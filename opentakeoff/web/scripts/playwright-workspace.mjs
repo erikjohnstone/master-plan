@@ -33,9 +33,33 @@ try {
     const layout=await page.evaluate(()=>({top:document.querySelector('.workspace-body').getBoundingClientRect().top,width:document.documentElement.scrollWidth,viewport:innerWidth}));
     check(`${width}: shell at most 132px`,layout.top<=132);
     check(`${width}: no page overflow`,layout.width<=layout.viewport);
-    check(`${width}: only the three primary workflows`,JSON.stringify(await page.locator('.workspace-primary [data-workspace-nav]').evaluateAll(els=>els.map(el=>el.dataset.workspaceNav)))===JSON.stringify(['Schedules','Agent','Takeoff']));
+    check(`${width}: Schedules and Agent own the right workflow group`,JSON.stringify(await page.locator('.workspace-primary [data-workspace-nav]').evaluateAll(els=>els.map(el=>el.dataset.workspaceNav)))===JSON.stringify(['Schedules','Agent']));
     check(`${width}: no primary Report tab`,await nav('Report').count()===0);
     check(`${width}: no drafting clutter on top`,await page.locator('[data-topbar] .workspace-properties-toggle, [data-topbar] input').count()===0);
+    const headerLayout=await page.evaluate(()=>{
+      const rect=el=>el.getBoundingClientRect().toJSON();
+      const q=sel=>document.querySelector(sel);
+      const titled=title=>[...document.querySelectorAll('[title]')].find(el=>el.title===title);
+      const plans=q('[data-workspace-nav="Plans"]'), takeoff=q('[data-workspace-nav="Takeoff"]');
+      const prev=titled('Previous sheet'), next=titled('Next sheet'), edit=titled('Edit takeoffs');
+      const group=[plans,prev,next,edit,takeoff].map(rect);
+      return {
+        open:rect(titled('Open plans — PDF, image, or a .zip plan set (or just drag them onto the canvas)')),
+        sheets:rect(titled('Plan set — the visual gallery; open one or several sheets (G)')),
+        plans:rect(plans), prev:rect(prev), next:rect(next), edit:rect(edit), takeoff:rect(takeoff),
+        schedules:rect(q('[data-workspace-nav="Schedules"]')), agent:rect(q('[data-workspace-nav="Agent"]')),
+        workflow:rect(q('.workspace-workflow-nav')),
+        groupLeft:Math.min(...group.map(r=>r.left)), groupRight:Math.max(...group.map(r=>r.right)),
+        scaleParent:q('.workspace-sheet-scale')?.parentElement?.className || '',
+        scaleBox:rect(q('.workspace-sheet-scale')),
+      };
+    });
+    check(`${width}: Open and Sheets precede Plans`,headerLayout.open.right<headerLayout.plans.left && headerLayout.sheets.right<headerLayout.plans.left);
+    check(`${width}: Plans page Edit and Takeoff are centered`,Math.abs((headerLayout.groupLeft+headerLayout.groupRight)/2-width/2)<=32);
+    check(`${width}: center controls are large`,['plans','prev','next','edit','takeoff'].every(key=>headerLayout[key].height>=40));
+    check(`${width}: Takeoff follows Edit`,headerLayout.takeoff.left>=headerLayout.edit.right);
+    check(`${width}: Schedules and Agent sit on the far right`,headerLayout.schedules.left>width/2 && headerLayout.agent.left>headerLayout.schedules.left && headerLayout.workflow.right>=width-16);
+    check(`${width}: units and scale moved to sheet bar`,String(headerLayout.scaleParent).includes('workspace-sheet-tabs') && headerLayout.scaleBox.right<=width);
     await nav('Agent').click();
     check(`${width}: Agent active`,await nav('Agent').getAttribute('aria-pressed')==='true');
     check(`${width}: composer visible`,await page.locator('.agent-composer').isVisible());

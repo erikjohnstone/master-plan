@@ -4,8 +4,10 @@ User-directed follow-up to #89. Baseline: `dec0151f` on main.
 
 ## Layout
 
-- Schedules, Agent and Takeoff form the prominent, labeled primary group.
-- Plans and sheet navigation share a compact context row with Edit, units and scale.
+- Open and Sheets anchor the left side of one header row.
+- Plans, previous/current/next sheet, Edit and Takeoff form the larger centered navigation spine.
+- Schedules and Agent retain prominent labeled treatments on the far right.
+- Units and scale moved to the far right of the sheet-tab row.
 - The left rail's Tools tab reveals a second column. Zone, Snap, angle guides,
   labels, Command, Voice and contextual Finish/Create actions moved here.
 - Condition properties and the former right-edge utility buttons live in this
@@ -35,7 +37,7 @@ Agent and export handlers were not rewritten.
 
 ## Verification
 
-`playwright-workspace.mjs`: **166 checks passed**, zero browser errors.
+`playwright-workspace.mjs`: **190 checks passed**, zero browser errors.
 Sizes: 1280×800, 1440×900, 1920×1080 and 2560×1440. Includes original schedule
 headers/cells, citation payloads, Agent Run/Stop/proposal callbacks, resizing,
 focus mode, flyout positioning, draft retention, toggle state, utility routing

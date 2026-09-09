@@ -10,9 +10,11 @@ In a hurry, or already in the app? Press **`?`** (or the **?** button in the top
 
 ### Workspace navigation
 
-Use **Schedules · Agent · Takeoff** in the highlighted group at the top of the canvas.
-**Plans** in the sheet-context row returns to the drawing. Sheets opens the existing sheet gallery; the sheet
-strip still switches, groups and closes drawings.
+The canvas header keeps **Open · Sheets** on the left; centers the larger
+**Plans · sheet navigation · Edit · Takeoff** controls; and anchors the highlighted
+**Schedules · Agent** group on the right. Plans returns to the drawing. Sheets opens
+the existing sheet gallery; the sheet strip still switches, groups and closes drawings.
+Units and scale live at the right end of that sheet strip.
 
 Schedules and Agent share the primary dock: opening one hides the other, but
 hiding Agent does not stop a running task. Drag the dock's left edge to resize,

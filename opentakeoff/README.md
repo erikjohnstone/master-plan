@@ -36,8 +36,9 @@ what makes it training data.
 
 ## Start here
 
-The canvas workspace puts **Schedules · Agent · Takeoff** in a prominent primary
-navigation group. Plans, sheet navigation, Edit, units and scale sit below it.
+The canvas header keeps **Open · Sheets** on the left; centers the larger
+**Plans · sheet navigation · Edit · Takeoff** controls; and anchors the prominent
+**Schedules · Agent** group on the right. Units and scale sit on the sheet-tab row.
 The left rail's **Tools** tab opens a second column for drawing settings,
 condition properties and project panels; it never resizes the drawing.
 Takeoff retains its exports; the legacy report is under **⋯ → Measurement report**.

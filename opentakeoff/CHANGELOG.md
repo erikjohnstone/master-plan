@@ -4,7 +4,7 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — workspace presentation
 
-- Emphasize Schedules, Agent and Takeoff in a prominent primary navigation group. Keep Plans, sheet navigation, Edit, units and scale in the compact context row.
+- Center the larger Plans, page, Edit and Takeoff controls between Open/Sheets on the left and a prominent Schedules/Agent group on the right. Move units and scale to the sheet-tab row.
 - Add a left-rail Tools tab that opens a second column for drafting controls, condition properties and the former right-edge utility panels. Preserve the drawing footprint, command drafts, original callbacks and keyboard shortcuts.
 - Remove Report from primary navigation; keep Takeoff exports and the legacy Measurement report in the overflow menu.
 - Give Schedules a sheet navigator, search/facets and full extracted-cell grids with internal scrolling.

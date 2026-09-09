@@ -10614,30 +10614,10 @@ export default function TakeoffCanvas() {
       <input name="takeoff-import" ref={importInputRef} type="file" accept=".json,application/json" style={{ display: "none" }}
         onChange={(e) => { importTakeoffFile(e.target.files?.[0]); e.target.value = ""; }} />
       {!focusMode && (
-      <div data-topbar className="workspace-topbar" style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "stretch", padding: "6px 14px 6px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", whiteSpace: "nowrap" }}>
-        <div data-topbar-deck="1" style={{ display: "flex", gap: 7, alignItems: "center", minWidth: 0 }}>
+      <div data-topbar className="workspace-topbar" style={{ display: "grid", padding: "6px 14px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", whiteSpace: "nowrap" }}>
+        <div data-topbar-deck="1" className="workspace-header-row" style={{ display: "grid", alignItems: "center", minWidth: 0 }}>
+          <div className="workspace-file-nav">
         <strong style={{ fontFamily: "var(--f-display)", fontSize: 15, color: "var(--ink)", letterSpacing: "-0.02em" }}>Takeoff</strong>
-        <nav className="workspace-primary" aria-label="Workspace">
-          <button type="button" data-workspace-nav="Schedules" aria-pressed={schedulesOpen} onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}><Icon name="document" size={19} /><span>Schedules</span>{graphTables.length > 0 && <small>{graphTables.length}</small>}</button>
-          <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen} onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}><Icon name="target" size={19} /><span>Agent</span>{(agentRunning || agentProposals.length > 0) && <small>{agentRunning ? "running" : agentProposals.length + " pending"}</small>}</button>
-        {/* name="open-takeoff", like sheet-file / agent-goal: the Playwright
-            driver used to reach for this with a text regex, which also matched
-            the rail's Takeoff button, picked the one the open Agent panel
-            covers, and hung 120s on click actionability before reporting the
-            Takeoff panel as broken. It was never broken. */}
-        <button onClick={() => setShowTakeoffData(true)} name="open-takeoff" data-workspace-nav="Takeoff" aria-pressed={showTakeoffData}
-          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
-          style={{
-            padding: "8px 14px", border: "none",
-            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
-            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
-            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
-            letterSpacing: "0.12em", textTransform: "uppercase",
-          }}>
-          <Icon name="takeoffs" size={19} /><span>Takeoff</span>{(finishedTakeoffLineCount > 0 || agentTakeoffRows.length > 0) && <small>{finishedTakeoffLineCount || "data"}</small>}
-        </button>
-        </nav>
-        <div style={{ flex: 1 }} />
         <button type="button" onClick={() => fileInputRef.current?.click()} title="Open plans — PDF, image, or a .zip plan set (or just drag them onto the canvas)"
           style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
           <Icon name="plus" size={14} />Open</button>
@@ -10646,11 +10626,8 @@ export default function TakeoffCanvas() {
           style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${sheetGroup.length ? "var(--cobalt)" : "var(--ink-faint)"}`, background: sheetGroup.length ? "var(--cobalt)" : "transparent", color: sheetGroup.length ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
           <Icon name="sheets" size={15} />Sheets
         </button>
-        <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
-        {renderTopbarPinned()}
-        </span>
-        </div>
-        <div data-topbar-scroll style={{ display: "flex", gap: 7, alignItems: "flex-end", minWidth: 0, overflowX: "auto", overflowY: "hidden", scrollbarWidth: "thin", overscrollBehaviorX: "contain" }}>
+          </div>
+          <div data-topbar-scroll className="workspace-center-nav">
           <button type="button" data-workspace-nav="Plans" aria-pressed={!schedulesOpen && !agentOpen && !showTakeoffData && !showReport} onClick={() => { setAgentOpen(false); setSchedulesOpen(false); clearScheduleBrowseHighlights(); setView("canvas"); }}>Plans</button>
         {sheets.length > 0 && (
           <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
@@ -10691,25 +10668,32 @@ export default function TakeoffCanvas() {
             ]}
           />
         </>)}
-        <div style={{ flex: 1 }} />
-        {/* Scale and units remain in the sheet-context row. */}
-        {cluster(`Scale — ${ellipsize(labelFor(focusPanel), 22)}`,
-          <>
-            <button onClick={() => setUnits((u) => (u === "metric" ? "imperial" : "metric"))}
-              title={units === "metric" ? "Metric display (m² / m) — click for imperial. Calibrate in meters; 1:50-style scales in the list. Display only — stored takeoffs never change." : "Imperial display (SF / LF) — click for metric (m² / m, calibrate in meters, 1:50-style scales). Display only — stored takeoffs never change."}
-              style={{ padding: "6px 10px", border: `1px solid ${units === "metric" ? "var(--cobalt)" : "var(--ink-faint)"}`, background: units === "metric" ? "var(--cobalt)" : "transparent", color: units === "metric" ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, lineHeight: 1 }}>
-              {units === "metric" ? "m" : "ft"}
-            </button>
-            <ToolMenu
-              title={scaleTitle}
-              onOpenChange={onScaleMenuDepth}
-              face={<span>{scaleFace}</span>}
-              faceStyle={{ fontFamily: "var(--f-mono)", fontSize: 11.5, ...scaleFaceStyle }}
-              menuStyle={{ minWidth: 250 }}
-              items={scaleItems}
-            />
-          </>
-        )}
+        {/* name="open-takeoff", like sheet-file / agent-goal: the Playwright
+            driver used to reach for this with a text regex, which also matched
+            the rail's Takeoff button, picked the one the open Agent panel
+            covers, and hung 120s on click actionability before reporting the
+            Takeoff panel as broken. It was never broken. */}
+        <button onClick={() => setShowTakeoffData(true)} name="open-takeoff" data-workspace-nav="Takeoff" aria-pressed={showTakeoffData}
+          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
+          style={{
+            padding: "8px 14px", border: "none",
+            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
+            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
+            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+          }}>
+          <Icon name="takeoffs" size={19} /><span>Takeoff</span>{(finishedTakeoffLineCount > 0 || agentTakeoffRows.length > 0) && <small>{finishedTakeoffLineCount || "data"}</small>}
+        </button>
+          </div>
+          <div className="workspace-workflow-nav">
+        <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
+        {renderTopbarPinned()}
+        </span>
+            <nav className="workspace-primary" aria-label="Workspace">
+          <button type="button" data-workspace-nav="Schedules" aria-pressed={schedulesOpen} onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}><Icon name="document" size={19} /><span>Schedules</span>{graphTables.length > 0 && <small>{graphTables.length}</small>}</button>
+          <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen} onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}><Icon name="target" size={19} /><span>Agent</span>{(agentRunning || agentProposals.length > 0) && <small>{agentRunning ? "running" : agentProposals.length + " pending"}</small>}</button>
+            </nav>
+          </div>
         </div>
       </div>
       )}
@@ -10747,6 +10731,26 @@ export default function TakeoffCanvas() {
               items={openTabs.map((k) => ({ id: k, icon: "document", label: tabLabel(k), active: sheetGroup.length ? sheetGroup.includes(k) : k === sheetKey, onSelect: () => goToSheet(k) }))}
             />
           )}
+          <div className="workspace-sheet-scale">
+        {/* Scale and units remain in the sheet-context row. */}
+        {cluster(`Scale — ${ellipsize(labelFor(focusPanel), 22)}`,
+          <>
+            <button onClick={() => setUnits((u) => (u === "metric" ? "imperial" : "metric"))}
+              title={units === "metric" ? "Metric display (m² / m) — click for imperial. Calibrate in meters; 1:50-style scales in the list. Display only — stored takeoffs never change." : "Imperial display (SF / LF) — click for metric (m² / m, calibrate in meters, 1:50-style scales). Display only — stored takeoffs never change."}
+              style={{ padding: "6px 10px", border: `1px solid ${units === "metric" ? "var(--cobalt)" : "var(--ink-faint)"}`, background: units === "metric" ? "var(--cobalt)" : "transparent", color: units === "metric" ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, lineHeight: 1 }}>
+              {units === "metric" ? "m" : "ft"}
+            </button>
+            <ToolMenu
+              title={scaleTitle}
+              onOpenChange={onScaleMenuDepth}
+              face={<span>{scaleFace}</span>}
+              faceStyle={{ fontFamily: "var(--f-mono)", fontSize: 11.5, ...scaleFaceStyle }}
+              menuStyle={{ minWidth: 250 }}
+              items={scaleItems}
+            />
+          </>
+        )}
+          </div>
         </div>
       )}
 

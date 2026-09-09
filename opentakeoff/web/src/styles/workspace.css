@@ -2,28 +2,51 @@
 .workspace-topbar {
   flex-shrink: 0;
   padding: var(--sp-1) var(--sp-3) !important;
-  gap: var(--sp-1) !important;
 }
-.workspace-topbar [data-topbar-deck] { min-height: calc(var(--sp-6) * 2); gap: var(--sp-2) !important; }
-.workspace-topbar [data-topbar-scroll] { align-items: center !important; min-height: var(--ctl-m); gap: var(--sp-2) !important; }
-.workspace-topbar [data-workspace-nav="Plans"] {
-  display: inline-flex; align-items: center; padding: var(--sp-1) var(--sp-3);
+.workspace-header-row {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  column-gap: var(--sp-4); min-height: calc(var(--sp-6) * 2);
+}
+.workspace-file-nav, .workspace-center-nav, .workspace-workflow-nav {
+  display: flex; align-items: center; min-width: 0;
+}
+.workspace-file-nav { justify-self: start; gap: var(--sp-2); }
+.workspace-center-nav { justify-self: center; justify-content: center; gap: var(--sp-2); }
+.workspace-workflow-nav { justify-self: end; justify-content: flex-end; gap: var(--sp-2); }
+.workspace-center-nav > [data-workspace-nav="Plans"] {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: var(--topbar-h); padding: var(--sp-2) var(--sp-4);
   border: var(--rule-soft); background: var(--paper-bright); color: var(--ink-soft);
-  font: 600 var(--fs-s) var(--f-body);
+  font: 650 var(--fs-l) var(--f-body);
 }
-.workspace-topbar [data-workspace-nav="Plans"][aria-pressed="true"] { border-color: var(--ink-muted); color: var(--ink); }
+.workspace-center-nav > [data-workspace-nav="Plans"][aria-pressed="true"] { border-color: var(--cobalt); background: var(--tint-select); color: var(--cobalt); }
+.workspace-center-nav > span { flex-shrink: 0; }
+.workspace-center-nav > span > button,
+.workspace-center-nav .workspace-tool-cluster button,
+.workspace-center-nav .workspace-tool-cluster select { min-height: var(--topbar-h); }
+.workspace-center-nav > span > button { min-width: var(--topbar-h); }
+.workspace-center-nav .workspace-tool-cluster > span:last-child { gap: 0 !important; }
+.workspace-center-nav [name="open-takeoff"] {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+  min-height: var(--topbar-h); padding: var(--sp-2) var(--sp-4) !important;
+  border: 1px solid var(--cobalt) !important; background: var(--tint-select) !important;
+  color: var(--cobalt) !important; font: 650 var(--fs-l) var(--f-body) !important;
+  letter-spacing: normal !important; text-transform: none !important;
+}
+.workspace-center-nav [name="open-takeoff"][aria-pressed="true"] { background: var(--cobalt) !important; color: var(--accent-contrast) !important; }
+.workspace-center-nav [name="open-takeoff"] small { font: 600 var(--fs-xs) var(--f-mono); }
 .workspace-topbar button, .workspace-topbar select, .workspace-topbar input { min-height: var(--ctl-m); }
 .workspace-tool-cluster { flex-direction: row !important; align-items: center !important; gap: var(--sp-1) !important; }
 .workspace-tool-cluster > span:first-child { display: none; }
 .workspace-tool-cluster[data-context-label] { flex-direction: column !important; }
 .workspace-tool-cluster[data-context-label] > span:first-child { display: block; }
 .workspace-primary {
-  display: flex; align-items: stretch; gap: var(--sp-1); margin-left: var(--sp-6);
+  display: flex; align-items: stretch; gap: var(--sp-1); margin: 0;
   background: var(--tint-select); padding: var(--sp-1); border: 1px solid var(--cobalt);
 }
 .workspace-primary button {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
-  min-height: var(--ctl-l); min-width: calc(var(--sp-8) * 4); padding: var(--sp-2) var(--sp-4) !important;
+  min-height: var(--ctl-l); min-width: calc(var(--sp-8) * 3); padding: var(--sp-2) var(--sp-3) !important;
   border: 1px solid transparent !important; background: transparent !important;
   color: var(--cobalt) !important; font: 650 var(--fs-l) var(--f-body) !important;
   letter-spacing: normal !important; text-transform: none !important;
@@ -45,6 +68,11 @@
 .workspace-sheet-tabs [data-sheet-tab-strip] { flex-wrap: nowrap !important; overflow-x: auto !important; }
 .workspace-sheet-tabs [data-sheet-tab] { padding: 0 var(--sp-1) !important; gap: 2px !important; }
 .workspace-sheet-tabs button { min-height: var(--ctl-s); min-width: var(--ctl-s); }
+.workspace-sheet-scale {
+  display: flex; align-items: center; flex-shrink: 0; margin-left: auto;
+  padding-left: var(--sp-3); border-left: var(--rule-soft);
+}
+.workspace-sheet-scale :is(button,select) { min-height: var(--ctl-m); }
 .workspace-condition-tools {
   position: relative; border: var(--rule-soft); padding: var(--sp-3) !important;
 }
@@ -245,18 +273,24 @@
   .agent-answer-record::details-content, .agent-answer-long-heading::details-content { content-visibility: visible; }
 }
 @media (max-width: 1399px) {
-  .workspace-primary { margin-left: var(--sp-3); }
+  .workspace-header-row { column-gap: var(--sp-2); }
+  .workspace-file-nav, .workspace-center-nav, .workspace-workflow-nav { gap: var(--sp-1); }
+  .workspace-primary button { min-width: 84px; padding-inline: var(--sp-2) !important; }
+  .workspace-center-nav > [data-workspace-nav="Plans"], .workspace-center-nav [name="open-takeoff"] { padding-inline: var(--sp-3) !important; }
 }
 @media (max-width: 1199px) {
+  .workspace-header-row { grid-template-columns: minmax(0,1fr) auto; row-gap: var(--sp-1); }
+  .workspace-file-nav { grid-column: 1; grid-row: 1; }
+  .workspace-workflow-nav { grid-column: 2; grid-row: 1; }
+  .workspace-center-nav { grid-column: 1 / -1; grid-row: 2; }
   .workspace-dock { position: absolute; inset: 0; width: auto; max-width: none; z-index: 10; }
   .workspace-resize, .workspace-dock-tools { display: none; }
   .schedule-master-detail { grid-template-columns: 260px minmax(0,1fr); }
   .agent-thread, .agent-composer { width: 100%; }
 }
 @media (max-width: 900px) {
-  .workspace-topbar [data-topbar-deck] { flex-wrap: wrap; }
-  .workspace-primary { order: -1; width: 100%; }
-  .workspace-primary button { flex: 1; }
+  .workspace-file-nav strong { display: none; }
+  .workspace-primary button { min-width: 72px; }
   .workspace-dock { min-width: 0; }
   .schedule-master-detail { grid-template-columns: 180px minmax(0,1fr); }
 }
