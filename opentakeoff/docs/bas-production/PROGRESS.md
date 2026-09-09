@@ -1,5 +1,63 @@
 # BAS production workflow progress
 
+## First shared SOO–points comparison — integration pending
+
+This continuation made **progress**, not a completion claim. The durable point
+workspace checkpoint below is committed locally as `0c0e9563` (not pushed).
+The next substantive implementation is now present in shared
+`web/src/lib/basSequenceReconciliation.ts`, with its pre-code contract and
+independently authored original-PDF controls in `SOO_RECONCILIATION_CONTRACT.md`
+and `web/test/fixtures/bas-soo-monitor-cases.json`.
+
+- Original Fort Sam M-511/M-512 pages were visually reviewed through the PDF
+  skill. Both same-title DOAS sequences retain different unoccupied behavior.
+  Six explicit controller monitoring clauses retain local mode, modulation,
+  target and full source spans; every other paragraph/inset remains accounted
+  for and uninterpreted. Parent/general applicability still requires review.
+- Explicit source-review fixture associations produce **five listed matches /
+  one requirement not listed in the selected matrix**. The M-512 sequence calls
+  for duct-static-pressure monitoring but its selected matrix lacks that label.
+  M-511's printed pressure input remains **DI**, not silently changed to AI.
+  This is not complete SOO coverage or a project-wide missing-device finding.
+- Source-reference IDs retain explicit scope and original spans. No association
+  is inferred from title/proximity; identical tags in different explicit scopes
+  stay distinct. References never multiply points or establish installed units.
+  Matching labels do not mean satisfied, field-wired, approved or typed by SOO.
+- Nine focused tests cover six keyed source requirements, exact point matches,
+  selected-matrix omission, duplicate-row ambiguity, unresolved name evidence,
+  wrong-column impersonation, negative/conditional/compound/oversized clauses,
+  stale/foreign/spliced references, distinct scopes, replay and non-mutation.
+  First diagnostic failed before tests because its fixture selector expected
+  `TEMPERATURE` on page 8, which actually prints `TEMP.`. Corrected only the
+  test selector; original failure retained. No source key or extraction changed.
+- Real Session PDF → graph → unchanged Python point interpreter → new shared
+  comparison passes all six independent checks. Entire previous point result,
+  graph and source snapshot unchanged; deterministic replay passes. Final
+  diagnostic: **14,178 ms**, main-process peak RSS **438,550,528 bytes**, under
+  concurrent web checks; not whole-tree or performance A/B evidence.
+- MCP typecheck passes. Final full web run has **2,593 pass / 13 existing skips /
+  zero fail**, typecheck/lint/benchmark/build pass. Web `74403` and real diagnostic/
+  typecheck `41060` are terminal pass. Older `20653`, `11217`, `78361`, `24930`
+  are terminal; do not restart them. No verification jobs remain active.
+
+Evidence: `evidence/soo-reconciliation-verified/{checks,comparison}.json`,
+`soo-reconciliation-verified.log`, `soo-reconciliation-web-verified.log`.
+Earlier failed/initial checks remain retained. This is a bounded shared kernel,
+**not yet an output of the production compile tool, persisted SOO record, or UI
+assignment workflow**. No new public MCP verb or duplicated browser logic.
+VectorGrid, existing point/Python interpretation, symbols and legacy compile
+are untouched. Prior core-corpus failures remain disclosed below; no new full
+corpus/holdout result. Six held-out documents remain unopened.
+
+**Next:** extend canonical durable BAS state with source-preserving sequence
+records, scoped equipment/template identities and reviewed associations; connect
+that shared state to production compile and a contextual Takeoff comparison/
+assignment journey. Broaden explicit clause/condition/continuation support and
+independent development keys while keeping unsupported source content visible.
+Do not call reference-only equipment records verified installed quantities.
+Assemblies/responsibilities, compatibility, source archives, revisions, approvals,
+full corpus/holdout and complete end-to-end five-workflow gates remain required.
+
 ## Durable point-matrix workspace checkpoint — 2026-09-09
 
 The preceding question/status reply was **no progress**. Implementation and

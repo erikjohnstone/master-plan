@@ -1,0 +1,28 @@
+/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/test/basSequenceReconciliation.test.ts:20
+  matrix_id: points.matrices.find(m => m.page_id?.endsWith(`:p${page}`) && m.rows.some(r => r.name === 'SUPPLY AIR TEMPERATURE'))!.matrix_id,
+                                                                                                                                ^
+
+TypeError: Cannot read properties of undefined (reading 'matrix_id')
+    at <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/test/basSequenceReconciliation.test.ts:20:129)
+    at Array.map (<anonymous>)
+    at <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/test/basSequenceReconciliation.test.ts:18:55)
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.1
+✖ test/basSequenceReconciliation.test.ts (229.137041ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 233.3665
+
+✖ failing tests:
+
+test at test/basSequenceReconciliation.test.ts:1:1
+✖ test/basSequenceReconciliation.test.ts (229.137041ms)
+  'test failed'

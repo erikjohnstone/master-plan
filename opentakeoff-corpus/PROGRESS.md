@@ -5,7 +5,15 @@
 Active goal and acceptance contract: `../opentakeoff/docs/BAS_PRODUCTION_GOAL.md`.
 Current research, exact baselines, limitations and next steps:
 `../opentakeoff/docs/bas-production/PROGRESS.md`.
-Latest checkpoint: source-bound captures now persist across browser/MCP save,
+Latest: first shared SOO–point comparison kernel has six independently keyed
+real monitoring requirements, five listed matches and one selected-matrix
+omission. Printed DI preserved; no installed count inferred. Nine focused tests
+plus real Session/replay/source-preservation pass. Production compile/UI/persisted
+SOO integration remains next; this is not a delivered workflow. See linked BAS
+progress for exact coverage/limits. Final web check 2,593 pass/13 existing skips;
+typecheck/lint/bench/build pass. All verification jobs are terminal.
+
+Previous checkpoint: source-bound captures now persist across browser/MCP save,
 reload, export and reimport. Real browser: 12 matrices / 193 rows, fresh-context
 import, both themes/three widths, source paint and controlled changed-byte refusal
 pass. Real MCP compile/export/import parity passes. Full web 2,581 pass/13 skips

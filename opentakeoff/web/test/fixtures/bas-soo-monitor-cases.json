@@ -1,0 +1,18 @@
+{
+  "authorship": "Manually keyed after visually reviewing original Fort Sam M-511 and M-512 pages and original positioned text, before semantic-rule implementation. This is a bounded monitoring/link control, not complete SOO ground truth.",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "title": "DEDICATED OUTSIDE AIR SYSTEM CONTROL SEQUENCE",
+  "reviewed_associations": [
+    { "page": 7, "matrix_identity_cell": "SUPPLY AIR TEMPERATURE", "reference_span_index": 92, "reference_tag": "DOAS 3" },
+    { "page": 8, "matrix_identity_cell": "SUPPLY AIR TEMP.", "reference_span_index": 61, "reference_tag": "DOAS 1 OR 2" }
+  ],
+  "cases": [
+    { "page": 7, "marker": "2.1", "variable": "CHILLED WATER COIL LEAVING AIR TEMPERATURE", "mode": "IN COOLING", "modulate": "CHILLED WATER FLOW", "target": "CHILLED WATER COIL LEAVING AIR TEMPERATURE SET POINT OF 55°F", "listed_row_key": "6", "declared_channel": "AI" },
+    { "page": 7, "marker": "2.2", "variable": "SUPPLY AIR TEMPERATURE", "mode": "IN HEATING", "modulate": "HOT WATER COIL", "target": "SUPPLY AIR TEMPERATURE SETPOINT OF 70°F", "listed_row_key": "4", "declared_channel": "AI" },
+    { "page": 7, "marker": "3.1", "variable": "DUCT STATIC PRESSURE", "mode": null, "modulate": "SUPPLY AIR FLOW THROUGH THE VFD", "target": "DOWNSTREAM STATIC PRESSURE SET POINT", "listed_row_key": "19", "declared_channel": "DI", "uninterpreted_tail": "SENSOR LOCATION AND SETPOINT SHALL BE DETERMINED BY THE TAB FIRM." },
+    { "page": 8, "marker": "2.1", "variable": "CHILLED WATER COIL LEAVING AIR TEMPERATURE", "mode": "IN COOLING", "modulate": "CHILLED WATER FLOW", "target": "CHILLED WATER COIL LEAVING AIR TEMPERATURE SET POINT OF 55°F", "listed_row_key": "6", "declared_channel": "AI" },
+    { "page": 8, "marker": "2.2", "variable": "SUPPLY AIR TEMPERATURE", "mode": "IN HEATING", "modulate": "HOT WATER COIL", "target": "SUPPLY AIR TEMPERATURE SETPOINT OF 70°F", "listed_row_key": "4", "declared_channel": "AI" },
+    { "page": 8, "marker": "3.1", "variable": "DUCT STATIC PRESSURE", "mode": null, "modulate": "SUPPLY AIR FLOW THROUGH THE VFD", "target": "DOWNSTREAM STATIC PRESSURE SET POINT", "listed_row_key": null, "declared_channel": null, "uninterpreted_tail": "SENSOR LOCATION AND SETPOINT SHALL BE DETERMINED BY THE TAB FIRM." }
+  ],
+  "limitations": "Source-reviewed associations for these tests do not establish automated diagram applicability, installed equipment, field terminals, or complete SOO interpretation. No historical key or scorer is changed."
+}

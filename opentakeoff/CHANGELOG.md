@@ -1,5 +1,10 @@
 # Changelog
 
+- BAS development: shared, source-bound SOO monitoring/point-list comparison
+  kernel with explicit reference associations and independent real-PDF controls.
+  Internal only pending production persistence/UI integration; no installed
+  quantities, extraction changes or complete-workflow claim.
+
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
