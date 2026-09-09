@@ -36,8 +36,15 @@ what makes it training data.
 
 ## Start here
 
-The canvas workspace keeps **Plans · Schedules · Agent · Takeoff · Report** in one
-navigation row. Schedules shows the indexed cells beside their drawing evidence;
+The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
+left, centers the larger **sheet navigation** controls, and groups equal-sized
+**Takeoff · Edit · ⋯** controls at the upper right. **Schedules**
+and **Agent** float as a compact vertical pair at the center of the canvas's right edge.
+Units and scale sit on the sheet-tab row.
+The left rail's **Tools** tab opens a second column for drawing settings,
+condition properties and project panels; it never resizes the drawing.
+Takeoff retains its exports; the legacy report is under **⋯ → Measurement report**.
+Schedules shows the indexed cells beside their drawing evidence;
 Agent keeps the conversation, composer and proposal review together. Both
 workspaces resize or expand without changing the underlying takeoff data.
 Dense Agent answers offer Explore results: a full-workspace Table view by

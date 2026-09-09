@@ -836,6 +836,15 @@ export default function TakeoffCanvas() {
   // panel costs no fetch and can never disagree with what a tool would say.
   const [schedulesOpen, setSchedulesOpen] = useState(false);
   const [conditionToolsOpen, setConditionToolsOpen] = useState(false);
+  // Surface-only flyout: no drawing geometry, data, or execution state changes.
+  const [utilityRailOpen, setUtilityRailOpen] = useState(false);
+  const utilityToggleRef = useRef(null);
+  const utilityCloseRef = useRef(null);
+  const closeUtilityRail = () => {
+    setConditionToolsOpen(false);
+    setUtilityRailOpen(false);
+    utilityToggleRef.current?.focus();
+  };
   // Presentation arbitration only: execution continues when its panel is hidden.
   useEffect(() => {
     if (agentOpen) { setSchedulesOpen(false); clearScheduleBrowseHighlights(); }
@@ -10057,20 +10066,17 @@ export default function TakeoffCanvas() {
     setLayerOverrides(next);
   };
 
-  // panel-toggle for the right-edge rail — square like the zoom cluster, count as a
-  // tiny mono line under the icon. Lives on the canvas, costs the toolbar zero rows.
-  // The panel toggles carry the longest strings in the product — the Agent's is
-  // a full sentence — and they lived in native titles nobody could reach by
-  // keyboard. Placed bottom: this rail is on the right edge.
-  const panelBtn = (onClick, iconName, label, isOn, count) => (
-    <Tip text={label} placement="bottom" maxWidth={300}>
-    <button onClick={onClick} aria-label={label} aria-pressed={!!isOn}
-      style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, width: 34, minHeight: 34, padding: "5px 0 4px", border: `1px solid ${isOn ? "var(--ink)" : "var(--ink-faint)"}`, background: isOn ? "var(--ink)" : "var(--paper-bright)", color: isOn ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, lineHeight: 1 }}>
-      <Icon name={iconName} size={15} />{count ? <span style={{ fontFamily: "var(--f-mono)", fontSize: "var(--fs-2xs)" }}>{count}</span> : null}
-    </button>
+  // Readable navigation; original callbacks retain their click event.
+  const panelBtn = (onClick, iconName, label, isOn, count, caption) => (
+    <Tip text={label} placement="right" maxWidth={300}>
+      <button className="workspace-utility-link" onClick={e => { closeUtilityRail(); onClick(e); }}
+        aria-label={label} aria-pressed={!!isOn}>
+        <Icon name={iconName} size={17} /><span>{caption}</span>
+        {count ? <small>{count}</small> : null}
+        <Icon name="chevronRight" size={14} />
+      </button>
     </Tip>
   );
-  const vRule = <span style={{ width: 1, alignSelf: "stretch", background: "var(--ink-faint)", margin: "0 3px" }} />;
 
   // The panel's condition-list VIEW (search / natural sort / grouping / the
   // ⌘/⇧ multi-select) lives in components/TakeoffsPanel.jsx.
@@ -10349,6 +10355,7 @@ export default function TakeoffCanvas() {
           onOpenChange={onMenuDepth}
           face={<span style={{ fontWeight: 700, letterSpacing: "0.08em" }}>⋯</span>}
           items={[
+            { id: "measurement-report", icon: "document", label: "Measurement report", disabled: !conditions.length, onSelect: () => setShowReport(true) },
             { id: "guide", label: "How takeoff works", shortcut: "?", onSelect: () => setGuideOpen(true) },
             { id: "theme", label: theme === "dark" ? "Light chrome" : "Dark chrome", onSelect: toggleTheme },
             { section: "Drawing style" },
@@ -10606,35 +10613,24 @@ export default function TakeoffCanvas() {
         onChange={(e) => { importProfileFile(e.target.files?.[0]); e.target.value = ""; }} />
       <input name="takeoff-import" ref={importInputRef} type="file" accept=".json,application/json" style={{ display: "none" }}
         onChange={(e) => { importTakeoffFile(e.target.files?.[0]); e.target.value = ""; }} />
-      {/* THE top bar — TWO DECKS.
-          Deck 1 is where you are: the wordmark, Open, Sheets, the sheet you
-          are on, the Schedules index, and the pinned actions (Takeoff, Report,
-          ⋯, presence, account). Deck 2 is what you are doing: the drafting
-          clusters, each captioned.
-          It was one row. ~1550px of fixed-width controls do not fit a
-          1440-class laptop, so the row scrolled itself and the captions —
-          position:absolute, up to 200px wide, over cluster bodies often much
-          narrower — painted over each other and over their neighbours'
-          controls. "Scale — <sheet name>" landed on "Action", whose own
-          caption floats over buttons that are not even its children.
-          Two decks with captions in flow (see `cluster`) means groups push
-          each other apart instead, and the row fits without scrolling at the
-          widths people actually use. The scroll region and its shadow stay on
-          deck 2 as the last resort; menus open position:fixed off the trigger
-          rect (ToolMenu) so an overflow cannot clip them. Focus mode (F) hides
-          the whole bar — the rail and status bar carry the essentials. */}
       {!focusMode && (
-      <div data-topbar className="workspace-topbar" style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "stretch", padding: "6px 14px 6px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", whiteSpace: "nowrap" }}>
-        <div data-topbar-deck="1" style={{ display: "flex", gap: 7, alignItems: "center", minWidth: 0 }}>
-        <strong style={{ fontFamily: "var(--f-display)", fontSize: 15, color: "var(--ink)", letterSpacing: "-0.02em" }}>Takeoff</strong>
+      <div data-topbar className="workspace-topbar" style={{ display: "grid", padding: "6px 14px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", whiteSpace: "nowrap" }}>
+        <div data-topbar-deck="1" className="workspace-header-row" style={{ display: "grid", alignItems: "center", minWidth: 0 }}>
+          <div className="workspace-file-nav">
         <button type="button" onClick={() => fileInputRef.current?.click()} title="Open plans — PDF, image, or a .zip plan set (or just drag them onto the canvas)"
-          style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper-bright)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
+          style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
           <Icon name="plus" size={14} />Open</button>
         <button type="button" onClick={() => setView("gallery")}
           title={`Plan set — the visual gallery; open one or several sheets (G)${sheetGroup.length ? ` · ${sheetGroup.length} side-by-side now` : ""}`}
           style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${sheetGroup.length ? "var(--cobalt)" : "var(--ink-faint)"}`, background: sheetGroup.length ? "var(--cobalt)" : "transparent", color: sheetGroup.length ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
           <Icon name="sheets" size={15} />Sheets
         </button>
+        <button type="button" data-workspace-nav="Plans" aria-pressed={!schedulesOpen && !agentOpen && !showTakeoffData && !showReport}
+          onClick={() => { setAgentOpen(false); setSchedulesOpen(false); clearScheduleBrowseHighlights(); setView("canvas"); }}>
+          <Icon name="document" size={15} />Plans
+        </button>
+          </div>
+          <div data-topbar-scroll className="workspace-center-nav">
         {sheets.length > 0 && (
           <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
             <button type="button" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={!!sheetGroup.length || page <= 1} title="Previous sheet"
@@ -10651,43 +10647,14 @@ export default function TakeoffCanvas() {
               style={{ padding: "5px 8px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", opacity: (!!sheetGroup.length || page >= pageCount) ? 0.4 : 1 }}><Icon name="chevronRight" size={12} /></button>
           </span>
         )}
-        <nav className="workspace-primary" aria-label="Workspace">
-          <button type="button" data-workspace-nav="Plans" aria-pressed={!schedulesOpen && !agentOpen && !showTakeoffData && !showReport} onClick={() => { setAgentOpen(false); setSchedulesOpen(false); clearScheduleBrowseHighlights(); setView("canvas"); }}>Plans</button>
-          <button type="button" data-workspace-nav="Schedules" aria-pressed={schedulesOpen} onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}>Schedules{graphTables.length ? " · " + graphTables.length : ""}</button>
-          <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen} onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}>Agent{agentRunning ? " · running" : agentProposals.length ? " · " + agentProposals.length + " pending" : ""}</button>
-        {/* name="open-takeoff", like sheet-file / agent-goal: the Playwright
-            driver used to reach for this with a text regex, which also matched
-            the rail's Takeoff button, picked the one the open Agent panel
-            covers, and hung 120s on click actionability before reporting the
-            Takeoff panel as broken. It was never broken. */}
-        <button onClick={() => setShowTakeoffData(true)} name="open-takeoff" data-workspace-nav="Takeoff" aria-pressed={showTakeoffData}
-          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
-          style={{
-            padding: "8px 14px", border: "none",
-            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
-            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
-            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
-            letterSpacing: "0.12em", textTransform: "uppercase",
-          }}>
-          Takeoff{finishedTakeoffLineCount ? ` · ${finishedTakeoffLineCount}` : (agentTakeoffRows.length ? " · data" : "")}
-        </button>
-        <button data-workspace-nav="Report" aria-pressed={showReport} onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
-          style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>
-        </nav>
-        <div style={{ flex: 1 }} />
-        <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
-        {renderTopbarPinned()}
-        </span>
-        </div>
-        {/* DECK 2 — the working clusters. It still scrolls as one region if a
-            window is narrower than the clusters themselves; with the captions
-            in flow and deck 1 carrying the wide fixed controls, that should
-            not happen at 1440. app.css paints the two-layer scroll shadow so
-            "there is more" is never invisible. */}
-        {/* No `flex: 1 1 0` here: the bar is a COLUMN now, so a vertical basis
-            of 0 collapses this deck's height to nothing and its controls paint
-            back over deck 1. Measured — the whole bar came out 47px tall. */}
-        <div data-topbar-scroll style={{ display: "flex", gap: 7, alignItems: "flex-end", minWidth: 0, overflowX: "auto", overflowY: "hidden", scrollbarWidth: "thin", overscrollBehaviorX: "contain" }}>
+          </div>
+          <div className="workspace-workflow-nav">
+            <nav className="workspace-primary" aria-label="Workspace">
+          <button type="button" onClick={() => setShowTakeoffData(true)} name="open-takeoff" data-workspace-nav="Takeoff" aria-pressed={showTakeoffData}
+            title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export.">
+            <Icon name="takeoffs" size={15} /><span>Takeoff</span>{(finishedTakeoffLineCount > 0 || agentTakeoffRows.length > 0) && <small>{finishedTakeoffLineCount || "data"}</small>}
+          </button>
+            </nav>
         {cluster("Edit", <>
           <ToolMenu
             title="Edit takeoffs"
@@ -10711,8 +10678,209 @@ export default function TakeoffCanvas() {
             ]}
           />
         </>)}
-        {conditions.length > 0 && <button type="button" className="workspace-properties-toggle" aria-expanded={conditionToolsOpen} onClick={() => setConditionToolsOpen(v => !v)} title="Condition properties and pinned conditions">Conditions{aCond ? " · " + aCond.finish_tag : ""}</button>}
-        {vRule}
+        <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
+        {renderTopbarPinned()}
+        </span>
+          </div>
+        </div>
+      </div>
+      )}
+
+      {/* open-sheet tabs — what you opened from the gallery; click to view,
+          ⊞ to side-by-side, ✕ to close; the dropdown lists every open sheet */}
+      {!focusMode && openTabs.length > 0 && (
+        <div className="workspace-sheet-tabs" style={{ display: "flex", gap: 5, alignItems: "center", padding: "5px 14px", flexWrap: openTabs.length > MANY_TABS ? "nowrap" : "wrap", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", minWidth: 0 }}>
+          <span style={{ fontFamily: "var(--f-mono)", fontSize: 9.5, textTransform: "uppercase", letterSpacing: "0.14em", color: "var(--ink-muted)", flexShrink: 0 }}>Sheets</span>
+          {openTabs.length > MANY_TABS && (
+            <button type="button" onClick={() => scrollTabStrip(-1)} title="Scroll sheets left" aria-label="Scroll sheets left" style={{ flexShrink: 0, padding: "4px 5px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", display: "inline-flex" }}><Icon name="chevronLeft" size={12} /></button>
+          )}
+          <div ref={tabStripRef} data-sheet-tab-strip style={{ display: "flex", gap: 5, alignItems: "center", flexWrap: openTabs.length > MANY_TABS ? "nowrap" : "wrap", overflowX: openTabs.length > MANY_TABS ? "auto" : "visible", minWidth: 0, flex: openTabs.length > MANY_TABS ? 1 : "0 1 auto", scrollbarWidth: "none", overscrollBehaviorX: "contain" }}>
+          {openTabs.map((k) => {
+            const inGroup = sheetGroup.includes(k);
+            const on = sheetGroup.length ? inGroup : k === sheetKey;
+            const lbl = tabLabel(k);
+            return (
+              <span key={k} data-sheet-tab={on ? "active" : "idle"} style={{ display: "inline-flex", alignItems: "center", gap: 5, flexShrink: 0, border: "1px solid var(--ink-faint)", borderBottom: on ? "2px solid var(--cobalt)" : "1px solid var(--ink-faint)", background: on ? "var(--paper-cream)" : "transparent", padding: "3px 6px 2px 9px", maxWidth: 190 }}>
+                <button onClick={() => goToSheet(k)} title={k} style={{ border: "none", background: "none", cursor: "pointer", fontWeight: on ? 700 : 500, fontSize: 11.5, color: "var(--ink)", fontFamily: "var(--f-mono)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 140, padding: 0 }}>{lbl}</button>
+                <button onClick={() => toggleInGroup(k)} title={inGroup ? "Remove from side-by-side" : "Side-by-side with the current sheet"} style={{ border: "none", background: "none", cursor: "pointer", color: inGroup ? "var(--cobalt)" : "var(--ink-faint)", padding: 0, display: "inline-flex" }}><Icon name="sideBySide" size={11} /></button>
+                <button onClick={() => closeTab(k)} title="Close tab" style={{ border: "none", background: "none", cursor: "pointer", color: "var(--ink-muted)", padding: 0, display: "inline-flex" }}><Icon name="close" size={10} /></button>
+              </span>
+            );
+          })}
+          </div>
+          {openTabs.length > MANY_TABS && (
+            <button type="button" onClick={() => scrollTabStrip(1)} title="Scroll sheets right" aria-label="Scroll sheets right" style={{ flexShrink: 0, padding: "4px 5px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", display: "inline-flex" }}><Icon name="chevronRight" size={12} /></button>
+          )}
+          {openTabs.length > 1 && openTabs.length <= MANY_TABS && (
+            <ToolMenu
+              title="Jump to an open sheet"
+              onOpenChange={onMenuDepth}
+              face={<span style={{ fontFamily: "var(--f-mono)", fontSize: 11 }}>{openTabs.length} open</span>}
+              items={openTabs.map((k) => ({ id: k, icon: "document", label: tabLabel(k), active: sheetGroup.length ? sheetGroup.includes(k) : k === sheetKey, onSelect: () => goToSheet(k) }))}
+            />
+          )}
+          <div className="workspace-sheet-scale">
+        {/* Scale and units remain in the sheet-context row. */}
+        {cluster(`Scale — ${ellipsize(labelFor(focusPanel), 22)}`,
+          <>
+            <button onClick={() => setUnits((u) => (u === "metric" ? "imperial" : "metric"))}
+              title={units === "metric" ? "Metric display (m² / m) — click for imperial. Calibrate in meters; 1:50-style scales in the list. Display only — stored takeoffs never change." : "Imperial display (SF / LF) — click for metric (m² / m, calibrate in meters, 1:50-style scales). Display only — stored takeoffs never change."}
+              style={{ padding: "6px 10px", border: `1px solid ${units === "metric" ? "var(--cobalt)" : "var(--ink-faint)"}`, background: units === "metric" ? "var(--cobalt)" : "transparent", color: units === "metric" ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, lineHeight: 1 }}>
+              {units === "metric" ? "m" : "ft"}
+            </button>
+            <ToolMenu
+              title={scaleTitle}
+              onOpenChange={onScaleMenuDepth}
+              face={<span>{scaleFace}</span>}
+              faceStyle={{ fontFamily: "var(--f-mono)", fontSize: 11.5, ...scaleFaceStyle }}
+              menuStyle={{ minWidth: 250 }}
+              items={scaleItems}
+            />
+          </>
+        )}
+          </div>
+        </div>
+      )}
+
+      {/* calibration prompt */}
+      {tool === "calibrate" && (
+        <div style={{ padding: "8px 14px", background: "var(--paper-bright)", borderBottom: "1px solid var(--hairline-warm)", fontSize: 14 }}>
+          {calib.length < 2 ? <span>Custom scale: click two points along a known dimension ({calib.length}/2). Tip: use the longest dimension. (Or just pick a standard scale above.)</span> : (
+            <span>Real length:{" "}
+              <input name="calibration-length" type="number" value={pendingLen} onChange={(e) => setPendingLen(e.target.value)} onKeyDown={(e) => e.key === "Enter" && applyCalibration()} placeholder={units === "metric" ? "meters" : "feet"} autoFocus style={{ width: 90, padding: 5, borderRadius: 0, border: "1px solid var(--ink-faint)" }} /> {units === "metric" ? "m" : "ft"}
+              <button onClick={applyCalibration} style={{ marginLeft: 8, padding: "5px 12px", borderRadius: 0, border: "none", background: "var(--ink)", color: "var(--paper-bright)", cursor: "pointer" }}>Apply</button>
+              <button onClick={() => setCalib([])} style={{ marginLeft: 6, padding: "5px 10px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer" }}>Reset</button>
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* check-a-dimension prompt — read-only twin of calibrate: measure a printed
+          dimension at the current scale, compare with what the drawing says */}
+      {tool === "check" && (
+        <div style={{ padding: "8px 14px", background: "var(--paper-bright)", borderBottom: "1px solid var(--hairline-warm)", fontSize: 14 }}>
+          {check.length < 2 ? (
+            <span>Check a dimension: click both ends of a printed dimension ({check.length}/2). The measured length shows here — compare it with what the drawing says.</span>
+          ) : checkCross ? (
+            <span style={{ color: "var(--c-danger)" }}>Check on one sheet — those two clicks landed on different sheets. <button onClick={() => { setCheck([]); setCheckStated(""); }} style={{ marginLeft: 6, padding: "5px 10px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer" }}>Reset</button></span>
+          ) : !checkUpp ? (
+            <span style={{ color: "var(--c-danger)" }}>No scale set for {labelFor(checkPanel)} — pick a standard scale or calibrate first, then check it here.</span>
+          ) : checkPx <= 0 ? (
+            <span style={{ color: "var(--c-danger)" }}>Those two clicks landed on the same point — click the two <b>ends</b> of a printed dimension.</span>
+          ) : (
+            <span>
+              measures <b style={{ fontFamily: "var(--f-mono)" }}>{fmtCheckLen(checkFeet, units)}</b> at {stdValue || "custom scale"} · drawing says{" "}
+              <input name="check-stated-length" value={checkStated} onChange={(e) => setCheckStated(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") e.currentTarget.blur(); }} placeholder={units === "metric" ? "meters" : `feet (12'6, 6" ok)`} autoFocus style={{ width: 100, padding: 5, borderRadius: 0, border: "1px solid var(--ink-faint)" }} /> {units === "metric" ? "m" : "ft"}
+              {checkErrPct != null && (() => {
+                // checkVerdict grades the ROUNDED value the chip displays (and
+                // normalizes -0), so color and number can never contradict —
+                // see units.ts for the ≤1/≤5 tie-break rationale
+                const v = checkVerdict(checkErrPct);
+                const pct = `${v.shown >= 0 ? "+" : ""}${v.shown.toFixed(1)}%`;
+                return (
+                  <b style={{ marginLeft: 8, color: v.grade === "match" ? "var(--c-positive)" : v.grade === "close" ? "var(--c-warning)" : "var(--c-danger)" }}>
+                    {v.grade === "match" ? `matches — scale checks out (${pct})`
+                      : v.grade === "close" ? `off by ${pct} — re-check or recalibrate`
+                      : `off by ${pct} — wrong scale; recalibrate`}
+                  </b>
+                );
+              })()}
+              {checkStatedFeet > 0 && (
+                <button onClick={recalibrateFromCheck} style={{ marginLeft: 8, padding: "5px 12px", borderRadius: 0, border: "none", background: "var(--ink)", color: "var(--paper-bright)", cursor: "pointer" }}>Recalibrate to this</button>
+              )}
+              <button onClick={() => { setCheck([]); setCheckStated(""); }} style={{ marginLeft: 6, padding: "5px 10px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer" }}>Reset</button>
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* canvas + issue desk */}
+      <div className="workspace-body" data-primary-workspace={schedulesOpen ? "Schedules" : agentOpen ? "Agent" : "Plans"} style={{ flex: 1, display: "flex", overflow: "hidden", minHeight: 0, position: "relative" /* anchors the narrow-screen panel overlay */ }}>
+       {/* tool rail — machined faces grouped by MCP module (the concept shell).
+           Individual tiles replace deck 2's Measure/Cut Out menus; Markup keeps
+           its variety flyout on one tile (five markup kinds don't earn five
+           faces). Lives in the canvas row so docked panels + canvas reflow
+           beside it; survives focus mode — it IS the tool access. */}
+       {view === "canvas" && (
+       <nav role="toolbar" aria-label="Tools" style={{ width: "var(--rail-w)", flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--sp-1)", paddingTop: "var(--sp-2)", borderRight: "1px solid var(--ink-faint)", background: "var(--paper-bright)", overflowY: "auto", overflowX: "visible" }}>
+         <button type="button" className="workspace-utility-toggle" ref={utilityToggleRef}
+           aria-label="Drawing tools and panels" aria-expanded={utilityRailOpen} aria-controls="workspace-utility-drawer"
+           onClick={() => {
+             if (utilityRailOpen) closeUtilityRail();
+             else { setUtilityRailOpen(true); requestAnimationFrame(() => utilityCloseRef.current?.focus()); }
+           }}>
+           <Icon name={utilityRailOpen ? "chevronLeft" : "chevronRight"} size={17} /><span>Tools</span>
+         </button>
+         {railLabel("SEL")}
+         {railTile("select", "select", "Select — pick a takeoff, drag points; drag open canvas to pan", "V")}
+         {railLabel("MEAS")}
+         {MEASURE_TOOLS.map((t) => railTile(t.id, t.icon, t.label, t.shortcut))}
+         {railLabel("CUT")}
+         {CUT_TOOLS.map((t) => railTile(t.id, t.icon, t.label, t.shortcut, null, { tint: "var(--c-danger)" }))}
+         {railLabel("MARK")}
+         <span ref={(el) => { if (el) markTileTopRef.current = el.getBoundingClientRect().top; }} style={{ position: "relative", display: "inline-flex" }}>
+           <ToolMenu
+             title="Markup — annotations, not measurements"
+             active={MARKUP_IDS.includes(tool)}
+             onOpenChange={onMenuDepth}
+             flyout="right"
+             face={<Icon name="markup" size={17} />}
+             items={[
+               { section: "Markup — notes on the plan, never measured" },
+               ...MARKUP_TOOLS.map((t) => ({ id: t.id, icon: t.icon, label: t.label, shortcut: t.shortcut, active: tool === t.id, onSelect: () => { setTool(t.id); setMarkupDraft(null); } })),
+             ]}
+           />
+           {/* highlighter style popover — fixed beside the rail while armed
+               (fixed, not absolute: the rail's scroll box would clip it) */}
+           {tool === "highlighter" && (
+             <div style={{ position: "fixed", left: "calc(var(--rail-w) + 8px)", top: markTileTopRef.current || 200, zIndex: Z.popover, background: "var(--paper-bright)", border: "1px solid var(--ink-faint)", borderRadius: 0, boxShadow: "var(--shadow-pop)", padding: "8px 10px", display: "flex", flexDirection: "column", gap: 7 }}>
+               <div style={{ display: "flex", gap: 6 }} title="Ink">
+                 {HL_INKS.map((c) => (
+                   <button key={c} onClick={() => setHlStyle((st) => ({ ...st, color: c }))}
+                     style={{ width: 16, height: 16, padding: 0, background: c, border: hlStyle.color === c ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer" }} />
+                 ))}
+               </div>
+               <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                 {HL_SIZES.map(([lbl, px]) => (
+                   <button key={lbl} onClick={() => setHlStyle((st) => ({ ...st, size: px }))} title={`${lbl === "F" ? "Fine" : lbl === "M" ? "Medium" : "Broad"} tip`}
+                     style={{ width: 22, height: 20, padding: 0, fontFamily: "var(--f-mono)", fontSize: 10, cursor: "pointer", border: hlStyle.size === px ? "1px solid var(--ink)" : "1px solid var(--ink-faint)", background: hlStyle.size === px ? "var(--ink)" : "transparent", color: hlStyle.size === px ? "var(--paper-bright)" : "var(--ink)" }}>{lbl}</button>
+                 ))}
+                 <span style={{ width: 1, alignSelf: "stretch", background: "var(--ink-faint)" }} />
+                 {[["chisel", "M4 16 L14 6 L18 10 L8 20 Z"], ["round", "M5 17 Q12 3 19 13"]].map(([tip, d]) => (
+                   <button key={tip} onClick={() => setHlStyle((st) => ({ ...st, tip }))} title={`${tip} tip`}
+                     style={{ width: 24, height: 20, padding: 1, cursor: "pointer", border: hlStyle.tip === tip ? "1px solid var(--ink)" : "1px solid var(--ink-faint)", background: "transparent" }}>
+                     <svg viewBox="0 0 24 24" width="18" height="14">{tip === "chisel"
+                       ? <path d={d} fill="currentColor" stroke="none" />
+                       : <path d={d} fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />}</svg>
+                   </button>
+                 ))}
+               </div>
+             </div>
+           )}
+         </span>
+         {/* Approval stamp — ink over pencil. Human-only by design: this tile
+             is the ONLY way an estimator seal is minted (no MCP tool, no agent
+             path), so the mark means a person looked. */}
+         {railTile("approve", "approve", "Approval stamp — the estimator's ink. Click a committed takeoff to approve it, or empty plan to approve the sheet; click a seal to lift it. ⌘Z undoes. Human-only.", null,
+           () => setTool((t) => (t === "approve" ? "select" : "approve")), { tint: tool === "approve" ? "var(--c-positive)" : undefined, armed: tool === "approve" })}
+         {railLabel("CAL")}
+         {railTile("calibrate", "calibrate", "Calibrate — click two points of a known dimension", null)}
+       </nav>
+       )}
+       {/* Mounted while collapsed: drafts survive and the drawing never resizes. */}
+       {view === "canvas" && (
+         <aside id="workspace-utility-drawer" className="workspace-utility-drawer" hidden={!utilityRailOpen}
+           aria-label="Drawing tools and panels" style={{ zIndex: Z.popover }}
+           onKeyDown={e => {
+             if (e.key === "Escape" && !e.defaultPrevented) {
+               e.preventDefault(); e.stopPropagation(); closeUtilityRail();
+             }
+           }}>
+           <header><div><strong>Tools & panels</strong><span>Drawing controls</span></div>
+             <button type="button" ref={utilityCloseRef} onClick={closeUtilityRail} aria-label="Close tools and panels"><Icon name="close" size={16} /></button>
+           </header>
+           <div className="workspace-utility-scroll">
+             <section className="workspace-drafting-controls" aria-label="Drawing settings">
         {cluster("Aids", <>
           {panels.length === 1 && isStitchKey(panels[0].key) && (
             <button onClick={() => setTool((t) => (t === "stitch-align" ? "select" : "stitch-align"))}
@@ -10721,16 +10889,16 @@ export default function TakeoffCanvas() {
               <Icon name="calibrate" size={15} />Align
             </button>
           )}
-          <button onClick={() => setTool((t) => (t === "zone" ? "select" : "zone"))}
+          <button aria-pressed={tool === "zone"} onClick={() => setTool((t) => (t === "zone" ? "select" : "zone"))}
             title="Zone check — trace a region (an apartment, a wing) to read every condition's quantities inside it, materials included. Nothing is saved; the outline clears when you leave the tool."
             style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${tool === "zone" ? "var(--cobalt)" : "var(--ink-faint)"}`, background: tool === "zone" ? "var(--cobalt)" : "transparent", color: tool === "zone" ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
             <Icon name="zone" size={15} />Zone
           </button>
-          <button onClick={() => setSnapOn((v) => !v)} title="Snap to plan lines/corners (beta)"
+          <button aria-pressed={snapOn} onClick={() => setSnapOn((v) => !v)} title="Snap to plan lines/corners (beta)"
             style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${snapOn ? "var(--c-positive)" : "var(--ink-faint)"}`, background: snapOn ? "var(--c-positive)" : "transparent", color: snapOn ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
             <Icon name="snap" size={15} />Snap
           </button>
-          <button onClick={() => setAngleOn((v) => !v)} title="45°/90° angle guides — the next segment locks to the 45° family as you draw (hold ⇧ to force the lock at any angle)"
+          <button aria-pressed={angleOn} onClick={() => setAngleOn((v) => !v)} title="45°/90° angle guides — the next segment locks to the 45° family as you draw (hold ⇧ to force the lock at any angle)"
             style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${angleOn ? "var(--cobalt)" : "var(--ink-faint)"}`, background: angleOn ? "var(--cobalt)" : "transparent", color: angleOn ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
             <Icon name="angle" size={15} />45°
           </button>
@@ -10796,33 +10964,7 @@ export default function TakeoffCanvas() {
             {voiceChip?.tone === "live" ? "● talking" : "talk · M"}
           </button>
         )}
-        <div style={{ flex: 1 }} />
-        {/* Truncate the sheet name HERE, not with a max-width on the caption:
-            the caption is in flow now, so an unbounded name would push Action
-            off the deck instead of painting over it. */}
-        {cluster(`Scale — ${ellipsize(labelFor(focusPanel), 22)}`,
-          <>
-            <button onClick={() => setUnits((u) => (u === "metric" ? "imperial" : "metric"))}
-              title={units === "metric" ? "Metric display (m² / m) — click for imperial. Calibrate in meters; 1:50-style scales in the list. Display only — stored takeoffs never change." : "Imperial display (SF / LF) — click for metric (m² / m, calibrate in meters, 1:50-style scales). Display only — stored takeoffs never change."}
-              style={{ padding: "6px 10px", border: `1px solid ${units === "metric" ? "var(--cobalt)" : "var(--ink-faint)"}`, background: units === "metric" ? "var(--cobalt)" : "transparent", color: units === "metric" ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, lineHeight: 1 }}>
-              {units === "metric" ? "m" : "ft"}
-            </button>
-            <ToolMenu
-              title={scaleTitle}
-              onOpenChange={onScaleMenuDepth}
-              face={<span>{scaleFace}</span>}
-              faceStyle={{ fontFamily: "var(--f-mono)", fontSize: 11.5, ...scaleFaceStyle }}
-              menuStyle={{ minWidth: 250 }}
-              items={scaleItems}
-            />
-          </>
-        )}
-        {/* ACTION only exists when there IS one. It used to render always, so a
-            caption sat over 150px of reserved emptiness at the end of the row
-            — and, with the caption out of flow, over the pinned TAKEOFF /
-            Report buttons that are not even its children. It sits last, after
-            everything else, so appearing and disappearing shifts nothing:
-            issue #61's contract is kept by POSITION, not by reserved space. */}
+        {/* Context actions keep the same handlers and keyboard alternatives. */}
         {(finishOk || proposal?.regions.length > 0 || (markupDraft && (tool === "cloud" || tool === "callout" || tool === "highlight" || tool === "dimension"))) && cluster("Action",
           <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "flex-end", gap: 6 }}>
             {markupDraft && (tool === "cloud" || tool === "callout" || tool === "highlight" || tool === "dimension") && <span style={{ fontSize: 11, color: "var(--cobalt)" }}>click the {tool === "callout" ? "label spot" : tool === "dimension" ? "other end" : "opposite corner"}…</span>}
@@ -10834,24 +10976,11 @@ export default function TakeoffCanvas() {
             )}
           </span>
         )}
-        </div>
-      </div>
-      )}
-
-      {/* quick-access condition palette — its own slim band under the toolbar
-          (like the sheet-tabs / conditions-strip rows), not crammed into the
-          already-wrapping top bar. A curated ≤9 pinned conditions for one-click
-          activation without opening the panel: drag a condition here from the
-          Takeoffs panel (or the strip) to pin it, or use a row's pushpin. Each
-          chip carries its 1–9 hotkey badge (cobalt); single-click activates
-          (reassigning a selected shape, like every activation surface),
-          double-click opens the docked panel scrolled to that row, the pushpin
-          unpins, and dragging one chip onto another reorders (which renumbers
-          the hotkeys). Below the chips, the active condition's appearance editor
-          — the same one the docked panel row renders — so line/fill/hatch/height
-          are editable without opening the sidebar. Shown once there's a
-          condition to pin, so the drop zone is discoverable. */}
-      {!focusMode && conditionToolsOpen && conditions.length > 0 && (
+             </section>
+             <section className="workspace-utility-conditions" aria-label="Condition settings">
+        {conditions.length > 0 && <button type="button" className="workspace-properties-toggle" aria-expanded={conditionToolsOpen} onClick={() => setConditionToolsOpen(v => !v)} title="Condition properties and pinned conditions">Conditions{aCond ? " · " + aCond.finish_tag : ""}</button>}
+      {/* Existing palette and appearance controls, now inside the tools flyout. */}
+      {conditionToolsOpen && conditions.length > 0 && (
         <div
           className="workspace-condition-tools"
           role="region" aria-label="Condition properties"
@@ -10900,48 +11029,11 @@ export default function TakeoffCanvas() {
             <button type="button" onClick={addCondition} title="Add a new condition"
               style={{ padding: "3px 9px", borderRadius: 0, border: "1px dashed var(--ink-faint)", background: "transparent", cursor: "pointer", fontSize: 12, color: "var(--ink-muted)" }}>+ condition</button>
           </div>
-          {/* the active condition's appearance editor, restored to the top bar —
-              same component the docked panel row renders (one source of truth) */}
+          {/* The same appearance editor and callbacks as the condition inspector. */}
           {aCond && (
             <div style={{ marginTop: 5, paddingTop: 5, borderTop: "1px solid var(--ink-faint)" }}>
               <ConditionAppearanceEditor cond={aCond} onUpdateCond={updateCond} onSetCondParam={setCondParam} onAssignAttr={assignAttr} conditionColumns={conditionColumns} layout="row" units={units} />
             </div>
-          )}
-        </div>
-      )}
-
-      {/* open-sheet tabs — what you opened from the gallery; click to view,
-          ⊞ to side-by-side, ✕ to close; the dropdown lists every open sheet */}
-      {!focusMode && openTabs.length > 0 && (
-        <div className="workspace-sheet-tabs" style={{ display: "flex", gap: 5, alignItems: "center", padding: "5px 14px", flexWrap: openTabs.length > MANY_TABS ? "nowrap" : "wrap", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", minWidth: 0 }}>
-          <span style={{ fontFamily: "var(--f-mono)", fontSize: 9.5, textTransform: "uppercase", letterSpacing: "0.14em", color: "var(--ink-muted)", flexShrink: 0 }}>Sheets</span>
-          {openTabs.length > MANY_TABS && (
-            <button type="button" onClick={() => scrollTabStrip(-1)} title="Scroll sheets left" aria-label="Scroll sheets left" style={{ flexShrink: 0, padding: "4px 5px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", display: "inline-flex" }}><Icon name="chevronLeft" size={12} /></button>
-          )}
-          <div ref={tabStripRef} data-sheet-tab-strip style={{ display: "flex", gap: 5, alignItems: "center", flexWrap: openTabs.length > MANY_TABS ? "nowrap" : "wrap", overflowX: openTabs.length > MANY_TABS ? "auto" : "visible", minWidth: 0, flex: openTabs.length > MANY_TABS ? 1 : "0 1 auto", scrollbarWidth: "none", overscrollBehaviorX: "contain" }}>
-          {openTabs.map((k) => {
-            const inGroup = sheetGroup.includes(k);
-            const on = sheetGroup.length ? inGroup : k === sheetKey;
-            const lbl = tabLabel(k);
-            return (
-              <span key={k} data-sheet-tab={on ? "active" : "idle"} style={{ display: "inline-flex", alignItems: "center", gap: 5, flexShrink: 0, border: "1px solid var(--ink-faint)", borderBottom: on ? "2px solid var(--cobalt)" : "1px solid var(--ink-faint)", background: on ? "var(--paper-cream)" : "transparent", padding: "3px 6px 2px 9px", maxWidth: 190 }}>
-                <button onClick={() => goToSheet(k)} title={k} style={{ border: "none", background: "none", cursor: "pointer", fontWeight: on ? 700 : 500, fontSize: 11.5, color: "var(--ink)", fontFamily: "var(--f-mono)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 140, padding: 0 }}>{lbl}</button>
-                <button onClick={() => toggleInGroup(k)} title={inGroup ? "Remove from side-by-side" : "Side-by-side with the current sheet"} style={{ border: "none", background: "none", cursor: "pointer", color: inGroup ? "var(--cobalt)" : "var(--ink-faint)", padding: 0, display: "inline-flex" }}><Icon name="sideBySide" size={11} /></button>
-                <button onClick={() => closeTab(k)} title="Close tab" style={{ border: "none", background: "none", cursor: "pointer", color: "var(--ink-muted)", padding: 0, display: "inline-flex" }}><Icon name="close" size={10} /></button>
-              </span>
-            );
-          })}
-          </div>
-          {openTabs.length > MANY_TABS && (
-            <button type="button" onClick={() => scrollTabStrip(1)} title="Scroll sheets right" aria-label="Scroll sheets right" style={{ flexShrink: 0, padding: "4px 5px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", display: "inline-flex" }}><Icon name="chevronRight" size={12} /></button>
-          )}
-          {openTabs.length > 1 && openTabs.length <= MANY_TABS && (
-            <ToolMenu
-              title="Jump to an open sheet"
-              onOpenChange={onMenuDepth}
-              face={<span style={{ fontFamily: "var(--f-mono)", fontSize: 11 }}>{openTabs.length} open</span>}
-              items={openTabs.map((k) => ({ id: k, icon: "document", label: tabLabel(k), active: sheetGroup.length ? sheetGroup.includes(k) : k === sheetKey, onSelect: () => goToSheet(k) }))}
-            />
           )}
         </div>
       )}
@@ -10951,7 +11043,7 @@ export default function TakeoffCanvas() {
           the same state (activate/reassign, hotkey badges, + condition) for
           users who want max panel-collapse and one-click switching. Toggled
           from the panel header, persisted with the panel prefs. */}
-      {!focusMode && conditionToolsOpen && panelPrefs.strip && (
+      {conditionToolsOpen && panelPrefs.strip && (
         <div style={{ display: "flex", gap: 8, alignItems: "center", padding: "7px 14px", flexWrap: "wrap", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)" }}>
           <span style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.4, color: "var(--ink-muted)" }}>Conditions</span>
           {conditions.map((c, i) => {
@@ -10972,122 +11064,19 @@ export default function TakeoffCanvas() {
         </div>
       )}
 
-      {/* calibration prompt */}
-      {tool === "calibrate" && (
-        <div style={{ padding: "8px 14px", background: "var(--paper-bright)", borderBottom: "1px solid var(--hairline-warm)", fontSize: 14 }}>
-          {calib.length < 2 ? <span>Custom scale: click two points along a known dimension ({calib.length}/2). Tip: use the longest dimension. (Or just pick a standard scale above.)</span> : (
-            <span>Real length:{" "}
-              <input name="calibration-length" type="number" value={pendingLen} onChange={(e) => setPendingLen(e.target.value)} onKeyDown={(e) => e.key === "Enter" && applyCalibration()} placeholder={units === "metric" ? "meters" : "feet"} autoFocus style={{ width: 90, padding: 5, borderRadius: 0, border: "1px solid var(--ink-faint)" }} /> {units === "metric" ? "m" : "ft"}
-              <button onClick={applyCalibration} style={{ marginLeft: 8, padding: "5px 12px", borderRadius: 0, border: "none", background: "var(--ink)", color: "var(--paper-bright)", cursor: "pointer" }}>Apply</button>
-              <button onClick={() => setCalib([])} style={{ marginLeft: 6, padding: "5px 10px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer" }}>Reset</button>
-            </span>
-          )}
-        </div>
-      )}
-
-      {/* check-a-dimension prompt — read-only twin of calibrate: measure a printed
-          dimension at the current scale, compare with what the drawing says */}
-      {tool === "check" && (
-        <div style={{ padding: "8px 14px", background: "var(--paper-bright)", borderBottom: "1px solid var(--hairline-warm)", fontSize: 14 }}>
-          {check.length < 2 ? (
-            <span>Check a dimension: click both ends of a printed dimension ({check.length}/2). The measured length shows here — compare it with what the drawing says.</span>
-          ) : checkCross ? (
-            <span style={{ color: "var(--c-danger)" }}>Check on one sheet — those two clicks landed on different sheets. <button onClick={() => { setCheck([]); setCheckStated(""); }} style={{ marginLeft: 6, padding: "5px 10px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer" }}>Reset</button></span>
-          ) : !checkUpp ? (
-            <span style={{ color: "var(--c-danger)" }}>No scale set for {labelFor(checkPanel)} — pick a standard scale or calibrate first, then check it here.</span>
-          ) : checkPx <= 0 ? (
-            <span style={{ color: "var(--c-danger)" }}>Those two clicks landed on the same point — click the two <b>ends</b> of a printed dimension.</span>
-          ) : (
-            <span>
-              measures <b style={{ fontFamily: "var(--f-mono)" }}>{fmtCheckLen(checkFeet, units)}</b> at {stdValue || "custom scale"} · drawing says{" "}
-              <input name="check-stated-length" value={checkStated} onChange={(e) => setCheckStated(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") e.currentTarget.blur(); }} placeholder={units === "metric" ? "meters" : `feet (12'6, 6" ok)`} autoFocus style={{ width: 100, padding: 5, borderRadius: 0, border: "1px solid var(--ink-faint)" }} /> {units === "metric" ? "m" : "ft"}
-              {checkErrPct != null && (() => {
-                // checkVerdict grades the ROUNDED value the chip displays (and
-                // normalizes -0), so color and number can never contradict —
-                // see units.ts for the ≤1/≤5 tie-break rationale
-                const v = checkVerdict(checkErrPct);
-                const pct = `${v.shown >= 0 ? "+" : ""}${v.shown.toFixed(1)}%`;
-                return (
-                  <b style={{ marginLeft: 8, color: v.grade === "match" ? "var(--c-positive)" : v.grade === "close" ? "var(--c-warning)" : "var(--c-danger)" }}>
-                    {v.grade === "match" ? `matches — scale checks out (${pct})`
-                      : v.grade === "close" ? `off by ${pct} — re-check or recalibrate`
-                      : `off by ${pct} — wrong scale; recalibrate`}
-                  </b>
-                );
-              })()}
-              {checkStatedFeet > 0 && (
-                <button onClick={recalibrateFromCheck} style={{ marginLeft: 8, padding: "5px 12px", borderRadius: 0, border: "none", background: "var(--ink)", color: "var(--paper-bright)", cursor: "pointer" }}>Recalibrate to this</button>
-              )}
-              <button onClick={() => { setCheck([]); setCheckStated(""); }} style={{ marginLeft: 6, padding: "5px 10px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer" }}>Reset</button>
-            </span>
-          )}
-        </div>
-      )}
-
-      {/* canvas + issue desk */}
-      <div className="workspace-body" data-primary-workspace={schedulesOpen ? "Schedules" : agentOpen ? "Agent" : "Plans"} style={{ flex: 1, display: "flex", overflow: "hidden", minHeight: 0, position: "relative" /* anchors the narrow-screen panel overlay */ }}>
-       {/* tool rail — machined faces grouped by MCP module (the concept shell).
-           Individual tiles replace deck 2's Measure/Cut Out menus; Markup keeps
-           its variety flyout on one tile (five markup kinds don't earn five
-           faces). Lives in the canvas row so docked panels + canvas reflow
-           beside it; survives focus mode — it IS the tool access. */}
-       {view === "canvas" && (
-       <nav role="toolbar" aria-label="Tools" style={{ width: "var(--rail-w)", flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--sp-1)", paddingTop: "var(--sp-2)", borderRight: "1px solid var(--ink-faint)", background: "var(--paper-bright)", overflowY: "auto", overflowX: "visible" }}>
-         {railLabel("SEL")}
-         {railTile("select", "select", "Select — pick a takeoff, drag points; drag open canvas to pan", "V")}
-         {railLabel("MEAS")}
-         {MEASURE_TOOLS.map((t) => railTile(t.id, t.icon, t.label, t.shortcut))}
-         {railLabel("CUT")}
-         {CUT_TOOLS.map((t) => railTile(t.id, t.icon, t.label, t.shortcut, null, { tint: "var(--c-danger)" }))}
-         {railLabel("MARK")}
-         <span ref={(el) => { if (el) markTileTopRef.current = el.getBoundingClientRect().top; }} style={{ position: "relative", display: "inline-flex" }}>
-           <ToolMenu
-             title="Markup — annotations, not measurements"
-             active={MARKUP_IDS.includes(tool)}
-             onOpenChange={onMenuDepth}
-             flyout="right"
-             face={<Icon name="markup" size={17} />}
-             items={[
-               { section: "Markup — notes on the plan, never measured" },
-               ...MARKUP_TOOLS.map((t) => ({ id: t.id, icon: t.icon, label: t.label, shortcut: t.shortcut, active: tool === t.id, onSelect: () => { setTool(t.id); setMarkupDraft(null); } })),
-             ]}
-           />
-           {/* highlighter style popover — fixed beside the rail while armed
-               (fixed, not absolute: the rail's scroll box would clip it) */}
-           {tool === "highlighter" && (
-             <div style={{ position: "fixed", left: "calc(var(--rail-w) + 8px)", top: markTileTopRef.current || 200, zIndex: Z.popover, background: "var(--paper-bright)", border: "1px solid var(--ink-faint)", borderRadius: 0, boxShadow: "var(--shadow-pop)", padding: "8px 10px", display: "flex", flexDirection: "column", gap: 7 }}>
-               <div style={{ display: "flex", gap: 6 }} title="Ink">
-                 {HL_INKS.map((c) => (
-                   <button key={c} onClick={() => setHlStyle((st) => ({ ...st, color: c }))}
-                     style={{ width: 16, height: 16, padding: 0, background: c, border: hlStyle.color === c ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer" }} />
-                 ))}
-               </div>
-               <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                 {HL_SIZES.map(([lbl, px]) => (
-                   <button key={lbl} onClick={() => setHlStyle((st) => ({ ...st, size: px }))} title={`${lbl === "F" ? "Fine" : lbl === "M" ? "Medium" : "Broad"} tip`}
-                     style={{ width: 22, height: 20, padding: 0, fontFamily: "var(--f-mono)", fontSize: 10, cursor: "pointer", border: hlStyle.size === px ? "1px solid var(--ink)" : "1px solid var(--ink-faint)", background: hlStyle.size === px ? "var(--ink)" : "transparent", color: hlStyle.size === px ? "var(--paper-bright)" : "var(--ink)" }}>{lbl}</button>
-                 ))}
-                 <span style={{ width: 1, alignSelf: "stretch", background: "var(--ink-faint)" }} />
-                 {[["chisel", "M4 16 L14 6 L18 10 L8 20 Z"], ["round", "M5 17 Q12 3 19 13"]].map(([tip, d]) => (
-                   <button key={tip} onClick={() => setHlStyle((st) => ({ ...st, tip }))} title={`${tip} tip`}
-                     style={{ width: 24, height: 20, padding: 1, cursor: "pointer", border: hlStyle.tip === tip ? "1px solid var(--ink)" : "1px solid var(--ink-faint)", background: "transparent" }}>
-                     <svg viewBox="0 0 24 24" width="18" height="14">{tip === "chisel"
-                       ? <path d={d} fill="currentColor" stroke="none" />
-                       : <path d={d} fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />}</svg>
-                   </button>
-                 ))}
-               </div>
-             </div>
-           )}
-         </span>
-         {/* Approval stamp — ink over pencil. Human-only by design: this tile
-             is the ONLY way an estimator seal is minted (no MCP tool, no agent
-             path), so the mark means a person looked. */}
-         {railTile("approve", "approve", "Approval stamp — the estimator's ink. Click a committed takeoff to approve it, or empty plan to approve the sheet; click a seal to lift it. ⌘Z undoes. Human-only.", null,
-           () => setTool((t) => (t === "approve" ? "select" : "approve")), { tint: tool === "approve" ? "var(--c-positive)" : undefined, armed: tool === "approve" })}
-         {railLabel("CAL")}
-         {railTile("calibrate", "calibrate", "Calibrate — click two points of a known dimension", null)}
-       </nav>
+             </section>
+             <section className="workspace-utility-links" aria-label="Project panels">
+               <h3>Project panels</h3>
+          {panelBtn(() => setLeftTab((t) => (t === "markup" ? null : "markup")), "markup", "Markups on these sheets (clouds, callouts, notes)", leftTab === "markup", markupCount, "Markups")}
+          {panelBtn(() => setLeftTab((t) => (t === "stamp" ? null : "stamp")), "stamp", "Stamps — reusable annotations dropped click-to-place", leftTab === "stamp", stampLib.stamps.length, "Stamps")}
+          {panelBtn(() => setLeftTab((t) => (t === "rfi" ? null : "rfi")), "rfi", "RFI register — raise, track, and export Requests For Information", leftTab === "rfi", rfis.length, "RFIs")}
+          {panelBtn(toggleTakeoffs, "takeoffs", "Takeoffs — conditions + running totals", takeoffsOpen, visibleShapes.length, "Conditions & totals")}
+          {rollByCond.size > 0 && panelBtn(() => setRollPanelOpen((o) => !o), "roll", "Roll goods — the cut diagram, cutting order, and figured order footage", rollPanelOpen, rollByCond.size, "Roll goods")}
+          {layerEntries.length > 0 && panelBtn(() => setLayersOpen((o) => !o), "layers", "PDF layers — what this drawing's own layer table states each ink is; set what One-Click treats as wall and what it ignores", layersOpen, layerEntries.reduce((n, e) => n + e.layers.length, 0), "PDF layers")}
+          {panelBtn(() => setShowRevisions(true), "revisions", "Revisions — save the takeoff at each bid revision, compare what moved", showRevisions, undefined, "Revisions")}
+             </section>
+           </div>
+         </aside>
        )}
        {/* docked LEFT panel — one of Markups/Stamps/RFIs at a time. Reflows the
            canvas (a flex sibling), mirroring the docked Takeoffs panel on the right. */}
@@ -12596,19 +12585,6 @@ export default function TakeoffCanvas() {
           </div>
         )}
 
-        {/* panel rail — markup/takeoffs toggles on the right edge (zoom-cluster
-            style). Moved out of the toolbar so it never wraps a third row. The
-            takeoffs toggle mirrors the DOCKED panel's collapsed pref — the rail
-            rides the canvas edge, so it stays visible either way. */}
-        <div style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", display: "flex", flexDirection: "column", gap: 6, zIndex: 8 }}>
-          {panelBtn(() => setLeftTab((t) => (t === "markup" ? null : "markup")), "markup", "Markups on these sheets (clouds, callouts, notes)", leftTab === "markup", markupCount)}
-          {panelBtn(() => setLeftTab((t) => (t === "stamp" ? null : "stamp")), "stamp", "Stamps — reusable annotations dropped click-to-place", leftTab === "stamp", stampLib.stamps.length)}
-          {panelBtn(() => setLeftTab((t) => (t === "rfi" ? null : "rfi")), "rfi", "RFI register — raise, track, and export Requests For Information", leftTab === "rfi", rfis.length)}
-          {panelBtn(toggleTakeoffs, "takeoffs", "Takeoffs — conditions + running totals", takeoffsOpen, visibleShapes.length)}
-          {rollByCond.size > 0 && panelBtn(() => setRollPanelOpen((o) => !o), "roll", "Roll goods — the cut diagram, cutting order, and figured order footage", rollPanelOpen, rollByCond.size)}
-          {layerEntries.length > 0 && panelBtn(() => setLayersOpen((o) => !o), "layers", "PDF layers — what this drawing's own layer table states each ink is; set what One-Click treats as wall and what it ignores", layersOpen, layerEntries.reduce((n, e) => n + e.layers.length, 0))}
-          {panelBtn(() => setShowRevisions(true), "revisions", "Revisions — save the takeoff at each bid revision, compare what moved", showRevisions)}
-        </div>
 
        </div>
 
@@ -12761,6 +12737,21 @@ export default function TakeoffCanvas() {
           clearSelectionRef={panelSelectionRef}
           {...panelHandlers}
         />
+
+        <nav className="workspace-action-rail" aria-label="Primary actions">
+          <button type="button" data-workspace-nav="Schedules" aria-pressed={schedulesOpen}
+            onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}>
+            <Icon name="document" size={21} />
+            <span>Schedules</span>
+            {graphTables.length > 0 && <small>{graphTables.length}</small>}
+          </button>
+          <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen}
+            onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}>
+            <Icon name="target" size={21} />
+            <span>Agent</span>
+            {(agentRunning || agentProposals.length > 0) && <small>{agentRunning ? "live" : agentProposals.length}</small>}
+          </button>
+        </nav>
       </div>
 
       {/* Unified plan navigator — one surface for the plan-set gallery AND the
