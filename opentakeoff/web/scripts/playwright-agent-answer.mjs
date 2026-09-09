@@ -51,6 +51,9 @@ try {
   await reader.waitFor();
   check('reader expands the existing main workspace', await dock.getAttribute('data-expanded') !== null && (await reader.boundingBox()).width >= 1200);
   check('focus enters Back to conversation', await page.getByRole('button', { name: 'Back to conversation' }).evaluate(el => el === document.activeElement));
+  check('Table is the first mode and opens by default', await page.locator('.agent-results-modes button').first().textContent() === 'Table' && await page.getByRole('button', { name: 'Table', exact: true }).getAttribute('aria-pressed') === 'true' && await page.locator('.agent-results-comparison').isVisible());
+  await page.screenshot({ path: resolve(out, 'results-table-default.png') });
+  await page.getByRole('button', { name: 'Details', exact: true }).click();
   check('five original rows, no invented rows', await rowButtons().count() === 5);
   if (expected[0][0][1].length > 60) {
     check('long navigation labels retain their full tooltip value', await rowButtons().first().locator('strong').getAttribute('title') === expected[0][0][1]);
@@ -76,13 +79,18 @@ try {
     await page.screenshot({ path: resolve(out, `results-${width}.png`) });
   }
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.getByRole('button', { name: 'Compare rows', exact: true }).click();
+  await page.getByRole('button', { name: 'Table', exact: true }).click();
   assert.deepEqual(await page.locator('.agent-results-comparison th').allTextContents(), expected[0].map(pair => pair[0]));
   const values = await page.locator('.agent-results-comparison tbody tr').evaluateAll(nodes => nodes.map(node => [...node.querySelectorAll('td')].map(cell => cell.textContent)));
   assert.deepEqual(values, expected.map(row => row.map(pair => pair[1])));
   check('comparison preserves all 175 cells and exact original headers/order', true);
   check('wide comparison scrolls internally', await page.locator('.agent-results-comparison').evaluate(el => el.scrollWidth > el.clientWidth && document.documentElement.scrollWidth <= innerWidth));
   await page.screenshot({ path: resolve(out, 'results-comparison.png') });
+  for (const width of [1280, 1440, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 900 });
+    check(`${width}: table stays inside workspace with internal scrolling`, await page.locator('.agent-results-comparison').evaluate(el => el.scrollWidth > el.clientWidth && el.getBoundingClientRect().right <= innerWidth && document.documentElement.scrollWidth <= innerWidth));
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.locator('.agent-results-comparison').evaluate(el => { el.scrollLeft = el.scrollWidth; });
   check('comparison keeps row identity visible at the far-right columns', await page.locator('.agent-results-comparison tbody td').first().evaluate(el => Math.abs(el.getBoundingClientRect().left - el.closest('.agent-results-comparison').getBoundingClientRect().left) < 2));
   await page.screenshot({ path: resolve(out, 'results-comparison-last-columns.png') });
@@ -105,7 +113,7 @@ try {
   const cite = { id: 'cite-1', sheet: 'test#1', bbox_px: [10, 20, 30, 40], row_key: 'AHU-1', column: 'CFM', value: '500' };
   await page.evaluate(cite => window.__uiRender({ citations: [cite], thread: [{ role: 'assistant', text: '- MARK: AHU-1 · CFM: 500 · NOTE: unchanged · FLAG: NO\n- MARK: AHU-2 · DIFFERENT: 0 · NOTE: verify · FLAG: YES' }] }), cite);
   await explore.click();
-  check('different field schemas are not merged into a comparison table', await page.getByRole('button', { name: 'Compare rows', exact: true }).count() === 0);
+  check('different field schemas fall back to Details without inventing a table', await page.getByRole('button', { name: 'Table', exact: true }).count() === 0 && await page.locator('.agent-results-detail').isVisible());
   await page.locator('.agent-results-detail dl button').first().click();
   assert.deepEqual(await page.evaluate(() => window.__uiCalls.pop()), ['onOpenCitation', cite]);
   await reader.waitFor({ state: 'detached' });
@@ -114,7 +122,19 @@ try {
   await page.getByRole('button', { name: 'Back to conversation' }).click();
   await reader.waitFor({ state: 'detached' });
   check('Back restores conversation without clearing it', await explore.isVisible());
+  await page.evaluate(cite => window.__uiRender({ citations: [cite], thread: [{ role: 'assistant', text: '- MARK: AHU-1 · CFM: 500 · NOTE: unchanged · FLAG: NO' }] }), cite);
   await explore.click();
+  check('a single structured row also opens as a table', await page.locator('.agent-results-comparison tbody tr').count() === 1);
+  await page.locator('.agent-results-comparison td button').first().click();
+  assert.deepEqual(await page.evaluate(() => window.__uiCalls.pop()), ['onOpenCitation', cite]);
+  await reader.waitFor({ state: 'detached' });
+  check('default Table citation preserves its callback and bbox', await dock.getAttribute('data-expanded') === null);
+  await explore.click();
+  await page.getByRole('button', { name: 'Details', exact: true }).click();
+  await page.getByRole('button', { name: 'Back to conversation' }).click();
+  await reader.waitFor({ state: 'detached' });
+  await explore.click();
+  check('reopening results starts with Table even after reading Details', await page.getByRole('button', { name: 'Table', exact: true }).getAttribute('aria-pressed') === 'true' && await page.locator('.agent-results-comparison').isVisible());
   await page.evaluate(() => window.__uiRender({ thread: [] }));
   await reader.waitFor({ state: 'detached' });
   check('removing a response cleans up its reader and transient expansion', await dock.getAttribute('data-expanded') === null);

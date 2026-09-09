@@ -137,7 +137,7 @@ function AnswerResults({ items, rows, cites, onOpenCitation }) {
   const [host, setHost] = useState(null);
   const [selected, setSelected] = useState(0);
   const [query, setQuery] = useState("");
-  const [compare, setCompare] = useState(false);
+  const [compare, setCompare] = useState(true);
   const launch = useRef(null);
   const back = useRef(null);
   const detail = useRef(null);
@@ -145,7 +145,7 @@ function AnswerResults({ items, rows, cites, onOpenCitation }) {
   const scroll = useRef(0);
   const focusWorkspace = useFocusWorkspace();
   useEffect(() => () => { restore.current?.(); }, []);
-  const comparable = rows.length > 1 && rows.every(row =>
+  const comparable = rows.length > 0 && rows.every(row =>
     row.length === rows[0].length && row.every((field, i) => field.label === rows[0][i].label));
   const visible = rows.map((fields, index) => ({ fields, index })).filter(({ fields }) =>
     fields.some(field => `${field.label} ${field.value}`.toLocaleLowerCase().includes(query.toLocaleLowerCase())));
@@ -175,6 +175,7 @@ function AnswerResults({ items, rows, cites, onOpenCitation }) {
         if (!target) return;
         scroll.current = target.scrollTop;
         target.scrollTop = 0;
+        setCompare(comparable);
         restore.current = focusWorkspace();
         setHost(target);
       }}>Explore results</button>
@@ -190,11 +191,11 @@ function AnswerResults({ items, rows, cites, onOpenCitation }) {
             <button ref={back} type="button" onClick={close}>← Back to conversation</button>
             <div><h3>Answer results</h3><p>{rows.length} rows · Values from this answer, unchanged</p></div>
             {comparable && <div className="agent-results-modes" aria-label="Result view">
+              <button type="button" aria-pressed={compare} onClick={() => setCompare(true)}>Table</button>
               <button type="button" aria-pressed={!compare} onClick={() => setCompare(false)}>Details</button>
-              <button type="button" aria-pressed={compare} onClick={() => setCompare(true)}>Compare rows</button>
             </div>}
           </header>
-          {compare ? <div className="agent-results-comparison" tabIndex={0} aria-label="Compare answer rows">
+          {compare && comparable ? <div className="agent-results-comparison" tabIndex={0} aria-label="Answer table">
             <table><thead><tr>{rows[0].map((field, i) => <th key={i}>{wrapFieldLabel(inlineMd(field.label, null, null))}</th>)}</tr></thead>
               <tbody>{rows.map((fields, ri) => <tr key={ri}>{fields.map((field, ci) => <td key={ci}>{ci === 0
                 ? <span className="agent-results-row-label" title={field.value}>{inlineMd(field.value, cites, cite)}</span>

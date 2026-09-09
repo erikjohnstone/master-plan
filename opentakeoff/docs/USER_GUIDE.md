@@ -31,9 +31,12 @@ the existing keyboard shortcut submit; Stop cancels through the existing path.
 Sources, history and technical steps remain available. Proposals still require
 explicit Accept/Reject. Finished quantities and export remain in Takeoff.
 Dense answer rows offer **Explore results**, opening the main workspace as a
-reader. Find a row in the left navigator and read its original label/value pairs
-on the right. **Compare rows** is available only when every row has the exact
-same headers in the same order; its wide grid scrolls internally. No columns are
+reader. **Table** is the first and default view: a digital grid of the answer's
+rows and columns, with pinned headers and first-column identity. Its wide grid
+scrolls internally. Choose **Details** to find a row in the left navigator and
+read its original label/value pairs on the right. Table is available only when
+every row has the exact same headers in the same order; otherwise the reader
+opens Details. Reopening results starts with Table when available. No columns are
 inferred, merged or renamed. The composer, running status and proposal review
 remain available. **Back to conversation** or Escape restores the previous dock
 view and draft; clicking a source-linked value closes the reader and reveals the

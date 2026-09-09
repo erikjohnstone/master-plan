@@ -46,14 +46,17 @@ passed. Live-model workflow results are documented separately from these views.
 The following are browser captures of the updated answer renderer replaying
 the five real recorded answer rows from the table19 live run. This is a
 presentation test, not a fresh model run or a claim of perfect transcription.
-Explore results temporarily opens the full Agent workspace, with a row
-navigator and a spacious detail view. All 175 label/value pairs are checked
-against the recorded response. Comparison is available only for rows with
-identical ordered headers. Back/Escape returns to chat; a citation reveals the
+Explore results temporarily opens the full Agent workspace. **Table** is the
+first/default view, with **Details** available for the row navigator and
+individual-item reading. All 175 label/value pairs are checked against the
+recorded response. Table is available only for rows with identical ordered
+headers; incompatible rows open Details. Back/Escape returns to chat; a citation reveals the
 drawing. The extraction engine is unchanged.
 
 ![Compact entry in the conversation](ui-workspace/evidence/results-reader/results-entry.png)
 
-![Full-workspace result reader](ui-workspace/evidence/results-reader/results-1440.png)
+![Table-first results workspace](ui-workspace/evidence/table-first/results-table-default.png)
 
-![Compare original answer rows](ui-workspace/evidence/results-reader/results-comparison.png)
+The earlier Details layout remains available as the secondary view:
+
+![Individual-row Details](ui-workspace/evidence/results-reader/results-1440.png)

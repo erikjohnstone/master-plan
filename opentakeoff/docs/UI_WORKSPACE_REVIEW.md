@@ -233,10 +233,13 @@ the full original conversation or a newly extracted result.
 After reviewing the first pass, the user explicitly requested a dedicated
 results workspace instead of in-chat field accordions. Dense unordered answer
 rows now show **Explore results** in the conversation. It temporarily expands
-the existing Agent workspace, with a searchable row navigator and a spacious
-selected-row detail list. **Compare rows** is available only when every row's
+the existing Agent workspace. Following the user's table-first feedback,
+**Table** replaces the Compare rows label, is ordered first, and opens by default
+on every entry. **Details** retains the searchable row navigator and spacious
+selected-row detail list as a secondary view. Table is available only when every row's
 field labels match exactly, position by position; duplicate labels keep their
-separate positions. No field union, inference, renaming or value repair occurs.
+separate positions. A single structured row can also open as a table; incompatible
+row headers fall back to Details. No field union, inference, renaming or value repair occurs.
 Ordered/mixed instructions retain their original order in the conversation.
 
 The existing composer, draft, run status/errors and pending proposal review
@@ -273,6 +276,16 @@ precede the long-label ellipsis polish; both source recordings are retained.
 [Reader regression checks](ui-workspace/evidence/results-reader/checks.json)
 
 ## Live HVAC transport failure — outside the UI change boundary
+
+The later table-first UI follow-up passes 45 reader checks on the first recorded
+answer and 47 on the long-label answer, including default/first Table selection,
+reopening, one-row tables, mismatched-header fallback, exact table citation/bbox
+callbacks, all 175 fields, and internal scrolling at all four widths. The full
+web check passes again (2,522 tests; 13 skipped). Its [evidence](ui-workspace/evidence/table-first/)
+includes the inspected default-table screenshots. One parallel browser capture
+timed out waiting for screenshot stability before opening the reader; the
+unchanged driver passed on its own retry. The failure log is retained. These
+are presentation replays, not new live-model or full-takeoff successes.
 
 The retry's [recorded Agent outcome](ui-workspace/evidence/live-hvac-failure/agent-outcome.txt)
 reports `bad CLI JSON: Expected ':' after property name in JSON at position

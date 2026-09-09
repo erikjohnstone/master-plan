@@ -216,8 +216,8 @@ async function runOne(rec, wantTitle) {
       await explore.first().click();
       await page.locator('[data-agent-results]').waitFor();
       await shot('3c-results-reader');
-      const compare = page.getByRole('button', { name: 'Compare rows', exact: true });
-      if (await compare.count()) { await compare.click(); await shot('3d-results-comparison'); }
+      const details = page.getByRole('button', { name: 'Details', exact: true });
+      if (await details.count()) { await details.click(); await shot('3d-results-details'); }
       await page.getByRole('button', { name: 'Back to conversation' }).click();
       // Read the original answer through its visible disclosure; do not change
       // the model prompt, extracted values, token scorer or truth records.
