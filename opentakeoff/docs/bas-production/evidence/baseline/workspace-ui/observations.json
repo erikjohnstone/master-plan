@@ -1,0 +1,135 @@
+{
+  "scope": "Baseline observations, not production acceptance assertions; isolated browser context",
+  "source": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection/pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+  "physicalTotal": {
+    "AI": 15,
+    "AO": 11,
+    "DI": 7,
+    "DO": 21
+  },
+  "observations": [
+    {
+      "theme": "light",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "layout": {
+        "region": {
+          "x": 212,
+          "y": 266.171875,
+          "width": 1496,
+          "height": 3911.1875
+        },
+        "firstTableY": 405.359375,
+        "documentWidth": 1920,
+        "viewportWidth": 1920,
+        "viewportHeight": 1080
+      },
+      "screenshot": "light-1920.png"
+    },
+    {
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "layout": {
+        "region": {
+          "x": 33.59375,
+          "y": 260.78125,
+          "width": 1372.8125,
+          "height": 3911.1875
+        },
+        "firstTableY": 399.96875,
+        "documentWidth": 1440,
+        "viewportWidth": 1440,
+        "viewportHeight": 900
+      },
+      "screenshot": "light-1440.png"
+    },
+    {
+      "theme": "light",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "layout": {
+        "region": {
+          "x": 31.1875,
+          "y": 257.78125,
+          "width": 1217.625,
+          "height": 3911.1875
+        },
+        "firstTableY": 396.96875,
+        "documentWidth": 1280,
+        "viewportWidth": 1280,
+        "viewportHeight": 800
+      },
+      "screenshot": "light-1280.png"
+    },
+    {
+      "theme": "dark",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "layout": {
+        "region": {
+          "x": 212,
+          "y": 266.171875,
+          "width": 1496,
+          "height": 3911.1875
+        },
+        "firstTableY": 405.359375,
+        "documentWidth": 1920,
+        "viewportWidth": 1920,
+        "viewportHeight": 1080
+      },
+      "screenshot": "dark-1920.png"
+    },
+    {
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "layout": {
+        "region": {
+          "x": 33.59375,
+          "y": 260.78125,
+          "width": 1372.8125,
+          "height": 3911.1875
+        },
+        "firstTableY": 399.96875,
+        "documentWidth": 1440,
+        "viewportWidth": 1440,
+        "viewportHeight": 900
+      },
+      "screenshot": "dark-1440.png"
+    },
+    {
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "layout": {
+        "region": {
+          "x": 31.1875,
+          "y": 257.78125,
+          "width": 1217.625,
+          "height": 3911.1875
+        },
+        "firstTableY": 396.96875,
+        "documentWidth": 1280,
+        "viewportWidth": 1280,
+        "viewportHeight": 800
+      },
+      "screenshot": "dark-1280.png"
+    }
+  ],
+  "persistedBasResult": false,
+  "hadBasResultBeforeReload": true,
+  "errors": []
+}

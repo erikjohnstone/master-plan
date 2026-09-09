@@ -1,5 +1,17 @@
 ## Active work
 
+### Deterministic BAS production workflows — isolated branch (2026-09-09)
+
+Active goal and acceptance contract: `../opentakeoff/docs/BAS_PRODUCTION_GOAL.md`.
+Current research, exact baselines, limitations and next steps:
+`../opentakeoff/docs/bas-production/PROGRESS.md`.
+Implementation is coordinator-only on `codex/bas-math-engine`, baseline `161583a4`.
+The new goal excludes vision/model training, pricing/costing/labor and automatic
+merges/deployments; those explicit limits supersede older scope notes below.
+30 focus and 190 source PDF hashes verified; 24 development truth records
+revalidated, six new-workflow holdouts reserved and unopened. Existing legacy
+MCP failures are disclosed, not scored away. No claim of production completion.
+
 ### Vector takeoff engine research — commercial + OSS stack (2026-09-01 22:00 UTC)
 
 **User directive:** Regex/title tuning is not the engine. Commercial products (Kamai,

@@ -1,0 +1,15 @@
+✔ Python BAS engine is strict and the transport does no arithmetic (421.43725ms)
+✔ unsafe JSON integer quantities and missing Python fail explicitly (5.869375ms)
+✔ safe individual inputs cannot silently produce rounded or oversized wire results (278.963417ms)
+✔ an unavailable Python runtime preserves legacy BAS output without a fake zero (13.077ms)
+✔ production CLI drains multi-megabyte UTF-8 JSON before explicit exit (70.920667ms)
+✔ shared production wrapper leaves all legacy results and graph values unchanged (225.804042ms)
+✔ singular indexed POINT LIST is consumed without modifying graph or legacy title selection (250.807417ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1494.2915

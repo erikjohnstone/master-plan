@@ -1,0 +1,3403 @@
+{
+  "source": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection/pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+  "demonstration_policy": {
+    "hardware": {
+      "profile_id": "DEMO · rigid 8/4/8/4 + 8 UI",
+      "rigid": {
+        "AI": 8,
+        "AO": 4,
+        "DI": 8,
+        "DO": 4
+      },
+      "universal_inputs": 8
+    },
+    "spare": {
+      "basis": "demand_addon",
+      "numerator": 15,
+      "denominator": 100
+    },
+    "licenses": [
+      {
+        "pool": "default",
+        "mode": "packs",
+        "base": 0,
+        "pack_size": 10
+      }
+    ]
+  },
+  "answer": {
+    "takeoff_id": "T-BAS-01",
+    "kind": "bas_points",
+    "sheet_count": 9,
+    "totals": {
+      "lists": 0,
+      "rows": 0,
+      "AI": 0,
+      "AO": 0,
+      "BI": 0,
+      "BO": 0,
+      "alarm": 0,
+      "trend": 0,
+      "hardwired": 0,
+      "soft": 0
+    },
+    "bas_math": {
+      "schema_version": "1",
+      "engine": "bas_math_v1",
+      "status": "review_required",
+      "project_complete": false,
+      "source_coverage": "point_list_only",
+      "physical_total": {
+        "AI": 15,
+        "AO": 11,
+        "DI": 7,
+        "DO": 21
+      },
+      "points": [
+        {
+          "group_id": "table-bbdeffc3e8c30a4c",
+          "point_id": "1",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "1",
+              "column": null,
+              "text": "DAMPER POSITION",
+              "bbox_px": [
+                3226.56,
+                900,
+                3725.76,
+                942
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "1",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3995.76,
+                900,
+                4085.76,
+                942
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbdeffc3e8c30a4c",
+          "point_id": "3",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 1,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "3",
+              "column": null,
+              "text": "DUAL OCCUPANCY SENSOR",
+              "bbox_px": [
+                3226.56,
+                984,
+                3725.76,
+                1026
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "3",
+              "column": "DI",
+              "text": "X",
+              "bbox_px": [
+                3905.74,
+                984,
+                3995.76,
+                1026
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbdeffc3e8c30a4c",
+          "point_id": "4",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 1,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "4",
+              "column": null,
+              "text": "DOWNSTREAM STATIC PRESSURE",
+              "bbox_px": [
+                3226.56,
+                1026,
+                3725.76,
+                1067.76
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "4",
+              "column": "DI",
+              "text": "X",
+              "bbox_px": [
+                3905.74,
+                1026,
+                3995.76,
+                1067.76
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "10",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 1,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "10",
+              "column": null,
+              "text": "SUPPLY FAN STATUS",
+              "bbox_px": [
+                2257.68,
+                864.24,
+                2816.88,
+                906.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "10",
+              "column": "DI",
+              "text": "X",
+              "bbox_px": [
+                2999.76,
+                864.24,
+                3091.44,
+                906.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "13",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "13",
+              "column": null,
+              "text": "SYSTEM ENABLE",
+              "bbox_px": [
+                2257.68,
+                990.24,
+                2816.88,
+                1032.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "13",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3091.44,
+                990.24,
+                3182.88,
+                1032.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "14",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "14",
+              "column": null,
+              "text": "RELIEF DAMPER OPEN/CLOSE",
+              "bbox_px": [
+                2257.68,
+                1032.24,
+                2816.88,
+                1074.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "14",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3091.44,
+                1032.24,
+                3182.88,
+                1074.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "16",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "16",
+              "column": null,
+              "text": "EXHAUST FAN ON/OFF",
+              "bbox_px": [
+                2257.68,
+                1116.24,
+                2816.88,
+                1158.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "16",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3091.44,
+                1116.24,
+                3182.88,
+                1158.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "17",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 1,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "17",
+              "column": null,
+              "text": "EXHAUST FAN STATUS",
+              "bbox_px": [
+                2257.68,
+                1158.24,
+                2816.88,
+                1200.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "17",
+              "column": "DI",
+              "text": "X",
+              "bbox_px": [
+                2999.76,
+                1158.24,
+                3091.44,
+                1200.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "19",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "19",
+              "column": null,
+              "text": "RA DAMPER OPEN/CLOSE",
+              "bbox_px": [
+                2257.68,
+                1242.24,
+                2816.88,
+                1284.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "19",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3091.44,
+                1242.24,
+                3182.88,
+                1284.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "2",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "2",
+              "column": null,
+              "text": "OUTSIDE AIR TEMP.",
+              "bbox_px": [
+                2257.68,
+                528.48,
+                2816.88,
+                570.48
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "2",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2816.88,
+                528.48,
+                2908.32,
+                570.48
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "20",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "20",
+              "column": null,
+              "text": "OA DAMPER OPEN/CLOSE",
+              "bbox_px": [
+                2257.68,
+                1284.24,
+                2816.88,
+                1326.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "20",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3091.44,
+                1284.24,
+                3182.88,
+                1326.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "22",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "22",
+              "column": null,
+              "text": "HW COIL LEAVING AIR TEMP.",
+              "bbox_px": [
+                2257.68,
+                1368,
+                2816.88,
+                1410
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "22",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2816.88,
+                1368,
+                2908.32,
+                1410
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "23",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "23",
+              "column": null,
+              "text": "HW COIL LEAVING AIR TEMP. SETPOINT",
+              "bbox_px": [
+                2257.68,
+                1410,
+                2816.88,
+                1452
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "23",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3091.44,
+                1410,
+                3182.88,
+                1452
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "24",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "24",
+              "column": null,
+              "text": "HOT WATER VALVE POSITION",
+              "bbox_px": [
+                2257.68,
+                1452,
+                2816.88,
+                1494
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "24",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2908.32,
+                1452,
+                2999.76,
+                1494
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "25",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "25",
+              "column": null,
+              "text": "CHILLED WATER VALVE POSITION",
+              "bbox_px": [
+                2257.68,
+                1494,
+                2816.88,
+                1536
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "25",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2908.32,
+                1494,
+                2999.76,
+                1536
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "26",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "26",
+              "column": null,
+              "text": "SUPPLY VFD SPEED",
+              "bbox_px": [
+                2257.68,
+                1536,
+                2816.88,
+                1578
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "26",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2908.32,
+                1536,
+                2999.76,
+                1578
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "27",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "27",
+              "column": null,
+              "text": "EXHAUST VFD SPEED",
+              "bbox_px": [
+                2257.68,
+                1578,
+                2816.88,
+                1620
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "27",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2908.32,
+                1578,
+                2999.76,
+                1620
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "3",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "3",
+              "column": null,
+              "text": "SUPPLY AIR FLOW",
+              "bbox_px": [
+                2257.68,
+                570.48,
+                2816.88,
+                612.48
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "3",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2816.88,
+                570.48,
+                2908.32,
+                612.48
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "4",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "4",
+              "column": null,
+              "text": "SUPPLY AIR TEMP.",
+              "bbox_px": [
+                2257.68,
+                612.48,
+                2816.88,
+                654.48
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "4",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2816.88,
+                612.48,
+                2908.32,
+                654.48
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "5",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "5",
+              "column": null,
+              "text": "SUPPLY AIR TEMP. SETPOINT",
+              "bbox_px": [
+                2257.68,
+                654.48,
+                2816.88,
+                696.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "5",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3091.44,
+                654.48,
+                3182.88,
+                696.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "6",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "6",
+              "column": null,
+              "text": "CHW COIL LEAVING AIR TEMP.",
+              "bbox_px": [
+                2257.68,
+                696.24,
+                2816.88,
+                738.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "6",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2816.88,
+                696.24,
+                2908.32,
+                738.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "7",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "7",
+              "column": null,
+              "text": "CHW COIL LEAVING AIR TEMP. SETPOINT",
+              "bbox_px": [
+                2257.68,
+                738.24,
+                2816.88,
+                780.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "7",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3091.44,
+                738.24,
+                3182.88,
+                780.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "9",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "9",
+              "column": null,
+              "text": "SUPPLY FAN ON/OFF",
+              "bbox_px": [
+                2257.68,
+                822.24,
+                2816.88,
+                864.24
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "9",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                3091.44,
+                822.24,
+                3182.88,
+                864.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "10",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 1,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "10",
+              "column": null,
+              "text": "SUPPLY FAN STATUS",
+              "bbox_px": [
+                1791.6,
+                830.64,
+                2350.8,
+                872.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "10",
+              "column": "DI",
+              "text": "X",
+              "bbox_px": [
+                2533.68,
+                830.64,
+                2625.36,
+                872.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "13",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "13",
+              "column": null,
+              "text": "SYSTEM ENABLE",
+              "bbox_px": [
+                1791.6,
+                956.64,
+                2350.8,
+                998.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "13",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                956.64,
+                2716.8,
+                998.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "14",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "14",
+              "column": null,
+              "text": "RELIEF DAMPER OPEN/CLOSE",
+              "bbox_px": [
+                1791.6,
+                998.64,
+                2350.8,
+                1040.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "14",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                998.64,
+                2716.8,
+                1040.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "16",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "16",
+              "column": null,
+              "text": "EXHAUST FAN ON/OFF",
+              "bbox_px": [
+                1791.6,
+                1082.64,
+                2350.8,
+                1124.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "16",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                1082.64,
+                2716.8,
+                1124.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "17",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 1,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "17",
+              "column": null,
+              "text": "EXHAUST FAN STATUS",
+              "bbox_px": [
+                1791.6,
+                1124.4,
+                2350.8,
+                1166.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "17",
+              "column": "DI",
+              "text": "X",
+              "bbox_px": [
+                2533.68,
+                1124.4,
+                2625.36,
+                1166.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "19",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 1,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "19",
+              "column": null,
+              "text": "DUCT STATIC PRESSURE",
+              "bbox_px": [
+                1791.6,
+                1208.4,
+                2350.8,
+                1250.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "19",
+              "column": "DI",
+              "text": "X",
+              "bbox_px": [
+                2533.68,
+                1208.4,
+                2625.36,
+                1250.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "2",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "2",
+              "column": null,
+              "text": "OUTSIDE AIR TEMPERATURE",
+              "bbox_px": [
+                1791.6,
+                494.64,
+                2350.8,
+                536.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "2",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2350.8,
+                494.64,
+                2442.24,
+                536.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "20",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "20",
+              "column": null,
+              "text": "DUCT STATIC PRESSURE SETPOINT",
+              "bbox_px": [
+                1791.6,
+                1250.4,
+                2350.8,
+                1292.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "20",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                1250.4,
+                2716.8,
+                1292.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "22",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "22",
+              "column": null,
+              "text": "HW COIL LEAVING AIR TEMPERATURE",
+              "bbox_px": [
+                1791.6,
+                1333.92,
+                2350.8,
+                1376.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "22",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2350.8,
+                1333.92,
+                2442.24,
+                1376.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "23",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "23",
+              "column": null,
+              "text": "HW COIL LEAVING AIR TEMP. SETPOINT",
+              "bbox_px": [
+                1791.6,
+                1376.4,
+                2350.8,
+                1418.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "23",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                1376.4,
+                2716.8,
+                1418.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "24",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "24",
+              "column": null,
+              "text": "HOT WATER VALVE POSITION",
+              "bbox_px": [
+                1791.6,
+                1418.4,
+                2350.8,
+                1460.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "24",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2442.24,
+                1418.4,
+                2533.68,
+                1460.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "25",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "25",
+              "column": null,
+              "text": "CHILLED WATER VALVE POSITION",
+              "bbox_px": [
+                1791.6,
+                1460.4,
+                2350.8,
+                1502.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "25",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2442.24,
+                1460.4,
+                2533.68,
+                1502.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "26",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "26",
+              "column": null,
+              "text": "SUPPLY VFD SPEED",
+              "bbox_px": [
+                1791.6,
+                1502.4,
+                2350.8,
+                1544.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "26",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2442.24,
+                1502.4,
+                2533.68,
+                1544.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "27",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "27",
+              "column": null,
+              "text": "EXHAUST VFD SPEED",
+              "bbox_px": [
+                1791.6,
+                1544.4,
+                2350.8,
+                1586.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "27",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2442.24,
+                1544.4,
+                2533.68,
+                1586.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "28",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "28",
+              "column": null,
+              "text": "RA DAMPER OPEN/CLOSE",
+              "bbox_px": [
+                1791.6,
+                1586.4,
+                2350.8,
+                1628.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "28",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                1586.4,
+                2716.8,
+                1628.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "29",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "29",
+              "column": null,
+              "text": "OA DAMPER OPEN/CLOSE",
+              "bbox_px": [
+                1791.6,
+                1628.4,
+                2350.8,
+                1670.4
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "29",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                1628.4,
+                2716.8,
+                1670.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "3",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "3",
+              "column": null,
+              "text": "SUPPLY AIR FLOW",
+              "bbox_px": [
+                1791.6,
+                536.64,
+                2350.8,
+                578.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "3",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2350.8,
+                536.64,
+                2442.24,
+                578.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "4",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "4",
+              "column": null,
+              "text": "SUPPLY AIR TEMPERATURE",
+              "bbox_px": [
+                1791.6,
+                578.64,
+                2350.8,
+                620.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "4",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2350.8,
+                578.64,
+                2442.24,
+                620.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "5",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "5",
+              "column": null,
+              "text": "SUPPLY AIR TEMPERATURE SETPOINT",
+              "bbox_px": [
+                1791.6,
+                620.64,
+                2350.8,
+                662.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "5",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                620.64,
+                2716.8,
+                662.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "6",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "6",
+              "column": null,
+              "text": "CHW COIL LEAVING AIR TEMPERATURE",
+              "bbox_px": [
+                1791.6,
+                662.64,
+                2350.8,
+                704.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "6",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2350.8,
+                662.64,
+                2442.24,
+                704.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "7",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "7",
+              "column": null,
+              "text": "CHW COIL LEAVING AIR TEMP. SETPOINT",
+              "bbox_px": [
+                1791.6,
+                704.64,
+                2350.8,
+                746.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "7",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                704.64,
+                2716.8,
+                746.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "9",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "9",
+              "column": null,
+              "text": "SUPPLY FAN ON/OFF",
+              "bbox_px": [
+                1791.6,
+                788.64,
+                2350.8,
+                830.64
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "9",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2625.36,
+                788.64,
+                2716.8,
+                830.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "10",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "10",
+              "column": null,
+              "text": "HOT WATER VALVE POSITION",
+              "bbox_px": [
+                2151.84,
+                715.92,
+                2697.6,
+                759.36
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "10",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2697.6,
+                715.92,
+                2783.04,
+                759.36
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "11",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "11",
+              "column": null,
+              "text": "CHILLED WATER VALVE POSITION",
+              "bbox_px": [
+                2151.84,
+                759.36,
+                2697.6,
+                803.04
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "11",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2697.6,
+                759.36,
+                2783.04,
+                803.04
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "2",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "2",
+              "column": null,
+              "text": "SUPPLY AIR TEMPERATURE",
+              "bbox_px": [
+                2151.84,
+                368.16,
+                2697.6,
+                411.6
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "2",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2697.6,
+                368.16,
+                2783.04,
+                411.6
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "3",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "3",
+              "column": null,
+              "text": "SPACE TEMPERATURE",
+              "bbox_px": [
+                2151.84,
+                411.6,
+                2697.6,
+                455.04
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "3",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2697.6,
+                411.6,
+                2783.04,
+                455.04
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "4",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "4",
+              "column": null,
+              "text": "SUPPLY AIR TEMPERATURE SETPOINT",
+              "bbox_px": [
+                2151.84,
+                455.04,
+                2697.6,
+                498.48
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "4",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2783.04,
+                455.04,
+                2868.48,
+                498.48
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "5",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "5",
+              "column": null,
+              "text": "SPACE AIR TEMPERATURE SETPOINT",
+              "bbox_px": [
+                2151.84,
+                498.48,
+                2697.6,
+                541.92
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "5",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2783.04,
+                498.48,
+                2868.48,
+                541.92
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "6",
+          "physical": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 0,
+            "DO": 1
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "6",
+              "column": null,
+              "text": "SUPPLY FAN ON/OFF",
+              "bbox_px": [
+                2151.84,
+                541.92,
+                2697.6,
+                585.6
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "6",
+              "column": "DO",
+              "text": "X",
+              "bbox_px": [
+                2954.16,
+                541.92,
+                3039.6,
+                585.6
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "7",
+          "physical": {
+            "AI": 0,
+            "AO": 1,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "7",
+              "column": null,
+              "text": "SUPPLY FAN SPEED",
+              "bbox_px": [
+                2151.84,
+                585.6,
+                2697.6,
+                629.04
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "7",
+              "column": "AO",
+              "text": "X",
+              "bbox_px": [
+                2783.04,
+                585.6,
+                2868.48,
+                629.04
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        },
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "9",
+          "physical": {
+            "AI": 1,
+            "AO": 0,
+            "DI": 0,
+            "DO": 0
+          },
+          "soft": [],
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "9",
+              "column": null,
+              "text": "RETURN AIR DAMPER POSITION",
+              "bbox_px": [
+                2151.84,
+                672.48,
+                2697.6,
+                715.92
+              ],
+              "origin": "blueprint_index"
+            },
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "9",
+              "column": "AI",
+              "text": "X",
+              "bbox_px": [
+                2697.6,
+                672.48,
+                2783.04,
+                715.92
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "conflict": false,
+          "sources": [
+            "point_list"
+          ]
+        }
+      ],
+      "hardware": [
+        {
+          "group_id": "table-f3f1c93ee5d6662f",
+          "status": "calculated",
+          "live_per_pool": {
+            "AI": 5,
+            "AO": 3,
+            "DI": 0,
+            "DO": 1
+          },
+          "required_per_pool": {
+            "AI": 6,
+            "AO": 4,
+            "DI": 0,
+            "DO": 2
+          },
+          "blocks_total": 1,
+          "blocks_per_pool": 1,
+          "pool_count": 1,
+          "profile_id": "DEMO · rigid 8/4/8/4 + 8 UI",
+          "allocation": "independent",
+          "spare_policy": {
+            "basis": "demand_addon",
+            "numerator": 15,
+            "denominator": 100,
+            "minimum": {
+              "AI": 0,
+              "AO": 0,
+              "DI": 0,
+              "DO": 0
+            }
+          },
+          "rigid_capacity_per_pool": {
+            "AI": 8,
+            "AO": 4,
+            "DI": 8,
+            "DO": 4
+          },
+          "universal_capacity_per_pool": 8,
+          "assigned_rigid_per_pool": {
+            "AI": 6,
+            "AO": 4,
+            "DI": 0,
+            "DO": 2
+          },
+          "assigned_universal_AI": 0,
+          "assigned_universal_DI": 0,
+          "unassigned_universal": 8
+        },
+        {
+          "group_id": "table-eb6fd2fc958df3fc",
+          "status": "calculated",
+          "live_per_pool": {
+            "AI": 5,
+            "AO": 4,
+            "DI": 3,
+            "DO": 10
+          },
+          "required_per_pool": {
+            "AI": 6,
+            "AO": 5,
+            "DI": 4,
+            "DO": 12
+          },
+          "blocks_total": 3,
+          "blocks_per_pool": 3,
+          "pool_count": 1,
+          "profile_id": "DEMO · rigid 8/4/8/4 + 8 UI",
+          "allocation": "independent",
+          "spare_policy": {
+            "basis": "demand_addon",
+            "numerator": 15,
+            "denominator": 100,
+            "minimum": {
+              "AI": 0,
+              "AO": 0,
+              "DI": 0,
+              "DO": 0
+            }
+          },
+          "rigid_capacity_per_pool": {
+            "AI": 24,
+            "AO": 12,
+            "DI": 24,
+            "DO": 12
+          },
+          "universal_capacity_per_pool": 24,
+          "assigned_rigid_per_pool": {
+            "AI": 6,
+            "AO": 5,
+            "DI": 4,
+            "DO": 12
+          },
+          "assigned_universal_AI": 0,
+          "assigned_universal_DI": 0,
+          "unassigned_universal": 24
+        },
+        {
+          "group_id": "table-bbdeffc3e8c30a4c",
+          "status": "calculated",
+          "live_per_pool": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 2,
+            "DO": 1
+          },
+          "required_per_pool": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 3,
+            "DO": 2
+          },
+          "blocks_total": 1,
+          "blocks_per_pool": 1,
+          "pool_count": 1,
+          "profile_id": "DEMO · rigid 8/4/8/4 + 8 UI",
+          "allocation": "independent",
+          "spare_policy": {
+            "basis": "demand_addon",
+            "numerator": 15,
+            "denominator": 100,
+            "minimum": {
+              "AI": 0,
+              "AO": 0,
+              "DI": 0,
+              "DO": 0
+            }
+          },
+          "rigid_capacity_per_pool": {
+            "AI": 8,
+            "AO": 4,
+            "DI": 8,
+            "DO": 4
+          },
+          "universal_capacity_per_pool": 8,
+          "assigned_rigid_per_pool": {
+            "AI": 0,
+            "AO": 0,
+            "DI": 3,
+            "DO": 2
+          },
+          "assigned_universal_AI": 0,
+          "assigned_universal_DI": 0,
+          "unassigned_universal": 8
+        },
+        {
+          "group_id": "table-bbe365bff36717f0",
+          "status": "calculated",
+          "live_per_pool": {
+            "AI": 5,
+            "AO": 4,
+            "DI": 2,
+            "DO": 9
+          },
+          "required_per_pool": {
+            "AI": 6,
+            "AO": 5,
+            "DI": 3,
+            "DO": 11
+          },
+          "blocks_total": 3,
+          "blocks_per_pool": 3,
+          "pool_count": 1,
+          "profile_id": "DEMO · rigid 8/4/8/4 + 8 UI",
+          "allocation": "independent",
+          "spare_policy": {
+            "basis": "demand_addon",
+            "numerator": 15,
+            "denominator": 100,
+            "minimum": {
+              "AI": 0,
+              "AO": 0,
+              "DI": 0,
+              "DO": 0
+            }
+          },
+          "rigid_capacity_per_pool": {
+            "AI": 24,
+            "AO": 12,
+            "DI": 24,
+            "DO": 12
+          },
+          "universal_capacity_per_pool": 24,
+          "assigned_rigid_per_pool": {
+            "AI": 6,
+            "AO": 5,
+            "DI": 3,
+            "DO": 11
+          },
+          "assigned_universal_AI": 0,
+          "assigned_universal_DI": 0,
+          "unassigned_universal": 24
+        }
+      ],
+      "licenses": [
+        {
+          "pool": "default",
+          "weighted_points": 0,
+          "status": "calculated",
+          "variables": 0,
+          "entitlement": 0,
+          "packs": 0,
+          "headroom": 0
+        }
+      ],
+      "serial": [],
+      "ip": [],
+      "diagnostics": [
+        {
+          "code": "TABLE_SCOPE_NOT_EQUIPMENT_COUNT",
+          "severity": "warning",
+          "message": "Counts cover this listed table once. Template replication, controller grouping and installed equipment counts are not established by the table alone.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": null,
+              "column": null,
+              "text": "BAS INPUT/OUTPUT POINT LIST",
+              "bbox_px": [
+                2066.4,
+                215.04,
+                3474.48,
+                1150.8
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": null
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "1",
+              "column": null,
+              "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+              "bbox_px": [
+                2151.84,
+                324.72,
+                2697.6,
+                368.16
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "1"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "8",
+              "column": null,
+              "text": "SUPPLY FAN FAILURE",
+              "bbox_px": [
+                2151.84,
+                629.04,
+                2697.6,
+                672.48
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "8"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "12",
+              "column": null,
+              "text": "FILTER REPLACEMENT ALARM",
+              "bbox_px": [
+                2151.84,
+                803.04,
+                2697.6,
+                846.48
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "12"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "13",
+              "column": null,
+              "text": "HIGH TEMPERATURE ALARM",
+              "bbox_px": [
+                2151.84,
+                846.48,
+                2697.6,
+                889.92
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "13"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "14",
+              "column": null,
+              "text": "FREEZE PROTECTION",
+              "bbox_px": [
+                2151.84,
+                889.92,
+                2697.6,
+                933.36
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "14"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "15",
+              "column": null,
+              "text": "CHANGE FILTER ALARM",
+              "bbox_px": [
+                2151.84,
+                933.36,
+                2697.6,
+                976.8
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "15"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "16",
+              "column": null,
+              "text": "HIGH/LOW SUPPLY AIR TEMP. ALARM",
+              "bbox_px": [
+                2151.84,
+                976.8,
+                2697.6,
+                1020.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "16"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "17",
+              "column": null,
+              "text": "CONDENSATE OVERFLOW ALARM",
+              "bbox_px": [
+                2151.84,
+                1020.24,
+                2697.6,
+                1063.92
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "17"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "18",
+              "column": null,
+              "text": "SMOKE DETERCTOR ALARM",
+              "bbox_px": [
+                2151.84,
+                1063.92,
+                2697.6,
+                1107.36
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "18"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "19",
+              "column": null,
+              "text": "HIGH/LOW SUPPLY STATIC PRESSURE ALARM",
+              "bbox_px": [
+                2151.84,
+                1107.36,
+                2697.6,
+                1150.8
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-f3f1c93ee5d6662f",
+          "point_id": "19"
+        },
+        {
+          "code": "TABLE_SCOPE_NOT_EQUIPMENT_COUNT",
+          "severity": "warning",
+          "message": "Counts cover this listed table once. Template replication, controller grouping and installed equipment counts are not established by the table alone.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": null,
+              "column": null,
+              "text": "BAS INPUT/OUTPUT POINT LIST",
+              "bbox_px": [
+                1698.48,
+                368.88,
+                2883.12,
+                1670.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": null
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "1",
+              "column": null,
+              "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+              "bbox_px": [
+                1791.6,
+                452.64,
+                2350.8,
+                494.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "1"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "8",
+              "column": null,
+              "text": "FILTER DIFFERENTIAL PRESSURE",
+              "bbox_px": [
+                1791.6,
+                746.64,
+                2350.8,
+                788.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "8"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "11",
+              "column": null,
+              "text": "SUPPLY FAN FAILURE",
+              "bbox_px": [
+                1791.6,
+                872.64,
+                2350.8,
+                914.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "11"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "12",
+              "column": null,
+              "text": "CONDENSATE OVERFLOW",
+              "bbox_px": [
+                1791.6,
+                914.64,
+                2350.8,
+                956.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "12"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "15",
+              "column": null,
+              "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+              "bbox_px": [
+                1791.6,
+                1040.64,
+                2350.8,
+                1082.64
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "15"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "18",
+              "column": null,
+              "text": "EXHAUST FAN FAILURE",
+              "bbox_px": [
+                1791.6,
+                1166.4,
+                2350.8,
+                1208.4
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "18"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "21",
+              "column": null,
+              "text": "DUCT SMOKE DETECTOR",
+              "bbox_px": [
+                1791.6,
+                1292.4,
+                2350.8,
+                1333.92
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-eb6fd2fc958df3fc",
+          "point_id": "21"
+        },
+        {
+          "code": "TABLE_SCOPE_NOT_EQUIPMENT_COUNT",
+          "severity": "warning",
+          "message": "Counts cover this listed table once. Template replication, controller grouping and installed equipment counts are not established by the table alone.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": null,
+              "column": null,
+              "text": "BAS INPUT/OUTPUT POINT LIST",
+              "bbox_px": [
+                3091.68,
+                816,
+                4217.76,
+                1067.76
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbdeffc3e8c30a4c",
+          "point_id": null
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "2",
+              "column": null,
+              "text": "VAV FAILURE",
+              "bbox_px": [
+                3226.56,
+                942,
+                3725.76,
+                984
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbdeffc3e8c30a4c",
+          "point_id": "2"
+        },
+        {
+          "code": "TABLE_SCOPE_NOT_EQUIPMENT_COUNT",
+          "severity": "warning",
+          "message": "Counts cover this listed table once. Template replication, controller grouping and installed equipment counts are not established by the table alone.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": null,
+              "column": null,
+              "text": "BAS INPUT/OUTPUT POINT LIST",
+              "bbox_px": [
+                2164.56,
+                402.48,
+                3349.2,
+                1620
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": null
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "1",
+              "column": null,
+              "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+              "bbox_px": [
+                2257.68,
+                486.48,
+                2816.88,
+                528.48
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "1"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "8",
+              "column": null,
+              "text": "FILTER DIFFERENTIAL PRESSURE",
+              "bbox_px": [
+                2257.68,
+                780.24,
+                2816.88,
+                822.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "8"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "11",
+              "column": null,
+              "text": "SUPPLY FAN FAILURE",
+              "bbox_px": [
+                2257.68,
+                906.24,
+                2816.88,
+                948.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "11"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "12",
+              "column": null,
+              "text": "CONDENSATE OVERFLOW",
+              "bbox_px": [
+                2257.68,
+                948.24,
+                2816.88,
+                990.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "12"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "15",
+              "column": null,
+              "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+              "bbox_px": [
+                2257.68,
+                1074.24,
+                2816.88,
+                1116.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "15"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "18",
+              "column": null,
+              "text": "EXHAUST FAN FAILURE",
+              "bbox_px": [
+                2257.68,
+                1200.24,
+                2816.88,
+                1242.24
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "18"
+        },
+        {
+          "code": "INDEX_ROW_NO_TYPED_POINTS",
+          "severity": "info",
+          "message": "No positive typed I/O or software-value cell. Alarm/trend-only rows do not create physical terminals.",
+          "evidence": [
+            {
+              "sheet_id": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+              "table_title": "BAS INPUT/OUTPUT POINT LIST",
+              "row_key": "21",
+              "column": null,
+              "text": "DUCT SMOKE DETECTOR",
+              "bbox_px": [
+                2257.68,
+                1326.24,
+                2816.88,
+                1368
+              ],
+              "origin": "blueprint_index"
+            }
+          ],
+          "group_id": "table-bbe365bff36717f0",
+          "point_id": "21"
+        },
+        {
+          "code": "SOO_INDEX_NOT_FOUND",
+          "severity": "warning",
+          "message": "No sequence returned by the current index; inspect the blueprint before concluding SOO is absent.",
+          "evidence": [],
+          "group_id": null,
+          "point_id": null
+        },
+        {
+          "code": "INDEX_COVERAGE_UNVERIFIED",
+          "severity": "warning",
+          "message": "Math covers indexed, typed cells only; source completeness, wire distances and equipment replication require verification.",
+          "evidence": [],
+          "group_id": null,
+          "point_id": null
+        },
+        {
+          "code": "SINGLE_SOURCE",
+          "severity": "info",
+          "message": "Only one requirement source was supplied; cross-source agreement is unverified.",
+          "evidence": [],
+          "group_id": null,
+          "point_id": null
+        }
+      ]
+    },
+    "empty_pages": 9,
+    "exclusions": [
+      "Title-only schematic points lists (non-extractable typed rows)",
+      "HVAC equipment schedules (counted under T-HVAC-01)",
+      "Sequence-of-operations / narrative controls text (not a typed points table — refuse / not done; never invent points from SOO)",
+      "No architectural sheets in this upload — fire/smoke damper counts are from mechanical sheets only; a complete count requires cross-checking the architectural fire-rated wall plan, not present in this set.",
+      "Valve/damper type or performance requirements and commissioning/TAB scope that exist only in a separate specifications book (CSI Division 23) are out of scope unless that book is part of this upload — this platform can only see what was actually provided."
+    ],
+    "category_count": 0,
+    "category_counts": null,
+    "list_counts": [],
+    "downloaded": [],
+    "ui_takeoff_open": true
+  }
+}
