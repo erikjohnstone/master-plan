@@ -1,0 +1,190 @@
+
+> opentakeoff-web@0.1.0 bench
+> node --import tsx bench/run.mts
+
+enclosed-room / center                       IoU 1.000  SF±0.0%  conf 1.00
+enclosed-room / near-wall                    IoU 1.000  SF±0.0%  conf 1.00  (near-wall-seed)
+cased-opening-3ft / center                   IoU 1.000  SF±0.0%  conf 0.94  (gap-seal)
+door-swing-3ft / center                      IoU 1.000  SF±0.0%  conf 0.93  (door-swing,wedge-included)
+door-swing-3ft / in-doorway                  refused ✓  (doorway-interior,known-limit)
+two-doorways / center                        IoU 1.000  SF±0.0%  conf 0.85  (gap-seal,multi-gap)
+hatched-room / center                        IoU 1.000  SF±0.0%  conf 0.93  (hatch)
+tile-grid-room / in-cell                     IoU 1.000  SF±0.0%  conf 0.85  (hatch,tile-grid)
+curved-partition / left-half                 IoU 0.990  SF±1.0%  conf 0.84  (curved-wall,no-false-wedge)
+two-door-room / center                       IoU 1.000  SF±0.0%  conf 0.92  (door-swing,multi-door)
+annotation-ring-room / center                IoU 0.667  SF±33.3%  conf 1.00  [known-fail]  (annotation-ring,known-limit)
+partition-bank-15in / mid-bay                IoU 0.196  SF±400.0% LEAK  conf 0.85  [known-fail]  (partition-bank,known-limit)
+tile-demising-same-pen / room-a              IoU 0.500  SF±100.0%  conf 0.85  [known-fail]  (demising-wall,known-limit)
+open-space / outside-room                    refused ✓  (open-space)
+oversized-enclosure / center                 refused ✓  (room-size-cap)
+sample-plan / break-103                      IoU 1.000  SF±0.0%  conf 1.00
+sample-plan / corridor-104                   IoU 1.000  SF±0.0%  conf 1.00
+sample-plan / office-101                     IoU 1.000  SF±0.0%  conf 1.00
+sample-plan / office-102                     IoU 1.000  SF±0.0%  conf 1.00
+va-finish-plan / patient-room-137            IoU 1.000  SF±0.0%  conf 0.93  (door-swing)
+va-finish-plan / patient-room-137-band       IoU 0.999  SF±0.1%  conf 1.00  (annotation-band)
+va-finish-plan / patient-toilet-137a         IoU 0.999  SF±0.0%  conf 0.90  (hatch,dense-hatch-room)
+va-finish-plan / elevator-e01                IoU 0.992  SF±0.6%  conf 0.92  (door-swing)
+va-finish-plan / ward-room                   IoU 1.000  SF±0.0%  conf 0.94  (door-swing)
+va-finish-plan / ward-vestibule              IoU 1.000  SF±0.0%  conf 0.89  (door-swing,vestibule)
+va-finish-plan / cloud-corridor              IoU 1.000  SF±0.0%  conf 0.98  (cloud-boundary,corridor)
+va-finish-plan / shaded-wing-office          IoU 1.000  SF±0.0%  conf 0.97  (shaded-wing)
+va-finish-plan / open-margin                 NOT refused (ok)  conf 0.65  [known-fail]  (sheet-margin,known-limit)
+
+── case coverage (Σ engine vs Σ golden, double-counted floor) ──
+sample-plan                   4 probes | golden 1751.9 SF | engine 1751.9 SF (×1.000) | overlap 0.00 SF (0.000%, gate 0.5%) | worst room SF±0.0% / ±0.00 SF abs (gate 1 SF, break-103)
+va-finish-plan                8 probes | golden 2614.3 SF | engine 2615.2 SF (×1.000) | overlap 0.00 SF (0.000%, gate 0.5%) | worst room SF±0.6% / ±0.85 SF abs (gate 1 SF, elevator-e01)
+  (whole-case figures — a per-ROOM regression can hide inside them; see bench/pin-goldens.mts)
+  (the per-room ABSOLUTE SF trigger above is the part a relative band cannot do: 2.5% of
+   cloud-corridor is 43.6 SF, which is how 36.7 SF moved without an adjudication — see THRESHOLDS)
+
+── wall semantics "drawn-path-vertex" — golden vertices ON a drawn path vertex (≤ 7 px) ──
+sample-plan / break-103                        3/4   =  75%  (floor 60%)
+sample-plan / corridor-104                     3/4   =  75%  (floor 60%)
+sample-plan / office-101                       3/4   =  75%  (floor 60%)
+sample-plan / office-102                       3/4   =  75%  (floor 60%)
+va-finish-plan / patient-room-137             27/30  =  90%  (floor 60%)
+va-finish-plan / patient-room-137-band        10/10  = 100%  (floor 60%)
+va-finish-plan / patient-toilet-137a          21/23  =  91%  (floor 60%)
+va-finish-plan / elevator-e01                 21/21  = 100%  (floor 60%)
+va-finish-plan / ward-room                    33/33  = 100%  (floor 60%)
+va-finish-plan / ward-vestibule               24/25  =  96%  (floor 60%)
+va-finish-plan / cloud-corridor               79/79  = 100%  (floor 60%)
+va-finish-plan / shaded-wing-office           39/39  = 100%  (floor 60%)
+  ↑ the declaration is checked against the DATA, not against the constant every writer stamps
+    it from. It equals the wall CENTRELINE only where walls are single strokes; on the VA
+    plan's double-line walls (pairs measured 4.96–6.17 in apart) it lands on a FACE.
+
+── re-pin adjudications on record (bench/pin-goldens.mts, task 0.9) ──
+  va-finish-plan / case-total                2026-07-28 2511.48 → 2580.22 SF (2.74%)
+      ↳ Reported here only for completeness — and note it is the check that would NOT have caught this, exactly as the protocol header says: the case total moved +2.74% while individual rooms moved up to +8.45%. Every probe on this case is re-pinned in ONE pass for ONE reason (audit A5b: the bench measured traceRegion, the product measures the snapped ring), no probe was added or removed, and each row carries its own adjudication above. The total moves because all eight rooms grew outward together onto the drawn path vertices nearest their traced corners. CORRECTED 2026-07-29 (audit F5): the original text said they grew outward 'to their wall centrelines'. That is only true where a wall is a single stroke. Most walls on this sheet are drawn as PAIRS of lines, measured 7.44-9.26 image px = 4.96-6.17 in apart at ptPerFt 18, and the snapped corners land on ONE line of the pair - a wall FACE - at offset 0.00 from it. See wallSemantics on this case and the WALL_SEMANTICS block in bench/corpus.ts.
+  va-finish-plan / patient-room-137          2026-07-28 161.37 → 167.96 SF (4.08%, IoU 0.948)
+      ↳ A5b: the bench pinned bare traceRegion(); production pins the SNAPPED ring and reports area_sf from it. Nothing about the flood changed (43 verts before and after, IoU 0.948, same region) — the 43 corners moved outward onto the drawing`s own wall vertices. On this sheet the working mask is ws 0.496 (mppf 8.93), so one cell is 1.34in of building and the raster contour sat ~half a cell inside each wall: over a 102.7 ft perimeter that is a 0.78in uniform outward shift = +6.59 SF. 167.96 SF is the number TakeoffCanvas.jsx and mcp/src/session.ts return for this click; 161.37 was never displayed anywhere.
+  va-finish-plan / patient-room-137          2026-08-02 167.96 → 202.05 SF (20.29%, IoU 0.824)
+      ↳ The room now reads WALL-TO-WALL instead of to its finish-tag annotation ring. The +34.09 SF (167.96 -> 202.05) is floor the engine was losing, not floor it invented. This sheet labels each WALL, not just each room: a hairline offset run is drawn 1.6-2.18 ft inside every wall with 45-degree corner ties and the P-1/P-2/P-3 tag boxes STRADDLING it, so the ring is a closed loop and a flood started in the room stopped on it -- the corpus already documented the loss (the perimeter band was only measurable as its own click, pinned separately at 20.65 SF) and pinned the wall-to-wall intent as the synthetic annotation-ring-room known-fail. classifyOffsetAnnotationSegs (oneclick.ts section 2c) supplies the missing evidence: a stroke is annotation when the first thing running alongside it within 2 ft on one side is substantially heavier (ring pen nibble 1, wall pen 2 on this sheet) and NOTHING runs alongside on the other. It feeds the SAME soft plane hatch does, so the strict pass still treated the ring as a barrier and this result came from the moderate GROW-BUT-VERIFY tier (hatchTier bounded, 1.22x growth), never an unbounded override. REVIEWED ON SCREEN: the traced boundary sits on the inside face of the heavy wall on all four sides, the 45-degree corner ties remain as small hard nubs, and toilet 137A is NOT annexed. Corpus-wide this probe is the ONLY one that moves -- all seven other probes on this case, and every probe on sample-plan, are unchanged at IoU 1.000, and all four known-fails hold their exact baseline values with pair IoU 1.000. The WEST band is deliberately still excluded: its ring stands off 2.18 ft, past the 2 ft cap, and widening the cap to reach it makes a click inside the 1.15 ft band double-count 20.7 SF against the room, which the bench catches. That residual needs the sliver rule -- a 1.15 ft x 16 ft strip is not a room and should escalate unbounded -- not a wider cap.
+  va-finish-plan / patient-room-137-band     2026-07-28 19.04 → 20.65 SF (8.45%, IoU 0.803)
+      ↳ A5b re-pin, and the largest mover in the corpus BECAUSE it is the narrowest probe, not because it moved most in absolute terms. The band is the perimeter strip between the finish-tag annotation ring and the wall: 20.65 SF over a 35.9 ft perimeter is a mean width of 1.15 ft. CORRECTED 2026-07-29 (audit F5): the original text called this 'the same ~0.54in per-side snap correction that is +4% on a room'. The two corrections are NOT the same. The band's is +1.61 SF over 35.9 ft = 0.54in per side; patient-room-137's is +6.59 SF over 102.7 ft = 0.775in per side. The band moved LESS per side than the room did and still moved twice the percentage, which is the actual point: percentage is set by how much area the corrected boundary encloses per foot of perimeter, not by the size of the correction. The band encloses 0.575 SF per foot of perimeter, patient-room-137 encloses 1.64 SF per foot - a factor of 2.85 - so 0.54in on the band and 0.775in on the room give 8.45% and 4.08% (predicted ratio 1.99, observed 2.07). Ring topology is unchanged (10 verts before and after); IoU 0.803 is low for the same reason — on a strip barely a foot wide, moving both long edges half an inch overlaps poorly with itself. The product returns 20.65 SF for this click.
+  va-finish-plan / patient-toilet-137a       2026-07-28 39.24 → 41.20 SF (5%, IoU 0.928)
+      ↳ A5b re-pin. Dense-hatch toilet room, 23 verts before and after, same escalated flood, IoU 0.928. The snap pulls the traced corners off the hatch-quantized raster contour onto the PT-tile room`s drawn wall vertices: 0.66in outward over a 35.3 ft perimeter = +1.96 SF. CORRECTED 2026-07-29 (audit F5): the original text read 'confirms as centreline-to-centreline against the adjacent patient room'. It does not, and it was the measurement that falsified this corpus's old wallSemantics of "centerline". These two rings do not share a line: at their closest they are 8.79 px = 5.86 in apart, which is this sheet's drawn wall thickness, because each room's snap lands on the FACE it can see. A genuine centreline pair measures 0.00 - ward-room and ward-vestibule, whose shared boundary is one 36-px line, measure 0.000 px. What the numbers DO confirm is that the toilet and the patient room still TILE: they do not overlap (case pairwise overlap 0.004%) and neither claims the other's floor. 41.20 SF is what the one-click returns.
+  va-finish-plan / elevator-e01              2026-07-28 136.79 → 142.63 SF (4.27%, IoU 0.946)
+      ↳ A5b re-pin. Drawn-door elevator lobby; the flood, its swing wedge and its status are unchanged. Vertex count drops 22 to 21 because two traced corners snapped onto the SAME PDF vertex and snapVertices collapsed the resulting sub-2px duplicate — the documented cleanup, not a lost feature. 0.87in outward over an 82.0 ft perimeter = +5.84 SF. 142.63 SF is the product`s reading.
+  va-finish-plan / ward-room                 2026-07-28 229.32 → 235.26 SF (2.59%, IoU 0.982)
+      ↳ A5b re-pin, the smallest VA mover (+2.59%) simply because 235.26 SF over a 97.4 ft perimeter is the corpus`s bulkiest room: its own 0.73in per-side correction is a smaller fraction of it (per-side corrections are NOT uniform across this sheet's probes — they run 0.54in to 0.92in; see shaded-wing-office's adjudication for why). 33 verts before and after, both double-door swing wedges still included, IoU 0.982. Still tiles with ward-vestibule (no overlap, no gap) after both were re-pinned. 235.26 SF is what the product returns.
+  va-finish-plan / ward-vestibule            2026-07-28 65.83 → 68.92 SF (4.7%, IoU 0.938)
+      ↳ A5b re-pin. The complementary side of the ward-room double doors; unchanged flood and status, 25 verts before and after, IoU 0.938. 0.87in outward over a 42.9 ft perimeter = +3.09 SF. Re-pinned in the same pass as ward-room precisely so the two keep tiling: the shared swing-arc boundary snaps to the same drawn arc endpoints from both sides, and the case pairwise overlap stays at 0.10 SF (0.004%). 68.92 SF is the product`s reading.
+  va-finish-plan / shaded-wing-office        2026-07-28 153.72 → 160.53 SF (4.43%, IoU 0.974)
+      ↳ A5b re-pin. Shaded-wing office, 39 verts before and after, IoU 0.974, same flood. 0.93in outward over an 88.6 ft perimeter = +6.81 SF. Its per-side correction (0.93in) sits mid-range for this sheet — cloud-corridor's is 1.11in, patient-room-137-band's 0.54in. CORRECTED 2026-07-29 (audit F5): the original text attributed that spread to 'how much of each boundary lands on a drawn vertex within the 7px snap tolerance'. Measurably not the cause - that coverage is 91-100% on every probe of this case (golden vertices within 7 px of a drawn path vertex: patient-toilet-137a 21/23 = 91%, ward-vestibule 24/25 = 96%, patient-room-137 42/43 = 98%, and 100% on the other five including this one), and a near-constant cannot explain a 2x spread: the two probes at 100% coverage are 0.54in and 0.93in. The spread is the WALL CLASS each boundary is drawn in. A single-stroke edge (this probe's 198-px vertical, cloud-corridor's 914-px vertical: one line at offset 0.00, nothing else within 18 px) offers one snap target; a double-line edge (this probe's 238-px horizontal and 124-px vertical: a second line 7.44-7.48 px = 4.96-4.99 in away) offers two, so how far a corner travels depends on which face carries a vertex in range. Recorded as the reviewed explanation rather than a measurement: the pre-snap traces were not retained, so a per-vertex accounting of the 2026-07-28 re-pin cannot be re-derived from the corpus. 160.53 SF is what a user reads.
+
+── mask fidelity: the SAME probes traced UN-SNAPPED (GATED since audit F6) ──
+   probe                                       raw IoU   raw SF±   prod IoU  prod SF±   raw x-res pair IoU
+   enclosed-room / center                        0.980     2.03%      1.000     0.00%   0.980
+   enclosed-room / near-wall                     0.980     2.03%      1.000     0.00%   0.980
+   cased-opening-3ft / center                    0.980     2.03%      1.000     0.00%   0.980
+   door-swing-3ft / center                       0.980     2.03%      1.000     0.00%   0.980
+   two-doorways / center                         0.957     4.33%      1.000     0.00%   0.962
+   hatched-room / center                         0.992     0.83%      1.000     0.00%   0.992
+   tile-grid-room / in-cell                      0.992     0.83%      1.000     0.00%   0.992
+   curved-partition / left-half                  0.968     3.20%      0.990     0.96%   0.971
+   two-door-room / center                        0.980     2.03%      1.000     0.00%   0.980
+   annotation-ring-room / center                 0.650    34.99%      0.667    33.33%   0.975  [known-fail]
+   partition-bank-15in / mid-bay                 0.197   384.20%      0.196   400.00%   0.963  [known-fail]
+   tile-demising-same-pen / room-a               0.497    97.44%      0.500   100.00%   0.987  [known-fail]
+   sample-plan / break-103                       0.996     0.41%      1.000     0.00%   0.995
+   sample-plan / corridor-104                    0.996     0.41%      1.000     0.00%   0.995
+   sample-plan / office-101                      0.996     0.41%      1.000     0.00%   0.995
+   sample-plan / office-102                      0.996     0.41%      1.000     0.00%   0.995
+   va-finish-plan / patient-room-137             0.970     2.68%      1.000     0.01%   —
+   va-finish-plan / patient-room-137-band        0.860     7.83%      0.999     0.06%   —
+   va-finish-plan / patient-toilet-137a          0.932     4.73%      0.999     0.00%   —
+   va-finish-plan / elevator-e01                 0.949     3.18%      0.992     0.60%   —
+   va-finish-plan / ward-room                    0.973     2.54%      1.000     0.02%   —
+   va-finish-plan / ward-vestibule               0.948     4.51%      1.000     0.01%   —
+   va-finish-plan / cloud-corridor               0.978     2.11%      1.000     0.00%   —
+   va-finish-plan / shaded-wing-office           0.954     4.26%      1.000     0.02%   —
+   raw (rasterisation only, known-fails excluded): n=21 | mean IoU 0.969 | floor IoU 0.860 (gate 0.8) | worst SF 7.83%
+   raw cross-resolution pair-IoU floor: 0.962 (gate 0.9; 13 probe(s) with ≥2 gated resolutions)
+   ↑ this is the rasterisation error the snap hides, and since audit F6 it GATES. It used to be
+     reported only, on the argument that the product ships the snapped ring — true, but the snap
+     had also made cross-resolution pair-IoU exactly 1.000 on 8 of 9 synthetic probes, so this
+     was the corpus's last rasterisation signal and nothing was holding it. See THRESHOLDS.
+
+synthetic — PRODUCTION RINGS (trace+snap) vs goldens authored from the same numbers.
+  Independent of the engine's own past output, but NOT a raw accuracy figure: the snap
+  lands corners on the authored vertices, so this says "the flood found the right drawn
+  boundary", not "the raster is this good" — for that, read mask fidelity above.
+  n=9 | mean IoU 0.999 | floor IoU 0.990  [wall semantics: drawn-path-vertex]
+engine-pinned (REGRESSION SAFETY ONLY — not accuracy; these are the engine's own past output):
+  n=12 | mean IoU 0.999 | floor IoU 0.992
+
+golden probes: 21 | mean IoU 0.999 | floor IoU 0.990 | refusal 0.0% | leak 0.0% (gating aggregate — see the split above before quoting the mean)
+refusal probes: 3 (all synthetic) | correct 100.0% | known-fail tracked: 4
+
+── known-fails (EXCLUDED from every metric above) ──
+  annotation-ring-room / center              IoU 0.667 SF±33.3%
+  partition-bank-15in / mid-bay              IoU 0.196 SF±400.0% LEAK
+  tile-demising-same-pen / room-a            IoU 0.500 SF±100.0%
+  va-finish-plan / open-margin               *** NOT REFUSED — actively failing ***
+
+── cross-resolution (ws × 1 / 0.75 / 0.5) ──
+enclosed-room / center                       statuses ok/ok/ok  pair IoU 1.000  vs-golden 1.000/1.000/1.000
+enclosed-room / near-wall                    statuses ok/ok/ok  pair IoU 1.000  vs-golden 1.000/1.000/1.000
+cased-opening-3ft / center                   statuses ok/ok/ok  pair IoU 1.000  vs-golden 1.000/1.000/1.000
+door-swing-3ft / center                      statuses ok/ok/ok  pair IoU 1.000  vs-golden 1.000/1.000/1.000
+door-swing-3ft / in-doorway                  statuses leak/leak/leak
+two-doorways / center                        statuses ok/ok/ok  pair IoU 1.000  vs-golden 1.000/1.000/1.000
+hatched-room / center                        statuses ok/ok/ok  pair IoU 1.000  vs-golden 1.000/1.000/1.000
+tile-grid-room / in-cell                     statuses ok/ok/ok  pair IoU 1.000  vs-golden 1.000/1.000/1.000
+curved-partition / left-half                 statuses ok/ok/ok  pair IoU 0.994  vs-golden 0.990/0.991/0.985
+two-door-room / center                       statuses ok/ok/ok  pair IoU 1.000  vs-golden 1.000/1.000/1.000
+annotation-ring-room / center                statuses ok/ok/ok  pair IoU 1.000  vs-golden 0.667/0.667/0.667  [known-fail]
+partition-bank-15in / mid-bay                statuses ok/ok/ok  pair IoU 1.000  vs-golden 0.214/0.214/0.214  [known-fail]
+tile-demising-same-pen / room-a              statuses ok/ok/ok  pair IoU 1.000  vs-golden 0.500/0.500/0.500  [known-fail]
+open-space / outside-room                    statuses leak/leak/leak
+oversized-enclosure / center                 statuses leak/leak/leak
+sample-plan / break-103                      statuses ok/ok/ok  pair IoU 0.997  vs-golden 1.000/0.999/0.997
+sample-plan / corridor-104                   statuses ok/ok/ok  pair IoU 0.997  vs-golden 1.000/0.999/0.997
+sample-plan / office-101                     statuses ok/ok/ok  pair IoU 0.997  vs-golden 1.000/0.999/0.997
+sample-plan / office-102                     statuses ok/ok/ok  pair IoU 0.997  vs-golden 1.000/0.999/0.997
+va-finish-plan / patient-room-137            statuses ok/ok/ok  vs-golden 1.000/0.948/0.881  [NO GATED PAIR — not cross-checked]  [sub-floor: ×0.75,×0.5]
+va-finish-plan / patient-room-137-band       statuses ok/ok/ok  vs-golden 0.999/0.870/0.864  [NO GATED PAIR — not cross-checked]  [sub-floor: ×0.75,×0.5]
+va-finish-plan / patient-toilet-137a         statuses ok/ok/ok  vs-golden 0.999/0.849/0.370  [NO GATED PAIR — not cross-checked]  [sub-floor: ×0.75,×0.5]
+va-finish-plan / elevator-e01                statuses ok/ok/ok  vs-golden 0.994/0.960/0.931  [NO GATED PAIR — not cross-checked]  [sub-floor: ×0.75,×0.5]
+va-finish-plan / ward-room                   statuses ok/ok/ok  vs-golden 1.000/0.478/0.629  [NO GATED PAIR — not cross-checked]  [sub-floor: ×0.75,×0.5]
+va-finish-plan / ward-vestibule              statuses ok/ok/ok  vs-golden 1.000/0.961/0.921  [NO GATED PAIR — not cross-checked]  [sub-floor: ×0.75,×0.5]
+va-finish-plan / cloud-corridor              statuses ok/ok/ok  vs-golden 1.000/0.988/0.982  [NO GATED PAIR — not cross-checked]  [sub-floor: ×0.75,×0.5]
+va-finish-plan / shaded-wing-office          statuses ok/ok/ok  vs-golden 1.000/0.979/0.925  [NO GATED PAIR — not cross-checked]  [sub-floor: ×0.75,×0.5]
+va-finish-plan / open-margin                 statuses ok/ok/ok  [NO GATED PAIR — not cross-checked]  [sub-floor: ×0.75,×0.5]  [known-fail]
+
+cross probes: 16 | disagreements 0 | pair-IoU floor 0.994 | pair-IoU mean 0.999 | NOT cross-checked (single gated resolution): 9
+
+── confidence vs SF error (gate: >2.5% SF ⇒ conf ≤ 0.9; ≤0.5% SF ⇒ conf ≥ median-of-inaccurate + 0.03, and ≥ 0.88) ──
+  INACCURATE (n=3, median conf 0.85):
+    partition-bank-15in/mid-bay              conf 0.85   SF error 400.0%
+    tile-demising-same-pen/room-a            conf 0.85   SF error 100.0%
+    va-finish-plan/open-margin               conf 0.65   traced (ok) where the answer key says refuse
+  ACCURATE   (n=17, worst conf 0.89):
+    va-finish-plan/ward-vestibule            conf 0.89
+    va-finish-plan/patient-toilet-137a       conf 0.90
+    two-door-room/center                     conf 0.92
+    door-swing-3ft/center                    conf 0.93
+    hatched-room/center                      conf 0.93
+    va-finish-plan/patient-room-137          conf 0.93
+    cased-opening-3ft/center                 conf 0.94
+    va-finish-plan/ward-room                 conf 0.94
+    va-finish-plan/shaded-wing-office        conf 0.97
+    va-finish-plan/cloud-corridor            conf 0.98
+    enclosed-room/center                     conf 1.00
+    enclosed-room/near-wall                  conf 1.00
+    sample-plan/break-103                    conf 1.00
+    sample-plan/corridor-104                 conf 1.00
+    sample-plan/office-101                   conf 1.00
+    sample-plan/office-102                   conf 1.00
+    va-finish-plan/patient-room-137-band     conf 1.00
+  EXEMPT     two-doorways/center                      conf 0.85  (xfail: must stay ≤ 0.87)
+      ↳ Added by audit A5b. Signal set as measured: raster false, hatchFiltered false (hatchTier absent), wedges undefined, wedgeGrowth undefined, curveFrac undefined, mppf 18, areaSF 19.8, sealedPx set with virtualFrac 0.00, and minPassDelta ≥ 1 — the sole-minimum-passage deduction, whose own factor string is "the drawn linework does not enclose this space". Score 0.850. That statement is TRUE: the fixture is a room with two undrawn cased openings, and every square foot of its boundary across those openings is synthetic. The probe measures 0.00% off only because the golden is authored under the same convention the engine guessed (a cased opening is bridged) — the engine had no evidence for that and correctly declined to claim any. So this is a case where the gate's floor premise (accurate ⇒ confident) does not hold, rather than a miscalibration to tune away. XFAIL DIRECTION: asserted to stay in the BAND 0.80 ≤ conf ≤ 0.87 — the upper bound sits below CONF_GATE.floorAbs, so if the engine ever learns to distinguish a bridged drawn opening from an invented wall it will score at or above the floor, this breaks, and the exemption must be dropped. The lower bound was added by audit F6: `xfailAtMost` alone tolerates COLLAPSE, and this exemption excuses exactly one deduction (CONF_MINPASS_SOLE = 0.85, the whole score) — not a pile of them. At 0.80 the bound fires the moment a factor of ×0.94 or stronger stacks on top (raster-traced ×0.90, coarse-mask ×0.90, hatch-filtered(override) ×0.85, any curve-bounded or oversize factor); it still tolerates the two mildest (door-swing ×0.97 → 0.82, hatch-filtered(bounded) ×0.95 → 0.81), which is deliberate — those two would be arguable on this fixture, and a bound that fires on an arguable change is a bound that gets widened.
+  EXEMPT     tile-grid-room/in-cell                   conf 0.85  (xfail: must stay EQUAL to partition-bank-15in/mid-bay)
+      ↳ Added by audit A5b, and the exemption IS the finding. Signal set as measured: raster false, sealedPx undefined, virtualFrac undefined, wedges undefined, wedgeGrowth undefined, curveFrac undefined, minPassDelta undefined, mppf 18, areaSF 1029 — and hatchFiltered true with hatchTier "override", which is the ONLY factor, giving score 0.850 exactly. partition-bank-15in/mid-bay carries the identical single factor at the identical 0.850 while measuring 400.0% wrong, and tile-demising-same-pen/room-a likewise at 100.0% wrong. So `hatch-filtered(override)` is the sole deduction on the corpus's most accurate escalated trace AND on its two worst: it reports the REGIME the escalation was accepted under, which is equally true of all three, and says nothing about whether the result is plausible. Separating them needs a signal keyed on the escalated region's own geometry, which is a change to src/lib/confidence.ts and outside A5b's scope. XFAIL DIRECTION: asserted to stay EXACTLY EQUAL to partition-bank-15in/mid-bay's score. The day any signal tells the two apart this breaks, and the exemption must be dropped — not widened.
+  EXEMPT     annotation-ring-room/center              conf 1.00  (xfail: must stay > 0.9)
+      ↳ Instrumented against the complete signal set traceConfidence can read — raster false, hatchFiltered false (hatchTier absent), sealedPx undefined, virtualFrac undefined, wedges undefined, wedgeGrowth undefined, curveFrac undefined (no curve linework on the boundary), minPassDelta exactly 0.0000 (the minimum-passage rule ran at r=5 and changed nothing), areaSF 79, mppf 18 (well above DETERMINISM_MIN_MPPF). Every signal reads clean because the trace IS clean: a verbatim vector trace that stopped at a drawn finish-tag annotation ring rather than the wall behind it. There is nothing for a confidence deduction to key on; separating an annotation ring from a wall needs vector-native topology (RFC item A), not tuning. XFAIL DIRECTION: asserted to stay ABOVE 0.90 — if a future signal fires here the assertion breaks and the exemption must be re-argued or dropped.
+
+bench passed

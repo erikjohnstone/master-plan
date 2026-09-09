@@ -352,9 +352,9 @@ test("schedule_plan_reconcile intent is phrase-robust (≥5 phrasings)", () => {
 
 
 test("sweepBasServedMark forwards preferTitle and classifies MATCH", async () => {
-  const calls = [];
+  const calls: Array<{ tag: string; opts: { preferTitle?: string } }> = [];
   const session = {
-    async sweepScheduleRow(tag, opts) {
+    async sweepScheduleRow(tag: string, opts: { preferTitle?: string }) {
       calls.push({ tag, opts });
       return { found: 2, sheets: [{ matches: [{}, {}] }] };
     },

@@ -1,0 +1,20 @@
+
+1280px — 26 leaf elements, bar 85px tall, deck 2 1256/1256px
+ok    1280: no two top-bar elements overlap
+      (1280px may scroll — overflow 0px, the scroll shadow says so)
+
+1440px — 26 leaf elements, bar 85px tall, deck 2 1416/1416px
+ok    1440: no two top-bar elements overlap
+ok    1440: the working deck fits without scrolling  — 1416 > 1416 by 0px
+
+1920px — 26 leaf elements, bar 85px tall, deck 2 1896/1896px
+ok    1920: no two top-bar elements overlap
+ok    1920: the working deck fits without scrolling  — 1896 > 1896 by 0px
+
+2560px — 26 leaf elements, bar 85px tall, deck 2 2536/2536px
+ok    2560: no two top-bar elements overlap
+ok    2560: the working deck fits without scrolling  — 2536 > 2536 by 0px
+
+screenshots in /tmp/ot-topbar
+
+all checks passed

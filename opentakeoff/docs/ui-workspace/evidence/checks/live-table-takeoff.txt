@@ -1,0 +1,11 @@
+file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web/scripts/playwright-table-takeoff-ui.mjs:41
+if (!apiKey) throw new Error("no CEREBRAS_API_KEY (env or web/.env)");
+                   ^
+
+Error: no CEREBRAS_API_KEY (env or web/.env)
+    at file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web/scripts/playwright-table-takeoff-ui.mjs:41:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.1

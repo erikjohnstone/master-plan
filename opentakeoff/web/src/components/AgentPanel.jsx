@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { keyText } from "../lib/keys.ts";
 import { Icon } from "../brand/icons.jsx";
 import AgentAnswer from "./AgentAnswer.jsx";
+import { useRevealDrawing } from "./WorkspaceDock.jsx";
 
 const evidenceText = (ev) => {
   if (!ev) return "";
@@ -204,6 +205,8 @@ export default function AgentPanel({
   runHistory = [], historyOpen = false, onToggleHistory,
 }) {
   const [draft, setDraft] = useState("");
+  const revealDrawing = useRevealDrawing();
+  const openCitation = citation => { revealDrawing(); onOpenCitation(citation); };
   const [showSteps, setShowSteps] = useState(false);
   // Sources stay collapsed by default so the Answer stays answer-first —
   // a long card list must not bury the takeoff reply (seen on D03/D04 demos).
@@ -267,7 +270,7 @@ export default function AgentPanel({
   const ctl = { padding: "3px 9px", border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer", fontSize: 11.5 };
 
   return (
-    <div style={{ width: 380, flexShrink: 0, display: "flex", flexDirection: "column", borderLeft: "1px solid var(--ink-faint)", background: "var(--paper-bright)", overflow: "hidden", minHeight: 0 }}>
+    <div className="agent-workspace" data-agent-panel>
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", background: "var(--cobalt)", color: "var(--accent-contrast)" }}>
         <Icon name="target" size={15} />
         <strong style={{ flex: 1, fontSize: 12.5 }}>Agent{proposals.length ? ` · ${proposals.length} pending` : ""}</strong>
@@ -310,11 +313,22 @@ export default function AgentPanel({
       ) : (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
           {/* Chat thread — the primary surface */}
-          <div ref={threadRef} style={{ flex: 1, minHeight: 120, overflow: "auto", padding: "10px 12px" }}>
+          <div ref={threadRef} className="agent-thread" style={{ flex: 1, minHeight: 120, overflow: "auto", padding: "10px 12px" }}>
             {thread.length === 0 && !running && (
-              <div style={{ color: "var(--ink-muted)", fontSize: 12.5, lineHeight: 1.55 }}>
-                Ask a real estimating question. This chat stays for workflow steps and conversation —
-                structured quantities open in the Takeoff panel for review and CSV / Excel / PDF export.
+              <div className="agent-empty">
+                <span className="t-label">HVAC / BAS · Drawing evidence</span>
+                <h3>What do you need to take off?</h3>
+                <p>Ask about this plan set. Review the answer and its sources here;
+                  structured quantities open in Takeoff for review and export.</p>
+                <div className="agent-starters">
+                  {["Locate the control-valve schedule and show its source.", "Read the points list for AHU-1 and cite the drawing.", "Count the globe valves on this blueprint and show the evidence."].map(prompt => (
+                    <button key={prompt} type="button" onClick={() => {
+                      setDraft(prompt);
+                      threadRef.current?.parentElement?.querySelector('textarea[name="agent-goal"]')?.focus();
+                    }}>{prompt}</button>
+                  ))}
+                </div>
+                <p>Proposed marks require your review. Nothing is accepted automatically.</p>
               </div>
             )}
             {thread.map((m, i) => (
@@ -333,7 +347,7 @@ export default function AgentPanel({
                   {m.role === "user" ? "You" : "Answer"}
                 </div>
                 {m.role === "assistant" ? (
-                  <AgentAnswer text={m.text} citations={citations} onOpenCitation={onOpenCitation} />
+                  <AgentAnswer text={m.text} citations={citations} onOpenCitation={openCitation} />
                 ) : (
                   <div style={{ color: "var(--ink)", whiteSpace: "pre-wrap", overflowWrap: "anywhere", fontSize: 13, lineHeight: 1.55, fontFamily: "inherit" }}>
                     {m.text}
@@ -440,16 +454,17 @@ export default function AgentPanel({
                     three columns produced three cards that read identically;
                     this drawer is a list of evidence, not a list of events. */}
                 {showSources && dedupedCitations.map((c) => (
-                  <SourceCard key={c.id} citation={c} onOpen={onOpenCitation} />
+                  <SourceCard key={c.id} citation={c} onOpen={openCitation} />
                 ))}
               </div>
             )}
           </div>
 
           {/* Composer — first ask or follow-up */}
-          <div style={{ padding: "10px 12px", borderTop: "1px solid var(--ink-faint)" }}>
+          <div className="agent-composer" style={{ padding: "10px 12px", borderTop: "1px solid var(--ink-faint)" }}>
             <textarea
               name="agent-goal"
+              aria-label="Ask the takeoff agent"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               rows={canFollowUp ? 2 : 3}
@@ -515,8 +530,8 @@ export default function AgentPanel({
             )}
           </div>
 
-          <div style={{ maxHeight: "28%", display: "flex", flexDirection: "column", minHeight: 0, borderTop: "1px solid var(--ink-faint)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 12px" }}>
+          <div className="agent-review" style={{ maxHeight: "28%", display: "flex", flexDirection: "column", minHeight: 0, borderTop: "1px solid var(--ink-faint)" }}>
+            <div className="agent-review-heading" style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 12px" }}>
               <strong style={{ flex: 1, fontSize: 11.5 }}>Proposals · {proposals.length}</strong>
               {proposals.length > 0 && (
                 <>
@@ -557,8 +572,8 @@ export default function AgentPanel({
                         {evidenceText(p.evidence) || "no evidence"}
                       </span>
                     </span>
-                    <button onClick={() => onAccept(p.id)} style={{ ...ctl, color: "var(--c-positive)", fontWeight: 600 }}>✓</button>
-                    <button onClick={() => onReject(p.id)} style={{ ...ctl, color: "var(--c-danger)" }}>✕</button>
+                    <button title="Accept proposal" onClick={() => onAccept(p.id)} style={{ ...ctl, color: "var(--c-positive)", fontWeight: 600 }}>✓</button>
+                    <button title="Reject proposal" onClick={() => onReject(p.id)} style={{ ...ctl, color: "var(--c-danger)" }}>✕</button>
                   </div>
                 );
               })}

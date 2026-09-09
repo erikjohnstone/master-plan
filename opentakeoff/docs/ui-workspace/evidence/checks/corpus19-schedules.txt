@@ -1,0 +1,28 @@
+doc 19: 19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf
+indexed, schedules ready
+ok    status chip is a button
+ok    panel is fed from the graph  — 4 tables
+ok    header counts match the graph  — "4 schedules across 1 sheets · 11 rowsAll sheetsM-401All kindsequipment" vs 4/1/11
+ok    one expandable section per table  — 4 vs 4
+ok    View paints one schedule_browse markup  — [{"s":"19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf#8","t":"Air Handling Unit Schedule CHW"}]
+ok    it lands on that table's own sheet  — 19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf#8 vs 19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf#8
+ok    its rect is normalized 0..1  — [[0.04968253968253968,0.03083333333333333],[0.8732506613756614,0.12327777777777776]]
+ok    three View clicks leave ONE highlight, not three  — 1 markups
+ok    and it is the same box  — [[0.04968253968253968,0.03083333333333333],[0.8732506613756614,0.12327777777777776]]
+ok    no stray markups accumulated  — 1 vs 1
+ok    sections are grouped by sheet  — 1 groups vs 1 sheets
+ok    expand all opens every schedule at once  — 4 of 4
+ok    and collapse all closes them
+ok    the summary follows the filter  — "1 of 4 schedules · 1 sheets · 5 rowsAll sheetsM-401All kinds"
+ok    and matches what is actually listed  — 1 listed vs "1 of 4 schedules · 1 she"
+ok    the row tag is clickable  — looking for AHU-04
+ok    clicking a tag paints that row  — ["AHU-04"]
+ok    the row cites the sheet its ink is on  — 19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf#8 vs 19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf#8
+ok    a row is a slice of its table, not the whole thing  — row h 0.0078 vs table h 0.0924
+ok    every extracted header is rendered unchanged
+ok    every first-row cell is rendered unchanged
+ok    wide grid does not overflow the page
+ok    closing clears the browse highlights
+ok    and disturbs no other markups  — 0 vs 0
+
+all checks passed

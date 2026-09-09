@@ -1,3 +1,4 @@
+import type { FixtureCategories, FixtureCell } from "./fixtureRuntimeTypes.ts";
 /**
  * Soft schedule-title matching — set-agnostic (no-space titles, sibling excludes).
  */
@@ -49,7 +50,7 @@ test("soft title keeps DOAH unit vs handling siblings apart", () => {
     scheduleTitleMatches(
       "DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE",
       HVAC_FAMILY_SPECS.DOAH_HANDLING.titleRe,
-      HVAC_FAMILY_SPECS.DOAH_HANDLING.exclude,
+      (HVAC_FAMILY_SPECS.DOAH_HANDLING as { titleRe: RegExp; exclude?: RegExp }).exclude,
     ),
     true,
   );
@@ -512,7 +513,7 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
     scheduleTitleMatches(
       "SNORKEL HOOD SCHEDULE",
       HVAC_FAMILY_SPECS.RANGE_HOOD.titleRe,
-      HVAC_FAMILY_SPECS.RANGE_HOOD.exclude,
+      (HVAC_FAMILY_SPECS.RANGE_HOOD as { titleRe: RegExp; exclude?: RegExp }).exclude,
     ),
     true,
   );
@@ -532,7 +533,7 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
 test("MISCELLANEOUS SCHEDULE yields only keyRe-gated family marks (set-agnostic)", () => {
   // Catch-all misc tables must not inflate untitled pump rows via keyRe —
   // PUMP uses blankKeyRe only so titled PUMP SCHEDULE stays unfiltered.
-  assert.equal(HVAC_FAMILY_SPECS.PUMP.keyRe, undefined);
+  assert.equal((HVAC_FAMILY_SPECS.PUMP as { titleRe: RegExp; keyRe?: RegExp }).keyRe, undefined);
   assert.ok(HVAC_FAMILY_SPECS.PUMP.blankKeyRe!.test("HWP-1"));
   assert.ok(HVAC_FAMILY_SPECS.PUMP.blankKeyRe!.test("IWP-1"));
   assert.ok(HVAC_FAMILY_SPECS.PUMP.blankKeyRe!.test("HWRP-1"));
@@ -559,14 +560,14 @@ test("EQUIPMENT SCHEDULE catch-all ORs blankKeyRe|keyRe (WSHP via HEAT_PUMP keyR
     }],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.HEAT_PUMP.count, 1);
-  assert.equal(hvac.categories.PUMP.count, 1);
-  assert.equal(hvac.categories.CONDENSING_UNIT.count, 1);
-  assert.equal(hvac.categories.HEAT_PUMP.items[0].tag, "WSHP-1");
-  assert.equal(hvac.categories.PUMP.items[0].tag, "HWP-1");
-  assert.equal(hvac.categories.CONDENSING_UNIT.items[0].tag, "CU-1");
+  assert.equal((hvac.categories as FixtureCategories).HEAT_PUMP.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).PUMP.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).CONDENSING_UNIT.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).HEAT_PUMP.items[0].tag, "WSHP-1");
+  assert.equal((hvac.categories as FixtureCategories).PUMP.items[0].tag, "HWP-1");
+  assert.equal((hvac.categories as FixtureCategories).CONDENSING_UNIT.items[0].tag, "CU-1");
   // Louvers stay orphan (no family).
-  for (const [fam, cat] of Object.entries(hvac.categories)) {
+  for (const [fam, cat] of Object.entries((hvac.categories as FixtureCategories))) {
     if (["HEAT_PUMP", "PUMP", "CONDENSING_UNIT"].includes(fam)) continue;
     assert.equal(cat.count, 0, `unexpected ${fam}`);
   }
@@ -597,7 +598,7 @@ test("accessory families: pot feeder, GMU, strainer, bypass, BS booster, HS, DT"
     ),
     true,
   );
-  assert.equal(HVAC_FAMILY_SPECS.AIR_COMPRESSOR.keyRe, undefined);
+  assert.equal((HVAC_FAMILY_SPECS.AIR_COMPRESSOR as { titleRe: RegExp; keyRe?: RegExp }).keyRe, undefined);
   assert.equal(
     scheduleTitleMatches(
       "HYDRONIC FLOW METER SCHEDULE",
@@ -654,13 +655,13 @@ test("FLOW_METER catch-all + CONTROL_DAMPER titled compile", () => {
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.FLOW_METER.count, 1);
-  assert.equal(hvac.categories.FLOW_METER.items[0].tag, "FM-1");
-  assert.equal(hvac.categories.AIR_SEPARATOR.count, 1);
-  assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
-  assert.equal(hvac.categories.CONTROL_DAMPER.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).FLOW_METER.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FLOW_METER.items[0].tag, "FM-1");
+  assert.equal((hvac.categories as FixtureCategories).AIR_SEPARATOR.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).EXPANSION_TANK.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).CONTROL_DAMPER.count, 2);
   assert.deepEqual(
-    hvac.categories.CONTROL_DAMPER.items.map((i) => i.tag).sort(),
+    (hvac.categories as FixtureCategories).CONTROL_DAMPER.items.map((i) => i.tag).sort(),
     ["OA1", "OA2"],
   );
   assert.equal(hvac.totals.items, 5);
@@ -831,29 +832,29 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.CONTROL_DAMPER.count, 4);
+  assert.equal((hvac.categories as FixtureCategories).CONTROL_DAMPER.count, 4);
   assert.deepEqual(
-    hvac.categories.CONTROL_DAMPER.items.map((i) => i.tag).sort(),
+    (hvac.categories as FixtureCategories).CONTROL_DAMPER.items.map((i) => i.tag).sort(),
     ["JED-1-1", "MD-1", "MD-2", "PED-2-1"],
   );
-  assert.equal(hvac.categories.ISOLATION_VALVE.count, 4);
+  assert.equal((hvac.categories as FixtureCategories).ISOLATION_VALVE.count, 4);
   assert.deepEqual(
-    hvac.categories.ISOLATION_VALVE.items.map((i) => i.tag).sort(),
+    (hvac.categories as FixtureCategories).ISOLATION_VALVE.items.map((i) => i.tag).sort(),
     ["GV-1", "GV-2", "VLV-1", "VLV-2"],
   );
   // Bare VALVE SCHEDULE + V-CHW still belongs to CHW control valves, not isolation.
-  assert.equal(hvac.categories.CHW_CONTROL_VALVE.count, 1);
-  assert.equal(hvac.categories.PRESSURE_REDUCING_VALVE.count, 4);
+  assert.equal((hvac.categories as FixtureCategories).CHW_CONTROL_VALVE.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).PRESSURE_REDUCING_VALVE.count, 4);
   assert.deepEqual(
-    hvac.categories.PRESSURE_REDUCING_VALVE.items.map((i) => i.tag).sort(),
+    (hvac.categories as FixtureCategories).PRESSURE_REDUCING_VALVE.items.map((i) => i.tag).sort(),
     ["PRV-1", "PRV-1A", "PRV-1B", "PRV-2A"],
   );
-  assert.equal(hvac.categories.PRESSURE_SAFETY_VALVE.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).PRESSURE_SAFETY_VALVE.count, 2);
   assert.deepEqual(
-    hvac.categories.PRESSURE_SAFETY_VALVE.items.map((i) => i.tag).sort(),
+    (hvac.categories as FixtureCategories).PRESSURE_SAFETY_VALVE.items.map((i) => i.tag).sort(),
     ["PSV-1", "PSV-2"],
   );
-  assert.equal(hvac.categories.MIXING_VALVE.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).MIXING_VALVE.count, 2);
 });
 
 test("LOUVER + LOUVERED_PENTHOUSE titled compile; FIN_TUBE titledOnly skips filter FTR", () => {
@@ -922,16 +923,16 @@ test("LOUVER + LOUVERED_PENTHOUSE titled compile; FIN_TUBE titledOnly skips filt
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.LOUVER.count, 2);
-  assert.equal(hvac.categories.LOUVERED_PENTHOUSE.count, 1);
-  assert.equal(hvac.categories.FIN_TUBE_RADIATION.count, 1);
-  assert.equal(hvac.categories.FIN_TUBE_RADIATION.items[0].tag, "FTR-1");
-  assert.equal(hvac.categories.FILTER.count, 1);
-  assert.equal(hvac.categories.FILTER.items[0].tag, "FTR-2");
-  assert.equal(hvac.categories.STRAINER.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).LOUVER.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).LOUVERED_PENTHOUSE.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FIN_TUBE_RADIATION.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FIN_TUBE_RADIATION.items[0].tag, "FTR-1");
+  assert.equal((hvac.categories as FixtureCategories).FILTER.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FILTER.items[0].tag, "FTR-2");
+  assert.equal((hvac.categories as FixtureCategories).STRAINER.count, 1);
   // Blank + catch-all FTR must not inflate FIN_TUBE or FILTER.
-  assert.ok(!hvac.categories.FIN_TUBE_RADIATION.items.some((i) => /FTR-9|FTR-8/i.test(i.tag)));
-  assert.ok(!hvac.categories.FILTER.items.some((i) => /FTR-9|FTR-8/i.test(i.tag)));
+  assert.ok(!(hvac.categories as FixtureCategories).FIN_TUBE_RADIATION.items.some((i) => /FTR-9|FTR-8/i.test(i.tag)));
+  assert.ok(!(hvac.categories as FixtureCategories).FILTER.items.some((i) => /FTR-9|FTR-8/i.test(i.tag)));
 });
 
 test("HYDRONIC ACCESSORIES claims PF/GMU/HS (Klamath shape)", () => {
@@ -949,9 +950,9 @@ test("HYDRONIC ACCESSORIES claims PF/GMU/HS (Klamath shape)", () => {
     }],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.AIR_SEPARATOR.count, 2);
-  assert.equal(hvac.categories.GLYCOL_MAKEUP.count, 1);
-  assert.equal(hvac.categories.CHEMICAL_POT_FEEDER.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).AIR_SEPARATOR.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).GLYCOL_MAKEUP.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).CHEMICAL_POT_FEEDER.count, 1);
   assert.equal(hvac.totals.items, 4);
 });
 
@@ -970,10 +971,10 @@ test("HYDRONIC ACCESSORIES catch-all claims AS/BT/ET (Klamath shape)", () => {
     }],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.AIR_SEPARATOR.count, 1);
-  assert.equal(hvac.categories.BUFFER_TANK.count, 1);
-  assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
-  assert.equal(hvac.categories.AIR_SEPARATOR.items[0].tag, "AS-1");
+  assert.equal((hvac.categories as FixtureCategories).AIR_SEPARATOR.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).BUFFER_TANK.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).EXPANSION_TANK.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).AIR_SEPARATOR.items[0].tag, "AS-1");
   assert.equal(hvac.totals.items, 3);
 });
 
@@ -1007,9 +1008,9 @@ test("LAB_AIR_VALVE + snorkel hood compile (itd shape)", () => {
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.LAB_AIR_VALVE.count, 2);
-  assert.equal(hvac.categories.RANGE_HOOD.count, 1);
-  assert.equal(hvac.categories.DOAS.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).LAB_AIR_VALVE.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).RANGE_HOOD.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).DOAS.count, 2);
 });
 
 test("MECHANICAL SPECIALTY EQUIPMENT + ductless comma marks (itd shape)", () => {
@@ -1053,17 +1054,17 @@ test("MECHANICAL SPECIALTY EQUIPMENT + ductless comma marks (itd shape)", () => 
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.AIR_SEPARATOR.count, 1);
-  assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
-  assert.equal(hvac.categories.FCU.count, 1);
-  assert.deepEqual(hvac.categories.FCU.items.map((i) => i.tag), ["DFC-1"]);
-  assert.equal(hvac.categories.CONDENSING_UNIT.count, 1);
-  assert.deepEqual(hvac.categories.CONDENSING_UNIT.items.map((i) => i.tag), ["DCU-1"]);
-  assert.equal(hvac.categories.DUCT_MOUNTED_COIL.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).AIR_SEPARATOR.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).EXPANSION_TANK.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FCU.count, 1);
+  assert.deepEqual((hvac.categories as FixtureCategories).FCU.items.map((i) => i.tag), ["DFC-1"]);
+  assert.equal((hvac.categories as FixtureCategories).CONDENSING_UNIT.count, 1);
+  assert.deepEqual((hvac.categories as FixtureCategories).CONDENSING_UNIT.items.map((i) => i.tag), ["DCU-1"]);
+  assert.equal((hvac.categories as FixtureCategories).DUCT_MOUNTED_COIL.count, 2);
   // ERV keyRe claims ERU-*; HP half from SYMBOL comma list joins HEAT_PUMP.
-  assert.equal(hvac.categories.ERV.count, 1);
-  assert.equal(hvac.categories.ERV.items[0].tag, "ERU-1");
-  assert.ok(hvac.categories.HEAT_PUMP.items.some((i) => i.tag === "HP-4"));
+  assert.equal((hvac.categories as FixtureCategories).ERV.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).ERV.items[0].tag, "ERU-1");
+  assert.ok((hvac.categories as FixtureCategories).HEAT_PUMP.items.some((i) => i.tag === "HP-4"));
 });
 
 test("WP1.4 split-system outdoor CU joins CONDENSING_UNIT without Carson B* filter", () => {
@@ -1090,13 +1091,13 @@ test("WP1.4 split-system outdoor CU joins CONDENSING_UNIT without Carson B* filt
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.CONDENSING_UNIT.count, 3);
+  assert.equal((hvac.categories as FixtureCategories).CONDENSING_UNIT.count, 3);
   assert.deepEqual(
-    hvac.categories.CONDENSING_UNIT.items.map((i) => i.tag).sort(),
+    (hvac.categories as FixtureCategories).CONDENSING_UNIT.items.map((i) => i.tag).sort(),
     ["B1", "B2", "CU-1"],
   );
-  assert.equal(hvac.categories.FCU.count, 1);
-  assert.equal(hvac.categories.FCU.items[0].tag, "F-1");
+  assert.equal((hvac.categories as FixtureCategories).FCU.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FCU.items[0].tag, "F-1");
 });
 
 test("WP1.4 CEILING_FAN titled schedule (Jeff City shape); FAN excludes ceiling fans", () => {
@@ -1140,10 +1141,10 @@ test("WP1.4 CEILING_FAN titled schedule (Jeff City shape); FAN excludes ceiling 
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.CEILING_FAN.count, 3);
-  assert.deepEqual(hvac.categories.CEILING_FAN.items.map((i) => i.tag).sort(), ["CF-1", "CF-2", "CF-3"]);
-  assert.equal(hvac.categories.FAN.count, 1);
-  assert.equal(hvac.categories.FAN.items[0].tag, "EF-1");
+  assert.equal((hvac.categories as FixtureCategories).CEILING_FAN.count, 3);
+  assert.deepEqual((hvac.categories as FixtureCategories).CEILING_FAN.items.map((i) => i.tag).sort(), ["CF-1", "CF-2", "CF-3"]);
+  assert.equal((hvac.categories as FixtureCategories).FAN.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FAN.items[0].tag, "EF-1");
 });
 
 test("WP1.4 FAN blank-title KEF kitchen exhaust (Klamath)", () => {
@@ -1161,8 +1162,8 @@ test("WP1.4 FAN blank-title KEF kitchen exhaust (Klamath)", () => {
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.FAN.count, 1);
-  assert.equal(hvac.categories.FAN.items[0].tag, "KEF-1");
+  assert.equal((hvac.categories as FixtureCategories).FAN.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FAN.items[0].tag, "KEF-1");
 });
 
 test("WP1.4 VACUUM_PUMP titled V-* (SDSU shape); hydronic PUMP excludes vacuum", () => {
@@ -1202,10 +1203,10 @@ test("WP1.4 VACUUM_PUMP titled V-* (SDSU shape); hydronic PUMP excludes vacuum",
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.VACUUM_PUMP.count, 1);
-  assert.equal(hvac.categories.VACUUM_PUMP.items[0].tag, "V-1");
-  assert.equal(hvac.categories.PUMP.count, 1);
-  assert.equal(hvac.categories.PUMP.items[0].tag, "CHP-1");
+  assert.equal((hvac.categories as FixtureCategories).VACUUM_PUMP.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).VACUUM_PUMP.items[0].tag, "V-1");
+  assert.equal((hvac.categories as FixtureCategories).PUMP.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).PUMP.items[0].tag, "CHP-1");
 });
 
 test("WP1.4 BRINE_TANK on softener schedule (SDSU BT-1); Colville BUFFER BT untouched", () => {
@@ -1248,12 +1249,12 @@ test("WP1.4 BRINE_TANK on softener schedule (SDSU BT-1); Colville BUFFER BT unto
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.WATER_SOFTENER.count, 1);
-  assert.equal(hvac.categories.WATER_SOFTENER.items[0].tag, "WS-1");
-  assert.equal(hvac.categories.BRINE_TANK.count, 1);
-  assert.equal(hvac.categories.BRINE_TANK.items[0].tag, "BT-1");
-  assert.equal(hvac.categories.BUFFER_TANK.count, 1);
-  assert.equal(hvac.categories.BUFFER_TANK.items[0].tag, "BT-2");
+  assert.equal((hvac.categories as FixtureCategories).WATER_SOFTENER.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).WATER_SOFTENER.items[0].tag, "WS-1");
+  assert.equal((hvac.categories as FixtureCategories).BRINE_TANK.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).BRINE_TANK.items[0].tag, "BT-1");
+  assert.equal((hvac.categories as FixtureCategories).BUFFER_TANK.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).BUFFER_TANK.items[0].tag, "BT-2");
 });
 
 test("WP1.4 TEF/GX fans, ELECTRIC HUMIDIFIER EH, FILTER F-#, LOUER OCR, EPANSION OCR", () => {
@@ -1323,16 +1324,16 @@ test("WP1.4 TEF/GX fans, ELECTRIC HUMIDIFIER EH, FILTER F-#, LOUER OCR, EPANSION
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.deepEqual(hvac.categories.FAN.items.map((i) => i.tag).sort(), ["GX-1", "TEF-1"]);
-  assert.equal(hvac.categories.HUMIDIFIER.count, 1);
-  assert.equal(hvac.categories.HUMIDIFIER.items[0].tag, "EH-1");
-  assert.equal(hvac.categories.FILTER.count, 1);
-  assert.equal(hvac.categories.FILTER.items[0].tag, "F-1");
-  assert.equal(hvac.categories.LOUVER.count, 2);
-  assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
-  assert.equal(hvac.categories.EXPANSION_TANK.items[0].tag, "ET-1");
+  assert.deepEqual((hvac.categories as FixtureCategories).FAN.items.map((i) => i.tag).sort(), ["GX-1", "TEF-1"]);
+  assert.equal((hvac.categories as FixtureCategories).HUMIDIFIER.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).HUMIDIFIER.items[0].tag, "EH-1");
+  assert.equal((hvac.categories as FixtureCategories).FILTER.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FILTER.items[0].tag, "F-1");
+  assert.equal((hvac.categories as FixtureCategories).LOUVER.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).EXPANSION_TANK.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).EXPANSION_TANK.items[0].tag, "ET-1");
   // FILTER titledOnly must not steal split-system indoor F-1.
-  assert.equal(hvac.categories.FCU.items.some((i) => i.tag === "F-1"), true);
+  assert.equal((hvac.categories as FixtureCategories).FCU.items.some((i) => i.tag === "F-1"), true);
 });
 
 test("WP1.4 AIR HANDLER HEAT PUMP → AHU+HP comma-split; FUME_HOOD_DAMPER ECV", () => {
@@ -1396,18 +1397,18 @@ test("WP1.4 AIR HANDLER HEAT PUMP → AHU+HP comma-split; FUME_HOOD_DAMPER ECV",
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.AHU.count, 2);
-  assert.deepEqual(hvac.categories.AHU.items.map((i) => i.tag).sort(), ["AHU-1", "AHU-2"]);
-  assert.equal(hvac.categories.HEAT_PUMP.count, 2);
-  assert.deepEqual(hvac.categories.HEAT_PUMP.items.map((i) => i.tag).sort(), ["HP-1", "HP-2"]);
-  assert.equal(hvac.categories.GRD.count, 2);
-  assert.deepEqual(hvac.categories.GRD.items.map((i) => i.tag).sort(), ["G-1", "G-2"]);
-  assert.equal(hvac.categories.FUME_HOOD_DAMPER.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).AHU.count, 2);
+  assert.deepEqual((hvac.categories as FixtureCategories).AHU.items.map((i) => i.tag).sort(), ["AHU-1", "AHU-2"]);
+  assert.equal((hvac.categories as FixtureCategories).HEAT_PUMP.count, 2);
+  assert.deepEqual((hvac.categories as FixtureCategories).HEAT_PUMP.items.map((i) => i.tag).sort(), ["HP-1", "HP-2"]);
+  assert.equal((hvac.categories as FixtureCategories).GRD.count, 2);
+  assert.deepEqual((hvac.categories as FixtureCategories).GRD.items.map((i) => i.tag).sort(), ["G-1", "G-2"]);
+  assert.equal((hvac.categories as FixtureCategories).FUME_HOOD_DAMPER.count, 2);
   assert.deepEqual(
-    hvac.categories.FUME_HOOD_DAMPER.items.map((i) => i.tag).sort(),
+    (hvac.categories as FixtureCategories).FUME_HOOD_DAMPER.items.map((i) => i.tag).sort(),
     ["ECV-NB-1", "ECV-NB-2"],
   );
-  assert.equal(hvac.categories.VAV.count, 0);
+  assert.equal((hvac.categories as FixtureCategories).VAV.count, 0);
 });
 
 test("WP1.4 ECAV→VAV, VFD family, split AC/ACCU (bldg5406 shape)", () => {
@@ -1456,18 +1457,18 @@ test("WP1.4 ECAV→VAV, VFD family, split AC/ACCU (bldg5406 shape)", () => {
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.VAV.count, 3);
+  assert.equal((hvac.categories as FixtureCategories).VAV.count, 3);
   assert.deepEqual(
-    hvac.categories.VAV.items.map((i) => i.tag).sort(),
+    (hvac.categories as FixtureCategories).VAV.items.map((i) => i.tag).sort(),
     ["CAV-NB-1", "ECAV-NB-1", "ECAV-NB-2"],
   );
-  assert.equal(hvac.categories.FCU.count, 1);
-  assert.equal(hvac.categories.FCU.items[0].tag, "AC-1");
-  assert.equal(hvac.categories.CONDENSING_UNIT.count, 1);
-  assert.equal(hvac.categories.CONDENSING_UNIT.items[0].tag, "ACCU-1");
-  assert.equal(hvac.categories.VARIABLE_FREQUENCY_DRIVE.count, 2);
+  assert.equal((hvac.categories as FixtureCategories).FCU.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).FCU.items[0].tag, "AC-1");
+  assert.equal((hvac.categories as FixtureCategories).CONDENSING_UNIT.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).CONDENSING_UNIT.items[0].tag, "ACCU-1");
+  assert.equal((hvac.categories as FixtureCategories).VARIABLE_FREQUENCY_DRIVE.count, 2);
   assert.deepEqual(
-    hvac.categories.VARIABLE_FREQUENCY_DRIVE.items.map((i) => i.tag).sort(),
+    (hvac.categories as FixtureCategories).VARIABLE_FREQUENCY_DRIVE.items.map((i) => i.tag).sort(),
     ["VFD-1", "VFD-2"],
   );
 });
@@ -1498,10 +1499,10 @@ test("WP1.4 SPLIT SYSTEM HEAT PUMPS indoor FC joins FCU (Klamath shape)", () => 
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.HEAT_PUMP.count, 2);
-  assert.deepEqual(hvac.categories.HEAT_PUMP.items.map((i) => i.tag).sort(), ["HP-01", "HP-02"]);
-  assert.equal(hvac.categories.FCU.count, 2);
-  assert.deepEqual(hvac.categories.FCU.items.map((i) => i.tag).sort(), ["FC-01", "FC-02"]);
+  assert.equal((hvac.categories as FixtureCategories).HEAT_PUMP.count, 2);
+  assert.deepEqual((hvac.categories as FixtureCategories).HEAT_PUMP.items.map((i) => i.tag).sort(), ["HP-01", "HP-02"]);
+  assert.equal((hvac.categories as FixtureCategories).FCU.count, 2);
+  assert.deepEqual((hvac.categories as FixtureCategories).FCU.items.map((i) => i.tag).sort(), ["FC-01", "FC-02"]);
 });
 
 test("query_table soft needle hits no-space titles for long needles", () => {

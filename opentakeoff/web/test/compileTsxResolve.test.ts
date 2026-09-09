@@ -16,12 +16,12 @@ test("requiredEvidenceCorrection fatals after compile_corpus_takeoff error (no 8
   const goal = "Run a complete valve takeoff on this blueprint set";
   const first = requiredEvidenceCorrection([], goal, "");
   assert.match(first || "", /compile_corpus_takeoff/);
-  assert.ok(!first.startsWith("__FATAL__:"));
+  assert.ok(!first!.startsWith("__FATAL__:"));
 
   const afterFail = requiredEvidenceCorrection([{
     name: "compile_corpus_takeoff",
     out: { error: "Cannot find package 'tsx'" },
   }], goal, "");
-  assert.ok(afterFail.startsWith("__FATAL__:"), afterFail);
-  assert.match(afterFail, /tsx|Install|failed/i);
+  assert.ok(afterFail!.startsWith("__FATAL__:"), afterFail!);
+  assert.match(afterFail!, /tsx|Install|failed/i);
 });

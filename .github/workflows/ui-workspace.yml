@@ -1,0 +1,83 @@
+name: UI workspace verification
+on:
+  pull_request:
+    paths:
+      - 'opentakeoff/web/**'
+      - '.github/workflows/ui-workspace.yml'
+permissions:
+  contents: read
+jobs:
+  full-web-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            opentakeoff/web/package-lock.json
+            opentakeoff/mcp/package-lock.json
+      - run: npm ci --workspaces=false
+        working-directory: opentakeoff/web
+      - run: npm ci --workspaces=false
+        working-directory: opentakeoff/mcp
+      # Intentionally NOT weakened to accommodate inherited main failures.
+      - run: npm run check
+        working-directory: opentakeoff/web
+  ui-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: opentakeoff/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            opentakeoff/web/package-lock.json
+            opentakeoff/mcp/package-lock.json
+      - run: npm ci --workspaces=false
+      - run: npm ci --workspaces=false
+        working-directory: opentakeoff/mcp
+      - run: npx playwright install --with-deps chromium
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # The built-in vector sample uses the existing sidecar reader. Without
+      # this dependency the engine correctly falls back to a different reader,
+      # which does not supply the wide grid this UI contract must exercise.
+      - run: python -m pip install 'pdfplumber>=0.11.0' 'pypdfium2>=5.9.0'
+      - name: Start isolated UI
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 5176 > /tmp/ot-vite.log 2>&1 &
+          node --input-type=module -e 'for(let i=0;i<60;i++){try{const r=await fetch("http://127.0.0.1:5176");if(r.ok)process.exit(0)}catch{}await new Promise(r=>setTimeout(r,1000))}process.exit(1)'
+      - name: Workspace and unchanged interaction contracts
+        env:
+          OT_UI_URL: http://127.0.0.1:5176
+          OT_UI_PDF: public/demo/sample-mechanical-set.pdf
+        run: |
+          node scripts/playwright-workspace.mjs
+          node scripts/playwright-agent-answer.mjs
+          OT_ANSWER_CAPTURE=../docs/ui-workspace/evidence/live-results19/19__vol2__094.answer.txt OT_ANSWER_OUT=/tmp/ot-agent-answer-long-labels node scripts/playwright-agent-answer.mjs
+          node scripts/playwright-topbar.mjs --widths 1280,1440,1920,2560
+          node scripts/playwright-schedules-panel.mjs
+          node scripts/playwright-inline-cites.mjs
+          node scripts/playwright-count-proposals.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-workspace-evidence
+          path: |
+            /tmp/ot-workspace-ui
+            /tmp/ot-agent-answer
+            /tmp/ot-agent-answer-long-labels
+            /tmp/ot-topbar
+            /tmp/ot-schedules
+            /tmp/ot-cites
+            /tmp/ot-count
+            /tmp/ot-vite.log

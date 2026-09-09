@@ -1,0 +1,91 @@
+
+> opentakeoff-web@0.1.0 check
+> npm run typecheck && npm run lint && npm test && npm run bench && npm run build
+
+
+> opentakeoff-web@0.1.0 typecheck
+> tsc --noEmit
+
+
+> opentakeoff-web@0.1.0 lint
+> eslint src netlify/functions
+
+
+/Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web/src/lib/agentLoop.js
+   403:17   error  Unnecessary escape character: \[                                                           no-useless-escape
+   590:241  error  Unnecessary escape character: \"                                                           no-useless-escape
+   590:258  error  Unnecessary escape character: \"                                                           no-useless-escape
+  1453:29   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1462:39   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1562:43   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1690:11   error  'scanTitle' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  1730:23   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1735:40   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1735:55   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1736:36   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1736:52   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1736:64   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1741:36   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1821:65   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1876:62   error  Unnecessary escape character: \-                                                           no-useless-escape
+  1952:661  error  Unnecessary escape character: \'                                                           no-useless-escape
+
+/Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web/src/lib/agentTakeoff.js
+  717:51  error  'rowCount' is assigned a value but never used. Allowed unused args must match /^_/u  no-unused-vars
+  887:36  error  'col' is defined but never used. Allowed unused args must match /^_/u                no-unused-vars
+
+/Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web/src/lib/takeoffWorkflow.js
+   51:35   error  Unnecessary escape character: \-  no-useless-escape
+   52:31   error  Unnecessary escape character: \-  no-useless-escape
+   52:51   error  Unnecessary escape character: \-  no-useless-escape
+   65:24   error  Unnecessary escape character: \-  no-useless-escape
+   71:56   error  Unnecessary escape character: \-  no-useless-escape
+  135:16   error  Unnecessary escape character: \-  no-useless-escape
+  219:62   error  Unnecessary escape character: \-  no-useless-escape
+  220:45   error  Unnecessary escape character: \-  no-useless-escape
+  239:126  error  Unnecessary escape character: \/  no-useless-escape
+  287:24   error  Unnecessary escape character: \-  no-useless-escape
+  302:16   error  Unnecessary escape character: \-  no-useless-escape
+  311:17   error  Unnecessary escape character: \-  no-useless-escape
+  319:45   error  Unnecessary escape character: \-  no-useless-escape
+  319:63   error  Unnecessary escape character: \-  no-useless-escape
+  336:42   error  Unnecessary escape character: \-  no-useless-escape
+  337:75   error  Unnecessary escape character: \-  no-useless-escape
+  347:91   error  Unnecessary escape character: \-  no-useless-escape
+  363:56   error  Unnecessary escape character: \-  no-useless-escape
+  378:65   error  Unnecessary escape character: \-  no-useless-escape
+  408:28   error  Unnecessary escape character: \-  no-useless-escape
+
+/Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web/src/pages/TakeoffCanvas.jsx
+    78:72   error    'sweepRatio' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                         no-unused-vars
+    78:84   error    'corroborateFingerprint' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                             no-unused-vars
+    78:108  error    'classifySweepMatches' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                               no-unused-vars
+    78:151  error    'fragmentedTagOcc' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                   no-unused-vars
+    78:169  error    'deepHyphenChainTagOcc' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                              no-unused-vars
+    78:192  error    'compoundTagOcc' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                     no-unused-vars
+   102:52   error    'corroborateInlineMotif' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                             no-unused-vars
+   102:76   error    'classifyInlineMotifMatches' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                         no-unused-vars
+   125:10   error    'compileCorpusTakeoff' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                               no-unused-vars
+   228:58   error    'rowKeyAnswersFor' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                   no-unused-vars
+  1990:6    warning  React Hook useEffect has missing dependencies: 'groupKeys' and 'sweep'. Either include them or remove the dependency array                                react-hooks/exhaustive-deps
+  2981:5    warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  7289:6    warning  React Hook useEffect has missing dependencies: 'getOrFetchProductionGraph' and 'rasterScheduleNotes'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  7653:16   error    'e' is defined but never used                                                                                                                             no-unused-vars
+
+✖ 53 problems (50 errors, 3 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+
+npm error Lifecycle script `lint` failed with error:
+npm error code 1
+npm error path /Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web
+npm error workspace opentakeoff-web@0.1.0
+npm error location /Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web
+npm error command failed
+npm error command sh -c eslint src netlify/functions
+npm error Lifecycle script `check` failed with error:
+npm error code 1
+npm error path /Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web
+npm error workspace opentakeoff-web@0.1.0
+npm error location /Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web
+npm error command failed
+npm error command sh -c npm run typecheck && npm run lint && npm test && npm run bench && npm run build

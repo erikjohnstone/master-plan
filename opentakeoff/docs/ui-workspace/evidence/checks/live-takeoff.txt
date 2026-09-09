@@ -1,0 +1,11 @@
+file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web/scripts/playwright-takeoff-ui-demo.mjs:31
+  throw new Error("Need a live CEREBRAS_API_KEY (or /tmp/cerebras_ui_key.txt).");
+        ^
+
+Error: Need a live CEREBRAS_API_KEY (or /tmp/cerebras_ui_key.txt).
+    at file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web/scripts/playwright-takeoff-ui-demo.mjs:31:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.1

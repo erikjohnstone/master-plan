@@ -1,3 +1,4 @@
+import type { SheetGraph, ScheduleTable } from "../src/lib/sheetgraph.ts";
 /**
  * Pillar gap recovery unit tests.
  */
@@ -24,7 +25,7 @@ describe("pillarGapRecovery", () => {
       height: 1200,
       pageViewportTransform: [1, 0, 0, 1, 0, 0],
     };
-    assert.equal(sheetNeedsPillarGapRecovery(g, ctx), true);
+    assert.equal(sheetNeedsPillarGapRecovery(g as unknown as SheetGraph, ctx), true);
   });
 
   it("does not flag when a valve-shaped table already exists", () => {
@@ -45,6 +46,6 @@ describe("pillarGapRecovery", () => {
       height: 1200,
       pageViewportTransform: [1, 0, 0, 1, 0, 0],
     };
-    assert.equal(sheetNeedsPillarGapRecovery(g, ctx), false);
+    assert.equal(sheetNeedsPillarGapRecovery(g as unknown as SheetGraph, ctx), false);
   });
 });

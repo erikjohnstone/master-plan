@@ -1,3 +1,4 @@
+import type { SheetGraph, ScheduleTable } from "../src/lib/sheetgraph.ts";
 /**
  * Integrated estimator document — wraps Pillar A/C compile, not a fork.
  */
@@ -44,7 +45,7 @@ const graph = {
 
 describe("estimatorTakeoffDocument integration", () => {
   it("preserves Pillar A/C compile outputs in pillars.c_estimator", () => {
-    const doc = buildEstimatorTakeoffDocument(graph, { file: "set.pdf" });
+    const doc = buildEstimatorTakeoffDocument(graph as unknown as SheetGraph, { file: "set.pdf" });
     assert.ok(doc.pillars?.a_compile?.takeoff_ids?.valve);
     assert.ok(doc.pillars?.c_estimator?.valve);
     assert.ok(doc.pillars?.c_estimator?.bas);
@@ -52,7 +53,7 @@ describe("estimatorTakeoffDocument integration", () => {
   });
 
   it("finds real BAS points from the AHU-1 I/O LIST fixture table (basCompile.categories.points_lists.lists, not a top-level basCompile.lists)", () => {
-    const doc = buildEstimatorTakeoffDocument(graph, { file: "set.pdf" });
+    const doc = buildEstimatorTakeoffDocument(graph as unknown as SheetGraph, { file: "set.pdf" });
     assert.ok(doc.pillars?.a_compile?.bas_lists > 0, "bas_lists must count the real I/O LIST table, not stay 0");
     assert.ok(doc.points.length > 0, "the fixture's own AHU-1 I/O LIST row (AI-1) must produce a real point");
     assert.ok(doc.points.some((p) => p.name === "AI-1" || p.description === "AI-1"));
@@ -60,13 +61,13 @@ describe("estimatorTakeoffDocument integration", () => {
   });
 
   it("includes pipeline harness corroboration", () => {
-    const doc = buildEstimatorTakeoffDocument(graph, { file: "set.pdf" });
+    const doc = buildEstimatorTakeoffDocument(graph as unknown as SheetGraph, { file: "set.pdf" });
     assert.ok(doc.pipeline_harness);
     assert.ok(Array.isArray(doc.grid_classifications));
   });
 
   it("emits grounded valve evidence from compile cells", () => {
-    const doc = buildEstimatorTakeoffDocument(graph, { file: "set.pdf" });
+    const doc = buildEstimatorTakeoffDocument(graph as unknown as SheetGraph, { file: "set.pdf" });
     assert.ok(doc.valves.length >= 1);
     const cv = doc.valves.find((v) => v.tag === "CV-7");
     assert.ok(cv);
@@ -75,7 +76,7 @@ describe("estimatorTakeoffDocument integration", () => {
   });
 
   it("embeds Pillar B reconcile rows when provided", () => {
-    const doc = buildEstimatorTakeoffDocument(graph, {
+    const doc = buildEstimatorTakeoffDocument(graph as unknown as SheetGraph, {
       file: "set.pdf",
       reconcileSummary: {
         rows: [{
@@ -89,7 +90,7 @@ describe("estimatorTakeoffDocument integration", () => {
       },
     });
     assert.ok(doc.pillars?.b_reconcile);
-    assert.equal(doc.pillars.b_reconcile.rows.length, 1);
+    assert.equal((doc.pillars.b_reconcile as { rows: unknown[] }).rows.length, 1);
     assert.ok(doc.discrepancies.some((d) => d.itemRef === "CV-7"));
   });
 });

@@ -1,3 +1,4 @@
+import type { FixtureCategories, FixtureCell } from "./fixtureRuntimeTypes.ts";
 /**
  * L5 header-geometry classification (shared UI+MCP path) — untitled valve/BAS grids.
  */
@@ -75,8 +76,8 @@ describe("untitled valve grid compile (013-shaped)", () => {
     const graph = { sheets: [{ key: "set.pdf#5" }], tables: [UNTITLED_VALVE_TABLE] };
     const valve = compileControlValveTakeoff(null, graph);
     assert.ok(valve.totals.items >= 2, "CV-7 and CV-11/CV-12 split");
-    assert.ok(valve.categories.CHW_CONTROL_VALVE?.count >= 2);
-    const tags = (valve.categories.CHW_CONTROL_VALVE?.items || []).map((i) => i.tag);
+    assert.ok((valve.categories as FixtureCategories).CHW_CONTROL_VALVE?.count >= 2);
+    const tags = ((valve.categories as FixtureCategories).CHW_CONTROL_VALVE?.items || []).map((i) => i.tag);
     assert.ok(tags.some((t) => /^CV-7$/i.test(t)));
     assert.ok(tags.some((t) => /^CV-11$/i.test(t)));
     assert.ok(tags.some((t) => /^CV-12$/i.test(t)));
@@ -122,7 +123,7 @@ describe("titled-but-service-unqualified valve schedule compile (074-shaped)", (
     const graph = { sheets: [{ key: "set.pdf#9" }], tables: [TITLED_GENERIC_VALVE_TABLE] };
     const valve = compileControlValveTakeoff(null, graph);
     assert.ok(valve.totals.items >= 2, "CV-1 and CV-2 both claimed despite the generic title");
-    const tags = Object.values(valve.categories)
+    const tags = Object.values((valve.categories as FixtureCategories))
       .flatMap((c) => c?.items || [])
       .map((i) => i.tag);
     assert.ok(tags.some((t) => /^CV-1$/i.test(t)));

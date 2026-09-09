@@ -14,6 +14,7 @@
  *   node scripts/playwright-count-proposals.mjs
  */
 import { chromium } from "playwright";
+import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,6 +26,7 @@ const OUT = process.env.OT_COUNT_OUT || "/tmp/ot-count";
 const BENCH = "/home/user/master-plan/HVAC BAS Benchmark Collection";
 
 function findPdf() {
+  if (process.env.OT_UI_PDF) return resolve(process.env.OT_UI_PDF);
   const cands = [
     resolve(BENCH, "pdf/05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf"),
     resolve(root, "public/tarrant-county-mechanical.pdf"),
@@ -41,7 +43,7 @@ const check = (name, ok, detail = "") => {
 
 const browser = await chromium.launch({
   headless: true,
-  executablePath: "/opt/pw-browsers/chromium",
+  executablePath: process.env.OT_BROWSER_PATH || undefined,
   args: ["--no-sandbox", "--disable-dev-shm-usage"],
 });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -57,6 +59,7 @@ try {
     { timeout: 15 * 60 * 1000 },
   );
   await page.waitForTimeout(1500);
+  await openImportedSheet(page);
 
   // A scale is required before any proposal can be accepted — set it the way
   // the agent's set_scale tool does.

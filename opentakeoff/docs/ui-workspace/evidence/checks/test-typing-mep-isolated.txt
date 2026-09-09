@@ -1,0 +1,36 @@
+✔ buildMepGraph: a T-junction (one line touching another's MIDPOINT) splits correctly into a real 3-way node (11.545083ms)
+✔ buildMepGraph: two lines that never touch stay in separate components (1.148584ms)
+✔ buildMepGraph: layerSignal is 'none' with no layer data, 'strong' with confident, high-coverage layer data (2.526208ms)
+✔ buildMepGraph: every edge inherits its ORIGINAL segment's own system tag, even after being split at a junction (1.302167ms)
+✔ buildMepGraph: an exact reversed-duplicate segment (a real CAD 'double stroke' artifact) never crashes JTS's noding (0.495958ms)
+✔ buildMepGraph: a real, densely crosshatched sheet can defeat JTS's noding at EVERY retry grid, not just the first — a genuine, disclosed throw, not a bug in buildMepGraph itself (16.934542ms)
+✔ buildMepGraph: an empty sheet (no segments) returns an empty graph, not a throw (1.215333ms)
+✔ buildMepGraph: excludeSegs drops exactly the marked segments (0.443625ms)
+✔ buildMepGraph: a dense grid of crossing lines (many segments × many junctions) stays fast — the real O(survivors×junctions) regression this session found and fixed (6455.180041ms)
+✔ traceConnectivity: a straight run reaches its one real equipment placement (2.596333ms)
+✔ traceConnectivity: a real branching junction reaching two DIFFERENT equipment is ambiguous, never picks one (1.419417ms)
+✔ traceConnectivity: a dead end that ran out of connected linework says so, distinct from hitting the hop cap (0.503166ms)
+✔ traceConnectivity: hitting max_hops before reaching equipment is named as a distinct dead_end reason (1.922ms)
+✔ traceConnectivity: never invents a reached equipment from nearest-as-the-crow-flies — an unconnected placement stays unreached (1.145ms)
+✔ traceConnectivity: long trace (>30 hops) discloses the factor and discounts confidence (3.774958ms)
+✔ traceConnectivity: an unclassified layer signal discloses the factor and discounts confidence, even on a clean reach (0.45925ms)
+✔ traceConnectivity: refuses (does not silently return dead_end) when no equipment symbols are supplied at all (0.609958ms)
+✔ traceConnectivity: refuses when the seed point isn't on any traced linework (0.499917ms)
+✔ traceConnectivity: refuses when the sheet has no vector linework at all (0.199292ms)
+✔ traceConnectivity: determinism — the same call twice returns the same result (0.411583ms)
+✔ traceConnectivity: a real drawn gap WITH a fitting symbol sitting in it bridges and reaches equipment (0.970208ms)
+✔ traceConnectivity: the identical gap with NO fitting symbol supplied stays a real dead_end — never bridged on proximity alone (0.592125ms)
+✔ traceConnectivity: a gap too WIDE to bridge stays dead_end even with a fitting symbol sitting exactly in it (0.421792ms)
+✔ traceConnectivity: a seed clicked partway along a run (not at either endpoint) resolves and reaches equipment (0.330041ms)
+✔ traceConnectivity: an equipment placement that sits mid-edge (not at a drawn endpoint) is still reachable (0.281417ms)
+✔ traceConnectivity: a seed a few px off the run's own centerline (within seed_tol_ft) still resolves, not just exact hits (0.294ms)
+✔ traceConnectivity: seed/equipment resolution tolerance is floored at the graph's own quantGridPx — a coarse retry-grid solve must not out-tolerance a seed sitting on real, if quantized-away, linework (0.302ms)
+✔ traceConnectivity: a fitting symbol sitting well OFF the gap's own line never bridges two unrelated dangling ends (0.429041ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7294.602333

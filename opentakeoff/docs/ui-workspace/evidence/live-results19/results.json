@@ -1,0 +1,22 @@
+[
+ {
+  "id": "19__vol2__094",
+  "title": "Air Handling Unit Schedule CHW",
+  "page": 8,
+  "wantRows": 5,
+  "sheets": 9,
+  "indexSeconds": 15,
+  "uiTables": 4,
+  "uiSheets": 9,
+  "agentSeconds": 46,
+  "panelLines": 0,
+  "uiTablesFound": "4/4",
+  "uiTablesRowExact": "4/4",
+  "uiRows": "11/11",
+  "rowsFound": 0,
+  "tokens": "219/260",
+  "tokenPct": 84.2,
+  "answerChars": 15146,
+  "pageErrors": 0
+ }
+]

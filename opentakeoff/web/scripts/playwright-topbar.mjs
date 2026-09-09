@@ -17,6 +17,7 @@
  *   node scripts/playwright-topbar.mjs [--widths 1280,1440,1920]
  */
 import { chromium } from "playwright";
+import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { existsSync, mkdirSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -37,13 +38,14 @@ const check = (name, ok, detail = "") => {
 };
 
 function findPdf() {
+  if (process.env.OT_UI_PDF) return resolve(process.env.OT_UI_PDF);
   if (!existsSync(BENCH)) return null;
   const hit = readdirSync(BENCH).find((f) => f.startsWith(`${doc}__`) && f.endsWith(".pdf"));
   return hit ? resolve(BENCH, hit) : null;
 }
 
 mkdirSync(OUT, { recursive: true });
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
+const browser = await chromium.launch({ executablePath: process.env.OT_BROWSER_PATH || undefined, args: ["--no-sandbox"] });
 
 // The overlap probe. Leaf elements only — a container legitimately contains its
 // children, and a caption legitimately sits above its own controls, so compare
@@ -104,6 +106,7 @@ try {
       await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
     }
     await page.waitForTimeout(1200);
+    await openImportedSheet(page);
 
     const r = await page.evaluate(OVERLAP_FN);
     console.log(`\n${width}px — ${r.leaves} leaf elements, bar ${r.barHeight}px tall, deck 2 ${r.scrollWidth}/${r.clientWidth}px`);

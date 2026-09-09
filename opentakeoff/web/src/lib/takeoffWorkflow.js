@@ -48,8 +48,8 @@ export function goalAsksCompleteSetTakeoff(g) {
 /** Hydronic service filter from goal phrasing (CHW vs HHW only). */
 export function valveServiceFromGoal(goal) {
   const g = String(goal || "");
-  const chw = /\b(?:CHW|chilled[\s\-]*water)\b/i.test(g);
-  const hhw = /\b(?:HHW|hot[\s\-]*water|heating[\s\-]*water)\b/i.test(g);
+  const chw = /\b(?:CHW|chilled[\s-]*water)\b/i.test(g);
+  const hhw = /\b(?:HHW|hot[\s-]*water|heating[\s-]*water)\b/i.test(g);
   if (chw && hhw) return null;
   if (chw) return "CHW";
   if (hhw) return "HHW";
@@ -62,13 +62,13 @@ export function namedEquipmentFamilyCount(goal) {
   let n = 0;
   if (/\bAHUs?\b/i.test(g)) n += 1;
   if (/\bDOAH\b|dedicated\s+outdoor/i.test(g)) n += 1;
-  if (/\bFCUs?\b|fan[\s\-]*coil/i.test(g)) n += 1;
+  if (/\bFCUs?\b|fan[\s-]*coil/i.test(g)) n += 1;
   if (/\bVAVs?\b|volume\s+control\s+box|air\s+terminal\s+box/i.test(g)) n += 1;
   if (/\bchillers?\b/i.test(g)) n += 1;
   if (/\bboilers?\b/i.test(g)) n += 1;
   if (/\bpumps?\b/i.test(g)) n += 1;
   if (/\bRTUs?\b|rooftop/i.test(g)) n += 1;
-  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) n += 1;
+  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s-]*coil/i.test(g)) n += 1;
   return n;
 }
 
@@ -132,7 +132,7 @@ export function classifyTakeoffIntent(goal) {
     && (/\b(?:row\s+counts?|breakdown|totals?|counts?)\b/i.test(g) || goalAsksTakeoff(g));
   if (pointsListTakeoff) return "points_takeoff";
 
-  if (/\bfan[\s\-]*coil|\bFCUs?\b/i.test(g)
+  if (/\bfan[\s-]*coil|\bFCUs?\b/i.test(g)
     && /\b(?:buildings?|splits?|cross[- ]building|across\b)/i.test(g)
     && goalAsksTakeoff(g)) {
     return "fcu_buildings";
@@ -216,8 +216,8 @@ export function classifyTakeoffIntent(goal) {
     || /\b(?:AHUs?|DOAHs?|DOAS|VAVs?|FCUs?|RTUs?|CRAHs?|CUHs?|UHs?)\b/i.test(g)
     || /\b(?:chillers?|boilers?|pumps?|vacuum\s+pumps?|humidifiers?|dehumidifiers?)\b/i.test(g)
     || /\b(?:diffusers?|grilles?|registers?|air\s+separators?|expansion\s+tanks?)\b/i.test(g)
-    || /\b(?:unit\s+heaters?|cabinet\s+unit\s+heaters?|fan[\s\-]*coils?|rooftop)\b/i.test(g)
-    || /\b(?:dedicated\s+outdoor|computer[\s\-]*room)\b/i.test(g)
+    || /\b(?:unit\s+heaters?|cabinet\s+unit\s+heaters?|fan[\s-]*coils?|rooftop)\b/i.test(g)
+    || /\b(?:dedicated\s+outdoor|computer[\s-]*room)\b/i.test(g)
   )) {
     return "equipment_schedule";
   }
@@ -236,7 +236,7 @@ export function scaleRefuseMessage(sheetKey, detectedLabel) {
 export function namedPointsListTitles(goal) {
   const titles = [];
   // FCU WITH … must not span a comma into the next sibling title.
-  const re = /\b((?:POINTS\s+LIST|UNIT\s+HEATER\s+DDC\s+POINTS\s+LIST|FCU\s+WITH[^,.\n?]{0,80}DDC\s+POINTS\s+LIST)[A-Z0-9\s\-\/]*)/gi;
+  const re = /\b((?:POINTS\s+LIST|UNIT\s+HEATER\s+DDC\s+POINTS\s+LIST|FCU\s+WITH[^,.\n?]{0,80}DDC\s+POINTS\s+LIST)[A-Z0-9\s\-/]*)/gi;
   for (const m of String(goal || "").matchAll(re)) {
     const t = m[1].replace(/\s+/g, " ").trim().replace(/[,:;]+$/, "");
     if (t.length >= 12) titles.push(t);
@@ -284,7 +284,7 @@ export function scheduleFamilyNeedles(goal) {
       exclude: /HANDLING/i,
     });
   }
-  if (/\bFCUs?\b|fan[\s\-]*coil/i.test(g)) {
+  if (/\bFCUs?\b|fan[\s-]*coil/i.test(g)) {
     add({
       label: "FCU",
       title: "FAN COIL UNIT SCHEDULE",
@@ -299,7 +299,7 @@ export function scheduleFamilyNeedles(goal) {
       titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|AIR TERMINAL BOX/i,
     });
   }
-  if (/\bair[\s\-]*cooled\s+chiller/i.test(g)) {
+  if (/\bair[\s-]*cooled\s+chiller/i.test(g)) {
     add({
       label: "air-cooled chiller",
       title: "AIR COOLED CHILLER SCHEDULE",
@@ -308,7 +308,7 @@ export function scheduleFamilyNeedles(goal) {
       minCount: 1,
     });
   }
-  if (/\bheat[\s\-]*recovery\s+chiller/i.test(g)) {
+  if (/\bheat[\s-]*recovery\s+chiller/i.test(g)) {
     add({
       label: "heat-recovery chiller",
       title: "AIR COOLED HEAT RECOVERY CHILLER",
@@ -316,7 +316,7 @@ export function scheduleFamilyNeedles(goal) {
       minCount: 1,
     });
   }
-  if (/\bchillers?\b/i.test(g) && !/\bair[\s\-]*cooled|heat[\s\-]*recovery/i.test(g)) {
+  if (/\bchillers?\b/i.test(g) && !/\bair[\s-]*cooled|heat[\s-]*recovery/i.test(g)) {
     add({ label: "chiller", title: "CHILLER SCHEDULE", titleRe: /CHILLER SCHEDULE/i });
   }
   if (/\bboilers?\b/i.test(g)) {
@@ -333,8 +333,8 @@ export function scheduleFamilyNeedles(goal) {
       exclude: /HEAT\s+PUMP|HYDRONIC/i,
     });
   }
-  if (/\bRTUs?\b|rooftop|packaged|roof[\s\-]*top\s+unit/i.test(g)) {
-    add({ label: "RTU", title: "ROOF TOP UNIT SCHEDULE", titleRe: /ROOF[\s\-]*TOP|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE/i });
+  if (/\bRTUs?\b|rooftop|packaged|roof[\s-]*top\s+unit/i.test(g)) {
+    add({ label: "RTU", title: "ROOF TOP UNIT SCHEDULE", titleRe: /ROOF[\s-]*TOP|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE/i });
   }
   if (/\bERVs?\b|energy\s+recovery/i.test(g)) {
     add({
@@ -344,7 +344,7 @@ export function scheduleFamilyNeedles(goal) {
     });
   }
   if (/\bfurnaces?\b/i.test(g)) {
-    add({ label: "furnace", title: "FURNACE SCHEDULE", titleRe: /FURNACE\s+SCHEDULE|GAS[\s\-]*FIRED\s+.*FURNACE/i });
+    add({ label: "furnace", title: "FURNACE SCHEDULE", titleRe: /FURNACE\s+SCHEDULE|GAS[\s-]*FIRED\s+.*FURNACE/i });
   }
   if (/\bcondensing\s+units?\b/i.test(g)) {
     add({ label: "condensing unit", title: "CONDENSING UNIT SCHEDULE", titleRe: /CONDENSING\s+UNIT\s+SCHEDULE/i });
@@ -360,7 +360,7 @@ export function scheduleFamilyNeedles(goal) {
       exclude: /DEDICATED\s+OUTDOOR\s+AIR/i,
     });
   }
-  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil|ceiling\s+fan/i.test(g)) {
+  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s-]*coil|ceiling\s+fan/i.test(g)) {
     add({ label: "fan", title: "FAN SCHEDULE", titleRe: /FAN SCHEDULE/i });
   }
   if (/\bceiling\s+fans?\b/i.test(g)) {
@@ -375,7 +375,7 @@ export function scheduleFamilyNeedles(goal) {
     add({
       label: "diffuser",
       title: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
-      titleRe: /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER|DIFFUSER[\s\-]*GRILLE/i,
+      titleRe: /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER|DIFFUSER[\s-]*GRILLE/i,
     });
   }
   if (/\bfume\s+hood\s+damper|\bECVs?\b|fume\s+hood.{0,20}(?:VAV|damper)/i.test(g)) {
@@ -405,7 +405,7 @@ export function scheduleFamilyNeedles(goal) {
       titleRe: /HUMIDIFIER SCHEDULE/i,
     });
   }
-  if (/\bCRAH\b|computer[\s\-]*room/i.test(g)) {
+  if (/\bCRAH\b|computer[\s-]*room/i.test(g)) {
     add({
       label: "CRAH",
       title: "COMPUTER ROOM AIR HANDLER",

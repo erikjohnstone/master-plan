@@ -1,0 +1,24 @@
+{
+  "provenance": "Presentation replay of 175 fields from recorded live table19 answer; separate synthetic callback control",
+  "checks": [
+    "five recorded rows, no invented rows",
+    "all 175 field labels and values preserved exactly in original order",
+    "all row summaries fit in one answer viewport",
+    "keyboard opens row details",
+    "1280: dock fits viewport",
+    "1280: answer fields stay inside dock",
+    "1280: composer remains visible",
+    "1440: dock fits viewport",
+    "1440: answer fields stay inside dock",
+    "1440: composer remains visible",
+    "1920: dock fits viewport",
+    "1920: answer fields stay inside dock",
+    "1920: composer remains visible",
+    "2560: dock fits viewport",
+    "2560: answer fields stay inside dock",
+    "2560: composer remains visible",
+    "field citation retains exact callback and bbox",
+    "no browser errors"
+  ],
+  "errors": []
+}

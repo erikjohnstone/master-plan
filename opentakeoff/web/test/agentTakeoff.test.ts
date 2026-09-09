@@ -1,3 +1,4 @@
+import type { FixtureCategories, FixtureCell } from "./fixtureRuntimeTypes.ts";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { PDFDocument } from "pdf-lib";
@@ -136,7 +137,7 @@ test("compileAgentTakeoff collapses sweep EAV into installed line items", () => 
   assert.equal(vav.qty, 1);
   assert.equal(vav.unit, "EA");
   assert.equal(vav.qty_kind, "installed");
-  assert.match(vav.description, /TRANE/);
+  assert.match(vav.description!, /TRANE/);
   assert.match(vav.attrs_text, /CFM 2170/);
   assert.equal(vav.sheet_id, "mech.pdf#2");
   assert.ok(!lines.some((l) => l.tag === "EF-2"), "query_table scrap must not become Takeoff");
@@ -321,16 +322,16 @@ test("compileAgentTakeoff: corpus compile locks line count — scrap cannot infl
   assert.equal(lines.reduce((n, l) => n + (l.qty || 0), 0), 2);
   assert.ok(lines.every((l) => l.tag === "AHU-1" || l.tag === "AHU-2"));
   const ahu1 = lines.find((l) => l.tag === "AHU-1");
-  assert.deepEqual(ahu1.bbox_px, [10, 20, 30, 40]);
-  assert.deepEqual(ahu1.table_bbox_px, [1, 2, 500, 600]);
+  assert.deepEqual(ahu1!.bbox_px, [10, 20, 30, 40]);
+  assert.deepEqual(ahu1!.table_bbox_px, [1, 2, 500, 600]);
   const groups = groupTakeoffByFamily(lines);
   assert.ok(groups[0].tableCite?.bbox_px);
   assert.equal(groups[0].tableCite.kind, "table");
   const rowCite = lineLeadCite(ahu1, "tag");
-  assert.equal(rowCite.kind, "row");
-  assert.deepEqual(rowCite.bbox_px, [10, 20, 30, 40]);
-  assert.equal(String(ahu1.specs.CFM || ""), "2000");
-  assert.ok(Object.values(ahu1.specs).some((v) => String(v) === "460"));
+  assert.equal(rowCite!.kind, "row");
+  assert.deepEqual(rowCite!.bbox_px, [10, 20, 30, 40]);
+  assert.equal(String((ahu1!.specs as Record<string, unknown>).CFM || ""), "2000");
+  assert.ok(Object.values((ahu1!.specs as Record<string, unknown>)).some((v) => String(v) === "460"));
 });
 
 test("rowsFromCompiledTakeoff: BAS points lists → POINT TYPE rows", () => {
@@ -582,7 +583,7 @@ test("cleanTakeoffTag strips markdown bold wrappers", () => {
 });
 
 test("normalizeControlValveCells: one Cv + served equipment, never dual CHW/HHW Cv", () => {
-  const cells = normalizeControlValveCells({
+  const cells = (normalizeControlValveCells({
     cells: {
       "UNIT MARK": { text: "AHU-A1", bbox: [1, 2, 3, 4] },
       "VALVE SIZE (IN)": { text: "1", bbox: null },
@@ -594,7 +595,7 @@ test("normalizeControlValveCells: one Cv + served equipment, never dual CHW/HHW 
       "HHW CV": { text: "0.5", bbox: null },
     },
     table_bbox_px: [10, 20, 30, 40],
-  }, "HHW");
+  }, "HHW") as unknown as Record<string, FixtureCell>);
   assert.equal(cells["Served equipment"]?.text, "AHU-A1");
   assert.equal(cells["Unit Mark"]?.text, "AHU-A1");
   assert.equal(cells.Service?.text, "HHW");
@@ -606,7 +607,7 @@ test("normalizeControlValveCells: one Cv + served equipment, never dual CHW/HHW 
 });
 
 test("normalizeControlValveCells: promote printed actuator / fail / signal (WP7)", () => {
-  const cells = normalizeControlValveCells({
+  const cells = (normalizeControlValveCells({
     cells: {
       "UNIT MARK": { text: "VAV-1", bbox: null },
       "VALVE SIZE": { text: "1/2", bbox: null },
@@ -615,7 +616,7 @@ test("normalizeControlValveCells: promote printed actuator / fail / signal (WP7)
       "CONTROL SIGNAL": { text: "0-10V", bbox: null },
       CV: { text: "1.2", bbox: null },
     },
-  }, null);
+  }, null) as unknown as Record<string, FixtureCell>);
   assert.equal(cells.Actuator?.text, "24V ELECTRIC");
   assert.equal(cells["Fail position"]?.text, "NO");
   assert.equal(cells["Control signal"]?.text, "0-10V");
@@ -666,9 +667,9 @@ test("control_valves compile includes isolation/damper families; CHW filter stay
     ],
   };
   const all = compileControlValveTakeoff([], graph);
-  assert.ok((all.categories.CHW_CONTROL_VALVE?.count || 0) >= 1);
-  assert.ok((all.categories.ISOLATION_VALVE?.count || 0) >= 1);
-  assert.ok((all.categories.CONTROL_DAMPER?.count || 0) >= 1);
+  assert.ok(((all.categories as FixtureCategories).CHW_CONTROL_VALVE?.count || 0) >= 1);
+  assert.ok(((all.categories as FixtureCategories).ISOLATION_VALVE?.count || 0) >= 1);
+  assert.ok(((all.categories as FixtureCategories).CONTROL_DAMPER?.count || 0) >= 1);
   assert.ok(all.totals.items >= 3);
   assert.equal(all.estimator_status.estimator_complete, false);
   assert.equal(all.estimator_status.gt_locked, false);
@@ -683,9 +684,9 @@ test("control_valves compile includes isolation/damper families; CHW filter stay
   assert.ok(all.estimator_status.gates.some((g) => g.gate === "plan_paint" && g.status === "refuse_not_done"));
   assert.ok(all.estimator_status.gates.some((g) => g.gate === "gt_lock" && g.status === "refuse_not_done"));
   const chwOnly = compileControlValveTakeoff([], graph, { service: "CHW" });
-  assert.equal(chwOnly.categories.ISOLATION_VALVE, undefined);
-  assert.equal(chwOnly.categories.CONTROL_DAMPER, undefined);
-  assert.ok((chwOnly.categories.CHW_CONTROL_VALVE?.count || 0) >= 1);
+  assert.equal((chwOnly.categories as FixtureCategories).ISOLATION_VALVE, undefined);
+  assert.equal((chwOnly.categories as FixtureCategories).CONTROL_DAMPER, undefined);
+  assert.ok(((chwOnly.categories as FixtureCategories).CHW_CONTROL_VALVE?.count || 0) >= 1);
   assert.equal(chwOnly.estimator_status.estimator_complete, false);
 });
 
@@ -786,10 +787,10 @@ test("control_valves compile → panel lines with cites; dual-Cv scrap dropped",
   assert.equal(compiled.takeoff_id, "T-VALVE-01");
   assert.equal(compiled.totals.items, 2);
   assert.equal(compiled.service_filter, null);
-  assert.equal(compiled.categories.HHW_CONTROL_VALVE.count, 1);
-  assert.equal(compiled.categories.CHW_CONTROL_VALVE.count, 1);
-  assert.equal(compiled.categories.HHW_CONTROL_VALVE.items[0].cells.Cv.text, "0.5");
-  assert.equal(compiled.categories.HHW_CONTROL_VALVE.items[0].cells["Served equipment"].text, "AHU-A1");
+  assert.equal((compiled.categories as FixtureCategories).HHW_CONTROL_VALVE.count, 1);
+  assert.equal((compiled.categories as FixtureCategories).CHW_CONTROL_VALVE.count, 1);
+  assert.equal((compiled.categories as FixtureCategories).HHW_CONTROL_VALVE.items[0].cells.Cv.text, "0.5");
+  assert.equal((compiled.categories as FixtureCategories).HHW_CONTROL_VALVE.items[0].cells["Served equipment"].text, "AHU-A1");
 
   const chwOnly = compileControlValveTakeoff([], {
     tables: [
@@ -823,8 +824,8 @@ test("control_valves compile → panel lines with cites; dual-Cv scrap dropped",
   }, { service: "CHW" });
   assert.equal(chwOnly.service_filter, "CHW");
   assert.equal(chwOnly.totals.items, 1);
-  assert.equal(chwOnly.categories.CHW_CONTROL_VALVE?.count, 1);
-  assert.equal(chwOnly.categories.HHW_CONTROL_VALVE, undefined);
+  assert.equal((chwOnly.categories as FixtureCategories).CHW_CONTROL_VALVE?.count, 1);
+  assert.equal((chwOnly.categories as FixtureCategories).HHW_CONTROL_VALVE, undefined);
   assert.ok(chwOnly.exclusions.some((e) => /HHW/i.test(e) && /filtered/i.test(e)));
 
   const hhwOnly = compileControlValveTakeoff([], {
@@ -859,8 +860,8 @@ test("control_valves compile → panel lines with cites; dual-Cv scrap dropped",
   }, { service: "HHW" });
   assert.equal(hhwOnly.service_filter, "HHW");
   assert.equal(hhwOnly.totals.items, 1);
-  assert.equal(hhwOnly.categories.HHW_CONTROL_VALVE?.count, 1);
-  assert.equal(hhwOnly.categories.CHW_CONTROL_VALVE, undefined);
+  assert.equal((hhwOnly.categories as FixtureCategories).HHW_CONTROL_VALVE?.count, 1);
+  assert.equal((hhwOnly.categories as FixtureCategories).CHW_CONTROL_VALVE, undefined);
 
   const rows = rowsFromCompiledTakeoff(compiled, { workflow: "valve takeoff" });
   // Inject dual-Cv scrap that must not appear on the compiled valve line.
@@ -880,9 +881,9 @@ test("control_valves compile → panel lines with cites; dual-Cv scrap dropped",
   assert.ok(hhw);
   assert.ok(lineLeadCite(hhw, "tag")?.bbox_px);
   assert.equal(hhw.sheet_id, "mech.pdf#44");
-  assert.equal(hhw.specs["CHW CV"], undefined);
-  assert.equal(hhw.specs["HHW CV"], undefined);
-  assert.ok(hhw.specs.Cv === "0.5" || hhw.specs.CV === "0.5" || Object.values(hhw.specs).includes("0.5"));
+  assert.equal((hhw.specs as Record<string, unknown>)["CHW CV"], undefined);
+  assert.equal((hhw.specs as Record<string, unknown>)["HHW CV"], undefined);
+  assert.ok((hhw.specs as Record<string, unknown>).Cv === "0.5" || (hhw.specs as Record<string, unknown>).CV === "0.5" || Object.values((hhw.specs as Record<string, unknown>)).includes("0.5"));
   assert.equal(hhw.unit_mark, "AHU-A1");
   assert.match(hhw.family, /Building A · .*HHW CONTROL VALVE/i);
   const cite = lineLeadCite(hhw, "tag");
@@ -940,7 +941,7 @@ test("valve takeoff sections Building · CHW before Building · HHW; row cite us
       },
     ],
   });
-  const item = compiled.categories.CHW_CONTROL_VALVE.items.find((i) => /T1A/i.test(i.tag));
+  const item = (compiled.categories as FixtureCategories).CHW_CONTROL_VALVE.items.find((i) => /T1A/i.test(i.tag));
   assert.ok(item?.row_bbox_px);
   assert.deepEqual(item.row_bbox_px, [10, 20, 120, 40]);
   assert.equal(item.building, "T");

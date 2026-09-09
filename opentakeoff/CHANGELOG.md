@@ -2,6 +2,16 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## Unreleased — workspace presentation
+
+- Expose Plans, Schedules, Agent, Takeoff and Report as labeled primary destinations.
+- Move condition properties into an on-demand toolbar popover; keep the compact sheet strip.
+- Give Schedules a sheet navigator, search/facets and full extracted-cell grids with internal scrolling.
+- Give Schedules and Agent responsive, keyboard/pointer-resizable docks and an expanded view.
+- Add Agent starter drafts, larger review targets and a persistent composer. Existing run, source and proposal callbacks remain unchanged.
+- Move dense Agent answer rows into Explore results: a full-workspace Table view first by default, with a row navigator and spacious Details as the secondary view. Table preserves exact matching headers; incompatible rows open Details without inventing columns. Preserve original fields, order, Unicode, duplicate labels, empty values, citations and draft state. Back/Escape returns to chat; citations reveal the drawing. Long headings and original answer rows remain available.
+- Keep extraction, coordinates, citations, quantities, project formats and export contents unchanged. This release is presentation-only.
+
 ## 2026-08-29 — multi-hyphen equipment tags
 
 ### Fixed

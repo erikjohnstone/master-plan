@@ -19,10 +19,11 @@ import { chromium } from "playwright";
 import { readFileSync, existsSync, mkdirSync, writeFileSync, readdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { openImportedSheet } from "./fixtures/open-imported-sheet.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
-const BENCH = "/home/user/master-plan/HVAC BAS Benchmark Collection";
+const BENCH = process.env.OT_BENCH_ROOT || "/home/user/master-plan/HVAC BAS Benchmark Collection";
 const OUT = process.env.OT_TABLE_UI_OUT || "/tmp/ot-table-ui";
 const baseUrl = process.env.OT_UI_URL || "http://127.0.0.1:5173/";
 const AGENT_TIMEOUT_MS = Number(process.env.OT_AGENT_TIMEOUT_MS || 20 * 60 * 1000);
@@ -103,7 +104,7 @@ async function runOne(rec, wantTitle) {
 
   const browser = await chromium.launch({
     headless: true,
-    executablePath: "/opt/pw-browsers/chromium",
+    executablePath: process.env.OT_BROWSER_PATH || undefined,
     args: ["--no-sandbox", "--disable-dev-shm-usage"],
   });
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -149,6 +150,7 @@ async function runOne(rec, wantTitle) {
     // driver used to march straight on and drive an empty project.
     await page.waitForFunction(
       () => window.__opentakeoff?.indexProgress?.()?.phase === "ready",
+      null,
       { timeout: INDEX_TIMEOUT_MS },
     );
     const idx = await page.evaluate(() => window.__opentakeoff.indexProgress());
@@ -156,13 +158,14 @@ async function runOne(rec, wantTitle) {
     result.sheets = idx.total;
     result.indexSeconds = Math.round((Date.now() - t0) / 1000);
     await page.waitForTimeout(2500);
+    await openImportedSheet(page);
     await shot("2-indexed");
 
     say("open Agent");
     // NOT button[title*="Agent"] — the Takeoff button's own tooltip says
     // "…from every Agent run", so a substring match grabs Takeoff, clicks it,
     // and then waits forever for an Agent textarea that was never opened.
-    const rail = page.locator('button[title^="Agent —"]').first();
+    const rail = page.locator('[data-workspace-nav="Agent"], button[title^="Agent —"]').first();
     if (await rail.count()) await rail.click();
     else await page.evaluate(() => window.__opentakeoff.openAgent());
     await page.waitForSelector('textarea[name="agent-goal"]', { timeout: 60_000 });
@@ -208,6 +211,18 @@ async function runOne(rec, wantTitle) {
     }
     await page.waitForTimeout(1500);
     await shot("3b-agent-after-run");
+    const explore = page.getByRole('button', { name: 'Explore results', exact: true });
+    if (await explore.count()) {
+      await explore.first().click();
+      await page.locator('[data-agent-results]').waitFor();
+      await shot('3c-results-reader');
+      const details = page.getByRole('button', { name: 'Details', exact: true });
+      if (await details.count()) { await details.click(); await shot('3d-results-details'); }
+      await page.getByRole('button', { name: 'Back to conversation' }).click();
+      // Read the original answer through its visible disclosure; do not change
+      // the model prompt, extracted values, token scorer or truth records.
+      for (const summary of await page.locator('.agent-answer-original > summary').all()) await summary.click();
+    }
     result.agentSeconds = Math.round((Date.now() - t0) / 1000);
     if (!sawRunning) say("WARNING: agent never entered running state");
 

@@ -1,0 +1,119 @@
+ok 1280: Plans visible and ergonomic
+ok 1280: Schedules visible and ergonomic
+ok 1280: Agent visible and ergonomic
+ok 1280: Takeoff visible and ergonomic
+ok 1280: Report visible and ergonomic
+ok 1280: shell at most 132px
+ok 1280: no page overflow
+ok 1280: Agent active
+ok 1280: composer visible
+ok 1280: only one primary dock
+ok 1280: Schedules active
+ok 1280: usable drawing width
+ok 1280: all headers unmodified
+ok 1280: all cells unmodified
+ok 1280: wide table scrolls internally
+ok 1280: filtered empty state
+ok 1280: expanded workspace
+ok 1280: expanded view keeps canvas footprint
+ok 1280: evidence reveals drawing
+ok 1280: keyboard minimum
+ok 1280: keyboard increment
+ok 1280: pointer resize
+ok 1280: focus returns to Schedules
+ok 1280: condition properties available on demand
+ok 1280: condition popover Escape restores focus
+ok 1280: focus mode preserved
+ok 1440: Plans visible and ergonomic
+ok 1440: Schedules visible and ergonomic
+ok 1440: Agent visible and ergonomic
+ok 1440: Takeoff visible and ergonomic
+ok 1440: Report visible and ergonomic
+ok 1440: shell at most 132px
+ok 1440: no page overflow
+ok 1440: Agent active
+ok 1440: composer visible
+ok 1440: only one primary dock
+ok 1440: Schedules active
+ok 1440: usable drawing width
+ok 1440: all headers unmodified
+ok 1440: all cells unmodified
+ok 1440: wide table scrolls internally
+ok 1440: filtered empty state
+ok 1440: expanded workspace
+ok 1440: expanded view keeps canvas footprint
+ok 1440: evidence reveals drawing
+ok 1440: keyboard minimum
+ok 1440: keyboard increment
+ok 1440: pointer resize
+ok 1440: focus returns to Schedules
+ok 1440: condition properties available on demand
+ok 1440: condition popover Escape restores focus
+ok 1440: focus mode preserved
+ok 1920: Plans visible and ergonomic
+ok 1920: Schedules visible and ergonomic
+ok 1920: Agent visible and ergonomic
+ok 1920: Takeoff visible and ergonomic
+ok 1920: Report visible and ergonomic
+ok 1920: shell at most 132px
+ok 1920: no page overflow
+ok 1920: Agent active
+ok 1920: composer visible
+ok 1920: only one primary dock
+ok 1920: Schedules active
+ok 1920: usable drawing width
+ok 1920: all headers unmodified
+ok 1920: all cells unmodified
+ok 1920: wide table scrolls internally
+ok 1920: filtered empty state
+ok 1920: expanded workspace
+ok 1920: expanded view keeps canvas footprint
+ok 1920: evidence reveals drawing
+ok 1920: keyboard minimum
+ok 1920: keyboard increment
+ok 1920: pointer resize
+ok 1920: focus returns to Schedules
+ok 1920: condition properties available on demand
+ok 1920: condition popover Escape restores focus
+ok 1920: focus mode preserved
+ok 2560: Plans visible and ergonomic
+ok 2560: Schedules visible and ergonomic
+ok 2560: Agent visible and ergonomic
+ok 2560: Takeoff visible and ergonomic
+ok 2560: Report visible and ergonomic
+ok 2560: shell at most 132px
+ok 2560: no page overflow
+ok 2560: Agent active
+ok 2560: composer visible
+ok 2560: only one primary dock
+ok 2560: Schedules active
+ok 2560: usable drawing width
+ok 2560: all headers unmodified
+ok 2560: all cells unmodified
+ok 2560: wide table scrolls internally
+ok 2560: filtered empty state
+ok 2560: expanded workspace
+ok 2560: expanded view keeps canvas footprint
+ok 2560: evidence reveals drawing
+ok 2560: keyboard minimum
+ok 2560: keyboard increment
+ok 2560: pointer resize
+ok 2560: focus returns to Schedules
+ok 2560: condition properties available on demand
+ok 2560: condition popover Escape restores focus
+ok 2560: focus mode preserved
+ok starter only fills draft
+ok starter focuses composer
+ok Run preserves trimmed text and options
+ok follow-up preserves exact options
+ok citation callback payload unchanged
+ok Agent citation restores split
+ok 900px: running status fits real workspace
+ok 900px: running composer fits real workspace
+ok Stop preserves direct click event contract
+ok 900px: pending review count fits real workspace
+ok 900px: review composer fits real workspace
+ok proposal review callbacks and IDs unchanged
+ok no automatic accept or commit
+ok settings, New, history, Takeoff and close callbacks unchanged
+ok no browser errors

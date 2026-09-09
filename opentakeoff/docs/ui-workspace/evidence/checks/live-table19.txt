@@ -1,0 +1,24 @@
+[19__vol2__094] pdf pdf/19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf
+[19__vol2__094] asking for: Air Handling Unit Schedule CHW (page 8, 5 rows in truth)
+[19__vol2__094] shot 1-empty
+[19__vol2__094] upload blueprint
+[19__vol2__094] indexed 9/9 sheets in 21s
+[19__vol2__094] shot 2-indexed
+[19__vol2__094] open Agent
+[19__vol2__094] UI graph: 9 sheets, 4 tables
+[19__vol2__094] goal: Find the "Air Handling Unit Schedule CHW" on this drawing set and list every row of it. Give one line per row …
+[19__vol2__094] shot 3-agent
+[19__vol2__094] status: Mapping schedules and sheets…
+[19__vol2__094] status: Searching the drawings…
+[19__vol2__094] status: Reading schedule data…
+[19__vol2__094] status: Reading schedule rows…
+[19__vol2__094] status: Saving a source card…
+[19__vol2__094] shot 3b-agent-after-run
+[19__vol2__094] takeoff panel: 0 lines
+[19__vol2__094] shot 4-takeoff
+[19__vol2__094] UI vs truth: found 4/4 tables, row-count exact 4/4, rows 11/11
+[19__vol2__094] rows 0/5 · values 240/260 (92.3%) · 49s
+
+==== TABLE TAKEOFF THROUGH THE UI ====
+  19__vol2__094        0/5   rows   92.3% values  49s  Air Handling Unit Schedule CHW
+UIDONE

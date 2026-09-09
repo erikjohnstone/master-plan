@@ -1,0 +1,70 @@
+{
+  "base": "05bbc38f",
+  "unchangedExecutableTestFiles": 16,
+  "results": [
+    {
+      "file": "opentakeoff/web/test/agentAnswer.test.ts",
+      "sha256": "fe7955f3bae0823c337dfccddbff91195d25bf462f8b699d5619f2b8d368c1b5"
+    },
+    {
+      "file": "opentakeoff/web/test/agentLoop.test.ts",
+      "sha256": "f8969df2d56583e21dc2edb1c5a3c0d49d3a441fbd1237a47a43ee8c0d715c89"
+    },
+    {
+      "file": "opentakeoff/web/test/agentTakeoff.test.ts",
+      "sha256": "ba9753304ebdec6ed5707af59aadec45033948f044ebd6c35ff0bcefb1a443f2"
+    },
+    {
+      "file": "opentakeoff/web/test/compileProgressWalkthrough.test.ts",
+      "sha256": "60fb005a0b569a17542385afde9827a3a32f73feea505970f579b6d3d359e777"
+    },
+    {
+      "file": "opentakeoff/web/test/compileTsxResolve.test.ts",
+      "sha256": "a0e08c78782ae3a3069c7e409765b9cba28ffddb1312f127d59a754dc92e8acb"
+    },
+    {
+      "file": "opentakeoff/web/test/corpusTakeoffBas.test.ts",
+      "sha256": "953ed0defb6e144c79fa53f0bd03219a5186e08fe6bda76c4d8e9c958d666c73"
+    },
+    {
+      "file": "opentakeoff/web/test/corpusTakeoffHeaderGeometry.test.ts",
+      "sha256": "df81edec9de6eb11a31cfbffcb621479852d0c35692995052081f85445d22cac"
+    },
+    {
+      "file": "opentakeoff/web/test/estimatorTakeoffDocument.test.ts",
+      "sha256": "dc39452ba706e216b671c9f172846a6ba6f6d98011f43494017b8bfe89d7077a"
+    },
+    {
+      "file": "opentakeoff/web/test/gridClassify.test.ts",
+      "sha256": "aa94f51ec46a4213cd4095cc213ab5a6f81cdce9840a299be80d82d994149c25"
+    },
+    {
+      "file": "opentakeoff/web/test/pillarGapRecovery.test.ts",
+      "sha256": "f3ffcffaabb2703ba84027bd03be5dd199e03c283bc640339366016afbd36f83"
+    },
+    {
+      "file": "opentakeoff/web/test/schedulePlanReconcile.test.ts",
+      "sha256": "ba50419446cf4905870ee4d3c5c0630cb3fad50407c7501416dcd6e2bfd57033"
+    },
+    {
+      "file": "opentakeoff/web/test/scheduleTitleMatch.test.ts",
+      "sha256": "26ed4fec45c69a3c63bea81be00d484b7b1cb2869db14370f892ae1368662a34"
+    },
+    {
+      "file": "opentakeoff/web/test/sequenceExtract.test.ts",
+      "sha256": "c98cdbd362b4c6bebb7f6973c4d2cf1d2fe2e452a48a8ffd0bf648d7e6a2e385"
+    },
+    {
+      "file": "opentakeoff/web/test/sheetgraph.test.ts",
+      "sha256": "485a8fc966f3ba99060ccc28cd4407791d457d248ac80912e1062dfa5c10aa01"
+    },
+    {
+      "file": "opentakeoff/web/test/takeoffWorkflow.test.ts",
+      "sha256": "a6ede76e8c1cc75ff216f37daf9f78c60f773eed9115201aadeaa6bc4a5ccfcc"
+    },
+    {
+      "file": "opentakeoff/web/test/workflowFixtureProof.test.ts",
+      "sha256": "bff822eaa5c7dff85c52202e590e7dcf9ed1587c2c6c83149a4986a7d53132f1"
+    }
+  ]
+}
