@@ -26,6 +26,13 @@ Do not substitute alarm/trend flags for I/O, or an unobserved cell for a verifie
 zero. Its unavailable state is separate from math-policy failure. Durable
 equipment assignment, review and approved snapshot integration remain in progress.
 
+`bas_workflow` adds durable point-evidence captures with content fingerprints and
+source manifests. `export_takeoff` carries the Session's captures; `import_takeoff`
+validates and merges them without changing the operator's current selection.
+Source PDFs are separate, and imported evidence is not an approved or freshly
+recomputed result. A capture failure is disclosed as `bas_workflow_error` without
+replacing source observations or engineering output.
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

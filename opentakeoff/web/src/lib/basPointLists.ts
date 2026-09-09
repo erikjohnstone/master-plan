@@ -52,10 +52,11 @@ export const basPointListsSchema = z.object({
     for (const n of matrix.notes) owns(n.source);
     const rawRows = new Map<string, number>();
     for (const r of matrix.raw.rows.slice(matrix.header_rows)) rawRows.set(rowKey(r), (rawRows.get(rowKey(r)) ?? 0) + 1);
-    for (const r of matrix.rows) {
+    for (const [index, r] of matrix.rows.entries()) {
       if (rowIds.has(r.row_id)) fail('Duplicate point row identity');
       rowIds.add(r.row_id);
       const key = rowKey(r.raw), remaining = rawRows.get(key) ?? 0;
+      if (index + matrix.header_rows >= matrix.raw.rows.length || key !== rowKey(matrix.raw.rows[index + matrix.header_rows])) fail('Point row order differs from the source matrix');
       if (!remaining || r.local_key !== r.raw.key) fail('Point row differs from its raw source');
       else rawRows.set(key, remaining - 1);
       const missing = new Set(matrix.raw.headers.filter(h => !Object.prototype.hasOwnProperty.call(r.raw.cells, h)));

@@ -18,6 +18,7 @@
 
 import { ANN_SCHEMA } from "./store.js";
 import { sanitizeApprovals } from "./approvals.js";
+import { basWorkflowSchema, mergeBasWorkflows } from "./basWorkflow.ts";
 
 /** Parse + gate an import file's text. Throws with copy the message bar shows
  * verbatim — "Couldn't…" is the canvas's danger convention (isDangerMsg), so
@@ -32,6 +33,7 @@ export function parseTakeoffImport(text) {
   if (!doc || typeof doc !== "object" || Array.isArray(doc) || doc.schema !== ANN_SCHEMA) {
     throw new Error(`Couldn't import takeoff: not a takeoff export (expected schema "${ANN_SCHEMA}" — the file export_takeoff or the app writes).`);
   }
+  if (doc.bas_workflow != null) basWorkflowSchema.parse(doc.bas_workflow);
   return doc;
 }
 
@@ -61,6 +63,8 @@ const freeId = (id, taken) => {
  */
 export function mergeTakeoffImport(current, imported, knownFiles = null) {
   const cur = current && typeof current === "object" ? current : {};
+  // BAS evidence is user work even in a project with no drawn shapes.
+  const basWorkflow = mergeBasWorkflows(cur.bas_workflow, imported.bas_workflow);
   const impShapes = arr(imported.shapes).filter((s) => s && typeof s === "object" && typeof s.sheet_id === "string" && typeof s.id === "string");
   const impConds = arr(imported.conditions).filter((c) => c && typeof c === "object" && typeof c.id === "string");
 
@@ -77,7 +81,7 @@ export function mergeTakeoffImport(current, imported, knownFiles = null) {
   // enough here that predictability wins over preserving it). Approval seals
   // DO block it (#176): a seal is ink someone placed — operator state wins,
   // so a sealed-but-untraced project merges instead of being replaced.
-  if (!arr(cur.shapes).length && !arr(cur.markups).length && !arr(cur.approvals).length) {
+  if (!arr(cur.shapes).length && !arr(cur.markups).length && !arr(cur.approvals).length && !cur.bas_workflow?.captures?.length) {
     // …except the VIEW. An MCP export typically carries empty tab/group
     // state (the session has no such concept), and adopting an empty list
     // would close the operator's open sheet and bounce them to the gallery
@@ -85,6 +89,7 @@ export function mergeTakeoffImport(current, imported, knownFiles = null) {
     // Empty carries no intent; a NON-empty imported view is real state and wins.
     const payload = {
       ...imported,
+      ...(basWorkflow ? { bas_workflow: basWorkflow } : {}),
       ...(arr(imported.sheet_tabs).length ? {} : { sheet_tabs: arr(cur.sheet_tabs) }),
       ...(arr(imported.sheet_group).length ? {} : { sheet_group: arr(cur.sheet_group) }),
       ...(arr(imported.last_group).length ? {} : { last_group: arr(cur.last_group) }),
@@ -165,6 +170,7 @@ export function mergeTakeoffImport(current, imported, knownFiles = null) {
   // all stay current (rules never ride the MCP export by RFC scope anyway).
   const payload = {
     ...cur,
+    ...(basWorkflow ? { bas_workflow: basWorkflow } : {}),
     conditions,
     shapes: [...arr(cur.shapes), ...addedShapes],
     markups: [...arr(cur.markups), ...addedMarkups],

@@ -81,8 +81,10 @@ and recompute interpretation.
 The browser adapter only remaps navigation aliases. Source/page/matrix/row IDs,
 raw row keys, source text and boxes remain unchanged. The record is carried in
 Takeoff metadata and full compile JSON; the existing engineering-only export
-and row workbook are not silently repurposed to include it. Dedicated persisted
-review/UI/export integration remains required.
+and row workbook are not silently repurposed to include it. The subsequent
+`WORKFLOW_CAPTURE_CONTRACT.md` checkpoint adds durable browser/MCP captures and
+a digital-matrix reader with full point JSON export/import. Reviewed corrections,
+SOO/equipment mapping and final release controls remain required.
 
 The transport has explicit 32 MiB limits and a 30-second timeout. Large-source
 batching, source-version retention and the remaining corpus checks are still
@@ -90,6 +92,6 @@ required before production completion; an unavailable large input is not a
 coverage pass. Reproduction uses `mcp/scripts/verify-bas-point-production.mjs`
 with a source PDF, earlier compile, fresh CLI compile and report destination.
 
-End-to-end delivery still requires durable browser/MCP state, reviewed
-corrections, equipment mapping and complete UI/export presentation.
+End-to-end delivery still requires reviewed corrections, SOO/equipment mapping,
+historical source retention and the complete review/release UI/export journey.
 Do not declare workflow A complete when only these internal checks pass.

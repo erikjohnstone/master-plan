@@ -1,0 +1,17 @@
+Real PDF uploaded; waiting for graph indexing
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.selectOption: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('region', { name: 'Grounded point lists', exact: true }).getByLabel('Point list', { exact: true })[22m
+
+    at /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-points.mjs:43:58 {
+  log: [
+    "  - waiting for getByRole('region', { name: 'Grounded point lists', exact: true }).getByLabel('Point list', { exact: true })"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.13.1

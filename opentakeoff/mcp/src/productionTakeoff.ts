@@ -3,6 +3,7 @@ import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { compileSequencesTakeoff } from "../../web/src/lib/sequenceExtract.ts";
 import type { SheetGraph } from "../../web/src/lib/sheetgraph.ts";
 import { runBasMath, runBasPointLists } from "./basMath.ts";
+import { captureBasPoints } from "../../web/src/lib/basWorkflow.ts";
 
 /** Snapshot the source context before awaiting either Python operation. A
  * math-policy error and an evidence error are independent, never a fake zero.
@@ -12,10 +13,20 @@ async function pointListsForSession(session: unknown, graph: SheetGraph) {
   if (!session || typeof session !== "object" || !("basSourcesForPipeline" in session)
       || typeof session.basSourcesForPipeline !== "function") return undefined;
   try {
-    return await runBasPointLists({ sources: session.basSourcesForPipeline(), tables: graph.tables });
+    const sources = session.basSourcesForPipeline();
+    const points = await runBasPointLists({ sources, tables: graph.tables });
+    try {
+      const workflow = await captureBasPoints(sources.documents, points);
+      if ('retainBasWorkflow' in session && typeof session.retainBasWorkflow === 'function') session.retainBasWorkflow(workflow);
+      return { bas_point_lists: points, bas_workflow: workflow };
+    } catch (error) {
+      // Retention is a separate failure domain. Preserve useful unresolved
+      // source observations even when they cannot form a source-owned capture.
+      return { bas_point_lists: points, bas_workflow_error: error instanceof Error ? error.message : 'BAS evidence capture unavailable' };
+    }
   } catch (error) {
-    return { schema_version: "bas_point_lists_v1" as const, status: "unavailable" as const,
-      project_complete: false as const, error: error instanceof Error ? error.message : "BAS point sources unavailable" };
+    return { bas_point_lists: { schema_version: "bas_point_lists_v1" as const, status: "unavailable" as const,
+      project_complete: false as const, error: error instanceof Error ? error.message : "BAS point sources unavailable" } };
   }
 }
 
@@ -37,6 +48,6 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
     bas_math = { engine: "bas_math_v1" as const, status: "unavailable" as const,
       project_complete: false as const, error: error instanceof Error ? error.message : "BAS math unavailable" };
   }
-  const bas_point_lists = await pointLists;
-  return { ...compiled, bas_math, ...(bas_point_lists !== undefined ? { bas_point_lists } : {}) };
+  const pointResult = await pointLists;
+  return { ...compiled, bas_math, ...pointResult };
 }

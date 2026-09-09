@@ -18,6 +18,7 @@ import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
 import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
+import { activeBasCapture, mergeBasWorkflows, type BasWorkflow } from "../../web/src/lib/basWorkflow.ts";
 import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src/lib/basNarratives.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -863,6 +864,7 @@ export class Session {
   /** Approval-family records (#176) — estimator seals arrive only by import;
    * agent verdicts mint through markVerdict and nothing else. */
   approvals: Approval[] = [];
+  basWorkflow: BasWorkflow | null = null;
   /** The last assign-from-schedule run's unresolved rooms (0.9.18) — what the
    * marked-set cover discloses as withheld. Replaced per assign run, cleared
    * with the rest of the session on a non-merge load_plan. Seeds ride
@@ -914,6 +916,7 @@ export class Session {
       this.shapes = [];
       this.markups = [];
       this.approvals = [];
+      this.basWorkflow = null;
       this.file = null;
       this.filePath = null;
       this.nextOrd = 1;
@@ -1002,6 +1005,15 @@ export class Session {
    */
   basNarrativesForPipeline(): BasNarrativeDiscovery {
     return discoverBasNarratives(this.basSourcesForPipeline());
+  }
+
+  /** Observational result cache, never a review decision. A compile that races
+   * load_plan must not become the new session's current evidence. */
+  retainBasWorkflow(workflow: BasWorkflow): void {
+    const capture = activeBasCapture(workflow);
+    const loaded = new Set([...this.docs.values()].map(({ doc }) => `sha256:${doc.sourceSha256}`));
+    if (!capture || capture.sources.length !== loaded.size || capture.sources.some(s => !loaded.has(s.source_id))) return;
+    this.basWorkflow = mergeBasWorkflows(this.basWorkflow, workflow, true);
   }
 
   /** The file (basename) a sheet key belongs to — the key codec's inverse. */
@@ -5730,6 +5742,7 @@ export class Session {
       // exist, exactly the canvas buildPayload's convention, so a verdict-free
       // export stays byte-identical to a pre-#176 one
       ...(this.approvals.length ? { approvals: this.approvals } : {}),
+      ...(this.basWorkflow ? { bas_workflow: this.basWorkflow } : {}),
       sheet_group: [],
       last_group: [],
       sheet_tabs: [],

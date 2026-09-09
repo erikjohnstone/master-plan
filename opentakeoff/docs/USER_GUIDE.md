@@ -32,8 +32,20 @@ still need review. The original cells and source locations remain available.
 Full compile JSON additionally contains `bas_point_lists`: source-bound listed
 observations, supported controller footnotes, and separate unobserved-column
 accounting for sparse tables. The existing **Export BAS JSON** button exports
-engineering math only; row workbooks remain row exports. Dedicated persisted
-point-evidence review and presentation are still in development. Neither an
+engineering math only; row workbooks remain row exports. **Takeoff → Point lists**
+opens the original digital matrices, including nested header rows. Select a
+point's row number for observations, controller notes and unresolved fields;
+click a printed value to inspect its source. Missing cells are marked “—”,
+not silently filled with zero. **Export point evidence** includes all captures
+and rows regardless of filters and can be reopened with **Import takeoff…**.
+
+Point captures persist through project autosave, JSON and snapshots. They are
+not approved releases. Captures retain source hashes, but these JSON files do
+not contain historical PDF bytes. Reopen the exact original PDF to navigate
+old evidence; a changed file with the same name is refused. A renamed copy of
+the same bytes can still resolve. Existing engineering calculations remain
+transient; equipment assignment, immutable source archives, reviewed corrections
+and approved revision workflows are still in development. Neither an
 absent cell nor a controller-provided point establishes zero field scope or a
 new wired terminal.
 

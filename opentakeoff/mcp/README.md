@@ -27,6 +27,14 @@ replace `bas_math` or legacy quantities. Source and math failures are independen
 unavailable evidence is explicit. It is an intermediate workflow record, not a
 reviewed/approved takeoff. See the [point evidence contract](../docs/bas-production/POINT_REVIEW_CONTRACT.md).
 
+The additive `bas_workflow` stores a fingerprinted point-evidence capture and
+input source manifest. The Session retains it for `export_takeoff` and validates
+it on `import_takeoff`; duplicates are idempotent. `load_plan` without merge
+clears it with the rest of the Session. Imported captures are not re-extraction
+or approval; their fingerprints detect corruption, not forged authorship.
+Original source PDFs must be retained separately. `bas_workflow_error` reports
+capture failure without discarding valid point observations or math.
+
 No clone, no build—point your MCP client at the published package:
 
 ```json

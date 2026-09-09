@@ -4,6 +4,7 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add a digital point-matrix workspace and fingerprinted `bas_workflow` evidence captures. Project autosave, JSON and MCP export/import retain original rows and source identities; repeated captures/imports deduplicate without changing operator selection. Source clicks match loaded PDF bytes, not stale filenames. Point evidence is not an approved release, installed count, or historical PDF archive; equipment and reviewed revision workflows remain unfinished.
 - Return source-bound point-list observations alongside the existing BAS math on the shared production compile path. Preserve original rows and sparse cells; retain supported controller footnotes without treating them as installed devices or wired terminals. Strict validation and browser citation-alias mapping protect raw evidence. Durable workflow review and dedicated presentation remain in development.
 
 - Admit explicit points-list captions on detail/plan sheets through shared routing; keep spatially separate same-title/local-key matrices during fallback reconciliation. Preserve existing table objects and leave the VectorGrid reader unchanged.

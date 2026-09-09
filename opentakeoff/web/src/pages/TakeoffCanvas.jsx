@@ -158,6 +158,7 @@ import Tip from "../components/Tip.jsx";
 import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet } from "../lib/scheduleBrowse.js";
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
 import { basResultForCanvas } from "../lib/basBrowserResult.js";
+import { basWorkflowSchema, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow } from "../lib/basWorkflow.ts";
 import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
@@ -607,6 +608,13 @@ export default function TakeoffCanvas() {
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
   const [showTakeoffData, setShowTakeoffData] = useState(false);
   const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
+  const [basWorkflow, setBasWorkflow] = useState(null);
+  const basWorkflowRef = useRef(null);
+  basWorkflowRef.current = basWorkflow;
+  const [basViewState, setBasViewState] = useState({});
+  const basLoadEpochRef = useRef(0);
+  const basCompileEpochRef = useRef(0);
+  const basSourceSignatureRef = useRef('');
   const finishedTakeoffLineCount = useMemo(
     () => compileAgentTakeoff(agentTakeoffRows).length,
     [agentTakeoffRows],
@@ -1270,6 +1278,7 @@ export default function TakeoffCanvas() {
   // members under the SAME keys, and this effect is the one path that rebuilds
   // the merged snap/mask geometry and member placement.
   const [docEpoch, setDocEpoch] = useState(0);
+  basSourceSignatureRef.current = JSON.stringify([docEpoch, sheets.map(s => s.name).sort()]);
   const groupSig = JSON.stringify(groupKeys) + "@" + docEpoch + "|" + stitchLayoutSig(groupKeys, stitches);
   let _px = 0;
   const panels = groupKeys.map((key) => {
@@ -1761,6 +1770,15 @@ export default function TakeoffCanvas() {
   // Restore in the Revisions panel, so a restored revision walks the same
   // defensive path as a page reload.
   const hydrate = (a) => {
+    // Validate before changing any project state. Invalid additive cargo must
+    // not be silently stripped and autosaved over the original record.
+    const restoredBas = a.bas_workflow == null ? null : basWorkflowSchema.parse(a.bas_workflow);
+    basLoadEpochRef.current++;
+    setBasWorkflow(restoredBas);
+    basWorkflowRef.current = restoredBas;
+    setBasViewState({});
+    setLastCorpusTakeoffMeta(null);
+    setAgentTakeoffRows([]);
     // Same cross-load-transient gap as the panel epoch bump below: a revision
     // Restore runs in-place with the same sheet keys, so a surviving zoneCheck
     // would immediately re-classify the RESTORED shape set against the
@@ -2675,7 +2693,7 @@ export default function TakeoffCanvas() {
     // units is additive and diff-only (the sheet_levels convention): imperial —
     // the default — omits the key, so an old imperial project's payload is
     // byte-identical on round-trip; only a metric project carries the field.
-    return { project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
+    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
   };
   // Runtime restore of a saved payload — the Revisions panel's Restore lands
   // here. A runtime load (unlike mount) can interrupt work in
@@ -2708,6 +2726,7 @@ export default function TakeoffCanvas() {
     if (!file) return;
     try {
       const imported = parseTakeoffImport(await file.text());
+      if (imported.bas_workflow != null) await verifyBasWorkflow(imported.bas_workflow);
       const { payload, note } = mergeTakeoffImport(buildPayload(), imported, sheets.map((s) => s.name));
       restoreSavedPayload(payload);
       const parts = [`Imported ${note.shapes_added} shape${note.shapes_added === 1 ? "" : "s"}`];
@@ -2786,7 +2805,7 @@ export default function TakeoffCanvas() {
         onProgress: setCommitMsg,
       });
       downloadArchive(`${base}.otk`, data);
-      setCommitMsg(`Exported ${base}.otk — ${sheets.length} PDF${sheets.length === 1 ? "" : "s"} + the full takeoff (${shapes.length} shape${shapes.length === 1 ? "" : "s"}). Self-contained: open it on any machine, or hand it to another estimator.`);
+      setCommitMsg(`Exported ${base}.otk — ${sheets.length} PDF${sheets.length === 1 ? "" : "s"} + the full takeoff (${shapes.length} shape${shapes.length === 1 ? "" : "s"}). ${basWorkflow ? 'Current PDFs are included. Older BAS captures may reference other PDF versions; retain those originals separately.' : 'Self-contained: open it on any machine, or hand it to another estimator.'}`);
     } catch (e) {
       setCommitMsg(`Couldn't export project: ${e?.message || e}`);
     }
@@ -2908,7 +2927,7 @@ export default function TakeoffCanvas() {
     // state it serializes, so listing buildPayload (a new identity each render)
     // would fire a save on every render instead of only on a real change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, layerOverrides, lastGroup, openTabs, stitches, projectName, clientInfo, units]);
+  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, layerOverrides, lastGroup, openTabs, stitches, projectName, clientInfo, units, basWorkflow]);
   useEffect(() => { saveStateRef.current = saveState; }, [saveState]);
 
   // Flush a pending debounced save on navigate-away (unmount), and warn before a
@@ -7123,6 +7142,9 @@ export default function TakeoffCanvas() {
   }
 
   async function fetchProductionCorpusTakeoff(kind, opts = {}) {
+    const requestEpoch = ++basCompileEpochRef.current;
+    const loadEpoch = basLoadEpochRef.current;
+    const sourceSignature = basSourceSignatureRef.current;
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) throw new Error("No PDF loaded");
     const onProgress = typeof opts.onProgress === "function" ? opts.onProgress : null;
@@ -7132,6 +7154,20 @@ export default function TakeoffCanvas() {
     if (opts.service) fd.append("service", String(opts.service).toUpperCase());
     if (opts.bas_math != null) fd.append("bas_math", JSON.stringify(opts.bas_math));
     const basShaToName = new Map();
+    const finishResult = async result => {
+      if (result.bas_workflow) {
+        await verifyBasWorkflow(result.bas_workflow);
+        if (requestEpoch !== basCompileEpochRef.current || loadEpoch !== basLoadEpochRef.current || sourceSignature !== basSourceSignatureRef.current) {
+          throw new Error('The drawing set or saved workspace changed during BAS compilation. Run it again for the current project.');
+        }
+        // A retained capture keeps server aliases unchanged; citation resolution
+        // uses SHA/page, not these aliases. Names are display-only metadata.
+        for (const capture of result.bas_workflow.captures) for (const source of capture.sources) {
+          if (basShaToName.has(source.sha256)) source.names = [basShaToName.get(source.sha256)];
+        }
+      }
+      return basResultForCanvas(result, basShaToName);
+    };
     for (const name of names) {
       const bytes = await store.loadPdfData(name);
       try { basShaToName.set(await sha256Hex(bytes), name); } catch { /* preserve unknown identities */ }
@@ -7192,9 +7228,9 @@ export default function TakeoffCanvas() {
         }
       }
       if (!result) throw new Error("compile stream ended without a result");
-      return basResultForCanvas(result, basShaToName);
+      return finishResult(result);
     }
-    return basResultForCanvas(await res.json(), basShaToName);
+    return finishResult(await res.json());
   }
 
   // Single real fetch per (sig), however many callers want the production
@@ -7568,6 +7604,16 @@ export default function TakeoffCanvas() {
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
   function showCompiledTakeoff(compiled, meta = {}) {
     if (!compiled || compiled.error) return;
+    if (compiled.bas_math || compiled.bas_point_lists) setShowTakeoffData(true);
+    if (compiled.bas_workflow) {
+      try {
+        const next = mergeBasWorkflows(basWorkflowRef.current, compiled.bas_workflow, true);
+        basWorkflowRef.current = next;
+        setBasWorkflow(next);
+        setShowTakeoffData(true);
+      } catch (error) { setCommitMsg(`Couldn't retain BAS evidence: ${error.message}. Previous saved captures were preserved.`); }
+    }
+    if (compiled.bas_workflow_error) setCommitMsg(`Couldn't retain BAS evidence: ${compiled.bas_workflow_error}. Existing captures were preserved.`);
     const totals = compiled.totals || (
       compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
         ? {
@@ -12823,6 +12869,9 @@ export default function TakeoffCanvas() {
           rows={agentTakeoffRows}
           projectName={projectName}
           corpusMeta={lastCorpusTakeoffMeta}
+          basWorkflow={basWorkflow}
+          basViewState={basViewState}
+          onBasViewStateChange={setBasViewState}
           onClear={() => { setAgentTakeoffRows([]); setLastCorpusTakeoffMeta(null); }}
           onRemove={(id) => setAgentTakeoffRows((rows) => rows.filter((r) => r.id !== id))}
           onRemoveLine={(line) => {
@@ -12832,6 +12881,21 @@ export default function TakeoffCanvas() {
           }}
           onClose={() => setShowTakeoffData(false)}
           onOpenCitation={async (row) => {
+            if (row?.page_id) {
+              try {
+                const generation = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+                const loaded = [];
+                for (const name of [...new Set(sheets.map(s => s.name))]) {
+                  const bytes = await store.loadPdfData(name);
+                  loaded.push({ name, sha256: await sha256Hex(bytes) });
+                }
+                const sheet = resolveBasPage(row.page_id, loaded);
+                if (!sheet || generation !== basLoadEpochRef.current || signature !== basSourceSignatureRef.current) {
+                  throw new Error('The original PDF version is not loaded. Reopen its exact bytes; an old filename is not sufficient.');
+                }
+                row = { ...row, sheet_id: sheet };
+              } catch (error) { setCommitMsg(`Could not open BAS source: ${error.message}`); return { error: error.message }; }
+            }
             if (!row?.sheet_id || !row?.bbox_px) return;
             // Close the takeoff modal so the estimator can see the sheet highlight.
             setShowTakeoffData(false);

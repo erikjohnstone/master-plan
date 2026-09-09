@@ -1,0 +1,27 @@
+.bas-point-workspace { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; padding: var(--sp-4); }
+.bas-point-workspace button, .bas-point-workspace input, .bas-point-workspace select { font: inherit; color: var(--ink); background: var(--paper-bright); border: 1px solid var(--ink-faint); padding: var(--sp-2) var(--sp-3); }
+.bas-point-workspace button { cursor: pointer; }
+.bas-point-workspace button:disabled { cursor: default; opacity: .55; }
+.bas-point-workspace :focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+.bas-point-controls { display: flex; flex-wrap: wrap; align-items: end; gap: var(--sp-3); }
+.bas-point-controls label { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: var(--sp-2); font-size: var(--fs-s); }
+.bas-point-controls select, .bas-point-controls input { width: 100%; min-width: 0; box-sizing: border-box; }
+.bas-point-heading { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+.bas-point-heading h2, .bas-point-heading h3 { margin: 0; font-size: var(--fs-l); }
+.bas-point-heading button { margin-left: auto; }
+.bas-point-heading span, .bas-point-scope { font-size: var(--fs-s); color: var(--ink-muted); }
+.bas-point-scope { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); }
+.bas-point-grid { overflow: auto; max-height: 55vh; border: 1px solid var(--ink-faint); }
+.bas-point-grid table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: var(--fs-s); }
+.bas-point-grid th, .bas-point-grid td { text-align: left; vertical-align: top; border-bottom: 1px solid var(--ink-faint); border-right: 1px solid var(--ink-faint); padding: var(--sp-2) var(--sp-3); min-width: 5rem; max-width: 24rem; }
+.bas-point-grid thead th { position: sticky; top: 0; background: var(--paper-bright); z-index: 1; min-width: 8rem; }
+.bas-point-grid tbody th { position: sticky; left: 0; background: var(--paper-bright); }
+.bas-point-grid tr[data-selected="true"] { background: color-mix(in srgb, var(--cobalt) 9%, var(--paper-bright)); }
+.bas-point-grid .bas-point-cell { border: 0; padding: 0; background: transparent; text-align: left; text-decoration: underline; text-decoration-color: var(--ink-faint); text-underline-offset: .2em; }
+.bas-point-detail { border: 1px solid var(--ink-faint); padding: var(--sp-4); }
+.bas-point-detail dl { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+.bas-point-detail dt { color: var(--ink-muted); font-size: var(--fs-s); }
+.bas-point-detail dd { margin: var(--sp-2) 0 0; font-family: var(--f-mono); }
+.bas-point-disclosure { color: var(--ink-muted); font-size: var(--fs-s); }
+.bas-point-disclosure code { display: block; overflow-wrap: anywhere; }
+.bas-point-message { padding: var(--sp-5); }

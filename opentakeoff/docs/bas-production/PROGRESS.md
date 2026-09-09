@@ -1,5 +1,57 @@
 # BAS production workflow progress
 
+## Durable point-matrix workspace checkpoint — 2026-09-09
+
+The preceding question/status reply was **no progress**. Implementation and
+this continuation made **progress**: shared evidence captures, durable browser
+and Session state, import/export validation, a source-linked digital matrix
+reader, and real browser/MCP verification. No VectorGrid/table extraction,
+Python interpretation, symbol thresholds, commercial code, push or deployment.
+
+- Shared `bas_workflow_v1` / `point_captures_1` uses content-addressed point
+  captures. Repeat imports are idempotent; different captures remain separate.
+  Alias changes preserve identity. Corrupt/foreign evidence is rejected. This
+  is evidence transport, not approval or authenticated provenance.
+- Fresh real CLI compile preserves **every previous result field exactly**
+  except the additive capture. Real MCP compile/export/reset/import matches the
+  CLI (including typed export): 12 matrices, capture
+  `1d3432c6802d814de9f5e0f4ffb6f4af8d406890e9c92fdfb77cd326fa9861b3`.
+  MCP proof took 43,173 ms, main-process peak RSS 501,940,224 bytes. Not a frozen
+  performance A/B or whole-process-tree measurement.
+- Real Chrome / actual Fort Sam upload / production compile: **12 matrices /
+  193 listed rows**, all raw columns/header rows, keyboard selection, negative
+  filtering, source paint/return selection, autosave/reload/export exact parity,
+  and import into a fresh browser context pass. Different real PDF bytes under
+  the same filename correctly refuse source navigation without closing evidence.
+  This is a **controlled safety fixture**, not a real addendum. Six theme/width
+  screenshots plus details/source/refusal retained; dark matrix/details and light
+  refusal visually inspected. No page-level overflow or browser JS errors.
+- Earlier UI failure was a diagnostic race: installed Playwright treated an
+  async `waitForFunction` Promise as truthy. Four waits now use awaited Node-side
+  polling. Three tests prove retries, false-condition timeout and propagation of
+  errors. Original failure retained; no production persistence change for it.
+- Full web check **2,581 pass / 13 existing skips**, typecheck/lint/bench/build
+  pass. Three subsequent diagnostic tests pass separately; typecheck reran green.
+  Final MCP typecheck, **22 BAS tests**, build pass. Python unchanged from 97 pass /
+  mypy 11 files. All jobs terminal; do not restart 75607, 75039, 4890, 46710,
+  52504 or 80833.
+
+Evidence: `evidence/point-workspace-persistence-verified/`,
+`evidence/point-workspace-mcp-parity/`, `evidence/point-workspace-compile.json`,
+`point-workspace-web-check.log`, `point-workspace-persistence-verified.log`.
+Contract: `WORKFLOW_CAPTURE_CONTRACT.md`. Earlier failed diagnostics remain
+retained, not counted as product passes. Prior core corpus/A-B results below
+remain baseline; this batch is **not** an all-corpus/holdout result. Six reserved
+holdouts remain unopened.
+
+**Next substantive milestone:** shared source-scoped SOO requirement/point-list/
+equipment reconciliation, with independent source keys and explicit assignment
+rules before implementation. Not cosmetic polish. No SOO semantic join or
+installed-equipment proof is implemented by the capture layer. Source-PDF
+archiving, canonical equipment/decision history, assemblies/responsibilities,
+compatibility and approved revision snapshots remain required. All five full
+workflows remain incomplete. No blocker/completion claim.
+
 ### Final verification for the point-record checkpoint
 
 All handles listed in the checkpoint below are now terminal; **do not restart

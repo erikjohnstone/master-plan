@@ -364,7 +364,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }, run("takeoff_summary", () => session.summary()));
 
   server.registerTool("export_takeoff", {
-    description: `The full "opentakeoff.takeoff_canvas.v1" annotations payload — exactly what the app autosaves, importable by it. Returned inline; pass path to also write it to disk as JSON. ${COORDS}`,
+    description: `The full "opentakeoff.takeoff_canvas.v1" annotations payload — exactly what the app autosaves, importable by it. Includes retained bas_workflow point-evidence captures when present; these are not approved takeoffs and do not contain source PDF bytes. Returned inline; pass path to also write it to disk as JSON. ${COORDS}`,
     inputSchema: {
       path: z.string().optional().describe("File path to write the payload to"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),

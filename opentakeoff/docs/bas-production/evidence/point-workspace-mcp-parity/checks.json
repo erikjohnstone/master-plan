@@ -1,0 +1,10 @@
+{
+  "scope": "Real Fort Sam CLI/MCP compile, export/reset/import parity. Not complete equipment/revision workflows.",
+  "prior_fields_exactly_unchanged": true,
+  "mcp_cli_exact_parity": true,
+  "real_export_reset_import": true,
+  "capture_id": "1d3432c6802d814de9f5e0f4ffb6f4af8d406890e9c92fdfb77cd326fa9861b3",
+  "matrices": 12,
+  "elapsed_ms": 43173,
+  "main_process_peak_rss_bytes": 501940224
+}

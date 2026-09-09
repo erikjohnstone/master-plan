@@ -2,15 +2,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
+import { mkdtemp, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { z } from 'zod';
 import { Session } from '../src/session.ts';
 import { runBasMath, runBasPointLists } from '../src/basMath.ts';
 import { compileProductionTakeoff } from '../src/productionTakeoff.ts';
-import { compileCorpusTakeoffOutput } from '../src/outputs.ts';
+import { compileCorpusTakeoffOutput, exportTakeoffOutput } from '../src/outputs.ts';
 import { compileTakeoff } from '../../web/src/lib/compileTakeoff.mjs';
 import { buildBasSourceContext } from '../../web/src/lib/basSources.ts';
 import { basPointListsSchema } from '../../web/src/lib/basPointLists.ts';
 import type { SheetGraph } from '../../web/src/lib/sheetgraph.ts';
+import { captureBasPoints, verifyBasWorkflow } from '../../web/src/lib/basWorkflow.ts';
+import { importTakeoff } from '../src/importing.ts';
 
 const sources = buildBasSourceContext([{ sha256: 'a'.repeat(64), byte_length: 100, name: 'fixture.pdf', page_count: 1,
   pages: [{ page_number: 1, sheet_key: 'fixture.pdf', width_px: 500, height_px: 500, rotation: 0,
@@ -42,7 +47,9 @@ test('production BAS compile adds grounded observations without replacing legacy
   const before = structuredClone(graph);
   const result = await compileProductionTakeoff(session, graph, 'T-BAS-01');
   assert.ok('bas_point_lists' in result, 'production must expose the source-bound result');
-  const { bas_math, bas_point_lists, ...legacy } = result;
+  const { bas_math, bas_point_lists, bas_workflow, ...legacy } = result;
+  assert.equal(bas_workflow?.captures.length, 1);
+  assert.deepEqual(bas_workflow?.captures[0].points, bas_point_lists);
   assert.deepEqual(legacy, compileTakeoff(session, graph, 'T-BAS-01'));
   assert.deepEqual(bas_point_lists, await runBasPointLists({ sources, tables: graph.tables }));
   assert.deepEqual(bas_math, await runBasMath({ blueprint: { tables: graph.tables, sequence_count: 0, options: {} } }));
@@ -58,6 +65,47 @@ test('source failure is explicit and cannot discard a valid legacy or math resul
     project_complete: false, error: 'Source pages unavailable' });
   assert.ok('bas_math' in result && 'physical_total' in result.bas_math);
   assert.equal(result.bas_math.physical_total.AI, 1);
+});
+
+test('unowned point observations are retained even when a durable capture is impossible', async () => {
+  const unowned = structuredClone(graph);
+  unowned.tables[0].sheet = 'not-loaded.pdf';
+  const result = await compileProductionTakeoff({ basSourcesForPipeline: () => sources }, unowned, 'bas_points');
+  assert.ok('bas_point_lists' in result && result.bas_point_lists && 'matrices' in result.bas_point_lists);
+  assert.equal(result.bas_point_lists.matrices.length, 1);
+  assert.ok('bas_workflow_error' in result && result.bas_workflow_error);
+  assert.equal('bas_workflow' in result, false);
+});
+
+test('real Session export/import retains verified captures and rejects corruption before mutation', async () => {
+  const s = new Session();
+  const pdf = fileURLToPath(new URL('../../demo/sample-plan.pdf', import.meta.url));
+  await s.loadPlan(pdf);
+  const context = s.basSourcesForPipeline();
+  const points = await runBasPointLists({ sources: context, tables: [] });
+  const workflow = await captureBasPoints(context.documents, points);
+  s.retainBasWorkflow(workflow);
+  assert.deepEqual(s.exportPayload().bas_workflow, workflow);
+  assert.deepEqual(z.object(exportTakeoffOutput).parse(s.exportPayload()).bas_workflow, workflow, 'typed export must not strip the capture');
+  const dir = await mkdtemp(path.join(tmpdir(), 'bas-workflow-import-'));
+  const file = path.join(dir, 'takeoff.json');
+  await writeFile(file, JSON.stringify(s.exportPayload()));
+  const restored = new Session();
+  await restored.loadPlan(pdf);
+  await importTakeoff(restored, file);
+  assert.deepEqual(await verifyBasWorkflow(restored.exportPayload().bas_workflow), workflow);
+  await importTakeoff(restored, file);
+  assert.equal(restored.basWorkflow?.captures.length, 1);
+  const corrupt = structuredClone(restored.exportPayload());
+  corrupt.bas_workflow!.captures[0].points.issues.push('CONTROLLED_CORRUPTION');
+  await writeFile(file, JSON.stringify(corrupt));
+  await assert.rejects(importTakeoff(restored, file), /fingerprint/);
+  assert.deepEqual(restored.basWorkflow, workflow);
+  await restored.loadPlan(pdf);
+  assert.equal(restored.basWorkflow, null, 'replacing the session clears prior captures');
+  const oldSourceCapture = await captureBasPoints(sources.documents, await runBasPointLists({ sources, tables: graph.tables }));
+  restored.retainBasWorkflow(oldSourceCapture);
+  assert.equal(restored.basWorkflow, null, 'a compile for another loaded byte set cannot populate this session');
 });
 
 test('invalid engineering policy cannot suppress valid source observations', async () => {

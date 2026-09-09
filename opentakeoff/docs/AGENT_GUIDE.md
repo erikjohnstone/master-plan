@@ -294,3 +294,11 @@ Python, unverified replication and conflicting types are not successful zero
 takeoffs. `project_complete` remains false. Export the BAS JSON for the full
 engineering audit; existing schedule exports are unchanged. See
 [the contract](../bas_engine/README.md).
+
+The additive `bas_workflow` retains source-bound point evidence captures.
+`export_takeoff` and `import_takeoff` round-trip them; importing evidence never
+approves it or establishes an installed count. Fingerprints detect changed
+capture data, not authenticated authorship. Source navigation requires the exact
+original PDF bytes. JSON carries source identities, not historical PDFs; retain
+those separately. SOO/equipment reconciliation and approved BAS snapshots are
+not implied by a successful capture or export.

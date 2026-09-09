@@ -48,8 +48,12 @@ alarm/trend flags are not additional I/O or software values. See
 
 The shared BAS compile JSON also retains source-bound point observations and
 supported controller footnotes in `bas_point_lists`. These are listed evidence,
-not installed devices. Its durable review/presentation workflow is still in
-development; existing engineering and row exports keep their current meaning.
+not installed devices. **Takeoff → Point lists** shows the original digital
+matrices and source-bound row interpretation. Fingerprinted captures persist
+with the project and export/import as point evidence; opening a source requires
+matching PDF bytes, not merely its filename. Equipment assignment, source-PDF
+archiving and approved review/revision workflows remain in development.
+Existing engineering and row exports keep their current meaning.
 
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized

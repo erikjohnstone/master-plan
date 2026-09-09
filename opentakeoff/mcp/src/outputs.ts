@@ -9,6 +9,7 @@
 // upstream widens the reply instead of failing validation.
 import { z } from "zod";
 import { basPointListsOutputSchema } from "../../web/src/lib/basPointLists.ts";
+import { basWorkflowSchema } from "../../web/src/lib/basWorkflow.ts";
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -112,6 +113,8 @@ export const compileCorpusTakeoffOutput = {
   bas_math: z.any().optional(),
   /** Source-bound listed observations, not installed devices or wired demand. */
   bas_point_lists: basPointListsOutputSchema.optional().describe("Source/version-bound listed point observations, raw cells, sparse-column accounting and explicit supported controller notes. Not installed quantity, verified field wiring or complete coverage. Independent unavailable status preserves legacy and math results."),
+  bas_workflow: basWorkflowSchema.optional().describe("Durable, fingerprinted evidence capture; not an approved takeoff. Export/import retains it. Source PDFs must be retained separately."),
+  bas_workflow_error: z.string().optional().describe("Capture retention failed; original point observations and math are not discarded."),
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),
@@ -608,6 +611,7 @@ export const exportDxfOutput = {
 };
 
 export const exportTakeoffOutput = {
+  bas_workflow: basWorkflowSchema.optional().describe('Retained point-evidence captures, not approval or embedded source PDFs.'),
   schema: z.string(),
   project_name: z.string(),
   units: z.string(),

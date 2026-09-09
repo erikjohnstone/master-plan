@@ -5,7 +5,15 @@
 Active goal and acceptance contract: `../opentakeoff/docs/BAS_PRODUCTION_GOAL.md`.
 Current research, exact baselines, limitations and next steps:
 `../opentakeoff/docs/bas-production/PROGRESS.md`.
-Latest checkpoint: shared source-bound point observations now cross the real
+Latest checkpoint: source-bound captures now persist across browser/MCP save,
+reload, export and reimport. Real browser: 12 matrices / 193 rows, fresh-context
+import, both themes/three widths, source paint and controlled changed-byte refusal
+pass. Real MCP compile/export/import parity passes. Full web 2,581 pass/13 skips
+plus three diagnostic tests; MCP BAS 22 pass, typecheck/build pass. All jobs
+terminal. No extraction change. Next: shared SOO–points–equipment reconciliation.
+All five workflows remain incomplete; historical source bytes are not archived.
+
+Previous checkpoint: shared source-bound point observations now cross the real
 production CLI/MCP path. Fort Sam 12 matrices / 193 listed rows, six source-note
 spans and 16 reviewed controller bindings; prior legacy/math fields unchanged.
 Python 97 pass, MCP BAS/diagnostic 20 pass, full web 2,573 pass/13 existing skips
