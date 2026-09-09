@@ -36,9 +36,11 @@ what makes it training data.
 
 ## Start here
 
-The canvas header keeps **Open · Sheets** on the left; centers the larger
-**Plans · sheet navigation · Edit · Takeoff** controls; and anchors the prominent
-**Schedules · Agent** group on the right. Units and scale sit on the sheet-tab row.
+The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
+left, centers the larger **sheet navigation** controls, and groups equal-sized
+**Takeoff · Edit · ⋯** controls at the upper right. **Schedules**
+and **Agent** float as a compact vertical pair at the center of the canvas's right edge.
+Units and scale sit on the sheet-tab row.
 The left rail's **Tools** tab opens a second column for drawing settings,
 condition properties and project panels; it never resizes the drawing.
 Takeoff retains its exports; the legacy report is under **⋯ → Measurement report**.

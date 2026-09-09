@@ -4,9 +4,12 @@ User-directed follow-up to #89. Baseline: `dec0151f` on main.
 
 ## Layout
 
-- Open and Sheets anchor the left side of one header row.
-- Plans, previous/current/next sheet, Edit and Takeoff form the larger centered navigation spine.
-- Schedules and Agent retain prominent labeled treatments on the far right.
+- Open, Sheets and Plans form one compact file-navigation group on the left.
+- Previous/current/next sheet form the larger centered navigation spine.
+- Equal-sized Takeoff, Edit and overflow controls form the upper-right action
+  group; the redundant product wordmark is removed.
+- Schedules and Agent are compact tabs stacked at the vertical center of the
+  canvas's right edge, floating over the workspace instead of claiming a column.
 - Units and scale moved to the far right of the sheet-tab row.
 - The left rail's Tools tab reveals a second column. Zone, Snap, angle guides,
   labels, Command, Voice and contextual Finish/Create actions moved here.
@@ -37,13 +40,13 @@ Agent and export handlers were not rewritten.
 
 ## Verification
 
-`playwright-workspace.mjs`: **190 checks passed**, zero browser errors.
+`playwright-workspace.mjs`: **206 checks passed**, zero browser errors.
 Sizes: 1280×800, 1440×900, 1920×1080 and 2560×1440. Includes original schedule
 headers/cells, citation payloads, Agent Run/Stop/proposal callbacks, resizing,
 focus mode, flyout positioning, draft retention, toggle state, utility routing
 and legacy report access. Light and HUD screenshots visually inspected.
 
-`npm run check`: passed typecheck, lint (existing warnings only), **2,533 tests**
+`npm run check`: passed typecheck, lint (existing warnings only), **2,559 tests**
 with 13 existing skips, the unchanged benchmark gates and production build.
 Additional UI regression results are recorded in the pull request.
 

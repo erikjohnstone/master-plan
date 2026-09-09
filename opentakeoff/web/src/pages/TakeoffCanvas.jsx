@@ -10617,7 +10617,6 @@ export default function TakeoffCanvas() {
       <div data-topbar className="workspace-topbar" style={{ display: "grid", padding: "6px 14px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", whiteSpace: "nowrap" }}>
         <div data-topbar-deck="1" className="workspace-header-row" style={{ display: "grid", alignItems: "center", minWidth: 0 }}>
           <div className="workspace-file-nav">
-        <strong style={{ fontFamily: "var(--f-display)", fontSize: 15, color: "var(--ink)", letterSpacing: "-0.02em" }}>Takeoff</strong>
         <button type="button" onClick={() => fileInputRef.current?.click()} title="Open plans — PDF, image, or a .zip plan set (or just drag them onto the canvas)"
           style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
           <Icon name="plus" size={14} />Open</button>
@@ -10626,9 +10625,12 @@ export default function TakeoffCanvas() {
           style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${sheetGroup.length ? "var(--cobalt)" : "var(--ink-faint)"}`, background: sheetGroup.length ? "var(--cobalt)" : "transparent", color: sheetGroup.length ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
           <Icon name="sheets" size={15} />Sheets
         </button>
+        <button type="button" data-workspace-nav="Plans" aria-pressed={!schedulesOpen && !agentOpen && !showTakeoffData && !showReport}
+          onClick={() => { setAgentOpen(false); setSchedulesOpen(false); clearScheduleBrowseHighlights(); setView("canvas"); }}>
+          <Icon name="document" size={15} />Plans
+        </button>
           </div>
           <div data-topbar-scroll className="workspace-center-nav">
-          <button type="button" data-workspace-nav="Plans" aria-pressed={!schedulesOpen && !agentOpen && !showTakeoffData && !showReport} onClick={() => { setAgentOpen(false); setSchedulesOpen(false); clearScheduleBrowseHighlights(); setView("canvas"); }}>Plans</button>
         {sheets.length > 0 && (
           <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
             <button type="button" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={!!sheetGroup.length || page <= 1} title="Previous sheet"
@@ -10645,6 +10647,14 @@ export default function TakeoffCanvas() {
               style={{ padding: "5px 8px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", opacity: (!!sheetGroup.length || page >= pageCount) ? 0.4 : 1 }}><Icon name="chevronRight" size={12} /></button>
           </span>
         )}
+          </div>
+          <div className="workspace-workflow-nav">
+            <nav className="workspace-primary" aria-label="Workspace">
+          <button type="button" onClick={() => setShowTakeoffData(true)} name="open-takeoff" data-workspace-nav="Takeoff" aria-pressed={showTakeoffData}
+            title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export.">
+            <Icon name="takeoffs" size={15} /><span>Takeoff</span>{(finishedTakeoffLineCount > 0 || agentTakeoffRows.length > 0) && <small>{finishedTakeoffLineCount || "data"}</small>}
+          </button>
+            </nav>
         {cluster("Edit", <>
           <ToolMenu
             title="Edit takeoffs"
@@ -10668,31 +10678,9 @@ export default function TakeoffCanvas() {
             ]}
           />
         </>)}
-        {/* name="open-takeoff", like sheet-file / agent-goal: the Playwright
-            driver used to reach for this with a text regex, which also matched
-            the rail's Takeoff button, picked the one the open Agent panel
-            covers, and hung 120s on click actionability before reporting the
-            Takeoff panel as broken. It was never broken. */}
-        <button onClick={() => setShowTakeoffData(true)} name="open-takeoff" data-workspace-nav="Takeoff" aria-pressed={showTakeoffData}
-          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
-          style={{
-            padding: "8px 14px", border: "none",
-            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
-            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
-            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
-            letterSpacing: "0.12em", textTransform: "uppercase",
-          }}>
-          <Icon name="takeoffs" size={19} /><span>Takeoff</span>{(finishedTakeoffLineCount > 0 || agentTakeoffRows.length > 0) && <small>{finishedTakeoffLineCount || "data"}</small>}
-        </button>
-          </div>
-          <div className="workspace-workflow-nav">
         <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
         {renderTopbarPinned()}
         </span>
-            <nav className="workspace-primary" aria-label="Workspace">
-          <button type="button" data-workspace-nav="Schedules" aria-pressed={schedulesOpen} onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}><Icon name="document" size={19} /><span>Schedules</span>{graphTables.length > 0 && <small>{graphTables.length}</small>}</button>
-          <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen} onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}><Icon name="target" size={19} /><span>Agent</span>{(agentRunning || agentProposals.length > 0) && <small>{agentRunning ? "running" : agentProposals.length + " pending"}</small>}</button>
-            </nav>
           </div>
         </div>
       </div>
@@ -12749,6 +12737,21 @@ export default function TakeoffCanvas() {
           clearSelectionRef={panelSelectionRef}
           {...panelHandlers}
         />
+
+        <nav className="workspace-action-rail" aria-label="Primary actions">
+          <button type="button" data-workspace-nav="Schedules" aria-pressed={schedulesOpen}
+            onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}>
+            <Icon name="document" size={21} />
+            <span>Schedules</span>
+            {graphTables.length > 0 && <small>{graphTables.length}</small>}
+          </button>
+          <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen}
+            onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}>
+            <Icon name="target" size={21} />
+            <span>Agent</span>
+            {(agentRunning || agentProposals.length > 0) && <small>{agentRunning ? "live" : agentProposals.length}</small>}
+          </button>
+        </nav>
       </div>
 
       {/* Unified plan navigator — one surface for the plan-set gallery AND the

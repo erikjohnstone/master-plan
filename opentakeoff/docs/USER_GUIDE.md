@@ -10,9 +10,11 @@ In a hurry, or already in the app? Press **`?`** (or the **?** button in the top
 
 ### Workspace navigation
 
-The canvas header keeps **Open · Sheets** on the left; centers the larger
-**Plans · sheet navigation · Edit · Takeoff** controls; and anchors the highlighted
-**Schedules · Agent** group on the right. Plans returns to the drawing. Sheets opens
+The canvas header keeps **Open · Sheets · Plans** together on the left; centers the
+larger **sheet navigation** controls; and groups equal-sized **Takeoff · Edit · ⋯**
+controls at the upper right. **Schedules** and
+**Agent** are stacked as floating tabs at the center of the canvas's right edge. Plans
+returns to the drawing. Sheets opens
 the existing sheet gallery; the sheet strip still switches, groups and closes drawings.
 Units and scale live at the right end of that sheet strip.
 
@@ -795,7 +797,7 @@ The modal asks for an optional credit line and an attestation that you have the 
 
 ## 12a. The Schedules index
 
-Opening a plan set indexes it. Part of that pass reads every **schedule table** on every sheet — its printed title, its columns, its rows, and a box around each individual cell. The **Schedules** button in the top bar, next to *Sheets*, is where you look at what it found. It shows a count as soon as the pass finishes (*Schedules · 24*), and it is disabled while the pass is still running.
+Opening a plan set indexes it. Part of that pass reads every **schedule table** on every sheet — its printed title, its columns, its rows, and a box around each individual cell. The floating **Schedules** tab at the canvas's right edge is where you look at what it found. It shows a count as soon as the pass finishes (*Schedules · 24*), and it is disabled while the pass is still running.
 
 The panel docks on the right, beside the drawing rather than over it, because the point is to read a table and look at the sheet it came from at the same time.
 
