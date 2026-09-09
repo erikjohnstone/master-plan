@@ -8,6 +8,7 @@ import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { waitForAsync } from './fixtures/wait-for-async.mjs';
 import { basSequenceView } from '../src/lib/basReview.ts';
 import { interpretBasSequences } from '../src/lib/basSequenceReconciliation.ts';
+import { basEquipmentSummary } from '../src/lib/basEquipmentReview.ts';
 
 assert.ok(process.env.OT_UI_PDF && process.env.OT_BAS_OUT, 'Real PDF and evidence directory required');
 const out = resolve(process.env.OT_BAS_OUT);
@@ -53,8 +54,9 @@ try {
   // verified wire output, not a differently named direct-CLI source file.
   const baseline = readFileSync(new URL('../../docs/bas-production/evidence/point-workspace-persistence-verified/compile-response.ndjson', import.meta.url), 'utf8')
     .trim().split('\n').map(JSON.parse).find(m => m.type === 'result').result;
-  const withoutWorkflow = value => { const { bas_workflow: _workflow, ...rest } = value; return rest; };
+  const withoutWorkflow = value => { const { bas_workflow: _workflow, bas_equipment: _equipment, ...rest } = value; return rest; };
   assert.deepEqual(withoutWorkflow(compiled), withoutWorkflow(baseline), 'Every legacy compile field remains exact');
+  assert.deepEqual(compiled.bas_equipment, await basEquipmentSummary(compiled.bas_workflow, compiled.bas_workflow.current_capture_id), 'New equipment index agrees with its immutable capture');
   const capture = compiled.bas_workflow.captures[0];
   assert.equal(capture.narrative_sources.pages.length, 9);
   assert.equal(capture.points.matrices.length, 12);

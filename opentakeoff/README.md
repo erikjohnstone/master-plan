@@ -61,6 +61,14 @@ reference. Source-preserving link edits and removals retain their history throug
 save/export/import. A listed match is not proof of applicability, wiring or
 installation; unsupported clauses remain visible for review.
 
+The development BAS workflow also retains original equipment-schedule rows and
+an explicit scoped equipment/template register. **Takeoff → Equipment** and MCP
+use the same service for per-equipment or system-once assignments, exceptions
+and durable history. The editor previews decisions before recording them and
+keeps source inspection inside the existing workspace. These are named scheduled
+members, not installed counts. Assignment-driven demand, installed corroboration
+and the remaining release workflow are still in progress.
+
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
 **Takeoff · Edit · ⋯** controls at the upper right. **Schedules**

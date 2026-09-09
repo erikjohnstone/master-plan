@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+  "named_members": 14,
+  "assignment_mode": "system_once",
+  "explicit_test_exception": "CH-3",
+  "included_after_test_exception": 13,
+  "installed_quantity": null,
+  "workflow_bytes": 1804644,
+  "compile_export_bytes": 5696632,
+  "checks": [
+    "real upload/compile",
+    "independent source member key",
+    "five literal applicability references attached and saved",
+    "saved assignment reference opens original drawing",
+    "keyboard scope/member/assignment saves",
+    "preview invalidation on edit",
+    "shared assignment parity",
+    "source paint/return/draft",
+    "exception preserves register",
+    "both themes/two widths",
+    "autosave/reload/export",
+    "fresh-context import",
+    "withdrawal retains history"
+  ],
+  "limits": "Explicit operator assignment workflow, not automatic applicability or installed proof. Test exception is a controlled user input, not printed source truth. No assignment-driven Python demand or full-goal completion claimed.",
+  "errors": []
+}

@@ -48,7 +48,10 @@ test('production BAS compile adds grounded observations without replacing legacy
   const before = structuredClone(graph);
   const result = await compileProductionTakeoff(session, graph, 'T-BAS-01');
   assert.ok('bas_point_lists' in result, 'production must expose the source-bound result');
-  const { bas_math, bas_point_lists, bas_workflow, ...legacy } = result;
+  assert.ok('bas_workflow' in result && result.bas_workflow, 'valid source evidence must remain persistable');
+  const { bas_math, bas_point_lists, bas_workflow, bas_equipment, ...legacy } = result;
+  assert.equal(bas_equipment?.capture_id, bas_workflow?.current_capture_id);
+  assert.deepEqual(bas_equipment?.occurrences, [], 'This synthetic graph contains no equipment schedule');
   assert.equal(bas_workflow?.captures.length, 1);
   assert.deepEqual(bas_workflow?.captures[0].points, bas_point_lists);
   assert.deepEqual(legacy, compileTakeoff(session, graph, 'T-BAS-01'));
@@ -66,6 +69,31 @@ test('source failure is explicit and cannot discard a valid legacy or math resul
     project_complete: false, error: 'Source pages unavailable' });
   assert.ok('bas_math' in result && 'physical_total' in result.bas_math);
   assert.equal(result.bas_math.physical_total.AI, 1);
+});
+
+test('new equipment capture failure cannot disable valid point/SOO persistence or commit an equipment decision', async () => {
+  const malformed = structuredClone(graph);
+  // Controlled old-consumer-compatible shape: the points adapter does not
+  // require title.sheet, but new equipment ownership validation does.
+  malformed.tables.push({ ...structuredClone(graph.tables[0]), kind: 'equipment' });
+  malformed.tables[1].title!.text = 'AHU SCHEDULE';
+  malformed.tables[1].headers = ['TAG'];
+  malformed.tables[1].rows = [{ key: 'AHU-1', sheet: 'fixture.pdf', cells: { TAG: { text: 'AHU-1', bbox: [0, 20, 100, 30] } } }];
+  const session = { basWorkflow: null as BasWorkflow | null, basSourcesForPipeline: () => sources,
+    retainBasWorkflow(w: BasWorkflow) { this.basWorkflow = w; return true; } };
+  const result = await compileProductionTakeoff(session, malformed, 'bas_points');
+  assert.ok('bas_workflow' in result && result.bas_workflow);
+  assert.ok('bas_equipment_error' in result && result.bas_equipment_error);
+  assert.equal('bas_equipment' in result, false);
+  assert.equal(result.bas_workflow.revision, 'bas_evidence_2');
+  assert.deepEqual(result.bas_workflow.captures[0].points, await runBasPointLists({ sources, tables: malformed.tables }));
+  const before = structuredClone(session.basWorkflow);
+  await assert.rejects(compileProductionTakeoff(session, malformed, 'bas_points', { bas_equipment_review: {
+    operation_id: '00000000-0000-4000-8000-000000000005', capture_id: result.bas_workflow.current_capture_id,
+    expected_head: null, reason: 'Must reject unavailable equipment evidence',
+    register: { schema_version: 'bas_equipment_register_v1', scopes: [], equipment: [], assignments: [] },
+  } }), /no retained equipment evidence/);
+  assert.deepEqual(session.basWorkflow, before);
 });
 
 test('production recompile returns retained association events; stale requests never mutate them', async () => {
@@ -100,6 +128,44 @@ test('production recompile returns retained association events; stale requests n
     ...request, operation_id: '00000000-0000-4000-8000-000000000002' } }), /changed since/);
   assert.deepEqual(session.basWorkflow, retained);
   assert.deepEqual(reviewed.bas_workflow.captures, first.bas_workflow.captures);
+});
+
+test('shared production compile returns the equipment/SOO/point comparison and replays its durable assignment', async () => {
+  const input = buildBasSourceContext([{ sha256: 'c'.repeat(64), byte_length: 100, name: 'fixture.pdf', page_count: 1,
+    pages: [{ page_number: 1, sheet_key: 'fixture.pdf', width_px: 1000, height_px: 1000, rotation: 0, spans: [
+      { str: 'SEQUENCE OF OPERATION', x0: 10, y0: 150, x1: 400, y1: 170 },
+      { str: '1. THE CONTROLLER SHALL MONITOR SUPPLY AIR TEMPERATURE AND MODULATE HOT WATER FLOW TO MAINTAIN SET POINT.', x0: 10, y0: 190, x1: 850, y1: 200 },
+      { str: 'AHU-1', x0: 10, y0: 400, x1: 80, y1: 410 },
+    ] }] }]);
+  const exactGraph = structuredClone(graph);
+  exactGraph.tables[0].rows[0].cells['POINT NAME'].text = 'SUPPLY AIR TEMPERATURE';
+  exactGraph.tables.push({ kind: 'equipment', sheet: 'fixture.pdf', title: { sheet: 'fixture.pdf', text: 'AHU SCHEDULE', bbox: [0, 380, 300, 390] },
+    region: [0, 380, 300, 420], headers: ['TAG'], rows: [{ key: 'AHU-1', sheet: 'fixture.pdf', cells: { TAG: { text: 'AHU-1', bbox: [0, 400, 100, 410] } } }] });
+  const session = { basWorkflow: null as BasWorkflow | null, basSourcesForPipeline: () => input,
+    retainBasWorkflow(w: BasWorkflow) { this.basWorkflow = mergeBasWorkflows(this.basWorkflow, w, true); return true; } };
+  const first = await compileProductionTakeoff(session, exactGraph, 'bas_points');
+  assert.ok('bas_workflow' in first && first.bas_workflow && 'bas_equipment' in first && first.bas_equipment);
+  const region = interpretBasSequences(input).regions.find(r => r.raw.status === 'body_detected')!;
+  const uuid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
+  const request = { operation_id: uuid(1), capture_id: first.bas_workflow.current_capture_id, expected_head: null,
+    reason: 'Controlled production-boundary test, not a real PDF finding', register: { schema_version: 'bas_equipment_register_v1',
+      scopes: [{ scope_id: uuid(2), building: 'A', level: '1', system: 'Air handling', phase: 'new', source_span_ids: [], reason: 'Explicit controlled scope' }],
+      equipment: [{ equipment_id: uuid(3), scope_id: uuid(2), tag: 'AHU-1', reason: 'Bind printed member',
+        bindings: [{ occurrence_id: first.bas_equipment.occurrences[0].occurrence_id, member: 'AHU-1' }] }],
+      assignments: [{ assignment_id: uuid(4), matrix_id: first.bas_workflow.captures[0].points.matrices[0].matrix_id,
+        applicability: 'per_equipment', equipment_ids: [uuid(3)], excluded_equipment_ids: [], sequence_region_ids: [region.region_id],
+        source_span_ids: [], reason: 'Controlled explicit sequence and points applicability' }],
+    } };
+  const linked = await compileProductionTakeoff(session, exactGraph, 'bas_points', { bas_equipment_review: request });
+  assert.ok('bas_equipment' in linked && linked.bas_equipment && 'bas_workflow' in linked && linked.bas_workflow);
+  const comparison = linked.bas_equipment.sequence_comparisons[0];
+  assert.deepEqual(comparison.included_equipment_ids, [uuid(3)]);
+  assert.equal(comparison.requirements[0].status, 'listed');
+  assert.equal(comparison.requirements[0].installed_quantity, null);
+  assert.deepEqual(linked.bas_workflow.captures, first.bas_workflow.captures);
+  assert.deepEqual(z.object(compileCorpusTakeoffOutput).parse(linked), linked);
+  assert.deepEqual(await compileProductionTakeoff(session, exactGraph, 'bas_points'), linked);
+  assert.deepEqual(await compileProductionTakeoff(session, exactGraph, 'bas_points', { bas_equipment_review: request }), linked);
 });
 
 test('unowned point observations are retained even when a durable capture is impossible', async () => {

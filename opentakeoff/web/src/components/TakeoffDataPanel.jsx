@@ -16,6 +16,7 @@ import {
 import CiteValue from "./CiteValue.jsx";
 import BasMathSummary from "./BasMathSummary.jsx";
 import BasPointsWorkspace from "./BasPointsWorkspace.jsx";
+import BasEquipmentWorkspace from "./BasEquipmentWorkspace.jsx";
 
 /** Cap visible technical columns so each family table stays readable. */
 const UI_SPEC_MAX = 12;
@@ -94,13 +95,20 @@ export default function TakeoffDataPanel({
   basViewState,
   onBasViewStateChange,
   onBasReview,
+  onBasEquipmentReview,
   onClear,
   onRemove,
   onRemoveLine,
   onClose,
   onOpenCitation,
 }) {
-  const [tab, setTab] = useState(basWorkflow && (corpusMeta?.kind === 'bas_points' || !rows.length) ? "points" : "takeoff");
+  const [localTab, setLocalTab] = useState(basWorkflow && (corpusMeta?.kind === 'bas_points' || !rows.length) ? "points" : "takeoff");
+  const tab = basViewState?.takeoffTab || localTab;
+  const setTab = value => {
+    setLocalTab(value);
+    onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: value }));
+  };
+  const evidenceTab = tab === 'points' || tab === 'equipment';
   const [filter, setFilter] = useState("");
   const [busy, setBusy] = useState("");
   const [err, setErr] = useState("");
@@ -236,12 +244,12 @@ export default function TakeoffDataPanel({
               {projectName || "Project takeoff"}
             </div>
             <div style={{
-              display: tab === 'points' ? 'none' : "flex", flexWrap: "wrap", gap: "6px 14px",
+              display: evidenceTab ? 'none' : "flex", flexWrap: "wrap", gap: "6px 14px",
               marginTop: 8, fontFamily: "var(--f-mono)", fontSize: "var(--fs-s)",
               color: "var(--ink-muted)", letterSpacing: "0.02em",
             }}
               data-takeoff-stats
-              hidden={tab === 'points'}
+              hidden={evidenceTab}
               data-lines={lines.length}
               data-schedules={familyGroups.length}
               data-ea={qtyTotal ?? ""}
@@ -261,7 +269,8 @@ export default function TakeoffDataPanel({
               <span>{rows.length} evidence fields</span>
             </div>
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-muted)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
-              {tab === "points" ? "Original point-list matrices with source-bound interpretation. No installed quantities are inferred."
+              {tab === "equipment" ? "Source-backed equipment identities and explicit template assignments. Original schedule evidence stays unchanged."
+                : tab === "points" ? "Original point-list matrices with source-bound interpretation. No installed quantities are inferred."
                 : tab === "takeoff" && corpusMeta?.bas_math
                 ? "BAS engineering is shown separately from the original schedule rows. Review source coverage and unresolved constraints before procurement."
                 : tab === "takeoff"
@@ -269,7 +278,7 @@ export default function TakeoffDataPanel({
                 : "Workflow audit trail — every field the Agent gathered. Does not change the finished Takeoff totals."}
             </div>
           </div>
-          {tab !== "points" && <><input
+          {!evidenceTab && <><input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             placeholder={corpusMeta?.bas_math ? "Filter points or schedule rows…" : tab === "takeoff" ? "Filter tag, schedule, field…" : "Filter tag, field, sheet…"}
@@ -289,7 +298,7 @@ export default function TakeoffDataPanel({
             title={corpusMeta?.bas_math ? "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
             style={{ ...btnStyle, marginTop: 4 }}>{busy === "pdf" ? "…" : corpusMeta?.bas_math ? "Rows PDF" : "PDF"}</button>
           </>}
-          {tab !== "points" && typeof onClear === "function" && (
+          {!evidenceTab && typeof onClear === "function" && (
             <button type="button" onClick={onClear} disabled={!rows.length && !corpusMeta?.bas_math}
               style={{ ...btnStyle, marginTop: 4, background: "transparent", color: "var(--ink-muted)" }}>
               Clear
@@ -309,6 +318,7 @@ export default function TakeoffDataPanel({
             Workflow data
           </button>
           {basWorkflow && <button type="button" style={tabBtn(tab === "points")} onClick={() => setTab("points")}>Point lists</button>}
+          {basWorkflow && <button type="button" style={tabBtn(tab === "equipment")} onClick={() => setTab("equipment")}>Equipment</button>}
         </div>
 
         {err && (
@@ -356,7 +366,8 @@ export default function TakeoffDataPanel({
         )}
 
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px" }}>
-          {tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
+          {tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onOpenCitation={onOpenCitation} />
+            : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
           {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}
           {tab === "takeoff" ? (
             !lines.length ? (

@@ -27,6 +27,7 @@ import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption, reconci
 import { takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
 import { compileProductionTakeoff } from "./productionTakeoff.ts";
 import { basReviewRequestSchema } from "../../web/src/lib/basReviewContract.ts";
+import { basEquipmentReviewRequestSchema } from "../../web/src/lib/basEquipmentRegister.ts";
 import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
@@ -707,15 +708,17 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         "BAS only: optional deterministic Python policy (hardware {profile_id,rigid:{AI,AO,DI,DO},universal_inputs}, spare {basis:demand_addon|installed_unused,numerator,denominator}, licenses, serial_routes, ip_closets, group_overrides, typed soo). Omit unknown policies; never invent hardware capacities, replication, distances or typed SOO. Returned bas_math is separate from legacy printed totals; review diagnostics and project_complete=false. The independent bas_point_lists result retains source-bound listed observations and supported controller notes, not verified wiring or installed quantity. Group IDs are returned by the first compile. See docs/BAS_MATH_RESEARCH.md for exact constraints.",
       ),
       bas_review: basReviewRequestSchema.optional().describe('BAS only: explicit sequence/point-matrix association upsert/removal against an existing capture and expected review head. Needs source-span equipment references and a reason. Records an agent_proposal, never operator approval or installed quantities. First compile without this option to obtain bas_workflow capture/source IDs; export_takeoff retains evidence and history.'),
+      bas_equipment_review: basEquipmentReviewRequestSchema.optional().describe('BAS only: atomically replace the explicit scoped equipment register and template assignments for a retained equipment capture. Requires exact source occurrence/member bindings, UUID identities, per_equipment or system_once applicability, exceptions, reasons, operation ID and expected equipment head. Records an agent_proposal, not approval, installation proof or field-wiring demand. Original sources and prior decisions remain immutable; export_takeoff retains them. First compile without this input and inspect bas_workflow equipment_sources.'),
       path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
       export_path: z.string().optional().describe("Optional directory for CSV/XLSX workbook tabs"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: compileCorpusTakeoffOutput,
-  }, run("compile_corpus_takeoff", async ({ kind, service, detail, bas_math, bas_review, path: outPath, export_path: exportPath, overwrite }) => {
+  }, run("compile_corpus_takeoff", async ({ kind, service, detail, bas_math, bas_review, bas_equipment_review, path: outPath, export_path: exportPath, overwrite }) => {
     const graph = await session.graphForPipeline();
     const compiled: any = await compileProductionTakeoff(session, graph, kind, {
       ...(service ? { service } : {}), ...(bas_math ? { bas_math } : {}), ...(bas_review ? { bas_review } : {}),
+      ...(bas_equipment_review ? { bas_equipment_review } : {}),
     });
     if (detail !== "full") {
       // Delete, don't set undefined — an object key present with value

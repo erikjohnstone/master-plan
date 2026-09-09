@@ -1,10 +1,44 @@
 ## Active work
 
+Verified isolated BAS equipment checkpoint: full web **2,623 pass / 13 existing
+skips**, typecheck/lint/bench/build pass; actual Behavioral UI **14 named members,
+5 original applicability references**, assignment/exceptions/source return,
+reload/export/fresh import/withdrawal all pass. Public MCP also passes; original
+graph/point/math exact. Explicit enlarged resource allowances and earlier
+diagnostic failures are disclosed. Core takeoff/reference job remains live;
+graph baseline misses unchanged. No all-five-workflow or production-complete
+claim. See `../opentakeoff/docs/bas-production/PROGRESS.md` for evidence and next.
+
+Equipment editor increment (isolated BAS branch, 2026-09-09): internal source and
+register tables, selected-equipment templates, explicit scopes/members/exceptions,
+shared validated preview/save, source-row reader and saved evidence references
+are implemented. Full web check passes 2,621 tests/13 existing skips plus build.
+Actual Behavioral UI and MCP walkthroughs are still live; earlier MCP default
+heap and post-import 120-second failures remain documented, not green. No new
+assignment demand arithmetic or installed corroboration yet. Full status and
+live handles: `../opentakeoff/docs/bas-production/PROGRESS.md`. No extraction,
+symbol threshold, costing, holdout, push or merge change.
+
 ### Deterministic BAS production workflows — isolated branch (2026-09-09)
 
 Active goal and acceptance contract: `../opentakeoff/docs/BAS_PRODUCTION_GOAL.md`.
 Current research, exact baselines, limitations and next steps:
 `../opentakeoff/docs/bas-production/PROGRESS.md`.
+Active increment: shared source-backed equipment candidates, scoped register and
+durable per-unit/system-once assignments now reuse the existing SOO/point
+comparison. No installed count or new demand math. Focused shared 45 pass;
+MCP production 12 pass/typecheck, contract subset 132 pass; first full web 2620
+pass/13 existing skips, build/bench/lint/types pass; final rerun live. Existing
+real SOO browser workflow remains green with the new capture. Large Behavioral
+MCP proof hit the known baseline default-heap limit; phase-logged 4-GiB retry
+`89172` is live. Do not claim that walkthrough passed or default-memory safety.
+Seven-set corpus `21748` remains live: graph 78 correct/13 missing cells,
+133 expected symbol outcomes/5 missing. All graph misses reproduced on the
+starting revision; takeoff/reference pending. Full details and process handles
+are in the BAS progress record. Equipment UI/math, other workflows and full
+corpus/holdout gates remain unfinished. No VectorGrid/production deployment.
+
+Previous checkpoint:
 Latest: retained SOO text and auditable association events now work through the
 actual browser and MCP workflow, including source return, autosave/reload,
 export/import, stale/invalid-request rejection and removal history. Repaired an

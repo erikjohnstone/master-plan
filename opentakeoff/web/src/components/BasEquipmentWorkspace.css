@@ -1,0 +1,11 @@
+.bas-equipment-workspace { line-height: 1.5; }
+.bas-equipment-workspace .bas-point-grid td { overflow-wrap: anywhere; }
+.bas-equipment-fields { border: 0; padding: var(--sp-4) 0; margin: 0; display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; }
+.bas-equipment-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--sp-2); max-height: 32vh; overflow: auto; padding: var(--sp-2); border: 1px solid var(--ink-faint); }
+.bas-equipment-options label { display: flex; align-items: start; gap: var(--sp-2); padding: var(--sp-2); overflow-wrap: anywhere; }
+.bas-equipment-options small { display: block; color: var(--ink-muted); }
+.bas-equipment-workspace input[type="checkbox"] { flex-shrink: 0; width: var(--fs-l); height: var(--fs-l); accent-color: var(--cobalt); }
+.bas-equipment-preview { border-left: 2px solid var(--cobalt); padding: var(--sp-3) var(--sp-4); background: color-mix(in srgb, var(--cobalt) 5%, var(--paper-bright)); }
+.bas-equipment-preview h4 { margin-top: 0; }
+.bas-equipment-workspace summary { cursor: pointer; }
+.bas-equipment-alert { color: var(--c-danger); overflow-wrap: anywhere; }

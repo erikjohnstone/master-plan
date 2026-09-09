@@ -4,6 +4,10 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Retain unmodified equipment graph tables in additive `bas_equipment_3` captures. Parse bounded complete designation lists/ranges/exclusions and strict printed counts without row-key shortcuts or default quantities. Expose source-owned candidate IDs through `bas_equipment`.
+- Add the shared scoped equipment/register and per-equipment/system-once assignment service, with explicit bindings/exceptions, immutable proposal history, stale-edit rejection and durable export/import. The optional existing-tool `bas_equipment_review` input uses this service. Explicit SOO references reuse the existing point comparator within the assigned equipment scope; source IDs and unpaired rows remain available.
+- Add **Takeoff → Equipment** for source/register tables, scoped member binding, equipment details, assignment/exception editing, validated previews and reasoned withdrawal. Use the same shared service as MCP; preserve source-return context and evidence/history exports. Assignment-driven demand, installed corroboration and release controls remain unfinished; original table extraction, legacy quantities and math are unchanged.
+
 - Retain full source-text snapshots alongside point matrices in `bas_evidence_2`; old point-only captures keep their fingerprints. Add **Sequences & links** inside Point lists, with original prose, bounded monitoring comparisons, source navigation and explicit equipment-reference associations. Save/import/export preserves evidence and edit/removal history; stale edits and conflicting imports reject without silently overwriting decisions. MCP `bas_review` uses the same service with proposal origin. No installed-equipment, complete SOO, approval or source-PDF archival claim.
 - Correct the new integration's ordinary MCP recompile reply to include already-retained review events, not only the new evidence capture.
 

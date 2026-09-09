@@ -5,6 +5,8 @@ import type { SheetGraph } from "../../web/src/lib/sheetgraph.ts";
 import { runBasMath, runBasPointLists } from "./basMath.ts";
 import { captureBasEvidence, mergeBasWorkflows } from "../../web/src/lib/basWorkflow.ts";
 import { applyBasReview } from "../../web/src/lib/basReview.ts";
+import { captureBasEquipmentTables } from "../../web/src/lib/basEquipmentEvidence.ts";
+import { applyBasEquipmentReview, basEquipmentSummary } from "../../web/src/lib/basEquipmentReview.ts";
 
 /** Snapshot the source context before awaiting either Python operation. A
  * math-policy error and an evidence error are independent, never a fake zero.
@@ -17,8 +19,14 @@ async function pointListsForSession(session: unknown, graph: SheetGraph) {
     const sources = session.basSourcesForPipeline();
     const points = await runBasPointLists({ sources, tables: graph.tables });
     try {
-      const workflow = await captureBasEvidence(sources, points);
-      return { bas_point_lists: points, bas_workflow: workflow };
+      let equipment, equipmentError;
+      try { equipment = captureBasEquipmentTables(graph.tables); }
+      catch (error) { equipmentError = error instanceof Error ? error.message : 'Equipment source capture unavailable'; }
+      // An equipment extension failure must not disable the already-working
+      // point/SOO capture. Its own write option will refuse before committing.
+      const workflow = await captureBasEvidence(sources, points, equipment);
+      return { bas_point_lists: points, bas_workflow: workflow,
+        ...(equipmentError ? { bas_equipment_error: equipmentError } : {}) };
     } catch (error) {
       // Retention is a separate failure domain. Preserve useful unresolved
       // source observations even when they cannot form a source-owned capture.
@@ -31,8 +39,9 @@ async function pointListsForSession(session: unknown, graph: SheetGraph) {
 }
 
 export async function compileProductionTakeoff(session: unknown, graph: SheetGraph, kind: string,
-  opts: { service?: string; bas_math?: unknown; bas_review?: unknown } = {}) {
-  if (opts.bas_review != null && kind !== 'bas_points' && kind !== 'T-BAS-01') throw new Error('BAS review is only available for the BAS points workflow');
+  opts: { service?: string; bas_math?: unknown; bas_review?: unknown; bas_equipment_review?: unknown } = {}) {
+  const hasReview = opts.bas_review != null || opts.bas_equipment_review != null;
+  if (hasReview && kind !== 'bas_points' && kind !== 'T-BAS-01') throw new Error('BAS review is only available for the BAS points workflow');
   const compiled = compileTakeoff(session, graph, kind, opts);
   if (compiled.kind !== "bas_points") return compiled;
   // SHOULD THIS BE ON THE SHARED PATH? Yes: both UI CLI and MCP call here.
@@ -50,6 +59,7 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
       project_complete: false as const, error: error instanceof Error ? error.message : "BAS math unavailable" };
   }
   const pointResult = await pointLists;
+  let equipmentSummary;
   if (pointResult && 'bas_workflow' in pointResult && pointResult.bas_workflow) {
     const previous = session && typeof session === 'object' && 'basWorkflow' in session ? session.basWorkflow : null;
     const merged = mergeBasWorkflows(previous, pointResult.bas_workflow, true)!;
@@ -59,12 +69,18 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
     if (opts.bas_review != null) {
       pointResult.bas_workflow = await applyBasReview(merged, opts.bas_review, 'agent_proposal');
     }
+    if (opts.bas_equipment_review != null) {
+      pointResult.bas_workflow = await applyBasEquipmentReview(pointResult.bas_workflow, opts.bas_equipment_review, 'agent_proposal');
+    }
+    if (pointResult.bas_workflow.captures.find(c => c.capture_id === pointResult.bas_workflow.current_capture_id)?.equipment_sources) {
+      equipmentSummary = await basEquipmentSummary(pointResult.bas_workflow, pointResult.bas_workflow.current_capture_id!);
+    }
     // Commit only after any requested review validates. Invalid requests leave
     // the prior Session review/capture state untouched.
     if (session && typeof session === 'object' && 'retainBasWorkflow' in session && typeof session.retainBasWorkflow === 'function') {
       const retained = session.retainBasWorkflow(pointResult.bas_workflow);
-      if (retained === false && opts.bas_review != null) throw new Error('The loaded drawing set changed; the BAS review was not applied');
+      if (retained === false && hasReview) throw new Error('The loaded drawing set changed; the BAS review was not applied');
     }
-  } else if (opts.bas_review != null) throw new Error('BAS evidence could not be captured; prior review history was preserved');
-  return { ...compiled, bas_math, ...pointResult };
+  } else if (hasReview) throw new Error('BAS evidence could not be captured; prior review history was preserved');
+  return { ...compiled, bas_math, ...pointResult, ...(equipmentSummary ? { bas_equipment: equipmentSummary } : {}) };
 }

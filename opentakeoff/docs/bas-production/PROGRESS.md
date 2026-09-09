@@ -1,6 +1,249 @@
 # BAS production workflow progress
 
+## Verified equipment editor checkpoint — 2026-09-09
+
+This continuation made **progress**. Shared source-backed equipment and explicit
+template assignment now have an actual editing/persistence/source/export journey
+in Takeoff and public MCP. This is still not all five complete BAS workflows.
+No extraction, symbol threshold, costing, push, merge or deployment change.
+
+- Final full web `61719` completed: **2,623 pass / 13 existing skips / zero
+  failures**, typecheck/lint/bench/build pass. Existing bundle and optional Agent
+  key warnings remain. Focused empty-preview regression tests (2), editor lint
+  and typecheck passed; TypeScript files are checked by tsc (ESLint's existing
+  configuration does not cover the small `.ts` UI lifecycle helper).
+- Actual original 29-page Behavioral browser `41432` / `equipment-browser-7`
+  passed: explicit scope; all 14 independently keyed scheduled members; matrix
+  once; five independently keyed original applicability spans attached to scope
+  and assignment; saved reference opens M701; keyboard preview/save; edits
+  invalidate preview; explicit test exception preserves equipment inventory;
+  source paint/return/draft; both themes at 1280/1920; autosave/reload/export;
+  fresh-context import; withdrawal retains original evidence and prior events.
+  No browser JS errors. Retained workflow **1,804,644 bytes**; actual compile JSON
+  download **5,696,632 bytes** (not wire-size measurement). CH-3 exception is
+  clearly a controlled operator decision, not printed-source truth. Earlier
+  complete browser `10346` also passed without attached applicability spans.
+- Light-1280 and dark-1920 equipment screenshots visually inspected, plus M701
+  source paint and original M601 member paint. No overlapping UI controls or
+  page-level horizontal overflow. Source painting uses the current canvas zoom;
+  the small original printed text may still require the normal zoom interaction.
+  A future contextual citation zoom can improve that without altering bboxes.
+- Actual public MCP `34698` passed with original graph/point/math exact and full
+  retry/recompile/reset/import/withdrawal checks: 14 members, 7 equipment tables,
+  workflow **1,788,448 bytes**. Explicit 4-GiB heap / 600-second compile deadline;
+  **633,067 ms** for the entire diagnostic and main-process peak RSS
+  **1,493,106,688 bytes** under concurrent work. This does not solve the independently
+  reproduced default-memory/deadline limits or establish isolated performance.
+- Earlier new shared tests 45 pass, MCP focused/production tests and 132-contract
+  subset pass (details below); Python production is unchanged. The shared
+  three-way comparator is covered by controlled production-boundary tests;
+  the actual Behavioral equipment key does not claim full SOO interpretation.
+
+Failures were retained and corrected honestly: two inspector-body capture
+failures (actual JSON download now used); one closed browser target; a genuine
+null-preview UI crash (two regression tests); and an exact accessible-name
+failure (Applicability explicitly labeled). No key, original assertion,
+threshold, source data or scorer was weakened.
+
+Core corpus job `21748` remains live (Navfac PID 57494 last confirmed). **Takeoff
+and reference pending**; graph: **78 correct / 0 wrong / 13 missed cells**, row
+symbols **133 expected / 5 missed / 0 false**. All current graph misses reproduced
+on the starting revision; absent table keys remain unscored. No all-metric
+completion claim. Keep the live job; do not restart after an observation timeout.
+
+Next required implementation: shared Python assignment-demand adapter (contract
+now spelled out), installed/phase/multi-view evidence reconciliation, manual and
+aggregate quantity bases, broader supported applicability and independent keys.
+Broader SOO coverage, assemblies/responsibilities, engineering compatibility,
+source archives/revisions/approved releases, corpus/holdout gates remain required.
+The full objective is unchanged. The code and selected proofs below are ready
+for a local verified checkpoint; detailed earlier run records follow.
+
+## Equipment editing and inspectable evidence — 2026-09-09, in progress
+
+Browser editor update: attempt `12576` (`equipment-browser-4`) reached the real
+editor and reproduced an empty-preview crash (`undefined === undefined` admitted
+a null preview). Fixed with a surface-specific guarded preview lifecycle; two
+new regression tests pass. Attempt `86616` (`equipment-browser-5`) then recorded
+the scope and all 14 source members without JS errors, but stopped at a missing
+exact accessible name for Applicability. Added its explicit accessible label;
+no decision semantics changed. Both failure screenshots inspected. Current
+actual browser run `10346` writes `equipment-browser-6.log`. Full final web gate
+`61719` has passed 2,623 tests / 13 existing skips and is in benchmarks/build.
+Focused final editor typecheck/lint `9000` pending terminal poll; preceding
+`85724` passed. No successful equipment UI walkthrough is claimed yet.
+
+Latest verification update: actual Behavioral MCP `34698` **passes** all checks:
+14 independently keyed members, system-once assignment, original graph/point/math
+equality, stale/foreign/non-BAS refusals, retry/recompile, export/reset/import,
+withdrawal retaining history. Seven raw equipment tables retained. Workflow
+1,788,448 bytes; full diagnostic 633,067 ms; main-process peak RSS 1,493,106,688
+bytes under concurrent load (not whole-tree/isolated peak). The 4-GiB and 600-s
+compile allowances are explicit; default resource safety remains unproven.
+Evidence: `equipment-workflow-mcp-complete/checks.json` and matching log.
+
+Browser attempts `45576` and `70783` completed original PDF indexing/compile
+without JS errors but failed retrieving the streaming response from Chrome's
+inspector cache. Enlarged diagnostic buffers did not fix that. The diagnostic
+now captures the actual application's compile JSON download instead, preserving
+all domain assertions; it measures exported bytes rather than claiming wire size.
+Attempt `19181` then terminated because its browser target closed during upload;
+no editor pass claimed. Its processes were absent before retry. Current run uses
+browser-process diagnostic logging and `equipment-browser-4.log`; preserve all
+three failed attempts and screenshots. Focused final UI lint/typecheck `85724`
+must be polled; no new extraction or math edits.
+
+Previous status-only goal turn: **no progress**. This continuation makes
+**progress**: an internal Equipment source/register table, scoped member editing,
+selected-equipment assignment/exception/withdrawal forms, shared validated preview
+and ordinary autosave integration. All five goal workflows remain required and
+incomplete. No push, merge, deployment, costing or extraction changes.
+
+The UI uses `validateBasEquipmentRegister` for previews and
+`applyBasEquipmentReview` for commits, matching MCP. Original cells can be read
+as a digital row or opened on the original drawing; saved scope/assignment and
+interpreted requirement references are directly inspectable. Matched points open
+the retained original matrix. Manual decisions remain disclosed, with reasons;
+missing supporting references do not become extracted applicability facts.
+Equipment detail and its draft survive citation return through existing canvas
+state. Any input change invalidates the preview; stale heads/captures reject.
+No new permanent toolbar/rail. Assignment-driven Python demand is not implemented.
+
+The prior final shared-engine web check completed: **2,621 pass, 13 existing
+skips, zero fail**, typecheck/lint/bench/build pass. New UI focused typecheck/lint
+passed (one new hook warning corrected; unrelated canvas warnings retained).
+Editor full check `76242` also completed: typecheck/lint, the same 2,621 tests,
+benchmarks and build pass. Additional source-inspection UI edits were made while
+the suite ran; focused check `7848` and actual browser verification remain the
+latest-source gates. Do not treat unit checks as equipment UI walkthrough proof.
+
+Large actual MCP `89172` **failed** at the final post-import compile with the
+120-second client deadline. Graph had completed at 275.0 seconds, so the reset
+causes a new cold graph longer than that diagnostic allowance. Export/import and
+intermediate assignments were reached but this is not a complete pass. Failure
+log/export retained. The new explicit-4-GiB/600-second-compile diagnostic `34698`
+(PID 61004, `equipment-workflow-mcp-complete.log`) is live and reached the
+post-import compile. This changes only the diagnostic allowance, not production
+memory/timeout settings, and cannot establish default resource safety.
+
+Real browser `45576` (PID 61053, `equipment-browser.log`) is live on the original
+29-page Behavioral PDF. Its actual Vite graph child PID 61091 was independently
+confirmed alive; no timeout was treated as completion. Browser editor assertions
+have not yet run. Subsequent diagnostic phase/heartbeat logging was added to the
+script for future runs; the current invocation predates it. Keep the active job,
+do not start a duplicate. Core seven-set takeoff/reference `21748` remains live
+with Navfac PID 57494; its earlier graph results/starting-baseline reproductions
+are recorded below. Default-memory failure, timeouts and missing corpus table
+keys remain explicit limitations, not passing scores.
+
+Next: finish current browser/MCP/web/corpus checks; inspect captured screenshots;
+repair any reproduced UI defects; commit coherent verified work. Then implement
+the shared Python assignment-demand adapter and the remaining full workflows,
+including additional independent development keys and the reserved holdout gates.
+
+## Source-backed equipment and three-way assignment — 2026-09-09, active verification
+
+The preceding status-answer turn was **no progress**. This continuation made
+**progress**: shared equipment evidence, explicit scoped identities and durable
+template assignments, plus reuse of the existing SOO/point comparator against
+those assigned equipment. All five complete workflows remain open; no blocker
+or production-completion claim. Current changes are not yet committed.
+
+- New `basEquipmentMembership.ts` parses bounded complete tags/lists/ranges and
+  explicit exclusions atomically. Strict printed counts preserve zero and reject
+  decimal/prefix parsing. Initial typecheck found unsupported `replaceAll`; fixed
+  with a compatible replacement, without changing the accepted grammar.
+- `basEquipmentEvidence.ts` retains original equipment-classified graph tables,
+  including opaque metadata, cells and continuation ownership. Stable version-
+  bound occurrence IDs ignore only filename navigation aliases. Repeated source
+  tables/labels stay separate; no row-key shortcut, component-count substitution,
+  implicit one, installed count or automatic scope. Existing merged VFD cell in
+  Behavioral stays unresolved rather than trusting its tempting row key.
+- All 14 independently keyed Behavioral system members resolve to their original
+  schedule row/page in the retained real graph. Heating-water pumps remain in
+  the candidate inventory, not implicitly included in the CHW system assignment.
+  No new PDF truth was manufactured from implementation output; holdouts unopened.
+- `bas_equipment_3` capture extension retains raw equipment sources without
+  changing old point/SOO capture fingerprints. Shared register/review service
+  uses explicit scope/equipment UUIDs, exact source-member bindings, reasons,
+  per-equipment/system-once applicability, exceptions and hash-linked history.
+  Stale/foreign/duplicate decisions reject, exact retries are idempotent, and
+  withdrawal retains earlier evidence/events. Origins remain operator input or
+  Agent proposal, not authenticated approval. No new demand arithmetic yet.
+- Equipment assignments can explicitly reference body-bearing SOO regions. They
+  reuse the exact existing source-name comparator, now factored once, and retain
+  requirement/source/row IDs plus included equipment scope. Listed/omitted/
+  ambiguous/unavailable outcomes never create signal types or installed counts.
+  A controlled production-boundary test verifies this complete three-way reply,
+  schema parity, persistence and recompile; it is not independent real-PDF truth.
+- Existing compile tool adds `bas_equipment` candidate/register/comparison index
+  and optional `bas_equipment_review` transaction. Equipment-capture failure is
+  isolated as `bas_equipment_error`, preserving valid point/SOO capture; attempted
+  equipment writes refuse before changing prior Session state. Metadata versions
+  agree at 0.9.68; still 50 tools. Dedicated equipment UI remains unimplemented.
+- Focused shared tests **45 pass**, including all nine prior sequence comparison
+  tests and actual IndexedDB/import replay. MCP initial BAS subset **20 pass**,
+  typecheck/build pass; subsequent **12 point/production tests pass** including
+  failure isolation and three-way reply, with another clean typecheck. Initial
+  legacy-equality test required explicitly separating/validating the new additive
+  index; every original field assertion remains exact. A later typecheck required
+  asserting valid evidence actually has its capture before destructuring.
+- First full web check **2,620 pass / 13 existing skips / zero fail**;
+  typecheck/lint/bench/build pass. A final run after factoring the comparator is
+  live. MCP contract/parity subset **132 pass**. Python production unchanged.
+- Real browser regression passes: original Fort Sam upload, exact old fields,
+  new index/capture agreement, source/keyboard form, both themes/two widths,
+  autosave/reload/export, fresh import and removal history. 18 selected clauses,
+  two listed/one not-listed requirement; no JS errors. Retained workflow
+  1,111,944 bytes, response 1,630,992 bytes. Light-1280 and dark-1920 screenshots
+  visually inspected. This exercises the existing SOO UI, not an equipment UI.
+
+**Large-PDF verification is NOT green:** actual Behavioral public-MCP diagnostic
+`85399` terminated with V8 2-GiB heap exhaustion (log
+`equipment-workflow-mcp.log`). Retained prior baseline independently documents
+the same default-heap OOM and an equal-4-GiB successful graph A/B. The phase-logged
+default retry `10490` reached `graph:start`; it was deliberately stopped (143)
+after that baseline evidence was recovered, not mistaken for a timeout. Its
+owned processes 59510/59533 were terminated and confirmed absent before the
+4-GiB retry. `89172` is the live explicit-4-GiB retry, log
+`equipment-workflow-mcp-4g.log`. Do not claim default-memory production safety
+or an equipment MCP walkthrough pass until its actual checks finish.
+
+**Legacy corpus:** seven-set job `21748` remains live (PID 56233; takeoff child
+56250, active Navfac child 57494). Graph stage finished: **78 correct / 0 wrong /
+13 missed cells; 133 expected row-symbol outcomes / 5 missed / 0 false outcomes**.
+Baker's 13 misses were previously reproduced on the starting revision. Fresh
+starting checkout `08dffc79` reproduction `97520` confirms all five Bldg5406
+misses exactly: EF-1/EF-4/EF-5/CH-1/AS-1, 11/16 outcomes. Takeoff and reference
+stages remain pending; no all-metric gate claimed. Table recall remains unscored
+without authored table keys. These are correctness checks under concurrent work,
+not frozen cache/runtime/memory A/B measurements.
+
+**Live:** final web `56619`; equipment MCP/4-GiB `89172`; core corpus `21748`.
+Terminal pass: first web `55152`, browser `88615`, MCP contract `24786`, focused
+shared/typecheck `60831`, MCP focused/build `15140`, added three-way/typecheck
+`65973`, failure-isolation/build `60905`, prior MCP contract `72013`. Preserve
+earlier diagnostic failures (`16119`, `94803`, `85399`) and cancelled `10490`.
+Do not restart live jobs because a polling observation expires.
+
+**Next:** finish these gates; equipment-centered editing/source journey; exact
+Python assignment demand adapter; actual installed-evidence reconciliation;
+manual/aggregate quantity bases and broader explicit applicability patterns;
+additional independent development keys. SOO breadth, assemblies/responsibility,
+engineering compatibility, source archives/revisions/release and full corpus/
+holdout gates remain required. No costing, vision, VectorGrid, symbol-threshold,
+commercial math, push, merge or deployment change.
+
+Evidence: `equipment-capture-sequence-browser/`, `equipment-workflow-*.log`,
+`equipment-starting-bldg5406-graph.log`, and the unchanged independent equipment
+key. Full raw diagnostic exports/failures are retained locally, not counted green.
+
 ## Retained SOO comparison workflow — 2026-09-09, verification checkpoint
+
+Implementation, diagnostic scripts, selected verified screenshots/checks and the
+next independent source key are committed locally as `4d480688` (not pushed).
+Full diagnostic wire/export/failure artifacts remain in the evidence directories
+locally; the complete legacy corpus and MCP contract subset below are still live.
 
 The preceding status-answer turn was **no progress**. This continuation made
 **progress**: real browser/MCP integration, durable sequence source and review

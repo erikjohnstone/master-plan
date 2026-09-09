@@ -10,6 +10,7 @@
 import { z } from "zod";
 import { basPointListsOutputSchema } from "../../web/src/lib/basPointLists.ts";
 import { basWorkflowSchema } from "../../web/src/lib/basWorkflow.ts";
+import { basEquipmentSummarySchema } from "../../web/src/lib/basEquipmentReview.ts";
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -115,6 +116,8 @@ export const compileCorpusTakeoffOutput = {
   bas_point_lists: basPointListsOutputSchema.optional().describe("Source/version-bound listed point observations, raw cells, sparse-column accounting and explicit supported controller notes. Not installed quantity, verified field wiring or complete coverage. Independent unavailable status preserves legacy and math results."),
   bas_workflow: basWorkflowSchema.optional().describe("Durable, fingerprinted evidence capture; not an approved takeoff. Export/import retains it. Source PDFs must be retained separately."),
   bas_workflow_error: z.string().optional().describe("Capture retention failed; original point observations and math are not discarded."),
+  bas_equipment: basEquipmentSummarySchema.optional().describe('Source occurrence/member index and retained scoped equipment/template decisions. Named scheduled equipment only, not installed counts or verified field wiring. Original cells remain in the referenced bas_workflow capture.'),
+  bas_equipment_error: z.string().optional().describe('Equipment capture unavailable; the existing point/SOO capture is preserved. Equipment review writes refuse rather than changing earlier decisions.'),
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),

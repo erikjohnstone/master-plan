@@ -129,6 +129,34 @@ function hasLiteralReference(tag: string, evidence: BasSourceSpan[]) {
 
 /** An explicit association compares evidence; it neither assigns a physical
  * quantity nor proves applicability. No association is inferred by this API. */
+export function compareBasSequenceMatrix(region: ReturnType<typeof interpretBasSequences>['regions'][number],
+  matrix: ReturnType<typeof basPointListsSchema.parse>['matrices'][number]) {
+  // One comparator for source-reference links and canonical-equipment links.
+  // Callers establish ownership/applicability; this function only compares the
+  // unchanged supported requirements with the actual point identity column.
+  const nameColumns = matrix.raw.headers.filter(header => {
+    const effective = matrix.header_sources.find(s => s.column === header)?.text ?? header;
+    return ['POINTNAME', 'POINTDESCRIPTION', 'CONTROLPOINTS', 'DESCRIPTION'].includes(effective.toUpperCase().replace(/[^A-Z]/g, ''));
+  });
+  const comparable = matrix.rows.filter(r => {
+    const cell = nameColumns.length === 1 ? r.raw.cells[nameColumns[0]] : undefined;
+    return r.name.trim() && cell?.text === r.name && cell.bbox !== null;
+  });
+  const labelsComplete = comparable.length === matrix.rows.length;
+  const matchedRows = new Set<string>();
+  const requirements = region.clauses.flatMap(c => c.requirements.map(requirement => {
+    const rows = comparable.filter(r => normalizedBasVariable(r.name) === requirement.normalized_variable);
+    rows.forEach(r => matchedRows.add(r.row_id));
+    const status = rows.length > 1 ? 'ambiguous_listed_rows' as const : rows.length === 1 ? 'listed' as const
+      : labelsComplete ? 'not_listed_in_selected_matrix' as const : 'point_labels_unavailable' as const;
+    return { requirement, clause_id: c.clause_id, source_spans: c.source_spans, status,
+      listed_rows: structuredClone(rows), field_wiring_status: 'not_established' as const,
+      installed_quantity: null };
+  }));
+  return { requirements, unpaired_point_row_ids: matrix.rows.filter(r => !matchedRows.has(r.row_id)).map(r => r.row_id),
+    matrix_issues: [...matrix.issues], quantity_basis: 'comparison_only' as const };
+}
+
 export async function reconcileBasSequencePoints(sources: BasSourceContext, rawPoints: unknown, rawAssociations: unknown) {
   const sequences = interpretBasSequences(sources);
   const points = basPointListsSchema.parse(rawPoints);
@@ -160,30 +188,8 @@ export async function reconcileBasSequencePoints(sources: BasSourceContext, rawP
       references.push({ reference_id: referenceId, ...ref, source_spans: sourceSpans,
         quantity_basis: 'source_reference_only' as const, installed_quantity: null });
     }
-    // Validate the interpreter's name against its actual identity column. Do
-    // not substitute a matching note/attribute cell or guess a missing name.
-    const nameColumns = matrix.raw.headers.filter(header => {
-      const effective = matrix.header_sources.find(s => s.column === header)?.text ?? header;
-      return ['POINTNAME', 'POINTDESCRIPTION', 'CONTROLPOINTS', 'DESCRIPTION'].includes(effective.toUpperCase().replace(/[^A-Z]/g, ''));
-    });
-    const comparable = matrix.rows.filter(r => {
-      const cell = nameColumns.length === 1 ? r.raw.cells[nameColumns[0]] : undefined;
-      return r.name.trim() && cell?.text === r.name && cell.bbox !== null;
-    });
-    const labelsComplete = comparable.length === matrix.rows.length;
-    const matchedRows = new Set<string>();
-    const requirements = region.clauses.flatMap(c => c.requirements.map(requirement => {
-      const rows = comparable.filter(r => normalizedBasVariable(r.name) === requirement.normalized_variable);
-      rows.forEach(r => matchedRows.add(r.row_id));
-      const status = rows.length > 1 ? 'ambiguous_listed_rows' as const : rows.length === 1 ? 'listed' as const
-        : labelsComplete ? 'not_listed_in_selected_matrix' as const : 'point_labels_unavailable' as const;
-      return { requirement, clause_id: c.clause_id, source_spans: c.source_spans, status,
-        listed_rows: structuredClone(rows), field_wiring_status: 'not_established' as const,
-        installed_quantity: null };
-    }));
     comparisons.push({ association: structuredClone(association), equipment_references: references,
-      requirements, unpaired_point_row_ids: matrix.rows.filter(r => !matchedRows.has(r.row_id)).map(r => r.row_id),
-      matrix_issues: [...matrix.issues], quantity_basis: 'comparison_only' as const });
+      ...compareBasSequenceMatrix(region, matrix) });
   }
   return { schema_version: 'bas_sequence_point_comparison_v1' as const, rule_version: BAS_SEQUENCE_RULE,
     project_complete: false as const, sequences, comparisons };

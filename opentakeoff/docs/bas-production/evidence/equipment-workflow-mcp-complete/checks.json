@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+  "source_scheduled_members": 14,
+  "applicability": "system_once",
+  "installed_quantity": null,
+  "legacy_compile_exact": true,
+  "point_result_exact": true,
+  "legacy_math_exact": true,
+  "graph_exact": true,
+  "replay_exact": true,
+  "raw_equipment_tables": 7,
+  "checks": [
+    "public MCP typed/text parity",
+    "source-owned candidate lookup",
+    "explicit scope/register/assignment",
+    "retry",
+    "ordinary recompile",
+    "stale/foreign/non-BAS rejection",
+    "export/reset/import",
+    "withdrawal retaining history"
+  ],
+  "workflow_bytes": 1788448,
+  "elapsed_ms": 633067,
+  "main_process_peak_rss_bytes": 1493106688,
+  "project_complete": false,
+  "limits": "Explicit 4-GiB Node allowance and 600-s MCP compile deadline; default-heap/default-deadline safety not established. Scheduled-source assignment only. No new installed proof, demand adapter, equipment UI, approval or real addendum test in this diagnostic."
+}

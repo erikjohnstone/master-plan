@@ -160,6 +160,7 @@ import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
 import { basResultForCanvas } from "../lib/basBrowserResult.js";
 import { basWorkflowSchema, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow } from "../lib/basWorkflow.ts";
 import { applyBasReview } from "../lib/basReview.ts";
+import { applyBasEquipmentReview } from "../lib/basEquipmentReview.ts";
 import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
@@ -12873,6 +12874,14 @@ export default function TakeoffCanvas() {
           basWorkflow={basWorkflow}
           basViewState={basViewState}
           onBasViewStateChange={setBasViewState}
+          onBasEquipmentReview={async request => {
+            const previous = basWorkflowRef.current;
+            const updated = await applyBasEquipmentReview(previous, request, 'operator_input');
+            if (basWorkflowRef.current !== previous) throw new Error('The BAS workspace changed during this edit. Review the current state before retrying.');
+            basWorkflowRef.current = updated;
+            setBasWorkflow(updated);
+            return updated;
+          }}
           onBasReview={async request => {
             const previous = basWorkflowRef.current;
             const updated = await applyBasReview(previous, request, 'operator_input');

@@ -42,6 +42,19 @@ invalid source references and divergent histories reject. Source text stays
 immutable; matching a listed point is not verified wiring or installed quantity.
 See [the workflow contract](bas-production/SEQUENCE_WORKFLOW_CONTRACT.md).
 
+Development revision `bas_equipment_3` retains original equipment tables as well.
+The additive `bas_equipment` index exposes occurrence/member IDs and the current
+register/head. `bas_equipment_review` explicitly records scoped equipment and
+matrix assignments, with reasons and per-equipment/system-once applicability.
+This writes proposal history; omit it for a read/compile. Stale heads, foreign
+members and duplicate applications reject before mutation. Full source tables
+and old decisions survive export/import. No installed quantity, equipment demand
+derivation or approval is implied. The Takeoff Equipment editor uses this same
+service. Explicit SOO links add source-backed `sequence_comparisons` to the index;
+equipment-capture failures return `bas_equipment_error` without erasing valid
+point/SOO evidence. See
+[equipment assignment inputs and limits](bas-production/EQUIPMENT_ASSIGNMENT_CONTRACT.md).
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

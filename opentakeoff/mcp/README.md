@@ -49,6 +49,22 @@ and conflicting import branches reject. Ordinary recompiles return retained
 history. These are bounded sequence-to-matrix comparisons, not verified
 installed-equipment assignments or complete SOO interpretation.
 
+On the development branch, revision `bas_equipment_3` additionally retains raw
+equipment graph tables without changing their cells. `bas_equipment` returns
+source-owned occurrence IDs, named members, separate printed quantities and the
+current equipment review head/register. The optional `bas_equipment_review`
+input has `{operation_id,capture_id,expected_head,reason,register}`. The register
+contains explicit scopes, equipment UUIDs with exact occurrence/member bindings,
+and matrix assignments with `per_equipment` or `system_once` applicability and
+exceptions. The shared service rejects stale/foreign references, double binding,
+duplicate matrix application and mixed system/per-unit replication. It records
+Agent proposals, not approvals. Export/import retains history and original
+evidence. Explicit SOO links return source-backed `sequence_comparisons` in the
+same equipment index. `bas_equipment_error` isolates equipment-capture failures
+without discarding valid point/SOO evidence. The Takeoff Equipment editor uses
+this same validation/service. Assignment-driven demand, installed corroboration
+and release remain in development. See [the assignment contract](../docs/bas-production/EQUIPMENT_ASSIGNMENT_CONTRACT.md).
+
 No clone, no build—point your MCP client at the published package:
 
 ```json

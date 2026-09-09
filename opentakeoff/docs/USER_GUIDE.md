@@ -10,6 +10,29 @@ In a hurry, or already in the app? Press **`?`** (or the **?** button in the top
 
 ### Workspace navigation
 
+On the development branch, **Takeoff → Equipment** displays original equipment
+schedule rows and a separate **Scoped equipment register**. **Create scope**
+records established building, level, system and phase labels; leave missing
+labels blank. **Register printed members** binds exact source members to that
+scope. Repeated labels or views are not automatically merged or counted.
+
+Select a registered equipment tag to inspect its source and **Assign point list**.
+Choose the matrix, explicitly establish **Per included equipment** or **Once for
+this system**, select the members and any exceptions, and optionally link source
+sequence regions and drawing-text references. Every edit needs a reason.
+**Preview decision** invokes the same validation as MCP. Editing any input
+invalidates that preview; **Record decision** preserves the resulting register
+and prior history. An outdated draft must be discarded and reviewed again.
+
+**Edit identity & sources** can bind additional explicitly reviewed views to the
+same identity. **Withdraw assignment** retains its previous decisions; remove
+references before removing an equipment identity. **Export evidence & decisions**
+includes the complete BAS record, independent of table filters. Autosave and
+**Import takeoff…** retain it; source navigation requires the exact PDF bytes.
+These are named scheduled members and reviewed assignments, not installed counts,
+assignment-driven point totals, or approved releases. Those remaining workflows
+are still in development. The editor adds no canvas toolbar or floating panel.
+
 For a BAS points takeoff, the **Takeoff** tab also shows **BAS takeoff · Engineering**.
 Points is the default table; I/O capacity, Networks, Licenses and Issues separate
 the remaining decisions. Arrow keys, Home and End move among these views. The
@@ -61,7 +84,7 @@ not approved releases. Captures retain source hashes, but these JSON files do
 not contain historical PDF bytes. Reopen the exact original PDF to navigate
 old evidence; a changed file with the same name is refused. A renamed copy of
 the same bytes can still resolve. Existing engineering calculations remain
-transient; actual-equipment assignment, immutable source archives, broader source corrections
+transient; installed-equipment reconciliation, immutable source archives, broader source corrections
 and approved revision workflows are still in development. Neither an
 absent cell nor a controller-provided point establishes zero field scope or a
 new wired terminal.
