@@ -10311,6 +10311,21 @@ export function scheduleTableFromODL(
         // rule 31/33's own "which path actually produced this table"
         // caution, not because this ODL path has its own confirmed case.
         for (const [text, count] of counts) if (count >= 3 && (/:$/.test(text) || /^NOTES$/i.test(text))) { isCaption = true; break; }
+        // EVERY NON-EMPTY CELL HOLDING THE EXACT SAME TEXT is the table's
+        // own title/footer caption bleeding into a phantom data row, not a
+        // real per-column reading — no colon or "NOTES" required this time,
+        // because the shape itself (100% of the row identical) is the
+        // signal, not the wording. Real, corpus-found (2026-09-09):
+        // 15_IA_IowaState_Biorenewables_Lab.pdf#11's own EXISTING PANEL
+        // SCHEDULE carried "REVISEDPANELSCHEDULE" — the sheet's own footer
+        // caption, not a colon-suffixed note or the word "NOTES" — in EVERY
+        // one of 11 non-empty cells of its own final row, which the
+        // colon/NOTES check above never matches. Requiring ALL non-empty
+        // cells to agree (not just >=3 of them) keeps this from firing on a
+        // real data row that happens to repeat one value in a few columns
+        // (a real "SPARE" circuit's ITEM FED column, say) while still
+        // catching a whole-row caption regardless of what it says.
+        if (!isCaption && cellTexts.length >= 3 && counts.size === 1) isCaption = true;
         if (isCaption) continue;
       }
     }

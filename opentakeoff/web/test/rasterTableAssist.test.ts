@@ -79,6 +79,71 @@ test("hasCorruptedHeaders: several headers sharing one long leading substring �
   assert.equal(hasCorruptedHeaders(headers), true);
 });
 
+test("hasCorruptedHeaders: 2+ headers shaped \"LABEL: value\" are refused even without a shared 20-char prefix — the real shape when the header/data boundary swallows several DIFFERENT pre-header spec lines (15_IA#11, same document, a distinct real corruption shape found 2026-09-09)", () => {
+  // Each header differs after its own "WIRE: 3" prefix, so the existing
+  // shared-20-char-prefix check alone never fires on this exact set — this
+  // is the real, measured header list from that run.
+  const headers = [
+    "(REVISED) 150",
+    "VOLTS: PANEL 1-RP-1115",
+    "22,000 AICRATING MOUNTING: WRE LOAD",
+    "120/208 PHASE ROOM SURFACE",
+    "WIRE: 3 FEEDER SIZE CIRCUITBREAKER",
+    "WIRE: 3 1115 FED FROM: NEUTRAL",
+    "WIRE: 3",
+    "WIRE: 3 4 CIRCUITBREAKER",
+    "WIRE: 3 B-SWB-0115 EXISTING",
+    "MAIN CAP. 225 AMPERES WRE SIZE",
+    "COL11",
+    "LOAD WATTS ITEM FED",
+    "MLO CCT",
+  ];
+  assert.equal(hasCorruptedHeaders(headers), true);
+});
+
+test("hasCorruptedHeaders: a single real header with one incidental colon is never enough on its own", () => {
+  assert.equal(hasCorruptedHeaders(["CIRCUIT", "BREAKER", "EFFICIENCY: SEER 13", "FRAME"]), false);
+});
+
+test("a real per-item schedule where the same value legitimately repeats in a FEW columns is never dropped as a phantom caption row", () => {
+  // Two real circuits each happen to share "SPARE" in their own LOAD
+  // DESCRIPTION column — a real, ordinary shape, not the all-cells-identical
+  // corruption this fix targets (only 1 of 4 columns repeats per row).
+  const structured = table(4, 4, [
+    cell(0, 0, "PANEL A SCHEDULE", { colSpan: 4 }),
+    cell(1, 0, "CKT"), cell(1, 1, "BREAKER"), cell(1, 2, "POLE"), cell(1, 3, "LOAD DESCRIPTION"),
+    cell(2, 0, "1"), cell(2, 1, "20A"), cell(2, 2, "1"), cell(2, 3, "SPARE"),
+    cell(3, 0, "2"), cell(3, 1, "20A"), cell(3, 2, "1"), cell(3, 3, "SPARE"),
+  ]);
+  const result = scheduleTableFromSidecarStructure([], "test.pdf#1", {
+    pageViewportTransform: IDENTITY, region: [0, 0, 400, 400],
+    structured, cropWidth: 400, cropHeight: 400,
+  });
+  assert.ok(result);
+  assert.equal(result!.rows.length, 2, "both real SPARE circuits must survive, not be mistaken for a caption row");
+});
+
+test("a whole-row title/footer caption bleeding into the table's own final row (not colon-suffixed, not the word NOTES) is dropped, not shipped as a phantom data row (15_IA#11, real corpus shape found 2026-09-09)", () => {
+  const structured = table(5, 4, [
+    cell(0, 0, "PANEL A SCHEDULE", { colSpan: 4 }),
+    cell(1, 0, "CKT"), cell(1, 1, "BREAKER"), cell(1, 2, "POLE"), cell(1, 3, "LOAD DESCRIPTION"),
+    cell(2, 0, "1"), cell(2, 1, "20A"), cell(2, 2, "1"), cell(2, 3, "LIGHTS"),
+    cell(3, 0, "2"), cell(3, 1, "20A"), cell(3, 2, "1"), cell(3, 3, "RECEPTACLES"),
+    // The sheet's own footer caption, misread by table_structure as one
+    // ordinary data row — every column holds the identical string.
+    cell(4, 0, "REVISEDPANELSCHEDULE"), cell(4, 1, "REVISEDPANELSCHEDULE"),
+    cell(4, 2, "REVISEDPANELSCHEDULE"), cell(4, 3, "REVISEDPANELSCHEDULE"),
+  ]);
+  const result = scheduleTableFromSidecarStructure([], "test.pdf#1", {
+    pageViewportTransform: IDENTITY, region: [0, 0, 400, 400],
+    structured, cropWidth: 400, cropHeight: 400,
+  });
+  assert.ok(result);
+  assert.equal(result!.rows.length, 2, "the phantom caption row must never be counted as a third circuit");
+  const keys = result!.rows.map((r) => r.key);
+  assert.ok(!keys.includes("REVISEDPANELSCHEDULE"), `phantom caption row must not survive as a row key: got ${JSON.stringify(keys)}`);
+});
+
 test("scheduleTableFromSidecarStructure: a structural read whose own header/data boundary corrupts is refused, not silently returned", () => {
   // A minimal repro of the real shape: rows with sparse, uneven own-column
   // coverage (no row ever states EVERY one of 5 columns on its own, forcing

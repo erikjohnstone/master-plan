@@ -245,6 +245,29 @@ export function hasCorruptedHeaders(headers: string[]): boolean {
     seen.set(key, (seen.get(key) || 0) + 1);
   }
   for (const count of seen.values()) if (count >= 2) return true;
+
+  // A HEADER SHAPED "LABEL: value" IS SWALLOWED SPEC TEXT, NOT A REAL COLUMN
+  // NAME. Real headers are short label words ("WIRE SIZE", "BREAKER") —
+  // never a colon followed by a value ("WIRE: 3"). Real, corpus-found
+  // (2026-09-09, task #84's own region-narrowing fix finally getting a real
+  // structural read far enough to reach this document's per-row data):
+  // 15_IA_IowaState_Biorenewables_Lab.pdf#11's EXISTING PANEL SCHEDULE
+  // shipped 5 of 14 "headers" as literal pre-header spec lines ("WIRE: 3
+  // FEEDER SIZE CIRCUITBREAKER", "WIRE: 3 1115 FED FROM: NEUTRAL", …) while
+  // the table's REAL header row (ITEM FED/WATTS/POLES/FRAME/…) was swallowed
+  // as an ordinary DATA row underneath them — the header/data boundary
+  // landed one row too late, a separate, disclosed defect this check does
+  // not fix, only refuses rather than ships. The 20+-char shared-prefix
+  // check above missed this shape because the trailing content after each
+  // "WIRE: 3" differs, so no two headers share a long enough IDENTICAL
+  // prefix — this catches the same swallowed-spec-row corruption by its own
+  // shape instead. Two-or-more is the bar (not one) for the same reason the
+  // prefix check above uses one: a single stray colon in one real header
+  // ("EFFICIENCY: SEER") is not corruption; several is the swallowed-row
+  // signature.
+  const specLike = headers.filter((h) => /\S+:\s*\S/.test(h));
+  if (specLike.length >= 2) return true;
+
   return false;
 }
 
