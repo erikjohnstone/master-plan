@@ -361,6 +361,13 @@ export function scheduleTableFromSidecarStructure(
     // carry a value there. See scheduleTableFromODL's own doc on
     // fullCoverageSlack for why 1 is the right, minimal forgiveness.
     fullCoverageSlack: 1,
+    // Real, measured (same EXISTING PANEL SCHEDULE): its own real header
+    // block has TWO consecutive full-coverage/ungrouped rows — a genuine
+    // pre-header spec continuation line, then the table's own real
+    // single-tier header — each of which individually clears the vocab
+    // bar. See scheduleTableFromODL's own doc on chainHeaderCandidates for
+    // why the one-shot default wrongly demoted the real header row to data.
+    chainHeaderCandidates: true,
   });
   if (table && hasCorruptedHeaders(table.headers)) return null;
   return table;

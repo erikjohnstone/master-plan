@@ -9468,6 +9468,37 @@ export function scheduleTableFromODL(
      * shared plaque, the fan schedule's SINGLE POINT span, …) is unaffected
      * — those are excluded by `grouped`, never by coverage alone. */
     fullCoverageSlack?: number;
+    /** Lets a SECOND (and third, etc.) consecutive full-coverage/ungrouped
+     * row ALSO be checked against the header vocabulary, instead of the
+     * one-shot design's own rule that the first such row's own vocab
+     * outcome — pass or fail — is final. False/undefined (every existing
+     * caller) preserves the original one-shot behavior exactly: a passing
+     * candidate still locks out any further check, same as it always has.
+     *
+     * Real, measured reason this exists (task #84, 2026-09-09, same
+     * EXISTING PANEL SCHEDULE as extraHeaderVocab/headerLookahead/
+     * fullCoverageSlack above): this table's real header block has TWO
+     * consecutive full-coverage/ungrouped rows before its real data starts
+     * - a genuine pre-header spec continuation line (hitRate 0.57, several
+     * PANEL_SCHEDULE_HEADER_WORDS like CIRCUITBREAKER/NEUTRAL genuinely
+     * appear in it) immediately followed by the table's REAL single-tier
+     * header (hitRate 0.82: NO/ITEM FED/WATTS/POLES/FRAME/AMPS). The
+     * one-shot design correctly folds the FIRST row into the header (0.57
+     * clears the 0.4 bar) - then, because a candidate was already checked,
+     * never even looks at the vocabulary of the second, genuinely-header
+     * row that follows it: it falls straight to break and the table's REAL
+     * header row was demoted into an ordinary DATA row, corrupting every
+     * column name (fixed as a shipping-safety matter by hasCorruptedHeaders'
+     * own new "LABEL: value" check; this option is the actual root-cause
+     * fix, letting the real header land where it belongs instead of merely
+     * refusing once it doesn't).
+     *
+     * Deliberately does NOT relax the one-shot rescue's own single-attempt
+     * discipline (headerLookahead still only fires ONCE, on the first row
+     * that fails) - this only lets rows that keep PASSING keep extending
+     * the header block, which is the same standard every accepted header
+     * row already has to clear on its own. */
+    chainHeaderCandidates?: boolean;
   } = {},
 ): ScheduleTable | null {
   const refuse = (reason: string): null => { opts.reject?.(reason); return null; };
@@ -9766,9 +9797,21 @@ export function scheduleTableFromODL(
     const { fullCoverage, grouped } = classifyBodyRow(r, ownCells);
     if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
     if (!headerCandidateChecked) {
-      headerCandidateChecked = true;
       const { texts, hitRate } = headerVocabHitRate(ownCells);
-      if (texts.length && hitRate >= 0.4) { headerEnd = r + 1; continue; }
+      if (texts.length && hitRate >= 0.4) {
+        headerEnd = r + 1;
+        // CHAIN (opt-in only — see opts.chainHeaderCandidates' own doc on
+        // scheduleTableFromODL's signature): a row that PASSES does not
+        // lock out checking the NEXT ambiguous row too — a real header
+        // block can have more than one full-coverage/ungrouped row that
+        // each individually clear the vocab bar (a pre-header spec line
+        // immediately followed by the table's own real header row). Default
+        // behavior (false/undefined) locks here exactly as it always has,
+        // so every existing caller is byte-for-byte unchanged.
+        if (!opts.chainHeaderCandidates) headerCandidateChecked = true;
+        continue;
+      }
+      headerCandidateChecked = true;
       // LOOKAHEAD RESCUE (opt-in only — see opts.headerLookahead's own doc
       // on scheduleTableFromODL's signature). This row failed the vocab
       // bar on its own; before giving up exactly as the one-shot design
