@@ -6,6 +6,9 @@
 // takeoff round-trips into the app.
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { mkdtemp, writeFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { tableRegionViaSidecar, tableStructureViaSidecar } from "../../web/src/lib/tableSidecarClient.ts";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
@@ -804,6 +807,26 @@ export type JournalEntry = JournalPayload & { seq: number };
 // customer behind a restrictive outbound proxy — vendoring removes the
 // network dependency entirely, verified working end to end locally.
 const TESSDATA_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../sidecar/tessdata");
+
+// Minimum longest-side render dimension for a crop headed to table_region/
+// table_structure (task #79/#81). Real, measured root cause (2026-09-08):
+// rendering a schedule crop 1:1 to its own page-space size (the previous
+// convention, `Math.max(x1-x0, y1-y0)` with no floor) starves
+// rapid_table_det's own detector on any region under roughly its 928x928
+// native input — confirmed live on 15_IA_IowaState_Biorenewables_Lab.pdf#11's
+// EXISTING PANEL SCHEDULE: table_region.table_region_rpc returned hasTable:
+// false at every detAccuracy threshold down to 0.1 when the exact same
+// crop (title + full multi-tier header + 7 data rows, plainly a real ruled
+// table) was rendered at its native 566x566, then flipped to hasTable: true
+// with zero other changes at 928x928 and stayed correct at every higher size
+// tried. This isn't the detector's own internal square resize (928x928 is
+// its fixed input either way) — it's rendering FROM THE VECTOR PDF at
+// native resolution so the ruled lines the detector keys on are crisp
+// instead of upsampled/blurred from a too-small source raster. Applied to
+// every render feeding table_region OR table_structure (the whole-crop
+// check and each tiled band alike); the existing `Math.min(2048, …)` cap
+// stays untouched — this only raises the floor, never lowers the ceiling.
+const MIN_STRUCTURED_RENDER_DIM = 1024;
 
 const sheetSummary = (s: SheetState): SheetSummary => ({
   sheet: s.key,
@@ -5838,7 +5861,154 @@ export class Session {
     return out;
   }
 
-  /** L4.5 OCR assist — tesseract on a rendered schedule region (shared path). */
+  /** Tries table_region on one already-rendered crop; returns the sidecar's
+   * own reply (or null on any sidecar failure). Writes/cleans up its own
+   * temp file — callers that also need table_structure on a HIT should
+   * re-render and call tableStructureViaSidecar themselves (structure
+   * recognition wants the SAME crop the region check approved, not a
+   * resized copy, so no PNG is reused across the two calls here). */
+  private async probeTableRegion(png: Uint8Array): Promise<Awaited<ReturnType<typeof tableRegionViaSidecar>>> {
+    let tmpDir: string | null = null;
+    try {
+      tmpDir = await mkdtemp(path.join(tmpdir(), "ocr-probe-"));
+      const pngPath = path.join(tmpDir, "crop.png");
+      await writeFile(pngPath, png);
+      return await tableRegionViaSidecar(pngPath);
+    } catch {
+      return null;
+    } finally {
+      if (tmpDir) await rm(tmpDir, { recursive: true, force: true }).catch(() => {});
+    }
+  }
+
+  /** Splits an extreme-aspect-ratio page-space region into overlapping,
+   * roughly-square bands along its long axis. Real, corpus-found reason
+   * this exists (task #81/#79, 2026-09-08): 15_IA_IowaState_Biorenewables
+   * _Lab.pdf#11's own real EXISTING/REVISED PANEL SCHEDULE tables sit
+   * inside a region scheduleKeywordRegion sized 566×2237px — squashing
+   * that into rapid_table_det's own 928×928 detector input destroys the
+   * table's real proportions badly enough that it finds nothing, even
+   * though two genuine, well-ruled tables are plainly in there (confirmed
+   * by rendering the exact region and looking at it — it also contains an
+   * unrelated job-site photo further down, which a single whole-region
+   * read could never separate from the real tables regardless). Bands
+   * overlap by 20% of their own height/width so a table straddling a
+   * naive cut-in-half still lands wholly inside at least one band. */
+  private static regionBands(region: [number, number, number, number], maxAspect = 1.8): [number, number, number, number][] {
+    const [x0, y0, x1, y1] = region;
+    const w = x1 - x0, h = y1 - y0;
+    if (w <= 0 || h <= 0) return [region];
+    if (h / w <= maxAspect && w / h <= maxAspect) return [region];
+    const vertical = h > w;
+    const long = vertical ? h : w;
+    const short = vertical ? w : h;
+    // Tiles at maxAspect itself (not a square `short x short` tile) — real,
+    // measured win (2026-09-08, same 15_IA panel-schedule case as
+    // MIN_STRUCTURED_RENDER_DIM above): a square 566x566 tile on this
+    // region's own EXISTING PANEL SCHEDULE captured only its title/header
+    // and 5-7 of its ~20 real data rows before running off the tile's own
+    // bottom edge — real, but badly truncated. The SAME crop widened to
+    // 566x1019 (short * 1.8, this function's own existing maxAspect, so
+    // still within whatever bound made table_region/table_structure
+    // reliable in the first place) captured the ENTIRE table: title,
+    // full multi-tier header, and all ~20 data rows through its last real
+    // row, still correctly column-aligned. A tile just IS the detector's/
+    // structure-reader's own safe aspect-ratio ceiling, not some smaller
+    // fraction of it — there was never a reason to tile tighter than that.
+    const tileLong = Math.max(short * maxAspect, 1);
+    const step = tileLong * 0.8; // 20% overlap
+    const bands: [number, number, number, number][] = [];
+    for (let pos = 0; pos < long; pos += step) {
+      const start = Math.min(pos, Math.max(0, long - tileLong));
+      const end = Math.min(long, start + tileLong);
+      bands.push(vertical ? [x0, y0 + start, x1, y0 + end] : [x0 + start, y0, x0 + end, y1]);
+      if (end >= long) break;
+    }
+    return bands.length ? bands : [region];
+  }
+
+  /** Tries the sidecar structural path for one rendered crop.
+   * Returns:
+   *  - a real OcrRegionResult (structured populated) when table_region
+   *    confirmed a table shape AND table_structure produced real cells;
+   *  - "refused" when table_region ran and confidently found no
+   *    table-shaped region — the caller must NOT fall back to tesseract in
+   *    this case, since that would hand tesseract exactly the logo/stamp/
+   *    elevation content this gate exists to filter out;
+   *  - null when the sidecar itself is unavailable/failed (region check
+   *    came back null) or ran but table_structure found nothing usable —
+   *    the caller falls back to tesseract, unchanged from before this
+   *    tier existed. */
+  private async tryStructuredOcrAssist(
+    sheetKey: string, region: [number, number, number, number], png: Uint8Array, width: number, height: number,
+  ): Promise<OcrRegionResult | "refused" | null> {
+    const wholeCropResult = await this.probeTableRegion(png);
+    if (wholeCropResult === null) return null; // sidecar unavailable — fall back to tesseract entirely
+
+    if (wholeCropResult.hasTable) {
+      return this.structuredFromCrop(png, width, height, region);
+    }
+
+    // Whole-crop check found nothing — an extreme aspect ratio is the known,
+    // real reason that can be a false negative rather than a genuine "no
+    // table here" (see regionBands' own comment). A well-shaped region that
+    // still finds nothing really is refused; no tiling to retry with.
+    const bands = Session.regionBands(region);
+    if (bands.length <= 1) return "refused";
+
+    const s = this.sheet(sheetKey);
+    for (const band of bands) {
+      const [bx0, by0, bx1, by1] = band;
+      let bandPng: Uint8Array, bandW: number, bandH: number;
+      try {
+        ({ png: bandPng, width: bandW, height: bandH } = await s.page.renderRegionPng(
+          { x0: bx0, y0: by0, x1: bx1, y1: by1 },
+          Math.min(2048, Math.max(MIN_STRUCTURED_RENDER_DIM, bx1 - bx0, by1 - by0)),
+        ));
+      } catch {
+        continue;
+      }
+      const bandResult = await this.probeTableRegion(bandPng);
+      if (bandResult?.hasTable) {
+        const structured = await this.structuredFromCrop(bandPng, bandW, bandH, band);
+        if (structured && structured !== "refused") return structured;
+      }
+    }
+    return "refused"; // every band tried, none confirmed a table
+  }
+
+  /** table_structure on a crop already confirmed (by table_region) to
+   * contain a table. Separate from tryStructuredOcrAssist so the band loop
+   * above can call it per-band without re-running the region check. */
+  private async structuredFromCrop(
+    png: Uint8Array, width: number, height: number, region: [number, number, number, number],
+  ): Promise<OcrRegionResult | "refused" | null> {
+    let tmpDir: string | null = null;
+    try {
+      tmpDir = await mkdtemp(path.join(tmpdir(), "ocr-structure-"));
+      const pngPath = path.join(tmpDir, "crop.png");
+      await writeFile(pngPath, png);
+      const table = await tableStructureViaSidecar(pngPath);
+      if (!table?.cells?.length) return null;
+      return { words: [], fullText: "", structured: table, cropWidth: width, cropHeight: height, region };
+    } catch {
+      return null;
+    } finally {
+      if (tmpDir) await rm(tmpDir, { recursive: true, force: true }).catch(() => {});
+    }
+  }
+
+  /** L4.5 OCR assist on a rendered schedule region (shared path). Two-tier:
+   * rapid_table's real structural reader (task #79) when the sidecar is
+   * available AND table_region's own gate confirms the crop actually
+   * contains a table-shaped region, falling back to tesseract's flat-word
+   * path (unchanged) otherwise — sidecar-absent behavior is byte-for-byte
+   * what this function did before this tier existed. `table_region` saying
+   * "no table" is a real refusal, not a soft signal: no assist result at
+   * all for this crop rather than handing tesseract a logo/elevation
+   * rendering to guess at — exactly the false-positive shape the corpus-
+   * wide raster scan (2026-09-08) found live (13_MI_MSU_LifeSciences_Lab
+   * Renovation.pdf's own repeated title-block graphic, 20+ sheets). */
   private async ocrScheduleRegion(
     sheetKey: string,
     region: [number, number, number, number],
@@ -5849,8 +6019,13 @@ export class Session {
       const r = { x0, y0, x1, y1 };
       const { png, width, height } = await s.page.renderRegionPng(
         r,
-        Math.min(2048, Math.max(x1 - x0, y1 - y0)),
+        Math.min(2048, Math.max(MIN_STRUCTURED_RENDER_DIM, x1 - x0, y1 - y0)),
       );
+
+      const structured = await this.tryStructuredOcrAssist(sheetKey, region, png, width, height);
+      if (structured === "refused") return null;
+      if (structured) return structured;
+
       const Tesseract = (await import("tesseract.js")).default;
       // Real, found live (research-agent-confirmed against tesseract.js's own
       // source): the top-level Tesseract.recognize() convenience wrapper

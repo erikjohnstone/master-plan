@@ -9408,6 +9408,66 @@ export function scheduleTableFromODL(
      * region that was found and then declined, which are different problems
      * with different fixes. */
     reject?: (reason: string) => void;
+    /** Extra words ORed into the header-candidate vocabulary check below
+     * (headerCandidateChecked's own 40% bar) ONLY — never touches
+     * ALL_HEADER_WORDS/EQUIPMENT_HEADERS itself, so a caller-scoped domain
+     * vocabulary (rasterTableAssist.ts's own electrical panel-schedule
+     * words, task #79) can clear THIS function's header/data boundary
+     * without widening the shared, corpus-tuned kind-classification vocab
+     * every OTHER caller (including the vector/geometric extractor) still
+     * uses unchanged — avoiding the exact single-table-per-sheet slot-
+     * competition hazard EQUIPMENT_HEADERS' own comment already warns any
+     * future addition there needs a full corpus sweep to rule out. */
+    extraHeaderVocab?: string[];
+    /** How many further rows, past the first vocab-failing header candidate,
+     * the header/data boundary below will scan for a LATER row that also
+     * reaches "full coverage, ungrouped" AND clears the vocab bar — before
+     * giving up exactly as it always has. 0/undefined (every existing
+     * caller) preserves the original one-shot behavior byte-for-byte: this
+     * only ever WIDENS what counts as header, never narrows it, and only
+     * once a real caller opts in.
+     *
+     * Real, measured reason this exists (task #79, 2026-09-08): a genuine
+     * CAD convention scheduleTableFromODL's own vector-sourced corpus never
+     * needed to handle — an ELECTRICAL PANEL SCHEDULE prints several
+     * low-text-density SPEC rows (voltage/phase/wire, room/fed-from,
+     * surface/feeder-size) between its title and its real per-column
+     * header row, each one individually shaped exactly like a genuine
+     * single-tier header (full coverage, ungrouped) and each failing the
+     * vocab bar on its own (they're metadata, not column names) —
+     * 15_IA_IowaState_Biorenewables_Lab.pdf#11's own EXISTING PANEL
+     * SCHEDULE. The one-shot design's own break-on-first-failure is
+     * correct and stays untouched for every table shaped like the cases
+     * its own extensive comments already document (a real data row that
+     * merely LOOKS header-shaped must never be swallowed) — the rescue
+     * here only fires when a LATER row corroborates it by itself clearing
+     * the vocab bar, never on the failing row's own say-so. */
+    headerLookahead?: number;
+    /** Forgiveness on the maxCovered/fullCoverage calibration bar (see the
+     * classifyBodyRow closure below) — a row covering `bar - slack` columns
+     * of its own counts as "full coverage" too. 0/undefined (every existing
+     * caller) preserves the original bar exactly.
+     *
+     * Real, measured reason this exists (task #79, 2026-09-08, same
+     * EXISTING PANEL SCHEDULE): its own real per-column HEADER row (AMPS/
+     * POLES/FRAME/NEUTRAL/…/WIRE SIZE) states 8 of the table's 9 real
+     * columns as ITS OWN cells — rapid_table's structural read simply never
+     * produced a distinct cell for the header's own WIRE SIZE position on
+     * that one row, though several data rows below it do carry a value
+     * there — while `maxCovered` calibrates its bar to 9 from whichever
+     * row happens to be the one complete one. Under the exact bar the
+     * header row reads as "still partial", `grouped` doesn't catch it
+     * either (zero spanning cells), so `!fullCoverage` alone swept it into
+     * "still header" indefinitely — never reaching the vocab check at all,
+     * unlike a real ODL grid (ruled lines from the PDF itself, not
+     * OCR'd/structure-read per row) where a printed column's cell is
+     * either there or genuinely blank, never simply MISSING from one row's
+     * own structural read. A slack of 1 is the SMALLEST forgiveness that
+     * fixes this real case; it does not relax `grouped` at all, so every
+     * documented spanning-row counter-example above (the grille rows'
+     * shared plaque, the fan schedule's SINGLE POINT span, …) is unaffected
+     * — those are excluded by `grouped`, never by coverage alone. */
+    fullCoverageSlack?: number;
   } = {},
 ): ScheduleTable | null {
   const refuse = (reason: string): null => { opts.reject?.(reason); return null; };
@@ -9601,6 +9661,99 @@ export function scheduleTableFromODL(
     if (cols.size > maxCovered) maxCovered = cols.size;
   }
 
+  // COVERAGE IS ABOUT COLUMNS, NOT CELL COUNT. A row of 21 own cells one of
+  // which spans two columns covers all 22 — counting cells instead calls it
+  // partial. With no spans anywhere the two counts are identical, so this
+  // changes nothing for a span-free grid; it only matters where spans exist,
+  // which is exactly where the old count was wrong.
+  //
+  // A DATA ROW STATES ITS OWN MARK; A HEADER TIER INHERITS IT.
+  //
+  // Counting only a row's OWN cells makes a data row that shares a value
+  // with the rows below it look partial, and the loop eats it as a tier.
+  // Measured on 24__vol2__019 page 15's GRILLE, REGISTER, AND DIFFUSER
+  // SCHEDULE: rows S1-1..S1-4 and S3-1 share one SQUARE PLAQUE cell spanning
+  // five rows and one 24x24 spanning four, so each owns 10 of 14 columns.
+  // All five were absorbed into the header block and the table reached the
+  // graph starting at S2-1 — five real air devices gone from a schedule the
+  // reader had returned whole.
+  //
+  // Counting inherited coverage for EVERY row is not the fix and would undo
+  // a measured one: AHU-1's own real third header tier supplies 16 of its 47
+  // columns and inherits the rest, and treating it as full coverage puts it
+  // back on the vocabulary tie-break that was already proved wrong there
+  // (its DESIGN/ACTUAL/SENSIBLE/TOTAL labels name nothing in any header
+  // vocabulary, so it was read as the first data row and a phantom row was
+  // minted). The two cases differ in one visible way: the grille rows each
+  // print their own mark in column 0, while every one of those header tiers
+  // inherits column 0 from the tier above. So inherited coverage counts only
+  // for a row that states its own leftmost value.
+  //
+  // A SPAN IN A DATA ROW IS RARE BUT REAL, and the claim above that it
+  // "can never occur in a real per-item data row" is measurably false:
+  // 096_IN_Vermillion_County_Jail#19's AHU SUPPLY FAN SCHEDULE prints
+  // SINGLE POINT across MCA and MOCP in EVERY one of its seven data rows
+  // (a single-point power connection genuinely is one value for two
+  // columns). Under "any span makes this a header tier" the loop swallowed
+  // all seven, concatenated their values into the column labels — header 0
+  // came back as "MARK SF-1A SF-1B SF-2A SF-2B SF-3 SF-4A SF-4B" — and the
+  // table was refused for having no data rows. Nine of the ten schedules on
+  // that sheet failed this way.
+  //
+  // What separates a real grouping tier from a data row that happens to
+  // span is PROPORTION, not presence. That table's own first header tier is
+  // 13 spanning cells out of 15; its data rows are 1 out of 21. A genuine
+  // tier exists TO group, so grouping is most of what it does — a MAJORITY,
+  // the word this comment already used, which a `* 4` (25%) bar does not
+  // actually enforce.
+  //
+  // That gap is real, not academic: 044_NY_VA_Project_528A8_17_805_Replace
+  // _Main_Boilers#21's own STEAM UNIT HEATER SCHEDULE prints a handful of
+  // genuinely shared values per row too — "GENERATOR ROOM" once for both
+  // LOCATION and AREA SERVED, one EAT/MIN CAPACITY/PRESS ENT HEATER value
+  // spanning the two sub-columns each of those headers implies — 4 spanning
+  // cells out of 15 on every one of its three real data rows (UH-3/UH-4/
+  // UH-5), 26.7%. `* 4` calls that "grouped" by a hair (16 >= 15) and
+  // swallowed all three real rows as header tiers the same way the fan
+  // schedule's own single span used to, all the way to the table's last
+  // row — headerEnd ran off the end, dataRows came back empty, and the
+  // table was refused for "no keyed data rows" though its own key column
+  // (MARK) and every one of UH-3/UH-4/UH-5 were read correctly upstream of
+  // this check. `* 2` (50%, an actual majority) still keeps the fan
+  // schedule's real tier (13/15, 86.7%) grouped and its real data rows
+  // (1/21, 4.8%) not, while no longer catching this table's 26.7% alongside
+  // them.
+  //
+  // Factored into its own closure so the lookahead rescue below (see
+  // opts.headerLookahead) can classify a CANDIDATE row further down the
+  // table with the exact same rule the main loop uses, rather than a
+  // second, driftable copy of it.
+  const classifyBodyRow = (r: number, ownCells: Set<ODLTableCell>): { fullCoverage: boolean; grouped: boolean } => {
+    const coveredCols = new Set<number>();
+    for (let c = 0; c < C; c++) {
+      const cell = grid[r][c];
+      if (cell && cell["row number"] - 1 === r) coveredCols.add(c);
+    }
+    const spanning = [...ownCells].filter((cl) => (cl["column span"] || 1) > 1 || (cl["row span"] || 1) > 1);
+    let ownsLeadCell = false;
+    {
+      const lead = grid[r][0];
+      ownsLeadCell = !!lead && lead["row number"] - 1 === r && !!odlCellText(lead).trim();
+    }
+    let inheritedCols = 0;
+    if (ownsLeadCell) for (let c = 0; c < C; c++) if (grid[r][c]) inheritedCols++;
+    const bar = Math.max(1, Math.min(C, maxCovered) - (opts.fullCoverageSlack ?? 0));
+    const fullCoverage = coveredCols.size >= bar || (ownsLeadCell && inheritedCols >= bar);
+    const grouped = spanning.length > 0 && (!fullCoverage || spanning.length * 2 >= ownCells.size);
+    return { fullCoverage, grouped };
+  };
+  const headerVocabHitRate = (ownCells: Set<ODLTableCell>): { texts: string[]; hitRate: number } => {
+    const texts = [...ownCells].map(odlCellText).filter(Boolean);
+    const vocab = opts.extraHeaderVocab ? [...ALL_HEADER_WORDS_ARR, ...opts.extraHeaderVocab] : ALL_HEADER_WORDS_ARR;
+    const hits = texts.filter((s) => headerLabels(s, vocab).length > 0).length;
+    return { texts, hitRate: texts.length ? hits / texts.length : 0 };
+  };
+
   let headerEnd = bodyStart;
   let headerCandidateChecked = false;
   for (let r = bodyStart; r < R; r++) {
@@ -9610,89 +9763,40 @@ export function scheduleTableFromODL(
       if (cell && cell["row number"] - 1 === r) ownCells.add(cell);
     }
     if (!ownCells.size) { headerEnd = r + 1; continue; } // fully blank spacer row
-    // COVERAGE IS ABOUT COLUMNS, NOT CELL COUNT. A row of 21 own cells one of
-    // which spans two columns covers all 22 — counting cells instead calls it
-    // partial. With no spans anywhere the two counts are identical, so this
-    // changes nothing for a span-free grid; it only matters where spans exist,
-    // which is exactly where the old count was wrong.
-    const coveredCols = new Set<number>();
-    for (let c = 0; c < C; c++) {
-      const cell = grid[r][c];
-      if (cell && cell["row number"] - 1 === r) coveredCols.add(c);
-    }
-    const spanning = [...ownCells].filter((cl) => (cl["column span"] || 1) > 1 || (cl["row span"] || 1) > 1);
-    // A DATA ROW STATES ITS OWN MARK; A HEADER TIER INHERITS IT.
-    //
-    // Counting only a row's OWN cells makes a data row that shares a value
-    // with the rows below it look partial, and the loop eats it as a tier.
-    // Measured on 24__vol2__019 page 15's GRILLE, REGISTER, AND DIFFUSER
-    // SCHEDULE: rows S1-1..S1-4 and S3-1 share one SQUARE PLAQUE cell spanning
-    // five rows and one 24x24 spanning four, so each owns 10 of 14 columns.
-    // All five were absorbed into the header block and the table reached the
-    // graph starting at S2-1 — five real air devices gone from a schedule the
-    // reader had returned whole.
-    //
-    // Counting inherited coverage for EVERY row is not the fix and would undo
-    // a measured one: AHU-1's own real third header tier supplies 16 of its 47
-    // columns and inherits the rest, and treating it as full coverage puts it
-    // back on the vocabulary tie-break that was already proved wrong there
-    // (its DESIGN/ACTUAL/SENSIBLE/TOTAL labels name nothing in any header
-    // vocabulary, so it was read as the first data row and a phantom row was
-    // minted). The two cases differ in one visible way: the grille rows each
-    // print their own mark in column 0, while every one of those header tiers
-    // inherits column 0 from the tier above. So inherited coverage counts only
-    // for a row that states its own leftmost value.
-    let ownsLeadCell = false;
-    {
-      const lead = grid[r][0];
-      ownsLeadCell = !!lead && lead["row number"] - 1 === r && !!odlCellText(lead).trim();
-    }
-    let inheritedCols = 0;
-    if (ownsLeadCell) for (let c = 0; c < C; c++) if (grid[r][c]) inheritedCols++;
-    const bar = Math.min(C, maxCovered);
-    const fullCoverage = coveredCols.size >= bar || (ownsLeadCell && inheritedCols >= bar);
-    // A SPAN IN A DATA ROW IS RARE BUT REAL, and the claim above that it
-    // "can never occur in a real per-item data row" is measurably false:
-    // 096_IN_Vermillion_County_Jail#19's AHU SUPPLY FAN SCHEDULE prints
-    // SINGLE POINT across MCA and MOCP in EVERY one of its seven data rows
-    // (a single-point power connection genuinely is one value for two
-    // columns). Under "any span makes this a header tier" the loop swallowed
-    // all seven, concatenated their values into the column labels — header 0
-    // came back as "MARK SF-1A SF-1B SF-2A SF-2B SF-3 SF-4A SF-4B" — and the
-    // table was refused for having no data rows. Nine of the ten schedules on
-    // that sheet failed this way.
-    //
-    // What separates a real grouping tier from a data row that happens to
-    // span is PROPORTION, not presence. That table's own first header tier is
-    // 13 spanning cells out of 15; its data rows are 1 out of 21. A genuine
-    // tier exists TO group, so grouping is most of what it does — a MAJORITY,
-    // the word this comment already used, which a `* 4` (25%) bar does not
-    // actually enforce.
-    //
-    // That gap is real, not academic: 044_NY_VA_Project_528A8_17_805_Replace
-    // _Main_Boilers#21's own STEAM UNIT HEATER SCHEDULE prints a handful of
-    // genuinely shared values per row too — "GENERATOR ROOM" once for both
-    // LOCATION and AREA SERVED, one EAT/MIN CAPACITY/PRESS ENT HEATER value
-    // spanning the two sub-columns each of those headers implies — 4 spanning
-    // cells out of 15 on every one of its three real data rows (UH-3/UH-4/
-    // UH-5), 26.7%. `* 4` calls that "grouped" by a hair (16 >= 15) and
-    // swallowed all three real rows as header tiers the same way the fan
-    // schedule's own single span used to, all the way to the table's last
-    // row — headerEnd ran off the end, dataRows came back empty, and the
-    // table was refused for "no keyed data rows" though its own key column
-    // (MARK) and every one of UH-3/UH-4/UH-5 were read correctly upstream of
-    // this check. `* 2` (50%, an actual majority) still keeps the fan
-    // schedule's real tier (13/15, 86.7%) grouped and its real data rows
-    // (1/21, 4.8%) not, while no longer catching this table's 26.7% alongside
-    // them.
-    const grouped = spanning.length > 0
-      && (!fullCoverage || spanning.length * 2 >= ownCells.size);
+    const { fullCoverage, grouped } = classifyBodyRow(r, ownCells);
     if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
     if (!headerCandidateChecked) {
       headerCandidateChecked = true;
-      const texts = [...ownCells].map(odlCellText).filter(Boolean);
-      const vocabHits = texts.filter((s) => headerLabels(s, ALL_HEADER_WORDS_ARR).length > 0).length;
-      if (texts.length && vocabHits / texts.length >= 0.4) { headerEnd = r + 1; continue; }
+      const { texts, hitRate } = headerVocabHitRate(ownCells);
+      if (texts.length && hitRate >= 0.4) { headerEnd = r + 1; continue; }
+      // LOOKAHEAD RESCUE (opt-in only — see opts.headerLookahead's own doc
+      // on scheduleTableFromODL's signature). This row failed the vocab
+      // bar on its own; before giving up exactly as the one-shot design
+      // always has, scan forward for a LATER row that is ALSO "full
+      // coverage, ungrouped" — the same ambiguous shape — and DOES clear
+      // the vocab bar by itself. Finding one means everything between here
+      // and there (this row included) is a multi-row header preamble, real
+      // corroborated by the header that follows it, not guessed from this
+      // row alone. Finding none (the window runs out, or the next
+      // unambiguous row is data) changes nothing: falls straight through
+      // to the same `break` this always had.
+      if (opts.headerLookahead) {
+        let rescueEnd = -1;
+        for (let r2 = r + 1; r2 < Math.min(R, r + 1 + opts.headerLookahead); r2++) {
+          const ownCells2 = new Set<ODLTableCell>();
+          for (let c = 0; c < C; c++) {
+            const cell = grid[r2][c];
+            if (cell && cell["row number"] - 1 === r2) ownCells2.add(cell);
+          }
+          if (!ownCells2.size) continue; // blank spacer row inside the window — keep scanning
+          const { fullCoverage: fc2, grouped: g2 } = classifyBodyRow(r2, ownCells2);
+          if (g2 || !fc2) continue; // still an ambiguous/grouped tier — keep scanning
+          const { texts: texts2, hitRate: hitRate2 } = headerVocabHitRate(ownCells2);
+          if (texts2.length && hitRate2 >= 0.4) rescueEnd = r2 + 1;
+          break; // first unambiguous row in the window decides it, pass or fail
+        }
+        if (rescueEnd > 0) { headerEnd = rescueEnd; r = rescueEnd - 1; continue; }
+      }
     }
     break; // first real data row
   }
