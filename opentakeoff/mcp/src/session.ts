@@ -5946,6 +5946,8 @@ export class Session {
     if (wholeCropResult === null) return null; // sidecar unavailable — fall back to tesseract entirely
 
     if (wholeCropResult.hasTable) {
+      const narrowed = await this.narrowToDetectedTable(sheetKey, region, width, height, wholeCropResult.regions[0]?.box);
+      if (narrowed) return narrowed;
       return this.structuredFromCrop(png, width, height, region);
     }
 
@@ -5970,11 +5972,98 @@ export class Session {
       }
       const bandResult = await this.probeTableRegion(bandPng);
       if (bandResult?.hasTable) {
+        const narrowed = await this.narrowToDetectedTable(sheetKey, band, bandW, bandH, bandResult.regions[0]?.box);
+        if (narrowed) return narrowed;
         const structured = await this.structuredFromCrop(bandPng, bandW, bandH, band);
         if (structured && structured !== "refused") return structured;
       }
     }
     return "refused"; // every band tried, none confirmed a table
+  }
+
+  /** Re-renders and re-runs table_structure on JUST the sub-region
+   * table_region's own detector reported within a crop, instead of running
+   * structure recognition on the whole (deliberately generous, see
+   * scheduleKeywordRegion's own width floor) crop. Returns null when there
+   * is no usable box, the box covers almost the whole crop already (nothing
+   * to narrow), or the narrower attempt itself finds nothing — callers fall
+   * back to structuredFromCrop on the original crop in every such case, so
+   * this can only ever help, never regress a crop that was already correct.
+   *
+   * Real, corpus-found reason this exists (2026-09-09, OCRDBG raw-cell
+   * dump): 16_NV_CarsonValleyMS_HVAC_Replacement.pdf#31's own widened crop
+   * (scheduleKeywordRegion's 45%-of-sheet-width floor, task #84) spans
+   * BUILDING B's entire panel-schedule strip — several distinct panel
+   * schedules stacked together, each its own real table — and table_region
+   * confirms "yes, a table is somewhere in here" without saying there are
+   * several. Running table_structure on the WHOLE crop merged them into one
+   * incoherent 59x8 grid whose cell text concatenates unrelated rows' worth
+   * of numbers ("720 8 180 10 12 1200 1000 14 1000 16 ACLE 180 18..."), not
+   * because the region-selection fix was wrong (it correctly gave the crop
+   * enough width to contain a real table) but because table_region's own
+   * box for THAT ONE detected table is far tighter than our whole crop, and
+   * we were throwing it away. Re-rendering just that box, at full
+   * resolution for the now-much-smaller area (the same MIN_STRUCTURED_
+   * RENDER_DIM/2048 cap applied to a far smaller region means far more
+   * pixels per real point), gives table_structure one real table and its
+   * own real column widths instead of several jammed together and
+   * downscaled past legibility. */
+  private async narrowToDetectedTable(
+    sheetKey: string,
+    cropRegion: [number, number, number, number],
+    cropW: number,
+    cropH: number,
+    box: [number, number, number, number] | undefined,
+  ): Promise<OcrRegionResult | "refused" | null> {
+    if (!box) return null;
+    const [rx0, ry0, rx1, ry1] = cropRegion;
+    // renderRegionPng scales both axes by ONE factor (the long edge divided
+    // by the crop's own longer page-space dimension) — recovering it exactly
+    // from the already-known crop/render dimensions avoids threading a new
+    // parameter through both call sites above for a value they already have
+    // the inputs to reproduce.
+    const zoom = Math.max(cropW, cropH) / Math.max(rx1 - rx0, ry1 - ry0);
+    if (!(zoom > 0) || !Number.isFinite(zoom)) return null;
+    const [bx0, by0, bx1, by1] = box;
+    // Margin proportional to the box, not a tiny fixed pixel count — real,
+    // measured (2026-09-09, same 16_NV#31 case): re-running table_region
+    // itself on a too-tightly-cropped box (originally an 8px pad) came back
+    // hasTable: false on the SAME table content it had just confirmed in
+    // the wider crop, almost certainly because a detector tuned on whole
+    // page-like crops loses confidence without any surrounding context.
+    // table_structure's own job (parse ruled lines into cells) needs no
+    // such context, so this only re-verifies table_region on request below
+    // as a light sanity check — the real fix is not re-gating on it at all
+    // (see the direct structuredFromCrop call, no probeTableRegion here).
+    const pad = Math.max(24, Math.round(Math.max(bx1 - bx0, by1 - by0) * 0.06));
+    const px0 = Math.max(0, bx0 - pad);
+    const py0 = Math.max(0, by0 - pad);
+    const px1 = Math.min(cropW, bx1 + pad);
+    const py1 = Math.min(cropH, by1 + pad);
+    const bw = px1 - px0, bh = py1 - py0;
+    if (bw < 40 || bh < 40) return null; // degenerate box — not worth a second render
+    // Nothing to narrow when the detected box is already nearly the whole
+    // crop (a single-table crop, the common case) — skip the extra render.
+    if (bw >= cropW * 0.9 && bh >= cropH * 0.9) return null;
+    const boxRegion: [number, number, number, number] = [
+      rx0 + px0 / zoom, ry0 + py0 / zoom, rx0 + px1 / zoom, ry0 + py1 / zoom,
+    ];
+    try {
+      const s = this.sheet(sheetKey);
+      const { png: tightPng, width: tightW, height: tightH } = await s.page.renderRegionPng(
+        { x0: boxRegion[0], y0: boxRegion[1], x1: boxRegion[2], y1: boxRegion[3] },
+        Math.min(2048, Math.max(MIN_STRUCTURED_RENDER_DIM, boxRegion[2] - boxRegion[0], boxRegion[3] - boxRegion[1])),
+      );
+      // NOT re-gated on probeTableRegion — see the comment on `pad` above.
+      // table_structure runs directly on the tighter, higher-resolution
+      // render; a genuinely empty/garbage crop still comes back refused or
+      // null from scheduleTableFromODL's own discipline downstream, same as
+      // any other candidate this pipeline ever hands it.
+      const structured = await this.structuredFromCrop(tightPng, tightW, tightH, boxRegion);
+      return structured && structured !== "refused" ? structured : null;
+    } catch {
+      return null;
+    }
   }
 
   /** table_structure on a crop already confirmed (by table_region) to
