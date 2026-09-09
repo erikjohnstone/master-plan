@@ -703,7 +703,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       ),
       detail: z.enum(["compact", "full"]).optional().describe('"compact" (default) omits per-page page_accounting.pages; "full" includes every sheet'),
       bas_math: z.record(z.string(), z.unknown()).optional().describe(
-        "BAS only: optional deterministic Python policy (hardware {profile_id,rigid:{AI,AO,DI,DO},universal_inputs}, spare {basis:demand_addon|installed_unused,numerator,denominator}, licenses, serial_routes, ip_closets, group_overrides, typed soo). Omit unknown policies; never invent hardware capacities, replication, distances or typed SOO. Returned bas_math is separate from legacy printed totals; review diagnostics and project_complete=false. Group IDs are returned by the first compile. See docs/BAS_MATH_RESEARCH.md for exact constraints.",
+        "BAS only: optional deterministic Python policy (hardware {profile_id,rigid:{AI,AO,DI,DO},universal_inputs}, spare {basis:demand_addon|installed_unused,numerator,denominator}, licenses, serial_routes, ip_closets, group_overrides, typed soo). Omit unknown policies; never invent hardware capacities, replication, distances or typed SOO. Returned bas_math is separate from legacy printed totals; review diagnostics and project_complete=false. The independent bas_point_lists result retains source-bound listed observations and supported controller notes, not verified wiring or installed quantity. Group IDs are returned by the first compile. See docs/BAS_MATH_RESEARCH.md for exact constraints.",
       ),
       path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
       export_path: z.string().optional().describe("Optional directory for CSV/XLSX workbook tabs"),

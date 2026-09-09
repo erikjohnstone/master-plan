@@ -20,6 +20,13 @@ group overrides and typed SOO. Original printed totals remain unchanged.
 An absent runtime returns explicit `unavailable`, not zero demand. See
 [BAS contracts and installation](../bas_engine/README.md).
 
+BAS compile also returns validated `bas_point_lists`: source/version-bound
+listed observations, raw rows, sparse-column accounting and supported explicit
+controller footnotes. This record has no installed-device total and does not
+replace `bas_math` or legacy quantities. Source and math failures are independent;
+unavailable evidence is explicit. It is an intermediate workflow record, not a
+reviewed/approved takeoff. See the [point evidence contract](../docs/bas-production/POINT_REVIEW_CONTRACT.md).
+
 No clone, no build—point your MCP client at the published package:
 
 ```json

@@ -144,7 +144,7 @@ function matchByKeySet(tables: ScheduleTable[], sheetKey: string, built: Schedul
  * exact key set identifies the duplicate without conflating accessory
  * reference tables or complementary numbered schedule sections. */
 export function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number {
-  const seen = new Map<string, number>();
+  const seen = new Map<string, number[]>();
   const remove = new Set<number>();
   const keySetOf = (table: ScheduleTable): string[] | null => {
     if (table.kind === "reference" || !table.rows.length) return null;
@@ -189,15 +189,21 @@ export function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number
     if (!keys) continue;
     const title = table.title.text.toUpperCase().replace(/[^A-Z0-9]/g, "");
     const identity = `${table.sheet}\0${title}\0${keys.join("\0")}`;
-    const prior = seen.get(identity);
+    // Identical titles and local numbered keys do not identify the same ink:
+    // separate point matrices routinely restart at 1. Require a spatial
+    // intersection and retain every distinct region in this identity bucket.
+    const candidates = seen.get(identity) ?? [];
+    const prior = candidates.find(index => !remove.has(index)
+      && bboxOverlapRatio(tables[index].region, table.region) > 0);
     if (prior == null) {
-      seen.set(identity, i);
+      candidates.push(i);
+      seen.set(identity, candidates);
       continue;
     }
     const a = tableCompleteness(tables[prior]), b = tableCompleteness(table);
     if (b.headers > a.headers || (b.headers === a.headers && b.cells > a.cells)) {
       remove.add(prior);
-      seen.set(identity, i);
+      candidates.push(i);
     } else {
       remove.add(i);
     }
@@ -5839,7 +5845,7 @@ export class Session {
    * OCR/VLM assist when vector paths alone cannot reach schedule rows). */
   private async runVectorTakeoffStack(g: SheetGraph): Promise<void> {
     await runVectorTakeoffPipeline(g, {
-      runODL: (graph) => this.enhanceTablesWithODL(graph),
+      runODL: (graph, additionalPointListSheets) => this.enhanceTablesWithODL(graph, additionalPointListSheets),
       getSheetContexts: () => this.buildVectorSheetContexts(g),
       sheetHasPointsListTitle: (key) => this.sheetHasPointsListTitle(key),
       sheetHasDrawingIndexTitle: (key) => this.sheetHasDrawingIndexTitle(key),
@@ -6213,15 +6219,16 @@ export class Session {
    * effort only: no Java runtime, a scanned/uncooperative PDF, or any per-
    * table parse error silently leaves the existing geometric result in
    * place — this pass can only ever IMPROVE g.tables, never take it down. */
-  private async enhanceTablesWithODL(g: SheetGraph): Promise<void> {
+  private async enhanceTablesWithODL(g: SheetGraph, additionalPointListSheets: string[] = []): Promise<void> {
     // Schedule-role sheets are the normal ODL targets. Also include legend /
     // unknown sheets that print a real POINTS LIST / DDC POINTS LIST title:
     // NAVFAC mechanical #64 was role=legend (note text hit /LEGEND/) while
     // carrying "POINTS LIST DOAH-TI", so ODL never ran and T-BAS-01 compiled
     // to 0 lists. Do NOT flip every POINTS LIST mention to role=schedule —
     // that over-recovers Air Ops schematic siblings and breaks the locked 122.
+    const additionalTargets = new Set(additionalPointListSheets);
     const scheduleSheets = g.sheets.filter((s) =>
-      s.role === "schedule"
+      additionalTargets.has(s.key) || s.role === "schedule"
       || ((s.role === "legend" || s.role === "unknown")
         && (this.sheetHasPointsListTitle(s.key) || this.sheetHasDrawingIndexTitle(s.key))));
     if (!scheduleSheets.length) return;

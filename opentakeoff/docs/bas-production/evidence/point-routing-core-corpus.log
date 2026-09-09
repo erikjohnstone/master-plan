@@ -1,0 +1,183 @@
+
+=== takeoff + reference ===
+
+=== sheet graph ===
+
+=== table recall ===
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+· bessemer …
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+· bessemer …
+· bessemer …
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+· itd-d1-lab …
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+· baker-county-eoc …
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+╔══════════════════════════════════════════════════════════════════════════
+║ TABLE RECALL — does the pipeline find the table at all (not just score it right)
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        tables  recall
+──────────────────────────────────────────
+bessemer                   (no *.tables.csv key — not scored)
+itd-d1-lab                 (no *.tables.csv key — not scored)
+baker-county-eoc           (no *.tables.csv key — not scored)
+(no sets had a *.tables.csv key)
+=== table recall completed in 8.2s ===
+· itd-d1-lab …
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+· baker-county-eoc …
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+· itd-d1-lab …
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+· baker-county-eoc …
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+╔══════════════════════════════════════════════════════════════════════════
+║ SHEET GRAPH — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        cell P    cell R   cell F1     tag P    tag R   reported  rowsym R
+────────────────────────────────────────────────────────────────────────────────────────────
+bessemer                      —        —        —         —        —       0     100.0%
+itd-d1-lab                    —        —        —         —        —       4     100.0%
+baker-county-eoc          100.0%    85.7%    92.3%      —        —      13     100.0%
+────────────────────────────────────────────────────────────────────────────────────────────
+CORPUS                    100.0%    85.7%    92.3%    0.0%     0.0%              100.0%
+
+cells   78 right · 0 wrong · 13 missed
+tags    0 real · 0 not-rooms reported · 0 real rooms missed
+rowsym  66 found on the plan as expected · 0 unexpectedly resolved · 0 real drawn symbols NOT anchored by sweep_schedule_row
+
+── failure bins, worst first ──
+   13×  cell-missing
+         baker-county-eoc  100|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  101|CEILING  want "ACT-1" got "undefined"
+         baker-county-eoc  102|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  103|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  104|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  105|CEILING  want "ACT-1" got "undefined"
+         … and 7 more
+=== sheet graph completed in 711.4s ===
+╔══════════════════════════════════════════════════════════════════════════
+║ PROJECT-LEVEL TAKEOFF — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        tags   exact    Σ|Δqty|   missing   false-add
+──────────────────────────────────────────────────────────────────────────
+bessemer                     10   100.0%         0         0           5
+itd-d1-lab                  116    89.7%        35         2          11
+baker-county-eoc             40    87.5%         1         5           0
+──────────────────────────────────────────────────────────────────────────
+CORPUS                      166    89.8%        36         7          16
+applicable installed rows: 148/160 exact ( 92.5%)
+expected honest refusals: 1/6 correct
+
+── bessemer — real mismatches ──
+  SR-1       FALSELY ADDED — qty=7, type=(unclassified), the key never mentions this tag
+  SR-2       FALSELY ADDED — qty=2, type=(unclassified), the key never mentions this tag
+  TG-1       FALSELY ADDED — qty=6, type=Transfer grille, the key never mentions this tag
+  TG-2       FALSELY ADDED — qty=4, type=Transfer grille, the key never mentions this tag
+  EF-1       FALSELY ADDED — qty=1, type=Fan (exhaust / supply / return / general), the key never mentions this tag
+
+── itd-d1-lab — real mismatches ──
+  TP-2       expected=12  actual=23  Δ=+11  status=resolved
+  TD-1       expected=2  actual=8  Δ=+6  status=resolved
+  US-1       expected=1  actual=7  Δ=+6  status=resolved
+  ES-1       expected=1  actual=3  Δ=+2  status=resolved
+  FS-1       expected=1  actual=3  Δ=+2  status=resolved
+  FS-2       expected=7  actual=9  Δ=+2  status=resolved
+  HB-2       expected=2  actual=4  Δ=+2  status=resolved
+  DFC-1      expected=1  actual=0  Δ=-1  status=not_in_output
+  F-1        expected=1  actual=0  Δ=-1  status=not_in_output
+  LAV-1      expected=1  actual=2  Δ=+1  status=resolved
+  SS-1       expected=2  actual=1  Δ=-1  status=resolved
+  ET-1       expected=0  actual=1  Δ=0  status=resolved
+  DFC-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  F-1        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  R-1 8"Ø    FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  R-2 10X6   FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  R-3 12X8   FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  R-4 18X10  FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  SA-1       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  D-1        FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  GCO JAY R. SMITH 4220 SERIES, ROUND EXTRA HEAVY DUTY CAST IRON TOP. FURNISH WITH WITH ABS PLUG. COVER TO BE INSCRIBED "SAN". FALSELY ADDED — qty=3, type=(unclassified), the key never mentions this tag
+  GCO JAY R. SMITH 4250 SERIES, ROUND FLANGED HOUSING WITH HEAVY DUTY CAST IRON COVER. FURNISH WITH ABS PLUG. COVER TO BE INSCRIBED "SAN". FALSELY ADDED — qty=3, type=(unclassified), the key never mentions this tag
+  RP-2       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  TP-1       FALSELY ADDED — qty=2, type=(unclassified), the key never mentions this tag
+  1.         FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+
+── baker-county-eoc — real mismatches ──
+  WH-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  RTU-01     expected=0  actual=0  Δ=0  status=not_in_output
+  RTU-02     expected=0  actual=0  Δ=0  status=not_in_output
+  EAC-1      expected=0  actual=0  Δ=0  status=not_in_output
+  EAC-2      expected=0  actual=0  Δ=0  status=not_in_output
+  RTU-01     MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  RTU-02     MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EAC-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EAC-2      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  WH-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+
+── failure-type breakdown (TakeoffFailure[], every set) ──
+    45×  REFUSED_NO_SCALE
+    20×  SYMBOL_FALSE_NEGATIVE
+
+╔══════════════════════════════════════════════════════════════════════════
+║ REFERENCE-TABLE EXTRACTION — reused from the takeoff pass
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        cells   exact
+──────────────────────────────────────────
+bessemer                      12   100.0%
+itd-d1-lab                    34    11.8%
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "SUPPLY AIR VALVE": expected "SAV-7" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "GENERAL EXHAUST VALVE": expected "GEV-5" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "SNORKEL EXHAUST VALVE": expected "SEV-5" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "REHEAT VALVE": expected "HC-7" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "HEATING COIL": expected "CV-7" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "SUPPLY AIR VALVE": expected "SAV-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "GENERAL EXHAUST VALVE": expected "GEV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "SNORKEL EXHAUST VALVE": expected "SEV-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "REHEAT VALVE": expected "HC-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "HEATING COIL": expected "CV-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "SUPPLY AIR VALVE": expected "SAV-9" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "GENERAL EXHAUST VALVE": expected "GEV-2" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "SNORKEL EXHAUST VALVE": expected "N/A" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "REHEAT VALVE": expected "HC-9" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "HEATING COIL": expected "CV-9" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "SUPPLY AIR VALVE": expected "SAV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "GENERAL EXHAUST VALVE": expected "GEV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "SNORKEL EXHAUST VALVE": expected "SEV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "REHEAT VALVE": expected "HC-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "HEATING COIL": expected "CV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "LAB SPACE": expected "RESIDENCY NOISE ROOM 130" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "AIR VALVE": expected "SAV-8" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "EXHAUST VALVE": expected "SEV-2" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "VALVE": expected "HC-8" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "COIL": expected "CV-8" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "LAB SPACE": expected "MATERIAL LAB 118" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "AIR VALVE": expected "SAV-6" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "EXHAUST VALVE": expected "SEV-4" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "VALVE": expected "HC-6" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "COIL": expected "CV-6" got (missing)
+baker-county-eoc              21   100.0%
+
+=== takeoff + reference completed in 1099.6s ===
+
+=== complete corpus evaluation finished in 1099.6s ===

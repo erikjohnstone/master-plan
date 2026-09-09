@@ -21,6 +21,22 @@ unverified equipment replication and policy gaps before procurement. Abstract
 I/O profiles and spare policies must be supplied explicitly through the BAS
 compile options; no actual product is selected. See [BAS setup](../bas_engine/README.md).
 
+Point lists may be on detail or plan sheets, not only schedule sheets. Separate
+matrices can reuse local row numbers without being the same table. For supported
+nested headings, the BAS calculation reads HARDWARE POINTS and SOFTWARE POINTS
+with their directional/value subheadings. Alarm, trend and graphics flags do not
+add terminals or software values. These are listed-table calculations, not
+verified installed quantities; controller-provided qualifiers and applicability
+still need review. The original cells and source locations remain available.
+
+Full compile JSON additionally contains `bas_point_lists`: source-bound listed
+observations, supported controller footnotes, and separate unobserved-column
+accounting for sparse tables. The existing **Export BAS JSON** button exports
+engineering math only; row workbooks remain row exports. Dedicated persisted
+point-evidence review and presentation are still in development. Neither an
+absent cell nor a controller-provided point establishes zero field scope or a
+new wired terminal.
+
 The canvas header keeps **Open · Sheets · Plans** together on the left; centers the
 larger **sheet navigation** controls; and groups equal-sized **Takeoff · Edit · ⋯**
 controls at the upper right. **Schedules** and

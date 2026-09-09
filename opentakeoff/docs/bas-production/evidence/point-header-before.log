@@ -1,0 +1,136 @@
+FFFF...F..F.                                                             [100%]
+=================================== FAILURES ===================================
+_ test_declared_hardware_software_parent_vocabulary[HARDWARE POINTS AI-expected0] _
+
+header = 'HARDWARE POINTS AI', expected = ('physical', 'AI')
+
+    @pytest.mark.parametrize("header,expected", [
+        ("HARDWARE POINTS AI", ("physical", "AI")),
+        ("HARDWARE POINTS BO", ("physical", "DO")),
+        ("SOFTWARE POINTS AV", ("soft", "SOFTWARE POINTS AV")),
+        ("SOFTWARE POINTS AI", ("soft", "AI")),
+        ("SOFTWARE POINTS TREND", None),
+        ("SOFTWARE POINTS ALARM", None),
+        ("HARDWARE SOFTWARE POINTS AI", None),
+        ("HARDWIRED NETWORK AI", None),
+        ("HARDWARE POINTS ANALOG", None),
+        ("HARDWARE POINTS AV", None),
+    ])
+    def test_declared_hardware_software_parent_vocabulary(header, expected):
+>       assert column_type(header) == expected
+E       AssertionError: assert None == ('physical', 'AI')
+E        +  where None = column_type('HARDWARE POINTS AI')
+
+bas_engine/tests/test_point_headers.py:29: AssertionError
+_ test_declared_hardware_software_parent_vocabulary[HARDWARE POINTS BO-expected1] _
+
+header = 'HARDWARE POINTS BO', expected = ('physical', 'DO')
+
+    @pytest.mark.parametrize("header,expected", [
+        ("HARDWARE POINTS AI", ("physical", "AI")),
+        ("HARDWARE POINTS BO", ("physical", "DO")),
+        ("SOFTWARE POINTS AV", ("soft", "SOFTWARE POINTS AV")),
+        ("SOFTWARE POINTS AI", ("soft", "AI")),
+        ("SOFTWARE POINTS TREND", None),
+        ("SOFTWARE POINTS ALARM", None),
+        ("HARDWARE SOFTWARE POINTS AI", None),
+        ("HARDWIRED NETWORK AI", None),
+        ("HARDWARE POINTS ANALOG", None),
+        ("HARDWARE POINTS AV", None),
+    ])
+    def test_declared_hardware_software_parent_vocabulary(header, expected):
+>       assert column_type(header) == expected
+E       AssertionError: assert None == ('physical', 'DO')
+E        +  where None = column_type('HARDWARE POINTS BO')
+
+bas_engine/tests/test_point_headers.py:29: AssertionError
+_ test_declared_hardware_software_parent_vocabulary[SOFTWARE POINTS AV-expected2] _
+
+header = 'SOFTWARE POINTS AV', expected = ('soft', 'SOFTWARE POINTS AV')
+
+    @pytest.mark.parametrize("header,expected", [
+        ("HARDWARE POINTS AI", ("physical", "AI")),
+        ("HARDWARE POINTS BO", ("physical", "DO")),
+        ("SOFTWARE POINTS AV", ("soft", "SOFTWARE POINTS AV")),
+        ("SOFTWARE POINTS AI", ("soft", "AI")),
+        ("SOFTWARE POINTS TREND", None),
+        ("SOFTWARE POINTS ALARM", None),
+        ("HARDWARE SOFTWARE POINTS AI", None),
+        ("HARDWIRED NETWORK AI", None),
+        ("HARDWARE POINTS ANALOG", None),
+        ("HARDWARE POINTS AV", None),
+    ])
+    def test_declared_hardware_software_parent_vocabulary(header, expected):
+>       assert column_type(header) == expected
+E       AssertionError: assert None == ('soft', 'SOFTWARE POINTS AV')
+E        +  where None = column_type('SOFTWARE POINTS AV')
+
+bas_engine/tests/test_point_headers.py:29: AssertionError
+_ test_declared_hardware_software_parent_vocabulary[SOFTWARE POINTS AI-expected3] _
+
+header = 'SOFTWARE POINTS AI', expected = ('soft', 'AI')
+
+    @pytest.mark.parametrize("header,expected", [
+        ("HARDWARE POINTS AI", ("physical", "AI")),
+        ("HARDWARE POINTS BO", ("physical", "DO")),
+        ("SOFTWARE POINTS AV", ("soft", "SOFTWARE POINTS AV")),
+        ("SOFTWARE POINTS AI", ("soft", "AI")),
+        ("SOFTWARE POINTS TREND", None),
+        ("SOFTWARE POINTS ALARM", None),
+        ("HARDWARE SOFTWARE POINTS AI", None),
+        ("HARDWIRED NETWORK AI", None),
+        ("HARDWARE POINTS ANALOG", None),
+        ("HARDWARE POINTS AV", None),
+    ])
+    def test_declared_hardware_software_parent_vocabulary(header, expected):
+>       assert column_type(header) == expected
+E       AssertionError: assert None == ('soft', 'AI')
+E        +  where None = column_type('SOFTWARE POINTS AI')
+
+bas_engine/tests/test_point_headers.py:29: AssertionError
+_ test_declared_hardware_software_parent_vocabulary[HARDWIRED NETWORK AI-None] _
+
+header = 'HARDWIRED NETWORK AI', expected = None
+
+    @pytest.mark.parametrize("header,expected", [
+        ("HARDWARE POINTS AI", ("physical", "AI")),
+        ("HARDWARE POINTS BO", ("physical", "DO")),
+        ("SOFTWARE POINTS AV", ("soft", "SOFTWARE POINTS AV")),
+        ("SOFTWARE POINTS AI", ("soft", "AI")),
+        ("SOFTWARE POINTS TREND", None),
+        ("SOFTWARE POINTS ALARM", None),
+        ("HARDWARE SOFTWARE POINTS AI", None),
+        ("HARDWIRED NETWORK AI", None),
+        ("HARDWARE POINTS ANALOG", None),
+        ("HARDWARE POINTS AV", None),
+    ])
+    def test_declared_hardware_software_parent_vocabulary(header, expected):
+>       assert column_type(header) == expected
+E       AssertionError: assert ('soft', 'AI') == None
+E        +  where ('soft', 'AI') = column_type('HARDWIRED NETWORK AI')
+
+bas_engine/tests/test_point_headers.py:29: AssertionError
+_______ test_real_meter_and_global_subheaders_preserve_all_source_cells ________
+
+    def test_real_meter_and_global_subheaders_preserve_all_source_cells():
+        root = Path(__file__).resolve().parents[2]
+        graph = json.loads((root / "docs/bas-production/evidence/fort-sam-routing-final-graph.json").read_text())
+        tables = [IndexedTable.model_validate(t) for t in graph["tables"] if "HARDWARE POINTS" in t["headers"]]
+        assert len(tables) == 4
+        # Water, gas, electric, global: listed positive cell identities only.
+        expected = [({1}, set()), ({1}, set()), (set(), set(range(1, 16))), ({1, 2}, set())]
+        for table, (ai_rows, av_rows) in zip(tables, expected, strict=True):
+            before = table.model_dump()
+            typed, evidence, start = indexed_columns(table)
+>           assert start == 1
+E           assert 0 == 1
+
+bas_engine/tests/test_point_headers.py:42: AssertionError
+=========================== short test summary info ============================
+FAILED bas_engine/tests/test_point_headers.py::test_declared_hardware_software_parent_vocabulary[HARDWARE POINTS AI-expected0]
+FAILED bas_engine/tests/test_point_headers.py::test_declared_hardware_software_parent_vocabulary[HARDWARE POINTS BO-expected1]
+FAILED bas_engine/tests/test_point_headers.py::test_declared_hardware_software_parent_vocabulary[SOFTWARE POINTS AV-expected2]
+FAILED bas_engine/tests/test_point_headers.py::test_declared_hardware_software_parent_vocabulary[SOFTWARE POINTS AI-expected3]
+FAILED bas_engine/tests/test_point_headers.py::test_declared_hardware_software_parent_vocabulary[HARDWIRED NETWORK AI-None]
+FAILED bas_engine/tests/test_point_headers.py::test_real_meter_and_global_subheaders_preserve_all_source_cells
+6 failed, 6 passed in 0.36s

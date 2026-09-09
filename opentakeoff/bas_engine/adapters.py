@@ -97,6 +97,10 @@ def normalized_header(value: str) -> str:
     return re.sub(r"\s+", " ", value.upper().replace("_", " ")).strip()
 
 
+PHYSICAL_COLUMN_SCOPE = re.compile(r"\b(?:HARDWARE|HARDWIRED|HARD WIRED|PHYSICAL)\b")
+SOFTWARE_COLUMN_SCOPE = re.compile(r"\b(?:SOFTWARE|INTEGRATION|SOFT|NETWORK|BACNET|MODBUS|KNX)\b")
+
+
 def column_type(header: str) -> tuple[Literal["physical", "soft"], str] | None:
     h = normalized_header(header)
     aliases = {"AI": "AI", "AO": "AO", "DI": "DI", "DO": "DO", "BI": "DI", "BO": "DO",
@@ -107,14 +111,19 @@ def column_type(header: str) -> tuple[Literal["physical", "soft"], str] | None:
             "ANALOG VARIABLE", "BINARY VARIABLE", "MULTISTATE VARIABLE", "MULTISTAGE VARIABLE")
     if h in soft:
         return "soft", h
-    network = re.search(r"\b(?:INTEGRATION|SOFT|NETWORK|BACNET|MODBUS|KNX)\b", h)
+    network = SOFTWARE_COLUMN_SCOPE.search(h)
+    physical = PHYSICAL_COLUMN_SCOPE.search(h)
+    # A contradictory parent is unresolved, not whichever scope we test first.
+    # DDC alone is not a contradiction: DDC INTEGRATION is a valid soft scope.
+    if network and physical:
+        return None
     for name in sorted(aliases, key=len, reverse=True):
         if h == name:
             return "physical", aliases[name]
         if h.endswith(" " + name):
             if network:
                 return "soft", name
-            if re.search(r"\b(?:HARDWIRED|HARD WIRED|PHYSICAL|DDC)\b", h):
+            if physical or re.search(r"\bDDC\b", h):
                 return "physical", aliases[name]
     if network and any(h.endswith(" "+name) for name in soft):
         return "soft", h
@@ -140,7 +149,7 @@ def indexed_columns(table: IndexedTable) -> tuple[dict[str, tuple[Literal["physi
     cites: list[Evidence] = []
     for h, cell in first.cells.items():
         parent = re.sub(r"\s+\d+$", "", normalized_header(h))
-        if not re.search(r"\b(?:HARDWIRED|HARD WIRED|PHYSICAL|INTEGRATION|SOFT|NETWORK|BACNET|MODBUS|KNX)\b", parent):
+        if not (PHYSICAL_COLUMN_SCOPE.search(parent) or SOFTWARE_COLUMN_SCOPE.search(parent)):
             continue
         detected = column_type(parent + " " + cell.text)
         if detected is not None:

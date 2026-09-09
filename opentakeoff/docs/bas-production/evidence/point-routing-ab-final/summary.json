@@ -1,0 +1,396 @@
+{
+  "scope": "Table/graph preservation and process wall/RSS. Added regions are observations, not correctness or installed-quantity certification. No symbol sweep or takeoff/reference scorer is substituted by this comparison.",
+  "results": [
+    {
+      "id": "12__vol2__028",
+      "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+      "delta": {
+        "baseline_tables": 12,
+        "candidate_tables": 20,
+        "unchanged_baseline_tables": 12,
+        "missing_or_changed_baseline_tables": [],
+        "added_regions": [
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              3161.28,
+              536.88,
+              4352.4,
+              887.28
+            ],
+            "rows": 6
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINTLIST",
+            "region": [
+              1508.64,
+              621.12,
+              2699.76,
+              1102.32
+            ],
+            "rows": 10
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              259.44,
+              1638,
+              1698.96,
+              2226.72
+            ],
+            "rows": 10
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              1737.36,
+              1638,
+              3064.32,
+              2196.48
+            ],
+            "rows": 10
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              3127.92,
+              1638,
+              4460.86,
+              2496.96
+            ],
+            "rows": 16
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              483.84,
+              2460.24,
+              1989.36,
+              2883.6
+            ],
+            "rows": 7
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#3",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              3054,
+              1456.08,
+              4245.14,
+              2569.68
+            ],
+            "rows": 25
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#4",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              2997.12,
+              1290.24,
+              4188.46,
+              2736.24
+            ],
+            "rows": 34
+          }
+        ],
+        "unmatched_candidate_tables": [
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              3161.28,
+              536.88,
+              4352.4,
+              887.28
+            ],
+            "rows": 6
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINTLIST",
+            "region": [
+              1508.64,
+              621.12,
+              2699.76,
+              1102.32
+            ],
+            "rows": 10
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              259.44,
+              1638,
+              1698.96,
+              2226.72
+            ],
+            "rows": 10
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              1737.36,
+              1638,
+              3064.32,
+              2196.48
+            ],
+            "rows": 10
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              3127.92,
+              1638,
+              4460.86,
+              2496.96
+            ],
+            "rows": 16
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#2",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              483.84,
+              2460.24,
+              1989.36,
+              2883.6
+            ],
+            "rows": 7
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#3",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              3054,
+              1456.08,
+              4245.14,
+              2569.68
+            ],
+            "rows": 25
+          },
+          {
+            "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#4",
+            "title": "BAS INPUT/OUTPUT POINT LIST",
+            "region": [
+              2997.12,
+              1290.24,
+              4188.46,
+              2736.24
+            ],
+            "rows": 34
+          }
+        ],
+        "table_sequence_equal": false,
+        "sheet_metadata_equal": true,
+        "remaining_graph_relationships_equal": true
+      },
+      "replay": {
+        "baseline_tables": 20,
+        "candidate_tables": 20,
+        "unchanged_baseline_tables": 20,
+        "missing_or_changed_baseline_tables": [],
+        "added_regions": [],
+        "unmatched_candidate_tables": [],
+        "table_sequence_equal": true,
+        "sheet_metadata_equal": true,
+        "remaining_graph_relationships_equal": true
+      },
+      "cachedReplay": {
+        "baseline_tables": 20,
+        "candidate_tables": 20,
+        "unchanged_baseline_tables": 20,
+        "missing_or_changed_baseline_tables": [],
+        "added_regions": [],
+        "unmatched_candidate_tables": [],
+        "table_sequence_equal": true,
+        "sheet_metadata_equal": true,
+        "remaining_graph_relationships_equal": true
+      },
+      "stats": [
+        {
+          "label": "baseline-cold",
+          "forced_cold": true,
+          "wall_ms": 29687,
+          "rss_bytes": 473497600,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/12__vol2__028-baseline-cold.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/12__vol2__028-baseline-cold.log"
+        },
+        {
+          "label": "candidate-cold",
+          "forced_cold": true,
+          "wall_ms": 29455,
+          "rss_bytes": 428572672,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/12__vol2__028-candidate-cold.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/12__vol2__028-candidate-cold.log"
+        },
+        {
+          "label": "candidate-cache-fill",
+          "forced_cold": false,
+          "wall_ms": 26182,
+          "rss_bytes": 464289792,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/12__vol2__028-candidate-cache-fill.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/12__vol2__028-candidate-cache-fill.log"
+        },
+        {
+          "label": "candidate-warm",
+          "forced_cold": false,
+          "wall_ms": 25516,
+          "rss_bytes": 484687872,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/12__vol2__028-candidate-warm.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/12__vol2__028-candidate-warm.log"
+        }
+      ]
+    },
+    {
+      "id": "22__vol2__012",
+      "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+      "delta": {
+        "baseline_tables": 9,
+        "candidate_tables": 9,
+        "unchanged_baseline_tables": 9,
+        "missing_or_changed_baseline_tables": [],
+        "added_regions": [],
+        "unmatched_candidate_tables": [],
+        "table_sequence_equal": true,
+        "sheet_metadata_equal": true,
+        "remaining_graph_relationships_equal": true
+      },
+      "replay": {
+        "baseline_tables": 9,
+        "candidate_tables": 9,
+        "unchanged_baseline_tables": 9,
+        "missing_or_changed_baseline_tables": [],
+        "added_regions": [],
+        "unmatched_candidate_tables": [],
+        "table_sequence_equal": true,
+        "sheet_metadata_equal": true,
+        "remaining_graph_relationships_equal": true
+      },
+      "cachedReplay": {
+        "baseline_tables": 9,
+        "candidate_tables": 9,
+        "unchanged_baseline_tables": 9,
+        "missing_or_changed_baseline_tables": [],
+        "added_regions": [],
+        "unmatched_candidate_tables": [],
+        "table_sequence_equal": true,
+        "sheet_metadata_equal": true,
+        "remaining_graph_relationships_equal": true
+      },
+      "stats": [
+        {
+          "label": "baseline-cold",
+          "forced_cold": true,
+          "wall_ms": 248335,
+          "rss_bytes": 1585053696,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/22__vol2__012-baseline-cold.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/22__vol2__012-baseline-cold.log"
+        },
+        {
+          "label": "candidate-cold",
+          "forced_cold": true,
+          "wall_ms": 198939,
+          "rss_bytes": 1415118848,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/22__vol2__012-candidate-cold.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/22__vol2__012-candidate-cold.log"
+        },
+        {
+          "label": "candidate-cache-fill",
+          "forced_cold": false,
+          "wall_ms": 213074,
+          "rss_bytes": 1813708800,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/22__vol2__012-candidate-cache-fill.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/22__vol2__012-candidate-cache-fill.log"
+        },
+        {
+          "label": "candidate-warm",
+          "forced_cold": false,
+          "wall_ms": 7331,
+          "rss_bytes": 471564288,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/22__vol2__012-candidate-warm.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/22__vol2__012-candidate-warm.log"
+        }
+      ]
+    },
+    {
+      "id": "21__vol2__095",
+      "source_sha256": "17887e9efd271427725d9c334e1ee6119d7fbd2d0d865906b719ed695e7b3606",
+      "delta": {
+        "baseline_tables": 1,
+        "candidate_tables": 1,
+        "unchanged_baseline_tables": 1,
+        "missing_or_changed_baseline_tables": [],
+        "added_regions": [],
+        "unmatched_candidate_tables": [],
+        "table_sequence_equal": true,
+        "sheet_metadata_equal": true,
+        "remaining_graph_relationships_equal": true
+      },
+      "replay": {
+        "baseline_tables": 1,
+        "candidate_tables": 1,
+        "unchanged_baseline_tables": 1,
+        "missing_or_changed_baseline_tables": [],
+        "added_regions": [],
+        "unmatched_candidate_tables": [],
+        "table_sequence_equal": true,
+        "sheet_metadata_equal": true,
+        "remaining_graph_relationships_equal": true
+      },
+      "cachedReplay": {
+        "baseline_tables": 1,
+        "candidate_tables": 1,
+        "unchanged_baseline_tables": 1,
+        "missing_or_changed_baseline_tables": [],
+        "added_regions": [],
+        "unmatched_candidate_tables": [],
+        "table_sequence_equal": true,
+        "sheet_metadata_equal": true,
+        "remaining_graph_relationships_equal": true
+      },
+      "stats": [
+        {
+          "label": "baseline-cold",
+          "forced_cold": true,
+          "wall_ms": 22823,
+          "rss_bytes": 942800896,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/21__vol2__095-baseline-cold.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/21__vol2__095-baseline-cold.log"
+        },
+        {
+          "label": "candidate-cold",
+          "forced_cold": true,
+          "wall_ms": 20803,
+          "rss_bytes": 911097856,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/21__vol2__095-candidate-cold.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/21__vol2__095-candidate-cold.log"
+        },
+        {
+          "label": "candidate-cache-fill",
+          "forced_cold": false,
+          "wall_ms": 21385,
+          "rss_bytes": 969408512,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/21__vol2__095-candidate-cache-fill.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/21__vol2__095-candidate-cache-fill.log"
+        },
+        {
+          "label": "candidate-warm",
+          "forced_cold": false,
+          "wall_ms": 17621,
+          "rss_bytes": 1039908864,
+          "graph_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/21__vol2__095-candidate-warm.json",
+          "log_file": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab-final/21__vol2__095-candidate-warm.log"
+        }
+      ]
+    }
+  ]
+}

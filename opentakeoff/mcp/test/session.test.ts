@@ -325,6 +325,30 @@ test("assignmentDisclosure: null for all-human, mixed counts, and the pointInPol
 });
 
 // ── collapseEquivalentPrimaryTables: title-less exact-key-set duplicate ────
+test("same-title numbered matrices in separate source regions are not duplicate reads", () => {
+  const matrix = (x: number, name: string): ScheduleTable => {
+    const bbox: [number, number, number, number] = [x, 100, x + 200, 300];
+    return { kind: "reference", sheet: "controls.pdf#2", region: bbox,
+      title: { text: "BAS INPUT/OUTPUT POINT LIST", sheet: "controls.pdf#2", bbox },
+      headers: ["TAG", "POINT NAME", "AI"],
+      rows: ["1", "2"].map(key => ({ key, sheet: "controls.pdf#2", cells: {
+        TAG: { text: key, bbox }, "POINT NAME": { text: name, bbox }, AI: { text: "X", bbox },
+      } })),
+    };
+  };
+  const water = matrix(100, "WATER FLOW RATE"), gas = matrix(500, "GAS FLOW RATE");
+  const tables = [water, gas];
+  assert.equal(collapseEquivalentPrimaryTables(tables), 0);
+  assert.deepEqual(tables, [water, gas]);
+  // A later duplicate must match the right spatial member, not whichever
+  // same-title/key table happened to be seen first. Both orders must work.
+  for (const pair of [[water, gas], [gas, water]]) {
+    const candidates = [...pair, structuredClone(water), structuredClone(gas)];
+    assert.equal(collapseEquivalentPrimaryTables(candidates), 2);
+    assert.deepEqual(candidates, pair);
+  }
+});
+
 test("collapseEquivalentPrimaryTables also removes a TITLE-LESS duplicate whose row-key set exactly matches an already-titled table (real bug: 045_FL_VA_Project_516_21_107_EHRM_Infrastructure's own CHILLED WATER FAN COIL UNIT SCHEDULE)", () => {
   const bbox: [number, number, number, number] = [0, 0, 1, 1];
   const cell = (text: string) => ({ text, bbox });

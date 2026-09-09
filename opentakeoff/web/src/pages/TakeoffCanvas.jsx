@@ -7582,6 +7582,7 @@ export default function TakeoffCanvas() {
       sheet_count: compiled.sheet_count,
       totals,
       bas_math: compiled.bas_math || null,
+      bas_point_lists: compiled.bas_point_lists || null,
       empty_pages: compiled.page_accounting?.empty_pages,
       exclusions: compiled.exclusions || [],
       category_counts: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"

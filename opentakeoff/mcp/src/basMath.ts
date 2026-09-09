@@ -3,6 +3,7 @@ import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
+import { basPointListsSchema, type BasPointLists } from "../../web/src/lib/basPointLists.ts";
 
 const appRoot = fileURLToPath(new URL("../../", import.meta.url));
 const bundledRoot = fileURLToPath(new URL("./python/", import.meta.url));
@@ -45,6 +46,14 @@ function safeNumbers(value: unknown): void {
 }
 
 export async function runBasMath(payload: unknown, options: { python?: string; timeoutMs?: number } = {}): Promise<BasMathResult> {
+  return runBasProcess(payload, resultSchema, options);
+}
+
+export async function runBasPointLists(payload: unknown, options: { python?: string; timeoutMs?: number } = {}): Promise<BasPointLists> {
+  return runBasProcess({ point_lists: payload }, basPointListsSchema, options);
+}
+
+async function runBasProcess<T>(payload: unknown, schema: z.ZodType<T>, options: { python?: string; timeoutMs?: number }): Promise<T> {
   safeNumbers(payload);
   const input = JSON.stringify(payload);
   if (Buffer.byteLength(input) > LIMIT) throw new Error("BAS input exceeds 32 MiB");
@@ -54,12 +63,12 @@ export async function runBasMath(payload: unknown, options: { python?: string; t
     let stdout = Buffer.alloc(0);
     let stderr = "";
     let settled = false;
-    const finish = (error: Error | null, result?: BasMathResult) => {
+    const finish = (error: Error | null, result?: T) => {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
       if (error) { child.kill("SIGKILL"); reject(error); }
-      else if (result) resolve(result);
+      else if (result !== undefined) resolve(result);
     };
     const timer = setTimeout(() => finish(new Error("BAS math timed out; no result was accepted")), options.timeoutMs ?? 30_000);
     child.on("error", () => finish(new Error("BAS Python runtime unavailable. Install Pydantic V2 and configure OPENTAKEOFF_BAS_PYTHON.")));
@@ -78,7 +87,7 @@ export async function runBasMath(payload: unknown, options: { python?: string; t
           throw new Error(err.success ? err.data.error.message : "BAS math process failed validation");
         }
         safeNumbers(output);
-        finish(null, resultSchema.parse(output));
+        finish(null, schema.parse(output));
       } catch (error) {
         const message = stderr.includes("No module named")
           ? "BAS Python dependencies unavailable. Install Pydantic V2 and configure OPENTAKEOFF_BAS_PYTHON."

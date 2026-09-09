@@ -48,7 +48,15 @@ projection check.
 and field-scoped equality. The previously captured source text and existing
 authored point-module keys establish the missing matrix rows.
 
-## Next authorized step
+## Authorization and follow-up
+
+The user subsequently authorized obtaining the missing information while
+preserving VectorGrid extraction. The shared routing fix and the newly reproduced
+downstream duplicate-removal defect are being verified. See
+`POINT_ROUTING_CONTRACT.md` and current `PROGRESS.md`; the original diagnosis and
+initial pending-permission checkpoint below are retained as history.
+
+### Original checkpoint
 
 An explicit question was sent asking permission to fix the **shared routing
 gate**, without changing VectorGrid's extraction algorithm, under corpus

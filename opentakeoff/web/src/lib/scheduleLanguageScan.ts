@@ -88,7 +88,7 @@ const CAPTION_XREF_RE = /^(SEE|REFER|REFERENCE|PER|FOR|AS|NOTE|NOTES|CONTINUED|C
  *  schedules on a `plan` sheet were invisible to the single-span scan below.
  *  Spans on the same printed line, close enough together to be one caption
  *  and not two unrelated ones, get joined before the regex ever sees them. */
-function joinCaptionLines(spans: GraphSpan[]): string[] {
+function joinCaptionLines(spans: GraphSpan[], includeSingleSpans = false): string[] {
   const rows: GraphSpan[][] = [];
   for (const sp of [...spans].sort((a, b) => a.y - b.y || a.x - b.x)) {
     const h = sp.h || 12;
@@ -101,7 +101,7 @@ function joinCaptionLines(spans: GraphSpan[]): string[] {
     row.sort((a, b) => a.x - b.x);
     let cluster: GraphSpan[] = [row[0]];
     const flush = () => {
-      if (cluster.length > 1) lines.push(cluster.map(spanText).join(" ").replace(/\s+/g, " ").trim());
+      if (includeSingleSpans || cluster.length > 1) lines.push(cluster.map(spanText).join(" ").replace(/\s+/g, " ").trim());
     };
     for (let i = 1; i < row.length; i++) {
       const prev = cluster[cluster.length - 1];
@@ -131,6 +131,24 @@ export function sheetHasScheduleCaption(spans: GraphSpan[]): boolean {
     if (SCHEDULE_CAPTION_RE.test(t)) return true;
   }
   return false;
+}
+
+/** Strict printed points-list caption for admitting an otherwise non-schedule
+ * drawing. The older title hook deliberately remains broader for legend/unknown
+ * pages. Admission only offers the page to the existing structural extractor;
+ * it neither creates a table nor changes the sheet's role.
+ *
+ * Evaluate whole spatial lines, not each fragment independently: in a split
+ * "SEE" + "POINTS LIST" reference, the second run is not a caption. */
+export function sheetHasPointsListCaption(spans: GraphSpan[]): boolean {
+  // Every accepted caption ends in LIST or POINT(S)LIST. Avoid assembling all
+  // page lines when that terminal word is absent (the common non-BAS case).
+  if (!spans.some(sp => /\b(?:LIST|POINTS?LIST)\b/.test(spanText(sp)))) return false;
+  return joinCaptionLines(spans, true).some((text) => {
+    if (text.length < 8 || text.length > 120) return false;
+    if (/\b(SEE|REFER|REFERENCE|PER|AS|NOTE|NOTES|SHALL|PROVIDE)\b/.test(text)) return false;
+    return /^(?:[A-Z0-9][A-Z0-9 ,.'&/()#-]* )?(?:POINTS? ?LIST|I\s*\/\s*O LIST|IO LIST)$/.test(text);
+  });
 }
 
 /** Session hook: legend/unknown sheets with extractable POINTS/DDC list titles.

@@ -1,0 +1,32 @@
+▶ shared point-list page routing
+  ✖ admits a glued POINTLIST caption without another caption rescuing the page (5.255708ms)
+✖ shared point-list page routing (5.889916ms)
+ℹ tests 1
+ℹ suites 1
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 460.838666
+
+✖ failing tests:
+
+test at test/vectorTakeoffPipeline.test.ts:1:2560
+✖ admits a glued POINTLIST caption without another caption rescuing the page (5.255708ms)
+  AssertionError [ERR_ASSERTION]: BAS INPUT/OUTPUT POINTLIST
+
+  false !== true
+
+      at TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/test/vectorTakeoffPipeline.test.ts:60:14)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async Promise.all (index 2)
+      at async Suite.run (node:internal/test_runner/test:1515:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

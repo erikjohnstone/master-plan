@@ -1,5 +1,210 @@
 # BAS production workflow progress
 
+### Final verification for the point-record checkpoint
+
+All handles listed in the checkpoint below are now terminal; **do not restart
+them**. Web `78183` completed the entire check: 2,573 pass / 13 existing skips,
+typecheck, lint, benchmark and build pass. Final MCP `1624` completed typecheck,
+**20 tests** (including diagnostic negative controls) and build. Python remains
+97 pass / mypy 11 source files. `git diff --check` passes.
+
+Baseline takeoff/reference `59931` completed: all three per-set metric lines and
+every reported takeoff/reference failure detail are identical to candidate.
+The seven missing items, 16 key-flagged additions and 30 missing ITD reference
+cells are therefore reproduced on the starting revision, not newly introduced
+by this batch. These are unresolved baseline failures, not correctness passes.
+Graph A/B `81547` completed for all three documents: baseline tables preserved
+12/12 Fort Sam, 9/9 Behavioral Medicine and 1/1 JVWTP; only Fort Sam has added
+regions (eight, independently keyed). Replay table sequences and remaining
+relationships match. Timing/cache limitations below remain; this is not a
+frozen final performance gate or a full-corpus result.
+
+The newly authored matrix audit had a false-pass hole: a missing nonempty-cell
+box was skipped. A controlled checksum fixture reproduced it; missing, inverted
+or out-of-region boxes now fail. The original PDF/key audit reran with this
+stricter diagnostic and still passes all 1,603 values, every expected nonempty
+box check, 193 rows and 12 preserved original tables. No historical scorer or
+key changed. Report normalization now accurately states NFKC/case/whitespace,
+not the earlier inaccurate “whitespace-only” description. Logs:
+`point-audit-box-before.log`, `point-matrix-audit-final.log`,
+`point-production-mcp-verified.log`, `point-production-web-verified.log`.
+
+This is a local implementation checkpoint, not production completion. No active
+verification jobs remain. Keep the detached baseline checkout for later frozen
+performance/coverage checks. Next substantive implementation remains canonical
+durable BAS/equipment workflow state and actual Takeoff presentation, then the
+remaining required SOO/assignment/assembly/compatibility/revision journeys.
+
+## Source-bound point records on production path — 2026-09-09
+
+The preceding user-question turn was **no progress** (status clarification).
+This continuation is **progress**: shared Python point interpretation, strict
+source/result contracts, independent negative controls, production orchestration,
+MCP schema exposure and source-preserving browser adaptation. No VectorGrid
+reader/parser/threshold change, no agents, no push/merge/deploy.
+
+- Shared `bas_point_lists_v1` retains all matrix rows/cells and supported literal
+  controller notes. Source byte/page identity is separate from navigation names.
+  Hardware declarations, software values and attribute flags remain distinct;
+  the new record deliberately has no installed-device or field-wiring total.
+- Fort Sam fresh production CLI: 12 matrices / 193 retained listed rows / 246
+  observations, six actual footnote spans, 16 reviewed chiller/boiler row bindings.
+  Every legacy and `bas_math` field equals the prior compile exactly. The original
+  zero-row legacy compiler result is still disclosed; it is not silently repaired
+  by substituting these observations into its old contract.
+- Real MCP `load_plan` + `compile_corpus_takeoff` verified against that CLI result,
+  including raw rows, source IDs, all note text/boxes and structured/text parity.
+  MCP's existing `path:null`/`export_path:null` envelope is checked explicitly.
+  An initial diagnostic failed because it had not accounted for those two
+  existing transport fields; the failure log is retained. Corrected parity:
+  `evidence/fort-sam-point-production-parity.json`, 28,905 ms, main-process peak
+  RSS 407,207,936 bytes. This is not a whole-process-tree or performance A/B claim.
+- Python: **97 pass**; mypy **11 source files pass**. MCP shared BAS suite:
+  **16 pass**, typecheck and build pass. Browser adapter: four tests pass,
+  including the real retained point result. Final full web rerun is live after
+  replacing unsupported ES2022 `Object.hasOwn` with the existing target's
+  `hasOwnProperty.call`; no TypeScript target or lint gate was relaxed.
+- New negative cases reject BAS-keyword-only/reference captions, invalid raw
+  boxes (including unknown columns), malformed source identities, orphaned or
+  altered output evidence, omitted rows, status conflicts, and ambiguously owned
+  notes. Missing/rotated/out-of-region footnotes do not become integration facts.
+- Sparse graph cells are an intentional existing contract. New
+  `unobserved_columns` lists absent cells without manufacturing zero/box evidence;
+  `uninterpreted_columns` separately retains supplied unknown content. The first
+  missing-cell test draft failed on a fixture KeyError, not an engine defect;
+  corrected before/after evidence is retained and documented in the contract.
+- Core candidate gate completed: takeoff 89.8% exact / seven missing / 16 keyed
+  false-add flags; applicable installed 148/160, expected refusals 1/6; reference
+  37/67; graph 78 correct / zero wrong / 13 missing CEILING cells; symbols 66/66.
+  Starting-revision Baker graph independently reproduces the same 13 misses.
+  Baseline takeoff/reference comparison remains live, so its other misses are
+  not yet labeled pre-existing. No table-recall keys exist for these three sets.
+- Equal 4-GiB-heap graph A/B retry completed Behavioral Medicine: all nine tables,
+  sheet metadata and remaining relationships unchanged; no additions. The first
+  default-heap baseline OOM remains retained. Fort Sam preserves all 12 previous
+  tables and adds the independently keyed eight regions. JVWTP comparison remains
+  live. Cache repeats overlapped non-extraction MCP source changes, which are in
+  the cache digest: do **not** interpret their warm labels as verified cache hits
+  or call these a frozen full-code performance gate. A final frozen warm check
+  remains required; no extraction code changed during those comparisons.
+
+Current live handles at this checkpoint: baseline takeoff/reference `59931`;
+graph A/B `81547` (JVWTP candidate); final web `78183`. Terminal: fresh CLI
+`81751` pass, first MCP diagnostic `79619` fail (envelope described above),
+corrected MCP parity `83377` pass, MCP gates `31180` pass, Python `6463` pass.
+
+**Remaining end state:** all five complete workflows remain required. Point
+records are now in shared compile JSON and carried by browser metadata, but
+dedicated UI presentation, canonical durable state, reviewed corrections,
+equipment/template joins and complete export are not implemented. Next move is
+canonical persisted BAS workflow/equipment records and actual Takeoff presentation,
+alongside SOO requirement interpretation—not more observer-only completion claims.
+Large-source batching (current 32-MiB transport), source version retention,
+assemblies/responsibilities, compatibility, revisions/approvals, full corpus and
+holdout/UI gates remain open. Holdouts have not been opened.
+
+Contract: `POINT_REVIEW_CONTRACT.md`. Graph/routing contract separately updated
+with fail-before/pass-after glued POINTLIST admission, not inferred from the
+mixed-caption Fort Sam page. No completion or genuine blocker claim.
+
+## Point-header interpretation and regression checkpoint — 2026-09-09
+
+The previous user-question turn was a status clarification (no implementation
+progress). This continuation made concrete progress: reproduced six header
+interpretation failures, fixed the shared Python consumer, verified all 73
+Python tests, mypy on nine source files, seven transport tests, MCP typecheck
+and build. No VectorGrid reader/geometry/parser change. No push/merge/deploy.
+
+- Nested HARDWARE POINTS / SOFTWARE POINTS parent headings now expose the
+  existing directional/value children. Four M-506 matrices independently
+  verify four positive AI rows and fifteen AV rows; trend/alarm/display flags
+  add neither terminals nor software values. Explicit conflicting scope is
+  unresolved, not resolved by precedence. Full source tables remain untouched.
+- Fresh real production CLI compile: original legacy result excluding
+  `bas_math` is exactly unchanged. Four formerly untyped matrices now contribute
+  19 typed rows. The result remains `review_required`, `project_complete=false`.
+  **Not installed demand:** controller integration qualifiers and applicability
+  still need their source-bound workflow. Retained result:
+  `evidence/fort-sam-point-header-compile.json`.
+- A/B Python invocation at baseline `08dffc79` and current consumer preserves
+  the entire EngineResult exactly for both earlier Fort Sam and Behavioral
+  fixtures, not just totals. Command used the same `.venv-bas/bin/python` with
+  each checkout as cwd, `python -m bas_engine`, and each fixture's tables as
+  BlueprintInput. Existing 61 tests plus 12 new cases pass.
+- Final previous web `npm run check` did complete: 2,570 pass / 13 existing
+  skips / zero failures, typecheck/lint/bench/build pass. Current Python and
+  diagnostic-only edits do not change that web build; no new UI work this turn.
+- Completed real Fort Sam graph A/B: all 12 original full table objects and
+  remaining graph relationships unchanged; eight new independently keyed
+  regions. Candidate cold and both normal cache reads have identical table
+  sequences. Cold baseline 19,760 ms / RSS 413,990,912 bytes; cold candidate
+  22,567 ms / RSS 443,924,480 bytes; candidate warm 1,701 ms. One observation
+  under concurrent evaluation load, not a statistical speedup or whole-process-
+  tree peak measurement. Baseline warm timing still pending.
+- Tightened the **new diagnostic comparator**, not any existing scorer: match
+  table occurrences one-to-one and reject additions/reordering on replay.
+  Three adversarial tests pass; rerunning it on saved Fort Sam graphs passes.
+  `evidence/point-routing-comparator-fort-sam.log` retains the stronger check.
+- Focused core graph scorer completed in 711.4 s: 78 correct / zero wrong /
+  13 missing keyed cells (all Baker County CEILING); 66/66 expected row-symbol
+  anchors. No positive room-tag key cases in this selected set. This is **not
+  a clean graph baseline claim**: starting-revision Baker reproduction is live.
+  Takeoff/reference stages still running. All three sets lack table-recall
+  keys, so table recall was **not scored**.
+- Broader A/B stopped with a terminal V8 heap-limit failure on **baseline**
+  Behavioral Medicine (22), before running its candidate or document 21.
+  Default 2 GiB JS heap exhausted; retained log shows 250.13 s and maximum RSS
+  1,631,633,408 bytes. This is not a comparison pass. Original failed logs
+  preserved. Retry both revisions under the same explicit heap cap after
+  memory headroom is available; do not restart still-running core jobs.
+
+Current live handles: core takeoff/reference `66455`; starting-revision Baker
+graph reproduction `40164`. Terminal: A/B `38653` (failed as above), Python
+`28931` (pass), MCP `31779` (pass), comparator/typecheck `30627` (pass), production
+compile `17383` (pass). Graph/routing candidate remains frozen while core child
+processes run. Python consumer is not used by those graph/scorer entry points.
+
+Next: finish/classify pending baseline comparisons, retry remaining A/B cases
+with sufficient equal memory caps, cover glued-caption admission separately,
+then commit the verified routing/header batch. Continue source-bound controller
+qualifiers and complete point/SOO interpretation into canonical persisted BAS
+records. All five end-to-end workflows, full corpus gates, holdout and UI
+persistence/review/export remain required. No completion or blocking claim.
+
+Contracts: `POINT_HEADER_CONTRACT.md`, `POINT_ROUTING_CONTRACT.md`.
+
+## Point-list routing recovery — active verification, 2026-09-09
+
+User approved obtaining the missing information while preserving VectorGrid and
+reiterated production-quality completion. Previous implementation turn was
+progress; intervening clarification only explained the pending choice. Current
+batch implements shared page admission and fixes a reproduced downstream
+duplicate-removal error. No VectorGrid reader/adapter/parser changes.
+
+- Regression tests reproduced both defects before their fixes.
+- Real source audit: 12/12 BAS matrices, 193/193 listed rows and 1,603/1,603
+  cell values match existing independently authored keys, including blank flags
+  and nonempty-cell source-region checks. Baseline was four matrices/79 rows/610
+  cell values. All twelve original complete table objects are exactly unchanged.
+- First routing-only candidate recovered seven tables; trace proved the fallback
+  reconciliation removed the gas-meter matrix after VectorGrid read it. Separate
+  regions no longer collapse merely because their title/local row keys match.
+- MCP typecheck, 29 Session/BAS tests and build pass. Web final check: 2,570 pass,
+  13 existing skips, zero fail; benchmark/build completed successfully.
+- Printed recovery is NOT physical I/O, installed count or semantic completeness.
+  HARDWARE/SOFTWARE nested headings and integration qualifiers remain next-work
+  items. No partial implementation is declared production complete.
+
+Contract, evidence and limitations: `POINT_ROUTING_CONTRACT.md`.
+Current verification handles: web check `63436`; focused core-corpus gate `66455`
+(bessemer, itd-d1-lab, baker-county-eoc); real compile `23623`. Poll live handles
+before doing anything with them. Terminal: MCP `57962`, Fort Sam graph `53244`.
+Temporary detached baseline checkout, created for A/B checks only:
+`/tmp/opentakeoff-routing-baseline.k9rAWG/checkout` at `08dffc79`; dependency
+symlinks only, no source modifications. Preserve until comparisons finish.
+Candidate code is frozen during the running corpus gate; do not mix revisions
+between its child processes. Broad corpus/holdout gates remain incomplete.
+
 ## Narrative discovery and omission diagnosis — 2026-09-09
 
 Previous brief goal/status turn was no progress. This continuation added shared

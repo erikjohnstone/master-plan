@@ -5,6 +5,18 @@
 Active goal and acceptance contract: `../opentakeoff/docs/BAS_PRODUCTION_GOAL.md`.
 Current research, exact baselines, limitations and next steps:
 `../opentakeoff/docs/bas-production/PROGRESS.md`.
+Latest checkpoint: shared source-bound point observations now cross the real
+production CLI/MCP path. Fort Sam 12 matrices / 193 listed rows, six source-note
+spans and 16 reviewed controller bindings; prior legacy/math fields unchanged.
+Python 97 pass, MCP BAS/diagnostic 20 pass, full web 2,573 pass/13 existing skips
+(typecheck/lint/bench/build pass); durable workflow/UI/export still incomplete.
+Core candidate: takeoff 89.8%, references 37/67, graph 78 correct/13 missing,
+66/66 symbols. Baseline reproduces the 13 Baker CEILING misses and all reported
+takeoff/reference failures. Three-document graph A/B is complete: prior tables
+12/12 Fort Sam, 9/9 Behavioral and 1/1 JVWTP preserved, only eight independently
+keyed Fort Sam additions. All verification handles are terminal.
+Use the linked latest checkpoint for current handles and performance limitations;
+older live-status paragraphs below are historical, not a restart instruction.
 Implementation is coordinator-only on `codex/bas-math-engine`, baseline `161583a4`.
 The new goal excludes vision/model training, pricing/costing/labor and automatic
 merges/deployments; those explicit limits supersede older scope notes below.
@@ -23,6 +35,17 @@ not full SOO interpretation or a complete workflow. The missing 114 Fort Sam
 listed point rows were traced to the shared page-role routing gate; permission
 was requested before changing that gate. Detailed proof and pending work remain
 in the BAS production progress record above.
+User subsequently authorized the routing repair. Shared routing/reconciliation
+now recovers all 12 Fort Sam BAS matrices / 193 printed rows / 1,603 keyed cells,
+with the original 12 complete graph tables unchanged. No VectorGrid reader edit.
+Nested HARDWARE/SOFTWARE header interpretation is now tested in the shared
+Python consumer (73 tests pass; prior complete fixture outputs unchanged).
+These are printed-source results, not installed quantities or complete workflows.
+Focused graph gate: 78 correct / 0 wrong / 13 missing keyed cells, 66/66 expected
+symbol anchors. Baker CEILING baseline reproduction and takeoff/reference are
+still live; no non-regression claim yet. Behavioral A/B baseline hit the default
+V8 heap limit; the failure is retained, not scored away. Current process handles,
+runtime/RSS, exact comparisons and next steps are in the linked BAS progress.
 
 ### Vector takeoff engine research — commercial + OSS stack (2026-09-01 22:00 UTC)
 

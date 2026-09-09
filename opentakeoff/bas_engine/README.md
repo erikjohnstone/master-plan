@@ -1,5 +1,13 @@
 # BAS math engine
 
+The same bounded Python transport also accepts an exclusive `point_lists`
+envelope containing Session source context and indexed tables. It returns
+`bas_point_lists_v1`: source-bound listed observations, sparse/uninterpreted
+column accounting and supported explicit controller footnotes, with no installed
+quantity total. Both UI production compile and MCP return this additive record.
+See [point evidence contract](../docs/bas-production/POINT_REVIEW_CONTRACT.md)
+for supported patterns, limits and unfinished review/persistence integration.
+
 One deterministic implementation for the existing Takeoff UI and MCP compile
 path. No product catalog, model calls, PDF parsing, or project-spec ingestion.
 See [the research and mathematical proofs](../docs/BAS_MATH_RESEARCH.md) and
@@ -60,6 +68,14 @@ the additional UI pool. Instances cannot share terminals unless the group
 explicitly declares `allocation="shared_pool"`. That option is valid only when
 the physical architecture permits pooling. The returned assignment reserves UI
 once across AI and DI; it cannot cover AO or DO.
+
+The indexed-table adapter accepts explicit HARDWARE POINTS / SOFTWARE POINTS
+parents with retained directional/value subheadings. It preserves the indexed
+cells and subheader evidence; trend, alarm and graphics flags do not create
+extra channels or variables. Conflicting physical/software scope is unresolved.
+This projection covers each table once. It does not interpret every controller
+footnote, establish installed equipment, or prove source completeness. See the
+[header contract and source-based tests](../docs/bas-production/POINT_HEADER_CONTRACT.md).
 
 For SOO-only, use `soo` instead of `point_list`. For both, supply both arrays and
 align the same `group_id` and `point_id` explicitly. Never align unrelated points

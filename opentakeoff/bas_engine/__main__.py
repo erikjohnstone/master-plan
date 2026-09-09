@@ -10,6 +10,7 @@ from pydantic import ValidationError
 from .adapters import BlueprintInput, indexed_request
 from .engine import calculate
 from .models import Contract, EngineRequest, EngineResult
+from .point_lists import PointListInput, PointListResult, review_point_lists
 
 MAX_BYTES = 32 * 1024 * 1024
 
@@ -17,6 +18,7 @@ MAX_BYTES = 32 * 1024 * 1024
 class Envelope(Contract):
     request: EngineRequest | None = None
     blueprint: BlueprintInput | None = None
+    point_lists: PointListInput | None = None
 
 
 def main() -> int:
@@ -25,15 +27,21 @@ def main() -> int:
         if len(data) > MAX_BYTES:
             raise ValueError("BAS input exceeds 32 MiB")
         envelope = Envelope.model_validate_json(data)
-        if (envelope.request is None) == (envelope.blueprint is None):
-            raise ValueError("provide exactly one request or blueprint payload")
-        request = envelope.request
-        if request is None:
-            assert envelope.blueprint is not None
-            request = indexed_request(envelope.blueprint)
-        result = calculate(request)
+        if sum(item is not None for item in (envelope.request, envelope.blueprint, envelope.point_lists)) != 1:
+            raise ValueError("provide exactly one request, blueprint or point_lists payload")
+        result: EngineResult | PointListResult
+        if envelope.point_lists is not None:
+            result = review_point_lists(envelope.point_lists)
+            result = PointListResult.model_validate(result.model_dump())
+        else:
+            request = envelope.request
+            if request is None:
+                assert envelope.blueprint is not None
+                request = indexed_request(envelope.blueprint)
+            result = calculate(request)
+            result = EngineResult.model_validate(result.model_dump())
         # Validate the output contract again before crossing a process boundary.
-        output = EngineResult.model_validate(result.model_dump()).model_dump_json()
+        output = result.model_dump_json()
         if len(output.encode()) > MAX_BYTES:
             raise ValueError("BAS output exceeds 32 MiB")
         sys.stdout.write(output + "\n")

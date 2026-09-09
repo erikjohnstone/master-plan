@@ -39,8 +39,17 @@ what makes it training data.
 BAS takeoffs now have a separate engineering result in **Takeoff**: typed I/O,
 abstract capacity, explicit network constraints, independent software licensing
 and source discrepancies. UI and MCP call one Pydantic V2 Python engine. This
-does not change blueprint extraction or certify project completeness. See
+does not certify project completeness. Explicit points-list captions now admit
+detail/plan sheets to the existing reader, and separate matrices retain their
+own source regions even when local row numbers repeat. The VectorGrid reader
+is unchanged. Nested hardware/software headings are interpreted downstream;
+alarm/trend flags are not additional I/O or software values. See
 [setup and contracts](bas_engine/README.md) and [math proofs](docs/BAS_MATH_RESEARCH.md).
+
+The shared BAS compile JSON also retains source-bound point observations and
+supported controller footnotes in `bas_point_lists`. These are listed evidence,
+not installed devices. Its durable review/presentation workflow is still in
+development; existing engineering and row exports keep their current meaning.
 
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized

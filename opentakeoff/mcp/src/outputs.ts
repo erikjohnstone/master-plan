@@ -8,6 +8,7 @@
 // output (summary rows, export payload) use .passthrough() so a field added
 // upstream widens the reply instead of failing validation.
 import { z } from "zod";
+import { basPointListsOutputSchema } from "../../web/src/lib/basPointLists.ts";
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -109,6 +110,8 @@ export const compileCorpusTakeoffOutput = {
   estimator_product: z.any().optional(),
   /** Additive deterministic Python BAS math; legacy printed totals stay unchanged. */
   bas_math: z.any().optional(),
+  /** Source-bound listed observations, not installed devices or wired demand. */
+  bas_point_lists: basPointListsOutputSchema.optional().describe("Source/version-bound listed point observations, raw cells, sparse-column accounting and explicit supported controller notes. Not installed quantity, verified field wiring or complete coverage. Independent unavailable status preserves legacy and math results."),
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),

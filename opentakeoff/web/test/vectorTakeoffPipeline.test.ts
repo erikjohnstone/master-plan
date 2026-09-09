@@ -8,7 +8,70 @@ import { sheetHasScheduleKeywords, extractScheduleTablesFromLineGrid, MAX_LINE_G
 import { extractScheduleTablesFromStreamGrid } from "../src/lib/scheduleStreamFallback.ts";
 import { runVectorTakeoffPipeline, scheduleKeywordRegion, type VectorPipelineHooks } from "../src/lib/vectorTakeoffPipeline.ts";
 import { shutdownVectorGrid } from "../src/lib/vectorGridClient.ts";
+import { sheetHasPointsListTitleSpans } from "../src/lib/scheduleLanguageScan.ts";
 import type { GraphSpan, SheetGraph } from "../src/lib/sheetgraph.ts";
+
+describe("shared point-list page routing", () => {
+  const span = (str: string, x = 100): GraphSpan => ({ str, x, y: 100, w: str.length * 8, h: 12 });
+  async function routed(role: string, spans: GraphSpan[]) {
+    const g: SheetGraph = {
+      available: true, sheets: [], rooms: [], unmatched_tags: [], tables: [],
+      callouts: [], buildings: [], revisions: [], notes: [],
+    };
+    let fallbackCalls = 0;
+    let additionalPointListSheets: string[] = [];
+    await runVectorTakeoffPipeline(g, {
+      getSheetContexts: () => [{ key: "fixture.pdf#1", role, spans, width: 1000, height: 1000,
+        pageViewportTransform: [1, 0, 0, 1, 0, 0] }],
+      sheetHasPointsListTitle: () => sheetHasPointsListTitleSpans(spans),
+      runODL: async (_graph, additional = []) => { fallbackCalls++; additionalPointListSheets = additional; },
+    });
+    // No PDF reader/geometry in this unit fixture: eligible empty pages reach
+    // the existing fallback. Real-PDF extraction is verified separately.
+    assert.deepEqual(g.tables, []);
+    if (spans.length === 1 && spans[0].str === "BAS INPUT/OUTPUT POINT LIST") {
+      assert.deepEqual(additionalPointListSheets, ["fixture.pdf#1"]);
+    }
+    return fallbackCalls === 1;
+  }
+
+  it("offers an explicit BAS matrix caption independently of the drawing role", async () => {
+    for (const role of ["detail", "elevation", "plan", "section", "legend", "unknown", "schedule"]) {
+      assert.equal(await routed(role, [span("BAS INPUT/OUTPUT POINT LIST")]), true, role);
+    }
+    assert.equal(await routed("detail", [span("POINTS"), span("LIST", 156)]), true);
+  });
+
+  it("does not widen nonschedule routing for cross-references, prose, or diagram labels", async () => {
+    for (const role of ["detail", "elevation", "plan", "section"]) {
+      for (const title of ["SEE BAS INPUT/OUTPUT POINT LIST", "REFER TO POINTS LIST ON M-601",
+        "BAS POINTS SHALL BE CONNECTED", "AUTOMATIC TEMPERATURE CONTROL DIAGRAM",
+        "AHU-1", "BAS INPUT/OUTPUT POINT LIST IS ON M-601"]) {
+        assert.equal(await routed(role, [span(title)]), false, `${role}: ${title}`);
+      }
+      // Do not treat the standalone second PDF text run as a real heading.
+      assert.equal(await routed(role, [span("SEE"), span("POINTS LIST", 132)]), false);
+      assert.equal(await routed(role, [span("POINTS"), span("LIST", 800)]), false);
+    }
+  });
+
+  it("admits a glued POINTLIST caption without another caption rescuing the page", async () => {
+    for (const title of ["BAS INPUT/OUTPUT POINTLIST", "POINTLIST", "DDC POINTSLIST"]) {
+      assert.equal(await routed("detail", [span(title)]), true, title);
+    }
+    for (const title of ["SEE POINTLIST", "CHECKPOINTLIST", "POINTLIST ON M-601", "REFER TO DDC POINTSLIST"]) {
+      assert.equal(await routed("detail", [span(title)]), false, title);
+    }
+  });
+
+  it("preserves the pre-existing schedule and legend/unknown fallback admission", async () => {
+    assert.equal(await routed("schedule", []), true);
+    assert.equal(await routed("plan", [span("CONTROL VALVE SCHEDULE")]), true);
+    for (const role of ["legend", "unknown"]) {
+      assert.equal(await routed(role, [span("BAS POINTS SHALL BE CONNECTED")]), true);
+    }
+  });
+});
 
 describe("L1.5 pageTileGrid", () => {
   it("slices oversized pages into overlapping tiles", () => {

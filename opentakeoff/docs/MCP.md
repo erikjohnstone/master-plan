@@ -19,6 +19,13 @@ there is no separate browser math implementation. `bas_math` is additive to the
 existing BAS compile response. Never treat its conservative conflict envelope
 as resolved drawing truth or its `calculated` status as project completeness.
 
+The additive `bas_point_lists` record retains listed observations with source
+versions/pages, original cells, sparse/uninterpreted columns and supported
+controller notes. It does not establish installed quantity or field wiring.
+Do not substitute alarm/trend flags for I/O, or an unobserved cell for a verified
+zero. Its unavailable state is separate from math-policy failure. Durable
+equipment assignment, review and approved snapshot integration remain in progress.
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

@@ -11,7 +11,7 @@ import {
   extractScheduleTablesFromVectorGrid,
 } from "./vectorGridAdapter.ts";
 import { vectorGridAvailable, vectorGridMode } from "./vectorGridClient.ts";
-import { sheetHasPointsListTitleSpans, sheetHasScheduleCaption, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
+import { sheetHasPointsListCaption, sheetHasPointsListTitleSpans, sheetHasScheduleCaption, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
 import {
   adoptVectorGridTables,
   collapseEquivalentPrimaryTables,
@@ -46,7 +46,7 @@ export interface VectorSheetContext {
 
 export interface VectorPipelineHooks {
   /** L2 ODL pass (OpenDataLoader-PDF). */
-  runODL: (g: SheetGraph) => Promise<void>;
+  runODL: (g: SheetGraph, additionalPointListSheets?: string[]) => Promise<void>;
   getSheetContexts: () => VectorSheetContext[] | Promise<VectorSheetContext[]>;
   sheetHasPointsListTitle: (sheetKey: string) => boolean;
   /** A cover/index sheet's own DRAWING LIST / SHEET INDEX table (optional —
@@ -187,6 +187,10 @@ function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): 
   // everywhere on a floor plan, which is why the role check existed — so the
   // test for a non-schedule sheet is a printed CAPTION, not vocabulary.
   if (sheetHasScheduleCaption(ctx.spans)) return true;
+  // A point matrix can share a detail/elevation/plan sheet. The role is not
+  // evidence of absence. Keep the broader legacy title/language hook below
+  // the role gate: only a spatially assembled printed caption expands routing.
+  if (sheetHasPointsListCaption(ctx.spans)) return true;
   if (ctx.role !== "legend" && ctx.role !== "unknown") return false;
   if (hooks.sheetHasPointsListTitle(ctx.key)) return true;
   if (hooks.sheetHasDrawingIndexTitle?.(ctx.key)) return true;
@@ -543,7 +547,11 @@ export async function runVectorTakeoffPipeline(
     const keyOfTable = (t: ScheduleTable) =>
       `${t.sheet}|${t.title?.text ?? ""}|${(t.region || []).map((v) => Math.round(v)).join(",")}`;
     const beforeOdl = new Set(g.tables.map(keyOfTable));
-    await timed("L2:ODL", () => hooks.runODL(g));
+    // Forward newly admitted caption-bearing pages only when VectorGrid left
+    // them uncovered. Do not make the fallback reread a recovered matrix.
+    const additionalPointListSheets = uncovered
+      .filter(ctx => sheetHasPointsListCaption(ctx.spans)).map(ctx => ctx.key);
+    await timed("L2:ODL", () => hooks.runODL(g, additionalPointListSheets));
     if (report) {
       for (const t of g.tables) {
         if (beforeOdl.has(keyOfTable(t))) continue;

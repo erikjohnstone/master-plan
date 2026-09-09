@@ -4,6 +4,10 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Return source-bound point-list observations alongside the existing BAS math on the shared production compile path. Preserve original rows and sparse cells; retain supported controller footnotes without treating them as installed devices or wired terminals. Strict validation and browser citation-alias mapping protect raw evidence. Durable workflow review and dedicated presentation remain in development.
+
+- Admit explicit points-list captions on detail/plan sheets through shared routing; keep spatially separate same-title/local-key matrices during fallback reconciliation. Preserve existing table objects and leave the VectorGrid reader unchanged.
+- Interpret explicit nested HARDWARE POINTS / SOFTWARE POINTS headers in the shared Python consumer. Keep trend/alarm/display flags out of I/O and software-value counts, and reject conflicting physical/software header scopes. Table-local counts remain distinct from installed quantities and complete engineering demand.
 - Keep large BAS results readable to Agent with a bounded chat-only summary; preserve the full Takeoff/export payload and all existing completion metadata.
 
 - Add a shared, manufacturer-independent Pydantic V2 engine for typed SOO/point-list reconciliation, rigid/UI capacity, exact spare ceilings, constrained serial/IP topology and independent software licensing.

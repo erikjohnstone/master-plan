@@ -1,0 +1,501 @@
+{
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "image_scale": 2,
+  "scope": "Authored printed rows/cells and approximate source-cell regions. Not physical I/O or installed quantities. NFKC, case and whitespace text normalization; missing cells compared with authored blanks. Every expected nonempty cell requires a finite ordered box whose center lies in its authored region. Header rows are reported separately, not repaired.",
+  "baseline": {
+    "tables": 4,
+    "matched_rows": 79,
+    "matched_cells": 610,
+    "errors": 8
+  },
+  "candidate": {
+    "tables": 12,
+    "matched_rows": 193,
+    "matched_cells": 1603,
+    "errors": 0
+  },
+  "preservation": [
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+      "title": "EXTERNAL STATIC PRESSURE SCHEDULE",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+      "title": "NOISE CONTROL DUCT SILENCER SCHEDULE",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6",
+      "title": "BAS INPUT/OUTPUT POINT LIST",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+      "title": "BAS INPUT/OUTPUT POINT LIST",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7",
+      "title": "BAS INPUT/OUTPUT POINT LIST",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8",
+      "title": "BAS INPUT/OUTPUT POINT LIST",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#9",
+      "title": "CHILLED WATER FAN COIL UNIT SCHEDULE",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#9",
+      "title": "DEDICATED OUTSIDE AIR SYSTEM SCHEDULE",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#9",
+      "title": "BOILER SCHEDULE",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#9",
+      "title": "UNIT HEATER SCHEDULE",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#9",
+      "title": "AIR-COOLED CHILLER SCHEDULE",
+      "unchanged": true
+    },
+    {
+      "sheet": "12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#9",
+      "title": "EXHAUST FAN SCHEDULE",
+      "unchanged": true
+    }
+  ],
+  "reused_key_regions": [],
+  "additional_unkeyed_tables": [],
+  "before": [
+    {
+      "id": "M506-MINI-SPLIT",
+      "page": 2,
+      "expected_rows": 10,
+      "expected_cells": 70,
+      "matching_tables": 0,
+      "matched_rows": 0,
+      "matched_cells": 0,
+      "checked_nonempty_boxes": 0,
+      "errors": [
+        {
+          "kind": "table_cardinality",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "id": "M506-SWITCHED-EF",
+      "page": 2,
+      "expected_rows": 6,
+      "expected_cells": 42,
+      "matching_tables": 0,
+      "matched_rows": 0,
+      "matched_cells": 0,
+      "checked_nonempty_boxes": 0,
+      "errors": [
+        {
+          "kind": "table_cardinality",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "id": "M506-WATER-METER",
+      "page": 2,
+      "expected_rows": 9,
+      "expected_cells": 108,
+      "matching_tables": 0,
+      "matched_rows": 0,
+      "matched_cells": 0,
+      "checked_nonempty_boxes": 0,
+      "errors": [
+        {
+          "kind": "table_cardinality",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "id": "M506-GAS-METER",
+      "page": 2,
+      "expected_rows": 9,
+      "expected_cells": 108,
+      "matching_tables": 0,
+      "matched_rows": 0,
+      "matched_cells": 0,
+      "checked_nonempty_boxes": 0,
+      "errors": [
+        {
+          "kind": "table_cardinality",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "id": "M506-ELECTRIC-METER",
+      "page": 2,
+      "expected_rows": 15,
+      "expected_cells": 180,
+      "matching_tables": 0,
+      "matched_rows": 0,
+      "matched_cells": 0,
+      "checked_nonempty_boxes": 0,
+      "errors": [
+        {
+          "kind": "table_cardinality",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "id": "M506-GLOBAL",
+      "page": 2,
+      "expected_rows": 6,
+      "expected_cells": 72,
+      "matching_tables": 0,
+      "matched_rows": 0,
+      "matched_cells": 0,
+      "checked_nonempty_boxes": 0,
+      "errors": [
+        {
+          "kind": "table_cardinality",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "id": "M507-CHILLED-WATER-SYSTEM",
+      "page": 3,
+      "expected_rows": 25,
+      "expected_cells": 175,
+      "matching_tables": 0,
+      "matched_rows": 0,
+      "matched_cells": 0,
+      "checked_nonempty_boxes": 0,
+      "errors": [
+        {
+          "kind": "table_cardinality",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "id": "M508-HEATING-WATER-SYSTEM",
+      "page": 4,
+      "expected_rows": 34,
+      "expected_cells": 238,
+      "matching_tables": 0,
+      "matched_rows": 0,
+      "matched_cells": 0,
+      "checked_nonempty_boxes": 0,
+      "errors": [
+        {
+          "kind": "table_cardinality",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "id": "M510-FCU",
+      "page": 6,
+      "expected_rows": 19,
+      "expected_cells": 190,
+      "matching_tables": 1,
+      "matched_rows": 19,
+      "matched_cells": 190,
+      "checked_nonempty_boxes": 57,
+      "errors": [],
+      "table_region": [
+        2066.4,
+        215.04,
+        3474.48,
+        1150.8
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M511-DOAS3",
+      "page": 7,
+      "expected_rows": 29,
+      "expected_cells": 203,
+      "matching_tables": 1,
+      "matched_rows": 29,
+      "matched_cells": 203,
+      "checked_nonempty_boxes": 87,
+      "errors": [],
+      "table_region": [
+        1698.48,
+        368.88,
+        2883.12,
+        1670.4
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M511-VAV",
+      "page": 7,
+      "expected_rows": 4,
+      "expected_cells": 28,
+      "matching_tables": 1,
+      "matched_rows": 4,
+      "matched_cells": 28,
+      "checked_nonempty_boxes": 12,
+      "errors": [],
+      "table_region": [
+        3091.68,
+        816,
+        4217.76,
+        1067.76
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M512-DOAS12",
+      "page": 8,
+      "expected_rows": 27,
+      "expected_cells": 189,
+      "matching_tables": 1,
+      "matched_rows": 27,
+      "matched_cells": 189,
+      "checked_nonempty_boxes": 81,
+      "errors": [],
+      "table_region": [
+        2164.56,
+        402.48,
+        3349.2,
+        1620
+      ],
+      "retained_header_rows": 0
+    }
+  ],
+  "after": [
+    {
+      "id": "M506-MINI-SPLIT",
+      "page": 2,
+      "expected_rows": 10,
+      "expected_cells": 70,
+      "matching_tables": 1,
+      "matched_rows": 10,
+      "matched_cells": 70,
+      "checked_nonempty_boxes": 30,
+      "errors": [],
+      "table_region": [
+        1508.64,
+        621.12,
+        2699.76,
+        1102.32
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M506-SWITCHED-EF",
+      "page": 2,
+      "expected_rows": 6,
+      "expected_cells": 42,
+      "matching_tables": 1,
+      "matched_rows": 6,
+      "matched_cells": 42,
+      "checked_nonempty_boxes": 18,
+      "errors": [],
+      "table_region": [
+        3161.28,
+        536.88,
+        4352.4,
+        887.28
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M506-WATER-METER",
+      "page": 2,
+      "expected_rows": 9,
+      "expected_cells": 108,
+      "matching_tables": 1,
+      "matched_rows": 9,
+      "matched_cells": 108,
+      "checked_nonempty_boxes": 34,
+      "errors": [],
+      "table_region": [
+        259.44,
+        1638,
+        1698.96,
+        2226.72
+      ],
+      "retained_header_rows": 1
+    },
+    {
+      "id": "M506-GAS-METER",
+      "page": 2,
+      "expected_rows": 9,
+      "expected_cells": 108,
+      "matching_tables": 1,
+      "matched_rows": 9,
+      "matched_cells": 108,
+      "checked_nonempty_boxes": 34,
+      "errors": [],
+      "table_region": [
+        1737.36,
+        1638,
+        3064.32,
+        2196.48
+      ],
+      "retained_header_rows": 1
+    },
+    {
+      "id": "M506-ELECTRIC-METER",
+      "page": 2,
+      "expected_rows": 15,
+      "expected_cells": 180,
+      "matching_tables": 1,
+      "matched_rows": 15,
+      "matched_cells": 180,
+      "checked_nonempty_boxes": 75,
+      "errors": [],
+      "table_region": [
+        3127.92,
+        1638,
+        4460.86,
+        2496.96
+      ],
+      "retained_header_rows": 1
+    },
+    {
+      "id": "M506-GLOBAL",
+      "page": 2,
+      "expected_rows": 6,
+      "expected_cells": 72,
+      "matching_tables": 1,
+      "matched_rows": 6,
+      "matched_cells": 72,
+      "checked_nonempty_boxes": 15,
+      "errors": [],
+      "table_region": [
+        483.84,
+        2460.24,
+        1989.36,
+        2883.6
+      ],
+      "retained_header_rows": 1
+    },
+    {
+      "id": "M507-CHILLED-WATER-SYSTEM",
+      "page": 3,
+      "expected_rows": 25,
+      "expected_cells": 175,
+      "matching_tables": 1,
+      "matched_rows": 25,
+      "matched_cells": 175,
+      "checked_nonempty_boxes": 78,
+      "errors": [],
+      "table_region": [
+        3054,
+        1456.08,
+        4245.14,
+        2569.68
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M508-HEATING-WATER-SYSTEM",
+      "page": 4,
+      "expected_rows": 34,
+      "expected_cells": 238,
+      "matching_tables": 1,
+      "matched_rows": 34,
+      "matched_cells": 238,
+      "checked_nonempty_boxes": 108,
+      "errors": [],
+      "table_region": [
+        2997.12,
+        1290.24,
+        4188.46,
+        2736.24
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M510-FCU",
+      "page": 6,
+      "expected_rows": 19,
+      "expected_cells": 190,
+      "matching_tables": 1,
+      "matched_rows": 19,
+      "matched_cells": 190,
+      "checked_nonempty_boxes": 57,
+      "errors": [],
+      "table_region": [
+        2066.4,
+        215.04,
+        3474.48,
+        1150.8
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M511-DOAS3",
+      "page": 7,
+      "expected_rows": 29,
+      "expected_cells": 203,
+      "matching_tables": 1,
+      "matched_rows": 29,
+      "matched_cells": 203,
+      "checked_nonempty_boxes": 87,
+      "errors": [],
+      "table_region": [
+        1698.48,
+        368.88,
+        2883.12,
+        1670.4
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M511-VAV",
+      "page": 7,
+      "expected_rows": 4,
+      "expected_cells": 28,
+      "matching_tables": 1,
+      "matched_rows": 4,
+      "matched_cells": 28,
+      "checked_nonempty_boxes": 12,
+      "errors": [],
+      "table_region": [
+        3091.68,
+        816,
+        4217.76,
+        1067.76
+      ],
+      "retained_header_rows": 0
+    },
+    {
+      "id": "M512-DOAS12",
+      "page": 8,
+      "expected_rows": 27,
+      "expected_cells": 189,
+      "matching_tables": 1,
+      "matched_rows": 27,
+      "matched_cells": 189,
+      "checked_nonempty_boxes": 81,
+      "errors": [],
+      "table_region": [
+        2164.56,
+        402.48,
+        3349.2,
+        1620
+      ],
+      "retained_header_rows": 0
+    }
+  ]
+}
