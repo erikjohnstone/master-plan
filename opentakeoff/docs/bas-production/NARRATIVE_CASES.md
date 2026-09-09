@@ -26,6 +26,24 @@ regions. General controls/zone prose and all other possible requirements still
 need their own coverage accounting. This count is not a “complete project SOO”
 claim and must not become a hardcoded production expectation.
 
+## Additional independently reviewed layout: Behavioral Medicine M701
+
+Focus rank 22, SHA-256
+`b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711`, PDF page
+20: CHILLED WATER SYSTEM / SEQUENCE OF OPERATION is one right-hand region.
+The original page was rendered and reviewed in full. It has a much larger
+two-line heading, twelve lettered sections A-L, bold inline labels with slightly
+overlapping PDF text-run boxes, and two small two-column reset tables embedded
+in sections G/H. The full region must preserve both inset tables separately
+from prose and exclude the neighboring 101-row point matrix. Existing authored
+controls-context assertions also corroborate selected sequence clauses.
+
+The source-reviewed key is `web/test/fixtures/bas-narrative-behavioral.json`;
+the raw production text capture is `evidence/baseline/behavioral-text.json`.
+The initial discovery audit returned heading-only here. This is a development
+case, not holdout proof. Extracting its prose still does not establish each
+component's signal type, ownership or installation count.
+
 ## Negative and edge requirements
 
 1. Table cells, point flags and repeated view captions must not be silently

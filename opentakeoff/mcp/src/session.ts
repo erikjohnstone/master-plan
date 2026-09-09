@@ -18,6 +18,7 @@ import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
 import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
+import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src/lib/basNarratives.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -988,6 +989,13 @@ export class Session {
         page_count: doc.numPages, pages });
     }
     return buildBasSourceContext(documents);
+  }
+
+  /** Shared BAS narrative lane; preserves the legacy table-only sequence tool.
+   * Discovery is source accounting, not interpreted points or project coverage.
+   */
+  basNarrativesForPipeline(): BasNarrativeDiscovery {
+    return discoverBasNarratives(this.basSourcesForPipeline());
   }
 
   /** The file (basename) a sheet key belongs to — the key codec's inverse. */

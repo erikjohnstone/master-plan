@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "authorship": "Independently reviewed original PDF page 20/M701, its full Poppler render, source text and existing authored controls-context assertions. Not generated from discovery output.",
+  "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+  "source_id": "22__vol2__012",
+  "coordinate_frame": "image_px",
+  "regions": [
+    {
+      "page": 20,
+      "title": "SEQUENCE OF OPERATION",
+      "context_title": "CHILLED WATER SYSTEM\nSEQUENCE OF OPERATION",
+      "bbox": [3300, 240, 4650, 2670],
+      "section_markers": ["A.", "B.", "C.", "D.", "E.", "F.", "G.", "H.", "I.", "J.", "K.", "L."],
+      "insets": [
+        [["OUTSIDE AIR TEMP.", "CHWS SETPOINT"], ["75 deg F", "44 deg F"], ["65 deg F", "48 deg F"]],
+        [["WET BULB OA", "TOWER SETPOINT"], ["60 deg F", "65 deg F"], ["75 deg F", "85 deg F"]]
+      ]
+    }
+  ],
+  "heading_only": [],
+  "limitations": "This is one source-region key, not all project requirements. The neighboring point matrix is excluded from this SOO region, not from the workflow. Reset pairs preserve printed columns and units without deriving I/O or installed quantities."
+}

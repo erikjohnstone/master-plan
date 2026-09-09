@@ -1,0 +1,4 @@
+Four BAS tables: all saved adapter-fixture fields (sheet/title/headers/region/rows, including every cell/bbox) unchanged. Fixture does not include kind; no kind equivalence claimed.
+{"page":2,"role":"detail","has_schedule_caption":false,"has_points_list_title":true,"graph_tables":0}
+{"page":3,"role":"elevation","has_schedule_caption":false,"has_points_list_title":true,"graph_tables":0}
+{"page":4,"role":"elevation","has_schedule_caption":false,"has_points_list_title":true,"graph_tables":0}

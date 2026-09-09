@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Session } from '../src/session.ts';
 import { openPdf, textSpans } from '../src/pdf.ts';
+import { discoverBasNarratives } from '../../web/src/lib/basNarratives.ts';
 
 const sample = fileURLToPath(new URL('../../demo/sample-plan.pdf', import.meta.url));
 
@@ -26,9 +27,15 @@ test('shared BAS seam retains the production PDF spans and leaves Session output
     }
     assert.deepEqual(session.sheetList(), sheetListBefore);
     assert.deepEqual(session.basSourcesForPipeline(), context);
+    const narratives = session.basNarrativesForPipeline();
+    assert.deepEqual(narratives, discoverBasNarratives(context), 'Session invokes the exact shared narrative implementation');
+    for (const [i, page] of narratives.pages.entries()) {
+      assert.deepEqual(Object.values(page.accounting).flat().sort(), context.pages[i].spans.map(s => s.span_id).sort());
+    }
     const full = await session.sheetContext(session.files[0], {});
     assert.deepEqual(context.pages[0].spans.map(s => s.text), full.text.spans.map(s => s.str));
     assert.deepEqual(session.basSourcesForPipeline(), context, 'another consumer populating geometry/text caches cannot change BAS evidence');
+    assert.deepEqual(session.basNarrativesForPipeline(), narratives, 'narrative discovery also remains cache-independent');
   } finally { await doc.destroy(); }
 });
 

@@ -16,6 +16,13 @@ First shared source adapter verified on 24 development PDFs / 1,253 pages /
 passes (2,557 pass, 13 skips), focused BAS tests and MCP build/typecheck pass.
 This proves source preservation, not improved takeoff or SOO completeness;
 the detailed progress record distinguishes those scopes.
+Shared narrative discovery now has nine source-region controls across two PDFs,
+including embedded reset tables, plus exhaustive accounting/replay across all
+24 development PDFs. Final web check: 2,567 pass / 13 existing skips. This is
+not full SOO interpretation or a complete workflow. The missing 114 Fort Sam
+listed point rows were traced to the shared page-role routing gate; permission
+was requested before changing that gate. Detailed proof and pending work remain
+in the BAS production progress record above.
 
 ### Vector takeoff engine research — commercial + OSS stack (2026-09-01 22:00 UTC)
 

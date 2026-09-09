@@ -1,5 +1,46 @@
 # BAS production workflow progress
 
+## Narrative discovery and omission diagnosis — 2026-09-09
+
+Previous brief goal/status turn was no progress. This continuation added shared
+`basNarratives.ts` plus `Session.basNarrativesForPipeline()` and source-backed
+tests. This remains an internal building block, not a completed persisted/UI
+workflow. VectorGrid, graph routing, legacy compilers, Python math and UI code
+are unchanged. No external push/merge/deploy.
+
+- Ten new focused narrative tests pass. Nine exact source regions across Fort
+  Sam and Behavioral Medicine are independently checked, including two embedded
+  reset tables and all twelve Behavioral SOO sections. Source text/coordinates
+  are preserved, and equal titles with different behavior remain distinct.
+- Final real Session audit: all 24 development PDFs / 1,253 pages / 563,248 spans
+  pass exhaustive disjoint accounting and deterministic replay. Nine authored
+  region checks pass. Holdouts remain unopened. Observed 54 bodies / 62 heading
+  candidates / one segmentation conflict are **not** corpus accuracy results.
+- Discovery summed 637 ms; full load/validation/replay diagnostic 54,715 ms;
+  cumulative peak RSS 1,062,305,792 bytes. No whole-takeoff performance claim.
+- Final web check passed: 2,567 pass, 13 existing skips, zero failures, bench
+  and build pass. MCP typecheck/build and nine BAS tests pass. Full legacy
+  quantity/reference/graph gates have not been repeated for this source-only
+  batch; remain pending, with existing baseline failures still disclosed.
+- Final negative testing reproduced and fixed accepting a four-word scale
+  caption as narrative. The final repeat retained all nine reviewed regions
+  and changed one rank-25 candidate to heading-only. Exact logs and source
+  results are in `evidence/narrative-discovery-release/` and the corresponding
+  `narrative-release-*` logs. No source/table quantity was changed.
+- Reproduced Fort Sam's missing 114 listed rows: three pages (detail/elevation
+  roles) are excluded **before** the existing positive points-title check.
+  The graph's twelve tables include only four BAS matrices, not twelve.
+  This identifies an upstream shared routing defect, not yet a VectorGrid
+  extraction defect. Exact diagnosis and preservation limits:
+  `POINT_OMISSION_DIAGNOSIS.md`.
+- Asked permission to fix that routing gate under regression tests; no reply
+  at this checkpoint. No gate edit made. Other goal work can continue.
+
+Contract, limitations and evidence: `NARRATIVE_CONTRACT.md`. Next: broaden
+source-bound narrative interpretation and canonical equipment/template/decision
+records with durable state; resolve the routing permission before touching that
+gate. All five complete workflows and final corpus/UI/MCP gates remain required.
+
 ## Shared source foundation — 2026-09-09
 
 Research/acceptance baseline committed locally as `333c5bac`. The first code
