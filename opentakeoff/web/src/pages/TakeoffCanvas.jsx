@@ -157,6 +157,7 @@ import SweepReviewPanel from "../components/SweepReviewPanel.jsx";
 import Tip from "../components/Tip.jsx";
 import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet } from "../lib/scheduleBrowse.js";
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
+import { basResultForCanvas } from "../lib/basBrowserResult.js";
 import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
@@ -7129,8 +7130,11 @@ export default function TakeoffCanvas() {
     const fd = new FormData();
     fd.append("kind", kind);
     if (opts.service) fd.append("service", String(opts.service).toUpperCase());
+    if (opts.bas_math != null) fd.append("bas_math", JSON.stringify(opts.bas_math));
+    const basShaToName = new Map();
     for (const name of names) {
       const bytes = await store.loadPdfData(name);
+      try { basShaToName.set(await sha256Hex(bytes), name); } catch { /* preserve unknown identities */ }
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
     if (onProgress) {
@@ -7188,9 +7192,9 @@ export default function TakeoffCanvas() {
         }
       }
       if (!result) throw new Error("compile stream ended without a result");
-      return result;
+      return basResultForCanvas(result, basShaToName);
     }
-    return await res.json();
+    return basResultForCanvas(await res.json(), basShaToName);
   }
 
   // Single real fetch per (sig), however many callers want the production
@@ -7577,6 +7581,7 @@ export default function TakeoffCanvas() {
       kind: compiled.kind,
       sheet_count: compiled.sheet_count,
       totals,
+      bas_math: compiled.bas_math || null,
       empty_pages: compiled.page_accounting?.empty_pages,
       exclusions: compiled.exclusions || [],
       category_counts: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
@@ -7627,6 +7632,7 @@ export default function TakeoffCanvas() {
     try {
       compiled = await fetchProductionCorpusTakeoff(kind, {
         service: opts.service || null,
+        bas_math: opts.bas_math,
         onProgress: reportProgress,
       });
     } catch (e) {
@@ -7669,6 +7675,7 @@ export default function TakeoffCanvas() {
       kind: compiled.kind,
       sheet_count: compiled.sheet_count,
       totals: compiled.totals,
+      bas_math: compiled.bas_math || null,
       empty_pages: compiled.page_accounting?.empty_pages,
       exclusions: compiled.exclusions,
       category_count: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"

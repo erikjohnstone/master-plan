@@ -23,6 +23,7 @@ export function buildServer(
     // takeoffs land as reviewable work instead of a bare numbers report.
     instructions: [
       "OpenTakeoff: quantity takeoff on construction plan PDFs.",
+      "BAS engineering: compile_corpus_takeoff returns additive bas_math from the shared Python engine. Keep soft variables separate from copper I/O; never invent abstract hardware policy, equipment replication, topology or typed SOO. Review discrepancies and coverage flags. A max envelope is not resolved drawing truth; project_complete remains false. Runtime unavailable is not zero demand.",
       "A takeoff's deliverable is the marked-up planset, not a numbers report. Standard finish for ANY takeoff:",
       "SCHEDULE-DRIVEN takeoff (HVAC equipment, BAS/DDC points, or control valves/dampers read from a printed schedule table — not a drawn floor condition): call compile_corpus_takeoff first for the scheduled quantity per tag, then reconcile_schedule_plan for the installed/drawn quantity and its MATCH / SCHEDULE_ONLY / PLAN_ONLY / AMBIGUOUS status per tag. A compile with no reconcile only answers what the schedule lists, not what is actually drawn. Steps 1-5 below are the canvas-shape (area/length/count condition) takeoff and do not apply to this path — no scale-set or shape-commit is needed to read a schedule table.",
       "1. load_plan, then set_scale on each sheet you measure (quantities are px-only until the scale is set).",

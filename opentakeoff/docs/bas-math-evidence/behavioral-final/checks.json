@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "endpoint": "/__ot/compile-corpus-takeoff",
+  "source": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection/pdf/22__vol2__012__Center_for_Behavioral_Medicine_Chiller_Upgrade.pdf",
+  "totals": {
+    "AI": 33,
+    "AO": 21,
+    "DI": 23,
+    "DO": 14
+  },
+  "points": 100,
+  "first_point": "CHILLED WATER DIFFERENTIAL PRESSURE SENSOR",
+  "checks": [
+    "real upload",
+    "real production compile",
+    "Python response visible unchanged",
+    "keyboard tabs",
+    "JSON export",
+    "source citation paint",
+    "Takeoff reopen",
+    "filter negative control"
+  ],
+  "errors": []
+}

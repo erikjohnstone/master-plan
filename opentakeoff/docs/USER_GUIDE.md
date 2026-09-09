@@ -10,6 +10,17 @@ In a hurry, or already in the app? Press **`?`** (or the **?** button in the top
 
 ### Workspace navigation
 
+For a BAS points takeoff, the **Takeoff** tab also shows **BAS takeoff · Engineering**.
+Points is the default table; I/O capacity, Networks, Licenses and Issues separate
+the remaining decisions. Arrow keys, Home and End move among these views. The
+point filter does not change totals. **View source** uses the original drawing
+citation. **Export BAS JSON** includes engineering results, assumptions and
+diagnostics; the original CSV/Excel/PDF buttons still export the original
+schedule rows, not the new engineering calculations. Review missing SOO,
+unverified equipment replication and policy gaps before procurement. Abstract
+I/O profiles and spare policies must be supplied explicitly through the BAS
+compile options; no actual product is selected. See [BAS setup](../bas_engine/README.md).
+
 The canvas header keeps **Open · Sheets · Plans** together on the left; centers the
 larger **sheet navigation** controls; and groups equal-sized **Takeoff · Edit · ⋯**
 controls at the upper right. **Schedules** and

@@ -36,6 +36,12 @@ what makes it training data.
 
 ## Start here
 
+BAS takeoffs now have a separate engineering result in **Takeoff**: typed I/O,
+abstract capacity, explicit network constraints, independent software licensing
+and source discrepancies. UI and MCP call one Pydantic V2 Python engine. This
+does not change blueprint extraction or certify project completeness. See
+[setup and contracts](bas_engine/README.md) and [math proofs](docs/BAS_MATH_RESEARCH.md).
+
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
 **Takeoff · Edit · ⋯** controls at the upper right. **Schedules**

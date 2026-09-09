@@ -1,0 +1,36 @@
+{
+  "baseline": "61698a0ba8817e0e9266607d7d48b8476e8796f6",
+  "scope": "Same actual cached graphs compiled by a detached main checkout and this branch; not a new cold extraction comparison.",
+  "results": [
+    {
+      "source": "bldg5406-hvac-demo",
+      "expected_legacy_hvac": 32,
+      "equality": {
+        "hvac_equipment": "all output fields identical",
+        "bas_points": "all output fields identical",
+        "control_valves": "all output fields identical"
+      },
+      "main_hvac": 14
+    },
+    {
+      "source": "federal-mech",
+      "expected_legacy_hvac": 103,
+      "equality": {
+        "hvac_equipment": "all output fields identical",
+        "bas_points": "all output fields identical",
+        "control_valves": "all output fields identical"
+      },
+      "main_hvac": 128
+    },
+    {
+      "source": "itd-d1-lab",
+      "expected_legacy_hvac": 93,
+      "equality": {
+        "hvac_equipment": "all output fields identical",
+        "bas_points": "all output fields identical",
+        "control_valves": "all output fields identical"
+      },
+      "main_hvac": 97
+    }
+  ]
+}

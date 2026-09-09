@@ -13,6 +13,12 @@ operating manual—how a takeoff is run, what withholds, what refuses—and
 
 ## Setup
 
+For BAS engineering, install the [shared Python engine](../bas_engine/README.md).
+UI and MCP use the same `productionTakeoff` orchestration and Python process;
+there is no separate browser math implementation. `bas_math` is additive to the
+existing BAS compile response. Never treat its conservative conflict envelope
+as resolved drawing truth or its `calculated` status as project completeness.
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

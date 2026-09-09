@@ -1,5 +1,9 @@
 # OpenTakeoff AI sandbox (optional)
 
+The deterministic BAS math engine is **not this AI sandbox**. It lives in
+[`bas_engine/`](../bas_engine/README.md) and runs through the existing Node
+production-compile path used by UI and MCP. It has no model or API-key dependency.
+
 **You do not need this to use OpenTakeoff.** The takeoff canvas runs entirely in
 your browser. This is an *optional* backend that adds a **bring-your-own-model
 socket**—a few takeoff-scoped AI endpoints you can wire a local model behind

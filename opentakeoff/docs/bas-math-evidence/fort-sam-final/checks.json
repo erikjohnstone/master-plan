@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "endpoint": "/__ot/compile-corpus-takeoff",
+  "source": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection/pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+  "totals": {
+    "AI": 15,
+    "AO": 11,
+    "DI": 7,
+    "DO": 21
+  },
+  "points": 54,
+  "first_point": "1",
+  "checks": [
+    "real upload",
+    "real production compile",
+    "Python response visible unchanged",
+    "keyboard tabs",
+    "JSON export",
+    "source citation paint",
+    "Takeoff reopen",
+    "filter negative control"
+  ],
+  "errors": []
+}

@@ -25,7 +25,7 @@ import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
 import { importTakeoff } from "./importing.ts";
 import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption, reconcileSchedulePlan } from "./takeoff.ts";
 import { takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
-import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
+import { compileProductionTakeoff } from "./productionTakeoff.ts";
 import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
@@ -702,14 +702,19 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         "Optional for control_valves / T-VALVE-01: only CHW or only HHW control-valve schedules. Omit for the full valve/damper takeoff.",
       ),
       detail: z.enum(["compact", "full"]).optional().describe('"compact" (default) omits per-page page_accounting.pages; "full" includes every sheet'),
+      bas_math: z.record(z.string(), z.unknown()).optional().describe(
+        "BAS only: optional deterministic Python policy (hardware {profile_id,rigid:{AI,AO,DI,DO},universal_inputs}, spare {basis:demand_addon|installed_unused,numerator,denominator}, licenses, serial_routes, ip_closets, group_overrides, typed soo). Omit unknown policies; never invent hardware capacities, replication, distances or typed SOO. Returned bas_math is separate from legacy printed totals; review diagnostics and project_complete=false. Group IDs are returned by the first compile. See docs/BAS_MATH_RESEARCH.md for exact constraints.",
+      ),
       path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
       export_path: z.string().optional().describe("Optional directory for CSV/XLSX workbook tabs"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: compileCorpusTakeoffOutput,
-  }, run("compile_corpus_takeoff", async ({ kind, service, detail, path: outPath, export_path: exportPath, overwrite }) => {
+  }, run("compile_corpus_takeoff", async ({ kind, service, detail, bas_math, path: outPath, export_path: exportPath, overwrite }) => {
     const graph = await session.graphForPipeline();
-    const compiled: any = compileTakeoff(session, graph, kind, service ? { service } : {});
+    const compiled: any = await compileProductionTakeoff(session, graph, kind, {
+      ...(service ? { service } : {}), ...(bas_math ? { bas_math } : {}),
+    });
     if (detail !== "full") {
       // Delete, don't set undefined — an object key present with value
       // undefined survives on structuredContent (the raw JS object) but

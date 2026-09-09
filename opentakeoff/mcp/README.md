@@ -12,6 +12,14 @@ decides whether the numbers are any good.
 
 ## Run it in 60 seconds (npx)
 
+The BAS engineering extension needs Python 3.11+ and Pydantic V2 on the MCP
+host. Set `OPENTAKEOFF_BAS_PYTHON` if Python is not on PATH. The existing
+`compile_corpus_takeoff` verb returns additive `bas_math` for BAS; its optional
+policy includes abstract hardware, rational spare capacity, licenses, networks,
+group overrides and typed SOO. Original printed totals remain unchanged.
+An absent runtime returns explicit `unavailable`, not zero demand. See
+[BAS contracts and installation](../bas_engine/README.md).
+
 No clone, no build—point your MCP client at the published package:
 
 ```json

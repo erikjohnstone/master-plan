@@ -13,6 +13,13 @@ __pycache__/
 .venv/
 venv/
 server/.venv/
+.venv-bas/
+bas_engine/build/
+bas_engine/*.egg-info/
+bas_engine/.mypy_cache/
+bas_engine/.pytest_cache/
+tmp/bas-proof/
+mcp/tmp/bas-proof/
 
 # Local env / secrets — never commit
 .env

@@ -2,6 +2,15 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## Unreleased — BAS engineering
+
+- Keep large BAS results readable to Agent with a bounded chat-only summary; preserve the full Takeoff/export payload and all existing completion metadata.
+
+- Add a shared, manufacturer-independent Pydantic V2 engine for typed SOO/point-list reconciliation, rigid/UI capacity, exact spare ceilings, constrained serial/IP topology and independent software licensing.
+- Extend the existing BAS compile with additive `bas_math` output; preserve all original tables, counts, citations and boxes. Read already-indexed nested subheadings without modifying VectorGrid or extraction.
+- Show points, hardware, networks, licenses and review findings in Takeoff, with source navigation and a separate BAS JSON export. Missing runtime and incomplete evidence remain explicit; this is not a project-completeness certification.
+- Add Python exhaustive/regression tests, source-reviewed corpus table fixtures, Node transport tests and a real-upload Takeoff walkthrough.
+
 ## Unreleased — workspace presentation
 
 - Group compact Open, Sheets and Plans controls on the left; center the larger page navigation; group equal-sized Takeoff, Edit and overflow controls at the upper right; and float Schedules and Agent as a compact vertical pair at the center of the canvas's right edge. Remove the redundant product wordmark and move units and scale to the sheet-tab row.

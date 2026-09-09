@@ -284,3 +284,13 @@ next."*
 - [**OpenTakeoff Academy**](https://aec.kentucky-ai.com)—an open benchmark for agents that do
   takeoff. Bring any model and your own harness; you're scored on operating a real tool against
   geometry you don't control.
+# BAS engineering boundary
+
+For BAS `compile_corpus_takeoff`, inspect the additive `bas_math` result separately
+from original printed totals. Supply only evidenced abstract hardware, spare,
+license, topology and equipment-group policies. Typed SOO inputs need explicit
+identity alignment and source citations. Missing narrative typing, unavailable
+Python, unverified replication and conflicting types are not successful zero
+takeoffs. `project_complete` remains false. Export the BAS JSON for the full
+engineering audit; existing schedule exports are unchanged. See
+[the contract](../bas_engine/README.md).

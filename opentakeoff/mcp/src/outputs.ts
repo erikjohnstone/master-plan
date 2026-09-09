@@ -107,6 +107,8 @@ export const compileCorpusTakeoffOutput = {
    * least learns this field exists, not left invisible under z.any(). */
   estimator_status: z.any().optional(),
   estimator_product: z.any().optional(),
+  /** Additive deterministic Python BAS math; legacy printed totals stay unchanged. */
+  bas_math: z.any().optional(),
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),
