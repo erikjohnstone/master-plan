@@ -10,8 +10,8 @@ In a hurry, or already in the app? Press **`?`** (or the **?** button in the top
 
 ### Workspace navigation
 
-Use **Plans · Schedules · Agent · Takeoff · Report** at the top of the canvas.
-Plans returns to the drawing. Sheets opens the existing sheet gallery; the sheet
+Use **Schedules · Agent · Takeoff** in the highlighted group at the top of the canvas.
+**Plans** in the sheet-context row returns to the drawing. Sheets opens the existing sheet gallery; the sheet
 strip still switches, groups and closes drawings.
 
 Schedules and Agent share the primary dock: opening one hides the other, but
@@ -44,9 +44,20 @@ drawing through the existing citation path. **Original answer rows** retains the
 verbatim row text. Long headings remain under Full heading; ordinary prose and
 short lists remain directly visible.
 
-Open **Conditions · [active tag]** in the working toolbar for pinned conditions,
-line/fill/hatch, waste and dimensions. Escape or a click outside closes it.
-The existing conditions inspector, shortcuts and drawing actions are unchanged.
+Press **Tools** at the top of the left tool rail to open a second column. It holds
+Zone, Snap, angle guides, labels, Command, Voice, and available Finish/Create actions,
+plus the former right-edge panels: Markups, Stamps, RFIs, Conditions & totals,
+Roll goods, PDF layers and Revisions. Conditional tools appear only when available.
+Edit, units and scale remain at the top. The flyout overlays rather than resizes
+the drawing. Close it with its tab, close button or Escape; command drafts survive.
+Selecting a project panel closes the flyout and opens that existing panel.
+
+Inside Tools, open **Conditions · [active tag]** for pinned conditions,
+line/fill/hatch, waste and dimensions. Escape first closes condition properties;
+a second Escape closes Tools and returns focus to its tab. Clicking outside the
+condition properties still closes them. Drawing shortcuts and actions are unchanged.
+Takeoff retains its existing exports. The separate legacy per-condition report is
+available from **⋯ → Measurement report**, not a primary navigation tab.
 
 ### Manual sections
 
@@ -77,7 +88,7 @@ The fastest way to learn the canvas is to run one takeoff end to end on the bund
 
 1. **Load the sample.** On the opening screen, click **Load sample plan**—a real medical-center floor finish plan. (Your own plans: drag a PDF anywhere onto the page.)
 2. **Accept the scale.** Open the **Set scale…** chip in the toolbar. The plan's drawn scale note has already been read off the sheet—click **Plan says 1/4″ = 1′-0″ — use it**. A calibrated ruler bar flashes on the sheet for a few seconds so you can eyeball that it's right (a door opening is about 3′).
-3. **Choose a condition.** A fresh workspace ships with a starter set of flooring conditions—CPT-1, LVT-1, CT-1, and friends. Press `1` to arm the first (the number keys answer in list order until you pin your own palette), or open the **☰ Takeoffs** rail button and click one.
+3. **Choose a condition.** A fresh workspace ships with a starter set of flooring conditions—CPT-1, LVT-1, CT-1, and friends. Press `1` to arm the first (the number keys answer in list order until you pin your own palette), or open the **Tools → Conditions & totals** button and click one.
 4. **One-Click the rooms.** Press `O`, then click inside a room. The room traces itself, wall to wall, as a dashed proposal. Click the next room, and the next. Press `⏎` to create them all.
 5. **Read the report.** Open **Report** for the per-condition breakdown—SF, SY, waste-adjusted order quantities, and the materials buy list. Export **CSV**, **Excel**, or a **Marked set** PDF.
 
@@ -181,7 +192,7 @@ Past ~115% zoom the visible region re-renders straight from the PDF vectors at y
 ### Layers (CAD-exported sheets)
 
 A sheet exported from CAD often carries an **Optional Content** table—the layer names the
-drafter worked in. When it does, a **Layers** rail button appears and the docked panel lists
+drafter worked in. When it does, a **PDF layers** button inside Tools appears and the docked panel lists
 every layer with the role OpenTakeoff classified it as and whether the PDF has it visible by
 default. Each layer takes one of three settings:
 
@@ -193,7 +204,7 @@ This is why One-Click doesn't have to *infer* a room boundary from hatch on a la
 drawing already states what its ink is. On the measured fixture corpus, honoring the declared
 roles takes mean region IoU from 0.543 to 1.000 across tile-grid, grid-line,
 hidden-demolition, furniture, and xref-dialect scenes. Overrides save per sheet, and **Return
-every layer on this sheet to Auto** resets them. Sheets with no layer table show no rail button
+every layer on this sheet to Auto** resets them. Sheets with no layer table show no PDF layers button
 and no panel—the fill path is byte-identical to a sheet without layers, so nothing changes for
 scans or flattened plots.
 
@@ -281,7 +292,7 @@ The band under the toolbar is your working set: **pin** a condition there (the p
 
 ### The Takeoffs panel
 
-The **☰ Takeoffs** rail button docks the panel (it starts collapsed; the palette band is the primary surface). Four tabs:
+The **Tools → Conditions & totals** button docks the panel (it starts collapsed; the palette band is the primary surface). Four tabs:
 
 - **Takeoffs**—every condition with live totals for the open sheets (`SF · SF wall · LF · EA`), a shape count, a **⌖** that zooms the canvas to the condition's takeoffs (double-clicking the row does the same), the Supporting Materials button, the pin, and delete. Above the list: a filter box, **A→Z** natural sort and **≡ grp** tag-family grouping (views only—hotkey numbering never changes). **⌘-click / ⇧-click** rows to bulk-select conditions, then set waste or line color on all of them, or bulk-delete.
 - **Library**—reusable condition templates, shared across every plan in this browser. **+ save 〈tag〉 to the library** snapshots the active condition (appearance, waste, H/T, materials); **Apply** adds it to any project as a fresh condition. A fresh workspace seeds from this library—tune your house conditions once and every new job starts with them.
@@ -485,7 +496,7 @@ refusal.
 
 ### Zone check
 
-**Zone** (toolbar button; no hotkey) answers "what's in this wing?" without touching the takeoff. Trace a region the way you'd trace an area—an apartment, a phase—and close it with `⏎`, double-click, or **Finish**. A panel lists every condition whose shapes sit inside, with quantities **and its supporting materials scaled to the zone**, computed by the same rules as the Report. Shapes count by their center point, same sheet only, and counted shapes glow cobalt so inclusion is visible. It's a reading, not a takeoff: nothing is saved, redrawing replaces the zone, and `Esc` or leaving the tool clears it.
+**Zone** (inside Tools; no hotkey) answers "what's in this wing?" without touching the takeoff. Trace a region the way you'd trace an area—an apartment, a phase—and close it with `⏎`, double-click, or **Finish**. A panel lists every condition whose shapes sit inside, with quantities **and its supporting materials scaled to the zone**, computed by the same rules as the Report. Shapes count by their center point, same sheet only, and counted shapes glow cobalt so inclusion is visible. It's a reading, not a takeoff: nothing is saved, redrawing replaces the zone, and `Esc` or leaving the tool clears it.
 
 ### The 45°/90° angle lock
 
@@ -541,7 +552,7 @@ One-Click Area (`O`) is the fastest way to measure a room: click inside it, and 
 
 1. Arm `O` and click inside a room. The traced region appears dashed with a star at your seed point.
 2. Keep clicking—each click adds a space to the selection (the readout totals them live). **`⌥`-click carves a cutout**: an enclosed area *inside* an already-selected space—a column, a shaft—that will commit as a deduct.
-3. **Create** with `⏎`, a double-click, or the **Create (N)** toolbar button. Every space commits as a shape on the active condition; cutouts commit as deducts. The toast confirms: *"Created N takeoff(s) — 〈SF〉 〈TAG〉. Click the next room."*
+3. **Create** with `⏎`, a double-click, or the **Create (N)** button inside Tools. Every space commits as a shape on the active condition; cutouts commit as deducts. The toast confirms: *"Created N takeoff(s) — 〈SF〉 〈TAG〉. Click the next room."*
 
 **Create leaves the newest takeoff selected**, so if you watch a fill land wrong the very next
 `⌫` deletes it—no trip to the Edit menu. One-Click stays armed (the message means what it says:
@@ -642,7 +653,7 @@ One more distinction: **Undo last shape** (Edit menu) and `⌫`-with-nothing-in-
 
 ## 9. Markups, stamps, and RFIs
 
-The markup layer is communication, never quantity: clouds, callouts, notes, highlighter ink, images, and stamps live on a separate layer the totals never count. The left dock (rail buttons on the canvas's right edge) carries three tabs—**Markups**, **Stamps**, **RFIs**.
+The markup layer is communication, never quantity: clouds, callouts, notes, highlighter ink, images, and stamps live on a separate layer the totals never count. The left dock (opened from the left rail's Tools tab) carries three tabs—**Markups**, **Stamps**, **RFIs**.
 
 ### The markup tools
 
@@ -693,7 +704,7 @@ RFIs export as **RFI CSV** and **RFI JSON** from the Report, and they ride the M
 
 <img src="img/report.png" alt="The takeoff report — per-condition breakdown and materials buy list" width="780"/>
 
-Open **Report** for the whole takeoff on one page: a per-condition table, the supporting-materials buy list, per-sheet base quantities, and your markups noted—with a project-name field and a print masthead up top (client, reference, date, prepared-by, and an optional trade-name identity so the output brands as your company).
+Open **⋯ → Measurement report** for the whole takeoff on one page: a per-condition table, the supporting-materials buy list, per-sheet base quantities, and your markups noted—with a project-name field and a print masthead up top (client, reference, date, prepared-by, and an optional trade-name identity so the output brands as your company).
 
 ### The numbers, honestly
 
@@ -1079,7 +1090,7 @@ nothing is ever sent without that explicit confirm (`Esc` or 20 seconds
 dismisses the offer). Near-miss commands—a garbled number, extra words—never
 get the offer; they ask you to say it again.
 
-**Push-to-talk.** Hold **M** (or hold the **Voice** toolbar button), speak,
+**Push-to-talk.** Hold **M** (or hold the **talk · M** button inside Tools), speak,
 release to run—the transcript flashes in a chip so you can see what was
 heard, then the outcome lands in the message bar. `Esc` mid-hold discards.
 Speech is recognized **on your device** in the browser (a ~44 MB model,

@@ -26,13 +26,16 @@ try {
     await page.setViewportSize({width,height});
     await openImportedSheet(page);
     await nav('Plans').click();
-    for(const name of ['Plans','Schedules','Agent','Takeoff','Report']) {
+    for(const name of ['Plans','Schedules','Agent','Takeoff']) {
       const box=await nav(name).boundingBox();
       check(`${width}: ${name} visible and ergonomic`,box && box.x>=0 && box.x+box.width<=width && box.height>=32);
     }
     const layout=await page.evaluate(()=>({top:document.querySelector('.workspace-body').getBoundingClientRect().top,width:document.documentElement.scrollWidth,viewport:innerWidth}));
     check(`${width}: shell at most 132px`,layout.top<=132);
     check(`${width}: no page overflow`,layout.width<=layout.viewport);
+    check(`${width}: only the three primary workflows`,JSON.stringify(await page.locator('.workspace-primary [data-workspace-nav]').evaluateAll(els=>els.map(el=>el.dataset.workspaceNav)))===JSON.stringify(['Schedules','Agent','Takeoff']));
+    check(`${width}: no primary Report tab`,await nav('Report').count()===0);
+    check(`${width}: no drafting clutter on top`,await page.locator('[data-topbar] .workspace-properties-toggle, [data-topbar] input').count()===0);
     await nav('Agent').click();
     check(`${width}: Agent active`,await nav('Agent').getAttribute('aria-pressed')==='true');
     check(`${width}: composer visible`,await page.locator('.agent-composer').isVisible());
@@ -91,12 +94,40 @@ try {
     await page.waitForTimeout(100);
     check(`${width}: focus returns to Schedules`,await nav('Schedules').evaluate(el=>el===document.activeElement));
     await nav('Plans').click();
+    const railToggle=page.getByRole('button',{name:'Drawing tools and panels',exact:true});
+    const drawer=page.locator('#workspace-utility-drawer');
+    await page.getByTitle('Fit sheet to view',{exact:true}).click();
+    const drawingBefore=await page.locator('.workspace-drawing').boundingBox();
+    await railToggle.click();
+    check(`${width}: flyout opens beside left rail`,await drawer.isVisible() && (await drawer.boundingBox()).x===56);
+    assert.deepEqual(await page.locator('.workspace-drawing').boundingBox(),drawingBefore);
+    check(`${width}: flyout preserves drawing footprint`,true);
+    check(`${width}: named utility buttons relocated`,await drawer.locator('.workspace-utility-link').count()>=5);
+    const utilityBoxes=await drawer.locator('.workspace-utility-link').evaluateAll(els=>els.map(el=>el.getBoundingClientRect().toJSON()));
+    check(`${width}: utility links form one readable column`,utilityBoxes.every((box,i)=>box.width>=240 && (!i || box.y>=utilityBoxes[i-1].bottom)));
+    for(const title of ['Snap to plan lines/corners (beta)','45°/90° angle guides']) {
+      const button=drawer.locator('button').filter({has:page.locator('svg')}).and(page.getByTitle(title,{exact:title.startsWith('Snap')}));
+      const before=await button.getAttribute('aria-pressed');await button.click();
+      check(`${width}: ${title} toggles`,await button.getAttribute('aria-pressed')!==(before));
+      await button.click();
+    }
+    const command=drawer.locator('input[placeholder="cpt 1 · waste 7 · this room"]');
+    await command.fill('draft not submitted');
+    await page.keyboard.press('Escape');
+    check(`${width}: Escape closes flyout and restores focus`,!(await drawer.isVisible()) && await railToggle.evaluate(el=>el===document.activeElement));
+    await railToggle.click();
+    check(`${width}: closed flyout preserves command draft`,await command.inputValue()==='draft not submitted');
+    await command.fill('');
+    await page.screenshot({path:resolve(out,`${width}-tools.png`)});
     await page.locator('.workspace-properties-toggle').click();
     check(`${width}: condition properties available on demand`,await page.getByRole('region',{name:'Condition properties'}).isVisible());
+    await page.screenshot({path:resolve(out,`${width}-conditions.png`)});
     await page.getByRole('region',{name:'Condition properties'}).locator('input').first().focus();
     await page.keyboard.press('Escape');
     await page.locator('.workspace-condition-tools').waitFor({state:'detached'});
     check(`${width}: condition popover Escape restores focus`,await page.locator('.workspace-properties-toggle').evaluate(el=>el===document.activeElement));
+    await page.keyboard.press('Escape');
+    check(`${width}: second Escape closes tools`,!(await drawer.isVisible()));
     await page.keyboard.press('f');
     await page.locator('[data-topbar]').waitFor({state:'detached'});
     check(`${width}: focus mode preserved`,await page.locator('[data-topbar]').count()===0);
@@ -106,6 +137,21 @@ try {
   }
   // Component callback contract: real component, deterministic props, no network.
   await page.setViewportSize({width:1440,height:900});
+  const toolsToggle=page.getByRole('button',{name:'Drawing tools and panels',exact:true});
+  await toolsToggle.click();
+  await page.getByRole('button',{name:'Stamps — reusable annotations dropped click-to-place',exact:true}).click();
+  check('opening a utility closes the flyout',!(await page.locator('#workspace-utility-drawer').isVisible()));
+  check('Stamps opens its existing panel',await page.getByTitle('Stamps',{exact:true}).getAttribute('style').then(style=>style.includes('2px solid')));
+  await page.getByTitle('Close panel',{exact:true}).click();
+  await page.getByTitle('More — guide, appearance, schedule import, project moves',{exact:true}).click();
+  await page.getByRole('menuitem',{name:'Measurement report',exact:true}).click();
+  check('legacy report still accessible from overflow',await page.locator('.report-panel').isVisible());
+  await page.getByTitle('Back to the canvas (Esc)',{exact:true}).click();
+  await toolsToggle.click();
+  await page.evaluate(()=>document.documentElement.dataset.theme='dark');
+  await page.screenshot({path:resolve(out,'1440-tools-hud.png')});
+  await page.evaluate(()=>delete document.documentElement.dataset.theme);
+  await page.getByRole('button',{name:'Close tools and panels',exact:true}).click();
   await page.evaluate(async()=>{
     const {mountAgentHarness}=await import('/scripts/fixtures/ui-agent-harness.jsx');
     mountAgentHarness();
