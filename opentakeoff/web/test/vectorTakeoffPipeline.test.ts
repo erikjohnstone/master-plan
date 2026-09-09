@@ -6,7 +6,7 @@ import { describe, it, after } from "node:test";
 import { slicePageTiles, clipSpansToTile } from "../src/lib/pageTileGrid.ts";
 import { sheetHasScheduleKeywords, extractScheduleTablesFromLineGrid, MAX_LINE_GRID_SEGMENTS } from "../src/lib/scheduleGridFallback.ts";
 import { extractScheduleTablesFromStreamGrid } from "../src/lib/scheduleStreamFallback.ts";
-import { runVectorTakeoffPipeline, type VectorPipelineHooks } from "../src/lib/vectorTakeoffPipeline.ts";
+import { runVectorTakeoffPipeline, scheduleKeywordRegion, type VectorPipelineHooks } from "../src/lib/vectorTakeoffPipeline.ts";
 import { shutdownVectorGrid } from "../src/lib/vectorGridClient.ts";
 import type { GraphSpan, SheetGraph } from "../src/lib/sheetgraph.ts";
 
@@ -89,6 +89,85 @@ describe("L2 stream fallback", () => {
     const keys = tables[0].rows.map((r) => r.key);
     assert.ok(!keys.includes("MARK"), `a repeated header row must never survive as a phantom "MARK" data row: got ${JSON.stringify(keys)}`);
     assert.deepEqual(keys, ["C101", "C102", "C201", "C202"], `all 4 real doors must still be present, header row skipped cleanly: got ${JSON.stringify(keys)}`);
+  });
+});
+
+describe("L4.5 scheduleKeywordRegion (task #84, real corpus root cause 2026-09-09)", () => {
+  it("widens a narrow caption to a real-table-sized floor instead of just the caption's own width", () => {
+    // Real shape (16_NV_CarsonValleyMS_HVAC_Replacement.pdf#31/#32): a
+    // caption's own bbox is ~130-760pt wide against a ~6000pt sheet — the
+    // old code returned exactly that narrow bbox, rapid_table read a
+    // genuine but severely truncated single-column strip, and
+    // scheduleTableFromODL correctly refused it as "grid too small".
+    const width = 6048, height = 4320;
+    const spans: GraphSpan[] = [{ str: "EXISTING PANEL SCHEDULE", x: 4401, y: 2302, w: 130, h: 18 }];
+    const region = scheduleKeywordRegion(spans, width, height);
+    assert.ok(region, "must return a region for a real keyword hit");
+    const [x0, , x1] = region!;
+    assert.ok(x1 - x0 >= width * 0.45 - 1, `region must be widened to the sheet-width floor, got width ${x1 - x0}`);
+  });
+
+  it("never widens past the sheet edges even when the caption sits near one", () => {
+    const width = 1200, height = 900;
+    const spans: GraphSpan[] = [{ str: "EQUIPMENT SCHEDULE", x: 1100, y: 100, w: 90, h: 14 }];
+    const region = scheduleKeywordRegion(spans, width, height);
+    assert.ok(region);
+    const [x0, , x1] = region!;
+    assert.ok(x0 >= 0 && x1 <= width, `region must stay inside the sheet: got [${x0}, ${x1}] on a ${width}-wide sheet`);
+  });
+
+  it("does not widen a caption whose own cluster already spans a real table's width", () => {
+    // A caption/header row that's ALREADY wide (e.g. column headers printed
+    // as one wide keyword-matching run) must not be shrunk or distorted by
+    // the floor logic — the floor only ever WIDENS a too-narrow bbox.
+    const width = 4000, height = 3000;
+    const spans: GraphSpan[] = [{ str: "MECHANICAL EQUIPMENT SCHEDULE FOR THIS BUILDING", x: 200, y: 300, w: 2400, h: 16 }];
+    const region = scheduleKeywordRegion(spans, width, height);
+    assert.ok(region);
+    const [x0, , x1] = region!;
+    assert.ok(x1 - x0 >= 2400, `an already-wide cluster must not be narrowed: got width ${x1 - x0}`);
+  });
+
+  it("extends the vertical band upward instead of collapsing when the caption sits near the page's bottom edge", () => {
+    // Real shape (25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#8/#9/#10): the
+    // caption sits ~187pt above the page's bottom margin, so the old
+    // `bandH = min(1200, height - y0)` collapsed to ~187pt — far too short
+    // to contain the real table, and every tiled band came back empty.
+    const width = 4896, height = 3168;
+    const spans: GraphSpan[] = [{ str: "REFRIGERANT PIPING SCHEDULE", x: 4145, y: 2980, w: 200, h: 16 }];
+    const region = scheduleKeywordRegion(spans, width, height);
+    assert.ok(region);
+    const [, y0, , y1] = region!;
+    assert.ok(y1 - y0 >= 500, `region must have a real minimum height, got ${y1 - y0}`);
+    assert.ok(y0 < 2980, "must extend upward to make room, not just accept a truncated band below the caption");
+  });
+
+  it("clusters widely-separated keyword hits and keeps only the largest cluster, instead of unioning the whole sheet", () => {
+    // Real shape (017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#14):
+    // scattered keyword hits across nearly the entire sheet unioned into a
+    // near-whole-page region ([207, 108, 5908, 4320] on a 6048x4320 sheet),
+    // which then had to be downscaled past legibility to fit the render
+    // cap — table_structure found only 4-7 coarse cells, not a real grid.
+    const width = 6048, height = 4320;
+    const spans: GraphSpan[] = [
+      // The real caption: two text runs of the same title, close together.
+      { str: "EXISTING VENTILATION SCHEDULE", x: 300, y: 200, w: 240, h: 16 },
+      { str: "VENTILATION FAN SCHEDULE CONTINUED", x: 320, y: 230, w: 260, h: 14 },
+      // An unrelated, far-away stray match elsewhere on the same sheet.
+      { str: "REFER TO DETAIL SCHEDULE ON SHEET M6.1", x: 5600, y: 4100, w: 300, h: 14 },
+    ];
+    const region = scheduleKeywordRegion(spans, width, height);
+    assert.ok(region);
+    const [x0, y0, x1, y1] = region!;
+    assert.ok(x1 - x0 < width * 0.6, `must not union the far-away stray hit into a near-whole-page region: got width ${x1 - x0}`);
+    assert.ok(y1 - y0 < height * 0.6, `must not union the far-away stray hit vertically either: got height ${y1 - y0}`);
+    // The real caption's own location must still be inside the chosen region.
+    assert.ok(x0 <= 300 && x1 >= 540, "the real caption's own cluster must anchor the region, not the stray hit");
+  });
+
+  it("returns null when the sheet carries no schedule-keyword text at all (unchanged fallback trigger)", () => {
+    const spans: GraphSpan[] = [{ str: "GENERAL NOTES", x: 100, y: 100, w: 80, h: 14 }];
+    assert.equal(scheduleKeywordRegion(spans, 2000, 1500), null);
   });
 });
 

@@ -58,7 +58,11 @@ export interface VectorPipelineHooks {
 
 const OCR_ENV = typeof process !== "undefined" && process.env?.OPENTAKEOFF_PIPELINE_OCR === "1";
 
-function scheduleKeywordRegion(
+/** How far apart (pt) two keyword hits can be and still count as the same
+ * caption block, for scheduleKeywordRegion's own clustering below. */
+const KEYWORD_CLUSTER_GAP = 300;
+
+export function scheduleKeywordRegion(
   spans: GraphSpan[],
   width: number,
   height: number,
@@ -68,24 +72,98 @@ function scheduleKeywordRegion(
     return t.length >= 6 && t.length <= 120 && sheetHasScheduleKeywords([sp]);
   });
   if (!hits.length) return null;
+
+  // CLUSTER HITS BY PROXIMITY BEFORE TAKING A BBOX — a real caption's own
+  // hit(s) (a title sometimes splits into 2-3 text runs) sit close together;
+  // hits far apart are unrelated keyword matches elsewhere on the sheet (a
+  // general note, a different schedule's own caption). The old code unioned
+  // EVERY hit on the sheet into one bbox regardless of distance — real,
+  // corpus-found (2026-09-09, OCRDBG trace): 017_MD#14's own region came out
+  // [207, 108, 5908, 4320] on a 6048x4320 sheet, i.e. nearly the entire page
+  // in both axes, which no single caption is ever that large — that can only
+  // be scattered hits far apart getting unioned together. The result then
+  // had to be downscaled past legibility to fit the render cap, so
+  // table_structure found only 4-7 coarse cells instead of a real grid.
+  // Keeping only the largest cluster (the real caption, assuming a genuine
+  // multi-run title produces more same-block hits than a stray one-off
+  // keyword match) fixes this without touching the single-hit case at all —
+  // one hit is trivially its own cluster, so a sheet with exactly one
+  // matching caption behaves exactly as before.
+  const centers = hits
+    .map((h) => ({ h, cx: h.x + h.w / 2, cy: h.y + h.h / 2 }))
+    .sort((a, b) => a.cy - b.cy || a.cx - b.cx);
+  const clusters: (typeof centers)[] = [];
+  for (const c of centers) {
+    const cur = clusters[clusters.length - 1];
+    const prev = cur?.[cur.length - 1];
+    if (prev && Math.hypot(c.cx - prev.cx, c.cy - prev.cy) <= KEYWORD_CLUSTER_GAP) {
+      cur.push(c);
+    } else {
+      clusters.push([c]);
+    }
+  }
+  clusters.sort((a, b) => b.length - a.length);
+  const primary = clusters[0].map((c) => c.h);
+
   let x0 = Infinity;
   let y0 = Infinity;
   let x1 = -Infinity;
   let y1 = -Infinity;
-  for (const h of hits) {
+  for (const h of primary) {
     x0 = Math.min(x0, h.x);
     y0 = Math.min(y0, h.y);
     x1 = Math.max(x1, h.x + h.w);
     y1 = Math.max(y1, h.y + h.h);
   }
+
   const padX = 48;
   const padY = 32;
-  const bandH = Math.min(1200, height - y0);
+
+  // WIDEN PAST THE CAPTION'S OWN WIDTH. A caption ("PANEL SCHEDULE") is
+  // almost always far narrower than the real table beside/below it — real,
+  // corpus-found: 16_NV/D_25_CO/029_ME's own captions produced 130-763pt-wide
+  // regions against 5000+pt sheets, so rapid_table read a genuine but
+  // severely truncated single column and scheduleTableFromODL correctly
+  // refused it as "grid too small: Nx1". Floor at 45% of the sheet's own
+  // width, centered on the caption — generous enough to cover a real panel/
+  // equipment schedule's usual width with margin, but never wider than that
+  // floor, so a sheet whose captions cluster tightly still gets a crop
+  // narrow enough to stay legible after the render cap (the opposite
+  // failure — see 017_MD/029_ME's own case in the clustering comment above).
+  const capW = x1 - x0;
+  const minW = width * 0.45;
+  let rx0 = x0 - padX;
+  let rx1 = x1 + padX;
+  if (capW < minW) {
+    const cx = (x0 + x1) / 2;
+    rx0 = cx - minW / 2;
+    rx1 = cx + minW / 2;
+    if (rx0 < 0) { rx1 -= rx0; rx0 = 0; }
+    if (rx1 > width) { rx0 -= rx1 - width; rx1 = width; }
+  }
+
+  // A MINIMUM TABLE HEIGHT, EXTENDING UPWARD WHEN THE CAPTION SITS NEAR THE
+  // PAGE'S BOTTOM EDGE. The old `bandH = min(1200, height - y0)` collapsed to
+  // whatever room happened to remain below the caption, with no floor — real,
+  // corpus-found: 25_WA's own caption sits ~187pt above the page's bottom
+  // margin, so the region came out 187pt tall against a table needing
+  // several hundred more, and every tiled band came back with no table
+  // detected. A table can print above OR below its own caption, so when
+  // there isn't enough room below, extend upward instead of accepting a
+  // truncated band.
+  const MIN_BAND_H = 500;
+  const TARGET_BAND_H = 1200;
+  let ry0 = y0 - padY;
+  let ry1 = Math.min(height, y1 + TARGET_BAND_H);
+  if (ry1 - ry0 < MIN_BAND_H) {
+    ry0 = Math.max(0, ry1 - MIN_BAND_H);
+  }
+
   return [
-    Math.max(0, x0 - padX),
-    Math.max(0, y0 - padY),
-    Math.min(width, x1 + padX),
-    Math.min(height, y1 + bandH),
+    Math.max(0, rx0),
+    Math.max(0, ry0),
+    Math.min(width, rx1),
+    Math.min(height, ry1),
   ];
 }
 
