@@ -1007,13 +1007,14 @@ export class Session {
     return discoverBasNarratives(this.basSourcesForPipeline());
   }
 
-  /** Observational result cache, never a review decision. A compile that races
-   * load_plan must not become the new session's current evidence. */
-  retainBasWorkflow(workflow: BasWorkflow): void {
+  /** Retain validated source captures and review events together. A compile
+   * racing load_plan must not become the new session's current evidence. */
+  retainBasWorkflow(workflow: BasWorkflow): boolean {
     const capture = activeBasCapture(workflow);
     const loaded = new Set([...this.docs.values()].map(({ doc }) => `sha256:${doc.sourceSha256}`));
-    if (!capture || capture.sources.length !== loaded.size || capture.sources.some(s => !loaded.has(s.source_id))) return;
+    if (!capture || capture.sources.length !== loaded.size || capture.sources.some(s => !loaded.has(s.source_id))) return false;
     this.basWorkflow = mergeBasWorkflows(this.basWorkflow, workflow, true);
+    return true;
   }
 
   /** The file (basename) a sheet key belongs to — the key codec's inverse. */

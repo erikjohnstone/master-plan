@@ -5,7 +5,19 @@
 Active goal and acceptance contract: `../opentakeoff/docs/BAS_PRODUCTION_GOAL.md`.
 Current research, exact baselines, limitations and next steps:
 `../opentakeoff/docs/bas-production/PROGRESS.md`.
-Latest: first shared SOO–point comparison kernel has six independently keyed
+Latest: retained SOO text and auditable association events now work through the
+actual browser and MCP workflow, including source return, autosave/reload,
+export/import, stale/invalid-request rejection and removal history. Repaired an
+ordinary recompile reply that omitted retained review events; regression protected.
+Full web 2,600 pass/13 skips, typecheck/lint/bench/build pass; MCP BAS 23 pass,
+typecheck/build/tool count pass. New original-PDF source key separates system-wide
+matrix membership (14 named members) from a two-chiller operating limit versus
+three scheduled chillers. It is not installed-quantity proof or a completed
+equipment interpreter. Full seven-set legacy corpus gate `21748` and MCP contract
+subset `72013` are live; poll/revalidate rather than restart. See the detailed
+BAS progress for evidence and exact limitations. All five workflows remain open.
+
+Previous checkpoint: first shared SOO–point comparison kernel has six independently keyed
 real monitoring requirements, five listed matches and one selected-matrix
 omission. Printed DI preserved; no installed count inferred. Nine focused tests
 plus real Session/replay/source-preservation pass. Production compile/UI/persisted

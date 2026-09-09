@@ -3,6 +3,11 @@ import { z } from 'zod';
 import { basPointListsSchema, type BasPointLists } from './basPointLists.ts';
 import { sha256Hex } from './graphKeys.js';
 import type { BasSourceDocument } from './basSources.ts';
+import { basSourceContextSchema, type BasSourceContext } from './basSources.ts';
+import { canonicalBasJson } from './basCanonical.ts';
+import { BAS_SEQUENCE_RULE, reconcileBasSequencePoints } from './basSequenceReconciliation.ts';
+import { basReviewEventSchema } from './basReviewContract.ts';
+export { canonicalBasJson } from './basCanonical.ts';
 
 const sha = z.string().regex(/^[a-f0-9]{64}$/);
 const source = z.object({
@@ -12,10 +17,17 @@ const source = z.object({
 }).strict().refine(s => s.source_id === `sha256:${s.sha256}`, 'Source digest disagrees with identity');
 const capture = z.object({
   capture_id: sha, sources: z.array(source).min(1).max(10000), points: basPointListsSchema,
+  narrative_sources: basSourceContextSchema.optional(),
+  narrative_rule_version: z.literal(BAS_SEQUENCE_RULE).optional(),
 }).strict().superRefine((c, ctx) => {
   const fail = (message: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, message });
   const docs = new Map(c.sources.map(s => [s.source_id, s]));
   if (docs.size !== c.sources.length) fail('Duplicate capture source');
+  if (!!c.narrative_sources !== !!c.narrative_rule_version) fail('Narrative sources and rule version must be retained together');
+  if (c.narrative_sources) {
+    const manifest = (sources: BasSourceDocument[]) => sources.map(({ names: _names, ...s }) => s).sort((a, b) => a.source_id.localeCompare(b.source_id));
+    if (canonicalBasJson(manifest(c.narrative_sources.documents)) !== canonicalBasJson(manifest(c.sources))) fail('Narrative sources disagree with capture document manifest');
+  }
   for (const matrix of c.points.matrices) {
     const doc = matrix.source_id ? docs.get(matrix.source_id) : undefined;
     const page = matrix.page_id?.match(/:p([1-9]\d*)$/)?.[1];
@@ -25,26 +37,26 @@ const capture = z.object({
   }
 });
 export const basWorkflowSchema = z.object({
-  schema_version: z.literal('bas_workflow_v1'), revision: z.literal('point_captures_1'),
+  schema_version: z.literal('bas_workflow_v1'), revision: z.enum(['point_captures_1', 'bas_evidence_2']),
   captures: z.array(capture).max(1000), current_capture_id: sha.nullable(),
+  review_events: z.array(basReviewEventSchema).max(10000).optional(),
 }).strict().superRefine((w, ctx) => {
   const ids = new Set(w.captures.map(c => c.capture_id));
   if (ids.size !== w.captures.length || (w.current_capture_id !== null && !ids.has(w.current_capture_id))) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Invalid BAS capture references' });
   }
+  const fail = (message: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, message });
+  if (w.revision === 'point_captures_1' && (w.captures.some(c => c.narrative_sources) || w.review_events)) fail('Narrative/review data requires the new workflow revision');
+  const heads = new Map<string, string>(), operations = new Set<string>(), eventIds = new Set<string>();
+  for (const event of w.review_events ?? []) {
+    if (!ids.has(event.capture_id) || !w.captures.find(c => c.capture_id === event.capture_id)?.narrative_sources) fail('Review event has no retained narrative capture');
+    if (event.expected_head !== (heads.get(event.capture_id) ?? null)) fail('Divergent or incomplete BAS review history');
+    if (operations.has(event.operation_id) || eventIds.has(event.event_id)) fail('Duplicate BAS review operation/event');
+    heads.set(event.capture_id, event.event_id); operations.add(event.operation_id); eventIds.add(event.event_id);
+  }
 });
 export type BasWorkflow = z.infer<typeof basWorkflowSchema>;
 export type BasCapture = BasWorkflow['captures'][number];
-
-export function canonicalBasJson(value: unknown): string {
-  if (value === null || typeof value === 'string' || typeof value === 'boolean') return JSON.stringify(value);
-  if (typeof value === 'number' && Number.isFinite(value)) return JSON.stringify(value);
-  if (Array.isArray(value)) return `[${value.map(canonicalBasJson).join(',')}]`;
-  if (value && typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype) {
-    return `{${Object.keys(value).sort().map(k => `${JSON.stringify(k)}:${canonicalBasJson((value as Record<string, unknown>)[k])}`).join(',')}}`;
-  }
-  throw new Error('BAS fingerprint requires finite JSON data');
-}
 
 /** Replace ONLY navigation aliases, never raw source strings or local row keys. */
 function identityPayload(c: Omit<BasCapture, 'capture_id'>) {
@@ -56,7 +68,14 @@ function identityPayload(c: Omit<BasCapture, 'capture_id'>) {
     m.notes.forEach(n => remap(n.source));
     m.rows.forEach(r => { r.observations.forEach(o => remap(o.source)); r.qualifiers.forEach(n => remap(n.source)); });
   }
-  return { sources: c.sources.map(({ names: _names, ...s }) => s).sort((a, b) => a.source_id < b.source_id ? -1 : 1), points };
+  const narratives = c.narrative_sources ? {
+    narrative_rule_version: c.narrative_rule_version,
+    narrative_sources: { ...c.narrative_sources,
+      documents: c.narrative_sources.documents.map(({ names: _names, ...s }) => s),
+      pages: c.narrative_sources.pages.map(p => ({ ...p, sheet_keys: [p.page_id] })),
+    },
+  } : {};
+  return { sources: c.sources.map(({ names: _names, ...s }) => s).sort((a, b) => a.source_id < b.source_id ? -1 : 1), points, ...narratives };
 }
 const fingerprint = (c: Omit<BasCapture, 'capture_id'>) => sha256Hex(new TextEncoder().encode(canonicalBasJson(identityPayload(c))));
 
@@ -66,9 +85,33 @@ export async function captureBasPoints(sources: BasSourceDocument[], points: Bas
   return { schema_version: 'bas_workflow_v1', revision: 'point_captures_1', captures: [checked], current_capture_id: checked.capture_id };
 }
 
+export async function captureBasEvidence(sources: BasSourceContext, points: BasPointLists): Promise<BasWorkflow> {
+  const checked = capture.parse({ capture_id: '0'.repeat(64), sources: sources.documents, points,
+    narrative_sources: sources, narrative_rule_version: BAS_SEQUENCE_RULE });
+  checked.capture_id = await fingerprint(checked);
+  return { schema_version: 'bas_workflow_v1', revision: 'bas_evidence_2', captures: [checked], current_capture_id: checked.capture_id };
+}
+
+export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSchema>, 'event_id'>) =>
+  sha256Hex(new TextEncoder().encode(canonicalBasJson(event)));
+
 export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
   const result = basWorkflowSchema.parse(raw);
   for (const c of result.captures) if (await fingerprint(c) !== c.capture_id) throw new Error('BAS capture fingerprint mismatch; saved evidence was changed');
+  const pairs = new Map<string, Set<string>>();
+  for (const event of result.review_events ?? []) {
+    const { event_id, ...payload } = event;
+    if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS review event fingerprint mismatch');
+    const c = result.captures.find(c => c.capture_id === event.capture_id)!;
+    const linked = pairs.get(event.capture_id) ?? new Set<string>();
+    const a = event.action;
+    const pair = JSON.stringify(a.kind === 'upsert' ? [a.association.region_id, a.association.matrix_id] : [a.region_id, a.matrix_id]);
+    if (a.kind === 'upsert') {
+      await reconcileBasSequencePoints(c.narrative_sources!, c.points, [{ ...a.association, review_origin: event.origin }]);
+      linked.add(pair);
+    } else if (!linked.delete(pair)) throw new Error('BAS review removes an association that does not exist');
+    pairs.set(event.capture_id, linked);
+  }
   return result;
 }
 
@@ -84,7 +127,15 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     if (old && canonicalBasJson(identityPayload(old)) !== canonicalBasJson(identityPayload(c))) throw new Error('Conflicting BAS evidence for one capture identity');
     if (!old) merged.set(c.capture_id, c);
   }
+  const events = new Map((left.review_events ?? []).map(e => [e.event_id, e]));
+  for (const event of right.review_events ?? []) {
+    const previous = events.get(event.event_id);
+    if (previous && canonicalBasJson(previous) !== canonicalBasJson(event)) throw new Error('Conflicting BAS review event identity');
+    events.set(event.event_id, event);
+  }
   return basWorkflowSchema.parse({ ...left, captures: [...merged.values()],
+    revision: left.revision === 'bas_evidence_2' || right.revision === 'bas_evidence_2' ? 'bas_evidence_2' : 'point_captures_1',
+    ...(events.size || left.review_events || right.review_events ? { review_events: [...events.values()] } : {}),
     current_capture_id: activateIncoming ? right.current_capture_id : left.current_capture_id ?? right.current_capture_id });
 }
 

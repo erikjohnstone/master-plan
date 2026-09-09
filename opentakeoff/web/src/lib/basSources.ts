@@ -62,6 +62,43 @@ export interface BasSourceContext {
   pages: BasSourcePage[];
 }
 
+/** Shared persisted-source validation. IDs are checked against their actual
+ * owner/index, never accepted merely because they have a plausible prefix. */
+const sourceId = z.string().regex(/^sha256:[a-f0-9]{64}$/);
+const sourceBox = z.tuple([finite, finite, finite, finite]).refine(b => b[2] >= b[0] && b[3] >= b[1], 'Unordered source box');
+export const basSourceContextSchema = z.object({
+  schema_version: z.literal('bas_sources_v1'), adapter: z.literal('session_text_spans_v1'),
+  coordinate_frame: z.literal('image_px'), scope: z.literal('available_pdf_text_only'),
+  documents: z.array(z.object({ source_id: sourceId, sha256: z.string().regex(/^[a-f0-9]{64}$/),
+    byte_length: positiveInteger, page_count: positiveInteger,
+    names: z.array(z.string().min(1).max(4096)).min(1).max(1024) }).strict()).max(10000),
+  pages: z.array(z.object({ page_id: z.string().min(1).max(512), source_id: sourceId,
+    page_number: positiveInteger, sheet_keys: z.array(z.string().min(1).max(4096)).min(1).max(1024),
+    width_px: finite.positive(), height_px: finite.positive(), rotation: finite,
+    text_status: z.enum(['available', 'no_text']),
+    spans: z.array(z.object({ span_id: z.string().min(1).max(512), source_index: z.number().int().nonnegative().safe(),
+      text: z.string().max(1000000), bbox_px: sourceBox, rotation: finite.optional() }).strict()).max(200000),
+  }).strict()).max(25000),
+}).strict().superRefine((context, ctx) => {
+  const fail = (message: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, message });
+  const docs = new Map(context.documents.map(d => [d.source_id, d]));
+  if (docs.size !== context.documents.length) fail('Duplicate source document');
+  const aliases = new Set<string>(), pageIds = new Set<string>(), sheets = new Set<string>();
+  for (const doc of context.documents) {
+    if (doc.source_id !== `sha256:${doc.sha256}`) fail('Source digest disagrees with document identity');
+    for (const name of doc.names) { if (aliases.has(name)) fail('Duplicate source alias'); aliases.add(name); }
+    const pages = context.pages.filter(p => p.source_id === doc.source_id).map(p => p.page_number).sort((a, b) => a - b);
+    if (pages.length !== doc.page_count || pages.some((n, i) => n !== i + 1)) fail('Source pages are missing or duplicated');
+  }
+  for (const page of context.pages) {
+    if (!docs.has(page.source_id) || page.page_id !== `${page.source_id}:p${page.page_number}` || pageIds.has(page.page_id)) fail('Invalid source page ownership');
+    pageIds.add(page.page_id);
+    for (const key of page.sheet_keys) { if (sheets.has(key)) fail('Duplicate source sheet key'); sheets.add(key); }
+    if (page.text_status !== (page.spans.some(s => s.text.trim()) ? 'available' : 'no_text')) fail('Source text availability disagrees with spans');
+    page.spans.forEach((s, i) => { if (s.source_index !== i || s.span_id !== `${page.page_id}:s${i}`) fail('Invalid source span ownership/order'); });
+  }
+});
+
 /** A fresh, validated snapshot. No source/geometry mutation or text rewriting.
  * IDs are version-scoped. Cross-version equipment identity is a separate job.
  */

@@ -35,6 +35,20 @@ or approval; their fingerprints detect corruption, not forged authorship.
 Original source PDFs must be retained separately. `bas_workflow_error` reports
 capture failure without discarding valid point observations or math.
 
+New `bas_evidence_2` captures also retain all positioned drawing text and its
+interpretation rule version. BAS compile accepts optional `bas_review`:
+`{operation_id, capture_id, expected_head, action}`. The action is either
+`{kind:"upsert", association:{region_id, matrix_id, equipment_references, reason}}`
+or `{kind:"remove", region_id, matrix_id, reason}`. Each equipment reference
+contains a literal `tag`, original `span_ids`, and nullable
+`scope:{building,level,system,phase}`. Obtain IDs from the retained capture;
+use its last event ID as the expected head, or null for the first event.
+This explicit option writes an `agent_proposal` event, never operator approval.
+Exact retries are idempotent; changed retries, stale heads, invalid references
+and conflicting import branches reject. Ordinary recompiles return retained
+history. These are bounded sequence-to-matrix comparisons, not verified
+installed-equipment assignments or complete SOO interpretation.
+
 No clone, no build—point your MCP client at the published package:
 
 ```json

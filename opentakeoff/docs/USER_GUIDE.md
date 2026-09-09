@@ -39,12 +39,29 @@ click a printed value to inspect its source. Missing cells are marked “—”,
 not silently filled with zero. **Export point evidence** includes all captures
 and rows regardless of filters and can be reopened with **Import takeoff…**.
 
+Choose **Sequences & links** within Point lists to read retained original SOO
+text. Select a sequence, then expand **Link a point list and equipment reference**.
+Choose a matrix and literal drawing-text reference, enter its tag and established
+scope, and explain the association. **Save comparison link** records the link;
+it does not replicate a template or establish installed equipment. Supported
+monitoring clauses compare against point names; an omitted match means “Not
+listed in selected matrix,” not absent from the whole project. Other clauses
+remain visible and uninterpreted. Use source buttons to inspect the drawing.
+
+Edits and removals require reasons and retain prior events. **Export BAS evidence
+& history** saves the complete record, regardless of the current selection.
+Project reload and **Import takeoff…** retain it. Stale review versions and
+divergent imported histories require attention rather than silently overwriting
+newer work. Old point-only captures need recompilation of the original PDFs
+before they can show SOO text. History records local origins, not authenticated
+reviewers, approvals, or server-enforced immutability.
+
 Point captures persist through project autosave, JSON and snapshots. They are
 not approved releases. Captures retain source hashes, but these JSON files do
 not contain historical PDF bytes. Reopen the exact original PDF to navigate
 old evidence; a changed file with the same name is refused. A renamed copy of
 the same bytes can still resolve. Existing engineering calculations remain
-transient; equipment assignment, immutable source archives, reviewed corrections
+transient; actual-equipment assignment, immutable source archives, broader source corrections
 and approved revision workflows are still in development. Neither an
 absent cell nor a controller-provided point establishes zero field scope or a
 new wired terminal.

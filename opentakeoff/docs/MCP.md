@@ -33,6 +33,15 @@ Source PDFs are separate, and imported evidence is not an approved or freshly
 recomputed result. A capture failure is disclosed as `bas_workflow_error` without
 replacing source observations or engineering output.
 
+Revision `bas_evidence_2` retains original positioned SOO text as well. The
+optional `bas_review` input to BAS compile adds/removes explicit comparison
+links with a reason, operation ID and expected review head. This option mutates
+Session review history as `agent_proposal`; it never approves a takeoff.
+Recompiles return retained history, and export/import preserves it. Stale heads,
+invalid source references and divergent histories reject. Source text stays
+immutable; matching a listed point is not verified wiring or installed quantity.
+See [the workflow contract](bas-production/SEQUENCE_WORKFLOW_CONTRACT.md).
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

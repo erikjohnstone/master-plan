@@ -14,7 +14,8 @@ import { compileTakeoff } from '../../web/src/lib/compileTakeoff.mjs';
 import { buildBasSourceContext } from '../../web/src/lib/basSources.ts';
 import { basPointListsSchema } from '../../web/src/lib/basPointLists.ts';
 import type { SheetGraph } from '../../web/src/lib/sheetgraph.ts';
-import { captureBasPoints, verifyBasWorkflow } from '../../web/src/lib/basWorkflow.ts';
+import { captureBasPoints, mergeBasWorkflows, verifyBasWorkflow, type BasWorkflow } from '../../web/src/lib/basWorkflow.ts';
+import { interpretBasSequences } from '../../web/src/lib/basSequenceReconciliation.ts';
 import { importTakeoff } from '../src/importing.ts';
 
 const sources = buildBasSourceContext([{ sha256: 'a'.repeat(64), byte_length: 100, name: 'fixture.pdf', page_count: 1,
@@ -65,6 +66,40 @@ test('source failure is explicit and cannot discard a valid legacy or math resul
     project_complete: false, error: 'Source pages unavailable' });
   assert.ok('bas_math' in result && 'physical_total' in result.bas_math);
   assert.equal(result.bas_math.physical_total.AI, 1);
+});
+
+test('production recompile returns retained association events; stale requests never mutate them', async () => {
+  // Declared synthetic adapter fixture. The separate MCP walkthrough loads a
+  // real PDF and exercises the same public create/retry/recompile/export path.
+  const input = buildBasSourceContext([{ name: 'fixture.pdf', sha256: 'a'.repeat(64), byte_length: 100, page_count: 1,
+    pages: [{ page_number: 1, sheet_key: 'fixture.pdf', width_px: 1000, height_px: 700, rotation: 0, spans: [
+      { str: 'AIR HANDLING UNIT CONTROL SEQUENCE', x0: 10, y0: 150, x1: 450, y1: 170 },
+      { str: '1. THE CONTROLLER SHALL MONITOR SUPPLY AIR TEMPERATURE AND MODULATE HOT WATER FLOW TO MAINTAIN SET POINT.', x0: 10, y0: 190, x1: 850, y1: 200 },
+      { str: 'AHU-1', x0: 10, y0: 400, x1: 80, y1: 410 },
+    ] }] }]);
+  const session = { basWorkflow: null as BasWorkflow | null, basSourcesForPipeline: () => input,
+    retainBasWorkflow(w: BasWorkflow) { this.basWorkflow = mergeBasWorkflows(this.basWorkflow, w, true); return true; } };
+  const first = await compileProductionTakeoff(session, graph, 'bas_points');
+  assert.ok('bas_workflow' in first && first.bas_workflow);
+  const region = interpretBasSequences(input).regions.find(r => r.raw.status === 'body_detected');
+  assert.ok(region);
+  const request = { operation_id: '00000000-0000-4000-8000-000000000001',
+    capture_id: first.bas_workflow.current_capture_id, expected_head: null,
+    action: { kind: 'upsert', association: { region_id: region.region_id,
+      matrix_id: first.bas_workflow.captures[0].points.matrices[0].matrix_id, reason: 'Synthetic pipeline regression association',
+      equipment_references: [{ tag: 'AHU-1', span_ids: [input.pages[0].spans[2].span_id],
+        scope: { building: null, level: null, system: null, phase: null } }] } } };
+  const reviewed = await compileProductionTakeoff(session, graph, 'bas_points', { bas_review: request });
+  assert.ok('bas_workflow' in reviewed && reviewed.bas_workflow);
+  assert.equal(reviewed.bas_workflow.review_events?.length, 1);
+  assert.equal(reviewed.bas_workflow.review_events[0].origin, 'agent_proposal');
+  assert.deepEqual(await compileProductionTakeoff(session, graph, 'bas_points'), reviewed);
+  assert.deepEqual(await compileProductionTakeoff(session, graph, 'bas_points', { bas_review: request }), reviewed);
+  const retained = structuredClone(session.basWorkflow);
+  await assert.rejects(compileProductionTakeoff(session, graph, 'bas_points', { bas_review: {
+    ...request, operation_id: '00000000-0000-4000-8000-000000000002' } }), /changed since/);
+  assert.deepEqual(session.basWorkflow, retained);
+  assert.deepEqual(reviewed.bas_workflow.captures, first.bas_workflow.captures);
 });
 
 test('unowned point observations are retained even when a durable capture is impossible', async () => {

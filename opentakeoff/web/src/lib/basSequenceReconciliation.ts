@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { discoverBasNarratives, type BasNarrativeBlock } from './basNarratives.ts';
 import type { BasSourceContext, BasSourceSpan } from './basSources.ts';
 import { basPointListsSchema } from './basPointLists.ts';
-import { canonicalBasJson } from './basWorkflow.ts';
+import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 
 export const BAS_SEQUENCE_RULE = 'explicit_monitor_modulate_1' as const;
@@ -94,17 +94,18 @@ export function interpretBasSequences(sources: BasSourceContext) {
 }
 
 const bounded = z.string().trim().min(1).max(512);
-const associationSchema = z.array(z.object({
+export const basSequenceAssociationSchema = z.object({
   region_id: bounded, matrix_id: bounded,
-  review_origin: z.enum(['operator_input', 'source_review_fixture']),
+  review_origin: z.enum(['operator_input', 'agent_proposal', 'source_review_fixture']),
   reason: z.string().trim().min(1).max(4096),
   equipment_references: z.array(z.object({
     tag: bounded, span_ids: z.array(bounded).min(1).max(100),
     scope: z.object({ building: bounded.nullable(), level: bounded.nullable(),
       system: bounded.nullable(), phase: bounded.nullable() }).strict(),
   }).strict()).min(1).max(1000),
-}).strict()).max(10000);
-export type BasSequenceAssociation = z.infer<typeof associationSchema>[number];
+}).strict();
+const associationSchema = z.array(basSequenceAssociationSchema).max(10000);
+export type BasSequenceAssociation = z.infer<typeof basSequenceAssociationSchema>;
 
 const digest = (value: unknown) => sha256Hex(new TextEncoder().encode(canonicalBasJson(value)));
 const literal = (text: string) => text.normalize('NFKC').toUpperCase().replace(/\s+/g, ' ').trim();

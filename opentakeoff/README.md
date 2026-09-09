@@ -55,6 +55,12 @@ matching PDF bytes, not merely its filename. Equipment assignment, source-PDF
 archiving and approved review/revision workflows remain in development.
 Existing engineering and row exports keep their current meaning.
 
+**Point lists → Sequences & links** retains original SOO text and compares
+supported monitoring clauses with an explicitly linked matrix and equipment
+reference. Source-preserving link edits and removals retain their history through
+save/export/import. A listed match is not proof of applicability, wiring or
+installation; unsupported clauses remain visible for review.
+
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
 **Takeoff · Edit · ⋯** controls at the upper right. **Schedules**

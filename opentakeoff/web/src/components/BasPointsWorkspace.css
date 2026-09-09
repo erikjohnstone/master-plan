@@ -25,3 +25,16 @@
 .bas-point-disclosure { color: var(--ink-muted); font-size: var(--fs-s); }
 .bas-point-disclosure code { display: block; overflow-wrap: anywhere; }
 .bas-point-message { padding: var(--sp-5); }
+.bas-sequence-select { display: flex; flex-direction: column; gap: var(--sp-2); font-size: var(--fs-s); }
+.bas-sequence-select select, .bas-sequence-select textarea { width: 100%; box-sizing: border-box; }
+.bas-sequence-select textarea { min-height: 5rem; font: inherit; color: var(--ink); background: var(--paper-bright); border: 1px solid var(--ink-faint); padding: var(--sp-3); resize: vertical; }
+.bas-sequence-prose { max-height: 52vh; }
+.bas-sequence-prose td:nth-child(2) { min-width: 24rem; width: 60%; max-width: none; line-height: 1.65; }
+.bas-sequence-prose th:first-child { min-width: 3rem; }
+.bas-sequence-prose td p { margin: var(--sp-2) 0; }
+.bas-sequence-link-form { border: 1px solid var(--ink-faint); padding: var(--sp-4); }
+.bas-sequence-link-form summary { cursor: pointer; font-weight: 650; }
+.bas-sequence-link-form form { display: flex; flex-direction: column; gap: var(--sp-4); }
+.bas-sequence-reference { padding: var(--sp-3); border-left: 2px solid var(--cobalt); overflow-wrap: anywhere; }
+.bas-sequence-association { padding: var(--sp-3) 0; border-bottom: 1px solid var(--ink-faint); }
+.bas-sequence-association label { margin-right: var(--sp-3); }

@@ -26,6 +26,7 @@ import { importTakeoff } from "./importing.ts";
 import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption, reconcileSchedulePlan } from "./takeoff.ts";
 import { takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
 import { compileProductionTakeoff } from "./productionTakeoff.ts";
+import { basReviewRequestSchema } from "../../web/src/lib/basReviewContract.ts";
 import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
@@ -684,7 +685,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }));
 
   server.registerTool("compile_corpus_takeoff", {
-    description: `Compile a full HVAC schedule-quantity, BAS points-list, control-valve/damper, sequence-of-operations, or embedded-coil-valve-gap takeoff from the loaded plan set's extractable tables — unique scheduled MARK/VALVE MARK tags per equipment family (T-HVAC-01), extractable POINTS/DDC list rows with AI/AO/BI/BO (T-BAS-01), valve/damper/air-valve schedules with contractor columns (T-VALVE-01: mark, served unit, service, size, GPM, Cv, actuator when printed), every SOO/control-sequence table or narrative-title hit with section text and per-cell citations (T-SOO-01 / "sequences" — never derives typed I/O points from the prose; that stays refuse_not_done on the bas_points path), or "embedded_coil_gaps" (T-VALVE-EMBEDDED-01): a hydronic coil that needs flow control always implies a control valve exists, whether or not it has its own dedicated valve schedule — this walks EVERY equipment schedule (AHU/RTU/FCU/chiller/etc., not just tables already believed to be about valves) for coil GPM+EWT/LWT data embedded directly in the row, cross-references each one against the real T-VALVE-01 compile by tag/served-area, and discloses any coil with no matching scheduled valve as a real, evidence-cited gap rather than a silent miss (real, found-live case: 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations's own AIR HANDLING UNIT SCHEDULE has real coil data with no separate valve schedule anywhere in the set). This is schedule/list quantity, not installed drawing counts (use project_takeoff for those). Returns categories, item cites with bboxes, page accounting (empty pages explicit), and exclusions. Pass path to write JSON; pass export_path to also write CSV tabs (+ XLSX when available) under that directory. Read-only; does not commit canvas shapes. ${COORDS}`,
+    description: `Compile a full HVAC schedule-quantity, BAS points-list, control-valve/damper, sequence-of-operations, or embedded-coil-valve-gap takeoff from the loaded plan set's extractable tables — unique scheduled MARK/VALVE MARK tags per equipment family (T-HVAC-01), extractable POINTS/DDC list rows with AI/AO/BI/BO (T-BAS-01), valve/damper/air-valve schedules with contractor columns (T-VALVE-01: mark, served unit, service, size, GPM, Cv, actuator when printed), every SOO/control-sequence table or narrative-title hit with section text and per-cell citations (T-SOO-01 / "sequences" — never derives typed I/O points from the prose; that stays refuse_not_done on the bas_points path), or "embedded_coil_gaps" (T-VALVE-EMBEDDED-01): a hydronic coil that needs flow control always implies a control valve exists, whether or not it has its own dedicated valve schedule — this walks EVERY equipment schedule (AHU/RTU/FCU/chiller/etc., not just tables already believed to be about valves) for coil GPM+EWT/LWT data embedded directly in the row, cross-references each one against the real T-VALVE-01 compile by tag/served-area, and discloses any coil with no matching scheduled valve as a real, evidence-cited gap rather than a silent miss (real, found-live case: 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations's own AIR HANDLING UNIT SCHEDULE has real coil data with no separate valve schedule anywhere in the set). This is schedule/list quantity, not installed drawing counts (use project_takeoff for those). Returns categories, item cites with bboxes, page accounting (empty pages explicit), and exclusions. Pass path to write JSON; pass export_path to also write CSV tabs (+ XLSX when available) under that directory. BAS compile also retains immutable point/PDF-text evidence in bas_workflow. Optional bas_review records a source-backed association upsert/removal in Session history as agent_proposal; it is not read-only when supplied. Recompiles retain review history. No canvas shapes, approvals, installed counts or typed I/O are created by these associations. ${COORDS}`,
     inputSchema: {
       kind: z.enum([
         "hvac_equipment",
@@ -705,15 +706,16 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       bas_math: z.record(z.string(), z.unknown()).optional().describe(
         "BAS only: optional deterministic Python policy (hardware {profile_id,rigid:{AI,AO,DI,DO},universal_inputs}, spare {basis:demand_addon|installed_unused,numerator,denominator}, licenses, serial_routes, ip_closets, group_overrides, typed soo). Omit unknown policies; never invent hardware capacities, replication, distances or typed SOO. Returned bas_math is separate from legacy printed totals; review diagnostics and project_complete=false. The independent bas_point_lists result retains source-bound listed observations and supported controller notes, not verified wiring or installed quantity. Group IDs are returned by the first compile. See docs/BAS_MATH_RESEARCH.md for exact constraints.",
       ),
+      bas_review: basReviewRequestSchema.optional().describe('BAS only: explicit sequence/point-matrix association upsert/removal against an existing capture and expected review head. Needs source-span equipment references and a reason. Records an agent_proposal, never operator approval or installed quantities. First compile without this option to obtain bas_workflow capture/source IDs; export_takeoff retains evidence and history.'),
       path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
       export_path: z.string().optional().describe("Optional directory for CSV/XLSX workbook tabs"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: compileCorpusTakeoffOutput,
-  }, run("compile_corpus_takeoff", async ({ kind, service, detail, bas_math, path: outPath, export_path: exportPath, overwrite }) => {
+  }, run("compile_corpus_takeoff", async ({ kind, service, detail, bas_math, bas_review, path: outPath, export_path: exportPath, overwrite }) => {
     const graph = await session.graphForPipeline();
     const compiled: any = await compileProductionTakeoff(session, graph, kind, {
-      ...(service ? { service } : {}), ...(bas_math ? { bas_math } : {}),
+      ...(service ? { service } : {}), ...(bas_math ? { bas_math } : {}), ...(bas_review ? { bas_review } : {}),
     });
     if (detail !== "full") {
       // Delete, don't set undefined — an object key present with value

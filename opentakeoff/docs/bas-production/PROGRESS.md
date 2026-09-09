@@ -1,5 +1,90 @@
 # BAS production workflow progress
 
+## Retained SOO comparison workflow — 2026-09-09, verification checkpoint
+
+The preceding status-answer turn was **no progress**. This continuation made
+**progress**: real browser/MCP integration, durable sequence source and review
+events, negative controls, a reproduced/repaired recompile-history bug, and
+independently reviewed source cases for actual-equipment assignment. All five
+complete workflows remain required; no blocker or completion claim.
+
+- New `bas_evidence_2` captures retain complete positioned PDF text alongside
+  unchanged point evidence. Old point-only capture fingerprints remain exact.
+  Original source data is immutable; separate hash-linked review events retain
+  explicit links, reasons, origins, edits/removals and expected prior heads.
+  Exact retries are idempotent; stale/foreign evidence, changed requests and
+  divergent imports reject. This is local integrity, not authenticated approval.
+- Actual Takeoff **Point lists → Sequences & links** opens original prose,
+  bounded monitoring interpretations, source-reference association controls and
+  comparisons without a new canvas rail. UI and MCP invoke the same validation,
+  history and comparison service. `bas_review` is an optional existing-tool input,
+  with `agent_proposal` origin; it is not read-only when provided. Version 0.9.67
+  agrees on all three manifest surfaces; no new MCP verb (50 tools unchanged).
+- Real browser PDF upload/production compile: old browser compile fields exactly
+  unchanged excluding additive capture; 12 matrices/193 rows and all nine pages
+  retained. Original selected sequence has 18 blocks. An invalid equipment
+  reference cannot create an event; valid keyboard submission produces two listed
+  rows/one selected-matrix omission. Source paint/return retains sequence, draft
+  and prose scroll. Both themes at 1280/1920, actual autosave, reload/export,
+  fresh-context import and reasoned removal retaining prior evidence/history pass.
+  No browser JS errors; light-1280 and dark-1920 comparisons visually inspected.
+  Workflow payload 1,004,719 bytes; response 1,492,966 bytes. This nine-page
+  result does not establish large-corpus transport/performance safety.
+- Browser diagnostic failures retained: initial compared content-hashed browser
+  filenames with original-named CLI; second missed the existing outer display
+  alias mapping; third attempted to edit a collapsed post-save form. Corrected
+  only diagnostic setup/expected transport distinctions; no source keys or
+  production extraction altered. Final `sequence-workflow-browser-4` passes.
+- Actual MCP create/retry/recompile/export/reset/import/remove passes. It
+  reproduced a genuine new-integration defect: ordinary recompile omitted saved
+  review events from its response although Session retained them. Shared compile
+  now returns merged retained history, protected by real MCP proof and a focused
+  production-boundary regression test. Invalid/stale/non-BAS requests preserve
+  Session state. Original legacy compile fields and full source snapshot remain
+  exact. 65,219 ms for the whole multi-call proof; main-process peak RSS
+  755,302,400 bytes under concurrent checks, not whole-tree or isolated A/B.
+- Focused web workflow/review/comparison tests **24 pass**. Full web check:
+  **2,600 pass / 13 existing skips / zero fail**, typecheck/lint/bench/build pass.
+  Existing bundle-size and missing optional Agent-key warnings remain. MCP
+  typecheck, **23 BAS tests**, build and tool-count gate pass. Python production
+  unchanged from prior 97-pass/mypy checkpoint; not rerun this increment.
+
+Evidence: `evidence/sequence-workflow-browser-4/`,
+`evidence/sequence-workflow-mcp-verified/`, corresponding `.log` files,
+`sequence-workflow-focused.log`, `sequence-workflow-web-check.log`.
+Full original/rejected diagnostic outputs remain local; never count them green.
+Contracts: `SEQUENCE_WORKFLOW_CONTRACT.md`, `EQUIPMENT_ASSIGNMENT_CONTRACT.md`.
+
+**Next equipment evidence:** original Behavioral Medicine M601/M701 (development
+rank 22) visually reviewed using the PDF skill. Five explicit equipment lists
+resolve to 14 named scheduled members; the system matrix already covers them
+once. The sequence's two-chiller simultaneous-operation limit is not its three
+scheduled chillers. Heating-water pumps elsewhere on M601 are not automatically
+members of this CHW matrix. Refrigerant monitoring is not a named device count.
+New independent `bas-equipment-system-cases.json` has one passing source-key
+integrity test and a subsequent clean web typecheck; this is not a passing
+equipment interpreter. The six reserved holdouts remain unopened. Temporary
+rendered review pages: `/tmp/bas-equipment-source-review.yMtoqm/`.
+
+**Live checks at this checkpoint:** complete seven-set legacy corpus gate
+`21748` (PID 56233), log `sequence-workflow-core-corpus.log`; MCP contract/parity
+subset `72013`, log `sequence-workflow-mcp-contract-check.log`. Revalidate/poll
+these handles rather than restarting. Corpus table-recall has no authored keys
+and is unscored; takeoff/reference/graph remain pending. Prior three-set baseline
+failures remain disclosed below; no new full-corpus non-regression claim.
+Terminal: browser `29825` pass; real MCP `71402` pass; full web `12930` pass;
+MCP BAS/typecheck `36632` pass; new source-key/typecheck `47712` pass. Earlier
+diagnostic handles `72397`, `23940`, `17540`, `2669` are terminal failures as
+explained above. Old MCP `82785` was missing on revalidation; checks reran.
+
+**Remaining:** broader SOO conditions/continuations and supported requirements;
+canonical actual-equipment/template assignment and exact demand derivation;
+assemblies/responsibilities; compatibility; archived source versions,
+revision pairing/approval invalidation/release; large-source batching; full
+applicable corpus/holdout and five-workflow end-to-end gates. Reference links
+are not actual installations. VectorGrid/table extraction/symbols unchanged.
+No push, merge, deployment or external provisioning.
+
 ## First shared SOO–points comparison — integration pending
 
 This continuation made **progress**, not a completion claim. The durable point

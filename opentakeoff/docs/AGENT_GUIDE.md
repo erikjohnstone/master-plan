@@ -302,3 +302,17 @@ capture data, not authenticated authorship. Source navigation requires the exact
 original PDF bytes. JSON carries source identities, not historical PDFs; retain
 those separately. SOO/equipment reconciliation and approved BAS snapshots are
 not implied by a successful capture or export.
+
+New `bas_evidence_2` captures additionally retain full positioned drawing text
+and its interpretation rule version. Optional `bas_review` on
+`compile_corpus_takeoff(kind:"bas_points")` records an explicit sequence/matrix
+association or removal. First obtain the capture ID and source references from
+a compile, then supply a unique `operation_id`, `capture_id`, `expected_head`
+(last event ID for that capture, or null), and an action with a reason.
+Upserts require a region ID, matrix ID and literal source-span equipment
+references; optional scope is a disclosed input, not inferred installation.
+These events are `agent_proposal`, never human approval. Exact retries are
+idempotent; stale heads, reused operation IDs with changed requests and invalid
+references reject. Ordinary recompiles and exports retain prior history.
+The shared bounded monitoring comparison does not infer typed I/O, verify
+applicability, replicate templates or establish actual equipment quantities.

@@ -1,13 +1,11 @@
 # Changelog
 
-- BAS development: shared, source-bound SOO monitoring/point-list comparison
-  kernel with explicit reference associations and independent real-PDF controls.
-  Internal only pending production persistence/UI integration; no installed
-  quantities, extraction changes or complete-workflow claim.
-
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
+
+- Retain full source-text snapshots alongside point matrices in `bas_evidence_2`; old point-only captures keep their fingerprints. Add **Sequences & links** inside Point lists, with original prose, bounded monitoring comparisons, source navigation and explicit equipment-reference associations. Save/import/export preserves evidence and edit/removal history; stale edits and conflicting imports reject without silently overwriting decisions. MCP `bas_review` uses the same service with proposal origin. No installed-equipment, complete SOO, approval or source-PDF archival claim.
+- Correct the new integration's ordinary MCP recompile reply to include already-retained review events, not only the new evidence capture.
 
 - Add a digital point-matrix workspace and fingerprinted `bas_workflow` evidence captures. Project autosave, JSON and MCP export/import retain original rows and source identities; repeated captures/imports deduplicate without changing operator selection. Source clicks match loaded PDF bytes, not stale filenames. Point evidence is not an approved release, installed count, or historical PDF archive; equipment and reviewed revision workflows remain unfinished.
 - Return source-bound point-list observations alongside the existing BAS math on the shared production compile path. Preserve original rows and sparse cells; retain supported controller footnotes without treating them as installed devices or wired terminals. Strict validation and browser citation-alias mapping protect raw evidence. Durable workflow review and dedicated presentation remain in development.
