@@ -7,6 +7,7 @@ import { captureBasEvidence, mergeBasWorkflows } from "../../web/src/lib/basWork
 import { applyBasReview } from "../../web/src/lib/basReview.ts";
 import { captureBasEquipmentTables } from "../../web/src/lib/basEquipmentEvidence.ts";
 import { applyBasEquipmentReview, basEquipmentSummary } from "../../web/src/lib/basEquipmentReview.ts";
+import { calculateBasAssignments } from './basAssignmentDemand.ts';
 
 /** Snapshot the source context before awaiting either Python operation. A
  * math-policy error and an evidence error are independent, never a fake zero.
@@ -39,8 +40,8 @@ async function pointListsForSession(session: unknown, graph: SheetGraph) {
 }
 
 export async function compileProductionTakeoff(session: unknown, graph: SheetGraph, kind: string,
-  opts: { service?: string; bas_math?: unknown; bas_review?: unknown; bas_equipment_review?: unknown } = {}) {
-  const hasReview = opts.bas_review != null || opts.bas_equipment_review != null;
+  opts: { service?: string; bas_math?: unknown; bas_review?: unknown; bas_equipment_review?: unknown; bas_assignment_demand?: unknown } = {}) {
+  const hasReview = opts.bas_review != null || opts.bas_equipment_review != null || opts.bas_assignment_demand != null;
   if (hasReview && kind !== 'bas_points' && kind !== 'T-BAS-01') throw new Error('BAS review is only available for the BAS points workflow');
   const compiled = compileTakeoff(session, graph, kind, opts);
   if (compiled.kind !== "bas_points") return compiled;
@@ -60,6 +61,7 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
   }
   const pointResult = await pointLists;
   let equipmentSummary;
+  let assignmentCalculation;
   if (pointResult && 'bas_workflow' in pointResult && pointResult.bas_workflow) {
     const previous = session && typeof session === 'object' && 'basWorkflow' in session ? session.basWorkflow : null;
     const merged = mergeBasWorkflows(previous, pointResult.bas_workflow, true)!;
@@ -72,15 +74,24 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
     if (opts.bas_equipment_review != null) {
       pointResult.bas_workflow = await applyBasEquipmentReview(pointResult.bas_workflow, opts.bas_equipment_review, 'agent_proposal');
     }
+    if (opts.bas_assignment_demand != null) {
+      const calculated = await calculateBasAssignments(pointResult.bas_workflow, opts.bas_assignment_demand);
+      pointResult.bas_workflow = calculated.workflow;
+      assignmentCalculation = calculated.calculation;
+    }
     if (pointResult.bas_workflow.captures.find(c => c.capture_id === pointResult.bas_workflow.current_capture_id)?.equipment_sources) {
       equipmentSummary = await basEquipmentSummary(pointResult.bas_workflow, pointResult.bas_workflow.current_capture_id!);
     }
     // Commit only after any requested review validates. Invalid requests leave
     // the prior Session review/capture state untouched.
+    if (hasReview && session && typeof session === 'object' && 'basWorkflow' in session && session.basWorkflow !== previous) {
+      throw new Error('The BAS workspace changed during this operation; no stale decision or calculation was saved');
+    }
     if (session && typeof session === 'object' && 'retainBasWorkflow' in session && typeof session.retainBasWorkflow === 'function') {
       const retained = session.retainBasWorkflow(pointResult.bas_workflow);
       if (retained === false && hasReview) throw new Error('The loaded drawing set changed; the BAS review was not applied');
     }
   } else if (hasReview) throw new Error('BAS evidence could not be captured; prior review history was preserved');
-  return { ...compiled, bas_math, ...pointResult, ...(equipmentSummary ? { bas_equipment: equipmentSummary } : {}) };
+  return { ...compiled, bas_math, ...pointResult, ...(equipmentSummary ? { bas_equipment: equipmentSummary } : {}),
+    ...(assignmentCalculation ? { bas_assignment_demand: assignmentCalculation } : {}) };
 }

@@ -55,6 +55,18 @@ equipment-capture failures return `bas_equipment_error` without erasing valid
 point/SOO evidence. See
 [equipment assignment inputs and limits](bas-production/EQUIPMENT_ASSIGNMENT_CONTRACT.md).
 
+Optional `bas_assignment_demand: {capture_id, expected_equipment_head}` on the
+same BAS compile invokes the shared Python assignment service. It retains a
+`bas_assignment_4` calculation with original observations, exact selection,
+exceptions, multiplication factors, source gaps and qualifiers. Known listed
+subtotals are not unique requirements, installed quantities or field wiring;
+no combined project total is invented. The UI's **Calculate assigned values**
+uses this same service. Exact-dependency retries reuse the saved result. Stale
+requests or concurrent Session changes reject before mutation. Export/import
+preserves earlier results; their dependency heads determine whether they are
+current, regardless of import order. Fingerprints are local corruption detection,
+not authenticated provenance or engineering approval.
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

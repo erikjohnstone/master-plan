@@ -29,9 +29,22 @@ same identity. **Withdraw assignment** retains its previous decisions; remove
 references before removing an equipment identity. **Export evidence & decisions**
 includes the complete BAS record, independent of table filters. Autosave and
 **Import takeoff…** retain it; source navigation requires the exact PDF bytes.
-These are named scheduled members and reviewed assignments, not installed counts,
-assignment-driven point totals, or approved releases. Those remaining workflows
-are still in development. The editor adds no canvas toolbar or floating panel.
+These are named scheduled members and reviewed assignments, not installed counts
+or approved releases. The editor adds no canvas toolbar or floating panel.
+
+After recording assignments, choose **Calculate assigned values**. The shared
+Python engine applies each known listed value to the included members, or applies
+a system-wide matrix once. Expand **Assigned listed values** in equipment details
+to inspect the original value, application factor, derived value and **View source
+cell** link. The reader retains its open state and page when you visit the drawing.
+Alarm/trend attributes are not multiplied into I/O quantities. Unknown cells
+remain unknown; known listed subtotals are not complete, unique-device or verified
+field-wiring totals. Controller qualifications and source gaps remain available.
+Saved results identify their exact evidence capture, equipment decision and rule.
+Changing an assignment marks previous results historical; calculate again for
+the current decisions. Export/import and withdrawal retain earlier calculations.
+The server-capable local endpoint and Python runtime are required; there is no
+browser math fallback or inferred installation, protocol, hardware or pricing.
 
 For a BAS points takeoff, the **Takeoff** tab also shows **BAS takeoff · Engineering**.
 Points is the default table; I/O capacity, Networks, Licenses and Issues separate

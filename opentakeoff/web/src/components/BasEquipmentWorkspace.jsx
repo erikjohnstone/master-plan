@@ -2,12 +2,13 @@
 // comparison and transaction validation use the shared UI/MCP BAS services.
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { activeBasCapture, verifyBasWorkflow } from '../lib/basWorkflow.ts';
-import { basEquipmentHead, basEquipmentView } from '../lib/basEquipmentReview.ts';
+import { basEquipmentHead, basEquipmentView, basAssignmentCalculationState } from '../lib/basEquipmentReview.ts';
 import { validateBasEquipmentRegister } from '../lib/basEquipmentRegister.ts';
 import { interpretBasSequences } from '../lib/basSequenceReconciliation.ts';
 import { downloadText } from '../lib/totals.js';
 import { ANN_SCHEMA } from '../lib/store.js';
 import { equipmentPreviewReady } from './basEquipmentEditorState.ts';
+import BasAssignedValues from './BasAssignedValues.jsx';
 import './BasPointsWorkspace.css';
 import './BasEquipmentWorkspace.css';
 
@@ -27,7 +28,7 @@ function DrawingReferences({ ids, spans, onSource, label, reason }) {
   </details>;
 }
 
-export default function BasEquipmentWorkspace({ workflow, viewState, onViewStateChange, onOpenCitation, onReview }) {
+export default function BasEquipmentWorkspace({ workflow, viewState, onViewStateChange, onOpenCitation, onReview, onCalculate }) {
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [preview, setPreview] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -50,6 +51,7 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
   const { verified, capture, view } = data || {};
   const register = view?.register;
   const head = capture ? basEquipmentHead(verified, capture.capture_id) : null;
+  const calculationState = capture ? basAssignmentCalculationState(verified, capture.capture_id) : null;
   const draft = state.draft;
   const stale = draft && (draft.captureId !== capture?.capture_id || draft.expectedHead !== head);
   const matrices = capture?.points.matrices || [];
@@ -86,6 +88,14 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
       const response = await onOpenCitation({ page_id: pageId, sheet_id: pageId, bbox_px: box, value: text, kind: 'row' });
       if (response?.error) setError(response.error);
     } catch (e) { setError(e.message); }
+  }
+  async function calculate() {
+    setError(''); setNotice(''); setBusy(true);
+    try {
+      await onCalculate({ capture_id: capture.capture_id, expected_equipment_head: head });
+      setNotice('Listed-value calculation saved with its source cells and equipment decisions. Not installation or wiring verification.');
+    } catch (e) { setError(e.message); }
+    finally { setBusy(false); }
   }
   async function makePreview(event) {
     event.preventDefault(); setError(''); setNotice(''); setBusy(true);
@@ -146,6 +156,7 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
     <div className="bas-point-heading"><h2 ref={heading} tabIndex={-1}>{equipment ? equipment.tag : 'Equipment'}</h2>
       <span>{equipment ? scopeLabel(scope) : `${register.equipment.length} registered · ${occurrences.length} source rows`}</span>
       <button type="button" onClick={() => downloadText('bas-equipment.takeoff.json', JSON.stringify({ schema: ANN_SCHEMA, bas_workflow: verified }, null, 2), 'application/json')}>Export evidence &amp; decisions</button>
+      <button type="button" disabled={busy || !!draft || !head || !register.assignments.length || !onCalculate} onClick={calculate}>{busy ? 'Working…' : 'Calculate assigned values'}</button>
     </div>
     {error && <p role="alert" className="bas-equipment-alert">{error}</p>}{notice && <p role="status">{notice}</p>}
     {equipment ? <>
@@ -172,6 +183,9 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
         <p>Included: {a.included_equipment_ids.map(id => register.equipment.find(e => e.equipment_id === id)?.tag).join(', ') || 'None; all explicitly excluded'}.</p>
         {!!a.excluded_equipment_ids.length && <p>Excluded from this template: {a.excluded_equipment_ids.map(id => register.equipment.find(e => e.equipment_id === id)?.tag).join(', ')}.</p>}
         <button type="button" onClick={() => onViewStateChange(previous => ({ ...previous, takeoffTab: 'points', mode: 'points', matrixId: a.matrix_id, filter: '' }))}>Read original point matrix</button>
+        <BasAssignedValues calculation={calculationState.latest} assignmentId={a.assignment_id} stale={calculationState.status === 'stale_dependencies'}
+          page={state.calculationPages?.[a.assignment_id]} onPage={page => change({ calculationPages: { ...state.calculationPages, [a.assignment_id]: page } })} onSource={source}
+          open={state.calculationOpen?.[a.assignment_id]} onOpenChange={open => change({ calculationOpen: { ...state.calculationOpen, [a.assignment_id]: open } })} />
         {a.sequence_comparisons.map(c => <div key={c.region_id}><h4>{regions.find(r => r.region_id === c.region_id)?.title || 'Sequence'}</h4>
           <button type="button" onClick={() => onViewStateChange(previous => ({ ...previous, takeoffTab: 'points', mode: 'sequences', sequenceId: c.region_id }))}>Read original sequence</button>
           <div className="bas-point-grid"><table aria-label="Equipment sequence coverage"><thead><tr><th>Supported requirement</th><th>Listed rows</th><th>Comparison</th></tr></thead><tbody>{c.requirements.map(r => <tr key={r.requirement.requirement_id}>
@@ -252,6 +266,7 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
       </section>}
     </section>}
     <details className="bas-point-disclosure"><summary>Coverage &amp; decision history</summary><p>Only discovered equipment schedules are represented. Explicit assignments are local operator decisions or Agent proposals, not authenticated approvals. JSON export retains evidence and decisions, not original PDF bytes.</p>
+      <p>Calculation state: {human(calculationState.status)}. Saved earlier calculations remain in the exported history after assignments change or are withdrawn.</p>
       {view.issues.map((issue, index) => <p key={index}>{human(issue.code)}</p>)}
       {(verified.equipment_events || []).filter(e => e.capture_id === capture.capture_id).map(event => <p key={event.event_id}>{event.created_at} · {human(event.origin)} · {event.reason}</p>)}
     </details>

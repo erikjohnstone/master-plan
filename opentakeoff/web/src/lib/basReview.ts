@@ -55,5 +55,5 @@ export async function applyBasReview(rawWorkflow: unknown, rawRequest: unknown,
   }
   const payload = { ...request, rule_version: 'bas_association_review_1' as const, origin, created_at: createdAt };
   const event = basReviewEventSchema.parse({ ...payload, event_id: await basEventFingerprint(payload) });
-  return basWorkflowSchema.parse({ ...workflow, revision: workflow.revision === 'bas_equipment_3' ? 'bas_equipment_3' : 'bas_evidence_2', review_events: [...(workflow.review_events ?? []), event] });
+  return basWorkflowSchema.parse({ ...workflow, revision: ['bas_equipment_3', 'bas_assignment_4'].includes(workflow.revision) ? workflow.revision : 'bas_evidence_2', review_events: [...(workflow.review_events ?? []), event] });
 }

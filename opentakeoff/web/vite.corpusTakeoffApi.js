@@ -19,6 +19,7 @@ import { join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { basAssignmentMiddleware } from './vite.basAssignmentApi.js';
 
 const webRoot = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const mcpRoot = resolve(webRoot, "../mcp");
@@ -379,8 +380,13 @@ const OT_ROUTES = [
   ["/__ot/count-marks", "count_marks"],
   ["/__ot/reconcile-schedule-plan", "reconcile"],
 ];
+const assignmentMiddleware = basAssignmentMiddleware(resolveTsxLoader);
 
 function otMiddleware(req, res, next) {
+  if (req.url?.split('?')[0] === '/__ot/bas-assignment-demand') {
+    if (req.method !== 'POST') return sendJson(res, 405, { error: 'POST only' });
+    return assignmentMiddleware(req, res, next);
+  }
   for (const [prefix, kind] of OT_ROUTES) {
     if (!req.url?.startsWith(prefix)) continue;
     if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });

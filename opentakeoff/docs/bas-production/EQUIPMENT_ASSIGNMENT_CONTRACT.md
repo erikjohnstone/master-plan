@@ -210,6 +210,28 @@ and UI/MCP parity; durable results and non-commercial export; measured large-set
 request/result sizes and runtime. These remain required work, not accomplished
 by the present assignment editor or its preview.
 
+The first arithmetic record is a **listed-observation derivation**, not a
+unique-device or field-terminal total. Each original observation gets an
+addressable matrix/row/column reference, original value, explicit replication
+factor and assigned value. Attributes remain attributes and are not multiplied
+as quantities. Ambiguous observations stay null even when all members are
+excluded; known values multiplied by an explicit empty selection yield zero.
+Retain row qualifiers, missing typed columns and uninterpreted columns. Show
+known listed subtotals separately from unobserved/ambiguous coverage; never label
+them the full point requirement. Do not add different assignments into a project
+total before physical requirement identities are established. Potential shared
+points across a system-wide and local matrix need review even when the selected
+equipment lists are disjoint within the same scope. Python reuses its existing
+I/O vector math and header classifications; no second JavaScript interpreter or
+default hardware/licensing request is introduced. The raw matrix, sources and
+review history remain unchanged.
+
+This distinction was rechecked against UFGS 23 09 00 §3.3.10–3.3.10.6 (PDF
+pp.44–45, accessed 2026-09-09): hardware, network and configuration entries are
+separate, with source-specific DDC ownership and signal types. The guide is
+research support, not an imported project requirement:
+https://www.wbdg.org/FFC/DOD/UFGS/UFGS%2023%2009%2000.pdf
+
 Real drawing set → shared schedule/plan/SOO evidence → equipment table with
 separate quantity bases and unresolved identity/scope → selected-equipment
 template/points detail → source inspection → applicability and exception review

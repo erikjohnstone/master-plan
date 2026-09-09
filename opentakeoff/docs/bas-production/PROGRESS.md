@@ -1,5 +1,133 @@
 # BAS production workflow progress
 
+Local equipment/source editor checkpoint **5d072f59** and component-source
+kernel **a0b58e8a** are committed. No push, merge or deployment. The current
+shared Python assigned-observation increment now has passing actual browser and
+public MCP walkthroughs, in addition to focused and full web gates. It is not a
+unique physical requirement total, installed count or full-goal completion.
+All five agreed workflows remain required. This continuation made progress in
+real verification, a measured readability fix, and source-backed assembly review.
+
+### Current verification and live handles — 2026-09-09
+
+- Final shared response-acceptance guard rejects otherwise valid responses that
+  drop history, alter source/capture state, or return a mismatched result copy.
+  `59506`: MCP types/build/tool count and **33 BAS tests pass** (eight new
+  assignment tests); packaged Python includes the sparse-header fix. Python
+  **119 pass**, mypy **12 files pass**. Earlier 32-test count below is superseded.
+- Full web **17541**, `assignment-component-web-check.log`, is **terminal exit 0**:
+  **2,630 pass / 13 existing skips / zero failures**, typecheck/lint/bench/build
+  pass, including the response guard, contrast fix and seven component-source
+  tests. This supersedes the earlier full run's two unchanged hatch/grid timing
+  failures; both failures/logs and original thresholds remain retained. It does
+  not yet cover the newer assembly-register module. Existing bundle/optional
+  Agent configuration warnings remain; no asserted cause for timing variation.
+- Actual browser **95677**, `assignment-demand-browser-3/checks.json`, **passes**:
+  original 29-page Behavioral upload/compile; 14 independently keyed members;
+  five source applicability references; system-once factor 1 rather than 14;
+  original source observations unchanged and attributes unmultiplied; keyboard
+  calculate/source paint/return; retry; controlled member exception/recalculation;
+  both themes at 1280/1920; autosave/reload/export/fresh import; withdrawal retains
+  all old calculations and shows staleness. No JS errors. Workflow 2,131,535
+  bytes; compile export 5,696,632 bytes. Earlier indexing-timeout/browser-close
+  runs remain failures, not erased by this successful retry.
+- Actual public MCP **27726**, `assignment-demand-mcp-2/checks.json`, **exit 0**:
+  original graph, legacy compile/point/math and replay exact; assignment and
+  calculation retries, stale/foreign rejection, export/reset/import and
+  withdrawal with retained history pass. Workflow 1,951,665 bytes;
+  **518,035 ms**, main-process peak RSS **1,610,399,744 bytes**. This used explicit
+  4-GiB/600-second compile diagnostic allowances, not default-resource proof.
+  Earlier MCP attempt timed out in the post-import graph rebuild and is retained.
+- Real-PDF ordinary-import readability check reproduced dark table contrast
+  **3.4004836:1**, 361 of 411 text elements failing the 4.5:1 threshold. Surface-
+  only existing color-token/inheritance fixes now pass all 411 elements in both
+  themes at both sizes: light minimum **6.5089384:1**, dark **7.7077960:1**, no
+  page overflow or workflow mutation. Before/after JSON and screenshots retained
+  under `assignment-reader-contrast-{before,after}`; after process **39299 exit 0**.
+  Actual source-paint/light/dark screenshots visually inspected. This is scoped
+  readability QA, not blanket accessibility certification.
+- Baseline comparison **78297**, PID 66280 and Navfac child 66378, remains
+  authoritatively live. Federal finished, Bldg5406 and raster have begun; no aggregate
+  result is claimed. Do not restart.
+- Read-only cache diagnosis: sheetGraphCache hashes all MCP source files, so
+  downstream BAS edits can invalidate graph caches despite the comment that
+  downstream BAS changes should not. No cache rule was weakened or changed.
+
+Component source checkpoint **a0b58e8a**: original Fort Sam M-511/M-512/M-601
+inspected visually and keyed independently. Seven tests/types and full web gate
+pass for explicit distinct fan-drive pairs and factory-furnished onboard
+controller declarations, full provenance, partial-clause disclosure and negative
+controls. No monitoring reference becomes another controller; no AO point row
+becomes another drive. VAV source case is keyed, not yet supported by the parser.
+
+New uncommitted `ASSEMBLY_REVIEW_CONTRACT.md` / shared register implements source-
+owned physical component records, explicit scope/members/exceptions/conditions,
+lifecycle, separate activity claims/conflicts/reasoned resolutions, duplicate
+source consumption checks and preserved upstream equipment issues. Nine tests
+pass in `assembly-register-tests-2.log`; a subsequent typecheck found three
+implicit-any callbacks in the controlled test adapter. Explicit span typing
+and upstream-issue retention pass all nine tests and typecheck in **13475 exit 0**
+(`assembly-register-tests-3.log`, `assembly-register-typecheck-2.log`); no assertion
+relaxed. This controlled source-derived
+adapter is not a real graph/UI/MCP workflow proof. Durable assembly transactions,
+Python quantities, UI/MCP integration and all other full-goal gates remain next.
+Holdout, VectorGrid, symbols and legacy math untouched.
+
+Historical checkpoint details (superseded by the results above):
+
+- New MCP BAS suite: **32 pass**, typecheck/build/tool count pass before the final
+  sparse-header fix (Python copies must be rebuilt). Seven new tests include
+  source parity/corruption, exact retries, unknowns, alias preservation, HTTP
+  parity, cancellation, stale heads and concurrent Session updates. Import
+  order cannot make an older result appear current. No competing browser math.
+- Web check `24018`: **2,623 pass / 13 existing skips / zero failures**;
+  typecheck/lint/bench pass, build still running at this checkpoint. The previous
+  check had two route-registration failures; the single shared middleware was
+  fixed, retaining all prior assertions. Three route tests pass. Logs retained.
+- Actual new browser `6062` / `assignment-demand-browser-1` is **terminal failure**:
+  600-second indexing timeout before calculation UI was reached. No browser JS
+  errors; failure screenshot inspected. Vite reloaded during this run (observed
+  warming → null → warming); concurrent heavy load was also present. Do not
+  claim a passed calculation walkthrough or assume either observation fully
+  explains the timeout. Previous equipment-only walkthrough remains separately
+  valid. Do not rerun until the existing graph jobs and code are stable.
+- Actual new MCP `22070` / `assignment-demand-mcp-1.log` remains live, PID 66036,
+  in graph construction. Keep it; no restart on an observation timeout. Uses
+  explicit 4-GiB / 600-second compile diagnostic allowances, not default-runtime
+  proof. Baseline comparison `78297` / `assignment-starting-remaining-corpus.log`
+  is live, PID 66280 with Federal/Navfac children. No result yet.
+
+### Completed legacy core gate — not green
+
+`21748` is **terminal**, not live. `sequence-workflow-core-corpus.log` completed
+in **4,601.6 seconds** under concurrent work, not a frozen performance A/B:
+
+- Takeoff **505/541 exact**: installed **470/499**, honest refusals **7/14**,
+  raster-unavailable **28/28**; absolute quantity delta **74**, missing **18**,
+  key-flagged additions **53**. Additions require investigation, not assumed
+  key gaps or proven false installations.
+- Reference **99/129 exact**, all 30 misses in ITD.
+- Graph **78/91 cells**, zero wrong and 13 missing Baker CEILING cells;
+  row-symbol **133/138**, five missing Bldg5406 anchors, zero false resolutions.
+  No `tables.csv` keys: table recall is unscored, not 100%.
+
+Per-set takeoff exact / quantity delta / missing / additions:
+Bessemer 10/10 / 0 / 0 / 5; ITD 104/116 / 35 / 2 / 11;
+Federal 102/102 / 0 / 0 / 16; Navfac 209/217 / 14 / 0 / 21;
+Bldg5406 17/28 / 24 / 11 / 0; Baker 35/40 / 1 / 5 / 0;
+raster 28/28 / 0 / 0 / 0.
+
+All graph misses and the Bessemer/ITD/Baker takeoff/reference discrepancies match
+the retained starting-revision **08dffc79** runs (including failure details).
+Remaining four-set baseline comparison is still live. Earlier journal paragraphs
+below that call `21748` live are historical. Do not rewrite keys/scorers, count a
+zero process exit as a passing corpus, or attribute the pending deltas yet.
+
+Next: complete new calculation end-to-end evidence and final gates, checkpoint
+locally, then explicit physical-requirement identity/quantity reconciliation,
+broader SOO/applicability coverage and the remaining three workflows. All five
+bounded workflows and corpus/holdout/resource gates remain required.
+
 ## Verified equipment editor checkpoint — 2026-09-09
 
 This continuation made **progress**. Shared source-backed equipment and explicit

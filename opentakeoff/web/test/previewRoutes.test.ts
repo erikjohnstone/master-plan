@@ -21,6 +21,7 @@ const ROUTES = [
   "/__ot/sweep-schedule-row",
   "/__ot/count-marks",
   "/__ot/reconcile-schedule-plan",
+  "/__ot/bas-assignment-demand",
 ];
 
 test("the plugin serves /__ot/* in BOTH dev and preview", () => {

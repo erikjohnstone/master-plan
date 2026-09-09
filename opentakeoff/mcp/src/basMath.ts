@@ -4,6 +4,7 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { basPointListsSchema, type BasPointLists } from "../../web/src/lib/basPointLists.ts";
+import { basAssignmentDemandResultSchema, type BasAssignmentDemandResult } from "../../web/src/lib/basAssignmentDemandContract.ts";
 
 const appRoot = fileURLToPath(new URL("../../", import.meta.url));
 const bundledRoot = fileURLToPath(new URL("./python/", import.meta.url));
@@ -53,7 +54,12 @@ export async function runBasPointLists(payload: unknown, options: { python?: str
   return runBasProcess({ point_lists: payload }, basPointListsSchema, options);
 }
 
-async function runBasProcess<T>(payload: unknown, schema: z.ZodType<T>, options: { python?: string; timeoutMs?: number }): Promise<T> {
+export async function runBasAssignmentDemand(payload: unknown, options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}): Promise<BasAssignmentDemandResult> {
+  return runBasProcess({ assignment_demand: payload }, basAssignmentDemandResultSchema, options);
+}
+
+async function runBasProcess<T>(payload: unknown, schema: z.ZodType<T>, options: { python?: string; timeoutMs?: number; signal?: AbortSignal }): Promise<T> {
+  options.signal?.throwIfAborted();
   safeNumbers(payload);
   const input = JSON.stringify(payload);
   if (Buffer.byteLength(input) > LIMIT) throw new Error("BAS input exceeds 32 MiB");
@@ -67,10 +73,13 @@ async function runBasProcess<T>(payload: unknown, schema: z.ZodType<T>, options:
       if (settled) return;
       settled = true;
       clearTimeout(timer);
+      options.signal?.removeEventListener('abort', onAbort);
       if (error) { child.kill("SIGKILL"); reject(error); }
       else if (result !== undefined) resolve(result);
     };
+    const onAbort = () => finish(new Error('BAS calculation cancelled; no result accepted'));
     const timer = setTimeout(() => finish(new Error("BAS math timed out; no result was accepted")), options.timeoutMs ?? 30_000);
+    options.signal?.addEventListener('abort', onAbort, { once: true });
     child.on("error", () => finish(new Error("BAS Python runtime unavailable. Install Pydantic V2 and configure OPENTAKEOFF_BAS_PYTHON.")));
     child.stdin.on("error", () => { /* close/error handler reports the process result */ });
     child.stdout.on("data", (chunk: Buffer) => {

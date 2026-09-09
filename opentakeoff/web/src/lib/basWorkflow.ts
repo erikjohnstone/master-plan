@@ -9,6 +9,8 @@ import { BAS_SEQUENCE_RULE, reconcileBasSequencePoints } from './basSequenceReco
 import { basReviewEventSchema } from './basReviewContract.ts';
 import { basEquipmentEvidenceSchema, equipmentIdentityPayload, type BasEquipmentEvidence } from './basEquipmentEvidence.ts';
 import { basEquipmentReviewEventSchema, validateBasEquipmentRegister, type BasEquipmentReviewEvent } from './basEquipmentRegister.ts';
+import { basAssignmentCalculationSchema, basAssignmentCalculationFingerprint, basAssignmentInputFingerprint,
+  buildBasAssignmentDemandInput, verifyBasAssignmentDemandResult } from './basAssignmentDemandContract.ts';
 export { canonicalBasJson } from './basCanonical.ts';
 
 const sha = z.string().regex(/^[a-f0-9]{64}$/);
@@ -41,10 +43,11 @@ const capture = z.object({
   }
 });
 export const basWorkflowSchema = z.object({
-  schema_version: z.literal('bas_workflow_v1'), revision: z.enum(['point_captures_1', 'bas_evidence_2', 'bas_equipment_3']),
+  schema_version: z.literal('bas_workflow_v1'), revision: z.enum(['point_captures_1', 'bas_evidence_2', 'bas_equipment_3', 'bas_assignment_4']),
   captures: z.array(capture).max(1000), current_capture_id: sha.nullable(),
   review_events: z.array(basReviewEventSchema).max(10000).optional(),
   equipment_events: z.array(basEquipmentReviewEventSchema).max(10000).optional(),
+  assignment_calculations: z.array(basAssignmentCalculationSchema).max(10000).optional(),
 }).strict().superRefine((w, ctx) => {
   const ids = new Set(w.captures.map(c => c.capture_id));
   if (ids.size !== w.captures.length || (w.current_capture_id !== null && !ids.has(w.current_capture_id))) {
@@ -52,8 +55,10 @@ export const basWorkflowSchema = z.object({
   }
   const fail = (message: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, message });
   if (w.revision === 'point_captures_1' && (w.captures.some(c => c.narrative_sources) || w.review_events)) fail('Narrative/review data requires the new workflow revision');
-  if (w.revision !== 'bas_equipment_3' && w.captures.some(c => c.equipment_sources)) fail('Equipment evidence requires the equipment workflow revision');
-  if (w.equipment_events && w.revision !== 'bas_equipment_3') fail('Equipment review requires the equipment workflow revision');
+  const hasEquipment = ['bas_equipment_3', 'bas_assignment_4'].includes(w.revision);
+  if (!hasEquipment && w.captures.some(c => c.equipment_sources)) fail('Equipment evidence requires the equipment workflow revision');
+  if (w.equipment_events && !hasEquipment) fail('Equipment review requires the equipment workflow revision');
+  if (w.assignment_calculations && w.revision !== 'bas_assignment_4') fail('Assignment calculations require the new workflow revision');
   const heads = new Map<string, string>(), operations = new Set<string>(), eventIds = new Set<string>();
   for (const event of w.review_events ?? []) {
     if (!ids.has(event.capture_id) || !w.captures.find(c => c.capture_id === event.capture_id)?.narrative_sources) fail('Review event has no retained narrative capture');
@@ -67,6 +72,14 @@ export const basWorkflowSchema = z.object({
     if (event.expected_head !== (equipmentHeads.get(event.capture_id) ?? null)) fail('Divergent or incomplete equipment review history');
     if (operations.has(event.operation_id) || eventIds.has(event.event_id)) fail('Duplicate BAS review operation/event');
     equipmentHeads.set(event.capture_id, event.event_id); operations.add(event.operation_id); eventIds.add(event.event_id);
+  }
+  const calculationIds = new Set<string>();
+  for (const calculation of w.assignment_calculations ?? []) {
+    if (calculationIds.has(calculation.calculation_id)) fail('Duplicate assignment calculation identity');
+    calculationIds.add(calculation.calculation_id);
+    if (!w.equipment_events?.some(e => e.event_id === calculation.result.equipment_head && e.capture_id === calculation.result.capture_id)) {
+      fail('Assignment calculation has no retained equipment decision');
+    }
   }
 });
 export type BasWorkflow = z.infer<typeof basWorkflowSchema>;
@@ -134,6 +147,15 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
     const c = result.captures.find(c => c.capture_id === event.capture_id)!;
     await validateBasEquipmentRegister(c.narrative_sources!, c.equipment_sources!, c.points, event.register);
   }
+  for (const calculation of result.assignment_calculations ?? []) {
+    const { calculation_id, ...payload } = calculation;
+    if (await basAssignmentCalculationFingerprint(payload) !== calculation_id) throw new Error('BAS assignment calculation fingerprint mismatch');
+    const event = result.equipment_events!.find(e => e.event_id === calculation.result.equipment_head)!;
+    const c = result.captures.find(c => c.capture_id === event.capture_id)!;
+    const input = await buildBasAssignmentDemandInput(c, event.register, event.event_id);
+    if (await basAssignmentInputFingerprint(input) !== calculation.input_fingerprint) throw new Error('BAS assignment calculation inputs changed');
+    verifyBasAssignmentDemandResult(input, calculation.result);
+  }
   return result;
 }
 
@@ -161,11 +183,19 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     if (previous && canonicalBasJson(previous) !== canonicalBasJson(event)) throw new Error('Conflicting equipment event identity');
     equipmentEvents.set(event.event_id, event);
   }
+  const calculations = new Map((left.assignment_calculations ?? []).map(c => [c.calculation_id, c]));
+  for (const calculation of right.assignment_calculations ?? []) {
+    const previous = calculations.get(calculation.calculation_id);
+    if (previous && canonicalBasJson(previous) !== canonicalBasJson(calculation)) throw new Error('Conflicting assignment calculation identity');
+    calculations.set(calculation.calculation_id, calculation);
+  }
   return basWorkflowSchema.parse({ ...left, captures: [...merged.values()],
-    revision: left.revision === 'bas_equipment_3' || right.revision === 'bas_equipment_3' ? 'bas_equipment_3'
+    revision: left.revision === 'bas_assignment_4' || right.revision === 'bas_assignment_4' ? 'bas_assignment_4'
+      : left.revision === 'bas_equipment_3' || right.revision === 'bas_equipment_3' ? 'bas_equipment_3'
       : left.revision === 'bas_evidence_2' || right.revision === 'bas_evidence_2' ? 'bas_evidence_2' : 'point_captures_1',
     ...(events.size || left.review_events || right.review_events ? { review_events: [...events.values()] } : {}),
     ...(equipmentEvents.size || left.equipment_events || right.equipment_events ? { equipment_events: [...equipmentEvents.values()] } : {}),
+    ...(calculations.size || left.assignment_calculations || right.assignment_calculations ? { assignment_calculations: [...calculations.values()] } : {}),
     current_capture_id: activateIncoming ? right.current_capture_id : left.current_capture_id ?? right.current_capture_id });
 }
 

@@ -62,8 +62,14 @@ Agent proposals, not approvals. Export/import retains history and original
 evidence. Explicit SOO links return source-backed `sequence_comparisons` in the
 same equipment index. `bas_equipment_error` isolates equipment-capture failures
 without discarding valid point/SOO evidence. The Takeoff Equipment editor uses
-this same validation/service. Assignment-driven demand, installed corroboration
-and release remain in development. See [the assignment contract](../docs/bas-production/EQUIPMENT_ASSIGNMENT_CONTRACT.md).
+this same validation/service. Optional `bas_assignment_demand` with `capture_id`
+and `expected_equipment_head` invokes shared Python and retains source-cell
+derivations in `bas_assignment_4`. It calculates assigned listed values only:
+attributes stay separate, unknowns stay null, and known subtotals do not assert
+unique physical points, installed equipment or field wiring. Stale requests
+reject; results retain their dependency identity through export/import and
+withdrawal. Physical requirement reconciliation, installed corroboration and
+release remain in development. See [the assignment contract](../docs/bas-production/EQUIPMENT_ASSIGNMENT_CONTRACT.md).
 
 No clone, no build—point your MCP client at the published package:
 

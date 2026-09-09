@@ -1,5 +1,49 @@
 ## Active work
 
+Current verified BAS checkpoint (supersedes historical status below): actual
+assigned-observation browser **95677** and public MCP **27726** both passed on
+the original 29-page source, including replay, source equality, retry,
+export/import and withdrawal/history. MCP took 518,035 ms with explicit 4-GiB /
+600-second diagnostic allowances; not default-resource proof. Full web **17541**
+passes **2,630 tests / 13 existing skips**, types/lint/bench/build. Python 119 and
+MCP 33 BAS tests remain green. Dark reader contrast was measured/fixed with
+existing tokens and checked at two sizes/both themes without workflow changes.
+Component source kernel committed locally **a0b58e8a** (seven focused tests);
+assembly register is uncommitted intermediate work, not a completed workflow.
+Baseline remaining-four-set comparison **78297** remains live. Full five-workflow
+goal active; no extraction, holdout, costing, push, merge or deployment change.
+See `../opentakeoff/docs/bas-production/PROGRESS.md` for exact evidence/limits.
+
+Latest isolated BAS verification supersedes older live-status entries below:
+MCP **33 BAS tests**, types/build/tool count pass; Python **119 tests**, mypy
+**12 files** pass. Final response-acceptance guards preserve complete history.
+Earlier full web check completed green; later guard-state check has **2 timing
+failures / 2,621 pass / 13 skips** in unchanged hatch/grid tests. Both original
+thresholds pass in isolation, but a clean full gate is still required.
+New calculation MCP run is terminal (post-import 600-second compile timeout);
+second browser run terminal (browser closed during indexing). Neither proves
+the new calculation end-to-end. Actual browser retry **95677** is running;
+starting four-set corpus comparison **78297**, PID 66280/Navfac 66378, remains
+live. No restart on observation timeout. Shared component source kernel has
+three passing tests and typecheck; not yet an integrated assembly workflow.
+Original M-512/M-601 reviewed, holdout untouched. Full goal remains active.
+
+Current isolated BAS increment is uncommitted: shared Python assigned listed
+values preserve original observations/citations, exact applicability factors,
+unknowns/attributes and immutable stale-aware history. Python **119 pass**, mypy
+**12 files**; MCP BAS **32 pass** before the final Python validator fix; web
+**2,623 pass / 13 skips**, bench pass, build pending. Real calculation browser
+attempt **failed during 600-second indexing**, not a passed UI proof; actual MCP
+`22070` remains live. Prior equipment-only proof is separately verified.
+
+Legacy core `21748` is terminal: takeoff **505/541**, reference **99/129**, graph
+cells **78/91** and symbols **133/138**; 53 key-flagged additions, 18 missing and
+absolute quantity delta 74. Not green. Graph and three sets' failures reproduce
+on starting revision `08dffc79`; remaining four-set baseline `78297` is live.
+Older live-status entries below are historical. Full current evidence/handles:
+`../opentakeoff/docs/bas-production/PROGRESS.md`. No extraction, key/scorer,
+threshold, holdout, costing, push, merge or deployment change in this increment.
+
 Verified isolated BAS equipment checkpoint: full web **2,623 pass / 13 existing
 skips**, typecheck/lint/bench/build pass; actual Behavioral UI **14 named members,
 5 original applicability references**, assignment/exceptions/source return,

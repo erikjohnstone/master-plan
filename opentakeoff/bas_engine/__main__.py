@@ -11,6 +11,7 @@ from .adapters import BlueprintInput, indexed_request
 from .engine import calculate
 from .models import Contract, EngineRequest, EngineResult
 from .point_lists import PointListInput, PointListResult, review_point_lists
+from .assignment_demand import AssignmentDemandInput, AssignmentDemandResult, calculate_assignment_demand
 
 MAX_BYTES = 32 * 1024 * 1024
 
@@ -19,6 +20,7 @@ class Envelope(Contract):
     request: EngineRequest | None = None
     blueprint: BlueprintInput | None = None
     point_lists: PointListInput | None = None
+    assignment_demand: AssignmentDemandInput | None = None
 
 
 def main() -> int:
@@ -27,10 +29,13 @@ def main() -> int:
         if len(data) > MAX_BYTES:
             raise ValueError("BAS input exceeds 32 MiB")
         envelope = Envelope.model_validate_json(data)
-        if sum(item is not None for item in (envelope.request, envelope.blueprint, envelope.point_lists)) != 1:
-            raise ValueError("provide exactly one request, blueprint or point_lists payload")
-        result: EngineResult | PointListResult
-        if envelope.point_lists is not None:
+        if sum(item is not None for item in (envelope.request, envelope.blueprint, envelope.point_lists, envelope.assignment_demand)) != 1:
+            raise ValueError("provide exactly one request, blueprint, point_lists or assignment_demand payload")
+        result: EngineResult | PointListResult | AssignmentDemandResult
+        if envelope.assignment_demand is not None:
+            result = calculate_assignment_demand(envelope.assignment_demand)
+            result = AssignmentDemandResult.model_validate(result.model_dump())
+        elif envelope.point_lists is not None:
             result = review_point_lists(envelope.point_lists)
             result = PointListResult.model_validate(result.model_dump())
         else:

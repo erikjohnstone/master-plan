@@ -8,6 +8,24 @@ quantity total. Both UI production compile and MCP return this additive record.
 See [point evidence contract](../docs/bas-production/POINT_REVIEW_CONTRACT.md)
 for supported patterns, limits and unfinished review/persistence integration.
 
+An exclusive `assignment_demand` envelope accepts a verified capture/head,
+retained point observations and explicit scoped assignments. The shared workflow
+service establishes source membership before invoking Python. Output
+`bas_assignment_demand_v1` retains each original observation, multiplication
+factor, assigned listed value, qualifications and unobserved cells. Attributes
+are not quantities. Known subtotals are not unique requirements or field-wiring
+counts; project/installed totals stay unresolved. This path uses existing I/O
+vector arithmetic without supplying default hardware, protocol, spare or license
+policies. It does not change legacy `calculate` or indexed table results.
+
+The UI's `/__ot/bas-assignment-demand` and MCP compile option invoke the same
+service and persist `bas_assignment_4` calculations. Inputs/outputs are bounded
+to 32 MiB; Python is bounded to 30 seconds and the HTTP process to 45 seconds.
+Cancellation propagates to the owned Python process. A rejected/late response
+does not overwrite changed workspace state. There is no static-host or browser
+fallback, authenticated reviewer identity, approval or deployment provisioned
+by this feature.
+
 One deterministic implementation for the existing Takeoff UI and MCP compile
 path. No product catalog, model calls, PDF parsing, or project-spec ingestion.
 See [the research and mathematical proofs](../docs/BAS_MATH_RESEARCH.md) and

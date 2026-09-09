@@ -38,6 +38,7 @@ import ToolMenu from "../components/ToolMenu.jsx";
 import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
+import { assertBasAssignmentUpdate } from "../lib/basAssignmentDemandContract.ts";
 import {
   compileAgentTakeoff,
   dedupeTakeoffRows,
@@ -12874,6 +12875,21 @@ export default function TakeoffCanvas() {
           basWorkflow={basWorkflow}
           basViewState={basViewState}
           onBasViewStateChange={setBasViewState}
+          onBasAssignmentCalculate={async request => {
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            const response = await fetch('/__ot/bas-assignment-demand', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ workflow: previous, request }) });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Assignment calculation unavailable; prior results were preserved.');
+            const updated = await verifyBasWorkflow(result.workflow);
+            assertBasAssignmentUpdate(previous, updated, result.calculation, request);
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature) {
+              throw new Error('The BAS workspace or source PDFs changed during calculation. No stale result was saved; calculate again for the current assignments.');
+            }
+            basWorkflowRef.current = updated;
+            setBasWorkflow(updated);
+            return updated;
+          }}
           onBasEquipmentReview={async request => {
             const previous = basWorkflowRef.current;
             const updated = await applyBasEquipmentReview(previous, request, 'operator_input');

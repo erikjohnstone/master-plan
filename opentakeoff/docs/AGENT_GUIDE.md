@@ -316,3 +316,16 @@ idempotent; stale heads, reused operation IDs with changed requests and invalid
 references reject. Ordinary recompiles and exports retain prior history.
 The shared bounded monitoring comparison does not infer typed I/O, verify
 applicability, replicate templates or establish actual equipment quantities.
+
+The separate equipment register records explicit source-bound assignments and
+exceptions. After reviewing it, `bas_assignment_demand` on the BAS compile accepts
+`capture_id` and `expected_equipment_head` and saves shared-Python listed-value
+derivations. Report their basis: per included named member or system once. Cite
+the original row/column and retain controller qualifiers. Never call a known
+subtotal complete when cells were unavailable, add alarm/trend attributes as
+terminals, or treat repeated source requirements as unique physical devices.
+Different templates may describe the same point; no project total resolves that
+ambiguity automatically. A source/decision change makes previous calculations
+stale, not approved. The saved source evidence and earlier results remain
+exportable. Missing Python, validation failure, timeout or stale response must
+not be described as a successful zero takeoff.

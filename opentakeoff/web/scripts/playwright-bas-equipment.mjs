@@ -7,11 +7,12 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { waitForAsync } from './fixtures/wait-for-async.mjs';
-import { basEquipmentView, basEquipmentRegister } from '../src/lib/basEquipmentReview.ts';
+import { basEquipmentView, basEquipmentRegister, basAssignmentCalculationState } from '../src/lib/basEquipmentReview.ts';
 
 assert.ok(process.env.OT_UI_PDF && process.env.OT_BAS_OUT, 'Real source PDF and output directory required');
 const truth = JSON.parse(readFileSync(new URL('../test/fixtures/bas-equipment-system-cases.json', import.meta.url), 'utf8'));
 const members = truth.membership_cases.flatMap(c => c.members);
+const verifyDemand = process.env.OT_BAS_DEMAND === '1';
 const out = resolve(process.env.OT_BAS_OUT); mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.OT_BROWSER_PATH || undefined });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -141,6 +142,30 @@ try {
   await page.locator('[data-workspace-nav="Takeoff"]').click();
   await w.waitFor();
   console.log('Actual keyboard scope/member/assignment saves passed; shared view has 14 named members, matrix once');
+  if (verifyDemand) {
+    await w.getByRole('button', { name: 'Calculate assigned values', exact: true }).focus();
+    await page.keyboard.press('Enter');
+    await waitForAsync(async () => (await saved(page))?.assignment_calculations?.length === 1, { timeout: 60000, label: 'actual shared Python calculation saved' });
+    reviewed = await saved(page);
+    const calculation = reviewed.assignment_calculations[0], derived = calculation.result.assignments[0];
+    assert.equal(derived.replication_factor, 1);
+    assert.equal(derived.included_equipment_ids.length, 14);
+    assert.deepEqual(derived.rows.flatMap(r => r.observations.map(o => o.original)), matrix.rows.flatMap(r => r.observations));
+    assert.ok(derived.rows.every(r => r.observations.every(o => o.original.kind === 'attribute' ? o.assigned_value === null : o.assigned_value === o.original.value)));
+    await w.getByRole('button', { name: 'Calculate assigned values', exact: true }).click();
+    await w.getByRole('button', { name: 'Calculate assigned values', exact: true }).waitFor();
+    assert.equal((await saved(page)).assignment_calculations.length, 1, 'same-input retry is idempotent');
+    await w.locator('summary').filter({ hasText: /^Assigned listed values/ }).click();
+    const values = w.getByRole('table', { name: 'Assigned value derivation', exact: true });
+    await values.waitFor();
+    await values.getByRole('button', { name: 'View source cell', exact: true }).first().click();
+    await w.waitFor({ state: 'hidden' });
+    await page.getByText('Rendering sheet…', { exact: true }).waitFor({ state: 'hidden', timeout: 60000 });
+    await page.screenshot({ path: `${out}/calculation-source.png` });
+    await page.locator('[data-workspace-nav="Takeoff"]').click();
+    await values.waitFor();
+    console.log('Actual calculation, keyboard action, retry, source-cell paint and reader return passed');
+  }
   await w.getByRole('button', { name: 'Edit assignment', exact: true }).click();
   await editor(page).getByLabel('Exclude CH-3', { exact: true }).check();
   const draftReason = 'Controlled pending exception review; source return must retain this draft';
@@ -159,6 +184,19 @@ try {
   assert.equal(view.assignments[0].included_equipment_ids.length, 13);
   assert.equal(view.register.equipment.length, 14);
   assert.deepEqual(reviewed.captures, initial.captures);
+  if (verifyDemand) {
+    assert.equal(basAssignmentCalculationState(reviewed, capture.capture_id).status, 'stale_dependencies');
+    assert.ok(await w.getByText('Historical result.', { exact: false }).isVisible());
+    const earlier = structuredClone(reviewed.assignment_calculations[0]);
+    await w.getByRole('button', { name: 'Calculate assigned values', exact: true }).click();
+    await waitForAsync(async () => (await saved(page))?.assignment_calculations?.length === 2, { timeout: 60000, label: 'exception recalculation saved' });
+    reviewed = await saved(page);
+    assert.deepEqual(reviewed.assignment_calculations[0], earlier);
+    assert.equal(reviewed.assignment_calculations[1].result.assignments[0].replication_factor, 1);
+    assert.equal(reviewed.assignment_calculations[1].result.assignments[0].included_equipment_ids.length, 13);
+    assert.deepEqual(reviewed.assignment_calculations[1].result.assignments[0].rows, earlier.result.assignments[0].rows, 'whole-system source values do not shrink after one member exception');
+    assert.equal(basAssignmentCalculationState(reviewed, capture.capture_id).status, 'current_dependencies');
+  }
   for (const theme of ['light', 'dark']) {
     await page.emulateMedia({ colorScheme: theme });
     await page.waitForFunction(t => document.documentElement.dataset.theme === t, theme);
@@ -167,6 +205,11 @@ try {
       await w.getByRole('heading', { name: 'CH-1', exact: true }).scrollIntoViewIfNeeded();
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       await page.screenshot({ path: `${out}/${theme}-${width}-detail.png` });
+      if (verifyDemand) {
+        await w.getByRole('table', { name: 'Assigned value derivation', exact: true }).scrollIntoViewIfNeeded();
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+        await page.screenshot({ path: `${out}/${theme}-${width}-calculation.png` });
+      }
     }
   }
   const exported = await exportRecord(page, 'reviewed');
@@ -195,6 +238,10 @@ try {
   assert.deepEqual(removed.equipment_events.slice(0, 4), reviewed.equipment_events);
   assert.equal((await basEquipmentView(removed, capture.capture_id)).assignments.length, 0);
   assert.equal(basEquipmentRegister(removed, capture.capture_id).equipment.length, 14);
+  if (verifyDemand) {
+    assert.deepEqual(removed.assignment_calculations, reviewed.assignment_calculations);
+    assert.equal(basAssignmentCalculationState(removed, capture.capture_id).status, 'stale_dependencies');
+  }
   await exportRecord(imported, 'withdrawn');
   assert.deepEqual(errors, []);
   writeFileSync(`${out}/checks.json`, JSON.stringify({ ok: true, source_sha256: truth.source_sha256, named_members: 14,
@@ -203,8 +250,8 @@ try {
     checks: ['real upload/compile', 'independent source member key', 'five literal applicability references attached and saved',
       'saved assignment reference opens original drawing', 'keyboard scope/member/assignment saves', 'preview invalidation on edit',
       'shared assignment parity', 'source paint/return/draft', 'exception preserves register', 'both themes/two widths', 'autosave/reload/export',
-      'fresh-context import', 'withdrawal retains history'],
-    limits: 'Explicit operator assignment workflow, not automatic applicability or installed proof. Test exception is a controlled user input, not printed source truth. No assignment-driven Python demand or full-goal completion claimed.', errors }, null, 2));
+      'fresh-context import', 'withdrawal retains history', ...(verifyDemand ? ['actual shared Python assigned values', 'calculation source-cell paint/return', 'calculation retry', 'stale result disclosure', 'exception recalculation', 'calculation history persistence/import/withdrawal'] : [])],
+    limits: `Explicit operator assignment workflow, not automatic applicability or installed proof. Test exception is a controlled user input, not printed source truth. ${verifyDemand ? 'Python result covers assigned listed observations, not unique physical requirements or field wiring.' : 'No assignment-driven Python demand claimed.'} No full-goal completion claimed.`, errors }, null, 2));
   console.log('Real equipment editing workflow passed');
 } catch (e) {
   writeFileSync(`${out}/browser-errors.json`, JSON.stringify(errors));

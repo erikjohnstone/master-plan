@@ -4,6 +4,19 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add shared-Python assigned listed-value derivations and additive `bas_assignment_4`
+  persistence, with original cells, exact scoped selections/exceptions, retained
+  qualifications and explicit unknowns. **Calculate assigned values** and MCP's
+  `bas_assignment_demand` use one service. Stale dependencies remain historical;
+  retries, export/import and withdrawal retain prior results. This is not unique
+  physical requirement reconciliation, installed counting or field-wiring proof.
+- Preserve one identical dev/preview middleware while adding the bounded same-origin
+  calculation route; keep existing route assertions and extend them to the new
+  endpoint. Add concurrent-write and cancellation protection without extraction changes.
+- Correct BAS reader text contrast using existing primary/secondary theme tokens;
+  verify real imported calculation data in both themes and two desktop widths.
+  No result, evidence or theme-palette changes.
+
 - Retain unmodified equipment graph tables in additive `bas_equipment_3` captures. Parse bounded complete designation lists/ranges/exclusions and strict printed counts without row-key shortcuts or default quantities. Expose source-owned candidate IDs through `bas_equipment`.
 - Add the shared scoped equipment/register and per-equipment/system-once assignment service, with explicit bindings/exceptions, immutable proposal history, stale-edit rejection and durable export/import. The optional existing-tool `bas_equipment_review` input uses this service. Explicit SOO references reuse the existing point comparator within the assigned equipment scope; source IDs and unpaired rows remain available.
 - Add **Takeoff → Equipment** for source/register tables, scoped member binding, equipment details, assignment/exception editing, validated previews and reasoned withdrawal. Use the same shared service as MCP; preserve source-return context and evidence/history exports. Assignment-driven demand, installed corroboration and release controls remain unfinished; original table extraction, legacy quantities and math are unchanged.

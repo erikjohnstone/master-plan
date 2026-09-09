@@ -96,6 +96,7 @@ export default function TakeoffDataPanel({
   onBasViewStateChange,
   onBasReview,
   onBasEquipmentReview,
+  onBasAssignmentCalculate,
   onClear,
   onRemove,
   onRemoveLine,
@@ -366,7 +367,7 @@ export default function TakeoffDataPanel({
         )}
 
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px" }}>
-          {tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onOpenCitation={onOpenCitation} />
+          {tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onOpenCitation={onOpenCitation} />
             : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
           {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}
           {tab === "takeoff" ? (

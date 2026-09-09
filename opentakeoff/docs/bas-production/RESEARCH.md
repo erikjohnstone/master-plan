@@ -71,6 +71,17 @@ Source identity and business identity must remain separate. A content hash ident
 
 ## Live UI findings and proposed placement
 
+Follow-up on the real assigned-value reader: inherited muted text measured only
+3.40:1 in dark mode. W3C's [WCAG 2.2 contrast guidance](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)
+requires at least 4.5:1 for normal text without rounding. The fix uses the
+existing primary/secondary text tokens within BAS readers, not a new palette.
+Actual PDF upload plus ordinary import of a verified workflow now measures all
+411 sampled reader text elements at at least 6.51:1 in light and 7.71:1 in dark,
+at 1280 and 1920 pixels. Evidence: `evidence/assignment-reader-contrast-before/`
+and `evidence/assignment-reader-contrast-after/`. This is a bounded contrast and
+state-preservation check, not an app-wide accessibility certification. Accessed
+2026-09-09; exact unrounded ratios are retained in the JSON artifacts.
+
 The real Fort Sam upload was compiled through the production endpoint. Captures at 1920×1080, 1440×900, and 1280×800 in both themes are retained in `evidence/baseline/workspace-ui/`. No response fixtures were injected. The reload check found a BAS result before reload and none afterward; no browser page errors occurred.
 
 At 1280×800, the first point row appears around y=630, after the workspace header, tab row, family links, engineering heading, caution copy, total matrix, secondary tab row, and further copy. The problem is vertical hierarchy, not just width. Adding three more permanent panels would amplify it.

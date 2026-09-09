@@ -11,6 +11,7 @@ import { z } from "zod";
 import { basPointListsOutputSchema } from "../../web/src/lib/basPointLists.ts";
 import { basWorkflowSchema } from "../../web/src/lib/basWorkflow.ts";
 import { basEquipmentSummarySchema } from "../../web/src/lib/basEquipmentReview.ts";
+import { basAssignmentCalculationSchema } from '../../web/src/lib/basAssignmentDemandContract.ts';
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -118,6 +119,7 @@ export const compileCorpusTakeoffOutput = {
   bas_workflow_error: z.string().optional().describe("Capture retention failed; original point observations and math are not discarded."),
   bas_equipment: basEquipmentSummarySchema.optional().describe('Source occurrence/member index and retained scoped equipment/template decisions. Named scheduled equipment only, not installed counts or verified field wiring. Original cells remain in the referenced bas_workflow capture.'),
   bas_equipment_error: z.string().optional().describe('Equipment capture unavailable; the existing point/SOO capture is preserved. Equipment review writes refuse rather than changing earlier decisions.'),
+  bas_assignment_demand: basAssignmentCalculationSchema.optional().describe('Persisted shared-Python derivation of assigned listed observations, bound to exact capture/equipment head. Subtotals exclude unavailable cells and are not unique requirements, field wiring, installed quantities or approval.'),
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),

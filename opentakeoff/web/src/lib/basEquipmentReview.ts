@@ -14,6 +14,16 @@ export function basEquipmentRegister(workflow: BasWorkflow, captureId: string) {
   return workflow.equipment_events?.filter(e => e.capture_id === captureId).at(-1)?.register ?? emptyBasEquipmentRegister();
 }
 
+/** Shared dependency status; a saved calculation is not an approval. */
+export function basAssignmentCalculationState(workflow: BasWorkflow, captureId: string) {
+  const records = workflow.assignment_calculations?.filter(c => c.result.capture_id === captureId) ?? [];
+  // Imported historical calculations may be appended after a current one.
+  // Dependency identity, not incidental import order, decides freshness.
+  const latest = records.filter(c => c.result.equipment_head === basEquipmentHead(workflow, captureId)).at(-1) ?? records.at(-1) ?? null;
+  return { latest, status: !latest ? 'not_calculated' as const
+    : latest.result.equipment_head === basEquipmentHead(workflow, captureId) ? 'current_dependencies' as const : 'stale_dependencies' as const };
+}
+
 export async function basEquipmentView(workflow: BasWorkflow, captureId: string) {
   const capture = workflow.captures.find(c => c.capture_id === captureId);
   if (!capture?.equipment_sources || !capture.narrative_sources) throw new Error('Recompile the original PDFs to retain equipment evidence');
@@ -79,5 +89,5 @@ export async function applyBasEquipmentReview(rawWorkflow: unknown, rawRequest: 
   await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, request.register);
   const payload = { ...request, rule_version: 'equipment_assignment_review_1' as const, origin, created_at: createdAt };
   const event = basEquipmentReviewEventSchema.parse({ ...payload, event_id: await basEventFingerprint(payload) });
-  return basWorkflowSchema.parse({ ...workflow, revision: 'bas_equipment_3', equipment_events: [...(workflow.equipment_events ?? []), event] });
+  return basWorkflowSchema.parse({ ...workflow, revision: workflow.revision === 'bas_assignment_4' ? 'bas_assignment_4' : 'bas_equipment_3', equipment_events: [...(workflow.equipment_events ?? []), event] });
 }

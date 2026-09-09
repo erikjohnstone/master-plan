@@ -66,8 +66,12 @@ an explicit scoped equipment/template register. **Takeoff → Equipment** and MC
 use the same service for per-equipment or system-once assignments, exceptions
 and durable history. The editor previews decisions before recording them and
 keeps source inspection inside the existing workspace. These are named scheduled
-members, not installed counts. Assignment-driven demand, installed corroboration
-and the remaining release workflow are still in progress.
+members, not installed counts. **Calculate assigned values** uses the shared
+Python engine and retains the source cell, multiplier and result. Unknowns,
+controller notes and possible duplicate requirements stay explicit; known listed
+subtotals are not complete or verified field-wiring totals. Decision changes
+make earlier results stale without deleting them. Installed corroboration,
+physical requirement reconciliation and the release workflow remain in progress.
 
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
