@@ -7,10 +7,10 @@
 //   - ambiguity (reused room numbers) refuses rather than guesses;
 //   - a set with no text layer is unavailable, never half-populated;
 //   - schedule sheets never mint phantom room tags.
-import { test } from "node:test";
+import { test, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -4160,4 +4160,135 @@ test("B-7: sheet-margin grid locators never enter a header or stretch the band",
   assert.ok(rfs.region[2] < 5900, `band must not reach the right page edge: x1=${rfs.region[2]}`);
   assert.ok(!rfs.rows.some((r) => /Revisions:|ARCHITECT\/ENGINEER/.test(r.key)),
     "the sheet title block must never be swept in as a data row");
+});
+
+describe("scheduleTableFromODL: chainHeaderCandidates (task #84, real corpus root cause 2026-09-09)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  // row/col here are 1-based, matching ODL's own convention (the real code
+  // maps grid index via `cell["row number"] - 1` / `cell["column number"] - 1`).
+  const odlCell = (row: number, col: number, text: string, colSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 50, row * 20, col * 50 + 50 * colSpan, row * 20 + 20],
+    "row number": row, "column number": col, "row span": 1, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+  // Two REAL header tiers, each individually clearing the vocab bar on its
+  // own — CIRCUIT/BREAKER/POLE/FRAME (tier 1) and WIRE/NEUTRAL/TRIP/FEEDER
+  // (tier 2), both drawn from PANEL_SCHEDULE_HEADER_WORDS — followed by 2
+  // real data rows. This is the same real shape 15_IA_IowaState_
+  // Biorenewables_Lab.pdf#11's own EXISTING PANEL SCHEDULE has (a genuine
+  // pre-header/second-tier row immediately followed by the table's real
+  // header row), isolated from that document's OWN harder problem (its
+  // pre-header row is unrelated SPEC TEXT, not a real second header tier —
+  // see rasterTableAssist.ts's own chainHeaderCandidates wiring comment for
+  // why that specific document still correctly refuses via
+  // hasCorruptedHeaders even with this fix).
+  const buildTable = (): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 200, 100],
+    "number of rows": 5, "number of columns": 4,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "PANEL A SCHEDULE", 4)] },
+      { type: "table row", "row number": 2, id: 1, cells: [odlCell(2, 1, "CIRCUIT"), odlCell(2, 2, "BREAKER"), odlCell(2, 3, "POLE"), odlCell(2, 4, "FRAME")] },
+      { type: "table row", "row number": 3, id: 2, cells: [odlCell(3, 1, "WIRE"), odlCell(3, 2, "NEUTRAL"), odlCell(3, 3, "TRIP"), odlCell(3, 4, "FEEDER")] },
+      { type: "table row", "row number": 4, id: 3, cells: [odlCell(4, 1, "CV-1"), odlCell(4, 2, "20A"), odlCell(4, 3, "1"), odlCell(4, 4, "SMALL")] },
+      { type: "table row", "row number": 5, id: 4, cells: [odlCell(5, 1, "CV-2"), odlCell(5, 2, "30A"), odlCell(5, 3, "2"), odlCell(5, 4, "LARGE")] },
+    ],
+  });
+
+  it("without chainHeaderCandidates (default), the second real header tier is wrongly treated as data — the bug's own baseline, proven not assumed", () => {
+    const t = scheduleTableFromODL(buildTable(), "test.pdf#1", IDENTITY, { extraHeaderVocab: ["CIRCUIT", "BREAKER", "POLE", "FRAME", "WIRE", "NEUTRAL", "TRIP", "FEEDER"] });
+    assert.ok(t, "must still build a table (refusing outright would hide the bug, not demonstrate it)");
+    assert.equal(t!.headers.length, 4);
+    const keys = t!.rows.map((r) => r.key);
+    assert.ok(keys.includes("WIRE"), `the second header tier's own row must be misread as a data row keyed "WIRE" without the fix: got ${JSON.stringify(keys)}`);
+  });
+
+  it("with chainHeaderCandidates: true, both real header tiers join into one real compound header per column, and only the 2 real data rows survive", () => {
+    const t = scheduleTableFromODL(buildTable(), "test.pdf#1", IDENTITY, {
+      extraHeaderVocab: ["CIRCUIT", "BREAKER", "POLE", "FRAME", "WIRE", "NEUTRAL", "TRIP", "FEEDER"],
+      chainHeaderCandidates: true,
+    });
+    assert.ok(t, "a genuine 2-tier header must still build a real table");
+    assert.equal(t!.rows.length, 2, "only the 2 real circuits, neither header tier, must count as data rows");
+    const keys = t!.rows.map((r) => r.key);
+    assert.deepEqual(keys, ["CV-1", "CV-2"]);
+    assert.ok(t!.headers.some((h) => /CIRCUIT/.test(h) && /WIRE/.test(h)), `column 0's header must join BOTH real tiers: got ${JSON.stringify(t!.headers)}`);
+  });
+});
+
+describe("scheduleTableFromODL: header-join loop skips spec-metadata rows (task #90, real corpus root cause 2026-09-09)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 50, row * 20, col * 50 + 50 * colSpan, row * 20 + 20],
+    "row number": row, "column number": col, "row span": 1, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+  const VOCAB = ["CIRCUIT", "BREAKER", "POLE", "FRAME", "WIRE", "NEUTRAL", "TRIP", "FEEDER"];
+
+  // Real shape, rendered and read live off 15_IA_IowaState_Biorenewables_
+  // Lab.pdf#11's own EXISTING PANEL SCHEDULE (task #90): a title, THEN two
+  // genuine spec-metadata rows ("VOLTS: 120"/"WIRE: 4" — one row with a
+  // spanning cell, so `grouped` folds it into the header block with no
+  // vocab check at all; "MOUNTING:"/"1115 FED FROM:" — one row with partial
+  // column coverage, so `!fullCoverage` folds it the same way), THEN the
+  // table's own real two-tier header (chainHeaderCandidates' own test above
+  // isolates that half of this shape), THEN real data. Before this fix, the
+  // join loop concatenated the metadata rows' own colon-shaped text into
+  // EVERY column's label right alongside the two real header tiers.
+  const buildTable = (): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 200, 140],
+    "number of rows": 7, "number of columns": 4,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "PANEL A SCHEDULE", 4)] },
+      { type: "table row", "row number": 2, id: 1, cells: [odlCell(2, 1, "VOLTS: 120"), odlCell(2, 3, "WIRE: 4", 2)] },
+      { type: "table row", "row number": 3, id: 2, cells: [odlCell(3, 1, "MOUNTING:"), odlCell(3, 4, "1115 FED FROM:")] },
+      { type: "table row", "row number": 4, id: 3, cells: [odlCell(4, 1, "CIRCUIT"), odlCell(4, 2, "BREAKER"), odlCell(4, 3, "POLE"), odlCell(4, 4, "FRAME")] },
+      { type: "table row", "row number": 5, id: 4, cells: [odlCell(5, 1, "WIRE"), odlCell(5, 2, "NEUTRAL"), odlCell(5, 3, "TRIP"), odlCell(5, 4, "FEEDER")] },
+      { type: "table row", "row number": 6, id: 5, cells: [odlCell(6, 1, "CV-1"), odlCell(6, 2, "20A"), odlCell(6, 3, "1"), odlCell(6, 4, "SMALL")] },
+      { type: "table row", "row number": 7, id: 6, cells: [odlCell(7, 1, "CV-2"), odlCell(7, 2, "30A"), odlCell(7, 3, "2"), odlCell(7, 4, "LARGE")] },
+    ],
+  });
+
+  it("the two spec-metadata rows never reach colLabel, even though the boundary loop folds them into the header block", () => {
+    const t = scheduleTableFromODL(buildTable(), "test.pdf#1", IDENTITY, {
+      extraHeaderVocab: VOCAB,
+      chainHeaderCandidates: true,
+    });
+    assert.ok(t, "the real 2-tier header + 2 real data rows must still build a table");
+    assert.equal(t!.rows.length, 2, "only the 2 real circuits must count as data rows");
+    assert.deepEqual(t!.rows.map((r) => r.key), ["CV-1", "CV-2"]);
+    for (const h of t!.headers) {
+      assert.ok(!/VOLTS|MOUNTING|FED FROM/.test(h), `metadata text must never reach a header: got ${JSON.stringify(t!.headers)}`);
+      assert.ok(!h.includes(":"), `a colon-shaped spec fragment must never reach a header: got ${JSON.stringify(t!.headers)}`);
+    }
+    assert.ok(t!.headers.some((h) => /CIRCUIT/.test(h) && /WIRE/.test(h)), `column 0's header must still join BOTH real tiers, unaffected by the metadata skip: got ${JSON.stringify(t!.headers)}`);
+  });
+
+  // hasCorruptedHeaders' own doc (rasterTableAssist.ts) is explicit that a
+  // SINGLE stray colon in one real header cell ("EFFICIENCY: SEER") is not
+  // corruption — this join-loop skip reuses that exact "2+" bar (not 1) so
+  // it never throws away a real single-tier header row over one genuinely
+  // colon-formatted column name sitting among otherwise-normal ones.
+  it("a real header row with only ONE colon-shaped cell is never skipped", () => {
+    const t = scheduleTableFromODL(
+      {
+        type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 200, 100],
+        "number of rows": 4, "number of columns": 4,
+        rows: [
+          { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "PANEL A SCHEDULE", 4)] },
+          { type: "table row", "row number": 2, id: 1, cells: [odlCell(2, 1, "CIRCUIT"), odlCell(2, 2, "BREAKER"), odlCell(2, 3, "POLE: A"), odlCell(2, 4, "FRAME")] },
+          { type: "table row", "row number": 3, id: 2, cells: [odlCell(3, 1, "CV-1"), odlCell(3, 2, "20A"), odlCell(3, 3, "1"), odlCell(3, 4, "SMALL")] },
+          { type: "table row", "row number": 4, id: 3, cells: [odlCell(4, 1, "CV-2"), odlCell(4, 2, "30A"), odlCell(4, 3, "2"), odlCell(4, 4, "LARGE")] },
+        ],
+      },
+      "test.pdf#2",
+      IDENTITY,
+      { extraHeaderVocab: VOCAB },
+    );
+    assert.ok(t, "a real single-tier header must still build a table");
+    assert.ok(t!.headers.some((h) => h === "POLE: A"), `the one genuinely colon-shaped real header must survive intact: got ${JSON.stringify(t!.headers)}`);
+  });
 });

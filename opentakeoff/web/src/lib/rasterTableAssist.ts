@@ -245,7 +245,73 @@ export function hasCorruptedHeaders(headers: string[]): boolean {
     seen.set(key, (seen.get(key) || 0) + 1);
   }
   for (const count of seen.values()) if (count >= 2) return true;
+
+  // A HEADER SHAPED "LABEL: value" IS SWALLOWED SPEC TEXT, NOT A REAL COLUMN
+  // NAME. Real headers are short label words ("WIRE SIZE", "BREAKER") —
+  // never a colon followed by a value ("WIRE: 3"). Real, corpus-found
+  // (2026-09-09, task #84's own region-narrowing fix finally getting a real
+  // structural read far enough to reach this document's per-row data):
+  // 15_IA_IowaState_Biorenewables_Lab.pdf#11's EXISTING PANEL SCHEDULE
+  // shipped 5 of 14 "headers" as literal pre-header spec lines ("WIRE: 3
+  // FEEDER SIZE CIRCUITBREAKER", "WIRE: 3 1115 FED FROM: NEUTRAL", …) while
+  // the table's REAL header row (ITEM FED/WATTS/POLES/FRAME/…) was swallowed
+  // as an ordinary DATA row underneath them — the header/data boundary
+  // landed one row too late, a separate, disclosed defect this check does
+  // not fix, only refuses rather than ships. The 20+-char shared-prefix
+  // check above missed this shape because the trailing content after each
+  // "WIRE: 3" differs, so no two headers share a long enough IDENTICAL
+  // prefix — this catches the same swallowed-spec-row corruption by its own
+  // shape instead. Two-or-more is the bar (not one) for the same reason the
+  // prefix check above uses one: a single stray colon in one real header
+  // ("EFFICIENCY: SEER") is not corruption; several is the swallowed-row
+  // signature.
+  const specLike = headers.filter((h) => /\S+:\s*\S/.test(h));
+  if (specLike.length >= 2) return true;
+
+  // TOO MANY UNRESOLVED "COLN" FALLBACK HEADERS means most of the table's
+  // real column names were never recognized at all — scheduleTableFromODL's
+  // own fallback (colLabel.map((l, i) => l || `COL${i+1}`)) is meant for the
+  // rare column with no header cell of its own (see fullCoverageSlack's own
+  // doc: one real, measured case out of nine columns), not for a table where
+  // a THIRD or more of the columns never got a real name. Real, corpus-found
+  // (task #93, 2026-09-09, whole-sheet-scan corpus eval): three separate
+  // documents shipped with 30-100% COL-N headers and were NOT caught by
+  // either check above (their headers share no long identical prefix and
+  // contain no colon) — 16_NV#31's own "table" was headers ["COL1","COL2"]
+  // over raw, ungrouped circuit numbers; 046_MI#29 and D_25_CO#2 each had
+  // 3 of 9-10 headers fall back to COL-N. Two-or-more (not one, matching
+  // this function's own established bar) keeps a table with exactly one
+  // genuinely unresolved column — the real, measured, legitimate case this
+  // fallback exists for — from ever being refused by this check.
+  const colFallback = headers.filter((h) => /^COL\d+$/.test(h));
+  if (colFallback.length >= 2 && colFallback.length / headers.length >= 0.25) return true;
+
   return false;
+}
+
+/** A data row that duplicates the table's OWN header text is the header row
+ * itself bled into the data via a column-shift artifact in the sidecar's
+ * own OCR, not a real per-item record — no real schedule row's own printed
+ * value is ever byte-identical to one of its OTHER columns' header name.
+ * Real, corpus-found (task #93, 2026-09-09, whole-sheet-scan corpus eval):
+ * D_25_CO#2's own CAPACITY(MBH) equipment schedule shipped a "row" whose own
+ * cells read {"WEIGHT (LBS)":"MOCP", "COL7":"WEIGHT", "COL8":"WEIGHT",
+ * "NOTES":"NOTES"} — MOCP and NOTES are BOTH this exact table's own OTHER
+ * header names, not real data — the header row itself, shifted one column
+ * over by the sidecar's own cell-boundary confusion, landed as the table's
+ * SECOND row instead of its first. Two-or-more exact matches (not one, same
+ * "two-or-more" bar as hasCorruptedHeaders' own two checks) keeps a real
+ * data row that happens to coincidentally repeat ONE header word (a genuine
+ * "TYPE" value that happens to equal a "TYPE" column elsewhere, say) from
+ * ever being refused by this check. */
+export function rowDuplicatesHeaders(headers: string[], cellTexts: string[]): boolean {
+  const headerSet = new Set(headers.map((h) => h.trim().toUpperCase()).filter(Boolean));
+  let matches = 0;
+  for (const t of cellTexts) {
+    const norm = t.trim().toUpperCase();
+    if (norm && headerSet.has(norm)) matches++;
+  }
+  return matches >= 2;
 }
 
 /**
@@ -338,8 +404,16 @@ export function scheduleTableFromSidecarStructure(
     // carry a value there. See scheduleTableFromODL's own doc on
     // fullCoverageSlack for why 1 is the right, minimal forgiveness.
     fullCoverageSlack: 1,
+    // Real, measured (same EXISTING PANEL SCHEDULE): its own real header
+    // block has TWO consecutive full-coverage/ungrouped rows — a genuine
+    // pre-header spec continuation line, then the table's own real
+    // single-tier header — each of which individually clears the vocab
+    // bar. See scheduleTableFromODL's own doc on chainHeaderCandidates for
+    // why the one-shot default wrongly demoted the real header row to data.
+    chainHeaderCandidates: true,
   });
   if (table && hasCorruptedHeaders(table.headers)) return null;
+  if (table && table.rows.some((r) => rowDuplicatesHeaders(table.headers, Object.values(r.cells).map((c) => c.text)))) return null;
   return table;
 }
 

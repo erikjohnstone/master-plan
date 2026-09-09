@@ -10,6 +10,7 @@ import assert from "node:assert/strict";
 import {
   scheduleTableFromSidecarStructure,
   hasCorruptedHeaders,
+  rowDuplicatesHeaders,
   type SidecarStructureTable,
   type SidecarStructureCell,
 } from "../src/lib/rasterTableAssist.ts";
@@ -77,6 +78,132 @@ test("hasCorruptedHeaders: several headers sharing one long leading substring �
     "WRE: 4 B-SWB-0115 EXISTING WRE SZE #12 #12 #6 #3",
   ];
   assert.equal(hasCorruptedHeaders(headers), true);
+});
+
+test("hasCorruptedHeaders: 2+ headers shaped \"LABEL: value\" are refused even without a shared 20-char prefix — the real shape when the header/data boundary swallows several DIFFERENT pre-header spec lines (15_IA#11, same document, a distinct real corruption shape found 2026-09-09)", () => {
+  // Each header differs after its own "WIRE: 3" prefix, so the existing
+  // shared-20-char-prefix check alone never fires on this exact set — this
+  // is the real, measured header list from that run.
+  const headers = [
+    "(REVISED) 150",
+    "VOLTS: PANEL 1-RP-1115",
+    "22,000 AICRATING MOUNTING: WRE LOAD",
+    "120/208 PHASE ROOM SURFACE",
+    "WIRE: 3 FEEDER SIZE CIRCUITBREAKER",
+    "WIRE: 3 1115 FED FROM: NEUTRAL",
+    "WIRE: 3",
+    "WIRE: 3 4 CIRCUITBREAKER",
+    "WIRE: 3 B-SWB-0115 EXISTING",
+    "MAIN CAP. 225 AMPERES WRE SIZE",
+    "COL11",
+    "LOAD WATTS ITEM FED",
+    "MLO CCT",
+  ];
+  assert.equal(hasCorruptedHeaders(headers), true);
+});
+
+test("hasCorruptedHeaders: a single real header with one incidental colon is never enough on its own", () => {
+  assert.equal(hasCorruptedHeaders(["CIRCUIT", "BREAKER", "EFFICIENCY: SEER 13", "FRAME"]), false);
+});
+
+test("hasCorruptedHeaders: a table whose headers are mostly unresolved COL-N fallbacks is refused — the real, measured shape from task #93's whole-sheet-scan corpus eval (2026-09-09)", () => {
+  // 16_NV_CarsonValleyMS_HVAC_Replacement.pdf#31's own real "table": both
+  // headers fell back to COL1/COL2 over raw, ungrouped circuit numbers —
+  // caught neither by the shared-prefix check (no header reaches 20 chars)
+  // nor the "LABEL: value" check (no colon anywhere).
+  assert.equal(hasCorruptedHeaders(["COL1", "COL2"]), true);
+  // 046_MI_Veterinary_Medical_Center_Replace_Elevators_3.pdf#29's own real
+  // panel schedule: 3 of 9 headers fell back (33%).
+  assert.equal(
+    hasCorruptedHeaders(["BRKR", "DESCRIPTION", "CIRCUIT VA", "COL4", "A", "PHASELOADS", "COL7", "CIRCUIT", "COL9"]),
+    true,
+  );
+});
+
+test("hasCorruptedHeaders: one genuinely unresolved column among many real ones is never enough on its own — the real, measured legitimate case fullCoverageSlack exists for", () => {
+  assert.equal(
+    hasCorruptedHeaders(["NO", "ITEM FED", "WATTS", "POLES", "FRAME", "AMPS", "VOLTAGE", "PHASE", "COL9"]),
+    false,
+  );
+});
+
+test("rowDuplicatesHeaders: a data row whose own cells duplicate 2+ of the table's OTHER header names is the header row itself, column-shifted into the data — the real, measured shape from D_25_CO_weld-mech-permit-set.pdf#2's own CAPACITY(MBH) equipment schedule (task #93, 2026-09-09)", () => {
+  const headers = ["SUPPLY AIR (CFM)", "OUTSIDE AIR (CFM)", "VOLTAGE / PHASE", "MCA", "MOCP", "WEIGHT (LBS)", "COL7", "COL8", "NOTES"];
+  const rowCells = ["CAPACITY(MBH) COOLING", "CAPACITY(MBH) COOLING", "EER/SEER", "ELECTRICAL DATA VOLTAGE/", "MOCP", "WEIGHT", "WEIGHT", "NOTES"];
+  assert.equal(rowDuplicatesHeaders(headers, rowCells), true);
+});
+
+test("rowDuplicatesHeaders: a real data row that coincidentally repeats ONE header word is never enough on its own", () => {
+  const headers = ["TAG", "TYPE", "MODEL", "NOTES"];
+  // A real spare circuit whose own TYPE column value happens to read "TYPE"
+  // as a genuine abbreviation is not corruption on its own.
+  const rowCells = ["AC-1", "TYPE", "PUY-A24", ""];
+  assert.equal(rowDuplicatesHeaders(headers, rowCells), false);
+});
+
+test("scheduleTableFromSidecarStructure: a table whose header row bleeds into a subsequent data row (column-shifted duplicate) is refused, not shipped", () => {
+  const structured = table(6, 4, [
+    cell(0, 0, "EQUIPMENT SCHEDULE", { colSpan: 4 }),
+    cell(1, 0, "TAG"), cell(1, 1, "MODEL"), cell(1, 2, "MOCP"), cell(1, 3, "NOTES"),
+    // TWO genuine, unambiguous data rows first. The header/data boundary's
+    // own headerLookahead rescue (opted into by this caller) checks only the
+    // SINGLE next full-coverage/ungrouped row after the first vocab-failing
+    // candidate, then gives up — a second clean data row here (rather than
+    // going straight to the duplicate-header row) keeps that one-shot rescue
+    // from ever reaching the duplicate row at all, so the boundary locks
+    // after row 1 exactly as it should on a real, unambiguous data section.
+    cell(2, 0, "AC-2"), cell(2, 1, "MITSUBISHI"), cell(2, 2, "20"), cell(2, 3, "1,2"),
+    cell(3, 0, "AC-2.5"), cell(3, 1, "CARRIER"), cell(3, 2, "25"), cell(3, 3, "5,6"),
+    // The header row itself, shifted one column over by a sidecar cell-
+    // boundary artifact — MOCP and NOTES are this table's OWN OTHER header
+    // names appearing verbatim as "data".
+    cell(4, 0, "AC-1"), cell(4, 1, "MOCP"), cell(4, 2, "NOTES"), cell(4, 3, ""),
+    cell(5, 0, "AC-3"), cell(5, 1, "TRANE"), cell(5, 2, "30"), cell(5, 3, "3,4"),
+  ]);
+  const result = scheduleTableFromSidecarStructure([], "test.pdf#1", {
+    pageViewportTransform: IDENTITY, region: [0, 0, 400, 400],
+    structured, cropWidth: 400, cropHeight: 400,
+  });
+  assert.equal(result, null, "a header row duplicated as data must be refused, not shipped as a real row");
+});
+
+test("a real per-item schedule where the same value legitimately repeats in a FEW columns is never dropped as a phantom caption row", () => {
+  // Two real circuits each happen to share "SPARE" in their own LOAD
+  // DESCRIPTION column — a real, ordinary shape, not the all-cells-identical
+  // corruption this fix targets (only 1 of 4 columns repeats per row).
+  const structured = table(4, 4, [
+    cell(0, 0, "PANEL A SCHEDULE", { colSpan: 4 }),
+    cell(1, 0, "CKT"), cell(1, 1, "BREAKER"), cell(1, 2, "POLE"), cell(1, 3, "LOAD DESCRIPTION"),
+    cell(2, 0, "1"), cell(2, 1, "20A"), cell(2, 2, "1"), cell(2, 3, "SPARE"),
+    cell(3, 0, "2"), cell(3, 1, "20A"), cell(3, 2, "1"), cell(3, 3, "SPARE"),
+  ]);
+  const result = scheduleTableFromSidecarStructure([], "test.pdf#1", {
+    pageViewportTransform: IDENTITY, region: [0, 0, 400, 400],
+    structured, cropWidth: 400, cropHeight: 400,
+  });
+  assert.ok(result);
+  assert.equal(result!.rows.length, 2, "both real SPARE circuits must survive, not be mistaken for a caption row");
+});
+
+test("a whole-row title/footer caption bleeding into the table's own final row (not colon-suffixed, not the word NOTES) is dropped, not shipped as a phantom data row (15_IA#11, real corpus shape found 2026-09-09)", () => {
+  const structured = table(5, 4, [
+    cell(0, 0, "PANEL A SCHEDULE", { colSpan: 4 }),
+    cell(1, 0, "CKT"), cell(1, 1, "BREAKER"), cell(1, 2, "POLE"), cell(1, 3, "LOAD DESCRIPTION"),
+    cell(2, 0, "1"), cell(2, 1, "20A"), cell(2, 2, "1"), cell(2, 3, "LIGHTS"),
+    cell(3, 0, "2"), cell(3, 1, "20A"), cell(3, 2, "1"), cell(3, 3, "RECEPTACLES"),
+    // The sheet's own footer caption, misread by table_structure as one
+    // ordinary data row — every column holds the identical string.
+    cell(4, 0, "REVISEDPANELSCHEDULE"), cell(4, 1, "REVISEDPANELSCHEDULE"),
+    cell(4, 2, "REVISEDPANELSCHEDULE"), cell(4, 3, "REVISEDPANELSCHEDULE"),
+  ]);
+  const result = scheduleTableFromSidecarStructure([], "test.pdf#1", {
+    pageViewportTransform: IDENTITY, region: [0, 0, 400, 400],
+    structured, cropWidth: 400, cropHeight: 400,
+  });
+  assert.ok(result);
+  assert.equal(result!.rows.length, 2, "the phantom caption row must never be counted as a third circuit");
+  const keys = result!.rows.map((r) => r.key);
+  assert.ok(!keys.includes("REVISEDPANELSCHEDULE"), `phantom caption row must not survive as a row key: got ${JSON.stringify(keys)}`);
 });
 
 test("scheduleTableFromSidecarStructure: a structural read whose own header/data boundary corrupts is refused, not silently returned", () => {
