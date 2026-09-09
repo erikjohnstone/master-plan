@@ -1,0 +1,110 @@
+{
+  "authorship": "Independently reviewed original Fort Sam PDF pages 8 (M-512) and 9 (M-601) using full Poppler renders and original text before requirement-identity/assembly implementation. Page 7 (M-511) was subsequently reviewed in full before implementing the VAV component-list pattern or cross-region identity decisions. Existing retained span/cell data was then checked against the visual expectations. These are bounded source facts and future acceptance cases, not a claim that the new workflows already interpret them.",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "coordinate_frame": "image_px",
+  "page_frame": [4896, 3168],
+  "scope_evidence": {
+    "diagram_page": 8,
+    "diagram_caption_span": 208,
+    "diagram_caption": "DOAS 1&2 P&ID",
+    "alternate_unit_label_span": 61,
+    "alternate_unit_label": "DOAS 1 OR 2",
+    "schedule_page": 9,
+    "scheduled_members": [{"span": 854, "tag": "DOAS-1"}, {"span": 886, "tag": "DOAS-2"}, {"span": 921, "tag": "DOAS-3"}],
+    "constraint": "The OR label alone cannot create two installations. The caption and schedule support a separately reviewed DOAS-1/DOAS-2 applicability decision. DOAS-3 is separately scheduled, not silently attached to this diagram. Installed counts and phase remain unverified."
+  },
+  "point_cases": [
+    {
+      "case_id": "measured-temperature-versus-setpoint",
+      "page": 8,
+      "matrix_title": "BAS INPUT/OUTPUT POINT LIST",
+      "rows": [
+        {"key": "4", "label": "SUPPLY AIR TEMP.", "label_span": 29, "column": "AI", "printed": "X", "listed_value": 1},
+        {"key": "5", "label": "SUPPLY AIR TEMP. SETPOINT", "label_span": 33, "column": "DO", "printed": "X", "listed_value": 1}
+      ],
+      "sequence_span": 192,
+      "sequence_marker": "2.2",
+      "constraint": "The monitored variable and its setpoint are distinct. A reviewed link from clause 2.2 to row 4 must not create another temperature point. Retain the original DO printed for row 5; do not substitute an expert-assumed software type or claim electrical compatibility."
+    },
+    {
+      "case_id": "repeated-global-alarm-label-not-two-wired-points",
+      "page": 8,
+      "matrix_title": "BAS INPUT/OUTPUT POINT LIST",
+      "rows": [
+        {"key": "1", "label": "EMERGENCY SHUTDOWN (GLOBAL)", "label_span": 18, "column": "ALARM", "printed": "X", "listed_value": 1},
+        {"key": "15", "label": "EMERGENCY SHUTDOWN (GLOBAL)", "label_span": 93, "column": "ALARM", "printed": "X", "listed_value": 1}
+      ],
+      "constraint": "Retain both source rows as alarm attributes. Repeated text does not establish physical identity, field I/O, or two devices; neither row can be silently dropped."
+    }
+  ],
+  "component_cases": [
+    {
+      "case_id": "vav-explicit-components-not-actuator-or-io-inference",
+      "page": 7,
+      "heading": "SEQUENCE OF OPERATION VAV TERMINAL UNIT (NON-FAN POWERED):",
+      "source_spans": [156, 157, 163, 169],
+      "text": "1. EACH VAV TERMINAL UNIT WILL BE PROVIDED WITH A BACNET COMPATIBLE TERMINAL EQUIPMENT CONTROLLER (TEC), A DUAL TECHNOLOGY OCCUPANCY SENSOR, A DOWNSTREAM STATIC PRESSURE SENSOR, AND A PRIMARY MODULATING SUPPLY AIR DAMPER.",
+      "declared_per_subject_components": [
+        {"kind": "terminal equipment controller", "quantity": 1, "protocol_requirement": "BACnet compatible"},
+        {"kind": "dual technology occupancy sensor", "quantity": 1},
+        {"kind": "downstream static pressure sensor", "quantity": 1},
+        {"kind": "primary modulating supply air damper", "quantity": 1}
+      ],
+      "constraint": "Each applies only after a VAV equipment set is established. Dual technology describes one sensor, not two devices or two channels. A damper requirement does not separately establish actuator quantity, torque, power or signal. No activity owner, physical terminal type or installed quantity follows from this paragraph. This source case remains pending parser/workflow implementation."
+    },
+    {
+      "case_id": "same-doas-subject-on-distinct-source-regions",
+      "references": [
+        {"page": 7, "caption_span": 273, "caption": "DOAS 3 P&ID", "vfd_span": 238, "controller_span": 252},
+        {"page": 8, "caption_span": 208, "caption": "DOAS 1&2 P&ID", "vfd_span": 174, "controller_span": 188}
+      ],
+      "constraint": "The same generic DOAS/DOAS SYSTEM wording occurs under different equipment captions. Preserve separate source occurrence identities and require explicit applicability; do not merge component roles by equal text, or multiply either paragraph by every scheduled DOAS. Identical component wording does not prove identical full sequences; their occupied/unoccupied operation differs. Cross-region assignment reconciliation remains pending."
+    },
+    {
+      "case_id": "one-onboard-controller-referenced-for-several-functions",
+      "page": 8,
+      "requirement_span": 188,
+      "subsequent_reference_spans": [203, 207],
+      "schedule_note": {"page": 9, "span": 975, "number": "5", "text": "5. PROVIDE WITH FACTORY FURNISHED ONBOARD BACNET CONTROLLER."},
+      "component_role": "onboard BACnet controller",
+      "furnish_basis": "factory_furnished",
+      "unestablished_activities": ["install", "wire", "program", "test"],
+      "constraint": "Within one explicitly bound DOAS unit, the requirement, monitoring reference and alarm reference do not specify three independent controllers. The schedule note is corroborating evidence, not a fourth controller. Scope/identity must be reviewed before any quantity is produced; contractor identities are not inferred."
+    },
+    {
+      "case_id": "supply-and-exhaust-vfds-are-distinct",
+      "page": 8,
+      "requirement_span": 174,
+      "text": "1.2 THE DOAS SHALL BE PROVIDED WITH A VFD FOR THE SUPPLY FAN, AND A VFD FOR THE EXHAUST FAN.",
+      "per_bound_unit_roles": [{"role": "supply fan VFD", "quantity": 1}, {"role": "exhaust fan VFD", "quantity": 1}],
+      "related_point_rows": [{"key": "26", "label": "SUPPLY VFD SPEED", "column": "AO"}, {"key": "27", "label": "EXHAUST VFD SPEED", "column": "AO"}],
+      "constraint": "The two explicitly different fan roles must remain distinct. Their speed output rows are control requirements, not two additional physical VFDs. Installed scope, field wiring and responsibility are not established by this clause."
+    },
+    {
+      "case_id": "declared-actuator-signal-not-actuator-quantity",
+      "page": 9,
+      "span": 972,
+      "note_number": "10",
+      "text": "10. PROVIDE WITH MIXING BOX WITH RETURN AND OUTSIDE AIR DAMPERS WITH 0-10 VDC MODULATING ACTUATOR.",
+      "declared_signal": {"mode": "voltage_dc", "minimum_volts": 0, "maximum_volts": 10},
+      "actuator_quantity": null,
+      "supply_voltage": null,
+      "torque": null,
+      "constraint": "The control-signal range is explicit. It is not a power-supply rating; plural dampers do not establish actuator/linkage count, torque, fail position or compatible output hardware."
+    },
+    {
+      "case_id": "duplicate-isolator-notes-are-not-a-quantity",
+      "page": 9,
+      "schedule_title": "EXHAUST FAN SCHEDULE",
+      "notes": [
+        {"span": 1199, "text": "1. PROVIDE WITH FIELD-INSTALLED RUBBER VIBRATION ISOLATORS."},
+        {"span": 1203, "text": "3. PROVIDE WITH FIELD-INSTALLED RUBBER VIBRATION ISOLATORS."}
+      ],
+      "related_factory_note": {"span": 1201, "text": "2. PROVIDE FACTORY-FURNISHED ACCESSORIES FOR MOUNTING TO STRUCTURE."},
+      "isolator_quantity": null,
+      "install_basis": "field_installed",
+      "constraint": "Retain both repeated instructions but do not turn their occurrence count into two isolators or two kits. The neighboring factory-accessory note does not prove that the isolators are factory furnished or identify an installing contractor."
+    }
+  ],
+  "limitations": "No production rule, existing scorer/key or source extraction was changed. These source reviews do not establish automatic joins, a complete assembly inventory, engineering certification, installed counts, or entire-project coverage. No reserved holdout was opened."
+}
