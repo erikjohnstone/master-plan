@@ -9901,6 +9901,49 @@ export function scheduleTableFromODL(
       if (cell && cell["row number"] - 1 === r) ownCellsHere.add(cell);
     }
     if (ownCellsHere.size === 1 && [...ownCellsHere][0]["column span"] >= C - 1) continue;
+    // A ROW WHOSE OWN CELLS ARE MOSTLY "LABEL: value" SPEC TEXT IS SWALLOWED
+    // METADATA, NOT A HEADER TIER — it must never contribute to colLabel even
+    // though the `grouped`/`!fullCoverage` boundary logic above (deliberately,
+    // for real grouping tiers like AHU-1's DESIGN/ACTUAL row) folds it into
+    // the header block unconditionally, with no vocab check at all.
+    //
+    // Real, measured (task #90, 2026-09-09, rendered and read the actual
+    // sheet): 15_IA_IowaState_Biorenewables_Lab.pdf#11's EXISTING PANEL
+    // SCHEDULE prints THREE spec/metadata rows (VOLTS:/PHASE/WIRE:/MAIN CAP.,
+    // AIC RATING/ROOM:/FED FROM:/GE A-SERIES II…, MOUNTING:/FEEDER SIZE:/
+    // MAIN CONNECTION:) between its title and its real TWO-TIER column header
+    // (CCT NO/ITEM FED/LOAD WATTS/WIRE SIZE/CIRCUIT BREAKER…/NEUTRAL/…). Two
+    // of those three metadata rows have spanning/partial-coverage cells
+    // (`grouped` or `!fullCoverage`), so the boundary loop folds them into
+    // the header block the same way it folds a real grouping tier — but
+    // unlike a real tier, their own cells are colon-shaped ("VOLTS: 120/208",
+    // "FED FROM: B-SWB-0115"), never a genuine column label. The join loop
+    // then concatenated their text into EVERY column's label, corrupting all
+    // 14 real headers CCT NO/ITEM FED/WATTS/POLES/FRAME/AMPS/… beyond
+    // hasCorruptedHeaders' own recognition (its 20-char shared-prefix and
+    // "2+ colon-shaped headers" checks both look at the FINAL joined string,
+    // which by then mixes real header words in with the spec text and no
+    // longer matches either shape cleanly).
+    //
+    // `>= 2` is the SAME bar hasCorruptedHeaders' own specLike check already
+    // uses (see that function's own doc for why 2, not 1: a single stray
+    // colon in one real header cell, "EFFICIENCY: SEER", is not corruption) —
+    // reused here rather than invented, and measured against this table's
+    // own three metadata rows (2, 3, and 3 colon-bearing cells respectively)
+    // vs. its real two-tier header rows (0 in each).
+    //
+    // A BARE `\S:` (colon immediately after a non-space character), not
+    // hasCorruptedHeaders' own `\S+:\s*\S` (colon WITH a trailing value in
+    // the SAME cell), is the right test here — measured live: this table's
+    // OCR structural read splits several of its own "LABEL: value" spec
+    // lines across TWO adjacent cells ("MOUNTING:" alone, then "SURFACE" as
+    // its own next cell; "…MAIN CONNECTION:" alone with no cell after it at
+    // all), so the label-only cell's text ends at the colon with nothing
+    // following it in that SAME cell — `\S+:\s*\S` never matches it, and the
+    // row's real spec-metadata shape went undetected under that stricter
+    // test even though every one of its cells still ends in a colon.
+    const specLikeCells = [...ownCellsHere].filter((cl) => /\S:/.test(odlCellText(cl))).length;
+    if (specLikeCells >= 2) continue;
     for (let c = 0; c < C; c++) {
       const cell = grid[r][c];
       if (!cell || cell === lastSeen[c]) continue;
