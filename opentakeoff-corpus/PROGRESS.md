@@ -11,6 +11,11 @@ merges/deployments; those explicit limits supersede older scope notes below.
 30 focus and 190 source PDF hashes verified; 24 development truth records
 revalidated, six new-workflow holdouts reserved and unopened. Existing legacy
 MCP failures are disclosed, not scored away. No claim of production completion.
+First shared source adapter verified on 24 development PDFs / 1,253 pages /
+563,248 text spans with exact original text/frame/hash parity. Full web check
+passes (2,557 pass, 13 skips), focused BAS tests and MCP build/typecheck pass.
+This proves source preservation, not improved takeoff or SOO completeness;
+the detailed progress record distinguishes those scopes.
 
 ### Vector takeoff engine research — commercial + OSS stack (2026-09-01 22:00 UTC)
 

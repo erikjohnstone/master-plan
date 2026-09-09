@@ -17,6 +17,7 @@ import { runOpenDataLoaderPages } from "./opendataloader.ts";
 import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
+import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -964,6 +965,29 @@ export class Session {
   /** Every loaded document's basename, load order. */
   get files(): string[] {
     return [...this.docs.keys()];
+  }
+
+  /** Shared text-only BAS evidence seam. Does not build or modify the graph,
+   * invoke OCR/geometry, or alter existing schedule/symbol output. Reading
+   * loaded bytes' identity avoids a path changing underneath an open session.
+   */
+  basSourcesForPipeline(): BasSourceContext {
+    const documents: BasSourceDocumentInput[] = [];
+    for (const [name, { doc }] of this.docs) {
+      const pages: BasSourceDocumentInput['pages'] = [];
+      for (let n = 1; n <= doc.numPages; n++) {
+        const key = n === 1 ? name : `${name}#${n}`;
+        const state = this.sheets.get(key);
+        if (!state) throw new UserError(`Source page ${key} is not loaded; BAS coverage cannot be established.`);
+        // Deliberately do not populate/mutate another consumer's lazy cache.
+        const spans = state.spans ?? textSpans(state.page);
+        pages.push({ page_number: n, sheet_key: key, width_px: state.widthPx,
+          height_px: state.heightPx, rotation: state.page.rotate, spans });
+      }
+      documents.push({ name, sha256: doc.sourceSha256, byte_length: doc.byteLength,
+        page_count: doc.numPages, pages });
+    }
+    return buildBasSourceContext(documents);
   }
 
   /** The file (basename) a sheet key belongs to — the key codec's inverse. */

@@ -1,0 +1,247 @@
+{
+  "scope": "Development focus PDFs only; complete text/frame/hash/replay parity with existing production PDF adapter. Not SOO/table/quantity coverage.",
+  "holdout_opened": false,
+  "documents": 24,
+  "results": [
+    {
+      "id": "01__vol2__001",
+      "sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+      "pages": 75,
+      "spans": 34494,
+      "no_text_pages": 0,
+      "elapsed_ms": 4643,
+      "peak_rss_bytes": 398458880,
+      "pass": true
+    },
+    {
+      "id": "02__vol2__015",
+      "sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+      "pages": 27,
+      "spans": 9098,
+      "no_text_pages": 0,
+      "elapsed_ms": 1146,
+      "peak_rss_bytes": 469549056,
+      "pass": true
+    },
+    {
+      "id": "03__vol1__27",
+      "sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+      "pages": 38,
+      "spans": 12033,
+      "no_text_pages": 0,
+      "elapsed_ms": 2393,
+      "peak_rss_bytes": 545390592,
+      "pass": true
+    },
+    {
+      "id": "04__vol2__062",
+      "sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+      "pages": 29,
+      "spans": 10872,
+      "no_text_pages": 0,
+      "elapsed_ms": 892,
+      "peak_rss_bytes": 549650432,
+      "pass": true
+    },
+    {
+      "id": "06__vol2__096",
+      "sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+      "pages": 36,
+      "spans": 17065,
+      "no_text_pages": 0,
+      "elapsed_ms": 2560,
+      "peak_rss_bytes": 549650432,
+      "pass": true
+    },
+    {
+      "id": "07__vol2__061",
+      "sha256": "c55da475bac3a1aeaae723b12adf35896970fe249ca3556b4d430a990c0e41a0",
+      "pages": 71,
+      "spans": 28719,
+      "no_text_pages": 0,
+      "elapsed_ms": 2609,
+      "peak_rss_bytes": 555581440,
+      "pass": true
+    },
+    {
+      "id": "09__vol2__014",
+      "sha256": "f208e34965aba62b3752f39b2691e2a418ac823bd99dbaadfb2e7b06391fc7ff",
+      "pages": 28,
+      "spans": 12672,
+      "no_text_pages": 0,
+      "elapsed_ms": 1243,
+      "peak_rss_bytes": 566689792,
+      "pass": true
+    },
+    {
+      "id": "10__vol2__040",
+      "sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+      "pages": 48,
+      "spans": 27702,
+      "no_text_pages": 0,
+      "elapsed_ms": 5896,
+      "peak_rss_bytes": 629522432,
+      "pass": true
+    },
+    {
+      "id": "11__vol1__05",
+      "sha256": "78755d16240f834ee429960526cadab8edec205b65df36a70c171ab4d4b993db",
+      "pages": 67,
+      "spans": 35372,
+      "no_text_pages": 0,
+      "elapsed_ms": 4363,
+      "peak_rss_bytes": 629522432,
+      "pass": true
+    },
+    {
+      "id": "12__vol2__028",
+      "sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+      "pages": 9,
+      "spans": 3995,
+      "no_text_pages": 0,
+      "elapsed_ms": 258,
+      "peak_rss_bytes": 629522432,
+      "pass": true
+    },
+    {
+      "id": "13__vol2__017",
+      "sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+      "pages": 25,
+      "spans": 10499,
+      "no_text_pages": 2,
+      "elapsed_ms": 1518,
+      "peak_rss_bytes": 647856128,
+      "pass": true
+    },
+    {
+      "id": "14__vol2__021",
+      "sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+      "pages": 19,
+      "spans": 4240,
+      "no_text_pages": 0,
+      "elapsed_ms": 1201,
+      "peak_rss_bytes": 659406848,
+      "pass": true
+    },
+    {
+      "id": "16__vol2__069",
+      "sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+      "pages": 9,
+      "spans": 2753,
+      "no_text_pages": 0,
+      "elapsed_ms": 452,
+      "peak_rss_bytes": 659406848,
+      "pass": true
+    },
+    {
+      "id": "17__vol1__16",
+      "sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+      "pages": 47,
+      "spans": 14897,
+      "no_text_pages": 0,
+      "elapsed_ms": 2255,
+      "peak_rss_bytes": 672399360,
+      "pass": true
+    },
+    {
+      "id": "18__vol2__092",
+      "sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+      "pages": 13,
+      "spans": 4636,
+      "no_text_pages": 0,
+      "elapsed_ms": 750,
+      "peak_rss_bytes": 673021952,
+      "pass": true
+    },
+    {
+      "id": "20__vol2__097",
+      "sha256": "95f1c434a5dca5ea297a5981901483d0f57b6a7277abc6c87d5645f072dfe0e3",
+      "pages": 25,
+      "spans": 4011,
+      "no_text_pages": 0,
+      "elapsed_ms": 382,
+      "peak_rss_bytes": 673021952,
+      "pass": true
+    },
+    {
+      "id": "21__vol2__095",
+      "sha256": "17887e9efd271427725d9c334e1ee6119d7fbd2d0d865906b719ed695e7b3606",
+      "pages": 8,
+      "spans": 1132,
+      "no_text_pages": 0,
+      "elapsed_ms": 146,
+      "peak_rss_bytes": 674299904,
+      "pass": true
+    },
+    {
+      "id": "22__vol2__012",
+      "sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+      "pages": 29,
+      "spans": 8429,
+      "no_text_pages": 0,
+      "elapsed_ms": 4779,
+      "peak_rss_bytes": 675495936,
+      "pass": true
+    },
+    {
+      "id": "23__vol2__033",
+      "sha256": "235fa6719258c64a8fe48b139e5c5e080a260e558432a63e13d682e2169e507d",
+      "pages": 80,
+      "spans": 16911,
+      "no_text_pages": 0,
+      "elapsed_ms": 5264,
+      "peak_rss_bytes": 742391808,
+      "pass": true
+    },
+    {
+      "id": "25__vol2__053",
+      "sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+      "pages": 12,
+      "spans": 5930,
+      "no_text_pages": 0,
+      "elapsed_ms": 1570,
+      "peak_rss_bytes": 773767168,
+      "pass": true
+    },
+    {
+      "id": "26__vol2__031",
+      "sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+      "pages": 90,
+      "spans": 48902,
+      "no_text_pages": 0,
+      "elapsed_ms": 5145,
+      "peak_rss_bytes": 773767168,
+      "pass": true
+    },
+    {
+      "id": "28__vol1__26",
+      "sha256": "6873dbdbf3fa2e364c7daf5dfebceb98ab00cb34aab3b2468cac62832771ab43",
+      "pages": 64,
+      "spans": 146355,
+      "no_text_pages": 0,
+      "elapsed_ms": 8911,
+      "peak_rss_bytes": 942260224,
+      "pass": true
+    },
+    {
+      "id": "29__vol2__030",
+      "sha256": "c8a85e522ea577c37a658f099e5f3b2af619fb3a8c35ffc219b39a13b9c56367",
+      "pages": 93,
+      "spans": 37441,
+      "no_text_pages": 0,
+      "elapsed_ms": 7221,
+      "peak_rss_bytes": 969228288,
+      "pass": true
+    },
+    {
+      "id": "30__vol2__058",
+      "sha256": "5c0d37ef255d621865fc7e0147ef7cad54321292e4f68d45ae97447d35b8e627",
+      "pages": 311,
+      "spans": 65090,
+      "no_text_pages": 0,
+      "elapsed_ms": 24233,
+      "peak_rss_bytes": 1088503808,
+      "pass": true
+    }
+  ]
+}

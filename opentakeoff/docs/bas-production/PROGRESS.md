@@ -1,5 +1,38 @@
 # BAS production workflow progress
 
+## Shared source foundation — 2026-09-09
+
+Research/acceptance baseline committed locally as `333c5bac`. The first code
+step adds loaded-byte SHA-256 identity and `Session.basSourcesForPipeline()`;
+shared schema/alias validation lives in `web/src/lib/basSources.ts`. This is
+the source adapter for upcoming workflow consumers, not completed SOO discovery
+or a newly exposed UI/MCP workflow. Existing graph, table, symbol, legacy compile
+and BAS math code are unchanged. No pricing/costing/labor or runtime vision.
+
+Verified final candidate:
+
+- Four shared-contract unit tests pass; two real-PDF Session tests plus the
+  existing seven BAS transport tests pass. Default MCP `npm test` now runs this
+  BAS gate via its pretest hook; this does not imply the remaining legacy suite
+  is green.
+- MCP typecheck and build pass. Full web check passes on the final candidate:
+  2,557 pass, 13 pre-existing skips, zero failures, benchmarks and build pass.
+- Final source parity run: 24 development PDFs, 1,253 pages, 563,248 spans,
+  every source hash/text/bbox/page frame/replay check passed. Two textless pages
+  are retained as unavailable text, not interpreted as empty BAS scope.
+  Six holdout records/bodies remain unopened.
+- The diagnostic took 89,830 ms summed across documents and peaked at
+  1,088,503,808 RSS bytes. It includes two PDF reads plus validation and replay;
+  this is not a cold/warm takeoff-pipeline performance claim.
+- Source contract and exact test semantics: `SOURCE_CONTRACT.md`. Eight
+  explicitly titled, independently source-reviewed primary SOO bodies and
+  negative controls for the next step: `NARRATIVE_CASES.md`.
+
+Next: shared narrative region discovery and complete coverage accounting,
+beginning with independently reviewed multi-column/mixed-table source layouts.
+Then equipment/template joins and durable BAS records, following the full
+implementation plan. None of the five end-to-end workflows is declared complete.
+
 ## Checkpoint — 2026-09-09
 
 Goal: `../BAS_PRODUCTION_GOAL.md`. Active, incomplete. Coordinator-only.

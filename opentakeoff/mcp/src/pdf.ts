@@ -2,6 +2,7 @@
 // handed out here; the geometry engine (web/src/lib) never sees a pdf.js object.
 import "./hush.ts"; // must stay the first import — see hush.ts
 import { createRequire } from "node:module";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import * as pdfjs from "pdfjs-dist";
@@ -89,6 +90,9 @@ async function ensureCanvasGlobals(): Promise<void> {
 export interface OcgEntry { id: string; name: string; visible: boolean; }
 
 export interface DocHandle {
+  /** Identity of the exact bytes loaded, not a later re-read of a mutable path. */
+  readonly sourceSha256: string;
+  readonly byteLength: number;
   numPages: number;
   page(n: number): Promise<PageHandle>;
   /** The document's Optional Content Groups (empty = no layers survived export). */
@@ -109,6 +113,8 @@ export async function openPdf(filePath: string): Promise<DocHandle> {
     isEvalSupported: false,
   }).promise;
   return {
+    sourceSha256: createHash("sha256").update(bytes).digest("hex"),
+    byteLength: bytes.byteLength,
     numPages: doc.numPages,
     async page(n: number): Promise<PageHandle> {
       const page = await doc.getPage(n);
