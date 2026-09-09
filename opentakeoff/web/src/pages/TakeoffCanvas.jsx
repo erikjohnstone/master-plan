@@ -12585,6 +12585,20 @@ export default function TakeoffCanvas() {
           </div>
         )}
 
+        <nav className="workspace-action-rail" aria-label="Primary actions">
+          <button type="button" data-workspace-nav="Schedules" aria-pressed={schedulesOpen}
+            onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}>
+            <Icon name="document" size={21} />
+            <span>Schedules</span>
+            {graphTables.length > 0 && <small>{graphTables.length}</small>}
+          </button>
+          <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen}
+            onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}>
+            <Icon name="target" size={21} />
+            <span>Agent</span>
+            {(agentRunning || agentProposals.length > 0) && <small>{agentRunning ? "live" : agentProposals.length}</small>}
+          </button>
+        </nav>
 
        </div>
 
@@ -12738,20 +12752,6 @@ export default function TakeoffCanvas() {
           {...panelHandlers}
         />
 
-        <nav className="workspace-action-rail" aria-label="Primary actions">
-          <button type="button" data-workspace-nav="Schedules" aria-pressed={schedulesOpen}
-            onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}>
-            <Icon name="document" size={21} />
-            <span>Schedules</span>
-            {graphTables.length > 0 && <small>{graphTables.length}</small>}
-          </button>
-          <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen}
-            onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}>
-            <Icon name="target" size={21} />
-            <span>Agent</span>
-            {(agentRunning || agentProposals.length > 0) && <small>{agentRunning ? "live" : agentProposals.length}</small>}
-          </button>
-        </nav>
       </div>
 
       {/* Unified plan navigator — one surface for the plan-set gallery AND the

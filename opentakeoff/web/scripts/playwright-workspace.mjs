@@ -79,9 +79,19 @@ try {
     await nav('Agent').click();
     check(`${width}: Agent active`,await nav('Agent').getAttribute('aria-pressed')==='true');
     check(`${width}: composer visible`,await page.locator('.agent-composer').isVisible());
+    check(`${width}: launcher clears Agent workspace`,await page.evaluate(()=>{
+      const launcher=document.querySelector('.workspace-action-rail').getBoundingClientRect();
+      const dock=document.querySelector('[data-workspace-dock="Agent"]').getBoundingClientRect();
+      return launcher.right<=dock.left+1;
+    }));
     await nav('Schedules').click();
     check(`${width}: only one primary dock`,await page.locator('[data-workspace-dock]').count()===1);
     check(`${width}: Schedules active`,await nav('Schedules').getAttribute('aria-pressed')==='true');
+    check(`${width}: launcher clears Schedules workspace`,await page.evaluate(()=>{
+      const launcher=document.querySelector('.workspace-action-rail').getBoundingClientRect();
+      const dock=document.querySelector('[data-workspace-dock="Schedules"]').getBoundingClientRect();
+      return launcher.right<=dock.left+1;
+    }));
     const drawing=await page.locator('.workspace-drawing').boundingBox();
     check(`${width}: usable drawing width`,drawing.width>=500);
     const panel=page.locator('[data-schedules-panel]');

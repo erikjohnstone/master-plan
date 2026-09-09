@@ -78,7 +78,7 @@
 .workspace-drawing { min-width: 0; }
 .workspace-body { isolation: isolate; }
 .workspace-action-rail {
-  position: absolute; z-index: 12; top: 50%; right: 0; width: 68px;
+  position: absolute; z-index: 9; top: 50%; right: 0; width: 68px;
   transform: translateY(-50%); display: flex; flex-direction: column;
   box-shadow: var(--shadow-2);
 }

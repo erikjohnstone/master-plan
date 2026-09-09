@@ -10,6 +10,8 @@ User-directed follow-up to #89. Baseline: `dec0151f` on main.
   group; the redundant product wordmark is removed.
 - Schedules and Agent are compact tabs stacked at the vertical center of the
   canvas's right edge, floating over the workspace instead of claiming a column.
+  When either dock opens, the pair follows the reflowed canvas edge and never
+  overlays the Schedule or Agent workspace.
 - Units and scale moved to the far right of the sheet-tab row.
 - The left rail's Tools tab reveals a second column. Zone, Snap, angle guides,
   labels, Command, Voice and contextual Finish/Create actions moved here.
@@ -40,7 +42,7 @@ Agent and export handlers were not rewritten.
 
 ## Verification
 
-`playwright-workspace.mjs`: **206 checks passed**, zero browser errors.
+`playwright-workspace.mjs`: **214 checks passed**, zero browser errors.
 Sizes: 1280×800, 1440×900, 1920×1080 and 2560×1440. Includes original schedule
 headers/cells, citation payloads, Agent Run/Stop/proposal callbacks, resizing,
 focus mode, flyout positioning, draft retention, toggle state, utility routing
@@ -56,6 +58,8 @@ The built-in mechanical sample, opened through the real UI; no mockup data or
 image editing. These captures document layout, not extraction accuracy.
 
 ![Primary navigation, tools collapsed](evidence/primary-toolbar/1440-plans.png)
+
+![Schedule workspace with the launcher clear of its content](evidence/primary-toolbar/1440-schedules.png)
 
 ![Left tools column expanded](evidence/primary-toolbar/1440-tools.png)
 
