@@ -30,6 +30,10 @@ In Agent, a starter question fills the composer without running it. Run/Ask and
 the existing keyboard shortcut submit; Stop cancels through the existing path.
 Sources, history and technical steps remain available. Proposals still require
 explicit Accept/Reject. Finished quantities and export remain in Takeoff.
+Dense answer rows show their first field and a field count. Click the row heading
+(or focus it and press Enter/Space) to read every label/value pair in its original
+order. Source-linked values still open the drawing. Long headings are available
+under Full heading; ordinary prose and short lists remain directly visible.
 
 Open **Conditions · [active tag]** in the working toolbar for pinned conditions,
 line/fill/hatch, waste and dimensions. Escape or a click outside closes it.

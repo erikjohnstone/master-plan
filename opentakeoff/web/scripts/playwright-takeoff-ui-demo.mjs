@@ -17,11 +17,12 @@ import {
 } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { openImportedSheet } from "./fixtures/open-imported-sheet.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const corpus = resolve(root, "../opentakeoff-corpus");
 const pdf = resolve(corpus, "raw/navfac-cherry-point-atc-mechanical.pdf");
-const artifacts = "/opt/cursor/artifacts";
+const artifacts = process.env.OT_DEMO_OUT || "/opt/cursor/artifacts";
 const baseUrl = process.env.OT_UI_URL || "http://127.0.0.1:5173/";
 const apiKey = (process.env.CEREBRAS_API_KEY || (existsSync("/tmp/cerebras_ui_key.txt")
   ? readFileSync("/tmp/cerebras_ui_key.txt", "utf8")
@@ -86,13 +87,12 @@ const STALL_DIAG_MS = Number(process.env.OT_DEMO_STALL_MS || 90_000);
 const STALL_FAIL_MS = Number(process.env.OT_DEMO_STALL_FAIL_MS || 3 * 60 * 1000);
 
 async function diagnoseHang(label, status) {
-  const { execSync } = await import("node:child_process");
+  const { execSync, execFileSync } = await import("node:child_process");
   let procs = "";
   try {
-    procs = execSync(
-      "ps -eo pid,etime,cmd --sort=-etime | grep -E 'production-graph-cli|playwright|chrome|node.*vite' | grep -v grep | head -20",
-      { encoding: "utf8" },
-    );
+    procs = execFileSync("ps", ["-axo", "pid,etime,args"], { encoding: "utf8" })
+      .split("\n").filter(line => /production-graph-cli|playwright|chrome|node.*vite/i.test(line))
+      .slice(0, 20).join("\n");
   } catch {
     procs = "(no matching processes)";
   }
@@ -182,7 +182,8 @@ async function runOne(job) {
   console.log(`[${job.label}] new user · fresh browser · upload blueprint · Agent Run`);
 
   const browser = await chromium.launch({
-    headless: false,
+    headless: process.env.OT_HEADLESS === "1",
+    executablePath: process.env.OT_BROWSER_PATH || undefined,
     args: ["--use-gl=angle", "--window-size=1440,900"],
   });
   const context = await browser.newContext({
@@ -220,13 +221,15 @@ async function runOne(job) {
   console.log(`[${job.label}] upload blueprint PDF`);
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
   await page.waitForFunction(
-    () => typeof window.__opentakeoff?.openAgent === "function",
+    () => window.__opentakeoff?.indexProgress?.()?.phase === "ready",
+    null,
     { timeout: 180_000 },
   );
   await page.waitForTimeout(3500);
+  await openImportedSheet(page);
 
   console.log(`[${job.label}] open Agent`);
-  const agentRail = page.locator('button[title*="Agent — describe a takeoff"]').first();
+  const agentRail = page.locator('[data-workspace-nav="Agent"], button[title*="Agent — describe a takeoff"]').first();
   if (await agentRail.count()) await agentRail.click();
   else await page.evaluate(() => window.__opentakeoff.openAgent());
   await page.waitForSelector('textarea[name="agent-goal"]', { timeout: 30_000 });

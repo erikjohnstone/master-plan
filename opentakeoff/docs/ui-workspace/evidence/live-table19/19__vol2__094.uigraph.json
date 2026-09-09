@@ -1,0 +1,110 @@
+{
+ "available": true,
+ "sheet_count": 9,
+ "table_count": 4,
+ "titles": [
+  {
+   "sheet": "19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf#8",
+   "title": "Air Handling Unit Schedule CHW",
+   "rows": 5,
+   "headers": [
+    "MARK",
+    "UINT MODEL",
+    "UNIT TYPE",
+    "UNIT COMPONENTS IN DIRECTION OF AIR FLOW SEE LEGEND BELOW",
+    "AIR FLOWS TOTAL MAX. CFM",
+    "AIR FLOWS OCCUPIED MODE OA CFM",
+    "AIR FLOWS UN-OCCUPIED MODE OA CFM",
+    "AIR FLOWS SMOKE MODE SA & OA CFM",
+    "FAN DATA EXT. SP IN W.G.",
+    "FAN DATA TOTAL SP IN W.G.",
+    "FAN DATA FAN SIZE AND TYPE",
+    "FAN DATA RPM",
+    "FAN DATA MOTOR HP",
+    "FAN DATA VAR. FREQ. DRIVE",
+    "COOLING COIL CAPACITY SEN. MBH",
+    "COOLING COIL CAPACITY TOTAL MBH",
+    "COOLING COIL AIR DATA ENT. TEMP. DB/WB",
+    "COOLING COIL AIR DATA LVG. TEMP. DB/WB",
+    "COOLING COIL AIR DATA VEL. FPM",
+    "COOLING COIL AIR DATA ROW/FIN. PER FT.",
+    "COOLING COIL AIR DATA P.D. IN W.G.",
+    "COOLING COIL WATER DATA TEMP. F ENT.",
+    "COOLING COIL WATER DATA TEMP. F LVG.",
+    "COOLING COIL WATER DATA FLOW GPM",
+    "COOLING COIL WATER DATA P.D. FT W.G.",
+    "HEATING COIL ENT.",
+    "HEATING COIL LVG.",
+    "HEATING COIL P.D. IN W.G.",
+    "HEATING COIL KW",
+    "FILTERS PREFILTER AIR PD IN. W.G.",
+    "FILTERS PREFILTER TYPE",
+    "FILTERS FINAL FILTER AIR PD IN. W.G.",
+    "FILTERS FINAL FILTER TYPE",
+    "ELECTRICAL DATA VOLT/ PHASE/HZ",
+    "ELECTRICAL DATA MCA"
+   ]
+  },
+  {
+   "sheet": "19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf#8",
+   "title": "Packaged Air Cooled Water Chiller Schedule",
+   "rows": 1,
+   "headers": [
+    "MARK",
+    "MODEL NO.",
+    "ENERGY EFFICIENCY RATING",
+    "INTEGRATED PART LOAD VALUE",
+    "COOLING CAPACITY NOMINAL TONS",
+    "COOLING CAPACITY CAPACITY TONS",
+    "COOLING CAPACITY AMB. TEMP.",
+    "CHILLED WATER DATA FLOW GPM",
+    "CHILLED WATER DATA MAX PD FT",
+    "CHILLED WATER DATA EWT",
+    "CHILLED WATER DATA LWT",
+    "CONDENSER FAN NO.",
+    "CONDENSER FAN FLA EACH",
+    "COMPRESSORS NO.",
+    "COMPRESSORS RLA EACH",
+    "COMPRESSORS LRA EACH",
+    "ELECTRICAL DATA MCA",
+    "ELECTRICAL DATA MAX. FUSE SIZE",
+    "ELECTRICAL DATA VOLT/PHASE"
+   ]
+  },
+  {
+   "sheet": "19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf#8",
+   "title": "Cooling Tower Schedule",
+   "rows": 1,
+   "headers": [
+    "MARK",
+    "MODEL NO.",
+    "TOWER TYPE",
+    "# OF CELLS",
+    "OPERATING WEIGHT (LBS)",
+    "FLOW GPM",
+    "MAX. HEAD (FT)",
+    "WATER TEMP. ENT.",
+    "WATER TEMP. LVG.",
+    "AMBIENT WB",
+    "DRIVE TYPE",
+    "FAN MOTOR DATA HP",
+    "FAN MOTOR DATA RPM",
+    "VOLT/ PHASE"
+   ]
+  },
+  {
+   "sheet": "19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf#8",
+   "title": "Disposable Cylinder Electric Humidifier Schedule",
+   "rows": 4,
+   "headers": [
+    "MARK",
+    "MODEL NO.",
+    "DUCT SIZE",
+    "MIN. CAPACITY LB. PER. HR.",
+    "NO. CYLINDERS",
+    "KW",
+    "VOLT/PHASE"
+   ]
+  }
+ ]
+}

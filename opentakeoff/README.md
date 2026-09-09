@@ -40,6 +40,8 @@ The canvas workspace keeps **Plans · Schedules · Agent · Takeoff · Report** 
 navigation row. Schedules shows the indexed cells beside their drawing evidence;
 Agent keeps the conversation, composer and proposal review together. Both
 workspaces resize or expand without changing the underlying takeoff data.
+Dense Agent answer rows expand into label/value lists instead of long inline
+field dumps; the original values and source links remain available.
 
 | You are | Go here |
 |---|---|

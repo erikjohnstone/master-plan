@@ -82,6 +82,53 @@ function parseTable(lines, start) {
   return { rows, next: i };
 }
 
+// Presentation only: the existing answer contract flattens table rows into
+// "label: value · label: value" text. Lay out those explicit separators; never
+// query, infer units, repair values, group columns, or create takeoff records.
+// Ambiguous/unstructured text keeps the ordinary markdown rendering.
+function displayFields(item) {
+  const chunks = item.split(" · ");
+  if (chunks.length < 4) return null;
+  const fields = chunks.map(chunk => {
+    const pair = /^(.+?):(?: |$)(.*)$/.exec(chunk);
+    if (!pair || !pair[1].trim()) return null;
+    return { label: pair[1], value: pair[2] };
+  });
+  return fields.every(Boolean) ? fields : null;
+}
+
+// Models often use nonbreaking spaces across an entire column label. Add
+// layout-only break opportunities without replacing any original characters.
+function wrapFieldLabel(nodes) {
+  return (Array.isArray(nodes) ? nodes : [nodes]).flatMap((node, index) => {
+    if (typeof node !== "string") return [node];
+    return node.split(/([\u00a0\u202f])/u).flatMap((part, partIndex) =>
+      /^[\u00a0\u202f]$/u.test(part)
+        ? [part, <wbr key={`${index}-${partIndex}`} />]
+        : [part]);
+  });
+}
+
+function AnswerFields({ fields, cites, onOpenCitation }) {
+  return (
+    <details className="agent-answer-record" data-agent-answer-record>
+      <summary>
+        <span className="agent-answer-record-label">{inlineMd(fields[0].label, null, null)}</span>
+        <strong>{inlineMd(fields[0].value, null, null)}</strong>
+        <span className="agent-answer-record-count">{fields.length} fields</span>
+      </summary>
+      <dl className="agent-answer-fields">
+        {fields.map((field, index) => (
+          <div key={index}>
+            <dt>{wrapFieldLabel(inlineMd(field.label, cites, onOpenCitation))}</dt>
+            <dd>{inlineMd(field.value, cites, onOpenCitation)}</dd>
+          </div>
+        ))}
+      </dl>
+    </details>
+  );
+}
+
 function blockNodes(raw, cites, onOpenCitation) {
   const text = scrubEstimatorNoise(raw);
   const lines = text.replace(/\r\n/g, "\n").split("\n");
@@ -144,11 +191,16 @@ function blockNodes(raw, cites, onOpenCitation) {
       const level = heading[1]?.startsWith?.("#") ? heading[1].length : 3;
       const title = heading[2] || heading[1];
       const Tag = level === 1 ? "h3" : level === 2 ? "h4" : "h5";
-      out.push(
+      out.push(title.length > 240 ? (
+        <details key={key++} className="agent-answer-long-heading">
+          <summary>Full heading</summary>
+          <Tag>{inlineMd(title, cites, onOpenCitation)}</Tag>
+        </details>
+      ) : (
         <Tag key={key++} style={{ margin: "10px 0 6px", fontSize: level === 1 ? 14.5 : 13.5, fontWeight: 700, lineHeight: 1.35, color: "var(--ink)" }}>
           {inlineMd(title, cites, onOpenCitation)}
-        </Tag>,
-      );
+        </Tag>
+      ));
       i += 1;
       continue;
     }
@@ -198,10 +250,13 @@ function blockNodes(raw, cites, onOpenCitation) {
         i += 1;
       }
       const ListTag = ordered ? "ol" : "ul";
+      const fields = items.map(displayFields);
       out.push(
-        <ListTag key={key++} style={{ margin: "0 0 8px", paddingLeft: 18, fontSize: 13, lineHeight: 1.5 }}>
+        <ListTag key={key++} className={fields.every(Boolean) && !ordered ? "agent-answer-records" : undefined} style={{ margin: "0 0 8px", paddingLeft: 18, fontSize: 13, lineHeight: 1.5 }}>
           {items.map((item, ii) => (
-            <li key={ii} style={{ marginBottom: 3 }}>{inlineMd(item, cites, onOpenCitation)}</li>
+            <li key={ii} style={{ marginBottom: 3 }}>{fields[ii]
+              ? <AnswerFields fields={fields[ii]} cites={cites} onOpenCitation={onOpenCitation} />
+              : inlineMd(item, cites, onOpenCitation)}</li>
           ))}
         </ListTag>,
       );

@@ -79,6 +79,8 @@ and [after](ui-workspace/evidence/after/evidence.json).
 - GitHub's `ui-contracts` job passed on commit `05bbc38f` in
   [run 34290478079](https://github.com/erikjohnstone/master-plan/actions/runs/34290478079).
   This is distinct from the full release check.
+- Both `full-web-check` and `ui-contracts` passed on `0082b7a9` in
+  [run 34292447597](https://github.com/erikjohnstone/master-plan/actions/runs/34292447597).
 
 ## Separately authorized test typing
 
@@ -134,16 +136,45 @@ warnings), 2,515 passing tests / 13 skipped, benchmarks, and production build.
 The browser proof was repeated after cleanup against the original baseline:
 all 9 tables, citation/bbox outputs, proposals, takeoff data and CSV still match.
 
+## Live Agent table walkthrough
+
+The user supplied a local key, verified by an authenticated models request.
+It is locally Git-excluded, owner-readable only, never included in a commit or
+this evidence. Captured text artifacts were checked for the secret before copying.
+
+The real table-takeoff driver ran on document 19 through upload → indexing →
+Agent Run → answer → Takeoff, without the `--compile` bypass or seeded results.
+All four tables and all 11 graph rows match the unchanged ground truth. There
+were zero browser errors; indexing took 21 seconds and the driver reported 49
+seconds at Agent completion. The ordinary schedule query produced no finished
+takeoff lines, consistent with the existing distinction between workflow data
+and a compiled takeoff.
+
+The existing strict answer scorer reports **0/5 completely exact rows and
+240/260 tokens (92.3%)**. Inspection of every unmatched token found hyphenated
+text (`DRAW-THRU`, component strings, drive descriptions) and ASCII dash
+placeholders rendered by the model with typographic hyphens/dashes. The score
+and scorer are unchanged; this is not labeled perfect transcription or an
+extraction improvement. The full HVAC takeoff/export driver is a separate gate.
+
+[Actual Agent screenshot](ui-workspace/evidence/live-table19/19__vol2__094.3b-agent-after-run.png)
+and [unaltered result metrics](ui-workspace/evidence/live-table19/results.json).
+
 ## Open release gates — not claimed complete
 
 1. The inherited **252 TypeScript errors and 50 lint errors are resolved** by
    the separately authorized typing and lint-only checkpoints. Three inherited
    warnings remain. No checks were hidden, ignored or weakened. The complete
-   local check passes; CI must still be verified on the pushed cleanup commit.
+   local check and both CI jobs passed on cleanup commit `0082b7a9`.
 2. `playwright-table-takeoff-ui.mjs --doc 05` and
    `playwright-takeoff-ui-demo.mjs hvac` were attempted but refuse to start
    without a live `CEREBRAS_API_KEY`. The user subsequently supplied a local key;
-   authentication was verified, and live workflow validation is now pending.
+   authentication was verified. The live table19 query completed (metrics above).
+   The full HVAC driver reached a reported compile of 413 lines but its Takeoff
+   panel contained zero lines/evidence and the driver failed its existing
+   `T-HVAC-01` assertion. This is an unresolved end-to-end handoff failure, not a
+   successful takeoff. No execution/extraction logic or expected results were
+   changed to conceal it; its cause is not yet established.
    Deterministic UI callback and real graph/citation tests do not replace those
    live end-to-end gates.
 3. This monorepo had no root `.github/workflows` directory; nested package
@@ -175,6 +206,26 @@ OT_UI_URL=http://localhost:5176 OT_UI_PDF=public/demo/sample-mechanical-set.pdf 
 Run `ui-workspace-proof.mjs` with `OT_PROOF_PHASE=baseline` on the baseline
 checkout, and `OT_PROOF_PHASE=after` on this branch, sharing `OT_PROOF_OUT`.
 The after pass asserts complete semantic equality and captures the screenshots.
+
+## Answer readability follow-up
+
+Shared-path gate: **NO**. `AgentAnswer` lays out the existing flattened
+`label: value · label: value` answer text; it does not query tables, infer a
+quantity, repair content, modify prompts, or create takeoff records. Four or
+more explicit fields become an expandable definition list. Duplicate labels,
+empty values, original order and original Unicode characters remain intact.
+Unstructured text and short lists retain their existing rendering. Long
+headings remain in a labeled disclosure. Nonbreaking spaces in labels gain
+layout-only word-break opportunities; no characters are substituted.
+
+`playwright-agent-answer.mjs` replays the five recorded table19 answer rows
+(175 fields), restoring Markdown markers lost by the earlier innerText capture.
+This is explicitly a **presentation replay**, not a new live-model success and
+not a repair of the recorded model's strict transcription score. The test
+compares every rendered label/value exactly and checks keyboard disclosure,
+responsive bounds and a separate synthetic citation callback/bbox control.
+Screenshots show the production components with replayed response rows, not
+the full original conversation or a newly extracted result.
 
 ## Representative comparison (1440×900)
 

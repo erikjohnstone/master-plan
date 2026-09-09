@@ -9,6 +9,7 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 - Give Schedules a sheet navigator, search/facets and full extracted-cell grids with internal scrolling.
 - Give Schedules and Agent responsive, keyboard/pointer-resizable docks and an expanded view.
 - Add Agent starter drafts, larger review targets and a persistent composer. Existing run, source and proposal callbacks remain unchanged.
+- Present dense Agent answer rows as expandable label/value lists; retain every field in order, including duplicate labels and empty values. Long headings remain available under Full heading.
 - Keep extraction, coordinates, citations, quantities, project formats and export contents unchanged. This release is presentation-only.
 
 ## 2026-08-29 — multi-hyphen equipment tags
