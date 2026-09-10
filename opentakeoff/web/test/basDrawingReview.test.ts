@@ -194,7 +194,7 @@ test('workflow verification rejects changed event digests/dependencies and all j
 
 test('all six prior revisions upgrade without rewriting prior values and imports preserve or reject competing history', async () => {
   const w = await fixture(), legacy = await captureBasPoints(w.captures[0].sources, points);
-  for (const revision of BAS_WORKFLOW_REVISIONS.filter(r => r !== 'bas_review_7')) {
+  for (const revision of BAS_WORKFLOW_REVISIONS.slice(0, BAS_WORKFLOW_REVISIONS.indexOf('bas_review_7'))) {
     const old = { ...(revision === 'point_captures_1' ? legacy : w), revision };
     const next = await initial(old);
     assert.deepEqual(next.captures, old.captures); assert.deepEqual(await verifyBasWorkflow(next), next);

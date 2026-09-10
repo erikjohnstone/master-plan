@@ -1,5 +1,65 @@
 # BAS production workflow progress
 
+## Durable comparison journal foundation — 2026-09-10
+
+After **b7563f9a**, added shared `bas_revision_8` comparison history. Records pin
+the exact source sets, event/calculation selectors, item correspondence, review
+reasons, self-declared identity/origin and completed report fingerprint. Save and
+reopen run the same Python-backed comparison; exact retries preserve later
+history. A changed report is explicitly mismatched, not silently accepted. No
+approval, source-byte or authenticated-review guarantee is inferred from a hash.
+Wire schemas were extracted without changing the existing import paths or
+comparison/inventory algorithms, avoiding a Workflow/schema import cycle.
+
+Verified old revision compatibility, typed selector ownership, missing/reordered/
+forked/tampered history, size limits, actual IndexedDB reload and ordinary JSON
+import/export. Every existing SOO, equipment, assembly, engineering, calculation
+and drawing write preserves the new journal; old pinned comparisons still replay
+after relevant applicability edits. Controlled changed-count/SOO tests retain
+originals, unknowns and unresolveds. Caller mutation, runtime failures, cancellation
+and expired deadlines accept no partial write. Re-signed wrong report identities
+are distinguishable from matching replays; foreign item IDs fail replay.
+
+**Web 58287 exit 0: 2,800 pass / 13 existing skips**, 29.620 s tests / 5.34 s build;
+types/lint/benchmarks pass with the same three lint warnings and disclosed legacy
+One-Click/build warnings. **MCP 10599 exit 0:** types, **127 existing BAS + 26
+comparison/journal tests** (19 comparison, seven new journal), and **four packaging
+tests pass**. **Python 26010 exit 0:** 452 pass / one explicit packaging skip,
+6.31 s; mypy 20 source files; separately enabled packaging test passes in 0.88 s.
+The seven new web journal tests are included in the full web total.
+
+First serial retained-source baseline: prepare 4.013–4.093 s, record 4.131–4.190 s,
+reopen 4.018–4.248 s; incremental peak RSS 251,494,400 bytes. Subsequent gate fixed
+at 6 s per operation / 512 MiB before further evaluation. Final operations
+4.062–4.170 s, incremental peak RSS **245,071,872 bytes**. Existing comparison
+**4.036 / 3.998 / 3.958 s**, inventory **3.208 / 3.161 / 3.171 s** and history /
+201,000-entry drawing gates pass unchanged. This benchmark uses the same retained
+Fort Sam basis on both sides (496 rows, 12 matrices, two selected saved records),
+with one through three journal entries. It is not an issued addendum, maximum-
+size performance claim or fresh PDF extraction. Exact evidence and commands:
+`evidence/revision-journal-1/proof.json`; contract: `REVISION_JOURNAL_CONTRACT.md`.
+
+**This is an internal checkpoint, not completion of workflow E or the main goal.**
+No new public comparison UI/MCP walkthrough or full corpus/holdout pass is claimed.
+No extraction, VectorGrid, symbol, Python math, key/scorer, model, commercial or
+external changes. Goal remains active: finish public revision comparison, issue
+decisions, dependency-bound selective approvals and approved snapshots, plus A–D
+final corpus/holdout gates. The appended researched symbol/installed-plan phase
+remains last and does not replace or shorten the original five workflows.
+
+Next public integration uses the existing internal **Review & changes → Drawing
+changes** workspace. Trace already confirmed: `BasProjectReviewWorkspace.jsx` →
+`BasDrawingWorkspace.jsx`; callbacks flow through `TakeoffDataPanel.jsx` and
+`TakeoffCanvas.jsx`. Python-backed browser transport is the existing bounded
+`vite.basAssignmentApi.js` / `mcp/scripts/bas-assignment-cli.mts` pattern, while MCP
+history-only operations use `Session.basDrawingGuard()`. Extend these surfaces
+without recompiling/rebinding original extraction or adding permanent chrome.
+Provide explicit pinned-version selection, searchable/paged one-to-one item
+pairing with reasons, before/after/difference table, original sources, durable
+save/reopen and complete exports. Recompute only a requested comparison, not every
+historical report on workspace mount. Preserve existing page-accounting commands.
+Actual browser and packaged-MCP journeys are required before calling this public.
+
 ## Shared revision-impact comparison — 2026-09-10
 
 After **34aeaffa**, implemented the internal shared comparison service. Both

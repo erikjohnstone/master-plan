@@ -12,6 +12,13 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add the internal append-only comparison journal (`bas_revision_8`). Save exact
+  source/decision selectors, correspondence reasons and replayed report identity;
+  preserve them through old edit paths, reload and import. Reopening reruns shared
+  Python-backed comparison and explicitly reports mismatched results. A saved
+  comparison is not approval, authenticated review or installed truth. Public
+  comparison UI/MCP integration and approved snapshots remain in progress.
+
 - Add the internal shared revision-impact service: explicit item correspondence,
   original evidence and declared-field changes, quantity-basis/membership checks,
   and exact Python count deltas after selected saved-result replay and retained

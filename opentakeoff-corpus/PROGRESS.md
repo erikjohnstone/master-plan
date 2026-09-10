@@ -1,5 +1,21 @@
 ## Active work
 
+2026-09-10 checkpoint after **b7563f9a**: internal shared comparison journal
+(`bas_revision_8`) saves exact pinned source/decision/correspondence and report
+identity; save/reopen rerun Python-backed comparison. Actual IDB/JSON retention,
+all old write paths, exact retry, tamper/fork/ownership rejection and cancellation
+are tested. **Web 2,800 pass / 13 existing skips; MCP 127 existing BAS + 26
+comparison/journal + four packaging tests pass; Python 452 pass / one packaging
+skip, mypy 20 files and separately enabled packaging test pass.** Final retained
+prepare/save/reopen **4.062–4.170 s**, **245,071,872-byte incremental peak RSS**;
+unchanged history/inventory/comparison gates pass. Same-basis retained evidence,
+not real issued-addendum or public comparison proof. See
+`opentakeoff/docs/bas-production/evidence/revision-journal-1/proof.json`.
+No extraction/VectorGrid/symbol/math, keys/scorers, holdout or external changes.
+Original goal remains active: next public revision UI/MCP, issue decisions,
+selective approvals/snapshots and A–D final gates; appended researched symbol /
+installed-plan work stays last. This internal checkpoint does not finish E.
+
 2026-09-10 checkpoint after **34aeaffa**: internal shared BAS revision comparison
 now retains explicit item correspondence, original/declared-field changes, source
 and dependency boundaries, unknown quantities and compatible measure/membership

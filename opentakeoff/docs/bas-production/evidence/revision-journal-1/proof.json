@@ -1,0 +1,250 @@
+{
+  "checkpoint": "shared_revision_comparison_journal",
+  "date": "2026-09-10",
+  "parent_commit": "b7563f9a",
+  "scope": "Internal shared persistence/replay service, not public comparison completion or an approved snapshot",
+  "shared_path": "Yes: exact selectors, correspondence history, replay and response ownership are shared. Python remains the arithmetic authority. No UI/MCP decision fork.",
+  "web": {
+    "command": "npm run check",
+    "workdir": "opentakeoff/web",
+    "session": 58287,
+    "exit_code": 0,
+    "tests": 2813,
+    "passed": 2800,
+    "existing_skips": 13,
+    "failed": 0,
+    "duration_ms": 29620.42675,
+    "build_seconds": 5.34,
+    "existing_lint_warnings": 3,
+    "log": "opentakeoff/tmp/bas-revision-journal-web-check-1.log"
+  },
+  "mcp": {
+    "command": "npm run typecheck && npm run test:bas && npm run test:packaging",
+    "workdir": "opentakeoff/mcp",
+    "session": 10599,
+    "exit_code": 0,
+    "typecheck": "pass",
+    "existing_bas_passed": 127,
+    "existing_bas_duration_ms": 44594.504375,
+    "comparison_and_journal_passed": 26,
+    "comparison_and_journal_duration_ms": 18117.190959,
+    "new_journal_service_tests": 7,
+    "packaging_passed": 4,
+    "packaging_duration_ms": 88.632333,
+    "log": "opentakeoff/tmp/bas-revision-journal-mcp-final-1.log"
+  },
+  "python": {
+    "session": 26010,
+    "exit_code": 0,
+    "passed": 452,
+    "explicit_packaging_skipped": 1,
+    "seconds": 6.31,
+    "mypy_source_files": 20,
+    "explicit_OT_BAS_VERIFY_PACKAGE_1_passed": 1,
+    "explicit_packaging_seconds": 0.88,
+    "logs": [
+      "opentakeoff/tmp/bas-revision-journal-pytest-1.log",
+      "opentakeoff/tmp/bas-revision-journal-mypy-1.log",
+      "opentakeoff/tmp/bas-revision-journal-python-package-1.log"
+    ]
+  },
+  "journal_baseline_before_further_evaluation": {
+    "benchmark": "complete_bas_revision_journal",
+    "fixture_bytes": 3511836,
+    "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+    "node": "v24.13.1",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M2",
+    "elapsed": [
+      {
+        "prepare_ms": 4093.0787499999997,
+        "record_ms": 4137.260417,
+        "reopen_ms": 4032.1137909999998,
+        "journal_bytes": 1875
+      },
+      {
+        "prepare_ms": 4013.1027080000003,
+        "record_ms": 4190.212125000002,
+        "reopen_ms": 4247.641374999999,
+        "journal_bytes": 3811
+      },
+      {
+        "prepare_ms": 4043.6708329999965,
+        "record_ms": 4131.481833999998,
+        "reopen_ms": 4018.545416000001,
+        "journal_bytes": 5747
+      }
+    ],
+    "initial_rss": 590725120,
+    "incremental_peak_rss": 251494400,
+    "rows": 496,
+    "selected_saved_records_replayed_in_python": 2,
+    "point_matrices_checked_in_python": 12,
+    "source_bytes_verified": false,
+    "pdf_extraction": false,
+    "public_walkthrough": false
+  },
+  "final_benchmarks": [
+    {
+      "benchmark": "complete_bas_revision_comparison",
+      "budget_ms": 6000,
+      "budget_incremental_rss": 536870912,
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed_ms": [
+        4035.5409999999997,
+        3997.7310420000013,
+        3958.340209
+      ],
+      "initial_rss": 572882944,
+      "incremental_peak_rss": 148766720,
+      "rows": 496,
+      "calculated": 175,
+      "selected_saved_records_replayed_in_python": 2,
+      "point_matrices_checked_in_python": 12,
+      "encoded_bytes": 6462912,
+      "source_bytes_verified": false,
+      "pdf_extraction": false,
+      "public_walkthrough": false
+    },
+    {
+      "benchmark": "complete_bas_revision_journal",
+      "budget_per_operation_ms": 6000,
+      "budget_incremental_rss": 536870912,
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed": [
+        {
+          "prepare_ms": 4131.255333000001,
+          "record_ms": 4166.510332999999,
+          "reopen_ms": 4111.415584,
+          "journal_bytes": 1875
+        },
+        {
+          "prepare_ms": 4111.751,
+          "record_ms": 4169.79925,
+          "reopen_ms": 4092.414917000002,
+          "journal_bytes": 3811
+        },
+        {
+          "prepare_ms": 4061.5593339999978,
+          "record_ms": 4158.457582999999,
+          "reopen_ms": 4104.182958000005,
+          "journal_bytes": 5747
+        }
+      ],
+      "initial_rss": 581599232,
+      "incremental_peak_rss": 245071872,
+      "rows": 496,
+      "selected_saved_records_replayed_in_python": 2,
+      "point_matrices_checked_in_python": 12,
+      "source_bytes_verified": false,
+      "pdf_extraction": false,
+      "public_walkthrough": false
+    }
+  ],
+  "preservation_benchmarks": [
+    {
+      "benchmark": "retained_bas_sync_history",
+      "fixture_bytes": 3511836,
+      "saved_calculation_records": 31,
+      "node": "v24.13.1",
+      "budget_ms": 5000,
+      "elapsed_ms": [
+        3123.4156249999996,
+        2976.489125,
+        2994.608958
+      ],
+      "max_ms": 3123.4156249999996,
+      "python_replay": false
+    },
+    {
+      "benchmark": "bas_drawing_history",
+      "fixture": "controlled_1000_pages_100_revisions",
+      "accounting_entries": 201000,
+      "node": "v24.13.1",
+      "elapsed_ms": [
+        51.336208000000056,
+        41.61399999999992,
+        32.58112500000004
+      ],
+      "budget_ms": 2000,
+      "initial_rss": 88276992,
+      "observed_rss_bytes": [
+        191692800,
+        204226560,
+        235798528
+      ],
+      "peak_rss_bytes": 235798528,
+      "peak_incremental_rss_bytes": 147521536,
+      "budget_incremental_rss_bytes": 268435456,
+      "scope": "synchronous_journal_validation_not_extraction_or_approval"
+    },
+    {
+      "benchmark": "bas_revision_inventory",
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed_ms": [
+        3208.3425420000003,
+        3160.7312919999995,
+        3171.191417
+      ],
+      "budget_ms": 5000,
+      "incremental_peak_rss": 76988416,
+      "rss_budget": 536870912,
+      "items": 496,
+      "encoded_report_bytes": 3044819,
+      "source_bytes_checked": false,
+      "python_replay": false
+    }
+  ],
+  "coverage": [
+    "Seven earlier workflow revisions remain readable; explicit revision 8 required for journal data",
+    "Seven web tests cover IDB reload, ordinary JSON export/import, retention merges, typed selectors, fork/tamper rejection, UTF-8 and count bounds",
+    "Actual Python changed-count/SOO comparison, unknowns and unresolved correspondence survive record/reopen",
+    "Canonical exact retry after later events; different request/origin/head/report fingerprint fails",
+    "Existing SOO, equipment, assembly, assignment/assembly-calculation, engineering and drawing writes preserve journal and historical replay",
+    "Caller-owned nested metadata and requests cannot change in-flight results; runtime/abort/deadline failures preserve caller state",
+    "Re-signed false report identity is explicitly mismatched; re-signed foreign correspondence cannot replay"
+  ],
+  "integrity_boundary": "Workflow structure/hash checks are not comparison replay, source-byte verification, authenticated identity or approval. Restored journal entries remain unapproved and must be individually replayed before using differences.",
+  "initial_failures": [
+    "Mechanical schema refactor initially omitted the BasRevisionInventory type import; corrected. Original type-failure log retained as tmp/bas-revision-journal-types-1.log."
+  ],
+  "limitations": [
+    "No public comparison UI/MCP walkthrough yet",
+    "Retained real Fort Sam source evidence plus controlled hardware decisions; same basis benchmark is not issued-addendum validation",
+    "Existing 13 web skips, 3 lint warnings, legacy known-fail One-Click probes and build/Agent configuration warnings remain",
+    "No full corpus or blind holdout acceptance in this checkpoint",
+    "Benchmark covers 496 comparison rows and one through three journal events, not maximum-size latency"
+  ],
+  "safety": {
+    "extraction_vectorgrid_symbol_changes": false,
+    "python_math_changes": false,
+    "keys_scorers_or_thresholds_changed": false,
+    "holdout_opened": false,
+    "cost_pricing_labor_models_added": false,
+    "push_merge_deploy": false,
+    "workflow_revision": "bas_revision_8",
+    "goal_complete": false
+  },
+  "remaining": [
+    "Public spacious revision comparison, explicit pairing, pinned-version choices, source inspection, drafts, paging, reload and export on actual UI and packaged MCP",
+    "Issue decisions, dependency-bound selective approvals and approved takeoff snapshots",
+    "Remaining A–D real-corpus and untouched holdout acceptance",
+    "Only then the appended research-gated deformation-tolerant symbol and installed-plan reconciliation phase"
+  ]
+}
