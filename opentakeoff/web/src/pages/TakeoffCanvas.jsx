@@ -54,6 +54,7 @@ import {
   splitConversationalAnswer,
 } from "../lib/agentTakeoff.js";
 import RevisionsPanel from "../components/RevisionsPanel.jsx";
+import BasSyncNotice from "../components/BasSyncNotice.jsx";
 import UserGuide from "../components/UserGuide.jsx";
 import TakeoffsPanel, { clampPanelW, CONDITION_DND_MIME, ConditionAppearanceEditor } from "../components/TakeoffsPanel.jsx";
 import { HATCHES, PALETTE, NO_FILL, HatchPattern, HatchSwatch } from "../components/hatches.jsx";
@@ -12907,6 +12908,7 @@ export default function TakeoffCanvas() {
         />
       )}
 
+      <BasSyncNotice store={store} hidden={saveState === 'conflict' || !!loadError} />
       {saveState === "conflict" && (
         <div role="alert" aria-label="Unsaved version conflict" style={{ position: "absolute", bottom: "calc(var(--sp-6) + var(--sp-3))", left: "50%", transform: "translateX(-50%)", zIndex: Z.toast, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--sp-3)", width: "min(42rem, calc(100% - 2 * var(--sp-4)))", padding: "var(--sp-3)", background: "var(--paper-bright)", border: "1px solid var(--c-danger)", boxShadow: "var(--shadow-2)", fontSize: "var(--fs-m)", color: "var(--ink)" }}>
           <span>{ANNOTATION_CONFLICT_MESSAGE}</span>

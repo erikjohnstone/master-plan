@@ -12,6 +12,14 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Preserve compatible BAS captures and review/calculation history during
+  local-first sync instead of treating the entire workflow as last-writer-wins.
+  Invalid or competing review histories remain unmerged with a durable
+  **BAS sync needs review** notice, an exportable remote recovery copy when
+  available, and an explicit retry. Older snapshots cannot delete known history.
+  Source lineage is verified; no calculation, approval or installed-count claim
+  is created. Synced ZIP restore and atomic cross-device coordination remain open.
+
 - Add public MCP source-inclusive restore with shared preview/merge and mandatory
   merged-history Python replay. Exact originals, previous state, replay receipt
   and a re-importable merged backup are retained in a new caller-directed local

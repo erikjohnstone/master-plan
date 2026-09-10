@@ -1,5 +1,24 @@
 ## Active work
 
+2026-09-10 checkpoint after **7692b78b**: fixed a reproduced sync history loss
+(three BAS captures became two under whole-object remote-wins). Shared retention
+and lineage now govern known BAS histories in sync; incompatible branches stay
+unmerged with a durable notice and exact remote recovery export when available.
+Final web **2,742 pass / 13 skips**, **85 focused pass**, MCP **119 BAS + 4 packaging
+pass**, types/build green. Unchanged five-second serial history benchmark:
+**3.286 / 3.184 / 3.162 s**. Initial parallel timing failure is documented.
+Real Fort Sam app + actual folder composite over origin-private files passes
+controlled review conflict, recovery download, reload and retry; six final
+screenshots inspected. No live cloud/OS-sync or real addendum claim. Details:
+`../opentakeoff/docs/bas-production/SYNC_HISTORY_PROOF.md`.
+
+Synced ZIP restore remains gated pending in-flight/cross-tab/write-bookkeeping
+coordination. Provider revisions are read-then-write, not server CAS. Main A–E
+goal, journal recovery, drawing correspondence, scoped approvals and remaining
+corpus/untouched-holdout gates remain active; symbol/installed-plan extension
+stays last. No new full-corpus score, extraction/math/scorer/model change,
+holdout access, push, merge or deployment.
+
 2026-09-10 checkpoint after **a23054ec**: public MCP source-inclusive restore now
 uses the shared merge/replay contract and actual Python, retains all original
 versions plus prior state, preserves browser-only payload fields and reopens exact

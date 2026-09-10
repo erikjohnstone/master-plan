@@ -105,6 +105,18 @@ reload before saving. This is not an archive restore action, and ordinary JSON
 and `.otk` imports retain their existing behavior. Legacy cloud-only storage is
 unchanged; the local-first adapter forwards the local version guard.
 
+Local-first sync preserves compatible BAS history from known versions. An older
+snapshot omitting it is not a deletion request. **BAS sync needs review** means
+the histories cannot safely combine; local work remains available and that sync
+operation did not overwrite either takeoff. **Export remote recovery copy**
+downloads the saved unmerged remote JSON when a copy was successfully retained.
+It is unverified, unapproved and contains no original PDFs. If no copy could be
+saved, the notice says so. Keep both takeoffs; do not edit fingerprints or erase
+events to force them to merge. **Check sync again** retries after the conflict
+has been addressed; it does not choose a winning review decision. The notice
+survives reload. This protection does not supply atomic cross-device writes or
+enable synced ZIP restoration. See [sync history proof](bas-production/SYNC_HISTORY_PROOF.md).
+
 On the development branch, **Takeoff → Equipment** displays original equipment
 schedule rows and a separate **Scoped equipment register**. **Create scope**
 records established building, level, system and phase labels; leave missing

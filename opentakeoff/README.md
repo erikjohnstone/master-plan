@@ -55,6 +55,12 @@ matching PDF bytes, not merely its filename. Equipment assignment, source-PDF
 archiving and approved review/revision workflows remain in development.
 Existing engineering and row exports keep their current meaning.
 
+Local-first sync now retains compatible BAS history across known saved versions.
+Conflicting review branches produce **BAS sync needs review**, with an exportable
+remote recovery copy when available and an explicit retry—not silent replacement
+or automatic approval. Synced ZIP restore and cross-device atomicity remain work
+in progress. See the [history preservation proof](docs/bas-production/SYNC_HISTORY_PROOF.md).
+
 **Point lists → Sequences & links** retains original SOO text and compares
 supported monitoring clauses with an explicitly linked matrix and equipment
 reference. Source-preserving link edits and removals retain their history through

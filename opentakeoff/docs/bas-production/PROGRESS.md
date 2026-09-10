@@ -1,5 +1,39 @@
 # BAS production workflow progress
 
+## BAS history-safe sync reconciliation — 2026-09-10
+
+After **7692b78b**, reproduced a real generic-sync loss: three independently valid
+BAS captures became two under whole-object remote-wins, labeled a clean merge.
+Shared append-only retention now keeps all three and rejects conflicting review
+branches. Actual sync seed, adoption, first push, older/missing snapshots and
+crash recovery use shared lineage validation. Invalid/unmerged remote JSON gets
+a deduplicated recovery copy when possible and a durable **BAS sync needs review**
+notice with exact export/retry; local work is retained. No math/approval is inferred.
+
+Final web **78501 exit 0: 2,742 pass / 13 existing skips**, 23.581 s tests,
+5.29 s build. **11 new cases; 85 focused pass**. Five-second history benchmark
+initially failed under the full parallel suite; the unchanged budget now runs
+serially within `npm run check`: final **3.286 / 3.184 / 3.162 s** for the real
+3.5 MB / 31-record retained fixture. MCP **76745 exit 0: 119 BAS + 4 packaging
+pass**, types green. Existing warning/One-Click caveats remain. Full standalone
+Python and full corpus/holdout were not rerun; no new extraction accuracy claim.
+
+Actual browser **56962 exit 0**, `evidence/sync-history-browser-3`: real Fort Sam
+upload + retained history → actual folder composite with origin-private file
+transport → controlled competing review → unchanged local/remote histories →
+exact recovery download → reload notice → compatible retry. All 31 historical
+records and exact active PDF bytes stay intact; no page errors. Six final light/
+dark 1280/1440/1920 screenshots visually inspected; dark secondary copy corrected.
+This is not a live cloud/OS-sync test or real addendum. See `SYNC_HISTORY_PROOF.md`.
+
+Important research correction: existing Drive/folder providers use app-level
+read-then-write revisions, **not atomic server CAS**. Cross-tab in-flight restore
+coordination and multi-key adoption bookkeeping remain next; synced ZIP restore
+stays gated until those are complete. Continue journal recovery UX, reviewed
+drawing correspondence, scoped approvals, A–D corpus/holdout gates, and only then
+the appended researched symbol/installed-plan phase. Main goal remains active.
+No VectorGrid/symbol/table/cite/bbox/math/key/cost/labor change, push or merge.
+
 ## Public MCP archive restoration — 2026-09-10
 
 After **a23054ec**, public MCP now previews and explicitly commits the same shared

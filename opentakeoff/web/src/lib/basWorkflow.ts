@@ -285,6 +285,19 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     current_capture_id: activateIncoming ? right.current_capture_id : left.current_capture_id ?? right.current_capture_id });
 }
 
+/** Retain append-only evidence from all known versions during reconciliation.
+ * A missing/older snapshot is not an instruction to delete BAS history. The
+ * caller's selected version supplies navigation only, not a winning review
+ * branch. Conflicting event chains still fail the existing shared merge gate.
+ * Synchronous structure gate; verifyBasWorkflow must precede adoption/use. */
+export function retainBasWorkflowHistory(selected: unknown, ...versions: unknown[]): BasWorkflow | null {
+  let merged = mergeBasWorkflows(selected, null);
+  const selection = merged?.current_capture_id;
+  for (const version of versions) merged = mergeBasWorkflows(merged, version);
+  if (merged && selection !== undefined) merged.current_capture_id = selection;
+  return merged;
+}
+
 export function activeBasCapture(workflow: BasWorkflow | null | undefined) {
   return workflow?.captures.find(c => c.capture_id === workflow.current_capture_id) ?? null;
 }

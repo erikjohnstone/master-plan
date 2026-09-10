@@ -55,8 +55,11 @@ export function buildLocalFirstStore(projectId, drive, cloud) {
     onRemoteUpdate: (data, rev) => bridge.onRemoteUpdate?.(data, rev),  // null until the canvas registers
     isBusy: () => bridge.isBusy?.() ?? false,                          // null → not busy (safe default)
     saveSnapshot: (label, payload, fid) => snapSync.saveSnapshot(label, payload, fid), // loser backups sync via Slice 2
+    onSyncIssue: issue => bridge.onSyncIssue?.(issue),
   });
   bridge.flushPending = annSync.flushPending;  // canvas idle-drain hook (used in Slice 5b)
+  bridge.checkRemote = annSync.checkRemote;
+  bridge.readSyncIssue = annSync.readSyncIssue;
 
   // Presence (#317) — the same heartbeat files, through the Drive provider
   // surface snapshots already ride. A 10-minute beat keeps an 8-hour session
