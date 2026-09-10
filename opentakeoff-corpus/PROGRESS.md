@@ -1,5 +1,20 @@
 ## Active work
 
+2026-09-09 priority clarification: finish the five BAS workflows first. The
+user-authorized symbol-deformation/installed-plan reconciliation research and
+hardening is appended as a final phase in `opentakeoff/docs/BAS_PRODUCTION_GOAL.md`,
+not a replacement. Initial source/code leads are retained in
+`opentakeoff/docs/bas-production/SYMBOL_RECONCILIATION_RESEARCH.md`; no new symbol
+code. Main-goal checkpoint **0f8fcd72** remains local. Browser race attempt 1
+passed cancellation and exactly-once retry checks before setup timeout; attempt
+2 is terminal with an import/persistence timeout. Neither run is a full pass.
+Instrumentation-only reruns **94873 / 74627 exit 0**, 39.635 / 39.353 s, now
+pass all four safety checks including late response across a newer import,
+exact export/reload and zero browser errors. No deadlines or assertions changed;
+earlier timeout causes remain unproven, not claimed repaired. Engineering
+exports and review/revisions remain on the main critical path. Detailed current
+evidence is in BAS production progress below.
+
 2026-09-09 newest checkpoint supersedes live/pending statuses below: full web
 **60382 exit 0**, **2,665 pass / 13 skips**, types/lint/bench/build pass; Python
 **438 pass / mypy 18 files**; browser-4 passes both themes/three widths, exact

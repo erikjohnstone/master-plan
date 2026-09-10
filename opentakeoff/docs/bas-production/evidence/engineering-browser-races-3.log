@@ -1,0 +1,52 @@
+{"label":"open application","start_ms":411,"duration_ms":461}
+{"label":"upload original PDF","start_ms":873,"duration_ms":180}
+{"label":"wait for graph readiness","start_ms":1053,"duration_ms":1743}
+{"label":"open imported sheet","start_ms":2798,"duration_ms":2}
+{"label":"ordinary takeoff import","start_ms":2800,"duration_ms":7}
+{"label":"read full persisted workflow","start_ms":2807,"duration_ms":1}
+{"label":"read full persisted workflow","start_ms":2910,"duration_ms":481}
+{"label":"read full persisted workflow","start_ms":3492,"duration_ms":2}
+{"label":"read full persisted workflow","start_ms":3596,"duration_ms":3}
+{"label":"read full persisted workflow","start_ms":3700,"duration_ms":1}
+{"label":"read full persisted workflow","start_ms":3803,"duration_ms":4}
+{"label":"read full persisted workflow","start_ms":3908,"duration_ms":4}
+{"label":"read full persisted workflow","start_ms":4013,"duration_ms":1}
+{"label":"read full persisted workflow","start_ms":4116,"duration_ms":373}
+{"label":"read full persisted workflow","start_ms":4490,"duration_ms":274}
+{"label":"open Takeoff workspace","start_ms":4770,"duration_ms":1094}
+Cancel preview after actual Python response is ready
+{"label":"read full persisted workflow","start_ms":10856,"duration_ms":487}
+{"label":"read full persisted workflow","start_ms":13995,"duration_ms":361}
+Cancel recording after actual Python response is ready
+{"label":"read full persisted workflow","start_ms":16643,"duration_ms":267}
+{"label":"read full persisted workflow","start_ms":17075,"duration_ms":291}
+{"label":"read full persisted workflow","start_ms":17467,"duration_ms":313}
+{"label":"read full persisted workflow","start_ms":17882,"duration_ms":302}
+{"label":"read full persisted workflow","start_ms":18285,"duration_ms":274}
+{"label":"read full persisted workflow","start_ms":18660,"duration_ms":2533}
+{"label":"read full persisted workflow","start_ms":21295,"duration_ms":263}
+{"label":"read full persisted workflow","start_ms":21558,"duration_ms":255}
+{"label":"read full persisted workflow","start_ms":23177,"duration_ms":428}
+{"label":"open application","start_ms":24491,"duration_ms":347}
+{"label":"upload original PDF","start_ms":24838,"duration_ms":139}
+{"label":"wait for graph readiness","start_ms":24980,"duration_ms":1473}
+{"label":"open imported sheet","start_ms":26455,"duration_ms":2}
+{"label":"ordinary takeoff import","start_ms":26456,"duration_ms":6}
+{"label":"read full persisted workflow","start_ms":26462,"duration_ms":1}
+{"label":"read full persisted workflow","start_ms":26564,"duration_ms":470}
+{"label":"read full persisted workflow","start_ms":27135,"duration_ms":2}
+{"label":"read full persisted workflow","start_ms":27238,"duration_ms":3}
+{"label":"read full persisted workflow","start_ms":27342,"duration_ms":4}
+{"label":"read full persisted workflow","start_ms":27447,"duration_ms":4}
+{"label":"read full persisted workflow","start_ms":27553,"duration_ms":4}
+{"label":"read full persisted workflow","start_ms":27659,"duration_ms":6}
+{"label":"read full persisted workflow","start_ms":27766,"duration_ms":349}
+{"label":"read full persisted workflow","start_ms":28115,"duration_ms":264}
+{"label":"open Takeoff workspace","start_ms":28384,"duration_ms":1046}
+Delay recording across ordinary import of controlled newer decisions
+{"label":"read full persisted workflow","start_ms":35924,"duration_ms":362}
+{"label":"read full persisted workflow","start_ms":36388,"duration_ms":983}
+{"label":"read full persisted workflow","start_ms":37471,"duration_ms":274}
+{"label":"read full persisted workflow","start_ms":37745,"duration_ms":252}
+{"label":"read full persisted workflow","start_ms":38566,"duration_ms":259}
+{"label":"read full persisted workflow","start_ms":39256,"duration_ms":373}

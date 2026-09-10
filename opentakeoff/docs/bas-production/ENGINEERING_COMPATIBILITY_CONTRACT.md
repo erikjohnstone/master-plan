@@ -284,6 +284,20 @@ IndexedDB/export/import, and mathematically forged/re-hashed results.
 
 ### Shared transport acceptance before integration
 
+Browser race acceptance (2026-09-09, before the dedicated walkthrough): use an
+original development PDF and ordinary reviewed-workflow import. Delay delivery
+of a successful **real** HTTP/Python response, deliberately ignoring the fetch
+abort signal in the test transport to exercise the application's own post-await
+guard. Cancelled preview and record operations must retain exact persisted
+history and the draft; a later explicit retry may save exactly one new event.
+Import a controlled newer equipment decision while another record response is
+held: releasing that response must not replace the new dependency/history.
+Include reload and JSON export equality. The delay is fault injection, not a
+fixture result or evidence of automatic rating discovery. This follows the
+[AbortSignal post-await check](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/throwIfAborted)
+and explicit network-control testing described by
+[Playwright](https://playwright.dev/docs/network), rechecked 2026-09-09.
+
 All eleven Python check variants need strict, non-coercing UI/MCP transport
 schemas. They preserve decimal strings, units, nulls, evidence bases and original
 array order. JS validates structure and response lineage, not engineering math;

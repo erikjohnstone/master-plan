@@ -1,0 +1,10 @@
+file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/fixtures/wait-for-async.mjs:16
+  throw new Error(`Timed out waiting for ${label} after ${attempts} attempts; last resolved value: ${JSON.stringify(last)}`);
+        ^
+
+Error: Timed out waiting for async condition after 5 attempts; last resolved value: false
+    at waitForAsync (file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/fixtures/wait-for-async.mjs:16:9)
+    at async setup (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-engineering-races.mjs:37:3)
+    at async <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-engineering-races.mjs:84:13)
+
+Node.js v24.13.1

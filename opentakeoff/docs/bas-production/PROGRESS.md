@@ -1,5 +1,52 @@
 # BAS production workflow progress
 
+## User extension and current priority — 2026-09-09
+
+The user explicitly added a final research-gated phase for deformation-tolerant
+symbol extraction and installed-plan reconciliation, then reaffirmed that the
+main five workflows must be finished first. The detailed acceptance file
+`docs/BAS_PRODUCTION_GOAL.md` now records that sequence and its no-training,
+accuracy, speed, evidence and VectorGrid-preservation gates. The original goal
+tool's short objective still says five workflows; the referenced detailed goal
+and the latest user instruction govern this additive extension. Initial primary
+research and code findings are saved in `SYMBOL_RECONCILIATION_RESEARCH.md`;
+research is not complete and no symbol/extraction implementation has begun.
+
+Main-goal implementation checkpoint is local commit **0f8fcd72**. The browser
+race checks now have two consecutive complete passes. Failed-first evidence:
+**97414 exit 1** completed cancelled
+preview, cancelled record, and exactly-one-event retry/export/reload checks,
+then timed out opening a second workspace. Unchanged rerun **76048 exit 1**
+timed out during initial ordinary-import persistence (five full-payload polls
+in 30 seconds), with no page errors. Both failed-run evidence directories are
+retained. Cause is not established; investigate setup/poll/renderer timing,
+without extending deadlines or weakening state-equality assertions. The
+delayed response across newer-import case was still unverified at that point.
+
+Adding timing observations only, without changing assertions, deadlines,
+production code, or the full-payload polling strategy, produced **94873 exit 0**
+(`engineering-browser-races-3/checks.json`, **39,635 ms**) and an unchanged repeat
+**74627 exit 0** (`engineering-browser-races-4/checks.json`, **39,353 ms**).
+Both verify actual HTTP/Python response delivery after cancellation, exact
+preserved history/drafts, exactly one event after explicit retry, rejection of
+late recording across an ordinary controlled newer-equipment import, and exact
+JSON export/reload. Zero page errors. Both race-3 screenshots were inspected.
+Full persisted-workflow reads in race-3 were generally 1–487 ms, with a 2,533 ms
+outlier; this does not establish the cause of the two earlier setup timeouts or
+prove they are repaired. These are controlled transport/decision scenarios,
+not real addenda or all failure modes. The harness passes `node --check`.
+Focused shared service/review gates **89363 exit 0**:
+`engineering-race-focused-mcp-1.log`, **15 pass / 0 skips / 0 failures**,
+8,229.125833 ms. This includes a 1,001-event batch-boundary replay with rejection
+of corruption in the final batch. The existing 31-file documentation link gate
+and `git diff --check` pass. No full extraction corpus rerun was needed for
+this documentation/browser-harness-only checkpoint; baseline metrics above
+are not new results.
+
+JSON preserves
+engineering history; spreadsheet export completeness and workflow E remain
+pending. No push, merge, deploy, pricing/labor or VectorGrid algorithm change.
+
 ## Packaged VectorGrid loading and engineering parity — 2026-09-09
 
 This checkpoint supersedes pending/live statements in the preceding entries.
