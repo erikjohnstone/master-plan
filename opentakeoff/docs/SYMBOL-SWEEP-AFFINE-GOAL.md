@@ -553,7 +553,7 @@ explicitly "not a plan-scale seed". Enable it there, bounded by
 |---|---|---|---|---|---|---|
 | Before (`18f0c9e`) | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 — no real instances found to author, see Findings | 0 | not remeasured (runner change is additive-only; no matching-code touched) | Phase 0 done: schema extended, runner campaign-aware (commit `1d97d8f`), exhaustive discovery search run, honest 0-instance affine campaign is the recorded before-number |
 | Phase 1 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (unchanged — `affine` off everywhere in the runner; see Findings) | 0 | ~19.6 min sum of 47 case `elapsed_ms` (measures the unchanged rigid path, not affine — nothing turns `affine` on yet, so this is the same no-op baseline as Phase 0, not a real perf measurement of refinement cost) | `symbolAffine.ts` (fit/decompose/bounds/correspondences, commit `ea083e2`) wired into `matchSymbol` (commit `6e1e30e`): a rigid-search near-miss gets refined and re-scored; an out-of-bounds fit is disclosed and withheld, never committed. 399 tests green (361 pre-existing + 35 pure-math + 3 new integration tests). Gate 1 met: existing behaviour unchanged (`affine` absent is proven byte-for-byte identical, both by test and by the unchanged corpus numbers); the new tests prove the ON path works. Real corpus recall stays 0/0 because Phase 0 found no real affine instances to test against in this corpus — Phase 1's own correctness is carried entirely by synthetic fixtures, per this document's own Phase 0 revision. |
-| Phase 2 | | | | | | |
+| Phase 2 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (unchanged — `affine` off everywhere in the runner; see Findings) | 0 | ~19.6 min sum of 47 case `elapsed_ms`, statistically identical to Phase 1's (same reason: nothing in the runner turns `affine` on, so this measures the unchanged rigid path again, not the new candidate generation's real cost) | Continuous-rotation candidate generation (commit `bf4630c`): vote-before-score geometric hashing appends a voted rotation as a new dynamic `xforms` entry, so the existing scoring/classification code (already generic over `xforms[]`) handles it unmodified. 407 tests green (399 pre-existing + 8 new: 4 off-grid angles found exactly via a genuinely asymmetric fixture, a mirrored case, `rotations:false` disables it, candidate-growth guard). Gate 2 met on the no-op axis (byte-for-byte proof, both by test and unchanged corpus numbers) and on the synthetic-fixture axis (real off-grid rotation is now found — the whole point of this phase); real corpus recall stays 0/0 for the same reason as Phase 0/1 (no real instances exist in this corpus to move it). Also fixed a real, generically-applicable bug in the shared `mergeProposals` (see Findings) — pinned by its own regression test. |
 | Phase 3 | | | | | | |
 | Phase 4 | | | | | | |
 | Default flip | | | | | | |
@@ -628,6 +628,45 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   a blocking count for Phase 1 to start. Phase 1–4's own synthetic
   fixtures (already specified in each phase's §3) carry the correctness
   burden this corpus cannot.
+
+- **2026-09-10 — `mergeProposals` (shared by every sweep, not only affine
+  ones) dropped a losing candidate's extra fields onto the winner's `xf`.**
+  Its tie-break correctly decided WHICH candidate should win (`s.score >
+  twin.score || (tie && s.xf < twin.xf)`) but then copied only the five
+  named fields (`at`/`score`/`xf`/`rotation`/`mirrored`) onto the kept
+  object — Phase 1's `transform`/`mAt`/`boundsFailed` fields, added to
+  `Scored` but not to `mergeProposals`'s own five-field contract, survived
+  from whichever candidate happened to be `kept` FIRST even after a later,
+  better candidate won the tie-break. Caught by Phase 2's own "plain
+  translated copy" test: a clean rigid xf=0 match (score 1.0, no transform
+  needed) tied in score against a spurious xf=4 candidate that Phase 1 had
+  refined up to the same 1.0 via a wrong-but-self-consistent correspondence
+  set (`rotation_deg: 184.2°`, `extra: 0.646`) — the merge correctly
+  recorded `xf: 0` as the winner but the stale `transform` from xf=4 rode
+  along, producing a row that claimed to be BOTH a clean rigid match and an
+  affine-refined one. Fixed by replacing the whole kept-array slot with the
+  winner's own object on a tie (`kept[twinIdx] = { ...s }`) instead of
+  copying named fields — generic, so it protects every current and future
+  caller that attaches its own extra fields to a scored candidate, not just
+  this one. Pinned by a regression test using the exact scenario above.
+
+- **2026-09-10 — the shared `SYMBOL` test fixture (square + one diagonal +
+  a stub) has its own real near-symmetry that Phase 1's narrow near-grid
+  refinement never surfaced but Phase 2's much wider rotation search finds
+  easily.** A specific mirror+rotation combination reproduces the fixture's
+  own ink almost exactly, so a large-angle rotation test built on `SYMBOL`
+  can converge on a technically-scoring-1.0 but semantically wrong
+  alternate reading (`mirrored: true`, large `extra`) instead of the
+  intended plain rotation. Confirmed NOT a bug in the affine math itself:
+  an independently-constructed, genuinely asymmetric open-polyline fixture
+  (`ASYM2` in `symbolsweep.test.ts`, distinct segment lengths, no
+  near-symmetry) recovers every tested angle (30°/57°/123°/211°, plus a
+  mirrored 40° case) exactly. Lesson for future phases' own tests: keep
+  `SYMBOL` for what it already exercises well (rigid symmetry, dedup,
+  negatives) and reach for an asymmetric fixture whenever a test's whole
+  point is pinning down ONE unambiguous transform — Phase 3's own stretch/
+  shear tests should do the same, not assume `SYMBOL`'s asymmetry holds
+  under every distortion.
 
 ---
 
