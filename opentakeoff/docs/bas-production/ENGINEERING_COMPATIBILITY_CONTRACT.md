@@ -238,6 +238,31 @@ resources, solver-result equality, replay and actual Python process parity.
 
 ## Completion gates
 
+### Complex browser form acceptance (2026-09-10, before implementation)
+
+The single live signal-note walkthrough does not prove the other ten forms.
+Reuse the existing controlled Python integration cases and explicit ownership
+maps without changing numeric expectations. Bind their declared resources to
+reviewed equipment from an original development PDF, calculate through actual
+Python, then ordinary-import each saved review into a fresh test browser.
+These are controlled capabilities, not twelve real projects or discovered
+hardware. Original PDF/capture/equipment/assembly records must remain unchanged.
+
+Through labeled visible controls, visit every top-level input and every nested
+rating/list entry for all eleven check variants. Check exact values, units,
+nulls and input-basis/reason text; do not inject React state or fake results.
+Exercise real nested edits, a known failed constraint followed by correction,
+preview without persistence, recorded history, JSON export/reload equality and
+shared Python replay. Preserve old failure outcomes. Capture complex power and
+network forms in both themes at the required desktop widths and inspect them.
+Test setup may prepare source-bound controlled imports through the same shared
+service; it must not be presented as UI creation from blank for every variant.
+
+Use scoped labels/fieldset groups per [W3C grouping guidance](https://www.w3.org/WAI/tutorials/forms/grouping/)
+and [Playwright's locator guidance](https://playwright.dev/docs/locators),
+rechecked 2026-09-10. This is test/verification-only work unless a reproduced
+production defect requires a separately documented shared-path decision.
+
 ### Ownership and history acceptance before implementation
 
 The register retains the complete engineering input, stable declared resources

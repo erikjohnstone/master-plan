@@ -1,0 +1,94 @@
+{
+  "family": "analog",
+  "phase": "ordinary import",
+  "error": "Error: Timed out waiting for analog ordinary import after 79 attempts; last resolved value: false",
+  "stack": "Error: Timed out waiting for analog ordinary import after 79 attempts; last resolved value: false\n    at waitForAsync (file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/fixtures/wait-for-async.mjs:16:9)\n    at runNextTicks (node:internal/process/task_queues:64:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-engineering-families.mjs:130:5)",
+  "observations": [
+    {
+      "family": "signal",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 15,
+      "exact_export_reload": true
+    }
+  ],
+  "fields": [
+    {
+      "family": "signal",
+      "path": "test-check.source.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_direction",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_direction.value",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_direction",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_direction.value",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_mode",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_mode.value",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_modes",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_modes.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_modes.value",
+      "kind": "array",
+      "length": 1
+    }
+  ],
+  "errors": []
+}

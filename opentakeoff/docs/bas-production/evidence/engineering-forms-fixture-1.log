@@ -1,0 +1,19 @@
+✔ owned signal checks save and replay through Python; every selected resource is checked (324.766208ms)
+✔ owned analog checks save and replay through Python; every selected resource is checked (308.50775ms)
+✔ owned loading checks save and replay through Python; every selected resource is checked (300.675834ms)
+✔ owned contact checks save and replay through Python; every selected resource is checked (296.986875ms)
+✔ owned pulse checks save and replay through Python; every selected resource is checked (299.642708ms)
+✔ owned power checks save and replay through Python; every selected resource is checked (300.313ms)
+✔ owned mechanical checks save and replay through Python; every selected resource is checked (301.806333ms)
+✔ owned allocation checks save and replay through Python; every selected resource is checked (310.1955ms)
+✔ owned expansion checks save and replay through Python; every selected resource is checked (306.073417ms)
+✔ owned serial checks save and replay through Python; every selected resource is checked (305.266208ms)
+✔ owned ip checks save and replay through Python; every selected resource is checked (298.718875ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3945.7795

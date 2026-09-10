@@ -1,0 +1,23 @@
+Starting signal
+Passed signal
+Starting analog
+Passed analog
+Starting loading
+Passed loading
+Starting contact
+Passed contact
+Starting pulse
+Passed pulse
+Starting power
+Passed power
+Starting mechanical
+Passed mechanical
+Starting allocation
+Passed allocation
+Starting expansion
+Passed expansion
+Starting serial
+Passed serial
+Starting ip
+Passed ip
+{"source_sha256":"c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d","observations":[{"family":"signal","checks":1,"ui_recorded_events":1,"visited_fields":15,"exact_export_reload":true},{"family":"analog","checks":1,"ui_recorded_events":1,"visited_fields":26,"exact_export_reload":true},{"family":"loading","checks":1,"ui_recorded_events":1,"visited_fields":22,"exact_export_reload":true},{"family":"contact","checks":1,"ui_recorded_events":1,"visited_fields":38,"exact_export_reload":true},{"family":"pulse","checks":1,"ui_recorded_events":1,"visited_fields":24,"exact_export_reload":true},{"family":"power","checks":1,"ui_recorded_events":3,"visited_fields":58,"exact_export_reload":true},{"family":"mechanical","checks":1,"ui_recorded_events":1,"visited_fields":31,"exact_export_reload":true},{"family":"allocation","checks":1,"ui_recorded_events":1,"visited_fields":27,"exact_export_reload":true},{"family":"expansion","checks":2,"ui_recorded_events":2,"visited_fields":92,"exact_export_reload":true},{"family":"serial","checks":1,"ui_recorded_events":3,"visited_fields":74,"exact_export_reload":true},{"family":"ip","checks":1,"ui_recorded_events":1,"visited_fields":44,"exact_export_reload":true}],"fields":451,"layouts":[{"name":"power-edit","theme":"light","width":1280},{"name":"power-edit","theme":"light","width":1440},{"name":"power-edit","theme":"light","width":1920},{"name":"power-edit","theme":"dark","width":1280},{"name":"power-edit","theme":"dark","width":1440},{"name":"power-edit","theme":"dark","width":1920},{"name":"serial-edit","theme":"light","width":1280},{"name":"serial-edit","theme":"light","width":1440},{"name":"serial-edit","theme":"light","width":1920},{"name":"serial-edit","theme":"dark","width":1280},{"name":"serial-edit","theme":"dark","width":1440},{"name":"serial-edit","theme":"dark","width":1920}],"errors":[],"duration_ms":414038,"limits":"One original PDF, eleven controlled capability families bound to reviewed owners. Tests form fidelity/corrections, not discovery, independent arithmetic truth or real addenda."}

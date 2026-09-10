@@ -1,5 +1,73 @@
 # BAS production workflow progress
 
+## All-family engineering forms verified; revision contract — 2026-09-10
+
+This is a test/research checkpoint after **eb18c7ad**, not completion of the main
+BAS goal. No production code, extraction, VectorGrid, Python arithmetic, saved
+contract, pricing or labor behavior changed. Shared-path gate: this code is
+**test-only**. The existing explicit resource maps/controlled Python cases now
+have one reusable fixture provider; all prior ownership/export assertions remain.
+The new browser harness uses the actual UI and shared Python service, not injected
+responses or React state. No push, merge or deployment.
+
+Verified terminal evidence:
+
+- Focused ownership families **91780 exit 0**, `engineering-forms-fixture-1.log`:
+  **11 pass / 0 failures / 0 skips**, 3,945.7795 ms. Full BAS MCP **14338 exit 0**,
+  `engineering-forms-bas-1.log`: **90 pass / 0 failures / 0 skips**, 15,954.567375 ms.
+  MCP types **20520 exit 0**. Browser script syntax and `git diff --check` pass.
+- Original Fort Sam PDF, same source hash as the preceding engineering proof:
+  browser **95611 exit 0**, `engineering-families-browser-3/checks.json`,
+  **414,038 ms**. All **11 families / 12 check records / 451 field-and-list
+  observations / 16 UI-recorded decisions** passed. Every family retains exact
+  inputs, prior history, original captures/equipment/assemblies, and exact JSON
+  export/reload. Preview does not persist; recording goes through actual Python;
+  no page errors. This is harness duration, not interactive response latency.
+- Nested power-state edit produces `power.scenario.operating` failure with
+  **65 VA known load against 50 VA usable capacity**; correction passes. Duplicate
+  serial address produces `serial.addresses_unique`, `duplicate_addresses: 1`;
+  correction passes. Both failed events remain in history/export. A separate
+  read-only post-run assertion checked those exact failed rule IDs/normalized
+  values, the following pass and the overall recorded counts.
+- All **12** power/network screenshots inspected: light/dark at 1280, 1440 and
+  1920. Visible controls/labels are legible and have no page-level horizontal
+  overflow. These are deeply scrolled form views, not full-form overviews; the
+  serial screenshots do not show the complete selected-node form at once.
+  Field accessibility/value assertions, not screenshots alone, verify traversal.
+- Setup failures are retained. Run 1 **76819 exit 1** completed signal then failed
+  analog import. Pure shared import reproduced the correct rejection of a
+  divergent engineering history: the harness branched from the original baseline
+  instead of continuing the saved signal event. Fix: continue the actual saved
+  history, not relax importer validation. Run 2 **5883 exit 1** completed signal
+  then waited for an absent gallery; its failure screenshot shows the correctly
+  restored canvas. Fix: use the existing conditional imported-sheet helper after
+  verified graph readiness. No production fix, assertion removal or deadline
+  extension was used. Run 3 completed every family.
+
+Coverage boundary: one original development PDF with controlled capability inputs
+bound to its reviewed equipment. This tests all-family form fidelity and selected
+correction journeys, not UI creation from blank for every family, discovered
+hardware ratings, independently new arithmetic truth or eleven real projects.
+Broader real-source grounding and final public/corpus/holdout gates remain.
+
+Workflow E research now has a concrete pre-implementation contract in
+`REVIEW_REVISION_CONTRACT.md`, with the code/primary-source findings retained in
+`REVIEW_REVISION_AUDIT.md`. It specifies issue actions that cannot dismiss a
+failed constraint into pass; explicit source-set/page accounting; independent
+source/semantic/quantity changes; selective dependency invalidation; atomic
+source-retaining snapshots; and honest local identity/storage limits. It is not
+implemented. Metadata-only addendum leads do not yet establish real revision
+pairs. No holdout bodies/keys opened for this checkpoint.
+
+No fresh full extraction-corpus run for test/docs-only changes. Prior **505/541
+takeoff, 99/129 reference, 78/91 graph cells / 133/138 anchors**, including 23
+old-path ENOENTs, remain the disclosed baseline, not newly green shipping metrics.
+The standard doc-link gate still covers 31 top-level documentation files; new
+nested contract references are checked separately. Next: source-backed coverage
+and E's shared issue catalog/source-retention implementation, followed by complete
+revision/approval UI and MCP journeys. Finish the five workflows before the
+appended symbol-engine implementation phase.
+
 ## Saved engineering review export — 2026-09-10
 
 The original five BAS workflows remain the priority; the final symbol phase has

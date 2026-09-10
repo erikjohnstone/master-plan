@@ -1,5 +1,22 @@
 ## Active work
 
+2026-09-10 newest main-goal checkpoint, after **eb18c7ad**: all eleven engineering
+families passed actual browser form verification on the original Fort Sam PDF
+with explicitly controlled capabilities. **95611 exit 0**, 414.038 s, **451
+field/list observations, 16 UI-recorded decisions**, exact JSON export/reload and
+zero page errors. Power overload and duplicate serial address fail, correction
+passes, and earlier failures remain; exact rule/normalized-value readback checked.
+All 12 power/network theme/width screenshots inspected. Source/ownership/assembly
+history remains unchanged. Full BAS MCP **14338 exit 0: 90 pass**, focused
+**91780: 11 pass**, MCP types pass. Two failed test setups are retained: divergent
+test history (correctly refused) and waiting for a gallery after canvas restoration;
+only the harness changed. No production/extraction/math edit. The new workflow E
+audit/contract specifies issue review, version correspondence, retained source
+snapshots and selective invalidation; implementation remains ahead. No new corpus
+metrics or holdout access, no push/merge/deploy. This is not automatic hardware
+discovery or full-goal completion. Detailed evidence and next work are recorded
+in `opentakeoff/docs/bas-production/PROGRESS.md`.
+
 2026-09-10 main-goal checkpoint: saved engineering review XLSX is implemented on
 one shared UI/MCP projection, with original inputs, all constraint/history data,
 source locations and applicability findings. Not an approved deliverable or

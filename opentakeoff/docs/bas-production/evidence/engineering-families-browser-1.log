@@ -1,0 +1,14 @@
+Starting signal
+Passed signal
+Starting analog
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: Timed out waiting for analog ordinary import after 79 attempts; last resolved value: false
+    at waitForAsync (file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/fixtures/wait-for-async.mjs:16:9)
+    at runNextTicks (node:internal/process/task_queues:64:5)
+    at process.processImmediate (node:internal/timers:472:9)
+    at async <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-engineering-families.mjs:130:5)
+
+Node.js v24.13.1

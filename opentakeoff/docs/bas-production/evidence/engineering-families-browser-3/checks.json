@@ -1,0 +1,2428 @@
+{
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "observations": [
+    {
+      "family": "signal",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 15,
+      "exact_export_reload": true
+    },
+    {
+      "family": "analog",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 26,
+      "exact_export_reload": true
+    },
+    {
+      "family": "loading",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 22,
+      "exact_export_reload": true
+    },
+    {
+      "family": "contact",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 38,
+      "exact_export_reload": true
+    },
+    {
+      "family": "pulse",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 24,
+      "exact_export_reload": true
+    },
+    {
+      "family": "power",
+      "checks": 1,
+      "ui_recorded_events": 3,
+      "visited_fields": 58,
+      "exact_export_reload": true
+    },
+    {
+      "family": "mechanical",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 31,
+      "exact_export_reload": true
+    },
+    {
+      "family": "allocation",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 27,
+      "exact_export_reload": true
+    },
+    {
+      "family": "expansion",
+      "checks": 2,
+      "ui_recorded_events": 2,
+      "visited_fields": 92,
+      "exact_export_reload": true
+    },
+    {
+      "family": "serial",
+      "checks": 1,
+      "ui_recorded_events": 3,
+      "visited_fields": 74,
+      "exact_export_reload": true
+    },
+    {
+      "family": "ip",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 44,
+      "exact_export_reload": true
+    }
+  ],
+  "fields": [
+    {
+      "family": "signal",
+      "path": "test-check.source.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_direction",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_direction.value",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_direction",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_direction.value",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_mode",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_mode.value",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_modes",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_modes.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_modes.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "analog",
+      "path": "test-check.source.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.source.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.source.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.sink.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.sink.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.sink.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.signal_dimension",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.output_range",
+      "kind": "known"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.output_range.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.output_range.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.output_range.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.output_range.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_range",
+      "kind": "known"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_range.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_range.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_range.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_range.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.output_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.output_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.excitation",
+      "kind": "known"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.excitation.value",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_excitation",
+      "kind": "known"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_excitation.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "analog",
+      "path": "test-check.accepted_excitation.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "loading",
+      "path": "test-check.source.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.source.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.source.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.sink.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.sink.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.sink.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.topology",
+      "kind": "known"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.topology.value",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.permitted_load",
+      "kind": "known"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.permitted_load.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.permitted_load.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.permitted_load.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.permitted_load.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.parts.0.part_id",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.parts.0.resistance",
+      "kind": "known"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.parts.0.resistance.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.parts.0.resistance.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.parts.1.part_id",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.parts.1.resistance",
+      "kind": "known"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.parts.1.resistance.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.parts.1.resistance.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "loading",
+      "path": "test-check.parts",
+      "kind": "array",
+      "length": 2
+    },
+    {
+      "family": "contact",
+      "path": "test-check.source.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.source.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.source.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.sink.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.sink.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.sink.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.provided_interface",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.provided_interface.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.accepted_interfaces",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.accepted_interfaces.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.accepted_interfaces.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "contact",
+      "path": "test-check.circuit_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.circuit_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.circuit_voltage",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.circuit_voltage.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.circuit_voltage.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.circuit_voltage.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.circuit_voltage.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_voltage",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_voltage.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_voltage.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_voltage.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_voltage.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.operating_current",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.operating_current.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.operating_current.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_current",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_current.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_current.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_current.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_current.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.circuit_load_class",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.circuit_load_class.value",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_load_classes",
+      "kind": "known"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_load_classes.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "contact",
+      "path": "test-check.rated_load_classes.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.source.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.source.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.source.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.sink.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.sink.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.sink.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.maximum_frequency",
+      "kind": "known"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.maximum_frequency.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.maximum_frequency.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.accepted_maximum_frequency",
+      "kind": "known"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.accepted_maximum_frequency.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.accepted_maximum_frequency.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.minimum_on_time",
+      "kind": "known"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.minimum_on_time.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.minimum_on_time.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.required_minimum_on_time",
+      "kind": "known"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.required_minimum_on_time.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.required_minimum_on_time.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.minimum_off_time",
+      "kind": "known"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.minimum_off_time.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.minimum_off_time.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.required_minimum_off_time",
+      "kind": "known"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.required_minimum_off_time.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "pulse",
+      "path": "test-check.required_minimum_off_time.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.supply_id",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.pool_id",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.output_voltage",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.output_voltage.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.output_voltage.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.output_voltage.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.output_voltage.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.output_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.output_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.capacity",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.capacity.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.capacity.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.usable_fraction",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.usable_fraction.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.usable_fraction.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.load_id",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.accepted_voltage",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.accepted_voltage.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.accepted_voltage.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.accepted_voltage.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.accepted_voltage.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.accepted_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.accepted_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.operating.demand",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.operating.demand.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.operating.demand.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.operating.power_factor",
+      "kind": "null"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.startup.demand",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.startup.demand.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.startup.demand.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.0.startup.power_factor",
+      "kind": "null"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.load_id",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.accepted_voltage",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.accepted_voltage.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.accepted_voltage.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.accepted_voltage.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.accepted_voltage.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.accepted_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.accepted_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.operating.demand",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.operating.demand.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.operating.demand.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.operating.power_factor",
+      "kind": "null"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.startup.demand",
+      "kind": "known"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.startup.demand.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.startup.demand.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads.1.startup.power_factor",
+      "kind": "null"
+    },
+    {
+      "family": "power",
+      "path": "test-check.loads",
+      "kind": "array",
+      "length": 2
+    },
+    {
+      "family": "power",
+      "path": "test-check.scenarios.0.scenario_id",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.scenarios.0.reason",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.scenarios.0.states.0.load_id",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.scenarios.0.states.0.state.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.scenarios.0.states.1.load_id",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.scenarios.0.states.1.state.value",
+      "kind": "string"
+    },
+    {
+      "family": "power",
+      "path": "test-check.scenarios.0.states",
+      "kind": "array",
+      "length": 2
+    },
+    {
+      "family": "power",
+      "path": "test-check.scenarios",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_torque",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_torque.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_torque.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.available_torque",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.available_torque.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.available_torque.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_closeoff",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_closeoff.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_closeoff.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.available_closeoff",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.available_closeoff.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.available_closeoff.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_fail_position",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_fail_position.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.provided_fail_position",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.provided_fail_position.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_environment",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_environment.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_environment.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_environment.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_environment.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.rated_environment",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.rated_environment.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.rated_environment.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.rated_environment.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.rated_environment.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_enclosure",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.required_enclosure.value",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.accepted_enclosures",
+      "kind": "known"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.accepted_enclosures.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "mechanical",
+      "path": "test-check.accepted_enclosures.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.channel_id",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.physical_terminal_id",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.owner_equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.pool_id",
+      "kind": "known"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.pool_id.value",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.allowed_scope_ids",
+      "kind": "known"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.allowed_scope_ids.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.allowed_scope_ids.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.configured_mode",
+      "kind": "known"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.configured_mode.value",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.direction",
+      "kind": "known"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels.0.direction.value",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.channels",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.endpoint.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.endpoint.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.endpoint.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.physical_kind",
+      "kind": "known"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.physical_kind.value",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.required_mode",
+      "kind": "known"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.required_mode.value",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.required_direction",
+      "kind": "known"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.required_direction.value",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.required_pool_id",
+      "kind": "known"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.required_pool_id.value",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.channel_id",
+      "kind": "known"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints.0.channel_id.value",
+      "kind": "string"
+    },
+    {
+      "family": "allocation",
+      "path": "test-check.endpoints",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.supply_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.pool_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.output_voltage",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.output_voltage.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.output_voltage.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.output_voltage.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.output_voltage.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.output_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.output_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.capacity",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.capacity.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.capacity.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.usable_fraction",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.usable_fraction.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.usable_fraction.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.load_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.accepted_voltage",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.accepted_voltage.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.accepted_voltage.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.accepted_voltage.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.accepted_voltage.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.accepted_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.accepted_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.operating.demand",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.operating.demand.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.operating.demand.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.operating.power_factor",
+      "kind": "null"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.startup.demand",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.startup.demand.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.startup.demand.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.0.startup.power_factor",
+      "kind": "null"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.load_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.accepted_voltage",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.accepted_voltage.value.minimum.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.accepted_voltage.value.minimum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.accepted_voltage.value.maximum.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.accepted_voltage.value.maximum.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.accepted_waveform",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.accepted_waveform.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.operating.demand",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.operating.demand.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.operating.demand.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.operating.power_factor",
+      "kind": "null"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.startup.demand",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.startup.demand.value.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.startup.demand.value.unit",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads.1.startup.power_factor",
+      "kind": "null"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.loads",
+      "kind": "array",
+      "length": 2
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.scenarios.0.scenario_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.scenarios.0.reason",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.scenarios.0.states.0.load_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.scenarios.0.states.0.state.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.scenarios.0.states.1.load_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.scenarios.0.states.1.state.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.scenarios.0.states",
+      "kind": "array",
+      "length": 2
+    },
+    {
+      "family": "expansion",
+      "path": "power-check.scenarios",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.base_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.pool_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.accepted_interfaces",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.accepted_interfaces.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.accepted_interfaces.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.maximum_modules",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.maximum_modules.value",
+      "kind": "number"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.maximum_channels",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.maximum_channels.value",
+      "kind": "number"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.power_check_id",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.power_check_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.module_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.device_kind",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.device_kind.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.interface_id",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.interface_id.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.compatible_base_ids",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.compatible_base_ids.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.compatible_base_ids.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.channel_count",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.0.channel_count.value",
+      "kind": "number"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.module_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.device_kind",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.device_kind.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.interface_id",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.interface_id.value",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.compatible_base_ids",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.compatible_base_ids.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.compatible_base_ids.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.channel_count",
+      "kind": "known"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules.1.channel_count.value",
+      "kind": "number"
+    },
+    {
+      "family": "expansion",
+      "path": "test-check.modules",
+      "kind": "array",
+      "length": 2
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.media",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.media.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.allowed_scope_ids",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.allowed_scope_ids.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.allowed_scope_ids.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.segment_id",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.protocol",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.protocol.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.baud_rate",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.baud_rate.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.frame_format",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.frame_format.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.max_devices",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.max_devices.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.max_managers",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.max_managers.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.max_load_microunits",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.max_load_microunits.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.max_length_mm",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.max_length_mm.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.reserved_devices",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.reserved_devices.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.reserved_managers",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.reserved_managers.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.reserved_load_microunits",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.reserved_load_microunits.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.reserved_addresses",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.reserved_addresses.value.0",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.reserved_addresses.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.lead_length_mm",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.lead_length_mm.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.endpoint.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.endpoint.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.endpoint.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.physical_kind",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.physical_kind.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.media",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.media.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.protocol",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.protocol.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.baud_rate",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.baud_rate.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.frame_format",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.frame_format.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.role",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.role.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.address",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.address.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.load_microunits",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.load_microunits.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.position_mm",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.0.position_mm.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.endpoint.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.endpoint.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.endpoint.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.physical_kind",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.physical_kind.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.media",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.media.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.protocol",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.protocol.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.baud_rate",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.baud_rate.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.frame_format",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.frame_format.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.role",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.role.value",
+      "kind": "string"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.address",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.address.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.load_microunits",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.load_microunits.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.position_mm",
+      "kind": "known"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes.1.position_mm.value",
+      "kind": "number"
+    },
+    {
+      "family": "serial",
+      "path": "serial-check.nodes",
+      "kind": "array",
+      "length": 2
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.media",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.media.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.allowed_scope_ids",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.allowed_scope_ids.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.allowed_scope_ids.value",
+      "kind": "array",
+      "length": 1
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.closet_id",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.address_domain_id",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.protocol",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.protocol.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.ports_per_switch",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.ports_per_switch.value",
+      "kind": "number"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.reserved_ports_per_switch",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.reserved_ports_per_switch.value",
+      "kind": "number"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.available_switches",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.available_switches.value",
+      "kind": "number"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.max_link_length_mm",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.max_link_length_mm.value",
+      "kind": "number"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.endpoint.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.endpoint.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.endpoint.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.physical_kind",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.physical_kind.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.media",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.media.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.protocol",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.protocol.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.address",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.address.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.link_length_mm",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.0.link_length_mm.value",
+      "kind": "number"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.endpoint.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.endpoint.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.endpoint.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.physical_kind",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.physical_kind.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.media",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.media.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.protocol",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.protocol.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.address",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.address.value",
+      "kind": "string"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.link_length_mm",
+      "kind": "known"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes.1.link_length_mm.value",
+      "kind": "number"
+    },
+    {
+      "family": "ip",
+      "path": "ip-check.nodes",
+      "kind": "array",
+      "length": 2
+    }
+  ],
+  "layouts": [
+    {
+      "name": "power-edit",
+      "theme": "light",
+      "width": 1280
+    },
+    {
+      "name": "power-edit",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "name": "power-edit",
+      "theme": "light",
+      "width": 1920
+    },
+    {
+      "name": "power-edit",
+      "theme": "dark",
+      "width": 1280
+    },
+    {
+      "name": "power-edit",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "name": "power-edit",
+      "theme": "dark",
+      "width": 1920
+    },
+    {
+      "name": "serial-edit",
+      "theme": "light",
+      "width": 1280
+    },
+    {
+      "name": "serial-edit",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "name": "serial-edit",
+      "theme": "light",
+      "width": 1920
+    },
+    {
+      "name": "serial-edit",
+      "theme": "dark",
+      "width": 1280
+    },
+    {
+      "name": "serial-edit",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "name": "serial-edit",
+      "theme": "dark",
+      "width": 1920
+    }
+  ],
+  "errors": [],
+  "duration_ms": 414038,
+  "limits": "One original PDF, eleven controlled capability families bound to reviewed owners. Tests form fidelity/corrections, not discovery, independent arithmetic truth or real addenda."
+}
