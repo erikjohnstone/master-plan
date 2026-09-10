@@ -12,6 +12,14 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add the internal shared revision-impact service: explicit item correspondence,
+  original evidence and declared-field changes, quantity-basis/membership checks,
+  and exact Python count deltas after selected saved-result replay and retained
+  point validation. Preserve unknowns, changed measures and unpaired items without
+  manufactured zeros. Resource renaming and saved-output representation remain
+  distinct. Public comparison editing, its journal, approvals and snapshots are
+  not yet exposed; this does not finish the BAS production goal.
+
 - Add a shared internal revision-side inventory with explicitly pinned source,
   decision and calculation versions. Preserve old evidence through dependency
   changes, source-local responsibility claims, unknown/attribute distinctions,

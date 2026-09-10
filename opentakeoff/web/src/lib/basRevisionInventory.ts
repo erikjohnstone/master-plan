@@ -1,7 +1,7 @@
 /** Shared, source-owned inventory for pinned revision sides. It retains raw
  * evidence and declared/calculated quantities, but computes no delta or approval. */
 import { z } from 'zod';
-import { basCaptureIdentityPayload, verifyBasWorkflow } from './basWorkflow.ts';
+import { basCaptureIdentityPayload, verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 import { basDrawingCapturePages } from './basDrawingRevision.ts';
@@ -74,6 +74,14 @@ const retained = (metric: string, dimension: string, basis: string, value: numbe
 export async function buildBasRevisionInventory(raw: unknown, rawBasis: unknown, signal?: AbortSignal) {
   const basis = basRevisionBasisSchema.parse(rawBasis); signal?.throwIfAborted();
   const workflow = await verifyBasWorkflow(raw); signal?.throwIfAborted();
+  return inventoryForVerifiedBasRevision(workflow, basis, signal);
+}
+
+/** Shared implementation for a caller-owned, already verified workflow. Two
+ * comparison sides reuse this exact path; no unvalidated public request may
+ * bypass buildBasRevisionInventory/verifyBasWorkflow through this internal seam. */
+export async function inventoryForVerifiedBasRevision(workflow: BasWorkflow, rawBasis: unknown, signal?: AbortSignal) {
+  const basis = basRevisionBasisSchema.parse(rawBasis); signal?.throwIfAborted();
   const selected = selectBasRevisionState(workflow, basis);
   const pending: Array<{ item: Omit<BasRevisionItem, 'item_id' | 'content_fingerprint'>; identity: unknown }> = [];
   const capabilities = [];

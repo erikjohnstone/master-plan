@@ -9,6 +9,7 @@ import { basAssemblyQuantityResultSchema, type BasAssemblyQuantityResult } from 
 import { basEngineeringInputSchema, basEngineeringResultSchema, verifyBasEngineeringResult,
   type BasEngineeringResult } from "../../web/src/lib/basEngineeringContract.ts";
 import { BAS_WORKFLOW_REPLAY_RULE, type BasReplayRecord } from '../../web/src/lib/basWorkflowReplay.ts';
+import { basRevisionQuantityRequestSchema, basRevisionQuantityResultSchema, verifyBasRevisionQuantityResult } from '../../web/src/lib/basRevisionComparison.ts';
 
 const appRoot = fileURLToPath(new URL("../../", import.meta.url));
 const bundledRoot = fileURLToPath(new URL("./python/", import.meta.url));
@@ -64,6 +65,14 @@ export async function runBasAssignmentDemand(payload: unknown, options: { python
 
 export async function runBasAssemblyQuantities(payload: unknown, options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}): Promise<BasAssemblyQuantityResult> {
   return runBasProcess({ assembly_quantities: payload }, basAssemblyQuantityResultSchema, options);
+}
+
+/** Source service supplies only comparable pairs, after selected-result replay.
+ * This process boundary cannot substitute counts, pair IDs or checked matrices. */
+export async function runBasRevisionQuantities(payload: unknown, options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}) {
+  const input = basRevisionQuantityRequestSchema.parse(payload);
+  const output = await runBasProcess({ revision_quantities: input }, basRevisionQuantityResultSchema, options);
+  return verifyBasRevisionQuantityResult(input, output);
 }
 
 /** Internal shared transport; callers must separately validate actual source,

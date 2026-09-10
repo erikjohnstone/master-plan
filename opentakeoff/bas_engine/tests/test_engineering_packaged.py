@@ -35,3 +35,18 @@ def test_packaged_engineering_sources_and_actual_process_match_checkout():
         assert output["original"]["checks"] == payload["engineering"]["checks"]
         outputs.append(output)
     assert outputs[0] == outputs[1]
+    # New comparison arithmetic must also execute from the shipped runtime,
+    # without using the source checkout or silently claiming installed scope.
+    pair = {"row_id": "a" * 64, "metric_key": "AI", "dimension": "declared_io:AI",
+            "basis": "listed_matrix_only", "before": 5, "after": 2}
+    revision_outputs = []
+    for cwd in [root, bundled]:
+        process = subprocess.run([sys.executable, "-m", "bas_engine"], cwd=cwd,
+                                 input=json.dumps({"revision_quantities": {"pairs": [pair], "point_matrices": []}}),
+                                 text=True, capture_output=True, timeout=10, check=False)
+        assert process.returncode == 0 and not process.stderr
+        result = json.loads(process.stdout)
+        assert result["pairs"] == [{**pair, "delta": -3}]
+        assert result["installed_quantity"] is None and not result["approved"] and not result["project_complete"]
+        revision_outputs.append(result)
+    assert revision_outputs[0] == revision_outputs[1]

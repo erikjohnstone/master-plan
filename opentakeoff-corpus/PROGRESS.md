@@ -1,5 +1,23 @@
 ## Active work
 
+2026-09-10 checkpoint after **34aeaffa**: internal shared BAS revision comparison
+now retains explicit item correspondence, original/declared-field changes, source
+and dependency boundaries, unknown quantities and compatible measure/membership
+reviews. Python validates point cells, replays selected saved records and computes
+exact comparable deltas. Reproduced/fixed unlike-variable subtraction, reused-UUID
+membership changes and engineering ID-only false changes across 11 families.
+**Web 2,793 pass / 13 existing skips**; Python **452 pass / one packaging skip**,
+mypy **20 files**; MCP types, **127 prior BAS + 19 new comparison + four packaging
+tests pass**, plus separately enabled Python packaging parity. Complete retained
+comparison **4.217 / 4.171 / 4.149 s**, **172,523,520-byte incremental peak RSS**,
+496 rows / 175 comparable values, under predeclared 6 s / 512 MiB. Existing gates
+remain unchanged. Proof and limitations:
+`opentakeoff/docs/bas-production/evidence/revision-comparison-1/proof.json`.
+No extraction/VectorGrid/symbol/old-math/key/scorer, holdout, push/merge/deploy change.
+No public comparison or full-corpus completion claim. Next correspondence journal
+and UI/MCP integration, issue decisions, approvals/snapshots and A–D final gates;
+then appended researched symbol/installed-plan phase. Original goal stays active.
+
 2026-09-10 checkpoint after **c2685089**: shared pinned revision-side inventory
 implemented and verified, without extraction/VectorGrid/symbol/math changes.
 Old decisions keep their exact original sources when newer equipment/component

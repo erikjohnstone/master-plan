@@ -1,5 +1,53 @@
 # BAS production workflow progress
 
+## Shared revision-impact comparison — 2026-09-10
+
+After **34aeaffa**, implemented the internal shared comparison service. Both
+sides pin exact source/decision/calculation versions; reviewed one-to-one matches,
+add/remove decisions, unresolved/outside accounting, original evidence, declared
+fields, rules, dependencies and quantity basis remain separate. Python replays
+selected saved results, validates retained point observations against original
+cells and computes only comparable count deltas. No workflow writes or approval.
+
+Reproduced and fixed different point variables being subtracted after replication;
+reused equipment UUIDs hiding changed source bindings; and engineering resource
+IDs creating false declared-field changes. Explicit reference handling now covers
+all **11 engineering families**. Saved output representation stays separately
+visible and unchanged in each original. Unknowns, attributes, missing sides,
+changed measures and stale/cross-boundary evidence do not become numeric zeros.
+
+**Web 74271 exit 0: 2,793 pass / 13 existing skips**, types/lint/bench/build pass,
+29.955 s tests / 5.42 s build. Existing three lint warnings, legacy One-Click known
+failures and bundle/Agent configuration warnings remain. **Python 89332 exit 0:
+452 pass / one explicit packaging skip**, 6.86 s; configured mypy **20 files pass**.
+**MCP 48744 exit 0:** types, **127 existing BAS + 19 new comparison tests pass**,
+build, **four packaging tests**, and the separately enabled **Python packaging
+test passes**, including actual new arithmetic execution from the bundled runtime.
+The new comparison suite and serial gate run by default after `test:bas`.
+
+Complete retained-project comparison: **496 rows / 175 comparable values / 12
+validated point matrices / two selected saved records replayed**, final **4.217 /
+4.171 / 4.149 s**, incremental peak RSS **172,523,520 bytes**, report **6,462,912
+bytes**. Predeclared post-baseline gates 6 s / 512 MiB pass; not an improvement
+claim. Existing history, 201,000-entry drawing journal and inventory budgets pass
+unchanged. Exact baseline, failures, corrections and final proof:
+`evidence/revision-comparison-1/proof.json`; contract: `REVISION_IMPACT_CONTRACT.md`.
+
+This is **not a public comparison workflow or production-complete milestone**.
+Real retained Fort Sam data supplements controlled changed/re-export cases;
+no new actual UI/public-MCP comparison, issued-addendum, full corpus or blind
+holdout acceptance is claimed. No VectorGrid, symbol, extraction, existing math,
+key/scorer, cost/labor, model, push/merge/deploy changes. Original main goal stays
+active; the symbol extension remains last, not a substitute.
+
+Next: extract wire schemas from the comparison implementation before adding an
+append-only comparison journal (avoid a Workflow/schema import cycle). Persist
+explicit pinned correspondence/reasons and deterministic report identity; replay
+through the same Python-backed service. Add history-safe public UI/MCP inspection,
+paging, source-return context and export. Then issue decisions, selective
+dependency-bound approvals/snapshots; remaining A–D corpus/holdout/public gates;
+then researched deformation-tolerant symbols and installed-plan reconciliation.
+
 ## Pinned revision-side inventory — 2026-09-10
 
 After **c2685089**, implemented the shared read-only basis/inventory foundation

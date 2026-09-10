@@ -94,6 +94,69 @@ not a blanket whole-workflow digest. No impact preview approves anything.
 
 ## Acceptance and performance gates
 
+### Comparison implementation boundary (before implementation)
+
+An explicit comparison request pins both bases and contains one-to-one item
+matches, reasoned added/removed item decisions and optional reasoned membership
+comparison confirmations. Remaining identical capture-bound identities pair
+automatically; all other unpaired in-scope records stay unresolved. Outside-set
+records remain accounted for separately. Matching never derives identity from
+row position, bare tags, filenames or label similarity. A manual correspondence
+is an auditable decision, not an automatically proven physical identity.
+
+Each pair reports original-version identity, retained evidence/text/geometry,
+supported declared fields, rule changes, dependency/source-boundary issues and
+quantities independently. Original records remain retrievable from each pinned
+inventory. No source-text diff implies arbitrary SOO comprehension or complete
+PDF ink equality. Typed relation identities are normalized through the reviewed
+correspondence map, never by deleting all fields called `id`.
+Engineering inputs and constraint statuses are compared separately from exact
+saved-output representation. Output rule labels can embed resource IDs, and
+network output carries original closet/port IDs. Those bytes stay intact and a
+separate `saved_output_equal` flag discloses any difference; they are not used as
+proof that the engineering requirement changed. No arbitrary result-text ID
+replacement or network-layout equivalence is claimed.
+
+Known same-dimension, same-denominator quantities may receive a delta. Changed
+variable, units/dimension, applicability (`per_equipment` versus `system_once`),
+lifecycle, condition, disposition or rule is incompatible without a new suitable
+basis; no override can force a delta across these conditions. For derived group
+quantities whose measure is otherwise identical, changed included membership or
+replication factor requires a separate explicit confirmation and reason before
+comparison. Membership includes the actual pinned equipment tag, scope and
+source-occurrence bindings, not only its reusable UUID. Missing sides/values,
+attributes, stale dependencies, unavailable
+source coverage and unlocated/cross-boundary quantity scope have no numeric delta.
+Add/remove decisions still display their original quantities; absence is not zero.
+
+Python subtracts only validated comparable count pairs. The service replays the
+exact selected saved assignment, assembly and engineering records in Python;
+persisted hashes/status labels cannot replace replay. It binds returned pair IDs,
+metrics, inputs and rules before accepting any output. Cancellation, ownership or
+response failure returns no successful partial report and never changes history.
+Retained point observations also run through the existing Python original-cell,
+header/channel and missing-column validator. Derived comparisons resolve the
+actual source row's point variable; explicit pairing cannot equate supply-air and
+return-air variables merely because both use AI channels.
+
+Hard comparison bounds: 200,000 accounted rows, 64 MiB encoded report; numeric
+transport batches reuse the 1,000-record / 30 MiB limits. Establish the first
+complete serial real-retained-input comparison timing/memory baseline before
+optimization. The inventory gate remains unchanged; do not falsely apply its
+five-second budget to the newly added math/replay and two-sided comparison.
+
+Initial complete comparison baseline (before optimization): retained Fort Sam /
+controlled hardware, 496 rows, 175 comparable values, 12 point matrices validated
+and two selected saved records replayed; 4.136 / 3.996 / 3.947 s, incremental peak
+RSS 186,449,920 bytes, 6,450,016-byte report. Node 24.13.1 / Apple M2 / darwin-arm64;
+fixture SHA-256 `afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5`.
+Before further candidate evaluation, set a serial regression budget of 6 seconds
+per full comparison and 512 MiB incremental peak RSS on this fixture: roughly
+45% latency margin over the first measured run, not an improvement claim or an
+interactive keystroke budget. It includes existing history validation and Python
+startup/replay, not PDF extraction or original-byte verification. Public operations
+must show progress/cancellation; large schema limits are not performance promises.
+
 Before public completion: positive changed-requirement, unchanged re-export,
 renumbered/reordered pages, same-tag/different-building, quantity/basis change,
 partial addendum, removed/added/ambiguous/split item, stale and unrelated decision
@@ -156,3 +219,32 @@ The main goal remains active: implement item correspondence and semantic/
 comparable-quantity impact, issue decisions, selective approvals and approved
 snapshots; complete remaining A–D corpus/holdout gates; then execute the appended
 researched symbol/installed-plan phase. No push, merge, publication or deployment.
+
+## Comparison checkpoint — 2026-09-10
+
+The shared read-only service now implements the above correspondence, declared-
+field and comparable-count boundary. Existing Python validators/calculators are
+reused; the only new arithmetic is exact count subtraction. Neither extracted
+source values nor previous math algorithms are changed. Schema/correspondence
+preparation is not a Python replay receipt, and replay is not source-byte proof.
+
+Final web check: **2,793 pass / 13 existing skips**; standalone Python **452 pass /
+one explicit packaging skip**, configured mypy **20 files pass**. MCP types,
+**127 prior BAS + 19 new comparison tests**, **four packaging tests**, and the
+separately enabled original/bundled Python parity test pass. New tests include
+real Python evaluation/replay of all 11 controlled engineering families, positive
+changed counts/SOO, unlike-variable and membership/basis refusal, strict output
+binding, exact UTF-8/count batching and invalid/runtime/cancellation cases.
+No generated-response fixture is passed off as actual runtime evidence.
+
+Final serial complete comparison **4.217 / 4.171 / 4.149 s**, incremental peak
+RSS **172,523,520 bytes**, report **6,462,912 bytes**, with 496 rows / 175 comparable
+values, two selected saved records replayed and 12 point matrices validated.
+The predeclared 6 s / 512 MiB gate and all unchanged history/inventory gates pass.
+Baseline and exact evidence: `evidence/revision-comparison-1/proof.json`.
+
+Public item correspondence, its append-only journal, actual UI/MCP comparison
+walkthroughs and export, issue decisions, dependency-bound approvals and snapshots
+remain unfinished. No full-corpus/holdout gate or real issued-addendum validation
+is claimed here. The main BAS goal remains active and the appended symbol phase
+remains after it. This checkpoint is progress, not production completion.

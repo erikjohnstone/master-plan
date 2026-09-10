@@ -1,0 +1,74 @@
+{
+  "checkpoint": "shared_revision_comparison",
+  "date": "2026-09-10",
+  "parent_commit": "34aeaffa",
+  "scope": "Internal shared service and real Python integration; not public comparison or production completion",
+  "runtime": { "node": "v24.13.1", "python": "3.14.3", "platform": "darwin", "arch": "arm64", "cpu": "Apple M2" },
+  "web": {
+    "command": "npm run check", "workdir": "opentakeoff/web", "session": 74271, "exit_code": 0,
+    "tests": 2806, "passed": 2793, "skipped_existing": 13, "failed": 0, "test_duration_ms": 29955.122125,
+    "build_seconds": 5.42, "existing_lint_warnings": 3,
+    "log": "opentakeoff/tmp/bas-revision-comparison-web-check-1.log"
+  },
+  "python": {
+    "command": ".venv-bas/bin/python -m pytest bas_engine/tests",
+    "session": 89332, "exit_code": 0, "passed": 452, "skipped_explicit_packaging_gate": 1, "seconds": 6.86,
+    "mypy": { "exit_code": 0, "source_files": 20, "config": "bas_engine/pyproject.toml" },
+    "logs": ["opentakeoff/tmp/bas-revision-comparison-pytest-2.log", "opentakeoff/tmp/bas-revision-comparison-mypy-2.log"]
+  },
+  "mcp": {
+    "command": "npm run typecheck && npm run test:bas && npm run test:packaging; explicit OT_BAS_VERIFY_PACKAGE=1 Python packaging test",
+    "session": 48744, "exit_code": 0, "typecheck": "pass", "existing_bas_tests_passed": 127,
+    "existing_bas_duration_ms": 44567.118167, "new_comparison_tests_passed": 19,
+    "new_comparison_duration_ms": 17593.517, "packaging_tests_passed": 4,
+    "explicit_python_packaging_tests_passed": 1, "explicit_python_packaging_seconds": 0.90,
+    "log": "opentakeoff/tmp/bas-revision-comparison-mcp-final-1.log"
+  },
+  "complete_comparison": {
+    "fixture": "opentakeoff/docs/bas-production/evidence/engineering-families-browser-3/ip-reviewed.takeoff.json",
+    "fixture_bytes": 3511836, "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+    "fixture_limitations": "Retained real Fort Sam sources with controlled explicit hardware inputs; same pinned basis on both sides, not a real issued addendum",
+    "initial_before_further_evaluation_ms": [4135.919125, 3996.1065830000007, 3947.131875000001],
+    "initial_incremental_peak_rss": 186449920,
+    "predeclared_later_candidate_budget_ms": 6000, "budget_incremental_rss": 536870912,
+    "final_elapsed_ms": [4217.136166, 4170.799, 4149.458166], "final_incremental_peak_rss": 172523520,
+    "rows": 496, "calculated_values": 175, "selected_saved_records_replayed_in_python": 2,
+    "point_matrices_checked_in_python": 12, "final_report_bytes": 6462912,
+    "source_bytes_verified": false, "pdf_extraction": false, "public_walkthrough": false
+  },
+  "preservation_benchmarks": {
+    "history_ms": [3162.447459, 3078.9042080000004, 2990.7219590000004], "history_budget_ms": 5000,
+    "drawing_entries": 201000, "drawing_ms": [52.381041000000096, 42.11241700000005, 31.32570899999996],
+    "drawing_budget_ms": 2000, "drawing_incremental_peak_rss": 139493376, "drawing_rss_budget": 268435456,
+    "inventory_ms": [3068.563791, 3079.099625, 3033.8195829999986], "inventory_budget_ms": 5000,
+    "inventory_incremental_peak_rss": 118996992, "inventory_rss_budget": 536870912,
+    "inventory_rows": 496, "inventory_bytes": 3044819
+  },
+  "reproduced_and_fixed": [
+    "Derived assignment quantities incorrectly compared different source point variables after explicit row pairing",
+    "A reused equipment UUID concealed a changed original occurrence from the membership-review gate",
+    "Resource-bound saved output identifiers were mistaken for changed engineering requirements",
+    "Power scenario load references and expansion compatibility references were not normalized through explicit correspondence"
+  ],
+  "initial_failures_retained_in_tmp": [
+    "bas-revision-variable-repro-1.log: fixture tried calculating an inactive capture; corrected explicit test activation without changing production gate",
+    "bas-revision-variable-repro-2.log: different variables incorrectly returned calculated",
+    "bas-revision-membership-repro-1.log: reused UUID incorrectly returned calculated",
+    "bas-revision-engineering-repro-1.log: network identity-only saved output reported as declared-field change",
+    "bas-revision-engineering-families-repro-1.log: power and expansion reference projection failures",
+    "bas-revision-comparison-types-1.log and types-3.log: unsupported Object.hasOwn/replaceAll library calls; corrected without changing compiler settings"
+  ],
+  "safety": {
+    "vectorgrid_or_symbol_changes": false, "existing_math_algorithm_changes": false,
+    "new_python_operation": "Comparable retained count subtraction plus existing point validation",
+    "workflow_schema_or_history_writes": false, "approval_or_installed_quantity_claim": false,
+    "holdout_opened": false, "corpus_keys_or_scorers_changed": false,
+    "push_merge_deploy": false
+  },
+  "remaining": [
+    "Append-only item correspondence journal and public UI/MCP comparison with source inspection, durable drafts, paging, export and replay",
+    "Issue decisions, dependency-bound approvals and versioned approved snapshots",
+    "Remaining A-D real-input acceptance, full corpus, blind holdout and public release gates",
+    "Only after the original five workflows: appended research-gated symbol and installed-plan phase"
+  ]
+}
