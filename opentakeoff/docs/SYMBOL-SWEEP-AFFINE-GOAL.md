@@ -556,6 +556,7 @@ explicitly "not a plan-scale seed". Enable it there, bounded by
 | Phase 2 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (unchanged — `affine` off everywhere in the runner; see Findings) | 0 | ~19.6 min sum of 47 case `elapsed_ms`, statistically identical to Phase 1's (same reason: nothing in the runner turns `affine` on, so this measures the unchanged rigid path again, not the new candidate generation's real cost) | Continuous-rotation candidate generation (commit `bf4630c`): vote-before-score geometric hashing appends a voted rotation as a new dynamic `xforms` entry, so the existing scoring/classification code (already generic over `xforms[]`) handles it unmodified. 407 tests green (399 pre-existing + 8 new: 4 off-grid angles found exactly via a genuinely asymmetric fixture, a mirrored case, `rotations:false` disables it, candidate-growth guard). Gate 2 met on the no-op axis (byte-for-byte proof, both by test and unchanged corpus numbers) and on the synthetic-fixture axis (real off-grid rotation is now found — the whole point of this phase); real corpus recall stays 0/0 for the same reason as Phase 0/1 (no real instances exist in this corpus to move it). Also fixed a real, generically-applicable bug in the shared `mergeProposals` (see Findings) — pinned by its own regression test. |
 | Phase 3 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (unchanged — `affine`/`scaleSearch` off everywhere in the runner; see Findings) | 0 | ~19.4 min sum of 47 case `elapsed_ms`, statistically identical to Phase 1/2's (same reason: nothing in the runner turns `scaleSearch` on, so this measures the unchanged rigid path again) | Two-segment-basis affine candidate generation (stretch/shear made PROPOSABLE, not just refinable): a basis pair of non-parallel seed segments, a ratio-band search for the first's sheet correspondent, a margin-based rect search predicting and finding the second, a 4-point `fitAffine`, and a third-segment vote before it is ever scored or refined — reusing Phase 1's refine/bounds/disclosure machinery unmodified (same `xf ≥ rigidXformCount` dynamic-candidate path Phase 2 already wired). 413 tests green (407 pre-existing + 6 new: x-only and y-only 1.3× stretch, 1.2×+8° shear, 1.6× stretch withheld with the bounds reason, `rotations:false` disables it, candidate-growth guard). Used the asymmetric `ASYM2` fixture per Phase 2's own Finding, not `SYMBOL`. Gate 3 met on the no-op axis (byte-for-byte proof, both by test and unchanged corpus numbers) and on the synthetic-fixture axis (anisotropic stretch and shear are now proposed, fitted, and bounds-checked — the whole point of this phase); real corpus recall stays 0/0 for the same reason as every prior phase (Phase 0 found no real instances in this corpus). Also found and fixed two real bugs during testing, both recorded as Findings: basis-pair selection could end up all-parallel on a single-axis stretch (fixed by widening the candidate pool without touching the shared `ANCHOR_COUNT`), and the ratio-band search could miss an out-of-bounds stretch entirely rather than disclose it (fixed by trying both basis-pair role assignments, plus loosening the dynamic-candidate proposal floor to let refinement run before a rough guess's raw score forecloses it — the rigid path's own gate is untouched). |
 | Phase 4 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (no campaign change this phase — see Findings) | 0 | ~19.8 min sum of 47 case `elapsed_ms`, statistically identical to Phases 1–3 (this phase adds disclosure/filtering, not new candidate generation, so the rigid path's own cost is unaffected either way) | Two independent, additive pieces. (1) Missing-stroke disclosure: the plain score-based withheld reason now names the top 3 least-matched seed segments by length plus the aggregate missing percentage, via a new optional `detail?: number[]` output on the existing `scoreAt` (no duplicated geometry — it already computed this per segment, just discarded it into the running sum before). Applies with `affine` off too (pure bookkeeping). (2) Exploded-text filter: a new pure `glyphClusterMask` helper (≥6 segments, each ≤4·tol, compact bbox <25% of a reference diagonal, ≥3 distinct directions) wired into `fingerprintSymbol` (new optional `dropGlyphClusters` param, baked into the fingerprint at construction — reports `droppedGlyphSegments`) and into `matchSymbol`'s `extraFor` (new `opts.dropGlyphClusters`, default follows `opts.affine.enabled`) so a tag/label near either the seed or a swept instance never inflates totalLen or counts as "extra linework". 417 tests green (413 pre-existing + 4 new: a second near-miss fixture pinning the exact missing-segment name and percentage, a seed-side tag exclusion proof (`droppedGlyphSegments`, byte-for-byte `rel` equality with the untagged fixture), a sheet-side tag-never-counts-as-extra proof, and an explicit `dropGlyphClusters:false` override proof). `sweepNegative.test.ts` unaffected (4/4 unchanged) — negatives already worked under a fitted transform since Phase 1/2, nothing to add. Gate 4 met: byte-for-byte no-op when both new options are absent/off (proven by test and the unchanged corpus numbers), and the synthetic-fixture axis demonstrates both disclosures working as specified. |
+| Phase 5 (steps 1–5, no default flip yet) | 2026-09-10 | not re-run this step — no matching-code touched, only options/output plumbing and docs; see the corpus runs already recorded under Phases 1–4 above, unaffected | 0/0 (no campaign change — `affine` still off by default everywhere) | 0 | not remeasured (no matching-code touched) | Production wiring, structural parity, and docs — the default flip (step 6) is deliberately its own, separate, LAST commit per §3 Phase 5 and is not included here. `mcp/src/session.ts`: `symbolSweep`/`sweepScheduleRow` both gain `opts.affine`, threaded into every `matchSymbol` call (both share one local `sweepOpts` object per function) and into `fingerprintSymbol`'s new `dropGlyphClusters` param; every wire row that already copied `rotation`/`mirrored` now also copies `transform` (10 call sites). `mcp/src/tools.ts`: `symbol_sweep` and `sweep_schedule_row` both gain an `affine: {enabled, max_stretch, max_shear_deg, scale_search}` input (matching §4.3's defaults) — `matchReferenceSymbol`/`match_reference_symbol` deliberately NOT wired (not part of this document's Gate 5 checklist; see Findings). `mcp/src/outputs.ts`: both `sweepPlacement` and `rowSweepPlacement` gain an optional `transform` field (mirroring `SweepTransform` exactly) and their `rotation` doc comments are updated. `web/src/lib/agentTools.js` + `web/src/pages/TakeoffCanvas.jsx`: the SAME `affine` option threaded through the canvas agent tool's `symbol_sweep` (`agentSymbolSweep`), plus its own wire-row `transform` copies and `fingerprintSymbol`'s `dropGlyphClusters` — `runSymbolSweep` (the manual marquee toolbar action, which has no options surface a caller can reach at all today) deliberately left untouched until the default-flip commit, which is the only place that can turn it on (see Findings). A NEW shared, exported `affineOptionsFromWire()` (`symbolsweep.ts`) is the ONE wire→`AffineOptions` translation both `mcp/src/tools.ts` and `web/src/lib/agentTools.js` call — structural parity (one function can't drift out of sync with itself) rather than two independent copies merely tested for agreement. A REAL, latent bug found and fixed along the way (see Findings): `sweepThumb.js`'s `matchBox` sized every review thumbnail to `max(seed_w, seed_h)`, which silently clips ink for a rotation that isn't a multiple of 90° — invisible before Phase 2 made off-grid rotation discoverable at all. `SweepReviewPanel.jsx`'s `Thumb` now threads the row's own disclosed rotation (and shows the fitted transform as a hover title on a MATCH row, which carries no `reason` text). New tests: `symbolAffine.ts`'s `affineOptionsFromWire` (2 tests), a 33°/90°/45°-diagonal `matchBox` proof (2 tests), a structural parity test proving the canvas agent tool reaches the engine with the exact `AffineOptions` the shared translation produces (`mcp/test/symbolSweepAffineParity.test.ts`). tsc clean on both `web` and `mcp`; 452 web tests green (450 pre-existing across the affected suites + 2 new `matchBox` tests — `affineOptionsFromWire`'s own 2 tests are counted in `mcp`'s suite instead, alongside the parity test); eslint clean on every touched `.js`/`.jsx` file. |
 | Default flip | | | | | | |
 
 Findings (cases that contradicted a bound — never fixed by moving it):
@@ -758,6 +759,75 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   semantics, so there was no reason to omit it. Both existing missing-
   stroke tests updated to assert the corrected `"{len} px {orientation}"`
   wording.
+
+- **2026-09-10 — `sweepThumb.js`'s `matchBox` silently clipped review
+  thumbnails for any placement rotated off a 90°-multiple — a real,
+  latent bug invisible before Phase 2 made off-grid rotation discoverable
+  at all.** §3 Phase 5 step 3 asked to "verify it does not assume
+  multiples of 90°; fix if it does" — grepping for an explicit
+  `rotation === 90` style check found nothing, but the geometry itself was
+  still wrong: `matchBox` sized every tile to `max(seed_w, seed_h) ×
+  (1 + 2·pad)`, which is exactly sufficient at 0/90/180/270° (a
+  right-angle instance's own axis-aligned bbox never exceeds the larger
+  side) but provably insufficient at an arbitrary angle — a rotated
+  rectangle's true bounding box is `w·|cosθ| + h·|sinθ|` on one axis and
+  `w·|sinθ| + h·|cosθ|` on the other, which peaks at the shape's own
+  diagonal (`√(w²+h²)`) near a 45°-from-longest-axis rotation. For a
+  square seed this is `√2× (≈41%)` past `max(w,h)` — comfortably past the
+  default 15% pad. Fixed by giving `matchBox` an optional `rotationDeg`
+  parameter (default 0 — every existing caller keeps its EXACT prior
+  numbers, proven by the existing pinned 0°/90° test) that computes the
+  true rotated bounding box for the ACTUAL angle drawn, not a blind
+  worst-case guess. Wired the real angle through from `SweepReviewPanel.jsx`
+  (`m.transform?.rotation_deg ?? m.rotation`) since that row-level data
+  already existed and simply wasn't being passed. New tests: 33° (the
+  documented probe angle), an exact-90°-equals-the-plain-case regression,
+  and a 45°-square-must-cover-its-own-diagonal proof.
+
+- **2026-09-10 — `match_reference_symbol`/`matchAgainstLibrary` and the
+  canvas's manual marquee-drag sweep (`runSymbolSweep`) deliberately NOT
+  wired with `affine` in this phase — recorded, not silently skipped.**
+  §3 Phase 5's own definition of done and §1's call-site table don't
+  name either as a Gate 5 requirement (the tool schema/wiring work is
+  scoped to `symbol_sweep`/`sweep_schedule_row`, the two tools this whole
+  document is about). `matchAgainstLibrary` already forwards an arbitrary
+  `MatchOptions` (including `affine`) straight through to `matchSymbol`
+  transparently — nothing in the engine itself blocks it — but
+  `matchReferenceSymbol`'s own opts type exposes no surface for a caller
+  to state it, and doing so would need its own tool-schema change to a
+  DIFFERENT tool this document doesn't otherwise touch. `runSymbolSweep`
+  (the canvas's `Symbol` toolbar drag-marquee action, distinct from the
+  agent-driven `agentSymbolSweep`) has literally no options parameter
+  today — it is called with only the two rect corners — so there is no
+  existing surface to thread `affine` through at all; the ONLY thing that
+  can turn it on is the default-flip commit itself, which must therefore
+  touch this call site directly (hardcode `affine: {enabled: true, ...}`
+  once the default actually flips) rather than plumb an option nobody
+  can set beforehand. Both are explicitly listed as required edits in
+  the default-flip step's own plan, not forgotten.
+
+- **2026-09-10 — the parity test proves structural sharing, not a live
+  canvas-vs-MCP run — recorded as a deliberate scoping decision, not a
+  shortcut.** §3 Phase 5 item 4 asks for "one fixture, both call sites'
+  option objects → identical matches/withheld/rejected." `matchSymbol`/
+  `sweepSymbols` themselves cannot literally disagree between the two
+  surfaces: `mcp/src/session.ts` and `web/src/pages/TakeoffCanvas.jsx`
+  both call the exact same exported functions from `symbolsweep.ts`, not
+  two separate implementations — recall confirmed this directly by
+  reading both call sites. The only place true parity could be LOST is
+  the wire→`AffineOptions` translation at each surface's own tool schema
+  (necessarily two different schemas — a zod tool vs. a JSON-schema agent
+  tool). Rather than write a test that runs both surfaces and compares
+  outputs (which would need a browser — not available in this
+  environment — to exercise the canvas path for real), the fix is
+  structural: a single exported `affineOptionsFromWire()` in
+  `symbolsweep.ts` that BOTH `mcp/src/tools.ts` and `web/src/lib/
+  agentTools.js` import and call, so the two schemas cannot drift out of
+  translation sync with each other even if their wire shapes' field names
+  ever diverge cosmetically. The new parity test exercises the canvas
+  side's actual dispatcher (`executeAgentTool`) end to end and asserts the
+  `AffineOptions` it hands the engine matches the shared function's own
+  output bit for bit.
 
 ---
 
