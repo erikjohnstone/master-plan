@@ -1,5 +1,74 @@
 # BAS production workflow progress
 
+## Engineering calculator dependency — 2026-09-09
+
+The preceding “What's after this?” answer was status-only: **no progress**.
+This continuation revalidated the isolated `codex/bas-math-engine` checkout,
+read the full goal/instructions, and polled the same **77284** regression handle
+live. No duplicate corpus run was launched. Original PDFs/keys and holdout remain
+untouched. New code is entirely in the shared Python engineering dependency and
+its exclusive process envelope; no web/MCP source, VectorGrid, graph or symbol
+logic changed.
+
+Implemented `engineering_units.py`, `engineering_contracts.py`, `engineering.py`:
+source-retaining typed ratings; exact decimal/rational dimensional comparisons;
+signal direction/mode, analog ranges/excitation, declared series/parallel/effective
+resistive loading, contact/pulse characteristics, explicit operating/startup/off
+power scenarios, torque/close-off/fail/environment checks, physical-terminal
+allocation and expansion constraints. W/VA conversion requires that scenario's
+explicit power factor. Unknown ratings never default to zero or a passing result;
+known failures survive other missing inputs. Cross-check endpoint mode/direction
+conflicts and terminal/endpoint reuse cannot pass as independent rows. A supply
+cannot be split into separate partial-load checks. Expansion power references
+the same-base/pool power calculation covering every module. Extreme exact
+rational complexity rejects explicitly, never rounds to a passing boundary.
+
+Primary-source research continued during implementation: UFGS interface/expansion
+and actuator distinctions; NIST exact force/length/unit definitions; DOE real vs
+apparent power. The next network dependency was researched against official
+BACnet addendum ce, Modbus serial V1.02 and TI RS-485 references, recorded in the
+compatibility contract. Reference examples are not project defaults. The real
+M-601 independent key supplies only the signal requirement; its calculator test
+retains original wording and source IDs and treats missing counterpart ratings
+as unknown. This fixture-backed test is **not** a new live source/UI walkthrough.
+
+Verified:
+
+- Final **62381 exit 0**, `engineering-kernel-python-final.log`: **307 pass,
+  zero failures/skips, 20.98 s**, with `OT_BAS_VERIFY_PACKAGE=1` after MCP build.
+  Includes the prior 174 Python cases, new negative/boundary/identity cases,
+  exhaustive small declared load/topology scenarios, nine real Python process
+  comparisons, malformed/oversized payloads and actual packaged-source parity.
+  Original request and repeat/JSON replay are checked. No installed count or
+  full D-workflow coverage is inferred from these test counts.
+- Final mypy: **16 source files**, no issues. An earlier pass had 306 pytest
+  successes but four mypy errors from one reused loop variable; renamed that
+  variable without changing behavior. The failing log remains retained.
+- **30221 exit 0**: existing shared BAS MCP tests **44 pass**, types and build
+  pass. Actual packaged legacy MCP→Python smoke **21870 exit 0** preserves old
+  math/serial/IP/response parity. Final rebuilt Python sources match checkout
+  byte-for-byte; packaged process import location and response are checked, not
+  inferred from build success. Packaging is an explicit opt-in test gate and
+  was enabled for the final full Python run.
+- No browser code changed; the prior complete web/browser evidence remains
+  recorded below. No new engineering browser journey is claimed.
+
+The ongoing legacy regression **77284** still has active CPU-consuming takeoff
+and graph children. Its completed table-recall phase reports Bessemer **6/11
+(54.5%)**, five misses and three key-unlisted additions; six core sets have no
+table keys, and **23 manifest PDFs fail with historical Desktop-path ENOENT**.
+This is not a complete table-corpus pass. Takeoff/reference/graph finals remain
+pending. Do not call those path failures an extraction regression or silently
+change keys. After the run terminates, inspect content identities and repair only
+isolated input-location mappings before the required complete evaluation.
+
+Next remains the full contract: network constraints around the existing solvers,
+shared source/equipment ownership and register/event persistence, UI/MCP service,
+real development PDF journeys, and remaining A/B/C/E/corpus/holdout gates.
+The numeric dependency **does not complete workflow D**. No new engineering
+UI/MCP action exists yet; selected-check `pass` is not project completeness.
+No push, merge, deployment, model, vision or pricing/labor work.
+
 ## Explicit list-rule verification and engineering handoff — 2026-09-09
 
 Committed locally: **5b4d82cf** is the verified v2 list/UI increment;

@@ -4,6 +4,14 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add the shared Python engineering dependency for explicit signal, electrical,
+  power, mechanical, allocation and expansion constraints. Retain original
+  source/input bases; use exact units, explicit power scenarios and separate
+  failed/missing outcomes. Reject duplicate physical-source allocation and
+  bounded-arithmetic overflow. This is not yet a UI/MCP engineering workflow:
+  source ownership, saved review, network integration and end-to-end acceptance
+  remain unfinished. Existing extraction and quantity algorithms are unchanged.
+
 - Add opt-in component rule v2 for complete, explicitly singular controller,
   occupancy-sensor, static-pressure-sensor and supply-air-damper lists. Keep
   distinct functions separate, reject ambiguous/conditional partial kits, and

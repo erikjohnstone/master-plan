@@ -90,6 +90,11 @@ pressure sensors and supply-air dampers. Original wording stays available from
 each compact row. The upgrade does not assign these components to equipment or
 change earlier results; applicability still requires review and recalculation.
 
+Engineering compatibility is being built in the shared Python engine. Its
+declared-rating checks and process tests are implemented; the saved engineering
+register, source-ownership service, network integration and UI/MCP workflow are
+not yet complete. This is not an available project-compatibility certification.
+
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
 **Takeoff · Edit · ⋯** controls at the upper right. **Schedules**

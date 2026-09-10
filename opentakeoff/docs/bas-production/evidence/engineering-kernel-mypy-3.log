@@ -1,0 +1,5 @@
+bas_engine/engineering.py:390: error: Incompatible types in assignment (expression has type "EndpointAllocation", variable has type "Endpoint")  [assignment]
+bas_engine/engineering.py:391: error: "Endpoint" has no attribute "endpoint"; maybe "endpoint_id"?  [attr-defined]
+bas_engine/engineering.py:392: error: "Endpoint" has no attribute "channel_id"  [attr-defined]
+bas_engine/engineering.py:393: error: "Endpoint" has no attribute "channel_id"  [attr-defined]
+Found 4 errors in 1 file (checked 16 source files)

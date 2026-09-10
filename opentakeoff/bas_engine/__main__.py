@@ -13,6 +13,8 @@ from .models import Contract, EngineRequest, EngineResult
 from .point_lists import PointListInput, PointListResult, review_point_lists
 from .assignment_demand import AssignmentDemandInput, AssignmentDemandResult, calculate_assignment_demand
 from .assemblies import AssemblyQuantityInput, AssemblyQuantityResult, calculate_assembly_quantities
+from .engineering_contracts import EngineeringInput
+from .engineering import EngineeringResult, check_engineering
 
 MAX_BYTES = 32 * 1024 * 1024
 
@@ -23,6 +25,7 @@ class Envelope(Contract):
     point_lists: PointListInput | None = None
     assignment_demand: AssignmentDemandInput | None = None
     assembly_quantities: AssemblyQuantityInput | None = None
+    engineering: EngineeringInput | None = None
 
 
 def main() -> int:
@@ -31,10 +34,13 @@ def main() -> int:
         if len(data) > MAX_BYTES:
             raise ValueError("BAS input exceeds 32 MiB")
         envelope = Envelope.model_validate_json(data)
-        if sum(item is not None for item in (envelope.request, envelope.blueprint, envelope.point_lists, envelope.assignment_demand, envelope.assembly_quantities)) != 1:
-            raise ValueError("provide exactly one request, blueprint, point_lists, assignment_demand or assembly_quantities payload")
-        result: EngineResult | PointListResult | AssignmentDemandResult | AssemblyQuantityResult
-        if envelope.assembly_quantities is not None:
+        if sum(item is not None for item in (envelope.request, envelope.blueprint, envelope.point_lists, envelope.assignment_demand, envelope.assembly_quantities, envelope.engineering)) != 1:
+            raise ValueError("provide exactly one request, blueprint, point_lists, assignment_demand, assembly_quantities or engineering payload")
+        result: EngineResult | PointListResult | AssignmentDemandResult | AssemblyQuantityResult | EngineeringResult
+        if envelope.engineering is not None:
+            result = check_engineering(envelope.engineering)
+            result = EngineeringResult.model_validate(result.model_dump())
+        elif envelope.assembly_quantities is not None:
             result = calculate_assembly_quantities(envelope.assembly_quantities)
             result = AssemblyQuantityResult.model_validate(result.model_dump())
         elif envelope.assignment_demand is not None:

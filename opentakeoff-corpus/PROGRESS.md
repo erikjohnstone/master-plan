@@ -1,5 +1,25 @@
 ## Active work
 
+Engineering continuation: the preceding status answer was **no progress**;
+this turn adds the shared Python declared-constraint dependency and bounded
+process envelope. Exact units, signal/load/contact/pulse/power/mechanical checks,
+cross-check endpoint/terminal ownership and expansion constraints are tested;
+no new extraction, graph, symbol, browser or MCP source changes. Final Python
+**62381 exit 0**, **307 pass / zero skips/failures (20.98 s)** including explicit
+packaging verification; mypy **16 files**. Existing MCP BAS **44 pass**,
+types/build and actual packaged legacy transport smoke pass. The full research,
+retained failure logs, input/source limits and evidence are in
+`opentakeoff/docs/bas-production/PROGRESS.md`.
+
+**77284 remains live**, same job, not restarted. Completed table recall is
+Bessemer **6/11**, five misses/three key-unlisted additions, six core sets without
+keys, and **23 ENOENT historical Desktop PDF paths**. Takeoff/reference/graph
+finals remain pending. Do not claim a full regression pass. Resolve isolated
+input-location mappings by content identity only after the current run finishes;
+do not edit source keys or mutate this run's manifest. Engineering network,
+ownership/persistence/UI/MCP integration, the other workflow gates and untouched
+holdout remain required. Nothing pushed, merged or deployed.
+
 Local checkpoints: **5b4d82cf** (verified list rules/UI) and **8a214255**
 (engineering acceptance/source key). Full existing scored corpus regression
 **77284** is now running and was re-polled live, log

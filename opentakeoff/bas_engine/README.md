@@ -1,5 +1,42 @@
 # BAS math engine
 
+## Engineering compatibility dependency — not yet a complete UI/MCP workflow
+
+The exclusive Python `engineering` envelope accepts
+`bas_engineering_input_v1` and returns `bas_engineering_result_v1`, pinned to
+`declared_engineering_constraints_1`. It implements declared signal
+direction/mode, analog range/excitation, resistive loading, contact and pulse
+characteristics, explicit operating/startup power scenarios, mechanical ratings,
+physical-terminal allocation and expansion constraints. Expansion power checks
+reuse the same scenario calculator. Endpoint identity, terminal exclusivity and
+power-source ownership are checked across submitted check rows as well as within
+one row. Splitting a physical supply into separate partial-load checks rejects.
+
+Every entered characteristic retains an explicit-input or drawing-transcription
+basis; a transcription requires original wording and source IDs. This is not
+source authentication: the pending shared workflow service must establish actual
+capture/equipment/source ownership before accepting or saving these inputs.
+Results retain their complete input and per-rule input paths, missing fields and
+pass/fail/not-evaluable outcomes. Overall status applies only to selected declared
+constraints, never project completeness or engineering certification.
+
+Comparisons use bounded decimal strings and exact rational units. W and VA are
+different dimensions; conversion needs the applicable explicit power factor.
+Derating and startup states have no default. Known failures remain failures when
+another field is missing. Extreme rational intermediates exceeding 8,192 bits
+reject the calculation explicitly instead of rounding or truncating it. The
+existing 32-MiB process input/output limit remains unchanged.
+
+This dependency is tested through the actual Python process. It is **not yet
+exposed by a UI control or MCP tool**, and does not implement the engineering
+register, persistence/review, network integration or complete source-backed
+browser/MCP journey. Those remain required by
+[the full compatibility contract](../docs/bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
+Existing network/hardware, point-list, assignment and assembly calculations are
+unchanged. There is no new extraction, detector, product selection or pricing.
+
+## Existing production integrations
+
 The same bounded Python transport also accepts an exclusive `point_lists`
 envelope containing Session source context and indexed tables. It returns
 `bas_point_lists_v1`: source-bound listed observations, sparse/uninterpreted
@@ -57,6 +94,12 @@ python3 -m venv .venv-bas
 .venv-bas/bin/python -m pytest bas_engine/tests -q
 .venv-bas/bin/python -m mypy --config-file bas_engine/pyproject.toml bas_engine
 ```
+
+For the explicit engineering packaging gate, first run `npm run build` in
+`mcp/`, then run `OT_BAS_VERIFY_PACKAGE=1 .venv-bas/bin/python -m pytest
+bas_engine/tests -q` from `opentakeoff/`. This verifies packaged source bytes,
+the actual Python import path and process response parity; it fails if a required
+bundle is missing or stale. The ordinary suite skips only that packaging gate.
 
 The Node bridge uses `OPENTAKEOFF_BAS_PYTHON`, then the checkout's
 `.venv-bas/bin/python`, then `python3` on PATH. For a Windows virtual environment,
