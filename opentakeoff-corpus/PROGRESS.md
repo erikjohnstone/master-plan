@@ -1,5 +1,19 @@
 ## Active work
 
+2026-09-09 ownership/history continuation: shared engineering register,
+append-only dependency-bound reviews and actual Python history replay are
+implemented internally. **23** focused service/ownership tests cover all eleven
+rule families and real browser-store round trips; two reproduced defects
+(stale-assembly view and response/request binding) were corrected. Full Python
+**438 pass / mypy 18 files** including package verification; full BAS MCP **84
+pass**, types/build and packaged legacy smoke pass. Full web **56704 exit 0**:
+**2,657 pass / 13 existing skips**, types/lint/bench/build pass (build 9.83 s). Exact logs,
+boundaries and failed-first evidence: `opentakeoff/docs/bas-production/PROGRESS.md`.
+No extraction/VectorGrid/graph/symbol changes or public engineering UI/MCP yet.
+Same corpus **77284** and its NAVFAC child remain authoritatively live; graph
+**78/91 cells / 133/138 anchors**, takeoff/reference pending, 23 missing table
+paths not yet changed. Keep the full five-workflow goal active; no push/merge.
+
 Latest 2026-09-09 continuation: **516476ea** commits the verified network
 dependency. Shared engineering wire schemas and internal Node→Python transport
 now have **61 passing BAS MCP tests**, types/build and packaged legacy smoke.

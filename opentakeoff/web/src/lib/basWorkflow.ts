@@ -16,6 +16,8 @@ import { basAssemblyReviewEventSchema, basAssemblyInterpretationFingerprint, val
   type BasAssemblyReviewEvent } from './basAssemblyRegister.ts';
 import { basAssemblyCalculationSchema, basAssemblyCalculationFingerprint, buildBasAssemblyQuantityInput,
   basAssemblyQuantityInputFingerprint, verifyBasAssemblyQuantityResult } from './basAssemblyQuantityContract.ts';
+import { basEngineeringReviewEventSchema, validateBasEngineeringRegister, type BasEngineeringReviewEvent } from './basEngineeringRegister.ts';
+import { verifyBasEngineeringResult } from './basEngineeringContract.ts';
 export { canonicalBasJson } from './basCanonical.ts';
 
 const sha = z.string().regex(/^[a-f0-9]{64}$/);
@@ -55,6 +57,7 @@ export const basWorkflowSchema = z.object({
   assignment_calculations: z.array(basAssignmentCalculationSchema).max(10000).optional(),
   assembly_events: z.array(basAssemblyReviewEventSchema).max(10000).optional(),
   assembly_calculations: z.array(basAssemblyCalculationSchema).max(10000).optional(),
+  engineering_events: z.array(basEngineeringReviewEventSchema).max(10000).optional(),
 }).strict().superRefine((w, ctx) => {
   const ids = new Set(w.captures.map(c => c.capture_id));
   if (ids.size !== w.captures.length || (w.current_capture_id !== null && !ids.has(w.current_capture_id))) {
@@ -62,12 +65,13 @@ export const basWorkflowSchema = z.object({
   }
   const fail = (message: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, message });
   if (w.revision === 'point_captures_1' && (w.captures.some(c => c.narrative_sources) || w.review_events)) fail('Narrative/review data requires the new workflow revision');
-  const hasEquipment = ['bas_equipment_3', 'bas_assignment_4', 'bas_assembly_5'].includes(w.revision);
+  const hasEquipment = ['bas_equipment_3', 'bas_assignment_4', 'bas_assembly_5', 'bas_engineering_6'].includes(w.revision);
   if (!hasEquipment && w.captures.some(c => c.equipment_sources)) fail('Equipment evidence requires the equipment workflow revision');
   if (w.equipment_events && !hasEquipment) fail('Equipment review requires the equipment workflow revision');
-  if (w.assignment_calculations && !['bas_assignment_4', 'bas_assembly_5'].includes(w.revision)) fail('Assignment calculations require the new workflow revision');
-  if (w.assembly_events && w.revision !== 'bas_assembly_5') fail('Assembly review requires the assembly workflow revision');
-  if (w.assembly_calculations && w.revision !== 'bas_assembly_5') fail('Assembly calculations require the assembly workflow revision');
+  if (w.assignment_calculations && !['bas_assignment_4', 'bas_assembly_5', 'bas_engineering_6'].includes(w.revision)) fail('Assignment calculations require the new workflow revision');
+  if (w.assembly_events && !['bas_assembly_5', 'bas_engineering_6'].includes(w.revision)) fail('Assembly review requires the assembly workflow revision');
+  if (w.assembly_calculations && !['bas_assembly_5', 'bas_engineering_6'].includes(w.revision)) fail('Assembly calculations require the assembly workflow revision');
+  if (w.engineering_events && w.revision !== 'bas_engineering_6') fail('Engineering review requires the engineering workflow revision');
   const heads = new Map<string, string>(), operations = new Set<string>(), eventIds = new Set<string>();
   for (const event of w.review_events ?? []) {
     if (!ids.has(event.capture_id) || !w.captures.find(c => c.capture_id === event.capture_id)?.narrative_sources) fail('Review event has no retained narrative capture');
@@ -90,6 +94,16 @@ export const basWorkflowSchema = z.object({
     assemblyHeads.set(event.capture_id, event.event_id); operations.add(event.operation_id); eventIds.add(event.event_id);
   }
   const calculationIds = new Set<string>();
+  const engineeringHeads = new Map<string, string>();
+  for (const event of w.engineering_events ?? []) {
+    if (!w.equipment_events?.some(e => e.event_id === event.expected_equipment_head && e.capture_id === event.capture_id)) fail('Engineering review has no retained equipment decision');
+    if (event.expected_assembly_head !== null && !w.assembly_events?.some(e => e.event_id === event.expected_assembly_head
+      && e.capture_id === event.capture_id && e.expected_equipment_head === event.expected_equipment_head)) fail('Engineering review has no matching assembly decision');
+    if (event.expected_sequence_head !== null && !w.review_events?.some(e => e.event_id === event.expected_sequence_head && e.capture_id === event.capture_id)) fail('Engineering review has no matching SOO review');
+    if (event.expected_head !== (engineeringHeads.get(event.capture_id) ?? null)) fail('Divergent or incomplete engineering review history');
+    if (operations.has(event.operation_id) || eventIds.has(event.event_id)) fail('Duplicate BAS review operation/event');
+    engineeringHeads.set(event.capture_id, event.event_id); operations.add(event.operation_id); eventIds.add(event.event_id);
+  }
   for (const calculation of w.assignment_calculations ?? []) {
     if (calculationIds.has(calculation.calculation_id)) fail('Duplicate assignment calculation identity');
     calculationIds.add(calculation.calculation_id);
@@ -143,7 +157,7 @@ export async function captureBasEvidence(sources: BasSourceContext, points: BasP
   return { schema_version: 'bas_workflow_v1', revision: equipment ? 'bas_equipment_3' : 'bas_evidence_2', captures: [checked], current_capture_id: checked.capture_id };
 }
 
-export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSchema>, 'event_id'> | Omit<BasEquipmentReviewEvent, 'event_id'> | Omit<BasAssemblyReviewEvent, 'event_id'>) =>
+export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSchema>, 'event_id'> | Omit<BasEquipmentReviewEvent, 'event_id'> | Omit<BasAssemblyReviewEvent, 'event_id'> | Omit<BasEngineeringReviewEvent, 'event_id'>) =>
   sha256Hex(new TextEncoder().encode(canonicalBasJson(event)));
 
 export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
@@ -198,6 +212,17 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
     if (await basAssemblyQuantityInputFingerprint(input) !== calculation.input_fingerprint) throw new Error('BAS assembly calculation inputs changed');
     verifyBasAssemblyQuantityResult(input, calculation.result);
   }
+  // This browser-safe verifier establishes lineage, not arithmetic authenticity.
+  // Engineering results require shared Python replay before being used as current.
+  for (const event of result.engineering_events ?? []) {
+    const { event_id, ...payload } = event;
+    if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS engineering event fingerprint mismatch');
+    const c = result.captures.find(c => c.capture_id === event.capture_id)!;
+    const equipment = result.equipment_events!.find(e => e.event_id === event.expected_equipment_head)!;
+    const assembly = result.assembly_events?.find(e => e.event_id === event.expected_assembly_head)?.register ?? null;
+    await validateBasEngineeringRegister(c, equipment.register, assembly, event.register);
+    verifyBasEngineeringResult(event.register.input, event.result);
+  }
   return result;
 }
 
@@ -243,6 +268,12 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     if (previous && canonicalBasJson(previous) !== canonicalBasJson(calculation)) throw new Error('Conflicting assembly calculation identity');
     assemblyCalculations.set(calculation.calculation_id, calculation);
   }
+  const engineeringEvents = new Map((left.engineering_events ?? []).map(e => [e.event_id, e]));
+  for (const event of right.engineering_events ?? []) {
+    const previous = engineeringEvents.get(event.event_id);
+    if (previous && canonicalBasJson(previous) !== canonicalBasJson(event)) throw new Error('Conflicting engineering event identity');
+    engineeringEvents.set(event.event_id, event);
+  }
   return basWorkflowSchema.parse({ ...left, captures: [...merged.values()],
     revision: atLeastBasWorkflowRevision(left.revision, right.revision),
     ...(events.size || left.review_events || right.review_events ? { review_events: [...events.values()] } : {}),
@@ -250,6 +281,7 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     ...(calculations.size || left.assignment_calculations || right.assignment_calculations ? { assignment_calculations: [...calculations.values()] } : {}),
     ...(assemblyEvents.size || left.assembly_events || right.assembly_events ? { assembly_events: [...assemblyEvents.values()] } : {}),
     ...(assemblyCalculations.size || left.assembly_calculations || right.assembly_calculations ? { assembly_calculations: [...assemblyCalculations.values()] } : {}),
+    ...(engineeringEvents.size || left.engineering_events || right.engineering_events ? { engineering_events: [...engineeringEvents.values()] } : {}),
     current_capture_id: activateIncoming ? right.current_capture_id : left.current_capture_id ?? right.current_capture_id });
 }
 

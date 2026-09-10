@@ -1,0 +1,55 @@
+✖ SOO association creation, correction and removal invalidate engineering without rewriting old reviews (451.741917ms)
+✖ response acceptance binds the returned event to the exact submitted request (372.4035ms)
+✔ 1001 saved decisions replay across the batch boundary, and corruption in the final batch rejects the entire history (3424.401375ms)
+ℹ 1001 controlled events replayed in 1472.9 ms; 5363092 serialized bytes
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4679.008167
+
+✖ failing tests:
+
+test at test/basEngineeringReview.test.ts:1:12059
+✖ SOO association creation, correction and removal invalidate engineering without rewriting old reviews (451.741917ms)
+  Error [ZodError]: [
+    {
+      "code": "too_small",
+      "minimum": 1,
+      "type": "array",
+      "inclusive": true,
+      "exact": false,
+      "message": "Array must contain at least 1 element(s)",
+      "path": [
+        "action",
+        "association",
+        "equipment_references"
+      ]
+    }
+  ]
+      at get error (file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/node_modules/zod/v3/types.js:39:31)
+      at ZodObject.parse (file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/node_modules/zod/v3/types.js:114:22)
+      at applyBasReview (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/src/lib/basReview.ts:40:42)
+      at async TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/basEngineeringReview.test.ts:178:22)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    issues: [ { code: 'too_small', minimum: 1, type: 'array', inclusive: true, exact: false, message: 'Array must contain at least 1 element(s)', path: [Array] } ],
+    [errors]: [ { code: 'too_small', minimum: 1, type: 'array', inclusive: true, exact: false, message: 'Array must contain at least 1 element(s)', path: [Array] } ]
+  }
+
+test at test/basEngineeringReview.test.ts:1:14662
+✖ response acceptance binds the returned event to the exact submitted request (372.4035ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/basEngineeringReview.test.ts:208:12)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:785:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /different.*request/,
+    operator: 'throws',
+    diff: 'simple'
+  }

@@ -1,0 +1,32 @@
+✔ actual Python review retains original sources, current dependency identities and idempotent operation history (1848.614791ms)
+✔ equipment withdrawal preserves historical sources/results but invalidates freshness and new saves (2126.294625ms)
+✔ assembly exclusions stale old results; recomputation retains failed and missing constraints even when excluded (2170.736708ms)
+✔ source-version switching cannot silently reactivate an old passing result (1342.371ms)
+✔ forked, incomplete, downgraded and cross-workflow histories reject instead of silently merging (1232.241916ms)
+✔ locally rehashed calculations still require exact Python replay before being accepted as current (2144.540042ms)
+✔ ordinary IndexedDB save/load and portable import preserve complete engineering histories and legacy annotations (1018.440333ms)
+✔ source validation, runtime failure and cancellation never append a partial review (20.71325ms)
+✔ opening an unreviewed engineering workspace after equipment withdrawal must not crash on the stale assembly (4.022833ms)
+✖ SOO association creation, correction and removal invalidate engineering without rewriting old reviews (0.637416ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12340.561292
+
+✖ failing tests:
+
+test at test/basEngineeringReview.test.ts:1:12059
+✖ SOO association creation, correction and removal invalidate engineering without rewriting old reviews (0.637416ms)
+  TypeError: Cannot read properties of undefined (reading '0')
+      at engineeringFixture (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/test/helpers/basEngineeringFixture.ts:33:57)
+      at TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/basEngineeringReview.test.ts:172:39)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:785:18)
+      at Test.postRun (node:internal/test_runner/test:1232:19)
+      at Test.run (node:internal/test_runner/test:1160:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:785:7)

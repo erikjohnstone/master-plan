@@ -207,6 +207,50 @@ resources, solver-result equality, replay and actual Python process parity.
 
 ## Completion gates
 
+### Ownership and history acceptance before implementation
+
+The register retains the complete engineering input, stable declared resources
+(endpoint/part/terminal/channel/supply/pool/module/segment/closet/domain), and a
+reasoned target selection for every check. Resources are owned by actual reviewed
+equipment and its registered scope; optional assembly-component links must belong
+to that equipment in the pinned assembly register. These are declared identities,
+not inferred installed devices. Excluded/conditional/unknown component scope
+remains a review issue, not proof of an installed component.
+
+Every source span must exist in the pinned capture. Drawing transcriptions retain
+the full selected raw span text, joined with newlines in the explicitly selected
+order, without trimming/reformatting it. A transcription remains a disclosed
+human/Agent proposal even when its quote is owned; matching the quote does not
+automatically validate the numeric interpretation or its applicability.
+Explicit inputs may have no source; their reason/origin stays visible.
+
+Every check has one target record with its resources, source spans and reason.
+Every referenced resource must be selected and have the right declared role,
+equipment and scope; mechanical checks explicitly select their compared subject
+resources rather than having endpoints invented. A reasoned exclusion retains
+the original check and computed outcome. It never deletes a failed constraint.
+
+Add workflow revision 6 and append-only engineering events that retain the
+register and Python result together, pinned to capture, equipment, assembly and
+SOO review heads. Saving computes in Python; caller-supplied calculated results
+are not accepted. Identical operation retries preserve the original event;
+different requests reusing an operation ID reject. Older evidence, events and
+results remain readable after any dependency changes, with stale status.
+
+Browser-side import checks structure, fingerprints, source ownership and response
+lineage; it does not certify the stored arithmetic. The shared Python service
+must replay imported engineering calculations before treating them as current.
+No persisted self-attested flag or local actor label substitutes for that replay.
+Replay uses one bounded Python batch envelope over saved results, deduplicating
+identical input computations within the batch. It must compare the complete
+recomputed result, not just totals or a caller's hash, and identify a mismatched
+record without echoing source text. Empty history is not project completeness.
+The old envelopes retain their behavior; malformed/mixed envelopes reject.
+Test all resource families, foreign/cross-version sources, altered quotes,
+component exceptions, missing/duplicate target ownership, history forks,
+operation collisions across workflows, stale heads, deterministic retry, actual
+IndexedDB/export/import, and mathematically forged/re-hashed results.
+
 ### Shared transport acceptance before integration
 
 All eleven Python check variants need strict, non-coercing UI/MCP transport

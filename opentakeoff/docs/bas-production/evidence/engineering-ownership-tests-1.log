@@ -1,0 +1,12 @@
+✔ engineering ownership retains exact source text/bboxes and declared resource bindings without arithmetic (60.496125ms)
+✔ foreign sources, altered quotes, wrong equipment/component/scope and incomplete targets reject (40.094916ms)
+✔ component exclusions, conditions and unknown lifecycle remain issues with the original check retained (10.816084ms)
+✔ no assembly is required for explicit equipment-owned endpoints, but component claims cannot lose their dependency (12.727917ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 807.441625

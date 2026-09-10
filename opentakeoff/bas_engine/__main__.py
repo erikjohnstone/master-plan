@@ -15,6 +15,7 @@ from .assignment_demand import AssignmentDemandInput, AssignmentDemandResult, ca
 from .assemblies import AssemblyQuantityInput, AssemblyQuantityResult, calculate_assembly_quantities
 from .engineering_contracts import EngineeringInput
 from .engineering import EngineeringResult, check_engineering
+from .engineering_replay import EngineeringReplayInput, EngineeringReplayResult, replay_engineering
 
 MAX_BYTES = 32 * 1024 * 1024
 
@@ -26,6 +27,7 @@ class Envelope(Contract):
     assignment_demand: AssignmentDemandInput | None = None
     assembly_quantities: AssemblyQuantityInput | None = None
     engineering: EngineeringInput | None = None
+    engineering_replay: EngineeringReplayInput | None = None
 
 
 def main() -> int:
@@ -34,10 +36,13 @@ def main() -> int:
         if len(data) > MAX_BYTES:
             raise ValueError("BAS input exceeds 32 MiB")
         envelope = Envelope.model_validate_json(data)
-        if sum(item is not None for item in (envelope.request, envelope.blueprint, envelope.point_lists, envelope.assignment_demand, envelope.assembly_quantities, envelope.engineering)) != 1:
-            raise ValueError("provide exactly one request, blueprint, point_lists, assignment_demand, assembly_quantities or engineering payload")
-        result: EngineResult | PointListResult | AssignmentDemandResult | AssemblyQuantityResult | EngineeringResult
-        if envelope.engineering is not None:
+        if sum(item is not None for item in (envelope.request, envelope.blueprint, envelope.point_lists, envelope.assignment_demand, envelope.assembly_quantities, envelope.engineering, envelope.engineering_replay)) != 1:
+            raise ValueError("provide exactly one request, blueprint, point_lists, assignment_demand, assembly_quantities, engineering or engineering_replay payload")
+        result: EngineResult | PointListResult | AssignmentDemandResult | AssemblyQuantityResult | EngineeringResult | EngineeringReplayResult
+        if envelope.engineering_replay is not None:
+            result = replay_engineering(envelope.engineering_replay)
+            result = EngineeringReplayResult.model_validate(result.model_dump())
+        elif envelope.engineering is not None:
             result = check_engineering(envelope.engineering)
             result = EngineeringResult.model_validate(result.model_dump())
         elif envelope.assembly_quantities is not None:

@@ -1,0 +1,30 @@
+......F.                                                                 [100%]
+=================================== FAILURES ===================================
+______ test_repeated_inputs_are_computed_once_without_skipping_comparison ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10795de00>
+
+    def test_repeated_inputs_are_computed_once_without_skipping_comparison(monkeypatch):
+        import bas_engine.engineering_replay as module
+        calls = []
+        actual = module.check_engineering
+        def counted(request):
+            calls.append(request)
+            return actual(request)
+        monkeypatch.setattr(module, "check_engineering", counted)
+        result = saved()
+        request = EngineeringReplayInput(results=[result] * 100)
+        assert replay_engineering(request).checked_results == 100
+        assert len(calls) == 1
+        broken = copy.deepcopy(request)
+        broken.results[-1].checks[0].constraints[0].message = "Changed"
+>       with pytest.raises(ValueError, match="result 99"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'result 99'
+E         Actual message: 'Saved engineering result 0 does not match shared Python replay'
+
+bas_engine/tests/test_engineering_replay.py:64: AssertionError
+=========================== short test summary info ============================
+FAILED bas_engine/tests/test_engineering_replay.py::test_repeated_inputs_are_computed_once_without_skipping_comparison
+1 failed, 7 passed in 1.88s

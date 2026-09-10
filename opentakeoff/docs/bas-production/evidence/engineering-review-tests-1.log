@@ -1,0 +1,31 @@
+✔ actual Python review retains original sources, current dependency identities and idempotent operation history (1982.033375ms)
+✔ equipment withdrawal preserves historical sources/results but invalidates freshness and new saves (1292.273708ms)
+✔ assembly exclusions stale old results; recomputation retains failed and missing constraints even when excluded (1289.0985ms)
+✔ source-version switching cannot silently reactivate an old passing result (781.839375ms)
+✔ forked, incomplete, downgraded and cross-workflow histories reject instead of silently merging (769.116875ms)
+✔ locally rehashed calculations still require exact Python replay before being accepted as current (1298.562959ms)
+✔ ordinary IndexedDB save/load and portable import preserve complete engineering histories and legacy annotations (774.478167ms)
+✔ source validation, runtime failure and cancellation never append a partial review (11.607334ms)
+✖ opening an unreviewed engineering workspace after equipment withdrawal must not crash on the stale assembly (3.818375ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8668.296667
+
+✖ failing tests:
+
+test at test/basEngineeringReview.test.ts:1:11232
+✖ opening an unreviewed engineering workspace after equipment withdrawal must not crash on the stale assembly (3.818375ms)
+  Error: Assembly selection must use registered equipment in one existing scope
+      at <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/src/lib/basAssemblyRegister.ts:96:104)
+      at Array.map (<anonymous>)
+      at validateBasAssemblyRegister (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/src/lib/basAssemblyRegister.ts:93:42)
+      at async validateBasEngineeringRegister (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/src/lib/basEngineeringRegister.ts:95:35)
+      at async basEngineeringView (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/src/lib/basEngineeringReview.ts:27:16)
+      at async TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/basEngineeringReview.test.ts:163:16)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:785:7)

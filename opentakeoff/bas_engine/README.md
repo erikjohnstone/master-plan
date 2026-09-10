@@ -21,7 +21,7 @@ default device limits or installed quantities are inferred.
 
 Every entered characteristic retains an explicit-input or drawing-transcription
 basis; a transcription requires original wording and source IDs. This is not
-source authentication: the pending shared workflow service must establish actual
+source authentication: the shared engineering review service establishes retained
 capture/equipment/source ownership before accepting or saving these inputs.
 Results retain their complete input and per-rule input paths, missing fields and
 pass/fail/not-evaluable outcomes. Overall status applies only to selected declared
@@ -35,9 +35,9 @@ reject the calculation explicitly instead of rounding or truncating it. The
 existing 32-MiB process input/output limit remains unchanged.
 
 This dependency is tested through the actual Python process. It is **not yet
-exposed by a UI control or MCP tool**, and does not implement the engineering
-register, persistence/review or complete source-backed
-browser/MCP journey. Those remain required by
+exposed by a UI control or MCP tool**. Its source-bound register and append-only
+review service are implemented internally, but the complete source-backed
+browser/MCP journey remains required by
 [the full compatibility contract](../docs/bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
 The internal `runBasEngineering` transport uses the same bounded process runner
 as existing BAS calculations. Shared TypeScript schemas preserve all eleven
@@ -48,6 +48,31 @@ replay before being trusted as current. Run transport parity tests with
 `npm run test:bas` in `mcp/`; the engineering cases need the Python test extras.
 Existing network/hardware, point-list, assignment and assembly calculations are
 unchanged. There is no new extraction, detector, product selection or pricing.
+
+The exclusive `engineering_replay` envelope accepts `results` (at most 1,000
+saved engineering results) and returns `bas_engineering_replay_v1`. Python
+recomputes each distinct retained input and compares the **entire** result, not
+only a total, passing flag or local hash. A mismatch rejects the batch. This
+verifies calculation equality, not whether an operator's input matches a drawing
+or an installed device. Empty history never means project completeness.
+
+The shared register binds declared endpoints, loads, supplies, pools, terminals,
+modules and networks to reviewed equipment/scopes, with optional owned assembly
+components. Transcriptions retain the exact selected source-span text and
+bounding boxes. Component exclusions and unknown conditions remain visible;
+excluding a check does not erase its failure. Workflow `bas_engineering_6`
+events retain the register and Python result atomically, pinned to capture,
+equipment, assembly and SOO-review heads. Old results remain readable but stale
+after dependent decisions change. Retries preserve the original operation;
+conflicting histories and response/request substitutions reject.
+
+The browser-safe verifier checks structure, sources and event integrity and
+reports `requires_python_replay` for saved results. The internal Node service
+replays complete histories in count/byte-bounded batches before reporting
+`verified_shared_python_replay`. Ordinary browser save/load and portable project
+import/export retain these records; they cannot authenticate a reviewer or
+convert an imported hash into a fresh calculation. Public workflow integration
+and real-PDF journeys remain incomplete.
 
 ## Existing production integrations
 

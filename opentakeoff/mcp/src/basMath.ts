@@ -74,6 +74,17 @@ export async function runBasEngineering(payload: unknown, options: { python?: st
   return verifyBasEngineeringResult(input, result);
 }
 
+/** Recompute saved outcomes in Python. No hash or imported status substitutes
+ * for calculation equality, and this alone does not validate source ownership. */
+export async function replayBasEngineering(results: BasEngineeringResult[], options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}) {
+  const schema = z.object({ schema_version: z.literal('bas_engineering_replay_v1'),
+    rule_version: z.literal('declared_engineering_constraints_1'), checked_results: count,
+    match: z.literal(true), project_complete: z.literal(false) }).strict();
+  const result = await runBasProcess({ engineering_replay: { results } }, schema, options);
+  if (result.checked_results !== results.length) throw new Error('Engineering replay omitted saved results');
+  return result;
+}
+
 async function runBasProcess<T>(payload: unknown, schema: z.ZodType<T>, options: { python?: string; timeoutMs?: number; signal?: AbortSignal }): Promise<T> {
   options.signal?.throwIfAborted();
   safeNumbers(payload);

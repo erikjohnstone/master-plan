@@ -1,5 +1,96 @@
 # BAS production workflow progress
 
+## Engineering ownership, history and replay checkpoint — 2026-09-09
+
+The preceding research-status reply was **no progress** on implementation.
+This continuation revalidated the worktree and the same live corpus handle,
+then implemented and tested the shared review dependency. The complete five
+workflows remain the goal; public engineering/UI and remaining A/B/C/E gates
+are not complete.
+
+Shared-path decision: **yes** for declared resource/source ownership, review
+history, dependency freshness, response/request binding and Python replay. No
+new browser arithmetic, extraction/VectorGrid/graph/symbol change, product/model,
+installed-count inference, public tool, deployment or external infrastructure.
+
+New `basEngineeringRegister.ts` binds every check to selected declared resources
+and registered equipment/scopes, optionally to owned assembly components. Exact
+selected source-span wording, IDs and bboxes remain retained. All eleven Python
+families have explicit ownership coverage; exclusions and unknown conditions
+remain issues without removing the check or its outcome. Explicit inputs and
+manual transcriptions remain disclosed decisions, not automated source truth.
+
+Workflow `bas_engineering_6` retains append-only events containing the register
+and actual Python result together, pinned to capture, equipment, assembly and
+SOO review heads. The internal shared service validates, calculates, retries
+idempotently and preserves older history. Browser-safe integrity validation
+reports `requires_python_replay`; the Node service recomputes complete histories
+before `verified_shared_python_replay`. Re-hashing a forged result is not enough.
+Replay batches are count/byte bounded; identical inputs compute once per batch,
+but every saved result is compared in full. Local hashes are not authentication.
+
+Two reproduced defects were corrected on this new path:
+- Opening an unreviewed engineering view after equipment withdrawal attempted
+  to validate a stale assembly against the new empty equipment register. It now
+  discloses the stale dependency without rebasing or crashing.
+- Response acceptance originally checked retained-history equality but did not
+  bind to the exact submitted request. The browser-safe shared assertion now
+  checks request and origin as well as preservation; substituted responses reject.
+
+Focused evidence:
+- **29235 / 86040 exit 0**: initial web/MCP typechecks.
+- Ownership unit tests: **4 pass**, `engineering-ownership-tests-1.log`.
+- Python replay **45553 exit 0**: **8 pass / mypy 18 files**. Initial test
+  incorrectly reused one mutable object 100 times; fixed the fixture to use
+  independent records without weakening the expected last-record rejection.
+- Initial service run **27440 exit 1**: 8 pass and the reproduced stale-assembly
+  failure. Follow-up **70130 exit 0**: 20 pass plus MCP typecheck.
+- Boundary test **86743 exit 1** reproduced response/request acceptance failure.
+  The SOO fixture also lacked a required equipment reference; corrected the
+  controlled fixture, not production association validation. Its deliberately
+  empty matrix tests history invalidation, not point extraction coverage.
+- **8925 exit 0**: **23 ownership/service tests pass**, zero skips/failures,
+  **28,120.14 ms**, MCP typecheck/build pass. Includes all eleven families,
+  source/owner/role negatives, SOO creation/correction/removal, stale equipment
+  and assembly state, capture switching, fork/import/retry, source preservation,
+  actual IndexedDB round trips, response substitution and forged math.
+- Controlled dense history: **1,001 events / 5,363,092 serialized bytes**,
+  successful full-history replay **2,312.3 ms** in the focused run. A re-hashed
+  corruption in the final batch rejects the entire history. This is a bounded
+  synthetic history test, not real addendum or production peak-memory proof.
+
+Full gates:
+- **76181 exit 0**: **438 Python tests pass**, zero skips/failures, **33.49 s**,
+  explicit `OT_BAS_VERIFY_PACKAGE=1`; mypy passes **18 source files**.
+- **69564 exit 0**: **84 BAS MCP tests pass**, zero skips/failures,
+  **38,372.90 ms**. New tests are registered in normal `test:bas`.
+- **44497 exit 0**: rebuilt packaged legacy real-stdio smoke passes for SOO,
+  hardware/license, serial/IP and wire parity.
+- Full web **56704 exit 0**: types/lint and **2,657 tests pass / 13 existing skips /
+  0 failures**, **51,371.80 ms** test phase. Existing three lint warnings.
+  All existing benchmarks pass; build passes in **9.83 s**, existing chunk-size
+  warning. This verifies the internal dependency, not a new real-browser journey.
+  The first web attempt failed on a new test-fixture property typo (`sources`
+  instead of `documents`), corrected before this passing test phase.
+  One test title was subsequently clarified from source-version switching to
+  **capture switching**, because it does not claim real addendum validation;
+  its unchanged assertion passes in `engineering-review-capture-switch-1.log`.
+
+Same **77284** corpus run remains live, with the NAVFAC child confirmed using
+CPU. No restart or path-manifest modification. Graph **78/91 cells / 133/138
+anchors**, zero wrong/unexpected, matches documented starting misses; table
+phase remains incomplete due to 23 historical-path failures. Takeoff/reference
+finals remain pending. This running legacy component-list regression is not a
+fixed-commit final gate for the new complete engineering workflow.
+
+Next: complete selected-equipment engineering editing, exact response/live-state
+acceptance, public UI/MCP service entry points and retained non-commercial
+exports; actual original-PDF journeys across the rule families and themes; then
+remaining coverage, review/revision/release, applicable full corpus and untouched
+holdout acceptance. Restore isolated missing input mappings only after **77284**
+is terminal, using the existing 23/23 hash-matched audit. No success criterion,
+source key or threshold has been changed. No push, merge or deployment.
+
 ## Shared engineering transport checkpoint — 2026-09-09
 
 Network dependency committed locally as **516476ea**. This continuation also

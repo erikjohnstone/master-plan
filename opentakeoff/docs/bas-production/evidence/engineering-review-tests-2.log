@@ -1,0 +1,28 @@
+✔ owned signal checks save and replay through Python; every selected resource is checked (550.903375ms)
+✔ owned analog checks save and replay through Python; every selected resource is checked (523.662542ms)
+✔ owned loading checks save and replay through Python; every selected resource is checked (524.174375ms)
+✔ owned contact checks save and replay through Python; every selected resource is checked (527.039834ms)
+✔ owned pulse checks save and replay through Python; every selected resource is checked (528.530125ms)
+✔ owned power checks save and replay through Python; every selected resource is checked (526.818583ms)
+✔ owned mechanical checks save and replay through Python; every selected resource is checked (515.083333ms)
+✔ owned allocation checks save and replay through Python; every selected resource is checked (521.333417ms)
+✔ owned expansion checks save and replay through Python; every selected resource is checked (532.324917ms)
+✔ owned serial checks save and replay through Python; every selected resource is checked (532.073625ms)
+✔ owned ip checks save and replay through Python; every selected resource is checked (544.7745ms)
+✔ actual Python review retains original sources, current dependency identities and idempotent operation history (1392.24225ms)
+✔ equipment withdrawal preserves historical sources/results but invalidates freshness and new saves (1293.958ms)
+✔ assembly exclusions stale old results; recomputation retains failed and missing constraints even when excluded (1304.616917ms)
+✔ source-version switching cannot silently reactivate an old passing result (777.274542ms)
+✔ forked, incomplete, downgraded and cross-workflow histories reject instead of silently merging (787.930167ms)
+✔ locally rehashed calculations still require exact Python replay before being accepted as current (1300.427875ms)
+✔ ordinary IndexedDB save/load and portable import preserve complete engineering histories and legacy annotations (756.945917ms)
+✔ source validation, runtime failure and cancellation never append a partial review (11.625917ms)
+✔ opening an unreviewed engineering workspace after equipment withdrawal must not crash on the stale assembly (4.600583ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7977.4005
