@@ -1440,6 +1440,12 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       propose(b.tx, b.ty, xi, 0);
     }
   }
+  // §4.1's `via` disclosure — which mechanism actually found a placement —
+  // reads this boundary: xf < rigidXformCount is "rigid", rigidXformCount
+  // <= xf < rotationXformCount is Phase 2's "rotation" basis, xf >=
+  // rotationXformCount is Phase 3's "affine" basis (captured here, after
+  // Phase 2's own appends and before Phase 3's).
+  const rotationXformCount = xforms.length;
 
   // ── 2c. two-segment-basis affine (Phase 3 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md) ──
   // Phase 2 only ever proposes a SIMILARITY transform: one segment's own
@@ -1756,7 +1762,9 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
    * better with the ACTUAL affine transform near it. Returns null when
    * refinement can't run (correspondences too few/ambiguous/collinear —
    * §2.1's own refusal) or doesn't beat the rigid score; never throws. */
-  const refine = (rigidM: [number, number, number, number], tx: number, ty: number): { at: Point; score: number; m: [number, number, number, number]; transform: SweepTransform } | null => {
+  const refine = (
+    rigidM: [number, number, number, number], tx: number, ty: number, via: SweepTransform["via"],
+  ): { at: Point; score: number; m: [number, number, number, number]; transform: SweepTransform } | null => {
     if (!affineOn) return null;
     const corr = gatherCorrespondences(rel, rigidM, tx, ty, segs, wideGrid!, 6 * tol);
     const fit = fitAffine(corr);
@@ -1771,7 +1779,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       transform: {
         rotation_deg: decomp.rotation_deg, scale_x: decomp.scale_x, scale_y: decomp.scale_y,
         shear_deg: decomp.shear_deg, mirrored: decomp.mirrored,
-        rms_px: Math.round(fit.rms * 100) / 100, tol_px: Math.round(tolFit * 100) / 100, via: "rigid",
+        rms_px: Math.round(fit.rms * 100) / 100, tol_px: Math.round(tolFit * 100) / 100, via,
       },
     };
   };
@@ -1811,7 +1819,13 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     // is dropped immediately, exactly as before Phase 2/3 existed — never
     // call refine() for a rigid candidate this poor (same cost, same result).
     if (!isDynamicCandidate && score < proposalFloor) continue;
-    const refined = (score < scoreHigh || isDynamicCandidate) ? refine(xforms[c.xf].m, c.tx, c.ty) : null;
+    // §4.1's `via` — which mechanism actually produced this candidate's OWN
+    // guess matrix, before refinement improves on it. A rigid candidate
+    // refined into a better fit is still "rigid" provenance (the guess that
+    // located it was one of the 8 fixed matrices); Phase 2/3 candidates
+    // report their own basis.
+    const via: SweepTransform["via"] = c.xf < rigidXformCount ? "rigid" : c.xf < rotationXformCount ? "rotation" : "affine";
+    const refined = (score < scoreHigh || isDynamicCandidate) ? refine(xforms[c.xf].m, c.tx, c.ty, via) : null;
     const accept = refined && (isDynamicCandidate ? refined.score >= score : refined.score > score);
     // A dynamic candidate's OWN guess matrix (a single anchor's rotation
     // estimate, or Phase 3's 4-point basis fit) can score below even the
@@ -2156,25 +2170,37 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       });
       continue;
     }
-    // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — a plain score-based
+    // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md §4.2 — a plain score-based
     // near-miss names WHICH seed segments are responsible, not just the
-    // percentage: the top 3 least-matched segments by length, so there is
-    // something concrete to go look at on the sheet. `detail` is scoreAt's
-    // own per-segment coverage, re-read here (never re-derived) at the
-    // row's exact kept placement — cheap, since this only runs for the few
-    // rows that reach the plain near-miss branch, never on the hot scoring
-    // path. Named by length only: the code has no semantic label (no
-    // "stub"/"tick" concept) for a segment, only what it measured.
+    // percentage: the top 3 least-matched segments by length (and their
+    // orientation — horizontal/vertical/diagonal, computed from the
+    // segment's own endpoints, never an invented semantic label like
+    // "stub"/"tick"), so there is something concrete to go look at on the
+    // sheet. `detail` is scoreAt's own per-segment coverage, re-read here
+    // (never re-derived) at the row's exact kept placement — cheap, since
+    // this only runs for the few rows that reach the plain near-miss
+    // branch, never on the hot scoring path. The base sentence keeps this
+    // engine's own established "matched X% … (commit bar Y%)" wording
+    // (quoted verbatim in SweepReviewPanel.jsx's own comment, already a
+    // real product-facing convention) rather than §4.2's illustrative
+    // "reproduces X%" phrasing — a deliberate, disclosed choice, not a
+    // miss; see the Findings entry.
     const detail: number[] = [];
     scoreAt(s.mAt ?? xforms[s.xf].m, s.at[0], s.at[1], undefined, detail);
+    const orientationOf = (ax: number, ay: number, bx: number, by: number): "horizontal" | "vertical" | "diagonal" => {
+      const angDeg = (undirectedAngle(by - ay, bx - ax) * 180) / Math.PI; // [0, 180)
+      if (Math.min(angDeg, Math.abs(180 - angDeg)) <= 5) return "horizontal";
+      if (Math.abs(angDeg - 90) <= 5) return "vertical";
+      return "diagonal";
+    };
     const missing = rel
-      .map((r, k) => ({ len: r[4], frac: detail[k] ?? 0 }))
+      .map((r, k) => ({ ax: r[0], ay: r[1], bx: r[2], by: r[3], len: r[4], frac: detail[k] ?? 0 }))
       .filter((x) => x.frac < 0.5)
       .sort((a, b) => b.len - a.len || b.frac - a.frac)
       .slice(0, 3);
     const missingPct = Math.max(0, 100 - Math.round(s.score * 100));
     const missingText = missing.length
-      ? `; missing ${missing.map((x) => `the ${Math.round(x.len)}px segment`).join(" and ")} (${missingPct}% of linework)`
+      ? `; missing ${missing.map((x) => `the ${Math.round(x.len)} px ${orientationOf(x.ax, x.ay, x.bx, x.by)}`).join(" and ")} (${missingPct}% of linework)`
       : "";
     withheld.push({ ...row(s), reason: `matched ${Math.round(s.score * 100)}% of the seed's linework (commit bar ${Math.round(scoreHigh * 100)}%)${missingText} — likely a variant or an overlapped instance; look before counting it` });
   }

@@ -189,7 +189,7 @@ test("a perturbed near-miss lands in withheld with a reason, and is never a matc
   // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — the reason names WHICH
   // segment is missing (the ~28px diagonal, by length — the code has no
   // semantic name for it), not just the aggregate percentage.
-  assert.match(w.reason, /missing the 28px segment/, `reason should name the broken diagonal: ${w.reason}`);
+  assert.match(w.reason, /missing the 28 px diagonal/, `reason should name the broken diagonal by length and orientation: ${w.reason}`);
   assert.match(w.reason, /% of linework\)/, `reason should quantify the missing share: ${w.reason}`);
 });
 
@@ -816,6 +816,7 @@ for (const deg of [30, 57, 123, 211]) {
     assert.ok(m.transform, "a Phase-2-discovered match must disclose its transform");
     assert.ok(Math.abs(m.transform!.rotation_deg - deg) < 3, `disclosed rotation ${m.transform!.rotation_deg} vs true ${deg}`);
     assert.equal(m.transform!.mirrored, false);
+    assert.equal(m.transform!.via, "rotation", "§4.1 — a Phase-2-discovered row discloses its OWN basis, not the rigid path's");
   });
 }
 
@@ -892,6 +893,7 @@ test("Phase 3: an x-only 1.3× stretch invisible to both the rigid search and Ph
   assert.ok(Math.abs(m.transform!.scale_x - 1.3) < 0.05, `disclosed scale_x ${m.transform!.scale_x} vs true 1.3`);
   assert.ok(Math.abs(m.transform!.scale_y - 1) < 0.05, `disclosed scale_y ${m.transform!.scale_y} vs true 1.0`);
   assert.equal(m.transform!.mirrored, false);
+  assert.equal(m.transform!.via, "affine", "§4.1 — a Phase-3-discovered row discloses its OWN basis, not the rigid or rotation path's");
 });
 
 test("Phase 3: a y-only 1.3× stretch is found and disclosed (the other axis, not just x)", () => {
@@ -934,6 +936,7 @@ test("Phase 3: a 1.6× stretch (over the default 1.5× bound) is withheld with t
   const perfect = affine.withheld.find((w) => w.transform && Math.abs(w.transform.scale_x - 1.6) < 0.05);
   assert.ok(perfect, `expected a withheld row disclosing the true ~1.6× fit, got: ${JSON.stringify(affine.withheld)}`);
   assert.ok(/stretch/.test(perfect!.reason) && /bar 1\.5/.test(perfect!.reason), `bounds reason should name the stretch and the bar, got: ${perfect!.reason}`);
+  assert.equal(perfect!.transform!.via, "affine", "§4.1 — the out-of-bounds fit was found via Phase 3's own basis");
 });
 
 test("Phase 3: opts.rotations === false disables two-segment-basis search too, exactly as it disables the rigid family and Phase 2", () => {
@@ -1004,7 +1007,7 @@ test("Phase 4: a near-miss names which seed segment is missing, by length — al
   assert.equal(r.withheld.length, 1);
   const w = r.withheld[0];
   assert.match(w.reason, /commit bar/);
-  assert.match(w.reason, /missing the 10px segment/, `reason should name the broken side by its full length: ${w.reason}`);
+  assert.match(w.reason, /missing the 10 px horizontal/, `reason should name the broken side by length and orientation: ${w.reason}`);
   assert.match(w.reason, /\(25% of linework\)/, `reason should quantify the missing share: ${w.reason}`);
 });
 

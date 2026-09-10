@@ -718,6 +718,47 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   before any refine() call) — this only widens what a dynamic candidate
   gets a chance to prove. Pinned by the 1.6× stretch test.
 
+- **2026-09-10 — `SweepTransform.via` had been hardcoded to `"rigid"` on
+  every refined row since Phase 1, including Phase 2/3 rows §4.1 itself
+  says should read `"rotation"`/`"affine"`.** Caught by re-reading §4.1
+  while starting Phase 5 (its own contract section), not by a failing
+  test — nothing had asserted `via` on a Phase 2/3 row before. Mechanism:
+  `refine()` built its returned `transform` with `via: "rigid"` literally,
+  regardless of which `xforms` entry actually produced the candidate being
+  refined. Fixed by capturing `rotationXformCount` (the boundary between
+  Phase 2's appends and Phase 3's, mirroring the existing `rigidXformCount`
+  boundary before Phase 2) and passing the correct `via` into `refine()`
+  from its one call site: `xf < rigidXformCount` → `"rigid"`,
+  `rigidXformCount <= xf < rotationXformCount` → `"rotation"`,
+  `xf >= rotationXformCount` → `"affine"`. Pinned with new `via` assertions
+  added to the existing Phase 2 off-grid-rotation test, the Phase 3
+  x-only-stretch test, and the Phase 3 out-of-bounds-withheld test.
+
+- **2026-09-10 — §4.2's exact missing-stroke wording conflicts with an
+  already-shipped, product-facing reason string; kept the shipped one and
+  added what §4.2 actually wanted (segment naming + orientation) inside
+  it, rather than rewriting it.** §4.2 specifies `reproduces ${pct}% of
+  the seed; missing ${list} (${missingPct}% of linework)`. But the PRE-
+  EXISTING plain near-miss reason — `matched ${pct}% of the seed's
+  linework (commit bar ${scoreHigh}%) — likely a variant or an overlapped
+  instance; look before counting it` — is quoted verbatim in
+  `web/src/components/SweepReviewPanel.jsx`'s own comment as the reason
+  this exact panel was built to surface reasons instead of a bare
+  percentage: a real, already-tested, product-facing convention, not
+  something this phase introduced. Rewriting it to §4.2's "reproduces …"
+  phrasing would silently break that convention for a wording preference
+  with no functional difference. Kept the shipped sentence and inserted
+  the missing-segment list (now WITH orientation — `"${len} px
+  ${orientation}"`, `horizontal`/`vertical`/`diagonal` computed from each
+  segment's own endpoints at a ±5° tolerance around each axis, never an
+  invented semantic label) and the aggregate percentage before its closing
+  clause. Initially shipped without orientation at all (a stated but
+  wrong assumption that no semantic label was computable) — corrected
+  once §4.2 was re-read closely: orientation is geometry, not invented
+  semantics, so there was no reason to omit it. Both existing missing-
+  stroke tests updated to assert the corrected `"{len} px {orientation}"`
+  wording.
+
 ---
 
 ## Appendix A — Background, for the reader who wants the why
