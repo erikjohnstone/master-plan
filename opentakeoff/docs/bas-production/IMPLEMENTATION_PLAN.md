@@ -4,6 +4,29 @@ This is the pre-implementation acceptance plan for `../BAS_PRODUCTION_GOAL.md`, 
 
 ## Shared-path decisions
 
+### Integration audit, 2026-09-10 (after `6192c488`)
+
+The browser Agent's `agentTools.js` exposes `compile_corpus_takeoff` with kind,
+download, service and optional `bas_math`. Its dispatcher does not expose the new
+equipment, assignment, assembly, engineering or scope-review operations offered
+by MCP/the Takeoff workspace. Therefore merging the current branch alone does
+**not** provide a complete conversational five-workflow takeoff. Before final
+acceptance, connect the existing Agent conversation to shared deterministic
+draft preparation and validated operations, preserving human-only approval.
+Verify an actual browser prompt → supported cited draft → review/correction →
+durable results/export journey, not just a mocked tool definition. Report useful
+automatic/accepted/corrected/rejected work and remaining user decisions. No model
+interpretation of new requirements/ratings or guessed quantities is authorized.
+
+Readiness research also confirms `assignment_demand.py` always reports
+`UNIQUE_POINT_IDENTITIES_NOT_ESTABLISHED` and
+`PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES`. These are retained limitations,
+not errors to hide for a green approval. The final A/B reconciliation acceptance
+must address supported unique requirement identities and remaining conflicts
+before a complete assigned-point deliverable is claimed. Current scoped-readiness
+positives for equipment/components/responsibilities/declared compatibility are
+not a substitute for the assigned-point or Agent-driven acceptance gates.
+
 - YES shared: PDF text exposure, source identities, narrative region discovery, table interpretation, equipment/template joins, component derivation, responsibility scope, engineering rules, revision correspondence, approval invalidation, readiness, deterministic exports.
 - NO shared: workspace layout, selection, filters, scroll, theme, keyboard focus, downloads and browser storage transport. These consume validated shared records and do not compute separate quantities or approval truth.
 - Keep current `compileTakeoff`, graph construction, VectorGrid, symbols, legends, and existing exports intact. Add a separate versioned BAS workflow result; do not repurpose `bas_math.project_complete=false` into a project certification.

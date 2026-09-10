@@ -38,8 +38,12 @@ function previews(w: BasWorkflow, signal?: AbortSignal) {
   const cache = new Map<string, Promise<BasDeliverableScope>>();
   return (spec: BasDeliverableScopeSpec) => {
     const key = canonicalBasJson(spec);
-    if (!cache.has(key)) cache.set(key, deliverableScopeForVerifiedWorkflow(w, spec, signal));
-    return cache.get(key)!;
+    const value = cache.get(key) ?? deliverableScopeForVerifiedWorkflow(w, spec, signal);
+    // Aggregate readiness can visit many historical bases. Keep only the
+    // current and one historical projection, not an unbounded inventory cache.
+    cache.delete(key); cache.set(key, value);
+    if (cache.size > 2) cache.delete(cache.keys().next().value!);
+    return value;
   };
 }
 const scopeFingerprint = (v: BasDeliverableScope) => {
@@ -128,6 +132,38 @@ export async function inspectBasScopeHistory(raw: unknown) {
     scopes: [...journal.scopes.values()].map(e => ({ scope_id: e.scope_id, event_id: e.event_id,
       state: e.action.kind === 'save_scope' ? 'saved_not_approved' as const : 'withdrawn' as const })),
     replay_verification: 'lineage_only' as const, approved: false as const };
+}
+
+/** Shared readiness input, with one verified workflow and operation-local
+ * projection cache. Not approval, byte verification or arithmetic replay.
+ * Every retained decision used below is semantically replayed; lineage alone
+ * cannot establish its result. Never accept caller-supplied coverage arrays. */
+export async function prepareBasScopeReadiness(raw: unknown, eventId: string, signal?: AbortSignal) {
+  sha.parse(eventId); signal?.throwIfAborted();
+  const workflow = await verifyBasWorkflow(raw), journal = history(workflow);
+  const scope = savedScope(workflow, eventId), preview = previews(workflow, signal);
+  if (journal.scopes.get(scope.scope_id)?.event_id !== scope.event_id)
+    throw new Error('Readiness requires the current saved scope, not a superseded or withdrawn scope');
+  const original = (await replayEvent(workflow, scope, preview)).value as BasDeliverableScope;
+  const current = await preview(currentSpec(workflow, scope.action.specification));
+  const coverage = [];
+  for (const event of journal.coverage.values()) {
+    signal?.throwIfAborted();
+    if (event.scope_id !== scope.scope_id || event.action.kind !== 'record_coverage') continue;
+    const action = event.action;
+    await replayEvent(workflow, event, preview);
+    let state: 'current_dependencies' | 'changed_dependencies' | 'unavailable_current_inputs' = 'unavailable_current_inputs';
+    let current_error: string | null = null;
+    try {
+      const value = await coverageResult(workflow, { ...action, basis: current.specification.basis }, current.specification, preview);
+      state = value.fingerprint === event.result_fingerprint ? 'current_dependencies' : 'changed_dependencies';
+    } catch (error) {
+      signal?.throwIfAborted(); current_error = error instanceof Error ? error.message : 'Current coverage replay failed';
+    }
+    coverage.push({ event, state, current_error });
+  }
+  signal?.throwIfAborted();
+  return { workflow, scope, original, current, coverage };
 }
 
 /** Replay a single retained decision, then compare relevant current inputs.

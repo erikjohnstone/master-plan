@@ -13,8 +13,8 @@ export const uuid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart
 export const explicit = <T>(value: T) => ({ value, basis: { origin: 'explicit_input' as const, source_span_ids: [], original_text: null,
   reason: 'Controlled explicit test input, not an extracted capability' } });
 
-export async function engineeringFixture(options: { withSequence?: boolean } = {}) {
-  const source = buildBasSourceContext([{ sha256: 'a'.repeat(64), byte_length: 100, name: 'controlled-engineering.pdf', page_count: 1,
+export async function engineeringFixture(options: { withSequence?: boolean; sha256?: string; byte_length?: number } = {}) {
+  const source = buildBasSourceContext([{ sha256: options.sha256 ?? 'a'.repeat(64), byte_length: options.byte_length ?? 100, name: 'controlled-engineering.pdf', page_count: 1,
     pages: [{ page_number: 1, sheet_key: 'controlled-engineering.pdf', width_px: 1800, height_px: 1000, rotation: 0,
       spans: [{ str: 'AHU-1 THRU AHU-2', x0: 10, y0: 10, x1: 200, y1: 20 },
         { str: '10. PROVIDE WITH 0-10 VDC MODULATING ACTUATOR.', x0: 10, y0: 150, x1: 1200, y1: 170 },

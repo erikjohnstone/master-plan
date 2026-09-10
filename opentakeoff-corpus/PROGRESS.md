@@ -1,5 +1,27 @@
 ## Active work
 
+2026-09-10 after **6192c488**: internal shared scoped-readiness implementation
+verified; no extraction/VectorGrid/symbol/bbox/Python math change. Shared scope
+replay, explicit coverage/mapping, original-byte verification, actual Python
+replay and dependency freshness remain independent gates. No approval is created.
+**Web 95900 exit 0:** 2,872 pass / 13 existing skips, types/lint/bench/build; same
+three warnings/four documented One-Click limitations. Readiness **3.858–4.063 s /
+469,352,448-byte incremental RSS**, below predeclared 10 s/512 MiB. **MCP 6178
+exit 0:** types, 128 BAS + 33 revision + six issue + 16 scope/readiness + four
+packaging + 122 tool/staging/safe-write tests, benchmarks and 53-tool metadata.
+**Python 91952 exit 0:** 453 pass / zero skips, 12.24 s; mypy 20 files. No live
+test handle remains. Proof/failure ledger: `opentakeoff/docs/bas-production/READINESS_PROOF.md`.
+
+This is not yet public approval/snapshot or a complete conversational BAS takeoff.
+The browser Agent lacks the new workflow operations; assigned-point calculations
+still always retain unresolved unique-identity/project-total flags. These gaps
+are now explicit in the acceptance plan, not waived. Continue public readiness /
+explicit approval / source-inclusive snapshot/reopen, supported identity and
+Agent-driven draft integration, all remaining A–D and final corpus/holdout gates,
+then appended researched symbol/installed-plan work. No new corpus/holdout score
+or public-walkthrough claim; historical non-green baseline retained. Goal active,
+no blocker; local commit only, no push/merge/deploy/publication.
+
 2026-09-10 after **371ec826**: public Scope & coverage is implemented and verified
 for a local feature-branch commit. Shared catalogs/mapping preparation and the
 existing journal power UI/MCP; no extraction/VectorGrid/symbol/math change.

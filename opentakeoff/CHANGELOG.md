@@ -12,6 +12,12 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add an internal shared scoped-readiness service linking saved human coverage,
+  exact source mappings, original-byte verification, Python replay, dependency
+  freshness and retained issues. Readiness is never an approval, installed
+  count or project-completeness claim. Public approval/snapshots and complete
+  browser-Agent orchestration remain unfinished. No extraction or math change.
+
 - Connect shared scope/coverage review to an internal Takeoff workspace and
   `bas_scope_review`. Populate choices from retained claims; preserve original
   page/span evidence, explicit exclusions, dependencies, draft/source return,

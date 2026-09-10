@@ -1,5 +1,32 @@
 # BAS production workflow progress
 
+## Scoped readiness — verified internal increment, 2026-09-10
+
+After **6192c488**, an internal shared readiness service now joins exact saved
+scope/coverage, source mapping, original-byte verification, actual Python replay,
+selective dependencies and retained inside/outside issues. It never approves or
+changes extraction/math. Ten new web tests and five actual-Python integration
+tests cover positive equipment/components/responsibilities/declared-compatibility
+and negative integrity/freshness/coverage cases. Full web **95900 exit 0**:
+**2,872 pass / 13 existing skips**, types/lint/bench/build, same known warnings.
+Readiness benchmark **3.858–4.063 s / 469,352,448-byte incremental peak RSS** under
+predeclared 10 s/512 MiB. Final MCP **6178 exit 0**: types, 128 BAS + 33 revision +
+six issue + 16 scope/readiness + four packaging + 122 tool/staging/safe-write
+tests; unchanged performance budgets and 53-tool metadata check pass. Python
+**91952 exit 0**: 453 pass / zero skips, 12.24 s; mypy 20 source files pass.
+All test handles are terminal; this increment is ready for its local commit.
+
+Two explicit completion gaps are now recorded in `IMPLEMENTATION_PLAN.md`:
+the browser Agent does not expose the new workflow operations, and the existing
+assigned-point calculator always retains unresolved unique-identity/project-total
+flags. Do not hide those flags or equate editors/MCP capabilities with a complete
+conversational BAS takeoff. The original source/corpus, useful automatic-work and
+Agent-driven draft acceptance gates remain required. Next: complete this gate,
+then public readiness/approval/snapshots and source-inclusive reopen, supported
+point identity/reconciliation and Agent integration, remaining A–D/final corpus/
+holdout verification, then the appended symbol/installed-plan phase. See
+`READINESS_CONTRACT.md` / `READINESS_PROOF.md`. Goal active; no blocker or deployment.
+
 ## Public scope and source coverage — verified increment, 2026-09-10
 
 After **371ec826**, populated shared catalogs, exact reference mapping preparation,

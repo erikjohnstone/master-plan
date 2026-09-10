@@ -20,7 +20,7 @@
     "check:tool-count": "node scripts/check-tool-count.mjs",
     "pretest": "npm run test:bas",
     "posttest:bas": "npm run test:bas-revisions && npm run test:bas-issues && npm run test:bas-scope",
-    "test:bas-scope": "node --import tsx --test test/basDeliverableScope.test.ts test/basScopeReview.test.ts test/basScopeTransport.test.ts",
+    "test:bas-scope": "node --import tsx --test test/basDeliverableScope.test.ts test/basScopeReview.test.ts test/basScopeTransport.test.ts test/basReadiness.test.ts",
     "test:bas-issues": "node --import tsx --test test/basIssueReview.test.ts test/basIssueTransport.test.ts && node --import tsx scripts/bench-bas-issue-lineage.mts && node --import tsx scripts/bench-bas-issue-journal.mts",
     "test:bas-revisions": "node --import tsx --test test/basRevisionComparison.test.ts test/basRevisionReview.test.ts test/basRevisionOperations.test.ts test/basRevisionTransport.test.ts && node --import tsx scripts/bench-bas-revision-comparison.mts && node --import tsx scripts/bench-bas-revision-journal.mts",
     "test:bas": "node --import tsx --test test/basSources.test.ts test/basSourceView.test.ts test/basMath.test.ts test/basPointLists.test.ts test/basPointAudit.test.ts test/basRoutingComparison.test.ts test/basAssignmentDemand.test.ts test/basAssemblyQuantities.test.ts test/basEngineeringContract.test.ts test/basEngineeringReview.test.ts test/basEngineeringOwnershipFamilies.test.ts test/basEngineeringIntegration.test.ts test/basEngineeringExport.test.ts test/basProjectReview.test.ts test/basEvidenceBundle.test.ts test/basWorkflowReplay.test.ts test/basRestoreFile.test.ts test/basDrawingReview.test.ts test/basRevisionInventory.test.ts",
