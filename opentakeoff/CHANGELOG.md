@@ -12,6 +12,12 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add an internal shared deliverable-scope compiler over the existing revision
+  inventory. Exact source-cited exclusions retain included prerequisites and
+  original quantities; dependency fingerprints distinguish relevant changes
+  from unrelated edits. Scope preview is not approval, verified coverage or a
+  shipped public release workflow. No extraction, math, persistence or UI change.
+
 - Route SOO issues to their exact retained clause, region or matrix comparison;
   preserve drafts and original-source return. Add an internal, paged source-text
   accounting reader using unchanged shared discovery results. Missing/historical

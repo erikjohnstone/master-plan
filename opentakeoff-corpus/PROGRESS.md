@@ -1,5 +1,29 @@
 ## Active work
 
+2026-09-10 checkpoint after **c1a7fcea**: added the internal shared deliverable
+scope/exclusion compiler, preserving the original inventory, citations, saved
+quantities, unknowns and stale dependencies. Explicit report exclusions cannot
+remove required assignment members or connected engineering resources. Selective
+content fingerprints respond to relevant changes, not unrelated register edits.
+No extraction/VectorGrid/symbol/Python math change; no public scope/approval UI or
+MCP feature is claimed. Coverage, issue/readiness, approval and durable release
+remain unfinished main-goal work, not replaced by this internal foundation.
+
+Final **web 5760 exit 0: 2,835 pass / 13 existing skips**, types/lint/bench/build;
+same three warnings, four legacy One-Click known-fails and build notices. Final
+**MCP 15294 exit 0: typecheck and 8 pass**, including actual Python shared-pool
+addition, excluded failure retention, assigned-demand/empty-result boundaries
+and existing production compile/restoration parity. Real-retained preview
+**832.851–836.404 ms / 31,391,744-byte incremental peak RSS**, under predeclared
+5 s/512 MiB limits. No new corpus/holdout or full Python-suite run; no new public
+browser/packaged-MCP walkthrough. Details in
+`opentakeoff/docs/bas-production/DELIVERABLE_SCOPE_PROOF.md`.
+
+Next: actual saved scope/coverage decisions, shared readiness, public integration,
+selective approvals and source-inclusive approved snapshot/export/reopen, then
+remaining A–D acceptance/final corpus gates. The user's appended deep symbol /
+installed-plan phase remains last. Active, no blocker, no push/merge/deployment.
+
 2026-09-10 checkpoint after **c0a3ac8e**: completed exact SOO issue-to-clause,
 region/comparison and page navigation, plus an internal bounded source-accounting
 reader. This is surface-only selection over unchanged shared discovery/review;

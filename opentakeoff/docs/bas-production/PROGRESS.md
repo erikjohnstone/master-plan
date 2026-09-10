@@ -1,5 +1,38 @@
 # BAS production workflow progress
 
+## Shared deliverable scope and dependency compiler — 2026-09-10
+
+After **c1a7fcea**, added the internal shared exact-ID scope/exclusion compiler
+over the unchanged revision inventory. It retains all original evidence and
+saved quantities, resource-sharing prerequisites, conditions/responsibilities,
+outside/unselected items, stale dependencies and unknowns. Per-claim fingerprints
+distinguish unrelated edits from relevant changes. Excluding a report claim
+does not remove an equipment member or shared load. Coverage, source availability,
+issue adjudication and Python replay are explicitly unverified by this preview;
+approval/project completeness remain false. No new public UI/MCP scope feature,
+persistence revision, extraction, VectorGrid, symbol or Python math change.
+
+Predeclared primary-source research/acceptance: `DELIVERABLE_SCOPE_CONTRACT.md`.
+Baseline 12 inventory tests passed; no missing component-clause defect was found.
+**Final web 5760 exit 0:** types/lint/tests/all benchmarks/build, **2,835 pass /
+13 existing skips / zero failures**, tests 21.964 s, build 5.40 s. Same three
+canvas warnings, four disclosed legacy One-Click known-fails and build notices.
+**Final MCP 15294 exit 0:** types and **8 pass**, including actual Python shared-
+pool additions, excluded failures, retained assignment demand, calculated empty
+results and existing compile/restoration parity. No full Python/corpus/holdout run.
+
+Final real-retained scope benchmark: **832.851–836.404 ms**, **31,391,744-byte**
+incremental peak RSS, below predeclared 5 s/512 MiB gates. Nine claims, 205
+dependencies, 496 unchanged inventory items. Proof and precise limits:
+`DELIVERABLE_SCOPE_PROOF.md`. Internal compiler tests are not a new public UI /
+packaged MCP walkthrough or automatic hardware discovery.
+
+**Next:** saved scope/coverage/applicability decisions, issue/readiness integration,
+public UI/MCP, selective approvals and source-inclusive snapshot/export/reopen;
+remaining original A–D acceptance and final corpus/holdout gates. The five main
+workflows remain first; appended deep symbol/installed-plan research remains
+last. Goal active, no blocker or production-completion claim, no push/merge/deploy.
+
 ## Exact SOO issue routes and source-accounting inspection — 2026-09-10
 
 After **c0a3ac8e**, corrected the reproduced general-workspace-only SOO route.

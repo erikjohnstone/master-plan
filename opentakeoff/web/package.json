@@ -18,8 +18,9 @@
     "bench:bas-sync": "node --import tsx bench/bas-sync-history.mts",
     "bench:bas-drawings": "node --import tsx bench/bas-drawing-history.mts",
     "bench:bas-revision-inventory": "node --import tsx bench/bas-revision-inventory.mts",
+    "bench:bas-deliverable-scope": "node --import tsx bench/bas-deliverable-scope.mts",
     "demo:ui": "node --import tsx scripts/demo-ui-proof.mjs",
-    "check": "npm run typecheck && npm run lint && npm test && npm run bench:bas-sync && npm run bench:bas-drawings && npm run bench:bas-revision-inventory && npm run bench && npm run build",
+    "check": "npm run typecheck && npm run lint && npm test && npm run bench:bas-sync && npm run bench:bas-drawings && npm run bench:bas-revision-inventory && npm run bench:bas-deliverable-scope && npm run bench && npm run build",
     "styles:sync": "diff src/styles/tokens.css ${SPLINE_DIR:-../../spline-app/frontend}/src/styles/tokens.css && diff src/styles/app.css ${SPLINE_DIR:-../../spline-app/frontend}/src/styles/app.css && echo styles-in-sync || echo \"sibling missing or drifted (non-fatal)\"",
     "lint": "eslint src netlify/functions"
   },
