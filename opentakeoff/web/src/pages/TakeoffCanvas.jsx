@@ -41,6 +41,8 @@ import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
 import { assertBasAssignmentUpdate } from "../lib/basAssignmentDemandContract.ts";
 import { assertBasAssemblyCalculationUpdate } from "../lib/basAssemblyQuantityContract.ts";
 import { applyBasAssemblyReview } from "../lib/basAssemblyReview.ts";
+import { assertBasEngineeringUpdate, assertBasEngineeringInspection } from "../lib/basEngineeringReview.ts";
+import { basEngineeringCommandSchema } from "../lib/basEngineeringRegister.ts";
 import {
   compileAgentTakeoff,
   dedupeTakeoffRows,
@@ -12877,6 +12879,24 @@ export default function TakeoffCanvas() {
           basWorkflow={basWorkflow}
           basViewState={basViewState}
           onBasViewStateChange={setBasViewState}
+          onBasEngineering={async (rawCommand, options = {}) => {
+            const command = basEngineeringCommandSchema.parse(rawCommand);
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            options.signal?.throwIfAborted();
+            const response = await fetch('/__ot/bas-engineering', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: options.signal,
+              body: JSON.stringify({ workflow: previous, request: command }) });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Engineering service unavailable; prior results were preserved.');
+            const updated = await verifyBasWorkflow(result.workflow);
+            if (command.action === 'review') assertBasEngineeringUpdate(previous, updated, result.event, command.request, 'operator_input');
+            else await assertBasEngineeringInspection(previous, updated, result.view, command.request.capture_id);
+            options.signal?.throwIfAborted();
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature) {
+              throw new Error('The BAS workspace or source PDFs changed. No stale engineering result was accepted.');
+            }
+            if (options.persist && command.action === 'review') { basWorkflowRef.current = updated; setBasWorkflow(updated); }
+            return { ...result, workflow: updated };
+          }}
           onBasAssemblyCalculate={async request => {
             const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
             const response = await fetch('/__ot/bas-assembly-quantities', { method: 'POST', headers: { 'Content-Type': 'application/json' },

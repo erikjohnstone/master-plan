@@ -1,9 +1,25 @@
 # Changelog
 
+- Correct the packaged MCP VectorGrid runtime location and ship its unchanged
+  Python import dependencies. Source-run extraction paths and algorithms are
+  unchanged; package checks verify byte-identical runtime copies.
+
+- Engineering result input links now disclose manual transcription versus
+  explicit declaration, open the exact nested input, and page dense outcomes.
+  Saved engineering reviews remain accessible after equipment withdrawal.
+
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add the development selected-equipment Engineering editor and shared HTTP/MCP
+  review/replay entry points. Retain equipment-owned resources, exact original
+  wording, explicit input origins, all eleven check variants and append-only
+  results. Preview/save and read-only replay bind to current sources and review
+  heads; older or altered responses cannot replace the active workspace.
+  Unknowns, excluded failures and stale dependencies remain separate. JSON
+  evidence export/import includes the history; full real-corpus, workbook and
+  release acceptance is still in progress, not a production-completion claim.
 - Add the shared Python engineering dependency for explicit signal, electrical,
   power, mechanical, allocation and expansion constraints. Retain original
   source/input bases; use exact units, explicit power scenarios and separate

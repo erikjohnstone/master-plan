@@ -1,5 +1,44 @@
 ## Active work
 
+2026-09-09 newest checkpoint supersedes live/pending statuses below: full web
+**60382 exit 0**, **2,665 pass / 13 skips**, types/lint/bench/build pass; Python
+**438 pass / mypy 18 files**; browser-4 passes both themes/three widths, exact
+input provenance and source return, fresh import and controlled owner withdrawal.
+The packaged MCP runtime resolved VectorGrid outside its package and silently
+used fallback tables. User approved **packaging/loading only**. Existing Python
+files are now copied byte-for-byte; shared runtime location and cache dependency
+are corrected without algorithm/threshold/bbox/symbol/math edits. Public real-PDF
+MCP **6174 exit 0**, 64.698 s: exact browser capture/history/outcomes, legacy
+output, replay, retry and export/reimport pass. Standalone runtime/regression
+gates pass: 6 standalone pages, **29 tables / 2,390 cells** exactly equal across
+source/package and first/repeated requests; missing sources error, raster and
+symbol-only controls add no vector tables. Four packaging tests, 30 existing
+adapter/pipeline tests, two cache tests, packaged stdio smoke and final **87 BAS
+MCP tests / types / 50-tool count** pass. Generated package bytecode was removed
+by rebuilding only its output directory; originals are unchanged. One real
+controlled engineering check is not full design verification.
+Same legacy corpus **77284 terminal**, 5,460.9 s: takeoff **505/541** (installed
+470/499), reference **99/129**, graph **78/91 cells / 133/138 anchors**, unchanged
+baseline; 23 old-path ENOENTs still disclosed/unmodified. Full detail and limits:
+`opentakeoff/docs/bas-production/PROGRESS.md`. Five-workflow goal remains active;
+no push/merge/deploy. Earlier logs and failed-first evidence are retained.
+
+2026-09-09 Engineering UI/public integration is in active verification, not
+production completion. Shared review/inspect now reaches HTTP/CLI and public BAS
+compile; selected-equipment forms retain source wording, unknowns, drafts and
+history. **87 BAS MCP tests pass**, types/build/50-tool count and legacy stdio
+pass. Actual Fort Sam UI direction/mode walkthrough passed twice (61.044 s and
+255.840 s under concurrent checks), both themes and three widths. Controlled
+counterpart inputs remain labeled; no installed or full 0–10 V range claim.
+Full web has **2,662 pass / 13 existing skips**, bench/build pending on **80830**.
+Python full run: 437 pass, one unchanged 10-second child timeout; exact focused
+rerun passes in 0.82 s. Packaged real-PDF MCP attempt **12601** ended **137** in
+initial compile; cause not established, no success claim. Detailed evidence,
+remaining acceptance and next queue: `opentakeoff/docs/bas-production/PROGRESS.md`.
+Same **77284** corpus run remains live beyond NAVFAC; graph **78/91 cells /
+133/138 anchors**, takeoff/reference pending, 23 missing table paths unchanged.
+No extraction/symbol/VectorGrid/Python arithmetic change; no push/merge/deploy.
+
 2026-09-09 ownership/history continuation: shared engineering register,
 append-only dependency-bound reviews and actual Python history replay are
 implemented internally. **23** focused service/ownership tests cover all eleven

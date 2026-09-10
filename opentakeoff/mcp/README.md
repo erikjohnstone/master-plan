@@ -12,6 +12,20 @@ decides whether the numbers are any good.
 
 ## Run it in 60 seconds (npx)
 
+The packaged MCP server includes the same VectorGrid Python source files used
+by the source-run app. Its configured Python needs `pdfplumber`, `pymupdf`
+(PyMuPDF) and Shapely 2. Set `OPENTAKEOFF_VECTORGRID_PYTHON` to that interpreter
+when it is not `python3`. Packaging does not install dependencies or include
+models, corpus PDFs, keys or virtual environments. Dependency licenses still
+apply. Run `npm run test:packaging` before distributing a build.
+
+For a configured runtime, `node --import tsx scripts/verify-vectorgrid-package.mts
+<new-evidence-directory> <pdf> <page> [<pdf> <page> ...]` executes exact full-reply
+comparisons between source and relocated package, twice per process. It also
+requires missing PDF inputs to remain explicit errors. This is packaging/parity
+verification, not independent table accuracy. The build recreates only its
+generated `dist/python/vectorgrid` directory so local bytecode is not shipped.
+
 The BAS engineering extension needs Python 3.11+ and Pydantic V2 on the MCP
 host. Set `OPENTAKEOFF_BAS_PYTHON` if Python is not on PATH. The existing
 `compile_corpus_takeoff` verb returns additive `bas_math` for BAS; its optional
@@ -93,6 +107,28 @@ lists with distinct physical roles. Upgrade only with a new reasoned
 and results remain retained; no new equipment membership or component quantity
 is accepted by changing the rule alone. Recalculate dependent results explicitly.
 See [list rules and migration](../docs/bas-production/COMPONENT_LIST_RULE_CONTRACT.md).
+
+Development revision `bas_engineering_6` retains source-bound declared resources
+and append-only engineering results. Optional `bas_engineering_review` on BAS
+compile accepts `{operation_id, capture_id, expected_head,
+expected_equipment_head, expected_assembly_head, expected_sequence_head,
+register, reason}`. Each register contains strict Python-compatible `input`,
+equipment-owned `resources`, and per-check `targets` with applicability/exclusions.
+The shared service validates original source wording and resource ownership,
+replays retained history, calculates and records an `agent_proposal`. It is not
+human approval. Optional `bas_engineering_inspect: {capture_id}` replays saved
+calculations without adding an engineering decision.
+
+`bas_engineering` returns the register/event, current dependency heads, issues,
+source status and a separate calculation-verification status. Ordinary reads
+report `requires_python_replay`; requested review/inspection reports
+`verified_shared_python_replay` only after recomputation. Stale dependencies do
+not become current through replay. Unknowns remain unknown; exclusions preserve
+failed outcomes. `project_complete` is false and `installed_quantity` is null.
+Current shared source, quantities, old exports and unrelated trade behavior retain
+their meaning. An unavailable unrequested summary is isolated in
+`bas_engineering_error`; requested invalid operations fail without partial saves.
+See [engineering contracts and current acceptance](../docs/bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
 
 No clone, no build—point your MCP client at the published package:
 

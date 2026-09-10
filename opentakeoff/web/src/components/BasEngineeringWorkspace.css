@@ -1,0 +1,27 @@
+.bas-engineering-workspace { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; color: var(--ink); }
+.bas-engineering-workspace small { display: block; color: var(--ink-secondary); }
+.bas-engineering-workspace h3, .bas-engineering-workspace h4 { margin: 0; }
+.bas-engineering-workspace label { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; }
+.bas-engineering-workspace input, .bas-engineering-workspace select, .bas-engineering-workspace textarea { max-width: 100%; min-width: 0; }
+.bas-engineering-workspace textarea { min-height: calc(var(--ctl-m) * 2); }
+.bas-engineering-field { display: flex; flex-direction: column; gap: var(--sp-3); min-width: 0; margin: 0; padding: var(--sp-4); border: 1px solid var(--ink-faint); }
+.bas-engineering-field legend { padding: 0 var(--sp-2); color: var(--ink-secondary); }
+.bas-engineering-form-layout { display: flex; flex-wrap: wrap; gap: var(--sp-4); align-items: start; }
+.bas-engineering-form-layout > nav { flex: 1 1 calc(var(--ctl-m) * 6); }
+.bas-engineering-form-layout > :last-child { flex: 3 1 var(--props-w); }
+.bas-engineering-field-list { display: flex; flex-direction: column; gap: var(--sp-2); }
+.bas-engineering-field-list button { text-align: left; white-space: normal; }
+.bas-engineering-workspace button[aria-pressed="true"] { color: var(--cobalt); border-color: var(--cobalt); background: var(--tint-select); }
+.bas-engineering-source-options { display: flex; flex-direction: column; gap: var(--sp-3); max-height: calc(var(--ctl-m) * 9); overflow: auto; margin: var(--sp-3) 0; }
+.bas-engineering-source-options label { flex-direction: row; align-items: start; }
+.bas-engineering-source-options input { flex: 0 0 auto; }
+.bas-engineering-source { padding: var(--sp-3) 0; border-bottom: 1px solid var(--ink-faint); }
+.bas-engineering-sources, .bas-engineering-source p { overflow-wrap: anywhere; }
+.bas-engineering-verbatim { white-space: pre-wrap; overflow-wrap: anywhere; }
+.bas-engineering-result [data-status="fail"] { color: var(--c-danger); }
+.bas-engineering-result td { vertical-align: top; }
+.bas-engineering-result td p { margin: var(--sp-2) 0; }
+.bas-engineering-input-link { margin-bottom: var(--sp-3); }
+.bas-engineering-input-link small { margin-top: var(--sp-2); }
+.bas-engineering-choices { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.bas-engineering-choices label { flex-direction: row; align-items: center; }

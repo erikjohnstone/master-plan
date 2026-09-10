@@ -76,6 +76,7 @@ function sourceDigest() {
       join(WEB_LIB, "tableExtractorReconcile.ts"),
       join(WEB_LIB, "vectorGridAdapter.ts"),
       join(WEB_LIB, "vectorGridClient.ts"),
+      join(WEB_LIB, "vectorGridRuntime.mjs"),
       // THE PYTHON SIDE IS PART OF THE ENGINE, not an external service. The
       // vectorgrid extractor runs out of process, so a change to it is
       // invisible to a digest that only hashes TypeScript — and the graph it

@@ -106,6 +106,37 @@ specific issue. Never report an unsupported topology as a zero-load solution.
 
 ## Persistence, shared service and UI journey
 
+### User-facing integration acceptance (before implementation)
+
+Selected equipment gains one internal Engineering view: a checks table, declared
+resources and a focused selected-field editor, not a permanent canvas rail.
+Forms use the existing strict schemas for structure and shared validation for
+truth. All eleven check variants, nested lists and nullable ratings must be
+editable without JSON. Required fields start blank and unknown ratings start
+null; selecting a known rating does not select a mode, capacity or default
+factor. Source selection preserves exact full span wording and existing bbox
+navigation. Resource IDs are stable UI-generated identities with explicit
+equipment ownership; choosing a resource never claims an installed device.
+
+The shared Node review/inspect service is exposed through one bounded HTTP/CLI
+transport and the existing public BAS compile tool. Preview computes without
+persisting; recording revalidates/recomputes against current heads. Browser
+acceptance binds response, submitted request, loaded PDF signature and workspace
+epoch. Imported saved outcomes remain unverified until explicit shared replay.
+Cancellation, stale/late responses and failed validation never overwrite state.
+No static-host/browser calculator fallback is introduced.
+
+Focused UI fields use labeled fieldsets and native controls following
+[W3C form grouping guidance](https://www.w3.org/WAI/tutorials/forms/grouping/)
+(rechecked 2026-09-09). Schema introspection is presentation only, using the
+installed Zod v3 object's shape/nullable/array interfaces (official
+[Zod v3 documentation](https://v3.zod.dev/)); it must not implement engineering
+rules or coerce decimal strings. Tests must cover every field/variant and array
+editing, blank/null preservation, stable identities, response/source changes,
+HTTP and public MCP parity, actual-PDF preview/save/citation/reload/export,
+keyboard navigation, dense lists and both themes. Controlled counterpart inputs
+must remain labeled as such, never presented as extracted drawing capabilities.
+
 ### Numeric dependency contract (implementation order, not reduced scope)
 
 The Python dependency starts with typed signal, load, contact, pulse, power and

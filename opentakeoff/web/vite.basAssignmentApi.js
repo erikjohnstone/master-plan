@@ -20,8 +20,13 @@ export function basAssemblyMiddleware(resolveLoader) {
   return basQuantityMiddleware(resolveLoader, 'assembly');
 }
 
+export function basEngineeringMiddleware(resolveLoader) {
+  return basQuantityMiddleware(resolveLoader, 'engineering');
+}
+
 function basQuantityMiddleware(resolveLoader, kind) {
-  const route = kind === 'assembly' ? '/__ot/bas-assembly-quantities' : '/__ot/bas-assignment-demand';
+  const route = kind === 'engineering' ? '/__ot/bas-engineering'
+    : kind === 'assembly' ? '/__ot/bas-assembly-quantities' : '/__ot/bas-assignment-demand';
   return async (req, res, next) => {
     if (req.url?.split('?')[0] !== route) return next();
     if (req.method !== 'POST') return send(res, 405, { error: 'POST only' });

@@ -93,6 +93,17 @@ old calculations become stale. Inspect new declarations before separately
 assigning equipment applicability. No default kit or extra installed count.
 See [the versioned list contract](bas-production/COMPONENT_LIST_RULE_CONTRACT.md).
 
+The development BAS compile accepts `bas_engineering_review` with operation and
+capture IDs, expected engineering/equipment/assembly/SOO heads, a complete
+declared-resource/check register and a reason. It records an Agent proposal
+through the shared source-validation and Python service, not human approval.
+`bas_engineering_inspect: {capture_id}` explicitly replays retained results.
+The additive `bas_engineering` projection separates dependency freshness from
+`requires_python_replay` / `verified_shared_python_replay`. Unknown ratings,
+excluded failures and prior history remain visible. No installed quantities,
+guessed routes or whole-project compatibility certification are produced.
+See [the engineering input and evidence contract](bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

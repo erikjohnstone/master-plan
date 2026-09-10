@@ -46,6 +46,39 @@ the current decisions. Export/import and withdrawal retain earlier calculations.
 The server-capable local endpoint and Python runtime are required; there is no
 browser math fallback or inferred installation, protocol, hardware or pricing.
 
+Within selected equipment, **Engineering** opens declared compatibility checks.
+Use **Declared resources** to name equipment-owned endpoints, supplies, pools,
+terminals, modules or network locations; these are declarations, not detections.
+In **Checks**, select a check type and choose **New check**. Required fields
+start blank and missing ratings remain **Unknown / not provided**. Enter only
+declared values and attach exact drawing text when transcribing a requirement.
+Source references navigate to the original PDF; counterpart capabilities absent
+from the drawing must be disclosed explicit inputs, not claimed extraction.
+
+Use **Stage check & continue editing** for related changes. Staging does not save.
+**Preview & calculate** runs the complete staged register in shared Python;
+**Record engineering decision** checks it again against current source and review
+heads before saving. Failed and missing constraints remain separately visible,
+including explicitly excluded checks. Editing invalidates the preview; cancellation
+or changed source state cannot save a late response. Discard an outdated draft
+and review the current dependencies before trying again.
+
+**Read check** exposes original inputs and exact calculation outcomes. Each
+outcome's input links identify explicit declarations versus manual drawing
+transcriptions; they do not imply automatic hardware discovery. References on
+an individual input are separate from overall check-applicability references.
+Large result tables page through every retained constraint, fifty at a time.
+**Review saved engineering** on the equipment table keeps reviews accessible
+after equipment withdrawal; historical results do not become current again.
+After
+reload or import, use **Verify saved calculations** to replay retained results
+through shared Python. Replay does not make outdated dependencies current and
+does not approve the project. **Export evidence & decisions** retains the full
+register, original evidence and calculation history as JSON; existing row
+workbooks do not yet include engineering checks. This development workflow needs
+the local server-capable endpoint and configured Python runtime, not a browser
+calculator. Full engineering coverage and release acceptance remain in progress.
+
 Within selected equipment, choose **Assembly & responsibilities** for its
 component table. **Add from drawing declarations** offers supported explicit fan
 VFD pairs and factory-furnished onboard-controller declarations; it does not

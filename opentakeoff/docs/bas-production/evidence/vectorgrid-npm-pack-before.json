@@ -1,0 +1,276 @@
+[
+  {
+    "id": "opentakeoff-mcp@0.9.72",
+    "name": "opentakeoff-mcp",
+    "version": "0.9.72",
+    "size": 760981,
+    "unpackedSize": 2530450,
+    "shasum": "22554f6d055247dbb9f29c772cd94df3bcc21a84",
+    "integrity": "sha512-VrfrIM100dSu6qKeyM2s6ZK58Byqdwh1R7xPQfebJKhA5YyFHzUov4wjbLyy5a0YHDr69G868YZ3vJFKVyz1Aw==",
+    "filename": "opentakeoff-mcp-0.9.72.tgz",
+    "files": [
+      {
+        "path": "README.md",
+        "size": 47172,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__init__.py",
+        "size": 213,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__main__.py",
+        "size": 4185,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/__init__.cpython-314.pyc",
+        "size": 443,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/__main__.cpython-314.pyc",
+        "size": 6154,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/adapters.cpython-314.pyc",
+        "size": 24264,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/assemblies.cpython-314.pyc",
+        "size": 16042,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/assignment_demand.cpython-314.pyc",
+        "size": 23418,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/engine.cpython-314.pyc",
+        "size": 3355,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/engineering_contracts.cpython-314.pyc",
+        "size": 37202,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/engineering_network.cpython-314.pyc",
+        "size": 31371,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/engineering_replay.cpython-314.pyc",
+        "size": 3016,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/engineering_units.cpython-314.pyc",
+        "size": 8022,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/engineering.cpython-314.pyc",
+        "size": 42921,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/hardware.cpython-314.pyc",
+        "size": 6937,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/licensing.cpython-314.pyc",
+        "size": 5101,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/models.cpython-314.pyc",
+        "size": 22658,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/network.cpython-314.pyc",
+        "size": 8784,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/point_lists.cpython-314.pyc",
+        "size": 23477,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/reconcile.cpython-314.pyc",
+        "size": 6872,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/__pycache__/sources.cpython-314.pyc",
+        "size": 9777,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/adapters.py",
+        "size": 16674,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/assemblies.py",
+        "size": 10255,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/assignment_demand.py",
+        "size": 13894,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/engine.py",
+        "size": 1981,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/engineering_contracts.py",
+        "size": 21064,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/engineering_network.py",
+        "size": 19567,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/engineering_replay.py",
+        "size": 1604,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/engineering_units.py",
+        "size": 4299,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/engineering.py",
+        "size": 28137,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/hardware.py",
+        "size": 3831,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/licensing.py",
+        "size": 3239,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/models.py",
+        "size": 11090,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/network.py",
+        "size": 5266,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/point_lists.py",
+        "size": 13118,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/pyproject.toml",
+        "size": 533,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/reconcile.py",
+        "size": 3575,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/bas_engine/sources.py",
+        "size": 3716,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/bakeoff/__pycache__/bakeoff.cpython-314.pyc",
+        "size": 31428,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/bakeoff/__pycache__/boxfit.cpython-314.pyc",
+        "size": 32714,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/bakeoff/__pycache__/celltext.cpython-314.pyc",
+        "size": 32856,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/bakeoff/__pycache__/vectorgrid.cpython-314.pyc",
+        "size": 68285,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/bakeoff/bakeoff.py",
+        "size": 21637,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/bakeoff/boxfit.py",
+        "size": 20619,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/bakeoff/celltext.py",
+        "size": 20528,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/bakeoff/vectorgrid.py",
+        "size": 61450,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/sidecar/__pycache__/vectorgrid_rpc.cpython-314.pyc",
+        "size": 11018,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/sidecar/tables.py",
+        "size": 19558,
+        "mode": 420
+      },
+      {
+        "path": "dist/python/vectorgrid/sidecar/vectorgrid_rpc.py",
+        "size": 7928,
+        "mode": 420
+      },
+      {
+        "path": "dist/server-core.js",
+        "size": 1702746,
+        "mode": 420
+      },
+      {
+        "path": "dist/server.js",
+        "size": 1148,
+        "mode": 493
+      },
+      {
+        "path": "package.json",
+        "size": 5308,
+        "mode": 420
+      }
+    ],
+    "entryCount": 52,
+    "bundled": []
+  }
+]

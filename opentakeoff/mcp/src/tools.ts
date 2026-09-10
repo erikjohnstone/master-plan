@@ -6,6 +6,7 @@ import { z } from "zod";
 import { basAssignmentDemandRequestSchema } from '../../web/src/lib/basAssignmentDemandContract.ts';
 import { basAssemblyReviewRequestSchema } from '../../web/src/lib/basAssemblyRegister.ts';
 import { basAssemblyQuantityRequestSchema } from '../../web/src/lib/basAssemblyQuantityContract.ts';
+import { basEngineeringReviewRequestSchema, basEngineeringInspectRequestSchema } from '../../web/src/lib/basEngineeringRegister.ts';
 import type { McpServer, RegisteredTool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { ok, okImage, fail, UserError, type ToolReply } from "./format.ts";
 import { UNDO_CAP, CONTEXT_MIN_LEN_PX, CONTEXT_MAX_SEGMENTS, CONTEXT_MAX_SEGMENTS_CEIL, type Session } from "./session.ts";
@@ -715,18 +716,21 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       bas_assignment_demand: basAssignmentDemandRequestSchema.optional().describe('BAS only: calculate and retain listed-observation derivations for all saved assignments against capture_id and expected_equipment_head. Uses shared Python math, exact included members and system-once scope. Source cells/qualifiers, unknowns and exceptions remain inspectable. Known subtotals are not complete/unique requirements, field wiring, installed devices or approvals. Stale inputs reject. Export retains current and earlier calculations.'),
       bas_assembly_review: basAssemblyReviewRequestSchema.optional().describe('BAS only: save a reasoned component/responsibility register against exact capture, equipment head and assembly head. First inspect bas_assemblies source requirement IDs and retained drawing spans. Source declarations require matching kind/quantity/functional role; explicit decisions retain originals. Select member scope and per-equipment or selected-group-once applicability explicitly. Furnish/install/wire/program/test are independent. To review expanded singular component lists, explicitly pin register.source_rule_version to explicit_component_declarations_2 in a new reasoned event; v1 remains the default. A rule upgrade preserves history and does not add equipment/components or establish applicability; recalculate stale results after review. No default kits, inferred contractors, installed totals or operator approval; records agent_proposal. Stale writes and overlapping source consumption reject; prior history is retained.'),
       bas_assembly_quantities: basAssemblyQuantityRequestSchema.optional().describe('BAS only: compute and persist declared component quantities with shared Python for exact capture/equipment/assembly heads. All component decisions and source references remain unchanged; unknowns, predicates, exclusions and lifecycle remain distinct. No aggregate installed or unique-device total, field wiring or approval. Edit stale assembly applicability before recalculating. Export includes earlier results.'),
+      bas_engineering_review: basEngineeringReviewRequestSchema.optional().describe('BAS only: calculate and atomically retain a source/equipment-bound engineering register with shared Python. Requires exact capture, engineering/equipment/assembly/SOO heads, UUID operation, reason, declared resources and one target per check. All eleven signal/range/load/contact/pulse/power/mechanical/allocation/expansion/serial/IP variants retain authored values and original source spans. Unknown ratings stay not evaluable; exclusions retain failures. No typical ratings, routes, products, installed counts or certification. Records agent_proposal, not authenticated approval. First obtain bas_workflow source IDs and equipment decisions. Replayed imported results must match Python exactly.'),
+      bas_engineering_inspect: basEngineeringInspectRequestSchema.optional().describe('BAS only: replay retained engineering history in shared Python and inspect the selected retained capture without creating an engineering decision. Default recompile returns saved results as requires_python_replay; use this option before relying on them. verified_shared_python_replay establishes calculation equality for declared inputs, not source interpretation, installation or project completeness. Stale dependency status remains separate. No automatic approval or revision rebasing.'),
       path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
       export_path: z.string().optional().describe("Optional directory for CSV/XLSX workbook tabs"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: compileCorpusTakeoffOutput,
-  }, run("compile_corpus_takeoff", async ({ kind, service, detail, bas_math, bas_review, bas_equipment_review, bas_assignment_demand, bas_assembly_review, bas_assembly_quantities, path: outPath, export_path: exportPath, overwrite }) => {
+  }, run("compile_corpus_takeoff", async ({ kind, service, detail, bas_math, bas_review, bas_equipment_review, bas_assignment_demand, bas_assembly_review, bas_assembly_quantities, bas_engineering_review, bas_engineering_inspect, path: outPath, export_path: exportPath, overwrite }) => {
     const graph = await session.graphForPipeline();
     const compiled: any = await compileProductionTakeoff(session, graph, kind, {
       ...(service ? { service } : {}), ...(bas_math ? { bas_math } : {}), ...(bas_review ? { bas_review } : {}),
       ...(bas_equipment_review ? { bas_equipment_review } : {}),
       ...(bas_assignment_demand ? { bas_assignment_demand } : {}),
       ...(bas_assembly_review ? { bas_assembly_review } : {}), ...(bas_assembly_quantities ? { bas_assembly_quantities } : {}),
+      ...(bas_engineering_review ? { bas_engineering_review } : {}), ...(bas_engineering_inspect ? { bas_engineering_inspect } : {}),
     });
     if (detail !== "full") {
       // Delete, don't set undefined — an object key present with value

@@ -14,6 +14,7 @@ import { basEquipmentSummarySchema } from "../../web/src/lib/basEquipmentReview.
 import { basAssignmentCalculationSchema } from '../../web/src/lib/basAssignmentDemandContract.ts';
 import { basAssemblySummarySchema } from '../../web/src/lib/basAssemblyReview.ts';
 import { basAssemblyCalculationSchema } from '../../web/src/lib/basAssemblyQuantityContract.ts';
+import { basEngineeringSummarySchema } from '../../web/src/lib/basEngineeringReview.ts';
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -124,6 +125,8 @@ export const compileCorpusTakeoffOutput = {
   bas_assignment_demand: basAssignmentCalculationSchema.optional().describe('Persisted shared-Python derivation of assigned listed observations, bound to exact capture/equipment head. Subtotals exclude unavailable cells and are not unique requirements, field wiring, installed quantities or approval.'),
   bas_assemblies: basAssemblySummarySchema.optional().describe('Addressable source component declarations and explicit scoped assembly/responsibility decisions; not installed proof or complete source discovery. Full original spans remain in bas_workflow.'),
   bas_assembly_quantities: basAssemblyCalculationSchema.optional().describe('Saved shared-Python declared component quantities for exact equipment and assembly decisions. Never installed/unique-device totals or approval.'),
+  bas_engineering: basEngineeringSummarySchema.optional().describe('Source/resource-bound engineering decisions, retained original inputs/results and separate dependency/replay status. A saved pass is not freshly verified, complete coverage, installed proof or approval. Use bas_engineering_inspect to replay; missing values and exclusions remain explicit.'),
+  bas_engineering_error: z.string().optional().describe('Engineering review unavailable; legacy extraction and earlier history remain retained.'),
   bas_assembly_error: z.string().optional().describe('Assembly summary unavailable; original point, table and math results remain retained. Requested assembly writes refuse atomically.'),
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),

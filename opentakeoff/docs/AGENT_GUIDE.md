@@ -357,3 +357,20 @@ known contribution. A changed equipment head makes old assembly decisions stale;
 repair the complete register against current equipment before recalculating.
 Old records remain readable/exportable. Do not remove conflicting evidence or
 describe an explicit resolution as a source correction or commissioning signoff.
+
+For declared engineering checks, `bas_engineering_review` on BAS compile takes
+the complete input/resource/target register plus the expected engineering,
+equipment, assembly and SOO review heads. Obtain original source references and
+explicit applicability before proposing ratings; an equipment power-supply
+schedule does not automatically rate its actuator control interface. The shared
+service validates exact retained wording, equipment/resource ownership and all
+previous calculations before recording a new `agent_proposal`. Do not invent
+values to make the schema pass. Null means unknown, not zero or not applicable.
+
+Inspect `bas_engineering` outcomes and missing inputs, not just the top-level
+status. To verify imported calculations, request
+`bas_engineering_inspect: {capture_id}`. Ordinary read summaries deliberately
+remain `requires_python_replay`. A replayed result can still have
+`stale_dependencies`; repair current assignments explicitly instead of relabeling
+the old decision. Exclusions retain their failures. Selected constraints never
+establish installed quantities, universal coverage or authenticated approval.

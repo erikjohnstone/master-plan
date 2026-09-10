@@ -34,6 +34,11 @@ export const basEngineeringReviewEventSchema = basEngineeringReviewRequestSchema
   rule_version: z.literal('engineering_review_1'), origin: z.enum(['operator_input', 'agent_proposal']),
   created_at: z.string().datetime(), result: basEngineeringResultSchema }).strict();
 export type BasEngineeringReviewEvent = z.infer<typeof basEngineeringReviewEventSchema>;
+export const basEngineeringInspectRequestSchema = z.object({ capture_id: sha }).strict();
+export const basEngineeringCommandSchema = z.discriminatedUnion('action', [
+  z.object({ action: z.literal('review'), request: basEngineeringReviewRequestSchema }).strict(),
+  z.object({ action: z.literal('inspect'), request: basEngineeringInspectRequestSchema }).strict(),
+]);
 
 type Reference = { resource_id: string; role: Role; input_path: string; equipment_id?: string; scope_id?: string };
 /** Explicit finite roles/paths, not a heuristic scan for strings ending in _id. */

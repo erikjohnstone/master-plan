@@ -23,9 +23,10 @@ export async function engineeringFixture(options: { withSequence?: boolean } = {
           { str: '1. THE CONTROLLER SHALL MONITOR SUPPLY AIR TEMPERATURE AND MODULATE HOT WATER FLOW TO MAINTAIN SET POINT.', x0: 10, y0: 290, x1: 1600, y1: 310 },
         ] : [])] }] }]);
   const box = [10, 10, 200, 20];
-  const equipmentSources = captureBasEquipmentTables([{ kind: 'equipment', sheet: 'controlled-engineering.pdf',
+  const tables = [{ kind: 'equipment', sheet: 'controlled-engineering.pdf',
     title: { sheet: 'controlled-engineering.pdf', text: 'AHU SCHEDULE', bbox: box }, headers: ['TAG'], region: [0, 0, 300, 100],
-    rows: [{ key: 'AHUS', sheet: 'controlled-engineering.pdf', cells: { TAG: { text: 'AHU-1 THRU AHU-2', bbox: box } } }] }]);
+    rows: [{ key: 'AHUS', sheet: 'controlled-engineering.pdf', cells: { TAG: { text: 'AHU-1 THRU AHU-2', bbox: box } } }] }];
+  const equipmentSources = captureBasEquipmentTables(tables);
   const points = basPointListsSchema.parse({ schema_version: 'bas_point_lists_v1', rule_version: 'point_observations_1',
     scope: 'discovered_matrices_only', project_complete: false, issues: [], matrices: options.withSequence ? [{
       // Deliberately empty controlled matrix tests association history, not
@@ -67,5 +68,5 @@ export async function engineeringFixture(options: { withSequence?: boolean } = {
   const request = { operation_id: uuid(50), capture_id: workflow.current_capture_id!, expected_head: heads.engineering,
     expected_equipment_head: heads.equipment!, expected_assembly_head: heads.assembly, expected_sequence_head: heads.sequence,
     reason: 'Controlled initial engineering review', register };
-  return { workflow, request, register, equipment, assembly, source, capture: workflow.captures[0] };
+  return { workflow, request, register, equipment, assembly, source, tables, capture: workflow.captures[0] };
 }

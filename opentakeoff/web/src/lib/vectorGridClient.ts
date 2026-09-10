@@ -17,13 +17,11 @@
  */
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { createInterface } from "node:readline";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 import { existsSync } from "node:fs";
 import { resolveVectorGridMode } from "./vectorGridMode.mjs";
+import { vectorGridServerPath } from "./vectorGridRuntime.mjs";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const SERVER = resolve(HERE, "../../../sidecar/tables.py");
+const SERVER = vectorGridServerPath(import.meta.url);
 
 /** off = never runs. shadow = runs and reports, merges nothing. on = primary. */
 export type VectorGridMode = "off" | "shadow" | "on";

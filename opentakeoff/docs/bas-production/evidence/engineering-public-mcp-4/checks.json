@@ -1,0 +1,10 @@
+{
+  "ok": false,
+  "phase": "compile_corpus_takeoff",
+  "error": "Error: Initial compile retained workflow: strict equality failed at $.captures (key counts 2 versus 1)",
+  "sampled_peak_rss_kb": {
+    "96585": 464752,
+    "96618": 606752
+  },
+  "stderr_bytes": 64
+}

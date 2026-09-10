@@ -90,10 +90,14 @@ pressure sensors and supply-air dampers. Original wording stays available from
 each compact row. The upgrade does not assign these components to equipment or
 change earlier results; applicability still requires review and recalculation.
 
-Engineering compatibility is being built in the shared Python engine. Its
-declared-rating and network-constraint checks and process tests are implemented;
-the saved engineering register, source-ownership service and UI/MCP workflow are
-not yet complete. This is not an available project-compatibility certification.
+The development branch adds **Equipment → Engineering** for declared signal,
+electrical, power, actuator, allocation, expansion and network checks. Stage
+source-bound resources and inputs, calculate a preview, then explicitly record
+the decision through shared Python. Saved histories retain original wording,
+unknowns and excluded failures; replay verifies calculations separately from
+dependency freshness. The same service is available through BAS compile in MCP.
+Broader real-document and release acceptance remain in progress; a passing
+selected constraint is not a complete or certified compatible design.
 
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
