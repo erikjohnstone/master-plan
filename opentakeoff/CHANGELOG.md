@@ -12,13 +12,21 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Enable evidence ZIP restore in local-first synced workspaces, coordinating
+  recovery, adoption, push acknowledgments and restore across same-scope tabs.
+  Commit annotation adoption and sync ancestry atomically; persist pending restore
+  intent across offline/restart. Restore remains local, unapproved and source-checked;
+  original PDFs are not uploaded by annotation sync. Add explicit sync status/retry,
+  cancellation, writer-v5 migration and concurrency regression tests. No extraction
+  or quantity changes; no distributed-lock or atomic-cloud guarantee.
+
 - Preserve compatible BAS captures and review/calculation history during
   local-first sync instead of treating the entire workflow as last-writer-wins.
   Invalid or competing review histories remain unmerged with a durable
   **BAS sync needs review** notice, an exportable remote recovery copy when
   available, and an explicit retry. Older snapshots cannot delete known history.
   Source lineage is verified; no calculation, approval or installed-count claim
-  is created. Synced ZIP restore and atomic cross-device coordination remain open.
+  is created. Atomic cross-device coordination remains outside the existing providers.
 
 - Add public MCP source-inclusive restore with shared preview/merge and mandatory
   merged-history Python replay. Exact originals, previous state, replay receipt

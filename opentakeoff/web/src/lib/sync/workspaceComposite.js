@@ -63,6 +63,7 @@ export function buildSyncedWorkspaceStore({ scope, provider, snapProvider, ensur
   bridge.whenSynced = annSync.whenSynced;
   bridge.whenPushed = annSync.whenPushed;
   bridge.readSyncIssue = annSync.readSyncIssue;
+  bridge.readRestoreSyncStatus = annSync.readRestoreSyncStatus;
 
   // Presence (#317) rides the same provider surface. Started async (device id
   // lives in IDB); advisory — a failure never blocks the store.
@@ -82,11 +83,8 @@ export function buildSyncedWorkspaceStore({ scope, provider, snapProvider, ensur
   })().catch(() => { /* presence is advisory */ });
 
   const composite = { ...localStore, ...annSync, ...snapSync };
-  // Local restore is atomic in IDB but bypasses this coordinator's in-flight
-  // pushes and post-adopt bookkeeping. Do not inherit that unsafe entry point
-  // by spread. Expose restore here only with explicit sync coordination/tests.
-  delete composite.restoreBasEvidence;
+  composite.restoreBasEvidence = annSync.restoreBasEvidence;
   Object.defineProperty(composite, "syncBridge", { value: bridge, enumerable: false });
-  Object.defineProperty(composite, "dispose", { enumerable: false, value: () => bridge.presence?.stop() });
+  Object.defineProperty(composite, "dispose", { enumerable: false, value: () => { annSync.dispose(); bridge.presence?.stop(); } });
   return composite;
 }

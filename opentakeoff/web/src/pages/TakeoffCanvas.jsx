@@ -3004,7 +3004,7 @@ export default function TakeoffCanvas() {
       annotationConflictRef.current = false; remotePendingRender.current = false;
       suppressNextSave.current = true;
       restoreSavedPayload(result.payload);
-      const notice = `Evidence backup restored. Original PDFs and merged history are saved locally; previous state is retained in restore journal ${result.operation_id}. This is not an approved takeoff.`;
+      const notice = `Evidence backup restored. Original PDFs and merged history are saved locally; previous state is retained in restore journal ${result.operation_id}. ${result.sync === 'pending' ? 'Annotation sync runs separately; check its status below. ' : ''}This is not an approved takeoff.`;
       setBasViewState({ ...basViewState, takeoffTab: 'review', projectReview: { originalSources: true, restoreNotice: notice } });
       setView('canvas');
       setSaveState('saved'); setCommitMsg(notice);

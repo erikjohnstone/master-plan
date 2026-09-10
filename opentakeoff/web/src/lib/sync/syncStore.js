@@ -17,9 +17,10 @@
 //   • Local write is authoritative and NEVER blocks on the network. loadAnnotations
 //     returns local instantly and cannot throw a network error into the mount
 //     chain. The Drive push is fire-and-forget.
-//   • Durable bookkeeping lives in `sync:<folderId>:*` meta keys, each its OWN key
-//     (metaGet/metaPut, no composite record) so autosave/push/recovery never
-//     lost-update each other.
+//   • Durable bookkeeping retains `sync:<folderId>:*` keys. Ancestor/revision/
+//     generation acknowledgments are atomic IDB checkpoints; adoption includes
+//     the canonical payload in that same transaction. One annotation-scope Web
+//     Lock covers network/recovery/adoption/restore through final bookkeeping.
 //   • CRASH-TORN WRITE ORDERING is the correctness spine — every durable write is
 //     ordered so a crash mid-sequence fails SAFE:
 //       - `touched` is written BEFORE the annotation content. Torn the safe way →
@@ -27,7 +28,7 @@
 //         would let the next mount's seed adopt remote over a real edit = silent
 //         loss.
 //       - the push `marker` {targetRev} is written BEFORE the push; `synced_rev`
-//         advances only AFTER a confirmed push; the marker is cleared LAST. On
+//         advances only AFTER a confirmed push, atomically clearing the marker. On
 //         recovery a lingering marker means "verify against Drive", not "trust".
 //   • `expectedRev` for a push is ALWAYS the durable `synced_rev`, never a rev
 //     carried in the payload — so a restored old snapshot mints synced_rev+1 and
@@ -38,6 +39,7 @@ import { mergeAnnotations, samePayload } from "./merge.js";
 import { annotationGeneration, attachAnnotationGeneration, isAnnotationConflict } from "../annotationGeneration.js";
 import { retainBasWorkflowHistory, verifyBasWorkflow } from '../basWorkflow.ts';
 import { sha256Hex } from '../graphKeys.js';
+import { mergeTakeoffImport } from '../importTakeoff.js';
 
 /**
  * @param {object} opts
@@ -66,6 +68,11 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
   if (!provider || typeof provider.pull !== "function" || typeof provider.push !== "function") {
     throw new Error("createSyncStore: provider with pull()/push() is required");
   }
+  if (typeof base.withAnnotationSync !== 'function' || typeof base.commitAnnotationSync !== 'function') {
+    throw new Error('createSyncStore: coordinated local base is required');
+  }
+  let active = true;
+  const coordinated = work => base.withAnnotationSync(() => active ? work() : undefined);
   const K = {
     touched: `sync:${folderId}:touched`,
     syncedRev: `sync:${folderId}:synced_rev`,
@@ -73,27 +80,30 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     lastPushedAt: `sync:${folderId}:last_pushed_at`,
     base: `sync:${folderId}:synced_base`,
     basIssue: `sync:${folderId}:bas_issue`,
+    generation: `sync:${folderId}:generation`,
   };
 
   const readSyncedRev = async () => {
     const v = await metaGet(K.syncedRev);
     return typeof v === "number" ? v : null;
   };
-  const isTouched = async () => (await metaGet(K.touched)) === true;
+  const isTouched = async () => (await metaGet(K.touched)) === true || annotationGeneration(await base.loadAnnotations()) !== null;
+  const restorePending = async local => annotationGeneration(local) !== null && annotationGeneration(local) !== (await metaGet(K.generation));
+  const syncState = (rev, data, generation, acknowledged = false, extra = {}, remove = []) => ({ scope: folderId,
+    values: { synced_rev: rev ?? null, synced_base: { rev: rev ?? null, data },
+      ...(acknowledged ? { generation } : {}), ...extra }, remove });
 
   // The COMMON ANCESTOR for the #313 three-way merge: the payload as of
   // synced_rev, written beside every synced_rev advance as { rev, data }. It is
-  // trusted ONLY when its stamped rev matches the durable synced_rev — a crash
-  // torn between the two meta writes leaves a mismatch, and a mismatched base
-  // silently degrades the next conflict to the uniform remote-wins path (the
-  // pre-#313 behavior), never to a merge against the wrong ancestor. Absent on
-  // pre-#313 installs for the same safe reason.
+  // trusted ONLY when its stamped rev matches the durable synced_rev. Older
+  // builds could tear these two writes; reject those historical mismatches.
+  // New checkpoints commit them together. Pending restore uses the shared
+  // operator-preserving import rule when no usable ancestor exists.
   const readMergeBase = async () => {
     const [v, syncedRev] = await Promise.all([metaGet(K.base), readSyncedRev()]);
     if (!v || v.data == null) return null;
     return (v.rev ?? null) === syncedRev ? v.data : null;
   };
-  const writeMergeBase = (rev, data) => metaPut(K.base, { rev: rev ?? null, data });
 
   // Delivery only: all evidence/event union and lineage decisions are shared
   // with import/restore/MCP. No Python result becomes current or approved here.
@@ -124,10 +134,9 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
   // our base (someone else wrote), or recovery that finds the same at mount, means
   // the remote WINS: snapshot the local (opted) side so nothing is lost, adopt the
   // remote as canonical, advance synced_rev:
-  //     snapshot(current local) → base.saveAnnotations(remote) → synced_rev = remote.rev
-  // Ordering is the crash spine again — synced_rev advances LAST, so a tear leaves
-  // local=remote / synced_rev=stale (next edit re-conflicts and re-reconciles), never
-  // the reverse (synced_rev ahead of an un-adopted local → the winner is silently lost).
+  //     snapshot(current local) → atomic { canonical payload, remote rev, ancestor }
+  // IDB atomically adopts and records the remote ancestor. No successful local
+  // adoption is followed by a separately crash-torn revision update.
   //
   // Resolution has two tiers (#313). With a trustworthy common ancestor
   // (synced_base matching synced_rev) the divergence resolves by SHAPE-LEVEL
@@ -190,8 +199,15 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
       const siblingFork = ancestor && Number.isInteger(remote.rev) && remote.rev === syncedRev && !samePayload(remote.data, ancestor);
       let m = null;
       let adopted;
+      const restoring = await restorePending(local);
       try {
-        if (ancestor && movedForward) m = mergeAnnotations(ancestor, local, remote.data);
+        if (restoring && !(ancestor && movedForward)) {
+          // No trustworthy pre-restore ancestry: reuse the shared import rule,
+          // retaining restored operator state. Keep the complete remote too;
+          // same-id remote values may not survive an operator-preserving merge.
+          m = { merged: mergeTakeoffImport(local, remote.data).payload, clean: false };
+          await saveSnapshot('Restore sync remote backup', remote.data, folderId);
+        } else if (ancestor && movedForward) m = mergeAnnotations(ancestor, local, remote.data);
         else if (siblingFork) m = mergeAnnotations({}, local, remote.data);
         adopted = await preserveBasHistory(m ? m.merged : remote.data, local, remote.data, ancestor);
       } catch (error) {
@@ -215,19 +231,15 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
       // side by Slice 5b's apply-time isBusy re-check + idle re-read-local (Case 2).
       if (isBusy()) break;
       try {
-        await base.saveAnnotations(adopted, { generation: remote.generation, expectedPayload: local });
+        await base.saveAnnotations(adopted, { generation: remote.generation, expectedPayload: local,
+          syncState: syncState(remote.rev, remote.data, remote.generation, samePayload(adopted, remote.data)) });
       } catch (error) {
         // Current state won the transaction. Re-read/merge on a subsequent
         // drain; never publish a remote-update callback for an uncommitted save.
         if (isAnnotationConflict(error)) break;
         throw error;
       }
-      await metaPut(K.syncedRev, remote.rev);                // advance LAST (crash spine)
-      // The next merge's ancestor is what the REMOTE holds at synced_rev — local
-      // may now be ahead of it by the merged-in local work. Written after
-      // synced_rev; a tear between the two leaves rev≠base.rev, which
-      // readMergeBase rejects (degrade, never mis-merge).
-      await writeMergeBase(remote.rev, remote.data);
+      // Canonical adoption + exact remote ancestor/rev committed atomically.
       // A merged adopt that kept any local work is now AHEAD of the remote —
       // push it (after the drain) so the other machine converges to the union
       // too. Plain remote-wins adopts are never ahead, as before.
@@ -250,7 +262,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
   let flushing = null;
   function flushPending() {
     if (flushing) return flushing;
-    flushing = maybeFlush().catch(() => {}).finally(() => { flushing = null; });
+    flushing = bootstrap.then(() => coordinated(maybeFlush)).catch(() => {}).finally(() => { flushing = null; });
     return flushing;
   }
 
@@ -261,7 +273,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     if (typeof saveSnapshot !== "function") return;
     if (!remote || remote.data == null) return;
     pendingRemote = { ...structuredClone(remote), generation }; // own bytes before any verifier await
-    await flushPending();
+    await maybeFlush(); // caller owns the lease; do not queue a nested lock
   }
 
   // ── mount recovery: a lingering marker means a push was in flight when we died.
@@ -295,18 +307,17 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
         const changed = !samePayload(retained, local);
         if (changed) {
           if (isBusy()) return false;
-          await base.saveAnnotations(retained, { generation, expectedPayload: local });
+          await base.saveAnnotations(retained, { generation, expectedPayload: local,
+            syncState: syncState(remoteRev, remote.data, generation, samePayload(retained, remote.data), {}, ['marker']) });
+        } else {
+          await base.commitAnnotationSync(syncState(remoteRev, remote.data, generation, samePayload(retained, remote.data), {}, ['marker']), { generation });
         }
-        await metaPut(K.syncedRev, remoteRev);
-        await writeMergeBase(remoteRev, remote.data);
-        await metaDelete(K.marker);
         await clearBasIssue();
         if (changed) onRemoteUpdate?.(attachAnnotationGeneration(structuredClone(retained), generation), remoteRev);
         return !samePayload(retained, remote.data);
       }
       // it landed → adopt the rev, clear the marker
-      await metaPut(K.syncedRev, remoteRev);
-      await metaDelete(K.marker);
+      await base.commitAnnotationSync(syncState(remoteRev, remote?.data ?? null, generation, samePayload(local, remote?.data), {}, ['marker']), { generation });
       return false;
     }
     // Didn't land at targetRev. Clear the marker either way; if the remote is
@@ -364,13 +375,12 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     if (await isTouched()) return;
     const retainedLocal = !samePayload(adopted, remote.data);
     if (retainedLocal) await metaPut(K.touched, true);
-    await base.saveAnnotations(adopted, { generation, expectedPayload: local });
+    await base.saveAnnotations(adopted, { generation, expectedPayload: local,
+      syncState: syncState(remote.rev, remote.data, generation, !retainedLocal) });
     // Base future pushes on remote's rev. A rev-less remote (a flag-off teammate's
     // write) stores synced_rev=null, so the next edit's push runs expectedRev=null
     // and blind-overwrites it (rev → 1). That's the mixed-fleet hazard the plan
     // hands to 4c (rev-less remote WINS, snapshot the local side); 4b only seeds.
-    await metaPut(K.syncedRev, remote.rev);
-    await writeMergeBase(remote.rev, remote.data); // the seed IS the common ancestor (#313)
     await clearBasIssue();
     if (onRemoteUpdate) onRemoteUpdate(attachAnnotationGeneration(structuredClone(adopted), generation), remote.rev);
     if (retainedLocal) schedulePush();
@@ -378,8 +388,11 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
 
   // Recovery then seed, once, at construction. loadAnnotations does NOT await this
   // (local returns instantly); the push path does, so a push can't race recovery.
-  const bootstrap = (async () => {
+  const bootstrap = coordinated(async () => {
     try {
+      // Generation and restored payload commit together. This durable outbox
+      // survives a crash before any follow-up metadata/scheduling could run.
+      if (await restorePending(await base.loadAnnotations())) return true;
       const needsRepush = await recover();
       await seedOnMount();
       return needsRepush;
@@ -388,7 +401,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
       // (the push path awaits it) or throw into a caller. Local stays canonical.
       return false;
     }
-  })();
+  }).catch(() => false);
   // If recovery found a cleanly-unlanded push, re-attempt AFTER bootstrap settles
   // (scheduling inside recover would deadlock on `await bootstrap` in pushOnce).
   bootstrap.then((needsRepush) => { if (needsRepush) schedulePush(); }).catch(() => {});
@@ -398,26 +411,32 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
   let pushing = null;
   let pushAgain = false;
   function schedulePush() {
+    if (!active) return;
     if (pushing) { pushAgain = true; return; }
     pushing = (async () => {
       do {
         pushAgain = false;
-        try { await pushOnce(); } catch { /* best-effort: local is canonical */ }
-      } while (pushAgain);
+        try { await bootstrap; await coordinated(pushOnce); } catch { /* best-effort: local is canonical */ }
+      } while (pushAgain && active);
     })().finally(() => { pushing = null; });
   }
 
   async function pushOnce() {
-    await bootstrap; // recovery/seed settle before any push
     const expectedRev = await readSyncedRev(); // durable base, never payload.rev
     const payload = await base.loadAnnotations(), ancestor = await readMergeBase();
+    const restoring = await restorePending(payload);
+    if (pendingRemote && pendingRemote.generation !== annotationGeneration(payload)) pendingRemote = null;
     // A BAS writer cannot publish an older/missing/invalid history over known
     // evidence, including a first or rev-less push. Network failure keeps the
     // local save; a successful read/reconcile is required before this push.
     const knownBas = payload.bas_workflow != null || ancestor?.bas_workflow != null || !!(await metaGet(K.basIssue));
     let cur = null;
     try { cur = structuredClone(await provider.pull()); }
-    catch { if (knownBas || expectedRev == null) return; }
+    catch { if (restoring || knownBas || expectedRev == null) return; }
+    if (restoring && cur?.data != null && (!ancestor || (cur.rev ?? null) !== expectedRev || !samePayload(cur.data, ancestor))) {
+      await reconcile(cur, annotationGeneration(payload));
+      return;
+    }
     if (knownBas || cur?.data?.bas_workflow != null) {
       let retained;
       try { retained = await preserveBasHistory(payload, payload, cur?.data, ancestor); }
@@ -460,7 +479,8 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     // Record BOTH the target and the base we're pushing from, so recovery can tell
     // "our push never landed" (remote still == baseRev, incl. null first-push) from
     // a real divergence — see recover(). Marker written BEFORE the push.
-    await metaPut(K.marker, { targetRev, baseRev: expectedRev });
+    await base.commitAnnotationSync({ scope: folderId, values: { marker: { targetRev, baseRev: expectedRev, generation: annotationGeneration(payload) } } },
+      { generation: annotationGeneration(payload) });
     const res = await provider.push(payload, { expectedRev });
     if (res.conflict) {
       // Provider refused — we KNOW nothing was written, so there's nothing to
@@ -471,12 +491,8 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
       await reconcile(res.remote, annotationGeneration(payload));
       return;
     }
-    await metaPut(K.syncedRev, res.rev);          // advance AFTER confirmed push
-    // What we just pushed is the new common ancestor (#313). Written after
-    // synced_rev — a tear leaves rev≠base.rev, which readMergeBase rejects.
-    await writeMergeBase(res.rev, payload);
-    await metaPut(K.lastPushedAt, Date.now());    // for the Slice 6 status line
-    await metaDelete(K.marker);                   // clear marker LAST
+    await base.commitAnnotationSync(syncState(res.rev, payload, annotationGeneration(payload), true,
+      { last_pushed_at: Date.now() }, ['marker']), { generation: annotationGeneration(payload) });
     await clearBasIssue();
   }
 
@@ -491,6 +507,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     // Local write authoritative; then a fire-and-forget precondition push. `touched`
     // is set BEFORE the content write (crash-ordering spine — see header).
     async saveAnnotations(payload, options) {
+      if (!active) throw new Error('This sync workspace was closed. Reload the current workspace before saving.');
       // Own state before the touched write yields; never upgrade a caller's
       // token by consulting the current adapter during an async save.
       const owned = structuredClone(payload), expected = options && structuredClone(options);
@@ -515,19 +532,22 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     try {
       await bootstrap;
       if (pushing) return;
-      const generation = annotationGeneration(await base.loadAnnotations());
-      let remote;
-      try { remote = await provider.pull(); } catch { return; }
-      if (!remote || remote.data == null) return;
-      if ((remote.rev ?? null) === (await readSyncedRev())) {
-        // Same rev is not proof of same content on an eventually-consistent
-        // transport (sibling fork — see maybeFlush). With an ancestor to
-        // compare against, different content at our own rev is a fork to
-        // reconcile; without one, or with matching content, we're in sync.
-        const anc = await readMergeBase();
-        if (!anc || samePayload(remote.data, anc)) return;
-      }
-      await reconcile(remote, generation);
+      await coordinated(async () => {
+        if (await restorePending(await base.loadAnnotations())) { schedulePush(); return; }
+        const generation = annotationGeneration(await base.loadAnnotations());
+        let remote;
+        try { remote = await provider.pull(); } catch { return; }
+        if (!remote || remote.data == null) return;
+        if ((remote.rev ?? null) === (await readSyncedRev())) {
+          // Same rev is not proof of same content on an eventually-consistent
+          // transport (sibling fork — see maybeFlush). With an ancestor to
+          // compare against, different content at our own rev is a fork to
+          // reconcile; without one, or with matching content, we're in sync.
+          const anc = await readMergeBase();
+          if (!anc || samePayload(remote.data, anc)) return;
+        }
+        await reconcile(remote, generation);
+      });
     } catch { /* best-effort; local canonical */ }
   }
 
@@ -536,6 +556,24 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
   Object.defineProperty(api, "whenPushed", { enumerable: false, value: async () => { while (pushing) await pushing; } });
   Object.defineProperty(api, "flushPending", { enumerable: false, value: flushPending });
   Object.defineProperty(api, "readSyncIssue", { enumerable: false, value: () => metaGet(K.basIssue) });
+  Object.defineProperty(api, 'restoreBasEvidence', { enumerable: false, value: async (plan, loadSource, options) => {
+    // The canonical base owns the lease, including plain-local callers in other
+    // tabs. Do not add a nested lock or wait for a network push after commit.
+    const guard = () => {
+      if (!active) throw new Error('This sync workspace was closed. No restore was committed.');
+      options?.guard?.();
+    };
+    guard();
+    const result = await base.restoreBasEvidence(plan, loadSource, { ...options, guard });
+    pendingRemote = null;
+    schedulePush();
+    return { ...result, sync: 'pending', originals_sync: 'browser_local_only' };
+  } });
+  Object.defineProperty(api, 'readRestoreSyncStatus', { enumerable: false, value: async () => {
+    const local = await base.loadAnnotations();
+    return { generation: annotationGeneration(local), pending: await restorePending(local), originals_sync: 'browser_local_only' };
+  } });
+  Object.defineProperty(api, 'dispose', { enumerable: false, value: () => { active = false; pendingRemote = null; pushAgain = false; } });
 
   return api;
 }

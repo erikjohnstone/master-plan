@@ -58,8 +58,10 @@ Existing engineering and row exports keep their current meaning.
 Local-first sync now retains compatible BAS history across known saved versions.
 Conflicting review branches produce **BAS sync needs review**, with an exportable
 remote recovery copy when available and an explicit retry—not silent replacement
-or automatic approval. Synced ZIP restore and cross-device atomicity remain work
-in progress. See the [history preservation proof](docs/bas-production/SYNC_HISTORY_PROOF.md).
+or automatic approval. Synced ZIP restore now coordinates with other tabs and
+active sync writes before its local commit; annotation sync is reported separately
+from local original-PDF retention. This is not atomic cross-device storage. See
+the [sync restore contract and proof](docs/bas-production/SYNC_RESTORE_CONTRACT.md).
 
 **Point lists → Sequences & links** retains original SOO text and compares
 supported monitoring clauses with an explicitly linked matrix and equipment
@@ -129,13 +131,13 @@ historical original, named by digest. Browser and MCP use the same archive and
 ownership checks. Missing or changed bytes block export. File verification is
 read-only. **Replay saved calculations** then checks every historical assignment,
 assembly and engineering result through the shared Python engine; it neither
-updates stale inputs nor approves a takeoff. Browser-local **Preview restore** and
+updates stale inputs nor approves a takeoff. Local and local-first synced **Preview restore** and
 **Restore reviewed merge** now replay the merged history and atomically retain
 its originals, saved state and recovery journal. An empty workspace offers
 **Restore BAS evidence backup**. Historical PDFs do not enter active counting.
 MCP also previews and explicitly restores the same shared merge into its Session,
 retaining originals and previous state in an operation-owned local directory.
-Synced restoration, drawing correspondence and approved snapshots remain unfinished;
+Drawing correspondence and approved snapshots remain unfinished;
 see [browser restore proof](docs/bas-production/RESTORE_BROWSER_PROOF.md) and
 [MCP restore contract/proof](docs/bas-production/RESTORE_MCP_PROOF.md).
 See [format, limits and acceptance](docs/bas-production/EVIDENCE_BUNDLE_CONTRACT.md).

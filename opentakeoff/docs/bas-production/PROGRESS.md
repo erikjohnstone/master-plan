@@ -1,5 +1,43 @@
 # BAS production workflow progress
 
+## Coordinated synced evidence restore — 2026-09-10
+
+After **4119b0db**, local and local-first synced restore share a per-annotation-
+scope Web Lock with recovery/adopt/push/checkpoint, including other browser tabs.
+Adoption payload and remote ancestry commit atomically; generation acknowledgment
+cannot cross restore. Durable pending state survives offline/restart. Unknown
+ancestry uses existing shared operator-preserving import and retains remote JSON;
+history conflicts still block. Closed coordinators do not send later workspace
+state. IDB v5 preserves prior records and fences uncoordinated v4 writers.
+
+**12 new tests**; final focused **94 pass** (92818, 7.233 s). Final web **95921
+exit 0: 2,754 pass / 13 existing skips**, 18.755 s tests, 5.26 s build; history
+benchmark **3.073 / 2.986 / 2.951 s** under unchanged 5 s gate. Existing lint/
+One-Click/chunk caveats remain. MCP types and **119 BAS pass** (47.749 s); corrected
+VectorGrid packaging invocation **3 pass**. Initial test/typing/command failures
+are recorded in `SYNC_RESTORE_CONTRACT.md`, not hidden.
+
+Actual browser **79651 exit 0**, `evidence/sync-restore-browser-2`: actual folder
+composite/OPFS + real Fort Sam ZIP + second-tab lease → cancel/no change → retry/
+actual Python replay of 31 records → local atomic restore → annotation provider
+confirmation → exact original reader → reload. **24.682 s** local including replay
+and controlled wait; **27.076 s** through sync. Eight final screenshots inspected;
+no page errors. No live cloud/OS-sync, new extraction or real addendum claim.
+
+Large capacity: private contexts failed quota twice; instrumented failure proves
+rollback and also exceeded 2 GiB sampled RSS. Do not claim that mode passed.
+Same **551,119,404 bytes**, isolated ordinary profile: **90411 exit 0**, restore
+**10.249 s**, verify **1.106 s**, sampled RSS **2,109,784,064 < 2,147,483,648**;
+narrow headroom, unchanged limits. Chromium RAM-based private quota is documented;
+different modes are not a before/after speed improvement. Controlled bytes are
+not real-PDF accuracy evidence. See the complete contract/proof for all limits.
+
+Main goal remains active. Next: usable journal recovery, reviewed source/version
+correspondence and scoped approval/snapshot journey, remaining A–D corpus/holdout
+gates, then appended symbol/installed-plan research and measured hardening.
+Full standalone Python/corpus/holdout not rerun; no VectorGrid, symbols, table/
+cite/bbox, Python math, keys, costs/labor, push or merge changed.
+
 ## BAS history-safe sync reconciliation — 2026-09-10
 
 After **7692b78b**, reproduced a real generic-sync loss: three independently valid

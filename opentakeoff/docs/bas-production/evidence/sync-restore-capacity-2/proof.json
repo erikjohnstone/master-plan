@@ -1,0 +1,50 @@
+{
+  "failed": true,
+  "error": "QuotaExceededError",
+  "source_bytes": 551119404,
+  "sources": 4,
+  "storage_before": {
+    "quota": 2147557376,
+    "usage": 73728,
+    "usageDetails": {
+      "indexedDB": 73728
+    }
+  },
+  "storage_after": {
+    "quota": 2147557376,
+    "usage": 73728,
+    "usageDetails": {
+      "indexedDB": 73728
+    }
+  },
+  "restore_ms": 10082.899999976158,
+  "annotations": {
+    "schema": "opentakeoff.takeoff_canvas.v1",
+    "conditions": [],
+    "shapes": [],
+    "markups": [],
+    "sheets": [],
+    "sheet_group": [],
+    "last_group": [],
+    "sheet_tabs": [],
+    "rules": [],
+    "approvals": [],
+    "stitches": []
+  },
+  "journal": null,
+  "available_originals": [
+    false,
+    false,
+    false,
+    false
+  ],
+  "active_sheets": 0,
+  "peak_sampled_chrome_rss_bytes": 2208399360,
+  "samples": 104,
+  "errors": [],
+  "limits": {
+    "phase_ms": 30000,
+    "sampled_rss_bytes": 2147483648
+  },
+  "disclosure": "Controlled byte arrays, actual Python empty-history replay and browser IDB restore; not parsed PDFs or corpus accuracy. 100ms summed Chrome-process RSS, not exact instantaneous peak. Synchronous final hashing may briefly block UI on large originals."
+}

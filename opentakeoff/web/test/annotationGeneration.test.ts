@@ -18,7 +18,7 @@ const doc = (name: string) => ({ ...emptyAnnotations(), project_name: name });
 async function controlledReplacement(project: string, payload: object, generation: string) {
   await createLocalStore(project).loadAnnotations();
   const db = await new Promise<IDBDatabase>((resolve, reject) => {
-    const r = indexedDB.open('opentakeoff', 4); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error);
+    const r = indexedDB.open('opentakeoff', 5); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error);
   });
   try {
     await new Promise<void>((resolve, reject) => {
@@ -51,7 +51,7 @@ test('legacy projects keep their JSON contract; generation is non-enumerable, pe
   assert.equal(annotationGeneration((await localStore.getSnapshot((await localStore.listSnapshots())[0].id)).payload), null);
 });
 
-test('v4 preserves v3 data and prevents an older blind-writer build from reopening the database', async () => {
+test('v5 preserves v3 data and prevents older blind-writer and uncoordinated builds from reopening', async () => {
   const old = await new Promise<IDBDatabase>((resolve, reject) => {
     const r = indexedDB.open('opentakeoff', 3);
     r.onupgradeneeded = () => {
@@ -72,6 +72,9 @@ test('v4 preserves v3 data and prevents an older blind-writer build from reopeni
     const r = indexedDB.open('opentakeoff', 3); r.onsuccess = () => { r.result.close(); resolve(null); }; r.onerror = () => reject(r.error);
   }), { name: 'VersionError' });
   assert.deepEqual(await localStore.loadAnnotations(), doc('v3 work'));
+  await assert.rejects(new Promise((resolve, reject) => {
+    const r = indexedDB.open('opentakeoff', 4); r.onsuccess = () => { r.result.close(); resolve(null); }; r.onerror = () => reject(r.error);
+  }), { name: 'VersionError' });
 });
 
 test('a stale queued save, untokened writer and old unmount flush cannot overwrite a replacement', async () => {
@@ -82,6 +85,26 @@ test('a stale queued save, untokened writer and old unmount flush cannot overwri
   await localStore.loadAnnotations(); // unrelated reader must not authorize the queue
   await assert.rejects(localStore.saveAnnotations(queued.payload, { generation: queued.generation }), isAnnotationConflict);
   assert.deepEqual(await localStore.loadAnnotations(), doc('restored'));
+});
+
+test('v5 upgrade retains v4 restore generations, journals and sync ancestry without rewriting their payloads', async () => {
+  const old = await new Promise<IDBDatabase>((resolve, reject) => {
+    const r = indexedDB.open('opentakeoff', 4);
+    r.onupgradeneeded = () => r.result.createObjectStore('meta');
+    r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error);
+  });
+  const journal = { operation_id: first, previous_payload: doc('before restore') }, ancestor = { rev: 7, data: doc('old remote') };
+  await new Promise<void>((resolve, reject) => {
+    const t = old.transaction('meta', 'readwrite'), os = t.objectStore('meta');
+    os.put(doc('v4 restored'), 'annotations'); os.put(first, ['annotation_generation_v1', '']);
+    os.put(journal, ['bas_restore_journal_v1', '', first]); os.put(ancestor, 'sync:A:synced_base'); os.put(7, 'sync:A:synced_rev');
+    t.oncomplete = () => resolve(); t.onabort = () => reject(t.error);
+  });
+  old.onversionchange = () => old.close();
+  const migrated = await localStore.loadAnnotations();
+  assert.deepEqual(migrated, doc('v4 restored')); assert.equal(annotationGeneration(migrated), first);
+  assert.deepEqual(await localStore.loadBasRestoreJournal(first), journal);
+  assert.deepEqual(await metaGet('sync:A:synced_base'), ancestor); assert.equal(await metaGet('sync:A:synced_rev'), 7);
 });
 
 test('fresh editor saves repeatedly; successive replacements invalidate only older generations', async () => {
@@ -186,7 +209,7 @@ test('busy-deferred remote check cannot cross a replacement boundary; fresh chec
   await controlledReplacement('A', doc('restored'), first);
   busy = false; await sync.flushPending();
   assert.deepEqual(await base.loadAnnotations(), doc('restored')); assert.equal(updates.length, 0);
-  remote = { data: doc('freshly fetched remote'), rev: 7 }; await sync.checkRemote();
+  remote = { data: doc('freshly fetched remote'), rev: 7 }; await sync.checkRemote(); await sync.whenPushed();
   assert.deepEqual(await base.loadAnnotations(), doc('freshly fetched remote'));
   assert.equal(annotationGeneration(updates[0]), first);
 });
@@ -203,11 +226,14 @@ test('replacement during a conflict backup prevents both adopt and notification'
   await sync.flushPending(); assert.equal(updates.length, 0);
 });
 
-test('fresh post-replacement seed carries the correct token, without adding a JSON field', async () => {
+test('post-replacement construction cannot seed over pending restored work without a reconciliation sink', async () => {
   await controlledReplacement('A', doc('local'), first); const updates: any[] = [];
   const provider = { async pull() { return { data: doc('remote'), rev: 2 }; }, async push() { return { rev: 3 }; } };
   const sync = createSyncStore({ base: createLocalStore('A'), provider, folderId: 'A', onRemoteUpdate: value => updates.push(value) }) as any;
-  await sync.whenSynced();
-  assert.deepEqual(updates[0], doc('remote')); assert.equal(annotationGeneration(updates[0]), first);
+  await sync.whenSynced(); await sync.whenPushed();
+  assert.deepEqual(updates, []);
+  assert.deepEqual(await createLocalStore('A').loadAnnotations(), doc('local'));
+  assert.equal((await sync.readRestoreSyncStatus()).pending, true);
+  assert.equal(annotationGeneration(await createLocalStore('A').loadAnnotations()), first);
   assert.equal((await createLocalStore('A').loadAnnotations()).schema, ANN_SCHEMA);
 });

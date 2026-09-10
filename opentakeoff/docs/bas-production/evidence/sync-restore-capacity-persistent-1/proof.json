@@ -1,0 +1,33 @@
+{
+  "source_bytes": 551119404,
+  "sources": 4,
+  "storage_before": {
+    "quota": 10737423001,
+    "usage": 4761,
+    "usageDetails": {
+      "indexedDB": 4761
+    }
+  },
+  "storage_after": {
+    "quota": 10763752801,
+    "usage": 26334561,
+    "usageDetails": {
+      "indexedDB": 26334561
+    }
+  },
+  "restore_ms": 10249.400000035763,
+  "verify_ms": 1106.0999999642372,
+  "active_sheets": 0,
+  "journal_sources": 4,
+  "peak_sampled_chrome_rss_bytes": 2109784064,
+  "samples": 115,
+  "errors": [],
+  "browser_version": "152.0.7977.83",
+  "profile_mode": "isolated_persistent",
+  "retained_profile": "/var/folders/4z/2hy7_ndd7fb5sj8psdndlg240000gn/T/bas-restore-capacity-yhea6S",
+  "limits": {
+    "phase_ms": 30000,
+    "sampled_rss_bytes": 2147483648
+  },
+  "disclosure": "Controlled byte arrays, actual Python empty-history replay and browser IDB restore; not parsed PDFs or corpus accuracy. 100ms summed Chrome-process RSS, not exact instantaneous peak. Synchronous final hashing may briefly block UI on large originals."
+}

@@ -14,6 +14,15 @@ export default function BasEvidenceBundleActions({ workflow, adapter, busy, onBu
   const [status, setStatus] = useState(null), active = useRef(null), input = useRef(null);
   const [verifiedName, setVerifiedName] = useState(''), verifiedFile = useRef(null);
   const [preview, setPreview] = useState(null);
+  const [syncStatus, setSyncStatus] = useState(null), [checkingSync, setCheckingSync] = useState(false);
+  useEffect(() => {
+    let alive = true; setSyncStatus(null);
+    const bridge = adapter.syncBridge;
+    const read = () => bridge?.readRestoreSyncStatus?.().then(value => { if (alive) setSyncStatus(value); }).catch(() => {});
+    read();
+    bridge?.whenPushed?.().then(read).catch(() => {});
+    return () => { alive = false; };
+  }, [adapter, workflow]);
   useEffect(() => {
     setStatus(null); setVerifiedName(''); verifiedFile.current = null; setPreview(null);
     return () => { active.current?.controller.abort(); active.current = null; };
@@ -57,7 +66,7 @@ export default function BasEvidenceBundleActions({ workflow, adapter, busy, onBu
           if (!response.ok) throw new Error(value.error || 'Shared Python replay failed. Nothing was restored.');
           return value;
         }, guard);
-        setStatus({ error: false, text: 'Retaining originals and committing the reviewed merge…' });
+        setStatus({ error: false, text: adapter.syncBridge ? 'Waiting for active sync, then retaining originals and committing the reviewed merge…' : 'Retaining originals and committing the reviewed merge…' });
         const incoming = new Set(archive.manifest.sources.map(item => item.source.source_id));
         const result = await adapter.restoreBasEvidence(preview.plan, item => incoming.has(item.source.source_id)
           ? archive.readSource(item.source.source_id) : findBasOriginal(adapter, item, () => { guard(); return true; }),
@@ -119,6 +128,17 @@ export default function BasEvidenceBundleActions({ workflow, adapter, busy, onBu
   return <section className="bas-bundle-actions" aria-label="Portable evidence backup">
     <h3>Portable evidence backup</h3>
     <p>One ZIP with saved takeoff JSON and all historical originals. Unapproved and unsigned. Verify its files, preview the merge, then explicitly restore. Restore requires shared Python calculation replay and exact originals; historical PDFs stay separate from active counting sheets.</p>
+    {syncStatus?.generation && <div aria-label="Restored annotation sync">
+      <p role="status">{syncStatus.pending ? 'Restored annotations are saved here; sync is pending.' : 'This restore generation has reached the sync provider.'} Original PDFs remain browser-local: keep the evidence ZIP outside this browser. This is not an approval or a guarantee of another device’s copy.</p>
+      <button type="button" disabled={!!busy || checkingSync} onClick={async () => {
+        setCheckingSync(true);
+        try {
+          await adapter.syncBridge.checkRemote(); await adapter.syncBridge.whenPushed();
+          setSyncStatus(await adapter.syncBridge.readRestoreSyncStatus());
+        } catch { setStatus({ error: true, text: 'Could not check sync. The local restore remains saved.' }); }
+        finally { setCheckingSync(false); }
+      }}>{checkingSync ? 'Checking sync…' : 'Retry / check restore sync'}</button>
+    </div>}
     <div className="bas-source-actions">
       <button type="button" disabled={!!busy || !adapter.loadAnnotations || !workflow} onClick={() => run()}>Download evidence bundle</button>
       <button type="button" disabled={!!busy} onClick={() => input.current?.click()}>Verify evidence bundle</button>

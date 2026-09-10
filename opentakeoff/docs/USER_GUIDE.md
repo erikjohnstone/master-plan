@@ -75,7 +75,7 @@ Do not overwrite a newer namesake without explicitly selecting the intended vers
 Archives are unencrypted and unsigned—store/share them as project-confidential data.
 Supported limits and current proof: [evidence bundle contract](bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
 
-In browser-local storage, **Preview restore** shows the normal operator-preserving
+In local and local-first synced storage, **Preview restore** shows the normal operator-preserving
 merge. **Discard preview** changes nothing. **Restore reviewed merge** replays
 the complete merged BAS history through Python, verifies every required original,
 then saves originals, takeoff, previous-state journal and new save version together.
@@ -88,7 +88,7 @@ At the empty plan picker, use **Restore BAS evidence backup** to reach this flow
 This restores an unapproved backup, not an approved deliverable or current design.
 MCP offers the same shared merge/replay through explicit preview and commit;
 its recovery directory retains originals and previous state without adding old
-PDFs to active counting. Synced-storage restoration is not available yet. Journals are local
+PDFs to active counting. Journals are local
 storage records, not authenticated signatures or a completed rollback UI. A crash
 can leave unpublished staging data; existing originals are never silently deleted
 to reclaim space. See [restore proof and remaining boundaries](bas-production/RESTORE_BROWSER_PROOF.md).
@@ -100,7 +100,7 @@ download that editable JSON, then **Reload saved version** to inspect the saved
 project. The JSON does not include PDFs. The conflict stays visible even after
 exporting, and closing/reloading a conflicted tab warns about unsaved work.
 Other readers cannot silently authorize an older editor to overwrite the project.
-The local database's v4 upgrade preserves existing records; builds using v3 must
+The local database's v5 upgrade preserves existing records; builds using v3 or v4 must
 reload before saving. This is not an archive restore action, and ordinary JSON
 and `.otk` imports retain their existing behavior. Legacy cloud-only storage is
 unchanged; the local-first adapter forwards the local version guard.
@@ -114,8 +114,25 @@ It is unverified, unapproved and contains no original PDFs. If no copy could be
 saved, the notice says so. Keep both takeoffs; do not edit fingerprints or erase
 events to force them to merge. **Check sync again** retries after the conflict
 has been addressed; it does not choose a winning review decision. The notice
-survives reload. This protection does not supply atomic cross-device writes or
-enable synced ZIP restoration. See [sync history proof](bas-production/SYNC_HISTORY_PROOF.md).
+survives reload. This protection does not supply atomic cross-device writes.
+See [sync history proof](bas-production/SYNC_HISTORY_PROOF.md).
+
+Local-first Drive, synced-folder and Microsoft 365 workspaces coordinate evidence
+restore with active annotation sync and other tabs sharing the same local project.
+A queued restore can be cancelled; a changed preview must be reviewed again.
+Ordinary local edits do not wait for the network. A successful restore is saved
+locally even if the provider is offline. **Retry / check restore sync** reports
+whether that restored save generation reached the provider and retries when needed;
+it is not a guarantee of another device's copy or later edits. Original PDFs remain
+browser-local—keep the evidence ZIP outside the browser. Pending restore state
+survives reload. Unknown remote ancestry uses the operator-preserving import merge
+and retains a remote recovery snapshot. Conflicting BAS histories still require review.
+
+This requires Web Locks support and coordinates cooperating tabs in one browser
+storage context, not other devices or already-issued requests from a terminated
+tab. Existing providers do not implement atomic server-side revision checks.
+Legacy cloud-only restore remains unavailable. See
+[sync restore guarantees and proof](bas-production/SYNC_RESTORE_CONTRACT.md).
 
 On the development branch, **Takeoff → Equipment** displays original equipment
 schedule rows and a separate **Scoped equipment register**. **Create scope**

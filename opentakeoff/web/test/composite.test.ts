@@ -110,7 +110,7 @@ test('composite BAS originals use the canonical project scope and never route PD
   assert.equal(composite.loadPdfData, cloud.loadPdfData);
 });
 
-test('sync composites cannot accidentally expose uncoordinated local restore; local recovery and retention remain available', async () => {
+test('sync composites expose coordinated restore, exact project journal and pending status; retention remains local', async () => {
   const drive = buildLocalFirstStore('restore-scope', fakeDrive(), stubCloud()) as any;
   const workspace = buildSyncedWorkspaceStore({ scope: 'restore-workspace',
     provider: { async pull() { return null; }, async push() { throw new Error('No push is expected'); } },
@@ -118,8 +118,11 @@ test('sync composites cannot accidentally expose uncoordinated local restore; lo
   try {
     assert.equal(typeof localStore.restoreBasEvidence, 'function');
     assert.equal(typeof createLocalStore('plain-local').restoreBasEvidence, 'function');
-    assert.equal(typeof drive.restoreBasEvidence, 'undefined');
-    assert.equal(typeof workspace.restoreBasEvidence, 'undefined');
+    assert.equal(typeof drive.restoreBasEvidence, 'function');
+    assert.equal(typeof workspace.restoreBasEvidence, 'function');
+    assert.notEqual(workspace.restoreBasEvidence, localStore.restoreBasEvidence);
+    assert.equal(typeof drive.loadBasRestoreJournal, 'function');
+    assert.equal((await workspace.syncBridge.readRestoreSyncStatus()).pending, false);
     assert.equal(workspace.retainBasSource, localStore.retainBasSource);
     assert.equal(workspace.loadBasSource, localStore.loadBasSource);
     await workspace.syncBridge.whenSynced();

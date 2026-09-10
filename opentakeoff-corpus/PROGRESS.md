@@ -1,5 +1,24 @@
 ## Active work
 
+2026-09-10 checkpoint after **4119b0db**: synced evidence ZIP restore now coordinates
+with active sync operations and other same-scope browser tabs. Local adoption and
+remote ancestry are atomic; pending restore generations survive offline/restart.
+Existing shared history/import/replay rules are reused; no extraction change.
+Final web **2,754 pass / 13 existing skips**, **94 focused pass**, MCP **119 BAS**
+and **3 packaging** pass. History benchmark stays under unchanged 5 s budget.
+Actual Fort Sam ZIP / Python 31-record replay / folder-composite OPFS / second-tab
+wait-cancel-retry / source-reader / reload proof passes; eight screenshots inspected.
+Local restore including replay/wait **24.682 s**, through annotation sync **27.076 s**.
+No live cloud or real addendum claim. Private-context 551 MB capacity failed quota
+(clean rollback; memory budget also exceeded); ordinary isolated profile passes
+same bytes, **10.249 s / 1.106 s**, **2,109,784,064 bytes RSS < 2 GiB**, narrow margin.
+Both outcomes and differing profile modes are disclosed in
+`opentakeoff/docs/bas-production/SYNC_RESTORE_CONTRACT.md`.
+Main goal remains active: journal recovery UX, drawing correspondence, scoped
+approvals/snapshots, A–D corpus/holdout gates, then appended symbol/installed-plan
+phase. No full corpus/holdout or standalone Python rerun, no new accuracy claim,
+no VectorGrid/table/cite/bbox/math/key/cost/labor change, no push/merge/deploy.
+
 2026-09-10 checkpoint after **7692b78b**: fixed a reproduced sync history loss
 (three BAS captures became two under whole-object remote-wins). Shared retention
 and lineage now govern known BAS histories in sync; incompatible branches stay

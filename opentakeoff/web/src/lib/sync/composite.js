@@ -60,6 +60,9 @@ export function buildLocalFirstStore(projectId, drive, cloud) {
   bridge.flushPending = annSync.flushPending;  // canvas idle-drain hook (used in Slice 5b)
   bridge.checkRemote = annSync.checkRemote;
   bridge.readSyncIssue = annSync.readSyncIssue;
+  bridge.readRestoreSyncStatus = annSync.readRestoreSyncStatus;
+  bridge.whenSynced = annSync.whenSynced;
+  bridge.whenPushed = annSync.whenPushed;
 
   // Presence (#317) — the same heartbeat files, through the Drive provider
   // surface snapshots already ride. A 10-minute beat keeps an 8-hour session
@@ -84,13 +87,14 @@ export function buildLocalFirstStore(projectId, drive, cloud) {
   // These PDFs remain browser-local, not a new Drive sync contract. Bind to the
   // same project as canonical annotations; never borrow anonymous local methods.
   const composite = { ...cloud, ...annSync, ...snapSync,
-    retainBasSource: local.retainBasSource, loadBasSource: local.loadBasSource };
+    retainBasSource: local.retainBasSource, loadBasSource: local.loadBasSource,
+    restoreBasEvidence: annSync.restoreBasEvidence, loadBasRestoreJournal: local.loadBasRestoreJournal };
   // Non-enumerable so it rides the live `store` binding to the canvas without
   // polluting the store shape or the composite spread. Canvas reads store.syncBridge.
   Object.defineProperty(composite, "syncBridge", { value: bridge, enumerable: false });
   // setActiveStore calls this when the composite is swapped out (project
   // switch, exit to local) — the heartbeat must not keep writing into a
   // project the user left.
-  Object.defineProperty(composite, "dispose", { enumerable: false, value: () => bridge.presence?.stop() });
+  Object.defineProperty(composite, "dispose", { enumerable: false, value: () => { annSync.dispose(); bridge.presence?.stop(); } });
   return composite;
 }
