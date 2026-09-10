@@ -1,0 +1,13 @@
+{
+  "schema": "annotation_generation_browser_proof_v1",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "controlled_replacement": true,
+  "archive_restore_tested": false,
+  "errors": [],
+  "checks": [
+    "Actual captured/debounced autosave refused after controlled atomic replacement; editor data preserved",
+    "Persistent recovery action exports unsaved editor data and unchanged BAS history without overwriting saved state",
+    "Separate previously loaded browser tab is also fenced; unrelated reads do not upgrade its token",
+    "Explicit reload hydrates the new token; fresh edits persist normally; exact PDF and complete BAS history unchanged"
+  ]
+}

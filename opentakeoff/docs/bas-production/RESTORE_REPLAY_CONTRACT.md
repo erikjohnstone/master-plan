@@ -82,3 +82,36 @@ Update after `628f047c`: isolated exact-source reopening is implemented in UI
 and MCP; see `SOURCE_VIEW_PROOF.md`. Existing live-sheet citations remain intact.
 No historical original enters the active drawing set merely for inspection.
 Atomic archive restoration and the blind/queued-save hazards above remain open.
+
+## Save-fence implementation after original-source reopening
+
+The blind-save prerequisite is now implemented: IndexedDB v4, atomic payload/
+generation reads, same-transaction expected-generation writes, optional exact
+expected-payload CAS for background adoption, and a per-editor token captured with
+each debounce/unmount payload. The token is non-enumerable transport metadata,
+not a persisted takeoff field. Current projects have a null token until a future
+atomic restore explicitly advances it. Ordinary JSON/OTK imports do not mint one.
+v4 is necessary even without a new object store: an old v3 build would ignore the
+guard, so its subsequent database opens must fail rather than write blindly.
+
+Sync captures the generation before fetching remote state and refuses delayed
+adoption across a replacement. The canvas cannot upgrade its editor token from
+an unrelated read or background callback. A conflict keeps its current work for
+explicit JSON export/reload. `ANNOTATION_GENERATION_PROOF.md` records the tests;
+its controlled replacement is not a claim of actual ZIP restoration.
+
+Next implement the actual shared restore preview, complete merged-history Python
+replay and source staging/atomic publication. The final transaction must advance
+`["annotation_generation_v1", projectId]` together with sources, merged annotations
+and the operation/previous-state journal; no independent generation write in
+production. The successful caller alone hydrates the returned generation and
+clears its old scheduled/unmount payload before suppressing the hydration echo.
+Keep other tabs' work untouched. Cover quota/abort, stale preview, interrupted
+staging, old-build blocking, and real UI/MCP restoration/source reopening.
+
+Local-first sync additionally needs restore coordination with in-flight pushes
+and post-adopt bookkeeping/callbacks. The current guard protects local annotation
+writes; it is not a multi-device/cloud transaction or a remote durability claim.
+Legacy filename-bound geometry/calibration correspondence remains unresolved:
+do not paint it on a newer namesake, add all old drawings to active counting, or
+silently omit it. Do not call the five-workflow goal complete at this prerequisite.

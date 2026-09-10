@@ -19,6 +19,7 @@ import { Link, useNavigate } from "react-router";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { store, isStaleTabError, STALE_TAB_MESSAGE, friendlyStoreError, projectIdFromUrl, ANN_SCHEMA, emptyAnnotations, metaGet, metaPut } from "../lib/store.js";
+import { annotationGeneration, isAnnotationConflict, ANNOTATION_CONFLICT_MESSAGE } from "../lib/annotationGeneration.js";
 import { forgetThumbs, releaseThumbs } from "../lib/thumbs.js";
 import { loadSheetSpans, saveSheetSpans, forgetSheetText } from "../lib/textIndex.js";
 import { newRun, saveRun, listRuns, sanitizeToolResult } from "../lib/runHistory.js";
@@ -1091,6 +1092,8 @@ export default function TakeoffCanvas() {
   const toolRef = useRef(tool);
   const proposalRef = useRef(proposal);
   const hydrated = useRef(false);
+  const annotationGenerationRef = useRef(null);
+  const annotationConflictRef = useRef(false);
   // Autosave stays holstered until a user-originated edit. hydrate() flips every
   // autosave dep to a fresh identity, so the effect fires once on the post-load
   // render with no edit behind it; that lone run arms this and returns instead of
@@ -1918,6 +1921,7 @@ export default function TakeoffCanvas() {
       return store.loadAnnotations();
     }).then((a) => {
       if (off) return;
+      annotationGenerationRef.current = annotationGeneration(a);
       hydrate(a);
       hydrated.current = true;
     }).catch((e) => {
@@ -2911,22 +2915,31 @@ export default function TakeoffCanvas() {
     // canvas are dropped by that re-hydrate (visible supersession, not silent loss —
     // the co-editing casualty the rollout forbids). The drain clears the flag.
     if (remotePendingRender.current) return;
-    const payload = buildPayload();
-    saveDataRef.current = payload;          // keep the freshest payload for an unmount flush
+    const payload = buildPayload(), generation = annotationGenerationRef.current, saveStore = store;
+    saveDataRef.current = { payload, generation }; // capture together, including unmount flush
+    if (annotationConflictRef.current) { setSaveState("conflict"); return; }
     setSaveState("saving");
     const t = setTimeout(() => {
       // A render was deferred AFTER this save was scheduled (its closure captured the
       // pre-adopt payload) → don't push stale over the winner; go idle so the canvas
       // can drain and re-hydrate. Closes the last pre-scheduled-save loss window.
       if (remotePendingRender.current) { setSaveState("idle"); return; }
-      store.saveAnnotations(payload).then(() => setSaveState("saved")).catch((e) => {
+      saveStore.saveAnnotations(payload, { generation }).then(() => {
+        // An older successful write cannot clear a newer write's error/status.
+        if (saveDataRef.current?.payload === payload && !annotationConflictRef.current) setSaveState("saved");
+      }).catch((e) => {
+        // A future successful explicit restore may already have hydrated a new
+        // generation while this older write was in flight. It must not lock
+        // that fresh editor or replace its current status.
+        if (generation !== annotationGenerationRef.current) return;
         // surface the failure rather than dropping to a silent "idle" — with inline
         // image markups a QuotaExceededError is a realistic failure mode, and a
         // silent one loses the WHOLE payload (shapes, quantities, everything) with
         // no signal. Stale-tab keeps its sticky lockout copy; anything else (quota,
         // disk) shows the actionable friendlyStoreError text.
+        if (isAnnotationConflict(e)) annotationConflictRef.current = true;
         setCommitMsg(isStaleTabError(e) ? STALE_TAB_MESSAGE : friendlyStoreError(e));
-        setSaveState("idle");
+        setSaveState(annotationConflictRef.current ? "conflict" : "idle");
       });
     }, 700);
     return () => clearTimeout(t);
@@ -2946,12 +2959,13 @@ export default function TakeoffCanvas() {
     // binding here would write the cloud project's annotations into the local
     // store. In-life saves keep the live binding (it never swaps mid-mount).
     const mountStore = store;
-    const onBeforeUnload = (e) => { if (saveStateRef.current === "saving") { e.preventDefault(); e.returnValue = ""; } };
+    const onBeforeUnload = (e) => { if (saveStateRef.current === "saving" || annotationConflictRef.current) { e.preventDefault(); e.returnValue = ""; } };
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => {
       window.removeEventListener("beforeunload", onBeforeUnload);
       if (hydrated.current && saveStateRef.current === "saving" && saveDataRef.current) {
-        mountStore.saveAnnotations(saveDataRef.current).catch(() => {});   // best-effort flush
+        const { payload, generation } = saveDataRef.current;
+        mountStore.saveAnnotations(payload, { generation }).catch(() => {});   // best-effort fenced flush
       }
     };
   }, []);
@@ -2970,7 +2984,7 @@ export default function TakeoffCanvas() {
   // an agent run and its staged proposals — hydrate() wipes agentProposals and the
   // conditions a mid-run agent minted, so both defer exactly like One-Click review).
   busyStateRef.current = { poly, calib, check, proposal, scaleGuide, prevScale, agentRunning, agentProposals };
-  const computeBusy = () => isCanvasBusy({
+  const computeBusy = () => annotationConflictRef.current || isCanvasBusy({
     ...busyStateRef.current,
     saveState: saveStateRef.current,
     dragging: !!dragRef.current || !!ocDragRef.current,
@@ -2991,10 +3005,17 @@ export default function TakeoffCanvas() {
     if (!bridge) return;
     bridge.isBusy = computeBusy;
     bridge.onRemoteUpdate = (data) => {
+      if (annotationConflictRef.current) return; // do not discard this editor's unsaved work
+      if (annotationGeneration(data) !== annotationGenerationRef.current) {
+        annotationConflictRef.current = true;
+        setSaveState("conflict"); setCommitMsg(ANNOTATION_CONFLICT_MESSAGE);
+        return; // only initial load/explicit restore can adopt a new generation
+      }
       saveDataRef.current = null;
       if (computeBusy()) { remotePendingRender.current = true; return; }
       remotePendingRender.current = false; // this hydrate satisfies any earlier deferred render
       suppressNextSave.current = true;
+      annotationGenerationRef.current = annotationGeneration(data);
       hydrate(data || {});
     };
     return () => { bridge.isBusy = null; bridge.onRemoteUpdate = null; };
@@ -3029,7 +3050,7 @@ export default function TakeoffCanvas() {
   // committed trace's pending save lands before we re-read (CRITICAL-b).
   useEffect(() => {
     const bridge = store.syncBridge;
-    if (!bridge || computeBusy()) return;
+    if (!bridge || computeBusy() || annotationConflictRef.current) return;
     let alive = true;
     (async () => {
       // Serialize: drain Case 1 FIRST so a store-deferred adopt lands (and its
@@ -3045,8 +3066,14 @@ export default function TakeoffCanvas() {
         // A concurrent store-side onRemoteUpdate may have hydrated + cleared the flag
         // during the await — don't double-hydrate (Finding 4).
         if (!alive || computeBusy() || !remotePendingRender.current) return;
+        if (annotationGeneration(a) !== annotationGenerationRef.current) {
+          annotationConflictRef.current = true;
+          setSaveState("conflict"); setCommitMsg(ANNOTATION_CONFLICT_MESSAGE);
+          return;
+        }
         remotePendingRender.current = false;      // clear ONLY after a successful read
         suppressNextSave.current = true;
+        annotationGenerationRef.current = annotationGeneration(a);
         hydrate(a || {});
       } catch { /* keep remotePendingRender → retry on the next idle, never drop it */ }
     })();
@@ -12861,6 +12888,14 @@ export default function TakeoffCanvas() {
         />
       )}
 
+      {saveState === "conflict" && (
+        <div role="alert" aria-label="Unsaved version conflict" style={{ position: "absolute", bottom: "calc(var(--sp-6) + var(--sp-3))", left: "50%", transform: "translateX(-50%)", zIndex: Z.toast, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--sp-3)", width: "min(42rem, calc(100% - 2 * var(--sp-4)))", padding: "var(--sp-3)", background: "var(--paper-bright)", border: "1px solid var(--c-danger)", boxShadow: "var(--shadow-2)", fontSize: "var(--fs-m)", color: "var(--ink)" }}>
+          <span>{ANNOTATION_CONFLICT_MESSAGE}</span>
+          <button className="btn-ghost" type="button" onClick={exportTakeoffFile}>Export unsaved takeoff</button>
+          <button className="btn-ghost" type="button" onClick={() => window.location.reload()}>Reload saved version</button>
+        </div>
+      )}
+
       {loadError && (
         <div style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 60, display: "flex", alignItems: "center", gap: 12, maxWidth: 640, padding: "10px 14px", background: "var(--paper-bright)", border: "1px solid var(--c-danger)", boxShadow: "var(--shadow-2)", fontSize: 12.5, color: "var(--ink)" }}>
           <span>
@@ -13160,7 +13195,7 @@ export default function TakeoffCanvas() {
         })()}
         <span style={{ marginLeft: "auto", display: "flex", gap: 12, opacity: 0.75 }} aria-live="polite">
           <span>{shapes.filter((s) => panelKeySet.has(s.sheet_id)).length} shapes</span>
-          <span>{cloudMode ? "drive" : "local"}{saveState === "saving" ? " · saving…" : saveState === "saved" ? " · saved" : ""}</span>
+          <span>{cloudMode ? "drive" : "local"}{saveState === "saving" ? " · saving…" : saveState === "saved" ? " · saved" : saveState === "conflict" ? " · not saved — version conflict" : ""}</span>
         </span>
       </footer>
       {/* BYO-key AI settings — the single config surface for the ai.js seam

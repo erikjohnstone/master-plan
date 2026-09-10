@@ -12,6 +12,14 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add per-editor local annotation save-version checks and same-transaction
+  expected-payload checks for sync adoption. Queued saves, unmount flushes and
+  delayed sync responses cannot cross a changed generation. Conflicted editors
+  preserve unsaved work with **Export unsaved takeoff** and **Reload saved version**.
+  IndexedDB v4 preserves v3 records and prevents old blind-writer builds from
+  reopening the database. No takeoff JSON, extraction or arithmetic change.
+  Actual atomic ZIP restoration and generation minting remain to be wired.
+
 - Add read-only original-source reopening from **Original PDFs** and historical
   BAS citations. UI and MCP share exact source ownership, byte identity and saved
   frame checks; an old PDF is not added to current extraction/counting. Existing

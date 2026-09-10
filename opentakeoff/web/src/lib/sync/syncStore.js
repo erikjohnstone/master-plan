@@ -32,6 +32,7 @@
 
 import { metaGet, metaPut, metaDelete } from "../store.js";
 import { mergeAnnotations, samePayload } from "./merge.js";
+import { annotationGeneration, attachAnnotationGeneration, isAnnotationConflict } from "../annotationGeneration.js";
 
 /**
  * @param {object} opts
@@ -123,6 +124,13 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     while (pendingRemote && !isBusy()) {
       const remote = pendingRemote;
       const local = await base.loadAnnotations();            // cumulative local divergence
+      // A restore may have committed while this response was in flight or
+      // deferred behind the editor's busy gate. Do not adopt it into a newer
+      // local generation. A later check must fetch remote afresh.
+      if (annotationGeneration(local) !== remote.generation) {
+        if (pendingRemote === remote) pendingRemote = null;
+        continue;
+      }
       // ── #313: with a trustworthy common ancestor, resolve at the SHAPE level
       // instead of uniform remote-wins. The merge is a pure function of
       // (base, local, remote), so both machines converge to the same payload
@@ -168,7 +176,14 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
       // side by Slice 5b's apply-time isBusy re-check + idle re-read-local (Case 2).
       if (isBusy()) break;
       const adopted = m ? m.merged : remote.data;
-      await base.saveAnnotations(adopted);                   // adopt (merged or remote) as canonical
+      try {
+        await base.saveAnnotations(adopted, { generation: remote.generation, expectedPayload: local });
+      } catch (error) {
+        // Current state won the transaction. Re-read/merge on a subsequent
+        // drain; never publish a remote-update callback for an uncommitted save.
+        if (isAnnotationConflict(error)) break;
+        throw error;
+      }
       await metaPut(K.syncedRev, remote.rev);                // advance LAST (crash spine)
       // The next merge's ancestor is what the REMOTE holds at synced_rev — local
       // may now be ahead of it by the merged-in local work. Written after
@@ -183,7 +198,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
       // pendingRemote set for a later retry (never a dropped update), and if a fresher
       // remote queued during the awaits we keep it — the loop drains to it next iteration.
       if (pendingRemote === remote) pendingRemote = null;
-      if (onRemoteUpdate) onRemoteUpdate(adopted, remote.rev);
+      if (onRemoteUpdate) onRemoteUpdate(attachAnnotationGeneration(structuredClone(adopted), remote.generation), remote.rev);
     }
     // Fire-and-forget: pushOnce awaits bootstrap, and bootstrap may itself be
     // awaiting THIS drain (recover → reconcile → flushPending) — scheduling,
@@ -200,13 +215,13 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     return flushing;
   }
 
-  async function reconcile(remote) {
+  async function reconcile(remote, generation) {
     // No snapshot sink → can't preserve the loser, so degrade to 4b: leave local
     // ahead (no adopt, no loss). A data-less remote (deleted/unreadable) has nothing
     // to adopt → likewise keep local canonical rather than overwrite it with null.
     if (typeof saveSnapshot !== "function") return;
     if (!remote || remote.data == null) return;
-    pendingRemote = remote; // last-discovered wins — freshest Drive truth in serial discovery
+    pendingRemote = { ...remote, generation }; // local version at request start, NOT at response time
     await flushPending();
   }
 
@@ -220,6 +235,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
       return false;
     }
     let remote;
+    const generation = annotationGeneration(await base.loadAnnotations());
     try {
       remote = await provider.pull();
     } catch {
@@ -256,12 +272,12 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
       // re-pushing our legitimately-ahead local is correct — reconciling would revert
       // it to the base rev and drop the un-pushed edits.)
       if (baseRev === null && remote?.data != null) {
-        await reconcile(remote);            // external rev-less write → remote wins (Slice 4c)
+        await reconcile(remote, generation); // external rev-less write → remote wins (Slice 4c)
         return false;
       }
       return true;                          // our push never landed → re-push
     }
-    await reconcile(remote);                // real divergence → remote wins (Slice 4c)
+    await reconcile(remote, generation);    // real divergence → remote wins (Slice 4c)
     return false;
   }
 
@@ -271,6 +287,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
   // is 4c, not a seed.
   async function seedOnMount() {
     if (await isTouched()) return;
+    const local = await base.loadAnnotations(), generation = annotationGeneration(local);
     let remote;
     try {
       remote = await provider.pull();
@@ -281,14 +298,14 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     // Re-check: the user may have started editing during the pull await. If so
     // this is no longer a seed (their edit wins locally; 4c reconciles later).
     if (await isTouched()) return;
-    await base.saveAnnotations(remote.data); // adopt remote into local (no touched — not a local edit)
+    await base.saveAnnotations(remote.data, { generation, expectedPayload: local });
     // Base future pushes on remote's rev. A rev-less remote (a flag-off teammate's
     // write) stores synced_rev=null, so the next edit's push runs expectedRev=null
     // and blind-overwrites it (rev → 1). That's the mixed-fleet hazard the plan
     // hands to 4c (rev-less remote WINS, snapshot the local side); 4b only seeds.
     await metaPut(K.syncedRev, remote.rev);
     await writeMergeBase(remote.rev, remote.data); // the seed IS the common ancestor (#313)
-    if (onRemoteUpdate) onRemoteUpdate(remote.data, remote.rev);
+    if (onRemoteUpdate) onRemoteUpdate(attachAnnotationGeneration(structuredClone(remote.data), generation), remote.rev);
   }
 
   // Recovery then seed, once, at construction. loadAnnotations does NOT await this
@@ -337,10 +354,11 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     if (expectedRev != null) {
       const anc = await readMergeBase();
       if (anc) {
+        const generation = annotationGeneration(await base.loadAnnotations());
         let cur = null;
         try { cur = await provider.pull(); } catch { cur = null; }
         if (cur && cur.data != null && (cur.rev ?? null) === expectedRev && !samePayload(cur.data, anc)) {
-          await reconcile({ data: cur.data, rev: cur.rev });
+          await reconcile({ data: cur.data, rev: cur.rev }, generation);
           return;
         }
       }
@@ -358,7 +376,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
       // remote {data, rev} the push saw, so 4c resolves it (remote wins, snapshot
       // the local side) without a second pull.
       await metaDelete(K.marker);
-      await reconcile(res.remote);
+      await reconcile(res.remote, annotationGeneration(payload));
       return;
     }
     await metaPut(K.syncedRev, res.rev);          // advance AFTER confirmed push
@@ -379,9 +397,12 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
 
     // Local write authoritative; then a fire-and-forget precondition push. `touched`
     // is set BEFORE the content write (crash-ordering spine — see header).
-    async saveAnnotations(payload) {
+    async saveAnnotations(payload, options) {
+      // Own state before the touched write yields; never upgrade a caller's
+      // token by consulting the current adapter during an async save.
+      const owned = structuredClone(payload), expected = options && structuredClone(options);
       await metaPut(K.touched, true);
-      await base.saveAnnotations(payload);
+      await base.saveAnnotations(owned, expected);
       schedulePush();
     },
   };
@@ -401,6 +422,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     try {
       await bootstrap;
       if (pushing) return;
+      const generation = annotationGeneration(await base.loadAnnotations());
       let remote;
       try { remote = await provider.pull(); } catch { return; }
       if (!remote || remote.data == null) return;
@@ -412,7 +434,7 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
         const anc = await readMergeBase();
         if (!anc || samePayload(remote.data, anc)) return;
       }
-      await reconcile(remote);
+      await reconcile(remote, generation);
     } catch { /* best-effort; local canonical */ }
   }
 

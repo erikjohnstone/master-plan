@@ -1,5 +1,39 @@
 # BAS production workflow progress
 
+## Per-editor save fencing — 2026-09-10
+
+After **4b1c7595**, local annotations now read payload/generation atomically and
+refuse writes from an older editor generation. Debounced saves and unmount
+flushes capture the original token; unrelated reads/background callbacks cannot
+upgrade it. Local-first sync forwards the token and checks expected current
+payload before adoption. v4 preserves v3 records and fences old blind-writer
+builds. Conflicted editors retain work with explicit export/reload recovery.
+This is browser storage delivery, not changed BAS interpretation or arithmetic.
+
+**83 focused tests pass**, including **14 new** generation/migration/sync tests.
+Full web **69931 exit 0: 2,717 pass / 13 existing skips / zero failures**,
+15.738 s tests, build 5.19 s; final canvas guards **54485** types/lint/build pass,
+build 6.69 s. Existing three lint warnings, chunk warnings and One-Click benchmark
+caveats remain (16 cross probes / zero disagreements, nine not cross-checked).
+MCP **59064 exit 0: 107 BAS pass, 4 packaging pass**, types pass; actual unchanged
+Python services exercised. Full Python suite not rerun here. MCP 0.9.73/50 tools.
+Final real two-tab browser **83833 exit 0**, zero page errors: actual queued
+autosave refusal, second-editor refusal, unsaved JSON export and explicit reload
+then successful saves, complete original BAS history/PDF unchanged. Six final
+screenshots and proof: `evidence/annotation-generation-browser-5`; full details
+and primary storage research: `ANNOTATION_GENERATION_PROOF.md`.
+
+Important boundary: the replacement in that browser proof is a labeled controlled
+IDB transaction. **Actual ZIP restoration/generation minting is not wired yet.**
+Next implement shared merge/legacy correspondence safety, merged-history Python
+replay, operation-owned source staging, one atomic original/state/journal/token
+commit and caller hydrate, including in-flight local-first sync coordination,
+and actual public UI/MCP restore-to-citation proofs. Ordinary JSON/OTK behavior
+is unchanged. Continue E revision/approval and remaining A–D corpus/holdout gates;
+symbol deformation/installed-plan work remains appended last. No scope reduction,
+new model, VectorGrid/key/scorer change, holdout access, push, merge or deployment.
+Historical corpus accuracy/path issues are unchanged, not a new full-corpus pass.
+
 ## Exact original-source reopening — 2026-09-10
 
 After **628f047c**, the real UI and built MCP can inspect retained/historical

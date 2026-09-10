@@ -75,6 +75,18 @@ Do not overwrite a newer namesake without explicitly selecting the intended vers
 Archives are unencrypted and unsigned—store/share them as project-confidential data.
 Supported limits and current proof: [evidence bundle contract](bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
 
+The development build adds save-version protection in preparation for atomic
+restoration. A detected replacement conflict stops this editor's autosaves; it
+does not discard the editor's unsaved work. Use **Export unsaved takeoff** to
+download that editable JSON, then **Reload saved version** to inspect the saved
+project. The JSON does not include PDFs. The conflict stays visible even after
+exporting, and closing/reloading a conflicted tab warns about unsaved work.
+Other readers cannot silently authorize an older editor to overwrite the project.
+The local database's v4 upgrade preserves existing records; builds using v3 must
+reload before saving. This is not an archive restore action, and ordinary JSON
+and `.otk` imports retain their existing behavior. Legacy cloud-only storage is
+unchanged; the local-first adapter forwards the local version guard.
+
 On the development branch, **Takeoff → Equipment** displays original equipment
 schedule rows and a separate **Scoped equipment register**. **Create scope**
 records established building, level, system and phase labels; leave missing

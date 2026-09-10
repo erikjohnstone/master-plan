@@ -38,9 +38,12 @@
 import { sanitizeTemplates } from "./templates.js";
 import { sanitizeMaterialLibrary } from "./materials.js";
 import { sanitizeStampLibrary } from "./stamps.js";
+import { attachAnnotationGeneration, annotationConflict } from "./annotationGeneration.js";
 
 const DB_NAME = "opentakeoff";
-const DB_VERSION = 3;
+// v4 changes writer semantics, not payload/store layout. A v3 build's blind
+// writes must get VersionError after this upgrade; it cannot honor save tokens.
+const DB_VERSION = 4;
 const PDF_STORE = "pdfs";          // key: file name -> { name, bytes: ArrayBuffer, hash?, rev?, ts? }
 const META_STORE = "meta";         // key: "annotations" -> payload object
 const SNAP_STORE = "snapshots";    // key: id -> { id, ts, label, payload }
@@ -54,6 +57,7 @@ const ANN_KEY = "annotations";
 // Array keys cannot collide with generic string-key annotation/sync bookkeeping.
 // Retained BAS originals are project-scoped and never removed by closePdf.
 const basSourceKey = (projectId, sourceId) => ["bas_source_v1", projectId || "", sourceId];
+const annotationGenerationKey = projectId => ["annotation_generation_v1", projectId || ""];
 // condition template library — browser-global (not part of a project payload),
 // lives under its own key in the keyPath-less meta store: no DB version bump
 const TPL_KEY = "condition_templates";
@@ -88,7 +92,7 @@ function openDB() {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = () => {
       const db = req.result;
-      // contains-guards make this run for fresh creates and every vN->v3 upgrade
+      // contains-guards preserve every existing record on a vN->v4 upgrade
       if (!db.objectStoreNames.contains(PDF_STORE)) db.createObjectStore(PDF_STORE, { keyPath: "name" });
       if (!db.objectStoreNames.contains(META_STORE)) db.createObjectStore(META_STORE);
       if (!db.objectStoreNames.contains(SNAP_STORE)) db.createObjectStore(SNAP_STORE, { keyPath: "id" });
@@ -202,6 +206,64 @@ async function sha256Hex(bytes) {
   return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+// Read payload + generation in ONE transaction. A later unrelated read must
+// never authorize an older editor to write. The non-enumerable token stays off
+// JSON exports, snapshots and the shared takeoff contract.
+function annotationStore(projectId = "") {
+  const annKey = projectId ? `${ANN_KEY}:${projectId}` : ANN_KEY;
+  const generationKey = annotationGenerationKey(projectId);
+  return {
+    async loadAnnotations() {
+      return withDb(db => new Promise((resolve, reject) => {
+        const t = db.transaction(META_STORE, "readonly"), os = t.objectStore(META_STORE);
+        const payload = os.get(annKey), generation = os.get(generationKey);
+        t.oncomplete = () => {
+          try { resolve(attachAnnotationGeneration(payload.result || emptyAnnotations(), generation.result)); }
+          catch (error) { reject(error); }
+        };
+        t.onabort = () => reject(t.error || new Error("Couldn't read saved takeoff"));
+        t.onerror = () => reject(t.error);
+      }));
+    },
+    // expectedPayload is an optional same-transaction CAS for a reconciler that
+    // read local state before awaiting I/O. Generation alone fences pre-restore
+    // editors; CAS additionally detects ordinary intervening saves before adopt.
+    /** @param {any} payload
+     * @param {{generation?: string|null, expectedPayload?: any}} [options] */
+    async saveAnnotations(payload, { generation = null, expectedPayload } = {}) {
+      const owned = structuredClone({ ...payload, schema: ANN_SCHEMA });
+      const expected = expectedPayload === undefined ? undefined : structuredClone(expectedPayload);
+      const { canonicalBasJson } = await import("./basCanonical.ts");
+      // Annotation data already uses a JSON wire contract. JSON normalization
+      // retains its established omission of undefined optional properties.
+      const compare = value => canonicalBasJson(JSON.parse(JSON.stringify(value)));
+      const expectedJson = expected === undefined ? undefined : compare(expected);
+      return withDb(db => new Promise((resolve, reject) => {
+        const t = db.transaction(META_STORE, "readwrite"), os = t.objectStore(META_STORE);
+        let failure;
+        const abort = error => { failure = error; t.abort(); };
+        t.oncomplete = () => resolve();
+        t.onabort = () => reject(failure || t.error || new Error("Couldn't save takeoff"));
+        t.onerror = () => reject(failure || t.error);
+        const version = os.get(generationKey);
+        version.onsuccess = () => {
+          try {
+            if ((version.result ?? null) !== generation) { abort(annotationConflict()); return; }
+            if (expectedJson === undefined) { os.put(owned, annKey); return; }
+            const current = os.get(annKey);
+            current.onsuccess = () => {
+              try {
+                if (compare(current.result || emptyAnnotations()) !== expectedJson) { abort(annotationConflict()); return; }
+                os.put(owned, annKey);
+              } catch (error) { abort(error); }
+            };
+          } catch (error) { abort(error); }
+        };
+      }));
+    },
+  };
+}
+
 /** Surface-specific IDB delivery; ownership and byte truth are shared. No
  * snapshot, approval, current-source selection or annotation write occurs here. */
 function basSourceStore(projectId = "") {
@@ -263,6 +325,7 @@ function basSourceStore(projectId = "") {
 
 export const localStore = {
   ...basSourceStore(),
+  ...annotationStore(),
   // `rev` (CO-1's per-file revision counter) rides along for callers that
   // need to tell "this file's bytes are unchanged since I last looked" from
   // "this is new or different" WITHOUT re-hashing or re-reading a byte of
@@ -378,15 +441,6 @@ export const localStore = {
     const rec = await withDb((db) => tx(db, REV_STORE, "readonly", (os) => os.get(revKey(name, rev))));
     if (!rec) throw new Error(`Revision ${rev} of ${name} not found in local store`);
     return new Uint8Array(rec.bytes);
-  },
-
-  async loadAnnotations() {
-    const a = await withDb((db) => tx(db, META_STORE, "readonly", (os) => os.get(ANN_KEY)));
-    return a || emptyAnnotations();
-  },
-
-  async saveAnnotations(payload) {
-    await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put({ ...payload, schema: ANN_SCHEMA }, ANN_KEY)));
   },
 
   async loadTemplates() {
@@ -528,17 +582,10 @@ export function createLocalStore(folderId = null) {
   // mode, so a caller threading it through here must land on the global
   // "annotations" blob, NOT a distinct "annotations:" scope.
   if (folderId == null || folderId === "") return localStore;
-  const annKey = ANN_KEY + ":" + folderId;
   return {
     ...localStore,
     ...basSourceStore(folderId),
-    async loadAnnotations() {
-      const a = await withDb((db) => tx(db, META_STORE, "readonly", (os) => os.get(annKey)));
-      return a || emptyAnnotations();
-    },
-    async saveAnnotations(payload) {
-      await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put({ ...payload, schema: ANN_SCHEMA }, annKey)));
-    },
+    ...annotationStore(folderId),
   };
 }
 

@@ -273,7 +273,7 @@ test("createLocalStore(folderId): PDFs and browser-global libraries stay global 
   assert.equal((await localStore.loadMaterialLibrary()).length, 1);
 });
 
-test("v1->v3 upgrade preserves pdfs + annotations, and snapshots work after", async () => {
+test("v1->v4 upgrade preserves pdfs + annotations, and snapshots work after", async () => {
   // Seed a v1 database exactly the way the shipped v1 code laid it out.
   const v1 = await rawOpen(1, (db) => {
     db.createObjectStore("pdfs", { keyPath: "name" });
@@ -285,7 +285,7 @@ test("v1->v3 upgrade preserves pdfs + annotations, and snapshots work after", as
   await rawPut(v1, "meta", ann, "annotations");
   v1.close();
 
-  // Store methods open at DB_VERSION 3 — onupgradeneeded contains-guards
+  // Store methods open at DB_VERSION 4 — onupgradeneeded contains-guards
   // must add only the missing stores (snapshots, pdf_revs) and leave v1 data intact.
   // The seeded v1 record predates CO-1's rev field entirely — listSheets()
   // reads a legacy record's absent rev as 1, the same "no revision history
@@ -321,19 +321,19 @@ test("a failed put closes the connection anyway (withDb error path)", async () =
   // functions aren't structured-cloneable — the put throws DataCloneError
   await assert.rejects(store.saveSnapshot("x", { evil: () => {} }), /clon/i);
   // if saveSnapshot leaked its connection, this version bump would block
-  await probeUpgrade(4);
+  await probeUpgrade(5);
 });
 
 test("blocked open rejects BlockedError, then closes its late success (no zombie connection)", async () => {
   const v1 = await rawOpen(1);
-  // v1 stays open — the store's v3 open blocks behind it and must reject
+  // v1 stays open — the store's v4 open blocks behind it and must reject
   await assert.rejects(store.listSheets(), (e: any) => e.name === "BlockedError");
   // Once the blocker closes, the store's orphaned open finally succeeds; the
   // settled flag must close that connection, or THIS probe blocks in turn.
   // (Deterministic: fake-indexeddb chains opens on one connection queue and
   // fires onsuccess before advancing it — no sleeps needed.)
   v1.close();
-  await probeUpgrade(4);
+  await probeUpgrade(5);
 });
 
 test("friendlyStoreError maps quota to actionable copy; other errors pass through", () => {

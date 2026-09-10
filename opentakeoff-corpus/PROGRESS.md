@@ -1,5 +1,20 @@
 ## Active work
 
+2026-09-10 checkpoint after **4b1c7595**: per-editor browser save fencing now
+refuses obsolete generations and expected-state sync races without changing
+extraction/math. DB v4 preserves old records and rejects v3 blind-writer builds.
+Actual canvas two-tab test preserves/export-recovers unsaved work and allows
+fresh saves after explicit reload; its replacement is a **controlled IDB
+transaction, not implemented ZIP restoration**. **83 focused pass**; full web
+**2,717 pass / 13 existing skips**, final types/lint/build pass; MCP **107 BAS +
+4 packaging pass**, types pass. Zero page errors and unchanged complete Fort Sam
+BAS history/source bytes. See
+`../opentakeoff/docs/bas-production/ANNOTATION_GENERATION_PROOF.md`.
+Main goal remains active: implement actual atomic source-inclusive restore and
+sync coordination next, then revision/approval and remaining A–D acceptance;
+appended symbol/installed-plan phase stays last. No new full-corpus or holdout
+result, VectorGrid/key/threshold change, push, merge or deployment.
+
 2026-09-10 checkpoint after **628f047c**: original-source reopening now uses one
 shared ownership/hash/page/frame contract in the browser and packaged MCP. Old
 citations can open retained bytes without adding historical PDFs to active
