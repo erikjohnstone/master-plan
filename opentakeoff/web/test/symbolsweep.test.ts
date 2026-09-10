@@ -712,3 +712,65 @@ test("VARIANT GUARD stands down in manual mode: counter-examples keep the contai
   assert.equal(bare.withheld.filter((w) => /extra linework/.test(w.reason)).length, 3,
     "drains and louver variant all come back as disclosed questions, never dropped");
 });
+
+// ── Phase 1 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — affine refinement ─────────
+// opts.affine is off by default; every test above this line never sets it,
+// so they also stand as the "affine absent is a no-op" proof (item (e) of
+// the goal doc's §3 Phase 1 step 5) — none of them changed when this
+// wiring landed.
+
+test("affine refinement: a near-grid rotated placement withheld under the rigid search becomes a match with a disclosed transform", () => {
+  // 3° off the nearest rigid guess, symbol scaled 3× so the rotation's
+  // endpoint displacement clears the rigid endpoint tolerance (this is
+  // near-grid refinement's own stated scope — Phase 2, not this phase,
+  // is what makes an arbitrary rotation PROPOSABLE in the first place).
+  const sc = 3, deg = 3;
+  const rectSc: [Point, Point] = [[RECT[0][0] * sc, RECT[0][1] * sc], [RECT[1][0] * sc, RECT[1][1] * sc]];
+  const segs = place([{ at: [0, 0], sc }, { at: [500, 0], sc, rot: deg }]);
+  const fp = fingerprintSymbol(segs, rectSc);
+
+  const rigid = matchSymbol(fp, segs, { excludeCenter: fp.center });
+  assert.equal(rigid.matches.length, 0, "the rigid search alone should NOT commit this placement");
+  assert.ok(rigid.withheld.length > 0, "but it should see SOMETHING near-miss, not silence");
+
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+  assert.equal(affine.matches.length, 1, "affine refinement should recover exactly one clean match");
+  const m = affine.matches[0];
+  assert.ok(m.score >= 0.92, `refined score should clear the commit bar, got ${m.score}`);
+  assert.ok(m.transform, "a refined match must disclose its transform (§4.1)");
+  assert.ok(Math.abs(m.transform!.rotation_deg - deg) < 1, `disclosed rotation ${m.transform!.rotation_deg} vs true ${deg}`);
+  assert.equal(m.transform!.via, "rigid");
+  assert.equal(m.transform!.mirrored, false);
+});
+
+test("affine refinement: affine OFF is a byte-for-byte no-op vs the plain rigid search", () => {
+  const sc = 3, deg = 3;
+  const rectSc: [Point, Point] = [[RECT[0][0] * sc, RECT[0][1] * sc], [RECT[1][0] * sc, RECT[1][1] * sc]];
+  const segs = place([{ at: [0, 0], sc }, { at: [500, 0], sc, rot: deg }]);
+  const fp = fingerprintSymbol(segs, rectSc);
+  const plain = matchSymbol(fp, segs, { excludeCenter: fp.center });
+  const affineAbsent = matchSymbol(fp, segs, { excludeCenter: fp.center });
+  assert.deepEqual(affineAbsent, plain, "identical options minus affine should be identical results");
+  const affineExplicitlyOff = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: false } });
+  assert.deepEqual(affineExplicitlyOff, plain, "affine.enabled:false must also be exactly the rigid result");
+});
+
+test("affine refinement: an out-of-bounds stretch is withheld with the bounds reason, never a match", () => {
+  // Genuinely asymmetric open polyline (5 segments, distinct lengths, no
+  // closed square) — avoids the shared SYMBOL fixture's own self-similarity
+  // under non-uniform scaling, which can otherwise alias to a spurious
+  // WITHIN-bounds reading tied in score with the honest out-of-bounds one.
+  const ASYM: [number, number, number, number][] = [
+    [0, 0, 12, 0], [12, 0, 12, 20], [12, 20, -18, 20], [-18, 20, -18, 6], [-18, 6, 2, 6],
+  ];
+  const placeStretched = (at: Point, sx: number, sy: number): number[] =>
+    ASYM.flatMap(([ax, ay, bx, by]) => [ax * sx + at[0], ay * sy + at[1], bx * sx + at[0], by * sy + at[1]]);
+  const rect: [Point, Point] = [[-23, -5], [17, 25]];
+  const segs = [...placeStretched([0, 0], 1, 1), ...placeStretched([400, 0], 1.6, 1)];
+  const fp = fingerprintSymbol(segs, rect);
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+  assert.equal(affine.matches.length, 0, "a 1.6× stretch (over the default 1.5× bound) must never commit as a match");
+  const perfect = affine.withheld.find((w) => w.transform && Math.abs(w.transform.scale_x - 1.6) < 0.01);
+  assert.ok(perfect, `expected a withheld row disclosing the true ~1.6× fit, got: ${JSON.stringify(affine.withheld)}`);
+  assert.ok(/stretch/.test(perfect!.reason) && /bar 1\.5/.test(perfect!.reason), `bounds reason should name the stretch and the bar, got: ${perfect!.reason}`);
+});

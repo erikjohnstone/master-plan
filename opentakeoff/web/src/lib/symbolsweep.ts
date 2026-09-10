@@ -68,6 +68,10 @@
 //
 // sweepSymbols composes the two on one sheet, unchanged.
 
+import {
+  fitAffine, decomposeAffine, affineWithinBounds, gatherCorrespondences, DEFAULT_AFFINE_BOUNDS,
+} from "./symbolAffine.ts";
+
 export type Point = [number, number];
 
 /** Minimal text-run shape used only to decide which pages a SET-wide symbol
@@ -173,11 +177,52 @@ export function hasSymbolSweepPlanEvidence(
   return dispersed(fieldTags) && dispersed(flows);
 }
 
+/** Phase 1 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md §4.3 — bounds and toggles for
+ * affine refinement/search. `enabled` stays false until Phase 5 flips the
+ * default; every other field is meaningless while it is. */
+export interface AffineOptions {
+  enabled?: boolean;
+  /** Default 1.5 — see symbolAffine.ts's `AffineBounds`. */
+  maxStretch?: number;
+  /** Default 10. */
+  maxShearDeg?: number;
+  /** Phase 2 — default true once `affine.enabled`. Not implemented yet;
+   * reserved so Phase 2 does not need a new option name. */
+  rotationSearch?: boolean;
+  /** Phase 2/3 — default false. Not implemented yet; reserved. */
+  scaleSearch?: boolean;
+}
+
+/** §4.1 — disclosed on a row whenever affine refinement (not the rigid
+ * search) produced the kept placement. Absent on a row the rigid path
+ * committed without refinement, so a same-as-today sweep produces
+ * same-as-today rows. */
+export interface SweepTransform {
+  /** Degrees CW, image space (y down), [0, 360). Continuous. */
+  rotation_deg: number;
+  /** Scale along the seed's own x / y axes, AFTER the stated uniform ratio
+   * (opts.scale) is divided out — 1.0 means "as drawn on the seed sheet". */
+  scale_x: number;
+  scale_y: number;
+  /** Deviation from a right angle between the seed's axes, degrees. */
+  shear_deg: number;
+  mirrored: boolean;
+  /** RMS residual of the fit, px, and the tolerance the re-score used. */
+  rms_px: number;
+  tol_px: number;
+  /** How the placement was found: "rigid" (one of the 8 matrices, then
+   * refined), "rotation" (Phase 2 basis), "affine" (Phase 3 basis). */
+  via: "rigid" | "rotation" | "affine";
+}
+
 export interface SweepOptions {
   /** Also try 90/180/270 rotated placements (default true — symbols rotate on plans). */
   rotations?: boolean;
   /** Also try mirrored placements (default true). */
   mirror?: boolean;
+  /** Phase 1+ of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — off by default (byte-
+   * for-byte the pre-affine rigid search when absent). See AffineOptions. */
+  affine?: AffineOptions;
   /** Endpoint match tolerance, image px (default 2 — CAD jitter, not drift). */
   tolPx?: number;
   /** Commit bar: score ≥ this is a match (default 0.92). */
@@ -230,6 +275,9 @@ export interface SweepMatch {
    * — a richer-variant suspect. On a match row it says LOOK AT THIS ONE FIRST;
    * under variantGuard such placements demote to withheld instead. */
   extra?: number;
+  /** Present only when affine refinement (§4.1) is the reason this row was
+   * found/kept — see SweepTransform. */
+  transform?: SweepTransform;
 }
 
 export interface SweepWithheld extends SweepMatch {
@@ -1242,12 +1290,95 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     return matched / totalLen;
   };
 
+  // ── 3b. affine refinement (Phase 1 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md) ────
+  // opts.affine is off by default (byte-for-byte the rigid search when
+  // absent — nothing below this comment runs). When on: for a placement the
+  // rigid search already proposed but scored below scoreHigh, gather
+  // correspondences near that rigid guess, fit the ACTUAL affine transform,
+  // and re-score at the fit — never touching a placement already ≥
+  // scoreHigh under the rigid path (monotone: refinement can only raise a
+  // near-miss, never revisit a committed match).
+  const affineOpts = opts.affine;
+  const affineOn = affineOpts?.enabled === true;
+  const affineBounds = affineOn
+    ? { maxStretch: affineOpts!.maxStretch ?? DEFAULT_AFFINE_BOUNDS.maxStretch, maxShearDeg: affineOpts!.maxShearDeg ?? DEFAULT_AFFINE_BOUNDS.maxShearDeg }
+    : DEFAULT_AFFINE_BOUNDS;
+  // §3's own radius is 6·tol for gatherCorrespondences and the re-score
+  // tolerance never exceeds 3·tol (§2.4) — a spatial index built for 3·tol
+  // cells covers both reliably without disturbing the shared, tol-keyed
+  // `grid`/`body` the rigid path uses everywhere else.
+  const wideTol = 3 * tol;
+  const wideGrid = affineOn ? new EndpointGrid(segs, wideTol) : null;
+  const wideBody = affineOn ? new BodyGrid(segs, Math.max(2 * wideTol, 4)) : null;
+  /** scoreAt's exact logic, parameterised by tolerance and spatial index —
+   * needed only because the fitted matrix's residual-adaptive tolerance
+   * (§2.4) can exceed the rigid search's fixed `tol`. */
+  const scoreAtTol = (
+    m: [number, number, number, number], tx: number, ty: number, tolAt: number, gridAt: EndpointGrid, bodyAt: BodyGrid,
+  ): number => {
+    const tol2At = tolAt * tolAt;
+    const nearAt = (x1: number, y1: number, x2: number, y2: number): boolean =>
+      (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) <= tol2At;
+    let matched = 0;
+    for (let k = 0; k < rel.length; k++) {
+      const r = rel[k];
+      const a = apply(m, r[0], r[1]);
+      const b = apply(m, r[2], r[3]);
+      const ax = a[0] + tx, ay = a[1] + ty, bx = b[0] + tx, by = b[1] + ty;
+      let hit = false;
+      for (const j of gridAt.near(ax, ay, scratch)) {
+        const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
+        if ((nearAt(px, py, ax, ay) && nearAt(qx, qy, bx, by)) || (nearAt(qx, qy, ax, ay) && nearAt(px, py, bx, by))) { hit = true; break; }
+      }
+      const sdx = bx - ax, sdy = by - ay, sLen = Math.hypot(sdx, sdy);
+      const steps = Math.max(1, Math.ceil(r[4] / Math.max(tolAt, 1)));
+      let covered = 0;
+      for (let si = 0; si <= steps; si++) {
+        const f = si / steps, x = ax + sdx * f, y = ay + sdy * f;
+        let sample = false;
+        for (const j of bodyAt.near(x, y, bodyScratch)) {
+          const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
+          const tdx = qx - px, tdy = qy - py, tLen = Math.hypot(tdx, tdy);
+          if (!tLen || Math.abs((sdx * tdx + sdy * tdy) / (sLen * tLen)) < angleCos) continue;
+          if (distToSeg(x, y, px, py, qx, qy) > tolAt) continue;
+          sample = true; break;
+        }
+        if (sample) covered++;
+      }
+      matched += Math.max(hit ? r[4] : 0, r[4] * covered / (steps + 1));
+    }
+    return matched / totalLen;
+  };
+  /** For a rigid-search placement scoring below scoreHigh, try to do
+   * better with the ACTUAL affine transform near it. Returns null when
+   * refinement can't run (correspondences too few/ambiguous/collinear —
+   * §2.1's own refusal) or doesn't beat the rigid score; never throws. */
+  const refine = (rigidM: [number, number, number, number], tx: number, ty: number): { at: Point; score: number; m: [number, number, number, number]; transform: SweepTransform } | null => {
+    if (!affineOn) return null;
+    const corr = gatherCorrespondences(rel, rigidM, tx, ty, segs, wideGrid!, 6 * tol);
+    const fit = fitAffine(corr);
+    if (!fit) return null;
+    const decomp = decomposeAffine(fit.m);
+    const tolFit = Math.min(Math.max(3 * fit.rms, tol), 3 * tol);
+    const score = scoreAtTol(fit.m, fit.tx, fit.ty, tolFit, wideGrid!, wideBody!);
+    return {
+      at: [fit.tx, fit.ty],
+      score,
+      m: fit.m,
+      transform: {
+        rotation_deg: decomp.rotation_deg, scale_x: decomp.scale_x, scale_y: decomp.scale_y,
+        shear_deg: decomp.shear_deg, mirrored: decomp.mirrored,
+        rms_px: Math.round(fit.rms * 100) / 100, tol_px: Math.round(tolFit * 100) / 100, via: "rigid",
+      },
+    };
+  };
+
   // ── 4. classify + dedupe ───────────────────────────────────────────────────
   // One physical placement can be proposed by several anchors and — for a
   // symmetric symbol — several transforms; centers agree within ~tol, so a
   // small merge radius collapses them to the best score (earliest transform
   // on ties: the plainest reading wins deterministically).
-  type Scored = SweepMatch & { xf: number };
+  type Scored = SweepMatch & { xf: number; boundsFailed?: boolean; mAt?: [number, number, number, number] };
   const scored: Scored[] = [];
   const ungated = { v: 0 };
   // Placements the geometry alone would have COMMITTED and the stated
@@ -1262,7 +1393,29 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     const score = scoreAt(xforms[c.xf].m, c.tx, c.ty, lumGate ? ungated : undefined);
     if (lumGate && ungated.v >= scoreHigh && score < scoreHigh) lumOut.push([c.tx, c.ty]);
     if (score < proposalFloor) continue;
-    scored.push({ at: [c.tx, c.ty], score, rotation: xforms[c.xf].rotation, mirrored: xforms[c.xf].mirrored, xf: c.xf });
+    const row: Scored = { at: [c.tx, c.ty], score, rotation: xforms[c.xf].rotation, mirrored: xforms[c.xf].mirrored, xf: c.xf };
+    // Refinement only ever touches a placement the rigid path did NOT
+    // already commit (score < scoreHigh) — a committed match is never
+    // revisited, so this addition is strictly monotone.
+    if (score < scoreHigh) {
+      const refined = refine(xforms[c.xf].m, c.tx, c.ty);
+      if (refined && refined.score > row.score) {
+        const withinBounds = affineWithinBounds(
+          { rotation_deg: refined.transform.rotation_deg, scale_x: refined.transform.scale_x, scale_y: refined.transform.scale_y, shear_deg: refined.transform.shear_deg, mirrored: refined.transform.mirrored },
+          affineBounds, opts.scale ?? 1,
+        );
+        row.at = refined.at;
+        row.score = refined.score;
+        row.transform = refined.transform;
+        row.mAt = refined.m;
+        // A fit whose numbers are outside the stated bounds is disclosed
+        // (the caller gets the transform and can judge it) but must never
+        // silently become a match on the strength of a score the bounds
+        // check itself says not to trust — §3 Phase 1 step 3.
+        if (refined.score >= scoreHigh && !withinBounds) row.boundsFailed = true;
+      }
+    }
+    scored.push(row);
   }
   // One physical placement can cast transform-equivalent peaks a little
   // farther apart than two tolerances when the seed centroid is eccentric.
@@ -1416,7 +1569,11 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     for (let bi = 0; bi < negatives.length; bi++) {
       const neg = negatives[bi];
       if (!neg) continue;
-      const ev = evidenceAt(neg, xforms[sc.xf].m, sc.at[0], sc.at[1]);
+      // §3 Phase 1 step 4 — a refined placement's counter-example evidence
+      // is read under the FITTED matrix, not the nearest rigid one: the
+      // negative's canonical-frame linework must land where the placement
+      // actually is, and for a refined row that is `mAt`, not `xforms[xf]`.
+      const ev = evidenceAt(neg, sc.mAt ?? xforms[sc.xf].m, sc.at[0], sc.at[1]);
       if (ev >= EXCLUDE_EVIDENCE_BAR && (!killed || ev > killed.ev)) killed = { by: bi, neg, ev };
     }
     if (killed) {
@@ -1470,11 +1627,25 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     relBBoxByXf.set(xi, bb);
     return bb;
   };
+  const relBBoxAt = (m: [number, number, number, number]): [number, number, number, number] => {
+    const bb: [number, number, number, number] = [Infinity, Infinity, -Infinity, -Infinity];
+    for (const r of rel) {
+      const a = apply(m, r[0], r[1]), b = apply(m, r[2], r[3]);
+      bb[0] = Math.min(bb[0], a[0], b[0]); bb[1] = Math.min(bb[1], a[1], b[1]);
+      bb[2] = Math.max(bb[2], a[0], b[0]); bb[3] = Math.max(bb[3], a[1], b[1]);
+    }
+    return bb;
+  };
   const extraFor = (s: Scored): number => {
-    const bb = relBBoxFor(s.xf);
+    // A refined row's kept placement is the FITTED matrix, not the nearest
+    // rigid one — using the rigid xf here would compute extra-ink against
+    // linework the symbol isn't actually drawn over. relBBoxFor's per-xf
+    // cache only applies to the 8 shared rigid matrices; a fitted matrix is
+    // per-instance and computed fresh (cheap — one pass over `rel`).
+    const m = s.mAt ?? xforms[s.xf].m;
+    const bb = s.mAt ? relBBoxAt(s.mAt) : relBBoxFor(s.xf);
     const bx0 = bb[0] + s.at[0] - tol, by0 = bb[1] + s.at[1] - tol;
     const bx1 = bb[2] + s.at[0] + tol, by1 = bb[3] + s.at[1] + tol;
-    const { m } = xforms[s.xf];
     const placed = rel.map((r) => {
       const a = apply(m, r[0], r[1]), b = apply(m, r[2], r[3]);
       return [a[0] + s.at[0], a[1] + s.at[1], b[0] + s.at[0], b[1] + s.at[1]] as const;
@@ -1507,9 +1678,10 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     score: pct(s.score),
     rotation: s.rotation,
     mirrored: s.mirrored,
+    ...(s.transform ? { transform: s.transform } : {}),
   });
   const isMatch = (s: Scored): boolean =>
-    s.score >= scoreHigh && (!guardOn || (extraOf.get(s) ?? 0) <= extraBar);
+    s.score >= scoreHigh && !s.boundsFailed && (!guardOn || (extraOf.get(s) ?? 0) <= extraBar);
   for (const s of survivors) {
     if (!isMatch(s)) continue;
     const ev = extraOf.get(s) ?? 0;
@@ -1520,6 +1692,19 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   for (const s of survivors) {
     if (isMatch(s)) continue;
     if (matches.some((m) => Math.hypot(m.at[0] - s.at[0], m.at[1] - s.at[1]) <= suppressR)) continue;
+    // §4.2 — a refined placement that clears scoreHigh but fails the stated
+    // affine bounds is disclosed with what it actually measured, never
+    // silently committed and never confused with the ordinary near-miss or
+    // extra-ink reasons below (those are about SCORE; this is about a
+    // transform the caller said not to trust).
+    if (s.boundsFailed && s.transform) {
+      const t = s.transform;
+      withheld.push({
+        ...row(s),
+        reason: `matches ${Math.round(s.score * 100)}% of the seed under a ${t.scale_x}× / ${t.scale_y}× stretch and ${t.shear_deg}° shear (bar ${affineBounds.maxStretch}× / ${affineBounds.maxShearDeg}°) — that much distortion may be a different device drawn to look alike; view_sheet here and confirm, or raise affine.max_stretch if this drawing set genuinely stretches its symbols`,
+      });
+      continue;
+    }
     if (s.score >= scoreHigh) {
       const ev = extraOf.get(s) ?? 0;
       withheld.push({
