@@ -1,5 +1,35 @@
 # BAS production workflow progress
 
+## Full saved-calculation replay — 2026-09-10
+
+After **f20c8e24**, an actual shared Python replay gate now covers every saved
+assignment, assembly and engineering result, with exact historical input/head
+reconstruction and full-workflow receipts. The browser verified-backup view and
+optional MCP archive preflight use it without mutating state. Re-signed wrong
+quantities reject even when file hashes and saved-history fingerprints validate.
+This closes an E restoration/approval prerequisite, not E itself. Source truth,
+VectorGrid, existing calculators and old workflow/JSON semantics are untouched.
+Scope, reproducible evidence and current limits: `WORKFLOW_REPLAY_PROOF.md`.
+
+Full web **4580: 2,697 pass / 13 existing skips**, check exit 0; final cosmetic
+types/lint/build **19330** passes. Full BAS MCP **9977: 103 pass**, types and
+packaging **4 pass**; existing broader MCP **1480: 155 pass**. Full Python with
+packaging **62302: 443 pass / 0 skips**, configured mypy **19 source files**.
+Final actual Fort Sam UI **53663** passes **3 assembly + 28 engineering** replay,
+valid-byte/wrong-math rejection, cancellation and unchanged state; zero page
+errors, six theme/size screenshots inspected, 11.492 s whole UI replay. Built
+public MCP **81379** produces the same replay receipt and rejects the same
+forgery, with no loaded plan needed for preflight and no Session mutation.
+
+Automatic ZIP restoration remains unimplemented. Next close blind annotation
+save/queued autosave races, atomically restore required originals and merged
+state, reopen exact retained-source citations, then complete correspondence,
+review journals and scoped approved snapshots. No checkbox bypasses source/math
+integrity. Original A–E and final corpus/holdout acceptance stay first; appended
+symbol deformation/installed-plan research remains the last phase, not a
+replacement. Historical corpus metrics/23 old-path errors remain unchanged;
+no new full-corpus pass or universal-production claim. No push/merge/deploy.
+
 ## Source-inclusive unapproved backup — 2026-09-10
 
 After **81e55b2e**, shared `bas_evidence_bundle_v1` archives now include exact

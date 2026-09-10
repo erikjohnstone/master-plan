@@ -5,14 +5,15 @@ import { calculateBasAssemblies } from '../src/basAssemblyQuantities.ts';
 import { applyBasEngineeringReview, inspectBasEngineering } from '../src/basEngineeringReview.ts';
 import { basEngineeringCommandSchema } from '../../web/src/lib/basEngineeringRegister.ts';
 import { writeJsonAndExit } from './cliJson.mjs';
+import { verifyBasWorkflowCalculations } from '../src/basWorkflowReplay.ts';
 
 const limit = 32 * 1024 * 1024;
 const cancelled = new AbortController();
 process.once('SIGTERM', () => cancelled.abort());
 let label = 'BAS';
 try {
-  const kind = z.enum(['assignment', 'assembly', 'engineering']).parse(process.argv[2] ?? 'assignment');
-  label = kind === 'engineering' ? 'BAS engineering' : 'BAS quantity';
+  const kind = z.enum(['assignment', 'assembly', 'engineering', 'workflow-replay']).parse(process.argv[2] ?? 'assignment');
+  label = kind === 'workflow-replay' ? 'BAS workflow replay' : kind === 'engineering' ? 'BAS engineering' : 'BAS quantity';
   const chunks: Buffer[] = [];
   let bytes = 0;
   for await (const chunk of process.stdin) {
@@ -23,7 +24,10 @@ try {
   }
   const payload = z.object({ workflow: z.unknown(), request: z.unknown() }).strict().parse(JSON.parse(Buffer.concat(chunks).toString('utf8')));
   let result;
-  if (kind === 'engineering') {
+  if (kind === 'workflow-replay') {
+    z.object({}).strict().parse(payload.request);
+    result = await verifyBasWorkflowCalculations(payload.workflow, { signal: cancelled.signal });
+  } else if (kind === 'engineering') {
     const command = basEngineeringCommandSchema.parse(payload.request);
     result = command.action === 'inspect'
       ? await inspectBasEngineering(payload.workflow, command.request.capture_id, { signal: cancelled.signal })

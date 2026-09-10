@@ -5,6 +5,7 @@ import { verifyBasSourceBytes } from '../../web/src/lib/basSourceRetention.ts';
 import { sha256Hex } from '../../web/src/lib/graphKeys.js';
 import { writeAtomicArtifact } from './atomicArtifactFile.ts';
 import type { Session } from './session.ts';
+import { verifyBasWorkflowCalculations } from './basWorkflowReplay.ts';
 
 export async function exportBasEvidenceBundle(session: Session, path: string, originals: string[], overwrite?: boolean) {
   const payload = structuredClone(session.exportPayload()), expected = canonicalBasJson(payload);
@@ -41,7 +42,8 @@ export async function exportBasEvidenceBundle(session: Session, path: string, or
   return payload;
 }
 
-export async function inspectBasEvidenceBundleFile(path: string) {
+export async function inspectBasEvidenceBundleFile(path: string, options: { replayCalculations?: boolean; signal?: AbortSignal } = {}) {
+  options.signal?.throwIfAborted();
   const file = await open(path, 'r');
   try {
     const size = (await file.stat()).size;
@@ -50,9 +52,12 @@ export async function inspectBasEvidenceBundleFile(path: string) {
       while (done < length) { const result = await file.read(bytes, done, length - done, offset + done);
         if (!result.bytesRead) throw new Error('BAS evidence archive is truncated'); done += result.bytesRead; }
       return bytes;
-    } });
+    } }, () => options.signal?.throwIfAborted());
     await archive.verifyOriginals();
+    const replay = options.replayCalculations ? await verifyBasWorkflowCalculations(archive.payload.bas_workflow, { signal: options.signal }) : null;
+    options.signal?.throwIfAborted();
     return { bundle_id: archive.bundle_id, manifest: archive.manifest, source_byte_verification: 'verified_now' as const,
-      calculation_verification: 'not_python_replayed' as const, restored: false as const };
+      calculation_verification: replay?.calculation_verification ?? 'not_python_replayed' as const,
+      ...(replay ? { workflow_replay: replay } : {}), restored: false as const };
   } finally { await file.close(); }
 }

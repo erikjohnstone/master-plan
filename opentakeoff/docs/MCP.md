@@ -123,6 +123,15 @@ restoring anything. No plan is required. The optional `bas_evidence_bundle`
 receipt explicitly reports `restored: false`, `source_byte_verification:
 "verified_now"` and `calculation_verification: "not_python_replayed"`. These
 unencrypted, unsigned archives do not grant approval or certify source completeness.
+Add `replay_calculations: true` only with `verify_evidence_bundle: true` to also
+replay every saved assignment, assembly and engineering result through the shared
+Python calculators. The optional `workflow_replay` receipt binds the exact
+workflow digest and all historical record IDs. `calculation_verification` then
+reports `verified_shared_python_replay` or `no_saved_calculations`; empty history
+is not calculation coverage. Wrong results, unsupported rules, runtime failure,
+size limits and cancellation reject without a partial receipt. The service has
+a 30-second replay deadline and bounded 1,000-record/30 MiB batches. Successful
+historical replay does not mean current dependencies, approval or restoration.
 See [format and bounded acceptance](bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
 
 For the development project review queue, add `bas_project_review: {capture_id}`

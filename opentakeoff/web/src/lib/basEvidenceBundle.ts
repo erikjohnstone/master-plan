@@ -6,6 +6,7 @@ import { canonicalBasJson } from './basCanonical.ts';
 import { basSourceInventory, basRetainedSourceSchema, verifyBasSourceBytes, type BasSourceInventoryItem } from './basSourceRetention.ts';
 import { parseTakeoffImport } from './importTakeoff.js';
 import { sha256Hex } from './graphKeys.js';
+import { basWorkflowReplayReceiptSchema } from './basWorkflowReplay.ts';
 
 export const BAS_BUNDLE_LIMITS = Object.freeze({ sources: 10000, pdf: 512 * 1024 ** 2,
   payload: 256 * 1024 ** 2, manifest: 16 * 1024 ** 2, archive: 2 ** 31 - 1, chunk: 64 * 1024 });
@@ -22,9 +23,11 @@ export const basEvidenceBundleManifestSchema = z.object({
 }).strict();
 export type BasEvidenceBundleManifest = z.infer<typeof basEvidenceBundleManifestSchema>;
 export const basEvidenceBundleInspectionSchema = z.object({ bundle_id: sha, manifest: basEvidenceBundleManifestSchema,
-  source_byte_verification: z.literal('verified_now'), calculation_verification: z.literal('not_python_replayed'),
+  source_byte_verification: z.literal('verified_now'), calculation_verification: z.enum(['not_python_replayed', 'verified_shared_python_replay', 'no_saved_calculations']),
+  workflow_replay: basWorkflowReplayReceiptSchema.optional(),
   restored: z.literal(false),
-}).strict();
+}).strict().refine(r => r.workflow_replay ? r.calculation_verification === r.workflow_replay.calculation_verification
+  : r.calculation_verification === 'not_python_replayed', 'Replay status requires its exact workflow receipt');
 export interface BasBundleReader { size: number; read(offset: number, length: number): Promise<Uint8Array> }
 type Guard = () => void;
 const noop = () => {};

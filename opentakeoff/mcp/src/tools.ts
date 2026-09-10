@@ -60,12 +60,12 @@ const layersFilterSchema = z.object({
   exclude: z.array(z.string()).optional().describe("Layer names or ids whose ink must not block the flood at all"),
 }).optional().describe("Override the sheet's classified layer roles for THIS call (see sheet_info.layers)");
 
-const run = (tool: string, fn: (args: any) => unknown | Promise<unknown>) =>
-  async (args: any): Promise<ToolReply> => {
+const run = (tool: string, fn: (args: any, context?: { signal: AbortSignal }) => unknown | Promise<unknown>) =>
+  async (args: any, context?: { signal: AbortSignal }): Promise<ToolReply> => {
     const startedAt = process.hrtime.bigint();
     let reply: ToolReply;
     try {
-      reply = ok(await fn(args));
+      reply = ok(await fn(args, context));
     } catch (e) {
       reply = fail(e);
     }
@@ -459,19 +459,23 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }));
 
   server.registerTool("import_takeoff", {
-    description: `The way BACK IN (#151): load an "opentakeoff.takeoff_canvas.v1" file — a prior export_takeoff, or the app's own save — into this session, through the SAME tested merge rules as the app's Sheet-menu import: finish-tag identity joins imported conditions onto this session's own (their knobs win), new ids append, duplicate ids skip (re-import is idempotent), and THIS session's calibration wins per sheet. An empty session adopts the file wholesale. Resume yesterday's work, extend a takeoff a human already reviewed (their ink stays ink — reviewed shapes arrive untouchable by agent verbs), or audit someone else's export with list_shapes/takeoff_summary. Requires a loaded plan; shapes referencing OTHER files ride along and count in totals but can't be viewed against this document — the reply's unknown_files names them. Approval marks ride the file too — transport, not minting: an estimator seal arriving by import stays estimator ink, listable but untouchable here. undo_last removes the imported SHAPES as one step; adopted conditions, scales, annotations, and approval marks stay. Alternatively, verify_evidence_bundle:true performs read-only .otbas.zip preflight without requiring a loaded plan. It verifies archive integrity, all original bytes and saved source ownership, not calculations or approval. Nothing is imported or restored; the optional bas_evidence_bundle receipt explicitly says restored:false.`,
+    description: `The way BACK IN (#151): load an "opentakeoff.takeoff_canvas.v1" file — a prior export_takeoff, or the app's own save — into this session, through the SAME tested merge rules as the app's Sheet-menu import: finish-tag identity joins imported conditions onto this session's own (their knobs win), new ids append, duplicate ids skip (re-import is idempotent), and THIS session's calibration wins per sheet. An empty session adopts the file wholesale. Resume yesterday's work, extend a takeoff a human already reviewed (their ink stays ink — reviewed shapes arrive untouchable by agent verbs), or audit someone else's export with list_shapes/takeoff_summary. Requires a loaded plan; shapes referencing OTHER files ride along and count in totals but can't be viewed against this document — the reply's unknown_files names them. Approval marks ride the file too — transport, not minting: an estimator seal arriving by import stays estimator ink, listable but untouchable here. undo_last removes the imported SHAPES as one step; adopted conditions, scales, annotations, and approval marks stay. Alternatively, verify_evidence_bundle:true performs read-only .otbas.zip preflight without requiring a loaded plan. By default it verifies archive integrity, all original bytes and saved source ownership, not calculations or approval. Add replay_calculations:true to check every saved assignment, assembly and engineering result through the existing shared Python calculators; its receipt binds the exact workflow and historical record IDs. Empty history reports no_saved_calculations, not a complete audit. Replay does not repair stale dependencies or establish source-set coverage. Nothing is imported or restored; the optional bas_evidence_bundle receipt explicitly says restored:false.`,
     inputSchema: {
-      path: z.string().describe("Path to a takeoff_canvas.v1 JSON file on disk"),
-      verify_evidence_bundle: z.boolean().optional().describe('Read-only preflight of a .otbas.zip instead of JSON import. Verifies every PDF hash, archive structure and saved source ownership; does not restore, merge, replay calculations or approve anything. No loaded plan is required.'),
+      path: z.string().describe("Path to a takeoff_canvas.v1 JSON file, or a .otbas.zip with verify_evidence_bundle:true"),
+      verify_evidence_bundle: z.boolean().optional().describe('Read-only preflight of a .otbas.zip instead of JSON import. Verifies every PDF hash, archive structure and saved source ownership; does not restore, merge or approve anything. Calculation replay requires replay_calculations:true. No loaded plan is required.'),
+      replay_calculations: z.boolean().optional().describe('Only with verify_evidence_bundle:true: also replay every saved assignment, assembly and engineering result through existing shared Python calculators. Historical dependencies stay historical; no approval or restoration.'),
     },
     outputSchema: importTakeoffOutput,
-  }, run("import_takeoff", async (a) => {
+  }, run("import_takeoff", async (a, context) => {
+    if (a.replay_calculations !== undefined && !a.verify_evidence_bundle) throw new UserError('replay_calculations requires verify_evidence_bundle:true. Nothing was imported.');
     if (!a.verify_evidence_bundle) return importTakeoff(session, a.path);
-    const inspection = await inspectBasEvidenceBundleFile(a.path);
+    const inspection = await inspectBasEvidenceBundleFile(a.path, { replayCalculations: a.replay_calculations, signal: context?.signal });
     return { file: basename(a.path), replaced: false, shapes_added: 0, shapes_pending: 0, conditions_merged: 0,
       conditions_added: 0, scales_adopted: 0, unknown_files: [], rules_imported: 0, shapes_total: session.shapes.length,
       bas_evidence_bundle: inspection,
-      note: 'Verified unapproved evidence backup only. Nothing was imported or restored; no merge, calculation replay, source-set review or approval was performed.' };
+      note: inspection.calculation_verification === 'no_saved_calculations' ? 'Verified unapproved backup. There are no saved assignment, assembly or engineering calculations to replay. Nothing was imported/restored or approved.'
+        : a.replay_calculations ? 'Verified unapproved backup and checked saved calculations through shared Python. Nothing was imported/restored or approved; dependency freshness and source-set coverage are separate.'
+        : 'Verified unapproved evidence backup only. Nothing was imported or restored; no merge, calculation replay, source-set review or approval was performed.' };
   }));
 
   server.registerTool("apply_rules", {

@@ -63,3 +63,12 @@ documents uncompressed streaming and CRC calculation; local installed version is
 defines stored method 0, local/central records and bit-3 data descriptors. Using
 the library for emission and a strict application-format reader is our design
 inference, not a claim of universal ZIP compatibility or security certification.
+# Additive saved-calculation preflight — 2026-09-10
+
+Archive bytes, manifest and default inspection remain unchanged. The Original
+PDFs browser view now offers **Replay saved calculations** after file verification;
+MCP preflight accepts `replay_calculations: true`. Both use the same full-history
+input reconstruction and existing Python calculators. The separate receipt binds
+workflow identity and all checked B/C/D record IDs. No-saved-calculation status is
+distinct from verified results. This does not restore a project or grant approval.
+See [the replay contract](RESTORE_REPLAY_CONTRACT.md).

@@ -12,6 +12,15 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add optional **Replay saved calculations** after evidence-bundle verification
+  and MCP `import_takeoff` preflight `replay_calculations: true`. Every historical
+  assignment/assembly input is reconstructed from its original decision head;
+  those results and every engineering result must exactly match the unchanged
+  Python calculators. Full-workflow receipts, bounded batches, cancellation and
+  explicit empty-history status prevent file integrity from masquerading as
+  arithmetic verification. Default JSON/file preflight behavior is unchanged.
+  This is read-only and does not restore, rebase, approve or certify a takeoff.
+
 - Add source-inclusive, unapproved evidence ZIP backup and read-only verification
   in **Review & changes → Original PDFs** and existing MCP export/import tools.
   Shared canonical manifests, exact JSON, all historical originals, strict ZIP

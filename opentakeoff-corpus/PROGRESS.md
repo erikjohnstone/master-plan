@@ -1,5 +1,23 @@
 ## Active work
 
+2026-09-10 checkpoint after **f20c8e24**: full saved B/C/D calculation replay now
+uses historical input reconstruction and unchanged Python calculators on the
+shared UI/MCP path. Optional browser/MCP archive preflight returns exact workflow
+and record receipts; re-signed wrong totals reject and no state is restored or
+approved. Full web **2,697 pass / 13 existing skips**; BAS MCP **103 pass** plus
+broader existing MCP **155 pass**, packaging **4 pass**; Python with package gate
+**443 pass**, configured mypy **19 files**. Actual Fort Sam UI and built MCP both
+replay all **3 assembly + 28 engineering** historical results, reject the same
+valid-byte/wrong-math backup and preserve history. Six final UI screenshots and
+the failure state inspected. See
+`../opentakeoff/docs/bas-production/WORKFLOW_REPLAY_PROOF.md` for exact runs and
+limits. No VectorGrid/algorithm/scorer/threshold changes or holdout access.
+Main goal remains active: atomic restoration/autosave safety and original-version
+citations, revision correspondence/journals, scoped approval/snapshots, then all
+remaining corpus/holdout gates and appended symbol/installed-plan phase.
+Historical scores and old-path failures below are not a new green corpus gate.
+No push, merge or deployment.
+
 2026-09-10 checkpoint after **81e55b2e**: source-inclusive unapproved evidence ZIP
 backup now has one shared canonical/ownership/hash/container implementation,
 actual browser download/verification and additive MCP export/read-only preflight.

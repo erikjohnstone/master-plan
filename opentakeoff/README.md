@@ -115,8 +115,10 @@ set, approve takeoffs or implement revision release.
 The development **Original PDFs** view also downloads and verifies an **unapproved
 evidence bundle**: one `.otbas.zip` containing saved takeoff JSON and every
 historical original, named by digest. Browser and MCP use the same archive and
-ownership checks. Missing or changed bytes block export. Verification is read-only,
-not calculation replay or approval; full-project ZIP restoration remains unfinished.
+ownership checks. Missing or changed bytes block export. File verification is
+read-only. **Replay saved calculations** then checks every historical assignment,
+assembly and engineering result through the shared Python engine; it neither
+updates stale inputs nor approves a takeoff. Full-project ZIP restoration remains unfinished.
 See [format, limits and acceptance](docs/bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
 
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the

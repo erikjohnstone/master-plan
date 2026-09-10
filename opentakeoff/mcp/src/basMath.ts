@@ -8,6 +8,7 @@ import { basAssignmentDemandResultSchema, type BasAssignmentDemandResult } from 
 import { basAssemblyQuantityResultSchema, type BasAssemblyQuantityResult } from "../../web/src/lib/basAssemblyQuantityContract.ts";
 import { basEngineeringInputSchema, basEngineeringResultSchema, verifyBasEngineeringResult,
   type BasEngineeringResult } from "../../web/src/lib/basEngineeringContract.ts";
+import { BAS_WORKFLOW_REPLAY_RULE, type BasReplayRecord } from '../../web/src/lib/basWorkflowReplay.ts';
 
 const appRoot = fileURLToPath(new URL("../../", import.meta.url));
 const bundledRoot = fileURLToPath(new URL("./python/", import.meta.url));
@@ -82,6 +83,16 @@ export async function replayBasEngineering(results: BasEngineeringResult[], opti
     match: z.literal(true), project_complete: z.literal(false) }).strict();
   const result = await runBasProcess({ engineering_replay: { results } }, schema, options);
   if (result.checked_results !== results.length) throw new Error('Engineering replay omitted saved results');
+  return result;
+}
+
+export async function replayBasWorkflowBatch(records: BasReplayRecord[], options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}) {
+  const schema = z.object({ schema_version: z.literal('bas_workflow_replay_batch_v1'), rule_version: z.literal(BAS_WORKFLOW_REPLAY_RULE),
+    checked_records: z.array(z.object({ kind: z.enum(['assignment', 'assembly', 'engineering']), record_id: z.string().regex(/^[a-f0-9]{64}$/) }).strict()).max(1000),
+    match: z.literal(true), project_complete: z.literal(false) }).strict();
+  const result = await runBasProcess({ workflow_replay: { records } }, schema, options);
+  const expected = records.map(({ kind, record_id }) => ({ kind, record_id }));
+  if (JSON.stringify(result.checked_records) !== JSON.stringify(expected)) throw new Error('BAS workflow replay omitted or changed calculation records');
   return result;
 }
 

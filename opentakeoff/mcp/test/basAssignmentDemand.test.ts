@@ -19,6 +19,8 @@ import { compileProductionTakeoff } from '../src/productionTakeoff.ts';
 import type { SheetGraph } from '../../web/src/lib/sheetgraph.ts';
 import { basAssignmentMiddleware } from '../../web/vite.basAssignmentApi.js';
 import { resolveTsxLoader } from '../../web/vite.corpusTakeoffApi.js';
+import { verifyBasWorkflowCalculations } from '../src/basWorkflowReplay.ts';
+import { basAssignmentCalculationFingerprint } from '../../web/src/lib/basAssignmentDemandContract.ts';
 
 const uuid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 async function fixture() {
@@ -94,6 +96,27 @@ test('assignment calculations and retries never downgrade or omit newer assembly
   const laterAssembly = await applyBasAssemblyReview(originallyCalculated.workflow, assemblyRequest, 'operator_input');
   assert.deepEqual((await calculateBasAssignments(laterAssembly, request, { python: '/not-a-runtime' })).workflow, laterAssembly);
   assert.deepEqual(laterAssembly.assignment_calculations, originallyCalculated.workflow.assignment_calculations);
+});
+
+test('complete replay uses each historical assignment head and rejects re-signed totals', async () => {
+  const { workflow, request } = await fixture();
+  const first = await calculateBasAssignments(workflow, request);
+  const register = structuredClone(workflow.equipment_events![0].register);
+  register.assignments[0].excluded_equipment_ids = [register.equipment[0].equipment_id];
+  const edited = await applyBasEquipmentReview(first.workflow, { operation_id: uuid(301), capture_id: request.capture_id,
+    expected_head: request.expected_equipment_head, reason: 'Historical-head replay control', register }, 'operator_input');
+  const second = await calculateBasAssignments(edited, { ...request, expected_equipment_head: basEquipmentHead(edited, request.capture_id)! });
+  assert.equal(first.calculation.result.assignments[0].known_listed_io_subtotal.AI, 6);
+  assert.equal(second.calculation.result.assignments[0].known_listed_io_subtotal.AI, 4);
+  const before = structuredClone(second.workflow), receipt = await verifyBasWorkflowCalculations(second.workflow);
+  assert.deepEqual(receipt.checked_records.assignment, [first.calculation.calculation_id, second.calculation.calculation_id]);
+  assert.deepEqual(second.workflow, before);
+  const changed = structuredClone(second.workflow), calculation = changed.assignment_calculations![0];
+  calculation.result.assignments[0].known_listed_io_subtotal.AI = 7;
+  const { calculation_id: _id, ...payload } = calculation;
+  calculation.calculation_id = await basAssignmentCalculationFingerprint(payload);
+  await verifyBasWorkflow(changed);
+  await assert.rejects(verifyBasWorkflowCalculations(changed), /assignment result .* does not match/);
 });
 
 test('corrupt values, changed sources, foreign dependencies and missing observations reject', async () => {

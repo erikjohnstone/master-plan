@@ -23,9 +23,12 @@ export function basAssemblyMiddleware(resolveLoader) {
 export function basEngineeringMiddleware(resolveLoader) {
   return basQuantityMiddleware(resolveLoader, 'engineering');
 }
+export function basWorkflowReplayMiddleware(resolveLoader) {
+  return basQuantityMiddleware(resolveLoader, 'workflow-replay');
+}
 
 function basQuantityMiddleware(resolveLoader, kind) {
-  const route = kind === 'engineering' ? '/__ot/bas-engineering'
+  const route = kind === 'workflow-replay' ? '/__ot/bas-workflow-replay' : kind === 'engineering' ? '/__ot/bas-engineering'
     : kind === 'assembly' ? '/__ot/bas-assembly-quantities' : '/__ot/bas-assignment-demand';
   return async (req, res, next) => {
     if (req.url?.split('?')[0] !== route) return next();

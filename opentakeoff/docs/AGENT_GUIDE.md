@@ -16,7 +16,12 @@ saved BAS history; use `original_pdf_paths` for unavailable historical files.
 Matching is by SHA-256 and byte length, not filename. Existing ZIP files require
 explicit `overwrite: true`. `import_takeoff {path: "/path/project.otbas.zip",
 verify_evidence_bundle: true}` performs read-only preflight even without a loaded
-plan. Its receipt says `restored: false`: no merge, Python replay or approval.
+plan. Its default receipt says `restored: false`: no merge, Python replay or approval.
+Add `replay_calculations: true` to that preflight to check every saved assignment,
+assembly and engineering result through the shared Python engine. Read the exact
+`workflow_replay` receipt; `no_saved_calculations` is not a successful audit of
+project calculations. Historical inputs remain historical. Replay does not repair
+freshness, review coverage, approve a deliverable or restore anything.
 Do not describe these unencrypted, unsigned backups as approved releases or claim
 that ZIP restoration is implemented. Ordinary JSON import/export is unchanged.
 

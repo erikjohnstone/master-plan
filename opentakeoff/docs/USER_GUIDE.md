@@ -49,7 +49,16 @@ no partial archive is offered. Unsaved changes are not included. A saved workspa
 change during export requires retry. **Cancel backup operation** stops publication.
 **Verify evidence bundle** checks the selected archive, every PDF digest and saved
 source ownership without changing the workspace. It does not replay calculations,
-approve a takeoff or automatically restore a project. ZIP utilities can extract
+approve a takeoff or automatically restore a project. After file verification,
+**Replay saved calculations** reruns every saved assignment, assembly and
+engineering record against its original inputs through the existing shared
+Python engine. The result names the checked counts, including historical records.
+It does not make old dependencies current, prove discovery completeness or approve
+anything. No saved records means **no saved calculations**, not a complete audit.
+The local Python service must be configured; unsupported environments report its
+absence instead of accepting the backup as calculation-verified. This browser
+request is limited to 32 MiB of saved workflow JSON. Cancellation or failure
+accepts no replay result and changes no saved state. ZIP utilities can extract
 `takeoff.json` and digest-named `sources/*.pdf` for manual reopening/import; legacy
 filename-bound annotations may need the original name listed in `manifest.json`.
 Do not overwrite a newer namesake without explicitly selecting the intended version.

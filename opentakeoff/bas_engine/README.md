@@ -1,6 +1,6 @@
 # BAS math engine
 
-## Engineering compatibility dependency — not yet a complete UI/MCP workflow
+## Engineering compatibility
 
 The exclusive Python `engineering` envelope accepts
 `bas_engineering_input_v1` and returns `bas_engineering_result_v1`, pinned to
@@ -34,10 +34,11 @@ another field is missing. Extreme rational intermediates exceeding 8,192 bits
 reject the calculation explicitly instead of rounding or truncating it. The
 existing 32-MiB process input/output limit remains unchanged.
 
-This dependency is tested through the actual Python process. It is **not yet
-exposed by a UI control or MCP tool**. Its source-bound register and append-only
-review service are implemented internally, but the complete source-backed
-browser/MCP journey remains required by
+This dependency is tested through the actual Python process and the development
+Equipment engineering workspace / shared MCP workflow. Its source-bound register
+and append-only review service retain explicit inputs, not automatic discovery
+of all hardware ratings. Broader source/corpus acceptance and review/release
+completion remain required by
 [the full compatibility contract](../docs/bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
 The internal `runBasEngineering` transport uses the same bounded process runner
 as existing BAS calculations. Shared TypeScript schemas preserve all eleven
@@ -71,8 +72,23 @@ reports `requires_python_replay` for saved results. The internal Node service
 replays complete histories in count/byte-bounded batches before reporting
 `verified_shared_python_replay`. Ordinary browser save/load and portable project
 import/export retain these records; they cannot authenticate a reviewer or
-convert an imported hash into a fresh calculation. Public workflow integration
-and real-PDF journeys remain incomplete.
+convert an imported hash into a fresh calculation. The current real-PDF evidence
+and remaining acceptance are recorded in
+[BAS production progress](../docs/bas-production/PROGRESS.md).
+
+The exclusive `workflow_replay` envelope accepts up to 1,000 typed records:
+`assignment` and `assembly` records contain their reconstructed `input` and saved
+`result`; `engineering` records contain a saved result with original inputs.
+Every record includes its content-addressed `record_id`. Python calls the
+unchanged existing calculators and compares the complete typed result. Any
+mismatch or duplicate rejects the batch without partial acceptance. A successful
+`bas_workflow_replay_batch_v1` reply returns exact ordered record IDs, not an
+approval. The shared Node service first validates workflow ownership and
+reconstructs each historical head, partitions complete JSON envelopes under
+30 MiB, then returns an exact full-workflow receipt only after all batches pass.
+Its 30-second deadline, cancellation and explicit `no_saved_calculations` status
+apply to both browser and MCP preflight. The browser request cap is 32 MiB.
+See [restoration/replay contract](../docs/bas-production/RESTORE_REPLAY_CONTRACT.md).
 
 ## Existing production integrations
 

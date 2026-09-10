@@ -17,5 +17,7 @@
 .bas-bundle-actions h3 { margin: 0 0 8px; }
 .bas-bundle-actions p { margin: 8px 0; overflow-wrap: anywhere; }
 .bas-bundle-actions .bas-source-actions { flex-direction: row; flex-wrap: wrap; }
+.bas-bundle-actions .bas-bundle-selected { margin-top: var(--sp-2); align-items: center; }
+.bas-bundle-selected span { min-width: 0; overflow-wrap: anywhere; }
 .bas-source-heading button, .bas-review-actions button { margin-left: 0; }
 .bas-review-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-left: auto; }
