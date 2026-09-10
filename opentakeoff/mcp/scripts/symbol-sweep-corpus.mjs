@@ -54,9 +54,41 @@ function assignInstances(expected, predicted) {
   return { ok: expectedToPrediction.every((i) => i >= 0), owner, choices, expectedToPrediction };
 }
 
+/** Phase 0 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md: an "affine" campaign case's
+ * `instances` are ONLY the specific real off-grid/stretched/variant
+ * placements of an already-corroborated seed — never the sheet's whole
+ * symbol population (baseline/extended cases already cover that). A strict
+ * one-to-one bipartite match against EVERY prediction on the sheet is the
+ * wrong tool here (most predictions are legitimate, unrelated rigid finds
+ * this case was never meant to enumerate) — this instead asks, per expected
+ * instance, "did anything land near it": a `matches` hit is full recall, a
+ * `withheld` hit means the engine saw it but declined (today's honest
+ * behaviour on a stretched/rotated symbol, per hasCorruptedHeaders-style
+ * disclosure elsewhere in this codebase), and neither is the "silence" gap
+ * the affine goal document exists to close. Never fails the run — recall
+ * below 100% is the EXPECTED, correct measurement before the affine
+ * matching in symbolsweep.ts exists; only identity errors (checked by the
+ * caller before this runs) can fail an affine case. */
+function affineRecall(expected, matches, withheld) {
+  const near = (e, p) => dist(e.at, p.at) <= e.tolerance_px && (e.page === undefined || p.page === e.page);
+  const rows = expected.map((e) => {
+    const m = matches.find((p) => near(e, p));
+    if (m) return { id: e.id, status: "matched", at: m.at, score: m.score, transform: e.transform, variant: e.variant };
+    const w = withheld.find((p) => near(e, p));
+    if (w) return { id: e.id, status: "withheld", at: w.at, score: w.score, reason: w.reason, transform: e.transform, variant: e.variant };
+    return { id: e.id, status: "missing", transform: e.transform, variant: e.variant };
+  });
+  const matched = rows.filter((r) => r.status === "matched").length;
+  const withheldN = rows.filter((r) => r.status === "withheld").length;
+  const missing = rows.filter((r) => r.status === "missing").length;
+  return { rows, matched, withheld: withheldN, missing, total: expected.length };
+}
+
 const rows = [];
+const affineRows = [];
 let failed = 0;
 for (const c of cases) {
+  const isAffine = c.campaign === "affine";
   const errors = [];
   const source = path.join(corpusRoot, c.source_pdf);
   const actualHash = await sha256(source);
@@ -96,7 +128,10 @@ for (const c of cases) {
       const skippedPlans = result.skipped.filter((row) => row.role === "plan");
       if (skippedPlans.length) errors.push(`set coverage skipped plan sheet(s): ${skippedPlans.map((row) => row.sheet).join(", ")}`);
     }
-    if (result.found !== c.instances.length) errors.push(`count ${result.found} != ${c.instances.length}`);
+    // The affine campaign's own instances are a NAMED SUBSET of a real
+    // symbol population, not the whole count — see affineRecall's own doc
+    // above for why an exact-count check is the wrong tool here.
+    if (!isAffine && result.found !== c.instances.length) errors.push(`count ${result.found} != ${c.instances.length}`);
     if ((result.seed?.label ?? null) !== (c.seed.tag ?? null)) errors.push(`seed tag ${result.seed?.label ?? "<none>"} != ${c.seed.tag ?? "<none>"}`);
     if (dist(result.seed.center, c.seed.at) > c.seed.tolerance_px) {
       errors.push(`seed at ${result.seed.center.join(",")} misses frozen center ${c.seed.at.join(",")}`);
@@ -107,6 +142,7 @@ for (const c of cases) {
     // a coordinate collision on another sheet is never allowed to satisfy an
     // expected instance.
     const predictions = [];
+    const withheldPredictions = [];
     const labels = [];
     const seedLabel = result.seed.label ? { label: result.seed.label, token_bbox: result.seed.label_bbox } : null;
     if (scope === "sheet") {
@@ -114,6 +150,7 @@ for (const c of cases) {
         predictions.push({ ...match, page: c.page });
         labels.push(match.label ? { label: match.label, token_bbox: match.label_bbox } : null);
       });
+      (result.withheld ?? []).forEach((w) => withheldPredictions.push({ ...w, page: c.page }));
     } else {
       for (const pageResult of result.sheets) {
         const pageIndex = loaded.sheets.findIndex((candidate) => candidate.sheet === pageResult.sheet);
@@ -125,33 +162,67 @@ for (const c of cases) {
           predictions.push({ ...match, page: pageIndex + 1 });
           labels.push(match.label ? { label: match.label, token_bbox: match.label_bbox } : null);
         });
+        (pageResult.withheld ?? []).forEach((w) => withheldPredictions.push({ ...w, page: pageIndex + 1 }));
       }
     }
 
-    const assignment = assignInstances(c.instances, predictions);
-    if (!assignment.ok) errors.push(`no one-to-one localization for ${assignment.missing?.id ?? "one or more instances"}`);
-    // Re-resolve only the final physical placements to retain the exact token
-    // boxes. This is the same shared pure label code used by MCP and canvas;
-    // the frozen expected boxes prove that each repeated same-family tag is
-    // attached to its own symbol rather than merely matching the family text.
-    if (c.seed.tag_bbox && !bboxNear(seedLabel?.token_bbox, c.seed.tag_bbox)) errors.push("seed attached to the wrong text-run box");
-    if (assignment.ok) {
-      for (let ei = 0; ei < c.instances.length; ei++) {
-        const pi = assignment.expectedToPrediction[ei];
-        const label = labels[pi];
-        const expected = c.instances[ei];
-        if ((label?.label ?? null) !== (expected.tag ?? null)) errors.push(`${expected.id} label ${label?.label ?? "<none>"} != ${expected.tag ?? "<none>"}`);
-        if (expected.tag_bbox && !bboxNear(label?.token_bbox, expected.tag_bbox)) errors.push(`${expected.id} attached to the wrong ${expected.tag} text-run box`);
+    if (isAffine) {
+      const recall = affineRecall(c.instances, predictions, withheldPredictions);
+      affineRows.push({ id: c.id, document_id: c.document_id, ...recall });
+    } else {
+      const assignment = assignInstances(c.instances, predictions);
+      if (!assignment.ok) errors.push(`no one-to-one localization for ${assignment.missing?.id ?? "one or more instances"}`);
+      // Re-resolve only the final physical placements to retain the exact
+      // token boxes. This is the same shared pure label code used by MCP and
+      // canvas; the frozen expected boxes prove that each repeated
+      // same-family tag is attached to its own symbol rather than merely
+      // matching the family text.
+      if (assignment.ok) {
+        for (let ei = 0; ei < c.instances.length; ei++) {
+          const pi = assignment.expectedToPrediction[ei];
+          const label = labels[pi];
+          const expected = c.instances[ei];
+          if ((label?.label ?? null) !== (expected.tag ?? null)) errors.push(`${expected.id} label ${label?.label ?? "<none>"} != ${expected.tag ?? "<none>"}`);
+          if (expected.tag_bbox && !bboxNear(label?.token_bbox, expected.tag_bbox)) errors.push(`${expected.id} attached to the wrong ${expected.tag} text-run box`);
+        }
       }
     }
+    // Seed identity (which text-run the seed itself attaches to) is checked
+    // for every case, affine included — it is about seed quality, not about
+    // the affine recall gap this campaign measures.
+    if (c.seed.tag_bbox && !bboxNear(seedLabel?.token_bbox, c.seed.tag_bbox)) errors.push("seed attached to the wrong text-run box");
   }
 
   const ok = errors.length === 0;
   if (!ok) failed++;
-  rows.push({ id: c.id, ok, expected: c.instances.length, found: result?.found ?? 0, elapsed_ms: elapsedMs, errors });
-  console.log(`${ok ? "PASS" : "FAIL"} ${c.id}: ${result?.found ?? 0}/${c.instances.length} in ${elapsedMs} ms`);
+  rows.push({ id: c.id, ok, campaign: c.campaign ?? "baseline", expected: c.instances.length, found: result?.found ?? 0, elapsed_ms: elapsedMs, errors });
+  if (isAffine) {
+    const r = affineRows[affineRows.length - 1];
+    console.log(`${ok ? "PASS" : "FAIL"} [affine] ${c.id}: ${r.matched} matched, ${r.withheld} withheld, ${r.missing} missing / ${r.total} in ${elapsedMs} ms`);
+  } else {
+    console.log(`${ok ? "PASS" : "FAIL"} ${c.id}: ${result?.found ?? 0}/${c.instances.length} in ${elapsedMs} ms`);
+  }
   for (const error of errors) console.log(`  - ${error}`);
 }
 
-console.log(JSON.stringify({ schema: manifest.schema, cases: rows.length, passed: rows.length - failed, failed, results: rows }, null, 2));
+if (affineRows.length) {
+  const totals = affineRows.reduce((t, r) => ({
+    total: t.total + r.total, matched: t.matched + r.matched, withheld: t.withheld + r.withheld, missing: t.missing + r.missing,
+  }), { total: 0, matched: 0, withheld: 0, missing: 0 });
+  const pct = (n) => totals.total ? Math.round((n / totals.total) * 1000) / 10 : 0;
+  console.log(`\n=== AFFINE CAMPAIGN (Phase 0 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md, §9 numbers) ===`);
+  console.log(`cases: ${affineRows.length}, documents: ${new Set(affineRows.map((r) => r.document_id)).size}, instances: ${totals.total}`);
+  console.log(`matched (committed): ${totals.matched} (${pct(totals.matched)}%)`);
+  console.log(`withheld (found, declined): ${totals.withheld} (${pct(totals.withheld)}%)`);
+  console.log(`missing (silent — the gap this goal closes): ${totals.missing} (${pct(totals.missing)}%)`);
+  for (const r of affineRows) {
+    for (const row of r.rows) {
+      if (row.status !== "missing") continue;
+      const t = row.transform ? ` [${Object.entries(row.transform).filter(([k]) => k !== "note").map(([k, v]) => `${k}=${v}`).join(" ")}]` : "";
+      console.log(`  MISSING ${r.id}/${row.id}${t}`);
+    }
+  }
+}
+
+console.log(JSON.stringify({ schema: manifest.schema, cases: rows.length, passed: rows.length - failed, failed, results: rows, ...(affineRows.length ? { affine: affineRows } : {}) }, null, 2));
 if (failed) process.exitCode = 1;
