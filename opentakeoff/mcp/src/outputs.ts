@@ -386,12 +386,29 @@ export const placeCountOutput = {
   ea_total: z.number().describe("The condition's total EA after this call"),
 };
 
+/** docs/SYMBOL-SWEEP-AFFINE-GOAL.md §4.1 — disclosed on a placement only
+ * when affine search/refinement (not the plain rigid search) produced it.
+ * Absent on a row the rigid path committed without help, so a sweep with
+ * `affine` off — or a placement the rigid search already nailed with
+ * `affine` on — reports exactly what it always has. */
+const sweepTransform = z.object({
+  rotation_deg: z.number().describe("Continuous rotation, degrees CW, image space (y down), [0, 360)"),
+  scale_x: z.number().describe("Scale along the seed's own x axis, AFTER any stated seed→target size ratio is divided out — 1.0 means \"as drawn on the seed sheet\""),
+  scale_y: z.number().describe("Scale along the seed's own y axis, same convention as scale_x"),
+  shear_deg: z.number().describe("Deviation from a right angle between the seed's transformed axes, degrees — 0 for a pure rotation/scale"),
+  mirrored: z.boolean(),
+  rms_px: z.number().describe("RMS residual of the fit, image px, over the surviving correspondences"),
+  tol_px: z.number().describe("The tolerance the re-score actually used (residual-adaptive, clamped to [tolerance_px, 3× tolerance_px])"),
+  via: z.enum(["rigid", "rotation", "affine"]).describe("Which mechanism found this placement: one of the 8 fixed matrices then refined, a continuous single-segment rotation basis, or a two-segment stretch/shear basis"),
+});
+
 /** symbol_sweep — one row per found placement; withheld rows carry the reason. */
 const sweepPlacement = {
   at: z.tuple([z.number(), z.number()]).describe("The placed symbol's centroid (image px) — the point a commit places its count marker at"),
   score: z.number().describe("Length-weighted fraction of the seed's segments matched within tolerance, 0..1"),
-  rotation: z.number().describe("Detected rotation in degrees (0 | 90 | 180 | 270)"),
+  rotation: z.number().describe("Detected rotation in degrees — 0 | 90 | 180 | 270 from the rigid search; a continuous value when `transform` is present"),
   mirrored: z.boolean(),
+  transform: sweepTransform.optional().describe("Present only when affine search/refinement produced this placement (docs/SYMBOL-SWEEP-AFFINE-GOAL.md §4.1) — the actual fitted rotation/scale/shear, not just the nearest rigid guess"),
   extra: z.number().optional().describe("Richer-variant disclosure: the fraction of the seed's total length found as UNMATCHED extra linework fully inside this placement's footprint, present when past the 0.30 bar — the classic grille-counted-as-register shape; LOOK at these first. Under variant_guard such placements demote to withheld instead of matching"),
   label: z.string().optional().describe("The drawing's own tag for this placement (#308) — a fixture token written beside it or connected by a drawn leader (e.g. \"P-7\", \"FD1\"). The tag corroborates already-detected vector geometry: same-family near-matches may promote, while geometry labeled as a sibling family is withheld; text alone never creates a placement"),
   label_via: z.enum(["adjacent", "leader"]).optional().describe("How the tag reached this placement: written beside it, or followed along a drawn leader line (leader-following arms only on multi-pen sheets, where the annotation pen separates from the work)"),
@@ -1060,8 +1077,9 @@ export const findScheduleOutput = {
 const rowSweepPlacement = {
   at: z.tuple([z.number(), z.number()]).describe("The matched marker's centroid (image px)"),
   score: z.number().describe("Length-weighted fraction of the anchor's segments matched within tolerance, 0..1"),
-  rotation: z.number().describe("Detected rotation in degrees (0 | 90 | 180 | 270)"),
+  rotation: z.number().describe("Detected rotation in degrees — 0 | 90 | 180 | 270 from the rigid search; a continuous value when `transform` is present"),
   mirrored: z.boolean(),
+  transform: sweepTransform.optional().describe("Present only when affine search/refinement produced this placement (docs/SYMBOL-SWEEP-AFFINE-GOAL.md §4.1) — the actual fitted rotation/scale/shear, not just the nearest rigid guess"),
 };
 
 export const sweepScheduleRowOutput = {

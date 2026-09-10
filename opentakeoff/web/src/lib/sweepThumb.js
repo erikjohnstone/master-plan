@@ -42,12 +42,28 @@ export function normRect(rect) {
 }
 
 /** The box a match occupies: the seed's own footprint, centred on the placement.
- *  A rotated placement is squared off to the larger side so a 90° instance is
- *  not clipped. `pad` gives the glyph a little air in the tile. */
-export function matchBox(at, seedRect, pad = 0.15) {
+ *  `pad` gives the glyph a little air in the tile.
+ *
+ *  `rotationDeg` (default 0 — every pre-affine caller keeps its exact prior
+ *  behavior) rotates the seed's own rect by that angle and squares off to
+ *  whichever axis-aligned side comes out larger, so an ARBITRARY continuous
+ *  rotation (docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Phase 2/3) is never clipped,
+ *  not just the four 90°-multiples: at exactly 0/90/180/270° this reduces to
+ *  the plain max(w,h) a right-angle instance always needed (cos/sin are 0 or
+ *  1, so one of the two rotated-side formulas below IS max(w,h) and the
+ *  other is min(w,h)) — same numbers as before affine existed. At an
+ *  off-grid angle, a seed's rotated bounding box is strictly bigger than
+ *  max(w,h) (up to its own diagonal, at a 45°-from-longest-axis worst case)
+ *  and a caller that kept assuming max(w,h) regardless of angle would
+ *  silently crop real ink from the tile. */
+export function matchBox(at, seedRect, pad = 0.15, rotationDeg = 0) {
   const r = normRect(seedRect);
   if (!r || !Array.isArray(at) || !Number.isFinite(at[0]) || !Number.isFinite(at[1])) return null;
-  const side = Math.max(r.w, r.h) * (1 + pad * 2);
+  const th = ((Number(rotationDeg) || 0) * Math.PI) / 180;
+  const c = Math.abs(Math.cos(th)), s = Math.abs(Math.sin(th));
+  const rotatedW = r.w * c + r.h * s;
+  const rotatedH = r.w * s + r.h * c;
+  const side = Math.max(rotatedW, rotatedH) * (1 + pad * 2);
   const half = side / 2;
   return { x0: at[0] - half, y0: at[1] - half, x1: at[0] + half, y1: at[1] + half, w: side, h: side };
 }

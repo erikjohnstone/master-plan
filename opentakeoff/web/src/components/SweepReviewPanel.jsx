@@ -18,9 +18,14 @@ import React, { useMemo } from "react";
 import { Z } from "../lib/ui.js";
 import { buildSegIndex, segmentsInBox, matchBox, tileLines } from "../lib/sweepThumb.js";
 
-/** One match, as it is drawn on the sheet. */
-function Thumb({ segs, index, seedRect, at, size = 46, color, dim, mark }) {
-  const box = useMemo(() => matchBox(at, seedRect), [at, seedRect]);
+/** One match, as it is drawn on the sheet. `rotation` is the row's own
+ * disclosed angle — continuous when `transform` is present (docs/SYMBOL-
+ * SWEEP-AFFINE-GOAL.md), one of 0/90/180/270 otherwise — so the tile is
+ * sized for the actual placement, not just squared off for a right angle.
+ * `transform`, when present, gets a plain hover title naming the fit — the
+ * one place a MATCH row (no `reason` text) still discloses it. */
+function Thumb({ segs, index, seedRect, at, rotation = 0, transform, size = 46, color, dim, mark }) {
+  const box = useMemo(() => matchBox(at, seedRect, undefined, rotation), [at, seedRect, rotation]);
   const lines = useMemo(
     () => (box && segs && index ? tileLines(segs, segmentsInBox(segs, index, box), box) : []),
     [segs, index, box],
@@ -29,6 +34,9 @@ function Thumb({ segs, index, seedRect, at, size = 46, color, dim, mark }) {
   // Stroke in the tile's own units so a 40px symbol and a 570px assembly both
   // come out legible at 46 screen px.
   const sw = Math.max(box.w / size, box.w / 90);
+  const title = transform
+    ? `${transform.rotation_deg}° · ${transform.scale_x}× / ${transform.scale_y}× scale · ${transform.shear_deg}° shear${transform.mirrored ? " · mirrored" : ""}`
+    : undefined;
   return (
     <svg
       width={size} height={size} viewBox={`0 0 ${box.w} ${box.h}`}
@@ -37,6 +45,7 @@ function Thumb({ segs, index, seedRect, at, size = 46, color, dim, mark }) {
         display: "block", background: "var(--paper-bright)",
         border: `1px solid ${color}`, opacity: dim ? 0.4 : 1, flexShrink: 0,
       }}>
+      {title && <title>{title}</title>}
       {lines.map(([ax, ay, bx, by], i) => (
         <line key={i} x1={ax} y1={ay} x2={bx} y2={by} stroke="var(--ink)" strokeWidth={sw} strokeLinecap="round" />
       ))}
@@ -137,6 +146,7 @@ export default function SweepReviewPanel({
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 4, paddingLeft: 22 }}>
                     {sweep.matches.filter((m) => tagKeyOf(m) === g.tag).slice(0, MATCH_THUMBS).map((m, i) => (
                       <Thumb key={i} segs={segs} index={segIndex} seedRect={seedRect} at={m.at}
+                        rotation={m.transform?.rotation_deg ?? m.rotation} transform={m.transform}
                         color={isOff ? "var(--ink-faint)" : "var(--cobalt)"} dim={isOff} />
                     ))}
                     {g.n > MATCH_THUMBS && (
@@ -173,6 +183,7 @@ export default function SweepReviewPanel({
                 <span style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: q.state === "dismissed" ? "line-through" : "none" }}>
                   {canThumb && (
                     <Thumb segs={segs} index={segIndex} seedRect={seedRect} at={q.at} size={40}
+                      rotation={q.transform?.rotation_deg ?? q.rotation} transform={q.transform}
                       color={q.state === "accepted" ? "var(--c-positive)" : q.state === "dismissed" ? "var(--ink-faint)" : DS.symbol.question}
                       dim={q.state === "dismissed"} />
                   )}

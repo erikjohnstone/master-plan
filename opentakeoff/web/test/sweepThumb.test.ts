@@ -33,13 +33,38 @@ test("normRect accepts a marquee dragged in any direction", () => {
 });
 
 test("matchBox is the seed footprint centred on the placement, squared for rotation", () => {
-  // a 40x20 seed: a 90° instance is 20x40, so the tile has to be 40 either way
+  // a 40x20 seed: a 90° instance is 20x40, so the tile has to be 40 either
+  // way — the default rotationDeg (0) exercises this exactly as before
+  // docs/SYMBOL-SWEEP-AFFINE-GOAL.md's continuous rotation existed.
   const b = matchBox([100, 100], [[0, 0], [40, 20]], 0);
   assert.deepEqual(b, { x0: 80, y0: 80, x1: 120, y1: 120, w: 40, h: 40 });
   const padded = matchBox([100, 100], [[0, 0], [40, 20]], 0.25);
   assert.equal(padded!.w, 60, "pad grows both sides");
   assert.equal(matchBox([0, 0], null as any), null);
   assert.equal(matchBox(undefined as any, [[0, 0], [10, 10]]), null);
+});
+
+test("matchBox at an off-grid rotation (33°) is sized to the ACTUAL rotated footprint, not just squared to max(w,h)", () => {
+  // docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — an off-grid rotated instance
+  // is invisible to a tile computed as if rotation only ever meant 0/90/180/
+  // 270: a 40x20 seed rotated 33° has a TRUE bounding box of about
+  // 40*cos33 + 20*sin33 = 44.4 wide, 40*sin33 + 20*cos33 = 38.6 tall — both
+  // bigger than plain max(40,20)=40 on at least one axis. The old (pre-
+  // rotationDeg) formula would have clipped real ink at this angle for the
+  // wider axis; the fix must not.
+  const rigid = matchBox([100, 100], [[0, 0], [40, 20]], 0, 0)!;
+  const rotated = matchBox([100, 100], [[0, 0], [40, 20]], 0, 33)!;
+  assert.ok(rotated.w > rigid.w, `a 33° tile must be wider than the plain 0° tile: ${rotated.w} vs ${rigid.w}`);
+  const expectedW = 40 * Math.cos((33 * Math.PI) / 180) + 20 * Math.sin((33 * Math.PI) / 180);
+  const expectedH = 40 * Math.sin((33 * Math.PI) / 180) + 20 * Math.cos((33 * Math.PI) / 180);
+  const expectedSide = Math.max(expectedW, expectedH);
+  assert.ok(Math.abs(rotated.w - expectedSide) < 0.01, `expected side ${expectedSide}, got ${rotated.w}`);
+  // 90° must still equal the plain right-angle case exactly (w/h swap, same max)
+  assert.deepEqual(matchBox([100, 100], [[0, 0], [40, 20]], 0, 90), rigid, "90° must match the plain rigid case exactly — no regression for the original right-angle path");
+  // an unrotated square symbol at its own worst case (45°) must not clip:
+  // the box must be at least the seed's own diagonal (sqrt(2)× a side)
+  const sq = matchBox([0, 0], [[0, 0], [20, 20]], 0, 45)!;
+  assert.ok(sq.w >= 20 * Math.SQRT2 - 0.01, `a 45°-rotated square tile must cover its own diagonal, got ${sq.w}`);
 });
 
 test("segmentsInBox finds the symbol under a match and nothing from its neighbour", () => {

@@ -5051,7 +5051,7 @@ export default function TakeoffCanvas() {
       sheet_id: sw.key, condition_id: activeCond, measure_role: "count",
       verts_norm: [[m.at[0] / sw.img.w, m.at[1] / sw.img.h]], computed: { count: 1 },
       ...(activeLabel ? { label: activeLabel } : {}),
-      origin: { method: "symbol_sweep", symbol: { score: m.score, rotation: m.rotation, mirrored: m.mirrored, seed: { source: "instance", sheet: sw.key, ...(m.seedRow ? { seed_instance: true } : {}) } } },
+      origin: { method: "symbol_sweep", symbol: { score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), seed: { source: "instance", sheet: sw.key, ...(m.seedRow ? { seed_instance: true } : {}) } } },
     })) });
     const skippedN = sw.matches.length - sw.matches.filter((m) => !off.has(tagKey(m))).length;
     setCommitMsg(`Committed ${rows.length} EA under ${condById[activeCond]?.finish_tag || "condition"}${sw.includeSeed ? " — seed included" : ""}${skippedN ? ` · ${skippedN} excluded by label` : ""} · one undo step (${keyText("⌘Z")}).`);
@@ -6696,7 +6696,10 @@ export default function TakeoffCanvas() {
     let seedName = null;
     let spans = null;
     try {
-      const fp = fingerprintSymbol(segs, rect, lum);
+      // docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
+      // default flip; the seed's own exploded-text filter follows the same
+      // gate (default on when affine.enabled) as the MCP path.
+      const fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: opts.affine?.enabled === true });
       assertDistinctiveSymbolSeed(fp);
       spans = await ensureTextSpans(key);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
@@ -6707,6 +6710,7 @@ export default function TakeoffCanvas() {
         ...(lum ? { lum } : {}),
         ...(opts.luminanceTolerance != null ? { lumTol: opts.luminanceTolerance } : {}),
         ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
+        ...(opts.affine ? { affine: opts.affine } : {}),
       });
     } catch (e) {
       return { error: String((e && e.message) || e) };
@@ -6742,8 +6746,8 @@ export default function TakeoffCanvas() {
       // could not tell a near-miss from a richer variant. It also dropped
       // rotation/mirrored and `extra` — the very disclosure that says WHY the
       // guard fired.
-      matches: res.matches.map((m, i) => ({ at: norm(m.at), score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.extra != null ? { extra: m.extra } : {}), label: L(1 + i) })),
-      withheld: res.withheld.map((w, i) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.extra != null ? { extra: w.extra } : {}), reason: w.reason || SWEEP_FALLBACK_REASON, label: L(1 + nM + i) })),
+      matches: res.matches.map((m, i) => ({ at: norm(m.at), score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), ...(m.extra != null ? { extra: m.extra } : {}), label: L(1 + i) })),
+      withheld: res.withheld.map((w, i) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra != null ? { extra: w.extra } : {}), reason: w.reason || SWEEP_FALLBACK_REASON, label: L(1 + nM + i) })),
       rejected: (res.rejected || []).map((r) => ({ at: norm(r.at), reason: r.reason || "excluded" })),
       complete: res.complete,
       dropped: res.candidates?.dropped || 0,
@@ -6785,8 +6789,8 @@ export default function TakeoffCanvas() {
       shapes: results.map((r) => ({
         name: r.name,
         found: r.result.matches.length,
-        matches: r.result.matches.map((m) => ({ at: norm(m.at), score: m.score, rotation: m.rotation, mirrored: m.mirrored })),
-        withheld: r.result.withheld.map((w) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.extra != null ? { extra: w.extra } : {}), reason: w.reason || SWEEP_FALLBACK_REASON })),
+        matches: r.result.matches.map((m) => ({ at: norm(m.at), score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}) })),
+        withheld: r.result.withheld.map((w) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra != null ? { extra: w.extra } : {}), reason: w.reason || SWEEP_FALLBACK_REASON })),
         complete: r.result.complete,
       })),
     };

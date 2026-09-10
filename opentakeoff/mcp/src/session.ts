@@ -2815,6 +2815,11 @@ export class Session {
     exclude?: [Point, Point][];
     luminanceTolerance?: number;
     commitSeed?: boolean;
+    /** docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
+     * default flip. Threaded straight through to matchSymbol; also gates
+     * the seed's own exploded-text filter (fingerprintSymbol's
+     * dropGlyphClusters, default on when affine.enabled). */
+    affine?: SweepOptions["affine"];
   }) {
     const s = this.sheet(name);
     const scope = opts.scope ?? "sheet";
@@ -2868,10 +2873,13 @@ export class Session {
       // #260 — the stated stroke-luminance gate. The tolerance travels in the
       // shared opts; the CHANNEL is per target sheet, passed at each match.
       ...(typeof opts.luminanceTolerance === "number" ? { lumTol: opts.luminanceTolerance } : {}),
+      // docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
+      // default flip (§6's own default-off scaleSearch is untouched here).
+      ...(opts.affine ? { affine: opts.affine } : {}),
     };
     let fp: SymbolFingerprint;
     try {
-      fp = fingerprintSymbol(geo.segs, rect, geo.lum);
+      fp = fingerprintSymbol(geo.segs, rect, geo.lum, { dropGlyphClusters: opts.affine?.enabled === true });
       assertDistinctiveSymbolSeed(fp);
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
@@ -2941,7 +2949,7 @@ export class Session {
             method: "symbol_sweep" as const,
             actor: "agent" as const,
             reviewed: false,
-            symbol: { score: m.score, rotation: m.rotation, mirrored: m.mirrored, seed: { source: "instance" as const, sheet: s.key } },
+            symbol: { score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), seed: { source: "instance" as const, sheet: s.key } },
           }))],
         });
       }
@@ -2949,10 +2957,10 @@ export class Session {
       return {
         scope,
         found: res.matches.length,
-        matches: res.matches.map((m, i) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.extra !== undefined ? { extra: m.extra } : {}), ...Session.labelFields(lbl.matches[i]) })),
-        withheld: res.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(lbl.withheld[i]), reason: w.reason })),
+        matches: res.matches.map((m, i) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), ...(m.extra !== undefined ? { extra: m.extra } : {}), ...Session.labelFields(lbl.matches[i]) })),
+        withheld: res.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(lbl.withheld[i]), reason: w.reason })),
         seed: { ...seedOut, ...Session.labelFields(lbl.seed) },
-        ...(res.rejected.length ? { rejected: res.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
+        ...(res.rejected.length ? { rejected: res.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, ...(r.transform ? { transform: r.transform } : {}), by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(res.negatives ? { negatives: res.negatives.filter((n) => !!n).map((n) => ({ mode: n!.mode, segments: n!.segments, center: [round1(n!.center[0]), round1(n!.center[1])] as [number, number] })) } : {}),
         ...(res.lum_gate ? { lum_gate: res.lum_gate } : {}),
         ...((corrected.promoted || corrected.demoted) ? { label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } } : {}),
@@ -3099,7 +3107,7 @@ export class Session {
             method: "symbol_sweep",
             actor: "agent",
             reviewed: false,
-            symbol: { score: m.score, rotation: m.rotation, mirrored: m.mirrored, seed: { source: seedSource, sheet: s.key, role: seedRole } },
+            symbol: { score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), seed: { source: seedSource, sheet: s.key, role: seedRole } },
           }).id);
         }
       }
@@ -3163,9 +3171,9 @@ export class Session {
       sheets: perSheet.map((p) => ({
         sheet: p.state.key,
         found: p.matches.length,
-        matches: p.matches.map((m, i) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.extra !== undefined ? { extra: m.extra } : {}), ...Session.labelFields(p.labels.matches[i]) })),
-        withheld: p.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(p.labels.withheld[i]), reason: w.reason })),
-        ...(p.rejected.length ? { rejected: p.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
+        matches: p.matches.map((m, i) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), ...(m.extra !== undefined ? { extra: m.extra } : {}), ...Session.labelFields(p.labels.matches[i]) })),
+        withheld: p.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(p.labels.withheld[i]), reason: w.reason })),
+        ...(p.rejected.length ? { rejected: p.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, ...(r.transform ? { transform: r.transform } : {}), by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(p.lum_gate ? { lum_gate: p.lum_gate } : {}),
         ...((p.label_corroboration.promoted || p.label_corroboration.demoted) ? { label_corroboration: p.label_corroboration } : {}),
         candidates: p.candidates,
@@ -3217,8 +3225,8 @@ export class Session {
       shapes: results.map((r) => ({
         name: r.name,
         found: r.result.matches.length,
-        matches: r.result.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])] as [number, number], score: m.score, rotation: m.rotation, mirrored: m.mirrored })),
-        withheld: r.result.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
+        matches: r.result.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])] as [number, number], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}) })),
+        withheld: r.result.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), reason: w.reason })),
         complete: r.result.complete,
       })),
     };
@@ -3563,6 +3571,11 @@ export class Session {
      * sweeps without a preference still refuse honest cross-family collisions. */
     preferSheet?: string | null;
     preferTitle?: string | null;
+    /** docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
+     * default flip. Threaded straight through to matchSymbol; also gates
+     * the anchor's own exploded-text filter (fingerprintSymbol's
+     * dropGlyphClusters, default on when affine.enabled). */
+    affine?: SweepOptions["affine"];
   } = {}) {
     let tRaw = (tag || "").trim().toUpperCase();
     let t = tRaw.replace(/\s+/g, "");
@@ -3955,6 +3968,9 @@ export class Session {
       rotations: opts.rotations ?? true,
       mirror: opts.mirror ?? true,
       tolPx: opts.tolerancePx ?? SWEEP_TOL_PX,
+      // docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
+      // default flip.
+      ...(opts.affine ? { affine: opts.affine } : {}),
     };
     // corroborators: the tag's OTHER occurrences — same sheet when it has
     // them, else the next sheet that does; a tag drawn exactly once has none
@@ -4082,7 +4098,7 @@ export class Session {
       ];
       let cand: SymbolFingerprint;
       try {
-        cand = fingerprintSymbol(anchorGeo.segs, rect);
+        cand = fingerprintSymbol(anchorGeo.segs, rect, undefined, { dropGlyphClusters: opts.affine?.enabled === true });
       } catch (e) {
         // nothing fully inside yet → widen; a region-sized grab → bigger pads only get worse
         return e instanceof Error && /region, not one symbol/.test(e.message) ? "region" : null;
@@ -4815,7 +4831,7 @@ export class Session {
             reviewed: false,
             assignment: { source: "schedule", schedule_sheet: tb.sheet },
             symbol: {
-              score: m.score, rotation: m.rotation, mirrored: m.mirrored,
+              score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}),
               seed: {
                 source: "schedule_row", sheet: anchorSheet.key, row: { sheet: tb.sheet, key: t, table },
                 corroborated, ...(corroboratedVia ? { corroborated_via: "sibling_tag" as const, corroborated_tag: corroboratedVia } : corroborated ? { corroborated_via: "same_tag" as const } : {}),
@@ -4909,8 +4925,8 @@ export class Session {
       sheets: perSheet.map((p) => ({
         sheet: p.state.key,
         found: p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0),
-        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}), ...(m.text_counted ? { counted_from: "explicit_label" as const } : {}) })),
-        withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
+        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}), ...(m.text_counted ? { counted_from: "explicit_label" as const } : {}) })),
+        withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), reason: w.reason })),
         excluded: p.excluded.map((e) => ({ at: [round1(e.at[0]), round1(e.at[1])], tag: e.tag })),
         text_only: p.text_only,
         candidates: p.candidates,
@@ -4921,7 +4937,7 @@ export class Session {
         ...(p.redundant_view.length ? {
           redundant_view: p.redundant_view.map((m) => ({
             at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored,
-            tag_at: Session.wireBox(m.tag_at), room: m.room, kept_sheet: m.kept_sheet,
+            ...(m.transform ? { transform: m.transform } : {}), tag_at: Session.wireBox(m.tag_at), room: m.room, kept_sheet: m.kept_sheet,
           })),
         } : {}),
       })),

@@ -196,6 +196,26 @@ export interface AffineOptions {
   scaleSearch?: boolean;
 }
 
+/** docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 §4 — the ONE translation from
+ * the tool-schema wire shape (`enabled`/`max_stretch`/`max_shear_deg`/
+ * `scale_search`, snake_case, what a JSON-schema/zod tool input actually
+ * carries) to `AffineOptions` (camelCase, what `matchSymbol`/`sweepSymbols`
+ * take). Both the MCP `symbol_sweep`/`sweep_schedule_row` tools
+ * (`mcp/src/tools.ts`) and the canvas agent tool (`web/src/lib/
+ * agentTools.js`) call this SAME function rather than each writing their
+ * own object-literal mapping — the "canvas and MCP cannot disagree"
+ * doctrine enforced structurally (one shared translation can't drift out
+ * of sync with itself) rather than by a test that merely checks two
+ * independent copies still happen to agree. Returns undefined for
+ * undefined input (an omitted `affine` wire field stays exactly that —
+ * absent — never an object of defaults). */
+export function affineOptionsFromWire(a: {
+  enabled?: boolean; max_stretch?: number; max_shear_deg?: number; scale_search?: boolean;
+} | undefined): AffineOptions | undefined {
+  if (!a) return undefined;
+  return { enabled: a.enabled, maxStretch: a.max_stretch, maxShearDeg: a.max_shear_deg, scaleSearch: a.scale_search };
+}
+
 /** §4.1 — disclosed on a row whenever affine refinement (not the rigid
  * search) produced the kept placement. Absent on a row the rigid path
  * committed without refinement, so a same-as-today sweep produces
