@@ -106,8 +106,11 @@ selected constraint is not a complete or certified compatible design.
 **Takeoff → Review & changes** now gathers saved source, point/SOO, equipment,
 assembly and engineering findings in one searchable workspace. Inspect original
 evidence, return to the existing domain workspace, or export every finding as
-JSON. Unknown codes and excluded failures stay visible. This first review slice
-does not approve takeoffs, verify retained PDF bytes or implement revision release.
+JSON. Unknown codes and excluded failures stay visible. **Original PDFs** can
+retain, verify and download exact source bytes separately in the current browser
+project, surviving ordinary PDF removal. Copies are not synced; keep an external
+backup and the takeoff JSON. This does not clear findings, select a revised drawing
+set, approve takeoffs or implement revision release.
 
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized

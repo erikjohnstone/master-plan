@@ -1,5 +1,42 @@
 # BAS production workflow progress
 
+## Original PDF retention — 2026-09-10
+
+After **3eddc21f**, **Review & changes → Original PDFs** now explicitly retains,
+verifies and downloads physical source versions in the current browser project.
+Shared ownership/byte validation, project-scoped IDB delivery and exact recovery
+are implemented; extraction, VectorGrid, Python arithmetic, old workflow schemas
+and default exports remain unchanged. This is an E prerequisite, not completed
+revision/release controls. Original five workflows still precede the final
+research-gated symbol/installed-plan phase. Proof: `SOURCE_RETENTION_PROOF.md`.
+
+Focused **97188: 40 pass** (including existing storage/composite controls), plus
+typecheck. Full first web **56462 exit 0: 2,689 pass / 13 existing skips**, types,
+lint, benchmark/build pass. Final layout types/lint/build **65838 exit 0**.
+Full existing BAS MCP **76073: 93 pass**, no failures/skips, 23.852 s. Two actual
+Fort Sam UI walkthroughs pass with **456 unchanged findings**, original bbox and
+history checks, exact PDF downloads, reload and separate ordinary removePdf
+transport recovery. Final **31204 exit 0**, 60.676 s, no page errors; all six final
+source-view screenshots inspected. Source-view keyboard focus and filter return
+are tested. First retention 2.149 s and review first open 5.034 s are single-run
+observations, not production speed claims. No new model or Agent key is required.
+
+Availability is verified only for the selected original, at action time. Copies
+are not cloud/folder synced, authenticated immutable storage or an approved
+source set. Legacy cloud-only mode explicitly lacks this capability. No new MCP
+retention command, automatic archived-source citation reopening, combined portable
+archive, page correspondence, scoped approval or atomic snapshot seal is claimed.
+These remain next in E, with public UI/MCP parity and final full corpus gates.
+No holdout access; historical **505/541 takeoff, 99/129 reference, 78/91 cells,
+133/138 anchors** and 23 old-path ENOENTs remain, not a new green corpus run.
+No push, merge or deployment.
+
+Final full web **67712 exit 0**, `source-retention-web-check-final.log`:
+**2,689 pass / 13 existing skips / 0 failures**, 12.168 s test phase,
+types/lint/benchmark/build pass; build 5.11 s. Existing One-Click cross probes:
+16, zero disagreements, pair-IoU floor 0.994 / mean 0.999; nine single-resolution
+cases remain outside that cross check. Not a new full extraction-corpus score.
+
 ## Shared project finding queue — 2026-09-10
 
 After **0357cada**, the first read-only E slice is wired through one shared

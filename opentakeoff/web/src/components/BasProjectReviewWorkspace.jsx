@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { basProjectReview } from '../lib/basProjectReview.ts';
 import { downloadText } from '../lib/totals.js';
+import BasOriginalSources from './BasOriginalSources.jsx';
 import './BasPointsWorkspace.css';
 import './BasProjectReviewWorkspace.css';
 
@@ -12,6 +13,12 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [sourceError, setSourceError] = useState('');
   const heading = useRef(null), scroll = useRef(null), returnFocus = useRef(null);
+  const originalsButton = useRef(null), originalsReturn = useRef(false);
+  useEffect(() => {
+    if (!state.originalSources && originalsReturn.current) {
+      originalsButton.current?.focus(); originalsReturn.current = false;
+    }
+  }, [state.originalSources]);
   useEffect(() => {
     let live = true;
     basProjectReview(workflow, workflow.current_capture_id).then(value => {
@@ -41,12 +48,14 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
       if (response?.error) setSourceError(response.error);
     } catch (error) { setSourceError(error.message); }
   }
+  if (state.originalSources) return <BasOriginalSources workflow={workflow} onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
   if (!ready) return <p role="status" className="bas-point-message">Gathering saved BAS findings…</p>;
   if (computed.error) return <p role="alert" className="bas-point-message">Review unavailable: {computed.error}. Saved evidence has not been changed.</p>;
   const sourcePage = Math.max(0, Math.min(state.sourcePage || 0, Math.ceil((selected?.evidence.length || 0) / 20) - 1));
   return <section className="bas-point-workspace bas-project-review" aria-label="Project BAS review">
     <div className="bas-point-heading"><h2>Review &amp; changes</h2><span>{data.issues.length} saved findings</span>
-      <button type="button" onClick={() => downloadText('bas-review-findings.json', JSON.stringify(data, null, 2), 'application/json')}>Export findings</button></div>
+      <div className="bas-review-actions"><button ref={originalsButton} type="button" onClick={() => change({ originalSources: true })}>Original PDFs</button>
+      <button type="button" onClick={() => downloadText('bas-review-findings.json', JSON.stringify(data, null, 2), 'application/json')}>Export findings</button></div></div>
     <p className="bas-review-boundary">Current findings only · not an approved takeoff. PDF availability and saved calculations require separate verification.</p>
     <div className="bas-point-controls">
       <label>Find a finding<input value={state.filter || ''} onChange={e => change({ filter: e.target.value, page: 0 })} placeholder="Issue, equipment or source text" /></label>

@@ -22,6 +22,26 @@ Keep the normal evidence JSON and original PDFs. Readiness, drawing corresponden
 source-retaining snapshots and approval are still being implemented. A blocker
 here is a saved finding to review, not a claim that the entire design was checked.
 
+**Original PDFs** lists every physical version referenced by saved BAS history,
+including historical captures. **Retain original** finds the exact bytes among
+loaded files or the local revision trail and stores one protected copy in this
+browser project. It verifies length and SHA-256; a newer namesake cannot substitute.
+Save the BAS workflow first; if it changes during verification, retry. Closing a
+PDF afterward removes its ordinary filename trail, but not this retained copy.
+**Verify retained copy** checks the stored bytes again; **Download original**
+verifies and downloads a digest-named PDF for external backup or manual reopening.
+Verification is per visit, not an ongoing guarantee. Source links still require
+the exact PDF to be loaded; automatic reopening from retained copies is not yet
+wired. Use **Open** with the downloaded PDF to restore that exact version.
+
+Retention is browser-local, including local-first synced projects; these copies
+are not synced to Drive or a folder. Legacy cloud-only storage reports that this
+action is unavailable. Browser clearing or eviction can remove them. Keep the
+PDFs externally and retain the ordinary takeoff JSON too: neither download alone
+is a complete evidence archive. Retention does not change findings, calculations,
+approvals or the current drawing set. Storage failures do not delete old evidence
+to make room. No approved snapshot is created by these actions.
+
 On the development branch, **Takeoff → Equipment** displays original equipment
 schedule rows and a separate **Scoped equipment register**. **Create scope**
 records established building, level, system and phase labels; leave missing

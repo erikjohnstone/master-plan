@@ -12,6 +12,13 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add **Review & changes → Original PDFs** for explicit browser-local source
+  retention, byte verification and exact original downloads. Shared ownership
+  and digest checks reject corrupt/foreign evidence; the IDB write compares the
+  persisted BAS workflow and waits for transaction completion. Sources remain
+  project-scoped and survive ordinary PDF removal. No approval, revision pairing,
+  automatic source reopening, source-inclusive release archive or new MCP option
+  is claimed by this browser storage step. Existing workflows/exports are unchanged.
 - Add the shared read-only project finding queue and **Takeoff → Review & changes**.
   The optional BAS compile `bas_project_review: {capture_id}` returns the same
   original codes, source evidence, affected subjects and dependency/exclusion

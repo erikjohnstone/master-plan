@@ -51,6 +51,9 @@ const SNAP_STORE = "snapshots";    // key: id -> { id, ts, label, payload }
 const REV_STORE = "pdf_revs";      // key -> { key, name, rev, hash, ts, bytes }
 const revKey = (name, rev) => `${name}\u0000${rev}`;
 const ANN_KEY = "annotations";
+// Array keys cannot collide with generic string-key annotation/sync bookkeeping.
+// Retained BAS originals are project-scoped and never removed by closePdf.
+const basSourceKey = (projectId, sourceId) => ["bas_source_v1", projectId || "", sourceId];
 // condition template library — browser-global (not part of a project payload),
 // lives under its own key in the keyPath-less meta store: no DB version bump
 const TPL_KEY = "condition_templates";
@@ -199,7 +202,67 @@ async function sha256Hex(bytes) {
   return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+/** Surface-specific IDB delivery; ownership and byte truth are shared. No
+ * snapshot, approval, current-source selection or annotation write occurs here. */
+function basSourceStore(projectId = "") {
+  const annKey = projectId ? `${ANN_KEY}:${projectId}` : ANN_KEY;
+  return {
+    async retainBasSource(workflow, sourceId, data) {
+      // Freeze the caller's buffers/history before even the lazy imports await.
+      const input = structuredClone({ workflow, data });
+      const { prepareBasSourceRetention } = await import("./basSourceRetention.ts");
+      const { canonicalBasJson } = await import("./basCanonical.ts");
+      const prepared = await prepareBasSourceRetention(input.workflow, sourceId, input.data);
+      return withDb(db => new Promise((resolve, reject) => {
+        const t = db.transaction(META_STORE, "readwrite"), os = t.objectStore(META_STORE);
+        let failure = null, retained = false;
+        const abort = error => { failure = error; t.abort(); };
+        t.oncomplete = () => resolve({ source_id: sourceId, retained, storage: "browser_local" });
+        t.onerror = () => reject(failure || t.error);
+        t.onabort = () => reject(failure || t.error || new Error("Original PDF retention aborted"));
+        const request = os.get(annKey);
+        request.onsuccess = () => {
+          try {
+            if (canonicalBasJson(request.result?.bas_workflow ?? null) !== prepared.expected_workflow_json) {
+              abort(new Error("Saved BAS workflow changed or is not yet saved; retry original PDF retention."));
+              return;
+            }
+            const key = basSourceKey(projectId, sourceId), previous = os.get(key);
+            previous.onsuccess = () => {
+              try {
+                if (previous.result !== undefined) {
+                  const old = previous.result;
+                  if (old.schema_version !== "bas_original_pdf_v1" || canonicalBasJson(old.source) !== canonicalBasJson(prepared.source)
+                    || !(old.bytes instanceof ArrayBuffer) || old.bytes.byteLength !== prepared.bytes.byteLength
+                    || new Uint8Array(old.bytes).some((byte, index) => byte !== prepared.bytes[index])) {
+                    abort(new Error("Retained original PDF conflicts with verified bytes; existing evidence was not overwritten."));
+                  }
+                  return;
+                }
+                os.add({ schema_version: "bas_original_pdf_v1", source: prepared.source, bytes: prepared.bytes.buffer }, key);
+                retained = true;
+              } catch (error) { abort(error); }
+            };
+          } catch (error) { abort(error); }
+        };
+      }));
+    },
+    async loadBasSource(rawSource) {
+      const expectedSource = structuredClone(rawSource);
+      const { basRetainedSourceSchema, verifyBasSourceBytes } = await import("./basSourceRetention.ts");
+      const { canonicalBasJson } = await import("./basCanonical.ts");
+      const source = basRetainedSourceSchema.parse(expectedSource);
+      const record = await withDb(db => tx(db, META_STORE, "readonly", os => os.get(basSourceKey(projectId, source.source_id))));
+      if (record === undefined) return null;
+      if (record.schema_version !== "bas_original_pdf_v1" || canonicalBasJson(record.source) !== canonicalBasJson(source)
+        || !(record.bytes instanceof ArrayBuffer)) throw new Error("Retained original PDF metadata is corrupt; availability is not verified.");
+      return verifyBasSourceBytes(source, record.bytes);
+    },
+  };
+}
+
 export const localStore = {
+  ...basSourceStore(),
   // `rev` (CO-1's per-file revision counter) rides along for callers that
   // need to tell "this file's bytes are unchanged since I last looked" from
   // "this is new or different" WITHOUT re-hashing or re-reading a byte of
@@ -468,6 +531,7 @@ export function createLocalStore(folderId = null) {
   const annKey = ANN_KEY + ":" + folderId;
   return {
     ...localStore,
+    ...basSourceStore(folderId),
     async loadAnnotations() {
       const a = await withDb((db) => tx(db, META_STORE, "readonly", (os) => os.get(annKey)));
       return a || emptyAnnotations();

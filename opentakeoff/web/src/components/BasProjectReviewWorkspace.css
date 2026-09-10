@@ -12,3 +12,6 @@
 .bas-review-facts { display: grid; grid-template-columns: max-content 1fr; gap: var(--sp-2) var(--sp-4); }
 .bas-review-facts dd { margin: 0; }
 .bas-review-detail h3 { text-transform: capitalize; }
+.bas-source-actions { display: flex; flex-direction: column; align-items: stretch; gap: var(--sp-2); }
+.bas-source-heading button, .bas-review-actions button { margin-left: 0; }
+.bas-review-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-left: auto; }

@@ -1,5 +1,27 @@
 ## Active work
 
+2026-09-10 checkpoint after **3eddc21f**: explicit browser-local original PDF
+retention/verification/download now uses shared ownership/digest validation and
+project-scoped per-source transactions. Sources survive ordinary filename/revision
+deletion; corrupt/foreign inputs, stale saves, quota failures and transaction aborts
+cannot overwrite old evidence or approve a takeoff. Focused **40 pass**; first full
+web **2,689 pass / 13 existing skips**, types/lint/bench/build pass; final layout
+types/lint/build pass. Existing BAS MCP **93 pass**. Final Fort Sam UI **31204
+exit 0**, **60.676 s**, **456 unchanged findings**, exact source recovery and
+history/bbox/keyboard checks, zero page errors; six final source-view screenshots
+inspected. No new public MCP retention verb or completed revision/snapshot seal.
+Full details: `../opentakeoff/docs/bas-production/SOURCE_RETENTION_PROOF.md`.
+No VectorGrid/extraction/math/key changes or holdout access. Historical **505/541
+takeoff, 99/129 reference, 78/91 graph cells, 133/138 anchors** plus 23 old-path
+ENOENTs remain, not a new full corpus run. Finish the main BAS workflows and
+remaining corpus gates before the appended symbol/installed-plan phase.
+No push, merge or deployment.
+
+Final full web **67712 exit 0** repeats **2,689 pass / 13 existing skips**, no
+failures, types/lint/benchmark/build pass. One-Click cross gate: 16 probes,
+zero disagreements, pair-IoU floor 0.994 / mean 0.999; nine single-resolution
+cases not cross-checked. This is not the complete schedule/quantity/graph corpus.
+
 2026-09-10 newest main-goal checkpoint, after **0357cada**: shared read-only BAS
 finding queue now connects internal Review & changes and opt-in public MCP.
 Real Fort Sam browser **19202 exit 0**, 37.561 s, and packaged MCP **6687 exit 0**,

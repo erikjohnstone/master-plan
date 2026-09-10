@@ -96,6 +96,55 @@ try {
   assert.equal(await trigger.evaluate(el => el === document.activeElement), true, 'Back restores focus to the selected finding');
   checks.push('Keyboard selection, source citation, domain route, filter/selection and focus return');
   same(await saved(), baseline, 'Read-only review preserves all source/decision history');
+  await review.getByRole('button', { name: 'Original PDFs', exact: true }).click();
+  const originals = page.getByRole('region', { name: 'Original BAS PDFs', exact: true });
+  const versions = originals.getByRole('table', { name: 'Original PDF versions', exact: true });
+  await versions.waitFor();
+  assert.equal(await originals.getByRole('heading', { name: 'Original PDFs', exact: true }).evaluate(el => el === document.activeElement), true);
+  await originals.getByRole('button', { name: '← Back to findings', exact: true }).click();
+  assert.equal(await review.getByRole('button', { name: 'Original PDFs', exact: true }).evaluate(el => el === document.activeElement), true);
+  assert.equal(await review.getByLabel('Find a finding', { exact: true }).inputValue(), 'responsibility unknown');
+  await page.keyboard.press('Enter'); await versions.waitFor();
+  assert.equal(await versions.locator('tbody tr').count(), 1);
+  const retentionStarted = performance.now();
+  await originals.getByRole('button', { name: 'Retain original', exact: true }).click();
+  await originals.getByText('Retained original · bytes verified now', { exact: true }).waitFor();
+  timings.original_retention_ms = Math.round(performance.now() - retentionStarted);
+  const originalDownload = page.waitForEvent('download');
+  await originals.getByRole('button', { name: 'Download original', exact: true }).click();
+  const downloadedOriginal = await originalDownload;
+  assert.equal(downloadedOriginal.suggestedFilename(), `${sha}.pdf`);
+  await downloadedOriginal.saveAs(resolve(out, 'downloaded-original.pdf'));
+  assert.equal(createHash('sha256').update(readFileSync(resolve(out, 'downloaded-original.pdf'))).digest('hex'), sha);
+  same(await saved(), baseline, 'Retention/download leaves original findings and all saved decisions unchanged');
+  for (const theme of ['light', 'dark']) for (const [width, height] of [[1280, 800], [1440, 900], [1920, 1080]]) {
+    await page.emulateMedia({ colorScheme: theme }); await page.waitForFunction(t => document.documentElement.dataset.theme === t, theme);
+    await page.setViewportSize({ width, height });
+    assert.ok(await originals.evaluate(el => el.scrollWidth <= el.clientWidth + 1));
+    await page.screenshot({ path: resolve(out, `originals-${theme}-${width}.png`) });
+  }
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await openImportedSheet(page);
+  await page.locator('[data-workspace-nav="Takeoff"]').click();
+  await page.getByRole('button', { name: 'Review & changes', exact: true }).click();
+  if (!(await originals.isVisible())) await review.getByRole('button', { name: 'Original PDFs', exact: true }).click();
+  await originals.getByRole('button', { name: 'Verify retained copy', exact: true }).click();
+  await originals.getByText('Retained original · bytes verified now', { exact: true }).waitFor();
+  same(await saved(), baseline, 'Original retention survives browser reload without a workflow rewrite');
+  // Explicit transport test, not a claim of exercising the canvas Close UI:
+  // ordinary removePdf destroys the filename trail, never the BAS original.
+  const removed = await page.evaluate(async () => {
+    const { localStore } = await import('/src/lib/store.js');
+    const names = (await localStore.listSheets()).map(s => s.name);
+    for (const name of names) await localStore.removePdf(name);
+    return (await localStore.listSheets()).length;
+  });
+  assert.equal(removed, 0);
+  const recoveredDownload = page.waitForEvent('download');
+  await originals.getByRole('button', { name: 'Download original', exact: true }).click();
+  await (await recoveredDownload).saveAs(resolve(out, 'recovered-original.pdf'));
+  assert.equal(createHash('sha256').update(readFileSync(resolve(out, 'recovered-original.pdf'))).digest('hex'), sha);
+  checks.push('Actual UI retain/verify/download/reload; exact original hash survives separate ordinary removePdf transport test; no approval');
   assert.equal(errors.length, 0);
   const result = { pdf_sha256: sha, findings: expected.issues.length, checks, timings, page_errors: errors, duration_ms: Math.round(performance.now() - started) };
   writeFileSync(resolve(out, 'checks.json'), JSON.stringify(result, null, 2)); console.log(JSON.stringify(result));
