@@ -1,6 +1,6 @@
 /** Shared review labels/policy, not extraction or approval. Unknown codes stay
  * visible and blocking; an acknowledgement cannot change the source outcome. */
-export const BAS_PROJECT_ISSUE_RULE = 'saved_bas_findings_1' as const;
+export const BAS_PROJECT_ISSUE_RULE = 'saved_bas_findings_2' as const;
 export type BasIssueDomain = 'sources' | 'points' | 'sequences' | 'equipment' | 'assemblies' | 'engineering';
 export type BasIssueSeverity = 'blocker' | 'warning' | 'information';
 type Entry = { title: string; next_step: string; severity: BasIssueSeverity };

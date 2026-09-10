@@ -1,5 +1,50 @@
 # BAS production workflow progress
 
+## Stable finding identities before issue decisions — 2026-09-10
+
+After **01094715**, reproduced a shared review defect on the retained Fort Sam
+workflow: canonical JSON backup changed **236 of 456** finding occurrences only
+because raw cell dictionary order changed. Failed-first regression now passes:
+**zero changed occurrences**. Shared row evidence follows explicit header order,
+retains unlisted cells/blanks/distinct boxes, and preserves narrative span order.
+Projection rule is explicitly `saved_bas_findings_2`; old standalone exports are
+not rewritten. All 456 original findings/statuses/subjects/text/bbox multisets
+match the prior implementation, and the input workflow is unchanged.
+
+**Web 14988 exit 0:** 2,806 pass / 13 existing skips, types/lint/bench/build pass.
+Same three lint warnings, four legacy One-Click benchmark failures and
+bundle/Agent-key warnings. **MCP 4959 exit 0:** types, 128 BAS + 33 revision +
+four packaging tests, unchanged 51 tools; **42355 exit 0:** another 122
+staging/safe-write/tool tests, Python 452 pass / one explicit packaging skip,
+mypy 20 source files, enabled Python packaging one pass. No Python/math changes.
+Serial finding reads **3.059-3.336 s**, **475,693,056-byte** incremental peak RSS,
+within the declared 5 s / 512 MiB envelope. No speed improvement claimed.
+
+Actual browser **6465** and canonical-backup browser **72448** both exit 0.
+The latter imports sorted JSON through the normal file input, exports all **456
+findings** exactly equal to the original-order shared projection, preserves
+keyboard/source/domain return state and exact original retention through reload.
+**Zero browser errors; 4.241 s first open; 2.133 s original retention.** Both
+themes/three viewports checked. Representative queue/detail/original/highlight
+screenshots visually inspected; 1280 detail evidence uses internal scrolling.
+Proof and reproduction: `FINDING_IDENTITY_PROOF.md`,
+`evidence/issue-order-browser-2/checks.json`.
+
+Primary-source issue/approval workflow research refreshed in
+`REVIEW_REVISION_CONTRACT.md`; no claim of automatically verified hardware,
+authenticated reviewer, complete coverage or approved takeoff.
+
+**Next critical path:** implement the additive issue-decision journal (revision
+9, not reusing drawing 7/comparison 8), exact occurrence/head/ownership validation,
+append-only acknowledgement/withdrawal and source-preserving corrective routes.
+Acknowledge must never remove a blocker or change a count. Then dependency-bound
+selective approval and a positive source-inclusive approved snapshot/export
+journey, followed by remaining A-D/applicable corpus/holdout gates. The appended
+deep symbol/installed-plan research remains **last**, not a replacement for the
+original five workflows. Goal active; no blocker. No full corpus run, holdout
+opening, VectorGrid/extraction/symbol changes, models, commercial math or external
+push/merge/deploy/publish.
+
 ## Public pinned comparison workflow — 2026-09-10
 
 After **b942b4f7**, exposed the shared Python-backed revision comparison through

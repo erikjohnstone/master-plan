@@ -130,6 +130,9 @@ project, surviving ordinary PDF removal. Copies are not synced; keep an external
 backup and the takeoff JSON. This does not clear findings, select a revised drawing
 set, approve takeoffs or implement revision release.
 
+Finding identities now survive canonical JSON backup/restore. Table evidence
+follows its recorded column order; original values and source boxes are unchanged.
+
 **Open original** provides a read-only page reader. Historical BAS citations also
 use it when their exact PDF is no longer active. Hash and saved page-frame checks
 prevent a newer namesake from receiving an old highlight. The reader does not add

@@ -22,6 +22,11 @@ Keep the normal evidence JSON and original PDFs. Readiness, drawing corresponden
 source-retaining snapshots and approval are still being implemented. A blocker
 here is a saved finding to review, not a claim that the entire design was checked.
 
+Saving/restoring the same evidence does not create new finding occurrences merely
+because JSON object keys change order. Current findings use `saved_bas_findings_2`;
+older standalone finding exports keep their original rule and IDs. Raw header
+order, blank cells, unlocated evidence and distinct source boxes are preserved.
+
 **Original PDFs** lists every physical version referenced by saved BAS history,
 including historical captures. **Retain original** finds the exact bytes among
 loaded files or the local revision trail and stores one protected copy in this

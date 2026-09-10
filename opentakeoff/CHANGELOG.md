@@ -12,6 +12,12 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Correct shared finding occurrence identity across canonical backup/restore.
+  Evidence follows explicit table headers, with unlisted cells retained in a
+  deterministic tail; narrative span order is unchanged. Version the projection
+  as `saved_bas_findings_2` without rewriting source data or old finding exports.
+  No extraction, quantity, approval or installed-count behavior changes.
+
 - Expose pinned requirement/quantity comparison in the existing full-width
   **Review & changes → Drawing changes** workspace and additive MCP `revision`
   commands. Explicit item pairing, source inspection, stale-preview rejection,

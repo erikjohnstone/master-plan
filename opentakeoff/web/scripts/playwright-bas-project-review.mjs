@@ -9,13 +9,19 @@ import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { waitForAsync } from './fixtures/wait-for-async.mjs';
 import { verifyBasWorkflow } from '../src/lib/basWorkflow.ts';
 import { basProjectReview } from '../src/lib/basProjectReview.ts';
+import { canonicalBasJson } from '../src/lib/basCanonical.ts';
 import { assertProofEqual as same } from '../../mcp/scripts/helpers/proofEquality.ts';
 
 const [pdfPath, archivePath, output] = process.argv.slice(2);
 assert.ok(pdfPath && archivePath && output, 'Original PDF, reviewed archive, new output directory required');
 const pdf = resolve(pdfPath), archive = resolve(archivePath), out = resolve(output);
 assert.equal(existsSync(out), false); mkdirSync(out, { recursive: true });
-const baseline = await verifyBasWorkflow(JSON.parse(readFileSync(archive, 'utf8')).bas_workflow);
+const payload = JSON.parse(readFileSync(archive, 'utf8'));
+const baseline = await verifyBasWorkflow(payload.bas_workflow);
+// Exercise the real backup ordering defect through ordinary browser import,
+// not a store injection. This generated artifact preserves every payload value.
+const canonicalArchive = resolve(out, 'canonical-backup.takeoff.json');
+writeFileSync(canonicalArchive, canonicalBasJson(payload));
 const sha = createHash('sha256').update(readFileSync(pdf)).digest('hex');
 assert.ok(baseline.captures.some(c => c.sources.some(s => s.sha256 === sha)));
 const expected = await basProjectReview(baseline, baseline.current_capture_id);
@@ -34,7 +40,7 @@ try {
   await page.waitForFunction(() => ['ready', 'error'].includes(window.__opentakeoff?.graphPrewarm()?.phase), null, { timeout: 600000 });
   assert.equal(await page.evaluate(() => window.__opentakeoff.graphPrewarm().phase), 'ready');
   await openImportedSheet(page);
-  await page.locator('input[name="takeoff-import"]').setInputFiles(archive);
+  await page.locator('input[name="takeoff-import"]').setInputFiles(canonicalArchive);
   await waitForAsync(async () => (await saved())?.engineering_events?.at(-1)?.event_id === baseline.engineering_events.at(-1).event_id, { timeout: 30000 });
   same(await saved(), baseline, 'Ordinary imported history');
   await page.locator('[data-workspace-nav="Takeoff"]').click();
@@ -44,7 +50,7 @@ try {
   const download = page.waitForEvent('download'); await review.getByRole('button', { name: 'Export findings', exact: true }).click();
   await (await download).saveAs(resolve(out, 'findings.json'));
   same(JSON.parse(readFileSync(resolve(out, 'findings.json'), 'utf8')), expected, 'Browser/shared exact queue');
-  checks.push('Exact shared export; no approval or dropped findings');
+  checks.push('Canonical backup imported through actual UI; exact original-order shared export; no approval or dropped findings');
   await review.getByRole('button', { name: 'Next findings', exact: true }).click();
   assert.equal(await list.locator('tbody tr').count(), Math.min(50, expected.issues.length - 50));
   await review.getByRole('button', { name: 'Previous findings', exact: true }).click();

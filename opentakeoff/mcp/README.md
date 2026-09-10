@@ -206,6 +206,8 @@ It neither replays Python nor verifies stored PDF bytes, dismisses constraints o
 grants approval. Default compile output is unchanged when the option is omitted.
 Normal compile may retain a fresh capture; the finding request selects the named
 retained capture and explicitly labels historical versus active source state.
+Current `saved_bas_findings_2` identities survive canonical JSON restore; table
+evidence follows recorded headers, with original values and boxes unchanged.
 Save the findings with the existing optional compile JSON `path`; retain ordinary
 evidence JSON plus original PDFs separately. Revision/release work is unfinished.
 

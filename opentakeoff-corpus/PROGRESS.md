@@ -1,5 +1,23 @@
 ## Active work
 
+2026-09-10 checkpoint after **01094715**: fixed shared BAS finding identity across
+canonical backup. The retained real source workflow had **236/456** occurrences
+change solely with object-key order; failed-first regression now gives **0/456**.
+Explicit header order and every original finding/value/bbox are retained,
+narrative span order unchanged; projection rule `saved_bas_findings_2` is explicit.
+**Web 2,806 pass / 13 existing skips; MCP 128 BAS + 33 revision + four packaging +
+122 staging/safe-write/tool tests pass; Python 452 pass / one packaging skip,
+mypy 20 files and enabled packaging test pass.** Existing warnings/legacy
+benchmark failures remain disclosed. Real-PDF browser and normal canonical-backup
+import/export both preserve all 456 findings, source links, state and originals;
+zero browser errors, final first-open 4.241 s. Shared reads 3.059-3.336 s under
+5 s / 512 MiB. Proof: `opentakeoff/docs/bas-production/FINDING_IDENTITY_PROOF.md`.
+**Main goal active:** issue-decision journal/corrective routes, selective
+approvals/approved snapshots and remaining A-D/corpus/holdout gates next.
+Appended deep symbol/installed-plan phase remains last. No extraction, VectorGrid,
+Python math, symbol, key/scorer, model, costing/labor or external changes;
+no new full-corpus score or holdout inspection claimed.
+
 2026-09-10 checkpoint after **b942b4f7**: public pinned BAS revision comparison
 now runs through one Python-backed service from browser and existing MCP tool.
 Actual browser source/import → comparison/pairing → save/reload/replay/export

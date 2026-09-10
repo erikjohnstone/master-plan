@@ -45,6 +45,20 @@ seals or generic mutable snapshots. Older records have no project approval, not
 an implicit approval. Every older edit/import path must preserve revision 7.
 Unknown future revisions/fields fail explicitly rather than being stripped.
 
+Implementation checkpoint: `bas_review_7` now owns drawing correspondence and
+`bas_revision_8` owns pinned comparison history. The next issue-decision journal
+must use a new additive revision (9), not reuse either existing revision. Those
+issue decisions and scoped approvals remain unimplemented at this checkpoint.
+
+2026-09-10 primary-source refresh: Autodesk documents issue placement/references
+and activity tracking separately from explicit file-review approval workflows.
+Changes to approval workflow definitions apply to new reviews, not older ones.
+This supports our separation of issue awareness from release approval and our
+retention of versioned historical decisions; it is a workflow design inference,
+not evidence of BAS engineering correctness or authenticated local reviewers.
+[Autodesk issues](https://help.autodesk.com/cloudhelp/ENU/Build-Issues/files/Issues_Create.html),
+[Autodesk approval workflows](https://help.autodesk.com/cloudhelp/ENU/Docs-Reviews/files/getting-started-reviews/Reviews_Create_Edit.html).
+
 Each new request includes a UUID operation ID, expected journal head, exact
 capture/source-set identity, relevant dependency fingerprint and reason. Events
 also retain origin, self-declared reviewer label, timestamp and canonical digest.

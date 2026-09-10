@@ -161,6 +161,10 @@ source-linked saved-finding projection. Original failures, exclusions, unknown
 codes and stale dependencies are retained. It does not change existing compile
 fields, replay calculations, verify stored source bytes or approve a takeoff.
 Findings are not a completeness score; readiness remains `not_evaluated`.
+The current `saved_bas_findings_2` projection preserves occurrence identities
+across canonical JSON restore; source evidence follows explicit table header
+order without changing source values/boxes. Older standalone exports retain
+their older rule/IDs and are not silently promoted to the current schema.
 See [review and revision acceptance](bas-production/REVIEW_REVISION_CONTRACT.md)
 for the remaining approval/source-retention work.
 

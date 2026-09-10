@@ -7,6 +7,54 @@ import { engineeringFixture, uuid } from './helpers/basEngineeringFixture.ts';
 import { captureBasEvidence } from '../src/lib/basWorkflow.ts';
 import { applyBasEquipmentReview } from '../src/lib/basEquipmentReview.ts';
 import type { BasEquipmentRegister } from '../src/lib/basEquipmentRegister.ts';
+import { canonicalBasJson } from '../src/lib/basCanonical.ts';
+import { basPointListsSchema } from '../src/lib/basPointLists.ts';
+import { captureBasEquipmentTables } from '../src/lib/basEquipmentEvidence.ts';
+
+// Shared-path regression: canonical backup changes object insertion order, not
+// source text, boxes, quantities or the finding being reviewed.
+test('real retained BAS findings survive canonical backup without new occurrence identities', async () => {
+  const workflow = JSON.parse(readFileSync(new URL('../../docs/bas-production/evidence/engineering-families-browser-3/ip-reviewed.takeoff.json', import.meta.url), 'utf8')).bas_workflow;
+  const before = JSON.stringify(workflow);
+  const original = await basProjectReview(workflow, workflow.current_capture_id);
+  const restored = await basProjectReview(JSON.parse(canonicalBasJson(workflow)), workflow.current_capture_id);
+  assert.ok(original.issues.length > 400, 'Exercise the retained real drawing, not an empty queue');
+  const byKey = new Map(restored.issues.map(i => [i.issue_key, i]));
+  assert.equal(original.issues.filter(i => i.occurrence_id !== byKey.get(i.issue_key)?.occurrence_id).length, 0,
+    'Backup ordering must not invalidate finding decisions');
+  assert.deepEqual(restored, original);
+  assert.equal(JSON.stringify(workflow), before);
+});
+
+test('finding evidence follows explicit headers, retains orphan cells, blanks and distinct boxes', async () => {
+  const f = await engineeringFixture({ withSequence: true });
+  const cells = { A: { text: 'same', bbox: [40, 10, 60, 20] },
+    orphanZ: { text: 'unmapped Z', bbox: null }, Z: { text: '', bbox: [10, 10, 20, 20] },
+    B: { text: 'same', bbox: [70, 10, 90, 20] }, orphanA: { text: 'unmapped A', bbox: null } };
+  const raw = { key: 'controlled-row', cells };
+  const points = basPointListsSchema.parse({ ...f.capture.points, matrices: [{ ...f.capture.points.matrices[0],
+    raw: { ...f.capture.points.matrices[0].raw, headers: ['Z', 'B', 'A', 'unobserved', 'Z'], rows: [raw] },
+    rows: [{ row_id: 'controlled-point', local_key: raw.key, name: '', raw, status: 'review_required',
+      observations: [], qualifiers: [], issues: [], uninterpreted_columns: ['Z', 'B', 'A'],
+      unobserved_columns: ['unobserved'], field_wiring_status: 'not_established' }] }] });
+  const workflow = await captureBasEvidence(f.source, points);
+  const view = await basProjectReview(workflow, workflow.current_capture_id!);
+  const issue = view.issues.find(i => i.code === 'point_columns_unobserved')!;
+  const expected = [cells.Z, cells.B, cells.A, cells.orphanA, cells.orphanZ].map(cell => ({
+    page_id: f.source.pages[0].page_id, span_id: null, text: cell.text, bbox_px: cell.bbox }));
+  assert.deepEqual(issue.evidence, expected);
+  assert.equal(issue.evidence.length, 5, 'No invented missing cell, no duplicate repeated header, no lost blank or distinct box');
+  assert.deepEqual(await basProjectReview(JSON.parse(canonicalBasJson(workflow)), workflow.current_capture_id!), view);
+  assert.deepEqual(workflow.captures[0].points, points, 'The source header sequence and raw cells remain untouched');
+
+  const table = { ...f.tables[0], headers: ['B', 'A'], rows: [{ key: raw.key, sheet: f.tables[0].sheet,
+    cells: { A: cells.A, Z: cells.Z, B: cells.B } }] };
+  const equipmentWorkflow = await captureBasEvidence(f.source, f.capture.points, captureBasEquipmentTables([table]));
+  const equipmentView = await basProjectReview(equipmentWorkflow, equipmentWorkflow.current_capture_id!);
+  assert.deepEqual(equipmentView.issues.find(i => i.code === 'missing_mark_column')!.evidence,
+    [expected[1], expected[2], expected[0]], 'Equipment evidence uses source headers before unlisted columns too');
+  assert.deepEqual(await basProjectReview(JSON.parse(canonicalBasJson(equipmentWorkflow)), equipmentWorkflow.current_capture_id!), equipmentView);
+});
 
 test('shared queue preserves all five independent responsibility activities, exact source and durable state', async () => {
   const f = await engineeringFixture({ withSequence: true }), before = structuredClone(f.workflow);
@@ -39,6 +87,8 @@ test('unknown upstream code is visible and blocking; inspection does not invent 
   assert.equal(basProjectIssuePolicy('engineering', '__proto__').known_code, false);
   assert.equal(basProjectIssuePolicy('engineering', 'constructor').severity, 'blocker');
   assert.equal(basProjectReviewSchema.safeParse({ ...view, readiness: 'approved_for_scope' }).success, false);
+  assert.equal(basProjectReviewSchema.safeParse({ ...view, rule_version: 'saved_bas_findings_1' }).success, false,
+    'Old export identities are not silently relabeled as the corrected current rule');
 });
 
 test('changed scope creates changed finding input without hiding stale assembly decisions', async () => {

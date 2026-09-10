@@ -49,6 +49,14 @@ export async function basProjectReview(raw: unknown, captureId: string): Promise
   const fromSpans = (ids: string[]) => ids.map(id => { const s = spans.get(id); if (!s) throw new Error('Project finding has a foreign source span'); return s; });
   const fromCell = (page_id: string | null, cell: { text: string; bbox: number[] | null } | null | undefined): Evidence[] =>
     page_id && cell ? [{ page_id, span_id: null, text: cell.text, bbox_px: cell.bbox as Evidence['bbox_px'] }] : [];
+  // Shared finding identity must survive canonical backup. The header array is
+  // explicit source order; dictionary insertion order is not. Retain orphan
+  // cells too, deterministically, without reordering narrative source spans.
+  const fromRow = (pageId: string | null, headers: string[], cells: Record<string, { text: string; bbox: number[] | null }>) => {
+    const keys = new Set(headers);
+    return [...keys, ...Object.keys(cells).filter(k => !keys.has(k)).sort()]
+      .filter(k => Object.prototype.hasOwnProperty.call(cells, k)).flatMap(k => fromCell(pageId, cells[k]));
+  };
   const push = (domain: BasIssueDomain, code: string, owner: Subject, finding: unknown, evidence: Evidence[] = [], equipment_ids: string[] = [],
     dependency_status: Issue['dependency_status'] = 'current_dependencies', source_event_id: string | null = null,
     disposition: Issue['disposition'] = 'not_established') => {
@@ -64,7 +72,7 @@ export async function basProjectReview(raw: unknown, captureId: string): Promise
     const evidence = fromCell(matrix.page_id, matrix.raw.title ?? { text: owner.label, bbox: matrix.raw.region });
     for (const code of matrix.issues) push('points', code, owner, { code }, evidence);
     for (const row of matrix.rows) {
-      const cells = Object.values(row.raw.cells).flatMap(c => fromCell(matrix.page_id, c));
+      const cells = fromRow(matrix.page_id, matrix.raw.headers, row.raw.cells);
       const rowOwner = subject('point_row', row.row_id, row.name || row.local_key || 'Unnamed point row');
       for (const code of row.issues) push('points', code, rowOwner, { code, status: row.status }, cells);
       if (row.unobserved_columns.length) push('points', 'point_columns_unobserved', rowOwner, { columns: row.unobserved_columns }, cells);
@@ -107,7 +115,7 @@ export async function basProjectReview(raw: unknown, captureId: string): Promise
     const occurrences = new Map(equipment.candidates.tables.flatMap(t => t.rows.map(r => [r.occurrence_id, { r, t }] as const)));
     const rowEvidence = (occurrenceId: string) => {
       const found = occurrences.get(occurrenceId);
-      return found ? Object.values(found.t.raw.rows[found.r.row_index].cells).flatMap(c => fromCell(found.r.page_id, c)) : [];
+      return found ? fromRow(found.r.page_id, found.t.raw.headers, found.t.raw.rows[found.r.row_index].cells) : [];
     };
     const equipmentEvidence = (ids: string[]) => unique(ids.flatMap(id => equipmentMap.get(id)?.bindings.flatMap(b => rowEvidence(b.occurrence_id)) ?? []));
     for (const { r, t } of occurrences.values()) for (const code of r.issues) push('equipment', code,

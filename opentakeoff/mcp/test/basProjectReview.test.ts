@@ -11,6 +11,33 @@ import { calculateBasAssignments } from '../src/basAssignmentDemand.ts';
 import { captureBasEvidence } from '../../web/src/lib/basWorkflow.ts';
 import { applyBasEquipmentReview } from '../../web/src/lib/basEquipmentReview.ts';
 import type { BasEquipmentRegister } from '../../web/src/lib/basEquipmentRegister.ts';
+import { canonicalBasJson } from '../../web/src/lib/basCanonical.ts';
+
+test('production compile findings match the browser before and after canonical workflow restoration', async () => {
+  const f = await engineeringFixture();
+  // Header order deliberately differs from dictionary insertion order. This
+  // controlled malformed schedule must keep its missing-mark finding visible.
+  const table = { ...f.tables[0], headers: ['Z', 'A'], rows: [{ ...f.tables[0].rows[0],
+    cells: { A: { text: 'first dictionary key', bbox: [60, 10, 90, 20] },
+      Z: { text: 'first printed column', bbox: [10, 10, 50, 20] } } }] };
+  const graph = { available: true, tables: [table], sheets: [], notes: [], rooms: [], unmatched_tags: [], callouts: [], buildings: [] } as unknown as SheetGraph;
+  const beforeGraph = structuredClone(graph);
+  const session = { basWorkflow: f.workflow, basSourcesForPipeline: () => f.source,
+    retainBasWorkflow(next: typeof f.workflow) { this.basWorkflow = next; return true; } };
+  await compileProductionTakeoff(session, graph, 'bas_points');
+  const request = { capture_id: session.basWorkflow.current_capture_id! };
+  const before = await compileProductionTakeoff(session, graph, 'bas_points', { bas_project_review: request });
+  const ui = await basProjectReview(session.basWorkflow, request.capture_id);
+  assert.ok('bas_project_review' in before);
+  assert.deepEqual(before.bas_project_review, ui);
+  assert.ok(ui.issues.some(i => i.code === 'missing_mark_column'));
+  session.basWorkflow = JSON.parse(canonicalBasJson(session.basWorkflow));
+  const restored = await compileProductionTakeoff(session, graph, 'bas_points', { bas_project_review: request });
+  assert.ok('bas_project_review' in restored);
+  assert.deepEqual(restored, before, 'All compile values, history and citations—not just finding count—must match');
+  assert.deepEqual(restored.bas_project_review, await basProjectReview(session.basWorkflow, request.capture_id));
+  assert.deepEqual(graph, beforeGraph);
+});
 
 test('saved failed and excluded engineering constraints keep original inputs/outcomes and source bboxes', async () => {
   const f = await engineeringFixture();
