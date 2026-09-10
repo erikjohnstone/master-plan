@@ -55,10 +55,12 @@ matching PDF bytes, not merely its filename. Equipment assignment, source-PDF
 archiving and approved review/revision workflows remain in development.
 Existing engineering and row exports keep their current meaning.
 
-Development persistence now supports a separate source-set/page-correspondence
-journal, preserving old captures and rejecting incomplete or conflicting page
-accounting. Public revision editing and scoped approvals are still being built;
-this is not an installed-count or release feature. See the
+Development **Review & changes → Drawing changes** and MCP `bas_drawing_review`
+now expose the shared source-set/page-correspondence journal: select retained
+pages, explicitly account for replacements/additions/removals, inspect original
+sources, preview and record decisions. Unresolved reviews retain history without
+publishing a complete source set. Quantity-impact comparison and scoped approvals
+are still being built; this is not an installed-count or release feature. See the
 [correspondence contract](docs/bas-production/DRAWING_CORRESPONDENCE_CONTRACT.md).
 
 Local-first sync now retains compatible BAS history across known saved versions.
@@ -204,7 +206,7 @@ otherwise, and nothing an autonomous agent could call.
 
 OpenTakeoff is that engine, with two front ends over identical geometry:
 
-- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->50<!--/tool-count--> tools, on the
+- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->51<!--/tool-count--> tools, on the
   [official MCP registry](https://registry.modelcontextprotocol.io). An agent opens a plan,
   reads the title block, sets the scale, floods the rooms, checks its own work on a rendered
   overlay, and hands back a marked-up planset PDF.
@@ -612,7 +614,7 @@ plus a vision-capable model id.
 | **Voice** | Push-to-talk takeoff commands, recognized on-device in WebAssembly; audio never leaves the browser |
 | **View** | Light or **dark (negative print)**—sheet pixels inverted at draw time, exports follow |
 | **Storage** | IndexedDB + localStorage—client-only, nothing uploaded |
-| **MCP server** | <!--tool-count-->50<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
+| **MCP server** | <!--tool-count-->51<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
 | **Provenance** | Every shape records its scale, its method, its confidence, and whether a person or an agent made it |
 | **Capture (opt-in)** | Bundled [capture server](capture/README.md) banks each contributed takeoff as (geometry → label) training rows |
 | **Deploy** | One static build—Netlify, Vercel, GitHub Pages, Cloudflare Pages, S3, any static host |

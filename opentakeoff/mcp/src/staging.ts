@@ -24,6 +24,7 @@ export const TOOL_STAGES: Record<string, readonly string[]> = {
     "match_reference_symbol", "find_legend_symbols", "sweep_inline_motif",
   ],
   revise: [
+    "bas_drawing_review",
     "list_shapes", "delete_shape", "edit_shape", "edit_materials", "edit_condition",
     "duplicate_condition", "split_condition", "undo_last", "annotate",
     "list_annotations", "link_annotation", "mark_verdict", "delete_verdict",

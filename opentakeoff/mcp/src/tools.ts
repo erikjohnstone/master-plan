@@ -46,6 +46,8 @@ import { exportBasEvidenceBundle, inspectBasEvidenceBundleFile } from './basEvid
 import { basename } from 'node:path';
 import { viewBasOriginalSource } from './basSourceView.ts';
 import { restoreBasEvidenceFile } from './basRestoreFile.ts';
+import { basDrawingCommandSchema, basDrawingCommandResultSchema } from '../../web/src/lib/basDrawingInspection.ts';
+import { runBasDrawingCommand } from './basDrawingReview.ts';
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -88,6 +90,11 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     },
     sendResourceListChanged: () => realServer.sendResourceListChanged(),
   };
+  server.registerTool('bas_drawing_review', {
+    description: `Review retained BAS drawing versions without loading old originals into active counting or rerunning extraction. command.kind=inspect lists capture/event identities in reverse retention order (query.offset/limit, default 25, maximum 50); query.capture_id returns original page IDs, query.event_id returns retained page accounting and the resulting source set. Each paged collection has its total count. prepare validates an exact create_source_set or review_revision action and returns expected_head and expected_dependencies without saving. record requires that complete action, operation UUID, expected head/dependency digest, reason and self-declared reviewer; records agent_proposal history only. Account for every baseline/incoming page, reciprocal one-to-one replacements, explicit removals/additions; partial-addendum omissions require retained-page confirmation. Unresolved accounting produces no complete source set. compare reads two owned capture/page references: available retained text/frame equality is NOT full ink equality or a quantity delta. No approval, installed count or Python replay. Changes stay in Session until export_takeoff (prefer its source-inclusive evidence bundle); exact retries are idempotent, stale/foreign/conflicting decisions reject. Restore history via import_takeoff if no active plans are needed; view_sheet with a saved source page ID inspects its original bytes without activating it. ${COORDS}`,
+    inputSchema: { command: basDrawingCommandSchema },
+    outputSchema: { result: basDrawingCommandResultSchema },
+  }, run('bas_drawing_review', async ({ command }, context) => ({ result: await runBasDrawingCommand(session, command, context?.signal) })));
   server.registerTool("load_plan", {
     description: `Open a plan PDF from disk. Default: replace the whole session (previous documents, scales, conditions, and shapes are cleared). merge: true ADDS the document to the working set instead (#152) — a bid set is plans + schedule + addenda, not one PDF — keeping every scale, condition, and shape; sheet keys carry file names so documents never collide, the sheet graph spans the whole set (resolve_tag can chain a plan tag on one file to a schedule row in another), and the marked set covers every worked sheet. Re-loading an already-merged file is refused — reload = replace, deliberately. Returns file, files, page_count, and one entry per sheet. The loaded sheets also become browsable resources (takeoff://sheets). ${COORDS}`,
     inputSchema: {

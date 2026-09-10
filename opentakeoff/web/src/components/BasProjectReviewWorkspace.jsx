@@ -4,16 +4,21 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { basProjectReview } from '../lib/basProjectReview.ts';
 import { downloadText } from '../lib/totals.js';
 import BasOriginalSources from './BasOriginalSources.jsx';
+import BasDrawingWorkspace from './BasDrawingWorkspace.jsx';
 import './BasPointsWorkspace.css';
 import './BasProjectReviewWorkspace.css';
 
 const domains = { sources: 'Source coverage', points: 'Point lists', sequences: 'Sequences', equipment: 'Equipment', assemblies: 'Assemblies', engineering: 'Engineering' };
 const human = text => String(text).replace(/_/g, ' ');
-export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain, restoreContext }) {
+export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain, onDrawingReview, restoreContext }) {
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [sourceError, setSourceError] = useState('');
   const heading = useRef(null), scroll = useRef(null), returnFocus = useRef(null);
   const originalsButton = useRef(null), originalsReturn = useRef(false);
+  const drawingButton = useRef(null), drawingReturn = useRef(false);
+  useEffect(() => {
+    if (!state.drawingReview && drawingReturn.current) { drawingButton.current?.focus(); drawingReturn.current = false; }
+  }, [state.drawingReview]);
   useEffect(() => {
     if (!state.originalSources && originalsReturn.current) {
       originalsButton.current?.focus(); originalsReturn.current = false;
@@ -50,12 +55,15 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
     } catch (error) { setSourceError(error.message); }
   }
   if (state.originalSources || !workflow) return <BasOriginalSources workflow={workflow} restoreContext={restoreContext} restoreNotice={state.restoreNotice} onOpenCitation={onOpenCitation} onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
+  if (state.drawingReview) return <BasDrawingWorkspace workflow={workflow} state={state.drawings}
+    onStateChange={updater => onStateChange(previous => ({ ...previous, drawings: updater(previous?.drawings || {}) }))}
+    onReview={onDrawingReview} onOpenCitation={onOpenCitation} onBack={() => { drawingReturn.current = true; change({ drawingReview: false }); }} />;
   if (!ready) return <p role="status" className="bas-point-message">Gathering saved BAS findings…</p>;
-  if (computed.error) return <p role="alert" className="bas-point-message">Review unavailable: {computed.error}. Saved evidence has not been changed.</p>;
+  if (computed.error) return <div className="bas-point-message"><p role="alert">Findings unavailable: {computed.error}. Saved evidence has not been changed.</p><button ref={drawingButton} type="button" onClick={() => change({ drawingReview: true })}>Drawing changes</button><button type="button" onClick={() => change({ originalSources: true })}>Original PDFs</button></div>;
   const sourcePage = Math.max(0, Math.min(state.sourcePage || 0, Math.ceil((selected?.evidence.length || 0) / 20) - 1));
   return <section className="bas-point-workspace bas-project-review" aria-label="Project BAS review">
     <div className="bas-point-heading"><h2>Review &amp; changes</h2><span>{data.issues.length} saved findings</span>
-      <div className="bas-review-actions"><button ref={originalsButton} type="button" onClick={() => change({ originalSources: true })}>Original PDFs</button>
+      <div className="bas-review-actions"><button ref={drawingButton} type="button" onClick={() => change({ drawingReview: true })}>Drawing changes</button><button ref={originalsButton} type="button" onClick={() => change({ originalSources: true })}>Original PDFs</button>
       <button type="button" onClick={() => downloadText('bas-review-findings.json', JSON.stringify(data, null, 2), 'application/json')}>Export findings</button></div></div>
     <p className="bas-review-boundary">Current findings only · not an approved takeoff. PDF availability and saved calculations require separate verification.</p>
     <div className="bas-point-controls">

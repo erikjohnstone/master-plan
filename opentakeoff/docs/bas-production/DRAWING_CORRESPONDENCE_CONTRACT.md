@@ -108,3 +108,109 @@ MCP **38438 exit 0**: typecheck, **119 BAS tests** (59.543 s), build and
 Full standalone Python, full corpus and blind holdout were not rerun.
 Compact committed report: `evidence/drawing-shared-1/proof.json`; raw local logs
 are `tmp/bas-drawing-{shared-tests-final,web-final,mcp-packaging,bench}.log`.
+
+## Public editor and history-only MCP integration — 2026-09-10
+
+After `79868930`, the browser exposes **Review & changes → Drawing changes**.
+It selects retained source pages, creates a source set, reviews baseline/incoming
+page dispositions and reciprocal replacements, previews through the shared
+append validator, and records operator decisions through the existing autosave
+path. Selection order is explicit: reselecting a page appends it. Page links use
+the isolated original-source reader; drafts, page/scroll and history selection
+survive source inspection. Neither the form nor Session transport computes BAS
+quantities. Unsupported capture inventories show the shared limit instead of
+crashing or silently dropping pages.
+
+MCP `bas_drawing_review` exposes `inspect`, `prepare`, `record` and `compare` over
+the same retained journal, including with no active PDFs. Inspection pages each
+collection at 1–50 entries with explicit totals. Preparation saves nothing;
+recording stamps `agent_proposal`, checks exact workflow/load state and rejects
+concurrent mutation or cancellation. Exact retries retain later history and
+return the requested event's accounting, not the latest event's page count.
+Session-only changes require export for durable storage. Agent proposals do not
+become operator approvals or active counting input.
+
+### Research recheck and limits
+
+Official documentation rechecked 2026-09-10: Autodesk distinguishes visual sheet
+comparison from inventory quantity comparison and supports explicit version/
+snapshot selection. Its version UI warns about takeoff on previous file versions.
+Bluebeam describes page/automatic/manual alignment for PDF overlays. These are
+documented workflows, not hands-on competitor tests. Our inference is to keep
+source correspondence, interpreted changes, quantity changes and approval
+invalidation separate. The current text/frame comparator is deliberately not
+presented as a full-ink overlay or a quantity-difference implementation.
+
+- [Autodesk sheet and quantity comparison](https://help.autodesk.com/cloudhelp/ENU/Takeoff-Files/files/Compare_Sheets.html)
+- [Autodesk version indicators](https://help.autodesk.com/cloudhelp/ENU/Takeoff-Files/files/Version_in_Sheets_Models.html)
+- [Bluebeam overlay alignment](https://support.bluebeam.com/user-manual/menus/document/overlay-pages.html)
+
+### Actual browser proof and rejected runs
+
+`evidence/drawing-browser-2/proof.json`: actual nine-page Fort Sam upload plus
+retained real-PDF/controlled-hardware history, then an actual compiled PDF with
+original pages 9 and 8 copied in that order. This is **not an issued addendum**.
+PDF skill render checks confirm the copied M-601 schedule and M-512 points/SOO
+pages remain visually intact. Original bytes are untouched. The derivative
+source SHA-256 is `03398b9ba57fb5492c5ada6e38ef606df4e2b0cae766f84f2afa386f6e484053`;
+its actual shared compile took 2,811.443 ms and produced one point matrix.
+
+The browser explicitly pairs old page 8 to incoming page 2 and old page 9 to
+incoming page 1, retains pages 1–7, records two decisions, preserves every old
+capture/engineering record, opens the exact source, reloads and exports unchanged
+history. Six layouts (1280×800, 1440×900, 1920×1080 in both themes) have no horizontal
+workspace overflow or page errors; source and preview screenshots are retained.
+Measured preview→record→durable save: 8,423 / 8,446 ms. These are first measured
+end-to-end baselines, not predeclared speed gates or production-speed claims.
+
+Final browser run `81444` is the successful rerun; preceding `47273` failed
+because the test reselected the first page (appending it) but then assumed order
+1–9. The comparison correctly returned `changed`. The corrected test toggles the
+last page and explicitly asserts source order; no scorer or production comparison
+was weakened. Initial fixture generation left a worker alive after writing;
+`shutdownVectorGrid` cleanup was added and the final generator exited zero.
+The first MCP surface check failed only its mandatory coordinate-contract
+description assertion (106 pass / 1 fail); the description was fixed, not the test.
+
+Reproduce with `mcp/scripts/build-bas-drawing-revision-fixture.mjs` (original PDF,
+new directory, page order `9 8`), `web/scripts/playwright-bas-drawings.mjs` (original,
+retained history JSON, fixture directory, new output directory), and
+`mcp/scripts/verify-bas-drawings.mts` (browser JSON, original, derivative, new output).
+Generated PDF metadata may produce a different source hash on another run; each
+run records its exact bytes/capture IDs. This is not a byte-identical fixture
+generator or a held-out accuracy test.
+
+Semantic/quantity-impact comparison, issue decisions, selective approval
+dependencies and approved snapshots remain required. The main five workflows
+and their final corpus gates are not complete; researched symbol/installed-plan
+hardening remains the additive last phase. No VectorGrid algorithms, thresholds,
+table/citation/bbox semantics, symbols, Python arithmetic, costs or labor changed.
+
+### Final verification checkpoint
+
+Web **11736 exit 0**: typecheck/lint (three existing warnings), **2,771 pass /
+13 existing skips**, 25.659 s tests, 5.46 s build. Real-history validation
+3.069 / 2.987 / 2.996 s under the unchanged 5 s gate; 201,000-entry journal
+51.757 / 40.825 / 32.441 ms, 146,309,120-byte incremental peak RSS under the
+unchanged 2 s / 256 MiB gate. Existing One-Click known failures and chunk-size
+warnings remain; this is not full-corpus accuracy verification.
+
+MCP **59493 exit 0**: types/count parity, **126 BAS pass** (43.844 s), **4
+packaging/proof pass**, **107 public-tool/staging pass** (28.754 s). Seven new
+MCP tests cover guarded public delivery, old-event retries after later reviews
+and explicit oversized inventory refusal. Version 0.9.75 / 51 tools is local
+development only, not published.
+
+Final built public MCP **41483 exit 0**, `evidence/drawing-mcp-2/proof.json`:
+browser export restored exactly with no active plans, one duplicate-delivery
+proposal appended without adding pages, comparison exactly matches the shared
+browser helper, both original PDFs render, and exported source-inclusive history
+recovers exactly in a new process. Three assembly and 28 engineering records
+actually replay through Python during restore. Measured restore 24.288 s,
+prepare+record 6.721 s, fresh-process restore 26.954 s. Earlier successful built
+walkthrough measured 24.465 / 6.075 / 23.968 s; not a before/after speed claim.
+Repeated validation latency needs further work before a production-speed claim.
+
+Compact gate evidence: `evidence/drawing-public-1/proof.json`. Full corpus,
+blind holdout and standalone full Python suite were not rerun. Goal remains
+active, with no scope reduction or completion/approval claim.

@@ -13,6 +13,13 @@ operating manual—how a takeoff is run, what withholds, what refuses—and
 
 ## Setup
 
+Development `bas_drawing_review` works directly against retained BAS history,
+including a restored session without active plans. Inspect captures/events in
+bounded pages, prepare explicit source accounting, then record against the exact
+returned head and dependency digest. Results are agent proposals, never approval
+or quantity deltas. Export afterward to persist Session changes. See the
+[drawing command contract](../mcp/README.md#drawing-correspondence).
+
 Source-inclusive BAS recovery is a two-call `import_takeoff` operation:
 preview `restore_evidence_bundle: {action: "preview"}`, then commit the returned
 `preview_id` with `{action: "commit", preview_id, directory}`. The existing output
@@ -184,7 +191,7 @@ Register the server with your MCP client (any stdio client):
 Never point a client config at `npm start`—npm's banner goes to stdout,
 which is the MCP wire. `node --import tsx` is the whole invocation.
 
-By default the server hands every client all fifty tool schemas at once. Set
+By default the server hands every client all 51 tool schemas at once. Set
 `OPENTAKEOFF_MCP_STAGED_TOOLS=1` in the server's environment to stage the
 surface instead: only the setup tools start enabled, and the agent opens the
 `measure` / `revise` / `handoff` groups on demand with `open_tool_stage` as

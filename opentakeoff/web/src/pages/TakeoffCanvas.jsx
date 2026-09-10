@@ -167,6 +167,7 @@ import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
 import { basResultForCanvas } from "../lib/basBrowserResult.js";
 import { basWorkflowSchema, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow } from "../lib/basWorkflow.ts";
 import { applyBasReview } from "../lib/basReview.ts";
+import { applyBasDrawingReview } from "../lib/basDrawingReview.ts";
 import { applyBasEquipmentReview } from "../lib/basEquipmentReview.ts";
 import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
@@ -13002,6 +13003,16 @@ export default function TakeoffCanvas() {
             const previous = basWorkflowRef.current;
             const updated = await applyBasReview(previous, request, 'operator_input');
             if (basWorkflowRef.current !== previous) throw new Error('The BAS workspace changed during this edit. Review the current state before retrying.');
+            basWorkflowRef.current = updated;
+            setBasWorkflow(updated);
+            return updated;
+          }}
+          onBasDrawingReview={async request => {
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, adapter = store;
+            const updated = await applyBasDrawingReview(previous, request, 'operator_input');
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || store !== adapter) {
+              throw new Error('The BAS project changed during drawing review. No stale page accounting was saved.');
+            }
             basWorkflowRef.current = updated;
             setBasWorkflow(updated);
             return updated;

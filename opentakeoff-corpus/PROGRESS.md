@@ -1,5 +1,23 @@
 ## Active work
 
+2026-09-10 checkpoint after **79868930**: shared page correspondence now has the
+public **Review & changes → Drawing changes** editor and history-only MCP
+`bas_drawing_review`. Existing evidence/counts remain unchanged; recording is
+page accounting, not approval or semantic/quantity impact. Browser real-original
+plus controlled reordered-page walkthrough passes draft/source return, explicit
+pairing, six layouts, durable save/reload/export. Packaged public MCP restores that
+history, records duplicate delivery without increasing pages, views exact originals
+and exports/restarts. Controlled revision/hardware inputs are disclosed.
+Final web **2,771 pass / 13 existing skips**, MCP types, **126 BAS + 4 packaging +
+107 staging/public-tool tests pass**. Existing history and journal performance
+gates pass unchanged; browser save measured **8.423 / 8.446 s** (baseline, not a
+speed claim). Initial test-fixture ordering and tool-description failures were
+fixed without weakening tests. Details: `opentakeoff/docs/bas-production/PROGRESS.md`
+and `DRAWING_CORRESPONDENCE_CONTRACT.md`. Semantic/quantity comparison, issue
+decisions and approved snapshots remain next, then A–D corpus/holdout gates and
+the appended researched symbol/installed-plan phase. Goal active; no extraction,
+math, thresholds, keys/scorers, holdout access, full corpus run or push/merge/deploy.
+
 2026-09-10 checkpoint after **63658a35**: shared drawing-correspondence foundation
 implemented (`bas_review_7`). Explicit source sets and complete reciprocal page
 accounting preserve old evidence; unresolved revisions publish no complete set.

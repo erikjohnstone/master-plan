@@ -12,6 +12,12 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Expose shared drawing correspondence in **Review & changes → Drawing changes**
+  and the history-only MCP `bas_drawing_review` command. Preview, explicit page
+  decisions, retained source viewing, draft return and proposal history preserve
+  existing equipment/capture data. No extraction, installed-count, quantity-impact
+  or approval changes. MCP development version 0.9.75, 51 tools; not published.
+
 - Add the shared `bas_review_7` drawing-correspondence foundation: immutable
   source-set/page accounting, reciprocal replacements, explicit partial-addendum
   retention, unresolved review history and strict ownership/head/digest checks.

@@ -1,0 +1,145 @@
+{
+  "checks": [
+    "Initial source selection, draft/source return, preview invalidation and keyboard-recorded durable source set",
+    "Actual source-derived PDF import, explicit cross-page pairing, partial retention, exact source reader and six layouts",
+    "Reload and actual public browser evidence export preserve both correspondence events and all prior data"
+  ],
+  "timings": {
+    "preview_record_1_durable_ms": 8423,
+    "preview_record_2_durable_ms": 8446
+  },
+  "errors": [],
+  "fixture": {
+    "fixture_kind": "controlled_source_derived_page_reordering",
+    "source_path": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection/pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+    "original_page_count": 9,
+    "selected_original_pages": [
+      9,
+      8
+    ],
+    "derivative_path": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/tmp/pdfs/bas-drawing-revision-2/controlled-reordered-source-pages.pdf",
+    "derivative_source": [
+      {
+        "source_id": "sha256:03398b9ba57fb5492c5ada6e38ef606df4e2b0cae766f84f2afa386f6e484053",
+        "sha256": "03398b9ba57fb5492c5ada6e38ef606df4e2b0cae766f84f2afa386f6e484053",
+        "byte_length": 225169,
+        "page_count": 2,
+        "names": [
+          "controlled-reordered-source-pages.pdf"
+        ]
+      }
+    ],
+    "capture_id": "b026d9e14c0b8a0f09e34ef2de86d7da2b8126010006ed9371e0716b4a0eb9bd",
+    "compile_ms": 2811.4429170000003,
+    "matrices": 1,
+    "actual_production_compile": true,
+    "real_issued_addendum": false,
+    "installed_quantity_proof": false
+  },
+  "final_source_sets": [
+    {
+      "id": "1c8bc270b89c5f0b13ce4d302d8e9a8b4c47ef829fe58381f97d74ca60579259",
+      "pages": [
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p1"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p2"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p3"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p4"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p5"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p6"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p7"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p8"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p9"
+        }
+      ]
+    },
+    {
+      "id": "07d24b502e6d40a94ab55279586103c4960f0ff8b6a7137bc57d3b1ce65594fc",
+      "pages": [
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p1"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p2"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p3"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p4"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p5"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p6"
+        },
+        {
+          "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+          "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p7"
+        },
+        {
+          "capture_id": "b026d9e14c0b8a0f09e34ef2de86d7da2b8126010006ed9371e0716b4a0eb9bd",
+          "page_id": "sha256:03398b9ba57fb5492c5ada6e38ef606df4e2b0cae766f84f2afa386f6e484053:p2"
+        },
+        {
+          "capture_id": "b026d9e14c0b8a0f09e34ef2de86d7da2b8126010006ed9371e0716b4a0eb9bd",
+          "page_id": "sha256:03398b9ba57fb5492c5ada6e38ef606df4e2b0cae766f84f2afa386f6e484053:p1"
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "before": {
+      "capture_id": "5b7b6c07dbb0bebc32148e4200a4ba65c4cde1c13d096226dd61778e7aa094ac",
+      "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p8"
+    },
+    "after": {
+      "capture_id": "b026d9e14c0b8a0f09e34ef2de86d7da2b8126010006ed9371e0716b4a0eb9bd",
+      "page_id": "sha256:03398b9ba57fb5492c5ada6e38ef606df4e2b0cae766f84f2afa386f6e484053:p2"
+    },
+    "source_identity": "different_original_page",
+    "capture_identity": "different_capture",
+    "retained_text_geometry": "equal",
+    "comparison_scope": "available_retained_text_and_page_frame_only",
+    "semantic_changes": "not_assessed",
+    "quantity_changes": "not_assessed",
+    "approval_impact": "not_assessed",
+    "source_bytes": "not_verified"
+  },
+  "public_ui": true,
+  "real_issued_revision": false,
+  "approved": false,
+  "quantity_delta_proof": false
+}

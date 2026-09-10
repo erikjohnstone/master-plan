@@ -156,10 +156,26 @@ includes the complete BAS record, independent of table filters. Autosave and
 These are named scheduled members and reviewed assignments, not installed counts
 or approved releases. The editor adds no canvas toolbar or floating panel.
 
-The development evidence format also retains source-set and page-correspondence
-history separately from equipment decisions. These records do not change counts
-or approve a takeoff. The public drawing-revision editor and approval journey
-remain in development; there is no new revision action to use in this build yet.
+On the development branch, **Review & changes → Drawing changes** manages
+source-set and page-correspondence history separately from equipment decisions.
+Choose a retained **Evidence capture**, then **New source set** to select pages.
+Selection order becomes the source-set order; reselecting a page appends it.
+For a revision, select its baseline source set and incoming capture, choose a
+partial addendum or replacement set, then **Start revision review**. Review every
+baseline and incoming page, explicitly pairing replacements and recording
+additions, removals or unresolved decisions. Partial-addendum omissions are
+proposed as retained; they still require confirmation. Exact-source duplicate
+pages can be recorded without adding them again.
+
+Enter a self-declared reviewer and reason, **Preview page accounting**, then
+**Record page accounting**. Editing inputs invalidates the preview. Source links
+open the retained original without rebinding evidence to the current drawing;
+returning preserves the draft. Decision history, autosave and **Export evidence &
+decisions** preserve recorded reviews. Keep original PDFs or a source-inclusive
+backup for later source viewing. Unresolved reviews publish no complete source
+set. **Compare retained evidence** compares available text and page geometry,
+not full drawing ink. These records do not change counts or approve a takeoff;
+quantity-impact comparison and the approval journey remain in development.
 
 After recording assignments, choose **Calculate assigned values**. The shared
 Python engine applies each known listed value to the included members, or applies
@@ -1188,7 +1204,7 @@ What's sent, and only when you run an AI feature: the sheet region in question a
 
 The same engine speaks [MCP](https://modelcontextprotocol.io), one command away:
 `npx -y opentakeoff-mcp` (or the one-click `opentakeoff-mcp.mcpb` bundle for Claude Desktop). An
-MCP client gets **<!--tool-count-->50<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
+MCP client gets **<!--tool-count-->51<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
 with the same scale gate and the same provenance receipts:
 
 | Group | Tools |

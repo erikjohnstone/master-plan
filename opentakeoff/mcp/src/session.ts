@@ -1013,6 +1013,21 @@ export class Session {
       schedule_withheld: this.scheduleWithheld, journal: this.journal, seq: this.seq });
   }
 
+  /** History-only review may run with no active PDFs. Reject a concurrent BAS
+   * edit, restore, or even a load that returns to identical bytes. Other canvas
+   * state is not overwritten by the caller's final BAS-only assignment. */
+  basDrawingGuard() {
+    if (this.basPlanLoads) throw new Error('A plan is loading; wait before reviewing drawing history.');
+    const workflow = this.basWorkflow, version = this.basRestoreVersion;
+    const expected = basRestoreJson(workflow);
+    return () => {
+      if (this.basPlanLoads || this.basRestoreVersion !== version || this.basWorkflow !== workflow
+        || basRestoreJson(this.basWorkflow) !== expected) {
+        throw new Error('BAS workspace changed during drawing review. Reload the current accounting; no stale decision was saved.');
+      }
+    };
+  }
+
   /** Includes mutations outside exportPayload and load operations still in flight.
    * A load-and-return-to-identical-bytes cannot resurrect a stale preview. */
   basRestoreGuard() {

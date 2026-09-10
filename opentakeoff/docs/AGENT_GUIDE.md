@@ -34,6 +34,17 @@ a deliverable, select current source scope or verify installed quantity.
 Unencrypted local recovery files are not authenticated or guaranteed permanent.
 Ordinary JSON import retains its previous semantics.
 
+Development drawing review: use `bas_drawing_review` directly on retained history,
+including without active PDFs. Inspect paginated captures/events, prepare exact
+page accounting, then record with the returned head/dependency digest, UUID,
+reason and self-declared reviewer. MCP records are `agent_proposal`, never human
+approval. Export Session changes explicitly. Incomplete page decisions retain
+history without establishing a complete source set. Exact retained-text equality
+does not establish unchanged drawing ink, requirements or quantities. Original
+page IDs remain source-viewable; changing source correspondence does not rebind
+old calculations or make stale decisions current. Semantic revision impact and
+approved takeoff snapshots still require their subsequent workflow integration.
+
 Inspect historical BAS evidence using `view_sheet` with the exact saved `page_id`
 as `sheet`, and `original_pdf_path` when its bytes are not currently loaded. Do not
 add old versions to the current drawing set merely to inspect them: that can
@@ -207,7 +218,7 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 50 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 51 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
 Forty descriptions is real token weight for a session that may never touch half of them, so the

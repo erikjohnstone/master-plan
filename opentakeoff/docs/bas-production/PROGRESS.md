@@ -1,5 +1,52 @@
 # BAS production workflow progress
 
+## Public drawing correspondence — 2026-09-10
+
+After **79868930**, the shared page-accounting journal is usable in
+**Review & changes → Drawing changes** and the new history-only MCP
+`bas_drawing_review`. Explicit source selection, replacement/addendum accounting,
+unresolved decisions, exact source viewing, preview invalidation and immutable
+history use the same validator. MCP proposals require export, remain unapproved
+and cannot overwrite concurrent workflow/restore/plan-load changes. UI drafts
+and source-return context remain surface-specific. No extraction change.
+
+Final web **11736 exit 0: 2,771 pass / 13 existing skips**, 25.659 s tests / 5.46 s
+build. Three existing lint warnings, legacy One-Click known failures and bundle
+warnings remain. Real-history benchmark **3.069 / 2.987 / 2.996 s**, unchanged
+5 s gate. Journal **51.757 / 40.825 / 32.441 ms**, incremental peak RSS
+**146,309,120 bytes**, unchanged 2 s / 256 MiB gate. MCP final **59493 exit 0**:
+types, 51-tool count parity, **126 BAS tests** (43.844 s), **4 packaging/proof
+tests**, **107 staging/public-tool tests** (28.754 s). Seven new MCP tests include
+exact public restore/export/source viewing, stale/racing/reused requests,
+oversized inventory disclosure and old-operation retry after later decisions.
+
+Browser **81444 exit 0**, `evidence/drawing-browser-2`: actual Fort Sam original
+plus controlled copied pages 9/8 compiled through the real shared pipeline.
+Explicit page 8→2 / 9→1 pairing retains nine pages, all prior captures/engineering
+history, source-return draft, reload and ordinary evidence export. Six light/dark
+desktop layouts plus source/preview screenshots inspected. No page errors.
+Preview→record→durable save baseline **8.423 / 8.446 s**; not a new speed gate.
+Initial test failed because reselecting page 1 changed explicit source order;
+corrected test asserts order, without weakening comparison. Initial MCP surface
+test failed a missing coordinate-description requirement; description corrected,
+test unchanged. Fixture-builder worker cleanup was repaired and rerun successfully.
+
+Built public MCP proof: `mcp/scripts/verify-bas-drawings.mts` restores the actual
+browser export with both exact PDFs, inspects/compares through the shared path,
+records a same-original duplicate delivery without adding pages, reopens both
+originals, exports and recovers in a fresh process. Actual Python replays all
+31 saved calculation records during restoration. Controlled hardware and copied
+pages are disclosed; not a real issued addendum or installed-count proof.
+Full details and measurements: `DRAWING_CORRESPONDENCE_CONTRACT.md`.
+
+Main goal stays active: next implement semantic/comparable-quantity revision
+impact, issue decisions, selective approval dependencies and approved snapshots;
+finish remaining A–D corpus/holdout gates, **then** the appended researched symbol/
+installed-plan phase. No standalone full Python/corpus/holdout rerun in this slice.
+No VectorGrid algorithm/threshold, symbol, table/cite/bbox, Python arithmetic,
+key/scorer, cost/labor, push, merge, publication or deployment changes. MCP 0.9.75
+is an unpublished development version, not a production release.
+
 ## Shared drawing correspondence foundation — 2026-09-10
 
 After **63658a35**, implemented the shared `bas_review_7` source-set and
