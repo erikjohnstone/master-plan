@@ -41,6 +41,25 @@ Drafts remain through source/domain navigation; stale inputs require a fresh
 decision draft. **Return to issue review** returns from the domain workspace.
 Approved snapshots remain unfinished.
 
+SOO finding routes select and focus the exact clause, region boundary or linked
+matrix comparison, even when another region has the same title. An unavailable
+or historical target is disclosed rather than replaced with a current namesake.
+Historical decision actions and draft submission are read-only in that context;
+the original evidence and draft are retained. Existing assignment findings still
+open the exact equipment assignment editor.
+
+Page/source findings open **Sequences & links → Source coverage**. Choose a
+**Source accounting page** and **Text accounting group** to inspect the shared
+discovery partition: detected body, heading-only, ambiguous, unassigned,
+unsupported and blank spans. **View original source** opens the exact retained
+span's original PDF location. **Previous text** / **Next text** page 50 spans at
+a time; evidence exports still contain the entire record. This reader does not
+mark a page reviewed, interpret unsupported prose, discard unassigned text or
+approve a takeoff. Coverage/applicability decisions are the next implementation
+step. **Sequence reader** returns to normal sequence browsing; association drafts
+survive issue/source navigation. The shared source and comparison services have
+not changed.
+
 **Original PDFs** lists every physical version referenced by saved BAS history,
 including historical captures. **Retain original** finds the exact bytes among
 loaded files or the local revision trail and stores one protected copy in this

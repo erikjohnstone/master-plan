@@ -12,6 +12,13 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Route SOO issues to their exact retained clause, region or matrix comparison;
+  preserve drafts and original-source return. Add an internal, paged source-text
+  accounting reader using unchanged shared discovery results. Missing/historical
+  targets are not replaced with current namesakes, and historical decision
+  contexts cannot enable new actions or submit a current draft. No extraction,
+  shared interpretation, quantity, approval or MCP contract changes.
+
 - Expose shared issue decisions in **Review & changes** and `bas_issue_review`.
   Observe an exact finding, start a source-preserving correction, replay historical
   evidence, record absence after changed inputs, or withdraw without deleting

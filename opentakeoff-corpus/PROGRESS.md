@@ -1,5 +1,27 @@
 ## Active work
 
+2026-09-10 checkpoint after **c0a3ac8e**: completed exact SOO issue-to-clause,
+region/comparison and page navigation, plus an internal bounded source-accounting
+reader. This is surface-only selection over unchanged shared discovery/review;
+no VectorGrid, symbol, Python math, source coordinates or MCP contract changes.
+Historical targets do not select current namesakes; drafts and full exports stay
+intact. Coverage/applicability decisions and approvals are **not** implemented by
+the reader. Main five workflows still precede appended symbol research.
+
+Final web **67500 exit 0: 2,825 pass / 13 existing skips**, types/lint/bench/build;
+same three warnings, four disclosed legacy One-Click known-fails and build notices.
+MCP **46682 exit 0: types + ten issue/transport/project-review tests**. Actual
+browser **97898 exit 0:** real PDF/import, exact original M-512 source bbox,
+keyboard/draft return, form-created comparison, 1,185 unassigned spans paged 50
+at once, both themes/three sizes, complete export/reload; zero browser errors,
+**1,022–1,047 ms** routes. Final screenshots inspected after rejecting an early
+render-incomplete capture. Proof: `opentakeoff/docs/bas-production/ISSUE_ROUTE_PROOF.md`.
+No new full corpus/Python/holdout result claimed for UI-only changes. Next:
+coverage/applicability and exclusions, selective approvals and positive approved
+snapshot/export/recovery, remaining A–D and final corpus/holdout gates, then the
+researched symbol/installed-plan extension. Goal active; no blocker or completion
+claim. No push/merge/deployment/publication.
+
 2026-09-10 checkpoint after **f70eda16**: shared BAS issue decisions are exposed
 in Review & changes and `bas_issue_review` (local 0.9.77, 52 tools). Guarded
 observations/correction-start, exact historical replay, changed-input absence and

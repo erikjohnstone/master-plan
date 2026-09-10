@@ -38,3 +38,8 @@
 .bas-sequence-reference { padding: var(--sp-3); border-left: 2px solid var(--cobalt); overflow-wrap: anywhere; }
 .bas-sequence-association { padding: var(--sp-3) 0; border-bottom: 1px solid var(--ink-faint); }
 .bas-sequence-association label { margin-right: var(--sp-3); }
+.bas-sequence-workspace > .bas-point-heading > button:first-child { margin-left: 0; }
+.bas-sequence-workspace button[aria-pressed="true"] { border-color: var(--cobalt); color: var(--cobalt); }
+.bas-sequence-association[data-review-target="true"] { border-left: 2px solid var(--cobalt); padding-left: var(--sp-3); }
+.bas-source-coverage { display: flex; flex-direction: column; gap: var(--sp-3); }
+.bas-source-coverage h3, .bas-source-coverage p { margin: 0; }

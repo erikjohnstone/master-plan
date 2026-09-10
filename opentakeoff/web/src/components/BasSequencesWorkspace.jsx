@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { basReviewHead, basSequenceView } from '../lib/basReview.ts';
 import { downloadText } from '../lib/totals.js';
 import { ANN_SCHEMA } from '../lib/store.js';
+import { basSequenceReviewSelection } from './basReviewNavigation.ts';
+import BasSourceCoverage from './BasSourceCoverage.jsx';
 import './BasPointsWorkspace.css';
 
 export default function BasSequencesWorkspace({ workflow, capture, viewState, onViewStateChange, onOpenCitation, onReview }) {
@@ -11,7 +13,7 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
-  const proseScroll = useRef(null);
+  const proseScroll = useRef(null), workspace = useRef(null);
   useEffect(() => {
     let live = true;
     basSequenceView(workflow, capture.capture_id).then(value => {
@@ -26,7 +28,12 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
   const ready = computed.input === workflow;
   const result = ready ? computed.value : null;
   const regions = result?.sequences.regions || [];
-  const region = regions.find(r => r.region_id === viewState?.sequenceId) || regions.find(r => r.raw.status === 'body_detected') || regions[0];
+  const target = viewState?.sequenceReviewTarget;
+  const selection = useMemo(() => target && result && target.captureId === capture.capture_id
+    ? basSequenceReviewSelection(result, target) : null, [target, result, capture.capture_id]);
+  const coverage = selection?.kind === 'coverage' || (!target && viewState?.sequencePane === 'coverage');
+  const region = target ? regions.find(r => r.region_id === selection?.regionId)
+    : regions.find(r => r.region_id === viewState?.sequenceId) || regions.find(r => r.raw.status === 'body_detected') || regions[0];
   const references = useMemo(() => (capture.narrative_sources?.pages || []).flatMap(p => p.spans.map(s => ({ ...s, page_id: p.page_id, page_number: p.page_number }))), [capture]);
   const query = (draft.search || '').trim().toLowerCase();
   const found = useMemo(() => query.length < 2 ? [] : references.filter(s => s.text.toLowerCase().includes(query)), [references, query]);
@@ -34,6 +41,12 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
   const comparisons = result?.comparisons.filter(c => c.association.region_id === region?.region_id) || [];
   const history = (workflow.review_events || []).filter(e => e.capture_id === capture.capture_id);
   useEffect(() => { if (ready && proseScroll.current) proseScroll.current.scrollTop = viewState?.sequenceScroll || 0; }, [ready, region?.region_id, viewState?.sequenceScroll]);
+  useEffect(() => {
+    if (ready && target && selection?.kind === 'sequence') {
+      const element = workspace.current?.querySelector('[data-review-target="true"]');
+      element?.focus({ preventScroll: true }); element?.scrollIntoView({ block: 'center', inline: 'nearest' });
+    }
+  }, [ready, target, selection]);
 
   async function source(pageId, span) {
     setError('');
@@ -59,20 +72,27 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
         scope: { building: draft.building?.trim() || null, level: draft.level?.trim() || null,
           system: draft.system?.trim() || null, phase: draft.phase?.trim() || null } }] } });
   }
-  return <section className="bas-point-workspace" aria-label="Sequences and comparison links">
+  return <section ref={workspace} className="bas-point-workspace bas-sequence-workspace" aria-label="Sequences and comparison links">
     <div className="bas-point-heading"><button type="button" onClick={() => change({ mode: 'points' })}>← Point matrices</button>
       <h2>Sequences &amp; links</h2><button type="button" onClick={() => downloadText('bas-workflow.takeoff.json', JSON.stringify({ schema: ANN_SCHEMA, bas_workflow: workflow }, null, 2), 'application/json')}>Export BAS evidence &amp; history</button></div>
     <p className="bas-point-scope">Original drawing text and reviewed comparisons. Listed points are not installed quantities. Discovery, interpretation and applicability remain incomplete.</p>
     {!ready ? <p role="status">Reading retained sequence evidence…</p> : computed.error ? <p role="alert">{computed.error}</p> : <>
-      <label className="bas-sequence-select">Sequence<select aria-label="Sequence" value={region?.region_id || ''} onChange={e => change({ sequenceId: e.target.value, sequenceScroll: 0 })}>
+      <div className="bas-point-controls"><button type="button" aria-pressed={!coverage} onClick={() => change({ sequenceReviewTarget: null, sequencePane: 'reader' })}>Sequence reader</button>
+        <button type="button" aria-pressed={coverage} onClick={() => change({ sequenceReviewTarget: null, sequencePane: 'coverage' })}>Source coverage</button></div>
+      {target && !selection && <p role="alert">The exact finding target is no longer available in the active sequence view. No other clause or comparison has been substituted. Return to issue review for its original evidence.</p>}
+      {coverage ? <BasSourceCoverage capture={capture} discovery={result.sequences.discovery} selectedPageId={selection?.pageId}
+        state={viewState} onChange={patch => change({ sequencePane: 'coverage', ...patch })} onSource={source} /> : <>
+      <label className="bas-sequence-select">Sequence<select aria-label="Sequence" value={region?.region_id || ''} onChange={e => change({ sequenceReviewTarget: null, sequenceId: e.target.value, sequenceScroll: 0 })}>
+        {!region && <option value="">Requested sequence unavailable</option>}
         {regions.map(r => <option key={r.region_id} value={r.region_id}>{r.title} · PDF page {r.page_id.split(':p').at(-1)} · {r.raw.status.replaceAll('_', ' ')}</option>)}
       </select></label>
-      {!region ? <p>No headed sequence region was discovered. Unheaded and unsupported source text is not established absent.</p> : <>
-        <div className="bas-point-heading"><h3>{region.title}</h3><span>{region.clauses.length} retained blocks · source boundary requires review</span>
+      {!region ? <p>{target ? 'Choose Sequence reader to browse other retained regions explicitly.' : 'No headed sequence region was discovered. Unheaded and unsupported source text is not established absent.'}</p> : <>
+        <div className="bas-point-heading"><h3 tabIndex={-1} data-review-target={!!selection && !selection.clauseId && !selection.matrixId}>{region.title}</h3><span>{region.clauses.length} retained blocks · source boundary requires review</span>
           <button type="button" onClick={() => source(region.page_id, { bbox_px: region.raw.bbox_px, text: region.title })}>View sequence on drawing</button></div>
         <div className="bas-point-grid bas-sequence-prose" ref={proseScroll} tabIndex={0} role="region" aria-label="Original sequence text">
           <table aria-label="Source sequence clauses"><thead><tr><th>Clause</th><th>Original drawing text</th><th>Current interpretation</th><th>Evidence</th></tr></thead>
-            <tbody>{region.clauses.map((c, i) => <tr key={c.clause_id}><th scope="row">{region.raw.blocks[i].marker || i + 1}</th>
+            <tbody>{region.clauses.map((c, i) => <tr key={c.clause_id} data-clause-id={c.clause_id} tabIndex={-1} data-selected={selection?.clauseId === c.clause_id}
+              data-review-target={selection?.clauseId === c.clause_id && !selection?.matrixId}><th scope="row">{region.raw.blocks[i].marker || i + 1}{selection?.clauseId === c.clause_id && <p>Review target</p>}</th>
               <td>{c.reading_text !== null ? c.reading_text : <table aria-label="Original sequence inset"><tbody>{region.raw.blocks[i].rows.map((row, ri) => <tr key={ri}>{row.map((cell, ci) => <td key={ci}>{cell.text}</td>)}</tr>)}</tbody></table>}</td>
               <td>{c.requirements.length ? c.requirements.map(r => <div key={r.requirement_id}><strong>Monitor {r.variable}</strong>
                 {r.operating_mode && <p>{r.operating_mode}</p>}<p>Monitoring clause only. Signal type and applicability require review.</p></div>) : 'Not interpreted — review original text'}</td>
@@ -101,19 +121,26 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
         </details>
         {!!comparisons.length && <section aria-label="Sequence point-list comparisons"><h3>Selected sequence comparisons</h3>
           <div className="bas-point-grid"><table aria-label="SOO and point-list comparison"><thead><tr><th>Monitoring requirement</th><th>Equipment reference</th><th>Listed row</th><th>Printed I/O</th><th>Comparison</th></tr></thead>
-            <tbody>{comparisons.flatMap(c => c.requirements.map(r => <tr key={`${c.association.matrix_id}:${r.requirement.requirement_id}`}>
+            <tbody>{comparisons.flatMap(c => c.requirements.map(r => <tr key={`${c.association.matrix_id}:${r.requirement.requirement_id}`} tabIndex={-1}
+              data-matrix-id={c.association.matrix_id} data-requirement-id={r.requirement.requirement_id}
+              data-selected={selection?.matrixId === c.association.matrix_id && selection?.requirementId === r.requirement.requirement_id}
+              data-review-target={selection?.matrixId === c.association.matrix_id && selection?.requirementId === r.requirement.requirement_id}>
               <th scope="row">{r.requirement.variable}{r.requirement.operating_mode && <p>{r.requirement.operating_mode}</p>}</th>
               <td>{c.equipment_references.map(ref => ref.tag).join(' · ')}<p>{c.association.review_origin.replaceAll('_', ' ')}</p></td>
               <td>{r.listed_rows.length ? r.listed_rows.map(row => <button type="button" key={row.row_id} onClick={() => change({ mode: 'points', matrixId: c.association.matrix_id, rowId: row.row_id, filter: '' })}>{row.local_key} · {row.name}</button>) : 'No matching listed row'}</td>
               <td>{r.listed_rows.flatMap(row => row.observations.filter(o => o.kind === 'declared_io').map(o => `${o.channel} · ${o.value ?? 'ambiguous'}`)).join(', ') || 'Not established'}</td>
               <td>{({ listed: 'Listed — applicability and wiring unverified', not_listed_in_selected_matrix: 'Not listed in selected matrix', ambiguous_listed_rows: 'Multiple matching rows — review required', point_labels_unavailable: 'Point labels unavailable' })[r.status]}</td>
             </tr>))}</tbody></table></div>
-          {comparisons.map(c => <div className="bas-sequence-association" key={c.association.matrix_id}><p><strong>{c.equipment_references.map(r => r.tag).join(' · ')}</strong> — {c.association.reason}</p>
+          {comparisons.map(c => <div className="bas-sequence-association" key={c.association.matrix_id} tabIndex={-1} data-comparison-matrix={c.association.matrix_id}
+            data-review-target={selection?.matrixId === c.association.matrix_id && !selection?.requirementId}>
+            {selection?.matrixId === c.association.matrix_id && <p><strong>Selected comparison from issue review</strong></p>}
+            <p><strong>{c.equipment_references.map(r => r.tag).join(' · ')}</strong> — {c.association.reason}</p>
             <p>{c.unpaired_point_row_ids.length} other matrix rows remain unpaired; they have not been removed or treated as unnecessary.</p>
             <label>Removal reason<input aria-label={`Removal reason for ${c.equipment_references.map(r => r.tag).join(' · ')}`} value={draft.removeReason || ''} onChange={e => edit({ removeReason: e.target.value })} /></label>
             <button type="button" disabled={busy || !draft.removeReason?.trim()} onClick={() => apply({ kind: 'remove', region_id: region.region_id, matrix_id: c.association.matrix_id, reason: draft.removeReason })}>Remove comparison link</button>
           </div>)}
         </section>}
+      </>}
       </>}
       <details className="bas-point-disclosure"><summary>Review history · {history.length} events</summary>
         <p>Origins are local claims, not authenticated identities. Associations never approve a takeoff.</p>

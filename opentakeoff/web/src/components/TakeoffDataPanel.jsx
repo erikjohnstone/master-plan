@@ -152,10 +152,10 @@ export default function TakeoffDataPanel({
     onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: value }));
   };
   const evidenceTab = tab === 'points' || tab === 'equipment' || tab === 'review';
-  const openReviewDomain = issue => {
-    const route = basReviewNavigation(basViewState || {}, issue, basWorkflow);
+  const openReviewDomain = (issue, captureId) => {
+    const route = basReviewNavigation(basViewState || {}, issue, basWorkflow, captureId);
     setLocalTab(route.takeoffTab);
-    onBasViewStateChange?.(previous => basReviewNavigation(previous || {}, issue, basWorkflow));
+    onBasViewStateChange?.(previous => basReviewNavigation(previous || {}, issue, basWorkflow, captureId));
   };
   const [filter, setFilter] = useState("");
   const [busy, setBusy] = useState("");

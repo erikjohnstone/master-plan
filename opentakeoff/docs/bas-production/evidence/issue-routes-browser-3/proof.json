@@ -1,0 +1,26 @@
+{
+  "pdf_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "input_sha256": "253b90a066a9a8b28e394873e7a5663710588649af801a4c598a618d7486d617",
+  "timings": {
+    "clause_route_ms": 1041,
+    "comparison_route_ms": 1047,
+    "page_route_ms": 1022
+  },
+  "errors": [],
+  "clause_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p8:line207:paragraph",
+  "comparison_issue": "72015b86acfe017c3432406e4ce0f6ea5b226dc7eb10f2553c43cca63d418fd2",
+  "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p9",
+  "coverage_rows": 1185,
+  "rendered_at_once": 50,
+  "linked_event": "d5575defde2916e88960e53f4d9dcaf0238eccda1d49d330fdfbfb2bfdd4cccb",
+  "checks": [
+    "Exact clause/region and keyboard focus",
+    "Draft preserved through issue and source navigation",
+    "Original citation bbox",
+    "Actual form-created comparison exact target",
+    "Original evidence unchanged",
+    "Exact page and bounded accounting",
+    "Both themes / three sizes",
+    "Unfiltered UI export and durable reload"
+  ]
+}

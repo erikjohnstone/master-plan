@@ -69,6 +69,9 @@ Development **Review & changes** and MCP `bas_issue_review` now expose shared
 acknowledgement, correction-start, replay-checked absence and withdrawal history.
 Original findings and blockers remain intact. Decision history stays inspectable
 after changes; exact-ID correction routes preserve existing editor drafts.
+SOO findings select their exact clause or matrix comparison. **Source coverage**
+exposes the shared page/text accounting with original-source links and bounded
+paging; it is inspection, not a coverage decision or approval.
 This is not approval, physical correction or a complete BAS-production claim.
 
 Local-first sync now retains compatible BAS history across known saved versions.

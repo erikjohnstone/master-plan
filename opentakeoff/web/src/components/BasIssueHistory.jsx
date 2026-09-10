@@ -30,7 +30,7 @@ export default function BasIssueHistory({ workflow, workspace, state, onStateCha
         <p><strong>{human(data.decision.action.kind)}</strong> · {data.decision.reviewer} (self-declared) · {human(data.decision.origin)}</p>
         <p>{data.decision.reason}</p>
         <p>Original finding replayed from retained inputs. Source bytes and Python calculations are not verified by this read.</p>
-        <button type="button" disabled={!onOpenDomain} onClick={() => onOpenDomain(data.original_finding)}>Open original domain workspace</button>
+        <button type="button" disabled={!onOpenDomain} onClick={() => onOpenDomain(data.original_finding, data.decision.capture_id)}>Open original domain workspace</button>
         {data.reviewed_change && <details><summary>Inputs changed for the recorded absence</summary><pre>{JSON.stringify(data.reviewed_change, null, 2)}</pre></details>}
         <BasIssueActions workspace={workspace} decisionView={data} state={state} onStateChange={onStateChange} onRecord={onRecord} onOpenDomain={onOpenDomain} />
         {!!data.current_findings.length && <div className="bas-review-actions">{data.current_findings.map(i => <button key={i.occurrence_id} type="button" onClick={() => change({ history: false, selectedId: i.occurrence_id, sourcePage: 0 })}>Open current finding</button>)}</div>}

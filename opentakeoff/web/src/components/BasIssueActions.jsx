@@ -1,6 +1,7 @@
 /** Surface-only forms. Shared services validate every decision against its pinned inputs. */
 import { useEffect, useRef, useState } from 'react';
 import { canonicalBasJson } from '../lib/basCanonical.ts';
+import { currentBasIssueActionContext } from './basIssueClient.ts';
 const labels = { acknowledge: 'Acknowledge', begin_correction: 'Begin correction', record_not_reported: 'Record no longer reported', withdraw: 'Withdraw decision' };
 const submitLabels = { acknowledge: 'Record acknowledgment', begin_correction: 'Record and open correction', record_not_reported: 'Confirm no longer reported', withdraw: 'Record withdrawal' };
 export default function BasIssueActions({ workspace, finding, decisionView, state, onStateChange, onRecord, onOpenDomain }) {
@@ -11,7 +12,7 @@ export default function BasIssueActions({ workspace, finding, decisionView, stat
   const draftId = draft?.request.operation_id;
   useEffect(() => { if (draftId) formHeading.current?.focus(); }, [draftId]);
   const change = patch => onStateChange(previous => ({ ...previous, ...patch }));
-  const active = workspace.project_review.source_status === 'active_capture';
+  const active = currentBasIssueActionContext(workspace.project_review, decisionView);
   const stale = draft && (draft.request.capture_id !== workspace.project_review.capture_id
     || draft.request.expected_head !== workspace.head || canonicalBasJson(draft.request.expected_basis) !== canonicalBasJson(workspace.basis));
   const target = decisionView?.decision;
@@ -25,7 +26,7 @@ export default function BasIssueActions({ workspace, finding, decisionView, stat
         expected_head: workspace.head, expected_basis: workspace.basis, reviewer: state.issueReviewer || '', reason: '', action } } });
   }
   async function save(event) {
-    event.preventDefault(); if (busy || stale || !draft) return;
+    event.preventDefault(); if (busy || stale || !active || !draft) return;
     const controller = new AbortController(); operation.current = controller; setBusy(true); setError('');
     try {
       const result = await onRecord(draft.request, { signal: controller.signal });
@@ -39,6 +40,7 @@ export default function BasIssueActions({ workspace, finding, decisionView, stat
   return <section className="bas-issue-actions" aria-label="Issue decisions">
     {state.issueNotice && <p role="status">{state.issueNotice}</p>}
     <p className="bas-review-boundary">Decision history does not change source evidence, quantities, severity or approval.</p>
+    {!active && <p role="status">Historical evidence is read-only here. Review the active capture before making a new decision.</p>}
     {error && <p role="alert">{error}</p>}
     {!draft ? <div className="bas-review-actions">
       {finding && <><button type="button" disabled={!active || !onRecord} onClick={() => begin('acknowledge')}>Acknowledge</button>
@@ -52,7 +54,7 @@ export default function BasIssueActions({ workspace, finding, decisionView, stat
       <h4 ref={formHeading} tabIndex={-1}>{labels[draft.request.action.kind]} · {draft.label}</h4>
       {stale && <p role="alert">The finding inputs or issue history changed. Your draft is retained; discard it and review the current evidence before recording.</p>}
       {draft.request.action.kind === 'record_not_reported' && <p>The original observation will be replayed and compared with current inputs. Absence can reflect removal or exclusion; it does not prove a physical correction.</p>}
-      <fieldset disabled={busy || stale}>
+      <fieldset disabled={busy || stale || !active}>
         <label>Reviewer (self-declared)<input aria-label="Reviewer (self-declared)" required maxLength={256} value={draft.request.reviewer}
           onChange={e => change({ issueDraft: { ...draft, request: { ...draft.request, reviewer: e.target.value } } })} /></label>
         <label>Issue decision reason<textarea aria-label="Issue decision reason" required maxLength={4096} value={draft.request.reason}

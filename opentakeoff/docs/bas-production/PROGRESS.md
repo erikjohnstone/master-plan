@@ -1,5 +1,39 @@
 # BAS production workflow progress
 
+## Exact SOO issue routes and source-accounting inspection — 2026-09-10
+
+After **c0a3ac8e**, corrected the reproduced general-workspace-only SOO route.
+Clauses, region boundaries, matrix comparisons and source pages now resolve by
+exact retained identity; no title matching or cross-capture substitution. Drafts
+and original-citation return survive. Historical action contexts are read-only,
+and new page routes reset stale display filters. Added an internal 50-row source
+accounting reader over the unchanged shared discovery partition. It does not
+record coverage/applicability decisions, waive issues or grant approval.
+
+**Final web 67500 exit 0:** types/lint/tests/bench/build, **2,825 pass / 13 existing
+skips / zero failures**, tests 20.798 s, build 5.48 s. Same three canvas warnings,
+four disclosed legacy One-Click known-fails and bundle/Agent-key notices. Full
+log `tmp/bas-issue-routes-web-final2.log`. **MCP 46682 exit 0:** typecheck and ten
+issue/transport/project-review tests, including actual registered tool and shared
+compile/restoration parity. Python and all shared extraction/math/MCP production
+source are unchanged; no new full Python/corpus/holdout run is claimed.
+
+**Final actual browser 97898 exit 0:** ordinary original PDF/upload/import,
+keyboard exact later-page clause, preserved draft, original M-512 bbox, real
+form-created comparison, exact page accounting, both themes/three widths,
+unfiltered export and durable reload. Zero browser errors; route times
+**1,022–1,047 ms**, within the existing 10 s public-operation budget. All final
+screenshots inspected. Run 1's premature source screenshot was rejected as visual
+proof; render-wait and spacing corrected, then runs 2/3 verified. Reproduction,
+limits and research: `ISSUE_ROUTE_PROOF.md`, `evidence/issue-routes-browser-3`.
+
+**Next main-goal work:** actual source-bound coverage/applicability review and
+deliverable exclusions, selective dependency-bound approvals, positive approved
+snapshot/source-inclusive export/recovery, remaining A–D acceptance and final
+applicable corpus/untouched-holdout gates. The reader is not a substitute for
+these decisions. The appended deep symbol/installed-plan phase remains last.
+Goal active; no blocker, production-completion claim, push, merge or deployment.
+
 ## Public issue decisions, corrective routes and durable replay — 2026-09-10
 
 After **f70eda16**, connected the shared journal to the existing Review & changes

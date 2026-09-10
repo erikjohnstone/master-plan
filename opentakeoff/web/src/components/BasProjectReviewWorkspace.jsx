@@ -79,6 +79,7 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
       <label>Severity<select aria-label="Severity" value={state.severity || ''} onChange={e => change({ severity: e.target.value, page: 0 })}><option value="">All findings</option><option value="blocker">Blocker</option><option value="warning">Warning</option><option value="information">Information</option></select></label>
     </div>}
     {sourceError && <p role="alert">{sourceError}</p>}
+    {state.routeNotice && <p role="status">{state.routeNotice}</p>}
     {state.history ? <BasIssueHistory workflow={workflow} workspace={workspace} state={state} onStateChange={onStateChange}
       onRecord={onIssueReview} onSource={source} onOpenDomain={onOpenDomain} /> : selected ? <section className="bas-review-detail" aria-label="Selected BAS finding">
       <button type="button" onClick={() => { returnFocus.current = selected.occurrence_id; change({ selectedId: null }); }}>← Back to findings</button>
