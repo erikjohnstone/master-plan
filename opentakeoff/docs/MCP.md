@@ -108,10 +108,22 @@ See [the engineering input and evidence contract](bas-production/ENGINEERING_COM
 replays saved engineering history and writes the same non-commercial workbook
 as the browser. It retains source locations, original inputs, exclusions and
 stale/superseded decisions without approving them. The inline annotation payload
-is unchanged. Use either `path` for JSON or `engineering_workbook_path` for XLSX
-in one call, not both. Existing XLSX files require `overwrite: true`; no ZIP
+is unchanged. Use only one output path per call. Existing XLSX files require `overwrite: true`; no ZIP
 signature is accepted as proof of ownership. Keep the JSON archive and source
 PDFs for reimport. See [the export contract](bas-production/ENGINEERING_EXPORT_CONTRACT.md).
+
+Alternatively, `export_takeoff {evidence_bundle_path: "/path/project.otbas.zip"}`
+creates an unapproved evidence backup containing exact saved JSON and every
+physical PDF version in BAS history. Missing historical originals can be supplied
+in `original_pdf_paths`; hashes/lengths establish identity. Existing ZIP files
+require `overwrite: true`; staging/cancellation/collisions preserve old outputs.
+`import_takeoff {path: "/path/project.otbas.zip", verify_evidence_bundle: true}`
+verifies all archive entries and original digests without loading, merging or
+restoring anything. No plan is required. The optional `bas_evidence_bundle`
+receipt explicitly reports `restored: false`, `source_byte_verification:
+"verified_now"` and `calculation_verification: "not_python_replayed"`. These
+unencrypted, unsigned archives do not grant approval or certify source completeness.
+See [format and bounded acceptance](bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
 
 For the development project review queue, add `bas_project_review: {capture_id}`
 to `compile_corpus_takeoff` with `kind: "bas_points"`. It shares the browser's

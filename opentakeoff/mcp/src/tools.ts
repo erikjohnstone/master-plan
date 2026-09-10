@@ -42,6 +42,8 @@ import { basEngineeringWorkbook } from '../../web/src/lib/basEngineeringExport.t
 import { canonicalBasJson } from '../../web/src/lib/basCanonical.ts';
 import { inspectBasEngineering } from './basEngineeringReview.ts';
 import { writeEngineeringWorkbook } from './engineeringWorkbookFile.ts';
+import { exportBasEvidenceBundle, inspectBasEvidenceBundleFile } from './basEvidenceBundleFile.ts';
+import { basename } from 'node:path';
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -375,15 +377,19 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }, run("takeoff_summary", () => session.summary()));
 
   server.registerTool("export_takeoff", {
-    description: `The full "opentakeoff.takeoff_canvas.v1" annotations payload — exactly what the app autosaves, importable by it. Includes retained bas_workflow point-evidence captures when present; these are not approved takeoffs and do not contain source PDF bytes. Returned inline; pass path to also write it to disk as JSON. Alternatively, engineering_workbook_path writes a readable XLSX of saved engineering checks, exact inputs, constraints, exclusions, source locations and history after shared Python replay. It is not a live calculator, installed count or approved release. Drafts are excluded. Keep the JSON archive and original PDFs for reimport. Use only one output path per call; existing XLSX files always require overwrite:true. ${COORDS}`,
+    description: `The full "opentakeoff.takeoff_canvas.v1" annotations payload — exactly what the app autosaves, importable by it. Includes retained bas_workflow point-evidence captures when present; these are not approved takeoffs and do not contain source PDF bytes. Returned inline; pass path to also write it to disk as JSON. Alternatively, engineering_workbook_path writes a readable XLSX of saved engineering checks, exact inputs, constraints, exclusions, source locations and history after shared Python replay. It is not a live calculator, installed count or approved release. Drafts are excluded. Keep the JSON archive and original PDFs for reimport. Use only one output path per call; existing XLSX files always require overwrite:true. ${COORDS} Evidence bundle alternative: evidence_bundle_path writes a deterministic .otbas.zip with exact takeoff JSON plus every physical original in saved BAS history. Supply missing historical files explicitly in original_pdf_paths. This is unapproved, unsigned, and not calculation replay. Existing ZIP always requires overwrite:true.`,
     inputSchema: {
       path: z.string().optional().describe("File path to write the payload to"),
       engineering_workbook_path: z.string().min(1).optional().describe('Alternative output path for a saved engineering review .xlsx; mutually exclusive with path. Requires saved BAS engineering history and shared Python replay.'),
+      evidence_bundle_path: z.string().min(1).optional().describe('Alternative .otbas.zip output: exact saved takeoff JSON and every original PDF in BAS history. Unapproved backup, no calculation replay. Existing ZIP requires overwrite:true.'),
+      original_pdf_paths: z.array(z.string().min(1)).max(10000).optional().describe('Only with evidence_bundle_path: explicit paths to unavailable historical originals. Matched by SHA-256 and length, never filename.'),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: exportTakeoffOutput,
-  }, run("export_takeoff", async ({ path: outPath, engineering_workbook_path: workbookPath, overwrite }) => {
-    if (outPath !== undefined && workbookPath !== undefined) throw new UserError('Use either path for JSON or engineering_workbook_path for XLSX, not both. No file was written.');
+  }, run("export_takeoff", async ({ path: outPath, engineering_workbook_path: workbookPath, evidence_bundle_path: bundlePath, original_pdf_paths: originalPaths, overwrite }) => {
+    if ([outPath, workbookPath, bundlePath].filter(p => p !== undefined).length > 1) throw new UserError('Use only one output path: path, engineering_workbook_path, or evidence_bundle_path. No file was written.');
+    if (originalPaths !== undefined && bundlePath === undefined) throw new UserError('original_pdf_paths requires evidence_bundle_path. No file was written.');
+    if (bundlePath) return exportBasEvidenceBundle(session, bundlePath, originalPaths || [], overwrite);
     // Freeze the asynchronous workbook's source snapshot; exportPayload carries
     // live annotation arrays. Keep ordinary JSON behavior unchanged.
     const payload = workbookPath ? structuredClone(session.exportPayload()) : session.exportPayload();
@@ -453,12 +459,20 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }));
 
   server.registerTool("import_takeoff", {
-    description: `The way BACK IN (#151): load an "opentakeoff.takeoff_canvas.v1" file — a prior export_takeoff, or the app's own save — into this session, through the SAME tested merge rules as the app's Sheet-menu import: finish-tag identity joins imported conditions onto this session's own (their knobs win), new ids append, duplicate ids skip (re-import is idempotent), and THIS session's calibration wins per sheet. An empty session adopts the file wholesale. Resume yesterday's work, extend a takeoff a human already reviewed (their ink stays ink — reviewed shapes arrive untouchable by agent verbs), or audit someone else's export with list_shapes/takeoff_summary. Requires a loaded plan; shapes referencing OTHER files ride along and count in totals but can't be viewed against this document — the reply's unknown_files names them. Approval marks ride the file too — transport, not minting: an estimator seal arriving by import stays estimator ink, listable but untouchable here. undo_last removes the imported SHAPES as one step; adopted conditions, scales, annotations, and approval marks stay.`,
+    description: `The way BACK IN (#151): load an "opentakeoff.takeoff_canvas.v1" file — a prior export_takeoff, or the app's own save — into this session, through the SAME tested merge rules as the app's Sheet-menu import: finish-tag identity joins imported conditions onto this session's own (their knobs win), new ids append, duplicate ids skip (re-import is idempotent), and THIS session's calibration wins per sheet. An empty session adopts the file wholesale. Resume yesterday's work, extend a takeoff a human already reviewed (their ink stays ink — reviewed shapes arrive untouchable by agent verbs), or audit someone else's export with list_shapes/takeoff_summary. Requires a loaded plan; shapes referencing OTHER files ride along and count in totals but can't be viewed against this document — the reply's unknown_files names them. Approval marks ride the file too — transport, not minting: an estimator seal arriving by import stays estimator ink, listable but untouchable here. undo_last removes the imported SHAPES as one step; adopted conditions, scales, annotations, and approval marks stay. Alternatively, verify_evidence_bundle:true performs read-only .otbas.zip preflight without requiring a loaded plan. It verifies archive integrity, all original bytes and saved source ownership, not calculations or approval. Nothing is imported or restored; the optional bas_evidence_bundle receipt explicitly says restored:false.`,
     inputSchema: {
       path: z.string().describe("Path to a takeoff_canvas.v1 JSON file on disk"),
+      verify_evidence_bundle: z.boolean().optional().describe('Read-only preflight of a .otbas.zip instead of JSON import. Verifies every PDF hash, archive structure and saved source ownership; does not restore, merge, replay calculations or approve anything. No loaded plan is required.'),
     },
     outputSchema: importTakeoffOutput,
-  }, run("import_takeoff", (a) => importTakeoff(session, a.path)));
+  }, run("import_takeoff", async (a) => {
+    if (!a.verify_evidence_bundle) return importTakeoff(session, a.path);
+    const inspection = await inspectBasEvidenceBundleFile(a.path);
+    return { file: basename(a.path), replaced: false, shapes_added: 0, shapes_pending: 0, conditions_merged: 0,
+      conditions_added: 0, scales_adopted: 0, unknown_files: [], rules_imported: 0, shapes_total: session.shapes.length,
+      bas_evidence_bundle: inspection,
+      note: 'Verified unapproved evidence backup only. Nothing was imported or restored; no merge, calculation replay, source-set review or approval was performed.' };
+  }));
 
   server.registerTool("apply_rules", {
     description: `Re-run the correction rules the takeoff arrived with (#207) — the lessons an estimator TAUGHT the canvas (#88): "every room like this loses the mechanical chase." A rule is a deterministic predicate (enclosed linework islands under a size cap, inside the rule's condition's rooms), never a re-prompt. Evaluation is the same pure rules.ts engine the canvas Preview runs; the commit is the one batch the canvas's Apply makes — ONE journal entry, undo_last takes the whole batch back. Everything lands reviewed: false (this server has no review gate), and the reply's per-rule disclosure — what each rule produced, what was skipped, with ids — IS your preview: read it, then view_sheet overlay:true. Idempotent by construction: any candidate an existing deduct already covers is dropped by the engine, so re-running after new rooms commit is the intended workflow and never double-deducts. Rules arrive ONLY via import_takeoff (minting a new rule is an estimator's correction and stays behind the canvas's human Preview→Apply gate); with none imported this refuses. Pass sheet to scan one sheet; omit it to scan every sheet holding the rules' rooms. Uncalibrated and scanned-raster sheets come back in skipped_sheets, named.`,

@@ -1,5 +1,43 @@
 # BAS production workflow progress
 
+## Source-inclusive unapproved backup — 2026-09-10
+
+After **81e55b2e**, shared `bas_evidence_bundle_v1` archives now include exact
+saved takeoff JSON and all historical original PDFs. Browser Original PDFs and
+existing MCP export/import tools create and verify this same strict stored-ZIP
+format. Digests/lengths/ownership, header consistency and stale/cancelled writes
+are checked; missing originals block export. This is an E prerequisite, not
+revision/release completion. No extraction, VectorGrid, arithmetic or existing
+workflow schema changes. Detailed scope and proof: `EVIDENCE_BUNDLE_PROOF.md`.
+
+Final full web **1355 exit 0: 2,697 pass / 13 existing skips / 0 fail**;
+types/lint/bench/build pass (5.75 s build). Full BAS MCP **16081: 95 pass**, plus
+types, packaging **4 pass**, all 50 tool names current. Actual Fort Sam browser
+**22305 exit 0**: download/verification, exact shared bytes and saved history,
+MCP-produced archive verification, cancelled operation, concurrent saved-state
+change and corrupt archive refusal; 2.283 s export, zero page errors. Six final
+1280/1440/1920 light/dark screenshots inspected. Built public MCP **45611**
+also passed source/history parity, inspection without a loaded plan and unchanged
+session/ordinary JSON behavior. Full payload IDs differ with legitimate legacy
+surface fields; do not misstate complete UI/MCP payload equality.
+
+Controlled capacity tests pass: 165.6 MB single source and 551.1 MB multi-source
+Node archives; the same 551.1 MB browser Blob strategy, with measured local
+runtime/memory. They do not parse real PDFs or establish installed-count accuracy.
+No holdout content/keys accessed. These backups are unencrypted, unsigned and
+not Python replay or approval. Automatic full-project ZIP restore, archived-source
+reopening, page correspondence, journaled revision decisions, scoped approval and
+atomic approved snapshot sealing remain next. Finish original A–E and final
+corpus/holdout gates before the appended symbol/installed-plan phase. Historical
+corpus scores and 23 old-path errors remain unresolved; no new full-corpus pass.
+No push, merge, deployment or new model.
+
+Latest same-size historical lookup regression: full BAS **72396 exit 0,
+95 pass / 0 fail/skip**, 12.264 s. Final built MCP **38156 exit 0** repeats
+cross-surface archive ownership/state parity, export 3.067 s. One-Click cross
+probes remain 16/zero disagreements, IoU floor 0.994/mean 0.999, with nine
+single-resolution cases outside the cross-check. These are not full corpus gates.
+
 ## Original PDF retention — 2026-09-10
 
 After **3eddc21f**, **Review & changes → Original PDFs** now explicitly retains,

@@ -1,5 +1,30 @@
 ## Active work
 
+2026-09-10 checkpoint after **81e55b2e**: source-inclusive unapproved evidence ZIP
+backup now has one shared canonical/ownership/hash/container implementation,
+actual browser download/verification and additive MCP export/read-only preflight.
+Every historical original is required; cancellation, stale state, corrupt bytes
+and output collisions cannot publish a successful backup or approve a takeoff.
+Final full web **1355: 2,697 pass / 13 existing skips**, types/lint/bench/build
+pass. Full BAS MCP **16081: 95 pass**, packaging **4 pass**, tool names 50/current.
+Final real Fort Sam UI **22305 exit 0**, zero errors, exact history/original bytes,
+cross-surface archive reading and controlled cancellation/concurrent-save checks;
+six final screenshots inspected. Built MCP **45611** passes exact shared output
+and source/history parity. Controlled 551.1 MB Node and browser transports pass
+predeclared local resource budgets; not PDF interpretation/installed-count proof.
+See `../opentakeoff/docs/bas-production/EVIDENCE_BUNDLE_PROOF.md`.
+No VectorGrid/math/key changes or holdout content access. Main BAS goal remains
+active: automatic bundle restore/source reopening, revision correspondence and
+journal, scoped approvals/atomic snapshot seal, then remaining corpus/holdout
+acceptance; only then appended symbol/installed-plan research. Historical corpus
+metrics and 23 old-path errors below are not replaced by these transport gates.
+No push, merge or deployment.
+
+Latest backup gate: full BAS **72396 exit 0**, 95 pass/0 fail/skip, 12.264 s;
+final built MCP **38156 exit 0**, exact source/history/ownership and preserved
+state. Existing One-Click 16 cross probes/0 disagreements, pair-IoU floor .994
+and mean .999; nine single-resolution cases not cross-checked. Not corpus scores.
+
 2026-09-10 checkpoint after **3eddc21f**: explicit browser-local original PDF
 retention/verification/download now uses shared ownership/digest validation and
 project-scoped per-source transactions. Sources survive ordinary filename/revision

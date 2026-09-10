@@ -16,6 +16,7 @@ import { basAssemblySummarySchema } from '../../web/src/lib/basAssemblyReview.ts
 import { basAssemblyCalculationSchema } from '../../web/src/lib/basAssemblyQuantityContract.ts';
 import { basEngineeringSummarySchema } from '../../web/src/lib/basEngineeringReview.ts';
 import { basProjectReviewSchema } from '../../web/src/lib/basProjectReview.ts';
+import { basEvidenceBundleInspectionSchema } from '../../web/src/lib/basEvidenceBundle.ts';
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -661,6 +662,7 @@ export const exportTakeoffOutput = {
 
 /** import_takeoff (#151) — the merge receipt, field-identical to the app's. */
 export const importTakeoffOutput = {
+  bas_evidence_bundle: basEvidenceBundleInspectionSchema.optional().describe('Present only for explicit read-only evidence-bundle preflight; nothing was imported.'),
   file: z.string().describe("Basename of the imported file"),
   replaced: z.boolean().describe("true = the session was empty and adopted the file wholesale"),
   shapes_added: z.number().int(),

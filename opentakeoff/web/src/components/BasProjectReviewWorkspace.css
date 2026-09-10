@@ -13,5 +13,9 @@
 .bas-review-facts dd { margin: 0; }
 .bas-review-detail h3 { text-transform: capitalize; }
 .bas-source-actions { display: flex; flex-direction: column; align-items: stretch; gap: var(--sp-2); }
+.bas-bundle-actions { margin: 0 0 16px; padding: 14px 16px; border: 1px solid var(--ink-faint); }
+.bas-bundle-actions h3 { margin: 0 0 8px; }
+.bas-bundle-actions p { margin: 8px 0; overflow-wrap: anywhere; }
+.bas-bundle-actions .bas-source-actions { flex-direction: row; flex-wrap: wrap; }
 .bas-source-heading button, .bas-review-actions button { margin-left: 0; }
 .bas-review-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-left: auto; }

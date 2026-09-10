@@ -9,6 +9,17 @@ geometry: the server imports `web/src/lib/{oneclick,sheets,geometry,totals}` dir
 you flood over stdio measures the same square footage as the same click on the canvas. There is
 no second implementation to drift.
 
+Development BAS evidence backup: `export_takeoff` accepts
+`evidence_bundle_path: "/path/project.otbas.zip"`, mutually exclusive with JSON
+`path` and `engineering_workbook_path`. It includes every physical original in
+saved BAS history; use `original_pdf_paths` for unavailable historical files.
+Matching is by SHA-256 and byte length, not filename. Existing ZIP files require
+explicit `overwrite: true`. `import_takeoff {path: "/path/project.otbas.zip",
+verify_evidence_bundle: true}` performs read-only preflight even without a loaded
+plan. Its receipt says `restored: false`: no merge, Python replay or approval.
+Do not describe these unencrypted, unsigned backups as approved releases or claim
+that ZIP restoration is implemented. Ordinary JSON import/export is unchanged.
+
 **Contents**
 
 1. [Connect in 60 seconds](#1-connect-in-60-seconds)

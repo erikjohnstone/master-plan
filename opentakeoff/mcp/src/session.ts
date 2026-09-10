@@ -977,6 +977,12 @@ export class Session {
     return [...this.docs.keys()];
   }
 
+  /** Transport only. Caller uses shared ownership/hash validation before export. */
+  async basOriginalBytes(sha256: string): Promise<Uint8Array | null> {
+    const loaded = [...this.docs.values()].find(({ doc }) => doc.sourceSha256 === sha256);
+    return loaded ? loaded.doc.originalBytes() : null;
+  }
+
   /** Shared text-only BAS evidence seam. Does not build or modify the graph,
    * invoke OCR/geometry, or alter existing schedule/symbol output. Reading
    * loaded bytes' identity avoids a path changing underneath an open session.

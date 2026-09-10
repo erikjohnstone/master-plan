@@ -42,6 +42,20 @@ is a complete evidence archive. Retention does not change findings, calculations
 approvals or the current drawing set. Storage failures do not delete old evidence
 to make room. No approved snapshot is created by these actions.
 
+**Download evidence bundle** packages the saved takeoff JSON with all original
+PDF versions referenced by BAS history—including old captures—in one `.otbas.zip`.
+Keep it outside browser storage. Missing or mismatched originals stop the download;
+no partial archive is offered. Unsaved changes are not included. A saved workspace
+change during export requires retry. **Cancel backup operation** stops publication.
+**Verify evidence bundle** checks the selected archive, every PDF digest and saved
+source ownership without changing the workspace. It does not replay calculations,
+approve a takeoff or automatically restore a project. ZIP utilities can extract
+`takeoff.json` and digest-named `sources/*.pdf` for manual reopening/import; legacy
+filename-bound annotations may need the original name listed in `manifest.json`.
+Do not overwrite a newer namesake without explicitly selecting the intended version.
+Archives are unencrypted and unsigned—store/share them as project-confidential data.
+Supported limits and current proof: [evidence bundle contract](bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
+
 On the development branch, **Takeoff → Equipment** displays original equipment
 schedule rows and a separate **Scoped equipment register**. **Create scope**
 records established building, level, system and phase labels; leave missing

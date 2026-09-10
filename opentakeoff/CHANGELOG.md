@@ -12,6 +12,15 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add source-inclusive, unapproved evidence ZIP backup and read-only verification
+  in **Review & changes → Original PDFs** and existing MCP export/import tools.
+  Shared canonical manifests, exact JSON, all historical originals, strict ZIP
+  structure/CRC/hash/ownership validation; no calculation replay or approval.
+  Browser publication checks saved-state freshness; Node output is staged and
+  requires explicit overwrite for existing ZIP. Ordinary extraction, math,
+  workflow schemas and JSON behavior remain unchanged. Automatic full-project
+  restore and approved snapshots are still under development.
+
 - Add **Review & changes → Original PDFs** for explicit browser-local source
   retention, byte verification and exact original downloads. Shared ownership
   and digest checks reject corrupt/foreign evidence; the IDB write compares the

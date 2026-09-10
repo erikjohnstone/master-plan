@@ -1,0 +1,24 @@
+
+> opentakeoff-mcp@0.9.72 test:packaging
+> npm run build && node --import tsx --test test/vectorGridPackaging.test.mjs test/proofEquality.test.ts
+
+
+> opentakeoff-mcp@0.9.72 build
+> esbuild server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server-core.js && node scripts/finish-build.mjs
+
+
+  dist/server-core.js  1.7mb ⚠️
+
+⚡ Done in 96ms
+✔ large evidence mismatch remains a failed exact assertion with bounded diagnostics (11.488583ms)
+✔ source-run VectorGrid resolves the original runtime without changing its location (0.49525ms)
+✔ shipped VectorGrid runtime includes byte-identical dependencies and resolves outside the checkout (8.894583ms)
+✔ a missing packaged asset cannot fall back into an unrelated source checkout (0.55025ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 173.728958

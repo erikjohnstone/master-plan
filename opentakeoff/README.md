@@ -112,6 +112,13 @@ project, surviving ordinary PDF removal. Copies are not synced; keep an external
 backup and the takeoff JSON. This does not clear findings, select a revised drawing
 set, approve takeoffs or implement revision release.
 
+The development **Original PDFs** view also downloads and verifies an **unapproved
+evidence bundle**: one `.otbas.zip` containing saved takeoff JSON and every
+historical original, named by digest. Browser and MCP use the same archive and
+ownership checks. Missing or changed bytes block export. Verification is read-only,
+not calculation replay or approval; full-project ZIP restoration remains unfinished.
+See [format, limits and acceptance](docs/bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
+
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
 **Takeoff · Edit · ⋯** controls at the upper right. **Schedules**

@@ -5,6 +5,7 @@ import { basSourceInventory } from '../lib/basSourceRetention.ts';
 import { findBasOriginal } from '../lib/basSourceBrowser.js';
 import { store } from '../lib/store.js';
 import { downloadText } from '../lib/totals.js';
+import BasEvidenceBundleActions from './BasEvidenceBundleActions.jsx';
 
 export default function BasOriginalSources({ workflow, onBack }) {
   const [view, setView] = useState({ input: null, rows: [], error: '' });
@@ -45,6 +46,7 @@ export default function BasOriginalSources({ workflow, onBack }) {
     <div className="bas-point-heading bas-source-heading"><button type="button" onClick={onBack}>← Back to findings</button><h2 ref={heading} tabIndex={-1}>Original PDFs</h2></div>
     <p className="bas-review-boundary">All physical versions referenced by saved BAS history—not a reviewed current drawing set or an approved takeoff.</p>
     <p className="bas-review-boundary">Retain one original at a time in this browser project. Retained copies survive closing a PDF, but browser storage can be cleared or evicted and is not synced. Download originals for external backup; keep the takeoff JSON too. Verification here does not clear review findings.</p>
+    <BasEvidenceBundleActions workflow={workflow} adapter={adapter} busy={busy} onBusy={setBusy} />
     {view.input !== workflow ? <p role="status">Checking saved source ownership…</p> : view.error ? <p role="alert">{view.error}</p> :
       <div className="bas-point-grid bas-review-grid" tabIndex={0} role="region" aria-label="Saved original source versions">
         <table aria-label="Original PDF versions"><thead><tr><th scope="col">Original names &amp; identity</th><th scope="col">Saved evidence</th><th scope="col">Local retention</th><th scope="col">Actions</th></tr></thead><tbody>
