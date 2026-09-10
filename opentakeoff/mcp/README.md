@@ -211,6 +211,11 @@ evidence follows recorded headers, with original values and boxes unchanged.
 Save the findings with the existing optional compile JSON `path`; retain ordinary
 evidence JSON plus original PDFs separately. Revision/release work is unfinished.
 
+Imports/exports preserve the additive internal `bas_issues_9` decision journal.
+Journal hashes and lineage alone are not proof of a finding or its disappearance;
+selected observations require shared replay. No new public issue-action verb or
+approval is exposed in this checkpoint; the tool count remains 51.
+
 ### Drawing correspondence
 
 Requirement/quantity comparison uses the same tool with

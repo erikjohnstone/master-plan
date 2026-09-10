@@ -168,6 +168,11 @@ their older rule/IDs and are not silently promoted to the current schema.
 See [review and revision acceptance](bas-production/REVIEW_REVISION_CONTRACT.md)
 for the remaining approval/source-retention work.
 
+The additive internal `bas_issues_9` journal survives normal import/export and
+older BAS writes. A retained acknowledgement is neither a waiver nor approval;
+its finding and any recorded absence must be replayed against pinned inputs.
+Public issue-action commands and approved snapshots remain in development.
+
 To inspect a historical citation, call `view_sheet` with its saved BAS `page_id`
 as `sheet` and optional `original_pdf_path` for missing original bytes. This
 isolated read-only mode verifies source ownership, hash, page count and saved

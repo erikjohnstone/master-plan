@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { basEngineeringInputSchema, basEngineeringResultSchema, basEngineeringBasisSchema,
   type BasEngineeringCheck, type BasEngineeringBasis } from './basEngineeringContract.ts';
-import { validateBasEquipmentRegister, type BasEquipmentRegister } from './basEquipmentRegister.ts';
+import { validateBasEquipmentRegister, basEquipmentRegisterSchema, type BasEquipmentRegister } from './basEquipmentRegister.ts';
 import { validateBasAssemblyRegister, type BasAssemblyRegister } from './basAssemblyRegister.ts';
 import type { BasCapture } from './basWorkflow.ts';
 
@@ -95,75 +95,90 @@ export function basEngineeringRatingBases(check: BasEngineeringCheck): Array<{ i
  * quote/identity ownership, not whether a user interpreted a rating correctly. */
 export async function validateBasEngineeringRegister(capture: BasCapture, equipment: BasEquipmentRegister,
   assembly: BasAssemblyRegister | null, raw: unknown) {
+  return (await prepareBasEngineeringRegisterValidator(capture, equipment, assembly))(raw);
+}
+
+/** Internal batch seam. The workflow verifier may reuse this validator only
+ * for the exact already-owned capture/equipment/assembly heads within one
+ * operation. Every engineering register still runs every check below. */
+export async function prepareBasEngineeringRegisterValidator(capture: BasCapture, equipment: BasEquipmentRegister,
+  assembly: BasAssemblyRegister | null) {
   if (!capture.narrative_sources || !capture.equipment_sources) throw new Error('Engineering review requires retained equipment and text sources');
-  const equipmentView = await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, equipment);
   const assemblyView = assembly ? await validateBasAssemblyRegister(capture.narrative_sources, capture.equipment_sources, capture.points, equipment, assembly) : null;
-  const register = basEngineeringRegisterSchema.parse(raw);
+  // Assembly validation already calls the same equipment ownership validator.
+  // Its equipment issues and the schema-owned register contain precisely the
+  // prerequisite fields consumed here; do not repeat source interpretation.
+  const equipmentView = assemblyView ? { register: basEquipmentRegisterSchema.parse(equipment), issues: assemblyView.equipment_issues }
+    : await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, equipment);
   const members = new Map(equipmentView.register.equipment.map(e => [e.equipment_id, e]));
   const scopes = new Set(equipmentView.register.scopes.map(s => s.scope_id));
   const components = new Map(assemblyView?.components.map(c => [c.record.component_id, c]) ?? []);
+  const equipmentIssues = equipmentView.issues;
   const sourceSpans = new Map(capture.narrative_sources.pages.flatMap(page => page.spans.map(span => [span.span_id, { ...span, page_id: page.page_id }] as const)));
-  const unique = (ids: string[], what: string) => { if (new Set(ids).size !== ids.length) throw new Error(`Duplicate engineering ${what}`); };
-  const ownsSpans = (ids: string[]) => {
-    unique(ids, 'source span');
-    return ids.map(id => { const span = sourceSpans.get(id); if (!span) throw new Error('Engineering declaration refers to a foreign source span'); return span; });
+  return (raw: unknown) => {
+    const register = basEngineeringRegisterSchema.parse(raw);
+    const unique = (ids: string[], what: string) => { if (new Set(ids).size !== ids.length) throw new Error(`Duplicate engineering ${what}`); };
+    const ownsSpans = (ids: string[]) => {
+      unique(ids, 'source span');
+      return ids.map(id => { const span = sourceSpans.get(id); if (!span) throw new Error('Engineering declaration refers to a foreign source span'); return span; });
+    };
+    unique(register.resources.map(r => r.resource_id), 'resource identity');
+    unique(register.targets.map(t => t.check_id), 'target');
+    unique(register.input.checks.map(c => c.check_id), 'check');
+    const issues: Array<{ code: string; resource_id?: string; check_id?: string }> = [];
+    const resources = new Map(register.resources.map(r => [r.resource_id, r]));
+    const targets = new Map(register.targets.map(t => [t.check_id, t]));
+    const checks = new Map(register.input.checks.map(c => [c.check_id, c]));
+    for (const resource of register.resources) {
+      if (members.get(resource.equipment_id)?.scope_id !== resource.scope_id) throw new Error('Engineering resource must belong to registered equipment in its actual scope');
+      unique(resource.roles, 'resource role'); ownsSpans(resource.source_span_ids);
+      if (resource.component_id !== null) {
+        const component = components.get(resource.component_id);
+        if (!component || component.record.scope_id !== resource.scope_id || !component.record.equipment_ids.includes(resource.equipment_id))
+          throw new Error('Engineering resource refers to an unowned assembly component');
+        if (!component.included_equipment_ids.includes(resource.equipment_id) || component.record.disposition === 'excluded')
+          issues.push({ code: 'engineering_component_excluded', resource_id: resource.resource_id });
+        if (component.record.condition.status === 'unresolved' || component.record.condition.status === 'not_satisfied')
+          issues.push({ code: 'engineering_component_condition_not_established', resource_id: resource.resource_id });
+        if (component.record.lifecycle === 'unknown') issues.push({ code: 'engineering_component_lifecycle_unknown', resource_id: resource.resource_id });
+      }
+    }
+    if (targets.size !== checks.size || [...targets.keys()].some(id => !checks.has(id))) throw new Error('Every engineering check requires exactly one owned target');
+    const rating_sources = [];
+    for (const check of register.input.checks) {
+      unique(check.equipment_ids, 'check equipment');
+      if (check.equipment_ids.some(id => !members.has(id))) throw new Error('Engineering check refers to unregistered equipment');
+      const target = targets.get(check.check_id)!;
+      unique(target.resource_ids, 'selected resource'); ownsSpans(target.source_span_ids);
+      const selectedOwners = new Set<string>();
+      for (const id of target.resource_ids) {
+        const resource = resources.get(id);
+        if (!resource || !check.equipment_ids.includes(resource.equipment_id)) throw new Error('Engineering target includes an unowned resource');
+        selectedOwners.add(resource.equipment_id);
+      }
+      if (check.equipment_ids.some(id => !selectedOwners.has(id))) throw new Error('Engineering equipment selection has no declared target resource');
+      if (check.kind === 'mechanical' && !target.resource_ids.some(id => resources.get(id)!.roles.includes('mechanical_subject')))
+        throw new Error('Mechanical comparison requires an explicitly owned subject');
+      for (const ref of basEngineeringReferences(check)) {
+        const resource = resources.get(ref.resource_id);
+        if (!resource || !target.resource_ids.includes(ref.resource_id) || !resource.roles.includes(ref.role)
+          || (ref.equipment_id !== undefined && resource.equipment_id !== ref.equipment_id)
+          || (ref.scope_id !== undefined && resource.scope_id !== ref.scope_id)) throw new Error(`Engineering resource ownership mismatch at ${ref.input_path}`);
+      }
+      const allowedScopes = check.kind === 'allocation' ? check.channels.map(c => c.allowed_scope_ids)
+        : check.kind === 'serial_network' || check.kind === 'ip_network' ? [check.allowed_scope_ids] : [];
+      if (allowedScopes.some(s => s?.value.some(id => !scopes.has(id)))) throw new Error('Engineering allocation names an unregistered scope');
+      for (const rating of basEngineeringRatingBases(check)) {
+        const owned = ownsSpans(rating.basis.source_span_ids);
+        if (owned.length && rating.basis.original_text !== null && rating.basis.original_text !== owned.map(s => s.text).join('\n'))
+          throw new Error('Engineering original wording differs from its retained source spans');
+        rating_sources.push({ check_id: check.check_id, ...rating, source_spans: owned });
+      }
+      if (target.disposition === 'excluded') issues.push({ code: 'engineering_check_explicitly_excluded', check_id: check.check_id });
+    }
+    const selected = new Set(register.targets.flatMap(t => t.resource_ids));
+    for (const resource of register.resources) if (!selected.has(resource.resource_id)) issues.push({ code: 'engineering_resource_not_used', resource_id: resource.resource_id });
+    return { register, rating_sources, issues, equipment_issues: equipmentIssues,
+      project_complete: false as const, installed_quantity: null, validation_scope: 'source_and_resource_ownership_not_engineering_math' as const };
   };
-  unique(register.resources.map(r => r.resource_id), 'resource identity');
-  unique(register.targets.map(t => t.check_id), 'target');
-  unique(register.input.checks.map(c => c.check_id), 'check');
-  const issues: Array<{ code: string; resource_id?: string; check_id?: string }> = [];
-  const resources = new Map(register.resources.map(r => [r.resource_id, r]));
-  const targets = new Map(register.targets.map(t => [t.check_id, t]));
-  const checks = new Map(register.input.checks.map(c => [c.check_id, c]));
-  for (const resource of register.resources) {
-    if (members.get(resource.equipment_id)?.scope_id !== resource.scope_id) throw new Error('Engineering resource must belong to registered equipment in its actual scope');
-    unique(resource.roles, 'resource role'); ownsSpans(resource.source_span_ids);
-    if (resource.component_id !== null) {
-      const component = components.get(resource.component_id);
-      if (!component || component.record.scope_id !== resource.scope_id || !component.record.equipment_ids.includes(resource.equipment_id))
-        throw new Error('Engineering resource refers to an unowned assembly component');
-      if (!component.included_equipment_ids.includes(resource.equipment_id) || component.record.disposition === 'excluded')
-        issues.push({ code: 'engineering_component_excluded', resource_id: resource.resource_id });
-      if (component.record.condition.status === 'unresolved' || component.record.condition.status === 'not_satisfied')
-        issues.push({ code: 'engineering_component_condition_not_established', resource_id: resource.resource_id });
-      if (component.record.lifecycle === 'unknown') issues.push({ code: 'engineering_component_lifecycle_unknown', resource_id: resource.resource_id });
-    }
-  }
-  if (targets.size !== checks.size || [...targets.keys()].some(id => !checks.has(id))) throw new Error('Every engineering check requires exactly one owned target');
-  const rating_sources = [];
-  for (const check of register.input.checks) {
-    unique(check.equipment_ids, 'check equipment');
-    if (check.equipment_ids.some(id => !members.has(id))) throw new Error('Engineering check refers to unregistered equipment');
-    const target = targets.get(check.check_id)!;
-    unique(target.resource_ids, 'selected resource'); ownsSpans(target.source_span_ids);
-    const selectedOwners = new Set<string>();
-    for (const id of target.resource_ids) {
-      const resource = resources.get(id);
-      if (!resource || !check.equipment_ids.includes(resource.equipment_id)) throw new Error('Engineering target includes an unowned resource');
-      selectedOwners.add(resource.equipment_id);
-    }
-    if (check.equipment_ids.some(id => !selectedOwners.has(id))) throw new Error('Engineering equipment selection has no declared target resource');
-    if (check.kind === 'mechanical' && !target.resource_ids.some(id => resources.get(id)!.roles.includes('mechanical_subject')))
-      throw new Error('Mechanical comparison requires an explicitly owned subject');
-    for (const ref of basEngineeringReferences(check)) {
-      const resource = resources.get(ref.resource_id);
-      if (!resource || !target.resource_ids.includes(ref.resource_id) || !resource.roles.includes(ref.role)
-        || (ref.equipment_id !== undefined && resource.equipment_id !== ref.equipment_id)
-        || (ref.scope_id !== undefined && resource.scope_id !== ref.scope_id)) throw new Error(`Engineering resource ownership mismatch at ${ref.input_path}`);
-    }
-    const allowedScopes = check.kind === 'allocation' ? check.channels.map(c => c.allowed_scope_ids)
-      : check.kind === 'serial_network' || check.kind === 'ip_network' ? [check.allowed_scope_ids] : [];
-    if (allowedScopes.some(s => s?.value.some(id => !scopes.has(id)))) throw new Error('Engineering allocation names an unregistered scope');
-    for (const rating of basEngineeringRatingBases(check)) {
-      const owned = ownsSpans(rating.basis.source_span_ids);
-      if (owned.length && rating.basis.original_text !== null && rating.basis.original_text !== owned.map(s => s.text).join('\n'))
-        throw new Error('Engineering original wording differs from its retained source spans');
-      rating_sources.push({ check_id: check.check_id, ...rating, source_spans: owned });
-    }
-    if (target.disposition === 'excluded') issues.push({ code: 'engineering_check_explicitly_excluded', check_id: check.check_id });
-  }
-  const selected = new Set(register.targets.flatMap(t => t.resource_ids));
-  for (const resource of register.resources) if (!selected.has(resource.resource_id)) issues.push({ code: 'engineering_resource_not_used', resource_id: resource.resource_id });
-  return { register, rating_sources, issues, equipment_issues: equipmentView.issues,
-    project_complete: false as const, installed_quantity: null, validation_scope: 'source_and_resource_ownership_not_engineering_math' as const };
 }

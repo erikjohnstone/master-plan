@@ -1,0 +1,495 @@
+{
+  "scope": "shared service, retained real source and controlled decisions; not public UI/MCP or installed design",
+  "source_sha256": {
+    "web/src/lib/basWorkflow.ts": "a651c5761405e5aee71d79aff6f8c256fb43b9a16356d30fe90f0b059a9019f2",
+    "web/src/lib/basEngineeringRegister.ts": "d209444ec9669977e1a99c8b608136e5118ffbbceb7daa92c556de8fa50fc2ae",
+    "web/src/lib/basProjectReview.ts": "daa29f39239b6002a6527f24edcd56a3d96744998e2b9cfbe5b04ea4897323dd",
+    "web/src/lib/basIssueReview.ts": "d8081d5c02a74f4b7eb37847bc63e96f12291e7f496113409c2d339297467d18",
+    "web/src/lib/basIssueReviewContract.ts": "3fdb933ce4a232f4cc6a741c90968372262546acc5aa1918f847b579ede40d27",
+    "web/src/lib/basIssueReviewHistory.ts": "14a54e51f37d1b6f057c78fb360e62f8c2fdae50cd4f83e5ba9c10af05805f9f",
+    "web/src/lib/basIssueBasis.ts": "a65ddabfa23daa6e45cf10f607cf2830716f63675711157b9c7012587fc04e77"
+  },
+  "failed_candidates": [
+    {
+      "benchmark": "shared_bas_issue_journal",
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed": [
+        {
+          "operation": "inspect",
+          "ms": 3265.118,
+          "budget_ms": 6000
+        },
+        {
+          "operation": "begin_correction",
+          "ms": 3127.7210000000005,
+          "budget_ms": 6000
+        },
+        {
+          "operation": "replay_current_observation",
+          "ms": 3079.3064590000004,
+          "budget_ms": 8000
+        },
+        {
+          "operation": "inspect_corrected",
+          "ms": 3105.40525,
+          "budget_ms": 6000
+        },
+        {
+          "operation": "record_not_reported",
+          "ms": 3386.595083,
+          "budget_ms": 8000
+        },
+        {
+          "operation": "replay_after_canonical_backup",
+          "ms": 3350.2204170000005,
+          "budget_ms": 8000
+        }
+      ],
+      "initial_rss": 133726208,
+      "incremental_peak_rss": 549109760,
+      "budget_incremental_rss": 536870912,
+      "findings_before": 456,
+      "findings_after": 458,
+      "original_finding_replayed": true,
+      "original_capture_unchanged": true,
+      "journal_bytes": 2668,
+      "source_bytes_verified": false,
+      "pdf_extraction": false,
+      "python_replay": false,
+      "public_walkthrough": false
+    },
+    {
+      "benchmark": "shared_bas_issue_journal",
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed": [
+        {
+          "operation": "inspect",
+          "ms": 3281.8768330000003,
+          "budget_ms": 6000,
+          "rss": 557989888,
+          "heap_used": 167787024,
+          "incremental_peak_rss": 427425792
+        },
+        {
+          "operation": "begin_correction",
+          "ms": 3314.1690830000002,
+          "budget_ms": 6000,
+          "rss": 591380480,
+          "heap_used": 222440928,
+          "incremental_peak_rss": 460832768
+        },
+        {
+          "operation": "replay_current_observation",
+          "ms": 3280.7958750000007,
+          "budget_ms": 8000,
+          "rss": 618594304,
+          "heap_used": 196151808,
+          "incremental_peak_rss": 487161856
+        },
+        {
+          "operation": "inspect_corrected",
+          "ms": 3257.6020000000008,
+          "budget_ms": 6000,
+          "rss": 651689984,
+          "heap_used": 210193336,
+          "incremental_peak_rss": 521732096
+        },
+        {
+          "operation": "record_not_reported",
+          "ms": 3562.9172909999998,
+          "budget_ms": 6000,
+          "rss": 656818176,
+          "heap_used": 156613784,
+          "incremental_peak_rss": 528646144
+        },
+        {
+          "operation": "replay_after_canonical_backup",
+          "ms": 3528.914875000002,
+          "budget_ms": 8000,
+          "rss": 680771584,
+          "heap_used": 101089104,
+          "incremental_peak_rss": 554008576
+        }
+      ],
+      "initial_rss": 131432448,
+      "incremental_peak_rss": 559087616,
+      "budget_incremental_rss": 536870912,
+      "findings_before": 456,
+      "findings_after": 458,
+      "original_finding_replayed": true,
+      "original_capture_unchanged": true,
+      "journal_bytes": 2668,
+      "source_bytes_verified": false,
+      "pdf_extraction": false,
+      "python_replay": false,
+      "public_walkthrough": false
+    },
+    {
+      "benchmark": "shared_bas_issue_journal",
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed": [
+        {
+          "operation": "inspect",
+          "ms": 3311.649291,
+          "budget_ms": 6000,
+          "rss": 543997952,
+          "heap_used": 189848064,
+          "incremental_peak_rss": 425787392
+        },
+        {
+          "operation": "begin_correction",
+          "ms": 3240.9387079999997,
+          "budget_ms": 6000,
+          "rss": 607305728,
+          "heap_used": 84231672,
+          "incremental_peak_rss": 489963520
+        },
+        {
+          "operation": "replay_current_observation",
+          "ms": 3256.175583000001,
+          "budget_ms": 8000,
+          "rss": 624836608,
+          "heap_used": 235170936,
+          "incremental_peak_rss": 506609664
+        },
+        {
+          "operation": "inspect_corrected",
+          "ms": 3241.1875,
+          "budget_ms": 6000,
+          "rss": 639680512,
+          "heap_used": 229472048,
+          "incremental_peak_rss": 522911744
+        },
+        {
+          "operation": "record_not_reported",
+          "ms": 3498.161249999999,
+          "budget_ms": 6000,
+          "rss": 644595712,
+          "heap_used": 92339496,
+          "incremental_peak_rss": 527974400
+        },
+        {
+          "operation": "replay_after_canonical_backup",
+          "ms": 3501.1567079999986,
+          "budget_ms": 8000,
+          "rss": 652951552,
+          "heap_used": 97026040,
+          "incremental_peak_rss": 539066368
+        }
+      ],
+      "initial_rss": 118226944,
+      "incremental_peak_rss": 544489472,
+      "budget_incremental_rss": 536870912,
+      "findings_before": 456,
+      "findings_after": 458,
+      "original_finding_replayed": true,
+      "original_capture_unchanged": true,
+      "journal_bytes": 2668,
+      "source_bytes_verified": false,
+      "pdf_extraction": false,
+      "python_replay": false,
+      "public_walkthrough": false
+    },
+    {
+      "benchmark": "shared_bas_issue_journal",
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed": [
+        {
+          "operation": "inspect",
+          "ms": 1018.495708,
+          "budget_ms": 6000,
+          "rss": 541900800,
+          "heap_used": 237643376,
+          "incremental_peak_rss": 421380096
+        },
+        {
+          "operation": "begin_correction",
+          "ms": 927.6424590000001,
+          "budget_ms": 6000,
+          "rss": 597360640,
+          "heap_used": 251644544,
+          "incremental_peak_rss": 477708288
+        },
+        {
+          "operation": "replay_current_observation",
+          "ms": 958.2691249999998,
+          "budget_ms": 8000,
+          "rss": 597426176,
+          "heap_used": 146340888,
+          "incremental_peak_rss": 485228544
+        },
+        {
+          "operation": "inspect_corrected",
+          "ms": 958.3330830000004,
+          "budget_ms": 6000,
+          "rss": 663781376,
+          "heap_used": 361133648,
+          "incremental_peak_rss": 550551552
+        },
+        {
+          "operation": "record_not_reported",
+          "ms": 1190.2101250000005,
+          "budget_ms": 6000,
+          "rss": 664010752,
+          "heap_used": 317058528,
+          "incremental_peak_rss": 550764544
+        },
+        {
+          "operation": "replay_after_canonical_backup",
+          "ms": 1202.7214590000003,
+          "budget_ms": 8000,
+          "rss": 666157056,
+          "heap_used": 409594472,
+          "incremental_peak_rss": 555368448
+        }
+      ],
+      "initial_rss": 120520704,
+      "incremental_peak_rss": 555368448,
+      "budget_incremental_rss": 536870912,
+      "findings_before": 456,
+      "findings_after": 458,
+      "original_finding_replayed": true,
+      "original_capture_unchanged": true,
+      "journal_bytes": 2668,
+      "source_bytes_verified": false,
+      "pdf_extraction": false,
+      "python_replay": false,
+      "public_walkthrough": false
+    }
+  ],
+  "accepted_candidate_repeats": [
+    {
+      "benchmark": "shared_bas_issue_journal",
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed": [
+        {
+          "operation": "inspect",
+          "ms": 951.619583,
+          "budget_ms": 6000,
+          "rss": 567656448,
+          "heap_used": 156650752,
+          "incremental_peak_rss": 431063040
+        },
+        {
+          "operation": "begin_correction",
+          "ms": 877.8408750000001,
+          "budget_ms": 6000,
+          "rss": 569245696,
+          "heap_used": 155498048,
+          "incremental_peak_rss": 439287808
+        },
+        {
+          "operation": "replay_current_observation",
+          "ms": 843.5952089999998,
+          "budget_ms": 8000,
+          "rss": 636649472,
+          "heap_used": 300152168,
+          "incremental_peak_rss": 501399552
+        },
+        {
+          "operation": "inspect_corrected",
+          "ms": 921.000125,
+          "budget_ms": 6000,
+          "rss": 630095872,
+          "heap_used": 217992176,
+          "incremental_peak_rss": 508461056
+        },
+        {
+          "operation": "record_not_reported",
+          "ms": 1123.7231659999998,
+          "budget_ms": 6000,
+          "rss": 603439104,
+          "heap_used": 346697592,
+          "incremental_peak_rss": 508461056
+        },
+        {
+          "operation": "replay_after_canonical_backup",
+          "ms": 1080.5019580000007,
+          "budget_ms": 8000,
+          "rss": 606240768,
+          "heap_used": 196149936,
+          "incremental_peak_rss": 508461056
+        }
+      ],
+      "initial_rss": 136593408,
+      "incremental_peak_rss": 508461056,
+      "budget_incremental_rss": 536870912,
+      "findings_before": 456,
+      "findings_after": 458,
+      "original_finding_replayed": true,
+      "original_capture_unchanged": true,
+      "journal_bytes": 2668,
+      "source_bytes_verified": false,
+      "pdf_extraction": false,
+      "python_replay": false,
+      "public_walkthrough": false
+    },
+    {
+      "benchmark": "shared_bas_issue_journal",
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed": [
+        {
+          "operation": "inspect",
+          "ms": 945.397375,
+          "budget_ms": 6000,
+          "rss": 532955136,
+          "heap_used": 235156592,
+          "incremental_peak_rss": 413057024
+        },
+        {
+          "operation": "begin_correction",
+          "ms": 871.6301249999999,
+          "budget_ms": 6000,
+          "rss": 559906816,
+          "heap_used": 275690888,
+          "incremental_peak_rss": 439926784
+        },
+        {
+          "operation": "replay_current_observation",
+          "ms": 872.7144170000001,
+          "budget_ms": 8000,
+          "rss": 573685760,
+          "heap_used": 73762136,
+          "incremental_peak_rss": 453443584
+        },
+        {
+          "operation": "inspect_corrected",
+          "ms": 896.9968330000002,
+          "budget_ms": 6000,
+          "rss": 596279296,
+          "heap_used": 226013952,
+          "incremental_peak_rss": 477036544
+        },
+        {
+          "operation": "record_not_reported",
+          "ms": 1099.0069169999997,
+          "budget_ms": 6000,
+          "rss": 596115456,
+          "heap_used": 298184120,
+          "incremental_peak_rss": 483950592
+        },
+        {
+          "operation": "replay_after_canonical_backup",
+          "ms": 1123.6684999999998,
+          "budget_ms": 8000,
+          "rss": 631570432,
+          "heap_used": 152383320,
+          "incremental_peak_rss": 510853120
+        }
+      ],
+      "initial_rss": 120717312,
+      "incremental_peak_rss": 520634368,
+      "budget_incremental_rss": 536870912,
+      "findings_before": 456,
+      "findings_after": 458,
+      "original_finding_replayed": true,
+      "original_capture_unchanged": true,
+      "journal_bytes": 2668,
+      "source_bytes_verified": false,
+      "pdf_extraction": false,
+      "python_replay": false,
+      "public_walkthrough": false
+    },
+    {
+      "benchmark": "shared_bas_issue_journal",
+      "fixture_bytes": 3511836,
+      "fixture_sha256": "afa01b4ab892d3e0c112c9b6d8137e4c90afba8013b0ffd184c6c25e4bda15f5",
+      "node": "v24.13.1",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M2",
+      "elapsed": [
+        {
+          "operation": "inspect",
+          "ms": 927.1855,
+          "budget_ms": 6000,
+          "rss": 525582336,
+          "heap_used": 146205544,
+          "incremental_peak_rss": 405684224
+        },
+        {
+          "operation": "begin_correction",
+          "ms": 842.11825,
+          "budget_ms": 6000,
+          "rss": 527745024,
+          "heap_used": 240905664,
+          "incremental_peak_rss": 413401088
+        },
+        {
+          "operation": "replay_current_observation",
+          "ms": 837.5088330000001,
+          "budget_ms": 8000,
+          "rss": 550125568,
+          "heap_used": 143413264,
+          "incremental_peak_rss": 429359104
+        },
+        {
+          "operation": "inspect_corrected",
+          "ms": 850.7571250000005,
+          "budget_ms": 6000,
+          "rss": 596623360,
+          "heap_used": 93614040,
+          "incremental_peak_rss": 476200960
+        },
+        {
+          "operation": "record_not_reported",
+          "ms": 1070.5236670000004,
+          "budget_ms": 6000,
+          "rss": 596393984,
+          "heap_used": 95197544,
+          "incremental_peak_rss": 483360768
+        },
+        {
+          "operation": "replay_after_canonical_backup",
+          "ms": 1046.2489999999998,
+          "budget_ms": 8000,
+          "rss": 629473280,
+          "heap_used": 100336688,
+          "incremental_peak_rss": 512622592
+        }
+      ],
+      "initial_rss": 120766464,
+      "incremental_peak_rss": 518471680,
+      "budget_incremental_rss": 536870912,
+      "findings_before": 456,
+      "findings_after": 458,
+      "original_finding_replayed": true,
+      "original_capture_unchanged": true,
+      "journal_bytes": 2668,
+      "source_bytes_verified": false,
+      "pdf_extraction": false,
+      "python_replay": false,
+      "public_walkthrough": false
+    }
+  ]
+}

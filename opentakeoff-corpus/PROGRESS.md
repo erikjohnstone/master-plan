@@ -1,5 +1,23 @@
 ## Active work
 
+2026-09-10 checkpoint after **bb2df22c**: internal shared BAS issue decisions
+(`bas_issues_9`) retain exact observations/corrections/withdrawals and replay old
+findings after edits and canonical backups. No blocker dismissal or approval.
+Old writers and JSON/IndexedDB/evidence ZIP preserve the journal. Common async
+verification owns nested metadata; bounded prerequisite reuse retains all checks.
+**Final 34704 exit 0:** web 2,821 pass / 13 existing skips; MCP 128 BAS + 33
+revision + two issue + four packaging + 122 tool tests pass, 51 tools; Python
+452 pass / one packaging skip, mypy 20 files and enabled packaging test pass.
+Failed memory experiments are retained. Final repeats plus integrated gate:
+0.838–1.124 s, peak incremental RSS 521,912,320 bytes within unchanged 512 MiB.
+10,000-event lineage: 128.279 ms / 33,325,056 bytes. No full corpus/holdout run,
+VectorGrid/symbol/math change, trained models or commercial scope.
+Proof: `opentakeoff/docs/bas-production/ISSUE_DECISION_PROOF.md`.
+Next: expose issue actions through existing UI/shared MCP, then approvals and
+approved snapshots plus remaining BAS gates. Original five-workflow goal remains
+first; appended symbol/installed-plan research remains last. No production-
+complete claim or external push/merge/deploy/publish.
+
 2026-09-10 checkpoint after **01094715**: fixed shared BAS finding identity across
 canonical backup. The retained real source workflow had **236/456** occurrences
 change solely with object-key order; failed-first regression now gives **0/456**.

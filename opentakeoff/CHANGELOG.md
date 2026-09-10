@@ -12,6 +12,14 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add the internal shared issue journal (`bas_issues_9`): exact observations,
+  acknowledgement/correction history, replay-checked absence review and append-only
+  withdrawal. Older decisions, calculations, imports and backups preserve it.
+  No action waives a blocker or approves a takeoff. Reuse one exact prerequisite
+  validation context per workflow read; every engineering entry still gets its
+  own ownership and saved-result checks. No extraction or engineering-math change.
+  Public issue UI/MCP actions, approvals and snapshots remain unfinished.
+
 - Correct shared finding occurrence identity across canonical backup/restore.
   Evidence follows explicit table headers, with unlisted cells retained in a
   deterministic tail; narrative span order is unchanged. Version the projection

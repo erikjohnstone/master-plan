@@ -1,5 +1,40 @@
 # BAS production workflow progress
 
+## Shared issue decisions and exact historical replay — 2026-09-10
+
+After **bb2df22c**, implemented the internal `bas_issues_9` journal: exact
+observations, acknowledgement/begin-correction, replay-checked no-longer-reported
+decisions and withdrawals. Nothing waives a blocker, changes quantities or grants
+approval. Old decision/calculation writers, JSON/IndexedDB and source-inclusive
+backups retain history. Forged/re-signed observations, stale bases, conflicting
+branches and caller metadata mutation are covered. Common verification owns
+nested source metadata before awaiting; shared reference checks avoid redundant
+copies, and bounded prerequisite reuse retains every engineering check.
+No extraction, interpretation rule, Python math, VectorGrid or symbol changes.
+
+**Final 34704 exit 0:** web **2,821 pass / 13 existing skips**, types/lint/bench/
+build; MCP **128 BAS + 33 revision + two issue + four packaging + 122 tool tests**,
+types and unchanged 51-tool count; Python **452 pass / one explicit packaging
+skip**, mypy 20 files, separately enabled packaging one pass. Existing lint,
+legacy One-Click and bundle/Agent notices remain. No full corpus or holdout run.
+
+Failed memory candidates are retained. After removing duplicate prerequisite
+validation, three serial real-retained-input runs and the integrated gate pass
+unchanged budgets: **0.838–1.124 s**, maximum **521,912,320-byte** incremental RSS
+(<512 MiB). Controlled 10,000-event lineage: **128.279 ms / 33,325,056 bytes**,
+not full historical replay. The Fort Sam capture stays exact; controlled scope
+edits change the queue from 456 to 458 findings, retaining dependency warnings.
+Contract/proof: `ISSUE_DECISION_CONTRACT.md`, `ISSUE_DECISION_PROOF.md`,
+`evidence/issue-journal-shared.json`.
+
+**Next critical path:** public UI/MCP issue actions, exact corrective routing,
+safe adoption, actual source/reload/export walkthroughs. Then coverage/applicability
+decisions, selective approvals and a positive approved snapshot/export journey.
+Remaining A-D and final corpus/holdout gates are still required. Deeper symbol/
+installed-plan research is **last**, an addition to the original five workflows.
+Goal active; no user blocker. No new models, commercial scope, push, merge, deploy
+or publish. Internal issue controls are not yet exposed to users.
+
 ## Stable finding identities before issue decisions — 2026-09-10
 
 After **01094715**, reproduced a shared review defect on the retained Fort Sam

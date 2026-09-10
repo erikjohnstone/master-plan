@@ -133,6 +133,10 @@ set, approve takeoffs or implement revision release.
 Finding identities now survive canonical JSON backup/restore. Table evidence
 follows its recorded column order; original values and source boxes are unchanged.
 
+The internal issue-decision foundation retains observed findings and corrective
+history through backups. It cannot waive blockers or approve quantities; public
+issue actions and approved snapshots are still in development.
+
 **Open original** provides a read-only page reader. Historical BAS citations also
 use it when their exact PDF is no longer active. Hash and saved page-frame checks
 prevent a newer namesake from receiving an old highlight. The reader does not add

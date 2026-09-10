@@ -1,7 +1,7 @@
 /** SHOULD THIS BE ON THE SHARED PATH? Yes. One source-linked saved-finding view
  * for UI/MCP. No extraction, math, dismissal, source-byte verification or approval. */
 import { z } from 'zod';
-import { verifyBasWorkflow } from './basWorkflow.ts';
+import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 import { basEquipmentView, basAssignmentCalculationState } from './basEquipmentReview.ts';
 import { basAssemblyView, basAssemblyCalculationState } from './basAssemblyReview.ts';
 import { basEngineeringView } from './basEngineeringReview.ts';
@@ -40,6 +40,12 @@ const subject = (kind: Subject['kind'], id: string, label = id): Subject => ({ k
  * Invalid history fails explicitly. Older captures expose missing capabilities. */
 export async function basProjectReview(raw: unknown, captureId: string): Promise<BasProjectReview> {
   const workflow = await verifyBasWorkflow(raw);
+  return projectReviewForVerifiedBasWorkflow(workflow, captureId);
+}
+
+/** Internal shared seam: callers own and verify the workflow before selecting
+ * retained history. Public requests cannot supply findings or skip verification. */
+export async function projectReviewForVerifiedBasWorkflow(workflow: BasWorkflow, captureId: string): Promise<BasProjectReview> {
   const capture = workflow.captures.find(c => c.capture_id === captureId);
   if (!capture) throw new Error('Project review requires a retained BAS capture');
   const pending: Omit<Issue, 'issue_key' | 'occurrence_id'>[] = [];

@@ -16,12 +16,14 @@ import { basAssemblyReviewEventSchema, basAssemblyInterpretationFingerprint, val
   type BasAssemblyReviewEvent } from './basAssemblyRegister.ts';
 import { basAssemblyCalculationSchema, basAssemblyCalculationFingerprint, buildBasAssemblyQuantityInput,
   basAssemblyQuantityInputFingerprint, verifyBasAssemblyQuantityResult } from './basAssemblyQuantityContract.ts';
-import { basEngineeringReviewEventSchema, validateBasEngineeringRegister, type BasEngineeringReviewEvent } from './basEngineeringRegister.ts';
+import { basEngineeringReviewEventSchema, prepareBasEngineeringRegisterValidator, type BasEngineeringReviewEvent } from './basEngineeringRegister.ts';
 import { verifyBasEngineeringResult } from './basEngineeringContract.ts';
 import { basDrawingEventSchema, type BasDrawingEvent } from './basDrawingContract.ts';
 import { replayBasDrawingHistory, basDrawingDependencyFingerprint } from './basDrawingRevision.ts';
 import { basRevisionJournalSchema, type BasRevisionReviewEvent } from './basRevisionReviewContract.ts';
 import { validateBasRevisionJournal } from './basRevisionReviewHistory.ts';
+import { basIssueJournalSchema, type BasIssueReviewEvent } from './basIssueReviewContract.ts';
+import { validateBasIssueJournal } from './basIssueReviewHistory.ts';
 export { canonicalBasJson } from './basCanonical.ts';
 
 const sha = z.string().regex(/^[a-f0-9]{64}$/);
@@ -53,7 +55,7 @@ const capture = z.object({
     }
   }
 });
-export const basWorkflowSchema = z.object({
+const basWorkflowFields = z.object({
   schema_version: z.literal('bas_workflow_v1'), revision: z.enum(BAS_WORKFLOW_REVISIONS),
   captures: z.array(capture).max(1000), current_capture_id: sha.nullable(),
   review_events: z.array(basReviewEventSchema).max(10000).optional(),
@@ -64,7 +66,10 @@ export const basWorkflowSchema = z.object({
   engineering_events: z.array(basEngineeringReviewEventSchema).max(10000).optional(),
   drawing_events: z.array(basDrawingEventSchema).max(10000).optional(),
   revision_events: basRevisionJournalSchema.optional(),
-}).strict().superRefine((w, ctx) => {
+  issue_events: basIssueJournalSchema.optional(),
+}).strict();
+export const basWorkflowSchema = basWorkflowFields.superRefine(refineBasWorkflowReferences);
+function refineBasWorkflowReferences(w: z.infer<typeof basWorkflowFields>, ctx: z.RefinementCtx) {
   const ids = new Set(w.captures.map(c => c.capture_id));
   if (ids.size !== w.captures.length || (w.current_capture_id !== null && !ids.has(w.current_capture_id))) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Invalid BAS capture references' });
@@ -81,6 +86,7 @@ export const basWorkflowSchema = z.object({
   if (w.engineering_events && !supports('bas_engineering_6')) fail('Engineering review requires the engineering workflow revision');
   if (w.drawing_events && !supports('bas_review_7')) fail('Drawing review requires the review workflow revision');
   if (w.revision_events && !supports('bas_revision_8')) fail('Comparison review requires the comparison workflow revision');
+  if (w.issue_events && !supports('bas_issues_9')) fail('Issue decisions require the issue workflow revision');
   const heads = new Map<string, string>(), operations = new Set<string>(), eventIds = new Set<string>();
   for (const event of w.review_events ?? []) {
     if (!ids.has(event.capture_id) || !w.captures.find(c => c.capture_id === event.capture_id)?.narrative_sources) fail('Review event has no retained narrative capture');
@@ -113,13 +119,14 @@ export const basWorkflowSchema = z.object({
     if (operations.has(event.operation_id) || eventIds.has(event.event_id)) fail('Duplicate BAS review operation/event');
     engineeringHeads.set(event.capture_id, event.event_id); operations.add(event.operation_id); eventIds.add(event.event_id);
   }
-  for (const event of [...(w.drawing_events ?? []), ...(w.revision_events ?? [])]) {
+  for (const event of [...(w.drawing_events ?? []), ...(w.revision_events ?? []), ...(w.issue_events ?? [])]) {
     if (operations.has(event.operation_id) || eventIds.has(event.event_id)) fail('Duplicate BAS review operation/event');
     operations.add(event.operation_id); eventIds.add(event.event_id);
   }
   try {
     const drawings = replayBasDrawingHistory(w.captures, w.drawing_events);
     validateBasRevisionJournal(w, drawings.source_sets);
+    validateBasIssueJournal(w);
   }
   catch (error) { fail(error instanceof Error ? error.message : 'Invalid drawing review history'); }
   for (const calculation of w.assignment_calculations ?? []) {
@@ -135,9 +142,19 @@ export const basWorkflowSchema = z.object({
     if (!w.assembly_events?.some(e => e.event_id === calculation.result.assembly_head && e.capture_id === calculation.result.capture_id
       && e.expected_equipment_head === calculation.result.equipment_head)) fail('Assembly calculation has no matching retained decisions');
   }
-});
+}
 export type BasWorkflow = z.infer<typeof basWorkflowSchema>;
 export type BasCapture = BasWorkflow['captures'][number];
+
+/** Internal only: selecting prefixes from an already verified owner cannot
+ * alter field/hash validity, but can break cross-domain ancestry. Reuse every
+ * schema reference check without deep-copying the retained PDF evidence again.
+ * Public/unowned input still requires verifyBasWorkflow, not this function. */
+export function assertVerifiedBasWorkflowReferences(workflow: BasWorkflow): void {
+  refineBasWorkflowReferences(workflow, { path: [], addIssue(issue) {
+    throw new Error(issue.message ?? 'Invalid BAS workflow references');
+  } });
+}
 
 /** Replace ONLY navigation aliases, never raw source strings or local row keys. */
 export function basCaptureIdentityPayload(c: Omit<BasCapture, 'capture_id'>) {
@@ -175,11 +192,13 @@ export async function captureBasEvidence(sources: BasSourceContext, points: BasP
   return { schema_version: 'bas_workflow_v1', revision: equipment ? 'bas_equipment_3' : 'bas_evidence_2', captures: [checked], current_capture_id: checked.capture_id };
 }
 
-export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSchema>, 'event_id'> | Omit<BasEquipmentReviewEvent, 'event_id'> | Omit<BasAssemblyReviewEvent, 'event_id'> | Omit<BasEngineeringReviewEvent, 'event_id'> | Omit<BasDrawingEvent, 'event_id'> | Omit<BasRevisionReviewEvent, 'event_id'>) =>
+export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSchema>, 'event_id'> | Omit<BasEquipmentReviewEvent, 'event_id'> | Omit<BasAssemblyReviewEvent, 'event_id'> | Omit<BasEngineeringReviewEvent, 'event_id'> | Omit<BasDrawingEvent, 'event_id'> | Omit<BasRevisionReviewEvent, 'event_id'> | Omit<BasIssueReviewEvent, 'event_id'>) =>
   sha256Hex(new TextEncoder().encode(canonicalBasJson(event)));
 
 export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
-  const result = basWorkflowSchema.parse(raw);
+  // Passthrough metadata is source evidence too. Zod alone does not own nested
+  // unknown objects; take the complete snapshot before any asynchronous check.
+  const result = basWorkflowSchema.parse(structuredClone(raw));
   for (const c of result.captures) if (await fingerprint(c) !== c.capture_id) throw new Error('BAS capture fingerprint mismatch; saved evidence was changed');
   const pairs = new Map<string, Set<string>>();
   for (const event of result.review_events ?? []) {
@@ -232,13 +251,23 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
   }
   // This browser-safe verifier establishes lineage, not arithmetic authenticity.
   // Engineering results require shared Python replay before being used as current.
+  // One-entry cache, scoped to this invocation and keyed by immutable owned
+  // identities. Different heads/captures replace it; nothing survives a call.
+  const engineeringValidators = new Map<string, Awaited<ReturnType<typeof prepareBasEngineeringRegisterValidator>>>();
   for (const event of result.engineering_events ?? []) {
     const { event_id, ...payload } = event;
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS engineering event fingerprint mismatch');
     const c = result.captures.find(c => c.capture_id === event.capture_id)!;
     const equipment = result.equipment_events!.find(e => e.event_id === event.expected_equipment_head)!;
     const assembly = result.assembly_events?.find(e => e.event_id === event.expected_assembly_head)?.register ?? null;
-    await validateBasEngineeringRegister(c, equipment.register, assembly, event.register);
+    const key = canonicalBasJson([event.capture_id, event.expected_equipment_head, event.expected_assembly_head]);
+    let validate = engineeringValidators.get(key);
+    if (!validate) {
+      engineeringValidators.clear();
+      validate = await prepareBasEngineeringRegisterValidator(c, equipment.register, assembly);
+      engineeringValidators.set(key, validate);
+    }
+    validate(event.register);
     verifyBasEngineeringResult(event.register.input, event.result);
   }
   for (const event of result.drawing_events ?? []) {
@@ -251,6 +280,12 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
   for (const event of result.revision_events ?? []) {
     const { event_id, ...payload } = event;
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS comparison event fingerprint mismatch');
+  }
+  // Lineage only: reading an issue decision independently replays its pinned
+  // finding/absence through the shared projection before presenting that proof.
+  for (const event of result.issue_events ?? []) {
+    const { event_id, ...payload } = event;
+    if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS issue event fingerprint mismatch');
   }
   return result;
 }
@@ -315,6 +350,12 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     if (previous && canonicalBasJson(previous) !== canonicalBasJson(event)) throw new Error('Conflicting comparison event identity');
     revisionEvents.set(event.event_id, event);
   }
+  const issueEvents = new Map((left.issue_events ?? []).map(e => [e.event_id, e]));
+  for (const event of right.issue_events ?? []) {
+    const previous = issueEvents.get(event.event_id);
+    if (previous && canonicalBasJson(previous) !== canonicalBasJson(event)) throw new Error('Conflicting issue event identity');
+    issueEvents.set(event.event_id, event);
+  }
   return basWorkflowSchema.parse({ ...left, captures: [...merged.values()],
     revision: atLeastBasWorkflowRevision(left.revision, right.revision),
     ...(events.size || left.review_events || right.review_events ? { review_events: [...events.values()] } : {}),
@@ -325,6 +366,7 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     ...(engineeringEvents.size || left.engineering_events || right.engineering_events ? { engineering_events: [...engineeringEvents.values()] } : {}),
     ...(drawingEvents.size || left.drawing_events || right.drawing_events ? { drawing_events: [...drawingEvents.values()] } : {}),
     ...(revisionEvents.size || left.revision_events || right.revision_events ? { revision_events: [...revisionEvents.values()] } : {}),
+    ...(issueEvents.size || left.issue_events || right.issue_events ? { issue_events: [...issueEvents.values()] } : {}),
     current_capture_id: activateIncoming ? right.current_capture_id : left.current_capture_id ?? right.current_capture_id });
 }
 

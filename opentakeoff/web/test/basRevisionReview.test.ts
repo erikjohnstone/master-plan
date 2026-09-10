@@ -35,7 +35,7 @@ async function resign(e: BasRevisionReviewEvent) {
 }
 
 test('all seven prior revisions remain readable; the journal requires explicit revision 8', async () => {
-  for (const revision of BAS_WORKFLOW_REVISIONS.slice(0, -1)) {
+  for (const revision of BAS_WORKFLOW_REVISIONS.slice(0, BAS_WORKFLOW_REVISIONS.indexOf('bas_revision_8'))) {
     const old = { schema_version: 'bas_workflow_v1', revision, captures: [], current_capture_id: null };
     assert.deepEqual(await verifyBasWorkflow(old), old);
     assert.throws(() => basWorkflowSchema.parse({ ...old, revision_events: [] }), /comparison workflow revision/);

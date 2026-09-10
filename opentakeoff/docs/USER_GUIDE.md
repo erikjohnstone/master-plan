@@ -27,6 +27,10 @@ because JSON object keys change order. Current findings use `saved_bas_findings_
 older standalone finding exports keep their original rule and IDs. Raw header
 order, blank cells, unlocated evidence and distinct source boxes are preserved.
 
+Imported evidence can also retain internal issue-decision history. These records
+do not hide findings, alter quantities or approve the takeoff. Public issue-action
+controls and approved snapshots are not available at this development checkpoint.
+
 **Original PDFs** lists every physical version referenced by saved BAS history,
 including historical captures. **Retain original** finds the exact bytes among
 loaded files or the local revision trail and stores one protected copy in this
