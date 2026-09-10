@@ -12,6 +12,13 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add a shared internal revision-side inventory with explicitly pinned source,
+  decision and calculation versions. Preserve old evidence through dependency
+  changes, source-local responsibility claims, unknown/attribute distinctions,
+  source-boundary coverage and original records. Add lineage, real retained-PDF,
+  actual Python integration and serial performance gates. This is a foundation:
+  no public semantic-difference UI, quantity delta, approval or installed count.
+
 - Expose shared drawing correspondence in **Review & changes → Drawing changes**
   and the history-only MCP `bas_drawing_review` command. Preview, explicit page
   decisions, retained source viewing, draft return and proposal history preserve

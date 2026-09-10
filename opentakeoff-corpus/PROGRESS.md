@@ -1,5 +1,21 @@
 ## Active work
 
+2026-09-10 checkpoint after **c2685089**: shared pinned revision-side inventory
+implemented and verified, without extraction/VectorGrid/symbol/math changes.
+Old decisions keep their exact original sources when newer equipment/component
+bindings change; quantities retain unknown/attribute/basis and Python-replay
+distinctions. **Web 2,783 pass / 13 existing skips**; MCP types, **127 BAS + four
+packaging tests pass**. Real retained Fort Sam/controlled-hardware inventory has
+496 items, final **2.997 / 3.030 / 2.961 s**, **77,725,696-byte incremental peak
+RSS**, under predeclared 5 s / 512 MiB. Existing history/journal gates pass.
+Details: `opentakeoff/docs/bas-production/REVISION_IMPACT_CONTRACT.md` and progress.
+Internal inventory is not complete comparison, approval, fresh source/Python
+verification or installed truth. Next item correspondence, semantic/comparable
+quantity impact, issue decisions, selective approvals/snapshots and A–D final
+gates, then appended researched symbol/installed-plan phase. Goal active; no
+new full corpus/holdout, public comparison walkthrough, key/scorer changes or
+push/merge/deploy. Existing warnings/baseline failures remain disclosed.
+
 2026-09-10 checkpoint after **79868930**: shared page correspondence now has the
 public **Review & changes → Drawing changes** editor and history-only MCP
 `bas_drawing_review`. Existing evidence/counts remain unchanged; recording is

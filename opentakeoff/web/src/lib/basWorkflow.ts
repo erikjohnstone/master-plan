@@ -132,7 +132,7 @@ export type BasWorkflow = z.infer<typeof basWorkflowSchema>;
 export type BasCapture = BasWorkflow['captures'][number];
 
 /** Replace ONLY navigation aliases, never raw source strings or local row keys. */
-function identityPayload(c: Omit<BasCapture, 'capture_id'>) {
+export function basCaptureIdentityPayload(c: Omit<BasCapture, 'capture_id'>) {
   const points = structuredClone(c.points);
   for (const m of points.matrices) {
     m.raw.sheet = m.page_id!;
@@ -151,7 +151,7 @@ function identityPayload(c: Omit<BasCapture, 'capture_id'>) {
   return { sources: c.sources.map(({ names: _names, ...s }) => s).sort((a, b) => a.source_id < b.source_id ? -1 : 1), points, ...narratives,
     ...(c.equipment_sources ? { equipment_sources: equipmentIdentityPayload(c.equipment_sources, c.narrative_sources!) } : {}) };
 }
-const fingerprint = (c: Omit<BasCapture, 'capture_id'>) => sha256Hex(new TextEncoder().encode(canonicalBasJson(identityPayload(c))));
+const fingerprint = (c: Omit<BasCapture, 'capture_id'>) => sha256Hex(new TextEncoder().encode(canonicalBasJson(basCaptureIdentityPayload(c))));
 
 export async function captureBasPoints(sources: BasSourceDocument[], points: BasPointLists): Promise<BasWorkflow> {
   const checked = capture.parse({ capture_id: '0'.repeat(64), sources, points });
@@ -250,7 +250,7 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
   const merged = new Map(left.captures.map(c => [c.capture_id, c]));
   for (const c of right.captures) {
     const old = merged.get(c.capture_id);
-    if (old && canonicalBasJson(identityPayload(old)) !== canonicalBasJson(identityPayload(c))) throw new Error('Conflicting BAS evidence for one capture identity');
+    if (old && canonicalBasJson(basCaptureIdentityPayload(old)) !== canonicalBasJson(basCaptureIdentityPayload(c))) throw new Error('Conflicting BAS evidence for one capture identity');
     if (!old) merged.set(c.capture_id, c);
   }
   const events = new Map((left.review_events ?? []).map(e => [e.event_id, e]));

@@ -1,5 +1,39 @@
 # BAS production workflow progress
 
+## Pinned revision-side inventory — 2026-09-10
+
+After **c2685089**, implemented the shared read-only basis/inventory foundation
+for the remaining revision-impact workflow. Explicit source-set and per-capture
+decision/calculation IDs retain original pages, points, SOO clauses/requirements,
+equipment rows/assignments, assemblies/responsibilities, engineering inputs and
+saved results. Historical references resolve against the events they actually
+depended on; a later UUID rebind cannot silently change old evidence. Unknowns,
+attributes, scope boundaries, stale/missing dependencies and source rules remain
+explicit. Unchanged content identity is not approval or semantic equivalence.
+
+**Web 58915 exit 0: 2,783 pass / 13 existing skips**, including 12 added tests;
+typecheck, lint, benchmarks and build pass. **MCP 95875 exit 0:** types, **127 BAS
+tests** including new actual Python integration, build and **4 packaging tests**.
+Old capture/merge identity algorithm unchanged (existing helper exported/renamed).
+No VectorGrid, extraction, symbol, Python math or public navigation changes.
+
+Real retained Fort Sam/controlled-hardware inventory: **496 items / 3,044,819
+bytes**, final **2.997 / 3.030 / 2.961 s**, incremental peak RSS **77,725,696
+bytes**, under predeclared 5 s / 512 MiB. Existing history gate **3.137 / 2.999 /
+2.972 s**; 201,000-entry drawing journal **50.852 / 40.182 / 33.073 ms**, RSS
+**123,961,344 bytes**, unchanged gates pass. Initial fixture errors rejected by
+existing validators were corrected without changing production interpretation.
+Contract, provenance, warnings and exact scope: `REVISION_IMPACT_CONTRACT.md`;
+compact results: `evidence/revision-inventory-1/proof.json`.
+
+This is **not** complete revision review or any production-complete claim. No
+new public comparison walkthrough, full-corpus/holdout gate or standalone Python
+suite in this slice. Next: reviewed item correspondence and structured semantic/
+comparable-quantity differences; issue resolution; selective dependency-bound
+approvals and snapshot/export; remaining A–D acceptance gates; **then** the
+appended researched symbol/installed-plan phase. Goal remains active. No costs,
+labor, models, holdout access, push, merge, publish or deployment.
+
 ## Public drawing correspondence — 2026-09-10
 
 After **79868930**, the shared page-accounting journal is usable in
