@@ -774,3 +774,80 @@ test("affine refinement: an out-of-bounds stretch is withheld with the bounds re
   assert.ok(perfect, `expected a withheld row disclosing the true ~1.6× fit, got: ${JSON.stringify(affine.withheld)}`);
   assert.ok(/stretch/.test(perfect!.reason) && /bar 1\.5/.test(perfect!.reason), `bounds reason should name the stretch and the bar, got: ${perfect!.reason}`);
 });
+
+// ── Phase 2 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — continuous rotation ───────
+// The shared SYMBOL fixture above has its own accidental near-symmetry
+// (square + one diagonal admits a real combined mirror+rotation reading),
+// which is exactly the kind of confound §7.4 says to record, not route
+// around silently — recorded in the goal doc's Findings. These tests use a
+// genuinely asymmetric open polyline (distinct segment lengths, no near-
+// symmetry) so a recovered rotation has one unambiguous right answer.
+const ASYM2: [number, number, number, number][] = [
+  [0, 0, 11, 0], [11, 0, 11, 23], [11, 23, -26, 23], [-26, 23, -26, 7], [-26, 7, -17, 7],
+];
+const placeAsym = (at: Point, deg: number, mir: boolean): number[] => {
+  const th = (deg * Math.PI) / 180, c = Math.cos(th), s = Math.sin(th);
+  return ASYM2.flatMap(([ax, ay, bx, by]) => {
+    const tx = (x: number, y: number): Point => {
+      const mx = mir ? -x : x;
+      return [mx * c - y * s + at[0], mx * s + y * c + at[1]];
+    };
+    const [rax, ray] = tx(ax, ay), [rbx, rby] = tx(bx, by);
+    return [rax, ray, rbx, rby];
+  });
+};
+const asymRect: [Point, Point] = [[-31, -5], [16, 28]];
+
+for (const deg of [30, 57, 123, 211]) {
+  test(`Phase 2: an off-grid rotation invisible to the rigid search (${deg}°) is found and disclosed`, () => {
+    const segs = [...placeAsym([0, 0], 0, false), ...placeAsym([400, 0], deg, false)];
+    const fp = fingerprintSymbol(segs, asymRect);
+    const rigid = matchSymbol(fp, segs, { excludeCenter: fp.center });
+    assert.equal(rigid.matches.length, 0, `${deg}° should be off-grid enough to produce zero rigid candidates`);
+    const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+    assert.equal(affine.matches.length, 1, `Phase 2 should propose and match the ${deg}° instance`);
+    const m = affine.matches[0];
+    assert.ok(m.score >= 0.92);
+    assert.ok(m.transform, "a Phase-2-discovered match must disclose its transform");
+    assert.ok(Math.abs(m.transform!.rotation_deg - deg) < 3, `disclosed rotation ${m.transform!.rotation_deg} vs true ${deg}`);
+    assert.equal(m.transform!.mirrored, false);
+  });
+}
+
+test("Phase 2: a mirrored + 40° placement is found with mirrored:true", () => {
+  const segs = [...placeAsym([0, 0], 0, false), ...placeAsym([400, 0], 40, true)];
+  const fp = fingerprintSymbol(segs, asymRect);
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+  assert.equal(affine.matches.length, 1);
+  assert.equal(affine.matches[0].mirrored, true);
+  assert.ok(Math.abs(affine.matches[0].transform!.rotation_deg - 40) < 3);
+});
+
+test("Phase 2: a plain translated (0°) copy is still the rigid path's own clean match — no transform, and (the bug this test pins) no stale transform survives a merge tie against a spurious refined candidate", () => {
+  const segs = [...placeAsym([0, 0], 0, false), ...placeAsym([400, 0], 0, false)];
+  const fp = fingerprintSymbol(segs, asymRect);
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+  assert.equal(affine.matches.length, 1);
+  assert.equal(affine.matches[0].rotation, 0);
+  assert.equal(affine.matches[0].transform, undefined, "the rigid path won this one cleanly; nothing should be disclosed");
+  assert.equal(affine.matches[0].extra, undefined);
+});
+
+test("Phase 2: opts.rotations === false disables continuous rotation too, exactly as it disables the rigid 90° family today", () => {
+  const segs = [...placeAsym([0, 0], 0, false), ...placeAsym([400, 0], 30, false)];
+  const fp = fingerprintSymbol(segs, asymRect);
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, rotations: false, affine: { enabled: true } });
+  assert.equal(affine.matches.length, 0);
+  assert.equal(affine.withheld.length, 0, "an explicit rotations:false means silence for an off-grid instance, exactly as it always has");
+});
+
+test("Phase 2: candidates.considered on a plain 0°-aligned grid does not blow up (guards the vote against a proposal explosion)", () => {
+  const placements = Array.from({ length: 6 }, (_, i) => ({ at: [i * 100, 0] as Point }));
+  const segs = place(placements);
+  const fp = fingerprintSymbol(segs, RECT);
+  const rigid = matchSymbol(fp, segs);
+  const affine = matchSymbol(fp, segs, { affine: { enabled: true } });
+  assert.ok(affine.candidates.considered < rigid.candidates.considered * 3,
+    `affine considered=${affine.candidates.considered} vs rigid considered=${rigid.candidates.considered} — should stay well under 3×`);
+  assert.equal(affine.matches.length, rigid.matches.length, "a purely 0°-aligned grid should match identically either way");
+});

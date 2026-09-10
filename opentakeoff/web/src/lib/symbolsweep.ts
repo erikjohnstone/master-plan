@@ -1033,10 +1033,18 @@ export function buildNegative(fp: SymbolFingerprint, segs: number[], rect: [Poin
 export function mergeProposals<T extends { at: Point; score: number; xf: number; rotation: number; mirrored: boolean }>(scored: T[], mergeR: number): T[] {
   const kept: T[] = [];
   for (const s of scored) {
-    const twin = kept.find((k) => Math.hypot(k.at[0] - s.at[0], k.at[1] - s.at[1]) <= mergeR);
-    if (!twin) { kept.push({ ...s }); continue; }
+    const twinIdx = kept.findIndex((k) => Math.hypot(k.at[0] - s.at[0], k.at[1] - s.at[1]) <= mergeR);
+    if (twinIdx < 0) { kept.push({ ...s }); continue; }
+    const twin = kept[twinIdx];
     if (s.score > twin.score || (s.score === twin.score && s.xf < twin.xf)) {
-      twin.at = s.at; twin.score = s.score; twin.rotation = s.rotation; twin.mirrored = s.mirrored; twin.xf = s.xf;
+      // A whole-object REPLACE, not a field-by-field copy: T is generic, and
+      // a caller (Phase 1's `Scored`, for one) can carry extra mutable
+      // fields (`transform`, `mAt`, `boundsFailed`) beyond the five named
+      // here. Copying only those five would let the LOSING candidate's
+      // stale extra fields survive onto the winner's xf — an inconsistent
+      // hybrid row that discloses one placement's transform under another's
+      // identity. The winner's own full data replaces the slot outright.
+      kept[twinIdx] = { ...s };
     }
   }
   const byBest = [...kept].sort((a, b) =>
@@ -1065,6 +1073,19 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const scoreLow = opts.scoreLow ?? SWEEP_SCORE_LOW;
   const maxCandidates = opts.maxCandidates ?? SWEEP_CANDIDATE_CEILING;
   const xforms = transformsFor(opts.rotations ?? true, opts.mirror ?? true);
+  // The rigid count, captured before Phase 2 (below) may append continuous-
+  // rotation entries — consensus (§4c) deliberately keeps testing only the
+  // ORIGINAL rigid symmetry group, not every voted continuous rotation, so
+  // its own cost stays exactly what it was before this feature existed.
+  const rigidXformCount = xforms.length;
+  // opts.affine — off by default; every existing caller and the whole
+  // rigid-only sweep is unaffected until a caller opts in. See
+  // docs/SYMBOL-SWEEP-AFFINE-GOAL.md for what each piece implements.
+  const affineOpts = opts.affine;
+  const affineOn = affineOpts?.enabled === true;
+  const affineBounds = affineOn
+    ? { maxStretch: affineOpts!.maxStretch ?? DEFAULT_AFFINE_BOUNDS.maxStretch, maxShearDeg: affineOpts!.maxShearDeg ?? DEFAULT_AFFINE_BOUNDS.maxShearDeg }
+    : DEFAULT_AFFINE_BOUNDS;
   const n = segs.length >> 2;
   if (scale !== 1 && opts.excludeCenter) {
     throw new Error("excludeCenter is a point on the SEED sheet and means nothing on a target sheet at a different scale — omit it when sweeping across sheets (there is no seed there to shadow).");
@@ -1218,6 +1239,66 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     }
   }
 
+  // ── 2b. continuous rotation (Phase 2 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md) ──
+  // The rigid loop above only ever tries 8 fixed matrices, so a symbol
+  // rotated off those 90° multiples produces ZERO candidates — not a low
+  // score, silence (see symbolsweep.ts's own header and the goal doc's §1).
+  // This closes that gap the way geometric hashing does: an anchor segment's
+  // OWN direction, paired against a same-length sheet segment's direction,
+  // fixes a continuous rotation θ exactly (no search) — propose it, but
+  // VOTE before scoring it (a second, independent anchor must land on the
+  // same θ/mirror/center) so a lone coincidental length match never costs a
+  // score() call. Off by default; only runs when opts.affine.enabled and
+  // opts.affine.rotationSearch (default true once affine is on) and
+  // opts.rotations (a caller who explicitly disabled rotation search keeps
+  // meaning that, exactly as today).
+  if (affineOn && (affineOpts?.rotationSearch ?? true) && (opts.rotations ?? true)) {
+    type RotBucket = { thetaDeg: number; mirror: boolean; tx: number; ty: number; anchors: Set<number> };
+    const rotBuckets = new Map<string, RotBucket>();
+    const mirrorChoices: readonly boolean[] = (opts.mirror ?? true) ? [false, true] : [false];
+    for (const anc of anchors) {
+      const r = rel[anc.relIdx];
+      for (const j of bucketBand(anc.len)) {
+        const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
+        // both sheet-segment directions — the undirected-endpoint symmetry
+        // the rigid loop's two pairings already express
+        for (const [sx0, sy0, sx1, sy1] of [[px, py, qx, qy], [qx, qy, px, py]] as const) {
+          const sheetAngle = Math.atan2(sy1 - sy0, sx1 - sx0);
+          for (const mirror of mirrorChoices) {
+            const ax = mirror ? -r[0] : r[0], ay = r[1];
+            const bx = mirror ? -r[2] : r[2], by = r[3];
+            const localAngle = Math.atan2(by - ay, bx - ax);
+            const theta = sheetAngle - localAngle;
+            const c = Math.cos(theta), s = Math.sin(theta);
+            const m: [number, number, number, number] = mirror ? [-c, -s, -s, c] : [c, -s, s, c];
+            const A = apply(m, r[0], r[1]);
+            const tx = sx0 - A[0], ty = sy0 - A[1];
+            if (!insideRequestedRegion(tx, ty)) continue;
+            let thetaDeg = (theta * 180) / Math.PI;
+            thetaDeg = ((thetaDeg % 360) + 360) % 360;
+            // Within 6° of a rigid 0/90/180/270 multiple is already covered,
+            // exactly and more cheaply, by the rigid loop above — skip it
+            // here rather than propose a redundant near-duplicate.
+            const nearestRigid = Math.round(thetaDeg / 90) * 90;
+            if (Math.abs(thetaDeg - nearestRigid) < 6) continue;
+            const key = `${Math.round(thetaDeg / 6)}:${mirror}:${Math.round(tx / quant)}:${Math.round(ty / quant)}`;
+            let b = rotBuckets.get(key);
+            if (!b) { b = { thetaDeg, mirror, tx, ty, anchors: new Set() }; rotBuckets.set(key, b); }
+            b.anchors.add(anc.relIdx);
+          }
+        }
+      }
+    }
+    for (const b of rotBuckets.values()) {
+      if (b.anchors.size < 2) continue; // the vote: a lone anchor never scores
+      const th = (b.thetaDeg * Math.PI) / 180, c = Math.cos(th), s = Math.sin(th);
+      const m: [number, number, number, number] = b.mirror ? [-c, -s, -s, c] : [c, -s, s, c];
+      const xi = xforms.length;
+      xforms.push({ rotation: Math.round(b.thetaDeg * 10) / 10, mirrored: b.mirror, m });
+      propose(b.tx, b.ty, xi, 0);
+    }
+  }
+
   const proposals = [...proposalMap.values()];
 
   // Deterministic scoring order (reading order, then transform preference),
@@ -1297,12 +1378,9 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   // correspondences near that rigid guess, fit the ACTUAL affine transform,
   // and re-score at the fit — never touching a placement already ≥
   // scoreHigh under the rigid path (monotone: refinement can only raise a
-  // near-miss, never revisit a committed match).
-  const affineOpts = opts.affine;
-  const affineOn = affineOpts?.enabled === true;
-  const affineBounds = affineOn
-    ? { maxStretch: affineOpts!.maxStretch ?? DEFAULT_AFFINE_BOUNDS.maxStretch, maxShearDeg: affineOpts!.maxShearDeg ?? DEFAULT_AFFINE_BOUNDS.maxShearDeg }
-    : DEFAULT_AFFINE_BOUNDS;
+  // near-miss, never revisit a committed match). affineOpts/affineOn/
+  // affineBounds are computed earlier (right after `xforms`) so Phase 2's
+  // candidate generation can use them too.
   // §3's own radius is 6·tol for gatherCorrespondences and the re-score
   // tolerance never exceeds 3·tol (§2.4) — a spatial index built for 3·tol
   // cells covers both reliably without disturbing the shared, tol-keyed
@@ -1394,12 +1472,20 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     if (lumGate && ungated.v >= scoreHigh && score < scoreHigh) lumOut.push([c.tx, c.ty]);
     if (score < proposalFloor) continue;
     const row: Scored = { at: [c.tx, c.ty], score, rotation: xforms[c.xf].rotation, mirrored: xforms[c.xf].mirrored, xf: c.xf };
-    // Refinement only ever touches a placement the rigid path did NOT
-    // already commit (score < scoreHigh) — a committed match is never
-    // revisited, so this addition is strictly monotone.
-    if (score < scoreHigh) {
+    // Refinement runs for (a) any RIGID-search placement scoring below
+    // scoreHigh — a committed rigid match is never revisited, so this stays
+    // strictly monotone for the original 8-matrix path — and (b) EVERY
+    // Phase 2 continuous-rotation candidate regardless of its raw score: a
+    // single anchor's angle is "only accurate to a couple of degrees" (§3
+    // Phase 2 step 4) and disclosed values must come from the fit, not that
+    // raw estimate. A Phase 2 row is new by construction — replacing its
+    // transform with the fit's is never a regression, so it accepts a tying
+    // score too, not only a strictly higher one.
+    const isPhase2Candidate = c.xf >= rigidXformCount;
+    if (score < scoreHigh || isPhase2Candidate) {
       const refined = refine(xforms[c.xf].m, c.tx, c.ty);
-      if (refined && refined.score > row.score) {
+      const accept = refined && (isPhase2Candidate ? refined.score >= row.score : refined.score > row.score);
+      if (accept) {
         const withinBounds = affineWithinBounds(
           { rotation_deg: refined.transform.rotation_deg, scale_x: refined.transform.scale_x, scale_y: refined.transform.scale_y, shear_deg: refined.transform.shear_deg, mirrored: refined.transform.mirrored },
           affineBounds, opts.scale ?? 1,
@@ -1462,7 +1548,10 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     const tx = mid(xs), ty = mid(ys);
     if (cluster.some((s) => Math.hypot(s.at[0] - tx, s.at[1] - ty) <= mergeR)) continue;
     let best: Scored | null = null;
-    for (let xi = 0; xi < xforms.length; xi++) {
+    // Only the ORIGINAL rigid symmetry group here, not every Phase 2 voted
+    // continuous rotation — this hypothesis test's own cost stays exactly
+    // what it was before that feature existed (see rigidXformCount).
+    for (let xi = 0; xi < rigidXformCount; xi++) {
       const score = scoreAt(xforms[xi].m, tx, ty);
       if (score < proposalFloor) continue;
       const row: Scored = { at: [tx, ty], score, rotation: xforms[xi].rotation, mirrored: xforms[xi].mirrored, xf: xi };
