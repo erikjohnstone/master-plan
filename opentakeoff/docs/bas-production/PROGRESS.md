@@ -1,5 +1,33 @@
 # BAS production workflow progress
 
+## Browser-local archive restoration — 2026-09-10
+
+After **01e9b3a4**, actual browser-local restore now uses shared preview/merge and
+merged-history Python replay, stages bounded chunks, and atomically publishes
+originals + annotations + previous-state journal + new save generation. Exact
+filename-bound annotation checks prevent newer-namesake rebinding; historical
+PDFs remain outside active counting. The empty plan picker has a recovery entry.
+Old retained records still read; ordinary original retention also supports chunks.
+
+**13 new tests; full web 2,730 pass / 13 existing skips / zero failures**, types,
+lint, benchmark and build pass (three existing warnings). Real Fort Sam browser
+walkthrough **39999 exit 0**, actual 31-record Python replay, restore/cancel/reload/
+source reopening, **12.925 s restore**, zero page errors. Controlled 551.1 MB
+capacity **21712 exit 0**, **10.953 s restore / 0.960 s verification**, sampled
+Chrome RSS **2,052,210,688 bytes**, under unchanged 30 s / 2 GiB budgets with
+limited headroom. The earlier single-buffer implementation hit a real Chromium
+record-size limit and was replaced, not excused. See `RESTORE_BROWSER_PROOF.md`.
+MCP final regression **72865 exit 0**: types, **107 BAS + 4 packaging pass**;
+unchanged Python services exercised, full standalone Python suite not rerun.
+Final retry audit **74798 exit 0**: full web still **2,730 pass / 13 skips**,
+14.399 s tests / 5.35 s build; **40 focused pass** and packaging rerun passes.
+Already-applied restore retries now recheck originals instead of trusting the journal.
+
+Main goal stays active: finish public MCP/sync restore and recovery/journal UX,
+then reviewed drawing correspondence and scoped approvals; complete remaining A–D
+corpus/holdout gates and the final researched symbol/installed-plan extension.
+No protected extraction/math change, new corpus result, push, merge or deployment.
+
 ## Per-editor save fencing — 2026-09-10
 
 After **4b1c7595**, local annotations now read payload/generation atomically and

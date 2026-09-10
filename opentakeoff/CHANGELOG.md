@@ -12,13 +12,21 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add browser-local evidence ZIP restore: preview the shared merge, replay all
+  merged historical calculations through Python, stage originals, then atomically
+  save sources, takeoff, prior-state journal and editor generation. Empty-project
+  recovery is accessible from the plan picker. Exact version gates protect old
+  annotations; source PDFs stay out of active counting. Bounded 8 MiB storage
+  chunks support large originals while preserving older retained records.
+  Public MCP/sync restore, revision correspondence and approvals remain unfinished.
+
 - Add per-editor local annotation save-version checks and same-transaction
   expected-payload checks for sync adoption. Queued saves, unmount flushes and
   delayed sync responses cannot cross a changed generation. Conflicted editors
   preserve unsaved work with **Export unsaved takeoff** and **Reload saved version**.
   IndexedDB v4 preserves v3 records and prevents old blind-writer builds from
   reopening the database. No takeoff JSON, extraction or arithmetic change.
-  Actual atomic ZIP restoration and generation minting remain to be wired.
+  Browser-local atomic ZIP restoration now mints the guarded generation.
 
 - Add read-only original-source reopening from **Original PDFs** and historical
   BAS citations. UI and MCP share exact source ownership, byte identity and saved

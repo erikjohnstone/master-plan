@@ -56,7 +56,7 @@ const ctrlBtn = { display: "inline-flex", alignItems: "center", gap: 6, padding:
 
 export default function PlanNavigator({
   // presentation + exit
-  canClose, onExit, initialMode = "plan", cloudMode,
+  canClose, onExit, initialMode = "plan", cloudMode, onRestoreEvidence,
   // plan-set (gallery) data
   sheets, getDoc, scales, detectedScales, scaleUnconfirmed = {}, shapes, labels, onLabel, onDetect,
   thumbCacheRef, busyRef, openTabs, onOpen,
@@ -788,6 +788,8 @@ export default function PlanNavigator({
                   the schedules index themselves. Ask the Agent for a schedule, or marquee one
                   symbol and sweep the sheet for every placement.
                 </div>
+                {onRestoreEvidence && <button type="button" className="btn-ghost" onClick={onRestoreEvidence}
+                  style={{ marginTop: 'var(--sp-4)' }}>Restore BAS evidence backup</button>}
               </div>
             ) : enumerated ? (
               <>

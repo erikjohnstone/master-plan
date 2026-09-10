@@ -9,7 +9,7 @@ import './BasProjectReviewWorkspace.css';
 
 const domains = { sources: 'Source coverage', points: 'Point lists', sequences: 'Sequences', equipment: 'Equipment', assemblies: 'Assemblies', engineering: 'Engineering' };
 const human = text => String(text).replace(/_/g, ' ');
-export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain }) {
+export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain, restoreContext }) {
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [sourceError, setSourceError] = useState('');
   const heading = useRef(null), scroll = useRef(null), returnFocus = useRef(null);
@@ -21,6 +21,7 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
   }, [state.originalSources]);
   useEffect(() => {
     let live = true;
+    if (!workflow) return;
     basProjectReview(workflow, workflow.current_capture_id).then(value => {
       if (live) setComputed({ input: workflow, value, error: '' });
     }).catch(error => { if (live) setComputed({ input: workflow, value: null, error: error.message }); });
@@ -48,7 +49,7 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
       if (response?.error) setSourceError(response.error);
     } catch (error) { setSourceError(error.message); }
   }
-  if (state.originalSources) return <BasOriginalSources workflow={workflow} onOpenCitation={onOpenCitation} onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
+  if (state.originalSources || !workflow) return <BasOriginalSources workflow={workflow} restoreContext={restoreContext} restoreNotice={state.restoreNotice} onOpenCitation={onOpenCitation} onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
   if (!ready) return <p role="status" className="bas-point-message">Gathering saved BAS findings…</p>;
   if (computed.error) return <p role="alert" className="bas-point-message">Review unavailable: {computed.error}. Saved evidence has not been changed.</p>;
   const sourcePage = Math.max(0, Math.min(state.sourcePage || 0, Math.ceil((selected?.evidence.length || 0) / 20) - 1));

@@ -103,6 +103,7 @@ export default function TakeoffDataPanel({
   onBasAssemblyReview,
   onBasAssemblyCalculate,
   onBasEngineering,
+  restoreContext,
   onClear,
   onRemove,
   onRemoveLine,
@@ -370,7 +371,7 @@ export default function TakeoffDataPanel({
           </button>
           {basWorkflow && <button type="button" style={tabBtn(tab === "points")} onClick={() => setTab("points")}>Point lists</button>}
           {basWorkflow && <button type="button" style={tabBtn(tab === "equipment")} onClick={() => setTab("equipment")}>Equipment</button>}
-          {basWorkflow && <button type="button" style={{ ...tabBtn(tab === 'review'), marginLeft: 'auto' }} onClick={() => setTab('review')}>Review &amp; changes</button>}
+          <button type="button" style={{ ...tabBtn(tab === 'review'), marginLeft: 'auto' }} onClick={() => setTab('review')}>Review &amp; changes</button>
         </div>
 
         {err && (
@@ -420,7 +421,7 @@ export default function TakeoffDataPanel({
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px", ...(tab === 'review' ? { display: 'flex', flexDirection: 'column', minHeight: 0 } : {}) }}>
           {tab === 'review' ? <BasProjectReviewWorkspace workflow={basWorkflow} state={basViewState?.projectReview}
             onStateChange={updater => onBasViewStateChange?.(previous => ({ ...previous, projectReview: updater(previous?.projectReview || {}) }))}
-            onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} />
+            onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} restoreContext={restoreContext} />
             : tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onAssemblyReview={onBasAssemblyReview} onAssemblyCalculate={onBasAssemblyCalculate} onEngineering={onBasEngineering} onOpenCitation={onOpenCitation} />
             : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
           {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}

@@ -75,7 +75,23 @@ Do not overwrite a newer namesake without explicitly selecting the intended vers
 Archives are unencrypted and unsigned—store/share them as project-confidential data.
 Supported limits and current proof: [evidence bundle contract](bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
 
-The development build adds save-version protection in preparation for atomic
+In browser-local storage, **Preview restore** shows the normal operator-preserving
+merge. **Discard preview** changes nothing. **Restore reviewed merge** replays
+the complete merged BAS history through Python, verifies every required original,
+then saves originals, takeoff, previous-state journal and new save version together.
+Quota, cancellation, stale state and mismatched bytes refuse without publishing a
+partial restore. Old annotations require the exact original under its recorded
+filename; ambiguous version ownership must be reviewed, not guessed. Archived
+PDFs stay separate from active counting sheets and open through **Open original**.
+At the empty plan picker, use **Restore BAS evidence backup** to reach this flow.
+
+This restores an unapproved backup, not an approved deliverable or current design.
+MCP and synced-storage restoration are not available yet. Journals are local
+storage records, not authenticated signatures or a completed rollback UI. A crash
+can leave unpublished staging data; existing originals are never silently deleted
+to reclaim space. See [restore proof and remaining boundaries](bas-production/RESTORE_BROWSER_PROOF.md).
+
+The development build adds save-version protection for browser-local atomic
 restoration. A detected replacement conflict stops this editor's autosaves; it
 does not discard the editor's unsaved work. Use **Export unsaved takeoff** to
 download that editable JSON, then **Reload saved version** to inspect the saved

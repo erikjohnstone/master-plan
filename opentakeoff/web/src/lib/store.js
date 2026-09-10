@@ -39,6 +39,7 @@ import { sanitizeTemplates } from "./templates.js";
 import { sanitizeMaterialLibrary } from "./materials.js";
 import { sanitizeStampLibrary } from "./stamps.js";
 import { attachAnnotationGeneration, annotationConflict } from "./annotationGeneration.js";
+import { BAS_SOURCE_CHUNK_BYTES, basSourceChunkKey, basSourceChunkCount, basSourceChunkLength, basSourceChunkRecord, isBasSourceChunkRecord } from './basSourceStorage.js';
 
 const DB_NAME = "opentakeoff";
 // v4 changes writer semantics, not payload/store layout. A v3 build's blind
@@ -269,6 +270,16 @@ function annotationStore(projectId = "") {
 function basSourceStore(projectId = "") {
   const annKey = projectId ? `${ANN_KEY}:${projectId}` : ANN_KEY;
   return {
+    // Actual restore is local atomic delivery, not an ordinary import/save.
+    // Cloud composites must coordinate their own pushes before exposing it.
+    async restoreBasEvidence(plan, loadSource, { generation = null, guard = () => {}, signal } = {}) {
+      const { restoreBasEvidenceInIdb } = await import('./basRestoreStore.js');
+      return restoreBasEvidenceInIdb({ withDb, emptyAnnotations, projectId, plan, loadSource, generation, guard, signal });
+    },
+    async loadBasRestoreJournal(operationId) {
+      if (typeof operationId !== 'string' || !/^[a-f0-9-]{36}$/.test(operationId)) throw new Error('Invalid restore operation identity');
+      return withDb(db => tx(db, META_STORE, 'readonly', os => os.get(['bas_restore_journal_v1', projectId, operationId])));
+    },
     async retainBasSource(workflow, sourceId, data) {
       // Freeze the caller's buffers/history before even the lazy imports await.
       const input = structuredClone({ workflow, data });
@@ -294,6 +305,23 @@ function basSourceStore(projectId = "") {
               try {
                 if (previous.result !== undefined) {
                   const old = previous.result;
+                  if (isBasSourceChunkRecord(old) && canonicalBasJson(old.source) === canonicalBasJson(prepared.source)) {
+                    let index = 0;
+                    const next = () => {
+                      if (index === old.chunk_count) return;
+                      const n = index++, chunk = os.get(basSourceChunkKey(projectId, sourceId, n));
+                      chunk.onsuccess = () => {
+                        try {
+                          if (!(chunk.result instanceof ArrayBuffer) || chunk.result.byteLength !== basSourceChunkLength(prepared.source, n)
+                            || new Uint8Array(chunk.result).some((b, i) => b !== prepared.bytes[n * BAS_SOURCE_CHUNK_BYTES + i])) {
+                            abort(new Error('Retained original PDF chunks conflict with verified bytes; existing evidence was not overwritten.')); return;
+                          }
+                          next();
+                        } catch (error) { abort(error); }
+                      };
+                    };
+                    next(); return;
+                  }
                   if (old.schema_version !== "bas_original_pdf_v1" || canonicalBasJson(old.source) !== canonicalBasJson(prepared.source)
                     || !(old.bytes instanceof ArrayBuffer) || old.bytes.byteLength !== prepared.bytes.byteLength
                     || new Uint8Array(old.bytes).some((byte, index) => byte !== prepared.bytes[index])) {
@@ -301,7 +329,12 @@ function basSourceStore(projectId = "") {
                   }
                   return;
                 }
-                os.add({ schema_version: "bas_original_pdf_v1", source: prepared.source, bytes: prepared.bytes.buffer }, key);
+                if (prepared.bytes.length > BAS_SOURCE_CHUNK_BYTES) {
+                  for (let index = 0; index < basSourceChunkCount(prepared.source); index++) {
+                    os.add(prepared.bytes.buffer.slice(index * BAS_SOURCE_CHUNK_BYTES, (index + 1) * BAS_SOURCE_CHUNK_BYTES), basSourceChunkKey(projectId, sourceId, index));
+                  }
+                  os.add(basSourceChunkRecord(prepared.source), key);
+                } else os.add({ schema_version: "bas_original_pdf_v1", source: prepared.source, bytes: prepared.bytes.buffer }, key);
                 retained = true;
               } catch (error) { abort(error); }
             };
@@ -316,6 +349,25 @@ function basSourceStore(projectId = "") {
       const source = basRetainedSourceSchema.parse(expectedSource);
       const record = await withDb(db => tx(db, META_STORE, "readonly", os => os.get(basSourceKey(projectId, source.source_id))));
       if (record === undefined) return null;
+      if (isBasSourceChunkRecord(record) && canonicalBasJson(record.source) === canonicalBasJson(source)) {
+        const bytes = await withDb(db => new Promise((resolve, reject) => {
+          const t = db.transaction(META_STORE, 'readonly'), os = t.objectStore(META_STORE), data = new Uint8Array(source.byte_length);
+          let index = 0, failure;
+          t.oncomplete = () => resolve(data); t.onabort = () => reject(failure || t.error);
+          const next = () => {
+            if (index === record.chunk_count) return;
+            const n = index++, chunk = os.get(basSourceChunkKey(projectId, source.source_id, n));
+            chunk.onsuccess = () => {
+              try {
+                if (!(chunk.result instanceof ArrayBuffer) || chunk.result.byteLength !== basSourceChunkLength(source, n)) throw new Error('Retained original PDF chunk is missing or corrupt.');
+                data.set(new Uint8Array(chunk.result), n * BAS_SOURCE_CHUNK_BYTES); next();
+              } catch (error) { failure = error; t.abort(); }
+            };
+          };
+          next();
+        }));
+        return verifyBasSourceBytes(source, bytes);
+      }
       if (record.schema_version !== "bas_original_pdf_v1" || canonicalBasJson(record.source) !== canonicalBasJson(source)
         || !(record.bytes instanceof ArrayBuffer)) throw new Error("Retained original PDF metadata is corrupt; availability is not verified.");
       return verifyBasSourceBytes(source, record.bytes);

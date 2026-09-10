@@ -1094,6 +1094,7 @@ export default function TakeoffCanvas() {
   const hydrated = useRef(false);
   const annotationGenerationRef = useRef(null);
   const annotationConflictRef = useRef(false);
+  const basRestoreContext = useRef(null);
   // Autosave stays holstered until a user-originated edit. hydrate() flips every
   // autosave dep to a fresh identity, so the effect fires once on the post-load
   // render with no edit behind it; that lone run arms this and returns instead of
@@ -2991,6 +2992,23 @@ export default function TakeoffCanvas() {
     editing: editingRef.current,
     scanning: scanBusyRef.current,
   });
+  // Browser-only hydration of a successful atomic archive restore. Exact merge,
+  // history/source validation and replay belong to the shared restore module.
+  basRestoreContext.current = {
+    read: () => ({ payload: { schema: ANN_SCHEMA, ...buildPayload() }, generation: annotationGenerationRef.current,
+      busy: computeBusy(), pending: !!saveDataRef.current && saveStateRef.current !== 'saved' }),
+    apply: result => {
+      saveDataRef.current = null;
+      annotationGenerationRef.current = annotationGeneration(result.payload);
+      annotationConflictRef.current = false; remotePendingRender.current = false;
+      suppressNextSave.current = true;
+      restoreSavedPayload(result.payload);
+      const notice = `Evidence backup restored. Original PDFs and merged history are saved locally; previous state is retained in restore journal ${result.operation_id}. This is not an approved takeoff.`;
+      setBasViewState({ ...basViewState, takeoffTab: 'review', projectReview: { originalSources: true, restoreNotice: notice } });
+      setView('canvas');
+      setSaveState('saved'); setCommitMsg(notice);
+    },
+  };
 
   // Register both reconcile handlers ONCE. onRemoteUpdate handles CASE 2: the store
   // adopted remote→local, then the canvas went busy in maybeFlush's ~2-IDB-write gap
@@ -12848,6 +12866,7 @@ export default function TakeoffCanvas() {
       {(view === "gallery" || view === "picker") && (
         <PlanNavigator
           canClose={openTabs.length > 0}
+          onRestoreEvidence={() => { setView('canvas'); setBasViewState(previous => ({ ...previous, takeoffTab: 'review', projectReview: { originalSources: true } })); setShowTakeoffData(true); }}
           onExit={() => setView("canvas")}
           initialMode={view === "picker" ? "browse" : "plan"}
           cloudMode={cloudMode}
@@ -12912,6 +12931,7 @@ export default function TakeoffCanvas() {
           projectName={projectName}
           corpusMeta={lastCorpusTakeoffMeta}
           basWorkflow={basWorkflow}
+          restoreContext={basRestoreContext}
           basViewState={basViewState}
           onBasViewStateChange={setBasViewState}
           onBasEngineering={async (rawCommand, options = {}) => {

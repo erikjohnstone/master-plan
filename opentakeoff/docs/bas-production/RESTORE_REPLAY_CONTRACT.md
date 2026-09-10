@@ -1,5 +1,11 @@
 # Restoration and complete saved-calculation replay — 2026-09-10
 
+Implementation update: the browser-local ZIP restore journey now passes real-PDF
+and 551 MB controlled capacity checks. See `RESTORE_BROWSER_PROOF.md`. The earlier
+future-tense design below records its pre-change contract; public MCP restore,
+sync coordination, revision correspondence and approved snapshots remain open.
+Chunked source storage was required by Chromium's per-record serialization limit.
+
 Pre-change contract, extending workflow E, not a new completion target. The
 unapproved ZIP already checks container/source/history integrity. Ordinary JSON
 import intentionally retains its old semantics. Neither proves all saved math:

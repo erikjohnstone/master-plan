@@ -1,0 +1,16 @@
+{
+  "source_bytes": 551119404,
+  "sources": 4,
+  "restore_ms": 10952.600000023842,
+  "verify_ms": 960.1000000238419,
+  "active_sheets": 0,
+  "journal_sources": 4,
+  "peak_sampled_chrome_rss_bytes": 2052210688,
+  "samples": 120,
+  "errors": [],
+  "limits": {
+    "phase_ms": 30000,
+    "sampled_rss_bytes": 2147483648
+  },
+  "disclosure": "Controlled byte arrays, actual Python empty-history replay and browser IDB restore; not parsed PDFs or corpus accuracy. 100ms summed Chrome-process RSS, not exact instantaneous peak. Synchronous final hashing may briefly block UI on large originals."
+}

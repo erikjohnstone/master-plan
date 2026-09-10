@@ -123,10 +123,15 @@ historical original, named by digest. Browser and MCP use the same archive and
 ownership checks. Missing or changed bytes block export. File verification is
 read-only. **Replay saved calculations** then checks every historical assignment,
 assembly and engineering result through the shared Python engine; it neither
-updates stale inputs nor approves a takeoff. Full-project ZIP restoration remains unfinished.
+updates stale inputs nor approves a takeoff. Browser-local **Preview restore** and
+**Restore reviewed merge** now replay the merged history and atomically retain
+its originals, saved state and recovery journal. An empty workspace offers
+**Restore BAS evidence backup**. Historical PDFs do not enter active counting.
+Public MCP/synced restoration, drawing correspondence and approved snapshots
+remain unfinished; see [current restore proof](docs/bas-production/RESTORE_BROWSER_PROOF.md).
 See [format, limits and acceptance](docs/bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
 
-Local saves now carry an editor-specific version guard for the upcoming atomic
+Local saves carry an editor-specific version guard for the browser-local atomic
 restore path. A detected version conflict preserves unsaved work and offers
 **Export unsaved takeoff** before **Reload saved version**. The browser database
 upgrade preserves existing records but older builds must reload. This safeguard

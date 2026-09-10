@@ -1,5 +1,17 @@
 ## Active work
 
+2026-09-10 checkpoint after **01e9b3a4**: actual browser-local source-inclusive
+restore passes the real Fort Sam journey (31 saved calculations replayed by
+Python, exact history/original reopened after reload) and the controlled 551.1 MB
+storage gate. Shared merge/replay/source gates; atomic chunked originals, payload,
+prior-state journal and save generation. No historical PDFs enter active counting.
+Full web **2,730 pass / 13 existing skips**, no failures; 13 new restore tests.
+Capacity **10.953 s**, sampled Chrome RSS **2,052,210,688 bytes** under unchanged
+30 s / 2 GiB limits. See `../opentakeoff/docs/bas-production/RESTORE_BROWSER_PROOF.md`.
+Main goal is not complete: public MCP/sync restore, journal recovery UX, drawing
+correspondence, approvals and A–D corpus/holdout acceptance still precede the
+appended symbol phase. No VectorGrid/math/key/threshold change or new corpus claim.
+
 2026-09-10 checkpoint after **4b1c7595**: per-editor browser save fencing now
 refuses obsolete generations and expected-state sync races without changing
 extraction/math. DB v4 preserves old records and rejects v3 blind-writer builds.
