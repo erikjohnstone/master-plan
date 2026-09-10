@@ -12,13 +12,20 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add **Export saved engineering XLSX** and the matching optional
+  `export_takeoff.engineering_workbook_path`. Shared Python replays saved
+  calculations before export; one shared projection preserves original inputs,
+  exclusions, source coordinates, pinned owners and stale/superseded history.
+  Exact decimals stay text; long or XML-incompatible passages use lossless text
+  parts. Drafts are excluded. Existing row, commercial and JSON exports retain
+  their meanings. This is a saved review, not an approved release.
 - Add the development selected-equipment Engineering editor and shared HTTP/MCP
   review/replay entry points. Retain equipment-owned resources, exact original
   wording, explicit input origins, all eleven check variants and append-only
   results. Preview/save and read-only replay bind to current sources and review
   heads; older or altered responses cannot replace the active workspace.
   Unknowns, excluded failures and stale dependencies remain separate. JSON
-  evidence export/import includes the history; full real-corpus, workbook and
+  evidence export/import includes the history; full real-corpus and
   release acceptance is still in progress, not a production-completion claim.
 - Add the shared Python engineering dependency for explicit signal, electrical,
   power, mechanical, allocation and expansion constraints. Retain original

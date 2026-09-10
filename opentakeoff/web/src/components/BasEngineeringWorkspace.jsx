@@ -12,6 +12,9 @@ import { ENGINEERING_LABELS, engineeringCheckShape, newEngineeringCheck, stageEn
   stageEngineeringResource, engineeringPreviewReady, engineeringListWindow, engineeringArrayIndex, engineeringInputAtPath } from './basEngineeringEditorState.ts';
 import BasEngineeringFields, { EngineeringSources, EngineeringChoices, engineeringValueLabel, humanEngineering as human } from './BasEngineeringFields.jsx';
 import Results, { engineeringStatusLabel as statusLabel } from './BasEngineeringResults.jsx';
+import { basEngineeringWorkbook, BAS_ENGINEERING_XLSX_MIME } from '../lib/basEngineeringExport.ts';
+import { buildXlsx } from '../lib/xlsx.js';
+import { downloadBytes } from '../lib/markedset.js';
 import './BasEngineeringWorkspace.css';
 
 const toggle = (ids, id) => ids.includes(id) ? ids.filter(v => v !== id) : [...ids, id];
@@ -41,6 +44,7 @@ export default function BasEngineeringWorkspace({ workflow, equipmentId, state =
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [preview, setPreview] = useState(null), [busy, setBusy] = useState(false), [error, setError] = useState(''), [notice, setNotice] = useState('');
   const running = useRef(null), editorHeading = useRef(null);
+  const liveWorkflow = useRef(workflow); liveWorkflow.current = workflow;
   const change = patch => onStateChange(previous => ({ ...previous, ...patch }));
   useEffect(() => {
     let live = true;
@@ -109,6 +113,23 @@ export default function BasEngineeringWorkspace({ workflow, equipmentId, state =
       controller.signal.throwIfAborted(); change({ replayReceipt: receiptKey(response.workflow) }); setNotice('Saved calculations match shared Python replay. This is not project approval.');
     } catch (e) { reportError(e); } finally { if (running.current === controller) running.current = null; setBusy(false); }
   }
+  async function exportWorkbook() {
+    if (busy) return;
+    const controller = new AbortController(); running.current = controller; setBusy(true); setError('');
+    try {
+      const response = await onEngineering({ action: 'inspect', request: { capture_id: capture.capture_id } }, { signal: controller.signal });
+      controller.signal.throwIfAborted();
+      const book = await basEngineeringWorkbook(verified, response);
+      controller.signal.throwIfAborted();
+      const bytes = await buildXlsx(book.sheets);
+      controller.signal.throwIfAborted();
+      if (canonicalBasJson(liveWorkflow.current) !== canonicalBasJson(response.workflow))
+        throw new Error('Saved workflow changed during export. No workbook downloaded; retry against current history.');
+      downloadBytes(`engineering-review-${book.workflow_sha256.slice(0, 12)}.xlsx`, bytes, BAS_ENGINEERING_XLSX_MIME);
+      change({ replayReceipt: receiptKey(response.workflow) });
+      setNotice('Saved engineering review exported with exact inputs, results, source locations and history. Staged edits are not included. This is not an approved release.');
+    } catch (e) { reportError(e); } finally { if (running.current === controller) running.current = null; setBusy(false); }
+  }
   const editorIdentity = resourceDraft?.resource_id || draft?.check.check_id;
   useEffect(() => { if (editorIdentity) editorHeading.current?.focus(); }, [editorIdentity]);
   if (!ready) return <p role="status">Checking engineering evidence…</p>;
@@ -123,6 +144,7 @@ export default function BasEngineeringWorkspace({ workflow, equipmentId, state =
   return <section className="bas-engineering-workspace" aria-label="Engineering compatibility">
     <div className="bas-point-heading"><h3>Engineering</h3><span>{human(view.dependency_status)} · selected declared constraints only</span>
       <button type="button" disabled={busy || !view.event || !onEngineering} onClick={inspect}>Verify saved calculations</button>
+      <button type="button" disabled={busy || !verified.engineering_events?.length || !onEngineering} onClick={exportWorkbook}>Export saved engineering XLSX</button>
       {busy && <button type="button" onClick={() => running.current?.abort(new Error('Engineering operation cancelled; no pending result accepted.'))}>Cancel operation</button>}
     </div>
     {view.event && <p role="status">{state.replayReceipt === receiptKey(verified) ? 'Saved calculations replayed in shared Python.' : 'Saved calculations need shared Python replay before use.'} A passing check is not complete design coverage or installed proof.</p>}

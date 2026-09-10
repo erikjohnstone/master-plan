@@ -37,6 +37,10 @@ import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
 } from "../../web/src/lib/hvacTaxonomy.ts";
 import { queryTable } from "../../web/src/lib/queryTable.mjs";
+import { basEngineeringWorkbook } from '../../web/src/lib/basEngineeringExport.ts';
+import { canonicalBasJson } from '../../web/src/lib/basCanonical.ts';
+import { inspectBasEngineering } from './basEngineeringReview.ts';
+import { writeEngineeringWorkbook } from './engineeringWorkbookFile.ts';
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -370,14 +374,29 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }, run("takeoff_summary", () => session.summary()));
 
   server.registerTool("export_takeoff", {
-    description: `The full "opentakeoff.takeoff_canvas.v1" annotations payload — exactly what the app autosaves, importable by it. Includes retained bas_workflow point-evidence captures when present; these are not approved takeoffs and do not contain source PDF bytes. Returned inline; pass path to also write it to disk as JSON. ${COORDS}`,
+    description: `The full "opentakeoff.takeoff_canvas.v1" annotations payload — exactly what the app autosaves, importable by it. Includes retained bas_workflow point-evidence captures when present; these are not approved takeoffs and do not contain source PDF bytes. Returned inline; pass path to also write it to disk as JSON. Alternatively, engineering_workbook_path writes a readable XLSX of saved engineering checks, exact inputs, constraints, exclusions, source locations and history after shared Python replay. It is not a live calculator, installed count or approved release. Drafts are excluded. Keep the JSON archive and original PDFs for reimport. Use only one output path per call; existing XLSX files always require overwrite:true. ${COORDS}`,
     inputSchema: {
       path: z.string().optional().describe("File path to write the payload to"),
+      engineering_workbook_path: z.string().min(1).optional().describe('Alternative output path for a saved engineering review .xlsx; mutually exclusive with path. Requires saved BAS engineering history and shared Python replay.'),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: exportTakeoffOutput,
-  }, run("export_takeoff", async ({ path: outPath, overwrite }) => {
-    const payload = session.exportPayload();
+  }, run("export_takeoff", async ({ path: outPath, engineering_workbook_path: workbookPath, overwrite }) => {
+    if (outPath !== undefined && workbookPath !== undefined) throw new UserError('Use either path for JSON or engineering_workbook_path for XLSX, not both. No file was written.');
+    // Freeze the asynchronous workbook's source snapshot; exportPayload carries
+    // live annotation arrays. Keep ordinary JSON behavior unchanged.
+    const payload = workbookPath ? structuredClone(session.exportPayload()) : session.exportPayload();
+    if (workbookPath) {
+      await assertWritable(workbookPath, 'xlsx', overwrite);
+      if (!payload.bas_workflow?.current_capture_id) throw new UserError('No active saved BAS workflow to export.');
+      const inspection = await inspectBasEngineering(payload.bas_workflow, payload.bas_workflow.current_capture_id);
+      const book = await basEngineeringWorkbook(payload.bas_workflow, inspection);
+      const { buildXlsx } = await import('../../web/src/lib/xlsx.js');
+      const bytes = await buildXlsx(book.sheets);
+      await writeEngineeringWorkbook(workbookPath, bytes, overwrite, () => {
+        if (canonicalBasJson(session.exportPayload()) !== canonicalBasJson(payload)) throw new UserError('Workspace changed during engineering export; no workbook was written. Retry against current history.');
+      });
+    }
     if (outPath) {
       await assertWritable(outPath, "json", overwrite);
       const { writeFile } = await import("node:fs/promises");

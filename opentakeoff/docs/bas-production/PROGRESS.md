@@ -1,5 +1,79 @@
 # BAS production workflow progress
 
+## Saved engineering review export — 2026-09-10
+
+The original five BAS workflows remain the priority; the final symbol phase has
+not displaced them. This checkpoint completes the bounded saved-engineering
+workbook contract, not workflow D's full real-document coverage or workflow E's
+approved deliverable. Prior checkpoint is **f5059580**, following **0f8fcd72**.
+No push, merge, deployment, extraction algorithm, VectorGrid threshold/bbox,
+Python engineering math, pricing or labor change.
+
+Shared-path gate: **yes** for the single saved-review projection, unchanged
+engineering labels, lossless text transport and opt-in XLSX formatting consumed
+by UI and MCP. **No** for the browser download, cancellation interaction or
+atomic filesystem delivery. The existing JSON contract/default XLSX sheet XML
+remain unchanged. Workbook history retains original inputs and constraint paths,
+decimal strings, null/zero distinctions, exclusions, withdrawn owners, current
+versus stale dependencies, source spans and resource-applicability findings.
+The workbook is explicitly not an approved release or installed/design proof.
+The source archive remains the JSON plus original PDFs.
+
+Verified terminal evidence:
+
+- Full web **74622 exit 0**, `engineering-export-web-check-3.log`: **2,670 pass /
+  13 existing skips / 0 failures**, 16,680.478667 ms test phase; types/lint (three
+  existing warnings), bench and build pass; build 5.28 s. Earlier full check 1
+  passed. Check 2 exposed an ES2020 `replaceAll` typing incompatibility in a new
+  presentation label; equivalent regex replacement fixed it without changing
+  the project target or interpretation.
+- Full BAS MCP **13770 exit 0**, `engineering-export-bas-final-3.log`: **90 pass /
+  0 skips / 0 failures**, 12,764.668875 ms. Final MCP types **99073 exit 0** and
+  build pass. Three new export tests plus exact input/result projection checks
+  across all eleven existing Python engineering families. Actual Python replay,
+  excluded failures/unknowns, source/owner history, stale receipts, hostile text,
+  atomic file preservation and concurrent in-place Session mutation are tested.
+- Real Fort Sam development PDF browser **27124 exit 0**,
+  `engineering-export-browser-4/checks.json`: **27,207 ms**, zero page errors.
+  Cancelled actual HTTP/Python replay produces no download; draft/history remain
+  exact. Retry exports saved values only. A newer ordinary import rejects a late
+  response without a stale download. Light/dark 1280 screenshots inspected.
+  Earlier browser attempts 1/2 passed cancellation and workbook equality then
+  failed harness navigation after import reset the equipment detail view. Import
+  does not close Takeoff. Attempt 3 passed after using the existing review entry;
+  no production navigation behavior was changed to satisfy the test.
+- Packaged public MCP **85326 exit 0**,
+  `engineering-export-package-3/checks.json`: **13 XML/ZIP parts exactly equal**
+  to the actual browser workbook, **11,917 bytes**, **4,623 ms**. Saved Session
+  history and legacy inline JSON stay unchanged; prior XLSX files are protected.
+  Initial packaged attempt reproduced missing `fflate`; it is now an explicit
+  runtime dependency, the same 0.8.3 already used by web. Standalone lockfile also
+  synchronizes the already-declared runtime `tsx` classification, not a new
+  version selection. An intermediate optional-esbuild installation failure is
+  retained; restoring optional platform dependencies preceded the two full
+  successful 90-test runs. No missing assertion was skipped.
+- Independent read-only workbook import/inspection **61848 exit 0**,
+  `engineering-export-artifact-4/verification.json`: **382 populated cells across
+  eight sheets** match the shared projection; no formulas or spreadsheet error
+  matches. All eight sheet previews inspected (seven prior-sheet definitions
+  explicitly equal to the already inspected artifact-3; new Findings inspected).
+  The reader's ISO-date coercion is compared as exact UTC text, not a production
+  data change. New Findings retains `scope_partly_unknown`, so numeric success
+  cannot hide that limitation. The spreadsheet skill informed this independent
+  readback and visual QA; no spreadsheet-calculation library entered production.
+- Documentation link gate: 31 files; `git diff --check` passes. Tool count remains
+  50; all three package version surfaces remain 0.9.72. No publish requested.
+
+Failures and intermediate evidence remain retained. This is one real-PDF saved
+history with controlled counterpart inputs, not automatic hardware discovery,
+all-family real-project coverage or a real addendum. No new full extraction
+corpus run for this export-only batch: previous **505/541 takeoff, 99/129 reference,
+78/91 graph cells and 133/138 anchors**, including 23 old-path ENOENTs, remain the
+disclosed baseline, not newly green shipping metrics. Final corpus/holdout gates
+remain required. Next: finish the remaining engineering real-document journey,
+then coherent review/revision/readiness/approved-snapshot controls using existing
+shared capture and decision history. Do not fork those truths into the UI.
+
 ## User extension and current priority — 2026-09-09
 
 The user explicitly added a final research-gated phase for deformation-tolerant

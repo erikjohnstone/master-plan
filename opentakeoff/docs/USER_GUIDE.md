@@ -74,8 +74,15 @@ After
 reload or import, use **Verify saved calculations** to replay retained results
 through shared Python. Replay does not make outdated dependencies current and
 does not approve the project. **Export evidence & decisions** retains the full
-register, original evidence and calculation history as JSON; existing row
-workbooks do not yet include engineering checks. This development workflow needs
+register, original evidence and calculation history as JSON.
+**Export saved engineering XLSX** replays saved calculations and downloads a
+separate review workbook with checks, exact inputs, constraints, exclusions,
+source locations and prior reviews. Unsaved edits stay in the editor and are
+not exported. Stale dependencies remain stale after replay. Keep the JSON
+archive and original PDFs for reimport; the workbook is not a live calculator or
+approved release. Long or XML-incompatible source text is retained in ordered
+**Full text** parts rather than silently truncated. Existing schedule-row and
+commercial workbooks keep their meaning. This development workflow needs
 the local server-capable endpoint and configured Python runtime, not a browser
 calculator. Full engineering coverage and release acceptance remain in progress.
 

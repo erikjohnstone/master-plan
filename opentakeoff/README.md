@@ -96,6 +96,10 @@ source-bound resources and inputs, calculate a preview, then explicitly record
 the decision through shared Python. Saved histories retain original wording,
 unknowns and excluded failures; replay verifies calculations separately from
 dependency freshness. The same service is available through BAS compile in MCP.
+**Export saved engineering XLSX** provides a separate, non-commercial review
+workbook with exact saved inputs, constraints, source locations and history.
+It excludes unsaved edits and does not approve or certify a design. Keep the
+evidence JSON archive and original PDFs for reimport.
 Broader real-document and release acceptance remain in progress; a passing
 selected constraint is not a complete or certified compatible design.
 

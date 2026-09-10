@@ -1,0 +1,38 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ saved exports retain outcomes, exclusions, exact source frame and pinned withdrawn owners (1004.861ms)
+✔ public MCP XLSX export matches shared projection, preserves session, and protects existing files (1142.074667ms)
+✔ owned signal checks save and replay through Python; every selected resource is checked (583.93125ms)
+✔ owned analog checks save and replay through Python; every selected resource is checked (466.431209ms)
+✔ owned loading checks save and replay through Python; every selected resource is checked (501.094125ms)
+✔ owned contact checks save and replay through Python; every selected resource is checked (470.87525ms)
+✔ owned pulse checks save and replay through Python; every selected resource is checked (456.714209ms)
+✔ owned power checks save and replay through Python; every selected resource is checked (431.601958ms)
+✔ owned mechanical checks save and replay through Python; every selected resource is checked (403.994417ms)
+✔ owned allocation checks save and replay through Python; every selected resource is checked (403.128458ms)
+✔ owned expansion checks save and replay through Python; every selected resource is checked (395.95325ms)
+✔ owned serial checks save and replay through Python; every selected resource is checked (410.95275ms)
+✔ owned ip checks save and replay through Python; every selected resource is checked (383.801875ms)
+✔ a path with nothing at it is writable (6.355166ms)
+✔ our own takeoff export overwrites silently — the re-export loop keeps working (3.285667ms)
+✔ our own report export overwrites silently (0.973375ms)
+✔ a stranger's file is refused, and the bytes survive (2.317958ms)
+✔ refuses a same-named file that is not JSON at all (0.922ms)
+✔ refuses JSON carrying somebody else's schema (1.005042ms)
+✔ overwrite:true replaces a stranger's file — explicit is allowed (0.580667ms)
+✔ a directory is refused with its own message, not an EISDIR later (0.588333ms)
+✔ a marked set we produced is recognized by its Producer and overwrites (8.749458ms)
+✔ somebody else's PDF is refused even at a marked-set-shaped path (2.782167ms)
+✔ the signed contract nobody wants overwritten is refused (2.764375ms)
+✔ a corrupt file fails CLOSED — unknown is protected, not clobbered (1.275875ms)
+✔ an unreadable file fails CLOSED (0.521292ms)
+✔ whitespace-formatted JSON is still recognized as ours (1.195416ms)
+✔ the marker must be in the head, not smuggled in from deep in the file (0.708042ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5499.717625

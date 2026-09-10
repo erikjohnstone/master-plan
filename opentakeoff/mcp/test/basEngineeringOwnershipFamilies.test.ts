@@ -10,6 +10,7 @@ import { engineeringFixture, uuid } from '../../web/test/helpers/basEngineeringF
 import { basEngineeringInputSchema, type BasEngineeringInput } from '../../web/src/lib/basEngineeringContract.ts';
 import { basEngineeringRegisterSchema, validateBasEngineeringRegister, type BasEngineeringRegister } from '../../web/src/lib/basEngineeringRegister.ts';
 import { applyBasEngineeringReview, verifyBasEngineeringHistory } from '../src/basEngineeringReview.ts';
+import { basEngineeringWorkbook } from '../../web/src/lib/basEngineeringExport.ts';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const localPython = fileURLToPath(new URL('../../.venv-bas/bin/python', import.meta.url));
@@ -63,6 +64,23 @@ for (const [name, raw] of Object.entries(cases)) test(`owned ${name} checks save
   assert.equal(saved.event.result.project_complete, false);
   assert.deepEqual(saved.event.register, register);
   assert.deepEqual(await verifyBasEngineeringHistory(saved.workflow, { python }), saved.workflow);
+  const book = await basEngineeringWorkbook(saved.workflow);
+  const exportedInputs = book.sheets.find(s => s.name === 'Inputs')!.rows.slice(1).filter(r => !String(r[1]).startsWith('target.'));
+  // Read each projected path back from the original contract independently.
+  for (const row of exportedInputs) {
+    const original = input.checks.find(c => c.check_id === row[0])!;
+    const value = String(row[1]).split('.').reduce((v: unknown, key) => (v as Record<string, unknown>)[key], original);
+    assert.equal(row[2], value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value);
+    assert.equal(row[3], value === null ? 'Unknown / not provided' : typeof value === 'object' ? JSON.stringify(value) : String(value));
+  }
+  const rows = book.sheets.find(s => s.name === 'Constraints')!.rows.slice(1);
+  assert.equal(rows.length, saved.event.result.checks.reduce((n, c) => n + c.constraints.length, 0));
+  for (const check of saved.event.result.checks) for (const c of check.constraints) {
+    const row = rows.find(r => r[0] === check.check_id && r[1] === c.rule_id)!;
+    assert.equal(row[2], c.status); assert.equal(row[3], c.message);
+    assert.deepEqual(JSON.parse(String(row[4])), c.input_paths); assert.deepEqual(JSON.parse(String(row[5])), c.missing_inputs);
+    assert.deepEqual(JSON.parse(String(row[6])), c.normalized);
+  }
   // An unregistered owner must reject for every resource, including supplies,
   // pools, terminals and domains that have no inline equipment_id in Python.
   for (let i = 0; i < resources.length; i++) {

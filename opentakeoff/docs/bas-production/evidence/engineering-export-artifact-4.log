@@ -1,0 +1,9 @@
+{"sheet":"Review","rows":12,"columns":2,"exact_cells_checked":24,"preview_range":"A1:B12"}
+{"sheet":"Checks","rows":2,"columns":12,"exact_cells_checked":24,"preview_range":"A1:F2"}
+{"sheet":"Constraints","rows":4,"columns":8,"exact_cells_checked":32,"preview_range":"A1:F4"}
+{"sheet":"Inputs","rows":38,"columns":5,"exact_cells_checked":190,"preview_range":"A1:E12"}
+{"sheet":"Resources","rows":3,"columns":12,"exact_cells_checked":36,"preview_range":"A1:F3"}
+{"sheet":"Findings","rows":2,"columns":9,"exact_cells_checked":18,"preview_range":"A1:F2"}
+{"sheet":"History","rows":2,"columns":15,"exact_cells_checked":30,"preview_range":"A1:F2"}
+{"sheet":"Source locations","rows":2,"columns":14,"exact_cells_checked":28,"preview_range":"A1:F2"}
+{"kind":"notice","message":"Cell search matched 0 entries."}

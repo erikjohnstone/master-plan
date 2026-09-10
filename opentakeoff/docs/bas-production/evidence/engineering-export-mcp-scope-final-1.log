@@ -1,0 +1,13 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ staged workbook cancellation preserves old files, absent targets and cleans only its temporary output (25.047667ms)
+✔ saved exports retain outcomes, exclusions, exact source frame and pinned withdrawn owners (652.354625ms)
+✔ public MCP XLSX export matches shared projection, preserves session, and protects existing files (980.812417ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2243.914958

@@ -1,0 +1,25 @@
+{"sheet":"Review","rows":12,"columns":2,"exact_cells_checked":24,"preview_range":"A1:B12"}
+{"sheet":"Checks","rows":2,"columns":12,"exact_cells_checked":24,"preview_range":"A1:F2"}
+{"sheet":"Constraints","rows":4,"columns":8,"exact_cells_checked":32,"preview_range":"A1:F4"}
+{"sheet":"Inputs","rows":38,"columns":5,"exact_cells_checked":190,"preview_range":"A1:E12"}
+{"sheet":"Resources","rows":3,"columns":12,"exact_cells_checked":36,"preview_range":"A1:F3"}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: History row 2 column 2
++ actual - expected
+
++ 2026-09-10T02:27:18.830Z
+- '2026-09-10T02:27:18.830Z'
+
+    at file:///private/tmp/bas-workbook-qa.SuVy53/inspect.mjs:16:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 2026-09-10T02:27:18.830Z,
+  expected: '2026-09-10T02:27:18.830Z',
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

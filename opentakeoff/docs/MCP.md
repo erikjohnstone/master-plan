@@ -104,6 +104,15 @@ excluded failures and prior history remain visible. No installed quantities,
 guessed routes or whole-project compatibility certification are produced.
 See [the engineering input and evidence contract](bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
 
+`export_takeoff {engineering_workbook_path: "/path/engineering-review.xlsx"}`
+replays saved engineering history and writes the same non-commercial workbook
+as the browser. It retains source locations, original inputs, exclusions and
+stale/superseded decisions without approving them. The inline annotation payload
+is unchanged. Use either `path` for JSON or `engineering_workbook_path` for XLSX
+in one call, not both. Existing XLSX files require `overwrite: true`; no ZIP
+signature is accepted as proof of ownership. Keep the JSON archive and source
+PDFs for reimport. See [the export contract](bas-production/ENGINEERING_EXPORT_CONTRACT.md).
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

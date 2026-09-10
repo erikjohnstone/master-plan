@@ -1,0 +1,15 @@
+node:internal/fs/promises:697
+  return new FileHandle(await PromisePrototypeThen(
+                        ^
+
+Error: ENOENT: no such file or directory, open '/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/engineering-export-browser-1/projection.json'
+    at async open (node:internal/fs/promises:697:25)
+    at async Object.readFile (node:internal/fs/promises:1348:14)
+    at async file:///private/tmp/bas-workbook-qa.SuVy53/inspect.mjs:6:31 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/engineering-export-browser-1/projection.json'
+}
+
+Node.js v24.19.0

@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.innerText: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('region', { name: 'Engineering compatibility', exact: true })[22m
+
+    at <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-engineering-export.mjs:90:34) {
+  log: [
+    "  - waiting for getByRole('region', { name: 'Engineering compatibility', exact: true })"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.13.1

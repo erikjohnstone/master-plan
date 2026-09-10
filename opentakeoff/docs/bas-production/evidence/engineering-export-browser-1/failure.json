@@ -1,0 +1,9 @@
+{
+  "error": "TimeoutError: locator.innerText: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Engineering compatibility', exact: true })\u001b[22m\n",
+  "stack": "locator.innerText: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Engineering compatibility', exact: true })\u001b[22m\n\n    at <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-engineering-export.mjs:90:34)",
+  "checks": [
+    "Cancelled actual replay response produces no download and preserves draft/history",
+    "Browser workbook matches shared/MCP projection exactly, excludes draft, preserves original history"
+  ],
+  "page_errors": []
+}

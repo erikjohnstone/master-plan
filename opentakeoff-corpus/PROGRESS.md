@@ -1,5 +1,25 @@
 ## Active work
 
+2026-09-10 main-goal checkpoint: saved engineering review XLSX is implemented on
+one shared UI/MCP projection, with original inputs, all constraint/history data,
+source locations and applicability findings. Not an approved deliverable or
+installed/design proof. Full web **74622 exit 0**, **2,670 pass / 13 existing
+skips**, types/lint/bench/build pass; full BAS MCP **13770 exit 0**, **90 pass**,
+MCP types/build and unchanged 50-tool/version surfaces checked. Real development
+PDF browser **27124 exit 0**, 27.207 s: actual replay cancellation, preserved
+draft/history, exact workbook and rejection after newer ordinary import; no page
+errors. Packaged public MCP **85326 exit 0**, 4.623 s: all 13 workbook parts equal
+to browser, prior-file guard and legacy inline JSON unchanged. Missing packaged
+ZIP dependency was reproduced then declared (existing web fflate 0.8.3); no
+extraction or Python math edit. Independent readback checked all 382 cells/eight
+sheets and visual previews. Failed-first runs are retained, not omitted.
+The export contract is bounded-complete; engineering real-document coverage and
+review/revision/approved-snapshot work remain. Detailed evidence is in
+`opentakeoff/docs/bas-production/PROGRESS.md`. No new extraction corpus metrics:
+505/541 takeoff, 99/129 reference, graph 78/91 cells / 133/138 anchors and 23
+old-path ENOENTs remain the historical baseline. No push/merge/deploy. Finish all
+five workflows before the appended symbol-reconciliation implementation phase.
+
 2026-09-09 priority clarification: finish the five BAS workflows first. The
 user-authorized symbol-deformation/installed-plan reconciliation research and
 hardening is appended as a final phase in `opentakeoff/docs/BAS_PRODUCTION_GOAL.md`,
