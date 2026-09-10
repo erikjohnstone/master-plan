@@ -103,6 +103,12 @@ evidence JSON archive and original PDFs for reimport.
 Broader real-document and release acceptance remain in progress; a passing
 selected constraint is not a complete or certified compatible design.
 
+**Takeoff → Review & changes** now gathers saved source, point/SOO, equipment,
+assembly and engineering findings in one searchable workspace. Inspect original
+evidence, return to the existing domain workspace, or export every finding as
+JSON. Unknown codes and excluded failures stay visible. This first review slice
+does not approve takeoffs, verify retained PDF bytes or implement revision release.
+
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
 **Takeoff · Edit · ⋯** controls at the upper right. **Schedules**

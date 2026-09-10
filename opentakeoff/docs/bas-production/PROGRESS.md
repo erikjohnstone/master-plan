@@ -1,5 +1,39 @@
 # BAS production workflow progress
 
+## Shared project finding queue — 2026-09-10
+
+After **0357cada**, the first read-only E slice is wired through one shared
+catalog/projection, the internal **Review & changes** workspace and opt-in public
+MCP `bas_project_review`. No extraction, VectorGrid, Python math, existing stored
+schema or default compile result changed. This is not E/main-goal completion:
+source retention, correspondence, decisions, approvals and release remain.
+The five BAS workflows still precede the appended symbol-reconciliation phase.
+
+Proof/limits/reproduction: `PROJECT_REVIEW_PROOF.md`. Final original-PDF browser
+**19202 exit 0**, 37.561 s: **456 findings**, exact full export, original page-8
+bbox highlight, source/domain return, filters, keyboard and viewport pager checks;
+zero page errors. Packaged MCP **6687 exit 0**, 38.951 s: exact browser/shared
+projection, structured/text agreement, every existing compile field unchanged,
+retained state protected on valid inspection and invalid capture. Five exports
+compare identically. Actual-Python tests preserve current failed/excluded checks
+and reproduce/fix duplicated capture-wide source coverage after calculation.
+
+Full BAS **38494: 93 pass**. Full web **6893 exit 0: 2,675 pass / 13 existing
+skips**, types/lint/bench/build pass. Final layout type/lint **63956** pass.
+MCP types/build/tool count/package **30387** pass, including **4 packaging tests**
+and byte-identical VectorGrid dependencies. No threshold/key/scorer relaxation.
+Failed-first catalog/dedup/browser evidence is retained. Pagination below the
+1280/1440 viewport was caught visually and fixed using a review-only flex region.
+
+Performance is not finished: final browser first open **4.740 s**; warm public
+compile+inspection **6.063 s** with concurrent verification. Do not call it fast
+or production-complete. Isolated profiling/identity-preserving optimization and
+broader correction/navigation/cancellation coverage remain required. No new full
+corpus metrics or holdout access; historical 505/541 takeoff, 99/129 reference,
+78/91 graph cells and 133/138 anchors plus 23 old-path ENOENTs remain disclosed.
+No push, merge or deployment. Next: finish the full E contract and remaining
+source/corpus gates, then the researched final symbol/installed-plan phase.
+
 ## All-family engineering forms verified; revision contract — 2026-09-10
 
 This is a test/research checkpoint after **eb18c7ad**, not completion of the main

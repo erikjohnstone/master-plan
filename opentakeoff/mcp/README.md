@@ -140,6 +140,18 @@ PDFs for reimport. `path` and `engineering_workbook_path` are mutually exclusive
 existing XLSX files always require `overwrite: true`. The inline annotation
 payload and ordinary JSON export remain unchanged.
 
+The development BAS compile also accepts `bas_project_review: {capture_id}` for
+an exact retained capture. Its additive result matches **Takeoff → Review & changes**:
+original issue codes, affected subjects/equipment, evidence, saved dependency
+status and exclusions. Unknown codes remain visible blockers. This is read-only
+inspection; `readiness: "not_evaluated"` and `project_complete: false` are deliberate.
+It neither replays Python nor verifies stored PDF bytes, dismisses constraints or
+grants approval. Default compile output is unchanged when the option is omitted.
+Normal compile may retain a fresh capture; the finding request selects the named
+retained capture and explicitly labels historical versus active source state.
+Save the findings with the existing optional compile JSON `path`; retain ordinary
+evidence JSON plus original PDFs separately. Revision/release work is unfinished.
+
 No clone, no build—point your MCP client at the published package:
 
 ```json

@@ -15,6 +15,7 @@ import { basAssignmentCalculationSchema } from '../../web/src/lib/basAssignmentD
 import { basAssemblySummarySchema } from '../../web/src/lib/basAssemblyReview.ts';
 import { basAssemblyCalculationSchema } from '../../web/src/lib/basAssemblyQuantityContract.ts';
 import { basEngineeringSummarySchema } from '../../web/src/lib/basEngineeringReview.ts';
+import { basProjectReviewSchema } from '../../web/src/lib/basProjectReview.ts';
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -127,6 +128,7 @@ export const compileCorpusTakeoffOutput = {
   bas_assembly_quantities: basAssemblyCalculationSchema.optional().describe('Saved shared-Python declared component quantities for exact equipment and assembly decisions. Never installed/unique-device totals or approval.'),
   bas_engineering: basEngineeringSummarySchema.optional().describe('Source/resource-bound engineering decisions, retained original inputs/results and separate dependency/replay status. A saved pass is not freshly verified, complete coverage, installed proof or approval. Use bas_engineering_inspect to replay; missing values and exclusions remain explicit.'),
   bas_engineering_error: z.string().optional().describe('Engineering review unavailable; legacy extraction and earlier history remain retained.'),
+  bas_project_review: basProjectReviewSchema.optional().describe('Opt-in shared, source-linked saved findings. Unknown codes, exclusions and failed constraints remain visible. Does not verify PDF bytes, replay calculations or decide readiness/approval.'),
   bas_assembly_error: z.string().optional().describe('Assembly summary unavailable; original point, table and math results remain retained. Requested assembly writes refuse atomically.'),
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),

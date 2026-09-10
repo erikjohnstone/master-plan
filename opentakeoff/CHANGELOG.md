@@ -12,6 +12,14 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add the shared read-only project finding queue and **Takeoff → Review & changes**.
+  The optional BAS compile `bas_project_review: {capture_id}` returns the same
+  original codes, source evidence, affected subjects and dependency/exclusion
+  state as the browser. Failed/unknown engineering constraints remain visible;
+  repeated source-wide coverage findings are not duplicated by assigned-value
+  summaries. Filtered views never truncate the full findings JSON export.
+  This is the first workflow-E slice, not revision approval or release readiness.
+  Existing extraction, Python math and default compile outputs are unchanged.
 - Add **Export saved engineering XLSX** and the matching optional
   `export_takeoff.engineering_workbook_path`. Shared Python replays saved
   calculations before export; one shared projection preserves original inputs,

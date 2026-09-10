@@ -13,6 +13,7 @@ import { calculateBasAssemblies } from './basAssemblyQuantities.ts';
 import { applyBasEngineeringReview, inspectBasEngineering } from './basEngineeringReview.ts';
 import { basEngineeringView, basEngineeringSummarySchema } from '../../web/src/lib/basEngineeringReview.ts';
 import { basEngineeringInspectRequestSchema } from '../../web/src/lib/basEngineeringRegister.ts';
+import { basProjectReview, basProjectReviewRequestSchema } from '../../web/src/lib/basProjectReview.ts';
 
 /** Snapshot the source context before awaiting either Python operation. A
  * math-policy error and an evidence error are independent, never a fake zero.
@@ -46,11 +47,12 @@ async function pointListsForSession(session: unknown, graph: SheetGraph) {
 
 export async function compileProductionTakeoff(session: unknown, graph: SheetGraph, kind: string,
   opts: { service?: string; bas_math?: unknown; bas_review?: unknown; bas_equipment_review?: unknown; bas_assignment_demand?: unknown;
-    bas_assembly_review?: unknown; bas_assembly_quantities?: unknown; bas_engineering_review?: unknown; bas_engineering_inspect?: unknown } = {}) {
+    bas_assembly_review?: unknown; bas_assembly_quantities?: unknown; bas_engineering_review?: unknown; bas_engineering_inspect?: unknown; bas_project_review?: unknown } = {}) {
   const hasAssemblyWrite = opts.bas_assembly_review != null || opts.bas_assembly_quantities != null;
   const hasEngineering = opts.bas_engineering_review != null || opts.bas_engineering_inspect != null;
+  const hasProjectReview = opts.bas_project_review != null;
   const hasReview = opts.bas_review != null || opts.bas_equipment_review != null || opts.bas_assignment_demand != null || hasAssemblyWrite || opts.bas_engineering_review != null;
-  if ((hasReview || hasEngineering) && kind !== 'bas_points' && kind !== 'T-BAS-01') throw new Error('BAS review is only available for the BAS points workflow');
+  if ((hasReview || hasEngineering || hasProjectReview) && kind !== 'bas_points' && kind !== 'T-BAS-01') throw new Error('BAS review is only available for the BAS points workflow');
   const compiled = compileTakeoff(session, graph, kind, opts);
   if (compiled.kind !== "bas_points") return compiled;
   // SHOULD THIS BE ON THE SHARED PATH? Yes: both UI CLI and MCP call here.
@@ -72,6 +74,7 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
   let assignmentCalculation;
   let assemblySummary, assemblyCalculation, assemblyError;
   let engineeringView, engineeringError;
+  let projectReview;
   if (pointResult && 'bas_workflow' in pointResult && pointResult.bas_workflow) {
     const previous = session && typeof session === 'object' && 'basWorkflow' in session ? session.basWorkflow : null;
     const merged = mergeBasWorkflows(previous, pointResult.bas_workflow, true)!;
@@ -114,19 +117,22 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
         assemblyError = error instanceof Error ? error.message : 'Assembly source review unavailable';
       }
     }
+    if (hasProjectReview) projectReview = await basProjectReview(pointResult.bas_workflow,
+      basProjectReviewRequestSchema.parse(opts.bas_project_review).capture_id);
     // Commit only after any requested review validates. Invalid requests leave
     // the prior Session review/capture state untouched.
-    if ((hasReview || hasEngineering) && session && typeof session === 'object' && 'basWorkflow' in session && session.basWorkflow !== previous) {
+    if ((hasReview || hasEngineering || hasProjectReview) && session && typeof session === 'object' && 'basWorkflow' in session && session.basWorkflow !== previous) {
       throw new Error('The BAS workspace changed during this operation; no stale decision or calculation was saved');
     }
     if (session && typeof session === 'object' && 'retainBasWorkflow' in session && typeof session.retainBasWorkflow === 'function') {
       const retained = session.retainBasWorkflow(pointResult.bas_workflow);
-      if (retained === false && (hasReview || hasEngineering)) throw new Error('The loaded drawing set changed; the BAS review was not applied');
+      if (retained === false && (hasReview || hasEngineering || hasProjectReview)) throw new Error('The loaded drawing set changed; the BAS review was not applied');
     }
-  } else if (hasReview || hasEngineering) throw new Error('BAS evidence could not be captured; prior review history was preserved');
+  } else if (hasReview || hasEngineering || hasProjectReview) throw new Error('BAS evidence could not be captured; prior review history was preserved');
   return { ...compiled, bas_math, ...pointResult, ...(equipmentSummary ? { bas_equipment: equipmentSummary } : {}),
     ...(assignmentCalculation ? { bas_assignment_demand: assignmentCalculation } : {}),
     ...(assemblySummary ? { bas_assemblies: assemblySummary } : {}), ...(assemblyError ? { bas_assembly_error: assemblyError } : {}),
     ...(assemblyCalculation ? { bas_assembly_quantities: assemblyCalculation } : {}),
-    ...(engineeringView ? { bas_engineering: basEngineeringSummarySchema.parse(engineeringView) } : {}), ...(engineeringError ? { bas_engineering_error: engineeringError } : {}) };
+    ...(engineeringView ? { bas_engineering: basEngineeringSummarySchema.parse(engineeringView) } : {}), ...(engineeringError ? { bas_engineering_error: engineeringError } : {}),
+    ...(projectReview ? { bas_project_review: projectReview } : {}) };
 }

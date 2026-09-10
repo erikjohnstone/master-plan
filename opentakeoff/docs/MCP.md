@@ -113,6 +113,15 @@ in one call, not both. Existing XLSX files require `overwrite: true`; no ZIP
 signature is accepted as proof of ownership. Keep the JSON archive and source
 PDFs for reimport. See [the export contract](bas-production/ENGINEERING_EXPORT_CONTRACT.md).
 
+For the development project review queue, add `bas_project_review: {capture_id}`
+to `compile_corpus_takeoff` with `kind: "bas_points"`. It shares the browser's
+source-linked saved-finding projection. Original failures, exclusions, unknown
+codes and stale dependencies are retained. It does not change existing compile
+fields, replay calculations, verify stored source bytes or approve a takeoff.
+Findings are not a completeness score; readiness remains `not_evaluated`.
+See [review and revision acceptance](bas-production/REVIEW_REVISION_CONTRACT.md)
+for the remaining approval/source-retention work.
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

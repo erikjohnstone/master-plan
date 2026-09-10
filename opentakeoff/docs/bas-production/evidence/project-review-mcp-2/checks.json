@@ -1,0 +1,10 @@
+{
+  "pdf_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "findings": 456,
+  "original_capture_unchanged": true,
+  "browser_mcp_parity": true,
+  "legacy_compile_parity": true,
+  "foreign_capture_rejected": true,
+  "inspect_ms": 6063,
+  "duration_ms": 38951
+}

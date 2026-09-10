@@ -1,5 +1,20 @@
 ## Active work
 
+2026-09-10 newest main-goal checkpoint, after **0357cada**: shared read-only BAS
+finding queue now connects internal Review & changes and opt-in public MCP.
+Real Fort Sam browser **19202 exit 0**, 37.561 s, and packaged MCP **6687 exit 0**,
+38.951 s, agree on all **456 findings** and preserve original sources, decisions,
+source bboxes and every default compile field. Unknown codes/excluded failures
+stay visible; actual-Python regression fixes duplicated source-wide coverage
+after assigned-value calculation. Full BAS **93 pass**, full web **2,675 pass /
+13 existing skips**, types/lint/bench/build and four package tests pass. First
+queue open 4.740 s is not called production-fast. Full review decisions, source
+retention, revisions, approvals and release remain; source/corpus/holdout gates
+remain too. No new corpus score, holdout access, extraction/VectorGrid/math edit,
+push/merge/deploy. Detailed proof and limitations:
+`opentakeoff/docs/bas-production/PROJECT_REVIEW_PROOF.md`. Finish the original five
+workflows before the appended symbol/installed-plan reconciliation phase.
+
 2026-09-10 newest main-goal checkpoint, after **eb18c7ad**: all eleven engineering
 families passed actual browser form verification on the original Fort Sam PDF
 with explicitly controlled capabilities. **95611 exit 0**, 414.038 s, **451

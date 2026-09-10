@@ -7,6 +7,7 @@ import { basAssignmentDemandRequestSchema } from '../../web/src/lib/basAssignmen
 import { basAssemblyReviewRequestSchema } from '../../web/src/lib/basAssemblyRegister.ts';
 import { basAssemblyQuantityRequestSchema } from '../../web/src/lib/basAssemblyQuantityContract.ts';
 import { basEngineeringReviewRequestSchema, basEngineeringInspectRequestSchema } from '../../web/src/lib/basEngineeringRegister.ts';
+import { basProjectReviewRequestSchema } from '../../web/src/lib/basProjectReview.ts';
 import type { McpServer, RegisteredTool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { ok, okImage, fail, UserError, type ToolReply } from "./format.ts";
 import { UNDO_CAP, CONTEXT_MIN_LEN_PX, CONTEXT_MAX_SEGMENTS, CONTEXT_MAX_SEGMENTS_CEIL, type Session } from "./session.ts";
@@ -737,12 +738,13 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       bas_assembly_quantities: basAssemblyQuantityRequestSchema.optional().describe('BAS only: compute and persist declared component quantities with shared Python for exact capture/equipment/assembly heads. All component decisions and source references remain unchanged; unknowns, predicates, exclusions and lifecycle remain distinct. No aggregate installed or unique-device total, field wiring or approval. Edit stale assembly applicability before recalculating. Export includes earlier results.'),
       bas_engineering_review: basEngineeringReviewRequestSchema.optional().describe('BAS only: calculate and atomically retain a source/equipment-bound engineering register with shared Python. Requires exact capture, engineering/equipment/assembly/SOO heads, UUID operation, reason, declared resources and one target per check. All eleven signal/range/load/contact/pulse/power/mechanical/allocation/expansion/serial/IP variants retain authored values and original source spans. Unknown ratings stay not evaluable; exclusions retain failures. No typical ratings, routes, products, installed counts or certification. Records agent_proposal, not authenticated approval. First obtain bas_workflow source IDs and equipment decisions. Replayed imported results must match Python exactly.'),
       bas_engineering_inspect: basEngineeringInspectRequestSchema.optional().describe('BAS only: replay retained engineering history in shared Python and inspect the selected retained capture without creating an engineering decision. Default recompile returns saved results as requires_python_replay; use this option before relying on them. verified_shared_python_replay establishes calculation equality for declared inputs, not source interpretation, installation or project completeness. Stale dependency status remains separate. No automatic approval or revision rebasing.'),
+      bas_project_review: basProjectReviewRequestSchema.optional().describe('BAS only: inspect the shared, source-linked project finding queue for an exact retained capture. Returns original domain codes, affected subjects, source locations, saved constraint failures/unknowns, exclusions and dependency state. Does not dismiss findings, replay Python, verify stored PDF availability or approve a takeoff. First compile to obtain capture_id. Same view as Takeoff > Review & changes; original decisions and extraction remain unchanged.'),
       path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
       export_path: z.string().optional().describe("Optional directory for CSV/XLSX workbook tabs"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: compileCorpusTakeoffOutput,
-  }, run("compile_corpus_takeoff", async ({ kind, service, detail, bas_math, bas_review, bas_equipment_review, bas_assignment_demand, bas_assembly_review, bas_assembly_quantities, bas_engineering_review, bas_engineering_inspect, path: outPath, export_path: exportPath, overwrite }) => {
+  }, run("compile_corpus_takeoff", async ({ kind, service, detail, bas_math, bas_review, bas_equipment_review, bas_assignment_demand, bas_assembly_review, bas_assembly_quantities, bas_engineering_review, bas_engineering_inspect, bas_project_review, path: outPath, export_path: exportPath, overwrite }) => {
     const graph = await session.graphForPipeline();
     const compiled: any = await compileProductionTakeoff(session, graph, kind, {
       ...(service ? { service } : {}), ...(bas_math ? { bas_math } : {}), ...(bas_review ? { bas_review } : {}),
@@ -750,6 +752,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       ...(bas_assignment_demand ? { bas_assignment_demand } : {}),
       ...(bas_assembly_review ? { bas_assembly_review } : {}), ...(bas_assembly_quantities ? { bas_assembly_quantities } : {}),
       ...(bas_engineering_review ? { bas_engineering_review } : {}), ...(bas_engineering_inspect ? { bas_engineering_inspect } : {}),
+      ...(bas_project_review ? { bas_project_review } : {}),
     });
     if (detail !== "full") {
       // Delete, don't set undefined — an object key present with value

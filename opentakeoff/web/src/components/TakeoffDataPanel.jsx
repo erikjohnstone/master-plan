@@ -17,6 +17,7 @@ import CiteValue from "./CiteValue.jsx";
 import BasMathSummary from "./BasMathSummary.jsx";
 import BasPointsWorkspace from "./BasPointsWorkspace.jsx";
 import BasEquipmentWorkspace from "./BasEquipmentWorkspace.jsx";
+import BasProjectReviewWorkspace from "./BasProjectReviewWorkspace.jsx";
 
 /** Cap visible technical columns so each family table stays readable. */
 const UI_SPEC_MAX = 12;
@@ -112,7 +113,17 @@ export default function TakeoffDataPanel({
     setLocalTab(value);
     onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: value }));
   };
-  const evidenceTab = tab === 'points' || tab === 'equipment';
+  const evidenceTab = tab === 'points' || tab === 'equipment' || tab === 'review';
+  const openReviewDomain = issue => {
+    const targetTab = ['sources', 'points', 'sequences'].includes(issue.domain) ? 'points' : 'equipment';
+    setLocalTab(targetTab);
+    onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: targetTab,
+      ...(targetTab === 'points' ? { mode: issue.domain === 'points' ? 'matrix' : 'sequences',
+        ...(issue.subject.kind === 'matrix' ? { matrixId: issue.subject.id } : {}) } : {
+        equipment: { ...previous?.equipment, engineeringOverview: issue.domain === 'engineering', assemblyOverview: issue.domain === 'assemblies',
+          ...(issue.subject.kind === 'equipment' ? { equipmentId: issue.subject.id } : {}) },
+      }) }));
+  };
   const [filter, setFilter] = useState("");
   const [busy, setBusy] = useState("");
   const [err, setErr] = useState("");
@@ -273,7 +284,8 @@ export default function TakeoffDataPanel({
               <span>{rows.length} evidence fields</span>
             </div>
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
-              {tab === "equipment" ? "Source-backed equipment identities and explicit template assignments. Original schedule evidence stays unchanged."
+              {tab === "review" ? "Source-linked findings across the saved BAS workflow. Resolve inputs in their original workspace; this view does not grant approval."
+                : tab === "equipment" ? "Source-backed equipment identities and explicit template assignments. Original schedule evidence stays unchanged."
                 : tab === "points" ? "Original point-list matrices with source-bound interpretation. No installed quantities are inferred."
                 : tab === "takeoff" && corpusMeta?.bas_math
                 ? "BAS engineering is shown separately from the original schedule rows. Review source coverage and unresolved constraints before procurement."
@@ -323,6 +335,7 @@ export default function TakeoffDataPanel({
           </button>
           {basWorkflow && <button type="button" style={tabBtn(tab === "points")} onClick={() => setTab("points")}>Point lists</button>}
           {basWorkflow && <button type="button" style={tabBtn(tab === "equipment")} onClick={() => setTab("equipment")}>Equipment</button>}
+          {basWorkflow && <button type="button" style={{ ...tabBtn(tab === 'review'), marginLeft: 'auto' }} onClick={() => setTab('review')}>Review &amp; changes</button>}
         </div>
 
         {err && (
@@ -369,8 +382,11 @@ export default function TakeoffDataPanel({
           </div>
         )}
 
-        <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px" }}>
-          {tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onAssemblyReview={onBasAssemblyReview} onAssemblyCalculate={onBasAssemblyCalculate} onEngineering={onBasEngineering} onOpenCitation={onOpenCitation} />
+        <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px", ...(tab === 'review' ? { display: 'flex', flexDirection: 'column', minHeight: 0 } : {}) }}>
+          {tab === 'review' ? <BasProjectReviewWorkspace workflow={basWorkflow} state={basViewState?.projectReview}
+            onStateChange={updater => onBasViewStateChange?.(previous => ({ ...previous, projectReview: updater(previous?.projectReview || {}) }))}
+            onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} />
+            : tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onAssemblyReview={onBasAssemblyReview} onAssemblyCalculate={onBasAssemblyCalculate} onEngineering={onBasEngineering} onOpenCitation={onOpenCitation} />
             : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
           {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}
           {tab === "takeoff" ? (

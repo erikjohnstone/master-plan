@@ -374,3 +374,12 @@ remain `requires_python_replay`. A replayed result can still have
 `stale_dependencies`; repair current assignments explicitly instead of relabeling
 the old decision. Exclusions retain their failures. Selected constraints never
 establish installed quantities, universal coverage or authenticated approval.
+
+Use optional `bas_project_review: {capture_id}` on BAS compile to inspect the
+same saved-finding queue as **Takeoff → Review & changes**. Keep original codes,
+evidence, affected scope and dependency status when explaining a finding.
+Unknown codes and excluded failures are not permission to skip review. A warning
+about incomplete source discovery is not proof that a requirement is absent.
+Correct inputs in their existing domain workflow and recompute; this read-only
+queue has no dismiss/approve action and does not replay Python or verify PDF
+availability. It deliberately does not evaluate release readiness.

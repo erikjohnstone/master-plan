@@ -10,6 +10,18 @@ In a hurry, or already in the app? Press **`?`** (or the **?** button in the top
 
 ### Workspace navigation
 
+On the development branch, **Takeoff → Review & changes** gathers saved BAS
+findings without altering quantities or decisions. Filter by **Area**, **Severity**
+or **Find a finding**; select a finding to see its exact source and original inputs.
+**View PDF page** opens the original loaded document version. Reopen Takeoff to
+return to the same selection and filters; **Back to findings** restores keyboard
+focus. The domain-workspace button opens the existing review/editor, not an
+automatic correction. **Export findings** includes all findings, regardless of
+filters, and is not an importable evidence archive or approved deliverable.
+Keep the normal evidence JSON and original PDFs. Readiness, drawing correspondence,
+source-retaining snapshots and approval are still being implemented. A blocker
+here is a saved finding to review, not a claim that the entire design was checked.
+
 On the development branch, **Takeoff → Equipment** displays original equipment
 schedule rows and a separate **Scoped equipment register**. **Create scope**
 records established building, level, system and phase labels; leave missing
