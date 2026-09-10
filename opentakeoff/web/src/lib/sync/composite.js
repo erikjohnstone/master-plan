@@ -88,7 +88,8 @@ export function buildLocalFirstStore(projectId, drive, cloud) {
   // same project as canonical annotations; never borrow anonymous local methods.
   const composite = { ...cloud, ...annSync, ...snapSync,
     retainBasSource: local.retainBasSource, loadBasSource: local.loadBasSource,
-    restoreBasEvidence: annSync.restoreBasEvidence, loadBasRestoreJournal: local.loadBasRestoreJournal };
+    restoreBasEvidence: annSync.restoreBasEvidence, loadBasRestoreJournal: local.loadBasRestoreJournal,
+    saveBasSnapshot: annSync.saveBasSnapshot, loadBasSnapshot: annSync.loadBasSnapshot, listBasSnapshots: annSync.listBasSnapshots };
   // Non-enumerable so it rides the live `store` binding to the canvas without
   // polluting the store shape or the composite spread. Canvas reads store.syncBridge.
   Object.defineProperty(composite, "syncBridge", { value: bridge, enumerable: false });

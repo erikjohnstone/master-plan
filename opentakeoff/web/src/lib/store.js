@@ -302,6 +302,29 @@ function annotationStore(projectId = "") {
 function basSourceStore(projectId = "") {
   const annKey = projectId ? `${ANN_KEY}:${projectId}` : ANN_KEY;
   return {
+    // Browser-local approval delivery uses the SAME project/lease as annotations.
+    // It never calls ordinary restore or changes the annotation generation.
+    /** @param {any} plan @param {any} loadSource @param {any} [options] */
+    async saveBasSnapshot(plan, loadSource, options = {}) {
+      const { generation = null, guard = () => {}, signal } = options;
+      const { saveBasSnapshotInIdb } = await import('./basSnapshotStore.js');
+      return withAnnotationCoordinator(projectId, () => saveBasSnapshotInIdb({
+        withDb, emptyAnnotations, projectId, plan, loadSource, generation, guard, signal,
+      }), { signal });
+    },
+    /** @param {any} [options] */
+    async listBasSnapshots(options = {}) {
+      const { after = null, limit = 50, guard = () => {}, signal } = options;
+      const { listBasSnapshotsInIdb } = await import('./basSnapshotStore.js');
+      return listBasSnapshotsInIdb({ withDb, projectId, after, limit, guard, signal });
+    },
+    /** @param {string} snapshotId @param {any} [options] */
+    async loadBasSnapshot(snapshotId, options = {}) {
+      const { replayCalculations, guard = () => {}, signal } = options;
+      const { loadBasSnapshotInIdb } = await import('./basSnapshotStore.js');
+      return loadBasSnapshotInIdb({ withDb, projectId, snapshotId, guard, signal,
+        io: { readSource: source => basSourceStore(projectId).loadBasSource(source), replayCalculations } });
+    },
     // Actual restore is local atomic delivery, not an ordinary import/save.
     // Sync and plain-local callers share this exact annotation-scope lease.
     /** @param {any} plan @param {any} loadSource

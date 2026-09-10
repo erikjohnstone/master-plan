@@ -130,3 +130,42 @@ corruption, unchanged annotations, stale generation/payload, idempotent versus
 conflicting retries, project isolation, multi-chunk originals and payloads,
 ordinary import/save/PDF-close retention, and disposed sync adapters. These do not
 replace real browser/source-backed and packaged MCP acceptance.
+
+## Public browser integration map
+
+The next UI delivery uses existing `BasProjectReviewWorkspace` and the
+`restoreContext.current.read()` seam already passed through `TakeoffDataPanel`.
+That seam reads the live payload, generation, pending save and canvas-busy state.
+Do not call its `apply()` method for a snapshot: that method restores annotations.
+
+- Keep snapshot navigation internal to Review & changes. A spacious reader shows
+  the reviewed scope, included result rows, exclusions, original references and
+  review declaration. No new permanent rail, toolbar or modal stack.
+- Use shared `catalogBasScope` for saved scope choices and `buildBasReadiness`
+  for preview. The UI must not derive readiness from local counts or hide blockers.
+- A browser-only client freezes current payload/generation and checks pending
+  saves, active adapter and live payload around asynchronous work. Obtain exact
+  originals through existing `findBasOriginal`; invoke the existing shared-Python
+  replay endpoint, then verify its receipt on the shared path.
+- Explicit approval uses `prepareBasSnapshotApproval(..., 'operator_input')`
+  and `adapter.saveBasSnapshot`. The Agent gets no approval-origin input or verb.
+  Persist only after the operator reviews scope and provides a name and reason.
+  Preflight `prepareBasSnapshotBundle` before publication so the exact payload,
+  record, source inventory and total archive fit all existing export bounds;
+  individual-PDF/source-count storage limits alone do not prove ZIP exportability.
+- `listBasSnapshots` is bounded metadata, not current/verified approval.
+  `loadBasSnapshot` returns a freshly replayed historical owned plan. Shared
+  `prepareBasSnapshotBundle` and the existing streaming Blob transport provide
+  source-inclusive export; `openBasSnapshotBundle` verifies an imported archive
+  before `saveBasSnapshot` retains it historically. None changes working annotations.
+- Use static Vite imports for owned-plan consumers. Hot-reload invalidation must
+  discard and reprepare previews; do not move ownership authority onto a global
+  object to keep stale plans alive.
+- Integrate selective dependency currentness and append-only revoke/supersede
+  state before the complete feature acceptance. A historical approval is never
+  labeled current solely because it reopened or still has a saved seal.
+
+UI tests must cover a genuine human-action path, no-save/dirty-state guards,
+source-service failure, cancellation, switching projects, reload, import/export,
+keyboard focus return, both themes and dense source-backed data. Controlled
+native-storage checks do not replace that real public journey.

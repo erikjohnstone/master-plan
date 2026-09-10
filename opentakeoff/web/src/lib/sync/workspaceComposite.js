@@ -84,6 +84,9 @@ export function buildSyncedWorkspaceStore({ scope, provider, snapProvider, ensur
 
   const composite = { ...localStore, ...annSync, ...snapSync };
   composite.restoreBasEvidence = annSync.restoreBasEvidence;
+  composite.saveBasSnapshot = annSync.saveBasSnapshot;
+  composite.loadBasSnapshot = annSync.loadBasSnapshot;
+  composite.listBasSnapshots = annSync.listBasSnapshots;
   Object.defineProperty(composite, "syncBridge", { value: bridge, enumerable: false });
   Object.defineProperty(composite, "dispose", { enumerable: false, value: () => { annSync.dispose(); bridge.presence?.stop(); } });
   return composite;

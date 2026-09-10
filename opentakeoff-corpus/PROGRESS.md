@@ -1,5 +1,20 @@
 ## Active work
 
+2026-09-10 after local checkpoint **b188b6b7**: browser-only atomic snapshot
+storage implemented and focused-tested; no extraction/VectorGrid/math change.
+Sources, exact payload/record, metadata, seal and retry identity publish together,
+with saved-generation/payload checks and project/disposal isolation. Shared
+verification remains authority. **80485 exit 0**: 47 related tests; **93938 exit 0**:
+14 storage tests. Full web **88334 exit 0**: 2,907 pass / 13 skips, all checks.
+Native Chrome **14632 exit 0**: controlled save/page-reload/reopen/corruption test,
+strict durability hint; not a real-PDF/public UI proof. Final **67324 exit 0**:
+web/MCP-packaging/scope/Python gates pass. **57481 exit 0** after final source-size
+guard: all 2,908 web tests pass / 13 skips, types/lint/build and native Chrome
+save/reload/reopen/corruption proof. All handles terminal.
+See `opentakeoff/docs/bas-production/SNAPSHOT_STORAGE_PROOF.md`. Combined snapshot
+memory gate still fails. Continue actual UI approval/reopen and remaining original,
+Agent/identity, corpus/holdout and final-symbol gates. No blocker or deployment.
+
 2026-09-10 after **b6249700**: shared history validation reuses privately owned
 equipment/assembly source context without skipping events or integrity checks.
 Full historical-view parity **9227 exit 0**; eight new regression tests. Latest

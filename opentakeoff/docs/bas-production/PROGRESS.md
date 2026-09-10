@@ -1,5 +1,30 @@
 # BAS production workflow progress
 
+## Atomic browser snapshot storage — in progress after b188b6b7
+
+Local checkpoint **b188b6b7** preserves the verified prepared-validation increment;
+no push or merge. Browser-only snapshot IO now consumes shared owned plans, stages
+originals and payload/record chunks privately, and publishes a separate seal and
+retry identity atomically. Creation rechecks exact annotations/generation;
+historical import never replaces working state. All project adapters are wired,
+including disposed-sync cancellation. Reopen checks bytes and fresh shared replay;
+metadata alone claims neither verification nor currentness.
+
+Initial storage tests caught a masked cancellation reason; fixed with first-error
+preservation. **80485 exit 0**: 47 related tests; **93938 exit 0**: 14 storage tests.
+Full web **88334 exit 0**: 2,907 pass / 13 skips, types/lint/benchmarks/build.
+After final strict-durability wiring, 15 storage tests passed. Native Chrome
+**14632 exit 0** verifies save/reload/reopen, strict hint and corruption refusal
+on controlled data—not a real-PDF approval UI walkthrough. Final **67324 exit 0**:
+web checks/benchmarks/build, MCP types/four packaging/17 scope tests, Python 453
+pass and mypy 20 files. Final source-limit guard then verified by **57481 exit 0**:
+web types/lint/all 2,908 tests pass / 13 existing skips / zero failures, build,
+and native Chrome save/reload/reopen/corruption proof again. All handles terminal.
+Ledger: `SNAPSHOT_STORAGE_PROOF.md`.
+No extraction/VectorGrid/math edits. The combined memory gate remains failing;
+public snapshot UI/currentness/revoke/supersede and all original acceptance remain
+unfinished. Goal active; no external blocker.
+
 ## Shared history verification — 2026-09-10, after b6249700
 
 Prepared, owned equipment/assembly contexts now avoid repeated source interpretation

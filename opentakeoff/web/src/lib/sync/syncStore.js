@@ -569,11 +569,31 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
     schedulePush();
     return { ...result, sync: 'pending', originals_sync: 'browser_local_only' };
   } });
+  // Browser-local BAS snapshots do not enter legacy annotation/snapshot sync.
+  // A disposed project cannot finish an asynchronous approval into its old scope.
+  const snapshotLifetime = new AbortController();
+  for (const method of ['saveBasSnapshot', 'listBasSnapshots', 'loadBasSnapshot']) {
+    Object.defineProperty(api, method, { enumerable: false, value: async (...args) => {
+      const optionIndex = method === 'saveBasSnapshot' ? 2 : method === 'loadBasSnapshot' ? 1 : 0;
+      const options = args[optionIndex] || {}, callerGuard = options.guard;
+      const guard = () => {
+        if (!active) throw new Error('This sync workspace was closed. Reload the current workspace before accessing BAS snapshots.');
+        callerGuard?.();
+      };
+      guard();
+      const signal = options.signal ? AbortSignal.any([options.signal, snapshotLifetime.signal]) : snapshotLifetime.signal;
+      args[optionIndex] = { ...options, guard, signal };
+      return base[method](...args);
+    } });
+  }
   Object.defineProperty(api, 'readRestoreSyncStatus', { enumerable: false, value: async () => {
     const local = await base.loadAnnotations();
     return { generation: annotationGeneration(local), pending: await restorePending(local), originals_sync: 'browser_local_only' };
   } });
-  Object.defineProperty(api, 'dispose', { enumerable: false, value: () => { active = false; pendingRemote = null; pushAgain = false; } });
+  Object.defineProperty(api, 'dispose', { enumerable: false, value: () => {
+    active = false; pendingRemote = null; pushAgain = false;
+    snapshotLifetime.abort(new Error('This sync workspace was closed. Reload the current workspace before accessing BAS snapshots.'));
+  } });
 
   return api;
 }
