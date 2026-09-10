@@ -80,6 +80,10 @@ export function buildSyncedWorkspaceStore({ scope, provider, snapProvider, ensur
   })().catch(() => { /* presence is advisory */ });
 
   const composite = { ...localStore, ...annSync, ...snapSync };
+  // Local restore is atomic in IDB but bypasses this coordinator's in-flight
+  // pushes and post-adopt bookkeeping. Do not inherit that unsafe entry point
+  // by spread. Expose restore here only with explicit sync coordination/tests.
+  delete composite.restoreBasEvidence;
   Object.defineProperty(composite, "syncBridge", { value: bridge, enumerable: false });
   Object.defineProperty(composite, "dispose", { enumerable: false, value: () => bridge.presence?.stop() });
   return composite;

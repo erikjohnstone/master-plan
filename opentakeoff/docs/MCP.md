@@ -13,6 +13,17 @@ operating manual—how a takeoff is run, what withholds, what refuses—and
 
 ## Setup
 
+Source-inclusive BAS recovery is a two-call `import_takeoff` operation:
+preview `restore_evidence_bundle: {action: "preview"}`, then commit the returned
+`preview_id` with `{action: "commit", preview_id, directory}`. The existing output
+parent receives a new operation-owned directory containing all originals, previous
+state and a re-importable merged backup. Shared merge/source rules and complete
+Python replay gate Session adoption. Read-only `verify_evidence_bundle` remains
+separate. See the [tool reference](../mcp/README.md) for limits and file guarantees.
+No old PDF becomes active counting input. Use `load_plan merge:true` to add active
+plans afterward; plain load replaces the Session. Recovery does not approve a
+takeoff, establish source coverage, or certify the design.
+
 For BAS engineering, install the [shared Python engine](../bas_engine/README.md).
 UI and MCP use the same `productionTakeoff` orchestration and Python process;
 there is no separate browser math implementation. `bas_math` is additive to the

@@ -1,5 +1,22 @@
 ## Active work
 
+2026-09-10 checkpoint after **a23054ec**: public MCP source-inclusive restore now
+uses the shared merge/replay contract and actual Python, retains all original
+versions plus prior state, preserves browser-only payload fields and reopens exact
+citations without activating historical PDFs. Built public real-PDF proof passes
+empty and populated Sessions plus process restart/disk recovery; all **31 saved
+calculations** replay. Final commit times 15.205 / 19.727 / 15.090 s. See
+`../opentakeoff/docs/bas-production/RESTORE_MCP_PROOF.md` for full timings and limits.
+Full web **2,731 pass / 13 existing skips**, MCP BAS **119 pass**, broader MCP
+**51 pass** (overlapping), packaging **4 pass**, types/tool-count green.
+
+Found and gated an accidental local-restore inheritance in folder/Microsoft 365
+sync composites. Actual sync coordination remains next, followed by journal UX,
+drawing correspondence, approvals and remaining A–D corpus/holdout acceptance.
+Appended symbol/installed-plan phase stays last. This is verified delivery/recovery
+progress, not a new full-corpus score or completion of the main goal. No extraction,
+math, key, threshold, model change, holdout access, push, merge or deployment.
+
 2026-09-10 checkpoint after **01e9b3a4**: actual browser-local source-inclusive
 restore passes the real Fort Sam journey (31 saved calculations replayed by
 Python, exact history/original reopened after reload) and the controlled 551.1 MB

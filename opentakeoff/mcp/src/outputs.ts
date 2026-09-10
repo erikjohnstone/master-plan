@@ -626,12 +626,16 @@ export const exportDxfOutput = {
   bytes: z.number().int(),
 };
 
+// A restored browser backup can legitimately contain only schema + BAS history.
+// Preserve that exact payload instead of synthesizing drawing fields. Existing
+// loaded-plan exports still populate every native field; present fields retain
+// their existing validators, and BAS evidence validation is unchanged.
 export const exportTakeoffOutput = {
   bas_workflow: basWorkflowSchema.optional().describe('Retained point-evidence captures, not approval or embedded source PDFs.'),
   schema: z.string(),
-  project_name: z.string(),
-  units: z.string(),
-  sheets: z.array(z.object({ sheet_id: z.string(), units_per_px: z.number() })),
+  project_name: z.string().optional(),
+  units: z.string().optional(),
+  sheets: z.array(z.object({ sheet_id: z.string(), units_per_px: z.number() })).optional(),
   conditions: z.array(z.object({
     id: z.string(),
     finish_tag: z.string(),
@@ -641,7 +645,7 @@ export const exportTakeoffOutput = {
     multiplier: z.number(),
     waste_pct: z.number(),
     materials: z.array(z.unknown()),
-  }).passthrough()),
+  }).passthrough()).optional(),
   shapes: z.array(z.object({
     id: z.string(),
     sheet_id: z.string(),
@@ -651,17 +655,19 @@ export const exportTakeoffOutput = {
     computed: z.object({ area_sf: z.number().optional(), perimeter_lf: z.number().optional(), count: z.number().optional() }).passthrough()
       .describe("count shapes carry {count} alone; every other role carries area_sf + perimeter_lf"),
     origin: z.object({}).passthrough().optional().describe("Provenance: method (manual|one_click_v1), actor (omitted=human, 'agent'=MCP/automation), reviewed (human affirmed at an explicit gate), assignment (where the finish tag came from — {source: 'schedule', room_tag, surface, schedule_sheet} when the room's own schedule row decided it, {source: 'asserted'} when the agent chose; stamped on every agent commit), and correction fields (edited, edited_before_create, copied, proposed_verts_norm, edits)"),
-  }).passthrough()),
-  markups: z.array(z.unknown()),
+  }).passthrough()).optional(),
+  markups: z.array(z.unknown()).optional(),
   approvals: z.array(z.unknown()).optional().describe("Approval-family records (#176) — the estimator's APPROVED seals and the agent's verdict marks {id, actor, ts, sheet_id, at:[nx,ny], shape_id?, text?}. Present only when any exist (the canvas payload's own convention), so a verdict-free export stays byte-identical"),
-  sheet_group: z.array(z.unknown()),
-  last_group: z.array(z.unknown()),
-  sheet_tabs: z.array(z.unknown()),
-  sheet_levels: z.object({}).passthrough(),
+  sheet_group: z.array(z.unknown()).optional(),
+  last_group: z.array(z.unknown()).optional(),
+  sheet_tabs: z.array(z.unknown()).optional(),
+  sheet_levels: z.object({}).passthrough().optional(),
 };
 
 /** import_takeoff (#151) — the merge receipt, field-identical to the app's. */
 export const importTakeoffOutput = {
+  bas_restore: z.object({ restored: z.boolean(), approved: z.literal(false), project_complete: z.literal(false) }).passthrough().optional()
+    .describe('Explicit source-inclusive restore preview or committed recovery operation. Detailed shared merge counts live in preview.merge; no automatic approval.'),
   bas_evidence_bundle: basEvidenceBundleInspectionSchema.optional().describe('Present only for explicit read-only evidence-bundle preflight; nothing was imported.'),
   file: z.string().describe("Basename of the imported file"),
   replaced: z.boolean().describe("true = the session was empty and adopted the file wholesale"),

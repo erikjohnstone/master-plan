@@ -12,13 +12,25 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add public MCP source-inclusive restore with shared preview/merge and mandatory
+  merged-history Python replay. Exact originals, previous state, replay receipt
+  and a re-importable merged backup are retained in a new caller-directed local
+  recovery directory before Session adoption. Browser-only saved fields survive
+  MCP round-trips; historical originals reopen without becoming active plans.
+  Stale previews, load races, cancellation and corrupt retained files refuse.
+  MCP 0.9.74; no new tools or extraction/arithmetic change. Local file publication
+  is not a cloud transaction, approval or guarantee against storage loss.
+  Prevent folder/Microsoft 365 composites from accidentally inheriting the local
+  restore method before sync coordination is implemented; plain local restore
+  and original retention stay available.
+
 - Add browser-local evidence ZIP restore: preview the shared merge, replay all
   merged historical calculations through Python, stage originals, then atomically
   save sources, takeoff, prior-state journal and editor generation. Empty-project
   recovery is accessible from the plan picker. Exact version gates protect old
   annotations; source PDFs stay out of active counting. Bounded 8 MiB storage
   chunks support large originals while preserving older retained records.
-  Public MCP/sync restore, revision correspondence and approvals remain unfinished.
+  Sync restore, revision correspondence and approvals remain unfinished.
 
 - Add per-editor local annotation save-version checks and same-transaction
   expected-payload checks for sync adoption. Queued saves, unmount flushes and

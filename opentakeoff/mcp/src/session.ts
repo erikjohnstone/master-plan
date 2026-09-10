@@ -20,6 +20,9 @@ import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
 import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
 import { activeBasCapture, mergeBasWorkflows, type BasWorkflow } from "../../web/src/lib/basWorkflow.ts";
 import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src/lib/basNarratives.ts";
+import { basRestoreJson, readBasRestorePlan, type BasRestorePlan } from '../../web/src/lib/basRestore.ts';
+import type { BasSourceInventoryItem } from '../../web/src/lib/basSourceRetention.ts';
+import { readBasOriginalFile } from './basOriginalFile.ts';
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -865,6 +868,11 @@ export class Session {
    * agent verdicts mint through markVerdict and nothing else. */
   approvals: Approval[] = [];
   basWorkflow: BasWorkflow | null = null;
+  // Restore delivery state, never input to extraction or the active source set.
+  private basRestoreVersion = 0;
+  private basPlanLoads = 0;
+  private basRestoreCargo: { payload: Record<string, any>; native: Record<string, any> } | null = null;
+  private basRetainedOriginals = new Map<string, { path: string; source: BasSourceInventoryItem['source'] }>();
   /** The last assign-from-schedule run's unresolved rooms (0.9.18) — what the
    * marked-set cover discloses as withheld. Replaced per assign run, cleared
    * with the rest of the session on a non-merge load_plan. Seeds ride
@@ -906,8 +914,14 @@ export class Session {
    * file again under merge is refused (an addendum is a new file — reloading
    * one in place is a replace-the-session decision, not a merge). */
   async loadPlan(filePath: string, opts: { merge?: boolean } = {}) {
+    this.basRestoreVersion++; this.basPlanLoads++;
+    try { return await this.loadPlanDocument(filePath, opts); }
+    finally { this.basPlanLoads--; }
+  }
+
+  private async loadPlanDocument(filePath: string, opts: { merge?: boolean } = {}) {
     const base = path.basename(filePath);
-    const merging = !!opts.merge && this.docs.size > 0;   // merge into empty = plain first load
+    const merging = !!opts.merge && (this.docs.size > 0 || this.basRestoreCargo !== null);
     if (!merging) {
       for (const d of this.docs.values()) await d.doc.destroy().catch(() => {});
       this.docs.clear();
@@ -917,6 +931,8 @@ export class Session {
       this.markups = [];
       this.approvals = [];
       this.basWorkflow = null;
+      this.basRestoreCargo = null;
+      this.basRetainedOriginals.clear();
       this.file = null;
       this.filePath = null;
       this.nextOrd = 1;
@@ -980,7 +996,98 @@ export class Session {
   /** Transport only. Caller uses shared ownership/hash validation before export. */
   async basOriginalBytes(sha256: string): Promise<Uint8Array | null> {
     const loaded = [...this.docs.values()].find(({ doc }) => doc.sourceSha256 === sha256);
-    return loaded ? loaded.doc.originalBytes() : null;
+    if (loaded) return loaded.doc.originalBytes();
+    const retained = this.basRetainedOriginals.get(sha256);
+    return retained ? readBasOriginalFile(retained.path, retained.source) : null;
+  }
+
+  /** Restore-specific empty-session view. Ordinary export still requires either
+   * a loaded plan or an actually restored payload. No fabricated active PDF. */
+  basRestorePayload(): Record<string, any> {
+    const payload = this.docs.size || this.basRestoreCargo ? this.exportPayload() : this.nativeExportPayload();
+    return JSON.parse(basRestoreJson({ ...payload, ...(this.rules.length ? { rules: this.rules } : {}) }));
+  }
+
+  basRestoreRecoveryState() {
+    return structuredClone({ payload: this.basRestorePayload(), rules: this.rules,
+      schedule_withheld: this.scheduleWithheld, journal: this.journal, seq: this.seq });
+  }
+
+  /** Includes mutations outside exportPayload and load operations still in flight.
+   * A load-and-return-to-identical-bytes cannot resurrect a stale preview. */
+  basRestoreGuard() {
+    // Cargo is private and replaced only with a version increment. Inspect all
+    // mutable native state directly instead of repeatedly cloning and overlaying
+    // the complete retained history on every streamed-file guard.
+    const snapshot = () => basRestoreJson({ native: this.nativeExportPayload(), files: this.files,
+      rules: this.rules, schedule_withheld: this.scheduleWithheld, journal: this.journal, seq: this.seq,
+      version: this.basRestoreVersion, pending: this.pendingCommits });
+    if (this.basPlanLoads) throw new Error('A plan is loading; wait before previewing restoration.');
+    const expected = snapshot();
+    return () => {
+      if (this.basPlanLoads || snapshot() !== expected) throw new Error('Workspace changed after restore preview. Preview the archive again; existing work was preserved.');
+    };
+  }
+
+  /** Exact legacy filename binding uses bytes held by the loaded document, not
+   * a path that might now contain a newer namesake. No PDF is loaded here. */
+  async verifyBasRestoreBindings(plan: BasRestorePlan, guard: () => void) {
+    const owned = readBasRestorePlan(plan);
+    for (const binding of owned.legacy_bindings) {
+      const source = owned.inventory.find(i => i.source.source_id === binding.source_id)!.source;
+      const loaded = this.docs.get(binding.name)?.doc;
+      if (!loaded || loaded.sourceSha256 !== source.sha256 || loaded.byteLength !== source.byte_length || loaded.numPages !== source.page_count) {
+        throw new Error(`Restore requires the exact original active as "${binding.name}" before adopting its filename-bound annotations.`);
+      }
+      const { verifyBasSourceBytes } = await import('../../web/src/lib/basSourceRetention.ts');
+      await verifyBasSourceBytes(source, await loaded.originalBytes()); guard();
+    }
+  }
+
+  /** Prepare all potentially fallible hydration before filesystem publication.
+   * The caller's publish callback must be synchronous and no-overwrite. After
+   * it succeeds only private in-memory assignments remain; no awaits/events. */
+  prepareBasRestoreAdoption(plan: BasRestorePlan, originals: Map<string, { path: string; source: BasSourceInventoryItem['source'] }>, guard: () => void) {
+    const owned = readBasRestorePlan(plan, true), payload = owned.payload;
+    guard();
+    if (basRestoreJson(this.basRestorePayload()) !== owned.expected_json) throw new Error('Restore preview does not match this Session.');
+    for (const key of ['conditions', 'shapes', 'markups', 'approvals', 'sheets']) {
+      if (payload[key] !== undefined && !Array.isArray(payload[key])) throw new Error(`Cannot hydrate malformed ${key}; nothing was restored.`);
+    }
+    const approvals = sanitizeApprovals(payload.approvals);
+    if (basRestoreJson(approvals) !== basRestoreJson(payload.approvals ?? [])) throw new Error('Restore would discard malformed approval marks; nothing was restored.');
+    const retained = new Map([...originals].map(([key, value]) => [key, structuredClone(value)]));
+    if (retained.size !== owned.inventory.length || owned.inventory.some(item => {
+      const entry = retained.get(item.source.sha256);
+      return !entry || !path.isAbsolute(entry.path) || basRestoreJson(entry.source) !== basRestoreJson(item.source);
+    })) throw new Error('Restore source delivery does not cover the complete merged history.');
+    const scales = new Map((payload.sheets ?? []).map((row: any) => [row.sheet_id, row]));
+    const changes = [...this.sheets.values()].map(sheet => {
+      const row: any = scales.get(sheet.key);
+      if (row && !(Number.isFinite(row.units_per_px) && row.units_per_px > 0)) throw new Error('Invalid saved calibration; nothing was restored.');
+      return { sheet, upp: row?.units_per_px ?? null, source: row?.scale_source, confirmed: row?.scale_confirmed };
+    });
+    // Compute the post-hydration native projection now; export overlays later
+    // native changes on exact cargo rather than dropping browser-only fields.
+    const native = this.nativeExportPayload();
+    native.conditions = payload.conditions ?? []; native.shapes = payload.shapes ?? []; native.markups = payload.markups ?? [];
+    delete native.approvals; if (approvals.length) native.approvals = approvals;
+    native.bas_workflow = payload.bas_workflow;
+    if (payload.rules !== undefined || this.rules.length) native.rules = structuredClone(this.rules);
+    native.sheets = changes.filter(c => c.upp != null).map(c => ({ sheet_id: c.sheet.key, units_per_px: c.upp,
+      ...(c.source ? { scale_source: c.source } : {}), ...(c.confirmed === false ? { scale_confirmed: false } : {}) }));
+    const cargo = { payload: structuredClone(payload), native: JSON.parse(basRestoreJson(native)) };
+    let adopted = false;
+    return (publish: () => void) => {
+      if (adopted) throw new Error('Restore operation was already adopted.');
+      guard();
+      publish();
+      this.conditions = native.conditions; this.shapes = native.shapes; this.markups = native.markups;
+      this.approvals = approvals; this.basWorkflow = payload.bas_workflow;
+      for (const c of changes) { c.sheet.upp = c.upp; c.sheet.scaleSource = c.source; c.sheet.scaleConfirmed = c.confirmed; }
+      this.basRestoreCargo = cargo; this.basRetainedOriginals = retained;
+      this.journal = []; this.pendingCommits = []; this.basRestoreVersion++; adopted = true;
+    };
   }
 
   /** Shared text-only BAS evidence seam. Does not build or modify the graph,
@@ -5728,8 +5835,7 @@ export class Session {
     return { sheet: s, build };
   }
 
-  exportPayload() {
-    if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+  private nativeExportPayload(): Record<string, any> {
     return {
       schema: ANN_SCHEMA,
       project_name: "",
@@ -5750,11 +5856,24 @@ export class Session {
       // export stays byte-identical to a pre-#176 one
       ...(this.approvals.length ? { approvals: this.approvals } : {}),
       ...(this.basWorkflow ? { bas_workflow: this.basWorkflow } : {}),
+      ...(this.basRestoreCargo && ('rules' in this.basRestoreCargo.payload || this.rules.length) ? { rules: this.rules } : {}),
       sheet_group: [],
       last_group: [],
       sheet_tabs: [],
       sheet_levels: {},
     };
+  }
+
+  exportPayload(): Record<string, any> {
+    if (!this.docs.size && !this.basRestoreCargo) throw new UserError("No plan loaded — call load_plan first.");
+    const native = this.nativeExportPayload();
+    if (!this.basRestoreCargo) return native;
+    const { payload, native: baseline } = this.basRestoreCargo, result = structuredClone(payload);
+    for (const key of new Set([...Object.keys(native), ...Object.keys(baseline)])) {
+      if (basRestoreJson(native[key] ?? null) === basRestoreJson(baseline[key] ?? null)) continue;
+      if (key in native) result[key] = structuredClone(native[key]); else delete result[key];
+    }
+    return result;
   }
 
   /** The computed Report document — "opentakeoff.report.v1", the SAME schema

@@ -42,8 +42,8 @@ export async function exportBasEvidenceBundle(session: Session, path: string, or
   return payload;
 }
 
-export async function inspectBasEvidenceBundleFile(path: string, options: { replayCalculations?: boolean; signal?: AbortSignal } = {}) {
-  options.signal?.throwIfAborted();
+export async function withBasEvidenceBundleFile<T>(path: string, guard: () => void, use: (archive: Awaited<ReturnType<typeof openBasEvidenceBundle>>) => Promise<T>) {
+  guard();
   const file = await open(path, 'r');
   try {
     const size = (await file.stat()).size;
@@ -52,12 +52,18 @@ export async function inspectBasEvidenceBundleFile(path: string, options: { repl
       while (done < length) { const result = await file.read(bytes, done, length - done, offset + done);
         if (!result.bytesRead) throw new Error('BAS evidence archive is truncated'); done += result.bytesRead; }
       return bytes;
-    } }, () => options.signal?.throwIfAborted());
+    } }, guard);
+    return await use(archive);
+  } finally { await file.close(); }
+}
+
+export async function inspectBasEvidenceBundleFile(path: string, options: { replayCalculations?: boolean; signal?: AbortSignal } = {}) {
+  return withBasEvidenceBundleFile(path, () => options.signal?.throwIfAborted(), async archive => {
     await archive.verifyOriginals();
     const replay = options.replayCalculations ? await verifyBasWorkflowCalculations(archive.payload.bas_workflow, { signal: options.signal }) : null;
     options.signal?.throwIfAborted();
     return { bundle_id: archive.bundle_id, manifest: archive.manifest, source_byte_verification: 'verified_now' as const,
       calculation_verification: replay?.calculation_verification ?? 'not_python_replayed' as const,
       ...(replay ? { workflow_replay: replay } : {}), restored: false as const };
-  } finally { await file.close(); }
+  });
 }

@@ -127,8 +127,11 @@ updates stale inputs nor approves a takeoff. Browser-local **Preview restore** a
 **Restore reviewed merge** now replay the merged history and atomically retain
 its originals, saved state and recovery journal. An empty workspace offers
 **Restore BAS evidence backup**. Historical PDFs do not enter active counting.
-Public MCP/synced restoration, drawing correspondence and approved snapshots
-remain unfinished; see [current restore proof](docs/bas-production/RESTORE_BROWSER_PROOF.md).
+MCP also previews and explicitly restores the same shared merge into its Session,
+retaining originals and previous state in an operation-owned local directory.
+Synced restoration, drawing correspondence and approved snapshots remain unfinished;
+see [browser restore proof](docs/bas-production/RESTORE_BROWSER_PROOF.md) and
+[MCP restore contract/proof](docs/bas-production/RESTORE_MCP_PROOF.md).
 See [format, limits and acceptance](docs/bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
 
 Local saves carry an editor-specific version guard for the browser-local atomic

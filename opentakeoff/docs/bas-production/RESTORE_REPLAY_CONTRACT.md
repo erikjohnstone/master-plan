@@ -2,8 +2,10 @@
 
 Implementation update: the browser-local ZIP restore journey now passes real-PDF
 and 551 MB controlled capacity checks. See `RESTORE_BROWSER_PROOF.md`. The earlier
-future-tense design below records its pre-change contract; public MCP restore,
-sync coordination, revision correspondence and approved snapshots remain open.
+future-tense design below records its pre-change contract. Public MCP restore now
+also passes exact shared merge, real historical Python replay, source reopening
+and process-restart recovery; see `RESTORE_MCP_PROOF.md`. Sync coordination,
+revision correspondence and approved snapshots remain open.
 Chunked source storage was required by Chromium's per-record serialization limit.
 
 Pre-change contract, extending workflow E, not a new completion target. The

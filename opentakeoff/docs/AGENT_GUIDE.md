@@ -22,8 +22,17 @@ assembly and engineering result through the shared Python engine. Read the exact
 `workflow_replay` receipt; `no_saved_calculations` is not a successful audit of
 project calculations. Historical inputs remain historical. Replay does not repair
 freshness, review coverage, approve a deliverable or restore anything.
-Do not describe these unencrypted, unsigned backups as approved releases or claim
-that ZIP restoration is implemented. Ordinary JSON import/export is unchanged.
+For actual ZIP restoration use `restore_evidence_bundle: {action: "preview"}`,
+read its merge counts and source requirements, then commit that `preview_id`
+with an explicit existing `directory`. Do not mix this with read-only flags.
+Commit always replays the complete merged history, retains all originals and
+previous state, and adopts the shared merge. No loaded plan is needed for BAS-only
+history. Filename-bound ink requires its exact original active. Use `load_plan`
+with `merge: true` to add active plans after recovery; plain load still replaces
+the Session. Restore is a new undo boundary, not `undo_last`. It does not approve
+a deliverable, select current source scope or verify installed quantity.
+Unencrypted local recovery files are not authenticated or guaranteed permanent.
+Ordinary JSON import retains its previous semantics.
 
 Inspect historical BAS evidence using `view_sheet` with the exact saved `page_id`
 as `sheet`, and `original_pdf_path` when its bytes are not currently loaded. Do not

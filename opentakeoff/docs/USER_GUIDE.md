@@ -86,7 +86,9 @@ PDFs stay separate from active counting sheets and open through **Open original*
 At the empty plan picker, use **Restore BAS evidence backup** to reach this flow.
 
 This restores an unapproved backup, not an approved deliverable or current design.
-MCP and synced-storage restoration are not available yet. Journals are local
+MCP offers the same shared merge/replay through explicit preview and commit;
+its recovery directory retains originals and previous state without adding old
+PDFs to active counting. Synced-storage restoration is not available yet. Journals are local
 storage records, not authenticated signatures or a completed rollback UI. A crash
 can leave unpublished staging data; existing originals are never silently deleted
 to reclaim space. See [restore proof and remaining boundaries](bas-production/RESTORE_BROWSER_PROOF.md).

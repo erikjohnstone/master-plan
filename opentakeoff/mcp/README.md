@@ -158,7 +158,33 @@ runtime, limit or cancellation yields no accepted receipt. Old dependencies stay
 historical; successful replay is not source-set review, restoration or approval.
 Browser and MCP share integrity/ownership rules. Archives are unsigned and
 unencrypted; they do not select a current source set or approve a takeoff.
-Automatic project ZIP restoration and approved release sealing remain unfinished.
+To restore, call `import_takeoff {path, restore_evidence_bundle: {action: "preview"}}`.
+Inspect the returned `bas_restore.preview`, then call the same path with
+`restore_evidence_bundle: {action: "commit", preview_id, directory}`. The output
+parent must already exist; a new private recovery directory is created, with no
+overwrite. Preview lasts 15 minutes and binds this Session's exact current state.
+For missing originals from its existing history, supply explicit
+`original_pdf_paths` inside the preview request. No caller-provided replay receipt
+is accepted: commit replays the entire merged history through Python.
+
+The recovery directory contains `takeoff.json`, digest-named PDFs,
+`previous-state.json`, `replay.json`, `restored.otbas.zip` and `COMMITTED.json`.
+Only the final commit marker identifies a completed operation; crashes before
+publication can leave an incomplete private directory. The restored ZIP can be
+previewed/committed in a new Session after process restart. This is local recovery,
+not an OS/filesystem-plus-memory distributed transaction or power-loss guarantee.
+Do not edit these files; fresh verification rejects damage.
+
+History-only restore works without loading plans. Use `view_sheet` with a saved
+page ID to inspect retained originals; they never automatically enter active
+counting. Filename-bound annotations require their exact original already active.
+To add active plans later, use `load_plan merge:true`; ordinary load still replaces
+the Session. Restore starts a new undo boundary; previous state remains on disk.
+The exact merged payload, including browser-only fields, round-trips on export.
+History-only backups may omit native drawing fields; present fields retain their
+validators. Ordinary JSON import and read-only verification remain unchanged.
+Synced restoration, reviewed drawing correspondence and approved release sealing
+remain unfinished.
 
 Inspect a historical original without adding it to the active takeoff:
 `view_sheet` accepts its saved BAS `page_id` as `sheet`. Supply

@@ -1,5 +1,44 @@
 # BAS production workflow progress
 
+## Public MCP archive restoration — 2026-09-10
+
+After **a23054ec**, public MCP now previews and explicitly commits the same shared
+restore merge, with mandatory full historical Python replay, retained originals,
+previous-state recovery files, exact Session adoption and browser-cargo round-trip.
+History-only recovery needs no loaded plan; old sources remain outside active
+counting and reopen by exact saved citation. A plain plan load still replaces the
+Session; merge-load preserves restored history. MCP **0.9.74 / 50 tools**.
+
+Final built public proof **15192 exit 0**, `evidence/restore-mcp-3`: actual browser
+Fort Sam backup → shared preview → commit → exact export → original SOO bbox →
+populated-session re-restore → process restart → restore disk-produced ZIP → same
+source citation. Each restore replays **3 assembly + 28 engineering** records;
+some hardware inputs are disclosed controlled declarations. Final commit times
+**15.205 / 19.727 / 15.090 s**; totals with preview/export **24.163 / 30.421 /
+23.999 s**. First contended run took 65.446 s; not hidden or compared as a quiet
+baseline. Final citation image visually verified, identical to prior inspected PNG.
+
+**12 new MCP tests**, final BAS suite **119 pass** (68306, 43.463 s); broader
+Session/conformance/restore **51 pass** (19396, 45.967 s, overlapping). Types,
+**4 packaging tests** and tool-count check pass. Full web **19830 exit 0:
+2,731 pass / 13 existing skips**, no failures, 19.792 s tests / 5.19 s build;
+existing warnings and benchmark caveats unchanged. Standalone full Python and
+full corpus/holdout were not rerun in this delivery batch. No new accuracy claim.
+
+Audit found an earlier checkpoint overstatement: folder/Microsoft 365 workspace
+composites accidentally inherited local restore by spread, although Drive's
+explicit composite did not. That unsafe entry point is now gated; local restore
+and original retention remain available. **51 sync/composite/local-restore tests
+pass** (15417). This is not completed sync support. Next coordinate in-flight
+pushes, deferred adoption and post-adopt metadata before re-exposing restore.
+
+Main A–E goal remains active: synced restore, recovery/journal UX, reviewed
+drawing correspondence, scoped approvals and remaining A–D corpus/holdout gates.
+The final researched symbol/installed-plan phase remains appended last, not a
+replacement. No VectorGrid/table/symbol algorithm, bbox, arithmetic, threshold,
+key or costing/labor change. No push, merge or deployment. Details and primary
+file-delivery research: `RESTORE_MCP_PROOF.md`.
+
 ## Browser-local archive restoration — 2026-09-10
 
 After **01e9b3a4**, actual browser-local restore now uses shared preview/merge and

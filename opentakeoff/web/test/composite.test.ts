@@ -8,6 +8,7 @@ import { IDBFactory } from "fake-indexeddb";
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { buildLocalFirstStore } from "../src/lib/sync/composite.js";
+import { buildSyncedWorkspaceStore } from '../src/lib/sync/workspaceComposite.js';
 import { createLocalStore, localStore } from '../src/lib/store.js';
 import { captureBasPoints } from '../src/lib/basWorkflow.ts';
 import { sha256Hex } from '../src/lib/graphKeys.js';
@@ -107,4 +108,21 @@ test('composite BAS originals use the canonical project scope and never route PD
   assert.equal(await createLocalStore('OTHER').loadBasSource(source), null);
   assert.equal(await localStore.loadBasSource(source), null);
   assert.equal(composite.loadPdfData, cloud.loadPdfData);
+});
+
+test('sync composites cannot accidentally expose uncoordinated local restore; local recovery and retention remain available', async () => {
+  const drive = buildLocalFirstStore('restore-scope', fakeDrive(), stubCloud()) as any;
+  const workspace = buildSyncedWorkspaceStore({ scope: 'restore-workspace',
+    provider: { async pull() { return null; }, async push() { throw new Error('No push is expected'); } },
+    snapProvider: fakeDrive(), ensureSidecarId: async () => 'sidecar', findSidecarId: async () => null }) as any;
+  try {
+    assert.equal(typeof localStore.restoreBasEvidence, 'function');
+    assert.equal(typeof createLocalStore('plain-local').restoreBasEvidence, 'function');
+    assert.equal(typeof drive.restoreBasEvidence, 'undefined');
+    assert.equal(typeof workspace.restoreBasEvidence, 'undefined');
+    assert.equal(workspace.retainBasSource, localStore.retainBasSource);
+    assert.equal(workspace.loadBasSource, localStore.loadBasSource);
+    await workspace.syncBridge.whenSynced();
+    assert.equal(workspace.syncBridge.onRemoteUpdate, null);
+  } finally { workspace.dispose(); drive.dispose(); }
 });
