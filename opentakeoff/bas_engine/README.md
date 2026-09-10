@@ -39,6 +39,13 @@ exposed by a UI control or MCP tool**, and does not implement the engineering
 register, persistence/review or complete source-backed
 browser/MCP journey. Those remain required by
 [the full compatibility contract](../docs/bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
+The internal `runBasEngineering` transport uses the same bounded process runner
+as existing BAS calculations. Shared TypeScript schemas preserve all eleven
+check variants and verify original-input/result lineage. Python still owns
+dimension, relationship and numeric validation; parsing a JS shape is not source
+validation or permission to save a review. Imported results require engine
+replay before being trusted as current. Run transport parity tests with
+`npm run test:bas` in `mcp/`; the engineering cases need the Python test extras.
 Existing network/hardware, point-list, assignment and assembly calculations are
 unchanged. There is no new extraction, detector, product selection or pricing.
 

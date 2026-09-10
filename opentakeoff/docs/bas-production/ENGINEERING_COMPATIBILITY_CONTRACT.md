@@ -207,6 +207,22 @@ resources, solver-result equality, replay and actual Python process parity.
 
 ## Completion gates
 
+### Shared transport acceptance before integration
+
+All eleven Python check variants need strict, non-coercing UI/MCP transport
+schemas. They preserve decimal strings, units, nulls, evidence bases and original
+array order. JS validates structure and response lineage, not engineering math;
+Python remains the authority for dimensions, numerical bounds and cross-check
+constraints. A successful JS parse alone must never permit saving a review.
+Use the existing bounded process transport, including cancellation, timeout and
+runtime diagnostics. Check actual process round trips for every variant, missing
+and failed cases, response/source substitution, omitted/reordered checks and
+forged passing summary states. Existing envelopes must remain identical.
+No public UI/MCP action is exposed until source/asset ownership and durable
+history are implemented. Imported historical calculations require integrity
+validation and shared-engine replay before being accepted as current outcomes;
+local hashes alone are not authenticated proof of the result.
+
 Each rule family needs exact boundary, incompatible, omitted, malformed and
 cross-scope cases. Independently enumerate small allocation/power cases where
 applicable. Preserve all prior Python/web/MCP and source/quantity regressions.

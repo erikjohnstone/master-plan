@@ -15,6 +15,10 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
   resource limits and cable reach around the unchanged network solvers. Retain
   partial-route evidence and capacity-only outcomes. Unknown physical identity
   cannot inflate known demand; software variables cannot pass device capacity.
+- Add strict shared engineering wire schemas and the internal bounded Python
+  transport. Preserve all check inputs/evidence and reject response substitution,
+  omitted checks and inconsistent summary statuses. This does not expose a new
+  UI action or public MCP tool; source ownership and saved review remain pending.
 
 - Add opt-in component rule v2 for complete, explicitly singular controller,
   occupancy-sensor, static-pressure-sensor and supply-air-damper lists. Keep

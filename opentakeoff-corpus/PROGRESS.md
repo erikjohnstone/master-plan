@@ -1,5 +1,24 @@
 ## Active work
 
+Latest 2026-09-09 continuation: **516476ea** commits the verified network
+dependency. Shared engineering wire schemas and internal Node→Python transport
+now have **61 passing BAS MCP tests**, types/build and packaged legacy smoke.
+Full web **44122 exit 0**: **2,653 pass / 13 existing skips**, types/lint/bench/build
+pass. No new Python change after **430 pass / mypy 17 files**. Original sources,
+VectorGrid, graph and symbol algorithms remain untouched. Public engineering
+review/persistence/UI/MCP integration is not complete.
+
+Read-only metadata recovery located **23/23** missing manifest filenames uniquely
+in the retained archive and verified each inventory SHA-256. Audit:
+`opentakeoff/docs/bas-production/evidence/corpus-path-audit-before-repair.json`.
+No input mappings, PDF bytes, keys or holdout interpretation changed. Same
+**77284** remains live; repair isolated mappings only once terminal. Graph phase
+**78/91 cells, 133/138 anchors**, 0 wrong/unexpected, remains at starting misses;
+takeoff/reference finals pending. New unrelated transport imports were added
+while it ran, so do not describe this as the final fixed-commit engineering gate.
+Complete five-workflow scope and next ownership/history/UI queue are retained in
+the BAS production progress record; no push/merge/deploy.
+
 2026-09-09 network checkpoint supersedes the historical active entry below.
 The previous research-status answer was **no progress**; this continuation
 completed declared serial/IP constraints around unchanged Python solvers and

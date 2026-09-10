@@ -1,5 +1,64 @@
 # BAS production workflow progress
 
+## Shared engineering transport checkpoint — 2026-09-09
+
+Network dependency committed locally as **516476ea**. This continuation also
+implemented strict shared TypeScript shapes for all eleven Python check kinds,
+original evidence/decimal/null retention, response lineage/status guards and the
+internal `runBasEngineering` wrapper over the existing bounded `basMath.ts`
+process. No arithmetic was duplicated in JS. Python still validates dimensions,
+relationships and numeric constraints; a JS shape parse is explicitly not a
+source-ownership or save-authorization gate. No public MCP verb or UI action.
+
+The new controlled cross-language tests reuse Python fixture builders only for
+transport parity, not independent source truth. All eleven families round-trip
+through actual Python with exact original/result equality. Negatives cover
+missing/failed characteristics, wrong dimensions and duplicate checks, substituted
+input reasons or network identities, omitted/reordered checks, missing constraints, invented
+passing summaries and unavailable/cancelled/timed-out runtimes. A first test
+expected detailed dimensional error wording; Python correctly returned its
+sanitized error. Fixed the expectation, not error handling. Strengthened malformed
+number tests to require direct schema rejection (including trailing CR/LF), not
+just a later runtime rejection: **32428 exit 0**, one focused test pass.
+
+Gates:
+- **24538 exit 0**: **61 BAS MCP tests pass**, zero failures/skips, **51,371.66 ms**;
+  MCP typecheck and build pass. New 17 tests are in normal `npm run test:bas`.
+- **16522 exit 0**: standalone web typecheck pass.
+- **44122 exit 0**: full web check, **2,653 pass / 13 existing skips / 0 failures**,
+  **109,132.64 ms** test phase; types, lint, existing benchmarks and build pass.
+  Build **18.96 s**, existing large-chunk warning. Build reports Agent API key
+  unavailable; no model/Agent invocation was needed or claimed in these gates.
+- **77535 exit 0**: rebuilt packaged MCP real-stdio legacy smoke preserves
+  SOO-only, hardware/license, serial/IP and text/structured response parity.
+- Previous Python checkpoint remains **430 pass / mypy 17 files**, including
+  packaged-byte verification. No Python change after that gate.
+
+The unchanged legacy regression **77284** is still live. New transport imports
+and test registration were added while it ran; the calculators are not invoked
+by the legacy scored extraction path. This run is the existing component-list
+regression, not a fixed-commit final gate for the new complete engineering
+workflow. Final full-scope regression after integration remains mandatory.
+Graph is **78/91 cells, 133/138 anchors**, zero wrong/unexpected; takeoff/reference
+remain pending. Table phase is incomplete with the 23 missing historical paths.
+
+Read-only recovery audit found **23/23 unique archived files** with bytes matching
+the retained corpus inventory SHA-256 values. See
+`evidence/corpus-path-audit-before-repair.json`. No manifest/PDF/key was edited,
+and no holdout interpretation was performed (file identity only). Once **77284**
+terminates, use these verified paths to repair only isolated input mappings.
+Do not claim identity with unavailable historical bytes beyond what the retained
+inventory proves; keep existing baseline errors and future per-document deltas.
+
+Next is actual source/asset ownership and durable engineering review: bind every
+check to registered equipment/scopes and selected assembly components, pin capture
+and dependency heads, retain original source wording and reasoned corrections,
+and require Python validation before saving. Imported calculations need shared
+Python replay before being accepted as current—not merely a locally reproducible
+hash. Then complete the selected-equipment UI and public MCP journey, and all
+remaining A/B/C/E, real-PDF, corpus and untouched-holdout gates. No reduction of
+the five-workflow goal, new infrastructure, push, merge or deployment.
+
 ## Declared network dependency verified — 2026-09-09
 
 The preceding research-status answer was **no progress** on implementation. This

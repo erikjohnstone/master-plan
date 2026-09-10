@@ -6,6 +6,8 @@ import { z } from "zod";
 import { basPointListsSchema, type BasPointLists } from "../../web/src/lib/basPointLists.ts";
 import { basAssignmentDemandResultSchema, type BasAssignmentDemandResult } from "../../web/src/lib/basAssignmentDemandContract.ts";
 import { basAssemblyQuantityResultSchema, type BasAssemblyQuantityResult } from "../../web/src/lib/basAssemblyQuantityContract.ts";
+import { basEngineeringInputSchema, basEngineeringResultSchema, verifyBasEngineeringResult,
+  type BasEngineeringResult } from "../../web/src/lib/basEngineeringContract.ts";
 
 const appRoot = fileURLToPath(new URL("../../", import.meta.url));
 const bundledRoot = fileURLToPath(new URL("./python/", import.meta.url));
@@ -61,6 +63,15 @@ export async function runBasAssignmentDemand(payload: unknown, options: { python
 
 export async function runBasAssemblyQuantities(payload: unknown, options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}): Promise<BasAssemblyQuantityResult> {
   return runBasProcess({ assembly_quantities: payload }, basAssemblyQuantityResultSchema, options);
+}
+
+/** Internal shared transport; callers must separately validate actual source,
+ * equipment and review ownership before saving anything. No new public tool. */
+export async function runBasEngineering(payload: unknown, options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}): Promise<BasEngineeringResult> {
+  options.signal?.throwIfAborted();
+  const input = basEngineeringInputSchema.parse(payload);
+  const result = await runBasProcess({ engineering: input }, basEngineeringResultSchema, options);
+  return verifyBasEngineeringResult(input, result);
 }
 
 async function runBasProcess<T>(payload: unknown, schema: z.ZodType<T>, options: { python?: string; timeoutMs?: number; signal?: AbortSignal }): Promise<T> {

@@ -1,0 +1,352 @@
+{
+  "scope": "Path/content-identity audit only; no extraction, key edits or active manifest mutation",
+  "missing": 23,
+  "uniquely_verified": 23,
+  "entries": [
+    {
+      "set_id": "12_MT_MSU_ReidHall_Renovation",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/12_MT_MSU_ReidHall_Renovation.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol1/HVAC_BAS_Plan_Sets/12_MT_MSU_ReidHall_Renovation.pdf",
+          "source_set_id": "vol1__12_MT_MSU_ReidHall_Renovation",
+          "split": "development",
+          "exists": true,
+          "sha256": "718889d45d60eac366be142265735c588c16e6a4bfad9d384c2c862969a3acc5",
+          "inventory_sha256": "718889d45d60eac366be142265735c588c16e6a4bfad9d384c2c862969a3acc5",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "24_IA_JohnsonCounty_Courthouse",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/24_IA_JohnsonCounty_Courthouse.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol1/HVAC_BAS_Plan_Sets/24_IA_JohnsonCounty_Courthouse.pdf",
+          "source_set_id": "vol1__24_IA_JohnsonCounty_Courthouse",
+          "split": "development",
+          "exists": true,
+          "sha256": "16606f9882826e9c41f6931f9bf0543150500adc22b09220cade432ecf632a20",
+          "inventory_sha256": "16606f9882826e9c41f6931f9bf0543150500adc22b09220cade432ecf632a20",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "27_WA_ColvilleTribes_Hatchery_Lab",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/27_WA_ColvilleTribes_Hatchery_Lab.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol1/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf",
+          "source_set_id": "vol1__27_WA_ColvilleTribes_Hatchery_Lab",
+          "split": "development",
+          "exists": true,
+          "sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+          "inventory_sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "16_NV_CarsonValleyMS_HVAC_Replacement",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol1/HVAC_BAS_Plan_Sets/16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
+          "source_set_id": "vol1__16_NV_CarsonValleyMS_HVAC_Replacement",
+          "split": "development",
+          "exists": true,
+          "sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+          "inventory_sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "13_MI_MSU_LifeSciences_LabRenovation",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/13_MI_MSU_LifeSciences_LabRenovation.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol1/HVAC_BAS_Plan_Sets/13_MI_MSU_LifeSciences_LabRenovation.pdf",
+          "source_set_id": "vol1__13_MI_MSU_LifeSciences_LabRenovation",
+          "split": "development",
+          "exists": true,
+          "sha256": "ff81d0c71ccce1261f33bfdcbc34fbd8b8acbaf75f90dbe2b45e33ea88549c9e",
+          "inventory_sha256": "ff81d0c71ccce1261f33bfdcbc34fbd8b8acbaf75f90dbe2b45e33ea88549c9e",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "03_FL_HurlburtField_ChildDevCenter",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/03_FL_HurlburtField_ChildDevCenter.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol1/HVAC_BAS_Plan_Sets/03_FL_HurlburtField_ChildDevCenter.pdf",
+          "source_set_id": "vol1__03_FL_HurlburtField_ChildDevCenter",
+          "split": "development",
+          "exists": true,
+          "sha256": "07f72d71a7ea9b09455d45a255a35e933a1dff0d459c280d16f87a7b1e19bb3d",
+          "inventory_sha256": "07f72d71a7ea9b09455d45a255a35e933a1dff0d459c280d16f87a7b1e19bb3d",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "08_ME_BGS_Augusta_EastCampus_Renovation",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/08_ME_BGS_Augusta_EastCampus_Renovation.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol1/HVAC_BAS_Plan_Sets/08_ME_BGS_Augusta_EastCampus_Renovation.pdf",
+          "source_set_id": "vol1__08_ME_BGS_Augusta_EastCampus_Renovation",
+          "split": "development",
+          "exists": true,
+          "sha256": "fb2bb79f000063411d7d7b4b9641e51f8e60f5dea0a5205cc55c0f9e741c9217",
+          "inventory_sha256": "fb2bb79f000063411d7d7b4b9641e51f8e60f5dea0a5205cc55c0f9e741c9217",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "15_IA_IowaState_Biorenewables_Lab",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/15_IA_IowaState_Biorenewables_Lab.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol1/HVAC_BAS_Plan_Sets/15_IA_IowaState_Biorenewables_Lab.pdf",
+          "source_set_id": "vol1__15_IA_IowaState_Biorenewables_Lab",
+          "split": "development",
+          "exists": true,
+          "sha256": "bff6532f6ee9b482e5298313f82d49f6264063a015b5c5fd392dee70e0065fa9",
+          "inventory_sha256": "bff6532f6ee9b482e5298313f82d49f6264063a015b5c5fd392dee70e0065fa9",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "09_ME_BGS_KennebecValleyCC_Renovation",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/09_ME_BGS_KennebecValleyCC_Renovation.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol1/HVAC_BAS_Plan_Sets/09_ME_BGS_KennebecValleyCC_Renovation.pdf",
+          "source_set_id": "vol1__09_ME_BGS_KennebecValleyCC_Renovation",
+          "split": "development",
+          "exists": true,
+          "sha256": "6434873508568a5efe415b46c3c35e3bf91e44816f4d941c9ba4db709b56bddf",
+          "inventory_sha256": "6434873508568a5efe415b46c3c35e3bf91e44816f4d941c9ba4db709b56bddf",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf",
+          "source_set_id": "vol2__031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+          "split": "development",
+          "exists": true,
+          "sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+          "inventory_sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "078_US_CP25028_MSU_Union_Sparty_Store_Renovations",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf",
+          "source_set_id": "vol2__078_US_CP25028_MSU_Union_Sparty_Store_Renovations",
+          "split": "development",
+          "exists": true,
+          "sha256": "661b5308103229e25276e705fccc1f05df9887f80c492711eb57ed5de3c7a91f",
+          "inventory_sha256": "661b5308103229e25276e705fccc1f05df9887f80c492711eb57ed5de3c7a91f",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf",
+          "source_set_id": "vol2__001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+          "split": "development",
+          "exists": true,
+          "sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+          "inventory_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf",
+          "source_set_id": "vol2__061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+          "split": "development",
+          "exists": true,
+          "sha256": "c55da475bac3a1aeaae723b12adf35896970fe249ca3556b4d430a990c0e41a0",
+          "inventory_sha256": "c55da475bac3a1aeaae723b12adf35896970fe249ca3556b4d430a990c0e41a0",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf",
+          "source_set_id": "vol2__016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+          "split": "development",
+          "exists": true,
+          "sha256": "23ded18dc611a4da3371d657193a481fcba215bc8aaa872934be94ded3b33117",
+          "inventory_sha256": "23ded18dc611a4da3371d657193a481fcba215bc8aaa872934be94ded3b33117",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf",
+          "source_set_id": "vol2__060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+          "split": "development",
+          "exists": true,
+          "sha256": "44cf96ab39e43346bc18edb0916a5f5b6c8d0d00c0692c38ffd0c1f8066c7a1d",
+          "inventory_sha256": "44cf96ab39e43346bc18edb0916a5f5b6c8d0d00c0692c38ffd0c1f8066c7a1d",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/041_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/041_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+          "source_set_id": "vol2__041_IL_VA_Project_537_17_115_Sterile_Processing",
+          "split": "development",
+          "exists": true,
+          "sha256": "3066db1e7cd6fa2e09f17f4a5d08be82209b1e010a986eb8b4697d66bf5d8dfe",
+          "inventory_sha256": "3066db1e7cd6fa2e09f17f4a5d08be82209b1e010a986eb8b4697d66bf5d8dfe",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf",
+          "source_set_id": "vol2__042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+          "split": "development",
+          "exists": true,
+          "sha256": "1b77edfd1675275cfe98f31933569c37d6f8c21b772c635a519c189409e1704d",
+          "inventory_sha256": "1b77edfd1675275cfe98f31933569c37d6f8c21b772c635a519c189409e1704d",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf",
+          "source_set_id": "vol2__073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
+          "split": "development",
+          "exists": true,
+          "sha256": "481d6683c257fd4f3176ff47c176eff7f92472e577f6de938258f129b062282f",
+          "inventory_sha256": "481d6683c257fd4f3176ff47c176eff7f92472e577f6de938258f129b062282f",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf",
+          "source_set_id": "vol2__008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+          "split": "development",
+          "exists": true,
+          "sha256": "2b7024ad75f57ddf04c0a5dd68ea80662f8fafc86390a6ad3c61ec6052c88357",
+          "inventory_sha256": "2b7024ad75f57ddf04c0a5dd68ea80662f8fafc86390a6ad3c61ec6052c88357",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+          "source_set_id": "vol2__017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+          "split": "development",
+          "exists": true,
+          "sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+          "inventory_sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+          "source_set_id": "vol2__009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+          "split": "new_workflow_holdout",
+          "exists": true,
+          "sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+          "inventory_sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+          "source_set_id": "vol2__067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
+          "split": "new_workflow_holdout",
+          "exists": true,
+          "sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+          "inventory_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+          "matches_inventory": true
+        }
+      ]
+    },
+    {
+      "set_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+      "missing_path": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
+      "candidates": [
+        {
+          "file": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04/sources/vol2/HVAC_BAS_Plan_Sets_Vol2/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
+          "source_set_id": "vol2__062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+          "split": "development",
+          "exists": true,
+          "sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+          "inventory_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+          "matches_inventory": true
+        }
+      ]
+    }
+  ]
+}
