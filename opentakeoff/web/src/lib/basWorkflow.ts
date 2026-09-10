@@ -8,13 +8,13 @@ import { canonicalBasJson } from './basCanonical.ts';
 import { BAS_SEQUENCE_RULE, reconcileBasSequencePoints } from './basSequenceReconciliation.ts';
 import { basReviewEventSchema } from './basReviewContract.ts';
 import { basEquipmentEvidenceSchema, equipmentIdentityPayload, type BasEquipmentEvidence } from './basEquipmentEvidence.ts';
-import { basEquipmentReviewEventSchema, validateBasEquipmentRegister, type BasEquipmentReviewEvent } from './basEquipmentRegister.ts';
+import { basEquipmentReviewEventSchema, prepareBasEquipmentRegisterValidator, type BasEquipmentReviewEvent } from './basEquipmentRegister.ts';
 import { basAssignmentCalculationSchema, basAssignmentCalculationFingerprint, basAssignmentInputFingerprint,
   buildBasAssignmentDemandInput, verifyBasAssignmentDemandResult } from './basAssignmentDemandContract.ts';
 import { BAS_WORKFLOW_REVISIONS, atLeastBasWorkflowRevision } from './basWorkflowRevision.ts';
-import { basAssemblyReviewEventSchema, basAssemblyInterpretationFingerprint, validateBasAssemblyRegister,
+import { basAssemblyReviewEventSchema, basAssemblyInterpretationFingerprint, prepareBasAssemblyRegisterValidator,
   type BasAssemblyReviewEvent } from './basAssemblyRegister.ts';
-import { basAssemblyCalculationSchema, basAssemblyCalculationFingerprint, buildBasAssemblyQuantityInput,
+import { basAssemblyCalculationSchema, basAssemblyCalculationFingerprint, assemblyQuantityInputForValidatedRegisters,
   basAssemblyQuantityInputFingerprint, verifyBasAssemblyQuantityResult } from './basAssemblyQuantityContract.ts';
 import { basEngineeringReviewEventSchema, prepareBasEngineeringRegisterValidator, type BasEngineeringReviewEvent } from './basEngineeringRegister.ts';
 import { verifyBasEngineeringResult } from './basEngineeringContract.ts';
@@ -219,22 +219,37 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
     } else if (!linked.delete(pair)) throw new Error('BAS review removes an association that does not exist');
     pairs.set(event.capture_id, linked);
   }
+  // One-entry contexts, local to this owned workflow. Every event is still
+  // hashed and every register validated; changing capture/heads replaces reuse.
+  let equipmentContext: { capture: string; validate: Awaited<ReturnType<typeof prepareBasEquipmentRegisterValidator>> } | undefined;
   for (const event of result.equipment_events ?? []) {
     const { event_id, ...payload } = event;
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS equipment event fingerprint mismatch');
     const c = result.captures.find(c => c.capture_id === event.capture_id)!;
-    await validateBasEquipmentRegister(c.narrative_sources!, c.equipment_sources!, c.points, event.register);
+    if (equipmentContext?.capture !== c.capture_id) equipmentContext = { capture: c.capture_id,
+      validate: await prepareBasEquipmentRegisterValidator(c.narrative_sources!, c.equipment_sources!, c.points) };
+    equipmentContext.validate(event.register);
   }
+  equipmentContext = undefined;
+  let assemblyContext: { key: string; validate: Awaited<ReturnType<typeof prepareBasAssemblyRegisterValidator>> } | undefined;
+  let interpretationIdentity: { key: string; fingerprint: string } | undefined;
   for (const event of result.assembly_events ?? []) {
     const { event_id, ...payload } = event;
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS assembly event fingerprint mismatch');
     const c = result.captures.find(c => c.capture_id === event.capture_id)!;
     const equipment = result.equipment_events!.find(e => e.event_id === event.expected_equipment_head)!;
-    if (await basAssemblyInterpretationFingerprint(c.narrative_sources!, event.register.source_rule_version) !== event.source_interpretation_fingerprint) {
+    const interpretationKey = canonicalBasJson([c.capture_id, event.register.source_rule_version]);
+    if (interpretationIdentity?.key !== interpretationKey) interpretationIdentity = { key: interpretationKey,
+      fingerprint: await basAssemblyInterpretationFingerprint(c.narrative_sources!, event.register.source_rule_version) };
+    if (interpretationIdentity.fingerprint !== event.source_interpretation_fingerprint) {
       throw new Error('BAS assembly source interpretation changed within its retained rule version');
     }
-    await validateBasAssemblyRegister(c.narrative_sources!, c.equipment_sources!, c.points, equipment.register, event.register);
+    const key = canonicalBasJson([c.capture_id, equipment.event_id]);
+    if (assemblyContext?.key !== key) assemblyContext = { key,
+      validate: await prepareBasAssemblyRegisterValidator(c.narrative_sources!, c.equipment_sources!, c.points, equipment.register) };
+    assemblyContext.validate(event.register);
   }
+  assemblyContext = undefined;
   for (const calculation of result.assignment_calculations ?? []) {
     const { calculation_id, ...payload } = calculation;
     if (await basAssignmentCalculationFingerprint(payload) !== calculation_id) throw new Error('BAS assignment calculation fingerprint mismatch');
@@ -250,7 +265,7 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
     const event = result.assembly_events!.find(e => e.event_id === calculation.result.assembly_head)!;
     const equipment = result.equipment_events!.find(e => e.event_id === event.expected_equipment_head)!;
     const c = result.captures.find(c => c.capture_id === event.capture_id)!;
-    const input = await buildBasAssemblyQuantityInput(c, equipment.register, equipment.event_id, event.register, event.event_id);
+    const input = assemblyQuantityInputForValidatedRegisters(c.capture_id, equipment.register, equipment.event_id, event.register, event.event_id);
     if (await basAssemblyQuantityInputFingerprint(input) !== calculation.input_fingerprint) throw new Error('BAS assembly calculation inputs changed');
     verifyBasAssemblyQuantityResult(input, calculation.result);
   }

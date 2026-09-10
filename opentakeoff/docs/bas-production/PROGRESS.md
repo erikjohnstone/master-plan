@@ -1,5 +1,33 @@
 # BAS production workflow progress
 
+## Shared history verification — 2026-09-10, after b6249700
+
+Prepared, owned equipment/assembly contexts now avoid repeated source interpretation
+within one verified history. Every event/hash/register/calculation check remains;
+no global cache or public bypass. Already-validated assembly calculation inputs
+use the same shared projection. No VectorGrid/extraction/symbol/bbox/math/schema
+change. A serializer experiment was rejected and production canonicalization is
+unchanged. Historical full-view parity **9227 exit 0**: all fields exact across
+two equipment and five assembly events. Eight new regression tests include
+cross-capture/head changes, forged later events and input/output mutation.
+
+Latest combined source-backed probe **27046 exit 1**: preparation **2.616 s**,
+reopening **3.079 s**, versus prior 4.599/6.004 s; controlled setup 16.389 s.
+Exact original, both selected claims, 458 issues and all 31 Python calculations
+retained. **648,708,096-byte incremental peak RSS still fails 512 MiB.** No scope
+or budget narrowed. Full web **34523 exit 0**: 2,892 pass / 13 existing skips /
+zero failures, types/lint/benchmarks/build. MCP **41130 exit 0**: types, 128 BAS,
+33 revision, six issue, 17 scope/snapshot, four packaging and 122 tool tests;
+benchmarks and metadata pass. Python **66195 exit 0**: 453 pass in 12.32 s,
+mypy 20 files. All handles terminal. Ledger: `REGISTER_VERIFICATION_PROOF.md`.
+
+The memory gate stays open. Continue atomic source/snapshot/seal storage and the
+public approval/export/reopen journey, and require the memory gate before accepting
+that feature. Agent orchestration and unique-point reconciliation are still
+required, followed by remaining A–D/corpus/holdout and appended symbol-phase gates.
+This is not a complete BAS takeoff or production release. Goal active; no external
+blocker, push, merge or deployment.
+
 ## Snapshot/archive core — work in progress, 2026-09-10
 
 After **ac879e3e**, strict shared snapshot preparation/reopening and a separate

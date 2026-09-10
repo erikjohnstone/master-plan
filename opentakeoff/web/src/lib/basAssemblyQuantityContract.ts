@@ -35,8 +35,17 @@ export async function buildBasAssemblyQuantityInput(capture: BasCapture, equipme
   assembly: BasAssemblyRegister, assemblyHead: string): Promise<BasAssemblyQuantityInput> {
   if (!capture.narrative_sources || !capture.equipment_sources) throw new Error('Assembly calculation requires retained source evidence');
   const view = await validateBasAssemblyRegister(capture.narrative_sources, capture.equipment_sources, capture.points, equipment, assembly);
-  return basAssemblyQuantityInputSchema.parse({ capture_id: capture.capture_id, equipment_head: equipmentHead, assembly_head: assemblyHead,
-    equipment: equipment.equipment.map(({ equipment_id, scope_id }) => ({ equipment_id, scope_id })), assembly_register: view.register });
+  return assemblyQuantityInputForValidatedRegisters(capture.capture_id, equipment, equipmentHead, view.register, assemblyHead);
+}
+
+/** Internal composition seam for the history verifier, AFTER it has validated
+ * every pinned equipment/assembly event on its privately owned workflow.
+ * Public calculation entry points still use buildBasAssemblyQuantityInput.
+ * This is the same schema/projection, not another source or quantity rule. */
+export function assemblyQuantityInputForValidatedRegisters(captureId: string, equipment: BasEquipmentRegister, equipmentHead: string,
+  assembly: BasAssemblyRegister, assemblyHead: string): BasAssemblyQuantityInput {
+  return basAssemblyQuantityInputSchema.parse({ capture_id: captureId, equipment_head: equipmentHead, assembly_head: assemblyHead,
+    equipment: equipment.equipment.map(({ equipment_id, scope_id }) => ({ equipment_id, scope_id })), assembly_register: assembly });
 }
 
 const digest = (value: unknown) => sha256Hex(new TextEncoder().encode(canonicalBasJson(value)));

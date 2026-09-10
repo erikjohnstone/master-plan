@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { canonicalBasJson } from '../src/lib/basCanonical.ts';
 import { boundedCanonicalCandidate } from './helpers/basCanonicalCandidate.ts';
 
@@ -21,4 +22,9 @@ test('bounded serialization experiment preserves exact historical bytes and reje
   for (const v of [undefined, NaN, Infinity, -Infinity, new Date(), 1n, Object.create(null), { nested: undefined }, [undefined]]) {
     assert.throws(() => canonicalBasJson(v), /finite JSON/); assert.throws(() => boundedCanonicalCandidate(v), /finite JSON/);
   }
+});
+
+test('retained real-source text serializes byte-for-byte like the historical implementation', () => {
+  const source = JSON.parse(readFileSync(new URL('../../docs/bas-production/evidence/baseline/fort-sam-text.json', import.meta.url), 'utf8'));
+  assert.equal(boundedCanonicalCandidate(source), canonicalBasJson(source));
 });

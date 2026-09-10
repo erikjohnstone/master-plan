@@ -93,3 +93,40 @@ the extra wall-time allowance covers full-history Python and source/archive byte
 verification. This is an internal transport probe with controlled applicability
 decisions, not the required public human-reviewed approval journey or automatic
 coverage evidence. Report setup, preparation, archive and reopening separately.
+
+## Browser delivery implementation map
+
+The current store has one canonical annotation scope and generation token;
+`basRestoreStore.js` already demonstrates private source staging followed by a
+single publishing transaction. The BAS original-source store uses content hashes
+and 8 MiB chunks. Its records survive ordinary annotation saves and PDF closing.
+Reuse those encodings, but do not call restore to save an approval: restore changes
+annotations and their generation, whereas snapshot creation must preserve them.
+
+- Put delivery in a separate browser-only module. Keep WebCrypto/Python awaits
+  before the final IDB transaction; use the existing lazy synchronous hash library
+  inside request callbacks. Resolve only on transaction completion.
+- Use separate project-scoped content-addressed snapshot metadata, chunked exact
+  takeoff/record data, initial seal and operation identity. Do not use the legacy
+  `snapshots` store, whose user-facing rollback lifecycle can remove records.
+- Stage one verified original at a time under invocation-private keys. Final
+  delivery checks existing originals byte-for-byte and publishes all missing
+  originals plus snapshot/seal together. Never overwrite a conflicting original.
+- A new approval requires the exact prepared payload and expected annotation
+  generation still to match after asynchronous work. The source/capture/head
+  checks in shared readiness remain authoritative; IDB cannot invent readiness.
+- A verified imported historical snapshot does not approve or replace the current
+  annotations. Shared plan mode distinguishes creation from historical reopening;
+  a caller-supplied origin/status flag must not grant that authority.
+- Local/scoped/Drive/workspace-composite adapters must use the same canonical
+  project scope and active-workspace guard. Snapshots/originals remain explicitly
+  browser-local until exported; do not silently introduce a cloud sync contract.
+- List metadata is not fresh verification. Reading stored content must check
+  chunk lengths/digests and then use shared original-byte/Python replay before
+  presenting verified historical approval. Currentness/revocation remains separate.
+
+Test actual fake-IDB atomic delivery, late cancellation, quota/abort, staged
+corruption, unchanged annotations, stale generation/payload, idempotent versus
+conflicting retries, project isolation, multi-chunk originals and payloads,
+ordinary import/save/PDF-close retention, and disposed sync adapters. These do not
+replace real browser/source-backed and packaged MCP acceptance.

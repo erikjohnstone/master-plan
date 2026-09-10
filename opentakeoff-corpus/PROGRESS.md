@@ -1,5 +1,20 @@
 ## Active work
 
+2026-09-10 after **b6249700**: shared history validation reuses privately owned
+equipment/assembly source context without skipping events or integrity checks.
+Full historical-view parity **9227 exit 0**; eight new regression tests. Latest
+combined snapshot probe **27046 exit 1**: 2.616 s prepare / 3.079 s reopen, all
+31 actual-Python calculations and exact original preserved. Memory still fails:
+648,708,096 bytes against the unchanged 512 MiB limit. Serializer prototype rejected;
+no extraction/VectorGrid/symbol/bbox/math/canonical-schema change. Full web
+**34523 exit 0**: 2,892 pass / 13 skips, types/lint/benchmarks/build. MCP **41130
+exit 0**: all applicable BAS/revision/issue/scope/packaging/tool gates pass. Python
+**66195 exit 0**: 453 pass, mypy 20 files. All handles terminal.
+See `opentakeoff/docs/bas-production/REGISTER_VERIFICATION_PROOF.md`. Continue
+atomic snapshot storage/public journey while retaining the memory gate, then
+Agent/unique-point and all original/corpus/holdout/final-symbol acceptance. Goal
+active, no external blocker or deployment; no new corpus score claimed.
+
 2026-09-10 after **ac879e3e**: snapshot/archive core is in progress, not public
 production approval. Shared creation/reopening requires exact original bytes,
 actual Python replay and full readiness; v1 unapproved backups remain distinct.

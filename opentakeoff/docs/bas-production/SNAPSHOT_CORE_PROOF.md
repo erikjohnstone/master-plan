@@ -5,6 +5,10 @@ research: `SNAPSHOT_CONTRACT.md`. This is an internal implementation increment,
 not workflow E completion, a public human approval or complete conversational
 BAS takeoff. No source/extraction/VectorGrid/symbol/bbox/Python-math edits.
 
+Follow-up to checkpoint `b6249700`: `REGISTER_VERIFICATION_PROOF.md` records
+measured history-validation improvements, historical-view parity, the rejected
+serializer trial and the still-open combined snapshot memory gate.
+
 ## Implementation
 
 `basSnapshot.ts` owns a strict explicit-operator declaration, exact takeoff digest,

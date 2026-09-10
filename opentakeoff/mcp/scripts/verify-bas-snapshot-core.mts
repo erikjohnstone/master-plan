@@ -12,6 +12,7 @@ import { verifyBasWorkflowCalculations } from '../src/basWorkflowReplay.ts';
 import type { BasWorkflow } from '../../web/src/lib/basWorkflow.ts';
 import type { BasScopeReviewEvent } from '../../web/src/lib/basScopeReview.ts';
 import { applyBasEquipmentReview } from '../../web/src/lib/basEquipmentReview.ts';
+import { allocationProfiler } from './bas-allocation-profiler.mts';
 const originalPath = process.argv[2];
 if (!originalPath) throw new Error('Pass the exact original PDF path; no filename-only source substitution');
 const raw = await readFile(new URL('../../docs/bas-production/evidence/scope-browser-7/reviewed.takeoff.json', import.meta.url));
@@ -22,6 +23,7 @@ const spec = (workflow.scope_events!.filter(e => e.action.kind === 'save_scope')
 const included = spec.included.filter(t => t.claim === 'scheduled_equipment');
 assert.equal(included.length, 2, 'Retained fixture identity changed; investigate rather than silently narrowing');
 const rss = process.memoryUsage().rss, setup = performance.now();
+const allocations = await allocationProfiler(process.argv.includes('--allocations'));
 const memory = (stage: string) => console.error(JSON.stringify({ stage, rss: process.memoryUsage().rss,
   heap_used: process.memoryUsage().heapUsed, incremental_peak_rss: Math.max(0, process.resourceUsage().maxRSS * 1024 - rss) }));
 // The original retained operator review explicitly leaves these values unknown.
@@ -39,6 +41,7 @@ const declared = await applyBasEquipmentReview(workflow, { operation_id: '000000
 const reviewed = await reviewReadyScope(declared, included, 2000);
 const setup_ms = performance.now() - setup;
 memory('after_controlled_setup');
+await allocations.checkpoint('controlled_setup');
 payload.bas_workflow = reviewed.workflow;
 const replayCalculations = (w: BasWorkflow, signal?: AbortSignal) => verifyBasWorkflowCalculations(w, { signal });
 const start = performance.now();
@@ -48,13 +51,16 @@ const plan = await prepareBasSnapshotApproval(payload, { operation_id: '00000000
   declared_at: '2026-09-10T17:00:00.000Z' }, 'operator_input', { readSource: async () => original, replayCalculations });
 const preparation_ms = performance.now() - start, archiveStart = performance.now();
 memory('after_preparation');
+await allocations.checkpoint('snapshot_preparation');
 const prepared = await prepareBasSnapshotBundle(plan), chunks = [];
 for await (const chunk of prepared.stream(async () => original)) chunks.push(chunk);
 const archive = Buffer.concat(chunks), archive_ms = performance.now() - archiveStart, reopenStart = performance.now();
 memory('after_archive');
+await allocations.checkpoint('archive');
 const reopened = await openBasSnapshotBundle({ size: archive.length, read: async (o, n) => archive.subarray(o, o + n) }, { replayCalculations });
 const reopen_ms = performance.now() - reopenStart;
 memory('after_reopen');
+await allocations.checkpoint('reopen'); allocations.close();
 assert.equal(reopened.plan.snapshot_id, plan.snapshot_id);
 assert.deepEqual(await reopened.readSource(workflow.captures[0].sources[0].source_id), new Uint8Array(original));
 assert.equal(readBasSnapshotPlan(reopened.plan).payload_json, readBasSnapshotPlan(plan).payload_json);
@@ -66,7 +72,8 @@ const report = { probe: 'source_backed_snapshot_core', fixture_sha256: createHas
   included_claims: readiness.scope.claims.length, retained_issues: readiness.issues.length,
   checked_records: readiness.replay.checked_records, calculation_verification: readiness.replay.calculation_verification,
   node: process.version, cpu: cpus()[0].model, platform: process.platform, arch: process.arch,
-  controlled_review: true, controlled_scope_fields: ['building', 'level', 'phase'], public_ui_mcp_walkthrough: false, project_approved: false, persisted: false };
+  allocation_profile: process.argv.includes('--allocations'), controlled_review: true,
+  controlled_scope_fields: ['building', 'level', 'phase'], public_ui_mcp_walkthrough: false, project_approved: false, persisted: false };
 console.log(JSON.stringify(report));
 assert.ok(preparation_ms < report.stage_budget_ms && reopen_ms < report.stage_budget_ms, 'Snapshot stage exceeds predeclared 25 s probe budget');
 assert.ok(incremental_peak_rss < report.rss_budget, 'Snapshot core probe exceeds predeclared 512 MiB incremental RSS');

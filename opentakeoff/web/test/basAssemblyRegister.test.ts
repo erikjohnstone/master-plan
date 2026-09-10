@@ -7,7 +7,7 @@ import { basPointListsSchema } from '../src/lib/basPointLists.ts';
 import { captureBasEquipmentTables, buildBasEquipmentCandidates } from '../src/lib/basEquipmentEvidence.ts';
 import { emptyBasEquipmentRegister } from '../src/lib/basEquipmentRegister.ts';
 import { interpretBasComponentRequirements } from '../src/lib/basComponentRequirements.ts';
-import { emptyBasAssemblyRegister, validateBasAssemblyRegister, type BasAssemblyComponent, type BasAssemblyRegister } from '../src/lib/basAssemblyRegister.ts';
+import { emptyBasAssemblyRegister, validateBasAssemblyRegister, prepareBasAssemblyRegisterValidator, type BasAssemblyComponent, type BasAssemblyRegister } from '../src/lib/basAssemblyRegister.ts';
 import { captureBasEvidence, basEventFingerprint, mergeBasWorkflows, verifyBasWorkflow } from '../src/lib/basWorkflow.ts';
 import { applyBasEquipmentReview, basEquipmentHead } from '../src/lib/basEquipmentReview.ts';
 import { applyBasAssemblyReview, basAssemblyHead, basAssemblyView, basAssemblySummary } from '../src/lib/basAssemblyReview.ts';
@@ -59,6 +59,17 @@ function component(n = 100, declaration = supply): BasAssemblyComponent {
 }
 const register = (...components: BasAssemblyComponent[]): BasAssemblyRegister => ({ ...emptyBasAssemblyRegister(), components });
 const validate = (value: unknown, members = equipment) => validateBasAssemblyRegister(sources, evidence, points, members, value);
+
+test('prepared real-source interpretation cannot be modified through a previous returned view', async () => {
+  const input = register(component(), component(101, exhaust)), expected = await validate(input);
+  const prepared = await prepareBasAssemblyRegisterValidator(sources, evidence, points, equipment);
+  const first = prepared(input);
+  assert.deepEqual(first, expected);
+  first.components[0].declarations[0].clause.source_spans[0].text = 'Tampered returned evidence';
+  first.components[0].declarations[0].component.requirement_id = 'Tampered returned requirement';
+  first.equipment_issues.length = 0;
+  assert.deepEqual(prepared(input), expected);
+});
 
 test('real source VFD roles remain distinct and all original evidence and applicability survive review', async () => {
   const input = register(component(), component(101, exhaust)), before = structuredClone({ input, sources, equipment, evidence, points });
