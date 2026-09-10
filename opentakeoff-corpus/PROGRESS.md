@@ -1,5 +1,25 @@
 ## Active work
 
+2026-09-09 network checkpoint supersedes the historical active entry below.
+The previous research-status answer was **no progress**; this continuation
+completed declared serial/IP constraints around unchanged Python solvers and
+fixed three reproduced unknown/nonphysical-capacity cases. **65649 exit 0**:
+**430 Python tests pass**, zero skips/failures, 36.33 s, including explicit
+packaging verification. **40560 exit 0**: mypy 17 files; **35735 exit 0**:
+44 existing BAS MCP tests pass. Failed wrong-directory/config invocations and
+exact evidence are retained in the BAS production progress record. No extraction,
+VectorGrid, graph, symbols or existing web/MCP source changes in this checkpoint.
+
+Same **77284** job remains live with active NAVFAC takeoff child. Graph phase is
+now finished: **78/91 cells**, 0 wrong; **133/138 anchors**, 0 unexpected, matching
+the documented starting misses. Takeoff/reference final metrics remain pending.
+Table recall remains Bessemer 6/11 plus 23 historical-path ENOENT failures; this
+is not a complete corpus pass. No new source/holdout files or keys were altered.
+Next: shared source ownership, typed engineering transport and durable decisions,
+then UI/MCP journeys and all remaining five-workflow gates. No push/merge/deploy.
+
+### Earlier engineering checkpoint
+
 Engineering continuation: the preceding status answer was **no progress**;
 this turn adds the shared Python declared-constraint dependency and bounded
 process envelope. Exact units, signal/load/contact/pulse/power/mechanical checks,

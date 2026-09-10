@@ -9,8 +9,12 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
   source/input bases; use exact units, explicit power scenarios and separate
   failed/missing outcomes. Reject duplicate physical-source allocation and
   bounded-arithmetic overflow. This is not yet a UI/MCP engineering workflow:
-  source ownership, saved review, network integration and end-to-end acceptance
+  source ownership, saved review and end-to-end acceptance
   remain unfinished. Existing extraction and quantity algorithms are unchanged.
+- Validate declared serial/IP port identity, settings, address/scope allocation,
+  resource limits and cable reach around the unchanged network solvers. Retain
+  partial-route evidence and capacity-only outcomes. Unknown physical identity
+  cannot inflate known demand; software variables cannot pass device capacity.
 
 - Add opt-in component rule v2 for complete, explicitly singular controller,
   occupancy-sensor, static-pressure-sensor and supply-air-damper lists. Keep

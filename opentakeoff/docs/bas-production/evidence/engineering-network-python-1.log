@@ -1,0 +1,60 @@
+
+==================================== ERRORS ====================================
+__________________ ERROR collecting tests/test_assemblies.py ___________________
+ImportError while importing test module '/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/bas_engine/tests/test_assemblies.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../bas_engine/tests/test_assemblies.py:7: in <module>
+    from bas_engine.assemblies import AssemblyQuantityInput, calculate_assembly_quantities
+E   ModuleNotFoundError: No module named 'bas_engine.assemblies'
+_______________ ERROR collecting tests/test_assignment_demand.py _______________
+ImportError while importing test module '/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/bas_engine/tests/test_assignment_demand.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../bas_engine/tests/test_assignment_demand.py:7: in <module>
+    from bas_engine.assignment_demand import AssignmentDemandInput, calculate_assignment_demand
+E   ModuleNotFoundError: No module named 'bas_engine.assignment_demand'
+__________________ ERROR collecting tests/test_engineering.py __________________
+ImportError while importing test module '/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/bas_engine/tests/test_engineering.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../bas_engine/tests/test_engineering.py:13: in <module>
+    from bas_engine.engineering import check_engineering
+E   ModuleNotFoundError: No module named 'bas_engine.engineering'
+______________ ERROR collecting tests/test_engineering_network.py ______________
+ImportError while importing test module '/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/bas_engine/tests/test_engineering_network.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../bas_engine/tests/test_engineering_network.py:11: in <module>
+    from bas_engine.engineering import check_engineering
+E   ModuleNotFoundError: No module named 'bas_engine.engineering'
+__________________ ERROR collecting tests/test_point_lists.py __________________
+ImportError while importing test module '/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/bas_engine/tests/test_point_lists.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../bas_engine/tests/test_point_lists.py:11: in <module>
+    from bas_engine.point_lists import PointListInput, review_point_lists
+E   ModuleNotFoundError: No module named 'bas_engine.point_lists'
+=========================== short test summary info ============================
+ERROR ../bas_engine/tests/test_assemblies.py
+ERROR ../bas_engine/tests/test_assignment_demand.py
+ERROR ../bas_engine/tests/test_engineering.py
+ERROR ../bas_engine/tests/test_engineering_network.py
+ERROR ../bas_engine/tests/test_point_lists.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 5 errors during collection !!!!!!!!!!!!!!!!!!!!
+5 errors in 1.66s

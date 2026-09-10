@@ -12,6 +12,13 @@ reuse the same scenario calculator. Endpoint identity, terminal exclusivity and
 power-source ownership are checked across submitted check rows as well as within
 one row. Splitting a physical supply into separate partial-load checks rejects.
 
+Declared serial-segment and IP-closet checks reuse the existing network solvers.
+They check physical port identity, protocol/media/settings, address collisions,
+scope, declared capacity and reach. Unknown identity is not known physical
+demand; partial serial positions retain a clearly labeled capacity-only result.
+Known overlength/overload remains failed. No network routes, extra gateways,
+default device limits or installed quantities are inferred.
+
 Every entered characteristic retains an explicit-input or drawing-transcription
 basis; a transcription requires original wording and source IDs. This is not
 source authentication: the pending shared workflow service must establish actual
@@ -29,7 +36,7 @@ existing 32-MiB process input/output limit remains unchanged.
 
 This dependency is tested through the actual Python process. It is **not yet
 exposed by a UI control or MCP tool**, and does not implement the engineering
-register, persistence/review, network integration or complete source-backed
+register, persistence/review or complete source-backed
 browser/MCP journey. Those remain required by
 [the full compatibility contract](../docs/bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
 Existing network/hardware, point-list, assignment and assembly calculations are

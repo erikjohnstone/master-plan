@@ -91,8 +91,8 @@ each compact row. The upgrade does not assign these components to equipment or
 change earlier results; applicability still requires review and recalculation.
 
 Engineering compatibility is being built in the shared Python engine. Its
-declared-rating checks and process tests are implemented; the saved engineering
-register, source-ownership service, network integration and UI/MCP workflow are
+declared-rating and network-constraint checks and process tests are implemented;
+the saved engineering register, source-ownership service and UI/MCP workflow are
 not yet complete. This is not an available project-compatibility certification.
 
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the

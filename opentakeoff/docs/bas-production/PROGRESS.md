@@ -1,5 +1,57 @@
 # BAS production workflow progress
 
+## Declared network dependency verified — 2026-09-09
+
+The preceding research-status answer was **no progress** on implementation. This
+continuation re-read the full goal/instructions, revalidated the actual worktree
+and the same live **77284** handle, and completed the unfinished shared Python
+network dependency. No VectorGrid, extraction, graph, symbol, legacy network
+solver, web or MCP source changes were made in this checkpoint.
+
+Serial/IP constraints retain physical port/scope/settings/address declarations,
+explicit budgets and partial route data. Existing `serial_partition` and
+`ip_switches` supply their unchanged results/diagnostics. Known failures survive
+missing inputs; duplicate cross-check ports and canonical IP addresses reject
+allocation; separate explicit address domains remain independent. An IP literal
+check is not subnet, routing, BBMD/SC or protocol-address-family certification.
+
+Three new tests reproduced erroneous selected-capacity outcomes: unknown port
+kind counted as definite demand (serial and IP), and a serial software variable
+receiving a passing device-capacity row. Corrected the shared dependency to use
+known physical demand, preserve unknown prerequisites and fail nonphysical
+consumers. The unchanged legacy calculators were not patched.
+
+Verified evidence:
+- **3265** focused pytest: **123 pass in 3.48 s**. Its following mypy invocation
+  omitted the required config and traversed build artifacts; that failed log is
+  retained. Correct invocation **40560 exit 0**, mypy **17 source files**, uses
+  `--config-file bas_engine/pyproject.toml`.
+- MCP build succeeded. **46556** then failed pytest collection because it ran
+  from `mcp/`; the failed log is retained, no production fix made for that error.
+- Correct application-root run **65649 exit 0**,
+  `engineering-network-python-2.log`: **430 pass, zero failures/skips, 36.33 s**,
+  `OT_BAS_VERIFY_PACKAGE=1`. Includes current packaged-source bytes/import and
+  actual Python process parity, all earlier cases, and network scenarios.
+- **35735 exit 0**, `engineering-network-mcp-1.log`: all existing **44 BAS MCP
+  tests pass**, zero skips/failures, 35,786.48 ms.
+- Dense 1,000-address controlled case accounts for missing addresses once,
+  retains 6,002 constraints and stays under 4 MB serialized; this is a bounded
+  output test, not yet a full UI or production peak-memory benchmark.
+
+Legacy run **77284** remains live, not restarted. Graph finished in **1517.5 s**:
+**78/91 cells**, zero wrong cells; **133/138 symbol anchors**, zero unexpected
+matches. The 13 Baker ceiling misses and five Bldg5406 misses match the documented
+starting baseline. Takeoff/reference are still pending (active NAVFAC child).
+Table discovery is still incomplete: Bessemer **6/11**, five misses/three
+key-unlisted additions, six unkeyed core sets and **23 historical-path ENOENTs**.
+Repair only isolated input-location mappings by verified content identity once
+this run terminates; never edit ground truths to fit output.
+
+Next: shared source/equipment/component ownership, typed transport, register and
+append-only history; then actual UI/MCP review/reload/export journeys, remaining
+A/B/C/E acceptance and full applicable corpus/holdout. The numeric/network
+dependency alone does **not** complete D. No new UI/MCP action, merge or push.
+
 ## Engineering calculator dependency — 2026-09-09
 
 The preceding “What's after this?” answer was status-only: **no progress**.

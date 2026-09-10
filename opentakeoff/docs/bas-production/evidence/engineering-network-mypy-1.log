@@ -1,0 +1,5 @@
+bas_engine/build/lib/bas_engine/reconcile.py:48: error: Argument "sources" to "ReconciledPoint" has incompatible type "list[str]"; expected "list[Literal['soo', 'point_list']]"  [arg-type]
+bas_engine/reconcile.py:48: error: Argument "sources" to "ReconciledPoint" has incompatible type "list[str]"; expected "list[Literal['soo', 'point_list']]"  [arg-type]
+bas_engine/tests/test_assignment_demand.py:175: error: Cannot find implementation or library stub for module named "test_point_lists"  [import-not-found]
+bas_engine/tests/test_assignment_demand.py:175: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+Found 3 errors in 3 files (checked 36 source files)

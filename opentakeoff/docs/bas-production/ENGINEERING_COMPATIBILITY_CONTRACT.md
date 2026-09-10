@@ -151,6 +151,39 @@ explicit endpoint roles and declared electrical/route limits; no universal
 device-count, baud or cable-length default. Reuse existing serial/IP solvers
 and preserve their capacity-only/physical-route distinction.
 
+### Network dependency acceptance before implementation
+
+Represent one explicitly declared serial segment or fixed IP closet per check,
+with physical port-scoped endpoint IDs, equipment/scope ownership, individual
+source-based settings and nullable ratings. Serial protocol/role/address,
+media/baud/frame settings, device/manager/unit-load budgets, head-end reservations
+and chainage/lead length are separate inputs. IP checks retain an explicit address
+domain, media/protocol, switch port/reservation/count and each cable length.
+No silent 32-device, 100-metre, router-address-zero or all-manager defaults.
+
+Reuse `serial_partition` and `ip_switches` unchanged for their existing exact
+subproblems. A serial check describes one segment: a solver result requiring
+multiple segments fails that allocation; it does not install more gateways.
+Missing chainages may yield a clearly labeled capacity-only partition, retaining
+all original partial positions. Known overlength or out-of-order chainages still
+fail independently. Unknown load/reservation policies prevent solver invocation,
+while known overload subtotals remain failed. An IP overlength cable cannot be
+repaired by declaring extra switches in the same closet.
+
+Accept only unique port allocation and explicit scope membership. Duplicate
+known addresses fail even when another address is missing; IP canonical address
+comparison is scoped to the declared address domain across closets. Reserved
+serial addresses cannot collide with device addresses. Modbus server and BACnet
+manager/subordinate address limits come from the references above. Settings
+must match the explicitly selected network; no protocol translation is inferred.
+This does not establish arbitrary routes, subnet/routing/BBMD/SC configuration,
+termination/bias design, upstream network redundancy or complete installation.
+
+Tests must include positive known configurations, exact overload/reach boundaries,
+missing each characteristic, false software-node admission, cross-scope/duplicate
+ports and addresses, incompatible protocols/settings, partial route data, reserved
+resources, solver-result equality, replay and actual Python process parity.
+
 - Follow `basAssemblyQuantities.ts`'s validated service/expected-head/cancellation
   pattern and the one `basMath.ts` bounded Python process transport. Add a new
   envelope member without changing existing request behavior. Source checking

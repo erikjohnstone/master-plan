@@ -15,9 +15,10 @@ from pydantic import Field
 from .engineering_contracts import (AllocationCheck, AnalogRangeCheck, ContactCheck, EngineeringCheck,
                                     EngineeringInput, ExpansionCheck, Known, MechanicalCheck,
                                     PowerCheck, PulseCheck, ResistiveLoadingCheck,
-                                    SignalCheck)
+                                    SignalCheck, SerialNetworkCheck, IpNetworkCheck)
+from .engineering_network import canonical_ip, ip_checks, serial_checks
 from .engineering_units import Interval, Quantity, bounded_exact, exact_sum, rational_text
-from .models import Contract
+from .models import Contract, Diagnostic, IpResult, SerialResult
 
 Status = Literal["pass", "fail", "not_evaluable"]
 T = TypeVar("T")
@@ -33,11 +34,18 @@ class ConstraintOutcome(Contract):
     normalized: dict[str, str] = Field(default_factory=dict)
 
 
+class NetworkCalculation(Contract):
+    serial: SerialResult | None = None
+    ip: IpResult | None = None
+    diagnostics: list[Diagnostic]
+
+
 class CheckResult(Contract):
     check_id: str
     kind: str
     status: Status
     constraints: list[ConstraintOutcome]
+    network_calculation: NetworkCalculation | None = None
 
 
 class EngineeringResult(Contract):
@@ -330,6 +338,7 @@ def expansion(check: ExpansionCheck, out: Outcomes, dependencies: dict[str, Chec
 
 def evaluate_check(check: EngineeringCheck) -> CheckResult:
     out = Outcomes()
+    network: NetworkCalculation | None = None
     if isinstance(check, SignalCheck):
         signal(check, out)
     elif isinstance(check, AnalogRangeCheck):
@@ -346,10 +355,16 @@ def evaluate_check(check: EngineeringCheck) -> CheckResult:
         mechanical(check, out)
     elif isinstance(check, AllocationCheck):
         allocation(check, out)
+    elif isinstance(check, SerialNetworkCheck):
+        serial_result, diagnostics = serial_checks(check, out)
+        network = NetworkCalculation(serial=serial_result, diagnostics=diagnostics)
+    elif isinstance(check, IpNetworkCheck):
+        ip_result, diagnostics = ip_checks(check, out)
+        network = NetworkCalculation(ip=ip_result, diagnostics=diagnostics)
     else:
         raise ValueError("Engineering check requires dependency-aware evaluation")
     return CheckResult(check_id=check.check_id, kind=check.kind,
-                       status=aggregate([row.status for row in out.rows]), constraints=out.rows)
+                       status=aggregate([row.status for row in out.rows]), constraints=out.rows, network_calculation=network)
 
 
 def check_engineering(request: EngineeringInput) -> EngineeringResult:
@@ -402,6 +417,32 @@ def check_engineering(request: EngineeringInput) -> EngineeringResult:
                     input_paths=[f"endpoints.{index}.channel_id", f"endpoints.{index}.endpoint.endpoint_id"], missing_inputs=[],
                     message="The same physical resource is allocated in multiple check rows.",
                     normalized={"conflicting_check_ids": ", ".join(sorted({c for c, _ in consumers}))}))
+                result.status = "fail"
+    network_ports: dict[str, list[tuple[str, str]]] = {}
+    ip_domains: dict[tuple[str, str], list[tuple[str, str]]] = {}
+    for check in original.checks:
+        if isinstance(check, SerialNetworkCheck):
+            port_references = [n.endpoint for n in check.nodes]
+        elif isinstance(check, IpNetworkCheck):
+            port_references = [n.endpoint for n in check.nodes]
+        else:
+            port_references = []
+        for i, port_reference in enumerate(port_references):
+            network_ports.setdefault(port_reference.endpoint_id, []).append((check.check_id, f"nodes.{i}.endpoint.endpoint_id"))
+        if isinstance(check, IpNetworkCheck):
+            for i, ip_node in enumerate(check.nodes):
+                address = canonical_ip(ip_node.address.value) if ip_node.address is not None else None
+                if address is not None:
+                    ip_domains.setdefault((check.address_domain_id, address), []).append((check.check_id, f"nodes.{i}.address"))
+    for family, network_resources in (("port", network_ports.values()), ("address", ip_domains.values())):
+        for network_claims in network_resources:
+            if len({check_id for check_id, _ in network_claims}) <= 1:
+                continue
+            for check_id, path in network_claims:
+                result = evaluated[check_id]
+                result.constraints.append(ConstraintOutcome(rule_id=f"network.cross_check_{family}.{path}", status="fail",
+                    input_paths=[path], missing_inputs=[], message="The physical port or address-domain address is assigned in multiple network checks.",
+                    normalized={"conflicting_check_ids": ", ".join(sorted({c for c, _ in network_claims}))}))
                 result.status = "fail"
     for check in original.checks:
         if isinstance(check, ExpansionCheck):

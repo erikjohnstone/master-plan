@@ -10,7 +10,7 @@ from typing import Annotated, Generic, Literal, Self, TypeVar
 from pydantic import Field, model_validator
 
 from .engineering_units import Interval, Quantity, require_dimension
-from .models import Contract, Count
+from .models import Contract, Count, PositiveCount
 
 Text = Annotated[str, Field(strict=True, min_length=1, max_length=4000, pattern=r"\S")]
 Id = Annotated[str, Field(strict=True, min_length=1, max_length=512, pattern=r"\S")]
@@ -366,8 +366,89 @@ class ExpansionCheck(Check):
         return self
 
 
+SerialProtocol = Literal["bacnet_mstp", "modbus_rtu"]
+SerialRole = Literal["manager", "subordinate", "server"]
+
+
+class SerialPort(Contract):
+    endpoint: Endpoint
+    physical_kind: Known[Literal["physical_port", "software_variable"]] | None
+    protocol: Known[SerialProtocol] | None
+    media: Known[Id] | None
+    baud_rate: Known[PositiveCount] | None
+    frame_format: Known[Id] | None
+    role: Known[SerialRole] | None
+    address: Known[Count] | None
+    load_microunits: Known[Count] | None
+    position_mm: Known[Count] | None
+
+
+class SerialNetworkCheck(Check):
+    kind: Literal["serial_network"]
+    segment_id: Id
+    protocol: Known[SerialProtocol] | None
+    media: Known[Id] | None
+    baud_rate: Known[PositiveCount] | None
+    frame_format: Known[Id] | None
+    allowed_scope_ids: Known[Names] | None
+    max_devices: Known[PositiveCount] | None
+    max_managers: Known[PositiveCount] | None
+    max_load_microunits: Known[PositiveCount] | None
+    max_length_mm: Known[PositiveCount] | None
+    reserved_devices: Known[Count] | None
+    reserved_managers: Known[Count] | None
+    reserved_load_microunits: Known[Count] | None
+    reserved_addresses: Known[Annotated[list[Count], Field(max_length=255)]] | None
+    lead_length_mm: Known[Count] | None
+    nodes: list[SerialPort] = Field(min_length=1, max_length=1000)
+
+    @model_validator(mode="after")
+    def ownership(self) -> Self:
+        unique([n.endpoint.endpoint_id for n in self.nodes], "serial port identity")
+        if any(n.endpoint.equipment_id not in self.equipment_ids for n in self.nodes):
+            raise ValueError("serial port references foreign equipment")
+        if self.allowed_scope_ids is not None:
+            unique(self.allowed_scope_ids.value, "serial allowed scope")
+        if self.reserved_addresses is not None and len(set(self.reserved_addresses.value)) != len(self.reserved_addresses.value):
+            raise ValueError("duplicate reserved serial address")
+        return self
+
+
+class IpPort(Contract):
+    endpoint: Endpoint
+    physical_kind: Known[Literal["physical_port", "software_variable"]] | None
+    protocol: Known[Id] | None
+    media: Known[Id] | None
+    address: Known[Id] | None
+    link_length_mm: Known[Count] | None
+
+
+class IpNetworkCheck(Check):
+    kind: Literal["ip_network"]
+    closet_id: Id
+    address_domain_id: Id
+    protocol: Known[Id] | None
+    media: Known[Id] | None
+    allowed_scope_ids: Known[Names] | None
+    ports_per_switch: Known[PositiveCount] | None
+    reserved_ports_per_switch: Known[Count] | None
+    available_switches: Known[Count] | None
+    max_link_length_mm: Known[PositiveCount] | None
+    nodes: list[IpPort] = Field(min_length=1, max_length=10000)
+
+    @model_validator(mode="after")
+    def ownership(self) -> Self:
+        unique([n.endpoint.endpoint_id for n in self.nodes], "IP port identity")
+        if any(n.endpoint.equipment_id not in self.equipment_ids for n in self.nodes):
+            raise ValueError("IP port references foreign equipment")
+        if self.allowed_scope_ids is not None:
+            unique(self.allowed_scope_ids.value, "IP allowed scope")
+        return self
+
+
 EngineeringCheck = Annotated[SignalCheck | AnalogRangeCheck | ResistiveLoadingCheck | ContactCheck |
-                             PulseCheck | PowerCheck | MechanicalCheck | AllocationCheck | ExpansionCheck,
+                             PulseCheck | PowerCheck | MechanicalCheck | AllocationCheck | ExpansionCheck |
+                             SerialNetworkCheck | IpNetworkCheck,
                              Field(discriminator="kind")]
 
 
@@ -387,11 +468,15 @@ class EngineeringInput(Contract):
         expansions = [check for check in self.checks if isinstance(check, ExpansionCheck)]
         unique([check.base_id for check in expansions], "expansion base allocation")
         unique([module.module_id for check in expansions for module in check.modules], "module allocation")
+        unique([check.segment_id for check in self.checks if isinstance(check, SerialNetworkCheck)], "serial segment allocation")
+        unique([check.closet_id for check in self.checks if isinstance(check, IpNetworkCheck)], "IP closet allocation")
         endpoints: dict[str, Endpoint] = {}
         for check in self.checks:
             references = [check.source, check.sink] if isinstance(check, Connection) else []
             if isinstance(check, AllocationCheck):
                 references += [e.endpoint for e in check.endpoints]
+            if isinstance(check, (SerialNetworkCheck, IpNetworkCheck)):
+                references += [n.endpoint for n in check.nodes]
             for endpoint in references:
                 previous = endpoints.get(endpoint.endpoint_id)
                 if previous is not None and previous != endpoint:
