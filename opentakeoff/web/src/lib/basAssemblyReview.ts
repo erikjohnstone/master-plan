@@ -16,7 +16,8 @@ export const basAssemblySummarySchema = z.object({ schema_version: z.literal('ba
   dependency_status: z.enum(['not_reviewed', 'current_dependencies', 'stale_dependencies']),
   register: basAssemblyRegisterSchema,
   source_requirements: z.array(z.object({ requirement_id: id, page_id: id, clause_id: id, source_span_ids: z.array(id),
-    component_kind: z.enum(['variable_frequency_drive', 'onboard_controller']), subject_label: z.string(),
+    component_kind: z.enum(['variable_frequency_drive', 'onboard_controller', 'terminal_equipment_controller', 'sensor', 'damper']), subject_label: z.string(),
+    component_role: z.enum(['terminal_equipment_control', 'dual_technology_occupancy', 'downstream_static_pressure', 'primary_modulating_supply_air']).optional(),
     fan_role: z.enum(['SUPPLY', 'RETURN', 'EXHAUST', 'RELIEF']).nullable(), declared_quantity: z.literal(1),
     applicability: z.literal('requires_equipment_applicability_review'),
   }).strict()),
@@ -67,6 +68,7 @@ export async function basAssemblySummary(workflow: BasWorkflow, captureId: strin
     source_requirements: sources.clauses.flatMap(clause => clause.components.map(c => ({ requirement_id: c.requirement_id,
       page_id: clause.page_id, clause_id: clause.clause_id, source_span_ids: clause.source_spans.map(s => s.span_id),
       component_kind: c.component_kind, subject_label: c.subject_label, fan_role: c.fan_role,
+      ...('component_role' in c ? { component_role: c.component_role } : {}),
       declared_quantity: c.declared_quantity, applicability: c.scope_status }))),
     issues: view.issues, equipment_issues: view.equipment_issues, project_complete: false, installed_quantity: null });
 }

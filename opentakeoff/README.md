@@ -83,6 +83,13 @@ decisions and mark dependent results stale. These are non-commercial scope
 records, not verified installations, commissioning signoffs or a complete BAS
 inventory. The five-workflow production effort remains in progress.
 
+**Review expanded component rules** explicitly upgrades a saved assembly's
+interpretation, with a reason and a new history event. Supported singular
+component lists distinguish terminal controllers, occupancy sensors, static
+pressure sensors and supply-air dampers. Original wording stays available from
+each compact row. The upgrade does not assign these components to equipment or
+change earlier results; applicability still requires review and recalculation.
+
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
 **Takeoff · Edit · ⋯** controls at the upper right. **Schedules**

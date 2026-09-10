@@ -5,11 +5,14 @@ import { activeBasCapture, verifyBasWorkflow } from '../lib/basWorkflow.ts';
 import { basAssemblyView, basAssemblyHead, basAssemblyCalculationState } from '../lib/basAssemblyReview.ts';
 import { basEquipmentHead, basEquipmentRegister } from '../lib/basEquipmentReview.ts';
 import { validateBasAssemblyRegister, emptyBasAssemblyRegister } from '../lib/basAssemblyRegister.ts';
-import { interpretBasComponentRequirements } from '../lib/basComponentRequirements.ts';
+import { BAS_COMPONENT_SOURCE_RULE_V2, interpretBasComponentRequirements } from '../lib/basComponentRequirements.ts';
 import { assemblyPreviewReady, stageAssemblyComponent, stageAssemblyWithdrawal } from './basAssemblyEditorState.ts';
 import './BasAssemblyWorkspace.css';
 
 const human = value => String(value ?? '').replaceAll('_', ' ');
+const componentLabel = component => component.component_role
+  ? `${human(component.component_role)} · ${human(component.component_kind)}`
+  : `${human(component.component_kind)}${component.fan_role ? ` ${component.fan_role}` : ''}`;
 const toggle = (ids, id) => ids.includes(id) ? ids.filter(x => x !== id) : [...ids, id];
 const kinds = ['variable_frequency_drive', 'onboard_controller', 'terminal_equipment_controller', 'controller', 'sensor',
   'valve', 'damper_actuator', 'damper', 'relay', 'power_supply', 'accessory', 'other_physical'];
@@ -51,7 +54,8 @@ export default function BasAssemblyWorkspace({ workflow, equipmentId, state = {}
   const assemblyHead = capture ? basAssemblyHead(verified, capture.capture_id) : null;
   const calculation = capture ? basAssemblyCalculationState(verified, capture.capture_id) : null;
   const spans = useMemo(() => capture?.narrative_sources.pages.flatMap(p => p.spans.map(s => ({ ...s, page_id: p.page_id, page_number: p.page_number }))) || [], [capture]);
-  const declarations = useMemo(() => capture ? interpretBasComponentRequirements(capture.narrative_sources).clauses.flatMap(clause => clause.components.map(component => ({ clause, component }))) : [], [capture]);
+  const sourceRule = state.batch?.register.source_rule_version || view?.register.source_rule_version;
+  const declarations = useMemo(() => capture ? interpretBasComponentRequirements(capture.narrative_sources, sourceRule).clauses.flatMap(clause => clause.components.map(component => ({ clause, component }))) : [], [capture, sourceRule]);
   const draft = state.draft, record = draft?.record, batch = state.batch;
   const stale = [draft, batch].some(value => value && (value.captureId !== capture?.capture_id || value.equipmentHead !== currentHead || value.assemblyHead !== assemblyHead));
   const selected = view?.components.find(c => c.record.component_id === state.componentId);
@@ -59,7 +63,7 @@ export default function BasAssemblyWorkspace({ workflow, equipmentId, state = {}
   const previewReady = assemblyPreviewReady(preview, draft, batch, stale) && ready;
   const previewComponent = preview?.view.components.find(c => c.record.component_id === record?.component_id);
   const needle = (state.candidateSearch || '').trim().toLowerCase();
-  const matches = declarations.filter(d => !needle || `${d.component.subject_label} ${human(d.component.component_kind)} ${d.component.fan_role || ''} ${d.clause.reading_text}`.toLowerCase().includes(needle));
+  const matches = declarations.filter(d => !needle || `${d.component.subject_label} ${componentLabel(d.component)} ${d.clause.reading_text}`.toLowerCase().includes(needle));
   const candidatePage = Math.max(0, Math.min(state.candidatePage || 0, Math.ceil(matches.length / 50) - 1));
   const rowPage = Math.max(0, Math.min(state.rowPage || 0, Math.ceil(rows.length / 50) - 1));
   const sourceNeedle = (state.sourceSearch || '').trim().toLowerCase();
@@ -78,7 +82,7 @@ export default function BasAssemblyWorkspace({ workflow, equipmentId, state = {}
     const component = declaration?.component;
     const next = existing ? structuredClone(existing) : {
       component_id: crypto.randomUUID(), scope_id: currentEquipment.scope_id, equipment_ids: [equipmentId], excluded_equipment_ids: [], member_exclusion_reason: null,
-      label: component ? `${component.fan_role ? `${component.fan_role} ` : ''}${human(component.component_kind)}` : '', component_kind: component?.component_kind || 'other_physical',
+      label: component ? componentLabel(component) : '', component_kind: component?.component_kind || 'other_physical',
       source_requirement_ids: component ? [component.requirement_id] : [], source_span_ids: [],
       quantity: { value: component?.declared_quantity ?? null, basis: '', origin: component ? 'source_declaration' : 'explicit_decision', reason: '' },
       lifecycle: 'unknown', disposition: 'included', exclusion_reason: null,
@@ -131,6 +135,14 @@ export default function BasAssemblyWorkspace({ workflow, equipmentId, state = {}
       setNotice('Declared assembly quantities saved. These are not verified installed counts.'); }
     catch (e) { setError(e.message); } finally { setBusy(false); }
   }
+  function reviewExpandedRules() {
+    if (busy || draft || batch || stale || !currentHead || view.dependency_status === 'stale_dependencies') return;
+    change({ batch: { captureId: capture.capture_id, equipmentHead: currentHead, assemblyHead,
+      register: { ...structuredClone(view.register), source_rule_version: BAS_COMPONENT_SOURCE_RULE_V2 }, reason: '',
+      changes: [{ componentId: 'source-rule', action: 'rule_upgrade', reason: 'Add explicit terminal-equipment component list interpretation; preserve earlier rule history.' }] },
+      showCandidates: true, candidatePage: 0 });
+    setPreview(null); setError(''); setNotice('Expanded component rules are staged, not saved. Review the declarations and record why this rule change applies. Earlier reviews keep their original interpretation.');
+  }
 
   if (!ready) return <p role="status">Checking assembly evidence…</p>;
   if (computed.error) return <p role="alert">{computed.error}</p>;
@@ -142,6 +154,7 @@ export default function BasAssemblyWorkspace({ workflow, equipmentId, state = {}
       <button type="button" disabled={busy || !!draft || !!batch || !canCalculate || !onCalculate} onClick={calculate}>Calculate assembly quantities</button>
       {equipmentId && <label><input type="checkbox" checked={!!state.showAll} onChange={e => change({ showAll: e.target.checked, rowPage: 0 })} /> Show all equipment assemblies</label>}</div>
     {error && <p role="alert" className="bas-equipment-alert">{error}</p>}{notice && <p role="status">{notice}</p>}
+    {sourceRule !== BAS_COMPONENT_SOURCE_RULE_V2 && <p className="bas-point-disclosure">This register uses its retained component rule. <button type="button" disabled={busy || !!draft || !!batch || stale || !currentHead || view.dependency_status === 'stale_dependencies'} onClick={reviewExpandedRules}>Review expanded component rules</button></p>}
     {view.dependency_status === 'stale_dependencies' && <p role="alert">Equipment decisions changed. Retained assemblies remain visible, but must be reviewed against the current equipment before recalculation. Edit a component and explicitly review the complete preview.</p>}
     {calculation?.status === 'stale_dependencies' && <p role="status">Saved quantities use earlier decisions. Review and recalculate; the old result has not been discarded.</p>}
     {batch && <section className="bas-point-detail" aria-label="Pending assembly changes"><div className="bas-point-heading"><h4>Pending assembly changes · not saved</h4>
@@ -160,9 +173,18 @@ export default function BasAssemblyWorkspace({ workflow, equipmentId, state = {}
     </section>}
     {state.showCandidates && <section className="bas-point-detail" aria-label="Drawing component declarations"><label className="bas-sequence-select">Find declarations<input value={state.candidateSearch || ''} onChange={e => change({ candidateSearch: e.target.value, candidatePage: 0 })} placeholder="Equipment, component, or source wording" /></label>
       <p>Supported explicit declarations only. Selecting one does not prove applicability to {currentEquipment?.tag}. Uninterpreted drawing text remains in the sequence reader.</p>
-      <div className="bas-point-grid" tabIndex={0} role="region" aria-label="Scrollable drawing component declarations"><table><thead><tr><th>Declaration</th><th>Source wording</th><th>Action</th></tr></thead><tbody>{matches.slice(candidatePage * 50, (candidatePage + 1) * 50).map(d => <tr key={d.component.requirement_id}>
-        <th scope="row">{d.component.subject_label}<p>{human(d.component.component_kind)} {d.component.fan_role || ''}</p></th>
-        <td>{d.clause.reading_text}<Evidence ids={d.clause.source_spans.map(s => s.span_id)} spans={spans} onSource={onSource} /></td>
+      <div className="bas-point-grid" tabIndex={0} role="region" aria-label="Scrollable drawing component declarations"><table><thead><tr><th>Declaration</th><th>Declared quantity</th><th>Source evidence</th><th>Action</th></tr></thead><tbody>{matches.slice(candidatePage * 50, (candidatePage + 1) * 50).map(d => <tr key={d.component.requirement_id}>
+        <th scope="row">{d.component.subject_label}<p>{componentLabel(d.component)}</p></th>
+        <td>{d.component.declared_quantity}<small>Per subject · applicability unreviewed</small></td>
+        <td><details open={!!state.expandedDeclarations?.includes(d.component.requirement_id)} onToggle={e => {
+          const open = e.currentTarget.open;
+          onStateChange(previous => {
+            const ids = previous.expandedDeclarations || [];
+            return ids.includes(d.component.requirement_id) === open ? previous : { ...previous, expandedDeclarations: toggle(ids, d.component.requirement_id) };
+          });
+        }}><summary>Original wording · PDF p.{capture.narrative_sources.pages.find(p => p.page_id === d.clause.page_id)?.page_number}</summary>
+          <p>{d.clause.reading_text}</p><Evidence ids={d.clause.source_spans.map(s => s.span_id)} spans={spans} onSource={onSource} />
+        </details></td>
         <td><button type="button" onClick={() => begin(d)}>Review this declaration</button></td></tr>)}</tbody></table></div>
       {!matches.length && <p>No supported declaration matches. This is not evidence that no components are required; inspect the original sequence or record an explicit decision.</p>}
       {matches.length > 50 && <nav className="bas-point-controls" aria-label="Drawing declaration pages"><button type="button" disabled={!candidatePage} onClick={() => change({ candidatePage: candidatePage - 1 })}>Previous declarations</button><span>Page {candidatePage + 1} of {Math.ceil(matches.length / 50)}</span><button type="button" disabled={(candidatePage + 1) * 50 >= matches.length} onClick={() => change({ candidatePage: candidatePage + 1 })}>Next declarations</button></nav>}</section>}
@@ -186,7 +208,7 @@ export default function BasAssemblyWorkspace({ workflow, equipmentId, state = {}
       {selected.record.member_exclusion_reason && <p>Member exclusions: {selected.record.member_exclusion_reason}</p>}{selected.record.exclusion_reason && <p>Component exclusion: {selected.record.exclusion_reason}</p>}
       <Responsibilities values={selected.responsibilities} />
       <details className="bas-point-disclosure"><summary>Original source declarations and decision references</summary>
-        {selected.declarations.map(d => <section key={d.component.requirement_id}><p>Original declared quantity: {d.component.declared_quantity} · {human(d.component.component_kind)} {d.component.fan_role || ''}</p><Evidence ids={d.clause.source_spans.map(s => s.span_id)} spans={spans} onSource={onSource} /></section>)}
+        {selected.declarations.map(d => <section key={d.component.requirement_id}><p>Original declared quantity: {d.component.declared_quantity} · {componentLabel(d.component)}</p><Evidence ids={d.clause.source_spans.map(s => s.span_id)} spans={spans} onSource={onSource} /></section>)}
         <Evidence ids={[...new Set([...selected.record.source_span_ids, ...selected.record.condition.source_span_ids, ...selected.record.responsibility_claims.flatMap(c => c.source_span_ids)])]} spans={spans} onSource={onSource} />
       </details></section>}
     {draft && <section className="bas-point-detail" aria-label="Assembly decision editor"><div className="bas-point-heading"><h4 ref={editor} tabIndex={-1}>Review component and scope</h4>

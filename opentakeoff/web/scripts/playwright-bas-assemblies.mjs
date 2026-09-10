@@ -120,7 +120,7 @@ try {
     await assembly(page).getByRole('button', { name: 'Add from drawing declarations', exact: true }).click();
     const candidates = page.getByRole('region', { name: 'Drawing component declarations', exact: true });
     await candidates.getByLabel('Find declarations').fill(source.kind);
-    const row = candidates.getByRole('row').filter({ has: page.getByRole('button', { name: 'View PDF p.8', exact: true }) })
+    const row = candidates.getByRole('row').filter({ has: page.getByText('Original wording · PDF p.8', { exact: true }) })
       .filter({ has: page.getByRole('rowheader').filter({ hasText: `${source.kind}${source.role ? ` ${source.role}` : ''}` }) });
     assert.equal(await row.count(), 1, `one original p8 ${source.name} declaration`);
     await row.getByRole('button', { name: 'Review this declaration', exact: true }).click();

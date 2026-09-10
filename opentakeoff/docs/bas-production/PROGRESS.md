@@ -1,5 +1,71 @@
 # BAS production workflow progress
 
+## Explicit list-rule verification and engineering handoff — 2026-09-09
+
+The preceding answer to “What's after this?” was status-only: **no progress**.
+This continuation re-read the detailed goal/instructions and inspected actual
+worktree state. Prior assembly work is committed locally as **6a3d6c13**.
+V2 handles **37515**, **19727**, **77794**, **50477** were polled and are all
+terminal **exit 0**; no duplicate jobs were started on an observation timeout.
+
+The new explicit component-list rule preserves v1's exact interpretation
+fingerprint and history. The independently reviewed M-511 paragraph now supplies
+four distinct source requirements: terminal controller, occupancy sensor,
+static-pressure sensor and supply-air damper. No actuator/channel/owner/installed
+count is added. Full-register reasoned rule transitions are shared UI/MCP;
+new roles cannot be silently collapsed by physical kind. Python quantity math
+is unchanged, and results retain their input rule pin.
+
+Verified evidence:
+
+- Original-PDF public MCP `component-list-v2-public-mcp-1`: **63,664 ms**,
+  main-process peak RSS **1,149,255,680 bytes**, heap limit **2,348,810,240**,
+  workflow **1,140,592 bytes**. Typed/text parity, source keys, v1 retention,
+  explicit upgrade, retry/stale/forgery, Python result equality, export/reset/
+  import, exceptions and withdrawal pass. Graph, legacy compile/math and points
+  remain exact. Four new candidates, **zero newly assigned components**.
+- Original-PDF browser `component-list-v2-browser-1`: pass in **42,138 ms**.
+  Visual inspection exposed repeated evidence making the four-row list too
+  tall. Source wording and individual citations now use a native disclosure;
+  only UI state/layout changed. No source spans or returned results are removed.
+- Revised actual browser **93245 exit 0**, `component-list-v2-browser-2`:
+  **41,868 ms**, keyboard Enter/Space, disclosure/filter/draft return, explicit
+  upgrade and old history, Python, reload/fresh import/export all pass. At
+  1280/1440/1920 in both themes, all four rows fit in **343 px**, zero internal
+  vertical overflow, zero page overflow/JS errors. Dark-1280 and light-1920
+  screenshots visually inspected. This is rule-transition proof, not VAV
+  registration/applicability or installed-count proof.
+- Prior complete v1 assembly UI journey rerun after presentation changes:
+  **36291 exit 0**, `assembly-browser-7`, **212,960 ms**, **1,145,741 bytes**.
+  Original upload/compile, actual DOAS members, three declarations, independent
+  responsibilities/conflict resolution, Python 2/2/2, source return, themes,
+  save/reload/import, withdrawal and atomic repair/history all pass.
+- Python **174 pass / mypy 13 files**; focused web **27 pass** with types/lint.
+  Final MCP **79848 exit 0**: **44 BAS tests**, types/build and 50-tool count
+  pass. All public metadata/locks now agree at **0.9.71**.
+- Full web **29362 exit 0**: types/lint, **2,653 pass / 13 skips / zero failures**,
+  unchanged benchmarks and build pass; test phase **91,455.92 ms**, build
+  **14.17 s**. The benchmark was verified live before finishing, not restarted.
+  Existing optional Agent-key/bundle warnings remain. No live model call claimed.
+  Log `component-list-v2-web-final-1.log`.
+
+Pre-implementation `ENGINEERING_COMPATIBILITY_CONTRACT.md` now covers all required
+D rule families, source/decision/persistence/UI/MCP contracts and acceptance.
+The original full M-601 page was inspected. Note 10 establishes a 0–10 VDC
+actuator signal for referenced DOAS schedule rows, **not** actuator supply/load
+or torque. The independent new `bas-compatibility-source-cases.json` matches
+retained text span 972, original bbox and frame exactly. Existing capacity and
+network solvers are reusable but do not implement electrical compatibility.
+No D production implementation or D-completion claim yet.
+
+Next: commit this coherent verified list/UI increment; then implement the
+complete engineering service and persistence/UI
+journey, while retaining outstanding A/B/C/E and full corpus/holdout gates.
+Prior measured corpus remains **not green** (505/541 takeoff, 99/129 reference,
+78/91 graph cells, 133/138 row-symbol); no new global corpus rerun is claimed.
+No VectorGrid/extraction/symbol/legacy-math, original corpus or holdout edits.
+No push, merge, deployment, models, pricing/labor or scope reduction.
+
 ## Verified assembly checkpoint and resumed work — 2026-09-09
 
 The preceding status-only answer was **no progress**. On resumption, full web

@@ -1,0 +1,60 @@
+
+> opentakeoff-mcp@0.9.71 test:bas
+> node --import tsx --test test/basSources.test.ts test/basMath.test.ts test/basPointLists.test.ts test/basPointAudit.test.ts test/basRoutingComparison.test.ts test/basAssignmentDemand.test.ts test/basAssemblyQuantities.test.ts
+
+✔ actual shared Python service retains source decisions, exact multiplication, replay and idempotent retries (735.503ms)
+✔ a reviewed source-rule transition invalidates the old calculation but preserves exact v1 history and quantity evidence (928.596291ms)
+✔ different sensor roles stay separate through shared validation and Python while same-kind source merges reject (519.465583ms)
+✔ edits and equipment withdrawal retain stale results; import order cannot masquerade as current (829.86125ms)
+✔ ordinary store/export/import retains calculations, original evidence and unrelated workflow fields (1027.453ms)
+✔ corrupt source copies, hidden unknowns, dropped history and mismatched responses reject (973.921167ms)
+✔ unknown quantities survive exclusion, and unsafe products/cancelled transport never produce accepted totals (1489.828083ms)
+✔ production compile exposes owned declarations, persists assembly review/calculation, and preserves legacy output (3677.814875ms)
+✔ actual assembly HTTP bridge matches shared Python and rejects malformed, foreign and stale requests (2484.373167ms)
+✔ concurrent or replaced Session cannot accept an older assembly calculation (2075.674ms)
+✔ shared Python calculation preserves evidence, history, replay and exclusion staleness (1157.151667ms)
+✔ assignment calculations and retries never downgrade or omit newer assembly history (835.343916ms)
+✔ corrupt values, changed sources, foreign dependencies and missing observations reject (481.576375ms)
+✔ calculation acceptance rejects dropped history, changed evidence and mismatched response records (959.671042ms)
+✔ filename aliases do not change input identity; authored sheet columns do (494.393ms)
+✔ new transport rejects unsafe products and cancellation without a fake total (988.2145ms)
+✔ production compile persists derived result and leaves legacy math/graph exact (2753.947959ms)
+✔ actual HTTP bridge uses shared service and refuses foreign-origin and malformed bodies (1984.58525ms)
+✔ concurrent Session decision cannot be overwritten by an older calculation (1470.600167ms)
+✔ Python BAS engine is strict and the transport does no arithmetic (785.473667ms)
+✔ unsafe JSON integer quantities and missing Python fail explicitly (5.776625ms)
+✔ safe individual inputs cannot silently produce rounded or oversized wire results (358.93175ms)
+✔ an unavailable Python runtime preserves legacy BAS output without a fake zero (4.170166ms)
+✔ production CLI drains multi-megabyte UTF-8 JSON before explicit exit (92.643792ms)
+✔ shared production wrapper leaves all legacy results and graph values unchanged (275.53075ms)
+✔ singular indexed POINT LIST is consumed without modifying graph or legacy title selection (283.458583ms)
+✔ point audit requires grounding for every expected nonempty cell, not only present boxes (356.97175ms)
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ Python point observations cross the strict shared boundary with unmodified sources (597.400125ms)
+✔ production BAS compile adds grounded observations without replacing legacy or math (803.078333ms)
+✔ source failure is explicit and cannot discard a valid legacy or math result (236.201625ms)
+✔ new equipment capture failure cannot disable valid point/SOO persistence or commit an equipment decision (1121.509834ms)
+✔ production recompile returns retained association events; stale requests never mutate them (2460.595209ms)
+✔ shared production compile returns the equipment/SOO/point comparison and replays its durable assignment (2206.908708ms)
+✔ unowned point observations are retained even when a durable capture is impossible (571.880416ms)
+✔ real Session export/import retains verified captures and rejects corruption before mutation (1123.538ms)
+✔ invalid engineering policy cannot suppress valid source observations (483.110333ms)
+✔ real Session source context is accepted; no point table is not claimed complete (478.035084ms)
+✔ point transport rejects invalid source identity, oversized payload and missing runtime (453.963084ms)
+✔ shared output schema rejects orphaned evidence, omitted rows and misleading statuses (424.6815ms)
+✔ comparison is one-to-one, not presence-only (1.535625ms)
+✔ added tables are allowed only between revisions, never replay (0.2625ms)
+✔ metadata and full table values remain in scope; only explicit incidental fields are excluded (0.467167ms)
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ shared BAS seam retains the production PDF spans and leaves Session outputs unchanged (285.607458ms)
+✔ source identity is captured at load, survives rename, and resets with a new session document (26.074875ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15266.78575

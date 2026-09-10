@@ -26,6 +26,17 @@ def raw_payload():
                 "responsibility_resolutions": [], "reason": "Controlled input, not a default physical kit"}]}}
 
 
+@pytest.mark.parametrize("source_rule", ["explicit_component_declarations_1", "explicit_component_declarations_2"])
+def test_quantity_result_preserves_explicit_source_rule_without_changing_math(source_rule):
+    raw = raw_payload()
+    raw["assembly_register"]["source_rule_version"] = source_rule
+    result = calculate_assembly_quantities(AssemblyQuantityInput.model_validate(raw))
+    assert result.source_rule_version == source_rule
+    assert result.components[0].assigned_quantity == 6
+    assert result.components[0].original.model_dump() == raw["assembly_register"]["components"][0]
+    assert result.installed_quantity is None
+
+
 @pytest.mark.parametrize("basis,excluded,factor", [
     ("per_equipment", [], 3), ("per_equipment", [12], 2),
     ("selected_group_once", [], 1), ("selected_group_once", [12], 1),

@@ -1,5 +1,21 @@
 ## Active work
 
+Latest continuation: **6a3d6c13** assembly work is committed locally. Pending
+component-list v2 preserves v1 source fingerprints/history and adds four
+literal source roles, not installed counts. Public original-PDF MCP **37515
+exit 0** (63.664 s, peak RSS 1,149,255,680 bytes) preserves graph, legacy
+compile/math and points exactly. Revised UI **93245 exit 0** (41.868 s) fixes
+repeated-source list density: all four rows fit in 343 px at 1280/1440/1920,
+both themes, keyboard/source return/reload/import/export pass. Prior complete
+assembly journey **36291 exit 0** also passes (212.960 s). Python 174 pass/mypy
+13; final MCP **79848 exit 0**, 44 BAS tests/types/build/tool count pass.
+Full web **29362 exit 0**, 2653 pass/13 skips plus types/lint/bench/build
+(build 14.17 s). Detailed BAS progress retains exact evidence and boundaries.
+Engineering compatibility's full pre-implementation contract and independent
+M-601 signal-note key are written; no compatibility implementation claimed yet.
+All five workflows and full corpus/holdout gates remain required; no extraction,
+original-corpus or holdout changes, no push/merge/deploy.
+
 Latest verified assembly checkpoint supersedes the running/retry entries below:
 actual browser **21023** and public MCP **93829** pass the original nine-page
 source journey, including saved history, source navigation, responsibility

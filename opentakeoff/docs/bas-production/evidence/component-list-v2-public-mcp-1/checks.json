@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "selected_members": [
+    "DOAS-1",
+    "DOAS-2"
+  ],
+  "components": 3,
+  "explicit_rule_upgrade": true,
+  "new_source_candidates": 4,
+  "newly_assigned_components": 0,
+  "assigned_contributions": [
+    2,
+    2,
+    2
+  ],
+  "installed_quantity": null,
+  "graph_exact": true,
+  "legacy_compile_exact": true,
+  "legacy_math_exact": true,
+  "point_result_exact": true,
+  "replay_exact": true,
+  "checks": [
+    "actual PDF/public typed and text output parity",
+    "independently keyed declaration spans and schedule members",
+    "source-owned equipment and assembly proposals",
+    "distinct VFD roles",
+    "factory furnish only",
+    "shared Python quantities",
+    "retry/replay",
+    "forged source quantity and stale head rejection",
+    "export/reset/import",
+    "exception and retained stale result",
+    "equipment withdrawal retains readable history"
+  ],
+  "elapsed_ms": 63664,
+  "main_process_peak_rss_bytes": 1149255680,
+  "node_heap_limit_bytes": 2348810240,
+  "workflow_bytes": 1140592,
+  "limits": "600-second diagnostic tool deadline; heap limit recorded, not assumed. Controlled scope/exception decisions, not automatic applicability, installed count, commissioning or full-goal completion."
+}

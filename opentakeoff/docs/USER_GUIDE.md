@@ -56,6 +56,21 @@ Such quantities are labeled user decisions, not extracted facts. Leave an
 unestablished quantity blank. Source-derived values cannot silently override
 their original declarations.
 
+An existing register keeps its original interpretation rule. **Review expanded
+component rules** stages an explicit rule upgrade: review the newly available
+declarations, enter **Overall assembly change reason**, preview, and save. The
+expanded rule supports complete, explicitly singular lists of terminal-equipment
+controllers, dual-technology occupancy sensors, downstream static-pressure
+sensors and primary modulating supply-air dampers. Different sensor roles remain
+separate; no additional actuator, channel, responsibility or installed quantity
+is inferred. Unsupported or conditional wording remains uninterpreted.
+
+Each declaration row shows its literal quantity. Expand **Original wording**
+for the full paragraph and individual PDF references; Enter and Space operate
+the disclosure. Its open state and your filter survive a source-view round trip.
+A rule upgrade preserves earlier reviews and quantities, makes dependent results
+stale, and does not silently add components or establish equipment applicability.
+
 Expand **Responsibility decisions** to record furnish, install, wire, program
 and test assignments independently. Factory furnishing establishes furnishing
 only. Different claims remain visible; **Resolve responsibility conflicts

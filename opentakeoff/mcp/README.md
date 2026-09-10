@@ -86,6 +86,14 @@ history in `bas_assembly_5`. No new tool, model, product catalog, pricing or
 commissioning workflow is introduced. See
 [assembly inputs, supported rules and limits](../docs/bas-production/ASSEMBLY_REVIEW_CONTRACT.md).
 
+The default component rule remains `explicit_component_declarations_1`.
+`explicit_component_declarations_2` adds bounded, complete singular component
+lists with distinct physical roles. Upgrade only with a new reasoned
+`bas_assembly_review` complete register and current expected heads. Old events
+and results remain retained; no new equipment membership or component quantity
+is accepted by changing the rule alone. Recalculate dependent results explicitly.
+See [list rules and migration](../docs/bas-production/COMPONENT_LIST_RULE_CONTRACT.md).
+
 No clone, no build—point your MCP client at the published package:
 
 ```json

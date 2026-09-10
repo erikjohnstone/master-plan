@@ -6,7 +6,7 @@ import { basSourceContextSchema, type BasSourceContext } from './basSources.ts';
 import { validateBasEquipmentRegister, type BasEquipmentRegister } from './basEquipmentRegister.ts';
 import type { BasEquipmentEvidence } from './basEquipmentEvidence.ts';
 import type { BasPointLists } from './basPointLists.ts';
-import { BAS_COMPONENT_SOURCE_RULE, interpretBasComponentRequirements } from './basComponentRequirements.ts';
+import { BAS_COMPONENT_SOURCE_RULE, BAS_COMPONENT_SOURCE_RULE_V2, basDeclaredComponentRole, interpretBasComponentRequirements } from './basComponentRequirements.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 
@@ -46,7 +46,7 @@ export const basAssemblyComponentSchema = z.object({
   if (component.quantity.origin === 'source_declaration' && !component.source_requirement_ids.length) fail('Source-derived quantity requires an interpreted source declaration');
 });
 export const basAssemblyRegisterSchema = z.object({ schema_version: z.literal('bas_assembly_register_v1'),
-  source_rule_version: z.literal(BAS_COMPONENT_SOURCE_RULE), components: z.array(basAssemblyComponentSchema).max(100000),
+  source_rule_version: z.enum([BAS_COMPONENT_SOURCE_RULE, BAS_COMPONENT_SOURCE_RULE_V2]), components: z.array(basAssemblyComponentSchema).max(100000),
 }).strict();
 export type BasAssemblyRegister = z.infer<typeof basAssemblyRegisterSchema>;
 export type BasAssemblyComponent = z.infer<typeof basAssemblyComponentSchema>;
@@ -106,10 +106,10 @@ export async function validateBasAssemblyRegister(sources: BasSourceContext, equ
       if (declarations.some(d => d.component.component_kind !== record.component_kind || d.component.declared_quantity !== record.quantity.value)) {
         throw new Error('Source-derived component kind or quantity disagrees with its declaration');
       }
-      const roles = new Set(declarations.map(d => JSON.stringify([d.component.component_kind, d.component.fan_role])));
+      const roles = new Set(declarations.map(d => basDeclaredComponentRole(d.component)));
       if (roles.size > 1) throw new Error('Distinct declared component roles cannot become one source-derived component');
     } else if (declarations.some(d => d.component.component_kind !== record.component_kind || d.component.declared_quantity !== record.quantity.value)
-        || new Set(declarations.map(d => d.component.fan_role)).size > 1) issue('source_declaration_corrected_by_explicit_decision');
+        || new Set(declarations.map(d => basDeclaredComponentRole(d.component))).size > 1) issue('source_declaration_corrected_by_explicit_decision');
     const excluded = new Set(record.excluded_equipment_ids);
     const included_equipment_ids = record.equipment_ids.filter(id => !excluded.has(id));
     if (record.disposition === 'included' && record.condition.status !== 'not_satisfied') {

@@ -84,6 +84,15 @@ summary failure is reported as `bas_assembly_error` without discarding valid
 point/SOO evidence; requested assembly writes fail rather than partly commit.
 See [the assembly contract](bas-production/ASSEMBLY_REVIEW_CONTRACT.md).
 
+Component rule v2 supports complete, explicitly singular lists of the reviewed
+terminal-controller, occupancy-sensor, static-pressure-sensor and supply-air
+damper roles. It is opt-in through a new reasoned `bas_assembly_review` event
+with `register.source_rule_version: "explicit_component_declarations_2"` and
+current expected heads. V1 history and source interpretation remain unchanged;
+old calculations become stale. Inspect new declarations before separately
+assigning equipment applicability. No default kit or extra installed count.
+See [the versioned list contract](bas-production/COMPONENT_LIST_RULE_CONTRACT.md).
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

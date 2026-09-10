@@ -71,6 +71,16 @@ Source identity and business identity must remain separate. A content hash ident
 
 ## Live UI findings and proposed placement
 
+The v2 component-list walkthrough exposed a density defect: four requirements
+repeated the same complete paragraph plus every contributing text span. Source
+disclosures now keep the component role and literal quantity visible while
+making the full wording and original references available on demand. W3C's
+[disclosure pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) specifies
+Enter/Space toggling; the UI uses native details/summary and retains expanded
+state across citation navigation. This is a presentation decision, not a new
+interpretation or evidence transformation. Accessed 2026-09-09; actual-browser
+keyboard, density and state checks are required before accepting it.
+
 Follow-up on the real assigned-value reader: inherited muted text measured only
 3.40:1 in dark mode. W3C's [WCAG 2.2 contrast guidance](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)
 requires at least 4.5:1 for normal text without rounding. The fix uses the

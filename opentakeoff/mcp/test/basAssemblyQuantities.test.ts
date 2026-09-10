@@ -30,12 +30,13 @@ import { parseTakeoffImport, mergeTakeoffImport } from '../../web/src/lib/import
 createRequire(new URL('../../web/package.json', import.meta.url))('fake-indexeddb/auto');
 
 const uuid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
-async function fixture() {
+async function fixture(componentList = false) {
   const source = buildBasSourceContext([{ sha256: 'a'.repeat(64), byte_length: 1, name: 'controlled.pdf', page_count: 1,
     pages: [{ page_number: 1, sheet_key: 'controlled.pdf', width_px: 1800, height_px: 1000, rotation: 0,
       spans: [{ str: 'AHU-1 THRU AHU-3', x0: 10, y0: 10, x1: 200, y1: 20 },
         { str: 'AHU CONTROL SEQUENCE', x0: 10, y0: 150, x1: 300, y1: 170 },
-        { str: '1. THE AHU SHALL BE PROVIDED WITH A FACTORY FURNISHED ON-BOARD BACNET CONTROLLER.', x0: 10, y0: 190, x1: 1600, y1: 210 }] }] }]);
+        { str: componentList ? '1. EACH AHU WILL BE PROVIDED WITH A DUAL TECHNOLOGY OCCUPANCY SENSOR AND A DOWNSTREAM STATIC PRESSURE SENSOR.'
+          : '1. THE AHU SHALL BE PROVIDED WITH A FACTORY FURNISHED ON-BOARD BACNET CONTROLLER.', x0: 10, y0: 190, x1: 1600, y1: 210 }] }] }]);
   const box = [10, 10, 200, 20];
   const tables = [{ kind: 'equipment', sheet: 'controlled.pdf',
     title: { sheet: 'controlled.pdf', text: 'AHU SCHEDULE', bbox: box }, headers: ['TAG'], region: [0, 0, 300, 100],
@@ -50,11 +51,12 @@ async function fixture() {
     bindings: [{ occurrence_id: candidates.tables[0].rows[0].occurrence_id, member: `AHU-${n}` }], reason: 'Controlled retained member binding' }));
   const registered = await applyBasEquipmentReview(captured, { operation_id: uuid(20), capture_id: captured.current_capture_id,
     expected_head: null, reason: 'Controlled equipment register', register: equipment }, 'operator_input');
-  const declaration = interpretBasComponentRequirements(source).clauses.flatMap(c => c.components)[0];
-  assert.equal(declaration.component_kind, 'onboard_controller');
-  const assembly: BasAssemblyRegister = { ...emptyBasAssemblyRegister(), components: [{ component_id: uuid(30), scope_id: uuid(1),
+  const sourceRule = componentList ? 'explicit_component_declarations_2' : 'explicit_component_declarations_1';
+  const declaration = interpretBasComponentRequirements(source, sourceRule).clauses.flatMap(c => c.components)[0];
+  assert.equal(declaration.component_kind, componentList ? 'sensor' : 'onboard_controller');
+  const assembly: BasAssemblyRegister = { ...emptyBasAssemblyRegister(), source_rule_version: sourceRule, components: [{ component_id: uuid(30), scope_id: uuid(1),
     equipment_ids: equipment.equipment.map(e => e.equipment_id), excluded_equipment_ids: [], member_exclusion_reason: null,
-    label: 'Controller', component_kind: 'onboard_controller', source_requirement_ids: [declaration.requirement_id], source_span_ids: [],
+    label: componentList ? 'Dual technology occupancy sensor' : 'Controller', component_kind: declaration.component_kind, source_requirement_ids: [declaration.requirement_id], source_span_ids: [],
     quantity: { value: 1, basis: 'per_equipment', origin: 'source_declaration', reason: 'Literal one; controlled per-member applicability decision' },
     lifecycle: 'unknown', disposition: 'included', exclusion_reason: null,
     condition: { status: 'unconditional', statement: null, source_span_ids: [], reason: 'Unconditional controlled declaration' },
@@ -84,6 +86,47 @@ test('actual shared Python service retains source decisions, exact multiplicatio
   assert.deepEqual((await calculateBasAssemblies(result.workflow, request, { python: '/not-a-runtime' })).workflow, result.workflow);
   assert.equal(basAssemblyCalculationState(result.workflow, request.capture_id).status, 'current_dependencies');
   assert.equal((await basAssemblyView(result.workflow, request.capture_id)).components[0].responsibilities[0].assignment, 'factory_furnished');
+});
+
+test('a reviewed source-rule transition invalidates the old calculation but preserves exact v1 history and quantity evidence', async () => {
+  const { workflow, request, assembly } = await fixture();
+  const original = await calculateBasAssemblies(workflow, request);
+  const upgraded = await applyBasAssemblyReview(original.workflow, { operation_id: uuid(42), capture_id: request.capture_id,
+    expected_head: request.expected_assembly_head, expected_equipment_head: request.expected_equipment_head,
+    reason: 'Explicit source-rule review, same owned components',
+    register: { ...assembly, source_rule_version: 'explicit_component_declarations_2' } }, 'operator_input');
+  assert.equal(basAssemblyCalculationState(upgraded, request.capture_id).status, 'stale_dependencies');
+  await assert.rejects(calculateBasAssemblies(upgraded, request), /decisions changed/);
+  const updatedRequest = { ...request, expected_assembly_head: basAssemblyHead(upgraded, request.capture_id)! };
+  const second = await calculateBasAssemblies(upgraded, updatedRequest);
+  assert.equal(second.calculation.result.source_rule_version, 'explicit_component_declarations_2');
+  assert.deepEqual(second.calculation.result.components, original.calculation.result.components);
+  assert.deepEqual(second.workflow.assembly_calculations![0], original.calculation);
+  assert.deepEqual(second.workflow.assembly_events![0], original.workflow.assembly_events![0]);
+  assert.deepEqual(await verifyBasWorkflow(JSON.parse(JSON.stringify(second.workflow))), second.workflow);
+  assert.deepEqual((await calculateBasAssemblies(second.workflow, updatedRequest, { python: '/not-a-runtime' })).workflow, second.workflow);
+});
+
+test('different sensor roles stay separate through shared validation and Python while same-kind source merges reject', async () => {
+  const { workflow, request, assembly, source } = await fixture(true);
+  const pressure = interpretBasComponentRequirements(source, 'explicit_component_declarations_2').clauses.flatMap(c => c.components)
+    .find(c => 'component_role' in c && c.component_role === 'downstream_static_pressure')!;
+  assert.ok(pressure);
+  const merged = structuredClone(assembly); merged.components[0].source_requirement_ids.push(pressure.requirement_id);
+  const review = { operation_id: uuid(43), capture_id: request.capture_id, expected_head: request.expected_assembly_head,
+    expected_equipment_head: request.expected_equipment_head, reason: 'Controlled separate sensor role test', register: merged };
+  await assert.rejects(applyBasAssemblyReview(workflow, review, 'operator_input'), /Distinct declared component roles/);
+  const separate = structuredClone(assembly);
+  separate.components.push({ ...structuredClone(assembly.components[0]), component_id: uuid(31), label: 'Downstream static pressure sensor',
+    source_requirement_ids: [pressure.requirement_id] });
+  const saved = await applyBasAssemblyReview(workflow, { ...review, register: separate }, 'operator_input');
+  const result = await calculateBasAssemblies(saved, { ...request, expected_assembly_head: basAssemblyHead(saved, request.capture_id) });
+  assert.deepEqual(result.calculation.result.components.map(c => c.assigned_quantity), [3, 3]);
+  assert.equal(result.calculation.result.installed_quantity, null);
+  assert.ok((await basAssemblyView(saved, request.capture_id)).components.every(c => c.responsibilities.every(r => r.assignment === 'unknown')));
+  const corrected = structuredClone(merged); corrected.components[0].quantity.origin = 'explicit_decision';
+  const explicit = await applyBasAssemblyReview(workflow, { ...review, register: corrected }, 'operator_input');
+  assert.ok((await basAssemblyView(explicit, request.capture_id)).issues.some(i => i.code === 'source_declaration_corrected_by_explicit_decision'));
 });
 
 test('edits and equipment withdrawal retain stale results; import order cannot masquerade as current', async () => {

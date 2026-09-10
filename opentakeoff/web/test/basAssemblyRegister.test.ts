@@ -10,7 +10,7 @@ import { interpretBasComponentRequirements } from '../src/lib/basComponentRequir
 import { emptyBasAssemblyRegister, validateBasAssemblyRegister, type BasAssemblyComponent, type BasAssemblyRegister } from '../src/lib/basAssemblyRegister.ts';
 import { captureBasEvidence, basEventFingerprint, mergeBasWorkflows, verifyBasWorkflow } from '../src/lib/basWorkflow.ts';
 import { applyBasEquipmentReview, basEquipmentHead } from '../src/lib/basEquipmentReview.ts';
-import { applyBasAssemblyReview, basAssemblyHead, basAssemblyView } from '../src/lib/basAssemblyReview.ts';
+import { applyBasAssemblyReview, basAssemblyHead, basAssemblyView, basAssemblySummary } from '../src/lib/basAssemblyReview.ts';
 import { BAS_WORKFLOW_REVISIONS, atLeastBasWorkflowRevision } from '../src/lib/basWorkflowRevision.ts';
 import { createLocalStore } from '../src/lib/store.js';
 import { mergeTakeoffImport, parseTakeoffImport } from '../src/lib/importTakeoff.js';
@@ -301,4 +301,27 @@ test('ordinary IndexedDB and takeoff import/export preserve the additive assembl
   assert.equal(saved.assembly_events![0].origin, 'agent_proposal', 'Save/import is not an operator approval');
   assert.deepEqual(mergeBasWorkflows(saved, established), saved);
   assert.deepEqual(mergeBasWorkflows(established, saved), saved);
+});
+
+test('explicit v2 transition adds four source candidates without changing old component decisions or v1 history', async () => {
+  const saved = await applyBasAssemblyReview(established, assemblyRequest(), 'operator_input');
+  const before = structuredClone(saved), oldSummary = await basAssemblySummary(saved, captureId);
+  const next: BasAssemblyRegister = { ...structuredClone(saved.assembly_events![0].register), source_rule_version: 'explicit_component_declarations_2' };
+  const request = { operation_id: uuid(2090), capture_id: captureId, expected_head: basAssemblyHead(saved, captureId),
+    expected_equipment_head: basEquipmentHead(saved, captureId)!, reason: 'Explicitly review new component-list rules; no VAV applicability assumed', register: next };
+  const upgraded = await applyBasAssemblyReview(saved, request, 'operator_input');
+  const summary = await basAssemblySummary(upgraded, captureId);
+  assert.equal(upgraded.assembly_events!.length, 2);
+  assert.deepEqual(upgraded.assembly_events![0], before.assembly_events![0]);
+  assert.notEqual(upgraded.assembly_events![1].source_interpretation_fingerprint, before.assembly_events![0].source_interpretation_fingerprint);
+  assert.deepEqual(upgraded.assembly_events![1].register.components, before.assembly_events![0].register.components);
+  assert.deepEqual(summary.source_requirements.filter(c => !c.component_role), oldSummary.source_requirements);
+  assert.deepEqual(summary.source_requirements.filter(c => c.component_role).map(c => c.component_role), [
+    'terminal_equipment_control', 'dual_technology_occupancy', 'downstream_static_pressure', 'primary_modulating_supply_air',
+  ]);
+  assert.deepEqual((await basAssemblyView(upgraded, captureId)).components, (await basAssemblyView(saved, captureId)).components);
+  assert.deepEqual(await verifyBasWorkflow(JSON.parse(JSON.stringify(upgraded))), upgraded);
+  assert.deepEqual(await applyBasAssemblyReview(upgraded, request, 'operator_input'), upgraded);
+  assert.deepEqual(saved, before);
+  await assert.rejects(applyBasAssemblyReview(upgraded, { ...request, operation_id: uuid(2091) }, 'operator_input'), /changed since/);
 });

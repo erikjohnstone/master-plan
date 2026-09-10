@@ -18,6 +18,7 @@ Ids = Annotated[list[Identifier], Field(max_length=10000)]
 Members = Annotated[list[UUID], Field(max_length=100000)]
 Activity = Literal["furnish", "install", "wire", "program", "test"]
 Assignment = Literal["factory_furnished", "field_installed", "named_party", "by_others", "unknown"]
+SourceRule = Literal["explicit_component_declarations_1", "explicit_component_declarations_2"]
 
 
 class ResponsibilityClaim(Contract):
@@ -112,7 +113,7 @@ class AssemblyComponent(Contract):
 
 class AssemblyRegister(Contract):
     schema_version: Literal["bas_assembly_register_v1"]
-    source_rule_version: Literal["explicit_component_declarations_1"]
+    source_rule_version: SourceRule
     components: Annotated[list[AssemblyComponent], Field(max_length=100000)]
 
 
@@ -174,7 +175,7 @@ class AssemblyQuantityResult(Contract):
     capture_id: Sha
     equipment_head: Sha
     assembly_head: Sha
-    source_rule_version: Literal["explicit_component_declarations_1"] = "explicit_component_declarations_1"
+    source_rule_version: SourceRule = "explicit_component_declarations_1"
     components: list[DerivedAssemblyComponent]
     quantity_basis: Literal["reviewed_declared_components_not_installed"] = "reviewed_declared_components_not_installed"
     project_complete: Literal[False] = False
@@ -219,4 +220,4 @@ def calculate_assembly_quantities(payload: AssemblyQuantityInput) -> AssemblyQua
         rows.append(DerivedAssemblyComponent(original=component, included_equipment_ids=included,
             replication_factor=factor, eligibility=eligibility, status=status, assigned_quantity=quantity, issues=issues))
     return AssemblyQuantityResult(capture_id=payload.capture_id, equipment_head=payload.equipment_head,
-        assembly_head=payload.assembly_head, components=rows)
+        assembly_head=payload.assembly_head, source_rule_version=payload.assembly_register.source_rule_version, components=rows)

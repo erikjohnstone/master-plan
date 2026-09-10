@@ -18,6 +18,7 @@ import { shutdownVectorGrid } from '../../web/src/lib/vectorGridClient.ts';
 import { writeJsonAndExit } from './cliJson.mjs';
 
 const [pdf, directory] = process.argv.slice(2);
+const upgradeRule = process.env.OT_BAS_COMPONENT_RULE === '2';
 assert.ok(pdf && directory, 'Usage: original Fort Sam development PDF and new output directory');
 const out = resolve(directory); mkdirSync(out, { recursive: true });
 const truth = JSON.parse(readFileSync(new URL('../../web/test/fixtures/bas-requirement-source-cases.json', import.meta.url), 'utf8'));
@@ -123,8 +124,35 @@ try {
     register: edited, reason: 'Controlled source-preserving component exception' } });
   assert.equal(basAssemblyCalculationState(reviewed.bas_workflow, capture.capture_id).status, 'stale_dependencies');
   assert.deepEqual(reviewed.bas_workflow.assembly_calculations, retained!.assembly_calculations);
-  const recomputed = await compile({ bas_assembly_quantities: { ...calculationRequest, expected_assembly_head: reviewed.bas_assemblies.review_head } });
+  let recomputed = await compile({ bas_assembly_quantities: { ...calculationRequest, expected_assembly_head: reviewed.bas_assemblies.review_head } });
   assert.deepEqual(recomputed.bas_assembly_quantities.result.components.map((c: any) => c.assigned_quantity), [1, 2, 2]);
+  if (upgradeRule) {
+    const old = structuredClone(recomputed);
+    const upgraded = await compile({ bas_assembly_review: { ...reviewRequest, operation_id: randomUUID(), expected_head: recomputed.bas_assemblies.review_head,
+      register: { ...edited, source_rule_version: 'explicit_component_declarations_2' },
+      reason: 'Explicit rule transition; preserve old DOAS applicability and do not infer VAV installations' } });
+    assert.deepEqual(upgraded.bas_workflow.assembly_events.slice(0, -1), old.bas_workflow.assembly_events);
+    assert.deepEqual(upgraded.bas_workflow.assembly_calculations, old.bas_workflow.assembly_calculations);
+    assert.equal(basAssemblyCalculationState(upgraded.bas_workflow, capture.capture_id).status, 'stale_dependencies');
+    const list = upgraded.bas_assemblies.source_requirements.filter((c: any) => c.component_role);
+    const fact = truth.component_cases.find((c: any) => c.case_id === 'vav-explicit-components-not-actuator-or-io-inference');
+    assert.deepEqual(list.map((c: any) => c.component_role), ['terminal_equipment_control', 'dual_technology_occupancy', 'downstream_static_pressure', 'primary_modulating_supply_air']);
+    for (const item of list) {
+      assert.equal(item.page_id, `sha256:${truth.source_sha256}:p${fact.page}`);
+      assert.deepEqual(item.source_span_ids, fact.source_spans.map((i: number) => `${item.page_id}:s${i}`));
+      assert.equal(item.declared_quantity, 1);
+    }
+    recomputed = await compile({ bas_assembly_quantities: { ...calculationRequest, expected_assembly_head: upgraded.bas_assemblies.review_head } });
+    assert.equal(recomputed.bas_assembly_quantities.result.source_rule_version, 'explicit_component_declarations_2');
+    assert.deepEqual(recomputed.bas_assembly_quantities.result.components, old.bas_assembly_quantities.result.components);
+    assert.deepEqual(recomputed.bas_workflow.captures, old.bas_workflow.captures);
+    assert.deepEqual(recomputed.bas_math, math); assert.deepEqual(recomputed.bas_point_lists, points);
+    const upgradedFile = resolve(out, 'upgraded.takeoff.json');
+    await call('export_takeoff', { path: upgradedFile });
+    const retainedV2 = structuredClone(session.basWorkflow);
+    await call('load_plan', { path: resolve(pdf) }); await call('import_takeoff', { path: upgradedFile });
+    assert.deepEqual(session.basWorkflow, retainedV2);
+  }
   const withdrawn = await compile({ bas_equipment_review: { operation_id: randomUUID(), capture_id: capture.capture_id,
     expected_head: registered.bas_equipment.review_head, register: emptyBasEquipmentRegister(), reason: 'Controlled full equipment withdrawal; preserve all assembly evidence' } });
   assert.equal(withdrawn.bas_assemblies.dependency_status, 'stale_dependencies');
@@ -136,6 +164,7 @@ try {
   await call('export_takeoff', { path: resolve(out, 'withdrawn.takeoff.json') });
   assert.deepEqual(graph, originalGraph);
   report = { ok: true, source_sha256: truth.source_sha256, selected_members: ['DOAS-1', 'DOAS-2'], components: 3,
+    ...(upgradeRule ? { explicit_rule_upgrade: true, new_source_candidates: 4, newly_assigned_components: 0 } : {}),
     assigned_contributions: [2, 2, 2], installed_quantity: null, graph_exact: true, legacy_compile_exact: true,
     legacy_math_exact: true, point_result_exact: true, replay_exact: true,
     checks: ['actual PDF/public typed and text output parity', 'independently keyed declaration spans and schedule members',

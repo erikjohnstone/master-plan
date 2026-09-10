@@ -339,6 +339,16 @@ Original declarations are reconstructed from the pinned rule and retained source
 not trusted caller-authored summaries. Factory furnishing says nothing about
 installation, wiring, programming or testing. Point rows are not extra devices.
 
+Rule `explicit_component_declarations_1` remains the default and is replayable.
+To review expanded singular component lists, submit a new complete
+`bas_assembly_review.register` with `source_rule_version` set to
+`explicit_component_declarations_2`, an explicit reason and current expected
+heads. Preserve the existing components unless separately reviewing a change.
+Inspect the resulting `bas_assemblies.source_requirements`; new sensor roles
+are distinct requirements, not interchangeable `sensor` counts. The transition
+does not establish applicability or revise earlier events. Recalculate after
+review; do not silently migrate old state during compile or import.
+
 `bas_assembly_quantities` invokes shared Python against the exact capture and
 review heads. It returns declared component contributions for the selected
 members, not unique-device, installed or whole-project totals. Unknown quantities

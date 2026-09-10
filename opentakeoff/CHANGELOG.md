@@ -4,6 +4,16 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add opt-in component rule v2 for complete, explicitly singular controller,
+  occupancy-sensor, static-pressure-sensor and supply-air-damper lists. Keep
+  distinct functions separate, reject ambiguous/conditional partial kits, and
+  preserve v1 interpretation fingerprints and history. Reviewed rule transitions
+  use the shared UI/MCP register, invalidate dependent calculations and preserve
+  all earlier evidence/results. Python accepts the validated version pin without
+  changing quantity math or assuming installed equipment.
+- Make drawing declarations compact, with literal quantities and keyboard-operated
+  source disclosures that retain their open state on return from the PDF.
+
 - Improve dark-theme Takeoff header and inactive-tab text contrast using the
   existing secondary text token; no theme, evidence or calculation changes.
 - Add source-backed assembly decisions and independent furnish/install/wire/
