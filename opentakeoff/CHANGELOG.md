@@ -12,6 +12,13 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add the shared `bas_review_7` drawing-correspondence foundation: immutable
+  source-set/page accounting, reciprocal replacements, explicit partial-addendum
+  retention, unresolved review history and strict ownership/head/digest checks.
+  Older workflow edits and merges preserve the new journal. Separate retained
+  text/frame comparison from source identity; no inferred quantity delta or
+  approval. Public UI/MCP editing and release integration remain unfinished.
+
 - Enable evidence ZIP restore in local-first synced workspaces, coordinating
   recovery, adoption, push acknowledgments and restore across same-scope tabs.
   Commit annotation adoption and sync ancestry atomically; persist pending restore

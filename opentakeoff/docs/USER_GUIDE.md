@@ -156,6 +156,11 @@ includes the complete BAS record, independent of table filters. Autosave and
 These are named scheduled members and reviewed assignments, not installed counts
 or approved releases. The editor adds no canvas toolbar or floating panel.
 
+The development evidence format also retains source-set and page-correspondence
+history separately from equipment decisions. These records do not change counts
+or approve a takeoff. The public drawing-revision editor and approval journey
+remain in development; there is no new revision action to use in this build yet.
+
 After recording assignments, choose **Calculate assigned values**. The shared
 Python engine applies each known listed value to the included members, or applies
 a system-wide matrix once. Expand **Assigned listed values** in equipment details

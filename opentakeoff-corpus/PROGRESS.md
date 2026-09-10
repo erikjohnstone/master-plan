@@ -1,5 +1,22 @@
 ## Active work
 
+2026-09-10 checkpoint after **63658a35**: shared drawing-correspondence foundation
+implemented (`bas_review_7`). Explicit source sets and complete reciprocal page
+accounting preserve old evidence; unresolved revisions publish no complete set.
+Partial addenda do not silently delete pages; retained text equality is not an
+ink/quantity claim. Existing edits and merges retain or reject conflicting journals.
+**17 focused pass**; final web **2,771 pass / 13 existing skips**, typecheck/lint/
+build and unchanged history gate pass. MCP types, **119 BAS + 4 packaging/proof**
+tests pass. New predeclared 1,000-page/100-revision journal benchmark: **50.182 /
+43.148 / 33.095 ms**, **149,536,768-byte incremental RSS**, under 2 s / 256 MiB.
+Retained real-PDF history IDB/JSON round-trip is verified; controlled revision
+cases are not real addenda or a public UI/MCP revision walkthrough. See
+`opentakeoff/docs/bas-production/DRAWING_CORRESPONDENCE_CONTRACT.md`.
+Next public editor/MCP delivery, semantic/quantity comparison, issue decisions,
+selective approvals/snapshots, remaining A–D corpus/holdout gates, then final
+researched symbol/installed-plan work. Goal active; no extraction/math/scorer/key
+change, holdout access, full corpus run, push, merge or deployment.
+
 2026-09-10 checkpoint after **4119b0db**: synced evidence ZIP restore now coordinates
 with active sync operations and other same-scope browser tabs. Local adoption and
 remote ancestry are atomic; pending restore generations survive offline/restart.

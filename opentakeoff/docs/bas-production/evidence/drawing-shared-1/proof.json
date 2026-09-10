@@ -1,0 +1,41 @@
+{
+  "checkpoint": "shared_drawing_correspondence_foundation",
+  "date": "2026-09-10",
+  "node": "v24.13.1",
+  "baseline_commit": "63658a35",
+  "public_revision_editor_complete": false,
+  "new_public_mcp_verb": false,
+  "approval_complete": false,
+  "new_real_pdf_extraction": false,
+  "controlled_revision_fixtures": true,
+  "retained_real_pdf_history": "engineering-families-browser-3/ip-reviewed.takeoff.json",
+  "focused": { "session": 86629, "exit_code": 0, "passed": 17, "failed": 0, "duration_ms": 12387.958041 },
+  "web_final": {
+    "session": 56770, "exit_code": 0, "typecheck": "passed", "lint_errors": 0,
+    "existing_lint_warnings": 3, "tests": 2784, "passed": 2771,
+    "existing_skips": 13, "failed": 0, "tests_duration_ms": 24244.965542,
+    "build_seconds": 5.06,
+    "existing_history_budget_ms": 5000,
+    "existing_history_ms": [3052.218458, 2968.319792, 2956.978375],
+    "legacy_benchmark": "passed_unchanged_gates_with_preexisting_known_failure_cases",
+    "build_warning": "existing_large_chunks"
+  },
+  "mcp": {
+    "session": 38438, "exit_code": 0, "typecheck": "passed",
+    "bas_passed": 119, "bas_failed": 0, "bas_duration_ms": 59542.818958,
+    "packaging_passed": 4, "packaging_duration_ms": 96.884417,
+    "version": "0.9.74", "tools": 50
+  },
+  "journal_benchmark": {
+    "scope": "synchronous_journal_validation_not_extraction_or_approval",
+    "pages": 1000, "revisions": 100, "accounting_entries": 201000,
+    "budget_ms": 2000, "elapsed_ms": [50.182208, 43.147833, 33.0945],
+    "initial_rss_bytes": 88555520, "peak_rss_bytes": 238092288,
+    "peak_incremental_rss_bytes": 149536768, "incremental_rss_budget_bytes": 268435456
+  },
+  "full_corpus_rerun": false,
+  "holdout_accessed": false,
+  "standalone_full_python_rerun": false,
+  "extraction_math_threshold_or_key_changes": false,
+  "push_merge_or_deploy": false
+}

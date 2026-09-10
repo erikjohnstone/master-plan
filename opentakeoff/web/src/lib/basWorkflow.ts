@@ -18,6 +18,8 @@ import { basAssemblyCalculationSchema, basAssemblyCalculationFingerprint, buildB
   basAssemblyQuantityInputFingerprint, verifyBasAssemblyQuantityResult } from './basAssemblyQuantityContract.ts';
 import { basEngineeringReviewEventSchema, validateBasEngineeringRegister, type BasEngineeringReviewEvent } from './basEngineeringRegister.ts';
 import { verifyBasEngineeringResult } from './basEngineeringContract.ts';
+import { basDrawingEventSchema, type BasDrawingEvent } from './basDrawingContract.ts';
+import { replayBasDrawingHistory, basDrawingDependencyFingerprint } from './basDrawingRevision.ts';
 export { canonicalBasJson } from './basCanonical.ts';
 
 const sha = z.string().regex(/^[a-f0-9]{64}$/);
@@ -58,6 +60,7 @@ export const basWorkflowSchema = z.object({
   assembly_events: z.array(basAssemblyReviewEventSchema).max(10000).optional(),
   assembly_calculations: z.array(basAssemblyCalculationSchema).max(10000).optional(),
   engineering_events: z.array(basEngineeringReviewEventSchema).max(10000).optional(),
+  drawing_events: z.array(basDrawingEventSchema).max(10000).optional(),
 }).strict().superRefine((w, ctx) => {
   const ids = new Set(w.captures.map(c => c.capture_id));
   if (ids.size !== w.captures.length || (w.current_capture_id !== null && !ids.has(w.current_capture_id))) {
@@ -65,13 +68,14 @@ export const basWorkflowSchema = z.object({
   }
   const fail = (message: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, message });
   if (w.revision === 'point_captures_1' && (w.captures.some(c => c.narrative_sources) || w.review_events)) fail('Narrative/review data requires the new workflow revision');
-  const hasEquipment = ['bas_equipment_3', 'bas_assignment_4', 'bas_assembly_5', 'bas_engineering_6'].includes(w.revision);
+  const hasEquipment = ['bas_equipment_3', 'bas_assignment_4', 'bas_assembly_5', 'bas_engineering_6', 'bas_review_7'].includes(w.revision);
   if (!hasEquipment && w.captures.some(c => c.equipment_sources)) fail('Equipment evidence requires the equipment workflow revision');
   if (w.equipment_events && !hasEquipment) fail('Equipment review requires the equipment workflow revision');
-  if (w.assignment_calculations && !['bas_assignment_4', 'bas_assembly_5', 'bas_engineering_6'].includes(w.revision)) fail('Assignment calculations require the new workflow revision');
-  if (w.assembly_events && !['bas_assembly_5', 'bas_engineering_6'].includes(w.revision)) fail('Assembly review requires the assembly workflow revision');
-  if (w.assembly_calculations && !['bas_assembly_5', 'bas_engineering_6'].includes(w.revision)) fail('Assembly calculations require the assembly workflow revision');
-  if (w.engineering_events && w.revision !== 'bas_engineering_6') fail('Engineering review requires the engineering workflow revision');
+  if (w.assignment_calculations && !['bas_assignment_4', 'bas_assembly_5', 'bas_engineering_6', 'bas_review_7'].includes(w.revision)) fail('Assignment calculations require the new workflow revision');
+  if (w.assembly_events && !['bas_assembly_5', 'bas_engineering_6', 'bas_review_7'].includes(w.revision)) fail('Assembly review requires the assembly workflow revision');
+  if (w.assembly_calculations && !['bas_assembly_5', 'bas_engineering_6', 'bas_review_7'].includes(w.revision)) fail('Assembly calculations require the assembly workflow revision');
+  if (w.engineering_events && !['bas_engineering_6', 'bas_review_7'].includes(w.revision)) fail('Engineering review requires the engineering workflow revision');
+  if (w.drawing_events && w.revision !== 'bas_review_7') fail('Drawing review requires the review workflow revision');
   const heads = new Map<string, string>(), operations = new Set<string>(), eventIds = new Set<string>();
   for (const event of w.review_events ?? []) {
     if (!ids.has(event.capture_id) || !w.captures.find(c => c.capture_id === event.capture_id)?.narrative_sources) fail('Review event has no retained narrative capture');
@@ -104,6 +108,12 @@ export const basWorkflowSchema = z.object({
     if (operations.has(event.operation_id) || eventIds.has(event.event_id)) fail('Duplicate BAS review operation/event');
     engineeringHeads.set(event.capture_id, event.event_id); operations.add(event.operation_id); eventIds.add(event.event_id);
   }
+  for (const event of w.drawing_events ?? []) {
+    if (operations.has(event.operation_id) || eventIds.has(event.event_id)) fail('Duplicate BAS review operation/event');
+    operations.add(event.operation_id); eventIds.add(event.event_id);
+  }
+  try { replayBasDrawingHistory(w.captures, w.drawing_events); }
+  catch (error) { fail(error instanceof Error ? error.message : 'Invalid drawing review history'); }
   for (const calculation of w.assignment_calculations ?? []) {
     if (calculationIds.has(calculation.calculation_id)) fail('Duplicate assignment calculation identity');
     calculationIds.add(calculation.calculation_id);
@@ -157,7 +167,7 @@ export async function captureBasEvidence(sources: BasSourceContext, points: BasP
   return { schema_version: 'bas_workflow_v1', revision: equipment ? 'bas_equipment_3' : 'bas_evidence_2', captures: [checked], current_capture_id: checked.capture_id };
 }
 
-export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSchema>, 'event_id'> | Omit<BasEquipmentReviewEvent, 'event_id'> | Omit<BasAssemblyReviewEvent, 'event_id'> | Omit<BasEngineeringReviewEvent, 'event_id'>) =>
+export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSchema>, 'event_id'> | Omit<BasEquipmentReviewEvent, 'event_id'> | Omit<BasAssemblyReviewEvent, 'event_id'> | Omit<BasEngineeringReviewEvent, 'event_id'> | Omit<BasDrawingEvent, 'event_id'>) =>
   sha256Hex(new TextEncoder().encode(canonicalBasJson(event)));
 
 export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
@@ -223,6 +233,11 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
     await validateBasEngineeringRegister(c, equipment.register, assembly, event.register);
     verifyBasEngineeringResult(event.register.input, event.result);
   }
+  for (const event of result.drawing_events ?? []) {
+    const { event_id, ...payload } = event;
+    if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS drawing event fingerprint mismatch');
+    if (await basDrawingDependencyFingerprint(event.action) !== event.expected_dependencies) throw new Error('BAS drawing dependency fingerprint mismatch');
+  }
   return result;
 }
 
@@ -274,6 +289,12 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     if (previous && canonicalBasJson(previous) !== canonicalBasJson(event)) throw new Error('Conflicting engineering event identity');
     engineeringEvents.set(event.event_id, event);
   }
+  const drawingEvents = new Map((left.drawing_events ?? []).map(e => [e.event_id, e]));
+  for (const event of right.drawing_events ?? []) {
+    const previous = drawingEvents.get(event.event_id);
+    if (previous && canonicalBasJson(previous) !== canonicalBasJson(event)) throw new Error('Conflicting drawing event identity');
+    drawingEvents.set(event.event_id, event);
+  }
   return basWorkflowSchema.parse({ ...left, captures: [...merged.values()],
     revision: atLeastBasWorkflowRevision(left.revision, right.revision),
     ...(events.size || left.review_events || right.review_events ? { review_events: [...events.values()] } : {}),
@@ -282,6 +303,7 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     ...(assemblyEvents.size || left.assembly_events || right.assembly_events ? { assembly_events: [...assemblyEvents.values()] } : {}),
     ...(assemblyCalculations.size || left.assembly_calculations || right.assembly_calculations ? { assembly_calculations: [...assemblyCalculations.values()] } : {}),
     ...(engineeringEvents.size || left.engineering_events || right.engineering_events ? { engineering_events: [...engineeringEvents.values()] } : {}),
+    ...(drawingEvents.size || left.drawing_events || right.drawing_events ? { drawing_events: [...drawingEvents.values()] } : {}),
     current_capture_id: activateIncoming ? right.current_capture_id : left.current_capture_id ?? right.current_capture_id });
 }
 

@@ -55,6 +55,12 @@ matching PDF bytes, not merely its filename. Equipment assignment, source-PDF
 archiving and approved review/revision workflows remain in development.
 Existing engineering and row exports keep their current meaning.
 
+Development persistence now supports a separate source-set/page-correspondence
+journal, preserving old captures and rejecting incomplete or conflicting page
+accounting. Public revision editing and scoped approvals are still being built;
+this is not an installed-count or release feature. See the
+[correspondence contract](docs/bas-production/DRAWING_CORRESPONDENCE_CONTRACT.md).
+
 Local-first sync now retains compatible BAS history across known saved versions.
 Conflicting review branches produce **BAS sync needs review**, with an exportable
 remote recovery copy when available and an explicit retry—not silent replacement

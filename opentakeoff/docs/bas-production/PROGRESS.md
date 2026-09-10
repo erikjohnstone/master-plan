@@ -1,5 +1,41 @@
 # BAS production workflow progress
 
+## Shared drawing correspondence foundation — 2026-09-10
+
+After **63658a35**, implemented the shared `bas_review_7` source-set and
+page-accounting journal. Explicit initial sets, reciprocal replacements,
+retention/removal/additions, same-source redundant delivery and unresolved
+decisions preserve all old captures, source order and frame ownership. Partial
+addendum omissions suggest retention for confirmation; changed-byte pairings are
+never silently confirmed. Text/frame comparison does not claim ink/semantic/
+quantity equality. Existing edits/import merges preserve or explicitly reject
+conflicting new history. No approval or current-count mutation is introduced.
+
+**17 focused pass** (86629). Final web **56770 exit 0: 2,771 pass / 13 existing
+skips**, 24.245 s tests / 5.06 s build; existing three lint warnings, legacy
+One-Click known failures and bundle warnings remain. Existing real-history
+benchmark **3.052 / 2.968 / 2.957 s**, under unchanged 5 s gate. Added predeclared
+1,000-page/100-revision journal gate: **50.182 / 43.148 / 33.095 ms**, incremental
+peak RSS **149,536,768 < 268,435,456 bytes**. Bounds are explicit and tested.
+MCP **38438 exit 0**: types, **119 BAS tests** (59.543 s), **4 packaging/proof
+tests**, build. No version/tool change; 0.9.74 / 50 tools.
+
+Retained real Fort Sam/controlled engineering history survives actual IDB and
+JSON replay with all original captures and engineering decisions unchanged.
+Source accounting fixtures are controlled, not real addendum validation. No new
+browser walkthrough, full corpus/holdout or standalone full Python run is claimed.
+Contract/evidence: `DRAWING_CORRESPONDENCE_CONTRACT.md` and
+`evidence/drawing-shared-1/proof.json`.
+
+Next: public revision editor in Review & changes and dedicated history-safe MCP
+entry point (the existing compile-retention gate requires active originals).
+Then source/semantic/comparable-quantity changes, issue decisions, selective
+dependencies and approved snapshots/export; remaining A–D corpus/holdout gates
+and final researched symbols/installed-plan phase remain required. This internal
+foundation is not a finished end-user revision capability. Goal remains active.
+No VectorGrid/symbol/table/cite/bbox/Python arithmetic/key/cost/labor changes,
+push, merge or deployment.
+
 ## Coordinated synced evidence restore — 2026-09-10
 
 After **4119b0db**, local and local-first synced restore share a per-annotation-
