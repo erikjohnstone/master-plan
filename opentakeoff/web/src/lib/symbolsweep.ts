@@ -417,7 +417,7 @@ const compose = (m: [number, number, number, number], t: [number, number, number
 /** Endpoint spatial hash over the sheet's segments: cell → segment indices
  * with an endpoint in that cell. Cell size ≥ 2×tol so a tolerance ball around
  * any query point is covered by the 3×3 cell neighborhood. */
-class EndpointGrid {
+export class EndpointGrid {
   private cells = new Map<number, number[]>();
   private cell: number;
   constructor(private segs: number[], tol: number) {
