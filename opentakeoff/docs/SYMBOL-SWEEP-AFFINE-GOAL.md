@@ -554,7 +554,7 @@ explicitly "not a plan-scale seed". Enable it there, bounded by
 | Before (`18f0c9e`) | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 — no real instances found to author, see Findings | 0 | not remeasured (runner change is additive-only; no matching-code touched) | Phase 0 done: schema extended, runner campaign-aware (commit `1d97d8f`), exhaustive discovery search run, honest 0-instance affine campaign is the recorded before-number |
 | Phase 1 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (unchanged — `affine` off everywhere in the runner; see Findings) | 0 | ~19.6 min sum of 47 case `elapsed_ms` (measures the unchanged rigid path, not affine — nothing turns `affine` on yet, so this is the same no-op baseline as Phase 0, not a real perf measurement of refinement cost) | `symbolAffine.ts` (fit/decompose/bounds/correspondences, commit `ea083e2`) wired into `matchSymbol` (commit `6e1e30e`): a rigid-search near-miss gets refined and re-scored; an out-of-bounds fit is disclosed and withheld, never committed. 399 tests green (361 pre-existing + 35 pure-math + 3 new integration tests). Gate 1 met: existing behaviour unchanged (`affine` absent is proven byte-for-byte identical, both by test and by the unchanged corpus numbers); the new tests prove the ON path works. Real corpus recall stays 0/0 because Phase 0 found no real affine instances to test against in this corpus — Phase 1's own correctness is carried entirely by synthetic fixtures, per this document's own Phase 0 revision. |
 | Phase 2 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (unchanged — `affine` off everywhere in the runner; see Findings) | 0 | ~19.6 min sum of 47 case `elapsed_ms`, statistically identical to Phase 1's (same reason: nothing in the runner turns `affine` on, so this measures the unchanged rigid path again, not the new candidate generation's real cost) | Continuous-rotation candidate generation (commit `bf4630c`): vote-before-score geometric hashing appends a voted rotation as a new dynamic `xforms` entry, so the existing scoring/classification code (already generic over `xforms[]`) handles it unmodified. 407 tests green (399 pre-existing + 8 new: 4 off-grid angles found exactly via a genuinely asymmetric fixture, a mirrored case, `rotations:false` disables it, candidate-growth guard). Gate 2 met on the no-op axis (byte-for-byte proof, both by test and unchanged corpus numbers) and on the synthetic-fixture axis (real off-grid rotation is now found — the whole point of this phase); real corpus recall stays 0/0 for the same reason as Phase 0/1 (no real instances exist in this corpus to move it). Also fixed a real, generically-applicable bug in the shared `mergeProposals` (see Findings) — pinned by its own regression test. |
-| Phase 3 | | | | | | |
+| Phase 3 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (unchanged — `affine`/`scaleSearch` off everywhere in the runner; see Findings) | 0 | ~19.4 min sum of 47 case `elapsed_ms`, statistically identical to Phase 1/2's (same reason: nothing in the runner turns `scaleSearch` on, so this measures the unchanged rigid path again) | Two-segment-basis affine candidate generation (stretch/shear made PROPOSABLE, not just refinable): a basis pair of non-parallel seed segments, a ratio-band search for the first's sheet correspondent, a margin-based rect search predicting and finding the second, a 4-point `fitAffine`, and a third-segment vote before it is ever scored or refined — reusing Phase 1's refine/bounds/disclosure machinery unmodified (same `xf ≥ rigidXformCount` dynamic-candidate path Phase 2 already wired). 413 tests green (407 pre-existing + 6 new: x-only and y-only 1.3× stretch, 1.2×+8° shear, 1.6× stretch withheld with the bounds reason, `rotations:false` disables it, candidate-growth guard). Used the asymmetric `ASYM2` fixture per Phase 2's own Finding, not `SYMBOL`. Gate 3 met on the no-op axis (byte-for-byte proof, both by test and unchanged corpus numbers) and on the synthetic-fixture axis (anisotropic stretch and shear are now proposed, fitted, and bounds-checked — the whole point of this phase); real corpus recall stays 0/0 for the same reason as every prior phase (Phase 0 found no real instances in this corpus). Also found and fixed two real bugs during testing, both recorded as Findings: basis-pair selection could end up all-parallel on a single-axis stretch (fixed by widening the candidate pool without touching the shared `ANCHOR_COUNT`), and the ratio-band search could miss an out-of-bounds stretch entirely rather than disclose it (fixed by trying both basis-pair role assignments, plus loosening the dynamic-candidate proposal floor to let refinement run before a rough guess's raw score forecloses it — the rigid path's own gate is untouched). |
 | Phase 4 | | | | | | |
 | Default flip | | | | | | |
 
@@ -667,6 +667,56 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   point is pinning down ONE unambiguous transform — Phase 3's own stretch/
   shear tests should do the same, not assume `SYMBOL`'s asymmetry holds
   under every distortion.
+
+- **2026-09-10 — Phase 3's basis-pair selection could end up with every
+  candidate parallel, silently disabling stretch detection on whichever
+  axis wasn't stretched.** Caught by the x-only-stretch test, not by
+  inspection. Mechanism: an anisotropic stretch on only one axis leaves
+  every segment on the OTHER axis unchanged in length, so those segments
+  still coincidentally length-match the seed elsewhere on the sheet. That
+  inflates their OBSERVED rarity (rarity is "how many sheet segments share
+  this length within tolerance", computed against the whole sheet
+  including the very instance being searched for) enough to push them out
+  of the shared, rarity-only-capped `anchors` array (`ANCHOR_COUNT = 3`)
+  entirely — every surviving anchor ends up on the stretched axis, all
+  mutually parallel, and no pair ever clears the ≥ 20° angle-diversity
+  check. Fix: basis-pair CANDIDATES are drawn from a wider pool (the
+  rarest 6 distinct lengths, `byLenQ` already has all of them — no new
+  computation) while still only ever trying the best `K = 3` PAIRS by
+  combined rarity, so the expensive per-pair search stays exactly as
+  bounded as before. `anchors`/`ANCHOR_COUNT` themselves are untouched —
+  every other caller of that shared array is unaffected. Pinned by the
+  x-only and y-only stretch tests in `symbolsweep.test.ts`.
+
+- **2026-09-10 — Phase 3's ratio-band search for the first basis segment
+  could miss a real, disclosable, OUT-OF-BOUNDS stretch entirely, not just
+  fail to commit it as a match.** Caught by the 1.6×-stretch-withheld
+  test: the first version found nothing at all (empty `withheld`), not
+  even a disclosed near-miss. Mechanism: `ratioBand` deliberately searches
+  only within the STATED bound (`affineBounds.maxStretch`, default 1.5×) —
+  right, since a stretch inside the bound is what should ever commit — but
+  which half of a basis pair happens to sit on the stretched axis is not
+  known ahead of time, and the pair-forming loop only ever tried ONE role
+  assignment per unordered pair (whichever came first by rarity). When
+  that happened to be the segment on the OUT-OF-BOUND stretched axis,
+  `ratioBand` correctly found nothing past 1.5× — except the seed's own
+  unstretched twin elsewhere on the sheet, which trivially satisfies the
+  band at ratio 1.0 and produces a spurious self-referential candidate
+  that `excludeCenter` then (correctly) suppresses, leaving nothing.
+  **Fix: try BOTH role assignments per selected pair** — whichever one
+  actually sits on the unchanged axis will find its ratio-band match
+  easily, and the other (however far out of bound) is then found via the
+  already-generous, POSITIONAL (not ratio-based) margin search used for
+  the second basis segment. Also required loosening the shared
+  `proposalFloor` gate: a dynamically-generated (Phase 2/3) candidate's
+  OWN rough guess matrix can legitimately score below that floor at the
+  rigid search's fixed tolerance even for a real placement — Phase 3's
+  4-point basis fit especially so — so refinement against the full
+  correspondence set must run before the floor is ever applied, not be
+  foreclosed by the rough guess's own raw score. The rigid path's gate is
+  byte-for-byte unchanged (still keyed to ITS raw score, still applied
+  before any refine() call) — this only widens what a dynamic candidate
+  gets a chance to prove. Pinned by the 1.6× stretch test.
 
 ---
 
