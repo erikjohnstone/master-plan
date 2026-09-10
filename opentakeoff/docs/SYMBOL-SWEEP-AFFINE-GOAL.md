@@ -552,7 +552,7 @@ explicitly "not a plan-scale seed". Enable it there, bounded by
 | Milestone | Date | Baseline cases | Affine campaign recall | False-adds | Suite wall-clock | Notes |
 |---|---|---|---|---|---|---|
 | Before (`18f0c9e`) | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 — no real instances found to author, see Findings | 0 | not remeasured (runner change is additive-only; no matching-code touched) | Phase 0 done: schema extended, runner campaign-aware (commit `1d97d8f`), exhaustive discovery search run, honest 0-instance affine campaign is the recorded before-number |
-| Phase 1 | | | | | | |
+| Phase 1 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (unchanged — `affine` off everywhere in the runner; see Findings) | 0 | ~19.6 min sum of 47 case `elapsed_ms` (measures the unchanged rigid path, not affine — nothing turns `affine` on yet, so this is the same no-op baseline as Phase 0, not a real perf measurement of refinement cost) | `symbolAffine.ts` (fit/decompose/bounds/correspondences, commit `ea083e2`) wired into `matchSymbol` (commit `6e1e30e`): a rigid-search near-miss gets refined and re-scored; an out-of-bounds fit is disclosed and withheld, never committed. 399 tests green (361 pre-existing + 35 pure-math + 3 new integration tests). Gate 1 met: existing behaviour unchanged (`affine` absent is proven byte-for-byte identical, both by test and by the unchanged corpus numbers); the new tests prove the ON path works. Real corpus recall stays 0/0 because Phase 0 found no real affine instances to test against in this corpus — Phase 1's own correctness is carried entirely by synthetic fixtures, per this document's own Phase 0 revision. |
 | Phase 2 | | | | | | |
 | Phase 3 | | | | | | |
 | Phase 4 | | | | | | |
