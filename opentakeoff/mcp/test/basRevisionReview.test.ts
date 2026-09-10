@@ -15,6 +15,7 @@ import { applyBasAssemblyReview } from '../../web/src/lib/basAssemblyReview.ts';
 import { calculateBasAssignments } from '../src/basAssignmentDemand.ts';
 import { calculateBasAssemblies } from '../src/basAssemblyQuantities.ts';
 import { applyBasEngineeringReview } from '../src/basEngineeringReview.ts';
+import { canonicalBasJson } from '../../web/src/lib/basCanonical.ts';
 
 const date = '2026-09-10T12:00:00.000Z';
 type Preview = Awaited<ReturnType<typeof prepareBasRevisionReview>>;
@@ -26,6 +27,16 @@ async function resign(event: BasRevisionReviewEvent) {
   const { event_id: _id, ...payload } = event;
   event.event_id = await basEventFingerprint(payload);
 }
+
+test('canonical JSON property reordering cannot change the replayed comparison or any source reference', async () => {
+  const f = await comparisonFixture({ ai: 4 }), preview = await prepareBasRevisionReview(f.workflow, f.request);
+  const saved = await recordBasRevisionReview(f.workflow, request(preview, 790), 'operator_input');
+  const canonical = JSON.parse(canonicalBasJson(saved.workflow));
+  assert.deepEqual(canonical, saved.workflow, 'Only object property order changes');
+  const replayed = await readBasRevisionReview(canonical, saved.event.event_id);
+  assert.equal(replayed.report_verification, 'matches_saved_report');
+  assert.deepEqual(replayed.report, preview.report, 'Every source text, bbox, quantity, identity and report field remains exact');
+});
 
 test('prepare, record, JSON reopen and actual Python replay preserve changed counts, SOO, evidence and unresolveds', async () => {
   const f = await comparisonFixture({ ai: 4, variable: 'RETURN AIR TEMPERATURE' }), original = structuredClone(f.workflow);

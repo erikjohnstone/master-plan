@@ -59,8 +59,10 @@ Development **Review & changes → Drawing changes** and MCP `bas_drawing_review
 now expose the shared source-set/page-correspondence journal: select retained
 pages, explicitly account for replacements/additions/removals, inspect original
 sources, preview and record decisions. Unresolved reviews retain history without
-publishing a complete source set. Quantity-impact comparison and scoped approvals
-are still being built; this is not an installed-count or release feature. See the
+publishing a complete source set. **Compare requirements & quantities** adds
+explicit item pairing, before/after declared values, exact-source inspection and
+saved/replayed comparison history. Scoped approvals are still being built; this
+is not an installed-count or release feature. See the
 [correspondence contract](docs/bas-production/DRAWING_CORRESPONDENCE_CONTRACT.md).
 
 Local-first sync now retains compatible BAS history across known saved versions.

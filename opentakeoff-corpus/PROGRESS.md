@@ -1,5 +1,26 @@
 ## Active work
 
+2026-09-10 checkpoint after **b942b4f7**: public pinned BAS revision comparison
+now runs through one Python-backed service from browser and existing MCP tool.
+Actual browser source/import → comparison/pairing → save/reload/replay/export
+passes, with bounded dense tables and retained original citations. Built MCP
+restores all 31 saved calculations, exactly matches the 698-row browser report,
+opens originals without activation, records/retries and recovers in a fresh process.
+Fixed a reproduced backup-key-ordering report mismatch by canonical ordering of
+exact evidence references (`bas_revision_inventory_2`); values, quantities and
+bboxes unchanged. UI unresolved-filter regression also fixed without domain edits.
+**Web 2,804 pass / 13 existing skips; MCP 127 BAS + 33 revision + four packaging +
+122 tool/safe-write/staging pass; Python 452 pass / one packaging skip, mypy 20
+files and enabled packaging test pass.** Existing warnings/failures remain disclosed.
+Final browser compare/reopen 5.372–5.709 s, durable save 12.301 s under the unchanged
+8/15-second gate; serial shared comparison/save/reopen 3.967–4.322 s under 6 s.
+Proof: `opentakeoff/docs/bas-production/REVISION_PUBLIC_PROOF.md`.
+Controlled reordered pages, not an issued addendum or installed-count proof.
+**Main goal remains active:** issue decisions, selective approvals/snapshots and
+A–D/final corpus/holdout gates next; appended symbol/installed-plan work last.
+No full corpus rerun, holdout opening, extraction/symbol/VectorGrid/math algorithm,
+key/scorer, model, costing/labor, push/merge/deploy or external changes.
+
 2026-09-10 checkpoint after **b7563f9a**: internal shared comparison journal
 (`bas_revision_8`) saves exact pinned source/decision/correspondence and report
 identity; save/reopen rerun Python-backed comparison. Actual IDB/JSON retention,

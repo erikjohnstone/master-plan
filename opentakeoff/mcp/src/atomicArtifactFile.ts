@@ -3,7 +3,7 @@ import { mkdtemp, open, rename, link, unlink, rmdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { assertWritable } from './safewrite.ts';
 
-export async function writeAtomicArtifact(path: string, kind: 'xlsx' | 'zip', chunks: AsyncIterable<Uint8Array> | Iterable<Uint8Array>,
+export async function writeAtomicArtifact(path: string, kind: 'xlsx' | 'zip' | 'json', chunks: AsyncIterable<Uint8Array> | Iterable<Uint8Array>,
   overwrite: boolean | undefined, beforeCommit: () => void) {
   await assertWritable(path, kind, overwrite);
   const staging = await mkdtemp(join(dirname(path), '.opentakeoff-artifact-')), pending = join(staging, `pending.${kind}`);

@@ -19,7 +19,7 @@ import { join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { basAssignmentMiddleware, basAssemblyMiddleware, basEngineeringMiddleware, basWorkflowReplayMiddleware } from './vite.basAssignmentApi.js';
+import { basAssignmentMiddleware, basAssemblyMiddleware, basEngineeringMiddleware, basWorkflowReplayMiddleware, basRevisionMiddleware } from './vite.basAssignmentApi.js';
 
 const webRoot = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const mcpRoot = resolve(webRoot, "../mcp");
@@ -384,8 +384,10 @@ const assignmentMiddleware = basAssignmentMiddleware(resolveTsxLoader);
 const assemblyMiddleware = basAssemblyMiddleware(resolveTsxLoader);
 const engineeringMiddleware = basEngineeringMiddleware(resolveTsxLoader);
 const workflowReplayMiddleware = basWorkflowReplayMiddleware(resolveTsxLoader);
+const revisionMiddleware = basRevisionMiddleware(resolveTsxLoader);
 
 function otMiddleware(req, res, next) {
+  if (req.url?.split('?')[0] === '/__ot/bas-revision') return revisionMiddleware(req, res, next);
   if (req.url?.split('?')[0] === '/__ot/bas-workflow-replay') return workflowReplayMiddleware(req, res, next);
   if (req.url?.split('?')[0] === '/__ot/bas-engineering') return engineeringMiddleware(req, res, next);
   if (req.url?.split('?')[0] === '/__ot/bas-assignment-demand') {

@@ -2,7 +2,6 @@
 import { spawn } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const LIMIT = 32 * 1024 * 1024;
 const mcpRoot = fileURLToPath(new URL('../mcp/', import.meta.url));
 const cli = fileURLToPath(new URL('../mcp/scripts/bas-assignment-cli.mts', import.meta.url));
 const send = (res, status, value) => {
@@ -26,9 +25,13 @@ export function basEngineeringMiddleware(resolveLoader) {
 export function basWorkflowReplayMiddleware(resolveLoader) {
   return basQuantityMiddleware(resolveLoader, 'workflow-replay');
 }
+export function basRevisionMiddleware(resolveLoader) {
+  return basQuantityMiddleware(resolveLoader, 'revision');
+}
 
 function basQuantityMiddleware(resolveLoader, kind) {
-  const route = kind === 'workflow-replay' ? '/__ot/bas-workflow-replay' : kind === 'engineering' ? '/__ot/bas-engineering'
+  const LIMIT = (kind === 'revision' ? 128 : 32) * 1024 * 1024;
+  const route = kind === 'revision' ? '/__ot/bas-revision' : kind === 'workflow-replay' ? '/__ot/bas-workflow-replay' : kind === 'engineering' ? '/__ot/bas-engineering'
     : kind === 'assembly' ? '/__ot/bas-assembly-quantities' : '/__ot/bas-assignment-demand';
   return async (req, res, next) => {
     if (req.url?.split('?')[0] !== route) return next();
@@ -46,7 +49,7 @@ function basQuantityMiddleware(resolveLoader, kind) {
       let size = 0;
       for await (const chunk of req) {
         size += chunk.length;
-        if (size > LIMIT) return send(res, 413, { error: `BAS ${kind} input exceeds 32 MiB` });
+        if (size > LIMIT) return send(res, 413, { error: `BAS ${kind} input exceeds ${LIMIT / (1024 * 1024)} MiB` });
         chunks.push(chunk);
       }
       const input = Buffer.concat(chunks);
@@ -76,7 +79,7 @@ function basQuantityMiddleware(resolveLoader, kind) {
       child.on('error', () => finish(503, { error: `BAS ${kind} process unavailable` }));
       child.stdout.on('data', chunk => {
         outputSize += chunk.length;
-        if (outputSize > LIMIT) return finish(502, { error: `BAS ${kind} output exceeds 32 MiB` });
+        if (outputSize > LIMIT) return finish(502, { error: `BAS ${kind} output exceeds ${LIMIT / (1024 * 1024)} MiB` });
         output.push(chunk);
       });
       child.on('close', code => {

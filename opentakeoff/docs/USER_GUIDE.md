@@ -175,7 +175,26 @@ decisions** preserve recorded reviews. Keep original PDFs or a source-inclusive
 backup for later source viewing. Unresolved reviews publish no complete source
 set. **Compare retained evidence** compares available text and page geometry,
 not full drawing ink. These records do not change counts or approve a takeoff;
-quantity-impact comparison and the approval journey remain in development.
+the approval journey remains in development.
+
+Within **Drawing changes**, choose **Compare requirements & quantities**. Select
+the before/after source sets and **Start comparison**. **Pinned versions** records
+the exact SOO, equipment, assembly, engineering and calculation versions used.
+**Compare requirements and quantities** produces a full-width table; filter it,
+select an item and inspect its original PDF evidence or unchanged original fields.
+**Review item correspondence** records explicit pairs, additions, removals and
+reasons. Changing a pairing or version requires a fresh comparison before saving.
+Unknown, unpaired and incompatible quantities never become zero differences.
+
+Name the comparison, enter a self-declared reviewer and reason, then **Save
+comparison review**. Saving rechecks the complete comparison through the shared
+Python-backed service. The project autosave and **Export evidence & decisions**
+retain the review; **Reopen** reruns its pinned comparison. Changed replays are
+explicitly flagged. **Export complete comparison** includes all rows, not just
+the current filter/page. Drafts survive source navigation, not browser reload;
+save before closing the project. This is review history, not takeoff approval,
+complete requirement discovery or verified installed quantity. Keep the exact
+original PDFs or a source-inclusive backup for later evidence inspection.
 
 After recording assignments, choose **Calculate assigned values**. The shared
 Python engine applies each known listed value to the included members, or applies

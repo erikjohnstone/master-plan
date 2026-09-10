@@ -12,6 +12,17 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Expose pinned requirement/quantity comparison in the existing full-width
+  **Review & changes → Drawing changes** workspace and additive MCP `revision`
+  commands. Explicit item pairing, source inspection, stale-preview rejection,
+  save/reopen, cancellation and full export share one Python-backed service.
+  MCP completed views are bounded and expire/invalidate; no extraction, installed
+  truth, approval or complete BAS-production claim. Real-source browser and built
+  MCP backup/restart replay agree exactly on the controlled 698-row comparison.
+  Canonical evidence ordering fixes a reproduced backup/replay mismatch without
+  changing extracted values, quantities or locations. Dense reader pages preserve
+  complete exports; unresolved measures stay visible in the changes filter.
+
 - Add the internal append-only comparison journal (`bas_revision_8`). Save exact
   source/decision selectors, correspondence reasons and replayed report identity;
   preserve them through old edit paths, reload and import. Reopening reruns shared

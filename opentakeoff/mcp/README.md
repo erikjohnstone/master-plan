@@ -211,6 +211,40 @@ evidence JSON plus original PDFs separately. Revision/release work is unfinished
 
 ### Drawing correspondence
 
+Requirement/quantity comparison uses the same tool with
+`command: {kind: "revision", command: {...}}`. Nested commands:
+
+- `{action: "inspect", source_set_id?, query?}` discovers retained source sets,
+  saved comparisons and available decision/calculation IDs. Supply a source-set
+  ID to obtain `selected_basis`; it resolves exact IDs, not floating selectors.
+- `{action: "run", operation, query?}` invokes the shared HTTP/MCP service.
+  Operation kinds are `inventory` with `basis`, `compare` with `comparison`,
+  `record` with `review`, or `read` with `event_id`. A comparison has exact
+  `before`/`after` bases and explicit `matches`, `added`, `removed`, and
+  `membership_reviews` arrays. Use the returned `expected_head` and
+  `expected_report_fingerprint` to record; add operation UUID, name, self-declared
+  reviewer and reason. Records are unapproved `agent_proposal` history.
+- `{action: "read", view_id, query?}` pages the completed operation without
+  rerunning Python. `query.path` traverses own fields/numeric array indices,
+  for example `["report", "rows"]`, then `["report", "rows", 0, "quantities"]`.
+  `offset`/`limit` page containers (default 25, maximum 50); `string_offset` and
+  `string_limit` page exact UTF-16 string units (default 4096, maximum 16384).
+  Scalar previews are capped at 256 units and explicitly disclose truncation.
+  All original fields are reachable; object summaries are only navigational.
+- `{action: "export", view_id, path, overwrite?}` atomically writes the complete
+  unchanged operation result to JSON, independent of paging. Existing targets
+  require explicit overwrite. Use `export_takeoff` separately to persist Session
+  evidence/history or its source-inclusive bundle.
+
+One completed view per Session, maximum 128 MiB encoded JSON, expires after 15
+minutes or another inspect/run; all BAS/load/restore changes invalidate it. A
+read is explicitly not a fresh replay. Use operation `read` to replay a saved
+comparison; `different_from_saved_report` must not be accepted as the reviewed
+result. Point cells and selected saved quantities replay through Python. Unknown,
+outside-scope, unpaired and incompatible measures remain explicit, not zero.
+No installed verification, automatic item identity, complete discovery or approval.
+The original page-only commands below remain unchanged.
+
 Development `bas_drawing_review` uses the same retained-source accounting as
 **Review & changes → Drawing changes**, without extracting again or requiring
 active plans. Restore an evidence backup first if the Session has no BAS history.
@@ -399,7 +433,7 @@ reads the tool list once. ([#230](https://github.com/Kentucky-ai/opentakeoff/iss
 | `resolve_tag` | ONE room tag → its room-finish schedule row → each code's finish/material definition, every edge cited (sheet + literal text + bbox). Refusal over guessing: `unresolved` comes back with a reason, never as silence. A delta/REV marker on the answering row rides the result as `revisions`—the codes are the post-revision answer, and you're told the ink changed. |
 | `find_schedule` | Locate a schedule table by kind ("room finish", "material")—sheet, title, headers, row count, a `view_sheet`-ready region, and `revised_rows` when delta/REV-marked rows exist. |
 | `compile_corpus_takeoff` | **Schedule-driven HVAC/BAS/valve takeoff** (`kind`: `hvac_equipment` \| `bas_points` \| `control_valves` \| `sequences` \| `embedded_coil_gaps`)—reads the set's equipment/BAS/valve/sequence schedule tables straight off the sheet graph, no shape-tracing. Returns one compiled envelope: `categories` (per-family rows and counts), `totals`, `page_accounting` (which pages were actually seen, which came back empty), and `exclusions` (scope rules that dropped a row, disclosed rather than silent). One dispatcher (`web/src/lib/compileTakeoff.mjs`) routes all five kinds for every caller—MCP tool, CLI, census script—so a kind never silently 404s from one entry point and works from another. |
-| `bas_drawing_review` | Shared retained-source correspondence: `inspect` (offset/limit ≤50), `prepare`, `record`, or `compare`. Works without active PDFs after evidence restoration. Explicit baseline/incoming page accounting, immutable proposal history and exact-state guards; no extraction, quantity delta or approval. Export to persist. See [contract](#drawing-correspondence). |
+| `bas_drawing_review` | Shared retained-source correspondence: `inspect`, `prepare`, `record`, `compare`; additive `revision` command for pinned requirement/quantity comparison, bounded reads, exact export and replayed proposal history. Works without active PDFs after evidence restoration. No extraction or approval. Export to persist. See [contract](#drawing-correspondence). |
 | `reconcile_schedule_plan` | **Cross-references a compiled schedule against the drawing**: for the whole set, or one `family` (e.g. `"VAV"`), sweeps the plan sheets for each schedule tag's drawn symbol and returns one row per tag with `scheduled_qty` (the printed schedule count), `installed_qty` (instances actually swept from the plan), and a `status`—matched, schedule-only (scheduled but never found drawn), plan-only (drawn but not on the schedule), or a disclosed refusal—each citing both the schedule row and the plan ink. This is the call that turns a schedule row-count into an actual reconciled takeoff line; report both quantities and the status, never the schedule count alone. |
 | `sheet_context` | The region's STRUCTURE in one frame: classified vector segments (endpoints as drawn, meta byte per segment), text spans with bboxes, and hatch-family instances with content-derived ids—same pattern spec ⇒ same id anywhere on the sheet, so plan↔legend matching is `id === id`. Decimation is declared and counted on every reply: `kept + dropped === total_in_region`, cap applies longest-first so walls survive. |
 | `view_sheet` | The agent's eyes: render the sheet (or an image-px crop) to PNG. `overlay` burns committed shapes in (solid = human-affirmed, dashed = unreviewed) to verify geometry landed; `grid` burns in a calibrated 1-ft/5-ft measuring grid with foot labels (`"auto"` from the set scale, or the drawing scale like `"1/4"`) so dimensions are counted off cells, not guessed; `marks` (#297) burns disclosure layers in — `question` (withheld placements, orange ?-circle), `struck` (rejections, magenta struck ×), `ring` (the sweep's seed, violet double ring) — in colors off the common CAD pens, so what a reply names, the picture shows. |

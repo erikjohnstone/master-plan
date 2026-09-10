@@ -1,0 +1,23 @@
+.bas-revision-workspace { min-width: 0; }
+.bas-revision-workspace small { display: block; color: var(--ink-secondary); margin-top: var(--sp-2); overflow-wrap: anywhere; }
+.bas-revision-workspace h3, .bas-revision-workspace h4 { font-size: var(--fs-m); margin: var(--sp-2) 0; }
+.bas-revision-workspace fieldset { min-width: 0; border: 1px solid var(--ink-faint); padding: var(--sp-3); }
+.bas-revision-workspace details > summary { cursor: pointer; padding: var(--sp-2) 0; }
+.bas-revision-workspace td, .bas-revision-workspace th, .bas-revision-workspace p { overflow-wrap: anywhere; }
+.bas-revision-sides { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-4); }
+.bas-revision-sides > section { min-width: 0; }
+.bas-revision-detail, .bas-revision-versions, .bas-revision-pairing, .bas-revision-save { border: 1px solid var(--ink-faint); padding: var(--sp-4); }
+.bas-revision-detail, .bas-revision-save { display: flex; flex-direction: column; gap: var(--sp-4); }
+.bas-revision-measure { min-height: calc(var(--ctl-l) * 1.5); font-family: var(--f-mono); padding-bottom: var(--sp-2); }
+.bas-revision-value .bas-point-grid { max-height: 36vh; }
+.bas-revision-value td { white-space: pre-wrap; }
+.bas-revision-path { font-size: var(--fs-s); color: var(--ink-secondary); }
+.bas-revision-choices { max-height: 38vh; overflow: auto; margin: var(--sp-3) 0; }
+.bas-revision-choices > label { display: flex; gap: var(--sp-3); padding: var(--sp-3); border-bottom: 1px solid var(--ink-faint); align-items: center; }
+.bas-revision-choices > label > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.bas-revision-source { border-left: 2px solid var(--ink-faint); padding: 0 var(--sp-3) var(--sp-3); margin: var(--sp-3) 0; }
+.bas-revision-workspace input[type=radio], .bas-revision-workspace input[type=checkbox] { width: var(--ctl-s); height: var(--ctl-s); flex: none; accent-color: var(--cobalt); }
+.bas-revision-workspace .bas-revision-check { flex-direction: row; align-items: center; }
+.bas-revision-membership { border-left: 2px solid var(--cobalt); padding: var(--sp-3); }
+.bas-revision-grid table { min-width: calc(var(--ctl-l) * 22); }
+@media (max-width: 900px) { .bas-revision-sides { grid-template-columns: minmax(0, 1fr); } }

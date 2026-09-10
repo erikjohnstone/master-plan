@@ -6,25 +6,30 @@ import { applyBasEngineeringReview, inspectBasEngineering } from '../src/basEngi
 import { basEngineeringCommandSchema } from '../../web/src/lib/basEngineeringRegister.ts';
 import { writeJsonAndExit } from './cliJson.mjs';
 import { verifyBasWorkflowCalculations } from '../src/basWorkflowReplay.ts';
+import { runBasRevisionOperation } from '../src/basRevisionOperations.ts';
 
-const limit = 32 * 1024 * 1024;
+// A revision reply includes both retained history and a full comparison report.
+// Existing operation limits are unchanged; revision transport refuses, never truncates.
+const limit = process.argv[2] === 'revision' ? 128 * 1024 * 1024 : 32 * 1024 * 1024;
 const cancelled = new AbortController();
 process.once('SIGTERM', () => cancelled.abort());
 let label = 'BAS';
 try {
-  const kind = z.enum(['assignment', 'assembly', 'engineering', 'workflow-replay']).parse(process.argv[2] ?? 'assignment');
+  const kind = z.enum(['assignment', 'assembly', 'engineering', 'workflow-replay', 'revision']).parse(process.argv[2] ?? 'assignment');
   label = kind === 'workflow-replay' ? 'BAS workflow replay' : kind === 'engineering' ? 'BAS engineering' : 'BAS quantity';
   const chunks: Buffer[] = [];
   let bytes = 0;
   for await (const chunk of process.stdin) {
     const data = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
     bytes += data.length;
-    if (bytes > limit) throw new Error(`BAS ${kind} input exceeds 32 MiB`);
+    if (bytes > limit) throw new Error(`BAS ${kind} input exceeds ${limit / (1024 * 1024)} MiB`);
     chunks.push(data);
   }
   const payload = z.object({ workflow: z.unknown(), request: z.unknown() }).strict().parse(JSON.parse(Buffer.concat(chunks).toString('utf8')));
   let result;
-  if (kind === 'workflow-replay') {
+  if (kind === 'revision') {
+    result = await runBasRevisionOperation(payload.workflow, payload.request, 'operator_input', { signal: cancelled.signal });
+  } else if (kind === 'workflow-replay') {
     z.object({}).strict().parse(payload.request);
     result = await verifyBasWorkflowCalculations(payload.workflow, { signal: cancelled.signal });
   } else if (kind === 'engineering') {
@@ -36,7 +41,7 @@ try {
     const calculate = kind === 'assembly' ? calculateBasAssemblies : calculateBasAssignments;
     result = await calculate(payload.workflow, payload.request, { signal: cancelled.signal });
   }
-  if (Buffer.byteLength(JSON.stringify(result)) > limit) throw new Error(`BAS ${kind} output exceeds 32 MiB`);
+  if (Buffer.byteLength(JSON.stringify(result)) > limit) throw new Error(`BAS ${kind} output exceeds ${limit / (1024 * 1024)} MiB`);
   await writeJsonAndExit(result);
 } catch (error) {
   const message = error instanceof z.ZodError ? `Invalid ${label} payload` : error instanceof Error ? error.message : `${label} operation unavailable`;

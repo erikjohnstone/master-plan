@@ -1,0 +1,23 @@
+{
+  "checks": [
+    "Actual PDF/import, cancelled comparison, explicit pairing, stale preview rejection, original PDF source return preserves draft/filter, keyboard save and durable exact history",
+    "Reload, actual Python report replay, complete comparison and workflow evidence exports retain exact source versions/decisions; six layouts, not issued-addendum proof"
+  ],
+  "timings": {
+    "initial_compare_ui_ms": 5395,
+    "paired_compare_ui_ms": 5372,
+    "record_durable_ui_ms": 12301,
+    "reopen_ui_ms": 5709
+  },
+  "errors": [],
+  "public_ui": true,
+  "real_issued_revision": false,
+  "controlled_hardware_inputs": true,
+  "approved": false,
+  "report_rows": 698,
+  "explicit_pair": {
+    "before_item_id": "e8c1e3fc32882a7513d551f07023c9c5179107accd307f64c143a6bc2549ad7d",
+    "after_item_id": "c257ca26204417daa449cb2d0b5a2962acc7f568a8ff11345755fa3528a742d7"
+  },
+  "event_id": "76fc5726a7f50fc7964662c8727d2ddde8430300ed8519497ec8de8dcb041f37"
+}

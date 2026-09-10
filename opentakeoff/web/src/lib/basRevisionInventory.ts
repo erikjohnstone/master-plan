@@ -19,7 +19,11 @@ type Source = BasRevisionItem['source_refs'][number];
 type Reference = BasRevisionItem['references'][number];
 type Quantity = BasRevisionItem['quantities'][number];
 const digest = (v: unknown) => sha256Hex(new TextEncoder().encode(canonicalBasJson(v)));
-const uniqueSources = (refs: Source[]) => [...new Map(refs.map(s => [canonicalBasJson(s), s])).values()];
+// Source references are a set, not the insertion order of a raw cell dictionary.
+// Canonical backup/restore can reorder dictionary keys without changing evidence.
+// Sort exact canonical keys (not locale collation); retain every text/bbox value.
+const uniqueSources = (refs: Source[]) => [...new Map(refs.map(s => [canonicalBasJson(s), s])).entries()]
+  .sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([, source]) => source);
 const link = (relation: string, kind: BasRevisionItem['kind'], subject_id: string, source_event_id: string | null = null): Reference =>
   ({ relation, kind, subject_id, source_event_id });
 const retained = (metric: string, dimension: string, basis: string, value: number | null, value_path: string): Quantity =>

@@ -1,7 +1,7 @@
 /** Shared wire-only pinned revision selectors; no Workflow imports. */
 import { z } from 'zod';
 
-export const BAS_REVISION_INVENTORY_RULE = 'bas_revision_inventory_1' as const;
+export const BAS_REVISION_INVENTORY_RULE = 'bas_revision_inventory_2' as const;
 const sha = z.string().regex(/^[a-f0-9]{64}$/);
 export const basRevisionHeadsSchema = z.object({ capture_id: sha,
   sequence_head: sha.nullable(), equipment_head: sha.nullable(), assembly_head: sha.nullable(),

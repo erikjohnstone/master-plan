@@ -1,5 +1,58 @@
 # BAS production workflow progress
 
+## Public pinned comparison workflow — 2026-09-10
+
+After **b942b4f7**, exposed the shared Python-backed revision comparison through
+the existing internal Takeoff review workspace and additive `bas_drawing_review`
+commands. Explicit pinned versions, one-to-one item correspondence with reasons,
+before/after/difference tables, original-source navigation, cancellation, guarded
+save, durable reopen, full export and bounded MCP views are integrated. UI pages
+long data without truncating full reports. MCP remains **51 tools**, local package
+version **0.9.76**, unpublished. No new permanent toolbar or extraction fork.
+
+The real source-derived browser journey passed, then packaged replay discovered
+a genuine canonical-backup ordering defect. Added a failed-first regression and
+fixed only exact source-reference set ordering on the shared inventory path,
+explicitly versioned `bas_revision_inventory_2`. All quantities, original text,
+IDs and citation coordinates stay unchanged. Old saved review fingerprints are
+not rewritten. A separate failed-first UI regression keeps unresolved quantities
+visible in the changes filter even when their declared fields compare equal.
+
+**Final web 83710 exit 0: 2,804 pass / 13 existing skips**, types/lint/bench/build
+pass; 26.575 s tests / 5.29 s build. Same three lint warnings, four legacy
+One-Click benchmark failures and bundle/Agent warnings remain disclosed.
+**MCP 43548 exit 0:** types, **127 existing BAS + 33 revision + four packaging +
+122 staging/safe-write/tool tests pass**, unchanged 51-tool check. **Python 86807
+exit 0:** 452 pass / one explicit packaging skip in 6.59 s; mypy 20 files; enabled
+packaging test passes separately in 0.90 s. No Python source changed.
+
+**Final browser 55766 exit 0**, `evidence/revision-browser-8/proof.json`: 698
+comparison rows; actual uploads/import, cancel, explicit pair, stale-preview
+rejection, source-return state, keyboard focus/save, actual IndexedDB reload,
+shared replay and complete exports. Six layouts and detail/both-source screenshots
+visually inspected. Compare/reopen **5.372–5.709 s**, durable save **12.301 s**,
+within predeclared 8/15-second limits. **Built MCP 23945 exit 0**,
+`evidence/revision-mcp-3/proof.json`: exact browser report, all 31 historical
+calculations replayed on restore, both originals verified/opened without activation,
+proposal record/retry, complete export and new-process recovery. Final browser 8
+and MCP 3 reports are exactly equal, not just matching totals.
+
+Existing serial comparison **3.967–4.065 s**, save/reopen/prepare **4.003–4.322 s**,
+incremental RSS 155,287,552 / 219,267,072 bytes; inventory/history/drawing gates
+also pass unchanged. These are bounded retained-fixture measurements, not maximum
+capacity, p95, fresh extraction or production deployment claims. The revision is
+controlled reordered original pages, **not an issued addendum**; declared hardware
+inputs remain controlled. Full proof, hashes, commands, failures and research:
+`REVISION_PUBLIC_PROOF.md`.
+
+**Original main goal remains active and incomplete.** Next: complete issue
+decisions/corrective navigation, selective dependency-bound approvals and positive
+approved snapshot/export workflow, then remaining A–D/final corpus and untouched
+holdout gates. Only after the original five workflows comes the appended deep
+researched symbol/installed-plan phase. No full corpus/holdout score is claimed
+for this checkpoint. No VectorGrid/table/symbol algorithm, scorer/key, model,
+commercial, push, merge, deploy or external-service changes.
+
 ## Durable comparison journal foundation — 2026-09-10
 
 After **b7563f9a**, added shared `bas_revision_8` comparison history. Records pin

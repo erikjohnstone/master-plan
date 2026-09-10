@@ -42,8 +42,13 @@ approval. Export Session changes explicitly. Incomplete page decisions retain
 history without establishing a complete source set. Exact retained-text equality
 does not establish unchanged drawing ink, requirements or quantities. Original
 page IDs remain source-viewable; changing source correspondence does not rebind
-old calculations or make stale decisions current. Semantic revision impact and
-approved takeoff snapshots still require their subsequent workflow integration.
+old calculations or make stale decisions current. Use the additive `revision`
+command for shared requirement/declared-quantity comparison: inspect versions,
+run an explicit comparison, read its bounded view, and record against the exact
+preview fingerprint. Saved comparisons replay pinned inputs; mismatches are not
+accepted as previous review. A cached view is a completed operation, not another
+Python replay; any BAS/load/restore change invalidates it. Export full comparison
+JSON and Session evidence. Approved takeoff snapshots remain unfinished.
 
 Inspect historical BAS evidence using `view_sheet` with the exact saved `page_id`
 as `sheet`, and `original_pdf_path` when its bytes are not currently loaded. Do not

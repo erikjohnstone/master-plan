@@ -5,12 +5,13 @@ import { basProjectReview } from '../lib/basProjectReview.ts';
 import { downloadText } from '../lib/totals.js';
 import BasOriginalSources from './BasOriginalSources.jsx';
 import BasDrawingWorkspace from './BasDrawingWorkspace.jsx';
+import BasRevisionWorkspace from './BasRevisionWorkspace.jsx';
 import './BasPointsWorkspace.css';
 import './BasProjectReviewWorkspace.css';
 
 const domains = { sources: 'Source coverage', points: 'Point lists', sequences: 'Sequences', equipment: 'Equipment', assemblies: 'Assemblies', engineering: 'Engineering' };
 const human = text => String(text).replace(/_/g, ' ');
-export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain, onDrawingReview, restoreContext }) {
+export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain, onDrawingReview, onRevisionOperation, restoreContext }) {
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [sourceError, setSourceError] = useState('');
   const heading = useRef(null), scroll = useRef(null), returnFocus = useRef(null);
@@ -55,9 +56,12 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
     } catch (error) { setSourceError(error.message); }
   }
   if (state.originalSources || !workflow) return <BasOriginalSources workflow={workflow} restoreContext={restoreContext} restoreNotice={state.restoreNotice} onOpenCitation={onOpenCitation} onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
+  if (state.revisionReview) return <BasRevisionWorkspace workflow={workflow} state={state.revisions}
+    onStateChange={updater => onStateChange(previous => ({ ...previous, revisions: updater(previous?.revisions || {}) }))}
+    onOperation={onRevisionOperation} onOpenCitation={onOpenCitation} onBack={() => change({ revisionReview: false })} />;
   if (state.drawingReview) return <BasDrawingWorkspace workflow={workflow} state={state.drawings}
     onStateChange={updater => onStateChange(previous => ({ ...previous, drawings: updater(previous?.drawings || {}) }))}
-    onReview={onDrawingReview} onOpenCitation={onOpenCitation} onBack={() => { drawingReturn.current = true; change({ drawingReview: false }); }} />;
+    onReview={onDrawingReview} onOpenCitation={onOpenCitation} onCompareRequirements={() => change({ revisionReview: true })} onBack={() => { drawingReturn.current = true; change({ drawingReview: false }); }} />;
   if (!ready) return <p role="status" className="bas-point-message">Gathering saved BAS findings…</p>;
   if (computed.error) return <div className="bas-point-message"><p role="alert">Findings unavailable: {computed.error}. Saved evidence has not been changed.</p><button ref={drawingButton} type="button" onClick={() => change({ drawingReview: true })}>Drawing changes</button><button type="button" onClick={() => change({ originalSources: true })}>Original PDFs</button></div>;
   const sourcePage = Math.max(0, Math.min(state.sourcePage || 0, Math.ceil((selected?.evidence.length || 0) / 20) - 1));

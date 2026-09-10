@@ -168,6 +168,7 @@ import { basResultForCanvas } from "../lib/basBrowserResult.js";
 import { basWorkflowSchema, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow } from "../lib/basWorkflow.ts";
 import { applyBasReview } from "../lib/basReview.ts";
 import { applyBasDrawingReview } from "../lib/basDrawingReview.ts";
+import { basRevisionOperationSchema, assertBasRevisionResponse } from "../lib/basRevisionOperations.ts";
 import { applyBasEquipmentReview } from "../lib/basEquipmentReview.ts";
 import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
@@ -13006,6 +13007,24 @@ export default function TakeoffCanvas() {
             basWorkflowRef.current = updated;
             setBasWorkflow(updated);
             return updated;
+          }}
+          onBasRevisionOperation={async (rawOperation, options = {}) => {
+            const operation = basRevisionOperationSchema.parse(rawOperation);
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            const previousJson = JSON.stringify(previous);
+            const guard = () => {
+              options.signal?.throwIfAborted();
+              if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature
+                || JSON.stringify(basWorkflowRef.current) !== previousJson) throw new Error('The BAS project changed during comparison. No stale result was saved.');
+            };
+            guard();
+            const response = await fetch('/__ot/bas-revision', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: options.signal,
+              body: JSON.stringify({ workflow: previous, request: operation }) });
+            const result = await response.json(); guard();
+            if (!response.ok) throw new Error(result.error || 'Revision service unavailable; no result accepted.');
+            const checked = await assertBasRevisionResponse(previous, operation, result); guard();
+            if (checked.kind === 'record') { basWorkflowRef.current = checked.workflow; setBasWorkflow(checked.workflow); }
+            return checked;
           }}
           onBasDrawingReview={async request => {
             const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, adapter = store;

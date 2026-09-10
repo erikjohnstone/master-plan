@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { verifyBasWorkflow } from './basWorkflow.ts';
 import { BAS_DRAWING_RULE, basDrawingPageRefSchema, basDrawingActionSchema, basDrawingRequestSchema } from './basDrawingContract.ts';
 import { replayBasDrawingHistory, basDrawingCapturePages } from './basDrawingRevision.ts';
+import { basRevisionTransportCommandSchema, basRevisionTransportResultSchema } from './basRevisionTransportContract.ts';
 
 const sha = z.string().regex(/^[a-f0-9]{64}$/), count = z.number().int().nonnegative().safe();
 export const basDrawingInspectRequestSchema = z.object({ capture_id: sha.optional(), event_id: sha.optional(),
@@ -71,6 +72,7 @@ export async function inspectBasDrawings(rawWorkflow: unknown, rawQuery: unknown
 }
 
 export const basDrawingCommandSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('revision'), command: basRevisionTransportCommandSchema }).strict(),
   z.object({ kind: z.literal('inspect'), query: basDrawingInspectRequestSchema.optional() }).strict(),
   z.object({ kind: z.literal('prepare'), action: basDrawingActionSchema }).strict(),
   z.object({ kind: z.literal('record'), review: basDrawingRequestSchema }).strict(),
@@ -79,6 +81,7 @@ export const basDrawingCommandSchema = z.discriminatedUnion('kind', [
 const preparation = z.object({ expected_head: sha.nullable(), expected_dependencies: sha, accounting_status: z.enum(['complete', 'unresolved']),
   source_page_count: count.nullable(), unresolved_pages: count, recorded: z.literal(false), approved: z.literal(false), quantity_changes: z.literal('not_assessed') }).strict();
 export const basDrawingCommandResultSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('revision'), result: basRevisionTransportResultSchema }).strict(),
   z.object({ kind: z.literal('inspect'), inspection: basDrawingInspectionSchema }).strict(),
   z.object({ kind: z.literal('prepare'), preparation }).strict(),
   z.object({ kind: z.literal('record'), event_id: sha, head: sha, source_set_id: sha.nullable(), source_page_count: count.nullable(),

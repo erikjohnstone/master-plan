@@ -8,7 +8,7 @@ import './BasDrawingWorkspace.css';
 
 const human = text => String(text).replaceAll('_', ' ');
 const pageNumber = ref => ref.page_id.split(':p').at(-1);
-export default function BasDrawingWorkspace({ workflow, state = {}, onStateChange, onReview, onOpenCitation, onBack }) {
+export default function BasDrawingWorkspace({ workflow, state = {}, onStateChange, onReview, onOpenCitation, onBack, onCompareRequirements }) {
   const [checked, setChecked] = useState({ input: null, value: null, error: '' });
   const [busy, setBusy] = useState(''), [error, setError] = useState('');
   const heading = useRef(null), latest = useRef(null), grid = useRef(null), mounted = useRef(false);
@@ -117,7 +117,7 @@ export default function BasDrawingWorkspace({ workflow, state = {}, onStateChang
   const historyPage = state.historyPage || 0, history = [...(data?.drawing_events || [])].reverse();
   const incomingPage = state.incomingPage || 0;
   return <section className="bas-point-workspace bas-project-review bas-drawing-workspace" aria-label="Drawing changes" aria-busy={!!busy}>
-    <div className="bas-point-heading"><h2 ref={heading} tabIndex={-1}>Drawing changes</h2><span>Retained source versions</span><button type="button" onClick={onBack}>← Back to findings</button></div>
+    <div className="bas-point-heading"><h2 ref={heading} tabIndex={-1}>Drawing changes</h2><span>Retained source versions</span><button type="button" disabled={!!busy} onClick={onCompareRequirements}>Compare requirements &amp; quantities</button><button type="button" onClick={onBack}>← Back to findings</button></div>
     <p className="bas-review-boundary">Page correspondence only. Source text, quantities and approval impact stay separate; no installed counts or approval are created here.</p>
     {!ready ? <p role="status">Checking retained drawing history…</p> : checked.error ? <p role="alert">{checked.error}</p> : <>
       {state.notice && <p role="status">{state.notice}</p>}

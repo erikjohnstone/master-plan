@@ -17,7 +17,10 @@ Development `bas_drawing_review` works directly against retained BAS history,
 including a restored session without active plans. Inspect captures/events in
 bounded pages, prepare explicit source accounting, then record against the exact
 returned head and dependency digest. Results are agent proposals, never approval
-or quantity deltas. Export afterward to persist Session changes. See the
+for page accounting. The additive `revision` command invokes shared requirement
+and Python-backed quantity comparison, with explicit pinned inputs, paged reads,
+full JSON export and replayed proposal history. Export afterward to persist
+Session changes. See the
 [drawing command contract](../mcp/README.md#drawing-correspondence).
 
 Source-inclusive BAS recovery is a two-call `import_takeoff` operation:
