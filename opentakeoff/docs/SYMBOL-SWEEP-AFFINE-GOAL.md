@@ -1,0 +1,542 @@
+# Symbol Sweep — distortion-tolerant matching (stretched, rotated, changed symbols)
+
+**Status:** goal document, authored 2026-09-10. Implementation not started.
+**Owner model:** written to be executed by Claude Sonnet 5 end to end, without
+further design input. Every decision that would otherwise need a judgement
+call is made here. Where this document and the code disagree, the code's own
+comments win on *what exists today*; this document wins on *what to build*.
+
+---
+
+## 0. Read this first — the contract
+
+Symbol sweep (`web/src/lib/symbolsweep.ts`) finds every placement of ONE
+example symbol from a sheet's vector linework. It is deterministic, has no
+learned model, and every candidate placement ends in exactly one of three
+disclosed buckets: `matches`, `withheld` (with a `reason`), or `rejected`
+(with the counter-example that did it). Nothing is ever silently dropped.
+That contract is the product, and this goal **extends it, never bends it**.
+
+The engine today is rigid. It searches exactly 8 transforms (0/90/180/270° ×
+mirror), a *stated* uniform scale, and a 2 px tolerance. A symbol drawn
+rotated 30°, or stretched 1.3× along one axis, produces **zero candidates** —
+not a withheld row, not a low score: silence. Silence is the one outcome the
+contract forbids, and it is the gap this goal closes.
+
+**What "done" means (verbatim, for the stop hook):** the sweep finds
+instances of a seeded symbol under any rotation, anisotropic stretch within a
+stated bound, and shear within a stated bound; discloses the transform it
+matched under on every such row; reports out-of-bounds fits as withheld with
+a reason instead of dropping them; passes every existing corpus case
+unchanged; passes a new authored campaign of real off-grid/stretched/variant
+instances at ≥ 90% recall with zero new false-adds; runs within 1.5× today's
+wall-clock on the corpus suite; and is the DEFAULT behaviour of
+`symbol_sweep` in both the MCP server and the browser canvas — with one flag
+to turn it off. All of that, measured, not asserted.
+
+### Non-negotiables (the "nevers")
+
+1. **No learned model, no vision, no raster.** Pure TypeScript geometry.
+   Closed-form least squares — no numeric dependency (a 2×2 normal-equation
+   solve is six lines).
+2. **Never search a transform without disclosing it.** Every row a widened
+   search produces carries a `transform` field (§4.1). A fit outside the
+   stated bounds becomes `withheld` with a reason. Never a silent drop,
+   never a silent commit.
+3. **Never move a bar to pass a case.** `SWEEP_SCORE_HIGH` (0.92),
+   `SWEEP_SCORE_LOW` (0.75), `SWEEP_TOL_PX` (2), `SWEEP_EXTRA_MAX` (0.30) are
+   not knobs for this work. If a real case needs a bar moved, stop and report
+   it as a finding; do not move it.
+4. **Never edit authored ground truth to fit output.** `cases.json` is
+   authored truth (its README says so). New cases are authored by rendering
+   the sheet and looking; existing cases are never rewritten.
+5. **Default behaviour is byte-for-byte unchanged until the gates in §8
+   pass.** Everything ships behind `opts.affine` first. The default flips in
+   its own commit, after two consecutive green runs.
+6. **Canvas and MCP cannot disagree.** Both call the same pure engine. Any
+   new option or field is threaded to both (§7) and a parity test proves
+   identical results on the same fixture.
+7. **Complete-count accounting stays honest.** The candidate ceiling
+   (`SWEEP_CANDIDATE_CEILING`) and `complete: false` semantics are unchanged;
+   a wider search that hits the ceiling reports it exactly as today.
+
+---
+
+## 1. What exists today (measured from the code, with line numbers)
+
+Read these before writing anything. Line numbers are as of commit `18f0c9e`.
+
+| What | Where | Behaviour that matters |
+|---|---|---|
+| Transform set | `transformsFor()` — `symbolsweep.ts:397` | 8 orthogonal 2×2 matrices, entries in {−1,0,1}. This is the entire search space. |
+| Uniform scale | `scaleFingerprint()` :653, `opts.scale` :616, `sweepRatio()` :2130 | Scale is **stated** from two committed sheet scales, never searched. Tolerance rides the ratio only upward. |
+| Fingerprint | `fingerprintSymbol()` :690 | Segments fully inside the seed rect, centroid-relative, `[ax,ay,bx,by,len]`. Text is not in `segs` unless the exporter exploded it to paths (Bluebeam SHX does). |
+| Candidate generation A | `matchSymbol()` :1008 → anchors :1085–1120 | Up to 3 seed segments of rarest quantized length vote; a sheet segment qualifies only if `|len − L| ≤ 2·tol` (4 px) and both endpoint pairings agree on a centroid within 4 px, under one of the 8 matrices. |
+| Candidate generation B | junction signatures :1123–1170 | Seed junctions (≥2 incident directions) matched to sheet junctions with every direction within `angleTol = π/12` (15°). |
+| Scoring | `scoreAt(m, tx, ty)` :1195–1250 | **Takes an arbitrary 2×2 `m`.** Endpoint test within `tol`; oriented body coverage with a 6° angle gate. Length-weighted fraction of seed matched. **This is the seam: it already accepts any matrix.** |
+| Dedupe / shadow | `mergeProposals()` :985, consensus :1275–1310 | Merge radius `max(3·tol, 4)`; suppression radius `footprint/2`. |
+| Precision | `extraFor()` :1470–1500, `variantGuard` | Extra unmatched ink inside the placed bbox, disclosed on the row (`extra`) or demoted under the guard. |
+| Counter-examples | `buildNegative()` :882 | Expressed in the positive's canonical frame; re-applied under the match's transform. |
+| Result types | `SweepMatch` :220, `SweepWithheld` :235, `SweepRejected` :243, `SweepResult` :254 | `rotation` is documented as `0 | 90 | 180 | 270`. |
+| MCP wire shape | `mcp/src/outputs.ts:365` `sweepPlacement` | `rotation` described as "0 \| 90 \| 180 \| 270". |
+| Callers | `mcp/src/session.ts` :2695, :2734, :2876, :3030, :3906, :3927, :4040; `web/src/pages/TakeoffCanvas.jsx` :4877, :4881, :6613, :6617, :6693 | Every place a new option must be threaded. |
+| Legend seeds | `web/src/lib/legendlearn.ts` :15–17, :40 | A legend glyph is refused as a plan seed **because scale isn't searched**. |
+| Ground truth | `HVAC BAS Benchmark Collection/ground_truth/symbol_sweep/cases.json` (47 cases), runner `mcp/scripts/symbol-sweep-corpus.mjs` | Instances carry `at`, `tolerance_px`, `tag`, `tag_bbox`, `page`. **No instance carries rotation, scale, or variant annotation.** |
+| Tests | `web/test/symbolsweep.test.ts`, `sweepNegative`, `sweepCoalesce`, `sweepScheduleRow`, `sweepThumb`, `legendlearn`, `symbolLabels` | 361 tests, all green at `18f0c9e`. |
+
+### Why each target case fails today (mechanism, not symptom)
+
+- **Stretched 1.3× on one axis:** every segment longer than ~13 px leaves
+  the ±4 px length bucket → anchors never vote. If a junction proposes it
+  anyway, the 8 fixed matrices place endpoints off by `(stretch−1) ×
+  distance-from-centroid` — past 2 px almost immediately — and body coverage
+  survives only near the centroid. Score < 0.75 → **invisible**.
+- **Rotated 30°:** the anchor's *length* matches, but the two endpoint-derived
+  centroids disagree by `2·L·sin(Δθ/2)` (≈10 px for a 20 px segment at 30°)
+  → no proposal; junction directions are 30° off vs a 15° gate → no
+  proposal. **Zero candidates → invisible.** This is the most common real
+  case (devices rotated to follow duct and pipe runs).
+- **Changed:** added strokes are already disclosed/guarded; removed strokes
+  up to ~25% already land in `withheld`; removed >25% is invisible;
+  re-drawn at different proportions behaves like stretch. Exploded SHX text
+  inside the seed rect enters the fingerprint as tiny segments and inflates
+  both the denominator and the extra-ink measure.
+
+### Two things already checked — do NOT build them
+
+- **Form XObject reuse** (instances with their transform for free): measured
+  across 16 corpus PDFs / 96 pages on 2026-09-10 — 201 form XObjects, 199
+  distinct. Bluebeam and AutoCAD `pdfplot` flatten blocks to paths. Dead end.
+- **A learned matcher**: out of scope by the user's explicit ask. The
+  classical answer (geometric hashing, affine least squares) is exact and
+  sufficient for seed-based matching; what a model buys is categorical
+  recognition with no seed, which this feature does not need.
+
+---
+
+## 2. The math (implement exactly this; no library)
+
+All in image px, y down. A placement is `p' = m·p + t` with `m` a 2×2 and
+`t` a translation; today `m` is one of 8 orthogonal matrices.
+
+### 2.1 Least-squares affine from correspondences
+
+Given `n ≥ 3` non-collinear correspondences `(s_i → q_i)` (seed point in
+centroid-relative coords → sheet point), solve for `m = [a b; c d]` and
+`t = [tx, ty]` minimising `Σ ‖m·s_i + t − q_i‖²`. Centre both point sets
+(subtract means `s̄`, `q̄`), then with `S` the 2×2 scatter `Σ (s_i−s̄)(s_i−s̄)ᵀ`
+and `C = Σ (q_i−q̄)(s_i−s̄)ᵀ`:
+
+```
+m = C · S⁻¹          (S⁻¹ is the closed-form 2×2 inverse; refuse if |det S| < 1e-6·trace(S)²)
+t = q̄ − m · s̄
+rms = sqrt( Σ ‖m·s_i + t − q_i‖² / n )
+```
+
+Weighted form (for IRLS): use weights `w_i` in every sum. Two IRLS passes:
+pass 1 unweighted; pass 2 with `w_i = 1` if residual ≤ 3·rms else `0`
+(drop). Refuse the fit if fewer than 3 correspondences survive or the
+survivors are collinear (`|det S| < 1e-6·trace(S)²`).
+
+### 2.2 Decomposition (what to disclose)
+
+Polar-style decomposition `m = R · P` with `R` a rotation (or reflection)
+and `P` symmetric positive-definite:
+
+```
+mirrored  = det(m) < 0
+m'        = mirrored ? m · diag(-1, 1) : m        // fold the mirror out first, matching transformsFor's convention (x → −x before rotation)
+PᵀP       = m'ᵀ m'  ; take P = sqrt(m'ᵀ m') via eigen-decomposition of the symmetric 2×2
+R         = m' · P⁻¹
+rotation_deg = atan2(R[1][0], R[0][0]) · 180/π, normalised to [0, 360)   (degrees CW in image space, y down — same convention as today's `rotation`)
+scale_x, scale_y = the two eigenvalues of P (report as scale along the seed's own x and y axes: P's diagonal after rotating into the eigenbasis is fine; simpler and acceptable: scale_x = ‖m'·[1,0]‖, scale_y = ‖m'·[0,1]‖)
+shear_deg = 90 − angle between m'·[1,0] and m'·[0,1], in degrees (0 for a pure rotation/scale)
+```
+
+Use the "simpler and acceptable" definitions for `scale_x`, `scale_y`,
+`shear_deg` — they are what an estimator can check with a ruler. Round
+disclosed values: degrees to 0.1, scales to 0.001.
+
+### 2.3 Bounds (defaults; all overridable in `opts.affine`)
+
+```
+maxStretch  = 1.5    // each of scale_x, scale_y within [1/1.5, 1.5] AFTER the stated uniform scale ratio is divided out
+maxShearDeg = 10
+rotation    = unbounded (any angle)
+mirror      = follows opts.mirror exactly as today
+```
+
+A fit outside bounds is never a match. It is `withheld` with the reason in
+§4.2.
+
+### 2.4 Residual-adaptive tolerance
+
+After a successful fit, re-score with `tolFit = clamp(3·rms, tol, 3·tol)`.
+Never below the stated `tol`, never above `3·tol` (6 px at defaults). The
+tolerance actually used is disclosed on the row (`transform.tol_px`).
+
+---
+
+## 3. Phases — in this order, one commit per phase, gates at the end of each
+
+### Phase 0 — Measure first: label the eval, author the campaign
+
+Nothing in Phases 1–5 is provable without this. Do it first.
+
+1. **Extend the ground-truth schema, additively.** In
+   `ground_truth/symbol_sweep/cases.json`, an expected instance MAY carry:
+   ```json
+   "transform": { "rotation_deg": 30, "scale_x": 1.30, "scale_y": 1.00, "shear_deg": 0, "mirrored": false, "note": "rotated to follow the duct run" }
+   "variant": { "kind": "missing_strokes" | "extra_strokes" | "redrawn", "note": "..." }
+   ```
+   Bump nothing that breaks the 47 baseline cases: the runner must treat
+   both fields as optional. Update the README's field list.
+2. **Author a new campaign, `"campaign": "affine"`**, by rendering and
+   looking (the same discipline the README already mandates): ≥ 20 real
+   instances across ≥ 8 corpus documents, covering at minimum 8 off-grid
+   rotations (spread across 15–75°), 6 anisotropic stretches (≥ 1.15×), 4
+   variants with strokes missing (10–25% of linework), 2 mirrored+rotated.
+   Record each instance's `at`, `tolerance_px`, `tag`/`tag_bbox` exactly as
+   existing cases do, plus `transform`/`variant`. Keep the retained visual
+   evidence the README requires.
+3. **Teach the runner to report by campaign** (`symbol-sweep-corpus.mjs`):
+   recall on `affine` instances, false-adds on baseline cases, and — for
+   every predicted row that carries a `transform` — the absolute error vs.
+   the authored transform (`rotation` within 3°, scales within 0.05). Exit
+   nonzero on any baseline regression, exactly as today.
+4. **Record the baseline number.** Run the suite at `18f0c9e` with the new
+   cases present: the `affine` campaign recall will be ~0. Write that number
+   into §9 of this document. That is the before.
+
+**Gate 0:** 47 baseline cases still pass (exit 0); ≥ 20 authored affine
+instances exist with transform/variant annotations; runner reports campaign
+metrics; baseline recall recorded.
+
+### Phase 1 — Fitted-matrix verification (smallest change, immediately measurable)
+
+Scope: placements the *existing* candidate generation already proposes but
+which score below `scoreHigh` because the rigid matrix is slightly wrong.
+This recovers near-grid rotation (≤ ~15°, via junction proposals), mild
+stretch, and shear — with no change to candidate generation.
+
+1. New pure module **`web/src/lib/symbolAffine.ts`** (same "pure, no
+   PDF/DOM, node-testable" convention as `symbolsweep.ts`):
+   - `fitAffine(pairs: Array<[sx,sy,qx,qy]>, weights?): AffineFit | null`
+     (§2.1, IRLS 2 passes).
+   - `decomposeAffine(m): { rotation_deg, scale_x, scale_y, shear_deg, mirrored }` (§2.2).
+   - `affineWithinBounds(decomp, bounds, statedScale): boolean` (§2.3).
+   - `gatherCorrespondences(rel, m0, tx, ty, segs, grid, radius)`: for each
+     transformed seed endpoint under the *current best rigid* `(m0, t)`,
+     the nearest sheet endpoint within `radius = 6·tol` (use the existing
+     `EndpointGrid.near`); one correspondence per seed endpoint, none if
+     ambiguous (two sheet endpoints within `tol` of each other). Require
+     ≥ 3 non-collinear pairs.
+2. In `matchSymbol` (`symbolsweep.ts`), after step 3 scoring and BEFORE
+   classification, when `opts.affine` is set: for every scored placement
+   with `proposalFloor ≤ score < scoreHigh`, gather correspondences, fit,
+   decompose, and re-score with `scoreAt(mFit, tFit.x, tFit.y)` at `tolFit`
+   (§2.4). Keep whichever of (rigid score, refined score) is higher.
+   Attach `transform` (§4.1) whenever the refined result is the one kept.
+   Placements already ≥ `scoreHigh` under the rigid path are **not
+   touched** — the addition is strictly monotone (a score can only go up),
+   so existing matches cannot regress.
+3. Classification (step 4) is unchanged except: a refined placement that
+   clears `scoreHigh` but fails `affineWithinBounds` goes to `withheld`
+   with the §4.2 reason, never to `matches`.
+4. **Negatives under a fitted matrix:** `buildNegative`'s canonical-frame
+   evidence must be tested under `mFit`, not the nearest rigid matrix. Find
+   where step 4b applies the transform and route the fitted one through.
+   Add a test: a counter-example still rejects a rotated-by-12° variant.
+5. **Tests** (`web/test/symbolAffine.test.ts`, new; plus additions to
+   `symbolsweep.test.ts` using its existing `SYMBOL` fixture and `place()`
+   helper): (a) `fitAffine` recovers a known `[a b c d tx ty]` from exact
+   points to 1e-9 and from ±1 px jittered points to < 0.5 px rms; (b)
+   decomposition of `k·R(θ)·diag(sx,sy)` returns θ, sx, sy within
+   tolerance for θ ∈ {7, 12, 45, 100, 250}°, sx/sy ∈ {1.0, 1.15, 1.3}; (c)
+   the 7.4° "synthetic variant" the codebase already documents as *withheld*
+   stays withheld with `affine` OFF and becomes a match with a disclosed
+   `rotation_deg ≈ 7.4` with `affine` ON; (d) a 1.6× stretch (over the
+   default `maxStretch`) is `withheld` with the bounds reason, never a
+   match; (e) `affine` OFF → results deep-equal `18f0c9e` behaviour on
+   every existing test (run the suite with the option absent — it must be
+   a no-op).
+
+**Gate 1:** all 361 existing tests + new tests green; full `web` suite
+green; corpus: 47 baseline unchanged; `affine` campaign recall reported
+(expect only the near-grid subset to move — record it in §9).
+
+### Phase 2 — Continuous rotation + uniform-scale candidate generation (1-segment basis)
+
+Scope: make off-grid rotation *proposable*. This is the phase that moves
+the recall number most.
+
+1. Under `opts.affine.rotationSearch === true` (default true once `affine`
+   is on), anchor selection stays "rarest quantized length first", but the
+   sheet-segment band becomes a **ratio band** when scale search is enabled
+   (`opts.affine.scaleSearch`, default `false` — scale stays stated by
+   default; see §6): `|len_sheet / len_seed − 1| ≤ maxStretch − 1`. With
+   scale search off, the band stays `±2·tol` exactly as today.
+2. For each (anchor, sheet segment) pair: the segment's own direction fixes
+   the rotation `θ = angle(sheet) − angle(seed_anchor)` (two candidates:
+   `θ` and `θ+180°`, from the two endpoint pairings) and, with scale search
+   on, `k = len_sheet / len_seed`. Build `m = k·R(θ)` (and the mirrored
+   twin when `opts.mirror`). The centroid follows from the pairing exactly
+   as today. Propose `(θ, k, mirror, tx, ty)`.
+3. **Vote before you score** (this is geometric hashing's whole point, and
+   it is what keeps cost flat): a proposal is scored only if a SECOND seed
+   anchor also finds a sheet segment consistent with the same `(θ, k,
+   mirror, tx, ty)` within `2·tol` of centroid and 6° of rotation. Bucket
+   proposals by `(round(θ/6°), round(log k / log 1.05), mirror, round(tx/quant), round(ty/quant))`
+   and require ≥ 2 distinct anchors in a bucket. Keep the existing
+   `proposalMap` dedupe; the key gains the θ and k buckets.
+4. Score voted proposals with `scoreAt(m, tx, ty)`; then run the Phase 1
+   refine on the survivors (the rotation from one segment is only accurate
+   to a couple of degrees; the fit tightens it and disclosed values come
+   from the fit).
+5. The existing 8 rigid transforms remain in the search (they are the
+   `θ ∈ {0,90,180,270}` slice and cost nothing); junction proposals remain.
+6. **Cost control:** bound the number of scored continuous-rotation
+   proposals by the same `maxCandidates` ceiling; when it bites,
+   `complete: false` and `candidates.dropped` say so, as today. Measure
+   `elapsed_ms` on the 47-case suite before and after; budget is 1.5×.
+7. **Tests:** the existing asymmetric `SYMBOL` placed at 30°, 57°, 123°
+   and 211° → each found as a match with `transform.rotation_deg` within
+   3°; a mirrored + 40° copy found with `mirrored: true`; the plain
+   translated copy still reports `rotation: 0` with no `transform` field
+   (rigid path won); rotations OFF (`opts.rotations === false`) still
+   disables everything but 0° exactly as today; `candidates.considered`
+   on the standard fixtures grows by less than 3× (guards the vote).
+
+**Gate 2:** all gates of Phase 1; `affine` campaign rotation instances
+recall ≥ 90%; baseline false-adds = 0; elapsed within 1.5×.
+
+### Phase 3 — Full affine candidate generation (2-segment basis) — stretch and shear
+
+Scope: make anisotropic stretch *proposable* (Phase 1 can only refine a
+stretch that was proposed; Phase 2 proposes only similarity transforms).
+
+1. Choose up to `K = 3` basis pairs of non-parallel seed segments (rarest
+   lengths first, angle between them ≥ 20°). For each basis pair and each
+   pair of sheet segments in a neighbourhood bounded by `footprint ×
+   maxStretch` around a first-segment candidate (reuse the ratio band from
+   Phase 2 for the first segment, then look up second-segment candidates
+   from `EndpointGrid.nearRect`), compute the affine from the two
+   correspondences (4 point pairs → the §2.1 solve; it is overdetermined
+   and that is fine). Refuse immediately if `decomposeAffine` is out of
+   bounds — never score an out-of-bounds proposal (cheap prune).
+2. Vote exactly as Phase 2 (a third seed segment must be found consistent
+   with the proposed affine) before scoring.
+3. Score with `scoreAt(mAffine, …)`, refine with Phase 1 (more
+   correspondences, better fit), classify with bounds.
+4. **Tests:** `SYMBOL` stretched 1.3× on x (and separately on y), and 1.2×
+   on x + 8° shear → matches with disclosed `scale_x`/`scale_y`/`shear_deg`
+   within 0.05 / 2°; 1.6× stretch → withheld with the bounds reason; a
+   stretched copy with the diagonal removed → withheld with the
+   missing-strokes reason (§4.2) and a `transform` field.
+
+**Gate 3:** all prior gates; `affine` campaign stretch instances recall
+≥ 90%; baseline false-adds = 0; elapsed within 1.5×.
+
+### Phase 4 — "Changed" symbols: disclosure, not guessing
+
+1. **Missing-stroke disclosure.** When a placement lands in `withheld` for
+   score reasons, the `reason` must name what was missing: the top three
+   unmatched seed segments by length and their share, e.g. *"reproduces 81%
+   of the seed; missing the 18 px stub and the 9 px tick (19% of
+   linework)"*. Pure bookkeeping inside `scoreAt` (it already knows which
+   `rel` entries hit). Applies with `affine` off too — this is a strict
+   improvement to an existing reason string; update the one test that pins
+   the near-miss reason text.
+2. **Exploded-text filter (opt-in, `opts.dropGlyphClusters`, default ON
+   when `affine` is on).** In `fingerprintSymbol`, detect clusters of
+   ≥ 6 segments each shorter than `4·tol`, whose union bbox is under
+   `0.25 × footprint` on its long side and whose segments form ≥ 3 distinct
+   directions (glyph strokes, not a tick mark); exclude them from the
+   fingerprint and report `seed.dropped_glyph_segments` on the result.
+   Apply the same filter inside `extraFor` so exploded tags never count as
+   "extra linework". Test with a fixture that adds a 5-letter exploded tag
+   inside the seed rect: score and `extra` are unchanged vs. the untagged
+   fixture.
+3. **Negatives are unchanged in spirit** — they already express "the thing
+   I do NOT mean" and now simply work under fitted transforms (Phase 1.4).
+
+**Gate 4:** all prior gates; the four authored `variant` instances behave as
+their annotation says (`missing_strokes` → withheld with a naming reason,
+never silent; `extra_strokes` → matched with `extra` disclosed or guarded);
+`sweepNegative.test.ts` green.
+
+### Phase 5 — Production wiring, parity, docs, default flip
+
+1. **Types:** `SweepOptions.affine?: AffineOptions` (§4.3);
+   `SweepMatch.transform?: SweepTransform` (§4.1); the `rotation` doc
+   comment becomes "0 | 90 | 180 | 270 from the rigid search; continuous
+   degrees when `transform` is present". `SweepResult.seed.dropped_glyph_segments?: number`.
+2. **MCP:** `mcp/src/outputs.ts:365 sweepPlacement` gains `transform`
+   (optional object, every field described); `rotation` description
+   updated. `mcp/src/session.ts` threads `affine` through every
+   `matchSymbol`/`sweepSymbols`/`matchAgainstLibrary` call listed in §1 and
+   copies `transform` into every wire row where `rotation`/`mirrored` are
+   copied today (:2765, :2773–2776, :2923, :2987–2989, :3041–3042, :4398,
+   :4639, :4733–4744). The `symbol_sweep` tool schema gains
+   `affine: { enabled, max_stretch, max_shear_deg, scale_search }` with the
+   defaults of §4.3.
+3. **Browser:** `web/src/pages/TakeoffCanvas.jsx` :4881, :6617, :6693 pass
+   the same option; the sweep review thumbnail (`web/src/lib/sweepThumb.js`)
+   must render an arbitrary rotation — verify it does not assume multiples
+   of 90° (read it; fix if it does; `sweepThumb.test.ts` gets a 33° case).
+   The marker/tooltip shows the disclosed transform when present.
+4. **Parity test:** one fixture, both call sites' option objects → identical
+   `matches`/`withheld`/`rejected` (the existing "canvas and MCP cannot
+   disagree" doctrine, made executable).
+5. **Docs:** `docs/AGENT_GUIDE.md` (the withheld doctrine section gains the
+   bounds reason and the transform field), `docs/MCP.md` (tool schema),
+   this document's §9 (numbers).
+6. **Default flip, its own commit, last:** `affine.enabled` defaults to
+   `true` in both the MCP tool and the canvas. `rotationSearch: true`,
+   `scaleSearch: false` (§6). Only after Gates 0–4 have passed on two
+   consecutive full runs.
+
+**Gate 5 (= done):** everything in §8.
+
+---
+
+## 4. Contracts (exact shapes)
+
+### 4.1 `SweepTransform` — disclosed on every affine-derived row
+
+```ts
+export interface SweepTransform {
+  /** Degrees CW, image space (y down), [0, 360). Continuous. */
+  rotation_deg: number;
+  /** Scale along the seed's own x / y axes, AFTER the stated uniform ratio
+   * (opts.scale) is divided out — 1.0 means "as drawn on the seed sheet". */
+  scale_x: number;
+  scale_y: number;
+  /** Deviation from a right angle between the seed's axes, degrees. */
+  shear_deg: number;
+  mirrored: boolean;
+  /** RMS residual of the fit, px, and the tolerance the re-score used. */
+  rms_px: number;
+  tol_px: number;
+  /** How the placement was found: "rigid" (one of the 8 matrices, then
+   * refined), "rotation" (Phase 2 basis), "affine" (Phase 3 basis). */
+  via: "rigid" | "rotation" | "affine";
+}
+```
+Absent on rows the rigid path committed without refinement — so a
+same-as-today sweep produces same-as-today rows.
+
+### 4.2 Reason strings (exact wording; tests pin these)
+
+- Out of bounds: `matches ${pct}% of the seed under a ${scale_x}× / ${scale_y}× stretch and ${shear_deg}° shear (bar ${maxStretch}× / ${maxShearDeg}°) — that much distortion may be a different device drawn to look alike; view_sheet here and confirm, or raise affine.max_stretch if this drawing set genuinely stretches its symbols`
+- Missing strokes: `reproduces ${pct}% of the seed; missing ${list} (${missingPct}% of linework)` where `list` names up to three segments as `"${len} px ${orientation}"` (`horizontal` / `vertical` / `diagonal`).
+- Existing reasons (variant/extra, luminance, negatives) are unchanged.
+
+### 4.3 `AffineOptions`
+
+```ts
+export interface AffineOptions {
+  enabled?: boolean;        // default false until Phase 5 flips it
+  maxStretch?: number;      // default 1.5
+  maxShearDeg?: number;     // default 10
+  rotationSearch?: boolean; // default true (Phase 2)
+  scaleSearch?: boolean;    // default false — see §6
+}
+```
+
+---
+
+## 5. Performance budget and how to measure it
+
+- Budget: **≤ 1.5× the `18f0c9e` wall-clock** for `node --import tsx
+  scripts/symbol-sweep-corpus.mjs` (run from `opentakeoff/mcp`), and
+  `elapsed_ms` per case (the runner already records it) ≤ 1.5× per case
+  for 45 of 47 cases (two outliers allowed, named).
+- Record before/after in §9. If a phase exceeds budget: reduce `K`, tighten
+  the vote (require 3 anchors), or narrow the neighbourhood — never widen
+  the ceiling, never silently skip proposals.
+- Never add a dependency. No WASM, no workers (the canvas path must stay
+  synchronous as it is today).
+
+## 6. Scale search — deliberately OFF by default, and why
+
+Uniform scale is *stated* today from two committed sheet scales
+(`sweepRatio`), and the module header explains the reasoning: a scale search
+trades exactness for guesses, and a symbol drawn 12× larger on a detail
+sheet must be found by the stated ratio, not by a search that would also
+match every small square to every big square. That reasoning stands.
+`scaleSearch` exists for one caller only: `legendlearn.ts`'s glyph-to-plan
+corroboration, where the legend's scale is unknown and the legend glyph is
+explicitly "not a plan-scale seed". Enable it there, bounded by
+`maxStretch`, with the disclosed `scale_x`/`scale_y`; leave it off for
+`symbol_sweep`. Do not flip this default in this goal.
+
+## 7. Working method (how Sonnet should proceed)
+
+1. Read §1's files at the cited lines before editing. Confirm line numbers
+   still hold (`git log -1 -- web/src/lib/symbolsweep.ts`); if the file
+   moved, re-locate by symbol name, not by line.
+2. One phase per commit, phase number in the subject. Run, in this order,
+   before every commit: `cd web && node --import tsx --test test/symbolsweep.test.ts test/symbolAffine.test.ts test/sweepNegative.test.ts test/sweepCoalesce.test.ts test/sweepScheduleRow.test.ts test/sweepThumb.test.ts test/legendlearn.test.ts test/symbolLabels.test.ts` → then the full `npm test` in `web/` → then `cd ../mcp && node --import tsx scripts/symbol-sweep-corpus.mjs`. Paste the three result lines into the commit body.
+3. Never commit with debug logging in the tree. Never commit a phase whose
+   gate is red; report the red instead.
+4. When a real corpus case contradicts the design (e.g. a 1.7× stretch that
+   is genuinely the same device), **do not raise the bound**. Record the
+   case in §9 as a finding with the sheet and coordinates, keep it withheld,
+   and continue. Bounds are the user's decision.
+5. Report every gate result immediately when it completes, with the numbers,
+   including regressions.
+
+## 8. Definition of done (all of these, measured)
+
+- [ ] Gates 0–5 green on two consecutive full runs.
+- [ ] 47 baseline corpus cases: exit 0, zero false-adds, unchanged counts.
+- [ ] `affine` campaign: ≥ 20 authored instances; recall ≥ 90%; every
+      predicted transform within 3° / 0.05 of the authored one.
+- [ ] Every affine-derived row carries `transform`; every out-of-bounds fit
+      is `withheld` with the §4.2 reason; a grep of the engine finds no code
+      path that discards a scored placement without a bucket.
+- [ ] `affine` absent → results deep-equal `18f0c9e` on the whole test
+      suite (no-op proof).
+- [ ] Wall-clock within 1.5× on the corpus suite; per-case within 1.5× for
+      45/47.
+- [ ] Canvas/MCP parity test green; thumbnails render arbitrary angles.
+- [ ] `outputs.ts`, `AGENT_GUIDE.md`, `MCP.md` updated; §9 filled in.
+- [ ] Default flipped in its own commit, after the above.
+
+## 9. Numbers (fill in as you go — this section is the record)
+
+| Milestone | Date | Baseline cases | Affine campaign recall | False-adds | Suite wall-clock | Notes |
+|---|---|---|---|---|---|---|
+| Before (`18f0c9e`) | | 47/47 | | 0 | | |
+| Phase 1 | | | | | | |
+| Phase 2 | | | | | | |
+| Phase 3 | | | | | | |
+| Phase 4 | | | | | | |
+| Default flip | | | | | | |
+
+Findings (cases that contradicted a bound — never fixed by moving it):
+
+- _none yet_
+
+---
+
+## Appendix A — Background, for the reader who wants the why
+
+The rigid search is 8 orthogonal matrices because plan symbols mostly rotate
+in quarter turns and flip. Real drawings break that in three ways: devices
+rotated to follow a duct or pipe run (any angle), symbols stretched to fit a
+space or re-drawn at different proportions (anisotropic scale), and variants
+with a stroke added or missing. All three are affine or partial-affine
+distortions, and matching under affine distortion with missing parts is
+solved, classical geometry: geometric hashing (Lamdan & Wolfson 1988;
+Wolfson & Rigoutsos, *Geometric Hashing: An Overview*, 1997) — an affine
+basis from two segments makes every other point's coordinates invariant,
+and voting tolerates occlusion — plus a least-squares affine fit and
+verification. Document-analysis symbol spotting (Rusiñol & Lladós, vectorial
+signatures and graph-path hashing) uses the same affine-invariant structural
+relations; its documented weakness is noise and occlusion, which is why this
+design keeps `scoreAt` verification and the withheld band as the final word.
+A learned matcher (FloorPlanCAD / GAT-CADNet / SymPoint) buys categorical
+recognition with no seed; this feature has a seed per job and does not need
+it.
