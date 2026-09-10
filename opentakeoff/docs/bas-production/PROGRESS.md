@@ -2,6 +2,17 @@
 
 ## Explicit list-rule verification and engineering handoff — 2026-09-09
 
+Committed locally: **5b4d82cf** is the verified v2 list/UI increment;
+**8a214255** retains the complete pre-implementation engineering contract and
+independent source key. Tracked worktree was clean afterward. No push/merge.
+Full existing scored corpus regression now runs as **77284**, log
+`component-list-v2-corpus-regression-1.log`, at those source versions. Command:
+`OPENTAKEOFF_EVAL_CONCURRENCY=1 npm run eval:corpus -- <isolated>/opentakeoff-corpus`
+from `mcp/`; no `--report`, no keys/scorers changed. Takeoff+reference, graph
+and table-recall are separate outputs. The job was re-polled live after launch;
+do not restart it because a model turn ends. Final results are not yet known.
+This legacy regression is not the frozen new-workflow holdout evaluation.
+
 The preceding answer to “What's after this?” was status-only: **no progress**.
 This continuation re-read the detailed goal/instructions and inspected actual
 worktree state. Prior assembly work is committed locally as **6a3d6c13**.
@@ -58,11 +69,11 @@ retained text span 972, original bbox and frame exactly. Existing capacity and
 network solvers are reusable but do not implement electrical compatibility.
 No D production implementation or D-completion claim yet.
 
-Next: commit this coherent verified list/UI increment; then implement the
-complete engineering service and persistence/UI
+Next: observe the same running corpus job and implement the complete
+engineering service and persistence/UI
 journey, while retaining outstanding A/B/C/E and full corpus/holdout gates.
 Prior measured corpus remains **not green** (505/541 takeoff, 99/129 reference,
-78/91 graph cells, 133/138 row-symbol); no new global corpus rerun is claimed.
+78/91 graph cells, 133/138 row-symbol); no new completed corpus result is claimed.
 No VectorGrid/extraction/symbol/legacy-math, original corpus or holdout edits.
 No push, merge, deployment, models, pricing/labor or scope reduction.
 

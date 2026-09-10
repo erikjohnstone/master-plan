@@ -1,5 +1,14 @@
 ## Active work
 
+Local checkpoints: **5b4d82cf** (verified list rules/UI) and **8a214255**
+(engineering acceptance/source key). Full existing scored corpus regression
+**77284** is now running and was re-polled live, log
+`opentakeoff/docs/bas-production/evidence/component-list-v2-corpus-regression-1.log`.
+No `--report` or changes to source keys/scorers; concurrency 1 per evaluator.
+Await takeoff+reference, graph and table-recall separately. This is not new
+workflow holdout evaluation and no final results are claimed yet. Continue the
+full engineering/persistence/UI and remaining five-workflow scope.
+
 Latest continuation: **6a3d6c13** assembly work is committed locally. Pending
 component-list v2 preserves v1 source fingerprints/history and adds four
 literal source roles, not installed counts. Public original-PDF MCP **37515
