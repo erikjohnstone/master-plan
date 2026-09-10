@@ -39,6 +39,8 @@ import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
 import { assertBasAssignmentUpdate } from "../lib/basAssignmentDemandContract.ts";
+import { assertBasAssemblyCalculationUpdate } from "../lib/basAssemblyQuantityContract.ts";
+import { applyBasAssemblyReview } from "../lib/basAssemblyReview.ts";
 import {
   compileAgentTakeoff,
   dedupeTakeoffRows,
@@ -12875,6 +12877,27 @@ export default function TakeoffCanvas() {
           basWorkflow={basWorkflow}
           basViewState={basViewState}
           onBasViewStateChange={setBasViewState}
+          onBasAssemblyCalculate={async request => {
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            const response = await fetch('/__ot/bas-assembly-quantities', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ workflow: previous, request }) });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Assembly calculation unavailable; prior results were preserved.');
+            const updated = await verifyBasWorkflow(result.workflow);
+            assertBasAssemblyCalculationUpdate(previous, updated, result.calculation, request);
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature) {
+              throw new Error('The BAS workspace or source PDFs changed during calculation. No stale assembly result was saved.');
+            }
+            basWorkflowRef.current = updated; setBasWorkflow(updated); return updated;
+          }}
+          onBasAssemblyReview={async request => {
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            const updated = await applyBasAssemblyReview(previous, request, 'operator_input');
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature) {
+              throw new Error('The BAS workspace or original PDFs changed during this edit. Review current evidence before retrying.');
+            }
+            basWorkflowRef.current = updated; setBasWorkflow(updated); return updated;
+          }}
           onBasAssignmentCalculate={async request => {
             const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
             const response = await fetch('/__ot/bas-assignment-demand', { method: 'POST', headers: { 'Content-Type': 'application/json' },

@@ -46,6 +46,42 @@ the current decisions. Export/import and withdrawal retain earlier calculations.
 The server-capable local endpoint and Python runtime are required; there is no
 browser math fallback or inferred installation, protocol, hardware or pricing.
 
+Within selected equipment, choose **Assembly & responsibilities** for its
+component table. **Add from drawing declarations** offers supported explicit fan
+VFD pairs and factory-furnished onboard-controller declarations; it does not
+automatically establish which equipment they apply to. Review the original PDF,
+selected members, **Applicability**, condition, lifecycle and reasons. Other
+components can be recorded with **Add explicit component** and drawing references.
+Such quantities are labeled user decisions, not extracted facts. Leave an
+unestablished quantity blank. Source-derived values cannot silently override
+their original declarations.
+
+Expand **Responsibility decisions** to record furnish, install, wire, program
+and test assignments independently. Factory furnishing establishes furnishing
+only. Different claims remain visible; **Resolve responsibility conflicts
+explicitly** selects a retained claim with a reason, without deleting the other
+evidence. This records takeoff scope, not commissioning execution or signoff.
+**Preview assembly decision** validates the complete register before **Save
+assembly decision**. Editing the draft invalidates its preview.
+
+**Calculate assembly quantities** saves each declared quantity, included members,
+application factor and resulting contribution through shared Python. The table's
+contribution covers the whole selected group, not only the currently selected
+equipment. It is not a project total or verified installed count. A false
+condition or explicit exclusion contributes zero only when the original quantity
+is known; an unknown original quantity remains unknown. Changes to equipment or
+assemblies leave earlier results visible as stale.
+
+For several interdependent repairs, use **Stage component edit**, repair the
+remaining records, enter **Overall assembly change reason**, and choose **Preview
+all pending assembly changes** then **Save all assembly changes**. Staging does
+not save a partially valid register. **Withdraw component** requires a reason
+and retains earlier source/decision history. **Review saved assemblies** from the
+equipment table remains available after equipment is removed. **Export evidence
+& decisions** includes all assembly history and calculations; existing row CSV,
+Excel and PDF exports still contain their original schedule rows. No pricing or
+labor values are added. Saved review does not constitute release approval.
+
 For a BAS points takeoff, the **Takeoff** tab also shows **BAS takeoff · Engineering**.
 Points is the default table; I/O capacity, Networks, Licenses and Issues separate
 the remaining decisions. Arrow keys, Home and End move among these views. The

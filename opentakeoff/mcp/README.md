@@ -71,6 +71,21 @@ reject; results retain their dependency identity through export/import and
 withdrawal. Physical requirement reconciliation, installed corroboration and
 release remain in development. See [the assignment contract](../docs/bas-production/EQUIPMENT_ASSIGNMENT_CONTRACT.md).
 
+BAS compile also exposes `bas_assemblies`, with source-owned component
+declarations, the reviewed assembly register, unresolved findings and dependency
+heads. `bas_assembly_review` accepts
+`{operation_id,capture_id,expected_head,expected_equipment_head,reason,register}`;
+`bas_assembly_quantities` accepts
+`{capture_id,expected_equipment_head,expected_assembly_head}`. Review records
+explicit applicability and separate furnish/install/wire/program/test claims.
+Quantity calculation uses the shared Python service; it preserves every original
+record, unknown and selection without asserting installed or unique-device totals.
+Both are optional mutations with stale-head and concurrent-workspace guards.
+Replays, imports and equipment withdrawal retain source/decision/calculation
+history in `bas_assembly_5`. No new tool, model, product catalog, pricing or
+commissioning workflow is introduced. See
+[assembly inputs, supported rules and limits](../docs/bas-production/ASSEMBLY_REVIEW_CONTRACT.md).
+
 No clone, no build—point your MCP client at the published package:
 
 ```json

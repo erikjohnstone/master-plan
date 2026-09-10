@@ -1,6 +1,7 @@
 /** Shared durable assignment service; both front ends use this exact path. */
 import { basWorkflowSchema, basEventFingerprint, verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 import { canonicalBasJson } from './basCanonical.ts';
+import { atLeastBasWorkflowRevision } from './basWorkflowRevision.ts';
 import { z } from 'zod';
 import { basEquipmentRegisterSchema } from './basEquipmentRegister.ts';
 import { basEquipmentReviewEventSchema, basEquipmentReviewRequestSchema, emptyBasEquipmentRegister,
@@ -89,5 +90,5 @@ export async function applyBasEquipmentReview(rawWorkflow: unknown, rawRequest: 
   await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, request.register);
   const payload = { ...request, rule_version: 'equipment_assignment_review_1' as const, origin, created_at: createdAt };
   const event = basEquipmentReviewEventSchema.parse({ ...payload, event_id: await basEventFingerprint(payload) });
-  return basWorkflowSchema.parse({ ...workflow, revision: workflow.revision === 'bas_assignment_4' ? 'bas_assignment_4' : 'bas_equipment_3', equipment_events: [...(workflow.equipment_events ?? []), event] });
+  return basWorkflowSchema.parse({ ...workflow, revision: atLeastBasWorkflowRevision(workflow.revision, 'bas_equipment_3'), equipment_events: [...(workflow.equipment_events ?? []), event] });
 }

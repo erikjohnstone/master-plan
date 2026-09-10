@@ -6,6 +6,7 @@ import { basAssignmentDemandRequestSchema, buildBasAssignmentDemandInput, basAss
   assertBasAssignmentUpdate,
 } from '../../web/src/lib/basAssignmentDemandContract.ts';
 import { runBasAssignmentDemand } from './basMath.ts';
+import { atLeastBasWorkflowRevision } from '../../web/src/lib/basWorkflowRevision.ts';
 
 export async function calculateBasAssignments(rawWorkflow: unknown, rawRequest: unknown,
   options: { python?: string; timeoutMs?: number; createdAt?: string; signal?: AbortSignal } = {}) {
@@ -26,7 +27,7 @@ export async function calculateBasAssignments(rawWorkflow: unknown, rawRequest: 
   const result = verifyBasAssignmentDemandResult(input, await runBasAssignmentDemand(input, options));
   const payload = { input_fingerprint, result, created_at: options.createdAt ?? new Date().toISOString() };
   const calculation = basAssignmentCalculationSchema.parse({ ...payload, calculation_id: await basAssignmentCalculationFingerprint(payload) });
-  const updated = basWorkflowSchema.parse({ ...workflow, revision: 'bas_assignment_4',
+  const updated = basWorkflowSchema.parse({ ...workflow, revision: atLeastBasWorkflowRevision(workflow.revision, 'bas_assignment_4'),
     assignment_calculations: [...(workflow.assignment_calculations ?? []), calculation] });
   assertBasAssignmentUpdate(workflow, updated, calculation, request);
   // The entry point must still compare current workspace identity after this

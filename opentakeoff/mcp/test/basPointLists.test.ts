@@ -49,7 +49,10 @@ test('production BAS compile adds grounded observations without replacing legacy
   const result = await compileProductionTakeoff(session, graph, 'T-BAS-01');
   assert.ok('bas_point_lists' in result, 'production must expose the source-bound result');
   assert.ok('bas_workflow' in result && result.bas_workflow, 'valid source evidence must remain persistable');
-  const { bas_math, bas_point_lists, bas_workflow, bas_equipment, ...legacy } = result;
+  const { bas_math, bas_point_lists, bas_workflow, bas_equipment, bas_assemblies, ...legacy } = result;
+  assert.equal(bas_assemblies?.capture_id, bas_workflow?.current_capture_id);
+  assert.deepEqual(bas_assemblies?.register.components, []);
+  assert.equal(bas_assemblies?.installed_quantity, null);
   assert.equal(bas_equipment?.capture_id, bas_workflow?.current_capture_id);
   assert.deepEqual(bas_equipment?.occurrences, [], 'This synthetic graph contains no equipment schedule');
   assert.equal(bas_workflow?.captures.length, 1);

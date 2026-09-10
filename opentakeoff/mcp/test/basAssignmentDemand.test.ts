@@ -13,6 +13,8 @@ import { captureBasEvidence, verifyBasWorkflow, mergeBasWorkflows, basWorkflowSc
 import { applyBasEquipmentReview, basEquipmentHead, basAssignmentCalculationState } from '../../web/src/lib/basEquipmentReview.ts';
 import { basAssignmentInputFingerprint, buildBasAssignmentDemandInput, verifyBasAssignmentDemandResult, basAssignmentCalculationSchema, assertBasAssignmentUpdate } from '../../web/src/lib/basAssignmentDemandContract.ts';
 import { emptyBasEquipmentRegister } from '../../web/src/lib/basEquipmentRegister.ts';
+import { emptyBasAssemblyRegister } from '../../web/src/lib/basAssemblyRegister.ts';
+import { applyBasAssemblyReview } from '../../web/src/lib/basAssemblyReview.ts';
 import { compileProductionTakeoff } from '../src/productionTakeoff.ts';
 import type { SheetGraph } from '../../web/src/lib/sheetgraph.ts';
 import { basAssignmentMiddleware } from '../../web/vite.basAssignmentApi.js';
@@ -75,6 +77,23 @@ test('shared Python calculation preserves evidence, history, replay and exclusio
   assert.equal(next.workflow.assignment_calculations!.length, 2);
   assert.equal(basAssignmentCalculationState({ ...next.workflow, assignment_calculations: [...next.workflow.assignment_calculations!].reverse() }, request.capture_id).status, 'current_dependencies');
   assert.deepEqual(await verifyBasWorkflow(mergeBasWorkflows(computed.workflow, next.workflow)), next.workflow);
+});
+
+test('assignment calculations and retries never downgrade or omit newer assembly history', async () => {
+  const { workflow, request } = await fixture();
+  const assemblyRequest = { operation_id: uuid(40), capture_id: request.capture_id, expected_head: null,
+    expected_equipment_head: request.expected_equipment_head, reason: 'Controlled empty assembly reviewed, not completeness proof', register: emptyBasAssemblyRegister() };
+  const withAssembly = await applyBasAssemblyReview(workflow, assemblyRequest, 'operator_input');
+  const calculated = await calculateBasAssignments(withAssembly, request);
+  assert.equal(calculated.workflow.revision, 'bas_assembly_5');
+  assert.deepEqual(calculated.workflow.assembly_events, withAssembly.assembly_events);
+  assert.equal(calculated.calculation.result.assignments[0].known_listed_io_subtotal.AI, 6);
+  assert.deepEqual(await verifyBasWorkflow(calculated.workflow), calculated.workflow);
+  assert.deepEqual((await calculateBasAssignments(calculated.workflow, request, { python: '/not-a-runtime' })).workflow, calculated.workflow);
+  const originallyCalculated = await calculateBasAssignments(workflow, request);
+  const laterAssembly = await applyBasAssemblyReview(originallyCalculated.workflow, assemblyRequest, 'operator_input');
+  assert.deepEqual((await calculateBasAssignments(laterAssembly, request, { python: '/not-a-runtime' })).workflow, laterAssembly);
+  assert.deepEqual(laterAssembly.assignment_calculations, originallyCalculated.workflow.assignment_calculations);
 });
 
 test('corrupt values, changed sources, foreign dependencies and missing observations reject', async () => {

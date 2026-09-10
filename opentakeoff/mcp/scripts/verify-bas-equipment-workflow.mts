@@ -47,7 +47,9 @@ try {
   const originalGraph = structuredClone(graph);
   phase('graph:clone-ready');
   const initial = await call('compile_corpus_takeoff', { kind: 'bas_points', detail: 'full' });
-  const { bas_workflow: workflow, bas_equipment: summary, bas_math: originalMath, bas_point_lists: originalPoints, path: _path, export_path: _export, ...legacy } = initial;
+  const { bas_workflow: workflow, bas_equipment: summary, bas_assemblies: assemblies, bas_math: originalMath, bas_point_lists: originalPoints, path: _path, export_path: _export, ...legacy } = initial;
+  assert.equal(assemblies.schema_version, 'bas_assembly_summary_v1');
+  assert.equal(assemblies.installed_quantity, null);
   assert.deepEqual(legacy, compileTakeoff(session, graph, 'bas_points'));
   const capture = workflow.captures[0];
   assert.equal(capture.sources[0].sha256, truth.source_sha256);

@@ -26,6 +26,22 @@ does not overwrite changed workspace state. There is no static-host or browser
 fallback, authenticated reviewer identity, approval or deployment provisioned
 by this feature.
 
+The exclusive `assembly_quantities` envelope carries a validated
+`assembly_register`, equipment-ID/scope projection and capture/equipment/assembly
+heads. `assemblies.py` calculates declared physical component contributions:
+per included equipment or once for a nonempty selected group. It retains original
+conditions, lifecycle, quantities, responsibility claims and source IDs. Unknown
+quantity is null even under exclusion; an unresolved applicable condition cannot
+produce a known contribution. There is no project, unique-device or installed
+total. Shared source/ownership validation runs before Python; Python also rejects
+foreign members, overlapping source consumption and malformed decisions.
+
+`/__ot/bas-assembly-quantities` and the MCP option call this same bounded service
+and append `bas_assembly_5` history. Dependency changes invalidate calculations;
+they do not delete them. Exact retries reuse retained results. Browser code does
+not reimplement multiplication. The existing 32-MiB/30-second Python and 45-second
+HTTP limits apply; unsafe JavaScript-range results reject rather than round.
+
 One deterministic implementation for the existing Takeoff UI and MCP compile
 path. No product catalog, model calls, PDF parsing, or project-spec ingestion.
 See [the research and mathematical proofs](../docs/BAS_MATH_RESEARCH.md) and

@@ -12,6 +12,8 @@ import { basPointListsOutputSchema } from "../../web/src/lib/basPointLists.ts";
 import { basWorkflowSchema } from "../../web/src/lib/basWorkflow.ts";
 import { basEquipmentSummarySchema } from "../../web/src/lib/basEquipmentReview.ts";
 import { basAssignmentCalculationSchema } from '../../web/src/lib/basAssignmentDemandContract.ts';
+import { basAssemblySummarySchema } from '../../web/src/lib/basAssemblyReview.ts';
+import { basAssemblyCalculationSchema } from '../../web/src/lib/basAssemblyQuantityContract.ts';
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -120,6 +122,9 @@ export const compileCorpusTakeoffOutput = {
   bas_equipment: basEquipmentSummarySchema.optional().describe('Source occurrence/member index and retained scoped equipment/template decisions. Named scheduled equipment only, not installed counts or verified field wiring. Original cells remain in the referenced bas_workflow capture.'),
   bas_equipment_error: z.string().optional().describe('Equipment capture unavailable; the existing point/SOO capture is preserved. Equipment review writes refuse rather than changing earlier decisions.'),
   bas_assignment_demand: basAssignmentCalculationSchema.optional().describe('Persisted shared-Python derivation of assigned listed observations, bound to exact capture/equipment head. Subtotals exclude unavailable cells and are not unique requirements, field wiring, installed quantities or approval.'),
+  bas_assemblies: basAssemblySummarySchema.optional().describe('Addressable source component declarations and explicit scoped assembly/responsibility decisions; not installed proof or complete source discovery. Full original spans remain in bas_workflow.'),
+  bas_assembly_quantities: basAssemblyCalculationSchema.optional().describe('Saved shared-Python declared component quantities for exact equipment and assembly decisions. Never installed/unique-device totals or approval.'),
+  bas_assembly_error: z.string().optional().describe('Assembly summary unavailable; original point, table and math results remain retained. Requested assembly writes refuse atomically.'),
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),

@@ -329,3 +329,21 @@ ambiguity automatically. A source/decision change makes previous calculations
 stale, not approved. The saved source evidence and earlier results remain
 exportable. Missing Python, validation failure, timeout or stale response must
 not be described as a successful zero takeoff.
+
+For assembly scope, use `bas_assemblies` to obtain source requirement IDs,
+current equipment/assembly heads and retained decisions. `bas_assembly_review`
+records explicit source-owned component applicability, quantities, conditions,
+lifecycle, separate activity claims and resolutions. Supply both expected heads
+and a unique operation ID; this records an Agent proposal, never human approval.
+Original declarations are reconstructed from the pinned rule and retained source,
+not trusted caller-authored summaries. Factory furnishing says nothing about
+installation, wiring, programming or testing. Point rows are not extra devices.
+
+`bas_assembly_quantities` invokes shared Python against the exact capture and
+review heads. It returns declared component contributions for the selected
+members, not unique-device, installed or whole-project totals. Unknown quantities
+remain unknown even if excluded. An unresolved applicable condition prevents a
+known contribution. A changed equipment head makes old assembly decisions stale;
+repair the complete register against current equipment before recalculating.
+Old records remain readable/exportable. Do not remove conflicting evidence or
+describe an explicit resolution as a source correction or commissioning signoff.

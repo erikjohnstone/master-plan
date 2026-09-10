@@ -1,5 +1,143 @@
 # BAS production workflow progress
 
+## Verified assembly checkpoint and resumed work — 2026-09-09
+
+The preceding status-only answer was **no progress**. On resumption, full web
+handle **16633** was re-polled and is terminal **exit 0**: **2,647 pass / 13
+skips**, types/lint/bench/build (build 9.96 s). The missing contrast handle
+**79146** was checked against its actual log and retained measurements: terminal
+assertion failure, five dark-theme shell labels at **3.4004836217764134:1**.
+No process was restarted merely on an observation timeout.
+
+Real browser **21023**, `assembly-browser-6/checks.json`, passed: original
+nine-page PDF upload/production compile, independently keyed schedule members,
+three separate source declarations, factory furnishing only, conflict and
+source-preserving resolution, keyboard operation, source paint/return, shared
+Python quantities/retry/staleness, both themes at 1280/1920, autosave/reload and
+fresh import. Removing a member leaves saved assemblies readable; staged
+multi-component repair and reasoned withdrawal save atomically, preserve
+history, and recalculate the remaining contributions to 1/1. **172,730 ms**,
+workflow **1,145,741 bytes**, zero browser JS errors. Controlled applicability
+and correction decisions are not automatic scope inference or a real addendum.
+
+Final Python logs confirm **172 pass in 21.42 s**, mypy **13 files**. Existing
+public MCP proof and 42-test/type/build gates below remain valid. No installed
+quantity or complete-workflow-C claim is made from these bounded cases.
+
+Surface-only Takeoff shell labels/inactive tabs now use the existing secondary
+text token. Actual PDF upload + ordinary import **66002 exit 0** passes the
+same unrelaxed 4.5:1 test, with all 44 sampled elements at both widths: light
+minimum **6.508938359990188:1**, dark **7.707796035708494:1**. Source state and
+both retained assembly calculations compare exactly; no page overflow or JS
+errors. Before/after screenshots inspected. Evidence:
+`assembly-contrast-{before,after}`. This is not app-wide accessibility proof.
+Full web **1691 exit 0** verifies this final cosmetic change, log
+`assembly-final-web-2.log`: **2,647 pass / 13 skips / zero failures**, types,
+lint, bench and build pass (test phase 39,957.75 ms; build 14.00 s). Existing
+optional Agent-key and bundle-size warnings remain; no live LLM call is claimed.
+
+All five workflows remain required. Next: coherent local assembly checkpoint,
+broader source/identity/duplicate and dense-state coverage, engineering
+compatibility, review/revisions, and remaining goal-wide verification. No
+VectorGrid, symbol, original corpus, holdout, push, merge or deployment changes.
+
+## Resumed assembly integration — 2026-09-09
+
+Browser attempt 5 also failed the conflict selector: waiting did not fix it.
+The earlier timing-only diagnosis was insufficient. The actual basis cell
+contains the conflict status **and** retained source/user claims, so an exact
+whole-text locator for just `conflict` cannot match. The diagnostic now reads the
+specific furnish row's basis cell and requires conflict plus both factory and
+by-others claims. No UI logic, evidence or assertion outcome was weakened.
+
+Actual public MCP **93829 exit 0**, `assembly-mcp-2/checks.json`, now passes on
+the original nine-page Fort Sam source: independently keyed p9 member spans and
+p8 declarations; separate supply/exhaust drives and one onboard-controller
+declaration per reviewed member; factory furnishing only; Python contributions
+2/2/2; retry/replay/forgery/stale rejection; export/reset/import; controlled
+exception 1/2/2; equipment withdrawal with readable retained assemblies. Graph,
+legacy compile, point observations and original math are exact. **89,623 ms**,
+main-process peak RSS **1,082,261,504 bytes**, Node heap limit **2,348,810,240**,
+workflow **1,130,971 bytes**. Explicit 600-second diagnostic tool deadline;
+not a general default-resource or installed-quantity claim.
+
+Full web **63073 exit 0**: **2,647 pass / 13 skips**, types/lint/bench/build.
+Subsequent accessible-name changes pass targeted lint/types **85732 exit 0**.
+Version metadata synchronized at **0.9.70** (including pre-existing root-lock
+version drift); new assembly tests are now in `test:bas`/normal MCP pretest.
+Final MCP **74835 exit 0**: **42 BAS tests**, types/tool count/build pass.
+
+Actual browser attempt 3 reached the assembly form and exposed ambiguous select
+labels; explicit accessible names were added. Attempt 4 saved all three source
+components and produced the expected conflict, but its immediate `isVisible`
+assertion raced asynchronous validation (failure screenshot shows the conflict).
+The diagnostic now waits for the rendered result. Both failures are retained;
+actual browser **34809**, attempt 5, remains under verification. No unit-only or
+MCP-only assertion is being substituted for the required actual UI journey.
+
+Latest superseding checkpoint: public assembly compile/HTTP/concurrent-Session
+tests now pass; all **42 MCP BAS tests**, types/build pass (`4545` exit 0).
+Earlier integration tests passed 17 but exposed nine new test typing errors;
+added explicit property guards and strict response parsing, no assertion relaxed.
+Three surface draft-lifecycle tests plus fourteen assembly register/history tests
+pass; editor lint/types pass. Multi-component staging, explicit withdrawal with
+saved reasons, stale-batch rejection and retained-assembly entry after equipment
+removal are now implemented. Staging is not shared validation or partial saving.
+Full web `63073` has **2,647 pass / 13 skips**, bench/build still pending at this
+checkpoint. It must reach terminal success before a full-green claim.
+
+Real UI attempt 1 failed before launch because the Playwright bundled browser
+is not installed; attempt 2 used installed Chrome, uploaded/compiled the original
+nine-page Fort Sam PDF and reached equipment registration. It failed a diagnostic
+assumption of exactly one source row for DOAS-1: the actual source has two p1 fan
+ESP rows and one p9 equipment-schedule row. Original M-601 visually rechecked;
+the script now selects the independently keyed p9 row and asserts containment of
+its exact keyed text span. No production rule, corpus key or extraction changed.
+The same assumption failed actual MCP attempt 1; both failures remain retained.
+UI retry `48449` and public MCP retry are now running. No completed assembly
+walkthrough claim yet.
+
+Starting four-set baseline **78297 is terminal exit 0**, not live. Takeoff exact:
+Federal 102/102, Navfac 209/217, Bldg5406 17/28, raster 28/28. Combined 356/375,
+absolute delta 38, missing 11, 37 key-flagged additions; installed 322/339,
+refusals 6/8. Reference cells 62/62 (no applicable cells for Bldg/raster).
+These match candidate per-set metrics; detailed mismatch lines were compared
+without normalization of facts. All seven core sets now have starting-revision
+comparison evidence. This does not make the corpus green: overall candidate
+takeoff 505/541, reference 99/129, graph cells 78/91, row-symbol 133/138.
+
+The immediately preceding status-only answer was **no progress**. This resumption
+revalidated actual processes and source before continuing. Assignment checkpoint
+**31d4a793** is committed locally; no push/merge/deployment. The five-workflow
+goal remains intact and incomplete.
+
+New assembly work after that commit is uncommitted. Shared register/history
+tests: **14 new web tests**, 36 including equipment/workflow/component controls;
+Python **172 pass**, mypy **13 files** (53 new assembly tests). Shared MCP/Python
+service **14 pass** (five assembly, nine assignment/history controls). Full web
+`70787` exited 0: **2,644 pass / 13 skips**, types/lint/bench/build pass. This
+full run preceded the new public MCP options, HTTP route and UI wiring, so does
+not prove those newer changes. Public integration MCP typecheck/build `95344`
+is now confirmed terminal exit 0. HTTP route registration has three passing tests.
+
+Retained failures fixed during this increment: test fixture missing sheet,
+three test callback types, test-only browser dependency resolution, Python field
+name shadowing, middleware syntax and synchronous route-dispatch mismatch.
+Editor lint `47391`/`88585` both exited 1: a missing JSX conditional brace at the
+source-reference disclosure; corrected on resumption, rerun required. The chained
+editor typecheck had not run. No thresholds/assertions weakened. Actual assembly
+upload/UI/public-MCP walkthroughs remain required, not replaced by helper tests.
+
+Baseline handle **78297** was polled and confirmed live again: parent PID 66280,
+Navfac child 66378 at elapsed 1:04:50, 100% CPU, RSS 264,208 KiB. No aggregate
+result yet; no restart. The owned Vite PID 26358 remains live on port 5177.
+
+Next: finish assembly UI validation, multi-component rebase and orphan-history
+access; prove public MCP/HTTP parity; actual original-PDF workflow, persistence,
+source navigation, both themes and dense-state tests; docs/version/full gates.
+Then broader reconciliation, engineering, review/revisions and all goal gates.
+VectorGrid, symbols, original corpus and holdout remain untouched.
+
 Local equipment/source editor checkpoint **5d072f59** and component-source
 kernel **a0b58e8a** are committed. No push, merge or deployment. The current
 shared Python assigned-observation increment now has passing actual browser and

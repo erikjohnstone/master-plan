@@ -5,6 +5,7 @@ import { basEquipmentRegisterSchema, validateBasEquipmentRegister, type BasEquip
 import type { BasCapture, BasWorkflow } from './basWorkflow.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
+import { atLeastBasWorkflowRevision } from './basWorkflowRevision.ts';
 
 const id = z.string().min(1).max(512), sha = z.string().regex(/^[a-f0-9]{64}$/);
 const count = z.number().int().nonnegative().safe(), ids = z.array(id).max(100000);
@@ -98,7 +99,7 @@ export function assertBasAssignmentUpdate(previous: BasWorkflow, updated: BasWor
   else if (!calculations.some(c => canonicalBasJson(c) === canonicalBasJson(calculation))) {
     throw new Error('Calculation response changed a retained result');
   }
-  const expected = { ...previous, revision: 'bas_assignment_4', assignment_calculations: calculations };
+  const expected = { ...previous, revision: atLeastBasWorkflowRevision(previous.revision, 'bas_assignment_4'), assignment_calculations: calculations };
   if (canonicalBasJson(updated) !== canonicalBasJson(expected)) {
     throw new Error('Calculation response changed or omitted source evidence, decisions or earlier results');
   }

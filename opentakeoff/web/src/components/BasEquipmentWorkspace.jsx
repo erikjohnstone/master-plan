@@ -9,6 +9,7 @@ import { downloadText } from '../lib/totals.js';
 import { ANN_SCHEMA } from '../lib/store.js';
 import { equipmentPreviewReady } from './basEquipmentEditorState.ts';
 import BasAssignedValues from './BasAssignedValues.jsx';
+import BasAssemblyWorkspace from './BasAssemblyWorkspace.jsx';
 import './BasPointsWorkspace.css';
 import './BasEquipmentWorkspace.css';
 
@@ -28,7 +29,7 @@ function DrawingReferences({ ids, spans, onSource, label, reason }) {
   </details>;
 }
 
-export default function BasEquipmentWorkspace({ workflow, viewState, onViewStateChange, onOpenCitation, onReview, onCalculate }) {
+export default function BasEquipmentWorkspace({ workflow, viewState, onViewStateChange, onOpenCitation, onReview, onCalculate, onAssemblyReview, onAssemblyCalculate }) {
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [preview, setPreview] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -153,18 +154,32 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
   const draftScope = draft?.kind === 'assignment' ? draft.scopeId : null;
   const previewAssignment = previewReady ? preview.view.assignments.find(a => a.assignment_id === draft.id) : null;
   return <section aria-label="Equipment and template assignments" className="bas-point-workspace bas-equipment-workspace">
-    <div className="bas-point-heading"><h2 ref={heading} tabIndex={-1}>{equipment ? equipment.tag : 'Equipment'}</h2>
+    <div className="bas-point-heading"><h2 ref={heading} tabIndex={-1}>{state.assemblyOverview ? 'Saved assemblies' : equipment ? equipment.tag : 'Equipment'}</h2>
       <span>{equipment ? scopeLabel(scope) : `${register.equipment.length} registered · ${occurrences.length} source rows`}</span>
       <button type="button" onClick={() => downloadText('bas-equipment.takeoff.json', JSON.stringify({ schema: ANN_SCHEMA, bas_workflow: verified }, null, 2), 'application/json')}>Export evidence &amp; decisions</button>
-      <button type="button" disabled={busy || !!draft || !head || !register.assignments.length || !onCalculate} onClick={calculate}>{busy ? 'Working…' : 'Calculate assigned values'}</button>
+      {state.detailTab !== 'assembly' && !state.assemblyOverview && <button type="button" disabled={busy || !!draft || !head || !register.assignments.length || !onCalculate} onClick={calculate}>{busy ? 'Working…' : 'Calculate assigned values'}</button>}
     </div>
     {error && <p role="alert" className="bas-equipment-alert">{error}</p>}{notice && <p role="status">{notice}</p>}
-    {equipment ? <>
+    {state.assemblyOverview ? <>
+      <button type="button" onClick={() => change({ assemblyOverview: false })}>← Back to equipment</button>
+      <BasAssemblyWorkspace workflow={verified} state={state.assembly}
+        onStateChange={updater => onViewStateChange(previous => ({ ...previous, equipment: { ...previous?.equipment,
+          assembly: typeof updater === 'function' ? updater(previous?.equipment?.assembly || {}) : updater } }))}
+        onSource={source} onReview={onAssemblyReview} onCalculate={onAssemblyCalculate} />
+    </> : equipment ? <>
       <div className="bas-point-controls"><button type="button" onClick={() => change({ equipmentId: null })}>← Back to equipment table</button>
         <button type="button" disabled={busy} onClick={() => begin('assignment', { scopeId: equipment.scope_id, equipmentIds: [equipment.equipment_id] })}>Assign point list</button>
         <button type="button" disabled={busy} onClick={() => begin('identity', { id: equipment.equipment_id, scopeId: equipment.scope_id, memberKeys: equipment.bindings.map(b => memberKey(b.occurrence_id, b.member)), reason: equipment.reason })}>Edit identity &amp; sources</button>
         <button type="button" disabled={busy} onClick={() => begin('remove_equipment', { id: equipment.equipment_id })}>Remove from register</button>
       </div>
+      <div className="bas-point-controls" role="group" aria-label="Equipment detail view">
+        <button type="button" aria-pressed={state.detailTab !== 'assembly'} onClick={() => change({ detailTab: 'points' })}>Templates &amp; points</button>
+        <button type="button" aria-pressed={state.detailTab === 'assembly'} onClick={() => change({ detailTab: 'assembly' })}>Assembly &amp; responsibilities</button>
+      </div>
+      {state.detailTab === 'assembly' ? <BasAssemblyWorkspace workflow={verified} equipmentId={equipment.equipment_id}
+        state={state.assembly} onStateChange={updater => onViewStateChange(previous => ({ ...previous, equipment: { ...previous?.equipment,
+          assembly: typeof updater === 'function' ? updater(previous?.equipment?.assembly || {}) : updater } }))}
+        onSource={source} onReview={onAssemblyReview} onCalculate={onAssemblyCalculate} /> : <>
       <div className="bas-point-scope"><span>Named scheduled equipment</span><span>Installed quantity: not established</span><span>Field wiring: not established</span></div>
       <p>Identity decision: {equipment.reason}</p>
       <DrawingReferences label="Scope evidence" ids={scope.source_span_ids} spans={spans} onSource={source} reason={scope.reason} />
@@ -195,11 +210,13 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
           <p>{c.unpaired_point_row_ids.length} other matrix rows remain unpaired and retained.</p></div>)}
         {!a.sequence_region_ids.length && <p>No sequence has been explicitly linked to this assignment.</p>}
       </section>; })}
+      </>}
     </> : <>
       <div className="bas-point-controls"><label>View<select aria-label="Equipment table view" value={state.table || 'sources'} onChange={e => change({ table: e.target.value, page: 0, scroll: 0 })}><option value="sources">Source schedule rows</option><option value="register">Scoped equipment register</option></select></label>
         <label>Find equipment<input value={state.filter || ''} onChange={e => change({ filter: e.target.value, page: 0, scroll: 0 })} /></label>
         <button type="button" onClick={() => begin('scope')}>Create scope</button>
         <button type="button" disabled={!register.scopes.length} onClick={() => begin('members')}>Register printed members</button>
+        {!!verified.assembly_events?.length && <button type="button" onClick={() => change({ assemblyOverview: true })}>Review saved assemblies</button>}
       </div>
       <div className="bas-point-grid" ref={grid} tabIndex={0} role="region" aria-label="Scrollable equipment table" onScroll={e => change({ scroll: e.currentTarget.scrollTop })}>
         <table aria-label="Equipment table"><thead><tr>{(state.table === 'register' ? ['Equipment', 'Explicit scope', 'Sources', 'Assignments'] : ['Printed designation', 'Schedule', 'Named members', 'Printed quantity', 'Review', 'Source']).map(h => <th key={h}>{h}</th>)}</tr></thead>

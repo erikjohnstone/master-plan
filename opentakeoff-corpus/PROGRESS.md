@@ -1,5 +1,37 @@
 ## Active work
 
+Latest verified assembly checkpoint supersedes the running/retry entries below:
+actual browser **21023** and public MCP **93829** pass the original nine-page
+source journey, including saved history, source navigation, responsibility
+conflict/resolution, withdrawal/rebase and Python contributions (not installed
+counts). Full web **16633 exit 0**, 2647 pass/13 skips, all phases; Python
+172 pass/mypy 13 files; MCP 42 BAS tests/types/build pass. Dark shell text
+contrast defect reproduced at 3.40048:1 and fixed surface-only: actual import
+**66002 exit 0**, both themes/widths, minimum light 6.50894 / dark 7.70780,
+source and calculation state exact. Final cosmetic full-web **1691 exit 0**:
+2647 pass/13 skips, types/lint/bench/build pass. Full five-workflow goal
+incomplete; no extraction or holdout changes.
+See BAS progress for retained evidence and boundaries.
+
+Superseding live-state update: baseline **78297 completed**, remaining four sets
+match candidate metrics/discrepancies (356/375 exact; reference 62/62). Overall
+core remains not green: takeoff 505/541, reference 99/129, graph cells 78/91 and
+row-symbol 133/138. New BAS assembly MCP tests/types/build pass (42 BAS tests).
+Full web has 2647 pass/13 skips with bench/build pending. Real assembly UI/MCP
+attempts found a test's wrong unique-tag-occurrence assumption; original p9
+source visually verified, diagnostics now select the keyed schedule occurrence
+without changing extraction or keys. Retries running. No completion claim.
+
+Latest BAS resumption: assignment workflow committed locally **31d4a793**.
+Uncommitted assembly shared history/Python tests pass (14 new web, 53 new Python;
+172 Python total, mypy 13 files; 14 assembly/assignment MCP tests). Full web 2644
+pass/13 skips before newer UI/public integration. Public MCP types/build pass.
+New editor lint found a JSX brace error; fixed, rerun required. Actual assembly
+UI/public-tool proof remains outstanding. Baseline **78297** revalidated live,
+Navfac PID 66378 consuming CPU; no restart or aggregate claim. Previous status
+answer was no progress; implementation has resumed. Full five-workflow contract
+unchanged. See BAS progress for exact evidence and current queue.
+
 Current verified BAS checkpoint (supersedes historical status below): actual
 assigned-observation browser **95677** and public MCP **27726** both passed on
 the original 29-page source, including replay, source equality, retry,

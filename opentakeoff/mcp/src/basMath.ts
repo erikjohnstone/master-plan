@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { basPointListsSchema, type BasPointLists } from "../../web/src/lib/basPointLists.ts";
 import { basAssignmentDemandResultSchema, type BasAssignmentDemandResult } from "../../web/src/lib/basAssignmentDemandContract.ts";
+import { basAssemblyQuantityResultSchema, type BasAssemblyQuantityResult } from "../../web/src/lib/basAssemblyQuantityContract.ts";
 
 const appRoot = fileURLToPath(new URL("../../", import.meta.url));
 const bundledRoot = fileURLToPath(new URL("./python/", import.meta.url));
@@ -56,6 +57,10 @@ export async function runBasPointLists(payload: unknown, options: { python?: str
 
 export async function runBasAssignmentDemand(payload: unknown, options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}): Promise<BasAssignmentDemandResult> {
   return runBasProcess({ assignment_demand: payload }, basAssignmentDemandResultSchema, options);
+}
+
+export async function runBasAssemblyQuantities(payload: unknown, options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}): Promise<BasAssemblyQuantityResult> {
+  return runBasProcess({ assembly_quantities: payload }, basAssemblyQuantityResultSchema, options);
 }
 
 async function runBasProcess<T>(payload: unknown, schema: z.ZodType<T>, options: { python?: string; timeoutMs?: number; signal?: AbortSignal }): Promise<T> {

@@ -4,6 +4,21 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Improve dark-theme Takeoff header and inactive-tab text contrast using the
+  existing secondary text token; no theme, evidence or calculation changes.
+- Add source-backed assembly decisions and independent furnish/install/wire/
+  program/test claims in selected-equipment details. Preserve source declarations,
+  conflicting claims, reasoned resolutions, exclusions and immutable history in
+  additive `bas_assembly_5`. Full-register preview, multi-component repair and
+  retained-history access prevent stale equipment changes from hiding assemblies.
+- Add shared Python declared assembly quantities and UI/MCP persistence. Retain
+  nullable quantities, exact applicability, conditions, lifecycle and original
+  claims; never promote these contributions to installed or complete project
+  totals. MCP BAS compile adds `bas_assemblies`, `bas_assembly_review` and
+  `bas_assembly_quantities`. Existing tables, citations, quantities and math are
+  unchanged. Broader source interpretation, engineering and approved releases
+  remain in progress; this is not all-five-workflow completion.
+
 - Add shared-Python assigned listed-value derivations and additive `bas_assignment_4`
   persistence, with original cells, exact scoped selections/exceptions, retained
   qualifications and explicit unknowns. **Calculate assigned values** and MCP's

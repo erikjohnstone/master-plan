@@ -82,6 +82,15 @@ and `evidence/assignment-reader-contrast-after/`. This is a bounded contrast and
 state-preservation check, not an app-wide accessibility certification. Accessed
 2026-09-09; exact unrounded ratios are retained in the JSON artifacts.
 
+The assembly walkthrough subsequently exposed the same contrast problem in five
+Takeoff-shell labels/inactive tabs. Measured before changing them, then switched
+only those shell text declarations to the existing secondary token. The actual
+PDF/ordinary-import rerun checks 44 sampled assembly/shell elements in each
+theme/width: light minimum 6.508938359990188:1, dark 7.707796035708494:1, exact
+retained workflow equality. `evidence/assembly-contrast-{before,after}` retains
+the failure and passing measurements/screenshots; this extends the measured
+surface coverage, not the accessibility-certification claim.
+
 The real Fort Sam upload was compiled through the production endpoint. Captures at 1920×1080, 1440×900, and 1280×800 in both themes are retained in `evidence/baseline/workspace-ui/`. No response fixtures were injected. The reload check found a BAS result before reload and none afterward; no browser page errors occurred.
 
 At 1280×800, the first point row appears around y=630, after the workspace header, tab row, family links, engineering heading, caution copy, total matrix, secondary tab row, and further copy. The problem is vertical hierarchy, not just width. Adding three more permanent panels would amplify it.

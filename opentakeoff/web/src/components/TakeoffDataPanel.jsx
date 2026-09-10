@@ -49,7 +49,7 @@ const tabBtn = (active) => ({
   border: "none",
   borderBottom: active ? "2px solid var(--ink)" : "2px solid transparent",
   background: "transparent",
-  color: active ? "var(--ink)" : "var(--ink-muted)",
+  color: active ? "var(--ink)" : "var(--ink-secondary)",
   cursor: "pointer",
   fontFamily: "var(--f-mono)",
   fontSize: "var(--fs-xs)",
@@ -97,6 +97,8 @@ export default function TakeoffDataPanel({
   onBasReview,
   onBasEquipmentReview,
   onBasAssignmentCalculate,
+  onBasAssemblyReview,
+  onBasAssemblyCalculate,
   onClear,
   onRemove,
   onRemoveLine,
@@ -237,7 +239,7 @@ export default function TakeoffDataPanel({
           <div style={{ flex: 1, minWidth: 0, paddingBottom: 12 }}>
             <div style={{
               fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", letterSpacing: "0.14em",
-              textTransform: "uppercase", color: "var(--ink-muted)",
+              textTransform: "uppercase", color: "var(--ink-secondary)",
             }}>
               {takeoffId || "Takeoff"}
             </div>
@@ -269,7 +271,7 @@ export default function TakeoffDataPanel({
               )}
               <span>{rows.length} evidence fields</span>
             </div>
-            <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-muted)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
+            <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
               {tab === "equipment" ? "Source-backed equipment identities and explicit template assignments. Original schedule evidence stays unchanged."
                 : tab === "points" ? "Original point-list matrices with source-bound interpretation. No installed quantities are inferred."
                 : tab === "takeoff" && corpusMeta?.bas_math
@@ -367,7 +369,7 @@ export default function TakeoffDataPanel({
         )}
 
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px" }}>
-          {tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onOpenCitation={onOpenCitation} />
+          {tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onAssemblyReview={onBasAssemblyReview} onAssemblyCalculate={onBasAssemblyCalculate} onOpenCitation={onOpenCitation} />
             : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
           {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}
           {tab === "takeoff" ? (

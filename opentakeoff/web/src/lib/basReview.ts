@@ -2,6 +2,7 @@
 import { basEventFingerprint, basWorkflowSchema, verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 import { basReviewEventSchema, basReviewRequestSchema, type BasReviewEvent } from './basReviewContract.ts';
 import { canonicalBasJson } from './basCanonical.ts';
+import { atLeastBasWorkflowRevision } from './basWorkflowRevision.ts';
 import { interpretBasSequences, reconcileBasSequencePoints, type BasSequenceAssociation } from './basSequenceReconciliation.ts';
 
 export function basReviewHead(workflow: BasWorkflow, captureId: string): string | null {
@@ -55,5 +56,5 @@ export async function applyBasReview(rawWorkflow: unknown, rawRequest: unknown,
   }
   const payload = { ...request, rule_version: 'bas_association_review_1' as const, origin, created_at: createdAt };
   const event = basReviewEventSchema.parse({ ...payload, event_id: await basEventFingerprint(payload) });
-  return basWorkflowSchema.parse({ ...workflow, revision: ['bas_equipment_3', 'bas_assignment_4'].includes(workflow.revision) ? workflow.revision : 'bas_evidence_2', review_events: [...(workflow.review_events ?? []), event] });
+  return basWorkflowSchema.parse({ ...workflow, revision: atLeastBasWorkflowRevision(workflow.revision, 'bas_evidence_2'), review_events: [...(workflow.review_events ?? []), event] });
 }

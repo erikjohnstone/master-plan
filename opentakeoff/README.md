@@ -73,6 +73,16 @@ subtotals are not complete or verified field-wiring totals. Decision changes
 make earlier results stale without deleting them. Installed corroboration,
 physical requirement reconciliation and the release workflow remain in progress.
 
+Selected equipment also opens **Assembly & responsibilities**. Review explicit
+drawing declarations or record a reasoned component decision, retain the original
+source, and track furnishing, installation, wiring, programming and testing
+separately. **Calculate assembly quantities** uses shared Python for declared
+per-equipment or selected-group contributions. Unknown counts stay unknown;
+factory furnishing does not assign the other activities. Changes retain prior
+decisions and mark dependent results stale. These are non-commercial scope
+records, not verified installations, commissioning signoffs or a complete BAS
+inventory. The five-workflow production effort remains in progress.
+
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
 **Takeoff · Edit · ⋯** controls at the upper right. **Schedules**

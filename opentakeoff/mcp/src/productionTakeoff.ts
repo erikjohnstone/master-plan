@@ -8,6 +8,8 @@ import { applyBasReview } from "../../web/src/lib/basReview.ts";
 import { captureBasEquipmentTables } from "../../web/src/lib/basEquipmentEvidence.ts";
 import { applyBasEquipmentReview, basEquipmentSummary } from "../../web/src/lib/basEquipmentReview.ts";
 import { calculateBasAssignments } from './basAssignmentDemand.ts';
+import { applyBasAssemblyReview, basAssemblySummary } from '../../web/src/lib/basAssemblyReview.ts';
+import { calculateBasAssemblies } from './basAssemblyQuantities.ts';
 
 /** Snapshot the source context before awaiting either Python operation. A
  * math-policy error and an evidence error are independent, never a fake zero.
@@ -40,8 +42,10 @@ async function pointListsForSession(session: unknown, graph: SheetGraph) {
 }
 
 export async function compileProductionTakeoff(session: unknown, graph: SheetGraph, kind: string,
-  opts: { service?: string; bas_math?: unknown; bas_review?: unknown; bas_equipment_review?: unknown; bas_assignment_demand?: unknown } = {}) {
-  const hasReview = opts.bas_review != null || opts.bas_equipment_review != null || opts.bas_assignment_demand != null;
+  opts: { service?: string; bas_math?: unknown; bas_review?: unknown; bas_equipment_review?: unknown; bas_assignment_demand?: unknown;
+    bas_assembly_review?: unknown; bas_assembly_quantities?: unknown } = {}) {
+  const hasAssemblyWrite = opts.bas_assembly_review != null || opts.bas_assembly_quantities != null;
+  const hasReview = opts.bas_review != null || opts.bas_equipment_review != null || opts.bas_assignment_demand != null || hasAssemblyWrite;
   if (hasReview && kind !== 'bas_points' && kind !== 'T-BAS-01') throw new Error('BAS review is only available for the BAS points workflow');
   const compiled = compileTakeoff(session, graph, kind, opts);
   if (compiled.kind !== "bas_points") return compiled;
@@ -62,6 +66,7 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
   const pointResult = await pointLists;
   let equipmentSummary;
   let assignmentCalculation;
+  let assemblySummary, assemblyCalculation, assemblyError;
   if (pointResult && 'bas_workflow' in pointResult && pointResult.bas_workflow) {
     const previous = session && typeof session === 'object' && 'basWorkflow' in session ? session.basWorkflow : null;
     const merged = mergeBasWorkflows(previous, pointResult.bas_workflow, true)!;
@@ -79,8 +84,18 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
       pointResult.bas_workflow = calculated.workflow;
       assignmentCalculation = calculated.calculation;
     }
+    if (opts.bas_assembly_review != null) pointResult.bas_workflow = await applyBasAssemblyReview(pointResult.bas_workflow, opts.bas_assembly_review, 'agent_proposal');
+    if (opts.bas_assembly_quantities != null) {
+      const calculated = await calculateBasAssemblies(pointResult.bas_workflow, opts.bas_assembly_quantities);
+      pointResult.bas_workflow = calculated.workflow; assemblyCalculation = calculated.calculation;
+    }
     if (pointResult.bas_workflow.captures.find(c => c.capture_id === pointResult.bas_workflow.current_capture_id)?.equipment_sources) {
       equipmentSummary = await basEquipmentSummary(pointResult.bas_workflow, pointResult.bas_workflow.current_capture_id!);
+      try { assemblySummary = await basAssemblySummary(pointResult.bas_workflow, pointResult.bas_workflow.current_capture_id!); }
+      catch (error) {
+        if (hasAssemblyWrite) throw error;
+        assemblyError = error instanceof Error ? error.message : 'Assembly source review unavailable';
+      }
     }
     // Commit only after any requested review validates. Invalid requests leave
     // the prior Session review/capture state untouched.
@@ -93,5 +108,7 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
     }
   } else if (hasReview) throw new Error('BAS evidence could not be captured; prior review history was preserved');
   return { ...compiled, bas_math, ...pointResult, ...(equipmentSummary ? { bas_equipment: equipmentSummary } : {}),
-    ...(assignmentCalculation ? { bas_assignment_demand: assignmentCalculation } : {}) };
+    ...(assignmentCalculation ? { bas_assignment_demand: assignmentCalculation } : {}),
+    ...(assemblySummary ? { bas_assemblies: assemblySummary } : {}), ...(assemblyError ? { bas_assembly_error: assemblyError } : {}),
+    ...(assemblyCalculation ? { bas_assembly_quantities: assemblyCalculation } : {}) };
 }

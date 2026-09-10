@@ -67,6 +67,23 @@ preserves earlier results; their dependency heads determine whether they are
 current, regardless of import order. Fingerprints are local corruption detection,
 not authenticated provenance or engineering approval.
 
+Development revision `bas_assembly_5` adds immutable assembly review and shared
+Python quantity history. BAS compile returns `bas_assemblies`: owned drawing
+declaration IDs, the saved register, dependency heads and unresolved findings.
+Optional `bas_assembly_review` accepts
+`{operation_id,capture_id,expected_head,expected_equipment_head,reason,register}`.
+The register holds source-backed or explicit component decisions, scope/members,
+conditions, lifecycle, separate activity claims and reasoned resolutions.
+Optional `bas_assembly_quantities` accepts
+`{capture_id,expected_equipment_head,expected_assembly_head}` and returns a saved
+calculation with full original records and exact per-equipment/selected-group
+contributions. Unknown is not zero; assigned is not installed. Stale/foreign
+requests and concurrent workspace changes reject before mutation. Earlier
+history survives export/import and equipment withdrawal. A read-only assembly
+summary failure is reported as `bas_assembly_error` without discarding valid
+point/SOO evidence; requested assembly writes fail rather than partly commit.
+See [the assembly contract](bas-production/ASSEMBLY_REVIEW_CONTRACT.md).
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

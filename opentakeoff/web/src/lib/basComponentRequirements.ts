@@ -78,9 +78,14 @@ function requirementBase(clauseId: string, role: string, subject: string) {
 
 /** Rebuild paragraphs from verified source, not caller-supplied interpretations.
  * No channel, hardware rating, contractor or equipment multiplier is inferred. */
-export function interpretBasComponentRequirements(rawSources: BasSourceContext): BasComponentRequirements {
+// Persisted v1 implementation: future grammars get a new version/dispatch,
+// never a silent reinterpretation of accepted assembly evidence.
+function interpretBasComponentRequirementsV1(rawSources: BasSourceContext): BasComponentRequirements {
   const sources = basSourceContextSchema.parse(rawSources);
   const sequences = interpretBasSequences(sources);
+  if (sequences.rule_version !== 'explicit_monitor_modulate_1' || sequences.discovery.rule_version !== 'horizontal_headed_regions_v1') {
+    throw new Error('Component rule v1 requires its original narrative dependencies');
+  }
   const clauses = sequences.regions.flatMap(region => region.clauses.map(clause => {
     const block = region.raw.blocks.find(b => b.block_id === clause.clause_id)!;
     const interpretable = region.raw.status === 'body_detected' && block.kind === 'paragraph';
@@ -108,11 +113,17 @@ export function interpretBasComponentRequirements(rawSources: BasSourceContext):
     project_complete: false, installed_quantity: null, clauses });
 }
 
+export function interpretBasComponentRequirements(sources: BasSourceContext,
+  ruleVersion: string = BAS_COMPONENT_SOURCE_RULE): BasComponentRequirements {
+  if (ruleVersion !== 'explicit_component_declarations_1') throw new Error('Unsupported component interpretation rule');
+  return interpretBasComponentRequirementsV1(sources);
+}
+
 /** A valid output shape is not proof of source truth. Imported/persisted results
  * must still agree with shared deterministic interpretation of retained spans. */
 export function verifyBasComponentRequirements(sources: BasSourceContext, rawResult: unknown): BasComponentRequirements {
   const result = basComponentRequirementsSchema.parse(rawResult);
-  if (canonicalBasJson(result) !== canonicalBasJson(interpretBasComponentRequirements(sources))) {
+  if (canonicalBasJson(result) !== canonicalBasJson(interpretBasComponentRequirements(sources, result.rule_version))) {
     throw new Error('Component requirements disagree with the retained source evidence');
   }
   return result;
