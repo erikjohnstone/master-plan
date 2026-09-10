@@ -154,6 +154,8 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
   const previewReady = equipmentPreviewReady(preview, draft, Boolean(stale));
   const draftScope = draft?.kind === 'assignment' ? draft.scopeId : null;
   const previewAssignment = previewReady ? preview.view.assignments.find(a => a.assignment_id === draft.id) : null;
+  const reviewScope = state.reviewTarget?.kind === 'scope' ? register.scopes.find(s => s.scope_id === state.reviewTarget.id) : null;
+  const reviewAssignment = state.reviewTarget?.kind === 'assignment' ? view.assignments.find(a => a.assignment_id === state.reviewTarget.id) : null;
   return <section aria-label="Equipment and template assignments" className="bas-point-workspace bas-equipment-workspace">
     <div className="bas-point-heading"><h2 ref={heading} tabIndex={-1}>{state.engineeringOverview ? 'Saved engineering reviews' : state.assemblyOverview ? 'Saved assemblies' : equipment ? equipment.tag : 'Equipment'}</h2>
       <span>{equipment ? scopeLabel(scope) : `${register.equipment.length} registered · ${occurrences.length} source rows`}</span>
@@ -161,6 +163,16 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
       {!['assembly', 'engineering'].includes(state.detailTab) && !state.assemblyOverview && !state.engineeringOverview && <button type="button" disabled={busy || !!draft || !head || !register.assignments.length || !onCalculate} onClick={calculate}>{busy ? 'Working…' : 'Calculate assigned values'}</button>}
     </div>
     {error && <p role="alert" className="bas-equipment-alert">{error}</p>}{notice && <p role="status">{notice}</p>}
+    {state.reviewTarget && <section className="bas-point-detail" aria-label="Issue correction target">
+      <h3>Selected {state.reviewTarget.kind}</h3>
+      {reviewScope ? <><p>{scopeLabel(reviewScope)}</p><button type="button" disabled={busy || !!draft} onClick={() => begin('scope', { id: reviewScope.scope_id, ...reviewScope, sourceIds: reviewScope.source_span_ids })}>Edit selected scope</button></>
+        : reviewAssignment ? <><p>{reviewAssignment.matrix_id} · {reviewAssignment.reason}</p><button type="button" disabled={busy || !!draft} onClick={() => begin('assignment', {
+          id: reviewAssignment.assignment_id, scopeId: reviewAssignment.scope_id, matrixId: reviewAssignment.matrix_id, applicability: reviewAssignment.applicability,
+          equipmentIds: reviewAssignment.equipment_ids, excludedIds: reviewAssignment.excluded_equipment_ids,
+          sequenceIds: reviewAssignment.sequence_region_ids, sourceIds: reviewAssignment.source_span_ids, reason: reviewAssignment.reason })}>Edit selected assignment</button></>
+        : <p>The exact target is no longer in the current register. Earlier evidence remains in issue history; no different item has been selected as its replacement.</p>}
+      {draft && <p>Your existing equipment draft is retained. Finish or discard it before starting another edit.</p>}
+    </section>}
     {state.engineeringOverview ? <>
       <button type="button" onClick={() => change({ engineeringOverview: false })}>← Back to equipment</button>
       <BasEngineeringWorkspace workflow={verified} state={state.engineering}

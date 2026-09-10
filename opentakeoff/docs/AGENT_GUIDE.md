@@ -34,6 +34,17 @@ a deliverable, select current source scope or verify installed quantity.
 Unencrypted local recovery files are not authenticated or guaranteed permanent.
 Ordinary JSON import retains its previous semantics.
 
+Development issue review: use `bas_issue_review` to inspect current findings and
+record exact observations with a reason and self-declared reviewer. Starting a
+correction is not the correction itself; use the relevant existing domain tools.
+After changing inputs, the shared service must replay the original finding and
+confirm absence before recording no-longer-reported status. Reappearing findings
+stay open. Acknowledgement/withdrawal never waive blockers or alter quantities.
+History lists are lineage-only; selected `replay` verifies original occurrences
+and recorded absence. PDF availability and Python replay remain separate checks.
+Save Session history using `export_takeoff`; an exported operation result alone is
+not a project backup. No issue action approves a deliverable.
+
 Development drawing review: use `bas_drawing_review` directly on retained history,
 including without active PDFs. Inspect paginated captures/events, prepare exact
 page accounting, then record with the returned head/dependency digest, UUID,
@@ -223,7 +234,7 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 51 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 52 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
 Forty descriptions is real token weight for a session that may never touch half of them, so the

@@ -1,5 +1,46 @@
 # BAS production workflow progress
 
+## Public issue decisions, corrective routes and durable replay — 2026-09-10
+
+After **f70eda16**, connected the shared journal to the existing Review & changes
+workspace and new `bas_issue_review` MCP tool. Acknowledge/correction-start,
+historical replay, changed-input absence review and withdrawal retain original
+findings and independent blockers. UI drafts/source return and exact-ID scope,
+assignment/component/check routes are preserved; browser and MCP adoption reject
+stale project/source/storage state. MCP views are bounded, expire/invalidate and
+export complete results separately from durable project history. No extraction,
+VectorGrid, symbol algorithm, Python arithmetic or citation-coordinate changes.
+Local unpublished package **0.9.77 / 52 tools**.
+
+**Final checks:** web 23076 exit 0, **2,823 pass / 13 existing skips**, types/lint/
+bench/build; MCP 94858 exit 0, types, **128 BAS + 33 revision + six issue + four
+packaging + 122 tool tests**, zero stale tool counts. Python 66866 exit 0:
+**453 pass with packaging enabled**, mypy 20 files. Same three canvas warnings,
+four disclosed legacy One-Click known-fails and bundle/Agent notices remain.
+Shared real-retained issue operations **0.884–1.159 s**, **523,632,640-byte**
+incremental RSS, within unchanged budgets. No full corpus or holdout run.
+
+**Actual browser 53197 exit 0:** real original/import, cited bbox, retained draft,
+keyboard, both themes/three viewports, exact scope edit, absence, reappearance,
+withdrawal, real UI exports and IndexedDB reload. Zero browser errors; actions
+**2.117–2.964 s**. Source/decision screenshots inspected. **Built MCP 62351 exit 0:**
+same historical source/absence evidence, exact current shared replay, original
+PDF view, proposal/retry/stale rejection, export and new-process recovery;
+**1.032–1.381 s**. Fixtures use controlled hardware/scope declarations, not
+automatically verified design. Findings **456 → 458 → 459** retain new dependency
+warnings. Failed browser label lookup and wrong MCP harness bbox format are
+documented, fixed and rerun; no production extraction fix was needed.
+Proof: `ISSUE_PUBLIC_PROOF.md`, `evidence/issue-public-browser-3`,
+`evidence/issue-public-mcp-2`.
+
+**Next:** complete the remaining exact clause/comparison corrective routes and
+review acceptance cases; coverage/applicability and deliverable exclusions;
+selective dependency-bound approvals and a positive approved snapshot/export/
+recovery journey; unfinished A–D and final applicable corpus/untouched-holdout
+gates. These are not optional reductions of the main goal. Only then perform the
+appended deep symbol/installed-plan research phase. Goal active, no user blocker;
+no claim of production completion, push, merge, deployment or publication.
+
 ## Shared issue decisions and exact historical replay — 2026-09-10
 
 After **bb2df22c**, implemented the internal `bas_issues_9` journal: exact

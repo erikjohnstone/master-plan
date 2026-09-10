@@ -1,5 +1,24 @@
 ## Active work
 
+2026-09-10 checkpoint after **f70eda16**: shared BAS issue decisions are exposed
+in Review & changes and `bas_issue_review` (local 0.9.77, 52 tools). Guarded
+observations/correction-start, exact historical replay, changed-input absence and
+withdrawal preserve all original evidence/blockers. Actual real-PDF browser
+correction/export/reload and packaged MCP source/replay/export/new-process recovery
+pass. Browser **2.117–2.964 s**, MCP **1.032–1.381 s**; controlled scope edits, not
+installed truth. Web **2,823 pass / 13 existing skips**, MCP **128 BAS + 33 revision
++ six issue + four packaging + 122 tool tests**, Python **453 with packaging
+enabled**, mypy 20 files. Existing warnings/legacy known-fails stay disclosed.
+Shared issue benchmark **0.884–1.159 s / 523,632,640-byte** incremental RSS passes
+unchanged budgets. No VectorGrid/extraction/symbol/Python-math changes and no full
+corpus or holdout run. Exact proof/failed-candidate record:
+`opentakeoff/docs/bas-production/ISSUE_PUBLIC_PROOF.md`.
+
+Original main goal remains active: remaining exact corrective routes, coverage/
+applicability/exclusions, selective approvals and positive approved snapshots,
+remaining A–D/final corpus gates. The deep symbol/installed-plan research remains
+the final add-on, never a replacement. No push, merge, deploy or publication.
+
 2026-09-10 checkpoint after **bb2df22c**: internal shared BAS issue decisions
 (`bas_issues_9`) retain exact observations/corrections/withdrawals and replay old
 findings after edits and canonical backups. No blocker dismissal or approval.

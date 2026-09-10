@@ -211,10 +211,36 @@ evidence follows recorded headers, with original values and boxes unchanged.
 Save the findings with the existing optional compile JSON `path`; retain ordinary
 evidence JSON plus original PDFs separately. Revision/release work is unfinished.
 
-Imports/exports preserve the additive internal `bas_issues_9` decision journal.
-Journal hashes and lineage alone are not proof of a finding or its disappearance;
-selected observations require shared replay. No new public issue-action verb or
-approval is exposed in this checkpoint; the tool count remains 51.
+### Issue decisions
+
+`bas_issue_review` exposes the shared `bas_issues_9` journal without recompiling.
+`command:{action:"inspect",capture_id?,query?}` returns current findings, history,
+latest decision relationships and the exact `head`/`basis` required for recording.
+Use `query:{path:["project_review","issues"],offset:0,limit:25}` to page findings;
+read an individual array index to get its exact issue/occurrence IDs and evidence.
+
+`action:"record"` takes `request:{operation_id,capture_id,expected_head,
+expected_basis,reviewer,reason,action}`. Inner actions are `acknowledge` or
+`begin_correction` with `issue_key,occurrence_id`; `record_not_reported` with the
+latest `observation_id`; and `withdraw` with the latest `decision_id`.
+Correction-start does not edit the underlying domain. Use its existing explicit
+review tools, then inspect current inputs before confirming absence. Shared replay
+requires the observed finding to have existed and no longer be reported after
+changed inputs. Removal/exclusion may cause absence; it is not physical correction.
+Origin is always `agent_proposal`; reviewer identity is self-declared. No action
+hides a blocker, changes quantities, verifies hardware or approves a deliverable.
+
+`action:"replay",event_id` reconstructs original/current findings and any historical
+absence. History lists verify lineage only; selected replay is separate. PDF bytes
+and saved Python results need their existing verification paths. Each operation
+returns a bounded `view_id`. `action:"read",view_id,query?` uses the same exact
+own-field/index and UTF-16 string paging as revision views below. One completed
+view per Session, at most 128 MiB, expires in 15 minutes or after replacement/state
+change. Cached reads are not a new replay. `action:"export",view_id,path,overwrite?`
+writes the full operation JSON atomically. Persist the project and full journal
+with `export_takeoff`, preferably a source-inclusive evidence bundle. Restore with
+`import_takeoff`. Exact retries retain history; stale/foreign/conflicting writes
+reject without adoption. Approved snapshots remain unfinished. There are 52 tools.
 
 ### Drawing correspondence
 
@@ -376,7 +402,7 @@ includes document text, shape vertices, or result payload content.
 
 ### Staged tool exposure (opt-in)
 
-By default every client gets all 51 tool schemas on `tools/list`—the flat
+By default every client gets all 52 tool schemas on `tools/list`—the flat
 contract every published client already expects. Fifty descriptions is real
 token weight for an agent session that may never touch half of them, so the
 server can instead stage the surface along the workflow it already teaches:
@@ -441,6 +467,7 @@ reads the tool list once. ([#230](https://github.com/Kentucky-ai/opentakeoff/iss
 | `find_schedule` | Locate a schedule table by kind ("room finish", "material")—sheet, title, headers, row count, a `view_sheet`-ready region, and `revised_rows` when delta/REV-marked rows exist. |
 | `compile_corpus_takeoff` | **Schedule-driven HVAC/BAS/valve takeoff** (`kind`: `hvac_equipment` \| `bas_points` \| `control_valves` \| `sequences` \| `embedded_coil_gaps`)—reads the set's equipment/BAS/valve/sequence schedule tables straight off the sheet graph, no shape-tracing. Returns one compiled envelope: `categories` (per-family rows and counts), `totals`, `page_accounting` (which pages were actually seen, which came back empty), and `exclusions` (scope rules that dropped a row, disclosed rather than silent). One dispatcher (`web/src/lib/compileTakeoff.mjs`) routes all five kinds for every caller—MCP tool, CLI, census script—so a kind never silently 404s from one entry point and works from another. |
 | `bas_drawing_review` | Shared retained-source correspondence: `inspect`, `prepare`, `record`, `compare`; additive `revision` command for pinned requirement/quantity comparison, bounded reads, exact export and replayed proposal history. Works without active PDFs after evidence restoration. No extraction or approval. Export to persist. See [contract](#drawing-correspondence). |
+| `bas_issue_review` | Shared finding observations, correction-start, replay-checked absence and withdrawals. Bounded current/history reads, exact original replay and complete result export; no extraction, waiver or approval. See [issue decisions](#issue-decisions). |
 | `reconcile_schedule_plan` | **Cross-references a compiled schedule against the drawing**: for the whole set, or one `family` (e.g. `"VAV"`), sweeps the plan sheets for each schedule tag's drawn symbol and returns one row per tag with `scheduled_qty` (the printed schedule count), `installed_qty` (instances actually swept from the plan), and a `status`—matched, schedule-only (scheduled but never found drawn), plan-only (drawn but not on the schedule), or a disclosed refusal—each citing both the schedule row and the plan ink. This is the call that turns a schedule row-count into an actual reconciled takeoff line; report both quantities and the status, never the schedule count alone. |
 | `sheet_context` | The region's STRUCTURE in one frame: classified vector segments (endpoints as drawn, meta byte per segment), text spans with bboxes, and hatch-family instances with content-derived ids—same pattern spec ⇒ same id anywhere on the sheet, so plan↔legend matching is `id === id`. Decimation is declared and counted on every reply: `kept + dropped === total_in_region`, cap applies longest-first so walls survive. |
 | `view_sheet` | The agent's eyes: render the sheet (or an image-px crop) to PNG. `overlay` burns committed shapes in (solid = human-affirmed, dashed = unreviewed) to verify geometry landed; `grid` burns in a calibrated 1-ft/5-ft measuring grid with foot labels (`"auto"` from the set scale, or the drawing scale like `"1/4"`) so dimensions are counted off cells, not guessed; `marks` (#297) burns disclosure layers in — `question` (withheld placements, orange ?-circle), `struck` (rejections, magenta struck ×), `ring` (the sweep's seed, violet double ring) — in colors off the common CAD pens, so what a reply names, the picture shows. |

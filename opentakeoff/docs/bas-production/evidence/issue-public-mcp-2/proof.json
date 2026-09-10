@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "Built public tool; ordinary real-PDF/history import; bounded read; exact browser/shared historical evidence and absence; source-byte view; proposal/retry/stale rejection; full export; new process recovery"
+  ],
+  "timings": {
+    "inspect_ms": 1054,
+    "replay_ms": 1381,
+    "record_ms": 1036,
+    "reopen_ms": 1032
+  },
+  "browser_original_evidence_equal": true,
+  "historical_absence_equal": true,
+  "final_events": 4,
+  "no_extraction_or_installed_count_claim": true
+}

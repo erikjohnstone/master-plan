@@ -20,6 +20,7 @@ import BasEquipmentWorkspace from "./BasEquipmentWorkspace.jsx";
 import BasProjectReviewWorkspace from "./BasProjectReviewWorkspace.jsx";
 import BasSourceReader from "./BasSourceReader.jsx";
 import { store } from '../lib/store.js';
+import { basReviewNavigation } from './basReviewNavigation.ts';
 
 /** Cap visible technical columns so each family table stays readable. */
 const UI_SPEC_MAX = 12;
@@ -100,6 +101,7 @@ export default function TakeoffDataPanel({
   onBasReview,
   onBasDrawingReview,
   onBasRevisionOperation,
+  onBasIssueReview,
   onBasEquipmentReview,
   onBasAssignmentCalculate,
   onBasAssemblyReview,
@@ -151,14 +153,9 @@ export default function TakeoffDataPanel({
   };
   const evidenceTab = tab === 'points' || tab === 'equipment' || tab === 'review';
   const openReviewDomain = issue => {
-    const targetTab = ['sources', 'points', 'sequences'].includes(issue.domain) ? 'points' : 'equipment';
-    setLocalTab(targetTab);
-    onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: targetTab,
-      ...(targetTab === 'points' ? { mode: issue.domain === 'points' ? 'matrix' : 'sequences',
-        ...(issue.subject.kind === 'matrix' ? { matrixId: issue.subject.id } : {}) } : {
-        equipment: { ...previous?.equipment, engineeringOverview: issue.domain === 'engineering', assemblyOverview: issue.domain === 'assemblies',
-          ...(issue.subject.kind === 'equipment' ? { equipmentId: issue.subject.id } : {}) },
-      }) }));
+    const route = basReviewNavigation(basViewState || {}, issue, basWorkflow);
+    setLocalTab(route.takeoffTab);
+    onBasViewStateChange?.(previous => basReviewNavigation(previous || {}, issue, basWorkflow));
   };
   const [filter, setFilter] = useState("");
   const [busy, setBusy] = useState("");
@@ -421,9 +418,10 @@ export default function TakeoffDataPanel({
         )}
 
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px", ...(tab === 'review' ? { display: 'flex', flexDirection: 'column', minHeight: 0 } : {}) }}>
+          {tab !== 'review' && basViewState?.projectReview?.returnFromDomain && <button type="button" onClick={() => setTab('review')}>← Return to issue review</button>}
           {tab === 'review' ? <BasProjectReviewWorkspace workflow={basWorkflow} state={basViewState?.projectReview}
             onStateChange={updater => onBasViewStateChange?.(previous => ({ ...previous, projectReview: updater(previous?.projectReview || {}) }))}
-            onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} onDrawingReview={onBasDrawingReview} onRevisionOperation={onBasRevisionOperation} restoreContext={restoreContext} />
+            onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} onDrawingReview={onBasDrawingReview} onRevisionOperation={onBasRevisionOperation} onIssueReview={onBasIssueReview} restoreContext={restoreContext} />
             : tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onAssemblyReview={onBasAssemblyReview} onAssemblyCalculate={onBasAssemblyCalculate} onEngineering={onBasEngineering} onOpenCitation={onOpenCitation} />
             : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
           {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}

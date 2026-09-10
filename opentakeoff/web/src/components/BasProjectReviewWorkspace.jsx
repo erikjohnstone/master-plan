@@ -1,17 +1,19 @@
 // Surface-specific reader. Shared saved findings and existing source navigation;
 // no UI-derived quantities, dismissal, approval or new persistence semantics.
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { basProjectReview } from '../lib/basProjectReview.ts';
+import { inspectBasIssueReview } from '../lib/basIssueReview.ts';
 import { downloadText } from '../lib/totals.js';
 import BasOriginalSources from './BasOriginalSources.jsx';
 import BasDrawingWorkspace from './BasDrawingWorkspace.jsx';
 import BasRevisionWorkspace from './BasRevisionWorkspace.jsx';
+import BasIssueActions from './BasIssueActions.jsx';
+import BasIssueHistory from './BasIssueHistory.jsx';
 import './BasPointsWorkspace.css';
 import './BasProjectReviewWorkspace.css';
 
 const domains = { sources: 'Source coverage', points: 'Point lists', sequences: 'Sequences', equipment: 'Equipment', assemblies: 'Assemblies', engineering: 'Engineering' };
 const human = text => String(text).replace(/_/g, ' ');
-export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain, onDrawingReview, onRevisionOperation, restoreContext }) {
+export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain, onDrawingReview, onRevisionOperation, onIssueReview, restoreContext }) {
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [sourceError, setSourceError] = useState('');
   const heading = useRef(null), scroll = useRef(null), returnFocus = useRef(null);
@@ -26,14 +28,14 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
     }
   }, [state.originalSources]);
   useEffect(() => {
-    let live = true;
+    const controller = new AbortController();
     if (!workflow) return;
-    basProjectReview(workflow, workflow.current_capture_id).then(value => {
-      if (live) setComputed({ input: workflow, value, error: '' });
-    }).catch(error => { if (live) setComputed({ input: workflow, value: null, error: error.message }); });
-    return () => { live = false; };
+    inspectBasIssueReview(workflow, workflow.current_capture_id, { signal: controller.signal }).then(value => {
+      if (!controller.signal.aborted) setComputed({ input: workflow, value, error: '' });
+    }).catch(error => { if (!controller.signal.aborted) setComputed({ input: workflow, value: null, error: error.message }); });
+    return () => controller.abort();
   }, [workflow]);
-  const ready = computed.input === workflow, data = ready ? computed.value : null;
+  const ready = computed.input === workflow, workspace = ready ? computed.value : null, data = workspace?.project_review;
   const change = patch => onStateChange(previous => ({ ...previous, ...patch }));
   const rows = useMemo(() => (data?.issues || []).filter(i => (!state.domain || i.domain === state.domain)
     && (!state.severity || i.severity === state.severity) && (!state.filter || `${i.title} ${i.code} ${i.subject.label} ${i.evidence.map(e => e.text).join(' ')}`.toLowerCase().includes(state.filter.toLowerCase()))), [data, state.domain, state.severity, state.filter]);
@@ -68,21 +70,24 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
   return <section className="bas-point-workspace bas-project-review" aria-label="Project BAS review">
     <div className="bas-point-heading"><h2>Review &amp; changes</h2><span>{data.issues.length} saved findings</span>
       <div className="bas-review-actions"><button ref={drawingButton} type="button" onClick={() => change({ drawingReview: true })}>Drawing changes</button><button ref={originalsButton} type="button" onClick={() => change({ originalSources: true })}>Original PDFs</button>
+      <button type="button" aria-pressed={!!state.history} onClick={() => change({ history: !state.history })}>{state.history ? 'Current findings' : 'Decision history'}</button>
       <button type="button" onClick={() => downloadText('bas-review-findings.json', JSON.stringify(data, null, 2), 'application/json')}>Export findings</button></div></div>
     <p className="bas-review-boundary">Current findings only · not an approved takeoff. PDF availability and saved calculations require separate verification.</p>
-    <div className="bas-point-controls">
+    {!state.history && <div className="bas-point-controls">
       <label>Find a finding<input value={state.filter || ''} onChange={e => change({ filter: e.target.value, page: 0 })} placeholder="Issue, equipment or source text" /></label>
       <label>Area<select aria-label="Area" value={state.domain || ''} onChange={e => change({ domain: e.target.value, page: 0 })}><option value="">All areas</option>{Object.entries(domains).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></label>
       <label>Severity<select aria-label="Severity" value={state.severity || ''} onChange={e => change({ severity: e.target.value, page: 0 })}><option value="">All findings</option><option value="blocker">Blocker</option><option value="warning">Warning</option><option value="information">Information</option></select></label>
-    </div>
+    </div>}
     {sourceError && <p role="alert">{sourceError}</p>}
-    {selected ? <section className="bas-review-detail" aria-label="Selected BAS finding">
+    {state.history ? <BasIssueHistory workflow={workflow} workspace={workspace} state={state} onStateChange={onStateChange}
+      onRecord={onIssueReview} onSource={source} onOpenDomain={onOpenDomain} /> : selected ? <section className="bas-review-detail" aria-label="Selected BAS finding">
       <button type="button" onClick={() => { returnFocus.current = selected.occurrence_id; change({ selectedId: null }); }}>← Back to findings</button>
       <h3 tabIndex={-1} ref={heading}>{selected.title}</h3>
       <p><strong>{domains[selected.domain]} · {human(selected.severity)}</strong> · {selected.subject.label}</p>
       <p>{selected.next_step}</p>
       <dl className="bas-review-facts"><dt>Saved dependency state</dt><dd>{human(selected.dependency_status)}</dd><dt>Included / excluded</dt><dd>{human(selected.disposition)}</dd><dt>Original code</dt><dd>{selected.code}</dd></dl>
       <button type="button" onClick={() => onOpenDomain(selected)}>Open {domains[selected.domain]} workspace</button>
+      <BasIssueActions workspace={workspace} finding={selected} state={state} onStateChange={onStateChange} onRecord={onIssueReview} onOpenDomain={onOpenDomain} />
       <h4>Original source evidence · {selected.evidence.length}</h4>
       {!selected.evidence.length && <p>No located source is attached to this finding. Do not interpret this as evidence that the requirement is absent.</p>}
       <div className="bas-point-grid"><table aria-label="Finding source evidence"><thead><tr><th scope="col">Original wording</th><th scope="col">Source</th></tr></thead><tbody>

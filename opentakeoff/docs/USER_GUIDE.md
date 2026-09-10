@@ -27,9 +27,19 @@ because JSON object keys change order. Current findings use `saved_bas_findings_
 older standalone finding exports keep their original rule and IDs. Raw header
 order, blank cells, unlocated evidence and distinct source boxes are preserved.
 
-Imported evidence can also retain internal issue-decision history. These records
-do not hide findings, alter quantities or approve the takeoff. Public issue-action
-controls and approved snapshots are not available at this development checkpoint.
+**Acknowledge** records awareness of an exact finding; **Begin correction** records
+it before opening its domain workspace. Supply a reason and self-declared reviewer.
+These actions never hide findings, alter quantities or approve the takeoff.
+**Decision history** retains observations even after the underlying issue stops
+appearing. Open a decision to replay its original evidence against its pinned
+inputs. After changing the underlying decisions, **Record no longer reported**
+requires shared recomputation to confirm absence. Removal or exclusion can cause
+absence; this is not physical correction or design verification. **Withdraw
+decision** adds a withdrawal, without deleting history. **Export replayed decision**
+contains the full replay; use ordinary evidence export/backup for project recovery.
+Drafts remain through source/domain navigation; stale inputs require a fresh
+decision draft. **Return to issue review** returns from the domain workspace.
+Approved snapshots remain unfinished.
 
 **Original PDFs** lists every physical version referenced by saved BAS history,
 including historical captures. **Retain original** finds the exact bytes among
@@ -1232,7 +1242,7 @@ What's sent, and only when you run an AI feature: the sheet region in question a
 
 The same engine speaks [MCP](https://modelcontextprotocol.io), one command away:
 `npx -y opentakeoff-mcp` (or the one-click `opentakeoff-mcp.mcpb` bundle for Claude Desktop). An
-MCP client gets **<!--tool-count-->51<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
+MCP client gets **<!--tool-count-->52<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
 with the same scale gate and the same provenance receipts:
 
 | Group | Tools |

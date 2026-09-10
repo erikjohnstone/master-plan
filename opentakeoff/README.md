@@ -65,6 +65,12 @@ saved/replayed comparison history. Scoped approvals are still being built; this
 is not an installed-count or release feature. See the
 [correspondence contract](docs/bas-production/DRAWING_CORRESPONDENCE_CONTRACT.md).
 
+Development **Review & changes** and MCP `bas_issue_review` now expose shared
+acknowledgement, correction-start, replay-checked absence and withdrawal history.
+Original findings and blockers remain intact. Decision history stays inspectable
+after changes; exact-ID correction routes preserve existing editor drafts.
+This is not approval, physical correction or a complete BAS-production claim.
+
 Local-first sync now retains compatible BAS history across known saved versions.
 Conflicting review branches produce **BAS sync needs review**, with an exportable
 remote recovery copy when available and an explicit retry—not silent replacement
@@ -133,9 +139,9 @@ set, approve takeoffs or implement revision release.
 Finding identities now survive canonical JSON backup/restore. Table evidence
 follows its recorded column order; original values and source boxes are unchanged.
 
-The internal issue-decision foundation retains observed findings and corrective
-history through backups. It cannot waive blockers or approve quantities; public
-issue actions and approved snapshots are still in development.
+The shared issue-decision journal retains observed findings and corrective
+history through backups. Its public controls are described above; it cannot waive
+blockers or approve quantities. Approved snapshots remain in development.
 
 **Open original** provides a read-only page reader. Historical BAS citations also
 use it when their exact PDF is no longer active. Hash and saved page-frame checks
@@ -215,7 +221,7 @@ otherwise, and nothing an autonomous agent could call.
 
 OpenTakeoff is that engine, with two front ends over identical geometry:
 
-- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->51<!--/tool-count--> tools, on the
+- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->52<!--/tool-count--> tools, on the
   [official MCP registry](https://registry.modelcontextprotocol.io). An agent opens a plan,
   reads the title block, sets the scale, floods the rooms, checks its own work on a rendered
   overlay, and hands back a marked-up planset PDF.
@@ -623,7 +629,7 @@ plus a vision-capable model id.
 | **Voice** | Push-to-talk takeoff commands, recognized on-device in WebAssembly; audio never leaves the browser |
 | **View** | Light or **dark (negative print)**—sheet pixels inverted at draw time, exports follow |
 | **Storage** | IndexedDB + localStorage—client-only, nothing uploaded |
-| **MCP server** | <!--tool-count-->51<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
+| **MCP server** | <!--tool-count-->52<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
 | **Provenance** | Every shape records its scale, its method, its confidence, and whether a person or an agent made it |
 | **Capture (opt-in)** | Bundled [capture server](capture/README.md) banks each contributed takeoff as (geometry → label) training rows |
 | **Deploy** | One static build—Netlify, Vercel, GitHub Pages, Cloudflare Pages, S3, any static host |

@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "Real upload/import; source bbox and draft return; both themes/three widths; keyboard; exact scope correction; absence; reappearance; withdrawal; full replay export; actual durable reload"
+  ],
+  "errors": [],
+  "timings": {
+    "begin_correction_ms": 2117,
+    "record_absence_ms": 2964,
+    "withdraw_ms": 2807
+  },
+  "original_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "finding": "1f86474026aa52d598e988c6cadc6f1e85fb86e1cb7b76a50dbeccde0a8d8833",
+  "events": 3,
+  "original_findings": 456,
+  "final_findings": 459,
+  "controlled_scope_changes": true,
+  "fresh_extraction_truth_or_installed_verification": false
+}

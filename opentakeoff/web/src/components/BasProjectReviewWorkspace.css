@@ -21,3 +21,10 @@
 .bas-bundle-selected span { min-width: 0; overflow-wrap: anywhere; }
 .bas-source-heading button, .bas-review-actions button { margin-left: 0; }
 .bas-review-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-left: auto; }
+.bas-issue-actions { margin-block: var(--sp-4); padding-block: var(--sp-3); border-block: 1px solid var(--ink-faint); }
+.bas-issue-actions .bas-review-actions { margin-top: var(--sp-3); }
+.bas-issue-actions fieldset { display: grid; gap: var(--sp-3); margin: 0 0 var(--sp-3); padding: 0; border: 0; min-width: 0; }
+.bas-issue-actions label, .bas-review-detail > label { display: grid; gap: var(--sp-2); }
+.bas-issue-actions textarea { min-height: calc(var(--ctl-l) * 2); resize: vertical; padding: var(--sp-3); font: inherit; line-height: 1.5; color: var(--ink); background: var(--paper-bright); border: 1px solid var(--ink-faint); }
+.bas-issue-actions button[type="submit"] { justify-self: start; }
+.bas-review-detail td small, .bas-review-detail th small { display: block; font-size: var(--fs-xs); color: var(--ink-secondary); }

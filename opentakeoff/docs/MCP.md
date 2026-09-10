@@ -13,6 +13,14 @@ operating manual—how a takeoff is run, what withholds, what refuses—and
 
 ## Setup
 
+Development `bas_issue_review` exposes current findings and append-only corrective
+history through shared BAS services. Inspect exact findings/head/basis, record an
+observation, edit the underlying domain using its existing tools, then replay and
+record no-longer-reported status only when changed inputs justify it. All decisions
+are self-declared agent proposals, not waivers or approval. Bounded completed views
+and full operation exports are separate from durable project backup. See
+[issue commands](../mcp/README.md#issue-decisions).
+
 Development `bas_drawing_review` works directly against retained BAS history,
 including a restored session without active plans. Inspect captures/events in
 bounded pages, prepare explicit source accounting, then record against the exact
@@ -203,7 +211,7 @@ Register the server with your MCP client (any stdio client):
 Never point a client config at `npm start`—npm's banner goes to stdout,
 which is the MCP wire. `node --import tsx` is the whole invocation.
 
-By default the server hands every client all 51 tool schemas at once. Set
+By default the server hands every client all 52 tool schemas at once. Set
 `OPENTAKEOFF_MCP_STAGED_TOOLS=1` in the server's environment to stage the
 surface instead: only the setup tools start enabled, and the agent opens the
 `measure` / `revise` / `handoff` groups on demand with `open_tool_stage` as

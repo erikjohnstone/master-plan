@@ -12,13 +12,20 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Expose shared issue decisions in **Review & changes** and `bas_issue_review`.
+  Observe an exact finding, start a source-preserving correction, replay historical
+  evidence, record absence after changed inputs, or withdraw without deleting
+  history. MCP delivery is paged, complete exports are separate, and changed
+  project/storage state rejects stale writes. No waiver, approval or extraction
+  changes. MCP 0.9.77 is a local development version, not published.
+
 - Add the internal shared issue journal (`bas_issues_9`): exact observations,
   acknowledgement/correction history, replay-checked absence review and append-only
   withdrawal. Older decisions, calculations, imports and backups preserve it.
   No action waives a blocker or approves a takeoff. Reuse one exact prerequisite
   validation context per workflow read; every engineering entry still gets its
   own ownership and saved-result checks. No extraction or engineering-math change.
-  Public issue UI/MCP actions, approvals and snapshots remain unfinished.
+  Public issue UI/MCP actions are described above; approvals and snapshots remain unfinished.
 
 - Correct shared finding occurrence identity across canonical backup/restore.
   Evidence follows explicit table headers, with unlisted cells retained in a
