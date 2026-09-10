@@ -13,6 +13,14 @@ operating manual—how a takeoff is run, what withholds, what refuses—and
 
 ## Setup
 
+Development `bas_scope_review` exposes retained-data catalogs, scope previews,
+source-reference mapping candidates and append-only scope/coverage proposals.
+Choose a reviewed source set, use exact returned targets/basis, inspect original
+sources, then explicitly record applicability. A candidate is not a verdict;
+an agent proposal is not human approval. `replay` compares original and current
+dependencies. Bounded views/full operation exports are separate from normal
+project backups. See [scope commands](../mcp/README.md#scope-and-source-coverage).
+
 Development `bas_issue_review` exposes current findings and append-only corrective
 history through shared BAS services. Inspect exact findings/head/basis, record an
 observation, edit the underlying domain using its existing tools, then replay and
@@ -211,7 +219,7 @@ Register the server with your MCP client (any stdio client):
 Never point a client config at `npm start`—npm's banner goes to stdout,
 which is the MCP wire. `node --import tsx` is the whole invocation.
 
-By default the server hands every client all 52 tool schemas at once. Set
+By default the server hands every client all 53 tool schemas at once. Set
 `OPENTAKEOFF_MCP_STAGED_TOOLS=1` in the server's environment to stage the
 surface instead: only the setup tools start enabled, and the agent opens the
 `measure` / `revise` / `handoff` groups on demand with `open_tool_stage` as

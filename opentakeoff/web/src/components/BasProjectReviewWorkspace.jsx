@@ -8,17 +8,22 @@ import BasDrawingWorkspace from './BasDrawingWorkspace.jsx';
 import BasRevisionWorkspace from './BasRevisionWorkspace.jsx';
 import BasIssueActions from './BasIssueActions.jsx';
 import BasIssueHistory from './BasIssueHistory.jsx';
+import BasScopeWorkspace from './BasScopeWorkspace.jsx';
 import './BasPointsWorkspace.css';
 import './BasProjectReviewWorkspace.css';
 
 const domains = { sources: 'Source coverage', points: 'Point lists', sequences: 'Sequences', equipment: 'Equipment', assemblies: 'Assemblies', engineering: 'Engineering' };
 const human = text => String(text).replace(/_/g, ' ');
-export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain, onDrawingReview, onRevisionOperation, onIssueReview, restoreContext }) {
+export default function BasProjectReviewWorkspace({ workflow, state = {}, onStateChange, onOpenCitation, onOpenDomain, onDrawingReview, onRevisionOperation, onIssueReview, onScopeReview, restoreContext }) {
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [sourceError, setSourceError] = useState('');
   const heading = useRef(null), scroll = useRef(null), returnFocus = useRef(null);
   const originalsButton = useRef(null), originalsReturn = useRef(false);
   const drawingButton = useRef(null), drawingReturn = useRef(false);
+  const scopeButton = useRef(null), scopeReturn = useRef(false);
+  useEffect(() => {
+    if (!state.scopeReview && scopeReturn.current) { scopeButton.current?.focus(); scopeReturn.current = false; }
+  }, [state.scopeReview]);
   useEffect(() => {
     if (!state.drawingReview && drawingReturn.current) { drawingButton.current?.focus(); drawingReturn.current = false; }
   }, [state.drawingReview]);
@@ -58,6 +63,11 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
     } catch (error) { setSourceError(error.message); }
   }
   if (state.originalSources || !workflow) return <BasOriginalSources workflow={workflow} restoreContext={restoreContext} restoreNotice={state.restoreNotice} onOpenCitation={onOpenCitation} onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
+  if (state.scopeReview) return <BasScopeWorkspace workflow={workflow} state={state.scopes}
+    onStateChange={updater => onStateChange(previous => ({ ...previous, scopes: updater(previous?.scopes || {}) }))}
+    onRecord={onScopeReview} onOpenCitation={onOpenCitation}
+    onDrawingReview={() => change({ scopeReview: false, drawingReview: true })}
+    onBack={() => { scopeReturn.current = true; change({ scopeReview: false }); }} />;
   if (state.revisionReview) return <BasRevisionWorkspace workflow={workflow} state={state.revisions}
     onStateChange={updater => onStateChange(previous => ({ ...previous, revisions: updater(previous?.revisions || {}) }))}
     onOperation={onRevisionOperation} onOpenCitation={onOpenCitation} onBack={() => change({ revisionReview: false })} />;
@@ -70,6 +80,7 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
   return <section className="bas-point-workspace bas-project-review" aria-label="Project BAS review">
     <div className="bas-point-heading"><h2>Review &amp; changes</h2><span>{data.issues.length} saved findings</span>
       <div className="bas-review-actions"><button ref={drawingButton} type="button" onClick={() => change({ drawingReview: true })}>Drawing changes</button><button ref={originalsButton} type="button" onClick={() => change({ originalSources: true })}>Original PDFs</button>
+      <button ref={scopeButton} type="button" onClick={() => change({ scopeReview: true })}>Scope &amp; coverage</button>
       <button type="button" aria-pressed={!!state.history} onClick={() => change({ history: !state.history })}>{state.history ? 'Current findings' : 'Decision history'}</button>
       <button type="button" onClick={() => downloadText('bas-review-findings.json', JSON.stringify(data, null, 2), 'application/json')}>Export findings</button></div></div>
     <p className="bas-review-boundary">Current findings only · not an approved takeoff. PDF availability and saved calculations require separate verification.</p>

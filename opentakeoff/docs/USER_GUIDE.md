@@ -10,6 +10,35 @@ In a hurry, or already in the app? Press **`?`** (or the **?** button in the top
 
 ### Workspace navigation
 
+Development **Review & changes → Scope & coverage** lets you define which retained
+claims a deliverable will include. Choose a **Drawing source set**; **Manage
+drawing sets** opens the existing page-accounting workspace if none exists.
+Create a **New scope**, name its purpose, then **Include available claims** or
+select individual equipment, assigned-points, assembly, responsibility and
+engineering claims. The catalog retains outside/unlocated evidence. Unselected
+is not an explicit exclusion. Exclusions require a reason, consequence and
+original source references; they do not remove shared prerequisites or loads.
+**Preview scope** does not save. Inspect its diagnostics, supply a self-declared
+reviewer and decision reason, then **Save reviewed scope**. No saved scope is an
+approved takeoff.
+
+In **Source coverage**, choose an included claim and original page. **Load original
+source** shows retained text with drawing links. Review the whole page or selected
+original text spans, then **Prepare evidence mappings**. Suggestions only share
+existing source references; they do not establish applicability. Choose an
+assessment, explicitly select applicable mappings, inspect the original source,
+and record your decision with a reason. No suggestion or assessment is accepted
+automatically. Your draft and view survive returning from a citation; changed
+workflow inputs invalidate old previews.
+
+**Decision history → Read decision** replays original evidence and compares
+current dependencies. Overlapping contradictory reviews remain visible.
+**Withdraw decision** retains history. **Export decision evidence** includes the
+complete original/current result, not only visible rows; it is not a project
+backup. Keep the normal evidence workflow export and source-inclusive backup.
+These controls do not waive findings, verify hardware, establish installed
+quantity or finish the still-in-development approval/snapshot workflow.
+
 On the development branch, **Takeoff → Review & changes** gathers saved BAS
 findings without altering quantities or decisions. Filter by **Area**, **Severity**
 or **Find a finding**; select a finding to see its exact source and original inputs.
@@ -55,8 +84,8 @@ unsupported and blank spans. **View original source** opens the exact retained
 span's original PDF location. **Previous text** / **Next text** page 50 spans at
 a time; evidence exports still contain the entire record. This reader does not
 mark a page reviewed, interpret unsupported prose, discard unassigned text or
-approve a takeoff. Coverage/applicability decisions are the next implementation
-step. **Sequence reader** returns to normal sequence browsing; association drafts
+approve a takeoff. Explicit coverage decisions are separate, under
+**Review & changes → Scope & coverage**. **Sequence reader** returns to normal sequence browsing; association drafts
 survive issue/source navigation. The shared source and comparison services have
 not changed.
 
@@ -1261,7 +1290,7 @@ What's sent, and only when you run an AI feature: the sheet region in question a
 
 The same engine speaks [MCP](https://modelcontextprotocol.io), one command away:
 `npx -y opentakeoff-mcp` (or the one-click `opentakeoff-mcp.mcpb` bundle for Claude Desktop). An
-MCP client gets **<!--tool-count-->52<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
+MCP client gets **<!--tool-count-->53<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
 with the same scale gate and the same provenance receipts:
 
 | Group | Tools |

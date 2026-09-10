@@ -169,6 +169,7 @@ import { basWorkflowSchema, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow
 import { applyBasReview } from "../lib/basReview.ts";
 import { applyBasDrawingReview } from "../lib/basDrawingReview.ts";
 import { recordBasIssueFromUi } from "../components/basIssueClient.ts";
+import { recordBasScopeFromUi } from "../components/basScopeClient.ts";
 import { basRevisionOperationSchema, assertBasRevisionResponse } from "../lib/basRevisionOperations.ts";
 import { applyBasEquipmentReview } from "../lib/basEquipmentReview.ts";
 import { normRect } from "../lib/sweepThumb.js";
@@ -13028,6 +13029,9 @@ export default function TakeoffCanvas() {
             return checked;
           }}
           onBasIssueReview={(request, options) => recordBasIssueFromUi(
+            () => ({ workflow: basWorkflowRef.current, epoch: basLoadEpochRef.current, signature: basSourceSignatureRef.current, adapter: store }),
+            updated => { basWorkflowRef.current = updated; setBasWorkflow(updated); }, request, options)}
+          onBasScopeReview={(request, options) => recordBasScopeFromUi(
             () => ({ workflow: basWorkflowRef.current, epoch: basLoadEpochRef.current, signature: basSourceSignatureRef.current, adapter: store }),
             updated => { basWorkflowRef.current = updated; setBasWorkflow(updated); }, request, options)}
           onBasDrawingReview={async request => {

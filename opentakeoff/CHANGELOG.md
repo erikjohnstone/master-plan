@@ -12,10 +12,18 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Connect shared scope/coverage review to an internal Takeoff workspace and
+  `bas_scope_review`. Populate choices from retained claims; preserve original
+  page/span evidence, explicit exclusions, dependencies, draft/source return,
+  guarded saves, history replay and bounded exports. No automatic applicability,
+  waiver, approval or extraction/math change. Real-original UI/packaged-MCP
+  walkthroughs and applicable web/MCP/Python regression gates pass; approval and
+  approved snapshots remain unfinished. See the BAS public scope proof.
+
 - Add internal durable scope/coverage history (`bas_scope_10`) with exact-source
   replay, claim-specific dependency checks, explicit overlapping conflicts and
   append-only withdrawal. Existing editors, imports and evidence backups preserve
-  it. Review is not a waiver or approval; public integration remains in progress.
+  it. Review is not a waiver or approval; public integration is described above.
   No extraction, VectorGrid, symbol or Python production-math changes.
 
 - Add an internal shared deliverable-scope compiler over the existing revision

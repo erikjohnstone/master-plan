@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "Built actual tool; original PDF/browser history; bounded catalog; exact historical source/mappings; original source view; preparation parity; proposal/retry/stale rejection; actual public unrelated/related edits; full export; fresh process recovery"
+  ],
+  "timings": {
+    "catalog_ms": 2227,
+    "replay_ms": 1752,
+    "prepare_ms": 1734,
+    "record_ms": 1838,
+    "replay_unrelated_ms": 2095,
+    "replay_related_ms": 2109,
+    "reopen_ms": 2002
+  },
+  "original_browser_coverage_equal": true,
+  "final_events": 6,
+  "controlled_applicability_and_hardware_inputs": true,
+  "no_extraction_or_installed_quantity_claim": true
+}

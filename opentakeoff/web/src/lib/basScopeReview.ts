@@ -11,7 +11,7 @@ import { deliverableScopeForVerifiedWorkflow, basDeliverableTargetKey, type BasD
 import { basScopeReviewRequestSchema, basScopeReviewEventSchema, basCoverageSlotKey, BAS_SCOPE_REVIEW_RULE,
   type BasScopeReviewEvent, type BasCoverageAction } from './basScopeReviewContract.ts';
 import { validateBasScopeJournal } from './basScopeReviewHistory.ts';
-import type { BasSourceSpan } from './basSources.ts';
+import { sourceForBasScopeCoverage } from './basScopeSource.ts';
 export * from './basScopeReviewContract.ts';
 const sha = z.string().regex(/^[a-f0-9]{64}$/);
 type Options = { signal?: AbortSignal; createdAt?: string };
@@ -52,21 +52,13 @@ async function coverageResult(w: BasWorkflow, action: BasCoverageAction, specifi
   if (!claim) throw new Error('Coverage claim is no longer included in this scope');
   const set = replayBasDrawingHistory(w.captures, w.drawing_events).source_sets.get(action.basis.source_set_id)!;
   if (!set.pages.some(p => p.capture_id === action.unit.capture_id && p.page_id === action.unit.page_id)) throw new Error('Coverage page is outside its source set');
-  const capture = w.captures.find(c => c.capture_id === action.unit.capture_id)!;
-  const page = capture.narrative_sources?.pages.find(p => p.page_id === action.unit.page_id);
-  const bySpan = new Map(page?.spans.map(s => [s.span_id, s]));
-  const spans: BasSourceSpan[] = action.unit.span_ids ? action.unit.span_ids.map(id => {
-    const span = bySpan.get(id); if (!span) throw new Error('Coverage span is not owned by its original page'); return span;
-  }) : page?.spans ?? [];
+  const source = sourceForBasScopeCoverage(w, action.unit);
   const items = new Map(view.inventory.items.map(i => [i.item_id, i])), dependencies = new Set(claim.dependency_item_ids);
   const mappings = action.mapped_item_ids.map(id => {
     const item = items.get(id);
     if (!item || !dependencies.has(id)) throw new Error('Coverage mapping is not an owned dependency of its included claim');
     return { item_id: id, content_fingerprint: item.content_fingerprint, kind: item.kind, label: item.label };
   });
-  const source = { unit: action.unit, text_status: page?.text_status ?? 'unavailable_legacy_capture',
-    frame: page ? { width_px: page.width_px, height_px: page.height_px, rotation: page.rotation } : null,
-    spans, scope: action.unit.span_ids === null ? 'whole_original_page' as const : 'selected_original_spans' as const };
   const fingerprint = await hash({ rule: BAS_SCOPE_REVIEW_RULE, source, claim: action.claim,
     dependency_fingerprint: claim.dependency_fingerprint, assessment: action.assessment,
     mappings: mappings.map(({ label: _label, ...m }) => m) });

@@ -102,6 +102,7 @@ export default function TakeoffDataPanel({
   onBasDrawingReview,
   onBasRevisionOperation,
   onBasIssueReview,
+  onBasScopeReview,
   onBasEquipmentReview,
   onBasAssignmentCalculate,
   onBasAssemblyReview,
@@ -421,7 +422,7 @@ export default function TakeoffDataPanel({
           {tab !== 'review' && basViewState?.projectReview?.returnFromDomain && <button type="button" onClick={() => setTab('review')}>← Return to issue review</button>}
           {tab === 'review' ? <BasProjectReviewWorkspace workflow={basWorkflow} state={basViewState?.projectReview}
             onStateChange={updater => onBasViewStateChange?.(previous => ({ ...previous, projectReview: updater(previous?.projectReview || {}) }))}
-            onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} onDrawingReview={onBasDrawingReview} onRevisionOperation={onBasRevisionOperation} onIssueReview={onBasIssueReview} restoreContext={restoreContext} />
+            onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} onDrawingReview={onBasDrawingReview} onRevisionOperation={onBasRevisionOperation} onIssueReview={onBasIssueReview} onScopeReview={onBasScopeReview} restoreContext={restoreContext} />
             : tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onAssemblyReview={onBasAssemblyReview} onAssemblyCalculate={onBasAssemblyCalculate} onEngineering={onBasEngineering} onOpenCitation={onOpenCitation} />
             : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
           {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}

@@ -74,6 +74,15 @@ exposes the shared page/text accounting with original-source links and bounded
 paging; it is inspection, not a coverage decision or approval.
 This is not approval, physical correction or a complete BAS-production claim.
 
+Development **Review & changes → Scope & coverage** and MCP `bas_scope_review`
+provide populated retained-data choices, explicit source-cited exclusions and
+page/span applicability review. Source-reference suggestions are candidates,
+not automatic coverage decisions. Saved decisions replay against original and
+current dependencies and retain withdrawals/conflicts. Scope review does not
+change quantities, waive findings or approve a deliverable. The
+[public scope proof](docs/bas-production/SCOPE_COVERAGE_PUBLIC_PROOF.md) records
+verified UI/MCP journeys, regression gates and the remaining production work.
+
 Local-first sync now retains compatible BAS history across known saved versions.
 Conflicting review branches produce **BAS sync needs review**, with an exportable
 remote recovery copy when available and an explicit retry—not silent replacement
@@ -224,7 +233,7 @@ otherwise, and nothing an autonomous agent could call.
 
 OpenTakeoff is that engine, with two front ends over identical geometry:
 
-- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->52<!--/tool-count--> tools, on the
+- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->53<!--/tool-count--> tools, on the
   [official MCP registry](https://registry.modelcontextprotocol.io). An agent opens a plan,
   reads the title block, sets the scale, floods the rooms, checks its own work on a rendered
   overlay, and hands back a marked-up planset PDF.
@@ -632,7 +641,7 @@ plus a vision-capable model id.
 | **Voice** | Push-to-talk takeoff commands, recognized on-device in WebAssembly; audio never leaves the browser |
 | **View** | Light or **dark (negative print)**—sheet pixels inverted at draw time, exports follow |
 | **Storage** | IndexedDB + localStorage—client-only, nothing uploaded |
-| **MCP server** | <!--tool-count-->52<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
+| **MCP server** | <!--tool-count-->53<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
 | **Provenance** | Every shape records its scale, its method, its confidence, and whether a person or an agent made it |
 | **Capture (opt-in)** | Bundled [capture server](capture/README.md) banks each contributed takeoff as (geometry → label) training rows |
 | **Deploy** | One static build—Netlify, Vercel, GitHub Pages, Cloudflare Pages, S3, any static host |

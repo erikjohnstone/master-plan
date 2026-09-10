@@ -1,5 +1,48 @@
 # BAS production workflow progress
 
+## Public scope and source coverage — verified increment, 2026-09-10
+
+After **371ec826**, populated shared catalogs, exact reference mapping preparation,
+full-width Scope & coverage UI and `bas_scope_review` MCP are implemented and
+verified. Catalogs/ownership/replay remain shared; editor layouts, drafts and
+adoption remain surface-specific. No extraction, VectorGrid, symbol, point
+interpretation, bbox or Python arithmetic change. Metadata remains local and
+unpublished: **0.9.78 / 53 tools**. The normal BAS gate includes scope tests.
+
+**Web 73663 exit 0:** types/lint/tests/all configured benchmarks/build;
+**2,862 pass / 13 existing skips / zero failures**, tests 86.031 s, build 8.94 s.
+Same three canvas warnings, four legacy One-Click known-fails and bundle notices.
+Scope-journal operations **1.359–2.382 s / 152,059,904-byte incremental RSS**,
+below unchanged 5 s/512 MiB gates. **MCP 36909 exit 0:** types; **128 BAS + 33
+revision + six issue + 11 scope + four packaging + 122 tool/staging/safe-write
+tests**, benchmarks and 53-tool metadata check pass. **Python 45740 exit 0:**
+453 pass with packaging enabled, 12.40 s; mypy 20 source files pass.
+
+**Final browser 43229 exit 0**, `scope-browser-7`: ordinary original upload/import,
+populated scope/exclusion, whole-page original inspection, discarded edit,
+keyboard save, exact VFD clause/bbox, source/draft return, mapped coverage,
+exact-span overlapping conflict and explicit withdrawal, replay/export/reload.
+Five retained events; zero browser errors; measured operations **0.944–4.262 s**.
+All 24 views across both themes/three widths and two source images were visually
+inspected. **Packaged MCP 6167 exit 0**, `scope-mcp-2`: exact browser/shared
+original parity, meaningful VFD source crop, proposal/retry/stale rejection,
+actual public unrelated/related input changes, full export and new-process
+recovery. Six retained events; operations **1.734–2.227 s**.
+
+Research, code boundary, commands, hashes, failure ledger and limits are in
+`SCOPE_COVERAGE_PUBLIC_PROOF.md` and its predeclared contract. Failed label and
+fieldset-overflow attempts remain local; no assertion was weakened. Nine claims
+and 26 selected reference candidates are organizational counts, not automatic
+requirement coverage or installed quantity. Whole-page text still includes
+non-BAS spans; measure useful draft acceptance and remaining review effort in
+the final A–D journeys.
+
+Next: shared readiness, selective explicit approval and source-inclusive approved
+snapshots/export/reopen; remaining A–D acceptance and final corpus/holdout gates,
+then appended symbol/installed-plan phase. No new corpus/holdout run or complete
+BAS-production claim. Goal active, no blocker; no push, merge, deployment or
+publication. This verified increment is ready for its local feature-branch commit.
+
 ## Durable scope and source-coverage journal — 2026-09-10
 
 After **7751d132**, added internal shared `bas_scope_10` decisions and exact

@@ -211,6 +211,50 @@ evidence follows recorded headers, with original values and boxes unchanged.
 Save the findings with the existing optional compile JSON `path`; retain ordinary
 evidence JSON plus original PDFs separately. Revision/release work is unfinished.
 
+### Scope and source coverage
+
+`bas_scope_review` exposes the shared scope/coverage journal. Use
+`command:{action:"catalog"}` for source sets/history; provide `source_set_id` to
+obtain the current pinned `basis`, exact `targets`, and original `pages`. No
+current selection means no target catalog, not zero requirements. Create source
+sets through `bas_drawing_review`. Targets preserve outside/unlocated evidence.
+
+`action:"preview",specification` accepts a `bas_deliverable_scope_spec_v1` with
+`scope_id` UUID, `name`, `reason`, `basis`, `included` claim targets and `excluded`
+targets with reason/consequence/evidence. Claim types are `scheduled_equipment`,
+`assigned_points`, `assembly_components`, `responsibilities` and
+`engineering_compatibility`. At most 2,000 combined targets, at least one included;
+limits reject rather than truncate. Excluding a claim retains dependencies shared
+with included claims. Preview changes no quantities or evidence.
+
+`action:"prepare_coverage",request:{specification,claim,unit}` returns exact source
+spans/frame and selectable dependency mappings. `unit` is `{capture_id,page_id,
+span_ids:null|[exact IDs]}`; null means the whole original page. Only exact retained
+page/span-reference intersections generate suggestions. No suggestion means no
+matching reference, not no requirement. Read the original PDF with `view_sheet`.
+
+`action:"record",request:{operation_id,expected_head,reviewer,reason,action}` accepts
+`save_scope` (specification, previous_scope_event_id), `record_coverage`
+(scope_event_id, current basis, claim, unit, assessment, mapped_item_ids,
+inspected_source:true), `withdraw_scope` (scope_event_id), and `withdraw_coverage`
+(coverage_event_id). Assessments are `applicable_mapped`, `not_applicable`, or
+`unresolved`; only applicable mapping has nonempty owned dependency IDs. All MCP
+writes are `agent_proposal`; self-declared identity is not authenticated human
+review. Exact retries are idempotent; stale, foreign and conflicting writes reject.
+
+`action:"replay",event_id` reconstructs original decisions and compares relevant
+current dependencies; potential overlapping conflicts remain visible. Catalog
+history only validates lineage. All new operations return a bounded `view_id`.
+Use `action:"read",view_id,query` for own-field/numeric-index traversal (for example,
+`["targets"]`, `["source","spans"]`, `["mappings"]`). Maximum 50 entries,
+flagged 256-unit previews and complete strings in up to 16,384 UTF-16-unit slices.
+One 128-MiB view per Session, 15-minute expiry, invalidated by new operations or
+workflow/load/restore changes. A read is cached output, not new replay.
+`action:"export",view_id,path,overwrite?` atomically exports the full operation;
+normal `export_takeoff`/evidence-bundle recovery retains the project journal.
+No action grants approval, waives independent findings, performs Python replay,
+verifies original PDF bytes, or establishes installed quantities.
+
 ### Issue decisions
 
 `bas_issue_review` exposes the shared `bas_issues_9` journal without recompiling.
@@ -240,7 +284,7 @@ change. Cached reads are not a new replay. `action:"export",view_id,path,overwri
 writes the full operation JSON atomically. Persist the project and full journal
 with `export_takeoff`, preferably a source-inclusive evidence bundle. Restore with
 `import_takeoff`. Exact retries retain history; stale/foreign/conflicting writes
-reject without adoption. Approved snapshots remain unfinished. There are 52 tools.
+reject without adoption. Approved snapshots remain unfinished. There are 53 tools.
 
 ### Drawing correspondence
 
@@ -402,7 +446,7 @@ includes document text, shape vertices, or result payload content.
 
 ### Staged tool exposure (opt-in)
 
-By default every client gets all 52 tool schemas on `tools/list`—the flat
+By default every client gets all 53 tool schemas on `tools/list`—the flat
 contract every published client already expects. Fifty descriptions is real
 token weight for an agent session that may never touch half of them, so the
 server can instead stage the surface along the workflow it already teaches:
@@ -468,6 +512,7 @@ reads the tool list once. ([#230](https://github.com/Kentucky-ai/opentakeoff/iss
 | `compile_corpus_takeoff` | **Schedule-driven HVAC/BAS/valve takeoff** (`kind`: `hvac_equipment` \| `bas_points` \| `control_valves` \| `sequences` \| `embedded_coil_gaps`)—reads the set's equipment/BAS/valve/sequence schedule tables straight off the sheet graph, no shape-tracing. Returns one compiled envelope: `categories` (per-family rows and counts), `totals`, `page_accounting` (which pages were actually seen, which came back empty), and `exclusions` (scope rules that dropped a row, disclosed rather than silent). One dispatcher (`web/src/lib/compileTakeoff.mjs`) routes all five kinds for every caller—MCP tool, CLI, census script—so a kind never silently 404s from one entry point and works from another. |
 | `bas_drawing_review` | Shared retained-source correspondence: `inspect`, `prepare`, `record`, `compare`; additive `revision` command for pinned requirement/quantity comparison, bounded reads, exact export and replayed proposal history. Works without active PDFs after evidence restoration. No extraction or approval. Export to persist. See [contract](#drawing-correspondence). |
 | `bas_issue_review` | Shared finding observations, correction-start, replay-checked absence and withdrawals. Bounded current/history reads, exact original replay and complete result export; no extraction, waiver or approval. See [issue decisions](#issue-decisions). |
+| `bas_scope_review` | Populated retained-claim catalog, evidenced scope/exclusions, source-reference coverage candidates, proposal decisions, replay and complete operation export. No extraction, quantity changes, waiver or approval. See [scope and source coverage](#scope-and-source-coverage). |
 | `reconcile_schedule_plan` | **Cross-references a compiled schedule against the drawing**: for the whole set, or one `family` (e.g. `"VAV"`), sweeps the plan sheets for each schedule tag's drawn symbol and returns one row per tag with `scheduled_qty` (the printed schedule count), `installed_qty` (instances actually swept from the plan), and a `status`—matched, schedule-only (scheduled but never found drawn), plan-only (drawn but not on the schedule), or a disclosed refusal—each citing both the schedule row and the plan ink. This is the call that turns a schedule row-count into an actual reconciled takeoff line; report both quantities and the status, never the schedule count alone. |
 | `sheet_context` | The region's STRUCTURE in one frame: classified vector segments (endpoints as drawn, meta byte per segment), text spans with bboxes, and hatch-family instances with content-derived ids—same pattern spec ⇒ same id anywhere on the sheet, so plan↔legend matching is `id === id`. Decimation is declared and counted on every reply: `kept + dropped === total_in_region`, cap applies longest-first so walls survive. |
 | `view_sheet` | The agent's eyes: render the sheet (or an image-px crop) to PNG. `overlay` burns committed shapes in (solid = human-affirmed, dashed = unreviewed) to verify geometry landed; `grid` burns in a calibrated 1-ft/5-ft measuring grid with foot labels (`"auto"` from the set scale, or the drawing scale like `"1/4"`) so dimensions are counted off cells, not guessed; `marks` (#297) burns disclosure layers in — `question` (withheld placements, orange ?-circle), `struck` (rejections, magenta struck ×), `ring` (the sweep's seed, violet double ring) — in colors off the common CAD pens, so what a reply names, the picture shows. |

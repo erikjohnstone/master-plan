@@ -34,6 +34,16 @@ a deliverable, select current source scope or verify installed quantity.
 Unencrypted local recovery files are not authenticated or guaranteed permanent.
 Ordinary JSON import retains its previous semantics.
 
+Development deliverable scope: use `bas_scope_review` to obtain source sets,
+current pinned targets and available original pages. Explicitly select claims
+and evidence-backed exclusions, preview, then record a proposed scope. Inspect
+original pages before making applicability proposals; exact page/span-reference
+suggestions are mapping candidates, never automatic interpretation or proof of
+completeness. Replay historical reviews to expose changed dependencies and
+overlapping contradictions. No scope or coverage action waives findings or
+approves a takeoff. Persist the project journal and originals through normal
+export/restore, not only the cached operation-result export.
+
 Development issue review: use `bas_issue_review` to inspect current findings and
 record exact observations with a reason and self-declared reviewer. Starting a
 correction is not the correction itself; use the relevant existing domain tools.
@@ -234,7 +244,7 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 52 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 53 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
 Forty descriptions is real token weight for a session that may never touch half of them, so the

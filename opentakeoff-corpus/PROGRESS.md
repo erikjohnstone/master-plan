@@ -1,5 +1,28 @@
 ## Active work
 
+2026-09-10 after **371ec826**: public Scope & coverage is implemented and verified
+for a local feature-branch commit. Shared catalogs/mapping preparation and the
+existing journal power UI/MCP; no extraction/VectorGrid/symbol/math change.
+**Web 73663 exit 0:** 2,862 pass / 13 existing skips / zero failures, types/lint/
+bench/build. **MCP 36909 exit 0:** types, 128 BAS + 33 revision + six issue + 11
+scope + four packaging + 122 tool/staging/safe-write tests and benchmarks.
+**Python 45740 exit 0:** 453 pass with packaging enabled; mypy 20 files.
+Unpublished metadata **0.9.78 / 53 tools**; scope suite in normal BAS gate.
+
+**Browser 43229 exit 0**, `scope-browser-7`: ordinary original upload/import,
+populated scope/exclusion, whole-page and exact VFD source inspection, draft
+return, keyboard save, mapped/conflicting span reviews, withdrawal/export/reload;
+five events, zero browser errors, **0.944–4.262 s**. All 24 theme/viewport images
+and two original-source views inspected. **Packaged MCP 6167 exit 0**, `scope-mcp-2`:
+browser/shared original parity, actual public unrelated/related edits, proposal/
+retry/stale rejection, complete export and new-process recovery; **1.734–2.227 s**.
+Failure ledger and exact boundaries: `opentakeoff/docs/bas-production/SCOPE_COVERAGE_PUBLIC_PROOF.md`.
+Nine claims/26 reference candidates are not automatic coverage accuracy. No new
+corpus/holdout evaluation or full BAS-production claim; old baseline retained.
+Readiness, selective approval, approved snapshots, remaining A–D and final
+corpus/holdout gates precede the appended symbol/installed-plan phase. Goal active;
+no blocker, push, merge, deployment or publication.
+
 2026-09-10 checkpoint after **7751d132**: internal shared `bas_scope_10` journal
 retains exact scope/coverage decisions and append-only withdrawal, with historical
 replay, selective currentness and overlapping-conflict disclosure. Human review
