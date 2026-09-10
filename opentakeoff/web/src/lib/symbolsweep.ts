@@ -186,10 +186,13 @@ export interface AffineOptions {
   maxStretch?: number;
   /** Default 10. */
   maxShearDeg?: number;
-  /** Phase 2 — default true once `affine.enabled`. Not implemented yet;
-   * reserved so Phase 2 does not need a new option name. */
+  /** Phase 2 — continuous-rotation candidate generation. Default true once
+   * `affine.enabled`. */
   rotationSearch?: boolean;
-  /** Phase 2/3 — default false. Not implemented yet; reserved. */
+  /** Phase 3 — two-segment-basis affine candidate generation (anisotropic
+   * stretch/shear proposal, not just refinement of an already-proposed
+   * placement). Default false: `symbol_sweep` itself never turns this on —
+   * see docs/SYMBOL-SWEEP-AFFINE-GOAL.md §6. */
   scaleSearch?: boolean;
 }
 
@@ -1299,6 +1302,181 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     }
   }
 
+  // ── 2c. two-segment-basis affine (Phase 3 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md) ──
+  // Phase 2 only ever proposes a SIMILARITY transform: one segment's own
+  // direction+length fixes a rotation and a single implicit uniform scale,
+  // never anisotropic stretch or shear — those need a SECOND, non-parallel
+  // correspondence to become fixable at all (one segment can't tell "rotated
+  // 12°" from "rotated 12° AND stretched 1.3× on y"). Two non-parallel seed
+  // segments (a "basis pair") fix the full 6-DOF affine: find the first
+  // basis segment's sheet correspondent under a RATIO BAND (not the rigid/
+  // similarity search's tight ±2·tol bucketBand — a genuinely stretched
+  // basis segment is drawn a stated factor longer or shorter, by design),
+  // use that single-segment match's rough isotropic-scale similarity guess
+  // to PREDICT where the second basis segment should land, rect-search near
+  // that prediction for its real sheet correspondent (never an independent
+  // re-search — that would be O(candidatesA × candidatesB)), and fit the
+  // full affine from those 4 points. Same discipline as Phase 2: VOTE (a
+  // third, independent seed segment must also be consistent with the fitted
+  // affine) before it ever reaches score(). Off by default; only runs when
+  // opts.affine.scaleSearch (a caller opts in explicitly — §6: symbol_sweep
+  // itself never does).
+  if (affineOn && (affineOpts?.scaleSearch ?? false) && (opts.rotations ?? true)) {
+    // Basis pairs need ANGULAR diversity, which is a different criterion
+    // than the shared `anchors` array's RARITY-only cap: a symbol stretched
+    // on only one axis leaves every segment on the OTHER axis unchanged, so
+    // those segments still coincidentally length-match the seed elsewhere on
+    // the sheet, inflating their observed rarity and pushing them out of the
+    // top-ANCHOR_COUNT `anchors` cut entirely — every surviving anchor ends
+    // up parallel, and no pair would ever clear the ≥20° check (found via a
+    // real x-only-stretch test, not by inspection — see the Finding). Pull
+    // basis CANDIDATES from a wider pool of the rarest DISTINCT lengths
+    // (`byLenQ` already has all of them; just don't slice to ANCHOR_COUNT),
+    // then pick up to K=3 PAIRS from that pool — the rarity-then-length sort
+    // order is unchanged, only the cut point is wider — preferring the
+    // pairs with the lowest combined rarity so the more expensive inner
+    // search below still only ever runs for a bounded few.
+    const basisPool = [...byLenQ.values()]
+      .sort((a, b) => a.rarity - b.rarity || b.len - a.len || a.relIdx - b.relIdx)
+      .slice(0, 6);
+    const basisPairs: Array<[(typeof basisPool)[number], (typeof basisPool)[number]]> = [];
+    for (let i = 0; i < basisPool.length; i++) {
+      for (let j = i + 1; j < basisPool.length; j++) {
+        const ra = rel[basisPool[i].relIdx], rb = rel[basisPool[j].relIdx];
+        const angA = undirectedAngle(ra[3] - ra[1], ra[2] - ra[0]);
+        const angB = undirectedAngle(rb[3] - rb[1], rb[2] - rb[0]);
+        if (angleDelta(angA, angB) >= (20 * Math.PI) / 180) {
+          basisPairs.push([basisPool[i], basisPool[j]]);
+        }
+      }
+    }
+    basisPairs.sort((a, b) => (a[0].rarity + a[1].rarity) - (b[0].rarity + b[1].rarity));
+    basisPairs.length = Math.min(basisPairs.length, 3);
+    if (basisPairs.length) {
+      const maxStretch = affineBounds.maxStretch;
+      const mirrorChoices3: readonly boolean[] = (opts.mirror ?? true) ? [false, true] : [false];
+      // every sheet segment whose length is within the STATED stretch bound
+      // of the seed segment's own length — deliberately wider than
+      // bucketBand, and capped: a very short seed segment's ratio band can
+      // span a dense length neighborhood on a busy sheet, and this is a
+      // per-basis-pair search, not a per-anchor one like bucketBand's.
+      const ratioBand = (L: number): number[] => {
+        const lo = L / maxStretch, hi = L * maxStretch;
+        const out: number[] = [];
+        for (let b = Math.floor(lo); b <= Math.ceil(hi) && out.length < 64; b++) {
+          const a = activeLenBucket.get(b);
+          if (a) for (const i of a) {
+            if (lengths[i] >= lo && lengths[i] <= hi) { out.push(i); if (out.length >= 64) break; }
+          }
+        }
+        return out;
+      };
+      // Nearest sheet endpoint to a query point within `margin`, or null.
+      // Broad-phase via the tol-keyed `grid`'s own nearRect (cell size is
+      // independent of the margin requested — it just visits more cells).
+      const nearestEndpoint = (px: number, py: number, margin: number): [number, number] | null => {
+        let best: [number, number] | null = null, bestD = Infinity;
+        for (const j of grid.nearRect(px - margin, py - margin, px + margin, py + margin)) {
+          for (const [ex, ey] of [[segs[j * 4], segs[j * 4 + 1]], [segs[j * 4 + 2], segs[j * 4 + 3]]] as const) {
+            const d = Math.hypot(ex - px, ey - py);
+            if (d <= margin && d < bestD) { bestD = d; best = [ex, ey]; }
+          }
+        }
+        return best;
+      };
+      type StretchBucket = { m: [number, number, number, number]; tx: number; ty: number; rotation: number; mirrored: boolean; rms: number };
+      const stretchBuckets = new Map<string, StretchBucket>();
+      // ratioBand(A's own length) is keyed to the STATED bound — deliberately
+      // narrower than the margin-based rect search used for B below (§3
+      // Phase 3's own scope: it need not find every stretch, only what the
+      // bound admits, PLUS enough past it to still WITHHELD-disclose a near-
+      // miss). Which of the pair sits on the actually-stretched axis is
+      // unknown ahead of time — an anisotropic stretch leaves the OTHER
+      // axis's segments unchanged, so if the stretched one is tried as A
+      // first, ratioBand may miss its real correspondent (or only find the
+      // seed's own unstretched twin) even though B's margin-based search
+      // would have found it easily. Try BOTH role assignments per pair
+      // rather than gambling on the rarity-driven ordering picking the
+      // right one — this is a fixed ×2 over an already-bounded (≤3 pairs)
+      // search, not a combinatorial blowup.
+      for (const basePair of basisPairs) for (const [ancA, ancB] of [basePair, [basePair[1], basePair[0]]] as const) {
+        const rA = rel[ancA.relIdx], rB = rel[ancB.relIdx];
+        for (const j of ratioBand(rA[4])) {
+          const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
+          for (const mirror of mirrorChoices3) {
+            const ax0 = mirror ? -rA[0] : rA[0], ay0 = rA[1];
+            const ax1 = mirror ? -rA[2] : rA[2], ay1 = rA[3];
+            const localLen = Math.hypot(ax1 - ax0, ay1 - ay0);
+            if (localLen < 1e-6) continue;
+            const localAngle = Math.atan2(ay1 - ay0, ax1 - ax0);
+            for (const [sx0, sy0, sx1, sy1] of [[px, py, qx, qy], [qx, qy, px, py]] as const) {
+              const sheetLen = Math.hypot(sx1 - sx0, sy1 - sy0);
+              if (sheetLen < 1e-6) continue;
+              const theta = Math.atan2(sy1 - sy0, sx1 - sx0) - localAngle;
+              const roughScale = sheetLen / localLen;
+              const c = Math.cos(theta) * roughScale, s = Math.sin(theta) * roughScale;
+              const roughM: [number, number, number, number] = mirror ? [-c, -s, -s, c] : [c, -s, s, c];
+              const Aq = apply(roughM, rA[0], rA[1]);
+              const roughTx = sx0 - Aq[0], roughTy = sy0 - Aq[1];
+              // predict B under the rough ISOTROPIC guess, then rect-search
+              // for its real sheet correspondent — a single segment can't
+              // fix anisotropic scale, so this guess is only trusted enough
+              // to aim the second search, never taken as the final fit.
+              const margin = Math.max(6 * tol, fpS.footprint * (maxStretch - 1) + 2 * tol);
+              const Bp0 = apply(roughM, rB[0], rB[1]);
+              const Bp1 = apply(roughM, rB[2], rB[3]);
+              const q0 = nearestEndpoint(Bp0[0] + roughTx, Bp0[1] + roughTy, margin);
+              const q1 = nearestEndpoint(Bp1[0] + roughTx, Bp1[1] + roughTy, margin);
+              if (!q0 || !q1 || Math.hypot(q0[0] - q1[0], q0[1] - q1[1]) < 1e-6) continue;
+              const fit = fitAffine([
+                [rA[0], rA[1], sx0, sy0], [rA[2], rA[3], sx1, sy1],
+                [rB[0], rB[1], q0[0], q0[1]], [rB[2], rB[3], q1[0], q1[1]],
+              ]);
+              if (!fit) continue;
+              const decomp = decomposeAffine(fit.m);
+              // Cheap prune: reject only clearly degenerate fits. Real
+              // bounds enforcement (§2.3) happens downstream once this
+              // candidate is refined against the FULL correspondence set —
+              // duplicating the exact bound here would just re-run work
+              // refine() (already wired for every xf ≥ rigidXformCount) does
+              // properly, against more evidence than 4 points give it.
+              const sanityLo = 1 / (maxStretch * 3), sanityHi = maxStretch * 3;
+              if (!Number.isFinite(decomp.scale_x) || !Number.isFinite(decomp.scale_y)
+                || decomp.scale_x < sanityLo || decomp.scale_x > sanityHi
+                || decomp.scale_y < sanityLo || decomp.scale_y > sanityHi) continue;
+              if (!insideRequestedRegion(fit.tx, fit.ty)) continue;
+              // The vote: a third, independent seed segment must also land
+              // near a real sheet endpoint pair under this fitted affine —
+              // mirrors Phase 2's ≥2-anchor vote, extended to a 3rd segment
+              // here since the basis pair itself already spent 2 fixing the
+              // transform (there's nothing left to "agree" with otherwise).
+              const voteTol = Math.max(3 * tol, 6);
+              let voted = false;
+              for (let k = 0; k < rel.length && !voted; k++) {
+                if (k === ancA.relIdx || k === ancB.relIdx) continue;
+                const r = rel[k];
+                const va = apply(fit.m, r[0], r[1]), vb = apply(fit.m, r[2], r[3]);
+                if (nearestEndpoint(va[0] + fit.tx, va[1] + fit.ty, voteTol)
+                  && nearestEndpoint(vb[0] + fit.tx, vb[1] + fit.ty, voteTol)) voted = true;
+              }
+              if (!voted) continue;
+              const key = `${Math.round(fit.tx / quant)}:${Math.round(fit.ty / quant)}`;
+              const prior = stretchBuckets.get(key);
+              if (!prior || fit.rms < prior.rms) {
+                stretchBuckets.set(key, { m: fit.m, tx: fit.tx, ty: fit.ty, rotation: decomp.rotation_deg, mirrored: decomp.mirrored, rms: fit.rms });
+              }
+            }
+          }
+        }
+      }
+      for (const b of stretchBuckets.values()) {
+        const xi = xforms.length;
+        xforms.push({ rotation: b.rotation, mirrored: b.mirrored, m: b.m });
+        propose(b.tx, b.ty, xi, 0);
+      }
+    }
+  }
+
   const proposals = [...proposalMap.values()];
 
   // Deterministic scoring order (reading order, then transform preference),
@@ -1470,36 +1648,49 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     const c = proposals[k];
     const score = scoreAt(xforms[c.xf].m, c.tx, c.ty, lumGate ? ungated : undefined);
     if (lumGate && ungated.v >= scoreHigh && score < scoreHigh) lumOut.push([c.tx, c.ty]);
-    if (score < proposalFloor) continue;
-    const row: Scored = { at: [c.tx, c.ty], score, rotation: xforms[c.xf].rotation, mirrored: xforms[c.xf].mirrored, xf: c.xf };
     // Refinement runs for (a) any RIGID-search placement scoring below
     // scoreHigh — a committed rigid match is never revisited, so this stays
     // strictly monotone for the original 8-matrix path — and (b) EVERY
-    // Phase 2 continuous-rotation candidate regardless of its raw score: a
-    // single anchor's angle is "only accurate to a couple of degrees" (§3
-    // Phase 2 step 4) and disclosed values must come from the fit, not that
-    // raw estimate. A Phase 2 row is new by construction — replacing its
-    // transform with the fit's is never a regression, so it accepts a tying
-    // score too, not only a strictly higher one.
-    const isPhase2Candidate = c.xf >= rigidXformCount;
-    if (score < scoreHigh || isPhase2Candidate) {
-      const refined = refine(xforms[c.xf].m, c.tx, c.ty);
-      const accept = refined && (isPhase2Candidate ? refined.score >= row.score : refined.score > row.score);
-      if (accept) {
-        const withinBounds = affineWithinBounds(
-          { rotation_deg: refined.transform.rotation_deg, scale_x: refined.transform.scale_x, scale_y: refined.transform.scale_y, shear_deg: refined.transform.shear_deg, mirrored: refined.transform.mirrored },
-          affineBounds, opts.scale ?? 1,
-        );
-        row.at = refined.at;
-        row.score = refined.score;
-        row.transform = refined.transform;
-        row.mAt = refined.m;
-        // A fit whose numbers are outside the stated bounds is disclosed
-        // (the caller gets the transform and can judge it) but must never
-        // silently become a match on the strength of a score the bounds
-        // check itself says not to trust — §3 Phase 1 step 3.
-        if (refined.score >= scoreHigh && !withinBounds) row.boundsFailed = true;
-      }
+    // dynamically-generated candidate (Phase 2 continuous rotation, Phase 3
+    // two-segment-basis affine) regardless of its raw score: a single
+    // anchor's angle is "only accurate to a couple of degrees" (§3 Phase 2
+    // step 4) and a 4-point basis fit is deliberately rough (§3 Phase 3) —
+    // disclosed values must come from the FULL-correspondence fit, not
+    // either raw estimate. A dynamic row is new by construction — replacing
+    // its transform with the fit's is never a regression, so it accepts a
+    // tying score too, not only a strictly higher one.
+    const isDynamicCandidate = c.xf >= rigidXformCount;
+    // The rigid path's own gate is UNCHANGED: a raw score below the floor
+    // is dropped immediately, exactly as before Phase 2/3 existed — never
+    // call refine() for a rigid candidate this poor (same cost, same result).
+    if (!isDynamicCandidate && score < proposalFloor) continue;
+    const refined = (score < scoreHigh || isDynamicCandidate) ? refine(xforms[c.xf].m, c.tx, c.ty) : null;
+    const accept = refined && (isDynamicCandidate ? refined.score >= score : refined.score > score);
+    // A dynamic candidate's OWN guess matrix (a single anchor's rotation
+    // estimate, or Phase 3's 4-point basis fit) can score below even the
+    // PROPOSAL floor at the fixed rigid tolerance while still being a real
+    // placement — that's exactly what refinement against the FULL
+    // correspondence set is for. Gate it on the BETTER of the two scores so
+    // a rough guess never forecloses refinement's own verdict.
+    if (isDynamicCandidate) {
+      const gateScore = accept ? refined!.score : score;
+      if (gateScore < proposalFloor) continue;
+    }
+    const row: Scored = { at: [c.tx, c.ty], score, rotation: xforms[c.xf].rotation, mirrored: xforms[c.xf].mirrored, xf: c.xf };
+    if (accept) {
+      const withinBounds = affineWithinBounds(
+        { rotation_deg: refined!.transform.rotation_deg, scale_x: refined!.transform.scale_x, scale_y: refined!.transform.scale_y, shear_deg: refined!.transform.shear_deg, mirrored: refined!.transform.mirrored },
+        affineBounds, opts.scale ?? 1,
+      );
+      row.at = refined!.at;
+      row.score = refined!.score;
+      row.transform = refined!.transform;
+      row.mAt = refined!.m;
+      // A fit whose numbers are outside the stated bounds is disclosed
+      // (the caller gets the transform and can judge it) but must never
+      // silently become a match on the strength of a score the bounds
+      // check itself says not to trust — §3 Phase 1 step 3.
+      if (refined!.score >= scoreHigh && !withinBounds) row.boundsFailed = true;
     }
     scored.push(row);
   }

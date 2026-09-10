@@ -851,3 +851,103 @@ test("Phase 2: candidates.considered on a plain 0°-aligned grid does not blow u
     `affine considered=${affine.candidates.considered} vs rigid considered=${rigid.candidates.considered} — should stay well under 3×`);
   assert.equal(affine.matches.length, rigid.matches.length, "a purely 0°-aligned grid should match identically either way");
 });
+
+// ── Phase 3 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — two-segment-basis affine ──
+// Phase 2's single-segment guess fixes a rotation + one implicit UNIFORM
+// scale — it can never propose a genuinely anisotropic stretch or shear,
+// because one correspondence pair can't distinguish "rotated θ" from
+// "rotated θ AND stretched non-uniformly". These fixtures scale ASYM2 up
+// (sc=10) so an anisotropic stretch displaces every segment's length well
+// past the rigid search's ±2·tol band — the rigid path must see NOTHING,
+// exactly like Phase 2's off-grid-rotation tests, so a match here can only
+// have come from Phase 3's own candidate generation.
+const placeAsymM = (at: Point, sc: number, m: readonly [number, number, number, number]): number[] =>
+  ASYM2.flatMap(([ax, ay, bx, by]) => {
+    const A: Point = [m[0] * ax * sc + m[1] * ay * sc + at[0], m[2] * ax * sc + m[3] * ay * sc + at[1]];
+    const B: Point = [m[0] * bx * sc + m[1] * by * sc + at[0], m[2] * bx * sc + m[3] * by * sc + at[1]];
+    return [A[0], A[1], B[0], B[1]];
+  });
+const asymRectSc: [Point, Point] = [[-310, -50], [160, 280]];
+const IDENTITY: [number, number, number, number] = [1, 0, 0, 1];
+
+test("Phase 3: an x-only 1.3× stretch invisible to both the rigid search and Phase 2 is found and disclosed", () => {
+  const seed = placeAsymM([0, 0], 10, IDENTITY);
+  const stretched = placeAsymM([4000, 0], 10, [1.3, 0, 0, 1]);
+  const segs = [...seed, ...stretched];
+  const fp = fingerprintSymbol(segs, asymRectSc);
+  const rigid = matchSymbol(fp, segs, { excludeCenter: fp.center });
+  assert.equal(rigid.matches.length, 0, "an anisotropic stretch this large should produce zero rigid candidates");
+  const phase2Only = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+  assert.equal(phase2Only.matches.length, 0, "scaleSearch defaults false — Phase 2 alone (rotation-only) must not find this either");
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true, scaleSearch: true } });
+  assert.equal(affine.matches.length, 1, "Phase 3 should propose and match the stretched instance");
+  const m = affine.matches[0];
+  assert.ok(m.score >= 0.92, `score should clear the commit bar, got ${m.score}`);
+  assert.ok(m.transform, "a Phase-3-discovered match must disclose its transform");
+  assert.ok(Math.abs(m.transform!.scale_x - 1.3) < 0.05, `disclosed scale_x ${m.transform!.scale_x} vs true 1.3`);
+  assert.ok(Math.abs(m.transform!.scale_y - 1) < 0.05, `disclosed scale_y ${m.transform!.scale_y} vs true 1.0`);
+  assert.equal(m.transform!.mirrored, false);
+});
+
+test("Phase 3: a y-only 1.3× stretch is found and disclosed (the other axis, not just x)", () => {
+  const seed = placeAsymM([0, 0], 10, IDENTITY);
+  const stretched = placeAsymM([4000, 0], 10, [1, 0, 0, 1.3]);
+  const segs = [...seed, ...stretched];
+  const fp = fingerprintSymbol(segs, asymRectSc);
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true, scaleSearch: true } });
+  assert.equal(affine.matches.length, 1);
+  const m = affine.matches[0];
+  assert.ok(Math.abs(m.transform!.scale_x - 1) < 0.05, `disclosed scale_x ${m.transform!.scale_x} vs true 1.0`);
+  assert.ok(Math.abs(m.transform!.scale_y - 1.3) < 0.05, `disclosed scale_y ${m.transform!.scale_y} vs true 1.3`);
+});
+
+test("Phase 3: a 1.2× x-stretch plus 8° shear is found and disclosed", () => {
+  // Constructed directly from decomposeAffine's own forward definition so the
+  // expected numbers are exact by construction: x-axis image kept along the
+  // seed's own x-axis at length 1.2 (scale_x=1.2), y-axis image at length 1
+  // (scale_y=1) turned 82° from it (angleBetween=82° ⇒ shear_deg=90−82=8°).
+  const shearM: [number, number, number, number] = [1.2, Math.cos((82 * Math.PI) / 180), 0, Math.sin((82 * Math.PI) / 180)];
+  const seed = placeAsymM([0, 0], 10, IDENTITY);
+  const sheared = placeAsymM([4000, 0], 10, shearM);
+  const segs = [...seed, ...sheared];
+  const fp = fingerprintSymbol(segs, asymRectSc);
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true, scaleSearch: true } });
+  assert.equal(affine.matches.length, 1);
+  const m = affine.matches[0];
+  assert.ok(Math.abs(m.transform!.scale_x - 1.2) < 0.05, `disclosed scale_x ${m.transform!.scale_x} vs true 1.2`);
+  assert.ok(Math.abs(m.transform!.scale_y - 1) < 0.05, `disclosed scale_y ${m.transform!.scale_y} vs true 1.0`);
+  assert.ok(Math.abs(m.transform!.shear_deg - 8) < 2, `disclosed shear_deg ${m.transform!.shear_deg} vs true 8`);
+});
+
+test("Phase 3: a 1.6× stretch (over the default 1.5× bound) is withheld with the bounds reason, never a match", () => {
+  const seed = placeAsymM([0, 0], 10, IDENTITY);
+  const stretched = placeAsymM([4000, 0], 10, [1.6, 0, 0, 1]);
+  const segs = [...seed, ...stretched];
+  const fp = fingerprintSymbol(segs, asymRectSc);
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true, scaleSearch: true } });
+  assert.equal(affine.matches.length, 0, "a 1.6× stretch (over the default 1.5× bound) must never commit as a match");
+  const perfect = affine.withheld.find((w) => w.transform && Math.abs(w.transform.scale_x - 1.6) < 0.05);
+  assert.ok(perfect, `expected a withheld row disclosing the true ~1.6× fit, got: ${JSON.stringify(affine.withheld)}`);
+  assert.ok(/stretch/.test(perfect!.reason) && /bar 1\.5/.test(perfect!.reason), `bounds reason should name the stretch and the bar, got: ${perfect!.reason}`);
+});
+
+test("Phase 3: opts.rotations === false disables two-segment-basis search too, exactly as it disables the rigid family and Phase 2", () => {
+  const seed = placeAsymM([0, 0], 10, IDENTITY);
+  const stretched = placeAsymM([4000, 0], 10, [1.3, 0, 0, 1]);
+  const segs = [...seed, ...stretched];
+  const fp = fingerprintSymbol(segs, asymRectSc);
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, rotations: false, affine: { enabled: true, scaleSearch: true } });
+  assert.equal(affine.matches.length, 0);
+  assert.equal(affine.withheld.length, 0, "an explicit rotations:false means silence for a stretched instance, exactly as it always has");
+});
+
+test("Phase 3: candidates.considered on a plain 0°-aligned grid does not blow up (guards the vote against a proposal explosion)", () => {
+  const placements = Array.from({ length: 6 }, (_, i) => ({ at: [i * 100, 0] as Point }));
+  const segs = place(placements);
+  const fp = fingerprintSymbol(segs, RECT);
+  const rigid = matchSymbol(fp, segs);
+  const affine = matchSymbol(fp, segs, { affine: { enabled: true, scaleSearch: true } });
+  assert.ok(affine.candidates.considered < rigid.candidates.considered * 3,
+    `affine considered=${affine.candidates.considered} vs rigid considered=${rigid.candidates.considered} — should stay well under 3×`);
+  assert.equal(affine.matches.length, rigid.matches.length, "a purely 0°-aligned grid should match identically either way");
+});
