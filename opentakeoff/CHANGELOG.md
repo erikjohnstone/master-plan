@@ -12,6 +12,12 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add internal durable scope/coverage history (`bas_scope_10`) with exact-source
+  replay, claim-specific dependency checks, explicit overlapping conflicts and
+  append-only withdrawal. Existing editors, imports and evidence backups preserve
+  it. Review is not a waiver or approval; public integration remains in progress.
+  No extraction, VectorGrid, symbol or Python production-math changes.
+
 - Add an internal shared deliverable-scope compiler over the existing revision
   inventory. Exact source-cited exclusions retain included prerequisites and
   original quantities; dependency fingerprints distinguish relevant changes

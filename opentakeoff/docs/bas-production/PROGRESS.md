@@ -1,5 +1,32 @@
 # BAS production workflow progress
 
+## Durable scope and source-coverage journal — 2026-09-10
+
+After **7751d132**, added internal shared `bas_scope_10` decisions and exact
+historical replay. Whole-page/span applicability, mapped dependencies, scope
+versions and withdrawals survive persistence. Unrelated edits do not invalidate
+unchanged coverage; relevant edits do. Conflicting overlapping assessments stay
+visible. No waiver, automatic interpretation, source-byte/Python verification or
+approval is implied by recording a review. No extraction/VectorGrid/symbol/math
+change. Public UI/MCP scope/coverage controls remain next, not already delivered.
+
+**Web 4354 exit 0:** types/lint/tests/all benchmarks/build; **2,852 pass / 13
+existing skips / zero failures**, tests 103.458 s, build 15.26 s. Existing warnings
+and known-fail benchmark controls remain. **MCP 12331 exit 0:** typecheck and
+**10 pass**, including actual Python demand/unknown preservation and failed
+engineering constraints remaining visible after coverage review. New internal
+operations **1.690–3.071 s / 96,059,392-byte incremental peak RSS** in the full
+gate, within predeclared 5 s/512 MiB. Earlier real-original archive proof **86100
+exit 0** preserved the exact 924,578-byte PDF and full decision replay. Harness
+failures/corrections and limits: `SCOPE_COVERAGE_JOURNAL_PROOF.md`.
+
+The human-in-loop/workload-reduction clarification is recorded in the goal.
+Next: populated public scope/coverage review, shared readiness, selective explicit
+approval, source-inclusive approved snapshots/export/reopen; remaining A–D and
+final corpus/holdout acceptance, then appended symbol/installed-plan phase.
+No new public walkthrough or corpus/holdout run. Goal active; no blocker, push,
+merge, deployment or production-completion claim.
+
 ## Shared deliverable scope and dependency compiler — 2026-09-10
 
 After **c1a7fcea**, added the internal shared exact-ID scope/exclusion compiler

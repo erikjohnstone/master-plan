@@ -25,15 +25,16 @@ export async function addRevisionSourceSet(workflow: BasWorkflow, pageIndices?: 
 }
 export const revisionBasis = (w: BasWorkflow) => defaultBasRevisionBasis(w, w.drawing_events!.at(-1)!.event_id);
 
-export async function revisionFixture() {
+export async function revisionFixture(options: { sha256?: string; byte_length?: number } = {}) {
   const f = await engineeringFixture({ withSequence: true });
-  const source = buildBasSourceContext([{ sha256: 'a'.repeat(64), byte_length: 100, name: 'controlled-two-pages.pdf', page_count: 2,
+  const source = buildBasSourceContext([{ sha256: options.sha256 ?? 'a'.repeat(64), byte_length: options.byte_length ?? 100, name: 'controlled-two-pages.pdf', page_count: 2,
     pages: [0, 1].map(i => ({ page_number: i + 1, sheet_key: `controlled.pdf#${i + 1}`, width_px: 1800, height_px: 1000, rotation: 0,
       spans: i ? [{ str: 'AHU-1 THRU AHU-2', x0: 410, y0: 410, x1: 600, y1: 420 }] : [
         ...f.source.pages[0].spans.map(s => ({ str: s.text, x0: s.bbox_px[0], y0: s.bbox_px[1], x1: s.bbox_px[2], y1: s.bbox_px[3] })),
         { str: '2. THE AHU SYSTEM SHALL BE PROVIDED WITH A FACTORY FURNISHED ON-BOARD BACNET CONTROLLER.', x0: 10, y0: 340, x1: 1600, y1: 360 },
       ] })) }]);
   const points = structuredClone(f.capture.points), m = points.matrices[0], box = [10, 450, 250, 470] as [number, number, number, number];
+  m.source_id = source.documents[0].source_id; m.page_id = source.pages[0].page_id;
   m.raw.sheet = source.pages[0].sheet_keys[0];
   m.raw.headers = ['POINT', 'AI', 'DI', 'ALARM', 'AV', 'DO'];
   const cells = Object.fromEntries([['POINT', 'SUPPLY AIR TEMPERATURE'], ['AI', '2'], ['DI', '?'], ['ALARM', 'X'], ['AV', '1']]

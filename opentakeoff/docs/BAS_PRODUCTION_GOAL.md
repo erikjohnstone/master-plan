@@ -26,6 +26,24 @@ Deliver an integrated, enterprise-quality workflow in the existing platform, sup
 
 ## Definition of “fully implemented”
 
+User clarification, 2026-09-10: the production target is **human-in-the-loop**.
+Human review is not itself a production-readiness defect. Generate useful,
+evidence-backed takeoff data and focus the estimator on exceptions, applicability
+and explicit approval; do not substitute manual reconstruction of the takeoff.
+Complete the five bounded workflows and their release/verification gates without
+requiring universal unattended understanding. This clarification does not waive
+source grounding, missing coverage, failed checks or the appended symbol phase.
+
+The user additionally emphasizes substantial workload reduction, not merely a
+safe manual editor. Automatically perform supported extraction, organization,
+identity/relationship resolution, quantity derivation and cross-checking; present
+source-backed drafts or clearly labeled candidates when human confirmation is
+required. Never fill unsupported facts just to reduce clicks. Measure useful
+automatic coverage, accepted/corrected/rejected draft results, and remaining
+manual work on representative corpus journeys separately from unit-test counts.
+Human review is the judgment/approval layer, not a substitute for implementing
+the requested automated work. All five workflows retain their full scope.
+
 Before coding each workflow, define its input contract, supported evidence patterns, complete user journey, unsupported conditions, and falsifiable acceptance tests. A completed feature must work from real input through durable state, source inspection, review, and export; no placeholder panels, demo-only data, hidden feature stubs, or transient-only implementations.
 
 Support explicit, auditable uncertainty. Missing evidence is not zero, and “unsupported” is not “complete.” A useful unsupported-input diagnostic is necessary but does not by itself satisfy a feature's acceptance criteria. Do not declare success by turning every difficult case into a refusal. Track actual coverage and correct automatic results separately from refusals.

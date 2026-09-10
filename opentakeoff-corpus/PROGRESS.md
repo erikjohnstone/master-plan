@@ -1,5 +1,27 @@
 ## Active work
 
+2026-09-10 checkpoint after **7751d132**: internal shared `bas_scope_10` journal
+retains exact scope/coverage decisions and append-only withdrawal, with historical
+replay, selective currentness and overlapping-conflict disclosure. Human review
+cannot waive existing BAS findings. Previous persistence/editor paths retain the
+additive data. No extraction, VectorGrid, symbol or Python production math change.
+Public scope/coverage review and actual readiness/approval remain unfinished.
+
+Final **web 4354 exit 0: 2,852 pass / 13 existing skips**, types/lint/bench/build;
+same warning/known-fail controls. Final **MCP 12331 exit 0: types + 10 pass**, with
+actual Python replay, unknown demand and failure preservation. Full-gate internal
+operations **1.690–3.071 s / 96,059,392-byte incremental peak RSS** under 5 s/512 MiB.
+Real-original backup **86100 exit 0** retains original 924,578-byte PDF and full
+workflow/decision replay. Details, failed harness attempts and current limits:
+`opentakeoff/docs/bas-production/SCOPE_COVERAGE_JOURNAL_PROOF.md`.
+
+Next: populated public coverage/scope choices, UI/MCP integration, readiness,
+selective approval and approved source-inclusive snapshot/export/reopen. Preserve
+all remaining A–D and final corpus/holdout gates before the appended symbol phase.
+User requires substantial automation with human exception review, not manual
+reconstruction. Active, no blocker; no new corpus/holdout or public-walkthrough
+claim; no push/merge/deploy/publication.
+
 2026-09-10 checkpoint after **c1a7fcea**: added the internal shared deliverable
 scope/exclusion compiler, preserving the original inventory, citations, saved
 quantities, unknowns and stale dependencies. Explicit report exclusions cannot

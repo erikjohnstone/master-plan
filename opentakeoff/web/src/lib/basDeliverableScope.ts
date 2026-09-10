@@ -1,6 +1,6 @@
 /** SHOULD THIS BE ON THE SHARED PATH? Yes. Exact claim/dependency selection is
  * shared truth. This compiler neither changes quantities nor grants approval. */
-import { verifyBasWorkflow } from './basWorkflow.ts';
+import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 import { inventoryForVerifiedBasRevision } from './basRevisionInventory.ts';
 import type { BasRevisionItem } from './basRevisionInventoryContract.ts';
 import { canonicalBasJson } from './basCanonical.ts';
@@ -22,11 +22,19 @@ type Diagnostic = BasDeliverableScope['claims'][number]['diagnostics'][number];
  * hashes, computed numbers, statuses or source quotes are never authoritative. */
 export async function buildBasDeliverableScope(raw: unknown, rawSpecification: unknown, signal?: AbortSignal): Promise<BasDeliverableScope> {
   const specification = basDeliverableScopeSpecSchema.parse(rawSpecification);
+  signal?.throwIfAborted();
+  const workflow = await verifyBasWorkflow(raw); signal?.throwIfAborted();
+  return deliverableScopeForVerifiedWorkflow(workflow, specification, signal);
+}
+
+/** Internal operation-local reuse only: caller must already own and verify the
+ * workflow. Public input always enters through buildBasDeliverableScope. */
+export async function deliverableScopeForVerifiedWorkflow(workflow: BasWorkflow, rawSpecification: unknown, signal?: AbortSignal): Promise<BasDeliverableScope> {
+  const specification = basDeliverableScopeSpecSchema.parse(rawSpecification);
   specification.included.sort(sortTargets);
   specification.excluded.sort((a, b) => sortTargets(a.target, b.target));
   specification.excluded.forEach(e => e.evidence.sort((a, b) => lexical(canonicalBasJson(a), canonicalBasJson(b))));
   signal?.throwIfAborted();
-  const workflow = await verifyBasWorkflow(raw); signal?.throwIfAborted();
   const inventory = await inventoryForVerifiedBasRevision(workflow, specification.basis, signal);
   const items = new Map(inventory.items.map(i => [i.item_id, i]));
   const lookup = new Map(inventory.items.map(i => [key(i.capture_id, i.kind, i.subject_id), i]));
