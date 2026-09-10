@@ -263,6 +263,18 @@ export interface SweepOptions {
   /** Counter-examples already read (canonical frame) — the cross-sheet form of
    * `exclude`, scaled with the fingerprint when a size ratio applies. */
   negatives?: SymbolNegative[];
+  /** Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — exclude exploded-text
+   * clusters (a PDF exporter that turns text into vector strokes leaves a
+   * dense cluster of short glyph-stroke segments, not one drawn symbol) from
+   * the SHEET-side "extra linework" tally in `extraFor`, so a tag or label
+   * drawn near a real instance never reads as a richer-variant suspect.
+   * Default: on when `affine.enabled` is, off otherwise — an exploded-tag
+   * false extra is exactly the kind of "changed symbol" noise this document
+   * is about, so it rides the same opt-in as the rest of that work. See
+   * `fingerprintSymbol`'s own `dropGlyphClusters` parameter for the SEED-side
+   * counterpart (baked into the fingerprint at construction, not an option
+   * here — a fingerprint is built once and reused across many sweeps). */
+  dropGlyphClusters?: boolean;
 }
 
 export interface SweepMatch {
@@ -543,6 +555,82 @@ const angleDelta = (a: number, b: number): number => {
   return Math.min(d, Math.PI - d);
 };
 
+/** Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — exploded-text detection. A
+ * PDF exporter that turns text into vector strokes leaves a dense cluster of
+ * individually-short segments (one per glyph stroke) rather than one drawn
+ * symbol. Marks entries as glyph-cluster ink when they form a group of at
+ * least MIN_GLYPH_CLUSTER segments, each no longer than `4·tol` (a tick mark
+ * or hardware feature this short but ALONE never reaches the cluster size;
+ * a real symbol's own strokes are typically longer than this), whose union
+ * bounding box is small relative to `refDiag` (a whole symbol's own
+ * footprint diagonal — a label sits inside a small corner of it, it doesn't
+ * span it), and whose directions are genuinely varied (glyph strokes go many
+ * ways; a hardware feature made of near-parallel short segments does not).
+ * `pts` is `[ax, ay, bx, by]` per entry, any coordinate frame (centroid-
+ * relative or absolute — this is purely geometric); returns a same-length,
+ * same-order mask. Pure: never mutates `pts`, never throws. */
+const MIN_GLYPH_CLUSTER = 6;
+const GLYPH_CLUSTER_MIN_DIRS = 3;
+function glyphClusterMask(
+  pts: ReadonlyArray<readonly [number, number, number, number]>, tol: number, refDiag: number,
+): boolean[] {
+  const n = pts.length;
+  const mask = new Array<boolean>(n).fill(false);
+  const shortMax = 4 * tol;
+  const short: number[] = [];
+  for (let i = 0; i < n; i++) {
+    const [ax, ay, bx, by] = pts[i];
+    if (Math.hypot(bx - ax, by - ay) <= shortMax) short.push(i);
+  }
+  if (short.length < MIN_GLYPH_CLUSTER) return mask;
+  // Union-find over the SHORT subset only — a long structural line never
+  // participates in a glyph cluster regardless of proximity to one.
+  const parent = short.map((_, k) => k);
+  const find = (x: number): number => {
+    while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; }
+    return x;
+  };
+  const union = (a: number, b: number): void => {
+    const ra = find(a), rb = find(b);
+    if (ra !== rb) parent[ra] = rb;
+  };
+  const link = Math.max(4 * tol, 4); // small letter-to-letter gap, not a search radius
+  for (let a = 0; a < short.length; a++) {
+    const [ax0, ay0, ax1, ay1] = pts[short[a]];
+    for (let b = a + 1; b < short.length; b++) {
+      const [bx0, by0, bx1, by1] = pts[short[b]];
+      const d = Math.min(
+        Math.hypot(ax0 - bx0, ay0 - by0), Math.hypot(ax0 - bx1, ay0 - by1),
+        Math.hypot(ax1 - bx0, ay1 - by0), Math.hypot(ax1 - bx1, ay1 - by1),
+      );
+      if (d <= link) union(a, b);
+    }
+  }
+  const groups = new Map<number, number[]>();
+  for (let k = 0; k < short.length; k++) {
+    const r = find(k);
+    const arr = groups.get(r);
+    if (arr) arr.push(k); else groups.set(r, [k]);
+  }
+  for (const idxs of groups.values()) {
+    if (idxs.length < MIN_GLYPH_CLUSTER) continue;
+    let bx0 = Infinity, by0 = Infinity, bx1 = -Infinity, by1 = -Infinity;
+    const dirs: number[] = [];
+    for (const k of idxs) {
+      const [ax, ay, bx, by] = pts[short[k]];
+      bx0 = Math.min(bx0, ax, bx); by0 = Math.min(by0, ay, by);
+      bx1 = Math.max(bx1, ax, bx); by1 = Math.max(by1, ay, by);
+      const a = undirectedAngle(by - ay, bx - ax);
+      if (!dirs.some((d) => angleDelta(d, a) <= (15 * Math.PI) / 180)) dirs.push(a);
+    }
+    const longSide = Math.max(bx1 - bx0, by1 - by0);
+    if (longSide >= 0.25 * refDiag) continue; // spans too much to be a label
+    if (dirs.length < GLYPH_CLUSTER_MIN_DIRS) continue; // too uniform to be text
+    for (const k of idxs) mask[short[k]] = true;
+  }
+  return mask;
+}
+
 /** Endpoint junctions clustered at the stated matching tolerance. Original
  * CAD corners survive when every side is split into multiple PDF paths, so
  * their incident direction signatures complement whole-segment anchors. */
@@ -634,6 +722,13 @@ export interface SymbolFingerprint {
    * caller discloses it, because "matched 100% of what was left" is a
    * different claim from "matched 100% of the symbol". */
   subPixelDropped?: number;
+  /** Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — segments excluded from
+   * `rel`/`totalLen` because `fingerprintSymbol` judged them an exploded-text
+   * cluster (a tag or label drawn inside the seed rect, not the symbol
+   * itself) rather than real symbol linework. Present only when
+   * `dropGlyphClusters` was passed AND something was actually dropped —
+   * same "disclose only what happened" convention as `subPixelDropped`. */
+  droppedGlyphSegments?: number;
 }
 
 export interface SymbolMatchResult {
@@ -737,8 +832,21 @@ export function scaleFingerprint(fp: SymbolFingerprint, k: number): SymbolFinger
 
 /** Step 1 alone: the segments fully inside the seed rect, expressed relative
  * to their length-weighted centroid. Throws the same instructive refusals
- * sweepSymbols always has (empty marquee, region-sized marquee). */
-export function fingerprintSymbol(segs: number[], seedRect: [Point, Point], lum?: Uint8Array): SymbolFingerprint {
+ * sweepSymbols always has (empty marquee, region-sized marquee).
+ *
+ * `dropGlyphClusters` (Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md, default
+ * off — a caller opts in explicitly, same convention as every other affine
+ * knob): a marquee that catches a nearby tag or label along with the symbol
+ * gets that label's exploded-text strokes excluded from `rel`/`totalLen`
+ * before anything else is computed from them, so a DIFFERENT instance
+ * without that exact label text is never penalized for lacking ink that was
+ * never really "the symbol" to begin with. Baked in at construction time
+ * (not a `matchSymbol` option) because a fingerprint is built once and
+ * reused across many sweeps — there is no later point where re-deciding
+ * this would make sense. */
+export function fingerprintSymbol(
+  segs: number[], seedRect: [Point, Point], lum?: Uint8Array, opts?: { dropGlyphClusters?: boolean },
+): SymbolFingerprint {
   const rx0 = Math.min(seedRect[0][0], seedRect[1][0]), rx1 = Math.max(seedRect[0][0], seedRect[1][0]);
   const ry0 = Math.min(seedRect[0][1], seedRect[1][1]), ry1 = Math.max(seedRect[0][1], seedRect[1][1]);
 
@@ -762,8 +870,33 @@ export function fingerprintSymbol(segs: number[], seedRect: [Point, Point], lum?
     throw new Error(`The seed rect holds ${seedIdx.length} segments — that is a region, not one symbol instance. Marquee a single symbol.`);
   }
 
+  // Glyph-cluster exclusion runs against the WHOLE marqueed instance's own
+  // raw bbox diagonal (computed here, before any filtering) — using a
+  // POST-filter footprint as the "is this small relative to the symbol"
+  // reference would be circular.
+  let keepIdx = seedIdx;
+  let droppedGlyphSegments = 0;
+  if (opts?.dropGlyphClusters) {
+    let rbx0 = Infinity, rby0 = Infinity, rbx1 = -Infinity, rby1 = -Infinity;
+    for (const i of seedIdx) {
+      rbx0 = Math.min(rbx0, segs[i * 4], segs[i * 4 + 2]); rby0 = Math.min(rby0, segs[i * 4 + 1], segs[i * 4 + 3]);
+      rbx1 = Math.max(rbx1, segs[i * 4], segs[i * 4 + 2]); rby1 = Math.max(rby1, segs[i * 4 + 1], segs[i * 4 + 3]);
+    }
+    const rawDiag = Math.hypot(rbx1 - rbx0, rby1 - rby0);
+    const pts = seedIdx.map((i) => [segs[i * 4], segs[i * 4 + 1], segs[i * 4 + 2], segs[i * 4 + 3]] as const);
+    const mask = glyphClusterMask(pts, SWEEP_TOL_PX, rawDiag);
+    const kept = seedIdx.filter((_, k) => !mask[k]);
+    // Never leave zero segments to fingerprint (a marquee that is ENTIRELY
+    // a label, not a symbol, is a marquee mistake — not this filter's call
+    // to make into a thrown error) — fall back to the unfiltered set.
+    if (kept.length) {
+      droppedGlyphSegments = seedIdx.length - kept.length;
+      keepIdx = kept;
+    }
+  }
+
   let totalLen = 0, cxw = 0, cyw = 0;
-  for (const i of seedIdx) {
+  for (const i of keepIdx) {
     const L = segLen(segs, i);
     totalLen += L;
     cxw += ((segs[i * 4] + segs[i * 4 + 2]) / 2) * L;
@@ -771,25 +904,27 @@ export function fingerprintSymbol(segs: number[], seedRect: [Point, Point], lum?
   }
   const seedCx = cxw / totalLen, seedCy = cyw / totalLen;
   // centroid-relative seed segments: [ax, ay, bx, by, len] per entry
-  const rel = seedIdx.map((i) => [
+  const rel = keepIdx.map((i) => [
     segs[i * 4] - seedCx, segs[i * 4 + 1] - seedCy,
     segs[i * 4 + 2] - seedCx, segs[i * 4 + 3] - seedCy,
     segLen(segs, i),
   ]);
-  // the symbol's own footprint (tight bbox over the seed segments) — the
+  // the symbol's own footprint (tight bbox over the KEPT seed segments,
+  // i.e. the symbol itself once a glyph cluster is excluded) — the
   // shadow-suppression radius in matchSymbol is half its diagonal
   let sbx0 = Infinity, sby0 = Infinity, sbx1 = -Infinity, sby1 = -Infinity;
-  for (const i of seedIdx) {
+  for (const i of keepIdx) {
     sbx0 = Math.min(sbx0, segs[i * 4], segs[i * 4 + 2]); sby0 = Math.min(sby0, segs[i * 4 + 1], segs[i * 4 + 3]);
     sbx1 = Math.max(sbx1, segs[i * 4], segs[i * 4 + 2]); sby1 = Math.max(sby1, segs[i * 4 + 1], segs[i * 4 + 3]);
   }
   return {
     rel,
     totalLen,
-    segments: seedIdx.length,
+    segments: keepIdx.length,
     center: [seedCx, seedCy],
     footprint: Math.hypot(sbx1 - sbx0, sby1 - sby0),
-    ...(lum && lum.length ? { lum: seedIdx.map((i) => lum[i] ?? 0) } : {}),
+    ...(lum && lum.length ? { lum: keepIdx.map((i) => lum[i] ?? 0) } : {}),
+    ...(droppedGlyphSegments ? { droppedGlyphSegments } : {}),
   };
 }
 
@@ -1089,6 +1224,10 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const affineBounds = affineOn
     ? { maxStretch: affineOpts!.maxStretch ?? DEFAULT_AFFINE_BOUNDS.maxStretch, maxShearDeg: affineOpts!.maxShearDeg ?? DEFAULT_AFFINE_BOUNDS.maxShearDeg }
     : DEFAULT_AFFINE_BOUNDS;
+  // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — default follows `affine`
+  // (an exploded-tag false "extra" is exactly the kind of changed-symbol
+  // noise this document is about) but a caller can still state either way.
+  const dropGlyphOn = opts.dropGlyphClusters ?? affineOn;
   const n = segs.length >> 2;
   if (scale !== 1 && opts.excludeCenter) {
     throw new Error("excludeCenter is a point on the SEED sheet and means nothing on a target sheet at a different scale — omit it when sweeping across sheets (there is no seed there to shadow).");
@@ -1506,7 +1645,13 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   // Six degrees admits drafting jitter while keeping a visibly different
   // diagonal in the near-match lane (the synthetic 7.4° variant contract).
   const angleCos = Math.cos(Math.PI / 30);
-  const scoreAt = (m: [number, number, number, number], tx: number, ty: number, ungated?: { v: number }): number => {
+  // `detail`, when given, is filled with each seed segment's OWN matched
+  // fraction (0..1, index-aligned with `rel`) — Phase 4 of docs/SYMBOL-
+  // SWEEP-AFFINE-GOAL.md's missing-stroke disclosure reads this to name
+  // which segments are responsible for a near-miss, without a second pass
+  // over the geometry: scoreAt already computes this per segment, this
+  // just keeps it instead of discarding it into the running `matched` sum.
+  const scoreAt = (m: [number, number, number, number], tx: number, ty: number, ungated?: { v: number }, detail?: number[]): number => {
     let matched = 0, matchedAny = 0;
     for (let k = 0; k < rel.length; k++) {
       const r = rel[k];
@@ -1542,8 +1687,10 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
         if (sample) covered++;
         if (sampleAny) coveredAny++;
       }
-      matched += Math.max(hit ? r[4] : 0, r[4] * covered / (steps + 1));
+      const ownFrac = Math.max(hit ? 1 : 0, covered / (steps + 1));
+      matched += ownFrac * r[4];
       matchedAny += Math.max(hitAny ? r[4] : 0, r[4] * coveredAny / (steps + 1));
+      if (detail) detail[k] = ownFrac;
     }
     if (ungated) ungated.v = matchedAny / totalLen;
     return matched / totalLen;
@@ -1930,10 +2077,26 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       const a = apply(m, r[0], r[1]), b = apply(m, r[2], r[3]);
       return [a[0] + s.at[0], a[1] + s.at[1], b[0] + s.at[0], b[1] + s.at[1]] as const;
     });
-    let extraLen = 0;
+    const candIdx: number[] = [];
     for (const j of grid.nearRect(bx0, by0, bx1, by1)) {
       const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
       if (px < bx0 || px > bx1 || py < by0 || py > by1 || qx < bx0 || qx > bx1 || qy < by0 || qy > by1) continue;
+      candIdx.push(j);
+    }
+    // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — a label or tag drawn near
+    // a real instance is exploded text, not the symbol; an exploded-text
+    // cluster in this local window never counts toward "extra linework",
+    // covered or not (it is extremely unlikely to overlap `placed` anyway).
+    let glyphMask: boolean[] | null = null;
+    if (dropGlyphOn && candIdx.length) {
+      const pts = candIdx.map((j) => [segs[j * 4], segs[j * 4 + 1], segs[j * 4 + 2], segs[j * 4 + 3]] as const);
+      glyphMask = glyphClusterMask(pts, tol, Math.max(bx1 - bx0, by1 - by0));
+    }
+    let extraLen = 0;
+    for (let ci = 0; ci < candIdx.length; ci++) {
+      if (glyphMask?.[ci]) continue;
+      const j = candIdx[ci];
+      const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
       let covered = false;
       for (const t of placed) {
         const sdx = t[2] - t[0], sdy = t[3] - t[1], tdx = qx - px, tdy = qy - py;
@@ -1993,7 +2156,27 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       });
       continue;
     }
-    withheld.push({ ...row(s), reason: `matched ${Math.round(s.score * 100)}% of the seed's linework (commit bar ${Math.round(scoreHigh * 100)}%) — likely a variant or an overlapped instance; look before counting it` });
+    // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — a plain score-based
+    // near-miss names WHICH seed segments are responsible, not just the
+    // percentage: the top 3 least-matched segments by length, so there is
+    // something concrete to go look at on the sheet. `detail` is scoreAt's
+    // own per-segment coverage, re-read here (never re-derived) at the
+    // row's exact kept placement — cheap, since this only runs for the few
+    // rows that reach the plain near-miss branch, never on the hot scoring
+    // path. Named by length only: the code has no semantic label (no
+    // "stub"/"tick" concept) for a segment, only what it measured.
+    const detail: number[] = [];
+    scoreAt(s.mAt ?? xforms[s.xf].m, s.at[0], s.at[1], undefined, detail);
+    const missing = rel
+      .map((r, k) => ({ len: r[4], frac: detail[k] ?? 0 }))
+      .filter((x) => x.frac < 0.5)
+      .sort((a, b) => b.len - a.len || b.frac - a.frac)
+      .slice(0, 3);
+    const missingPct = Math.max(0, 100 - Math.round(s.score * 100));
+    const missingText = missing.length
+      ? `; missing ${missing.map((x) => `the ${Math.round(x.len)}px segment`).join(" and ")} (${missingPct}% of linework)`
+      : "";
+    withheld.push({ ...row(s), reason: `matched ${Math.round(s.score * 100)}% of the seed's linework (commit bar ${Math.round(scoreHigh * 100)}%)${missingText} — likely a variant or an overlapped instance; look before counting it` });
   }
   const order = (a: SweepMatch, b: SweepMatch): number =>
     a.at[1] - b.at[1] || a.at[0] - b.at[0] || a.rotation - b.rotation || Number(a.mirrored) - Number(b.mirrored);

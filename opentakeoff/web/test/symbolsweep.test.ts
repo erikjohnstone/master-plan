@@ -186,6 +186,11 @@ test("a perturbed near-miss lands in withheld with a reason, and is never a matc
   assert.ok(w.score >= 0.75 && w.score < 0.92, `withheld band: ${w.score}`);
   assert.match(w.reason, /commit bar/);
   assert.ok(Math.abs(w.at[0] - 200 - 11.95) < 3, "reported where the near-miss sits");
+  // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — the reason names WHICH
+  // segment is missing (the ~28px diagonal, by length — the code has no
+  // semantic name for it), not just the aggregate percentage.
+  assert.match(w.reason, /missing the 28px segment/, `reason should name the broken diagonal: ${w.reason}`);
+  assert.match(w.reason, /% of linework\)/, `reason should quantify the missing share: ${w.reason}`);
 });
 
 test("tolerance behavior: jitter within tolPx matches, beyond it does not — and a wider tolerance recovers it", () => {
@@ -950,4 +955,99 @@ test("Phase 3: candidates.considered on a plain 0°-aligned grid does not blow u
   assert.ok(affine.candidates.considered < rigid.candidates.considered * 3,
     `affine considered=${affine.candidates.considered} vs rigid considered=${rigid.candidates.considered} — should stay well under 3×`);
   assert.equal(affine.matches.length, rigid.matches.length, "a purely 0°-aligned grid should match identically either way");
+});
+
+// ── Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — "changed" symbols ─────────
+// A small, exact-numbers fixture (a bare 10×10 square, totalLen = 40) rather
+// than the shared SYMBOL — the 30% extra-linework bar is easy to clear or
+// miss by construction when the seed's own total length is a round number.
+const TINY_SQUARE: [number, number, number, number][] = [
+  [0, 0, 10, 0], [10, 0, 10, 10], [10, 10, 0, 10], [0, 10, 0, 0],
+];
+const tinySquareAt = (at: Point): number[] =>
+  TINY_SQUARE.flatMap(([ax, ay, bx, by]) => [ax + at[0], ay + at[1], bx + at[0], by + at[1]]);
+const tinyRect: [Point, Point] = [[-3, -3], [13, 13]];
+/** A compact, 3-direction cluster of 15 short segments — well past
+ * MIN_GLYPH_CLUSTER (6), each well under 4·tol (8), spanning a bbox small
+ * relative to the window it sits in: a synthetic stand-in for an exploded-
+ * text tag (a PDF exporter's per-glyph-stroke output), not any real letter
+ * shapes — the detector only ever reasons about count/length/bbox/direction
+ * diversity, never what a cluster "looks like". Placed just outside the
+ * square's own top-right corner (base + [10.3..10.7, 10.5]), comfortably
+ * inside both the seed rect and matchSymbol's own local extra-ink window. */
+const glyphTagAt = (base: Point): [number, number, number, number][] => {
+  const out: [number, number, number, number][] = [];
+  for (let k = 0; k < 5; k++) {
+    const x0 = base[0] + 10.3 + k * 0.1, y0 = base[1] + 10.5;
+    // deliberately OFF the square's own 0°/90° edge directions (by >15°,
+    // comfortably past the extra-ink direction gate's ~6° tolerance) — a
+    // stroke aligned with and near a real edge's corner reads as that edge
+    // merely continuing, "covered" rather than new ink, regardless of this
+    // detector; that is the real, existing scoring behavior working as
+    // designed, not something to route around.
+    for (const deg of [20, 75, 135]) {
+      const th = (deg * Math.PI) / 180;
+      out.push([x0, y0, x0 + Math.cos(th) * 1.0, y0 + Math.sin(th) * 1.0]);
+    }
+  }
+  return out;
+};
+
+test("Phase 4: a near-miss names which seed segment is missing, by length — already covered above (see 'a perturbed near-miss' test); this pins the aggregate percentage on a second, independent fixture", () => {
+  // one whole side of TINY_SQUARE (len 10) simply not drawn, so the
+  // instance reproduces only 30/40 = 75% — exactly the withheld band's floor.
+  const broken = TINY_SQUARE.filter((_, i) => i !== 2);
+  const segs = [...tinySquareAt([0, 0]), ...broken.flatMap(([ax, ay, bx, by]) => [ax + 50, ay, bx + 50, by])];
+  const fp = fingerprintSymbol(tinySquareAt([0, 0]), tinyRect);
+  const r = matchSymbol(fp, segs, { excludeCenter: fp.center });
+  assert.equal(r.matches.length, 0, "75% is below the commit bar — a near-miss, not a match");
+  assert.equal(r.withheld.length, 1);
+  const w = r.withheld[0];
+  assert.match(w.reason, /commit bar/);
+  assert.match(w.reason, /missing the 10px segment/, `reason should name the broken side by its full length: ${w.reason}`);
+  assert.match(w.reason, /\(25% of linework\)/, `reason should quantify the missing share: ${w.reason}`);
+});
+
+test("Phase 4: an exploded tag inside the seed rect is excluded from the fingerprint's rel/totalLen when dropGlyphClusters is set", () => {
+  const bareSegs = tinySquareAt([0, 0]);
+  const bareFp = fingerprintSymbol(bareSegs, tinyRect);
+
+  const tag = glyphTagAt([0, 0]);
+  const taggedSegs = [...bareSegs, ...tag.flatMap((s) => s)];
+  const unfiltered = fingerprintSymbol(taggedSegs, tinyRect);
+  assert.ok(unfiltered.totalLen > bareFp.totalLen, "sanity: the tag really adds linework when not filtered");
+
+  const filtered = fingerprintSymbol(taggedSegs, tinyRect, undefined, { dropGlyphClusters: true });
+  assert.equal(filtered.droppedGlyphSegments, 15, "the 15-stroke exploded tag should be recognized and dropped");
+  assert.deepEqual(filtered.rel, bareFp.rel, "with the tag dropped, the fingerprint is byte-for-byte the untagged one");
+  assert.equal(filtered.totalLen, bareFp.totalLen);
+  assert.equal(filtered.center[0], bareFp.center[0]);
+  assert.equal(filtered.center[1], bareFp.center[1]);
+});
+
+test("Phase 4: a tag drawn next to a SWEPT instance (not the seed) never counts toward extra linework once dropGlyphClusters is on (default: on with affine.enabled)", () => {
+  const fp = fingerprintSymbol(tinySquareAt([0, 0]), tinyRect);
+  const segs = [...tinySquareAt([0, 0]), ...tinySquareAt([50, 0]), ...glyphTagAt([50, 0]).flatMap((s) => s)];
+  const near = (at: Point, x: number, y: number): boolean => Math.abs(at[0] - x) < 3 && Math.abs(at[1] - y) < 3;
+
+  const withoutFilter = matchSymbol(fp, segs, { excludeCenter: fp.center, variantGuard: true });
+  const taggedRow = withoutFilter.withheld.find((w) => near(w.at, 55, 5)) ?? withoutFilter.matches.find((m) => near(m.at, 55, 5));
+  assert.ok(taggedRow, `expected some row near the tagged instance, got matches=${JSON.stringify(withoutFilter.matches)} withheld=${JSON.stringify(withoutFilter.withheld)}`);
+  assert.ok(taggedRow!.extra !== undefined && taggedRow!.extra > 0.3,
+    `expected the tag to read as substantial extra ink past the 30% bar, got ${JSON.stringify(taggedRow)}`);
+
+  const withFilter = matchSymbol(fp, segs, { excludeCenter: fp.center, variantGuard: true, affine: { enabled: true } });
+  const cleanMatch = withFilter.matches.find((m) => near(m.at, 55, 5));
+  assert.ok(cleanMatch, `expected a clean match near the tagged instance once the tag is filtered, got matches=${JSON.stringify(withFilter.matches)} withheld=${JSON.stringify(withFilter.withheld)}`);
+  assert.equal(cleanMatch!.extra, undefined, "no extra should be disclosed once the exploded tag is excluded");
+});
+
+test("Phase 4: dropGlyphClusters:false stands down the sheet-side filter even with affine.enabled — an explicit override still means what it says", () => {
+  const fp = fingerprintSymbol(tinySquareAt([0, 0]), tinyRect);
+  const segs = [...tinySquareAt([0, 0]), ...tinySquareAt([50, 0]), ...glyphTagAt([50, 0]).flatMap((s) => s)];
+  const near = (at: Point, x: number, y: number): boolean => Math.abs(at[0] - x) < 3 && Math.abs(at[1] - y) < 3;
+  const forcedOff = matchSymbol(fp, segs, { excludeCenter: fp.center, variantGuard: true, affine: { enabled: true }, dropGlyphClusters: false });
+  const taggedRow = forcedOff.withheld.find((w) => near(w.at, 55, 5));
+  assert.ok(taggedRow, "the tag should still cost the instance under an explicit override, exactly as without affine at all");
+  assert.ok(taggedRow!.extra !== undefined && taggedRow!.extra > 0.3);
 });
