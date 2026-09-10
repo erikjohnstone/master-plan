@@ -30,9 +30,19 @@ Save the BAS workflow first; if it changes during verification, retry. Closing a
 PDF afterward removes its ordinary filename trail, but not this retained copy.
 **Verify retained copy** checks the stored bytes again; **Download original**
 verifies and downloads a digest-named PDF for external backup or manual reopening.
-Verification is per visit, not an ongoing guarantee. Source links still require
-the exact PDF to be loaded; automatic reopening from retained copies is not yet
-wired. Use **Open** with the downloaded PDF to restore that exact version.
+Verification is per visit, not an ongoing guarantee. **Open original** opens a
+read-only reader without adding the PDF to the active drawing set. Use the page
+controls, **Whole page**, **Focus citation**, or **Display** size to inspect it.
+The page retains its original rotation. Historical source links use this reader
+when the exact PDF is no longer active; current-sheet links work as before.
+The reader verifies exact bytes and the saved page dimensions before outlining
+the unchanged citation. Missing/corrupt originals or mismatched frames refuse;
+they never redirect to a newer namesake. Legacy histories without saved frames
+support whole-page inspection through **Open original**, not guessed highlights.
+**Back to takeoff** (or Escape inside the reader) restores the prior view and
+keyboard focus without resetting filters or creating a markup. PDFs over 512 MiB
+are refused; rendering is capped at 2,000 pixels on the long edge, so use a source
+crop to read dense notes. Password-protected originals cannot be opened here.
 
 Retention is browser-local, including local-first synced projects; these copies
 are not synced to Drive or a folder. Legacy cloud-only storage reports that this

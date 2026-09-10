@@ -1,0 +1,25 @@
+.bas-source-reader { display: flex; flex-direction: column; flex: 1; min-height: 0; color: var(--ink); }
+.bas-source-reader-heading, .bas-source-reader-controls { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; padding: var(--sp-3) var(--sp-5); border-bottom: var(--rule-soft); }
+.bas-source-reader h2, .bas-source-reader p { margin: 0; }
+.bas-source-reader h2 { font-size: var(--fs-xl); }
+.bas-source-reader-heading p, .bas-source-reader-status { font-size: var(--fs-s); color: var(--ink-secondary); }
+.bas-source-reader button, .bas-source-reader input, .bas-source-reader select { min-height: var(--ctl-l); padding: var(--sp-1) var(--sp-3); border: var(--rule-soft); background: var(--paper-bright); color: var(--ink); font: inherit; }
+.bas-source-reader button { cursor: pointer; }
+.bas-source-reader button:disabled { cursor: default; opacity: .5; }
+.bas-source-reader button[aria-pressed="true"] { color: var(--cobalt); border-color: var(--cobalt); background: var(--tint-select); }
+.bas-source-reader :focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+.bas-source-reader-info { padding: var(--sp-3) var(--sp-5); display: grid; gap: var(--sp-2); max-height: 25vh; overflow: auto; overflow-wrap: anywhere; border-bottom: var(--rule-soft); }
+.bas-source-reader-info summary { cursor: pointer; color: var(--ink-secondary); }
+.bas-source-reader-info code { font-size: var(--fs-s); }
+.bas-source-reader-quote { line-height: 1.5; white-space: pre-wrap; }
+.bas-source-reader-controls label { display: flex; align-items: center; gap: var(--sp-2); }
+.bas-source-reader-controls input { width: 5em; }
+.bas-source-reader-status, .bas-source-reader-error { padding: var(--sp-2) var(--sp-5); }
+.bas-source-reader-error { color: var(--c-danger); overflow-wrap: anywhere; }
+.bas-source-viewport { flex: 1; min-height: 0; overflow: auto; background: var(--paper-shadow); padding: var(--sp-4); }
+.bas-source-render canvas { display: block; background: var(--well); }
+.bas-source-viewport.is-fit { display: flex; align-items: center; justify-content: center; }
+.is-fit .bas-source-render { display: contents; }
+.is-fit canvas { max-width: 100%; max-height: 100%; object-fit: contain; }
+.is-zoomed .bas-source-render { flex: none; }
+.is-zoomed canvas { width: 100%; height: 100%; }

@@ -25,6 +25,13 @@ freshness, review coverage, approve a deliverable or restore anything.
 Do not describe these unencrypted, unsigned backups as approved releases or claim
 that ZIP restoration is implemented. Ordinary JSON import/export is unchanged.
 
+Inspect historical BAS evidence using `view_sheet` with the exact saved `page_id`
+as `sheet`, and `original_pdf_path` when its bytes are not currently loaded. Do not
+add old versions to the current drawing set merely to inspect them: that can
+pollute future quantities. The isolated reader verifies source bytes and page
+frame, refuses active overlays/grids/marks, and returns `added_to_active_set: false`.
+An image verifies neither requirement interpretation nor takeoff completeness.
+
 **Contents**
 
 1. [Connect in 60 seconds](#1-connect-in-60-seconds)

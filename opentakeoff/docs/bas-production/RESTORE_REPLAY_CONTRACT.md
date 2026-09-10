@@ -77,3 +77,8 @@ old bbox to a newer same-named file. These hazards remain open, not implemented
 by the replay checkpoint. Primary MDN transaction/quota documentation was checked
 again on 2026-09-10; staged verification and write fencing are design inferences,
 not browser durability or authentication guarantees.
+
+Update after `628f047c`: isolated exact-source reopening is implemented in UI
+and MCP; see `SOURCE_VIEW_PROOF.md`. Existing live-sheet citations remain intact.
+No historical original enters the active drawing set merely for inspection.
+Atomic archive restoration and the blind/queued-save hazards above remain open.

@@ -143,6 +143,15 @@ Findings are not a completeness score; readiness remains `not_evaluated`.
 See [review and revision acceptance](bas-production/REVIEW_REVISION_CONTRACT.md)
 for the remaining approval/source-retention work.
 
+To inspect a historical citation, call `view_sheet` with its saved BAS `page_id`
+as `sheet` and optional `original_pdf_path` for missing original bytes. This
+isolated read-only mode verifies source ownership, hash, page count and saved
+frame, and never adds the old drawing to current extraction. `region` outlines
+the supplied original box, while `region` in the reply describes the padded
+display crop. Active overlays, grids and marks are refused. Whole-page review is
+available for legacy histories lacking frames; located highlights require a
+matching saved frame. Byte/frame verification does not approve a takeoff.
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install

@@ -20,6 +20,12 @@ export interface BasSourceInventoryItem {
 /** All historical physical versions, NOT a reviewed current source set. Aliases
  * are lookup hints only; different versions with the same name remain distinct. */
 export async function basSourceInventory(rawWorkflow: unknown): Promise<BasSourceInventoryItem[]> {
+  return (await inspectBasSourceHistory(rawWorkflow)).inventory;
+}
+
+/** Return the owned verified history and inventory together, so a source-view
+ * consumer need not verify the same complete historical calculations twice. */
+export async function inspectBasSourceHistory(rawWorkflow: unknown) {
   const workflow = await verifyBasWorkflow(rawWorkflow);
   const sources = new Map<string, BasSourceInventoryItem>();
   for (const capture of workflow.captures) for (const { names, ...source } of capture.sources) {
@@ -32,9 +38,10 @@ export async function basSourceInventory(rawWorkflow: unknown): Promise<BasSourc
     next.capture_ids.push(capture.capture_id);
     sources.set(source.source_id, next);
   }
-  return [...sources.values()].sort((a, b) => a.source.source_id.localeCompare(b.source.source_id)).map(item => ({
+  const inventory = [...sources.values()].sort((a, b) => a.source.source_id.localeCompare(b.source.source_id)).map(item => ({
     ...item, names: [...new Set(item.names)].sort(), capture_ids: [...new Set(item.capture_ids)].sort(),
   }));
+  return { workflow, inventory };
 }
 
 function copyBytes(input: Uint8Array | ArrayBuffer): Uint8Array {

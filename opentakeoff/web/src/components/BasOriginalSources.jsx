@@ -7,7 +7,7 @@ import { store } from '../lib/store.js';
 import { downloadText } from '../lib/totals.js';
 import BasEvidenceBundleActions from './BasEvidenceBundleActions.jsx';
 
-export default function BasOriginalSources({ workflow, onBack }) {
+export default function BasOriginalSources({ workflow, onBack, onOpenCitation }) {
   const [view, setView] = useState({ input: null, rows: [], error: '' });
   const [busy, setBusy] = useState(''), [statuses, setStatuses] = useState({});
   const current = useRef(null), heading = useRef(null), adapter = store;
@@ -53,7 +53,8 @@ export default function BasOriginalSources({ workflow, onBack }) {
           {view.rows.map(item => <tr key={item.source.source_id}><th scope="row">{item.names.join(' / ')}<details><summary>SHA-256 identity</summary><code>{item.source.sha256}</code></details></th>
             <td>{item.source.page_count} pages · {item.source.byte_length.toLocaleString()} bytes<br />{item.capture_ids.length} captures · {item.capture_ids.includes(workflow.current_capture_id) ? 'includes active capture' : 'historical capture only'}</td>
             <td><span role={statuses[item.source.source_id] && !statuses[item.source.source_id].verified ? 'alert' : 'status'}>{busy === item.source.source_id ? 'Verifying original…' : statuses[item.source.source_id]?.text || 'Not checked this visit'}</span></td>
-            <td><div className="bas-source-actions"><button type="button" disabled={!!busy || !adapter.retainBasSource} onClick={() => run(item, 'retain')}>Retain original</button>
+            <td><div className="bas-source-actions"><button type="button" disabled={!!busy || !onOpenCitation} onClick={() => onOpenCitation({ page_id: `${item.source.source_id}:p1`, original_source_only: true })}>Open original</button>
+              <button type="button" disabled={!!busy || !adapter.retainBasSource} onClick={() => run(item, 'retain')}>Retain original</button>
               <button type="button" disabled={!!busy || !adapter.loadBasSource} onClick={() => run(item, 'verify')}>Verify retained copy</button>
               <button type="button" disabled={!!busy || !adapter.loadBasSource} onClick={() => run(item, 'download')}>Download original</button></div></td></tr>)}
         </tbody></table>

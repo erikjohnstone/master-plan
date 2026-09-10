@@ -1,5 +1,20 @@
 ## Active work
 
+2026-09-10 checkpoint after **628f047c**: original-source reopening now uses one
+shared ownership/hash/page/frame contract in the browser and packaged MCP. Old
+citations can open retained bytes without adding historical PDFs to active
+extraction. Existing live-sheet source navigation remains unchanged. Full web
+**2,702 pass / 13 existing skips**, final **19 focused** source/storage tests;
+BAS MCP **107 pass**, broader MCP **155 pass**, packaging **4 pass**; Python
+**443 pass**, configured mypy **19 files**. Actual Fort Sam UI/built MCP compare
+the same page-8 original source and reject a newer namesake/corrupt bytes with no
+history or annotation changes. Prior live-citation UI regression also passes.
+See `../opentakeoff/docs/bas-production/SOURCE_VIEW_PROOF.md` for exact evidence,
+controlled-fixture disclosure and remaining limits. No VectorGrid/key/scorer/
+symbol changes or new full-corpus/holdout gate. Main A–E remains first: atomic
+restore/save fencing, revision review/approval, remaining corpus acceptance; the
+appended symbol/installed-plan phase is still last. No push/merge/deploy.
+
 2026-09-10 checkpoint after **f20c8e24**: full saved B/C/D calculation replay now
 uses historical input reconstruction and unchanged Python calculators on the
 shared UI/MCP path. Optional browser/MCP archive preflight returns exact workflow

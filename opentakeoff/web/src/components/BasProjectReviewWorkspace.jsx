@@ -48,7 +48,7 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
       if (response?.error) setSourceError(response.error);
     } catch (error) { setSourceError(error.message); }
   }
-  if (state.originalSources) return <BasOriginalSources workflow={workflow} onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
+  if (state.originalSources) return <BasOriginalSources workflow={workflow} onOpenCitation={onOpenCitation} onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
   if (!ready) return <p role="status" className="bas-point-message">Gathering saved BAS findings…</p>;
   if (computed.error) return <p role="alert" className="bas-point-message">Review unavailable: {computed.error}. Saved evidence has not been changed.</p>;
   const sourcePage = Math.max(0, Math.min(state.sourcePage || 0, Math.ceil((selected?.evidence.length || 0) / 20) - 1));

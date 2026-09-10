@@ -1,5 +1,28 @@
 # BAS production workflow progress
 
+## Exact original-source reopening — 2026-09-10
+
+After **628f047c**, the real UI and built MCP can inspect retained/historical
+originals at their exact hash/page/frame without adding old drawings to active
+counting. Existing live-source navigation remains unchanged. Same-name replacement,
+corruption, frame mismatch, pending-read cancellation, focus return and source-size
+bounds have explicit tests. No quantity/history rewrite or approval. Details and
+screenshots: `SOURCE_VIEW_PROOF.md`.
+
+Full web **62763: 2,702 pass / 13 existing skips**; final types/lint/build and
+**19 focused** source/storage tests **41356** pass. BAS MCP **38175: 107 pass**,
+packaging **4 pass**, existing broader MCP **56848: 155 pass**; version **0.9.73**,
+50 tools. Python **87696: 443 pass**, configured mypy **19 files**. Built real-source
+proof **71644** and unchanged live-citation UI regression **21856** pass. Final
+source-reader proof is under `evidence/source-view-browser-4`.
+
+Main goal remains active. Next: actual atomic ZIP restoration, per-editor save
+fencing, revision correspondence/review journals and scoped approved snapshots;
+remaining A–D and final corpus/holdout acceptance; appended symbol robustness and
+installed-plan research last. No model/VectorGrid/threshold/key changes, holdout
+access, push, merge or deployment. Historical corpus scores/path failures remain
+unchanged, not a new passing corpus gate.
+
 ## Full saved-calculation replay — 2026-09-10
 
 After **f20c8e24**, an actual shared Python replay gate now covers every saved

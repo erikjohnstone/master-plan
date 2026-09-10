@@ -1,7 +1,7 @@
 // Takeoff UI — industry-standard finished takeoff + workflow audit.
 // Takeoff tab = compiled quantity schedule (contractor document).
 // Workflow data = raw EAV evidence trail. Chat stays conversational.
-import { useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "../brand/icons.jsx";
 import {
   compileAgentTakeoff,
@@ -18,6 +18,8 @@ import BasMathSummary from "./BasMathSummary.jsx";
 import BasPointsWorkspace from "./BasPointsWorkspace.jsx";
 import BasEquipmentWorkspace from "./BasEquipmentWorkspace.jsx";
 import BasProjectReviewWorkspace from "./BasProjectReviewWorkspace.jsx";
+import BasSourceReader from "./BasSourceReader.jsx";
+import { store } from '../lib/store.js';
 
 /** Cap visible technical columns so each family table stays readable. */
 const UI_SPEC_MAX = 12;
@@ -105,8 +107,39 @@ export default function TakeoffDataPanel({
   onRemove,
   onRemoveLine,
   onClose,
-  onOpenCitation,
+  onOpenCitation: onCanvasCitation,
 }) {
+  const [sourceView, setSourceView] = useState(null);
+  const sourceReturn = useRef(null);
+  const restoreSourceFocus = useRef(false);
+  const sourceContext = useRef(null);
+  const adapter = store;
+  sourceContext.current = { workflow: basWorkflow, adapter };
+  useEffect(() => { setSourceView(null); }, [basWorkflow, adapter]);
+  const onOpenCitation = async row => {
+    if (!row?.page_id || !basWorkflow) return onCanvasCitation?.(row);
+    const opener = document.activeElement;
+    // Preserve normal live-sheet navigation/overlays. Only unavailable originals
+    // (or an explicit Original PDFs action) use the isolated evidence reader.
+    if (!row.original_source_only && onCanvasCitation) {
+      const result = await onCanvasCitation(row, { originalFallback: true });
+      if (!result?.error) return result;
+    }
+    if (sourceContext.current.workflow !== basWorkflow || sourceContext.current.adapter !== adapter || store !== adapter) {
+      return { error: 'BAS source workspace changed; retry against the current project.' };
+    }
+    sourceReturn.current = opener;
+    setSourceView({ request: structuredClone(row), workflow: basWorkflow, adapter });
+    return { opened: 'original_source_reader' };
+  };
+  const readingSource = sourceView?.workflow === basWorkflow && sourceView?.adapter === adapter;
+  useLayoutEffect(() => {
+    if (!readingSource && restoreSourceFocus.current) {
+      restoreSourceFocus.current = false;
+      if (sourceReturn.current?.isConnected) sourceReturn.current.focus({ preventScroll: true });
+    }
+  }, [readingSource]);
+  const closeSource = () => { restoreSourceFocus.current = true; setSourceView(null); };
   const [localTab, setLocalTab] = useState(basWorkflow && (corpusMeta?.kind === 'bas_points' || !rows.length) ? "points" : "takeoff");
   const tab = basViewState?.takeoffTab || localTab;
   const setTab = value => {
@@ -244,6 +277,8 @@ export default function TakeoffDataPanel({
           overflow: "hidden",
         }}
       >
+        {readingSource && <BasSourceReader workflow={basWorkflow} request={sourceView.request} adapter={adapter} onBack={closeSource} />}
+        <div hidden={readingSource} style={{ display: readingSource ? 'none' : 'contents' }}>
         <header style={{
           display: "flex", alignItems: "flex-start", gap: 12,
           padding: "16px 20px 0", borderBottom: "1px solid var(--ink-faint)",
@@ -639,6 +674,7 @@ export default function TakeoffDataPanel({
             )
           )}
           </>}
+        </div>
         </div>
       </div>
     </div>

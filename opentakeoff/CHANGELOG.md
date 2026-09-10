@@ -12,6 +12,13 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add read-only original-source reopening from **Original PDFs** and historical
+  BAS citations. UI and MCP share exact source ownership, byte identity and saved
+  frame checks; an old PDF is not added to current extraction/counting. Existing
+  live-sheet citations remain unchanged. MCP `view_sheet` accepts a saved BAS
+  page ID and optional explicit `original_pdf_path`, with no active overlays or
+  grids in source mode. This does not restore a ZIP or approve a takeoff.
+
 - Add optional **Replay saved calculations** after evidence-bundle verification
   and MCP `import_takeoff` preflight `replay_calculations: true`. Every historical
   assignment/assembly input is reconstructed from its original decision head;

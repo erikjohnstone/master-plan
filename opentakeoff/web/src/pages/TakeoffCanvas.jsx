@@ -12957,7 +12957,7 @@ export default function TakeoffCanvas() {
             setAgentTakeoffRows((rows) => rows.filter((r) => !ids.has(r.id)));
           }}
           onClose={() => setShowTakeoffData(false)}
-          onOpenCitation={async (row) => {
+          onOpenCitation={async (row, { originalFallback = false } = {}) => {
             if (row?.page_id) {
               try {
                 const generation = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
@@ -12971,7 +12971,7 @@ export default function TakeoffCanvas() {
                   throw new Error('The original PDF version is not loaded. Reopen its exact bytes; an old filename is not sufficient.');
                 }
                 row = { ...row, sheet_id: sheet };
-              } catch (error) { setCommitMsg(`Could not open BAS source: ${error.message}`); return { error: error.message }; }
+              } catch (error) { if (!originalFallback) setCommitMsg(`Could not open BAS source: ${error.message}`); return { error: error.message }; }
             }
             if (!row?.sheet_id || !row?.bbox_px) return;
             // Close the takeoff modal so the estimator can see the sheet highlight.

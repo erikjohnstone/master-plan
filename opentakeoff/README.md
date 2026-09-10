@@ -112,6 +112,11 @@ project, surviving ordinary PDF removal. Copies are not synced; keep an external
 backup and the takeoff JSON. This does not clear findings, select a revised drawing
 set, approve takeoffs or implement revision release.
 
+**Open original** provides a read-only page reader. Historical BAS citations also
+use it when their exact PDF is no longer active. Hash and saved page-frame checks
+prevent a newer namesake from receiving an old highlight. The reader does not add
+historical pages to the active takeoff; existing live-sheet source navigation stays unchanged.
+
 The development **Original PDFs** view also downloads and verifies an **unapproved
 evidence bundle**: one `.otbas.zip` containing saved takeoff JSON and every
 historical original, named by digest. Browser and MCP use the same archive and

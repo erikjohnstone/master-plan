@@ -104,6 +104,15 @@ export interface DocHandle {
 
 export async function openPdf(filePath: string): Promise<DocHandle> {
   const bytes = await readFile(filePath);
+  return openOwnedPdfBytes(bytes);
+}
+
+/** Isolated original-source review; never registers a document with Session. */
+export async function openPdfBytes(input: Uint8Array): Promise<DocHandle> {
+  return openOwnedPdfBytes(new Uint8Array(input));
+}
+
+async function openOwnedPdfBytes(bytes: Uint8Array): Promise<DocHandle> {
   const doc = await pdfjs.getDocument({
     // getDocument({ data }) may DETACH the buffer it is handed — always pass a
     // fresh copy (new Uint8Array(view) copies), never the read buffer itself.

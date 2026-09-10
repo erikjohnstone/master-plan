@@ -160,6 +160,17 @@ Browser and MCP share integrity/ownership rules. Archives are unsigned and
 unencrypted; they do not select a current source set or approve a takeoff.
 Automatic project ZIP restoration and approved release sealing remain unfinished.
 
+Inspect a historical original without adding it to the active takeoff:
+`view_sheet` accepts its saved BAS `page_id` as `sheet`. Supply
+`original_pdf_path` when the exact bytes are no longer loaded; source aliases
+inside history are never treated as filesystem paths. Hash, page count and saved
+viewport dimensions/rotation must agree. Optional `region` is the unchanged box
+to outline; the reply separately reports its padded display crop. No current
+overlays, grids or marks may be used in this mode. Metadata says `read_only: true`
+and `added_to_active_set: false`. Legacy unframed histories permit whole-page
+inspection only. The original limit is 512 MiB and output remains at most 2,000
+pixels per edge. No restoration, calculation replay or approval is implied.
+
 The development BAS compile also accepts `bas_project_review: {capture_id}` for
 an exact retained capture. Its additive result matches **Takeoff → Review & changes**:
 original issue codes, affected subjects/equipment, evidence, saved dependency
