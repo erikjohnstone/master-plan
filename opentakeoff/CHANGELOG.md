@@ -12,11 +12,19 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add internal **Review & changes → Snapshots**: select reviewed scope, check
+  shared readiness, inspect exact retained evidence, explicitly approve/save,
+  reopen and export/import the original-source ZIP. Historical import also works
+  without restoring an active takeoff. Dirty/project-switched/cancelled work cannot
+  silently become approval. Records remain unsigned and browser-local; current
+  applicability, revoke/supersede, public MCP snapshot operations and the combined
+  memory gate are still unfinished. No extraction, VectorGrid or math change.
+
 - Add the shared scoped-snapshot preparation and source-inclusive archive core.
   A separate unsigned seal binds exact takeoff JSON, reviewed scope/dependencies,
   issues and original PDFs; creation and reopening require fresh readiness and
   saved-calculation replay. Existing unapproved backup format is preserved.
-  This is not yet a public approval/storage workflow or complete Agent takeoff.
+  The browser approval/storage increment is described above; this is not a complete Agent takeoff.
   No extraction, VectorGrid, symbol, bbox or Python arithmetic change.
 
 - Add an internal shared scoped-readiness service linking saved human coverage,

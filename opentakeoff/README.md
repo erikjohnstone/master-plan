@@ -83,6 +83,14 @@ change quantities, waive findings or approve a deliverable. The
 [public scope proof](docs/bas-production/SCOPE_COVERAGE_PUBLIC_PROOF.md) records
 verified UI/MCP journeys, regression gates and the remaining production work.
 
+Development **Review & changes → Snapshots** checks a reviewed scope against its
+original PDFs, source coverage and shared Python calculations before explicit
+human approval. Saved snapshots reopen as verified historical records and travel
+with original PDFs in a separate evidence ZIP. Import does not replace working
+annotations. Records remain browser-local and unsigned. Current applicability,
+revocation/supersession, public MCP snapshot tools and the combined memory gate
+remain unfinished; this is not a complete production takeoff or Agent workflow.
+
 Local-first sync now retains compatible BAS history across known saved versions.
 Conflicting review branches produce **BAS sync needs review**, with an exportable
 remote recovery copy when available and an explicit retry—not silent replacement

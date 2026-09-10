@@ -39,6 +39,42 @@ backup. Keep the normal evidence workflow export and source-inclusive backup.
 These controls do not waive findings, verify hardware, establish installed
 quantity or finish the still-in-development approval/snapshot workflow.
 
+Development **Review & changes → Snapshots** separates readiness from approval.
+Choose a **Reviewed scope**, then **Check readiness**. The screen verifies exact
+original bytes and replays saved calculations through the shared Python service.
+Unavailable originals/service, incomplete coverage, stale dependencies or blocking
+findings prevent approval. Finish saving before checking: changes to the live or
+saved workspace invalidate preparation. **Scope & coverage** returns to the
+existing review editor; no missing source facts are filled automatically.
+
+Inspect **Included**, **Exclusions**, **Findings**, **Coverage** and **Original PDFs**.
+**Inspect claim** exposes exact retained dependencies, values and original inputs.
+Original evidence opens read-only without adding historical pages to active
+counting. Null quantities stay **Not established**. Findings outside the included
+scope remain visible and are not waived by this deliverable.
+
+When ready, enter **Reviewer (self-declared)** and **Approval reason**, explicitly
+confirm the scope, then **Approve scope & save snapshot**. Fresh verification runs
+again before an atomic, separate browser-local save. Working annotations are not
+replaced. This approves only the named scope—not a complete project, installed
+count, or engineering certification. Identity and timestamp are self-declared;
+there is no authenticated signature or server-enforced immutability.
+
+**Saved snapshots → Open snapshot** verifies historical bytes and calculations
+again. Metadata alone is not verification. The reader explicitly reports current
+applicability as not evaluated; currentness, revocation and supersession are still
+in development. **Download snapshot evidence ZIP** preserves the reviewed takeoff,
+scope, decisions, findings, calculations and original PDFs. Keep this ZIP outside
+browser storage; snapshots and originals are not synced and can be cleared or
+evicted. This is an evidence archive, not the pending readable result-table export.
+
+Use **Import historical snapshot** to verify and retain that archive without
+restoring working annotations or approving current drawings. From an empty plan
+picker, **Restore BAS evidence backup → Snapshots** reaches the same historical
+reader. The historical snapshot archive is distinct from the unapproved evidence
+backup format. **Cancel snapshot operation** stops pending work; if cancellation
+coincides with a completed save, refresh the saved list to check its outcome.
+
 On the development branch, **Takeoff → Review & changes** gathers saved BAS
 findings without altering quantities or decisions. Filter by **Area**, **Severity**
 or **Find a finding**; select a finding to see its exact source and original inputs.
@@ -47,8 +83,8 @@ return to the same selection and filters; **Back to findings** restores keyboard
 focus. The domain-workspace button opens the existing review/editor, not an
 automatic correction. **Export findings** includes all findings, regardless of
 filters, and is not an importable evidence archive or approved deliverable.
-Keep the normal evidence JSON and original PDFs. Readiness, drawing correspondence,
-source-retaining snapshots and approval are still being implemented. A blocker
+Keep the normal evidence JSON and original PDFs. The development snapshot flow is
+described above; full release/currentness controls remain incomplete. A blocker
 here is a saved finding to review, not a claim that the entire design was checked.
 
 Saving/restoring the same evidence does not create new finding occurrences merely

@@ -9,6 +9,7 @@ import BasRevisionWorkspace from './BasRevisionWorkspace.jsx';
 import BasIssueActions from './BasIssueActions.jsx';
 import BasIssueHistory from './BasIssueHistory.jsx';
 import BasScopeWorkspace from './BasScopeWorkspace.jsx';
+import BasSnapshotWorkspace from './BasSnapshotWorkspace.jsx';
 import './BasPointsWorkspace.css';
 import './BasProjectReviewWorkspace.css';
 
@@ -21,6 +22,10 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
   const originalsButton = useRef(null), originalsReturn = useRef(false);
   const drawingButton = useRef(null), drawingReturn = useRef(false);
   const scopeButton = useRef(null), scopeReturn = useRef(false);
+  const snapshotButton = useRef(null), snapshotReturn = useRef(false);
+  useEffect(() => {
+    if (!state.snapshots && snapshotReturn.current) { snapshotButton.current?.focus(); snapshotReturn.current = false; }
+  }, [state.snapshots]);
   useEffect(() => {
     if (!state.scopeReview && scopeReturn.current) { scopeButton.current?.focus(); scopeReturn.current = false; }
   }, [state.scopeReview]);
@@ -62,7 +67,13 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
       if (response?.error) setSourceError(response.error);
     } catch (error) { setSourceError(error.message); }
   }
-  if (state.originalSources || !workflow) return <BasOriginalSources workflow={workflow} restoreContext={restoreContext} restoreNotice={state.restoreNotice} onOpenCitation={onOpenCitation} onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
+  if (state.snapshots) return <BasSnapshotWorkspace workflow={workflow} restoreContext={restoreContext} state={state.snapshotView}
+    onStateChange={updater => onStateChange(previous => ({ ...previous, snapshotView: updater(previous?.snapshotView || {}) }))}
+    onScopeReview={() => change({ snapshots: false, originalSources: false, scopeReview: true })}
+    onBack={() => { snapshotReturn.current = true; change({ snapshots: false }); }} />;
+  if (state.originalSources || !workflow) return <BasOriginalSources workflow={workflow} restoreContext={restoreContext} restoreNotice={state.restoreNotice} onOpenCitation={onOpenCitation}
+    onSnapshots={() => change({ snapshots: true, snapshotView: { ...(state.snapshotView || {}), tab: 'saved' } })}
+    onBack={() => { originalsReturn.current = true; change({ originalSources: false }); }} />;
   if (state.scopeReview) return <BasScopeWorkspace workflow={workflow} state={state.scopes}
     onStateChange={updater => onStateChange(previous => ({ ...previous, scopes: updater(previous?.scopes || {}) }))}
     onRecord={onScopeReview} onOpenCitation={onOpenCitation}
@@ -81,6 +92,7 @@ export default function BasProjectReviewWorkspace({ workflow, state = {}, onStat
     <div className="bas-point-heading"><h2>Review &amp; changes</h2><span>{data.issues.length} saved findings</span>
       <div className="bas-review-actions"><button ref={drawingButton} type="button" onClick={() => change({ drawingReview: true })}>Drawing changes</button><button ref={originalsButton} type="button" onClick={() => change({ originalSources: true })}>Original PDFs</button>
       <button ref={scopeButton} type="button" onClick={() => change({ scopeReview: true })}>Scope &amp; coverage</button>
+      <button ref={snapshotButton} type="button" onClick={() => change({ snapshots: true })}>Snapshots</button>
       <button type="button" aria-pressed={!!state.history} onClick={() => change({ history: !state.history })}>{state.history ? 'Current findings' : 'Decision history'}</button>
       <button type="button" onClick={() => downloadText('bas-review-findings.json', JSON.stringify(data, null, 2), 'application/json')}>Export findings</button></div></div>
     <p className="bas-review-boundary">Current findings only · not an approved takeoff. PDF availability and saved calculations require separate verification.</p>

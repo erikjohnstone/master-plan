@@ -320,7 +320,9 @@ export default function TakeoffDataPanel({
               <span>{rows.length} evidence fields</span>
             </div>
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
-              {tab === "review" ? "Source-linked findings across the saved BAS workflow. Resolve inputs in their original workspace; this view does not grant approval."
+              {tab === "review" ? basViewState?.projectReview?.snapshots
+                ? "Review a scoped snapshot with its exact original PDFs. Historical approval does not certify the current project."
+                : "Source-linked findings across the saved BAS workflow. Resolve inputs in their original workspace; this view does not grant approval."
                 : tab === "equipment" ? "Source-backed equipment identities and explicit template assignments. Original schedule evidence stays unchanged."
                 : tab === "points" ? "Original point-list matrices with source-bound interpretation. No installed quantities are inferred."
                 : tab === "takeoff" && corpusMeta?.bas_math

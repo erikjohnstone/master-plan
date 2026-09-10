@@ -1,0 +1,21 @@
+.bas-snapshot-workspace { overflow: auto; }
+.bas-snapshot-body, .bas-snapshot-contents { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; }
+.bas-snapshot-body[hidden] { display: none; }
+.bas-snapshot-body > .bas-point-heading > button:first-child { margin-left: 0; }
+.bas-snapshot-workspace button[aria-pressed="true"] { color: var(--cobalt); border-color: var(--cobalt); }
+.bas-snapshot-workspace code, .bas-snapshot-workspace td, .bas-snapshot-workspace th { overflow-wrap: anywhere; }
+.bas-snapshot-workspace pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--fs-s); max-height: 40vh; overflow: auto; }
+.bas-snapshot-workspace small { display: block; font-size: var(--fs-xs); color: var(--ink-secondary); }
+.bas-snapshot-workspace p { margin: 0; line-height: 1.5; }
+.bas-snapshot-workspace td p, .bas-snapshot-workspace details p { margin-block: var(--sp-2); }
+.bas-snapshot-status:empty { display: none; }
+.bas-snapshot-declaration, .bas-snapshot-approval { border: 1px solid var(--ink-faint); padding: var(--sp-4); display: grid; gap: var(--sp-3); }
+.bas-snapshot-search, .bas-snapshot-approval label { display: grid; gap: var(--sp-2); font-size: var(--fs-s); }
+.bas-snapshot-approval fieldset { display: grid; gap: var(--sp-4); min-width: 0; margin: 0; border: 0; padding: 0; }
+.bas-snapshot-approval legend { font-weight: 650; padding-bottom: var(--sp-3); }
+.bas-snapshot-approval textarea { min-height: calc(var(--ctl-l) * 2); resize: vertical; padding: var(--sp-3); font: inherit; color: var(--ink); background: var(--paper-bright); border: 1px solid var(--ink-faint); }
+.bas-snapshot-approval input, .bas-snapshot-approval textarea { width: 100%; box-sizing: border-box; }
+.bas-snapshot-approval .bas-snapshot-confirm { display: flex; align-items: flex-start; gap: var(--sp-3); }
+.bas-snapshot-confirm input { width: auto; flex: none; margin-top: var(--sp-1); }
+.bas-snapshot-approval button { justify-self: start; }
+.bas-snapshot-workspace > .bas-source-reader { flex: 1; min-height: 0; }

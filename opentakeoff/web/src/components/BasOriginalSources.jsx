@@ -7,7 +7,7 @@ import { store } from '../lib/store.js';
 import { downloadText } from '../lib/totals.js';
 import BasEvidenceBundleActions from './BasEvidenceBundleActions.jsx';
 
-export default function BasOriginalSources({ workflow, onBack, onOpenCitation, restoreContext, restoreNotice }) {
+export default function BasOriginalSources({ workflow, onBack, onOpenCitation, restoreContext, restoreNotice, onSnapshots }) {
   const [view, setView] = useState({ input: null, rows: [], error: '' });
   const [busy, setBusy] = useState(''), [statuses, setStatuses] = useState({});
   const current = useRef(null), heading = useRef(null), adapter = store;
@@ -47,6 +47,7 @@ export default function BasOriginalSources({ workflow, onBack, onOpenCitation, r
     <p className="bas-review-boundary">All physical versions referenced by saved BAS history—not a reviewed current drawing set or an approved takeoff.</p>
     <p className="bas-review-boundary">Retain one original at a time in this browser project. Retained copies survive closing a PDF, but browser storage can be cleared or evicted and is not synced. Download originals for external backup; keep the takeoff JSON too. Verification here does not clear review findings.</p>
     {restoreNotice && <p role="status">{restoreNotice}</p>}
+    {onSnapshots && <div className="bas-point-controls"><button type="button" onClick={onSnapshots}>Snapshots</button><span>Read or import an approved historical scope without restoring working annotations.</span></div>}
     <BasEvidenceBundleActions workflow={workflow} adapter={adapter} busy={busy} onBusy={setBusy} restoreContext={restoreContext} />
     {view.input !== workflow ? <p role="status">Checking saved source ownership…</p> : view.error ? <p role="alert">{view.error}</p> :
       <div className="bas-point-grid bas-review-grid" tabIndex={0} role="region" aria-label="Saved original source versions">

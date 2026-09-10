@@ -1,5 +1,29 @@
 # BAS production workflow progress
 
+## Public snapshot UI and user-requested merge checkpoint — 2026-09-10
+
+After `60a77a42`, Review & changes now connects the shared snapshot services to
+explicit human readiness/approval, historical reading and source-inclusive ZIP
+export/import. The existing original-PDF reader uses the snapshot's own workflow;
+empty-project import does not restore annotations or add counting sheets.
+Private preview ownership and live/saved/generation/project/cancellation guards
+remain separate from shared quantity/readiness authority. No extraction or math
+change in this increment. Contract and verification: `SNAPSHOT_UI_PROOF.md`.
+
+26 focused browser-client/storage tests pass. Two actual-Python real-PDF public
+walkthroughs pass; the second includes keyboard/source-return behavior and fresh
+empty-browser import. Latest readiness/save/export/reopen: 3.721/5.819/5.168/5.191 s.
+Real evidence with controlled review declarations, not independent production
+takeoff truth. Final web **18619 exit 0**: 2,918 pass / 13 skips / zero failures,
+types/lint/all configured benchmarks/build. MCP/package/Python and remote merge
+checks remain. User explicitly requested
+wrapping up and merging the existing branch, with an in-depth impact report;
+do not launch more feature phases during this wrap-up. Full goal remains incomplete.
+
+Currentness/revoke/supersede, readable result-table exports, public MCP snapshot
+operations, the combined memory failure, useful Agent orchestration, unique-point
+reconciliation, remaining corpus/holdout gates and final symbol phase stay open.
+
 ## Atomic browser snapshot storage — in progress after b188b6b7
 
 Local checkpoint **b188b6b7** preserves the verified prepared-validation increment;

@@ -1786,3 +1786,15 @@ honest (`corpus_pass_rate ≥ 0.95` not claimed until measured).
   the measured score gap.
 - OCR, raster vision, learned symbol detection, and local VLM are ON the shared
   vector pipeline when they genuinely improve recall — vector-first always.
+# BAS snapshot UI wrap-up — 2026-09-10
+
+User requested finish-current-work, merge to main after conflict/check verification,
+and a detailed user-impact report to conserve usage. No new feature phase started.
+The isolated BAS branch now has a public scoped snapshot reader/approval/import/
+export journey; two actual-Python real-PDF browser proofs passed with controlled
+review declarations. 26 focused client/storage tests pass. Full final web check
+passes: 2,918 pass / 13 existing skips / zero failures, all configured benchmarks
+and build. MCP/package/Python and remote merge checks remain.
+Details: `opentakeoff/docs/bas-production/SNAPSHOT_UI_PROOF.md`. No new corpus score
+or holdout claim. Full BAS goal remains incomplete; currentness/revocation, memory,
+Agent orchestration, point identity and final symbol acceptance remain open.
