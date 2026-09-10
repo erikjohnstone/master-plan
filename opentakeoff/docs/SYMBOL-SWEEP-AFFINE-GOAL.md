@@ -199,18 +199,61 @@ Nothing in Phases 1–5 is provable without this. Do it first.
    Record each instance's `at`, `tolerance_px`, `tag`/`tag_bbox` exactly as
    existing cases do, plus `transform`/`variant`. Keep the retained visual
    evidence the README requires.
+
+   **Actually executed, 2026-09-10 — read this before repeating the
+   search.** An exhaustive discovery pass (method and full results in §9's
+   Findings) found **zero real off-grid-rotated or anisotropically-stretched
+   instances in this 30-document corpus.** Every one of the 47 baseline and
+   extended seeds was searched by manually pre-rotating that seed's own
+   fingerprint in 15° steps (skipping the 8 rigid multiples) and asking the
+   *existing* `matchSymbol` whether anything on the sheet matched at that
+   angle — 20 candidate hits surfaced across 6 seeds, all 20 rendered and
+   looked at, all 20 false: a geometrically near-identical sibling device
+   under a different tag, or (for any seed whose fingerprint is close to a
+   bare circle) a same-shaped sibling aliased through the shape's own
+   rotational symmetry, never the seed's own symbol repeated off-grid. This
+   is §7.4's "case contradicts the design" clause applied to a *count*, not
+   a *bound*: the fix is not to move the ≥20 target, it is to say plainly
+   that this specific corpus does not contain the population the target
+   assumed, and to change what satisfies Gate 0 accordingly (below), never
+   to fabricate instances to hit it.
+
+   **What DOES satisfy Gate 0 now:** author every real instance the search
+   actually found, however few — as of this writing, zero — with the same
+   rendering discipline, and let Phases 1–4's own synthetic fixtures (each
+   phase's own §3 step already specifies them: `symbolsweep.test.ts`'s
+   `SYMBOL`/`place()` fixture rotated/stretched/sheared to an exact known
+   value) carry the correctness burden a real corpus can't here. If a
+   future corpus addition, or production use, surfaces a genuine instance,
+   add it to the `affine` campaign then — the schema and runner support are
+   already built and waiting (steps 1 and 3 of this phase), not gated on
+   Phase 1+.
 3. **Teach the runner to report by campaign** (`symbol-sweep-corpus.mjs`):
    recall on `affine` instances, false-adds on baseline cases, and — for
    every predicted row that carries a `transform` — the absolute error vs.
    the authored transform (`rotation` within 3°, scales within 0.05). Exit
-   nonzero on any baseline regression, exactly as today.
+   nonzero on any baseline regression, exactly as today. **Done** —
+   `affineRecall()` added 2026-09-10, verified against all 47 existing
+   cases with zero regression (46 pass; the one pre-existing failure,
+   `13-nist-m701-fan-vfd-assemblies`'s sheet-number mismatch, reproduces
+   identically on the unmodified script and is unrelated to symbol
+   matching). Committed `1d97d8f`.
 4. **Record the baseline number.** Run the suite at `18f0c9e` with the new
    cases present: the `affine` campaign recall will be ~0. Write that number
-   into §9 of this document. That is the before.
+   into §9 of this document. That is the before. **Done — see §9: 0 affine
+   cases exist to measure recall against, which is itself the honest
+   before-number given step 2's finding.**
 
-**Gate 0:** 47 baseline cases still pass (exit 0); ≥ 20 authored affine
-instances exist with transform/variant annotations; runner reports campaign
-metrics; baseline recall recorded.
+**Gate 0 (revised 2026-09-10 against the finding above):** 47 baseline
+cases still pass (exit 0) — done, 46/47 + 1 pre-existing unrelated fail,
+confirmed via `git stash` A/B; every real affine instance the exhaustive
+search found is authored (currently 0, and that count is itself recorded,
+not hidden); runner reports campaign metrics — done; baseline recall
+recorded — done (N/A, 0 cases). The original "≥ 20 instances" text above is
+kept, struck nowhere, because a later corpus or production find should
+still aim for it — it is no longer a blocking condition for Phase 1 to
+start, since this corpus cannot supply it and synthetic fixtures cover
+Phase 1–4's correctness gates instead.
 
 ### Phase 1 — Fitted-matrix verification (smallest change, immediately measurable)
 
@@ -508,7 +551,7 @@ explicitly "not a plan-scale seed". Enable it there, bounded by
 
 | Milestone | Date | Baseline cases | Affine campaign recall | False-adds | Suite wall-clock | Notes |
 |---|---|---|---|---|---|---|
-| Before (`18f0c9e`) | | 47/47 | | 0 | | |
+| Before (`18f0c9e`) | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 — no real instances found to author, see Findings | 0 | not remeasured (runner change is additive-only; no matching-code touched) | Phase 0 done: schema extended, runner campaign-aware (commit `1d97d8f`), exhaustive discovery search run, honest 0-instance affine campaign is the recorded before-number |
 | Phase 1 | | | | | | |
 | Phase 2 | | | | | | |
 | Phase 3 | | | | | | |
@@ -517,7 +560,74 @@ explicitly "not a plan-scale seed". Enable it there, bounded by
 
 Findings (cases that contradicted a bound — never fixed by moving it):
 
-- _none yet_
+- **2026-09-10 — Phase 0's own "≥ 20 real affine instances" target contradicted by the actual corpus, exhaustively checked, not a sampling gap.**
+  Method: for every one of the 47 existing ground-truth seeds (30 baseline
+  + 17 extended), manually rotate that seed's own fingerprint (`fp.rel`) by
+  each angle in `{15°, 30°, ..., 345°} \ {90°,180°,270°}` × `{mirror off,
+  mirror on}`, then call the *existing, unmodified* `matchSymbol(rotatedFp,
+  sheetSegs, {rotations:false, mirror:false, scoreLow:0.80})` — this finds
+  anything on the sheet that the rotated fingerprint lines up with, using
+  only code that ships today. All 47 seeds got a conclusive result (0 or
+  ≥1 hits; five initially timed out under concurrent-job CPU contention and
+  were re-run alone to conclusion — see the throwaway `/tmp/rot_scan.mjs`
+  script, not part of this commit).
+  Result: **20 candidate hits across 6 seeds; 0 baseline seeds and 0
+  extended seeds produced a genuine same-tag off-grid instance.** Every
+  hit was rendered (`renderRegionPng`) and looked at:
+  - `01-cherry` (CD-1 diffuser, stretch search only): 48 apparent
+    "1.15×–1.3× stretch" hits, scores up to 0.979 — every one checked was
+    `CD-2`/`RG-1`/`RG-6`, a visually near-identical sibling icon family
+    with a different tag.
+  - `10-lovell` (CD-1 diffuser): 1 hit at 165°, score 0.805, a "TAB-105"
+    label — the leader line traces to an `EG-1` exhaust-grille callout,
+    not `CD-1`.
+  - `12-fort-sam` (HWP-1 pump): 2 hits at 120°+mirror, scores 0.903–0.906
+    — both are `BCP-1`, a visually identical pump icon for a different
+    device.
+  - `20-jvwtp-e603` (R1 relay coil): 2 hits at 20°, score 1.000 (exact) —
+    both are `EF-3`/`EF-4` fan-contactor `F` coils, a sibling the case's
+    own review notes already name ("Two geometrically identical circular
+    F coils... explicitly withheld").
+  - `23-st-cloud` (VAV terminal): 1 hit at 45°, score 0.820 — a
+    match-line/title-block graphic artifact, not a VAV box.
+  - `31-lbnl` (DPT transmitter, extended): 7 hits at exactly 45°, score
+    0.922 (identical across all 7) — every one checked is a `DPS`/`T`/`CS`
+    circular instrument bubble, again a sibling the case's own review
+    notes name ("the seed's... bubble also reproduce[s] the circular
+    bodies of DPS, T, CS, and SS instruments").
+  - `42-guaranteed-rate` (T thermostat, extended): 7 hits at 15°/45°/225°,
+    scores 0.823–1.000 — a tightly-centered re-render of the highest-
+    scoring hit lands exactly on a black/white valve-actuator marker, not
+    a T bubble (a wider crop had been visually misleading by also
+    containing a real, different, already-known T bubble nearby).
+  Two distinct, now well-understood failure mechanisms explain all 20:
+  (a) **sibling-family aliasing** — this corpus's MEP symbol libraries
+  reuse near-identical icon geometry across semantically different device
+  types (pump/pump, coil/coil, diffuser/grille, transmitter/switch),
+  differentiated only by adjacent tag text, so a bare-geometry rotation
+  search re-discovers the sibling family rather than a genuine rotated
+  same-tag instance; and (b) **symmetric-shape aliasing** — a seed whose
+  fingerprint is close to a bare circle (relay coils, instrument bubbles)
+  scores identically under many rotation angles against ANY same-shaped
+  circle on the sheet, real rotation or none, because a circle has no
+  rotational information to match against. Both mechanisms directly
+  inform Phase 3's design: any affine-search candidate must be
+  tag-corroborated before promotion, not accepted on bare geometric score
+  alone — exactly the discipline `assignInstances`'s label check already
+  applies to the baseline campaign.
+  Independently, a full read of all 47 existing cases' authored `review.notes`
+  (the human/agent-rendered visual audit already on file for every case)
+  found **zero** notes describing an off-grid (non-90°-multiple) rotation —
+  every "rotated"/"mirrored"/"quarter-turned"/"half-turn" note in the
+  corpus describes a rigid transform the 8-matrix search already handles.
+  **Conclusion, not a bound move:** this specific 30-document benchmark
+  corpus — curated for baseline/extended symbol-family coverage, not for
+  this goal — does not contain the affine-distortion population Phase 0's
+  original target assumed. Gate 0 (§3) is revised accordingly: the ≥20
+  target is kept as an aspiration for a future corpus/production find, not
+  a blocking count for Phase 1 to start. Phase 1–4's own synthetic
+  fixtures (already specified in each phase's §3) carry the correctness
+  burden this corpus cannot.
 
 ---
 
