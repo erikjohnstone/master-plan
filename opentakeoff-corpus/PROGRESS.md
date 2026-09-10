@@ -1,5 +1,21 @@
 ## Active work
 
+2026-09-10 after **ac879e3e**: snapshot/archive core is in progress, not public
+production approval. Shared creation/reopening requires exact original bytes,
+actual Python replay and full readiness; v1 unapproved backups remain distinct.
+No VectorGrid/extraction/symbol/bbox/Python arithmetic edits. **Web 57886 exit 0**:
+2,884 pass / 13 existing skips, types/lint/bench/build. New source-backed snapshot
+probe preserves the original and all 31 calculations but fails its separate
+512 MiB incremental-RSS gate (latest 711,458,816 bytes); don't hide that behind
+the existing green readiness benchmark. Full MCP **84419 exit 0**: types, 128 BAS +
+33 revision + six issue + 17 scope/snapshot + four packaging + 122 tool/safe-write
+tests, existing budgets and metadata pass. Python **59068 exit 0**: 453 pass /
+zero skips; mypy 20 files. All test/probe handles terminal. Local checkpoint only,
+not a completed snapshot feature; no push/merge/deploy. Full ledger:
+`opentakeoff/docs/bas-production/SNAPSHOT_CORE_PROOF.md`. Next: reduce allocations,
+atomic snapshot storage and public approval/reopen, Agent/point-identity and
+remaining original/final-symbol gates. Goal active, no external blocker.
+
 2026-09-10 after **6192c488**: internal shared scoped-readiness implementation
 verified; no extraction/VectorGrid/symbol/bbox/Python math change. Shared scope
 replay, explicit coverage/mapping, original-byte verification, actual Python

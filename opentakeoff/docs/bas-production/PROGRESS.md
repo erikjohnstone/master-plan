@@ -1,5 +1,38 @@
 # BAS production workflow progress
 
+## Snapshot/archive core — work in progress, 2026-09-10
+
+After **ac879e3e**, strict shared snapshot preparation/reopening and a separate
+source-inclusive archive purpose are implemented. Current original bytes and
+actual Python replay are mandatory; forged readiness cannot be made valid just
+by recomputing hashes. Initial seal and exact reviewed inputs remain separate
+from mutable working state. Existing unapproved backups retain their contract.
+No extraction/VectorGrid/symbol/bbox/Python arithmetic changes or public approval
+verb. The browser Agent integration and unique-point identity gaps remain open.
+
+**Web 57886 exit 0**: 2,884 pass / 13 existing skips, types/lint/all configured
+benchmarks/build. Readiness 2.572–3.877 s / 377,454,592-byte incremental RSS;
+unchanged limits pass. Actual-Python focused MCP **14050 exit 0**, ten tests.
+The new source-backed core probe roundtrips the exact nine-page original and
+31 saved calculations, but **fails its separate 512 MiB incremental-memory gate**:
+latest non-profiled **63647 exit 1**, 711,458,816 bytes. Composition-only reuse of
+already verified history reduced preparation/reopening to 4.599/6.004 s; no math,
+source or integrity checks were removed. A test-only serializer experiment is
+not integrated. All probe failures and fixture declarations are in
+`SNAPSHOT_CORE_PROOF.md`; original unknown scope fields remain in saved history.
+
+Full MCP chain **84419 exit 0**: types, 128 BAS + 33 revision + six issue + 17
+scope/readiness/snapshot + four packaging + 122 tool/staging/safe-write tests;
+53-tool metadata and existing performance gates pass. Python **59068 exit 0**:
+453 pass / zero skips, 12.28 s, mypy 20 files pass. Doc links and diff checks pass.
+All test/probe handles are terminal. Owned Vite 34959 on 127.0.0.1:5177 was
+revalidated during the web gate. This is a local checkpoint with an open
+performance/integration gate, not a production release. Next: reduce the snapshot
+peak allocations without weakening its gate, then atomic source/snapshot/seal
+storage, selective currentness/history, public UI/MCP and real human-reviewed
+approval/export/reopen. All remaining A–D, useful Agent automation, corpus/holdout
+and appended symbol-phase acceptance stays in scope. Goal active; no blocker.
+
 ## Scoped readiness — verified internal increment, 2026-09-10
 
 After **6192c488**, an internal shared readiness service now joins exact saved

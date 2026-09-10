@@ -7,6 +7,9 @@ import { basSourceInventory, basRetainedSourceSchema, verifyBasSourceBytes, type
 import { parseTakeoffImport } from './importTakeoff.js';
 import { sha256Hex } from './graphKeys.js';
 import { basWorkflowReplayReceiptSchema } from './basWorkflowReplay.ts';
+import { BAS_SNAPSHOT_JSON_LIMIT, basSnapshotRecordSchema, readBasSnapshotPlan, assertBasSnapshotPlan, verifyBasSnapshot,
+  type BasSnapshotPlan, type BasSnapshotRecord } from './basSnapshot.ts';
+import type { BasReadinessIO } from './basReadiness.ts';
 
 export const BAS_BUNDLE_LIMITS = Object.freeze({ sources: 10000, pdf: 512 * 1024 ** 2,
   payload: 256 * 1024 ** 2, manifest: 16 * 1024 ** 2, archive: 2 ** 31 - 1, chunk: 64 * 1024 });
@@ -22,6 +25,12 @@ export const basEvidenceBundleManifestSchema = z.object({
   sources: z.array(sourceEntry).min(1).max(BAS_BUNDLE_LIMITS.sources),
 }).strict();
 export type BasEvidenceBundleManifest = z.infer<typeof basEvidenceBundleManifestSchema>;
+export const basSnapshotBundleManifestSchema = basEvidenceBundleManifestSchema.extend({
+  schema_version: z.literal('bas_snapshot_bundle_v1'), purpose: z.literal('scoped_takeoff_snapshot'),
+  snapshot: z.object({ path: z.literal('snapshot.json'), sha256: sha,
+    byte_length: count.max(BAS_SNAPSHOT_JSON_LIMIT) }).strict(),
+}).strict();
+const archiveManifestSchema = z.discriminatedUnion('schema_version', [basEvidenceBundleManifestSchema, basSnapshotBundleManifestSchema]);
 export const basEvidenceBundleInspectionSchema = z.object({ bundle_id: sha, manifest: basEvidenceBundleManifestSchema,
   source_byte_verification: z.literal('verified_now'), calculation_verification: z.enum(['not_python_replayed', 'verified_shared_python_replay', 'no_saved_calculations']),
   workflow_replay: basWorkflowReplayReceiptSchema.optional(),
@@ -33,14 +42,28 @@ type Guard = () => void;
 const noop = () => {};
 const encode = (value: unknown) => new TextEncoder().encode(canonicalBasJson(value));
 const decoder = new TextDecoder('utf-8', { fatal: true });
-const allowed = /^(?:manifest\.json|takeoff\.json|README\.txt|sources\/[a-f0-9]{64}\.pdf)$/;
+const allowed = /^(?:manifest\.json|takeoff\.json|snapshot\.json|README\.txt|sources\/[a-f0-9]{64}\.pdf)$/;
 const readme = new TextEncoder().encode('OpenTakeoff BAS evidence backup\n\nUnapproved and unsigned. Saved calculations have not been replayed by this archive.\nmanifest.json identifies all physical PDFs referenced by saved BAS history, not a reviewed current drawing set.\ntakeoff.json is the ordinary takeoff export. sources/ contains exact originals named by SHA-256.\nKeep the archive unchanged. Reopening an exact PDF then importing takeoff.json uses the existing merge rules.\nLegacy filename-bound annotations may require the original filename and explicit version selection.\nThis is not an approved takeoff, installed/as-built verification, or engineering certification.\n');
+const snapshotReadme = new TextEncoder().encode('OpenTakeoff BAS scoped takeoff snapshot\n\nUnsigned historical approval declaration, not approval of a newer working project.\nReviewer identity is self-declared and timestamp is local/untrusted.\nsnapshot.json contains the exact reviewed readiness, scope, dependencies, issues, exclusions and initial seal.\ntakeoff.json preserves the complete original inputs, results and decision history.\nsources/ contains every referenced original PDF, named by SHA-256.\nOpen with the BAS snapshot verifier: verify every original and replay saved calculations before trusting this declaration.\nThe archive alone has not rerun Python on your machine. Hashes are tamper checks, not authenticated signatures.\nNo project-complete, installed/as-built quantity, or engineering certification is asserted.\n');
 const fileLimit = (name: string) => name === 'manifest.json' ? BAS_BUNDLE_LIMITS.manifest
-  : name === 'takeoff.json' ? BAS_BUNDLE_LIMITS.payload : name === 'README.txt' ? 8192 : BAS_BUNDLE_LIMITS.pdf;
+  : name === 'takeoff.json' ? BAS_BUNDLE_LIMITS.payload : name === 'snapshot.json' ? BAS_SNAPSHOT_JSON_LIMIT
+    : name === 'README.txt' ? 8192 : BAS_BUNDLE_LIMITS.pdf;
 
 /** Freeze exact JSON; no dropping undefined/nonfinite values or sanitizing the
  * saved BAS history. Byte/source ownership is verified separately from math. */
 export async function prepareBasEvidenceBundle(rawPayload: unknown, guard: Guard = noop) {
+  const result = await prepareArchive(rawPayload, guard);
+  return { ...result, manifest: basEvidenceBundleManifestSchema.parse(result.manifest) };
+}
+/** Requires owned, freshly verified approval/reopen authority, never a caller's
+ * saved ready flag. Actual durable delivery remains the transport's job. */
+export async function prepareBasSnapshotBundle(plan: BasSnapshotPlan, guard: Guard = noop) {
+  const owned = readBasSnapshotPlan(plan);
+  const current = () => { guard(); assertBasSnapshotPlan(plan); };
+  const result = await prepareArchive(JSON.parse(owned.payload_json), current, owned.record);
+  return { ...result, manifest: basSnapshotBundleManifestSchema.parse(result.manifest) };
+}
+async function prepareArchive(rawPayload: unknown, guard: Guard, snapshot?: BasSnapshotRecord) {
   guard();
   const bytes = encode(structuredClone(rawPayload));
   if (bytes.byteLength > BAS_BUNDLE_LIMITS.payload) throw new Error('BAS bundle takeoff JSON exceeds the supported size limit');
@@ -49,18 +72,22 @@ export async function prepareBasEvidenceBundle(rawPayload: unknown, guard: Guard
   const inventory = await basSourceInventory(payload.bas_workflow); guard();
   if (!inventory.length || inventory.length > BAS_BUNDLE_LIMITS.sources) throw new Error('BAS bundle requires 1–10000 original PDFs');
   if (inventory.some(i => i.source.byte_length > BAS_BUNDLE_LIMITS.pdf)) throw new Error('An original PDF exceeds the BAS bundle size limit');
-  const manifest = basEvidenceBundleManifestSchema.parse({ schema_version: 'bas_evidence_bundle_v1',
-    purpose: 'unapproved_evidence_backup', archive_format: 'zip_store_1', calculation_verification: 'not_python_replayed',
+  const snapshotBytes = snapshot ? encode(snapshot) : null, disclosure = snapshot ? snapshotReadme : readme;
+  const manifest = archiveManifestSchema.parse({ schema_version: snapshot ? 'bas_snapshot_bundle_v1' : 'bas_evidence_bundle_v1',
+    purpose: snapshot ? 'scoped_takeoff_snapshot' : 'unapproved_evidence_backup', archive_format: 'zip_store_1', calculation_verification: 'not_python_replayed',
     payload: { path: 'takeoff.json', sha256: await sha256Hex(bytes), byte_length: bytes.byteLength },
     sources: inventory.map(item => ({ ...item, path: `sources/${item.source.sha256}.pdf` })),
+    ...(snapshotBytes ? { snapshot: { path: 'snapshot.json', sha256: await sha256Hex(snapshotBytes), byte_length: snapshotBytes.length } } : {}),
   });
   const manifestBytes = encode(manifest); guard();
   // Conservative ZIP header/directory allowance, known before any source load.
-  const maximum = bytes.length + manifestBytes.length + readme.length + inventory.reduce((n, i) => n + i.source.byte_length, 0) + (inventory.length + 3) * 256;
+  const maximum = bytes.length + manifestBytes.length + disclosure.length + (snapshotBytes?.length || 0)
+    + inventory.reduce((n, i) => n + i.source.byte_length, 0) + (inventory.length + (snapshot ? 4 : 3)) * 256;
   if (manifestBytes.length > BAS_BUNDLE_LIMITS.manifest || maximum > BAS_BUNDLE_LIMITS.archive) throw new Error('BAS bundle exceeds the supported archive size limit');
   const bundleId = await sha256Hex(manifestBytes); guard();
   return { manifest: structuredClone(manifest), bundle_id: bundleId,
     async *stream(load: (item: BasSourceInventoryItem) => Promise<Uint8Array>, current: Guard = guard): AsyncGenerator<Uint8Array> {
+      const check = () => { guard(); if (current !== guard) current(); };
       const queue: Uint8Array[] = []; let failure: Error | null = null, total = 0;
       const zip = new Zip((error, data) => { if (error) failure = error; else queue.push(data); });
       function* drain() {
@@ -71,22 +98,23 @@ export async function prepareBasEvidenceBundle(rawPayload: unknown, guard: Guard
         }
       }
       async function* entry(name: string, data: Uint8Array) {
-        current(); const file = new ZipPassThrough(name);
+        check(); const file = new ZipPassThrough(name);
         file.mtime = new Date(1980, 0, 1, 0, 0, 0); file.os = 0; file.attrs = 0;
         zip.add(file); yield* drain();
         for (let offset = 0; offset < data.length; offset += BAS_BUNDLE_LIMITS.chunk) {
-          current(); const end = Math.min(data.length, offset + BAS_BUNDLE_LIMITS.chunk);
+          check(); const end = Math.min(data.length, offset + BAS_BUNDLE_LIMITS.chunk);
           file.push(data.subarray(offset, end), end === data.length); yield* drain();
         }
       }
       try {
-        yield* entry('manifest.json', manifestBytes); yield* entry('takeoff.json', bytes); yield* entry('README.txt', readme);
+        yield* entry('manifest.json', manifestBytes); yield* entry('takeoff.json', bytes); yield* entry('README.txt', disclosure);
+        if (snapshotBytes) yield* entry('snapshot.json', snapshotBytes);
         for (const item of manifest.sources) {
-          current(); const data = await load(structuredClone(item)); current();
-          const verified = await verifyBasSourceBytes(item.source, data); current();
+          check(); const data = await load(structuredClone(item)); check();
+          const verified = await verifyBasSourceBytes(item.source, data); check();
           yield* entry(item.path, verified);
         }
-        current(); zip.end(); yield* drain(); current();
+        check(); zip.end(); yield* drain(); check();
       } finally { zip.terminate(); }
     },
   };
@@ -98,6 +126,22 @@ const u32 = (v: DataView, offset: number) => v.getUint32(offset, true);
 
 /** Random access reads never inflate untrusted input or hold all PDF entries. */
 export async function openBasEvidenceBundle(reader: BasBundleReader, guard: Guard = noop) {
+  const result = await openArchive(reader, guard, 'backup');
+  return { manifest: basEvidenceBundleManifestSchema.parse(result.manifest), bundle_id: result.bundle_id,
+    payload: result.payload, readSource: result.readSource, verifyOriginals: result.verifyOriginals };
+}
+/** Reopening verifies historical approval only. It neither restores annotations
+ * nor approves a current project. Source IO is always bound to archive originals. */
+export async function openBasSnapshotBundle(reader: BasBundleReader, io: Pick<BasReadinessIO, 'replayCalculations'> = {}, signal?: AbortSignal) {
+  const guard = () => signal?.throwIfAborted();
+  const result = await openArchive(reader, guard, 'snapshot');
+  const plan = await verifyBasSnapshot(result.payload, result.snapshot_record, {
+    replayCalculations: io.replayCalculations, readSource: source => result.readSource(source.source_id),
+  }, signal);
+  return { ...result, manifest: basSnapshotBundleManifestSchema.parse(result.manifest), plan,
+    status: 'verified_historical_scope' as const, current_working_state: 'not_evaluated' as const, restored: false as const };
+}
+async function openArchive(reader: BasBundleReader, guard: Guard, purpose: 'backup' | 'snapshot') {
   if (!Number.isSafeInteger(reader.size) || reader.size < 22 || reader.size > BAS_BUNDLE_LIMITS.archive) throw new Error('Invalid BAS archive size');
   async function read(offset: number, length: number) {
     guard();
@@ -109,7 +153,7 @@ export async function openBasEvidenceBundle(reader: BasBundleReader, guard: Guar
   const tailBytes = await read(reader.size - 22, 22), tail = new DataView(tailBytes.buffer, tailBytes.byteOffset, tailBytes.byteLength);
   const number = u16(tail, 10), directorySize = u32(tail, 12), directoryOffset = u32(tail, 16);
   if (u32(tail, 0) !== 0x06054b50 || u16(tail, 4) || u16(tail, 6) || u16(tail, 8) !== number || u16(tail, 20)
-    || number < 4 || number > BAS_BUNDLE_LIMITS.sources + 3 || directorySize > (BAS_BUNDLE_LIMITS.sources + 3) * 128
+    || number < 4 || number > BAS_BUNDLE_LIMITS.sources + 4 || directorySize > (BAS_BUNDLE_LIMITS.sources + 4) * 128
     || directoryOffset + directorySize !== reader.size - 22) throw new Error('Unsupported or inconsistent BAS ZIP directory');
   const directoryBytes = await read(directoryOffset, directorySize), directory = new DataView(directoryBytes.buffer, directoryBytes.byteOffset, directoryBytes.byteLength);
   const entries = new Map<string, Entry>(); let cursor = 0;
@@ -149,7 +193,9 @@ export async function openBasEvidenceBundle(reader: BasBundleReader, guard: Guar
     return bytes;
   }
   const manifestBytes = await contents('manifest.json');
-  const manifest = basEvidenceBundleManifestSchema.parse(JSON.parse(decoder.decode(manifestBytes)));
+  const manifest = archiveManifestSchema.parse(JSON.parse(decoder.decode(manifestBytes)));
+  if ((manifest.purpose === 'scoped_takeoff_snapshot') !== (purpose === 'snapshot'))
+    throw new Error('Wrong BAS archive purpose; use the explicit snapshot or unapproved-backup workflow');
   if (decoder.decode(manifestBytes) !== canonicalBasJson(manifest)) throw new Error('Noncanonical BAS archive manifest');
   const payloadBytes = await contents(manifest.payload.path);
   if (payloadBytes.length !== manifest.payload.byte_length || await sha256Hex(payloadBytes) !== manifest.payload.sha256) throw new Error('BAS archive takeoff hash/length mismatch');
@@ -157,17 +203,26 @@ export async function openBasEvidenceBundle(reader: BasBundleReader, guard: Guar
   if (decoder.decode(payloadBytes) !== canonicalBasJson(payload)) throw new Error('Noncanonical BAS archive takeoff JSON');
   const inventory = await basSourceInventory(payload.bas_workflow); guard();
   const expected = inventory.map(item => ({ ...item, path: `sources/${item.source.sha256}.pdf` }));
-  if (canonicalBasJson(expected) !== canonicalBasJson(manifest.sources) || entries.size !== inventory.length + 3) throw new Error('BAS archive source inventory does not own every entry');
+  const isSnapshot = manifest.schema_version === 'bas_snapshot_bundle_v1';
+  if (canonicalBasJson(expected) !== canonicalBasJson(manifest.sources) || entries.size !== inventory.length + (isSnapshot ? 4 : 3)) throw new Error('BAS archive source inventory does not own every entry');
   for (const item of manifest.sources) if (entries.get(item.path)?.size !== item.source.byte_length) throw new Error('Missing or incorrectly sized BAS original PDF');
   const originalReadme = await contents('README.txt');
-  if (decoder.decode(originalReadme) !== decoder.decode(readme)) throw new Error('BAS archive disclosure was changed');
+  if (decoder.decode(originalReadme) !== decoder.decode(isSnapshot ? snapshotReadme : readme)) throw new Error('BAS archive disclosure was changed');
+  let snapshot_record: BasSnapshotRecord | null = null;
+  if (manifest.schema_version === 'bas_snapshot_bundle_v1') {
+    const snapshotBytes = await contents(manifest.snapshot.path);
+    if (snapshotBytes.length !== manifest.snapshot.byte_length || await sha256Hex(snapshotBytes) !== manifest.snapshot.sha256)
+      throw new Error('BAS archive snapshot hash/length mismatch');
+    snapshot_record = basSnapshotRecordSchema.parse(JSON.parse(decoder.decode(snapshotBytes)));
+    if (decoder.decode(snapshotBytes) !== canonicalBasJson(snapshot_record)) throw new Error('Noncanonical BAS archive snapshot');
+  }
   const bundleId = await sha256Hex(manifestBytes); guard();
   async function readSource(sourceId: string) {
     const item = manifest.sources.find(i => i.source.source_id === sourceId);
     if (!item) throw new Error('BAS archive does not own the requested original');
     const bytes = await verifyBasSourceBytes(item.source, await contents(item.path)); guard(); return bytes;
   }
-  return { manifest: structuredClone(manifest), bundle_id: bundleId, payload: structuredClone(payload), readSource,
+  return { manifest: structuredClone(manifest), bundle_id: bundleId, payload: structuredClone(payload), snapshot_record, readSource,
     async verifyOriginals() { for (const item of manifest.sources) { await readSource(item.source.source_id); } guard(); },
   };
 }

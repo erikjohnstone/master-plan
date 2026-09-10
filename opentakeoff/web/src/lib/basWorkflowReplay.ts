@@ -1,6 +1,6 @@
 /** Shared historical input/receipt identity; never a browser calculator. */
 import { z } from 'zod';
-import { verifyBasWorkflow } from './basWorkflow.ts';
+import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 import { buildBasAssignmentDemandInput, type BasAssignmentDemandInput, type BasAssignmentDemandResult } from './basAssignmentDemandContract.ts';
@@ -23,11 +23,8 @@ export type BasReplayRecord = { record_id: string } & (
 
 export async function prepareBasWorkflowReplay(raw: unknown, guard: () => void = () => {}) {
   guard(); const workflow = await verifyBasWorkflow(raw); guard();
-  const workflow_sha256 = await sha256Hex(new TextEncoder().encode(canonicalBasJson(workflow))); guard();
-  const checked_records = { assignment: (workflow.assignment_calculations || []).map(c => c.calculation_id),
-    assembly: (workflow.assembly_calculations || []).map(c => c.calculation_id),
-    engineering: (workflow.engineering_events || []).map(e => e.event_id) };
-  return { workflow_sha256, checked_records: structuredClone(checked_records),
+  const identity = await replayIdentityForVerifiedBasWorkflow(workflow, guard);
+  return { ...identity,
     async *records(): AsyncGenerator<BasReplayRecord> {
       for (const calculation of workflow.assignment_calculations || []) {
         guard(); const event = workflow.equipment_events!.find(e => e.event_id === calculation.result.equipment_head)!;
@@ -50,8 +47,26 @@ export async function prepareBasWorkflowReplay(raw: unknown, guard: () => void =
   };
 }
 
+/** Internal identity seam for an already owned/verified workflow, not arithmetic
+ * execution and never a public "trust this history" option. */
+export async function replayIdentityForVerifiedBasWorkflow(workflow: BasWorkflow, guard: () => void = () => {}) {
+  guard();
+  const workflow_sha256 = await sha256Hex(new TextEncoder().encode(canonicalBasJson(workflow))); guard();
+  const checked_records = { assignment: (workflow.assignment_calculations || []).map(c => c.calculation_id),
+    assembly: (workflow.assembly_calculations || []).map(c => c.calculation_id),
+    engineering: (workflow.engineering_events || []).map(e => e.event_id) };
+  return { workflow_sha256, checked_records };
+}
+
 export async function assertBasWorkflowReplayReceipt(rawWorkflow: unknown, rawReceipt: unknown, guard: () => void = () => {}) {
-  const plan = await prepareBasWorkflowReplay(rawWorkflow, guard), receipt = basWorkflowReplayReceiptSchema.parse(rawReceipt);
+  guard(); const workflow = await verifyBasWorkflow(rawWorkflow); guard();
+  return assertReplayReceiptForVerifiedBasWorkflow(workflow, rawReceipt, guard);
+}
+
+/** Internal composition after full workflow verification AND actual configured
+ * replay. Public transports must retain the full-verification wrapper above. */
+export async function assertReplayReceiptForVerifiedBasWorkflow(workflow: BasWorkflow, rawReceipt: unknown, guard: () => void = () => {}) {
+  const plan = await replayIdentityForVerifiedBasWorkflow(workflow, guard), receipt = basWorkflowReplayReceiptSchema.parse(rawReceipt);
   const hasResults = Object.values(plan.checked_records).some(records => records.length);
   if (receipt.workflow_sha256 !== plan.workflow_sha256 || canonicalBasJson(receipt.checked_records) !== canonicalBasJson(plan.checked_records)
     || receipt.calculation_verification !== (hasResults ? 'verified_shared_python_replay' : 'no_saved_calculations')) {

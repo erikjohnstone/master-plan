@@ -12,6 +12,13 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — BAS engineering
 
+- Add the shared scoped-snapshot preparation and source-inclusive archive core.
+  A separate unsigned seal binds exact takeoff JSON, reviewed scope/dependencies,
+  issues and original PDFs; creation and reopening require fresh readiness and
+  saved-calculation replay. Existing unapproved backup format is preserved.
+  This is not yet a public approval/storage workflow or complete Agent takeoff.
+  No extraction, VectorGrid, symbol, bbox or Python arithmetic change.
+
 - Add an internal shared scoped-readiness service linking saved human coverage,
   exact source mappings, original-byte verification, Python replay, dependency
   freshness and retained issues. Readiness is never an approval, installed

@@ -27,6 +27,12 @@ export async function basSourceInventory(rawWorkflow: unknown): Promise<BasSourc
  * consumer need not verify the same complete historical calculations twice. */
 export async function inspectBasSourceHistory(rawWorkflow: unknown) {
   const workflow = await verifyBasWorkflow(rawWorkflow);
+  return { workflow, inventory: sourceInventoryForVerifiedBasWorkflow(workflow) };
+}
+
+/** Internal shared composition seam. Caller owns the result of verifyBasWorkflow;
+ * no public request may claim that arbitrary history is already verified. */
+export function sourceInventoryForVerifiedBasWorkflow(workflow: BasWorkflow): BasSourceInventoryItem[] {
   const sources = new Map<string, BasSourceInventoryItem>();
   for (const capture of workflow.captures) for (const { names, ...source } of capture.sources) {
     const item = sources.get(source.source_id);
@@ -41,7 +47,7 @@ export async function inspectBasSourceHistory(rawWorkflow: unknown) {
   const inventory = [...sources.values()].sort((a, b) => a.source.source_id.localeCompare(b.source.source_id)).map(item => ({
     ...item, names: [...new Set(item.names)].sort(), capture_ids: [...new Set(item.capture_ids)].sort(),
   }));
-  return { workflow, inventory };
+  return inventory;
 }
 
 function copyBytes(input: Uint8Array | ArrayBuffer): Uint8Array {

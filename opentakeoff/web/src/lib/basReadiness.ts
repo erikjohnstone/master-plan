@@ -5,8 +5,8 @@ import { basDeliverableTargetKey } from './basDeliverableScopeContract.ts';
 import { evaluateBasReadinessCoverage, basReadinessDiagnosticBlocks, type BasReadinessBlocker } from './basReadinessCoverage.ts';
 import { evaluateBasReadinessIssues } from './basReadinessIssues.ts';
 import { projectReviewForVerifiedBasWorkflow } from './basProjectReview.ts';
-import { basSourceInventory, verifyBasSourceBytes, type BasRetainedSource } from './basSourceRetention.ts';
-import { assertBasWorkflowReplayReceipt, prepareBasWorkflowReplay, BAS_WORKFLOW_REPLAY_RULE,
+import { sourceInventoryForVerifiedBasWorkflow, verifyBasSourceBytes, type BasRetainedSource } from './basSourceRetention.ts';
+import { assertReplayReceiptForVerifiedBasWorkflow, replayIdentityForVerifiedBasWorkflow, BAS_WORKFLOW_REPLAY_RULE,
   type BasWorkflowReplayReceipt } from './basWorkflowReplay.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
@@ -46,7 +46,7 @@ export async function buildBasReadiness(raw: unknown, scopeEventId: string, io: 
   const sources: { source: BasRetainedSource; status: 'verified_original_bytes' | 'unavailable' | 'not_verified' }[] = [];
   // The future archive carries the retained history: verify every referenced
   // original version, not just a conveniently open/current namesake.
-  for (const { source } of await basSourceInventory(workflow)) {
+  for (const { source } of sourceInventoryForVerifiedBasWorkflow(workflow)) {
     signal?.throwIfAborted();
     const bytes = adapters.readSource ? await adapters.readSource(structuredClone(source), signal) : null;
     signal?.throwIfAborted();
@@ -61,9 +61,9 @@ export async function buildBasReadiness(raw: unknown, scopeEventId: string, io: 
     // A transport receives its own copy; an accidental mutation cannot alter
     // the evaluated state or make its reply bind to different inputs.
     const receipt = await adapters.replayCalculations(structuredClone(workflow), signal);
-    signal?.throwIfAborted(); replay = await assertBasWorkflowReplayReceipt(workflow, receipt, () => signal?.throwIfAborted());
+    signal?.throwIfAborted(); replay = await assertReplayReceiptForVerifiedBasWorkflow(workflow, receipt, () => signal?.throwIfAborted());
   } else {
-    const plan = await prepareBasWorkflowReplay(workflow, () => signal?.throwIfAborted());
+    const plan = await replayIdentityForVerifiedBasWorkflow(workflow, () => signal?.throwIfAborted());
     if (Object.values(plan.checked_records).every(ids => ids.length === 0)) replay = {
       schema_version: 'bas_workflow_replay_v1', rule_version: BAS_WORKFLOW_REPLAY_RULE, workflow_sha256: plan.workflow_sha256,
       checked_records: plan.checked_records, calculation_verification: 'no_saved_calculations', project_complete: false };
