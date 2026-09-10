@@ -1,6 +1,303 @@
 # Changelog
 
+- Correct the packaged MCP VectorGrid runtime location and ship its unchanged
+  Python import dependencies. Source-run extraction paths and algorithms are
+  unchanged; package checks verify byte-identical runtime copies.
+
+- Engineering result input links now disclose manual transcription versus
+  explicit declaration, open the exact nested input, and page dense outcomes.
+  Saved engineering reviews remain accessible after equipment withdrawal.
+
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
+
+## Unreleased — BAS engineering
+
+- Add internal **Review & changes → Snapshots**: select reviewed scope, check
+  shared readiness, inspect exact retained evidence, explicitly approve/save,
+  reopen and export/import the original-source ZIP. Historical import also works
+  without restoring an active takeoff. Dirty/project-switched/cancelled work cannot
+  silently become approval. Records remain unsigned and browser-local; current
+  applicability, revoke/supersede, public MCP snapshot operations and the combined
+  memory gate are still unfinished. No extraction, VectorGrid or math change.
+
+- Add the shared scoped-snapshot preparation and source-inclusive archive core.
+  A separate unsigned seal binds exact takeoff JSON, reviewed scope/dependencies,
+  issues and original PDFs; creation and reopening require fresh readiness and
+  saved-calculation replay. Existing unapproved backup format is preserved.
+  The browser approval/storage increment is described above; this is not a complete Agent takeoff.
+  No extraction, VectorGrid, symbol, bbox or Python arithmetic change.
+
+- Add an internal shared scoped-readiness service linking saved human coverage,
+  exact source mappings, original-byte verification, Python replay, dependency
+  freshness and retained issues. Readiness is never an approval, installed
+  count or project-completeness claim. Public approval/snapshots and complete
+  browser-Agent orchestration remain unfinished. No extraction or math change.
+
+- Connect shared scope/coverage review to an internal Takeoff workspace and
+  `bas_scope_review`. Populate choices from retained claims; preserve original
+  page/span evidence, explicit exclusions, dependencies, draft/source return,
+  guarded saves, history replay and bounded exports. No automatic applicability,
+  waiver, approval or extraction/math change. Real-original UI/packaged-MCP
+  walkthroughs and applicable web/MCP/Python regression gates pass; approval and
+  approved snapshots remain unfinished. See the BAS public scope proof.
+
+- Add internal durable scope/coverage history (`bas_scope_10`) with exact-source
+  replay, claim-specific dependency checks, explicit overlapping conflicts and
+  append-only withdrawal. Existing editors, imports and evidence backups preserve
+  it. Review is not a waiver or approval; public integration is described above.
+  No extraction, VectorGrid, symbol or Python production-math changes.
+
+- Add an internal shared deliverable-scope compiler over the existing revision
+  inventory. Exact source-cited exclusions retain included prerequisites and
+  original quantities; dependency fingerprints distinguish relevant changes
+  from unrelated edits. Scope preview is not approval, verified coverage or a
+  shipped public release workflow. No extraction, math, persistence or UI change.
+
+- Route SOO issues to their exact retained clause, region or matrix comparison;
+  preserve drafts and original-source return. Add an internal, paged source-text
+  accounting reader using unchanged shared discovery results. Missing/historical
+  targets are not replaced with current namesakes, and historical decision
+  contexts cannot enable new actions or submit a current draft. No extraction,
+  shared interpretation, quantity, approval or MCP contract changes.
+
+- Expose shared issue decisions in **Review & changes** and `bas_issue_review`.
+  Observe an exact finding, start a source-preserving correction, replay historical
+  evidence, record absence after changed inputs, or withdraw without deleting
+  history. MCP delivery is paged, complete exports are separate, and changed
+  project/storage state rejects stale writes. No waiver, approval or extraction
+  changes. MCP 0.9.77 is a local development version, not published.
+
+- Add the internal shared issue journal (`bas_issues_9`): exact observations,
+  acknowledgement/correction history, replay-checked absence review and append-only
+  withdrawal. Older decisions, calculations, imports and backups preserve it.
+  No action waives a blocker or approves a takeoff. Reuse one exact prerequisite
+  validation context per workflow read; every engineering entry still gets its
+  own ownership and saved-result checks. No extraction or engineering-math change.
+  Public issue UI/MCP actions are described above; approvals and snapshots remain unfinished.
+
+- Correct shared finding occurrence identity across canonical backup/restore.
+  Evidence follows explicit table headers, with unlisted cells retained in a
+  deterministic tail; narrative span order is unchanged. Version the projection
+  as `saved_bas_findings_2` without rewriting source data or old finding exports.
+  No extraction, quantity, approval or installed-count behavior changes.
+
+- Expose pinned requirement/quantity comparison in the existing full-width
+  **Review & changes → Drawing changes** workspace and additive MCP `revision`
+  commands. Explicit item pairing, source inspection, stale-preview rejection,
+  save/reopen, cancellation and full export share one Python-backed service.
+  MCP completed views are bounded and expire/invalidate; no extraction, installed
+  truth, approval or complete BAS-production claim. Real-source browser and built
+  MCP backup/restart replay agree exactly on the controlled 698-row comparison.
+  Canonical evidence ordering fixes a reproduced backup/replay mismatch without
+  changing extracted values, quantities or locations. Dense reader pages preserve
+  complete exports; unresolved measures stay visible in the changes filter.
+
+- Add the internal append-only comparison journal (`bas_revision_8`). Save exact
+  source/decision selectors, correspondence reasons and replayed report identity;
+  preserve them through old edit paths, reload and import. Reopening reruns shared
+  Python-backed comparison and explicitly reports mismatched results. A saved
+  comparison is not approval, authenticated review or installed truth. Public
+  comparison UI/MCP integration and approved snapshots remain in progress.
+
+- Add the internal shared revision-impact service: explicit item correspondence,
+  original evidence and declared-field changes, quantity-basis/membership checks,
+  and exact Python count deltas after selected saved-result replay and retained
+  point validation. Preserve unknowns, changed measures and unpaired items without
+  manufactured zeros. Resource renaming and saved-output representation remain
+  distinct. Public comparison editing, its journal, approvals and snapshots are
+  not yet exposed; this does not finish the BAS production goal.
+
+- Add a shared internal revision-side inventory with explicitly pinned source,
+  decision and calculation versions. Preserve old evidence through dependency
+  changes, source-local responsibility claims, unknown/attribute distinctions,
+  source-boundary coverage and original records. Add lineage, real retained-PDF,
+  actual Python integration and serial performance gates. This is a foundation:
+  no public semantic-difference UI, quantity delta, approval or installed count.
+
+- Expose shared drawing correspondence in **Review & changes → Drawing changes**
+  and the history-only MCP `bas_drawing_review` command. Preview, explicit page
+  decisions, retained source viewing, draft return and proposal history preserve
+  existing equipment/capture data. No extraction, installed-count, quantity-impact
+  or approval changes. MCP development version 0.9.75, 51 tools; not published.
+
+- Add the shared `bas_review_7` drawing-correspondence foundation: immutable
+  source-set/page accounting, reciprocal replacements, explicit partial-addendum
+  retention, unresolved review history and strict ownership/head/digest checks.
+  Older workflow edits and merges preserve the new journal. Separate retained
+  text/frame comparison from source identity; no inferred quantity delta or
+  approval. Public UI/MCP editing and release integration remain unfinished.
+
+- Enable evidence ZIP restore in local-first synced workspaces, coordinating
+  recovery, adoption, push acknowledgments and restore across same-scope tabs.
+  Commit annotation adoption and sync ancestry atomically; persist pending restore
+  intent across offline/restart. Restore remains local, unapproved and source-checked;
+  original PDFs are not uploaded by annotation sync. Add explicit sync status/retry,
+  cancellation, writer-v5 migration and concurrency regression tests. No extraction
+  or quantity changes; no distributed-lock or atomic-cloud guarantee.
+
+- Preserve compatible BAS captures and review/calculation history during
+  local-first sync instead of treating the entire workflow as last-writer-wins.
+  Invalid or competing review histories remain unmerged with a durable
+  **BAS sync needs review** notice, an exportable remote recovery copy when
+  available, and an explicit retry. Older snapshots cannot delete known history.
+  Source lineage is verified; no calculation, approval or installed-count claim
+  is created. Atomic cross-device coordination remains outside the existing providers.
+
+- Add public MCP source-inclusive restore with shared preview/merge and mandatory
+  merged-history Python replay. Exact originals, previous state, replay receipt
+  and a re-importable merged backup are retained in a new caller-directed local
+  recovery directory before Session adoption. Browser-only saved fields survive
+  MCP round-trips; historical originals reopen without becoming active plans.
+  Stale previews, load races, cancellation and corrupt retained files refuse.
+  MCP 0.9.74; no new tools or extraction/arithmetic change. Local file publication
+  is not a cloud transaction, approval or guarantee against storage loss.
+  Prevent folder/Microsoft 365 composites from accidentally inheriting the local
+  restore method before sync coordination is implemented; plain local restore
+  and original retention stay available.
+
+- Add browser-local evidence ZIP restore: preview the shared merge, replay all
+  merged historical calculations through Python, stage originals, then atomically
+  save sources, takeoff, prior-state journal and editor generation. Empty-project
+  recovery is accessible from the plan picker. Exact version gates protect old
+  annotations; source PDFs stay out of active counting. Bounded 8 MiB storage
+  chunks support large originals while preserving older retained records.
+  Sync restore, revision correspondence and approvals remain unfinished.
+
+- Add per-editor local annotation save-version checks and same-transaction
+  expected-payload checks for sync adoption. Queued saves, unmount flushes and
+  delayed sync responses cannot cross a changed generation. Conflicted editors
+  preserve unsaved work with **Export unsaved takeoff** and **Reload saved version**.
+  IndexedDB v4 preserves v3 records and prevents old blind-writer builds from
+  reopening the database. No takeoff JSON, extraction or arithmetic change.
+  Browser-local atomic ZIP restoration now mints the guarded generation.
+
+- Add read-only original-source reopening from **Original PDFs** and historical
+  BAS citations. UI and MCP share exact source ownership, byte identity and saved
+  frame checks; an old PDF is not added to current extraction/counting. Existing
+  live-sheet citations remain unchanged. MCP `view_sheet` accepts a saved BAS
+  page ID and optional explicit `original_pdf_path`, with no active overlays or
+  grids in source mode. This does not restore a ZIP or approve a takeoff.
+
+- Add optional **Replay saved calculations** after evidence-bundle verification
+  and MCP `import_takeoff` preflight `replay_calculations: true`. Every historical
+  assignment/assembly input is reconstructed from its original decision head;
+  those results and every engineering result must exactly match the unchanged
+  Python calculators. Full-workflow receipts, bounded batches, cancellation and
+  explicit empty-history status prevent file integrity from masquerading as
+  arithmetic verification. Default JSON/file preflight behavior is unchanged.
+  This is read-only and does not restore, rebase, approve or certify a takeoff.
+
+- Add source-inclusive, unapproved evidence ZIP backup and read-only verification
+  in **Review & changes → Original PDFs** and existing MCP export/import tools.
+  Shared canonical manifests, exact JSON, all historical originals, strict ZIP
+  structure/CRC/hash/ownership validation; no calculation replay or approval.
+  Browser publication checks saved-state freshness; Node output is staged and
+  requires explicit overwrite for existing ZIP. Ordinary extraction, math,
+  workflow schemas and JSON behavior remain unchanged. Automatic full-project
+  restore and approved snapshots are still under development.
+
+- Add **Review & changes → Original PDFs** for explicit browser-local source
+  retention, byte verification and exact original downloads. Shared ownership
+  and digest checks reject corrupt/foreign evidence; the IDB write compares the
+  persisted BAS workflow and waits for transaction completion. Sources remain
+  project-scoped and survive ordinary PDF removal. No approval, revision pairing,
+  automatic source reopening, source-inclusive release archive or new MCP option
+  is claimed by this browser storage step. Existing workflows/exports are unchanged.
+- Add the shared read-only project finding queue and **Takeoff → Review & changes**.
+  The optional BAS compile `bas_project_review: {capture_id}` returns the same
+  original codes, source evidence, affected subjects and dependency/exclusion
+  state as the browser. Failed/unknown engineering constraints remain visible;
+  repeated source-wide coverage findings are not duplicated by assigned-value
+  summaries. Filtered views never truncate the full findings JSON export.
+  This is the first workflow-E slice, not revision approval or release readiness.
+  Existing extraction, Python math and default compile outputs are unchanged.
+- Add **Export saved engineering XLSX** and the matching optional
+  `export_takeoff.engineering_workbook_path`. Shared Python replays saved
+  calculations before export; one shared projection preserves original inputs,
+  exclusions, source coordinates, pinned owners and stale/superseded history.
+  Exact decimals stay text; long or XML-incompatible passages use lossless text
+  parts. Drafts are excluded. Existing row, commercial and JSON exports retain
+  their meanings. This is a saved review, not an approved release.
+- Add the development selected-equipment Engineering editor and shared HTTP/MCP
+  review/replay entry points. Retain equipment-owned resources, exact original
+  wording, explicit input origins, all eleven check variants and append-only
+  results. Preview/save and read-only replay bind to current sources and review
+  heads; older or altered responses cannot replace the active workspace.
+  Unknowns, excluded failures and stale dependencies remain separate. JSON
+  evidence export/import includes the history; full real-corpus and
+  release acceptance is still in progress, not a production-completion claim.
+- Add the shared Python engineering dependency for explicit signal, electrical,
+  power, mechanical, allocation and expansion constraints. Retain original
+  source/input bases; use exact units, explicit power scenarios and separate
+  failed/missing outcomes. Reject duplicate physical-source allocation and
+  bounded-arithmetic overflow. This is not yet a UI/MCP engineering workflow:
+  source ownership, saved review and end-to-end acceptance
+  remain unfinished. Existing extraction and quantity algorithms are unchanged.
+- Validate declared serial/IP port identity, settings, address/scope allocation,
+  resource limits and cable reach around the unchanged network solvers. Retain
+  partial-route evidence and capacity-only outcomes. Unknown physical identity
+  cannot inflate known demand; software variables cannot pass device capacity.
+- Add strict shared engineering wire schemas and the internal bounded Python
+  transport. Preserve all check inputs/evidence and reject response substitution,
+  omitted checks and inconsistent summary statuses. This does not expose a new
+  UI action or public MCP tool; source ownership and saved review remain pending.
+
+- Add opt-in component rule v2 for complete, explicitly singular controller,
+  occupancy-sensor, static-pressure-sensor and supply-air-damper lists. Keep
+  distinct functions separate, reject ambiguous/conditional partial kits, and
+  preserve v1 interpretation fingerprints and history. Reviewed rule transitions
+  use the shared UI/MCP register, invalidate dependent calculations and preserve
+  all earlier evidence/results. Python accepts the validated version pin without
+  changing quantity math or assuming installed equipment.
+- Make drawing declarations compact, with literal quantities and keyboard-operated
+  source disclosures that retain their open state on return from the PDF.
+
+- Improve dark-theme Takeoff header and inactive-tab text contrast using the
+  existing secondary text token; no theme, evidence or calculation changes.
+- Add source-backed assembly decisions and independent furnish/install/wire/
+  program/test claims in selected-equipment details. Preserve source declarations,
+  conflicting claims, reasoned resolutions, exclusions and immutable history in
+  additive `bas_assembly_5`. Full-register preview, multi-component repair and
+  retained-history access prevent stale equipment changes from hiding assemblies.
+- Add shared Python declared assembly quantities and UI/MCP persistence. Retain
+  nullable quantities, exact applicability, conditions, lifecycle and original
+  claims; never promote these contributions to installed or complete project
+  totals. MCP BAS compile adds `bas_assemblies`, `bas_assembly_review` and
+  `bas_assembly_quantities`. Existing tables, citations, quantities and math are
+  unchanged. Broader source interpretation, engineering and approved releases
+  remain in progress; this is not all-five-workflow completion.
+
+- Add shared-Python assigned listed-value derivations and additive `bas_assignment_4`
+  persistence, with original cells, exact scoped selections/exceptions, retained
+  qualifications and explicit unknowns. **Calculate assigned values** and MCP's
+  `bas_assignment_demand` use one service. Stale dependencies remain historical;
+  retries, export/import and withdrawal retain prior results. This is not unique
+  physical requirement reconciliation, installed counting or field-wiring proof.
+- Preserve one identical dev/preview middleware while adding the bounded same-origin
+  calculation route; keep existing route assertions and extend them to the new
+  endpoint. Add concurrent-write and cancellation protection without extraction changes.
+- Correct BAS reader text contrast using existing primary/secondary theme tokens;
+  verify real imported calculation data in both themes and two desktop widths.
+  No result, evidence or theme-palette changes.
+
+- Retain unmodified equipment graph tables in additive `bas_equipment_3` captures. Parse bounded complete designation lists/ranges/exclusions and strict printed counts without row-key shortcuts or default quantities. Expose source-owned candidate IDs through `bas_equipment`.
+- Add the shared scoped equipment/register and per-equipment/system-once assignment service, with explicit bindings/exceptions, immutable proposal history, stale-edit rejection and durable export/import. The optional existing-tool `bas_equipment_review` input uses this service. Explicit SOO references reuse the existing point comparator within the assigned equipment scope; source IDs and unpaired rows remain available.
+- Add **Takeoff → Equipment** for source/register tables, scoped member binding, equipment details, assignment/exception editing, validated previews and reasoned withdrawal. Use the same shared service as MCP; preserve source-return context and evidence/history exports. Assignment-driven demand, installed corroboration and release controls remain unfinished; original table extraction, legacy quantities and math are unchanged.
+
+- Retain full source-text snapshots alongside point matrices in `bas_evidence_2`; old point-only captures keep their fingerprints. Add **Sequences & links** inside Point lists, with original prose, bounded monitoring comparisons, source navigation and explicit equipment-reference associations. Save/import/export preserves evidence and edit/removal history; stale edits and conflicting imports reject without silently overwriting decisions. MCP `bas_review` uses the same service with proposal origin. No installed-equipment, complete SOO, approval or source-PDF archival claim.
+- Correct the new integration's ordinary MCP recompile reply to include already-retained review events, not only the new evidence capture.
+
+- Add a digital point-matrix workspace and fingerprinted `bas_workflow` evidence captures. Project autosave, JSON and MCP export/import retain original rows and source identities; repeated captures/imports deduplicate without changing operator selection. Source clicks match loaded PDF bytes, not stale filenames. Point evidence is not an approved release, installed count, or historical PDF archive; equipment and reviewed revision workflows remain unfinished.
+- Return source-bound point-list observations alongside the existing BAS math on the shared production compile path. Preserve original rows and sparse cells; retain supported controller footnotes without treating them as installed devices or wired terminals. Strict validation and browser citation-alias mapping protect raw evidence. Durable workflow review and dedicated presentation remain in development.
+
+- Admit explicit points-list captions on detail/plan sheets through shared routing; keep spatially separate same-title/local-key matrices during fallback reconciliation. Preserve existing table objects and leave the VectorGrid reader unchanged.
+- Interpret explicit nested HARDWARE POINTS / SOFTWARE POINTS headers in the shared Python consumer. Keep trend/alarm/display flags out of I/O and software-value counts, and reject conflicting physical/software header scopes. Table-local counts remain distinct from installed quantities and complete engineering demand.
+- Keep large BAS results readable to Agent with a bounded chat-only summary; preserve the full Takeoff/export payload and all existing completion metadata.
+
+- Add a shared, manufacturer-independent Pydantic V2 engine for typed SOO/point-list reconciliation, rigid/UI capacity, exact spare ceilings, constrained serial/IP topology and independent software licensing.
+- Extend the existing BAS compile with additive `bas_math` output; preserve all original tables, counts, citations and boxes. Read already-indexed nested subheadings without modifying VectorGrid or extraction.
+- Show points, hardware, networks, licenses and review findings in Takeoff, with source navigation and a separate BAS JSON export. Missing runtime and incomplete evidence remain explicit; this is not a project-completeness certification.
+- Add Python exhaustive/regression tests, source-reviewed corpus table fixtures, Node transport tests and a real-upload Takeoff walkthrough.
 
 ## Unreleased — workspace presentation
 

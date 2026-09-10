@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "source": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection/pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+  "capture_id": "1d3432c6802d814de9f5e0f4ffb6f4af8d406890e9c92fdfb77cd326fa9861b3",
+  "matrices": 12,
+  "rows": 193,
+  "checks": [
+    "real production compile",
+    "full matrix columns/rows",
+    "negative filter",
+    "keyboard selection",
+    "both themes/three widths",
+    "byte-bound source paint",
+    "source return selection",
+    "actual autosave",
+    "reload/export exact parity",
+    "real import into an empty browser context",
+    "controlled same-filename/different-PDF replacement refuses source navigation"
+  ],
+  "errors": []
+}

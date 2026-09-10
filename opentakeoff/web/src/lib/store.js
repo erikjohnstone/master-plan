@@ -38,9 +38,14 @@
 import { sanitizeTemplates } from "./templates.js";
 import { sanitizeMaterialLibrary } from "./materials.js";
 import { sanitizeStampLibrary } from "./stamps.js";
+import { attachAnnotationGeneration, annotationConflict } from "./annotationGeneration.js";
+import { withAnnotationCoordinator } from './annotationCoordinator.js';
+import { BAS_SOURCE_CHUNK_BYTES, basSourceChunkKey, basSourceChunkCount, basSourceChunkLength, basSourceChunkRecord, isBasSourceChunkRecord } from './basSourceStorage.js';
 
 const DB_NAME = "opentakeoff";
-const DB_VERSION = 3;
+// v5 fences pre-coordination writers; no payload/store layout is removed. v4
+// honored annotation generations but could finish stale sync bookkeeping.
+const DB_VERSION = 5;
 const PDF_STORE = "pdfs";          // key: file name -> { name, bytes: ArrayBuffer, hash?, rev?, ts? }
 const META_STORE = "meta";         // key: "annotations" -> payload object
 const SNAP_STORE = "snapshots";    // key: id -> { id, ts, label, payload }
@@ -51,6 +56,10 @@ const SNAP_STORE = "snapshots";    // key: id -> { id, ts, label, payload }
 const REV_STORE = "pdf_revs";      // key -> { key, name, rev, hash, ts, bytes }
 const revKey = (name, rev) => `${name}\u0000${rev}`;
 const ANN_KEY = "annotations";
+// Array keys cannot collide with generic string-key annotation/sync bookkeeping.
+// Retained BAS originals are project-scoped and never removed by closePdf.
+const basSourceKey = (projectId, sourceId) => ["bas_source_v1", projectId || "", sourceId];
+const annotationGenerationKey = projectId => ["annotation_generation_v1", projectId || ""];
 // condition template library — browser-global (not part of a project payload),
 // lives under its own key in the keyPath-less meta store: no DB version bump
 const TPL_KEY = "condition_templates";
@@ -85,7 +94,7 @@ function openDB() {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = () => {
       const db = req.result;
-      // contains-guards make this run for fresh creates and every vN->v3 upgrade
+      // contains-guards preserve every existing record on a vN->v4 upgrade
       if (!db.objectStoreNames.contains(PDF_STORE)) db.createObjectStore(PDF_STORE, { keyPath: "name" });
       if (!db.objectStoreNames.contains(META_STORE)) db.createObjectStore(META_STORE);
       if (!db.objectStoreNames.contains(SNAP_STORE)) db.createObjectStore(SNAP_STORE, { keyPath: "id" });
@@ -199,7 +208,236 @@ async function sha256Hex(bytes) {
   return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+// Read payload + generation in ONE transaction. A later unrelated read must
+// never authorize an older editor to write. The non-enumerable token stays off
+// JSON exports, snapshots and the shared takeoff contract.
+function annotationStore(projectId = "") {
+  const annKey = projectId ? `${ANN_KEY}:${projectId}` : ANN_KEY;
+  const generationKey = annotationGenerationKey(projectId);
+  // Own metadata before yielding. All fields in a checkpoint belong to one
+  // transport, while the CAS and lease belong to the canonical annotation scope.
+  const checkpoint = state => {
+    if (!state) return () => {};
+    const { scope, values = {}, remove = [] } = structuredClone(state);
+    if (typeof scope !== 'string' || !scope) throw new Error('Sync checkpoint requires a transport scope');
+    return os => {
+      for (const [name, value] of Object.entries(values)) os.put(value, `sync:${scope}:${name}`);
+      for (const name of remove) os.delete(`sync:${scope}:${name}`);
+    };
+  };
+  return {
+    withAnnotationSync: (work, options) => withAnnotationCoordinator(projectId, work, options),
+    async commitAnnotationSync(state, { generation = null } = {}) {
+      const write = checkpoint(state);
+      return withDb(db => new Promise((resolve, reject) => {
+        const t = db.transaction(META_STORE, 'readwrite'), os = t.objectStore(META_STORE);
+        let failure;
+        t.oncomplete = () => resolve();
+        t.onabort = () => reject(failure || t.error || new Error("Couldn't commit sync checkpoint"));
+        t.onerror = () => reject(failure || t.error);
+        const version = os.get(generationKey);
+        version.onsuccess = () => {
+          try {
+            if ((version.result ?? null) !== generation) throw annotationConflict();
+            write(os);
+          } catch (error) { failure = error; t.abort(); }
+        };
+      }));
+    },
+    async loadAnnotations() {
+      return withDb(db => new Promise((resolve, reject) => {
+        const t = db.transaction(META_STORE, "readonly"), os = t.objectStore(META_STORE);
+        const payload = os.get(annKey), generation = os.get(generationKey);
+        t.oncomplete = () => {
+          try { resolve(attachAnnotationGeneration(payload.result || emptyAnnotations(), generation.result)); }
+          catch (error) { reject(error); }
+        };
+        t.onabort = () => reject(t.error || new Error("Couldn't read saved takeoff"));
+        t.onerror = () => reject(t.error);
+      }));
+    },
+    // expectedPayload is an optional same-transaction CAS for a reconciler that
+    // read local state before awaiting I/O. Generation alone fences pre-restore
+    // editors; CAS additionally detects ordinary intervening saves before adopt.
+    /** @param {any} payload
+     * @param {{generation?: string|null, expectedPayload?: any, syncState?: any}} [options] */
+    async saveAnnotations(payload, { generation = null, expectedPayload, syncState } = {}) {
+      const owned = structuredClone({ ...payload, schema: ANN_SCHEMA });
+      const writeSync = checkpoint(syncState);
+      const expected = expectedPayload === undefined ? undefined : structuredClone(expectedPayload);
+      const { canonicalBasJson } = await import("./basCanonical.ts");
+      // Annotation data already uses a JSON wire contract. JSON normalization
+      // retains its established omission of undefined optional properties.
+      const compare = value => canonicalBasJson(JSON.parse(JSON.stringify(value)));
+      const expectedJson = expected === undefined ? undefined : compare(expected);
+      return withDb(db => new Promise((resolve, reject) => {
+        const t = db.transaction(META_STORE, "readwrite"), os = t.objectStore(META_STORE);
+        let failure;
+        const abort = error => { failure = error; t.abort(); };
+        t.oncomplete = () => resolve();
+        t.onabort = () => reject(failure || t.error || new Error("Couldn't save takeoff"));
+        t.onerror = () => reject(failure || t.error);
+        const version = os.get(generationKey);
+        version.onsuccess = () => {
+          try {
+            if ((version.result ?? null) !== generation) { abort(annotationConflict()); return; }
+            const publish = () => { os.put(owned, annKey); writeSync(os); };
+            if (expectedJson === undefined) { publish(); return; }
+            const current = os.get(annKey);
+            current.onsuccess = () => {
+              try {
+                if (compare(current.result || emptyAnnotations()) !== expectedJson) { abort(annotationConflict()); return; }
+                publish();
+              } catch (error) { abort(error); }
+            };
+          } catch (error) { abort(error); }
+        };
+      }));
+    },
+  };
+}
+
+/** Surface-specific IDB delivery; ownership and byte truth are shared. No
+ * snapshot, approval, current-source selection or annotation write occurs here. */
+function basSourceStore(projectId = "") {
+  const annKey = projectId ? `${ANN_KEY}:${projectId}` : ANN_KEY;
+  return {
+    // Browser-local approval delivery uses the SAME project/lease as annotations.
+    // It never calls ordinary restore or changes the annotation generation.
+    /** @param {any} plan @param {any} loadSource @param {any} [options] */
+    async saveBasSnapshot(plan, loadSource, options = {}) {
+      const { generation = null, guard = () => {}, signal } = options;
+      const { saveBasSnapshotInIdb } = await import('./basSnapshotStore.js');
+      return withAnnotationCoordinator(projectId, () => saveBasSnapshotInIdb({
+        withDb, emptyAnnotations, projectId, plan, loadSource, generation, guard, signal,
+      }), { signal });
+    },
+    /** @param {any} [options] */
+    async listBasSnapshots(options = {}) {
+      const { after = null, limit = 50, guard = () => {}, signal } = options;
+      const { listBasSnapshotsInIdb } = await import('./basSnapshotStore.js');
+      return listBasSnapshotsInIdb({ withDb, projectId, after, limit, guard, signal });
+    },
+    /** @param {string} snapshotId @param {any} [options] */
+    async loadBasSnapshot(snapshotId, options = {}) {
+      const { replayCalculations, guard = () => {}, signal } = options;
+      const { loadBasSnapshotInIdb } = await import('./basSnapshotStore.js');
+      return loadBasSnapshotInIdb({ withDb, projectId, snapshotId, guard, signal,
+        io: { readSource: source => basSourceStore(projectId).loadBasSource(source), replayCalculations } });
+    },
+    // Actual restore is local atomic delivery, not an ordinary import/save.
+    // Sync and plain-local callers share this exact annotation-scope lease.
+    /** @param {any} plan @param {any} loadSource
+     * @param {{generation?: string|null, guard?: ()=>void, signal?: AbortSignal}} [options] */
+    async restoreBasEvidence(plan, loadSource, { generation = null, guard = () => {}, signal } = {}) {
+      const { restoreBasEvidenceInIdb } = await import('./basRestoreStore.js');
+      return withAnnotationCoordinator(projectId, () => {
+        guard();
+        return restoreBasEvidenceInIdb({ withDb, emptyAnnotations, projectId, plan, loadSource, generation, guard, signal });
+      }, { signal });
+    },
+    async loadBasRestoreJournal(operationId) {
+      if (typeof operationId !== 'string' || !/^[a-f0-9-]{36}$/.test(operationId)) throw new Error('Invalid restore operation identity');
+      return withDb(db => tx(db, META_STORE, 'readonly', os => os.get(['bas_restore_journal_v1', projectId, operationId])));
+    },
+    async retainBasSource(workflow, sourceId, data) {
+      // Freeze the caller's buffers/history before even the lazy imports await.
+      const input = structuredClone({ workflow, data });
+      const { prepareBasSourceRetention } = await import("./basSourceRetention.ts");
+      const { canonicalBasJson } = await import("./basCanonical.ts");
+      const prepared = await prepareBasSourceRetention(input.workflow, sourceId, input.data);
+      return withDb(db => new Promise((resolve, reject) => {
+        const t = db.transaction(META_STORE, "readwrite"), os = t.objectStore(META_STORE);
+        let failure = null, retained = false;
+        const abort = error => { failure = error; t.abort(); };
+        t.oncomplete = () => resolve({ source_id: sourceId, retained, storage: "browser_local" });
+        t.onerror = () => reject(failure || t.error);
+        t.onabort = () => reject(failure || t.error || new Error("Original PDF retention aborted"));
+        const request = os.get(annKey);
+        request.onsuccess = () => {
+          try {
+            if (canonicalBasJson(request.result?.bas_workflow ?? null) !== prepared.expected_workflow_json) {
+              abort(new Error("Saved BAS workflow changed or is not yet saved; retry original PDF retention."));
+              return;
+            }
+            const key = basSourceKey(projectId, sourceId), previous = os.get(key);
+            previous.onsuccess = () => {
+              try {
+                if (previous.result !== undefined) {
+                  const old = previous.result;
+                  if (isBasSourceChunkRecord(old) && canonicalBasJson(old.source) === canonicalBasJson(prepared.source)) {
+                    let index = 0;
+                    const next = () => {
+                      if (index === old.chunk_count) return;
+                      const n = index++, chunk = os.get(basSourceChunkKey(projectId, sourceId, n));
+                      chunk.onsuccess = () => {
+                        try {
+                          if (!(chunk.result instanceof ArrayBuffer) || chunk.result.byteLength !== basSourceChunkLength(prepared.source, n)
+                            || new Uint8Array(chunk.result).some((b, i) => b !== prepared.bytes[n * BAS_SOURCE_CHUNK_BYTES + i])) {
+                            abort(new Error('Retained original PDF chunks conflict with verified bytes; existing evidence was not overwritten.')); return;
+                          }
+                          next();
+                        } catch (error) { abort(error); }
+                      };
+                    };
+                    next(); return;
+                  }
+                  if (old.schema_version !== "bas_original_pdf_v1" || canonicalBasJson(old.source) !== canonicalBasJson(prepared.source)
+                    || !(old.bytes instanceof ArrayBuffer) || old.bytes.byteLength !== prepared.bytes.byteLength
+                    || new Uint8Array(old.bytes).some((byte, index) => byte !== prepared.bytes[index])) {
+                    abort(new Error("Retained original PDF conflicts with verified bytes; existing evidence was not overwritten."));
+                  }
+                  return;
+                }
+                if (prepared.bytes.length > BAS_SOURCE_CHUNK_BYTES) {
+                  for (let index = 0; index < basSourceChunkCount(prepared.source); index++) {
+                    os.add(prepared.bytes.buffer.slice(index * BAS_SOURCE_CHUNK_BYTES, (index + 1) * BAS_SOURCE_CHUNK_BYTES), basSourceChunkKey(projectId, sourceId, index));
+                  }
+                  os.add(basSourceChunkRecord(prepared.source), key);
+                } else os.add({ schema_version: "bas_original_pdf_v1", source: prepared.source, bytes: prepared.bytes.buffer }, key);
+                retained = true;
+              } catch (error) { abort(error); }
+            };
+          } catch (error) { abort(error); }
+        };
+      }));
+    },
+    async loadBasSource(rawSource) {
+      const expectedSource = structuredClone(rawSource);
+      const { basRetainedSourceSchema, verifyBasSourceBytes } = await import("./basSourceRetention.ts");
+      const { canonicalBasJson } = await import("./basCanonical.ts");
+      const source = basRetainedSourceSchema.parse(expectedSource);
+      const record = await withDb(db => tx(db, META_STORE, "readonly", os => os.get(basSourceKey(projectId, source.source_id))));
+      if (record === undefined) return null;
+      if (isBasSourceChunkRecord(record) && canonicalBasJson(record.source) === canonicalBasJson(source)) {
+        const bytes = await withDb(db => new Promise((resolve, reject) => {
+          const t = db.transaction(META_STORE, 'readonly'), os = t.objectStore(META_STORE), data = new Uint8Array(source.byte_length);
+          let index = 0, failure;
+          t.oncomplete = () => resolve(data); t.onabort = () => reject(failure || t.error);
+          const next = () => {
+            if (index === record.chunk_count) return;
+            const n = index++, chunk = os.get(basSourceChunkKey(projectId, source.source_id, n));
+            chunk.onsuccess = () => {
+              try {
+                if (!(chunk.result instanceof ArrayBuffer) || chunk.result.byteLength !== basSourceChunkLength(source, n)) throw new Error('Retained original PDF chunk is missing or corrupt.');
+                data.set(new Uint8Array(chunk.result), n * BAS_SOURCE_CHUNK_BYTES); next();
+              } catch (error) { failure = error; t.abort(); }
+            };
+          };
+          next();
+        }));
+        return verifyBasSourceBytes(source, bytes);
+      }
+      if (record.schema_version !== "bas_original_pdf_v1" || canonicalBasJson(record.source) !== canonicalBasJson(source)
+        || !(record.bytes instanceof ArrayBuffer)) throw new Error("Retained original PDF metadata is corrupt; availability is not verified.");
+      return verifyBasSourceBytes(source, record.bytes);
+    },
+  };
+}
+
 export const localStore = {
+  ...basSourceStore(),
+  ...annotationStore(),
   // `rev` (CO-1's per-file revision counter) rides along for callers that
   // need to tell "this file's bytes are unchanged since I last looked" from
   // "this is new or different" WITHOUT re-hashing or re-reading a byte of
@@ -315,15 +553,6 @@ export const localStore = {
     const rec = await withDb((db) => tx(db, REV_STORE, "readonly", (os) => os.get(revKey(name, rev))));
     if (!rec) throw new Error(`Revision ${rev} of ${name} not found in local store`);
     return new Uint8Array(rec.bytes);
-  },
-
-  async loadAnnotations() {
-    const a = await withDb((db) => tx(db, META_STORE, "readonly", (os) => os.get(ANN_KEY)));
-    return a || emptyAnnotations();
-  },
-
-  async saveAnnotations(payload) {
-    await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put({ ...payload, schema: ANN_SCHEMA }, ANN_KEY)));
   },
 
   async loadTemplates() {
@@ -465,16 +694,10 @@ export function createLocalStore(folderId = null) {
   // mode, so a caller threading it through here must land on the global
   // "annotations" blob, NOT a distinct "annotations:" scope.
   if (folderId == null || folderId === "") return localStore;
-  const annKey = ANN_KEY + ":" + folderId;
   return {
     ...localStore,
-    async loadAnnotations() {
-      const a = await withDb((db) => tx(db, META_STORE, "readonly", (os) => os.get(annKey)));
-      return a || emptyAnnotations();
-    },
-    async saveAnnotations(payload) {
-      await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put({ ...payload, schema: ANN_SCHEMA }, annKey)));
-    },
+    ...basSourceStore(folderId),
+    ...annotationStore(folderId),
   };
 }
 

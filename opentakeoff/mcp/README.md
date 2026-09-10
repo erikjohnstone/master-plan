@@ -12,6 +12,343 @@ decides whether the numbers are any good.
 
 ## Run it in 60 seconds (npx)
 
+The packaged MCP server includes the same VectorGrid Python source files used
+by the source-run app. Its configured Python needs `pdfplumber`, `pymupdf`
+(PyMuPDF) and Shapely 2. Set `OPENTAKEOFF_VECTORGRID_PYTHON` to that interpreter
+when it is not `python3`. Packaging does not install dependencies or include
+models, corpus PDFs, keys or virtual environments. Dependency licenses still
+apply. Run `npm run test:packaging` before distributing a build.
+
+For a configured runtime, `node --import tsx scripts/verify-vectorgrid-package.mts
+<new-evidence-directory> <pdf> <page> [<pdf> <page> ...]` executes exact full-reply
+comparisons between source and relocated package, twice per process. It also
+requires missing PDF inputs to remain explicit errors. This is packaging/parity
+verification, not independent table accuracy. The build recreates only its
+generated `dist/python/vectorgrid` directory so local bytecode is not shipped.
+
+The BAS engineering extension needs Python 3.11+ and Pydantic V2 on the MCP
+host. Set `OPENTAKEOFF_BAS_PYTHON` if Python is not on PATH. The existing
+`compile_corpus_takeoff` verb returns additive `bas_math` for BAS; its optional
+policy includes abstract hardware, rational spare capacity, licenses, networks,
+group overrides and typed SOO. Original printed totals remain unchanged.
+An absent runtime returns explicit `unavailable`, not zero demand. See
+[BAS contracts and installation](../bas_engine/README.md).
+
+BAS compile also returns validated `bas_point_lists`: source/version-bound
+listed observations, raw rows, sparse-column accounting and supported explicit
+controller footnotes. This record has no installed-device total and does not
+replace `bas_math` or legacy quantities. Source and math failures are independent;
+unavailable evidence is explicit. It is an intermediate workflow record, not a
+reviewed/approved takeoff. See the [point evidence contract](../docs/bas-production/POINT_REVIEW_CONTRACT.md).
+
+The additive `bas_workflow` stores a fingerprinted point-evidence capture and
+input source manifest. The Session retains it for `export_takeoff` and validates
+it on `import_takeoff`; duplicates are idempotent. `load_plan` without merge
+clears it with the rest of the Session. Imported captures are not re-extraction
+or approval; their fingerprints detect corruption, not forged authorship.
+Original source PDFs must be retained separately. `bas_workflow_error` reports
+capture failure without discarding valid point observations or math.
+
+New `bas_evidence_2` captures also retain all positioned drawing text and its
+interpretation rule version. BAS compile accepts optional `bas_review`:
+`{operation_id, capture_id, expected_head, action}`. The action is either
+`{kind:"upsert", association:{region_id, matrix_id, equipment_references, reason}}`
+or `{kind:"remove", region_id, matrix_id, reason}`. Each equipment reference
+contains a literal `tag`, original `span_ids`, and nullable
+`scope:{building,level,system,phase}`. Obtain IDs from the retained capture;
+use its last event ID as the expected head, or null for the first event.
+This explicit option writes an `agent_proposal` event, never operator approval.
+Exact retries are idempotent; changed retries, stale heads, invalid references
+and conflicting import branches reject. Ordinary recompiles return retained
+history. These are bounded sequence-to-matrix comparisons, not verified
+installed-equipment assignments or complete SOO interpretation.
+
+On the development branch, revision `bas_equipment_3` additionally retains raw
+equipment graph tables without changing their cells. `bas_equipment` returns
+source-owned occurrence IDs, named members, separate printed quantities and the
+current equipment review head/register. The optional `bas_equipment_review`
+input has `{operation_id,capture_id,expected_head,reason,register}`. The register
+contains explicit scopes, equipment UUIDs with exact occurrence/member bindings,
+and matrix assignments with `per_equipment` or `system_once` applicability and
+exceptions. The shared service rejects stale/foreign references, double binding,
+duplicate matrix application and mixed system/per-unit replication. It records
+Agent proposals, not approvals. Export/import retains history and original
+evidence. Explicit SOO links return source-backed `sequence_comparisons` in the
+same equipment index. `bas_equipment_error` isolates equipment-capture failures
+without discarding valid point/SOO evidence. The Takeoff Equipment editor uses
+this same validation/service. Optional `bas_assignment_demand` with `capture_id`
+and `expected_equipment_head` invokes shared Python and retains source-cell
+derivations in `bas_assignment_4`. It calculates assigned listed values only:
+attributes stay separate, unknowns stay null, and known subtotals do not assert
+unique physical points, installed equipment or field wiring. Stale requests
+reject; results retain their dependency identity through export/import and
+withdrawal. Physical requirement reconciliation, installed corroboration and
+release remain in development. See [the assignment contract](../docs/bas-production/EQUIPMENT_ASSIGNMENT_CONTRACT.md).
+
+BAS compile also exposes `bas_assemblies`, with source-owned component
+declarations, the reviewed assembly register, unresolved findings and dependency
+heads. `bas_assembly_review` accepts
+`{operation_id,capture_id,expected_head,expected_equipment_head,reason,register}`;
+`bas_assembly_quantities` accepts
+`{capture_id,expected_equipment_head,expected_assembly_head}`. Review records
+explicit applicability and separate furnish/install/wire/program/test claims.
+Quantity calculation uses the shared Python service; it preserves every original
+record, unknown and selection without asserting installed or unique-device totals.
+Both are optional mutations with stale-head and concurrent-workspace guards.
+Replays, imports and equipment withdrawal retain source/decision/calculation
+history in `bas_assembly_5`. No new tool, model, product catalog, pricing or
+commissioning workflow is introduced. See
+[assembly inputs, supported rules and limits](../docs/bas-production/ASSEMBLY_REVIEW_CONTRACT.md).
+
+The default component rule remains `explicit_component_declarations_1`.
+`explicit_component_declarations_2` adds bounded, complete singular component
+lists with distinct physical roles. Upgrade only with a new reasoned
+`bas_assembly_review` complete register and current expected heads. Old events
+and results remain retained; no new equipment membership or component quantity
+is accepted by changing the rule alone. Recalculate dependent results explicitly.
+See [list rules and migration](../docs/bas-production/COMPONENT_LIST_RULE_CONTRACT.md).
+
+Development revision `bas_engineering_6` retains source-bound declared resources
+and append-only engineering results. Optional `bas_engineering_review` on BAS
+compile accepts `{operation_id, capture_id, expected_head,
+expected_equipment_head, expected_assembly_head, expected_sequence_head,
+register, reason}`. Each register contains strict Python-compatible `input`,
+equipment-owned `resources`, and per-check `targets` with applicability/exclusions.
+The shared service validates original source wording and resource ownership,
+replays retained history, calculates and records an `agent_proposal`. It is not
+human approval. Optional `bas_engineering_inspect: {capture_id}` replays saved
+calculations without adding an engineering decision.
+
+`bas_engineering` returns the register/event, current dependency heads, issues,
+source status and a separate calculation-verification status. Ordinary reads
+report `requires_python_replay`; requested review/inspection reports
+`verified_shared_python_replay` only after recomputation. Stale dependencies do
+not become current through replay. Unknowns remain unknown; exclusions preserve
+failed outcomes. `project_complete` is false and `installed_quantity` is null.
+Current shared source, quantities, old exports and unrelated trade behavior retain
+their meaning. An unavailable unrequested summary is isolated in
+`bas_engineering_error`; requested invalid operations fail without partial saves.
+See [engineering contracts and current acceptance](../docs/bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
+
+For a readable saved review, call `export_takeoff` with
+`engineering_workbook_path: "/path/engineering-review.xlsx"`. Shared Python
+replays all retained engineering calculations; the browser and MCP share the
+same workbook projection. It includes exact inputs, constraints, exclusions,
+source locations and pinned history. Stale dependencies stay stale. This is
+not an approved release or live calculator. Keep the evidence JSON and original
+PDFs for reimport. `path` and `engineering_workbook_path` are mutually exclusive;
+existing XLSX files always require `overwrite: true`. The inline annotation
+payload and ordinary JSON export remain unchanged.
+
+For a source-inclusive **unapproved evidence backup**, use
+`export_takeoff {evidence_bundle_path: "/path/project.otbas.zip"}` instead of a
+JSON/XLSX path. All historical originals are required; provide unavailable versions
+as explicit `original_pdf_paths`. Digest/length, not filename, identifies bytes.
+Existing ZIP always requires `overwrite: true`. To check the archive without a
+loaded plan, call `import_takeoff {path: "/path/project.otbas.zip",
+verify_evidence_bundle: true}`. This is read-only preflight, not import/restore:
+the default optional receipt says `restored: false` and `not_python_replayed`.
+Add `replay_calculations: true` to rerun every historical assignment, assembly
+and engineering result through the existing shared Python calculators. The
+`workflow_replay` receipt names the exact workflow digest and checked record IDs;
+status is `verified_shared_python_replay` or `no_saved_calculations`. Empty history
+is not verified project calculation coverage. Replay has a 30-second service
+deadline and 1,000-record/30 MiB subprocess batches. A mismatched result, missing
+runtime, limit or cancellation yields no accepted receipt. Old dependencies stay
+historical; successful replay is not source-set review, restoration or approval.
+Browser and MCP share integrity/ownership rules. Archives are unsigned and
+unencrypted; they do not select a current source set or approve a takeoff.
+To restore, call `import_takeoff {path, restore_evidence_bundle: {action: "preview"}}`.
+Inspect the returned `bas_restore.preview`, then call the same path with
+`restore_evidence_bundle: {action: "commit", preview_id, directory}`. The output
+parent must already exist; a new private recovery directory is created, with no
+overwrite. Preview lasts 15 minutes and binds this Session's exact current state.
+For missing originals from its existing history, supply explicit
+`original_pdf_paths` inside the preview request. No caller-provided replay receipt
+is accepted: commit replays the entire merged history through Python.
+
+The recovery directory contains `takeoff.json`, digest-named PDFs,
+`previous-state.json`, `replay.json`, `restored.otbas.zip` and `COMMITTED.json`.
+Only the final commit marker identifies a completed operation; crashes before
+publication can leave an incomplete private directory. The restored ZIP can be
+previewed/committed in a new Session after process restart. This is local recovery,
+not an OS/filesystem-plus-memory distributed transaction or power-loss guarantee.
+Do not edit these files; fresh verification rejects damage.
+
+History-only restore works without loading plans. Use `view_sheet` with a saved
+page ID to inspect retained originals; they never automatically enter active
+counting. Filename-bound annotations require their exact original already active.
+To add active plans later, use `load_plan merge:true`; ordinary load still replaces
+the Session. Restore starts a new undo boundary; previous state remains on disk.
+The exact merged payload, including browser-only fields, round-trips on export.
+History-only backups may omit native drawing fields; present fields retain their
+validators. Ordinary JSON import and read-only verification remain unchanged.
+Synced restoration, reviewed drawing correspondence and approved release sealing
+remain unfinished.
+
+Inspect a historical original without adding it to the active takeoff:
+`view_sheet` accepts its saved BAS `page_id` as `sheet`. Supply
+`original_pdf_path` when the exact bytes are no longer loaded; source aliases
+inside history are never treated as filesystem paths. Hash, page count and saved
+viewport dimensions/rotation must agree. Optional `region` is the unchanged box
+to outline; the reply separately reports its padded display crop. No current
+overlays, grids or marks may be used in this mode. Metadata says `read_only: true`
+and `added_to_active_set: false`. Legacy unframed histories permit whole-page
+inspection only. The original limit is 512 MiB and output remains at most 2,000
+pixels per edge. No restoration, calculation replay or approval is implied.
+
+The development BAS compile also accepts `bas_project_review: {capture_id}` for
+an exact retained capture. Its additive result matches **Takeoff → Review & changes**:
+original issue codes, affected subjects/equipment, evidence, saved dependency
+status and exclusions. Unknown codes remain visible blockers. This is read-only
+inspection; `readiness: "not_evaluated"` and `project_complete: false` are deliberate.
+It neither replays Python nor verifies stored PDF bytes, dismisses constraints or
+grants approval. Default compile output is unchanged when the option is omitted.
+Normal compile may retain a fresh capture; the finding request selects the named
+retained capture and explicitly labels historical versus active source state.
+Current `saved_bas_findings_2` identities survive canonical JSON restore; table
+evidence follows recorded headers, with original values and boxes unchanged.
+Save the findings with the existing optional compile JSON `path`; retain ordinary
+evidence JSON plus original PDFs separately. Revision/release work is unfinished.
+
+### Scope and source coverage
+
+`bas_scope_review` exposes the shared scope/coverage journal. Use
+`command:{action:"catalog"}` for source sets/history; provide `source_set_id` to
+obtain the current pinned `basis`, exact `targets`, and original `pages`. No
+current selection means no target catalog, not zero requirements. Create source
+sets through `bas_drawing_review`. Targets preserve outside/unlocated evidence.
+
+`action:"preview",specification` accepts a `bas_deliverable_scope_spec_v1` with
+`scope_id` UUID, `name`, `reason`, `basis`, `included` claim targets and `excluded`
+targets with reason/consequence/evidence. Claim types are `scheduled_equipment`,
+`assigned_points`, `assembly_components`, `responsibilities` and
+`engineering_compatibility`. At most 2,000 combined targets, at least one included;
+limits reject rather than truncate. Excluding a claim retains dependencies shared
+with included claims. Preview changes no quantities or evidence.
+
+`action:"prepare_coverage",request:{specification,claim,unit}` returns exact source
+spans/frame and selectable dependency mappings. `unit` is `{capture_id,page_id,
+span_ids:null|[exact IDs]}`; null means the whole original page. Only exact retained
+page/span-reference intersections generate suggestions. No suggestion means no
+matching reference, not no requirement. Read the original PDF with `view_sheet`.
+
+`action:"record",request:{operation_id,expected_head,reviewer,reason,action}` accepts
+`save_scope` (specification, previous_scope_event_id), `record_coverage`
+(scope_event_id, current basis, claim, unit, assessment, mapped_item_ids,
+inspected_source:true), `withdraw_scope` (scope_event_id), and `withdraw_coverage`
+(coverage_event_id). Assessments are `applicable_mapped`, `not_applicable`, or
+`unresolved`; only applicable mapping has nonempty owned dependency IDs. All MCP
+writes are `agent_proposal`; self-declared identity is not authenticated human
+review. Exact retries are idempotent; stale, foreign and conflicting writes reject.
+
+`action:"replay",event_id` reconstructs original decisions and compares relevant
+current dependencies; potential overlapping conflicts remain visible. Catalog
+history only validates lineage. All new operations return a bounded `view_id`.
+Use `action:"read",view_id,query` for own-field/numeric-index traversal (for example,
+`["targets"]`, `["source","spans"]`, `["mappings"]`). Maximum 50 entries,
+flagged 256-unit previews and complete strings in up to 16,384 UTF-16-unit slices.
+One 128-MiB view per Session, 15-minute expiry, invalidated by new operations or
+workflow/load/restore changes. A read is cached output, not new replay.
+`action:"export",view_id,path,overwrite?` atomically exports the full operation;
+normal `export_takeoff`/evidence-bundle recovery retains the project journal.
+No action grants approval, waives independent findings, performs Python replay,
+verifies original PDF bytes, or establishes installed quantities.
+
+### Issue decisions
+
+`bas_issue_review` exposes the shared `bas_issues_9` journal without recompiling.
+`command:{action:"inspect",capture_id?,query?}` returns current findings, history,
+latest decision relationships and the exact `head`/`basis` required for recording.
+Use `query:{path:["project_review","issues"],offset:0,limit:25}` to page findings;
+read an individual array index to get its exact issue/occurrence IDs and evidence.
+
+`action:"record"` takes `request:{operation_id,capture_id,expected_head,
+expected_basis,reviewer,reason,action}`. Inner actions are `acknowledge` or
+`begin_correction` with `issue_key,occurrence_id`; `record_not_reported` with the
+latest `observation_id`; and `withdraw` with the latest `decision_id`.
+Correction-start does not edit the underlying domain. Use its existing explicit
+review tools, then inspect current inputs before confirming absence. Shared replay
+requires the observed finding to have existed and no longer be reported after
+changed inputs. Removal/exclusion may cause absence; it is not physical correction.
+Origin is always `agent_proposal`; reviewer identity is self-declared. No action
+hides a blocker, changes quantities, verifies hardware or approves a deliverable.
+
+`action:"replay",event_id` reconstructs original/current findings and any historical
+absence. History lists verify lineage only; selected replay is separate. PDF bytes
+and saved Python results need their existing verification paths. Each operation
+returns a bounded `view_id`. `action:"read",view_id,query?` uses the same exact
+own-field/index and UTF-16 string paging as revision views below. One completed
+view per Session, at most 128 MiB, expires in 15 minutes or after replacement/state
+change. Cached reads are not a new replay. `action:"export",view_id,path,overwrite?`
+writes the full operation JSON atomically. Persist the project and full journal
+with `export_takeoff`, preferably a source-inclusive evidence bundle. Restore with
+`import_takeoff`. Exact retries retain history; stale/foreign/conflicting writes
+reject without adoption. Approved snapshots remain unfinished. There are 53 tools.
+
+### Drawing correspondence
+
+Requirement/quantity comparison uses the same tool with
+`command: {kind: "revision", command: {...}}`. Nested commands:
+
+- `{action: "inspect", source_set_id?, query?}` discovers retained source sets,
+  saved comparisons and available decision/calculation IDs. Supply a source-set
+  ID to obtain `selected_basis`; it resolves exact IDs, not floating selectors.
+- `{action: "run", operation, query?}` invokes the shared HTTP/MCP service.
+  Operation kinds are `inventory` with `basis`, `compare` with `comparison`,
+  `record` with `review`, or `read` with `event_id`. A comparison has exact
+  `before`/`after` bases and explicit `matches`, `added`, `removed`, and
+  `membership_reviews` arrays. Use the returned `expected_head` and
+  `expected_report_fingerprint` to record; add operation UUID, name, self-declared
+  reviewer and reason. Records are unapproved `agent_proposal` history.
+- `{action: "read", view_id, query?}` pages the completed operation without
+  rerunning Python. `query.path` traverses own fields/numeric array indices,
+  for example `["report", "rows"]`, then `["report", "rows", 0, "quantities"]`.
+  `offset`/`limit` page containers (default 25, maximum 50); `string_offset` and
+  `string_limit` page exact UTF-16 string units (default 4096, maximum 16384).
+  Scalar previews are capped at 256 units and explicitly disclose truncation.
+  All original fields are reachable; object summaries are only navigational.
+- `{action: "export", view_id, path, overwrite?}` atomically writes the complete
+  unchanged operation result to JSON, independent of paging. Existing targets
+  require explicit overwrite. Use `export_takeoff` separately to persist Session
+  evidence/history or its source-inclusive bundle.
+
+One completed view per Session, maximum 128 MiB encoded JSON, expires after 15
+minutes or another inspect/run; all BAS/load/restore changes invalidate it. A
+read is explicitly not a fresh replay. Use operation `read` to replay a saved
+comparison; `different_from_saved_report` must not be accepted as the reviewed
+result. Point cells and selected saved quantities replay through Python. Unknown,
+outside-scope, unpaired and incompatible measures remain explicit, not zero.
+No installed verification, automatic item identity, complete discovery or approval.
+The original page-only commands below remain unchanged.
+
+Development `bas_drawing_review` uses the same retained-source accounting as
+**Review & changes → Drawing changes**, without extracting again or requiring
+active plans. Restore an evidence backup first if the Session has no BAS history.
+
+1. `command: {kind: "inspect"}` lists retained captures and decisions. Optional
+   `query` selects `capture_id` or `event_id`, with `offset` and `limit` (1–50,
+   default 25). Selected arrays use the same offset; totals disclose remaining
+   pages. Remove `display_name` before using inspected page references in actions.
+2. `command: {kind: "prepare", action}` validates a complete `create_source_set`
+   or `review_revision` action and returns `expected_head` and
+   `expected_dependencies`. No event is saved. A revision explicitly accounts
+   for every baseline/incoming page; replacements must be reciprocal one-to-one.
+3. `command: {kind: "record", review}` takes that exact action, returned head and
+   digest, new UUID `operation_id`, self-declared `reviewer` and `reason`. It
+   appends `agent_proposal` history only. Exact retries are idempotent; stale or
+   conflicting requests reject. Unresolved accounting creates no complete source
+   set. `persistence: "session_only_until_export"` requires `export_takeoff` next.
+4. `command: {kind: "compare", before, after}` takes retained
+   `{capture_id, page_id}` pairs. It compares physical page identity and available
+   retained text/frame, not full PDF ink, semantic requirements or quantities.
+   Use `view_sheet` with each original `page_id` to inspect verified PDF bytes.
+
+Neither inspection nor recording verifies source-byte availability or approves
+a takeoff. Concurrent restore, plan loading or workflow mutation rejects an
+in-flight command. Keep the exported JSON and original PDFs, or a source-inclusive
+ZIP. Limits and ownership rules: [correspondence contract](../docs/bas-production/DRAWING_CORRESPONDENCE_CONTRACT.md).
+
 No clone, no build—point your MCP client at the published package:
 
 ```json
@@ -109,7 +446,7 @@ includes document text, shape vertices, or result payload content.
 
 ### Staged tool exposure (opt-in)
 
-By default every client gets all 50 tool schemas on `tools/list`—the flat
+By default every client gets all 53 tool schemas on `tools/list`—the flat
 contract every published client already expects. Fifty descriptions is real
 token weight for an agent session that may never touch half of them, so the
 server can instead stage the surface along the workflow it already teaches:
@@ -148,7 +485,7 @@ reads the tool list once. ([#230](https://github.com/Kentucky-ai/opentakeoff/iss
 | `symbol_sweep` | **Every instance of a repeated plan symbol, from ONE example**: marquee a tight `seed_rect` around a single drain/threshold/fixture symbol and the vector linework is searched deterministically for every other placement—translation plus 0/90/180/270 rotation and mirroring (both on by default). Score = length-weighted fraction of the seed's segments matched within `tolerance_px`; ≥ 0.92 is a match, the 0.75–0.92 band returns in `withheld` with reasons (never committed, never dropped silently), and the work cap is disclosed when it bites. **`scope: "set"` sweeps the whole working set, counting on PLAN-role sheets only** (the sheet graph decides; every excluded sheet disclosed in `skipped` with role and reason)—and the seed rect may sit on a detail or legend sheet, which then serves as the fingerprint SOURCE while staying excluded from counting: the estimator's "click the assembly in the detail, count it on the plans" gesture. Per-sheet results carry their own match/withheld lists, per-sheet cap accounting, and wall-clock `elapsed_ms`. `commit: true` + `condition` commits every match center as an EA count marker—the whole sweep (set-wide included) is one undo step, `origin.method "symbol_sweep"` with per-marker score, transform, and seed source (`origin.symbol.seed`). No scale required. **Counter-examples** (`exclude`, #259): rects around instances you do NOT mean, marqueed like the seed—the rect's own contents decide whether it rejects by extra contained linework or by the background line running THROUGH it that a real instance would break; every rejection disclosed in `rejected[]`, reinstatable with `place_count`, dead negatives refused with instructions. **Stroke-luminance gate** (`luminance_tolerance`, #260): for flattened exports where layers and pen weights are stripped but the file still states stroke color—a stated tolerance holds candidates to the seed's own pen, opt-in both ways, with `lum_gate` naming every placement the pen pulled under the bar. **Labels** (#308): for labeled families the sweep reads the drawing's own names—a fixture token written beside a placement or connected by its drawn leader (leader-following arms only on multi-pen sheets)—as `label`/`label_via` on every row plus `seed.label`; the reply flags shape-only matches in a labeled family, withheld rows carrying the seed's own tag, and matches the drawing names differently. Disclosure, never a recount. |
 | `sweep_schedule_row` | **Take off a schedule row's mark from the row itself**: pass the row's key (for example, `T1`) and the tool reads the row from the set's schedule tables (the row is the condition's cited source), anchors a fingerprint on the marker the tag is DRAWN as on a plan sheet (a deterministic pad ladder around the tag text; where the tag occurs more than once the fingerprint must recur at a second occurrence—`anchor.corroborated`—before it is trusted), and sweeps every plan-role sheet. **The count is geometry AND text agreeing**: drafting reuses one bubble shape across many marks, so a match counts only when the row's own tag sits within the marker footprint (its bbox rides the match as `tag_at` evidence); a match labeled with a sibling key is `excluded` and says whose it is, an unlabeled match is `withheld` as a question, a tag drawn with no matching marker is `text_only`. Refusal over guessing, each with the reason and the fix: no such row, an ambiguous key, a tag drawn on no plan sheet, no repeatable marker linework—a fingerprint is never guessed from text alone. `commit: true` commits the counted matches under the row's own key—one undo step, `origin.assignment {source: "schedule"}` plus the anchor and row citation on `origin.symbol.seed`. No scale required. |
 | `takeoff_summary` | Per-condition totals + grand totals, computed by the Report's rules. |
-| `export_takeoff` | The full `opentakeoff.takeoff_canvas.v1` payload—exactly what the app autosaves. Inline, and to disk with `path` (see **Writing to disk** below). |
+| `export_takeoff` | The full `opentakeoff.takeoff_canvas.v1` payload—exactly what the app autosaves. Inline, and to disk with `path`. Alternatively, `engineering_workbook_path` writes a saved engineering review XLSX after Python replay; not approval. Existing XLSX files require explicit overwrite.  `evidence_bundle_path` instead writes an unapproved source-inclusive ZIP; no replay or approval, explicit overwrite required. |
 | `delete_shape` | Remove a committed shape by id. |
 | `edit_shape` | **Revise** a committed shape instead of redoing it: new `verts`, a different `condition`, a different `role`, a `label` (the room it belongs to—what per-room reporting groups by; `""` clears it), or any combination—quantities recomputed from the result. Refuses shapes a human affirmed. |
 | `edit_materials` | Add/remove/patch supporting-materials rows on a condition—the coverage-rate lines (adhesive at N sf/gal, grout at N lf/bag, …) that turn a measured quantity into an order quantity, matching the canvas's Supporting Materials panel. `basis` is `area` \| `linear` \| `count` \| **`seam_lf`**—the last is the *figured* roll-layout seam length a weld rod or seam tape is bought by (set `roll_setup` on the condition first; without one it reads 0, because nothing has decided how that floor gets cut). `condition` mints on first touch, like `one_click`/`measure_polygon`. No review gate (materials rows are quantity config, not traced geometry)—edits directly, reversible with `undo_last`. |
@@ -156,7 +493,7 @@ reads the tool list once. ([#230](https://github.com/Kentucky-ai/opentakeoff/iss
 | `duplicate_condition` | **Twin a condition**—the same finish measured somewhere else, with its own supporting materials. One finish in two areas is neither two conditions nor one: the same sheet goods over a slab and over a raised deck take the same field material and different preparation underneath. The twin arrives carrying the original's whole materials list and keeps **following** it—fix a coverage rate on the original and every twin that hasn't touched that row gets it; edit a row on the twin and only THAT row stops following. `label` is required and becomes the tag suffix (`CPT-1` + `Level 2` → `CPT-1 – Level 2`). Reversible with `undo_last`. |
 | `split_condition` | **Cut a twin loose** from its family: every following material row freezes at its current values and edits to the original stop reaching it. It keeps its finish tag and still groups with its siblings—only the inheritance ends. For when two variants have diverged far enough that following each other is wrong. A condition that already owns its materials returns `split: false` rather than erroring. Reversible with `undo_last`. |
 | `export_report` | The **computed Report document**—`opentakeoff.report.v1`, the same JSON the canvas Report exports: gross + waste-adjusted quantities, the computed materials **buy list** per condition plus the project-wide roll-up, per-sheet base subtotals, and scale provenance. The contract for pricing consumers—`export_takeoff` carries materials as config rows, `takeoff_summary` strips them. Inline, and to disk with `path` (see **Writing to disk** below). |
-| `import_takeoff` | **The way back in**: load a `takeoff_canvas.v1` file (a prior `export_takeoff`, or the app's own save) through the SAME merge rules as the app's Sheet-menu import—finish-tag identity joins conditions (this session's knobs win), new ids append, duplicates skip (idempotent re-import), this session's calibration wins per sheet. Resume, extend, or audit. Correction rules (#88) ride the file too—`apply_rules` re-runs them. |
+| `import_takeoff` | **The way back in**: load a `takeoff_canvas.v1` file (a prior `export_takeoff`, or the app's own save) through the SAME merge rules as the app's Sheet-menu import—finish-tag identity joins conditions (this session's knobs win), new ids append, duplicates skip (idempotent re-import), this session's calibration wins per sheet. Resume, extend, or audit. Correction rules (#88) ride the file too—`apply_rules` re-runs them.  `verify_evidence_bundle: true` instead reads an unapproved source-inclusive ZIP without a loaded plan; no import or approval. Optional `replay_calculations: true` audits all historical B/C/D results through shared Python. |
 | `apply_rules` | **Re-run the correction rules the takeoff arrived with** (#207)—the lessons an estimator TAUGHT the canvas (#88), for example, "every room like this loses the mechanical chase". Same pure `rules.ts` engine the canvas Preview runs; committed as the ONE batch its Apply makes (`reviewed: false`, one undo step, `origin {method rule_v1, actor rule}` with the rule/seed/room citation). The reply's per-rule disclosure—produced, skipped, ids—IS the preview an agent gets. Idempotent by construction: anything an existing deduct covers is dropped by the engine, so re-running after new rooms commit is the intended workflow. Rules arrive ONLY through `import_takeoff`; minting one is an estimator's correction and stays behind the canvas's human Preview→Apply gate. |
 | `export_dxf` | The takeoff as a **CAD drawing**—a DXF (R2000) that AutoCAD, BricsCAD, LibreCAD and Revit import as native geometry. One sheet per file, like a DWG: every committed shape becomes an `LWPOLYLINE` (floor rings closed, walls and linear runs open, counts a circle) on a layer named for its finish—`OT-<TAG>`, with `-DEDUCT` / `-HOLE` / `-WALL` / `-LINEAR` / `-COUNT` suffix layers and room labels on `OT-LABELS`. Real units in the sheet's frame (origin bottom-left, Y up; feet, or `units:"m"`), and a ring's CAD area equals its `export_report` area to rounding. Refuses without a scale; with several sheets carrying shapes, `sheet` picks the drawing. Names every shape left out and why. `path` required. |
 | `export_marked_pdf` | The **marked-up planset**—the deliverable. Writes a distribution-ready PDF: a legend cover (per-condition totals, swatches, by-sheet breakdown) plus every sheet that carries work, vector-copied from the source with shapes, hatches, per-shape quantity chips, and annotations burned in—built by the same module as the canvas's MARKED SET button. Machine-traced shapes are disclosed as pending human review on the document itself, and the cover states where the finish tags came from (`Finish assignment: N schedule-resolved · N agent-asserted · …`, plus any rooms the last assign run withheld). Default path: `<plan> - marked set.pdf` next to the plan (see **Writing to disk** below). Works without `@napi-rs/canvas`. |
@@ -173,6 +510,9 @@ reads the tool list once. ([#230](https://github.com/Kentucky-ai/opentakeoff/iss
 | `resolve_tag` | ONE room tag → its room-finish schedule row → each code's finish/material definition, every edge cited (sheet + literal text + bbox). Refusal over guessing: `unresolved` comes back with a reason, never as silence. A delta/REV marker on the answering row rides the result as `revisions`—the codes are the post-revision answer, and you're told the ink changed. |
 | `find_schedule` | Locate a schedule table by kind ("room finish", "material")—sheet, title, headers, row count, a `view_sheet`-ready region, and `revised_rows` when delta/REV-marked rows exist. |
 | `compile_corpus_takeoff` | **Schedule-driven HVAC/BAS/valve takeoff** (`kind`: `hvac_equipment` \| `bas_points` \| `control_valves` \| `sequences` \| `embedded_coil_gaps`)—reads the set's equipment/BAS/valve/sequence schedule tables straight off the sheet graph, no shape-tracing. Returns one compiled envelope: `categories` (per-family rows and counts), `totals`, `page_accounting` (which pages were actually seen, which came back empty), and `exclusions` (scope rules that dropped a row, disclosed rather than silent). One dispatcher (`web/src/lib/compileTakeoff.mjs`) routes all five kinds for every caller—MCP tool, CLI, census script—so a kind never silently 404s from one entry point and works from another. |
+| `bas_drawing_review` | Shared retained-source correspondence: `inspect`, `prepare`, `record`, `compare`; additive `revision` command for pinned requirement/quantity comparison, bounded reads, exact export and replayed proposal history. Works without active PDFs after evidence restoration. No extraction or approval. Export to persist. See [contract](#drawing-correspondence). |
+| `bas_issue_review` | Shared finding observations, correction-start, replay-checked absence and withdrawals. Bounded current/history reads, exact original replay and complete result export; no extraction, waiver or approval. See [issue decisions](#issue-decisions). |
+| `bas_scope_review` | Populated retained-claim catalog, evidenced scope/exclusions, source-reference coverage candidates, proposal decisions, replay and complete operation export. No extraction, quantity changes, waiver or approval. See [scope and source coverage](#scope-and-source-coverage). |
 | `reconcile_schedule_plan` | **Cross-references a compiled schedule against the drawing**: for the whole set, or one `family` (e.g. `"VAV"`), sweeps the plan sheets for each schedule tag's drawn symbol and returns one row per tag with `scheduled_qty` (the printed schedule count), `installed_qty` (instances actually swept from the plan), and a `status`—matched, schedule-only (scheduled but never found drawn), plan-only (drawn but not on the schedule), or a disclosed refusal—each citing both the schedule row and the plan ink. This is the call that turns a schedule row-count into an actual reconciled takeoff line; report both quantities and the status, never the schedule count alone. |
 | `sheet_context` | The region's STRUCTURE in one frame: classified vector segments (endpoints as drawn, meta byte per segment), text spans with bboxes, and hatch-family instances with content-derived ids—same pattern spec ⇒ same id anywhere on the sheet, so plan↔legend matching is `id === id`. Decimation is declared and counted on every reply: `kept + dropped === total_in_region`, cap applies longest-first so walls survive. |
 | `view_sheet` | The agent's eyes: render the sheet (or an image-px crop) to PNG. `overlay` burns committed shapes in (solid = human-affirmed, dashed = unreviewed) to verify geometry landed; `grid` burns in a calibrated 1-ft/5-ft measuring grid with foot labels (`"auto"` from the set scale, or the drawing scale like `"1/4"`) so dimensions are counted off cells, not guessed; `marks` (#297) burns disclosure layers in — `question` (withheld placements, orange ?-circle), `struck` (rejections, magenta struck ×), `ring` (the sweep's seed, violet double ring) — in colors off the common CAD pens, so what a reply names, the picture shows. |

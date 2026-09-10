@@ -8,6 +8,15 @@
 // output (summary rows, export payload) use .passthrough() so a field added
 // upstream widens the reply instead of failing validation.
 import { z } from "zod";
+import { basPointListsOutputSchema } from "../../web/src/lib/basPointLists.ts";
+import { basWorkflowSchema } from "../../web/src/lib/basWorkflow.ts";
+import { basEquipmentSummarySchema } from "../../web/src/lib/basEquipmentReview.ts";
+import { basAssignmentCalculationSchema } from '../../web/src/lib/basAssignmentDemandContract.ts';
+import { basAssemblySummarySchema } from '../../web/src/lib/basAssemblyReview.ts';
+import { basAssemblyCalculationSchema } from '../../web/src/lib/basAssemblyQuantityContract.ts';
+import { basEngineeringSummarySchema } from '../../web/src/lib/basEngineeringReview.ts';
+import { basProjectReviewSchema } from '../../web/src/lib/basProjectReview.ts';
+import { basEvidenceBundleInspectionSchema } from '../../web/src/lib/basEvidenceBundle.ts';
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -107,6 +116,21 @@ export const compileCorpusTakeoffOutput = {
    * least learns this field exists, not left invisible under z.any(). */
   estimator_status: z.any().optional(),
   estimator_product: z.any().optional(),
+  /** Additive deterministic Python BAS math; legacy printed totals stay unchanged. */
+  bas_math: z.any().optional(),
+  /** Source-bound listed observations, not installed devices or wired demand. */
+  bas_point_lists: basPointListsOutputSchema.optional().describe("Source/version-bound listed point observations, raw cells, sparse-column accounting and explicit supported controller notes. Not installed quantity, verified field wiring or complete coverage. Independent unavailable status preserves legacy and math results."),
+  bas_workflow: basWorkflowSchema.optional().describe("Durable, fingerprinted evidence capture; not an approved takeoff. Export/import retains it. Source PDFs must be retained separately."),
+  bas_workflow_error: z.string().optional().describe("Capture retention failed; original point observations and math are not discarded."),
+  bas_equipment: basEquipmentSummarySchema.optional().describe('Source occurrence/member index and retained scoped equipment/template decisions. Named scheduled equipment only, not installed counts or verified field wiring. Original cells remain in the referenced bas_workflow capture.'),
+  bas_equipment_error: z.string().optional().describe('Equipment capture unavailable; the existing point/SOO capture is preserved. Equipment review writes refuse rather than changing earlier decisions.'),
+  bas_assignment_demand: basAssignmentCalculationSchema.optional().describe('Persisted shared-Python derivation of assigned listed observations, bound to exact capture/equipment head. Subtotals exclude unavailable cells and are not unique requirements, field wiring, installed quantities or approval.'),
+  bas_assemblies: basAssemblySummarySchema.optional().describe('Addressable source component declarations and explicit scoped assembly/responsibility decisions; not installed proof or complete source discovery. Full original spans remain in bas_workflow.'),
+  bas_assembly_quantities: basAssemblyCalculationSchema.optional().describe('Saved shared-Python declared component quantities for exact equipment and assembly decisions. Never installed/unique-device totals or approval.'),
+  bas_engineering: basEngineeringSummarySchema.optional().describe('Source/resource-bound engineering decisions, retained original inputs/results and separate dependency/replay status. A saved pass is not freshly verified, complete coverage, installed proof or approval. Use bas_engineering_inspect to replay; missing values and exclusions remain explicit.'),
+  bas_engineering_error: z.string().optional().describe('Engineering review unavailable; legacy extraction and earlier history remain retained.'),
+  bas_project_review: basProjectReviewSchema.optional().describe('Opt-in shared, source-linked saved findings. Unknown codes, exclusions and failed constraints remain visible. Does not verify PDF bytes, replay calculations or decide readiness/approval.'),
+  bas_assembly_error: z.string().optional().describe('Assembly summary unavailable; original point, table and math results remain retained. Requested assembly writes refuse atomically.'),
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),
@@ -602,11 +626,16 @@ export const exportDxfOutput = {
   bytes: z.number().int(),
 };
 
+// A restored browser backup can legitimately contain only schema + BAS history.
+// Preserve that exact payload instead of synthesizing drawing fields. Existing
+// loaded-plan exports still populate every native field; present fields retain
+// their existing validators, and BAS evidence validation is unchanged.
 export const exportTakeoffOutput = {
+  bas_workflow: basWorkflowSchema.optional().describe('Retained point-evidence captures, not approval or embedded source PDFs.'),
   schema: z.string(),
-  project_name: z.string(),
-  units: z.string(),
-  sheets: z.array(z.object({ sheet_id: z.string(), units_per_px: z.number() })),
+  project_name: z.string().optional(),
+  units: z.string().optional(),
+  sheets: z.array(z.object({ sheet_id: z.string(), units_per_px: z.number() })).optional(),
   conditions: z.array(z.object({
     id: z.string(),
     finish_tag: z.string(),
@@ -616,7 +645,7 @@ export const exportTakeoffOutput = {
     multiplier: z.number(),
     waste_pct: z.number(),
     materials: z.array(z.unknown()),
-  }).passthrough()),
+  }).passthrough()).optional(),
   shapes: z.array(z.object({
     id: z.string(),
     sheet_id: z.string(),
@@ -626,17 +655,20 @@ export const exportTakeoffOutput = {
     computed: z.object({ area_sf: z.number().optional(), perimeter_lf: z.number().optional(), count: z.number().optional() }).passthrough()
       .describe("count shapes carry {count} alone; every other role carries area_sf + perimeter_lf"),
     origin: z.object({}).passthrough().optional().describe("Provenance: method (manual|one_click_v1), actor (omitted=human, 'agent'=MCP/automation), reviewed (human affirmed at an explicit gate), assignment (where the finish tag came from — {source: 'schedule', room_tag, surface, schedule_sheet} when the room's own schedule row decided it, {source: 'asserted'} when the agent chose; stamped on every agent commit), and correction fields (edited, edited_before_create, copied, proposed_verts_norm, edits)"),
-  }).passthrough()),
-  markups: z.array(z.unknown()),
+  }).passthrough()).optional(),
+  markups: z.array(z.unknown()).optional(),
   approvals: z.array(z.unknown()).optional().describe("Approval-family records (#176) — the estimator's APPROVED seals and the agent's verdict marks {id, actor, ts, sheet_id, at:[nx,ny], shape_id?, text?}. Present only when any exist (the canvas payload's own convention), so a verdict-free export stays byte-identical"),
-  sheet_group: z.array(z.unknown()),
-  last_group: z.array(z.unknown()),
-  sheet_tabs: z.array(z.unknown()),
-  sheet_levels: z.object({}).passthrough(),
+  sheet_group: z.array(z.unknown()).optional(),
+  last_group: z.array(z.unknown()).optional(),
+  sheet_tabs: z.array(z.unknown()).optional(),
+  sheet_levels: z.object({}).passthrough().optional(),
 };
 
 /** import_takeoff (#151) — the merge receipt, field-identical to the app's. */
 export const importTakeoffOutput = {
+  bas_restore: z.object({ restored: z.boolean(), approved: z.literal(false), project_complete: z.literal(false) }).passthrough().optional()
+    .describe('Explicit source-inclusive restore preview or committed recovery operation. Detailed shared merge counts live in preview.merge; no automatic approval.'),
+  bas_evidence_bundle: basEvidenceBundleInspectionSchema.optional().describe('Present only for explicit read-only evidence-bundle preflight; nothing was imported.'),
   file: z.string().describe("Basename of the imported file"),
   replaced: z.boolean().describe("true = the session was empty and adopted the file wholesale"),
   shapes_added: z.number().int(),

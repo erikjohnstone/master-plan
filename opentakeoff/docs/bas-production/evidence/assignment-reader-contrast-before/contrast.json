@@ -1,0 +1,1829 @@
+[
+  {
+    "theme": "light",
+    "width": 1280,
+    "measured": 411,
+    "minimum_ratio": 5.262262417416654,
+    "failures": []
+  },
+  {
+    "theme": "light",
+    "width": 1920,
+    "measured": 411,
+    "minimum_ratio": 5.262262417416654,
+    "failures": []
+  },
+  {
+    "theme": "dark",
+    "width": 1280,
+    "measured": 411,
+    "minimum_ratio": 3.4004836217764134,
+    "failures": [
+      {
+        "element": "SUMMARY",
+        "text": "Assigned listed values · × 1 applications",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "P",
+        "text": "The entire system matrix is applied once when its selection is nonempty. This is a listed-",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "P",
+        "text": "Known listed I/O subtotal: AI 33 · AO 21 · DI 23 · DO 14.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "P",
+        "text": "Known listed software: INTEGRATION ANALOG VARIABLE 6 · INTEGRATION MULTISTAGE VARIABLE 3.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "P",
+        "text": "607 typed cells not observed · 0 ambiguous observations. Subtotals include known observati",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "Point",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "Kind / channel",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "Listed value",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "Applications",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "Assigned value",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "Evidence",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - REMOTE ENABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · DO",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - STATUS",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "software value · INTEGRATION MULTISTAGE VARIABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - STATUS",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "attribute · READ ONLY",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "—",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "Attribute, not quantity",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - FAULT ALARM",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "software value · INTEGRATION ANALOG VARIABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - FAULT ALARM",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "attribute · READ ONLY",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "—",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "Attribute, not quantity",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - % UNIT LOADING",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "software value · INTEGRATION ANALOG VARIABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - % UNIT LOADING",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "attribute · READ ONLY",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "—",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "Attribute, not quantity",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CONDENSER WATER VALVE COMMAND",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AO",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CONDENSER WATER VALVE FEEDBACK",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CHILLED WATER VALVE COMMAND",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AO",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CHILLED WATER VALVE FEEDBACK",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CONDENSER WATER DP SENSOR",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CHILLED WATER DP SENSOR",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CONDENSER WATER SUPPLY TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CONDENSER WATER RETURN TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CHILLED WATER SUPPLY TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 1 - CHILLED WATER RETURN TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - REMOTE ENABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · DO",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - STATUS",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "software value · INTEGRATION MULTISTAGE VARIABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - STATUS",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "attribute · READ ONLY",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "—",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "Attribute, not quantity",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - FAULT ALARM",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "software value · INTEGRATION ANALOG VARIABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - FAULT ALARM",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "attribute · READ ONLY",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "—",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "Attribute, not quantity",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - % UNIT LOADING",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "software value · INTEGRATION ANALOG VARIABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - % UNIT LOADING",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "attribute · READ ONLY",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "—",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "Attribute, not quantity",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CONDENSER WATER VALVE COMMAND",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AO",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CONDENSER WATER VALVE FEEDBACK",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CHILLED WATER VALVE COMMAND",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AO",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CHILLED WATER VALVE FEEDBACK",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CONDENSER WATER DP SENSOR",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CHILLED WATER DP SENSOR",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CONDENSER WATER SUPPLY TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CONDENSER WATER RETURN TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CHILLED WATER SUPPLY TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 2 - CHILLED WATER RETURN TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - REMOTE ENABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · DO",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - STATUS",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "software value · INTEGRATION MULTISTAGE VARIABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - STATUS",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "attribute · READ ONLY",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "—",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "Attribute, not quantity",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - FAULT ALARM",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "software value · INTEGRATION ANALOG VARIABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - FAULT ALARM",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "attribute · READ ONLY",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "—",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "Attribute, not quantity",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - % UNIT LOADING",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "software value · INTEGRATION ANALOG VARIABLE",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - % UNIT LOADING",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "attribute · READ ONLY",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "—",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "Attribute, not quantity",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - CONDENSER WATER VALVE COMMAND",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AO",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - CONDENSER WATER VALVE FEEDBACK",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - CHILLED WATER VALVE COMMAND",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AO",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - CHILLED WATER VALVE FEEDBACK",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - CONDENSER WATER DP SENSOR",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - CHILLED WATER DP SENSOR",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - CONDENSER WATER SUPPLY TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - CONDENSER WATER RETURN TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TH",
+        "text": "CHILLER 3 - CHILLED WATER SUPPLY TEMP.",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "declared io · AI",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "1",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "TD",
+        "text": "View source cellPrinted: X",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "SMALL",
+        "text": "Printed: X",
+        "ratio": 3.4004836217764134
+      }
+    ]
+  }
+]

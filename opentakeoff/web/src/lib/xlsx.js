@@ -62,26 +62,39 @@ export function sanitizeSheetName(name, used = new Set()) {
 //   number (finite)      → <c r=… ><v>…</v></c>
 //   null / undefined / "" → cell skipped entirely
 //   anything else         → inline string, XML-escaped
-export function sheetXml(rows) {
+export function sheetXml(rows, presentation = null) {
+  const columns = presentation?.widths || [];
+  const lastColumn = colLetter(Math.max(0, columns.length - 1));
+  const frozen = presentation ? Math.max(0, Math.min(columns.length - 1, presentation.freezeColumns || 0)) : 0;
   const out = ['<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
-    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>'];
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'];
+  if (presentation) {
+    out.push(`<dimension ref="A1:${lastColumn}${rows.length}"/><sheetViews><sheetView showGridLines="0" workbookViewId="0"><pane ${frozen ? `xSplit="${frozen}" ` : ''}ySplit="1" topLeftCell="${colLetter(frozen)}2" activePane="${frozen ? 'bottomRight' : 'bottomLeft'}" state="frozen"/></sheetView></sheetViews><cols>`);
+    columns.forEach((width, i) => out.push(`<col min="${i + 1}" max="${i + 1}" width="${Math.min(255, Math.max(1, Number(width) || 20))}" customWidth="1"/>`));
+    out.push('</cols>');
+  }
+  out.push('<sheetData>');
   rows.forEach((cells, ri) => {
-    out.push(`<row r="${ri + 1}">`);
+    const lines = presentation ? Math.max(1, ...cells.map((v, ci) => String(v ?? '').split('\n').reduce((n, line) => n + Math.max(1, Math.ceil(line.length / Math.max(8, (columns[ci] || 20) - 4))), 0))) : 1;
+    out.push(`<row r="${ri + 1}"${presentation ? ` ht="${Math.min(409, Math.max(ri === 0 ? 36 : 28, lines * 15 + 12))}" customHeight="1"` : ''}>`);
     cells.forEach((v, ci) => {
       if (v === null || v === undefined || v === "") return;
       const ref = `${colLetter(ci)}${ri + 1}`;
+      const style = presentation ? ` s="${ri === 0 ? 2 : 1}"` : '';
       if (typeof v === "number" && Number.isFinite(v)) {
-        out.push(`<c r="${ref}"><v>${v}</v></c>`);
+        out.push(`<c r="${ref}"${style}><v>${v}</v></c>`);
       } else {
         const t = escXml(v);
         // preserve leading/trailing whitespace the way Excel expects
         const sp = /^\s|\s$/.test(String(v)) ? ' xml:space="preserve"' : "";
-        out.push(`<c r="${ref}" t="inlineStr"><is><t${sp}>${t}</t></is></c>`);
+        out.push(`<c r="${ref}"${style} t="inlineStr"><is><t${sp}>${t}</t></is></c>`);
       }
     });
     out.push("</row>");
   });
-  out.push("</sheetData></worksheet>");
+  out.push('</sheetData>');
+  if (presentation?.filter && rows.length > 1) out.push(`<autoFilter ref="A1:${lastColumn}${rows.length}"/>`);
+  out.push('</worksheet>');
   return out.join("");
 }
 
@@ -97,12 +110,21 @@ const STYLES_XML = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
   '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>' +
   "</styleSheet>";
 
+// Opt-in review-table formatting. Legacy workbooks retain STYLES_XML and their
+// original unstyled worksheet XML exactly. This changes no report data/math.
+const PRESENTATION_STYLES_XML = STYLES_XML
+  .replace('<fonts count="1"><font><sz val="11"/><name val="Calibri"/></font></fonts>',
+    '<fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><sz val="10"/><name val="Arial"/><color rgb="FF18233A"/></font><font><sz val="10"/><name val="Arial"/><b/><color rgb="FFFFFFFF"/></font></fonts>')
+  .replace('<fills count="2">', '<fills count="3">').replace('</fills>', '<fill><patternFill patternType="solid"><fgColor rgb="FF1F3FC7"/><bgColor indexed="64"/></patternFill></fill></fills>')
+  .replace('<cellXfs count="1">', '<cellXfs count="3">').replace('</cellXfs>',
+    '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyAlignment="1" applyFill="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf></cellXfs>');
+
 // ---------------------------------------------------------------------------
 // Workbook assembly
 
 /**
  * Zip sheet definitions into an .xlsx byte array.
- * @param {Array<{name: string, rows: any[][]}>} sheets one entry per tab, in order
+ * @param {Array<{name: string, rows: any[][], presentation?: {widths: number[], freezeColumns?: number, filter?: boolean}}>} sheets one entry per tab, in order
  * @returns {Promise<Uint8Array>} download with MIME
  *   application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
  */
@@ -141,9 +163,9 @@ export async function buildXlsx(sheets) {
     "_rels/.rels": strToU8(rootRels),
     "xl/workbook.xml": strToU8(workbook),
     "xl/_rels/workbook.xml.rels": strToU8(wbRels),
-    "xl/styles.xml": strToU8(STYLES_XML),
+    "xl/styles.xml": strToU8(sheets.some(s => s.presentation) ? PRESENTATION_STYLES_XML : STYLES_XML),
   };
-  sheets.forEach((s, i) => { files[`xl/worksheets/sheet${i + 1}.xml`] = strToU8(sheetXml(s.rows)); });
+  sheets.forEach((s, i) => { files[`xl/worksheets/sheet${i + 1}.xml`] = strToU8(sheetXml(s.rows, s.presentation)); });
   return zipSync(files);
 }
 

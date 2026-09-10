@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "legacy_compile_exact": true,
+  "retained_source_exact": true,
+  "replay_exact": true,
+  "listed": 2,
+  "not_listed": 1,
+  "checks": [
+    "actual MCP typed/text parity",
+    "agent proposal/create",
+    "idempotent retry",
+    "ordinary recompile retains history",
+    "stale request rejection",
+    "invalid source rejection",
+    "non-BAS review rejection",
+    "actual export",
+    "reset/import exact history and comparison",
+    "removal retains evidence"
+  ],
+  "elapsed_ms": 65219,
+  "main_process_peak_rss_bytes": 755302400,
+  "workflow_bytes": 1003787,
+  "project_complete": false
+}

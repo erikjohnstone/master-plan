@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "restored_calculations": 2,
+  "checks": [
+    "actual PDF upload",
+    "ordinary real-workflow import",
+    "source/result exact preservation",
+    "both themes/two widths",
+    "normal text contrast at least 4.5:1",
+    "no page overflow"
+  ],
+  "readings": [
+    {
+      "theme": "light",
+      "width": 1280,
+      "measured": 411,
+      "minimum_ratio": 6.508938359990188,
+      "failures": []
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "measured": 411,
+      "minimum_ratio": 6.508938359990188,
+      "failures": []
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "measured": 411,
+      "minimum_ratio": 7.707796035708494,
+      "failures": []
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "measured": 411,
+      "minimum_ratio": 7.707796035708494,
+      "failures": []
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: [{"type":"text","text":"{\"error\":\"Cannot find package 'fflate' imported from /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/dist/server-core.js\"}"}]
+
+true !== false
+
+    at call (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/scripts/verify-bas-engineering-export.mts:26:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/scripts/verify-bas-engineering-export.mts:35:18) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.13.1

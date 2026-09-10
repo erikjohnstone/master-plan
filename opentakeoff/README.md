@@ -36,6 +36,161 @@ what makes it training data.
 
 ## Start here
 
+BAS takeoffs now have a separate engineering result in **Takeoff**: typed I/O,
+abstract capacity, explicit network constraints, independent software licensing
+and source discrepancies. UI and MCP call one Pydantic V2 Python engine. This
+does not certify project completeness. Explicit points-list captions now admit
+detail/plan sheets to the existing reader, and separate matrices retain their
+own source regions even when local row numbers repeat. The VectorGrid reader
+is unchanged. Nested hardware/software headings are interpreted downstream;
+alarm/trend flags are not additional I/O or software values. See
+[setup and contracts](bas_engine/README.md) and [math proofs](docs/BAS_MATH_RESEARCH.md).
+
+The shared BAS compile JSON also retains source-bound point observations and
+supported controller footnotes in `bas_point_lists`. These are listed evidence,
+not installed devices. **Takeoff → Point lists** shows the original digital
+matrices and source-bound row interpretation. Fingerprinted captures persist
+with the project and export/import as point evidence; opening a source requires
+matching PDF bytes, not merely its filename. Equipment assignment, source-PDF
+archiving and approved review/revision workflows remain in development.
+Existing engineering and row exports keep their current meaning.
+
+Development **Review & changes → Drawing changes** and MCP `bas_drawing_review`
+now expose the shared source-set/page-correspondence journal: select retained
+pages, explicitly account for replacements/additions/removals, inspect original
+sources, preview and record decisions. Unresolved reviews retain history without
+publishing a complete source set. **Compare requirements & quantities** adds
+explicit item pairing, before/after declared values, exact-source inspection and
+saved/replayed comparison history. Scoped approvals are still being built; this
+is not an installed-count or release feature. See the
+[correspondence contract](docs/bas-production/DRAWING_CORRESPONDENCE_CONTRACT.md).
+
+Development **Review & changes** and MCP `bas_issue_review` now expose shared
+acknowledgement, correction-start, replay-checked absence and withdrawal history.
+Original findings and blockers remain intact. Decision history stays inspectable
+after changes; exact-ID correction routes preserve existing editor drafts.
+SOO findings select their exact clause or matrix comparison. **Source coverage**
+exposes the shared page/text accounting with original-source links and bounded
+paging; it is inspection, not a coverage decision or approval.
+This is not approval, physical correction or a complete BAS-production claim.
+
+Development **Review & changes → Scope & coverage** and MCP `bas_scope_review`
+provide populated retained-data choices, explicit source-cited exclusions and
+page/span applicability review. Source-reference suggestions are candidates,
+not automatic coverage decisions. Saved decisions replay against original and
+current dependencies and retain withdrawals/conflicts. Scope review does not
+change quantities, waive findings or approve a deliverable. The
+[public scope proof](docs/bas-production/SCOPE_COVERAGE_PUBLIC_PROOF.md) records
+verified UI/MCP journeys, regression gates and the remaining production work.
+
+Development **Review & changes → Snapshots** checks a reviewed scope against its
+original PDFs, source coverage and shared Python calculations before explicit
+human approval. Saved snapshots reopen as verified historical records and travel
+with original PDFs in a separate evidence ZIP. Import does not replace working
+annotations. Records remain browser-local and unsigned. Current applicability,
+revocation/supersession, public MCP snapshot tools and the combined memory gate
+remain unfinished; this is not a complete production takeoff or Agent workflow.
+
+Local-first sync now retains compatible BAS history across known saved versions.
+Conflicting review branches produce **BAS sync needs review**, with an exportable
+remote recovery copy when available and an explicit retry—not silent replacement
+or automatic approval. Synced ZIP restore now coordinates with other tabs and
+active sync writes before its local commit; annotation sync is reported separately
+from local original-PDF retention. This is not atomic cross-device storage. See
+the [sync restore contract and proof](docs/bas-production/SYNC_RESTORE_CONTRACT.md).
+
+**Point lists → Sequences & links** retains original SOO text and compares
+supported monitoring clauses with an explicitly linked matrix and equipment
+reference. Source-preserving link edits and removals retain their history through
+save/export/import. A listed match is not proof of applicability, wiring or
+installation; unsupported clauses remain visible for review.
+
+The development BAS workflow also retains original equipment-schedule rows and
+an explicit scoped equipment/template register. **Takeoff → Equipment** and MCP
+use the same service for per-equipment or system-once assignments, exceptions
+and durable history. The editor previews decisions before recording them and
+keeps source inspection inside the existing workspace. These are named scheduled
+members, not installed counts. **Calculate assigned values** uses the shared
+Python engine and retains the source cell, multiplier and result. Unknowns,
+controller notes and possible duplicate requirements stay explicit; known listed
+subtotals are not complete or verified field-wiring totals. Decision changes
+make earlier results stale without deleting them. Installed corroboration,
+physical requirement reconciliation and the release workflow remain in progress.
+
+Selected equipment also opens **Assembly & responsibilities**. Review explicit
+drawing declarations or record a reasoned component decision, retain the original
+source, and track furnishing, installation, wiring, programming and testing
+separately. **Calculate assembly quantities** uses shared Python for declared
+per-equipment or selected-group contributions. Unknown counts stay unknown;
+factory furnishing does not assign the other activities. Changes retain prior
+decisions and mark dependent results stale. These are non-commercial scope
+records, not verified installations, commissioning signoffs or a complete BAS
+inventory. The five-workflow production effort remains in progress.
+
+**Review expanded component rules** explicitly upgrades a saved assembly's
+interpretation, with a reason and a new history event. Supported singular
+component lists distinguish terminal controllers, occupancy sensors, static
+pressure sensors and supply-air dampers. Original wording stays available from
+each compact row. The upgrade does not assign these components to equipment or
+change earlier results; applicability still requires review and recalculation.
+
+The development branch adds **Equipment → Engineering** for declared signal,
+electrical, power, actuator, allocation, expansion and network checks. Stage
+source-bound resources and inputs, calculate a preview, then explicitly record
+the decision through shared Python. Saved histories retain original wording,
+unknowns and excluded failures; replay verifies calculations separately from
+dependency freshness. The same service is available through BAS compile in MCP.
+**Export saved engineering XLSX** provides a separate, non-commercial review
+workbook with exact saved inputs, constraints, source locations and history.
+It excludes unsaved edits and does not approve or certify a design. Keep the
+evidence JSON archive and original PDFs for reimport.
+Broader real-document and release acceptance remain in progress; a passing
+selected constraint is not a complete or certified compatible design.
+
+**Takeoff → Review & changes** now gathers saved source, point/SOO, equipment,
+assembly and engineering findings in one searchable workspace. Inspect original
+evidence, return to the existing domain workspace, or export every finding as
+JSON. Unknown codes and excluded failures stay visible. **Original PDFs** can
+retain, verify and download exact source bytes separately in the current browser
+project, surviving ordinary PDF removal. Copies are not synced; keep an external
+backup and the takeoff JSON. This does not clear findings, select a revised drawing
+set, approve takeoffs or implement revision release.
+
+Finding identities now survive canonical JSON backup/restore. Table evidence
+follows its recorded column order; original values and source boxes are unchanged.
+
+The shared issue-decision journal retains observed findings and corrective
+history through backups. Its public controls are described above; it cannot waive
+blockers or approve quantities. Approved snapshots remain in development.
+
+**Open original** provides a read-only page reader. Historical BAS citations also
+use it when their exact PDF is no longer active. Hash and saved page-frame checks
+prevent a newer namesake from receiving an old highlight. The reader does not add
+historical pages to the active takeoff; existing live-sheet source navigation stays unchanged.
+
+The development **Original PDFs** view also downloads and verifies an **unapproved
+evidence bundle**: one `.otbas.zip` containing saved takeoff JSON and every
+historical original, named by digest. Browser and MCP use the same archive and
+ownership checks. Missing or changed bytes block export. File verification is
+read-only. **Replay saved calculations** then checks every historical assignment,
+assembly and engineering result through the shared Python engine; it neither
+updates stale inputs nor approves a takeoff. Local and local-first synced **Preview restore** and
+**Restore reviewed merge** now replay the merged history and atomically retain
+its originals, saved state and recovery journal. An empty workspace offers
+**Restore BAS evidence backup**. Historical PDFs do not enter active counting.
+MCP also previews and explicitly restores the same shared merge into its Session,
+retaining originals and previous state in an operation-owned local directory.
+Drawing correspondence and approved snapshots remain unfinished;
+see [browser restore proof](docs/bas-production/RESTORE_BROWSER_PROOF.md) and
+[MCP restore contract/proof](docs/bas-production/RESTORE_MCP_PROOF.md).
+See [format, limits and acceptance](docs/bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
+
+Local saves carry an editor-specific version guard for the browser-local atomic
+restore path. A detected version conflict preserves unsaved work and offers
+**Export unsaved takeoff** before **Reload saved version**. The browser database
+upgrade preserves existing records but older builds must reload. This safeguard
+does not itself restore an evidence ZIP or approve a takeoff.
+
 The canvas header keeps the compact **Open · Sheets · Plans** file controls on the
 left, centers the larger **sheet navigation** controls, and groups equal-sized
 **Takeoff · Edit · ⋯** controls at the upper right. **Schedules**
@@ -86,7 +241,7 @@ otherwise, and nothing an autonomous agent could call.
 
 OpenTakeoff is that engine, with two front ends over identical geometry:
 
-- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->50<!--/tool-count--> tools, on the
+- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->53<!--/tool-count--> tools, on the
   [official MCP registry](https://registry.modelcontextprotocol.io). An agent opens a plan,
   reads the title block, sets the scale, floods the rooms, checks its own work on a rendered
   overlay, and hands back a marked-up planset PDF.
@@ -494,7 +649,7 @@ plus a vision-capable model id.
 | **Voice** | Push-to-talk takeoff commands, recognized on-device in WebAssembly; audio never leaves the browser |
 | **View** | Light or **dark (negative print)**—sheet pixels inverted at draw time, exports follow |
 | **Storage** | IndexedDB + localStorage—client-only, nothing uploaded |
-| **MCP server** | <!--tool-count-->50<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
+| **MCP server** | <!--tool-count-->53<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
 | **Provenance** | Every shape records its scale, its method, its confidence, and whether a person or an agent made it |
 | **Capture (opt-in)** | Bundled [capture server](capture/README.md) banks each contributed takeoff as (geometry → label) training rows |
 | **Deploy** | One static build—Netlify, Vercel, GitHub Pages, Cloudflare Pages, S3, any static host |

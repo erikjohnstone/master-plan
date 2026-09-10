@@ -1,0 +1,54 @@
+{
+  "original_source_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "source_citation": {
+    "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p8",
+    "span_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p8:s174",
+    "bbox_px": [
+      947,
+      1824.4,
+      2159.6,
+      1852.6
+    ],
+    "text": "1.2 THE DOAS SHALL BE PROVIDED WITH A VFD FOR THE SUPPLY FAN, AND A VFD FOR THE EXHAUST FAN."
+  },
+  "metadata": {
+    "source_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+    "page_id": "sha256:c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d:p8",
+    "page": 8,
+    "sheet_px": [
+      4896,
+      3168
+    ],
+    "original_bbox_px": [
+      947,
+      1824.4,
+      2159.6,
+      1852.6
+    ],
+    "region": [
+      827,
+      1704.4,
+      2279.6,
+      1972.6
+    ],
+    "img_px": [
+      2000,
+      369
+    ],
+    "zoom": 1.3768415255404103,
+    "source_byte_verification": "verified_now",
+    "saved_frame_verification": "verified_now",
+    "read_only": true,
+    "added_to_active_set": false,
+    "overlay": false,
+    "project_complete": false
+  },
+  "view_ms": 3610,
+  "exact_shared_region_and_bbox": true,
+  "active_same_named_pdf_unchanged": true,
+  "history_and_annotations_unchanged": true,
+  "missing_original_refused": true,
+  "wrong_original_refused": true,
+  "active_overlay_refused": true,
+  "disclosure": "Built dist/server.js public tools; real Fort Sam history/source, controlled different same-named current PDF. No actual addendum or takeoff-completeness claim."
+}

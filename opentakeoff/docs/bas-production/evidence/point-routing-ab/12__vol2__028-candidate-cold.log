@@ -1,0 +1,24 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+OT_PROGRESS	{"phase":"load","message":"Loading 1 plan PDF…","pdf_count":1}
+OT_PROGRESS	{"phase":"graph","message":"Building Session + ODL sheet graph (schedules, roles, tables)…"}
+OT_PROGRESS	{"phase":"graph","message":"Sheet graph ready — 9 sheets, 20 schedule tables.","sheet_count":9,"table_count":20}
+{"ok":true,"bytes":210081,"out":"/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/docs/bas-production/evidence/point-routing-ab/12__vol2__028-candidate-cold.json"}
+       22.55 real        14.09 user         0.65 sys
+           443924480  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               66885  page reclaims
+                 185  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   9  messages sent
+                  10  messages received
+                   0  signals received
+                 650  voluntary context switches
+               19339  involuntary context switches
+         77389639270  instructions retired
+         23275412137  cycles elapsed
+           546820272  peak memory footprint

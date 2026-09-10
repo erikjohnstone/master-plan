@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "authorship": "Reviewed from full Poppler source renders and positioned PDF text before narrative implementation; rectangles select original evidence, not parser output.",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "source_id": "12__vol2__028",
+  "coordinate_frame": "image_px",
+  "regions": [
+    { "page": 2, "title": "EXHAUST FAN CONTROL SEQUENCE", "bbox": [3020, 930, 4430, 1280] },
+    { "page": 2, "title": "MINI-SPLIT CONTROL SEQUENCE", "bbox": [1350, 1120, 2980, 1400] },
+    { "page": 5, "title": "HEATING-WATER SYSTEM CONTROL SEQUENCES:", "bbox": [2180, 165, 4460, 2740] },
+    { "page": 5, "title": "CHILLED WATER SYSTEM CONTROL SEQUENCES:", "bbox": [280, 185, 2170, 2340] },
+    { "page": 6, "title": "FAN COIL UNIT (FCU) CONTROL SEQUENCE", "bbox": [450, 1250, 3780, 2730] },
+    { "page": 7, "title": "SEQUENCE OF OPERATION VAV TERMINAL UNIT (NON-FAN POWERED):", "bbox": [3040, 1180, 4460, 1750] },
+    { "page": 7, "title": "DEDICATED OUTSIDE AIR SYSTEM CONTROL SEQUENCE", "bbox": [350, 1740, 2850, 2540] },
+    { "page": 8, "title": "DEDICATED OUTSIDE AIR SYSTEM CONTROL SEQUENCE", "bbox": [900, 1715, 3410, 2510] }
+  ],
+  "heading_only": [
+    { "page": 5, "title": "CHILLED WATER SYSTEM SEQUENCE OF OPERATION" },
+    { "page": 5, "title": "HEATING HOT WATER SYSTEM SEQUENCE OF OPERATION" }
+  ],
+  "review_correction": "Initial page-6 authored rectangle ended at x=3740, clipping the independently visible E.a cooling clause ending at x=3754. Corrected to x=3780 after rechecking the original full-page render and raw span 141; no production rule or legacy corpus key changed to accommodate it.",
+  "limitations": "These eight explicit primary bodies are not all project requirements. General notes and zone-temperature prose must remain available for separate review. No installed quantities or I/O types are inferred from these rectangles."
+}

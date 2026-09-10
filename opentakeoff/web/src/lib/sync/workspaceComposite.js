@@ -54,6 +54,7 @@ export function buildSyncedWorkspaceStore({ scope, provider, snapProvider, ensur
     onRemoteUpdate: (data, rev) => bridge.onRemoteUpdate?.(data, rev),
     isBusy: () => bridge.isBusy?.() ?? false,
     saveSnapshot: (label, payload) => snapSync.saveSnapshot(label, payload, null),
+    onSyncIssue: issue => bridge.onSyncIssue?.(issue),
   });
   bridge.flushPending = annSync.flushPending;
   bridge.checkRemote = annSync.checkRemote;
@@ -61,6 +62,8 @@ export function buildSyncedWorkspaceStore({ scope, provider, snapProvider, ensur
   // the gates and tests await these; the store shape itself stays clean.
   bridge.whenSynced = annSync.whenSynced;
   bridge.whenPushed = annSync.whenPushed;
+  bridge.readSyncIssue = annSync.readSyncIssue;
+  bridge.readRestoreSyncStatus = annSync.readRestoreSyncStatus;
 
   // Presence (#317) rides the same provider surface. Started async (device id
   // lives in IDB); advisory — a failure never blocks the store.
@@ -80,7 +83,11 @@ export function buildSyncedWorkspaceStore({ scope, provider, snapProvider, ensur
   })().catch(() => { /* presence is advisory */ });
 
   const composite = { ...localStore, ...annSync, ...snapSync };
+  composite.restoreBasEvidence = annSync.restoreBasEvidence;
+  composite.saveBasSnapshot = annSync.saveBasSnapshot;
+  composite.loadBasSnapshot = annSync.loadBasSnapshot;
+  composite.listBasSnapshots = annSync.listBasSnapshots;
   Object.defineProperty(composite, "syncBridge", { value: bridge, enumerable: false });
-  Object.defineProperty(composite, "dispose", { enumerable: false, value: () => bridge.presence?.stop() });
+  Object.defineProperty(composite, "dispose", { enumerable: false, value: () => { annSync.dispose(); bridge.presence?.stop(); } });
   return composite;
 }

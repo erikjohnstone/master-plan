@@ -19,6 +19,7 @@ import { join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { basAssignmentMiddleware, basAssemblyMiddleware, basEngineeringMiddleware, basWorkflowReplayMiddleware, basRevisionMiddleware } from './vite.basAssignmentApi.js';
 
 const webRoot = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const mcpRoot = resolve(webRoot, "../mcp");
@@ -72,7 +73,7 @@ export function resolveTsxLoader() {
   );
 }
 
-function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, family, tags, familySweepAll, evaluationFast, onProgress }) {
+function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, marks, family, tags, familySweepAll, evaluationFast, onProgress }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
     try {
@@ -86,6 +87,7 @@ function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, family, ta
     const args = ["--import", importSpec, cli, "--mode", mode];
     if (kind) args.push("--kind", kind);
     if (service) args.push("--service", String(service).toUpperCase());
+    if (basMathOptions != null) args.push("--bas-math-options-stdin");
     if (tag) args.push("--tag", tag);
     if (marks?.length) args.push("--marks", marks.join(","));
     if (family) args.push("--family", family);
@@ -103,8 +105,10 @@ function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, family, ta
           .filter(Boolean)
           .join(":"),
       },
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: ["pipe", "pipe", "pipe"],
     });
+    child.stdin.on("error", () => { /* process close reports a failed CLI */ });
+    child.stdin.end(basMathOptions != null ? JSON.stringify(basMathOptions) : "");
     let stdout = "";
     let stderr = "";
     let stderrBuf = "";
@@ -202,6 +206,7 @@ async function resolvePdfs(req) {
   const ctype = req.headers["content-type"] || "";
   let kind;
   let service = null;
+  let basMathOptions = null;
   let tag = null;
   let marks = null;
   let family = null;
@@ -214,6 +219,7 @@ async function resolvePdfs(req) {
     const mp = await readMultipart(req);
     kind = mp.fields.kind;
     service = mp.fields.service || null;
+    basMathOptions = mp.fields.bas_math ? JSON.parse(mp.fields.bas_math) : null;
     tag = mp.fields.tag || null;
     marks = mp.fields.marks || null;
     family = mp.fields.family || null;
@@ -248,6 +254,7 @@ async function resolvePdfs(req) {
     const body = await readJson(req);
     kind = body.kind;
     service = body.service || null;
+    basMathOptions = body.bas_math ?? null;
     tag = body.tag || null;
     marks = body.marks || null;
     family = body.family || null;
@@ -262,7 +269,7 @@ async function resolvePdfs(req) {
       throw Object.assign(new Error("pdfPath or multipart file required"), { status: 400 });
     }
   }
-  return { kind, service, pdfPaths, tmpDir, tag, marks, family, tags, familySweepAll, evaluationFast };
+  return { kind, service, basMathOptions, pdfPaths, tmpDir, tag, marks, family, tags, familySweepAll, evaluationFast };
 }
 
 function wantsProgressStream(req) {
@@ -288,7 +295,7 @@ async function handle(req, res, mode) {
   try {
     const resolved = await resolvePdfs(req);
     tmpDir = resolved.tmpDir;
-    const { kind, service, pdfPaths, tag, marks, family, tags, familySweepAll, evaluationFast } = resolved;
+    const { kind, service, basMathOptions, pdfPaths, tag, marks, family, tags, familySweepAll, evaluationFast } = resolved;
     if (mode === "compile" && !kind) {
       return sendJson(res, 400, { error: "kind required" });
     }
@@ -339,13 +346,14 @@ async function handle(req, res, mode) {
         kind,
         pdfPaths,
         service,
+        basMathOptions,
         onProgress: (p) => writeNdjson(res, { type: "progress", ...p }),
       });
       writeNdjson(res, { type: "result", result });
       res.end();
       return;
     }
-    const result = await runCli({ mode: "compile", kind, pdfPaths, service });
+    const result = await runCli({ mode: "compile", kind, pdfPaths, service, basMathOptions });
     sendJson(res, 200, result);
   } catch (err) {
     console.error(`[production-graph-api ${mode}]`, err);
@@ -372,8 +380,24 @@ const OT_ROUTES = [
   ["/__ot/count-marks", "count_marks"],
   ["/__ot/reconcile-schedule-plan", "reconcile"],
 ];
+const assignmentMiddleware = basAssignmentMiddleware(resolveTsxLoader);
+const assemblyMiddleware = basAssemblyMiddleware(resolveTsxLoader);
+const engineeringMiddleware = basEngineeringMiddleware(resolveTsxLoader);
+const workflowReplayMiddleware = basWorkflowReplayMiddleware(resolveTsxLoader);
+const revisionMiddleware = basRevisionMiddleware(resolveTsxLoader);
 
 function otMiddleware(req, res, next) {
+  if (req.url?.split('?')[0] === '/__ot/bas-revision') return revisionMiddleware(req, res, next);
+  if (req.url?.split('?')[0] === '/__ot/bas-workflow-replay') return workflowReplayMiddleware(req, res, next);
+  if (req.url?.split('?')[0] === '/__ot/bas-engineering') return engineeringMiddleware(req, res, next);
+  if (req.url?.split('?')[0] === '/__ot/bas-assignment-demand') {
+    if (req.method !== 'POST') return sendJson(res, 405, { error: 'POST only' });
+    return assignmentMiddleware(req, res, next);
+  }
+  if (req.url?.split('?')[0] === '/__ot/bas-assembly-quantities') {
+    if (req.method !== 'POST') return sendJson(res, 405, { error: 'POST only' });
+    return assemblyMiddleware(req, res, next);
+  }
   for (const [prefix, kind] of OT_ROUTES) {
     if (!req.url?.startsWith(prefix)) continue;
     if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });

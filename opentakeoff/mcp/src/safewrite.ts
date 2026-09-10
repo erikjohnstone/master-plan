@@ -21,7 +21,7 @@ import { UserError } from "./format.ts";
  * provenance: a distributed deliverable should say what produced it. */
 export const PDF_PRODUCER = "OpenTakeoff";
 
-export type ExportKind = "json" | "pdf" | "dxf";
+export type ExportKind = "json" | "pdf" | "dxf" | "xlsx" | "zip";
 
 /** First `n` bytes, without reading a large export into memory to look at its head. */
 async function head(p: string, n: number): Promise<Buffer> {
@@ -39,6 +39,9 @@ async function head(p: string, n: number): Promise<Buffer> {
  * as NO — an unknown file is exactly the thing worth protecting. */
 async function isOwnExport(outPath: string, kind: ExportKind): Promise<boolean> {
   try {
+    // A ZIP signature is not proof of authorship. XLSX replacement always
+    // requires explicit overwrite, including a prior workbook of our own.
+    if (kind === 'xlsx' || kind === 'zip') return false;
     if (kind === "json") {
       // Both payloads stamp their schema as the first key, so the head is enough:
       // {"schema":"opentakeoff.takeoff_canvas.v1",…} / {"schema":"opentakeoff.report.v1",…}

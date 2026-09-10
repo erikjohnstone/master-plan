@@ -1,0 +1,19 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserType.launch: Executable doesn't exist at /Users/erikjohnstone/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     npx playwright install                                 ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+    at /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-points.mjs:12:32 {
+  log: [],
+  name: 'Error'
+}
+
+Node.js v24.13.1

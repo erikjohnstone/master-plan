@@ -1,0 +1,28 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+· baker-county-eoc …
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+╔══════════════════════════════════════════════════════════════════════════
+║ SHEET GRAPH — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        cell P    cell R   cell F1     tag P    tag R   reported  rowsym R
+────────────────────────────────────────────────────────────────────────────────────────────
+baker-county-eoc          100.0%    85.7%    92.3%      —        —      13     100.0%
+────────────────────────────────────────────────────────────────────────────────────────────
+CORPUS                    100.0%    85.7%    92.3%    0.0%     0.0%              100.0%
+
+cells   78 right · 0 wrong · 13 missed
+tags    0 real · 0 not-rooms reported · 0 real rooms missed
+rowsym  36 found on the plan as expected · 0 unexpectedly resolved · 0 real drawn symbols NOT anchored by sweep_schedule_row
+
+── failure bins, worst first ──
+   13×  cell-missing
+         baker-county-eoc  100|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  101|CEILING  want "ACT-1" got "undefined"
+         baker-county-eoc  102|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  103|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  104|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  105|CEILING  want "ACT-1" got "undefined"
+         … and 7 more

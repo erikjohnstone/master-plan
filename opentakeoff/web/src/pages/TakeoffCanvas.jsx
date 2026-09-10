@@ -19,6 +19,7 @@ import { Link, useNavigate } from "react-router";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { store, isStaleTabError, STALE_TAB_MESSAGE, friendlyStoreError, projectIdFromUrl, ANN_SCHEMA, emptyAnnotations, metaGet, metaPut } from "../lib/store.js";
+import { annotationGeneration, isAnnotationConflict, ANNOTATION_CONFLICT_MESSAGE } from "../lib/annotationGeneration.js";
 import { forgetThumbs, releaseThumbs } from "../lib/thumbs.js";
 import { loadSheetSpans, saveSheetSpans, forgetSheetText } from "../lib/textIndex.js";
 import { newRun, saveRun, listRuns, sanitizeToolResult } from "../lib/runHistory.js";
@@ -38,6 +39,11 @@ import ToolMenu from "../components/ToolMenu.jsx";
 import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
+import { assertBasAssignmentUpdate } from "../lib/basAssignmentDemandContract.ts";
+import { assertBasAssemblyCalculationUpdate } from "../lib/basAssemblyQuantityContract.ts";
+import { applyBasAssemblyReview } from "../lib/basAssemblyReview.ts";
+import { assertBasEngineeringUpdate, assertBasEngineeringInspection } from "../lib/basEngineeringReview.ts";
+import { basEngineeringCommandSchema } from "../lib/basEngineeringRegister.ts";
 import {
   compileAgentTakeoff,
   dedupeTakeoffRows,
@@ -48,6 +54,7 @@ import {
   splitConversationalAnswer,
 } from "../lib/agentTakeoff.js";
 import RevisionsPanel from "../components/RevisionsPanel.jsx";
+import BasSyncNotice from "../components/BasSyncNotice.jsx";
 import UserGuide from "../components/UserGuide.jsx";
 import TakeoffsPanel, { clampPanelW, CONDITION_DND_MIME, ConditionAppearanceEditor } from "../components/TakeoffsPanel.jsx";
 import { HATCHES, PALETTE, NO_FILL, HatchPattern, HatchSwatch } from "../components/hatches.jsx";
@@ -157,6 +164,14 @@ import SweepReviewPanel from "../components/SweepReviewPanel.jsx";
 import Tip from "../components/Tip.jsx";
 import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet } from "../lib/scheduleBrowse.js";
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
+import { basResultForCanvas } from "../lib/basBrowserResult.js";
+import { basWorkflowSchema, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow } from "../lib/basWorkflow.ts";
+import { applyBasReview } from "../lib/basReview.ts";
+import { applyBasDrawingReview } from "../lib/basDrawingReview.ts";
+import { recordBasIssueFromUi } from "../components/basIssueClient.ts";
+import { recordBasScopeFromUi } from "../components/basScopeClient.ts";
+import { basRevisionOperationSchema, assertBasRevisionResponse } from "../lib/basRevisionOperations.ts";
+import { applyBasEquipmentReview } from "../lib/basEquipmentReview.ts";
 import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
@@ -606,6 +621,13 @@ export default function TakeoffCanvas() {
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
   const [showTakeoffData, setShowTakeoffData] = useState(false);
   const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
+  const [basWorkflow, setBasWorkflow] = useState(null);
+  const basWorkflowRef = useRef(null);
+  basWorkflowRef.current = basWorkflow;
+  const [basViewState, setBasViewState] = useState({});
+  const basLoadEpochRef = useRef(0);
+  const basCompileEpochRef = useRef(0);
+  const basSourceSignatureRef = useRef('');
   const finishedTakeoffLineCount = useMemo(
     () => compileAgentTakeoff(agentTakeoffRows).length,
     [agentTakeoffRows],
@@ -1075,6 +1097,9 @@ export default function TakeoffCanvas() {
   const toolRef = useRef(tool);
   const proposalRef = useRef(proposal);
   const hydrated = useRef(false);
+  const annotationGenerationRef = useRef(null);
+  const annotationConflictRef = useRef(false);
+  const basRestoreContext = useRef(null);
   // Autosave stays holstered until a user-originated edit. hydrate() flips every
   // autosave dep to a fresh identity, so the effect fires once on the post-load
   // render with no edit behind it; that lone run arms this and returns instead of
@@ -1269,6 +1294,7 @@ export default function TakeoffCanvas() {
   // members under the SAME keys, and this effect is the one path that rebuilds
   // the merged snap/mask geometry and member placement.
   const [docEpoch, setDocEpoch] = useState(0);
+  basSourceSignatureRef.current = JSON.stringify([docEpoch, sheets.map(s => s.name).sort()]);
   const groupSig = JSON.stringify(groupKeys) + "@" + docEpoch + "|" + stitchLayoutSig(groupKeys, stitches);
   let _px = 0;
   const panels = groupKeys.map((key) => {
@@ -1760,6 +1786,15 @@ export default function TakeoffCanvas() {
   // Restore in the Revisions panel, so a restored revision walks the same
   // defensive path as a page reload.
   const hydrate = (a) => {
+    // Validate before changing any project state. Invalid additive cargo must
+    // not be silently stripped and autosaved over the original record.
+    const restoredBas = a.bas_workflow == null ? null : basWorkflowSchema.parse(a.bas_workflow);
+    basLoadEpochRef.current++;
+    setBasWorkflow(restoredBas);
+    basWorkflowRef.current = restoredBas;
+    setBasViewState({});
+    setLastCorpusTakeoffMeta(null);
+    setAgentTakeoffRows([]);
     // Same cross-load-transient gap as the panel epoch bump below: a revision
     // Restore runs in-place with the same sheet keys, so a surviving zoneCheck
     // would immediately re-classify the RESTORED shape set against the
@@ -1892,6 +1927,7 @@ export default function TakeoffCanvas() {
       return store.loadAnnotations();
     }).then((a) => {
       if (off) return;
+      annotationGenerationRef.current = annotationGeneration(a);
       hydrate(a);
       hydrated.current = true;
     }).catch((e) => {
@@ -2674,7 +2710,7 @@ export default function TakeoffCanvas() {
     // units is additive and diff-only (the sheet_levels convention): imperial —
     // the default — omits the key, so an old imperial project's payload is
     // byte-identical on round-trip; only a metric project carries the field.
-    return { project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
+    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
   };
   // Runtime restore of a saved payload — the Revisions panel's Restore lands
   // here. A runtime load (unlike mount) can interrupt work in
@@ -2707,6 +2743,7 @@ export default function TakeoffCanvas() {
     if (!file) return;
     try {
       const imported = parseTakeoffImport(await file.text());
+      if (imported.bas_workflow != null) await verifyBasWorkflow(imported.bas_workflow);
       const { payload, note } = mergeTakeoffImport(buildPayload(), imported, sheets.map((s) => s.name));
       restoreSavedPayload(payload);
       const parts = [`Imported ${note.shapes_added} shape${note.shapes_added === 1 ? "" : "s"}`];
@@ -2785,7 +2822,7 @@ export default function TakeoffCanvas() {
         onProgress: setCommitMsg,
       });
       downloadArchive(`${base}.otk`, data);
-      setCommitMsg(`Exported ${base}.otk — ${sheets.length} PDF${sheets.length === 1 ? "" : "s"} + the full takeoff (${shapes.length} shape${shapes.length === 1 ? "" : "s"}). Self-contained: open it on any machine, or hand it to another estimator.`);
+      setCommitMsg(`Exported ${base}.otk — ${sheets.length} PDF${sheets.length === 1 ? "" : "s"} + the full takeoff (${shapes.length} shape${shapes.length === 1 ? "" : "s"}). ${basWorkflow ? 'Current PDFs are included. Older BAS captures may reference other PDF versions; retain those originals separately.' : 'Self-contained: open it on any machine, or hand it to another estimator.'}`);
     } catch (e) {
       setCommitMsg(`Couldn't export project: ${e?.message || e}`);
     }
@@ -2884,22 +2921,31 @@ export default function TakeoffCanvas() {
     // canvas are dropped by that re-hydrate (visible supersession, not silent loss —
     // the co-editing casualty the rollout forbids). The drain clears the flag.
     if (remotePendingRender.current) return;
-    const payload = buildPayload();
-    saveDataRef.current = payload;          // keep the freshest payload for an unmount flush
+    const payload = buildPayload(), generation = annotationGenerationRef.current, saveStore = store;
+    saveDataRef.current = { payload, generation }; // capture together, including unmount flush
+    if (annotationConflictRef.current) { setSaveState("conflict"); return; }
     setSaveState("saving");
     const t = setTimeout(() => {
       // A render was deferred AFTER this save was scheduled (its closure captured the
       // pre-adopt payload) → don't push stale over the winner; go idle so the canvas
       // can drain and re-hydrate. Closes the last pre-scheduled-save loss window.
       if (remotePendingRender.current) { setSaveState("idle"); return; }
-      store.saveAnnotations(payload).then(() => setSaveState("saved")).catch((e) => {
+      saveStore.saveAnnotations(payload, { generation }).then(() => {
+        // An older successful write cannot clear a newer write's error/status.
+        if (saveDataRef.current?.payload === payload && !annotationConflictRef.current) setSaveState("saved");
+      }).catch((e) => {
+        // A future successful explicit restore may already have hydrated a new
+        // generation while this older write was in flight. It must not lock
+        // that fresh editor or replace its current status.
+        if (generation !== annotationGenerationRef.current) return;
         // surface the failure rather than dropping to a silent "idle" — with inline
         // image markups a QuotaExceededError is a realistic failure mode, and a
         // silent one loses the WHOLE payload (shapes, quantities, everything) with
         // no signal. Stale-tab keeps its sticky lockout copy; anything else (quota,
         // disk) shows the actionable friendlyStoreError text.
+        if (isAnnotationConflict(e)) annotationConflictRef.current = true;
         setCommitMsg(isStaleTabError(e) ? STALE_TAB_MESSAGE : friendlyStoreError(e));
-        setSaveState("idle");
+        setSaveState(annotationConflictRef.current ? "conflict" : "idle");
       });
     }, 700);
     return () => clearTimeout(t);
@@ -2907,7 +2953,7 @@ export default function TakeoffCanvas() {
     // state it serializes, so listing buildPayload (a new identity each render)
     // would fire a save on every render instead of only on a real change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, layerOverrides, lastGroup, openTabs, stitches, projectName, clientInfo, units]);
+  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, layerOverrides, lastGroup, openTabs, stitches, projectName, clientInfo, units, basWorkflow]);
   useEffect(() => { saveStateRef.current = saveState; }, [saveState]);
 
   // Flush a pending debounced save on navigate-away (unmount), and warn before a
@@ -2919,12 +2965,13 @@ export default function TakeoffCanvas() {
     // binding here would write the cloud project's annotations into the local
     // store. In-life saves keep the live binding (it never swaps mid-mount).
     const mountStore = store;
-    const onBeforeUnload = (e) => { if (saveStateRef.current === "saving") { e.preventDefault(); e.returnValue = ""; } };
+    const onBeforeUnload = (e) => { if (saveStateRef.current === "saving" || annotationConflictRef.current) { e.preventDefault(); e.returnValue = ""; } };
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => {
       window.removeEventListener("beforeunload", onBeforeUnload);
       if (hydrated.current && saveStateRef.current === "saving" && saveDataRef.current) {
-        mountStore.saveAnnotations(saveDataRef.current).catch(() => {});   // best-effort flush
+        const { payload, generation } = saveDataRef.current;
+        mountStore.saveAnnotations(payload, { generation }).catch(() => {});   // best-effort fenced flush
       }
     };
   }, []);
@@ -2943,13 +2990,30 @@ export default function TakeoffCanvas() {
   // an agent run and its staged proposals — hydrate() wipes agentProposals and the
   // conditions a mid-run agent minted, so both defer exactly like One-Click review).
   busyStateRef.current = { poly, calib, check, proposal, scaleGuide, prevScale, agentRunning, agentProposals };
-  const computeBusy = () => isCanvasBusy({
+  const computeBusy = () => annotationConflictRef.current || isCanvasBusy({
     ...busyStateRef.current,
     saveState: saveStateRef.current,
     dragging: !!dragRef.current || !!ocDragRef.current,
     editing: editingRef.current,
     scanning: scanBusyRef.current,
   });
+  // Browser-only hydration of a successful atomic archive restore. Exact merge,
+  // history/source validation and replay belong to the shared restore module.
+  basRestoreContext.current = {
+    read: () => ({ payload: { schema: ANN_SCHEMA, ...buildPayload() }, generation: annotationGenerationRef.current,
+      busy: computeBusy(), pending: !!saveDataRef.current && saveStateRef.current !== 'saved' }),
+    apply: result => {
+      saveDataRef.current = null;
+      annotationGenerationRef.current = annotationGeneration(result.payload);
+      annotationConflictRef.current = false; remotePendingRender.current = false;
+      suppressNextSave.current = true;
+      restoreSavedPayload(result.payload);
+      const notice = `Evidence backup restored. Original PDFs and merged history are saved locally; previous state is retained in restore journal ${result.operation_id}. ${result.sync === 'pending' ? 'Annotation sync runs separately; check its status below. ' : ''}This is not an approved takeoff.`;
+      setBasViewState({ ...basViewState, takeoffTab: 'review', projectReview: { originalSources: true, restoreNotice: notice } });
+      setView('canvas');
+      setSaveState('saved'); setCommitMsg(notice);
+    },
+  };
 
   // Register both reconcile handlers ONCE. onRemoteUpdate handles CASE 2: the store
   // adopted remote→local, then the canvas went busy in maybeFlush's ~2-IDB-write gap
@@ -2964,10 +3028,17 @@ export default function TakeoffCanvas() {
     if (!bridge) return;
     bridge.isBusy = computeBusy;
     bridge.onRemoteUpdate = (data) => {
+      if (annotationConflictRef.current) return; // do not discard this editor's unsaved work
+      if (annotationGeneration(data) !== annotationGenerationRef.current) {
+        annotationConflictRef.current = true;
+        setSaveState("conflict"); setCommitMsg(ANNOTATION_CONFLICT_MESSAGE);
+        return; // only initial load/explicit restore can adopt a new generation
+      }
       saveDataRef.current = null;
       if (computeBusy()) { remotePendingRender.current = true; return; }
       remotePendingRender.current = false; // this hydrate satisfies any earlier deferred render
       suppressNextSave.current = true;
+      annotationGenerationRef.current = annotationGeneration(data);
       hydrate(data || {});
     };
     return () => { bridge.isBusy = null; bridge.onRemoteUpdate = null; };
@@ -3002,7 +3073,7 @@ export default function TakeoffCanvas() {
   // committed trace's pending save lands before we re-read (CRITICAL-b).
   useEffect(() => {
     const bridge = store.syncBridge;
-    if (!bridge || computeBusy()) return;
+    if (!bridge || computeBusy() || annotationConflictRef.current) return;
     let alive = true;
     (async () => {
       // Serialize: drain Case 1 FIRST so a store-deferred adopt lands (and its
@@ -3018,8 +3089,14 @@ export default function TakeoffCanvas() {
         // A concurrent store-side onRemoteUpdate may have hydrated + cleared the flag
         // during the await — don't double-hydrate (Finding 4).
         if (!alive || computeBusy() || !remotePendingRender.current) return;
+        if (annotationGeneration(a) !== annotationGenerationRef.current) {
+          annotationConflictRef.current = true;
+          setSaveState("conflict"); setCommitMsg(ANNOTATION_CONFLICT_MESSAGE);
+          return;
+        }
         remotePendingRender.current = false;      // clear ONLY after a successful read
         suppressNextSave.current = true;
+        annotationGenerationRef.current = annotationGeneration(a);
         hydrate(a || {});
       } catch { /* keep remotePendingRender → retry on the next idle, never drop it */ }
     })();
@@ -7122,6 +7199,9 @@ export default function TakeoffCanvas() {
   }
 
   async function fetchProductionCorpusTakeoff(kind, opts = {}) {
+    const requestEpoch = ++basCompileEpochRef.current;
+    const loadEpoch = basLoadEpochRef.current;
+    const sourceSignature = basSourceSignatureRef.current;
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) throw new Error("No PDF loaded");
     const onProgress = typeof opts.onProgress === "function" ? opts.onProgress : null;
@@ -7129,8 +7209,25 @@ export default function TakeoffCanvas() {
     const fd = new FormData();
     fd.append("kind", kind);
     if (opts.service) fd.append("service", String(opts.service).toUpperCase());
+    if (opts.bas_math != null) fd.append("bas_math", JSON.stringify(opts.bas_math));
+    const basShaToName = new Map();
+    const finishResult = async result => {
+      if (result.bas_workflow) {
+        await verifyBasWorkflow(result.bas_workflow);
+        if (requestEpoch !== basCompileEpochRef.current || loadEpoch !== basLoadEpochRef.current || sourceSignature !== basSourceSignatureRef.current) {
+          throw new Error('The drawing set or saved workspace changed during BAS compilation. Run it again for the current project.');
+        }
+        // A retained capture keeps server aliases unchanged; citation resolution
+        // uses SHA/page, not these aliases. Names are display-only metadata.
+        for (const capture of result.bas_workflow.captures) for (const source of capture.sources) {
+          if (basShaToName.has(source.sha256)) source.names = [basShaToName.get(source.sha256)];
+        }
+      }
+      return basResultForCanvas(result, basShaToName);
+    };
     for (const name of names) {
       const bytes = await store.loadPdfData(name);
+      try { basShaToName.set(await sha256Hex(bytes), name); } catch { /* preserve unknown identities */ }
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
     if (onProgress) {
@@ -7188,9 +7285,9 @@ export default function TakeoffCanvas() {
         }
       }
       if (!result) throw new Error("compile stream ended without a result");
-      return result;
+      return finishResult(result);
     }
-    return await res.json();
+    return finishResult(await res.json());
   }
 
   // Single real fetch per (sig), however many callers want the production
@@ -7564,6 +7661,16 @@ export default function TakeoffCanvas() {
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
   function showCompiledTakeoff(compiled, meta = {}) {
     if (!compiled || compiled.error) return;
+    if (compiled.bas_math || compiled.bas_point_lists) setShowTakeoffData(true);
+    if (compiled.bas_workflow) {
+      try {
+        const next = mergeBasWorkflows(basWorkflowRef.current, compiled.bas_workflow, true);
+        basWorkflowRef.current = next;
+        setBasWorkflow(next);
+        setShowTakeoffData(true);
+      } catch (error) { setCommitMsg(`Couldn't retain BAS evidence: ${error.message}. Previous saved captures were preserved.`); }
+    }
+    if (compiled.bas_workflow_error) setCommitMsg(`Couldn't retain BAS evidence: ${compiled.bas_workflow_error}. Existing captures were preserved.`);
     const totals = compiled.totals || (
       compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
         ? {
@@ -7577,6 +7684,8 @@ export default function TakeoffCanvas() {
       kind: compiled.kind,
       sheet_count: compiled.sheet_count,
       totals,
+      bas_math: compiled.bas_math || null,
+      bas_point_lists: compiled.bas_point_lists || null,
       empty_pages: compiled.page_accounting?.empty_pages,
       exclusions: compiled.exclusions || [],
       category_counts: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
@@ -7627,6 +7736,7 @@ export default function TakeoffCanvas() {
     try {
       compiled = await fetchProductionCorpusTakeoff(kind, {
         service: opts.service || null,
+        bas_math: opts.bas_math,
         onProgress: reportProgress,
       });
     } catch (e) {
@@ -7669,6 +7779,7 @@ export default function TakeoffCanvas() {
       kind: compiled.kind,
       sheet_count: compiled.sheet_count,
       totals: compiled.totals,
+      bas_math: compiled.bas_math || null,
       empty_pages: compiled.page_accounting?.empty_pages,
       exclusions: compiled.exclusions,
       category_count: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
@@ -12760,6 +12871,7 @@ export default function TakeoffCanvas() {
       {(view === "gallery" || view === "picker") && (
         <PlanNavigator
           canClose={openTabs.length > 0}
+          onRestoreEvidence={() => { setView('canvas'); setBasViewState(previous => ({ ...previous, takeoffTab: 'review', projectReview: { originalSources: true } })); setShowTakeoffData(true); }}
           onExit={() => setView("canvas")}
           initialMode={view === "picker" ? "browse" : "plan"}
           cloudMode={cloudMode}
@@ -12800,6 +12912,15 @@ export default function TakeoffCanvas() {
         />
       )}
 
+      <BasSyncNotice store={store} hidden={saveState === 'conflict' || !!loadError} />
+      {saveState === "conflict" && (
+        <div role="alert" aria-label="Unsaved version conflict" style={{ position: "absolute", bottom: "calc(var(--sp-6) + var(--sp-3))", left: "50%", transform: "translateX(-50%)", zIndex: Z.toast, display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--sp-3)", width: "min(42rem, calc(100% - 2 * var(--sp-4)))", padding: "var(--sp-3)", background: "var(--paper-bright)", border: "1px solid var(--c-danger)", boxShadow: "var(--shadow-2)", fontSize: "var(--fs-m)", color: "var(--ink)" }}>
+          <span>{ANNOTATION_CONFLICT_MESSAGE}</span>
+          <button className="btn-ghost" type="button" onClick={exportTakeoffFile}>Export unsaved takeoff</button>
+          <button className="btn-ghost" type="button" onClick={() => window.location.reload()}>Reload saved version</button>
+        </div>
+      )}
+
       {loadError && (
         <div style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 60, display: "flex", alignItems: "center", gap: 12, maxWidth: 640, padding: "10px 14px", background: "var(--paper-bright)", border: "1px solid var(--c-danger)", boxShadow: "var(--shadow-2)", fontSize: 12.5, color: "var(--ink)" }}>
           <span>
@@ -12815,6 +12936,114 @@ export default function TakeoffCanvas() {
           rows={agentTakeoffRows}
           projectName={projectName}
           corpusMeta={lastCorpusTakeoffMeta}
+          basWorkflow={basWorkflow}
+          restoreContext={basRestoreContext}
+          basViewState={basViewState}
+          onBasViewStateChange={setBasViewState}
+          onBasEngineering={async (rawCommand, options = {}) => {
+            const command = basEngineeringCommandSchema.parse(rawCommand);
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            options.signal?.throwIfAborted();
+            const response = await fetch('/__ot/bas-engineering', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: options.signal,
+              body: JSON.stringify({ workflow: previous, request: command }) });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Engineering service unavailable; prior results were preserved.');
+            const updated = await verifyBasWorkflow(result.workflow);
+            if (command.action === 'review') assertBasEngineeringUpdate(previous, updated, result.event, command.request, 'operator_input');
+            else await assertBasEngineeringInspection(previous, updated, result.view, command.request.capture_id);
+            options.signal?.throwIfAborted();
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature) {
+              throw new Error('The BAS workspace or source PDFs changed. No stale engineering result was accepted.');
+            }
+            if (options.persist && command.action === 'review') { basWorkflowRef.current = updated; setBasWorkflow(updated); }
+            return { ...result, workflow: updated };
+          }}
+          onBasAssemblyCalculate={async request => {
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            const response = await fetch('/__ot/bas-assembly-quantities', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ workflow: previous, request }) });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Assembly calculation unavailable; prior results were preserved.');
+            const updated = await verifyBasWorkflow(result.workflow);
+            assertBasAssemblyCalculationUpdate(previous, updated, result.calculation, request);
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature) {
+              throw new Error('The BAS workspace or source PDFs changed during calculation. No stale assembly result was saved.');
+            }
+            basWorkflowRef.current = updated; setBasWorkflow(updated); return updated;
+          }}
+          onBasAssemblyReview={async request => {
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            const updated = await applyBasAssemblyReview(previous, request, 'operator_input');
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature) {
+              throw new Error('The BAS workspace or original PDFs changed during this edit. Review current evidence before retrying.');
+            }
+            basWorkflowRef.current = updated; setBasWorkflow(updated); return updated;
+          }}
+          onBasAssignmentCalculate={async request => {
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            const response = await fetch('/__ot/bas-assignment-demand', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ workflow: previous, request }) });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Assignment calculation unavailable; prior results were preserved.');
+            const updated = await verifyBasWorkflow(result.workflow);
+            assertBasAssignmentUpdate(previous, updated, result.calculation, request);
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature) {
+              throw new Error('The BAS workspace or source PDFs changed during calculation. No stale result was saved; calculate again for the current assignments.');
+            }
+            basWorkflowRef.current = updated;
+            setBasWorkflow(updated);
+            return updated;
+          }}
+          onBasEquipmentReview={async request => {
+            const previous = basWorkflowRef.current;
+            const updated = await applyBasEquipmentReview(previous, request, 'operator_input');
+            if (basWorkflowRef.current !== previous) throw new Error('The BAS workspace changed during this edit. Review the current state before retrying.');
+            basWorkflowRef.current = updated;
+            setBasWorkflow(updated);
+            return updated;
+          }}
+          onBasReview={async request => {
+            const previous = basWorkflowRef.current;
+            const updated = await applyBasReview(previous, request, 'operator_input');
+            if (basWorkflowRef.current !== previous) throw new Error('The BAS workspace changed during this edit. Review the current state before retrying.');
+            basWorkflowRef.current = updated;
+            setBasWorkflow(updated);
+            return updated;
+          }}
+          onBasRevisionOperation={async (rawOperation, options = {}) => {
+            const operation = basRevisionOperationSchema.parse(rawOperation);
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+            const previousJson = JSON.stringify(previous);
+            const guard = () => {
+              options.signal?.throwIfAborted();
+              if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature
+                || JSON.stringify(basWorkflowRef.current) !== previousJson) throw new Error('The BAS project changed during comparison. No stale result was saved.');
+            };
+            guard();
+            const response = await fetch('/__ot/bas-revision', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: options.signal,
+              body: JSON.stringify({ workflow: previous, request: operation }) });
+            const result = await response.json(); guard();
+            if (!response.ok) throw new Error(result.error || 'Revision service unavailable; no result accepted.');
+            const checked = await assertBasRevisionResponse(previous, operation, result); guard();
+            if (checked.kind === 'record') { basWorkflowRef.current = checked.workflow; setBasWorkflow(checked.workflow); }
+            return checked;
+          }}
+          onBasIssueReview={(request, options) => recordBasIssueFromUi(
+            () => ({ workflow: basWorkflowRef.current, epoch: basLoadEpochRef.current, signature: basSourceSignatureRef.current, adapter: store }),
+            updated => { basWorkflowRef.current = updated; setBasWorkflow(updated); }, request, options)}
+          onBasScopeReview={(request, options) => recordBasScopeFromUi(
+            () => ({ workflow: basWorkflowRef.current, epoch: basLoadEpochRef.current, signature: basSourceSignatureRef.current, adapter: store }),
+            updated => { basWorkflowRef.current = updated; setBasWorkflow(updated); }, request, options)}
+          onBasDrawingReview={async request => {
+            const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, adapter = store;
+            const updated = await applyBasDrawingReview(previous, request, 'operator_input');
+            if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || store !== adapter) {
+              throw new Error('The BAS project changed during drawing review. No stale page accounting was saved.');
+            }
+            basWorkflowRef.current = updated;
+            setBasWorkflow(updated);
+            return updated;
+          }}
           onClear={() => { setAgentTakeoffRows([]); setLastCorpusTakeoffMeta(null); }}
           onRemove={(id) => setAgentTakeoffRows((rows) => rows.filter((r) => r.id !== id))}
           onRemoveLine={(line) => {
@@ -12823,7 +13052,22 @@ export default function TakeoffCanvas() {
             setAgentTakeoffRows((rows) => rows.filter((r) => !ids.has(r.id)));
           }}
           onClose={() => setShowTakeoffData(false)}
-          onOpenCitation={async (row) => {
+          onOpenCitation={async (row, { originalFallback = false } = {}) => {
+            if (row?.page_id) {
+              try {
+                const generation = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+                const loaded = [];
+                for (const name of [...new Set(sheets.map(s => s.name))]) {
+                  const bytes = await store.loadPdfData(name);
+                  loaded.push({ name, sha256: await sha256Hex(bytes) });
+                }
+                const sheet = resolveBasPage(row.page_id, loaded);
+                if (!sheet || generation !== basLoadEpochRef.current || signature !== basSourceSignatureRef.current) {
+                  throw new Error('The original PDF version is not loaded. Reopen its exact bytes; an old filename is not sufficient.');
+                }
+                row = { ...row, sheet_id: sheet };
+              } catch (error) { if (!originalFallback) setCommitMsg(`Could not open BAS source: ${error.message}`); return { error: error.message }; }
+            }
             if (!row?.sheet_id || !row?.bbox_px) return;
             // Close the takeoff modal so the estimator can see the sheet highlight.
             setShowTakeoffData(false);
@@ -13011,7 +13255,7 @@ export default function TakeoffCanvas() {
         })()}
         <span style={{ marginLeft: "auto", display: "flex", gap: 12, opacity: 0.75 }} aria-live="polite">
           <span>{shapes.filter((s) => panelKeySet.has(s.sheet_id)).length} shapes</span>
-          <span>{cloudMode ? "drive" : "local"}{saveState === "saving" ? " · saving…" : saveState === "saved" ? " · saved" : ""}</span>
+          <span>{cloudMode ? "drive" : "local"}{saveState === "saving" ? " · saving…" : saveState === "saved" ? " · saved" : saveState === "conflict" ? " · not saved — version conflict" : ""}</span>
         </span>
       </footer>
       {/* BYO-key AI settings — the single config surface for the ai.js seam

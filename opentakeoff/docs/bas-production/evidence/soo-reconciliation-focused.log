@@ -1,0 +1,15 @@
+✔ six independently keyed real SOO monitoring requirements preserve modes, targets and raw source (23.480625ms)
+✔ explicit source associations yield five listed rows and one bounded omission, without changing printed DI (37.735416ms)
+✔ no automatic association and identical headings cannot erase opposing unoccupied behavior (13.010625ms)
+✔ literal normalization never drops point function, equipment identity or negative qualifiers (0.084875ms)
+✔ scope-changing and compound clauses do not get coerced into unqualified monitoring requirements (0.902625ms)
+✔ duplicate listed labels stay ambiguous and missing name evidence cannot become a missing-point conclusion (32.844875ms)
+✔ stale, foreign, duplicate and invented equipment associations are rejected (83.841958ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 592.546

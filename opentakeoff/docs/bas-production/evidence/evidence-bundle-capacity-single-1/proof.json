@@ -1,0 +1,17 @@
+{
+  "mode": "single",
+  "source_bytes": 165589793,
+  "archive_bytes": 165592475,
+  "export_ms": 1383.247875,
+  "verify_ms": 657.171292,
+  "peak_rss_bytes": 853770240,
+  "loads": 1,
+  "peak_concurrent_loads": 1,
+  "largest_output_chunk": 65536,
+  "bundle_id": "60f5b9c936b91e86cc56df498e55618384b249f5d49ef72297560aadcb28b9f2",
+  "limits": {
+    "phase_ms": 20000,
+    "rss_bytes": 1342177280
+  },
+  "disclosure": "Controlled binary source transport only, not valid PDF interpretation. Node atomic file sink; browser memory not measured."
+}

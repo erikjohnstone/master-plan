@@ -1,0 +1,3179 @@
+{
+  "schema_version": 1,
+  "audited_utc": "2026-09-09T19:20:23.975Z",
+  "source_roots": {
+    "collection": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection",
+    "archiveRoot": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/opentakeoff-corpus/bulk/focus-group-2026-09-04"
+  },
+  "baseline_commit": "161583a4",
+  "scope": "Metadata and source-byte inventory, not extraction scoring or ground-truth certification.",
+  "holdout_policy": {
+    "reserved_ranks": [
+      5,
+      8,
+      15,
+      19,
+      24,
+      27
+    ],
+    "scope": "Untouched by NEW workflow rule development; historical platform exposure is known and prevents claiming never-seen generalization.",
+    "require_no_body_or_key_inspection_until_frozen_evaluation": true,
+    "retire_holdout_status_if_used_for_debugging": true,
+    "exclude_known_duplicate_source_hashes_from_development": true
+  },
+  "summary": {
+    "focus_documents": 30,
+    "focus_pages": 1489,
+    "focus_hash_matches": 30,
+    "source_sets": 113,
+    "source_parts": 190,
+    "source_pages": 4799,
+    "source_part_hash_matches": 190,
+    "unique_source_part_hashes": 190,
+    "bas_screened_sets": 82,
+    "holdout_focus_documents": 6,
+    "truth_ledger_complete_claims": 30
+  },
+  "selected": [
+    {
+      "id": "01__vol2__001",
+      "rank": 1,
+      "title": "Cherry Point Air Traffic Tower and Air Operations",
+      "source_set_id": "vol2__001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+      "pages": 75,
+      "relative_path": "pdf/01__vol2__001__Cherry_Point_Air_Traffic_Tower_and_Air_Operations.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+      "bytes": 14641192,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 50,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "02__vol2__015",
+      "rank": 2,
+      "title": "Norfolk Submarine Pier 3 Utility Services",
+      "source_set_id": "vol2__015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+      "pages": 27,
+      "relative_path": "pdf/02__vol2__015__Norfolk_Submarine_Pier_3_Utility_Services.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+      "bytes": 5293915,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 10,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "03__vol1__27",
+      "rank": 3,
+      "title": "Colville White Sturgeon Fish Hatchery",
+      "source_set_id": "vol1__27_WA_ColvilleTribes_Hatchery_Lab",
+      "pages": 38,
+      "relative_path": "pdf/03__vol1__27__Colville_White_Sturgeon_Fish_Hatchery.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+      "bytes": 8162599,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 10,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "04__vol2__062",
+      "rank": 4,
+      "title": "ITD District 1 Testing Laboratory",
+      "source_set_id": "vol2__062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+      "pages": 29,
+      "relative_path": "pdf/04__vol2__062__ITD_District_1_Testing_Laboratory.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+      "bytes": 3266369,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 15,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "05__vol2__009",
+      "rank": 5,
+      "title": "USDA APHIS Plant Inspection Station Building 63",
+      "source_set_id": "vol2__009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+      "pages": 31,
+      "relative_path": "pdf/05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+      "bytes": 18927687,
+      "split": "new_workflow_holdout",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 9,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "06__vol2__096",
+      "rank": 6,
+      "title": "Vermillion County Jail",
+      "source_set_id": "vol2__096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+      "pages": 36,
+      "relative_path": "pdf/06__vol2__096__Vermillion_County_Jail.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+      "bytes": 7788627,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 17,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "07__vol2__061",
+      "rank": 7,
+      "title": "Ames Laboratory Harley Wilhelm Hall HVAC Upgrade",
+      "source_set_id": "vol2__061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+      "pages": 71,
+      "relative_path": "pdf/07__vol2__061__Ames_Laboratory_Harley_Wilhelm_Hall_HVAC_Upgrade.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "c55da475bac3a1aeaae723b12adf35896970fe249ca3556b4d430a990c0e41a0",
+      "bytes": 14116460,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "08__vol2__044",
+      "rank": 8,
+      "title": "Albany VA Main Boiler Replacement",
+      "source_set_id": "vol2__044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+      "pages": 31,
+      "relative_path": "pdf/08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384",
+      "bytes": 4279128,
+      "split": "new_workflow_holdout",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "09__vol2__014",
+      "rank": 9,
+      "title": "Missoula Fire Sciences Laboratory Mechanical Upgrade",
+      "source_set_id": "vol2__014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+      "pages": 28,
+      "relative_path": "pdf/09__vol2__014__Missoula_Fire_Sciences_Laboratory_Mechanical_Upgrade.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "f208e34965aba62b3752f39b2691e2a418ac823bd99dbaadfb2e7b06391fc7ff",
+      "bytes": 4475010,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 8,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "10__vol2__040",
+      "rank": 10,
+      "title": "Lovell Federal Health Care Center Sterile Processing Expansion",
+      "source_set_id": "vol2__040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+      "pages": 48,
+      "relative_path": "pdf/10__vol2__040__Lovell_Federal_Health_Care_Center_Sterile_Processing_Expansion.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+      "bytes": 18654334,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "11__vol1__05",
+      "rank": 11,
+      "title": "St. Louis John Cochran VA AHU and VAV Replacement",
+      "source_set_id": "vol1__05_MO_VA_StLouis_AHU_VAV_Replacement",
+      "pages": 67,
+      "relative_path": "pdf/11__vol1__05__St_Louis_John_Cochran_VA_AHU_and_VAV_Replacement.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "78755d16240f834ee429960526cadab8edec205b65df36a70c171ab4d4b993db",
+      "bytes": 30978460,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "12__vol2__028",
+      "rank": 12,
+      "title": "Fort Sam Houston Building 615 Controls Excerpt",
+      "source_set_id": "vol2__028_TX_Renovation_of_Building_615_Final_Design_Plans",
+      "pages": 9,
+      "relative_path": "pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+      "bytes": 924578,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 25,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "13__vol2__017",
+      "rank": 13,
+      "title": "NIST Gaithersburg Building 101 HVAC Renovation",
+      "source_set_id": "vol2__017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+      "pages": 25,
+      "relative_path": "pdf/13__vol2__017__NIST_Gaithersburg_Building_101_HVAC_Renovation.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+      "bytes": 14780344,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "14__vol2__021",
+      "rank": 14,
+      "title": "USDA ARS Laboratory Mechanical Set (2019)",
+      "source_set_id": "vol2__021_XX_Laboratory_building_mechanical_drawings_lab",
+      "pages": 19,
+      "relative_path": "pdf/14__vol2__021__USDA_ARS_Laboratory_Mechanical_Set_2019.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+      "bytes": 6244263,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 8,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "15__vol2__067",
+      "rank": 15,
+      "title": "SLAC LCLS-II-HE Process Cooling Water Skid",
+      "source_set_id": "vol2__067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
+      "pages": 13,
+      "relative_path": "pdf/15__vol2__067__SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+      "bytes": 6172005,
+      "split": "new_workflow_holdout",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "16__vol2__069",
+      "rank": 16,
+      "title": "ITD District 2 Laboratory Heating Upgrades Rebid",
+      "source_set_id": "vol2__069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+      "pages": 9,
+      "relative_path": "pdf/16__vol2__069__ITD_District_2_Laboratory_Heating_Upgrades_Rebid.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+      "bytes": 4299889,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 6,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "17__vol1__16",
+      "rank": 17,
+      "title": "Carson Valley Middle School Phase 1 HVAC Replacement",
+      "source_set_id": "vol1__16_NV_CarsonValleyMS_HVAC_Replacement",
+      "pages": 47,
+      "relative_path": "pdf/17__vol1__16__Carson_Valley_Middle_School_Phase_1_HVAC_Replacement.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+      "bytes": 19727771,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "18__vol2__092",
+      "rank": 18,
+      "title": "Guaranteed Rate Field HVAC Phase IX",
+      "source_set_id": "vol2__092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+      "pages": 13,
+      "relative_path": "pdf/18__vol2__092__Guaranteed_Rate_Field_HVAC_Phase_IX.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+      "bytes": 3402469,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "19__vol2__094",
+      "rank": 19,
+      "title": "Orange County Regional History Center HVAC",
+      "source_set_id": "vol2__094_FL_Orange_County_Regional_History_Center_HVAC",
+      "pages": 9,
+      "relative_path": "pdf/19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+      "bytes": 1963054,
+      "split": "new_workflow_holdout",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 6,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "20__vol2__097",
+      "rank": 20,
+      "title": "JVWTP Chemical Buildings HVAC Upgrades",
+      "source_set_id": "vol2__097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project",
+      "pages": 25,
+      "relative_path": "pdf/20__vol2__097__JVWTP_Chemical_Buildings_HVAC_Upgrades.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "95f1c434a5dca5ea297a5981901483d0f57b6a7277abc6c87d5645f072dfe0e3",
+      "bytes": 5130967,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "21__vol2__095",
+      "rank": 21,
+      "title": "JVWTP Washwater Reclaim Pump Station 2 HVAC",
+      "source_set_id": "vol2__095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
+      "pages": 8,
+      "relative_path": "pdf/21__vol2__095__JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "17887e9efd271427725d9c334e1ee6119d7fbd2d0d865906b719ed695e7b3606",
+      "bytes": 3418465,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 0,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "22__vol2__012",
+      "rank": 22,
+      "title": "Center for Behavioral Medicine Chiller Upgrade",
+      "source_set_id": "vol2__012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+      "pages": 29,
+      "relative_path": "pdf/22__vol2__012__Center_for_Behavioral_Medicine_Chiller_Upgrade.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+      "bytes": 21875354,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "23__vol2__033",
+      "rank": 23,
+      "title": "St. Cloud VA Building 51 MEP Replacement",
+      "source_set_id": "vol2__033_MN_VA_Project_656_18_301_Construct_Replace",
+      "pages": 80,
+      "relative_path": "pdf/23__vol2__033__St_Cloud_VA_Building_51_MEP_Replacement.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "235fa6719258c64a8fe48b139e5c5e080a260e558432a63e13d682e2169e507d",
+      "bytes": 34488477,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "24__vol2__019",
+      "rank": 24,
+      "title": "Eglin AFB NICoE Mechanical Controls",
+      "source_set_id": "vol2__019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+      "pages": 24,
+      "relative_path": "pdf/24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+      "bytes": 7572233,
+      "split": "new_workflow_holdout",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 10,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "25__vol2__053",
+      "rank": 25,
+      "title": "Houston VA Emergency Room Expansion",
+      "source_set_id": "vol2__053_VA_Renovate_Expand_Emergency_Room_System_VA",
+      "pages": 12,
+      "relative_path": "pdf/25__vol2__053__Houston_VA_Emergency_Room_Expansion.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+      "bytes": 6366692,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "26__vol2__031",
+      "rank": 26,
+      "title": "Columbia Truman VA Pandemic-Preparedness Warehouse",
+      "source_set_id": "vol2__031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+      "pages": 90,
+      "relative_path": "pdf/26__vol2__031__Columbia_Truman_VA_Pandemic_Preparedness_Warehouse.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+      "bytes": 18536999,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "27__vol1__21",
+      "rank": 27,
+      "title": "Orange County Public Safety Building",
+      "source_set_id": "vol1__21_VA_OrangeCounty_PublicSafetyBldg",
+      "pages": 128,
+      "relative_path": "pdf/27__vol1__21__Orange_County_Public_Safety_Building.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "e47047c7322d16d44854dd5aa738f3d76087cc47f446927b00d8afc04a128f65",
+      "bytes": 35562756,
+      "split": "new_workflow_holdout",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "28__vol1__26",
+      "rank": 28,
+      "title": "Transbay Tower Mechanical Schedules and Plans",
+      "source_set_id": "vol1__26_CA_TransbayTower_Mechanical_64Sheets",
+      "pages": 64,
+      "relative_path": "pdf/28__vol1__26__Transbay_Tower_Mechanical_Schedules_and_Plans.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "6873dbdbf3fa2e364c7daf5dfebceb98ab00cb34aab3b2468cac62832771ab43",
+      "bytes": 43514516,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "29__vol2__030",
+      "rank": 29,
+      "title": "Syracuse VA EHRM Infrastructure Controls",
+      "source_set_id": "vol2__030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+      "pages": 93,
+      "relative_path": "pdf/29__vol2__030__Syracuse_VA_EHRM_Infrastructure_Controls.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "c8a85e522ea577c37a658f099e5f3b2af619fb3a8c35ffc219b39a13b9c56367",
+      "bytes": 20964998,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    },
+    {
+      "id": "30__vol2__058",
+      "rank": 30,
+      "title": "LBNL Building 59 NERSC Facility Upgrade II",
+      "source_set_id": "vol2__058_CA_Lawrence_Berkeley_National_Laboratory_Building",
+      "pages": 311,
+      "relative_path": "pdf/30__vol2__058__LBNL_Building_59_NERSC_Facility_Upgrade_II.pdf",
+      "exists": true,
+      "matches": true,
+      "sha256": "5c0d37ef255d621865fc7e0147ef7cad54321292e4f68d45ae97447d35b8e627",
+      "bytes": 165589793,
+      "split": "development",
+      "truth": {
+        "ledger_complete_claim": true,
+        "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
+        "modules": 7,
+        "verification_flags_current": true,
+        "claim_is_independently_reverified": false
+      }
+    }
+  ],
+  "sets": [
+    {
+      "id": "vol1__01_NY_VA_Northport_Dialysis_100CD",
+      "volume": "vol1",
+      "title": "632-17-107 Renovate Dialysis - Northport VAMC, 100% Complete Construction Documents (Drawings 01)",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/01_NY_VA_Northport_Dialysis_100CD/01_NY_VA_Northport_Dialysis_100CD__part01_p1-27.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "12652f05627fa17c9dc7ed4bbc12e04d9eda3704c9d635d446e3c53bfd3ee376",
+          "bytes": 18529788
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/01_NY_VA_Northport_Dialysis_100CD/01_NY_VA_Northport_Dialysis_100CD__part02_p28-54.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "5b97540c36fa5214b0257469039128bf006256f1d5c7911a34bcbbcd8e39d1e1",
+          "bytes": 11261635
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/01_NY_VA_Northport_Dialysis_100CD/01_NY_VA_Northport_Dialysis_100CD__part03_p55-81.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "9ac6a3268583b4fc82ef9fd276250333f93bccef52eefef92ca0e8ccb5d3100b",
+          "bytes": 13741461
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/01_NY_VA_Northport_Dialysis_100CD/01_NY_VA_Northport_Dialysis_100CD__part04_p82-108.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "21fb4b384d19f2264f3350a2cf8d6b67ff2e65075fe3830681361f7552a99a9c",
+          "bytes": 7884142
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/01_NY_VA_Northport_Dialysis_100CD/01_NY_VA_Northport_Dialysis_100CD__part05_p109-135.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "7499a122af268f89ea831b59046536cf5ca8ee9ef12114e3208d5a4d58ebdfde",
+          "bytes": 8789113
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/01_NY_VA_Northport_Dialysis_100CD/01_NY_VA_Northport_Dialysis_100CD__part06_p136-162.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "d0138a5a7cd289cf3f658eec4fdf0eeac68d1f5ae1af34eef24518e670617dbd",
+          "bytes": 8357366
+        }
+      ]
+    },
+    {
+      "id": "vol1__02_UT_FAA_Ogden_AirTrafficControlTower",
+      "volume": "vol1",
+      "title": "FAA Airport Traffic Control Tower (ATCT) Final Standard Design Drawings V1.1 - issued for Ogden-Hinckley Airport (OGD) ATCT",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/02_UT_FAA_Ogden_AirTrafficControlTower/02_UT_FAA_Ogden_AirTrafficControlTower__part01_p1-58.pdf",
+          "pages": 58,
+          "exists": true,
+          "matches": true,
+          "sha256": "8889103eb1b23215fabca8de1a33144ed075400ff84341013774a965d744ae58",
+          "bytes": 18787544
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/02_UT_FAA_Ogden_AirTrafficControlTower/02_UT_FAA_Ogden_AirTrafficControlTower__part02_p59-116.pdf",
+          "pages": 58,
+          "exists": true,
+          "matches": true,
+          "sha256": "26ef9daccaa2fbc60dd215bd5e8809b9d6473b49d79f7f0be52ae0307a80f923",
+          "bytes": 8725694
+        }
+      ]
+    },
+    {
+      "id": "vol1__03_FL_HurlburtField_ChildDevCenter",
+      "volume": "vol1",
+      "title": "ADAL Child Development Center (CDC) Bldg 90353, Hurlburt Field - Drawings",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/03_FL_HurlburtField_ChildDevCenter.pdf",
+          "pages": 110,
+          "exists": true,
+          "matches": true,
+          "sha256": "07f72d71a7ea9b09455d45a255a35e933a1dff0d459c280d16f87a7b1e19bb3d",
+          "bytes": 17863866
+        }
+      ]
+    },
+    {
+      "id": "vol1__04_NV_VA_LasVegas_CentralUtilityPlant",
+      "volume": "vol1",
+      "title": "593-22-350 Improve Central Utility Plant - Southern Nevada Healthcare System",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/04_NV_VA_LasVegas_CentralUtilityPlant/04_NV_VA_LasVegas_CentralUtilityPlant__part01_p1-26.pdf",
+          "pages": 26,
+          "exists": true,
+          "matches": true,
+          "sha256": "846f8e00667a86082cecd56e712e7d14e6a17c88918f64fd9e7570ab48d40353",
+          "bytes": 10562355
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/04_NV_VA_LasVegas_CentralUtilityPlant/04_NV_VA_LasVegas_CentralUtilityPlant__part02_p27-52.pdf",
+          "pages": 26,
+          "exists": true,
+          "matches": true,
+          "sha256": "e5cbe958aeac52b935b899efa97af8f37f3640611e0cf474cb5ffe38651b6967",
+          "bytes": 17591651
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/04_NV_VA_LasVegas_CentralUtilityPlant/04_NV_VA_LasVegas_CentralUtilityPlant__part03_p53-76.pdf",
+          "pages": 24,
+          "exists": true,
+          "matches": true,
+          "sha256": "21586dbf2fe8b6a3610a04c875153e0d17bd8158e49dd8633fdcca559e0dc32e",
+          "bytes": 4177982
+        }
+      ]
+    },
+    {
+      "id": "vol1__05_MO_VA_StLouis_AHU_VAV_Replacement",
+      "volume": "vol1",
+      "title": "657-18-115JC Replace Various Air Handling Units and Variable Air Volume Boxes - John Cochran Division (100% Bid Documents, 67 sheets)",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/05_MO_VA_StLouis_AHU_VAV_Replacement/05_MO_VA_StLouis_AHU_VAV_Replacement__part01_p1-23.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "f772941673b6a0421b623602632fa03aaf5a3c21df8843474a9e126285ad8953",
+          "bytes": 19573842
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/05_MO_VA_StLouis_AHU_VAV_Replacement/05_MO_VA_StLouis_AHU_VAV_Replacement__part02_p24-46.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "41675fb9863b65e6aceaf5bfd72a0cf3bd00730445a222a2f32e000045944e94",
+          "bytes": 7753636
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/05_MO_VA_StLouis_AHU_VAV_Replacement/05_MO_VA_StLouis_AHU_VAV_Replacement__part03_p47-67.pdf",
+          "pages": 21,
+          "exists": true,
+          "matches": true,
+          "sha256": "090eb91d9b6968f09e67840205cd3d08d078a330292a68c99d39debea0037cdb",
+          "bytes": 3747687
+        }
+      ]
+    },
+    {
+      "id": "vol1__06_MO_NatlGuard_JeffCity_CST_Addition",
+      "volume": "vol1",
+      "title": "T2147-01 Jefferson City Readiness Center - Civil Support Team Building Addition",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/06_MO_NatlGuard_JeffCity_CST_Addition/06_MO_NatlGuard_JeffCity_CST_Addition__part01_p1-17.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "7be441d93f46d2be4ec77a93f075071c07c9b4d219e5d664a9807175b442aaf8",
+          "bytes": 6198319
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/06_MO_NatlGuard_JeffCity_CST_Addition/06_MO_NatlGuard_JeffCity_CST_Addition__part02_p18-34.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "6eb7b7669c3c5739fe16451376da56ff202f4ad8d46a1a78bc25bac971f3801c",
+          "bytes": 16786817
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/06_MO_NatlGuard_JeffCity_CST_Addition/06_MO_NatlGuard_JeffCity_CST_Addition__part03_p35-51.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "6e9d96647112c84c5b0b15241fedeeaa886edcf51b44a89ce6c784747db55c85",
+          "bytes": 4094718
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/06_MO_NatlGuard_JeffCity_CST_Addition/06_MO_NatlGuard_JeffCity_CST_Addition__part04_p52-68.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "fe17e2ddc5157e11f51391f20b97eafa81345c40186c75eaf2ffdeb4212396f7",
+          "bytes": 2041915
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/06_MO_NatlGuard_JeffCity_CST_Addition/06_MO_NatlGuard_JeffCity_CST_Addition__part05_p69-85.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "8ec1f0f5c40e3f6093b8d52c133d2b8e5ce482968d439b11dbdd4313754ffe0e",
+          "bytes": 1684209
+        }
+      ]
+    },
+    {
+      "id": "vol1__07_MO_MSHP_TroopB_HVAC_Boilers_Controls",
+      "volume": "vol1",
+      "title": "R2511-01 Replace HVAC & Boilers/Pumps/Controls - MSHP Troop B Headquarters",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/07_MO_MSHP_TroopB_HVAC_Boilers_Controls/07_MO_MSHP_TroopB_HVAC_Boilers_Controls__part01_p1-21.pdf",
+          "pages": 21,
+          "exists": true,
+          "matches": true,
+          "sha256": "36539e26321fdf22c3c30a0d5e66c17ac4f12a43e0ac6aafe4e7fd96264a3cb8",
+          "bytes": 8129000
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/07_MO_MSHP_TroopB_HVAC_Boilers_Controls/07_MO_MSHP_TroopB_HVAC_Boilers_Controls__part02_p22-41.pdf",
+          "pages": 20,
+          "exists": true,
+          "matches": true,
+          "sha256": "c4bcc9a71121c3372c253aeeac0c9601c836b32aa40fa717abb7e9a74c97e070",
+          "bytes": 12151232
+        }
+      ]
+    },
+    {
+      "id": "vol1__08_ME_BGS_Augusta_EastCampus_Renovation",
+      "volume": "vol1",
+      "title": "BGS Project 3670 - Center Building Renovations, East Campus",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/08_ME_BGS_Augusta_EastCampus_Renovation.pdf",
+          "pages": 35,
+          "exists": true,
+          "matches": true,
+          "sha256": "fb2bb79f000063411d7d7b4b9641e51f8e60f5dea0a5205cc55c0f9e741c9217",
+          "bytes": 5698283
+        }
+      ]
+    },
+    {
+      "id": "vol1__09_ME_BGS_KennebecValleyCC_Renovation",
+      "volume": "vol1",
+      "title": "BGS Project 3786 - Kennebec Valley Community College Renovations",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/09_ME_BGS_KennebecValleyCC_Renovation.pdf",
+          "pages": 9,
+          "exists": true,
+          "matches": true,
+          "sha256": "6434873508568a5efe415b46c3c35e3bf91e44816f4d941c9ba4db709b56bddf",
+          "bytes": 5624560
+        }
+      ]
+    },
+    {
+      "id": "vol1__10_MO_Hawthorn_PsychHospital_HVAC",
+      "volume": "vol1",
+      "title": "M2506-01 Replace HVAC & Mechanical Room Doors - Hawthorn Children's Psychiatric Hospital",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/10_MO_Hawthorn_PsychHospital_HVAC.pdf",
+          "pages": 9,
+          "exists": true,
+          "matches": true,
+          "sha256": "5679feac4b39748aea37bd296721551070c27111e5969d8ef1cb62036af40234",
+          "bytes": 3184746
+        }
+      ]
+    },
+    {
+      "id": "vol1__11_CA_SDSU_EngSciences_Complex_100SD",
+      "volume": "vol1",
+      "title": "SDSU Engineering & Interdisciplinary Sciences Complex - 100% Schematic Design (full A/S/M/E/P set)",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/11_CA_SDSU_EngSciences_Complex_100SD/11_CA_SDSU_EngSciences_Complex_100SD__part01_p1-32.pdf",
+          "pages": 32,
+          "exists": true,
+          "matches": true,
+          "sha256": "789e695df23d93541d414e9899ee260d4b032b9a6193c23dad9ec7415722380b",
+          "bytes": 16585799
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/11_CA_SDSU_EngSciences_Complex_100SD/11_CA_SDSU_EngSciences_Complex_100SD__part02_p33-64.pdf",
+          "pages": 32,
+          "exists": true,
+          "matches": true,
+          "sha256": "0bf461c5233aebaebe64447bdc68a38ba731d8432291d7abd0e0c1d71ecb3424",
+          "bytes": 11494519
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/11_CA_SDSU_EngSciences_Complex_100SD/11_CA_SDSU_EngSciences_Complex_100SD__part03_p65-96.pdf",
+          "pages": 32,
+          "exists": true,
+          "matches": true,
+          "sha256": "156316ee82ec32656b88b0e2c8350987f4252002d3bd0ce4b1bbccdd4a7375d0",
+          "bytes": 3611948
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/11_CA_SDSU_EngSciences_Complex_100SD/11_CA_SDSU_EngSciences_Complex_100SD__part04_p97-128.pdf",
+          "pages": 32,
+          "exists": true,
+          "matches": true,
+          "sha256": "8b4b51a26ddf3f7703b2f947179aeb45c8e263d1fed8b346120750d4b68b7b86",
+          "bytes": 4594780
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/11_CA_SDSU_EngSciences_Complex_100SD/11_CA_SDSU_EngSciences_Complex_100SD__part05_p129-157.pdf",
+          "pages": 29,
+          "exists": true,
+          "matches": true,
+          "sha256": "31a1178f2439c4a6b6b71f1de0b3a9ed14dcc2a9df6faa80f19b0afcb3173f75",
+          "bytes": 13505241
+        }
+      ]
+    },
+    {
+      "id": "vol1__12_MT_MSU_ReidHall_Renovation",
+      "volume": "vol1",
+      "title": "Reid Hall Center for Research on Rural Education Renovation",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/12_MT_MSU_ReidHall_Renovation.pdf",
+          "pages": 43,
+          "exists": true,
+          "matches": true,
+          "sha256": "718889d45d60eac366be142265735c588c16e6a4bfad9d384c2c862969a3acc5",
+          "bytes": 12536442
+        }
+      ]
+    },
+    {
+      "id": "vol1__13_MI_MSU_LifeSciences_LabRenovation",
+      "volume": "vol1",
+      "title": "CP23077 Life Science Building - Renovations to Room B108A",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/13_MI_MSU_LifeSciences_LabRenovation.pdf",
+          "pages": 36,
+          "exists": true,
+          "matches": true,
+          "sha256": "ff81d0c71ccce1261f33bfdcbc34fbd8b8acbaf75f90dbe2b45e33ea88549c9e",
+          "bytes": 8017287
+        }
+      ]
+    },
+    {
+      "id": "vol1__14_OR_KlamathCC_LearningCtr_Mechanical",
+      "volume": "vol1",
+      "title": "Klamath CC Community Learning Center - Mechanical Drawings (Addendum 4)",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/14_OR_KlamathCC_LearningCtr_Mechanical.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "ed959f5398e1ebf36eeff94b855234197b2f24fb1c89873ae89674f2916e97b0",
+          "bytes": 9168188
+        }
+      ]
+    },
+    {
+      "id": "vol1__15_IA_IowaState_Biorenewables_Lab",
+      "volume": "vol1",
+      "title": "Biorenewables Complex Research Laboratory Room 1115 Improvement",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/15_IA_IowaState_Biorenewables_Lab.pdf",
+          "pages": 11,
+          "exists": true,
+          "matches": true,
+          "sha256": "bff6532f6ee9b482e5298313f82d49f6264063a015b5c5fd392dee70e0065fa9",
+          "bytes": 16190799
+        }
+      ]
+    },
+    {
+      "id": "vol1__16_NV_CarsonValleyMS_HVAC_Replacement",
+      "volume": "vol1",
+      "title": "Carson Valley Middle School Phase 1 HVAC Replacement",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
+          "pages": 47,
+          "exists": true,
+          "matches": true,
+          "sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+          "bytes": 19727771
+        }
+      ]
+    },
+    {
+      "id": "vol1__17_FL_SuwanneeHS_Courtyard_100CD",
+      "volume": "vol1",
+      "title": "Suwannee High School Courtyard Renovation - 100% CD for Bid",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/17_FL_SuwanneeHS_Courtyard_100CD.pdf",
+          "pages": 31,
+          "exists": true,
+          "matches": true,
+          "sha256": "8d1d0d6b48faf1b89b97a257ce94976a8fc69385a55b9e10353743feafd09702",
+          "bytes": 9455914
+        }
+      ]
+    },
+    {
+      "id": "vol1__18_OR_BakerMS_HVAC_Electrical_FullSet",
+      "volume": "vol1",
+      "title": "Baker Middle School HVAC & Electrical Modifications - Full Drawing Bid Set",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf",
+          "pages": 26,
+          "exists": true,
+          "matches": true,
+          "sha256": "4c65f76ff6a6078395b5c94453b441a6cd913226543df75a8f333b51e1ec5919",
+          "bytes": 4391394
+        }
+      ]
+    },
+    {
+      "id": "vol1__19_CA_VistaUSD_DataCenter",
+      "volume": "vol1",
+      "title": "North Avenue Data Center Bid Drawings",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/19_CA_VistaUSD_DataCenter.pdf",
+          "pages": 24,
+          "exists": true,
+          "matches": true,
+          "sha256": "83a95dd124c837f25b0ea403961167ce74feb952df708f0c1989b2aefba97b2c",
+          "bytes": 12687220
+        }
+      ]
+    },
+    {
+      "id": "vol1__20_TX_JudsonISD_MEP_Upgrades_Pkg6",
+      "volume": "vol1",
+      "title": "JISD MEP Upgrades Package VI - Bid Issue Drawings (Woodlake Hills MS et al.)",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/20_TX_JudsonISD_MEP_Upgrades_Pkg6.pdf",
+          "pages": 13,
+          "exists": true,
+          "matches": true,
+          "sha256": "d440d2e70ee1692be6c4fdcb12c3d23aa9fcfca688fe3c84972356cef1c9a379",
+          "bytes": 14366222
+        }
+      ]
+    },
+    {
+      "id": "vol1__21_VA_OrangeCounty_PublicSafetyBldg",
+      "volume": "vol1",
+      "title": "Orange County Public Safety Building - Issued for Construction Drawings (FY19)",
+      "bas_screening_terms": "",
+      "split": "new_workflow_holdout",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/21_VA_OrangeCounty_PublicSafetyBldg/21_VA_OrangeCounty_PublicSafetyBldg__part01_p1-43.pdf",
+          "pages": 43,
+          "exists": true,
+          "matches": true,
+          "sha256": "3841bd799716a1a8099b278308caf572073a4695065a12cc4d0718f484de9ef4",
+          "bytes": 18369442
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/21_VA_OrangeCounty_PublicSafetyBldg/21_VA_OrangeCounty_PublicSafetyBldg__part02_p44-86.pdf",
+          "pages": 43,
+          "exists": true,
+          "matches": true,
+          "sha256": "282f0651547f86ff514cfc875577139708783410efcf3dd331708808f71d3401",
+          "bytes": 10176970
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/21_VA_OrangeCounty_PublicSafetyBldg/21_VA_OrangeCounty_PublicSafetyBldg__part03_p87-128.pdf",
+          "pages": 42,
+          "exists": true,
+          "matches": true,
+          "sha256": "c72a8a6dfcbd33d6b15e5822035eb7ab2c68defd2500ecd0981a28cf484abf04",
+          "bytes": 7012810
+        }
+      ]
+    },
+    {
+      "id": "vol1__22_GA_Valdosta_FireStation8_100CD",
+      "volume": "vol1",
+      "title": "Fire Station #8 Site Improvements and Building Renovation - 100% CD Drawing Set",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/22_GA_Valdosta_FireStation8_100CD/22_GA_Valdosta_FireStation8_100CD__part01_p1-42.pdf",
+          "pages": 42,
+          "exists": true,
+          "matches": true,
+          "sha256": "6e22db79a59d73ae2f2304726631f8f1aee03ec4ba8716820f04fa16c001a400",
+          "bytes": 16986961
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/22_GA_Valdosta_FireStation8_100CD/22_GA_Valdosta_FireStation8_100CD__part02_p43-84.pdf",
+          "pages": 42,
+          "exists": true,
+          "matches": true,
+          "sha256": "aeeb83bbecdcace128b4d50e7dde0af0bc475dfe0c173452fb054310bccfd649",
+          "bytes": 9121867
+        }
+      ]
+    },
+    {
+      "id": "vol1__23_GA_MaconBibb_RecreationCenter",
+      "volume": "vol1",
+      "title": "North Macon Park Recreation Center Renovation & Addition",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/23_GA_MaconBibb_RecreationCenter/23_GA_MaconBibb_RecreationCenter__part01_p1-15.pdf",
+          "pages": 15,
+          "exists": true,
+          "matches": true,
+          "sha256": "16234dbc0e93ddbd36b1759e1eda3cec74dc6ca1e0d4783400027a026d0f475e",
+          "bytes": 15277075
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/23_GA_MaconBibb_RecreationCenter/23_GA_MaconBibb_RecreationCenter__part02_p16-30.pdf",
+          "pages": 15,
+          "exists": true,
+          "matches": true,
+          "sha256": "65ffdef475375a282df9bfdba96bf6269c6ade9756ba593c52f00d1a7d6fbbb8",
+          "bytes": 13573653
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/23_GA_MaconBibb_RecreationCenter/23_GA_MaconBibb_RecreationCenter__part03_p31-44.pdf",
+          "pages": 14,
+          "exists": true,
+          "matches": true,
+          "sha256": "c0be7a68d6ceedae9ecedc7b853210a1f66aad8bc40becc6bc001172eb738213",
+          "bytes": 10401413
+        }
+      ]
+    },
+    {
+      "id": "vol1__24_IA_JohnsonCounty_Courthouse",
+      "volume": "vol1",
+      "title": "Johnson County Courthouse 2nd Level Courtroom Renovation - Bid Drawings",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/24_IA_JohnsonCounty_Courthouse.pdf",
+          "pages": 31,
+          "exists": true,
+          "matches": true,
+          "sha256": "16606f9882826e9c41f6931f9bf0543150500adc22b09220cade432ecf632a20",
+          "bytes": 5310578
+        }
+      ]
+    },
+    {
+      "id": "vol1__25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+      "volume": "vol1",
+      "title": "Douglas County Courthouse HVAC Replacement - Bid Drawings (2241)",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "28d43301ecc6960a8b2eb7736196c7820bd7598b754f70ef791ac68f6f94796a",
+          "bytes": 5153876
+        }
+      ]
+    },
+    {
+      "id": "vol1__26_CA_TransbayTower_Mechanical_64Sheets",
+      "volume": "vol1",
+      "title": "Transbay Tower (Salesforce Tower) - Mechanical Drawings, 2018 ASC Integrated Project problem",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/26_CA_TransbayTower_Mechanical_64Sheets/26_CA_TransbayTower_Mechanical_64Sheets__part01_p1-22.pdf",
+          "pages": 22,
+          "exists": true,
+          "matches": true,
+          "sha256": "773950fa81800851c74f857fc673a51240fb845e1f00c850495fe9086ddaa715",
+          "bytes": 19865969
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/26_CA_TransbayTower_Mechanical_64Sheets/26_CA_TransbayTower_Mechanical_64Sheets__part02_p23-44.pdf",
+          "pages": 22,
+          "exists": true,
+          "matches": true,
+          "sha256": "03930d5b1d3d528539c3c6547ffd7178f98f1b54b84b47b185532473e947fb2d",
+          "bytes": 16490224
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/26_CA_TransbayTower_Mechanical_64Sheets/26_CA_TransbayTower_Mechanical_64Sheets__part03_p45-64.pdf",
+          "pages": 20,
+          "exists": true,
+          "matches": true,
+          "sha256": "8829ded529ef17c7c00b17701f1dd9b5f02a457b21d3b47c37faa3f9bf888b75",
+          "bytes": 7196691
+        }
+      ]
+    },
+    {
+      "id": "vol1__27_WA_ColvilleTribes_Hatchery_Lab",
+      "volume": "vol1",
+      "title": "CCT White Sturgeon Fish Hatchery",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf",
+          "pages": 38,
+          "exists": true,
+          "matches": true,
+          "sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+          "bytes": 8162599
+        }
+      ]
+    },
+    {
+      "id": "vol1__28_WA_KCHA_PublicHousing_HVAC",
+      "volume": "vol1",
+      "title": "Brittany Park HVAC Upgrades",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/28_WA_KCHA_PublicHousing_HVAC/28_WA_KCHA_PublicHousing_HVAC__part01_p1-5.pdf",
+          "pages": 5,
+          "exists": true,
+          "matches": true,
+          "sha256": "f87fd10dae7cd627ddb37fb433803adde24130ca5ce0730cf87bfe99d7d5fd82",
+          "bytes": 8302557
+        },
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/28_WA_KCHA_PublicHousing_HVAC/28_WA_KCHA_PublicHousing_HVAC__part02_p6-9.pdf",
+          "pages": 4,
+          "exists": true,
+          "matches": true,
+          "sha256": "deb92acc8556e669ff923afb522b1fdb45c39ac28252d7f3cea288e2c3bb6bd7",
+          "bytes": 12439298
+        }
+      ]
+    },
+    {
+      "id": "vol1__29_TX_JPS_Hospital_CentralPlant_Chiller",
+      "volume": "vol1",
+      "title": "JPS Main Central Plant Chiller Addition",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/29_TX_JPS_Hospital_CentralPlant_Chiller.pdf",
+          "pages": 13,
+          "exists": true,
+          "matches": true,
+          "sha256": "740d599a0d2296efade9e14522160039bccaa57cdbf85b6289ada5e9db8c010a",
+          "bytes": 11607399
+        }
+      ]
+    },
+    {
+      "id": "vol1__30_WA_SpokaneTransit_CoolingTower",
+      "volume": "vol1",
+      "title": "STA Cooling Tower Replacement - Mechanical Bid Set",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/30_WA_SpokaneTransit_CoolingTower.pdf",
+          "pages": 14,
+          "exists": true,
+          "matches": true,
+          "sha256": "db27b8706f070dc2f652d9356c510f5f0ea8053f89d423c77df9da31d8fecf11",
+          "bytes": 1977264
+        }
+      ]
+    },
+    {
+      "id": "vol1__D_25_CO_weld-mech-permit-set",
+      "volume": "vol1",
+      "title": "D_25_CO_weld-mech-permit-set",
+      "bas_screening_terms": "",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol1/HVAC_BAS_Plan_Sets/D_25_CO_weld-mech-permit-set.pdf",
+          "pages": 8,
+          "exists": true,
+          "matches": true,
+          "sha256": "149fd19cd8454f4b8e67f822075670d317a58b86faeed4f03634b64bb00df2db",
+          "bytes": 980299
+        }
+      ]
+    },
+    {
+      "id": "vol2__001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+      "volume": "vol2",
+      "title": "FY20 P-228 ATC Tower and Air Operations - Mechanical (Issued for Construction, 11/19/2019)",
+      "bas_screening_terms": "ATC, BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINT LIST, POINTS LIST, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf",
+          "pages": 75,
+          "exists": true,
+          "matches": true,
+          "sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+          "bytes": 14641192
+        }
+      ]
+    },
+    {
+      "id": "vol2__004_MO_T2504_03_Interior_and_Exterior_Renovation",
+      "volume": "vol2",
+      "title": "T2504-03 Interior and Exterior Renovation, Jefferson Barracks Readiness Center",
+      "bas_screening_terms": "BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, ENERGY MANAGEMENT, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf",
+          "pages": 51,
+          "exists": true,
+          "matches": true,
+          "sha256": "e3d0cc1bc22fd82445079c068872f2877a6c2c9bd37cca59b0b727b1adb8816f",
+          "bytes": 16968676
+        }
+      ]
+    },
+    {
+      "id": "vol2__006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
+      "volume": "vol2",
+      "title": "U2607-01 Interior Renovations, C Wing Updates, St. Louis Veterans Home",
+      "bas_screening_terms": "BMS, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/006_US_U2607_01_Interior_Renovations_C_Wing_Updates.pdf",
+          "pages": 37,
+          "exists": true,
+          "matches": true,
+          "sha256": "44111d93bd6359360bccd6c1a9015c4cb341057cfa7fa441f890b197d87c758a",
+          "bytes": 9289999
+        }
+      ]
+    },
+    {
+      "id": "vol2__008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+      "volume": "vol2",
+      "title": "T2331-01 Repair to Interior/Exterior, Unheated Storage Building, Bellefontaine Readiness Center",
+      "bas_screening_terms": "AUTOMATIC TEMPERATURE, BMS, CONTROL DIAGRAM, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf",
+          "pages": 32,
+          "exists": true,
+          "matches": true,
+          "sha256": "2b7024ad75f57ddf04c0a5dd68ea80662f8fafc86390a6ad3c61ec6052c88357",
+          "bytes": 12585809
+        }
+      ]
+    },
+    {
+      "id": "vol2__009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+      "volume": "vol2",
+      "title": "USDA APHIS Plant Inspection Station Building 63 Envelope and HVAC Renovation - Final Drawings",
+      "bas_screening_terms": "AUTOMATIC TEMPERATURE, BACNET, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT, FRONT END, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "new_workflow_holdout",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+          "pages": 31,
+          "exists": true,
+          "matches": true,
+          "sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+          "bytes": 18927687
+        }
+      ]
+    },
+    {
+      "id": "vol2__010_US_WWYK240146_Design_Implement_Monitoring_Control",
+      "volume": "vol2",
+      "title": "WWYK240146 - Design & Implement Monitoring & Control System for IWCS, Bldg. 62516",
+      "bas_screening_terms": "BACNET, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/010_US_WWYK240146_Design_Implement_Monitoring_Control.pdf",
+          "pages": 31,
+          "exists": true,
+          "matches": true,
+          "sha256": "ffbae6e626baa25c4c2a1ab033ab596e647a5d3903853ecc07b4f8db297f854a",
+          "bytes": 18864313
+        }
+      ]
+    },
+    {
+      "id": "vol2__011_IL_VA_Hines_Finance_Center_Renovation",
+      "volume": "vol2",
+      "title": "VA Hines Finance Center Renovation - construction drawings",
+      "bas_screening_terms": "BACNET, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINT LIST, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/011_IL_VA_Hines_Finance_Center_Renovation.pdf",
+          "pages": 29,
+          "exists": true,
+          "matches": true,
+          "sha256": "68c28727f909317f22b4accb0927f0559c5308376c772421838bb2290cf1f8e8",
+          "bytes": 12756817
+        }
+      ]
+    },
+    {
+      "id": "vol2__012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+      "volume": "vol2",
+      "title": "M2430-01 Chiller Upgrade - Center for Behavioral Medicine",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, DDC, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral__part01_p1-15.pdf",
+          "pages": 15,
+          "exists": true,
+          "matches": true,
+          "sha256": "ec2659b8b3f913b11b4c2fec085496ac6e73a5326e26e2ca8350034bd1a9e10e",
+          "bytes": 9790536
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral__part02_p16-29.pdf",
+          "pages": 14,
+          "exists": true,
+          "matches": true,
+          "sha256": "c7c4e2d344c950bbd21a2faccc1cbb1ff5fe4efbe042423578e30e31f9727000",
+          "bytes": 12094789
+        }
+      ]
+    },
+    {
+      "id": "vol2__013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29",
+      "volume": "vol2",
+      "title": "T2523-01 Replace Boilers Phase 2, Building 29, Missouri National Guard AVCRAD",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, DDC, DIRECT DIGITAL, EMCS, ENERGY MANAGEMENT, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf",
+          "pages": 28,
+          "exists": true,
+          "matches": true,
+          "sha256": "c919f1e49505d0c381f92ce14850c6999d8dd4f07955133a33b74e2b97151902",
+          "bytes": 17223502
+        }
+      ]
+    },
+    {
+      "id": "vol2__014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+      "volume": "vol2",
+      "title": "USDA Forest Service Missoula Fire Sciences Laboratory Mechanical Upgrade - Mechanical drawings M0.1-M9.7",
+      "bas_screening_terms": "BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf",
+          "pages": 28,
+          "exists": true,
+          "matches": true,
+          "sha256": "f208e34965aba62b3752f39b2691e2a418ac823bd99dbaadfb2e7b06391fc7ff",
+          "bytes": 4475010
+        }
+      ]
+    },
+    {
+      "id": "vol2__015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+      "volume": "vol2",
+      "title": "P-095 Replace Submarine Pier 3 - Utility Services Building, Mechanical (2021)",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+          "bytes": 5293915
+        }
+      ]
+    },
+    {
+      "id": "vol2__016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+      "volume": "vol2",
+      "title": "Alter/Repair Building 1624, Irish Hill Test Site (Drawings Part 2)",
+      "bas_screening_terms": "BACNET, BMS, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "23ded18dc611a4da3371d657193a481fcba215bc8aaa872934be94ded3b33117",
+          "bytes": 15956743
+        }
+      ]
+    },
+    {
+      "id": "vol2__017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+      "volume": "vol2",
+      "title": "NIST Gaithersburg Building 101 HVAC Cooling Tower Renovation - Attachment 2 Drawings",
+      "bas_screening_terms": "AUTOMATIC TEMPERATURE, BMS, BUILDING AUTOMATION, DDC, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+          "pages": 25,
+          "exists": true,
+          "matches": true,
+          "sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+          "bytes": 14780344
+        }
+      ]
+    },
+    {
+      "id": "vol2__018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+      "volume": "vol2",
+      "title": "USDA-ARS U.S. National Poultry Research Center, Building 1 Room P111 Renovation - Attachment 5 Drawings",
+      "bas_screening_terms": "BACNET, BMS, DDC, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf",
+          "pages": 25,
+          "exists": true,
+          "matches": true,
+          "sha256": "a0271a5e3afa993cd58f4c263431a253a604092b43563c14b4c316cdda6c653f",
+          "bytes": 9656137
+        }
+      ]
+    },
+    {
+      "id": "vol2__019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+      "volume": "vol2",
+      "title": "Eglin AFB Building XX - Contract Documents (01/04/2019), Mechanical drawings",
+      "bas_screening_terms": "BACNET, BMS, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, LONWORKS, MODBUS, POINT LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "new_workflow_holdout",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf",
+          "pages": 24,
+          "exists": true,
+          "matches": true,
+          "sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+          "bytes": 7572233
+        }
+      ]
+    },
+    {
+      "id": "vol2__020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C",
+      "volume": "vol2",
+      "title": "R2415-01 HVAC System Upgrades - MSHP Troop C Headquarters",
+      "bas_screening_terms": "ATC, AUTOMATIC TEMPERATURE, BMS, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf",
+          "pages": 22,
+          "exists": true,
+          "matches": true,
+          "sha256": "0a11467a5730ccb11d375a4a62ca0900f4aab8dda7b0ce5948a62743b3e82bb0",
+          "bytes": 14822400
+        }
+      ]
+    },
+    {
+      "id": "vol2__021_XX_Laboratory_building_mechanical_drawings_lab",
+      "volume": "vol2",
+      "title": "Laboratory building mechanical drawings (2019) - lab AHUs, fume-hood/high-plume exhaust, BAS sequences and control diagrams; solicitation attachment '6-Lab-Mechanical'",
+      "bas_screening_terms": "ATC, BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, POINT LIST, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/021_XX_Laboratory_building_mechanical_drawings_lab.pdf",
+          "pages": 19,
+          "exists": true,
+          "matches": true,
+          "sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+          "bytes": 6244263
+        }
+      ]
+    },
+    {
+      "id": "vol2__023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+      "volume": "vol2",
+      "title": "Chiller Replacement at U.S. Salinity Laboratory (USDA-ARS)",
+      "bas_screening_terms": "BACNET, CONTROL SCHEMATIC",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "2bd7ebf3c6569e9c3071cac8f272705039428028f6efb49a5fb6ef6836d15f1e",
+          "bytes": 2514838
+        }
+      ]
+    },
+    {
+      "id": "vol2__024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+      "volume": "vol2",
+      "title": "E2508-01 Replace Steam Heating Units, Missouri School for the Deaf",
+      "bas_screening_terms": "BACNET, CONTROL DIAGRAM, DDC, DIRECT DIGITAL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf",
+          "pages": 15,
+          "exists": true,
+          "matches": true,
+          "sha256": "3d190df7097eec4210c28e5074411162092cb23af4b66ed7bcdb52e0f4fb4d62",
+          "bytes": 1589523
+        }
+      ]
+    },
+    {
+      "id": "vol2__028_TX_Renovation_of_Building_615_Final_Design_Plans",
+      "volume": "vol2",
+      "title": "Renovation of Building 615 - Final Design Plans (Aug 2019), mechanical sheets M-501..M-506 of a 191-sheet set; contract W9126G19B3286",
+      "bas_screening_terms": "BACNET, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, POINT LIST, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+          "pages": 9,
+          "exists": true,
+          "matches": true,
+          "sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+          "bytes": 924578
+        }
+      ]
+    },
+    {
+      "id": "vol2__029_ME_BGS_Project_3548_MEANG_Building_493_Boiler",
+      "volume": "vol2",
+      "title": "BGS Project 3548 MEANG Building 493 Boiler Replacement",
+      "bas_screening_terms": "BMS, CONTROL SEQUENCE, DDC",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/029_ME_BGS_Project_3548_MEANG_Building_493_Boiler.pdf",
+          "pages": 7,
+          "exists": true,
+          "matches": true,
+          "sha256": "d96e28a4975edd7b6851bddf9d8257e6b0ec0aa1a4971a14af7d3bb24f3f9c18",
+          "bytes": 7137215
+        }
+      ]
+    },
+    {
+      "id": "vol2__030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+      "volume": "vol2",
+      "title": "VA EHRM Infrastructure Upgrades Construction - Syracuse (Attachment 6, Mechanical drawings, 93 sheets)",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, EMCS, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction__part01_p1-47.pdf",
+          "pages": 47,
+          "exists": true,
+          "matches": true,
+          "sha256": "e40c5290069ebb9c4d90e0c506116f8a61911ab802145be61e12b036e70a6fb5",
+          "bytes": 10358290
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction__part02_p48-93.pdf",
+          "pages": 46,
+          "exists": true,
+          "matches": true,
+          "sha256": "9797eb9da622a9d42c19554e9d4767e5943d4582fe587da09bc76c66c5bb90de",
+          "bytes": 10650371
+        }
+      ]
+    },
+    {
+      "id": "vol2__031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+      "volume": "vol2",
+      "title": "VA Project 589A4-20-158 — Renovate Warehouse for Pandemic Preparedness (bid set, Vol 1, 90 sheets)",
+      "bas_screening_terms": "AUTOMATIC TEMPERATURE, BACNET, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf",
+          "pages": 90,
+          "exists": true,
+          "matches": true,
+          "sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+          "bytes": 18536999
+        }
+      ]
+    },
+    {
+      "id": "vol2__032_PA_Construct_EHRM_Infrastructure_Upgrades",
+      "volume": "vol2",
+      "title": "Construct EHRM Infrastructure Upgrades - Corporal Michael J. Crescenz VA Medical Center (Drawings 8 of 11 - Mechanical)",
+      "bas_screening_terms": "BACNET, BMS, CONTROL SEQUENCE, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/032_PA_Construct_EHRM_Infrastructure_Upgrades/032_PA_Construct_EHRM_Infrastructure_Upgrades__part01_p1-43.pdf",
+          "pages": 43,
+          "exists": true,
+          "matches": true,
+          "sha256": "ba134365051113383b12dd61b27a034ecaffff59ebb99a39becac168cf7dca36",
+          "bytes": 15019560
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/032_PA_Construct_EHRM_Infrastructure_Upgrades/032_PA_Construct_EHRM_Infrastructure_Upgrades__part02_p44-85.pdf",
+          "pages": 42,
+          "exists": true,
+          "matches": true,
+          "sha256": "f97a64825474e7bc0e5664bd52168d8ac4301b7a71c2fccf57ace37e504b6872",
+          "bytes": 5929450
+        }
+      ]
+    },
+    {
+      "id": "vol2__033_MN_VA_Project_656_18_301_Construct_Replace",
+      "volume": "vol2",
+      "title": "VA Project 656-18-301 - Construct/Replace Building 51 MEP Systems (Issue for Bid, 80 sheets)",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, EMCS, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/033_MN_VA_Project_656_18_301_Construct_Replace/033_MN_VA_Project_656_18_301_Construct_Replace__part01_p1-27.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "e091798697bc0b58444f0ca777d2aa2833d83635fee3c694e1642b53141e9041",
+          "bytes": 13153193
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/033_MN_VA_Project_656_18_301_Construct_Replace/033_MN_VA_Project_656_18_301_Construct_Replace__part02_p28-54.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "517849b6fc50d0939aa6023be653ed92389dccb254256f59828a3af72d3090eb",
+          "bytes": 12390134
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/033_MN_VA_Project_656_18_301_Construct_Replace/033_MN_VA_Project_656_18_301_Construct_Replace__part03_p55-80.pdf",
+          "pages": 26,
+          "exists": true,
+          "matches": true,
+          "sha256": "c80d46c0adf38771a90e5f58ad1ec7790aaed14e7bad371f08ce27dbdcfbac2a",
+          "bytes": 9014726
+        }
+      ]
+    },
+    {
+      "id": "vol2__034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+      "volume": "vol2",
+      "title": "VA Project 637-22-700 - EHRM Infrastructure Upgrades (Drawings Volume III)",
+      "bas_screening_terms": "BMS, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/034_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf",
+          "pages": 70,
+          "exists": true,
+          "matches": true,
+          "sha256": "e5ef0c5cdc460ef1db960ff713d68c545968d355d59abdca63a730ec20fb3b58",
+          "bytes": 12811307
+        }
+      ]
+    },
+    {
+      "id": "vol2__035_AR_564_19_101_Construct_New_Water_Storage",
+      "volume": "vol2",
+      "title": "564-19-101 Construct New Water Storage Facility - Veterans Health Care System of the Ozarks",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, CONTROL SEQUENCE, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/035_AR_564_19_101_Construct_New_Water_Storage/035_AR_564_19_101_Construct_New_Water_Storage__part01_p1-34.pdf",
+          "pages": 34,
+          "exists": true,
+          "matches": true,
+          "sha256": "a39d3c7bdc9a5c718f848e3e541b0c6a9b967731b6d82c7c082c8268864467bf",
+          "bytes": 18319158
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/035_AR_564_19_101_Construct_New_Water_Storage/035_AR_564_19_101_Construct_New_Water_Storage__part02_p35-67.pdf",
+          "pages": 33,
+          "exists": true,
+          "matches": true,
+          "sha256": "bb330e65a0d9a996094d012ccb1533b88f4a9446dd7940f8ba039178d7ad2ed5",
+          "bytes": 15479876
+        }
+      ]
+    },
+    {
+      "id": "vol2__036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+      "volume": "vol2",
+      "title": "VA Project 502-21-222 - EHRM Infrastructure Upgrades (Volume 3 drawings, 63 sheets)",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL, EMCS, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf",
+          "pages": 63,
+          "exists": true,
+          "matches": true,
+          "sha256": "b612bae17f9106f7ae5ed34edcc94d1dbd98dc7eff0586a789d04e7923b4e4f7",
+          "bytes": 13054349
+        }
+      ]
+    },
+    {
+      "id": "vol2__037_AR_VA_Project_598_19_118_Replace_21_Air_Handling",
+      "volume": "vol2",
+      "title": "VA Project 598-19-118 — Replace 21 Air Handling Units and Chiller for AHU-18 (revised design drawings)",
+      "bas_screening_terms": "CONTROL DIAGRAM, DDC, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/037_AR_VA_Project_598_19_118_Replace_21_Air_Handling/037_AR_VA_Project_598_19_118_Replace_21_Air_Handling__part01_p1-30.pdf",
+          "pages": 30,
+          "exists": true,
+          "matches": true,
+          "sha256": "440f30267ab6d544316d4e3165a0ef8ff4d125f6749480ef0c4521a1bee66c71",
+          "bytes": 15845317
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/037_AR_VA_Project_598_19_118_Replace_21_Air_Handling/037_AR_VA_Project_598_19_118_Replace_21_Air_Handling__part02_p31-60.pdf",
+          "pages": 30,
+          "exists": true,
+          "matches": true,
+          "sha256": "be8cf2c6aae655cb23f2a941c1ce40bf4e2cea2184dc945586a3c2c9f2bebc8a",
+          "bytes": 7322285
+        }
+      ]
+    },
+    {
+      "id": "vol2__038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+      "volume": "vol2",
+      "title": "VA Project 637-22-700 - EHRM Infrastructure Upgrades (Drawings Volume IV - mechanical/controls)",
+      "bas_screening_terms": "BMS, DDC, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/038_NC_VA_Project_637_22_700_EHRM_Infrastructure/038_NC_VA_Project_637_22_700_EHRM_Infrastructure__part01_p1-27.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "74cc505c923f3723b34cafd5ab01975326eb320939fbcf8d1f2eb60b7ef9c2b1",
+          "bytes": 3701736
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/038_NC_VA_Project_637_22_700_EHRM_Infrastructure/038_NC_VA_Project_637_22_700_EHRM_Infrastructure__part02_p28-54.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "a7a27b33cac0c533b813e8b11ca5d1ac2770b51841159f0fc73afdda84132cbe",
+          "bytes": 3094086
+        }
+      ]
+    },
+    {
+      "id": "vol2__039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
+      "volume": "vol2",
+      "title": "VA Project 580-22-201 - Replace and Upgrade Building Automation System (solicitation 36C25625R0043)",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT, FRONT END, MODBUS, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/039_TX_VA_Project_580_22_201_Replace_and_Upgrade.pdf",
+          "pages": 48,
+          "exists": true,
+          "matches": true,
+          "sha256": "27002597f1d70ab48ffeedc0f1be3a189440a6352de0bc2f9ddfc6137d7a4042",
+          "bytes": 18444592
+        }
+      ]
+    },
+    {
+      "id": "vol2__040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+      "volume": "vol2",
+      "title": "VA Solicitation 36C77623B0051 — Expand Sterile Processing Service (SPS), drawings 6 of 8",
+      "bas_screening_terms": "ATC, AUTOMATIC TEMPERATURE, BACNET, CONTROL DIAGRAM, DDC, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
+          "pages": 48,
+          "exists": true,
+          "matches": true,
+          "sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+          "bytes": 18654334
+        }
+      ]
+    },
+    {
+      "id": "vol2__041_IL_VA_Project_537_17_115_Sterile_Processing",
+      "volume": "vol2",
+      "title": "VA Project 537-17-115 — Sterile Processing Service (SPS) Construction, Phase 3 bid drawings",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, EMCS, ENERGY MANAGEMENT, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/041_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+          "pages": 37,
+          "exists": true,
+          "matches": true,
+          "sha256": "3066db1e7cd6fa2e09f17f4a5d08be82209b1e010a986eb8b4697d66bf5d8dfe",
+          "bytes": 16160295
+        }
+      ]
+    },
+    {
+      "id": "vol2__042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+      "volume": "vol2",
+      "title": "Renovate VCS Patriot Cafe, VA project 546-17-109 - 100% Construction Documents (March 2018), solicitation 36C24818R0412",
+      "bas_screening_terms": "CONTROL DIAGRAM, DDC, DIRECT DIGITAL, FRONT END, POINTS LIST, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf",
+          "pages": 34,
+          "exists": true,
+          "matches": true,
+          "sha256": "1b77edfd1675275cfe98f31933569c37d6f8c21b772c635a519c189409e1704d",
+          "bytes": 4806895
+        }
+      ]
+    },
+    {
+      "id": "vol2__043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+      "volume": "vol2",
+      "title": "VA Project 673-21-151 — Replace Air Handling Units, Building 1",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, DIRECT DIGITAL, FRONT END, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/043_FL_VA_Project_673_21_151_Replace_Air_Handling/043_FL_VA_Project_673_21_151_Replace_Air_Handling__part01_p1-17.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "adac3d77055e5bd94093868f788c6348d90a50b4d51855e305a09df0bbddf2d5",
+          "bytes": 16345850
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/043_FL_VA_Project_673_21_151_Replace_Air_Handling/043_FL_VA_Project_673_21_151_Replace_Air_Handling__part02_p18-33.pdf",
+          "pages": 16,
+          "exists": true,
+          "matches": true,
+          "sha256": "5779aed0e3c09d3fbff3591315d7745bcdd04c5b97fbcde93b5860f3dbef1db9",
+          "bytes": 9554059
+        }
+      ]
+    },
+    {
+      "id": "vol2__044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+      "volume": "vol2",
+      "title": "VA Project 528A8-17-805 - Replace Main Boilers (Mechanical, Part B - controls/flow diagrams)",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, MODBUS, POINTS LIST, SEQUENCE OF OPERATION",
+      "split": "new_workflow_holdout",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+          "pages": 31,
+          "exists": true,
+          "matches": true,
+          "sha256": "d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384",
+          "bytes": 4279128
+        }
+      ]
+    },
+    {
+      "id": "vol2__045_FL_VA_Project_516_21_107_EHRM_Infrastructure",
+      "volume": "vol2",
+      "title": "VA Project 516-21-107 - EHRM Infrastructure Upgrades, Lee County VA Healthcare Center",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf",
+          "pages": 31,
+          "exists": true,
+          "matches": true,
+          "sha256": "3bbb9e2ebfd14726d9181f19b678150e90675cf21c04e69dc380433a500f927e",
+          "bytes": 15273594
+        }
+      ]
+    },
+    {
+      "id": "vol2__046_MI_Veterinary_Medical_Center_Replace_Elevators_3",
+      "volume": "vol2",
+      "title": "Veterinary Medical Center Replace Elevators 3 and 4 (CP25044) - Drawings",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/046_MI_Veterinary_Medical_Center_Replace_Elevators_3.pdf",
+          "pages": 29,
+          "exists": true,
+          "matches": true,
+          "sha256": "fda76ac1076a2f5a28e54b21bb88f8f90c5f3a24d44a3124e8b92842eb80f3ef",
+          "bytes": 17791527
+        }
+      ]
+    },
+    {
+      "id": "vol2__047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+      "volume": "vol2",
+      "title": "VA Project 558-22-172 — Replace Chillers in AHU 1 and AHU 2",
+      "bas_screening_terms": "BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf",
+          "pages": 28,
+          "exists": true,
+          "matches": true,
+          "sha256": "8ca2b79d82a7b595c5ad3a7bcfcb64e829b96e20b963c5f507738b6fb3156274",
+          "bytes": 17677999
+        }
+      ]
+    },
+    {
+      "id": "vol2__048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+      "volume": "vol2",
+      "title": "VA Project 528A8-17-805 - Replace Main Boilers (Mechanical, Part A)",
+      "bas_screening_terms": "BMS, DDC",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+          "pages": 28,
+          "exists": true,
+          "matches": true,
+          "sha256": "e73d14c804a67c60b5c1dadb69e8f26d7b6e026fa2634d778f217be6d5431cec",
+          "bytes": 19712173
+        }
+      ]
+    },
+    {
+      "id": "vol2__049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+      "volume": "vol2",
+      "title": "VA Solicitation 36C77623B0051 — Expand Sterile Processing Service (SPS), drawings 5 of 8",
+      "bas_screening_terms": "ATC, AUTOMATIC TEMPERATURE, BMS, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
+          "pages": 27,
+          "exists": true,
+          "matches": true,
+          "sha256": "1935a9b3b03a2f70f45a879c16442b0bebf67732a5dad68fa0f39c3eb93ca8f7",
+          "bytes": 9699349
+        }
+      ]
+    },
+    {
+      "id": "vol2__050_IL_VA_Project_537_17_115_Sterile_Processing",
+      "volume": "vol2",
+      "title": "VA Project 537-17-115 — Sterile Processing Service (SPS) Construction, Phase 4 bid drawings",
+      "bas_screening_terms": "BMS, BUILDING AUTOMATION, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, EMCS, ENERGY MANAGEMENT, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/050_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+          "pages": 25,
+          "exists": true,
+          "matches": true,
+          "sha256": "1d9a40e030bcb5d433fe152a7deedd97ca6d20d422b4032630132b0c8af2e98c",
+          "bytes": 8804907
+        }
+      ]
+    },
+    {
+      "id": "vol2__052_IL_VA_Project_537_17_115_Sterile_Processing",
+      "volume": "vol2",
+      "title": "VA Project 537-17-115 — Sterile Processing Service (SPS) Construction, Phase 2 bid drawings",
+      "bas_screening_terms": "BMS, BUILDING AUTOMATION, ENERGY MANAGEMENT",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/052_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "da25f3f0a1544cbc3f0f7d49bd0e418bd46867386ee4695ef86feafda262d2a0",
+          "bytes": 7800424
+        }
+      ]
+    },
+    {
+      "id": "vol2__053_VA_Renovate_Expand_Emergency_Room_System_VA",
+      "volume": "vol2",
+      "title": "Renovate/Expand Emergency Room System, VA project 580-17-101 - 100% Construction Documents, Mechanical (March 2019), solicitation 36C25619R0072",
+      "bas_screening_terms": "CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINT LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+          "bytes": 6366692
+        }
+      ]
+    },
+    {
+      "id": "vol2__054_NV_VA_Project_654_212_Design_Build_Central",
+      "volume": "vol2",
+      "title": "VA Project 654-212 - Design-Build Central Utilities Plant (Mechanical 30x42 drawings)",
+      "bas_screening_terms": "BACNET, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/054_NV_VA_Project_654_212_Design_Build_Central.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "c239d0ce532a94a008318711b0b165f42fe8e7bf8465cc3006f6e248dd784541",
+          "bytes": 3446211
+        }
+      ]
+    },
+    {
+      "id": "vol2__055_US_VA_Project_673_20_107_EHRM_Infrastructure",
+      "volume": "vol2",
+      "title": "VA Project 673-20-107 - EHRM Infrastructure Upgrades, Addendum 1 combined drawings",
+      "bas_screening_terms": "CONTROL DIAGRAM, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/055_US_VA_Project_673_20_107_EHRM_Infrastructure.pdf",
+          "pages": 11,
+          "exists": true,
+          "matches": true,
+          "sha256": "5d383c7abf5154a681fc30bb8d7220262a48477a14574458c56faefa1b0b8181",
+          "bytes": 19549515
+        }
+      ]
+    },
+    {
+      "id": "vol2__056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces",
+      "volume": "vol2",
+      "title": "VA Project 632-19-106 - Renovate Pharmacy Spaces (Mechanical/HVAC sheets 31-36 of 52)",
+      "bas_screening_terms": "AUTOMATIC TEMPERATURE, BMS, CONTROL DIAGRAM, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf",
+          "pages": 6,
+          "exists": true,
+          "matches": true,
+          "sha256": "019138eb6b8118f9560faceb495078d5a305ecbe4c8489b52249083ca0e99edb",
+          "bytes": 6892451
+        }
+      ]
+    },
+    {
+      "id": "vol2__057_US_VA_Project_626_15_106_Upgrade_Energy",
+      "volume": "vol2",
+      "title": "VA Project 626-15-106 — Upgrade Energy Management System (EMS/DDC) Infrastructure",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/057_US_VA_Project_626_15_106_Upgrade_Energy.pdf",
+          "pages": 6,
+          "exists": true,
+          "matches": true,
+          "sha256": "004acf19591ee60642861d5b3d885361af09cc8b53db3924763c576fe3a23558",
+          "bytes": 5679057
+        }
+      ]
+    },
+    {
+      "id": "vol2__058_CA_Lawrence_Berkeley_National_Laboratory_Building",
+      "volume": "vol2",
+      "title": "Lawrence Berkeley National Laboratory Building 59 NERSC Facility Upgrade II (NFU2) - full bid drawing set",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, MODBUS, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part01_p1-23.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "7b6bc2b22df520e81bd547946167ef0e99e630953808973987c5b311b75be193",
+          "bytes": 12609861
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part02_p24-46.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "fc76e3ae40522ad016201a76ca005bf4940683d2b564693a53b41f4ddc5b57b7",
+          "bytes": 17650148
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part03_p47-69.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "5c6db1ad95608494a6049bfc68ea6354498ecac9051e04c8746ff545559bbcd4",
+          "bytes": 11576219
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part04_p70-92.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "17ea0f9e260babe02e214ff8989a6bfeb23649a58e1e7f7756abbee9e1b0f603",
+          "bytes": 12758375
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part05_p93-115.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "9c91feefa8c394039550b2d2c2285b9aa705018a16618f7acf502bba8f0e9dad",
+          "bytes": 6649676
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part06_p116-138.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "bec3b293879fb28c1f158f1e381ce84dfb9baf3f3dbd2c764f7cc28b584ee2b6",
+          "bytes": 3897749
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part07_p139-161.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "515b989022509c71e6198d829bb7d60ebba956bf287c1ce396c798b2412e506c",
+          "bytes": 17834539
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part08_p162-184.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "e61ac3abb3fe7a154b6325370f1cbaeaf290c07802520dbabc2daf390d5f4d5b",
+          "bytes": 17546847
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part09_p185-207.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "2ef8d3a2ee3e53cb93e09cdcac4d43602f5a66c93e645bba12b42f3c2a2eb077",
+          "bytes": 12278046
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part10_p208-230.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "825b4943ff51bbd699c69742861376bb7553d0f3ab66639cceecc6299f724b40",
+          "bytes": 6733259
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part11_p231-253.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "c9e154873c0b42c741a659e8287f450e4361ba8b4cfae11b28ca4a59b2219bb9",
+          "bytes": 16186712
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part12_p254-276.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "0ef0d8bba3e4d32a6056c3038ce4440ba4b0dcca49df1e7d27a3c823267ef73e",
+          "bytes": 8604283
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part13_p277-299.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "b904dac6c91900e3f25ff7904eae767bb0ee22af6ed9909552a34c5ddc1038d4",
+          "bytes": 18472030
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building/058_CA_Lawrence_Berkeley_National_Laboratory_Building__part14_p300-311.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "a343615ba66a15e2a720ea77447abc840e4e573e44a5c45f1eb962251d97e996",
+          "bytes": 4064830
+        }
+      ]
+    },
+    {
+      "id": "vol2__060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+      "volume": "vol2",
+      "title": "ASC 2024 Open Mechanical Competition - LAMBDA Project, Combined Contract Drawing Set (chiller yard replacement + optics lab HVAC, multi-discipline)",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf",
+          "pages": 83,
+          "exists": true,
+          "matches": true,
+          "sha256": "44cf96ab39e43346bc18edb0916a5f5b6c8d0d00c0692c38ffd0c1f8066c7a1d",
+          "bytes": 14152690
+        }
+      ]
+    },
+    {
+      "id": "vol2__061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+      "volume": "vol2",
+      "title": "Ames Laboratory - Harley Wilhelm Hall Building HVAC Upgrade (RFP SC-24-622), Appendix B drawings",
+      "bas_screening_terms": "CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINT LIST, POINTS LIST, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf",
+          "pages": 71,
+          "exists": true,
+          "matches": true,
+          "sha256": "c55da475bac3a1aeaae723b12adf35896970fe249ca3556b4d430a990c0e41a0",
+          "bytes": 14116460
+        }
+      ]
+    },
+    {
+      "id": "vol2__062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+      "volume": "vol2",
+      "title": "ITD District 1 Laboratory Building - Mechanical Bid Set (05-14-24)",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
+          "pages": 29,
+          "exists": true,
+          "matches": true,
+          "sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+          "bytes": 3266369
+        }
+      ]
+    },
+    {
+      "id": "vol2__063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+      "volume": "vol2",
+      "title": "Harrison Hall Extruder Lab 132 Renovation",
+      "bas_screening_terms": "BMS, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf",
+          "pages": 21,
+          "exists": true,
+          "matches": true,
+          "sha256": "032b9a29077b42f83c4b11294fbc952328200d10357abbdb4aac79ca1662f92c",
+          "bytes": 12549178
+        }
+      ]
+    },
+    {
+      "id": "vol2__064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit",
+      "volume": "vol2",
+      "title": "Leon Johnson Hall Room 346 Renovation - Permit Set (Classroom Improvements 23-0828)",
+      "bas_screening_terms": "BMS, CONTROL SEQUENCE, ENERGY MANAGEMENT, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit.pdf",
+          "pages": 20,
+          "exists": true,
+          "matches": true,
+          "sha256": "5ecd4fd0b1b3d204ffe9c4bacb181d80e63d7a12a13f707caedc2c3ad433d893",
+          "bytes": 3806382
+        }
+      ]
+    },
+    {
+      "id": "vol2__066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+      "volume": "vol2",
+      "title": "Barnard Hall 111 Lithography Lab Renovation",
+      "bas_screening_terms": "BACNET, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "43a88684b5046ec073a4714de41e212dbd610cacad8d7ffb30d7c255f411ccd4",
+          "bytes": 3770543
+        }
+      ]
+    },
+    {
+      "id": "vol2__067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
+      "volume": "vol2",
+      "title": "SLAC LCLS-II-HE Process Cooling Water Skid Upgrade (reference drawing set)",
+      "bas_screening_terms": "BMS, CONTROL DIAGRAM, FRONT END, MODBUS, POINTS LIST, SEQUENCE OF OPERATION",
+      "split": "new_workflow_holdout",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+          "pages": 13,
+          "exists": true,
+          "matches": true,
+          "sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+          "bytes": 6172005
+        }
+      ]
+    },
+    {
+      "id": "vol2__068_US_Antelope_Valley_College_Applied_Arts_Math",
+      "volume": "vol2",
+      "title": "Antelope Valley College Applied Arts & Math/Engineering Renovations - bid drawings",
+      "bas_screening_terms": "BACNET, BMS, DDC",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/068_US_Antelope_Valley_College_Applied_Arts_Math.pdf",
+          "pages": 11,
+          "exists": true,
+          "matches": true,
+          "sha256": "9306b449930c89b4950109e5e528c7eba5652a5b332adfd09b7b3ab15b15f891",
+          "bytes": 3928937
+        }
+      ]
+    },
+    {
+      "id": "vol2__069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+      "volume": "vol2",
+      "title": "ITD District 2 Laboratory Heating Upgrades (FM22701 Re-Bid) - Plans",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf",
+          "pages": 9,
+          "exists": true,
+          "matches": true,
+          "sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+          "bytes": 4299889
+        }
+      ]
+    },
+    {
+      "id": "vol2__071_ME_BGS_Project_3809_Health_Science_Center",
+      "volume": "vol2",
+      "title": "BGS Project 3809 Health Science Center Renovations, Southern Maine Community College",
+      "bas_screening_terms": "AUTOMATIC TEMPERATURE, BMS, BUILDING AUTOMATION, DDC, DIRECT DIGITAL, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/071_ME_BGS_Project_3809_Health_Science_Center.pdf",
+          "pages": 59,
+          "exists": true,
+          "matches": true,
+          "sha256": "fd9c467277371faa673004d1d8dd10bb0916193fd5ed82d3e7777935d3265f39",
+          "bytes": 17653350
+        }
+      ]
+    },
+    {
+      "id": "vol2__072_CA_CA07_2627_West_Valley_College_Science_Math",
+      "volume": "vol2",
+      "title": "CA07-2627 West Valley College Science & Math STEM Classroom HVAC Upgrades - DSA drawing set",
+      "bas_screening_terms": "BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, EMCS, ENERGY MANAGEMENT",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/072_CA_CA07_2627_West_Valley_College_Science_Math.pdf",
+          "pages": 38,
+          "exists": true,
+          "matches": true,
+          "sha256": "a428b03f5c71bcec7447246783a964d86543a822b3b66a9b4f552bbcb1fa25b5",
+          "bytes": 10746440
+        }
+      ]
+    },
+    {
+      "id": "vol2__073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
+      "volume": "vol2",
+      "title": "Roberts Hall Renovation - Permit Set (Classroom Improvements 23-0828)",
+      "bas_screening_terms": "BMS, CONTROL SEQUENCE, ENERGY MANAGEMENT, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf",
+          "pages": 37,
+          "exists": true,
+          "matches": true,
+          "sha256": "481d6683c257fd4f3176ff47c176eff7f92472e577f6de938258f129b062282f",
+          "bytes": 6914814
+        }
+      ]
+    },
+    {
+      "id": "vol2__074_CA_West_Valley_College_STEM_Classroom_HVAC",
+      "volume": "vol2",
+      "title": "West Valley College STEM Classroom HVAC Upgrades (CA23-2526) - Drawings",
+      "bas_screening_terms": "ATC, BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, EMCS, ENERGY MANAGEMENT",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf",
+          "pages": 35,
+          "exists": true,
+          "matches": true,
+          "sha256": "375360a3187b787f8a362185659f1160777372d072c0ffbc96a809305dd3bcf8",
+          "bytes": 10445448
+        }
+      ]
+    },
+    {
+      "id": "vol2__075_MT_Renne_Library_Innovation_Learning_Studio",
+      "volume": "vol2",
+      "title": "Renne Library Innovation Learning Studio",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, CONTROL SEQUENCE, DDC, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/075_MT_Renne_Library_Innovation_Learning_Studio.pdf",
+          "pages": 31,
+          "exists": true,
+          "matches": true,
+          "sha256": "ff22d2f934447791d989ef4f4aa08fd47eee8d418ff54071f92d46f1a6f787ca",
+          "bytes": 10785138
+        }
+      ]
+    },
+    {
+      "id": "vol2__077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+      "volume": "vol2",
+      "title": "Miller Dining Auxiliaries Offices HVAC Upgrades (Project 24-1099)",
+      "bas_screening_terms": "ATC, AUTOMATIC TEMPERATURE, BACNET, BMS, BUILDING AUTOMATION, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf",
+          "pages": 26,
+          "exists": true,
+          "matches": true,
+          "sha256": "8e93a097f28b00a3673909669f292a1a12b41eaaa6a9a4fac56653c32619e1ed",
+          "bytes": 7415467
+        }
+      ]
+    },
+    {
+      "id": "vol2__078_US_CP25028_MSU_Union_Sparty_Store_Renovations",
+      "volume": "vol2",
+      "title": "CP25028 MSU Union Sparty Store Renovations",
+      "bas_screening_terms": "BUILDING AUTOMATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf",
+          "pages": 25,
+          "exists": true,
+          "matches": true,
+          "sha256": "661b5308103229e25276e705fccc1f05df9887f80c492711eb57ed5de3c7a91f",
+          "bytes": 8515213
+        }
+      ]
+    },
+    {
+      "id": "vol2__080_CA_Contra_Costa_College_Science_Center_Conference",
+      "volume": "vol2",
+      "title": "Contra Costa College Science Center Conference Room 241 Conversion (C-4016) - Bid Set",
+      "bas_screening_terms": "BMS, BUILDING AUTOMATION, CONTROL SEQUENCE, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/080_CA_Contra_Costa_College_Science_Center_Conference.pdf",
+          "pages": 23,
+          "exists": true,
+          "matches": true,
+          "sha256": "000de4c9de1b602720a8c1cd3b9c551d1b4946f772c67da0b129c0f6f178cb7d",
+          "bytes": 13028853
+        }
+      ]
+    },
+    {
+      "id": "vol2__082_OR_Klamath_Community_College_Career_Learning",
+      "volume": "vol2",
+      "title": "Klamath Community College Career & Learning Center (CLC) - combined bid & permit mechanical drawings",
+      "bas_screening_terms": "BACNET, BMS, BUILDING AUTOMATION, CONTROL SEQUENCE, DDC, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/082_OR_Klamath_Community_College_Career_Learning.pdf",
+          "pages": 19,
+          "exists": true,
+          "matches": true,
+          "sha256": "76717d4832f3f781e7bff3c9243e86009b7d22629ca84b36db0e28c64c129d77",
+          "bytes": 10311430
+        }
+      ]
+    },
+    {
+      "id": "vol2__083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+      "volume": "vol2",
+      "title": "Town Offices / Facilities HVAC System Upgrades - Drawings",
+      "bas_screening_terms": "AUTOMATIC TEMPERATURE, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf",
+          "pages": 17,
+          "exists": true,
+          "matches": true,
+          "sha256": "773577742f331a03ca3859ab8e2fcde13764e9c09c1b37574e94242f12b3857c",
+          "bytes": 1609753
+        }
+      ]
+    },
+    {
+      "id": "vol2__084_SC_H59_N054_FW_Building_112_Chiller_Addition",
+      "volume": "vol2",
+      "title": "H59-N054-FW Building 112 Chiller Addition - project drawings (2021)",
+      "bas_screening_terms": "BACNET, BUILDING AUTOMATION, CONTROL SEQUENCE, MODBUS, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/084_SC_H59_N054_FW_Building_112_Chiller_Addition.pdf",
+          "pages": 13,
+          "exists": true,
+          "matches": true,
+          "sha256": "2201bd5804730aec2d9874950c6b3e4dbae4e73b4d2a43b17a2fadce155cdb20",
+          "bytes": 11137916
+        }
+      ]
+    },
+    {
+      "id": "vol2__086_CA_Contra_Costa_College_Early_Learning_Center",
+      "volume": "vol2",
+      "title": "Contra Costa College Early Learning Center HVAC Controls Conversion (C-1224) - Mechanical Drawings, Addendum 2",
+      "bas_screening_terms": "BACNET, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/086_CA_Contra_Costa_College_Early_Learning_Center.pdf",
+          "pages": 8,
+          "exists": true,
+          "matches": true,
+          "sha256": "39a2dc5a29ad39c3337481f8be9a369f18fb5e72af689d2523d65c8b67b449de",
+          "bytes": 9224022
+        }
+      ]
+    },
+    {
+      "id": "vol2__087_US_Contra_Costa_College_Chiller_Replacement",
+      "volume": "vol2",
+      "title": "Contra Costa College 2017 Chiller Replacement - mechanical drawing binder",
+      "bas_screening_terms": "BMS, DDC",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/087_US_Contra_Costa_College_Chiller_Replacement.pdf",
+          "pages": 7,
+          "exists": true,
+          "matches": true,
+          "sha256": "f47838bdff2ba4c329ccdb35731219eea37e8831a29b1d9121e692d6a7268c39",
+          "bytes": 8062910
+        }
+      ]
+    },
+    {
+      "id": "vol2__088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+      "volume": "vol2",
+      "title": "Phoenix Sky Harbor International Airport - PHX Sky Train Stage 2, Rental Car Center (RCC) Station, Package B04, Volume 6 - Mechanical / Electrical / Plumbing / Fire Protection / Communications, Issued for Construction (260 sheets)",
+      "bas_screening_terms": "ATC, AUTOMATIC TEMPERATURE, BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part01_p1-12.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "e2b7358b3b84bb6192537085e09f5680d143ac14d6d8701fd028e73b8d8f233f",
+          "bytes": 18768069
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part02_p13-24.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "054cbf1725a93cb31c283d231963da1aa3e73a241073e1c644c3a8dbf0ba4f53",
+          "bytes": 4358933
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part03_p25-36.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "bdf6fd1d407c342c2d42f2cfc0923effac6a7d0713ac0c41c1ad7dd5543c1e9a",
+          "bytes": 2663265
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part04_p37-48.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "2c67de17b1f7c596ef57af946b903b373ebb2fd1e77024c0eb1684cf20bc734c",
+          "bytes": 2938701
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part05_p49-60.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "2c0138c3cd7e311c2b05b8f6b55c437f585581315704748e011b202966d0be15",
+          "bytes": 1818708
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part06_p61-72.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "5484cfd79f79ae7823b40d132f4531fdd9fa3b606ff239a44ae2c23d930a1021",
+          "bytes": 1300335
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part07_p73-84.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "0676f2e2feb35c3966960e9f76e59ddb98d08d9a09826cb96ceaa17c9bde2f23",
+          "bytes": 4766405
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part08_p85-96.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "d2a669625f61124702a12473231f49d0fce505bdff15a9efb25160d252f65bb6",
+          "bytes": 3389422
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part09_p97-108.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "71b4a677bcbb169cc76c06199b2b03d0e931172f9f213c8638d73bbda19cc410",
+          "bytes": 2130050
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part10_p109-120.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "f97a1a1873f12dfe16d73b08f9cda9580cfe4f497be50372e81d40b9df97d610",
+          "bytes": 3241384
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part11_p121-132.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "4fed7512787ae8af4fc22397271e3c0c933bf6fd988153df3aeac18c3deaf920",
+          "bytes": 2821882
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part12_p133-144.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "9ca215b7e9393eb1fb777e0fe43ac4bf099fd9768d25ba822ba542093b580e60",
+          "bytes": 1904660
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part13_p145-156.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "309e567e8810150decccb56075b7bd4725ee750b4ef3a9aeffccefaee80b88d5",
+          "bytes": 4284760
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part14_p157-168.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "3bbee60751e699ccd9379f4e8d375cc4a820bef4a36652d849cab1bbcbc198c7",
+          "bytes": 4539073
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part15_p169-180.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "95c155587afe05e05a090f2e25e3e89455a05fb202604ba8556a2648be3caf51",
+          "bytes": 11329911
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part16_p181-192.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "792ab3db712f185ac0560d62319f46f26943dddc3742fd45a08e34c7894055a8",
+          "bytes": 1402158
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part17_p193-204.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "dd9d2eb5f00baf0a5c55ed8436689c6a72583f32c33c73979e6423f2d6701514",
+          "bytes": 1376172
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part18_p205-216.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "764eacd6aa805f6437469337e726239b9a52cdf41b528cbe1f4763a55cce9896",
+          "bytes": 3529170
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part19_p217-228.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "44d8fcaedc3e63931e21b860bc30bbb063b8dd3c6ee859cb1aed6f6302f4d1ba",
+          "bytes": 2032751
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part20_p229-240.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "c99eeaa386bc34aefbda832c417ba954a29b42b14718b38b29e7308f84155ee9",
+          "bytes": 4132543
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part21_p241-252.pdf",
+          "pages": 12,
+          "exists": true,
+          "matches": true,
+          "sha256": "ef6b0955d201d05c44412fef930f1fffe6ec3ca2fcdd1bcfced191bd2bc1bb35",
+          "bytes": 4239905
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX__part22_p253-260.pdf",
+          "pages": 8,
+          "exists": true,
+          "matches": true,
+          "sha256": "1bd6aec065ffee5aae37a8d82ff2b630300bfec457c34074b047d7063e86bf78",
+          "bytes": 2472717
+        }
+      ]
+    },
+    {
+      "id": "vol2__089_FL_Airport_Terminal_and_Hangar_Development",
+      "volume": "vol2",
+      "title": "Airport Terminal and Hangar Development - Release for Bid drawings (Nov 2021), AVCON project 2019.028.01",
+      "bas_screening_terms": "CONTROL SEQUENCE, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/089_FL_Airport_Terminal_and_Hangar_Development/089_FL_Airport_Terminal_and_Hangar_Development__part01_p1-45.pdf",
+          "pages": 45,
+          "exists": true,
+          "matches": true,
+          "sha256": "8e1a4033efc88860da3e49b7a5e6737fed7157cbafd7fe5f001756bbd120118b",
+          "bytes": 15830156
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/089_FL_Airport_Terminal_and_Hangar_Development/089_FL_Airport_Terminal_and_Hangar_Development__part02_p46-90.pdf",
+          "pages": 45,
+          "exists": true,
+          "matches": true,
+          "sha256": "cfb0dcccf449a21f5b44b55698aac79a5aa27ef5c9e368ea3ceb8cee7a322833",
+          "bytes": 13596873
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/089_FL_Airport_Terminal_and_Hangar_Development/089_FL_Airport_Terminal_and_Hangar_Development__part03_p91-135.pdf",
+          "pages": 45,
+          "exists": true,
+          "matches": true,
+          "sha256": "59a3bcd402392698c2d5874e5436bd45c066975363266fe0accd995d41a5aa57",
+          "bytes": 6126049
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/089_FL_Airport_Terminal_and_Hangar_Development/089_FL_Airport_Terminal_and_Hangar_Development__part04_p136-177.pdf",
+          "pages": 42,
+          "exists": true,
+          "matches": true,
+          "sha256": "4e5c5ca95d09418fcfffc85988404017c3d51f9a5cebe76ec8eb5b5c5b1db4e7",
+          "bytes": 5247828
+        }
+      ]
+    },
+    {
+      "id": "vol2__091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+      "volume": "vol2",
+      "title": "Guaranteed Rate Field HVAC/AHU Renovation Phase XI - Addendum 01 drawings (11/15/2021)",
+      "bas_screening_terms": "BUILDING AUTOMATION, DDC, POINTS LIST, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf",
+          "pages": 26,
+          "exists": true,
+          "matches": true,
+          "sha256": "e72ce12a0b1a7857733e14d86ab0d1238c7c7003a789d5c74ed1edfb98c9a147",
+          "bytes": 7821979
+        }
+      ]
+    },
+    {
+      "id": "vol2__092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+      "volume": "vol2",
+      "title": "Guaranteed Rate Field HVAC/AHU Renovation Phase IX - Issued for Bid drawings (10/07/2019)",
+      "bas_screening_terms": "AUTOMATIC TEMPERATURE, BUILDING AUTOMATION, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf",
+          "pages": 13,
+          "exists": true,
+          "matches": true,
+          "sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+          "bytes": 3402469
+        }
+      ]
+    },
+    {
+      "id": "vol2__093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+      "volume": "vol2",
+      "title": "BGS Project 3845 Jonesboro Heat Pump Upgrades (Dept. of Inland Fisheries & Wildlife)",
+      "bas_screening_terms": "ATC, AUTOMATIC TEMPERATURE, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades/093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades__part01_p1-4.pdf",
+          "pages": 4,
+          "exists": true,
+          "matches": true,
+          "sha256": "127a66b8bb59aba3945aa4d586f6cb069486a4312cb43446c397fb4fccf5a884",
+          "bytes": 19866949
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades/093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades__part02_p5-8.pdf",
+          "pages": 4,
+          "exists": true,
+          "matches": true,
+          "sha256": "2a7f7b569d4b232ccf38e223bb11b9170fe7240d9bcb5d9462ed3714d8269932",
+          "bytes": 893553
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades/093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades__part03_p9-11.pdf",
+          "pages": 3,
+          "exists": true,
+          "matches": true,
+          "sha256": "2c49511b4055ca94a4ed2eb48f563d2762ff23cbf44a4a982770460012f1c731",
+          "bytes": 935134
+        }
+      ]
+    },
+    {
+      "id": "vol2__094_FL_Orange_County_Regional_History_Center_HVAC",
+      "volume": "vol2",
+      "title": "Orange County Regional History Center HVAC/Mechanical - Contract Y15-770 Drawings",
+      "bas_screening_terms": "BMS, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION",
+      "split": "new_workflow_holdout",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/094_FL_Orange_County_Regional_History_Center_HVAC.pdf",
+          "pages": 9,
+          "exists": true,
+          "matches": true,
+          "sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+          "bytes": 1963054
+        }
+      ]
+    },
+    {
+      "id": "vol2__095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
+      "volume": "vol2",
+      "title": "JVWTP Washwater Reclaim Pump Station #2 HVAC Upgrades (Project No. 4387) - Drawings",
+      "bas_screening_terms": "ATC, BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, POINTS LIST, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.pdf",
+          "pages": 8,
+          "exists": true,
+          "matches": true,
+          "sha256": "17887e9efd271427725d9c334e1ee6119d7fbd2d0d865906b719ed695e7b3606",
+          "bytes": 3418465
+        }
+      ]
+    },
+    {
+      "id": "vol2__096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+      "volume": "vol2",
+      "title": "Vermillion County Jail - Mechanical Bid Set Construction Documents (Drawings)",
+      "bas_screening_terms": "BACNET, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, POINT LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+          "pages": 36,
+          "exists": true,
+          "matches": true,
+          "sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+          "bytes": 7788627
+        }
+      ]
+    },
+    {
+      "id": "vol2__097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project",
+      "volume": "vol2",
+      "title": "JVWTP Chemical Buildings HVAC Upgrades (Project No. 4348) - Construction Documents",
+      "bas_screening_terms": "ATC, CONTROL DIAGRAM, CONTROL SEQUENCE, SEQUENCE OF OPERATION",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf",
+          "pages": 25,
+          "exists": true,
+          "matches": true,
+          "sha256": "95f1c434a5dca5ea297a5981901483d0f57b6a7277abc6c87d5645f072dfe0e3",
+          "bytes": 5130967
+        }
+      ]
+    },
+    {
+      "id": "vol2__098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+      "volume": "vol2",
+      "title": "ITD D3 Bruneau Maintenance Shed HVAC Upgrade (FM32616) - Bid Drawings",
+      "bas_screening_terms": "CONTROL DIAGRAM, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade__part01_p1-7.pdf",
+          "pages": 7,
+          "exists": true,
+          "matches": true,
+          "sha256": "b38b5e50af800f018b9bfd87e9effe519bddd1eb8ab9415518adf307d1d82840",
+          "bytes": 6655587
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade__part02_p8-14.pdf",
+          "pages": 7,
+          "exists": true,
+          "matches": true,
+          "sha256": "fafa5c11baf7237ceee9b2500691973249b065a1d186d21ae14c345e93a4489a",
+          "bytes": 16389204
+        },
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade__part03_p15-20.pdf",
+          "pages": 6,
+          "exists": true,
+          "matches": true,
+          "sha256": "66ff327cd0d56c10d93cca12c2262894490eb33ad3eec334048197b9ea70909c",
+          "bytes": 5160865
+        }
+      ]
+    },
+    {
+      "id": "vol2__100_OH_Butler_Tech_RTU_Welding_Source_Capture",
+      "volume": "vol2",
+      "title": "Butler Tech RTU / Welding Source Capture Installation",
+      "bas_screening_terms": "AUTOMATIC TEMPERATURE, SEQUENCE OF OPERATION, TEMPERATURE CONTROL",
+      "split": "development",
+      "parts": [
+        {
+          "relative_path": "sources/vol2/HVAC_BAS_Plan_Sets_Vol2/100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf",
+          "pages": 7,
+          "exists": true,
+          "matches": true,
+          "sha256": "77385417df9fa67551ecc02da0c1eefa32507d9a3af6268060907ffb69628e50",
+          "bytes": 4671566
+        }
+      ]
+    }
+  ],
+  "mismatches": []
+}

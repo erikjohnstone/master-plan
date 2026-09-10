@@ -13,6 +13,191 @@ operating manual—how a takeoff is run, what withholds, what refuses—and
 
 ## Setup
 
+Development `bas_scope_review` exposes retained-data catalogs, scope previews,
+source-reference mapping candidates and append-only scope/coverage proposals.
+Choose a reviewed source set, use exact returned targets/basis, inspect original
+sources, then explicitly record applicability. A candidate is not a verdict;
+an agent proposal is not human approval. `replay` compares original and current
+dependencies. Bounded views/full operation exports are separate from normal
+project backups. See [scope commands](../mcp/README.md#scope-and-source-coverage).
+
+Development `bas_issue_review` exposes current findings and append-only corrective
+history through shared BAS services. Inspect exact findings/head/basis, record an
+observation, edit the underlying domain using its existing tools, then replay and
+record no-longer-reported status only when changed inputs justify it. All decisions
+are self-declared agent proposals, not waivers or approval. Bounded completed views
+and full operation exports are separate from durable project backup. See
+[issue commands](../mcp/README.md#issue-decisions).
+
+Development `bas_drawing_review` works directly against retained BAS history,
+including a restored session without active plans. Inspect captures/events in
+bounded pages, prepare explicit source accounting, then record against the exact
+returned head and dependency digest. Results are agent proposals, never approval
+for page accounting. The additive `revision` command invokes shared requirement
+and Python-backed quantity comparison, with explicit pinned inputs, paged reads,
+full JSON export and replayed proposal history. Export afterward to persist
+Session changes. See the
+[drawing command contract](../mcp/README.md#drawing-correspondence).
+
+Source-inclusive BAS recovery is a two-call `import_takeoff` operation:
+preview `restore_evidence_bundle: {action: "preview"}`, then commit the returned
+`preview_id` with `{action: "commit", preview_id, directory}`. The existing output
+parent receives a new operation-owned directory containing all originals, previous
+state and a re-importable merged backup. Shared merge/source rules and complete
+Python replay gate Session adoption. Read-only `verify_evidence_bundle` remains
+separate. See the [tool reference](../mcp/README.md) for limits and file guarantees.
+No old PDF becomes active counting input. Use `load_plan merge:true` to add active
+plans afterward; plain load replaces the Session. Recovery does not approve a
+takeoff, establish source coverage, or certify the design.
+
+For BAS engineering, install the [shared Python engine](../bas_engine/README.md).
+UI and MCP use the same `productionTakeoff` orchestration and Python process;
+there is no separate browser math implementation. `bas_math` is additive to the
+existing BAS compile response. Never treat its conservative conflict envelope
+as resolved drawing truth or its `calculated` status as project completeness.
+
+The additive `bas_point_lists` record retains listed observations with source
+versions/pages, original cells, sparse/uninterpreted columns and supported
+controller notes. It does not establish installed quantity or field wiring.
+Do not substitute alarm/trend flags for I/O, or an unobserved cell for a verified
+zero. Its unavailable state is separate from math-policy failure. Durable
+equipment assignment, review and approved snapshot integration remain in progress.
+
+`bas_workflow` adds durable point-evidence captures with content fingerprints and
+source manifests. `export_takeoff` carries the Session's captures; `import_takeoff`
+validates and merges them without changing the operator's current selection.
+Source PDFs are separate, and imported evidence is not an approved or freshly
+recomputed result. A capture failure is disclosed as `bas_workflow_error` without
+replacing source observations or engineering output.
+
+Revision `bas_evidence_2` retains original positioned SOO text as well. The
+optional `bas_review` input to BAS compile adds/removes explicit comparison
+links with a reason, operation ID and expected review head. This option mutates
+Session review history as `agent_proposal`; it never approves a takeoff.
+Recompiles return retained history, and export/import preserves it. Stale heads,
+invalid source references and divergent histories reject. Source text stays
+immutable; matching a listed point is not verified wiring or installed quantity.
+See [the workflow contract](bas-production/SEQUENCE_WORKFLOW_CONTRACT.md).
+
+Development revision `bas_equipment_3` retains original equipment tables as well.
+The additive `bas_equipment` index exposes occurrence/member IDs and the current
+register/head. `bas_equipment_review` explicitly records scoped equipment and
+matrix assignments, with reasons and per-equipment/system-once applicability.
+This writes proposal history; omit it for a read/compile. Stale heads, foreign
+members and duplicate applications reject before mutation. Full source tables
+and old decisions survive export/import. No installed quantity, equipment demand
+derivation or approval is implied. The Takeoff Equipment editor uses this same
+service. Explicit SOO links add source-backed `sequence_comparisons` to the index;
+equipment-capture failures return `bas_equipment_error` without erasing valid
+point/SOO evidence. See
+[equipment assignment inputs and limits](bas-production/EQUIPMENT_ASSIGNMENT_CONTRACT.md).
+
+Optional `bas_assignment_demand: {capture_id, expected_equipment_head}` on the
+same BAS compile invokes the shared Python assignment service. It retains a
+`bas_assignment_4` calculation with original observations, exact selection,
+exceptions, multiplication factors, source gaps and qualifiers. Known listed
+subtotals are not unique requirements, installed quantities or field wiring;
+no combined project total is invented. The UI's **Calculate assigned values**
+uses this same service. Exact-dependency retries reuse the saved result. Stale
+requests or concurrent Session changes reject before mutation. Export/import
+preserves earlier results; their dependency heads determine whether they are
+current, regardless of import order. Fingerprints are local corruption detection,
+not authenticated provenance or engineering approval.
+
+Development revision `bas_assembly_5` adds immutable assembly review and shared
+Python quantity history. BAS compile returns `bas_assemblies`: owned drawing
+declaration IDs, the saved register, dependency heads and unresolved findings.
+Optional `bas_assembly_review` accepts
+`{operation_id,capture_id,expected_head,expected_equipment_head,reason,register}`.
+The register holds source-backed or explicit component decisions, scope/members,
+conditions, lifecycle, separate activity claims and reasoned resolutions.
+Optional `bas_assembly_quantities` accepts
+`{capture_id,expected_equipment_head,expected_assembly_head}` and returns a saved
+calculation with full original records and exact per-equipment/selected-group
+contributions. Unknown is not zero; assigned is not installed. Stale/foreign
+requests and concurrent workspace changes reject before mutation. Earlier
+history survives export/import and equipment withdrawal. A read-only assembly
+summary failure is reported as `bas_assembly_error` without discarding valid
+point/SOO evidence; requested assembly writes fail rather than partly commit.
+See [the assembly contract](bas-production/ASSEMBLY_REVIEW_CONTRACT.md).
+
+Component rule v2 supports complete, explicitly singular lists of the reviewed
+terminal-controller, occupancy-sensor, static-pressure-sensor and supply-air
+damper roles. It is opt-in through a new reasoned `bas_assembly_review` event
+with `register.source_rule_version: "explicit_component_declarations_2"` and
+current expected heads. V1 history and source interpretation remain unchanged;
+old calculations become stale. Inspect new declarations before separately
+assigning equipment applicability. No default kit or extra installed count.
+See [the versioned list contract](bas-production/COMPONENT_LIST_RULE_CONTRACT.md).
+
+The development BAS compile accepts `bas_engineering_review` with operation and
+capture IDs, expected engineering/equipment/assembly/SOO heads, a complete
+declared-resource/check register and a reason. It records an Agent proposal
+through the shared source-validation and Python service, not human approval.
+`bas_engineering_inspect: {capture_id}` explicitly replays retained results.
+The additive `bas_engineering` projection separates dependency freshness from
+`requires_python_replay` / `verified_shared_python_replay`. Unknown ratings,
+excluded failures and prior history remain visible. No installed quantities,
+guessed routes or whole-project compatibility certification are produced.
+See [the engineering input and evidence contract](bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
+
+`export_takeoff {engineering_workbook_path: "/path/engineering-review.xlsx"}`
+replays saved engineering history and writes the same non-commercial workbook
+as the browser. It retains source locations, original inputs, exclusions and
+stale/superseded decisions without approving them. The inline annotation payload
+is unchanged. Use only one output path per call. Existing XLSX files require `overwrite: true`; no ZIP
+signature is accepted as proof of ownership. Keep the JSON archive and source
+PDFs for reimport. See [the export contract](bas-production/ENGINEERING_EXPORT_CONTRACT.md).
+
+Alternatively, `export_takeoff {evidence_bundle_path: "/path/project.otbas.zip"}`
+creates an unapproved evidence backup containing exact saved JSON and every
+physical PDF version in BAS history. Missing historical originals can be supplied
+in `original_pdf_paths`; hashes/lengths establish identity. Existing ZIP files
+require `overwrite: true`; staging/cancellation/collisions preserve old outputs.
+`import_takeoff {path: "/path/project.otbas.zip", verify_evidence_bundle: true}`
+verifies all archive entries and original digests without loading, merging or
+restoring anything. No plan is required. The optional `bas_evidence_bundle`
+receipt explicitly reports `restored: false`, `source_byte_verification:
+"verified_now"` and `calculation_verification: "not_python_replayed"`. These
+unencrypted, unsigned archives do not grant approval or certify source completeness.
+Add `replay_calculations: true` only with `verify_evidence_bundle: true` to also
+replay every saved assignment, assembly and engineering result through the shared
+Python calculators. The optional `workflow_replay` receipt binds the exact
+workflow digest and all historical record IDs. `calculation_verification` then
+reports `verified_shared_python_replay` or `no_saved_calculations`; empty history
+is not calculation coverage. Wrong results, unsupported rules, runtime failure,
+size limits and cancellation reject without a partial receipt. The service has
+a 30-second replay deadline and bounded 1,000-record/30 MiB batches. Successful
+historical replay does not mean current dependencies, approval or restoration.
+See [format and bounded acceptance](bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
+
+For the development project review queue, add `bas_project_review: {capture_id}`
+to `compile_corpus_takeoff` with `kind: "bas_points"`. It shares the browser's
+source-linked saved-finding projection. Original failures, exclusions, unknown
+codes and stale dependencies are retained. It does not change existing compile
+fields, replay calculations, verify stored source bytes or approve a takeoff.
+Findings are not a completeness score; readiness remains `not_evaluated`.
+The current `saved_bas_findings_2` projection preserves occurrence identities
+across canonical JSON restore; source evidence follows explicit table header
+order without changing source values/boxes. Older standalone exports retain
+their older rule/IDs and are not silently promoted to the current schema.
+See [review and revision acceptance](bas-production/REVIEW_REVISION_CONTRACT.md)
+for the remaining approval/source-retention work.
+
+The additive internal `bas_issues_9` journal survives normal import/export and
+older BAS writes. A retained acknowledgement is neither a waiver nor approval;
+its finding and any recorded absence must be replayed against pinned inputs.
+Public issue-action commands and approved snapshots remain in development.
+
+To inspect a historical citation, call `view_sheet` with its saved BAS `page_id`
+as `sheet` and optional `original_pdf_path` for missing original bytes. This
+isolated read-only mode verifies source ownership, hash, page count and saved
+frame, and never adds the old drawing to current extraction. `region` outlines
+the supplied original box, while `region` in the reply describes the padded
+display crop. Active overlays, grids and marks are refused. Whole-page review is
+available for legacy histories lacking frames; located highlights require a
+matching saved frame. Byte/frame verification does not approve a takeoff.
+
 ```bash
 cd web && npm install        # the engine's pdf.js lives here
 cd ../mcp && npm install
@@ -34,7 +219,7 @@ Register the server with your MCP client (any stdio client):
 Never point a client config at `npm start`—npm's banner goes to stdout,
 which is the MCP wire. `node --import tsx` is the whole invocation.
 
-By default the server hands every client all fifty tool schemas at once. Set
+By default the server hands every client all 53 tool schemas at once. Set
 `OPENTAKEOFF_MCP_STAGED_TOOLS=1` in the server's environment to stage the
 surface instead: only the setup tools start enabled, and the agent opens the
 `measure` / `revise` / `handoff` groups on demand with `open_tool_stage` as

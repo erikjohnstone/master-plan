@@ -1,0 +1,50 @@
+✔ shared engineering wire contract retains actual Python signal inputs, rules and results (846.748292ms)
+✔ shared engineering wire contract retains actual Python analog inputs, rules and results (982.729416ms)
+✔ shared engineering wire contract retains actual Python loading inputs, rules and results (826.476666ms)
+✔ shared engineering wire contract retains actual Python contact inputs, rules and results (712.820292ms)
+✔ shared engineering wire contract retains actual Python pulse inputs, rules and results (701.177709ms)
+✔ shared engineering wire contract retains actual Python power inputs, rules and results (789.14875ms)
+✔ shared engineering wire contract retains actual Python mechanical inputs, rules and results (762.198833ms)
+✔ shared engineering wire contract retains actual Python allocation inputs, rules and results (821.206417ms)
+✔ shared engineering wire contract retains actual Python expansion inputs, rules and results (1196.554417ms)
+✔ shared engineering wire contract retains actual Python serial inputs, rules and results (1120.504083ms)
+✔ shared engineering wire contract retains actual Python ip inputs, rules and results (1182.803292ms)
+✔ missing and incompatible inputs remain visible through actual Python, without changing evidence (1491.796292ms)
+✔ strict engineering wire shape does not coerce or discard authored values (8.326083ms)
+✖ Python remains dimensional and relationship authority after a successful JS shape parse (682.090375ms)
+✔ response boundary rejects changed source basis, omitted/reordered checks and fabricated summary status (21.687125ms)
+✔ network response cannot substitute a different closet or segment (2.920792ms)
+✔ empty check selection stays incomplete, cancelled/timed-out/unavailable runs accept nothing (776.198ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 16
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15918.626917
+
+✖ failing tests:
+
+test at test/basEngineeringContract.test.ts:18:2153
+✖ Python remains dimensional and relationship authority after a successful JS shape parse (682.090375ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /torque/. Input:
+  
+  'Error: Invalid BAS payload: engineering.checks.0.mechanical'
+  
+      at async TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/basEngineeringContract.test.ts:80:3)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:785:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Invalid BAS payload: engineering.checks.0.mechanical
+        at ChildProcess.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/src/basMath.ts:122:16)
+        at ChildProcess.emit (node:events:508:28)
+        at maybeClose (node:internal/child_process:1101:16)
+        at Socket.<anonymous> (node:internal/child_process:457:11)
+        at Socket.emit (node:events:508:28)
+        at Pipe.<anonymous> (node:net:346:12),
+    expected: /torque/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

@@ -8,6 +8,10 @@ import { IDBFactory } from "fake-indexeddb";
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { buildLocalFirstStore } from "../src/lib/sync/composite.js";
+import { buildSyncedWorkspaceStore } from '../src/lib/sync/workspaceComposite.js';
+import { createLocalStore, localStore } from '../src/lib/store.js';
+import { captureBasPoints } from '../src/lib/basWorkflow.ts';
+import { sha256Hex } from '../src/lib/graphKeys.js';
 
 beforeEach(() => {
   (globalThis as any).indexedDB = new IDBFactory();
@@ -86,4 +90,42 @@ test("composite: the store's onRemoteUpdate/isBusy options are null-guarded befo
   // and may fire onRemoteUpdate on a seed) must not throw. A plain load is local + safe.
   await assert.doesNotReject(store.loadAnnotations());
   assert.equal(store.syncBridge.onRemoteUpdate, null); // still null — nothing registered
+});
+
+test('composite BAS originals use the canonical project scope and never route PDF bytes to Drive', async () => {
+  const bytes = new TextEncoder().encode('%PDF-controlled-storage-only'), sha256 = await sha256Hex(bytes);
+  const source = { source_id: `sha256:${sha256}`, sha256, byte_length: bytes.length, page_count: 1 };
+  const workflow = await captureBasPoints([{ ...source, names: ['original.pdf'] }], {
+    schema_version: 'bas_point_lists_v1', rule_version: 'point_observations_1', scope: 'discovered_matrices_only',
+    project_complete: false, issues: [], matrices: [],
+  });
+  const cloud = stubCloud(), composite = buildLocalFirstStore('BAS-P', fakeDrive(), cloud);
+  // Seed canonical local history; this test must not enqueue a remote annotation push.
+  await createLocalStore('BAS-P').saveAnnotations({ bas_workflow: workflow });
+  await composite.retainBasSource(workflow, source.source_id, bytes);
+  assert.deepEqual(await composite.loadBasSource(source), bytes);
+  assert.deepEqual(await createLocalStore('BAS-P').loadBasSource(source), bytes);
+  assert.equal(await createLocalStore('OTHER').loadBasSource(source), null);
+  assert.equal(await localStore.loadBasSource(source), null);
+  assert.equal(composite.loadPdfData, cloud.loadPdfData);
+});
+
+test('sync composites expose coordinated restore, exact project journal and pending status; retention remains local', async () => {
+  const drive = buildLocalFirstStore('restore-scope', fakeDrive(), stubCloud()) as any;
+  const workspace = buildSyncedWorkspaceStore({ scope: 'restore-workspace',
+    provider: { async pull() { return null; }, async push() { throw new Error('No push is expected'); } },
+    snapProvider: fakeDrive(), ensureSidecarId: async () => 'sidecar', findSidecarId: async () => null }) as any;
+  try {
+    assert.equal(typeof localStore.restoreBasEvidence, 'function');
+    assert.equal(typeof createLocalStore('plain-local').restoreBasEvidence, 'function');
+    assert.equal(typeof drive.restoreBasEvidence, 'function');
+    assert.equal(typeof workspace.restoreBasEvidence, 'function');
+    assert.notEqual(workspace.restoreBasEvidence, localStore.restoreBasEvidence);
+    assert.equal(typeof drive.loadBasRestoreJournal, 'function');
+    assert.equal((await workspace.syncBridge.readRestoreSyncStatus()).pending, false);
+    assert.equal(workspace.retainBasSource, localStore.retainBasSource);
+    assert.equal(workspace.loadBasSource, localStore.loadBasSource);
+    await workspace.syncBridge.whenSynced();
+    assert.equal(workspace.syncBridge.onRemoteUpdate, null);
+  } finally { workspace.dispose(); drive.dispose(); }
 });

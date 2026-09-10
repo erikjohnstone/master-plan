@@ -1,0 +1,17 @@
+{
+  "scope": "Real MCP/CLI parity and source-span grounding. Independent matrix keys are a separate audit; no installed quantity or workflow completion claim.",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "legacy_and_math_exactly_unchanged": true,
+  "mcp_cli_payload_exact_parity": true,
+  "mcp_only_fields": {
+    "path": null,
+    "export_path": null
+  },
+  "matrices": 12,
+  "listed_rows": 193,
+  "observations": 246,
+  "verified_note_spans": 6,
+  "project_complete": false,
+  "elapsed_ms": 28905,
+  "rss_bytes": 407207936
+}

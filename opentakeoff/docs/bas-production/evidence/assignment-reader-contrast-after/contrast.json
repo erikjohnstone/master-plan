@@ -1,0 +1,30 @@
+[
+  {
+    "theme": "light",
+    "width": 1280,
+    "measured": 411,
+    "minimum_ratio": 6.508938359990188,
+    "failures": []
+  },
+  {
+    "theme": "light",
+    "width": 1920,
+    "measured": 411,
+    "minimum_ratio": 6.508938359990188,
+    "failures": []
+  },
+  {
+    "theme": "dark",
+    "width": 1280,
+    "measured": 411,
+    "minimum_ratio": 7.707796035708494,
+    "failures": []
+  },
+  {
+    "theme": "dark",
+    "width": 1920,
+    "measured": 411,
+    "minimum_ratio": 7.707796035708494,
+    "failures": []
+  }
+]

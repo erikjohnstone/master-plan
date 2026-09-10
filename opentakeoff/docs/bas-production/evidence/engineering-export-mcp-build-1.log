@@ -1,0 +1,8 @@
+
+> opentakeoff-mcp@0.9.72 build
+> esbuild server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server-core.js && node scripts/finish-build.mjs
+
+
+  dist/server-core.js  1.7mb ⚠️
+
+⚡ Done in 57ms

@@ -1,0 +1,94 @@
+{
+  "family": "analog",
+  "phase": "ordinary import",
+  "error": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTitle('Open just this sheet', { exact: true }).first() to be visible\u001b[22m\n",
+  "stack": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTitle('Open just this sheet', { exact: true }).first() to be visible\u001b[22m\n\n    at <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-engineering-families.mjs:132:78)",
+  "observations": [
+    {
+      "family": "signal",
+      "checks": 1,
+      "ui_recorded_events": 1,
+      "visited_fields": 15,
+      "exact_export_reload": true
+    }
+  ],
+  "fields": [
+    {
+      "family": "signal",
+      "path": "test-check.source.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink.endpoint_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink.equipment_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink.scope_id",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_direction",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_direction.value",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_direction",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_direction.value",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_mode",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.source_mode.value",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_modes",
+      "kind": "known"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_modes.value.0",
+      "kind": "string"
+    },
+    {
+      "family": "signal",
+      "path": "test-check.sink_modes.value",
+      "kind": "array",
+      "length": 1
+    }
+  ],
+  "errors": []
+}

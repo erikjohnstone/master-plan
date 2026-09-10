@@ -1,0 +1,47 @@
+{
+  "ok": true,
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "elapsed_ms": 81087,
+  "layouts": [
+    {
+      "theme": "light",
+      "width": 1280
+    },
+    {
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "theme": "light",
+      "width": 1920
+    },
+    {
+      "theme": "dark",
+      "width": 1280
+    },
+    {
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "theme": "dark",
+      "width": 1920
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "original upload and ordinary import",
+    "two explicit resources",
+    "unknown preview without save",
+    "manual note evidence",
+    "citation navigation and draft return",
+    "controlled pass preview/save",
+    "unchanged source/equipment/assembly histories",
+    "JSON export equality",
+    "reload and real Python replay",
+    "visible input provenance and exact saved-source return",
+    "fresh-context reimport",
+    "controlled withdrawal keeps stale engineering accessible and exportable"
+  ],
+  "limits": "One real signal-note workflow with controlled counterpart ratings. Not full engineering, real addenda, installed design or full-goal completion."
+}

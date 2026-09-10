@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "Actual download/picker verification; exact shared archive, saved payload and original digest; zero state mutation",
+    "Built MCP archive verified through actual browser file input without restoration",
+    "Controlled slow storage + actual cancellation leaves no extra download",
+    "Controlled concurrent persisted save rejected at publication boundary, with no extra download",
+    "Corrupt archive refused without state mutation"
+  ],
+  "timings": {
+    "export_ms": 2283
+  },
+  "errors": [],
+  "bundle_id": "329db9415775ab780fc2814f08f136368a53ced5239ac68a16085620c0730af9",
+  "archive_sha256": "11f25982c3ed9d7a3f81720833a473e09c72c002fe1d9bcbf994dfece024f7b7",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "archive_bytes": 2394271
+}

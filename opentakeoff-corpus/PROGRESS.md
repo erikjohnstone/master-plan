@@ -1,5 +1,876 @@
 ## Active work
 
+2026-09-10 after local checkpoint **b188b6b7**: browser-only atomic snapshot
+storage implemented and focused-tested; no extraction/VectorGrid/math change.
+Sources, exact payload/record, metadata, seal and retry identity publish together,
+with saved-generation/payload checks and project/disposal isolation. Shared
+verification remains authority. **80485 exit 0**: 47 related tests; **93938 exit 0**:
+14 storage tests. Full web **88334 exit 0**: 2,907 pass / 13 skips, all checks.
+Native Chrome **14632 exit 0**: controlled save/page-reload/reopen/corruption test,
+strict durability hint; not a real-PDF/public UI proof. Final **67324 exit 0**:
+web/MCP-packaging/scope/Python gates pass. **57481 exit 0** after final source-size
+guard: all 2,908 web tests pass / 13 skips, types/lint/build and native Chrome
+save/reload/reopen/corruption proof. All handles terminal.
+See `opentakeoff/docs/bas-production/SNAPSHOT_STORAGE_PROOF.md`. Combined snapshot
+memory gate still fails. Continue actual UI approval/reopen and remaining original,
+Agent/identity, corpus/holdout and final-symbol gates. No blocker or deployment.
+
+2026-09-10 after **b6249700**: shared history validation reuses privately owned
+equipment/assembly source context without skipping events or integrity checks.
+Full historical-view parity **9227 exit 0**; eight new regression tests. Latest
+combined snapshot probe **27046 exit 1**: 2.616 s prepare / 3.079 s reopen, all
+31 actual-Python calculations and exact original preserved. Memory still fails:
+648,708,096 bytes against the unchanged 512 MiB limit. Serializer prototype rejected;
+no extraction/VectorGrid/symbol/bbox/math/canonical-schema change. Full web
+**34523 exit 0**: 2,892 pass / 13 skips, types/lint/benchmarks/build. MCP **41130
+exit 0**: all applicable BAS/revision/issue/scope/packaging/tool gates pass. Python
+**66195 exit 0**: 453 pass, mypy 20 files. All handles terminal.
+See `opentakeoff/docs/bas-production/REGISTER_VERIFICATION_PROOF.md`. Continue
+atomic snapshot storage/public journey while retaining the memory gate, then
+Agent/unique-point and all original/corpus/holdout/final-symbol acceptance. Goal
+active, no external blocker or deployment; no new corpus score claimed.
+
+2026-09-10 after **ac879e3e**: snapshot/archive core is in progress, not public
+production approval. Shared creation/reopening requires exact original bytes,
+actual Python replay and full readiness; v1 unapproved backups remain distinct.
+No VectorGrid/extraction/symbol/bbox/Python arithmetic edits. **Web 57886 exit 0**:
+2,884 pass / 13 existing skips, types/lint/bench/build. New source-backed snapshot
+probe preserves the original and all 31 calculations but fails its separate
+512 MiB incremental-RSS gate (latest 711,458,816 bytes); don't hide that behind
+the existing green readiness benchmark. Full MCP **84419 exit 0**: types, 128 BAS +
+33 revision + six issue + 17 scope/snapshot + four packaging + 122 tool/safe-write
+tests, existing budgets and metadata pass. Python **59068 exit 0**: 453 pass /
+zero skips; mypy 20 files. All test/probe handles terminal. Local checkpoint only,
+not a completed snapshot feature; no push/merge/deploy. Full ledger:
+`opentakeoff/docs/bas-production/SNAPSHOT_CORE_PROOF.md`. Next: reduce allocations,
+atomic snapshot storage and public approval/reopen, Agent/point-identity and
+remaining original/final-symbol gates. Goal active, no external blocker.
+
+2026-09-10 after **6192c488**: internal shared scoped-readiness implementation
+verified; no extraction/VectorGrid/symbol/bbox/Python math change. Shared scope
+replay, explicit coverage/mapping, original-byte verification, actual Python
+replay and dependency freshness remain independent gates. No approval is created.
+**Web 95900 exit 0:** 2,872 pass / 13 existing skips, types/lint/bench/build; same
+three warnings/four documented One-Click limitations. Readiness **3.858–4.063 s /
+469,352,448-byte incremental RSS**, below predeclared 10 s/512 MiB. **MCP 6178
+exit 0:** types, 128 BAS + 33 revision + six issue + 16 scope/readiness + four
+packaging + 122 tool/staging/safe-write tests, benchmarks and 53-tool metadata.
+**Python 91952 exit 0:** 453 pass / zero skips, 12.24 s; mypy 20 files. No live
+test handle remains. Proof/failure ledger: `opentakeoff/docs/bas-production/READINESS_PROOF.md`.
+
+This is not yet public approval/snapshot or a complete conversational BAS takeoff.
+The browser Agent lacks the new workflow operations; assigned-point calculations
+still always retain unresolved unique-identity/project-total flags. These gaps
+are now explicit in the acceptance plan, not waived. Continue public readiness /
+explicit approval / source-inclusive snapshot/reopen, supported identity and
+Agent-driven draft integration, all remaining A–D and final corpus/holdout gates,
+then appended researched symbol/installed-plan work. No new corpus/holdout score
+or public-walkthrough claim; historical non-green baseline retained. Goal active,
+no blocker; local commit only, no push/merge/deploy/publication.
+
+2026-09-10 after **371ec826**: public Scope & coverage is implemented and verified
+for a local feature-branch commit. Shared catalogs/mapping preparation and the
+existing journal power UI/MCP; no extraction/VectorGrid/symbol/math change.
+**Web 73663 exit 0:** 2,862 pass / 13 existing skips / zero failures, types/lint/
+bench/build. **MCP 36909 exit 0:** types, 128 BAS + 33 revision + six issue + 11
+scope + four packaging + 122 tool/staging/safe-write tests and benchmarks.
+**Python 45740 exit 0:** 453 pass with packaging enabled; mypy 20 files.
+Unpublished metadata **0.9.78 / 53 tools**; scope suite in normal BAS gate.
+
+**Browser 43229 exit 0**, `scope-browser-7`: ordinary original upload/import,
+populated scope/exclusion, whole-page and exact VFD source inspection, draft
+return, keyboard save, mapped/conflicting span reviews, withdrawal/export/reload;
+five events, zero browser errors, **0.944–4.262 s**. All 24 theme/viewport images
+and two original-source views inspected. **Packaged MCP 6167 exit 0**, `scope-mcp-2`:
+browser/shared original parity, actual public unrelated/related edits, proposal/
+retry/stale rejection, complete export and new-process recovery; **1.734–2.227 s**.
+Failure ledger and exact boundaries: `opentakeoff/docs/bas-production/SCOPE_COVERAGE_PUBLIC_PROOF.md`.
+Nine claims/26 reference candidates are not automatic coverage accuracy. No new
+corpus/holdout evaluation or full BAS-production claim; old baseline retained.
+Readiness, selective approval, approved snapshots, remaining A–D and final
+corpus/holdout gates precede the appended symbol/installed-plan phase. Goal active;
+no blocker, push, merge, deployment or publication.
+
+2026-09-10 checkpoint after **7751d132**: internal shared `bas_scope_10` journal
+retains exact scope/coverage decisions and append-only withdrawal, with historical
+replay, selective currentness and overlapping-conflict disclosure. Human review
+cannot waive existing BAS findings. Previous persistence/editor paths retain the
+additive data. No extraction, VectorGrid, symbol or Python production math change.
+Public scope/coverage review and actual readiness/approval remain unfinished.
+
+Final **web 4354 exit 0: 2,852 pass / 13 existing skips**, types/lint/bench/build;
+same warning/known-fail controls. Final **MCP 12331 exit 0: types + 10 pass**, with
+actual Python replay, unknown demand and failure preservation. Full-gate internal
+operations **1.690–3.071 s / 96,059,392-byte incremental peak RSS** under 5 s/512 MiB.
+Real-original backup **86100 exit 0** retains original 924,578-byte PDF and full
+workflow/decision replay. Details, failed harness attempts and current limits:
+`opentakeoff/docs/bas-production/SCOPE_COVERAGE_JOURNAL_PROOF.md`.
+
+Next: populated public coverage/scope choices, UI/MCP integration, readiness,
+selective approval and approved source-inclusive snapshot/export/reopen. Preserve
+all remaining A–D and final corpus/holdout gates before the appended symbol phase.
+User requires substantial automation with human exception review, not manual
+reconstruction. Active, no blocker; no new corpus/holdout or public-walkthrough
+claim; no push/merge/deploy/publication.
+
+2026-09-10 checkpoint after **c1a7fcea**: added the internal shared deliverable
+scope/exclusion compiler, preserving the original inventory, citations, saved
+quantities, unknowns and stale dependencies. Explicit report exclusions cannot
+remove required assignment members or connected engineering resources. Selective
+content fingerprints respond to relevant changes, not unrelated register edits.
+No extraction/VectorGrid/symbol/Python math change; no public scope/approval UI or
+MCP feature is claimed. Coverage, issue/readiness, approval and durable release
+remain unfinished main-goal work, not replaced by this internal foundation.
+
+Final **web 5760 exit 0: 2,835 pass / 13 existing skips**, types/lint/bench/build;
+same three warnings, four legacy One-Click known-fails and build notices. Final
+**MCP 15294 exit 0: typecheck and 8 pass**, including actual Python shared-pool
+addition, excluded failure retention, assigned-demand/empty-result boundaries
+and existing production compile/restoration parity. Real-retained preview
+**832.851–836.404 ms / 31,391,744-byte incremental peak RSS**, under predeclared
+5 s/512 MiB limits. No new corpus/holdout or full Python-suite run; no new public
+browser/packaged-MCP walkthrough. Details in
+`opentakeoff/docs/bas-production/DELIVERABLE_SCOPE_PROOF.md`.
+
+Next: actual saved scope/coverage decisions, shared readiness, public integration,
+selective approvals and source-inclusive approved snapshot/export/reopen, then
+remaining A–D acceptance/final corpus gates. The user's appended deep symbol /
+installed-plan phase remains last. Active, no blocker, no push/merge/deployment.
+
+2026-09-10 checkpoint after **c0a3ac8e**: completed exact SOO issue-to-clause,
+region/comparison and page navigation, plus an internal bounded source-accounting
+reader. This is surface-only selection over unchanged shared discovery/review;
+no VectorGrid, symbol, Python math, source coordinates or MCP contract changes.
+Historical targets do not select current namesakes; drafts and full exports stay
+intact. Coverage/applicability decisions and approvals are **not** implemented by
+the reader. Main five workflows still precede appended symbol research.
+
+Final web **67500 exit 0: 2,825 pass / 13 existing skips**, types/lint/bench/build;
+same three warnings, four disclosed legacy One-Click known-fails and build notices.
+MCP **46682 exit 0: types + ten issue/transport/project-review tests**. Actual
+browser **97898 exit 0:** real PDF/import, exact original M-512 source bbox,
+keyboard/draft return, form-created comparison, 1,185 unassigned spans paged 50
+at once, both themes/three sizes, complete export/reload; zero browser errors,
+**1,022–1,047 ms** routes. Final screenshots inspected after rejecting an early
+render-incomplete capture. Proof: `opentakeoff/docs/bas-production/ISSUE_ROUTE_PROOF.md`.
+No new full corpus/Python/holdout result claimed for UI-only changes. Next:
+coverage/applicability and exclusions, selective approvals and positive approved
+snapshot/export/recovery, remaining A–D and final corpus/holdout gates, then the
+researched symbol/installed-plan extension. Goal active; no blocker or completion
+claim. No push/merge/deployment/publication.
+
+2026-09-10 checkpoint after **f70eda16**: shared BAS issue decisions are exposed
+in Review & changes and `bas_issue_review` (local 0.9.77, 52 tools). Guarded
+observations/correction-start, exact historical replay, changed-input absence and
+withdrawal preserve all original evidence/blockers. Actual real-PDF browser
+correction/export/reload and packaged MCP source/replay/export/new-process recovery
+pass. Browser **2.117–2.964 s**, MCP **1.032–1.381 s**; controlled scope edits, not
+installed truth. Web **2,823 pass / 13 existing skips**, MCP **128 BAS + 33 revision
++ six issue + four packaging + 122 tool tests**, Python **453 with packaging
+enabled**, mypy 20 files. Existing warnings/legacy known-fails stay disclosed.
+Shared issue benchmark **0.884–1.159 s / 523,632,640-byte** incremental RSS passes
+unchanged budgets. No VectorGrid/extraction/symbol/Python-math changes and no full
+corpus or holdout run. Exact proof/failed-candidate record:
+`opentakeoff/docs/bas-production/ISSUE_PUBLIC_PROOF.md`.
+
+Original main goal remains active: remaining exact corrective routes, coverage/
+applicability/exclusions, selective approvals and positive approved snapshots,
+remaining A–D/final corpus gates. The deep symbol/installed-plan research remains
+the final add-on, never a replacement. No push, merge, deploy or publication.
+
+2026-09-10 checkpoint after **bb2df22c**: internal shared BAS issue decisions
+(`bas_issues_9`) retain exact observations/corrections/withdrawals and replay old
+findings after edits and canonical backups. No blocker dismissal or approval.
+Old writers and JSON/IndexedDB/evidence ZIP preserve the journal. Common async
+verification owns nested metadata; bounded prerequisite reuse retains all checks.
+**Final 34704 exit 0:** web 2,821 pass / 13 existing skips; MCP 128 BAS + 33
+revision + two issue + four packaging + 122 tool tests pass, 51 tools; Python
+452 pass / one packaging skip, mypy 20 files and enabled packaging test pass.
+Failed memory experiments are retained. Final repeats plus integrated gate:
+0.838–1.124 s, peak incremental RSS 521,912,320 bytes within unchanged 512 MiB.
+10,000-event lineage: 128.279 ms / 33,325,056 bytes. No full corpus/holdout run,
+VectorGrid/symbol/math change, trained models or commercial scope.
+Proof: `opentakeoff/docs/bas-production/ISSUE_DECISION_PROOF.md`.
+Next: expose issue actions through existing UI/shared MCP, then approvals and
+approved snapshots plus remaining BAS gates. Original five-workflow goal remains
+first; appended symbol/installed-plan research remains last. No production-
+complete claim or external push/merge/deploy/publish.
+
+2026-09-10 checkpoint after **01094715**: fixed shared BAS finding identity across
+canonical backup. The retained real source workflow had **236/456** occurrences
+change solely with object-key order; failed-first regression now gives **0/456**.
+Explicit header order and every original finding/value/bbox are retained,
+narrative span order unchanged; projection rule `saved_bas_findings_2` is explicit.
+**Web 2,806 pass / 13 existing skips; MCP 128 BAS + 33 revision + four packaging +
+122 staging/safe-write/tool tests pass; Python 452 pass / one packaging skip,
+mypy 20 files and enabled packaging test pass.** Existing warnings/legacy
+benchmark failures remain disclosed. Real-PDF browser and normal canonical-backup
+import/export both preserve all 456 findings, source links, state and originals;
+zero browser errors, final first-open 4.241 s. Shared reads 3.059-3.336 s under
+5 s / 512 MiB. Proof: `opentakeoff/docs/bas-production/FINDING_IDENTITY_PROOF.md`.
+**Main goal active:** issue-decision journal/corrective routes, selective
+approvals/approved snapshots and remaining A-D/corpus/holdout gates next.
+Appended deep symbol/installed-plan phase remains last. No extraction, VectorGrid,
+Python math, symbol, key/scorer, model, costing/labor or external changes;
+no new full-corpus score or holdout inspection claimed.
+
+2026-09-10 checkpoint after **b942b4f7**: public pinned BAS revision comparison
+now runs through one Python-backed service from browser and existing MCP tool.
+Actual browser source/import → comparison/pairing → save/reload/replay/export
+passes, with bounded dense tables and retained original citations. Built MCP
+restores all 31 saved calculations, exactly matches the 698-row browser report,
+opens originals without activation, records/retries and recovers in a fresh process.
+Fixed a reproduced backup-key-ordering report mismatch by canonical ordering of
+exact evidence references (`bas_revision_inventory_2`); values, quantities and
+bboxes unchanged. UI unresolved-filter regression also fixed without domain edits.
+**Web 2,804 pass / 13 existing skips; MCP 127 BAS + 33 revision + four packaging +
+122 tool/safe-write/staging pass; Python 452 pass / one packaging skip, mypy 20
+files and enabled packaging test pass.** Existing warnings/failures remain disclosed.
+Final browser compare/reopen 5.372–5.709 s, durable save 12.301 s under the unchanged
+8/15-second gate; serial shared comparison/save/reopen 3.967–4.322 s under 6 s.
+Proof: `opentakeoff/docs/bas-production/REVISION_PUBLIC_PROOF.md`.
+Controlled reordered pages, not an issued addendum or installed-count proof.
+**Main goal remains active:** issue decisions, selective approvals/snapshots and
+A–D/final corpus/holdout gates next; appended symbol/installed-plan work last.
+No full corpus rerun, holdout opening, extraction/symbol/VectorGrid/math algorithm,
+key/scorer, model, costing/labor, push/merge/deploy or external changes.
+
+2026-09-10 checkpoint after **b7563f9a**: internal shared comparison journal
+(`bas_revision_8`) saves exact pinned source/decision/correspondence and report
+identity; save/reopen rerun Python-backed comparison. Actual IDB/JSON retention,
+all old write paths, exact retry, tamper/fork/ownership rejection and cancellation
+are tested. **Web 2,800 pass / 13 existing skips; MCP 127 existing BAS + 26
+comparison/journal + four packaging tests pass; Python 452 pass / one packaging
+skip, mypy 20 files and separately enabled packaging test pass.** Final retained
+prepare/save/reopen **4.062–4.170 s**, **245,071,872-byte incremental peak RSS**;
+unchanged history/inventory/comparison gates pass. Same-basis retained evidence,
+not real issued-addendum or public comparison proof. See
+`opentakeoff/docs/bas-production/evidence/revision-journal-1/proof.json`.
+No extraction/VectorGrid/symbol/math, keys/scorers, holdout or external changes.
+Original goal remains active: next public revision UI/MCP, issue decisions,
+selective approvals/snapshots and A–D final gates; appended researched symbol /
+installed-plan work stays last. This internal checkpoint does not finish E.
+
+2026-09-10 checkpoint after **34aeaffa**: internal shared BAS revision comparison
+now retains explicit item correspondence, original/declared-field changes, source
+and dependency boundaries, unknown quantities and compatible measure/membership
+reviews. Python validates point cells, replays selected saved records and computes
+exact comparable deltas. Reproduced/fixed unlike-variable subtraction, reused-UUID
+membership changes and engineering ID-only false changes across 11 families.
+**Web 2,793 pass / 13 existing skips**; Python **452 pass / one packaging skip**,
+mypy **20 files**; MCP types, **127 prior BAS + 19 new comparison + four packaging
+tests pass**, plus separately enabled Python packaging parity. Complete retained
+comparison **4.217 / 4.171 / 4.149 s**, **172,523,520-byte incremental peak RSS**,
+496 rows / 175 comparable values, under predeclared 6 s / 512 MiB. Existing gates
+remain unchanged. Proof and limitations:
+`opentakeoff/docs/bas-production/evidence/revision-comparison-1/proof.json`.
+No extraction/VectorGrid/symbol/old-math/key/scorer, holdout, push/merge/deploy change.
+No public comparison or full-corpus completion claim. Next correspondence journal
+and UI/MCP integration, issue decisions, approvals/snapshots and A–D final gates;
+then appended researched symbol/installed-plan phase. Original goal stays active.
+
+2026-09-10 checkpoint after **c2685089**: shared pinned revision-side inventory
+implemented and verified, without extraction/VectorGrid/symbol/math changes.
+Old decisions keep their exact original sources when newer equipment/component
+bindings change; quantities retain unknown/attribute/basis and Python-replay
+distinctions. **Web 2,783 pass / 13 existing skips**; MCP types, **127 BAS + four
+packaging tests pass**. Real retained Fort Sam/controlled-hardware inventory has
+496 items, final **2.997 / 3.030 / 2.961 s**, **77,725,696-byte incremental peak
+RSS**, under predeclared 5 s / 512 MiB. Existing history/journal gates pass.
+Details: `opentakeoff/docs/bas-production/REVISION_IMPACT_CONTRACT.md` and progress.
+Internal inventory is not complete comparison, approval, fresh source/Python
+verification or installed truth. Next item correspondence, semantic/comparable
+quantity impact, issue decisions, selective approvals/snapshots and A–D final
+gates, then appended researched symbol/installed-plan phase. Goal active; no
+new full corpus/holdout, public comparison walkthrough, key/scorer changes or
+push/merge/deploy. Existing warnings/baseline failures remain disclosed.
+
+2026-09-10 checkpoint after **79868930**: shared page correspondence now has the
+public **Review & changes → Drawing changes** editor and history-only MCP
+`bas_drawing_review`. Existing evidence/counts remain unchanged; recording is
+page accounting, not approval or semantic/quantity impact. Browser real-original
+plus controlled reordered-page walkthrough passes draft/source return, explicit
+pairing, six layouts, durable save/reload/export. Packaged public MCP restores that
+history, records duplicate delivery without increasing pages, views exact originals
+and exports/restarts. Controlled revision/hardware inputs are disclosed.
+Final web **2,771 pass / 13 existing skips**, MCP types, **126 BAS + 4 packaging +
+107 staging/public-tool tests pass**. Existing history and journal performance
+gates pass unchanged; browser save measured **8.423 / 8.446 s** (baseline, not a
+speed claim). Initial test-fixture ordering and tool-description failures were
+fixed without weakening tests. Details: `opentakeoff/docs/bas-production/PROGRESS.md`
+and `DRAWING_CORRESPONDENCE_CONTRACT.md`. Semantic/quantity comparison, issue
+decisions and approved snapshots remain next, then A–D corpus/holdout gates and
+the appended researched symbol/installed-plan phase. Goal active; no extraction,
+math, thresholds, keys/scorers, holdout access, full corpus run or push/merge/deploy.
+
+2026-09-10 checkpoint after **63658a35**: shared drawing-correspondence foundation
+implemented (`bas_review_7`). Explicit source sets and complete reciprocal page
+accounting preserve old evidence; unresolved revisions publish no complete set.
+Partial addenda do not silently delete pages; retained text equality is not an
+ink/quantity claim. Existing edits and merges retain or reject conflicting journals.
+**17 focused pass**; final web **2,771 pass / 13 existing skips**, typecheck/lint/
+build and unchanged history gate pass. MCP types, **119 BAS + 4 packaging/proof**
+tests pass. New predeclared 1,000-page/100-revision journal benchmark: **50.182 /
+43.148 / 33.095 ms**, **149,536,768-byte incremental RSS**, under 2 s / 256 MiB.
+Retained real-PDF history IDB/JSON round-trip is verified; controlled revision
+cases are not real addenda or a public UI/MCP revision walkthrough. See
+`opentakeoff/docs/bas-production/DRAWING_CORRESPONDENCE_CONTRACT.md`.
+Next public editor/MCP delivery, semantic/quantity comparison, issue decisions,
+selective approvals/snapshots, remaining A–D corpus/holdout gates, then final
+researched symbol/installed-plan work. Goal active; no extraction/math/scorer/key
+change, holdout access, full corpus run, push, merge or deployment.
+
+2026-09-10 checkpoint after **4119b0db**: synced evidence ZIP restore now coordinates
+with active sync operations and other same-scope browser tabs. Local adoption and
+remote ancestry are atomic; pending restore generations survive offline/restart.
+Existing shared history/import/replay rules are reused; no extraction change.
+Final web **2,754 pass / 13 existing skips**, **94 focused pass**, MCP **119 BAS**
+and **3 packaging** pass. History benchmark stays under unchanged 5 s budget.
+Actual Fort Sam ZIP / Python 31-record replay / folder-composite OPFS / second-tab
+wait-cancel-retry / source-reader / reload proof passes; eight screenshots inspected.
+Local restore including replay/wait **24.682 s**, through annotation sync **27.076 s**.
+No live cloud or real addendum claim. Private-context 551 MB capacity failed quota
+(clean rollback; memory budget also exceeded); ordinary isolated profile passes
+same bytes, **10.249 s / 1.106 s**, **2,109,784,064 bytes RSS < 2 GiB**, narrow margin.
+Both outcomes and differing profile modes are disclosed in
+`opentakeoff/docs/bas-production/SYNC_RESTORE_CONTRACT.md`.
+Main goal remains active: journal recovery UX, drawing correspondence, scoped
+approvals/snapshots, A–D corpus/holdout gates, then appended symbol/installed-plan
+phase. No full corpus/holdout or standalone Python rerun, no new accuracy claim,
+no VectorGrid/table/cite/bbox/math/key/cost/labor change, no push/merge/deploy.
+
+2026-09-10 checkpoint after **7692b78b**: fixed a reproduced sync history loss
+(three BAS captures became two under whole-object remote-wins). Shared retention
+and lineage now govern known BAS histories in sync; incompatible branches stay
+unmerged with a durable notice and exact remote recovery export when available.
+Final web **2,742 pass / 13 skips**, **85 focused pass**, MCP **119 BAS + 4 packaging
+pass**, types/build green. Unchanged five-second serial history benchmark:
+**3.286 / 3.184 / 3.162 s**. Initial parallel timing failure is documented.
+Real Fort Sam app + actual folder composite over origin-private files passes
+controlled review conflict, recovery download, reload and retry; six final
+screenshots inspected. No live cloud/OS-sync or real addendum claim. Details:
+`../opentakeoff/docs/bas-production/SYNC_HISTORY_PROOF.md`.
+
+Synced ZIP restore remains gated pending in-flight/cross-tab/write-bookkeeping
+coordination. Provider revisions are read-then-write, not server CAS. Main A–E
+goal, journal recovery, drawing correspondence, scoped approvals and remaining
+corpus/untouched-holdout gates remain active; symbol/installed-plan extension
+stays last. No new full-corpus score, extraction/math/scorer/model change,
+holdout access, push, merge or deployment.
+
+2026-09-10 checkpoint after **a23054ec**: public MCP source-inclusive restore now
+uses the shared merge/replay contract and actual Python, retains all original
+versions plus prior state, preserves browser-only payload fields and reopens exact
+citations without activating historical PDFs. Built public real-PDF proof passes
+empty and populated Sessions plus process restart/disk recovery; all **31 saved
+calculations** replay. Final commit times 15.205 / 19.727 / 15.090 s. See
+`../opentakeoff/docs/bas-production/RESTORE_MCP_PROOF.md` for full timings and limits.
+Full web **2,731 pass / 13 existing skips**, MCP BAS **119 pass**, broader MCP
+**51 pass** (overlapping), packaging **4 pass**, types/tool-count green.
+
+Found and gated an accidental local-restore inheritance in folder/Microsoft 365
+sync composites. Actual sync coordination remains next, followed by journal UX,
+drawing correspondence, approvals and remaining A–D corpus/holdout acceptance.
+Appended symbol/installed-plan phase stays last. This is verified delivery/recovery
+progress, not a new full-corpus score or completion of the main goal. No extraction,
+math, key, threshold, model change, holdout access, push, merge or deployment.
+
+2026-09-10 checkpoint after **01e9b3a4**: actual browser-local source-inclusive
+restore passes the real Fort Sam journey (31 saved calculations replayed by
+Python, exact history/original reopened after reload) and the controlled 551.1 MB
+storage gate. Shared merge/replay/source gates; atomic chunked originals, payload,
+prior-state journal and save generation. No historical PDFs enter active counting.
+Full web **2,730 pass / 13 existing skips**, no failures; 13 new restore tests.
+Capacity **10.953 s**, sampled Chrome RSS **2,052,210,688 bytes** under unchanged
+30 s / 2 GiB limits. See `../opentakeoff/docs/bas-production/RESTORE_BROWSER_PROOF.md`.
+Main goal is not complete: public MCP/sync restore, journal recovery UX, drawing
+correspondence, approvals and A–D corpus/holdout acceptance still precede the
+appended symbol phase. No VectorGrid/math/key/threshold change or new corpus claim.
+
+2026-09-10 checkpoint after **4b1c7595**: per-editor browser save fencing now
+refuses obsolete generations and expected-state sync races without changing
+extraction/math. DB v4 preserves old records and rejects v3 blind-writer builds.
+Actual canvas two-tab test preserves/export-recovers unsaved work and allows
+fresh saves after explicit reload; its replacement is a **controlled IDB
+transaction, not implemented ZIP restoration**. **83 focused pass**; full web
+**2,717 pass / 13 existing skips**, final types/lint/build pass; MCP **107 BAS +
+4 packaging pass**, types pass. Zero page errors and unchanged complete Fort Sam
+BAS history/source bytes. See
+`../opentakeoff/docs/bas-production/ANNOTATION_GENERATION_PROOF.md`.
+Main goal remains active: implement actual atomic source-inclusive restore and
+sync coordination next, then revision/approval and remaining A–D acceptance;
+appended symbol/installed-plan phase stays last. No new full-corpus or holdout
+result, VectorGrid/key/threshold change, push, merge or deployment.
+
+2026-09-10 checkpoint after **628f047c**: original-source reopening now uses one
+shared ownership/hash/page/frame contract in the browser and packaged MCP. Old
+citations can open retained bytes without adding historical PDFs to active
+extraction. Existing live-sheet source navigation remains unchanged. Full web
+**2,702 pass / 13 existing skips**, final **19 focused** source/storage tests;
+BAS MCP **107 pass**, broader MCP **155 pass**, packaging **4 pass**; Python
+**443 pass**, configured mypy **19 files**. Actual Fort Sam UI/built MCP compare
+the same page-8 original source and reject a newer namesake/corrupt bytes with no
+history or annotation changes. Prior live-citation UI regression also passes.
+See `../opentakeoff/docs/bas-production/SOURCE_VIEW_PROOF.md` for exact evidence,
+controlled-fixture disclosure and remaining limits. No VectorGrid/key/scorer/
+symbol changes or new full-corpus/holdout gate. Main A–E remains first: atomic
+restore/save fencing, revision review/approval, remaining corpus acceptance; the
+appended symbol/installed-plan phase is still last. No push/merge/deploy.
+
+2026-09-10 checkpoint after **f20c8e24**: full saved B/C/D calculation replay now
+uses historical input reconstruction and unchanged Python calculators on the
+shared UI/MCP path. Optional browser/MCP archive preflight returns exact workflow
+and record receipts; re-signed wrong totals reject and no state is restored or
+approved. Full web **2,697 pass / 13 existing skips**; BAS MCP **103 pass** plus
+broader existing MCP **155 pass**, packaging **4 pass**; Python with package gate
+**443 pass**, configured mypy **19 files**. Actual Fort Sam UI and built MCP both
+replay all **3 assembly + 28 engineering** historical results, reject the same
+valid-byte/wrong-math backup and preserve history. Six final UI screenshots and
+the failure state inspected. See
+`../opentakeoff/docs/bas-production/WORKFLOW_REPLAY_PROOF.md` for exact runs and
+limits. No VectorGrid/algorithm/scorer/threshold changes or holdout access.
+Main goal remains active: atomic restoration/autosave safety and original-version
+citations, revision correspondence/journals, scoped approval/snapshots, then all
+remaining corpus/holdout gates and appended symbol/installed-plan phase.
+Historical scores and old-path failures below are not a new green corpus gate.
+No push, merge or deployment.
+
+2026-09-10 checkpoint after **81e55b2e**: source-inclusive unapproved evidence ZIP
+backup now has one shared canonical/ownership/hash/container implementation,
+actual browser download/verification and additive MCP export/read-only preflight.
+Every historical original is required; cancellation, stale state, corrupt bytes
+and output collisions cannot publish a successful backup or approve a takeoff.
+Final full web **1355: 2,697 pass / 13 existing skips**, types/lint/bench/build
+pass. Full BAS MCP **16081: 95 pass**, packaging **4 pass**, tool names 50/current.
+Final real Fort Sam UI **22305 exit 0**, zero errors, exact history/original bytes,
+cross-surface archive reading and controlled cancellation/concurrent-save checks;
+six final screenshots inspected. Built MCP **45611** passes exact shared output
+and source/history parity. Controlled 551.1 MB Node and browser transports pass
+predeclared local resource budgets; not PDF interpretation/installed-count proof.
+See `../opentakeoff/docs/bas-production/EVIDENCE_BUNDLE_PROOF.md`.
+No VectorGrid/math/key changes or holdout content access. Main BAS goal remains
+active: automatic bundle restore/source reopening, revision correspondence and
+journal, scoped approvals/atomic snapshot seal, then remaining corpus/holdout
+acceptance; only then appended symbol/installed-plan research. Historical corpus
+metrics and 23 old-path errors below are not replaced by these transport gates.
+No push, merge or deployment.
+
+Latest backup gate: full BAS **72396 exit 0**, 95 pass/0 fail/skip, 12.264 s;
+final built MCP **38156 exit 0**, exact source/history/ownership and preserved
+state. Existing One-Click 16 cross probes/0 disagreements, pair-IoU floor .994
+and mean .999; nine single-resolution cases not cross-checked. Not corpus scores.
+
+2026-09-10 checkpoint after **3eddc21f**: explicit browser-local original PDF
+retention/verification/download now uses shared ownership/digest validation and
+project-scoped per-source transactions. Sources survive ordinary filename/revision
+deletion; corrupt/foreign inputs, stale saves, quota failures and transaction aborts
+cannot overwrite old evidence or approve a takeoff. Focused **40 pass**; first full
+web **2,689 pass / 13 existing skips**, types/lint/bench/build pass; final layout
+types/lint/build pass. Existing BAS MCP **93 pass**. Final Fort Sam UI **31204
+exit 0**, **60.676 s**, **456 unchanged findings**, exact source recovery and
+history/bbox/keyboard checks, zero page errors; six final source-view screenshots
+inspected. No new public MCP retention verb or completed revision/snapshot seal.
+Full details: `../opentakeoff/docs/bas-production/SOURCE_RETENTION_PROOF.md`.
+No VectorGrid/extraction/math/key changes or holdout access. Historical **505/541
+takeoff, 99/129 reference, 78/91 graph cells, 133/138 anchors** plus 23 old-path
+ENOENTs remain, not a new full corpus run. Finish the main BAS workflows and
+remaining corpus gates before the appended symbol/installed-plan phase.
+No push, merge or deployment.
+
+Final full web **67712 exit 0** repeats **2,689 pass / 13 existing skips**, no
+failures, types/lint/benchmark/build pass. One-Click cross gate: 16 probes,
+zero disagreements, pair-IoU floor 0.994 / mean 0.999; nine single-resolution
+cases not cross-checked. This is not the complete schedule/quantity/graph corpus.
+
+2026-09-10 newest main-goal checkpoint, after **0357cada**: shared read-only BAS
+finding queue now connects internal Review & changes and opt-in public MCP.
+Real Fort Sam browser **19202 exit 0**, 37.561 s, and packaged MCP **6687 exit 0**,
+38.951 s, agree on all **456 findings** and preserve original sources, decisions,
+source bboxes and every default compile field. Unknown codes/excluded failures
+stay visible; actual-Python regression fixes duplicated source-wide coverage
+after assigned-value calculation. Full BAS **93 pass**, full web **2,675 pass /
+13 existing skips**, types/lint/bench/build and four package tests pass. First
+queue open 4.740 s is not called production-fast. Full review decisions, source
+retention, revisions, approvals and release remain; source/corpus/holdout gates
+remain too. No new corpus score, holdout access, extraction/VectorGrid/math edit,
+push/merge/deploy. Detailed proof and limitations:
+`opentakeoff/docs/bas-production/PROJECT_REVIEW_PROOF.md`. Finish the original five
+workflows before the appended symbol/installed-plan reconciliation phase.
+
+2026-09-10 newest main-goal checkpoint, after **eb18c7ad**: all eleven engineering
+families passed actual browser form verification on the original Fort Sam PDF
+with explicitly controlled capabilities. **95611 exit 0**, 414.038 s, **451
+field/list observations, 16 UI-recorded decisions**, exact JSON export/reload and
+zero page errors. Power overload and duplicate serial address fail, correction
+passes, and earlier failures remain; exact rule/normalized-value readback checked.
+All 12 power/network theme/width screenshots inspected. Source/ownership/assembly
+history remains unchanged. Full BAS MCP **14338 exit 0: 90 pass**, focused
+**91780: 11 pass**, MCP types pass. Two failed test setups are retained: divergent
+test history (correctly refused) and waiting for a gallery after canvas restoration;
+only the harness changed. No production/extraction/math edit. The new workflow E
+audit/contract specifies issue review, version correspondence, retained source
+snapshots and selective invalidation; implementation remains ahead. No new corpus
+metrics or holdout access, no push/merge/deploy. This is not automatic hardware
+discovery or full-goal completion. Detailed evidence and next work are recorded
+in `opentakeoff/docs/bas-production/PROGRESS.md`.
+
+2026-09-10 main-goal checkpoint: saved engineering review XLSX is implemented on
+one shared UI/MCP projection, with original inputs, all constraint/history data,
+source locations and applicability findings. Not an approved deliverable or
+installed/design proof. Full web **74622 exit 0**, **2,670 pass / 13 existing
+skips**, types/lint/bench/build pass; full BAS MCP **13770 exit 0**, **90 pass**,
+MCP types/build and unchanged 50-tool/version surfaces checked. Real development
+PDF browser **27124 exit 0**, 27.207 s: actual replay cancellation, preserved
+draft/history, exact workbook and rejection after newer ordinary import; no page
+errors. Packaged public MCP **85326 exit 0**, 4.623 s: all 13 workbook parts equal
+to browser, prior-file guard and legacy inline JSON unchanged. Missing packaged
+ZIP dependency was reproduced then declared (existing web fflate 0.8.3); no
+extraction or Python math edit. Independent readback checked all 382 cells/eight
+sheets and visual previews. Failed-first runs are retained, not omitted.
+The export contract is bounded-complete; engineering real-document coverage and
+review/revision/approved-snapshot work remain. Detailed evidence is in
+`opentakeoff/docs/bas-production/PROGRESS.md`. No new extraction corpus metrics:
+505/541 takeoff, 99/129 reference, graph 78/91 cells / 133/138 anchors and 23
+old-path ENOENTs remain the historical baseline. No push/merge/deploy. Finish all
+five workflows before the appended symbol-reconciliation implementation phase.
+
+2026-09-09 priority clarification: finish the five BAS workflows first. The
+user-authorized symbol-deformation/installed-plan reconciliation research and
+hardening is appended as a final phase in `opentakeoff/docs/BAS_PRODUCTION_GOAL.md`,
+not a replacement. Initial source/code leads are retained in
+`opentakeoff/docs/bas-production/SYMBOL_RECONCILIATION_RESEARCH.md`; no new symbol
+code. Main-goal checkpoint **0f8fcd72** remains local. Browser race attempt 1
+passed cancellation and exactly-once retry checks before setup timeout; attempt
+2 is terminal with an import/persistence timeout. Neither run is a full pass.
+Instrumentation-only reruns **94873 / 74627 exit 0**, 39.635 / 39.353 s, now
+pass all four safety checks including late response across a newer import,
+exact export/reload and zero browser errors. No deadlines or assertions changed;
+earlier timeout causes remain unproven, not claimed repaired. Engineering
+exports and review/revisions remain on the main critical path. Detailed current
+evidence is in BAS production progress below.
+
+2026-09-09 newest checkpoint supersedes live/pending statuses below: full web
+**60382 exit 0**, **2,665 pass / 13 skips**, types/lint/bench/build pass; Python
+**438 pass / mypy 18 files**; browser-4 passes both themes/three widths, exact
+input provenance and source return, fresh import and controlled owner withdrawal.
+The packaged MCP runtime resolved VectorGrid outside its package and silently
+used fallback tables. User approved **packaging/loading only**. Existing Python
+files are now copied byte-for-byte; shared runtime location and cache dependency
+are corrected without algorithm/threshold/bbox/symbol/math edits. Public real-PDF
+MCP **6174 exit 0**, 64.698 s: exact browser capture/history/outcomes, legacy
+output, replay, retry and export/reimport pass. Standalone runtime/regression
+gates pass: 6 standalone pages, **29 tables / 2,390 cells** exactly equal across
+source/package and first/repeated requests; missing sources error, raster and
+symbol-only controls add no vector tables. Four packaging tests, 30 existing
+adapter/pipeline tests, two cache tests, packaged stdio smoke and final **87 BAS
+MCP tests / types / 50-tool count** pass. Generated package bytecode was removed
+by rebuilding only its output directory; originals are unchanged. One real
+controlled engineering check is not full design verification.
+Same legacy corpus **77284 terminal**, 5,460.9 s: takeoff **505/541** (installed
+470/499), reference **99/129**, graph **78/91 cells / 133/138 anchors**, unchanged
+baseline; 23 old-path ENOENTs still disclosed/unmodified. Full detail and limits:
+`opentakeoff/docs/bas-production/PROGRESS.md`. Five-workflow goal remains active;
+no push/merge/deploy. Earlier logs and failed-first evidence are retained.
+
+2026-09-09 Engineering UI/public integration is in active verification, not
+production completion. Shared review/inspect now reaches HTTP/CLI and public BAS
+compile; selected-equipment forms retain source wording, unknowns, drafts and
+history. **87 BAS MCP tests pass**, types/build/50-tool count and legacy stdio
+pass. Actual Fort Sam UI direction/mode walkthrough passed twice (61.044 s and
+255.840 s under concurrent checks), both themes and three widths. Controlled
+counterpart inputs remain labeled; no installed or full 0–10 V range claim.
+Full web has **2,662 pass / 13 existing skips**, bench/build pending on **80830**.
+Python full run: 437 pass, one unchanged 10-second child timeout; exact focused
+rerun passes in 0.82 s. Packaged real-PDF MCP attempt **12601** ended **137** in
+initial compile; cause not established, no success claim. Detailed evidence,
+remaining acceptance and next queue: `opentakeoff/docs/bas-production/PROGRESS.md`.
+Same **77284** corpus run remains live beyond NAVFAC; graph **78/91 cells /
+133/138 anchors**, takeoff/reference pending, 23 missing table paths unchanged.
+No extraction/symbol/VectorGrid/Python arithmetic change; no push/merge/deploy.
+
+2026-09-09 ownership/history continuation: shared engineering register,
+append-only dependency-bound reviews and actual Python history replay are
+implemented internally. **23** focused service/ownership tests cover all eleven
+rule families and real browser-store round trips; two reproduced defects
+(stale-assembly view and response/request binding) were corrected. Full Python
+**438 pass / mypy 18 files** including package verification; full BAS MCP **84
+pass**, types/build and packaged legacy smoke pass. Full web **56704 exit 0**:
+**2,657 pass / 13 existing skips**, types/lint/bench/build pass (build 9.83 s). Exact logs,
+boundaries and failed-first evidence: `opentakeoff/docs/bas-production/PROGRESS.md`.
+No extraction/VectorGrid/graph/symbol changes or public engineering UI/MCP yet.
+Same corpus **77284** and its NAVFAC child remain authoritatively live; graph
+**78/91 cells / 133/138 anchors**, takeoff/reference pending, 23 missing table
+paths not yet changed. Keep the full five-workflow goal active; no push/merge.
+
+Latest 2026-09-09 continuation: **516476ea** commits the verified network
+dependency. Shared engineering wire schemas and internal Node→Python transport
+now have **61 passing BAS MCP tests**, types/build and packaged legacy smoke.
+Full web **44122 exit 0**: **2,653 pass / 13 existing skips**, types/lint/bench/build
+pass. No new Python change after **430 pass / mypy 17 files**. Original sources,
+VectorGrid, graph and symbol algorithms remain untouched. Public engineering
+review/persistence/UI/MCP integration is not complete.
+
+Read-only metadata recovery located **23/23** missing manifest filenames uniquely
+in the retained archive and verified each inventory SHA-256. Audit:
+`opentakeoff/docs/bas-production/evidence/corpus-path-audit-before-repair.json`.
+No input mappings, PDF bytes, keys or holdout interpretation changed. Same
+**77284** remains live; repair isolated mappings only once terminal. Graph phase
+**78/91 cells, 133/138 anchors**, 0 wrong/unexpected, remains at starting misses;
+takeoff/reference finals pending. New unrelated transport imports were added
+while it ran, so do not describe this as the final fixed-commit engineering gate.
+Complete five-workflow scope and next ownership/history/UI queue are retained in
+the BAS production progress record; no push/merge/deploy.
+
+2026-09-09 network checkpoint supersedes the historical active entry below.
+The previous research-status answer was **no progress**; this continuation
+completed declared serial/IP constraints around unchanged Python solvers and
+fixed three reproduced unknown/nonphysical-capacity cases. **65649 exit 0**:
+**430 Python tests pass**, zero skips/failures, 36.33 s, including explicit
+packaging verification. **40560 exit 0**: mypy 17 files; **35735 exit 0**:
+44 existing BAS MCP tests pass. Failed wrong-directory/config invocations and
+exact evidence are retained in the BAS production progress record. No extraction,
+VectorGrid, graph, symbols or existing web/MCP source changes in this checkpoint.
+
+Same **77284** job remains live with active NAVFAC takeoff child. Graph phase is
+now finished: **78/91 cells**, 0 wrong; **133/138 anchors**, 0 unexpected, matching
+the documented starting misses. Takeoff/reference final metrics remain pending.
+Table recall remains Bessemer 6/11 plus 23 historical-path ENOENT failures; this
+is not a complete corpus pass. No new source/holdout files or keys were altered.
+Next: shared source ownership, typed engineering transport and durable decisions,
+then UI/MCP journeys and all remaining five-workflow gates. No push/merge/deploy.
+
+### Earlier engineering checkpoint
+
+Engineering continuation: the preceding status answer was **no progress**;
+this turn adds the shared Python declared-constraint dependency and bounded
+process envelope. Exact units, signal/load/contact/pulse/power/mechanical checks,
+cross-check endpoint/terminal ownership and expansion constraints are tested;
+no new extraction, graph, symbol, browser or MCP source changes. Final Python
+**62381 exit 0**, **307 pass / zero skips/failures (20.98 s)** including explicit
+packaging verification; mypy **16 files**. Existing MCP BAS **44 pass**,
+types/build and actual packaged legacy transport smoke pass. The full research,
+retained failure logs, input/source limits and evidence are in
+`opentakeoff/docs/bas-production/PROGRESS.md`.
+
+**77284 remains live**, same job, not restarted. Completed table recall is
+Bessemer **6/11**, five misses/three key-unlisted additions, six core sets without
+keys, and **23 ENOENT historical Desktop PDF paths**. Takeoff/reference/graph
+finals remain pending. Do not claim a full regression pass. Resolve isolated
+input-location mappings by content identity only after the current run finishes;
+do not edit source keys or mutate this run's manifest. Engineering network,
+ownership/persistence/UI/MCP integration, the other workflow gates and untouched
+holdout remain required. Nothing pushed, merged or deployed.
+
+Local checkpoints: **5b4d82cf** (verified list rules/UI) and **8a214255**
+(engineering acceptance/source key). Full existing scored corpus regression
+**77284** is now running and was re-polled live, log
+`opentakeoff/docs/bas-production/evidence/component-list-v2-corpus-regression-1.log`.
+No `--report` or changes to source keys/scorers; concurrency 1 per evaluator.
+Await takeoff+reference, graph and table-recall separately. This is not new
+workflow holdout evaluation and no final results are claimed yet. Continue the
+full engineering/persistence/UI and remaining five-workflow scope.
+
+Latest continuation: **6a3d6c13** assembly work is committed locally. Pending
+component-list v2 preserves v1 source fingerprints/history and adds four
+literal source roles, not installed counts. Public original-PDF MCP **37515
+exit 0** (63.664 s, peak RSS 1,149,255,680 bytes) preserves graph, legacy
+compile/math and points exactly. Revised UI **93245 exit 0** (41.868 s) fixes
+repeated-source list density: all four rows fit in 343 px at 1280/1440/1920,
+both themes, keyboard/source return/reload/import/export pass. Prior complete
+assembly journey **36291 exit 0** also passes (212.960 s). Python 174 pass/mypy
+13; final MCP **79848 exit 0**, 44 BAS tests/types/build/tool count pass.
+Full web **29362 exit 0**, 2653 pass/13 skips plus types/lint/bench/build
+(build 14.17 s). Detailed BAS progress retains exact evidence and boundaries.
+Engineering compatibility's full pre-implementation contract and independent
+M-601 signal-note key are written; no compatibility implementation claimed yet.
+All five workflows and full corpus/holdout gates remain required; no extraction,
+original-corpus or holdout changes, no push/merge/deploy.
+
+Latest verified assembly checkpoint supersedes the running/retry entries below:
+actual browser **21023** and public MCP **93829** pass the original nine-page
+source journey, including saved history, source navigation, responsibility
+conflict/resolution, withdrawal/rebase and Python contributions (not installed
+counts). Full web **16633 exit 0**, 2647 pass/13 skips, all phases; Python
+172 pass/mypy 13 files; MCP 42 BAS tests/types/build pass. Dark shell text
+contrast defect reproduced at 3.40048:1 and fixed surface-only: actual import
+**66002 exit 0**, both themes/widths, minimum light 6.50894 / dark 7.70780,
+source and calculation state exact. Final cosmetic full-web **1691 exit 0**:
+2647 pass/13 skips, types/lint/bench/build pass. Full five-workflow goal
+incomplete; no extraction or holdout changes.
+See BAS progress for retained evidence and boundaries.
+
+Superseding live-state update: baseline **78297 completed**, remaining four sets
+match candidate metrics/discrepancies (356/375 exact; reference 62/62). Overall
+core remains not green: takeoff 505/541, reference 99/129, graph cells 78/91 and
+row-symbol 133/138. New BAS assembly MCP tests/types/build pass (42 BAS tests).
+Full web has 2647 pass/13 skips with bench/build pending. Real assembly UI/MCP
+attempts found a test's wrong unique-tag-occurrence assumption; original p9
+source visually verified, diagnostics now select the keyed schedule occurrence
+without changing extraction or keys. Retries running. No completion claim.
+
+Latest BAS resumption: assignment workflow committed locally **31d4a793**.
+Uncommitted assembly shared history/Python tests pass (14 new web, 53 new Python;
+172 Python total, mypy 13 files; 14 assembly/assignment MCP tests). Full web 2644
+pass/13 skips before newer UI/public integration. Public MCP types/build pass.
+New editor lint found a JSX brace error; fixed, rerun required. Actual assembly
+UI/public-tool proof remains outstanding. Baseline **78297** revalidated live,
+Navfac PID 66378 consuming CPU; no restart or aggregate claim. Previous status
+answer was no progress; implementation has resumed. Full five-workflow contract
+unchanged. See BAS progress for exact evidence and current queue.
+
+Current verified BAS checkpoint (supersedes historical status below): actual
+assigned-observation browser **95677** and public MCP **27726** both passed on
+the original 29-page source, including replay, source equality, retry,
+export/import and withdrawal/history. MCP took 518,035 ms with explicit 4-GiB /
+600-second diagnostic allowances; not default-resource proof. Full web **17541**
+passes **2,630 tests / 13 existing skips**, types/lint/bench/build. Python 119 and
+MCP 33 BAS tests remain green. Dark reader contrast was measured/fixed with
+existing tokens and checked at two sizes/both themes without workflow changes.
+Component source kernel committed locally **a0b58e8a** (seven focused tests);
+assembly register is uncommitted intermediate work, not a completed workflow.
+Baseline remaining-four-set comparison **78297** remains live. Full five-workflow
+goal active; no extraction, holdout, costing, push, merge or deployment change.
+See `../opentakeoff/docs/bas-production/PROGRESS.md` for exact evidence/limits.
+
+Latest isolated BAS verification supersedes older live-status entries below:
+MCP **33 BAS tests**, types/build/tool count pass; Python **119 tests**, mypy
+**12 files** pass. Final response-acceptance guards preserve complete history.
+Earlier full web check completed green; later guard-state check has **2 timing
+failures / 2,621 pass / 13 skips** in unchanged hatch/grid tests. Both original
+thresholds pass in isolation, but a clean full gate is still required.
+New calculation MCP run is terminal (post-import 600-second compile timeout);
+second browser run terminal (browser closed during indexing). Neither proves
+the new calculation end-to-end. Actual browser retry **95677** is running;
+starting four-set corpus comparison **78297**, PID 66280/Navfac 66378, remains
+live. No restart on observation timeout. Shared component source kernel has
+three passing tests and typecheck; not yet an integrated assembly workflow.
+Original M-512/M-601 reviewed, holdout untouched. Full goal remains active.
+
+Current isolated BAS increment is uncommitted: shared Python assigned listed
+values preserve original observations/citations, exact applicability factors,
+unknowns/attributes and immutable stale-aware history. Python **119 pass**, mypy
+**12 files**; MCP BAS **32 pass** before the final Python validator fix; web
+**2,623 pass / 13 skips**, bench pass, build pending. Real calculation browser
+attempt **failed during 600-second indexing**, not a passed UI proof; actual MCP
+`22070` remains live. Prior equipment-only proof is separately verified.
+
+Legacy core `21748` is terminal: takeoff **505/541**, reference **99/129**, graph
+cells **78/91** and symbols **133/138**; 53 key-flagged additions, 18 missing and
+absolute quantity delta 74. Not green. Graph and three sets' failures reproduce
+on starting revision `08dffc79`; remaining four-set baseline `78297` is live.
+Older live-status entries below are historical. Full current evidence/handles:
+`../opentakeoff/docs/bas-production/PROGRESS.md`. No extraction, key/scorer,
+threshold, holdout, costing, push, merge or deployment change in this increment.
+
+Verified isolated BAS equipment checkpoint: full web **2,623 pass / 13 existing
+skips**, typecheck/lint/bench/build pass; actual Behavioral UI **14 named members,
+5 original applicability references**, assignment/exceptions/source return,
+reload/export/fresh import/withdrawal all pass. Public MCP also passes; original
+graph/point/math exact. Explicit enlarged resource allowances and earlier
+diagnostic failures are disclosed. Core takeoff/reference job remains live;
+graph baseline misses unchanged. No all-five-workflow or production-complete
+claim. See `../opentakeoff/docs/bas-production/PROGRESS.md` for evidence and next.
+
+Equipment editor increment (isolated BAS branch, 2026-09-09): internal source and
+register tables, selected-equipment templates, explicit scopes/members/exceptions,
+shared validated preview/save, source-row reader and saved evidence references
+are implemented. Full web check passes 2,621 tests/13 existing skips plus build.
+Actual Behavioral UI and MCP walkthroughs are still live; earlier MCP default
+heap and post-import 120-second failures remain documented, not green. No new
+assignment demand arithmetic or installed corroboration yet. Full status and
+live handles: `../opentakeoff/docs/bas-production/PROGRESS.md`. No extraction,
+symbol threshold, costing, holdout, push or merge change.
+
+### Deterministic BAS production workflows — isolated branch (2026-09-09)
+
+Active goal and acceptance contract: `../opentakeoff/docs/BAS_PRODUCTION_GOAL.md`.
+Current research, exact baselines, limitations and next steps:
+`../opentakeoff/docs/bas-production/PROGRESS.md`.
+Active increment: shared source-backed equipment candidates, scoped register and
+durable per-unit/system-once assignments now reuse the existing SOO/point
+comparison. No installed count or new demand math. Focused shared 45 pass;
+MCP production 12 pass/typecheck, contract subset 132 pass; first full web 2620
+pass/13 existing skips, build/bench/lint/types pass; final rerun live. Existing
+real SOO browser workflow remains green with the new capture. Large Behavioral
+MCP proof hit the known baseline default-heap limit; phase-logged 4-GiB retry
+`89172` is live. Do not claim that walkthrough passed or default-memory safety.
+Seven-set corpus `21748` remains live: graph 78 correct/13 missing cells,
+133 expected symbol outcomes/5 missing. All graph misses reproduced on the
+starting revision; takeoff/reference pending. Full details and process handles
+are in the BAS progress record. Equipment UI/math, other workflows and full
+corpus/holdout gates remain unfinished. No VectorGrid/production deployment.
+
+Previous checkpoint:
+Latest: retained SOO text and auditable association events now work through the
+actual browser and MCP workflow, including source return, autosave/reload,
+export/import, stale/invalid-request rejection and removal history. Repaired an
+ordinary recompile reply that omitted retained review events; regression protected.
+Full web 2,600 pass/13 skips, typecheck/lint/bench/build pass; MCP BAS 23 pass,
+typecheck/build/tool count pass. New original-PDF source key separates system-wide
+matrix membership (14 named members) from a two-chiller operating limit versus
+three scheduled chillers. It is not installed-quantity proof or a completed
+equipment interpreter. Full seven-set legacy corpus gate `21748` and MCP contract
+subset `72013` are live; poll/revalidate rather than restart. See the detailed
+BAS progress for evidence and exact limitations. All five workflows remain open.
+
+Previous checkpoint: first shared SOO–point comparison kernel has six independently keyed
+real monitoring requirements, five listed matches and one selected-matrix
+omission. Printed DI preserved; no installed count inferred. Nine focused tests
+plus real Session/replay/source-preservation pass. Production compile/UI/persisted
+SOO integration remains next; this is not a delivered workflow. See linked BAS
+progress for exact coverage/limits. Final web check 2,593 pass/13 existing skips;
+typecheck/lint/bench/build pass. All verification jobs are terminal.
+
+Previous checkpoint: source-bound captures now persist across browser/MCP save,
+reload, export and reimport. Real browser: 12 matrices / 193 rows, fresh-context
+import, both themes/three widths, source paint and controlled changed-byte refusal
+pass. Real MCP compile/export/import parity passes. Full web 2,581 pass/13 skips
+plus three diagnostic tests; MCP BAS 22 pass, typecheck/build pass. All jobs
+terminal. No extraction change. Next: shared SOO–points–equipment reconciliation.
+All five workflows remain incomplete; historical source bytes are not archived.
+
+Previous checkpoint: shared source-bound point observations now cross the real
+production CLI/MCP path. Fort Sam 12 matrices / 193 listed rows, six source-note
+spans and 16 reviewed controller bindings; prior legacy/math fields unchanged.
+Python 97 pass, MCP BAS/diagnostic 20 pass, full web 2,573 pass/13 existing skips
+(typecheck/lint/bench/build pass); durable workflow/UI/export still incomplete.
+Core candidate: takeoff 89.8%, references 37/67, graph 78 correct/13 missing,
+66/66 symbols. Baseline reproduces the 13 Baker CEILING misses and all reported
+takeoff/reference failures. Three-document graph A/B is complete: prior tables
+12/12 Fort Sam, 9/9 Behavioral and 1/1 JVWTP preserved, only eight independently
+keyed Fort Sam additions. All verification handles are terminal.
+Use the linked latest checkpoint for current handles and performance limitations;
+older live-status paragraphs below are historical, not a restart instruction.
+Implementation is coordinator-only on `codex/bas-math-engine`, baseline `161583a4`.
+The new goal excludes vision/model training, pricing/costing/labor and automatic
+merges/deployments; those explicit limits supersede older scope notes below.
+30 focus and 190 source PDF hashes verified; 24 development truth records
+revalidated, six new-workflow holdouts reserved and unopened. Existing legacy
+MCP failures are disclosed, not scored away. No claim of production completion.
+First shared source adapter verified on 24 development PDFs / 1,253 pages /
+563,248 text spans with exact original text/frame/hash parity. Full web check
+passes (2,557 pass, 13 skips), focused BAS tests and MCP build/typecheck pass.
+This proves source preservation, not improved takeoff or SOO completeness;
+the detailed progress record distinguishes those scopes.
+Shared narrative discovery now has nine source-region controls across two PDFs,
+including embedded reset tables, plus exhaustive accounting/replay across all
+24 development PDFs. Final web check: 2,567 pass / 13 existing skips. This is
+not full SOO interpretation or a complete workflow. The missing 114 Fort Sam
+listed point rows were traced to the shared page-role routing gate; permission
+was requested before changing that gate. Detailed proof and pending work remain
+in the BAS production progress record above.
+User subsequently authorized the routing repair. Shared routing/reconciliation
+now recovers all 12 Fort Sam BAS matrices / 193 printed rows / 1,603 keyed cells,
+with the original 12 complete graph tables unchanged. No VectorGrid reader edit.
+Nested HARDWARE/SOFTWARE header interpretation is now tested in the shared
+Python consumer (73 tests pass; prior complete fixture outputs unchanged).
+These are printed-source results, not installed quantities or complete workflows.
+Focused graph gate: 78 correct / 0 wrong / 13 missing keyed cells, 66/66 expected
+symbol anchors. Baker CEILING baseline reproduction and takeoff/reference are
+still live; no non-regression claim yet. Behavioral A/B baseline hit the default
+V8 heap limit; the failure is retained, not scored away. Current process handles,
+runtime/RSS, exact comparisons and next steps are in the linked BAS progress.
+
 ### Vector takeoff engine research — commercial + OSS stack (2026-09-01 22:00 UTC)
 
 **User directive:** Regex/title tuning is not the engine. Commercial products (Kamai,
@@ -915,3 +1786,15 @@ honest (`corpus_pass_rate ≥ 0.95` not claimed until measured).
   the measured score gap.
 - OCR, raster vision, learned symbol detection, and local VLM are ON the shared
   vector pipeline when they genuinely improve recall — vector-first always.
+# BAS snapshot UI wrap-up — 2026-09-10
+
+User requested finish-current-work, merge to main after conflict/check verification,
+and a detailed user-impact report to conserve usage. No new feature phase started.
+The isolated BAS branch now has a public scoped snapshot reader/approval/import/
+export journey; two actual-Python real-PDF browser proofs passed with controlled
+review declarations. 26 focused client/storage tests pass. Full final web check
+passes: 2,918 pass / 13 existing skips / zero failures, all configured benchmarks
+and build. MCP/package/Python and remote merge checks remain.
+Details: `opentakeoff/docs/bas-production/SNAPSHOT_UI_PROOF.md`. No new corpus score
+or holdout claim. Full BAS goal remains incomplete; currentness/revocation, memory,
+Agent orchestration, point identity and final symbol acceptance remain open.

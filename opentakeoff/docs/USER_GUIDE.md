@@ -10,6 +10,456 @@ In a hurry, or already in the app? Press **`?`** (or the **?** button in the top
 
 ### Workspace navigation
 
+Development **Review & changes → Scope & coverage** lets you define which retained
+claims a deliverable will include. Choose a **Drawing source set**; **Manage
+drawing sets** opens the existing page-accounting workspace if none exists.
+Create a **New scope**, name its purpose, then **Include available claims** or
+select individual equipment, assigned-points, assembly, responsibility and
+engineering claims. The catalog retains outside/unlocated evidence. Unselected
+is not an explicit exclusion. Exclusions require a reason, consequence and
+original source references; they do not remove shared prerequisites or loads.
+**Preview scope** does not save. Inspect its diagnostics, supply a self-declared
+reviewer and decision reason, then **Save reviewed scope**. No saved scope is an
+approved takeoff.
+
+In **Source coverage**, choose an included claim and original page. **Load original
+source** shows retained text with drawing links. Review the whole page or selected
+original text spans, then **Prepare evidence mappings**. Suggestions only share
+existing source references; they do not establish applicability. Choose an
+assessment, explicitly select applicable mappings, inspect the original source,
+and record your decision with a reason. No suggestion or assessment is accepted
+automatically. Your draft and view survive returning from a citation; changed
+workflow inputs invalidate old previews.
+
+**Decision history → Read decision** replays original evidence and compares
+current dependencies. Overlapping contradictory reviews remain visible.
+**Withdraw decision** retains history. **Export decision evidence** includes the
+complete original/current result, not only visible rows; it is not a project
+backup. Keep the normal evidence workflow export and source-inclusive backup.
+These controls do not waive findings, verify hardware, establish installed
+quantity or finish the still-in-development approval/snapshot workflow.
+
+Development **Review & changes → Snapshots** separates readiness from approval.
+Choose a **Reviewed scope**, then **Check readiness**. The screen verifies exact
+original bytes and replays saved calculations through the shared Python service.
+Unavailable originals/service, incomplete coverage, stale dependencies or blocking
+findings prevent approval. Finish saving before checking: changes to the live or
+saved workspace invalidate preparation. **Scope & coverage** returns to the
+existing review editor; no missing source facts are filled automatically.
+
+Inspect **Included**, **Exclusions**, **Findings**, **Coverage** and **Original PDFs**.
+**Inspect claim** exposes exact retained dependencies, values and original inputs.
+Original evidence opens read-only without adding historical pages to active
+counting. Null quantities stay **Not established**. Findings outside the included
+scope remain visible and are not waived by this deliverable.
+
+When ready, enter **Reviewer (self-declared)** and **Approval reason**, explicitly
+confirm the scope, then **Approve scope & save snapshot**. Fresh verification runs
+again before an atomic, separate browser-local save. Working annotations are not
+replaced. This approves only the named scope—not a complete project, installed
+count, or engineering certification. Identity and timestamp are self-declared;
+there is no authenticated signature or server-enforced immutability.
+
+**Saved snapshots → Open snapshot** verifies historical bytes and calculations
+again. Metadata alone is not verification. The reader explicitly reports current
+applicability as not evaluated; currentness, revocation and supersession are still
+in development. **Download snapshot evidence ZIP** preserves the reviewed takeoff,
+scope, decisions, findings, calculations and original PDFs. Keep this ZIP outside
+browser storage; snapshots and originals are not synced and can be cleared or
+evicted. This is an evidence archive, not the pending readable result-table export.
+
+Use **Import historical snapshot** to verify and retain that archive without
+restoring working annotations or approving current drawings. From an empty plan
+picker, **Restore BAS evidence backup → Snapshots** reaches the same historical
+reader. The historical snapshot archive is distinct from the unapproved evidence
+backup format. **Cancel snapshot operation** stops pending work; if cancellation
+coincides with a completed save, refresh the saved list to check its outcome.
+
+On the development branch, **Takeoff → Review & changes** gathers saved BAS
+findings without altering quantities or decisions. Filter by **Area**, **Severity**
+or **Find a finding**; select a finding to see its exact source and original inputs.
+**View PDF page** opens the original loaded document version. Reopen Takeoff to
+return to the same selection and filters; **Back to findings** restores keyboard
+focus. The domain-workspace button opens the existing review/editor, not an
+automatic correction. **Export findings** includes all findings, regardless of
+filters, and is not an importable evidence archive or approved deliverable.
+Keep the normal evidence JSON and original PDFs. The development snapshot flow is
+described above; full release/currentness controls remain incomplete. A blocker
+here is a saved finding to review, not a claim that the entire design was checked.
+
+Saving/restoring the same evidence does not create new finding occurrences merely
+because JSON object keys change order. Current findings use `saved_bas_findings_2`;
+older standalone finding exports keep their original rule and IDs. Raw header
+order, blank cells, unlocated evidence and distinct source boxes are preserved.
+
+**Acknowledge** records awareness of an exact finding; **Begin correction** records
+it before opening its domain workspace. Supply a reason and self-declared reviewer.
+These actions never hide findings, alter quantities or approve the takeoff.
+**Decision history** retains observations even after the underlying issue stops
+appearing. Open a decision to replay its original evidence against its pinned
+inputs. After changing the underlying decisions, **Record no longer reported**
+requires shared recomputation to confirm absence. Removal or exclusion can cause
+absence; this is not physical correction or design verification. **Withdraw
+decision** adds a withdrawal, without deleting history. **Export replayed decision**
+contains the full replay; use ordinary evidence export/backup for project recovery.
+Drafts remain through source/domain navigation; stale inputs require a fresh
+decision draft. **Return to issue review** returns from the domain workspace.
+Approved snapshots remain unfinished.
+
+SOO finding routes select and focus the exact clause, region boundary or linked
+matrix comparison, even when another region has the same title. An unavailable
+or historical target is disclosed rather than replaced with a current namesake.
+Historical decision actions and draft submission are read-only in that context;
+the original evidence and draft are retained. Existing assignment findings still
+open the exact equipment assignment editor.
+
+Page/source findings open **Sequences & links → Source coverage**. Choose a
+**Source accounting page** and **Text accounting group** to inspect the shared
+discovery partition: detected body, heading-only, ambiguous, unassigned,
+unsupported and blank spans. **View original source** opens the exact retained
+span's original PDF location. **Previous text** / **Next text** page 50 spans at
+a time; evidence exports still contain the entire record. This reader does not
+mark a page reviewed, interpret unsupported prose, discard unassigned text or
+approve a takeoff. Explicit coverage decisions are separate, under
+**Review & changes → Scope & coverage**. **Sequence reader** returns to normal sequence browsing; association drafts
+survive issue/source navigation. The shared source and comparison services have
+not changed.
+
+**Original PDFs** lists every physical version referenced by saved BAS history,
+including historical captures. **Retain original** finds the exact bytes among
+loaded files or the local revision trail and stores one protected copy in this
+browser project. It verifies length and SHA-256; a newer namesake cannot substitute.
+Save the BAS workflow first; if it changes during verification, retry. Closing a
+PDF afterward removes its ordinary filename trail, but not this retained copy.
+**Verify retained copy** checks the stored bytes again; **Download original**
+verifies and downloads a digest-named PDF for external backup or manual reopening.
+Verification is per visit, not an ongoing guarantee. **Open original** opens a
+read-only reader without adding the PDF to the active drawing set. Use the page
+controls, **Whole page**, **Focus citation**, or **Display** size to inspect it.
+The page retains its original rotation. Historical source links use this reader
+when the exact PDF is no longer active; current-sheet links work as before.
+The reader verifies exact bytes and the saved page dimensions before outlining
+the unchanged citation. Missing/corrupt originals or mismatched frames refuse;
+they never redirect to a newer namesake. Legacy histories without saved frames
+support whole-page inspection through **Open original**, not guessed highlights.
+**Back to takeoff** (or Escape inside the reader) restores the prior view and
+keyboard focus without resetting filters or creating a markup. PDFs over 512 MiB
+are refused; rendering is capped at 2,000 pixels on the long edge, so use a source
+crop to read dense notes. Password-protected originals cannot be opened here.
+
+Retention is browser-local, including local-first synced projects; these copies
+are not synced to Drive or a folder. Legacy cloud-only storage reports that this
+action is unavailable. Browser clearing or eviction can remove them. Keep the
+PDFs externally and retain the ordinary takeoff JSON too: neither download alone
+is a complete evidence archive. Retention does not change findings, calculations,
+approvals or the current drawing set. Storage failures do not delete old evidence
+to make room. No approved snapshot is created by these actions.
+
+**Download evidence bundle** packages the saved takeoff JSON with all original
+PDF versions referenced by BAS history—including old captures—in one `.otbas.zip`.
+Keep it outside browser storage. Missing or mismatched originals stop the download;
+no partial archive is offered. Unsaved changes are not included. A saved workspace
+change during export requires retry. **Cancel backup operation** stops publication.
+**Verify evidence bundle** checks the selected archive, every PDF digest and saved
+source ownership without changing the workspace. It does not replay calculations,
+approve a takeoff or automatically restore a project. After file verification,
+**Replay saved calculations** reruns every saved assignment, assembly and
+engineering record against its original inputs through the existing shared
+Python engine. The result names the checked counts, including historical records.
+It does not make old dependencies current, prove discovery completeness or approve
+anything. No saved records means **no saved calculations**, not a complete audit.
+The local Python service must be configured; unsupported environments report its
+absence instead of accepting the backup as calculation-verified. This browser
+request is limited to 32 MiB of saved workflow JSON. Cancellation or failure
+accepts no replay result and changes no saved state. ZIP utilities can extract
+`takeoff.json` and digest-named `sources/*.pdf` for manual reopening/import; legacy
+filename-bound annotations may need the original name listed in `manifest.json`.
+Do not overwrite a newer namesake without explicitly selecting the intended version.
+Archives are unencrypted and unsigned—store/share them as project-confidential data.
+Supported limits and current proof: [evidence bundle contract](bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
+
+In local and local-first synced storage, **Preview restore** shows the normal operator-preserving
+merge. **Discard preview** changes nothing. **Restore reviewed merge** replays
+the complete merged BAS history through Python, verifies every required original,
+then saves originals, takeoff, previous-state journal and new save version together.
+Quota, cancellation, stale state and mismatched bytes refuse without publishing a
+partial restore. Old annotations require the exact original under its recorded
+filename; ambiguous version ownership must be reviewed, not guessed. Archived
+PDFs stay separate from active counting sheets and open through **Open original**.
+At the empty plan picker, use **Restore BAS evidence backup** to reach this flow.
+
+This restores an unapproved backup, not an approved deliverable or current design.
+MCP offers the same shared merge/replay through explicit preview and commit;
+its recovery directory retains originals and previous state without adding old
+PDFs to active counting. Journals are local
+storage records, not authenticated signatures or a completed rollback UI. A crash
+can leave unpublished staging data; existing originals are never silently deleted
+to reclaim space. See [restore proof and remaining boundaries](bas-production/RESTORE_BROWSER_PROOF.md).
+
+The development build adds save-version protection for browser-local atomic
+restoration. A detected replacement conflict stops this editor's autosaves; it
+does not discard the editor's unsaved work. Use **Export unsaved takeoff** to
+download that editable JSON, then **Reload saved version** to inspect the saved
+project. The JSON does not include PDFs. The conflict stays visible even after
+exporting, and closing/reloading a conflicted tab warns about unsaved work.
+Other readers cannot silently authorize an older editor to overwrite the project.
+The local database's v5 upgrade preserves existing records; builds using v3 or v4 must
+reload before saving. This is not an archive restore action, and ordinary JSON
+and `.otk` imports retain their existing behavior. Legacy cloud-only storage is
+unchanged; the local-first adapter forwards the local version guard.
+
+Local-first sync preserves compatible BAS history from known versions. An older
+snapshot omitting it is not a deletion request. **BAS sync needs review** means
+the histories cannot safely combine; local work remains available and that sync
+operation did not overwrite either takeoff. **Export remote recovery copy**
+downloads the saved unmerged remote JSON when a copy was successfully retained.
+It is unverified, unapproved and contains no original PDFs. If no copy could be
+saved, the notice says so. Keep both takeoffs; do not edit fingerprints or erase
+events to force them to merge. **Check sync again** retries after the conflict
+has been addressed; it does not choose a winning review decision. The notice
+survives reload. This protection does not supply atomic cross-device writes.
+See [sync history proof](bas-production/SYNC_HISTORY_PROOF.md).
+
+Local-first Drive, synced-folder and Microsoft 365 workspaces coordinate evidence
+restore with active annotation sync and other tabs sharing the same local project.
+A queued restore can be cancelled; a changed preview must be reviewed again.
+Ordinary local edits do not wait for the network. A successful restore is saved
+locally even if the provider is offline. **Retry / check restore sync** reports
+whether that restored save generation reached the provider and retries when needed;
+it is not a guarantee of another device's copy or later edits. Original PDFs remain
+browser-local—keep the evidence ZIP outside the browser. Pending restore state
+survives reload. Unknown remote ancestry uses the operator-preserving import merge
+and retains a remote recovery snapshot. Conflicting BAS histories still require review.
+
+This requires Web Locks support and coordinates cooperating tabs in one browser
+storage context, not other devices or already-issued requests from a terminated
+tab. Existing providers do not implement atomic server-side revision checks.
+Legacy cloud-only restore remains unavailable. See
+[sync restore guarantees and proof](bas-production/SYNC_RESTORE_CONTRACT.md).
+
+On the development branch, **Takeoff → Equipment** displays original equipment
+schedule rows and a separate **Scoped equipment register**. **Create scope**
+records established building, level, system and phase labels; leave missing
+labels blank. **Register printed members** binds exact source members to that
+scope. Repeated labels or views are not automatically merged or counted.
+
+Select a registered equipment tag to inspect its source and **Assign point list**.
+Choose the matrix, explicitly establish **Per included equipment** or **Once for
+this system**, select the members and any exceptions, and optionally link source
+sequence regions and drawing-text references. Every edit needs a reason.
+**Preview decision** invokes the same validation as MCP. Editing any input
+invalidates that preview; **Record decision** preserves the resulting register
+and prior history. An outdated draft must be discarded and reviewed again.
+
+**Edit identity & sources** can bind additional explicitly reviewed views to the
+same identity. **Withdraw assignment** retains its previous decisions; remove
+references before removing an equipment identity. **Export evidence & decisions**
+includes the complete BAS record, independent of table filters. Autosave and
+**Import takeoff…** retain it; source navigation requires the exact PDF bytes.
+These are named scheduled members and reviewed assignments, not installed counts
+or approved releases. The editor adds no canvas toolbar or floating panel.
+
+On the development branch, **Review & changes → Drawing changes** manages
+source-set and page-correspondence history separately from equipment decisions.
+Choose a retained **Evidence capture**, then **New source set** to select pages.
+Selection order becomes the source-set order; reselecting a page appends it.
+For a revision, select its baseline source set and incoming capture, choose a
+partial addendum or replacement set, then **Start revision review**. Review every
+baseline and incoming page, explicitly pairing replacements and recording
+additions, removals or unresolved decisions. Partial-addendum omissions are
+proposed as retained; they still require confirmation. Exact-source duplicate
+pages can be recorded without adding them again.
+
+Enter a self-declared reviewer and reason, **Preview page accounting**, then
+**Record page accounting**. Editing inputs invalidates the preview. Source links
+open the retained original without rebinding evidence to the current drawing;
+returning preserves the draft. Decision history, autosave and **Export evidence &
+decisions** preserve recorded reviews. Keep original PDFs or a source-inclusive
+backup for later source viewing. Unresolved reviews publish no complete source
+set. **Compare retained evidence** compares available text and page geometry,
+not full drawing ink. These records do not change counts or approve a takeoff;
+the approval journey remains in development.
+
+Within **Drawing changes**, choose **Compare requirements & quantities**. Select
+the before/after source sets and **Start comparison**. **Pinned versions** records
+the exact SOO, equipment, assembly, engineering and calculation versions used.
+**Compare requirements and quantities** produces a full-width table; filter it,
+select an item and inspect its original PDF evidence or unchanged original fields.
+**Review item correspondence** records explicit pairs, additions, removals and
+reasons. Changing a pairing or version requires a fresh comparison before saving.
+Unknown, unpaired and incompatible quantities never become zero differences.
+
+Name the comparison, enter a self-declared reviewer and reason, then **Save
+comparison review**. Saving rechecks the complete comparison through the shared
+Python-backed service. The project autosave and **Export evidence & decisions**
+retain the review; **Reopen** reruns its pinned comparison. Changed replays are
+explicitly flagged. **Export complete comparison** includes all rows, not just
+the current filter/page. Drafts survive source navigation, not browser reload;
+save before closing the project. This is review history, not takeoff approval,
+complete requirement discovery or verified installed quantity. Keep the exact
+original PDFs or a source-inclusive backup for later evidence inspection.
+
+After recording assignments, choose **Calculate assigned values**. The shared
+Python engine applies each known listed value to the included members, or applies
+a system-wide matrix once. Expand **Assigned listed values** in equipment details
+to inspect the original value, application factor, derived value and **View source
+cell** link. The reader retains its open state and page when you visit the drawing.
+Alarm/trend attributes are not multiplied into I/O quantities. Unknown cells
+remain unknown; known listed subtotals are not complete, unique-device or verified
+field-wiring totals. Controller qualifications and source gaps remain available.
+Saved results identify their exact evidence capture, equipment decision and rule.
+Changing an assignment marks previous results historical; calculate again for
+the current decisions. Export/import and withdrawal retain earlier calculations.
+The server-capable local endpoint and Python runtime are required; there is no
+browser math fallback or inferred installation, protocol, hardware or pricing.
+
+Within selected equipment, **Engineering** opens declared compatibility checks.
+Use **Declared resources** to name equipment-owned endpoints, supplies, pools,
+terminals, modules or network locations; these are declarations, not detections.
+In **Checks**, select a check type and choose **New check**. Required fields
+start blank and missing ratings remain **Unknown / not provided**. Enter only
+declared values and attach exact drawing text when transcribing a requirement.
+Source references navigate to the original PDF; counterpart capabilities absent
+from the drawing must be disclosed explicit inputs, not claimed extraction.
+
+Use **Stage check & continue editing** for related changes. Staging does not save.
+**Preview & calculate** runs the complete staged register in shared Python;
+**Record engineering decision** checks it again against current source and review
+heads before saving. Failed and missing constraints remain separately visible,
+including explicitly excluded checks. Editing invalidates the preview; cancellation
+or changed source state cannot save a late response. Discard an outdated draft
+and review the current dependencies before trying again.
+
+**Read check** exposes original inputs and exact calculation outcomes. Each
+outcome's input links identify explicit declarations versus manual drawing
+transcriptions; they do not imply automatic hardware discovery. References on
+an individual input are separate from overall check-applicability references.
+Large result tables page through every retained constraint, fifty at a time.
+**Review saved engineering** on the equipment table keeps reviews accessible
+after equipment withdrawal; historical results do not become current again.
+After
+reload or import, use **Verify saved calculations** to replay retained results
+through shared Python. Replay does not make outdated dependencies current and
+does not approve the project. **Export evidence & decisions** retains the full
+register, original evidence and calculation history as JSON.
+**Export saved engineering XLSX** replays saved calculations and downloads a
+separate review workbook with checks, exact inputs, constraints, exclusions,
+source locations and prior reviews. Unsaved edits stay in the editor and are
+not exported. Stale dependencies remain stale after replay. Keep the JSON
+archive and original PDFs for reimport; the workbook is not a live calculator or
+approved release. Long or XML-incompatible source text is retained in ordered
+**Full text** parts rather than silently truncated. Existing schedule-row and
+commercial workbooks keep their meaning. This development workflow needs
+the local server-capable endpoint and configured Python runtime, not a browser
+calculator. Full engineering coverage and release acceptance remain in progress.
+
+Within selected equipment, choose **Assembly & responsibilities** for its
+component table. **Add from drawing declarations** offers supported explicit fan
+VFD pairs and factory-furnished onboard-controller declarations; it does not
+automatically establish which equipment they apply to. Review the original PDF,
+selected members, **Applicability**, condition, lifecycle and reasons. Other
+components can be recorded with **Add explicit component** and drawing references.
+Such quantities are labeled user decisions, not extracted facts. Leave an
+unestablished quantity blank. Source-derived values cannot silently override
+their original declarations.
+
+An existing register keeps its original interpretation rule. **Review expanded
+component rules** stages an explicit rule upgrade: review the newly available
+declarations, enter **Overall assembly change reason**, preview, and save. The
+expanded rule supports complete, explicitly singular lists of terminal-equipment
+controllers, dual-technology occupancy sensors, downstream static-pressure
+sensors and primary modulating supply-air dampers. Different sensor roles remain
+separate; no additional actuator, channel, responsibility or installed quantity
+is inferred. Unsupported or conditional wording remains uninterpreted.
+
+Each declaration row shows its literal quantity. Expand **Original wording**
+for the full paragraph and individual PDF references; Enter and Space operate
+the disclosure. Its open state and your filter survive a source-view round trip.
+A rule upgrade preserves earlier reviews and quantities, makes dependent results
+stale, and does not silently add components or establish equipment applicability.
+
+Expand **Responsibility decisions** to record furnish, install, wire, program
+and test assignments independently. Factory furnishing establishes furnishing
+only. Different claims remain visible; **Resolve responsibility conflicts
+explicitly** selects a retained claim with a reason, without deleting the other
+evidence. This records takeoff scope, not commissioning execution or signoff.
+**Preview assembly decision** validates the complete register before **Save
+assembly decision**. Editing the draft invalidates its preview.
+
+**Calculate assembly quantities** saves each declared quantity, included members,
+application factor and resulting contribution through shared Python. The table's
+contribution covers the whole selected group, not only the currently selected
+equipment. It is not a project total or verified installed count. A false
+condition or explicit exclusion contributes zero only when the original quantity
+is known; an unknown original quantity remains unknown. Changes to equipment or
+assemblies leave earlier results visible as stale.
+
+For several interdependent repairs, use **Stage component edit**, repair the
+remaining records, enter **Overall assembly change reason**, and choose **Preview
+all pending assembly changes** then **Save all assembly changes**. Staging does
+not save a partially valid register. **Withdraw component** requires a reason
+and retains earlier source/decision history. **Review saved assemblies** from the
+equipment table remains available after equipment is removed. **Export evidence
+& decisions** includes all assembly history and calculations; existing row CSV,
+Excel and PDF exports still contain their original schedule rows. No pricing or
+labor values are added. Saved review does not constitute release approval.
+
+For a BAS points takeoff, the **Takeoff** tab also shows **BAS takeoff · Engineering**.
+Points is the default table; I/O capacity, Networks, Licenses and Issues separate
+the remaining decisions. Arrow keys, Home and End move among these views. The
+point filter does not change totals. **View source** uses the original drawing
+citation. **Export BAS JSON** includes engineering results, assumptions and
+diagnostics; the original CSV/Excel/PDF buttons still export the original
+schedule rows, not the new engineering calculations. Review missing SOO,
+unverified equipment replication and policy gaps before procurement. Abstract
+I/O profiles and spare policies must be supplied explicitly through the BAS
+compile options; no actual product is selected. See [BAS setup](../bas_engine/README.md).
+
+Point lists may be on detail or plan sheets, not only schedule sheets. Separate
+matrices can reuse local row numbers without being the same table. For supported
+nested headings, the BAS calculation reads HARDWARE POINTS and SOFTWARE POINTS
+with their directional/value subheadings. Alarm, trend and graphics flags do not
+add terminals or software values. These are listed-table calculations, not
+verified installed quantities; controller-provided qualifiers and applicability
+still need review. The original cells and source locations remain available.
+
+Full compile JSON additionally contains `bas_point_lists`: source-bound listed
+observations, supported controller footnotes, and separate unobserved-column
+accounting for sparse tables. The existing **Export BAS JSON** button exports
+engineering math only; row workbooks remain row exports. **Takeoff → Point lists**
+opens the original digital matrices, including nested header rows. Select a
+point's row number for observations, controller notes and unresolved fields;
+click a printed value to inspect its source. Missing cells are marked “—”,
+not silently filled with zero. **Export point evidence** includes all captures
+and rows regardless of filters and can be reopened with **Import takeoff…**.
+
+Choose **Sequences & links** within Point lists to read retained original SOO
+text. Select a sequence, then expand **Link a point list and equipment reference**.
+Choose a matrix and literal drawing-text reference, enter its tag and established
+scope, and explain the association. **Save comparison link** records the link;
+it does not replicate a template or establish installed equipment. Supported
+monitoring clauses compare against point names; an omitted match means “Not
+listed in selected matrix,” not absent from the whole project. Other clauses
+remain visible and uninterpreted. Use source buttons to inspect the drawing.
+
+Edits and removals require reasons and retain prior events. **Export BAS evidence
+& history** saves the complete record, regardless of the current selection.
+Project reload and **Import takeoff…** retain it. Stale review versions and
+divergent imported histories require attention rather than silently overwriting
+newer work. Old point-only captures need recompilation of the original PDFs
+before they can show SOO text. History records local origins, not authenticated
+reviewers, approvals, or server-enforced immutability.
+
+Point captures persist through project autosave, JSON and snapshots. They are
+not approved releases. Captures retain source hashes, but these JSON files do
+not contain historical PDF bytes. Reopen the exact original PDF to navigate
+old evidence; a changed file with the same name is refused. A renamed copy of
+the same bytes can still resolve. Existing engineering calculations remain
+transient; installed-equipment reconciliation, immutable source archives, broader source corrections
+and approved revision workflows are still in development. Neither an
+absent cell nor a controller-provided point establishes zero field scope or a
+new wired terminal.
+
 The canvas header keeps **Open · Sheets · Plans** together on the left; centers the
 larger **sheet navigation** controls; and groups equal-sized **Takeoff · Edit · ⋯**
 controls at the upper right. **Schedules** and
@@ -876,7 +1326,7 @@ What's sent, and only when you run an AI feature: the sheet region in question a
 
 The same engine speaks [MCP](https://modelcontextprotocol.io), one command away:
 `npx -y opentakeoff-mcp` (or the one-click `opentakeoff-mcp.mcpb` bundle for Claude Desktop). An
-MCP client gets **<!--tool-count-->50<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
+MCP client gets **<!--tool-count-->53<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
 with the same scale gate and the same provenance receipts:
 
 | Group | Tools |

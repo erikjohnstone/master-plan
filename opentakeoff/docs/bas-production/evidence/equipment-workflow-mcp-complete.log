@@ -1,0 +1,30 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+{"phase":"load_plan:start","elapsed_ms":0,"rss_bytes":290226176,"heap_bytes":72178696}
+{"phase":"load_plan:complete","elapsed_ms":4309,"rss_bytes":485064704,"heap_bytes":92420928}
+{"phase":"graph:start","elapsed_ms":4309,"rss_bytes":485064704,"heap_bytes":92348600}
+{"phase":"graph:ready","elapsed_ms":318786,"rss_bytes":221954048,"heap_bytes":2325640632}
+{"phase":"graph:clone-ready","elapsed_ms":318817,"rss_bytes":229883904,"heap_bytes":2326615928}
+{"phase":"compile_corpus_takeoff:start","elapsed_ms":318817,"rss_bytes":229883904,"heap_bytes":2326617968}
+{"phase":"compile_corpus_takeoff:complete","elapsed_ms":321500,"rss_bytes":375177216,"heap_bytes":2502880272}
+{"phase":"compile_corpus_takeoff:start","elapsed_ms":321647,"rss_bytes":382271488,"heap_bytes":2505998776}
+{"phase":"compile_corpus_takeoff:complete","elapsed_ms":325630,"rss_bytes":330481664,"heap_bytes":2818096968}
+{"phase":"compile_corpus_takeoff:start","elapsed_ms":325850,"rss_bytes":363036672,"heap_bytes":2857672976}
+{"phase":"compile_corpus_takeoff:complete","elapsed_ms":328754,"rss_bytes":453296128,"heap_bytes":3127629376}
+{"phase":"compile_corpus_takeoff:start","elapsed_ms":328779,"rss_bytes":462553088,"heap_bytes":3132151936}
+{"phase":"compile_corpus_takeoff:complete","elapsed_ms":334318,"rss_bytes":817004544,"heap_bytes":2004515416}
+{"phase":"compile_corpus_takeoff:start","elapsed_ms":334368,"rss_bytes":811499520,"heap_bytes":2014112072}
+{"phase":"compile_corpus_takeoff:complete","elapsed_ms":336292,"rss_bytes":622264320,"heap_bytes":2130638400}
+{"phase":"compile_corpus_takeoff:start","elapsed_ms":336317,"rss_bytes":629473280,"heap_bytes":2136182768}
+{"phase":"compile_corpus_takeoff:complete","elapsed_ms":338246,"rss_bytes":460423168,"heap_bytes":2308512808}
+{"phase":"compile_corpus_takeoff:start","elapsed_ms":338345,"rss_bytes":485670912,"heap_bytes":2311703016}
+{"phase":"compile_corpus_takeoff:complete","elapsed_ms":338350,"rss_bytes":486866944,"heap_bytes":2311983128}
+{"phase":"export_takeoff:start","elapsed_ms":338367,"rss_bytes":487178240,"heap_bytes":2315179416}
+{"phase":"export_takeoff:complete","elapsed_ms":338789,"rss_bytes":600637440,"heap_bytes":2363110224}
+{"phase":"load_plan:start","elapsed_ms":338821,"rss_bytes":608600064,"heap_bytes":2373873512}
+{"phase":"load_plan:complete","elapsed_ms":350134,"rss_bytes":247087104,"heap_bytes":397310872}
+{"phase":"import_takeoff:start","elapsed_ms":350137,"rss_bytes":247939072,"heap_bytes":397313872}
+{"phase":"import_takeoff:complete","elapsed_ms":351412,"rss_bytes":411353088,"heap_bytes":517722784}
+{"phase":"compile_corpus_takeoff:start","elapsed_ms":351648,"rss_bytes":431915008,"heap_bytes":557455040}
+{"phase":"compile_corpus_takeoff:complete","elapsed_ms":632884,"rss_bytes":319438848,"heap_bytes":2735330448}
+{"ok":true,"source_sha256":"b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711","source_scheduled_members":14,"applicability":"system_once","installed_quantity":null,"legacy_compile_exact":true,"point_result_exact":true,"legacy_math_exact":true,"graph_exact":true,"replay_exact":true,"raw_equipment_tables":7,"checks":["public MCP typed/text parity","source-owned candidate lookup","explicit scope/register/assignment","retry","ordinary recompile","stale/foreign/non-BAS rejection","export/reset/import","withdrawal retaining history"],"workflow_bytes":1788448,"elapsed_ms":633067,"main_process_peak_rss_bytes":1493106688,"project_complete":false,"limits":"Explicit 4-GiB Node allowance and 600-s MCP compile deadline; default-heap/default-deadline safety not established. Scheduled-source assignment only. No new installed proof, demand adapter, equipment UI, approval or real addendum test in this diagnostic."}

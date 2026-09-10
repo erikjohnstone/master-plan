@@ -1,0 +1,39 @@
+name: BAS math verification
+on:
+  pull_request:
+    paths:
+      - 'opentakeoff/bas_engine/**'
+      - 'opentakeoff/mcp/**'
+      - 'opentakeoff/web/**'
+      - '.github/workflows/bas-math.yml'
+permissions:
+  contents: read
+jobs:
+  bas-math:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install './opentakeoff/bas_engine[test]'
+      - run: python -m pytest bas_engine/tests -q
+        working-directory: opentakeoff
+      - run: python -m mypy --config-file bas_engine/pyproject.toml bas_engine --exclude tests
+        working-directory: opentakeoff
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: opentakeoff/package-lock.json
+      - run: npm ci
+        working-directory: opentakeoff
+      - run: npm run typecheck
+        working-directory: opentakeoff/mcp
+      - run: node --import tsx --test test/basMath.test.ts
+        working-directory: opentakeoff/mcp
+      - run: npm run build && npm run smoke:dist
+        working-directory: opentakeoff/mcp
+      - run: node scripts/smoke-bas-dist.mjs
+        working-directory: opentakeoff/mcp

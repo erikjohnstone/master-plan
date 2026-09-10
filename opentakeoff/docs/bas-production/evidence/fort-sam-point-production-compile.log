@@ -1,0 +1,7 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+OT_PROGRESS	{"phase":"load","message":"Loading 1 plan PDF…","pdf_count":1}
+OT_PROGRESS	{"phase":"graph","message":"Building Session + ODL sheet graph (schedules, roles, tables)…"}
+OT_PROGRESS	{"phase":"graph","message":"Sheet graph ready — 9 sheets, 20 schedule tables.","sheet_count":9,"table_count":20}
+OT_PROGRESS	{"phase":"compile","message":"Compiling BAS points takeoff from extracted schedules…","kind":"bas_points"}
+OT_PROGRESS	{"phase":"done","message":"Compile finished — 0 lines ready for Takeoff.","kind":"bas_points","takeoff_id":"T-BAS-01","items":0}

@@ -20,8 +20,9 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename, resolve } from "node:path";
 import { cachedSheetGraph } from "./sheetGraphCache.mjs";
+import { writeJsonAndExit } from "./cliJson.mjs";
 import { Session } from "../src/session.ts";
-import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
+import { compileProductionTakeoff } from "../src/productionTakeoff.ts";
 import { reconcileSchedulePlan } from "../src/takeoff.ts";
 
 function argsOf(argv, name) {
@@ -45,6 +46,8 @@ function progress(phase, message, extra = {}) {
 const mode = arg(process.argv, "--mode") || "graph";
 const kind = arg(process.argv, "--kind");
 const service = arg(process.argv, "--service");
+const basMathOptions = process.argv.includes("--bas-math-options-stdin")
+  ? JSON.parse(readFileSync(0, "utf8")) : undefined;
 const sweepTag = arg(process.argv, "--tag");
 const marksCsv = arg(process.argv, "--marks");
 const family = arg(process.argv, "--family");
@@ -116,19 +119,17 @@ if (mode === "graph") {
   const json = JSON.stringify(graph);
   if (outPath) {
     writeFileSync(outPath, json);
-    process.stdout.write(`${JSON.stringify({ ok: true, bytes: json.length, out: outPath })}\n`);
+    await writeJsonAndExit({ ok: true, bytes: json.length, out: outPath });
   } else {
     // Large graphs can stress pipe buffering — prefer --out from the middleware.
-    process.stdout.write(`${json}\n`);
+    await writeJsonAndExit(graph);
   }
-  process.exit(0);
 }
 
 if (mode === "sweep") {
   progress("sweep", `Sweeping schedule row ${sweepTag} on shared Session path…`, { tag: sweepTag });
   const result = await session.sweepScheduleRow(sweepTag, { evaluationFast });
-  process.stdout.write(`${JSON.stringify(result)}\n`);
-  process.exit(0);
+  await writeJsonAndExit(result);
 }
 
 if (mode === "count_marks") {
@@ -137,8 +138,7 @@ if (mode === "count_marks") {
     : undefined;
   progress("count", `Counting marks on shared Session path…`, { marks: marks?.length ?? "all" });
   const result = await session.countMarks({ marks });
-  process.stdout.write(`${JSON.stringify(result)}\n`);
-  process.exit(0);
+  await writeJsonAndExit(result);
 }
 
 if (mode === "reconcile") {
@@ -152,8 +152,7 @@ if (mode === "reconcile") {
     evaluationFast,
     familySweepAll,
   });
-  process.stdout.write(`${JSON.stringify(result)}\n`);
-  process.exit(0);
+  await writeJsonAndExit(result);
 }
 
 if (mode !== "compile") {
@@ -162,7 +161,9 @@ if (mode !== "compile") {
 }
 
 progress("compile", `Compiling ${kindLabel} takeoff from extracted schedules…`, { kind });
-const compiled = compileTakeoff(session, graph, kind, service ? { service } : {});
+const compiled = await compileProductionTakeoff(session, graph, kind, {
+  ...(service ? { service } : {}), ...(basMathOptions ? { bas_math: basMathOptions } : {}),
+});
 const totals = compiled?.totals || {};
 const items = totals.items ?? totals.rows ?? null;
 progress("done", items != null
@@ -172,14 +173,7 @@ progress("done", items != null
   takeoff_id: compiled?.takeoff_id,
   items,
 });
-process.stdout.write(`${JSON.stringify(compiled)}\n`);
-// Every other mode above exits explicitly (graph/sweep/count_marks/reconcile
-// all call process.exit(0)) — this one fell off the end of the script
-// instead. compileTakeoff can start a persistent Python sidecar (vectorgrid),
-// and a live child process with open stdio pipes keeps Node's event loop
-// alive indefinitely — the same shape of bug already found and fixed once in
-// vectorTakeoffPipeline.test.ts (shutdownVectorGrid in an `after` hook).
-// Here it hung compileProgressWalkthrough.test.ts's `child.on("close")` wait
-// forever, since this CLI is spawned as a real subprocess: a hung child
-// process never emits `close` no matter how long the parent test waits.
-process.exit(0);
+// Exiting immediately after write truncated larger BAS results at the pipe
+// buffer boundary. Falling off the script instead leaves reader children alive.
+// Drain the exact response first, then exit. No extraction semantics change.
+await writeJsonAndExit(compiled);

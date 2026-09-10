@@ -1,0 +1,25 @@
+{
+  "proof": "public_browser_bas_snapshots",
+  "controlled_reviews": true,
+  "fresh_extraction_accuracy_claim": false,
+  "original_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "retained_input_sha256": "669c397133b88b7870e6e8027d28f7e3f2583b09a778b64ea14f0bd9b5fae156",
+  "snapshot_id": "f224271d0dd3370d0cb5bb0938694194bb5dc48878e72ac485c0b7946e3dc0e3",
+  "browser": "152.0.7977.83",
+  "timing": {
+    "readiness_ms": 3720.782084000006,
+    "approve_ms": 5818.990334000002,
+    "export_ms": 5167.900833,
+    "reopen_ms": 5190.651583000006
+  },
+  "checks": [
+    "Readiness does not approve; explicit reviewer, reason and confirmation required",
+    "Exact PDF citation renders in isolated reader; selected claim survives return",
+    "Actual button saves separate snapshot without replacing BAS evidence or measurements",
+    "Reload and actual Open snapshot reverify original bytes and shared Python",
+    "Exported snapshot imports idempotently through public UI; no duplicate approval",
+    "Fresh empty browser imports and renders original without replacing annotations or adding active counting sheets"
+  ],
+  "actual_python_requests": 5,
+  "errors": []
+}

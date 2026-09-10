@@ -1,0 +1,23 @@
+
+> opentakeoff-web@0.1.0 check
+> npm run typecheck && npm run lint && npm test && npm run bench && npm run build
+
+
+> opentakeoff-web@0.1.0 typecheck
+> tsc --noEmit
+
+test/helpers/basEngineeringFixture.ts(33,57): error TS2339: Property 'sources' does not exist on type 'BasSourceContext'.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web
+npm error workspace opentakeoff-web@0.1.0
+npm error location /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web
+npm error command failed
+npm error command sh -c tsc --noEmit
+npm error Lifecycle script `check` failed with error:
+npm error code 2
+npm error path /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web
+npm error workspace opentakeoff-web@0.1.0
+npm error location /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web
+npm error command failed
+npm error command sh -c npm run typecheck && npm run lint && npm test && npm run bench && npm run build

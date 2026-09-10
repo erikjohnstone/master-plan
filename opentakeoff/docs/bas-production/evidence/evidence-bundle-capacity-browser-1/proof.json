@@ -1,0 +1,16 @@
+{
+  "source_bytes": 551119404,
+  "archive_bytes": 551124749,
+  "export_ms": 2857.800000011921,
+  "verify_ms": 3648.399999976158,
+  "bundle_id": "21bb6362e130ffda2d2cbe414c2e5299510a8bf6e08ad48237d8b91087027402",
+  "sources": 4,
+  "peak_sampled_chrome_rss_bytes": 1569177600,
+  "samples": 65,
+  "errors": [],
+  "limits": {
+    "phase_ms": 30000,
+    "sampled_rss_bytes": 2147483648
+  },
+  "disclosure": "Controlled binary inputs, actual browser Blob delivery helper and shared verification. 100ms summed Chrome-process RSS samples including setup; not a loaded 30-PDF canvas or exact instantaneous peak."
+}

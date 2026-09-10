@@ -19,6 +19,7 @@
 
 import { chatWithTools, describeImageForAgent } from "./ai.js";
 import { runVerifiers } from "./agentVerifiers.js";
+import { basReplyForAgent } from "./basAgentSummary.js";
 import {
   classifyTakeoffIntent,
   corpusCompileKind,
@@ -2080,6 +2081,7 @@ export function parseAssistantTurn(provider, json) {
 const RESULT_MAX_CHARS = 5000;
 const resultText = (out) => {
   let payload = out && typeof out === "object" ? out : { value: out };
+  payload = basReplyForAgent(payload);
   // Cap oversized tool errors (e.g. legacy find_schedule dumps) so one failure
   // cannot blow the model context window.
   if (typeof payload?.error === "string" && payload.error.length > 600) {

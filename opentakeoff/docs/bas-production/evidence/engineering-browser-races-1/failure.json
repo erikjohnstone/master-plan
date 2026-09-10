@@ -1,0 +1,25 @@
+{
+  "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-workspace-nav=\"Takeoff\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" name=\"open-takeoff\" aria-pressed=\"false\" data-workspace-nav=\"Takeoff\" title=\"Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export.\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - performing click action\u001b[22m\n",
+  "checks": [
+    {
+      "name": "cancelled preview retains history and draft",
+      "response": {
+        "ok": true,
+        "eventId": "71eef8a2e554f1f705c433e10865eea37ceb386cd94e9d3b30fb05d23eddc1a6",
+        "calls": 1
+      }
+    },
+    {
+      "name": "cancelled record retains history and preview",
+      "response": {
+        "ok": true,
+        "eventId": "9a514e6f76f0cc15aa7f82c7458beb8645c8247b9cff843a7e7eb2de262164ea",
+        "calls": 1
+      }
+    },
+    {
+      "name": "explicit retry saves exactly one event, export/reload exact"
+    }
+  ],
+  "errors": []
+}

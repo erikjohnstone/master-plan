@@ -1,0 +1,24 @@
+✔ HTTP engineering review/replay matches shared Python and binds precisely to the submitted history (1606.246333ms)
+✔ production compile records engineering proposals and replay without changing legacy tables, math or evidence (2302.627958ms)
+✔ engineering public calls reject concurrent Session edits and a replaced drawing set (1574.034625ms)
+✔ actual Python review retains original sources, current dependency identities and idempotent operation history (881.25775ms)
+✔ equipment withdrawal preserves historical sources/results but invalidates freshness and new saves (889.806292ms)
+✔ assembly exclusions stale old results; recomputation retains failed and missing constraints even when excluded (894.840375ms)
+✔ capture switching cannot silently reactivate an old passing result (546.212542ms)
+✔ forked, incomplete, downgraded and cross-workflow histories reject instead of silently merging (516.184333ms)
+✔ locally rehashed calculations still require exact Python replay before being accepted as current (860.720167ms)
+✔ ordinary IndexedDB save/load and portable import preserve complete engineering histories and legacy annotations (521.262708ms)
+✔ source validation, runtime failure and cancellation never append a partial review (8.326792ms)
+✔ opening an unreviewed engineering workspace after equipment withdrawal must not crash on the stale assembly (6.171125ms)
+✔ SOO association creation, correction and removal invalidate engineering without rewriting old reviews (843.297ms)
+✔ response acceptance binds the returned event to the exact submitted request (155.498916ms)
+✔ 1001 saved decisions replay across the batch boundary, and corruption in the final batch rejects the entire history (1914.877792ms)
+ℹ 1001 controlled events replayed in 836.6 ms; 5363092 serialized bytes
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8229.125833

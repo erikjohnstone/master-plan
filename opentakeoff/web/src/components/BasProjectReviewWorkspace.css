@@ -1,0 +1,30 @@
+.bas-project-review { min-width: 0; min-height: 0; flex: 1; }
+.bas-project-review > * { flex-shrink: 0; }
+.bas-review-boundary { color: var(--ink-secondary); font-size: var(--fs-s); margin: 0; }
+.bas-review-grid { flex: 1 1 auto; min-height: calc(var(--ctl-l) * 2); max-height: none; }
+.bas-review-grid table { table-layout: fixed; }
+.bas-review-grid th:first-child { width: 32%; }
+.bas-review-grid th:nth-child(2) { width: 25%; }
+.bas-review-grid td, .bas-review-grid th, .bas-review-detail { overflow-wrap: anywhere; }
+.bas-project-review .bas-review-title { color: var(--cobalt); text-align: left; background: none; border: none; padding: 0; line-height: 1.5; }
+.bas-review-detail { padding: var(--sp-4); border: 1px solid var(--ink-faint); overflow: auto; min-height: 0; flex: 1 1 auto; }
+.bas-review-detail pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--fs-s); max-height: 40vh; overflow: auto; }
+.bas-review-facts { display: grid; grid-template-columns: max-content 1fr; gap: var(--sp-2) var(--sp-4); }
+.bas-review-facts dd { margin: 0; }
+.bas-review-detail h3 { text-transform: capitalize; }
+.bas-source-actions { display: flex; flex-direction: column; align-items: stretch; gap: var(--sp-2); }
+.bas-bundle-actions { margin: 0 0 16px; padding: 14px 16px; border: 1px solid var(--ink-faint); }
+.bas-bundle-actions h3 { margin: 0 0 8px; }
+.bas-bundle-actions p { margin: 8px 0; overflow-wrap: anywhere; }
+.bas-bundle-actions .bas-source-actions { flex-direction: row; flex-wrap: wrap; }
+.bas-bundle-actions .bas-bundle-selected { margin-top: var(--sp-2); align-items: center; }
+.bas-bundle-selected span { min-width: 0; overflow-wrap: anywhere; }
+.bas-source-heading button, .bas-review-actions button { margin-left: 0; }
+.bas-review-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-left: auto; }
+.bas-issue-actions { margin-block: var(--sp-4); padding-block: var(--sp-3); border-block: 1px solid var(--ink-faint); }
+.bas-issue-actions .bas-review-actions { margin-top: var(--sp-3); }
+.bas-issue-actions fieldset { display: grid; gap: var(--sp-3); margin: 0 0 var(--sp-3); padding: 0; border: 0; min-width: 0; }
+.bas-issue-actions label, .bas-review-detail > label { display: grid; gap: var(--sp-2); }
+.bas-issue-actions textarea { min-height: calc(var(--ctl-l) * 2); resize: vertical; padding: var(--sp-3); font: inherit; line-height: 1.5; color: var(--ink); background: var(--paper-bright); border: 1px solid var(--ink-faint); }
+.bas-issue-actions button[type="submit"] { justify-self: start; }
+.bas-review-detail td small, .bas-review-detail th small { display: block; font-size: var(--fs-xs); color: var(--ink-secondary); }

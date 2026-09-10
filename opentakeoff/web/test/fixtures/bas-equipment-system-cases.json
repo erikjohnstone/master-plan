@@ -1,0 +1,34 @@
+{
+  "authorship": "Independently keyed from visual review of original Behavioral Medicine PDF pages 19 (M601) and 20 (M701), cross-checked against original positioned PDF text before equipment-assignment implementation. This is scheduled membership/applicability evidence, not verified installed quantities or complete project ground truth.",
+  "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+  "schedule_page": 19,
+  "applicability_page": 20,
+  "point_matrix_title": "DDC POINTS LIST SUMMARY",
+  "system": "CHILLED WATER SYSTEM",
+  "matrix_quantity_basis": "system_listed_once",
+  "membership_cases": [
+    { "expression": "CH-1 thru CH-3", "span_index": 932, "members": ["CH-1", "CH-2", "CH-3"], "schedule_span_indices": [102, 134, 166] },
+    { "expression": "CT-1 thru CT-3", "span_index": 935, "members": ["CT-1", "CT-2", "CT-3"], "schedule_span_indices": [282, 317, 343] },
+    { "expression": "PCHP-1 thru PCHP-3", "span_index": 937, "members": ["PCHP-1", "PCHP-2", "PCHP-3"], "schedule_span_indices": [623, 641, 660] },
+    { "expression": "SCHP-1, SCHP-2", "span_index": 938, "members": ["SCHP-1", "SCHP-2"], "schedule_span_indices": [688, 718] },
+    { "expression": "CWP-1 thru CWP-3", "span_index": 941, "members": ["CWP-1", "CWP-2", "CWP-3"], "schedule_span_indices": [559, 587, 608] }
+  ],
+  "named_members": 14,
+  "installed_quantity": null,
+  "non_equipment_quantity_reference": { "span_index": 943, "text": "REFRIGERANT MONITORING", "quantity": null },
+  "operating_limit_negative_control": {
+    "span_index": 364,
+    "text": "ACTIVE CHILLERS IS <25% FOR 10 MINUTES (ADJ.). ONLY (2) CHILLERS SHALL BE ALLOWED TO OPERATE AT ANY TIME. THE BAS SHALL",
+    "simultaneous_operation_limit": 2,
+    "scheduled_chiller_members": 3,
+    "must_not_replace_equipment_quantity": true
+  },
+  "schedule_members_outside_this_matrix_scope": [
+    { "tag": "PHWP-1", "span_index": 738 },
+    { "tag": "PHWP-2", "span_index": 759 },
+    { "tag": "PHWP-3", "span_index": 767 },
+    { "tag": "SHWP-1", "span_index": 794 },
+    { "tag": "SHWP-2", "span_index": 811 }
+  ],
+  "limits": "Heating-water pumps remain scheduled project equipment but are not members of this explicitly listed chilled-water matrix. Applying the complete matrix once per each of its 14 named members would overcount; its rows already name individual equipment and system-wide points. No automatic CHILLER-to-CH alias, physical installation, assembly, protocol terminal or field-wiring conclusion is established by this key. M100 plans/P&IDs and phase evidence require separate review. Six reserved holdouts were not opened."
+}

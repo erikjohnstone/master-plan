@@ -1,0 +1,17 @@
+{
+  "schema": "bas_sync_history_browser_proof_v1",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "transport": "real_folder_composite_with_origin_private_directory",
+  "controlled_review_fork": true,
+  "live_cloud_tested": false,
+  "extraction_accuracy_claim": false,
+  "archive_restore_tested": false,
+  "recovery_snapshot": "snap_mtv8ef44i6fa94",
+  "checks": [
+    "Actual folder gate/composite + OPFS file transport retain both competing histories, without advancing synced rev; repeated conflict uses one recovery snapshot",
+    "Visible recovery action exports the exact unmerged remote JSON; it is labeled unverified and contains no original PDFs",
+    "Full app reload restores the durable sync notice; keyboard and viewport checks pass in both themes at 1280/1440/1920",
+    "Explicit retry against a compatible remote clears the notice and keeps all 31 historical calculation records and exact active PDF bytes unchanged"
+  ],
+  "errors": []
+}

@@ -26,6 +26,8 @@
 // The merge still unions (nothing is lost) but flags the sheet in
 // `review_sheets` — union-plus-review, not silent duplication.
 
+import { retainBasWorkflowHistory } from '../basWorkflow.ts';
+
 // Stable stringify (sorted object keys) so deep-equality is insensitive to key
 // order — payloads that round-tripped through different machines may carry the
 // same record with reordered keys.
@@ -188,7 +190,12 @@ export function mergeAnnotations(base, local, remote) {
   const conflicts = [];
   for (const k of keys) {
     const bv = b[k], lv = l[k], rv = r[k];
-    if (isKeyed(bv, lv, rv)) {
+    if (k === 'bas_workflow' && [bv, lv, rv].some(v => v != null)) {
+      // Evidence/events are append-only, not an ordinary last-writer-wins
+      // object. Navigation keeps the existing three-way selection policy.
+      // Divergent review branches throw; the caller must preserve both sides.
+      merged[k] = retainBasWorkflowHistory(mergeValue(bv, lv, rv), rv, lv, bv);
+    } else if (isKeyed(bv, lv, rv)) {
       const m = mergeKeyed(bv || [], lv || [], rv || []);
       for (const c of m.conflicts) conflicts.push({ key: k, ...c });
       merged[k] = m.records;

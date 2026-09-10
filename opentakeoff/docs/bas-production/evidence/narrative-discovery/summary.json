@@ -1,0 +1,2241 @@
+{
+  "scope": "Development-only real Session source discovery, exhaustive span partition, replay, plus explicitly authored exact region checks. Unreviewed region counts are not accuracy or project coverage.",
+  "holdout_opened": false,
+  "results": [
+    {
+      "id": "01__vol2__001",
+      "sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+      "pages": 75,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 8,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 8,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 29104,
+        "unsupported_span_ids": 5382,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 66,
+      "elapsed_ms": 2418,
+      "peak_rss_bytes": 438321152,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 50,
+          "title": "SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            3150.7,
+            1594.6,
+            3421.3,
+            1619.8
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 53,
+          "title": "AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            587.3,
+            2962.1,
+            1685.5,
+            3012
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 55,
+          "title": "AIR OPS / MTRACON - AHU SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            367.9,
+            2420.5,
+            1435.2,
+            2470.3
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 57,
+          "title": "AIR OPS - CHW SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            248.9,
+            2932.9,
+            1266.3,
+            2982.7
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 59,
+          "title": "AIR OPS - HHW SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            428.4,
+            2829.2,
+            1445.8,
+            2879
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 61,
+          "title": "MTRACTON/ATCT - CHW SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            315.4,
+            2976.5,
+            1512.5,
+            3026.4
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 63,
+          "title": "MTRACON/ATCT - HHW SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            274.8,
+            2929,
+            1447.7,
+            2978.9
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 68,
+          "title": "SERIES-FAN POWERED VAV BOX SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            2989.2,
+            2973.4,
+            4184.9,
+            3023.3
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "02__vol2__015",
+      "sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+      "pages": 27,
+      "statuses": {
+        "body_detected": 1,
+        "heading_only": 0,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 27,
+        "heading_only_span_ids": 0,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 8440,
+        "unsupported_span_ids": 631,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 9,
+      "elapsed_ms": 900,
+      "peak_rss_bytes": 461357056,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 27,
+          "title": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION",
+          "status": "body_detected",
+          "bbox": [
+            2407.7,
+            1960.4,
+            3754.4,
+            2635.9
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 7,
+          "lines": 16
+        }
+      ]
+    },
+    {
+      "id": "03__vol1__27",
+      "sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+      "pages": 38,
+      "statuses": {
+        "body_detected": 4,
+        "heading_only": 0,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 47,
+        "heading_only_span_ids": 0,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 11749,
+        "unsupported_span_ids": 237,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 12,
+      "elapsed_ms": 1391,
+      "peak_rss_bytes": 556695552,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 18,
+          "title": "EXHAUST FAN (EF-1,2) SEQUENCE OF OPERATION",
+          "status": "body_detected",
+          "bbox": [
+            1193,
+            1385.1,
+            2151.2,
+            1571.4
+          ],
+          "boundary": "next_heading",
+          "paragraphs": 4,
+          "lines": 5
+        },
+        {
+          "page": 18,
+          "title": "UNIT HEATER SEQUENCE OF OPERATION",
+          "status": "body_detected",
+          "bbox": [
+            2444,
+            1385.1,
+            3421.7,
+            1535.4
+          ],
+          "boundary": "next_heading",
+          "paragraphs": 3,
+          "lines": 4
+        },
+        {
+          "page": 18,
+          "title": "HYDRONIC PUMP (HWP-5,6) SEQUENCE OF OPERATION",
+          "status": "body_detected",
+          "bbox": [
+            2444,
+            1552.5,
+            3457.3,
+            2092.7
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 10,
+          "lines": 17
+        },
+        {
+          "page": 18,
+          "title": "EXHAUST FAN (EF-3) SEQUENCE OF OPERATION",
+          "status": "body_detected",
+          "bbox": [
+            1193,
+            1588.9,
+            2195.5,
+            2147
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 13,
+          "lines": 16
+        }
+      ]
+    },
+    {
+      "id": "04__vol2__062",
+      "sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+      "pages": 29,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 13,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 13,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 9624,
+        "unsupported_span_ids": 1235,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 10,
+      "elapsed_ms": 535,
+      "peak_rss_bytes": 562118656,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 16,
+          "title": "TEMPERATURE SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            3934.6,
+            1550.1,
+            4778.4,
+            1600.6
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 16,
+          "title": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            2777.8,
+            1889,
+            3855,
+            1939.4
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 16,
+          "title": "HEAT RELIEF FAN SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            1574.4,
+            2295,
+            2487,
+            2345.5
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 16,
+          "title": "SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            556.6,
+            2513.4,
+            1103.6,
+            2563.9
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 17,
+          "title": "LAB EXHAUST SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            915.6,
+            1626.6,
+            1932.3,
+            1677.1
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 17,
+          "title": "SPLIT SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            3031.4,
+            1682.6,
+            3880.9,
+            1733
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 18,
+          "title": "HEATING WATER SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            2065.4,
+            1512.2,
+            2925.4,
+            1552.6
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 19,
+          "title": "VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            1865.3,
+            2118.6,
+            3291,
+            2169.1
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 20,
+          "title": "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            578.4,
+            1883.2,
+            2154.1,
+            1933.7
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 20,
+          "title": "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            2695.7,
+            1942.7,
+            4240.2,
+            1993.2
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 21,
+          "title": "GENERAL EXHAUST FAN SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            3362.6,
+            646.7,
+            4230.3,
+            698.4
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 21,
+          "title": "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            1073.5,
+            2065.6,
+            2688.1,
+            2116.1
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 21,
+          "title": "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            3281,
+            2334.4,
+            4322.5,
+            2384.9
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "06__vol2__096",
+      "sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+      "pages": 36,
+      "statuses": {
+        "body_detected": 13,
+        "heading_only": 4,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 649,
+        "heading_only_span_ids": 4,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 15629,
+        "unsupported_span_ids": 783,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 22,
+      "elapsed_ms": 1480,
+      "peak_rss_bytes": 584368128,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 31,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            4631.3,
+            744.6,
+            5434.6,
+            2113.4
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 22,
+          "lines": 54
+        },
+        {
+          "page": 31,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            4462.1,
+            2775,
+            5383.8,
+            4077.4
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 24,
+          "lines": 51
+        },
+        {
+          "page": 32,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            3861.3,
+            1883.4,
+            5350.2,
+            3960
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 38,
+          "lines": 59
+        },
+        {
+          "page": 33,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            3854.4,
+            1908.5,
+            5343.2,
+            4073.8
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 39,
+          "lines": 64
+        },
+        {
+          "page": 34,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            3753.1,
+            1322.5,
+            5242,
+            2691.1
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 27,
+          "lines": 36
+        },
+        {
+          "page": 35,
+          "title": "CONTROL SEQUENCES:",
+          "status": "body_detected",
+          "bbox": [
+            1832.4,
+            116.9,
+            2558.1,
+            1014.7
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 10,
+          "lines": 25
+        },
+        {
+          "page": 35,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            2761,
+            726.3,
+            3814.9,
+            966.7
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 4,
+          "lines": 7
+        },
+        {
+          "page": 35,
+          "title": "JAIL EXHAUST SYSTEM CONTROL SEQUENCES:",
+          "status": "heading_only",
+          "bbox": [
+            2663,
+            1195.5,
+            3148.3,
+            1220.6
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 35,
+          "title": "EXHAUST FAN SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            3811.9,
+            2210.7,
+            5034,
+            2473.2
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 6,
+          "lines": 6
+        },
+        {
+          "page": 35,
+          "title": "POD EXHAUST SYSTEM CONTROL SEQUENCES:",
+          "status": "heading_only",
+          "bbox": [
+            2725.9,
+            2773.8,
+            3215,
+            2798.9
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 35,
+          "title": "EXHAUST FAN SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            3837.8,
+            3778.6,
+            5019.2,
+            4063.4
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 6,
+          "lines": 7
+        },
+        {
+          "page": 36,
+          "title": "SEQUENCE OF OPERATION - VAV BOXES:",
+          "status": "body_detected",
+          "bbox": [
+            4271.8,
+            162.8,
+            5316.3,
+            779.3
+          ],
+          "boundary": "next_heading",
+          "paragraphs": 3,
+          "lines": 26
+        },
+        {
+          "page": 36,
+          "title": "SEQUENCE OF OPERATION - CAV BOXES:",
+          "status": "body_detected",
+          "bbox": [
+            4271.8,
+            804.3,
+            5318.5,
+            1000.6
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 2,
+          "lines": 6
+        },
+        {
+          "page": 36,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            3572.2,
+            2061.4,
+            4626.1,
+            2279.8
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 4,
+          "lines": 6
+        },
+        {
+          "page": 36,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            1732.3,
+            2525.1,
+            2616.8,
+            2654.9
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 3,
+          "lines": 5
+        },
+        {
+          "page": 36,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "heading_only",
+          "bbox": [
+            3379,
+            3483.9,
+            3595.7,
+            3503
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 36,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "heading_only",
+          "bbox": [
+            4747.2,
+            3508.4,
+            4964,
+            3527.5
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "07__vol2__061",
+      "sha256": "c55da475bac3a1aeaae723b12adf35896970fe249ca3556b4d430a990c0e41a0",
+      "pages": 71,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 3,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 4,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 24398,
+        "unsupported_span_ids": 4317,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 97,
+      "elapsed_ms": 3870,
+      "peak_rss_bytes": 603996160,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 1,
+          "title": "M-501 SEQUENCES OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            4469.3,
+            2474,
+            4948.4,
+            2499.4
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 56,
+          "title": "AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            2525.5,
+            3337.6,
+            3669.6,
+            3375.6
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 56,
+          "title": "VARIABLE AIR VOLUME TERMINAL AIR BOX SCHEMATIC AND SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            2525.5,
+            4103.7,
+            4161.1,
+            4141.7
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "09__vol2__014",
+      "sha256": "f208e34965aba62b3752f39b2691e2a418ac823bd99dbaadfb2e7b06391fc7ff",
+      "pages": 28,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 0,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 0,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 10730,
+        "unsupported_span_ids": 1942,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 51,
+      "elapsed_ms": 2606,
+      "peak_rss_bytes": 603996160,
+      "accounting_and_replay_pass": true,
+      "regions": []
+    },
+    {
+      "id": "10__vol2__040",
+      "sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+      "pages": 48,
+      "statuses": {
+        "body_detected": 5,
+        "heading_only": 0,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 87,
+        "heading_only_span_ids": 0,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 25096,
+        "unsupported_span_ids": 2519,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 29,
+      "elapsed_ms": 4872,
+      "peak_rss_bytes": 603996160,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 46,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            802.5,
+            1008.8,
+            1672.8,
+            1636.8
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 5,
+          "lines": 24
+        },
+        {
+          "page": 46,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            4703,
+            1208.5,
+            5565.2,
+            1727.8
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 4,
+          "lines": 20
+        },
+        {
+          "page": 46,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            1360.5,
+            2641,
+            2309.7,
+            2899.4
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 2,
+          "lines": 10
+        },
+        {
+          "page": 46,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            3174,
+            2715.2,
+            4015,
+            2821.2
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 2,
+          "lines": 3
+        },
+        {
+          "page": 46,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            4550.6,
+            2737.5,
+            5492.8,
+            2908.8
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 2,
+          "lines": 6
+        }
+      ]
+    },
+    {
+      "id": "11__vol1__05",
+      "sha256": "78755d16240f834ee429960526cadab8edec205b65df36a70c171ab4d4b993db",
+      "pages": 67,
+      "statuses": {
+        "body_detected": 5,
+        "heading_only": 3,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 94,
+        "heading_only_span_ids": 3,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 32172,
+        "unsupported_span_ids": 3103,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 34,
+      "elapsed_ms": 2418,
+      "peak_rss_bytes": 769900544,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 50,
+          "title": "SEQUENCE OF OPERATION FOR VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR",
+          "status": "heading_only",
+          "bbox": [
+            378,
+            1939.9,
+            2347.2,
+            1977.8
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 50,
+          "title": "SEQUENCES OF OPERATION: COMPLETE AND STRICT COMPLIANCE WITH",
+          "status": "body_detected",
+          "bbox": [
+            1548,
+            2600.5,
+            2531.2,
+            2682
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 1,
+          "lines": 2
+        },
+        {
+          "page": 51,
+          "title": "SEQUENCES OF OPERATION FOR EXISTING AIR HANDLING UNITS AC-21 AND AC-22:",
+          "status": "body_detected",
+          "bbox": [
+            590.1,
+            2596.9,
+            1738,
+            3725.3
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 12,
+          "lines": 40
+        },
+        {
+          "page": 52,
+          "title": "SEQUENCE OF OPERATION FOR VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR",
+          "status": "heading_only",
+          "bbox": [
+            378,
+            1859,
+            2347.2,
+            1897
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 52,
+          "title": "SEQUENCES OF OPERATION: COMPLETE AND STRICT COMPLIANCE WITH",
+          "status": "body_detected",
+          "bbox": [
+            1548,
+            2857.3,
+            2531.2,
+            2938.6
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 1,
+          "lines": 2
+        },
+        {
+          "page": 53,
+          "title": "AC-36 SEQUENCE OF OPERATION",
+          "status": "body_detected",
+          "bbox": [
+            4554.2,
+            483.9,
+            5563.6,
+            1351.4
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 10,
+          "lines": 30
+        },
+        {
+          "page": 54,
+          "title": "SEQUENCE OF OPERATION FOR VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR",
+          "status": "heading_only",
+          "bbox": [
+            378,
+            1939.9,
+            2347.2,
+            1977.8
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 54,
+          "title": "SEQUENCES OF OPERATION: COMPLETE AND STRICT COMPLIANCE WITH",
+          "status": "body_detected",
+          "bbox": [
+            1548,
+            2938.2,
+            2531.2,
+            3019.4
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 1,
+          "lines": 2
+        }
+      ]
+    },
+    {
+      "id": "12__vol2__028",
+      "sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+      "pages": 9,
+      "statuses": {
+        "body_detected": 8,
+        "heading_only": 2,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 387,
+        "heading_only_span_ids": 2,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 2970,
+        "unsupported_span_ids": 636,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 8,
+      "discovery_ms": 4,
+      "elapsed_ms": 173,
+      "peak_rss_bytes": 789020672,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 2,
+          "title": "EXHAUST FAN CONTROL SEQUENCE",
+          "status": "body_detected",
+          "bbox": [
+            3039.1,
+            937.4,
+            4403.3,
+            1272.5
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 4,
+          "lines": 9
+        },
+        {
+          "page": 2,
+          "title": "MINI-SPLIT CONTROL SEQUENCE",
+          "status": "body_detected",
+          "bbox": [
+            1368.2,
+            1126.3,
+            2913.7,
+            1391
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 6,
+          "lines": 9
+        },
+        {
+          "page": 5,
+          "title": "HEATING-WATER SYSTEM CONTROL SEQUENCES:",
+          "status": "body_detected",
+          "bbox": [
+            2184.9,
+            172.3,
+            4430.7,
+            2724.7
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 51,
+          "lines": 73
+        },
+        {
+          "page": 5,
+          "title": "CHILLED WATER SYSTEM CONTROL SEQUENCES:",
+          "status": "body_detected",
+          "bbox": [
+            287.8,
+            192,
+            2105.4,
+            2335
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 36,
+          "lines": 61
+        },
+        {
+          "page": 5,
+          "title": "CHILLED WATER SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            512.6,
+            2422.6,
+            1820.3,
+            2472.5
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 5,
+          "title": "HEATING HOT WATER SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            2499.8,
+            2759.8,
+            3937.1,
+            2809.7
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 6,
+          "title": "FAN COIL UNIT (FCU) CONTROL SEQUENCE",
+          "status": "body_detected",
+          "bbox": [
+            471.8,
+            1258.5,
+            3754,
+            2719.4
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 24,
+          "lines": 33
+        },
+        {
+          "page": 7,
+          "title": "SEQUENCE OF OPERATION VAV TERMINAL UNIT (NON-FAN POWERED):",
+          "status": "body_detected",
+          "bbox": [
+            3061.4,
+            1193.7,
+            4419.5,
+            1732.1
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 8,
+          "lines": 14
+        },
+        {
+          "page": 7,
+          "title": "DEDICATED OUTSIDE AIR SYSTEM CONTROL SEQUENCE",
+          "status": "body_detected",
+          "bbox": [
+            356.4,
+            1749.6,
+            2795.9,
+            2528.2
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 18,
+          "lines": 22
+        },
+        {
+          "page": 8,
+          "title": "DEDICATED OUTSIDE AIR SYSTEM CONTROL SEQUENCE",
+          "status": "body_detected",
+          "bbox": [
+            903.8,
+            1722.2,
+            3337,
+            2500.8
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 18,
+          "lines": 22
+        }
+      ]
+    },
+    {
+      "id": "13__vol2__017",
+      "sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+      "pages": 25,
+      "statuses": {
+        "body_detected": 3,
+        "heading_only": 3,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 9,
+        "heading_only_span_ids": 3,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 7031,
+        "unsupported_span_ids": 3456,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 10,
+      "elapsed_ms": 822,
+      "peak_rss_bytes": 807845888,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 15,
+          "title": "SEQUENCE OF OPERATIONS AND PROVIDE A FULLY",
+          "status": "body_detected",
+          "bbox": [
+            1364.2,
+            801.8,
+            1775.1,
+            877.5
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 1,
+          "lines": 2
+        },
+        {
+          "page": 16,
+          "title": "EXISTING TO REMAIN SEQUENCE OF OPERATIONS",
+          "status": "heading_only",
+          "bbox": [
+            1893.8,
+            257.1,
+            2691.6,
+            294.8
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 16,
+          "title": "EXISTING TO REMAIN SEQUENCE OF OPERATIONS",
+          "status": "heading_only",
+          "bbox": [
+            3256.3,
+            257.1,
+            4054.1,
+            294.8
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 16,
+          "title": "EXISTING TO REMAIN SEQUENCE OF OPERATIONS",
+          "status": "heading_only",
+          "bbox": [
+            4563.8,
+            257.1,
+            5361.6,
+            294.8
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 16,
+          "title": "SEQUENCE OF OPERATIONS AND PROVIDE A FULLY",
+          "status": "body_detected",
+          "bbox": [
+            3452.6,
+            3549.1,
+            3863.6,
+            3624.8
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 1,
+          "lines": 2
+        },
+        {
+          "page": 17,
+          "title": "SEQUENCE OF OPERATIONS AND PROVIDE A FULLY",
+          "status": "body_detected",
+          "bbox": [
+            2653,
+            2310.2,
+            3063.9,
+            2385.9
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 1,
+          "lines": 2
+        }
+      ]
+    },
+    {
+      "id": "14__vol2__021",
+      "sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+      "pages": 19,
+      "statuses": {
+        "body_detected": 8,
+        "heading_only": 5,
+        "segmentation_conflict": 1
+      },
+      "accounting": {
+        "body_region_span_ids": 298,
+        "heading_only_span_ids": 8,
+        "ambiguous_span_ids": 50,
+        "unassigned_horizontal_span_ids": 3554,
+        "unsupported_span_ids": 330,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 5,
+      "elapsed_ms": 637,
+      "peak_rss_bytes": 807845888,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 17,
+          "title": "HEATING WATER SYSTEM SEQUENCE OF OPERATION:",
+          "status": "heading_only",
+          "bbox": [
+            810.6,
+            2034.7,
+            1242.2,
+            2052.1
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 17,
+          "title": "CHILLED WATER SYSTEM CONTROL SEQUENCE:",
+          "status": "body_detected",
+          "bbox": [
+            3159.7,
+            2071.9,
+            5086.7,
+            2974.6
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 18,
+          "lines": 28
+        },
+        {
+          "page": 17,
+          "title": "SEQUENCE OF OPERATIONS M-803",
+          "status": "heading_only",
+          "bbox": [
+            6220.2,
+            5003.7,
+            6715.9,
+            5043.7
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 18,
+          "title": "GENERAL LABORATORY SEQUENCE OF OPERATION:",
+          "status": "segmentation_conflict",
+          "bbox": [
+            3382.2,
+            1331.7,
+            4169,
+            2206.4
+          ],
+          "boundary": "ambiguous_lines",
+          "paragraphs": 12,
+          "lines": 37
+        },
+        {
+          "page": 18,
+          "title": "GENERAL LABORATORY SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            4409.4,
+            1344,
+            5196.2,
+            2301.2
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 14,
+          "lines": 38
+        },
+        {
+          "page": 18,
+          "title": "FAN COIL UNIT SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            5392.4,
+            1351.9,
+            6294.2,
+            1646.2
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 7,
+          "lines": 8
+        },
+        {
+          "page": 18,
+          "title": "LABORATORY AIR HANDLING UNIT SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            422,
+            1552.8,
+            1795.6,
+            1682.2
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 3,
+          "lines": 3
+        },
+        {
+          "page": 18,
+          "title": "SEQUENCE OF OPERATIONS M-804",
+          "status": "heading_only",
+          "bbox": [
+            6220.2,
+            5003.7,
+            6715.9,
+            5043.7
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 19,
+          "title": "REHEAT VAV TERMINAL UNITS SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            3976.9,
+            1029.3,
+            4848.3,
+            1843.3
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 6,
+          "lines": 34
+        },
+        {
+          "page": 19,
+          "title": "UNIT HEATER (UH) SEQUENCE OF OPERATION:",
+          "status": "heading_only",
+          "bbox": [
+            5164.6,
+            1219.7,
+            5519.2,
+            1236.1
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 19,
+          "title": "REHEAT VAV TERMINAL UNITS SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            2981.6,
+            1276.8,
+            3798.1,
+            2413
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 19,
+          "lines": 43
+        },
+        {
+          "page": 19,
+          "title": "AIR HANDLING UNIT SEQUENCE OF OPERATIONS:",
+          "status": "body_detected",
+          "bbox": [
+            356,
+            1634.4,
+            1448.4,
+            2846.2
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 22,
+          "lines": 50
+        },
+        {
+          "page": 19,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            5133.9,
+            2093.5,
+            5878.9,
+            2189.8
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 1,
+          "lines": 3
+        },
+        {
+          "page": 19,
+          "title": "SEQUENCE OF OPERATIONS M-805",
+          "status": "heading_only",
+          "bbox": [
+            6220.2,
+            5003.7,
+            6715.9,
+            5043.7
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "16__vol2__069",
+      "sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+      "pages": 9,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 2,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 2,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 2552,
+        "unsupported_span_ids": 199,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 2,
+      "elapsed_ms": 246,
+      "peak_rss_bytes": 808583168,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 6,
+          "title": "EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            3121.3,
+            2958.8,
+            4415,
+            3009.1
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 7,
+          "title": "EXISTING CHILLED WATER SYSTEM SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            389.3,
+            2500.1,
+            1673.8,
+            2550.4
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "17__vol1__16",
+      "sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+      "pages": 47,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 7,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 10,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 14469,
+        "unsupported_span_ids": 418,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 14,
+      "elapsed_ms": 1294,
+      "peak_rss_bytes": 847839232,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 1,
+          "title": "M6.01 MECHANICAL CONTROL DIAGRAMS AND SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            4362.2,
+            3360.5,
+            5023,
+            3378.5
+          ],
+          "boundary": "next_heading",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 1,
+          "title": "M6.02 MECHANICAL CONTROL DIAGRAMS AND SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            4362.2,
+            3403.2,
+            5023,
+            3421.2
+          ],
+          "boundary": "next_heading",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 1,
+          "title": "M6.03 MECHANICAL CONTROL DIAGRAMS AND SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            4362.2,
+            3445.9,
+            5023,
+            3463.9
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 28,
+          "title": "EF-B1 SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            3487.9,
+            220.6,
+            4230.3,
+            268.6
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 28,
+          "title": "SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            4487.3,
+            277.9,
+            5092.6,
+            325.9
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 28,
+          "title": "SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            4487.3,
+            835.9,
+            5092.6,
+            883.9
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 29,
+          "title": "SEQUENCE OF OPERATION (BID ALTERNATE 1)",
+          "status": "heading_only",
+          "bbox": [
+            4469.3,
+            250.6,
+            5491.6,
+            298.6
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "18__vol2__092",
+      "sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+      "pages": 13,
+      "statuses": {
+        "body_detected": 1,
+        "heading_only": 0,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 3,
+        "heading_only_span_ids": 0,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 4431,
+        "unsupported_span_ids": 202,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 6,
+      "elapsed_ms": 434,
+      "peak_rss_bytes": 847839232,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 13,
+          "title": "SEQUENCE OF OPERATION WITH PROPOSED SET POINTS, ADJUSTABILITY, CONTROL",
+          "status": "body_detected",
+          "bbox": [
+            2550.6,
+            3343.8,
+            3366.9,
+            3408.1
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 1,
+          "lines": 2
+        }
+      ]
+    },
+    {
+      "id": "20__vol2__097",
+      "sha256": "95f1c434a5dca5ea297a5981901483d0f57b6a7277abc6c87d5645f072dfe0e3",
+      "pages": 25,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 1,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 1,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 3918,
+        "unsupported_span_ids": 92,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 5,
+      "elapsed_ms": 239,
+      "peak_rss_bytes": 847839232,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 13,
+          "title": "CONTROL SEQUENCE OF OPERATIONS",
+          "status": "heading_only",
+          "bbox": [
+            3681.7,
+            1448.3,
+            4034.4,
+            1475.3
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "21__vol2__095",
+      "sha256": "17887e9efd271427725d9c334e1ee6119d7fbd2d0d865906b719ed695e7b3606",
+      "pages": 8,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 0,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 0,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 1096,
+        "unsupported_span_ids": 36,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 1,
+      "elapsed_ms": 94,
+      "peak_rss_bytes": 847839232,
+      "accounting_and_replay_pass": true,
+      "regions": []
+    },
+    {
+      "id": "22__vol2__012",
+      "sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+      "pages": 29,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 1,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 1,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 7757,
+        "unsupported_span_ids": 671,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 8,
+      "elapsed_ms": 2494,
+      "peak_rss_bytes": 847839232,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 20,
+          "title": "SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            3321.7,
+            305.7,
+            3998,
+            356
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "23__vol2__033",
+      "sha256": "235fa6719258c64a8fe48b139e5c5e080a260e558432a63e13d682e2169e507d",
+      "pages": 80,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 4,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 4,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 16277,
+        "unsupported_span_ids": 630,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 21,
+      "elapsed_ms": 2816,
+      "peak_rss_bytes": 847839232,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 70,
+          "title": "SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            1586,
+            1488.7,
+            1918.7,
+            1526.4
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 71,
+          "title": "VAV BOX CONTROL SEQUENCE",
+          "status": "heading_only",
+          "bbox": [
+            5384,
+            177,
+            5723.7,
+            210.5
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 71,
+          "title": "VAV BOX CONTROL SEQUENCE",
+          "status": "heading_only",
+          "bbox": [
+            3727,
+            198.1,
+            4066.7,
+            231.6
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 71,
+          "title": "SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            2970.4,
+            2857.4,
+            3303,
+            2895.1
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "25__vol2__053",
+      "sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+      "pages": 12,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 2,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 2,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 4716,
+        "unsupported_span_ids": 1212,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 7,
+      "elapsed_ms": 817,
+      "peak_rss_bytes": 847839232,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 11,
+          "title": "ISOLATION ROOM CONTROL SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            1092.2,
+            1419,
+            2128.2,
+            1457
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 11,
+          "title": "VAV TERMINAL SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            2851,
+            1791.7,
+            3641.1,
+            1829.8
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "26__vol2__031",
+      "sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+      "pages": 90,
+      "statuses": {
+        "body_detected": 1,
+        "heading_only": 2,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 12,
+        "heading_only_span_ids": 2,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 46398,
+        "unsupported_span_ids": 2490,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 57,
+      "elapsed_ms": 3010,
+      "peak_rss_bytes": 847839232,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 68,
+          "title": "SEQUENCE OF OPERATION:",
+          "status": "body_detected",
+          "bbox": [
+            2949.8,
+            3094.1,
+            3979.8,
+            3441.6
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 5,
+          "lines": 11
+        },
+        {
+          "page": 69,
+          "title": "SEQUENCE OF OPERATION FOR VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR",
+          "status": "heading_only",
+          "bbox": [
+            1093.4,
+            1811.7,
+            3033.4,
+            1849.7
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 82,
+          "title": "LIGHTING SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            4261.9,
+            2003.1,
+            4962.9,
+            2042.2
+          ],
+          "boundary": "font_change",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "28__vol1__26",
+      "sha256": "6873dbdbf3fa2e364c7daf5dfebceb98ab00cb34aab3b2468cac62832771ab43",
+      "pages": 64,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 0,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 0,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 23936,
+        "unsupported_span_ids": 122419,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 94,
+      "elapsed_ms": 5640,
+      "peak_rss_bytes": 969555968,
+      "accounting_and_replay_pass": true,
+      "regions": []
+    },
+    {
+      "id": "29__vol2__030",
+      "sha256": "c8a85e522ea577c37a658f099e5f3b2af619fb3a8c35ffc219b39a13b9c56367",
+      "pages": 93,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 5,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 5,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 32262,
+        "unsupported_span_ids": 5174,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 37,
+      "elapsed_ms": 3733,
+      "peak_rss_bytes": 975699968,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 83,
+          "title": "SEQUENCE OF OPERATION",
+          "status": "heading_only",
+          "bbox": [
+            1825.2,
+            1886.3,
+            2078.8,
+            1905.1
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 88,
+          "title": "SEQUENCE OF OPERATION FOR CRAC UNITS",
+          "status": "heading_only",
+          "bbox": [
+            601.4,
+            1044.3,
+            1525.1,
+            1082.4
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 88,
+          "title": "SEQUENCE OF OPERATION FOR CRAC UNITS STANDALONE CONTROLLER (CRAC 01 & 02)",
+          "status": "heading_only",
+          "bbox": [
+            505.7,
+            2303.8,
+            2349.9,
+            2341.9
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 90,
+          "title": "MOTORIZED DAMPER CONTROL SEQUENCE",
+          "status": "heading_only",
+          "bbox": [
+            4136.6,
+            1613.4,
+            4581.8,
+            1638.5
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 91,
+          "title": "SEQUENCE OF OPERATION FOR DOAS",
+          "status": "heading_only",
+          "bbox": [
+            1645.2,
+            416.9,
+            2230.4,
+            454.6
+          ],
+          "boundary": "vertical_gap",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    },
+    {
+      "id": "30__vol2__058",
+      "sha256": "5c0d37ef255d621865fc7e0147ef7cad54321292e4f68d45ae97447d35b8e627",
+      "pages": 311,
+      "statuses": {
+        "body_detected": 0,
+        "heading_only": 2,
+        "segmentation_conflict": 0
+      },
+      "accounting": {
+        "body_region_span_ids": 0,
+        "heading_only_span_ids": 2,
+        "ambiguous_span_ids": 0,
+        "unassigned_horizontal_span_ids": 44898,
+        "unsupported_span_ids": 20190,
+        "blank_span_ids": 0
+      },
+      "exact_region_assertions": 0,
+      "discovery_ms": 60,
+      "elapsed_ms": 13652,
+      "peak_rss_bytes": 1053655040,
+      "accounting_and_replay_pass": true,
+      "regions": [
+        {
+          "page": 206,
+          "title": "BUILDING AUTOMATION SEQUENCE OF OPERATIONS",
+          "status": "heading_only",
+          "bbox": [
+            3761,
+            1750.7,
+            4363.6,
+            1773.8
+          ],
+          "boundary": "next_heading",
+          "paragraphs": 0,
+          "lines": 0
+        },
+        {
+          "page": 206,
+          "title": "BUILDING AUTOMATION SEQUENCE OF OPERATIONS",
+          "status": "heading_only",
+          "bbox": [
+            3761,
+            1778.6,
+            4363.6,
+            1801.7
+          ],
+          "boundary": "end_of_aligned_text",
+          "paragraphs": 0,
+          "lines": 0
+        }
+      ]
+    }
+  ]
+}

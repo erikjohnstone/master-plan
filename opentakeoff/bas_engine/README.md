@@ -1,0 +1,295 @@
+# BAS math engine
+
+## Engineering compatibility
+
+The exclusive Python `engineering` envelope accepts
+`bas_engineering_input_v1` and returns `bas_engineering_result_v1`, pinned to
+`declared_engineering_constraints_1`. It implements declared signal
+direction/mode, analog range/excitation, resistive loading, contact and pulse
+characteristics, explicit operating/startup power scenarios, mechanical ratings,
+physical-terminal allocation and expansion constraints. Expansion power checks
+reuse the same scenario calculator. Endpoint identity, terminal exclusivity and
+power-source ownership are checked across submitted check rows as well as within
+one row. Splitting a physical supply into separate partial-load checks rejects.
+
+Declared serial-segment and IP-closet checks reuse the existing network solvers.
+They check physical port identity, protocol/media/settings, address collisions,
+scope, declared capacity and reach. Unknown identity is not known physical
+demand; partial serial positions retain a clearly labeled capacity-only result.
+Known overlength/overload remains failed. No network routes, extra gateways,
+default device limits or installed quantities are inferred.
+
+Every entered characteristic retains an explicit-input or drawing-transcription
+basis; a transcription requires original wording and source IDs. This is not
+source authentication: the shared engineering review service establishes retained
+capture/equipment/source ownership before accepting or saving these inputs.
+Results retain their complete input and per-rule input paths, missing fields and
+pass/fail/not-evaluable outcomes. Overall status applies only to selected declared
+constraints, never project completeness or engineering certification.
+
+Comparisons use bounded decimal strings and exact rational units. W and VA are
+different dimensions; conversion needs the applicable explicit power factor.
+Derating and startup states have no default. Known failures remain failures when
+another field is missing. Extreme rational intermediates exceeding 8,192 bits
+reject the calculation explicitly instead of rounding or truncating it. The
+existing 32-MiB process input/output limit remains unchanged.
+
+This dependency is tested through the actual Python process and the development
+Equipment engineering workspace / shared MCP workflow. Its source-bound register
+and append-only review service retain explicit inputs, not automatic discovery
+of all hardware ratings. Broader source/corpus acceptance and review/release
+completion remain required by
+[the full compatibility contract](../docs/bas-production/ENGINEERING_COMPATIBILITY_CONTRACT.md).
+The internal `runBasEngineering` transport uses the same bounded process runner
+as existing BAS calculations. Shared TypeScript schemas preserve all eleven
+check variants and verify original-input/result lineage. Python still owns
+dimension, relationship and numeric validation; parsing a JS shape is not source
+validation or permission to save a review. Imported results require engine
+replay before being trusted as current. Run transport parity tests with
+`npm run test:bas` in `mcp/`; the engineering cases need the Python test extras.
+Existing network/hardware, point-list, assignment and assembly calculations are
+unchanged. There is no new extraction, detector, product selection or pricing.
+
+The exclusive `engineering_replay` envelope accepts `results` (at most 1,000
+saved engineering results) and returns `bas_engineering_replay_v1`. Python
+recomputes each distinct retained input and compares the **entire** result, not
+only a total, passing flag or local hash. A mismatch rejects the batch. This
+verifies calculation equality, not whether an operator's input matches a drawing
+or an installed device. Empty history never means project completeness.
+
+The shared register binds declared endpoints, loads, supplies, pools, terminals,
+modules and networks to reviewed equipment/scopes, with optional owned assembly
+components. Transcriptions retain the exact selected source-span text and
+bounding boxes. Component exclusions and unknown conditions remain visible;
+excluding a check does not erase its failure. Workflow `bas_engineering_6`
+events retain the register and Python result atomically, pinned to capture,
+equipment, assembly and SOO-review heads. Old results remain readable but stale
+after dependent decisions change. Retries preserve the original operation;
+conflicting histories and response/request substitutions reject.
+
+The browser-safe verifier checks structure, sources and event integrity and
+reports `requires_python_replay` for saved results. The internal Node service
+replays complete histories in count/byte-bounded batches before reporting
+`verified_shared_python_replay`. Ordinary browser save/load and portable project
+import/export retain these records; they cannot authenticate a reviewer or
+convert an imported hash into a fresh calculation. The current real-PDF evidence
+and remaining acceptance are recorded in
+[BAS production progress](../docs/bas-production/PROGRESS.md).
+
+The exclusive `workflow_replay` envelope accepts up to 1,000 typed records:
+`assignment` and `assembly` records contain their reconstructed `input` and saved
+`result`; `engineering` records contain a saved result with original inputs.
+Every record includes its content-addressed `record_id`. Python calls the
+unchanged existing calculators and compares the complete typed result. Any
+mismatch or duplicate rejects the batch without partial acceptance. A successful
+`bas_workflow_replay_batch_v1` reply returns exact ordered record IDs, not an
+approval. The shared Node service first validates workflow ownership and
+reconstructs each historical head, partitions complete JSON envelopes under
+30 MiB, then returns an exact full-workflow receipt only after all batches pass.
+Its 30-second deadline, cancellation and explicit `no_saved_calculations` status
+apply to both browser and MCP preflight. The browser request cap is 32 MiB.
+See [restoration/replay contract](../docs/bas-production/RESTORE_REPLAY_CONTRACT.md).
+
+## Existing production integrations
+
+The same bounded Python transport also accepts an exclusive `point_lists`
+envelope containing Session source context and indexed tables. It returns
+`bas_point_lists_v1`: source-bound listed observations, sparse/uninterpreted
+column accounting and supported explicit controller footnotes, with no installed
+quantity total. Both UI production compile and MCP return this additive record.
+See [point evidence contract](../docs/bas-production/POINT_REVIEW_CONTRACT.md)
+for supported patterns, limits and unfinished review/persistence integration.
+
+An exclusive `assignment_demand` envelope accepts a verified capture/head,
+retained point observations and explicit scoped assignments. The shared workflow
+service establishes source membership before invoking Python. Output
+`bas_assignment_demand_v1` retains each original observation, multiplication
+factor, assigned listed value, qualifications and unobserved cells. Attributes
+are not quantities. Known subtotals are not unique requirements or field-wiring
+counts; project/installed totals stay unresolved. This path uses existing I/O
+vector arithmetic without supplying default hardware, protocol, spare or license
+policies. It does not change legacy `calculate` or indexed table results.
+
+The UI's `/__ot/bas-assignment-demand` and MCP compile option invoke the same
+service and persist `bas_assignment_4` calculations. Inputs/outputs are bounded
+to 32 MiB; Python is bounded to 30 seconds and the HTTP process to 45 seconds.
+Cancellation propagates to the owned Python process. A rejected/late response
+does not overwrite changed workspace state. There is no static-host or browser
+fallback, authenticated reviewer identity, approval or deployment provisioned
+by this feature.
+
+The exclusive `assembly_quantities` envelope carries a validated
+`assembly_register`, equipment-ID/scope projection and capture/equipment/assembly
+heads. `assemblies.py` calculates declared physical component contributions:
+per included equipment or once for a nonempty selected group. It retains original
+conditions, lifecycle, quantities, responsibility claims and source IDs. Unknown
+quantity is null even under exclusion; an unresolved applicable condition cannot
+produce a known contribution. There is no project, unique-device or installed
+total. Shared source/ownership validation runs before Python; Python also rejects
+foreign members, overlapping source consumption and malformed decisions.
+
+`/__ot/bas-assembly-quantities` and the MCP option call this same bounded service
+and append `bas_assembly_5` history. Dependency changes invalidate calculations;
+they do not delete them. Exact retries reuse retained results. Browser code does
+not reimplement multiplication. The existing 32-MiB/30-second Python and 45-second
+HTTP limits apply; unsafe JavaScript-range results reject rather than round.
+
+One deterministic implementation for the existing Takeoff UI and MCP compile
+path. No product catalog, model calls, PDF parsing, or project-spec ingestion.
+See [the research and mathematical proofs](../docs/BAS_MATH_RESEARCH.md) and
+[real-blueprint verification](../docs/BAS_MATH_PROOF.md).
+
+## Install and verify
+
+From `opentakeoff/`, using Python 3.11 or newer:
+
+```sh
+python3 -m venv .venv-bas
+.venv-bas/bin/python -m pip install './bas_engine[test]'
+.venv-bas/bin/python -m pytest bas_engine/tests -q
+.venv-bas/bin/python -m mypy --config-file bas_engine/pyproject.toml bas_engine
+```
+
+For the explicit engineering packaging gate, first run `npm run build` in
+`mcp/`, then run `OT_BAS_VERIFY_PACKAGE=1 .venv-bas/bin/python -m pytest
+bas_engine/tests -q` from `opentakeoff/`. This verifies packaged source bytes,
+the actual Python import path and process response parity; it fails if a required
+bundle is missing or stale. The ordinary suite skips only that packaging gate.
+
+The Node bridge uses `OPENTAKEOFF_BAS_PYTHON`, then the checkout's
+`.venv-bas/bin/python`, then `python3` on PATH. For a Windows virtual environment,
+set `OPENTAKEOFF_BAS_PYTHON` to its `Scripts/python.exe`. Runtime needs Pydantic
+V2; pandas, pytest and mypy are development/dataframe-adapter dependencies.
+MCP builds package the same Python sources under `dist/python/bas_engine`.
+They do not package an interpreter or install system dependencies for you.
+With that runtime configured, `node scripts/smoke-bas-dist.mjs` from `mcp/`
+verifies the built server's actual BAS tool response over MCP stdio.
+
+The browser uses its existing local production-compile endpoint. A static-only
+host cannot launch Python; it needs that existing server-capable endpoint and
+the configured runtime. There is no client-side fallback math engine. Missing
+Python or dependencies yields an explicit `bas_math.status="unavailable"` while
+preserving the original compile result. This branch does not provision a cloud
+service or change the optional AI sandbox.
+
+## Typed Python API
+
+```python
+from bas_engine import EngineRequest, calculate
+
+request = EngineRequest.model_validate({
+    "groups": [{"group_id": "AHU", "quantity": 3}],
+    "point_list": [
+        {"group_id": "AHU", "point_id": "SAT", "physical": {"AI": 1}},
+        {"group_id": "AHU", "point_id": "fan", "physical": {"DO": 1}},
+    ],
+    "hardware": {
+        "profile_id": "abstract-block",
+        "rigid": {"AI": 2, "AO": 2, "DI": 2, "DO": 2},
+        "universal_inputs": 4,
+    },
+    "spare": {"basis": "demand_addon", "numerator": 15, "denominator": 100},
+})
+result = calculate(request)
+assert result.physical_total.AI == 3
+assert result.hardware[0].blocks_total == 3
+```
+
+This is an abstract example, not a controller selection. `rigid` inputs exclude
+the additional UI pool. Instances cannot share terminals unless the group
+explicitly declares `allocation="shared_pool"`. That option is valid only when
+the physical architecture permits pooling. The returned assignment reserves UI
+once across AI and DI; it cannot cover AO or DO.
+
+The indexed-table adapter accepts explicit HARDWARE POINTS / SOFTWARE POINTS
+parents with retained directional/value subheadings. It preserves the indexed
+cells and subheader evidence; trend, alarm and graphics flags do not create
+extra channels or variables. Conflicting physical/software scope is unresolved.
+This projection covers each table once. It does not interpret every controller
+footnote, establish installed equipment, or prove source completeness. See the
+[header contract and source-based tests](../docs/bas-production/POINT_HEADER_CONTRACT.md).
+
+For SOO-only, use `soo` instead of `point_list`. For both, supply both arrays and
+align the same `group_id` and `point_id` explicitly. Never align unrelated points
+by row order or label similarity. Each row is per equipment instance; group
+quantity applies exactly once. Reconciliation preserves the identity union and
+forms the elementwise maximum **capacity envelope**, with warnings on conflicts.
+It is not an RFI resolution or permission to purchase both contradictory devices.
+
+`None`/omitted sources differ from an explicit `[]`. Every point needs a defined
+group. Duplicate point identities within a source, duplicate policy/network
+identities, negative/fractional/bool counts, unknown fields, and invalid boxes
+are rejected. `calculate` revalidates nested model state at its boundary.
+
+For a dataframe with explicitly mapped physical-count columns:
+
+```python
+from bas_engine.adapters import DataframeColumns, dataframe_requirements
+rows = dataframe_requirements(frame, DataframeColumns(
+    group_id="equipment", point_id="signal", AI="ai", AO="ao", DI="di", DO="do"
+))
+```
+
+Dataframes must provide integer cells in all four physical columns. Missing,
+NaN or ambiguous cells do not become zero. Software variables belong in the
+typed `soft` list, not a physical column.
+
+## Process interface and integration
+
+Run `python -m bas_engine` from `opentakeoff/` (or anywhere after installation),
+passing one JSON object on stdin: `{"request": <EngineRequest>}` or
+`{"blueprint": <BlueprintInput>}`. Exactly one is required. Output is one
+Pydantic-validated `EngineResult`; validation failures return exit code 2 and a
+structured error, without echoing offending source text. Request/response size
+is capped at 32 MiB. Node imposes a 30-second timeout and rejects integers outside
+JavaScript's exact range rather than displaying rounded counts. Python itself
+uses arbitrary-precision integer arithmetic.
+
+The existing `compile_corpus_takeoff(kind="bas_points")` calls
+`mcp/src/productionTakeoff.ts` from both MCP and the UI's production CLI. Its
+optional `bas_math` options are:
+
+- `hardware`, `spare`, `licenses`, `serial_routes`, `ip_closets`;
+- `group_overrides`, using group IDs returned by a prior compile;
+- `soo`, explicitly typed, cite-backed SOO requirements. Additional SOO-only
+  groups require a matching group override.
+
+No default hardware, spare percentage, endpoint placement or equipment
+replication is guessed. Indexed tables are read once per table scope. A strong
+directional point-matrix shape can establish scope without a standard title.
+Explicit nested hardwired/integration subheadings may be read from the first
+indexed row; generic ANALOG/DIGITAL headings do not establish direction.
+Ambiguous cells/duplicate channel mappings are withheld with diagnostics.
+Trend, alarm and read/write flags do not create copper or extra soft variables.
+The original graph, compiler, cells, citations and quantities are not mutated.
+
+## Engineering policies and limits
+
+- Spare add-on: `ceil(live * (denominator+numerator)/denominator)` per type.
+  Installed-unused: `ceil(live*denominator/(denominator-numerator))`. The two are
+  intentionally distinct. `minimum` is an optional absolute channel minimum per
+  allocation pool, not an additional percentage or an inferred minimum device.
+- Serial networks require ordered nodes, explicit device/address, electrical
+  micro-unit-load and millimetre distance limits. Greedy splitting is exact only
+  for a contiguous linear route with a permitted local head end at each segment
+  start. Unknown distance returns `capacity_only`, not verified wiring. MS/TP
+  manager budgets and Modbus addressed-server limits differ. This is not an
+  arbitrary floor-plan cable-routing solver.
+- IP uses explicit fixed closets, available switch ports and per-link limits.
+  An overlength link is infeasible even if more same-closet switches would have
+  spare ports. Upstream hierarchy, bandwidth, PoE and security need separate
+  engineering evidence.
+- Soft identity includes pool, scope, protocol and declared device/object
+  identity. `equipment_group` scope replicates with quantity; `project` scope
+  deduplicates across groups. Zero equipment never creates soft demand. License
+  weight and multiplicity are independent integers. Policies use base-plus-packs
+  or ascending absolute tiers. Missing policies and overflow are explicit.
+- `project_complete` is always false: these equations cannot certify that all
+  blueprint requirements, installation details or contractual scope were found.
+  `status="calculated"` means the supplied constraints were calculable, not a
+  complete project takeoff. Warnings/errors yield `review_required`.
+
+Schema sources are `models.py` and `adapters.py`. Programmatic JSON Schema is
+available via their Pydantic `model_json_schema()` methods. Tests include exact
+small-vector/route enumeration, huge replication without materializing devices,
+negative controls, transport failures and source-reviewed real table fixtures.

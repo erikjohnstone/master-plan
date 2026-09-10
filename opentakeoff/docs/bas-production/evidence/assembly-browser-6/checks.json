@@ -1,0 +1,35 @@
+{
+  "ok": true,
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "selected_source_members": [
+    "DOAS-1",
+    "DOAS-2"
+  ],
+  "original_declaration_components": 3,
+  "original_assigned_contributions": [
+    2,
+    2,
+    2
+  ],
+  "installed_quantity": null,
+  "elapsed_ms": 172730,
+  "workflow_bytes": 1145741,
+  "checks": [
+    "actual upload/production compile",
+    "independent source keys",
+    "ordinary source-owned equipment registration",
+    "separate fan roles; point rows add no devices",
+    "factory furnishing only",
+    "explicit conflict and source-preserving resolution",
+    "keyboard preview/save/calculation/source",
+    "shared Python retry/stale calculation",
+    "source paint/return",
+    "both themes/1280 and 1920",
+    "autosave/reload/export/fresh import",
+    "removed member retains readable assemblies",
+    "atomic multi-component repair and reasoned withdrawal",
+    "history preserved and recalculated"
+  ],
+  "limits": "Controlled applicability/responsibility/rebase decisions on original PDF, not automatic applicability, installed verification, actual addendum or full-goal completion.",
+  "errors": []
+}

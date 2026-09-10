@@ -1,0 +1,49 @@
+[
+  {
+    "theme": "light",
+    "width": 1280,
+    "measured": 44,
+    "minimum_ratio": 5.262262417416654,
+    "failures": []
+  },
+  {
+    "theme": "light",
+    "width": 1920,
+    "measured": 44,
+    "minimum_ratio": 5.262262417416654,
+    "failures": []
+  },
+  {
+    "theme": "dark",
+    "width": 1280,
+    "measured": 44,
+    "minimum_ratio": 3.4004836217764134,
+    "failures": [
+      {
+        "element": "DIV",
+        "text": "TAKEOFF",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "DIV",
+        "text": "Source-backed equipment identities and explicit template assignments. Original schedule ev",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "BUTTON",
+        "text": "TAKEOFF",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "BUTTON",
+        "text": "WORKFLOW DATA",
+        "ratio": 3.4004836217764134
+      },
+      {
+        "element": "BUTTON",
+        "text": "POINT LISTS",
+        "ratio": 3.4004836217764134
+      }
+    ]
+  }
+]

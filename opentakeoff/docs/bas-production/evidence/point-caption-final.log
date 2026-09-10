@@ -1,0 +1,52 @@
+▶ scheduleLanguageScan
+  ✔ detects embedded AHU POINTS LIST titles (not line-anchored only) (0.835416ms)
+  ✔ detects valve schedule language for the 70 compile-zero recovery path (0.535833ms)
+  ✔ detects BAS I/O list language (0.670792ms)
+  ✔ a POINTS LIST title split across two pdf.js spans is still recognized (GOAL.md rule, fixed 2026-09-08) (0.563125ms)
+✔ scheduleLanguageScan (3.419ms)
+▶ sheetHasScheduleCaption
+  ✔ accepts a standalone upper-case caption on a plan sheet (0.5355ms)
+  ✔ accepts the plural, and captions carrying punctuation draftsmen actually use (0.108291ms)
+  ✔ refuses a cross-reference note, which is what a plan sheet usually prints (0.118042ms)
+  ✔ refuses a bare word, lower case, and sentences that merely mention one (0.1105ms)
+  ✔ refuses legends and indexes on purpose — a legend is not a takeoff table (0.159167ms)
+  ✔ refuses a plan sheet with no caption at all (0.176208ms)
+✔ sheetHasScheduleCaption (1.498458ms)
+▶ shared point-list page routing
+  ✔ offers an explicit BAS matrix caption independently of the drawing role (5.122709ms)
+  ✔ does not widen nonschedule routing for cross-references, prose, or diagram labels (2.506625ms)
+  ✔ admits a glued POINTLIST caption without another caption rescuing the page (3.734ms)
+  ✔ preserves the pre-existing schedule and legend/unknown fallback admission (1.031916ms)
+✔ shared point-list page routing (13.17275ms)
+▶ L1.5 pageTileGrid
+  ✔ slices oversized pages into overlapping tiles (0.287291ms)
+  ✔ clips spans into tile-local coordinates (0.155959ms)
+✔ L1.5 pageTileGrid (0.571375ms)
+▶ L2 stream fallback
+  ✔ detects schedule keywords (0.285ms)
+  ✔ extracts borderless grid from aligned header + data rows (4.78ms)
+  ✔ a second real schedule's own repeated header row never survives as a phantom data row (GOAL.md rule 21, fixed 2026-09-04) (1.946417ms)
+✔ L2 stream fallback (7.191542ms)
+▶ L4.5 scheduleKeywordRegion (task #84, real corpus root cause 2026-09-09)
+  ✔ widens a narrow caption to a real-table-sized floor instead of just the caption's own width (0.542ms)
+  ✔ never widens past the sheet edges even when the caption sits near one (0.098917ms)
+  ✔ does not widen a caption whose own cluster already spans a real table's width (0.076125ms)
+  ✔ extends the vertical band upward instead of collapsing when the caption sits near the page's bottom edge (0.065084ms)
+  ✔ clusters widely-separated keyword hits and keeps only the largest cluster, instead of unioning the whole sheet (0.104792ms)
+  ✔ returns null when the sheet carries no schedule-keyword text at all (unchanged fallback trigger) (0.046958ms)
+✔ L4.5 scheduleKeywordRegion (task #84, real corpus root cause 2026-09-09) (1.088959ms)
+▶ L2 line grid fallback safety
+  ✔ skips ruled-grid when segment budget exceeded (0.200583ms)
+  ✔ caps dense axis lines without combinatorial blowup (10.158667ms)
+✔ L2 line grid fallback safety (10.426292ms)
+▶ L2 vectorgrid: a refused engine must say so where a person will see it
+  ✔ a real engine failure (bogus pdfPath, sidecar genuinely throws) surfaces in g.notes, not only the pipeline report (324.385709ms)
+✔ L2 vectorgrid: a refused engine must say so where a person will see it (325.023792ms)
+ℹ tests 28
+ℹ suites 8
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 699.632625

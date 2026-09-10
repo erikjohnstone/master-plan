@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "elapsed_ms": 64698,
+  "workflow_bytes": 1160759,
+  "sampled_peak_rss_kb": {
+    "98130": 537024,
+    "98141": 885696
+  },
+  "stderr_bytes": 64,
+  "checks": [
+    "packaged public tool schemas",
+    "real original PDF",
+    "ordinary UI export import",
+    "typed/text parity",
+    "shared Python replay",
+    "Agent proposal with exact UI result",
+    "original histories retained",
+    "idempotent retry",
+    "foreign source rejected atomically",
+    "legacy output equality",
+    "public export/reset/import/replay"
+  ],
+  "limits": "One real source-note case, controlled counterpart ratings. One-second sampled memory is a lower bound, not an exact peak. Not all rule-family documents, addenda or production completion."
+}

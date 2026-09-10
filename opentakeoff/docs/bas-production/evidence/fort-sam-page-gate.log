@@ -1,0 +1,964 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      headers: [
+        'TAG',
+        'POINT NAME',
+...
+      ],
++     kind: 'reference',
+      region: [
+        2066.4,
+        215.04,
+        3474.48,
+        1150.8
+...
+      ],
++     kind: 'reference',
+      region: [
+        1698.48,
+        368.88,
+        2883.12,
+        1670.4
+...
+      ],
++     kind: 'reference',
+      region: [
+        3091.68,
+        816,
+        4217.76,
+        1067.76
+...
+      ],
++     kind: 'reference',
+      region: [
+        2164.56,
+        402.48,
+        3349.2,
+        1620
+
+    at file:///Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/[eval1]:1:565
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:268:26)
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:265:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      kind: 'reference',
+      sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+      title: {
+        sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+        text: 'BAS INPUT/OUTPUT POINT LIST',
+        bbox: [ 2066.4, 215.04, 3474.48, 270.72 ]
+      },
+      headers: [
+        'TAG',   'POINT NAME',
+        'AI',    'AO',
+        'DI',    'DO',
+        'AV',    'BV',
+        'TREND', 'ALARM'
+      ],
+      rows: [
+        {
+          key: '1',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '2',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '3',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '4',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '5',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '6',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '7',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '8',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '9',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '10',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '11',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '12',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '13',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '14',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '15',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '16',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '17',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '18',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '19',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        }
+      ],
+      region: [ 2066.4, 215.04, 3474.48, 1150.8 ]
+    },
+    {
+      kind: 'reference',
+      sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+      title: {
+        sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+        text: 'BAS INPUT/OUTPUT POINT LIST',
+        bbox: [ 1698.48, 368.88, 2883.12, 410.88 ]
+      },
+      headers: [ 'TAG', 'POINT NAME', 'AI', 'AO', 'DI', 'DO', 'ALARM' ],
+      rows: [
+        {
+          key: '1',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '2',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '3',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '4',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '5',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '6',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '7',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '8',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '9',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '10',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '11',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '12',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '13',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '14',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '15',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '16',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '17',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '18',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '19',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '20',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '21',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '22',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '23',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '24',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '25',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '26',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '27',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '28',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '29',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        }
+      ],
+      region: [ 1698.48, 368.88, 2883.12, 1670.4 ]
+    },
+    {
+      kind: 'reference',
+      sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+      title: {
+        sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+        text: 'BAS INPUT/OUTPUT POINT LIST',
+        bbox: [ 3091.68, 816, 4217.76, 858 ]
+      },
+      headers: [ 'TAG', 'POINT NAME', 'AI', 'AO', 'DI', 'DO', 'ALARM' ],
+      rows: [
+        {
+          key: '1',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '2',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '3',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '4',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        }
+      ],
+      region: [ 3091.68, 816, 4217.76, 1067.76 ]
+    },
+    {
+      kind: 'reference',
+      sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+      title: {
+        sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+        text: 'BAS INPUT/OUTPUT POINT LIST',
+        bbox: [ 2164.56, 402.48, 3349.2, 444.48 ]
+      },
+      headers: [ 'TAG', 'POINT NAME', 'AI', 'AO', 'DI', 'DO', 'ALARM' ],
+      rows: [
+        {
+          key: '1',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '2',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '3',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '4',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '5',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '6',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '7',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '8',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '9',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '10',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '11',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '12',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '13',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '14',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '15',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '16',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '17',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '18',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '19',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '20',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '21',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '22',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '23',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '24',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '25',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '26',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '27',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        }
+      ],
+      region: [ 2164.56, 402.48, 3349.2, 1620 ]
+    }
+  ],
+  expected: [
+    {
+      sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+      title: {
+        sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+        text: 'BAS INPUT/OUTPUT POINT LIST',
+        bbox: [ 2066.4, 215.04, 3474.48, 270.72 ]
+      },
+      headers: [
+        'TAG',   'POINT NAME',
+        'AI',    'AO',
+        'DI',    'DO',
+        'AV',    'BV',
+        'TREND', 'ALARM'
+      ],
+      region: [ 2066.4, 215.04, 3474.48, 1150.8 ],
+      rows: [
+        {
+          key: '1',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '2',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '3',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '4',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '5',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '6',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '7',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '8',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '9',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '10',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '11',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '12',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '13',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '14',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '15',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '16',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '17',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '18',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '19',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#6',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        }
+      ]
+    },
+    {
+      sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+      title: {
+        sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+        text: 'BAS INPUT/OUTPUT POINT LIST',
+        bbox: [ 1698.48, 368.88, 2883.12, 410.88 ]
+      },
+      headers: [ 'TAG', 'POINT NAME', 'AI', 'AO', 'DI', 'DO', 'ALARM' ],
+      region: [ 1698.48, 368.88, 2883.12, 1670.4 ],
+      rows: [
+        {
+          key: '1',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '2',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '3',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '4',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '5',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '6',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '7',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '8',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '9',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '10',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '11',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '12',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '13',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '14',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '15',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '16',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '17',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '18',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '19',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '20',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '21',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '22',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '23',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '24',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '25',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '26',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '27',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '28',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '29',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        }
+      ]
+    },
+    {
+      sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+      title: {
+        sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+        text: 'BAS INPUT/OUTPUT POINT LIST',
+        bbox: [ 3091.68, 816, 4217.76, 858 ]
+      },
+      headers: [ 'TAG', 'POINT NAME', 'AI', 'AO', 'DI', 'DO', 'ALARM' ],
+      region: [ 3091.68, 816, 4217.76, 1067.76 ],
+      rows: [
+        {
+          key: '1',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '2',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '3',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '4',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#7',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        }
+      ]
+    },
+    {
+      sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+      title: {
+        sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+        text: 'BAS INPUT/OUTPUT POINT LIST',
+        bbox: [ 2164.56, 402.48, 3349.2, 444.48 ]
+      },
+      headers: [ 'TAG', 'POINT NAME', 'AI', 'AO', 'DI', 'DO', 'ALARM' ],
+      region: [ 2164.56, 402.48, 3349.2, 1620 ],
+      rows: [
+        {
+          key: '1',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '2',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '3',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '4',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '5',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '6',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '7',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '8',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '9',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '10',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '11',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '12',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '13',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '14',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '15',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '16',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '17',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DI: [Object] }
+        },
+        {
+          key: '18',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '19',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '20',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '21',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], ALARM: [Object] }
+        },
+        {
+          key: '22',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AI: [Object] }
+        },
+        {
+          key: '23',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], DO: [Object] }
+        },
+        {
+          key: '24',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '25',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '26',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        },
+        {
+          key: '27',
+          sheet: '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf#8',
+          cells: { TAG: [Object], 'POINT NAME': [Object], AO: [Object] }
+        }
+      ]
+    }
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.13.1

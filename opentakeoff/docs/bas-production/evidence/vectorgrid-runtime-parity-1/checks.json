@@ -1,0 +1,121 @@
+{
+  "complete": true,
+  "python": "python3",
+  "checks": [
+    {
+      "pdf": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection/pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+      "page": 2,
+      "sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+      "tables": 7,
+      "cells": 684,
+      "source": {
+        "cold_ms": 2847,
+        "warm_ms": 1817
+      },
+      "packaged": {
+        "cold_ms": 2370,
+        "warm_ms": 1808
+      },
+      "exact_reply_equal": true,
+      "missing_source_rejected": true,
+      "source_stderr": "",
+      "packaged_stderr": ""
+    },
+    {
+      "pdf": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection/pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+      "page": 8,
+      "sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+      "tables": 3,
+      "cells": 216,
+      "source": {
+        "cold_ms": 1480,
+        "warm_ms": 588
+      },
+      "packaged": {
+        "cold_ms": 815,
+        "warm_ms": 523
+      },
+      "exact_reply_equal": true,
+      "missing_source_rejected": true,
+      "source_stderr": "",
+      "packaged_stderr": ""
+    },
+    {
+      "pdf": "/Users/erikjohnstone/Documents/ChatGPT/MASTER PLAN/HVAC BAS Benchmark Collection/pdf/06__vol2__096__Vermillion_County_Jail.pdf",
+      "page": 19,
+      "sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+      "tables": 10,
+      "cells": 1028,
+      "source": {
+        "cold_ms": 1593,
+        "warm_ms": 1149
+      },
+      "packaged": {
+        "cold_ms": 1442,
+        "warm_ms": 1153
+      },
+      "exact_reply_equal": true,
+      "missing_source_rejected": true,
+      "source_stderr": "",
+      "packaged_stderr": ""
+    },
+    {
+      "pdf": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/public/demo/sample-finish-plan.pdf",
+      "page": 1,
+      "sha256": "53aa2a44efc8f9a2e625ed223fcfbf9ee19d15eb8469ba57183874b6a8e2a56f",
+      "tables": 9,
+      "cells": 462,
+      "source": {
+        "cold_ms": 16262,
+        "warm_ms": 17544
+      },
+      "packaged": {
+        "cold_ms": 22216,
+        "warm_ms": 16795
+      },
+      "exact_reply_equal": true,
+      "missing_source_rejected": true,
+      "source_stderr": "",
+      "packaged_stderr": ""
+    },
+    {
+      "pdf": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/fixtures/raster-schedule.pdf",
+      "page": 1,
+      "sha256": "9612bd8a5c33fa38fb5872e9884445016336a9485eb20669971333ec90917ddd",
+      "tables": 0,
+      "cells": 0,
+      "source": {
+        "cold_ms": 339,
+        "warm_ms": 2
+      },
+      "packaged": {
+        "cold_ms": 279,
+        "warm_ms": 3
+      },
+      "exact_reply_equal": true,
+      "missing_source_rejected": true,
+      "source_stderr": "",
+      "packaged_stderr": ""
+    },
+    {
+      "pdf": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/fixtures/symbol-plan.pdf",
+      "page": 1,
+      "sha256": "89f57d73dc4e08b51e22a89521ef1d85a589c9df9472960fcada666973e7eb97",
+      "tables": 0,
+      "cells": 0,
+      "source": {
+        "cold_ms": 258,
+        "warm_ms": 7
+      },
+      "packaged": {
+        "cold_ms": 281,
+        "warm_ms": 7
+      },
+      "exact_reply_equal": true,
+      "missing_source_rejected": true,
+      "source_stderr": "",
+      "packaged_stderr": ""
+    }
+  ],
+  "limits": "Exact runtime parity and package import closure on selected pages. Warm means a second request in the same Python process. Not independent table accuracy or a full corpus/holdout gate."
+}

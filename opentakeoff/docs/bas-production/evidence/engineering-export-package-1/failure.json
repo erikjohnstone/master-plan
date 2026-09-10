@@ -1,0 +1,4 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: [{\"type\":\"text\",\"text\":\"{\\\"error\\\":\\\"Cannot find package 'fflate' imported from /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/dist/server-core.js\\\"}\"}]\n\ntrue !== false\n",
+  "stderr": "Warning: Please use the `legacy` build in Node.js environments.\n"
+}

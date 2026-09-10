@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "capture_id": "8da23c78108aa046fb9164cc743643bd0a0efff5676334e2bbb98e1994de0bbb",
+  "workflow_bytes": 1004719,
+  "wire_bytes": 1492966,
+  "clauses": 18,
+  "comparisons": 3,
+  "listed": 2,
+  "not_listed": 1,
+  "checks": [
+    "real compile/legacy exact parity",
+    "all raw clauses retained",
+    "invalid reference rejected",
+    "keyboard create",
+    "shared comparison parity",
+    "source paint/return/draft/scroll",
+    "both themes/two widths",
+    "autosave",
+    "reload/export exact parity",
+    "fresh-context import",
+    "removal retains original evidence and event"
+  ],
+  "errors": []
+}

@@ -1,7 +1,7 @@
 // Takeoff UI — industry-standard finished takeoff + workflow audit.
 // Takeoff tab = compiled quantity schedule (contractor document).
 // Workflow data = raw EAV evidence trail. Chat stays conversational.
-import { useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "../brand/icons.jsx";
 import {
   compileAgentTakeoff,
@@ -14,6 +14,13 @@ import {
   lineSpecValue,
 } from "../lib/agentTakeoff.js";
 import CiteValue from "./CiteValue.jsx";
+import BasMathSummary from "./BasMathSummary.jsx";
+import BasPointsWorkspace from "./BasPointsWorkspace.jsx";
+import BasEquipmentWorkspace from "./BasEquipmentWorkspace.jsx";
+import BasProjectReviewWorkspace from "./BasProjectReviewWorkspace.jsx";
+import BasSourceReader from "./BasSourceReader.jsx";
+import { store } from '../lib/store.js';
+import { basReviewNavigation } from './basReviewNavigation.ts';
 
 /** Cap visible technical columns so each family table stays readable. */
 const UI_SPEC_MAX = 12;
@@ -46,7 +53,7 @@ const tabBtn = (active) => ({
   border: "none",
   borderBottom: active ? "2px solid var(--ink)" : "2px solid transparent",
   background: "transparent",
-  color: active ? "var(--ink)" : "var(--ink-muted)",
+  color: active ? "var(--ink)" : "var(--ink-secondary)",
   cursor: "pointer",
   fontFamily: "var(--f-mono)",
   fontSize: "var(--fs-xs)",
@@ -88,13 +95,69 @@ export default function TakeoffDataPanel({
   rows = [],
   projectName = "",
   corpusMeta = null,
+  basWorkflow = null,
+  basViewState,
+  onBasViewStateChange,
+  onBasReview,
+  onBasDrawingReview,
+  onBasRevisionOperation,
+  onBasIssueReview,
+  onBasScopeReview,
+  onBasEquipmentReview,
+  onBasAssignmentCalculate,
+  onBasAssemblyReview,
+  onBasAssemblyCalculate,
+  onBasEngineering,
+  restoreContext,
   onClear,
   onRemove,
   onRemoveLine,
   onClose,
-  onOpenCitation,
+  onOpenCitation: onCanvasCitation,
 }) {
-  const [tab, setTab] = useState("takeoff"); // takeoff | workflow
+  const [sourceView, setSourceView] = useState(null);
+  const sourceReturn = useRef(null);
+  const restoreSourceFocus = useRef(false);
+  const sourceContext = useRef(null);
+  const adapter = store;
+  sourceContext.current = { workflow: basWorkflow, adapter };
+  useEffect(() => { setSourceView(null); }, [basWorkflow, adapter]);
+  const onOpenCitation = async row => {
+    if (!row?.page_id || !basWorkflow) return onCanvasCitation?.(row);
+    const opener = document.activeElement;
+    // Preserve normal live-sheet navigation/overlays. Only unavailable originals
+    // (or an explicit Original PDFs action) use the isolated evidence reader.
+    if (!row.original_source_only && onCanvasCitation) {
+      const result = await onCanvasCitation(row, { originalFallback: true });
+      if (!result?.error) return result;
+    }
+    if (sourceContext.current.workflow !== basWorkflow || sourceContext.current.adapter !== adapter || store !== adapter) {
+      return { error: 'BAS source workspace changed; retry against the current project.' };
+    }
+    sourceReturn.current = opener;
+    setSourceView({ request: structuredClone(row), workflow: basWorkflow, adapter });
+    return { opened: 'original_source_reader' };
+  };
+  const readingSource = sourceView?.workflow === basWorkflow && sourceView?.adapter === adapter;
+  useLayoutEffect(() => {
+    if (!readingSource && restoreSourceFocus.current) {
+      restoreSourceFocus.current = false;
+      if (sourceReturn.current?.isConnected) sourceReturn.current.focus({ preventScroll: true });
+    }
+  }, [readingSource]);
+  const closeSource = () => { restoreSourceFocus.current = true; setSourceView(null); };
+  const [localTab, setLocalTab] = useState(basWorkflow && (corpusMeta?.kind === 'bas_points' || !rows.length) ? "points" : "takeoff");
+  const tab = basViewState?.takeoffTab || localTab;
+  const setTab = value => {
+    setLocalTab(value);
+    onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: value }));
+  };
+  const evidenceTab = tab === 'points' || tab === 'equipment' || tab === 'review';
+  const openReviewDomain = (issue, captureId) => {
+    const route = basReviewNavigation(basViewState || {}, issue, basWorkflow, captureId);
+    setLocalTab(route.takeoffTab);
+    onBasViewStateChange?.(previous => basReviewNavigation(previous || {}, issue, basWorkflow, captureId));
+  };
   const [filter, setFilter] = useState("");
   const [busy, setBusy] = useState("");
   const [err, setErr] = useState("");
@@ -179,7 +242,7 @@ export default function TakeoffDataPanel({
     }
   };
 
-  const exportDisabled = tab === "workflow" ? !visibleRows.length : !visibleLines.length;
+  const exportDisabled = tab === "points" || (tab === "workflow" ? !visibleRows.length : !visibleLines.length);
 
   const jumpToFamily = (name) => {
     setJumpFamily(name);
@@ -215,6 +278,8 @@ export default function TakeoffDataPanel({
           overflow: "hidden",
         }}
       >
+        {readingSource && <BasSourceReader workflow={basWorkflow} request={sourceView.request} adapter={adapter} onBack={closeSource} />}
+        <div hidden={readingSource} style={{ display: readingSource ? 'none' : 'contents' }}>
         <header style={{
           display: "flex", alignItems: "flex-start", gap: 12,
           padding: "16px 20px 0", borderBottom: "1px solid var(--ink-faint)",
@@ -222,7 +287,7 @@ export default function TakeoffDataPanel({
           <div style={{ flex: 1, minWidth: 0, paddingBottom: 12 }}>
             <div style={{
               fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", letterSpacing: "0.14em",
-              textTransform: "uppercase", color: "var(--ink-muted)",
+              textTransform: "uppercase", color: "var(--ink-secondary)",
             }}>
               {takeoffId || "Takeoff"}
             </div>
@@ -230,39 +295,47 @@ export default function TakeoffDataPanel({
               {projectName || "Project takeoff"}
             </div>
             <div style={{
-              display: "flex", flexWrap: "wrap", gap: "6px 14px",
+              display: evidenceTab ? 'none' : "flex", flexWrap: "wrap", gap: "6px 14px",
               marginTop: 8, fontFamily: "var(--f-mono)", fontSize: "var(--fs-s)",
               color: "var(--ink-muted)", letterSpacing: "0.02em",
             }}
               data-takeoff-stats
+              hidden={evidenceTab}
               data-lines={lines.length}
               data-schedules={familyGroups.length}
               data-ea={qtyTotal ?? ""}
               data-evidence={rows.length}
               data-takeoff-id={takeoffId || ""}
             >
-              <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{lines.length}</strong> lines</span>
+              <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{lines.length}</strong> {corpusMeta?.bas_math ? "original schedule lines" : "lines"}</span>
               <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{familyGroups.length}</strong> schedules</span>
               {qtyTotal != null && (
                 <span data-takeoff-ea={qtyTotal}><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{qtyTotal}</strong> EA</span>
               )}
-              {lockedTotal != null && (
+              {lockedTotal != null && !corpusMeta?.bas_math && (
                 <span style={{ color: compiledOk ? "var(--ink)" : "var(--c-danger)" }}>
                   locked {lockedTotal}{compiledOk ? " · matched" : " · mismatch"}
                 </span>
               )}
               <span>{rows.length} evidence fields</span>
             </div>
-            <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-muted)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
-              {tab === "takeoff"
+            <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
+              {tab === "review" ? basViewState?.projectReview?.snapshots
+                ? "Review a scoped snapshot with its exact original PDFs. Historical approval does not certify the current project."
+                : "Source-linked findings across the saved BAS workflow. Resolve inputs in their original workspace; this view does not grant approval."
+                : tab === "equipment" ? "Source-backed equipment identities and explicit template assignments. Original schedule evidence stays unchanged."
+                : tab === "points" ? "Original point-list matrices with source-bound interpretation. No installed quantities are inferred."
+                : tab === "takeoff" && corpusMeta?.bas_math
+                ? "BAS engineering is shown separately from the original schedule rows. Review source coverage and unresolved constraints before procurement."
+                : tab === "takeoff"
                 ? "Finished quantity takeoff — sections are Building · schedule when the set splits by building. Click Valve Mark / Unit Mark / Sheet to paint that whole schedule row on the drawings (one cite at a time)."
                 : "Workflow audit trail — every field the Agent gathered. Does not change the finished Takeoff totals."}
             </div>
           </div>
-          <input
+          {!evidenceTab && <><input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder={tab === "takeoff" ? "Filter tag, schedule, field…" : "Filter tag, field, sheet…"}
+            placeholder={corpusMeta?.bas_math ? "Filter points or schedule rows…" : tab === "takeoff" ? "Filter tag, schedule, field…" : "Filter tag, field, sheet…"}
             style={{
               width: 220, padding: "9px 11px", borderRadius: "var(--r-1)", marginTop: 4,
               border: "1px solid var(--ink-faint)", background: "var(--paper)",
@@ -270,20 +343,24 @@ export default function TakeoffDataPanel({
             }}
           />
           <button type="button" onClick={() => runExport("csv")} disabled={exportDisabled || !!busy}
-            style={{ ...btnStyle, marginTop: 4 }}>{busy === "csv" ? "…" : "CSV"}</button>
+            title={corpusMeta?.bas_math ? "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
+            style={{ ...btnStyle, marginTop: 4 }}>{busy === "csv" ? "…" : corpusMeta?.bas_math ? "Rows CSV" : "CSV"}</button>
           <button type="button" onClick={() => runExport("xlsx")} disabled={exportDisabled || !!busy}
-            style={{ ...btnStyle, marginTop: 4 }}>{busy === "xlsx" ? "…" : "Excel"}</button>
+            title={corpusMeta?.bas_math ? "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
+            style={{ ...btnStyle, marginTop: 4 }}>{busy === "xlsx" ? "…" : corpusMeta?.bas_math ? "Rows Excel" : "Excel"}</button>
           <button type="button" onClick={() => runExport("pdf")} disabled={exportDisabled || !!busy}
-            style={{ ...btnStyle, marginTop: 4 }}>{busy === "pdf" ? "…" : "PDF"}</button>
-          {typeof onClear === "function" && (
-            <button type="button" onClick={onClear} disabled={!rows.length}
+            title={corpusMeta?.bas_math ? "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
+            style={{ ...btnStyle, marginTop: 4 }}>{busy === "pdf" ? "…" : corpusMeta?.bas_math ? "Rows PDF" : "PDF"}</button>
+          </>}
+          {!evidenceTab && typeof onClear === "function" && (
+            <button type="button" onClick={onClear} disabled={!rows.length && !corpusMeta?.bas_math}
               style={{ ...btnStyle, marginTop: 4, background: "transparent", color: "var(--ink-muted)" }}>
               Clear
             </button>
           )}
           <button type="button" onClick={onClose} aria-label="Close takeoff"
             style={{ border: "none", background: "transparent", cursor: "pointer", padding: 8, marginTop: 2 }}>
-            <Icon name="x" size={18} />
+            <Icon name="close" size={18} />
           </button>
         </header>
 
@@ -294,6 +371,9 @@ export default function TakeoffDataPanel({
           <button type="button" style={tabBtn(tab === "workflow")} onClick={() => setTab("workflow")}>
             Workflow data
           </button>
+          {basWorkflow && <button type="button" style={tabBtn(tab === "points")} onClick={() => setTab("points")}>Point lists</button>}
+          {basWorkflow && <button type="button" style={tabBtn(tab === "equipment")} onClick={() => setTab("equipment")}>Equipment</button>}
+          <button type="button" style={{ ...tabBtn(tab === 'review'), marginLeft: 'auto' }} onClick={() => setTab('review')}>Review &amp; changes</button>
         </div>
 
         {err && (
@@ -340,12 +420,21 @@ export default function TakeoffDataPanel({
           </div>
         )}
 
-        <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px" }}>
+        <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px", ...(tab === 'review' ? { display: 'flex', flexDirection: 'column', minHeight: 0 } : {}) }}>
+          {tab !== 'review' && basViewState?.projectReview?.returnFromDomain && <button type="button" onClick={() => setTab('review')}>← Return to issue review</button>}
+          {tab === 'review' ? <BasProjectReviewWorkspace workflow={basWorkflow} state={basViewState?.projectReview}
+            onStateChange={updater => onBasViewStateChange?.(previous => ({ ...previous, projectReview: updater(previous?.projectReview || {}) }))}
+            onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} onDrawingReview={onBasDrawingReview} onRevisionOperation={onBasRevisionOperation} onIssueReview={onBasIssueReview} onScopeReview={onBasScopeReview} restoreContext={restoreContext} />
+            : tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onAssemblyReview={onBasAssemblyReview} onAssemblyCalculate={onBasAssemblyCalculate} onEngineering={onBasEngineering} onOpenCitation={onOpenCitation} />
+            : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
+          {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}
           {tab === "takeoff" ? (
             !lines.length ? (
               <div style={{ padding: "56px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: "var(--fs-l)", lineHeight: 1.5 }}>
-                No finished takeoff yet.<br />
-                Run Agent with a complete HVAC, BAS, or valve takeoff goal — compiled quantities land here.
+                {corpusMeta?.bas_math ? "No rows from the original schedule compiler. BAS engineering results and their review findings are shown above." : <>
+                  No finished takeoff yet.<br />
+                  Run Agent with a complete HVAC, BAS, or valve takeoff goal — compiled quantities land here.
+                </>}
               </div>
             ) : (
               familyGroups.map((group) => {
@@ -588,6 +677,8 @@ export default function TakeoffDataPanel({
               ))
             )
           )}
+          </>}
+        </div>
         </div>
       </div>
     </div>

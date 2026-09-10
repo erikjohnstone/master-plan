@@ -1,0 +1,148 @@
+.....FFFFFFFFF......                                                     [100%]
+=================================== FAILURES ===================================
+___________ test_missing_typed_cell_is_not_an_explicit_blank_or_zero ___________
+
+    def test_missing_typed_cell_is_not_an_explicit_blank_or_zero():
+        raw = real_input()
+        table = next(t for t in raw["tables"] if t["sheet"].endswith("#3"))
+        header = next(h for h in table["headers"] if h == "AI")
+>       del table["rows"][0]["cells"][header]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'AI'
+
+bas_engine/tests/test_point_lists.py:136: KeyError
+_ test_keyword_only_or_reference_caption_is_not_a_point_matrix[BAS CONTROL DIAGRAM] _
+
+title = 'BAS CONTROL DIAGRAM'
+
+    @pytest.mark.parametrize("title", ["BAS CONTROL DIAGRAM", "DDC PANEL BILL OF MATERIAL", "SEE POINT LIST", "I/O WIRING DETAIL"])
+    def test_keyword_only_or_reference_caption_is_not_a_point_matrix(title):
+        raw = real_input()
+        raw["tables"] = [{"sheet": raw["tables"][0]["sheet"], "title": {"text": title},
+                          "headers": ["ITEM", "QUANTITY"], "rows": [{"key": "1", "cells": {
+                              "ITEM": {"text": "Controller"}, "QUANTITY": {"text": "1"}}}]}]
+>       assert not review_point_lists(PointListInput.model_validate(raw)).matrices
+E       AssertionError: assert not [PointMatrix(matrix_id='matrix:b6df358cc78669a640fc6471d49e1ffd8e9526404cb8dcfe568f29d4dc02d3c4', source_id='sha256:c6...COLUMNS_UNRESOLVED', 'POINT_NAME_COLUMN_UNRESOLVED', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')]
+E        +  where [PointMatrix(matrix_id='matrix:b6df358cc78669a640fc6471d49e1ffd8e9526404cb8dcfe568f29d4dc02d3c4', source_id='sha256:c6...COLUMNS_UNRESOLVED', 'POINT_NAME_COLUMN_UNRESOLVED', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')] = PointListResult(schema_version='bas_point_lists_v1', rule_version='point_observations_1', scope='discovered_matrices_o...', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')], issues=['SOURCE_DISCOVERY_COVERAGE_UNVERIFIED']).matrices
+E        +    where PointListResult(schema_version='bas_point_lists_v1', rule_version='point_observations_1', scope='discovered_matrices_o...', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')], issues=['SOURCE_DISCOVERY_COVERAGE_UNVERIFIED']) = review_point_lists(PointListInput(sources=SourceContext(schema_version='bas_sources_v1', adapter='session_text_spans_v1', coordinate_fram...w(key='1', cells={'ITEM': IndexedCell(text='Controller', bbox=None), 'QUANTITY': IndexedCell(text='1', bbox=None)})])]))
+E        +      where PointListInput(sources=SourceContext(schema_version='bas_sources_v1', adapter='session_text_spans_v1', coordinate_fram...w(key='1', cells={'ITEM': IndexedCell(text='Controller', bbox=None), 'QUANTITY': IndexedCell(text='1', bbox=None)})])]) = model_validate({'tables': [{'sheet': '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf', 'title': {'text': 'BAS CONT...rces_v1', 'adapter': 'session_text_spans_v1', 'coordinate_frame': 'image_px', 'scope': 'available_pdf_text_only', ...}})
+E        +        where model_validate = PointListInput.model_validate
+
+bas_engine/tests/test_point_lists.py:149: AssertionError
+_ test_keyword_only_or_reference_caption_is_not_a_point_matrix[DDC PANEL BILL OF MATERIAL] _
+
+title = 'DDC PANEL BILL OF MATERIAL'
+
+    @pytest.mark.parametrize("title", ["BAS CONTROL DIAGRAM", "DDC PANEL BILL OF MATERIAL", "SEE POINT LIST", "I/O WIRING DETAIL"])
+    def test_keyword_only_or_reference_caption_is_not_a_point_matrix(title):
+        raw = real_input()
+        raw["tables"] = [{"sheet": raw["tables"][0]["sheet"], "title": {"text": title},
+                          "headers": ["ITEM", "QUANTITY"], "rows": [{"key": "1", "cells": {
+                              "ITEM": {"text": "Controller"}, "QUANTITY": {"text": "1"}}}]}]
+>       assert not review_point_lists(PointListInput.model_validate(raw)).matrices
+E       AssertionError: assert not [PointMatrix(matrix_id='matrix:3815212c368c31f3041846c2f75540293acd896f021df01386e3cd68e04f1e64', source_id='sha256:c6...COLUMNS_UNRESOLVED', 'POINT_NAME_COLUMN_UNRESOLVED', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')]
+E        +  where [PointMatrix(matrix_id='matrix:3815212c368c31f3041846c2f75540293acd896f021df01386e3cd68e04f1e64', source_id='sha256:c6...COLUMNS_UNRESOLVED', 'POINT_NAME_COLUMN_UNRESOLVED', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')] = PointListResult(schema_version='bas_point_lists_v1', rule_version='point_observations_1', scope='discovered_matrices_o...', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')], issues=['SOURCE_DISCOVERY_COVERAGE_UNVERIFIED']).matrices
+E        +    where PointListResult(schema_version='bas_point_lists_v1', rule_version='point_observations_1', scope='discovered_matrices_o...', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')], issues=['SOURCE_DISCOVERY_COVERAGE_UNVERIFIED']) = review_point_lists(PointListInput(sources=SourceContext(schema_version='bas_sources_v1', adapter='session_text_spans_v1', coordinate_fram...w(key='1', cells={'ITEM': IndexedCell(text='Controller', bbox=None), 'QUANTITY': IndexedCell(text='1', bbox=None)})])]))
+E        +      where PointListInput(sources=SourceContext(schema_version='bas_sources_v1', adapter='session_text_spans_v1', coordinate_fram...w(key='1', cells={'ITEM': IndexedCell(text='Controller', bbox=None), 'QUANTITY': IndexedCell(text='1', bbox=None)})])]) = model_validate({'tables': [{'sheet': '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf', 'title': {'text': 'DDC PANE...rces_v1', 'adapter': 'session_text_spans_v1', 'coordinate_frame': 'image_px', 'scope': 'available_pdf_text_only', ...}})
+E        +        where model_validate = PointListInput.model_validate
+
+bas_engine/tests/test_point_lists.py:149: AssertionError
+_ test_keyword_only_or_reference_caption_is_not_a_point_matrix[SEE POINT LIST] _
+
+title = 'SEE POINT LIST'
+
+    @pytest.mark.parametrize("title", ["BAS CONTROL DIAGRAM", "DDC PANEL BILL OF MATERIAL", "SEE POINT LIST", "I/O WIRING DETAIL"])
+    def test_keyword_only_or_reference_caption_is_not_a_point_matrix(title):
+        raw = real_input()
+        raw["tables"] = [{"sheet": raw["tables"][0]["sheet"], "title": {"text": title},
+                          "headers": ["ITEM", "QUANTITY"], "rows": [{"key": "1", "cells": {
+                              "ITEM": {"text": "Controller"}, "QUANTITY": {"text": "1"}}}]}]
+>       assert not review_point_lists(PointListInput.model_validate(raw)).matrices
+E       AssertionError: assert not [PointMatrix(matrix_id='matrix:f1784ea90ea22a8801b1ef00df2a7d5eb1a1d711fac83851a16f57708137b49d', source_id='sha256:c6...COLUMNS_UNRESOLVED', 'POINT_NAME_COLUMN_UNRESOLVED', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')]
+E        +  where [PointMatrix(matrix_id='matrix:f1784ea90ea22a8801b1ef00df2a7d5eb1a1d711fac83851a16f57708137b49d', source_id='sha256:c6...COLUMNS_UNRESOLVED', 'POINT_NAME_COLUMN_UNRESOLVED', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')] = PointListResult(schema_version='bas_point_lists_v1', rule_version='point_observations_1', scope='discovered_matrices_o...', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')], issues=['SOURCE_DISCOVERY_COVERAGE_UNVERIFIED']).matrices
+E        +    where PointListResult(schema_version='bas_point_lists_v1', rule_version='point_observations_1', scope='discovered_matrices_o...', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')], issues=['SOURCE_DISCOVERY_COVERAGE_UNVERIFIED']) = review_point_lists(PointListInput(sources=SourceContext(schema_version='bas_sources_v1', adapter='session_text_spans_v1', coordinate_fram...w(key='1', cells={'ITEM': IndexedCell(text='Controller', bbox=None), 'QUANTITY': IndexedCell(text='1', bbox=None)})])]))
+E        +      where PointListInput(sources=SourceContext(schema_version='bas_sources_v1', adapter='session_text_spans_v1', coordinate_fram...w(key='1', cells={'ITEM': IndexedCell(text='Controller', bbox=None), 'QUANTITY': IndexedCell(text='1', bbox=None)})])]) = model_validate({'tables': [{'sheet': '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf', 'title': {'text': 'SEE POIN...rces_v1', 'adapter': 'session_text_spans_v1', 'coordinate_frame': 'image_px', 'scope': 'available_pdf_text_only', ...}})
+E        +        where model_validate = PointListInput.model_validate
+
+bas_engine/tests/test_point_lists.py:149: AssertionError
+_ test_keyword_only_or_reference_caption_is_not_a_point_matrix[I/O WIRING DETAIL] _
+
+title = 'I/O WIRING DETAIL'
+
+    @pytest.mark.parametrize("title", ["BAS CONTROL DIAGRAM", "DDC PANEL BILL OF MATERIAL", "SEE POINT LIST", "I/O WIRING DETAIL"])
+    def test_keyword_only_or_reference_caption_is_not_a_point_matrix(title):
+        raw = real_input()
+        raw["tables"] = [{"sheet": raw["tables"][0]["sheet"], "title": {"text": title},
+                          "headers": ["ITEM", "QUANTITY"], "rows": [{"key": "1", "cells": {
+                              "ITEM": {"text": "Controller"}, "QUANTITY": {"text": "1"}}}]}]
+>       assert not review_point_lists(PointListInput.model_validate(raw)).matrices
+E       AssertionError: assert not [PointMatrix(matrix_id='matrix:c2b70cb8e78f8ef90366002c069a358118198f39b2a6c0a8747fc4b4de75139c', source_id='sha256:c6...COLUMNS_UNRESOLVED', 'POINT_NAME_COLUMN_UNRESOLVED', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')]
+E        +  where [PointMatrix(matrix_id='matrix:c2b70cb8e78f8ef90366002c069a358118198f39b2a6c0a8747fc4b4de75139c', source_id='sha256:c6...COLUMNS_UNRESOLVED', 'POINT_NAME_COLUMN_UNRESOLVED', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')] = PointListResult(schema_version='bas_point_lists_v1', rule_version='point_observations_1', scope='discovered_matrices_o...', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')], issues=['SOURCE_DISCOVERY_COVERAGE_UNVERIFIED']).matrices
+E        +    where PointListResult(schema_version='bas_point_lists_v1', rule_version='point_observations_1', scope='discovered_matrices_o...', 'TABLE_REGION_UNAVAILABLE'], quantity_basis='listed_matrix_only')], issues=['SOURCE_DISCOVERY_COVERAGE_UNVERIFIED']) = review_point_lists(PointListInput(sources=SourceContext(schema_version='bas_sources_v1', adapter='session_text_spans_v1', coordinate_fram...w(key='1', cells={'ITEM': IndexedCell(text='Controller', bbox=None), 'QUANTITY': IndexedCell(text='1', bbox=None)})])]))
+E        +      where PointListInput(sources=SourceContext(schema_version='bas_sources_v1', adapter='session_text_spans_v1', coordinate_fram...w(key='1', cells={'ITEM': IndexedCell(text='Controller', bbox=None), 'QUANTITY': IndexedCell(text='1', bbox=None)})])]) = model_validate({'tables': [{'sheet': '12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf', 'title': {'text': 'I/O WIRI...rces_v1', 'adapter': 'session_text_spans_v1', 'coordinate_frame': 'image_px', 'scope': 'available_pdf_text_only', ...}})
+E        +        where model_validate = PointListInput.model_validate
+
+bas_engine/tests/test_point_lists.py:149: AssertionError
+_______ test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted[box0] _______
+
+box = [10, 10, 0, 0]
+
+    @pytest.mark.parametrize("box", [[10, 10, 0, 0], [False, 0, 1, 1], ["0", 0, 1, 1], [0, 0, float("inf"), 1]])
+    def test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted(box):
+        raw = real_input()
+        raw["tables"][0]["rows"][0]["cells"]["UNINTERPRETED"] = {"text": "unknown", "bbox": box}
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValidationError
+
+bas_engine/tests/test_point_lists.py:156: Failed
+_______ test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted[box1] _______
+
+box = [False, 0, 1, 1]
+
+    @pytest.mark.parametrize("box", [[10, 10, 0, 0], [False, 0, 1, 1], ["0", 0, 1, 1], [0, 0, float("inf"), 1]])
+    def test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted(box):
+        raw = real_input()
+        raw["tables"][0]["rows"][0]["cells"]["UNINTERPRETED"] = {"text": "unknown", "bbox": box}
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValidationError
+
+bas_engine/tests/test_point_lists.py:156: Failed
+_______ test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted[box2] _______
+
+box = ['0', 0, 1, 1]
+
+    @pytest.mark.parametrize("box", [[10, 10, 0, 0], [False, 0, 1, 1], ["0", 0, 1, 1], [0, 0, float("inf"), 1]])
+    def test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted(box):
+        raw = real_input()
+        raw["tables"][0]["rows"][0]["cells"]["UNINTERPRETED"] = {"text": "unknown", "bbox": box}
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValidationError
+
+bas_engine/tests/test_point_lists.py:156: Failed
+_______ test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted[box3] _______
+
+box = [0, 0, inf, 1]
+
+    @pytest.mark.parametrize("box", [[10, 10, 0, 0], [False, 0, 1, 1], ["0", 0, 1, 1], [0, 0, float("inf"), 1]])
+    def test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted(box):
+        raw = real_input()
+        raw["tables"][0]["rows"][0]["cells"]["UNINTERPRETED"] = {"text": "unknown", "bbox": box}
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValidationError
+
+bas_engine/tests/test_point_lists.py:156: Failed
+=========================== short test summary info ============================
+FAILED bas_engine/tests/test_point_lists.py::test_missing_typed_cell_is_not_an_explicit_blank_or_zero
+FAILED bas_engine/tests/test_point_lists.py::test_keyword_only_or_reference_caption_is_not_a_point_matrix[BAS CONTROL DIAGRAM]
+FAILED bas_engine/tests/test_point_lists.py::test_keyword_only_or_reference_caption_is_not_a_point_matrix[DDC PANEL BILL OF MATERIAL]
+FAILED bas_engine/tests/test_point_lists.py::test_keyword_only_or_reference_caption_is_not_a_point_matrix[SEE POINT LIST]
+FAILED bas_engine/tests/test_point_lists.py::test_keyword_only_or_reference_caption_is_not_a_point_matrix[I/O WIRING DETAIL]
+FAILED bas_engine/tests/test_point_lists.py::test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted[box0]
+FAILED bas_engine/tests/test_point_lists.py::test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted[box1]
+FAILED bas_engine/tests/test_point_lists.py::test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted[box2]
+FAILED bas_engine/tests/test_point_lists.py::test_invalid_box_in_uninterpreted_raw_cell_is_not_accepted[box3]
+9 failed, 11 passed in 1.95s

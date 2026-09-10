@@ -1,0 +1,11 @@
+{
+  "error": "TimeoutError: locator.selectOption: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Project BAS review', exact: true }).getByLabel('Area', { exact: true })\u001b[22m\n",
+  "stack": "locator.selectOption: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Project BAS review', exact: true }).getByLabel('Area', { exact: true })\u001b[22m\n\n    at <anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/scripts/playwright-bas-project-review.mjs:57:52)",
+  "checks": [
+    "Exact shared export; no approval or dropped findings"
+  ],
+  "timings": {
+    "first_open_ms": 4333
+  },
+  "page_errors": []
+}

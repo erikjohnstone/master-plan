@@ -1,0 +1,17 @@
+{
+  "purpose": "Independent full-page drawing review for engineering input grounding; not expected counterpart capabilities or installed quantities",
+  "reviewed_at": "2026-09-09",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "page": 9,
+  "sheet": "M-601",
+  "frame_px": [4896, 3168],
+  "schedule_title": "DEDICATED OUTSIDE AIR SYSTEM SCHEDULE",
+  "note_number": 10,
+  "note_span_index": 972,
+  "note_bbox_px": [1364.4, 1766.7, 2533.9, 1787.3],
+  "note_text": "10. PROVIDE WITH MIXING BOX WITH RETURN AND OUTSIDE AIR DAMPERS WITH 0-10 VDC MODULATING ACTUATOR.",
+  "equipment_rows_listing_note": ["DOAS-1", "DOAS-2", "DOAS-3"],
+  "explicit_signal_requirement": { "mode": "voltage", "waveform": "DC", "minimum": "0", "maximum": "10", "unit": "V" },
+  "not_established_by_note": ["actuator power voltage", "actuator load", "torque", "fail position", "controller output capability", "actuator installed count"],
+  "negative_control": "Equipment electrical VOLT/PH and MCA are not actuator control-power ratings. Generic voltage-monitoring point labels elsewhere in the PDF are not this actuator's signal requirement."
+}

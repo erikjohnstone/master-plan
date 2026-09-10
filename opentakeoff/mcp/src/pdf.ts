@@ -2,6 +2,7 @@
 // handed out here; the geometry engine (web/src/lib) never sees a pdf.js object.
 import "./hush.ts"; // must stay the first import — see hush.ts
 import { createRequire } from "node:module";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import * as pdfjs from "pdfjs-dist";
@@ -89,6 +90,11 @@ async function ensureCanvasGlobals(): Promise<void> {
 export interface OcgEntry { id: string; name: string; visible: boolean; }
 
 export interface DocHandle {
+  /** Identity of the exact bytes loaded, not a later re-read of a mutable path. */
+  readonly sourceSha256: string;
+  readonly byteLength: number;
+  /** Original loaded bytes, not a re-read of a possibly replaced filesystem path. */
+  originalBytes(): Promise<Uint8Array>;
   numPages: number;
   page(n: number): Promise<PageHandle>;
   /** The document's Optional Content Groups (empty = no layers survived export). */
@@ -98,6 +104,15 @@ export interface DocHandle {
 
 export async function openPdf(filePath: string): Promise<DocHandle> {
   const bytes = await readFile(filePath);
+  return openOwnedPdfBytes(bytes);
+}
+
+/** Isolated original-source review; never registers a document with Session. */
+export async function openPdfBytes(input: Uint8Array): Promise<DocHandle> {
+  return openOwnedPdfBytes(new Uint8Array(input));
+}
+
+async function openOwnedPdfBytes(bytes: Uint8Array): Promise<DocHandle> {
   const doc = await pdfjs.getDocument({
     // getDocument({ data }) may DETACH the buffer it is handed — always pass a
     // fresh copy (new Uint8Array(view) copies), never the read buffer itself.
@@ -109,6 +124,9 @@ export async function openPdf(filePath: string): Promise<DocHandle> {
     isEvalSupported: false,
   }).promise;
   return {
+    sourceSha256: createHash("sha256").update(bytes).digest("hex"),
+    byteLength: bytes.byteLength,
+    originalBytes: async () => new Uint8Array(await doc.getData()),
     numPages: doc.numPages,
     async page(n: number): Promise<PageHandle> {
       const page = await doc.getPage(n);

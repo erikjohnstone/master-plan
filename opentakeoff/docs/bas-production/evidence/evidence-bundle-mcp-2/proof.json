@@ -1,0 +1,12 @@
+{
+  "browser_bundle_id": "329db9415775ab780fc2814f08f136368a53ced5239ac68a16085620c0730af9",
+  "mcp_bundle_id": "c8d11b434ad97610810040966b50677ef66fe643bdc379ebdccaa3b50c9ac93e",
+  "exact_shared_bytes": true,
+  "same_history_and_sources": true,
+  "source_versions": 1,
+  "verified_without_loaded_plan": true,
+  "preserved_state": true,
+  "restored": false,
+  "export_ms": 3067,
+  "disclosure": "Built dist/server.js public MCP; JSON merge preserves legacy per-surface UI fields, so full payload/bundle IDs can differ. Sources and BAS history compare exactly."
+}

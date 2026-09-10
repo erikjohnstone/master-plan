@@ -1,0 +1,23 @@
+
+> opentakeoff-mcp@0.9.66 test:bas
+> node --import tsx --test test/basSources.test.ts test/basMath.test.ts
+
+✔ Python BAS engine is strict and the transport does no arithmetic (461.110541ms)
+✔ unsafe JSON integer quantities and missing Python fail explicitly (3.455958ms)
+✔ safe individual inputs cannot silently produce rounded or oversized wire results (210.89825ms)
+✔ an unavailable Python runtime preserves legacy BAS output without a fake zero (12.271458ms)
+✔ production CLI drains multi-megabyte UTF-8 JSON before explicit exit (158.940625ms)
+✔ shared production wrapper leaves all legacy results and graph values unchanged (292.518375ms)
+✔ singular indexed POINT LIST is consumed without modifying graph or legacy title selection (142.735625ms)
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ shared BAS seam retains the production PDF spans and leaves Session outputs unchanged (185.929083ms)
+✔ source identity is captured at load, survives rename, and resets with a new session document (213.931125ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1444.266583

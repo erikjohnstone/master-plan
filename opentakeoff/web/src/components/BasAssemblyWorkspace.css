@@ -1,0 +1,9 @@
+.bas-assembly-workspace { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; color: var(--ink); }
+.bas-assembly-workspace small { display: block; color: var(--ink-secondary); }
+.bas-assembly-workspace h4 { margin: 0; font-size: var(--fs-m); }
+.bas-assembly-evidence { overflow-wrap: anywhere; }
+.bas-assembly-evidence p { margin: var(--sp-2) 0; }
+.bas-assembly-evidence button { white-space: nowrap; }
+.bas-assembly-claim, .bas-assembly-resolution { min-width: 0; display: flex; flex-direction: column; gap: var(--sp-3); margin: var(--sp-3) 0; padding: var(--sp-3); border: 1px solid var(--ink-faint); }
+.bas-assembly-claim legend { color: var(--ink-secondary); padding: 0 var(--sp-2); }
+.bas-assembly-workspace button[aria-pressed="true"] { border-color: var(--cobalt); color: var(--cobalt); }

@@ -1,0 +1,36 @@
+
+> opentakeoff-mcp@0.9.66 test:bas
+> node --import tsx --test test/basSources.test.ts test/basMath.test.ts test/basPointLists.test.ts test/basPointAudit.test.ts test/basRoutingComparison.test.ts
+
+✔ Python BAS engine is strict and the transport does no arithmetic (614.986291ms)
+✔ unsafe JSON integer quantities and missing Python fail explicitly (3.60275ms)
+✔ safe individual inputs cannot silently produce rounded or oversized wire results (367.705042ms)
+✔ an unavailable Python runtime preserves legacy BAS output without a fake zero (8.449792ms)
+✔ production CLI drains multi-megabyte UTF-8 JSON before explicit exit (142.106ms)
+✔ shared production wrapper leaves all legacy results and graph values unchanged (399.158459ms)
+✔ singular indexed POINT LIST is consumed without modifying graph or legacy title selection (308.34ms)
+✔ point audit requires grounding for every expected nonempty cell, not only present boxes (242.668625ms)
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ Python point observations cross the strict shared boundary with unmodified sources (688.570625ms)
+✔ production BAS compile adds grounded observations without replacing legacy or math (944.23575ms)
+✔ source failure is explicit and cannot discard a valid legacy or math result (356.190458ms)
+✔ invalid engineering policy cannot suppress valid source observations (336.008125ms)
+✔ real Session source context is accepted; no point table is not claimed complete (396.054541ms)
+✔ point transport rejects invalid source identity, oversized payload and missing runtime (304.478542ms)
+✔ shared output schema rejects orphaned evidence, omitted rows and misleading statuses (269.2235ms)
+✔ comparison is one-to-one, not presence-only (1.714542ms)
+✔ added tables are allowed only between revisions, never replay (0.412375ms)
+✔ metadata and full table values remain in scope; only explicit incidental fields are excluded (1.405708ms)
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ shared BAS seam retains the production PDF spans and leaves Session outputs unchanged (302.645375ms)
+✔ source identity is captured at load, survives rename, and resets with a new session document (52.2575ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4700.473458

@@ -14,6 +14,7 @@ import {
 import { UserError } from "./format.ts";
 import { sanitizeApprovals, type Session, type Shape, type Condition, type Markup } from "./session.ts";
 import type { Rule } from "../../web/src/lib/rules.ts";
+import { verifyBasWorkflow } from "../../web/src/lib/basWorkflow.ts";
 
 // untyped canvas JS — typed facades state the contract at the boundary
 const parseTakeoffImport = parseJs as unknown as (text: string) => Record<string, unknown>;
@@ -37,14 +38,17 @@ export async function importTakeoff(session: Session, filePath: string) {
   let imported: Record<string, unknown>;
   try {
     imported = parseTakeoffImport(text);
+    if (imported.bas_workflow != null) imported.bas_workflow = await verifyBasWorkflow(imported.bas_workflow);
   } catch (e) {
     throw new UserError(e instanceof Error ? e.message : String(e));
   }
 
   const prevShapeIds = new Set(session.shapes.map((s) => s.id));
   const { payload, note } = mergeTakeoffImport(session.exportPayload(), imported, session.files);
+  const basWorkflow = payload.bas_workflow == null ? null : await verifyBasWorkflow(payload.bas_workflow);
 
   session.conditions = (payload.conditions as Condition[]) ?? [];
+  session.basWorkflow = basWorkflow;
   session.shapes = (payload.shapes as Shape[]) ?? [];
   session.markups = (payload.markups as Markup[]) ?? [];
   // approvals (#176): transport, not minting — an estimator seal arriving by

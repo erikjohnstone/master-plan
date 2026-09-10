@@ -1,0 +1,34 @@
+▶ shared point-list page routing
+  ✖ offers an explicit BAS matrix caption independently of the drawing role (4.74725ms)
+  ✔ does not widen nonschedule routing for cross-references, prose, or diagram labels (3.059417ms)
+  ✔ preserves the pre-existing schedule and legend/unknown fallback admission (1.146083ms)
+✖ shared point-list page routing (9.663167ms)
+ℹ tests 3
+ℹ suites 1
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 575.569666
+
+✖ failing tests:
+
+test at test/vectorTakeoffPipeline.test.ts:1:1417
+✖ offers an explicit BAS matrix caption independently of the drawing role (4.74725ms)
+  AssertionError [ERR_ASSERTION]: detail
+
+  false !== true
+
+      at TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/web/test/vectorTakeoffPipeline.test.ts:36:14)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1515:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,13 @@
+.bas-drawing-workspace { min-width: 0; }
+.bas-drawing-workspace h3 { margin: 0; font-size: var(--fs-m); }
+.bas-drawing-workspace small { display: block; color: var(--ink-secondary); margin-top: var(--sp-2); overflow-wrap: anywhere; }
+.bas-drawing-workspace select { max-width: 100%; min-width: 0; }
+.bas-drawing-workspace .bas-point-controls label { min-width: calc(var(--ctl-l) * 4); }
+.bas-drawing-grid { max-height: 45vh; }
+.bas-drawing-workspace table { table-layout: fixed; }
+.bas-drawing-workspace td, .bas-drawing-workspace th { overflow-wrap: anywhere; }
+.bas-drawing-workspace input[type=checkbox] { width: var(--ctl-s); height: var(--ctl-s); accent-color: var(--cobalt); }
+.bas-drawing-record, .bas-drawing-save { border: 1px solid var(--ink-faint); padding: var(--sp-4); }
+.bas-drawing-record p, .bas-drawing-save p { margin-bottom: 0; overflow-wrap: anywhere; }
+.bas-drawing-source-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-2); }
+.bas-drawing-workspace .bas-review-facts { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }

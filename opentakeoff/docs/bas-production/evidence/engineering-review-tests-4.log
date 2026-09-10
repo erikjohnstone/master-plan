@@ -1,0 +1,32 @@
+✔ owned signal checks save and replay through Python; every selected resource is checked (619.756125ms)
+✔ owned analog checks save and replay through Python; every selected resource is checked (594.717166ms)
+✔ owned loading checks save and replay through Python; every selected resource is checked (769.207833ms)
+✔ owned contact checks save and replay through Python; every selected resource is checked (1157.3405ms)
+✔ owned pulse checks save and replay through Python; every selected resource is checked (1096.25775ms)
+✔ owned power checks save and replay through Python; every selected resource is checked (1015.348875ms)
+✔ owned mechanical checks save and replay through Python; every selected resource is checked (985.736917ms)
+✔ owned allocation checks save and replay through Python; every selected resource is checked (939.195875ms)
+✔ owned expansion checks save and replay through Python; every selected resource is checked (943.840667ms)
+✔ owned serial checks save and replay through Python; every selected resource is checked (951.74325ms)
+✔ owned ip checks save and replay through Python; every selected resource is checked (988.06675ms)
+✔ actual Python review retains original sources, current dependency identities and idempotent operation history (1477.789708ms)
+✔ equipment withdrawal preserves historical sources/results but invalidates freshness and new saves (2368.007834ms)
+✔ assembly exclusions stale old results; recomputation retains failed and missing constraints even when excluded (2549.679833ms)
+✔ source-version switching cannot silently reactivate an old passing result (1372.449083ms)
+✔ forked, incomplete, downgraded and cross-workflow histories reject instead of silently merging (1432.779708ms)
+✔ locally rehashed calculations still require exact Python replay before being accepted as current (2502.233875ms)
+✔ ordinary IndexedDB save/load and portable import preserve complete engineering histories and legacy annotations (1728.80025ms)
+✔ source validation, runtime failure and cancellation never append a partial review (16.209125ms)
+✔ opening an unreviewed engineering workspace after equipment withdrawal must not crash on the stale assembly (5.942625ms)
+✔ SOO association creation, correction and removal invalidate engineering without rewriting old reviews (2207.757ms)
+✔ response acceptance binds the returned event to the exact submitted request (415.562542ms)
+✔ 1001 saved decisions replay across the batch boundary, and corruption in the final batch rejects the entire history (11451.621209ms)
+ℹ 1001 controlled events replayed in 2312.3 ms; 5363092 serialized bytes
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 28120.137958

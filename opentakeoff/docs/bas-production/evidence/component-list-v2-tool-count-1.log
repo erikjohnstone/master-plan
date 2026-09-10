@@ -1,0 +1,5 @@
+
+> opentakeoff-mcp@0.9.71 check:tool-count
+> node scripts/check-tool-count.mjs
+
+3 marker(s), 0 stale, TOOL_NAMES.length = 50

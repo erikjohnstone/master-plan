@@ -1,0 +1,69 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ Python point observations cross the strict shared boundary with unmodified sources (848.127791ms)
+✖ production BAS compile adds grounded observations without replacing legacy or math (333.259417ms)
+✖ source failure is explicit and cannot discard a valid legacy or math result (291.660417ms)
+✖ invalid engineering policy cannot suppress valid source observations (272.83175ms)
+✔ real Session source context is accepted; no point table is not claimed complete (451.675ms)
+✔ point transport rejects invalid source identity, oversized payload and missing runtime (339.719417ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 3
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4552.167458
+
+✖ failing tests:
+
+test at test/basPointLists.test.ts:1:2110
+✖ production BAS compile adds grounded observations without replacing legacy or math (333.259417ms)
+  AssertionError [ERR_ASSERTION]: production must expose the source-bound result
+      at TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/basPointLists.test.ts:43:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:785:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/basPointLists.test.ts:1:3070
+✖ source failure is explicit and cannot discard a valid legacy or math result (291.660417ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok('bas_point_lists' in result)
+
+      at TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/basPointLists.test.ts:55:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:785:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/basPointLists.test.ts:1:3611
+✖ invalid engineering policy cannot suppress valid source observations (272.83175ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok('bas_point_lists' in result && result.bas_point_lists && 'matrices' in result.bas_point_lists)
+
+      at TestContext.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/test/basPointLists.test.ts:64:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:785:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

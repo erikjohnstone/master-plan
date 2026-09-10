@@ -485,6 +485,11 @@ export const AGENT_TOOL_DEFS = [
           type: "boolean",
           description: "If true (default), download the compiled workbook in the browser.",
         },
+        bas_math: {
+          type: "object",
+          description: "BAS-only optional engineering policies for the shared Python engine: hardware {profile_id,rigid:{AI,AO,DI,DO},universal_inputs}, spare {basis:demand_addon|installed_unused,numerator,denominator}, licenses, serial_routes, ip_closets, group_overrides and explicitly typed soo. Only supply evidenced or user-selected values. Never invent capacities, routes or source points. Results and unresolved input gaps appear separately in bas_math; legacy totals remain unchanged.",
+          additionalProperties: true,
+        },
         service: {
           type: "string",
           enum: ["CHW", "HHW"],
@@ -995,6 +1000,7 @@ export async function executeAgentTool(ctx, name, args) {
         return await ctx.compileCorpusTakeoff(kind, {
           download: args.download !== false,
           service: args.service || null,
+          bas_math: args.bas_math,
         });
       }
 

@@ -31,6 +31,7 @@ import { driveSnapshotProvider } from "../google/snapshotSyncAdapter.js";
  *   registers its onRemoteUpdate/isBusy handlers into on mount.
  */
 export function buildLocalFirstStore(projectId, drive, cloud) {
+  const local = createLocalStore(projectId);
   // The bridge carries the canvas's reconcile handlers into the otherwise plain-JS
   // reconciler and hands its flushPending back out. Handlers start null (the store's
   // bootstrap seed can fire before the canvas registers) and are null-guarded at
@@ -45,7 +46,7 @@ export function buildLocalFirstStore(projectId, drive, cloud) {
   });
 
   const annSync = createSyncStore({
-    base: createLocalStore(projectId),         // per-project local annotations (canonical)
+    base: local,                              // per-project local annotations (canonical)
     provider: createDriveProvider(projectId, drive, {
       ensureSidecarId: cloud.ensureSidecarId,  // shared resolver (F4)
       findSidecarId: cloud.findSidecarFolder,  // non-creating read path (a viewer never litters an empty sidecar)
@@ -54,8 +55,14 @@ export function buildLocalFirstStore(projectId, drive, cloud) {
     onRemoteUpdate: (data, rev) => bridge.onRemoteUpdate?.(data, rev),  // null until the canvas registers
     isBusy: () => bridge.isBusy?.() ?? false,                          // null → not busy (safe default)
     saveSnapshot: (label, payload, fid) => snapSync.saveSnapshot(label, payload, fid), // loser backups sync via Slice 2
+    onSyncIssue: issue => bridge.onSyncIssue?.(issue),
   });
   bridge.flushPending = annSync.flushPending;  // canvas idle-drain hook (used in Slice 5b)
+  bridge.checkRemote = annSync.checkRemote;
+  bridge.readSyncIssue = annSync.readSyncIssue;
+  bridge.readRestoreSyncStatus = annSync.readRestoreSyncStatus;
+  bridge.whenSynced = annSync.whenSynced;
+  bridge.whenPushed = annSync.whenPushed;
 
   // Presence (#317) — the same heartbeat files, through the Drive provider
   // surface snapshots already ride. A 10-minute beat keeps an 8-hour session
@@ -77,13 +84,18 @@ export function buildLocalFirstStore(projectId, drive, cloud) {
     presence.start();
   })().catch(() => { /* presence is advisory — never blocks the store */ });
 
-  const composite = { ...cloud, ...annSync, ...snapSync };
+  // These PDFs remain browser-local, not a new Drive sync contract. Bind to the
+  // same project as canonical annotations; never borrow anonymous local methods.
+  const composite = { ...cloud, ...annSync, ...snapSync,
+    retainBasSource: local.retainBasSource, loadBasSource: local.loadBasSource,
+    restoreBasEvidence: annSync.restoreBasEvidence, loadBasRestoreJournal: local.loadBasRestoreJournal,
+    saveBasSnapshot: annSync.saveBasSnapshot, loadBasSnapshot: annSync.loadBasSnapshot, listBasSnapshots: annSync.listBasSnapshots };
   // Non-enumerable so it rides the live `store` binding to the canvas without
   // polluting the store shape or the composite spread. Canvas reads store.syncBridge.
   Object.defineProperty(composite, "syncBridge", { value: bridge, enumerable: false });
   // setActiveStore calls this when the composite is swapped out (project
   // switch, exit to local) — the heartbeat must not keep writing into a
   // project the user left.
-  Object.defineProperty(composite, "dispose", { enumerable: false, value: () => bridge.presence?.stop() });
+  Object.defineProperty(composite, "dispose", { enumerable: false, value: () => { annSync.dispose(); bridge.presence?.stop(); } });
   return composite;
 }

@@ -1,0 +1,17 @@
+.bas-scope-workspace { min-width: 0; }
+.bas-scope-workspace > button { align-self: flex-start; }
+.bas-scope-fields > button { justify-self: start; }
+.bas-scope-workspace .bas-scope-fields { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-3); min-width: 0; margin-block: var(--sp-3); }
+.bas-scope-workspace fieldset { min-inline-size: 0; }
+.bas-scope-workspace select, .bas-scope-workspace input:not([type="checkbox"]), .bas-scope-workspace textarea { min-width: 0; max-width: 100%; box-sizing: border-box; }
+.bas-scope-fields label { display: grid; gap: var(--sp-2); min-width: 0; }
+.bas-scope-fields textarea { font: inherit; color: var(--ink); background: var(--paper-bright); border: 1px solid var(--ink-faint); padding: var(--sp-3); resize: vertical; min-width: 0; }
+.bas-scope-workspace button[aria-pressed="true"] { color: var(--cobalt); border-color: var(--cobalt); background: color-mix(in srgb, var(--cobalt) 9%, var(--paper-bright)); }
+.bas-scope-workspace .bas-point-grid { max-width: 100%; }
+.bas-scope-workspace td { overflow-wrap: anywhere; vertical-align: top; }
+.bas-scope-workspace td small { display: block; color: var(--ink-secondary); margin-top: var(--sp-1); }
+.bas-scope-workspace .bas-scope-attestation { display: flex; align-items: center; gap: var(--sp-2); }
+.bas-scope-workspace input[type="checkbox"] { width: auto; flex: none; }
+.bas-scope-verbatim { white-space: pre-wrap; }
+.bas-scope-workspace pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.bas-scope-source { min-width: 0; }

@@ -1,0 +1,142 @@
+
+> opentakeoff-mcp@0.9.72 test:bas
+> node --import tsx --test test/basSources.test.ts test/basMath.test.ts test/basPointLists.test.ts test/basPointAudit.test.ts test/basRoutingComparison.test.ts test/basAssignmentDemand.test.ts test/basAssemblyQuantities.test.ts test/basEngineeringContract.test.ts test/basEngineeringReview.test.ts test/basEngineeringOwnershipFamilies.test.ts test/basEngineeringIntegration.test.ts test/basEngineeringExport.test.ts
+
+✔ actual shared Python service retains source decisions, exact multiplication, replay and idempotent retries (564.146666ms)
+✔ a reviewed source-rule transition invalidates the old calculation but preserves exact v1 history and quantity evidence (860.547791ms)
+✔ different sensor roles stay separate through shared validation and Python while same-kind source merges reject (485.504292ms)
+✔ edits and equipment withdrawal retain stale results; import order cannot masquerade as current (846.95775ms)
+✔ ordinary store/export/import retains calculations, original evidence and unrelated workflow fields (673.76325ms)
+✔ corrupt source copies, hidden unknowns, dropped history and mismatched responses reject (502.477625ms)
+✔ unknown quantities survive exclusion, and unsafe products/cancelled transport never produce accepted totals (924.004292ms)
+✔ production compile exposes owned declarations, persists assembly review/calculation, and preserves legacy output (3608.972958ms)
+✔ actual assembly HTTP bridge matches shared Python and rejects malformed, foreign and stale requests (2057.080333ms)
+✔ concurrent or replaced Session cannot accept an older assembly calculation (3041.482709ms)
+✔ shared Python calculation preserves evidence, history, replay and exclusion staleness (829.878625ms)
+✔ assignment calculations and retries never downgrade or omit newer assembly history (788.926166ms)
+✔ corrupt values, changed sources, foreign dependencies and missing observations reject (481.251708ms)
+✔ calculation acceptance rejects dropped history, changed evidence and mismatched response records (883.536291ms)
+✔ filename aliases do not change input identity; authored sheet columns do (238.285959ms)
+✔ new transport rejects unsafe products and cancellation without a fake total (500.431625ms)
+✔ production compile persists derived result and leaves legacy math/graph exact (1560.267458ms)
+✔ actual HTTP bridge uses shared service and refuses foreign-origin and malformed bodies (2053.457333ms)
+✔ concurrent Session decision cannot be overwritten by an older calculation (1382.153584ms)
+✔ shared engineering wire contract retains actual Python signal inputs, rules and results (289.183917ms)
+✔ shared engineering wire contract retains actual Python analog inputs, rules and results (263.957875ms)
+✔ shared engineering wire contract retains actual Python loading inputs, rules and results (252.941542ms)
+✔ shared engineering wire contract retains actual Python contact inputs, rules and results (271.480334ms)
+✔ shared engineering wire contract retains actual Python pulse inputs, rules and results (253.223708ms)
+✔ shared engineering wire contract retains actual Python power inputs, rules and results (259.393625ms)
+✔ shared engineering wire contract retains actual Python mechanical inputs, rules and results (275.376167ms)
+✔ shared engineering wire contract retains actual Python allocation inputs, rules and results (273.974042ms)
+✔ shared engineering wire contract retains actual Python expansion inputs, rules and results (284.204417ms)
+✔ shared engineering wire contract retains actual Python serial inputs, rules and results (241.425416ms)
+✔ shared engineering wire contract retains actual Python ip inputs, rules and results (256.234792ms)
+✔ missing and incompatible inputs remain visible through actual Python, without changing evidence (537.705709ms)
+✔ strict engineering wire shape does not coerce or discard authored values (3.054708ms)
+✔ Python remains dimensional and relationship authority after a successful JS shape parse (565.635459ms)
+✔ response boundary rejects changed source basis, omitted/reordered checks and fabricated summary status (9.060417ms)
+✔ network response cannot substitute a different closet or segment (1.931791ms)
+✔ empty check selection stays incomplete, cancelled/timed-out/unavailable runs accept nothing (332.3025ms)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: The package "@esbuild/darwin-arm64" could not be found, and is needed by esbuild.
+
+If you are installing esbuild with npm, make sure that you don't specify the
+"--no-optional" or "--omit=optional" flags. The "optionalDependencies" feature
+of "package.json" is used by esbuild to install the correct binary executable
+for your current platform.
+    at generateBinPath (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/node_modules/tsx/node_modules/esbuild/lib/main.js:2040:15)
+    at esbuildCommandAndArgs (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/node_modules/tsx/node_modules/esbuild/lib/main.js:2110:33)
+    at ensureServiceIsRunning (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/node_modules/tsx/node_modules/esbuild/lib/main.js:2267:25)
+    at startSyncServiceWorker (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/node_modules/tsx/node_modules/esbuild/lib/main.js:2474:19)
+    at Object.<anonymous> (/Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp/node_modules/tsx/node_modules/esbuild/lib/main.js:2515:3)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14) {
+  name: 'TransformError'
+}
+
+Node.js v24.13.1
+✖ test/basEngineeringExport.test.ts (204.838583ms)
+✔ HTTP engineering review/replay matches shared Python and binds precisely to the submitted history (2581.553917ms)
+✔ production compile records engineering proposals and replay without changing legacy tables, math or evidence (4938.917958ms)
+✔ engineering public calls reject concurrent Session edits and a replaced drawing set (4194.243625ms)
+✔ owned signal checks save and replay through Python; every selected resource is checked (560.257125ms)
+✔ owned analog checks save and replay through Python; every selected resource is checked (574.223375ms)
+✔ owned loading checks save and replay through Python; every selected resource is checked (578.192542ms)
+✔ owned contact checks save and replay through Python; every selected resource is checked (587.561584ms)
+✔ owned pulse checks save and replay through Python; every selected resource is checked (554.711ms)
+✔ owned power checks save and replay through Python; every selected resource is checked (580.854ms)
+✔ owned mechanical checks save and replay through Python; every selected resource is checked (633.287625ms)
+✔ owned allocation checks save and replay through Python; every selected resource is checked (524.381416ms)
+✔ owned expansion checks save and replay through Python; every selected resource is checked (747.413458ms)
+✔ owned serial checks save and replay through Python; every selected resource is checked (1541.139083ms)
+✔ owned ip checks save and replay through Python; every selected resource is checked (981.576792ms)
+✔ actual Python review retains original sources, current dependency identities and idempotent operation history (1389.668292ms)
+✔ equipment withdrawal preserves historical sources/results but invalidates freshness and new saves (1289.159833ms)
+✔ assembly exclusions stale old results; recomputation retains failed and missing constraints even when excluded (1468.254167ms)
+✔ capture switching cannot silently reactivate an old passing result (812.051834ms)
+✔ forked, incomplete, downgraded and cross-workflow histories reject instead of silently merging (1295.871875ms)
+✔ locally rehashed calculations still require exact Python replay before being accepted as current (2475.604709ms)
+✔ ordinary IndexedDB save/load and portable import preserve complete engineering histories and legacy annotations (1215.94675ms)
+✔ source validation, runtime failure and cancellation never append a partial review (24.526958ms)
+✔ opening an unreviewed engineering workspace after equipment withdrawal must not crash on the stale assembly (19.712584ms)
+✔ SOO association creation, correction and removal invalidate engineering without rewriting old reviews (2912.210333ms)
+✔ response acceptance binds the returned event to the exact submitted request (354.763ms)
+✔ 1001 saved decisions replay across the batch boundary, and corruption in the final batch rejects the entire history (4738.612167ms)
+ℹ 1001 controlled events replayed in 1739.1 ms; 5363092 serialized bytes
+✔ Python BAS engine is strict and the transport does no arithmetic (499.600625ms)
+✔ unsafe JSON integer quantities and missing Python fail explicitly (2.543ms)
+✔ safe individual inputs cannot silently produce rounded or oversized wire results (277.142125ms)
+✔ an unavailable Python runtime preserves legacy BAS output without a fake zero (15.736666ms)
+✔ production CLI drains multi-megabyte UTF-8 JSON before explicit exit (55.789166ms)
+✔ shared production wrapper leaves all legacy results and graph values unchanged (247.631208ms)
+✔ singular indexed POINT LIST is consumed without modifying graph or legacy title selection (304.974625ms)
+✔ point audit requires grounding for every expected nonempty cell, not only present boxes (213.376542ms)
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ Python point observations cross the strict shared boundary with unmodified sources (517.795ms)
+✔ production BAS compile adds grounded observations without replacing legacy or math (813.22ms)
+✔ source failure is explicit and cannot discard a valid legacy or math result (408.176459ms)
+✔ new equipment capture failure cannot disable valid point/SOO persistence or commit an equipment decision (940.814708ms)
+✔ production recompile returns retained association events; stale requests never mutate them (2623.811166ms)
+✔ shared production compile returns the equipment/SOO/point comparison and replays its durable assignment (1641.042417ms)
+✔ unowned point observations are retained even when a durable capture is impossible (396.664042ms)
+✔ real Session export/import retains verified captures and rejects corruption before mutation (1185.5195ms)
+✔ invalid engineering policy cannot suppress valid source observations (921.938583ms)
+✔ real Session source context is accepted; no point table is not claimed complete (716.751375ms)
+✔ point transport rejects invalid source identity, oversized payload and missing runtime (430.350542ms)
+✔ shared output schema rejects orphaned evidence, omitted rows and misleading statuses (311.94275ms)
+✔ comparison is one-to-one, not presence-only (0.784792ms)
+✔ added tables are allowed only between revisions, never replay (0.165125ms)
+✔ metadata and full table values remain in scope; only explicit incidental fields are excluded (0.307625ms)
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ shared BAS seam retains the production PDF spans and leaves Session outputs unchanged (935.198875ms)
+✔ source identity is captured at load, survives rename, and resets with a new session document (26.555917ms)
+ℹ tests 88
+ℹ suites 0
+ℹ pass 87
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18339.825125
+
+✖ failing tests:
+
+test at test/basEngineeringExport.test.ts:1:1
+✖ test/basEngineeringExport.test.ts (204.838583ms)
+  'test failed'
+npm error Lifecycle script `test:bas` failed with error:
+npm error code 1
+npm error path /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp
+npm error workspace opentakeoff-mcp@0.9.72
+npm error location /Users/erikjohnstone/Documents/ChatGPT/master-plan-bas-engine/opentakeoff/mcp
+npm error command failed
+npm error command sh -c node --import tsx --test test/basSources.test.ts test/basMath.test.ts test/basPointLists.test.ts test/basPointAudit.test.ts test/basRoutingComparison.test.ts test/basAssignmentDemand.test.ts test/basAssemblyQuantities.test.ts test/basEngineeringContract.test.ts test/basEngineeringReview.test.ts test/basEngineeringOwnershipFamilies.test.ts test/basEngineeringIntegration.test.ts test/basEngineeringExport.test.ts

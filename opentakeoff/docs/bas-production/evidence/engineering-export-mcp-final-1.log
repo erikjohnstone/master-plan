@@ -1,0 +1,62 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ saved exports retain outcomes, exclusions, exact source frame and pinned withdrawn owners (1004.697ms)
+✔ public MCP XLSX export matches shared projection, preserves session, and protects existing files (1452.905292ms)
+✔ HTTP engineering review/replay matches shared Python and binds precisely to the submitted history (2348.805916ms)
+✔ production compile records engineering proposals and replay without changing legacy tables, math or evidence (2682.135708ms)
+✔ engineering public calls reject concurrent Session edits and a replaced drawing set (1546.32525ms)
+✔ owned signal checks save and replay through Python; every selected resource is checked (536.527625ms)
+✔ owned analog checks save and replay through Python; every selected resource is checked (481.213375ms)
+✔ owned loading checks save and replay through Python; every selected resource is checked (443.457084ms)
+✔ owned contact checks save and replay through Python; every selected resource is checked (455.016542ms)
+✔ owned pulse checks save and replay through Python; every selected resource is checked (482.25325ms)
+✔ owned power checks save and replay through Python; every selected resource is checked (517.529042ms)
+✔ owned mechanical checks save and replay through Python; every selected resource is checked (417.662792ms)
+✔ owned allocation checks save and replay through Python; every selected resource is checked (383.341ms)
+✔ owned expansion checks save and replay through Python; every selected resource is checked (381.3915ms)
+✔ owned serial checks save and replay through Python; every selected resource is checked (368.827541ms)
+✔ owned ip checks save and replay through Python; every selected resource is checked (359.12125ms)
+✔ actual Python review retains original sources, current dependency identities and idempotent operation history (1344.184667ms)
+✔ equipment withdrawal preserves historical sources/results but invalidates freshness and new saves (1093.237959ms)
+✔ assembly exclusions stale old results; recomputation retains failed and missing constraints even when excluded (1240.366292ms)
+✔ capture switching cannot silently reactivate an old passing result (573.849666ms)
+✔ forked, incomplete, downgraded and cross-workflow histories reject instead of silently merging (543.747583ms)
+✔ locally rehashed calculations still require exact Python replay before being accepted as current (869.029125ms)
+✔ ordinary IndexedDB save/load and portable import preserve complete engineering histories and legacy annotations (503.832542ms)
+✔ source validation, runtime failure and cancellation never append a partial review (8.18525ms)
+✔ opening an unreviewed engineering workspace after equipment withdrawal must not crash on the stale assembly (4.701041ms)
+✔ SOO association creation, correction and removal invalidate engineering without rewriting old reviews (832.9545ms)
+✔ response acceptance binds the returned event to the exact submitted request (154.905584ms)
+✔ 1001 saved decisions replay across the batch boundary, and corruption in the final batch rejects the entire history (1890.799292ms)
+ℹ 1001 controlled events replayed in 817.7 ms; 5363092 serialized bytes
+✔ a path with nothing at it is writable (14.307625ms)
+✔ our own takeoff export overwrites silently — the re-export loop keeps working (7.263167ms)
+✔ our own report export overwrites silently (2.657792ms)
+✔ a stranger's file is refused, and the bytes survive (10.57875ms)
+✔ refuses a same-named file that is not JSON at all (6.096875ms)
+✔ refuses JSON carrying somebody else's schema (2.710416ms)
+✔ overwrite:true replaces a stranger's file — explicit is allowed (1.258291ms)
+✔ a directory is refused with its own message, not an EISDIR later (1.166542ms)
+✔ a marked set we produced is recognized by its Producer and overwrites (15.887417ms)
+✔ somebody else's PDF is refused even at a marked-set-shaped path (13.743792ms)
+✔ the signed contract nobody wants overwritten is refused (12.812208ms)
+✔ a corrupt file fails CLOSED — unknown is protected, not clobbered (8.687542ms)
+✔ an unreadable file fails CLOSED (2.042042ms)
+✔ whitespace-formatted JSON is still recognized as ours (1.004416ms)
+✔ the marker must be in the head, not smuggled in from deep in the file (2.286542ms)
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+✔ staging: default build is the flat TOOL_NAMES — no opener, nothing disabled (822.724917ms)
+✔ staging: the stage table partitions the registered set exactly (742.056542ms)
+✔ staging: setup-only at start, open_tool_stage grows the surface, idempotent (1299.796292ms)
+✔ staging: staged instructions ride initialize only when the flag is on (4.72875ms)
+✔ staging: a closed tool's refusal names its stage and the call that opens it (3.812125ms)
+✔ staging: the flat build's refusals are untouched (2.158333ms)
+ℹ tests 49
+ℹ suites 0
+ℹ pass 49
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9352.190375
