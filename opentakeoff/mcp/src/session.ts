@@ -2879,7 +2879,11 @@ export class Session {
     };
     let fp: SymbolFingerprint;
     try {
-      fp = fingerprintSymbol(geo.segs, rect, geo.lum, { dropGlyphClusters: opts.affine?.enabled === true });
+      // dropGlyphClusters no longer follows opts.affine.enabled — see
+      // docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Findings (2026-09-11): a
+      // controlled corpus run measured it as the larger of two confirmed
+      // causes behind a real corpus regression. Off until redesigned.
+      fp = fingerprintSymbol(geo.segs, rect, geo.lum, { dropGlyphClusters: false });
       assertDistinctiveSymbolSeed(fp);
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
@@ -4107,7 +4111,9 @@ export class Session {
       ];
       let cand: SymbolFingerprint;
       try {
-        cand = fingerprintSymbol(anchorGeo.segs, rect, undefined, { dropGlyphClusters: opts.affine?.enabled === true });
+        // dropGlyphClusters no longer follows opts.affine.enabled — see
+        // docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Findings (2026-09-11).
+        cand = fingerprintSymbol(anchorGeo.segs, rect, undefined, { dropGlyphClusters: false });
       } catch (e) {
         // nothing fully inside yet → widen; a region-sized grab → bigger pads only get worse
         return e instanceof Error && /region, not one symbol/.test(e.message) ? "region" : null;

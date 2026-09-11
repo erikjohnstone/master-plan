@@ -1286,10 +1286,16 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const affineBounds = affineOn
     ? { maxStretch: affineOpts!.maxStretch ?? DEFAULT_AFFINE_BOUNDS.maxStretch, maxShearDeg: affineOpts!.maxShearDeg ?? DEFAULT_AFFINE_BOUNDS.maxShearDeg }
     : DEFAULT_AFFINE_BOUNDS;
-  // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — default follows `affine`
-  // (an exploded-tag false "extra" is exactly the kind of changed-symbol
-  // noise this document is about) but a caller can still state either way.
-  const dropGlyphOn = opts.dropGlyphClusters ?? affineOn;
+  // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — used to default to
+  // following `affine.enabled`. Changed 2026-09-11 (see the goal doc's own
+  // Findings) after a controlled full-corpus run measured this heuristic
+  // as the LARGER of two confirmed causes behind a real, widespread
+  // corpus regression (79% of 667 excess phantom matches across 12 real
+  // cases) — it fires on 40% of this corpus's own seeds, and no example
+  // in the whole corpus shows it behaving conservatively. Now OFF by
+  // default, independent of `affine.enabled`, until the heuristic itself
+  // is redesigned; a caller can still explicitly opt in either way.
+  const dropGlyphOn = opts.dropGlyphClusters ?? false;
   const n = segs.length >> 2;
   if (scale !== 1 && opts.excludeCenter) {
     throw new Error("excludeCenter is a point on the SEED sheet and means nothing on a target sheet at a different scale — omit it when sweeping across sheets (there is no seed there to shadow).");

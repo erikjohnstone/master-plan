@@ -1028,7 +1028,7 @@ test("Phase 4: an exploded tag inside the seed rect is excluded from the fingerp
   assert.equal(filtered.center[1], bareFp.center[1]);
 });
 
-test("Phase 4: a tag drawn next to a SWEPT instance (not the seed) never counts toward extra linework once dropGlyphClusters is on (default: on with affine.enabled)", () => {
+test("Phase 4: a tag drawn next to a SWEPT instance (not the seed) never counts toward extra linework once dropGlyphClusters:true is passed explicitly", () => {
   const fp = fingerprintSymbol(tinySquareAt([0, 0]), tinyRect);
   const segs = [...tinySquareAt([0, 0]), ...tinySquareAt([50, 0]), ...glyphTagAt([50, 0]).flatMap((s) => s)];
   const near = (at: Point, x: number, y: number): boolean => Math.abs(at[0] - x) < 3 && Math.abs(at[1] - y) < 3;
@@ -1039,18 +1039,24 @@ test("Phase 4: a tag drawn next to a SWEPT instance (not the seed) never counts 
   assert.ok(taggedRow!.extra !== undefined && taggedRow!.extra > 0.3,
     `expected the tag to read as substantial extra ink past the 30% bar, got ${JSON.stringify(taggedRow)}`);
 
-  const withFilter = matchSymbol(fp, segs, { excludeCenter: fp.center, variantGuard: true, affine: { enabled: true } });
+  // dropGlyphClusters no longer follows affine.enabled (see docs/SYMBOL-SWEEP-AFFINE-GOAL.md's
+  // Findings, 2026-09-11) — it must be requested explicitly to see the filtered behavior.
+  const withFilter = matchSymbol(fp, segs, { excludeCenter: fp.center, variantGuard: true, affine: { enabled: true }, dropGlyphClusters: true });
   const cleanMatch = withFilter.matches.find((m) => near(m.at, 55, 5));
   assert.ok(cleanMatch, `expected a clean match near the tagged instance once the tag is filtered, got matches=${JSON.stringify(withFilter.matches)} withheld=${JSON.stringify(withFilter.withheld)}`);
   assert.equal(cleanMatch!.extra, undefined, "no extra should be disclosed once the exploded tag is excluded");
 });
 
-test("Phase 4: dropGlyphClusters:false stands down the sheet-side filter even with affine.enabled — an explicit override still means what it says", () => {
+test("Phase 4: dropGlyphClusters defaults to off even with affine.enabled — a caller gets the unfiltered tag cost unless they opt in", () => {
   const fp = fingerprintSymbol(tinySquareAt([0, 0]), tinyRect);
   const segs = [...tinySquareAt([0, 0]), ...tinySquareAt([50, 0]), ...glyphTagAt([50, 0]).flatMap((s) => s)];
   const near = (at: Point, x: number, y: number): boolean => Math.abs(at[0] - x) < 3 && Math.abs(at[1] - y) < 3;
-  const forcedOff = matchSymbol(fp, segs, { excludeCenter: fp.center, variantGuard: true, affine: { enabled: true }, dropGlyphClusters: false });
-  const taggedRow = forcedOff.withheld.find((w) => near(w.at, 55, 5));
-  assert.ok(taggedRow, "the tag should still cost the instance under an explicit override, exactly as without affine at all");
+  // See docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Findings (2026-09-11): a controlled
+  // corpus run measured this heuristic as the larger of two confirmed causes
+  // behind a real corpus regression, so it no longer turns on just because
+  // affine.enabled is true — a caller must opt in with dropGlyphClusters:true.
+  const withAffineOnly = matchSymbol(fp, segs, { excludeCenter: fp.center, variantGuard: true, affine: { enabled: true } });
+  const taggedRow = withAffineOnly.withheld.find((w) => near(w.at, 55, 5)) ?? withAffineOnly.matches.find((m) => near(m.at, 55, 5));
+  assert.ok(taggedRow, "the tag should still cost the instance with affine.enabled alone, since dropGlyphClusters is off by default");
   assert.ok(taggedRow!.extra !== undefined && taggedRow!.extra > 0.3);
 });
