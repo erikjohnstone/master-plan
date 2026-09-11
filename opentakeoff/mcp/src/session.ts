@@ -2875,6 +2875,15 @@ export class Session {
     if (!(Math.abs(rect[1][0] - rect[0][0]) >= 1 && Math.abs(rect[1][1] - rect[0][1]) >= 1)) {
       throw new UserError(`Empty seed rect — need two distinct corners in image px inside the sheet (${s.widthPx} × ${s.heightPx}).`);
     }
+    // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E step 1 — loaded here,
+    // before the seed fingerprint, rather than later (only inside the
+    // scope==="sheet" block below, as before): the PDF's own text layer is
+    // an authoritative fact for exploded-text exclusion, and the SEED-side
+    // fingerprint needs it exactly as much as the sheet-side sweep does.
+    // The seed rect always sits on `s` itself (never a different sheet),
+    // so `s.spans` is the right source for the seed's own text boxes too.
+    if (!s.spans) s.spans = textSpans(s.page);
+    const textBoxes: [number, number, number, number][] = s.spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
     const sweepOpts: SweepOptions = {
       rotations: opts.rotations ?? true,
       mirror: opts.mirror ?? true,
@@ -2890,6 +2899,11 @@ export class Session {
       // docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
       // default flip (§6's own default-off scaleSearch is untouched here).
       ...(opts.affine ? { affine: opts.affine } : {}),
+      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E — `s`'s own text
+      // layer; the "set" scope block below builds each swept sheet's OWN
+      // textBoxes fresh instead of reusing this one (a different sheet has
+      // a different text layer).
+      textBoxes,
     };
     let fp: SymbolFingerprint;
     try {
@@ -2897,7 +2911,7 @@ export class Session {
       // docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Findings (2026-09-11): a
       // controlled corpus run measured it as the larger of two confirmed
       // causes behind a real corpus regression. Off until redesigned.
-      fp = fingerprintSymbol(geo.segs, rect, geo.lum, { dropGlyphClusters: false });
+      fp = fingerprintSymbol(geo.segs, rect, geo.lum, { dropGlyphClusters: false, textBoxes });
       assertDistinctiveSymbolSeed(fp);
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
@@ -2938,7 +2952,7 @@ export class Session {
     };
 
     if (scope === "sheet") {
-      if (!s.spans) s.spans = textSpans(s.page);
+      // s.spans already loaded above (Phase E's textBoxes needed it early).
       // rawCenter, not center: docs/SYMBOL-SWEEP-AFFINE-GOAL.md Findings
       // (2026-09-11) — center is filtered by dropGlyphClusters and can shift
       // enough on a real symbol to attach the seed's own nearby-tag lookup
@@ -3085,11 +3099,20 @@ export class Session {
       }
       const ratio = sweepRatio(s, sh);
       const t0 = process.hrtime.bigint();
+      // #308 — each target sheet's own text names its own placements. Moved
+      // ahead of the match call itself (docs/SYMBOL-SWEEP-CLEAN-CORPUS-
+      // GOAL.md Phase E): `sweepOpts.textBoxes` is the SEED sheet `s`'s own
+      // text layer, wrong for any OTHER sheet in a set-wide sweep — this
+      // sheet's own text boxes must override it per sheet, the same way
+      // `lum: g2.lum` already does below.
+      if (!sh.spans) sh.spans = textSpans(sh.page);
+      const sheetTextBoxes: [number, number, number, number][] = sh.spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
       let res: SymbolMatchResult;
       try {
         res = matchSymbol(fp, g2.segs, {
           ...sweepOpts,
           lum: g2.lum,
+          textBoxes: sheetTextBoxes,
           ...(ratio.scale === 1 ? {} : { scale: ratio.scale }),
           ...(sh.key === s.key ? { excludeCenter: fp.center } : {}),
           ...(seedLbl ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
@@ -3104,8 +3127,6 @@ export class Session {
         continue;
       }
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
-      // #308 — each target sheet's own text names its own placements
-      if (!sh.spans) sh.spans = textSpans(sh.page);
       // On the seed plan, keep the seed center in the one-to-one label
       // assignment even though it is excluded from the count. Otherwise its
       // own unique tag is left free to promote a second transform peak from a

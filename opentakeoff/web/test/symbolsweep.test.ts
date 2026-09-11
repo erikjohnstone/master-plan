@@ -1143,3 +1143,101 @@ test("Phase 4: dropGlyphClusters defaults to off even with affine.enabled — a 
   assert.ok(taggedRow, "the tag should still cost the instance with affine.enabled alone, since dropGlyphClusters is off by default");
   assert.ok(taggedRow!.extra !== undefined && taggedRow!.extra > 0.3);
 });
+
+// docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E — the PDF's own text layer
+// is an authoritative fact, not a geometric guess: a segment whose both
+// endpoints fall inside a stated text box is excluded independent of
+// dropGlyphClusters entirely. A box generously covering glyphTagAt's own
+// footprint (base+[10.3..10.7, 10.5], strokes up to 1px long) with real
+// margin, not a hairline fit.
+const glyphTagBox = (base: Point): [number, number, number, number] =>
+  [base[0] + 9, base[1] + 9, base[0] + 12, base[1] + 12];
+
+// textBoxMask also refuses a box whose OWN dilated footprint spans too much
+// of the symbol it's judged against (root-caused on real corpus data: case
+// 42's thermostat bubble — see textBoxMask's own doc comment) — the SAME
+// `longSide >= 0.25 * refDiag` fraction glyphClusterMask already uses. The
+// bare `TINY_SQUARE` (10×10) is too small a stage for that guard: dilating
+// even glyphTagBox's already-tight 3×3 box by `2·tol=4` on every side (11×11)
+// already exceeds 25% of a ~16-unit window on its own, independent of
+// anything about the tag itself. A 100×100 square keeps the SAME tag
+// geometry (and so the SAME cluster/direction/length shape `glyphClusterMask`
+// exercises) proportionally small against a size closer to a real corpus
+// symbol, so these two tests use it instead of `TINY_SQUARE`.
+const BIG_SQUARE: [number, number, number, number][] = [
+  [0, 0, 100, 0], [100, 0, 100, 100], [100, 100, 0, 100], [0, 100, 0, 0],
+];
+const bigSquareAt = (at: Point): number[] =>
+  BIG_SQUARE.flatMap(([ax, ay, bx, by]) => [ax + at[0], ay + at[1], bx + at[0], by + at[1]]);
+const bigRect: [Point, Point] = [[-3, -3], [113, 113]];
+
+test("Phase E: an exploded tag inside the seed rect is excluded from the fingerprint via textBoxes, with dropGlyphClusters left OFF", () => {
+  const bareSegs = bigSquareAt([0, 0]);
+  const bareFp = fingerprintSymbol(bareSegs, bigRect);
+
+  // base [90, 90] + glyphTagAt's own +[10.3..10.7, 10.5] offset lands the
+  // tag just past BIG_SQUARE's own top-right corner (100, 100) — the same
+  // "just outside the corner" placement `glyphTagAt`'s own doc comment
+  // describes, scaled to this bigger symbol.
+  const tag = glyphTagAt([90, 90]);
+  const taggedSegs = [...bareSegs, ...tag.flatMap((s) => s)];
+  const filtered = fingerprintSymbol(taggedSegs, bigRect, undefined, { textBoxes: [glyphTagBox([90, 90])] });
+  assert.equal(filtered.droppedGlyphSegments, 15, "the 15-stroke exploded tag should be recognized and dropped via the text box alone");
+  assert.deepEqual(filtered.rel, bareFp.rel, "with the tag dropped, the fingerprint is byte-for-byte the untagged one");
+  assert.equal(filtered.totalLen, bareFp.totalLen);
+});
+
+test("Phase E: a tag near a SWEPT instance never counts toward extra linework once textBoxes covers it, WITHOUT dropGlyphClusters", () => {
+  const fp = fingerprintSymbol(bigSquareAt([0, 0]), bigRect);
+  // Second instance well clear of the seed (150 units, past BIG_SQUARE's own
+  // 100-unit width); its tag sits just past ITS OWN top-right corner (250, 100).
+  const segs = [...bigSquareAt([0, 0]), ...bigSquareAt([150, 0]), ...glyphTagAt([240, 90]).flatMap((s) => s)];
+  const near = (at: Point, x: number, y: number): boolean => Math.abs(at[0] - x) < 3 && Math.abs(at[1] - y) < 3;
+
+  // No dropGlyphClusters anywhere in this call — proves textBoxes is its
+  // own, independently-gated mechanism, not a variant of the geometric one.
+  const withTextBox = matchSymbol(fp, segs, { excludeCenter: fp.center, variantGuard: true, textBoxes: [glyphTagBox([240, 90])] });
+  const cleanMatch = withTextBox.matches.find((m) => near(m.at, 200, 50));
+  assert.ok(cleanMatch, `expected a clean match near the tagged instance once the text box excludes the tag, got matches=${JSON.stringify(withTextBox.matches)} withheld=${JSON.stringify(withTextBox.withheld)}`);
+  assert.equal(cleanMatch!.extra, undefined, "no extra should be disclosed once the text-boxed tag is excluded");
+});
+
+test("Phase E: a text box that does not cover the tag changes nothing — the exclusion is genuinely position-gated, not a blanket pass", () => {
+  const fp = fingerprintSymbol(tinySquareAt([0, 0]), tinyRect);
+  const segs = [...tinySquareAt([0, 0]), ...tinySquareAt([50, 0]), ...glyphTagAt([50, 0]).flatMap((s) => s)];
+  const near = (at: Point, x: number, y: number): boolean => Math.abs(at[0] - x) < 3 && Math.abs(at[1] - y) < 3;
+  // A text box far away from the actual tag — must not accidentally exclude it.
+  const missedBox: [number, number, number, number] = [900, 900, 910, 910];
+  const r = matchSymbol(fp, segs, { excludeCenter: fp.center, variantGuard: true, textBoxes: [missedBox] });
+  const taggedRow = r.withheld.find((w) => near(w.at, 55, 5)) ?? r.matches.find((m) => near(m.at, 55, 5));
+  assert.ok(taggedRow, `expected some row near the still-tagged instance, got matches=${JSON.stringify(r.matches)} withheld=${JSON.stringify(r.withheld)}`);
+  assert.ok(taggedRow!.extra !== undefined && taggedRow!.extra > 0.3, "a text box that misses the tag entirely must not suppress its real extra-ink cost");
+});
+
+// Regression test for the real corpus failure that motivated textBoxMask's
+// own `longSide >= 0.25 * refDiag` guard (cases 42 and 45 — see
+// textBoxMask's doc comment): a small symbol whose own body is drawn as
+// several SHORT segments (a circle/diamond's polyline chords), with a tag
+// lettered literally inside it. Every one of the diamond's own 4 edges is
+// individually short enough to pass the length cap alone (shortMax = 4·tol
+// = 8, edges here are ~7.07), so — unlike the earlier "exploded tag beside
+// the symbol" tests above — the length cap by itself does NOT protect this
+// case; only the box's own size, relative to the whole symbol, does.
+test("Phase E: a text box spanning most of a small symbol's own body is never trusted for exclusion, even when every one of its own edges is individually short", () => {
+  // A small diamond: four ~7.07-unit edges around a 10×10 bbox (diag ≈14.14).
+  const diamondSegs = [5, 10, 10, 5, 10, 5, 5, 0, 5, 0, 0, 5, 0, 5, 5, 10];
+  const diamondRect: [Point, Point] = [[-2, -2], [12, 12]];
+  const bare = fingerprintSymbol(diamondSegs, diamondRect);
+  assert.equal(bare.rel.length, 4, "sanity: the bare diamond is exactly its 4 edges");
+
+  // A label box covering most of the diamond's own interior — exactly the
+  // "T centered in a small thermostat bubble" / "AI inside a small diamond"
+  // shape real corpus data showed, not a small label off to one side.
+  const bigBox: [number, number, number, number] = [2, 2, 8, 8];
+  const filtered = fingerprintSymbol(diamondSegs, diamondRect, undefined, { textBoxes: [bigBox] });
+  // `droppedGlyphSegments` is only present on the fingerprint when nonzero
+  // (see its own field, only spread in when truthy) — absent here means zero.
+  assert.equal(filtered.droppedGlyphSegments, undefined,
+    "a text box spanning most of the symbol's own body must never be trusted for exclusion, no matter how short its individual edges are");
+  assert.deepEqual(filtered.rel, bare.rel, "the diamond's own 4 structural edges must survive intact");
+});

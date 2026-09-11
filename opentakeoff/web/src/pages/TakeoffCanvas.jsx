@@ -4959,12 +4959,22 @@ export default function TakeoffCanvas() {
     let res;
     let seedName = null;
     let spans = null;
+    let textBoxes;
     try {
-      const fp = fingerprintSymbol(segs, rect, lum);
-      assertDistinctiveSymbolSeed(fp);
+      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E — spans loaded before
+      // the seed fingerprint (mirrors agentSymbolSweep's own reorder below
+      // and mcp/src/session.ts's) so the PDF's own text layer excludes
+      // exploded-tag strokes from the seed's own `rel` too, not just the
+      // sheet-side sweep. Unlike `dropGlyphClusters` (deliberately left
+      // untouched here — see the predecessor doc's own Finding on this
+      // function), `textBoxes` reads an authoritative fact, not a
+      // geometric guess, so it carries none of that caution.
       spans = await ensureTextSpans(key);
+      textBoxes = spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
+      const fp = fingerprintSymbol(segs, rect, lum, { textBoxes });
+      assertDistinctiveSymbolSeed(fp);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
-      res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}) });
+      res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}), textBoxes });
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
       // instructions, exactly as the MCP surfaces them — and they are stated
@@ -6709,16 +6719,23 @@ export default function TakeoffCanvas() {
     let res;
     let seedName = null;
     let spans = null;
+    let textBoxes;
     try {
+      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E — spans loaded BEFORE
+      // the seed fingerprint (was after, mirrors mcp/src/session.ts's own
+      // reorder) so the PDF's own text layer can exclude exploded-tag
+      // strokes from the seed's own `rel`, the same authoritative-fact
+      // exclusion the sheet-side sweep below gets via `textBoxes` in opts.
+      spans = await ensureTextSpans(key);
+      textBoxes = spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
       // dropGlyphClusters no longer follows opts.affine.enabled — mirrors
       // mcp/src/session.ts (docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Findings,
       // 2026-09-11: a controlled corpus run measured it as the larger of two
       // confirmed causes behind a real corpus regression). This comment was
       // stale (canvas/MCP parity gap, fixed in
       // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase B).
-      const fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false });
+      const fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false, textBoxes });
       assertDistinctiveSymbolSeed(fp);
-      spans = await ensureTextSpans(key);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
       res = sweepSymbols(segs, rect, {
         rotations: opts.rotations !== false,
@@ -6728,6 +6745,7 @@ export default function TakeoffCanvas() {
         ...(opts.luminanceTolerance != null ? { lumTol: opts.luminanceTolerance } : {}),
         ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
         ...(opts.affine ? { affine: opts.affine } : {}),
+        textBoxes,
       });
     } catch (e) {
       return { error: String((e && e.message) || e) };

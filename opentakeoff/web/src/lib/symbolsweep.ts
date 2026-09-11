@@ -307,6 +307,17 @@ export interface SweepOptions {
    * counterpart (baked into the fingerprint at construction, not an option
    * here — a fingerprint is built once and reused across many sweeps). */
   dropGlyphClusters?: boolean;
+  /** Phase E of docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md — the PDF's OWN text
+   * layer, `[x0,y0,x1,y1]` boxes in image px. Unlike `dropGlyphClusters`
+   * (a geometric GUESS at what looks like exploded text), a text box is an
+   * authoritative fact from the PDF itself — a segment whose BOTH endpoints
+   * fall inside a text box (dilated by `2·tol`) is masked from the SHEET-
+   * side "extra linework" tally unconditionally, independent of
+   * `dropGlyphClusters` and applied BEFORE that geometric heuristic runs
+   * (so real symbol geometry the heuristic might have kept is never
+   * re-litigated once the text layer already explains it). See
+   * `fingerprintSymbol`'s own `textBoxes` for the SEED-side counterpart. */
+  textBoxes?: [number, number, number, number][];
 }
 
 export interface SweepMatch {
@@ -682,6 +693,68 @@ function glyphClusterMask(
   return mask;
 }
 
+/** Phase E of docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md — mask a segment whose
+ * BOTH endpoints fall inside ANY of the given text boxes, each dilated by
+ * `2·tol`. Unlike `glyphClusterMask` (a geometric GUESS from stroke shape
+ * alone), this reads an authoritative fact the PDF's own text layer
+ * already states — no cluster size or direction-diversity heuristic
+ * involved. It still shares `glyphClusterMask`'s own `shortMax = 4·tol`
+ * length cap, though: a real HVAC/BAS symbol is routinely drawn with its
+ * tag lettering placed literally inside the symbol's own outline (e.g. an
+ * "AI" callout inside a diamond body), so a text box can legitimately
+ * overlap — and, without a length cap, incorrectly swallow — the symbol's
+ * own long structural edges. Only a segment short enough to plausibly BE
+ * glyph ink itself is eligible for text-box exclusion; a long edge is
+ * never dropped no matter how completely a text box covers it.
+ *
+ * A length cap alone is not enough, though: a small symbol's own CURVED
+ * body (a circle/bubble rendered as many short polyline chords, e.g. a
+ * thermostat bubble) is made entirely of short segments too, and a tag
+ * lettered inside that body (very common — "T" centered in a thermostat
+ * bubble, "AI" inside a diamond) produces a text box whose OWN footprint
+ * is a large fraction of the whole symbol's footprint, not a small
+ * label-sized region off to one side. Confirmed directly on real corpus
+ * data (case 42's thermostat bubble): a 33-segment seed dropped to 9
+ * segments — the length cap alone did not stop most of the circle's own
+ * arc chords, which happened to sit inside the dilated "T" text box too,
+ * from being swept away alongside the glyph. So, mirroring
+ * `glyphClusterMask`'s OWN `longSide >= 0.25 * refDiag` "spans too much to
+ * be a label" guard, a text box is only trusted for exclusion when ITS
+ * OWN dilated footprint is small relative to the whole symbol
+ * (`refDiag`, the seed/local-window's own bbox diagonal) — a box that
+ * covers a large share of the symbol is far more likely to be sitting
+ * over the symbol's own real structure than to BE a small applied label.
+ * `pts` and `boxes` share one coordinate frame (both absolute or both
+ * centroid-relative — caller's choice, consistently). Pure: never
+ * mutates its inputs, never throws. Empty/absent `boxes` returns an
+ * all-false mask, same shape contract as `glyphClusterMask`. */
+function textBoxMask(
+  pts: ReadonlyArray<readonly [number, number, number, number]>,
+  boxes: ReadonlyArray<readonly [number, number, number, number]> | undefined,
+  tol: number,
+  refDiag: number,
+): boolean[] {
+  const mask = new Array<boolean>(pts.length).fill(false);
+  if (!boxes || !boxes.length) return mask;
+  const shortMax = 4 * tol;
+  const d = 2 * tol;
+  const dilated = boxes
+    .map(([x0, y0, x1, y1]) => [x0 - d, y0 - d, x1 + d, y1 + d] as const)
+    // a box spanning too much of the symbol is more likely to be sitting
+    // over real structure than to be a small applied label — same
+    // fraction glyphClusterMask already uses for its own cluster bbox.
+    .filter(([bx0, by0, bx1, by1]) => Math.max(bx1 - bx0, by1 - by0) < 0.25 * refDiag);
+  if (!dilated.length) return mask;
+  const inAnyBox = (x: number, y: number): boolean =>
+    dilated.some(([bx0, by0, bx1, by1]) => x >= bx0 && x <= bx1 && y >= by0 && y <= by1);
+  for (let i = 0; i < pts.length; i++) {
+    const [ax, ay, bx, by] = pts[i];
+    if (Math.hypot(bx - ax, by - ay) > shortMax) continue; // never a symbol's own long edge
+    if (inAnyBox(ax, ay) && inAnyBox(bx, by)) mask[i] = true;
+  }
+  return mask;
+}
+
 /** Endpoint junctions clustered at the stated matching tolerance. Original
  * CAD corners survive when every side is split into multiple PDF paths, so
  * their incident direction signatures complement whole-segment anchors. */
@@ -912,7 +985,8 @@ export function scaleFingerprint(fp: SymbolFingerprint, k: number): SymbolFinger
  * reused across many sweeps — there is no later point where re-deciding
  * this would make sense. */
 export function fingerprintSymbol(
-  segs: number[], seedRect: [Point, Point], lum?: Uint8Array, opts?: { dropGlyphClusters?: boolean },
+  segs: number[], seedRect: [Point, Point], lum?: Uint8Array,
+  opts?: { dropGlyphClusters?: boolean; textBoxes?: [number, number, number, number][] },
 ): SymbolFingerprint {
   const rx0 = Math.min(seedRect[0][0], seedRect[1][0]), rx1 = Math.max(seedRect[0][0], seedRect[1][0]);
   const ry0 = Math.min(seedRect[0][1], seedRect[1][1]), ry1 = Math.max(seedRect[0][1], seedRect[1][1]);
@@ -943,21 +1017,43 @@ export function fingerprintSymbol(
   // reference would be circular.
   let keepIdx = seedIdx;
   let droppedGlyphSegments = 0;
-  if (opts?.dropGlyphClusters) {
-    let rbx0 = Infinity, rby0 = Infinity, rbx1 = -Infinity, rby1 = -Infinity;
-    for (const i of seedIdx) {
-      rbx0 = Math.min(rbx0, segs[i * 4], segs[i * 4 + 2]); rby0 = Math.min(rby0, segs[i * 4 + 1], segs[i * 4 + 3]);
-      rbx1 = Math.max(rbx1, segs[i * 4], segs[i * 4 + 2]); rby1 = Math.max(rby1, segs[i * 4 + 1], segs[i * 4 + 3]);
+  // `rawDiag` stays keyed to the ORIGINAL unfiltered `seedIdx`, never any
+  // filtered subset — the anti-circularity reasoning below holds
+  // regardless of how many segments either filter has already excluded,
+  // and both the text-box and geometric-cluster heuristics share this
+  // SAME reference so a box/cluster is judged against the whole symbol,
+  // not against what the other filter already removed.
+  let rbx0 = Infinity, rby0 = Infinity, rbx1 = -Infinity, rby1 = -Infinity;
+  for (const i of seedIdx) {
+    rbx0 = Math.min(rbx0, segs[i * 4], segs[i * 4 + 2]); rby0 = Math.min(rby0, segs[i * 4 + 1], segs[i * 4 + 3]);
+    rbx1 = Math.max(rbx1, segs[i * 4], segs[i * 4 + 2]); rby1 = Math.max(rby1, segs[i * 4 + 1], segs[i * 4 + 3]);
+  }
+  const rawDiag = Math.hypot(rbx1 - rbx0, rby1 - rby0);
+  // Phase E of docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md — text-layer exclusion
+  // runs FIRST and unconditionally whenever `textBoxes` is given, entirely
+  // independent of `dropGlyphClusters`: an authoritative fact from the
+  // PDF's own text layer needs no geometric heuristic to trust it. Segments
+  // it explains are removed from consideration before the (optional,
+  // riskier) geometric heuristic below ever re-litigates them.
+  if (opts?.textBoxes?.length) {
+    const pts = keepIdx.map((i) => [segs[i * 4], segs[i * 4 + 1], segs[i * 4 + 2], segs[i * 4 + 3]] as const);
+    const tmask = textBoxMask(pts, opts.textBoxes, SWEEP_TOL_PX, rawDiag);
+    const kept = keepIdx.filter((_, k) => !tmask[k]);
+    // Same never-empty safety net as the geometric heuristic below.
+    if (kept.length) {
+      droppedGlyphSegments += keepIdx.length - kept.length;
+      keepIdx = kept;
     }
-    const rawDiag = Math.hypot(rbx1 - rbx0, rby1 - rby0);
-    const pts = seedIdx.map((i) => [segs[i * 4], segs[i * 4 + 1], segs[i * 4 + 2], segs[i * 4 + 3]] as const);
+  }
+  if (opts?.dropGlyphClusters) {
+    const pts = keepIdx.map((i) => [segs[i * 4], segs[i * 4 + 1], segs[i * 4 + 2], segs[i * 4 + 3]] as const);
     const mask = glyphClusterMask(pts, SWEEP_TOL_PX, rawDiag);
-    const kept = seedIdx.filter((_, k) => !mask[k]);
+    const kept = keepIdx.filter((_, k) => !mask[k]);
     // Never leave zero segments to fingerprint (a marquee that is ENTIRELY
     // a label, not a symbol, is a marquee mistake — not this filter's call
     // to make into a thrown error) — fall back to the unfiltered set.
     if (kept.length) {
-      droppedGlyphSegments = seedIdx.length - kept.length;
+      droppedGlyphSegments += keepIdx.length - kept.length;
       keepIdx = kept;
     }
   }
@@ -2090,6 +2186,37 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     }
     return best;
   };
+  // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E follow-up — every
+  // candidate's own `.at` (`s.at`/`sc.at`, everywhere above and below) is
+  // the fitted transform's translation, which maps `rel`'s own origin:
+  // `fp.center`. `fp.center` is the FILTERED (textBoxMask/dropGlyphClusters)
+  // centroid, deliberately — see `SymbolFingerprint.rawCenter`'s own doc
+  // comment — so dropped ink cannot skew the SHAPE used for correspondence.
+  // But that leaves every candidate's DISCLOSED position anchored to the
+  // filtered centroid too, while ground truth (and the seed's own reported
+  // position — `sweepLabels`/`session.ts` already use `fp.rawCenter` for
+  // exactly this reason) is authored against the symbol's real, full-body
+  // visual center. Confirmed on real corpus data (case 38's 1001-segment
+  // pump assembly): a match landed 2.22px off — just past a 2px tolerance —
+  // purely from this centroid offset, never a genuine localization error.
+  // The fix carries the SAME fixed offset (rawCenter − center, in the
+  // seed's own pre-transform frame) through each candidate's own fitted
+  // rotation/scale and adds it to that candidate's translation — there is
+  // no independent "raw" correspondence to re-derive per candidate, so this
+  // is the best available estimate of where the symbol's full-body center
+  // would sit. A no-op whenever nothing was filtered: `rawCenter === center`
+  // exactly whenever `droppedGlyphSegments` is unset, so every pre-Phase-E
+  // behavior (and every internal distance/suppression check below, which
+  // deliberately keeps using the UNCORRECTED `s.at`/`sc.at` for self-
+  // consistency within the filtered frame) is byte-for-byte unaffected.
+  const centerOffset: Point = [fp.rawCenter[0] - fp.center[0], fp.rawCenter[1] - fp.center[1]];
+  const hasCenterOffset = centerOffset[0] !== 0 || centerOffset[1] !== 0;
+  const disclosedAt = (s: { at: Point; xf: number; mAt?: [number, number, number, number] }): Point => {
+    if (!hasCenterOffset) return s.at;
+    const m = s.mAt ?? xforms[s.xf].m;
+    const d = apply(m, centerOffset[0], centerOffset[1]);
+    return [s.at[0] + d[0], s.at[1] + d[1]];
+  };
   const rejected: SweepRejected[] = [];
   const survivors: Scored[] = [];
   for (const sc of away) {
@@ -2105,8 +2232,9 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       if (ev >= EXCLUDE_EVIDENCE_BAR && (!killed || ev > killed.ev)) killed = { by: bi, neg, ev };
     }
     if (killed) {
+      const at = disclosedAt(sc);
       rejected.push({
-        at: [Math.round(sc.at[0] * 10) / 10, Math.round(sc.at[1] * 10) / 10] as Point,
+        at: [Math.round(at[0] * 10) / 10, Math.round(at[1] * 10) / 10] as Point,
         score: Math.round(sc.score * 1000) / 1000,
         rotation: sc.rotation,
         mirrored: sc.mirrored,
@@ -2189,13 +2317,21 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     // cluster in this local window never counts toward "extra linework",
     // covered or not (it is extremely unlikely to overlap `placed` anyway).
     let glyphMask: boolean[] | null = null;
-    if (dropGlyphOn && candIdx.length) {
+    // Phase E of docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md — the SHEET-side
+    // counterpart of fingerprintSymbol's own text-layer exclusion: applies
+    // unconditionally whenever `opts.textBoxes` is given, independent of
+    // `dropGlyphOn`, for the same reason (an authoritative fact needs no
+    // geometric heuristic to trust).
+    let textMask: boolean[] | null = null;
+    if ((dropGlyphOn || opts.textBoxes?.length) && candIdx.length) {
       const pts = candIdx.map((j) => [segs[j * 4], segs[j * 4 + 1], segs[j * 4 + 2], segs[j * 4 + 3]] as const);
-      glyphMask = glyphClusterMask(pts, tol, Math.max(bx1 - bx0, by1 - by0));
+      const localDiag = Math.max(bx1 - bx0, by1 - by0);
+      if (opts.textBoxes?.length) textMask = textBoxMask(pts, opts.textBoxes, tol, localDiag);
+      if (dropGlyphOn) glyphMask = glyphClusterMask(pts, tol, localDiag);
     }
     let extraLen = 0;
     for (let ci = 0; ci < candIdx.length; ci++) {
-      if (glyphMask?.[ci]) continue;
+      if (glyphMask?.[ci] || textMask?.[ci]) continue;
       const j = candIdx[ci];
       const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
       let covered = false;
@@ -2241,13 +2377,16 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const matches: SweepMatch[] = [];
   const withheld: SweepWithheld[] = [];
   const pct = (v: number): number => Math.round(v * 1000) / 1000;
-  const row = (s: Scored): SweepMatch => ({
-    at: [Math.round(s.at[0] * 10) / 10, Math.round(s.at[1] * 10) / 10] as Point,
-    score: pct(s.score),
-    rotation: s.rotation,
-    mirrored: s.mirrored,
-    ...(s.transform ? { transform: s.transform } : {}),
-  });
+  const row = (s: Scored): SweepMatch => {
+    const at = disclosedAt(s);
+    return {
+      at: [Math.round(at[0] * 10) / 10, Math.round(at[1] * 10) / 10] as Point,
+      score: pct(s.score),
+      rotation: s.rotation,
+      mirrored: s.mirrored,
+      ...(s.transform ? { transform: s.transform } : {}),
+    };
+  };
   const isMatch = (s: Scored): boolean =>
     s.score >= scoreHigh && !s.boundsFailed && !densitySuspect.has(s) && (!guardOn || (extraOf.get(s) ?? 0) <= extraBar);
   for (const s of survivors) {
@@ -2363,7 +2502,15 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
 /** The one-sheet sweep, unchanged: fingerprint the marquee, match the same
  * sheet, suppress the seed's own location. */
 export function sweepSymbols(segs: number[], seedRect: [Point, Point], opts: SweepOptions = {}): SweepResult {
-  const fp = fingerprintSymbol(segs, seedRect, opts.lum);
+  // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E — `textBoxes` threaded
+  // into the SEED-side fingerprint too, not just the sheet-side match below,
+  // so a caller's text layer excludes tag strokes from the seed's own `rel`
+  // the same way an external fingerprintSymbol({textBoxes}) call would.
+  // `dropGlyphClusters` is deliberately NOT threaded here (pre-existing
+  // behavior, unchanged) — this helper's own seed is always geometry-only
+  // unless a caller builds its own fingerprint and calls matchSymbol
+  // directly, same as before this phase.
+  const fp = fingerprintSymbol(segs, seedRect, opts.lum, { textBoxes: opts.textBoxes });
   const m = matchSymbol(fp, segs, { ...opts, excludeCenter: fp.center });
   return {
     seed: {
