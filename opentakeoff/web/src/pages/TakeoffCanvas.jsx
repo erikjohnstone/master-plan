@@ -4960,15 +4960,11 @@ export default function TakeoffCanvas() {
     let seedName = null;
     let spans = null;
     try {
-      // Manual marquee flow has no options surface of its own — this is the
-      // ONLY place that can ever turn affine on for it, so the default-flip
-      // (docs/SYMBOL-SWEEP-AFFINE-GOAL.md §3 Phase 5 step 6) is hardcoded
-      // here rather than threaded through a param nobody would ever set.
-      const fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: true });
+      const fp = fingerprintSymbol(segs, rect, lum);
       assertDistinctiveSymbolSeed(fp);
       spans = await ensureTextSpans(key);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
-      res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}), affine: { enabled: true } });
+      res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}) });
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
       // instructions, exactly as the MCP surfaces them — and they are stated

@@ -29,7 +29,7 @@
 // lost.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { affineOptionsFromWire, AFFINE_WIRE_DEFAULT, type AffineOptions } from "../../web/src/lib/symbolsweep.ts";
+import { affineOptionsFromWire, type AffineOptions } from "../../web/src/lib/symbolsweep.ts";
 import { executeAgentTool } from "../../web/src/lib/agentTools.js";
 
 test("affineOptionsFromWire: undefined stays undefined, every field maps camelCase, nothing is silently defaulted", () => {
@@ -45,20 +45,11 @@ test("affineOptionsFromWire: undefined stays undefined, every field maps camelCa
   );
 });
 
-test("symbol_sweep affine parity: the canvas agent tool reaches the engine with the SAME AffineOptions affineOptionsFromWire produces for the same wire input, defaults included", async () => {
-  // As of docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 step 6 (default flip),
-  // omitting `affine` entirely is NOT the same as "no affine options" —
-  // both wire surfaces apply AFFINE_WIRE_DEFAULT (enabled: true) BEFORE
-  // calling affineOptionsFromWire, per that constant's own doc comment.
-  // Expressing the expectation the same way (merge onto AFFINE_WIRE_DEFAULT,
-  // then translate) rather than hand-computing each expected object is what
-  // makes this a real parity check: it fails if either surface's merge logic
-  // drifts from the other, not just if the shared constant's values drift.
+test("symbol_sweep affine parity: the canvas agent tool reaches the engine with the SAME AffineOptions affineOptionsFromWire produces for the same wire input", async () => {
   const wireInputs: Array<Record<string, unknown> | undefined> = [
     undefined,
     { enabled: false, max_stretch: 1.5, max_shear_deg: 10, scale_search: false },
     { enabled: true, max_stretch: 1.3, max_shear_deg: 8, scale_search: true },
-    { enabled: false }, // partial override — the other fields still fall back to AFFINE_WIRE_DEFAULT
   ];
   for (const wire of wireInputs) {
     let captured: { affine?: AffineOptions } | undefined;
@@ -73,25 +64,9 @@ test("symbol_sweep affine parity: the canvas agent tool reaches the engine with 
     if (wire) args.affine = wire;
     const result = await executeAgentTool(ctx, "symbol_sweep", args);
     assert.ok(!("error" in (result as object)), `symbol_sweep should not refuse a valid affine wire shape: ${JSON.stringify(result)}`);
-    const expected = affineOptionsFromWire({ ...AFFINE_WIRE_DEFAULT, ...(wire ?? {}) });
     assert.deepEqual(
-      captured?.affine, expected,
-      `wire=${JSON.stringify(wire)} — the canvas path's own AffineOptions must equal the shared default-merged translation`,
+      captured?.affine, affineOptionsFromWire(wire as Parameters<typeof affineOptionsFromWire>[0]),
+      `wire=${JSON.stringify(wire)} — the canvas path's own AffineOptions must equal the shared translation's`,
     );
-  }
-  // And the no-affine-at-all case specifically must resolve to enabled:true —
-  // the whole point of the default flip, asserted explicitly rather than
-  // only implicitly via the loop above.
-  {
-    let captured: { affine?: AffineOptions } | undefined;
-    const ctx = {
-      sheetDims: () => ({ w: 2000, h: 1500 }),
-      symbolSweep: async (_sheet: string, _rect: unknown, opts: { affine?: AffineOptions }) => {
-        captured = opts;
-        return { matches: [], withheld: [] };
-      },
-    };
-    await executeAgentTool(ctx, "symbol_sweep", { sheet: "plan.pdf", seed_rect_norm: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
-    assert.equal(captured?.affine?.enabled, true, "omitting `affine` entirely must still enable affine matching (default flip)");
   }
 });
