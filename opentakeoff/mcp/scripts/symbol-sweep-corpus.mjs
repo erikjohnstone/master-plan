@@ -7,6 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Session } from "../src/session.ts";
+import { affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../../web/src/lib/symbolsweep.ts";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const masterRoot = path.resolve(here, "../../..");
@@ -116,6 +117,24 @@ for (const c of cases) {
       ...(c.options?.variant_guard ? { variantGuard: true } : {}),
       ...(c.options?.rotations === false ? { rotations: false } : {}),
       ...(c.options?.mirror === false ? { mirror: false } : {}),
+      // docs/SYMBOL-SWEEP-AFFINE-GOAL.md §3 Phase 5 step 6 — the wire-level
+      // default flip was ATTEMPTED and REVERTED (see the goal doc's
+      // Findings): the two-run gate that supposedly cleared it never
+      // actually exercised this path, because this runner used to call
+      // session.symbolSweep with no `affine` at all, silently re-testing
+      // the unchanged rigid baseline every time. Fixing that (this change)
+      // is what surfaced the real regression that got the flip reverted.
+      // This now applies AFFINE_WIRE_DEFAULT unconditionally, independent
+      // of whatever the wire-level default currently is, so the corpus
+      // suite is a real, standing gate any FUTURE default-flip attempt must
+      // clear — it will show red for as long as the underlying bugs
+      // (dropGlyphClusters clipping real seed geometry; label-corroboration
+      // promoting affine-widened low-quality fits) remain unfixed, which is
+      // the correct, honest state for it to be in until they are. A case
+      // can opt out with `options.affine: false` (mirrors rotations/mirror
+      // above) if a future ground-truth case specifically needs the
+      // rigid-only path.
+      ...(c.options?.affine === false ? {} : { affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT) }),
     });
     elapsedMs = Math.round(performance.now() - started);
   }
