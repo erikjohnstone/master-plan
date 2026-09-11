@@ -1274,6 +1274,54 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   (the 139 excess matches / 15 failing cases that remain, all traced to
   the unconditional tolerance-widening Finding above).
 
+- **2026-09-11 — Investigating case 05 directly (the largest remaining Phase-1 offender by count) found something narrower and more useful than expected: its 79 excess matches are NOT contamination near the 5 real air devices — they are an entirely unrelated symbol family ~1100-1400px away — and case 05 additionally exposes a real, but apparently narrow (not corpus-wide), THIRD bug: enabling `affine` can break label-corroboration promotion for a real match that depends on it.**
+  Traced every one of case 05's 5 real D10 instances directly (not by
+  aggregate count) against `session.symbolSweep`, both with and without
+  `affine`. Two separate, real findings:
+  1. All 84 matches under `affine` sit 1100-1400px from every one of the 5
+     real D10 positions — none of the 79 excess is near a real device at
+     all. They cluster near `y≈1100` (the real devices sit at
+     `y≈2533-2745`), scoring 0.952 raw via the plain rigid path at
+     `rotation_deg≈89`, `tol_px=6` (Root Cause #1's signature exactly,
+     confirmed again on a THIRD independent case, but this time proven to
+     be a wholly separate, unrelated location, not corruption of the real
+     instances' own neighborhood).
+  2. All 5 real D10s score ~0.59-0.65 raw (matches the ground-truth
+     review's own note: "Geometry scores around 0.59... same-family
+     drawing labels provide explicit corroboration") and, WITHOUT
+     `affine`, are correctly promoted to `matches` by
+     `reconcileSweepLabels` (baseline: 5 matched, 6 withheld — confirmed
+     directly, not assumed). WITH `affine` on, the exact same 5
+     candidates (same score, same position within 1.7px) stay `withheld`
+     — `reconcileSweepLabels` no longer promotes them. The likely cause:
+     `affine` inflates this sheet's candidate pool from 6 withheld to
+     2311, and label-corroboration promotion likely refuses on ambiguity
+     once multiple withheld candidates now compete for the same nearby
+     "D10" text run — the same candidate-flooding mechanism the
+     label-promotion Finding above already identified as a SECONDARY
+     cause, but there recorded only as a FALSE-POSITIVE risk (promoting a
+     wrong candidate); this is its FALSE-NEGATIVE mirror (refusing to
+     promote a genuinely correct one). Checked whether this generalizes:
+     `06-vermillion-m210a-ss15-cell-devices` (also a Phase-1-only case,
+     candidate pool inflates from 14 withheld to 279 under `affine`) shows
+     ALL 13 real instances still correctly matched under `affine`, two of
+     them scoring even HIGHER than baseline (0.82→1.00, 0.98→1.00) —
+     genuine refinement improvement, not regression. So this is not a
+     corpus-wide recall regression; it appears specific to a case like 05
+     whose real matches score low enough to depend entirely on label
+     promotion in the first place, combined with enough candidate flooding
+     to create genuine ambiguity at that specific text run. Not
+     investigated further or fixed here — it needs the same synthetic-
+     fixture-plus-corpus validation discipline as the already-deferred
+     label-promotion fix (see the two reverted `symbollabels.ts` attempts
+     above), and belongs in that same future fix, not a separate one,
+     since both are downstream of the same candidate-flooding root cause.
+     Recorded here because it changes this case's own failure story: `05`
+     is not "79 false adds near 5 correct matches" but "0 real matches
+     recovered at all (a pre-existing label-dependent recall pattern this
+     document did not break, but did not fix either) plus 79 completely
+     unrelated phantom matches elsewhere on the sheet."
+
 ---
 
 ## Appendix A — Background, for the reader who wants the why
