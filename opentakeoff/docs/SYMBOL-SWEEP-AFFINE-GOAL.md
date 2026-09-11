@@ -1171,6 +1171,39 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   statistics from it, and only then judge whether regularity actually
   separates the two populations.
 
+- **2026-09-11 — Went looking for that real corpus instance of correctly-classified exploded text (to complete the Finding above) and found something more important instead: `dropGlyphClusters` fires on 19 of 47 corpus seeds (40%), and NONE of them look like a clean, conservative "small incidental tag" case.**
+  Surveyed every seed in the corpus for how much `dropGlyphClusters` drops
+  relative to `dropGlyphClusters: false` (segment-count and length
+  fraction, same method as the `01`/`10` Findings above). 19 of 47 seeds
+  show ANY drop at all — this is not the rare edge case the two already-
+  found false-add cases suggested, it is a routine occurrence across a
+  large share of this real corpus. The drop percentages themselves range
+  from 8% up to 90% of segment count (`02`: 8%, `08`: 15%, `25`: 19%, `03`:
+  19%, ... `14`: 90%, `22`: 81%, `33`: 83%, `24`: 78%, `38`: 60%, `13`:
+  65%, `17`: 67%, alongside the already-known `01` 61% and `10` 88%).
+  Checked the SMALLEST real drop in the whole corpus (`02-norfolk-am104-
+  generator-core`, 8% by count) specifically hoping it would be the clean
+  "small tag beside a big symbol" case needed to validate or refute the
+  stroke-regularity hypothesis above. It is not obviously that: the dropped
+  cluster still spans a 55×50px bounding box and carries the same kind of
+  ambiguous regularity signature (`R = 0.670`, 14 distinct angle buckets
+  across only 32 segments — proportionally MORE angular diversity than
+  case 10's already-inconclusive cluster, not less). Across all 19 real
+  seeds this fires on, none presents as an obvious, small, conservative,
+  correctly-scoped drop — the absence of any validating example, across
+  the entire corpus this project has, is itself the finding.
+  This changes the assessment of `dropGlyphClusters` from "occasionally
+  over-fires on richly-detailed symbols" to "the calibration itself may be
+  fundamentally too aggressive for this corpus's real drafting conventions,
+  not a design that mostly works needing a tuning correction at the
+  margins." Whoever picks this up next should treat "is this heuristic
+  salvageable by tuning at all, or does it need to default OFF
+  independent of `affine.enabled` until properly redesigned" as an open
+  question to answer FIRST, before spending more effort on the specific
+  discriminator (regularity or otherwise) — tuning a discriminator on top
+  of a heuristic that may be wrong at its foundation risks solving the
+  wrong problem.
+
 ---
 
 ## Appendix A — Background, for the reader who wants the why
