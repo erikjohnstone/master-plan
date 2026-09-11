@@ -54,9 +54,8 @@ export function rowSheet(table, row) {
 export function splitSheetKey(key) {
   const s = String(key || "");
   const i = s.lastIndexOf("#");
-  if (i < 0) return { file: s, page: 1 };
-  const page = Number(s.slice(i + 1));
-  return { file: s.slice(0, i), page: Number.isFinite(page) ? page : 1 };
+  if (i < 0 || !/^\d+$/.test(s.slice(i + 1))) return { file: s, page: 1 };
+  return { file: s.slice(0, i), page: Number(s.slice(i + 1)) };
 }
 
 /** Header counts for the panel: how many tables, over how many distinct
@@ -107,6 +106,37 @@ export function groupBySheet(tables) {
     g.tables.push(t);
   }
   return out;
+}
+
+/** Keep the schedule browser aligned with the plan source(s) currently shown.
+ *
+ * Local workspaces deliberately retain PDFs until the estimator removes them,
+ * so `graph.tables` can legitimately contain an earlier, unrelated set. The
+ * graph remains the shared project truth; this is only the browser's view
+ * scope. A continued table is included when any of its parts or rows is on a
+ * visible source PDF, even if its first part lives in another file.
+ */
+export function tablesForSourceFiles(tables, sourceFiles) {
+  const wanted = new Set((Array.isArray(sourceFiles) ? sourceFiles : [])
+    .map((key) => splitSheetKey(key).file)
+    .filter(Boolean));
+  if (!wanted.size) return [];
+  return (Array.isArray(tables) ? tables : []).filter((table) => {
+    const keys = [
+      table?.sheet,
+      ...(table?.parts || []).map((part) => part?.sheet),
+      ...(table?.rows || []).map((row) => row?.sheet),
+    ];
+    return keys.some((key) => wanted.has(splitSheetKey(key).file));
+  });
+}
+
+/** Add one schedule to the digital reader without closing any comparison
+ * schedules already open. Always returns a new Set for React state updates. */
+export function openScheduleIds(openIds, table) {
+  const next = new Set(openIds instanceof Set ? openIds : []);
+  next.add(tableId(table));
+  return next;
 }
 
 /** Columns worth showing beside a row key, best first.
