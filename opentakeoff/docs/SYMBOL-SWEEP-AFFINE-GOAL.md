@@ -615,10 +615,41 @@ Findings (cases that contradicted a bound — never fixed by moving it):
      searched transform disclosed or withheld", implicitly meaning
      disclosed/withheld ON ITS OWN GEOMETRIC MERITS) that the label layer
      was never audited against once affine widened what could reach it.
-  Neither cause is fixed yet — both need real design work, not a bounds
-  tweak (§7 rule 4 does not apply here: this is the bound admitting a
-  false positive, not a genuine case the bound wrongly excludes). The
-  corpus suite is left deliberately red on affected cases with
+  Neither cause is fully fixed yet — both need real design work, not a
+  bounds tweak (§7 rule 4 does not apply here: this is the bound admitting a
+  false positive, not a genuine case the bound wrongly excludes).
+
+  **Update, same day, commit `a0099c3`: cause 1 partially addressed, cause 2
+  still open.** Added `SymbolFingerprint.rawCenter` (the seed's centroid over
+  EVERY segment in the marquee, independent of `dropGlyphClusters`) and
+  switched `session.ts`'s seed-label-lookup call sites and the seed's
+  disclosed `center` field to use it instead of the filtered `center`. This
+  is real, tested, verified-on-the-actual-case progress — re-running
+  `01-cherry-mh111-cd1` directly confirms the exact symptom it targeted
+  ("seed at 1746.9,440.2 misses frozen center 1746.9,436.2") is gone; the
+  disclosed seed position now matches the ground truth exactly. 418 web +
+  123 mcp tests stay green, no regression.
+  It is explicitly NOT a fix for the case as a whole: re-run after this
+  change, `01-cherry-mh111-cd1` still returns 27 matches (not 19) and the
+  seed's own tag lookup still resolves to "RG-6" instead of "CD-1" — using
+  the now-CORRECT center for that lookup didn't change which text it finds
+  nearest. That means the real cause of the wrong-tag attachment (and by
+  extension a meaningful share of the false-adds) is NOT fully explained by
+  the center-shift theory as first diagnosed — it is at least partly
+  downstream in `labelPlacements`'s own nearest-text-span logic, or in cause
+  2 (the label-corroboration promotion path), neither of which this change
+  touched. The corpus suite correctly stays red on this case. Also fixed in
+  the same commit: the corpus-runner fix from commit `7574ede` had been
+  importing `AFFINE_WIRE_DEFAULT` from a module that no longer exported it
+  after the revert removed it (`main` was broken — running the script threw
+  immediately) — `tsc` never caught this because `mcp/tsconfig.json`'s
+  `include` doesn't cover `scripts/*.mjs`. Re-added the constant standalone
+  (not the wire-schema defaulting, which stays reverted). Lesson recorded
+  for this document's own §7 working method: a change to a `.mjs` script
+  under `scripts/` must be RUN, not just type-checked, before it is trusted
+  — `tsc --noEmit` silently does not cover that directory.
+
+  The corpus suite is left deliberately red on affected cases with
   `AFFINE_WIRE_DEFAULT` genuinely on, rather than quietly reverting the
   runner fix too — that redness is the correct, honest state until a real
   fix lands, and it is the gate any future default-flip attempt must pass
