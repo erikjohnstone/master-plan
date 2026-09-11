@@ -45,6 +45,26 @@
 //    channel → symbol_sweep's stated luminance_tolerance gate.
 //      black: (100,100) seed · (200,100) · (300,100) · (400,220) rotated 90°
 //      grey:  (100,400) · (250,400) · (400,400)
+//
+// (later fixtures — symbol-set/lum/labels/uniqtags/annotated — are generated
+// further below, each documented at its own block.)
+//
+// symbol-hold.pdf — docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase B: the
+// wire-level `hold` field's own end-to-end proof, through a real PDF, not
+// just the pure-engine test in web/test/symbolsweep.test.ts. (612×612 pt, no
+// text layer.) A HALF-SIZE drain symbol (SYMBOL_HOLD, 10×10 square + diagonal
+// + 7 pt stub) — halved so that the PDF's ×2 render scale reproduces, in
+// image px, the exact geometry web/test/symbolsweep.test.ts's own "an
+// out-of-bounds stretch is withheld with the bounds reason" test already
+// proved produces a bounds-failed affine fit:
+//   (100,100) the SEED instance
+//   (300,100) the SAME shape stretched 1.6× in x only — at the DEFAULT 1.5×
+//     bound this fits WITHIN bounds (rigid endpoint-pairing recovers only a
+//     partial 1.135× read, rms_px 6.15, via the shape's own near-symmetric
+//     square), so the test calls symbol_sweep with maxStretch: 1.1 to push
+//     that SAME real fit outside a tighter, still-legitimate bound — proving
+//     `hold: "bounds"` reaches the wire, not fabricating a scenario the
+//     engine would never actually produce.
 import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -460,3 +480,36 @@ for (const off of uniqOffsets) uniqPdf += `${String(off).padStart(10, "0")} 0000
 uniqPdf += `trailer\n<< /Size ${uniqObjects.length + 1} /Root 1 0 R >>\nstartxref\n${uniqXrefAt}\n%%EOF\n`;
 writeFileSync(OUT_UNIQ, uniqPdf, "latin1");
 console.log(`wrote ${OUT_UNIQ} (${uniqPdf.length} bytes)`);
+
+// ── symbol-hold.pdf — Phase B `hold` wire-level fixture (see the doc block
+// at the top of this file for the exact geometry and why it is half-size) ──
+
+const OUT_HOLD = join(FIXTURES, "symbol-hold.pdf");
+const SYMBOL_HOLD = [
+  [0, 0, 10, 0], [10, 0, 10, 10], [10, 10, 0, 10], [0, 10, 0, 0],
+  [0, 0, 10, 10],
+  [10, 5, 17, 5],
+];
+const stretchX = (segs, sx, [px, py]) => segs.map(([ax, ay, bx, by]) => [ax * sx + px, ay + py, bx * sx + px, by + py]);
+
+const holdContent = [
+  "0.5 w",
+  ...place(SYMBOL_HOLD, [100, 100]),                    // seed
+  ...place(stretchX(SYMBOL_HOLD, 1.6, [0, 0]), [300, 100]), // stretched 1.6x in x
+].join("\n");
+
+const holdObjects = [
+  "<< /Type /Catalog /Pages 2 0 R >>",
+  "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+  "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 4 0 R /Resources << >> >>",
+  `<< /Length ${holdContent.length} >>\nstream\n${holdContent}\nendstream`,
+];
+let holdPdf = "%PDF-1.5\n";
+const holdOffsets = [];
+holdObjects.forEach((body, i) => { holdOffsets.push(holdPdf.length); holdPdf += `${i + 1} 0 obj\n${body}\nendobj\n`; });
+const holdXrefAt = holdPdf.length;
+holdPdf += `xref\n0 ${holdObjects.length + 1}\n0000000000 65535 f \n`;
+for (const off of holdOffsets) holdPdf += `${String(off).padStart(10, "0")} 00000 n \n`;
+holdPdf += `trailer\n<< /Size ${holdObjects.length + 1} /Root 1 0 R >>\nstartxref\n${holdXrefAt}\n%%EOF\n`;
+writeFileSync(OUT_HOLD, holdPdf, "latin1");
+console.log(`wrote ${OUT_HOLD} (${holdPdf.length} bytes)`);

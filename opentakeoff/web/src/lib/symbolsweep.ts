@@ -329,6 +329,18 @@ export interface SweepMatch {
 
 export interface SweepWithheld extends SweepMatch {
   reason: string;
+  /** Present when the row CLEARED the score bar and is nonetheless withheld
+   * for a reason that is not about score: `"bounds"` — the fitted transform
+   * is outside the stated affine bounds (§4.2); `"density"` — a
+   * widened-tolerance read within one symbol footprint of another accepted
+   * match. Such a row is disclosed, but it is NOT a corroboration candidate
+   * — see `LabelPlacementOptions.eligible` in symbollabels.ts. A degenerate
+   * high-scoring fit was found, on the real corpus, competing for and
+   * winning a real instance's own drawn tag (docs/SYMBOL-SWEEP-CLEAN-
+   * CORPUS-GOAL.md §2, C1, 2026-09-11) — `hold` is what lets the label layer
+   * tell that row apart from a genuine near-miss without a geometric gate
+   * of its own. */
+  hold?: "bounds" | "density";
 }
 
 /** A placement a counter-example rejected (#259). Disclosed the way `withheld`
@@ -2248,6 +2260,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       const t = s.transform!;
       withheld.push({
         ...row(s),
+        hold: "density",
         reason: `matches ${Math.round(s.score * 100)}% of the seed only under a widened tolerance (±${t.tol_px} px vs the base ±${tol} px, fitted at ${t.rotation_deg}° / ${t.scale_x}×,${t.scale_y}×) AND sits within one symbol's own footprint (${Math.round(suppressR)} px) of another accepted match — two genuine instances of the same symbol cannot be this close without overlapping. This reads as noise from the same contaminated area, not a second real instance; view_sheet here and confirm before counting either reading`,
       });
       continue;
@@ -2262,6 +2275,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       const t = s.transform;
       withheld.push({
         ...row(s),
+        hold: "bounds",
         reason: `matches ${Math.round(s.score * 100)}% of the seed under a ${t.scale_x}× / ${t.scale_y}× stretch and ${t.shear_deg}° shear (bar ${affineBounds.maxStretch}× / ${affineBounds.maxShearDeg}°) — that much distortion may be a different device drawn to look alike; view_sheet here and confirm, or raise affine.max_stretch if this drawing set genuinely stretches its symbols`,
       });
       continue;

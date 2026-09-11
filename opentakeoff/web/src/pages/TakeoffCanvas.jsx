@@ -4979,10 +4979,24 @@ export default function TakeoffCanvas() {
       spans = spans || await ensureTextSpans(key);
       labels = labelPlacements(
         [res.seed.center, ...res.matches.map((m) => m.at), ...res.withheld.map((w) => w.at)],
-        spans, segs, lum, { preferredLabel: seedName?.label, preferredFamily: seedName?.family, scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)], symbolInkLengthPx: res.seed.length_px },
+        spans, segs, lum, {
+          preferredLabel: seedName?.label, preferredFamily: seedName?.family,
+          scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)],
+          // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2 C1 / Phase B — a held
+          // withheld row is disclosed geometry, never a corroboration
+          // candidate; excluding it here keeps a degenerate/contaminated fit
+          // from winning or being promoted on a real instance's own tag.
+          eligible: [true, ...res.matches.map(() => true), ...res.withheld.map((w) => !w.hold)],
+          symbolInkLengthPx: res.seed.length_px,
+        },
       );
     } catch { labels = []; }
-    const seedLabel = labels[0] || null;
+    // The seed's own placement still participates in the assignment above
+    // (so it can hold a text run and keep it from a neighboring instance),
+    // but its REPORTED identity is the uncontested `seedName` lookup, not the
+    // contested `labels[0]` — see mcp/src/session.ts's sweepLabels for the
+    // parity contract this mirrors.
+    const seedLabel = seedName || labels[0] || null;
     const rawMatchCount = res.matches.length;
     const corrected = reconcileSweepLabels(
       seedLabel,
@@ -6696,10 +6710,13 @@ export default function TakeoffCanvas() {
     let seedName = null;
     let spans = null;
     try {
-      // docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
-      // default flip; the seed's own exploded-text filter follows the same
-      // gate (default on when affine.enabled) as the MCP path.
-      const fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: opts.affine?.enabled === true });
+      // dropGlyphClusters no longer follows opts.affine.enabled — mirrors
+      // mcp/src/session.ts (docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Findings,
+      // 2026-09-11: a controlled corpus run measured it as the larger of two
+      // confirmed causes behind a real corpus regression). This comment was
+      // stale (canvas/MCP parity gap, fixed in
+      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase B).
+      const fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false });
       assertDistinctiveSymbolSeed(fp);
       spans = await ensureTextSpans(key);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
@@ -6720,10 +6737,22 @@ export default function TakeoffCanvas() {
       spans = spans || await ensureTextSpans(key);
       labels = labelPlacements(
         [res.seed.center, ...res.matches.map((m) => m.at), ...res.withheld.map((w) => w.at)],
-        spans, segs, lum, { preferredLabel: seedName?.label, preferredFamily: seedName?.family, scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)], symbolInkLengthPx: res.seed.length_px },
+        spans, segs, lum, {
+          preferredLabel: seedName?.label, preferredFamily: seedName?.family,
+          scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)],
+          // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2 C1 / Phase B — a held
+          // withheld row is disclosed geometry, never a corroboration
+          // candidate; excluding it here keeps a degenerate/contaminated fit
+          // from winning or being promoted on a real instance's own tag.
+          eligible: [true, ...res.matches.map(() => true), ...res.withheld.map((w) => !w.hold)],
+          symbolInkLengthPx: res.seed.length_px,
+        },
       );
     } catch { labels = []; }
-    const seedLabel = labels[0] || null;
+    // The seed's own placement still participates in the assignment above,
+    // but its REPORTED identity is the uncontested `seedName` lookup — see
+    // mcp/src/session.ts's sweepLabels for the parity contract this mirrors.
+    const seedLabel = seedName || labels[0] || null;
     const rawMatchCount = res.matches.length;
     const corrected = reconcileSweepLabels(
       seedLabel,
@@ -6747,7 +6776,7 @@ export default function TakeoffCanvas() {
       // rotation/mirrored and `extra` — the very disclosure that says WHY the
       // guard fired.
       matches: res.matches.map((m, i) => ({ at: norm(m.at), score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), ...(m.extra != null ? { extra: m.extra } : {}), label: L(1 + i) })),
-      withheld: res.withheld.map((w, i) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra != null ? { extra: w.extra } : {}), reason: w.reason || SWEEP_FALLBACK_REASON, label: L(1 + nM + i) })),
+      withheld: res.withheld.map((w, i) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra != null ? { extra: w.extra } : {}), ...(w.hold ? { hold: w.hold } : {}), reason: w.reason || SWEEP_FALLBACK_REASON, label: L(1 + nM + i) })),
       rejected: (res.rejected || []).map((r) => ({ at: norm(r.at), reason: r.reason || "excluded" })),
       complete: res.complete,
       dropped: res.candidates?.dropped || 0,

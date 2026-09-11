@@ -468,6 +468,30 @@ test("collapseEquivalentPrimaryTables also removes a TITLED reference-kind dupli
   assert.equal(diffTitlePair.length, 2);
 });
 
+// docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase B — a withheld row that
+// cleared the score bar for a reason unrelated to score carries `hold` all
+// the way onto the wire, through the real Session pipeline (not just at the
+// pure-engine level — web/test/symbolsweep.test.ts already pins `hold`'s own
+// values there). scripts/make-symbol-fixture.mjs's own doc comment for
+// symbol-hold.pdf explains why this real fixture reliably produces a
+// bounds-failed fit rather than asserting one that happens to fall out of
+// arbitrary numbers.
+test("symbol_sweep: a withheld row held for a reason unrelated to score (an out-of-bounds affine fit) carries `hold` on the wire", async () => {
+  const HOLD_PLAN = fileURLToPath(new URL("./fixtures/symbol-hold.pdf", import.meta.url));
+  const s = new Session();
+  const loaded = await s.loadPlan(HOLD_PLAN);
+  const key = loaded.sheets[0].sheet;
+  const r = await s.symbolSweep(key, {
+    seedRect: [[196, 980], [272, 1028]],
+    affine: { enabled: true, maxStretch: 1.1 },
+  }) as { found: number; withheld: Array<{ hold?: string; reason: string }> };
+  assert.equal(r.found, 0, "the stretched instance must not commit as a match");
+  assert.equal(r.withheld.length, 1);
+  const w = r.withheld[0];
+  assert.equal(w.hold, "bounds", "an out-of-bounds affine fit must be disclosed as held on the wire");
+  assert.match(w.reason, /stretch/);
+});
+
 // Real, found live: this file (and, checked directly, every other MCP test
 // file — none of them call this) never tears down the persistent Python
 // vectorgrid sidecar a real Session.loadPlan/graph build starts. Same shape

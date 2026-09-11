@@ -76,6 +76,17 @@ export interface LabelPlacementOptions {
    * renaming a tiny point glyph reached through shared duct/control linework.
    * Omit only for callers that do not know the swept geometry. */
   symbolInkLengthPx?: number;
+  /** Aligned with `placements`. A placement marked `false` is disclosed
+   * geometry that is NOT a corroboration candidate — a `SweepWithheld.hold`
+   * row (out-of-bounds or density-suspect: a degenerate or contaminated fit
+   * that nonetheless cleared the score bar). It proposes no edge at all, so
+   * it can neither win nor be stolen a text run: a high-scoring held phantom
+   * can no longer beat a genuine, lower-scoring instance for the tag that
+   * identifies it (docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2, C1, measured
+   * on the real corpus — case 11's four `scale_x: 0, scale_y: 0, score: 1`
+   * matches held the tags `1-VAV-4/10/12/16` that named the real
+   * thermostats). Omitted, or `true`, means eligible — today's behavior. */
+  eligible?: boolean[];
 }
 
 const canonicalLabel = (label: string): string => label.trim().toUpperCase().replace(/[–—−]/g, "-").replace(/\s+/g, "");
@@ -781,6 +792,7 @@ export function labelPlacements(
 
   // ── adjacent: nearest token within its own text-height radius ─────────────
   for (let p = 0; p < placements.length; p++) {
+    if (options.eligible?.[p] === false) continue;
     const [px, py] = placements[p];
     for (let ti = 0; ti < tokens.length; ti++) {
       const t = tokens[ti];
@@ -849,6 +861,7 @@ export function labelPlacements(
         for (const start of starts) {
           const reach = chase(idx, start.point, start.firstJoin);
           for (let p = 0; p < placements.length; p++) {
+            if (options.eligible?.[p] === false) continue;
             const h = Math.max(labelSpanHeight(t), 8);
             if (!placementInsideEmbeddedToken(t, placements[p][0], placements[p][1])) continue;
             const glyphPad = (options.scores?.[p] ?? 1) < LABEL_REVIEW_SCORE_LOW ? h * 0.6 : 2;
@@ -962,7 +975,14 @@ export function reconcileSweepLabels(
   });
   withheld.forEach((row, i) => {
     const label = withheldLabels[i] ?? null;
-    if (label && placementLabelFamily(label) === seed && equipmentLabelStyleCompatible(seedLabel, label)) {
+    // A held row (out-of-bounds or density-suspect — docs/SYMBOL-SWEEP-
+    // CLEAN-CORPUS-GOAL.md §2, C1) is disclosed geometry, never a
+    // corroboration candidate: it is excluded from the label ASSIGNMENT
+    // itself (LabelPlacementOptions.eligible), so `label` should already be
+    // null here, but the promotion gate is repeated explicitly — the one
+    // place a degenerate or contaminated fit could otherwise be promoted on
+    // the strength of a tag it never legitimately earned.
+    if (!row.hold && label && placementLabelFamily(label) === seed && equipmentLabelStyleCompatible(seedLabel, label)) {
       promoted++;
       const { reason: _reason, ...match } = row;
       accepted.push({ row: match, label });

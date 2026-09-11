@@ -851,3 +851,51 @@ test("set-wide label corroboration withholds geometry that has no family tag", (
   assert.equal(r.promoted, 1);
   assert.equal(r.demoted, 1);
 });
+
+// docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2 C1 / Phase B — a held withheld
+// row (out-of-bounds or density-suspect: a fit that cleared the score bar
+// for a reason unrelated to score) is disclosed geometry, never a
+// corroboration candidate. Measured on the real corpus: case 05's real D10
+// air devices scored ~0.59 and were correctly promoted via their drawn tag
+// at baseline, but a `scale_x: 0, scale_y: 0, score: 1.0` degenerate fit
+// nearby beat them for that same tag once affine widened the candidate pool.
+
+test("eligible:false excludes a placement from the tag competition entirely — the genuine, farther, lower-score instance keeps its own tag uncontested", () => {
+  const token = span("D10", 20, 88, 40, 25); // center (40, 100.5)
+  const genuine: [number, number] = [0, 100];   // distance ~40 from the token
+  const held: [number, number] = [35, 100];     // distance ~5.5 — would win on distance AND score alone
+
+  // Without eligibility, the closer/higher-score placement wins the token.
+  const contested = labelPlacements([genuine, held], [token], [], undefined, { scores: [0.59, 1.0] });
+  assert.equal(contested[0], null, "sanity: uncontested, the held row's own distance+score would normally win");
+  assert.equal(contested[1]?.label, "D10");
+
+  // With it marked ineligible, it proposes NO edge at all.
+  const r = labelPlacements([genuine, held], [token], [], undefined, { scores: [0.59, 1.0], eligible: [true, false] });
+  assert.equal(r[1], null, "the held placement must propose no edge, regardless of its own distance or score");
+  assert.equal(r[0]?.label, "D10", "the genuine instance keeps the tag once the held phantom is excluded from the competition");
+});
+
+test("label corroboration never promotes a HELD withheld row, even with the seed's own tag adjacent", () => {
+  const seed = { label: "CD-1", via: "leader" as const, distance_px: 2 };
+  const same = { label: "CD-1", via: "leader" as const, distance_px: 3 };
+  const rawWithheld = { at: [20, 20] as [number, number], score: 0.99, rotation: 0, mirrored: false, reason: "matches under a 0x/0x fit", hold: "bounds" as const };
+  const r = reconcileSweepLabels(seed, [], [], [rawWithheld], [same]);
+  assert.equal(r.promoted, 0, "a held row must never be promoted, no matter how good its own tag match looks");
+  assert.deepEqual(r.matches, []);
+  assert.equal(r.withheld.length, 1);
+  assert.equal(r.withheld[0].hold, "bounds", "the row stays held, its own reason and hold untouched");
+});
+
+test("labelPlacements: a placement can lose its own nearest tag to a closer competing placement in a shared assignment — callers reporting a placement's OWN identity must look it up uncontested, not read it off the shared result", () => {
+  const token = span("D10", 20, 88, 40, 25); // center (40, 100.5)
+  const seedPoint: [number, number] = [0, 100];     // distance ~40 from the token
+  const competitor: [number, number] = [35, 100];   // distance ~5.5 — wins the shared assignment
+
+  const uncontested = labelPlacements([seedPoint], [token], [], undefined, { scores: [1] });
+  assert.equal(uncontested[0]?.label, "D10", "looked up alone, the seed correctly finds its own nearby tag");
+
+  const contested = labelPlacements([seedPoint, competitor], [token], [], undefined, { scores: [1, 1] });
+  assert.equal(contested[0], null, "in a shared assignment, the seed can lose its own tag to a closer competing placement");
+  assert.equal(contested[1]?.label, "D10");
+});

@@ -2687,11 +2687,25 @@ export class Session {
       preferredLabel: discoveredSeed?.label ?? preferredLabel,
       ...(discoveredSeed?.family ? { preferredFamily: placementLabelFamily(discoveredSeed) } : {}),
       scores: [...(seedCenter ? [1] : []), ...matches.map((m) => m.score), ...withheld.map((w) => w.score)],
+      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2 C1 / Phase B — a held
+      // withheld row (out-of-bounds or density-suspect) is disclosed
+      // geometry, never a corroboration candidate: it proposes no edge at
+      // all, so it can neither win a real instance's own drawn tag nor be
+      // promoted on the strength of one it never legitimately earned.
+      eligible: [...(seedCenter ? [true] : []), ...matches.map(() => true), ...withheld.map((w) => !w.hold)],
       symbolInkLengthPx,
     });
     const off = seedCenter ? 1 : 0;
     return {
-      seed: seedCenter ? named[0] : null,
+      // The seed's own placement still participates in the assignment above
+      // (so it can hold a text run and keep it from a neighboring instance),
+      // but its REPORTED identity is the uncontested lookup, not the
+      // contested `named[0]` — a held phantom sitting on the seed's own tag
+      // must never be able to steal the seed's reported label and thereby
+      // null it out, which silently disables reconcileSweepLabels for the
+      // whole sweep (measured on the real corpus, cases 05/10, before this
+      // fix: `seed tag <none> != D10` / `!= CD-1`).
+      seed: seedCenter ? discoveredSeed : null,
       matches: named.slice(off, off + matches.length),
       withheld: named.slice(off + matches.length),
     };
@@ -2970,7 +2984,7 @@ export class Session {
         scope,
         found: res.matches.length,
         matches: res.matches.map((m, i) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), ...(m.extra !== undefined ? { extra: m.extra } : {}), ...Session.labelFields(lbl.matches[i]) })),
-        withheld: res.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(lbl.withheld[i]), reason: w.reason })),
+        withheld: res.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(lbl.withheld[i]), ...(w.hold ? { hold: w.hold } : {}), reason: w.reason })),
         seed: { ...seedOut, ...Session.labelFields(lbl.seed) },
         ...(res.rejected.length ? { rejected: res.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, ...(r.transform ? { transform: r.transform } : {}), by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(res.negatives ? { negatives: res.negatives.filter((n) => !!n).map((n) => ({ mode: n!.mode, segments: n!.segments, center: [round1(n!.center[0]), round1(n!.center[1])] as [number, number] })) } : {}),
@@ -3185,7 +3199,7 @@ export class Session {
         sheet: p.state.key,
         found: p.matches.length,
         matches: p.matches.map((m, i) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), ...(m.extra !== undefined ? { extra: m.extra } : {}), ...Session.labelFields(p.labels.matches[i]) })),
-        withheld: p.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(p.labels.withheld[i]), reason: w.reason })),
+        withheld: p.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(p.labels.withheld[i]), ...(w.hold ? { hold: w.hold } : {}), reason: w.reason })),
         ...(p.rejected.length ? { rejected: p.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, ...(r.transform ? { transform: r.transform } : {}), by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(p.lum_gate ? { lum_gate: p.lum_gate } : {}),
         ...((p.label_corroboration.promoted || p.label_corroboration.demoted) ? { label_corroboration: p.label_corroboration } : {}),
@@ -3239,7 +3253,7 @@ export class Session {
         name: r.name,
         found: r.result.matches.length,
         matches: r.result.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])] as [number, number], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}) })),
-        withheld: r.result.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), reason: w.reason })),
+        withheld: r.result.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.hold ? { hold: w.hold } : {}), reason: w.reason })),
         complete: r.result.complete,
       })),
     };
@@ -4941,7 +4955,7 @@ export class Session {
         sheet: p.state.key,
         found: p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0),
         matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}), ...(m.text_counted ? { counted_from: "explicit_label" as const } : {}) })),
-        withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), reason: w.reason })),
+        withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.hold ? { hold: w.hold } : {}), reason: w.reason })),
         excluded: p.excluded.map((e) => ({ at: [round1(e.at[0]), round1(e.at[1])], tag: e.tag })),
         text_only: p.text_only,
         candidates: p.candidates,

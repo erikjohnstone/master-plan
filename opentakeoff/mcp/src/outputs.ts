@@ -415,6 +415,17 @@ const sweepPlacement = {
   label_bbox: z.tuple([z.number(), z.number(), z.number(), z.number()]).optional().describe("Exact [x0, y0, x1, y1] image-pixel box of the text run that supplied label — auditable proof that this physical placement owns the closest intended tag, rather than merely sharing its family"),
 };
 
+/** docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2 C1 / Phase B — present on a
+ * withheld row that CLEARED the score bar and is withheld for a reason that
+ * is not about score: the fit is numerically degenerate or out-of-bounds
+ * (`"bounds"`), or a widened-tolerance read too close to another accepted
+ * match (`"density"`). Such a row never competed for, and can never be
+ * promoted on the strength of, a drawn tag — it is disclosed, not a
+ * corroboration candidate. Defined once, spread onto every withheld schema
+ * below that carries a `reason`. */
+const sweepHold = z.enum(["bounds", "density"]).optional()
+  .describe("Present only on a withheld row that cleared the score bar for a reason unrelated to score: a numerically degenerate/out-of-bounds fit (\"bounds\") or a widened-tolerance read too close to another accepted match (\"density\"). Such a row was excluded from the drawing's own tag competition and can never be promoted on a tag's strength.");
+
 /** A placement a counter-example rejected (#259, reported by @FrankAtGHub).
  * Disclosed exactly the way `withheld` is: an exclusion is a judgement, and a
  * judgement the estimator cannot see is a count they cannot check. Everything
@@ -462,7 +473,7 @@ const sweepSheetBlock = z.object({
   sheet: z.string(),
   found: z.number().int(),
   matches: z.array(z.object(sweepPlacement)),
-  withheld: z.array(z.object({ ...sweepPlacement, reason: z.string() })),
+  withheld: z.array(z.object({ ...sweepPlacement, reason: z.string(), hold: sweepHold })),
   rejected: z.array(sweepRejected).optional().describe("Placements a counter-example rejected on this sheet (#259) — never counted, always named"),
   lum_gate: sweepLumGate.optional().describe("This sheet's stated-luminance-gate accounting (#260) — present only when luminance_tolerance was stated"),
   candidates: sweepCandidates.describe("The work ceiling applies PER SHEET; dropped > 0 here names exactly where the count is incomplete"),
@@ -494,7 +505,7 @@ export const symbolSweepOutput = {
   scope: z.enum(["sheet", "set"]).describe('"sheet" = the swept sheet alone (matches/withheld/candidates at top level); "set" = every PLAN-role sheet in the working set (per-sheet results in sheets[], exclusions in skipped[])'),
   found: z.number().int().describe("Placements that cleared the commit bar — across every swept sheet in set scope"),
   matches: z.array(z.object(sweepPlacement)).optional().describe("Sheet scope only. Deterministic reading order (y, then x). The seed's own location is never listed here"),
-  withheld: z.array(z.object({ ...sweepPlacement, reason: z.string() })).optional()
+  withheld: z.array(z.object({ ...sweepPlacement, reason: z.string(), hold: sweepHold })).optional()
     .describe("Sheet scope only. Near-matches in the [0.75, 0.92) band — reported with a reason, NEVER committed. A withheld placement is a question you can answer with view_sheet; a hidden one is a miscount"),
   seed: z.object({
     sheet: z.string().describe("The sheet the seed rect was marqueed on"),
@@ -535,7 +546,7 @@ export const matchReferenceSymbolOutput = {
     name: z.string().describe("The reference shape's own name, e.g. \"gate valve\""),
     found: z.number().int().describe("Placements that cleared the commit bar (score ≥ 0.92)"),
     matches: z.array(z.object(sweepPlacement)).describe("Deterministic reading order (y, then x)"),
-    withheld: z.array(z.object({ ...sweepPlacement, reason: z.string() })).describe("Near-matches in the [0.75, 0.92) band — a question to LOOK at (view_sheet), never silently dropped and never silently promoted"),
+    withheld: z.array(z.object({ ...sweepPlacement, reason: z.string(), hold: sweepHold })).describe("Near-matches in the [0.75, 0.92) band — a question to LOOK at (view_sheet), never silently dropped and never silently promoted"),
     complete: z.boolean().describe("True when every proposed placement for this shape was scored — false means found is a FLOOR, not a total"),
   })).describe("One entry per checked reference shape, in library order"),
 };
@@ -1118,7 +1129,7 @@ export const sweepScheduleRowOutput = {
     sheet: z.string(),
     found: z.number().int(),
     matches: z.array(z.object({ ...rowSweepPlacement, tag_at: wireBox.describe("The corroborating tag text's bbox — the evidence that this marker is THIS row's") })),
-    withheld: z.array(z.object({ ...rowSweepPlacement, reason: z.string() }))
+    withheld: z.array(z.object({ ...rowSweepPlacement, reason: z.string(), hold: sweepHold }))
       .describe("Questions, never counts: markers matching the geometry but carrying no tag (an unlabeled instance or a shared bubble shape), and near-miss scores in the [0.75, 0.92) band"),
     excluded: z.array(z.object({ at: z.tuple([z.number(), z.number()]), tag: z.string() }))
       .describe("Markers matching the geometry but labeled with a SIBLING row's tag — the bubble shape is shared across marks, so these belong to that row, not this one"),

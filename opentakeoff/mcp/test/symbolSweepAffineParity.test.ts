@@ -70,3 +70,20 @@ test("symbol_sweep affine parity: the canvas agent tool reaches the engine with 
     );
   }
 });
+
+// docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase B — `hold` on a withheld row
+// must reach the agent tool result unchanged: the canvas dispatcher's own
+// symbol_sweep case is a pure passthrough of whatever agentSymbolSweep
+// returns, and this pins that no future field-filtering silently strips it.
+test("symbol_sweep affine parity: a withheld row's `hold` field reaches the agent tool result unchanged", async () => {
+  const ctx = {
+    sheetDims: () => ({ w: 2000, h: 1500 }),
+    symbolSweep: async () => ({
+      matches: [],
+      withheld: [{ at: [0.1, 0.1], score: 1, rotation: 0, mirrored: false, hold: "bounds", reason: "out of bounds" }],
+    }),
+  };
+  const args: Record<string, unknown> = { sheet: "plan.pdf", seed_rect_norm: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } };
+  const result = await executeAgentTool(ctx, "symbol_sweep", args) as { withheld?: Array<{ hold?: string }> };
+  assert.equal(result.withheld?.[0]?.hold, "bounds", "a held withheld row must not be stripped by the agent tool passthrough");
+});
