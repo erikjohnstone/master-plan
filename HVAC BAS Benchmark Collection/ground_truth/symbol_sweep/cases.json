@@ -58,6 +58,7 @@
       "sheet_number": "AM104",
       "page_size_px": [4896, 3168],
       "seed_rect": [[1840, 730], [1930, 810]],
+      "options": { "variant_guard": true },
       "seed": {
         "tag": null,
         "at": [1876.3, 755.6],
@@ -1368,6 +1369,7 @@
       "sheet_number": "M-201",
       "page_size_px": [6048, 4320],
       "seed_rect": [[4540, 1930], [4720, 2085]],
+      "options": { "variant_guard": true },
       "seed": {
         "tag": null,
         "at": [4632.5, 1999.6],
