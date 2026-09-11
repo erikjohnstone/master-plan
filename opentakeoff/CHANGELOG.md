@@ -301,6 +301,7 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ## Unreleased — workspace presentation
 
+- Make a schedule's **View** action open its digital grid and grounded drawing region together, and scope the Schedules badge/list to the plan source currently visible instead of mixing in retained PDFs from unrelated work.
 - Group compact Open, Sheets and Plans controls on the left; center the larger page navigation; group equal-sized Takeoff, Edit and overflow controls at the upper right; and float Schedules and Agent as a compact vertical pair at the center of the canvas's right edge. Remove the redundant product wordmark and move units and scale to the sheet-tab row.
 - Anchor the Schedules/Agent launcher to the reflowed drawing edge so opening either workspace moves the launcher beside the canvas instead of leaving it over the workspace content.
 - Add a left-rail Tools tab that opens a second column for drafting controls, condition properties and the former right-edge utility panels. Preserve the drawing footprint, command drafts, original callbacks and keyboard shortcuts.

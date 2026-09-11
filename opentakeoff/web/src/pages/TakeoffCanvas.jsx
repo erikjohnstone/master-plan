@@ -162,7 +162,7 @@ import ImportSchedulePanel from "../components/ImportSchedulePanel.jsx";
 import SchedulesPanel from "../components/SchedulesPanel.jsx";
 import SweepReviewPanel from "../components/SweepReviewPanel.jsx";
 import Tip from "../components/Tip.jsx";
-import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet } from "../lib/scheduleBrowse.js";
+import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet, tablesForSourceFiles } from "../lib/scheduleBrowse.js";
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
 import { basResultForCanvas } from "../lib/basBrowserResult.js";
 import { basWorkflowSchema, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow } from "../lib/basWorkflow.ts";
@@ -1285,6 +1285,27 @@ export default function TakeoffCanvas() {
   // all the original single-sheet math is unchanged.
   const groupKeys = sheetGroup.length ? sheetGroup : [sheetKey];
   const stitchById = useMemo(() => Object.fromEntries(stitches.map((s) => [s.id, s])), [stitches]);
+  // The graph is project-wide shared truth, while the schedule browser is a
+  // view of the plan source(s) currently on the canvas. Local workspaces keep
+  // older PDFs until explicitly removed; do not mix their schedules into the
+  // active set's badge or navigator. Side-by-side and stitched views include
+  // every source PDF they visibly contain.
+  const scheduleSourceFiles = useMemo(() => {
+    const files = new Set();
+    for (const key of (sheetGroup.length ? sheetGroup : [sheetKey])) {
+      const sourceKeys = stitchById[key]?.members?.map((member) => member.key) || [key];
+      for (const sourceKey of sourceKeys) {
+        const file = parseSheetKey(sourceKey).file;
+        if (file) files.add(file);
+      }
+    }
+    return [...files];
+  }, [sheetGroup, sheetKey, stitchById]);
+  const currentGraphTables = useMemo(
+    () => tablesForSourceFiles(graphTables, scheduleSourceFiles),
+    [graphTables, scheduleSourceFiles],
+  );
+  const scheduleScopeKey = scheduleSourceFiles.join("\u0000");
   // docEpoch re-keys groupSig when a re-dropped file's BYTES changed under the
   // same name (store.addPdf → revised): the render effect keyed on groupSig is
   // the one path that resets every cache (compositor, pageObjs, snap grids) and
@@ -7987,6 +8008,7 @@ export default function TakeoffCanvas() {
         shapes: () => shapes,
         markups: () => markups,
         graphTables: () => graphTables,
+        scheduleTables: () => currentGraphTables,
         openSchedules: () => setSchedulesOpen(true),
         // Put an answer in the thread without a model call, so the answer's
         // OWN rendering — inline cites, meta chips, tables — is verifiable in
@@ -12734,7 +12756,7 @@ export default function TakeoffCanvas() {
             onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}>
             <Icon name="document" size={21} />
             <span>Schedules</span>
-            {graphTables.length > 0 && <small>{graphTables.length}</small>}
+            {currentGraphTables.length > 0 && <small>{currentGraphTables.length}</small>}
           </button>
           <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen}
             onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}>
@@ -12791,7 +12813,8 @@ export default function TakeoffCanvas() {
             lines. A pure view — layout state lives on the shapes (rollcut). */}
         {schedulesOpen && (
           <WorkspaceDock name="Schedules"><SchedulesPanel
-            tables={graphTables}
+            key={scheduleScopeKey}
+            tables={currentGraphTables}
             prewarm={graphPrewarm}
             indexing={indexProgress.phase === "text"}
             sheetLabel={tabLabel}
