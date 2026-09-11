@@ -557,9 +557,72 @@ explicitly "not a plan-scale seed". Enable it there, bounded by
 | Phase 3 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (unchanged — `affine`/`scaleSearch` off everywhere in the runner; see Findings) | 0 | ~19.4 min sum of 47 case `elapsed_ms`, statistically identical to Phase 1/2's (same reason: nothing in the runner turns `scaleSearch` on, so this measures the unchanged rigid path again) | Two-segment-basis affine candidate generation (stretch/shear made PROPOSABLE, not just refinable): a basis pair of non-parallel seed segments, a ratio-band search for the first's sheet correspondent, a margin-based rect search predicting and finding the second, a 4-point `fitAffine`, and a third-segment vote before it is ever scored or refined — reusing Phase 1's refine/bounds/disclosure machinery unmodified (same `xf ≥ rigidXformCount` dynamic-candidate path Phase 2 already wired). 413 tests green (407 pre-existing + 6 new: x-only and y-only 1.3× stretch, 1.2×+8° shear, 1.6× stretch withheld with the bounds reason, `rotations:false` disables it, candidate-growth guard). Used the asymmetric `ASYM2` fixture per Phase 2's own Finding, not `SYMBOL`. Gate 3 met on the no-op axis (byte-for-byte proof, both by test and unchanged corpus numbers) and on the synthetic-fixture axis (anisotropic stretch and shear are now proposed, fitted, and bounds-checked — the whole point of this phase); real corpus recall stays 0/0 for the same reason as every prior phase (Phase 0 found no real instances in this corpus). Also found and fixed two real bugs during testing, both recorded as Findings: basis-pair selection could end up all-parallel on a single-axis stretch (fixed by widening the candidate pool without touching the shared `ANCHOR_COUNT`), and the ratio-band search could miss an out-of-bounds stretch entirely rather than disclose it (fixed by trying both basis-pair role assignments, plus loosening the dynamic-candidate proposal floor to let refinement run before a rough guess's raw score forecloses it — the rigid path's own gate is untouched). |
 | Phase 4 | 2026-09-10 | 46/47 + 1 pre-existing unrelated fail | 0/0 (no campaign change this phase — see Findings) | 0 | ~19.8 min sum of 47 case `elapsed_ms`, statistically identical to Phases 1–3 (this phase adds disclosure/filtering, not new candidate generation, so the rigid path's own cost is unaffected either way) | Two independent, additive pieces. (1) Missing-stroke disclosure: the plain score-based withheld reason now names the top 3 least-matched seed segments by length plus the aggregate missing percentage, via a new optional `detail?: number[]` output on the existing `scoreAt` (no duplicated geometry — it already computed this per segment, just discarded it into the running sum before). Applies with `affine` off too (pure bookkeeping). (2) Exploded-text filter: a new pure `glyphClusterMask` helper (≥6 segments, each ≤4·tol, compact bbox <25% of a reference diagonal, ≥3 distinct directions) wired into `fingerprintSymbol` (new optional `dropGlyphClusters` param, baked into the fingerprint at construction — reports `droppedGlyphSegments`) and into `matchSymbol`'s `extraFor` (new `opts.dropGlyphClusters`, default follows `opts.affine.enabled`) so a tag/label near either the seed or a swept instance never inflates totalLen or counts as "extra linework". 417 tests green (413 pre-existing + 4 new: a second near-miss fixture pinning the exact missing-segment name and percentage, a seed-side tag exclusion proof (`droppedGlyphSegments`, byte-for-byte `rel` equality with the untagged fixture), a sheet-side tag-never-counts-as-extra proof, and an explicit `dropGlyphClusters:false` override proof). `sweepNegative.test.ts` unaffected (4/4 unchanged) — negatives already worked under a fitted transform since Phase 1/2, nothing to add. Gate 4 met: byte-for-byte no-op when both new options are absent/off (proven by test and the unchanged corpus numbers), and the synthetic-fixture axis demonstrates both disclosures working as specified. |
 | Phase 5 (steps 1–5, no default flip yet) | 2026-09-10 | not re-run this step — no matching-code touched, only options/output plumbing and docs; see the corpus runs already recorded under Phases 1–4 above, unaffected | 0/0 (no campaign change — `affine` still off by default everywhere) | 0 | not remeasured (no matching-code touched) | Production wiring, structural parity, and docs — the default flip (step 6) is deliberately its own, separate, LAST commit per §3 Phase 5 and is not included here. `mcp/src/session.ts`: `symbolSweep`/`sweepScheduleRow` both gain `opts.affine`, threaded into every `matchSymbol` call (both share one local `sweepOpts` object per function) and into `fingerprintSymbol`'s new `dropGlyphClusters` param; every wire row that already copied `rotation`/`mirrored` now also copies `transform` (10 call sites). `mcp/src/tools.ts`: `symbol_sweep` and `sweep_schedule_row` both gain an `affine: {enabled, max_stretch, max_shear_deg, scale_search}` input (matching §4.3's defaults) — `matchReferenceSymbol`/`match_reference_symbol` deliberately NOT wired (not part of this document's Gate 5 checklist; see Findings). `mcp/src/outputs.ts`: both `sweepPlacement` and `rowSweepPlacement` gain an optional `transform` field (mirroring `SweepTransform` exactly) and their `rotation` doc comments are updated. `web/src/lib/agentTools.js` + `web/src/pages/TakeoffCanvas.jsx`: the SAME `affine` option threaded through the canvas agent tool's `symbol_sweep` (`agentSymbolSweep`), plus its own wire-row `transform` copies and `fingerprintSymbol`'s `dropGlyphClusters` — `runSymbolSweep` (the manual marquee toolbar action, which has no options surface a caller can reach at all today) deliberately left untouched until the default-flip commit, which is the only place that can turn it on (see Findings). A NEW shared, exported `affineOptionsFromWire()` (`symbolsweep.ts`) is the ONE wire→`AffineOptions` translation both `mcp/src/tools.ts` and `web/src/lib/agentTools.js` call — structural parity (one function can't drift out of sync with itself) rather than two independent copies merely tested for agreement. A REAL, latent bug found and fixed along the way (see Findings): `sweepThumb.js`'s `matchBox` sized every review thumbnail to `max(seed_w, seed_h)`, which silently clips ink for a rotation that isn't a multiple of 90° — invisible before Phase 2 made off-grid rotation discoverable at all. `SweepReviewPanel.jsx`'s `Thumb` now threads the row's own disclosed rotation (and shows the fitted transform as a hover title on a MATCH row, which carries no `reason` text). New tests: `symbolAffine.ts`'s `affineOptionsFromWire` (2 tests), a 33°/90°/45°-diagonal `matchBox` proof (2 tests), a structural parity test proving the canvas agent tool reaches the engine with the exact `AffineOptions` the shared translation produces (`mcp/test/symbolSweepAffineParity.test.ts`). tsc clean on both `web` and `mcp`; 452 web tests green (450 pre-existing across the affected suites + 2 new `matchBox` tests — `affineOptionsFromWire`'s own 2 tests are counted in `mcp`'s suite instead, alongside the parity test); eslint clean on every touched `.js`/`.jsx` file. |
-| Default flip | | | | | | |
+| Default flip — ATTEMPTED AND REVERTED | 2026-09-11 | 27 vs expected 19 on `01-cherry-mh111-cd1` alone once the runner actually exercised the path (see Findings); full 47-case run not completed — reverted on the first real failure rather than continuing to characterize the damage | not applicable — this is a regression finding, not a campaign measurement | ≥ 8 false-adds on this one case alone | not measured — reverted before a timing run was meaningful | The flip (commit `c1fd732`) shipped, then was reverted (`1ed0656`) in the same session once real testing found it unsafe. Full story below in Findings; the short version: the "two consecutive full runs" that supposedly cleared this never ran the code path a flip actually turns on, because the corpus runner calls `session.symbolSweep` directly and never passed `affine` — fixed in commit `7574ede`, which immediately turned up the regression this row records. `main` is back to `affine.enabled` defaulting `false` everywhere (the pre-`c1fd732` state); the corpus suite now runs with `affine` genuinely on for every case as a standing gate, and will show red on affected cases until the two causes below are actually fixed. This document's own §8 "Default flipped" box stays unchecked. |
 
 Findings (cases that contradicted a bound — never fixed by moving it):
+
+- **2026-09-11 — The default-flip commit (`c1fd732`) was unsafe and was reverted (`1ed0656`) in the same session, because the gate that was supposed to catch this never ran the real code path.**
+  The corpus runner (`mcp/scripts/symbol-sweep-corpus.mjs`) calls
+  `session.symbolSweep` directly, and `session.symbolSweep` applies no
+  default of its own for `affine` (its absence from `opts` IS "off" — by
+  design, so that internal/test callers never silently change behavior
+  under them). The wire-level default flip only changes what `mcp/src/
+  tools.ts`'s zod schema and `web/src/lib/agentTools.js`'s dispatcher
+  synthesize before calling `session.symbolSweep` — a corpus runner that
+  calls the session directly bypasses that layer entirely. So both "clean"
+  two-consecutive-full-run results recorded for the flip were re-running the
+  exact same rigid-only baseline every prior phase already proved unchanged
+  — they proved nothing about the path a real flip turns on for every
+  actual caller. Fixed in `7574ede`: the runner now applies the same
+  `AFFINE_WIRE_DEFAULT` constant unconditionally (opt-out per case), so it
+  is finally testing what a flip actually means.
+  That fix immediately surfaced a real regression on real data:
+  `01-cherry-mh111-cd1` (a CD-1 ceiling-diffuser sweep, 19 real instances)
+  returned 27 matches with affine genuinely on — an 8-instance false-add,
+  plus harness-level identity errors (`seed tag RG-6 != CD-1`, `seed at
+  1746.9,440.2 misses frozen center 1746.9,436.2`). Diagnosed directly
+  (`session.symbolSweep` called standalone, full match dump with `score`
+  and `transform`), not guessed at — two distinct, compounding causes:
+  1. **`dropGlyphClusters` (Phase 4) can strip real seed geometry, not just
+     exploded text.** It is applied to the SEED's own fingerprint whenever
+     `affine.enabled` (`fingerprintSymbol(geo.segs, rect, geo.lum,
+     {dropGlyphClusters: opts.affine?.enabled === true})` in
+     `session.ts`'s `symbolSweep`), and on this real symbol its heuristic
+     (≥6 segments, each ≤4·tol, compact bbox <25% of the reference
+     diagonal, ≥3 distinct directions) matched part of the CD-1 symbol's
+     OWN legitimate geometry, not a nearby tag. Stripping it shifted the
+     seed's computed center by ~4px — enough that the nearest-label lookup
+     (`labelPlacements([fp.center], ...)`) attached to a DIFFERENT, nearby
+     symbol's tag ("RG-6") instead of the seed's own ("CD-1"). This
+     heuristic was validated in Phase 4 only against synthetic fixtures
+     built to BE exploded text — it was never tested against a real dense
+     symbol that might resemble one by the same geometric measure, and this
+     real corpus has at least one.
+  2. **Pre-existing label-corroboration promotion was never designed for
+     an affine-widened candidate pool.** `session.ts`'s `symbolSweep`
+     widens the withheld band's lower score bound to
+     `LABEL_CORROBORATION_SCORE_LOW` whenever the seed has a nearby text
+     hint, then `reconcileSweepLabels` promotes any withheld candidate
+     whose OWN drawn tag agrees with the seed's family straight to a
+     committed match — a pre-existing, PRE-affine mechanism (`#308`) that
+     was safe when only near-perfect RIGID matches ever scored in that
+     band. Affine's much wider refine()-driven candidate generation now
+     puts genuinely bad geometric fits in that same band (one of the 27
+     matches here carried `scale_x: 0.221, shear_deg: 77.6°` — unmistakably
+     a different symbol, not a distorted CD-1) and the promotion logic
+     trusts the text tag over the geometry regardless of how bad that fit
+     is. This is a real gap in this document's own §0 discipline ("every
+     searched transform disclosed or withheld", implicitly meaning
+     disclosed/withheld ON ITS OWN GEOMETRIC MERITS) that the label layer
+     was never audited against once affine widened what could reach it.
+  Neither cause is fixed yet — both need real design work, not a bounds
+  tweak (§7 rule 4 does not apply here: this is the bound admitting a
+  false positive, not a genuine case the bound wrongly excludes). The
+  corpus suite is left deliberately red on affected cases with
+  `AFFINE_WIRE_DEFAULT` genuinely on, rather than quietly reverting the
+  runner fix too — that redness is the correct, honest state until a real
+  fix lands, and it is the gate any future default-flip attempt must pass
+  cleanly, on the ACTUAL code path this time.
 
 - **2026-09-10 — Phase 0's own "≥ 20 real affine instances" target contradicted by the actual corpus, exhaustively checked, not a sampling gap.**
   Method: for every one of the 47 existing ground-truth seeds (30 baseline
