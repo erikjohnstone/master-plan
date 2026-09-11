@@ -2033,8 +2033,22 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       // A fit whose numbers are outside the stated bounds is disclosed
       // (the caller gets the transform and can judge it) but must never
       // silently become a match on the strength of a score the bounds
-      // check itself says not to trust — §3 Phase 1 step 3.
-      if (refined!.score >= scoreHigh && !withinBounds) row.boundsFailed = true;
+      // check itself says not to trust — §3 Phase 1 step 3. This used to
+      // gate on `refined!.score >= scoreHigh` too, on the assumption that a
+      // sub-scoreHigh row could only ever reach the plain, disclosed
+      // near-miss `withheld` branch below — but `LABEL_CORROBORATION_SCORE_
+      // LOW` (symbollabels.ts) lets a row as weak as 0.45 get promoted on a
+      // drawn tag's word alone, entirely independent of this score gate.
+      // Confirmed on real corpus data (docs/SYMBOL-SWEEP-CLEAN-CORPUS-
+      // GOAL.md's Phase F Finding, case `23`): a candidate scoring 0.854
+      // with `scale_y: 0.49, shear_deg: -30.3°` (both far outside
+      // `affineBounds`) got promoted via its leader-attached tag because
+      // this gate never even evaluated it. `boundsFailed` (and the
+      // `hold: "bounds"` / corroboration-ineligibility it produces
+      // downstream) must apply to every out-of-bounds refined fit, not only
+      // ones already at scoreHigh — the corroboration path is exactly the
+      // second, independent route into `matches` this guard exists to close.
+      if (!withinBounds) row.boundsFailed = true;
     }
     scored.push(row);
   }
