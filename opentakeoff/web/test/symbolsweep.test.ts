@@ -3,7 +3,24 @@
 // tolerance behavior, decoy rejection, determinism, and the reported work cap.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, scaleFingerprint, fragmentedTagOcc, familyQuorumFragmentedTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, hasSymbolSweepPlanTitle, hasSymbolSweepPlanEvidence, type Point, type FlatSpan, type SymbolSweepRoleSpan } from "../src/lib/symbolsweep.ts";
+import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, scaleFingerprint, fragmentedTagOcc, familyQuorumFragmentedTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, hasSymbolSweepPlanTitle, hasSymbolSweepPlanEvidence, type Point, type FlatSpan, type SymbolSweepRoleSpan, type SweepMatch, type SweepWithheld } from "../src/lib/symbolsweep.ts";
+import { AFFINE_MIN_SINGULAR } from "../src/lib/symbolAffine.ts";
+
+// docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase A — no row `matchSymbol` ever
+// returns may carry a transform whose fit has collapsed onto a point or a
+// line (the real corpus mechanism behind case 11's `scale_x: 0, scale_y: 0,
+// score: 1` matches): `fitAffine` now refuses such a fit outright, so this
+// should hold vacuously, but it is asserted directly against real matchSymbol
+// output — not just against fitAffine in isolation — everywhere a disclosed
+// transform exists in this file's own established fixtures.
+function assertNoCollapsedTransform(rows: ReadonlyArray<SweepMatch | SweepWithheld>): void {
+  for (const row of rows) {
+    if (!row.transform) continue;
+    const sMin = Math.min(row.transform.scale_x, row.transform.scale_y);
+    assert.ok(sMin >= AFFINE_MIN_SINGULAR * 0.999, // float slack on the disclosed (rounded) scale
+      `disclosed transform has a collapsed singular value ${sMin} < ${AFFINE_MIN_SINGULAR}: ${JSON.stringify(row)}`);
+  }
+}
 
 test("set sweep recognizes an exporter-fragmented discipline plan title without trusting an index row", () => {
   const fragmented: SymbolSweepRoleSpan[] = [
@@ -746,6 +763,7 @@ test("affine refinement: a near-grid rotated placement withheld under the rigid 
   assert.ok(Math.abs(m.transform!.rotation_deg - deg) < 1, `disclosed rotation ${m.transform!.rotation_deg} vs true ${deg}`);
   assert.equal(m.transform!.via, "rigid");
   assert.equal(m.transform!.mirrored, false);
+  assertNoCollapsedTransform([...affine.matches, ...affine.withheld]);
 });
 
 test("affine refinement: affine OFF is a byte-for-byte no-op vs the plain rigid search", () => {
@@ -778,6 +796,7 @@ test("affine refinement: an out-of-bounds stretch is withheld with the bounds re
   const perfect = affine.withheld.find((w) => w.transform && Math.abs(w.transform.scale_x - 1.6) < 0.01);
   assert.ok(perfect, `expected a withheld row disclosing the true ~1.6× fit, got: ${JSON.stringify(affine.withheld)}`);
   assert.ok(/stretch/.test(perfect!.reason) && /bar 1\.5/.test(perfect!.reason), `bounds reason should name the stretch and the bar, got: ${perfect!.reason}`);
+  assertNoCollapsedTransform([...affine.matches, ...affine.withheld]);
 });
 
 // docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Findings (2026-09-11, Root Cause #1) — a
@@ -828,6 +847,7 @@ test("Phase 1 tolerance widening: a placement that only clears scoreHigh via the
       "a suspect reading should be far from the isolated, unaffected match, not confused with it",
     );
   }
+  assertNoCollapsedTransform([...r.matches, ...r.withheld]);
 });
 
 test("Phase 1 tolerance widening: two ordinary RIGID matches (no widening needed) that sit within one footprint of each other are BOTH still committed — this check never touches pre-existing rigid-only behavior", () => {

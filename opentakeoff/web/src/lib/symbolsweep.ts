@@ -1753,7 +1753,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
         for (const j of body.near(x, y, bodyScratch)) {
           const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
           const tdx = qx - px, tdy = qy - py, tLen = Math.hypot(tdx, tdy);
-          if (!tLen || Math.abs((sdx * tdx + sdy * tdy) / (sLen * tLen)) < angleCos) continue;
+          if (!sLen || !tLen || Math.abs((sdx * tdx + sdy * tdy) / (sLen * tLen)) < angleCos) continue;
           if (distToSeg(x, y, px, py, qx, qy) > tol) continue;
           sampleAny = true;
           if (lumOk(j, k)) { sample = true; break; }
@@ -1816,7 +1816,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
         for (const j of bodyAt.near(x, y, bodyScratch)) {
           const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
           const tdx = qx - px, tdy = qy - py, tLen = Math.hypot(tdx, tdy);
-          if (!tLen || Math.abs((sdx * tdx + sdy * tdy) / (sLen * tLen)) < angleCos) continue;
+          if (!sLen || !tLen || Math.abs((sdx * tdx + sdy * tdy) / (sLen * tLen)) < angleCos) continue;
           if (distToSeg(x, y, px, py, qx, qy) > tolAt) continue;
           sample = true; break;
         }

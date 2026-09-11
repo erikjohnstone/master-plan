@@ -64,6 +64,33 @@ export interface AffineBounds {
 
 export const DEFAULT_AFFINE_BOUNDS: AffineBounds = { maxStretch: 1.5, maxShearDeg: 10 };
 
+/** The smallest singular value a fitted matrix may carry along ANY direction
+ * before the fit itself is refused as numerically degenerate, rather than
+ * merely disclosed as out-of-bounds. Well below `1/DEFAULT_AFFINE_BOUNDS
+ * .maxStretch` (0.667): a real 1.5×–5× compression is still a legitimate,
+ * DISCLOSED out-of-bounds fit (§4.2) — this only catches a fit that has
+ * collapsed the symbol onto a point or a line, where the reported score
+ * means nothing (see `fitAffine`'s own doc comment for the mechanism this
+ * closes: docs/SYMBOL-SWEEP-AFFINE-GOAL.md's successor Findings,
+ * 2026-09-11 — a `scale_x: 0, scale_y: 0, rms_px: 0` fit scored 1.0). */
+export const AFFINE_MIN_SINGULAR = 0.2;
+
+/** Singular values `[sMax, sMin]` of the 2×2 matrix `m = [a,b,c,d]`
+ * (row-major, `[[a,b],[c,d]]`), closed form via the eigenvalues of the
+ * symmetric `mᵀm`. Pure, never NaN for finite input — the two eigenvalues of
+ * a symmetric PSD 2×2 are always real and non-negative (the `Math.max(0, …)`
+ * guards are belt-and-braces against floating-point underflow, not a real
+ * branch). Shared by `decomposeAffine` (its own `s1, s2`, the singular
+ * values of `P` in the polar decomposition `m = R·P`, are exactly these) and
+ * by `fitAffine`'s own degeneracy check — factored out so the two never
+ * drift out of agreement. */
+export function affineSingularValues(m: readonly [number, number, number, number]): [number, number] {
+  const [a, b, c, d] = m;
+  const p = a * a + c * c, q = a * b + c * d, r = b * b + d * d;
+  const mid = (p + r) / 2, half = Math.sqrt(Math.max(0, ((p - r) / 2) ** 2 + q * q));
+  return [Math.sqrt(Math.max(0, mid + half)), Math.sqrt(Math.max(0, mid - half))];
+}
+
 /** §2.1 — least-squares affine from correspondences, 2-pass IRLS.
  *
  * `pairs` are `[sx, sy, qx, qy]`: a seed point in centroid-relative
@@ -115,6 +142,16 @@ export function fitAffine(
     const d = Cyx * iSxy + Cyy * iSyy;
     const tx = qBarX - (a * sBarX + b * sBarY);
     const ty = qBarY - (c * sBarX + d * sBarY);
+    // Rank-deficient RESULT, refused exactly as a collinear SOURCE is refused
+    // above (the `detS` check). When every seed endpoint's nearest sheet
+    // endpoint within the search radius is the same vertex (or all lie on one
+    // line), the source scatter is still full-rank (several DISTINCT seed
+    // endpoints) but the least-squares solve collapses the fitted matrix
+    // itself onto a point or a line: `m ≈ 0` (or rank 1), `rms ≈ 0`. A
+    // caller's own `scoreAtTol`/`scoreAt` then treats the resulting
+    // zero-length chord as trivially "covering" any nearby sheet segment,
+    // producing a perfect score for a fit that explains nothing.
+    if (affineSingularValues([a, b, c, d])[1] < AFFINE_MIN_SINGULAR) return null;
     let sumSq = 0;
     for (const p of pts) {
       const px = a * p[0] + b * p[1] + tx, py = c * p[0] + d * p[1] + ty;
@@ -174,11 +211,12 @@ export function decomposeAffine(m: readonly [number, number, number, number]): A
   // rotation_deg: the true polar-decomposition R = m'·P⁻¹, via the
   // eigendecomposition of the symmetric P² = m'ᵀm' = [[a²+c², ab+cd],
   // [ab+cd, b²+d²]]. Standard closed-form symmetric-2×2 eigensolve: the
-  // eigenvector angle is φ = ½·atan2(2q, p−r); eigenvalues λ = mid ± half.
+  // eigenvector angle is φ = ½·atan2(2q, p−r); the eigenvalues themselves
+  // are `affineSingularValues`' own s1/s2 (P's eigenvalues ARE m's singular
+  // values), shared rather than re-derived so the two never drift apart.
   const p = a * a + c * c, q = a * b + c * d, r = b * b + d * d;
   const phi = 0.5 * Math.atan2(2 * q, p - r);
-  const mid = (p + r) / 2, half = Math.sqrt(Math.max(0, ((p - r) / 2) ** 2 + q * q));
-  const s1 = Math.sqrt(Math.max(0, mid + half)), s2 = Math.sqrt(Math.max(0, mid - half));
+  const [s1, s2] = affineSingularValues([a, b, c, d]);
   const cphi = Math.cos(phi), sphi = Math.sin(phi);
   // P = V·diag(s1,s2)·Vᵀ, V = [[cphi,-sphi],[sphi,cphi]] — expanded closed-form.
   const P11 = cphi * cphi * s1 + sphi * sphi * s2;

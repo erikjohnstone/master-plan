@@ -4,7 +4,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  fitAffine, decomposeAffine, affineWithinBounds, gatherCorrespondences, DEFAULT_AFFINE_BOUNDS,
+  fitAffine, decomposeAffine, affineWithinBounds, affineSingularValues, gatherCorrespondences,
+  DEFAULT_AFFINE_BOUNDS, AFFINE_MIN_SINGULAR,
 } from "../src/lib/symbolAffine.ts";
 import { EndpointGrid } from "../src/lib/symbolsweep.ts";
 
@@ -82,6 +83,46 @@ test("fitAffine's IRLS pass drops a genuine outlier correspondence", () => {
   assert.equal(fit!.n, 19, "the outlier should be dropped, 19 of 20 survive");
   assert.ok(Math.abs(fit!.tx - tx) < 1e-6, "the fit should recover the true translation, not be dragged by the outlier");
   assert.ok(Math.abs(fit!.ty - ty) < 1e-6);
+});
+
+// docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase A — a collinear/degenerate
+// SOURCE scatter is already refused above (§2.1's own `detS` check); these
+// pin the companion case: the source is fine (several DISTINCT, non-collinear
+// seed points) but the fitted RESULT collapses onto a point or a line. Before
+// this fix such a fit returned `m ≈ [0,0,0,0]`, `rms ≈ 0` — a "perfect" score
+// for a transform that explains nothing (docs/SYMBOL-SWEEP-CLEAN-CORPUS-
+// GOAL.md §2, C1 — the real corpus mechanism behind case 11's four
+// `scale_x: 0, scale_y: 0` matches).
+
+test("fitAffine refuses a fit whose RESULT collapses onto a single point (every target the same vertex)", () => {
+  // Seed points span a real 2-D footprint; every one is hypothesised to map
+  // to the SAME sheet vertex — the "every nearest endpoint is one shared
+  // corner" case measured on the real corpus.
+  const seedPts: Array<[number, number]> = [[0, 0], [10, 0], [0, 10], [10, 10], [-6, 4], [3, -9]];
+  const pairs = seedPts.map(([sx, sy]) => [sx, sy, 100, 50] as [number, number, number, number]);
+  assert.equal(fitAffine(pairs), null, "a rank-0 result (every target coincident) must be refused, not returned as a zero matrix");
+});
+
+test("fitAffine refuses a fit whose RESULT collapses onto one line (non-collinear source, collinear targets)", () => {
+  const seedPts: Array<[number, number]> = [[0, 0], [10, 0], [0, 10], [10, 10], [-6, 4], [3, -9]];
+  // Targets all sit on the line y = 50 — the source scatter is 2-D and
+  // full-rank, but the fitted matrix can only be rank 1.
+  const pairs = seedPts.map(([sx, sy], i) => [sx, sy, 20 + i * 7, 50] as [number, number, number, number]);
+  assert.equal(fitAffine(pairs), null, "a rank-1 result (every target collinear) must be refused");
+});
+
+test("fitAffine still returns a legitimate fit at a real 1/3 compression (sMin well above AFFINE_MIN_SINGULAR)", () => {
+  const m: [number, number, number, number] = [1, 0, 0, 1 / 3]; // scale_y = 0.333
+  assert.ok(affineSingularValues(m)[1] > AFFINE_MIN_SINGULAR, "sanity: this fixture's own sMin must clear the floor");
+  const tx = 4, ty = -2;
+  const seedPts: Array<[number, number]> = [[0, 0], [10, 0], [0, 10], [10, 10], [-6, 4], [3, -9]];
+  const pairs = seedPts.map(([sx, sy]) => {
+    const qx = m[0] * sx + m[1] * sy + tx, qy = m[2] * sx + m[3] * sy + ty;
+    return [sx, sy, qx, qy] as [number, number, number, number];
+  });
+  const fit = fitAffine(pairs);
+  assert.ok(fit, "a real 3x compression is a legitimate, disclosable fit — never refused as degenerate");
+  assert.ok(Math.abs(fit!.rms) < 1e-6);
 });
 
 // §2.2 — decomposition
