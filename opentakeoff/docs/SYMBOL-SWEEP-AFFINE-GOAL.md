@@ -1204,6 +1204,36 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   of a heuristic that may be wrong at its foundation risks solving the
   wrong problem.
 
+- **2026-09-11 — Answered that question directly: a full 47-case corpus run with `dropGlyphClusters` forced off (affine otherwise genuinely on) cuts total corpus failures from 22/47 to 15/47 and total excess phantom matches from 667 to 139 — a 79% reduction. This isolates and quantifies, for the first time, exactly how much of the corpus-wide damage each of the two confirmed root causes owns.**
+  Method: a TEMPORARY, uncommitted patch to `session.ts` (`sweepOpts`'s
+  `dropGlyphClusters: false` plus the seed's own `fingerprintSymbol` call
+  forced to `false`, both reverted immediately after the run — never
+  committed, `git diff` confirmed clean afterward) to isolate Phase 1's
+  tolerance-widening cause from Phase 4's `dropGlyphClusters` cause by
+  running the SAME full 47-case corpus sweep with only the latter disabled.
+  Per-case delta (case: before excess → after excess):
+  `01` +8→+2, `02` +0→+4 (the one regression — see below), `03` +8→+3,
+  `10` +537→+45, `17` +16→+0 (fully fixed), `24` +2→+1, `27` +1→+0 (fixed),
+  `33` +7→+0 (fixed), `46` +4→+0 (fixed). `05`, `06`, `14` unchanged
+  (+79/+1/+3 either way) — independent confirmation these three are
+  caused ENTIRELY by Phase 1's tolerance widening, with zero contribution
+  from `dropGlyphClusters`, consistent with case 05's own earlier Finding.
+  8 cases flip from failing to passing outright (`22`, `27`, `32`, `33`,
+  `34`, `35`, `38`, `46`); exactly 1 case regresses (`02`, previously
+  clean, now +4) — confirming `dropGlyphClusters` is not purely harmful
+  either; it is doing real, correct work on at least this one seed, so
+  simply deleting the feature is not a strictly-better move than turning
+  it off by default.
+  Conclusion, directly answering the question this Finding chain has been
+  building toward: `dropGlyphClusters` is the LARGER of the two confirmed
+  causes by a wide margin (528 of the 667 excess matches, 79%), and
+  disabling it by default (independent of `affine.enabled`, until the
+  heuristic itself is redesigned per the two Findings above) is a real,
+  quantified, net-positive interim move — not a full fix, since 139 excess
+  matches and 15 failing cases remain, all attributable to Phase 1's own
+  unconditional tolerance widening, which is now the clearer, more
+  isolated, more tractable next target on its own.
+
 ---
 
 ## Appendix A — Background, for the reader who wants the why
