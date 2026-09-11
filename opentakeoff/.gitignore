@@ -21,6 +21,11 @@ bas_engine/.pytest_cache/
 tmp/bas-proof/
 mcp/tmp/bas-proof/
 
+# Temporary corpus/debug scripts (see docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md
+# §0: "Temporary diagnostics live in mcp/scripts/tmp-*.mjs... and are never
+# committed") — ignored outright so they never trip the untracked-files check.
+mcp/scripts/tmp-*.mjs
+
 # Local env / secrets — never commit
 .env
 .env.*
