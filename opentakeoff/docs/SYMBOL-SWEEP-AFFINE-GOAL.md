@@ -686,6 +686,48 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   fix lands, and it is the gate any future default-flip attempt must pass
   cleanly, on the ACTUAL code path this time.
 
+  **Same-day attempt at cause 2 itself, tried and deliberately reverted
+  (never committed) — recorded because the negative result is real signal
+  for whoever attempts this next.** Added a score floor to
+  `reconcileSweepLabels`'s promotion branch in `symbollabels.ts`, gated to
+  affine-sourced candidates only (`row.transform` present) so the
+  already-tested, already-correct RIGID-origin sibling-corroboration case
+  (a same-family low-score match promoted by tag, e.g. VAV-9/VAV-12 —
+  real, passing test, deliberately left untouched) would not regress.
+  First attempt used `SWEEP_SCORE_LOW` (0.75) as the floor: `01-cherry-
+  mh111-cd1` moved 27 → 26 — real but tiny, because almost every one of
+  the false-adds scored ABOVE 0.75 already (up to 0.984), comfortably
+  inside the pre-existing 0.75–0.92 "near-match, promotable by tag" band
+  this file's own header comment describes as a deliberate, LONG-STANDING
+  design (`#308`, pre-dating this entire affine effort). That reframes the
+  real cause: affine does not corrupt the promotion rule itself — it
+  floods that same band with far more candidates than the 8-position rigid
+  search could ever produce (continuous rotation × independent x/y stretch
+  × shear vs. 8 discrete transforms), so "some 0.75–0.92 fit exists nearby
+  with an agreeing tag" stops being the rare coincidence the rule was
+  tuned for.
+  Second attempt raised the floor to `SWEEP_SCORE_HIGH` (0.92) — which,
+  because anything scoring that high already commits as a plain match
+  before label reconciliation ever runs, amounts to disabling affine-
+  sourced label promotion entirely. Result: 27 → 16, UNDER the true count
+  of 19. This proves at least 3 of this case's genuinely real CD-1
+  instances were themselves relying on this exact mechanism — their raw
+  geometric score alone was not enough to commit, and correct tag
+  corroboration was the only reason they were ever going to count. A
+  single global score threshold cannot separate these two populations
+  (genuine-but-weak affine fits vs. wrong-symbol affine fits coincidentally
+  near a real tag) on one case's evidence alone — trying either bound
+  swaps one error class for the other. The fix likely needs a signal
+  beyond raw score entirely: e.g. the fitted transform's own physical
+  plausibility (independent x/y scale ratio, `rms_px` relative to the
+  seed's own footprint, or the specific combination that made the reverted
+  0.221/77.6° fit unmistakably wrong versus a merely-imperfect real match)
+  rather than a single number every candidate is judged against the same
+  way. This needs real, corpus-wide (not one-case) synthetic-plus-real
+  validation before landing — reverted cleanly (never committed, working
+  tree restored to `a0099c3`) rather than leaving an unvalidated guess in
+  the tree.
+
 - **2026-09-10 — Phase 0's own "≥ 20 real affine instances" target contradicted by the actual corpus, exhaustively checked, not a sampling gap.**
   Method: for every one of the 47 existing ground-truth seeds (30 baseline
   + 17 extended), manually rotate that seed's own fingerprint (`fp.rel`) by
