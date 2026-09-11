@@ -422,7 +422,13 @@ const sweepPlacement = {
  * match (`"density"`). Such a row never competed for, and can never be
  * promoted on the strength of, a drawn tag — it is disclosed, not a
  * corroboration candidate. Defined once, spread onto every withheld schema
- * below that carries a `reason`. */
+ * below that carries a `reason`.
+ *
+ * A `"extra"` value (widened tolerance + substantial extra ink) was
+ * specified but never shipped, and a companion coverage-tolerance fix to
+ * `extraFor` was tried and reverted too — both measured against all 47
+ * real cases first and abandoned for real, corpus-proven reasons; see the
+ * goal doc's Phase C outcome note and Finding. */
 const sweepHold = z.enum(["bounds", "density"]).optional()
   .describe("Present only on a withheld row that cleared the score bar for a reason unrelated to score: a numerically degenerate/out-of-bounds fit (\"bounds\") or a widened-tolerance read too close to another accepted match (\"density\"). Such a row was excluded from the drawing's own tag competition and can never be promoted on a tag's strength.");
 

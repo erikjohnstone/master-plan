@@ -339,7 +339,14 @@ export interface SweepWithheld extends SweepMatch {
    * winning a real instance's own drawn tag (docs/SYMBOL-SWEEP-CLEAN-
    * CORPUS-GOAL.md §2, C1, 2026-09-11) — `hold` is what lets the label layer
    * tell that row apart from a genuine near-miss without a geometric gate
-   * of its own. */
+   * of its own.
+   *
+   * A `"extra"` hold (widened tolerance + substantial extra ink) was
+   * SPECIFIED but never shipped, and a companion fix to `extraFor`'s own
+   * coverage-tolerance check was tried and reverted too — both measured
+   * directly against all 47 real cases first and abandoned for real,
+   * corpus-proven reasons. See docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §3
+   * Phase C's own outcome note and Finding for the numbers. */
   hold?: "bounds" | "density";
 }
 

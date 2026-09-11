@@ -257,6 +257,79 @@ the geometric heuristic only on ink the text layer cannot explain.
 4. Gate: corpus: `02` → 1/1, `41` → 1/1, `10` count within +3; no
    previously-passing case regresses.
 
+**Outcome, 2026-09-11 — NEITHER of Phase C's two ideas survived real
+corpus measurement. Zero engine code shipped from this phase.** Both
+attempts were well-motivated, both were validated on synthetic fixtures
+first, and both were reverted only after the real 47-case corpus proved
+each one wrong in a way no synthetic test could have caught. Recorded in
+full so neither is retried blind.
+
+**Attempt 1 — step 1's `widenedExtra`/`hold:"extra"` rule.** Implemented
+exactly as specified and passed its own synthetic test. Building that
+test first surfaced a real, unrelated engine bug: `extraFor`'s coverage
+check compared a row's segments against the STRICT base `tol` even when
+the row's own score was established at a WIDENED `transform.tol_px` — a
+segment whose true offset fell between the two tolerances (exactly what
+`refine()` already trusted to reach the score) was wrongly counted as
+"extra." A clean, correctly-matched synthetic placement measured ~33%
+extra purely from this mismatch.
+
+Fixing that (checking coverage at the row's own `transform.tol_px`) and
+THEN running step 3's diagnostic (`tmp-phasec-extra-diag.mjs`, deleted
+before commit) across all 47 real cases, before trusting step 1's rule,
+found: **62 real (ground-truth-confirmed) widened instances exist
+corpus-wide; 5 of them, across 2 cases, still measure extra in
+[0.378, 1.408] even with the coverage bug fixed.** The 85 phantom
+(non-real) widened rows measure extra in [0.322, 5.182] — fully
+overlapping the real population's own range (19 phantom rows sit in
+[0.30, 0.50] alone, more than the real count in that band). There is no
+threshold on extra-ink fraction, at any value, that separates real from
+phantom here. Per this phase's own header ("measure first, then rule")
+and step 3's own instruction ("if one does, record it and stop"), the
+`widenedExtra`/`hold:"extra"` mechanism was REVERTED.
+
+**Attempt 2 — the `extraFor` coverage-tolerance fix, kept "on its own
+merits" after attempt 1's rule was dropped.** The fix is internally
+consistent (checking coverage at the same tolerance the score already
+trusted) and fixes a real synthetic false positive. It looked corpus-safe
+by construction: no case in this corpus sets `variant_guard`, and
+`extra`'s numeric value can only gate `isMatch` when `variant_guard` is
+on — so the fix appeared unable to change which rows become matches.
+**That reasoning was wrong.** `extra` has a SECOND, independent consumer:
+`symbollabels.ts`'s `reconcileSweepLabels` demotes an unlabeled match to
+withheld when `(row.extra ?? 0) > 0.3` (line ~968), entirely unrelated to
+`variant_guard`. Running the FULL 47-case corpus gate with the fix
+applied showed 13/47 failing — one MORE than Phase B's 12 — with
+`42-guaranteed-rate-m121-thermostat-bubbles` newly regressed (3/3 → 4/3).
+Traced directly: a phantom placement at `[1399.2, 3080.1]` (score 1.0, no
+corroborating "T" tag, `tol_px: 4.98`) was previously demoted via the
+line-968 rule because its (buggy) extra measured 0.641; with the coverage
+bug fixed, its extra measured **0.0485** — a 13x drop, not a modest
+correction — because the widened coverage window (radius `covTol = 4.98px`
+vs the base `2px`) is large enough to sweep in real, unrelated nearby
+drawing content as "covered" on a real, dense sheet, something the clean
+synthetic fixture (open space around the placement) could not reveal.
+The line-968 demotion no longer fired, and an actual phantom (no real
+thermostat exists at that position — confirmed against the case's 3
+authored instances, nearest at 227px away) counted as a 4th match.
+Verified deterministic (re-ran both the buggy and fixed versions twice
+each; byte-identical both times) and isolated (this is the ONLY case
+whose pass/fail changed anywhere in the 47-case run) before concluding
+this, not assumed. Per the same "no previously-passing case regresses"
+rule every other phase in this document is held to, the fix was REVERTED.
+
+**Lesson for whoever revisits either idea:** `extra`'s current definition
+is coupled to `reconcileSweepLabels`' own no-tag-plus-high-extra
+heuristic in a way this phase's own author did not anticipate going in —
+changing how `extra` is computed for ANY row changes what that OTHER,
+separately-authored mechanism does, corpus-wide, not just what
+`matchSymbol` itself does. A future attempt at either the withholding
+rule or the coverage-tolerance fix needs to corpus-test BOTH consumers
+together, not "matchSymbol's own isMatch is unaffected, so this is safe"
+— that specific reasoning is now proven false by this Finding, not merely
+untested. `02` and `41`'s gate expectations from step 4 don't apply here
+— nothing shipped from this phase touches their matches at all.
+
 ### Phase D — two-tolerance consistency (measure first, then rule)
 
 1. Diagnostic (temporary): in `refine`, also compute
@@ -391,6 +464,7 @@ Only after A–D, because D changes which rows exist at all.
 | Start (`036e12f`) | 2026-09-11 | 13 | 12 | see §1 | baseline for this document |
 | Phase A | 2026-09-11 | 12 | 10 | `05`: lost 2 of 3 errors (`seed tag <none>` and `seed on wrong text-run box` both cleared — only `no one-to-one for d10-02` remains). `10`: lost 2 of 3 errors the same way, and its excess dropped `+3 → +1` (38→36 vs 35; only `no one-to-one for cd1-02` remains). `28`: FULLY FIXED (was localization-only, now exact 2/2). `01, 02, 06, 11, 13, 14, 17, 18, 23, 41`: byte-identical to the baseline row — none of these touch a degenerate fit, exactly as diagnosed in §1. | `fitAffine` refuses a rank-deficient result (`AFFINE_MIN_SINGULAR = 0.2`); `scoreAt`/`scoreAtTol` guard `!sLen`. Verified directly (not inferred): case 11 now has ZERO matches or withheld rows with `min(scale_x, scale_y) < 0.2` anywhere in its output (was 4). Gate 4's letter ("case 11's four scale 0×0 matches gone") is met, but case 11 itself still fails on the SAME localization error as before — the degenerate matches were stealing OTHER real instances' tags too (see the Finding below), so removing them didn't clear case 11's own reported failure; that needs Phase B. Web: tsc clean, 423/423 tests green (420 pre-existing + 3 new `fitAffine` degeneracy tests). MCP: tsc clean, 123/123 green. No case regressed. |
 | Phase B | 2026-09-11 | 12 (unchanged) | 9 | `06`: its count issue is FULLY GONE (`14→13`, was `+1`) — the held phantom that was winning the count no longer competes for or gets promoted on a drawn tag, but the real instance it displaced still fails a DIFFERENT check (`no one-to-one for ss15-upper-04`, a NEW localization mismatch this case did not show before) — net: the excess match is gone, the case's pass/fail did not flip. `17`: still one `no one-to-one` failure, but on a DIFFERENT instance (`cu-bo1`, was `cu-bo2`) — the eligibility/uncontested-seed change shifted which candidate wins a tie, not which one loses. `01, 02, 05, 10, 11, 13, 14, 18, 23, 41`: byte-identical to the Phase A row (same errors, same counts) — `eligible`/`hold`/the uncontested seed did not touch these specific failures, meaning their `no one-to-one` errors are NOT (or not solely) caused by C1's tag-theft mechanism; they need their own re-diagnosis, not assumed to be the same cause. | `SweepWithheld.hold?: "bounds"\|"density"`; `LabelPlacementOptions.eligible?`; `reconcileSweepLabels`' promotion gated on `!row.hold`; `session.ts`'s `sweepLabels` reports the seed's UNCONTESTED lookup, threads `eligible`/`hold` through; `TakeoffCanvas.jsx`'s `agentSymbolSweep`/`runSymbolSweep` mirror the same three changes (canvas/MCP parity) plus the `dropGlyphClusters` parity-bug fix (§2 C2 note). New fixture `mcp/test/fixtures/symbol-hold.pdf` (via `make-symbol-fixture.mjs`) proves `hold` reaches the wire through a REAL PDF, not just the pure-engine level. Web: tsc clean, 426/426 tests green (423 pre-existing + 3 new symbolLabels tests). MCP: tsc clean, 125/125 green (123 pre-existing + 2 new: session.test.ts's wire-level `hold` proof, symbolSweepAffineParity.test.ts's passthrough proof). eslint clean on both touched `.jsx`/`.js` files (3 pre-existing unrelated warnings, 0 errors). No case regressed — the net corpus change is strictly non-negative (one fewer excess match, zero new failures). |
+| Phase C | 2026-09-11 | 12 (unchanged) | 9 (unchanged) | No case's pass/fail or count changed — ZERO engine code shipped from this phase. Two attempts were built, corpus-tested, and reverted: (1) `widenedExtra`/`hold:"extra"` (withhold a widened+high-extra row outright) — passed its synthetic test, but corpus-wide 5 real widened instances (2 cases) measure extra in [0.378, 1.408], fully overlapping the 85 phantom widened rows' own [0.322, 5.182] range — no threshold separates them. (2) The `extraFor` coverage-tolerance fix (check coverage at a row's own `transform.tol_px`, not the stricter base `tol`) that attempt 1 surfaced along the way — kept initially as "corpus-safe by construction" (no case sets `variant_guard`, `extra` only gates `matchSymbol`'s own `isMatch` when guarded), but a FULL 47-case run found `variant_guard` is not `extra`'s only consumer: `symbollabels.ts`'s `reconcileSweepLabels` independently demotes an unlabeled high-extra match (line ~968), and the fix regressed case `42` (3/3 → 4/3) through exactly that path — a phantom's extra dropped from a buggy 0.641 to a genuine 0.0485 once the coverage window widened enough to sweep in real, unrelated nearby drawing content as "covered." Traced to the single row, confirmed deterministic (2 runs each, byte-identical) and isolated (the only case whose pass/fail changed in the 47-case run) before reverting. | See the goal doc's own Phase C outcome note (§3) for the full trace of both attempts, including the exact numbers, the offending row's coordinates, and the lesson for whoever revisits this: `extra`'s two independent consumers (`matchSymbol`'s own `variant_guard` gate and `reconcileSweepLabels`' unrelated no-tag-demotion rule) must BOTH be corpus-tested together, not just the one a change directly touches. Web tsc clean; symbolsweep/symbolLabels/symbolAffine suites 177/177 (byte-identical to Phase B's own count — Phase C's synthetic test was removed along with its reverted mechanism, back to exactly what Phase B shipped); full web suite matches the pre-existing baseline exactly (2905 pass / 65 fail — the 65 are pre-existing, unrelated IndexedDB/sync/Drive infra failures, confirmed identical on a stashed pre-Phase-A tree earlier in this document's own work). MCP tsc clean; Phase C touched no MCP test file, so MCP's own count is unchanged from Phase B (125/125). eslint clean. `docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md`, `web/src/lib/symbolsweep.ts`, `mcp/src/outputs.ts` carry only documentation of both abandoned attempts (a `SweepWithheld.hold`/`sweepHold` doc-comment note pointing here) — no functional change. |
 
 Findings (a case that contradicts a rule above is recorded here, never fixed by bending the rule):
 
@@ -401,3 +475,5 @@ Findings (a case that contradicts a rule above is recorded here, never fixed by 
   - **`17` — the failure moved, not cleared.** Before: `no one-to-one for cu-bo2`. After: `no one-to-one for cu-bo1`. Same failure count, a different specific instance now loses the tie — consistent with `eligible`/the uncontested-seed change shifting WHICH candidate wins an assignment, not with the underlying ambiguity being resolved.
   - **`01, 05, 10, 11, 18, 23` — completely unchanged**, byte-identical errors to the Phase A row. Since Phase B's ENTIRE mechanism is "exclude held rows from the tag competition," an unchanged failure here means the specific candidate that's winning or losing the wrong tag on these cases is NOT itself a held row — it is a genuine, ELIGIBLE candidate (a real rigid or non-degenerate affine match) that is simply closer to the wrong tag, or two real candidates genuinely equidistant/ambiguous relative to one drawn tag. This is a DIFFERENT failure mode than C1's own held-row-theft mechanism, even though the runner reports it with the identical string ("no one-to-one localization for X") — the corpus runner's own message does not distinguish "the tag went to a held phantom" from "the tag went to the wrong genuine candidate," which is exactly the diagnostic gap Phase F's own runner-diagnostics step (nearest withheld + its `hold`) is meant to close. Whoever picks up the remaining six cases should run that diagnostic FIRST, per case, before assuming Phase B's own mechanism applies — assuming it without checking is exactly the mistake this Finding is recording against.
   - Conclusion: Phase B is real, validated, and correctly scoped — it fixes what it claims to fix (excess matches and promotions caused specifically by held/degenerate rows), and the corpus proves that mechanism now works (case 06's count fix, case 11's confirmed loss of its four stolen tags in the Phase A Finding above). It was never going to clear every `no one-to-one` case, because not every one of them shares C1's root cause — that assumption, inherited from §1's own combined listing, is the thing this Finding corrects.
+
+- **2026-09-11 — Phase C: both attempts failed real corpus measurement, and the second failure disproves an assumption this document's own author made about `extra`'s blast radius.** Full trace in §3's Phase C outcome note; the load-bearing part, recorded here because it generalizes beyond this one phase: `extra` (the fraction of a placement's footprint not explained by the seed) has TWO independent consumers in this codebase, not one. `matchSymbol` itself (`symbolsweep.ts`) only ever gates on `extra` when the caller passes `variant_guard: true` — true of zero cases in this corpus, which is why the `extraFor` coverage-tolerance fix looked provably safe from inside `symbolsweep.ts` alone. But `symbollabels.ts`'s `reconcileSweepLabels` (line ~968) separately demotes any unlabeled match with `extra > 0.3` to withheld, UNCONDITIONALLY — no `variant_guard` involved at all. Fixing `extraFor`'s own internal bug (a real, defensible fix in isolation, still fixes a genuine false positive on a clean synthetic case) changed the NUMBER `extra` reports for every widened row, and that number feeds a completely different, separately-authored gate this phase's own author did not check before judging the fix "corpus-safe." Concretely: a phantom in case `42` had its buggy `extra` (0.641, itself inflated by the very bug being fixed) demoted by line 968; the corrected `extra` (0.0485) no longer triggered that demotion, and the phantom counted, regressing a previously-passing case. Both the phantom's un-real status (227px from the nearest of the case's 3 authored instances) and the effect's determinism (2 runs each of both code versions, byte-identical) and isolation (the ONLY case whose pass/fail changed anywhere in the 47-case run) were verified directly, not assumed, before reverting. The general lesson: "this value only gates X, and X doesn't apply to any corpus case" is not the same claim as "this value has no other consumers" — the second claim needs an actual grep across the codebase for every read site of the field being changed, not just a check of the ONE mechanism the change was originally about. Neither Phase C attempt should be retried without first grepping every consumer of whatever value the new attempt changes, corpus-testing all of them together.
