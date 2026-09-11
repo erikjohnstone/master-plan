@@ -6,6 +6,7 @@ import assert from "node:assert/strict";
 import {
   tableTitleText, rowBbox, rowSheet, splitSheetKey,
   summarize, filterTables, tableId, readingOrder, groupBySheet, previewColumns,
+  tablesForSourceFiles, openScheduleIds,
 } from "../src/lib/scheduleBrowse.js";
 
 const cell = (text: string, bbox: number[]) => ({ text, bbox });
@@ -57,6 +58,7 @@ test("splitSheetKey handles a page, no page, and a filename containing #", () =>
   assert.deepEqual(splitSheetKey("plans.pdf#12"), { file: "plans.pdf", page: 12 });
   assert.deepEqual(splitSheetKey("plans.pdf"), { file: "plans.pdf", page: 1 });
   assert.deepEqual(splitSheetKey("set #2.pdf#7"), { file: "set #2.pdf", page: 7 });
+  assert.deepEqual(splitSheetKey("set #2.pdf"), { file: "set #2.pdf", page: 1 });
   assert.deepEqual(splitSheetKey(""), { file: "", page: 1 });
 });
 
@@ -125,6 +127,32 @@ test("groupBySheet: sheets in reading order, tables in reading order inside them
   assert.deepEqual(g.map((x: any) => x.page), [3, 12, 1]);
   assert.deepEqual(groupBySheet([]), []);
   assert.deepEqual(groupBySheet(undefined as any), []);
+});
+
+test("tablesForSourceFiles excludes schedules retained from unrelated PDFs", () => {
+  const current = { sheet: "fort-sam.pdf#2", title: "VAV SCHEDULE", rows: [] };
+  const old = { sheet: "previous-job.pdf#7", title: "AHU SCHEDULE", rows: [] };
+  assert.deepEqual(tablesForSourceFiles([old, current], ["fort-sam.pdf#5"]), [current]);
+  assert.deepEqual(tablesForSourceFiles([old, current], []), []);
+});
+
+test("tablesForSourceFiles includes continued schedule ink carried by a visible source", () => {
+  const continued = {
+    sheet: "volume-a.pdf#9", title: "POINTS LIST", rows: [{ sheet: "volume-b.pdf#1" }],
+    parts: [{ sheet: "volume-a.pdf#9" }, { sheet: "volume-b.pdf" }],
+  };
+  assert.deepEqual(tablesForSourceFiles([continued], ["volume-b.pdf#4"]), [continued]);
+  assert.deepEqual(tablesForSourceFiles([continued], ["volume-c.pdf"]), []);
+});
+
+test("openScheduleIds opens View in the digital reader and preserves comparisons", () => {
+  const first = { sheet: "a.pdf", region: [0, 0, 10, 10] };
+  const viewed = { sheet: "a.pdf", region: [20, 0, 30, 10] };
+  const before = new Set([tableId(first)]);
+  const after = openScheduleIds(before, viewed);
+  assert.notEqual(after, before);
+  assert.deepEqual([...after], [tableId(first), tableId(viewed)]);
+  assert.deepEqual([...before], [tableId(first)], "the prior state is not mutated");
 });
 
 test("previewColumns picks what identifies the equipment, not the first three columns", () => {

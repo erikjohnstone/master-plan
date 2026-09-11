@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "../brand/icons.jsx";
 import { useRevealDrawing } from "./WorkspaceDock.jsx";
 import { tableTitleText, rowBbox, rowSheet, splitSheetKey,
-  summarize, filterTables, tableId, groupBySheet } from "../lib/scheduleBrowse.js";
+  summarize, filterTables, tableId, groupBySheet, openScheduleIds } from "../lib/scheduleBrowse.js";
 
 const ROW_CHUNK = 40;
 const titleOf = table => tableTitleText(table) || "Untitled schedule";
@@ -60,6 +60,15 @@ export default function SchedulesPanel({
   const detail = useRef(null);
   const revealDrawing = useRevealDrawing();
   const paint = payload => { revealDrawing(); onPaint(payload); };
+  // View is one atomic user action: select/open the digital table and reveal
+  // its grounded region on the drawing. Previously it did only the latter,
+  // forcing a second click on the surrounding schedule card.
+  const view = table => {
+    const id = tableId(table);
+    setSelected(id);
+    setOpenIds(prev => openScheduleIds(prev, table));
+    paint({kind:"table",table});
+  };
   // Facets choose what is visible; never copy or change a table.
   const shown = useMemo(() => filterTables(tables,q).filter(t => (!sheet || t.sheet === sheet) && (!kind || t.kind === kind)),[tables,q,sheet,kind]);
   const groups = useMemo(() => groupBySheet(shown),[shown]);
@@ -134,7 +143,7 @@ export default function SchedulesPanel({
                   </button>
                   <div className="schedule-nav-actions">
                     <span>{table.kind || "unknown"}</span>
-                    <button type="button" title="Show this whole schedule on the drawing" onClick={()=>paint({kind:"table",table})}>View</button>
+                    <button type="button" title="Open this schedule and show it on the drawing" onClick={()=>view(table)}>View</button>
                   </div>
                 </div>;
               })}

@@ -199,7 +199,8 @@ Units and scale sit on the sheet-tab row.
 The left rail's **Tools** tab opens a second column for drawing settings,
 condition properties and project panels; it never resizes the drawing.
 Takeoff retains its exports; the legacy report is under **⋯ → Measurement report**.
-Schedules shows the indexed cells beside their drawing evidence;
+Schedules shows indexed cells from the plan source currently on the canvas beside
+their drawing evidence; **View** opens the digital grid and its grounded region together.
 Agent keeps the conversation, composer and proposal review together. Both
 workspaces resize or expand without changing the underlying takeoff data.
 Dense Agent answers offer Explore results: a full-workspace Table view by

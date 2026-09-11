@@ -476,9 +476,12 @@ Dock width and expanded state are local UI preferences, not project data.
 Opening a drawing citation restores the split view so the evidence is visible.
 
 In Schedules, search or filter by sheet/kind, then open one or more schedules in
-the navigator. Every extracted header and cell remains unchanged. Wide grids
-scroll horizontally. View or Show on plan paints the whole schedule; a row's tag
-paints its existing cell region. Closing Schedules removes only browse highlights.
+the navigator. The badge and navigator follow the plan source currently visible
+on the canvas, so PDFs retained from another job do not enter the count. Every
+extracted header and cell remains unchanged. Wide grids scroll horizontally.
+View opens that digital grid and paints the whole grounded schedule; Show on plan
+does the same from the grid. A row's tag paints its existing cell region. Closing
+Schedules removes only browse highlights.
 
 In Agent, a starter question fills the composer without running it. Run/Ask and
 the existing keyboard shortcut submit; Stop cancels through the existing path.
@@ -1255,7 +1258,7 @@ The panel docks on the right, beside the drawing rather than over it, because th
 
 **Opening one.** Click a schedule to expand it; you can hold as many open as you like, and **expand all** opens everything the filter is currently showing. Under the title you get the rows: the tag, then the columns that identify and size the thing — manufacturer, model, CFM, tons, and so on — rather than whichever columns happened to be printed first. The full column list sits below the rows, behind *+N more columns*.
 
-**Showing it on the drawing.** **View** paints the whole schedule's box on its sheet. Clicking any **tag** paints just that row — and a row cites the sheet its own ink is on, which for a continued schedule is not the sheet the table started on. Only one browse highlight exists at a time: clicking a second one replaces the first, and closing the panel takes its ink with it. Nothing you do here is saved into the takeoff.
+**Showing it on the drawing.** **View** opens the schedule in the digital reader and paints the whole schedule's box on its sheet in the same click. The badge, list, and totals are scoped to the plan source currently visible on the canvas; schedules from other PDFs retained in the workspace stay out of that view. Clicking any **tag** paints just that row — and a row cites the sheet its own ink is on, which for a continued schedule is not the sheet the table started on. Only one browse highlight exists at a time: clicking a second one replaces the first, and closing the panel takes its ink with it. Nothing you do here is saved into the takeoff.
 
 **Filtering.** The box filters on the printed title, the column names, the row tags, the sheet, and the kind — so typing `equipment` selects the equipment schedules, and clicking a kind label does the same thing. The count above the list follows the filter (*4 of 24 schedules*), so the number on screen always describes the list under it.
 

@@ -16,7 +16,7 @@
 import { chromium } from "playwright";
 import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { existsSync, mkdirSync, readdirSync } from "node:fs";
-import { resolve } from "node:path";
+import { basename, resolve } from "node:path";
 
 const BENCH = "/home/user/master-plan/HVAC BAS Benchmark Collection/pdf";
 const OUT = process.env.OT_SCHED_OUT || "/tmp/ot-schedules";
@@ -48,9 +48,17 @@ page.on("pageerror", (e) => { console.log(`pageerror ${String(e).slice(0, 200)}`
 
 try {
   const pdf = findPdf();
+  const previousPdf = process.env.OT_UI_PREVIOUS_PDF ? resolve(process.env.OT_UI_PREVIOUS_PDF) : null;
   console.log(`doc ${doc}: ${pdf.split("/").pop()}`);
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
   await page.waitForSelector('input[name="sheet-file"]', { state: "attached", timeout: 60_000 });
+  if (previousPdf) {
+    console.log(`retained prior plan: ${basename(previousPdf)}`);
+    await page.locator('input[name="sheet-file"]').first().setInputFiles(previousPdf);
+    await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
+    await page.waitForFunction(() => window.__opentakeoff?.graphPrewarm?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
+    await openImportedSheet(page);
+  }
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
   // `null` is the page-function ARGUMENT. Playwright's signature is
   // waitForFunction(fn, arg, options) — passing { timeout } as the second
@@ -61,6 +69,18 @@ try {
   await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
   // the schedule pass is separate from the text index
   await page.waitForFunction(() => window.__opentakeoff?.graphPrewarm?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
+  if (previousPdf) {
+    const expected = { current: basename(pdf), previous: basename(previousPdf) };
+    await page.waitForFunction(({ current, previous }) => {
+      const raw = window.__opentakeoff?.probe?.graphTables?.() || [];
+      const scoped = window.__opentakeoff?.probe?.scheduleTables?.() || [];
+      const belongs = (table, file) => table?.sheet === file || String(table?.sheet || "").startsWith(`${file}#`);
+      return raw.some((table) => belongs(table, current))
+        && raw.some((table) => belongs(table, previous))
+        && scoped.length > 0
+        && scoped.every((table) => belongs(table, current));
+    }, expected, { timeout: 15 * 60 * 1000 });
+  }
   console.log("indexed, schedules ready");
   await openImportedSheet(page);
 
@@ -70,8 +90,15 @@ try {
   await chip.click();
   await page.waitForTimeout(700);
 
-  const tables = await page.evaluate(() => window.__opentakeoff.probe.graphTables());
-  check("panel is fed from the graph", tables.length > 0, `${tables.length} tables`);
+  const allTables = await page.evaluate(() => window.__opentakeoff.probe.graphTables());
+  const tables = await page.evaluate(() => window.__opentakeoff.probe.scheduleTables());
+  check("panel is fed from the current plan's graph tables", tables.length > 0, `${tables.length} tables`);
+  if (previousPdf) {
+    check("retained unrelated schedules stay out of the current plan viewer",
+      allTables.length > tables.length
+        && tables.every((table) => table?.sheet === basename(pdf) || String(table?.sheet || "").startsWith(`${basename(pdf)}#`)),
+      `${tables.length} current of ${allTables.length} retained tables`);
+  }
 
   // The panel header must agree with the graph, not with itself.
   const header = await page.evaluate(() => {
@@ -92,6 +119,9 @@ try {
   const before = await page.evaluate(() => window.__opentakeoff.probe.markups().length);
   await panel.locator('button', { hasText: /^View$/ }).first().click();
   await page.waitForTimeout(1200);
+  check("View opens the schedule in the digital reader",
+    await sections.first().getAttribute("aria-expanded") === "true"
+      && await panel.locator(".schedule-detail").count() > 0);
   const status = await page.evaluate(() => (document.querySelector("[data-commit-tone]")?.textContent || "").trim());
   if (status) console.log(`      status bar: ${status}`);
   const afterTable = await page.evaluate(() => window.__opentakeoff.probe.markups().filter((m) => m.source === "schedule_browse"));
@@ -151,7 +181,7 @@ try {
   await page.waitForTimeout(400);
 
   // ── a ROW paints its own cells, on the sheet its ink is on ───────────────
-  await sections.first().click();
+  if (await sections.first().getAttribute("aria-expanded") !== "true") await sections.first().click();
   await page.waitForTimeout(600);
   const firstRow = (t0.rows || [])[0];
   if (!firstRow) { check("table has rows to click", false, "first table is empty"); }
