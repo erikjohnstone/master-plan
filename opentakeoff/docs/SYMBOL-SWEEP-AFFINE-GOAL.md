@@ -649,6 +649,37 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   under `scripts/` must be RUN, not just type-checked, before it is trusted
   — `tsc --noEmit` silently does not cover that directory.
 
+  **Further narrowing, same day: cause 1 (center shift) is real but is
+  NOT what drives this case's wrong-tag attachment — the priority is
+  entirely cause 2.** Computed the real distance from the ground truth's
+  own frozen seed center to CD-1's own authored `tag_bbox`: 86.3px. That is
+  a substantial leader-line distance in a busy floor plan — plausibly
+  farther than at least one neighboring device's own tag sits from this
+  same symbol. `labelPlacements`'s nearest-visible-text heuristic (a
+  PRE-EXISTING, already-tuned system — its own source comments cite a real
+  calibration case from THIS SAME "Cherry Point" document set) can
+  legitimately prefer a closer WRONG tag over a farther RIGHT one; this is
+  an existing limitation of "nearest text" as an attachment strategy, not
+  something Phase 4/5 introduced. The center-shift bug was real and worth
+  fixing (disclosed coordinates were provably wrong), but it was not the
+  decisive factor in why this seed mislabels — re-pointing the lookup at
+  the geometrically correct center did not change which tag it finds
+  nearest, because the true tag was never going to win on proximity either
+  way.
+  This means cause 2 is the one that actually matters for the false-add
+  count: this pre-existing tag-proximity ambiguity is not new, but it only
+  becomes a false-add now because affine's wider candidate pool creates
+  more low-quality-but-nearby-labeled withheld candidates for the
+  label-corroboration promotion to wrongly commit. The real fix is almost
+  certainly gating that promotion on some minimum geometric plausibility
+  (e.g. the fitted transform's own residual, or a tighter effective bound
+  than the raw max_stretch/max_shear pass/fail) rather than trusting ANY
+  nearby text agreement regardless of fit quality — not a bounds tweak, and
+  not something to redesign in the same sitting that found it: it needs
+  its own careful synthetic-fixture-plus-corpus validation pass so it
+  doesn't regress the real, valuable cases this promotion mechanism already
+  correctly handles.
+
   The corpus suite is left deliberately red on affected cases with
   `AFFINE_WIRE_DEFAULT` genuinely on, rather than quietly reverting the
   runner fix too — that redness is the correct, honest state until a real
