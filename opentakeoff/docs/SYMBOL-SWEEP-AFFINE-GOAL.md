@@ -1146,6 +1146,31 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   `AffineOptions` it hands the engine matches the shared function's own
   output bit for bit.
 
+- **2026-09-11 — Checked the proposed "stroke regularity" hypothesis for `dropGlyphClusters` against case 10's real dropped cluster: inconclusive, not validated, not implemented.**
+  Extracted the actual 145 segments `glyphClusterMask` drops from case 10's
+  seed (fixed a coordinate-frame bug first: `fpOff.rel`/`fpOn.rel` are each
+  centroid-relative to their OWN fingerprint's center, which differ once
+  segments are dropped, so a naive diff of `rel` entries wrongly flagged
+  100% as dropped — re-derived in absolute image-px coordinates via
+  `rel[i] + center` before diffing). Real numbers: length coefficient of
+  variation 0.677 (moderate spread, not the near-uniform stroke length a
+  clean repeated hatch pattern would show); angular concentration `R =
+  0.591` on a 0–1 scale (moderately aligned, not clearly "all parallel" nor
+  clearly "scattered"); 31 distinct 5°-angle buckets across 145 segments
+  (real angular diversity — a simple 1–2-direction hatch would show far
+  fewer). This does not cleanly read as "obviously a regular hatch pattern"
+  the way the hypothesis predicted, but there is no real (not synthetic)
+  correctly-classified exploded-text example from this corpus on hand to
+  compare it against, so it does not cleanly rule the idea out either —
+  unlike the four fully-checked-and-disproven hypotheses above, this one is
+  genuinely unresolved, not negative. Recorded honestly as such rather than
+  either implementing an unvalidated heuristic from one data point or
+  falsely claiming a clean rule-out the data does not support. Whoever
+  picks this up next should find or author a real corpus instance of
+  correctly-classified exploded text first, extract the same three
+  statistics from it, and only then judge whether regularity actually
+  separates the two populations.
+
 ---
 
 ## Appendix A — Background, for the reader who wants the why
