@@ -625,6 +625,21 @@ confirmed clean afterward).
    the nearest match — "no one-to-one localization" hid that case 05's real
    instances were found at d = 0 for a whole day. Do this FIRST if it helps
    Phase B; it is diagnostics only.
+
+   **Done, 2026-09-11.** Verified immediately useful: on case `17`, the
+   nearest match to `cu-bo1` is 36.4px away at score 0.795 (correctly not
+   counted), but the nearest WITHHELD row is 1.0px away at score 0.949,
+   `hold: "density"` — the correct reading exists, sitting almost exactly
+   at the true location, and is being suppressed by the density-suspect
+   mechanism because a nearby phantom was accepted first. This sharpens
+   Phase D's own "no per-row signal distinguishes real from phantom"
+   finding: it's not that the correct candidate is indistinguishable from
+   the phantom — the diagnostics show it scores HIGHER and sits closer to
+   ground truth — it's that the assignment/suppression machinery has no
+   way to prefer it once a nearby competitor is already accepted. Output-
+   only change (two new `errors[]` lines on the existing failure path,
+   nothing about pass/fail logic touched); verified directly on case `17`
+   before committing.
 2. Two consecutive full 47-case runs with identical per-case output
    (determinism), 46/47 passing (`13` is the pre-existing sheet-number
    failure — do not touch its ground truth, do not special-case it in the

@@ -190,7 +190,27 @@ for (const c of cases) {
       affineRows.push({ id: c.id, document_id: c.document_id, ...recall });
     } else {
       const assignment = assignInstances(c.instances, predictions);
-      if (!assignment.ok) errors.push(`no one-to-one localization for ${assignment.missing?.id ?? "one or more instances"}`);
+      if (!assignment.ok) {
+        errors.push(`no one-to-one localization for ${assignment.missing?.id ?? "one or more instances"}`);
+        // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F step 1 — "no
+        // one-to-one localization" alone hid, for a whole day, that case
+        // 05's real instances were actually found at d=0 as WITHHELD rows.
+        // Name the nearest withheld row (distance/score/hold/reason) and
+        // the nearest match for the missing expected instance, so a future
+        // reader never has to re-discover that distinction from scratch.
+        const missing = assignment.missing;
+        if (missing) {
+          const near = (p) => (missing.page === undefined || p.page === missing.page) ? dist(missing.at, p.at) : Infinity;
+          const nearestOf = (rows) => rows.reduce((best, p) => {
+            const d = near(p);
+            return !best || d < best.d ? { d, p } : best;
+          }, null);
+          const nearestMatch = nearestOf(predictions);
+          const nearestWithheld = nearestOf(withheldPredictions);
+          if (nearestMatch) errors.push(`nearest match to ${missing.id}: d=${nearestMatch.d.toFixed(1)}px score=${nearestMatch.p.score} at=${nearestMatch.p.at.join(",")}`);
+          if (nearestWithheld) errors.push(`nearest withheld to ${missing.id}: d=${nearestWithheld.d.toFixed(1)}px score=${nearestWithheld.p.score}${nearestWithheld.p.hold ? ` hold=${nearestWithheld.p.hold}` : ""} at=${nearestWithheld.p.at.join(",")} — ${(nearestWithheld.p.reason ?? "").slice(0, 80)}`);
+        }
+      }
       // Re-resolve only the final physical placements to retain the exact
       // token boxes. This is the same shared pure label code used by MCP and
       // canvas; the frozen expected boxes prove that each repeated
