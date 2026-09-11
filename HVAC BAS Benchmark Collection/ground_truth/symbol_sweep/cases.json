@@ -506,6 +506,7 @@
       "sheet_number": "M-701",
       "page_size_px": [6912, 5184],
       "seed_rect": [[4485, 1785], [4575, 1930]],
+      "options": { "affine": false },
       "seed": {
         "tag": null,
         "at": [4529.7, 1867.7],
