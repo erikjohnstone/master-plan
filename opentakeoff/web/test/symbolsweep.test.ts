@@ -780,6 +780,69 @@ test("affine refinement: an out-of-bounds stretch is withheld with the bounds re
   assert.ok(/stretch/.test(perfect!.reason) && /bar 1\.5/.test(perfect!.reason), `bounds reason should name the stretch and the bar, got: ${perfect!.reason}`);
 });
 
+// docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Findings (2026-09-11, Root Cause #1) — a
+// placement that only clears scoreHigh via refine()'s widened tolerance is
+// physically implausible when it sits within one symbol's own footprint of
+// another accepted match: no two real instances of the same symbol can be
+// that close without overlapping (checked against all 47 real corpus cases'
+// own ground truth before relying on it — the closest any two genuine
+// same-family instances ever sit, corpus-wide, is 54.7px). Scoped ONLY to
+// rows that needed the widening (`transform.tol_px > tol`), so a plain rigid
+// match is never touched by this — proven directly below.
+test("Phase 1 tolerance widening: a placement that only clears scoreHigh via the widened tolerance is withheld, never committed, when it sits within one footprint of another accepted match", () => {
+  const sc = 3, deg = 3;
+  // A pure synthetic rotation fits the affine least-squares solve PERFECTLY
+  // (rms→0), so refine() re-aligns it and it scores 1.0 at the ORIGINAL 2px
+  // tolerance — that's affine refinement working as intended, not the
+  // widening this fix is about. Real corpus residual comes from wrong
+  // correspondences, not clean geometry; a small opposing per-endpoint
+  // jitter (never explainable by any single affine transform) stands in for
+  // that here, forcing a genuine >2px residual so `tol_px` really is widened.
+  const rectSc: [Point, Point] = [[RECT[0][0] * sc, RECT[0][1] * sc], [RECT[1][0] * sc, RECT[1][1] * sc]];
+  const jitter = 1.6;
+  const segs = place([
+    { at: [0, 0], sc },
+    { at: [500, 0], sc, rot: deg, jitter },   // isolated — nothing else nearby, stays a clean match
+    { at: [1000, 0], sc, rot: deg, jitter },  // a suspect pair: both need widening AND sit
+    { at: [1025, 0], sc, rot: deg, jitter },  // well under one footprint (~118px at this scale) apart
+  ]);
+  const fp = fingerprintSymbol(segs, rectSc);
+  const r = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+
+  // Positions land at the symbol's own reported centroid, not exactly the
+  // placement's local origin — check by RELATIVE structure (isolated vs a
+  // close pair), not hardcoded absolute offsets from `at`.
+  assert.equal(r.matches.length, 1, `expected only the isolated placement to commit, got matches=${JSON.stringify(r.matches)}`);
+  const isolated = r.matches[0];
+  assert.ok(isolated.transform && isolated.transform.tol_px > 2, "the control match should itself need the widened tolerance, or this test proves nothing");
+
+  const suspects = r.withheld.filter((w) => /widened tolerance/.test(w.reason) && /footprint/.test(w.reason));
+  assert.equal(suspects.length, 2, `expected both close placements disclosed as density-suspect, got withheld=${JSON.stringify(r.withheld)}`);
+  assert.ok(
+    Math.hypot(suspects[0].at[0] - suspects[1].at[0], suspects[0].at[1] - suspects[1].at[1]) < 100,
+    "the two suspect readings should be near each other (that's why they're suspect)",
+  );
+  for (const s of suspects) {
+    assert.ok(
+      Math.hypot(s.at[0] - isolated.at[0], s.at[1] - isolated.at[1]) > 200,
+      "a suspect reading should be far from the isolated, unaffected match, not confused with it",
+    );
+  }
+});
+
+test("Phase 1 tolerance widening: two ordinary RIGID matches (no widening needed) that sit within one footprint of each other are BOTH still committed — this check never touches pre-existing rigid-only behavior", () => {
+  // Plain, unrotated copies score 1.0 under the base tolerance alone —
+  // `transform` is never set (refine() is never even attempted, since a
+  // rigid candidate already at scoreHigh skips it), so neither placement is
+  // eligible for the density check above no matter how close together they
+  // sit — exactly the safety property the fix is scoped around.
+  const segs = place([{ at: [0, 0] }, { at: [500, 0] }, { at: [515, 0] }]);
+  const fp = fingerprintSymbol(place([{ at: [0, 0] }]), RECT);
+  const r = matchSymbol(fp, segs, { excludeCenter: fp.center });
+  assert.equal(r.matches.length, 2, `expected both plain rigid matches to commit, got ${JSON.stringify(r.matches)}`);
+  for (const m of r.matches) assert.ok(!m.transform, "a plain rigid match must not carry a transform");
+});
+
 // ── Phase 2 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — continuous rotation ───────
 // The shared SYMBOL fixture above has its own accidental near-symmetry
 // (square + one diagonal admits a real combined mirror+rotation reading),

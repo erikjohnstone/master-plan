@@ -2195,6 +2195,30 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const extraOf = new Map<Scored, number>();
   for (const s of survivors) if (s.score >= scoreHigh) extraOf.set(s, extraFor(s));
 
+  // Physical-plausibility check for a refined placement that only clears
+  // scoreHigh under the widened tolerance (docs/SYMBOL-SWEEP-AFFINE-GOAL.md's
+  // Findings, 2026-09-11: Root Cause #1). Two genuinely distinct instances of
+  // the SAME symbol cannot sit within half the symbol's own bbox diagonal of
+  // each other without physically overlapping — the exact principle already
+  // stated and used above for shadow suppression (`suppressR`), just never
+  // enforced between two otherwise-independent accepted matches. Checked
+  // against the full 47-case ground truth before relying on it: the closest
+  // any two real same-family instances (including the seed) ever sit,
+  // corpus-wide, is 54.7px (`42-guaranteed-rate-m121-thermostat-bubbles`) —
+  // comfortably above a typical seed's own `suppressR`. Scoped ONLY to rows
+  // that NEEDED the widened tolerance (`transform.tol_px > tol`) to reach
+  // scoreHigh at all: a plain rigid match (no `transform`, or a refined one
+  // that didn't need widening) is never touched by this, so every
+  // pre-existing, already-tested rigid-only behavior is exactly unaffected.
+  const densitySuspect = new Set<Scored>();
+  for (const s of survivors) {
+    if (!(s.transform && s.transform.tol_px > tol && s.score >= scoreHigh && !s.boundsFailed)) continue;
+    for (const other of survivors) {
+      if (other === s || other.score < scoreHigh || other.boundsFailed) continue;
+      if (Math.hypot(other.at[0] - s.at[0], other.at[1] - s.at[1]) <= suppressR) { densitySuspect.add(s); break; }
+    }
+  }
+
   const matches: SweepMatch[] = [];
   const withheld: SweepWithheld[] = [];
   const pct = (v: number): number => Math.round(v * 1000) / 1000;
@@ -2206,7 +2230,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     ...(s.transform ? { transform: s.transform } : {}),
   });
   const isMatch = (s: Scored): boolean =>
-    s.score >= scoreHigh && !s.boundsFailed && (!guardOn || (extraOf.get(s) ?? 0) <= extraBar);
+    s.score >= scoreHigh && !s.boundsFailed && !densitySuspect.has(s) && (!guardOn || (extraOf.get(s) ?? 0) <= extraBar);
   for (const s of survivors) {
     if (!isMatch(s)) continue;
     const ev = extraOf.get(s) ?? 0;
@@ -2216,6 +2240,18 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   }
   for (const s of survivors) {
     if (isMatch(s)) continue;
+    // A density-suspect row is ALWAYS within suppressR of the accepted match
+    // that made it suspect (that's the condition), so it must be disclosed
+    // here, before the general "shadow of an already-counted match" skip
+    // below silently drops it — this is a distinct reason, not a duplicate.
+    if (densitySuspect.has(s)) {
+      const t = s.transform!;
+      withheld.push({
+        ...row(s),
+        reason: `matches ${Math.round(s.score * 100)}% of the seed only under a widened tolerance (±${t.tol_px} px vs the base ±${tol} px, fitted at ${t.rotation_deg}° / ${t.scale_x}×,${t.scale_y}×) AND sits within one symbol's own footprint (${Math.round(suppressR)} px) of another accepted match — two genuine instances of the same symbol cannot be this close without overlapping. This reads as noise from the same contaminated area, not a second real instance; view_sheet here and confirm before counting either reading`,
+      });
+      continue;
+    }
     if (matches.some((m) => Math.hypot(m.at[0] - s.at[0], m.at[1] - s.at[1]) <= suppressR)) continue;
     // §4.2 — a refined placement that clears scoreHigh but fails the stated
     // affine bounds is disclosed with what it actually measured, never
