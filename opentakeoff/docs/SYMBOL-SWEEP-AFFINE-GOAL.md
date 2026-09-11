@@ -682,6 +682,35 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   label-promotion investigation remains a real, separate, third
   contributing issue, lower priority than both of these.
 
+- **2026-09-11 — A fourth single-signal hypothesis, checked with real numbers before implementation, also fails to discriminate: capping the FRACTION of a seed `glyphClusterMask` may drop.**
+  Obvious next idea for the `dropGlyphClusters`-over-stripping cause above:
+  refuse to drop a cluster when it would remove too large a share of the
+  seed's own segments/length — a real symbol's own hatching being
+  misclassified should, in principle, be a much bigger share of the whole
+  than an incidental attached tag. Checked against real numbers before
+  writing any code: the EXISTING, validated Phase 4 fixture
+  (`symbolsweep.test.ts`'s `glyphTagAt`, a legitimate small tag beside a 4-
+  segment square) already drops 79% of the seed's SEGMENT COUNT (15 of 19)
+  and 27% of its LENGTH (15 of 55px) — and case `10`'s real over-drop is
+  88% by count, 31% by length. Neither metric separates the two with any
+  safe margin: a threshold loose enough to keep the legitimate test passing
+  (needs to tolerate ≥ 79%/27%) would also let case 10's 88%/31% through
+  untouched. This rules out drop-fraction capping the same way score
+  thresholds and transform-magnitude plausibility were already ruled out —
+  four single-scalar signals checked, four found not to discriminate.
+  This pattern across all four suggests the real problem may not be
+  fixable with a single extra scalar cutoff on top of `glyphClusterMask`'s
+  existing count/length/bbox/direction-diversity features at all — a real
+  symbol's own dense hatch/fill pattern and genuine exploded text can look
+  structurally identical on exactly those features (this heuristic's own
+  documented feature set). The two real seeds hit by this (`01`, `10`) are
+  both densely cross-hatched diffusers; the fix may need a feature these
+  four attempts didn't use, such as stroke REGULARITY (a hatch pattern's
+  strokes are typically near-parallel with highly consistent spacing;
+  genuine letterforms are not) — untested, unimplemented, the next
+  hypothesis worth checking with real numbers before writing code, exactly
+  as this Finding did.
+
 - **2026-09-11 — The default-flip commit (`c1fd732`) was unsafe and was reverted (`1ed0656`) in the same session, because the gate that was supposed to catch this never ran the real code path.**
   The corpus runner (`mcp/scripts/symbol-sweep-corpus.mjs`) calls
   `session.symbolSweep` directly, and `session.symbolSweep` applies no
