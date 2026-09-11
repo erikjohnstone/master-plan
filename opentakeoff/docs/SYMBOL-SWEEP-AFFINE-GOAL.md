@@ -607,15 +607,36 @@ Findings (cases that contradicted a bound — never fixed by moving it):
   1 only against synthetic fixtures and a corpus that (per Phase 0's own
   finding) contains zero real off-grid instances, so nothing in the
   existing test suite exercises a sheet with dense, geometrically-similar-
-  but-distinct real content near a seed's own shape. A real fix likely
-  needs the widened tolerance to be conditioned on the fit ACTUALLY
-  requiring meaningful affine correction (e.g. only widen when the refined
-  rotation/scale/shear meaningfully differs from the rigid candidate's own
-  nominal transform, not for every rigid-origin candidate regardless), not
-  a global multiplier applied indiscriminately. This needs its own
-  corpus-wide validation before any further default-flip attempt — the
-  label-promotion investigation below remains real and unfixed, but is not
-  the first thing to fix.
+  but-distinct real content near a seed's own shape.
+
+  **Same-day follow-up: the obvious next hypothesis — gate the widened
+  tolerance on the fit's OWN decomposed distortion, not just its residual
+  — checked directly against this exact false match, and ruled out.**
+  This case's own false match decomposes to `scale_x: 0.761, scale_y:
+  1.021, shear_deg: 8.6` — a real 24% scale deviation and 1.34× anisotropy,
+  not a near-identity fit hiding behind noise. A least-squares affine fit
+  against the WRONG (but coincidentally similar) nearby correspondences
+  has no way to know they're wrong; it produces whatever transform best
+  explains them regardless, and that transform can look just as
+  "genuinely distorted" as a real one. So "only widen when the decomposed
+  rotation/scale/shear meaningfully differs from identity" — the fix this
+  document recorded as likely correct a few hours earlier — does not
+  discriminate real fits from wrong ones either. Two single-candidate
+  signals are now ruled out with direct evidence (raw score, at two
+  different thresholds — see the promotion-gate Finding above; and
+  transform-magnitude plausibility, here) as of this Finding.
+  The one signal that looks structurally promising, not yet attempted:
+  the 84 false matches on this case sit densely packed (as close as ~8px
+  apart), unlike real HVAC equipment placements, which are normally
+  spaced by real physical clearance. A per-candidate check can't see this;
+  a check across the CANDIDATE SET — flagging a widened-tolerance match as
+  suspect when several OTHER candidates score similarly nearby under the
+  same widened tolerance (density inconsistent with genuinely spaced
+  equipment) — might. Recorded as the next avenue, not implemented here:
+  it needs the same corpus-wide, not-one-case validation discipline
+  already learned twice over in this document before it goes anywhere
+  near a default. The label-promotion investigation below remains real
+  and unfixed, but is not the first thing to fix.
 
 - **2026-09-11 — The default-flip commit (`c1fd732`) was unsafe and was reverted (`1ed0656`) in the same session, because the gate that was supposed to catch this never ran the real code path.**
   The corpus runner (`mcp/scripts/symbol-sweep-corpus.mjs`) calls
