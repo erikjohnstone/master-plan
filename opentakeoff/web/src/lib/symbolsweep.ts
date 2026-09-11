@@ -216,6 +216,18 @@ export function affineOptionsFromWire(a: {
   return { enabled: a.enabled, maxStretch: a.max_stretch, maxShearDeg: a.max_shear_deg, scaleSearch: a.scale_search };
 }
 
+/** docs/SYMBOL-SWEEP-AFFINE-GOAL.md §3 Phase 5 step 6 — the affine wire
+ * object's own default values. NOT currently wired into either tool schema's
+ * own `.default(...)` (that attempt, commit `c1fd732`, was reverted — see
+ * the goal doc's Findings: it shipped a real regression because the gate
+ * that was meant to catch it never ran this code path). Kept as a standalone
+ * export because `mcp/scripts/symbol-sweep-corpus.mjs` still needs it: the
+ * corpus suite now applies it to EVERY case unconditionally, deliberately
+ * independent of whatever the wire-level default currently is, so it stays
+ * the real, standing gate a future default-flip attempt must clear on the
+ * actual code path — not proof by proxy. */
+export const AFFINE_WIRE_DEFAULT = { enabled: true, max_stretch: 1.5, max_shear_deg: 10, scale_search: false } as const;
+
 /** §4.1 — disclosed on a row whenever affine refinement (not the rigid
  * search) produced the kept placement. Absent on a row the rigid path
  * committed without refinement, so a same-as-today sweep produces
@@ -749,6 +761,21 @@ export interface SymbolFingerprint {
    * `dropGlyphClusters` was passed AND something was actually dropped —
    * same "disclose only what happened" convention as `subPixelDropped`. */
   droppedGlyphSegments?: number;
+  /** The seed marquee's OWN length-weighted centroid computed from EVERY
+   * segment inside the rect, before any `dropGlyphClusters` filtering —
+   * always present, and identical to `center` when nothing was dropped.
+   * `center` (used for matching internals: `rel`'s own origin,
+   * `excludeCenter` self-suppression) is deliberately filtered, because a
+   * dropped cluster should not skew the shape used for correspondence
+   * matching. But a filtered center is the wrong anchor for "where does
+   * this instance sit for label lookup" — found 2026-09-11 (see
+   * docs/SYMBOL-SWEEP-AFFINE-GOAL.md Findings): on a real symbol,
+   * `glyphClusterMask` dropped part of the symbol's own genuine geometry
+   * (not incidental text), shifting `center` ~4px and attaching the seed
+   * to a NEIGHBORING symbol's drawn tag instead of its own. Callers doing
+   * nearby-label lookup for the seed itself should use `rawCenter`, not
+   * `center`. */
+  rawCenter: Point;
 }
 
 export interface SymbolMatchResult {
@@ -844,6 +871,7 @@ export function scaleFingerprint(fp: SymbolFingerprint, k: number): SymbolFinger
     totalLen,
     segments: rel.length,
     center: fp.center,
+    rawCenter: fp.rawCenter,
     footprint: fp.footprint * k,
     ...(fp.lum ? { lum } : {}),
     ...(subPixelDropped ? { subPixelDropped } : {}),
@@ -923,6 +951,19 @@ export function fingerprintSymbol(
     cyw += ((segs[i * 4 + 1] + segs[i * 4 + 3]) / 2) * L;
   }
   const seedCx = cxw / totalLen, seedCy = cyw / totalLen;
+  // rawCenter: the SAME length-weighted centroid, but over the full,
+  // UNFILTERED seedIdx — see SymbolFingerprint.rawCenter's own doc comment
+  // for why this must stay independent of keepIdx. Recomputed from scratch
+  // (not reused from the keepIdx loop above) rather than skipped when
+  // keepIdx === seedIdx, so this is one code path either way, not two.
+  let rawTotalLen = 0, rawCxw = 0, rawCyw = 0;
+  for (const i of seedIdx) {
+    const L = segLen(segs, i);
+    rawTotalLen += L;
+    rawCxw += ((segs[i * 4] + segs[i * 4 + 2]) / 2) * L;
+    rawCyw += ((segs[i * 4 + 1] + segs[i * 4 + 3]) / 2) * L;
+  }
+  const rawCenter: Point = [rawCxw / rawTotalLen, rawCyw / rawTotalLen];
   // centroid-relative seed segments: [ax, ay, bx, by, len] per entry
   const rel = keepIdx.map((i) => [
     segs[i * 4] - seedCx, segs[i * 4 + 1] - seedCy,
@@ -942,6 +983,7 @@ export function fingerprintSymbol(
     totalLen,
     segments: keepIdx.length,
     center: [seedCx, seedCy],
+    rawCenter,
     footprint: Math.hypot(sbx1 - sbx0, sby1 - sby0),
     ...(lum && lum.length ? { lum: keepIdx.map((i) => lum[i] ?? 0) } : {}),
     ...(droppedGlyphSegments ? { droppedGlyphSegments } : {}),

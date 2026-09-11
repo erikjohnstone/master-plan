@@ -2910,14 +2910,22 @@ export class Session {
     const seedOut = {
       sheet: s.key,
       segments: fp.segments,
-      center: [round1(fp.center[0]), round1(fp.center[1])] as [number, number],
+      // rawCenter, not center — this is DISCLOSED to the caller as "where
+      // the seed instance is", which must reflect the true, unfiltered
+      // marquee position, not the dropGlyphClusters-filtered centroid used
+      // internally for matching. See rawCenter's own doc comment.
+      center: [round1(fp.rawCenter[0]), round1(fp.rawCenter[1])] as [number, number],
       rect: [round1(rect[0][0]), round1(rect[0][1]), round1(rect[1][0]), round1(rect[1][1])],
       length_px: round1(fp.totalLen),
     };
 
     if (scope === "sheet") {
       if (!s.spans) s.spans = textSpans(s.page);
-      const seedHint = labelPlacements([fp.center], s.spans, geo.segs, geo.lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] ?? null;
+      // rawCenter, not center: docs/SYMBOL-SWEEP-AFFINE-GOAL.md Findings
+      // (2026-09-11) — center is filtered by dropGlyphClusters and can shift
+      // enough on a real symbol to attach the seed's own nearby-tag lookup
+      // to a NEIGHBORING symbol's tag instead of its own.
+      const seedHint = labelPlacements([fp.rawCenter], s.spans, geo.segs, geo.lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] ?? null;
       const rawRes = matchSymbol(fp, geo.segs, {
         ...sweepOpts, lum: geo.lum, excludeCenter: fp.center,
         ...(seedHint ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
@@ -2927,7 +2935,7 @@ export class Session {
       // what each already-geometric placement IS (a tag written beside it, or
       // connected by a leader). Text may corroborate/demote geometry but can
       // never manufacture a placement without vector evidence.
-      const rawLbl = this.sweepLabels(s.spans, geo, fp.center, rawRes.matches, rawRes.withheld, undefined, fp.totalLen);
+      const rawLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, rawRes.matches, rawRes.withheld, undefined, fp.totalLen);
       const corrected = reconcileSweepLabels(rawLbl.seed, rawRes.matches, rawLbl.matches, rawRes.withheld, rawLbl.withheld);
       const res: SymbolMatchResult = { ...rawRes, matches: corrected.matches, withheld: corrected.withheld };
       const lbl = { seed: rawLbl.seed, matches: corrected.matchLabels, withheld: corrected.withheldLabels };
@@ -2935,7 +2943,7 @@ export class Session {
       if (opts.commit && (res.matches.length || opts.commitSeed)) {
         // #296 — commit_seed puts the seed instance first in the SAME batch:
         // one undo step covers the whole gesture, seed included.
-        const points = [...(opts.commitSeed ? [fp.center] : []), ...res.matches.map((m) => m.at)];
+        const points = [...(opts.commitSeed ? [fp.rawCenter] : []), ...res.matches.map((m) => m.at)];
         const seedOrigin = {
           method: "symbol_sweep" as const,
           actor: "agent" as const,
@@ -2978,7 +2986,7 @@ export class Session {
           if (opts.commit && !res.matches.length && !opts.commitSeed) parts.push("commit requested but nothing cleared the bar — no shapes were committed.");
           // #296 — a count that excludes something the estimator can see must
           // say so: the seed is almost always installed work in sheet scope.
-          if (committed && !opts.commitSeed) parts.push(`The seed instance at (${round1(fp.center[0])}, ${round1(fp.center[1])}) is NOT in this count — if it is installed work, re-run with commit_seed: true or place_count it.`);
+          if (committed && !opts.commitSeed) parts.push(`The seed instance at (${round1(fp.rawCenter[0])}, ${round1(fp.rawCenter[1])}) is NOT in this count — if it is installed work, re-run with commit_seed: true or place_count it.`);
           if (labelNote) parts.push(labelNote);
           return parts.length ? { note: parts.join(" ") } : {};
         })(),
@@ -3034,7 +3042,8 @@ export class Session {
     this.requireCrossScale(s, seedRole, this.sheetList().filter((sh) => (roleOf.get(sh.key) ?? "unknown") === "plan"));
 
     if (!s.spans) s.spans = textSpans(s.page);
-    const seedLbl = this.sweepLabels(s.spans, geo, fp.center, [], [], undefined, fp.totalLen).seed;
+    // rawCenter, not center — see the sheet-scope path's own comment above.
+    const seedLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, [], [], undefined, fp.totalLen).seed;
     const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }; label_corroboration: { promoted: number; demoted: number } }[] = [];
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     for (const sh of this.sheetList()) {
@@ -3083,7 +3092,7 @@ export class Session {
       // assignment even though it is excluded from the count. Otherwise its
       // own unique tag is left free to promote a second transform peak from a
       // neighboring/overlapped instance — a real FCU-5 set-wide overcount.
-      const rawLabels = this.sweepLabels(sh.spans, g2, sh.key === s.key ? fp.center : null, res.matches, res.withheld, seedLbl?.label, fp.totalLen * ratio.scale);
+      const rawLabels = this.sweepLabels(sh.spans, g2, sh.key === s.key ? fp.rawCenter : null, res.matches, res.withheld, seedLbl?.label, fp.totalLen * ratio.scale);
       // A small fingerprint that is distinctive on its seed sheet may be
       // ordinary title-block/detail geometry elsewhere in a large set. When
       // the seed is named, set scope therefore requires every counted target
