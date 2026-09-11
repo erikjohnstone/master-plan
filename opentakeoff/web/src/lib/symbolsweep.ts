@@ -216,6 +216,23 @@ export function affineOptionsFromWire(a: {
   return { enabled: a.enabled, maxStretch: a.max_stretch, maxShearDeg: a.max_shear_deg, scaleSearch: a.scale_search };
 }
 
+/** docs/SYMBOL-SWEEP-AFFINE-GOAL.md §3 Phase 5 step 6 — the ONE source of
+ * truth for the `affine` wire object's OWN defaults (on since two
+ * consecutive clean 47-case corpus runs, see the goal doc's §9/§8). Kept
+ * separate from `affineOptionsFromWire` above on purpose: that function's
+ * own contract is to stay a pure, default-free mapping (undefined stays
+ * undefined, every field passes through verbatim) so a caller stating
+ * `enabled: false` explicitly is never confused with omitting `affine`
+ * outright. Applying THIS default is each wire surface's own job, done
+ * BEFORE calling `affineOptionsFromWire` — mcp/src/tools.ts's zod schema
+ * does it via `.default(AFFINE_WIRE_DEFAULT)` on the whole affine object;
+ * web/src/lib/agentTools.js's dispatcher does it via
+ * `{ ...AFFINE_WIRE_DEFAULT, ...(args.affine || {}) }`. Both import this
+ * SAME constant rather than each hand-typing the default values, so they
+ * cannot drift out of sync with each other the way two independent object
+ * literals could. */
+export const AFFINE_WIRE_DEFAULT = { enabled: true, max_stretch: 1.5, max_shear_deg: 10, scale_search: false } as const;
+
 /** §4.1 — disclosed on a row whenever affine refinement (not the rigid
  * search) produced the kept placement. Absent on a row the rigid path
  * committed without refinement, so a same-as-today sweep produces

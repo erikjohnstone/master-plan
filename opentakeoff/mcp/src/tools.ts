@@ -34,7 +34,7 @@ import { compileProductionTakeoff } from "./productionTakeoff.ts";
 import { basReviewRequestSchema } from "../../web/src/lib/basReviewContract.ts";
 import { basEquipmentReviewRequestSchema } from "../../web/src/lib/basEquipmentRegister.ts";
 import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
-import { affineOptionsFromWire } from "../../web/src/lib/symbolsweep.ts";
+import { affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../../web/src/lib/symbolsweep.ts";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
 } from "../../web/src/lib/hvacTaxonomy.ts";
@@ -263,11 +263,11 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       luminance_tolerance: z.number().int().min(0).max(254).optional()
         .describe("Stroke-luminance gate, 0–254 (#260): a sheet segment only answers for a seed segment when their stroke luminances (Rec. 709, 0 black – 255 white) are within this. For flattened exports where a black device and its grey background twin are geometrically identical — 32–64 separates black from grey. Omit to score on geometry alone; stated, the reply's lum_gate discloses the seed's luminance band and every placement the gate pulled under the commit bar"),
       affine: z.object({
-        enabled: z.boolean().default(false).describe("Also search continuous (off-grid) rotation and bounded anisotropic stretch/shear, not just 0/90/180/270. A symbol drawn rotated ~37° or stretched to fit a tight run is invisible to the rigid search alone — this makes it PROPOSABLE, scores it against the fitted transform, and discloses the fit (rotation_deg/scale_x/scale_y/shear_deg/mirrored) on the row's `transform` field. A fit outside max_stretch/max_shear_deg is never a match — it comes back `withheld` naming the actual distortion, so a genuinely different device drawn to look alike is a question, not a silent count. Off by default (docs/SYMBOL-SWEEP-AFFINE-GOAL.md)"),
+        enabled: z.boolean().default(true).describe("Also search continuous (off-grid) rotation and bounded anisotropic stretch/shear, not just 0/90/180/270. A symbol drawn rotated ~37° or stretched to fit a tight run is invisible to the rigid search alone — this makes it PROPOSABLE, scores it against the fitted transform, and discloses the fit (rotation_deg/scale_x/scale_y/shear_deg/mirrored) on the row's `transform` field. A fit outside max_stretch/max_shear_deg is never a match — it comes back `withheld` naming the actual distortion, so a genuinely different device drawn to look alike is a question, not a silent count. Default true since 2026-09 (docs/SYMBOL-SWEEP-AFFINE-GOAL.md §3 Phase 5): two consecutive full 47-case corpus runs came back clean (0 false-adds, 0 regressions) with it on; set false to fall back to the original rigid-only search"),
         max_stretch: z.number().positive().default(1.5).describe("Bound on scale_x/scale_y (after dividing out any stated seed→target size ratio): each must fall in [1/max_stretch, max_stretch] to commit as a match. Default 1.5×"),
         max_shear_deg: z.number().positive().default(10).describe("Bound on |shear_deg| to commit as a match. Default 10°"),
         scale_search: z.boolean().default(false).describe("Also propose anisotropic stretch/shear that a single rotated segment alone can't fix (a genuinely non-uniform stretch on one axis). Off by default even when affine.enabled is true — most symbols are rotated or uniformly resized, not stretched, and this widens the search; turn on only when this drawing set genuinely stretches its symbols"),
-      }).optional().describe("docs/SYMBOL-SWEEP-AFFINE-GOAL.md — off by default. Turn on `enabled` to catch rotated-off-grid or distorted \"changed\" symbols; leave `scale_search` off unless this specific drawing set stretches its symbols non-uniformly"),
+      }).default(AFFINE_WIRE_DEFAULT).describe("docs/SYMBOL-SWEEP-AFFINE-GOAL.md — on by default (the whole object defaults to AFFINE_WIRE_DEFAULT so omitting `affine` entirely still gets `enabled: true`). Turn `enabled` off to force the original rigid-only (0/90/180/270) search; leave `scale_search` off unless this specific drawing set stretches its symbols non-uniformly"),
     },
     outputSchema: symbolSweepOutput,
   }, run("symbol_sweep", (a) => session.symbolSweep(a.sheet, {
@@ -324,11 +324,11 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       prefer_schedule_sheet: z.string().optional().describe("When the same mark appears on multiple schedules (shared building letter), prefer the row on this sheet key"),
       prefer_schedule_title: z.string().optional().describe("When the same mark appears on multiple schedules, prefer the row whose table title matches (exact or …SCHEDULE stem)"),
       affine: z.object({
-        enabled: z.boolean().default(false).describe("Also search continuous (off-grid) rotation and bounded anisotropic stretch/shear for the marker, not just 0/90/180/270. Off by default (docs/SYMBOL-SWEEP-AFFINE-GOAL.md)"),
+        enabled: z.boolean().default(true).describe("Also search continuous (off-grid) rotation and bounded anisotropic stretch/shear for the marker, not just 0/90/180/270. Default true since 2026-09 (docs/SYMBOL-SWEEP-AFFINE-GOAL.md §3 Phase 5); set false to fall back to rigid-only"),
         max_stretch: z.number().positive().default(1.5).describe("Bound on scale_x/scale_y to commit as a match. Default 1.5×"),
         max_shear_deg: z.number().positive().default(10).describe("Bound on |shear_deg| to commit as a match. Default 10°"),
         scale_search: z.boolean().default(false).describe("Also propose anisotropic stretch/shear a single rotated segment alone can't fix. Off by default even when affine.enabled is true"),
-      }).optional().describe("docs/SYMBOL-SWEEP-AFFINE-GOAL.md — off by default; see symbol_sweep's own affine option for the full explanation"),
+      }).default(AFFINE_WIRE_DEFAULT).describe("docs/SYMBOL-SWEEP-AFFINE-GOAL.md — on by default (the whole object defaults to AFFINE_WIRE_DEFAULT so omitting `affine` entirely still gets `enabled: true`); see symbol_sweep's own affine option for the full explanation"),
     },
     outputSchema: sweepScheduleRowOutput,
   }, run("sweep_schedule_row", (a) => session.sweepScheduleRow(a.tag, {

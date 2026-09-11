@@ -67,7 +67,7 @@
 //   editCondition(tag, opts): { condition_id, finish_tag, ... } | { error }
 //   editMaterials(tag, opts): { condition_id, finish_tag, materials } | { error }
 
-import { affineOptionsFromWire } from "./symbolsweep.ts";
+import { affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "./symbolsweep.ts";
 
 // ── evidence whitelist ───────────────────────────────────────────────────────
 // Mirrors contribute.js's wire-side deep whitelist byte-for-byte: applying it
@@ -310,9 +310,9 @@ export const AGENT_TOOL_DEFS = [
         luminance_tolerance: { type: "number", minimum: 0, maximum: 254, description: "Optional stroke-luminance gate (0=black..255=white) for flattened exports where a real device and a background twin are geometrically identical but drawn in different pen colors." },
         affine: {
           type: "object",
-          description: "Off by default. Also search continuous (off-grid) rotation and bounded stretch/shear, not just 0/90/180/270 — a symbol drawn rotated ~37° or stretched to fit a tight run is otherwise invisible to the search entirely, not just low-scoring. A match under this gets a `transform` field disclosing the actual fit; a fit past max_stretch/max_shear_deg is withheld naming the distortion, never silently counted.",
+          description: "On by default. Also searches continuous (off-grid) rotation and bounded stretch/shear, not just 0/90/180/270 — a symbol drawn rotated ~37° or stretched to fit a tight run is otherwise invisible to the search entirely, not just low-scoring. A match under this gets a `transform` field disclosing the actual fit; a fit past max_stretch/max_shear_deg is withheld naming the distortion, never silently counted. Pass {enabled: false} to force the original rigid-only (0/90/180/270) search.",
           properties: {
-            enabled: { type: "boolean", description: "Default false." },
+            enabled: { type: "boolean", description: "Default true." },
             max_stretch: { type: "number", description: "Bound on scale_x/scale_y to commit as a match. Default 1.5." },
             max_shear_deg: { type: "number", description: "Bound on shear degrees to commit as a match. Default 10." },
             scale_search: { type: "boolean", description: "Also propose anisotropic stretch a single rotated segment can't fix on its own. Default false, even when enabled is true — turn on only when this drawing set genuinely stretches its symbols." },
@@ -922,7 +922,7 @@ export async function executeAgentTool(ctx, name, args) {
           tolerancePx: args.tolerance_px,
           luminanceTolerance: args.luminance_tolerance,
           pointNorm: args.seed_point_norm,
-          ...(args.affine ? { affine: affineOptionsFromWire(args.affine) } : {}),
+          affine: affineOptionsFromWire({ ...AFFINE_WIRE_DEFAULT, ...(args.affine || {}) }),
         });
       }
 
