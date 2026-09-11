@@ -2969,8 +2969,37 @@ export class Session {
       // never manufacture a placement without vector evidence.
       const rawLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, rawRes.matches, rawRes.withheld, undefined, fp.totalLen);
       const corrected = reconcileSweepLabels(rawLbl.seed, rawRes.matches, rawLbl.matches, rawRes.withheld, rawLbl.withheld);
-      const res: SymbolMatchResult = { ...rawRes, matches: corrected.matches, withheld: corrected.withheld };
-      const lbl = { seed: rawLbl.seed, matches: corrected.matchLabels, withheld: corrected.withheldLabels };
+      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F — a `hold: "density"`
+      // row is, by construction, never degenerate (only `hold: "bounds"`
+      // rows are); when one scores higher than an ALREADY-labeled,
+      // already-counted match within the seed's own shadow-suppression
+      // radius, it is very likely a more precisely-located reading of the
+      // SAME physical instance the tag already, correctly, identified — the
+      // committed match's own coordinate was just imprecise. This corrects
+      // ONLY the reported position/score/transform of an already-decided
+      // match; it never touches which match owns which label, nor whether
+      // anything is promoted or demoted, so it cannot reopen case 11's own
+      // regression (Phase B) the way transferring the TAG itself did (see
+      // this section's own reverted attempt above).
+      const mergeR = fp.footprint / 2;
+      const usedWithheld = new Set<number>();
+      const positionedMatches = corrected.matches.map((m) => {
+        let bestW: SweepWithheld | undefined;
+        let bestI = -1;
+        for (let i = 0; i < corrected.withheld.length; i++) {
+          const w = corrected.withheld[i];
+          if (usedWithheld.has(i) || w.hold !== "density" || w.score <= m.score) continue;
+          if (Math.hypot(w.at[0] - m.at[0], w.at[1] - m.at[1]) > mergeR) continue;
+          if (!bestW || w.score > bestW.score) { bestW = w; bestI = i; }
+        }
+        if (!bestW) return m;
+        usedWithheld.add(bestI);
+        return { ...m, at: bestW.at, score: bestW.score, rotation: bestW.rotation, mirrored: bestW.mirrored, ...(bestW.transform ? { transform: bestW.transform } : { transform: undefined }) };
+      });
+      const positionedWithheld = corrected.withheld.filter((_, i) => !usedWithheld.has(i));
+      const positionedWithheldLabels = corrected.withheldLabels.filter((_, i) => !usedWithheld.has(i));
+      const res: SymbolMatchResult = { ...rawRes, matches: positionedMatches, withheld: positionedWithheld };
+      const lbl = { seed: rawLbl.seed, matches: corrected.matchLabels, withheld: positionedWithheldLabels };
       let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
       if (opts.commit && (res.matches.length || opts.commitSeed)) {
         // #296 — commit_seed puts the seed instance first in the SAME batch:
