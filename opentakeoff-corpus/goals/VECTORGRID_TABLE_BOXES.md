@@ -1,6 +1,10 @@
 # Goal: vectorgrid finds every table on every vector sheet, with the right box
 
-Opened 2026-09-07. Not complete.
+Opened 2026-09-07. Not complete. Tightened 2026-09-12 — see "Non-negotiable:
+what 'ground truth' means here" and "The Demo Corpus" below. This goal is not
+closed by a statistical extrapolation, an unaudited heuristic, or a
+cherry-picked good day. It closes when a stranger can watch it live on a
+document it has never seen and not find the seam.
 
 ## Why
 
@@ -30,6 +34,49 @@ reported EXCLUDED**, never counted as misses and never counted as wins. We do
 not control how a consultant pastes a table into a sheet, and a metric that
 punishes or flatters us for it measures the wrong thing. Everything with real
 drawn linework is in scope, and nothing else is.
+
+## Non-negotiable: what "ground truth" means here
+
+This section governs how every word in Method and the Completion Gate is
+read. It exists because "ground truth" is the one term in this file that is
+easy to quietly water down under volume pressure, and doing that is exactly
+the failure this goal was opened to end.
+
+**Ground truth means a human looked at the rendered page — extractor's
+answer NOT in view — and wrote down the true box and the true cell content.**
+Nothing else earns that name in this file, ever, regardless of how it is
+reported.
+
+Two mechanisms in Method produce numbers at volume without a human
+touching every one of them. Both are real and both stay in this file, but
+neither is ground truth and neither may be quoted as if it were:
+
+- **The self-supervised MERGED/MISSED/SPLIT/ESCAPED sweep (Method §2) is a
+  triage instrument.** It tells you where to point a human next, for free,
+  across all 224 PDFs. It is never cited as evidence that a table is
+  correctly found — only that it's worth someone's eyes.
+- **Auto-accepted boxes (Method §3) are a volume accelerant, not a truth
+  source.** Two independent extractors agreeing within 4pt means they
+  didn't disagree — not that either is right. Two tools sharing a blind
+  spot (a picture-frame border both treat as the table's actual edge, say)
+  agree confidently and both being wrong. Auto-accept earns trust only in
+  proportion to the size and randomness of the audit sample checking it —
+  report the auto-accept rate, the audit sample size, and the audit
+  disagreement rate, every time, together. If the audited disagreement rate
+  is not indistinguishable from zero, auto-accept is broken and gets turned
+  off — not re-tuned, not shrunk quietly, off — until the reason it's wrong
+  is found.
+
+**This goal is never declared complete by quoting the self-supervised
+signal, by an auto-accept rate with no audit behind it, or by a demo set
+chosen after the fact because it happened to score well.** If a future
+session is tempted to write "vectorgrid is done, see the 97% self-supervised
+recall number" — that is not this goal being met. That is this goal being
+half-assed with better vocabulary. The only numbers that close this file are
+named explicitly in the Completion Gate and the Demo Corpus sections below,
+and every one of them is either a human eyes-on-the-page count or a
+mechanically independent cross-check reported next to its own measured
+agreement rate — never presented as if it were the hand-graded number.
 
 ## Method
 
@@ -66,6 +113,13 @@ is not ground truth.
 **vectorgrid nails a large volume of tables it has never seen — the box AND
 the values, cell by cell, row by row, column by column — and it is hand-graded
 against the actual tables.** Not the 137. Not the pages it was tuned on.
+
+This gate is met only by the numbers named below, each reported the way its
+own row says. It is explicitly NOT met by: the self-supervised sweep alone,
+an auto-accept rate without its audit, a sample chosen because it already
+looked good, or "the corpus-wide number is high enough that a few misses
+don't matter." One un-disclosed wrong cell in a table someone actually
+relies on is the whole failure mode this platform exists to refuse.
 
 ### The held-out split is declared first, and frozen
 
@@ -119,6 +173,30 @@ cells**. Two things scale it without lying:
 
 Neither replaces the held-out hand-graded number. They surround it.
 
+### Volume floor — a real denominator, not a vibe
+
+Step 1 of Method (the text-layer discovery pass) will produce a real count:
+the total number of schedule-shaped captions across all 224 PDFs. The moment
+that number exists, it gets written into this file — call it **N**. Until N
+is measured and printed here, "volume" has not been answered, regardless of
+how many tables have been hand-graded so far.
+
+Once N is known:
+
+- The held-out hand-graded sample (boxes AND cells, full discipline above)
+  must cover **at least 25% of N**, not a fixed small number that looked
+  impressive when the corpus was smaller.
+- That sample is drawn by a documented random process — never hand-picked,
+  never "the sheets that were already easy to read" — and stratified across
+  every discipline this claims to cover (HVAC, BAS, electrical, plumbing,
+  structural, architectural) and across both Vol1 and Vol2, in roughly the
+  proportion each actually appears in the corpus.
+- If 25% of N is judged genuinely infeasible to hand-grade in reasonable
+  time, the fallback is not a smaller sample chosen quietly — it is stating
+  the real number reached, the real percentage of N it represents, and why,
+  in this file, next to the score. A shrunk bar that isn't written down is
+  the exact "half-assed with better vocabulary" failure this file forbids.
+
 ### And the existing gates stay unmoved
 
 `boxscore.py` 137/137 and mean IoU 0.9993, `cellscore.py` 917/917 cells and
@@ -126,6 +204,59 @@ Neither replaces the held-out hand-graded number. They surround it.
 SPLIT/OVERRUN/SHORT/MERGED on the keyed set, and the app's own regions via
 `mcp/scripts/table-box-eval.mjs` per producing stage with a cause on every
 miss. A held-out score is not licence to regress the measured one.
+
+## The Demo Corpus — the walk-out proof
+
+The corpus-wide statistical gate above proves the platform is sound
+everywhere. It is not, by itself, the thing you hand someone a laptop and
+walk through live — a 96% corpus-wide number means there's a real document
+in the pile that's wrong, and nobody can promise it isn't the one an
+audience member happens to click on. This section is the second, stricter
+thing that sits on top of it, built specifically to be shown to a room of
+people with zero hedging.
+
+**The set.** At least 30 real documents, named up front in
+`keys/DEMO_CORPUS.txt` and frozen before grading starts — the same
+no-swapping-a-document-out-because-it-embarrassed-the-score discipline as
+`keys/HELDOUT.txt`. Chosen to span every discipline this claims to cover
+(HVAC, BAS, electrical, plumbing, structural, architectural) and both Vol1
+and Vol2 — not 30 easy HVAC sheets. It may overlap the held-out split; it may
+not be hand-picked for how well vectorgrid already does on it, and the
+selection process (e.g. "every Nth document from a sorted manifest,
+stratified by discipline") gets written down here so nobody can wonder later
+whether it was cherry-picked.
+
+**The bar, per document, per table:**
+
+- Every non-rasterized table on it is found — self-supervised MISSED = 0 on
+  every one of these documents, hand-confirmed by rendering the sheet, not
+  assumed from the sweep.
+- Every box is hand-graded, blind (extractor's answer not in view, boxes
+  picked from the page's own candidate rules) — EoB ≤ 4pt. **Auto-accept
+  does not apply here.** The whole demo corpus is graded the expensive way,
+  because this is the set someone will watch live.
+- Every cell of every table is hand-transcribed off the render and compared
+  exact-match against what vectorgrid produced. No cellocr.py cross-check
+  standing in for the transcription here — this is the one place in this
+  file where the mechanically-independent shortcuts from "Volume, honestly"
+  are not allowed to substitute.
+- Rasters/pasted images on these documents are still correctly EXCLUDED, not
+  silently zeroed — that disclosure has to hold up live too.
+
+**The pass condition is zero, not a percentage.** Not "99% accurate on the
+demo corpus" — zero known box errors and zero known cell errors across all
+30+ documents. If hand-grading finds one real error anywhere in this set,
+this goal is not complete, no matter what the corpus-wide statistical
+numbers say, and the fix + regression test happen before the demo corpus is
+re-claimed clean. One wrong number in front of a room ends the meeting and
+the credibility along with it — that is the entire reason this section
+exists and it is graded to that standard, not a lesser one.
+
+**What "walking it out" looks like when this is done:** open any document
+from `keys/DEMO_CORPUS.txt` that hasn't been shown before, in the real app,
+live — every schedule highlighted correctly, every cell value matching the
+page, nothing rasterized silently dropped. That moment is the actual
+deliverable this whole file exists to produce.
 
 ## Open at the time of writing
 
