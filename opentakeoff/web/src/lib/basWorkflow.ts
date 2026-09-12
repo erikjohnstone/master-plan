@@ -8,13 +8,13 @@ import { canonicalBasJson } from './basCanonical.ts';
 import { BAS_SEQUENCE_RULE, reconcileBasSequencePoints } from './basSequenceReconciliation.ts';
 import { basReviewEventSchema } from './basReviewContract.ts';
 import { basEquipmentEvidenceSchema, equipmentIdentityPayload, ownBasEquipmentEvidencePassthrough, type BasEquipmentEvidence } from './basEquipmentEvidence.ts';
-import { basEquipmentReviewEventSchema, prepareBasEquipmentRegisterValidator, type BasEquipmentReviewEvent,
+import { basEquipmentReviewEventSchema, prepareBasEquipmentRegisterValidatorForVerifiedWorkflow, type BasEquipmentReviewEvent,
   type BasEquipmentAssignmentView } from './basEquipmentRegister.ts';
 import { basAssignmentCalculationSchema, basAssignmentCalculationFingerprint, basAssignmentInputFingerprint,
   buildBasAssignmentDemandInput, verifyBasAssignmentDemandResult } from './basAssignmentDemandContract.ts';
 import { BAS_WORKFLOW_REVISIONS, atLeastBasWorkflowRevision } from './basWorkflowRevision.ts';
-import { basAssemblyReviewEventSchema, basAssemblyInterpretationFingerprint, prepareBasAssemblyRegisterValidator,
-  prepareBasAssemblyRegisterValidatorForVerifiedEquipment, type BasAssemblyReviewEvent,
+import { basAssemblyReviewEventSchema, prepareBasAssemblyRegisterOperationForVerifiedEquipment,
+  type BasAssemblyReviewEvent,
   type BasAssemblyReviewView } from './basAssemblyRegister.ts';
 import { basAssemblyCalculationSchema, basAssemblyCalculationFingerprint, assemblyQuantityInputForValidatedRegisters,
   basAssemblyQuantityInputFingerprint, verifyBasAssemblyQuantityResult } from './basAssemblyQuantityContract.ts';
@@ -166,14 +166,21 @@ export function assertVerifiedBasWorkflowReferences(workflow: BasWorkflow): void
 
 /** Replace ONLY navigation aliases, never raw source strings or local row keys. */
 export function basCaptureIdentityPayload(c: Omit<BasCapture, 'capture_id'>) {
-  const points = structuredClone(c.points);
-  for (const m of points.matrices) {
-    m.raw.sheet = m.page_id!;
-    const remap = (s: { sheet_key: string; page_id: string | null }) => { s.sheet_key = s.page_id!; };
-    m.header_sources.forEach(remap);
-    m.notes.forEach(n => remap(n.source));
-    m.rows.forEach(r => { r.observations.forEach(o => remap(o.source)); r.qualifiers.forEach(n => remap(n.source)); });
-  }
+  // Identity serialization is read-only. Copy only objects whose navigation
+  // alias changes instead of cloning every retained row/cell/source first.
+  // canonicalBasJson observes the same values; unchanged evidence can be shared
+  // for this short-lived projection without becoming mutable authority.
+  const remap = <T extends { sheet_key: string; page_id: string | null }>(source: T): T =>
+    ({ ...source, sheet_key: source.page_id! });
+  const points = { ...c.points, matrices: c.points.matrices.map(m => ({ ...m,
+    raw: { ...m.raw, sheet: m.page_id! },
+    header_sources: m.header_sources.map(remap),
+    notes: m.notes.map(n => ({ ...n, source: remap(n.source) })),
+    rows: m.rows.map(r => ({ ...r,
+      observations: r.observations.map(o => ({ ...o, source: remap(o.source) })),
+      qualifiers: r.qualifiers.map(n => ({ ...n, source: remap(n.source) })),
+    })),
+  })) };
   const narratives = c.narrative_sources ? {
     narrative_rule_version: c.narrative_rule_version,
     narrative_sources: { ...c.narrative_sources,
@@ -204,6 +211,21 @@ export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSch
   sha256Hex(new TextEncoder().encode(canonicalBasJson(event)));
 
 export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
+  return verifyBasWorkflowOwned(raw, false);
+}
+
+/** Internal snapshot/readiness entrypoint. It preserves the exact latest review
+ * views already established below for one subsequent current-inventory audit. */
+export async function verifyBasWorkflowWithPreparedReviewViews(raw: unknown): Promise<BasWorkflow> {
+  return verifyBasWorkflowOwned(raw, true);
+}
+
+type PreparedWorkflowReviewViews = { equipment: Map<string, { head: string; view: BasEquipmentAssignmentView }>;
+  assembly: Map<string, { head: string; equipment_head: string; view: BasAssemblyReviewView;
+    interpretation: Awaited<ReturnType<typeof prepareBasAssemblyRegisterOperationForVerifiedEquipment>>['interpretation'] }> };
+const preparedWorkflowReviewViews = new WeakMap<object, PreparedWorkflowReviewViews>();
+
+async function verifyBasWorkflowOwned(raw: unknown, retainPreparedReviewViews: boolean): Promise<BasWorkflow> {
   // Zod owns every strict workflow object/array. Equipment evidence alone
   // intentionally passes through unknown graph metadata, so own that bounded
   // evidence explicitly before the first await instead of cloning the entire
@@ -232,14 +254,21 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
   }
   // One-entry contexts, local to this owned workflow. Every event is still
   // hashed and every register validated; changing capture/heads replaces reuse.
-  let equipmentContext: { capture: string; validate: Awaited<ReturnType<typeof prepareBasEquipmentRegisterValidator>>;
+  let equipmentContext: { capture: string; validate: Awaited<ReturnType<typeof prepareBasEquipmentRegisterValidatorForVerifiedWorkflow>>;
     event_id?: string; view?: BasEquipmentAssignmentView } | undefined;
+  const latestEquipment = new Map<string, string>();
+  for (const event of result.equipment_events ?? []) latestEquipment.set(event.capture_id, event.event_id);
+  const latestAssembly = new Map<string, string>();
+  for (const event of result.assembly_events ?? []) latestAssembly.set(event.capture_id, event.event_id);
+  const retainedViews: PreparedWorkflowReviewViews = { equipment: new Map(), assembly: new Map() };
   const equipmentViewFor = async (c: BasCapture, event: BasEquipmentReviewEvent) => {
     if (equipmentContext?.capture !== c.capture_id) equipmentContext = { capture: c.capture_id,
-      validate: await prepareBasEquipmentRegisterValidator(c.narrative_sources!, c.equipment_sources!, c.points) };
+      validate: await prepareBasEquipmentRegisterValidatorForVerifiedWorkflow(c.narrative_sources!, c.equipment_sources!, c.points) };
     if (equipmentContext.event_id !== event.event_id) {
       equipmentContext.view = equipmentContext.validate(event.register);
       equipmentContext.event_id = event.event_id;
+      if (retainPreparedReviewViews && latestEquipment.get(c.capture_id) === event.event_id)
+        retainedViews.equipment.set(c.capture_id, { head: event.event_id, view: equipmentContext.view });
     }
     return equipmentContext.view!;
   };
@@ -249,31 +278,37 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
     const c = result.captures.find(c => c.capture_id === event.capture_id)!;
     await equipmentViewFor(c, event);
   }
-  let assemblyContext: { key: string; validate: Awaited<ReturnType<typeof prepareBasAssemblyRegisterValidator>>;
-    event_id?: string; view?: BasAssemblyReviewView } | undefined;
-  let interpretationIdentity: { key: string; fingerprint: string } | undefined;
-  const assemblyViewFor = async (c: BasCapture, event: BasAssemblyReviewEvent, equipment: BasEquipmentReviewEvent) => {
-    const key = canonicalBasJson([c.capture_id, equipment.event_id]);
+  let assemblyContext: { key: string;
+    operation: Awaited<ReturnType<typeof prepareBasAssemblyRegisterOperationForVerifiedEquipment>>;
+    fingerprint?: string; event_id?: string; view?: BasAssemblyReviewView } | undefined;
+  const assemblyOperationFor = async (c: BasCapture, event: BasAssemblyReviewEvent, equipment: BasEquipmentReviewEvent) => {
+    const key = canonicalBasJson([c.capture_id, equipment.event_id, event.register.source_rule_version]);
     if (assemblyContext?.key !== key) {
       const equipmentView = await equipmentViewFor(c, equipment);
-      assemblyContext = { key, validate: await prepareBasAssemblyRegisterValidatorForVerifiedEquipment(
-        c.narrative_sources!, equipmentView) };
+      assemblyContext = { key, operation: await prepareBasAssemblyRegisterOperationForVerifiedEquipment(
+        c.narrative_sources!, equipmentView, event.register.source_rule_version) };
     }
-    if (assemblyContext.event_id !== event.event_id) {
-      assemblyContext.view = assemblyContext.validate(event.register);
-      assemblyContext.event_id = event.event_id;
+    return assemblyContext;
+  };
+  const assemblyViewFor = async (c: BasCapture, event: BasAssemblyReviewEvent, equipment: BasEquipmentReviewEvent) => {
+    const context = await assemblyOperationFor(c, event, equipment);
+    if (context.event_id !== event.event_id) {
+      context.view = context.operation.validate(event.register);
+      context.event_id = event.event_id;
+      if (retainPreparedReviewViews && latestAssembly.get(c.capture_id) === event.event_id)
+        retainedViews.assembly.set(c.capture_id, { head: event.event_id, equipment_head: event.expected_equipment_head,
+          view: context.view, interpretation: context.operation.interpretation });
     }
-    return assemblyContext.view!;
+    return context.view!;
   };
   for (const event of result.assembly_events ?? []) {
     const { event_id, ...payload } = event;
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS assembly event fingerprint mismatch');
     const c = result.captures.find(c => c.capture_id === event.capture_id)!;
     const equipment = result.equipment_events!.find(e => e.event_id === event.expected_equipment_head)!;
-    const interpretationKey = canonicalBasJson([c.capture_id, event.register.source_rule_version]);
-    if (interpretationIdentity?.key !== interpretationKey) interpretationIdentity = { key: interpretationKey,
-      fingerprint: await basAssemblyInterpretationFingerprint(c.narrative_sources!, event.register.source_rule_version) };
-    if (interpretationIdentity.fingerprint !== event.source_interpretation_fingerprint) {
+    const context = await assemblyOperationFor(c, event, equipment);
+    context.fingerprint ??= await context.operation.sourceInterpretationFingerprint();
+    if (context.fingerprint !== event.source_interpretation_fingerprint) {
       throw new Error('BAS assembly source interpretation changed within its retained rule version');
     }
     await assemblyViewFor(c, event, equipment);
@@ -345,7 +380,24 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
     const { event_id, ...payload } = event;
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS scope event fingerprint mismatch');
   }
+  if (retainPreparedReviewViews && (retainedViews.equipment.size || retainedViews.assembly.size))
+    preparedWorkflowReviewViews.set(result, retainedViews);
   return result;
+}
+
+/** One-shot internal handoff. Object identity plus exact event heads prevent a
+ * copied/foreign workflow or historical selection from consuming these views. */
+export function consumePreparedBasWorkflowReviewViews(workflow: BasWorkflow, captureId: string,
+  equipmentHead: string | null, assemblyHead: string | null) {
+  const retained = preparedWorkflowReviewViews.get(workflow);
+  if (!retained || !equipmentHead) return null;
+  const equipment = retained.equipment.get(captureId);
+  if (equipment?.head !== equipmentHead) return null;
+  const assembly = retained.assembly.get(captureId);
+  retained.equipment.delete(captureId); retained.assembly.delete(captureId);
+  if (!retained.equipment.size && !retained.assembly.size) preparedWorkflowReviewViews.delete(workflow);
+  return { equipment: equipment.view,
+    assembly: assembly?.head === assemblyHead && assembly.equipment_head === equipmentHead ? assembly : null };
 }
 
 /** Synchronous structure/merge gate; callers verify fingerprints before use. */

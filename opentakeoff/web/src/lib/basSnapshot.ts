@@ -2,12 +2,12 @@
  * browser/MCP, independent of storage, extraction and the mutable workflow.
  * A prepared plan is not a committed approval. Local declarations are unsigned. */
 import { z } from 'zod';
-import { canonicalBasJson } from './basCanonical.ts';
+import { canonicalBasJson, canonicalBasJsonByteLength } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 import { parseTakeoffImport } from './importTakeoff.js';
 import { ANN_SCHEMA } from './store.js';
 import { buildBasReadinessForVerifiedWorkflow, BAS_READINESS_RULE, type BasReadinessIO } from './basReadiness.ts';
-import { inspectBasSourceHistory, sourceInventoryForVerifiedBasWorkflow, type BasSourceInventoryItem } from './basSourceRetention.ts';
+import { inspectBasSourceHistoryWithPreparedReviewViews, sourceInventoryForVerifiedBasWorkflow, type BasSourceInventoryItem } from './basSourceRetention.ts';
 import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 
 export const BAS_SNAPSHOT_RULE = 'bas_scoped_snapshot_1' as const;
@@ -71,7 +71,7 @@ function ownTakeoff(raw: unknown): OwnedTakeoff {
  * is in flight. verifyBasWorkflow synchronously owns every retained field before
  * its first await, so the redundant parsed/cloned graph need not stay resident. */
 async function consumeOwnedSourceHistory(input: OwnedTakeoff) {
-  const pending = inspectBasSourceHistory(input.payload.bas_workflow);
+  const pending = inspectBasSourceHistoryWithPreparedReviewViews(input.payload.bas_workflow);
   delete input.payload.bas_workflow;
   const inspected = await pending;
   input.payload.bas_workflow = inspected.workflow;
@@ -108,7 +108,7 @@ export async function prepareBasSnapshotArchiveInput(rawJson: unknown, signal?: 
 function ownPlan(payload_json: string, record: BasSnapshotRecord, inventory: BasSourceInventoryItem[],
   mode: OwnedPlan['mode'], signal?: AbortSignal) {
   signal?.throwIfAborted();
-  if (encode(record).length > BAS_SNAPSHOT_JSON_LIMIT) throw new Error('BAS snapshot record exceeds the supported size limit');
+  if (canonicalBasJsonByteLength(record) > BAS_SNAPSHOT_JSON_LIMIT) throw new Error('BAS snapshot record exceeds the supported size limit');
   const plan: BasSnapshotPlan = Object.freeze({ kind: 'bas_snapshot_plan', snapshot_id: record.snapshot_id });
   // Every caller above supplies a schema-parsed record it privately owns.
   // Keep that object private; readBasSnapshotPlan remains the copy boundary.
@@ -143,7 +143,7 @@ export function assertBasSnapshotPlan(plan: BasSnapshotPlan) {
  * not source-byte or calculation verification; only verifyBasSnapshot grants
  * an owned reopened plan after those expensive checks. */
 export async function verifyBasSnapshotRecordIdentity(rawRecord: unknown): Promise<BasSnapshotRecord> {
-  if (encode(rawRecord).length > BAS_SNAPSHOT_JSON_LIMIT) throw new Error('BAS snapshot record exceeds the supported size limit');
+  if (canonicalBasJsonByteLength(rawRecord) > BAS_SNAPSHOT_JSON_LIMIT) throw new Error('BAS snapshot record exceeds the supported size limit');
   const record = basSnapshotRecordSchema.parse(structuredClone(rawRecord)), { snapshot, seal } = record;
   const { event_id, ...sealPayload } = seal;
   if (await hash(snapshot) !== record.snapshot_id || seal.snapshot_id !== record.snapshot_id

@@ -1,16 +1,17 @@
 /** Shared, source-owned inventory for pinned revision sides. It retains raw
  * evidence and declared/calculated quantities, but computes no delta or approval. */
-import { basCaptureIdentityPayload, verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
-import { canonicalBasJson } from './basCanonical.ts';
+import { basCaptureIdentityPayload, consumePreparedBasWorkflowReviewViews, verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
+import { canonicalBasJson, canonicalBasJsonByteLength } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 import { basDrawingCapturePages } from './basDrawingRevision.ts';
 import { BAS_REVISION_INVENTORY_RULE, basRevisionBasisSchema, selectBasRevisionState } from './basRevisionBasis.ts';
-import { buildBasEquipmentCandidates } from './basEquipmentEvidence.ts';
+import { buildBasEquipmentCandidatesForVerifiedEvidence } from './basEquipmentEvidence.ts';
+import { prepareBasEquipmentRegisterValidatorForVerifiedWorkflow, type BasEquipmentAssignmentView } from './basEquipmentRegister.ts';
 import { interpretBasSequences } from './basSequenceReconciliation.ts';
 import { basActiveAssociations } from './basReview.ts';
 import { BAS_COMPONENT_SOURCE_RULE, interpretBasComponentRequirements } from './basComponentRequirements.ts';
 import { basEngineeringRatingBases } from './basEngineeringRegister.ts';
-import { validateBasAssemblyRegister } from './basAssemblyRegister.ts';
+import { prepareBasAssemblyRegisterOperationForVerifiedEquipment, type BasAssemblyReviewView } from './basAssemblyRegister.ts';
 
 export * from './basRevisionInventoryContract.ts';
 import { basRevisionItemSchema, basRevisionInventorySchema, assertBasRevisionInventorySize,
@@ -18,6 +19,14 @@ import { basRevisionItemSchema, basRevisionInventorySchema, assertBasRevisionInv
 type Source = BasRevisionItem['source_refs'][number];
 type Reference = BasRevisionItem['references'][number];
 type Quantity = BasRevisionItem['quantities'][number];
+type PreparedAssemblyView = BasAssemblyReviewView & { capture_id: string; review_head: string; review_origin: 'operator_input' | 'agent_proposal';
+  equipment_head: string; current_equipment_head: string; dependency_status: 'current_dependencies' | 'stale_dependencies';
+  source_status: 'active_capture' | 'historical_capture' };
+type PreparedInventoryAudit = { workflow: BasWorkflow; captures: Map<string, {
+  equipment: { head: string; view: BasEquipmentAssignmentView };
+  assembly: { head: string; view: PreparedAssemblyView } | null;
+}> };
+const preparedInventoryAudits = new WeakMap<object, PreparedInventoryAudit>();
 const digest = (v: unknown) => sha256Hex(new TextEncoder().encode(canonicalBasJson(v)));
 // Source references are a set, not the insertion order of a raw cell dictionary.
 // Canonical backup/restore can reorder dictionary keys without changing evidence.
@@ -41,9 +50,16 @@ export async function buildBasRevisionInventory(raw: unknown, rawBasis: unknown,
  * comparison sides reuse this exact path; no unvalidated public request may
  * bypass buildBasRevisionInventory/verifyBasWorkflow through this internal seam. */
 export async function inventoryForVerifiedBasRevision(workflow: BasWorkflow, rawBasis: unknown, signal?: AbortSignal) {
+  return inventoryForVerifiedBasRevisionWithOptions(workflow, rawBasis, signal);
+}
+
+/** Internal operation options are application wiring, never request fields. */
+export async function inventoryForVerifiedBasRevisionWithOptions(workflow: BasWorkflow, rawBasis: unknown,
+  signal?: AbortSignal, options: { retainPreparedReviewViews?: boolean; consumePreparedWorkflowReviewViews?: boolean } = {}) {
   const basis = basRevisionBasisSchema.parse(rawBasis); signal?.throwIfAborted();
   const selected = selectBasRevisionState(workflow, basis);
   const pending: Array<{ item: Omit<BasRevisionItem, 'item_id' | 'content_fingerprint'>; identity: unknown }> = [];
+  const preparedCaptures: PreparedInventoryAudit['captures'] = new Map();
   const capabilities = [];
   let encodedBytes = 0;
   for (const state of selected.states) {
@@ -71,7 +87,7 @@ export async function inventoryForVerifiedBasRevision(workflow: BasWorkflow, raw
       const item = { capture_id: capture.capture_id, kind: k, subject_id, label, source_event_id: null, calculation_id: null,
         rule_version: BAS_REVISION_INVENTORY_RULE, interpretation_rules: [], origin: 'retained_pdf_evidence' as const, dependency_status: 'not_applicable' as const,
         ...meta, source_refs, references, source_scope, original_json: canonicalBasJson(original), quantities };
-      const encoded = new TextEncoder().encode(canonicalBasJson(item)).byteLength;
+      const encoded = canonicalBasJsonByteLength(item);
       encodedBytes += encoded;
       assertBasRevisionInventorySize(pending.length + 1, encodedBytes);
       pending.push({ item, identity });
@@ -110,8 +126,39 @@ export async function inventoryForVerifiedBasRevision(workflow: BasWorkflow, raw
           requirement, evidence, [link('clause', 'sequence_clause', clause.clause_id)], [], sequenceMeta);
       }
     }
+    // One pinned revision state can consume the same schedule/component
+    // evidence for inventory and register validation. The operation contexts
+    // below are created from retained sources, never caller interpretations.
+    const equipmentEvents = new Map(workflow.equipment_events?.filter(e => e.capture_id === capture.capture_id).map(e => [e.event_id, e]));
+    const assemblyEvents = new Map(workflow.assembly_events?.filter(e => e.capture_id === capture.capture_id).map(e => [e.event_id, e]));
+    const equipmentAt = (head: string | null) => head ? equipmentEvents.get(head) : undefined;
+    const assemblyAt = (head: string | null) => head ? assemblyEvents.get(head) : undefined;
+    const preparedWorkflowViews = options.consumePreparedWorkflowReviewViews
+      ? consumePreparedBasWorkflowReviewViews(workflow, capture.capture_id, heads.equipment_head, heads.assembly_head) : null;
+    const requiresEquipmentValidator = !preparedWorkflowViews
+      || !!(state.assembly && state.assembly.expected_equipment_head !== heads.equipment_head);
+    const equipmentValidator = requiresEquipmentValidator && capture.equipment_sources && capture.narrative_sources
+      ? await prepareBasEquipmentRegisterValidatorForVerifiedWorkflow(capture.narrative_sources, capture.equipment_sources, capture.points) : null;
+    const equipmentViews = new Map<string, BasEquipmentAssignmentView>();
+    if (heads.equipment_head && preparedWorkflowViews)
+      equipmentViews.set(heads.equipment_head, preparedWorkflowViews.equipment);
+    const equipmentViewAt = (head: string | null) => {
+      if (!head) return undefined;
+      const cached = equipmentViews.get(head); if (cached) return cached;
+      if (!equipmentValidator) return undefined;
+      const event = equipmentAt(head); if (!event) return undefined;
+      const view = equipmentValidator(event.register); equipmentViews.set(head, view); return view;
+    };
+    const selectedEquipmentView = equipmentViewAt(heads.equipment_head);
+    const pinnedEquipmentView = state.assembly ? equipmentViewAt(state.assembly.expected_equipment_head) : null;
+    if (state.assembly && !pinnedEquipmentView) throw new Error('Revision assembly has no owned pinned equipment view');
     const sourceRule = state.assembly?.register.source_rule_version ?? BAS_COMPONENT_SOURCE_RULE;
-    const declared = capture.narrative_sources ? interpretBasComponentRequirements(capture.narrative_sources, sourceRule) : null;
+    const preparedAssembly = state.assembly && preparedWorkflowViews?.assembly?.head === state.assembly.event_id
+      ? preparedWorkflowViews.assembly : null;
+    const assemblyOperation = state.assembly && !preparedAssembly ? await prepareBasAssemblyRegisterOperationForVerifiedEquipment(
+      capture.narrative_sources!, pinnedEquipmentView!, sourceRule) : null;
+    const declared = preparedAssembly?.interpretation ?? assemblyOperation?.interpretation
+      ?? (capture.narrative_sources ? interpretBasComponentRequirements(capture.narrative_sources, sourceRule) : null);
     for (const clause of declared?.clauses ?? []) for (const component of clause.components) {
       const refs = fromSpans(clause.source_spans.map(s => s.span_id));
       add('component_requirement', component.requirement_id, `${component.subject_label} · ${component.component_kind}`, component, refs,
@@ -128,8 +175,8 @@ export async function inventoryForVerifiedBasRevision(workflow: BasWorkflow, raw
       [link('region', 'sequence_region', a.region_id), link('matrix', 'point_matrix', a.matrix_id)], [],
       { source_event_id: owner.event_id, origin: owner.origin, interpretation_rules: [owner.rule_version] });
     }
-    const candidates = capture.equipment_sources && capture.narrative_sources
-      ? await buildBasEquipmentCandidates(capture.narrative_sources, capture.equipment_sources) : null;
+    const candidates = selectedEquipmentView?.candidates ?? (capture.equipment_sources && capture.narrative_sources
+      ? await buildBasEquipmentCandidatesForVerifiedEvidence(capture.narrative_sources, capture.equipment_sources) : null);
     const occurrenceRefs = new Map<string, Source[]>();
     for (const [ti, table] of (candidates?.tables ?? []).entries()) {
       const refs = fromCell(aliases.get(table.raw.sheet) ?? null, table.raw.title ?? { text: 'Equipment schedule', bbox: table.raw.region });
@@ -145,10 +192,6 @@ export async function inventoryForVerifiedBasRevision(workflow: BasWorkflow, raw
     }
     // Resolve every dependency against the event it actually named. A newer
     // register may reuse an equipment UUID with different source bindings.
-    const equipmentEvents = new Map(workflow.equipment_events?.filter(e => e.capture_id === capture.capture_id).map(e => [e.event_id, e]));
-    const assemblyEvents = new Map(workflow.assembly_events?.filter(e => e.capture_id === capture.capture_id).map(e => [e.event_id, e]));
-    const equipmentAt = (head: string | null) => head ? equipmentEvents.get(head) : undefined;
-    const assemblyAt = (head: string | null) => head ? assemblyEvents.get(head) : undefined;
     const memberRefsAt = (head: string | null, ids: string[]) => ids.flatMap(id => {
       const member = equipmentAt(head)?.register.equipment.find(e => e.equipment_id === id);
       if (!member) throw new Error('Revision dependency member is not owned by its pinned equipment event');
@@ -185,8 +228,18 @@ export async function inventoryForVerifiedBasRevision(workflow: BasWorkflow, raw
       [...memberRefs(a.equipment_ids), ...(matrixRefs.get(a.matrix_id) ?? []), ...fromSpans(a.source_span_ids), ...a.sequence_region_ids.flatMap(id => regionRefs.get(id) ?? [])],
       [link('matrix', 'point_matrix', a.matrix_id), ...a.equipment_ids.map(id => link('equipment', 'equipment', id, heads.equipment_head)),
         ...a.sequence_region_ids.map(id => link('sequence', 'sequence_region', id))], [], decisionMeta);
-    const assemblyView = state.assembly ? await validateBasAssemblyRegister(capture.narrative_sources!, capture.equipment_sources!, capture.points,
-      equipmentAt(state.assembly.expected_equipment_head)!.register, state.assembly.register) : null;
+    const assemblyView = state.assembly ? preparedAssembly?.view ?? assemblyOperation!.validate(state.assembly.register) : null;
+    if (heads.equipment_head && selectedEquipmentView) preparedCaptures.set(capture.capture_id, {
+      equipment: { head: heads.equipment_head, view: selectedEquipmentView },
+      assembly: state.assembly && assemblyView ? { head: state.assembly.event_id, view: {
+        ...assemblyView, capture_id: capture.capture_id, review_head: state.assembly.event_id,
+        review_origin: state.assembly.origin, equipment_head: state.assembly.expected_equipment_head,
+        current_equipment_head: heads.equipment_head,
+        dependency_status: state.assembly.expected_equipment_head === heads.equipment_head
+          ? 'current_dependencies' : 'stale_dependencies',
+        source_status: workflow.current_capture_id === capture.capture_id ? 'active_capture' : 'historical_capture',
+      } } : null,
+    });
     for (const c of state.assembly?.register.components ?? []) {
       const refs = componentRefsAt(heads.assembly_head, c.component_id), equipmentHead = state.assembly!.expected_equipment_head;
       const meta = { source_event_id: state.assembly!.event_id, origin: state.assembly!.origin,
@@ -274,6 +327,38 @@ export async function inventoryForVerifiedBasRevision(workflow: BasWorkflow, raw
     source_bytes: 'not_verified' as const, calculation_verification: 'saved_results_not_python_replayed' as const,
     semantic_comparison: 'not_performed' as const, quantity_comparison: 'not_performed' as const, approved: false as const };
   signal?.throwIfAborted();
-  assertBasRevisionInventorySize(items.length, new TextEncoder().encode(canonicalBasJson(result)).byteLength);
-  return basRevisionInventorySchema.parse(result);
+  assertBasRevisionInventorySize(items.length, canonicalBasJsonByteLength(result));
+  const inventory = basRevisionInventorySchema.parse(result);
+  // This is deliberately not serialized. Only the exact verified workflow and
+  // exact parsed inventory object from this operation may reuse its private
+  // validation view; every other caller falls back to source-backed validation.
+  if (options.retainPreparedReviewViews && preparedCaptures.size)
+    preparedInventoryAudits.set(inventory, { workflow, captures: preparedCaptures });
+  return inventory;
+}
+
+/** Internal readiness/review handoff. It cannot be reconstructed from client
+ * fields and refuses a different workflow object or selected equipment head. */
+export function consumeReviewViewsForPreparedBasRevisionInventory(workflow: BasWorkflow,
+  inventory: BasRevisionInventory, captureId: string, expectedEquipmentHead: string | null,
+  expectedAssemblyHead: string | null) {
+  const prepared = preparedInventoryAudits.get(inventory);
+  if (!prepared || prepared.workflow !== workflow || !expectedEquipmentHead) return null;
+  const capture = prepared.captures.get(captureId);
+  if (capture?.equipment.head !== expectedEquipmentHead) return null;
+  prepared.captures.delete(captureId);
+  if (!prepared.captures.size) preparedInventoryAudits.delete(inventory);
+  return { equipment: capture.equipment.view,
+    assembly: capture.assembly?.head === expectedAssemblyHead ? capture.assembly.view : null };
+}
+
+/** Move an operation context across the deliverable schema's owned-copy
+ * boundary. Both objects are already validated inventories; mismatched or
+ * ordinary inventories carry no private authority and do nothing. */
+export function transferPreparedBasRevisionInventoryViews(workflow: BasWorkflow,
+  source: BasRevisionInventory, target: BasRevisionInventory) {
+  const prepared = preparedInventoryAudits.get(source);
+  if (!prepared || prepared.workflow !== workflow) return;
+  preparedInventoryAudits.delete(source);
+  preparedInventoryAudits.set(target, prepared);
 }

@@ -6,11 +6,9 @@ import { evaluateBasReadinessCoverage, basReadinessDiagnosticBlocks, type BasRea
 import { evaluateBasReadinessIssues } from './basReadinessIssues.ts';
 import { projectReviewForVerifiedBasWorkflow } from './basProjectReview.ts';
 import { sourceInventoryForVerifiedBasWorkflow, verifyBasSourceBytes, type BasRetainedSource } from './basSourceRetention.ts';
-import { assertReplayReceiptForVerifiedBasWorkflow, replayIdentityForVerifiedBasWorkflow, BAS_WORKFLOW_REPLAY_RULE,
+import { assertReplayReceiptForPreparedWorkflow, BAS_WORKFLOW_REPLAY_RULE,
   prepareBasWorkflowReplayForVerifiedWorkflow, type BasPreparedWorkflowReplay,
   type BasWorkflowReplayReceipt } from './basWorkflowReplay.ts';
-import { canonicalBasJson } from './basCanonical.ts';
-import { sha256Hex } from './graphKeys.js';
 import type { BasWorkflow } from './basWorkflow.ts';
 
 export const BAS_READINESS_RULE = 'bas_scoped_readiness_1' as const;
@@ -44,7 +42,9 @@ export async function buildBasReadinessForVerifiedWorkflow(workflow: BasWorkflow
 async function buildBasReadinessFromPrepared(input: Awaited<ReturnType<typeof prepareBasScopeReadiness>>,
   adapters: BasReadinessIO, signal?: AbortSignal) {
   const { workflow, scope, current, original } = input;
-  const workflow_sha256 = await sha256Hex(new TextEncoder().encode(canonicalBasJson(workflow)));
+  const replayPlan = await prepareBasWorkflowReplayForVerifiedWorkflow(workflow,
+    () => signal?.throwIfAborted());
+  const workflow_sha256 = replayPlan.workflow_sha256;
   const coverage = evaluateBasReadinessCoverage(input, signal), blockers: BasReadinessBlocker[] = [...coverage.blockers];
   const block = (code: string, explanation: string, target: BasReadinessBlocker['target'] = null, item_id: string | null = null) =>
     blockers.push({ code, explanation, target, item_id, page_id: null, event_ids: [] });
@@ -80,20 +80,19 @@ async function buildBasReadinessFromPrepared(input: Awaited<ReturnType<typeof pr
     // A transport receives its own copy; an accidental mutation cannot alter
     // the evaluated state or make its reply bind to different inputs.
     const receipt = adapters.replayPreparedCalculations
-      ? await adapters.replayPreparedCalculations(await prepareBasWorkflowReplayForVerifiedWorkflow(workflow,
-        () => signal?.throwIfAborted()), signal)
+      ? await adapters.replayPreparedCalculations(replayPlan, signal)
       : await adapters.replayCalculations!(structuredClone(workflow), signal);
-    signal?.throwIfAborted(); replay = await assertReplayReceiptForVerifiedBasWorkflow(workflow, receipt, () => signal?.throwIfAborted());
+    signal?.throwIfAborted(); replay = assertReplayReceiptForPreparedWorkflow(replayPlan, receipt,
+      () => signal?.throwIfAborted());
   } else {
-    const plan = await replayIdentityForVerifiedBasWorkflow(workflow, () => signal?.throwIfAborted());
-    if (Object.values(plan.checked_records).every(ids => ids.length === 0)) replay = {
-      schema_version: 'bas_workflow_replay_v1', rule_version: BAS_WORKFLOW_REPLAY_RULE, workflow_sha256: plan.workflow_sha256,
-      checked_records: plan.checked_records, calculation_verification: 'no_saved_calculations', project_complete: false };
+    if (Object.values(replayPlan.checked_records).every(ids => ids.length === 0)) replay = {
+      schema_version: 'bas_workflow_replay_v1', rule_version: BAS_WORKFLOW_REPLAY_RULE, workflow_sha256: replayPlan.workflow_sha256,
+      checked_records: replayPlan.checked_records, calculation_verification: 'no_saved_calculations', project_complete: false };
     else block('actual_python_replay_required', 'Run the existing shared Python verifier against every retained calculation; saved passing results are not fresh verification.');
   }
   const reviews = [];
   for (const { capture_id } of current.specification.basis.captures) {
-    signal?.throwIfAborted(); reviews.push(await projectReviewForVerifiedBasWorkflow(workflow, capture_id));
+    signal?.throwIfAborted(); reviews.push(await projectReviewForVerifiedBasWorkflow(workflow, capture_id, current.inventory));
   }
   const issues = evaluateBasReadinessIssues(current, reviews, coverage.pages,
     sources.length > 0 && sources.every(s => s.status === 'verified_original_bytes'), replay !== null, signal);

@@ -1,5 +1,55 @@
 # BAS production workflow progress
 
+## Snapshot memory gate passes after source-owned candidate reuse — 2026-09-12
+
+SHOULD THIS BE ON THE SHARED PATH? **Yes.** Candidate identity, equipment
+validation, revision inventory, readiness and snapshot replay are shared UI/MCP
+truth. Public candidate/register calls still own and schema-validate their
+inputs. Inside one already verified workflow audit, the exact source context,
+point matrices and equipment evidence are now passed to the same candidate
+builder without reparsing and recloning that schedule graph. A separate
+one-operation handoff reuses only exact equipment/assembly review views with
+matching workflow object and event heads, then consumes them. Capture identity
+normalization now copies only navigation-alias objects while canonicalizing the
+same bytes. No request flag or persistent trusted cache exists.
+
+The exact source-backed Fort Sam snapshot probe now passes its unchanged
+**536,870,912-byte incremental RSS** gate in four independent clean processes:
+**525,287,424**, **535,232,512**, **496,566,272** and **523,239,424 bytes**.
+The three-run confirmation measured setup **8.175–8.634 s**, preparation
+**1.433–1.638 s**, archive **0.089 s**, and reopen **1.648–1.717 s**. Each run
+retained the same two included claims, 458 issues, 31 saved records, exact
+924,578-byte original, and actual shared-Python verification. The narrowest
+passing margin is disclosed rather than treated as unlimited headroom.
+
+The broad web gate passes **3,005/3,018** with zero failures and the same 13
+expected fixture/model skips. Typecheck and production build pass; lint has zero
+errors and the same three existing `TakeoffCanvas.jsx` warnings. MCP passes 128
+BAS, 33 revision, six issue, and 17 scope/snapshot tests plus their declared
+performance gates with the configured Python runtime. Package build,
+distribution smoke, four packaging tests and the 55-tool metadata gate pass.
+
+The independent legacy MCP run spent **816,197 ms** successfully compiling every
+available corpus PDF structurally, then reproduced the recorded WP1 count drift
+for `bldg5406-hvac-demo`, `federal-mech`, and `itd-d1-lab`; D01/D02/D06 passed
+their production assertions while the recorded D03–D05 extraction expectations
+failed. Those files and all extraction/VectorGrid code are unchanged here. The
+failed corpus assertions left their Python table sidecars idle, so the runner
+was terminated after **1,083,807 ms** rather than misreported as a completed
+pass; tests the interrupt marked cancelled are not counted as executed.
+
+Rejected experiment: an exact canonical streaming/in-place SHA path preserved
+all identities and passed focused tests, but increased isolated peak RSS to
+**643,416,064 / 621,740,032 bytes** and roughly doubled several focused test
+times. It was removed completely. The accepted improvement eliminates duplicate
+validated work instead of replacing the hash algorithm.
+
+This checkpoint does **not** change VectorGrid, table extraction, row/column
+relationships, citations, bboxes, symbols, legends, thresholds, Python math,
+installed quantity, pricing or labor. It is a performance/certification
+checkpoint for the already completed five bounded human-in-loop workflows, not
+a blanket claim that every final corpus/holdout requirement is complete.
+
 ## Snapshot allocation checkpoint — 2026-09-12
 
 SHOULD THIS BE ON THE SHARED PATH? **Yes.** Workflow verification, source

@@ -7,7 +7,8 @@ import { validateBasEquipmentRegister, basEquipmentRegisterSchema, type BasEquip
   type BasEquipmentAssignmentView } from './basEquipmentRegister.ts';
 import type { BasEquipmentEvidence } from './basEquipmentEvidence.ts';
 import type { BasPointLists } from './basPointLists.ts';
-import { BAS_COMPONENT_SOURCE_RULE, BAS_COMPONENT_SOURCE_RULE_V2, basDeclaredComponentRole, interpretBasComponentRequirements } from './basComponentRequirements.ts';
+import { BAS_COMPONENT_SOURCE_RULE, BAS_COMPONENT_SOURCE_RULE_V2, basDeclaredComponentRole, interpretBasComponentRequirements,
+  type BasComponentRequirements } from './basComponentRequirements.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 
@@ -62,8 +63,10 @@ export const basAssemblyReviewEventSchema = basAssemblyReviewRequestSchema.exten
   created_at: z.string().datetime(), origin: z.enum(['operator_input', 'agent_proposal']),
 }).strict();
 export type BasAssemblyReviewEvent = z.infer<typeof basAssemblyReviewEventSchema>;
+const fingerprintBasAssemblyInterpretation = (interpretation: BasComponentRequirements) =>
+  sha256Hex(new TextEncoder().encode(canonicalBasJson(interpretation)));
 export const basAssemblyInterpretationFingerprint = (sources: BasSourceContext, ruleVersion: string) =>
-  sha256Hex(new TextEncoder().encode(canonicalBasJson(interpretBasComponentRequirements(sources, ruleVersion))));
+  fingerprintBasAssemblyInterpretation(interpretBasComponentRequirements(sources, ruleVersion));
 
 type Claim = { claim_id: string; activity: typeof BAS_ASSEMBLY_ACTIVITIES[number];
   assignment: z.infer<typeof assignment>; party: string | null; source_span_ids: string[];
@@ -89,7 +92,8 @@ export async function prepareBasAssemblyRegisterValidator(sources: BasSourceCont
   const context = basSourceContextSchema.parse(sources);
   const ownedEquipment = basEquipmentRegisterSchema.parse(equipmentRegister);
   const registered = await validateBasEquipmentRegister(context, equipment, points, ownedEquipment);
-  return prepareBasAssemblyRegisterValidatorForVerifiedEquipment(context, registered);
+  const validate = await prepareBasAssemblyRegisterValidatorForVerifiedEquipment(context, registered);
+  return (raw: unknown) => structuredClone(validate(raw));
 }
 
 /** Internal operation-local composition seam. The workflow verifier supplies
@@ -100,6 +104,32 @@ export async function prepareBasAssemblyRegisterValidatorForVerifiedEquipment(so
   const context = basSourceContextSchema.parse(sources);
   let interpretation: ReturnType<typeof interpretBasComponentRequirements> | undefined;
   let interpretedRule: string | undefined;
+  let validate: ReturnType<typeof prepareBasAssemblyRegisterValidatorForInterpretation> | undefined;
+  return (raw: unknown) => {
+    const register = basAssemblyRegisterSchema.parse(raw);
+    if (!interpretation || interpretedRule !== register.source_rule_version) {
+      interpretation = interpretBasComponentRequirements(context, register.source_rule_version);
+      interpretedRule = register.source_rule_version;
+      validate = prepareBasAssemblyRegisterValidatorForInterpretation(context, registered, interpretation);
+    }
+    return validate!(register);
+  };
+}
+
+/** Internal operation-local context generated only from retained sources. It
+ * lets one audit fingerprint, inventory and validate the exact same owned
+ * interpretation without accepting a caller-supplied interpretation result. */
+export async function prepareBasAssemblyRegisterOperationForVerifiedEquipment(sources: BasSourceContext,
+  registered: BasEquipmentAssignmentView, ruleVersion: string) {
+  const context = basSourceContextSchema.parse(sources);
+  const interpretation = interpretBasComponentRequirements(context, ruleVersion);
+  const validate = prepareBasAssemblyRegisterValidatorForInterpretation(context, registered, interpretation);
+  return { interpretation, validate,
+    sourceInterpretationFingerprint: () => fingerprintBasAssemblyInterpretation(interpretation) };
+}
+
+function prepareBasAssemblyRegisterValidatorForInterpretation(context: BasSourceContext,
+  registered: BasEquipmentAssignmentView, interpretation: BasComponentRequirements) {
   const allSpans = new Map(context.pages.flatMap(page => page.spans.map(span => [span.span_id, { ...span, page_id: page.page_id }] as const)));
   const members = new Map(registered.register.equipment.map(item => [item.equipment_id, item]));
   const scopes = new Map(registered.register.scopes.map(scope => [scope.scope_id, scope]));
@@ -109,10 +139,7 @@ export async function prepareBasAssemblyRegisterValidatorForVerifiedEquipment(so
   };
   return (raw: unknown) => {
     const register = basAssemblyRegisterSchema.parse(raw);
-    if (!interpretation || interpretedRule !== register.source_rule_version) {
-      interpretation = interpretBasComponentRequirements(context, register.source_rule_version);
-      interpretedRule = register.source_rule_version;
-    }
+    if (register.source_rule_version !== interpretation.rule_version) throw new Error('Assembly register uses a different prepared source interpretation rule');
     const requirements = new Map(interpretation.clauses.flatMap(clause => clause.components.map(component => [component.requirement_id, { clause, component }] as const)));
     unique(register.components.map(c => c.component_id), 'component identity');
     const consumed = new Set<string>(), issues: Issue[] = [];
@@ -188,9 +215,9 @@ export async function prepareBasAssemblyRegisterValidatorForVerifiedEquipment(so
         else reviewed.set(key, record.component_id);
       }
     }
-    return structuredClone({ schema_version: 'bas_assembly_review_view_v1' as const, register, components, issues, equipment_issues: registered.issues,
+    return { schema_version: 'bas_assembly_review_view_v1' as const, register, components, issues, equipment_issues: registered.issues,
       project_complete: false as const, installed_quantity: null,
-      interpretation_scope: 'declared_components_and_explicit_decisions_only' as const });
+      interpretation_scope: 'declared_components_and_explicit_decisions_only' as const };
   };
 }
 export type BasAssemblyReviewView = ReturnType<Awaited<ReturnType<typeof prepareBasAssemblyRegisterValidator>>>;

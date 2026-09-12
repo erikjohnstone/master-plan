@@ -4,9 +4,10 @@ import { engineeringFixture, uuid } from './helpers/basEngineeringFixture.ts';
 import { prepareBasEquipmentRegisterValidator, validateBasEquipmentRegister, type BasEquipmentRegister } from '../src/lib/basEquipmentRegister.ts';
 import { prepareBasAssemblyRegisterValidator, validateBasAssemblyRegister } from '../src/lib/basAssemblyRegister.ts';
 import { BAS_COMPONENT_SOURCE_RULE_V2 } from '../src/lib/basComponentRequirements.ts';
-import { basEventFingerprint, captureBasEvidence, mergeBasWorkflows, verifyBasWorkflow } from '../src/lib/basWorkflow.ts';
-import { applyBasEquipmentReview, basEquipmentView } from '../src/lib/basEquipmentReview.ts';
-import { applyBasAssemblyReview, basAssemblyView, basAssemblyViewForVerifiedEquipment } from '../src/lib/basAssemblyReview.ts';
+import { basEventFingerprint, captureBasEvidence, consumePreparedBasWorkflowReviewViews, mergeBasWorkflows,
+  verifyBasWorkflow, verifyBasWorkflowWithPreparedReviewViews } from '../src/lib/basWorkflow.ts';
+import { applyBasEquipmentReview, basEquipmentHead, basEquipmentView } from '../src/lib/basEquipmentReview.ts';
+import { applyBasAssemblyReview, basAssemblyHead, basAssemblyView, basAssemblyViewForVerifiedEquipment } from '../src/lib/basAssemblyReview.ts';
 import { basEngineeringView, basEngineeringViewForVerifiedViews } from '../src/lib/basEngineeringReview.ts';
 import { buildBasEquipmentCandidates } from '../src/lib/basEquipmentEvidence.ts';
 import { buildBasAssemblyQuantityInput, assemblyQuantityInputForValidatedRegisters } from '../src/lib/basAssemblyQuantityContract.ts';
@@ -54,6 +55,31 @@ test('workflow verification owns strict fields and nested passthrough evidence b
     ((record.metadata as { nested: string[] }).nested)[0] = 'FORGED AFTER CALL';
   }
   assert.deepEqual(await pending, before);
+});
+
+test('snapshot verifier review views are exact, one-shot and unavailable to ordinary or copied workflows', async () => {
+  const f = await engineeringFixture(), captureId = f.workflow.current_capture_id!;
+  const ordinary = await verifyBasWorkflow(f.workflow);
+  assert.equal(consumePreparedBasWorkflowReviewViews(ordinary, captureId,
+    basEquipmentHead(ordinary, captureId), basAssemblyHead(ordinary, captureId)), null);
+  const workflow = await verifyBasWorkflowWithPreparedReviewViews(f.workflow);
+  const prepared = consumePreparedBasWorkflowReviewViews(workflow, captureId,
+    basEquipmentHead(workflow, captureId), basAssemblyHead(workflow, captureId));
+  assert.ok(prepared?.assembly);
+  assert.deepEqual(prepared.equipment, await basEquipmentView(workflow, captureId));
+  const assembly = await basAssemblyView(workflow, captureId);
+  assert.deepEqual(prepared.assembly.view, {
+    schema_version: assembly.schema_version, register: assembly.register, components: assembly.components,
+    issues: assembly.issues, equipment_issues: assembly.equipment_issues, project_complete: assembly.project_complete,
+    installed_quantity: assembly.installed_quantity, interpretation_scope: assembly.interpretation_scope,
+  });
+  assert.equal(consumePreparedBasWorkflowReviewViews(workflow, captureId,
+    basEquipmentHead(workflow, captureId), basAssemblyHead(workflow, captureId)), null);
+  const separate = await verifyBasWorkflowWithPreparedReviewViews(f.workflow), copied = structuredClone(separate);
+  assert.equal(consumePreparedBasWorkflowReviewViews(copied, captureId,
+    basEquipmentHead(copied, captureId), basAssemblyHead(copied, captureId)), null);
+  assert.ok(consumePreparedBasWorkflowReviewViews(separate, captureId,
+    basEquipmentHead(separate, captureId), basAssemblyHead(separate, captureId)));
 });
 
 test('verified project-review compositions exactly match independent public equipment, assembly and engineering views', async () => {

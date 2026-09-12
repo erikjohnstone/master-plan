@@ -90,6 +90,19 @@ const quantityHeaders = new Set(['QTY', 'QUANTITY', 'COUNT']);
 
 export async function buildBasEquipmentCandidates(rawSources: unknown, rawEvidence: unknown) {
   const sources = basSourceContextSchema.parse(rawSources), evidence = basEquipmentEvidenceSchema.parse(rawEvidence);
+  // The evidence schema deliberately passes unknown graph metadata through.
+  // Own it before the first table hash awaits so public callers cannot mutate a
+  // later table while an earlier table is being digested.
+  ownBasEquipmentEvidencePassthrough(evidence);
+  return buildBasEquipmentCandidatesForVerifiedEvidence(sources, evidence);
+}
+
+/** Internal shared seam for evidence already owned by verifyBasWorkflow (or by
+ * the public wrapper immediately above). It changes no interpretation rule and
+ * exposes no request flag; it only avoids parsing the same retained schedule
+ * graph twice inside one source-backed workflow audit. */
+export async function buildBasEquipmentCandidatesForVerifiedEvidence(sources: BasSourceContext,
+  evidence: BasEquipmentEvidence) {
   const aliases = pageAliases(sources), copies = new Map<string, number>();
   const identity = equipmentIdentityPayload(evidence, sources);
   const tables = [];
