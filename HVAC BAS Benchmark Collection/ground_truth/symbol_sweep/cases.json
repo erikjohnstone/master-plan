@@ -336,6 +336,7 @@
       "sheet_number": "M100.0",
       "page_size_px": [6048, 4320],
       "seed_rect": [[2760, 940], [2840, 1020]],
+      "options": { "affine": false },
       "seed": {
         "tag": "CD-1",
         "at": [2793.2, 990.2],
