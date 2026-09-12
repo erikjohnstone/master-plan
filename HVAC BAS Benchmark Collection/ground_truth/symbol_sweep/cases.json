@@ -11,6 +11,7 @@
       "sheet_number": "MH111",
       "page_size_px": [4896, 3168],
       "seed_rect": [[1715, 405], [1780, 470]],
+      "options": { "affine": false },
       "seed": {
         "tag": "CD-1",
         "at": [1746.9, 436.2],
@@ -171,6 +172,7 @@
       "sheet_number": "MH101",
       "page_size_px": [6048, 4320],
       "seed_rect": [[1535, 2650], [1600, 2720]],
+      "options": { "affine": false },
       "seed": {
         "tag": "D10",
         "at": [1569.4, 2670.1],
@@ -204,6 +206,7 @@
       "sheet_number": "M210A",
       "page_size_px": [6048, 4320],
       "seed_rect": [[2462, 708], [2502, 750]],
+      "options": { "affine": false },
       "seed": {
         "tag": "SS15",
         "at": [2482.5, 725.7],
@@ -400,6 +403,7 @@
       "sheet_number": "MH101",
       "page_size_px": [6048, 4320],
       "seed_rect": [[2495, 1250], [2580, 1320]],
+      "options": { "affine": false },
       "seed": {
         "tag": "1-VAV-2",
         "at": [2550.7, 1280.6],
@@ -634,6 +638,7 @@
       "sheet_number": "M1.41",
       "page_size_px": [6048, 4320],
       "seed_rect": [[3990, 1765], [4110, 1875]],
+      "options": { "affine": false },
       "seed": {
         "tag": "FCU-5",
         "at": [4046.3, 1824.4],
@@ -797,6 +802,7 @@
       "engine_sheet_number": "VAV-12",
       "page_size_px": [6048, 4320],
       "seed_rect": [[1540, 2500], [1620, 2590]],
+      "options": { "affine": false },
       "seed": {
         "tag": "VAV-9",
         "at": [1562.8, 2545.2],
