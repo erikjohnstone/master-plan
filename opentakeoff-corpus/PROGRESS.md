@@ -1744,6 +1744,18 @@ Coordinator drawing/text probe on 021 Lab, 031 Warehouse, 062 ITD Lab.
 Artifacts: `/opt/cursor/artifacts/pillar-c-*-soo-probe.json`,
 `pillar-c-062-points-list-near-miss.json`, `pillar-c-062-points-list-title-assoc.json`.
 
+### Bulk corpus staging (2026-09-01)
+
+- Vol1 + Vol2 HVAC/BAS plan-set PDFs restored on this VM from the public Drive
+  archives used by the prior coordinator (`1cDMOhgm6Ts_LIVm_AwIDKNzRoQmVz5Ma`,
+  `1HGWFUwHpNbI_8wEloYRyhMwCcOEbjCEE`).
+- On disk: `opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets` (977M) and
+  `…/HVAC_BAS_Plan_Sets_Vol2` (1.7G, multipart rejoined). All **113** bulk
+  `cross-set-compile` key `source_file` paths resolve.
+- Repro: `./scripts/stage-bulk-corpus.sh` (idempotent; `FORCE=1` to refresh).
+  PDFs stay gitignored — bake into the Cloud Agent environment snapshot so
+  new agents inherit them.
+
 ### Next queue (platform loop)
 
 1. **Pillar C (corpus-deep):** inventory floors **112/112** + valve product census **81/81** (11 printed / 70 compile-empty) but **0** estimator-complete;
