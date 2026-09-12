@@ -133,3 +133,4 @@ export async function prepareBasEquipmentRegisterValidator(sources: BasSourceCon
       register, candidates, assignments, issues, installed_quantity: null });
   };
 }
+export type BasEquipmentAssignmentView = ReturnType<Awaited<ReturnType<typeof prepareBasEquipmentRegisterValidator>>>;

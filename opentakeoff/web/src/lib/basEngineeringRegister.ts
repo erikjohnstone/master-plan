@@ -3,8 +3,9 @@
 import { z } from 'zod';
 import { basEngineeringInputSchema, basEngineeringResultSchema, basEngineeringBasisSchema,
   type BasEngineeringCheck, type BasEngineeringBasis } from './basEngineeringContract.ts';
-import { validateBasEquipmentRegister, basEquipmentRegisterSchema, type BasEquipmentRegister } from './basEquipmentRegister.ts';
-import { validateBasAssemblyRegister, type BasAssemblyRegister } from './basAssemblyRegister.ts';
+import { validateBasEquipmentRegister, basEquipmentRegisterSchema, type BasEquipmentRegister,
+  type BasEquipmentAssignmentView } from './basEquipmentRegister.ts';
+import { validateBasAssemblyRegister, type BasAssemblyRegister, type BasAssemblyReviewView } from './basAssemblyRegister.ts';
 import type { BasCapture } from './basWorkflow.ts';
 
 const uuid = z.string().uuid(), id = z.string().min(1).max(512).regex(/\S/);
@@ -110,6 +111,16 @@ export async function prepareBasEngineeringRegisterValidator(capture: BasCapture
   // prerequisite fields consumed here; do not repeat source interpretation.
   const equipmentView = assemblyView ? { register: basEquipmentRegisterSchema.parse(equipment), issues: assemblyView.equipment_issues }
     : await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, equipment);
+  return prepareBasEngineeringRegisterValidatorForVerifiedViews(capture, equipmentView, assemblyView);
+}
+
+/** Internal operation-local composition seam. Inputs are the exact validated
+ * views already produced for pinned equipment/assembly heads in this workflow
+ * audit; no source interpretation or candidate discovery is skipped publicly. */
+export async function prepareBasEngineeringRegisterValidatorForVerifiedViews(capture: BasCapture,
+  equipmentView: Pick<BasEquipmentAssignmentView, 'register' | 'issues'>,
+  assemblyView: BasAssemblyReviewView | null) {
+  if (!capture.narrative_sources || !capture.equipment_sources) throw new Error('Engineering review requires retained equipment and text sources');
   const members = new Map(equipmentView.register.equipment.map(e => [e.equipment_id, e]));
   const scopes = new Set(equipmentView.register.scopes.map(s => s.scope_id));
   const components = new Map(assemblyView?.components.map(c => [c.record.component_id, c]) ?? []);

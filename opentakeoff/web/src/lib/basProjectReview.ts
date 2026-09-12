@@ -3,8 +3,8 @@
 import { z } from 'zod';
 import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 import { basEquipmentView, basAssignmentCalculationState } from './basEquipmentReview.ts';
-import { basAssemblyView, basAssemblyCalculationState } from './basAssemblyReview.ts';
-import { basEngineeringView } from './basEngineeringReview.ts';
+import { basAssemblyViewForVerifiedEquipment, basAssemblyCalculationState } from './basAssemblyReview.ts';
+import { basEngineeringViewForVerifiedViews } from './basEngineeringReview.ts';
 import { basSequenceView } from './basReview.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
@@ -164,7 +164,7 @@ export async function projectReviewForVerifiedBasWorkflow(workflow: BasWorkflow,
           assignment.included_equipment_ids, demandStatus, demand.latest.calculation_id);
       }
     }
-    const assembly = await basAssemblyView(workflow, captureId);
+    const assembly = await basAssemblyViewForVerifiedEquipment(workflow, captureId, equipment);
     if (assembly.dependency_status === 'stale_dependencies') push('assemblies', 'assembly_stale_dependencies', whole,
       { current_equipment_head: assembly.current_equipment_head, reviewed_equipment_head: assembly.equipment_head }, [], [], 'stale_dependencies', assembly.review_head);
     const components = new Map(assembly.components.map(c => [c.record.component_id, c]));
@@ -185,7 +185,7 @@ export async function projectReviewForVerifiedBasWorkflow(workflow: BasWorkflow,
     if (quantity.latest) for (const c of quantity.latest.result.components) for (const code of c.issues) push('assemblies', code,
       subject('component', c.original.component_id, c.original.label), { code, status: c.status }, fromSpans(c.original.source_span_ids), c.original.equipment_ids,
       quantity.status === 'not_calculated' ? 'not_reviewed' : quantity.status, quantity.latest.calculation_id, c.original.disposition);
-    const engineering = await basEngineeringView(workflow, captureId);
+    const engineering = await basEngineeringViewForVerifiedViews(workflow, captureId, equipment, assembly);
     if (engineering.event) {
       push('engineering', 'engineering_requires_python_replay', whole, { event_id: engineering.event.event_id }, [], [], engineering.dependency_status, engineering.event.event_id);
       if (engineering.dependency_status === 'stale_dependencies') push('engineering', 'engineering_stale_dependencies', whole, engineering.current_heads, [], [], engineering.dependency_status, engineering.event.event_id);

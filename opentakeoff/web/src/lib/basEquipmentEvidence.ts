@@ -31,6 +31,30 @@ export const basEquipmentEvidenceSchema = z.object({
 export type BasEquipmentEvidence = z.infer<typeof basEquipmentEvidenceSchema>;
 export type BasEquipmentTable = BasEquipmentEvidence['tables'][number];
 
+/** Zod owns every declared object/array above but intentionally retains
+ * unknown graph metadata by reference. A verified workflow must own only those
+ * passthrough values before its first await; cloning the complete evidence
+ * would duplicate all already-owned schedule rows and cells. */
+export function ownBasEquipmentEvidencePassthrough(evidence: BasEquipmentEvidence): void {
+  const ownUnknown = (record: Record<string, unknown>, known: ReadonlySet<string>) => {
+    for (const key of Object.keys(record)) if (!known.has(key)) record[key] = structuredClone(record[key]);
+  };
+  const tableFields = new Set(['kind', 'sheet', 'title', 'headers', 'rows', 'region', 'building', 'parts']);
+  const rowFields = new Set(['key', 'sheet', 'building', 'cells']);
+  const cellFields = new Set(['text', 'bbox']);
+  const titleFields = new Set(['text', 'bbox', 'sheet']);
+  const partFields = new Set(['sheet', 'title', 'rows', 'region']);
+  for (const table of evidence.tables) {
+    ownUnknown(table, tableFields);
+    if (table.title) ownUnknown(table.title, titleFields);
+    for (const row of table.rows) {
+      ownUnknown(row, rowFields);
+      for (const cell of Object.values(row.cells)) ownUnknown(cell, cellFields);
+    }
+    for (const part of table.parts ?? []) ownUnknown(part, partFields);
+  }
+}
+
 export function captureBasEquipmentTables(tables: unknown[]): BasEquipmentEvidence {
   return basEquipmentEvidenceSchema.parse({ schema_version: 'bas_equipment_evidence_v1',
     rule_version: 'schedule_members_1', scope: 'discovered_equipment_tables_only',

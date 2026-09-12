@@ -23,6 +23,14 @@ export type BasReplayRecord = { record_id: string } & (
 
 export async function prepareBasWorkflowReplay(raw: unknown, guard: () => void = () => {}) {
   guard(); const workflow = await verifyBasWorkflow(raw); guard();
+  return prepareBasWorkflowReplayForVerifiedWorkflow(workflow, guard);
+}
+
+/** Internal composition seam for a workflow verified in the same operation.
+ * The transport receives only immutable identity values and cloned calculation
+ * records, never the workflow object captured by the private generator. */
+export async function prepareBasWorkflowReplayForVerifiedWorkflow(workflow: BasWorkflow,
+  guard: () => void = () => {}) {
   const identity = await replayIdentityForVerifiedBasWorkflow(workflow, guard);
   return { ...identity,
     async *records(): AsyncGenerator<BasReplayRecord> {
@@ -46,6 +54,7 @@ export async function prepareBasWorkflowReplay(raw: unknown, guard: () => void =
     },
   };
 }
+export type BasPreparedWorkflowReplay = Awaited<ReturnType<typeof prepareBasWorkflowReplayForVerifiedWorkflow>>;
 
 /** Internal identity seam for an already owned/verified workflow, not arithmetic
  * execution and never a public "trust this history" option. */

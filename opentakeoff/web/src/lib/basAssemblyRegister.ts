@@ -3,7 +3,8 @@
  * This validates declarations; Python owns later quantity expansion/math. */
 import { z } from 'zod';
 import { basSourceContextSchema, type BasSourceContext } from './basSources.ts';
-import { validateBasEquipmentRegister, basEquipmentRegisterSchema, type BasEquipmentRegister } from './basEquipmentRegister.ts';
+import { validateBasEquipmentRegister, basEquipmentRegisterSchema, type BasEquipmentRegister,
+  type BasEquipmentAssignmentView } from './basEquipmentRegister.ts';
 import type { BasEquipmentEvidence } from './basEquipmentEvidence.ts';
 import type { BasPointLists } from './basPointLists.ts';
 import { BAS_COMPONENT_SOURCE_RULE, BAS_COMPONENT_SOURCE_RULE_V2, basDeclaredComponentRole, interpretBasComponentRequirements } from './basComponentRequirements.ts';
@@ -88,6 +89,15 @@ export async function prepareBasAssemblyRegisterValidator(sources: BasSourceCont
   const context = basSourceContextSchema.parse(sources);
   const ownedEquipment = basEquipmentRegisterSchema.parse(equipmentRegister);
   const registered = await validateBasEquipmentRegister(context, equipment, points, ownedEquipment);
+  return prepareBasAssemblyRegisterValidatorForVerifiedEquipment(context, registered);
+}
+
+/** Internal operation-local composition seam. The workflow verifier supplies
+ * the exact view returned by the source-backed equipment validator for the
+ * pinned equipment head; public raw paths continue through the wrapper above. */
+export async function prepareBasAssemblyRegisterValidatorForVerifiedEquipment(sources: BasSourceContext,
+  registered: BasEquipmentAssignmentView) {
+  const context = basSourceContextSchema.parse(sources);
   let interpretation: ReturnType<typeof interpretBasComponentRequirements> | undefined;
   let interpretedRule: string | undefined;
   const allSpans = new Map(context.pages.flatMap(page => page.spans.map(span => [span.span_id, { ...span, page_id: page.page_id }] as const)));
@@ -183,3 +193,4 @@ export async function prepareBasAssemblyRegisterValidator(sources: BasSourceCont
       interpretation_scope: 'declared_components_and_explicit_decisions_only' as const });
   };
 }
+export type BasAssemblyReviewView = ReturnType<Awaited<ReturnType<typeof prepareBasAssemblyRegisterValidator>>>;

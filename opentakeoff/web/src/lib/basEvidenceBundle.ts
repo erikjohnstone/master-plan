@@ -7,7 +7,7 @@ import { basSourceInventory, basRetainedSourceSchema, verifyBasSourceBytes, type
 import { parseTakeoffImport } from './importTakeoff.js';
 import { sha256Hex } from './graphKeys.js';
 import { basWorkflowReplayReceiptSchema } from './basWorkflowReplay.ts';
-import { BAS_SNAPSHOT_JSON_LIMIT, basSnapshotRecordSchema, readBasSnapshotPlan, assertBasSnapshotPlan,
+import { BAS_SNAPSHOT_JSON_LIMIT, basSnapshotRecordSchema, readBasSnapshotArchivePlan, assertBasSnapshotPlan,
   prepareBasSnapshotArchiveInput, verifyBasSnapshotArchiveInput,
   type BasSnapshotPlan, type BasSnapshotRecord, type BasSnapshotArchiveInput } from './basSnapshot.ts';
 import type { BasReadinessIO } from './basReadiness.ts';
@@ -59,20 +59,28 @@ export async function prepareBasEvidenceBundle(rawPayload: unknown, guard: Guard
 /** Requires owned, freshly verified approval/reopen authority, never a caller's
  * saved ready flag. Actual durable delivery remains the transport's job. */
 export async function prepareBasSnapshotBundle(plan: BasSnapshotPlan, guard: Guard = noop) {
-  const owned = readBasSnapshotPlan(plan);
+  const owned = readBasSnapshotArchivePlan(plan);
   const current = () => { guard(); assertBasSnapshotPlan(plan); };
-  const result = await prepareArchive(null, current, owned.record, owned.payload_json);
+  const result = await prepareArchive(null, current, owned.record, owned.payload_json, owned.inventory);
   return { ...result, manifest: basSnapshotBundleManifestSchema.parse(result.manifest) };
 }
-async function prepareArchive(rawPayload: unknown, guard: Guard, snapshot?: BasSnapshotRecord, ownedPayloadJson?: string) {
+async function prepareArchive(rawPayload: unknown, guard: Guard, snapshot?: BasSnapshotRecord,
+  ownedPayloadJson?: string, ownedInventory?: BasSourceInventoryItem[]) {
   guard();
   // An owned snapshot plan already froze canonical payload JSON. Reuse those
   // exact immutable bytes instead of materializing and serializing two objects.
   const bytes = ownedPayloadJson === undefined ? encode(rawPayload) : new TextEncoder().encode(ownedPayloadJson);
   if (bytes.byteLength > BAS_BUNDLE_LIMITS.payload) throw new Error('BAS bundle takeoff JSON exceeds the supported size limit');
-  const payload = parseTakeoffImport(decoder.decode(bytes));
-  if (!payload.bas_workflow) throw new Error('BAS evidence bundle requires saved BAS history');
-  const inventory = await basSourceInventory(payload.bas_workflow); guard();
+  let inventory: BasSourceInventoryItem[];
+  if (ownedPayloadJson !== undefined) {
+    if (!snapshot || !ownedInventory) throw new Error('BAS snapshot archive requires owned source inventory');
+    inventory = ownedInventory;
+  } else {
+    const payload = parseTakeoffImport(decoder.decode(bytes));
+    if (!payload.bas_workflow) throw new Error('BAS evidence bundle requires saved BAS history');
+    inventory = await basSourceInventory(payload.bas_workflow);
+  }
+  guard();
   if (!inventory.length || inventory.length > BAS_BUNDLE_LIMITS.sources) throw new Error('BAS bundle requires 1–10000 original PDFs');
   if (inventory.some(i => i.source.byte_length > BAS_BUNDLE_LIMITS.pdf)) throw new Error('An original PDF exceeds the BAS bundle size limit');
   const snapshotBytes = snapshot ? encode(snapshot) : null, disclosure = snapshot ? snapshotReadme : readme;
@@ -136,12 +144,14 @@ export async function openBasEvidenceBundle(reader: BasBundleReader, guard: Guar
 }
 /** Reopening verifies historical approval only. It neither restores annotations
  * nor approves a current project. Source IO is always bound to archive originals. */
-export async function openBasSnapshotBundle(reader: BasBundleReader, io: Pick<BasReadinessIO, 'replayCalculations'> = {}, signal?: AbortSignal) {
+export async function openBasSnapshotBundle(reader: BasBundleReader,
+  io: Pick<BasReadinessIO, 'replayCalculations' | 'replayPreparedCalculations'> = {}, signal?: AbortSignal) {
   const guard = () => signal?.throwIfAborted();
   const result = await openArchive(reader, guard, 'snapshot');
   if (!result.snapshot_input || !result.snapshot_record) throw new Error('BAS snapshot archive is incomplete');
   const verified = await verifyBasSnapshotArchiveInput(result.snapshot_input, result.snapshot_record, {
-    replayCalculations: io.replayCalculations, readSource: source => result.readSource(source.source_id),
+    replayCalculations: io.replayCalculations, replayPreparedCalculations: io.replayPreparedCalculations,
+    readSource: source => result.readSource(source.source_id),
   }, signal);
   const { snapshot_input: _input, ...publicResult } = result;
   return { ...publicResult, payload: verified.payload, manifest: basSnapshotBundleManifestSchema.parse(result.manifest), plan: verified.plan,

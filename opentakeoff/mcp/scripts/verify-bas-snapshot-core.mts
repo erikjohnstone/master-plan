@@ -8,7 +8,7 @@ import { cpus } from 'node:os';
 import { reviewReadyScope } from '../../web/test/helpers/basReadinessFixture.ts';
 import { prepareBasSnapshotApproval, readBasSnapshotPlan } from '../../web/src/lib/basSnapshot.ts';
 import { prepareBasSnapshotBundle, openBasSnapshotBundle } from '../../web/src/lib/basEvidenceBundle.ts';
-import { verifyBasWorkflowCalculations } from '../src/basWorkflowReplay.ts';
+import { verifyPreparedBasWorkflowCalculations } from '../src/basWorkflowReplay.ts';
 import type { BasWorkflow } from '../../web/src/lib/basWorkflow.ts';
 import type { BasScopeReviewEvent } from '../../web/src/lib/basScopeReview.ts';
 import { applyBasEquipmentReview } from '../../web/src/lib/basEquipmentReview.ts';
@@ -16,7 +16,12 @@ import { allocationProfiler } from './bas-allocation-profiler.mts';
 const originalPath = process.argv[2];
 if (!originalPath) throw new Error('Pass the exact original PDF path; no filename-only source substitution');
 const raw = await readFile(new URL('../../docs/bas-production/evidence/scope-browser-7/reviewed.takeoff.json', import.meta.url));
-const payload = JSON.parse(raw.toString()), workflow: BasWorkflow = payload.bas_workflow;
+const payload = JSON.parse(raw.toString());
+let workflow: BasWorkflow = payload.bas_workflow;
+// The runtime keeps one current workflow. Do not pin the fixture's superseded
+// original inside its export envelope while the real review services create
+// successive immutable workflow values below.
+delete payload.bas_workflow;
 const original = await readFile(originalPath), original_sha256 = createHash('sha256').update(original).digest('hex');
 assert.equal(original_sha256, workflow.captures[0].sources[0].sha256);
 const spec = (workflow.scope_events!.filter(e => e.action.kind === 'save_scope').at(-1)!.action as Extract<BasScopeReviewEvent['action'], { kind: 'save_scope' }>).specification;
@@ -35,29 +40,37 @@ for (const scope of register.scopes) {
   scope.source_span_ids = [];
   scope.reason = 'CONTROLLED operator declarations for archive format/runtime test; these fields are not extracted or user-approved project facts';
 }
-const declared = await applyBasEquipmentReview(workflow, { operation_id: '00000000-0000-4000-8000-000000009998',
+workflow = await applyBasEquipmentReview(workflow, { operation_id: '00000000-0000-4000-8000-000000009998',
   capture_id: lastEquipment.capture_id, expected_head: lastEquipment.event_id, register,
   reason: 'Controlled scope declarations; preserve original unknown review in history' }, 'operator_input', '2026-09-10T17:00:00.000Z');
-const reviewed = await reviewReadyScope(declared, included, 2000);
+let reviewed: Awaited<ReturnType<typeof reviewReadyScope>> | null = await reviewReadyScope(workflow, included, 2000);
+workflow = reviewed.workflow;
+const reviewedScopeEventId = reviewed.scope.event_id;
+// The helper also returns its pre-coverage preview for focused scope tests; the
+// snapshot journey does not use that obsolete projection.
+reviewed = null;
 const setup_ms = performance.now() - setup;
 memory('after_controlled_setup');
 await allocations.checkpoint('controlled_setup');
-payload.bas_workflow = reviewed.workflow;
-const replayCalculations = (w: BasWorkflow, signal?: AbortSignal) => verifyBasWorkflowCalculations(w, { signal });
+payload.bas_workflow = workflow;
+const replayPreparedCalculations = (plan: Parameters<typeof verifyPreparedBasWorkflowCalculations>[0], signal?: AbortSignal) =>
+  verifyPreparedBasWorkflowCalculations(plan, { signal });
 const start = performance.now();
 const plan = await prepareBasSnapshotApproval(payload, { operation_id: '00000000-0000-4000-8000-000000009999',
-  scope_event_id: reviewed.scope.event_id, reviewer: 'CONTROLLED CORE TEST — not a user approval',
+  scope_event_id: reviewedScopeEventId, reviewer: 'CONTROLLED CORE TEST — not a user approval',
   reason: 'Source-backed transport/runtime fixture with controlled applicability, not production scope verification',
-  declared_at: '2026-09-10T17:00:00.000Z' }, 'operator_input', { readSource: async () => original, replayCalculations });
+  declared_at: '2026-09-10T17:00:00.000Z' }, 'operator_input', { readSource: async () => original, replayPreparedCalculations });
 const preparation_ms = performance.now() - start, archiveStart = performance.now();
 memory('after_preparation');
 await allocations.checkpoint('snapshot_preparation');
-const prepared = await prepareBasSnapshotBundle(plan), chunks = [];
+let prepared: Awaited<ReturnType<typeof prepareBasSnapshotBundle>> | null = await prepareBasSnapshotBundle(plan);
+const chunks: Uint8Array[] = [];
 for await (const chunk of prepared.stream(async () => original)) chunks.push(chunk);
 const archive = Buffer.concat(chunks), archive_ms = performance.now() - archiveStart, reopenStart = performance.now();
+prepared = null; chunks.length = 0;
 memory('after_archive');
 await allocations.checkpoint('archive');
-const reopened = await openBasSnapshotBundle({ size: archive.length, read: async (o, n) => archive.subarray(o, o + n) }, { replayCalculations });
+const reopened = await openBasSnapshotBundle({ size: archive.length, read: async (o, n) => archive.subarray(o, o + n) }, { replayPreparedCalculations });
 const reopen_ms = performance.now() - reopenStart;
 memory('after_reopen');
 await allocations.checkpoint('reopen'); allocations.close();

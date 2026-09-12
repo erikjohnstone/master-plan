@@ -7,6 +7,7 @@ import { evaluateBasReadinessIssues } from './basReadinessIssues.ts';
 import { projectReviewForVerifiedBasWorkflow } from './basProjectReview.ts';
 import { sourceInventoryForVerifiedBasWorkflow, verifyBasSourceBytes, type BasRetainedSource } from './basSourceRetention.ts';
 import { assertReplayReceiptForVerifiedBasWorkflow, replayIdentityForVerifiedBasWorkflow, BAS_WORKFLOW_REPLAY_RULE,
+  prepareBasWorkflowReplayForVerifiedWorkflow, type BasPreparedWorkflowReplay,
   type BasWorkflowReplayReceipt } from './basWorkflowReplay.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
@@ -19,6 +20,9 @@ export const BAS_READINESS_RULE = 'bas_scoped_readiness_1' as const;
 export type BasReadinessIO = {
   readSource?: (source: BasRetainedSource, signal?: AbortSignal) => Promise<Uint8Array | ArrayBuffer | null>;
   replayCalculations?: (workflow: BasWorkflow, signal?: AbortSignal) => Promise<unknown>;
+  /** Trusted in-process transport seam. The prepared plan exposes cloned
+   * calculation records, not the verified workflow it privately captures. */
+  replayPreparedCalculations?: (plan: BasPreparedWorkflowReplay, signal?: AbortSignal) => Promise<unknown>;
 };
 
 export async function buildBasReadiness(raw: unknown, scopeEventId: string, io: BasReadinessIO = {}, signal?: AbortSignal) {
@@ -72,10 +76,13 @@ async function buildBasReadinessFromPrepared(input: Awaited<ReturnType<typeof pr
   }
   if (!sources.length) block('source_inventory_empty', 'An empty original-source inventory cannot support an approved takeoff.');
   let replay: BasWorkflowReplayReceipt | null = null;
-  if (adapters.replayCalculations) {
+  if (adapters.replayPreparedCalculations || adapters.replayCalculations) {
     // A transport receives its own copy; an accidental mutation cannot alter
     // the evaluated state or make its reply bind to different inputs.
-    const receipt = await adapters.replayCalculations(structuredClone(workflow), signal);
+    const receipt = adapters.replayPreparedCalculations
+      ? await adapters.replayPreparedCalculations(await prepareBasWorkflowReplayForVerifiedWorkflow(workflow,
+        () => signal?.throwIfAborted()), signal)
+      : await adapters.replayCalculations!(structuredClone(workflow), signal);
     signal?.throwIfAborted(); replay = await assertReplayReceiptForVerifiedBasWorkflow(workflow, receipt, () => signal?.throwIfAborted());
   } else {
     const plan = await replayIdentityForVerifiedBasWorkflow(workflow, () => signal?.throwIfAborted());

@@ -7,16 +7,19 @@ import { basSourceContextSchema, type BasSourceContext } from './basSources.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { BAS_SEQUENCE_RULE, reconcileBasSequencePoints } from './basSequenceReconciliation.ts';
 import { basReviewEventSchema } from './basReviewContract.ts';
-import { basEquipmentEvidenceSchema, equipmentIdentityPayload, type BasEquipmentEvidence } from './basEquipmentEvidence.ts';
-import { basEquipmentReviewEventSchema, prepareBasEquipmentRegisterValidator, type BasEquipmentReviewEvent } from './basEquipmentRegister.ts';
+import { basEquipmentEvidenceSchema, equipmentIdentityPayload, ownBasEquipmentEvidencePassthrough, type BasEquipmentEvidence } from './basEquipmentEvidence.ts';
+import { basEquipmentReviewEventSchema, prepareBasEquipmentRegisterValidator, type BasEquipmentReviewEvent,
+  type BasEquipmentAssignmentView } from './basEquipmentRegister.ts';
 import { basAssignmentCalculationSchema, basAssignmentCalculationFingerprint, basAssignmentInputFingerprint,
   buildBasAssignmentDemandInput, verifyBasAssignmentDemandResult } from './basAssignmentDemandContract.ts';
 import { BAS_WORKFLOW_REVISIONS, atLeastBasWorkflowRevision } from './basWorkflowRevision.ts';
 import { basAssemblyReviewEventSchema, basAssemblyInterpretationFingerprint, prepareBasAssemblyRegisterValidator,
-  type BasAssemblyReviewEvent } from './basAssemblyRegister.ts';
+  prepareBasAssemblyRegisterValidatorForVerifiedEquipment, type BasAssemblyReviewEvent,
+  type BasAssemblyReviewView } from './basAssemblyRegister.ts';
 import { basAssemblyCalculationSchema, basAssemblyCalculationFingerprint, assemblyQuantityInputForValidatedRegisters,
   basAssemblyQuantityInputFingerprint, verifyBasAssemblyQuantityResult } from './basAssemblyQuantityContract.ts';
-import { basEngineeringReviewEventSchema, prepareBasEngineeringRegisterValidator, type BasEngineeringReviewEvent } from './basEngineeringRegister.ts';
+import { basEngineeringReviewEventSchema, prepareBasEngineeringRegisterValidator,
+  prepareBasEngineeringRegisterValidatorForVerifiedViews, type BasEngineeringReviewEvent } from './basEngineeringRegister.ts';
 import { verifyBasEngineeringResult } from './basEngineeringContract.ts';
 import { basDrawingEventSchema, type BasDrawingEvent } from './basDrawingContract.ts';
 import { replayBasDrawingHistory, basDrawingDependencyFingerprint } from './basDrawingRevision.ts';
@@ -201,9 +204,17 @@ export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSch
   sha256Hex(new TextEncoder().encode(canonicalBasJson(event)));
 
 export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
-  // Passthrough metadata is source evidence too. Zod alone does not own nested
-  // unknown objects; take the complete snapshot before any asynchronous check.
-  const result = basWorkflowSchema.parse(structuredClone(raw));
+  // Zod owns every strict workflow object/array. Equipment evidence alone
+  // intentionally passes through unknown graph metadata, so own that bounded
+  // evidence explicitly before the first await instead of cloning the entire
+  // workflow and then making Zod allocate a second complete copy.
+  const result = basWorkflowSchema.parse(raw);
+  for (const capture of result.captures) if (capture.equipment_sources) {
+    ownBasEquipmentEvidencePassthrough(capture.equipment_sources);
+  }
+  // Do not pin a caller's second complete workflow graph in this async frame.
+  // Every retained field is owned above before the first asynchronous check.
+  raw = undefined;
   for (const c of result.captures) if (await fingerprint(c) !== c.capture_id) throw new Error('BAS capture fingerprint mismatch; saved evidence was changed');
   const pairs = new Map<string, Set<string>>();
   for (const event of result.review_events ?? []) {
@@ -221,18 +232,39 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
   }
   // One-entry contexts, local to this owned workflow. Every event is still
   // hashed and every register validated; changing capture/heads replaces reuse.
-  let equipmentContext: { capture: string; validate: Awaited<ReturnType<typeof prepareBasEquipmentRegisterValidator>> } | undefined;
+  let equipmentContext: { capture: string; validate: Awaited<ReturnType<typeof prepareBasEquipmentRegisterValidator>>;
+    event_id?: string; view?: BasEquipmentAssignmentView } | undefined;
+  const equipmentViewFor = async (c: BasCapture, event: BasEquipmentReviewEvent) => {
+    if (equipmentContext?.capture !== c.capture_id) equipmentContext = { capture: c.capture_id,
+      validate: await prepareBasEquipmentRegisterValidator(c.narrative_sources!, c.equipment_sources!, c.points) };
+    if (equipmentContext.event_id !== event.event_id) {
+      equipmentContext.view = equipmentContext.validate(event.register);
+      equipmentContext.event_id = event.event_id;
+    }
+    return equipmentContext.view!;
+  };
   for (const event of result.equipment_events ?? []) {
     const { event_id, ...payload } = event;
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS equipment event fingerprint mismatch');
     const c = result.captures.find(c => c.capture_id === event.capture_id)!;
-    if (equipmentContext?.capture !== c.capture_id) equipmentContext = { capture: c.capture_id,
-      validate: await prepareBasEquipmentRegisterValidator(c.narrative_sources!, c.equipment_sources!, c.points) };
-    equipmentContext.validate(event.register);
+    await equipmentViewFor(c, event);
   }
-  equipmentContext = undefined;
-  let assemblyContext: { key: string; validate: Awaited<ReturnType<typeof prepareBasAssemblyRegisterValidator>> } | undefined;
+  let assemblyContext: { key: string; validate: Awaited<ReturnType<typeof prepareBasAssemblyRegisterValidator>>;
+    event_id?: string; view?: BasAssemblyReviewView } | undefined;
   let interpretationIdentity: { key: string; fingerprint: string } | undefined;
+  const assemblyViewFor = async (c: BasCapture, event: BasAssemblyReviewEvent, equipment: BasEquipmentReviewEvent) => {
+    const key = canonicalBasJson([c.capture_id, equipment.event_id]);
+    if (assemblyContext?.key !== key) {
+      const equipmentView = await equipmentViewFor(c, equipment);
+      assemblyContext = { key, validate: await prepareBasAssemblyRegisterValidatorForVerifiedEquipment(
+        c.narrative_sources!, equipmentView) };
+    }
+    if (assemblyContext.event_id !== event.event_id) {
+      assemblyContext.view = assemblyContext.validate(event.register);
+      assemblyContext.event_id = event.event_id;
+    }
+    return assemblyContext.view!;
+  };
   for (const event of result.assembly_events ?? []) {
     const { event_id, ...payload } = event;
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS assembly event fingerprint mismatch');
@@ -244,12 +276,8 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
     if (interpretationIdentity.fingerprint !== event.source_interpretation_fingerprint) {
       throw new Error('BAS assembly source interpretation changed within its retained rule version');
     }
-    const key = canonicalBasJson([c.capture_id, equipment.event_id]);
-    if (assemblyContext?.key !== key) assemblyContext = { key,
-      validate: await prepareBasAssemblyRegisterValidator(c.narrative_sources!, c.equipment_sources!, c.points, equipment.register) };
-    assemblyContext.validate(event.register);
+    await assemblyViewFor(c, event, equipment);
   }
-  assemblyContext = undefined;
   for (const calculation of result.assignment_calculations ?? []) {
     const { calculation_id, ...payload } = calculation;
     if (await basAssignmentCalculationFingerprint(payload) !== calculation_id) throw new Error('BAS assignment calculation fingerprint mismatch');
@@ -279,17 +307,21 @@ export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS engineering event fingerprint mismatch');
     const c = result.captures.find(c => c.capture_id === event.capture_id)!;
     const equipment = result.equipment_events!.find(e => e.event_id === event.expected_equipment_head)!;
-    const assembly = result.assembly_events?.find(e => e.event_id === event.expected_assembly_head)?.register ?? null;
+    const assemblyEvent = result.assembly_events?.find(e => e.event_id === event.expected_assembly_head) ?? null;
     const key = canonicalBasJson([event.capture_id, event.expected_equipment_head, event.expected_assembly_head]);
     let validate = engineeringValidators.get(key);
     if (!validate) {
       engineeringValidators.clear();
-      validate = await prepareBasEngineeringRegisterValidator(c, equipment.register, assembly);
+      const equipmentView = await equipmentViewFor(c, equipment);
+      const assemblyView = assemblyEvent ? await assemblyViewFor(c, assemblyEvent, equipment) : null;
+      validate = await prepareBasEngineeringRegisterValidatorForVerifiedViews(c, equipmentView, assemblyView);
       engineeringValidators.set(key, validate);
     }
     validate(event.register);
     verifyBasEngineeringResult(event.register.input, event.result);
   }
+  engineeringValidators.clear();
+  assemblyContext = undefined; equipmentContext = undefined;
   for (const event of result.drawing_events ?? []) {
     const { event_id, ...payload } = event;
     if (await basEventFingerprint(payload) !== event_id) throw new Error('BAS drawing event fingerprint mismatch');

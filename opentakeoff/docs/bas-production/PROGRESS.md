@@ -1,5 +1,54 @@
 # BAS production workflow progress
 
+## Snapshot allocation checkpoint — 2026-09-12
+
+SHOULD THIS BE ON THE SHARED PATH? **Yes.** Workflow verification, source
+inventory, calculation replay, readiness and snapshot identity are shared
+UI/MCP truth. This checkpoint changes only those shared composition boundaries
+and the core benchmark's ownership of superseded intermediates. It does not
+change VectorGrid, extraction, tables, row/column relationships, citations,
+bboxes, symbols, legends, Python arithmetic, installed quantity, pricing or
+labor.
+
+The shared workflow verifier now lets Zod own its declared strict fields once
+and separately owns only the nested unknown metadata deliberately retained by
+the equipment-evidence passthrough schema. Operation-local equipment, assembly
+and engineering views are reused only for their exact pinned capture/event
+heads; public raw entry points still perform full validation. Snapshot
+preparation carries the source inventory established by the same opaque verified
+plan instead of parsing the complete workflow again. MCP readiness sends an
+opaque record iterator to the actual Python replay service instead of copying
+and reverifying a second full workflow. There is no request flag, saved-ready
+bypass or caller-provided trusted object. New mutation-isolation and independent
+public-view parity tests cover these boundaries.
+
+The exact source-backed Fort Sam core journey remains functionally correct:
+the exact **924,578-byte** original and **3,528,351-byte** retained takeoff
+produce a **7,875,906-byte** archive; both included scheduled-equipment claims,
+all **458** findings and all **31** saved calculation records survive actual
+Python verification and reopen with the same snapshot and canonical takeoff.
+The latest isolated run measured setup **12.015 s**, preparation **1.947 s**,
+archive **0.089 s** and reopen **1.960 s**. This is a substantial time and
+allocation improvement over the previous checkpoint, but it is **not a memory
+pass**: incremental peak RSS was **586,776,576 bytes**, still **49,905,664
+bytes** above the unchanged **536,870,912-byte** gate. The failure remains
+enforced by the probe and is not relabeled or hidden.
+
+Current regression state: web **3,001/3,014 pass**, zero failures and the same
+13 expected fixture/model skips; typecheck and production build pass; lint has
+the same three existing `TakeoffCanvas.jsx` warnings and no errors. With the
+configured BAS Python environment, MCP passes **128 BAS + 33 revision + 6 issue
++ 17 scope/snapshot** tests and all included performance assertions. Package
+build, distribution smoke, BAS packaged-Python smoke, four packaging tests and
+the **55-tool** metadata check pass. Running that Python-dependent suite against
+the machine's bare `python3` correctly fails for missing Pydantic/Pytest; the
+configured production verifier is the passing environment reported here.
+
+This is a safe optimization checkpoint, not the production release gate. The
+five bounded human-in-loop workflows and their browser walkthrough evidence
+remain complete below; the separate source-backed snapshot peak-memory gate is
+still open.
+
 ## Snapshot composition and final gate rerun — 2026-09-12
 
 SHOULD THIS BE ON THE SHARED PATH? **Yes.** Snapshot truth, original-source

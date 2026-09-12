@@ -9,7 +9,7 @@ import { assessBasSnapshotCurrentness, basSnapshotCurrentnessSchema, basSnapshot
 import { canonicalBasJson } from '../../web/src/lib/basCanonical.ts';
 import { buildXlsx } from '../../web/src/lib/xlsx.js';
 import { withBasSnapshotBundleFile } from './basEvidenceBundleFile.ts';
-import { verifyBasWorkflowCalculations } from './basWorkflowReplay.ts';
+import { verifyPreparedBasWorkflowCalculations } from './basWorkflowReplay.ts';
 import { writeAtomicArtifact } from './atomicArtifactFile.ts';
 import type { Session } from './session.ts';
 
@@ -77,7 +77,7 @@ export async function inspectBasSnapshotFile(session: Session, rawPath: string, 
       if (!session.basWorkflow) throw new Error('No current retained BAS workflow is loaded for currentness comparison');
       currentness = await assessBasSnapshotCurrentness(archive.plan, session.basWorkflow, lifecycle.events, {
         readSource: async source => { guard(); return session.basOriginalBytes(source.sha256); },
-        replayCalculations: workflow => verifyBasWorkflowCalculations(workflow, { signal: options.signal }),
+        replayPreparedCalculations: plan => verifyPreparedBasWorkflowCalculations(plan, { signal: options.signal }),
       }, options.signal); guard();
     }
     let workbookPath: string | null = null;
