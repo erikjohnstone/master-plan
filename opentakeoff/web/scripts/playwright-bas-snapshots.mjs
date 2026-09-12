@@ -14,6 +14,7 @@ import { applyBasEquipmentReview } from '../src/lib/basEquipmentReview.ts';
 const [pdfPath, retainedPath, output] = process.argv.slice(2);
 assert.ok(pdfPath && retainedPath && output, 'Pass original PDF, retained takeoff and fresh output directory');
 const pdf = resolve(pdfPath), out = resolve(output); assert.equal(existsSync(out), false); mkdirSync(out, { recursive: true });
+const appUrl = process.env.OT_UI_URL || 'http://127.0.0.1:5177';
 const original = readFileSync(pdf), raw = readFileSync(resolve(retainedPath)), payload = JSON.parse(raw);
 const originalHash = createHash('sha256').update(original).digest('hex'), workflow = payload.bas_workflow;
 assert.equal(originalHash, workflow.captures[0].sources[0].sha256);
@@ -33,8 +34,9 @@ const input = resolve(out, 'controlled-input.takeoff.json'); writeFileSync(input
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, acceptDownloads: true });
 const page = await context.newPage(); page.setDefaultTimeout(30000);
-let storeUrl; const errors = [], timing = {}, checks = [], requests = [];
+let storeUrl; const errors = [], timing = {}, checks = [], requests = [], downloadedFiles = [];
 page.on('pageerror', e => errors.push(String(e)));
+page.on('download', download => downloadedFiles.push(download));
 page.on('request', req => {
   if (!storeUrl && new URL(req.url()).pathname === '/src/lib/store.js') storeUrl = req.url();
   if (new URL(req.url()).pathname === '/__ot/bas-workflow-replay') requests.push(req.url());
@@ -57,7 +59,7 @@ async function capture(name, target) {
   await page.emulateMedia({ colorScheme: 'light' }); await page.setViewportSize({ width: 1440, height: 900 });
 }
 try {
-  await page.goto('http://127.0.0.1:5177', { waitUntil: 'domcontentloaded' });
+  await page.goto(appUrl, { waitUntil: 'domcontentloaded' });
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
   await page.waitForFunction(() => ['ready', 'error'].includes(window.__opentakeoff?.graphPrewarm()?.phase), null, { timeout: 600000 });
   assert.equal(await page.evaluate(() => window.__opentakeoff.graphPrewarm().phase), 'ready');
@@ -103,16 +105,38 @@ try {
   await capture('findings', snapshots.getByRole('navigation', { name: 'Snapshot sections', exact: true }));
   start = performance.now(); const download = page.waitForEvent('download');
   await snapshots.getByRole('button', { name: 'Download snapshot evidence ZIP', exact: true }).click();
-  const zip = await download, zipPath = resolve(out, zip.suggestedFilename()); await zip.saveAs(zipPath); timing.export_ms = performance.now() - start;
+  const zip = await download;
+  const zipPath = resolve(out, zip.suggestedFilename()); await zip.saveAs(zipPath); timing.export_ms = performance.now() - start;
   await page.reload(); await page.getByRole('button', { name: 'Open', exact: true }).waitFor(); await openImportedSheet(page);
   await navigate(); await snapshots.getByRole('button', { name: 'Saved snapshots', exact: true }).click();
   start = performance.now(); await snapshots.getByRole('button', { name: 'Open snapshot', exact: true }).click();
   await snapshots.getByRole('region', { name: 'Verified historical snapshot', exact: true }).waitFor({ timeout: 90000 }); timing.reopen_ms = performance.now() - start;
   checks.push('Reload and actual Open snapshot reverify original bytes and shared Python');
+  await snapshots.getByRole('button', { name: 'Check against current saved work', exact: true }).click();
+  const currentness = snapshots.locator('details').filter({ hasText: 'Currentness result' });
+  await currentness.waitFor({ timeout: 90000 }); assert.match(await currentness.innerText(), /current for reviewed scope/);
+  checks.push('Fresh source/Python comparison confirms only the exact reviewed scope remains current');
   await snapshots.locator('input[name="bas-snapshot-import"]').setInputFiles(zipPath);
   await snapshots.getByRole('status').filter({ hasText: 'Historical snapshot imported and verified' }).waitFor({ timeout: 90000 });
   assert.equal((await page.evaluate(async url => (await import(url)).localStore.listBasSnapshots(), storeUrl)).items.length, 1);
   checks.push('Exported snapshot imports idempotently through public UI; no duplicate approval');
+  const release = snapshots.getByRole('group', { name: 'Revoke or supersede this snapshot', exact: true });
+  await release.getByLabel('Reviewer (self-declared)', { exact: true }).fill('CONTROLLED PUBLIC UI TEST');
+  await release.getByLabel('Reason', { exact: true }).fill('Controlled lifecycle restore proof; no project or installed-quantity conclusion');
+  await release.getByRole('checkbox').check();
+  await release.getByRole('button', { name: 'Record revoke', exact: true }).click();
+  await snapshots.getByRole('status').filter({ hasText: 'Snapshot revoked.' }).waitFor();
+  assert.match(await snapshots.getByRole('region', { name: 'Verified historical snapshot', exact: true }).innerText(), /revoked by CONTROLLED PUBLIC UI TEST/);
+  await page.screenshot({ path: resolve(out, 'revoked-lifecycle.png') });
+  await snapshots.getByRole('button', { name: 'Check against current saved work', exact: true }).click();
+  await snapshots.locator('details').filter({ hasText: 'Currentness result' }).waitFor();
+  assert.match(await snapshots.locator('details').filter({ hasText: 'Currentness result' }).innerText(), /not current lifecycle/);
+  const beforeLifecycleExport = downloadedFiles.length;
+  await snapshots.getByRole('button', { name: 'Download lifecycle JSON', exact: true }).click();
+  await waitForAsync(() => downloadedFiles.length >= beforeLifecycleExport + 1, { label: 'revoked snapshot lifecycle sidecar download' });
+  const lifecycleDownload = downloadedFiles.slice(beforeLifecycleExport).find(item => item.suggestedFilename().endsWith('.lifecycle.json'));
+  assert.ok(lifecycleDownload); const lifecyclePath = resolve(out, lifecycleDownload.suggestedFilename()); await lifecycleDownload.saveAs(lifecyclePath);
+  checks.push('Explicit human revoke is append-only, makes currentness fail, and exports separate lifecycle history');
   assert.ok(requests.length >= 5, 'Actual Python endpoint used for readiness, approval, export, reopen, import');
   // A fresh profile has no current workflow, annotations, PDFs or test injections.
   // Historical import must still be reachable without restoring working state.
@@ -121,7 +145,7 @@ try {
     const empty = await fresh.newPage(); let freshStoreUrl;
     empty.on('request', req => { if (!freshStoreUrl && new URL(req.url()).pathname === '/src/lib/store.js') freshStoreUrl = req.url(); });
     empty.on('pageerror', e => errors.push(String(e)));
-    await empty.goto('http://127.0.0.1:5177');
+    await empty.goto(appUrl);
     const initial = await empty.evaluate(async url => ({ annotations: await (await import(url)).localStore.loadAnnotations(),
       sheets: await (await import(url)).localStore.listSheets() }), freshStoreUrl);
     await empty.getByRole('button', { name: 'Restore BAS evidence backup', exact: true }).click();
@@ -129,6 +153,11 @@ try {
     const history = empty.getByRole('region', { name: 'BAS snapshots', exact: true });
     await history.locator('input[name="bas-snapshot-import"]').setInputFiles(zipPath);
     await history.getByRole('status').filter({ hasText: 'Historical snapshot imported and verified' }).waitFor({ timeout: 90000 });
+    assert.match(await history.innerText(), /Verified historical scope · approved/, 'immutable ZIP retains original approval');
+    await history.locator('input[name="bas-snapshot-lifecycle-import"]').setInputFiles(lifecyclePath);
+    await history.getByRole('status').filter({ hasText: 'Snapshot lifecycle imported and verified. Status: revoked.' }).waitFor({ timeout: 90000 });
+    assert.match(await history.innerText(), /Verified historical scope · revoked/);
+    await empty.screenshot({ path: resolve(out, 'restored-revoked-lifecycle.png') });
     const after = await empty.evaluate(async url => ({ annotations: await (await import(url)).localStore.loadAnnotations(),
       sheets: await (await import(url)).localStore.listSheets(), snapshots: await (await import(url)).localStore.listBasSnapshots() }), freshStoreUrl);
     assert.deepEqual(after.annotations, initial.annotations); assert.deepEqual(after.sheets, initial.sheets);
@@ -136,7 +165,7 @@ try {
     await history.getByRole('button', { name: /^Original PDFs \(/ }).click(); await history.getByRole('button', { name: 'Read original PDF', exact: true }).click();
     await empty.getByRole('region', { name: 'Original source reader', exact: true }).getByRole('status').filter({ hasText: /Original page 1 ready/ }).waitFor({ timeout: 60000 });
     await empty.screenshot({ path: resolve(out, 'empty-project-original.png') });
-    checks.push('Fresh empty browser imports and renders original without replacing annotations or adding active counting sheets');
+    checks.push('Fresh empty browser imports the immutable ZIP then lifecycle JSON, retains revoked status, and renders the original without replacing annotations or active counting sheets');
   } finally { await fresh.close(); }
   assert.deepEqual(errors, []);
   writeFileSync(resolve(out, 'proof.json'), JSON.stringify({ proof: 'public_browser_bas_snapshots', controlled_reviews: true,

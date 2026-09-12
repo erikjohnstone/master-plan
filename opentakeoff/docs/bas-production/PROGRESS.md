@@ -1,5 +1,101 @@
 # BAS production workflow progress
 
+## Five deterministic workflows — final browser walkthroughs, 2026-09-12
+
+All five bounded BAS workflows now have successful public-browser walkthroughs
+against real retained PDF evidence. The implementation stays on the shared
+UI/MCP workflow and Python-calculation path; UI navigation remains surface-only.
+No VectorGrid, table, citation/bbox, legend, symbol-recognition or extraction
+algorithm was changed in this completion pass. Full estimator steps and inspected
+screenshots are in `../BAS_TAKEOFF_WALKTHROUGH.md`.
+
+- **Point lists:** Fort Sam production compile exposes all 12 reviewed matrices,
+  193 rows and exact source-cell navigation. Keyboard selection, light/dark at
+  1280/1440/1920, autosave, reload, full export and clean-context import pass.
+  Evidence: `evidence/five-workflows-points-final-6/`.
+- **Sequences:** all 18 original clauses remain retained; a source-backed link
+  produces a three-row supported comparison (two listed, one not listed), while
+  invalid references reject. Source-return drafts, themes, persistence, import
+  and append-only removal pass. Evidence:
+  `evidence/five-workflows-sequences-final-3/`.
+- **Equipment/templates:** a separate 29-page Behavioral Medicine project yields
+  14 independently keyed members. A reviewed system-once assignment, source
+  cells, controlled exception/recalculation, stale history, reload/export/import
+  and withdrawal pass through actual Python. Installed quantity stays null.
+  Evidence: `evidence/five-workflows-equipment-final-2/`.
+- **Assemblies/responsibilities:** original Fort Sam text yields distinct supply
+  VFD, exhaust VFD and onboard-controller components; factory furnish does not
+  imply install/wire/program/test. Explicit conflicts, source-preserving
+  resolution, group contributions, atomic rebasing, persistence/import and
+  withdrawal pass. Installed total stays null. Evidence:
+  `evidence/five-workflows-assemblies-final/`.
+- **Engineering:** a real 0–10 VDC drawing note plus clearly disclosed controlled
+  counterpart capabilities exercises unknown, then pass, exact provenance,
+  source navigation, Python replay, six responsive/theme layouts, persistence,
+  import and historical access after equipment withdrawal. This is one real
+  signal-note journey, not complete design verification. Evidence:
+  `evidence/five-workflows-engineering-final/`.
+- **Review:** the accumulated real workflow exposes 456 findings with paging,
+  filters, keyboard/source/domain routing, exact original bboxes, original-PDF
+  retain/verify/download/recovery and complete export parity. Evidence:
+  `evidence/five-workflows-review-final/`.
+- **Revisions:** a controlled page-reordered derivative of the real Fort Sam PDF
+  exercises cancelled comparison, explicit correspondence, stale-preview
+  rejection, source return, durable review, reload/Python replay and complete
+  export. Public timings were 7.551 s initial, 6.957 s paired, 11.785 s record and
+  7.500 s reopen. This is not an issued addendum. Evidence:
+  `evidence/five-workflows-revision-final-9/`.
+- **Snapshots:** readiness remains separate from approval; self-declared reviewer,
+  reason and confirmation are required. Save/reopen/currentness, append-only
+  revocation, separate ZIP/lifecycle downloads and empty-browser recovery pass
+  with exact original PDF rendering and unchanged annotations/counting sheets.
+  Evidence: `evidence/snapshot-lifecycle-final-5/`.
+- **Agent/MCP:** the existing Agent can inspect and open all five workflow domains;
+  the public MCP surface adds `inspect_bas_workflow` and `inspect_bas_snapshot`
+  for 55 tools total. Neither surface can silently approve, revoke, supersede or
+  manufacture installed quantity.
+
+Final-gate issues caught instead of hidden: the first full web run found a real
+pending-caller-mutation leak in revision request ownership; the shared comparison
+boundary now owns the request before its first await and the full 3,012-test rerun
+passes 2,999 with 13 existing skips. Python pytest passes 456 with one skip and
+configured mypy passes 21 source files. The generic room benchmark and production
+web build pass. Readiness on the 3.5 MB/456-finding retained workflow passes its
+10 s and 512 MiB limits at 5.315–6.741 s and 322,256,896 incremental bytes.
+
+The separate scope-journal benchmark does not pass its predeclared 5 s operation
+limit on this loaded host. Its three save/coverage/read ranges were
+4.162–5.335/4.064–4.570/5.954–9.212 s; incremental peak RSS was 170,016,768 bytes,
+within the 512 MiB memory limit. The limit and fixture were not weakened. MCP
+typecheck and the 128 BAS, 33 revision, six issue and 17 scope-focused tests pass;
+the package build, distribution smoke check and 55-tool metadata gate pass. Three
+conformance tests that timed out while the full real-PDF suite saturated shared
+sidecars pass in isolation (111/1.1/131 s). The full legacy corpus run still
+reproduces its recorded WP1 keyed-compile differences and D03–D05 extraction
+expectation failures; D01, D02, D06 and the all-available-PDF structural compile
+pass. None of the implicated VectorGrid/sheet-graph/symbol/extraction files is
+changed in this branch, and the failures are not relabeled as BAS-workflow passes.
+
+Known boundaries remain material. The Behavioral 29-page production graph
+exhausted the default 2 GiB Node heap and required a disclosed 4 GiB browser-test
+run. The real source-backed snapshot journey remains functionally correct but its
+previous measured incremental RSS is above the separate 512 MiB target. No spec
+book ingestion, learned/vision symbol work or field-installed verification is in
+this branch. The scope-journal latency gate above is also open. These facts prevent
+a blanket production-complete claim even though the five bounded human-in-loop
+journeys now work end to end.
+
+## Five-workflow completion resumed; symbol work delegated — 2026-09-12
+
+The user resumed this goal with a superseding boundary: finish and verify the five
+deterministic BAS workflows, but do not enter symbol recognition because another
+model owns it. Symbol implementation is no longer an acceptance gate for this
+branch. Existing symbol, legend, VectorGrid, table, citation and bbox production
+code remains untouched. Current integration audit is focused on literal public
+wiring, durable review/export/replay, and an estimator walkthrough for workflows
+A–E. The browser Agent orchestration, unique-point reconciliation and remaining
+snapshot lifecycle/MCP gaps from the prior checkpoint remain open until verified.
+
 ## Public snapshot UI and user-requested merge checkpoint — 2026-09-10
 
 After `60a77a42`, Review & changes now connects the shared snapshot services to

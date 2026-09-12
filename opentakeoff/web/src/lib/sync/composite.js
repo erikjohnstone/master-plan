@@ -89,7 +89,8 @@ export function buildLocalFirstStore(projectId, drive, cloud) {
   const composite = { ...cloud, ...annSync, ...snapSync,
     retainBasSource: local.retainBasSource, loadBasSource: local.loadBasSource,
     restoreBasEvidence: annSync.restoreBasEvidence, loadBasRestoreJournal: local.loadBasRestoreJournal,
-    saveBasSnapshot: annSync.saveBasSnapshot, loadBasSnapshot: annSync.loadBasSnapshot, listBasSnapshots: annSync.listBasSnapshots };
+    saveBasSnapshot: annSync.saveBasSnapshot, loadBasSnapshot: annSync.loadBasSnapshot, listBasSnapshots: annSync.listBasSnapshots,
+    saveBasSnapshotLifecycle: annSync.saveBasSnapshotLifecycle, loadBasSnapshotLifecycle: annSync.loadBasSnapshotLifecycle };
   // Non-enumerable so it rides the live `store` binding to the canvas without
   // polluting the store shape or the composite spread. Canvas reads store.syncBridge.
   Object.defineProperty(composite, "syncBridge", { value: bridge, enumerable: false });

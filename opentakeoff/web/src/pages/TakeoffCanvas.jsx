@@ -170,8 +170,9 @@ import { applyBasReview } from "../lib/basReview.ts";
 import { applyBasDrawingReview } from "../lib/basDrawingReview.ts";
 import { recordBasIssueFromUi } from "../components/basIssueClient.ts";
 import { recordBasScopeFromUi } from "../components/basScopeClient.ts";
-import { basRevisionOperationSchema, assertBasRevisionResponse } from "../lib/basRevisionOperations.ts";
+import { basRevisionOperationSchema, assertBasRevisionResponseForVerifiedWorkflow } from "../lib/basRevisionOperations.ts";
 import { applyBasEquipmentReview } from "../lib/basEquipmentReview.ts";
+import { inspectBasWorkflow } from "../lib/basWorkflowInspection.ts";
 import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
@@ -7902,6 +7903,35 @@ export default function TakeoffCanvas() {
     };
   }
 
+  /** SHOULD THIS BE ON THE SHARED PATH? Split by responsibility. The status
+   * projection is shared (inspectBasWorkflow); opening React view state is
+   * surface-specific and cannot change retained BAS truth. */
+  async function agentInspectBasWorkflow(domain, captureId = null) {
+    const workflow = basWorkflowRef.current;
+    if (!workflow) return { error: "No retained BAS workflow is open. Run compile_corpus_takeoff with kind=\"bas_points\" first." };
+    try { return await inspectBasWorkflow(workflow, domain, captureId); }
+    catch (error) { return { error: `BAS workflow inspection failed: ${error?.message || error}` }; }
+  }
+
+  function agentOpenBasWorkspace(destination) {
+    if (!basWorkflowRef.current) return { error: "No retained BAS workflow is open. Compile a BAS takeoff first." };
+    const routes = {
+      point_soo: { takeoffTab: "points", mode: "sequences", sequenceScroll: 0 },
+      equipment_templates: { takeoffTab: "equipment", equipment: { assemblyOverview: false, engineeringOverview: false } },
+      assemblies_responsibility: { takeoffTab: "equipment", equipment: { assemblyOverview: true, engineeringOverview: false } },
+      engineering_compatibility: { takeoffTab: "equipment", equipment: { assemblyOverview: false, engineeringOverview: true } },
+      review_revisions_release: { takeoffTab: "review", projectReview: { snapshots: false, originalSources: false } },
+    };
+    const route = routes[destination];
+    if (!route) return { error: "Unknown BAS workspace destination." };
+    setBasViewState(previous => ({ ...previous, ...route,
+      ...(route.equipment ? { equipment: { ...previous?.equipment, ...route.equipment } } : {}),
+      ...(route.projectReview ? { projectReview: { ...previous?.projectReview, ...route.projectReview } } : {}),
+    }));
+    setShowTakeoffData(true);
+    return { opened: true, destination, changed_workflow: false, approval: "not_evaluated" };
+  }
+
   /** Push reconcile rows into the Takeoff panel — the ONLY thing this tool
    * used to do was download a standalone CSV; the rows never reached
    * agentTakeoffRows at all, so scheduled_qty/installed_qty/status never
@@ -8836,6 +8866,8 @@ export default function TakeoffCanvas() {
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
       compileCorpusTakeoff: agentCompileCorpusTakeoff,
+      inspectBasWorkflow: agentInspectBasWorkflow,
+      openBasWorkspace: agentOpenBasWorkspace,
       reconcileSchedulePlan: agentReconcileSchedulePlan,
       countMarks: agentCountMarks,
       sweepScheduleRow: agentSweepScheduleRow,
@@ -13116,7 +13148,7 @@ export default function TakeoffCanvas() {
               body: JSON.stringify({ workflow: previous, request: operation }) });
             const result = await response.json(); guard();
             if (!response.ok) throw new Error(result.error || 'Revision service unavailable; no result accepted.');
-            const checked = await assertBasRevisionResponse(previous, operation, result); guard();
+            const checked = await assertBasRevisionResponseForVerifiedWorkflow(previous, operation, result); guard();
             if (checked.kind === 'record') { basWorkflowRef.current = checked.workflow; setBasWorkflow(checked.workflow); }
             return checked;
           }}
@@ -13177,7 +13209,11 @@ export default function TakeoffCanvas() {
             });
             if (result?.error) {
               setCommitMsg(`Could not open cite: ${result.error}`);
-              return;
+              // Let the workspace that initiated the navigation display the
+              // same refusal beside the evidence. Swallowing this here left a
+              // source button looking inert when a historical sheet revision
+              // was no longer open, even though no incorrect bbox was painted.
+              return { error: result.error };
             }
             const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
             if (markup) flyToMarkup(markup);

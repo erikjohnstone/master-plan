@@ -18,6 +18,17 @@ const localPython = fileURLToPath(new URL("../../.venv-bas/bin/python", import.m
 const LIMIT = 32 * 1024 * 1024;
 const count = z.number().int().nonnegative().safe();
 const vector = z.object({ AI: count, AO: count, DI: count, DO: count }).strict();
+const checkedReplayRecordSchema = z.object({
+  kind: z.enum(['assignment', 'assembly', 'engineering']),
+  record_id: z.string().regex(/^[a-f0-9]{64}$/),
+}).strict();
+const workflowReplayBatchResultSchema = z.object({
+  schema_version: z.literal('bas_workflow_replay_batch_v1'),
+  rule_version: z.literal(BAS_WORKFLOW_REPLAY_RULE),
+  checked_records: z.array(checkedReplayRecordSchema).max(1000),
+  match: z.literal(true),
+  project_complete: z.literal(false),
+}).strict();
 const evidence = z.object({
   sheet_id: z.string().nullable(), table_title: z.string().nullable(),
   row_key: z.string().nullable(), column: z.string().nullable(), text: z.string().nullable(),
@@ -96,13 +107,32 @@ export async function replayBasEngineering(results: BasEngineeringResult[], opti
 }
 
 export async function replayBasWorkflowBatch(records: BasReplayRecord[], options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}) {
-  const schema = z.object({ schema_version: z.literal('bas_workflow_replay_batch_v1'), rule_version: z.literal(BAS_WORKFLOW_REPLAY_RULE),
-    checked_records: z.array(z.object({ kind: z.enum(['assignment', 'assembly', 'engineering']), record_id: z.string().regex(/^[a-f0-9]{64}$/) }).strict()).max(1000),
-    match: z.literal(true), project_complete: z.literal(false) }).strict();
-  const result = await runBasProcess({ workflow_replay: { records } }, schema, options);
+  const result = await runBasProcess({ workflow_replay: { records } }, workflowReplayBatchResultSchema, options);
   const expected = records.map(({ kind, record_id }) => ({ kind, record_id }));
   if (JSON.stringify(result.checked_records) !== JSON.stringify(expected)) throw new Error('BAS workflow replay omitted or changed calculation records');
   return result;
+}
+
+/** Combine the two existing revision-only Python operations for bounded
+ * requests. Callers retain the existing batch fallback when this envelope
+ * would exceed its limits; output is verified exactly as the separate calls. */
+export async function runBasRevisionBundle(records: BasReplayRecord[], payload: unknown,
+  options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}) {
+  const quantities = basRevisionQuantityRequestSchema.parse(payload);
+  const schema = z.object({
+    schema_version: z.literal('bas_revision_bundle_v1'),
+    workflow_replay: workflowReplayBatchResultSchema,
+    revision_quantities: basRevisionQuantityResultSchema,
+    installed_quantity: z.null(),
+    approved: z.literal(false),
+    project_complete: z.literal(false),
+  }).strict();
+  const result = await runBasProcess({ revision_bundle: { workflow_replay: { records }, revision_quantities: quantities } }, schema, options);
+  const expected = records.map(({ kind, record_id }) => ({ kind, record_id }));
+  if (JSON.stringify(result.workflow_replay.checked_records) !== JSON.stringify(expected)) {
+    throw new Error('BAS revision bundle omitted or changed replay records');
+  }
+  return { ...result, revision_quantities: verifyBasRevisionQuantityResult(quantities, result.revision_quantities) };
 }
 
 async function runBasProcess<T>(payload: unknown, schema: z.ZodType<T>, options: { python?: string; timeoutMs?: number; signal?: AbortSignal }): Promise<T> {

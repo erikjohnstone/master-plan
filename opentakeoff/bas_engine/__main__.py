@@ -18,6 +18,7 @@ from .engineering import EngineeringResult, check_engineering
 from .engineering_replay import EngineeringReplayInput, EngineeringReplayResult, replay_engineering
 from .workflow_replay import WorkflowReplayInput, WorkflowReplayResult, replay_workflow
 from .revision_quantities import RevisionQuantityInput, RevisionQuantityResult, compare_revision_quantities
+from .revision_bundle import RevisionBundleInput, RevisionBundleResult, calculate_revision_bundle
 
 MAX_BYTES = 32 * 1024 * 1024
 
@@ -32,6 +33,7 @@ class Envelope(Contract):
     engineering_replay: EngineeringReplayInput | None = None
     workflow_replay: WorkflowReplayInput | None = None
     revision_quantities: RevisionQuantityInput | None = None
+    revision_bundle: RevisionBundleInput | None = None
 
 
 def main() -> int:
@@ -40,10 +42,13 @@ def main() -> int:
         if len(data) > MAX_BYTES:
             raise ValueError("BAS input exceeds 32 MiB")
         envelope = Envelope.model_validate_json(data)
-        if sum(item is not None for item in (envelope.request, envelope.blueprint, envelope.point_lists, envelope.assignment_demand, envelope.assembly_quantities, envelope.engineering, envelope.engineering_replay, envelope.workflow_replay, envelope.revision_quantities)) != 1:
-            raise ValueError("provide exactly one request, blueprint, point_lists, assignment_demand, assembly_quantities, engineering, engineering_replay, workflow_replay or revision_quantities payload")
-        result: EngineResult | PointListResult | AssignmentDemandResult | AssemblyQuantityResult | EngineeringResult | EngineeringReplayResult | WorkflowReplayResult | RevisionQuantityResult
-        if envelope.revision_quantities is not None:
+        if sum(item is not None for item in (envelope.request, envelope.blueprint, envelope.point_lists, envelope.assignment_demand, envelope.assembly_quantities, envelope.engineering, envelope.engineering_replay, envelope.workflow_replay, envelope.revision_quantities, envelope.revision_bundle)) != 1:
+            raise ValueError("provide exactly one request, blueprint, point_lists, assignment_demand, assembly_quantities, engineering, engineering_replay, workflow_replay, revision_quantities or revision_bundle payload")
+        result: EngineResult | PointListResult | AssignmentDemandResult | AssemblyQuantityResult | EngineeringResult | EngineeringReplayResult | WorkflowReplayResult | RevisionQuantityResult | RevisionBundleResult
+        if envelope.revision_bundle is not None:
+            result = calculate_revision_bundle(envelope.revision_bundle)
+            result = RevisionBundleResult.model_validate(result.model_dump())
+        elif envelope.revision_quantities is not None:
             result = compare_revision_quantities(envelope.revision_quantities)
             result = RevisionQuantityResult.model_validate(result.model_dump())
         elif envelope.workflow_replay is not None:

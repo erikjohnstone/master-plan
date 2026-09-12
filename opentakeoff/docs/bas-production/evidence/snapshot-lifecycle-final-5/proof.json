@@ -1,0 +1,27 @@
+{
+  "proof": "public_browser_bas_snapshots",
+  "controlled_reviews": true,
+  "fresh_extraction_accuracy_claim": false,
+  "original_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "retained_input_sha256": "669c397133b88b7870e6e8027d28f7e3f2583b09a778b64ea14f0bd9b5fae156",
+  "snapshot_id": "58cf1b9b40b71ec376e050283f988294b91f9b93ae8b27fd096bae96a7bc5ec3",
+  "browser": "152.0.7977.83",
+  "timing": {
+    "readiness_ms": 6541.018458000006,
+    "approve_ms": 9910.127999999997,
+    "export_ms": 6662.247707999995,
+    "reopen_ms": 6098.0072089999885
+  },
+  "checks": [
+    "Readiness does not approve; explicit reviewer, reason and confirmation required",
+    "Exact PDF citation renders in isolated reader; selected claim survives return",
+    "Actual button saves separate snapshot without replacing BAS evidence or measurements",
+    "Reload and actual Open snapshot reverify original bytes and shared Python",
+    "Fresh source/Python comparison confirms only the exact reviewed scope remains current",
+    "Exported snapshot imports idempotently through public UI; no duplicate approval",
+    "Explicit human revoke is append-only, makes currentness fail, and exports separate lifecycle history",
+    "Fresh empty browser imports the immutable ZIP then lifecycle JSON, retains revoked status, and renders the original without replacing annotations or active counting sheets"
+  ],
+  "actual_python_requests": 6,
+  "errors": []
+}

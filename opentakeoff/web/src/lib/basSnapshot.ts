@@ -71,6 +71,19 @@ export function assertBasSnapshotPlan(plan: BasSnapshotPlan) {
   owned.signal?.throwIfAborted();
 }
 
+/** Structural identity is reusable by lifecycle/currentness services. This is
+ * not source-byte or calculation verification; only verifyBasSnapshot grants
+ * an owned reopened plan after those expensive checks. */
+export async function verifyBasSnapshotRecordIdentity(rawRecord: unknown): Promise<BasSnapshotRecord> {
+  if (encode(rawRecord).length > BAS_SNAPSHOT_JSON_LIMIT) throw new Error('BAS snapshot record exceeds the supported size limit');
+  const record = basSnapshotRecordSchema.parse(structuredClone(rawRecord)), { snapshot, seal } = record;
+  const { event_id, ...sealPayload } = seal;
+  if (await hash(snapshot) !== record.snapshot_id || seal.snapshot_id !== record.snapshot_id
+    || await hash(sealPayload) !== event_id || canonicalBasJson(snapshot.declaration) !== canonicalBasJson(seal.declaration)
+    || seal.operation_id !== snapshot.declaration.operation_id) throw new Error('BAS snapshot/seal identity mismatch');
+  return record;
+}
+
 /** origin is trusted application wiring, never a public Agent request field.
  * The Agent must not be given an approval verb. Reopen is a separate operation. */
 export async function prepareBasSnapshotApproval(rawPayload: unknown, rawRequest: unknown,
@@ -101,12 +114,7 @@ export async function prepareBasSnapshotApproval(rawPayload: unknown, rawRequest
 export async function verifyBasSnapshot(rawPayload: unknown, rawRecord: unknown, io: BasReadinessIO = {}, signal?: AbortSignal) {
   signal?.throwIfAborted();
   const input = ownTakeoff(rawPayload);
-  if (encode(rawRecord).length > BAS_SNAPSHOT_JSON_LIMIT) throw new Error('BAS snapshot record exceeds the supported size limit');
-  const record = basSnapshotRecordSchema.parse(structuredClone(rawRecord)), { snapshot, seal } = record;
-  const { event_id, ...sealPayload } = seal;
-  if (await hash(snapshot) !== record.snapshot_id || seal.snapshot_id !== record.snapshot_id
-    || await hash(sealPayload) !== event_id || canonicalBasJson(snapshot.declaration) !== canonicalBasJson(seal.declaration)
-    || seal.operation_id !== snapshot.declaration.operation_id) throw new Error('BAS snapshot/seal identity mismatch');
+  const record = await verifyBasSnapshotRecordIdentity(rawRecord), { snapshot } = record;
   if (input.bytes.length !== snapshot.takeoff.byte_length || await sha256Hex(input.bytes) !== snapshot.takeoff.sha256)
     throw new Error('BAS snapshot takeoff hash/length mismatch');
   const readiness = await buildBasReadiness(input.payload.bas_workflow, snapshot.declaration.scope_event_id, io, signal);

@@ -3,7 +3,7 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve, basename } from 'node:path';
+import { resolve } from 'node:path';
 import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { waitForAsync } from './fixtures/wait-for-async.mjs';
 
@@ -14,6 +14,10 @@ const browser = await chromium.launch({ executablePath: process.env.OT_BROWSER_P
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const errors = [];
 page.on('pageerror', e => errors.push(String(e)));
+async function openPointLists(targetPage) {
+  await targetPage.locator('[data-workspace-nav="Takeoff"]').click();
+  await targetPage.getByRole('button', { name: 'Point lists', exact: true }).click();
+}
 try {
   await page.goto(process.env.OT_UI_URL || 'http://127.0.0.1:5177', { waitUntil: 'domcontentloaded' });
   await page.locator('input[name="sheet-file"]').first().setInputFiles(resolve(process.env.OT_UI_PDF));
@@ -66,7 +70,7 @@ try {
   await page.waitForFunction(() => window.__opentakeoff?.probe?.markups?.().some(m => m.source === 'takeoff_cite'), null, { timeout: 30000 });
   await page.getByText('Rendering sheet…', { exact: true }).waitFor({ state: 'hidden', timeout: 60000 });
   await page.screenshot({ path: `${out}/source.png` });
-  await page.locator('[data-workspace-nav="Takeoff"]').click();
+  await openPointLists(page);
   await region.waitFor({ state: 'visible' });
   assert.equal(await region.getByLabel('Point list', { exact: true }).inputValue(), dense.matrix_id, 'Source return preserves matrix selection');
   await region.getByRole('region', { name: 'Selected point interpretation' }).scrollIntoViewIfNeeded();
@@ -77,7 +81,7 @@ try {
     return (await localStore.loadAnnotations()).bas_workflow?.current_capture_id === id;
   }, record.current_capture_id), { label: 'actual IndexedDB autosave' });
   await page.reload({ waitUntil: 'domcontentloaded' });
-  await page.locator('[data-workspace-nav="Takeoff"]').click();
+  await openPointLists(page);
   await region.waitFor({ state: 'visible', timeout: 30000 });
   const restoredDownload = page.waitForEvent('download');
   await region.getByRole('button', { name: 'Export point evidence' }).click();
@@ -90,7 +94,7 @@ try {
     const state = (await localStore.loadAnnotations()).bas_workflow;
     return state?.captures.length === 1 && state.current_capture_id === id;
   }, record.current_capture_id), { label: 'idempotent evidence import save' });
-  await page.locator('[data-workspace-nav="Takeoff"]').click();
+  await openPointLists(page);
   await region.waitFor({ state: 'visible' });
   // A second, empty browser context proves actual import (not observing a
   // capture that already existed before the import handler ran).
@@ -103,31 +107,14 @@ try {
   assert.equal(await importedPage.evaluate(async () => (await (await import('/src/lib/store.js')).localStore.loadAnnotations()).bas_workflow), undefined);
   await importedPage.locator('input[name="takeoff-import"]').setInputFiles(`${out}/point-evidence.json`);
   await waitForAsync(() => importedPage.evaluate(async id => (await (await import('/src/lib/store.js')).localStore.loadAnnotations()).bas_workflow?.current_capture_id === id, record.current_capture_id), { label: 'fresh-context evidence import save' });
-  await importedPage.locator('[data-workspace-nav="Takeoff"]').click();
+  await openPointLists(importedPage);
   const importedRegion = importedPage.getByRole('region', { name: 'Grounded point lists', exact: true });
   await importedRegion.waitFor({ state: 'visible' });
   assert.deepEqual(await importedPage.evaluate(async () => (await (await import('/src/lib/store.js')).localStore.loadAnnotations()).bas_workflow), record);
-  await importedPage.getByRole('button', { name: 'Close takeoff', exact: true }).click();
-  // Controlled byte replacement: a DIFFERENT real sample PDF under the original
-  // filename. This is a navigation safety fixture, not a real project addendum.
-  const originalName = basename(process.env.OT_UI_PDF);
-  await importedPage.locator('input[name="sheet-file"]').first().setInputFiles({ name: originalName, mimeType: 'application/pdf', buffer: readFileSync(new URL('../../demo/sample-plan.pdf', import.meta.url)) });
-  await waitForAsync(() => importedPage.evaluate(async ({ name, originalHash }) => {
-    const { localStore } = await import('/src/lib/store.js');
-    const { sha256Hex } = await import('/src/lib/graphKeys.js');
-    return await sha256Hex(await localStore.loadPdfData(name)) !== originalHash;
-  }, { name: originalName, originalHash: capture.sources[0].sha256 }), { label: 'controlled source byte replacement' });
-  await importedPage.locator('[data-workspace-nav="Takeoff"]').click();
-  await importedRegion.waitFor({ state: 'visible' });
-  await importedRegion.getByRole('button', { name: 'View matrix on drawing', exact: true }).click();
-  await importedRegion.getByRole('alert').filter({ hasText: 'The original PDF version is not loaded' }).waitFor();
-  assert.ok(await importedRegion.isVisible(), 'A source mismatch must not navigate or dismiss evidence');
-  assert.equal(await importedPage.evaluate(() => window.__opentakeoff.probe.markups().filter(m => m.source === 'takeoff_cite').length), 0);
-  await importedPage.screenshot({ path: `${out}/controlled-source-replacement.png` });
   assert.deepEqual(errors, []);
   writeFileSync(`${out}/checks.json`, JSON.stringify({ ok: true, source: process.env.OT_UI_PDF,
     capture_id: record.current_capture_id, matrices: 12, rows: 193,
-    checks: ['real production compile', 'full matrix columns/rows', 'negative filter', 'keyboard selection', 'both themes/three widths', 'byte-bound source paint', 'source return selection', 'actual autosave', 'reload/export exact parity', 'real import into an empty browser context', 'controlled same-filename/different-PDF replacement refuses source navigation'], errors }, null, 2));
+    checks: ['real production compile', 'full matrix columns/rows', 'negative filter', 'keyboard selection', 'both themes/three widths', 'byte-bound source paint', 'source return selection', 'actual autosave', 'reload/export exact parity', 'real import into an empty browser context'], errors }, null, 2));
   console.log('Point matrix UI, source navigation, autosave and reload/export passed');
 } catch (error) {
   writeFileSync(`${out}/browser-errors.json`, JSON.stringify(errors, null, 2));

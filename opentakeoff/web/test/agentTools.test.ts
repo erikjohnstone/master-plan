@@ -58,6 +58,26 @@ test("registry: every tool has a name, description, and object schema; names are
   }
 });
 
+test("deterministic BAS workflow tools delegate inspection and open only the requested workspace", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    inspectBasWorkflow: async (domain: string, captureId: string | null) => {
+      calls.push(['inspect', domain, captureId]);
+      return { schema_version: 'bas_workflow_inspection_v1', domain, installed_quantity: null };
+    },
+    openBasWorkspace: (destination: string) => {
+      calls.push(['open', destination]);
+      return { opened: true, destination, changed_workflow: false };
+    },
+  });
+  const inspected = await executeAgentTool(ctx, 'inspect_bas_workflow', { domain: 'assemblies_responsibility' });
+  const opened = await executeAgentTool(ctx, 'open_bas_workspace', { destination: 'assemblies_responsibility' });
+  assert.equal(inspected.domain, 'assemblies_responsibility');
+  assert.equal(opened.changed_workflow, false);
+  assert.deepEqual(calls, [['inspect', 'assemblies_responsibility', null], ['open', 'assemblies_responsibility']]);
+  assert.match((await executeAgentTool(makeCtx().ctx, 'inspect_bas_workflow', { domain: 'point_soo' })).error, /not wired/);
+});
+
 test("query_table delegates whole-set cited cell filters", async () => {
   const { ctx } = makeCtx();
   const out = await executeAgentTool(ctx, "query_table", {
@@ -402,4 +422,3 @@ test("sweep_schedule_row forwards prefer_schedule_title to Session preferTitle",
   assert.equal(opts.preferTitle, "2-STAGE, GAS FIRED FURNACE SCHEDULE");
   assert.equal(opts.preferSheet, "M-601");
 });
-

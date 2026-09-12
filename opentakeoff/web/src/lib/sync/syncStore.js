@@ -572,9 +572,10 @@ export function createSyncStore({ base, provider, folderId, onRemoteUpdate, save
   // Browser-local BAS snapshots do not enter legacy annotation/snapshot sync.
   // A disposed project cannot finish an asynchronous approval into its old scope.
   const snapshotLifetime = new AbortController();
-  for (const method of ['saveBasSnapshot', 'listBasSnapshots', 'loadBasSnapshot']) {
+  for (const method of ['saveBasSnapshot', 'listBasSnapshots', 'loadBasSnapshot', 'saveBasSnapshotLifecycle', 'loadBasSnapshotLifecycle']) {
     Object.defineProperty(api, method, { enumerable: false, value: async (...args) => {
-      const optionIndex = method === 'saveBasSnapshot' ? 2 : method === 'loadBasSnapshot' ? 1 : 0;
+      const optionIndex = method === 'saveBasSnapshot' || method === 'saveBasSnapshotLifecycle' ? 2
+        : method === 'loadBasSnapshot' || method === 'loadBasSnapshotLifecycle' ? 1 : 0;
       const options = args[optionIndex] || {}, callerGuard = options.guard;
       const guard = () => {
         if (!active) throw new Error('This sync workspace was closed. Reload the current workspace before accessing BAS snapshots.');

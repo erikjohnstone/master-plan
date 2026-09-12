@@ -50,6 +50,8 @@
 //   resolveTag(tag): Promise<ResolveResult>
 //   findSchedule(kind): Promise<FindScheduleResult>
 //   compileCorpusTakeoff(kind, opts): Promise<CompiledTakeoff | { error }>
+//   inspectBasWorkflow(domain, captureId?): Promise<BasWorkflowInspection | { error }>
+//   openBasWorkspace(destination): { opened, destination } | { error }
 //   exportTakeoff(): { downloaded, condition_count } | { error }   // real browser download
 //   exportReport(): { downloaded, condition_count } | { error }    // real browser download
 //   countMarks(marks|undefined): Promise<CountMarksResult>
@@ -511,6 +513,39 @@ export const AGENT_TOOL_DEFS = [
         },
       },
       required: ["kind"],
+    },
+  },
+  {
+    name: "inspect_bas_workflow",
+    description: "Inspect one of the five retained deterministic BAS workflows through the same validated shared services used by the Takeoff workspaces and MCP. Returns bounded counts, dependency freshness, issue codes and the exact next step for point/SOO coverage, equipment-template assignment, assemblies/responsibilities, engineering compatibility, or review/revisions/release. This is read-only: it does not approve, edit, infer installed quantity, or freshly verify original bytes/Python calculations.",
+    input_schema: {
+      type: "object",
+      properties: {
+        domain: {
+          type: "string",
+          enum: ["point_soo", "equipment_templates", "assemblies_responsibility", "engineering_compatibility", "review_revisions_release"],
+          description: "The deterministic BAS workflow to inspect.",
+        },
+        capture_id: {
+          type: "string",
+          description: "Optional retained capture SHA-256. Omit for the active drawing capture.",
+        },
+      },
+      required: ["domain"],
+    },
+  },
+  {
+    name: "open_bas_workspace",
+    description: "Open the correct spacious Takeoff workspace for one deterministic BAS workflow without changing any BAS evidence, quantities, decisions or approvals. Use after inspect_bas_workflow so the estimator can review sources and make the required human decisions.",
+    input_schema: {
+      type: "object",
+      properties: {
+        destination: {
+          type: "string",
+          enum: ["point_soo", "equipment_templates", "assemblies_responsibility", "engineering_compatibility", "review_revisions_release"],
+        },
+      },
+      required: ["destination"],
     },
   },
   {
@@ -1024,6 +1059,20 @@ export async function executeAgentTool(ctx, name, args) {
           service: args.service || null,
           bas_math: args.bas_math,
         });
+      }
+
+      case "inspect_bas_workflow": {
+        if (typeof ctx.inspectBasWorkflow !== "function") {
+          return { error: "inspect_bas_workflow is not wired in this session. Compile a BAS takeoff and reopen the Takeoff workspace." };
+        }
+        return await ctx.inspectBasWorkflow(args.domain, args.capture_id || null);
+      }
+
+      case "open_bas_workspace": {
+        if (typeof ctx.openBasWorkspace !== "function") {
+          return { error: "open_bas_workspace is not wired in this session." };
+        }
+        return ctx.openBasWorkspace(args.destination);
       }
 
       case "reconcile_schedule_plan": {

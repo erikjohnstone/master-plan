@@ -8,6 +8,7 @@ import { basAssemblyReviewRequestSchema } from '../../web/src/lib/basAssemblyReg
 import { basAssemblyQuantityRequestSchema } from '../../web/src/lib/basAssemblyQuantityContract.ts';
 import { basEngineeringReviewRequestSchema, basEngineeringInspectRequestSchema } from '../../web/src/lib/basEngineeringRegister.ts';
 import { basProjectReviewRequestSchema } from '../../web/src/lib/basProjectReview.ts';
+import { inspectBasWorkflow, basWorkflowInspectionDomainSchema, basWorkflowInspectionSchema } from '../../web/src/lib/basWorkflowInspection.ts';
 import type { McpServer, RegisteredTool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { ok, okImage, fail, UserError, type ToolReply } from "./format.ts";
 import { UNDO_CAP, CONTEXT_MIN_LEN_PX, CONTEXT_MAX_SEGMENTS, CONTEXT_MAX_SEGMENTS_CEIL, type Session } from "./session.ts";
@@ -53,6 +54,7 @@ import { basIssueCommandSchema, basIssueTransportResultSchema } from '../../web/
 import { runBasIssueTransport } from './basIssueTransport.ts';
 import { basScopeCommandSchema, basScopeTransportResultSchema } from '../../web/src/lib/basScopeTransportContract.ts';
 import { runBasScopeTransport } from './basScopeTransport.ts';
+import { inspectBasSnapshotFile, basSnapshotFileInspectionSchema } from './basSnapshotFile.ts';
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -95,6 +97,31 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     },
     sendResourceListChanged: () => realServer.sendResourceListChanged(),
   };
+  server.registerTool('inspect_bas_workflow', {
+    description: `Inspect one of the five deterministic BAS workflows from the current retained, validated workflow: point_soo, equipment_templates, assemblies_responsibility, engineering_compatibility, or review_revisions_release. Returns the same bounded status projection as the browser Agent: counts, dependency freshness, grouped issue codes and an exact next step. It does not mutate history, verify original PDF bytes, freshly replay saved Python calculations, infer installed quantity, approve scope or declare the project complete. Use the domain-specific BAS tools to perform explicit review/calculation and bas_scope_review/bas_issue_review/bas_drawing_review for review controls. ${COORDS}`,
+    inputSchema: {
+      domain: basWorkflowInspectionDomainSchema,
+      capture_id: z.string().regex(/^[a-f0-9]{64}$/).optional().describe('Optional retained capture; omit for active capture.'),
+    },
+    outputSchema: { result: basWorkflowInspectionSchema },
+  }, run('inspect_bas_workflow', async ({ domain, capture_id }) => {
+    if (!session.basWorkflow) throw new UserError('No retained BAS workflow is loaded. Compile or import a BAS takeoff first.');
+    return { result: await inspectBasWorkflow(session.basWorkflow, domain, capture_id) };
+  }));
+  server.registerTool('inspect_bas_snapshot', {
+    description: `Open and verify a source-inclusive .otbas-snapshot.zip from disk. Always verifies the immutable snapshot/seal, exact takeoff payload, every original PDF byte and every saved Python calculation before reporting the self-declared historical scope. Optional lifecycle_path reads the separate append-only browser lifecycle JSON and replays revoke/supersede state. compare_current=true compares the snapshot with the currently loaded retained BAS workflow using selective scope dependencies, current original bytes and fresh Python replay; unrelated edits may remain current, relevant changes block. Optional workbook_path writes a readable non-commercial XLSX with summary, claims, exclusions, findings, sources and lifecycle tabs. This tool cannot approve, revoke or supersede; those are explicit operator actions. It never establishes project completeness or installed quantity. ${COORDS}`,
+    inputSchema: {
+      path: z.string().min(1).describe('Path to the .otbas-snapshot.zip evidence archive.'),
+      lifecycle_path: z.string().min(1).optional().describe('Optional .lifecycle.json sidecar exported by the browser.'),
+      compare_current: z.boolean().optional().describe('Freshly compare this historical scope with the current loaded BAS workflow.'),
+      workbook_path: z.string().min(1).optional().describe('Optional output .xlsx path for readable snapshot result tables.'),
+      overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
+    },
+    outputSchema: { result: basSnapshotFileInspectionSchema },
+  }, run('inspect_bas_snapshot', async ({ path, lifecycle_path, compare_current, workbook_path, overwrite }, context) => ({
+    result: await inspectBasSnapshotFile(session, path, { lifecyclePath: lifecycle_path, compareCurrent: compare_current,
+      workbookPath: workbook_path, overwrite, signal: context?.signal }),
+  })));
   server.registerTool('bas_scope_review', {
     description: `Build explicit BAS deliverable scopes and retain source-coverage review using the same shared services as the UI. No extraction, quantity changes, waiver or approval. command.action='catalog' lists reviewed drawing source_sets and scope history. Repeat with source_set_id to get the current pinned basis, available targets and original pages. Targets retain outside/unlocated evidence; catalog availability is not discovery completeness. Create a source set with bas_drawing_review if none exists. Use exact target/capture/page IDs and basis from these results, never names as identity.
 action='preview' takes specification:{schema_version:'bas_deliverable_scope_spec_v1',scope_id UUID,name,reason,basis,included:[{claim,capture_id,subject_id}],excluded:[{target,reason,consequence,evidence:[{capture_id,page_id,span_id:null|exact span ID}]}]}. Claims are scheduled_equipment, assigned_points, assembly_components, responsibilities, engineering_compatibility. At least one included claim and at most 2000 combined targets; no silent truncation. Exclusions omit deliverable claims, not prerequisites or shared loads. Preview retains original inventory, quantities, unknowns and diagnostics; it does not verify original bytes, replay Python or approve anything.

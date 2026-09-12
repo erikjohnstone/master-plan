@@ -37,7 +37,8 @@ current dependencies. Overlapping contradictory reviews remain visible.
 complete original/current result, not only visible rows; it is not a project
 backup. Keep the normal evidence workflow export and source-inclusive backup.
 These controls do not waive findings, verify hardware, establish installed
-quantity or finish the still-in-development approval/snapshot workflow.
+quantity or by themselves approve a snapshot. See the complete estimator path in
+[BAS takeoff workflow walkthrough](BAS_TAKEOFF_WALKTHROUGH.md).
 
 Development **Review & changes → Snapshots** separates readiness from approval.
 Choose a **Reviewed scope**, then **Check readiness**. The screen verifies exact
@@ -61,9 +62,10 @@ count, or engineering certification. Identity and timestamp are self-declared;
 there is no authenticated signature or server-enforced immutability.
 
 **Saved snapshots → Open snapshot** verifies historical bytes and calculations
-again. Metadata alone is not verification. The reader explicitly reports current
-applicability as not evaluated; currentness, revocation and supersession are still
-in development. **Download snapshot evidence ZIP** preserves the reviewed takeoff,
+again. Metadata alone is not verification. Choose **Check against current saved
+work** before relying on current applicability. Explicit revoke and supersede
+actions append lifecycle history without rewriting the original approval.
+**Download snapshot evidence ZIP** preserves the reviewed takeoff,
 scope, decisions, findings, calculations and original PDFs. Keep this ZIP outside
 browser storage; snapshots and originals are not synced and can be cleared or
 evicted. This is an evidence archive, not the pending readable result-table export.
@@ -83,8 +85,8 @@ return to the same selection and filters; **Back to findings** restores keyboard
 focus. The domain-workspace button opens the existing review/editor, not an
 automatic correction. **Export findings** includes all findings, regardless of
 filters, and is not an importable evidence archive or approved deliverable.
-Keep the normal evidence JSON and original PDFs. The development snapshot flow is
-described above; full release/currentness controls remain incomplete. A blocker
+Keep the normal evidence JSON and original PDFs. The snapshot flow is described
+above; its release controls remain self-declared and browser-local. A blocker
 here is a saved finding to review, not a claim that the entire design was checked.
 
 Saving/restoring the same evidence does not create new finding occurrences merely
@@ -104,7 +106,12 @@ decision** adds a withdrawal, without deleting history. **Export replayed decisi
 contains the full replay; use ordinary evidence export/backup for project recovery.
 Drafts remain through source/domain navigation; stale inputs require a fresh
 decision draft. **Return to issue review** returns from the domain workspace.
-Approved snapshots remain unfinished.
+**Approved snapshots** in Review & changes are explicit human release records.
+They retain the exact takeoff, original PDFs, readiness evidence, calculation
+results and exclusions; reopening verifies those bytes rather than trusting a
+label. A saved snapshot can be checked against current saved work and explicitly
+revoked or superseded with append-only history. This is takeoff release control,
+not engineering certification or an unattended project-complete claim.
 
 SOO finding routes select and focus the exact clause, region boundary or linked
 matrix comparison, even when another region has the same title. An unavailable
@@ -278,7 +285,7 @@ decisions** preserve recorded reviews. Keep original PDFs or a source-inclusive
 backup for later source viewing. Unresolved reviews publish no complete source
 set. **Compare retained evidence** compares available text and page geometry,
 not full drawing ink. These records do not change counts or approve a takeoff;
-the approval journey remains in development.
+approval is a separate, explicit action under **Review & changes → Snapshots**.
 
 Within **Drawing changes**, choose **Compare requirements & quantities**. Select
 the before/after source sets and **Start comparison**. **Pinned versions** records
@@ -455,8 +462,9 @@ not approved releases. Captures retain source hashes, but these JSON files do
 not contain historical PDF bytes. Reopen the exact original PDF to navigate
 old evidence; a changed file with the same name is refused. A renamed copy of
 the same bytes can still resolve. Existing engineering calculations remain
-transient; installed-equipment reconciliation, immutable source archives, broader source corrections
-and approved revision workflows are still in development. Neither an
+source- and dependency-bound; installed-equipment reconciliation still requires
+adequate plan-instance evidence, and browser-local archives are not server-backed
+immutable records. Neither an
 absent cell nor a controller-provided point establishes zero field scope or a
 new wired terminal.
 
@@ -1329,7 +1337,7 @@ What's sent, and only when you run an AI feature: the sheet region in question a
 
 The same engine speaks [MCP](https://modelcontextprotocol.io), one command away:
 `npx -y opentakeoff-mcp` (or the one-click `opentakeoff-mcp.mcpb` bundle for Claude Desktop). An
-MCP client gets **<!--tool-count-->53<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
+MCP client gets **<!--tool-count-->55<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
 with the same scale gate and the same provenance receipts:
 
 | Group | Tools |
