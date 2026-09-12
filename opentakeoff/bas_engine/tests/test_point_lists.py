@@ -41,6 +41,65 @@ def matrix(result, page):
     return matches[0]
 
 
+def row_oriented_source_input():
+    raw = real_input()
+    raw["tables"] = []
+    page = raw["sources"]["pages"][0]
+    values = [
+        ("HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1", [400, 100, 900, 125], None),
+        ("POINT TYPE", [700, 160, 725, 260], 270),
+        ("POINT NAME", [350, 235, 450, 260], None),
+        ("TAG", [600, 235, 650, 260], None),
+        ("1", [200, 280, 215, 305], None),
+        ("DUCT STATIC PRESSURE", [230, 280, 480, 305], None),
+        ("SP-1", [610, 280, 650, 305], None),
+        ("AI", [705, 280, 725, 305], None),
+        ("2", [200, 320, 215, 345], None),
+        ("STATIC PRESSURE SENSOR - HIGH STATIC", [230, 320, 540, 345], None),
+        ("SP-2", [610, 320, 650, 345], None),
+        ("AI", [705, 320, 725, 345], None),
+        ("SHUTDOWN", [230, 347, 320, 365], None),
+        ("SHEET-4", [200, 380, 900, 405], None),
+        ("FAN START/STOP", [230, 380, 430, 405], None),
+        ("SS-1", [610, 380, 650, 405], None),
+        ("BO", [705, 380, 725, 405], None),
+        ("99", [200, 500, 225, 525], None),
+        ("AI", [705, 500, 725, 525], None),
+    ]
+    page["spans"] = [{"span_id": f'{page["page_id"]}:s{i}', "source_index": i,
+        "text": text, "bbox_px": box, **({"rotation": rotation} if rotation is not None else {})}
+        for i, (text, box, rotation) in enumerate(values)]
+    page["text_status"] = "available"
+    return raw
+
+
+def marked_source_input(title="CHILLER PLANT DDC POINTS LIST"):
+    raw = real_input()
+    raw["tables"] = []
+    page = raw["sources"]["pages"][0]
+    values = [
+        (title, [300, 100, 950, 125]),
+        ("NAME", [350, 150, 400, 175]),
+        ("DESCRIPTION", [470, 150, 600, 175]),
+        ("TREND", [800, 150, 840, 175]),
+        ("ALARM", [850, 150, 890, 175]),
+        ("GRAPHIC", [900, 150, 950, 175]),
+        ("AI1", [360, 200, 390, 225]),
+        ("SUPPLY WATER TEMPERATURE", [430, 200, 690, 225]),
+        ("BI2", [360, 240, 390, 265]),
+        ("PUMP STATUS", [430, 240, 570, 265]),
+        ("BO3", [360, 280, 390, 305]),
+        ("PUMP START STOP", [430, 280, 600, 305]),
+        ("AI99", [100, 320, 135, 345]),
+        ("AI88", [360, 600, 395, 625]),
+        ("UNRELATED DIAGRAM LABEL", [430, 600, 650, 625]),
+    ]
+    page["spans"] = [{"span_id": f'{page["page_id"]}:s{i}', "source_index": i,
+        "text": text, "bbox_px": box} for i, (text, box) in enumerate(values)]
+    page["text_status"] = "available"
+    return raw
+
+
 def test_real_source_rows_flags_and_controller_qualifiers_are_preserved():
     payload = PointListInput.model_validate(real_input())
     before = payload.model_dump()
@@ -177,6 +236,199 @@ def test_keyword_only_or_reference_caption_is_not_a_point_matrix(title):
     raw["tables"] = [{"sheet": raw["tables"][0]["sheet"], "title": {"text": title},
                       "headers": ["ITEM", "QUANTITY"], "rows": [{"key": "1", "cells": {
                           "ITEM": {"text": "Controller"}, "QUANTITY": {"text": "1"}}}]}]
+    assert not review_point_lists(PointListInput.model_validate(raw)).matrices
+
+
+def test_row_oriented_point_function_schedule_is_source_bound_and_counted_once_per_row():
+    raw = real_input()
+    sheet = raw["sources"]["pages"][0]["sheet_keys"][0]
+    raw["tables"] = [{"sheet": sheet,
+        "title": {"text": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1",
+                  "bbox": [100, 100, 900, 140]},
+        "region": [100, 100, 900, 500], "headers": ["POINT NAME", "TAG", "POINT TYPE"],
+        "rows": [
+            {"key": "1", "cells": {"POINT NAME": {"text": "DUCT STATIC PRESSURE", "bbox": [110, 160, 400, 190]},
+              "TAG": {"text": "SP-1", "bbox": [410, 160, 500, 190]},
+              "POINT TYPE": {"text": "AI", "bbox": [510, 160, 560, 190]}}},
+            {"key": "2", "cells": {"POINT NAME": {"text": "FAN START/STOP", "bbox": [110, 200, 400, 230]},
+              "TAG": {"text": "SS-1", "bbox": [410, 200, 500, 230]},
+              "POINT TYPE": {"text": "BO", "bbox": [510, 200, 560, 230]}}},
+            {"key": "3", "cells": {"POINT NAME": {"text": "FAN STATUS", "bbox": [110, 240, 400, 270]},
+              "TAG": {"text": "CSR-1", "bbox": [410, 240, 500, 270]},
+              "POINT TYPE": {"text": "BINARY INPUT", "bbox": [510, 240, 650, 270]}}},
+        ]}]
+    before = copy.deepcopy(raw)
+    result = review_point_lists(PointListInput.model_validate(raw))
+    assert raw == before
+    assert len(result.matrices) == 1
+    rows = result.matrices[0].rows
+    assert [row.name for row in rows] == ["DUCT STATIC PRESSURE", "FAN START/STOP", "FAN STATUS"]
+    assert [row.observations[0].channel for row in rows] == ["AI", "DO", "DI"]
+    assert all(row.observations[0].value == 1 for row in rows)
+    assert all(row.observations[0].source.column == "POINT TYPE" for row in rows)
+    assert all(row.observations[0].source.bbox_px == row.raw.cells["POINT TYPE"].bbox for row in rows)
+    assert all(row.status == "interpreted" and not row.issues for row in rows)
+
+
+def test_row_oriented_unknown_or_duplicate_type_schema_is_review_only():
+    raw = real_input()
+    sheet = raw["sources"]["pages"][0]["sheet_keys"][0]
+    base = {"sheet": sheet, "title": {"text": "BMS POINT FUNCTION SCHEDULE - MISCELLANEOUS"},
+        "region": [100, 100, 900, 500], "headers": ["POINT NAME", "POINT TYPE"],
+        "rows": [{"key": "1", "cells": {"POINT NAME": {"text": "UNKNOWN SIGNAL", "bbox": [110, 160, 400, 190]},
+            "POINT TYPE": {"text": "ANALOG", "bbox": [510, 160, 600, 190]}}}]}
+    raw["tables"] = [base]
+    row = review_point_lists(PointListInput.model_validate(raw)).matrices[0].rows[0]
+    assert row.status == "review_required" and not row.observations
+    assert "POINT_TYPE_AMBIGUOUS" in row.issues
+
+    duplicate = copy.deepcopy(base)
+    duplicate["headers"].append("I/O TYPE")
+    duplicate["rows"][0]["cells"]["I/O TYPE"] = {"text": "AI", "bbox": [610, 160, 680, 190]}
+    raw["tables"] = [duplicate]
+    matrix = review_point_lists(PointListInput.model_validate(raw)).matrices[0]
+    assert "POINT_TYPE_COLUMN_UNRESOLVED" in matrix.issues
+    assert not matrix.rows[0].observations
+
+
+def test_generic_equipment_type_column_is_not_a_row_oriented_point_matrix():
+    raw = real_input()
+    raw["tables"] = [{"sheet": raw["sources"]["pages"][0]["sheet_keys"][0],
+        "title": {"text": "AIR HANDLING UNIT SCHEDULE"}, "headers": ["DEVICE", "TYPE"],
+        "rows": [{"key": "AHU-1", "cells": {"DEVICE": {"text": "AHU-1"}, "TYPE": {"text": "AI"}}}]}]
+    assert not review_point_lists(PointListInput.model_validate(raw)).matrices
+
+
+def test_explicit_point_function_schedule_recovers_core_rows_from_source_spans():
+    raw = row_oriented_source_input()
+    before = copy.deepcopy(raw)
+    result = review_point_lists(PointListInput.model_validate(raw))
+    assert raw == before
+    assert len(result.matrices) == 1
+    matrix = result.matrices[0]
+    assert matrix.page_id == raw["sources"]["pages"][0]["page_id"]
+    assert matrix.issues == ["SOURCE_SPAN_CORE_COLUMNS_ONLY"]
+    assert [row.local_key for row in matrix.rows] == ["1", "2", "4"]
+    assert [row.name for row in matrix.rows] == [
+        "DUCT STATIC PRESSURE", "STATIC PRESSURE SENSOR - HIGH STATIC SHUTDOWN", "FAN START/STOP"]
+    assert [row.observations[0].channel for row in matrix.rows] == ["AI", "AI", "DO"]
+    assert all(row.observations[0].value == 1 for row in matrix.rows)
+    assert all(row.observations[0].source.bbox_px == row.raw.cells["HARDWARE POINT TYPE"].bbox
+               for row in matrix.rows)
+    assert all(row.status == "review_required" for row in matrix.rows)
+
+
+def test_source_recovery_replaces_a_partial_matching_graph_table_without_losing_cells():
+    raw = row_oriented_source_input()
+    page = raw["sources"]["pages"][0]
+    raw["tables"] = [{"sheet": page["sheet_keys"][0],
+        "title": {"text": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1",
+                  "bbox": [400, 100, 900, 125]},
+        "region": [190, 100, 900, 310],
+        "headers": ["POINT NAME", "HARDWARE TAG", "HARDWARE POINT TYPE", "SOFTWARE TREND"],
+        "rows": [{"key": "1", "cells": {
+            "POINT NAME": {"text": "DUCT STATIC PRESSURE", "bbox": [230, 280, 480, 305]},
+            "HARDWARE TAG": {"text": "SP-1", "bbox": [610, 280, 650, 305]},
+            "HARDWARE POINT TYPE": {"text": "AI", "bbox": [705, 280, 725, 305]},
+            "SOFTWARE TREND": {"text": "X", "bbox": [760, 280, 780, 305]},
+        }}]}]
+    matrix = review_point_lists(PointListInput.model_validate(raw)).matrices[0]
+    assert len(matrix.rows) == 3
+    assert "SOFTWARE TREND" in matrix.raw.headers
+    assert matrix.rows[0].raw.cells["SOFTWARE TREND"].text == "X"
+    assert "SOURCE_SPAN_CORE_COLUMNS_ONLY" not in matrix.issues
+    assert matrix.raw.region[3] >= 405
+
+
+def test_source_recovery_retains_graph_rows_outside_its_bounded_row_run():
+    raw = row_oriented_source_input()
+    page = raw["sources"]["pages"][0]
+    raw["tables"] = [{"sheet": page["sheet_keys"][0],
+        "title": {"text": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1",
+                  "bbox": [400, 100, 900, 125]},
+        "region": [190, 100, 900, 310],
+        "headers": ["POINT NAME", "HARDWARE TAG", "HARDWARE POINT TYPE", "NOTE"],
+        "rows": [
+            {"key": "1", "cells": {
+                "POINT NAME": {"text": "DUCT STATIC PRESSURE", "bbox": [230, 280, 480, 305]},
+                "HARDWARE TAG": {"text": "SP-1", "bbox": [610, 280, 650, 305]},
+                "HARDWARE POINT TYPE": {"text": "AI", "bbox": [705, 280, 725, 305]}},
+            },
+            {"key": "GRAPH-ONLY", "cells": {
+                "POINT NAME": {"text": "EXPLICIT GRAPH ROW", "bbox": [230, 430, 480, 455]},
+                "HARDWARE TAG": {"text": "GO-1", "bbox": [610, 430, 650, 455]},
+                "HARDWARE POINT TYPE": {"text": "AO", "bbox": [705, 430, 725, 455]},
+                "NOTE": {"text": "Retain me", "bbox": [760, 430, 850, 455]}},
+            },
+        ]}]
+    matrix = review_point_lists(PointListInput.model_validate(raw)).matrices[0]
+    assert [row.local_key for row in matrix.rows] == ["1", "2", "4", "GRAPH-ONLY"]
+    retained = matrix.rows[-1]
+    assert retained.raw.cells["NOTE"].text == "Retain me"
+    assert retained.observations[0].channel == "AO"
+
+
+@pytest.mark.parametrize("title", [
+    "CHILLER PLANT DDC POINTS LIST",
+    "VARIABLE FREQUENCY DRIVE BACNET INTERFACE SCHEDULE",
+])
+def test_marked_point_schedule_recovers_grounded_core_rows_and_direction(title):
+    raw = marked_source_input(title)
+    before = copy.deepcopy(raw)
+    matrix = review_point_lists(PointListInput.model_validate(raw)).matrices[0]
+    assert raw == before
+    assert matrix.issues == ["SOURCE_SPAN_CORE_COLUMNS_ONLY"]
+    assert [row.local_key for row in matrix.rows] == ["AI1", "BI2", "BO3"]
+    assert [row.name for row in matrix.rows] == [
+        "SUPPLY WATER TEMPERATURE", "PUMP STATUS", "PUMP START STOP"]
+    assert [row.observations[0].channel for row in matrix.rows] == ["AI", "DI", "DO"]
+    assert all(row.observations[0].source.column == "POINT NUMBER" for row in matrix.rows)
+    assert all(row.status == "review_required" for row in matrix.rows)
+
+
+def test_marked_source_recovery_extends_a_clipped_graph_table_without_inventing_flags():
+    raw = marked_source_input()
+    page = raw["sources"]["pages"][0]
+    raw["tables"] = [{"sheet": page["sheet_keys"][0],
+        "title": {"text": "CHILLER PLANT DDC POINTS LIST", "bbox": [300, 100, 950, 125]},
+        "region": [300, 100, 950, 230],
+        "headers": ["NAME", "DESCRIPTION", "TREND", "ALARM", "GRAPHIC"],
+        "rows": [{"key": "AI1", "cells": {
+            "NAME": {"text": "AI1", "bbox": [360, 200, 390, 225]},
+            "DESCRIPTION": {"text": "SUPPLY WATER TEMPERATURE", "bbox": [430, 200, 690, 225]},
+            "TREND": {"text": "X", "bbox": [800, 200, 820, 225]},
+        }}]}]
+    matrix = review_point_lists(PointListInput.model_validate(raw)).matrices[0]
+    assert len(matrix.rows) == 3
+    assert matrix.rows[0].raw.cells["TREND"].text == "X"
+    assert matrix.rows[1].unobserved_columns == ["ALARM", "GRAPHIC", "TREND"]
+    assert "SOURCE_SPAN_CORE_COLUMNS_ONLY" not in matrix.issues
+    assert [row.observations[0].channel for row in matrix.rows] == ["AI", "DI", "DO"]
+
+
+def test_split_bacnet_caption_merges_with_the_overlapping_full_graph_title_once():
+    raw = marked_source_input("BACNET INTERFACE SCHEDULE")
+    page = raw["sources"]["pages"][0]
+    raw["tables"] = [{"sheet": page["sheet_keys"][0],
+        "title": {"text": "VARIABLE FREQUENCY DRIVE BACNET INTERFACE SCHEDULE",
+                  "bbox": [300, 80, 950, 125]},
+        "region": [300, 80, 950, 230], "headers": ["NAME", "DESCRIPTION", "TREND"],
+        "rows": [{"key": "AI1", "cells": {
+            "NAME": {"text": "AI1", "bbox": [360, 200, 390, 225]},
+            "DESCRIPTION": {"text": "SUPPLY WATER TEMPERATURE", "bbox": [430, 200, 690, 225]}}}]}]
+    result = review_point_lists(PointListInput.model_validate(raw))
+    assert len(result.matrices) == 1
+    assert result.matrices[0].raw.title.text == "VARIABLE FREQUENCY DRIVE BACNET INTERFACE SCHEDULE"
+    assert len(result.matrices[0].rows) == 3
+
+
+def test_source_span_recovery_requires_all_three_explicit_headers():
+    raw = row_oriented_source_input()
+    page = raw["sources"]["pages"][0]
+    page["spans"] = [span for span in page["spans"] if span["text"] != "TAG"]
+    for index, span in enumerate(page["spans"]):
+        span["source_index"] = index
+        span["span_id"] = f'{page["page_id"]}:s{index}'
     assert not review_point_lists(PointListInput.model_validate(raw)).matrices
 
 

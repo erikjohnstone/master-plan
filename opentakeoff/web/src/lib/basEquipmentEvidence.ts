@@ -6,6 +6,7 @@ import { basSourceContextSchema, type BasSourceContext } from './basSources.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 import { parseBasEquipmentMembership, parseBasPrintedCount } from './basEquipmentMembership.ts';
+import { isBasPointsListTable } from './corpusTakeoff.mjs';
 
 const box = z.tuple([z.number().finite(), z.number().finite(), z.number().finite(), z.number().finite()])
   .refine(b => b[2] >= b[0] && b[3] >= b[1], 'Unordered equipment source box');
@@ -56,9 +57,23 @@ export function ownBasEquipmentEvidencePassthrough(evidence: BasEquipmentEvidenc
 }
 
 export function captureBasEquipmentTables(tables: unknown[]): BasEquipmentEvidence {
+  const inBasEquipmentScope = (table: Record<string, unknown>) => {
+    if (isBasPointsListTable(table)) return false;
+    const title = String((table.title as { text?: unknown } | null)?.text ?? '').toUpperCase()
+      .replace(/\s+/g, ' ').trim();
+    // Graph `equipment` includes all MEP schedule disciplines. These captions
+    // describe construction criteria or electrical distribution, not a BAS-
+    // assignable equipment member. Keep unknown equipment schedules visible;
+    // exclude only explicit, structurally unrelated families.
+    if (/\bDUCT\s+(?:CONSTRUCTION|LEAKAGE)(?:\s+AND\s+LEAKAGE)?\s+SCHEDULE\b/.test(title)) return false;
+    if (/\b(?:LUMINAIRE|LIGHTING\s+FIXTURE)\s+SCHEDULE\b/.test(title)) return false;
+    if (/\b(?:PANEL|PANELBOARD|SWITCHBOARD)\b.*\bSCHEDULE\b/.test(title)) return false;
+    return true;
+  };
   return basEquipmentEvidenceSchema.parse({ schema_version: 'bas_equipment_evidence_v1',
     rule_version: 'schedule_members_1', scope: 'discovered_equipment_tables_only',
-    tables: tables.filter(t => t && typeof t === 'object' && 'kind' in t && t.kind === 'equipment') });
+    tables: tables.filter(t => t && typeof t === 'object' && 'kind' in t && t.kind === 'equipment'
+      && inBasEquipmentScope(t)) });
 }
 
 function pageAliases(sources: BasSourceContext) {

@@ -47,6 +47,15 @@ Automatic work: point/SOO discovery for supported vector-text patterns, original
 reading order and geometry retention, deterministic supported-clause comparison,
 source accounting, persistence and replay.
 
+For explicit row-oriented **POINT FUNCTION SCHEDULE** tables, the shared path
+retains the printed point name, tag and directional point type even when the
+general table graph clipped rows. For marked **DDC POINTS LIST** and **BACNET
+INTERFACE SCHEDULE** tables, exact printed AI/AO/BI/BO/DI/DO marks become
+directional I/O observations while AV/BV/MI/MO/MSV remain separate software
+values. A source-span recovery never invents alarm, trend, graphic or fail-mode
+flags that were omitted by the graph; those columns remain visible as unobserved
+release blockers until a person checks the drawing.
+
 Human work: decide whether a clause applies, select the correct equipment/matrix,
 resolve ambiguous text, explain the association and review unsupported clauses.
 **Not listed** is never treated as proof that a point is absent from the project.
@@ -234,6 +243,10 @@ all write decisions remain explicit user actions in their workspaces.
   of this implementation.
 - A 29-page real project required a 4 GiB Node heap for the equipment browser
   walkthrough after the default 2 GiB graph build exhausted memory.
+- A cold 31-page, 18.9 MB dense-vector holdout required about 13 minutes 44
+  seconds and peaked at 1.91 GB RSS during full graph construction. Production
+  compile then completed in 2.3 seconds. This is an honestly retained cold-path
+  performance boundary, not hidden by a warm-cache number.
 - The source-backed snapshot journey passes the separate 512 MiB incremental
   memory target in four independent clean processes. The narrowest observed
   margin was 1,638,400 bytes, so large-project headroom remains intentionally

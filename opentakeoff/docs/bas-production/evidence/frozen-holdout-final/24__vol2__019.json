@@ -1,0 +1,1393 @@
+{
+  "schema_version": "bas_holdout_evaluation_v1",
+  "evaluated_utc": "2026-09-12T19:57:16.337Z",
+  "split": "new_workflow_holdout",
+  "rules_frozen_before_open": true,
+  "production_rules_changed_from_result": false,
+  "document": {
+    "id": "24__vol2__019",
+    "rank": 24,
+    "title": "Eglin AFB NICoE Mechanical Controls",
+    "pdf_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+    "pages": 24,
+    "bytes": 7572233,
+    "independent_record_sha256": "2ff3fe978c15410e80292fdcd7536cb427d8cc317bdcdb61cc4f842ae70e3709",
+    "independent_record_review_status": "complete_with_documented_source_limitations",
+    "independent_record_claim_is_reverified": false
+  },
+  "source_accounting": {
+    "pages": 24,
+    "spans": 13789,
+    "no_text_pages": 0,
+    "exhaustive_partition": {
+      "body_region_span_ids": 376,
+      "heading_only_span_ids": 4,
+      "ambiguous_span_ids": 2,
+      "unassigned_horizontal_span_ids": 13069,
+      "unsupported_span_ids": 338,
+      "blank_span_ids": 0
+    },
+    "source_hash_and_page_count_match": true,
+    "workflow_schema_and_fingerprints_pass": true
+  },
+  "graph_inventory": {
+    "tables": 31,
+    "tables_by_kind": {
+      "equipment": 20,
+      "reference": 11
+    },
+    "table_details": [
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "kind": "reference",
+        "title": "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE",
+        "region": [
+          2504.2,
+          990.6,
+          5829.4,
+          1296.7
+        ],
+        "headers": [
+          "TYPE",
+          "SYSTEM",
+          "DESIGN AIR FLOW CFM",
+          "CAPACITY MBH",
+          "QUANTITY OF COILS IN BANK",
+          "MIN ROWS",
+          "MAX FINS PER INCH",
+          "MAXIMUM FACE VELOCITY",
+          "LENGTH",
+          "HEIGHT",
+          "EAT DB °F",
+          "EAT WB °F",
+          "LAT DB °F",
+          "LAT WB °F",
+          "MAX AIR PD I.W.G",
+          "EWT °F",
+          "LWT °F",
+          "FLOW GPM",
+          "WATER MAX PD FT. H2O",
+          "REMARKS"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "kind": "reference",
+        "title": "ELECTRONIC SECURITY / TELECOMMUNICATIONS",
+        "region": [
+          5488.8,
+          2030.9,
+          5983.5,
+          4209.4
+        ],
+        "headers": [
+          "ISSUED FOR",
+          "REV",
+          "DATE"
+        ],
+        "rows": 5
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "reference",
+        "title": "ELECTRONIC SECURITY / TELECOMMUNICATIONS",
+        "region": [
+          5488.8,
+          2030.9,
+          5957.6,
+          3757.2
+        ],
+        "headers": [
+          "ISSUED FOR",
+          "REV",
+          "DATE"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#16",
+        "kind": "reference",
+        "title": "ELECTRONIC SECURITY / TELECOMMUNICATIONS",
+        "region": [
+          5488.8,
+          2030.9,
+          5983.5,
+          4209.4
+        ],
+        "headers": [
+          "ISSUED FOR",
+          "REV",
+          "DATE"
+        ],
+        "rows": 5
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#17",
+        "kind": "reference",
+        "title": "EGLIN AIR FORCE BASE",
+        "region": [
+          3844.1,
+          606,
+          5996.6,
+          1270.8
+        ],
+        "headers": [
+          "POINT NAME",
+          "TAG",
+          "NOTES"
+        ],
+        "rows": 4
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#19",
+        "kind": "reference",
+        "title": "ELECTRONIC SECURITY / TELECOMMUNICATIONS",
+        "region": [
+          5488.8,
+          2030.9,
+          5983.5,
+          4209.4
+        ],
+        "headers": [
+          "ISSUED FOR",
+          "REV",
+          "DATE"
+        ],
+        "rows": 6
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#24",
+        "kind": "reference",
+        "title": "ELECTRONIC SECURITY / TELECOMMUNICATIONS",
+        "region": [
+          5488.8,
+          2030.9,
+          5983.5,
+          4209.4
+        ],
+        "headers": [
+          "ISSUED FOR",
+          "REV",
+          "DATE"
+        ],
+        "rows": 5
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#4",
+        "kind": "reference",
+        "title": "341.1-2",
+        "region": [
+          1964.4,
+          2748.61767578125,
+          2187.4,
+          3212.16
+        ],
+        "headers": [
+          "COL1",
+          "COL2",
+          "COL3",
+          "COL4"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#4",
+        "kind": "reference",
+        "title": "Room Schedule",
+        "region": [
+          2710.8,
+          2864.16,
+          3268.08,
+          4019.52
+        ],
+        "headers": [
+          "NUMBER 100",
+          "NUMBER 100 2",
+          "NAME VESTIBULE FAMILY WAITING"
+        ],
+        "rows": 40
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#4",
+        "kind": "reference",
+        "title": "Room Schedule",
+        "region": [
+          3321.6,
+          2864.16,
+          3879.12,
+          4019.52
+        ],
+        "headers": [
+          "NUMBER",
+          "NAME"
+        ],
+        "rows": 41
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#4",
+        "kind": "reference",
+        "title": "Room Schedule",
+        "region": [
+          3933.12,
+          2864.16,
+          4490.38,
+          4045.44
+        ],
+        "headers": [
+          "NUMBER",
+          "NAME"
+        ],
+        "rows": 41
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "kind": "equipment",
+        "title": "AIR HANDLING UNIT SCHEDULE",
+        "region": [
+          2169.12,
+          139.92,
+          5351.02,
+          352.78
+        ],
+        "headers": [
+          "TAG",
+          "LOCATION",
+          "AIRFLOW MINIMUM SUPPLY AIR FLOW CFM",
+          "AIRFLOW DESIGN SUPPLY AIR FLOW CFM",
+          "AIRFLOW MINIMUM OUTSIDE AIR FLOW CFM",
+          "AIRFLOW DESIGN RETURN AIRFLOW",
+          "SUPPLY FAN SF QTY",
+          "SUPPLY FAN SF TAG",
+          "SUPPLY FAN E.S.P",
+          "RELIEF FAN RF QTY",
+          "RELIEF FAN RF TAG",
+          "RELIEF FAN E.S.P",
+          "COIL DATA HEATING HW TAG",
+          "COIL DATA COOLING CHW TAG",
+          "ACCESSORIES ENERGY RECOVERY WHEEL TYPE",
+          "ACCESSORIES ENERGY RECOVERY WHEEL TAG",
+          "ACCESSORIES ENERGY RECOVERY WHEEL VFD",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "kind": "equipment",
+        "title": "AIR HANDLING UNIT FAN SCHEDULE",
+        "region": [
+          2844.72,
+          554.16,
+          5373.6,
+          844.78
+        ],
+        "headers": [
+          "TAG",
+          "SYSTEM",
+          "AIR CAPACITY MINIMUM CFM",
+          "AIR CAPACITY DESIGN CFM",
+          "FAN CONFIGURATION FAN TYPE",
+          "FAN CONFIGURATION WHEEL TYPE",
+          "FAN CONFIGURATION MINIMUM DIAMETER IN.",
+          "FAN CONFIGURATION CLASS",
+          "FAN CONFIGURATION ARRANGEMENT",
+          "VOLUME CONTROL",
+          "MOTOR DATA VFD",
+          "MOTOR DATA HORSEPOWER",
+          "MOTOR DATA MAX RPM",
+          "MOTOR DATA VOLTAGE",
+          "MOTOR DATA PHASE",
+          "REMARKS"
+        ],
+        "rows": 4
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "kind": "equipment",
+        "title": "CHILLER SCHEDULE (ELECTRIC AIR-COOLED)",
+        "region": [
+          867.6,
+          1325.28,
+          5376.22,
+          1572.7
+        ],
+        "headers": [
+          "TAG",
+          "LOCATION",
+          "TYPE",
+          "REFRIGERANT",
+          "MINIMUM NET COOLING CAPACITY TONS",
+          "EVAPORATOR SIDE DATA EWT °F",
+          "EVAPORATOR SIDE DATA LWT °F",
+          "EVAPORATOR SIDE DATA DESIGN WATER FLOW GPM",
+          "EVAPORATOR SIDE DATA NUMBER OF PASSES",
+          "EVAPORATOR SIDE DATA WATER MAX PD FT.H20",
+          "ELECTRICAL CONDENSER DATA AMBIENT TEMPERATURE °F",
+          "ELECTRICAL CONDENSER DATA FAN QTY",
+          "ELECTRICAL CONDENSER DATA FAN FLA (EA)",
+          "ELECTRICAL COMPRESSOR DATA COMPRESSOR QTY",
+          "ELECTRICAL COMPRESSOR DATA COMP 1 RLA",
+          "ELECTRICAL COMPRESSOR DATA COMP 2 RLA",
+          "ELECTRICAL COMPRESSOR DATA COMP 3 RLA",
+          "ELECTRICAL COMPRESSOR DATA COMP 4 RLA",
+          "ELECTRICAL MAX KW AT DESIGN",
+          "ELECTRICAL VOLTAGE",
+          "ELECTRICAL PHASE",
+          "STARTER TYPE",
+          "OPERATING WEIGHT LBS",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "kind": "equipment",
+        "title": "HOT WATER CONDENSING BOILER SCHEDULE",
+        "region": [
+          2405.28,
+          1771.92,
+          5370.94,
+          2040
+        ],
+        "headers": [
+          "TAG",
+          "LOCATION",
+          "TYPE",
+          "DESIGN PARAMETERS INPUT MBH",
+          "DESIGN PARAMETERS MINIMUM EFFICIENCY AT 25% FIRING RATE",
+          "DESIGN PARAMETERS DESIGN FLOW GPM",
+          "DESIGN PARAMETERS EWT °F",
+          "DESIGN PARAMETERS LWT °F",
+          "FIRING RATE NATURAL GAS (CFH)",
+          "ELECTRICAL DATA VOLTAGE",
+          "ELECTRICAL DATA PHASE",
+          "OPERATING WEIGHT",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "kind": "equipment",
+        "title": "PUMP SCHEDULE",
+        "region": [
+          912.48,
+          2177.52,
+          5376.22,
+          2590.8
+        ],
+        "headers": [
+          "TAG",
+          "SYSTEM",
+          "LOCATION",
+          "TYPE",
+          "FLUID",
+          "TEMPERATURE (°F)",
+          "CAPACITY GPM",
+          "DISCHARGE HEAD FT.H20",
+          "MINIMUM NPSH FT.H2O",
+          "MINIMUM EFFICIENCY (%)",
+          "PIPE CONNECTIONS SUCTION",
+          "PIPE CONNECTIONS DISCHARGE",
+          "MOTOR DATA HORSEPOWER",
+          "MOTOR DATA RPM",
+          "MOTOR DATA VOLTAGE",
+          "MOTOR DATA PHASE",
+          "OPERATING WEIGHT LBS",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 11
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "kind": "equipment",
+        "title": "GENERAL FAN SCHEDULE",
+        "region": [
+          812.64,
+          2803.2,
+          5370.94,
+          3064.8
+        ],
+        "headers": [
+          "TAG",
+          "AREA SERVED",
+          "LOCATION",
+          "AIR CAPACITY MINIMUM CFM",
+          "AIR CAPACITY DESIGN CFM",
+          "FAN CONFIGURATION FAN TYPE",
+          "FAN CONFIGURATION WHEEL TYPE",
+          "TOTAL SP I.W.G",
+          "EXTERNAL SP I.W.G",
+          "FAN RPM",
+          "VOLUME CONTROL",
+          "OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 1 63 HZ",
+          "OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 2 125 HZ",
+          "OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 3 250 HZ",
+          "OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 4 500 HZ",
+          "OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 5 1,000 HZ",
+          "OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 6 2,000 HZ",
+          "OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 7 4,000 HZ",
+          "OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 8 8,000 HZ",
+          "HORSEPOWER",
+          "MAX RPM",
+          "VOLTAGE",
+          "PHASE",
+          "OPERATING WEIGHT",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 4
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "kind": "equipment",
+        "title": "AIR SEPARATOR SCHEDULE",
+        "region": [
+          3560.16,
+          3275.76,
+          5370.94,
+          3456.48
+        ],
+        "headers": [
+          "TAG",
+          "SYSTEM",
+          "LOCATION",
+          "TYPE",
+          "CONNECTION SIZE (IN)",
+          "FLOW GPM",
+          "MAX. P.D. (FT W.C.)",
+          "BASIS OF DESIGN MANUFACTURER",
+          "BASIS OF DESIGN MODEL"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "equipment",
+        "title": "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+        "region": [
+          3166.78,
+          116.16,
+          5361.36,
+          962.14
+        ],
+        "headers": [
+          "MARK",
+          "TYPE",
+          "MINIMUM AIRFLOW [CFM]",
+          "MAXIMUM AIRFLOW [CFM]",
+          "NECK SIZE",
+          "LINEAR DIFFUSER DATA LENGTH [FT]",
+          "LINEAR DIFFUSER DATA SLOT QUANTITY",
+          "LINEAR DIFFUSER DATA SLOT WIDTH [IN]",
+          "FACE SIZE",
+          "MAX PD [IN-W.G]",
+          "MAX NC",
+          "BASIS OF DESIGN MANUFACTURER",
+          "BASIS OF DESIGN MODEL",
+          "REMARKS"
+        ],
+        "rows": 23
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "equipment",
+        "title": "HOT WATER FAN COIL UNIT SCHEDULE",
+        "region": [
+          1912.08,
+          1146.24,
+          5361.36,
+          1330.08
+        ],
+        "headers": [
+          "TAG",
+          "LOCATION",
+          "TYPE",
+          "AIRSIDE DATA AIR FLOW CFM",
+          "AIRSIDE DATA VOLUME CONTROL",
+          "AIRSIDE DATA EXTERNAL SP I.W.G",
+          "FAN DATA WATTS",
+          "FAN DATA VOLTAGE",
+          "FAN DATA PHASE",
+          "HEATING COIL DATA EAT DB °F",
+          "HEATING COIL DATA LAT DB °F",
+          "HEATING COIL DATA EWT °F",
+          "HEATING COIL DATA LWT °F",
+          "HEATING COIL DATA FLOW GPM",
+          "HEATING COIL DATA MAX PD FT.H2O",
+          "MAX NC",
+          "OPERATING WEIGHT LBS",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "equipment",
+        "title": "AIR-COOLED CONDENSING UNIT SCHEDULE",
+        "region": [
+          2313.84,
+          1422.96,
+          5361.36,
+          1765.44
+        ],
+        "headers": [
+          "TAG",
+          "LOCATION",
+          "TYPE",
+          "REFRIGERANT TYPE",
+          "NOMINAL CAPACITY TONS",
+          "AMBIENT TEMP °F",
+          "CONDENSER FANS QUANTITY",
+          "CONDENSER FANS CONDENSER FAN CFM",
+          "ELECTRICAL DATA MAX KW AT DESIGN",
+          "ELECTRICAL DATA VOLTAGE",
+          "ELECTRICAL DATA PHASE",
+          "ELECTRICAL DATA FLA",
+          "ELECTRICAL DATA MOCP",
+          "OPERATING WEIGHT LBS",
+          "MANUFACTURER",
+          "SYSTEM",
+          "REMARKS"
+        ],
+        "rows": 6
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "equipment",
+        "title": "EXPANSION TANK SCHEDULE",
+        "region": [
+          1721.76,
+          1959.12,
+          5361.36,
+          2168.88
+        ],
+        "headers": [
+          "TAG",
+          "SYSTEM",
+          "LOCATION",
+          "TYPE",
+          "TEMPERATURE RANGE MINIMUM °F",
+          "TEMPERATURE RANGE MAXIMUM °F",
+          "TANK VOLUME GAL",
+          "MINIMUM ACCEPTANCE VOLUME GAL",
+          "SIZE DATA DIAMETER",
+          "SIZE DATA HEIGHT",
+          "SIZE DATA CONNECTION SIZE",
+          "OPERATING PRESSURE MIN PSI",
+          "OPERATING PRESSURE MAX PSI",
+          "FULL WEIGHT LBS",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "equipment",
+        "title": "DX FAN COIL UNIT SCHEDULE",
+        "region": [
+          1427.04,
+          2258.16,
+          5361.36,
+          2605.92
+        ],
+        "headers": [
+          "TAG",
+          "LOCATION",
+          "SYSTEM",
+          "TYPE",
+          "AIRSIDE DATA AIR FLOW CFM",
+          "AIRSIDE DATA VOLUME CONTROL",
+          "AIRSIDE DATA EXTERNAL SP I.W.G",
+          "FAN DATA WATTS",
+          "FAN DATA VOLTAGE",
+          "FAN DATA PHASE",
+          "COOLING COIL DATA COOLING COIL DATA TOTAL CAPACITY BTU/HR",
+          "COOLING COIL DATA COOLING COIL DATA SENSIBLE CAPACITY BTU/HR",
+          "COOLING COIL DATA EAT DB °F",
+          "COOLING COIL DATA EAT WB °F",
+          "COOLING COIL DATA LAT DB °F",
+          "COOLING COIL DATA LAT WB °F",
+          "MAX NC",
+          "OPERATING WEIGHT LBS",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 6
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "equipment",
+        "title": "UNIT HEATER SCHEDULE (HOT WATER)",
+        "region": [
+          1590.24,
+          2809.2,
+          5361.36,
+          3018.96
+        ],
+        "headers": [
+          "TAG",
+          "LOCATION",
+          "TYPE",
+          "AIRSIDE DATA LOW SPEED CFM",
+          "AIRSIDE DATA HIGH SPEED CFM",
+          "AIRSIDE DATA EAT DB °F",
+          "AIRSIDE DATA LAT DB °F",
+          "AIRSIDE DATA THROW",
+          "HEATING DATA MINIMUM CAPACITY BTU/HR",
+          "HEATING DATA EWT °F",
+          "HEATING DATA LWT °F",
+          "HEATING DATA FLOW GPM",
+          "HEATING DATA MAX PD FT.H2O",
+          "FAN DATA HORSEPOWER",
+          "FAN DATA RPM",
+          "FAN DATA VOLTAGE",
+          "FAN DATA PHASE",
+          "MOUNTING HEIGHT",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "equipment",
+        "title": "SILENCER SCHEDULE",
+        "region": [
+          1466.88,
+          3198.48,
+          5361.36,
+          3408.48
+        ],
+        "headers": [
+          "TAG",
+          "SYSTEM",
+          "LOCATION",
+          "TYPE",
+          "DESIGN AIR FLOW CFM",
+          "FACE VELOCITY FPM",
+          "MAXIMUM AIR PD I.W.G.",
+          "DUCT SIZE WIDTH",
+          "DUCT SIZE HEIGHT",
+          "LENGTH",
+          "DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 1 63 HZ",
+          "DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 2",
+          "DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 3",
+          "DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 4 500 HZ",
+          "DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 5 1,000 HZ",
+          "DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 6 2,000 HZ",
+          "DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 7 4,000 HZ",
+          "DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 8 8,000 HZ",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "equipment",
+        "title": "FIN TUBE RADIATION SCHEDULE",
+        "region": [
+          1724.88,
+          3478.8,
+          5361.36,
+          3735.12
+        ],
+        "headers": [
+          "TAG",
+          "LOCATION",
+          "LENGTH",
+          "MOUNTING",
+          "MINIMUM FINS PER FOOT",
+          "ENCLOSURE WIDTH",
+          "ENCLOSURE HEIGHT",
+          "CAPACITY PER FT. BTU/HR",
+          "MINIMUM CAPACITY BTU/HR",
+          "MINIMUM WATER FLOW GPM",
+          "EWT °F",
+          "LWT °F",
+          "EAT DB °F",
+          "HORIZONTAL ROWS",
+          "VERTICAL ROWS",
+          "DRY WEIGHT LBS",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 4
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "kind": "equipment",
+        "title": "ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE",
+        "region": [
+          3197.28,
+          3895.2,
+          5361.36,
+          4101.84
+        ],
+        "headers": [
+          "TAG",
+          "SYSTEM",
+          "LOCATION",
+          "DESIGN AIR FLOW CFM",
+          "MAXIMUM AIR PD I.W.G",
+          "ROOF OPENING LENGTH",
+          "ROOF OPENING WIDTH",
+          "PENTHOUSE THROAT SIZE LENGTH",
+          "PENTHOUSE THROAT SIZE WIDTH",
+          "PENTHOUSE THROAT SIZE HEIGHT",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 3
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#16",
+        "kind": "equipment",
+        "title": "VOLUME CONTROL BOX SCHEDULE",
+        "region": [
+          2332.08,
+          116.16,
+          5361.36,
+          1804.32
+        ],
+        "headers": [
+          "TAG",
+          "INLET DIAMETER",
+          "AIRSIDE DATA MINIMUM AIR FLOW CFM",
+          "AIRSIDE DATA MAXIMUM AIR FLOW CFM",
+          "MAXIMUM NOISE DATA RADIATED SOUND (NC)",
+          "MAXIMUM NOISE DATA DISCHARGE SOUND (NC)",
+          "AIRSIDE DATA MIN INLET SP I.W.G.",
+          "AIRSIDE DATA MAX AIR PD I.W.G",
+          "HYDRONIC REHEAT COIL DATA EAT (°F)",
+          "HYDRONIC REHEAT COIL DATA LAT (°F)",
+          "HYDRONIC REHEAT COIL DATA EWT (°F)",
+          "HYDRONIC REHEAT COIL DATA LWT (°F)",
+          "HYDRONIC REHEAT COIL DATA SENSIBLE CAPACITY (BTU/HR)",
+          "HYDRONIC REHEAT COIL DATA FLOW (GPM)",
+          "HYDRONIC REHEAT COIL DATA PIPE CONNECTI ON SIZE IN",
+          "HYDRONIC REHEAT COIL DATA MAX WATER PD FT. H20",
+          "MANUFACTURER",
+          "MODEL",
+          "REMARKS"
+        ],
+        "rows": 58
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#20",
+        "kind": "equipment",
+        "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM",
+        "region": [
+          2324.88,
+          1706.4,
+          4779.36,
+          2517.1
+        ],
+        "headers": [
+          "B-1",
+          "POINT NAME",
+          "HARDWARE TAG",
+          "HARDWARE POINT TYPE",
+          "FAIL MODE FAIL ON (OPEN)",
+          "FAIL MODE FAIL OFF (CLOSED)",
+          "FAIL MODE LAST COMMANDED STATE",
+          "FAIL MODE LOCAL DEFAULT",
+          "SOFTWARE NETWORK POINT",
+          "SOFTWARE CALCULATED POINT",
+          "SOFTWARE MAINTENANCE ALARM",
+          "SOFTWARE CRITICAL ALARM",
+          "SOFTWARE 24 HOUR OPERATION",
+          "SOFTWARE PROGRAM START/STOP",
+          "SOFTWARE OPTIMUM START",
+          "SOFTWARE MORNING WARM/COOL",
+          "SOFTWARE UNOCCUPIED SET POINT",
+          "SOFTWARE DEMAND LIMIT",
+          "SOFTWARE DIRECT DIGITAL CONTROL",
+          "SOFTWARE SET POINT ADJUSTMENT",
+          "SOFTWARE TOTALIZER",
+          "SOFTWARE RUN TIME",
+          "SOFTWARE ALARM INSTRUCTIONS",
+          "SOFTWARE MAINTENANCE WORK ORDER",
+          "SOFTWARE ALARM LIMITS",
+          "SOFTWARE SOFTWARE INTERLOCKS",
+          "SOFTWARE TREND",
+          "ALARM LIMITS LOW LIMIT",
+          "ALARM LIMITS HIGH LIMIT",
+          "NOTES"
+        ],
+        "rows": 9
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#23",
+        "kind": "equipment",
+        "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - VAV BOXES",
+        "region": [
+          2934.48,
+          224.88,
+          5389.22,
+          1311.6
+        ],
+        "headers": [
+          "COL1",
+          "POINT NAME",
+          "HARDWARE TAG",
+          "HARDWARE POINT TYPE",
+          "FAIL MODE FAIL ON (OPEN)",
+          "FAIL MODE FAIL OFF (CLOSED)",
+          "FAIL MODE LAST COMMANDED STATE",
+          "FAIL MODE LOCAL DEFAULT",
+          "SOFTWARE NETWORK POINT",
+          "SOFTWARE CALCULATED POINT",
+          "SOFTWARE MAINTENANCE ALARM",
+          "SOFTWARE CRITICAL ALARM",
+          "SOFTWARE 24 HOUR OPERATION",
+          "SOFTWARE PROGRAM START/STOP",
+          "SOFTWARE OPTIMUM START",
+          "SOFTWARE MORNING WARM/COOL",
+          "SOFTWARE UNOCCUPIED SET POINT",
+          "SOFTWARE DEMAND LIMIT",
+          "SOFTWARE DIRECT DIGITAL CONTROL",
+          "SOFTWARE SET POINT ADJUSTMENT",
+          "SOFTWARE TOTALIZER",
+          "SOFTWARE RUN TIME",
+          "SOFTWARE ALARM INSTRUCTIONS",
+          "SOFTWARE MAINTENANCE WORK ORDER",
+          "SOFTWARE ALARM LIMITS",
+          "SOFTWARE SOFTWARE INTERLOCKS",
+          "SOFTWARE TREND",
+          "ALARM LIMITS LOW LIMIT",
+          "ALARM LIMITS HIGH LIMIT",
+          "NOTES"
+        ],
+        "rows": 15
+      },
+      {
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#24",
+        "kind": "equipment",
+        "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - MISCELLANEOUS",
+        "region": [
+          2327.02,
+          2522.88,
+          4795.68,
+          3092.14
+        ],
+        "headers": [
+          "COL1",
+          "POINT NAME",
+          "HARDWARE TAG",
+          "HARDWARE POINT TYPE",
+          "FAIL MODE FAIL ON (OPEN)",
+          "FAIL MODE FAIL OFF (CLOSED)",
+          "FAIL MODE LAST COMMANDED STATE",
+          "FAIL MODE LOCAL DEFAULT",
+          "SOFTWARE NETWORK POINT",
+          "SOFTWARE CALCULATED POINT",
+          "SOFTWARE MAINTENANCE ALARM",
+          "SOFTWARE CRITICAL ALARM",
+          "SOFTWARE 24 HOUR OPERATION",
+          "SOFTWARE PROGRAM START/STOP",
+          "SOFTWARE OPTIMUM START",
+          "SOFTWARE MORNING WARM/COOL",
+          "SOFTWARE UNOCCUPIED SET POINT",
+          "SOFTWARE DEMAND LIMIT",
+          "SOFTWARE DIRECT DIGITAL CONTROL",
+          "SOFTWARE SET POINT ADJUSTMENT",
+          "SOFTWARE TOTALIZER",
+          "SOFTWARE RUN TIME",
+          "SOFTWARE ALARM INSTRUCTIONS",
+          "SOFTWARE MAINTENANCE WORK ORDER",
+          "SOFTWARE ALARM LIMITS",
+          "SOFTWARE SOFTWARE INTERLOCKS",
+          "SOFTWARE TREND",
+          "ALARM LIMITS LOW LIMIT",
+          "ALARM LIMITS HIGH LIMIT",
+          "NOTES"
+        ],
+        "rows": 2
+      }
+    ]
+  },
+  "point_lists": {
+    "truth_kind": "authored_point_tables",
+    "expected_tables": 5,
+    "expected_rows": 158,
+    "expected_diagram_callouts_not_tables": 0,
+    "actual_matrices": 5,
+    "actual_rows": 158,
+    "actual_observations": 158,
+    "authored_table_matches": [
+      {
+        "expected": {
+          "id": "M83-CHW-POINTS",
+          "page": 19,
+          "sheet": "M8.3",
+          "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - CHW SYSTEM",
+          "rows": 21,
+          "region": [
+            1160,
+            987.541,
+            1740,
+            1415.541
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:538aea63b74cb6ec06553a33ec80e8aa7e2817b3f5c50c443c0af58eb0aba352",
+        "actual_rows": 21,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M84-HHW-POINTS",
+          "page": 20,
+          "sheet": "M8.4",
+          "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM",
+          "rows": 32,
+          "region": [
+            1160,
+            1105.5,
+            1730,
+            1723.221
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:c08d803e9d844de8fbfc80d6b06a1830803273a069c0476620db6aa71d940fec",
+        "actual_rows": 32,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M85-AHU1-POINTS",
+          "page": 21,
+          "sheet": "M8.5",
+          "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1",
+          "rows": 69,
+          "region": [
+            1535,
+            778.74,
+            1960,
+            2112.981
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:9abf6e1794c2b4ed565645d511de77bdb0ce1807db65d35b2b6033a718b5ffaa",
+        "actual_rows": 69,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M87-VAV-POINTS",
+          "page": 23,
+          "sheet": "M8.7",
+          "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - VAV BOXES",
+          "rows": 15,
+          "region": [
+            1400,
+            364.74,
+            2030,
+            654.74
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:2f140e6cf39cfe5b204460dee7f6cac378e2195f59e9fe118aff6e3daa35856a",
+        "actual_rows": 15,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M88-MISC-POINTS",
+          "page": 24,
+          "sheet": "M8.8",
+          "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - MISCELLANEOUS",
+          "rows": 21,
+          "region": [
+            1150,
+            1513.74,
+            1730,
+            1993.46
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:36937a63408ecfe8f997aef393c170335a483bd96f20c5bf5653eab69ab36559",
+        "actual_rows": 21,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      }
+    ],
+    "unmatched_actual_candidates": []
+  },
+  "bas_math": {
+    "status": "review_required",
+    "source_coverage": "point_list_only",
+    "physical_total": {
+      "AI": 59,
+      "AO": 33,
+      "DI": 41,
+      "DO": 25
+    },
+    "calculated_rows": 158
+  },
+  "sequences": {
+    "authored_titled_regions": 0,
+    "authored_title_matches": [],
+    "authored_sequence_inventory_items": 0,
+    "authored_summary_groups": 5,
+    "authored_summary_clauses": 0,
+    "actual_regions": [
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p19:line120:narrative",
+        "page": 19,
+        "title": "CHILLED WATER SYSTEM - SEQUENCE OF OPERATION",
+        "status": "body_detected",
+        "clauses": 10,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 10
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p20:line157:narrative",
+        "page": 20,
+        "title": "HEATING HOT WATER SYSTEM - SEQUENCE OF OPERATION",
+        "status": "body_detected",
+        "clauses": 26,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 26
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p22:line1:narrative",
+        "page": 22,
+        "title": "AHU-1 SEQUENCE OF OPERATIONS",
+        "status": "heading_only",
+        "clauses": 0,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 0
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p22:line843:narrative",
+        "page": 22,
+        "title": "LEED IAQ PRE-OCCUPANCY FLUSH-OUT - SEQUENCE OF OPERATION",
+        "status": "body_detected",
+        "clauses": 1,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 1
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p23:line0:narrative",
+        "page": 23,
+        "title": "CONTROL SEQUENCE",
+        "status": "segmentation_conflict",
+        "clauses": 0,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 0
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p23:line83:narrative",
+        "page": 23,
+        "title": "SEQUENCE OF OPERATION",
+        "status": "body_detected",
+        "clauses": 11,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 11
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p23:line262:narrative",
+        "page": 23,
+        "title": "CONTROL SEQUENCE",
+        "status": "segmentation_conflict",
+        "clauses": 0,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 0
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p23:line414:narrative",
+        "page": 23,
+        "title": "CONTROL SEQUENCE",
+        "status": "heading_only",
+        "clauses": 0,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 0
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p23:line462:narrative",
+        "page": 23,
+        "title": "SEQUENCE OF OPERATIONS",
+        "status": "body_detected",
+        "clauses": 15,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 15
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p24:line64:narrative",
+        "page": 24,
+        "title": "TOILET EXHAUST FANS - SEQUENCE OF OPERATION:",
+        "status": "body_detected",
+        "clauses": 4,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 4
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p24:line75:narrative",
+        "page": 24,
+        "title": "MECHANICAL ROOM EXHAUST FAN - SEQUENCE OF OPERATION:",
+        "status": "body_detected",
+        "clauses": 4,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 4
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p24:line80:narrative",
+        "page": 24,
+        "title": "UNIT HEATER - SEQUENCE OF OPERATION:",
+        "status": "body_detected",
+        "clauses": 2,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 2
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p24:line122:narrative",
+        "page": 24,
+        "title": "FAN COIL UNIT - SEQUENCE OF OPERATION:",
+        "status": "body_detected",
+        "clauses": 1,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 1
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p24:line222:narrative",
+        "page": 24,
+        "title": "DX SPLIT SYSTEM - SEQUENCE OF OPERATION:",
+        "status": "body_detected",
+        "clauses": 2,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 2
+      },
+      {
+        "region_id": "sha256:b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10:p24:line227:narrative",
+        "page": 24,
+        "title": "FINNED TUBE RADIATOR - SEQUENCE OF OPERATION:",
+        "status": "body_detected",
+        "clauses": 2,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 2
+      }
+    ],
+    "actual_region_count": 15,
+    "actual_clause_count": 78,
+    "discovery_complete": false,
+    "interpretation_complete": false
+  },
+  "equipment_candidates": {
+    "authored_schedule_counts": {
+      "tables": 17,
+      "rows": 132,
+      "building_scoped_tag_identities_including_outlet_types": 132,
+      "other_scheduled_tag_identities": 109,
+      "full_vav_performance_rows": 58,
+      "source_scope": "There are 132 literal unique schedule marks: 25 on M7.1, 49 on M7.2, and 58 on M7.3. The M7.3 companion table preserves all 58 performance rows with 18 dual-engine-rechecked fields each. M7.2's 23 grille/register/diffuser marks are product/type rows and are not expanded into plan-placement, actuator, or terminal quantities."
+    },
+    "actual_tables": 17,
+    "actual_rows": 132,
+    "tables": [
+      {
+        "table_id": "bas-equipment:c574ca16b3740254282523f5a69ea984e2d7448617e73b0446421648d2cc3a27:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "title": "AIR HANDLING UNIT SCHEDULE",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:cc79003acff8832807ee3177d818a0fda6dd7f44dd8618396ab106eb50c40a52:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "title": "AIR HANDLING UNIT FAN SCHEDULE",
+        "rows": 4,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:8e1896192a60583785bad4e89076c5facab47952e89c3b2cbe8912d52e0fa606:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "title": "CHILLER SCHEDULE (ELECTRIC AIR-COOLED)",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:a35a5c03513e4112c28e70652cce6b52fef97214197bb4130af3d87fcd13230e:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "title": "HOT WATER CONDENSING BOILER SCHEDULE",
+        "rows": 2,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:20b30af505b57761b17ea4660bda3ed6296ab5f6728dc55b90081f51225b03de:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "title": "PUMP SCHEDULE",
+        "rows": 11,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:350df492abff7b33f888720f7cfd722cb499525bf236a7ecc3a2818431ee89c5:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "title": "GENERAL FAN SCHEDULE",
+        "rows": 4,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:b0b2e24e01c8f992cc76f1b7ef4ab86fad7767a3aab7b186f00d1f86d3daf588:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#14",
+        "title": "AIR SEPARATOR SCHEDULE",
+        "rows": 2,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:d885d0dc56b5487249e9d9b3fb7de9d0d7a77d31aa2caf4eaa91617398461dfb:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "title": "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+        "rows": 23,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:52e559f3cf8fb39e81c5a98f5d8d3ed189ed92ad45c907c2132667c5e8364f8b:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "title": "HOT WATER FAN COIL UNIT SCHEDULE",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:631d699fe9269e0c7730d70f026ad8bbc9968daf63fe3641ae9923335b610a48:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "title": "AIR-COOLED CONDENSING UNIT SCHEDULE",
+        "rows": 6,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:ce76d3ea64f5fac13d1e6a3eda5b87611c95b8882f0c936c8f551156fca82dea:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "title": "EXPANSION TANK SCHEDULE",
+        "rows": 2,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:42372410b2c5930860fd0b4458dfaf5c38623ed70a28df141ddb1d463741d986:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "title": "DX FAN COIL UNIT SCHEDULE",
+        "rows": 6,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:abc504f803750232fb8a3ea9b3294690ad768f85ea53b5a51f58d667d2beba66:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "title": "UNIT HEATER SCHEDULE (HOT WATER)",
+        "rows": 2,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:13ad77ac51f86dba43ce1d214e3d3d60d0beb30268fed2e80ad84f5cb99c7cd5:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "title": "SILENCER SCHEDULE",
+        "rows": 2,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:d23bca6587aec30f5570f2a270b67c3af453543c6fa41d2e1c8196e29abd6eec:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "title": "FIN TUBE RADIATION SCHEDULE",
+        "rows": 4,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:cdd2855bcb62d009e0d9fdae0ea8a04b3eb928504a3158ddcbb3fd8ba7c8e392:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#15",
+        "title": "ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE",
+        "rows": 3,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:1ad3b87b131319566c683f14bb8a4acb928418d78092ec2b8cfc92416439994b:copy1",
+        "sheet": "24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf#16",
+        "title": "VOLUME CONTROL BOX SCHEDULE",
+        "rows": 58,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      }
+    ],
+    "rows_with_issues": 0,
+    "issue_codes": [],
+    "installed_quantity_values": [
+      null
+    ]
+  },
+  "initial_human_in_loop_state": {
+    "review_events": 0,
+    "equipment_events": 0,
+    "assembly_events": 0,
+    "engineering_events": 0,
+    "project_complete": false,
+    "installed_quantity": null,
+    "findings": 256,
+    "blockers": 256,
+    "findings_by_domain_severity_code": {
+      "points:blocker:point_columns_uninterpreted": 26,
+      "points:blocker:POINT_COLUMNS_UNINTERPRETED": 26,
+      "points:blocker:point_columns_unobserved": 68,
+      "points:blocker:SOURCE_DISCOVERY_COVERAGE_UNVERIFIED": 1,
+      "points:blocker:SOURCE_SPAN_CORE_COLUMNS_ONLY": 2,
+      "sequences:blocker:ambiguous_spans": 1,
+      "sequences:blocker:discovery_incomplete": 1,
+      "sequences:blocker:heading_only": 2,
+      "sequences:blocker:segmentation_conflict": 2,
+      "sequences:blocker:unassigned_horizontal_spans": 24,
+      "sequences:blocker:uninterpreted_clause": 78,
+      "sequences:blocker:unsupported_spans": 24,
+      "sources:blocker:source_inventory_not_byte_verified": 1
+    }
+  },
+  "performance": {
+    "graph_ms": 95398,
+    "compile_and_capture_ms": 1839,
+    "total_ms": 99288,
+    "peak_rss_bytes": 1666957312
+  },
+  "assessment_boundary": "Independent source facts versus frozen automatic capture. Unmatched candidates require source review; they are not automatically labeled false positives. No human applicability, assembly, responsibility, compatibility, revision, approval, or installed-count decision is manufactured by this audit."
+}

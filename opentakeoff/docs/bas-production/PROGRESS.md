@@ -1,5 +1,42 @@
 # BAS production workflow progress
 
+## Final bounded BAS completion and frozen holdout audit — 2026-09-12
+
+The five deterministic, human-in-loop BAS workflows are wired through the same
+browser/MCP records and actual Python calculation authority. Final clean gates:
+Python **495 passed / 1 skipped** and mypy **21 files / 0 issues**; MCP **130 BAS
++ 33 revision + 6 issue + 17 scope** with typecheck; web **3,006/3,019** with
+13 expected fixture/model skips, zero failures, typecheck, benchmarks and build;
+MCP package build, distribution smoke, **4/4** packaging tests, and the exact
+**55-tool** registry check. Lint has zero errors and the same three existing
+`TakeoffCanvas.jsx` warnings.
+
+SHOULD THIS BE ON THE SHARED PATH? **Yes.** The final point changes decide shared
+schedule/point truth and Python math: row-oriented point types, exact printed
+physical and software marks, bounded source-span recovery for clipped point
+tables, same-source fragment merging, and explicit unobserved-column blockers.
+Point tables are not equipment candidates, and only explicit known cross-trade
+schedule families are excluded. The browser and MCP consume the same results.
+
+Real-PDF results include Eglin at **5/5 point matrices, 158/158 rows, AI 59 / AO
+33 / DI 41 / DO 25**, plus **17/17 equipment schedules and 132/132 rows** with
+installed quantity `null`; Albany's blind full-pipeline holdout at **2/2 and
+96/96** with no false physical I/O inference; and USDA's initial failure at 7/8
+and 50/75, followed by a source-only aggregate of 8 matrices and 75 rows. The final
+blind source-path reserve is an honestly retained **0/1 miss** on a control
+diagram truth item, with no post-open tuning.
+
+The exact evaluation roles, cold-path time/memory, source-record limitations,
+walkthrough screenshots, and remaining boundaries are recorded in
+`FINAL_ACCEPTANCE.md`, `evidence/frozen-holdout-final/README.md`, and
+`../BAS_TAKEOFF_WALKTHROUGH.md`.
+
+This pass does **not** change VectorGrid, table geometry, citations/bboxes,
+symbols, legends, OCR/vision, pricing, costing, labor, or installed-quantity
+logic. It does not claim specification ingestion, universal sequence
+interpretation, autonomous release, authenticated signatures, or performance
+closure for dense cold PDFs.
+
 ## Snapshot memory gate passes after source-owned candidate reuse — 2026-09-12
 
 SHOULD THIS BE ON THE SHARED PATH? **Yes.** Candidate identity, equipment

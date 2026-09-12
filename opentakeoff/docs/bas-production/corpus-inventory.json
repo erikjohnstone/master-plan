@@ -19,7 +19,13 @@
     "scope": "Untouched by NEW workflow rule development; historical platform exposure is known and prevents claiming never-seen generalization.",
     "require_no_body_or_key_inspection_until_frozen_evaluation": true,
     "retire_holdout_status_if_used_for_debugging": true,
-    "exclude_known_duplicate_source_hashes_from_development": true
+    "exclude_known_duplicate_source_hashes_from_development": true,
+    "status_after_2026_09_12_evaluation": {
+      "blind_full_pipeline_evaluation_completed_without_tuning": [8],
+      "blind_source_path_evaluation_completed_without_tuning": [27],
+      "opened_for_evaluation_then_retired_or_evaluation_only": [5, 15, 19, 24],
+      "still_untouched": []
+    }
   },
   "summary": {
     "focus_documents": 30,
@@ -31,7 +37,8 @@
     "source_part_hash_matches": 190,
     "unique_source_part_hashes": 190,
     "bas_screened_sets": 82,
-    "holdout_focus_documents": 6,
+    "holdout_focus_documents_originally_reserved": 6,
+    "holdout_focus_documents_still_untouched": 0,
     "truth_ledger_complete_claims": 30
   },
   "selected": [
@@ -126,7 +133,7 @@
       "matches": true,
       "sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
       "bytes": 18927687,
-      "split": "new_workflow_holdout",
+      "split": "retired_holdout_after_failure_debugging",
       "truth": {
         "ledger_complete_claim": true,
         "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
@@ -186,7 +193,7 @@
       "matches": true,
       "sha256": "d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384",
       "bytes": 4279128,
-      "split": "new_workflow_holdout",
+      "split": "blind_holdout_evaluated_without_tuning",
       "truth": {
         "ledger_complete_claim": true,
         "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
@@ -326,7 +333,7 @@
       "matches": true,
       "sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
       "bytes": 6172005,
-      "split": "new_workflow_holdout",
+      "split": "opened_holdout_evaluation_only",
       "truth": {
         "ledger_complete_claim": true,
         "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
@@ -406,7 +413,7 @@
       "matches": true,
       "sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
       "bytes": 1963054,
-      "split": "new_workflow_holdout",
+      "split": "opened_holdout_evaluation_only",
       "truth": {
         "ledger_complete_claim": true,
         "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
@@ -506,7 +513,7 @@
       "matches": true,
       "sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
       "bytes": 7572233,
-      "split": "new_workflow_holdout",
+      "split": "retired_holdout_after_failure_debugging",
       "truth": {
         "ledger_complete_claim": true,
         "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
@@ -566,7 +573,7 @@
       "matches": true,
       "sha256": "e47047c7322d16d44854dd5aa738f3d76087cc47f446927b00d8afc04a128f65",
       "bytes": 35562756,
-      "split": "new_workflow_holdout",
+      "split": "blind_source_path_evaluated_without_tuning",
       "truth": {
         "ledger_complete_claim": true,
         "ledger_updated_utc": "2026-09-05T10:37:39.903889+00:00",
