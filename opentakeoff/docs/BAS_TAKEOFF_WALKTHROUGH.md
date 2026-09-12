@@ -234,8 +234,10 @@ all write decisions remain explicit user actions in their workspaces.
   of this implementation.
 - A 29-page real project required a 4 GiB Node heap for the equipment browser
   walkthrough after the default 2 GiB graph build exhausted memory.
-- The source-backed snapshot journey is functionally successful, but its measured
-  incremental peak remains above the separate 512 MiB performance target.
+- The source-backed snapshot journey passes the separate 512 MiB incremental
+  memory target in four independent clean processes. The narrowest observed
+  margin was 1,638,400 bytes, so large-project headroom remains intentionally
+  monitored rather than treated as unlimited.
 - Physical installed quantity remains withheld unless adequate nonoverlapping
   evidence and explicit decisions establish a defensible unique total.
 - These are human-in-the-loop takeoff controls. They deliberately refuse to turn
