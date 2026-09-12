@@ -172,7 +172,7 @@ import { recordBasIssueFromUi } from "../components/basIssueClient.ts";
 import { recordBasScopeFromUi } from "../components/basScopeClient.ts";
 import { basRevisionOperationSchema, assertBasRevisionResponse } from "../lib/basRevisionOperations.ts";
 import { applyBasEquipmentReview } from "../lib/basEquipmentReview.ts";
-import { normRect, matchBox } from "../lib/sweepThumb.js";
+import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
 // docked diagram/reorder desk. Cut edits commit through the rollcut command.
@@ -12312,18 +12312,29 @@ export default function TakeoffCanvas() {
                   </g>
                 );
                 // A match/accepted row draws as a BOUNDING BOX around the
-                // seed's own footprint at that placement's rotation (the
-                // same box the review panel's own thumbnails already use,
-                // matchBox/sweepThumb.js), not an abstract X — "what got
-                // matched" should read as "this shape, right here" against
-                // the ink underneath, not just point at a trusted centroid.
-                // Falls back to the old X when sweep.seed.rect is missing (a
-                // review restored before this box existed).
+                // seed's own footprint at that placement's rotation, not an
+                // abstract X — "what got matched" should read as "this
+                // shape, right here" against the ink underneath, not just
+                // point at a trusted centroid. Deliberately NOT matchBox()
+                // (sweepThumb.js, used by the review panel's own
+                // thumbnails): that helper pads to a SQUARE sized off
+                // max(w,h) because a thumbnail tile's own size can't change
+                // with rotation — right for a fixed-size crop, but looser
+                // than necessary here. This draws the seed's own true
+                // width/height (a small fixed 3px margin, not a percentage)
+                // and rotates it with an SVG transform instead of squaring
+                // it off, so a non-square symbol gets a tight rectangle, not
+                // a padded square. Falls back to the old X when
+                // sweep.seed.rect is missing (a review restored before this
+                // box existed).
                 const Box = (row, color, w) => {
-                  const box = sweep.seed.rect && matchBox(row.at, sweep.seed.rect, 0.15, row.transform?.rotation_deg ?? row.rotation ?? 0);
-                  if (!box) return X(row.at, color, w);
-                  return <rect x={box.x0 + ox} y={box.y0} width={box.x1 - box.x0} height={box.y1 - box.y0}
-                    fill="none" stroke={color} strokeWidth={w * k} strokeOpacity={0.6} />;
+                  const r = sweep.seed.rect;
+                  if (!r) return X(row.at, color, w);
+                  const pad = 3, bw = r.w + pad * 2, bh = r.h + pad * 2;
+                  const deg = row.transform?.rotation_deg ?? row.rotation ?? 0;
+                  return <rect x={row.at[0] + ox - bw / 2} y={row.at[1] - bh / 2} width={bw} height={bh}
+                    fill="none" stroke={color} strokeWidth={w * k} strokeOpacity={0.6}
+                    transform={`rotate(${deg} ${row.at[0] + ox} ${row.at[1]})`} />;
                 };
                 return (
                   <g pointerEvents="none">
