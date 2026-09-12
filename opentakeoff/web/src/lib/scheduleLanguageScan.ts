@@ -2,7 +2,7 @@
  * Shared schedule/BAS/valve language scan — detects printed titles and keywords
  * Pillars A–D missed when geometric extraction returned zero tables.
  */
-import type { GraphSpan } from "./sheetgraph.ts";
+import type { GraphSpan, Bbox } from "./sheetgraph.ts";
 
 /** Valve / damper / actuator schedule language in vector text. */
 export const VALVE_SCHEDULE_LANGUAGE_RE =
@@ -195,14 +195,57 @@ export function sheetHasPointsListTitleSpans(spans: GraphSpan[]): boolean {
  * sheetHasPointsListTitleSpans is a different, narrower vocabulary (BAS/DDC
  * points, not a sheet index) that must not be widened to cover this — real,
  * found live: 08_ME's own cover sheet, 49 real rows, 0 extracted. */
+function isDrawingIndexTitle(t: string): boolean {
+  if (t.length < 8 || t.length > 78) return false;
+  return /^(?:[A-Z]+\s+)?(?:SHEET\s+INDEX|DRAWING\s+INDEX|INDEX\s+OF\s+DRAWINGS|DRAWING\s+LIST)$/i.test(t);
+}
+
 export function sheetHasDrawingIndexTitleSpans(spans: GraphSpan[]): boolean {
-  const test = (t: string): boolean => {
-    if (t.length < 8 || t.length > 78) return false;
-    return /^(?:[A-Z]+\s+)?(?:SHEET\s+INDEX|DRAWING\s+INDEX|INDEX\s+OF\s+DRAWINGS|DRAWING\s+LIST)$/i.test(t);
-  };
-  for (const sp of spans) if (test(spanText(sp))) return true;
-  for (const t of joinCaptionLines(spans)) if (test(t)) return true;
+  for (const sp of spans) if (isDrawingIndexTitle(spanText(sp))) return true;
+  for (const t of joinCaptionLines(spans)) if (isDrawingIndexTitle(t)) return true;
   return false;
+}
+
+/** `sheetHasDrawingIndexTitleSpans` answers "does this SHEET carry a drawing-
+ *  index caption anywhere" — the routing question `isScheduleTarget` needed.
+ *  It closed the recall half of the 08_ME bug (STATE.md §2a / goal
+ *  VECTORGRID_TABLE_BOXES.md, 2026-09-12): the sheet gets offered to
+ *  vectorgrid now. It never closed the other half — `scheduleTableFromODL`'s
+ *  own title search only ever looks INSIDE the ruled grid's own row 0 for a
+ *  spanning title cell, which is the shape a schedule whose name is drawn as
+ *  its own header ROW has, but not the shape a cover-sheet caption has: a
+ *  free-floating text run sitting ABOVE and OUTSIDE the ruled grid, on its
+ *  own underline, never a cell of the table at all. Measured live: vectorgrid
+ *  finds 08_ME's own DRAWING LIST grid exactly (52x8, matching its 49 real
+ *  sheet rows), and it is still refused with reason "unknown kind and no
+ *  title" — the SAME table, offered correctly, declined for a completely
+ *  different reason once it arrives.
+ *
+ *  This is that other half: given the table's own bounding box (already in
+ *  project space — the same space GraphSpan.x/y already use, see
+ *  odlBboxToProjectSpace's own callers), look for the SAME proven caption
+ *  vocabulary as sheetHasDrawingIndexTitleSpans, but only among spans sitting
+ *  in the band directly above the table (captions are drawn above what they
+ *  name, never below or beside it on the sheets this vocabulary was built
+ *  from) and roughly over its own horizontal extent. Scoped to this one
+ *  proven vocabulary, not sheetHasScheduleCaption's broader one, so a busy
+ *  cover sheet's unrelated "X SCHEDULE" caption elsewhere on the page can
+ *  never be borrowed by a table it doesn't belong to. */
+export function nearbyDrawingIndexCaptionText(spans: GraphSpan[], region: Bbox): string | null {
+  const [rx0, ry0, rx1, ry1] = region;
+  const w = rx1 - rx0;
+  const marginX = Math.max(40, w * 0.5);
+  const bandTop = ry0 - 260;
+  const bandBottom = ry0 + (ry1 - ry0) * 0.15;
+  const near = spans.filter((sp) => {
+    const cx = sp.x + sp.w / 2;
+    const sy1 = sp.y + sp.h;
+    return sy1 >= bandTop && sp.y <= bandBottom && cx >= rx0 - marginX && cx <= rx1 + marginX;
+  });
+  if (!near.length) return null;
+  for (const sp of near) { const t = spanText(sp); if (isDrawingIndexTitle(t)) return t; }
+  for (const t of joinCaptionLines(near)) if (isDrawingIndexTitle(t)) return t;
+  return null;
 }
 
 export function sheetHasScheduleLanguage(spans: GraphSpan[]): boolean {

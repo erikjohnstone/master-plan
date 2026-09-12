@@ -22,6 +22,7 @@
 
 import { ROOM_LABEL_RE } from "./detectRooms";
 import { isEquipTag, joinGraphSpans } from "./equiptags";
+import { nearbyDrawingIndexCaptionText } from "./scheduleLanguageScan.ts";
 
 /** rot: text rotation in degrees, clockwise in device space (y down). Absent
  * or 0 = horizontal; 90/270 = a quarter-turn — the rotated-header case. When
@@ -10042,7 +10043,24 @@ export function scheduleTableFromODL(
   if ((eqHits >= 3 || (hasCatalogIdentity && eqHits >= 2)) && eqHits >= rmHits && eqHits >= finHits) kind = "equipment";
   else if (rmHits >= 3 && rmHits > finHits && surfaceHits >= 2) kind = "room-finish";
   else if (finHits >= 3) kind = "finish";
-  const titleText = titleCell ? odlCellText(titleCell) : "";
+  let titleText = titleCell ? odlCellText(titleCell) : "";
+  // A caption drawn OUTSIDE the ruled grid (its own free-floating text run
+  // above the table, never a cell of it) is invisible to every check above —
+  // they only ever look INSIDE row 0 for an in-grid title. Real, measured:
+  // 08_ME's own cover-sheet DRAWING LIST (52x8, its 49 real sheet rows) is
+  // found by vectorgrid exactly and still refused "unknown kind and no
+  // title" because "DRAWING LIST" sits above the grid, underlined, not as
+  // a header-row cell (goal VECTORGRID_TABLE_BOXES.md, 2026-09-12). Scoped to
+  // nearbyDrawingIndexCaptionText's own narrow, already-proven vocabulary —
+  // never sheetHasScheduleCaption's broader one — so a busy sheet's
+  // unrelated caption elsewhere can't be borrowed by a table it doesn't
+  // name. Only fires when the in-grid search above found nothing, so every
+  // existing title (in-grid, word-group-split) still wins exactly as before.
+  if (!titleText.trim() && opts.sourceSpans?.length) {
+    const tableRegion = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
+    const found = nearbyDrawingIndexCaptionText(opts.sourceSpans, tableRegion);
+    if (found) titleText = found;
+  }
   // Unlike the geometric extractor (which has its own vocabulary-free
   // structural "reference" pass, above extractAllTables), this function had
   // no equivalent fallback: a real ODL-detected table whose header words

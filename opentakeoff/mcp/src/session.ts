@@ -6073,13 +6073,23 @@ export class Session {
   /** Full L0–L5 vector takeoff stack on the shared Session path (geometry-first;
    * OCR/VLM assist when vector paths alone cannot reach schedule rows). */
   private async runVectorTakeoffStack(g: SheetGraph): Promise<void> {
-    await runVectorTakeoffPipeline(g, {
+    const report = await runVectorTakeoffPipeline(g, {
       runODL: (graph, additionalPointListSheets) => this.enhanceTablesWithODL(graph, additionalPointListSheets),
       getSheetContexts: () => this.buildVectorSheetContexts(g),
       sheetHasPointsListTitle: (key) => this.sheetHasPointsListTitle(key),
       sheetHasDrawingIndexTitle: (key) => this.sheetHasDrawingIndexTitle(key),
       ocrRegion: (key, region) => this.ocrScheduleRegion(key, region),
     });
+    // Same OPENTAKEOFF_GRAPH_TRACE gate as the timing lines above — the
+    // pipeline's own declined_regions/declined_reasons (why a vectorgrid
+    // candidate never reached g.tables) used to be discarded here entirely.
+    // goal VECTORGRID_TABLE_BOXES.md's own completion gate requires knowing
+    // WHY vectorgrid declines what it finds (STATE.md §2a: "vectorgrid
+    // declines a large share of what it finds... how much is unknown") —
+    // this is that visibility, opt-in and zero-cost when unset.
+    if (process.env.OPENTAKEOFF_GRAPH_TRACE) {
+      process.stderr.write(`GRAPH_TRACE vectorgrid report=${JSON.stringify(report)}\n`);
+    }
   }
 
   private async buildVectorSheetContexts(g: SheetGraph): Promise<VectorSheetContext[]> {

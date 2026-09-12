@@ -667,6 +667,82 @@ glyph with no text at all, so the row-clustering pass sees continuation
 fragments rather than rows. Not fixed here; recorded with its evidence so it
 is not rediscovered from scratch.
 
+---
+
+### B-14 — a caption drawn OUTSIDE the ruled grid is invisible to title search (FIXED 2026-09-12)
+
+**Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf`'s own cover sheet
+(page 1) — a real DRAWING LIST (SHEET NUMBER / SHEET NAME / SCALE / FOR
+CONSTRUCTION checkbox column, 49 real listed sheets). First recorded as
+task #74 ("invisible to every extraction path"); traced fully under goal
+`opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md`'s own charter.
+
+**Measured, live, with the pipeline's own decline reasons** (a new opt-in
+`OPENTAKEOFF_GRAPH_TRACE` line in `mcp/src/session.ts`'s
+`runVectorTakeoffStack`, previously discarded entirely): vectorgrid finds
+this table's geometry EXACTLY — `52x8 at 1664,404,2448,1606` — and refuses it
+with reason `"unknown kind and no title"`. Confirmed by render
+(`render-page-crop.mjs`, read by eye): "DRAWING LIST" is printed as its own
+free-floating, underlined text run ABOVE the ruled grid, never a cell of it.
+
+**Root cause:** `scheduleTableFromODL`'s title search (`web/src/lib/
+sheetgraph.ts`) only ever looks INSIDE the grid's own row 0 for a title —
+either one cell spanning nearly the full width, or several word-group cells
+covering less than the full column count. Both shapes assume the table's
+name is drawn as part of the ruled grid itself. A caption printed outside
+and above the grid — the ordinary convention for a cover-sheet index — was
+structurally invisible to either check, so `titleCell` stayed null, kind
+classification found no equipment/room/finish vocabulary in SHEET NUMBER/
+SHEET NAME/SCALE, and the table was refused despite being found correctly.
+
+Note this is a DIFFERENT bug from the one `sheetHasDrawingIndexTitleSpans`
+(added earlier, same corpus document, see its own doc comment) already
+fixed: that hook closed the ROUTING half — getting the sheet OFFERED to
+vectorgrid at all, via `isScheduleTarget`'s `role === "unknown"` fallback.
+This is the TITLE-ATTACHMENT half, checked once a candidate table already
+exists — a completely separate code path that nobody had wired the same
+caption vocabulary into.
+
+**Fix:** `nearbyDrawingIndexCaptionText` (`web/src/lib/
+scheduleLanguageScan.ts`) — reuses the exact same proven
+`SHEET INDEX|DRAWING INDEX|INDEX OF DRAWINGS|DRAWING LIST` vocabulary
+`sheetHasDrawingIndexTitleSpans` already uses for routing, but scoped
+spatially: given the table's own bounding box (converted to project space
+via the existing `odlBboxToProjectSpace`, the same transform title-cell
+bboxes already go through), search only spans in the band directly above it
+and roughly over its own horizontal extent. Wired as a fallback in
+`scheduleTableFromODL`, firing ONLY when the in-grid search found nothing —
+an in-grid title still always wins (regression-tested). Scoped to this one
+narrow, already-proven vocabulary rather than the broader
+`sheetHasScheduleCaption` (which returns a false positive on this exact page
+from an unrelated span elsewhere on the sheet, measured directly) so a busy
+cover sheet's incidental caption elsewhere can never be borrowed by a table
+it doesn't name.
+
+**Result, measured before/after, same command, cold cache:** table count on
+this document goes from 2 to 3; the new table lands correctly kinded
+`reference`, key column populated (`G000`, `H200`, `D101`, ...), 34 real
+rows. `table.title` itself still reports `null` (the classification uses the
+found caption text internally; no synthetic title-cell object is
+constructed, matching this same file's own existing accepted precedent —
+see the STEAM UNIT HEATER SCHEDULE case a few paragraphs above, "the table
+reached the graph correctly keyed and celled... but with `title: null`") —
+a smaller, separate, disclosed gap, not a blocker: the table's data is now
+real and complete, only its own display name in the Schedules panel is not
+yet populated by this fallback.
+
+**Verified:** new regression suite in `web/test/sheetgraph.test.ts`
+("a caption drawn OUTSIDE the ruled grid still names the table") — refuses
+with no spans (proves the fix is additive, not a relaxed default), refuses
+when a caption exists far from this table (never borrows an unrelated
+caption), recovers all 6 rows of a synthetic fixture once the real caption
+shape is nearby, and confirms an in-grid title always wins when both exist.
+Full `web/test/sheetgraph.test.ts` (136/136) and
+`web/test/scheduleLanguageScan.test.ts` (10/10) green; `tsc --noEmit` clean
+in both `mcp` and `web`; full corpus regression gate run cold-cache before
+commit (see the commit that lands this entry for the exact before/after
+numbers on the frozen 541-tag scored corpus).
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.

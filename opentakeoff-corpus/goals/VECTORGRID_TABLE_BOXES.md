@@ -287,14 +287,25 @@ scope (all vector-native, no raster/OCR path involved), not yet closed:**
   yet confirmed as such). Corrupts one row's quantity cell and produces a
   correctly-disclosed but real one-unit undercount. Fix shape is named in
   B-10 (test row population + x-band span, not position) but not applied.
-- **Task #74 vs. `STATE.md` §2a item 4 — an unresolved contradiction in this
-  project's own records.** `STATE.md` claims `08_ME#1`'s DRAWING LIST
-  cover-sheet table was fixed by the dangle-discard fix (89.3% → 91.0%);
-  task #74 is still open, saying the same table is "invisible to every
-  extraction path." One of these is stale. Five-minute check: render
-  `08_ME#1` and run it through the live pipeline before doing anything else
-  in this file, since it may mean the box-only bakeoff score and the live
-  Session path have diverged.
+- ~~**Task #74 vs. `STATE.md` §2a item 4**~~ — **RESOLVED 2026-09-12, not stale
+  on either side.** Both records were true at once, describing two DIFFERENT
+  bugs on the same table: `STATE.md`'s dangle-discard fix genuinely fixed
+  vectorgrid's own BOX EXTENT (confirmed live — vectorgrid finds this exact
+  table's geometry, `52x8`, matching its box score); task #74's "invisible to
+  every extraction path" was a SEPARATE, still-open title-attachment bug —
+  `scheduleTableFromODL` only ever searches for a title INSIDE the ruled
+  grid's own row 0, and this table's real caption ("DRAWING LIST") is printed
+  OUTSIDE and above the grid, its own free-floating underlined text run. Live
+  decline reason, captured via a new opt-in `OPENTAKEOFF_GRAPH_TRACE` line in
+  `runVectorTakeoffStack` (previously the pipeline's own declined_regions/
+  declined_reasons were discarded entirely): `"unknown kind and no title"` —
+  found correctly, refused for an unrelated reason. **Fixed**: see
+  `TAKEOFF_BUG_CATALOGUE.md`'s new B-14 for the full trace, the fix
+  (`nearbyDrawingIndexCaptionText` in `scheduleLanguageScan.ts`, reusing the
+  same proven drawing-index vocabulary `sheetHasDrawingIndexTitleSpans`
+  already uses for routing, scoped spatially to the table's own bbox), and
+  the regression suite. Table count on this document: 2 → 3, the recovered
+  table correctly kinded `reference` with all 34 real rows.
 - **Task #82 — HVAC equipment compile totals reported wrong on 6+ corpus
   sets, not yet root-caused with this file's own render-and-read discipline.**
   Unlike the others above, this has not been traced to a specific sheet or

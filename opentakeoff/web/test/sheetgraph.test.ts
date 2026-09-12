@@ -4292,3 +4292,73 @@ describe("scheduleTableFromODL: header-join loop skips spec-metadata rows (task 
     assert.ok(t!.headers.some((h) => h === "POLE: A"), `the one genuinely colon-shaped real header must survive intact: got ${JSON.stringify(t!.headers)}`);
   });
 });
+
+describe("scheduleTableFromODL: a caption drawn OUTSIDE the ruled grid still names the table (goal VECTORGRID_TABLE_BOXES.md, 2026-09-12)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 50, row * 20, col * 50 + 50 * colSpan, row * 20 + 20],
+    "row number": row, "column number": col, "row span": 1, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+
+  // Real shape, rendered and read live off 08_ME_BGS_Augusta_EastCampus_
+  // Renovation.pdf's own cover-sheet DRAWING LIST (49 real sheet rows):
+  // "DRAWING LIST" is its own free-floating, underlined text run printed
+  // ABOVE the ruled grid, never a cell of it — row 1 of the grid is the
+  // real per-column header (SHEET NUMBER / SHEET NAME / SCALE / a rotated
+  // "FOR CONSTRUCTION" strip), so neither the wide-single-cell title check
+  // nor the word-group-split check above ever finds a title, and none of
+  // SHEET NUMBER/SHEET NAME/SCALE clears EQUIPMENT_HEADERS/ROOM_HEADERS/
+  // FINISH_HEADERS. Before this fix: refused "unknown kind and no title",
+  // even though vectorgrid found the grid's own 52x8 geometry exactly.
+  const buildTable = (): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 200, 160],
+    "number of rows": 7, "number of columns": 4,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "SHEET NUMBER"), odlCell(1, 2, "SHEET NAME"), odlCell(1, 3, "SCALE"), odlCell(1, 4, "FOR CONSTRUCTION")] },
+      { type: "table row", "row number": 2, id: 1, cells: [odlCell(2, 1, "G 000"), odlCell(2, 2, "CODE INFORMATION AND ASSEMBLIES"), odlCell(2, 3, "AS SHOWN"), odlCell(2, 4, "X")] },
+      { type: "table row", "row number": 3, id: 2, cells: [odlCell(3, 1, "H 200"), odlCell(3, 2, "BASEMENT PLAN ASBESTOS ABATEMENT"), odlCell(3, 3, "1/8\" = 1'-0\""), odlCell(3, 4, "X")] },
+      { type: "table row", "row number": 4, id: 3, cells: [odlCell(4, 1, "D 101"), odlCell(4, 2, "FIRST FLOOR DEMOLITION AND PHASING PLAN"), odlCell(4, 3, "1/8\" = 1'-0\""), odlCell(4, 4, "X")] },
+      { type: "table row", "row number": 5, id: 4, cells: [odlCell(5, 1, "A 101"), odlCell(5, 2, "FIRST FLOOR PLAN"), odlCell(5, 3, "1/8\" = 1'-0\""), odlCell(5, 4, "X")] },
+      { type: "table row", "row number": 6, id: 5, cells: [odlCell(6, 1, "A 102"), odlCell(6, 2, "SECOND FLOOR PLAN"), odlCell(6, 3, "1/8\" = 1'-0\""), odlCell(6, 4, "X")] },
+      { type: "table row", "row number": 7, id: 6, cells: [odlCell(7, 1, "M 101"), odlCell(7, 2, "MECHANICAL FIRST FLOOR PLAN"), odlCell(7, 3, "AS SHOWN"), odlCell(7, 4, "X")] },
+    ],
+  });
+
+  it("is refused with no source spans to search — proves the fix is additive, not a relaxed default", () => {
+    const t = scheduleTableFromODL(buildTable(), "08_ME_test.pdf", IDENTITY, {});
+    assert.equal(t, null, "with no sourceSpans, this table must refuse exactly as it always has");
+  });
+
+  it("is refused when a caption exists but sits nowhere near this table (never borrows an unrelated caption)", () => {
+    const farSpans: GraphSpan[] = [{ str: "DRAWING LIST", x: 2000, y: 2000, w: 100, h: 15 }];
+    const t = scheduleTableFromODL(buildTable(), "08_ME_test.pdf", IDENTITY, { sourceSpans: farSpans });
+    assert.equal(t, null, "a caption far from this table's own bbox must never be borrowed");
+  });
+
+  it("recovers the table, kinded reference, once its real caption is found in the band above it", () => {
+    const spans: GraphSpan[] = [{ str: "DRAWING LIST", x: 20, y: -50, w: 100, h: 15 }];
+    const t = scheduleTableFromODL(buildTable(), "08_ME_test.pdf", IDENTITY, { sourceSpans: spans });
+    assert.ok(t, "the real caption above the grid must recover this table");
+    assert.equal(t!.kind, "reference", "no equipment/room/finish vocabulary applies — this is the generic, vocabulary-free reference kind");
+    assert.equal(t!.rows.length, 6, "all 6 real sheet rows must survive");
+    assert.deepEqual(t!.rows.map((r) => r.key), ["G000", "H200", "D101", "A101", "A102", "M101"]);
+  });
+
+  it("still prefers a real in-grid title over the out-of-grid fallback when both exist", () => {
+    const t2: ODLTable = {
+      type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 200, 180],
+      "number of rows": 8, "number of columns": 4,
+      rows: [
+        { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "REAL IN-GRID TITLE", 4)] },
+        ...buildTable().rows.map((r) => ({ ...r, "row number": r["row number"] + 1, cells: r.cells.map((c) => ({ ...c, "row number": c["row number"] + 1 })) })),
+      ],
+    };
+    const spans: GraphSpan[] = [{ str: "DRAWING LIST", x: 20, y: -50, w: 100, h: 15 }];
+    const t = scheduleTableFromODL(t2, "08_ME_test.pdf", IDENTITY, { sourceSpans: spans });
+    assert.ok(t, "must still build");
+    assert.notEqual(t!.title?.text, "DRAWING LIST", "an in-grid title always wins — the out-of-grid fallback only fires when row 0 found nothing");
+  });
+});
