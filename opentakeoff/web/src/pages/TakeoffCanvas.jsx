@@ -172,7 +172,7 @@ import { recordBasIssueFromUi } from "../components/basIssueClient.ts";
 import { recordBasScopeFromUi } from "../components/basScopeClient.ts";
 import { basRevisionOperationSchema, assertBasRevisionResponse } from "../lib/basRevisionOperations.ts";
 import { applyBasEquipmentReview } from "../lib/basEquipmentReview.ts";
-import { normRect } from "../lib/sweepThumb.js";
+import { normRect, matchBox } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
 // docked diagram/reorder desk. Cut edits commit through the rollcut command.
@@ -12311,17 +12311,31 @@ export default function TakeoffCanvas() {
                     <line x1={at[0] + ox - 8 * k} y1={at[1] + 8 * k} x2={at[0] + ox + 8 * k} y2={at[1] - 8 * k} />
                   </g>
                 );
+                // A match/accepted row draws as a BOUNDING BOX around the
+                // seed's own footprint at that placement's rotation (the
+                // same box the review panel's own thumbnails already use,
+                // matchBox/sweepThumb.js), not an abstract X — "what got
+                // matched" should read as "this shape, right here" against
+                // the ink underneath, not just point at a trusted centroid.
+                // Falls back to the old X when sweep.seed.rect is missing (a
+                // review restored before this box existed).
+                const Box = (row, color, w) => {
+                  const box = sweep.seed.rect && matchBox(row.at, sweep.seed.rect, 0.15, row.transform?.rotation_deg ?? row.rotation ?? 0);
+                  if (!box) return X(row.at, color, w);
+                  return <rect x={box.x0 + ox} y={box.y0} width={box.x1 - box.x0} height={box.y1 - box.y0}
+                    fill="none" stroke={color} strokeWidth={w * k} strokeOpacity={0.6} />;
+                };
                 return (
                   <g pointerEvents="none">
                     <circle cx={sweep.seed.center[0] + ox} cy={sweep.seed.center[1]} r={15 * k} fill="none" stroke={DS.symbol.seed} strokeWidth={2 * k} strokeOpacity={0.65} />
                     <circle cx={sweep.seed.center[0] + ox} cy={sweep.seed.center[1]} r={9 * k} fill="none" stroke={DS.symbol.seed} strokeWidth={2 * k} strokeOpacity={0.65} />
                     {sweep.matches.map((m, i) => {
                       const offTag = sweep.excludedTags.includes((m.label && m.label.label) || "\u2205");
-                      return <g key={`m${i}`} opacity={offTag ? 0.22 : 1}>{X(m.at, activeColor, 2.4)}</g>;
+                      return <g key={`m${i}`} opacity={offTag ? 0.22 : 1}>{Box(m, activeColor, 2.4)}</g>;
                     })}
                     {sweep.questions.map((q, i) => {
                       if (q.state === "dismissed") return null;
-                      if (q.state === "accepted") return <g key={`q${i}`}>{X(q.at, activeColor, 2.4)}</g>;
+                      if (q.state === "accepted") return <g key={`q${i}`}>{Box(q, activeColor, 2.4)}</g>;
                       return (
                         <g key={`q${i}`}>
                           <circle cx={q.at[0] + ox} cy={q.at[1]} r={13 * k} fill="none" stroke={DS.symbol.question} strokeWidth={(i === sweep.qIndex ? 3.4 : 2.2) * k} strokeOpacity={i === sweep.qIndex ? 0.85 : 0.6} />
