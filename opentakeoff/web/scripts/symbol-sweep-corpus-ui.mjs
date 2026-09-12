@@ -148,13 +148,30 @@ for (const c of cases) {
     // contention going forward) — widened further for real margin.
     await page.waitForFunction((k) => (window.__opentakeoff.probe.segCount(k) || 0) > 0, key, { timeout: 480_000 });
 
-    const swept = await page.evaluate(({ k, rect }) => window.__opentakeoff.probe.sweepRect(k, rect), { k: key, rect: c.seed_rect });
+    // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's own case-44 Finding: segCount
+    // going > 0 is NOT a reliable "runSymbolSweep can now read the segs"
+    // signal — traced directly (a temporary debug probe, not committed) to
+    // a real race where sweepRect's own probe.sweepRect() returns {ok:true}
+    // but runSymbolSweep silently refused with "no vector linework" because
+    // vectorSegsRef wasn't yet stably populated for this key, even though
+    // segCount() already reported >0. A 5s settle wait made it reproduce
+    // clean every time. Retry the sweep itself (not just the poll below) so
+    // a case that hits this race gets a real second attempt instead of a
+    // false "no review opened".
+    let swept = await page.evaluate(({ k, rect }) => window.__opentakeoff.probe.sweepRect(k, rect), { k: key, rect: c.seed_rect });
     if (swept?.error) errors.push(`sweep error: ${swept.error}`);
-    // Poll, don't sleep a fixed amount — affine (continuous rotation +
-    // bounded stretch/shear) is the standard search now, and a dense sheet
-    // can take several real seconds to finish; a short fixed wait here was
-    // measured to occasionally read the review before React applied it.
-    await page.waitForFunction(() => window.__opentakeoff.probe.sweep() != null, null, { timeout: 60_000 }).catch(() => {});
+    let opened = await page.waitForFunction(() => window.__opentakeoff.probe.sweep() != null, null, { timeout: 15_000 }).then(() => true).catch(() => false);
+    if (!opened) {
+      await page.waitForTimeout(2000);
+      swept = await page.evaluate(({ k, rect }) => window.__opentakeoff.probe.sweepRect(k, rect), { k: key, rect: c.seed_rect });
+      if (swept?.error) errors.push(`sweep error (retry): ${swept.error}`);
+      // Poll, don't sleep a fixed amount — affine (continuous rotation +
+      // bounded stretch/shear) is the standard search now, and a dense
+      // sheet can take several real seconds to finish; a short fixed wait
+      // here was measured to occasionally read the review before React
+      // applied it.
+      await page.waitForFunction(() => window.__opentakeoff.probe.sweep() != null, null, { timeout: 60_000 }).catch(() => {});
+    }
 
     const sweep = await page.evaluate(() => {
       const s = window.__opentakeoff.probe.sweep();
