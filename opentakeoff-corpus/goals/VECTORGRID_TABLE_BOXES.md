@@ -137,3 +137,35 @@ miss. A held-out score is not licence to regress the measured one.
 - `vectorgrid` declines a large share of what it finds: 53 declined against 90
   kept on `001_NC`, 22 against 28 on `016_NY`. Some of that is correct. How
   much is unknown.
+
+**Added 2026-09-12, from the running bug catalogue — confirmed real, in
+scope (all vector-native, no raster/OCR path involved), not yet closed:**
+
+- **B-13 (`TAKEOFF_BUG_CATALOGUE.md`) — wrapped multi-line cells never band
+  into rows at all.** `13_MI…#28`'s FIRE ALARM DEVICES SCHEDULE: vectorgrid's
+  box is correct, the header is accepted, and `bandGenericDataRows` still
+  returns 0 rows because DESCRIPTION/REMARKS wrap 2-4 printed lines and the
+  SYMBOL column is a drawn glyph with no text. This is a silent zero, not a
+  refusal — highest-priority open item, since wrapped cells are near-universal
+  on real MEP schedules and every instance of this bug is invisible to every
+  score in this file that isn't specifically a held-out volume read.
+- **B-10 / task #77 — a full-width section-divider row between two groups of
+  data rows bands into the narrow column beneath it** (`028_TX#p1` NOISE
+  CONTROL DUCT SILENCER SCHEDULE; `042_VA` "INDOOR AREA TEMPERATURE/HUMIDITY
+  SETPOINTS" is very likely the same failure mode on a different sheet, not
+  yet confirmed as such). Corrupts one row's quantity cell and produces a
+  correctly-disclosed but real one-unit undercount. Fix shape is named in
+  B-10 (test row population + x-band span, not position) but not applied.
+- **Task #74 vs. `STATE.md` §2a item 4 — an unresolved contradiction in this
+  project's own records.** `STATE.md` claims `08_ME#1`'s DRAWING LIST
+  cover-sheet table was fixed by the dangle-discard fix (89.3% → 91.0%);
+  task #74 is still open, saying the same table is "invisible to every
+  extraction path." One of these is stale. Five-minute check: render
+  `08_ME#1` and run it through the live pipeline before doing anything else
+  in this file, since it may mean the box-only bakeoff score and the live
+  Session path have diverged.
+- **Task #82 — HVAC equipment compile totals reported wrong on 6+ corpus
+  sets, not yet root-caused with this file's own render-and-read discipline.**
+  Unlike the others above, this has not been traced to a specific sheet or
+  mechanism yet — do that first, the same way B-3/B-4/B-7/B-11/B-12 were each
+  traced against one real cited page before any fix was written.
