@@ -140,7 +140,17 @@ export async function inspectBasScopeHistory(raw: unknown) {
  * cannot establish its result. Never accept caller-supplied coverage arrays. */
 export async function prepareBasScopeReadiness(raw: unknown, eventId: string, signal?: AbortSignal) {
   sha.parse(eventId); signal?.throwIfAborted();
-  const workflow = await verifyBasWorkflow(raw), journal = history(workflow);
+  const workflow = await verifyBasWorkflow(raw); signal?.throwIfAborted();
+  return prepareBasScopeReadinessForVerifiedWorkflow(workflow, eventId, signal);
+}
+
+/** Internal shared composition seam. The caller must own the exact result of
+ * verifyBasWorkflow; public raw-input paths continue through the wrapper above.
+ * This prevents archive source verification and readiness from auditing the
+ * same immutable history twice in one operation. */
+export async function prepareBasScopeReadinessForVerifiedWorkflow(workflow: BasWorkflow, eventId: string, signal?: AbortSignal) {
+  sha.parse(eventId); signal?.throwIfAborted();
+  const journal = history(workflow);
   const scope = savedScope(workflow, eventId), preview = previews(workflow, signal);
   if (journal.scopes.get(scope.scope_id)?.event_id !== scope.event_id)
     throw new Error('Readiness requires the current saved scope, not a superseded or withdrawn scope');

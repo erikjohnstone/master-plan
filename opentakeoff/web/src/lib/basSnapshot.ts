@@ -5,7 +5,10 @@ import { z } from 'zod';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 import { parseTakeoffImport } from './importTakeoff.js';
-import { buildBasReadiness, BAS_READINESS_RULE, type BasReadinessIO } from './basReadiness.ts';
+import { ANN_SCHEMA } from './store.js';
+import { buildBasReadinessForVerifiedWorkflow, BAS_READINESS_RULE, type BasReadinessIO } from './basReadiness.ts';
+import { inspectBasSourceHistory, type BasSourceInventoryItem } from './basSourceRetention.ts';
+import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 
 export const BAS_SNAPSHOT_RULE = 'bas_scoped_snapshot_1' as const;
 export const BAS_SNAPSHOT_JSON_LIMIT = 256 * 1024 ** 2;
@@ -39,21 +42,59 @@ export type BasSnapshotRecord = z.infer<typeof basSnapshotRecordSchema>;
 export type BasSnapshotPlan = { readonly kind: 'bas_snapshot_plan'; readonly snapshot_id: string };
 type OwnedPlan = { payload_json: string; record: BasSnapshotRecord; signal?: AbortSignal; mode: 'create' | 'reopen' };
 const plans = new WeakMap<BasSnapshotPlan, OwnedPlan>();
+/** Private handoff from the archive parser to snapshot replay. The archive
+ * parser owns this object and never exposes its mutable payload to a caller.
+ * This avoids cloning/canonicalizing/parsing the same large takeoff twice. */
+export type BasSnapshotArchiveInput = { readonly kind: 'bas_snapshot_archive_input'; readonly takeoff_sha256: string };
+type OwnedTakeoff = { json: string; bytes: Uint8Array; payload: ReturnType<typeof parseTakeoffImport> };
+type OwnedArchiveInput = OwnedTakeoff & { verified_workflow: BasWorkflow };
+const archiveInputs = new WeakMap<BasSnapshotArchiveInput, OwnedArchiveInput>();
 const encode = (v: unknown) => new TextEncoder().encode(canonicalBasJson(v));
 const hash = (v: unknown) => sha256Hex(encode(v));
 
-function ownTakeoff(raw: unknown) {
-  const json = canonicalBasJson(structuredClone(raw)), bytes = new TextEncoder().encode(json);
+function ownTakeoff(raw: unknown): OwnedTakeoff {
+  // Own the complete envelope before any await. Full BAS schema, reference and
+  // fingerprint validation follows in buildBasReadiness; repeating the same
+  // whole-history Zod parse here would retain a second large object for no
+  // additional trust decision.
+  const payload = structuredClone(raw) as ReturnType<typeof parseTakeoffImport>;
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload) || payload.schema !== ANN_SCHEMA)
+    throw new Error(`Couldn't import takeoff: not a takeoff export (expected schema "${ANN_SCHEMA}" — the file export_takeoff or the app writes).`);
+  const json = canonicalBasJson(payload), bytes = new TextEncoder().encode(json);
   if (bytes.length > BAS_SNAPSHOT_JSON_LIMIT) throw new Error('BAS snapshot takeoff exceeds the supported size limit');
-  const payload = parseTakeoffImport(json);
   if (!payload.bas_workflow) throw new Error('BAS snapshot requires saved workflow evidence');
   return { json, bytes, payload };
+}
+
+/** Parse one canonical archive entry into opaque, privately owned state.
+ * Canonical bytes, schema and full workflow history are all checked here.
+ * Returned inventory is an independent value; mutating it cannot affect replay. */
+export async function prepareBasSnapshotArchiveInput(rawJson: unknown, signal?: AbortSignal): Promise<{
+  input: BasSnapshotArchiveInput; inventory: BasSourceInventoryItem[];
+}> {
+  signal?.throwIfAborted();
+  if (typeof rawJson !== 'string') throw new Error('BAS snapshot archive takeoff must be canonical JSON');
+  const bytes = new TextEncoder().encode(rawJson);
+  if (bytes.length > BAS_SNAPSHOT_JSON_LIMIT) throw new Error('BAS snapshot takeoff exceeds the supported size limit');
+  const payload = parseTakeoffImport(rawJson);
+  if (!payload.bas_workflow) throw new Error('BAS snapshot requires saved workflow evidence');
+  if (canonicalBasJson(payload) !== rawJson) throw new Error('Noncanonical BAS archive takeoff JSON');
+  const verified = await inspectBasSourceHistory(payload.bas_workflow); signal?.throwIfAborted();
+  // The parsed payload is private. Retain the audited equivalent instead of
+  // keeping both full workflow object graphs alive through readiness replay.
+  payload.bas_workflow = verified.workflow;
+  const input: BasSnapshotArchiveInput = Object.freeze({ kind: 'bas_snapshot_archive_input',
+    takeoff_sha256: await sha256Hex(bytes) });
+  archiveInputs.set(input, { json: rawJson, bytes, payload, verified_workflow: verified.workflow });
+  return { input, inventory: structuredClone(verified.inventory) };
 }
 function ownPlan(payload_json: string, record: BasSnapshotRecord, mode: OwnedPlan['mode'], signal?: AbortSignal) {
   signal?.throwIfAborted();
   if (encode(record).length > BAS_SNAPSHOT_JSON_LIMIT) throw new Error('BAS snapshot record exceeds the supported size limit');
   const plan: BasSnapshotPlan = Object.freeze({ kind: 'bas_snapshot_plan', snapshot_id: record.snapshot_id });
-  plans.set(plan, { payload_json, record: structuredClone(record), mode, signal });
+  // Every caller above supplies a schema-parsed record it privately owns.
+  // Keep that object private; readBasSnapshotPlan remains the copy boundary.
+  plans.set(plan, { payload_json, record, mode, signal });
   return plan;
 }
 /** Only a plan produced by fresh shared verification can cross a commit/export
@@ -92,7 +133,9 @@ export async function prepareBasSnapshotApproval(rawPayload: unknown, rawRequest
   if (origin !== 'operator_input') throw new Error('BAS snapshot approval requires an explicit operator action');
   const request = basSnapshotApprovalRequestSchema.parse(structuredClone(rawRequest));
   const input = ownTakeoff(rawPayload);
-  const readiness = await buildBasReadiness(input.payload.bas_workflow, request.scope_event_id, io, signal);
+  const verifiedWorkflow = await verifyBasWorkflow(input.payload.bas_workflow); signal?.throwIfAborted();
+  input.payload.bas_workflow = verifiedWorkflow;
+  const readiness = await buildBasReadinessForVerifiedWorkflow(verifiedWorkflow, request.scope_event_id, io, signal);
   if (readiness.status !== 'ready_for_explicit_approval')
     throw new Error(`BAS snapshot is blocked: ${[...new Set(readiness.blockers.map(b => b.code))].slice(0, 12).join(', ')}`);
   const declaration = declarationSchema.parse({ ...request, origin, reviewer_identity: 'self_declared', timestamp_authority: 'local_untrusted' });
@@ -114,10 +157,33 @@ export async function prepareBasSnapshotApproval(rawPayload: unknown, rawRequest
 export async function verifyBasSnapshot(rawPayload: unknown, rawRecord: unknown, io: BasReadinessIO = {}, signal?: AbortSignal) {
   signal?.throwIfAborted();
   const input = ownTakeoff(rawPayload);
+  return verifyOwnedSnapshot(input, rawRecord, io, signal);
+}
+
+/** Archive-only verifier. The opaque input is consumed once, after which its
+ * parsed payload is transferred to the caller. No mutable object is shared
+ * across the trust boundary and every ordinary snapshot check still runs. */
+export async function verifyBasSnapshotArchiveInput(input: BasSnapshotArchiveInput, rawRecord: unknown,
+  io: BasReadinessIO = {}, signal?: AbortSignal) {
+  const owned = archiveInputs.get(input);
+  if (!owned) throw new Error('BAS snapshot requires an owned canonical archive input');
+  try {
+    const plan = await verifyOwnedSnapshot(owned, rawRecord, io, signal, owned.verified_workflow);
+    return { plan, payload: owned.payload };
+  } finally {
+    archiveInputs.delete(input);
+  }
+}
+
+async function verifyOwnedSnapshot(input: OwnedTakeoff, rawRecord: unknown,
+  io: BasReadinessIO, signal?: AbortSignal, verifiedWorkflow?: BasWorkflow) {
+  signal?.throwIfAborted();
   const record = await verifyBasSnapshotRecordIdentity(rawRecord), { snapshot } = record;
   if (input.bytes.length !== snapshot.takeoff.byte_length || await sha256Hex(input.bytes) !== snapshot.takeoff.sha256)
     throw new Error('BAS snapshot takeoff hash/length mismatch');
-  const readiness = await buildBasReadiness(input.payload.bas_workflow, snapshot.declaration.scope_event_id, io, signal);
+  verifiedWorkflow ??= await verifyBasWorkflow(input.payload.bas_workflow); signal?.throwIfAborted();
+  input.payload.bas_workflow = verifiedWorkflow;
+  const readiness = await buildBasReadinessForVerifiedWorkflow(verifiedWorkflow, snapshot.declaration.scope_event_id, io, signal);
   if (readiness.status !== 'ready_for_explicit_approval' || readiness.workflow_sha256 !== snapshot.workflow_sha256
     || canonicalBasJson(readiness) !== snapshot.readiness_json) throw new Error('BAS snapshot readiness does not replay exactly');
   return ownPlan(input.json, record, 'reopen', signal);

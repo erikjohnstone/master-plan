@@ -1,5 +1,43 @@
 # BAS production workflow progress
 
+## Snapshot composition and final gate rerun — 2026-09-12
+
+SHOULD THIS BE ON THE SHARED PATH? **Yes.** Snapshot truth, original-source
+inventory, replay and export identity are shared UI/MCP authority. The archive
+reopen path now carries one opaque, privately owned canonical takeoff from ZIP
+validation into readiness replay. Its already fully verified workflow is reused
+within that operation instead of running the same equipment/assembly/engineering
+history audit again. Snapshot creation replaces its private pre-verification
+workflow with the audited equivalent before projection. There is no public skip
+flag; canonical bytes, schema, every event/fingerprint/register, source inventory,
+fresh original hashes, readiness and actual Python replay remain required. The
+ordinary backup format and public raw snapshot verifier retain their contracts.
+No extraction, VectorGrid, symbol, legend, table, bbox, citation or Python-math
+logic changed.
+
+Focused web security/persistence tests pass **67/67** and MCP snapshot/file tests
+pass **4/4** with configured Python. The full web rerun passes **2,999/3,012**
+with the same 13 existing skips and zero failures; typecheck, production build,
+and lint with the same three existing warnings pass. The full MCP BAS chain
+passes 128 BAS, 33 revision, six issue and 17 scope tests plus its configured
+benchmarks, production package build and distribution smoke check.
+
+The formerly slow scope benchmark passes when the heavily contended host clears:
+save **1.033–1.126 s**, coverage **0.995–1.096 s**, read after unrelated edit
+**1.466–1.577 s**, and **209,125,376-byte** incremental peak RSS, under unchanged
+5 s/512 MiB limits. Readiness passes at **1.652–1.975 s** and
+**388,333,568 bytes** under unchanged 10 s/512 MiB limits. The prior red scope
+run remains evidence of host contention, not a hidden pass.
+
+The fixed source-backed combined snapshot probe still fails its unchanged memory
+gate. Current exact functional roundtrip: setup **17.753 s**, prepare **2.947 s**,
+archive **0.548 s**, reopen **3.520 s**, two included claims, 458 retained issues,
+all 31 Python calculation records and the exact 924,578-byte Fort Sam original;
+incremental peak RSS **638,959,616 bytes** versus **536,870,912 allowed**. A V8
+allocation diagnostic showed archive/reopen estimated churn reduced from the
+historical 2.035/7.718 GB to 0.771/3.940 GB before the final retention cleanup,
+but peak RSS is still red and is not reported as production-passing.
+
 ## Five deterministic workflows — final browser walkthroughs, 2026-09-12
 
 All five bounded BAS workflows now have successful public-browser walkthroughs
@@ -63,10 +101,10 @@ configured mypy passes 21 source files. The generic room benchmark and productio
 web build pass. Readiness on the 3.5 MB/456-finding retained workflow passes its
 10 s and 512 MiB limits at 5.315–6.741 s and 322,256,896 incremental bytes.
 
-The separate scope-journal benchmark does not pass its predeclared 5 s operation
-limit on this loaded host. Its three save/coverage/read ranges were
-4.162–5.335/4.064–4.570/5.954–9.212 s; incremental peak RSS was 170,016,768 bytes,
-within the 512 MiB memory limit. The limit and fixture were not weakened. MCP
+An earlier scope-journal benchmark did not pass its predeclared 5 s operation
+limit while this host was heavily loaded. Its three save/coverage/read ranges were
+4.162–5.335/4.064–4.570/5.954–9.212 s; incremental peak RSS was 170,016,768 bytes.
+The unchanged rerun now passes with the exact results recorded above. MCP
 typecheck and the 128 BAS, 33 revision, six issue and 17 scope-focused tests pass;
 the package build, distribution smoke check and 55-tool metadata gate pass. Three
 conformance tests that timed out while the full real-PDF suite saturated shared
@@ -81,9 +119,8 @@ exhausted the default 2 GiB Node heap and required a disclosed 4 GiB browser-tes
 run. The real source-backed snapshot journey remains functionally correct but its
 previous measured incremental RSS is above the separate 512 MiB target. No spec
 book ingestion, learned/vision symbol work or field-installed verification is in
-this branch. The scope-journal latency gate above is also open. These facts prevent
-a blanket production-complete claim even though the five bounded human-in-loop
-journeys now work end to end.
+this branch. These facts prevent a blanket production-complete claim even though
+the five bounded human-in-loop journeys now work end to end.
 
 ## Five-workflow completion resumed; symbol work delegated — 2026-09-12
 

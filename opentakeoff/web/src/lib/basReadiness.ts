@@ -1,6 +1,6 @@
 /** SHOULD THIS BE ON THE SHARED PATH? Yes. One computed prerequisite for UI/MCP
  * explicit scoped approval. No extraction, math, persistence or approval here. */
-import { prepareBasScopeReadiness } from './basScopeReview.ts';
+import { prepareBasScopeReadiness, prepareBasScopeReadinessForVerifiedWorkflow } from './basScopeReview.ts';
 import { basDeliverableTargetKey } from './basDeliverableScopeContract.ts';
 import { evaluateBasReadinessCoverage, basReadinessDiagnosticBlocks, type BasReadinessBlocker } from './basReadinessCoverage.ts';
 import { evaluateBasReadinessIssues } from './basReadinessIssues.ts';
@@ -24,6 +24,21 @@ export type BasReadinessIO = {
 export async function buildBasReadiness(raw: unknown, scopeEventId: string, io: BasReadinessIO = {}, signal?: AbortSignal) {
   const adapters = { ...io }; signal?.throwIfAborted();
   const input = await prepareBasScopeReadiness(raw, scopeEventId, signal);
+  return buildBasReadinessFromPrepared(input, adapters, signal);
+}
+
+/** Internal shared composition seam for a workflow already fully audited by
+ * verifyBasWorkflow in this same operation. There is deliberately no public
+ * request field that can select this path. */
+export async function buildBasReadinessForVerifiedWorkflow(workflow: BasWorkflow, scopeEventId: string,
+  io: BasReadinessIO = {}, signal?: AbortSignal) {
+  const adapters = { ...io }; signal?.throwIfAborted();
+  const input = await prepareBasScopeReadinessForVerifiedWorkflow(workflow, scopeEventId, signal);
+  return buildBasReadinessFromPrepared(input, adapters, signal);
+}
+
+async function buildBasReadinessFromPrepared(input: Awaited<ReturnType<typeof prepareBasScopeReadiness>>,
+  adapters: BasReadinessIO, signal?: AbortSignal) {
   const { workflow, scope, current, original } = input;
   const workflow_sha256 = await sha256Hex(new TextEncoder().encode(canonicalBasJson(workflow)));
   const coverage = evaluateBasReadinessCoverage(input, signal), blockers: BasReadinessBlocker[] = [...coverage.blockers];
