@@ -1090,3 +1090,86 @@ export function reconcileSweepLabels(
     demoted,
   };
 }
+
+export interface PositionedSweepMatches {
+  matches: SweepMatch[];
+  withheld: SweepWithheld[];
+  withheldLabels: (PlacementLabel | null)[];
+}
+
+/** docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F — a `hold: "density"` row
+ * is, by construction, never degenerate (only `hold: "bounds"` rows are);
+ * when one scores higher than an ALREADY-labeled, already-counted match
+ * within the seed's own shadow-suppression radius, it is very likely a more
+ * precisely-located reading of the SAME physical instance the tag already,
+ * correctly, identified — the committed match's own coordinate was just
+ * imprecise. This corrects ONLY the reported position/score/transform of an
+ * already-decided match; it never touches which match owns which label, nor
+ * whether anything is promoted or demoted, so it cannot reopen case `11`'s
+ * own regression (Phase B) the way transferring the TAG itself did.
+ *
+ * A placement's own corroborating tag/leader box (`token_bbox`) is real,
+ * drawn evidence of where its physical instance actually sits — the SAME
+ * signal the ground-truth reviewers used by hand to disambiguate a tight
+ * cluster of near-identical readings ("own literal equipment leaders attach
+ * to the same [equipment] family", case `17`'s own review notes). Used only
+ * to pick among candidates that already cleared every other gate below;
+ * never on its own.
+ *
+ * Factored out of mcp/src/session.ts (where this shipped first, as an
+ * MCP-agent-only fix) specifically so every caller of `reconcileSweepLabels`
+ * — the MCP tool paths AND TakeoffCanvas.jsx's own manual Symbol-tool
+ * marquee — applies the SAME correction. A fix that lives only in one
+ * caller is not a fix for the product; a real human dragging the marquee
+ * must see exactly what an agent calling `symbol_sweep` sees. */
+export function positionMatchesToClosestReading(
+  matches: SweepMatch[],
+  matchLabels: (PlacementLabel | null)[],
+  withheld: SweepWithheld[],
+  withheldLabels: (PlacementLabel | null)[],
+  footprint: number,
+): PositionedSweepMatches {
+  const mergeR = footprint / 2;
+  const anchorDist = (at: Point, label: PlacementLabel | null | undefined): number | null => {
+    if (!label?.token_bbox) return null;
+    const [x0, y0, x1, y1] = label.token_bbox;
+    const nx = Math.min(Math.max(at[0], x0), x1);
+    const ny = Math.min(Math.max(at[1], y0), y1);
+    return Math.hypot(at[0] - nx, at[1] - ny);
+  };
+  const usedWithheld = new Set<number>();
+  const positionedMatches = matches.map((m, mi) => {
+    const lbl = matchLabels[mi];
+    const usable: { w: SweepWithheld; i: number }[] = [];
+    for (let i = 0; i < withheld.length; i++) {
+      const w = withheld[i];
+      if (usedWithheld.has(i) || w.hold !== "density" || w.score <= m.score) continue;
+      if (Math.hypot(w.at[0] - m.at[0], w.at[1] - m.at[1]) > mergeR) continue;
+      usable.push({ w, i });
+    }
+    if (!usable.length) return m;
+    // §3 Phase D/F Findings: several candidates around one busy real
+    // location can score nearly identically (a phantom scoring 1.0, 18px
+    // from the true reading at 0.992) — score alone cannot break that tie.
+    // When this match's own tag gives an anchor, prefer whichever candidate
+    // sits closest to it; otherwise keep the original highest-score rule
+    // unchanged (every case with zero or one usable candidate here behaves
+    // exactly as before).
+    let chosen = usable[0];
+    if (lbl?.token_bbox) {
+      let bestD = anchorDist(chosen.w.at, lbl)!;
+      for (const cand of usable.slice(1)) {
+        const d = anchorDist(cand.w.at, lbl)!;
+        if (d < bestD) { chosen = cand; bestD = d; }
+      }
+    } else {
+      for (const cand of usable.slice(1)) if (cand.w.score > chosen.w.score) chosen = cand;
+    }
+    usedWithheld.add(chosen.i);
+    const bestW = chosen.w;
+    return { ...m, at: bestW.at, score: bestW.score, rotation: bestW.rotation, mirrored: bestW.mirrored, ...(bestW.transform ? { transform: bestW.transform } : { transform: undefined }) };
+  });
+  const positionedWithheld = withheld.filter((_, i) => !usedWithheld.has(i));
+  const positionedWithheldLabels = withheldLabels.filter((_, i) => !usedWithheld.has(i));
+  return { matches: positionedMatches, withheld: positionedWithheld, withheldLabels: positionedWithheldLabels };
+}

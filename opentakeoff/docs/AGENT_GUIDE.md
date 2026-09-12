@@ -205,19 +205,20 @@ asked.
 | `symbol_sweep` | placements your own counter-example rejected, in `rejected[]` — which negative, its mode (shape / crossing), and the fraction of its evidence found | the geometry accepted it and your exclusion refused it: an exclusion is a judgement, and judgements get revised | look at each; `place_count` at its `at` reinstates one you disagree with, no re-run |
 | `symbol_sweep` | placements your stated `luminance_tolerance` pulled under the commit bar, in `lum_gate.at` — with the tolerance and the seed's own luminance band | the geometry would have committed it and the pen refused it: a symbol redrawn in a different pen fails the gate honestly | look at each; `place_count` reinstates, or widen the stated tolerance |
 | `symbol_sweep` | the drawing's own tag on every row (`label`/`label_via`, #308) — and the note's three flags: a match with NO label in a labeled family, a withheld row carrying the seed's own tag, a row named a different tag | shape says "looks like one"; the label says what the drafter called it — identity in both directions | trust tag-confirmed rows more; LOOK at unlabeled matches first (measured case: two 0.97 "drains" that were valve internals); `place_count` a withheld row the drawing vouches for |
-| `symbol_sweep`, `sweep_schedule_row` (`affine.enabled: true`, docs/SYMBOL-SWEEP-AFFINE-GOAL.md) | placements withheld with a distortion beyond the stated bounds — the reason names the measured stretch/shear (e.g. `1.6× / 1× stretch and 0° shear`) against the bar (default 1.5× / 10°) | the geometry fit but the distortion is large enough that this may be a different device drawn to look alike, not the seed rotated/resized on the sheet | `view_sheet` the coordinates and decide by looking; raise `affine.max_stretch`/`max_shear_deg` only if this drawing set genuinely stretches its symbols that much |
+| `symbol_sweep` (on by default, docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's default flip; `sweep_schedule_row`'s own `affine` stays opt-in) | placements withheld with a distortion beyond the stated bounds — the reason names the measured stretch/shear (e.g. `1.6× / 1× stretch and 0° shear`) against the bar (default 1.5× / 10°) | the geometry fit but the distortion is large enough that this may be a different device drawn to look alike, not the seed rotated/resized on the sheet | `view_sheet` the coordinates and decide by looking; raise `affine.max_stretch`/`max_shear_deg` only if this drawing set genuinely stretches its symbols that much, or pass `affine: {enabled: false}` for the old rigid-only search |
 | `sweep_schedule_row` | `excluded` (labeled with a sibling key), `withheld` (unlabeled), `text_only` (a tag with no marker) | drafting reuses one bubble shape across many marks, so geometry alone would over-count | look at each; the exclusions are usually right and the unlabeled ones are usually yours |
 | `derive_transitions` | wall-separated runs, in `withheld` with a length, a gap in inches, and an `at` point | the two rooms are adjacent across a partition, so the real transition is a threshold in a doorway that nothing in the trace record locates | measure the threshold at the door with `measure_line`, or hand the run to the estimator |
 
 `withheld_lf` is never folded into `total_lf`. A withheld item you ignore is a hole in the bid;
 one you never mention is worse. Report them in your summary even when you can't resolve them.
 
-With `affine.enabled: true`, any `symbol_sweep`/`sweep_schedule_row` row (match or withheld) that
-was found by rotation/stretch search — not the plain 90°-multiple rigid search — carries a
-`transform` object: `rotation_deg` (continuous, not just 0/90/180/270), `scale_x`/`scale_y`,
-`shear_deg`, `mirrored`, and `via` (which mechanism found it — `rigid`, `rotation`, or `affine`).
-Absent on a row the rigid path committed without help, so a sweep with `affine` off, or a
-placement the rigid search already nailed, reports exactly what it always has.
+With affine search active (the `symbol_sweep` default; opt-in via `affine.enabled: true` for
+`sweep_schedule_row`), any row (match or withheld) that was found by rotation/stretch search — not
+the plain 90°-multiple rigid search — carries a `transform` object: `rotation_deg` (continuous, not
+just 0/90/180/270), `scale_x`/`scale_y`, `shear_deg`, `mirrored`, and `via` (which mechanism found
+it — `rigid`, `rotation`, or `affine`). Absent on a row the rigid path committed without help, so
+a placement the rigid search already nailed reports exactly what it always has; pass
+`affine: {enabled: false}` on `symbol_sweep` to go back to the plain rigid-only search entirely.
 
 And SHOW them (#297): `view_sheet` takes `marks` — pass `withheld` coordinates as `question`,
 `rejected[]`/`lum_gate.at` as `struck`, and the sweep's `seed.center` as `ring` — so the render

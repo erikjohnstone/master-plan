@@ -60,7 +60,13 @@ try {
 
   const res = await page.evaluate(({ k, rect }) => window.__opentakeoff.probe.sweepRect(k, rect), { k: key, rect: c.seed_rect });
   check("the sweep ran from the corpus seed rect", !res?.error, JSON.stringify(res));
-  await page.waitForTimeout(1200);
+  // Poll instead of a fixed sleep: docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's
+  // default flip makes affine (continuous rotation + bounded stretch/shear)
+  // the standard search, not the old rigid-only path — a large, dense sheet
+  // (100k+ segments) can genuinely take several seconds longer to finish,
+  // and a fixed short wait here was measured to occasionally read the
+  // review state before React had actually applied it (flake, not a bug).
+  await page.waitForFunction(() => window.__opentakeoff.probe.sweep() != null, null, { timeout: 60_000 }).catch(() => {});
 
   const sweep = await page.evaluate(() => {
     const s = window.__opentakeoff.probe.sweep();

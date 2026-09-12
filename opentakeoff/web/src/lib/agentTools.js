@@ -67,7 +67,7 @@
 //   editCondition(tag, opts): { condition_id, finish_tag, ... } | { error }
 //   editMaterials(tag, opts): { condition_id, finish_tag, materials } | { error }
 
-import { affineOptionsFromWire } from "./symbolsweep.ts";
+import { affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "./symbolsweep.ts";
 
 // ── evidence whitelist ───────────────────────────────────────────────────────
 // Mirrors contribute.js's wire-side deep whitelist byte-for-byte: applying it
@@ -310,9 +310,9 @@ export const AGENT_TOOL_DEFS = [
         luminance_tolerance: { type: "number", minimum: 0, maximum: 254, description: "Optional stroke-luminance gate (0=black..255=white) for flattened exports where a real device and a background twin are geometrically identical but drawn in different pen colors." },
         affine: {
           type: "object",
-          description: "Off by default. Also search continuous (off-grid) rotation and bounded stretch/shear, not just 0/90/180/270 — a symbol drawn rotated ~37° or stretched to fit a tight run is otherwise invisible to the search entirely, not just low-scoring. A match under this gets a `transform` field disclosing the actual fit; a fit past max_stretch/max_shear_deg is withheld naming the distortion, never silently counted.",
+          description: "ON by default (omit this entirely to get it) — also searches continuous (off-grid) rotation and bounded stretch/shear, not just 0/90/180/270, so a symbol drawn rotated ~37° or stretched to fit a tight run is proposable at all, not just low-scoring. A match under this gets a `transform` field disclosing the actual fit; a fit past max_stretch/max_shear_deg is withheld naming the distortion, never silently counted. Pass { enabled: false } to opt out to the old rigid-only search.",
           properties: {
-            enabled: { type: "boolean", description: "Default false." },
+            enabled: { type: "boolean", description: "Default true when this object is omitted entirely; false only if you pass this object yourself without setting it." },
             max_stretch: { type: "number", description: "Bound on scale_x/scale_y to commit as a match. Default 1.5." },
             max_shear_deg: { type: "number", description: "Bound on shear degrees to commit as a match. Default 10." },
             scale_search: { type: "boolean", description: "Also propose anisotropic stretch a single rotated segment can't fix on its own. Default false, even when enabled is true — turn on only when this drawing set genuinely stretches its symbols." },
@@ -916,13 +916,20 @@ export async function executeAgentTool(ctx, name, args) {
         if (!args.seed_rect_norm && !(Array.isArray(args.seed_point_norm) && args.seed_point_norm.length === 2)) {
           return { error: "Pass either seed_rect_norm (marquee two corners) or seed_point_norm ([x,y], one click near the symbol)." };
         }
+        // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's default flip — mirrors
+        // mcp/src/tools.ts's own zod-level `.default(AFFINE_WIRE_DEFAULT)`
+        // on the whole object (not just the inner `enabled`): a real agent
+        // call that omits `affine` gets the SAME AFFINE_WIRE_DEFAULT
+        // configuration the corpus gate has run under all along, not the
+        // old rigid-only path. `{ affine: { enabled: false } }` still opts
+        // a caller OUT explicitly.
         return await ctx.symbolSweep(args.sheet, args.seed_rect_norm ? clampRegion(args.seed_rect_norm) : null, {
           rotations: args.rotations !== false,
           mirror: args.mirror !== false,
           tolerancePx: args.tolerance_px,
           luminanceTolerance: args.luminance_tolerance,
           pointNorm: args.seed_point_norm,
-          ...(args.affine ? { affine: affineOptionsFromWire(args.affine) } : {}),
+          affine: affineOptionsFromWire(args.affine || AFFINE_WIRE_DEFAULT),
         });
       }
 

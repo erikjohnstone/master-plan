@@ -327,7 +327,7 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // here exactly as netroom.js's room detector already uses it, as a fallback
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
-import { placementLabelFamily, labelPlacements, reconcileSweepLabels, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
+import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -2969,67 +2969,15 @@ export class Session {
       // never manufacture a placement without vector evidence.
       const rawLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, rawRes.matches, rawRes.withheld, undefined, fp.totalLen);
       const corrected = reconcileSweepLabels(rawLbl.seed, rawRes.matches, rawLbl.matches, rawRes.withheld, rawLbl.withheld);
-      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F — a `hold: "density"`
-      // row is, by construction, never degenerate (only `hold: "bounds"`
-      // rows are); when one scores higher than an ALREADY-labeled,
-      // already-counted match within the seed's own shadow-suppression
-      // radius, it is very likely a more precisely-located reading of the
-      // SAME physical instance the tag already, correctly, identified — the
-      // committed match's own coordinate was just imprecise. This corrects
-      // ONLY the reported position/score/transform of an already-decided
-      // match; it never touches which match owns which label, nor whether
-      // anything is promoted or demoted, so it cannot reopen case 11's own
-      // regression (Phase B) the way transferring the TAG itself did (see
-      // this section's own reverted attempt above).
-      const mergeR = fp.footprint / 2;
-      // A placement's own corroborating tag/leader box (token_bbox) is real,
-      // drawn evidence of where its physical instance actually sits — the
-      // SAME signal the ground-truth reviewers used by hand to disambiguate
-      // a tight cluster of near-identical readings ("own literal equipment
-      // leaders attach to the same [equipment] family", case `17`'s own
-      // review notes). Used only to pick among candidates that already
-      // cleared every other gate below; never on its own.
-      const anchorDist = (at: Point, label: PlacementLabel | null | undefined): number | null => {
-        if (!label?.token_bbox) return null;
-        const [x0, y0, x1, y1] = label.token_bbox;
-        const nx = Math.min(Math.max(at[0], x0), x1);
-        const ny = Math.min(Math.max(at[1], y0), y1);
-        return Math.hypot(at[0] - nx, at[1] - ny);
-      };
-      const usedWithheld = new Set<number>();
-      const positionedMatches = corrected.matches.map((m, mi) => {
-        const lbl = corrected.matchLabels[mi];
-        const usable: { w: SweepWithheld; i: number }[] = [];
-        for (let i = 0; i < corrected.withheld.length; i++) {
-          const w = corrected.withheld[i];
-          if (usedWithheld.has(i) || w.hold !== "density" || w.score <= m.score) continue;
-          if (Math.hypot(w.at[0] - m.at[0], w.at[1] - m.at[1]) > mergeR) continue;
-          usable.push({ w, i });
-        }
-        if (!usable.length) return m;
-        // §3 Phase D/F Findings: several candidates around one busy real
-        // location can score nearly identically (a phantom scoring 1.0,
-        // 18px from the true reading at 0.992) — score alone cannot break
-        // that tie. When this match's own tag gives an anchor, prefer
-        // whichever candidate sits closest to it; otherwise keep the
-        // original highest-score rule unchanged (every case with zero or
-        // one usable candidate here behaves exactly as before).
-        let chosen = usable[0];
-        if (lbl?.token_bbox) {
-          let bestD = anchorDist(chosen.w.at, lbl)!;
-          for (const cand of usable.slice(1)) {
-            const d = anchorDist(cand.w.at, lbl)!;
-            if (d < bestD) { chosen = cand; bestD = d; }
-          }
-        } else {
-          for (const cand of usable.slice(1)) if (cand.w.score > chosen.w.score) chosen = cand;
-        }
-        usedWithheld.add(chosen.i);
-        const bestW = chosen.w;
-        return { ...m, at: bestW.at, score: bestW.score, rotation: bestW.rotation, mirrored: bestW.mirrored, ...(bestW.transform ? { transform: bestW.transform } : { transform: undefined }) };
-      });
-      const positionedWithheld = corrected.withheld.filter((_, i) => !usedWithheld.has(i));
-      const positionedWithheldLabels = corrected.withheldLabels.filter((_, i) => !usedWithheld.has(i));
+      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F / positioning-parity
+      // fix — moved into symbollabels.ts's own positionMatchesToClosestReading
+      // so this correction is shared with TakeoffCanvas.jsx's manual
+      // Symbol-tool marquee, not an MCP-agent-only benefit. See that
+      // function's own doc comment for the full rationale.
+      const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+      const positionedMatches = positioned.matches;
+      const positionedWithheld = positioned.withheld;
+      const positionedWithheldLabels = positioned.withheldLabels;
       const res: SymbolMatchResult = { ...rawRes, matches: positionedMatches, withheld: positionedWithheld };
       const lbl = { seed: rawLbl.seed, matches: corrected.matchLabels, withheld: positionedWithheldLabels };
       let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;

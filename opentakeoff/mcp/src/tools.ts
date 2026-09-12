@@ -34,7 +34,7 @@ import { compileProductionTakeoff } from "./productionTakeoff.ts";
 import { basReviewRequestSchema } from "../../web/src/lib/basReviewContract.ts";
 import { basEquipmentReviewRequestSchema } from "../../web/src/lib/basEquipmentRegister.ts";
 import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
-import { affineOptionsFromWire } from "../../web/src/lib/symbolsweep.ts";
+import { affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../../web/src/lib/symbolsweep.ts";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
 } from "../../web/src/lib/hvacTaxonomy.ts";
@@ -263,11 +263,23 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       luminance_tolerance: z.number().int().min(0).max(254).optional()
         .describe("Stroke-luminance gate, 0–254 (#260): a sheet segment only answers for a seed segment when their stroke luminances (Rec. 709, 0 black – 255 white) are within this. For flattened exports where a black device and its grey background twin are geometrically identical — 32–64 separates black from grey. Omit to score on geometry alone; stated, the reply's lum_gate discloses the seed's luminance band and every placement the gate pulled under the commit bar"),
       affine: z.object({
-        enabled: z.boolean().default(false).describe("Also search continuous (off-grid) rotation and bounded anisotropic stretch/shear, not just 0/90/180/270. A symbol drawn rotated ~37° or stretched to fit a tight run is invisible to the rigid search alone — this makes it PROPOSABLE, scores it against the fitted transform, and discloses the fit (rotation_deg/scale_x/scale_y/shear_deg/mirrored) on the row's `transform` field. A fit outside max_stretch/max_shear_deg is never a match — it comes back `withheld` naming the actual distortion, so a genuinely different device drawn to look alike is a question, not a silent count. Off by default (docs/SYMBOL-SWEEP-AFFINE-GOAL.md)"),
+        enabled: z.boolean().default(false).describe("Also search continuous (off-grid) rotation and bounded anisotropic stretch/shear, not just 0/90/180/270. A symbol drawn rotated ~37° or stretched to fit a tight run is invisible to the rigid search alone — this makes it PROPOSABLE, scores it against the fitted transform, and discloses the fit (rotation_deg/scale_x/scale_y/shear_deg/mirrored) on the row's `transform` field. A fit outside max_stretch/max_shear_deg is never a match — it comes back `withheld` naming the actual distortion, so a genuinely different device drawn to look alike is a question, not a silent count. False only if THIS object is given explicitly without `enabled` — the object itself defaults to affine ON (see below)"),
         max_stretch: z.number().positive().default(1.5).describe("Bound on scale_x/scale_y (after dividing out any stated seed→target size ratio): each must fall in [1/max_stretch, max_stretch] to commit as a match. Default 1.5×"),
         max_shear_deg: z.number().positive().default(10).describe("Bound on |shear_deg| to commit as a match. Default 10°"),
         scale_search: z.boolean().default(false).describe("Also propose anisotropic stretch/shear that a single rotated segment alone can't fix (a genuinely non-uniform stretch on one axis). Off by default even when affine.enabled is true — most symbols are rotated or uniformly resized, not stretched, and this widens the search; turn on only when this drawing set genuinely stretches its symbols"),
-      }).optional().describe("docs/SYMBOL-SWEEP-AFFINE-GOAL.md — off by default. Turn on `enabled` to catch rotated-off-grid or distorted \"changed\" symbols; leave `scale_search` off unless this specific drawing set stretches its symbols non-uniformly"),
+        // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §3 Phase F step 3 / §6
+        // Definition of Done — the default flip lives HERE, on the whole
+        // object, not on the inner `enabled` field (a documented zod
+        // nested-default gap: `enabled`'s own `.default(false)` only ever
+        // applies when the caller sends a partial `affine` object without
+        // that key — it does nothing when `affine` is omitted entirely,
+        // which is the common case for a real agent call). Omitting
+        // `affine` now gets the SAME AFFINE_WIRE_DEFAULT configuration the
+        // corpus gate has run under all along — see the goal doc's own
+        // Phase G outcome note for the exact corpus numbers this shipped
+        // with. An explicit `{ enabled: false }` (or any partial object
+        // without `enabled: true`) still opts a caller OUT, unchanged.
+      }).default(AFFINE_WIRE_DEFAULT).describe("docs/SYMBOL-SWEEP-AFFINE-GOAL.md — ON by default (docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's own default-flip). Catches rotated-off-grid or distorted \"changed\" symbols automatically; pass { enabled: false } to opt out to the old rigid-only search"),
     },
     outputSchema: symbolSweepOutput,
   }, run("symbol_sweep", (a) => session.symbolSweep(a.sheet, {

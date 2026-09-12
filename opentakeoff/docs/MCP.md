@@ -295,11 +295,12 @@ Fifty tools, in the order an agent tends to reach for them:
   (marquee ONE example of a repeated plan symbol—a drain, a threshold
   marker—and every placement is found deterministically from the vector
   linework, under rotation and mirroring, scored against a commit bar with
-  near-misses *withheld with reasons*; opt-in `affine` (default off, both
-  fields default off inside it too) also searches continuous off-grid
-  rotation and bounded anisotropic stretch/shear—a symbol drawn rotated
-  ~37° or stretched to fit a tight run is otherwise invisible to the search
-  entirely, not just low-scoring—and discloses the actual fit
+  near-misses *withheld with reasons*; `affine` (ON by default—docs/SYMBOL-
+  SWEEP-CLEAN-CORPUS-GOAL.md's default flip; pass `{enabled: false}` for the
+  old rigid-only search) also searches continuous off-grid rotation and
+  bounded anisotropic stretch/shear—a symbol drawn rotated ~37° or stretched
+  to fit a tight run is otherwise invisible to the search entirely, not just
+  low-scoring—and discloses the actual fit
   (`rotation_deg`/`scale_x`/`scale_y`/`shear_deg`/`mirrored`/`via`) on the
   row's `transform` field; a fit past `max_stretch`/`max_shear_deg` (default
   1.5×/10°) is never a silent match, it comes back `withheld` naming the

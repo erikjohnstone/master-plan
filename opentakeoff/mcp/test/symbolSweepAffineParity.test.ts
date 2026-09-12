@@ -29,7 +29,7 @@
 // lost.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { affineOptionsFromWire, type AffineOptions } from "../../web/src/lib/symbolsweep.ts";
+import { affineOptionsFromWire, AFFINE_WIRE_DEFAULT, type AffineOptions } from "../../web/src/lib/symbolsweep.ts";
 import { executeAgentTool } from "../../web/src/lib/agentTools.js";
 
 test("affineOptionsFromWire: undefined stays undefined, every field maps camelCase, nothing is silently defaulted", () => {
@@ -46,6 +46,12 @@ test("affineOptionsFromWire: undefined stays undefined, every field maps camelCa
 });
 
 test("symbol_sweep affine parity: the canvas agent tool reaches the engine with the SAME AffineOptions affineOptionsFromWire produces for the same wire input", async () => {
+  // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's default flip: an OMITTED
+  // `affine` (the common case for a real agent call) now resolves to
+  // AFFINE_WIRE_DEFAULT, not `undefined` — mirrors mcp/src/tools.ts's own
+  // zod-level `.default(AFFINE_WIRE_DEFAULT)` on the whole object. An
+  // EXPLICIT wire object (including `{ enabled: false }`) is untouched —
+  // only the omitted case changed.
   const wireInputs: Array<Record<string, unknown> | undefined> = [
     undefined,
     { enabled: false, max_stretch: 1.5, max_shear_deg: 10, scale_search: false },
@@ -64,9 +70,10 @@ test("symbol_sweep affine parity: the canvas agent tool reaches the engine with 
     if (wire) args.affine = wire;
     const result = await executeAgentTool(ctx, "symbol_sweep", args);
     assert.ok(!("error" in (result as object)), `symbol_sweep should not refuse a valid affine wire shape: ${JSON.stringify(result)}`);
+    const expected = affineOptionsFromWire((wire ?? AFFINE_WIRE_DEFAULT) as Parameters<typeof affineOptionsFromWire>[0]);
     assert.deepEqual(
-      captured?.affine, affineOptionsFromWire(wire as Parameters<typeof affineOptionsFromWire>[0]),
-      `wire=${JSON.stringify(wire)} — the canvas path's own AffineOptions must equal the shared translation's`,
+      captured?.affine, expected,
+      `wire=${JSON.stringify(wire)} — the canvas path's own AffineOptions must equal the shared translation's (defaulted to AFFINE_WIRE_DEFAULT when omitted)`,
     );
   }
 });

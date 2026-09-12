@@ -82,7 +82,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchAgainstLibrary } from "../lib/symbolsweep";
+import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchAgainstLibrary, affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -107,7 +107,7 @@ import { findLegendGlyphs, findGlyphNear, legendLearnStatus } from "../lib/legen
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
 import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
-import { labelPlacements, reconcileSweepLabels, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
+import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
 // is set) — the owner's call, 2026-08-24: it serves no purpose on the sheet.
@@ -4981,6 +4981,7 @@ export default function TakeoffCanvas() {
     let seedName = null;
     let spans = null;
     let textBoxes;
+    let fp;
     try {
       // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E — spans loaded before
       // the seed fingerprint (mirrors agentSymbolSweep's own reorder below
@@ -4992,10 +4993,16 @@ export default function TakeoffCanvas() {
       // geometric guess, so it carries none of that caution.
       spans = await ensureTextSpans(key);
       textBoxes = spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
-      const fp = fingerprintSymbol(segs, rect, lum, { textBoxes });
+      fp = fingerprintSymbol(segs, rect, lum, { textBoxes });
       assertDistinctiveSymbolSeed(fp);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
-      res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}), textBoxes });
+      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's default flip — the manual
+      // Symbol-tool marquee had no options surface at all (it always ran
+      // rigid-only, unlike agentSymbolSweep which threads whatever `affine`
+      // its own caller supplies). Wiring the same AFFINE_WIRE_DEFAULT here
+      // is what "the manual marquee path turned on" (§3 Phase F step 3)
+      // means — canvas and agent cannot disagree on which symbols exist.
+      res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}), affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT), textBoxes });
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
       // instructions, exactly as the MCP surfaces them — and they are stated
@@ -5034,8 +5041,13 @@ export default function TakeoffCanvas() {
       res.matches, res.matches.map((_, i) => labels[1 + i] || null),
       res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
     );
-    res = { ...res, matches: corrected.matches, withheld: corrected.withheld };
-    labels = [seedLabel, ...corrected.matchLabels, ...corrected.withheldLabels];
+    // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F / positioning-parity —
+    // shared with mcp/src/session.ts's own MCP tool paths (see that
+    // function's own doc comment) so the manual marquee reports the same
+    // corrected position an agent's symbol_sweep call would.
+    const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+    res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
+    labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
     const L = (i) => labels[i] || null;
     const nM = res.matches.length;
     // One physical spot, ONE question. The engine discloses every rotational
@@ -6741,6 +6753,7 @@ export default function TakeoffCanvas() {
     let seedName = null;
     let spans = null;
     let textBoxes;
+    let fp;
     try {
       // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E — spans loaded BEFORE
       // the seed fingerprint (was after, mirrors mcp/src/session.ts's own
@@ -6755,7 +6768,7 @@ export default function TakeoffCanvas() {
       // confirmed causes behind a real corpus regression). This comment was
       // stale (canvas/MCP parity gap, fixed in
       // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase B).
-      const fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false, textBoxes });
+      fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false, textBoxes });
       assertDistinctiveSymbolSeed(fp);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
       res = sweepSymbols(segs, rect, {
@@ -6798,8 +6811,13 @@ export default function TakeoffCanvas() {
       res.matches, res.matches.map((_, i) => labels[1 + i] || null),
       res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
     );
-    res = { ...res, matches: corrected.matches, withheld: corrected.withheld };
-    labels = [seedLabel, ...corrected.matchLabels, ...corrected.withheldLabels];
+    // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F / positioning-parity —
+    // shared with mcp/src/session.ts's own MCP tool paths (see that
+    // function's own doc comment) so the in-app agent tool reports the same
+    // corrected position an external MCP symbol_sweep call would.
+    const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+    res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
+    labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
     const L = (i) => labels[i]?.label || null;
     const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
     const nM = res.matches.length;
