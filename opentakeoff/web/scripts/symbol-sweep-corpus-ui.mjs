@@ -83,9 +83,15 @@ function assignInstances(expected, predicted) {
     }
     return false;
   };
+  // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's own case-10 Finding — returning
+  // at the FIRST failed instance hid six more. Keep going past a failure: a
+  // failed `visit` leaves `owner` untouched for that instance, so later
+  // instances are still assigned correctly and independently.
+  const missingAll = [];
   for (let ei = 0; ei < expected.length; ei++) {
-    if (!visit(ei, new Set())) return { ok: false, missing: expected[ei] };
+    if (!visit(ei, new Set())) missingAll.push(expected[ei]);
   }
+  if (missingAll.length) return { ok: false, missing: missingAll[0], missingAll };
   return { ok: true };
 }
 
@@ -182,17 +188,17 @@ for (const c of cases) {
         if (!isAffine) {
           const assignment = assignInstances(c.instances, sweep.matches);
           if (!assignment.ok) {
-            errors.push(`no one-to-one localization for ${assignment.missing?.id ?? "one or more instances"}`);
-            const missing = assignment.missing;
-            if (missing) {
+            const missingList = assignment.missingAll ?? (assignment.missing ? [assignment.missing] : []);
+            errors.push(`no one-to-one localization for ${missingList.length} instance${missingList.length === 1 ? "" : "s"}: ${missingList.map((m) => m.id).join(", ") || "one or more instances"}`);
+            for (const missing of missingList) {
               const nearest = (rows2) => rows2.reduce((best, p) => {
                 const d = dist(missing.at, p.at);
                 return !best || d < best.d ? { d, p } : best;
               }, null);
               const nm = nearest(sweep.matches);
               const nw = nearest(sweep.questions);
-              if (nm) errors.push(`nearest match: d=${nm.d.toFixed(1)}px score=${nm.p.score}`);
-              if (nw) errors.push(`nearest question: d=${nw.d.toFixed(1)}px score=${nw.p.score}`);
+              if (nm) errors.push(`nearest match to ${missing.id}: d=${nm.d.toFixed(1)}px score=${nm.p.score}`);
+              if (nw) errors.push(`nearest question to ${missing.id}: d=${nw.d.toFixed(1)}px score=${nw.p.score}`);
             }
           }
         }

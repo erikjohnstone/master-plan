@@ -47,9 +47,18 @@ function assignInstances(expected, predicted) {
     }
     return false;
   };
+  // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's own case-10 Finding — returning
+  // at the FIRST failed instance hid six more (a case reported as "one
+  // localization mismatch" was actually seven). Keep going past a failure:
+  // a failed `visit` leaves `owner` untouched for that instance, so later
+  // instances are still assigned correctly and independently. `missing`
+  // stays the first one (unchanged contract for every existing caller);
+  // `missingAll` is the additive, complete list.
+  const missingAll = [];
   for (let ei = 0; ei < expected.length; ei++) {
-    if (!visit(ei, new Set())) return { ok: false, owner, choices, missing: expected[ei] };
+    if (!visit(ei, new Set())) missingAll.push(expected[ei]);
   }
+  if (missingAll.length) return { ok: false, owner, choices, missing: missingAll[0], missingAll };
   const expectedToPrediction = new Array(expected.length).fill(-1);
   owner.forEach((ei, pi) => { if (ei >= 0) expectedToPrediction[ei] = pi; });
   return { ok: expectedToPrediction.every((i) => i >= 0), owner, choices, expectedToPrediction };
@@ -191,15 +200,17 @@ for (const c of cases) {
     } else {
       const assignment = assignInstances(c.instances, predictions);
       if (!assignment.ok) {
-        errors.push(`no one-to-one localization for ${assignment.missing?.id ?? "one or more instances"}`);
+        const missingList = assignment.missingAll ?? (assignment.missing ? [assignment.missing] : []);
+        errors.push(`no one-to-one localization for ${missingList.length} instance${missingList.length === 1 ? "" : "s"}: ${missingList.map((m) => m.id).join(", ") || "one or more instances"}`);
         // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F step 1 — "no
         // one-to-one localization" alone hid, for a whole day, that case
         // 05's real instances were actually found at d=0 as WITHHELD rows.
-        // Name the nearest withheld row (distance/score/hold/reason) and
-        // the nearest match for the missing expected instance, so a future
-        // reader never has to re-discover that distinction from scratch.
-        const missing = assignment.missing;
-        if (missing) {
+        // The case-10 Finding: reporting only the FIRST missing instance
+        // hid six more behind it. Name the nearest withheld row (distance/
+        // score/hold/reason) and the nearest match for EVERY missing
+        // expected instance, so a future reader never has to re-discover
+        // either gap from scratch.
+        for (const missing of missingList) {
           const near = (p) => (missing.page === undefined || p.page === missing.page) ? dist(missing.at, p.at) : Infinity;
           const nearestOf = (rows) => rows.reduce((best, p) => {
             const d = near(p);
