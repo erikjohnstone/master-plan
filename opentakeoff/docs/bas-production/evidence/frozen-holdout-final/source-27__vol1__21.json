@@ -1,0 +1,40 @@
+{
+  "schema_version": "bas_point_source_holdout_v1",
+  "evaluated_utc": "2026-09-12T19:58:34.674Z",
+  "evaluation_role": "blind_final_source_path",
+  "production_rules_frozen_before_open": true,
+  "document": {
+    "id": "27__vol1__21",
+    "rank": 27,
+    "title": "Orange County Public Safety Building",
+    "pages": 128,
+    "bytes": 35562756,
+    "pdf_sha256": "e47047c7322d16d44854dd5aa738f3d76087cc47f446927b00d8afc04a128f65",
+    "independent_record_sha256": "e8ce9323c9258a3961bd617274c10083536442040e27d7ba7e9a16e7ab83294f"
+  },
+  "source_accounting": {
+    "pages": 128,
+    "spans": 42054,
+    "no_text_pages": 0
+  },
+  "expected_tables": 1,
+  "expected_rows": 1,
+  "actual_tables": 0,
+  "actual_rows": 0,
+  "matches": [
+    {
+      "expected": {
+        "page": 52,
+        "title": "CHILLED WATER SYSTEM CONTROL DIAGRAM",
+        "rows": 1
+      },
+      "matched": false,
+      "actual": null,
+      "exact_row_count": null
+    }
+  ],
+  "unmatched_actual": [],
+  "duration_ms": 7680,
+  "peak_rss_bytes": 628867072,
+  "boundary": "Source-span recovery only; this does not run VectorGrid, prove installed quantity, or replace the full production-graph holdout."
+}

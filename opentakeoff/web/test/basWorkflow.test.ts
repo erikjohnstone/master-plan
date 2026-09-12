@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import 'fake-indexeddb/auto';
-import { activeBasCapture, basWorkflowSchema, canonicalBasJson, captureBasPoints, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow } from '../src/lib/basWorkflow.ts';
+import { activeBasCapture, basCaptureIdentityPayload, basWorkflowSchema, canonicalBasJson, captureBasPoints, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow } from '../src/lib/basWorkflow.ts';
 import { basPointListsSchema } from '../src/lib/basPointLists.ts';
 import { parseTakeoffImport, mergeTakeoffImport } from '../src/lib/importTakeoff.js';
 import { createLocalStore, ANN_SCHEMA } from '../src/lib/store.js';
 import { basResultForCanvas } from '../src/lib/basBrowserResult.js';
+import { canonicalBasJsonByteLength } from '../src/lib/basCanonical.ts';
 
 const points = basPointListsSchema.parse(JSON.parse(readFileSync(new URL('../../docs/bas-production/evidence/fort-sam-point-production-compile.json', import.meta.url), 'utf8')).bas_point_lists);
 const sha256 = 'c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d';
@@ -32,11 +33,36 @@ test('display rename preserves capture identity, source text and original geomet
   assert.deepEqual(a.captures[0].points.matrices[0].raw.rows, b.captures[0].points.matrices[0].raw.rows);
 });
 
+test('capture identity projection preserves legacy clone-and-remap bytes without cloning untouched evidence', async () => {
+  const workflow = await captureBasPoints(sources, points), capture = workflow.captures[0];
+  const legacyPoints = structuredClone(capture.points);
+  for (const matrix of legacyPoints.matrices) {
+    matrix.raw.sheet = matrix.page_id!;
+    const remap = (source: { sheet_key: string; page_id: string | null }) => { source.sheet_key = source.page_id!; };
+    matrix.header_sources.forEach(remap);
+    matrix.notes.forEach(note => remap(note.source));
+    matrix.rows.forEach(row => { row.observations.forEach(observation => remap(observation.source)); row.qualifiers.forEach(note => remap(note.source)); });
+  }
+  const actual = basCaptureIdentityPayload(capture);
+  assert.equal(canonicalBasJson(actual.points), canonicalBasJson(legacyPoints));
+  assert.notEqual(actual.points, capture.points);
+  assert.equal(actual.points.matrices[0].rows[0].raw, capture.points.matrices[0].rows[0].raw,
+    'unchanged retained row evidence is shared only inside the read-only identity projection');
+});
+
 test('canonical JSON preserves exact strings and arrays; rejects non-JSON and nonfinite numbers', () => {
   assert.equal(canonicalBasJson({ z: 'é', a: [2, 1, null, true] }), '{"a":[2,1,null,true],"z":"é"}');
   assert.notEqual(canonicalBasJson('é'), canonicalBasJson('e\u0301'));
   assert.notEqual(canonicalBasJson([1, 2]), canonicalBasJson([2, 1]));
-  for (const value of [undefined, NaN, Infinity, 1n, new Date()]) assert.throws(() => canonicalBasJson(value));
+  const sparse = new Array(3); sparse[1] = 'middle';
+  for (const value of [{ z: 'é😀', a: ['\b\t\n\f\r', '\u0000\u001f', '"\\', '\ud800', '\udc00', '\ud83d\ude00'] },
+    sparse, -0, 1.2e100, true, false, null]) {
+    const bytes = new TextEncoder().encode(canonicalBasJson(value));
+    assert.equal(canonicalBasJsonByteLength(value), bytes.byteLength);
+  }
+  for (const value of [undefined, NaN, Infinity, 1n, new Date(), [undefined]]) {
+    assert.throws(() => canonicalBasJson(value)); assert.throws(() => canonicalBasJsonByteLength(value));
+  }
 });
 
 test('controlled corruption and wrong source ownership are rejected, not sanitized away', async () => {

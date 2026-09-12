@@ -567,7 +567,7 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
           phase: "spot_cites",
           allowedTools: [
             "query_table", "highlight_citation", "find_text",
-            "sweep_schedule_row", "reconcile_schedule_plan",
+            "sweep_schedule_row", "reconcile_schedule_plan", "inspect_bas_workflow", "open_bas_workspace",
           ],
           nextMove: intent === "corpus_bas"
             ? "From the bas_points compile, query_table { row_key } on typed points and note served_equipment (or I/O device tags). Then sweep_schedule_row / reconcile_schedule_plan so those units paint on plan — when grounding HVAC inventory marks that share a building letter across schedules, pass prefer_schedule_title from the item's table_title. Highlight schedule cells + plan hits."
@@ -580,7 +580,7 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
           phase: "paint",
           allowedTools: [
             "sweep_schedule_row", "reconcile_schedule_plan",
-            "query_table", "highlight_citation",
+            "query_table", "highlight_citation", "inspect_bas_workflow", "open_bas_workspace",
           ],
           nextMove: intent === "corpus_bas"
             ? "Call sweep_schedule_row (or reconcile_schedule_plan) on served_equipment / device tags from the compile so plan locations paint. For inventory marks with a known table_title, pass prefer_schedule_title so cross-schedule building letters resolve (Carson-style) — never invent plan qty. highlight_citation on schedule cells and plan hits. A POINTS LIST total without plan paint is not a finished points takeoff."

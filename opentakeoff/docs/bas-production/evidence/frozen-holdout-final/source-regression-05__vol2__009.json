@@ -1,0 +1,194 @@
+{
+  "schema_version": "bas_point_source_holdout_v1",
+  "evaluated_utc": "2026-09-12T20:12:53.478Z",
+  "evaluation_role": "post_fix_source_path_regression",
+  "production_rules_frozen_before_open": false,
+  "document": {
+    "id": "05__vol2__009",
+    "rank": 5,
+    "title": "USDA APHIS Plant Inspection Station Building 63",
+    "pages": 31,
+    "bytes": 18927687,
+    "pdf_sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+    "independent_record_sha256": "3578922745acbcf80176ff3eb102588bd6af88166455a1d01b4b4081775a18de"
+  },
+  "source_accounting": {
+    "pages": 31,
+    "spans": 11493,
+    "no_text_pages": 0
+  },
+  "expected_tables": 8,
+  "expected_rows": 75,
+  "actual_tables": 8,
+  "actual_rows": 75,
+  "matches": [
+    {
+      "expected": {
+        "page": 19,
+        "title": "VARIABLE FREQUENCY DRIVE BACNET INTERFACE SCHEDULE",
+        "rows": 18
+      },
+      "matched": true,
+      "actual": {
+        "matrix_id": "matrix:f7832a06a67b3d8e5421165863eac916ec62bc64b6a45c8e47b8b99e68ced02a",
+        "page": 19,
+        "title": "BACNET INTERFACE SCHEDULE",
+        "rows": 18,
+        "physical_rows": 13,
+        "software_rows": 5,
+        "issues": [
+          "SOURCE_SPAN_CORE_COLUMNS_ONLY"
+        ]
+      },
+      "exact_row_count": true
+    },
+    {
+      "expected": {
+        "page": 20,
+        "title": "AHU-1 DDC POINTS LIST",
+        "rows": 17
+      },
+      "matched": true,
+      "actual": {
+        "matrix_id": "matrix:9203e10da734fa8a66b9c3f9ee1c25369836a037591f3177e539a118e9bf9ffc",
+        "page": 20,
+        "title": "AHU-1 DDC POINTS LIST",
+        "rows": 17,
+        "physical_rows": 17,
+        "software_rows": 0,
+        "issues": [
+          "SOURCE_SPAN_CORE_COLUMNS_ONLY"
+        ]
+      },
+      "exact_row_count": true
+    },
+    {
+      "expected": {
+        "page": 20,
+        "title": "CHILLER PLANT DDC POINTS LIST",
+        "rows": 11
+      },
+      "matched": true,
+      "actual": {
+        "matrix_id": "matrix:b1196390532ae0873f37b11c05824081f39d30aa3eecc2260c09c19a519d0a7c",
+        "page": 20,
+        "title": "CHILLER PLANT DDC POINTS LIST",
+        "rows": 11,
+        "physical_rows": 10,
+        "software_rows": 1,
+        "issues": [
+          "SOURCE_SPAN_CORE_COLUMNS_ONLY"
+        ]
+      },
+      "exact_row_count": true
+    },
+    {
+      "expected": {
+        "page": 21,
+        "title": "AHU-2 DDC POINTS LIST",
+        "rows": 11
+      },
+      "matched": false,
+      "actual": null,
+      "exact_row_count": null
+    },
+    {
+      "expected": {
+        "page": 21,
+        "title": "LAB EXHAUST FANS DDC POINTS LIST",
+        "rows": 2
+      },
+      "matched": false,
+      "actual": null,
+      "exact_row_count": null
+    },
+    {
+      "expected": {
+        "page": 21,
+        "title": "SCHEDULED EXHAUST FAN DDC POINTS LIST",
+        "rows": 2
+      },
+      "matched": true,
+      "actual": {
+        "matrix_id": "matrix:22b853d3f389d0b24b8e9df376f3f5f2fabf1b38c6c75df1a02c16c0f9b8d8b4",
+        "page": 21,
+        "title": "DDC POINTS LIST",
+        "rows": 2,
+        "physical_rows": 2,
+        "software_rows": 0,
+        "issues": [
+          "SOURCE_SPAN_CORE_COLUMNS_ONLY"
+        ]
+      },
+      "exact_row_count": true
+    },
+    {
+      "expected": {
+        "page": 22,
+        "title": "ELECTRIC UNIT HEATER DDC POINTS LIST",
+        "rows": 6
+      },
+      "matched": true,
+      "actual": {
+        "matrix_id": "matrix:b5408fa6145ba5b3575e6d7d0504cf950478730eea2a62871a1c71c46aa9a48c",
+        "page": 22,
+        "title": "DDC POINTS LIST",
+        "rows": 6,
+        "physical_rows": 6,
+        "software_rows": 0,
+        "issues": [
+          "SOURCE_SPAN_CORE_COLUMNS_ONLY"
+        ]
+      },
+      "exact_row_count": true
+    },
+    {
+      "expected": {
+        "page": 22,
+        "title": "VAV TERMINAL DDC POINTS LIST",
+        "rows": 8
+      },
+      "matched": false,
+      "actual": null,
+      "exact_row_count": null
+    }
+  ],
+  "unmatched_actual": [
+    {
+      "matrix_id": "matrix:5cc8e4650cdce03b6a0434314babb67f15fe8c22545f5e754fd207ebd46880de",
+      "page": 22,
+      "title": "VAV TERMINAL DDC POINTS LIST",
+      "rows": 8,
+      "physical_rows": 8,
+      "software_rows": 0,
+      "issues": [
+        "SOURCE_SPAN_CORE_COLUMNS_ONLY"
+      ]
+    },
+    {
+      "matrix_id": "matrix:798590f7dfa7dfaf27c637688742add6ae628f814cadb673719c3cd21c0861e0",
+      "page": 21,
+      "title": "AHU-2 DDC POINTS LIST",
+      "rows": 11,
+      "physical_rows": 11,
+      "software_rows": 0,
+      "issues": [
+        "SOURCE_SPAN_CORE_COLUMNS_ONLY"
+      ]
+    },
+    {
+      "matrix_id": "matrix:f650397d6a5aa187b52fb47deab73929fa59f15c308ec951bb38968513696ba3",
+      "page": 21,
+      "title": "LAB EXHAUST FANS DDC POINTS LIST",
+      "rows": 2,
+      "physical_rows": 2,
+      "software_rows": 0,
+      "issues": [
+        "SOURCE_SPAN_CORE_COLUMNS_ONLY"
+      ]
+    }
+  ],
+  "duration_ms": 4135,
+  "peak_rss_bytes": 538034176,
+  "boundary": "Source-span recovery only; this does not run VectorGrid, prove installed quantity, or replace the full production-graph holdout."
+}

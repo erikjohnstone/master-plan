@@ -1,0 +1,96 @@
+{
+  "schema_version": "bas_snapshot_lifecycle_export_v1",
+  "snapshot_id": "58cf1b9b40b71ec376e050283f988294b91f9b93ae8b27fd096bae96a7bc5ec3",
+  "lifecycle": {
+    "events": [
+      {
+        "schema_version": "bas_snapshot_lifecycle_event_v1",
+        "rule_version": "bas_snapshot_lifecycle_1",
+        "snapshot_id": "58cf1b9b40b71ec376e050283f988294b91f9b93ae8b27fd096bae96a7bc5ec3",
+        "operation_id": "1ce06b43-e22e-42e2-9b28-a466e45e3bca",
+        "previous_event_id": "da231a7009abc815c071e4571c26a42d580bf1d64f0caffdb6cf7d1a7fed55ef",
+        "action": {
+          "kind": "revoke"
+        },
+        "declaration": {
+          "reviewer": "CONTROLLED PUBLIC UI TEST",
+          "reason": "Controlled lifecycle restore proof; no project or installed-quantity conclusion",
+          "declared_at": "2026-09-12T15:33:28.456Z",
+          "origin": "operator_input",
+          "reviewer_identity": "self_declared",
+          "timestamp_authority": "local_untrusted"
+        },
+        "event_id": "419910cdfd5984c5ded7633de17a0d8b097b04865e7fa0dee3147edef1e3d878"
+      }
+    ],
+    "state": {
+      "schema_version": "bas_snapshot_lifecycle_state_v1",
+      "snapshot_id": "58cf1b9b40b71ec376e050283f988294b91f9b93ae8b27fd096bae96a7bc5ec3",
+      "status": "revoked",
+      "head": "419910cdfd5984c5ded7633de17a0d8b097b04865e7fa0dee3147edef1e3d878",
+      "event_count": 1,
+      "successor_snapshot_id": null,
+      "terminal_event": {
+        "schema_version": "bas_snapshot_lifecycle_event_v1",
+        "rule_version": "bas_snapshot_lifecycle_1",
+        "snapshot_id": "58cf1b9b40b71ec376e050283f988294b91f9b93ae8b27fd096bae96a7bc5ec3",
+        "operation_id": "1ce06b43-e22e-42e2-9b28-a466e45e3bca",
+        "previous_event_id": "da231a7009abc815c071e4571c26a42d580bf1d64f0caffdb6cf7d1a7fed55ef",
+        "action": {
+          "kind": "revoke"
+        },
+        "declaration": {
+          "reviewer": "CONTROLLED PUBLIC UI TEST",
+          "reason": "Controlled lifecycle restore proof; no project or installed-quantity conclusion",
+          "declared_at": "2026-09-12T15:33:28.456Z",
+          "origin": "operator_input",
+          "reviewer_identity": "self_declared",
+          "timestamp_authority": "local_untrusted"
+        },
+        "event_id": "419910cdfd5984c5ded7633de17a0d8b097b04865e7fa0dee3147edef1e3d878"
+      }
+    }
+  },
+  "currentness": {
+    "schema_version": "bas_snapshot_currentness_v1",
+    "snapshot_id": "58cf1b9b40b71ec376e050283f988294b91f9b93ae8b27fd096bae96a7bc5ec3",
+    "lifecycle": {
+      "schema_version": "bas_snapshot_lifecycle_state_v1",
+      "snapshot_id": "58cf1b9b40b71ec376e050283f988294b91f9b93ae8b27fd096bae96a7bc5ec3",
+      "status": "revoked",
+      "head": "419910cdfd5984c5ded7633de17a0d8b097b04865e7fa0dee3147edef1e3d878",
+      "event_count": 1,
+      "successor_snapshot_id": null,
+      "terminal_event": {
+        "schema_version": "bas_snapshot_lifecycle_event_v1",
+        "rule_version": "bas_snapshot_lifecycle_1",
+        "snapshot_id": "58cf1b9b40b71ec376e050283f988294b91f9b93ae8b27fd096bae96a7bc5ec3",
+        "operation_id": "1ce06b43-e22e-42e2-9b28-a466e45e3bca",
+        "previous_event_id": "da231a7009abc815c071e4571c26a42d580bf1d64f0caffdb6cf7d1a7fed55ef",
+        "action": {
+          "kind": "revoke"
+        },
+        "declaration": {
+          "reviewer": "CONTROLLED PUBLIC UI TEST",
+          "reason": "Controlled lifecycle restore proof; no project or installed-quantity conclusion",
+          "declared_at": "2026-09-12T15:33:28.456Z",
+          "origin": "operator_input",
+          "reviewer_identity": "self_declared",
+          "timestamp_authority": "local_untrusted"
+        },
+        "event_id": "419910cdfd5984c5ded7633de17a0d8b097b04865e7fa0dee3147edef1e3d878"
+      }
+    },
+    "status": "not_current_lifecycle",
+    "readiness_status": "not_run",
+    "blocker_codes": [],
+    "scope_event_id": "1837ab727bb537b4177b4fbde77d88cfc9f14d1c1ff3bf3c9df61b9487f53e34",
+    "source_set_id": "a640c78f737dbe0f37a1c7b9788dfa0c958fce9e78358c268400c790a7b80df3",
+    "guarantee": "reviewed_scope_only_not_project_or_installed_quantity",
+    "project_complete": false,
+    "installed_quantity": null
+  },
+  "export_semantics": "snapshot_lifecycle_sidecar_not_part_of_immutable_approval_archive",
+  "project_complete": false,
+  "installed_quantity": null
+}

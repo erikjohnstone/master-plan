@@ -58,7 +58,9 @@ def replay_workflow(request: WorkflowReplayInput) -> WorkflowReplayResult:
             raise ValueError('Duplicate saved BAS replay record')
         seen.add(record.record_id)
         if isinstance(record, AssignmentReplay):
-            current = calculate_assignment_demand(record.input).model_dump()
+            # Replay the rule that produced the retained result. New rules must
+            # never rewrite or make an older approved calculation unverifiable.
+            current = calculate_assignment_demand(record.input, record.result.rule_version).model_dump()
         elif isinstance(record, AssemblyReplay):
             current = calculate_assembly_quantities(record.input).model_dump()
         else:

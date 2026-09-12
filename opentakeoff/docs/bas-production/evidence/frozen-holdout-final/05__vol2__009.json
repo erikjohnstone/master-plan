@@ -1,0 +1,1337 @@
+{
+  "schema_version": "bas_holdout_evaluation_v1",
+  "evaluated_utc": "2026-09-12T19:46:42.848Z",
+  "split": "new_workflow_holdout",
+  "rules_frozen_before_open": true,
+  "production_rules_changed_from_result": false,
+  "document": {
+    "id": "05__vol2__009",
+    "rank": 5,
+    "title": "USDA APHIS Plant Inspection Station Building 63",
+    "pdf_sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+    "pages": 31,
+    "bytes": 18927687,
+    "independent_record_sha256": "3578922745acbcf80176ff3eb102588bd6af88166455a1d01b4b4081775a18de",
+    "independent_record_review_status": "complete_with_documented_source_limitations",
+    "independent_record_claim_is_reverified": false
+  },
+  "source_accounting": {
+    "pages": 31,
+    "spans": 11493,
+    "no_text_pages": 0,
+    "exhaustive_partition": {
+      "body_region_span_ids": 648,
+      "heading_only_span_ids": 0,
+      "ambiguous_span_ids": 0,
+      "unassigned_horizontal_span_ids": 10429,
+      "unsupported_span_ids": 416,
+      "blank_span_ids": 0
+    },
+    "source_hash_and_page_count_match": true,
+    "workflow_schema_and_fingerprints_pass": true
+  },
+  "graph_inventory": {
+    "tables": 34,
+    "tables_by_kind": {
+      "equipment": 15,
+      "reference": 19
+    },
+    "table_details": [
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#2",
+        "kind": "reference",
+        "title": "OCCUPANT LOADS",
+        "region": [
+          3732.5,
+          159.3,
+          5414,
+          374.4
+        ],
+        "headers": [
+          "STORY",
+          "PROPOSED USE",
+          "USE TYPE",
+          "SF/PER OCC.",
+          "AREA",
+          "NET/GROSS",
+          "NO. OF",
+          "STORY OCC."
+        ],
+        "rows": 3
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#2",
+        "kind": "reference",
+        "title": "ACCESSIBLE PARKING",
+        "region": [
+          4619,
+          550.5,
+          5364.8,
+          803
+        ],
+        "headers": [
+          "LOT OR",
+          "TOTAL # OF",
+          "TOTAL #"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#2",
+        "kind": "reference",
+        "title": "PLUMBING FIXTURE REQUIREMENTS",
+        "region": [
+          4589.3,
+          838,
+          5597.1,
+          1041.6
+        ],
+        "headers": [
+          "USE",
+          "WATER CLOSETS OR URINALS MALE FEMALE",
+          "LAVATORIES MALE FEMALE",
+          "SHOWERS / TUBS",
+          "DRINKING FOUNTAINS",
+          "SERVICE SINKS",
+          "CLOTHES WASHER CONNECT.",
+          "DESIGNER"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#22",
+        "kind": "reference",
+        "title": "",
+        "region": [
+          2434.3,
+          236.6,
+          3976.6,
+          2510.6
+        ],
+        "headers": [
+          "SA",
+          "H C",
+          "FS",
+          "T"
+        ],
+        "rows": 3
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#22",
+        "kind": "reference",
+        "title": "DDC POINTS LIST",
+        "region": [
+          4213.2,
+          639.5,
+          5330.6,
+          1014.7
+        ],
+        "headers": [
+          "NAME",
+          "DESCRIPTION",
+          "TREND",
+          "ALARM",
+          "GRAPHIC"
+        ],
+        "rows": 6
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#2",
+        "kind": "reference",
+        "title": "FIRE RATED CONSTRUCTION SCHEDULE",
+        "region": [
+          3652.8,
+          880.8,
+          4521.6,
+          1724.16
+        ],
+        "headers": [
+          "BUILDING ELEMENT",
+          "BUILDING ELEMENT 2",
+          "BUILDING ELEMENT 3",
+          "BUILDING ELEMENT 4",
+          "BUILDING ELEMENT 5",
+          "BUILDING ELEMENT 6",
+          "BUILDING ELEMENT 7",
+          "RATING REQUIRED",
+          "RATING PROVIDED",
+          "RATING REDUCT*",
+          "DETAIL # & SHEET #",
+          "ASSEMBLY DESIGN #",
+          "PENETRATION DESIGN #",
+          "JOINT DESIGN #"
+        ],
+        "rows": 14
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#4",
+        "kind": "reference",
+        "title": "LIFE SAFETY - EXISITNG EGRESS DOOR SCHEDULE",
+        "region": [
+          2892,
+          2964.48,
+          3708.96,
+          3092.64
+        ],
+        "headers": [
+          "DOOR NO.",
+          "CLEAR EGRESS WIDTH PROVIDED",
+          "EGRESS WIDTH FACTOR",
+          "OCCUPANT LOAD",
+          "OCCUPANT LOAD 2"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#5",
+        "kind": "reference",
+        "title": "DESIGN WIND PRESSURE FOR ROOF COMPONENTS (PSF)",
+        "region": [
+          1802.16,
+          1178.64,
+          2450.16,
+          1484.16
+        ],
+        "headers": [
+          "ROOF ZONE",
+          "COMPONENT TRIBUTARY AREA (FT2) 1 - 100",
+          "COMPONENT TRIBUTARY AREA (FT2) 1 - 100 2",
+          "COMPONENT TRIBUTARY AREA (FT2) 101+",
+          "COMPONENT TRIBUTARY AREA (FT2) 101+ 2"
+        ],
+        "rows": 3
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#5",
+        "kind": "reference",
+        "title": "DESIGN WIND PRESSURE FOR WALL COMPONENTS (PSF)",
+        "region": [
+          1802.16,
+          1529.76,
+          2450.16,
+          1781.76
+        ],
+        "headers": [
+          "WALL ZONE",
+          "COMPONENT TRIBUTARY AREA (FT2) 1 - 100",
+          "COMPONENT TRIBUTARY AREA (FT2) 1 - 100 2",
+          "COMPONENT TRIBUTARY AREA (FT2) 101+",
+          "COMPONENT TRIBUTARY AREA (FT2) 101+ 2"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#13",
+        "kind": "equipment",
+        "title": "DUCT CONSTRUCTION AND LEAKAGE SCHEDULE",
+        "region": [
+          3524.4,
+          2995.44,
+          5393.52,
+          3471.6
+        ],
+        "headers": [
+          "SYSTEM",
+          "SYSTEM DUCT TYPE",
+          "TYPE OF PRESSURE",
+          "SMACNA PRESSURE CLASS (IN WG)",
+          "SEAL CLASSIFICATION (PER SMACNA)",
+          "RECTANGULAR LEAKAGE CLASS (CFM/100 SQFT AT 1IN. WG)",
+          "ROUND AND FLAT OVAL LEAKAGE CLASS (CFM/100 SQFT AT 1IN. WG)"
+        ],
+        "rows": 6
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "kind": "equipment",
+        "title": "AIR DEVICE SCHEDULE",
+        "region": [
+          2946.24,
+          137.28,
+          5437.2,
+          975.36
+        ],
+        "headers": [
+          "MARK",
+          "MODULE SIZES (IN)",
+          "MNFR TITUS",
+          "MNFR RUSKIN",
+          "MODEL NO.",
+          "TYPE",
+          "MATERIAL STEEL (STL)",
+          "MATERIAL ALUMINUM (AL)",
+          "MATERIAL AL WITH STL FRAME",
+          "FINISH OFF WHITE",
+          "FINISH PRIMER",
+          "FINISH CLR BY ARCH",
+          "ACCESSORIES OPP BLADE DAMPER",
+          "ACCESSORIES AIR SCOOP",
+          "ACCESSORIES BUTTERFLY DAMPER",
+          "ACCESSORIES FIRE DAMPER",
+          "ACCESSORIES EQUALIZING GRID",
+          "MOUNTING LAY-IN",
+          "MOUNTING SURFACE",
+          "MOUNTING DUCT",
+          "MAX NC",
+          "MAX. LOSS IN W.G.",
+          "NOTES"
+        ],
+        "rows": 4
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "kind": "equipment",
+        "title": "AIR COOLED CHILLER SCHEDULE",
+        "region": [
+          1729.92,
+          1011.36,
+          3279.6,
+          1671.12
+        ],
+        "headers": [
+          "MARK",
+          "CAPACITY TONS",
+          "CAPACITY MIN EER",
+          "CAPACITY MIN IPLV",
+          "CHILLED WATER EWT (F)",
+          "CHILLED WATER LWT (F)",
+          "CHILLED WATER GPM",
+          "CHILLED WATER FOULNG FACTOR",
+          "CHILLED WATER MAX PRESSURE DROP FT WG",
+          "FLUID",
+          "NOTES"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "kind": "equipment",
+        "title": "FAN SCHEDULE",
+        "region": [
+          3329.04,
+          1011.36,
+          5437.2,
+          1840.32
+        ],
+        "headers": [
+          "MARK",
+          "CFM",
+          "ESP IN WG",
+          "MNFR COOK",
+          "MNFR GREENHECK",
+          "MODEL NO.",
+          "MOTOR MAX. HP.",
+          "MAX OPER WEIGHT (LBS)",
+          "MAX FAN SPEED (RPM)",
+          "MAX. NOISE SONES",
+          "DRIVE DIRECT",
+          "DRIVE BELT",
+          "ACCESSORIES MOTORIZED BYPASS DAMPER",
+          "ACCESSORIES ROOF CURB",
+          "ACCESSORIES ENERGY STAR RATED",
+          "ACCESSORIES DELAY TIMER",
+          "ACCESSORIES CEILING GRILLE",
+          "ACCESSORIES BIRD SCREEN",
+          "ACCESSORIES MOTOR EC",
+          "ACCESSORIES EQUIPMENT RAILS",
+          "COL21",
+          "NOTES"
+        ],
+        "rows": 5
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "kind": "equipment",
+        "title": "HYDRONIC CONTROL VALVE SCHEDULE",
+        "region": [
+          2432.64,
+          1874.88,
+          3743.52,
+          2333.76
+        ],
+        "headers": [
+          "MARK",
+          "GPM",
+          "MAX PRESSURE DROP (FT)",
+          "MIN CV",
+          "TYPE",
+          "CONFIGURATION",
+          "FLUID",
+          "FAIL POSITION"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "kind": "equipment",
+        "title": "AIR HANDLING UNIT SCHEDULE",
+        "region": [
+          3779.52,
+          1876.32,
+          5432.64,
+          2533.68
+        ],
+        "headers": [
+          "MARK",
+          "MNFR CARRIER",
+          "MNFR JCI",
+          "MNFR DAIKIN",
+          "MODEL SERIES",
+          "SUPPLY FAN MAX CFM",
+          "SUPPLY FAN MIN OA CFM",
+          "SUPPLY FAN UNOCCMI N CFM",
+          "SUPPLY FAN EXTERNIAL IN WG",
+          "MOTOR MAX MOTOR HP",
+          "MOTOR MAX RPM",
+          "COOLING COIL TOTAL MBH CLG",
+          "COOLING COIL SENS MBH CLG",
+          "COOLING COIL EAT DB F",
+          "COOLING COIL EAT WB F",
+          "COOLING COIL LAT DB F",
+          "COOLING COIL LAT WB F",
+          "COOLING COIL GPM",
+          "NOTES"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "kind": "equipment",
+        "title": "VAV TERMINAL SCHEDULE",
+        "region": [
+          4075.44,
+          2569.68,
+          5434.08,
+          3141.12
+        ],
+        "headers": [
+          "MARK",
+          "PRIMARY AIR MAX CFM",
+          "PRIMARY AIR MIN CFM",
+          "TYPE SHUTOFF",
+          "TYPE REHEAT",
+          "DUCT CONN INLET",
+          "AIR HANDLING SYSTEM",
+          "HEATING COIL HOT WATER",
+          "HEATING COIL ELECTRIC",
+          "HEATING COIL KW",
+          "NOTES"
+        ],
+        "rows": 7
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "kind": "equipment",
+        "title": "CHILLED WATER PUMP",
+        "region": [
+          3699.36,
+          3177.12,
+          4556.64,
+          3626.88
+        ],
+        "headers": [
+          "MARK",
+          "GPM",
+          "HEAD (FT WG)",
+          "MOTOR HP",
+          "FLUID",
+          "NOTES"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "kind": "equipment",
+        "title": "ELECTRIC DUCT HEATER",
+        "region": [
+          4592.64,
+          3177.12,
+          5434.08,
+          3748.56
+        ],
+        "headers": [
+          "MARK",
+          "CFM",
+          "TYPE PREHEAT",
+          "TYPE REHEAT",
+          "AIR HANDLING SYSTEM",
+          "KW",
+          "NOTES"
+        ],
+        "rows": 5
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#19",
+        "kind": "reference",
+        "title": "VARIABLE FREQUENCY DRIVE BACNET INTERFACE SCHEDULE",
+        "region": [
+          2556,
+          161.76,
+          3708,
+          1422
+        ],
+        "headers": [
+          "NAME",
+          "DESCRIPTION",
+          "TREND",
+          "ALARM",
+          "GRAPHIC"
+        ],
+        "rows": 18
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#20",
+        "kind": "reference",
+        "title": "AHU-1 DDC POINTS LIST",
+        "region": [
+          3859.44,
+          683.76,
+          5011.44,
+          1596.72
+        ],
+        "headers": [
+          "NAME",
+          "DESCRIPTION",
+          "TREND",
+          "ALARM",
+          "GRAPHIC"
+        ],
+        "rows": 17
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#20",
+        "kind": "reference",
+        "title": "CHILLER PLANT DDC POINTS LIST",
+        "region": [
+          4129.2,
+          3261.12,
+          5281.2,
+          3577.68
+        ],
+        "headers": [
+          "NAME",
+          "DESCRIPTION",
+          "TREND",
+          "ALARM",
+          "GRAPHIC"
+        ],
+        "rows": 4
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#21",
+        "kind": "reference",
+        "title": "LAB EXHAUST FANS DDC POINTS LIST",
+        "region": [
+          1719.84,
+          1132.8,
+          2871.84,
+          1522.8
+        ],
+        "headers": [
+          "NAME",
+          "COL2",
+          "DESCRIPTION",
+          "TREND",
+          "ALARM",
+          "GRAPHIC"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#21",
+        "kind": "reference",
+        "title": "SCHEDULED EXHAUST FAN DDC POINTS LIST",
+        "region": [
+          4257.84,
+          1501.2,
+          5409.84,
+          1891.2
+        ],
+        "headers": [
+          "NAME",
+          "COL2",
+          "DESCRIPTION",
+          "TREND",
+          "ALARM",
+          "GRAPHIC"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#21",
+        "kind": "reference",
+        "title": "AHU-2 DDC POINTS LIST",
+        "region": [
+          4212,
+          2989.44,
+          5364,
+          3758.88
+        ],
+        "headers": [
+          "NAME",
+          "DESCRIPTION",
+          "TREND",
+          "ALARM",
+          "GRAPHIC"
+        ],
+        "rows": 11
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#22",
+        "kind": "reference",
+        "title": "VAV TERMINAL DDC POINTS LIST",
+        "region": [
+          4187.76,
+          2995.68,
+          5339.76,
+          3661.68
+        ],
+        "headers": [
+          "NAME",
+          "DESCRIPTION",
+          "TREND",
+          "ALARM",
+          "GRAPHIC"
+        ],
+        "rows": 8
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#28",
+        "kind": "equipment",
+        "title": "LUMINAIRE SCHEDULE",
+        "region": [
+          2143.64,
+          217.56,
+          4521.44,
+          753.72
+        ],
+        "headers": [
+          "TYPE",
+          "DESCRIPTION",
+          "MANUFACTURER",
+          "MODEL NO.",
+          "TYPE 2",
+          "LUMENS",
+          "CCT",
+          "CRI",
+          "DRIVER VOLTAGE",
+          "WATTAGE",
+          "COL11",
+          "NOTES"
+        ],
+        "rows": 6
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "kind": "equipment",
+        "title": "EXISTING PANEL MDP SCHEDULE",
+        "region": [
+          334.72,
+          206.02,
+          1990.72,
+          1474.36
+        ],
+        "headers": [
+          "CKT 1",
+          "LOAD DESCRIPTION WATER HEATER MECHANICAL 122",
+          "WIRE EX",
+          "WIRE EX 2",
+          "TRIP 20",
+          "A 8.01",
+          "A 8.01 2",
+          "A 0.00",
+          "B",
+          "B 2",
+          "C",
+          "C 2",
+          "C 3",
+          "TRIP 100",
+          "WIRE --",
+          "WIRE -- 2",
+          "LOAD DESCRIPTION SPD",
+          "LOAD DESCRIPTION SPD 2",
+          "CKT 2"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "kind": "equipment",
+        "title": "EXISTING PANEL ELP SCHEDULE",
+        "region": [
+          2048.54,
+          206.02,
+          3704.54,
+          1474.36
+        ],
+        "headers": [
+          "CKT",
+          "LOAD DESCRIPTION",
+          "WIRE",
+          "WIRE 2",
+          "TRIP",
+          "A (KVA)",
+          "A (KVA) 2",
+          "A (KVA) 3",
+          "B (KVA)",
+          "B (KVA) 2",
+          "C (KVA)",
+          "C (KVA) 2",
+          "C (KVA) 3",
+          "TRIP 2",
+          "WIRE 3",
+          "WIRE 4",
+          "LOAD DESCRIPTION 2",
+          "LOAD DESCRIPTION 3",
+          "CKT 2"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "kind": "equipment",
+        "title": "EXISTING PANEL LP1 SCHEDULE",
+        "region": [
+          3740.54,
+          206.02,
+          5396.54,
+          1474.36
+        ],
+        "headers": [
+          "CKT 1",
+          "LOAD DESCRIPTION AHU-1 MECHANICAL 122",
+          "WIRE EX",
+          "WIRE EX 2",
+          "TRIP 30",
+          "A (KVA) 2.01",
+          "A (KVA) 2.01 2",
+          "A (KVA) 5.55",
+          "B (KVA)",
+          "B (KVA) 2",
+          "C (KVA)",
+          "C (KVA) 2",
+          "C (KVA) 3",
+          "TRIP 60",
+          "WIRE EX 3",
+          "WIRE EX 4",
+          "LOAD DESCRIPTION AHU-2 MECHANICAL 122",
+          "LOAD DESCRIPTION AHU-2 MECHANICAL 122 2",
+          "CKT 2"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "kind": "equipment",
+        "title": "EXISTING PANEL LP2 SCHEDULE",
+        "region": [
+          2048.54,
+          1510.36,
+          3704.54,
+          2778.7
+        ],
+        "headers": [
+          "CKT",
+          "LOAD DESCRIPTION",
+          "WIRE",
+          "WIRE 2",
+          "TRIP",
+          "A (KVA)",
+          "A (KVA) 2",
+          "A (KVA) 3",
+          "B (KVA)",
+          "B (KVA) 2",
+          "C (KVA)",
+          "C (KVA) 2",
+          "C (KVA) 3",
+          "TRIP 2",
+          "WIRE 3",
+          "WIRE 4",
+          "LOAD DESCRIPTION 2",
+          "LOAD DESCRIPTION 3",
+          "CKT 2"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "kind": "equipment",
+        "title": "EXISTING PANEL LP3 SCHEDULE",
+        "region": [
+          3740.54,
+          1510.36,
+          5396.54,
+          2778.7
+        ],
+        "headers": [
+          "CKT 1",
+          "LOAD DESCRIPTION VAV-1-1 OFFICE 101",
+          "WIRE EX",
+          "WIRE EX 2",
+          "TRIP 20",
+          "A (KVA) 1.00",
+          "A (KVA) 1.00 2",
+          "A (KVA) 3.34",
+          "B (KVA)",
+          "B (KVA) 2",
+          "C (KVA)",
+          "C (KVA) 2",
+          "C (KVA) 3",
+          "TRIP 40",
+          "WIRE EX 3",
+          "WIRE EX 4",
+          "LOAD DESCRIPTION EDH-4 LAB 4 118",
+          "LOAD DESCRIPTION EDH-4 LAB 4 118 2",
+          "CKT 2"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#31",
+        "kind": "reference",
+        "title": "EQUIPMENT CONNECTION SCHEDULE - EXHAUST FANS",
+        "region": [
+          2317.16,
+          253.3,
+          5337.2,
+          487.66
+        ],
+        "headers": [
+          "EQUIPMENT DESIGNATION",
+          "DESCRIPTION",
+          "LOAD RATING (HP, KW)",
+          "FLA",
+          "MCA",
+          "MOCP",
+          "VOLTAGE",
+          "PHASE",
+          "DISCONNECT SWITCH FRAME SIZE (A)",
+          "DISCONNECT SWITCH FUSE SIZE (A)",
+          "DISCONNECT SWITCH NEMA TYPE",
+          "DISCONNECT SWITCH MIN KAIC",
+          "CIRCUIT INFORMATION PANEL",
+          "CIRCUIT INFORMATION CIRCUIT #",
+          "REMARKS"
+        ],
+        "rows": 3
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#31",
+        "kind": "reference",
+        "title": "EQUIPMENT CONNECTION SCHEDULE - CHILLERS",
+        "region": [
+          2332.82,
+          638.7,
+          5352.84,
+          804.04
+        ],
+        "headers": [
+          "EQUIPMENT DESIGNATION",
+          "DESCRIPTION",
+          "LOAD RATING (HP, KW)",
+          "FLA",
+          "MCA",
+          "MOCP",
+          "VOLTAGE",
+          "PHASE",
+          "DISCONNECT SWITCH FRAME SIZE (A)",
+          "DISCONNECT SWITCH FUSE SIZE (A)",
+          "DISCONNECT SWITCH NEMA TYPE",
+          "DISCONNECT SWITCH MIN KAIC",
+          "CIRCUIT INFORMATION PANEL",
+          "CIRCUIT INFORMATION CIRCUIT #",
+          "REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#31",
+        "kind": "reference",
+        "title": "EQUIPMENT CONNECTION SCHEDULE - DUCT HEATERS",
+        "region": [
+          2317.16,
+          901.08,
+          5331.54,
+          1204.42
+        ],
+        "headers": [
+          "EQUIPMENT DESIGNATION",
+          "DESCRIPTION",
+          "LOAD RATING (HP, KW)",
+          "FLA",
+          "MCA",
+          "MOCP",
+          "VOLTAGE",
+          "PHASE",
+          "DISCONNECT SWITCH FRAME SIZE (A)",
+          "DISCONNECT SWITCH FUSE SIZE (A)",
+          "DISCONNECT SWITCH NEMA TYPE",
+          "DISCONNECT SWITCH MIN KAIC",
+          "CIRCUIT INFORMATION PANEL",
+          "CIRCUIT INFORMATION CIRCUIT #",
+          "REMARKS"
+        ],
+        "rows": 5
+      }
+    ]
+  },
+  "point_lists": {
+    "truth_kind": "authored_point_tables",
+    "expected_tables": 8,
+    "expected_rows": 75,
+    "expected_diagram_callouts_not_tables": 0,
+    "actual_matrices": 7,
+    "actual_rows": 50,
+    "actual_observations": 122,
+    "authored_table_matches": [
+      {
+        "expected": {
+          "id": "M801-VFD-BACNET-INTERFACE-LEDGER",
+          "page": 19,
+          "sheet": "M-801",
+          "title": "VARIABLE FREQUENCY DRIVE BACNET INTERFACE SCHEDULE",
+          "rows": 18,
+          "region": [
+            1280,
+            170,
+            1650,
+            567
+          ]
+        },
+        "matched": false,
+        "actual_matrix_id": null,
+        "actual_rows": null,
+        "exact_row_count": null,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M802-AHU1-DDC-LEDGER",
+          "page": 20,
+          "sheet": "M-802",
+          "title": "AHU-1 DDC POINTS LIST",
+          "rows": 17,
+          "region": [
+            1935,
+            432,
+            2325,
+            759
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:962bdc7f4eef150646c37f9a7042888ab373d506a2d54709ed7dec8f07889855",
+        "actual_rows": 17,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M802-CHILLER-PLANT-DDC-LEDGER",
+          "page": 20,
+          "sheet": "M-802",
+          "title": "CHILLER PLANT DDC POINTS LIST",
+          "rows": 11,
+          "region": [
+            2070,
+            1720,
+            2460,
+            1962
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:63741f68e0562f84de6657eeeda9a205995d67d50cd2996891f0cfe9321f914d",
+        "actual_rows": 4,
+        "exact_row_count": false,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M803-AHU2-DDC-LEDGER",
+          "page": 21,
+          "sheet": "M-803",
+          "title": "AHU-2 DDC POINTS LIST",
+          "rows": 11,
+          "region": [
+            2112,
+            1584,
+            2500,
+            1826
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:d41e8fd5b8901b3c72f99f39e1f2e986a036b13feb0cea9129a5003fe6eb89ac",
+        "actual_rows": 11,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M803-LAB-EXHAUST-DDC-LEDGER",
+          "page": 21,
+          "sheet": "M-803",
+          "title": "LAB EXHAUST FANS DDC POINTS LIST",
+          "rows": 2,
+          "region": [
+            866,
+            656,
+            1260,
+            708
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:73365cbe4ab75b87a0a655035d8ecedfe8c143923712aae3ece67e35ff9b2a23",
+        "actual_rows": 2,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M803-SCHEDULED-EXHAUST-DDC-LEDGER",
+          "page": 21,
+          "sheet": "M-803",
+          "title": "SCHEDULED EXHAUST FAN DDC POINTS LIST",
+          "rows": 2,
+          "region": [
+            2135,
+            840,
+            2525,
+            892
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:3977b2f048b97ef1b434377c5738dd222086468a0cea11a61e7a8c5fc95ccdca",
+        "actual_rows": 2,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+          "page": 22,
+          "sheet": "M-804",
+          "title": "ELECTRIC UNIT HEATER DDC POINTS LIST",
+          "rows": 6,
+          "region": [
+            2100,
+            374,
+            2505,
+            512
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:b5408fa6145ba5b3575e6d7d0504cf950478730eea2a62871a1c71c46aa9a48c",
+        "actual_rows": 6,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "M804-VAV-TERMINAL-DDC-LEDGER",
+          "page": 22,
+          "sheet": "M-804",
+          "title": "VAV TERMINAL DDC POINTS LIST",
+          "rows": 8,
+          "region": [
+            2100,
+            1588,
+            2505,
+            1777
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:7041c7affc7c1d175716798b2c0f7d0a37fb40e7450477de75712c3f9807923d",
+        "actual_rows": 8,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      }
+    ],
+    "unmatched_actual_candidates": []
+  },
+  "bas_math": {
+    "status": "review_required",
+    "source_coverage": "point_list_only",
+    "physical_total": {
+      "AI": 0,
+      "AO": 0,
+      "DI": 0,
+      "DO": 0
+    },
+    "calculated_rows": 0
+  },
+  "sequences": {
+    "authored_titled_regions": 0,
+    "authored_title_matches": [],
+    "authored_sequence_inventory_items": 0,
+    "authored_summary_groups": 0,
+    "authored_summary_clauses": 0,
+    "actual_regions": [
+      {
+        "region_id": "sha256:d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1:p20:line57:narrative",
+        "page": 20,
+        "title": "AHU-1 (VAV SYSTEM) SEQUENCE OF OPERATIONS",
+        "status": "body_detected",
+        "clauses": 7,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 7
+      },
+      {
+        "region_id": "sha256:d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1:p20:line314:narrative",
+        "page": 20,
+        "title": "CHILLED WATER PLANT: SEQUENCE OF OPERATION",
+        "status": "body_detected",
+        "clauses": 5,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 5
+      },
+      {
+        "region_id": "sha256:d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1:p21:line30:narrative",
+        "page": 21,
+        "title": "LABORATORY EXHAUST FANS SEQUENCE OF OPERATIONS",
+        "status": "body_detected",
+        "clauses": 4,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 4
+      },
+      {
+        "region_id": "sha256:d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1:p21:line87:narrative",
+        "page": 21,
+        "title": "SEQUENCE OF OPERATIONS:",
+        "status": "body_detected",
+        "clauses": 4,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 4
+      },
+      {
+        "region_id": "sha256:d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1:p21:line196:narrative",
+        "page": 21,
+        "title": "AHU-2 (CONSTANT VOLUME LAB SYSTEM) RECOMMENDED SEQUENCE OF OPERATIONS",
+        "status": "body_detected",
+        "clauses": 6,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 6
+      },
+      {
+        "region_id": "sha256:d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1:p22:line22:narrative",
+        "page": 22,
+        "title": "SEQUENCE OF OPERATIONS:",
+        "status": "body_detected",
+        "clauses": 7,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 7
+      },
+      {
+        "region_id": "sha256:d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1:p22:line192:narrative",
+        "page": 22,
+        "title": "SEQUENCE OF OPERATION:",
+        "status": "body_detected",
+        "clauses": 9,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 9
+      }
+    ],
+    "actual_region_count": 7,
+    "actual_clause_count": 42,
+    "discovery_complete": false,
+    "interpretation_complete": false
+  },
+  "equipment_candidates": {
+    "authored_schedule_counts": {
+      "tables": 8,
+      "rows": 28,
+      "building_scoped_tag_identities_including_outlet_types": 24,
+      "other_scheduled_tag_identities": 24,
+      "interpretation": "Counts are literal clean-tag schedule-row identities only. The four air-device type rows are separately retained and are not recast as installed outlets."
+    },
+    "actual_tables": 15,
+    "actual_rows": 48,
+    "tables": [
+      {
+        "table_id": "bas-equipment:929a43dca41af39abed161456ea0d719db00eb13712d9429d8210867463055a0:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#13",
+        "title": "DUCT CONSTRUCTION AND LEAKAGE SCHEDULE",
+        "rows": 6,
+        "rows_with_issues": 6,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:ded20d2ab66439921b3defb9737f7d584dfcb0043a3991ede6befffbd87af8b4:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "title": "AIR DEVICE SCHEDULE",
+        "rows": 4,
+        "rows_with_issues": 4,
+        "issue_codes": [
+          "membership_unsupported_syntax"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:935a20bf4d3ff7d11110d95f9acdd05c354b825defb55b1132aa869e23035bd4:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "title": "AIR COOLED CHILLER SCHEDULE",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:cd2075710889e55c031a0b4829f26df643249739d2225d02da57df05d90710a5:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "title": "FAN SCHEDULE",
+        "rows": 5,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:8689a545713db001a72869776b892b2763eb229a417df5f72c34ef7d3d555d2c:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "title": "HYDRONIC CONTROL VALVE SCHEDULE",
+        "rows": 2,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:2f396a9b7510c503a10f9a669d7c40cb5d87aabd2d4a607aab0bf3ab4a73faa5:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "title": "AIR HANDLING UNIT SCHEDULE",
+        "rows": 2,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:bea9c7999823e0f6e184d92a6ffd47fb8e5fbe5b42404bec9880e7b74b75ed97:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "title": "VAV TERMINAL SCHEDULE",
+        "rows": 7,
+        "rows_with_issues": 7,
+        "issue_codes": [
+          "membership_unsupported_syntax"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:4f59d895e3d41aa6ced5e056d37756f8036e9eaa5fdbe9140d691561416321df:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "title": "CHILLED WATER PUMP",
+        "rows": 2,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:0411e44b25e2772e486cd797eab63f3e495b4a91defe485452527baf62437248:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#18",
+        "title": "ELECTRIC DUCT HEATER",
+        "rows": 5,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:b93156cb5059fda270bd79e25e606fc0925ed445c6c504ef2829438a0b41eb18:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#28",
+        "title": "LUMINAIRE SCHEDULE",
+        "rows": 6,
+        "rows_with_issues": 6,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:c2b3378dcd44156e8fa82287ad227e4c1f80b862afaf1d7472fe654f1b9bb987:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "title": "EXISTING PANEL MDP SCHEDULE",
+        "rows": 2,
+        "rows_with_issues": 2,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:7c04407ed9396f8110f534534ce14fcdec3b48ed69d92a69e22809951888425f:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "title": "EXISTING PANEL ELP SCHEDULE",
+        "rows": 2,
+        "rows_with_issues": 2,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:6f8980436313f4c5c41b6c59bc3521f5d60e5c079323398cca4987d0ad98b7dc:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "title": "EXISTING PANEL LP1 SCHEDULE",
+        "rows": 1,
+        "rows_with_issues": 1,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:f7f76c5b791ed30fdc6e1138518e269100d5fe4e6ec34fce799cbe0086986c99:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "title": "EXISTING PANEL LP2 SCHEDULE",
+        "rows": 2,
+        "rows_with_issues": 2,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:64de7adb1e6fc28be3a241c0ba5ca2f71954ecc5b3e463b5fbc71f3aed453c48:copy1",
+        "sheet": "05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf#30",
+        "title": "EXISTING PANEL LP3 SCHEDULE",
+        "rows": 1,
+        "rows_with_issues": 1,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      }
+    ],
+    "rows_with_issues": 31,
+    "issue_codes": [
+      "membership_unsupported_syntax",
+      "missing_mark_column"
+    ],
+    "installed_quantity_values": [
+      null
+    ]
+  },
+  "initial_human_in_loop_state": {
+    "review_events": 0,
+    "equipment_events": 0,
+    "assembly_events": 0,
+    "engineering_events": 0,
+    "project_complete": false,
+    "installed_quantity": null,
+    "findings": 290,
+    "blockers": 290,
+    "findings_by_domain_severity_code": {
+      "equipment:blocker:membership_unsupported_syntax": 11,
+      "equipment:blocker:missing_mark_column": 20,
+      "points:blocker:DUPLICATE_LOCAL_ROW_KEY": 8,
+      "points:blocker:point_columns_uninterpreted": 50,
+      "points:blocker:POINT_COLUMNS_UNINTERPRETED": 50,
+      "points:blocker:point_columns_unobserved": 31,
+      "points:blocker:POINT_COLUMNS_UNRESOLVED": 7,
+      "points:blocker:POINT_NAME_UNAVAILABLE": 6,
+      "points:blocker:SOURCE_DISCOVERY_COVERAGE_UNVERIFIED": 1,
+      "sequences:blocker:discovery_incomplete": 1,
+      "sequences:blocker:unassigned_horizontal_spans": 31,
+      "sequences:blocker:uninterpreted_clause": 42,
+      "sequences:blocker:unsupported_spans": 31,
+      "sources:blocker:source_inventory_not_byte_verified": 1
+    }
+  },
+  "performance": {
+    "graph_ms": 815856,
+    "compile_and_capture_ms": 2341,
+    "total_ms": 823684,
+    "peak_rss_bytes": 1912864768
+  },
+  "assessment_boundary": "Independent source facts versus frozen automatic capture. Unmatched candidates require source review; they are not automatically labeled false positives. No human applicability, assembly, responsibility, compatibility, revision, approval, or installed-count decision is manufactured by this audit."
+}

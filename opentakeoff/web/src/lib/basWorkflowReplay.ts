@@ -20,11 +20,22 @@ export type BasReplayRecord = { record_id: string } & (
   { kind: 'assignment'; input: BasAssignmentDemandInput; result: BasAssignmentDemandResult }
   | { kind: 'assembly'; input: BasAssemblyQuantityInput; result: BasAssemblyQuantityResult }
   | { kind: 'engineering'; result: BasEngineeringResult });
+type BasWorkflowReplayIdentity = { workflow_sha256: string;
+  checked_records: BasWorkflowReplayReceipt['checked_records'] };
+const preparedReplayIdentities = new WeakMap<object, BasWorkflowReplayIdentity>();
 
 export async function prepareBasWorkflowReplay(raw: unknown, guard: () => void = () => {}) {
   guard(); const workflow = await verifyBasWorkflow(raw); guard();
+  return prepareBasWorkflowReplayForVerifiedWorkflow(workflow, guard);
+}
+
+/** Internal composition seam for a workflow verified in the same operation.
+ * The transport receives only immutable identity values and cloned calculation
+ * records, never the workflow object captured by the private generator. */
+export async function prepareBasWorkflowReplayForVerifiedWorkflow(workflow: BasWorkflow,
+  guard: () => void = () => {}) {
   const identity = await replayIdentityForVerifiedBasWorkflow(workflow, guard);
-  return { ...identity,
+  const plan = { ...identity,
     async *records(): AsyncGenerator<BasReplayRecord> {
       for (const calculation of workflow.assignment_calculations || []) {
         guard(); const event = workflow.equipment_events!.find(e => e.event_id === calculation.result.equipment_head)!;
@@ -45,7 +56,14 @@ export async function prepareBasWorkflowReplay(raw: unknown, guard: () => void =
       guard();
     },
   };
+  // The transport can see and even accidentally mutate its plan. Receipt
+  // acceptance remains bound to a separate private copy of the exact identity
+  // established before the plan crossed that boundary.
+  preparedReplayIdentities.set(plan, { workflow_sha256: identity.workflow_sha256,
+    checked_records: structuredClone(identity.checked_records) });
+  return plan;
 }
+export type BasPreparedWorkflowReplay = Awaited<ReturnType<typeof prepareBasWorkflowReplayForVerifiedWorkflow>>;
 
 /** Internal identity seam for an already owned/verified workflow, not arithmetic
  * execution and never a public "trust this history" option. */
@@ -66,11 +84,24 @@ export async function assertBasWorkflowReplayReceipt(rawWorkflow: unknown, rawRe
 /** Internal composition after full workflow verification AND actual configured
  * replay. Public transports must retain the full-verification wrapper above. */
 export async function assertReplayReceiptForVerifiedBasWorkflow(workflow: BasWorkflow, rawReceipt: unknown, guard: () => void = () => {}) {
-  const plan = await replayIdentityForVerifiedBasWorkflow(workflow, guard), receipt = basWorkflowReplayReceiptSchema.parse(rawReceipt);
-  const hasResults = Object.values(plan.checked_records).some(records => records.length);
-  if (receipt.workflow_sha256 !== plan.workflow_sha256 || canonicalBasJson(receipt.checked_records) !== canonicalBasJson(plan.checked_records)
+  const plan = await prepareBasWorkflowReplayForVerifiedWorkflow(workflow, guard);
+  return assertReplayReceiptForPreparedWorkflow(plan, rawReceipt, guard);
+}
+
+/** Internal operation-local receipt verifier. Only a plan created above owns a
+ * private expected identity; arbitrary lookalike objects cannot select this path. */
+export function assertReplayReceiptForPreparedWorkflow(plan: BasPreparedWorkflowReplay, rawReceipt: unknown,
+  guard: () => void = () => {}) {
+  guard();
+  const expected = preparedReplayIdentities.get(plan);
+  if (!expected) throw new Error('BAS replay receipt requires an owned prepared workflow');
+  const receipt = basWorkflowReplayReceiptSchema.parse(rawReceipt);
+  const hasResults = Object.values(expected.checked_records).some(records => records.length);
+  if (receipt.workflow_sha256 !== expected.workflow_sha256
+    || canonicalBasJson(receipt.checked_records) !== canonicalBasJson(expected.checked_records)
     || receipt.calculation_verification !== (hasResults ? 'verified_shared_python_replay' : 'no_saved_calculations')) {
     throw new Error('BAS replay receipt does not cover the exact saved workflow and all calculation records');
   }
+  guard();
   return receipt;
 }

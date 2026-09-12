@@ -1,6 +1,6 @@
 /** Shared operation/response ownership. No extraction or browser arithmetic. */
 import { z } from 'zod';
-import { basWorkflowSchema, verifyBasWorkflow } from './basWorkflow.ts';
+import { basWorkflowSchema, verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 import { basRevisionBasisSchema } from './basRevisionBasisContract.ts';
 import { basRevisionInventorySchema } from './basRevisionInventoryContract.ts';
 import { basRevisionComparisonRequestSchema, basRevisionComparisonSchema, normalizeBasRevisionComparisonRequest,
@@ -33,13 +33,19 @@ const same = (a: unknown, b: unknown) => canonicalBasJson(a) === canonicalBasJso
 /** Bind trusted-service output to the requested immutable inputs. This is NOT
  * an independent math check; actual arithmetic remains in the shared service. */
 export async function assertBasRevisionResponse(rawWorkflow: unknown, rawOperation: unknown, rawResponse: unknown) {
+  const workflow = basWorkflowSchema.parse(rawWorkflow);
+  return assertBasRevisionResponseForVerifiedWorkflow(workflow, rawOperation, rawResponse);
+}
+
+/** Internal response-binding path for a workflow already verified before it
+ * entered application state. Public/arbitrary callers use the wrapper above. */
+export async function assertBasRevisionResponseForVerifiedWorkflow(workflow: BasWorkflow, rawOperation: unknown, rawResponse: unknown) {
   const operation = basRevisionOperationSchema.parse(rawOperation), response = basRevisionResponseSchema.parse(rawResponse);
   if (operation.kind !== response.kind) throw new Error('Revision response changed the requested operation');
   if (operation.kind === 'inventory' && response.kind === 'inventory') {
     if (!same(operation.basis, response.inventory.basis)) throw new Error('Revision inventory response changed the selected versions');
     return response;
   }
-  const workflow = basWorkflowSchema.parse(rawWorkflow);
   let comparison, expectedFingerprint;
   if (operation.kind === 'compare' && response.kind === 'compare') {
     comparison = normalizeBasRevisionComparisonRequest(operation.comparison);

@@ -1969,8 +1969,12 @@ export function isBasPointsListTitle(title) {
   // Lab/VA DDC controller I/O summaries (device-point rows, not AI## MARK lists).
   if (/\bDDC\s+CONTROLLER\s+INPUT\s*\/?\s*OUTPUT\b/i.test(t)) return true;
   if (/\bCONTROLLER\s+I\s*\/?\s*O\s+(?:SUMMARY|LEGEND|LIST)\b/i.test(t)) return true;
-  // MISCELLANEOUS POINTS SCHEDULE / POINTS SCHEDULE (not SOO "point list table"
-  // narratives — those lack the SCHEDULE token after POINTS).
+  // Explicit object/interface matrices enumerate BAS-visible values even when
+  // the drafter did not put POINTS LIST in the caption.
+  if (/\bBACNET\s+INTERFACE\s+SCHEDULE\b/i.test(t)) return true;
+  // MISCELLANEOUS POINTS SCHEDULE / POINT FUNCTION SCHEDULE (not SOO
+  // "point list table" narratives — those lack the SCHEDULE token).
+  if (/\bPOINTS?\s+FUNCTION\s+SCHEDULE\b/i.test(t)) return true;
   if (/\bPOINTS?\s+SCHEDULE\b/i.test(t)) return true;
   return false;
 }

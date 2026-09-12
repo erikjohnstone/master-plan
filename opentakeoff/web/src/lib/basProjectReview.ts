@@ -2,13 +2,14 @@
  * for UI/MCP. No extraction, math, dismissal, source-byte verification or approval. */
 import { z } from 'zod';
 import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
-import { basEquipmentView, basAssignmentCalculationState } from './basEquipmentReview.ts';
-import { basAssemblyView, basAssemblyCalculationState } from './basAssemblyReview.ts';
-import { basEngineeringView } from './basEngineeringReview.ts';
+import { basEquipmentHead, basEquipmentView, basAssignmentCalculationState } from './basEquipmentReview.ts';
+import { basAssemblyHead, basAssemblyViewForVerifiedEquipment, basAssemblyCalculationState } from './basAssemblyReview.ts';
+import { basEngineeringViewForVerifiedViews } from './basEngineeringReview.ts';
 import { basSequenceView } from './basReview.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 import { BAS_PROJECT_ISSUE_RULE, basProjectIssuePolicy, type BasIssueDomain } from './basProjectIssueCatalog.ts';
+import { consumeReviewViewsForPreparedBasRevisionInventory, type BasRevisionInventory } from './basRevisionInventory.ts';
 
 const id = z.string().min(1).max(1024), sha = z.string().regex(/^[a-f0-9]{64}$/);
 const box = z.tuple([z.number().finite(), z.number().finite(), z.number().finite(), z.number().finite()])
@@ -45,7 +46,8 @@ export async function basProjectReview(raw: unknown, captureId: string): Promise
 
 /** Internal shared seam: callers own and verify the workflow before selecting
  * retained history. Public requests cannot supply findings or skip verification. */
-export async function projectReviewForVerifiedBasWorkflow(workflow: BasWorkflow, captureId: string): Promise<BasProjectReview> {
+export async function projectReviewForVerifiedBasWorkflow(workflow: BasWorkflow, captureId: string,
+  preparedInventory?: BasRevisionInventory): Promise<BasProjectReview> {
   const capture = workflow.captures.find(c => c.capture_id === captureId);
   if (!capture) throw new Error('Project review requires a retained BAS capture');
   const pending: Omit<Issue, 'issue_key' | 'occurrence_id'>[] = [];
@@ -115,8 +117,11 @@ export async function projectReviewForVerifiedBasWorkflow(workflow: BasWorkflow,
   }
   if (!capture.equipment_sources) push('sources', 'equipment_capture_unavailable', whole, { capture_id: captureId });
   else {
-    const equipment = await basEquipmentView(workflow, captureId), register = equipment.register;
-    const equipmentHead = workflow.equipment_events?.filter(e => e.capture_id === captureId).at(-1)?.event_id ?? null;
+    const equipmentHead = basEquipmentHead(workflow, captureId);
+    const preparedViews = preparedInventory ? consumeReviewViewsForPreparedBasRevisionInventory(
+      workflow, preparedInventory, captureId, equipmentHead, basAssemblyHead(workflow, captureId)) : null;
+    const equipment = preparedViews?.equipment ?? await basEquipmentView(workflow, captureId);
+    const register = equipment.register;
     const equipmentMap = new Map(register.equipment.map(e => [e.equipment_id, e]));
     const occurrences = new Map(equipment.candidates.tables.flatMap(t => t.rows.map(r => [r.occurrence_id, { r, t }] as const)));
     const rowEvidence = (occurrenceId: string) => {
@@ -164,7 +169,7 @@ export async function projectReviewForVerifiedBasWorkflow(workflow: BasWorkflow,
           assignment.included_equipment_ids, demandStatus, demand.latest.calculation_id);
       }
     }
-    const assembly = await basAssemblyView(workflow, captureId);
+    const assembly = preparedViews?.assembly ?? await basAssemblyViewForVerifiedEquipment(workflow, captureId, equipment);
     if (assembly.dependency_status === 'stale_dependencies') push('assemblies', 'assembly_stale_dependencies', whole,
       { current_equipment_head: assembly.current_equipment_head, reviewed_equipment_head: assembly.equipment_head }, [], [], 'stale_dependencies', assembly.review_head);
     const components = new Map(assembly.components.map(c => [c.record.component_id, c]));
@@ -185,7 +190,7 @@ export async function projectReviewForVerifiedBasWorkflow(workflow: BasWorkflow,
     if (quantity.latest) for (const c of quantity.latest.result.components) for (const code of c.issues) push('assemblies', code,
       subject('component', c.original.component_id, c.original.label), { code, status: c.status }, fromSpans(c.original.source_span_ids), c.original.equipment_ids,
       quantity.status === 'not_calculated' ? 'not_reviewed' : quantity.status, quantity.latest.calculation_id, c.original.disposition);
-    const engineering = await basEngineeringView(workflow, captureId);
+    const engineering = await basEngineeringViewForVerifiedViews(workflow, captureId, equipment, assembly);
     if (engineering.event) {
       push('engineering', 'engineering_requires_python_replay', whole, { event_id: engineering.event.event_id }, [], [], engineering.dependency_status, engineering.event.event_id);
       if (engineering.dependency_status === 'stale_dependencies') push('engineering', 'engineering_stale_dependencies', whole, engineering.current_heads, [], [], engineering.dependency_status, engineering.event.event_id);

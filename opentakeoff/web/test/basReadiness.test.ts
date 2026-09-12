@@ -105,6 +105,10 @@ test('forged or mismatched replay receipts and mutated adapter copies do not est
   await assert.rejects(buildBasReadiness(r.workflow, r.scope.event_id, { replayCalculations: async () => ({ ...reference.replay, workflow_sha256: 'f'.repeat(64) }) }), /exact saved workflow/);
   await assert.rejects(buildBasReadiness(r.workflow, r.scope.event_id, { replayCalculations: async () => ({ verified: true }) }));
   await assert.rejects(buildBasReadiness(r.workflow, r.scope.event_id, { replayCalculations: async () => { throw new Error('Actual Python failed'); } }), /Actual Python failed/);
+  await assert.rejects(buildBasReadiness(r.workflow, r.scope.event_id, { replayPreparedCalculations: async plan => {
+    plan.workflow_sha256 = 'f'.repeat(64);
+    return { ...reference.replay, workflow_sha256: plan.workflow_sha256 };
+  } }), /exact saved workflow/);
   await buildBasReadiness(r.workflow, r.scope.event_id, { readSource: async source => { source.sha256 = 'f'.repeat(64); return f.bytes; },
     replayCalculations: async copy => { copy.scope_events = []; return reference.replay; } });
   assert.equal(canonicalBasJson(r.workflow), before);

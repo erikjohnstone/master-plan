@@ -24,6 +24,7 @@ export const TOOL_STAGES: Record<string, readonly string[]> = {
     "match_reference_symbol", "find_legend_symbols", "sweep_inline_motif",
   ],
   revise: [
+    "inspect_bas_workflow",
     "bas_scope_review",
     "bas_drawing_review",
     "bas_issue_review",
@@ -32,6 +33,7 @@ export const TOOL_STAGES: Record<string, readonly string[]> = {
     "list_annotations", "link_annotation", "mark_verdict", "delete_verdict",
   ],
   handoff: [
+    "inspect_bas_snapshot",
     "takeoff_summary", "export_takeoff", "export_report", "import_takeoff",
     "apply_rules", "export_marked_pdf", "export_dxf",
   ],

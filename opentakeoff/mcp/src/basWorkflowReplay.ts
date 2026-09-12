@@ -1,6 +1,6 @@
 /** Complete saved-calculation audit shared by restoration/approval entry points. */
 import { prepareBasWorkflowReplay, basWorkflowReplayReceiptSchema, BAS_WORKFLOW_REPLAY_RULE,
-  type BasReplayRecord } from '../../web/src/lib/basWorkflowReplay.ts';
+  type BasReplayRecord, type BasPreparedWorkflowReplay } from '../../web/src/lib/basWorkflowReplay.ts';
 import { replayBasWorkflowBatch } from './basMath.ts';
 
 export const BAS_REPLAY_BATCH_LIMITS = Object.freeze({ records: 1000, bytes: 30 * 1024 * 1024 });
@@ -25,6 +25,15 @@ export async function verifyBasWorkflowCalculations(raw: unknown, options: { pyt
   const deadline = Date.now() + (options.timeoutMs ?? 30000);
   const guard = () => { options.signal?.throwIfAborted(); if (Date.now() >= deadline) throw new Error('BAS workflow replay timed out; no calculations accepted'); };
   const plan = await prepareBasWorkflowReplay(raw, guard);
+  return verifyPreparedBasWorkflowCalculations(plan, options, deadline);
+}
+
+/** Execute a replay plan prepared from a workflow already verified by shared
+ * readiness. Records remain schema-checked by Python and the returned receipt
+ * is still rebound to the exact workflow by the readiness caller. */
+export async function verifyPreparedBasWorkflowCalculations(plan: BasPreparedWorkflowReplay,
+  options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}, deadline = Date.now() + (options.timeoutMs ?? 30000)) {
+  const guard = () => { options.signal?.throwIfAborted(); if (Date.now() >= deadline) throw new Error('BAS workflow replay timed out; no calculations accepted'); };
   for await (const batch of basWorkflowReplayBatches(plan.records(), guard)) {
     guard();
     await replayBasWorkflowBatch(batch, { ...options, timeoutMs: Math.max(1, deadline - Date.now()) });

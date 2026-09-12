@@ -1,7 +1,7 @@
 /** Shared source ownership/byte verification. Storage transports must not infer
  * drawing correspondence, calculation validity or approval from retained bytes. */
 import { z } from 'zod';
-import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
+import { verifyBasWorkflow, verifyBasWorkflowWithPreparedReviewViews, type BasWorkflow } from './basWorkflow.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 
@@ -27,6 +27,13 @@ export async function basSourceInventory(rawWorkflow: unknown): Promise<BasSourc
  * consumer need not verify the same complete historical calculations twice. */
 export async function inspectBasSourceHistory(rawWorkflow: unknown) {
   const workflow = await verifyBasWorkflow(rawWorkflow);
+  return { workflow, inventory: sourceInventoryForVerifiedBasWorkflow(workflow) };
+}
+
+/** Snapshot/readiness-only composition keeps the verifier's latest review views
+ * available for one exact current-inventory consumer. */
+export async function inspectBasSourceHistoryWithPreparedReviewViews(rawWorkflow: unknown) {
+  const workflow = await verifyBasWorkflowWithPreparedReviewViews(rawWorkflow);
   return { workflow, inventory: sourceInventoryForVerifiedBasWorkflow(workflow) };
 }
 

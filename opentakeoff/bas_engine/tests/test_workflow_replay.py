@@ -41,6 +41,22 @@ def test_complete_batch_matches_existing_calculators_and_actual_process():
     assert json.loads(process.stdout) == checked.model_dump()
 
 
+def test_frozen_assignment_v1_and_current_v2_both_replay_without_rewriting_history():
+    assignment = payload()
+    v1 = calculate_assignment_demand(assignment, "assigned_listed_observations_1")
+    v2 = calculate_assignment_demand(assignment)
+    assert v1.unique_requirement_total is None
+    assert "PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES" in v1.issues
+    assert v2.unique_requirement_total is not None
+    assert v1.rule_version == "assigned_listed_observations_1"
+    assert v2.rule_version == "assigned_listed_observations_2"
+    request = WorkflowReplayInput.model_validate({'records': [
+        {'kind': 'assignment', 'record_id': '1' * 64, 'input': assignment.model_dump(), 'result': v1.model_dump()},
+        {'kind': 'assignment', 'record_id': '2' * 64, 'input': assignment.model_dump(), 'result': v2.model_dump()},
+    ]})
+    assert [row.record_id for row in replay_workflow(request).checked_records] == ['1' * 64, '2' * 64]
+
+
 @pytest.mark.parametrize('kind', ['assignment', 'assembly', 'engineering'])
 def test_plausible_but_wrong_saved_arithmetic_is_not_accepted(kind):
     data = records()

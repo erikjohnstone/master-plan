@@ -4,10 +4,9 @@ import assert from 'node:assert/strict';
 import { readinessFixture, reviewReadyScope } from '../../web/test/helpers/basReadinessFixture.ts';
 import { uuid } from '../../web/test/helpers/basEngineeringFixture.ts';
 import { applyBasEngineeringReview } from '../src/basEngineeringReview.ts';
-import { verifyBasWorkflowCalculations } from '../src/basWorkflowReplay.ts';
+import { verifyPreparedBasWorkflowCalculations } from '../src/basWorkflowReplay.ts';
 import { prepareBasSnapshotApproval, readBasSnapshotPlan, verifyBasSnapshot } from '../../web/src/lib/basSnapshot.ts';
 import { prepareBasSnapshotBundle, openBasSnapshotBundle } from '../../web/src/lib/basEvidenceBundle.ts';
-import type { BasWorkflow } from '../../web/src/lib/basWorkflow.ts';
 
 test('engineering snapshot requires actual Python on creation and archive reopen, preserving exact checked records', async () => {
   const f = await readinessFixture(), checked = await applyBasEngineeringReview(f.workflow, f.request, 'operator_input');
@@ -16,9 +15,12 @@ test('engineering snapshot requires actual Python on creation and archive reopen
   const request = { operation_id: uuid(997), scope_event_id: r.scope.event_id, reviewer: 'Controlled engineering reviewer',
     reason: 'Only this evidenced declared compatibility constraint', declared_at: '2026-09-10T17:00:00.000Z' };
   let calls = 0;
-  const replayCalculations = async (w: BasWorkflow, signal?: AbortSignal) => { calls++; return verifyBasWorkflowCalculations(w, { signal }); };
+  const replayPreparedCalculations = async (plan: Parameters<typeof verifyPreparedBasWorkflowCalculations>[0], signal?: AbortSignal) => {
+    calls++; return verifyPreparedBasWorkflowCalculations(plan, { signal });
+  };
   await assert.rejects(prepareBasSnapshotApproval(payload, request, 'operator_input', { readSource: async () => f.bytes }), /actual_python_replay_required/);
-  const plan = await prepareBasSnapshotApproval(payload, request, 'operator_input', { readSource: async () => f.bytes, replayCalculations });
+  const plan = await prepareBasSnapshotApproval(payload, request, 'operator_input', {
+    readSource: async () => f.bytes, replayPreparedCalculations });
   assert.equal(calls, 1);
   const owned = readBasSnapshotPlan(plan), readiness = JSON.parse(owned.record.snapshot.readiness_json);
   assert.deepEqual(readiness.replay.checked_records.engineering, [checked.event.event_id]);
@@ -26,7 +28,7 @@ test('engineering snapshot requires actual Python on creation and archive reopen
   const chunks = []; for await (const chunk of (await prepareBasSnapshotBundle(plan)).stream(async () => f.bytes)) chunks.push(chunk);
   const bytes = Buffer.concat(chunks), reader = { size: bytes.length, read: async (o: number, n: number) => bytes.subarray(o, o + n) };
   await assert.rejects(openBasSnapshotBundle(reader), /does not replay exactly/);
-  const reopened = await openBasSnapshotBundle(reader, { replayCalculations });
+  const reopened = await openBasSnapshotBundle(reader, { replayPreparedCalculations });
   assert.equal(calls, 2); assert.equal(reopened.plan.snapshot_id, plan.snapshot_id);
   await assert.rejects(verifyBasSnapshot(payload, owned.record, { readSource: async () => f.bytes,
     replayCalculations: async () => { throw new Error('Python unavailable during reopen'); } }), /Python unavailable/);

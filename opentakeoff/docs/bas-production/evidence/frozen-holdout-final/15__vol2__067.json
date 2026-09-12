@@ -1,0 +1,111 @@
+{
+  "schema_version": "bas_holdout_evaluation_v1",
+  "evaluated_utc": "2026-09-12T19:11:59.524Z",
+  "split": "new_workflow_holdout",
+  "rules_frozen_before_open": true,
+  "production_rules_changed_from_result": false,
+  "document": {
+    "id": "15__vol2__067",
+    "rank": 15,
+    "title": "SLAC LCLS-II-HE Process Cooling Water Skid",
+    "pdf_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+    "pages": 13,
+    "bytes": 6172005,
+    "independent_record_sha256": "df887ddc679526e5f01a639303aecab30d564c1a015e7f7b6c26855cb6aae9e7",
+    "independent_record_review_status": "complete_with_documented_source_limitations",
+    "independent_record_claim_is_reverified": false
+  },
+  "source_accounting": {
+    "pages": 13,
+    "spans": 5821,
+    "no_text_pages": 0,
+    "exhaustive_partition": {
+      "body_region_span_ids": 40,
+      "heading_only_span_ids": 0,
+      "ambiguous_span_ids": 0,
+      "unassigned_horizontal_span_ids": 5363,
+      "unsupported_span_ids": 418,
+      "blank_span_ids": 0
+    },
+    "source_hash_and_page_count_match": true,
+    "workflow_schema_and_fingerprints_pass": true
+  },
+  "point_lists": {
+    "truth_kind": "diagram_callouts_not_point_table",
+    "expected_tables": 0,
+    "expected_rows": 0,
+    "expected_diagram_callouts_not_tables": 23,
+    "actual_matrices": 0,
+    "actual_rows": 0,
+    "actual_observations": 0,
+    "authored_table_matches": [],
+    "unmatched_actual_candidates": []
+  },
+  "sequences": {
+    "authored_titled_regions": 0,
+    "authored_title_matches": [],
+    "authored_sequence_inventory_items": 0,
+    "authored_summary_groups": 0,
+    "authored_summary_clauses": 8,
+    "actual_regions": [
+      {
+        "region_id": "sha256:254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d:p6:line160:narrative",
+        "page": 6,
+        "title": "SEQUENCE OF OPERATION:",
+        "status": "body_detected",
+        "clauses": 16,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 16
+      }
+    ],
+    "actual_region_count": 1,
+    "actual_clause_count": 16,
+    "discovery_complete": false,
+    "interpretation_complete": false
+  },
+  "equipment_candidates": {
+    "authored_schedule_counts": {
+      "tables": 8,
+      "rows": 10,
+      "building_scoped_tag_identities_including_outlet_types": 10,
+      "other_scheduled_tag_identities": 10
+    },
+    "actual_tables": 11,
+    "actual_rows": 16,
+    "rows_with_issues": 11,
+    "issue_codes": [
+      "membership_unsupported_syntax",
+      "missing_mark_column"
+    ],
+    "installed_quantity_values": [
+      null
+    ]
+  },
+  "initial_human_in_loop_state": {
+    "review_events": 0,
+    "equipment_events": 0,
+    "assembly_events": 0,
+    "engineering_events": 0,
+    "project_complete": false,
+    "installed_quantity": null,
+    "findings": 56,
+    "blockers": 56,
+    "findings_by_domain_severity_code": {
+      "equipment:blocker:membership_unsupported_syntax": 4,
+      "equipment:blocker:missing_mark_column": 7,
+      "points:blocker:SOURCE_DISCOVERY_COVERAGE_UNVERIFIED": 1,
+      "sequences:blocker:discovery_incomplete": 1,
+      "sequences:blocker:unassigned_horizontal_spans": 13,
+      "sequences:blocker:uninterpreted_clause": 16,
+      "sequences:blocker:unsupported_spans": 13,
+      "sources:blocker:source_inventory_not_byte_verified": 1
+    }
+  },
+  "performance": {
+    "graph_ms": 74154,
+    "compile_and_capture_ms": 1112,
+    "total_ms": 77409,
+    "peak_rss_bytes": 1575239680
+  },
+  "assessment_boundary": "Independent source facts versus frozen automatic capture. Unmatched candidates require source review; they are not automatically labeled false positives. No human applicability, assembly, responsibility, compatibility, revision, approval, or installed-count decision is manufactured by this audit."
+}

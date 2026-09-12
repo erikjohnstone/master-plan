@@ -65,6 +65,48 @@ test('production BAS compile adds grounded observations without replacing legacy
   assert.deepEqual(await compileProductionTakeoff(session, graph, 'hvac_equipment'), compileTakeoff(session, graph, 'hvac_equipment'));
 });
 
+test('source-recovered point rows replace a partial graph copy for retained review and Python math', async () => {
+  const recoveredSources = buildBasSourceContext([{ sha256: 'd'.repeat(64), byte_length: 100,
+    name: 'fixture.pdf', page_count: 1, pages: [{ page_number: 1, sheet_key: 'fixture.pdf',
+      width_px: 1000, height_px: 800, rotation: 0, spans: [
+        { str: 'HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1', x0: 400, y0: 100, x1: 900, y1: 125 },
+        { str: 'POINT TYPE', x0: 700, y0: 160, x1: 725, y1: 260, rot: 270 },
+        { str: 'POINT NAME', x0: 350, y0: 235, x1: 450, y1: 260 },
+        { str: 'TAG', x0: 600, y0: 235, x1: 650, y1: 260 },
+        { str: '1', x0: 200, y0: 280, x1: 215, y1: 305 },
+        { str: 'DUCT STATIC PRESSURE', x0: 230, y0: 280, x1: 480, y1: 305 },
+        { str: 'SP-1', x0: 610, y0: 280, x1: 650, y1: 305 },
+        { str: 'AI', x0: 705, y0: 280, x1: 725, y1: 305 },
+        { str: '2', x0: 200, y0: 320, x1: 215, y1: 345 },
+        { str: 'SPACE TEMPERATURE', x0: 230, y0: 320, x1: 450, y1: 345 },
+        { str: 'T-1', x0: 610, y0: 320, x1: 650, y1: 345 },
+        { str: 'AI', x0: 705, y0: 320, x1: 725, y1: 345 },
+        { str: '3', x0: 200, y0: 360, x1: 215, y1: 385 },
+        { str: 'FAN START/STOP', x0: 230, y0: 360, x1: 430, y1: 385 },
+        { str: 'SS-1', x0: 610, y0: 360, x1: 650, y1: 385 },
+        { str: 'BO', x0: 705, y0: 360, x1: 725, y1: 385 },
+      ] }] }]);
+  const partial = structuredClone(graph);
+  partial.tables[0] = { kind: 'equipment', sheet: 'fixture.pdf',
+    title: { sheet: 'fixture.pdf', text: 'HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1', bbox: [400, 100, 900, 125] },
+    headers: ['POINT NAME', 'HARDWARE TAG', 'HARDWARE POINT TYPE'], region: [190, 100, 900, 310],
+    rows: [{ key: '1', sheet: 'fixture.pdf', cells: {
+      'POINT NAME': { text: 'DUCT STATIC PRESSURE', bbox: [230, 280, 480, 305] },
+      'HARDWARE TAG': { text: 'SP-1', bbox: [610, 280, 650, 305] },
+      'HARDWARE POINT TYPE': { text: 'AI', bbox: [705, 280, 725, 305] },
+    } }],
+  } as typeof partial.tables[number];
+  const before = structuredClone(partial);
+  const result = await compileProductionTakeoff({ basSourcesForPipeline: () => recoveredSources }, partial, 'bas_points');
+  assert.ok('bas_point_lists' in result && result.bas_point_lists && 'matrices' in result.bas_point_lists);
+  assert.equal(result.bas_point_lists.matrices.length, 1);
+  assert.equal(result.bas_point_lists.matrices[0].rows.length, 3);
+  assert.deepEqual(result.bas_point_lists.matrices[0].rows.map(row => row.observations[0].channel), ['AI', 'AI', 'DO']);
+  assert.ok('bas_math' in result && 'physical_total' in result.bas_math);
+  assert.deepEqual(result.bas_math.physical_total, { AI: 2, AO: 0, DI: 0, DO: 1 });
+  assert.deepEqual(partial, before);
+});
+
 test('source failure is explicit and cannot discard a valid legacy or math result', async () => {
   const result = await compileProductionTakeoff({ basSourcesForPipeline() { throw new Error('Source pages unavailable'); } }, graph, 'bas_points');
   assert.ok('bas_point_lists' in result);

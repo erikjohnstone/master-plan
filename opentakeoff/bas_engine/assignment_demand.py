@@ -108,6 +108,22 @@ class SoftwareSubtotal(Contract):
     known_listed_value: Count
 
 
+class UniqueRequirementTotal(Contract):
+    """A bounded total for an explicitly non-overlapping assignment partition.
+
+    This is a total of listed BAS requirements, not a count of physical devices,
+    field terminals, installed hardware, or commissioned points.
+    """
+
+    physical_io: IOVector
+    software: list[SoftwareSubtotal]
+    requirement_instances: Count
+    basis: Literal["nonoverlapping_explicit_assignment_partition"] = "nonoverlapping_explicit_assignment_partition"
+    coverage: Literal["selected_assignments_only"] = "selected_assignments_only"
+    installed_quantity: None = None
+    field_wiring_status: Literal["not_established"] = "not_established"
+
+
 class AssignmentDemand(Contract):
     assignment: Assignment
     included_equipment_ids: Ids
@@ -123,9 +139,12 @@ class AssignmentDemand(Contract):
     field_wiring_status: Literal["not_established"] = "not_established"
 
 
+AssignmentRule = Literal["assigned_listed_observations_1", "assigned_listed_observations_2"]
+
+
 class AssignmentDemandResult(Contract):
     schema_version: Literal["bas_assignment_demand_v1"] = "bas_assignment_demand_v1"
-    rule_version: Literal["assigned_listed_observations_1"] = "assigned_listed_observations_1"
+    rule_version: AssignmentRule = "assigned_listed_observations_2"
     engine: Literal["bas_math_v1"] = "bas_math_v1"
     capture_id: Sha
     equipment_head: Sha
@@ -133,7 +152,7 @@ class AssignmentDemandResult(Contract):
     scope: Literal["explicit_assignments_discovered_matrices_only"] = "explicit_assignments_discovered_matrices_only"
     assignments: list[AssignmentDemand]
     issues: list[str]
-    unique_requirement_total: None = None
+    unique_requirement_total: UniqueRequirementTotal | None = None
     installed_quantity: None = None
     project_complete: Literal[False] = False
 
@@ -186,7 +205,8 @@ def validate_observations(matrix: PointMatrix) -> dict[str, tuple[Literal["physi
     return typed
 
 
-def calculate_assignment_demand(payload: AssignmentDemandInput) -> AssignmentDemandResult:
+def calculate_assignment_demand(payload: AssignmentDemandInput,
+                                rule_version: AssignmentRule = "assigned_listed_observations_2") -> AssignmentDemandResult:
     payload = AssignmentDemandInput.model_validate(payload.model_dump())
     matrices = {m.matrix_id: m for m in payload.points.matrices}
     classifications = {key: validate_observations(matrices[key]) for key in {a.matrix_id for a in payload.assignments}}
@@ -210,7 +230,7 @@ def calculate_assignment_demand(payload: AssignmentDemandInput) -> AssignmentDem
         software: Counter[str] = Counter()
         missing_count = ambiguous_count = 0
         rows = []
-        issues = [*matrix.issues, "FIELD_WIRING_NOT_ESTABLISHED", "UNIQUE_POINT_IDENTITIES_NOT_ESTABLISHED"]
+        issues = [*matrix.issues, "FIELD_WIRING_NOT_ESTABLISHED"]
         if not included:
             issues.append("ALL_MEMBERS_EXPLICITLY_EXCLUDED")
         labels = Counter(r.name.strip().casefold() for r in matrix.rows if r.name.strip())
@@ -263,6 +283,53 @@ def calculate_assignment_demand(payload: AssignmentDemandInput) -> AssignmentDem
             known_listed_software_subtotals=[SoftwareSubtotal(channel=key, known_listed_value=software[key]) for key in sorted(software)],
             unobserved_typed_cells=missing_count, ambiguous_observations=ambiguous_count,
             issues=sorted(set(issues))))
-    return AssignmentDemandResult(capture_id=payload.capture_id, equipment_head=payload.equipment_head,
-        assignments=result, issues=sorted(set([*payload.points.issues,
-            "SOURCE_DISCOVERY_COVERAGE_UNVERIFIED", "PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES"])))
+    # Version 1 always withheld a project total. Retaining it here is required
+    # so approved/imported history can be replayed byte-for-byte after version 2
+    # adds the bounded, non-overlapping partition total.
+    if rule_version == "assigned_listed_observations_1":
+        for assignment in result:
+            assignment.issues = sorted(set([*assignment.issues, "UNIQUE_POINT_IDENTITIES_NOT_ESTABLISHED"]))
+        return AssignmentDemandResult(rule_version=rule_version, capture_id=payload.capture_id,
+            equipment_head=payload.equipment_head, assignments=result, unique_requirement_total=None,
+            issues=sorted(set([*payload.points.issues, "SOURCE_DISCOVERY_COVERAGE_UNVERIFIED",
+                "PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES"])))
+
+    # A useful project subtotal is deterministic without a manual same-point
+    # decision only when explicit assignments partition their subjects. One
+    # equipment identity may not consume two templates, and a system-once
+    # template may not share its scope with another assignment. Missing or
+    # ambiguous typed values also withhold the total. This proves uniqueness
+    # only inside the reviewed assignment set; source-discovery coverage and
+    # field wiring remain independent review gates.
+    overlap = any(equipment_assignments[key] > 1 for key in equipment_assignments)
+    overlap = overlap or any(scope in global_scopes and count > 1 for scope, count in scope_assignments.items())
+    has_counted_observation = any(
+        observation.original.kind != "attribute"
+        for assignment in result for row in assignment.rows for observation in row.observations)
+    complete_partition = bool(result) and has_counted_observation and not overlap and all(
+        assignment.included_equipment_ids
+        and assignment.unobserved_typed_cells == 0
+        and assignment.ambiguous_observations == 0
+        for assignment in result)
+    unique_total = None
+    if complete_partition:
+        physical = IOVector()
+        project_software: Counter[str] = Counter()
+        for assignment in result:
+            physical = physical.plus(assignment.known_listed_io_subtotal)
+            project_software.update({row.channel: row.known_listed_value
+                                     for row in assignment.known_listed_software_subtotals})
+        software_rows = [SoftwareSubtotal(channel=key, known_listed_value=project_software[key])
+                         for key in sorted(project_software)]
+        unique_total = UniqueRequirementTotal(
+            physical_io=physical,
+            software=software_rows,
+            requirement_instances=sum(physical.values()) + sum(row.known_listed_value for row in software_rows))
+    else:
+        for assignment in result:
+            assignment.issues = sorted(set([*assignment.issues, "UNIQUE_POINT_IDENTITIES_NOT_ESTABLISHED"]))
+    project_issues = [*payload.points.issues, "SOURCE_DISCOVERY_COVERAGE_UNVERIFIED"]
+    if unique_total is None:
+        project_issues.append("PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES")
+    return AssignmentDemandResult(rule_version=rule_version, capture_id=payload.capture_id, equipment_head=payload.equipment_head,
+        assignments=result, unique_requirement_total=unique_total, issues=sorted(set(project_issues)))

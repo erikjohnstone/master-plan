@@ -14,7 +14,8 @@ const row = matrix.shape.rows.element;
 const assignment = basEquipmentRegisterSchema.shape.assignments.element.extend({
   scope_id: z.string().uuid(), quantity_basis: z.literal('scheduled_named_members'),
 }).strict();
-export const BAS_ASSIGNMENT_DEMAND_RULE = 'assigned_listed_observations_1' as const;
+export const BAS_ASSIGNMENT_DEMAND_RULE = 'assigned_listed_observations_2' as const;
+export const BAS_ASSIGNMENT_DEMAND_RULE_V1 = 'assigned_listed_observations_1' as const;
 export const basAssignmentDemandRequestSchema = z.object({ capture_id: sha, expected_equipment_head: sha }).strict();
 export const basAssignmentDemandInputSchema = z.object({ capture_id: sha, equipment_head: sha,
   points: basPointListsSchema, assignments: z.array(assignment).max(100000),
@@ -22,7 +23,8 @@ export const basAssignmentDemandInputSchema = z.object({ capture_id: sha, equipm
 export type BasAssignmentDemandInput = z.infer<typeof basAssignmentDemandInputSchema>;
 
 export const basAssignmentDemandResultSchema = z.object({
-  schema_version: z.literal('bas_assignment_demand_v1'), rule_version: z.literal(BAS_ASSIGNMENT_DEMAND_RULE),
+  schema_version: z.literal('bas_assignment_demand_v1'),
+  rule_version: z.union([z.literal(BAS_ASSIGNMENT_DEMAND_RULE_V1), z.literal(BAS_ASSIGNMENT_DEMAND_RULE)]),
   engine: z.literal('bas_math_v1'), capture_id: sha, equipment_head: sha,
   point_rule_version: z.literal('point_observations_1'), scope: z.literal('explicit_assignments_discovered_matrices_only'),
   assignments: z.array(z.object({ assignment, included_equipment_ids: ids, replication_factor: count,
@@ -39,9 +41,24 @@ export const basAssignmentDemandResultSchema = z.object({
     subtotal_basis: z.literal('known_source_observations_not_unique_requirements'),
     unobserved_typed_cells: count, ambiguous_observations: count, issues: z.array(z.string()),
     installed_quantity: z.null(), field_wiring_status: z.literal('not_established'),
-  }).strict()).max(100000), issues: z.array(z.string()), unique_requirement_total: z.null(),
+  }).strict()).max(100000), issues: z.array(z.string()), unique_requirement_total: z.object({
+    physical_io: z.object({ AI: count, AO: count, DI: count, DO: count }).strict(),
+    software: z.array(z.object({ channel: z.string(), known_listed_value: count }).strict()),
+    requirement_instances: count,
+    basis: z.literal('nonoverlapping_explicit_assignment_partition'),
+    coverage: z.literal('selected_assignments_only'), installed_quantity: z.null(),
+    field_wiring_status: z.literal('not_established'),
+  }).strict().nullable(),
   installed_quantity: z.null(), project_complete: z.literal(false),
-}).strict();
+}).strict().superRefine((value, context) => {
+  // The frozen v1 rule never established a unique project requirement total.
+  // Parsing old records must remain possible, but a re-signed v1 result may
+  // not smuggle in the v2 conclusion.
+  if (value.rule_version === BAS_ASSIGNMENT_DEMAND_RULE_V1 && value.unique_requirement_total !== null) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ['unique_requirement_total'],
+      message: 'Assignment rule v1 cannot establish a unique requirement total' });
+  }
+});
 export type BasAssignmentDemandResult = z.infer<typeof basAssignmentDemandResultSchema>;
 export const basAssignmentCalculationSchema = z.object({ calculation_id: sha, input_fingerprint: sha,
   created_at: z.string().datetime(), result: basAssignmentDemandResultSchema }).strict();
@@ -110,6 +127,9 @@ export function assertBasAssignmentUpdate(previous: BasWorkflow, updated: BasWor
  * not malicious re-signing or authenticated engineering approval. */
 export function verifyBasAssignmentDemandResult(input: BasAssignmentDemandInput, raw: unknown) {
   const result = basAssignmentDemandResultSchema.parse(raw);
+  if (result.rule_version === BAS_ASSIGNMENT_DEMAND_RULE_V1 && result.unique_requirement_total !== null) {
+    throw new Error('Assignment rule v1 cannot establish a unique requirement total');
+  }
   if (result.capture_id !== input.capture_id || result.equipment_head !== input.equipment_head
       || result.point_rule_version !== input.points.rule_version) throw new Error('Assignment calculation dependencies changed');
   if (result.assignments.length !== input.assignments.length) throw new Error('Assignment calculation omitted an assignment');

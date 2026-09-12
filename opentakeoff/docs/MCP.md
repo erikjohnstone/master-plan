@@ -61,7 +61,9 @@ versions/pages, original cells, sparse/uninterpreted columns and supported
 controller notes. It does not establish installed quantity or field wiring.
 Do not substitute alarm/trend flags for I/O, or an unobserved cell for a verified
 zero. Its unavailable state is separate from math-policy failure. Durable
-equipment assignment, review and approved snapshot integration remain in progress.
+equipment assignment, review and snapshot records are part of the shared workflow;
+use `inspect_bas_workflow` for bounded status and `inspect_bas_snapshot` for
+read-only verification. Human approval/lifecycle writes remain browser actions.
 
 `bas_workflow` adds durable point-evidence captures with content fingerprints and
 source manifests. `export_takeoff` carries the Session's captures; `import_takeoff`
@@ -182,12 +184,14 @@ across canonical JSON restore; source evidence follows explicit table header
 order without changing source values/boxes. Older standalone exports retain
 their older rule/IDs and are not silently promoted to the current schema.
 See [review and revision acceptance](bas-production/REVIEW_REVISION_CONTRACT.md)
-for the remaining approval/source-retention work.
+for the contract, evidence and remaining limits.
 
-The additive internal `bas_issues_9` journal survives normal import/export and
+The additive `bas_issues_9` journal survives normal import/export and
 older BAS writes. A retained acknowledgement is neither a waiver nor approval;
 its finding and any recorded absence must be replayed against pinned inputs.
-Public issue-action commands and approved snapshots remain in development.
+Public issue review is available through `bas_issue_review`; source-inclusive
+approved snapshots can be verified through `inspect_bas_snapshot`, but MCP cannot
+create approval, revocation or supersession records.
 
 To inspect a historical citation, call `view_sheet` with its saved BAS `page_id`
 as `sheet` and optional `original_pdf_path` for missing original bytes. This
@@ -219,7 +223,7 @@ Register the server with your MCP client (any stdio client):
 Never point a client config at `npm start`—npm's banner goes to stdout,
 which is the MCP wire. `node --import tsx` is the whole invocation.
 
-By default the server hands every client all 53 tool schemas at once. Set
+By default the server hands every client all 55 tool schemas at once. Set
 `OPENTAKEOFF_MCP_STAGED_TOOLS=1` in the server's environment to stage the
 surface instead: only the setup tools start enabled, and the agent opens the
 `measure` / `revise` / `handoff` groups on demand with `open_tool_stage` as
@@ -229,7 +233,7 @@ client that honors `tools/list_changed`; leave it unset otherwise.
 
 ## What the agent gets
 
-Fifty tools, in the order an agent tends to reach for them:
+Fifty-five tools, in the order an agent tends to reach for them:
 
 - **Open and orient**—`load_plan`, `sheet_info` (including the sheet's PDF
   layer table—Optional Content Groups with a classified role, confidence,

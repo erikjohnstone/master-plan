@@ -2,11 +2,13 @@
 import type { BasWorkflow } from './basWorkflow.ts';
 import { basEquipmentRegister } from './basEquipmentReview.ts';
 import { emptyBasEngineeringRegister, validateBasEngineeringRegister, basEngineeringReviewRequestSchema,
-  type BasEngineeringReviewEvent } from './basEngineeringRegister.ts';
+  prepareBasEngineeringRegisterValidatorForVerifiedViews, type BasEngineeringReviewEvent } from './basEngineeringRegister.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { atLeastBasWorkflowRevision } from './basWorkflowRevision.ts';
 import { z } from 'zod';
 import { basEngineeringRegisterSchema, basEngineeringReviewEventSchema } from './basEngineeringRegister.ts';
+import type { BasEquipmentAssignmentView } from './basEquipmentRegister.ts';
+import type { BasAssemblyReviewView } from './basAssemblyRegister.ts';
 
 const sha = z.string().regex(/^[a-f0-9]{64}$/), id = z.string().min(1).max(512);
 const dependency = z.enum(['not_reviewed', 'current_dependencies', 'stale_dependencies']);
@@ -51,6 +53,21 @@ export function basEngineeringHeads(workflow: BasWorkflow, captureId: string) {
 /** A browser-safe view never labels an imported saved result as freshly verified.
  * The Node/Python service supplies that separate guarantee after actual replay. */
 export async function basEngineeringView(workflow: BasWorkflow, captureId: string) {
+  return buildBasEngineeringView(workflow, captureId);
+}
+
+/** Internal projection seam for one already verified project review. Pinned
+ * historical heads still fall back to the full source-backed validators. */
+export async function basEngineeringViewForVerifiedViews(workflow: BasWorkflow, captureId: string,
+  equipmentView: BasEquipmentAssignmentView, assemblyView: (BasAssemblyReviewView & {
+    review_head: string | null; equipment_head: string | null;
+  }) | null) {
+  return buildBasEngineeringView(workflow, captureId, equipmentView, assemblyView);
+}
+
+async function buildBasEngineeringView(workflow: BasWorkflow, captureId: string,
+  verifiedEquipment?: BasEquipmentAssignmentView,
+  verifiedAssembly?: (BasAssemblyReviewView & { review_head: string | null; equipment_head: string | null }) | null) {
   const capture = workflow.captures.find(c => c.capture_id === captureId);
   if (!capture) throw new Error('Engineering view has no retained capture');
   const heads = basEngineeringHeads(workflow, captureId);
@@ -67,7 +84,14 @@ export async function basEngineeringView(workflow: BasWorkflow, captureId: strin
   // current equipment merely to populate an empty engineering workspace.
   const assembly = !event && assemblyStatus === 'stale_dependencies' ? null
     : workflow.assembly_events?.find(e => e.event_id === assemblyHead)?.register ?? null;
-  const view = await validateBasEngineeringRegister(capture, equipment, assembly, event?.register ?? emptyBasEngineeringRegister());
+  const canReuse = !!verifiedEquipment && (!event || event.expected_equipment_head === heads.equipment)
+    && (assembly === null ? !verifiedAssembly || verifiedAssembly.review_head === null
+      : !!verifiedAssembly && verifiedAssembly.review_head === assemblyHead
+        && verifiedAssembly.equipment_head === (event?.expected_equipment_head ?? heads.equipment));
+  const view = canReuse
+    ? (await prepareBasEngineeringRegisterValidatorForVerifiedViews(capture, verifiedEquipment!, verifiedAssembly ?? null))(
+      event?.register ?? emptyBasEngineeringRegister())
+    : await validateBasEngineeringRegister(capture, equipment, assembly, event?.register ?? emptyBasEngineeringRegister());
   const current = event && workflow.current_capture_id === captureId && event.expected_equipment_head === heads.equipment
     && event.expected_assembly_head === heads.assembly && event.expected_sequence_head === heads.sequence;
   return { ...view, capture_id: captureId, event, current_heads: heads, assembly_dependency_status: assemblyStatus,

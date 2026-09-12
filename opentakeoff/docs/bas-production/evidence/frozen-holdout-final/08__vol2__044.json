@@ -1,0 +1,1275 @@
+{
+  "schema_version": "bas_holdout_evaluation_v1",
+  "evaluated_utc": "2026-09-12T19:37:39.481Z",
+  "split": "new_workflow_holdout",
+  "rules_frozen_before_open": true,
+  "production_rules_changed_from_result": false,
+  "document": {
+    "id": "08__vol2__044",
+    "rank": 8,
+    "title": "Albany VA Main Boiler Replacement",
+    "pdf_sha256": "d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384",
+    "pages": 31,
+    "bytes": 4279128,
+    "independent_record_sha256": "bc20be16e7e51816a7d60fc126275ec6815f8e155c49b4ca3a635764e9574d53",
+    "independent_record_review_status": "complete_with_documented_source_limitations",
+    "independent_record_claim_is_reverified": false
+  },
+  "source_accounting": {
+    "pages": 31,
+    "spans": 14755,
+    "no_text_pages": 0,
+    "exhaustive_partition": {
+      "body_region_span_ids": 40,
+      "heading_only_span_ids": 1,
+      "ambiguous_span_ids": 0,
+      "unassigned_horizontal_span_ids": 13641,
+      "unsupported_span_ids": 1073,
+      "blank_span_ids": 0
+    },
+    "source_hash_and_page_count_match": true,
+    "workflow_schema_and_fingerprints_pass": true
+  },
+  "graph_inventory": {
+    "tables": 31,
+    "tables_by_kind": {
+      "equipment": 24,
+      "finish": 1,
+      "reference": 6
+    },
+    "table_details": [
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#14",
+        "kind": "reference",
+        "title": "PIPE ANCHOR SCHEDULE",
+        "region": [
+          3779.76,
+          1138.56,
+          4802.1,
+          1437.84
+        ],
+        "headers": [
+          "D",
+          "D 2",
+          "P",
+          "P 2",
+          "C",
+          "C 2",
+          "N",
+          "N 2",
+          "S",
+          "S 2",
+          "BOLT PATTERN"
+        ],
+        "rows": 6
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#14",
+        "kind": "reference",
+        "title": "PIPE ANCHOR SCHEDULE",
+        "region": [
+          4710.96,
+          1138.56,
+          5675.76,
+          1525.92
+        ],
+        "headers": [
+          "D",
+          "D 2",
+          "L",
+          "L 2",
+          "P",
+          "P 2",
+          "T",
+          "T 2",
+          "E",
+          "E 2",
+          "N",
+          "N 2",
+          "S",
+          "S 2",
+          "BOLT PATTERN"
+        ],
+        "rows": 8
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#19",
+        "kind": "reference",
+        "title": "LEGEND",
+        "region": [
+          4673.54,
+          568.8,
+          5405.02,
+          1704.48
+        ],
+        "headers": [
+          "ABBREVIATION",
+          "NAME",
+          "SYMBOL",
+          "SYMBOL 2"
+        ],
+        "rows": 32
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "kind": "equipment",
+        "title": "BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",
+        "region": [
+          484.32,
+          286.32,
+          5704.34,
+          826.56
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "AREA AND/OR BLDG SERVED",
+          "TYPE",
+          "GROSS CAPACITY (IBR) LBS/HR",
+          "BOILER HP",
+          "OPERATING PRESS PSIG",
+          "RELIEF VALVE 1 SETTING PSIG",
+          "RELIEF VALVE 2 SETTING PSIG",
+          "HEATING SURFACE SQ FT",
+          "MIN CONT FIRING RATE LBS/HR",
+          "NATURAL GAS INPUT MBH",
+          "NATURAL GAS OUTPUT MBH",
+          "# 2 OIL INPUT MBH",
+          "# 2 OIL OUTPUT MBH",
+          "FIRST CUTOUT SETTINGS PSIG",
+          "SECOND CUTOUT SETTINGS PSIG",
+          "OIL ATOM COMPRESSOR MOTOR POWER HP",
+          "OIL ATOM COMPRESSOR MOTOR PHASE",
+          "OIL ATOM COMPRESSOR MOTOR VOLT",
+          "OIL ATOM COMPRESSOR MOTOR RPM",
+          "OIL PUMP MOTOR POWER HP",
+          "OIL PUMP MOTOR PHASE",
+          "OIL PUMP MOTOR VOLT",
+          "OIL PUMP MOTOR HZ",
+          "FAN MOTOR POWER HP",
+          "FAN MOTOR PHASE",
+          "FAN MOTOR VOLT",
+          "FAN MOTOR RPM",
+          "REMARKS"
+        ],
+        "rows": 4
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          3130.8,
+          1250.64,
+          5704.34,
+          1650.96
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "ARRANGEMENT",
+          "GENERATOR ARRANGEMENT",
+          "GENERATOR GPH",
+          "GENERATOR PSI RATING",
+          "GENERATOR MOTOR RPM",
+          "FUEL MOTOR RPM",
+          "OIL MOTOR RPM",
+          "OIL MOTOR HP",
+          "PUMP MOTOR HP",
+          "PUMP MOTOR V",
+          "SCHEDULE MOTOR V",
+          "SCHEDULE MOTOR PH",
+          "SCHEDULE STARTER",
+          "SCHEDULE REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "kind": "equipment",
+        "title": "FAN SCHEDULE",
+        "region": [
+          491.28,
+          1252.56,
+          2961.6,
+          2272.8
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "AREA AND/OR BLDG SERVED",
+          "SYSTEM AND/OR SERVICE",
+          "AIR FLOW CFM",
+          "TSP IN",
+          "FAN TYPE",
+          "FAN WHEEL",
+          "FAN CLASS",
+          "FAN ARRANGEMENT, ROTATION, AND DISCHARGE",
+          "FAN DIAMETER IN",
+          "FAN MIN % EFF",
+          "FAN DRIVE",
+          "FAN FAN MAX RPM",
+          "MOTOR ELECTRICAL NOMINAL POWER BHP",
+          "MOTOR ELECTRICAL NOMINAL POWER HP",
+          "MOTOR ELECTRICAL PHASE",
+          "MOTOR ELECTRICAL VOLT",
+          "MOTOR ELECTRICAL RPM",
+          "MOTOR ELECTRICAL SPEED CONTROL",
+          "CONTROL SEQUENCE",
+          "REMARKS"
+        ],
+        "rows": 7
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          3123.84,
+          1737.6,
+          5697.36,
+          2484.5
+        ],
+        "headers": [
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE MARK",
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE LOCATION",
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE ARRANGEMENT",
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE GPH",
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE PSI RATING",
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE MOTOR RPM",
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE MOTOR HP",
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE MOTOR V",
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE MOTOR PH",
+          "SUMMER BOILER FUEL OIL PUMP SCHEDULE STARTER",
+          "(EXISTING) STARTER",
+          "(EXISTING) NOTES"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "kind": "equipment",
+        "title": "BOILER PLANT · PUMP SCHEDULE",
+        "region": [
+          483.6,
+          2477.04,
+          2981.52,
+          3428.16
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "AREA AND/OR BLDG SERVED",
+          "SYSTEM AND/OR SERVICE",
+          "TYPE",
+          "CIRCULATING FLUID FLUID",
+          "CIRCULATING FLUID FLOW GPM",
+          "CIRCULATING FLUID HEAD FT",
+          "CIRCULATING FLUID NPSH REQ'D FT",
+          "CIRCULATING FLUID TEMP. °F",
+          "MIN % EFF",
+          "ELECTRICAL MOTOR NOMINAL POWER HP",
+          "ELECTRICAL MOTOR PHASE",
+          "ELECTRICAL MOTOR VOLT",
+          "ELECTRICAL MOTOR MAX RPM",
+          "ELECTRICAL MOTOR SPEED CONTROL",
+          "REMARKS"
+        ],
+        "rows": 5
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "kind": "equipment",
+        "title": "STEAM UNIT HEATER SCHEDULE",
+        "region": [
+          3135.12,
+          2761.68,
+          5700.26,
+          3430.32
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "AREA SERVED",
+          "AREA SERVED 2",
+          "TYPE UNIT",
+          "AIR FLOW CFM",
+          "EAT °F",
+          "EAT °F 2",
+          "MIN CAPACITY BTUH",
+          "MIN CAPACITY BTUH 2",
+          "PRESS ENT HEATER PSIG",
+          "PRESS ENT HEATER PSIG 2",
+          "TRAP LBS/HR",
+          "CONTROL SEQUENCE",
+          "MOTOR NOMINAL POWER HP",
+          "MOTOR PHASE",
+          "MOTOR VOLT",
+          "MOTOR RPM",
+          "REMARKS"
+        ],
+        "rows": 3
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "kind": "equipment",
+        "title": "AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU)",
+        "region": [
+          416.4,
+          361.68,
+          3074,
+          804
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "SERVICE",
+          "RATED COOLING CAPACITY (MBH)",
+          "RATED COOLING CAPACITY (MBH) 2",
+          "REFRIGERANT TYPE",
+          "REFRIGERANT CHARGE",
+          "REFRIGERANT CHARGE 2",
+          "NO. OF STAGE",
+          "HOT GAS BYPASS",
+          "HOT GAS BYPASS 2",
+          "AMBIENT TEMPERATURE",
+          "AMBIENT TEMPERATURE 2",
+          "MINIMUM EFFICIENCY (EER)",
+          "MINIMUM EFFICIENCY (EER) 2",
+          "ELECTRICAL DATA",
+          "ELECTRICAL DATA 2",
+          "ELECTRICAL DATA 3",
+          "MCA",
+          "MOCP",
+          "REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          3229.68,
+          365.28,
+          5731.46,
+          782.4
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "SERVICE",
+          "INDOOR SERVICE",
+          "INDOOR ASSOCIATE ACCU",
+          "INDOOR TOTAL COOLING CAPACITY (MBH)",
+          "UNIT TOTAL COOLING CAPACITY (MBH)",
+          "SCHEDULES SENSIBLE COOLING CAPACITY (MBH)",
+          "(AC) SENSIBLE COOLING CAPACITY (MBH)",
+          "(AC) REFRIGERANT TYPE",
+          "(AC) COOLING DB (°F)",
+          "(AC) COOLING WB (°F)",
+          "(AC) AIRFLOW",
+          "(AC) REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "kind": "equipment",
+        "title": "BOILER PLANT · BLOWDOWN TANK",
+        "region": [
+          3229.68,
+          945.12,
+          5740.32,
+          1534.08
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "SYSTEM AND/OR SERVICE",
+          "DIAMETER",
+          "VESSEL LENGTH",
+          "STAND",
+          "INLET CONNECTION",
+          "OUTLET CONNECTION",
+          "AFTER COOLER CONNECTION",
+          "AFTERCOOLER WATER CONNECTION",
+          "VENT CONNECTION",
+          "REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "kind": "equipment",
+        "title": "BOILER PLANT · PACKAGED CONDENSATE STORAGE TANK SCHEDULE",
+        "region": [
+          422.64,
+          1014.48,
+          3071,
+          1593.12
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "SYSTEM AND/OR SERVICE",
+          "TYPE",
+          "MIN NET CAPACITY GAL",
+          "DIMENSIONS (LENGTH) IN",
+          "DIMENSIONS (DIAMETER) IN",
+          "TANK PRESSURE PSIG",
+          "OPERATING PRESSURE PSIG",
+          "ELECTRICAL DATA (SINGLE POINT POWER) POWER FLA",
+          "ELECTRICAL DATA (SINGLE POINT POWER) MOCP",
+          "ELECTRICAL DATA (SINGLE POINT POWER) VOLT",
+          "ELECTRICAL DATA (SINGLE POINT POWER) PHASE",
+          "ELECTRICAL DATA (SINGLE POINT POWER) RPM",
+          "REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          3229.68,
+          1640.64,
+          5749.18,
+          2535.12
+        ],
+        "headers": [
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP MARK",
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP LOCATION",
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP SYSTEM AND/OR SERVICE",
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP FLOW RATE GPM",
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP DISCHARGE PRESSURE PSIG",
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP METERING PUMP POWER HP",
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP METERING PUMP POWER PHASE",
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP METERING PUMP POWER VOLTS",
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP SINGLE POINT ELECTRICAL CONNECTION DATA FLA",
+          "BOILER PLANT · CHEMICAL FEED SYSTEMS, PUMP SINGLE POINT ELECTRICAL CONNECTION DATA MOCP",
+          "TYPE SINGLE POINT ELECTRICAL CONNECTION DATA MOCP",
+          "TYPE SINGLE POINT ELECTRICAL CONNECTION DATA PHASE",
+          "SCHEDULE SINGLE POINT ELECTRICAL CONNECTION DATA PHASE",
+          "SCHEDULE SINGLE POINT ELECTRICAL CONNECTION DATA VOLTS",
+          "SCHEDULE REMARKS"
+        ],
+        "rows": 6
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          431.04,
+          1831.92,
+          3068.48,
+          2389.44
+        ],
+        "headers": [
+          "BOILER PLANT · PACKAGED MARK",
+          "BOILER PLANT · PACKAGED LOCATION",
+          "BOILER PLANT · PACKAGED SYSTEM AND/OR SERVICE",
+          "BOILER PLANT · PACKAGED TYPE",
+          "BOILER PLANT · PACKAGED MIN NET CAPACITY",
+          "BOILER PLANT · PACKAGED DIMENSIONS (LENGTH)",
+          "BOILER PLANT · PACKAGED DIMENSIONS (DIAMETER)",
+          "BOILER PLANT · PACKAGED TANK ASME RATED PRESSURE",
+          "DEAERATOR TANK ASME RATED PRESSURE",
+          "DEAERATOR OPERATING PRESSURE",
+          "TANK OPERATING PRESSURE",
+          "TANK RELIEF VALVE SETTING",
+          "SCHEDULE RELIEF VALVE SETTING",
+          "SCHEDULE ELECTRICAL DATA (SINGLE POINT POWER) POWER",
+          "SCHEDULE ELECTRICAL DATA (SINGLE POINT POWER) MOCP",
+          "SCHEDULE ELECTRICAL DATA (SINGLE POINT POWER) VOLT",
+          "SCHEDULE ELECTRICAL DATA (SINGLE POINT POWER) PHASE",
+          "SCHEDULE ELECTRICAL DATA (SINGLE POINT POWER) RPM",
+          "SCHEDULE REMARKS"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          431.04,
+          2625.6,
+          3086.16,
+          3275.28
+        ],
+        "headers": [
+          "BOILER PLANT · ECONOMIZER SCHEDULE, MARK",
+          "BOILER PLANT · ECONOMIZER SCHEDULE, LOCATION",
+          "BOILER PLANT · ECONOMIZER SCHEDULE, SYSTEM AND/OR SERVICE",
+          "BOILER PLANT · ECONOMIZER SCHEDULE, MIN HEAT EXCHANGED MBH",
+          "BOILER PLANT · ECONOMIZER SCHEDULE, WATER FLOW GPM",
+          "BOILER PLANT · ECONOMIZER SCHEDULE, MAX PRESS DROP WATER SIDE PSIG",
+          "FLUE MAX PRESS DROP WATER SIDE PSIG",
+          "FLUE MIN PRESS DROP GAS SIDE WC IN",
+          "GAS/FEEDWATER MIN PRESS DROP GAS SIDE WC IN",
+          "GAS/FEEDWATER RELIEF VALVE SETTING PSI",
+          "GAS/FEEDWATER DESIGN WATER TEMPERATURES DEG F IN",
+          "HEAT DESIGN WATER TEMPERATURES DEG F IN",
+          "HEAT DESIGN WATER TEMPERATURES DEG F OUT",
+          "EXCHANGERS DESIGN WATER TEMPERATURES DEG F OUT",
+          "EXCHANGERS REMARKS"
+        ],
+        "rows": 2
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "kind": "equipment",
+        "title": "LOUVER SCHEDULE",
+        "region": [
+          3229.68,
+          2731.68,
+          5750.64,
+          3276
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "SYSTEM AND/OR SERVICE",
+          "SYSTEM AND/OR SERVICE 2",
+          "\"WIDTH (IN)\"",
+          "HEIGHT (IN)",
+          "AIR FLOW (CFM)",
+          "FLOW DIRECTION",
+          "FLOW DIRECTION 2",
+          "\"FREE AREA (SQ FT)\"",
+          "FREE AREA %",
+          "FREE AREA VEL (FPM)",
+          "PRESSURE DROP (W.G.)",
+          "STILL WATER PEN VEL (FPM)",
+          "WATER PEN SAFETY FACTOR",
+          "MAX EXHAUST",
+          "NOTES"
+        ],
+        "rows": 3
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "kind": "equipment",
+        "title": "PILOT OPERATED BACK PRESSURE REGULATOR",
+        "region": [
+          3210.24,
+          225.6,
+          5363.26,
+          664.56
+        ],
+        "headers": [
+          "MARK",
+          "AREA SERVED",
+          "LOCATION",
+          "VALVE SIZE INCHES",
+          "REQUIRED CAPACITY LBS/HR",
+          "MAX FLOW WIDE OPEN VALVE LBS/HR",
+          "PRESSURE IN PSIG",
+          "PRESSURE OUT PSIG",
+          "NOTES"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "kind": "equipment",
+        "title": "BOILER PLANT · STEAM PRESSURE REDUCING VALVE SCHEDULE",
+        "region": [
+          373.92,
+          237.36,
+          2980.8,
+          1089.6
+        ],
+        "headers": [
+          "MARK",
+          "AREA SERVED",
+          "LOCATION",
+          "SYSTEM AND/OR SERVICE",
+          "VALVE SIZE INCHES",
+          "REQUIRED CAPACITY LBS/HR",
+          "MAX FLOW WIDE OPEN VALVE LBS/HR",
+          "PRESSURE IN PSIG",
+          "PRESSURE OUT PSIG",
+          "REFERENCE SIZE",
+          "NOTES"
+        ],
+        "rows": 7
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "kind": "finish",
+        "title": "",
+        "region": [
+          3210.24,
+          752.4,
+          5599.7,
+          1396.8
+        ],
+        "headers": [
+          "STEAM PRESSURE SAFETY MARK",
+          "STEAM PRESSURE SAFETY EQUIPMENT SERVED",
+          "STEAM PRESSURE SAFETY OPERATING PRESSURE",
+          "STEAM PRESSURE SAFETY SET PRESSURE",
+          "STEAM PRESSURE SAFETY REQUIRED FLOW",
+          "STEAM PRESSURE SAFETY SIZE",
+          "VALVE SIZE",
+          "VALVE MATERIAL",
+          "SCHEDULE MATERIAL",
+          "SCHEDULE ASME SECTION",
+          "SCHEDULE DRIP PAN",
+          "SCHEDULE REMARKS"
+        ],
+        "rows": 5
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "kind": "equipment",
+        "title": "BOILER PLANT · FLASH VESSEL SCHEDULE",
+        "region": [
+          371.28,
+          1263.84,
+          2990.4,
+          1803.36
+        ],
+        "headers": [
+          "MARK",
+          "CONDENSATE SOURCE PRESSURE PSIG",
+          "OUTLET PRESSURE PSIG",
+          "TOTAL LOAD IN LBS/HR",
+          "FLASH STEAM OUT LBS/HR",
+          "CONDENSATE LOAD OUT LBS/HR",
+          "DIAMETER INCH",
+          "INLET SIZE INCH",
+          "VENT SIZE INCH",
+          "OUTLET SIZE INCH",
+          "NOTES"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "kind": "equipment",
+        "title": "BOILER PLANT · STEAM METER SCHEDULE",
+        "region": [
+          3210,
+          1495.92,
+          5598,
+          2631.36
+        ],
+        "headers": [
+          "MARK",
+          "AREA/EQUIPMENT",
+          "MEDIA",
+          "INLET",
+          "FLOW RATE",
+          "FLOW RATE 2",
+          "PIPE SIZE",
+          "METER SIZE",
+          "STRAIGHT LENGTH",
+          "STRAIGHT LENGTH 2",
+          "STRAIGHT LENGTH 3",
+          "TURNDOWN",
+          "NOTES"
+        ],
+        "rows": 9
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "kind": "equipment",
+        "title": "BOILER PLANT · STEAM TRAP SCHEDULE",
+        "region": [
+          370.08,
+          1877.52,
+          2994.72,
+          3767.28
+        ],
+        "headers": [
+          "MARK",
+          "LOCATION",
+          "SYSTEM AND/OR SERVICE",
+          "REPLACE / NEW",
+          "CAPACITY AT MIN DIFF PRESS LBS/HR",
+          "MIN DIFF PRESS PSI",
+          "MIN INLET PRESS PSI",
+          "TRAP TYPE",
+          "TRAP SIZE",
+          "REMARKS"
+        ],
+        "rows": 19
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          3215.52,
+          2731.68,
+          5609.26,
+          3791.28
+        ],
+        "headers": [
+          "BOILER PLANT · FEED WATER METER MARK",
+          "BOILER PLANT · FEED WATER METER AREA/EQUIPMENT SERVICE",
+          "BOILER PLANT · FEED WATER METER MEDIA",
+          "BOILER PLANT · FEED WATER METER INLET",
+          "BOILER PLANT · FEED WATER METER FLOW RATE",
+          "BOILER PLANT · FEED WATER METER PIPE SIZE",
+          "BOILER PLANT · FEED WATER METER METER SIZE",
+          "BOILER PLANT · FEED WATER METER METER TYPE",
+          "BOILER PLANT · FEED WATER METER STRAIGHT LENGTH",
+          "SCHEDULE STRAIGHT LENGTH",
+          "SCHEDULE STRAIGHT LENGTH 2",
+          "SCHEDULE TURNDOWN",
+          "SCHEDULE REMARKS"
+        ],
+        "rows": 10
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#24",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          431.52,
+          392.16,
+          2637.84,
+          3013.44
+        ],
+        "headers": [
+          "BOILER PLANT · ISOLATION MARK",
+          "BOILER PLANT · ISOLATION LOCATION",
+          "BOILER PLANT · ISOLATION SYSTEM AND/OR SERVICE",
+          "BOILER PLANT · ISOLATION TYPE",
+          "VALVE TYPE",
+          "VALVE REPLACE / NEW",
+          "SCHEDULE REPLACE / NEW",
+          "SCHEDULE PIPE SIZE",
+          "SCHEDULE VALVE SIZE",
+          "SCHEDULE TEMP. TYPE",
+          "SCHEDULE REMARKS"
+        ],
+        "rows": 30
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#24",
+        "kind": "equipment",
+        "title": "BOILER PLANT · FUEL OIL METER SCHEDULE",
+        "region": [
+          3144.72,
+          392.16,
+          5446.08,
+          1140
+        ],
+        "headers": [
+          "MARK",
+          "AREA/EQUIPMENT SERVICE",
+          "MEDIA",
+          "INLET PRESSURE PSIG",
+          "FLOW RATE MAX GPM",
+          "PIPE SIZE INCH",
+          "METER SIZE INCH",
+          "METER TYPE",
+          "STRAIGHT LENGTH UP STREAM INCH",
+          "STRAIGHT LENGTH DOWN STREAM INCH",
+          "MIN FLOW GPM",
+          "MAX FLOW GPM",
+          "TURNDOWN RATIO",
+          "REMARKS"
+        ],
+        "rows": 4
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#24",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          3143.76,
+          1261.92,
+          5459.28,
+          1602.72
+        ],
+        "headers": [
+          "GENERATOR MARK",
+          "GENERATOR LOCATION",
+          "GENERATOR EQUIPMENT SERVE",
+          "GENERATOR ARRANGEMENT",
+          "DAY ARRANGEMENT",
+          "TANK ARRANGEMENT",
+          "SCHEDULE ARRANGEMENT",
+          "SCHEDULE VOLUME",
+          "SCHEDULE PSI RATE",
+          "SCHEDULE REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#24",
+        "kind": "equipment",
+        "title": "",
+        "region": [
+          3153.84,
+          1722.96,
+          5464.8,
+          2118.48
+        ],
+        "headers": [
+          "CONDENSATE MARK",
+          "CONDENSATE LOCATION",
+          "CONDENSATE EQUIPMENT SERVE",
+          "CONDENSATE PUMP # OF PUMP",
+          "CONDENSATE PUMP PUMP CAPACITY EACH (GPM)",
+          "CONDENSATE PUMP DISCHARGE PRESSURE (PSIG)",
+          "CONDENSATE PUMP MOTOR HP",
+          "PUMP PUMP MOTOR HP",
+          "PUMP PUMP VOLTAGE",
+          "PUMP CONDENSATE TANK RECEIVER CAPACITY (GALLONS)",
+          "PUMP CONDENSATE TANK MATERIAL",
+          "PUMP REMARKS"
+        ],
+        "rows": 1
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#29",
+        "kind": "reference",
+        "title": "A FUEL OIL SYSTEM BACNET POINTS LIST:",
+        "region": [
+          4831.92,
+          1799.76,
+          5772.48,
+          3714.24
+        ],
+        "headers": [
+          "POINT #",
+          "TYPE",
+          "DESCRIPTION",
+          "READ/WRITE ALLOWED"
+        ],
+        "rows": 33
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#31",
+        "kind": "reference",
+        "title": "SERVICE WATER HEATER POINTS LIST FOLLOWING POINTS SHALL BE PROGRAMMED AT THE ALC CONTROL SYSTEM VIA THE COMMUNICATION INTERFACE PROVIDED FOR EACH HEATER",
+        "region": [
+          4963.94,
+          243.6,
+          5867.76,
+          3790.8
+        ],
+        "headers": [
+          "POINT NAME",
+          "BACNET OBJECT TYPE",
+          "BACNET OBJECT ID"
+        ],
+        "rows": 63
+      },
+      {
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#14",
+        "kind": "reference",
+        "title": "MAXIMUM PIPE/TUBING SUPPORT SPACING",
+        "region": [
+          2763.958,
+          1827.24,
+          3017.638,
+          3207.242
+        ],
+        "headers": [
+          "NOM. SIZE MM [IN]",
+          "THRU 20 [THRU34]",
+          "25 [1]",
+          "32 [114]",
+          "40 [112]",
+          "50 [2]",
+          "65 [212]",
+          "75 [3]",
+          "100 [4]",
+          "125 [5]",
+          "150 [6]",
+          "200 [8]",
+          "250 [10]",
+          "300 [12]",
+          "350 [14]",
+          "400 [16]",
+          "450 [18]",
+          "500 [20]",
+          "600 [24]"
+        ],
+        "rows": 1
+      }
+    ]
+  },
+  "point_lists": {
+    "truth_kind": "authored_point_tables",
+    "expected_tables": 2,
+    "expected_rows": 96,
+    "expected_diagram_callouts_not_tables": 0,
+    "actual_matrices": 2,
+    "actual_rows": 96,
+    "actual_observations": 0,
+    "authored_table_matches": [
+      {
+        "expected": {
+          "id": "MI605-FUEL-OIL-BACNET",
+          "page": 29,
+          "sheet": "MI-605",
+          "title": "A FUEL OIL SYSTEM BACNET POINTS LIST:",
+          "rows": 33,
+          "region": [
+            2450,
+            958,
+            2885,
+            1856
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:126e957d9be49d4fc3d7efc15058d6d1ce4efd0abd29bc7b6bb9fd8b93541d20",
+        "actual_rows": 33,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      },
+      {
+        "expected": {
+          "id": "MI607-SERVICE-WATER-HEATER",
+          "page": 31,
+          "sheet": "MI-607",
+          "title": "SERVICE WATER HEATER POINTS LIST",
+          "rows": 63,
+          "region": [
+            2475,
+            190,
+            2890,
+            1890
+          ]
+        },
+        "matched": true,
+        "actual_matrix_id": "matrix:cb3b413fceda830dec8bb7f9b630ccde3c14311358a1e9dfdbb6d8bf4c7e1960",
+        "actual_rows": 63,
+        "exact_row_count": true,
+        "bounded_geometry_overlap": null,
+        "geometry_comparison": "not_run_independent_record_has_no_declared_coordinate_frame"
+      }
+    ],
+    "unmatched_actual_candidates": []
+  },
+  "bas_math": {
+    "status": "review_required",
+    "source_coverage": "point_list_only",
+    "physical_total": {
+      "AI": 0,
+      "AO": 0,
+      "DI": 0,
+      "DO": 0
+    },
+    "calculated_rows": 0
+  },
+  "sequences": {
+    "authored_titled_regions": 0,
+    "authored_title_matches": [],
+    "authored_sequence_inventory_items": 2,
+    "authored_summary_groups": 0,
+    "authored_summary_clauses": 0,
+    "actual_regions": [
+      {
+        "region_id": "sha256:d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384:p26:line836:narrative",
+        "page": 26,
+        "title": "CHEMICAL FEED SYSTEM SEQUENCE OF OPERATION :",
+        "status": "body_detected",
+        "clauses": 15,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 15
+      },
+      {
+        "region_id": "sha256:d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384:p29:line15:narrative",
+        "page": 29,
+        "title": "FUEL OIL SYSTEM CONTROL SEQUENCE",
+        "status": "heading_only",
+        "clauses": 0,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 0
+      },
+      {
+        "region_id": "sha256:d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384:p29:line20:narrative",
+        "page": 29,
+        "title": "SEQUENCE OF OPERATIONS",
+        "status": "body_detected",
+        "clauses": 4,
+        "interpreted_clauses": 0,
+        "uninterpreted_clauses": 4
+      }
+    ],
+    "actual_region_count": 3,
+    "actual_clause_count": 19,
+    "discovery_complete": false,
+    "interpretation_complete": false
+  },
+  "equipment_candidates": {
+    "authored_schedule_counts": {
+      "tables": 9,
+      "rows": 56,
+      "interpretation": "Nine selected high-value MI-503/MI-504 schedule tables and 56 literal rows are retained, including printed continuation and NO USE rows."
+    },
+    "actual_tables": 24,
+    "actual_rows": 121,
+    "tables": [
+      {
+        "table_id": "bas-equipment:9a03ea6a039f97745309c90907c8f46a5eba2b29700761b411c578ed48b5a51b:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "title": "BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",
+        "rows": 4,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:c73eead67b311e916ea02eb032e7e96fab085cc920c338ae7ec94b6a886857e2:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "title": "",
+        "rows": 1,
+        "rows_with_issues": 1,
+        "issue_codes": [
+          "membership_unsupported_syntax"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:55802eab01a1b56636040db3247dce993b5fb445f495eafe4e492597d2d36d6a:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "title": "FAN SCHEDULE",
+        "rows": 7,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:49ccb587486a980b7f0705956a8bd94bc0b0bdcc565f76031c64864e224f2141:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "title": "",
+        "rows": 1,
+        "rows_with_issues": 1,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:18448a747b77d8807798fc19bde9436a24023143029f7a8ae258e8521077f2c2:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "title": "BOILER PLANT · PUMP SCHEDULE",
+        "rows": 5,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:9ecc04ace4b0d0be3d73d86f956a0e96f1b568b0bff0fca2c7f3dfd700ca3c28:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#21",
+        "title": "STEAM UNIT HEATER SCHEDULE",
+        "rows": 3,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:243a22472d6f08f65eae72a35801695891b7f0362accf57d8c2cf6b84a47dc51:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "title": "AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU)",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:e6c49eea477b0ff2dbd4399a25289226c6173f00da102e0470d1a17046b49c27:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "title": "",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:c59e76519adecbc4a6d745a437a0c6f97d58a63159023e66f5f7b5c6d973b4b8:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "title": "BOILER PLANT · BLOWDOWN TANK",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:22e2ab22ae9ef2dd68fb29c3454ca6fdadfaebf36b3df114ab1e60214b772462:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "title": "BOILER PLANT · PACKAGED CONDENSATE STORAGE TANK SCHEDULE",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:5d332f425667f885a2ba25fe575432ce7e33eafe2452bd95d7bc2ac2faae69f3:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "title": "",
+        "rows": 6,
+        "rows_with_issues": 6,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:f153ef46d5d016f294f853e4b103c2512a100629451a44ca33a3deb820da28b0:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "title": "",
+        "rows": 2,
+        "rows_with_issues": 2,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:3e2f2985a66a62a63e63a3de0eeed5a92e543fbed0fbf693d0257f52c9e806ae:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "title": "",
+        "rows": 2,
+        "rows_with_issues": 2,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:4a64a4a525fc7db481a5ab15c4888d50194f48525912e16da2159e8f15b7017e:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#22",
+        "title": "LOUVER SCHEDULE",
+        "rows": 3,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:922f672fc1493da3ba97212d00e87fce5668049c6e5e7fd07b5ee77e28c9f379:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "title": "PILOT OPERATED BACK PRESSURE REGULATOR",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:5ef3ee4cdd85a3bc1ceb0329386f64b41f60ef4cd05430f0800561207bf8fc5e:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "title": "BOILER PLANT · STEAM PRESSURE REDUCING VALVE SCHEDULE",
+        "rows": 7,
+        "rows_with_issues": 4,
+        "issue_codes": [
+          "missing_mark_cell"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:7f07882d80939505104889fbb415da4753b206c63d1f12298938eec68edb9c1c:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "title": "BOILER PLANT · FLASH VESSEL SCHEDULE",
+        "rows": 1,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:efbb64574e8d1438d1c89f459ff70d7697e890d887a98dee66f26da7b7488e04:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "title": "BOILER PLANT · STEAM METER SCHEDULE",
+        "rows": 9,
+        "rows_with_issues": 2,
+        "issue_codes": [
+          "membership_unsupported_syntax"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:d9643ff6da50c4cde4ac3c4c9e8375781d76312d2200585f162771d7fe70f17f:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "title": "BOILER PLANT · STEAM TRAP SCHEDULE",
+        "rows": 19,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:2dc8030fd179e73929d8522f77c81dbf31b266d2cf9481711097e3650795a57c:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#23",
+        "title": "",
+        "rows": 10,
+        "rows_with_issues": 10,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:0913bba8eef58e8975004814dc7dfbd1f16d9c7ca3f2ead55f0d394e29ff1ff0:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#24",
+        "title": "",
+        "rows": 30,
+        "rows_with_issues": 30,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:83cbf3d32a4f267a31ce5abfe1793f0e63203a752236c73f5d903cd7126b34cb:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#24",
+        "title": "BOILER PLANT · FUEL OIL METER SCHEDULE",
+        "rows": 4,
+        "rows_with_issues": 0,
+        "issue_codes": []
+      },
+      {
+        "table_id": "bas-equipment:471f183710a440de7e44373f618fc37724405543b87ab518ca3bb23a1dd707e7:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#24",
+        "title": "",
+        "rows": 1,
+        "rows_with_issues": 1,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      },
+      {
+        "table_id": "bas-equipment:75ccd337d84b5f73bea0a9c73af17eaff39971330d523422b175ea39dbe02095:copy1",
+        "sheet": "08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf#24",
+        "title": "",
+        "rows": 1,
+        "rows_with_issues": 1,
+        "issue_codes": [
+          "missing_mark_column"
+        ]
+      }
+    ],
+    "rows_with_issues": 60,
+    "issue_codes": [
+      "membership_unsupported_syntax",
+      "missing_mark_cell",
+      "missing_mark_column"
+    ],
+    "installed_quantity_values": [
+      null
+    ]
+  },
+  "initial_human_in_loop_state": {
+    "review_events": 0,
+    "equipment_events": 0,
+    "assembly_events": 0,
+    "engineering_events": 0,
+    "project_complete": false,
+    "installed_quantity": null,
+    "findings": 372,
+    "blockers": 372,
+    "findings_by_domain_severity_code": {
+      "equipment:blocker:membership_unsupported_syntax": 3,
+      "equipment:blocker:missing_mark_cell": 4,
+      "equipment:blocker:missing_mark_column": 53,
+      "points:blocker:point_columns_uninterpreted": 96,
+      "points:blocker:POINT_COLUMNS_UNINTERPRETED": 96,
+      "points:blocker:point_columns_unobserved": 33,
+      "points:blocker:POINT_COLUMNS_UNRESOLVED": 2,
+      "points:blocker:SOURCE_DISCOVERY_COVERAGE_UNVERIFIED": 1,
+      "sequences:blocker:discovery_incomplete": 1,
+      "sequences:blocker:heading_only": 1,
+      "sequences:blocker:unassigned_horizontal_spans": 31,
+      "sequences:blocker:uninterpreted_clause": 19,
+      "sequences:blocker:unsupported_spans": 31,
+      "sources:blocker:source_inventory_not_byte_verified": 1
+    }
+  },
+  "performance": {
+    "graph_ms": 265292,
+    "compile_and_capture_ms": 3008,
+    "total_ms": 272793,
+    "peak_rss_bytes": 1225080832
+  },
+  "assessment_boundary": "Independent source facts versus frozen automatic capture. Unmatched candidates require source review; they are not automatically labeled false positives. No human applicability, assembly, responsibility, compatibility, revision, approval, or installed-count decision is manufactured by this audit."
+}
