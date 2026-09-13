@@ -1795,6 +1795,38 @@ CIRCULATING PUMP SCHEDULE`) is invisible as its own entity, and the
 survivor's title doesn't match either real table it's supposed to
 represent.
 
+### B-30 — a code-compliance approval stamp's own disclaimer paragraph is fabricated into a phantom one-row table (NOT FIXED — found, traced, disclosed)
+
+**Where:** `098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8`
+(sheet M3.0, "HVAC SCHEDULES") — found continuing the HELDOUT set's own
+missed-checking pass.
+
+**Measured:** the sheet carries 4 real, titled, ruled tables, all hand-
+confirmed and all extracted correctly by the production pipeline:
+`VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP)` (1 row),
+`FAN SCHEDULE` (3), `DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT
+SCHEDULE` (2), `GAS-FIRED UNIT HEATER SCHEDULE` (4). But the pipeline
+also reports a 5th, fabricated table: `title: "approved contingent on
+the compliance"`, `rows: 1`, `kind: reference`. This title is a verbatim
+fragment of a Division of Occupational & Professional Licenses (DOPL)
+code-review approval stamp printed in the sheet's top-left corner —
+"These plans are approved contingent on the compliance with the mark-ups
+and notes applied. This approval shall not be construed to be an
+approval of any violation..." — a pure disclaimer paragraph with no
+columns, rows, or ruled structure whatsoever.
+
+**Relationship to already-catalogued bugs:** distinct from B-16 (two
+SIDE-BY-SIDE numbered-notes lists fusing into one fake table via a false
+column correlation) because here a SINGLE disclaimer paragraph, with no
+sibling list beside it, is misread as tabular on its own. Same general
+family (prose text mistaken for a table) but a different triggering
+shape — a new bug number rather than an amendment.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this document
+fails MISSED=0's false-positive-free counterpart — a phantom table with
+no real basis pollutes an otherwise perfectly-extracted sheet (4/4 real
+tables correct).
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
