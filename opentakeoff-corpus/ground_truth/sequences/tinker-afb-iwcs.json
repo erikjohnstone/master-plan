@@ -1,0 +1,141 @@
+{
+  "schema": "opentakeoff.sequence_narrative_ground_truth.v1",
+  "source_pdf": "raw/tinker-afb-iwcs-controls.pdf",
+  "review_basis": "Human visual review of rendered vector PDF sheets Y-301, Y-302, Y-303, Y-304N, and Y-304S plus negative-control sheet Y-204. Expectations describe authored drawing evidence, not current engine output.",
+  "coordinate_frame": "source_pdf_positioned_text_origin_top_left",
+  "pages": [
+    {
+      "page": 26,
+      "sheet_number": "Y-301",
+      "expected_sequences": [
+        {
+          "title": "02 BUILDING 214 SEQUENCE OF OPERATIONS IW-LS-3",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 6,
+          "minimum_evidence_spans": 30,
+          "required_phrases": [
+            "PUMP TO BE PROGRAMMED FOR LEAD / LAG CONTROL",
+            "MEASURE SUMP LEVEL VIA ANALOG LEVEL SENSOR",
+            "HORN SILENCE SWITCH TO SILENCE HORN FOR 30 MINUTES"
+          ],
+          "forbidden_phrases": [
+            "BUILDING 214 LIFT STATION DETAIL",
+            "MS1 RUN AUTO SW",
+            "TO IWTP",
+            "STATION VAULT",
+            "FLOW METER"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 27,
+      "sheet_number": "Y-302",
+      "expected_sequences": [
+        {
+          "title": "02 BUILDING 3706 SEQUENCE OF OPERATIONS IW-LS-10",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 6,
+          "minimum_evidence_spans": 30,
+          "required_phrases": [
+            "PUMP TO BE PROGRAMMED FOR LEAD / LAG CONTROL",
+            "MEASURE SUMP LEVEL VIA ANALOG LEVEL SENSOR",
+            "HORN SILENCE SWITCH TO SILENCE HORN FOR 30 MINUTES"
+          ],
+          "forbidden_phrases": [
+            "BUILDING 3706 LIFT STATION DETAIL",
+            "MS1 RUN AUTO SW",
+            "TO IWTP",
+            "STATION VAULT",
+            "FLOW METER"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 28,
+      "sheet_number": "Y-303",
+      "expected_sequences": [
+        {
+          "title": "02 BUILDING 2280 SEQUENCE OF OPERATIONS IW-LS-2280",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 6,
+          "minimum_evidence_spans": 30,
+          "required_phrases": [
+            "PUMP TO BE PROGRAMMED FOR LEAD / LAG CONTROL",
+            "MEASURE SUMP LEVEL VIA ANALOG LEVEL SENSOR",
+            "HORN SILENCE SWITCH TO SILENCE HORN FOR 30 MINUTES"
+          ],
+          "forbidden_phrases": [
+            "BUILDING 2280 LIFT STATION DETAIL",
+            "MS1 RUN AUTO SW",
+            "TO IWTP",
+            "STATION VAULT",
+            "FLOW METER"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 29,
+      "sheet_number": "Y-304N",
+      "expected_sequences": [
+        {
+          "title": "02 BUILDING 2136 SEQUENCE OF OPERATIONS IW-LS-6N",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 6,
+          "minimum_evidence_spans": 30,
+          "required_phrases": [
+            "PUMP TO BE PROGRAMMED FOR LEAD / LAG CONTROL",
+            "MEASURE SUMP LEVEL VIA ANALOG LEVEL SENSOR",
+            "HORN SILENCE SWITCH TO SILENCE HORN FOR 30 MINUTES"
+          ],
+          "forbidden_phrases": [
+            "BUILDING 2136 NORTH LIFT STATION DETAIL",
+            "MS1 RUN AUTO SW",
+            "TO IWTP",
+            "STATION VAULT",
+            "FLOW METER"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 30,
+      "sheet_number": "Y-304S",
+      "expected_sequences": [
+        {
+          "title": "02 BUILDING 2136 SEQUENCE OF OPERATIONS IW-LS-6S",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 6,
+          "minimum_evidence_spans": 30,
+          "required_phrases": [
+            "PUMP TO BE PROGRAMMED FOR LEAD / LAG CONTROL",
+            "MEASURE SUMP LEVEL VIA ANALOG LEVEL SENSOR",
+            "HORN SILENCE SWITCH TO SILENCE HORN FOR 30 MINUTES"
+          ],
+          "forbidden_phrases": [
+            "BUILDING 2136 SOUTH LIFT STATION DETAIL",
+            "MS1 RUN AUTO SW",
+            "TO IWTP",
+            "STATION VAULT",
+            "FLOW METER"
+          ]
+        }
+      ]
+    }
+  ],
+  "negative_pages": [
+    {
+      "page": 25,
+      "sheet_number": "Y-204",
+      "expected_sequences": 0,
+      "review_note": "The interior routing plan contains instrumentation routing and general notes, but no authored Sequence of Operations block."
+    }
+  ]
+}

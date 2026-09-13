@@ -216,6 +216,9 @@ export default function TakeoffDataPanel({
     ?? null;
   const takeoffId = corpusMeta?.takeoff_id || null;
   const completeBasRun = corpusMeta?.kind === "complete_bas_takeoff";
+  const completeCoverage = completeBasRun ? corpusMeta?.coverage : null;
+  const completeSequenceCount = Number(completeCoverage?.sequences || 0);
+  const completeSequenceSections = Number(completeCoverage?.sequence_sections || 0);
   const compiledOk = takeoffId
     && lockedTotal != null
     && lines.length === lockedTotal
@@ -310,6 +313,12 @@ export default function TakeoffDataPanel({
             >
               <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{lines.length}</strong> {completeBasRun ? "takeoff lines" : corpusMeta?.bas_math ? "original schedule lines" : "lines"}</span>
               <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{familyGroups.length}</strong> schedules</span>
+              {completeSequenceCount > 0 && (
+                <span data-takeoff-sequences={completeSequenceCount}>
+                  <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{completeSequenceCount}</strong> sequences
+                  {completeSequenceSections > 0 ? ` · ${completeSequenceSections} sections` : ""}
+                </span>
+              )}
               {qtyTotal != null && (
                 <span data-takeoff-ea={qtyTotal}><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{qtyTotal}</strong> EA</span>
               )}
@@ -434,7 +443,19 @@ export default function TakeoffDataPanel({
           {tab === "takeoff" ? (
             !lines.length ? (
               <div style={{ padding: "56px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: "var(--fs-l)", lineHeight: 1.5 }}>
-                {corpusMeta?.bas_math ? "No rows from the original schedule compiler. BAS engineering results and their review findings are shown above." : <>
+                {completeBasRun ? <>
+                  <strong style={{ display: "block", color: "var(--ink)", marginBottom: 8 }}>No quantity-bearing schedule rows were found.</strong>
+                  {completeSequenceCount > 0 ? <>
+                    This controls evidence still includes {completeSequenceCount} grounded sequence{completeSequenceCount === 1 ? "" : "s"}
+                    {completeSequenceSections > 0 ? ` with ${completeSequenceSections} retained sections` : ""}. No equipment quantity has been inferred from narrative text.
+                    {basWorkflow && <div style={{ marginTop: 18 }}>
+                      <button type="button" style={btnStyle} onClick={() => {
+                        setLocalTab("points");
+                        onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: "points", mode: "sequences", sequenceScroll: 0 }));
+                      }}>Review sequences</button>
+                    </div>}
+                  </> : "The Agent retained its evidence and review findings without inventing equipment quantities."}
+                </> : corpusMeta?.bas_math ? "No rows from the original schedule compiler. BAS engineering results and their review findings are shown above." : <>
                   No finished takeoff yet.<br />
                   Run Agent with a complete HVAC, BAS, or valve takeoff goal — compiled quantities land here.
                 </>}

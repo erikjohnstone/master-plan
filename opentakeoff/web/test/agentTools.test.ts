@@ -151,6 +151,18 @@ test("run_complete_bas_takeoff executes every production stage in fixed order an
     sheet_count: 0,
     workstream_count: 5,
     bas_math: null,
+    coverage: {
+      equipment_items: 1,
+      point_lists: 0,
+      point_rows: 0,
+      sequences: 0,
+      sequence_sections: 0,
+      control_valve_items: 1,
+      embedded_coil_gaps: 0,
+      control_schematics: 0,
+      riser_diagrams: 0,
+      reconcile_rows: 2,
+    },
   });
   assert.deepEqual(calls.at(-1), ["open", "review_revisions_release"]);
   assert.equal(out.bas_math_policy, "not_supplied_unresolved_preserved");
