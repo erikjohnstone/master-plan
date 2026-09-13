@@ -106,7 +106,11 @@ test("run_complete_bas_takeoff executes every production stage in fixed order an
     },
     inspectBasWorkflow: async (domain: string) => {
       calls.push(["inspect", domain]);
-      return { domain, status: "not_started", blocker_count: 3, next_step: "estimator review", installed_quantity: null };
+      return { domain, status: "not_started", blocker_count: 3, next_step: "estimator review", installed_quantity: null,
+        metrics: domain === "point_soo" ? [
+          { key: "soo_labeled_point_candidates", label: "SOO point candidates", value: 7 },
+          { key: "point_type_review_rows", label: "Point type review rows", value: 3 },
+        ] : [] };
     },
     presentCompleteBasTakeoff: (presentation: unknown) => {
       calls.push(["present", presentation]);
@@ -155,16 +159,23 @@ test("run_complete_bas_takeoff executes every production stage in fixed order an
       equipment_items: 1,
       point_lists: 0,
       point_rows: 0,
+      point_type_review_rows: 3,
       sequences: 0,
       sequence_sections: 0,
+      soo_point_candidates: 7,
       control_valve_items: 1,
       embedded_coil_gaps: 0,
       control_schematics: 0,
       riser_diagrams: 0,
       reconcile_rows: 2,
+      reconcile_match: 1,
+      reconcile_schedule_only: 1,
+      reconcile_plan_only: 0,
+      reconcile_ambiguous: 0,
+      reconcile_refused: 0,
     },
   });
-  assert.deepEqual(calls.at(-1), ["open", "review_revisions_release"]);
+  assert.deepEqual(calls.at(-1), ["open", "takeoff_summary"]);
   assert.equal(out.bas_math_policy, "not_supplied_unresolved_preserved");
   assert.equal(out.stages.hvac_equipment.status, "complete");
   assert.equal(out.stages.control_schematics_and_risers.status, "partial");
@@ -215,6 +226,54 @@ test("run_complete_bas_takeoff preserves independent evidence after one shared c
   assert.deepEqual(later, ["analyze", "reconcile", ...[
     "point_soo", "equipment_templates", "assemblies_responsibility", "engineering_compatibility", "review_revisions_release",
   ], "present", "workspace"]);
+});
+
+test("run_complete_bas_takeoff uses one shared Session batch when the product capability is available", async () => {
+  const calls: unknown[] = [];
+  const compileOrder = ["hvac_equipment", "bas_points", "sequences", "control_valves", "embedded_coil_gaps"];
+  const compiles = Object.fromEntries(compileOrder.map((kind) => [kind, {
+    kind,
+    takeoff_id: kind,
+    sheet_count: 3,
+    totals: kind === "sequences" ? { sequences: 2, sections: 4 } : { items: 1 },
+  }]));
+  const { ctx } = makeCtx({
+    compileCompleteBasTakeoff: async (opts: unknown) => {
+      calls.push(["batch", opts]);
+      return {
+        schema_version: "opentakeoff.complete_bas_batch.v1",
+        compile_order: compileOrder,
+        compiles,
+        control_schematics: {
+          schema_version: "opentakeoff.control_schematic.v1",
+          totals: { schematics: 1, riser_diagrams: 1, unresolved_crossings: 0 },
+          engineering_readiness: { status: "coverage_not_established", blockers: [] },
+        },
+        reconcile: {
+          summary: { total: 1, match: 1, schedule_only: 0 },
+          rows: [{ tag: "AHU-1", status: "MATCH", plan_cites: [] }],
+        },
+      };
+    },
+    compileCorpusTakeoff: async () => { throw new Error("individual compile must not run"); },
+    analyzeControlSchematics: async () => { throw new Error("separate analysis must not run"); },
+    reconcileSchedulePlan: async () => { throw new Error("separate reconcile must not run"); },
+    inspectBasWorkflow: async (domain: string) => ({ domain, status: "not_started", metrics: [] }),
+    presentCompleteBasTakeoff: () => ({ presented: true }),
+    openBasWorkspace: () => ({ opened: true }),
+  });
+  const out = await executeAgentTool(ctx, "run_complete_bas_takeoff", {});
+  assert.equal(out.execution_status, "completed");
+  assert.equal(calls.length, 1);
+  assert.deepEqual(calls[0], ["batch", {
+    download: false,
+    categories: ["major_equipment", "air_terminal", "valve", "actuator", "damper", "sensor", "control_component"],
+    evaluationFast: true,
+  }]);
+  assert.deepEqual(out.compile_order, compileOrder);
+  assert.equal(out.reconcile.row_count, 1);
+  assert.equal(out.presentation.coverage.control_schematics, 1);
+  assert.equal(out.presentation.coverage.riser_diagrams, 1);
 });
 
 test("query_table delegates whole-set cited cell filters", async () => {

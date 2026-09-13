@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /** Real-PDF gate for free-form SOO + explicit schematic point evidence. */
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,6 +18,12 @@ if (!existsSync(truthPath)) throw new Error(`Ground truth not found: ${truthPath
 const truth = JSON.parse(readFileSync(truthPath, "utf8"));
 const pdfPath = resolve(corpus, truth.source_pdf);
 if (!existsSync(pdfPath)) throw new Error(`Source PDF not found: ${pdfPath}`);
+if (truth.source_sha256) {
+  const actualSha256 = createHash("sha256").update(readFileSync(pdfPath)).digest("hex");
+  if (actualSha256 !== truth.source_sha256) {
+    throw new Error(`Source SHA-256 mismatch: expected ${truth.source_sha256}, got ${actualSha256}`);
+  }
+}
 
 const doc = await openPdf(pdfPath);
 const sheetInputs = [];
@@ -88,10 +95,25 @@ for (const expected of truth.pages) {
   if (pageSchematics.length !== (expected.control_diagram_titles || []).length) {
     errors.push(`page ${expected.page}: expected ${(expected.control_diagram_titles || []).length} extracted schematic(s), got ${pageSchematics.length}`);
   }
+  for (const title of expected.forbidden_control_diagram_titles || []) {
+    if (schematicTitles.includes(title)) errors.push(`page ${expected.page}: forbidden title-block/false schematic extracted ${JSON.stringify(title)}`);
+  }
   for (const schematic of pageSchematics) {
     if (schematic.semantic_status !== "evidence_inventory") errors.push(`page ${expected.page}: unverified schematic ${JSON.stringify(schematic.title)} promoted to ${schematic.semantic_status}`);
     if (schematic.topology.status !== "computed") errors.push(`page ${expected.page}: raw vector topology not computed for ${JSON.stringify(schematic.title)}`);
-    if (!schematic.sequence_refs.length) errors.push(`page ${expected.page}: ${JSON.stringify(schematic.title)} is not bound to its authored sequence section`);
+    if (!validBbox(schematic.title_evidence?.bbox) || schematic.title_evidence?.sheet !== key) {
+      errors.push(`page ${expected.page}: ${JSON.stringify(schematic.title)} lacks a valid same-sheet title citation`);
+    }
+    if (expected.require_horizontal_title_evidence
+      && schematic.title_evidence.bbox[2] - schematic.title_evidence.bbox[0]
+        <= schematic.title_evidence.bbox[3] - schematic.title_evidence.bbox[1]) {
+      errors.push(`page ${expected.page}: ${JSON.stringify(schematic.title)} is grounded to a rotated/title-block occurrence instead of the horizontal drawing-field caption`);
+    }
+    const expectedStatus = expected.expected_sequence_binding_status?.[schematic.title]
+      || (expected.expected_sequence_bindings?.[schematic.title] || expected.expected_sequence_refs?.[schematic.title] ? "bound" : null);
+    if (expectedStatus && schematic.sequence_binding_status !== expectedStatus) {
+      errors.push(`page ${expected.page}: ${JSON.stringify(schematic.title)} sequence binding expected ${expectedStatus}, got ${schematic.sequence_binding_status}`);
+    }
   }
   for (const [diagramTitle, expectedSequenceTitles] of Object.entries(expected.expected_sequence_bindings || {})) {
     const schematic = pageSchematics.find((candidate) => candidate.title === diagramTitle);
@@ -103,6 +125,28 @@ for (const expected of truth.pages) {
     }
     if (JSON.stringify(actualSequenceTitles) !== JSON.stringify(wantedSequenceTitles)) {
       errors.push(`page ${expected.page}: ${JSON.stringify(diagramTitle)} sequences expected ${JSON.stringify(wantedSequenceTitles)}, got ${JSON.stringify(actualSequenceTitles)}`);
+    }
+  }
+  for (const [diagramTitle, expectedRefs] of Object.entries(expected.expected_sequence_refs || {})) {
+    const schematic = pageSchematics.find((candidate) => candidate.title === diagramTitle);
+    if (!schematic) continue;
+    const actualRefs = schematic.sequence_refs.map(({ title, sheet, title_bbox }) => ({
+      title, sheet, title_bbox,
+    })).sort((a, b) => a.sheet.localeCompare(b.sheet) || a.title.localeCompare(b.title));
+    const wantedRefs = expectedRefs.map(({ title, page }) => ({
+      title,
+      sheet: `${truth.source_pdf.split("/").at(-1)}#${page}`,
+    })).sort((a, b) => a.sheet.localeCompare(b.sheet) || a.title.localeCompare(b.title));
+    if (actualRefs.length !== wantedRefs.length) {
+      errors.push(`page ${expected.page}: ${JSON.stringify(diagramTitle)} expected ${wantedRefs.length} sequence ref(s), got ${actualRefs.length}`);
+    }
+    for (let index = 0; index < Math.min(actualRefs.length, wantedRefs.length); index++) {
+      if (actualRefs[index].title !== wantedRefs[index].title || actualRefs[index].sheet !== wantedRefs[index].sheet) {
+        errors.push(`page ${expected.page}: ${JSON.stringify(diagramTitle)} sequence ref expected ${JSON.stringify(wantedRefs[index])}, got ${JSON.stringify({ title: actualRefs[index].title, sheet: actualRefs[index].sheet })}`);
+      }
+      if (!validBbox(actualRefs[index].title_bbox)) {
+        errors.push(`page ${expected.page}: ${JSON.stringify(diagramTitle)} sequence ref ${JSON.stringify(actualRefs[index].title)} lacks a valid title bbox`);
+      }
     }
   }
   const extractedIo = Object.fromEntries(["AI", "AO", "DI", "DO"].map((token) => [
@@ -171,6 +215,10 @@ for (const expected of truth.pages) {
       unresolved_crossings: schematic.review.unresolved_crossings,
     })),
   });
+}
+
+if (truth.expected_total_schematics != null && controls.schematics.length !== truth.expected_total_schematics) {
+  errors.push(`expected ${truth.expected_total_schematics} total schematic(s), got ${controls.schematics.length}`);
 }
 
 const result = {

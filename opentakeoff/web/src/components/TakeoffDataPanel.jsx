@@ -11,6 +11,8 @@ import {
   groupTakeoffByFamily,
   lineLeadCite,
   lineLeadValue,
+  linePlanCite,
+  lineScheduleCite,
   lineSpecValue,
 } from "../lib/agentTakeoff.js";
 import CiteValue from "./CiteValue.jsx";
@@ -19,8 +21,10 @@ import BasPointsWorkspace from "./BasPointsWorkspace.jsx";
 import BasEquipmentWorkspace from "./BasEquipmentWorkspace.jsx";
 import BasProjectReviewWorkspace from "./BasProjectReviewWorkspace.jsx";
 import BasSourceReader from "./BasSourceReader.jsx";
+import BasSourceComparison from "./BasSourceComparison.jsx";
 import { store } from '../lib/store.js';
 import { basReviewNavigation } from './basReviewNavigation.ts';
+import { completeBasHeaderCoverage } from '../lib/completeBasPresentation.js';
 
 /** Cap visible technical columns so each family table stays readable. */
 const UI_SPEC_MAX = 12;
@@ -90,6 +94,40 @@ function shortSheet(sheet) {
   return s.length > 28 ? `…${s.slice(-24)}` : s;
 }
 
+function SourceComparisonActions({ line, onOpenCitation, onCompareCitations, comparisonBusy }) {
+  const schedule = lineScheduleCite(line);
+  const plan = linePlanCite(line);
+  const hasPair = Boolean(schedule && plan);
+  return <div style={{ display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
+    {hasPair && onCompareCitations && <button
+      type="button"
+      data-source-comparison-action="compare"
+      disabled={comparisonBusy}
+      onClick={() => onCompareCitations({ plan, schedule, tag: line.tag, line })}
+      style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0, color: "var(--paper-bright)", background: "var(--cobalt)", borderColor: "var(--cobalt)" }}
+      title={`Compare grounded plan match on ${line.plan_sheet_id} with source schedule row on ${line.schedule_sheet_id || line.sheet_id}`}
+    >
+      {comparisonBusy ? 'Opening…' : 'Compare'}
+    </button>}
+    {schedule && <button
+      type="button"
+      onClick={() => onOpenCitation?.(schedule)}
+      style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0 }}
+      title={`Open the source schedule row on ${line.schedule_sheet_id || line.sheet_id}`}
+    >
+      Schedule row · {shortSheet(line.schedule_sheet_id || line.sheet_id)}
+    </button>}
+    {plan ? <button
+      type="button"
+      onClick={() => onOpenCitation?.(plan)}
+      style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0, color: "var(--cobalt)", borderColor: "var(--cobalt)" }}
+      title={`Open the grounded plan match on ${line.plan_sheet_id}`}
+    >
+      Plan match · {shortSheet(line.plan_sheet_id)}
+    </button> : line.status && <span data-no-plan-match style={{ color: "var(--ink-muted)" }}>No plan match</span>}
+  </div>;
+}
+
 
 export default function TakeoffDataPanel({
   rows = [],
@@ -114,14 +152,21 @@ export default function TakeoffDataPanel({
   onRemoveLine,
   onClose,
   onOpenCitation: onCanvasCitation,
+  onCompareCitations,
 }) {
   const [sourceView, setSourceView] = useState(null);
+  const [sourceComparison, setSourceComparison] = useState(null);
+  const [comparisonBusy, setComparisonBusy] = useState(false);
+  const comparisonRequest = useRef(0);
   const sourceReturn = useRef(null);
   const restoreSourceFocus = useRef(false);
   const sourceContext = useRef(null);
   const adapter = store;
   sourceContext.current = { workflow: basWorkflow, adapter };
-  useEffect(() => { setSourceView(null); }, [basWorkflow, adapter]);
+  useEffect(() => {
+    comparisonRequest.current += 1;
+    setSourceView(null); setSourceComparison(null); setComparisonBusy(false);
+  }, [basWorkflow, adapter]);
   const onOpenCitation = async row => {
     if (!row?.page_id || !basWorkflow) return onCanvasCitation?.(row);
     const opener = document.activeElement;
@@ -146,6 +191,21 @@ export default function TakeoffDataPanel({
     }
   }, [readingSource]);
   const closeSource = () => { restoreSourceFocus.current = true; setSourceView(null); };
+  const openSourceComparison = async request => {
+    const operation = ++comparisonRequest.current;
+    setErr(''); setComparisonBusy(true);
+    try {
+      const result = await onCompareCitations?.(request);
+      if (operation !== comparisonRequest.current) return;
+      if (!result || result.error) { setErr(result?.error || 'Source comparison is unavailable.'); return; }
+      setSourceComparison(result);
+    } catch (error) {
+      if (operation === comparisonRequest.current) setErr(error?.message || String(error));
+    } finally {
+      if (operation === comparisonRequest.current) setComparisonBusy(false);
+    }
+  };
+  const closeSourceComparison = () => { comparisonRequest.current += 1; setComparisonBusy(false); setSourceComparison(null); };
   const [localTab, setLocalTab] = useState(basWorkflow && (corpusMeta?.kind === 'bas_points' || !rows.length) ? "points" : "takeoff");
   const tab = basViewState?.takeoffTab || localTab;
   const setTab = value => {
@@ -217,8 +277,9 @@ export default function TakeoffDataPanel({
   const takeoffId = corpusMeta?.takeoff_id || null;
   const completeBasRun = corpusMeta?.kind === "complete_bas_takeoff";
   const completeCoverage = completeBasRun ? corpusMeta?.coverage : null;
-  const completeSequenceCount = Number(completeCoverage?.sequences || 0);
-  const completeSequenceSections = Number(completeCoverage?.sequence_sections || 0);
+  const completeHeader = completeBasHeaderCoverage(completeCoverage);
+  const completeSequenceCount = completeHeader.sequences;
+  const completeSequenceSections = completeHeader.sequenceSections;
   const compiledOk = takeoffId
     && lockedTotal != null
     && lines.length === lockedTotal
@@ -283,7 +344,8 @@ export default function TakeoffDataPanel({
         }}
       >
         {readingSource && <BasSourceReader workflow={basWorkflow} request={sourceView.request} adapter={adapter} onBack={closeSource} />}
-        <div hidden={readingSource} style={{ display: readingSource ? 'none' : 'contents' }}>
+        {sourceComparison && <BasSourceComparison comparison={sourceComparison} onBack={closeSourceComparison} onOpenCitation={onOpenCitation} />}
+        <div hidden={readingSource || !!sourceComparison} style={{ display: readingSource || sourceComparison ? 'none' : 'contents' }}>
         <header style={{
           display: "flex", alignItems: "flex-start", gap: 12,
           padding: "16px 20px 0", borderBottom: "1px solid var(--ink-faint)",
@@ -307,27 +369,54 @@ export default function TakeoffDataPanel({
               hidden={evidenceTab}
               data-lines={lines.length}
               data-schedules={familyGroups.length}
-              data-ea={qtyTotal ?? ""}
+              data-ea={completeBasRun ? "" : (qtyTotal ?? "")}
               data-evidence={rows.length}
               data-takeoff-id={takeoffId || ""}
             >
-              <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{lines.length}</strong> {completeBasRun ? "takeoff lines" : corpusMeta?.bas_math ? "original schedule lines" : "lines"}</span>
-              <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{familyGroups.length}</strong> schedules</span>
-              {completeSequenceCount > 0 && (
-                <span data-takeoff-sequences={completeSequenceCount}>
+              {completeBasRun ? <>
+                <span data-bas-equipment-records={completeHeader.equipmentRecords}>
+                  <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{completeHeader.equipmentRecords}</strong> equipment records
+                </span>
+                <span data-bas-point-lists={completeHeader.pointLists} data-bas-point-rows={completeHeader.pointRows}
+                  data-bas-point-type-review-rows={completeHeader.pointTypeReviewRows}>
+                  <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{completeHeader.pointLists}</strong> point lists
+                  {completeHeader.pointRows > 0 ? ` · ${completeHeader.pointRows} rows` : ""}
+                  {completeHeader.pointTypeReviewRows > 0 ? ` · ${completeHeader.pointTypeReviewRows} I/O type reviews` : ""}
+                </span>
+                <span data-takeoff-sequences={completeSequenceCount} data-bas-soo-point-candidates={completeHeader.sooPointCandidates}>
                   <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{completeSequenceCount}</strong> sequences
                   {completeSequenceSections > 0 ? ` · ${completeSequenceSections} sections` : ""}
+                  {completeHeader.sooPointCandidates > 0 ? ` · ${completeHeader.sooPointCandidates} labeled SOO points to review` : ""}
                 </span>
-              )}
-              {qtyTotal != null && (
-                <span data-takeoff-ea={qtyTotal}><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{qtyTotal}</strong> EA</span>
-              )}
+                <span data-bas-valve-records={completeHeader.valveRecords}>
+                  <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{completeHeader.valveRecords}</strong> valve records
+                  {completeHeader.coilGaps > 0 ? ` · ${completeHeader.coilGaps} coil gaps` : ""}
+                </span>
+                {(completeHeader.schematics > 0 || completeHeader.risers > 0) && (
+                  <span data-bas-schematics={completeHeader.schematics} data-bas-risers={completeHeader.risers}>
+                    <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{completeHeader.schematics}</strong> schematics
+                    {` · ${completeHeader.risers} riser/flow ${completeHeader.risers === 1 ? "diagram" : "diagrams"}`}
+                  </span>
+                )}
+                {completeHeader.reconcileRows > 0 && (
+                  <span data-bas-reconcile-rows={completeHeader.reconcileRows} data-bas-reconcile-matches={completeHeader.reconcileMatches}>
+                    <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{completeHeader.reconcileMatches}</strong> plan-grounded matches
+                    {` · ${completeHeader.reconcileExceptions} exceptions`}
+                  </span>
+                )}
+              </> : <>
+                <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{lines.length}</strong> {corpusMeta?.bas_math ? "original schedule lines" : "lines"}</span>
+                <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{familyGroups.length}</strong> schedules</span>
+                {qtyTotal != null && (
+                  <span data-takeoff-ea={qtyTotal}><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{qtyTotal}</strong> EA</span>
+                )}
+              </>}
               {lockedTotal != null && !corpusMeta?.bas_math && (
                 <span style={{ color: compiledOk ? "var(--ink)" : "var(--c-danger)" }}>
                   locked {lockedTotal}{compiledOk ? " · matched" : " · mismatch"}
                 </span>
               )}
-              <span>{rows.length} evidence fields</span>
+              <span>{rows.length} cited source fields</span>
             </div>
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
               {tab === "review" ? basViewState?.projectReview?.snapshots
@@ -394,42 +483,49 @@ export default function TakeoffDataPanel({
 
         {/* Family jump strip — contractor scanning by schedule */}
         {tab === "takeoff" && familyGroups.length > 1 && (
-          <div style={{
-            display: "flex", gap: 6, flexWrap: "wrap", padding: "10px 20px",
+          <nav aria-label="Takeoff result groups" data-takeoff-group-rail={familyGroups.length} style={{
+            display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: 10, padding: "8px 20px",
             borderBottom: "1px solid var(--ink-faint)",
             background: "color-mix(in srgb, var(--paper) 85%, var(--ink-faint))",
           }}>
-            {familyGroups.map((g) => {
-              const name = familyLabel(g.family);
-              const active = jumpFamily === name;
-              return (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => {
-                    if (g.tableCite && onOpenCitation) onOpenCitation(g.tableCite);
-                    else jumpToFamily(name);
-                  }}
-                  style={{
-                    ...btnStyle,
-                    padding: "5px 9px",
-                    fontSize: "var(--fs-xs)",
-                    background: active ? "var(--ink)" : "var(--paper-bright)",
-                    color: active ? "var(--paper-bright)" : "var(--ink-muted)",
-                    borderColor: active ? "var(--ink)" : "var(--ink-faint)",
-                    maxWidth: 220,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    textDecoration: g.tableCite ? "underline" : undefined,
-                  }}
-                  title={g.tableCite ? `Open ${name} on the drawings` : name}
-                >
-                  {name.replace(/ SCHEDULE$/i, "")}
-                  <span style={{ opacity: 0.75 }}> · {g.qtyTotal || g.lines.length}</span>
-                </button>
-              );
-            })}
-          </div>
+            <span style={{ fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", color: "var(--ink-muted)", whiteSpace: "nowrap" }}>
+              {familyGroups.length} groups
+            </span>
+            <div style={{ display: "flex", gap: 6, overflowX: "auto", minWidth: 0, paddingBottom: 2, scrollbarWidth: "thin" }}>
+              {familyGroups.map((g) => {
+                const name = familyLabel(g.family);
+                const active = jumpFamily === name;
+                return (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => {
+                      if (g.tableCite && onOpenCitation) onOpenCitation(g.tableCite);
+                      else jumpToFamily(name);
+                    }}
+                    style={{
+                      ...btnStyle,
+                      flex: "0 0 auto",
+                      padding: "5px 9px",
+                      fontSize: "var(--fs-xs)",
+                      background: active ? "var(--ink)" : "var(--paper-bright)",
+                      color: active ? "var(--paper-bright)" : "var(--ink-muted)",
+                      borderColor: active ? "var(--ink)" : "var(--ink-faint)",
+                      maxWidth: 220,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      textDecoration: g.tableCite ? "underline" : undefined,
+                    }}
+                    title={g.tableCite ? `Open ${name} on the drawings` : name}
+                  >
+                    {name.replace(/ SCHEDULE$/i, "")}
+                    <span style={{ opacity: 0.75 }}> · {g.qtyTotal || g.lines.length}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </nav>
         )}
 
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px", ...(tab === 'review' ? { display: 'flex', flexDirection: 'column', minHeight: 0 } : {}) }}>
@@ -439,7 +535,6 @@ export default function TakeoffDataPanel({
             onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} onDrawingReview={onBasDrawingReview} onRevisionOperation={onBasRevisionOperation} onIssueReview={onBasIssueReview} onScopeReview={onBasScopeReview} restoreContext={restoreContext} />
             : tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onAssemblyReview={onBasAssemblyReview} onAssemblyCalculate={onBasAssemblyCalculate} onEngineering={onBasEngineering} onOpenCitation={onOpenCitation} />
             : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
-          {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}
           {tab === "takeoff" ? (
             !lines.length ? (
               <div style={{ padding: "56px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: "var(--fs-l)", lineHeight: 1.5 }}>
@@ -455,7 +550,7 @@ export default function TakeoffDataPanel({
                       }}>Review sequences</button>
                     </div>}
                   </> : "The Agent retained its evidence and review findings without inventing equipment quantities."}
-                </> : corpusMeta?.bas_math ? "No rows from the original schedule compiler. BAS engineering results and their review findings are shown above." : <>
+                </> : corpusMeta?.bas_math ? "No quantity-bearing rows were found in the original schedules. Engineering evidence and review gaps are shown below." : <>
                   No finished takeoff yet.<br />
                   Run Agent with a complete HVAC, BAS, or valve takeoff goal — compiled quantities land here.
                 </>}
@@ -513,10 +608,10 @@ export default function TakeoffDataPanel({
                                 boxShadow: i === 0 ? "2px 0 0 var(--ink-faint)" : undefined,
                               }}>{c.label}</th>
                             ))}
+                            <th style={th}>Source comparison</th>
                             {specs.map((c) => (
                               <th key={c} style={th}>{c}</th>
                             ))}
-                            <th style={th}>Sheet</th>
                             {showStatus ? <th style={th}>Status</th> : null}
                             <th style={th} />
                           </tr>
@@ -558,6 +653,9 @@ export default function TakeoffDataPanel({
                                   </td>
                                 );
                               })}
+                              <td style={{ ...td, fontSize: "var(--fs-xs)", color: "var(--ink-muted)", whiteSpace: "nowrap" }}>
+                                <SourceComparisonActions line={line} onOpenCitation={onOpenCitation} onCompareCitations={openSourceComparison} comparisonBusy={comparisonBusy} />
+                              </td>
                               {specs.map((c) => {
                                 const v = lineSpecValue(line, c);
                                 return (
@@ -571,31 +669,18 @@ export default function TakeoffDataPanel({
                                   </td>
                                 );
                               })}
-                              <td style={{ ...td, fontSize: "var(--fs-s)", color: "var(--ink-muted)", whiteSpace: "nowrap" }}
-                                title={line.plan_sheet_id || line.schedule_sheet_id || line.sheet_id || ""}>
-                                <CiteValue
-                                  text={shortSheet(line.plan_sheet_id || line.schedule_sheet_id || line.sheet_id)}
-                                  cite={lineLeadCite(line, "tag")}
-                                  onOpenCitation={onOpenCitation}
-                                  mono
-                                  title="Jump to this schedule row on the drawings"
-                                />
-                              </td>
                               {showStatus ? (
                                 <td style={{ ...td, fontSize: "var(--fs-s)", color: "var(--ink-muted)" }}>
                                   {line.status || "—"}
                                   {line.notes ? (
-                                    <div style={{ marginTop: 2, maxWidth: 160, whiteSpace: "normal" }}>{line.notes}</div>
+                                    <details style={{ marginTop: 3, maxWidth: 280 }}>
+                                      <summary style={{ cursor: "pointer", color: "var(--cobalt)", whiteSpace: "nowrap" }}>Details</summary>
+                                      <div style={{ marginTop: 5, whiteSpace: "normal", lineHeight: 1.4 }}>{line.notes}</div>
+                                    </details>
                                   ) : null}
                                 </td>
                               ) : null}
                               <td style={{ ...td, whiteSpace: "nowrap" }}>
-                                {typeof onOpenCitation === "function" && line.sheet_id && (line.row_bbox_px || line.bbox_px) && (
-                                  <button type="button" onClick={() => onOpenCitation(lineLeadCite(line, "tag"))}
-                                    style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)" }}>
-                                    View
-                                  </button>
-                                )}
                                 {typeof onRemoveLine === "function" && (
                                   <button type="button" onClick={() => onRemoveLine(line)}
                                     style={{
@@ -701,6 +786,7 @@ export default function TakeoffDataPanel({
               ))
             )
           )}
+          {tab === "takeoff" && corpusMeta?.bas_math && <BasMathSummary result={corpusMeta.bas_math} filter={filter} onOpenCitation={onOpenCitation} />}
           </>}
         </div>
         </div>

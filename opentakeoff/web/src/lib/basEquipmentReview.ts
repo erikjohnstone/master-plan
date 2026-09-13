@@ -28,7 +28,8 @@ export function basAssignmentCalculationState(workflow: BasWorkflow, captureId: 
 export async function basEquipmentView(workflow: BasWorkflow, captureId: string) {
   const capture = workflow.captures.find(c => c.capture_id === captureId);
   if (!capture?.equipment_sources || !capture.narrative_sources) throw new Error('Recompile the original PDFs to retain equipment evidence');
-  return validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, basEquipmentRegister(workflow, captureId));
+  return validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points,
+    basEquipmentRegister(workflow, captureId), capture.narrative_rule_version);
 }
 
 /** Compact public index supplies addressable source occurrence IDs. Full source
@@ -87,7 +88,8 @@ export async function applyBasEquipmentReview(rawWorkflow: unknown, rawRequest: 
   if (basEquipmentHead(workflow, request.capture_id) !== request.expected_head) throw new Error('Equipment review changed since this edit began. Reload the register.');
   const capture = workflow.captures.find(c => c.capture_id === request.capture_id);
   if (!capture?.narrative_sources || !capture.equipment_sources) throw new Error('This capture has no retained equipment evidence');
-  await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, request.register);
+  await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points,
+    request.register, capture.narrative_rule_version);
   const payload = { ...request, rule_version: 'equipment_assignment_review_1' as const, origin, created_at: createdAt };
   const event = basEquipmentReviewEventSchema.parse({ ...payload, event_id: await basEventFingerprint(payload) });
   return basWorkflowSchema.parse({ ...workflow, revision: atLeastBasWorkflowRevision(workflow.revision, 'bas_equipment_3'), equipment_events: [...(workflow.equipment_events ?? []), event] });

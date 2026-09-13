@@ -99,6 +99,236 @@ describe("control schematic extraction", () => {
     assert.deepEqual(result.schematics[0].title_evidence.bbox, [100, 460, 380, 518]);
   });
 
+  it("uses the horizontal detail title, rejects a rotated title-block copy, and binds the adjacent authored SOO", () => {
+    const schematicSheet = "navfac.pdf#52";
+    const sequenceSheet = "navfac.pdf#53";
+    const result = extractControlSchematics([{
+      key: schematicSheet, width: 1000, height: 700, segs: [100, 250, 700, 250],
+      spans: [
+        span("AIR OPS / MTRACON - DOAH SCHEMATIC", 100, 500, 520, 18),
+        { ...span("AIR OPS / MTRACON - DOAH CONTROL SCHEMATIC AND POINTS LIST", 920, 160, 18, 420), rot: Math.PI / 2 },
+      ],
+    }], {
+      ...emptyGraph(), tables: [], sequence_narratives: [{
+        id: "soo:navfac:53", sheet: sequenceSheet,
+        title: "AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION",
+        title_evidence: { sheet: sequenceSheet, text: "AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION", bbox: [100, 500, 650, 520] },
+        region: [100, 80, 650, 520], direction: "above_title", status: "extracted", sections: [],
+      }],
+    });
+    assert.equal(result.schematics.length, 1);
+    assert.equal(result.schematics[0].title, "AIR OPS / MTRACON - DOAH SCHEMATIC");
+    assert.equal(result.schematics[0].sequence_binding_status, "bound");
+    assert.deepEqual(result.schematics[0].sequence_refs.map(({ title, sheet }) => ({ title, sheet })), [{
+      title: "AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION", sheet: sequenceSheet,
+    }]);
+  });
+
+  it("retains repeated explicit control-diagram details as separate evidence inventories", () => {
+    const result = extractControlSchematics([{
+      key: "M8.7", width: 5600, height: 4214,
+      segs: [100, 100, 500, 100, 100, 400, 500, 400, 100, 700, 500, 700],
+      spans: [
+        span("ROOM TEMPERATURE", 160, 80, 150), span("CONTROL DAMPER", 320, 100, 130),
+        span("CONSTANT AIR VOLUME BOX - CONTROL DIAGRAM", 120, 300, 430, 31.2),
+        span("ROOM TEMPERATURE", 160, 390, 150), span("CONTROL DAMPER", 320, 410, 130),
+        span("VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM", 120, 620, 430, 31.2),
+        span("ROOM TEMPERATURE", 160, 710, 150), span("CONTROL DAMPER", 320, 730, 130),
+        span("DUAL MAXIMUM VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM", 120, 940, 520, 31.2),
+      ],
+    }]);
+    assert.deepEqual(result.schematics.map(({ title }) => title), [
+      "CONSTANT AIR VOLUME BOX - CONTROL DIAGRAM",
+      "VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM",
+      "DUAL MAXIMUM VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM",
+    ]);
+    assert.ok(result.schematics.every(({ semantic_status, review }) =>
+      semantic_status === "evidence_inventory" && review.human_review_required));
+    assert.equal(result.schematics[1].region[1], 331.2,
+      "the second stacked detail starts at the prior bottom caption, not a midpoint that clips its diagram");
+    assert.equal(result.schematics[2].region[1], 651.2,
+      "the third stacked detail retains linework immediately below the preceding caption");
+  });
+
+  it("clips right-edge schematic evidence at an authored title-block boundary", () => {
+    const result = extractControlSchematics([{
+      key: "M8.8", width: 1000, height: 1000,
+      segs: [650, 400, 900, 400],
+      spans: [
+        span("FCU-1", 790, 450, 55, 18),
+        span("FLORIDA-32542", 925, 470, 70, 32),
+        span("FAN COIL UNIT - CONTROL DIAGRAM", 650, 800, 300, 24),
+        span("DRAWING TITLE", 920, 850, 75, 16),
+        span("PROJECT NUMBER", 920, 900, 75, 16),
+        span("DRAWING NUMBER", 920, 950, 75, 16),
+      ],
+    }]);
+    assert.equal(result.schematics.length, 1);
+    assert.deepEqual(result.schematics[0].equipment.map(({ tag }) => tag), ["FCU-1"]);
+    assert.equal(result.schematics[0].region[2], 920);
+  });
+
+  it("lets a single wide system diagram reach the authored drawing-field boundary", () => {
+    const result = extractControlSchematics([{
+      key: "M8.4", width: 1000, height: 1000,
+      segs: [100, 100, 850, 100],
+      spans: [
+        span("DPT", 800, 180, 35, 18),
+        span("BOILER SYSTEM - CONTROL DIAGRAM", 100, 500, 360, 20),
+        span("DRAWING TITLE", 920, 850, 75, 16),
+      ],
+    }]);
+    assert.equal(result.schematics[0].region[2], 920);
+    assert.deepEqual(result.schematics[0].instruments.map(({ label }) => label), ["DPT"]);
+  });
+
+  it("partitions a tall detail with nearby-row captions, not an unrelated upper row", () => {
+    const result = extractControlSchematics([{
+      key: "M8.8", width: 1000, height: 1000,
+      segs: [40, 300, 900, 300, 40, 600, 900, 600],
+      spans: [
+        span("UPPER RIGHT CONTROL DIAGRAM", 250, 100, 260, 20),
+        span("L-7", 220, 500, 35, 18),
+        span("LIGHTING CONTROL DIAGRAM", 50, 650, 250, 20),
+        span("RIGHT LOWER CONTROL DIAGRAM", 650, 500, 280, 20),
+      ],
+    }]);
+    const lighting = result.schematics.find(({ title }) => title === "LIGHTING CONTROL DIAGRAM");
+    assert.ok(lighting);
+    assert.ok(lighting.region[2] > 450 && lighting.region[2] < 900);
+    assert.deepEqual(lighting.equipment.map(({ tag }) => tag), ["L-7"]);
+  });
+
+  it("binds a generic same-sheet SOO only through the authored control-diagram envelope", () => {
+    const sheet = "M8.7";
+    const narratives = [
+      {
+        id: "soo:top", sheet, title: "SEQUENCE OF OPERATION",
+        title_evidence: { sheet, text: "SEQUENCE OF OPERATION", bbox: [100, 200, 340, 220] as [number, number, number, number] },
+        region: [100, 200, 500, 450] as [number, number, number, number], direction: "below_title" as const,
+        status: "extracted" as const, sections: [],
+      },
+      {
+        id: "soo:bottom", sheet, title: "SEQUENCE OF OPERATIONS",
+        title_evidence: { sheet, text: "SEQUENCE OF OPERATIONS", bbox: [100, 720, 350, 740] as [number, number, number, number] },
+        region: [100, 720, 500, 930] as [number, number, number, number], direction: "below_title" as const,
+        status: "extracted" as const, sections: [],
+      },
+    ];
+    const result = extractControlSchematics([{
+      key: sheet, width: 1000, height: 1000,
+      segs: [100, 100, 500, 100, 100, 600, 500, 600],
+      spans: [
+        span("SEQUENCE OF OPERATION", 100, 200, 240, 20),
+        span("CONSTANT AIR VOLUME BOX - CONTROL DIAGRAM", 100, 460, 430, 20),
+        span("SEQUENCE OF OPERATIONS", 100, 720, 250, 20),
+        span("DUAL MAXIMUM VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM", 100, 940, 520, 20),
+      ],
+    }], { ...emptyGraph(), tables: [], sequence_narratives: narratives });
+    assert.deepEqual(result.schematics.map(({ sequence_binding_status, sequence_refs }) => ({
+      sequence_binding_status, ids: sequence_refs.map(({ id }) => id),
+    })), [
+      { sequence_binding_status: "bound", ids: ["soo:top"] },
+      { sequence_binding_status: "bound", ids: ["soo:bottom"] },
+    ]);
+  });
+
+  it("does not bind an adjacent SOO that only shares project-scope words", () => {
+    const result = extractControlSchematics([{
+      key: "navfac.pdf#54", width: 1000, height: 700, segs: [100, 250, 700, 250],
+      spans: [
+        span("AIR OPS / MTRACON - AHU SCHEMATIC", 100, 500, 520, 18),
+        { ...span("AIR OPS / MTRACON - AHU CONTROL SCHEMATIC AND POINTS LIST", 920, 160, 18, 420), rot: Math.PI / 2 },
+      ],
+    }], {
+      ...emptyGraph(), tables: [], sequence_narratives: [{
+        id: "soo:navfac:55", sheet: "navfac.pdf#55",
+        title: "AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION",
+        title_evidence: { sheet: "navfac.pdf#55", text: "AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION", bbox: [100, 500, 650, 520] },
+        region: [100, 80, 650, 520], direction: "above_title", status: "extracted", sections: [],
+      }],
+    });
+    assert.equal(result.schematics.length, 1);
+    assert.equal(result.schematics[0].sequence_binding_status, "unbound");
+    assert.deepEqual(result.schematics[0].sequence_refs, []);
+  });
+
+  it("does not classify a bare generic schematic without independent control evidence", () => {
+    const result = extractControlSchematics([{
+      key: "details.pdf#4", width: 1000, height: 700,
+      segs: [100, 250, 700, 250],
+      spans: [span("DOMESTIC WATER PIPING SCHEMATIC", 100, 500, 520, 18)],
+    }], emptyGraph());
+    assert.equal(result.schematics.length, 0);
+  });
+
+  it("binds one same-sheet SOO through a specific system anchor when project prefixes differ", () => {
+    const sheet = "navfac.pdf#64";
+    const result = extractControlSchematics([{
+      key: sheet, width: 1000, height: 700, segs: [100, 250, 700, 250],
+      spans: [span("ATCT - DOAH SCHEMATIC", 100, 500, 400, 18)],
+    }], {
+      ...emptyGraph(), tables: [], sequence_narratives: [{
+        id: "soo:navfac:64", sheet, title: "3.2.3 SEQUENCE OF OPERATION – DOAH-T1",
+        title_evidence: { sheet, text: "3.2.3 SEQUENCE OF OPERATION – DOAH-T1", bbox: [100, 300, 600, 320] },
+        region: [100, 300, 600, 480], direction: "below_title", status: "extracted", sections: [],
+      }],
+    });
+    assert.equal(result.schematics[0].sequence_binding_status, "bound");
+    assert.equal(result.schematics[0].sequence_refs[0].sheet, sheet);
+  });
+
+  it("binds a boiler control diagram to its authored heating-hot-water sequence", () => {
+    const sheet = "M8.4";
+    const result = extractControlSchematics([{
+      key: sheet, width: 1000, height: 700, segs: [100, 250, 700, 250],
+      spans: [span("BOILER SYSTEM - CONTROL DIAGRAM", 100, 500, 420, 18)],
+    }], {
+      ...emptyGraph(), tables: [], sequence_narratives: [{
+        id: "soo:m8.4:hhw", sheet, title: "HEATING HOT WATER SYSTEM - SEQUENCE OF OPERATION",
+        title_evidence: { sheet, text: "HEATING HOT WATER SYSTEM - SEQUENCE OF OPERATION", bbox: [100, 300, 650, 320] },
+        region: [100, 300, 650, 480], direction: "below_title", status: "extracted", sections: [],
+      }],
+    });
+    assert.equal(result.schematics[0].sequence_binding_status, "bound");
+    assert.deepEqual(result.schematics[0].sequence_refs.map(({ title }) => title), [
+      "HEATING HOT WATER SYSTEM - SEQUENCE OF OPERATION",
+    ]);
+  });
+
+  it("does not use hydronic family semantics to choose between competing heating-water sequences", () => {
+    const sheet = "M8.4";
+    const narratives = ["PRIMARY HEATING WATER SEQUENCE OF OPERATION", "SECONDARY HHW SEQUENCE OF OPERATION"]
+      .map((title, index) => ({
+        id: `soo:m8.4:${index}`, sheet, title,
+        title_evidence: { sheet, text: title, bbox: [100, 100 + index * 80, 650, 120 + index * 80] as [number, number, number, number] },
+        region: [100, 100 + index * 80, 650, 160 + index * 80] as [number, number, number, number],
+        direction: "below_title" as const, status: "extracted" as const, sections: [],
+      }));
+    const result = extractControlSchematics([{
+      key: sheet, width: 1000, height: 700, segs: [100, 250, 700, 250],
+      spans: [span("BOILER SYSTEM - CONTROL DIAGRAM", 100, 500, 420, 18)],
+    }], { ...emptyGraph(), tables: [], sequence_narratives: narratives });
+    assert.equal(result.schematics[0].sequence_binding_status, "ambiguous");
+    assert.deepEqual(result.schematics[0].sequence_refs.map(({ title }) => title).sort(), narratives.map(({ title }) => title).sort());
+  });
+
+  it("does not bind a boiler diagram to an unrelated chilled-water sequence", () => {
+    const sheet = "M8.4";
+    const result = extractControlSchematics([{
+      key: sheet, width: 1000, height: 700, segs: [100, 250, 700, 250],
+      spans: [span("BOILER SYSTEM - CONTROL DIAGRAM", 100, 500, 420, 18)],
+    }], {
+      ...emptyGraph(), tables: [], sequence_narratives: [{
+        id: "soo:m8.4:chw", sheet, title: "CHILLED WATER SYSTEM - SEQUENCE OF OPERATION",
+        title_evidence: { sheet, text: "CHILLED WATER SYSTEM - SEQUENCE OF OPERATION", bbox: [100, 300, 650, 320] },
+        region: [100, 300, 650, 480], direction: "below_title", status: "extracted", sections: [],
+      }],
+    });
+    assert.equal(result.schematics[0].sequence_binding_status, "unbound");
+    assert.deepEqual(result.schematics[0].sequence_refs, []);
+  });
+
   it("binds an instrument to an explicit I/O type only through a collinear authored vector tether", () => {
     const spans = [
       span("AHU SEQUENCE OF OPERATION", 200, 20, 320, 18),

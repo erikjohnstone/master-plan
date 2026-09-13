@@ -152,3 +152,29 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
     ...(engineeringView ? { bas_engineering: basEngineeringSummarySchema.parse(engineeringView) } : {}), ...(engineeringError ? { bas_engineering_error: engineeringError } : {}),
     ...(projectReview ? { bas_project_review: projectReview } : {}) };
 }
+
+/**
+ * Compile several production takeoff domains against one already-loaded
+ * Session and one graph. This is an orchestration optimization only: every
+ * item still passes through compileProductionTakeoff above, in caller order,
+ * with the same options and result contract as an individual call.
+ *
+ * SHOULD THIS BE ON THE SHARED PATH? Yes. Reusing a Session must never create
+ * a second browser-only interpretation of schedule truth, so the batch lives
+ * beside the canonical wrapper consumed by the production CLI/MCP path.
+ */
+export async function compileProductionTakeoffs(
+  session: unknown,
+  graph: SheetGraph,
+  requests: Array<{ kind: string; options?: Parameters<typeof compileProductionTakeoff>[3] }>,
+  onProgress?: (event: { kind: string; index: number; total: number; state: 'start' | 'done' }) => void,
+) {
+  const results: Record<string, Awaited<ReturnType<typeof compileProductionTakeoff>>> = {};
+  for (let index = 0; index < requests.length; index++) {
+    const request = requests[index];
+    onProgress?.({ kind: request.kind, index, total: requests.length, state: 'start' });
+    results[request.kind] = await compileProductionTakeoff(session, graph, request.kind, request.options || {});
+    onProgress?.({ kind: request.kind, index: index + 1, total: requests.length, state: 'done' });
+  }
+  return results;
+}

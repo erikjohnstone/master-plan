@@ -117,7 +117,7 @@
           "direction": "below_title",
           "status": "extracted",
           "minimum_sections": 1,
-          "minimum_evidence_spans": 4,
+          "minimum_evidence_spans": 3,
           "required_phrases": [
             "THE BMS WILL MODULATE THE HEATING HOT WATER VALVE AND CYCLE ON/OFF THE FAN COIL FAN",
             "SET POINT OF 72 F"

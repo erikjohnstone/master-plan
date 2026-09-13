@@ -5,7 +5,7 @@ import { sha256Hex } from './graphKeys.js';
 import type { BasSourceDocument } from './basSources.ts';
 import { basSourceContextSchema, type BasSourceContext } from './basSources.ts';
 import { canonicalBasJson } from './basCanonical.ts';
-import { BAS_SEQUENCE_RULE, reconcileBasSequencePoints } from './basSequenceReconciliation.ts';
+import { BAS_SEQUENCE_RULE, BAS_SEQUENCE_RULES, reconcileBasSequencePoints } from './basSequenceReconciliation.ts';
 import { basReviewEventSchema } from './basReviewContract.ts';
 import { basEquipmentEvidenceSchema, equipmentIdentityPayload, ownBasEquipmentEvidencePassthrough, type BasEquipmentEvidence } from './basEquipmentEvidence.ts';
 import { basEquipmentReviewEventSchema, prepareBasEquipmentRegisterValidatorForVerifiedWorkflow, type BasEquipmentReviewEvent,
@@ -40,7 +40,7 @@ const source = z.object({
 const capture = z.object({
   capture_id: sha, sources: z.array(source).min(1).max(10000), points: basPointListsSchema,
   narrative_sources: basSourceContextSchema.optional(),
-  narrative_rule_version: z.literal(BAS_SEQUENCE_RULE).optional(),
+  narrative_rule_version: z.enum(BAS_SEQUENCE_RULES).optional(),
   equipment_sources: basEquipmentEvidenceSchema.optional(),
 }).strict().superRefine((c, ctx) => {
   const fail = (message: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, message });
@@ -247,7 +247,7 @@ async function verifyBasWorkflowOwned(raw: unknown, retainPreparedReviewViews: b
     const a = event.action;
     const pair = JSON.stringify(a.kind === 'upsert' ? [a.association.region_id, a.association.matrix_id] : [a.region_id, a.matrix_id]);
     if (a.kind === 'upsert') {
-      await reconcileBasSequencePoints(c.narrative_sources!, c.points, [{ ...a.association, review_origin: event.origin }]);
+      await reconcileBasSequencePoints(c.narrative_sources!, c.points, [{ ...a.association, review_origin: event.origin }], c.narrative_rule_version);
       linked.add(pair);
     } else if (!linked.delete(pair)) throw new Error('BAS review removes an association that does not exist');
     pairs.set(event.capture_id, linked);
@@ -263,7 +263,8 @@ async function verifyBasWorkflowOwned(raw: unknown, retainPreparedReviewViews: b
   const retainedViews: PreparedWorkflowReviewViews = { equipment: new Map(), assembly: new Map() };
   const equipmentViewFor = async (c: BasCapture, event: BasEquipmentReviewEvent) => {
     if (equipmentContext?.capture !== c.capture_id) equipmentContext = { capture: c.capture_id,
-      validate: await prepareBasEquipmentRegisterValidatorForVerifiedWorkflow(c.narrative_sources!, c.equipment_sources!, c.points) };
+      validate: await prepareBasEquipmentRegisterValidatorForVerifiedWorkflow(
+        c.narrative_sources!, c.equipment_sources!, c.points, c.narrative_rule_version) };
     if (equipmentContext.event_id !== event.event_id) {
       equipmentContext.view = equipmentContext.validate(event.register);
       equipmentContext.event_id = event.event_id;

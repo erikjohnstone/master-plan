@@ -26,6 +26,7 @@ export default function BasMathSummary({ result, onOpenCitation, filter = "" }) 
     <p>Original schedule results are preserved below. No math result has been substituted.</p>
   </section>;
   const issues = result.diagnostics || [];
+  const hasTypedRequirements = Array.isArray(result.points) && result.points.length > 0;
   const needle = filter.trim().toLowerCase();
   const points = needle ? result.points.filter((p) => [p.point_id, p.group_id, ...p.evidence.map((e) => e.text || "")].join(" ").toLowerCase().includes(needle)) : result.points;
   const coverageSummary = !result.points.length
@@ -47,6 +48,30 @@ export default function BasMathSummary({ result, onOpenCitation, filter = "" }) 
     const cite = p?.evidence?.[0];
     return cite ? `${cite.table_title || "Point list"} · ${cite.sheet_id?.split("#").at(-1) || "source"}` : groupId;
   };
+  if (!hasTypedRequirements) return <section
+    aria-label="BAS engineering"
+    data-bas-status={result.status}
+    data-bas-empty-requirements
+    style={{ margin: "var(--sp-6) var(--sp-3) 0", padding: "var(--sp-4) var(--sp-5)", border: "1px solid var(--ink-faint)", background: "var(--paper)" }}
+  >
+    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--sp-3)" }}>
+      <div style={{ flex: "1 1 420px" }}>
+        <h2 style={{ margin: 0, fontSize: "var(--fs-l)" }}>Engineering inputs still needed</h2>
+        <p style={{ margin: "var(--sp-2) 0 0", color: "var(--ink-muted)", lineHeight: 1.55 }}>
+          No typed point-list or SOO requirements were available for calculation. This is an evidence gap—not proof that the project requires zero I/O.
+        </p>
+      </div>
+      <button type="button" style={button} onClick={() => downloadText("bas-engineering.json", JSON.stringify(result, null, 2), "application/json")}>Export engineering JSON</button>
+    </div>
+    {!!issues.length && <details style={{ marginTop: "var(--sp-3)" }}>
+      <summary style={{ cursor: "pointer", color: "var(--c-danger)", fontWeight: 650 }}>Review {issues.length} engineering evidence {issues.length === 1 ? "gap" : "gaps"}</summary>
+      <div style={{ marginTop: "var(--sp-3)" }}>
+        <Grid label="BAS engineering evidence gaps" headings={["Severity", "Finding", "Source"]}>
+          {issues.map((d, i) => <tr key={i}><th scope="row" style={cell}>{d.severity}</th><td style={cell}>{d.message}<small style={{ display: "block", color: "var(--ink-muted)" }}>{d.code}{d.point_id ? ` · Point ${d.point_id}` : ""}</small></td><td style={cell}>{sourceButton(d)}</td></tr>)}
+        </Grid>
+      </div>
+    </details>}
+  </section>;
   return <section aria-label="BAS engineering" data-bas-status={result.status} style={{ padding: "var(--sp-5) var(--sp-5) calc(var(--sp-5) + var(--sp-2))", borderBottom: "2px solid var(--ink-faint)" }}>
     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--sp-3)" }}>
       <h2 style={{ margin: 0, fontSize: "var(--fs-xl)" }}>BAS takeoff · Engineering</h2>

@@ -13,7 +13,7 @@ export const uuid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart
 export const explicit = <T>(value: T) => ({ value, basis: { origin: 'explicit_input' as const, source_span_ids: [], original_text: null,
   reason: 'Controlled explicit test input, not an extracted capability' } });
 
-export async function engineeringFixture(options: { withSequence?: boolean; sha256?: string; byte_length?: number } = {}) {
+export async function engineeringFixture(options: { withSequence?: boolean; withPointMatrix?: boolean; sha256?: string; byte_length?: number } = {}) {
   const source = buildBasSourceContext([{ sha256: options.sha256 ?? 'a'.repeat(64), byte_length: options.byte_length ?? 100, name: 'controlled-engineering.pdf', page_count: 1,
     pages: [{ page_number: 1, sheet_key: 'controlled-engineering.pdf', width_px: 1800, height_px: 1000, rotation: 0,
       spans: [{ str: 'AHU-1 THRU AHU-2', x0: 10, y0: 10, x1: 200, y1: 20 },
@@ -28,7 +28,7 @@ export async function engineeringFixture(options: { withSequence?: boolean; sha2
     rows: [{ key: 'AHUS', sheet: 'controlled-engineering.pdf', cells: { TAG: { text: 'AHU-1 THRU AHU-2', bbox: box } } }] }];
   const equipmentSources = captureBasEquipmentTables(tables);
   const points = basPointListsSchema.parse({ schema_version: 'bas_point_lists_v1', rule_version: 'point_observations_1',
-    scope: 'discovered_matrices_only', project_complete: false, issues: [], matrices: options.withSequence ? [{
+    scope: 'discovered_matrices_only', project_complete: false, issues: [], matrices: options.withSequence && options.withPointMatrix !== false ? [{
       // Deliberately empty controlled matrix tests association history, not
       // point extraction/coverage or a known installed demand.
       matrix_id: 'controlled-matrix', source_id: source.documents[0].source_id, page_id: source.pages[0].page_id,

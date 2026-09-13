@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { buildBasSourceContext } from '../src/lib/basSources.ts';
-import { basNarrativeRegionLines, discoverBasNarratives, isBasNarrativeHeading, type BasNarrativeRegion } from '../src/lib/basNarratives.ts';
+import { basNarrativeRegionLines, discoverBasNarratives, dropEmptyExactHeadingShadows, isBasNarrativeHeading, type BasNarrativeRegion } from '../src/lib/basNarratives.ts';
 
 const span = (str: string, x: number, y: number, w = 300, h = 10, rot = 0) => ({ str, x0: x, y0: y, x1: x + w, y1: y + h, rot });
 const source = (spans: ReturnType<typeof span>[]) => buildBasSourceContext([{ name: 'fixture.pdf', sha256: 'a'.repeat(64),
@@ -21,6 +21,24 @@ test('heading detection rejects references, behavioral clauses and point-list ca
     'BOILER SHUTDOWN SEQUENCE: WHEN THE BOILER START CONDITIONS ARE NOT MET, THE BOILER WILL DISABLE.']) {
     assert.equal(isBasNarrativeHeading(text), false, text);
   }
+});
+
+test('control-curve chart labels stay out of the SOO reader while real prose remains', () => {
+  const chart = source([
+    span('CONTROL SEQUENCE', 400, 60, 220, 24),
+    span('ROOM TEMPERATURE', 300, 95, 150), span('HEATING', 450, 95, 70),
+    span('ZONE SET POINT', 540, 95, 130), span('COOLING', 690, 95, 70),
+    span('VALVE OPEN', 300, 130, 100), span('CONTROL DAMPER', 300, 165, 130),
+    span('DAMPER UNOCCUPIED POSITION', 300, 200, 230), span('VALVE CLOSED', 690, 200, 110),
+    span('DEADBAND', 500, 235, 90),
+  ]);
+  assert.equal(discoverBasNarratives(chart).pages[0].regions.length, 0);
+
+  const real = source([
+    span('CONTROL SEQUENCE', 80, 60, 220, 24),
+    span('THE BAS SHALL ENABLE THE FAN WHEN THE SPACE IS OCCUPIED.', 80, 105, 500),
+  ]);
+  assert.equal(discoverBasNarratives(real).pages[0].regions[0].status, 'body_detected');
 });
 
 test('independent columns, numbered paragraphs and repeated headings retain distinct source scopes', () => {
@@ -71,6 +89,24 @@ test('large view captions do not become sequences and no implicit continuation c
   }
 });
 
+test('an empty canonical-heading shadow is removed only when it owns the exact same source span', () => {
+  const input = source([span('RTU - SEQUENCE OF OPERATIONS', 10, 20),
+    span('A. The unit shall run only when enabled.', 10, 40),
+    span('RTU - SEQUENCE OF OPERATIONS', 10, 100)]);
+  const distinct = discoverBasNarratives(input).pages[0].regions;
+  assert.equal(distinct.length, 2, 'Repeated authored headings with distinct spans remain distinct.');
+  const shadow = structuredClone(distinct);
+  shadow[1].heading.span_ids = [...shadow[0].heading.span_ids];
+  const pruned = dropEmptyExactHeadingShadows(shadow);
+  assert.equal(pruned.length, 1);
+  assert.ok(pruned[0].blocks.length > 0);
+
+  const competing = structuredClone(shadow);
+  competing[1].blocks = structuredClone(competing[0].blocks);
+  assert.equal(dropEmptyExactHeadingShadows(competing).length, 2,
+    'Competing non-empty interpretations are never silently collapsed.');
+});
+
 test('word fragments retain exact evidence while the reading aid adds only geometric spaces', () => {
   const input = source([span('FAN', 10, 20, 20), span('CONTROL', 34, 20, 50), span('SEQUENCE', 88, 20, 55),
     span('1.', 10, 40, 8), span('The fan shall not run.', 30, 40, 150)]);
@@ -78,6 +114,22 @@ test('word fragments retain exact evidence while the reading aid adds only geome
   assert.equal(result.regions[0].heading.text, 'FAN CONTROL SEQUENCE');
   assert.equal(prose(result.regions[0])[0].lines[0].text, '1. The fan shall not run.');
   assert.equal(regionSpans(result.regions[0]).length, 5);
+});
+
+test('above-title fallback retains punctuation-split control tags and every source fragment', () => {
+  const input = source([
+    span('A. DOAH SUPPLY FAN STATUS (DOAHSF', 10, 40, 286, 18),
+    span('-', 296, 40, 6, 18),
+    span('S)', 302, 40, 16, 18),
+    span('DOAH SEQUENCE OF OPERATION', 10, 400, 420, 28),
+  ]);
+  const page = discoverBasNarratives(input).pages[0];
+  assert.equal(page.regions.length, 1);
+  assert.equal(page.regions[0].status, 'body_detected');
+  assert.equal(prose(page.regions[0])[0].lines[0].text, 'A. DOAH SUPPLY FAN STATUS (DOAHSF-S)');
+  assert.equal(prose(page.regions[0])[0].lines[0].span_ids.length, 3);
+  assert.deepEqual(regionSpans(page.regions[0]), input.pages[0].spans.map(item => item.span_id).sort());
+  assert.equal(page.accounting.body_region_span_ids.length, 4);
 });
 
 test('overlapping region ownership is exposed instead of choosing a winner', () => {

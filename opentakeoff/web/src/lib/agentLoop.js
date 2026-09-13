@@ -19,7 +19,7 @@
 
 import { chatWithTools, describeImageForAgent } from "./ai.js";
 import { runVerifiers } from "./agentVerifiers.js";
-import { basReplyForAgent } from "./basAgentSummary.js";
+import { basReplyForAgent, completeBasAnswerMarkdown } from "./basAgentSummary.js";
 import {
   classifyTakeoffIntent,
   corpusCompileKind,
@@ -274,7 +274,84 @@ export function appendNamedScheduleAttrs(draft, missing) {
   return base ? `${base}\n\n${block}` : block;
 }
 
+/**
+ * Deterministically add review-only BAS facts that already exist in the shared
+ * workflow receipt. This is answer presentation, not extraction: the counts,
+ * source-coverage state, and authority remain exactly those emitted by the
+ * shared compilers/inspection. Keeping this local prevents an LLM wording
+ * miss from burning the entire Agent iteration budget.
+ */
+export function appendCompleteBasReviewDisclosure(draft, callLog) {
+  const completeBas = [...(callLog || [])].reverse().find(({ name, out }) =>
+    name === "run_complete_bas_takeoff" && !out?.error && out?.execution_status === "completed")?.out;
+  if (!completeBas) return String(draft || "");
+  const metricValue = (key) => Number(completeBas?.inspections?.point_soo?.metrics
+    ?.find((metric) => metric?.key === key)?.value || 0);
+  const candidates = Number(completeBas?.presentation?.coverage?.soo_point_candidates
+    ?? metricValue("soo_labeled_point_candidates"));
+  const typeReviews = Number(completeBas?.presentation?.coverage?.point_type_review_rows
+    ?? metricValue("point_type_review_rows"));
+  const missingPointList = /No point-list matrix was found/i
+    .test(String(completeBas?.inspections?.point_soo?.next_step || ""));
+  if (candidates <= 0 && typeReviews <= 0 && !missingPointList) return String(draft || "");
+
+  let base = String(draft || "").trim();
+  // “No points found” overclaims source coverage. Preserve the observed zero
+  // while naming exactly what was absent from the indexed evidence.
+  if (missingPointList) {
+    base = base
+      .replace(/\b0\s+(?:point-list\s+)?rows?\s*\(\s*no (?:BAS )?points(?: found)?\s*\)/gi, "0 extractable point-list rows")
+      .replace(/\bno points found\b/gi, "no extractable point-list matrix found");
+  }
+  const lines = [];
+  if (candidates > 0) {
+    lines.push(`${candidates} explicit labeled SOO point candidate${candidates === 1 ? "" : "s"} require${candidates === 1 ? "s" : ""} estimator review; this is not typed I/O, field wiring, equipment applicability, or installed quantity.`);
+  }
+  if (typeReviews > 0) {
+    lines.push(`${typeReviews} listed point row${typeReviews === 1 ? "" : "s"} require${typeReviews === 1 ? "s" : ""} I/O-type review; they are not promoted to typed physical points.`);
+  }
+  if (missingPointList) {
+    lines.push("No extractable point-list matrix was found in the loaded set. This does not prove the project has no points. The estimator must supply the applicable controls point-list or specification source before SOO-to-point linking.");
+  }
+  const block = `Evidence-bound review status:\n${lines.map((line) => `- ${line}`).join("\n")}`;
+  return base ? `${base}\n\n${block}` : block;
+}
+
 export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
+  // Agent-answer presentation guard. The deterministic coordinator already
+  // computed this shared metric; require the chat summary to disclose it as a
+  // review queue, never as typed/installed point truth.
+  const completeBas = [...callLog].reverse().find(({ name, out }) =>
+    name === "run_complete_bas_takeoff" && !out?.error && out?.execution_status === "completed")?.out;
+  const sooPointCandidates = Number(completeBas?.presentation?.coverage?.soo_point_candidates
+    ?? completeBas?.inspections?.point_soo?.metrics?.find((metric) => metric?.key === "soo_labeled_point_candidates")?.value
+    ?? 0);
+  const pointTypeReviewRows = Number(completeBas?.presentation?.coverage?.point_type_review_rows
+    ?? completeBas?.inspections?.point_soo?.metrics?.find((metric) => metric?.key === "point_type_review_rows")?.value
+    ?? 0);
+  const pointSooNextStep = String(completeBas?.inspections?.point_soo?.next_step || "");
+  const missingPointListSource = /No point-list matrix was found/i.test(pointSooNextStep);
+  if ((sooPointCandidates > 0 || pointTypeReviewRows > 0 || missingPointListSource) && finalText) {
+    const candidateCount = new RegExp(`(?:\\b${sooPointCandidates}\\b.{0,100}(?:SOO|sequence).{0,80}(?:candidate|review)|(?:SOO|sequence).{0,100}\\b${sooPointCandidates}\\b.{0,80}(?:candidate|review))`, "is");
+    const pointReviewCount = new RegExp(`(?:\\b${pointTypeReviewRows}\\b.{0,100}(?:I/O|point).{0,80}(?:type|untyped).{0,40}review|(?:I/O|point).{0,100}(?:type|untyped).{0,40}\\b${pointTypeReviewRows}\\b)`, "is");
+    const honestMissingSource = /no (?:extractable |applicable |loaded )?point-list (?:matrix|source)/i.test(finalText)
+      && /(?:does not (?:prove|establish)|is not evidence).{0,80}no points/i.test(finalText)
+      && /(?:add|supply|upload|provide).{0,100}(?:point-list|specification).{0,80}source/i.test(finalText);
+    const unsupportedNoPointsClaim = /\b0\b.{0,60}\bno (?:BAS )?points(?: found)?\b/i.test(finalText);
+    if ((sooPointCandidates > 0 && !candidateCount.test(finalText))
+        || (pointTypeReviewRows > 0 && !pointReviewCount.test(finalText))
+        || (missingPointListSource && (!honestMissingSource || unsupportedNoPointsClaim))) {
+      const facts = [];
+      if (sooPointCandidates > 0) facts.push(`${sooPointCandidates} explicit labeled SOO point candidates`);
+      if (pointTypeReviewRows > 0) facts.push(`${pointTypeReviewRows} listed point rows requiring I/O-type review`);
+      const factsDirection = facts.length > 0
+        ? `The completed BAS result contains ${facts.join(' and ')}. Add every nonzero exact count: call the SOO items estimator-review candidates, call the latter untyped/type-review rows, and do not promote either to typed I/O, field wiring, equipment applicability, or installed quantity.`
+        : '';
+      const sourceDirection = missingPointListSource
+        ? `${factsDirection ? ' ' : ''}State that no extractable point-list matrix was found, that this does not prove the project has no points, and that the estimator must add/supply the applicable controls point-list or specification source before linking.` : '';
+      return `${factsDirection}${sourceDirection}`;
+    }
+  }
   const successfulCount = callLog.some(({ name, out }) =>
     (name === "sweep_schedule_row" && Number.isFinite(out?.found))
     || (name === "count_marks" && !out?.error));
@@ -1935,7 +2012,7 @@ export function agentSystemPrompt() {
     "- Every proposal MUST cite evidence: the schedule row tag and/or the exact matched text token (a room tag or schedule cell) and/or the one_click seed. propose_shapes rejects uncited shapes.",
     "- You stage proposals only. A human reviews every shape at the accept gate; nothing you do commits a takeoff.",
     "- The five deterministic BAS workflows are inspected with inspect_bas_workflow and opened with open_bas_workspace. Use the exact domain requested: point_soo, equipment_templates, assemblies_responsibility, engineering_compatibility, or review_revisions_release. Inspection is read-only and reports saved-state freshness; it is not fresh source/Python verification. Open the matching workspace for the estimator to review and make decisions. Never claim that inspection approved a scope, verified installed quantity, or completed the project; snapshot approval remains an explicit human action in Review & changes.",
-    "- After run_complete_bas_takeoff, distinguish automation from estimator workflow state. A compile stage can be complete while point/SOO linking, equipment/template decisions, assemblies/responsibility, engineering checks, and release review remain not_started or in_progress. Copy those workflow_status values exactly; never turn a successful inspection call into a completed workflow. Keep the reply compact: extracted totals, reconcile counts, nonzero diagram blockers, then the next review action. Do not repeat technical steps or list hypothetical causes absent from the result.",
+    "- After run_complete_bas_takeoff, distinguish automation from estimator workflow state. A compile stage can be complete while point/SOO linking, equipment/template decisions, assemblies/responsibility, engineering checks, and release review remain not_started or in_progress. Copy those workflow_status values exactly; never turn a successful inspection call into a completed workflow. Keep the reply compact: extracted totals (including exact nonzero labeled SOO point-candidate and listed-row I/O-type-review counts; call them review candidates/untyped rows, never installed or typed points), reconcile counts, nonzero diagram blockers, then the next review action. Do not repeat technical steps or list hypothetical causes absent from the result.",
     "",
     "Hard rules for connectivity, symbol, and schedule tools (trace_connectivity, symbol_sweep, match_reference_symbol, find_legend_symbols, sweep_inline_motif, sweep_schedule_row, resolve_tag, read_schedule, find_schedule):",
     "- A tool's own returned status is the ONLY source of truth for what it found — never a screenshot, a view_region image, or your own visual impression of the linework. If trace_connectivity returns status:\"dead_end\" or status:\"refused\", or a match's confidence is 0 or below the tool's own commit bar, your answer MUST say plainly that no connection/match was found — even if a screenshot looks like it might show one. Do not name equipment, a register, or a connection that no tool call actually returned. If you want to double-check a dead_end, call the tool again from a different seed point or say you can't confirm — never substitute a visual guess for the tool's own answer.",
@@ -2307,6 +2384,41 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
   let answerNudgeSent = false;
   let consecutiveHighlightOnlyTurns = 0;
 
+  // The complete BAS command is a deterministic product macro. Once intent is
+  // classified, another model round-trip adds latency and wording risk but no
+  // engineering evidence. Execute the canonical coordinator directly and
+  // render its immutable receipt locally. Other conversational goals retain
+  // the provider tool-use loop below.
+  if (takeoffIntent === "complete_bas_takeoff"
+    && (tools || []).some((tool) => tool?.name === "run_complete_bas_takeoff")) {
+    const call = { id: "direct_complete_bas", name: "run_complete_bas_takeoff", args: {} };
+    emit({ type: "tool_start", name: call.name, args: call.args, deterministic: true });
+    let out;
+    try { out = await execute(call.name, call.args); }
+    catch (e) { out = { error: `Tool ${call.name} failed: ${String((e && e.message) || e)}` }; }
+    if (out == null || typeof out !== "object") out = { result: out ?? null };
+    callLog.push({ id: call.id, name: call.name, args: call.args, out });
+    emit({ type: "tool_end", name: call.name, result: out, deterministic: true });
+    if (out?.error || !["completed", "partial"].includes(out?.execution_status)) {
+      const message = String(out?.error || `Complete BAS run returned ${out?.execution_status || "no execution status"}.`);
+      emit({ type: "error", message });
+      return { status: "error", message, iterations: 1 };
+    }
+    emit({ type: "text", text: "[Workflow: complete_bas_takeoff / answer]" });
+    let displayText = completeBasAnswerMarkdown(out);
+    const correction = requiredEvidenceCorrection(callLog, goal, displayText);
+    if (correction) {
+      const message = `Deterministic BAS answer contract failed: ${correction}`;
+      emit({ type: "error", message });
+      return { status: "error", message, iterations: 1 };
+    }
+    const notes = runVerifiers(callLog, goal);
+    if (notes.length) displayText = `${displayText}\n\n${notes.join("\n\n")}`;
+    emit({ type: "text", text: displayText });
+    emit({ type: "done", text: displayText });
+    return { status: "done", text: displayText, iterations: 1 };
+  }
+
   for (; iterations < maxIterations; iterations++) {
     if (signal?.aborted) return aborted();
     let json;
@@ -2402,6 +2514,19 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
             lastDraftText = filled;
             correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
           }
+        }
+      }
+      // BAS review-status wording is fully determined by the completed shared
+      // receipt. Append it directly instead of asking the model to rewrite the
+      // same truthful counts until the global step cap is exhausted.
+      if (correction && /(?:completed BAS result contains|No point-list matrix was found)/i.test(correction)) {
+        const repaired = appendCompleteBasReviewDisclosure(draftForGate, callLog);
+        if (repaired && repaired !== draftForGate) {
+          draftForGate = repaired;
+          displayText = repaired;
+          lastDraftText = repaired;
+          correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+          emit({ type: "text", text: "[Evidence: appended review status from the completed BAS receipt.]" });
         }
       }
       // When cite-MARK bboxes are already in the call log, paint them now

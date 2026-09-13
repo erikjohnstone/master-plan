@@ -68,7 +68,8 @@ export type BasAssignmentCalculation = z.infer<typeof basAssignmentCalculationSc
  * every assignment together so cross-template conflicts cannot be batched away. */
 export async function buildBasAssignmentDemandInput(capture: BasCapture, register: BasEquipmentRegister, equipmentHead: string) {
   if (!capture.narrative_sources || !capture.equipment_sources) throw new Error('Assignment calculation needs retained equipment and narrative evidence');
-  const view = await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, register);
+  const view = await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points,
+    register, capture.narrative_rule_version);
   const selected = new Set(view.assignments.map(a => a.matrix_id));
   return basAssignmentDemandInputSchema.parse({ capture_id: capture.capture_id, equipment_head: equipmentHead,
     points: { ...capture.points, matrices: capture.points.matrices.filter(m => selected.has(m.matrix_id)) },

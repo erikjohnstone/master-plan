@@ -57,7 +57,8 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
   const draft = state.draft;
   const stale = draft && (draft.captureId !== capture?.capture_id || draft.expectedHead !== head);
   const matrices = capture?.points.matrices || [];
-  const regions = useMemo(() => capture?.narrative_sources ? interpretBasSequences(capture.narrative_sources).regions : [], [capture]);
+  const regions = useMemo(() => capture?.narrative_sources
+    ? interpretBasSequences(capture.narrative_sources, capture.narrative_rule_version).regions : [], [capture]);
   const spans = useMemo(() => (capture?.narrative_sources?.pages || []).flatMap(p => p.spans.map(s => ({ ...s, page_id: p.page_id, page_number: p.page_number }))), [capture]);
   const occurrences = useMemo(() => view?.candidates.tables.flatMap(t => t.rows.map(row => ({ ...row, table: t.raw, raw: t.raw.rows[row.row_index] }))) || [], [view]);
   const members = useMemo(() => occurrences.flatMap(row => (row.membership?.members || []).map(member => ({ key: memberKey(row.occurrence_id, member), member, row }))), [occurrences]);
@@ -125,7 +126,8 @@ export default function BasEquipmentWorkspace({ workflow, viewState, onViewState
         excluded_equipment_ids: draft.excludedIds, sequence_region_ids: draft.sequenceIds, source_span_ids: draft.sourceIds, reason });
       if (draft.kind === 'remove_assignment') next.assignments = next.assignments.filter(a => a.assignment_id !== draft.id);
       if (draft.kind === 'remove_equipment') next.equipment = next.equipment.filter(e => e.equipment_id !== draft.id);
-      const validated = await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, next);
+      const validated = await validateBasEquipmentRegister(
+        capture.narrative_sources, capture.equipment_sources, capture.points, next, capture.narrative_rule_version);
       setPreview({ input: draft, view: validated, request: { operation_id: crypto.randomUUID(), capture_id: capture.capture_id,
         expected_head: draft.expectedHead, reason, register: validated.register } });
     } catch (e) { setError(e.message); }

@@ -4,6 +4,7 @@
  * Endpoints (dev server):
  *   POST /__ot/sheet-graph              → SheetGraph (geometric + ODL)
  *   POST /__ot/compile-corpus-takeoff   → compileCorpusTakeoff on that graph
+ *   POST /__ot/complete-bas-takeoff     → five compilers + reconcile on one Session
  *   POST /__ot/sweep-schedule-row       → Session.sweepScheduleRow (shared path)
  *   POST /__ot/count-marks              → Session.countMarks (shared path)
  *   POST /__ot/reconcile-schedule-plan  → reconcileSchedulePlan (shared path)
@@ -381,7 +382,7 @@ function writeNdjson(res, obj) {
 
 async function handle(req, res, mode) {
   let tmpDir = null;
-  const stream = (mode === "compile" || mode === "reconcile") && wantsProgressStream(req);
+  const stream = (mode === "compile" || mode === "complete_bas" || mode === "reconcile") && wantsProgressStream(req);
   const abortController = new AbortController();
   req.once?.("aborted", () => abortController.abort());
   res.once?.("close", () => {
@@ -453,6 +454,34 @@ async function handle(req, res, mode) {
       }
       return sendJson(res, 200, result);
     }
+    if (mode === "complete_bas") {
+      if (stream) {
+        beginNdjson(res);
+        writeNdjson(res, {
+          type: "progress",
+          phase: "upload",
+          message: `Plans received (${pdfPaths.length} PDF${pdfPaths.length === 1 ? "" : "s"}) — starting the complete BAS takeoff…`,
+        });
+      }
+      const result = await runCli({
+        mode: "complete_bas",
+        pdfPaths,
+        basMathOptions,
+        categories,
+        evaluationFast,
+        signal: abortController.signal,
+        // Starts when the shared graph announces ready; indexing time is not
+        // charged against the estimator's post-index three-minute SLA.
+        postGraphTimeoutMs: 180_000,
+        ...(stream ? { onProgress: (p) => writeNdjson(res, { type: "progress", ...p }) } : {}),
+      });
+      if (stream) {
+        writeNdjson(res, { type: "result", result });
+        res.end();
+        return;
+      }
+      return sendJson(res, 200, result);
+    }
     if (stream) {
       beginNdjson(res);
       writeNdjson(res, {
@@ -496,6 +525,7 @@ async function handle(req, res, mode) {
 const OT_ROUTES = [
   ["/__ot/sheet-graph", "graph"],
   ["/__ot/compile-corpus-takeoff", "compile"],
+  ["/__ot/complete-bas-takeoff", "complete_bas"],
   ["/__ot/sweep-schedule-row", "sweep"],
   ["/__ot/symbol-sweep", "symbol_sweep"],
   ["/__ot/count-marks", "count_marks"],

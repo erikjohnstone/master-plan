@@ -1,7 +1,8 @@
 {
   "schema": "opentakeoff.sequence_narrative_ground_truth.v1",
   "source_pdf": "raw/navfac-cherry-point-atc-mechanical.pdf",
-  "review_basis": "Human visual review of rendered vector PDF sheets M-703, M-705, and M-707 plus negative-control sheets G-002 and MI601. Expectations describe authored drawing evidence, not current engine output.",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "review_basis": "Human visual review of all eight retained sequence regions on rendered vector PDF sheets MI703, MI705, MI711, MI713, MI721, MI723, MI730, and MI741 plus negative-control sheets G-002 and MI601. Required phrases are visibly authored inside each sequence region. MI741's adjacent SFPVAV point table is explicitly forbidden from the narrative. Expectations describe source truth, not prior engine output.",
   "coordinate_frame": "render_scale_2_image_px_origin_top_left",
   "pages": [
     {
@@ -17,7 +18,10 @@
           "required_phrases": [
             "DOAH SUPPLY FAN, DOAH EXHAUST FAN, AND VARIABLE FREQUENCY DRIVES",
             "SYSTEM SHALL OPERATE IN ONE OF THE FOLLOWING MODES",
-            "ALL MODULATING CONTROL SHALL BE PROPORTIONAL INTEGRAL (PI) CONTROL"
+            "ALL MODULATING CONTROL SHALL BE PROPORTIONAL INTEGRAL (PI) CONTROL",
+            "DOAH SUPPLY FAN STATUS (DOAHSF-S)",
+            "PREHEAT COIL DISCHARGE AIR TEMPERATURE LOW LIMIT (FREEZESTAT) (PH-DA-T-LL)",
+            "SUPPLY AIR DUCT PRESSURE HIGH LIMIT (SA-P-HL)"
           ],
           "forbidden_phrases": [
             "DDC SYSTEM NETWORK DIAGRAM"
@@ -48,7 +52,7 @@
     },
     {
       "page": 57,
-      "sheet_number": "M-707",
+      "sheet_number": "MI711",
       "expected_sequences": [
         {
           "title": "AIR OPS - CHW SYSTEM SEQUENCE OF OPERATION",
@@ -63,6 +67,125 @@
           ],
           "forbidden_phrases": [
             "DDC SYSTEM NETWORK DIAGRAM"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 59,
+      "sheet_number": "MI713",
+      "expected_sequences": [
+        {
+          "title": "AIR OPS - HHW SYSTEM SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 3,
+          "minimum_evidence_spans": 130,
+          "required_phrases": [
+            "THE HEATING HOT WATER SYSTEM (HHW) CONSISTS OF (2) CONDENSING BOILERS",
+            "THE SECONDARY HHW PUMP SPEED SHALL BE CONTROLLED TO MAINTAIN BUILDING LOOP DIFFERENTIAL SETPOINT",
+            "DDC SYSTEM SHALL MODULATE THE HHW BYPASS VALVE TO ENSURE MINIMUM FLOW OF 30%",
+            "IF ANY BOILER SHUTDOWN SWITCH IS ENGAGED, DISABLE ALL BOILER OPERATIONS"
+          ],
+          "forbidden_phrases": [
+            "GENERAL NOTES",
+            "DDC SYSTEM NETWORK DIAGRAM"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 61,
+      "sheet_number": "MI721",
+      "expected_sequences": [
+        {
+          "title": "MTRACTON/ATCT - CHW SYSTEM SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 2,
+          "minimum_evidence_spans": 170,
+          "required_phrases": [
+            "A MASTER CHILLER PLANT CONTROLLER SHALL BE PROVIDED TO ENABLE AND SEQUENCE THE CHILLERS",
+            "THE LEAD CHILLER SHOULD BE SELECTED AS THE CHILLER WITH THE LEAST RUN HOURS",
+            "THE DIFFERENTIAL PRESSURE SETPOINT SHALL BE RESET TO KEEP THE CRITICAL CONTROL VALVE BETWEEN 90-95% OPEN",
+            "THE DDC SYSTEM SHALL MODULATE THE CHW BYPASS VALVE TO ENSURE MINIMUM FLOW OF 30%"
+          ],
+          "forbidden_phrases": [
+            "GENERAL NOTES",
+            "DDC SYSTEM NETWORK DIAGRAM"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 63,
+      "sheet_number": "MI723",
+      "expected_sequences": [
+        {
+          "title": "MTRACON/ATCT - HHW SYSTEM SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 6,
+          "minimum_evidence_spans": 190,
+          "required_phrases": [
+            "THE HEATING HOT WATER SYSTEM (HHW) UTILIZES SHARED HHW RECOVERY CHILLERS BETWEEN TWO BUILDING BOILER PLANTS",
+            "NATURAL GAS SHALL BE USED ONLY WHEN THERE IS INSUFFICIENT HEAT RECOVERY AVAILABLE",
+            "IF ANY BOILER SHUTDOWN SWITCH IS ENGAGED, DISABLE ALL BOILER OPERATIONS",
+            "THE DDC SYSTEM SHALL CALCULATE THE BUILDINGS' HEATING HOT WATER LOAD"
+          ],
+          "forbidden_phrases": [
+            "GENERAL NOTES",
+            "DDC SYSTEM NETWORK DIAGRAM"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 64,
+      "sheet_number": "MI730",
+      "expected_sequences": [
+        {
+          "title": "3.2.3 SEQUENCE OF OPERATION – DOAH-T1",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 7,
+          "minimum_evidence_spans": 190,
+          "required_phrases": [
+            "VARIABLE SPEED SUPPLY FAN, PRE-HEAT COIL, CHILLED WATER COOLING COIL",
+            "PREHEAT COIL DISCHARGE AIR TEMPERATURE LOW LIMIT (FREEZESTAT) (PH-DA-T-LL)",
+            "DOAH PREHEAT COIL SETPOINT (DOAHHC-T-SP): 53°F",
+            "DOAH COOLING COIL SETPOINT (DOAHCC-T-SP): 55°F",
+            "DOAH DISCHARGE SETPOINT (DOAHSA-T-SP): 68°F"
+          ],
+          "forbidden_phrases": [
+            "POINTS LIST DOAH-T1",
+            "UOA RELATIVE HUMIDITY",
+            "BINARY OUTPUT"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 68,
+      "sheet_number": "MI741",
+      "expected_sequences": [
+        {
+          "title": "SERIES-FAN POWERED VAV BOX SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 4,
+          "minimum_evidence_spans": 50,
+          "required_phrases": [
+            "SERIES-FAN POWERED BOXES SHALL BE OPERABLE DURING WITH OCCUPIED PERIODS",
+            "WHEN THE DDC SYSTEM SCHEDULER INDICATES UNIT IS IN OCCUPIED MODE",
+            "MODULATE HHW VALVE TO MAINTAIN SPACE AT OCCUPIED HEATING SETPOINT",
+            "FAN FAILURE (INDICATED BY STATUS MISMATCH)"
+          ],
+          "forbidden_phrases": [
+            "SFPVAV DDC POINTS LIST",
+            "ANALOG INPUT",
+            "BINARY OUTPUT",
+            "COMPUTER ROOM AIR HANDLING UNITS"
           ]
         }
       ]

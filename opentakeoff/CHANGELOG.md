@@ -1,5 +1,20 @@
 # Changelog
 
+- Harden shared control-schematic discovery and SOO binding against horizontal
+  detail titles, rotated title-block copies, adjacent authored sequence sheets,
+  project-word collisions and generic non-control schematics. Add nine
+  human-reviewed NAVFAC schematic/binding truths and retain honest unbound cases.
+
+- Preserve the complete shared control-diagram result through the MCP output
+  schema, including topology, sequence source sheet, riser/network evidence,
+  continuation links, conflicts and engineering-readiness blockers.
+
+- Present complete Agent BAS runs as separately labeled equipment, point-list,
+  SOO, valve, diagram and reconciliation cardinalities. The workspace and canvas
+  no longer combine unlike records into a false EA count; navigation reports
+  `ready`. An unmocked 75-sheet Agent walkthrough completes in 37.7 seconds
+  post-index and remains explicitly human-review-required.
+
 - Correct the packaged MCP VectorGrid runtime location and ship its unchanged
   Python import dependencies. Source-run extraction paths and algorithms are
   unchanged; package checks verify byte-identical runtime copies.

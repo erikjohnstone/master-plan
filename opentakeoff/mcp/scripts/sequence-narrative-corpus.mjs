@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /** Human-authored real-PDF gate for free-form Sequence of Operations evidence. */
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -47,6 +48,13 @@ for (const truthPath of truthPaths) {
   if (!existsSync(pdfPath)) {
     errors.push(`${basename(truthPath)}: source PDF not found: ${pdfPath}`);
     continue;
+  }
+  if (truth.source_sha256) {
+    const actualSha256 = createHash("sha256").update(readFileSync(pdfPath)).digest("hex");
+    if (actualSha256 !== truth.source_sha256) {
+      errors.push(`${basename(truthPath)}: source SHA-256 expected ${truth.source_sha256}, got ${actualSha256}`);
+      continue;
+    }
   }
   const requestedPages = [...new Set([
     ...(truth.pages || []).map((row) => row.page),

@@ -446,6 +446,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         r = await session.sweepScheduleRow(tag, {
           commit: false,
           evaluationFast: opts.evaluationFast,
+          equipmentFamily: cls?.name ?? null,
           preferSheet: tb.sheet,
           preferTitle: tb.title?.text ?? null,
         });
@@ -463,6 +464,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
           r = await session.sweepScheduleRow(alias, {
             commit: false,
             evaluationFast: opts.evaluationFast,
+            equipmentFamily: cls?.name ?? null,
             preferSheet: tb.sheet,
             preferTitle: tb.title?.text ?? null,
           });

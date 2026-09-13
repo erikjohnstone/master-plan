@@ -1,5 +1,96 @@
 ## Active work
 
+2026-09-13 ITD D-1 generalization checkpoint: after the NAVFAC product-path
+proof, the same literal Agent prompt **Run a BAS takeoff.** passed on an unrelated
+29-sheet laboratory mechanical set in **15.682 s post-index** (**13.424 s
+persisted**) under the 180 s ceiling. It returned 97 equipment records, 13 SOOs /
+79 reader sections, one explicit SOO point candidate, 31 valves, 11 embedded-coil
+gaps, 13 control schematics and 37 schedule/plan rows (36 match / one
+schedule-only). No extractable point matrix exists in the source; the product
+reports missing evidence rather than zero installed points. The `AC-1` match
+opens distinct exact plan-page-25 and schedule-page-28 highlights. All 13
+compiled sequences are now reader-accessible bodies with no heading-only item.
+
+SHOULD THIS BE ON THE SHARED PATH? **Yes.** Wrapped SOO-title recovery,
+bottom-caption source boundaries, font-run line assembly, terminal-word
+continuations and hierarchical authored sections decide shared evidence truth
+for browser and MCP. The fixes are in the shared narrative extractor; no
+document name, sheet number or corpus identifier appears in production logic.
+New human-reviewed truth
+`ground_truth/sequences/itd-d1-lab-controls-m6.0.json` pins the exact source hash,
+four M6.0 titles, required body phrases and adjacent-lane/legend negatives.
+Sequence coverage is green at five documents, 18 positive pages, five negative
+pages and 27 expected SOOs. All BAS drawing gates pass. Full web verification is
+green at 3,144 tests / 3,131 passed / zero failures / 13 expected skips, typecheck, lint with
+three existing warnings, every benchmark and production build.
+
+Honest ceiling: ITD still reports 497 unresolved diagram crossings and 38
+unmapped instrument labels; its diagram results are evidence inventories, not
+principal-engineer semantic graphs. The takeoff stays human-review-required.
+No VectorGrid/table/bbox/citation contract, symbol recognizer, pricing, costing
+or labor logic changed. Continue broader real-set product-path validation and
+deeper grounded diagram/SOO reconciliation; the separate symbol-recognition
+work remains outside this coordinator's current phase.
+
+The same product path also passes two more structurally different
+sets. Tinker AFB (31 sheets) completes in **15.664 s post-index** with five
+reader-accessible building SOOs / 65 sections and correctly refuses to fabricate
+equipment or quantity from a controls-only source. Federal Attachment 4 (24
+sheets) completes in a final **16.964 s post-index** replay with 128 equipment records, three
+point matrices / 26 rows, 12 SOOs / 132 sections, 13 schematic inventories, one
+riser/flow diagram, and 99 reconciliation rows (95 match / four schedule-only).
+Its `AHU-1` plan and schedule actions open distinct exact highlights and a
+simultaneous high-resolution evidence reader; all 12 SOOs
+are body-detected and the dense 69-clause AHU reader excludes the adjacent LEED
+sequence. Both runs have zero browser/console errors and preserve human review.
+Receipts and screenshots are retained under
+`opentakeoff/docs/bas-production/evidence/complete-bas-agent-{tinker,federal}-current/`.
+
+Federal's human-reviewed schematic truth now covers all 13 authored diagrams on
+M8.3, M8.4, M8.7 and M8.8. Shared drawing-row partitioning recovers previously
+clipped `DPT`, `L-7` and `SW-1` evidence, and bounded system-family agreement
+binds `BOILER SYSTEM - CONTROL DIAGRAM` to the exact `HEATING HOT WATER SYSTEM -
+SEQUENCE OF OPERATION`. Competing heating-water sequences remain ambiguous and
+an unrelated chilled-water sequence remains unbound in negative controls. The
+real one-prompt Agent receipt enforces the same binding. This is still an
+evidence inventory: 1,061 unresolved crossings, 16 unmapped instrument labels
+and three unresolved sequence bindings remain visible for estimator review.
+
+2026-09-13 complete-BAS Agent/control binding checkpoint: the unmocked browser
+Agent completed the literal prompt **Run a BAS takeoff.** on the 75-sheet NAVFAC
+Cherry Point source in **37.673 s post-index**. It retained separately labeled
+equipment, point-list, SOO, valve/coil-gap, diagram and reconciliation records;
+exact source navigation and exports pass; release remains human-review-required.
+The invalid mixed `942 EA` display is removed. Proof and four screenshots are in
+`opentakeoff/docs/bas-production/evidence/complete-bas-agent-navfac-final/`.
+
+SHOULD THIS BE ON THE SHARED PATH? Shared diagram/SOO truth and the MCP result
+contract are shared; UI labels remain surface-only. New reviewed truth
+`ground_truth/control_schematics/navfac-control-sequence-bindings.json` pins the
+source SHA, nine horizontal drawing-field schematic titles, seven exact sequence
+bindings and two honest unbound cases. Rotated title-block copies, generic
+schematics and adjacent project-word collisions are negative controls. Existing
+ITD schematic, multi-document narrative, Transbay riser, Norfolk piping-state,
+NAVFAC/LBNL network gates pass. The full cold shared NAVFAC graph retains nine
+schematics, one network/riser-flow diagram and the expected seven bindings.
+
+Honest ceiling: this is evidence inventory, not verified engineering topology.
+NAVFAC retains 1,359 unresolved crossings, 59 unmapped instrument labels, two
+unresolved sequence bindings and zero verified semantic graphs. MI731's unheaded
+SOO remains undiscovered; MI732's sequence is outside the uploaded mechanical
+source. Installed count remains dependent on grounded plan evidence and the
+separate symbol-recognition work explicitly excluded from this coordinator's
+current scope. No VectorGrid/table/bbox/citation, symbol, pricing, costing or
+labor code changed.
+
+Final gates: web full check passes; MCP passes 132 BAS + 33 revision + six issue
++ 17 scope/snapshot tests, typecheck and four packaging tests. Broad concurrent
+MCP conformance/corpus run: 304 pass, 113 missing-fixture skips, one unrelated
+60 s `detect_rooms assign mode` timeout under corpus CPU contention; the exact
+case passed alone in 23.494 s. Active goal continues after this merge toward
+generalized unheaded narrative discovery and deeper diagram evidence, without
+entering the separate symbol recognizer.
+
 2026-09-10 after local checkpoint **b188b6b7**: browser-only atomic snapshot
 storage implemented and focused-tested; no extraction/VectorGrid/math change.
 Sources, exact payload/record, metadata, seal and retry identity publish together,

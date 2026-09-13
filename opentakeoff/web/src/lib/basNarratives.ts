@@ -3,7 +3,8 @@
  * All reconstructed text is a reading aid; immutable source spans are authority.
  */
 import type { BasSourceContext, BasSourcePage, BasSourceSpan } from './basSources.ts';
-import { extractSequenceNarratives, type NarrativeSequenceBlock, type NarrativeSpanEvidence } from './sequenceNarrative.ts';
+import { extractSequenceNarratives, isControlCurveChartHeading,
+  type NarrativeSequenceBlock, type NarrativeSpanEvidence } from './sequenceNarrative.ts';
 
 type Box = BasSourceSpan['bbox_px'];
 export interface BasNarrativeLine {
@@ -271,13 +272,9 @@ const containsCenter = (outer: Box, inner: Box) => {
  * never invented, and an unmappable evidence span fails the fallback closed. */
 function canonicalNarrativeRegion(page: BasSourcePage, block: NarrativeSequenceBlock,
   prior?: BasNarrativeRegion): BasNarrativeRegion | null {
-  const evidenceLine = (evidence: NarrativeSpanEvidence, suffix: string): BasNarrativeLine | null => {
-    const span = page.spans.find(candidate => sameBox(candidate.bbox_px, evidence.bbox)
-      && candidate.text.replace(/\s+/g, ' ').trim() === evidence.text);
-    if (!span) return null;
-    return { line_id: `${span.span_id}:${suffix}`, span_ids: [span.span_id], bbox_px: [...span.bbox_px],
-      text: evidence.text, geometry_status: 'ordered' };
-  };
+  const sourceSpan = (evidence: NarrativeSpanEvidence) => page.spans.find(candidate =>
+    sameBox(candidate.bbox_px, evidence.bbox)
+    && candidate.text.replace(/\s+/g, ' ').trim() === evidence.text);
   const exactHeading = page.spans.filter(span => sameBox(span.bbox_px, block.title_evidence.bbox)
     && span.text.replace(/\s+/g, ' ').trim() === block.title);
   const titleSpans = exactHeading.length ? exactHeading : page.spans.filter(span => horizontal(span)
@@ -291,10 +288,22 @@ function canonicalNarrativeRegion(page: BasSourcePage, block: NarrativeSequenceB
   };
   const blocks: BasNarrativeParagraph[] = [];
   for (const [sectionIndex, section] of block.sections.entries()) {
-    const lines = section.evidence.map((evidence, evidenceIndex) =>
-      evidenceLine(evidence, `canonical-${sectionIndex}-${evidenceIndex}`));
-    if (lines.some(line => line === null)) return null;
-    const owned = lines as BasNarrativeLine[];
+    const evidenceSpans = section.evidence.map(sourceSpan);
+    if (evidenceSpans.some(span => span === undefined)) return null;
+    const sourceLines = pageLines({ ...page, spans: evidenceSpans as BasSourceSpan[] });
+    const owned: BasNarrativeLine[] = [];
+    const seenLines = new Set<string>();
+    // Walk evidence in canonical reading order, but use pageLines' exact
+    // same-baseline reconstruction. This keeps punctuation-split identifiers
+    // readable while every original fragment remains an owned source span.
+    for (const span of evidenceSpans) {
+      const line = sourceLines.find(candidate => candidate.span_ids.includes(span!.span_id));
+      if (!line) return null;
+      if (!seenLines.has(line.line_id)) {
+        owned.push(structuredClone(line));
+        seenLines.add(line.line_id);
+      }
+    }
     if (!owned.length) continue;
     blocks.push({ kind: 'paragraph',
       block_id: `${owned[0].span_ids[0]}:canonical-paragraph:${sectionIndex}`,
@@ -349,13 +358,38 @@ function applyCanonicalNarrativeFallback(page: BasSourcePage, regions: BasNarrat
     || a.heading.bbox_px[0] - b.heading.bbox_px[0] || compareId(a.region_id, b.region_id));
 }
 
+/**
+ * The canonical above-title adapter can replace a weak first hypothesis with
+ * a source-owned body while a second heading-only hypothesis still points to
+ * the exact same authored heading span. That empty record is not another SOO:
+ * it owns no unique text whatsoever and makes the reader disagree with the
+ * canonical sequence compiler. Drop only that provably information-free
+ * shadow. Repeated titles with different source spans—and competing non-empty
+ * interpretations—remain separate and review-required.
+ */
+export function dropEmptyExactHeadingShadows(regions: BasNarrativeRegion[]): BasNarrativeRegion[] {
+  const headingKey = (region: BasNarrativeRegion) => [...region.heading.span_ids].sort().join('\u0000');
+  const bodyOwned = new Set(regions.filter(region => region.blocks.length > 0).map(headingKey));
+  return regions.filter(region => region.blocks.length > 0 || !bodyOwned.has(headingKey(region)));
+}
+
 /** Input is the validated buildBasSourceContext / Session snapshot. No I/O or
  * model calls, no table/quantity output, no cross-page implicit continuation. */
 export function discoverBasNarratives(context: BasSourceContext): BasNarrativeDiscovery {
   const pages = context.pages.map(page => {
     const lines = pageLines(page);
-    const regions = applyCanonicalNarrativeFallback(page,
-      lines.filter(line => isBasNarrativeHeading(line.text)).map(heading => discoverRegion(page, heading, lines)));
+    const graphSpans = page.spans.map(span => ({
+      str: span.text, x: span.bbox_px[0], y: span.bbox_px[1],
+      w: span.bbox_px[2] - span.bbox_px[0], h: span.bbox_px[3] - span.bbox_px[1],
+      ...(span.rotation !== undefined ? { rot: span.rotation } : {}),
+    }));
+    const narrativeHeadings = lines.filter(line => isBasNarrativeHeading(line.text))
+      .filter(line => !isControlCurveChartHeading({
+        str: line.text, x: line.bbox_px[0], y: line.bbox_px[1],
+        w: line.bbox_px[2] - line.bbox_px[0], h: line.bbox_px[3] - line.bbox_px[1],
+      }, graphSpans));
+    const regions = dropEmptyExactHeadingShadows(applyCanonicalNarrativeFallback(page,
+      narrativeHeadings.map(heading => discoverRegion(page, heading, lines))));
     const overlapping = new Set(lines.filter(line => line.geometry_status === 'overlapping_spans').flatMap(line => line.span_ids));
     const owners = new Map<string, BasNarrativeRegion[]>();
     for (const region of regions) {

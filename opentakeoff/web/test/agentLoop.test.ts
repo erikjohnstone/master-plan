@@ -7,7 +7,7 @@
 //   - malformed model output → {status:"error"} + an error event, never a throw.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal, missingNamedScheduleAttrs, appendNamedScheduleAttrs, compactSheetGraphForAgent } from "../src/lib/agentLoop.js";
+import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal, missingNamedScheduleAttrs, appendNamedScheduleAttrs, appendCompleteBasReviewDisclosure, compactSheetGraphForAgent } from "../src/lib/agentLoop.js";
 
 const CFG_A = { endpoint: "http://localhost:9999", apiKey: "k", model: "mock", provider: "anthropic" };
 const CFG_O = { ...CFG_A, provider: "openai" };
@@ -806,6 +806,44 @@ test("installed quantity cannot finish without deterministic count evidence", ()
   `Point mark: AHU-1 HW VALVE POSITION (FEEDBACK) on set.pdf#65\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28`)!, /BAS point mark|does not state that mark/);
 });
 
+test("complete BAS answer must disclose exact labeled SOO candidates without promoting them to installed points", () => {
+  const callLog = [{ name: "run_complete_bas_takeoff", out: {
+    execution_status: "completed",
+    presentation: { coverage: { soo_point_candidates: 26, point_type_review_rows: 3 } },
+  } }];
+  assert.match(requiredEvidenceCorrection(callLog, "Run a BAS takeoff.",
+    "Sequences: 8 sequences and 49 sections.")!, /26 explicit labeled SOO point candidates and 3 listed point rows/);
+  assert.equal(requiredEvidenceCorrection(callLog, "Run a BAS takeoff.",
+    "Sequences: 8 sequences, 49 sections, and 26 labeled SOO estimator-review candidates. Point lists also contain 3 untyped point rows requiring I/O type review. Installed quantity is not established."), null);
+});
+
+test("complete BAS answer treats zero point-list matrices as missing evidence, not proof of no points", () => {
+  const callLog = [{ name: "run_complete_bas_takeoff", out: {
+    execution_status: "completed", presentation: { coverage: { point_lists: 0 } },
+    inspections: { point_soo: { next_step: "No point-list matrix was found in the loaded set. Add the applicable controls point-list/specification source." } },
+  } }];
+  assert.match(requiredEvidenceCorrection(callLog, "Run a BAS takeoff.",
+    "BAS points: 0 rows (no points found).")!, /does not prove the project has no points/);
+  assert.equal(requiredEvidenceCorrection(callLog, "Run a BAS takeoff.",
+    "No extractable point-list matrix was found in the loaded set. This does not prove the project has no points; supply the applicable controls point-list or specification source before linking."), null);
+  const repaired = appendCompleteBasReviewDisclosure("BAS points: 0 rows (no points).", callLog);
+  assert.doesNotMatch(repaired, /no points found/i);
+  assert.match(repaired, /0 extractable point-list rows/i);
+  assert.match(repaired, /does not prove the project has no points/i);
+  assert.equal(requiredEvidenceCorrection(callLog, "Run a BAS takeoff.", repaired), null);
+});
+
+test("complete BAS review disclosure appends exact candidate and type-review counts", () => {
+  const callLog = [{ name: "run_complete_bas_takeoff", out: {
+    execution_status: "completed",
+    presentation: { coverage: { soo_point_candidates: 26, point_type_review_rows: 3 } },
+  } }];
+  const repaired = appendCompleteBasReviewDisclosure("Takeoff ready.", callLog);
+  assert.match(repaired, /26 explicit labeled SOO point candidates require estimator review/i);
+  assert.match(repaired, /3 listed point rows require I\/O-type review/i);
+  assert.equal(requiredEvidenceCorrection(callLog, "Run a BAS takeoff.", repaired), null);
+});
+
 test("generic point list takeoff: evidence gate demands compile, then clears after bas_points", () => {
   const goal = "Can you run a point list takeoff for me?";
   assert.match(
@@ -1190,17 +1228,13 @@ test("runAgentLoop seedSheetGraph:false leaves the first request as goal-only", 
   assert.deepEqual(requests[0].messages, [{ role: "user", content: "go" }]);
 });
 
-test("complete BAS workflow rejects a prose-only answer until the deterministic run succeeds", async () => {
+test("complete BAS workflow runs deterministically without a provider round-trip", async () => {
   const completeTool = {
     name: "run_complete_bas_takeoff",
     description: "Run every deterministic BAS takeoff stage and return a review-required result.",
     input_schema: { type: "object", properties: {}, required: [] },
   };
-  const { fn, requests } = scriptedFetch([
-    anthropicDone("Here is a generic BAS checklist."),
-    anthropicTurn("bas_1", "run_complete_bas_takeoff", {}),
-    anthropicDone("The deterministic BAS run completed and requires estimator review."),
-  ]);
+  const requests: unknown[] = [];
   const executed: string[] = [];
   const result = await runAgentLoop({
     cfg: CFG_A,
@@ -1209,12 +1243,21 @@ test("complete BAS workflow rejects a prose-only answer until the deterministic 
     seedSheetGraph: false,
     execute: (name) => {
       executed.push(name);
-      return { execution_status: "completed", human_review_required: true };
+      return {
+        workflow: "complete_bas_takeoff",
+        execution_status: "completed",
+        release_status: "human_review_required",
+        human_review_required: true,
+        presentation: { coverage: { equipment_items: 2, sequences: 1, sequence_sections: 4 } },
+        reconcile: { summary: { total: 0 } },
+        inspections: { point_soo: { status: "not_started", blocker_count: 1, next_step: "Review source coverage." } },
+      };
     },
-    fetchFn: fn as any,
+    fetchFn: (async () => { requests.push({}); throw new Error("provider must not be called"); }) as any,
   });
   assert.equal(result.status, "done");
   assert.deepEqual(executed, ["run_complete_bas_takeoff"]);
-  assert.equal(requests.length, 3);
-  assert.ok(requests[1].messages.some((message: any) => /cannot answer.*succeeds/i.test(String(message.content))));
+  assert.equal(requests.length, 0);
+  assert.match(result.text || "", /2.*Scheduled equipment records|Scheduled equipment records.*2/is);
+  assert.match(result.text || "", /human_review_required/i);
 });

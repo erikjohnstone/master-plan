@@ -17,9 +17,9 @@ import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.m
  * repeat for every installed device. This belongs with reconciliation—not
  * geometric recognition—so every UI/MCP quantity path consumes one policy.
  */
-export function isIndividuallyMarkedEquipmentSchedule(title) {
-  const squashed = String(title || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-  return /(?:AIRHANDLING|COMPUTERROOMAIRHANDLER|CRAH|DEDICATEDOUT(?:SIDE|DOOR)AIR|FANCOIL|VARIABLEAIRVOLUME|VAV(?:BOX|TERMINAL|UNIT|SCHEDULE)|ENERGYRECOVERY|ROOFTOP|CONDENSINGUNIT|HEATPUMP|PUMP|BOILER|CHILLER|UNITHEATER|DEHUMIDIFIER|HUMIDIFIER|AIRSEPARATOR|EXPANSIONTANK|RADIANT(?:HEATER|PANEL)|RANGEHOOD|CONTROLVALVE|FANSCHEDULE|DUCTSILENCER|SOUNDATTENUATOR)/.test(squashed)
+export function isIndividuallyMarkedEquipmentSchedule(title, equipmentFamily = "") {
+  const squashed = `${String(title || "")} ${String(equipmentFamily || "")}`.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return /(?:AIRHANDLING|AIRTERMINALBOX|COMPUTERROOMAIRHANDLER|CRAH|DEDICATEDOUT(?:SIDE|DOOR)AIR|FANCOIL|VARIABLEAIRVOLUME|VAV(?:BOX|TERMINAL|UNIT|SCHEDULE)|ENERGYRECOVERY|ROOFTOP|CONDENSINGUNIT|HEATPUMP|PUMP|BOILER|CHILLER|UNITHEATER|DEHUMIDIFIER|HUMIDIFIER|AIRSEPARATOR|EXPANSIONTANK|RADIANT(?:HEATER|PANEL)|RANGEHOOD|CONTROLVALVE|FANSCHEDULE|DUCTSILENCER|SOUNDATTENUATOR)/.test(squashed)
     && !/(?:DIFFUSER|GRILLE|REGISTER|FIXTURE|LUMINAIRE)/.test(squashed);
 }
 
@@ -685,6 +685,12 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
       const r = await session.sweepScheduleRow(row.tag, {
         commit: false,
         evaluationFast: !!opts.evaluationFast,
+        // A generic multi-family schedule title may not name the row's
+        // already-classified equipment family (for example an AIR SEPARATOR
+        // row inside MECHANICAL SPECIALTY EQUIPMENT SCHEDULE). Preserve that
+        // shared compiler evidence so exact-tag quantity semantics do not
+        // fall back to an unnecessary geometric search.
+        equipmentFamily: row.family || null,
         // Shared building letters (Carson B1/C1) collide across furnace / CU /
         // OAU / ERV / hood schedules. Prefer the scaffold's owning table.
         preferSheet: row.schedule_cite?.sheet ?? null,

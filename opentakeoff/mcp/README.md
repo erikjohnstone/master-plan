@@ -41,6 +41,15 @@ replace `bas_math` or legacy quantities. Source and math failures are independen
 unavailable evidence is explicit. It is an intermediate workflow record, not a
 reviewed/approved takeoff. See the [point evidence contract](../docs/bas-production/POINT_REVIEW_CONTRACT.md).
 
+`analyze_control_schematics` returns the complete shared diagram record through
+its declared output schema: exact title/source evidence, explicit I/O and
+instrument evidence, schedule and SOO bindings (including the SOO source sheet),
+raw vector topology, riser/network datums and transports, continuation links,
+authored state conflicts, and engineering-readiness blockers. `topology.status:
+"computed"` means vector nodes and edges were computed; it does not mean the
+mechanical/control semantics were verified. Unresolved crossings, labels and
+bindings remain explicit and keep the result human-review-required.
+
 The additive `bas_workflow` stores a fingerprinted point-evidence capture and
 input source manifest. The Session retains it for `export_takeoff` and validates
 it on `import_takeoff`; duplicates are idempotent. `load_plan` without merge

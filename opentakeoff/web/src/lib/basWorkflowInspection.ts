@@ -11,6 +11,7 @@ import { basAssemblyView, basAssemblyCalculationState } from './basAssemblyRevie
 import { basEngineeringView } from './basEngineeringReview.ts';
 import { projectReviewForVerifiedBasWorkflow } from './basProjectReview.ts';
 import { catalogBasScope } from './basScopeCatalog.ts';
+import type { BasSequenceRequirement } from './basSequenceReconciliation.ts';
 
 export const basWorkflowInspectionDomainSchema = z.enum([
   'point_soo', 'equipment_templates', 'assemblies_responsibility',
@@ -111,15 +112,27 @@ export async function inspectBasWorkflow(raw: unknown, rawDomain: unknown, rawCa
     } else {
       const view = await basSequenceView(workflow, captureId);
       const clauses = view.sequences.regions.flatMap(region => region.clauses);
+      // The versioned v1/v2 view is a discriminated union; normalize the two
+      // validated requirement arrays for bounded cross-version metrics only.
+      const requirements: BasSequenceRequirement[] = clauses.flatMap(clause => [...clause.requirements] as BasSequenceRequirement[]);
       const comparisons = view.comparisons.flatMap(comparison => comparison.requirements);
       const links = basActiveAssociations(workflow, captureId);
       metrics = [...pointSummary.metrics,
         metric('read_observations', 'Deterministically read point observations', rows.reduce((n, row) => n + row.observations.filter(o => o.status === 'read').length, 0)),
         metric('sequence_regions', 'SOO regions', view.sequences.regions.length), metric('sequence_clauses', 'SOO clauses', clauses.length),
+        metric('soo_supported_requirements', 'Conservatively interpreted SOO requirements', requirements.length),
+        metric('soo_monitoring_requirements', 'Explicit SOO monitor/modulate clauses', requirements.filter(r => r.kind === 'monitor_variable').length),
+        metric('soo_labeled_point_candidates', 'Explicit labeled SOO point candidates requiring review', requirements.filter(r => r.kind === 'labeled_point_candidate').length),
         metric('reviewed_links', 'Reviewed SOO ↔ point-list links', links.length),
         metric('requirements_listed', 'SOO requirements found in selected point lists', comparisons.filter(r => r.status === 'listed').length),
         metric('requirements_unresolved', 'SOO requirements not established in selected lists', comparisons.filter(r => r.status !== 'listed').length)];
-      if (!links.length && view.sequences.regions.length) { status = 'not_started'; next_step = 'Open Point lists → Sequences & links and review which SOO regions apply to which point-list matrices.'; }
+      if (!capture.points.matrices.length && view.sequences.regions.length) {
+        status = 'current_with_open_findings';
+        next_step = 'No point-list matrix was found in the loaded set. Review source coverage and add the applicable controls point-list/specification source before creating any SOO ↔ point-list link; do not infer a missing matrix from sequence prose.';
+      } else if (!links.length && view.sequences.regions.length) {
+        status = 'not_started';
+        next_step = 'Open Point lists → Sequences & links and review which SOO regions apply to which point-list matrices.';
+      }
     }
   } else if (domain === 'equipment_templates') {
     if (!capture.equipment_sources || !capture.narrative_sources) {

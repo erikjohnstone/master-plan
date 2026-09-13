@@ -3619,6 +3619,11 @@ export class Session {
      * count remains complete; unlabeled/sibling near-match disclosure does
      * not, and the wire result states that distinction explicitly. */
     evaluationFast?: boolean;
+    /** Already-classified schedule-row family from the shared takeoff
+     * compiler. Generic multi-family schedule titles may omit this semantic;
+     * the family can establish individually-marked quantity policy, but can
+     * never substitute for the exact plan tag still required below. */
+    equipmentFamily?: string | null;
     /** When the caller already knows which schedule owns this mark (family
      * reconcile scaffold / project-takeoff row walk), prefer that table so
      * shared building letters across distinct equipment schedules (Carson
@@ -3942,6 +3947,7 @@ export class Session {
       : [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(identityOf(row)).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
     const table = tb.title?.text || `${tb.kind} schedule`;
     const airDeviceTable = isRepeatableAirDeviceSchedule(table);
+    const individuallyMarkedTable = isIndividuallyMarkedEquipmentSchedule(table, opts.equipmentFamily || "");
 
     // 2. plan-role sheets, and every drawn occurrence of the tag on them
     const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
@@ -4077,7 +4083,7 @@ export class Session {
     // redundant reference. Exhaustive mode is unchanged and still audits
     // surrounding symbol geometry/unlabelled candidates.
     const singletonTaggedEquipment = opts.evaluationFast
-      && isIndividuallyMarkedEquipmentSchedule(table)
+      && individuallyMarkedTable
       && totalOcc > 0
       && occBySheet.every(({ sh, occ }) => occ.every((entry) =>
         scheduleCountMultiplier(sh.spans || [], entry.bbox) === 1));
@@ -4985,7 +4991,7 @@ export class Session {
       // itself placement evidence even when surrounding linework is too
       // sparse or variable to fingerprint. Repeatable type marks stay on
       // their stricter family-specific paths above.
-      if (isIndividuallyMarkedEquipmentSchedule(table) && !matches.length && occ.length) {
+      if (individuallyMarkedTable && !matches.length && occ.length) {
         const tagged = occ[0];
         matches.push({
           at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
@@ -5091,7 +5097,7 @@ export class Session {
     // An individually numbered equipment schedule names one physical unit
     // per mark. The same mark repeated across plan/section/detail views is
     // reference duplication, unlike diffuser/fixture/luminaire type marks.
-    if (isIndividuallyMarkedEquipmentSchedule(table)) {
+    if (individuallyMarkedTable) {
       const all = perSheet.flatMap((sheet) => sheet.matches.map((match) => ({ sheet, match })));
       if (all.length > 1) {
         const kept = all.slice().sort((a, b) =>

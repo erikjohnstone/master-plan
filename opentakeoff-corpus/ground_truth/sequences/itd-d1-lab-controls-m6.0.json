@@ -1,0 +1,88 @@
+{
+  "schema": "opentakeoff.sequence_narrative_ground_truth.v1",
+  "source_pdf": "raw/itd-d1-lab-mechanical.pdf",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "review_basis": "Human visual review of rendered vector PDF page 16 / sheet M6.0. Four independent bottom-caption SOO narratives occupy side-by-side lanes below three controls legends and a control-system architecture diagram. Required phrases are visibly authored inside each respective narrative; forbidden phrases pin the adjacent legends, architecture and neighboring SOO lanes outside it. Expectations describe source truth, not prior engine output.",
+  "coordinate_frame": "render_scale_2_image_px_origin_top_left",
+  "pages": [
+    {
+      "page": 16,
+      "sheet_number": "M6.0",
+      "expected_sequences": [
+        {
+          "title": "HEAT RELIEF FAN W/ LOUVER SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 7,
+          "minimum_evidence_spans": 44,
+          "required_phrases": [
+            "MOTORIZED INTAKE WALL LOUVER, MOTORIZED EXHAUST DAMPER, AN INLINE HEAT RELIEF FAN",
+            "SEND AN OPEN COMMAND TO THE INTAKE WALL LOUVER",
+            "IF THE LOUVER FAILS TO CLOSE, AN ALARM OF THE EVENT SHALL BE SENT TO THE OPERATOR'S WORKSTATION"
+          ],
+          "forbidden_phrases": [
+            "CONTROLS LEGEND",
+            "ANALOG INPUT",
+            "THE HEAT RELIEF FAN UNIT SYSTEM CONSISTS",
+            "DUCTLESS SPLIT SYSTEM"
+          ]
+        },
+        {
+          "title": "HEAT RELIEF FAN SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 5,
+          "minimum_evidence_spans": 36,
+          "required_phrases": [
+            "MOTORIZED EXHAUST DAMPER, AN INLINE HEAT RELIEF FAN, AND A ZONE TEMPERATURE SENSOR",
+            "SEND AN ENABLE COMMAND TO THE HEAT RELIEF FAN TO RUN CONTINUOUSLY",
+            "IF THE DAMPER FAILS TO CLOSE, AN ALARM OF THE EVENT SHALL BE SENT TO THE OPERATOR'S WORKSTATION"
+          ],
+          "forbidden_phrases": [
+            "CONTROLS LEGEND",
+            "ANALOG INPUT",
+            "INTAKE WALL LOUVER",
+            "DUCTLESS SPLIT SYSTEM"
+          ]
+        },
+        {
+          "title": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 3,
+          "minimum_evidence_spans": 21,
+          "required_phrases": [
+            "INDOOR FAN COIL UNIT, AN OUTDOOR HEAT PUMP UNIT, AND A MANUFACTURER PROVIDED WIRED CONTROLLER",
+            "THE DUCTLESS SPLIT SYSTEM SHALL BE DISABLED",
+            "WATER LEVEL OVERFLOW SWITCH INDICATES A HIGH CONDENSATE LEVEL",
+            "ALARM OF THE EVENT SHALL BE SENT TO THE OPERATOR'S WORKSTATION"
+          ],
+          "forbidden_phrases": [
+            "CONTROL SYSTEM ARCHITECTURE",
+            "GLOBAL CONTROLLER",
+            "TO ADDITIONAL",
+            "HEAT RELIEF FAN UNIT SYSTEM"
+          ]
+        },
+        {
+          "title": "OUTSIDE AIR TEMPERATURE SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 1,
+          "minimum_evidence_spans": 4,
+          "required_phrases": [
+            "ONE OUTSIDE AIR TEMPERATURE SENSOR SHALL BE INSTALLED ON THE NORTH SIDE OF THE BUILDING",
+            "PROVIDE A CONTINUOUS READING OF THE OUTSIDE AIR TEMPERATURE"
+          ],
+          "forbidden_phrases": [
+            "CONTROL SYSTEM ARCHITECTURE",
+            "GLOBAL CONTROLLER",
+            "EXHAUST FAN",
+            "DUCTLESS SPLIT SYSTEM"
+          ]
+        }
+      ]
+    }
+  ],
+  "negative_pages": []
+}

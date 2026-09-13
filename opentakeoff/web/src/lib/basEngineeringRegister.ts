@@ -110,7 +110,8 @@ export async function prepareBasEngineeringRegisterValidator(capture: BasCapture
   // Its equipment issues and the schema-owned register contain precisely the
   // prerequisite fields consumed here; do not repeat source interpretation.
   const equipmentView = assemblyView ? { register: basEquipmentRegisterSchema.parse(equipment), issues: assemblyView.equipment_issues }
-    : await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points, equipment);
+    : await validateBasEquipmentRegister(capture.narrative_sources, capture.equipment_sources, capture.points,
+      equipment, capture.narrative_rule_version);
   return prepareBasEngineeringRegisterValidatorForVerifiedViews(capture, equipmentView, assemblyView);
 }
 

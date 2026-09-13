@@ -155,7 +155,7 @@ const controlEvidence = z.object({
   source: z.enum(["text_span", "vector_geometry"]),
 });
 const controlTopology = z.object({
-  status: z.enum(["complete", "refused_too_dense", "no_vector_linework"]),
+  status: z.enum(["computed", "refused_too_dense", "no_vector_linework"]),
   nodes: z.array(z.object({ id: z.number().int(), at: point, degree: z.number().int() })),
   edges: z.array(z.object({
     id: z.number().int(), a: z.number().int(), b: z.number().int(), length_px: z.number(),
@@ -174,6 +174,21 @@ const controlTopology = z.object({
   connected_components: z.number().int(), input_segments: z.number().int(), retained_segments: z.number().int(), note: z.string(),
 });
 
+const controlScheduleRef = z.object({
+  sheet: z.string(), title: z.string().nullable(), row_key: z.string(), bbox: controlPixelBox.nullable(),
+});
+
+const rejectedControlScheduleRef = controlScheduleRef.extend({
+  reason: z.literal("non_hvac_bas_schedule_family"),
+});
+
+const diagramSystemEvidence = z.object({
+  normalized_system: z.enum(["chilled_water", "heating_water", "condenser_water", "building_automation_network"]),
+  authored_label: z.string(),
+  interpretation_basis: z.literal("authored_diagram_title"),
+  evidence: controlEvidence,
+});
+
 /** Additive vector-first control-schematic/riser evidence; never an installed
  * quantity claim and never a substitute for estimator review. */
 export const controlSchematicOutput = {
@@ -188,33 +203,123 @@ export const controlSchematicOutput = {
     point_totals: z.object({ AI: z.number().int(), AO: z.number().int(), DI: z.number().int(), DO: z.number().int(), total: z.number().int() }),
     instruments: z.array(z.object({
       id: z.string(), label: z.string(), at: point, evidence: controlEvidence,
-      io_type: z.null(), status: z.literal("unmapped_instrument_label"),
+      io_type: z.enum(["AI", "AO", "DI", "DO"]).nullable(),
+      status: z.enum(["unmapped_instrument_label", "mapped_to_explicit_io"]),
+    })),
+    io_bindings: z.array(z.object({
+      id: z.string(), point_id: z.string(), point_type: z.enum(["AI", "AO", "DI", "DO"]),
+      instrument_id: z.string(), instrument_label: z.string(),
+      interpretation_basis: z.literal("explicit_io_token_plus_collinear_vector_tether"),
+      point_evidence: controlEvidence, instrument_evidence: controlEvidence, tether_evidence: controlEvidence,
     })),
     equipment: z.array(z.object({
       tag: z.string(), at: point, evidence: controlEvidence,
-      schedule_refs: z.array(z.object({ sheet: z.string(), title: z.string().nullable(), row_key: z.string(), bbox: controlPixelBox.nullable() })),
+      schedule_binding_status: z.enum(["bound", "ambiguous", "unbound"]),
+      schedule_refs: z.array(controlScheduleRef),
+      rejected_schedule_refs: z.array(rejectedControlScheduleRef),
     })),
     component_labels: z.array(z.object({ label: z.string(), evidence: controlEvidence })),
     media_labels: z.array(z.object({ label: z.string(), evidence: controlEvidence })),
-    sequence_refs: z.array(z.object({ id: z.string(), title: z.string(), status: z.string(), title_bbox: controlPixelBox })),
+    sequence_refs: z.array(z.object({
+      id: z.string(),
+      sheet: z.string().describe("Exact source sheet carrying the referenced authored SOO"),
+      title: z.string(), status: z.string(), title_bbox: controlPixelBox,
+    })),
+    sequence_binding_status: z.enum(["bound", "ambiguous", "unbound"]),
     topology: controlTopology,
+    semantic_status: z.enum(["evidence_inventory", "partial_connectivity", "verified_semantic_graph"]),
     review: z.object({ human_review_required: z.literal(true), unresolved_crossings: z.number().int(), unmapped_instruments: z.number().int() }),
   })),
   risers: z.array(z.object({
-    id: z.string(), sheet: z.string(), title: z.string(), title_evidence: controlEvidence,
-    diagram_kind: z.enum(["riser", "flow", "network_architecture"]),
+    id: z.string(), sheet: z.string(), sheet_number: z.string().nullable(), title: z.string(), title_evidence: controlEvidence,
+    diagram_kind: z.enum(["riser", "flow", "piping", "network_architecture"]),
     region: controlPixelBox,
-    datums: z.array(z.object({ label: z.string(), y: z.number(), evidence: controlEvidence })),
-    risers: z.array(z.object({
-      x: z.number(), from_datum: z.string(), to_datum: z.string(), bbox: controlPixelBox, direction: z.literal("unknown"),
+    datums: z.array(z.object({
+      label: z.string(), y: z.number(), evidence: controlEvidence,
+      aliases: z.array(z.object({ label: z.string(), evidence: controlEvidence })),
+    })),
+    systems: z.array(diagramSystemEvidence),
+    service_groups: z.array(z.object({
+      id: z.string(), label: z.string(),
+      normalized_system: z.enum(["chilled_water", "heating_water", "condenser_water", "unknown"]),
+      pressure_zone: z.enum(["high", "low"]).nullable(),
+      service_pair: z.enum(["supply_return", "unspecified"]),
+      interpretation_basis: z.literal("authored_riser_label_conservative_abbreviation"),
+      evidence: z.array(controlEvidence),
+    })),
+    continuations: z.array(z.object({
+      id: z.string(), text: z.string(), target_sheet: z.string(),
+      boundary: z.enum(["top", "bottom", "interior"]), evidence: controlEvidence,
+    })),
+    diagram_tags: z.array(z.object({
+      tag: z.string(), evidence: z.array(controlEvidence), schedule_refs: z.array(controlScheduleRef),
+    })),
+    device_states: z.array(z.object({
+      device_tag: z.string(), state: z.enum(["normally_open", "normally_closed"]),
+      authored_token: z.enum(["NO", "NC"]),
+      interpretation_basis: z.literal("one_to_one_local_tag_state_geometry"),
+      tag_evidence: controlEvidence, state_evidence: controlEvidence,
+    })),
+    network_transports: z.array(z.object({
+      kind: z.enum(["protocol", "named_network", "physical_link"]),
+      name: z.enum(["BACnet", "BACnet/IP", "BACnet MS/TP", "CMnet", "Modbus", "UFT Network", "Ethernet"]),
+      authored_labels: z.array(z.string()), evidence: z.array(controlEvidence),
+    })),
+    network_components: z.array(z.object({
+      component_type: z.literal("ME Stack"), evidence: z.array(controlEvidence),
+    })),
+    floor_placements: z.array(z.object({
+      id: z.string(), subject_kind: z.enum(["diagram_tag", "network_component"]), subject: z.string(),
+      floor_label: z.string(), floor_aliases: z.array(z.string()), band_bbox: controlPixelBox,
+      interpretation_basis: z.literal("authored_subject_inside_authored_floor_band"),
+      subject_evidence: controlEvidence, floor_evidence: controlEvidence,
+    })),
+    trace_candidates: z.array(z.object({
+      id: z.string(), x: z.number(), from_datum: z.string(), to_datum: z.string(), bbox: controlPixelBox,
+      direction: z.literal("unknown"), status: z.literal("unresolved_vector_candidate"), evidence: controlEvidence,
     })),
     topology: controlTopology,
-    status: z.enum(["extracted", "insufficient_floor_datums", "no_vector_linework", "refused_too_dense"]),
+    status: z.enum(["evidence_inventory", "insufficient_floor_datums", "no_vector_linework", "refused_too_dense"]),
+    semantic_status: z.enum(["evidence_inventory", "partial_connectivity", "verified_semantic_graph"]),
+    review: z.object({
+      human_review_required: z.literal(true), unresolved_trace_candidates: z.number().int(),
+      unresolved_crossings: z.number().int(), note: z.string(),
+    }),
     human_review_required: z.literal(true),
   })),
+  diagram_conflicts: z.array(z.object({
+    id: z.string(), conflict_type: z.literal("normal_state_mismatch"),
+    normalized_system: z.enum(["chilled_water", "heating_water", "condenser_water", "building_automation_network"]),
+    device_tag: z.string(), status: z.literal("design_clarification_required"),
+    claims: z.array(z.object({
+      sheet: z.string(), diagram_title: z.string(), state: z.enum(["normally_open", "normally_closed"]),
+      tag_evidence: controlEvidence, state_evidence: controlEvidence,
+    })),
+  })),
+  continuation_links: z.array(z.object({
+    id: z.string(), from_diagram_id: z.string(), from_sheet: z.string(), from_sheet_number: z.string().nullable(),
+    to_diagram_id: z.string().nullable(), to_sheet: z.string().nullable(), to_sheet_number: z.string(),
+    status: z.enum(["reciprocal", "target_found_one_way", "unresolved_target", "ambiguous_target", "boundary_conflict"]),
+    from_boundary: z.enum(["top", "bottom", "interior"]),
+    to_boundary: z.enum(["top", "bottom", "interior"]).nullable(),
+    from_evidence: controlEvidence, to_evidence: controlEvidence.nullable(),
+  })),
+  engineering_readiness: z.object({
+    status: z.enum(["coverage_not_established", "evidence_inventory_only", "partial_engineering_model", "principal_engineering_ready"]),
+    diagram_count: z.number().int(), verified_semantic_graphs: z.number().int(), partial_semantic_graphs: z.number().int(),
+    evidence_inventory_graphs: z.number().int(),
+    blockers: z.array(z.object({ code: z.string(), count: z.number().int(), explanation: z.string() })),
+    human_review_required: z.literal(true), ready_for_unattended_release: z.literal(false),
+  }),
   totals: z.object({
     schematics: z.number().int(), riser_diagrams: z.number().int(), explicit_points: z.number().int(),
-    instruments_unmapped: z.number().int(), unresolved_crossings: z.number().int(),
+    explicit_io_bindings: z.number().int(), instruments_unmapped: z.number().int(),
+    unresolved_sequence_bindings: z.number().int(), unresolved_crossings: z.number().int(),
+    authored_riser_service_groups: z.number().int(), off_page_continuations: z.number().int(),
+    off_page_continuation_links: z.number().int(), unresolved_off_page_continuations: z.number().int(),
+    unresolved_trace_candidates: z.number().int(), diagram_state_conflicts: z.number().int(),
+    authored_network_transports: z.number().int(), authored_network_components: z.number().int(),
+    authored_floor_placements: z.number().int(), verified_semantic_graphs: z.number().int(),
   }),
   exclusions: z.array(z.string()),
 };

@@ -7,8 +7,11 @@ import {
   compileAgentTakeoff,
   compiledTakeoffToCsv,
   dedupeTakeoffRows,
+  displayScheduleFamily,
   groupTakeoffByFamily,
   lineLeadCite,
+  linePlanCite,
+  lineScheduleCite,
   makeTakeoffRow,
   mergeTakeoffRows,
   cleanTakeoffTag,
@@ -669,6 +672,16 @@ test("cleanTakeoffTag strips markdown bold wrappers", () => {
   assert.equal(makeTakeoffRow({ tag: "**CV-2**", field: "quantity", value: 1 }).tag, "CV-2");
 });
 
+test("display schedule family repairs only bounded missing-glyph CAD titles", () => {
+  assert.equal(displayScheduleFamily("PU P SCHEDULE", "PUMP"), "PUMP SCHEDULE");
+  assert.equal(displayScheduleFamily("LOU ER SCHEDULE", "LOUVER"), "LOUVER SCHEDULE");
+  assert.equal(displayScheduleFamily("GRILLE, REGIST ER AND DIFFUSER SCHEDULE", "GRD"), "GRILLE, REGISTER AND DIFFUSER SCHEDULE");
+  assert.equal(displayScheduleFamily("E PANSION AND CO PRESSION TANK SCHEDULE", "EXPANSION_TANK"), "EXPANSION AND COMPRESSION TANK SCHEDULE");
+  assert.equal(displayScheduleFamily("PRIMARY PUMP SCHEDULE", "PUMP"), "PRIMARY PUMP SCHEDULE", "a genuinely qualified title remains authored");
+  assert.equal(displayScheduleFamily("PUP SCHEDULE", "PUMP"), "PUP SCHEDULE", "a substitution is not silently repaired");
+  assert.equal(displayScheduleFamily("PU P SCHEDULE", "FAN"), "PU P SCHEDULE", "the established compiler category is required");
+});
+
 test("normalizeControlValveCells: one Cv + served equipment, never dual CHW/HHW Cv", () => {
   const cells = (normalizeControlValveCells({
     cells: {
@@ -1177,6 +1190,12 @@ test("reconcile_schedule_plan: EAV rows merge into ONE compiled line carrying sc
   assert.equal(line.status, "schedule_only");
   assert.equal(line.plan_sheet_id, "set.pdf#12");
   assert.equal(line.schedule_sheet_id, "set.pdf#5");
+  assert.deepEqual(line.plan_bbox_px, [90, 190, 110, 210]);
+  assert.equal(lineScheduleCite(line), null, "no schedule-row bbox means no fabricated schedule citation");
+  assert.deepEqual(linePlanCite(line), {
+    sheet_id: "set.pdf#12", bbox_px: [90, 190, 110, 210], column: "PLAN MARK", field: "plan_tag",
+    value: "VAV-1", tag: "VAV-1", table_title: "VAV SCHEDULE", kind: "row",
+  });
 
   const cols = takeoffLeadColumns(lines).map((c) => c.key);
   assert.ok(cols.includes("scheduled_qty") && cols.includes("installed_qty") && cols.includes("qty_kind"));
@@ -1191,6 +1210,31 @@ test("reconcile_schedule_plan: EAV rows merge into ONE compiled line carrying sc
   assert.match(dataLine, /,6,/, "scheduled qty 6 must appear in the row");
   assert.match(dataLine, /,4,/, "installed qty 4 must appear in the row");
   assert.match(dataLine, /schedule_only/);
+});
+
+test("reconciled line exposes separate schedule-row and plan-marker citations", () => {
+  const rows = rowsFromCompiledTakeoff({
+    kind: "hvac_equipment",
+    categories: { VAV: { items: [{
+      tag: "VAV-2", quantity: 1, quantity_basis: "printed_schedule_quantity",
+      sheet_id: "set.pdf#5", table_title: "VAV SCHEDULE",
+      bbox_px: [10, 20, 30, 40], row_bbox_px: [8, 18, 300, 42],
+    }] } },
+  });
+  rows.push(...rowsFromToolResult("reconcile_schedule_plan", {}, {
+    rows: [{
+      tag: "VAV-2", scheduled_qty: 1, installed_qty: 1, status: "MATCH",
+      installed_qty_basis: "exact_plan_tag", schedule_cite: { sheet: "set.pdf#5", title: "VAV SCHEDULE" },
+      plan_cites: [{ sheet: "set.pdf#12", bbox: [90, 190, 110, 210] }],
+    }], summary: { total: 1, match: 1 },
+  }));
+  const line = compileAgentTakeoff(rows)[0];
+  assert.equal(lineLeadCite(line, "tag")?.sheet_id, "set.pdf#5");
+  assert.deepEqual(lineLeadCite(line, "tag")?.bbox_px, [8, 18, 300, 42]);
+  assert.equal(lineScheduleCite(line)?.sheet_id, "set.pdf#5");
+  assert.deepEqual(lineScheduleCite(line)?.bbox_px, [8, 18, 300, 42]);
+  assert.equal(linePlanCite(line)?.sheet_id, "set.pdf#12");
+  assert.deepEqual(linePlanCite(line)?.bbox_px, [90, 190, 110, 210]);
 });
 
 test("compileAgentTakeoff never invents qty=1 for an attr-only tag with no printed or drawn quantity", () => {

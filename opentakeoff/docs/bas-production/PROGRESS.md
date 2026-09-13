@@ -1,5 +1,128 @@
 # BAS production workflow progress
 
+## Complete Agent run and control/SOO binding hardening — 2026-09-13
+
+SHOULD THIS BE ON THE SHARED PATH? **Split by responsibility.** Control-diagram
+classification, sequence binding and the MCP output contract decide shared
+engineering truth and are implemented once in the shared extraction/result path.
+The separately labeled header and `ready` navigation badge are presentation-only
+and do not change extraction, quantities, citations or retained workflow data.
+
+The real browser Agent accepted the literal prompt **Run a BAS takeoff.** against
+the 75-sheet NAVFAC Cherry Point mechanical set and completed in **37.673 s after
+indexing** (**32.420 s persisted deterministic run**) under the 180 s ceiling.
+The consolidated result contains 396 equipment records, 21 point lists / 546
+rows, eight SOOs / 54 sections, 163 control-valve records, six embedded-coil
+gaps, nine control schematics, one network/riser-flow diagram, and 293
+schedule/plan reconciliation rows (141 match, 152 schedule-only). It exposes
+3,381 row and 50 table citations, clause-level SOO source navigation, CSV and
+source-inclusive BAS evidence/history exports. Release remains
+`human_review_required`; all five project-decision workflows retain their honest
+`not_started` status. Screenshots and the exact receipt are in
+`evidence/complete-bas-agent-navfac-final/`.
+
+A second strict product-path run now broadens the same one-prompt journey to the
+unrelated 29-sheet ITD D-1 laboratory mechanical set. It completed in **15.682 s
+after indexing** (**13.424 s persisted deterministic run**) under the unchanged
+180 s ceiling. The result contains 97 equipment records, zero extractable point
+lists, 13 SOOs / 79 retained sections, one explicitly labeled SOO point
+candidate, 31 control-valve records, 11 embedded-coil gaps, 13 control
+schematics, and 37 reconciliation rows (**36 match / 1 schedule-only**). The
+zero-point-list result is disclosed as missing evidence rather than a zero-point
+claim. Release remains `human_review_required`.
+
+The ITD browser gate requires all 13 compiled SOOs to be inspectable in the
+reader and now observes **13 body-detected / 0 heading-only**. It selects the
+previously broken `DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION`, exposes four
+source-backed clauses, retains the wrapped terminal words `DISABLED.` and
+`OPERATOR'S WORKSTATION.`, and rejects adjacent `CONTROL SYSTEM ARCHITECTURE`,
+`GLOBAL CONTROLLER`, `TO ADDITIONAL` and `CONTROLS LEGEND` text from that body.
+The same journey proves a matched `AC-1` plan marker on PDF page 25 and its
+schedule row on PDF page 28 resolve to distinct exact source highlights. It
+exports CSV plus source-inclusive BAS evidence/history with 224 row and 24 table
+citations and reports zero browser or console errors.
+
+Two further one-prompt product runs pass.
+Tinker AFB's unrelated 31-sheet controls-only set completes in **15.664 s
+post-index**, retains five building-specific SOOs / 65 cited sections, and
+correctly returns zero equipment, point matrices, installed quantities,
+schematic inventories, or reconciliation rows. Its empty Takeoff state explains
+that narrative evidence is not quantity and routes directly to sequence review.
+The final 24-sheet Federal Attachment 4 mechanical replay completes in **16.964
+s post-index** (**13.977 s persisted**) with 128 equipment records, three point matrices / 26 rows, 12 SOOs /
+132 sections, 13 schematic inventories, one riser/flow diagram, and 99
+reconciliation rows (**95 match / 4 schedule-only**). Its `AHU-1` match opens
+distinct exact plan-page-7 and schedule-page-14 highlights. One `Compare` action
+opens a dedicated read-only reader with a 1,040×680 plan crop and a 1,600×453
+schedule-row crop, plus `MATCH`, scheduled and installed-observation facts;
+individual full-drawing actions remain available. The selected 69-clause AHU
+sequence excludes the adjacent LEED sequence. All three new runs have zero
+browser and console errors and remain `human_review_required`.
+Durable receipts and screenshots are in
+`evidence/complete-bas-agent-itd-current/`,
+`evidence/complete-bas-agent-tinker-current/`, and
+`evidence/complete-bas-agent-federal-current/`.
+
+Shared diagram discovery now admits authored horizontal `... SCHEMATIC` captions
+only with independent control structure, rejects rotated title-block copies and
+generic non-control schematic captions, binds terse same-sheet SOOs by a specific
+system anchor, and binds immediately adjacent same-source SOO sheets only with
+multiword and non-generic system agreement. A new human-reviewed NAVFAC truth set
+checks nine exact drawing titles, seven exact sequence bindings and two honest
+unbound cases. The two unbound cases are materially different: MI731 contains an
+unheaded sequence that current narrative discovery does not retain, while MI732
+explicitly sends its sequence to fire-alarm sheets outside the uploaded mechanical
+source. The existing ITD nine-schematic and multi-document 18-SOO gates remain
+green, as do Transbay riser, Norfolk piping-state and LBNL network-riser gates.
+
+Federal diagram ground truth now covers all 13 human-reviewed authored control
+diagrams across M8.3, M8.4, M8.7 and M8.8, not only the three VAV details on
+M8.7. A generalized drawing-row partition prevents upper-row captions from
+clipping tall lower details, and a lone wide system diagram can extend to the
+authored drawing-field/title-block boundary. That recovers printed `DPT`, `L-7`
+and `SW-1` evidence. Bounded hydronic-family title agreement binds the boiler
+diagram to the heating-hot-water SOO while a competing same-family SOO remains
+ambiguous and a chilled-water SOO is an explicit negative control. The real
+Agent receipt independently enforces this exact binding. The broader retained
+regions expose 1,061 unresolved crossings, 16 unmapped instrument labels and
+three unresolved sequence bindings for review rather than hiding that work.
+
+Shared narrative discovery now also reconstructs wrapped multi-line SOO titles,
+clips bottom-caption narratives to the nearest authored opening section, joins
+ordinary same-line PDF font runs without joining separate columns, retains
+strict one-word line completions, and recognizes authored hierarchical section
+numbers without treating ordinary `HEATING ...` prose as headings. A new
+human-reviewed ITD truth file pins the exact PDF hash, all four M6.0 SOO titles,
+required body phrases and per-lane forbidden contamination. The aggregate
+sequence gate is now green on **five documents, 18 positive pages, five negative
+pages and 27 expected sequences**.
+
+The MCP output schema now round-trips the actual shared result without stripping
+topology, sequence-sheet, schedule, riser, network, continuation, conflict or
+readiness fields. The complete-BAS UI no longer presents the mixed 942 compiled
+records as EA; every domain is separately labeled and both Takeoff navigation
+surfaces say `ready`.
+
+Verification after the ITD broadening: full web `npm run check` passes typecheck,
+**3,144 tests / 3,131 passed / zero failures / 13 expected skips**, BAS benchmarks,
+lint (zero errors; the same three existing hook warnings) and production build.
+MCP passes 132 BAS, 33 revision, six issue and 17 scope/snapshot tests plus all
+declared performance gates; typecheck and all four packaging tests pass. The
+available-corpus structural compile gate passes. The broad concurrent MCP suite
+reported 304 pass / 113 unavailable-fixture skips and one 60 s timeout in the
+unrelated `detect_rooms assign mode` test while other CPU-heavy corpus workers
+ran; the exact failed case then passed alone in **23.494 s** with the same output
+contract. No room, symbol or geometric code changed in this batch.
+
+This checkpoint does **not** claim principal-engineer semantic diagram coverage:
+the NAVFAC run correctly reports 1,359 unresolved crossings, 59 unmapped
+instrument labels, two unresolved sequence bindings and zero verified semantic
+graphs. It does not infer schematic point types without explicit printed I/O,
+does not solve the separate symbol-recognition/installed-count ceiling, and does
+not auto-complete contractual review decisions. VectorGrid, table extraction,
+row/column relationships, bboxes/citations, symbol recognition, pricing, costing
+and labor are unchanged.
+
 ## Final bounded BAS completion and frozen holdout audit — 2026-09-12
 
 The five deterministic, human-in-loop BAS workflows are wired through the same

@@ -1,0 +1,159 @@
+{
+  "schema": "opentakeoff.control_schematic_ground_truth.v1",
+  "source_pdf": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "review_basis": "Human visual review of rendered vector PDF sheets MI702-MI732. The expected titles are the horizontal detail captions visible on the drawing field, not rotated title-block descriptions. Six schematic/SOO pairs are authored on consecutive sheets, one pair is authored on MI730, MI731 is intentionally unbound because its prose has no extracted SOO heading, and MI732 is intentionally unbound because its authored note sends control sequences to fire-protection sheets outside this mechanical PDF. Expectations describe source truth, not prior engine output.",
+  "coordinate_frame": "render_scale_2_image_px_origin_top_left",
+  "expected_total_schematics": 9,
+  "pages": [
+    {
+      "page": 52,
+      "sheet_number": "MI702",
+      "sequence_titles": [],
+      "control_diagram_titles": ["AIR OPS / MTRACON - DOAH SCHEMATIC"],
+      "require_horizontal_title_evidence": true,
+      "forbidden_control_diagram_titles": ["AIR OPS / MTRACON - DOAH CONTROL SCHEMATIC AND POINTS LIST"],
+      "expected_sequence_refs": {
+        "AIR OPS / MTRACON - DOAH SCHEMATIC": [
+          { "page": 53, "title": "AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION" }
+        ]
+      }
+    },
+    {
+      "page": 53,
+      "sheet_number": "MI703",
+      "sequence_titles": ["AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION"],
+      "control_diagram_titles": []
+    },
+    {
+      "page": 54,
+      "sheet_number": "MI704",
+      "sequence_titles": [],
+      "control_diagram_titles": ["AIR OPS / MTRACON - AHU SCHEMATIC"],
+      "require_horizontal_title_evidence": true,
+      "forbidden_control_diagram_titles": ["AIR OPS / MTRACON - AHU CONTROL SCHEMATIC AND POINTS LIST"],
+      "expected_sequence_refs": {
+        "AIR OPS / MTRACON - AHU SCHEMATIC": [
+          { "page": 55, "title": "AIR OPS / MTRACON - AHU SEQUENCE OF OPERATION" }
+        ]
+      }
+    },
+    {
+      "page": 55,
+      "sheet_number": "MI705",
+      "sequence_titles": ["AIR OPS / MTRACON - AHU SEQUENCE OF OPERATION"],
+      "control_diagram_titles": []
+    },
+    {
+      "page": 56,
+      "sheet_number": "MI710",
+      "sequence_titles": [],
+      "control_diagram_titles": ["AIR OPS - CHW SYSTEM CONTROL SCHEMATIC"],
+      "require_horizontal_title_evidence": true,
+      "forbidden_control_diagram_titles": ["AIR OPS - CHW SYSTEM CONTROL SCHEMATIC AND POINTS LIST"],
+      "expected_sequence_refs": {
+        "AIR OPS - CHW SYSTEM CONTROL SCHEMATIC": [
+          { "page": 57, "title": "AIR OPS - CHW SYSTEM SEQUENCE OF OPERATION" }
+        ]
+      }
+    },
+    {
+      "page": 57,
+      "sheet_number": "MI711",
+      "sequence_titles": ["AIR OPS - CHW SYSTEM SEQUENCE OF OPERATION"],
+      "control_diagram_titles": []
+    },
+    {
+      "page": 58,
+      "sheet_number": "MI712",
+      "sequence_titles": [],
+      "control_diagram_titles": ["AIR OPS - HHW SYSTEM SCHEMATIC"],
+      "require_horizontal_title_evidence": true,
+      "forbidden_control_diagram_titles": ["AIR OPS - HHW SYSTEM CONTROL SCHEMATIC AND POINTS LIST"],
+      "expected_sequence_refs": {
+        "AIR OPS - HHW SYSTEM SCHEMATIC": [
+          { "page": 59, "title": "AIR OPS - HHW SYSTEM SEQUENCE OF OPERATION" }
+        ]
+      }
+    },
+    {
+      "page": 59,
+      "sheet_number": "MI713",
+      "sequence_titles": ["AIR OPS - HHW SYSTEM SEQUENCE OF OPERATION"],
+      "control_diagram_titles": []
+    },
+    {
+      "page": 60,
+      "sheet_number": "MI720",
+      "sequence_titles": [],
+      "control_diagram_titles": ["MTRACON/ATCT - CHW SYSTEM SCHEMATIC"],
+      "require_horizontal_title_evidence": true,
+      "forbidden_control_diagram_titles": ["MTRACON/ATCT - CHW SYSTEM CONTROL SCHEMATIC AND POINTS LIST"],
+      "expected_sequence_refs": {
+        "MTRACON/ATCT - CHW SYSTEM SCHEMATIC": [
+          { "page": 61, "title": "MTRACTON/ATCT - CHW SYSTEM SEQUENCE OF OPERATION" }
+        ]
+      }
+    },
+    {
+      "page": 61,
+      "sheet_number": "MI721",
+      "sequence_titles": ["MTRACTON/ATCT - CHW SYSTEM SEQUENCE OF OPERATION"],
+      "control_diagram_titles": []
+    },
+    {
+      "page": 62,
+      "sheet_number": "MI722",
+      "sequence_titles": [],
+      "control_diagram_titles": ["MTRACON/ATCT-HHW SYSTEM SCHEMATIC AND POINTS LIST"],
+      "require_horizontal_title_evidence": true,
+      "forbidden_control_diagram_titles": ["MTRACON/ATCT - HHW SYSTEM CONTROL SCHEMATIC AND POINTS LIST"],
+      "expected_sequence_refs": {
+        "MTRACON/ATCT-HHW SYSTEM SCHEMATIC AND POINTS LIST": [
+          { "page": 63, "title": "MTRACON/ATCT - HHW SYSTEM SEQUENCE OF OPERATION" }
+        ]
+      }
+    },
+    {
+      "page": 63,
+      "sheet_number": "MI723",
+      "sequence_titles": ["MTRACON/ATCT - HHW SYSTEM SEQUENCE OF OPERATION"],
+      "control_diagram_titles": []
+    },
+    {
+      "page": 64,
+      "sheet_number": "MI730",
+      "sequence_titles": ["3.2.3 SEQUENCE OF OPERATION – DOAH-T1"],
+      "control_diagram_titles": ["ATCT - DOAH SCHEMATIC"],
+      "require_horizontal_title_evidence": true,
+      "forbidden_control_diagram_titles": ["ATCT - DOAH CONTROL SCHEMATIC AND POINT LIST"],
+      "expected_sequence_refs": {
+        "ATCT - DOAH SCHEMATIC": [
+          { "page": 64, "title": "3.2.3 SEQUENCE OF OPERATION – DOAH-T1" }
+        ]
+      }
+    },
+    {
+      "page": 65,
+      "sheet_number": "MI731",
+      "sequence_titles": [],
+      "control_diagram_titles": ["ATCT - AHU SCHEMATIC"],
+      "require_horizontal_title_evidence": true,
+      "forbidden_control_diagram_titles": ["ATCT - AHU CONTROL SCHEMATIC AND POINT LIST"],
+      "expected_sequence_binding_status": {
+        "ATCT - AHU SCHEMATIC": "unbound"
+      }
+    },
+    {
+      "page": 66,
+      "sheet_number": "MI732",
+      "sequence_titles": [],
+      "control_diagram_titles": ["ATCT - STAIRWELL PRESSURIZATION SCHEMATIC"],
+      "require_horizontal_title_evidence": true,
+      "expected_sequence_binding_status": {
+        "ATCT - STAIRWELL PRESSURIZATION SCHEMATIC": "unbound"
+      },
+      "review_note": "The drawing explicitly says to see fire-protection sheets FA502 and FA623 for control sequences; those sheets are not present in this mechanical source PDF, so no local SOO binding is asserted."
+    }
+  ]
+}

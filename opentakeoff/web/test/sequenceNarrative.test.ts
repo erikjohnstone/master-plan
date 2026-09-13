@@ -78,6 +78,79 @@ describe("free-form sequence narratives", () => {
     assert.match(blocks[0].sections[0].body, /INTERLOCK/);
   });
 
+  it("retains punctuation-split control tags in a narrative line with exact fragment evidence", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "controls.pdf#53",
+      spans: [
+        span("A. DOAH SUPPLY FAN STATUS (DOAHSF", 80, 100, 286, 18),
+        span("-", 366, 100, 6, 18),
+        span("S)", 372, 100, 16, 18),
+        span("DOAH SEQUENCE OF OPERATION", 80, 400, 420, 28),
+      ],
+    }]);
+    assert.equal(blocks.length, 1);
+    assert.equal(blocks[0].sections[0].body, "DOAH SUPPLY FAN STATUS (DOAHSF-S)");
+    assert.deepEqual(blocks[0].sections[0].evidence.map((item) => item.text), [
+      "A. DOAH SUPPLY FAN STATUS (DOAHSF", "-", "S)",
+    ]);
+    assert.deepEqual(blocks[0].sections[0].evidence.map((item) => item.bbox), [
+      [80, 100, 366, 118], [366, 100, 372, 118], [372, 100, 388, 118],
+    ]);
+  });
+
+  it("retains normal font-run gaps and one-word wrapped sentence completions", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "controls.pdf#16",
+      spans: [
+        span("GENERAL:", 80, 90, 90, 16),
+        span("THE DUCTLESS SPLIT SYSTEM SHALL BE", 80, 120, 310, 16),
+        span("ENABLED.", 80, 140, 75, 16),
+        span("THE CONTRACTOR SHALL PROVIDE A NEW DDC", 80, 170, 300, 16),
+        span("CONTROL PACKAGE.", 392, 170, 150, 16),
+        span("UNIT SEQUENCE OF OPERATION", 80, 300, 360, 28),
+      ],
+    }]);
+    const body = blocks[0].sections.map((section) => section.body).join(" ");
+    assert.match(body, /DUCTLESS SPLIT SYSTEM SHALL BE ENABLED\./);
+    assert.match(body, /NEW DDC CONTROL PACKAGE\./);
+    assert.deepEqual(blocks[0].sections.flatMap((section) => section.evidence).map((item) => item.text), [
+      "GENERAL:", "THE DUCTLESS SPLIT SYSTEM SHALL BE", "ENABLED.",
+      "THE CONTRACTOR SHALL PROVIDE A NEW DDC", "CONTROL PACKAGE.",
+    ]);
+  });
+
+  it("keeps hierarchical clause numbers while ordinary heating sentences remain prose", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "controls.pdf#64",
+      spans: [
+        span("DOAH-T1 SEQUENCE OF OPERATION", 80, 60, 390, 24),
+        span("3.2.3.3.1 PROOFS", 80, 100, 180, 16),
+        span("A. SUPPLY FAN STATUS SHALL BE MONITORED.", 80, 125, 360, 16),
+        span("3.2.3.3.2 SAFETIES", 80, 160, 200, 16),
+        span("A. FREEZESTAT SHALL DISABLE THE FAN.", 80, 185, 330, 16),
+        span("HEATING VALVE AT ANY BOX IS OPEN 10% OR MORE AND SHALL REMAIN AVAILABLE.", 80, 210, 590, 16),
+      ],
+    }]);
+    assert.deepEqual(blocks[0].sections.map((section) => section.heading), [
+      "3.2.3.3.1", "A.", "3.2.3.3.2", "A.",
+    ]);
+    assert.match(blocks[0].sections.at(-1)!.body, /HEATING VALVE AT ANY BOX/);
+  });
+
+  it("does not join same-baseline narrative fragments across a column-sized gap", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "controls.pdf#53",
+      spans: [
+        span("A. THE FAN SHALL ENABLE.", 80, 100, 190, 18),
+        span("B. THE VALVE SHALL CLOSE.", 420, 100, 200, 18),
+        span("FAN SEQUENCE OF OPERATION", 80, 400, 360, 28),
+      ],
+    }]);
+    const bodies = blocks[0].sections.map((section) => section.body);
+    assert.deepEqual(bodies, ["THE FAN SHALL ENABLE.", "THE VALVE SHALL CLOSE."]);
+    assert.equal(blocks[0].sections.flatMap((section) => section.evidence).length, 2);
+  });
+
   it("retains a compact authored system tag printed after an under-detail SOO title", () => {
     const blocks = extractSequenceNarratives([{
       key: "lift-station.pdf#26",
@@ -178,6 +251,73 @@ describe("free-form sequence narratives", () => {
     assert.equal(blocks[0].title_evidence.bbox[1], 400, "larger authored detail title is the retained cite");
   });
 
+  it("joins one sequence bracketed by a small heading and a scaled detail caption", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "details.pdf#40",
+      spans: [
+        span("RTU - SEQUENCE OF OPERATIONS", 700, 200, 269, 19),
+        span("GENERAL:", 700, 238, 90, 19),
+        span("THE UNIT SHALL ENABLE OR DISABLE FROM THE OCCUPANCY SCHEDULE.", 700, 270, 560, 19),
+        span("OCCUPIED MODE:", 700, 430, 150, 19),
+        span("THE UNIT SHALL MODULATE THE OUTSIDE AIR DAMPER TO MAINTAIN SETPOINT.", 700, 462, 620, 19),
+        span("UNOCCUPIED MODE:", 700, 720, 170, 19),
+        span("IF THE FIRE ALARM SIGNALS A GENERAL ALARM, THE UNIT SHALL STOP.", 700, 752, 580, 19),
+        span("5", 650, 900, 30, 50),
+        span("RTU - SEQUENCE OF OPERATIONS", 700, 900, 428, 25),
+        span("SCALE: NTS", 700, 934, 95, 16),
+      ],
+    }]);
+    assert.equal(blocks.length, 1);
+    assert.equal(blocks[0].direction, "above_title");
+    assert.equal(blocks[0].title_evidence.bbox[1], 900);
+    assert.match(blocks[0].sections.map((section) => section.body).join(" "), /OCCUPANCY SCHEDULE/);
+    assert.match(blocks[0].sections.map((section) => section.body).join(" "), /FIRE ALARM SIGNALS/);
+  });
+
+  it("keeps equal-sized repeated titles as distinct physical sequence regions", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "controls.pdf#54",
+      spans: [
+        span("CONTROL SEQUENCE", 80, 60, 220, 20),
+        span("1. THE LEFT CONTROLLER SHALL ENABLE THE FAN.", 80, 95, 390, 16),
+        span("CONTROL SEQUENCE", 580, 60, 220, 20),
+        span("1. THE RIGHT CONTROLLER SHALL MODULATE THE VALVE.", 580, 95, 420, 16),
+      ],
+    }]);
+    assert.equal(blocks.length, 2);
+    assert.match(blocks[0].sections.map((section) => section.body).join(" "), /LEFT CONTROLLER/);
+    assert.match(blocks[1].sections.map((section) => section.body).join(" "), /RIGHT CONTROLLER/);
+  });
+
+  it("does not compile a control-curve chart as prose but keeps a real bare control-sequence heading", () => {
+    const chart = extractSequenceNarratives([{
+      key: "controls.pdf#23",
+      spans: [
+        span("CONTROL SEQUENCE", 400, 60, 220, 24),
+        span("ROOM TEMPERATURE", 300, 95, 150),
+        span("HEATING", 450, 95, 70),
+        span("ZONE SET POINT", 540, 95, 130),
+        span("COOLING", 690, 95, 70),
+        span("VALVE OPEN", 300, 130, 100),
+        span("CONTROL DAMPER", 300, 165, 130),
+        span("DAMPER UNOCCUPIED POSITION", 300, 200, 230),
+        span("VALVE CLOSED", 690, 200, 110),
+        span("DEADBAND", 500, 235, 90),
+      ],
+    }]);
+    assert.deepEqual(chart, []);
+
+    const prose = extractSequenceNarratives([{
+      key: "controls.pdf#24",
+      spans: [
+        span("CONTROL SEQUENCE", 80, 60, 220, 24),
+        span("THE BAS SHALL ENABLE THE FAN WHEN THE SPACE IS OCCUPIED.", 80, 105, 500),
+      ],
+    }]);
+    assert.equal(prose.length, 1);
+    assert.equal(prose[0].status, "extracted");
+  });
+
   it("keeps a smaller mode/cross-reference heading subordinate to the primary detail title", () => {
     const blocks = extractSequenceNarratives([{
       key: "controls.pdf#55",
@@ -246,5 +386,62 @@ describe("free-form sequence narratives", () => {
     const body = blocks[0].sections.map((section) => section.body).join(" ");
     assert.match(body, /ENABLE THE CHILLED WATER PLANT/);
     assert.doesNotMatch(body, /POWER CONSUMPTION|PUMP SPEED CONTROL|PLOT DATE/);
+  });
+
+  it("keeps a point-list table above an under-detail caption out of the sequence body", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "controls.pdf#68",
+      spans: [
+        span("SERIES FAN BOXES SHALL RUN WHEN OCCUPIED.", 600, 100, 390, 18),
+        span("THE DAMPER SHALL MODULATE TO MAINTAIN AIRFLOW.", 600, 140, 430, 18),
+        span("SFPVAV DDC POINTS LIST", 760, 400, 250, 20),
+        span("MARK", 600, 440, 60, 16),
+        span("DESCRIPTION", 700, 440, 140, 16),
+        span("ALARM", 860, 440, 70, 16),
+        span("ANALOG INPUT", 600, 480, 140, 16),
+        span("SPACE TEMPERATURE", 700, 510, 190, 16),
+        span("BINARY OUTPUT", 600, 540, 150, 16),
+        span("FAN START/STOP", 700, 570, 160, 16),
+        span("SERIES-FAN POWERED VAV BOX SEQUENCE OF OPERATION", 600, 700, 520, 28),
+      ],
+    }]);
+    assert.equal(blocks.length, 1);
+    assert.equal(blocks[0].direction, "above_title");
+    const body = blocks[0].sections.map((section) => section.body).join(" ");
+    assert.match(body, /DAMPER SHALL MODULATE/);
+    assert.doesNotMatch(body, /POINTS LIST|ANALOG INPUT|SPACE TEMPERATURE|FAN START\/STOP/);
+    assert.ok(blocks[0].region[3] <= 400);
+  });
+
+  it("recovers wrapped bottom-caption titles and starts at the nearest authored narrative cluster", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "controls.pdf#16",
+      spans: [
+        span("CONTROLS LEGEND", 80, 60, 300, 28),
+        span("ANALOG INPUT", 80, 105, 120, 16),
+        span("CONTROL SYSTEM ARCHITECTURE", 600, 80, 300, 28),
+        span("GLOBAL CONTROLLER", 600, 125, 170, 16),
+        span("GENERAL:", 80, 360, 90, 16),
+        span("THE RELIEF FAN SHALL ENABLE WHEN THE SPACE IS WARM.", 80, 388, 430, 16),
+        span("THE DAMPER SHALL OPEN AND PROVE POSITION.", 80, 416, 370, 16),
+        span("GENERAL:", 600, 360, 90, 16),
+        span("THE OUTSIDE AIR SENSOR SHALL BE INSTALLED ON THE NORTH WALL.", 600, 388, 460, 16),
+        span("THE CONTROLLER SHALL PROVIDE A CONTINUOUS TEMPERATURE READING.", 600, 416, 480, 16),
+        span("HEAT RELIEF FAN W/ LOUVER", 80, 520, 330, 28),
+        span("SEQUENCE OF OPERATION", 80, 552, 270, 28),
+        span("OUTSIDE AIR", 600, 520, 150, 28),
+        span("TEMPERATURE SEQUENCE OF OPERATION", 600, 552, 400, 28),
+      ],
+    }]);
+    assert.deepEqual(blocks.map((block) => block.title), [
+      "HEAT RELIEF FAN W/ LOUVER SEQUENCE OF OPERATION",
+      "OUTSIDE AIR TEMPERATURE SEQUENCE OF OPERATION",
+    ]);
+    const relief = blocks[0].sections.map((section) => section.body).join(" ");
+    const outside = blocks[1].sections.map((section) => section.body).join(" ");
+    assert.match(relief, /RELIEF FAN SHALL ENABLE/);
+    assert.doesNotMatch(relief, /CONTROLS LEGEND|ANALOG INPUT|OUTSIDE AIR SENSOR/);
+    assert.match(outside, /CONTINUOUS TEMPERATURE READING/);
+    assert.doesNotMatch(outside, /CONTROL SYSTEM ARCHITECTURE|GLOBAL CONTROLLER|RELIEF FAN/);
   });
 });

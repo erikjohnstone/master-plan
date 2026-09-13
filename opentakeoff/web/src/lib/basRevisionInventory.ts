@@ -105,7 +105,8 @@ export async function inventoryForVerifiedBasRevisionWithOptions(workflow: BasWo
           { origin: 'retained_point_interpretation', interpretation_rules: [capture.points.rule_version] }, canonical.points.matrices[i].rows[ri]);
       }
     }
-    const regions = capture.narrative_sources ? interpretBasSequences(capture.narrative_sources) : null;
+    const regions = capture.narrative_sources
+      ? interpretBasSequences(capture.narrative_sources, capture.narrative_rule_version) : null;
     const sequenceMeta = { origin: 'source_rule' as const, interpretation_rules: regions ? [regions.rule_version] : [] };
     const regionRefs = new Map<string, Source[]>();
     for (const ref of basDrawingCapturePages(capture)) {
@@ -122,8 +123,12 @@ export async function inventoryForVerifiedBasRevisionWithOptions(workflow: BasWo
         const evidence = fromSpans(clause.source_spans.map(s => s.span_id));
         add('sequence_clause', clause.clause_id, clause.reading_text || 'Structured narrative block', clause, evidence,
           [link('region', 'sequence_region', region.region_id)], [], sequenceMeta);
-        for (const requirement of clause.requirements) add('sequence_requirement', requirement.requirement_id, requirement.variable,
-          requirement, evidence, [link('clause', 'sequence_clause', clause.clause_id)], [], sequenceMeta);
+        for (const requirement of clause.requirements) {
+          const requirementEvidence = requirement.kind === 'labeled_point_candidate'
+            ? fromSpans(requirement.source_span_ids) : evidence;
+          add('sequence_requirement', requirement.requirement_id, requirement.variable,
+            requirement, requirementEvidence, [link('clause', 'sequence_clause', clause.clause_id)], [], sequenceMeta);
+        }
       }
     }
     // One pinned revision state can consume the same schedule/component
@@ -138,7 +143,8 @@ export async function inventoryForVerifiedBasRevisionWithOptions(workflow: BasWo
     const requiresEquipmentValidator = !preparedWorkflowViews
       || !!(state.assembly && state.assembly.expected_equipment_head !== heads.equipment_head);
     const equipmentValidator = requiresEquipmentValidator && capture.equipment_sources && capture.narrative_sources
-      ? await prepareBasEquipmentRegisterValidatorForVerifiedWorkflow(capture.narrative_sources, capture.equipment_sources, capture.points) : null;
+      ? await prepareBasEquipmentRegisterValidatorForVerifiedWorkflow(
+        capture.narrative_sources, capture.equipment_sources, capture.points, capture.narrative_rule_version) : null;
     const equipmentViews = new Map<string, BasEquipmentAssignmentView>();
     if (heads.equipment_head && preparedWorkflowViews)
       equipmentViews.set(heads.equipment_head, preparedWorkflowViews.equipment);

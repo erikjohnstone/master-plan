@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { basReplyForAgent } from '../src/lib/basAgentSummary.js';
+import { basReplyForAgent, completeBasAnswerMarkdown } from '../src/lib/basAgentSummary.js';
 import { runAgentLoop } from '../src/lib/agentLoop.js';
 
 test('both real BAS replies retain legacy metadata and engineering readiness inside Agent text budget', () => {
@@ -114,13 +114,13 @@ test('complete BAS tool results reach the model as a bounded end-to-end receipt 
     stages: {
       hvac_equipment: { status: 'complete' }, control_schematics_and_risers: { status: 'partial' },
       point_soo: { status: 'partial', workflow_status: 'not_started', blocker_count: 9 },
-      open_review_workspace: { status: 'complete' },
+      open_result_workspace: { status: 'complete' },
     },
     inspections: { point_soo: { status: 'not_started', blocker_count: 9, issue_count: 10,
       next_step: 'Review exact SOO links.', payload: 'y'.repeat(20_000) },
       review_revisions_release: { status: 'not_started', blocker_count: 2, issue_count: 2,
         next_step: 'Review findings.', issue_summary: [{ domain: 'points', code: 'POINT_COLUMNS_UNRESOLVED', severity: 'blocker', count: 2 }] } },
-    workspace: { destination: 'review_revisions_release' }, failures: [],
+    workspace: { destination: 'takeoff_summary' }, failures: [],
   };
   const before = JSON.stringify(payload);
   const compact = basReplyForAgent(payload);
@@ -138,4 +138,52 @@ test('complete BAS tool results reach the model as a bounded end-to-end receipt 
   assert.equal('schematics' in compact.diagram_analysis, false, 'chat summary must not dump individual diagram records');
   assert.match(compact.answer_contract.join(' '), /not_started means available/i);
   assert.equal(JSON.stringify(payload), before, 'Canonical receipt must not be changed');
+});
+
+test('complete BAS deterministic answer separates source coverage from installed truth', () => {
+  const payload = {
+    workflow: 'complete_bas_takeoff', execution_status: 'completed', release_status: 'human_review_required',
+    presentation: { coverage: {
+      equipment_items: 97, point_lists: 0, point_rows: 0, point_type_review_rows: 0,
+      sequences: 13, sequence_sections: 53, soo_point_candidates: 1,
+      control_valve_items: 31, embedded_coil_gaps: 11, control_schematics: 13,
+      riser_diagrams: 0, reconcile_rows: 37, reconcile_match: 36,
+      reconcile_schedule_only: 1, reconcile_plan_only: 0, reconcile_ambiguous: 0,
+    } },
+    control_schematics: { totals: { explicit_points: 74 } },
+    diagram_engineering_readiness: { blockers: [{ code: 'UNRESOLVED_DIAGRAM_CROSSINGS', count: 497, explanation: 'Crossings require review.' }] },
+    reconcile: { summary: { total: 37, match: 36, schedule_only: 1, plan_only: 0, ambiguous: 0, refused_no_scale: 0, refused_no_text: 0 } },
+    inspections: {
+      point_soo: { status: 'current_with_open_findings', blocker_count: 93,
+        next_step: 'No point-list matrix was found in the loaded set. Add the applicable controls point-list/specification source.' },
+    },
+  };
+  const text = completeBasAnswerMarkdown(payload);
+  assert.match(text, /97.*Scheduled equipment records|Scheduled equipment records.*97/is);
+  assert.match(text, /no extractable point-list matrix or rows/i);
+  assert.match(text, /1.*explicit labeled SOO point candidate/is);
+  assert.match(text, /37.*36 MATCH.*1 SCHEDULE_ONLY/is);
+  assert.match(text, /does not prove the project has no points/i);
+  assert.match(text, /human_review_required/i);
+  assert.doesNotMatch(text, /no points found/i);
+});
+
+test('complete BAS next action never invents an identified sequence when controls sources are absent', () => {
+  const text = completeBasAnswerMarkdown({
+    workflow: 'complete_bas_takeoff', release_status: 'human_review_required',
+    presentation: { coverage: {
+      equipment_items: 32, point_lists: 0, point_rows: 0, sequences: 0, sequence_sections: 0,
+      control_valve_items: 0, embedded_coil_gaps: 2, control_schematics: 0, riser_diagrams: 0,
+      reconcile_rows: 17, reconcile_match: 15, reconcile_schedule_only: 2,
+    } },
+    control_schematics: { totals: { explicit_points: 0 }, engineering_readiness: { blockers: [] } },
+    reconcile: { summary: { total: 17, match: 15, schedule_only: 2 } },
+    inspections: {
+      point_soo: { status: 'current_with_open_findings', blocker_count: 29,
+        next_step: 'Inspect the original sequence/page. Review unhandled wording.' },
+    },
+  });
+  assert.match(text, /None were extracted from this loaded set/i);
+  assert.match(text, /supply missing controls sources|review the cited discovery exceptions/i);
+  assert.doesNotMatch(text, /Inspect the original sequence\/page/i);
 });
