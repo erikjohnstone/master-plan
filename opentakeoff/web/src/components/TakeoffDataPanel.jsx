@@ -215,6 +215,7 @@ export default function TakeoffDataPanel({
     ?? corpusMeta?.totals?.rows
     ?? null;
   const takeoffId = corpusMeta?.takeoff_id || null;
+  const completeBasRun = corpusMeta?.kind === "complete_bas_takeoff";
   const compiledOk = takeoffId
     && lockedTotal != null
     && lines.length === lockedTotal
@@ -289,10 +290,10 @@ export default function TakeoffDataPanel({
               fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", letterSpacing: "0.14em",
               textTransform: "uppercase", color: "var(--ink-secondary)",
             }}>
-              {takeoffId || "Takeoff"}
+              {corpusMeta?.display_label || takeoffId || "Takeoff"}
             </div>
             <div style={{ fontSize: "var(--fs-2xl)", fontWeight: 650, marginTop: 2, letterSpacing: "-0.01em" }}>
-              {projectName || "Project takeoff"}
+              {projectName || (completeBasRun ? "BAS project takeoff" : "Project takeoff")}
             </div>
             <div style={{
               display: evidenceTab ? 'none' : "flex", flexWrap: "wrap", gap: "6px 14px",
@@ -307,7 +308,7 @@ export default function TakeoffDataPanel({
               data-evidence={rows.length}
               data-takeoff-id={takeoffId || ""}
             >
-              <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{lines.length}</strong> {corpusMeta?.bas_math ? "original schedule lines" : "lines"}</span>
+              <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{lines.length}</strong> {completeBasRun ? "takeoff lines" : corpusMeta?.bas_math ? "original schedule lines" : "lines"}</span>
               <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{familyGroups.length}</strong> schedules</span>
               {qtyTotal != null && (
                 <span data-takeoff-ea={qtyTotal}><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{qtyTotal}</strong> EA</span>
@@ -325,6 +326,8 @@ export default function TakeoffDataPanel({
                 : "Source-linked findings across the saved BAS workflow. Resolve inputs in their original workspace; this view does not grant approval."
                 : tab === "equipment" ? "Source-backed equipment identities and explicit template assignments. Original schedule evidence stays unchanged."
                 : tab === "points" ? "Original point-list matrices with source-bound interpretation. No installed quantities are inferred."
+                : tab === "takeoff" && completeBasRun
+                ? "Consolidated Agent run — equipment, BAS points, SOO, valves and coil gaps, diagram evidence, and schedule-to-plan reconciliation. Review exceptions and workflow decisions before release."
                 : tab === "takeoff" && corpusMeta?.bas_math
                 ? "BAS engineering is shown separately from the original schedule rows. Review source coverage and unresolved constraints before procurement."
                 : tab === "takeoff"
@@ -335,7 +338,7 @@ export default function TakeoffDataPanel({
           {!evidenceTab && <><input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder={corpusMeta?.bas_math ? "Filter points or schedule rows…" : tab === "takeoff" ? "Filter tag, schedule, field…" : "Filter tag, field, sheet…"}
+            placeholder={completeBasRun ? "Filter tag, schedule, field…" : corpusMeta?.bas_math ? "Filter points or schedule rows…" : tab === "takeoff" ? "Filter tag, schedule, field…" : "Filter tag, field, sheet…"}
             style={{
               width: 220, padding: "9px 11px", borderRadius: "var(--r-1)", marginTop: 4,
               border: "1px solid var(--ink-faint)", background: "var(--paper)",
@@ -343,14 +346,14 @@ export default function TakeoffDataPanel({
             }}
           />
           <button type="button" onClick={() => runExport("csv")} disabled={exportDisabled || !!busy}
-            title={corpusMeta?.bas_math ? "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
-            style={{ ...btnStyle, marginTop: 4 }}>{busy === "csv" ? "…" : corpusMeta?.bas_math ? "Rows CSV" : "CSV"}</button>
+            title={corpusMeta?.bas_math ? completeBasRun ? "Consolidated takeoff rows. Use Export BAS JSON for reviewed engineering results." : "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
+            style={{ ...btnStyle, marginTop: 4 }}>{busy === "csv" ? "…" : corpusMeta?.bas_math && !completeBasRun ? "Rows CSV" : "CSV"}</button>
           <button type="button" onClick={() => runExport("xlsx")} disabled={exportDisabled || !!busy}
-            title={corpusMeta?.bas_math ? "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
-            style={{ ...btnStyle, marginTop: 4 }}>{busy === "xlsx" ? "…" : corpusMeta?.bas_math ? "Rows Excel" : "Excel"}</button>
+            title={corpusMeta?.bas_math ? completeBasRun ? "Consolidated takeoff rows. Use Export BAS JSON for reviewed engineering results." : "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
+            style={{ ...btnStyle, marginTop: 4 }}>{busy === "xlsx" ? "…" : corpusMeta?.bas_math && !completeBasRun ? "Rows Excel" : "Excel"}</button>
           <button type="button" onClick={() => runExport("pdf")} disabled={exportDisabled || !!busy}
-            title={corpusMeta?.bas_math ? "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
-            style={{ ...btnStyle, marginTop: 4 }}>{busy === "pdf" ? "…" : corpusMeta?.bas_math ? "Rows PDF" : "PDF"}</button>
+            title={corpusMeta?.bas_math ? completeBasRun ? "Consolidated takeoff rows. Use Export BAS JSON for reviewed engineering results." : "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
+            style={{ ...btnStyle, marginTop: 4 }}>{busy === "pdf" ? "…" : corpusMeta?.bas_math && !completeBasRun ? "Rows PDF" : "PDF"}</button>
           </>}
           {!evidenceTab && typeof onClear === "function" && (
             <button type="button" onClick={onClear} disabled={!rows.length && !corpusMeta?.bas_math}

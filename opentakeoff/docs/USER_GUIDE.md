@@ -266,6 +266,12 @@ includes the complete BAS record, independent of table filters. Autosave and
 These are named scheduled members and reviewed assignments, not installed counts
 or approved releases. The editor adds no canvas toolbar or floating panel.
 
+When the Agent runs **Run a BAS takeoff**, Takeoff opens as a consolidated **BAS
+project takeoff**. The heading represents the complete Agent journey, not the
+last equipment, points, sequence or valve compiler to finish. Use **Takeoff** for
+the combined cited rows and reconciliation, then the adjacent BAS workspaces for
+source interpretation and human review before release.
+
 On the development branch, **Review & changes → Drawing changes** manages
 source-set and page-correspondence history separately from equipment decisions.
 Choose a retained **Evidence capture**, then **New source set** to select pages.

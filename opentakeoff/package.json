@@ -6,6 +6,7 @@
     "mcp"
   ],
   "scripts": {
+    "dev": "node web/scripts/dev.mjs",
     "typecheck": "turbo run typecheck",
     "test:shared-path": "turbo run test:shared-path",
     "test:workflows": "turbo run test:workflows",

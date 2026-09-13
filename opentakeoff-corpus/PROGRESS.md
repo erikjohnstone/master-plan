@@ -1968,3 +1968,43 @@ does not prove perfect recognition on arbitrary drawings, complete semantic
 port/branch graphs for every schematic, or production-grade symbol recognition
 in dense affine cases. Those outputs remain explicit refusals/review items; the
 separate symbol workstream owns that remaining recognition frontier.
+
+### Local-runtime and consolidated-workspace continuation — 2026-09-13
+
+**Shared-path decision:** no extraction, matching, quantity, table, citation or
+bbox rule changed in this continuation. The consolidated Takeoff label and local
+launcher are browser/development presentation and runtime concerns, so they stay
+surface-specific. VectorGrid and the separate symbol-recognition workstream are
+untouched.
+
+- A normal local Vite start could appear healthy while using system Python, then
+  lose all five retained BAS workflows when the Agent crossed into `bas_engine`
+  (Pydantic v1/v2 mismatch). `npm run dev` at the `opentakeoff` root now validates
+  Python 3.11+, Pydantic v2 and the installed BAS package, provisions the ignored
+  repo-local `.venv-bas` on first use, and launches Vite with the verified
+  interpreter. The root launcher also preserves ordinary Vite flags. A real
+  root-command launch on `127.0.0.1:5184` passed without a second terminal or a
+  manually exported BAS-Python variable.
+- The five compilers previously left Takeoff labeled as the final embedded-coil
+  subcompile. The browser now applies presentation-only `complete_bas_takeoff`
+  metadata after every canonical compile/reconcile/inspection result is retained.
+  The workspace reads **BAS PROJECT TAKEOFF**, explains the consolidated evidence
+  domains, and keeps its mandatory human-review gate. A regression assertion
+  rejects both a missing consolidated heading and the stale
+  `T-VALVE-EMBEDDED-01` heading.
+- The exact Agent prompt **`Run a BAS takeoff.`** was replayed from a fresh browser
+  against the canonical focus-corpus copy of the 29-sheet ITD District 1
+  Laboratory PDF. Its SHA-256 equals the already reported raw ITD proof, so this
+  is a launcher/UI regression replay, **not a sixth independent project**.
+  Post-index wall time was **38.8 s** under the **180 s** SLA. Result: **97** cited
+  takeoff lines, **13 SOOs / 53 sections**, **31 control-valve items**, **13 control
+  schematics**, **74 explicit schematic point tokens**, and **37** reconcile rows
+  (**36 MATCH / 1 SCHEDULE_ONLY**, **48** grounded instances). It truthfully
+  reports **0** typed point lists and **0** risers for this source rather than
+  fabricating either. The Takeoff reader exposed **321** row citations and **24**
+  table citations; CSV export, five workflow inspections, and the human-review
+  release state passed with no page or console errors.
+- Verification after the continuation: web **3,085 pass / 0 fail / 13 intentional
+  skips**, typecheck, production build, and lint (**0 errors; the same 3 pre-existing
+  warnings**) pass. Live proof artifacts are at
+  `/tmp/opentakeoff-complete-bas-agent-itd-d1-launcher/` on the coordinator host.

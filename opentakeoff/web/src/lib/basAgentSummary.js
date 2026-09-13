@@ -26,7 +26,8 @@ function completeBasReply(payload) {
     release_status: payload.release_status,
     human_review_required: payload.human_review_required,
     extraction_stages: Object.fromEntries(Object.entries(payload.stages || {})
-      .filter(([stage]) => !Object.hasOwn(inspections, stage) && stage !== "open_review_workspace")
+      .filter(([stage]) => !Object.hasOwn(inspections, stage)
+        && stage !== "open_review_workspace" && stage !== "present_complete_bas_takeoff")
       .map(([stage, value]) => [stage, {
       status: value?.status || "unknown",
       error: value?.error || null,

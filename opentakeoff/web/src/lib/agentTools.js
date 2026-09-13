@@ -1262,7 +1262,7 @@ const COMPLETE_BAS_RECONCILE_CATEGORIES = [
  * contains no extraction, matching, reconciliation, or BAS engineering rules.
  */
 export async function runCompleteBasTakeoff(ctx, args = {}) {
-  const required = ["compileCorpusTakeoff", "analyzeControlSchematics", "reconcileSchedulePlan", "inspectBasWorkflow", "openBasWorkspace"];
+  const required = ["compileCorpusTakeoff", "analyzeControlSchematics", "reconcileSchedulePlan", "inspectBasWorkflow", "presentCompleteBasTakeoff", "openBasWorkspace"];
   const missing = required.filter((name) => typeof ctx?.[name] !== "function");
   if (missing.length) return { error: `Complete BAS takeoff is not wired: ${missing.join(", ")}.`, execution_status: "blocked" };
 
@@ -1370,6 +1370,21 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
       error: inspections[domain]?.error || null,
     };
   }
+  // Presentation only. The five compilers and reconcile above remain the
+  // canonical truth; this replaces the misleading last-subcompile heading in
+  // the browser with one consolidated BAS-project heading. It must happen
+  // after every result row has reached Takeoff and before the review workspace
+  // opens. No quantity or readiness is calculated here.
+  const presentation = {
+    schema_version: "opentakeoff.complete_bas_presentation.v1",
+    kind: "complete_bas_takeoff",
+    display_label: "BAS PROJECT TAKEOFF",
+    sheet_count: Math.max(0, ...Object.values(compiles).map((value) => Number(value?.sheet_count || 0))),
+    workstream_count: COMPLETE_BAS_COMPILE_STAGES.length,
+    bas_math: compiles.bas_points?.bas_math || null,
+  };
+  const presented = await safely("present_complete_bas_takeoff", () => ctx.presentCompleteBasTakeoff(presentation));
+  stages.present_complete_bas_takeoff = { status: presented?.error ? "failed" : "complete", error: presented?.error || null };
   const workspace = await safely("open_review_workspace", () => ctx.openBasWorkspace("review_revisions_release"));
   stages.open_review_workspace = { status: workspace?.error ? "failed" : "complete", error: workspace?.error || null };
   return {
@@ -1385,6 +1400,7 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
     diagram_engineering_readiness: controlSchematics.engineering_readiness || null,
     reconcile,
     inspections,
+    presentation,
     workspace,
     failures,
     bas_math_policy: args.bas_math ? "user_or_evidence_supplied" : "not_supplied_unresolved_preserved",
