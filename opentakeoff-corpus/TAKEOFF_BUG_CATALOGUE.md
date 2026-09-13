@@ -975,7 +975,7 @@ yet; this is the first concrete, measured reason why, not a new admission.
 
 ---
 
-### B-17 — a real, correctly-extracted table loses its own title even though the title text sits at a normal, in-range gap (NOT FIXED — found, traced, disclosed)
+### B-17 — a real, correctly-extracted table loses its own title even though the title text sits at a normal, in-range gap (ROOT CAUSE CONFIRMED 2026-09-13 — not yet fixed; 2 related reconciliation gaps found and fixed along the way)
 
 **Where:** `063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9` — found
 during the same Demo Corpus hand-verification pass as B-16, this document
@@ -1080,6 +1080,96 @@ set's own missed-checking pass.**
 UNIT` table (1 row: `WFU-62-1`, capacity/pump data all correct) surfaces
 as `title: ""` despite its own real title sitting at an ordinary position
 directly above the table. Same signature, same non-fix.
+
+**ROOT CAUSE CONFIRMED 2026-09-13 (code-level, precise — not fixed, see
+below for why).** Traced live on the original 063_MT#9 case via a
+`qpdf`-sliced single page and temporary instrumentation (added,
+exercised, then fully reverted — no debug code left in the tree) printed
+at both `scheduleTableFromODL`'s own `refuse()`/successful-build return
+points and `nearbyScheduleCaption`'s own candidate list. The real
+mechanism is neither a dedup/completeness scoring bug nor a stray-
+candidate-wins bug (both plausible guesses this pass initially chased
+and disproved by direct measurement) — it's simpler and more specific:
+
+**vectorgrid genuinely tries two different row-boundary hypotheses for
+the SAME physical MEP COORDINATION SCHEDULE region**, confirmed via the
+exact instrumented sequence: a first candidate (raw ODL bbox `[1109.4,
+1007.28,2189.04,1094.88]`) is built with its title CORRECTLY recovered
+in-grid (`"MEP COORDINATION SCHEDULE - EXTRUDER LAB"`, `nearbyScheduleCaption`
+found nothing to improve, meaning `titleCell` already succeeded) — but
+its own row-keying then fails and it is refused whole: `refuse("no keyed
+data rows (kind equipment, key column \"MARK\")")`. `refuse()` returns
+bare `null`; the correctly-recovered title is discarded with the rest of
+the candidate, with nothing carried forward. A SECOND, separate candidate
+(raw bbox `[1109.4,1066.08,2189.04,1158.48]`, shifted ~59pt down —
+excluding the title row) is built for what is structurally the same
+table; its own row-keying succeeds (`rows: 2`), but because its own
+narrower region starts below the title row, both `titleCell` and
+`nearbyScheduleCaption` find nothing, and it survives into the graph with
+`title: null` — the table this bug's every measured instance actually
+shows.
+
+This is a THIRD confirmed instance of vectorgrid emitting more than one
+candidate region for one real table (same general family as B-26's
+disjoint block-split and B-38's overlapping-candidate duplicate) — but
+narrower and more specific than either: here the two candidates are
+close variations of the SAME row-boundary decision (does the title row
+belong inside the table's own detected grid or not), not a header/data
+block split or a bottom-edge ambiguity.
+
+**Why this is disclosed without a fix.** Closing this properly needs new
+plumbing, not a local change: `refuse()`'s only signal today is a reason
+string via `opts.reject`, with no channel to carry a correctly-recovered
+title (or its evidence bbox) out of a candidate that is about to be
+discarded for an unrelated reason (bad row-keying). A real fix means (a)
+widening the reject channel to optionally carry an orphaned title, (b)
+collecting these per-sheet across `extractScheduleTablesFromVectorGrid`'s
+own loop over `reply.tables` (six call sites in this codebase build a
+`ScheduleTable` via this same function, so the plumbing has to stay
+generic), and (c) a later pass that applies an orphaned title to a
+title-less survivor only when their regions are close/overlapping enough
+to be confident they name the same physical table — new cross-candidate
+stitching logic with its own false-positive risk (wrongly attaching one
+table's title to an unrelated neighbor) that needs real corpus
+validation, not a guess under time pressure, per this file's own
+standing rule.
+
+**Two related, genuinely independent reconciliation gaps found and fixed
+along the way (real improvements, verified NOT to close this specific
+063_MT#9 case — see below).** While tracing the above, direct code
+reading of `web/src/lib/tableExtractorReconcile.ts` turned up two
+existing reconciliation functions with the identical missing-title-
+carryover gap, for a case this specific bug doesn't hit (its own losing
+candidate is refused before either function ever sees it) but that
+could plausibly affect some other document in this 500+ corpus where two
+genuinely competing FULL candidates (not one refused, one surviving)
+reach these comparisons:
+
+- `dedupCrossSourceTables` — drops the weaker of two overlapping PRIMARY
+  tables (IoU >= 0.72) purely by a headers/cells/duplicate-key score with
+  only a token `+5` title bonus, small enough that a handful of extra
+  cells on the losing side always wins regardless. Fixed: when dropping
+  a losing candidate, if it has a title and the winner doesn't, the title
+  now carries over onto the winner before the drop.
+- `adoptVectorGridTables` — when vectorgrid's own reading of a sheet
+  displaces an existing (pre-vectorgrid) table by having more/equal
+  headers and cells, the existing table's title was discarded outright
+  with no carryover at all (not even a token bonus). Fixed identically:
+  a displaced table's own title, if the winning vectorgrid table lacks
+  one, now survives onto it.
+
+Both fixes are metadata-only (never touch rows, cells, region, or the
+completeness comparison itself; never overwrite a winner's own real
+title) and are covered by 3 new unit tests in the new `test/
+tableExtractorReconcile.test.ts` (the title-carryover case, a case
+proving a winner's own title is never overwritten, and a case proving
+tables that don't overlap enough are never merged). All 212 tests across
+`sheetgraph.test.ts`/`vectorTakeoffPipeline.test.ts`/
+`scheduleLanguageScan.test.ts`/`tableExtractorReconcile.test.ts`/
+`schedulePlanReconcile.test.ts` pass. Confirmed live that neither change
+affects 063_MT#9 itself (re-ran before/after: `title: null` unchanged) —
+these are real, tested, disclosed improvements to a general risk the
+reconciliation layer had, not a claimed fix for this specific bug.
 
 ---
 

@@ -175,7 +175,37 @@ export function adoptVectorGridTables(
       if (bc.headers !== existing.headers) return bc.headers > existing.headers;
       return bc.cells >= existing.cells;
     });
-    if (vectorGridWins) { displaced++; continue; }
+    if (vectorGridWins) {
+      // COMPLETENESS DECIDES THE ROWS/CELLS — IT SHOULD NOT ALSO COST THE
+      // TITLE the losing (existing) reading already correctly recovered.
+      //
+      // Real, corpus-found (TAKEOFF_BUG_CATALOGUE.md B-17,
+      // 063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9's own MEP
+      // COORDINATION SCHEDULE, confirmed recurring on 7 more documents):
+      // the pre-vectorgrid geometric reading's own region happened to
+      // start right at the title row, so its title-recovery correctly
+      // found "MEP COORDINATION SCHEDULE - EXTRUDER LAB" — but its region
+      // ended too early to reach every real data row, so vectorgrid's own,
+      // more complete reading of the same table (whose region starts
+      // lower, missing the title row entirely) wins here and displaces
+      // it. Before this fix the title went with it: the winning vectorgrid
+      // table carries `title: null` with no signal anything is missing.
+      // A displaced existing table's title is not competing evidence about
+      // which reading is more complete — both readings agree (by
+      // overlapping, and here by NOT hitting the ambiguous-merge guard
+      // above) that they read the SAME physical table, so a title either
+      // one recovered should survive onto whichever one wins the rows.
+      // Only fills a genuine gap (never overwrites vectorgrid's own real
+      // title), and only touches the ONE overlapping candidate lacking a
+      // title, so a genuinely ambiguous multi-candidate overlap is
+      // untouched either way.
+      if (t.title) {
+        const untitled = overlapping.find((b) => !b.title);
+        if (untitled) untitled.title = t.title;
+      }
+      displaced++;
+      continue;
+    }
     kept.push(t);
   }
   const acceptedBuilt = built.filter((b) => !kept.some((t) => t.sheet === sheetKey && overlaps(t, b)));
@@ -240,6 +270,31 @@ export function dedupCrossSourceTables(g: SheetGraph, iouThreshold = 0.72): numb
         c.headers * 10000 + c.cells * 10 - d * 1000 + (t.title ? 5 : 0) + (t.kind !== "reference" ? 3 : 0);
       const sa = score(a, ca, da);
       const sb = score(b, cb, db);
+      const winner = sb > sa ? b : a;
+      const loser = sb > sa ? a : b;
+      // THE SCORE PICKS THE MORE COMPLETE ROWS/CELLS — IT SHOULD NOT ALSO
+      // THROW AWAY A REAL TITLE THE LOSER HAPPENED TO RECOVER.
+      //
+      // Real, corpus-found (TAKEOFF_BUG_CATALOGUE.md B-17,
+      // 063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9's own MEP
+      // COORDINATION SCHEDULE, confirmed recurring on 7 more documents):
+      // vectorgrid sometimes emits two overlapping candidate regions for
+      // ONE physical table — one whose own bounds start right at the
+      // title row (so its title-recovery correctly finds "MEP
+      // COORDINATION SCHEDULE - EXTRUDER LAB") but whose bounds end too
+      // early to catch every real data row beneath it, and a second whose
+      // bounds start lower (missing the title row entirely, so its own
+      // title-recovery finds nothing) but whose bounds reach every real
+      // row. The `+5` title bonus above is deliberately small relative to
+      // `headers`/`cells` (the more complete candidate must still win the
+      // ROW DATA), but that same completeness win was silently discarding
+      // a title the OTHER candidate had already correctly, independently
+      // recovered for what both candidates agree (IoU >= iouThreshold) is
+      // the same physical table — the title is not competing evidence
+      // about which candidate is more complete, so it should survive onto
+      // whichever candidate wins. Never overwrites a winner's OWN title —
+      // only fills a genuine gap.
+      if (!winner.title && loser.title) winner.title = loser.title;
       if (sb > sa) drop.add(i);
       else drop.add(j);
     }
