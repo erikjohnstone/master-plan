@@ -286,6 +286,28 @@ selection process (e.g. "every Nth document from a sorted manifest,
 stratified by discipline") gets written down here so nobody can wonder later
 whether it was cherry-picked.
 
+**Drawn and frozen 2026-09-13** (`keys/DEMO_CORPUS.txt`,
+`bakeoff/draw_demo_corpus.py`) using exactly this section's own suggested
+method, verbatim: every Nth document from each stratum's own sorted
+manifest, no random seed at all — fully deterministic, so the list needs no
+seed to reproduce and there is no draw to "re-roll." Same real 4-stratum
+population as `keys/HELDOUT.txt` (Vol1/Vol2 × HVAC-primary/another-trade-
+primary — see that entry above for why this corpus does not support an even
+six-way discipline split), each stratum contributing its own proportional
+share of the 30-document floor (rounded up, so the small tail strata are
+never zero): **32 documents, 821 real tables** — 8 Vol1-HVAC, 1 Vol1-other,
+20 Vol2-HVAC, 3 Vol2-other. Overlaps `keys/HELDOUT.txt` on several documents,
+exactly as this section permits.
+
+**Not yet graded — this is the set, not the score.** Naming the 32
+documents is the "declared first, and frozen" half; the per-document,
+per-table hand-grading bar below (self-supervised MISSED=0, every box blind-
+graded, every cell hand-transcribed, no auto-accept and no cellocr.py
+shortcut anywhere in this set) is real, substantial labor across 821 tables
+that has not been started. `keys/DEMO_CORPUS.txt`'s own header says so
+explicitly, so a future session reading only that file cannot mistake "the
+set exists" for "the set passed."
+
 **The bar, per document, per table:**
 
 - Every non-rasterized table on it is found — self-supervised MISSED = 0 on
