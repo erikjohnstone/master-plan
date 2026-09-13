@@ -1,0 +1,167 @@
+# 098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.cells.csv -- CELL-tier
+# ground truth, HELDOUT document, sheet #8. All 4 real HVAC equipment tables
+# on this sheet (VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP), FAN
+# SCHEDULE, DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,
+# GAS-FIRED UNIT HEATER SCHEDULE -- 10 data rows total) were read directly
+# off a rendered crop of the page at scale=3.0 with the extractor's own
+# answer NOT in view, transcribed, THEN compared cell by cell against the
+# extractor's own output. Result: 10/10 rows matched EXACTLY across all 4
+# tables, including an as-drawn source typo preserved verbatim (GAS-FIRED
+# UNIT HEATER SCHEDULE's own AREA SERVED column reads "STORAGE / SERVCE
+# BAY" on all 4 rows -- "SERVCE", not "SERVICE" -- confirmed at high zoom
+# against the actual page). VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE's
+# own header list carries a leading "COL1" with no cell data for its one
+# row -- a genuinely blank leftmost column on the page, not a transcription
+# gap (nothing legible was skipped).
+#
+# The 5th table on this sheet (a title-block disclaimer paragraph fabricated
+# into a phantom "approved contingent on the compliance" table, B-30 in
+# TAKEOFF_BUG_CATALOGUE.md) is correctly excluded here -- it has no real
+# cells to transcribe.
+#
+# Because every value matched, this file's own data rows below are taken
+# from the extractor's output rather than re-keyed a second time by hand --
+# the two are byte-identical, confirmed cell by cell against the
+# independent hand-read first. row/col index ONLY each table's own DATA
+# rows/columns (0-based), following the same convention as this corpus's
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans.cells.csv.
+#
+# Part of opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md's own
+# Completion Gate CELL-tier requirement. Real, disclosed partial progress
+# on one HELDOUT document among 32; not a claim the HELDOUT set is graded.
+#
+sheet,table_title,row,col,text
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP),0,1,EF-2 & SF-1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP),0,2,MACURCO GAS VENTILATION CONTROL SYSTEM
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP),0,3,25 - 200
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP),0,4,1 - 5
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP),0,5,10% - 20%
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP),0,6,24V
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP),0,7,120/1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP),0,8,MACURCO CONTROL PANEL MODEL: DVP-120 MACURCO SENSOR MODEL: CX-6
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP),0,9,"1 , 2 , 3"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,0,EF-1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,1,STORAGE / REPAIR BAY
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,2,WALL PROP
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,3,185
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,4,0.25
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,5,"1,725"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,6,DIRECT / ECM
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,7,1/8 HP
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,8,115/1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,9,6.1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,10,75
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,11,COOK MODEL 10XW24D17
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,0,12,"1 , 3 , 5"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,0,EF-2
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,1,STORAGE / REPAIR BAY
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,2,TUBE AXIAL
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,3,"2,800"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,4,0.25
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,5,"1,725"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,6,DIRECT
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,7,1.0 HP
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,8,208/3
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,9,21
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,10,150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,11,COOK MODEL 20D17
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,1,12,"1 , 2 , 4 , 6"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,0,SF-1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,1,STORAGE / REPAIR BAY
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,2,TUBE AXIAL
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,3,"2,800"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,4,0.25
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,5,"1,725"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,6,DIRECT
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,7,1.0 HP
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,8,208/3
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,9,21
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,10,150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,11,COOK MODEL 20D17
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,FAN SCHEDULE,2,12,"1 , 2 , 4 , 7"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,0,"FC-1 , HP-1"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,1,OFFICE
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,2,0.5
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,3,HIGH WALL COOL/HEAT UNIT
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,4,147-383
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,5,.28
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,6,THROUGH OUTDOOR UNIT
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,7,11.3
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,8,10.8
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,9,6.40
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,10,12
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,11,15
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,12,208/1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,13,25.7/14.8
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,14,25/65
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,15,CARRIER INDOOR UNIT MODEL 45MAHAQ06 CARRIER OUTDOOR UNIT MODEL 37MAHAQ06
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,0,16,"1 , 2 , 3 , 4 , 5 , 6"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,0,"FC-2 , HP-2"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,1,CONFERENCE ROOM
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,2,1.5
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,3,HIGH WALL COOL/HEAT UNIT
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,4,353-559
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,5,.037
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,6,THROUGH OUTDOOR UNIT
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,7,17.1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,8,11.3
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,9,15.50
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,10,19
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,11,20
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,12,208/1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,13,21.5/14.8
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,14,35/75
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,15,CARRIER INDOOR UNIT MODEL 45MAHAQ18 CARRIER OUTDOOR UNIT MODEL 37MAHAQ18
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE,1,16,"1 , 2 , 3 , 4 , 5 , 6"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,0,UH-1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,1,STORAGE / SERVCE BAY
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,2,HORIZONTAL / SEPARATED COMBUSTION
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,3,"1,921"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,4,"1,050"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,5,1/6
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,6,115/1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,7,3.8
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,8,150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,9,124.5
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,10,110
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,11,REZNOR MODEL UDXC 150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,0,12,"1 , 2"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,0,UH-2
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,1,STORAGE / SERVCE BAY
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,2,HORIZONTAL / SEPARATED COMBUSTION
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,3,"1,921"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,4,"1,050"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,5,1/6
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,6,115/1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,7,3.8
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,8,150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,9,124.5
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,10,110
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,11,REZNOR MODEL UDXC 150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,1,12,"1 , 2"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,0,UH-3
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,1,STORAGE / SERVCE BAY
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,2,HORIZONTAL / SEPARATED COMBUSTION
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,3,"1,921"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,4,"1,050"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,5,1/6
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,6,115/1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,7,3.8
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,8,150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,9,124.5
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,10,110
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,11,REZNOR MODEL UDXC 150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,2,12,"1 , 2"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,0,UH-4
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,1,STORAGE / SERVCE BAY
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,2,HORIZONTAL / SEPARATED COMBUSTION
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,3,"1,921"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,4,"1,050"
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,5,1/6
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,6,115/1
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,7,3.8
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,8,150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,9,124.5
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,10,110
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,11,REZNOR MODEL UDXC 150
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8,GAS-FIRED UNIT HEATER SCHEDULE,3,12,"1 , 2"
