@@ -1439,6 +1439,60 @@ an otherwise 14/14 clean result.
 
 ---
 
+### B-25 — a whole schedule sheet, correctly role-classified, yields ZERO tables: an entire transposed-format page (units as columns, not rows) is completely unreachable (NOT FIXED — found, traced, disclosed)
+
+**Where:** `037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#40`
+("MECHANICAL SCHEDULES", sheet MJ110) — found during the same Demo Corpus
+hand-verification pass, next document after 015_VA. This is the single
+worst result measured in this entire pass, by a wide margin.
+
+**Measured, hand-graded against the render first:** this page carries at
+least 6 real table blocks — two `RETURN FANS` tables (12 and 7 real fan
+units respectively, 19 total), `VARIABLE FREQUENCY DRIVES` (39 rows),
+`AIR COOLED WATER CHILLERS` (1 row), `SINGLE DUCT SUPPLY AIR TERMINALS`
+(6 rows), `AIR DEVICES` (2 rows) — roughly 67 real data rows in total.
+Every one of these tables is drawn TRANSPOSED relative to every other
+schedule measured in this pass: each column is one real equipment unit
+(`RF-1`, `RF-1A`, `RF-1B`, …), and each row is a spec label (`AREA
+SERVED`, `BASIS OF DESIGN`, `AIRFLOW (CFM)`, …) whose value is read
+ACROSS the row, not down a column. `production-graph-cli.mjs`'s full
+output for this entire 60-sheet document contains only 5 tables total,
+NONE of them from page 40 — its own `schedules: []` sheet-graph entry is
+empty. This is not a false-negative role classification: the sheet-graph
+record for `#40` is correctly tagged `role: "schedule"` (confidence 0.5,
+evidence `"MECHANICAL SCHEDULES"`) — the page is correctly recognized as
+a schedule sheet, and the table-extraction step running on it still finds
+nothing at all. The other 5 tables that DO exist in this document (pages
+31, 54-57) are all small reference-kind fragments unrelated to this
+page's own content — no fabrication, no partial credit, simply absent.
+
+**Relationship to already-catalogued work:** task #64 ("Fix vectorgrid/
+ODL over-merge that corrupted 25_WA's stacked schedules") was closed
+under the description "was mis-diagnosed as 'transposed matrix'" —
+meaning a PRIOR transposed-table complaint on a different document turned
+out to have a different root cause. This document's own table shape is
+genuinely, visibly transposed (spec labels down the left column, one real
+equipment unit per column to the right), and gets a completely different,
+much worse outcome (zero tables, not a corruption) than every row-per-
+unit schedule measured elsewhere in this pass. Whether the table-region
+detector's column/row clustering logic has any handling at all for this
+orientation was not traced into the code, per this file's standing rule
+against guessing at a fix under time pressure — but the sheer completeness
+of the miss (not one of ~67 rows survives in any form) suggests the
+detector may simply never consider this orientation as a candidate table
+shape at all.
+
+**Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 at
+the most extreme end measured in this pass — an entire correctly-
+identified schedule sheet's real content (67 rows across 6 tables) is
+100% absent from the pipeline's output, with no partial recovery and no
+disclosed reason. If transposed schedules are common elsewhere in the
+corpus (return-fan and AHU schedules with many units are a routine HVAC
+drafting convention), this could be a systemic recall gap much larger
+than any single document.
+
+---
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.
