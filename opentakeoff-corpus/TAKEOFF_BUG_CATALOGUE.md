@@ -1927,6 +1927,61 @@ and potentially serious failure mode worth prioritizing: it silently
 under-reports a real table's own content without any signal (no missing
 title, no absent table) that anything is wrong.
 
+**CONFIRMED RECURRING 2026-09-13 — a 3rd document, and by far the most
+severe instance of this truncation shape found yet, affecting nearly
+every transposed table on one sheet.**
+`21_VA_OrangeCounty_PublicSafetyBldg.pdf`, sheets M-601 (#50) and M-602
+(#51) — found continuing the HELDOUT set's own missed-checking pass.
+
+**M-601 (#50):** `AIR HANDLING UNIT SCHEDULE` (a transposed table, AHU-1/
+AHU-2 as columns) hand-confirmed at **51 real rows** via `textSpans()`
+(6 identification rows + 41 spec rows across COOLING COIL/SUPPLY FAN/
+RETURN FAN/FILTER SECTION groups + 4 summary rows) — the extractor
+reports `rows: 35`, a confirmed **16-row truncation** on a table it
+otherwise titles correctly. The sheet's other table, `VAV TERMINAL BOX
+SCHEDULE` (57 rows, one row per VAV unit), extracts exactly right,
+confirmed via `textSpans()` designation-count.
+
+**M-602 (#51), 10 transposed equipment-comparison tables, hand-confirmed
+against the extractor's own reported counts (`textSpans()`-verified
+where noted):** `AIR COOLED CHILLER SCHEDULE` **26 real → 11 reported
+(-15, textSpans-verified)**; `UNIT HEATER SCHEDULE` **14 real → 4
+reported (-10, textSpans-verified)**; `COMPUTER ROOM UNIT SCHEDULE` **24
+real → 16 reported (-8, textSpans-verified)**; `BOILER SCHEDULE` 13 real
+→ 11 reported (-2); `FAN SCHEDULE` **12 real → 11 reported (-1,
+textSpans-verified)**; `AIR COOLED CONDENSING UNIT SCHEDULE` 10 real →
+9 reported (-1); `DUCTLESS SPLIT SYSTEM UNIT SCHEDULE` 9 real → 8
+reported (-1); `PUMP SCHEDULE` 16 real → 15 reported (-1); `AIR
+DISTRIBUTION DEVICE SCHEDULE` 8 real → 7 reported (-1); `RELIEF /
+EXHAUST HOOD SCHEDULE` 7 real → 6 reported (-1). **Every single one of
+the 10 tables on this sheet under-counts — never over-counts, never
+exact** — with the truncation magnitude tracking table density (the
+3 densest tables lose 8-15 rows each; the 7 simpler ones each lose
+exactly their own trailing `REMARKS` row).
+
+**Relationship to already-catalogued bugs:** confirms this bug's own
+"large fraction of a correctly-titled table's real rows silently
+dropped" shape a 3rd time, and sharply narrows it: every affected table
+across both confirmed documents (14_OR, this one) is **transposed-
+format** (attributes as rows, equipment units as columns) — this bug's
+original `FAN COIL UNITS` instance was a per-unit-row table, so the
+shape isn't exclusively transposed, but this sheet's unanimous,
+density-scaled under-count on 10/10 transposed tables is the first
+evidence that transposed layout specifically, and independently of
+absolute row count, correlates with SOME truncation (every table here
+lost at least its `REMARKS` row, even the smallest ones) — with the
+severity scaling with the number of attribute-rows once a table is
+dense enough. Root-causing should check whether the transposed reader
+path has an off-by-N or an early-termination condition keyed to
+row-group count or table height, independent of this bug's original
+per-unit-row `FAN COIL UNITS` case.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this is the
+single worst MISSED-count failure found in the HELDOUT pass to date on
+a per-sheet basis — 11 of 12 real tables across 2 sheets have a wrong
+row count, totaling roughly 40 real rows silently dropped from an
+otherwise well-titled, well-classified set of tables.
+
 ### B-32 — the primary equipment table itself (BOILERS) goes missing on a boiler-replacement project, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, disclosed)
 
 **Where:**
@@ -2052,6 +2107,66 @@ transposed-format tables do NOT always zero-extract (contrast B-25's
 own transposed-table finding), so this document's transposed layout is
 not itself the trigger for either the duplication above or B-25's
 blackout elsewhere.
+
+**CONFIRMED RECURRING 2026-09-13 — a 3rd document, untitled-phantom half
+only.** `21_VA_OrangeCounty_PublicSafetyBldg.pdf#50` (sheet M-601,
+"SCHEDULES I") reports an untitled (`title: ""`) 2-row phantom table
+alongside its 2 real tables (`AIR HANDLING UNIT SCHEDULE`, `VAV TERMINAL
+BOX SCHEDULE`). Traced via `textSpans()` region dump to the sheet's own
+title-block field grid in the bottom-right corner (`COMM NO:`, `DATE:`,
+`DRAWN:`/`DESIGN:`, `CHECK:` label/value pairs) — the same "sheet's own
+furniture fabricated into a phantom" mechanism this bug's original entry
+describes, with an empty rather than fabricated title, matching this
+document's own precedent exactly rather than 098_ID/080_CA/013_MO/12_MT's
+fabricated-title variant (filed under B-30). No duplicated-table half
+this time — both of this sheet's real tables appear exactly once each
+(row-count correctness aside, see B-31's own amendment below for the
+`AIR HANDLING UNIT SCHEDULE`'s separate row-truncation defect on this
+same sheet).
+
+### B-34 — control-diagram instrument-callout labels are clustered into fabricated phantom tables (NOT FIXED — found, traced, disclosed)
+
+**Where:** `21_VA_OrangeCounty_PublicSafetyBldg.pdf`, sheets M-701 (#52,
+"CHILLED WATER SYSTEM CONTROLS") and M-703 (#54, "AIR HANDLING UNIT
+CONTROLS") — found continuing the HELDOUT set's own missed-checking
+pass. Both are pure P&ID-style control-diagram + prose-sequence-of-
+operations sheets with zero real ruled schedule tables (hand-confirmed
+by full-page render).
+
+**Measured:** the extractor reports phantom tables on both: page #52,
+an untitled (`title: ""`) 2-row table sourced from a cluster of
+instrument-bubble callout labels near the chilled-water buffer tank
+detail ("HIGH CAPACITY AUTO AIR VENT", "GLOBAL OUTSIDE AIR HUMIDITY",
+"PUMP SPEED CONTROL", etc. — confirmed via `textSpans()` region dump,
+no ruled grid present in the source at all). Page #54 reports TWO
+phantoms: `"FURNISHED BY FIRE"` (3 rows) and `"RETURN AIR"` (9 rows),
+both sourced from instrument-bubble callout labels near the top-right
+of the AHU control diagram ("FURNISHED BY FIRE ALARM SYSTEM
+MANUFACTURER (TYPICAL)", "RETURN AIR HUMIDITY", "RETURN AIR TEMP", and
+similar sensor labels) — again zero ruled structure in the source. Both
+sheets' own REAL tables (`OUTSIDE AIR RESET SCHEDULE`, 2 rows each, on
+M-701 and the neighboring M-702/#53) extract correctly, confirmed by
+hand-render.
+
+**Relationship to already-catalogued bugs:** same broad "prose/label
+text mistaken for a table" family as B-16/B-29/B-30/B-33, but a new
+triggering shape: not a disclaimer stamp, not a title-block sub-grid,
+not side-by-side numbered notes — here it's **instrument-bubble callout
+labels scattered around a P&ID-style control diagram**, which apparently
+cluster densely enough near certain diagram regions to be misread as a
+tabular grid. Filed as a new number rather than merged into B-33
+because the untitled-vs-titled split doesn't track cleanly (this bug
+produces both an untitled AND two titled phantoms from the same
+mechanism), and because the source content (diagram callouts, not
+sheet furniture) is genuinely different from every prior instance.
+
+**Consequence for the HELDOUT set's own zero-error bar:** 3 phantom
+tables (14 phantom rows total) on 2 sheets that have zero real tables
+between them — a false-positive-free failure on control-diagram sheets
+specifically, a sheet type not previously implicated in this bug
+family. Given this document's controls-diagram sheets span roughly
+M-701 through M-707 (not fully surveyed), this may be a wider source of
+phantom tables than the 2 instances confirmed here.
 
 ## What is working
 

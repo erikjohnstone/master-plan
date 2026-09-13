@@ -37,8 +37,8 @@ real table count hand-confirmed, box/cell grading not yet done),
 blind and scored), `cell-graded` (box-graded, plus every cell hand-
 transcribed and exact-matched — this is PASS/FAIL for the document).
 
-**Status: 30 of 32 HELDOUT documents missed-checked (9 via Demo Corpus
-overlap, 21 new this session); 2 of 32 untouched. 0 of 32 have completed
+**Status: 31 of 32 HELDOUT documents missed-checked (9 via Demo Corpus
+overlap, 22 new this session); 1 of 32 untouched. 0 of 32 have completed
 FULL box+cell grading.**
 
 | document | status | real tables found | notes |
@@ -92,3 +92,5 @@ looking at the extractor's own answer, then compare. Any new
 fabricated-table or missed-table finding gets its own bug-catalogue
 entry in `TAKEOFF_BUG_CATALOGUE.md`, or amends an existing B-N entry if
 the signature matches one already found in the Demo Corpus pass.
+
+| 21_VA_OrangeCounty_PublicSafetyBldg | missed-checked | 12 real hand-confirmed, 1 clean, 11 wrong row counts; 4 phantom tables | Large (128-page) document, real mechanical-schedule content confined to 3 sheets: M-501/#47 (2 tables, both correct: `DRAIN SIZES SCHEDULE` 2 rows, `VAV BOX CONNECTION SCHEDULE` 7 rows), M-601/#50, M-602/#51. M-601's `VAV TERMINAL BOX SCHEDULE` (57 rows, textSpans-confirmed) is correct; its `AIR HANDLING UNIT SCHEDULE` is a **confirmed 16-row truncation** (51 real → 35 reported, textSpans-verified) — amended into B-31. M-602 carries 10 transposed equipment-comparison tables and **every single one under-counts**: `AIR COOLED CHILLER SCHEDULE` 26→11 (-15), `UNIT HEATER SCHEDULE` 14→4 (-10), `COMPUTER ROOM UNIT SCHEDULE` 24→16 (-8) — all 3 textSpans-verified — plus 7 more each short by 1-2 rows (`BOILER SCHEDULE` -2; `FAN SCHEDULE` -1, textSpans-verified; `AIR COOLED CONDENSING UNIT`, `DUCTLESS SPLIT SYSTEM UNIT`, `PUMP SCHEDULE`, `AIR DISTRIBUTION DEVICE SCHEDULE`, `RELIEF/EXHAUST HOOD SCHEDULE` each -1) — all amended into B-31 as its most severe confirmed instance yet. Separately, control-diagram sheets M-701/#52 and M-703/#54 (zero real ruled tables, hand-confirmed) each report phantom tables fabricated from instrument-bubble callout labels: an untitled 2-row phantom on #52 (traced to a pump-speed-control/expansion-tank label cluster — a DIFFERENT untitled-phantom instance than #50's title-block-sourced one, both amended into B-33/B-34 respectively), plus `"FURNISHED BY FIRE"` (3 rows) and `"RETURN AIR"` (9 rows) on #54 — filed as new bug **B-34** (control-diagram instrument-callout fabrication, a new triggering shape). M-701's and M-702/#53's real `OUTSIDE AIR RESET SCHEDULE` tables (2 rows each) both extract correctly. Plumbing (p30), electrical (p57-58, 83-96, 107, 116-118), and security/AV (p107, 116-117) schedule content surveyed via keyword scan and confirmed present but out of this pass's HVAC-equipment-schedule scope, not independently hand-verified. This is the single worst MISSED-count / row-accuracy failure found in the HELDOUT pass to date on a per-sheet basis. |
