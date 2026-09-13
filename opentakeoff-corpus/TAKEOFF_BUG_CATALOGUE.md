@@ -1992,6 +1992,42 @@ own namesake `BOILERS` equipment) plus a garbled, duplicated, and
 partially-fabricated report on 4 more tables — the worst combination of
 failure shapes measured on a single document this session.
 
+### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (NOT FIXED — found, traced, disclosed)
+
+**Where:**
+`023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8` (sheet
+M002, "MECHANICAL SCHEDULES") — a small, otherwise clean 3-table sheet,
+found continuing the HELDOUT set's own missed-checking pass.
+
+**Measured:** the sheet carries exactly 3 real tables, all correctly
+extracted: `AIR COOLED CHILLER SCHEDULE` (1 row), `BUFFER TANK SCHEDULE`
+(1 row), `PUMP SCHEDULE` (1 row, `CHWP-1&2`). But the extractor's own
+output lists **5** tables for this sheet: the 3 real ones, PLUS a
+second `PUMP SCHEDULE` entry (also `rows: 1`, `kind: reference` instead
+of `equipment`) that duplicates the real one under its own identical
+title, and PLUS an untitled (`title: ""`) 4-row table with no visible
+real counterpart anywhere on the rendered page — likely fabricated from
+the sheet's own title-block sub-grid (`PROJ. MANAGER`/`DRAWN BY`/
+`CHECKED BY`/`CONTRACT NO.` field-label rows, a 4-row grid in the same
+corner of every sheet in this set).
+
+**Relationship to already-catalogued bugs:** the duplicated `PUMP
+SCHEDULE` is a new shape — not B-29 (which merges two DIFFERENT real
+tables into one under a fabricated title) but the mirror case: ONE real
+table reported TWICE under its OWN correct title, with a different
+`kind` on the duplicate (`reference` vs the original's `equipment`),
+inflating this sheet's real table count by one. The untitled 4-row
+phantom is consistent with B-29/B-30's title-block-fabrication family in
+spirit (spurious content sourced from the sheet's own furniture) but
+with an empty rather than fabricated-string title, so filed alongside
+rather than merged into either.
+
+**Consequence for the HELDOUT set's own zero-error bar:** an otherwise
+perfectly-extracted 3-table sheet fails the false-positive-free half of
+the bar with 2 additional phantom entries — a real table double-counted
+and an untitled fabrication, on a document whose actual HVAC content is
+completely clean.
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
