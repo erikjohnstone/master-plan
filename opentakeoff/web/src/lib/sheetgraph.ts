@@ -6975,6 +6975,72 @@ function bandGenericDataRows(
     return toks.some((t) => /^\d+$/.test(t.str.trim()) && nearestAnchor(centerX(t), anchors) === button.label)
       && toks.filter((t) => nearestAnchor(centerX(t), anchors) !== anchors[0].label).length >= 2;
   };
+  // A logical row whose own identity/key column is a pure drawn glyph with
+  // NO extractable text anywhere in it can never seed a committed row in
+  // the main scan above (nothing ever lands within keyTol of keyColX for
+  // it) — and if that happens before the table's first successfully-keyed
+  // row, every one of its physical lines becomes an orphan with no
+  // accepted row close enough to fold onto below, so it is lost outright,
+  // not merely missing its own blank key cell. Real, corpus-found: goal
+  // VECTORGRID_TABLE_BOXES.md's B-13 — 13_MI_MSU_LifeSciences_
+  // LabRenovation.pdf#28's own FIRE ALARM DEVICES SCHEDULE draws its
+  // MANUAL PULL STATION / CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR /
+  // FIRE ALARM INTERLOCK rows' own SYMBOL cells as pure vector glyphs (a
+  // boxed "F", a circled "S", a filled dot — zero text, confirmed directly
+  // off the page's own text spans) printed BEFORE the table's only
+  // naturally-keyed rows (COMBINATION AUDIO SPEAKER's own drawn "15"/"30"/
+  // "60" numerals, which happen to land on a WRAPPED, not first, physical
+  // line of their own row — a vertical-centering quirk of this drafter's
+  // row layout). All three real rows vanished whole: not just a blank
+  // SYMBOL, every DESCRIPTION/MANUFACTURER/CATALOG NO./REMARKS token too.
+  //
+  // Fixed the same way this file already tells a wrapped continuation
+  // line apart from a genuine new row everywhere else in this function:
+  // the gap since the previous line. Partition the orphan pool itself
+  // (independent of whether any accepted row is nearby) into runs at
+  // every gap >= newRowGapFloor — the identical test the main scan above
+  // already applies to keyed candidates, no new discriminator invented. A
+  // run that cannot reach ANY already-accepted row within `radius` is not
+  // a continuation of something already on the table; it is a whole row
+  // the main scan never got to seed at all. Its own first line is
+  // promoted into a new row using its own leading text as the key
+  // (genericRowKeyOf, the identical bar every other key already clears —
+  // the same fallback this function's own SYSTEM TYPE precedent above
+  // already uses whenever a real row has nothing better to key on), and
+  // every other member of that run folds onto it directly, since sharing
+  // a run makes them the same row by construction. Scoped to in-band
+  // orphans only (a `banded`-shaped orphan, never the separate left-
+  // overflow shape above, which already has its own working fold target)
+  // so this can never invent a row out of a KEY column's own wrapped
+  // overflow text.
+  if (newRowGapFloor > 0 && orphans.length) {
+    const bandedOnly = orphans.filter((o) => o.toks.some((t) => t.x >= x0 && t.x <= x1));
+    const ordered = bandedOnly.slice().sort((a, b) => a.y - b.y);
+    const runs: Array<{ toks: GraphSpan[]; y: number }[]> = [];
+    for (const o of ordered) {
+      const run = runs[runs.length - 1];
+      if (run && o.y - run[run.length - 1].y < newRowGapFloor) run.push(o);
+      else runs.push([o]);
+    }
+    const rescued = new Set<{ toks: GraphSpan[]; y: number }>();
+    for (const run of runs) {
+      if (run.length === 1 && (isSectionHeading(run[0].toks) || isUnkeyedButtonSubrow(run[0].toks))) continue;
+      const reachable = run.some((o) => { const { i, d } = nearest(o.y); return i >= 0 && d <= radius; });
+      if (reachable) continue;
+      const seedTok = run[0].toks[0];
+      if (!seedTok) continue;
+      const key = genericRowKeyOf(seedTok.str, headerLabelSet);
+      if (!key) continue;
+      const row: TableRow = { key, sheet: sheetKey, cells: {} };
+      for (const o of run) { add(row, o.toks); rescued.add(o); }
+      out.push(row);
+      outY.push(run[0].y);
+    }
+    if (rescued.size) {
+      for (let k = orphans.length - 1; k >= 0; k--) if (rescued.has(orphans[k])) orphans.splice(k, 1);
+    }
+  }
+
   for (const o of orphans) {
     if (isSectionHeading(o.toks) || isUnkeyedButtonSubrow(o.toks)) continue;
     const { i, d } = nearest(o.y);
@@ -10377,9 +10443,54 @@ export function scheduleTableFromODL(
     // "more complete" by the cross-check reconcile pass and silently
     // REPLACED the geometric extractor's own correct, fuller read.
     const filledCells = texts.filter((s: string) => s.trim()).length;
-    const keyRes = printedKeys
+    let keyRes = printedKeys
       ? (printed && printedKeyOk(printed) ? { key: printed } : null)
       : rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", selfEvidenced, false, { inBand: filledCells, anchors: C });
+    // The row's own IDENTITY column can be a pure drawn glyph with zero
+    // extractable text at all — real, corpus-found: goal
+    // VECTORGRID_TABLE_BOXES.md's B-13, 13_MI_MSU_LifeSciences_
+    // LabRenovation.pdf#28's own FIRE ALARM DEVICES SCHEDULE draws its
+    // MANUAL PULL STATION / CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR /
+    // FIRE ALARM INTERLOCK rows' own SYMBOL cells as pure vector glyphs (a
+    // boxed "F", a circled "S", a filled dot) with no text token anywhere
+    // in that column, confirmed directly off the page's own text spans.
+    // vectorgrid's own geometry is exactly right here — 7 real row-bands,
+    // matching the page's real header plus 6 real data rows one-for-one,
+    // measured directly against the raw grid — and every OTHER column's
+    // real text (DESCRIPTION/MANUFACTURER/CATALOG NO./REMARKS) is already
+    // sitting correctly in `texts[]` right here. The bare `!keyRes` refusal
+    // below used to throw all of that away over one blank cell that was
+    // never going to hold a real tag to begin with.
+    //
+    // Falls back to the same generic, vocabulary-free key test the
+    // "reference" kind already trusts whenever a row has nothing better to
+    // key on (genericRowKeyOf) — applied to this row's own most substantial
+    // OTHER column, never the blank one. `texts.every(s => !s.trim())`
+    // above already excludes a genuinely blank spacer row, so this can
+    // never manufacture a key out of nothing, and it only ever runs once
+    // `rowKeyOf` has already failed on the real key column — an ordinary
+    // row with a real tag is untouched.
+    if (!keyRes && !printedKeys && !rawKey.trim()) {
+      // The LEFTMOST non-key column with real text, never the longest one —
+      // a schedule's own drafting convention always reads its identity
+      // immediately beside the key column (here, DESCRIPTION), while the
+      // longest cell on the row is routinely REMARKS: boilerplate
+      // instructions ("MOUNT AT 46-INCHES...", "REFER TO LIGHTING CONTROL
+      // DIAGRAM ON SHEET E-010.") that either blow past genericRowKeyOf's
+      // own 100-char cap or get correctly rejected by its cross-reference
+      // guard (REFERENCE_RE) — and when a REMARKS phrase happens to be
+      // short enough to slip through anyway, it is still the wrong text: a
+      // shared instruction, not this row's own identity. Measured live on
+      // this exact table (13_MI#28): picking the longest column recovered
+      // only 1 of 3 missing rows, and with the WRONG key (a REMARKS
+      // sentence); picking the leftmost recovers all 3 with their own real
+      // DESCRIPTION text as the key.
+      for (let c = 0; c < C; c++) {
+        if (c === keyCol || !texts[c].trim()) continue;
+        const fallbackKey = genericRowKeyOf(texts[c], new Set(headers.map((h) => norm(h))));
+        if (fallbackKey) { keyRes = { key: fallbackKey }; break; }
+      }
+    }
     if (!keyRes) continue; // no recognizable row key — refuse rather than mint a fake row
     const cells: Record<string, TableCell> = {};
     for (let c = 0; c < C; c++) {

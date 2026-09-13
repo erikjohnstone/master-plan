@@ -4362,3 +4362,96 @@ describe("scheduleTableFromODL: a caption drawn OUTSIDE the ruled grid still nam
     assert.notEqual(t!.title?.text, "DRAWING LIST", "an in-grid title always wins — the out-of-grid fallback only fires when row 0 found nothing");
   });
 });
+
+describe("scheduleTableFromODL: a row whose own identity column is a pure drawn glyph still keeps its data (goal VECTORGRID_TABLE_BOXES.md's B-13, 2026-09-13)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 50, row * 20, col * 50 + 50 * colSpan, row * 20 + 20],
+    "row number": row, "column number": col, "row span": 1, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+
+  // Real shape, rendered and read live off 13_MI_MSU_LifeSciences_
+  // LabRenovation.pdf#28's own FIRE ALARM DEVICES SCHEDULE. vectorgrid's own
+  // geometry is exactly right (measured directly against its raw grid: 7
+  // row-bands, matching the real header plus 6 real data rows one-for-one)
+  // — the loss is entirely downstream, in buildRows' own `rawKey`/`rowKeyOf`
+  // gate. Three of the six real rows draw their SYMBOL cell as a pure
+  // vector glyph (a boxed "F", a circled "S", a filled dot) with NO text
+  // token anywhere in it; the other three carry a real drawn numeral
+  // ("15"/"30"/"60"). Before this fix, `rowKeyOf("")` failed and
+  // `if (!keyRes) continue` threw away the whole row — not just its own
+  // blank SYMBOL cell, its already-correctly-extracted DESCRIPTION/
+  // MANUFACTURER/CATALOG NO./REMARKS too.
+  const buildTable = (): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 250, 140],
+    "number of rows": 6, "number of columns": 5,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "FIRE ALARM DEVICES SCHEDULE", 5)] },
+      { type: "table row", "row number": 2, id: 1, cells: [odlCell(2, 1, "SYMBOL"), odlCell(2, 2, "DESCRIPTION"), odlCell(2, 3, "MANUFACTURER"), odlCell(2, 4, "CATALOG NO."), odlCell(2, 5, "REMARKS")] },
+      // SYMBOL is a boxed "F" drawn as a vector glyph — zero text.
+      { type: "table row", "row number": 3, id: 2, cells: [odlCell(3, 1, ""), odlCell(3, 2, "MANUAL PULL STATION"), odlCell(3, 3, "NATIONAL TIME AND SIGNAL CORPORATION"), odlCell(3, 4, "541S"), odlCell(3, 5, "MOUNT AT 46-INCHES TO CENTER OF BOX, UNO. PROVIDE BACKBOX AS RECOMMENDED BY FIRE ALARM SYSTEM MANUFACTURER.")] },
+      // SYMBOL is a circled "S" — zero text. REMARKS is the row's own
+      // LONGEST cell but must never be the fallback key source.
+      { type: "table row", "row number": 4, id: 3, cells: [odlCell(4, 1, ""), odlCell(4, 2, "CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR"), odlCell(4, 3, "NATIONAL TIME AND SIGNAL CORPORATION"), odlCell(4, 4, "DX900-PHOTO"), odlCell(4, 5, "PROVIDE BACKBOX AS RECOMMENDED BY FIRE ALARM SYSTEM MANUFACTURER.")] },
+      // SYMBOL is a filled dot — zero text. REMARKS here is a bare
+      // cross-reference ("REFER TO...") that genericRowKeyOf must reject
+      // outright — DESCRIPTION is the only column that can key this row.
+      { type: "table row", "row number": 5, id: 4, cells: [odlCell(5, 1, ""), odlCell(5, 2, "FIRE ALARM INTERLOCK / CONTROL CONNECTION"), odlCell(5, 3, "-"), odlCell(5, 4, "-"), odlCell(5, 5, "REFER TO LIGHTING CONTROL DIAGRAM ON SHEET E-010.")] },
+      // SYMBOL carries a real drawn numeral — the ordinary, already-working path.
+      { type: "table row", "row number": 6, id: 5, cells: [odlCell(6, 1, "15"), odlCell(6, 2, "COMBINATION AUDIO SPEAKER / VISUAL STROBE SIGNAL, WALL MOUNTED"), odlCell(6, 3, "NATIONAL TIME AND SIGNAL CORPORATION"), odlCell(6, 4, "SG-CXSS 15Z"), odlCell(6, 5, "MOUNT AT 80-INCHES AFF TO BOTTOM OF BOX, UNO. PROVIDE BACKBOX AS RECOMMENDED BY FIRE ALARM SYSTEM MANUFACTURER.")] },
+    ],
+  });
+
+  it("keeps all 4 real rows, keying the 3 blank-symbol rows off their own DESCRIPTION text", () => {
+    const t = scheduleTableFromODL(buildTable(), "13_MI_test.pdf#28", IDENTITY, {});
+    assert.ok(t, "the table must still build");
+    assert.equal(t!.kind, "equipment", "SYMBOL/DESCRIPTION/MANUFACTURER/REMARKS clears the equipment vocabulary bar");
+    assert.equal(t!.rows.length, 4, "all 4 real rows must survive, not just the 1 with a real drawn SYMBOL");
+    assert.deepEqual(t!.rows.map((r) => r.key), [
+      "MANUAL PULL STATION",
+      "CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR",
+      "FIRE ALARM INTERLOCK / CONTROL CONNECTION",
+      "15",
+    ]);
+  });
+
+  it("never uses a REMARKS-shaped cross-reference as the fallback key, and never a >100-char cell either", () => {
+    const t = scheduleTableFromODL(buildTable(), "13_MI_test.pdf#28", IDENTITY, {});
+    assert.ok(t);
+    const interlock = t!.rows.find((r) => r.key.startsWith("FIRE ALARM INTERLOCK"));
+    assert.ok(interlock, `expected the interlock row to key off its own DESCRIPTION, got keys: ${JSON.stringify(t!.rows.map((r) => r.key))}`);
+    assert.equal(interlock!.key, "FIRE ALARM INTERLOCK / CONTROL CONNECTION");
+    const pullStation = t!.rows.find((r) => r.key === "MANUAL PULL STATION");
+    assert.ok(pullStation, "the >100-char REMARKS cell must never become this row's key");
+    assert.equal(pullStation!.cells["CATALOG NO."]?.text, "541S", "the row's other real cells must still be populated");
+  });
+
+  it("leaves an ordinary real-tag row (SYMBOL='15') completely untouched", () => {
+    const t = scheduleTableFromODL(buildTable(), "13_MI_test.pdf#28", IDENTITY, {});
+    assert.ok(t);
+    const row15 = t!.rows.find((r) => r.key === "15");
+    assert.ok(row15, "the already-working real-tag path must be unaffected");
+    assert.equal(row15!.cells["CATALOG NO."]?.text, "SG-CXSS 15Z");
+  });
+
+  it("never manufactures a key when every column on the row is unkeyable", () => {
+    const t2: ODLTable = {
+      ...buildTable(),
+      "number of rows": 7,
+      rows: [
+        ...buildTable().rows,
+        // Blank SYMBOL, and every other column is either blank or a bare
+        // dash — nothing on this row can ever pass genericRowKeyOf, so it
+        // must be dropped exactly as it always was, not manufactured into
+        // a phantom row.
+        { type: "table row", "row number": 7, id: 6, cells: [odlCell(7, 1, ""), odlCell(7, 2, "-"), odlCell(7, 3, ""), odlCell(7, 4, "-"), odlCell(7, 5, "")] },
+      ],
+    };
+    const t = scheduleTableFromODL(t2, "13_MI_test.pdf#28", IDENTITY, {});
+    assert.ok(t);
+    assert.equal(t!.rows.length, 4, "the fully unkeyable row must never seed a phantom row");
+  });
+});

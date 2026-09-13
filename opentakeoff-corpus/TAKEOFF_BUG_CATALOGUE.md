@@ -657,15 +657,69 @@ the old refusal is the safe answer.
 
 ---
 
-### B-13 — wrapped multi-line cells are never banded (OPEN)
+### B-13 — a row whose identity column is a pure drawn glyph gets dropped whole (FIXED 2026-09-13)
 
-Same sheet, 13_MI p28. With B-11 fixed the FIRE ALARM DEVICES SCHEDULE's
-header block is accepted (5 anchors, ruled line present) and then
-`bandGenericDataRows` returns **0 rows**. Its DESCRIPTION and REMARKS cells
-wrap over two to four printed lines each, and the SYMBOL column is a drawn
-glyph with no text at all, so the row-clustering pass sees continuation
-fragments rather than rows. Not fixed here; recorded with its evidence so it
-is not rediscovered from scratch.
+**Originally recorded** (this same corpus, earlier session) as "wrapped
+multi-line cells are never banded" via `bandGenericDataRows` returning 0
+rows. **Re-traced live under goal `VECTORGRID_TABLE_BOXES.md` and found to
+be stale on the mechanism, though the symptom (real rows silently vanishing
+on this exact table) was real** — this document's schedule now reaches the
+graph through vectorgrid, not the ODL/text-banding path `bandGenericDataRows`
+serves, so that function was never actually in the code path for this table.
+Measured directly:
+
+- `vectorgrid.py`'s own geometric row/column detection is 100% correct —
+  dumping its raw cell grid for this exact region shows **7 real row-bands**
+  (header + all 6 real data rows) with the right heights, matching the
+  rendered page one-for-one. The geometry is not the bug.
+- The loss is in `scheduleTableFromODL`'s own `buildRows` (`web/src/lib/
+  sheetgraph.ts`): `const rawKey = texts[keyCol]` reads the row's own SYMBOL
+  cell, and `rowKeyOf(rawKey, ...)` on an empty string returns null — `if
+  (!keyRes) continue` then discards the ENTIRE row, including its already
+  correctly-extracted DESCRIPTION/MANUFACTURER/CATALOG NO./REMARKS text, not
+  merely its own blank key cell.
+- Confirmed directly off the page's own text spans: MANUAL PULL STATION /
+  CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR / FIRE ALARM INTERLOCK draw
+  their SYMBOL cell as a pure vector glyph (a boxed "F", a circled "S", a
+  filled dot) with zero text anywhere in it. The other 3 rows
+  (COMBINATION AUDIO SPEAKER ×3) carry a real drawn numeral ("15"/"30"/"60")
+  and always worked.
+
+**Fix:** when `rowKeyOf` fails on a blank identity cell (never when
+`printedKeys` mode applies, and never on a genuinely blank spacer row —
+`texts.every(s => !s.trim())` already excludes that earlier), fall back to
+the LEFTMOST other column with real text, validated through the same
+vocabulary-free `genericRowKeyOf` the "reference" kind already trusts.
+Leftmost, not longest: an earlier version of this fix picked the row's own
+longest cell, which is routinely REMARKS — either well past
+`genericRowKeyOf`'s 100-char cap ("MOUNT AT 46-INCHES TO CENTER OF BOX,
+UNO. PROVIDE BACKBOX AS RECOMMENDED BY FIRE ALARM SYSTEM MANUFACTURER.",
+107 chars) or a bare cross-reference its own `REFERENCE_RE` guard correctly
+rejects ("REFER TO LIGHTING CONTROL DIAGRAM ON SHEET E-010."), and once it
+slipped through the length check it was still the WRONG identity — a shared
+boilerplate instruction, not the row's own name. The leftmost non-key
+column (DESCRIPTION, immediately beside SYMBOL) is the row's own real
+identity on every real schedule's own drafting convention, and recovers all
+3 missing rows with their own correct names as keys.
+
+**Result, measured live, before/after on the same document:** the FIRE ALARM
+DEVICES SCHEDULE goes from 3 rows to all 6 real rows — `MANUAL PULL
+STATION`, `CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR`, `FIRE ALARM
+INTERLOCK / CONTROL CONNECTION`, `15`, `30`, `60` — each fully populated
+(DESCRIPTION/MANUFACTURER/CATALOG NO./REMARKS all correct). A second,
+unrelated table elsewhere on the same document (sheet #25, previously
+undiscovered) was also recovered as a side effect of the same fix.
+
+**Verified:** new regression suite in `web/test/sheetgraph.test.ts`
+("a row whose own identity column is a pure drawn glyph still keeps its
+data") — recovers all 4 rows of a synthetic fixture mirroring this exact
+shape with correct keys, confirms the REMARKS-shaped cross-reference and
+the >100-char cell are never used as the fallback key, confirms the
+already-working real-tag path (SYMBOL="15") is untouched, and confirms a
+row where every column is genuinely unkeyable still refuses rather than
+manufacturing a phantom row. Full `sheetgraph.test.ts` (140/140) and
+`scheduleLanguageScan.test.ts` (10/10) green; `tsc --noEmit` clean in both
+`mcp` and `web`.
 
 ---
 

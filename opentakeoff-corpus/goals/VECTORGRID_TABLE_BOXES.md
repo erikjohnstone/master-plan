@@ -272,14 +272,23 @@ deliverable this whole file exists to produce.
 **Added 2026-09-12, from the running bug catalogue — confirmed real, in
 scope (all vector-native, no raster/OCR path involved), not yet closed:**
 
-- **B-13 (`TAKEOFF_BUG_CATALOGUE.md`) — wrapped multi-line cells never band
-  into rows at all.** `13_MI…#28`'s FIRE ALARM DEVICES SCHEDULE: vectorgrid's
-  box is correct, the header is accepted, and `bandGenericDataRows` still
-  returns 0 rows because DESCRIPTION/REMARKS wrap 2-4 printed lines and the
-  SYMBOL column is a drawn glyph with no text. This is a silent zero, not a
-  refusal — highest-priority open item, since wrapped cells are near-universal
-  on real MEP schedules and every instance of this bug is invisible to every
-  score in this file that isn't specifically a held-out volume read.
+- ~~**B-13 — wrapped multi-line cells never band into rows at all.**~~ —
+  **FIXED 2026-09-13, on a different mechanism than originally recorded.**
+  `13_MI…#28`'s FIRE ALARM DEVICES SCHEDULE reaches the graph through
+  vectorgrid now, not the ODL/text-banding path the original entry named —
+  `bandGenericDataRows` was never actually in this table's code path.
+  Traced live: vectorgrid's own geometry is 100% correct (7 real row-bands,
+  matching the page exactly); the loss was in `scheduleTableFromODL`'s own
+  `buildRows` — a row whose SYMBOL cell is a pure drawn glyph (zero text)
+  failed `rowKeyOf("")` and the whole row, DESCRIPTION/MANUFACTURER/
+  CATALOG NO./REMARKS included, was discarded over one blank cell. Fixed by
+  falling back to the row's own leftmost other column (never the longest —
+  that's routinely REMARKS boilerplate) through the same vocabulary-free
+  `genericRowKeyOf` the reference kind already trusts. See
+  `TAKEOFF_BUG_CATALOGUE.md`'s own updated B-13 entry for the full trace,
+  the two wrong turns before the right fix, and the regression suite. Table
+  recovers all 6 real rows (was 3); a second, unrelated table elsewhere on
+  the same document was also recovered as a side effect.
 - **B-10 / task #77 — a full-width section-divider row between two groups of
   data rows bands into the narrow column beneath it** (`028_TX#p1` NOISE
   CONTROL DUCT SILENCER SCHEDULE; `042_VA` "INDOOR AREA TEMPERATURE/HUMIDITY
