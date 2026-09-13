@@ -331,6 +331,20 @@ async function runL2VectorGridForSheet(
     reasons[key] = (reasons[key] ?? 0) + 1;
   }
   rec.rasters += res.rasters;
+  // "Rasters/pasted images... are still correctly EXCLUDED, not silently
+  // zeroed — that disclosure has to hold up live too" (goals/
+  // VECTORGRID_TABLE_BOXES.md, "The Demo Corpus"). Before this, a raster
+  // region vectorgrid correctly found and excluded (a pasted Excel
+  // screenshot, an embedded PCW riser diagram) produced NO trace anywhere
+  // in the ordinary output — indistinguishable from "never looked at" (see
+  // TAKEOFF_BUG_CATALOGUE.md's B-24, and the two raster regions confirmed
+  // on 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8 that B-23's
+  // own original writeup mistook for real vector tables with an unusual
+  // merged-cell/comparison-column structure — they are pasted images, 0
+  // real PDF text words anywhere near either one, out of 2293 on the page).
+  if (res.rasters > 0) {
+    report.notes.push(`${ctx.key}: ${res.rasters} raster table region(s) found and correctly excluded (pasted image, no ruled vector content to read) — not an extraction miss.`);
+  }
   if (mode === "shadow" || !res.tables.length) return;
   // Not mergeCandidates: vectorgrid is not one candidate among peers on a
   // sheet it read, it is the reading. See adoptVectorGridTables.

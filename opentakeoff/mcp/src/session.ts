@@ -6333,6 +6333,19 @@ export class Session {
       sheetHasDrawingIndexTitle: (key) => this.sheetHasDrawingIndexTitle(key),
       ocrRegion: (key, region) => this.ocrScheduleRegion(key, region),
     });
+    // report.notes was write-only before this: every note pushed onto it
+    // (a raster-region disclosure, "L2 vectorgrid did not run") only ever
+    // reached the OPENTAKEOFF_GRAPH_TRACE debug dump below, never the real
+    // graph.notes an ordinary run (and the live app) actually reads —
+    // indistinguishable, from the outside, between "correctly excluded"
+    // and "never looked at". goals/VECTORGRID_TABLE_BOXES.md's own Demo
+    // Corpus section: "that disclosure has to hold up live too." Real,
+    // measured (TAKEOFF_BUG_CATALOGUE.md's B-24):
+    // 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8 has 2 real
+    // raster regions (confirmed pasted images, 0 PDF text words near
+    // either one) that vectorgrid already finds and correctly excludes,
+    // with zero trace anywhere in the ordinary output before this line.
+    for (const note of report.notes) g.notes.push(note);
     // Same OPENTAKEOFF_GRAPH_TRACE gate as the timing lines above — the
     // pipeline's own declined_regions/declined_reasons (why a vectorgrid
     // candidate never reached g.tables) used to be discarded here entirely.
