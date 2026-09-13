@@ -11,15 +11,39 @@ grading has gotten without re-deriving it — the same reason
 
 **Status, honestly: grading has JUST STARTED.** 18 of 32 documents have
 been hand-rendered and checked for real table count this session
-(2026-09-13); 0 of 32 have completed box+cell grading. The remaining ~14
-documents (~570 of the set's own 821 real tables) are untouched, and even
-among the 18 checked, several (25_WA, 067_CA, 13_MI) have real content
-this pass did not fully verify — 13_MI in particular is a large 36-sheet
-document where only 3 of its 19 extracted tables were hand-rendered and
-checked; the other 16 (pages 15, 20, 28, 30, 32) are noted but unverified.
-This is not a shrunk bar — it is the real number reached, stated plainly,
-per this goal's own non-negotiable rule against quietly reporting a
-smaller sample as if it were the whole thing.
+(2026-09-13); 0 of 32 have completed FULL box+cell grading. The remaining
+~14 documents (~570 of the set's own 821 real tables) are untouched, and
+even among the 18 checked, several (25_WA, 067_CA, 13_MI) have real
+content this pass did not fully verify — 13_MI in particular is a large
+36-sheet document where only 3 of its 19 extracted tables were
+hand-rendered and checked; the other 16 (pages 15, 20, 28, 30, 32) are
+noted but unverified. This is not a shrunk bar — it is the real number
+reached, stated plainly, per this goal's own non-negotiable rule against
+quietly reporting a smaller sample as if it were the whole thing.
+
+**Real box-tier evidence exists for a 27-table subset, found and scored
+this session.** 4 of the 18 missed-checked documents (`008_MO`, `067_CA`,
+`13_MI`, `083_MA`) already carry hand-authored `keys/*.tableboxes.csv`
+entries from an earlier, separate ground-truth effort (the held-out
+box-tier sample, not authored for this Demo Corpus pass specifically) that
+happen to cover some of their real tables. Running the existing
+`table-box-eval.mjs` against those authored boxes — genuinely scoring
+EoB against a blind, pre-existing ground truth, exactly the mechanism the
+goal's own "Demo Corpus" section describes — gives real, non-trivial
+box-tier results: **008_MO 4/4 correct @4pt** (mean EoB 0.1pt), **067_CA
+14/15** (mean EoB 0.0pt on the 14 that matched; the 15th, `PCW RISER
+DIAGRAM SCHEDULE - HUTCH 1.3`, a RASTER table whose ground truth is the
+image's own placement rect, is reported MISSING — the app returns nothing
+for it at all, not even a disclosed-raster entry, which is a real gap
+against the goal's own "rasters must be correctly EXCLUDED, not silently
+zeroed" rule, not yet catalogued as its own bug), **13_MI 6/6**, **083_MA
+2/2**. This is 26/27 = 96.3% at the box tier for tables with existing
+authored ground truth — real signal, but it does NOT mean any of these 4
+documents are "box-graded" per this file's own status column: each has
+more real tables (found via this session's own render-and-count pass)
+than the authored CSV covers, and the goal's bar is every table, not a
+sample of them. No cell-tier (exact-match transcription) work has been
+done anywhere in this set.
 
 Status values: `not-started` (nothing done), `missed-checked` (rendered,
 real table count hand-confirmed, box/cell grading not yet done),

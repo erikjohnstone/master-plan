@@ -1372,6 +1372,45 @@ table is handled.
 
 ---
 
+### B-24 — a raster table's own placement is not reported at all, not even as a disclosed exclusion (NOT FIXED — found, traced, disclosed)
+
+**Where:** `067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8`,
+"PCW RISER DIAGRAM SCHEDULE - HUTCH 1.3" — found running
+`table-box-eval.mjs` against this document's own pre-existing
+hand-authored `keys/067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.
+tableboxes.csv` (authored in an earlier, separate ground-truth effort,
+not for this Demo Corpus pass), while checking real box-tier evidence
+against the goal's own EoB≤4pt bar for this session's grading pass.
+
+**Measured:** the authored ground truth records this table as a RASTER
+(a 645×659 embedded image) whose truth box is the image's own placement
+rectangle — the same convention used for `017_MD#14`'s raster table. All
+14 of this document's other authored tables on the same page score
+essentially perfect boxes (mean EoB 0.0pt) against `production-graph-
+cli.mjs`'s output. This 15th one does not appear in that output AT ALL —
+not as a found table, not as a disclosed-and-excluded raster, nothing.
+`table-box-eval.mjs` reports it `MISSING`.
+
+**Relationship to already-catalogued bugs and to the goal's own rule:**
+distinct from every other entry above because this is not a vector-table
+extraction failure — it's a gap in the goal's own explicit requirement
+that "Rasters/pasted images on these documents are still correctly
+EXCLUDED, not silently zeroed — that disclosure has to hold up live too"
+(`goals/VECTORGRID_TABLE_BOXES.md`, "The Demo Corpus" section). Silently
+returning nothing is indistinguishable, from the output alone, between
+"correctly recognized as an out-of-scope raster" and "never looked at
+this part of the page." Not traced into the raster-detection/disclosure
+code to find which of those two it actually is, per this file's standing
+rule against guessing at a fix under time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** if this
+represents an undisclosed miss rather than a correct-but-silent
+exclusion, it is a second real defect on this page (alongside B-23's
+merged-cell tables) that a per-table-found accounting would hide inside
+an otherwise 14/14 clean result.
+
+---
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.
