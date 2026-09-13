@@ -181,6 +181,44 @@ that number exists, it gets written into this file — call it **N**. Until N
 is measured and printed here, "volume" has not been answered, regardless of
 how many tables have been hand-graded so far.
 
+**Measured 2026-09-13.** Two real findings before N itself:
+
+1. **"224 PDFs" was never a real document count — it double-counted split
+   files.** Several large bulk-corpus projects were split into `partNN_p<range>`
+   files (each project living in its own subdirectory) with the reassembled
+   single PDF sitting in that volume's own `_rejoined/` folder — 12 split
+   projects in Vol1, 13 in Vol2. Counting every file under `bulk/` at any
+   depth (as a naive `find` does) counts a 3-part project as 4 documents (3
+   parts + 1 rejoined) instead of 1, landing at 215-224 depending on exactly
+   what is swept in. The REAL, deduplicated population — every top-level
+   unsplit PDF, plus each split project's own single `_rejoined` file, never
+   the raw parts (which would double-count every page they cover) — is
+   **113 real documents, 4,799 pages** (Vol1: 19 unsplit + 12 rejoined = 31;
+   Vol2: 69 unsplit + 13 rejoined = 82).
+2. **`findsheets.py` (pdfplumber) is computationally infeasible at this
+   volume on this corpus.** Timed directly: `extract_text()` on this corpus's
+   own CAD-dense pages takes 6-12 SECONDS EACH (measured live on
+   `03_FL_HurlburtField_ChildDevCenter.pdf`'s own first 6 pages) — at that
+   rate a single ~110-page document takes 10-20 minutes, and 113 documents
+   would take many hours sequentially. This matches this session's own two
+   earlier abandoned attempts at this same measurement. Substituted
+   `mcp/scripts/tables-found-census.mjs` — already in this repo, built for
+   exactly this ("the expensive layers are not needed... pull each page's
+   text spans once, a single pdf.js pass, and run buildSheetGraph over them
+   directly") — measured live at ~3-4 seconds per document including the
+   same 110-page file above. This substitutes "tables the text-layer
+   detector actually recognizes as tables" for findsheets.py's own "bare
+   caption regex match" — a narrower, more conservative count (a caption
+   with no matching ruled structure below it does not count), and arguably
+   the MORE relevant number for this file's own purpose: it is literally the
+   population this project's evals draw from, not just printed text that
+   looks like a title.
+
+**N = 2,341** (real tables found across all 113 real documents, 4,799 pages,
+0 failures — full per-document breakdown in the census JSON this run
+produced). 25% of N = **586** tables the held-out hand-graded sample must
+cover — not yet drawn (see the open item below).
+
 Once N is known:
 
 - The held-out hand-graded sample (boxes AND cells, full discipline above)
