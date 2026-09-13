@@ -8008,6 +8008,25 @@ export default function TakeoffCanvas() {
     catch (error) { return { error: `BAS workflow inspection failed: ${error?.message || error}` }; }
   }
 
+  /** SHOULD THIS BE ON THE SHARED PATH? No. Canonical extraction, quantity,
+   * reconciliation, citations and workflow status are already produced above
+   * by shared services. This only prevents the final subcompiler from naming a
+   * consolidated browser workspace after itself. */
+  function agentPresentCompleteBasTakeoff(presentation) {
+    if (presentation?.kind !== "complete_bas_takeoff") {
+      return { error: "Complete BAS presentation metadata is invalid." };
+    }
+    setLastCorpusTakeoffMeta({
+      kind: presentation.kind,
+      display_label: presentation.display_label,
+      sheet_count: presentation.sheet_count,
+      workstream_count: presentation.workstream_count,
+      bas_math: presentation.bas_math || null,
+    });
+    setShowTakeoffData(true);
+    return { presented: true, kind: presentation.kind, changed_takeoff_truth: false };
+  }
+
   function agentOpenBasWorkspace(destination) {
     if (!basWorkflowRef.current) return { error: "No retained BAS workflow is open. Compile a BAS takeoff first." };
     const routes = {
@@ -9005,6 +9024,7 @@ export default function TakeoffCanvas() {
       compileCorpusTakeoff: agentCompileCorpusTakeoff,
       analyzeControlSchematics: agentAnalyzeControlSchematics,
       inspectBasWorkflow: agentInspectBasWorkflow,
+      presentCompleteBasTakeoff: agentPresentCompleteBasTakeoff,
       openBasWorkspace: agentOpenBasWorkspace,
       reconcileSchedulePlan: agentReconcileSchedulePlan,
       countMarks: agentCountMarks,

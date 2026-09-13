@@ -108,6 +108,10 @@ test("run_complete_bas_takeoff executes every production stage in fixed order an
       calls.push(["inspect", domain]);
       return { domain, status: "not_started", blocker_count: 3, next_step: "estimator review", installed_quantity: null };
     },
+    presentCompleteBasTakeoff: (presentation: unknown) => {
+      calls.push(["present", presentation]);
+      return { presented: true, changed_takeoff_truth: false };
+    },
     openBasWorkspace: (destination: string) => {
       calls.push(["open", destination]);
       return { opened: true, destination };
@@ -138,6 +142,16 @@ test("run_complete_bas_takeoff executes every production stage in fixed order an
     },
   ]);
   assert.equal(Object.keys(out.inspections).length, 5);
+  const presentationCall = calls.at(-2) as unknown[];
+  assert.deepEqual(presentationCall[0], "present");
+  assert.deepEqual(presentationCall[1], {
+    schema_version: "opentakeoff.complete_bas_presentation.v1",
+    kind: "complete_bas_takeoff",
+    display_label: "BAS PROJECT TAKEOFF",
+    sheet_count: 0,
+    workstream_count: 5,
+    bas_math: null,
+  });
   assert.deepEqual(calls.at(-1), ["open", "review_revisions_release"]);
   assert.equal(out.bas_math_policy, "not_supplied_unresolved_preserved");
   assert.equal(out.stages.hvac_equipment.status, "complete");
@@ -170,6 +184,10 @@ test("run_complete_bas_takeoff preserves independent evidence after one shared c
       later.push(domain);
       return { domain, status: "current_with_open_findings" };
     },
+    presentCompleteBasTakeoff: () => {
+      later.push("present");
+      return { presented: true };
+    },
     openBasWorkspace: () => {
       later.push("workspace");
       return { opened: true };
@@ -184,7 +202,7 @@ test("run_complete_bas_takeoff preserves independent evidence after one shared c
   assert.equal(out.stages.review_revisions_release.status, "partial");
   assert.deepEqual(later, ["analyze", "reconcile", ...[
     "point_soo", "equipment_templates", "assemblies_responsibility", "engineering_compatibility", "review_revisions_release",
-  ], "workspace"]);
+  ], "present", "workspace"]);
 });
 
 test("query_table delegates whole-set cited cell filters", async () => {

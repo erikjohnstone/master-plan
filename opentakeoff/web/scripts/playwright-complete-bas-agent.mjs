@@ -229,9 +229,14 @@ try {
       hasInstalledQty: /Installed qty/i.test(text),
       hasStatus: /\bStatus\b/i.test(text),
       hasEmptyState: /(?:\b0\s+lines?\b|no\s+(?:takeoff\s+)?(?:lines?|rows?|results?))/i.test(text),
+      hasCompleteBasHeading: /BAS PROJECT TAKEOFF/i.test(text),
+      hasLastSubcompileHeading: /T-VALVE-EMBEDDED-01/i.test(text),
     };
   });
   if (panelFacts.hasObjectObject) throw new Error("Takeoff UI rendered [object Object].");
+  if (!panelFacts.hasCompleteBasHeading || panelFacts.hasLastSubcompileHeading) {
+    throw new Error("The consolidated Takeoff workspace is mislabeled as a subcompiler result.");
+  }
   if (Number(receipt.reconcile?.summary?.total || 0) > 0
       && (!panelFacts.hasScheduledQty || !panelFacts.hasInstalledQty || !panelFacts.hasStatus)) {
     throw new Error("Takeoff UI is missing scheduled/installed/status reconciliation columns.");

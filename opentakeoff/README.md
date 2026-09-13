@@ -157,6 +157,11 @@ project, surviving ordinary PDF removal. Copies are not synced; keep an external
 backup and the takeoff JSON. This does not clear findings, select a revised drawing
 set, approve takeoffs or implement revision release.
 
+The Agent request **Run a BAS takeoff** opens one consolidated **BAS project
+takeoff** rather than leaving the workspace labeled as whichever subcompiler ran
+last. Its Takeoff rows, BAS point/SOO evidence, diagrams, reconciliation and
+review state remain separate evidence domains under the same human release gate.
+
 Finding identities now survive canonical JSON backup/restore. Table evidence
 follows its recorded column order; original values and source boxes are unchanged.
 
@@ -422,10 +427,14 @@ measuring engine carved out of a commercial Division 9 estimating system—not a
 reimplementation.
 
 ```bash
-cd web
 npm install
-npm run dev        # http://localhost:5173
+npm run dev        # one terminal · http://localhost:5173
 ```
+
+The first local start creates the ignored `.venv-bas` environment and installs
+the validated BAS engine before Vite opens. Later starts reuse it. This prevents
+the Agent from appearing healthy and then losing BAS evidence at the Python
+boundary. Python 3.11 or newer is required for BAS takeoffs.
 
 Or open the [**live demo**](https://opentakeoff.kentucky-ai.com). Drag in
 `demo/sample-plan.pdf`, accept the detected scale, choose a condition, click **One-Click Area**,
@@ -780,7 +789,7 @@ A fork is the unit of ownership here, and it's the unit of contribution: the sam
 give you a private instance and a branch to send back.
 
 1. **[Fork on GitHub](https://github.com/Kentucky-ai/opentakeoff/fork)**, then clone your fork.
-2. **Run it:** `cd web && npm ci && npm run dev` — the canvas is at `localhost:5173`, and
+2. **Run it:** `npm ci && npm run dev` — one terminal opens the canvas at `localhost:5173`, and
    `npm run check` is the exact CI gate (typecheck, lint, test, build).
 3. **Put it on your own URL:** the repo carries its [`netlify.toml`](netlify.toml) (base `web`,
    publish `dist`), so importing your fork into Netlify deploys with no settings; any static host
