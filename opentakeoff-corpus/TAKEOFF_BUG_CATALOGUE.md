@@ -3564,6 +3564,73 @@ fix addresses the actual defect rather than only papering over its symptom.
 
 ---
 
+## B-42: mid-table floor-section divider hijacks the table's title AND silently drops the trailing section entirely (028_TX, "NOISE CONTROL DUCT SILENCER SCHEDULE")
+
+**Found 2026-09-13** while extending genuine `pixelruler.py` box-tier grading to
+028_TX's 3 remaining tables (the ledger's earlier "5/8 box-graded" note). This
+document's page-1 "NOISE CONTROL DUCT SILENCER SCHEDULE" is a single ruled table
+with two internal bold section-divider rows, "FIRST FLOOR" and "SECOND FLOOR",
+each followed by its own data rows (confirmed by direct render: FIRST FLOOR
+carries 14 data rows, SECOND FLOOR 2 more — 16 real rows total under one real
+caption, exactly matching this file's own earlier hand-count).
+
+**What production actually returns for this page:** only 2 tables —
+`EXTERNAL STATIC PRESSURE SCHEDULE` (17 rows, correct) and one titled
+**`"FIRST FLOOR"`** (13 rows). The real caption above it, "NOISE CONTROL DUCT
+SILENCER SCHEDULE", is nowhere in the output as a title. **SECOND FLOOR's own
+2 rows (`ROCK REHEARSAL 218`, `VEST 212`) do not appear anywhere in the
+extracted graph at all** — not merged into the FIRST FLOOR table, not present
+as a separate table, and not even a *declined* candidate: `OPENTAKEOFF_GRAPH_TRACE=1`
+on a fresh (post cache-clear) run lists exactly 4 declined regions for this
+page, and none of their coordinates fall anywhere near SECOND FLOOR's own
+location (the nearest, `4x11 at 124,1170,1566,1259: no header block above the
+data`, converts to pixel (186,1755)-(2349,1888.5) at scale 3 — confirmed by
+direct render to be the page's unrelated "DUCT SILENCER DETAIL" isometric
+drawing with its dimension leader lines, not this schedule at all). SECOND
+FLOOR was never proposed as a candidate region in the first place, so there
+is nothing to decline — it is a true silent drop, not a rejected-and-logged
+one.
+
+**Root cause, mechanism-level:** this is the same block-split failure family
+already tracked (B-26's "block-split at y=1019", B-77's "mid-table
+section-divider row misread as a second bogus table") but with a new, worse
+symptom shape: the section-divider text itself ("FIRST FLOOR") is being
+promoted to stand in as the resulting sub-block's own *title* (rather than
+being recognized as a keyed data row or a non-title section header within one
+continuing table), and whatever block-splitting logic acts on the FIRST/SECOND
+divider only emits a candidate for the block *before* the split it detects —
+the trailing section past the last divider it processes is never revisited to
+emit its own candidate at all. Not traced to the exact function this session
+(the vectorgrid Python extractor's own row/block segmentation is upstream of
+the TS reconciliation layer this session's other findings have mostly lived
+in) — disclosed at the mechanism level, consistent with this catalogue's
+existing convention for findings of this shape.
+
+**Also affects box-tier interpretation:** the `"FIRST FLOOR"`-titled table's
+own `region` was still measured genuinely blind against its own true ruled
+extent and **passes** (worst edge ~0.97pt) — the box that DOES exist is
+correctly bounded. But grading that box alone materially overstates this
+table's health: the real schedule is a single 16-row table, of which 3 rows
+(the missing 2 SECOND FLOOR data rows, discovered mid-count to *also* be one
+short even on the FIRST FLOOR side: 13 reported vs 14 counted from the
+render, not yet independently re-verified cell-by-cell) are simply absent
+from any extracted table, and its own real caption is never attached to what
+survives.
+
+**Correction to this ledger's own earlier claim:** `028_TX`'s row in
+`keys/DEMO_CORPUS_GRADING.md` previously stated "all 8 correct" for this
+document's schedule count, based on an earlier pass's row-count check. That
+check evidently did not catch this table's true structure (single schedule,
+two floor sections) against the FIRST/SECOND FLOOR split now confirmed live
+— corrected in that file's own row.
+
+**Not fixed this session** — same reasoning as B-26/B-31/B-32: touching
+vectorgrid's shared block/row-segmentation logic needs the corpus-wide
+regression sweep this session's standing rule requires before a change with
+that blast radius, and the exact originating call needs isolating first.
+
+---
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
