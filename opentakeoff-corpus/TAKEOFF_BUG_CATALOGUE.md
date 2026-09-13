@@ -1644,6 +1644,16 @@ the sibling `SPLIT SYSTEM INDOOR UNIT (EVAPORATOR) SCHEDULE` on the same
 sheet (38 real rows) matches exactly, so the over-count is specific to
 this one table, not a page-wide off-by-one.
 
+**CONFIRMED RECURRING 2026-09-13 — a 4th document, two-row
+over-count.** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3`'s
+`VENTILATION REQUIREMENTS` table reports `rows: 40`; direct `textSpans()`
+measurement confirms exactly 38 real rows (34 real room rows across 4
+`DOAS-`-grouped zones, plus 4 zone-subtotal rows) — includes a genuine
+duplicate room name, `CLASSROOM 135`, confirmed present twice at
+different y-positions under two different zones, ruled out as the
+source of the miscount. Found alongside B-31's own new row-truncation
+and missing-table findings on the same document.
+
 ### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (NOT FIXED — found, traced, disclosed)
 
 **Where:** `100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#7` (sheet
@@ -1826,6 +1836,66 @@ shape — a new bug number rather than an amendment.
 fails MISSED=0's false-positive-free counterpart — a phantom table with
 no real basis pollutes an otherwise perfectly-extracted sheet (4/4 real
 tables correct).
+
+### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (NOT FIXED — found, traced, disclosed)
+
+**Where:** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf`, both of its
+schedule pages (M002/#2, M003/#3) — found continuing the HELDOUT set's
+own missed-checking pass.
+
+**Measured, page #2 (M002, mistagged `role: detail`).** Hand-confirmed 5
+real tables: `FAN COIL UNITS` (18 rows, `FC-101` through `FC-210`,
+confirmed exactly via `textSpans()`), `DEDICATED OUTDOOR AIR SYSTEM` (4
+rows), `AIR COOLED CHILLER` (1 row), `HOT WATER CONDENSING BOILER` (2
+rows), `EXHAUST FANS` (1 row) — 26 rows total. The extractor reports only
+2 of these 5 tables: `HOT WATER CONDENSING BOILER` correct (2/2), but
+`FAN COIL UNITS` reports `rows: 2` against 18 real rows — a **16-row
+truncation on a table the extractor otherwise identifies and titles
+correctly**, a new failure shape not seen elsewhere in this file (every
+prior row-count bug in this catalogue either over-counts by 1-2 phantom
+rows, B-26, or the whole table is present/absent — never a large
+fraction of a correctly-titled table's own real rows silently dropped).
+`DEDICATED OUTDOOR AIR SYSTEM`, `AIR COOLED CHILLER`, and `EXHAUST FANS`
+are completely absent — 3 more real tables missing on the same page.
+
+**Measured, page #3 (M003, correctly tagged `role: schedule`).** Hand-
+confirmed 8 real tables (100 rows combined with page #2's real 26 —
+126 across the document), using `textSpans()` coordinate counts for the
+two dense tables: `HYDRONIC PUMPS` (8), `VENTILATION REQUIREMENTS` (38:
+34 real room rows across 4 `DOAS-`-grouped zones plus 4 zone-subtotal
+rows — genuinely includes `CLASSROOM 135` twice, confirmed as two
+distinct real rows at different y-positions under different DOAS zones,
+not a miscount), `SPLIT SYSTEM HEAT PUMPS` (4), `MAKE UP AIR UNITS` (1),
+`HYDRONIC ACCESSORIES` (10), `AIR DISTRIBUTION` (9), `ELECTRIC HEATERS`
+(3), `HEAT EXCHANGER` (1). The extractor finds 7 of these 8 — `AIR
+DISTRIBUTION` (9 rows) is completely absent, confirmed via a full-JSON
+title search, not misattached elsewhere. `VENTILATION REQUIREMENTS`
+reports `rows: 40` against the true 38 — a 2-row phantom-overcount,
+amended into B-26's own family below rather than re-described here. The
+other 6 tables all match exactly.
+
+**Relationship to already-catalogued bugs:** the `FAN COIL UNITS`
+16-row truncation is a genuinely new bug shape — filed here rather than
+folded into B-26 (which is exclusively small +1/+2 phantom-row
+OVER-counts) because this is a large fraction of REAL rows silently
+DROPPED from an otherwise correctly-identified table, the opposite
+direction and a different likely mechanism (a row-extraction limit or
+early-termination condition, not a stray adjacent line miscounted as
+data). The `AIR DISTRIBUTION` and page #2's 3 missing tables are plain
+missing-table cases, consistent with the general pattern already named
+across B-16/B-19/B-25/B-28 but not attributed to any one of them without
+further tracing.
+
+`VENTILATION REQUIREMENTS`'s own 40-vs-38 phantom-row overcount is the
+same small-overcount shape as B-26's other instances — amended there as
+a 4th confirmed document rather than re-described here.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this document
+fails MISSED=0 by 4 whole real tables (39 rows) plus a 16-row truncation
+inside a 5th, correctly-titled table — the row-truncation shape is a new
+and potentially serious failure mode worth prioritizing: it silently
+under-reports a real table's own content without any signal (no missing
+title, no absent table) that anything is wrong.
 
 ## What is working
 
