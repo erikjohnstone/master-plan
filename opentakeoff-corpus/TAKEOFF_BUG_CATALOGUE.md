@@ -1406,7 +1406,7 @@ SPLIT/OVERRUN/SHORT/MERGED, identical before and after.
 
 ---
 
-### B-19 — two real schedule tables vanish entirely from the same document while unrelated floor-plan callout text nearby gets fused into a fabricated one-row table (NOT FIXED — found, traced, disclosed)
+### B-19 — two real schedule tables vanish entirely from the same document while unrelated floor-plan callout text nearby gets fused into a fabricated one-row table (NOT FIXED — root cause of the page-23 disappearance confirmed precisely; page-25 disappearance and the callout fabrication remain untraced)
 
 **Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf` — same document
 as B-18, found in the same pass. This is why the Volume-floor census
@@ -1448,6 +1448,70 @@ that a reviewer could mistake for a real schedule) but a different domain
 reach the other. The page-25 disappearance is not yet traced to any known
 cause; it was not fabricated into anything else findable in this output,
 it is simply not there.
+
+**ROOT CAUSE OF THE PAGE-23 DISAPPEARANCE CONFIRMED 2026-09-13 (code-level,
+precise — not fixed).** The `"7 A 6 604 8 EVS 5"` fabrication and the real
+`PROJEJCT FINISH SCHEDULE`'s own disappearance are TWO SEPARATE, unrelated
+findings on the same page, not one bug — traced live
+(`OPENTAKEOFF_GRAPH_TRACE=1`, then `bakeoff/vectorgrid.py find_tables()` and
+`vectorgrid_rpc.extract_grid()` called directly on the sliced page, then a
+render crop at the exact traced coordinates):
+
+- The real table (12 rows, room numbers `111`-`158`, matching this entry's
+  own hand-count exactly) genuinely IS found by vectorgrid as one clean,
+  correctly-shaped 15x10 face — but refused with `"no header block above
+  the data"`, one of the trace's own 4 declined regions on this page.
+  Dumping this exact candidate's own cells (`vectorgrid_rpc.extract_grid`)
+  shows why: its own rows 0-1 are BLANK, and row 2 is already real data
+  (`"111", "STORAGE", "EXIST QT", ...`) — the header row (`ROOM`/`FLOOR`/
+  `WALL BASE`/`WALL MATL`/`WALL FINISH`/`CEILING MATL`/`CEILING FINISH`/
+  `CEILING HEIGHT`/`NOTES`) is not inside this candidate's own detected
+  face AT ALL. Confirmed by direct coordinate comparison: the header
+  words sit at y≈1233-1248, while the candidate's own bbox starts at
+  y=1262.46 — the header text sits entirely ABOVE (outside) the ruled data
+  grid's own top edge, in blank, unruled space between it and the table's
+  own caption further up the page. Confirmed this is a REAL header, not
+  page furniture: every header word's own x-position lands squarely
+  inside its corresponding data column's own x-boundary (`ROOM` at
+  x0=828.8 inside data col1's `[754.75,921.38]`; `NOTES` at x0=1604 inside
+  data col9's `[1497.49,1733.59]`; all 9 columns check out this cleanly),
+  exactly the evidence `celltext.py`'s own `split_unruled_header_row`
+  requires for the sibling shape it already fixes (B-18, same document,
+  its own `WINDOW SCHEDULE`).
+
+  **This is NOT the B-18 shape, despite being the same document and the
+  same general family.** `split_unruled_header_row`'s own doc is explicit
+  about its own scope: it recovers a header GLUED INTO the same single
+  face as the table's own title (a combined title+header blob that needs
+  splitting apart) — three safety constraints all keyed on that one
+  topmost face existing and being an outlier in height. This table's own
+  candidate has NO such face: its topmost rows are blank, and the header
+  text was never captured as a face/cell by vectorgrid's own polygon
+  arrangement at all (most plausibly because the header row itself has no
+  rules of its own — typed directly above the ruled data grid with
+  nothing enclosing it, a different real drafting convention than B-18's
+  "one big box holds both" shape). A real fix needs a genuinely new
+  capability neither `split_unruled_header_row` (splits an existing over-
+  large face) nor B-42's fragment-merge (stacks two REFUSED/adjacent
+  vectorgrid FACES together) can do: for a candidate refused this way
+  whose own topmost row(s) are blank, search the page's own text spans in
+  the gap ABOVE the candidate's own bbox for words that land one-per-
+  column on the x-boundaries the ruled data body already establishes
+  (exactly `split_unruled_header_row`'s own alignment test, applied to
+  text with no face at all rather than a face that needs splitting), and
+  synthesize a header row from them when enough columns clear the bar.
+  Not designed or attempted here — a new function, not a tweak to an
+  existing one, and (per this file's own standing rule) needs its own
+  corpus-wide false-positive check before shipping, the same discipline
+  B-27's own measured-and-rejected regex widening just demonstrated the
+  value of.
+
+  The `"7 A 6 604 8 EVS 5"` fabrication remains a SEPARATE, still-untraced
+  finding — its own region ([1571.77,714.78]-[1755.96,892.41] raw pt) sits
+  nowhere near the real finish schedule's own location
+  ([699.75,1262.46]-[1733.59,1562.62]), confirming these are two
+  independent defects on the same page, not one mechanism wearing two
+  faces.
 
 **Consequence for the Demo Corpus's own zero-error bar:** of this
 document's 4 real schedule tables, 0 pass extraction cleanly — 2 are
