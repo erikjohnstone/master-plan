@@ -260,7 +260,30 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // title in the corpus was found drafted as "ELEVATION NUMBER" itself, so
   // this exclusion is narrow and additive, not a loosened match elsewhere.
   { re: /ELEVATIONS?\b(?!\s+NUMBER)/, role: "elevation", conf: 0.7 },
-  { re: /DETAILS?\b|SECTIONS?\b/, role: "detail", conf: 0.6 },
+  // "CODE SECTION" is not a section-DRAWING reference — it is the ordinary
+  // electrical/mechanical schedule vocabulary for a regulatory code section
+  // (a breaker/wire-size note reading "VARIES (SEE CODE SECTION)", found
+  // live inside real panel-schedule columns). Real, measured:
+  // 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#27
+  // ("ELECTRICAL SCHEDULES", sheet E601) carries 5 real spans containing
+  // "SCHEDULE" (each individually classifying "schedule" at 0.5 in
+  // isolation) alongside this one stray "CODE SECTION" note, which matched
+  // the bare, unanchored SECTION half of this signal at 0.6 -- HIGHER than
+  // the real schedule signal, so the sheet's own role resolved to "detail"
+  // (halved to 0.3 by dissent, but never overturned) instead of "schedule".
+  // Session.ts gates vector-geometry extraction on role in
+  // {plan,schedule,demolition,unknown} -- role "detail" is NOT in that set,
+  // so `segs` was never extracted for this sheet at all, and vectorgrid
+  // never got a chance to run on 5 real, fully-ruled vector tables sitting
+  // right there (172/322/82/255 real geometric cells each, confirmed via
+  // vectorgrid.py's own find_tables() directly). TAKEOFF_BUG_CATALOGUE.md's
+  // B-21 (its 4th-document confirmation only -- the original 25_WA claim
+  // turned out to be a genuine raster misdiagnosis, corrected separately).
+  // Narrow, additive negative lookbehind, matching this file's own
+  // "ELEVATION NUMBER" exclusion two lines above -- excludes only this one
+  // measured phrase shape, never loosens a real "WALL SECTION"/"BUILDING
+  // SECTION A-A"/"CROSS SECTION" sheet-title match anywhere else.
+  { re: /DETAILS?\b|(?<!CODE )SECTIONS?\b/, role: "detail", conf: 0.6 },
 ];
 // Running-text references are not titles: "SEE FINISH PLAN FOR ADDITIONAL
 // INFORMATION" in a remark cell must never make a schedule sheet a plan.
