@@ -1254,6 +1254,60 @@ at least 12 real tables with real circuit-level electrical data,
 completely absent from a document whose HVAC-specific schedules otherwise
 extract almost perfectly.
 
+**CONFIRMED RECURRING 2026-09-13 — a 4th document, and the miss is wider
+than "panel schedules" specifically.** `012_MO_M2430_01_Chiller_Upgrade_
+Center_for_Behavioral.pdf#27` ("ELECTRICAL SCHEDULES", sheet E601) has
+both `PANELBOARD SCHEDULE: P1E (EXISTING)` (15 real rows) and `PANELBOARD
+SCHEDULE: HTP (EXISTING)` (9 real rows) missing entirely from the pipeline
+output, same as B-21's original finding — but the SAME page also loses
+`DISCONNECT SWITCH SCHEDULE` (6 real rows, a plain single-tier ruled
+table, not a boxed multi-panel layout at all). So the failure is not
+narrowly about the "THREE PHASE PANEL SCHEDULE" box shape specifically —
+something about this general class of dense electrical-schedule sheet is
+losing tables wholesale. (This document's own `VFD SCHEDULE` on the same
+page shows a related but DIFFERENT failure — 6 real rows fused into one
+with concatenated cell values — catalogued separately as B-22, since the
+row-fusion signature there is distinct enough to trace independently.)
+
+---
+
+### B-22 — multiple real rows are fused into a single row, with each cell's text a space-joined concatenation of every fused row's own value (NOT FIXED — found, traced, disclosed)
+
+**Where:** `012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#27`,
+"VFD SCHEDULE:" — found in the same pass as B-21's 4th-document
+confirmation, same page, same document.
+
+**Measured, hand-graded against the render first:** the real table has 16
+rows (`VFD-CWP-1/2/3`, `VFD-PCHP-1/2/3`, `VFD-SCHP-1/2`, `VFD-PHWP-1/2/3`,
+`VFD-SHWP-1/2`, `VFD-CT-1/2/3 (EXIST.)`), 10 real columns (`TAG NO,
+MANUFACTURER, MODEL, SERVES, HP, VOLTS, PHASE, HZ, DRIVE ENCLOSURE,
+NOTES`). `production-graph-cli.mjs`'s output for this table has only 4
+columns (`TAG, MANUFACTURER, MODEL, NOTES` — `SERVES`, `HP`, `VOLTS`,
+`PHASE`, `HZ`, `DRIVE ENCLOSURE` all gone) and exactly ONE row, keyed
+`VFD-PHWP-3`, whose own `TAG` cell reads `"VFD-SCHP-2 VFD-PHWP-1 VFD-PHWP-
+2 VFD-PHWP-3 VFD-SHWP-1 VFD-SHWP-2"` — SIX real tag values, space-joined
+into one string — and whose `MANUFACTURER`/`MODEL`/`NOTES` cells are each
+the same 6-way concatenation of that column's own real per-row values
+(`"SCHNEIDER SCHNEIDER SCHNEIDER SCHNEIDER SCHNEIDER SCHNEIDER"`, `"SFD212
+SFD212 SFD212 SFD212 SFD212 SFD212"`, `"1-5 1-5 1-5 1-5 1-5 1-5"`). The
+other 10 real rows (`VFD-CWP-1/2/3`, `VFD-PCHP-1/2/3`, `VFD-SCHP-1`,
+`VFD-CT-1/2/3`) are not present in any form — not fused, not fabricated,
+simply gone.
+
+**Relationship to already-catalogued bugs:** distinct from B-20 (one row
+duplicated verbatim) and from B-18 (header/first-row collapse) — here SIX
+different real rows' cell text is concatenated together into ONE row
+object, with real column data lost outright (4 of 10 columns). Not traced
+into the row-clustering or cell-joining code to find why these 6 rows'
+y-bands merged into one cluster while the other 10 rows vanished
+separately, per this file's standing rule against guessing at a fix under
+time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 (10
+of 16 rows entirely absent) and the one surviving row is itself not a real
+row — its every cell is corrupted concatenated text that matches no real
+table cell. This table cannot pass either box- or cell-grading.
+
 ---
 
 ## How these connect
