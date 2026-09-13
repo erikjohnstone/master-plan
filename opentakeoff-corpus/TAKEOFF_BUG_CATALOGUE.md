@@ -1086,6 +1086,19 @@ table kind sees long descriptive prose (the misplaced `SG` row) where it
 expects short column labels. This is not a one-document quirk; it is a
 repeatable failure mode.
 
+**CONFIRMED RECURRING 2026-09-13 — third real instance, third document, a
+new variant of the same signature.** `25_WA_DouglasCounty_Courthouse_HVAC_
+DDC.pdf#4`'s `HEAT PUMP SCHEDULE - SPLIT SYSTEM TYPE` (real rows: `HP-10`,
+`HP-20`) shows a slightly different flavor of the identical disease: every
+one of the ~34 real column headers gets the first real data row's own
+value APPENDED to it (`"SYMBOL HP-10"`, `"COOLING CAP. * TOTAL MBH 30"`,
+`"A - INDOOR UNIT *** FAN CFM 730"`, …, one fused `header+HP-10-value`
+string per column), and `HP-10` never appears as its own row at all — only
+`HP-20` survives as a normal row. Same root failure (the real header and
+the first real data row collapse into one another) but manifesting as a
+per-column fusion rather than a whole-row promotion — worth recording as
+a distinct sub-shape of the same bug, not a new bug number.
+
 **Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 (row
 `O`, and the true header row, are both gone) and the reported cells for
 row `A` do not exist in `rows` at all — they were reassigned to `headers`
@@ -1202,6 +1215,44 @@ that is not a fabrication of new content (unlike B-16/B-19) but an exact
 duplicate of real content still fails an exact row-count match — this
 table cannot pass cell-grading as extracted despite every cell value
 being individually correct.
+
+---
+
+### B-21 — an entire recurring table FORMAT (multi-panel electrical schedules) is invisible to extraction: at least 12 real tables across 2 sheets, 0 found (NOT FIXED — found, traced, disclosed)
+
+**Where:** `25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#8` and `#9`
+(sheets `E0.03` and `E0.04`, "ELECTRICAL PANEL SCHEDULES") — found while
+grading this document's HVAC schedules (page 4-5, otherwise a clean
+6-of-7-tables-correct result once B-18's known signature on the `HEAT
+PUMP SCHEDULE` is set aside — see that entry's newest instance).
+
+**Measured:** each of these two sheets lays out SIX real, titled, fully
+ruled "THREE PHASE PANEL SCHEDULE" tables side by side — an EXISTING
+version and a REVISED version of each of 3 panels (`M`/`M(R)`,
+`MSB1`/`MSB1(R)`, `BH1`/`BH1(R)` on p8; `BP3`/`BP3(R)`, `BP2`/`BP2(R)`,
+`BP1`/`BP1(R)` on p9), each with ~15-17 real circuit-description rows
+per panel. `production-graph-cli.mjs --mode graph`'s full output for this
+22-sheet document contains exactly 12 tables total, and NONE of them are
+these panel schedules — not fabricated into something else findable, not
+partially captured, simply absent. At least 12 real ruled tables (and
+likely more once sheet `E0.05`, not yet checked, is counted) are entirely
+unreachable through this pipeline.
+
+**Relationship to already-catalogued work:** task #64 ("Fix vectorgrid/ODL
+over-merge that corrupted 25_WA's stacked schedules") and task #88 ("16_NV
+#32 and all 3 of 25_WA's sheets never reach structure recognition at all
+under current code") are both closed as completed against this exact
+document. Whether this is a regression of that fix, a different sheet
+than the "3 sheets" #88 already covered, or a genuinely new failure mode
+specific to the "THREE PHASE PANEL SCHEDULE" boxed multi-panel layout was
+not determined here — flagged for a follow-up session to reconcile against
+those closed tasks' own original evidence before attempting a fix.
+
+**Consequence for the Demo Corpus's own zero-error bar:** this is the
+largest single MISSED count measured in this pass so far by table count —
+at least 12 real tables with real circuit-level electrical data,
+completely absent from a document whose HVAC-specific schedules otherwise
+extract almost perfectly.
 
 ---
 
