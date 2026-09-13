@@ -1,0 +1,1132 @@
+[
+  {
+    "id": "03_FL_HurlburtField_ChildDevCenter",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/03_FL_HurlburtField_ChildDevCenter.pdf",
+    "hvac_mech": 594,
+    "bas_controls": 35,
+    "electrical": 274,
+    "plumbing": 108,
+    "structural": 193,
+    "architectural": 22
+  },
+  {
+    "id": "08_ME_BGS_Augusta_EastCampus_Renovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/08_ME_BGS_Augusta_EastCampus_Renovation.pdf",
+    "hvac_mech": 49,
+    "bas_controls": 0,
+    "electrical": 38,
+    "plumbing": 7,
+    "structural": 15,
+    "architectural": 7
+  },
+  {
+    "id": "09_ME_BGS_KennebecValleyCC_Renovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/09_ME_BGS_KennebecValleyCC_Renovation.pdf",
+    "hvac_mech": 32,
+    "bas_controls": 0,
+    "electrical": 22,
+    "plumbing": 4,
+    "structural": 24,
+    "architectural": 5
+  },
+  {
+    "id": "10_MO_Hawthorn_PsychHospital_HVAC",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/10_MO_Hawthorn_PsychHospital_HVAC.pdf",
+    "hvac_mech": 113,
+    "bas_controls": 15,
+    "electrical": 22,
+    "plumbing": 18,
+    "structural": 5,
+    "architectural": 1
+  },
+  {
+    "id": "12_MT_MSU_ReidHall_Renovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/12_MT_MSU_ReidHall_Renovation.pdf",
+    "hvac_mech": 199,
+    "bas_controls": 4,
+    "electrical": 105,
+    "plumbing": 46,
+    "structural": 119,
+    "architectural": 8
+  },
+  {
+    "id": "13_MI_MSU_LifeSciences_LabRenovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/13_MI_MSU_LifeSciences_LabRenovation.pdf",
+    "hvac_mech": 197,
+    "bas_controls": 0,
+    "electrical": 253,
+    "plumbing": 33,
+    "structural": 10,
+    "architectural": 5
+  },
+  {
+    "id": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/14_OR_KlamathCC_LearningCtr_Mechanical.pdf",
+    "hvac_mech": 220,
+    "bas_controls": 26,
+    "electrical": 13,
+    "plumbing": 4,
+    "structural": 2,
+    "architectural": 0
+  },
+  {
+    "id": "15_IA_IowaState_Biorenewables_Lab",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/15_IA_IowaState_Biorenewables_Lab.pdf",
+    "hvac_mech": 43,
+    "bas_controls": 1,
+    "electrical": 35,
+    "plumbing": 8,
+    "structural": 88,
+    "architectural": 0
+  },
+  {
+    "id": "16_NV_CarsonValleyMS_HVAC_Replacement",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
+    "hvac_mech": 457,
+    "bas_controls": 31,
+    "electrical": 83,
+    "plumbing": 11,
+    "structural": 44,
+    "architectural": 0
+  },
+  {
+    "id": "17_FL_SuwanneeHS_Courtyard_100CD",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/17_FL_SuwanneeHS_Courtyard_100CD.pdf",
+    "hvac_mech": 147,
+    "bas_controls": 0,
+    "electrical": 144,
+    "plumbing": 30,
+    "structural": 134,
+    "architectural": 0
+  },
+  {
+    "id": "18_OR_BakerMS_HVAC_Electrical_FullSet",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf",
+    "hvac_mech": 246,
+    "bas_controls": 2,
+    "electrical": 167,
+    "plumbing": 16,
+    "structural": 46,
+    "architectural": 0
+  },
+  {
+    "id": "19_CA_VistaUSD_DataCenter",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/19_CA_VistaUSD_DataCenter.pdf",
+    "hvac_mech": 70,
+    "bas_controls": 0,
+    "electrical": 33,
+    "plumbing": 9,
+    "structural": 25,
+    "architectural": 0
+  },
+  {
+    "id": "20_TX_JudsonISD_MEP_Upgrades_Pkg6",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/20_TX_JudsonISD_MEP_Upgrades_Pkg6.pdf",
+    "hvac_mech": 57,
+    "bas_controls": 10,
+    "electrical": 15,
+    "plumbing": 0,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "24_IA_JohnsonCounty_Courthouse",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/24_IA_JohnsonCounty_Courthouse.pdf",
+    "hvac_mech": 159,
+    "bas_controls": 3,
+    "electrical": 107,
+    "plumbing": 26,
+    "structural": 175,
+    "architectural": 8
+  },
+  {
+    "id": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf",
+    "hvac_mech": 218,
+    "bas_controls": 1,
+    "electrical": 49,
+    "plumbing": 0,
+    "structural": 5,
+    "architectural": 0
+  },
+  {
+    "id": "27_WA_ColvilleTribes_Hatchery_Lab",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf",
+    "hvac_mech": 252,
+    "bas_controls": 7,
+    "electrical": 105,
+    "plumbing": 13,
+    "structural": 8,
+    "architectural": 0
+  },
+  {
+    "id": "29_TX_JPS_Hospital_CentralPlant_Chiller",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/29_TX_JPS_Hospital_CentralPlant_Chiller.pdf",
+    "hvac_mech": 152,
+    "bas_controls": 39,
+    "electrical": 9,
+    "plumbing": 3,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "30_WA_SpokaneTransit_CoolingTower",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/30_WA_SpokaneTransit_CoolingTower.pdf",
+    "hvac_mech": 222,
+    "bas_controls": 11,
+    "electrical": 14,
+    "plumbing": 5,
+    "structural": 16,
+    "architectural": 0
+  },
+  {
+    "id": "D_25_CO_weld-mech-permit-set",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/D_25_CO_weld-mech-permit-set.pdf",
+    "hvac_mech": 162,
+    "bas_controls": 1,
+    "electrical": 8,
+    "plumbing": 7,
+    "structural": 9,
+    "architectural": 1
+  },
+  {
+    "id": "01_NY_VA_Northport_Dialysis_100CD",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/01_NY_VA_Northport_Dialysis_100CD.pdf",
+    "hvac_mech": 717,
+    "bas_controls": 8,
+    "electrical": 445,
+    "plumbing": 220,
+    "structural": 108,
+    "architectural": 27
+  },
+  {
+    "id": "02_UT_FAA_Ogden_AirTrafficControlTower",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/02_UT_FAA_Ogden_AirTrafficControlTower.pdf",
+    "hvac_mech": 409,
+    "bas_controls": 1,
+    "electrical": 314,
+    "plumbing": 124,
+    "structural": 219,
+    "architectural": 0
+  },
+  {
+    "id": "04_NV_VA_LasVegas_CentralUtilityPlant",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/04_NV_VA_LasVegas_CentralUtilityPlant.pdf",
+    "hvac_mech": 490,
+    "bas_controls": 74,
+    "electrical": 314,
+    "plumbing": 30,
+    "structural": 179,
+    "architectural": 4
+  },
+  {
+    "id": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/05_MO_VA_StLouis_AHU_VAV_Replacement.pdf",
+    "hvac_mech": 903,
+    "bas_controls": 13,
+    "electrical": 157,
+    "plumbing": 10,
+    "structural": 5,
+    "architectural": 0
+  },
+  {
+    "id": "06_MO_NatlGuard_JeffCity_CST_Addition",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/06_MO_NatlGuard_JeffCity_CST_Addition.pdf",
+    "hvac_mech": 272,
+    "bas_controls": 48,
+    "electrical": 124,
+    "plumbing": 56,
+    "structural": 204,
+    "architectural": 25
+  },
+  {
+    "id": "07_MO_MSHP_TroopB_HVAC_Boilers_Controls",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/07_MO_MSHP_TroopB_HVAC_Boilers_Controls.pdf",
+    "hvac_mech": 72,
+    "bas_controls": 2,
+    "electrical": 8,
+    "plumbing": 1,
+    "structural": 5,
+    "architectural": 0
+  },
+  {
+    "id": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/11_CA_SDSU_EngSciences_Complex_100SD.pdf",
+    "hvac_mech": 691,
+    "bas_controls": 21,
+    "electrical": 334,
+    "plumbing": 105,
+    "structural": 79,
+    "architectural": 3
+  },
+  {
+    "id": "21_VA_OrangeCounty_PublicSafetyBldg",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+    "hvac_mech": 902,
+    "bas_controls": 45,
+    "electrical": 380,
+    "plumbing": 76,
+    "structural": 43,
+    "architectural": 3
+  },
+  {
+    "id": "22_GA_Valdosta_FireStation8_100CD",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/22_GA_Valdosta_FireStation8_100CD.pdf",
+    "hvac_mech": 176,
+    "bas_controls": 0,
+    "electrical": 78,
+    "plumbing": 57,
+    "structural": 4,
+    "architectural": 0
+  },
+  {
+    "id": "23_GA_MaconBibb_RecreationCenter",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/23_GA_MaconBibb_RecreationCenter.pdf",
+    "hvac_mech": 227,
+    "bas_controls": 2,
+    "electrical": 85,
+    "plumbing": 23,
+    "structural": 103,
+    "architectural": 25
+  },
+  {
+    "id": "26_CA_TransbayTower_Mechanical_64Sheets",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+    "hvac_mech": 850,
+    "bas_controls": 0,
+    "electrical": 168,
+    "plumbing": 19,
+    "structural": 68,
+    "architectural": 0
+  },
+  {
+    "id": "28_WA_KCHA_PublicHousing_HVAC",
+    "rel": "bulk/HVAC_BAS_Plan_Sets/_rejoined/28_WA_KCHA_PublicHousing_HVAC.pdf",
+    "hvac_mech": 132,
+    "bas_controls": 1,
+    "electrical": 5,
+    "plumbing": 1,
+    "structural": 2,
+    "architectural": 0
+  },
+  {
+    "id": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf",
+    "hvac_mech": 1750,
+    "bas_controls": 226,
+    "electrical": 39,
+    "plumbing": 21,
+    "structural": 14,
+    "architectural": 0
+  },
+  {
+    "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf",
+    "hvac_mech": 374,
+    "bas_controls": 6,
+    "electrical": 298,
+    "plumbing": 154,
+    "structural": 110,
+    "architectural": 34
+  },
+  {
+    "id": "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/006_US_U2607_01_Interior_Renovations_C_Wing_Updates.pdf",
+    "hvac_mech": 128,
+    "bas_controls": 0,
+    "electrical": 46,
+    "plumbing": 103,
+    "structural": 16,
+    "architectural": 10
+  },
+  {
+    "id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf",
+    "hvac_mech": 176,
+    "bas_controls": 0,
+    "electrical": 152,
+    "plumbing": 40,
+    "structural": 106,
+    "architectural": 13
+  },
+  {
+    "id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+    "hvac_mech": 470,
+    "bas_controls": 39,
+    "electrical": 153,
+    "plumbing": 9,
+    "structural": 59,
+    "architectural": 2
+  },
+  {
+    "id": "010_US_WWYK240146_Design_Implement_Monitoring_Control",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/010_US_WWYK240146_Design_Implement_Monitoring_Control.pdf",
+    "hvac_mech": 172,
+    "bas_controls": 0,
+    "electrical": 22,
+    "plumbing": 17,
+    "structural": 35,
+    "architectural": 1
+  },
+  {
+    "id": "011_IL_VA_Hines_Finance_Center_Renovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/011_IL_VA_Hines_Finance_Center_Renovation.pdf",
+    "hvac_mech": 253,
+    "bas_controls": 2,
+    "electrical": 162,
+    "plumbing": 37,
+    "structural": 18,
+    "architectural": 10
+  },
+  {
+    "id": "013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf",
+    "hvac_mech": 499,
+    "bas_controls": 10,
+    "electrical": 156,
+    "plumbing": 81,
+    "structural": 6,
+    "architectural": 1
+  },
+  {
+    "id": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf",
+    "hvac_mech": 707,
+    "bas_controls": 84,
+    "electrical": 28,
+    "plumbing": 12,
+    "structural": 23,
+    "architectural": 0
+  },
+  {
+    "id": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf",
+    "hvac_mech": 420,
+    "bas_controls": 52,
+    "electrical": 38,
+    "plumbing": 20,
+    "structural": 6,
+    "architectural": 0
+  },
+  {
+    "id": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf",
+    "hvac_mech": 138,
+    "bas_controls": 5,
+    "electrical": 84,
+    "plumbing": 24,
+    "structural": 10,
+    "architectural": 8
+  },
+  {
+    "id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+    "hvac_mech": 262,
+    "bas_controls": 38,
+    "electrical": 85,
+    "plumbing": 2,
+    "structural": 27,
+    "architectural": 0
+  },
+  {
+    "id": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf",
+    "hvac_mech": 124,
+    "bas_controls": 4,
+    "electrical": 73,
+    "plumbing": 16,
+    "structural": 13,
+    "architectural": 2
+  },
+  {
+    "id": "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf",
+    "hvac_mech": 832,
+    "bas_controls": 75,
+    "electrical": 43,
+    "plumbing": 5,
+    "structural": 33,
+    "architectural": 0
+  },
+  {
+    "id": "020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf",
+    "hvac_mech": 49,
+    "bas_controls": 3,
+    "electrical": 69,
+    "plumbing": 3,
+    "structural": 0,
+    "architectural": 4
+  },
+  {
+    "id": "021_XX_Laboratory_building_mechanical_drawings_lab",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/021_XX_Laboratory_building_mechanical_drawings_lab.pdf",
+    "hvac_mech": 195,
+    "bas_controls": 67,
+    "electrical": 6,
+    "plumbing": 1,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf",
+    "hvac_mech": 191,
+    "bas_controls": 0,
+    "electrical": 68,
+    "plumbing": 6,
+    "structural": 19,
+    "architectural": 0
+  },
+  {
+    "id": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf",
+    "hvac_mech": 112,
+    "bas_controls": 1,
+    "electrical": 71,
+    "plumbing": 3,
+    "structural": 11,
+    "architectural": 0
+  },
+  {
+    "id": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+    "hvac_mech": 170,
+    "bas_controls": 30,
+    "electrical": 5,
+    "plumbing": 4,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "029_ME_BGS_Project_3548_MEANG_Building_493_Boiler",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/029_ME_BGS_Project_3548_MEANG_Building_493_Boiler.pdf",
+    "hvac_mech": 116,
+    "bas_controls": 5,
+    "electrical": 37,
+    "plumbing": 4,
+    "structural": 1,
+    "architectural": 0
+  },
+  {
+    "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf",
+    "hvac_mech": 502,
+    "bas_controls": 12,
+    "electrical": 206,
+    "plumbing": 83,
+    "structural": 226,
+    "architectural": 38
+  },
+  {
+    "id": "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/034_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf",
+    "hvac_mech": 123,
+    "bas_controls": 1,
+    "electrical": 135,
+    "plumbing": 101,
+    "structural": 82,
+    "architectural": 20
+  },
+  {
+    "id": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf",
+    "hvac_mech": 701,
+    "bas_controls": 97,
+    "electrical": 24,
+    "plumbing": 242,
+    "structural": 3,
+    "architectural": 0
+  },
+  {
+    "id": "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/039_TX_VA_Project_580_22_201_Replace_and_Upgrade.pdf",
+    "hvac_mech": 527,
+    "bas_controls": 156,
+    "electrical": 234,
+    "plumbing": 39,
+    "structural": 1,
+    "architectural": 0
+  },
+  {
+    "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
+    "hvac_mech": 304,
+    "bas_controls": 21,
+    "electrical": 38,
+    "plumbing": 3,
+    "structural": 4,
+    "architectural": 0
+  },
+  {
+    "id": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/041_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+    "hvac_mech": 376,
+    "bas_controls": 9,
+    "electrical": 161,
+    "plumbing": 67,
+    "structural": 10,
+    "architectural": 14
+  },
+  {
+    "id": "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf",
+    "hvac_mech": 475,
+    "bas_controls": 10,
+    "electrical": 200,
+    "plumbing": 60,
+    "structural": 7,
+    "architectural": 7
+  },
+  {
+    "id": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+    "hvac_mech": 519,
+    "bas_controls": 9,
+    "electrical": 23,
+    "plumbing": 1,
+    "structural": 8,
+    "architectural": 0
+  },
+  {
+    "id": "045_FL_VA_Project_516_21_107_EHRM_Infrastructure",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf",
+    "hvac_mech": 151,
+    "bas_controls": 3,
+    "electrical": 10,
+    "plumbing": 4,
+    "structural": 2,
+    "architectural": 0
+  },
+  {
+    "id": "046_MI_Veterinary_Medical_Center_Replace_Elevators_3",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/046_MI_Veterinary_Medical_Center_Replace_Elevators_3.pdf",
+    "hvac_mech": 104,
+    "bas_controls": 6,
+    "electrical": 107,
+    "plumbing": 59,
+    "structural": 2,
+    "architectural": 0
+  },
+  {
+    "id": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf",
+    "hvac_mech": 381,
+    "bas_controls": 12,
+    "electrical": 190,
+    "plumbing": 14,
+    "structural": 46,
+    "architectural": 1
+  },
+  {
+    "id": "048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+    "hvac_mech": 260,
+    "bas_controls": 9,
+    "electrical": 40,
+    "plumbing": 12,
+    "structural": 2,
+    "architectural": 0
+  },
+  {
+    "id": "049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
+    "hvac_mech": 27,
+    "bas_controls": 0,
+    "electrical": 21,
+    "plumbing": 82,
+    "structural": 4,
+    "architectural": 0
+  },
+  {
+    "id": "050_IL_VA_Project_537_17_115_Sterile_Processing",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/050_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+    "hvac_mech": 217,
+    "bas_controls": 3,
+    "electrical": 108,
+    "plumbing": 46,
+    "structural": 8,
+    "architectural": 4
+  },
+  {
+    "id": "052_IL_VA_Project_537_17_115_Sterile_Processing",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/052_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+    "hvac_mech": 71,
+    "bas_controls": 0,
+    "electrical": 71,
+    "plumbing": 16,
+    "structural": 3,
+    "architectural": 0
+  },
+  {
+    "id": "053_VA_Renovate_Expand_Emergency_Room_System_VA",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf",
+    "hvac_mech": 177,
+    "bas_controls": 6,
+    "electrical": 4,
+    "plumbing": 1,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "054_NV_VA_Project_654_212_Design_Build_Central",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/054_NV_VA_Project_654_212_Design_Build_Central.pdf",
+    "hvac_mech": 234,
+    "bas_controls": 0,
+    "electrical": 11,
+    "plumbing": 9,
+    "structural": 29,
+    "architectural": 0
+  },
+  {
+    "id": "055_US_VA_Project_673_20_107_EHRM_Infrastructure",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/055_US_VA_Project_673_20_107_EHRM_Infrastructure.pdf",
+    "hvac_mech": 102,
+    "bas_controls": 0,
+    "electrical": 34,
+    "plumbing": 5,
+    "structural": 6,
+    "architectural": 0
+  },
+  {
+    "id": "056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf",
+    "hvac_mech": 36,
+    "bas_controls": 4,
+    "electrical": 0,
+    "plumbing": 0,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "057_US_VA_Project_626_15_106_Upgrade_Energy",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/057_US_VA_Project_626_15_106_Upgrade_Energy.pdf",
+    "hvac_mech": 26,
+    "bas_controls": 4,
+    "electrical": 9,
+    "plumbing": 1,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf",
+    "hvac_mech": 584,
+    "bas_controls": 16,
+    "electrical": 280,
+    "plumbing": 56,
+    "structural": 143,
+    "architectural": 0
+  },
+  {
+    "id": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf",
+    "hvac_mech": 1246,
+    "bas_controls": 60,
+    "electrical": 226,
+    "plumbing": 44,
+    "structural": 137,
+    "architectural": 2
+  },
+  {
+    "id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
+    "hvac_mech": 418,
+    "bas_controls": 105,
+    "electrical": 25,
+    "plumbing": 55,
+    "structural": 12,
+    "architectural": 0
+  },
+  {
+    "id": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf",
+    "hvac_mech": 94,
+    "bas_controls": 1,
+    "electrical": 126,
+    "plumbing": 58,
+    "structural": 11,
+    "architectural": 1
+  },
+  {
+    "id": "064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit.pdf",
+    "hvac_mech": 158,
+    "bas_controls": 1,
+    "electrical": 136,
+    "plumbing": 17,
+    "structural": 35,
+    "architectural": 7
+  },
+  {
+    "id": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf",
+    "hvac_mech": 64,
+    "bas_controls": 0,
+    "electrical": 88,
+    "plumbing": 1,
+    "structural": 5,
+    "architectural": 1
+  },
+  {
+    "id": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+    "hvac_mech": 96,
+    "bas_controls": 4,
+    "electrical": 12,
+    "plumbing": 4,
+    "structural": 44,
+    "architectural": 0
+  },
+  {
+    "id": "068_US_Antelope_Valley_College_Applied_Arts_Math",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/068_US_Antelope_Valley_College_Applied_Arts_Math.pdf",
+    "hvac_mech": 125,
+    "bas_controls": 5,
+    "electrical": 53,
+    "plumbing": 11,
+    "structural": 41,
+    "architectural": 0
+  },
+  {
+    "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf",
+    "hvac_mech": 131,
+    "bas_controls": 18,
+    "electrical": 51,
+    "plumbing": 14,
+    "structural": 3,
+    "architectural": 0
+  },
+  {
+    "id": "071_ME_BGS_Project_3809_Health_Science_Center",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/071_ME_BGS_Project_3809_Health_Science_Center.pdf",
+    "hvac_mech": 317,
+    "bas_controls": 0,
+    "electrical": 240,
+    "plumbing": 44,
+    "structural": 55,
+    "architectural": 24
+  },
+  {
+    "id": "072_CA_CA07_2627_West_Valley_College_Science_Math",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/072_CA_CA07_2627_West_Valley_College_Science_Math.pdf",
+    "hvac_mech": 270,
+    "bas_controls": 5,
+    "electrical": 99,
+    "plumbing": 23,
+    "structural": 64,
+    "architectural": 0
+  },
+  {
+    "id": "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf",
+    "hvac_mech": 187,
+    "bas_controls": 1,
+    "electrical": 177,
+    "plumbing": 67,
+    "structural": 105,
+    "architectural": 18
+  },
+  {
+    "id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf",
+    "hvac_mech": 232,
+    "bas_controls": 3,
+    "electrical": 110,
+    "plumbing": 30,
+    "structural": 78,
+    "architectural": 0
+  },
+  {
+    "id": "075_MT_Renne_Library_Innovation_Learning_Studio",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/075_MT_Renne_Library_Innovation_Learning_Studio.pdf",
+    "hvac_mech": 246,
+    "bas_controls": 6,
+    "electrical": 126,
+    "plumbing": 28,
+    "structural": 10,
+    "architectural": 8
+  },
+  {
+    "id": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf",
+    "hvac_mech": 390,
+    "bas_controls": 13,
+    "electrical": 85,
+    "plumbing": 4,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "078_US_CP25028_MSU_Union_Sparty_Store_Renovations",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf",
+    "hvac_mech": 169,
+    "bas_controls": 0,
+    "electrical": 123,
+    "plumbing": 41,
+    "structural": 9,
+    "architectural": 18
+  },
+  {
+    "id": "080_CA_Contra_Costa_College_Science_Center_Conference",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/080_CA_Contra_Costa_College_Science_Center_Conference.pdf",
+    "hvac_mech": 49,
+    "bas_controls": 1,
+    "electrical": 54,
+    "plumbing": 2,
+    "structural": 126,
+    "architectural": 21
+  },
+  {
+    "id": "082_OR_Klamath_Community_College_Career_Learning",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/082_OR_Klamath_Community_College_Career_Learning.pdf",
+    "hvac_mech": 225,
+    "bas_controls": 24,
+    "electrical": 9,
+    "plumbing": 3,
+    "structural": 2,
+    "architectural": 0
+  },
+  {
+    "id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf",
+    "hvac_mech": 244,
+    "bas_controls": 1,
+    "electrical": 79,
+    "plumbing": 21,
+    "structural": 6,
+    "architectural": 0
+  },
+  {
+    "id": "084_SC_H59_N054_FW_Building_112_Chiller_Addition",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/084_SC_H59_N054_FW_Building_112_Chiller_Addition.pdf",
+    "hvac_mech": 173,
+    "bas_controls": 2,
+    "electrical": 32,
+    "plumbing": 12,
+    "structural": 16,
+    "architectural": 0
+  },
+  {
+    "id": "086_CA_Contra_Costa_College_Early_Learning_Center",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/086_CA_Contra_Costa_College_Early_Learning_Center.pdf",
+    "hvac_mech": 43,
+    "bas_controls": 11,
+    "electrical": 17,
+    "plumbing": 9,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "087_US_Contra_Costa_College_Chiller_Replacement",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/087_US_Contra_Costa_College_Chiller_Replacement.pdf",
+    "hvac_mech": 35,
+    "bas_controls": 2,
+    "electrical": 5,
+    "plumbing": 0,
+    "structural": 1,
+    "architectural": 0
+  },
+  {
+    "id": "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf",
+    "hvac_mech": 314,
+    "bas_controls": 7,
+    "electrical": 145,
+    "plumbing": 5,
+    "structural": 7,
+    "architectural": 0
+  },
+  {
+    "id": "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf",
+    "hvac_mech": 291,
+    "bas_controls": 15,
+    "electrical": 46,
+    "plumbing": 3,
+    "structural": 5,
+    "architectural": 0
+  },
+  {
+    "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/094_FL_Orange_County_Regional_History_Center_HVAC.pdf",
+    "hvac_mech": 156,
+    "bas_controls": 7,
+    "electrical": 5,
+    "plumbing": 3,
+    "structural": 5,
+    "architectural": 0
+  },
+  {
+    "id": "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.pdf",
+    "hvac_mech": 90,
+    "bas_controls": 3,
+    "electrical": 13,
+    "plumbing": 1,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+    "hvac_mech": 1108,
+    "bas_controls": 74,
+    "electrical": 38,
+    "plumbing": 18,
+    "structural": 28,
+    "architectural": 0
+  },
+  {
+    "id": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf",
+    "hvac_mech": 229,
+    "bas_controls": 1,
+    "electrical": 97,
+    "plumbing": 11,
+    "structural": 3,
+    "architectural": 0
+  },
+  {
+    "id": "100_OH_Butler_Tech_RTU_Welding_Source_Capture",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf",
+    "hvac_mech": 79,
+    "bas_controls": 1,
+    "electrical": 33,
+    "plumbing": 29,
+    "structural": 1,
+    "architectural": 0
+  },
+  {
+    "id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+    "hvac_mech": 276,
+    "bas_controls": 10,
+    "electrical": 73,
+    "plumbing": 6,
+    "structural": 39,
+    "architectural": 0
+  },
+  {
+    "id": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+    "hvac_mech": 528,
+    "bas_controls": 20,
+    "electrical": 41,
+    "plumbing": 61,
+    "structural": 8,
+    "architectural": 0
+  },
+  {
+    "id": "032_PA_Construct_EHRM_Infrastructure_Upgrades",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf",
+    "hvac_mech": 820,
+    "bas_controls": 43,
+    "electrical": 74,
+    "plumbing": 9,
+    "structural": 3,
+    "architectural": 0
+  },
+  {
+    "id": "033_MN_VA_Project_656_18_301_Construct_Replace",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/033_MN_VA_Project_656_18_301_Construct_Replace.pdf",
+    "hvac_mech": 644,
+    "bas_controls": 34,
+    "electrical": 262,
+    "plumbing": 35,
+    "structural": 63,
+    "architectural": 0
+  },
+  {
+    "id": "035_AR_564_19_101_Construct_New_Water_Storage",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/035_AR_564_19_101_Construct_New_Water_Storage.pdf",
+    "hvac_mech": 178,
+    "bas_controls": 6,
+    "electrical": 62,
+    "plumbing": 21,
+    "structural": 191,
+    "architectural": 6
+  },
+  {
+    "id": "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf",
+    "hvac_mech": 1097,
+    "bas_controls": 96,
+    "electrical": 110,
+    "plumbing": 3,
+    "structural": 10,
+    "architectural": 0
+  },
+  {
+    "id": "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf",
+    "hvac_mech": 188,
+    "bas_controls": 9,
+    "electrical": 293,
+    "plumbing": 2,
+    "structural": 0,
+    "architectural": 0
+  },
+  {
+    "id": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf",
+    "hvac_mech": 292,
+    "bas_controls": 6,
+    "electrical": 167,
+    "plumbing": 10,
+    "structural": 82,
+    "architectural": 0
+  },
+  {
+    "id": "058_CA_Lawrence_Berkeley_National_Laboratory_Building",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/058_CA_Lawrence_Berkeley_National_Laboratory_Building.pdf",
+    "hvac_mech": 383,
+    "bas_controls": 2,
+    "electrical": 335,
+    "plumbing": 12,
+    "structural": 286,
+    "architectural": 9
+  },
+  {
+    "id": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf",
+    "hvac_mech": 761,
+    "bas_controls": 6,
+    "electrical": 334,
+    "plumbing": 159,
+    "structural": 245,
+    "architectural": 3
+  },
+  {
+    "id": "089_FL_Airport_Terminal_and_Hangar_Development",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+    "hvac_mech": 399,
+    "bas_controls": 2,
+    "electrical": 283,
+    "plumbing": 136,
+    "structural": 315,
+    "architectural": 24
+  },
+  {
+    "id": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf",
+    "hvac_mech": 155,
+    "bas_controls": 0,
+    "electrical": 77,
+    "plumbing": 3,
+    "structural": 2,
+    "architectural": 0
+  },
+  {
+    "id": "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+    "rel": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf",
+    "hvac_mech": 129,
+    "bas_controls": 4,
+    "electrical": 69,
+    "plumbing": 28,
+    "structural": 3,
+    "architectural": 0
+  }
+]

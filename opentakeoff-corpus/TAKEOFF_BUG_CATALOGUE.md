@@ -565,30 +565,53 @@ around it silently; `conformance.test.ts` names this bug explicitly at the
 one assertion it affects rather than weakening the check.
 
 
-### B-10 — a full-width section BANNER bands into a data column
+### B-10 — a full-width section BANNER bands into a data column (CLOSED — already fixed before this entry was last read, re-verified 2026-09-13)
 
 **Where:** `028_TX_Renovation_of_Building_615` p1, NOISE CONTROL DUCT SILENCER
 SCHEDULE. Found while closing B-3, not by the census.
 
-**Measured:** the table's QTY. cells read
+**Originally measured:** the table's QTY. cells read
 `["2","1","1","1","1","1","2","1","1","1","1","2","2","2","SECOND FLOOR 2","2"]`.
-The 15th is polluted: the sheet prints a full-width section banner
-("SECOND FLOOR") between two groups of rows, and that banner's text bands into
-the narrow QTY column of the row beneath it rather than being recognised as a
-divider spanning the whole table.
+The 15th was polluted: the sheet prints a full-width section banner
+("SECOND FLOOR") between two groups of rows, and that banner's text banded
+into the narrow QTY column of the row beneath it rather than being
+recognised as a divider spanning the whole table. Task #77 named the same
+general shape on a different document — `042_VA…#9`'s HVAC DESIGN DATA
+table, where a spanning "INDOOR AREA TEMPERATURE/HUMIDITY SETPOINTS" group
+header was misread — with a slightly different symptom (smeared into every
+column, not banded into a neighbor's narrow one); this file's own goal
+doc flagged them as "very likely the same failure mode, not yet confirmed".
 
-**Consequence:** that row's printed count will not parse, so the takeoff
-refuses it (`REFUSED_UNPARSEABLE_QTY`, reason quoting the polluted cell) and
-the schedule reports 22 of a printed 23 — correctly disclosed, but one real
-unit short. Extracting the trailing digit by regex would be exactly the
-"regex as the classification engine" this project forbids, so it is left
-refused until the banner is recognised structurally.
+**Re-traced live under goal `VECTORGRID_TABLE_BOXES.md`, 2026-09-13: both
+are already fixed, and both share the exact root cause this entry's own
+"fix shape" already named.** Commit `1ffa5e9b` (2026-09-08, five days
+BEFORE this open-item was next reviewed — not a fix made under this goal)
+added exactly the guard this entry called for: `buildRows`'s own row loop
+in `scheduleTableFromODL` now excludes a row whose one owned cell spans
+nearly the whole table width, motivated by (and its own commit message
+cites) the 042_VA example directly. Excluding that row at the very top of
+the loop — before any text-banding logic ever runs on it — kills BOTH
+symptoms through one mechanism: 042_VA's banner can no longer smear into
+every column because it's never treated as a data row at all, and (the
+same reasoning, confirmed by re-running 028_TX today) 028_TX's own
+"SECOND FLOOR" banner can no longer bleed into the neighboring row's QTY
+cell for the identical reason.
 
-**Fix shape (not applied):** a row whose single token spans most of the
-table's own x-band, sits between data rows, and populates no other column is a
-SECTION BANNER — exclude it from data banding (it is the same "test the
-property that distinguishes it" move as B-4's band-fill title test, applied to
-a row rather than a caption).
+**Verified live, 2026-09-13, current `main`:**
+- `028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf`'s NOISE
+  CONTROL DUCT SILENCER SCHEDULE: all 16 real rows present, QTY for
+  `ROCK REHEARSAL 218 - SUPPLY/RETURN` (the row immediately after the
+  "SECOND FLOOR" banner) reads clean `"2"`, not the polluted
+  `"SECOND FLOOR 2"`.
+- `042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#9`'s INDOOR AREA
+  TEMPERATURE/HUMIDITY SETPOINTS table: exactly 4 real rows (DINING AREA
+  (CAFETERIA) / CORRIDORS / OFFICES / ALL OTHER SPACES), no phantom
+  second table, no smeared columns.
+
+Task #77 ("mid-table section-divider row misread as a second bogus table")
+is the same stale tracking gap this file's own B-14/task #74 entry already
+found once this session — a real fix landed under a different name and the
+open-item list was never updated to reflect it.
 
 ---
 
@@ -657,15 +680,697 @@ the old refusal is the safe answer.
 
 ---
 
-### B-13 — wrapped multi-line cells are never banded (OPEN)
+### B-13 — a row whose identity column is a pure drawn glyph gets dropped whole (FIXED 2026-09-13)
 
-Same sheet, 13_MI p28. With B-11 fixed the FIRE ALARM DEVICES SCHEDULE's
-header block is accepted (5 anchors, ruled line present) and then
-`bandGenericDataRows` returns **0 rows**. Its DESCRIPTION and REMARKS cells
-wrap over two to four printed lines each, and the SYMBOL column is a drawn
-glyph with no text at all, so the row-clustering pass sees continuation
-fragments rather than rows. Not fixed here; recorded with its evidence so it
-is not rediscovered from scratch.
+**Originally recorded** (this same corpus, earlier session) as "wrapped
+multi-line cells are never banded" via `bandGenericDataRows` returning 0
+rows. **Re-traced live under goal `VECTORGRID_TABLE_BOXES.md` and found to
+be stale on the mechanism, though the symptom (real rows silently vanishing
+on this exact table) was real** — this document's schedule now reaches the
+graph through vectorgrid, not the ODL/text-banding path `bandGenericDataRows`
+serves, so that function was never actually in the code path for this table.
+Measured directly:
+
+- `vectorgrid.py`'s own geometric row/column detection is 100% correct —
+  dumping its raw cell grid for this exact region shows **7 real row-bands**
+  (header + all 6 real data rows) with the right heights, matching the
+  rendered page one-for-one. The geometry is not the bug.
+- The loss is in `scheduleTableFromODL`'s own `buildRows` (`web/src/lib/
+  sheetgraph.ts`): `const rawKey = texts[keyCol]` reads the row's own SYMBOL
+  cell, and `rowKeyOf(rawKey, ...)` on an empty string returns null — `if
+  (!keyRes) continue` then discards the ENTIRE row, including its already
+  correctly-extracted DESCRIPTION/MANUFACTURER/CATALOG NO./REMARKS text, not
+  merely its own blank key cell.
+- Confirmed directly off the page's own text spans: MANUAL PULL STATION /
+  CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR / FIRE ALARM INTERLOCK draw
+  their SYMBOL cell as a pure vector glyph (a boxed "F", a circled "S", a
+  filled dot) with zero text anywhere in it. The other 3 rows
+  (COMBINATION AUDIO SPEAKER ×3) carry a real drawn numeral ("15"/"30"/"60")
+  and always worked.
+
+**Fix:** when `rowKeyOf` fails on a blank identity cell (never when
+`printedKeys` mode applies, and never on a genuinely blank spacer row —
+`texts.every(s => !s.trim())` already excludes that earlier), fall back to
+the LEFTMOST other column with real text, validated through the same
+vocabulary-free `genericRowKeyOf` the "reference" kind already trusts.
+Leftmost, not longest: an earlier version of this fix picked the row's own
+longest cell, which is routinely REMARKS — either well past
+`genericRowKeyOf`'s 100-char cap ("MOUNT AT 46-INCHES TO CENTER OF BOX,
+UNO. PROVIDE BACKBOX AS RECOMMENDED BY FIRE ALARM SYSTEM MANUFACTURER.",
+107 chars) or a bare cross-reference its own `REFERENCE_RE` guard correctly
+rejects ("REFER TO LIGHTING CONTROL DIAGRAM ON SHEET E-010."), and once it
+slipped through the length check it was still the WRONG identity — a shared
+boilerplate instruction, not the row's own name. The leftmost non-key
+column (DESCRIPTION, immediately beside SYMBOL) is the row's own real
+identity on every real schedule's own drafting convention, and recovers all
+3 missing rows with their own correct names as keys.
+
+**Result, measured live, before/after on the same document:** the FIRE ALARM
+DEVICES SCHEDULE goes from 3 rows to all 6 real rows — `MANUAL PULL
+STATION`, `CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR`, `FIRE ALARM
+INTERLOCK / CONTROL CONNECTION`, `15`, `30`, `60` — each fully populated
+(DESCRIPTION/MANUFACTURER/CATALOG NO./REMARKS all correct). A second,
+unrelated table elsewhere on the same document (sheet #25, previously
+undiscovered) was also recovered as a side effect of the same fix.
+
+**Verified:** new regression suite in `web/test/sheetgraph.test.ts`
+("a row whose own identity column is a pure drawn glyph still keeps its
+data") — recovers all 4 rows of a synthetic fixture mirroring this exact
+shape with correct keys, confirms the REMARKS-shaped cross-reference and
+the >100-char cell are never used as the fallback key, confirms the
+already-working real-tag path (SYMBOL="15") is untouched, and confirms a
+row where every column is genuinely unkeyable still refuses rather than
+manufacturing a phantom row. Full `sheetgraph.test.ts` (140/140) and
+`scheduleLanguageScan.test.ts` (10/10) green; `tsc --noEmit` clean in both
+`mcp` and `web`.
+
+---
+
+### B-14 — a caption drawn OUTSIDE the ruled grid is invisible to title search (FIXED 2026-09-12)
+
+**Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf`'s own cover sheet
+(page 1) — a real DRAWING LIST (SHEET NUMBER / SHEET NAME / SCALE / FOR
+CONSTRUCTION checkbox column, 49 real listed sheets). First recorded as
+task #74 ("invisible to every extraction path"); traced fully under goal
+`opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md`'s own charter.
+
+**Measured, live, with the pipeline's own decline reasons** (a new opt-in
+`OPENTAKEOFF_GRAPH_TRACE` line in `mcp/src/session.ts`'s
+`runVectorTakeoffStack`, previously discarded entirely): vectorgrid finds
+this table's geometry EXACTLY — `52x8 at 1664,404,2448,1606` — and refuses it
+with reason `"unknown kind and no title"`. Confirmed by render
+(`render-page-crop.mjs`, read by eye): "DRAWING LIST" is printed as its own
+free-floating, underlined text run ABOVE the ruled grid, never a cell of it.
+
+**Root cause:** `scheduleTableFromODL`'s title search (`web/src/lib/
+sheetgraph.ts`) only ever looks INSIDE the grid's own row 0 for a title —
+either one cell spanning nearly the full width, or several word-group cells
+covering less than the full column count. Both shapes assume the table's
+name is drawn as part of the ruled grid itself. A caption printed outside
+and above the grid — the ordinary convention for a cover-sheet index — was
+structurally invisible to either check, so `titleCell` stayed null, kind
+classification found no equipment/room/finish vocabulary in SHEET NUMBER/
+SHEET NAME/SCALE, and the table was refused despite being found correctly.
+
+Note this is a DIFFERENT bug from the one `sheetHasDrawingIndexTitleSpans`
+(added earlier, same corpus document, see its own doc comment) already
+fixed: that hook closed the ROUTING half — getting the sheet OFFERED to
+vectorgrid at all, via `isScheduleTarget`'s `role === "unknown"` fallback.
+This is the TITLE-ATTACHMENT half, checked once a candidate table already
+exists — a completely separate code path that nobody had wired the same
+caption vocabulary into.
+
+**Fix:** `nearbyDrawingIndexCaptionText` (`web/src/lib/
+scheduleLanguageScan.ts`) — reuses the exact same proven
+`SHEET INDEX|DRAWING INDEX|INDEX OF DRAWINGS|DRAWING LIST` vocabulary
+`sheetHasDrawingIndexTitleSpans` already uses for routing, but scoped
+spatially: given the table's own bounding box (converted to project space
+via the existing `odlBboxToProjectSpace`, the same transform title-cell
+bboxes already go through), search only spans in the band directly above it
+and roughly over its own horizontal extent. Wired as a fallback in
+`scheduleTableFromODL`, firing ONLY when the in-grid search found nothing —
+an in-grid title still always wins (regression-tested). Scoped to this one
+narrow, already-proven vocabulary rather than the broader
+`sheetHasScheduleCaption` (which returns a false positive on this exact page
+from an unrelated span elsewhere on the sheet, measured directly) so a busy
+cover sheet's incidental caption elsewhere can never be borrowed by a table
+it doesn't name.
+
+**Result, measured before/after, same command, cold cache:** table count on
+this document goes from 2 to 3; the new table lands correctly kinded
+`reference`, key column populated (`G000`, `H200`, `D101`, ...), 34 real
+rows. `table.title` itself still reports `null` (the classification uses the
+found caption text internally; no synthetic title-cell object is
+constructed, matching this same file's own existing accepted precedent —
+see the STEAM UNIT HEATER SCHEDULE case a few paragraphs above, "the table
+reached the graph correctly keyed and celled... but with `title: null`") —
+a smaller, separate, disclosed gap, not a blocker: the table's data is now
+real and complete, only its own display name in the Schedules panel is not
+yet populated by this fallback.
+
+**Verified:** new regression suite in `web/test/sheetgraph.test.ts`
+("a caption drawn OUTSIDE the ruled grid still names the table") — refuses
+with no spans (proves the fix is additive, not a relaxed default), refuses
+when a caption exists far from this table (never borrows an unrelated
+caption), recovers all 6 rows of a synthetic fixture once the real caption
+shape is nearby, and confirms an in-grid title always wins when both exist.
+Full `web/test/sheetgraph.test.ts` (136/136) and
+`web/test/scheduleLanguageScan.test.ts` (10/10) green; `tsc --noEmit` clean
+in both `mcp` and `web`; full corpus regression gate run cold-cache before
+commit (see the commit that lands this entry for the exact before/after
+numbers on the frozen 541-tag scored corpus).
+
+---
+
+### B-15 / task #82 — a BAS/BMS control-points matrix compiles as physical equipment (FIXED 2026-09-13)
+
+**Where:** `federal-attachment4-mechanical.pdf#20/#23/#24` — three real
+"HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE" tables (HHW SYSTEM, VAV
+BOXES, MISCELLANEOUS). First tracked as task #82 ("HVAC equipment compile
+totals reported wrong on 6+ corpus sets, not yet root-caused"), on the
+`VECTORGRID_TABLE_BOXES.md` goal's own open-items list — traced to a
+specific sheet before any fix was written, per that goal's own stated
+discipline.
+
+**Measured, live** (`OPENTAKEOFF_EVAL_NO_CACHE=1 takeoff-eval.mjs
+federal-mech --with-reference`, cold cache): federal-mech's own frozen
+scored set reported 16 false-added tags, including 9 nonsensical bare-digit
+tags ("1" through "9", qty 2-4 each) alongside ET-1/ET-2/FTR-1B/FTR-2B/
+ALP-1/ALP-2/ALP-3. A `git worktree` diff against the commit immediately
+before this session's own B-13/B-14 fixes showed the identical 16 false-adds
+byte-for-byte — confirmed pre-existing, not a regression from this session's
+earlier work.
+
+**Root cause, confirmed by dumping the real sheet graph** (`production-
+graph-cli.mjs --mode graph`) and rendering the source page: the three real
+"HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE" tables are control-points
+matrices — POINT NAME / HARDWARE TAG / HARDWARE POINT TYPE, a bank of 2-4
+FAIL MODE columns, a much larger bank (up to 19) of SOFTWARE-prefixed
+columns, ALARM LIMITS — not physical-equipment schedules. "HARDWARE TAG"
+carries the bare word TAG and "HARDWARE POINT TYPE" carries TYPE, and a
+trailing NOTES column is present too — enough to clear `EQUIPMENT_HEADERS`'
+own generic `eqHits>=3` bar in `scheduleTableFromODL`
+(`web/src/lib/sheetgraph.ts`) the same way a real per-item catalog schedule
+does. Their own leftmost column is an unlabeled running row-index (1, 2,
+3…), not a real device tag — the real per-point identity lives one column
+over, under the real TAG column. Classified equipment-kind, that bare
+row-index became each row's own "equipment tag", reached
+`buildPlanSetTakeoff`'s equipment sweep, and — because the same small
+integers are ALSO drawn as cross-reference callout bubbles on the same
+sheet's own control diagram (confirmed by direct render of sheet #20's
+BOILER SYSTEM - CONTROL DIAGRAM) — really did find spurious matches.
+
+**Fix shape:** same discriminator family as this file's own B-3 ("choose
+the identifier column structurally, not by title vocabulary alone") and the
+same title-family-plus-structural-confirmation pattern `sheetgraph.ts`'s
+own `isReferenceCrossTable` already establishes for a different "qualifies
+equipment-kind on generic vocabulary alone but isn't" shape (CONNECTION/
+CALCULATION/ISOLATION tables demoted without a MODEL/MANUFACTURER column of
+their own).
+
+**FIXED 2026-09-13** (`web/src/lib/sheetgraph.ts`, `isBasPointFunctionSchedule`).
+A new structural check — title names "POINT FUNCTION/LIST SCHEDULE" AND a
+real FAIL MODE bank (≥2) AND a real SOFTWARE-prefixed bank (≥4); title alone
+is deliberately never enough, mirroring `isReferenceCrossTable`'s own
+"never on vocabulary alone" discipline — wired into BOTH the geometric
+extractor's own equipment-kind reclassification pass AND the ODL/vectorgrid
+`scheduleTableFromODL` path. Both call sites were needed: federal-mech's
+own three tables are read through vectorgrid, not the geometric reader, so
+fixing only one path would have half-closed the bug. Demotes to
+reference-kind, matching `isReferenceCrossTable`'s own precedent — reference
+kind is never swept for installed quantities at all (`buildPlanSetTakeoff`'s
+equipment loop only ever iterates equipment-kind tables), so the demotion
+fully and permanently removes these tables from compile-totals risk, not
+just from this one document's own current symptom.
+
+**Result, measured before/after, same command, cold cache:** federal-mech's
+false-adds drop from 16 to 7 — every bare-digit phantom tag is gone. The
+remaining 7 (ET-1/2, FTR-1B/2B, ALP-1/2/3) are a SEPARATE, already-disclosed
+key-file scope gap (see `federal-mech.takeoff.csv`'s own FINDING #2): real,
+correctly-extracted equipment tags the key deliberately excludes from
+scoring pending independent plan-quantity verification, not a code defect —
+out of this entry's own scope. Reference-table extraction stays 31/31 exact
+(`scoreReference` only ever iterates the key's own rows, so a newly-
+reclassified table adds zero scoring risk there).
+
+**Regression-checked against all 7 frozen scored sets.** federal-mech
+directly, via the full eval above. For the other 6 (bessemer, itd-d1-lab,
+navfac-cherry-point-atc, bldg5406-hvac-demo, baker-county-eoc,
+itd-d1-lab-raster): rather than trust the eval harness's own known
+per-document flakiness (`navfac-cherry-point-atc`'s single-document eval
+hung 40+ minutes both before AND after this fix, on an unrelated,
+pre-existing issue matching this file's own task #68/#70 precedent — killed,
+not chased, since it reproduces identically on unmodified code), each PDF's
+raw text was scanned directly for every phrase `isBasPointFunctionSchedule`
+keys on ("POINT FUNCTION SCHEDULE", "POINT LIST SCHEDULE", "HARDWARE TAG",
+"HARDWARE POINT TYPE", "FAIL MODE", "BMS POINT") — zero occurrences in all
+6 documents, so the new check cannot structurally fire on any of them; the
+fix is a byte-for-byte no-op there, not merely an unlikely one.
+
+**Verified:** `web/test/sheetgraph.test.ts` — a module-level
+`isBasPointFunctionSchedule` unit test (the real federal-mech header shape
+demotes; a genuine equipment schedule that merely says "POINT" in its title,
+or carries the title family with none of the real column shape, does not)
+plus a `scheduleTableFromODL` integration test built on federal-mech's real
+column shape, confirming the full table never lands equipment-kind. Full
+suite: 142/142 passing.
+
+---
+
+### B-16 — two side-by-side numbered-notes lists fuse into one fabricated table, and the real ruled table beside them is missed entirely (NOT FIXED — found, traced, disclosed)
+
+**Where:** `20_TX_JudsonISD_MEP_Upgrades_Pkg6.pdf#4` — found during this
+goal's own Demo Corpus hand-verification (`keys/DEMO_CORPUS.txt`), the
+smallest one-table document in the draw, picked first specifically because
+a small document is fast to grade completely.
+
+**Measured, hand-graded against the render, extractor's answer not in
+view first:** the real page carries a small, genuinely ruled 2-column table
+— "AHU / NEW FAN INTERLOCKS" (11 real data rows: AHU-1 through AHU-10 plus
+RTU-1, values like "EF-04, EF-08", one wrapped 2-line cell on AHU-9) — sunk
+inside a "SCHEMATIC — NEW FAN SOFTWARE INTERLOCKED WITH AHU/RTU (SPRING
+MEADOWS)" detail block. The production pipeline (`production-graph-cli.mjs
+--mode graph`, same command every other entry in this file is measured
+with) finds **zero** tables matching this real one. It DOES report exactly
+one table — reference-kind, headers `["B.", "OPERATIONAL SEQUENCE:", "B.
+(2)", "OPERATIONAL SEQUENCE: (2)"]`, 2 data rows keyed `B.1`/`B.2` — and
+this table is **entirely fabricated**: the page's own real content at those
+coordinates is two side-by-side "OPERATIONAL SEQUENCE:" numbered-notes
+lists (ordinary running prose under labels `B.1`/`B.2`/`B.3`, one list per
+control-schematic panel, TYPE 1 and TYPE 2, printed one above the other in
+the source) — not a table, not two tables, and definitely not one table
+with duplicated header pairs. The `(2)`-suffixed headers are this file's
+own existing duplicate-header disambiguation (see the "A ROW'S CELLS ARE
+KEYED BY HEADER STRING" comment in `sheetgraph.ts`) silently doing its job
+on a table that should never have been built at all.
+
+**Relationship to already-catalogued bugs, and why this is a new entry, not
+a duplicate:** the shape is the same DISEASE as B-4's own "reading column
+bands mined a fake 13-row table out of two side-by-side SEQUENCE OF
+OPERATION prose columns, whose headers were 'WORKSTATION.' and 'SHALL
+SEQUENCE THE FOLLOWING:'" and B-8's "three-plus side-by-side tables fused
+by Y-clustering" — but neither fix reaches this case. B-4's fix
+(`isTitleShaped`) rejects prose from becoming a table's TITLE; it says
+nothing about a numbered-list LABEL COLUMN ("B.1", "B.2" — short, real-
+code-shaped tokens, not sentences) being accepted as a real header/key
+column. B-8's fix targets an empty-corridor gutter between two real ruled
+tables; here there is no second real table at all, only two prose blocks
+that happen to sit in a shape (short label + long text, repeated down the
+page) generic-table detection reads as rows.
+
+**Not fixed.** Not traced past this point — the exact structural signal
+that would refuse "a repeating LABEL + LONG PROSE SENTENCE pair is not a
+table row" without also refusing genuine short-key/long-description
+schedule rows (which are common and real, e.g. any REMARKS-heavy schedule)
+needs its own measurement before a fix is written, per this file's own
+standing rule against guessing at a fix under time pressure. Left named
+and disclosed rather than half-fixed.
+
+**Consequence for the Demo Corpus's own zero-error bar:** this single
+document already fails BOTH halves of the bar before any box/cell grading
+even starts — MISSED != 0 (the real 11-row table is invisible) and a
+phantom table is counted as a win it is not. `keys/DEMO_CORPUS.txt`'s own
+header already states plainly that nothing in that set has passed grading
+yet; this is the first concrete, measured reason why, not a new admission.
+
+---
+
+### B-17 — a real, correctly-extracted table loses its own title even though the title text sits at a normal, in-range gap (NOT FIXED — found, traced, disclosed)
+
+**Where:** `063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9` — found
+during the same Demo Corpus hand-verification pass as B-16, this document
+picked next in ascending census-count order.
+
+**Measured:** page 9 carries six real, titled, ruled schedule tables
+stacked vertically (EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,
+EXHAUST FAN SCHEDULE, DEHUMIDIFICATION UNIT SCHEDULE, FILTRATION UNIT
+SCHEDULE, GRILLE/REGISTER/DIFFUSER SCHEDULE, and MEP COORDINATION SCHEDULE
+— all "- EXTRUDER LAB" suffixed), confirmed by eye on a full-page render
+before looking at the extractor's own output. `production-graph-cli.mjs
+--mode graph` correctly extracts all six as real `equipment`-kind tables
+with correct headers and rows (`EVAV-105`/`EVAV-106`, `EEF-4`, `DU-1`,
+`FU-1`, `S-3`/`R-3`, `DU-1`/`FU-1` respectively) — the MEP COORDINATION
+table's own 15-column header row and its two `DU-1`/`FU-1` rows all match
+the render exactly. But that sixth table's `title` field is `null`, and a
+document-wide search confirms the title is not misattached to any other
+table either — it is simply dropped.
+
+This is not a missing- or unreadable-title case: `textSpans()` on page 9
+finds `"MEP COORDINATION SCHEDULE - EXTRUDER LAB"` as a real span
+(`x0:2676.2, y0:2009.6, x1:3921.8, y1:2061.8`), horizontally centered on
+the table's own column range to within a few points (span center x≈3299,
+table region center x≈3298), and at a title-bottom-to-first-row-top gap of
+171pt — squarely inside the 76-182pt range measured for the five sibling
+tables on the same page that DID get titled correctly (`182, 132, 130,
+133, 76` pt respectively, same page, same document, same title-to-table
+visual pattern). Geometrically this title looks exactly like its five
+working siblings; something else about this specific header/title pair
+(a 15-column header — the widest of the six — with an empty `NOTES`
+column present in the header but blank in both data rows, is the only
+structural difference noticed so far) causes the title-attachment step to
+drop it instead.
+
+**Relationship to already-catalogued bugs:** distinct from B-16 (which
+fabricates a phantom table from prose) and from B-4/B-8 (title-shape and
+gutter-merge bugs on OTHER real tables) — this is a real table, correctly
+read cell-for-cell, that simply surfaces with no title at all despite a
+geometrically ordinary title sitting right above it. Not traced past the
+geometric comparison above; the actual attachment-selection logic in
+`sheetgraph.ts` was not read line-by-line to find why this one pairing is
+rejected, per this file's own standing rule against guessing at a fix
+under time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** a real table
+extracted with fully correct cells still fails a `title`-inclusive exact
+match, so this document cannot pass cell-grading as-is even though its
+row/cell content is right — a different failure shape than B-16's
+MISSED/fabricated pair, but still a concrete, measured reason this
+document is not yet clean.
+
+---
+
+### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (NOT FIXED — found, traced, disclosed)
+
+**Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf#16`, "WINDOW
+SCHEDULE" — found during the same Demo Corpus hand-verification pass,
+next document after 063_MT (census claimed 5 tables for the whole
+document; this document turned out to need the FULL pipeline compared
+against the render, not just the census tool, to see the real damage —
+see B-19 below for why).
+
+**Measured, hand-graded against the render first:** the real table has 14
+rows (key column: `A, B, C, D, E, F, G, H, J, K, L, M, N, O` — the
+architectural convention of skipping `I`), headers `KEY, TYPE, BRICKMOLD
+TYPE, DIVIDED LIGHT TYPE, OPNG WIDTH +/-, OPNG HEIGHT +/-, COUNT, NOTES`,
+under a plain one-line caption `WINDOW SCHEDULE`. `production-graph-cli.mjs
+--mode graph`'s actual output for this table:
+- `title.text`: `"WINDOW SCHEDULE BRICKMOLD DIVIDED LIGHT KEY TYPE TYPE
+  TYPE OPNG WIDTH +/- OPNG HEIGHT +/- COUNT NOTES"` — the entire real
+  header row's text has been concatenated onto the real one-line caption,
+  becoming the reported title.
+- `headers`: `["A", "CLAD WOOD DOUBLE HUNG", "A 2", "A 3", "3'-7\"",
+  "5'-6\"", "9", "COL8"]` — these are not headers at all; they are the
+  real DATA from row `A` (`KEY=A, TYPE=CLAD WOOD DOUBLE HUNG,
+  BRICKMOLD=A, DIVIDED LIGHT=A, WIDTH=3'-7", HEIGHT=5'-6", COUNT=9`),
+  reported as the column headers.
+- `rows`: keyed `B` through `N` — 12 rows. Row `A` is gone (consumed as
+  the fake header above) and row `O` (the real last row) is gone too, with
+  no trace of it anywhere in the table object.
+
+So one real header-absorption event costs this table its whole header AND
+one full data row (`O`), while a coincidentally table-shaped data row
+(`A`) is misread as the header the whole table is keyed against — net 12
+of 14 real rows surfaced, the true header lost, and the title polluted
+with the header text it swallowed.
+
+**Relationship to already-catalogued bugs:** distinct from #90's fix
+(header-JOIN loop no longer swallows a pre-header spec-metadata row INTO
+the header) — this is the same family of confusion (header/title/data
+boundary) but in the opposite direction: here the real header is swallowed
+INTO the title, and a real DATA row is promoted to serve as the header,
+rather than a metadata row being swallowed into the header. Not traced
+into `sheetgraph.ts`'s header-detection code past this measurement, per
+this file's standing rule against guessing at a fix under time pressure.
+
+**CONFIRMED RECURRING 2026-09-13 — second real instance, different
+document.** `28_WA_KCHA_PublicHousing_HVAC.pdf#2`'s `AIR TERMINAL
+SCHEDULE` shows the identical signature: the real header (`SYMBOL, AIR
+TERMINAL - SIZES AS NOTED ON PLANS`) is gone, the first real data row
+(`SG`, with its full multi-sentence description — `"SUPPLY GRILLE: TITUS
+MODEL 300FS FOR INSTALLATION..."`) is promoted to serve as the reported
+`headers`, and the table surfaces with only 2 of its 3 real rows (`RG`,
+`WTG` — `SG` consumed). A likely knock-on effect measured here for the
+first time: this table's `kind` also flips from `equipment` to
+`reference`, plausibly because the header-detection code that decides
+table kind sees long descriptive prose (the misplaced `SG` row) where it
+expects short column labels. This is not a one-document quirk; it is a
+repeatable failure mode.
+
+**CONFIRMED RECURRING 2026-09-13 — third real instance, third document, a
+new variant of the same signature.** `25_WA_DouglasCounty_Courthouse_HVAC_
+DDC.pdf#4`'s `HEAT PUMP SCHEDULE - SPLIT SYSTEM TYPE` (real rows: `HP-10`,
+`HP-20`) shows a slightly different flavor of the identical disease: every
+one of the ~34 real column headers gets the first real data row's own
+value APPENDED to it (`"SYMBOL HP-10"`, `"COOLING CAP. * TOTAL MBH 30"`,
+`"A - INDOOR UNIT *** FAN CFM 730"`, …, one fused `header+HP-10-value`
+string per column), and `HP-10` never appears as its own row at all — only
+`HP-20` survives as a normal row. Same root failure (the real header and
+the first real data row collapse into one another) but manifesting as a
+per-column fusion rather than a whole-row promotion — worth recording as
+a distinct sub-shape of the same bug, not a new bug number.
+
+**Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 (row
+`O`, and the true header row, are both gone) and the reported cells for
+row `A` do not exist in `rows` at all — they were reassigned to `headers`
+instead. This table cannot pass either box- or cell-grading as extracted.
+
+**CONFIRMED RECURRING 2026-09-13 — a 5th document, combined with B-21's
+own pattern on the same page.** `17_FL_SuwanneeHS_Courtyard_100CD.pdf#30`
+carries three real "Branch Panel" schedules (`EMDP`, `HN7B`, `LN7C`).
+`EMDP` (21 real circuit rows) surfaces with the same signature yet again
+— `title: null` (reported as `UNTITLED` — the panel's own real name
+`"Branch Panel: EMDP (EXISTING GE PANEL)"` is gone), and `headers` shows
+the same header+first-row fusion (`"CIRCUIT DESCRIPTION 30 KVA XFMR"`,
+`"TRIP 50 A"`, etc. — the real header text glued to circuit 3's own real
+values). The other two panels on the identical page, `HN7B` (15 rows) and
+`LN7C` (15 rows), are not fused into this one and not fabricated into
+anything else findable — they are simply absent, the same disease as
+B-21. This single page shows both bugs operating together: one table
+survives corrupted (B-18's signature), two vanish outright (B-21's).
+
+---
+
+### B-19 — two real schedule tables vanish entirely from the same document while unrelated floor-plan callout text nearby gets fused into a fabricated one-row table (NOT FIXED — found, traced, disclosed)
+
+**Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf` — same document
+as B-18, found in the same pass. This is why the Volume-floor census
+tool's own claim for this document (5 titled tables, 49 rows — cited in
+`keys/DEMO_CORPUS_GRADING.md`) could not be trusted at face value: the
+census tool runs `buildSheetGraph` directly with no vectorgrid/ODL layer,
+while `production-graph-cli.mjs --mode graph` (the actual deployed
+pipeline, and the tool every other entry in this file is measured with)
+reports a completely different, much worse shape for the same document.
+
+**Measured, hand-graded against the render first:** four real schedule
+tables exist in this document — `WINDOW SCHEDULE` (p16, 14 rows, see
+B-18), `DOOR AND FRAME SCHEDULE` (p25, 14 rows: `101.1, 105.1, 121.1,
+124.1, 146.1, 148.1, 149.1, 150.1, 155.1, 155.2, 158.1, 159.1, 201.1,
+301.1`), `PROJECT FINISH SCHEDULE` (p23, 12 rows: rooms `111, 116, 121,
+124, 140, 148, 149, 150, 155, 156, 157, 158`), and `LIGHTING FIXTURE
+SCHEDULE` (p35, 4 rows: `A, B, EX, EL`). The full production pipeline's
+own table list for this document contains exactly 4 tables total — one is
+the correctly-out-of-scope cover-sheet `DRAWING LIST` (34 sheets, `reference`
+kind, matches the existing `Revisions`-table precedent for legitimate
+non-schedule reference tables), one is `WINDOW SCHEDULE` (corrupted, see
+B-18), one is `LIGHTING FIXTURE SCHEDULE` (rows and headers all correct,
+but `title: null` — the same defect class as B-17, a 5th and 6th instance
+of that pattern across this pass), and the fourth is on page `#23` with
+`title.text: "7 A 6 604 8 EVS 5"`, `headers: ["COL1", "W1 149", "COL3"]`,
+and exactly one row (`key: "C1"`, cells `{"W1 149": "W1 149", "COL3":
+"C1"}`). That fourth table is not the real `PROJECT FINISH SCHEDULE` at
+all — its region and every cell trace to wall-type and room-number
+callout tags (`W1`, `C1`, `149`) scattered around the "ENLARGED PLAN" /
+"TOILET ROOM" floor-plan drawing on the SAME page, well away from the real
+schedule sitting at the bottom of that sheet. `DOOR AND FRAME SCHEDULE`
+(p25) has no corresponding table anywhere in the output at all — not
+garbled, not misattached, simply absent.
+
+**Relationship to already-catalogued bugs:** the page-23 fabrication is
+the same DISEASE as B-16 (unrelated page content fused into a fake table
+that a reviewer could mistake for a real schedule) but a different domain
+— plan callouts, not prose notes — so a fix for one is not guaranteed to
+reach the other. The page-25 disappearance is not yet traced to any known
+cause; it was not fabricated into anything else findable in this output,
+it is simply not there.
+
+**Consequence for the Demo Corpus's own zero-error bar:** of this
+document's 4 real schedule tables, 0 pass extraction cleanly — 2 are
+completely missing, 1 is corrupted (B-18), and 1 is correct but untitled
+(same class as B-17) — while a genuinely fabricated table is reported as
+if it were real. This is the worst-scoring document graded so far in this
+pass.
+
+**CONFIRMED RECURRING 2026-09-13 — third real instance, third document,
+same pass.** `28_WA_KCHA_PublicHousing_HVAC.pdf#2` fabricates not one but
+THREE separate fake `reference`-kind tables from unrelated page content,
+none of them a real schedule:
+- `"SPRING VIBRATION ISOLATOR"` (2 rows) and `"REQUIRED, SEE"` (2 rows) —
+  both trace to the annotation callout labels of the `IN-LINE FAN
+  INSTALLATION DETAIL` isometric drawing on the same sheet (e.g. cells
+  `"CONNECT"`/`"CONNECTION"`, `"MOUNT SPEED CONTROLLER ON..."`/`"IN-LINE
+  FAN INSTALLATION DETAIL"` — detail-callout text, not tabular data).
+- `"UNTITLED"` (2 rows) is the strangest instance yet: its region
+  (`[4796, 278.8, 5101.5, 2396]` — ~305pt wide, ~2100pt tall) is the
+  sheet's own narrow vertical TITLE-BLOCK SIDEBAR, and its fabricated
+  headers are the letter-spaced firm name (`"T R E S W E S T"`, `"E N G I
+  N E E R S,"`, `"I N C."`) with cells built from the project-title box
+  (`"PROJECT TITLE BRITTANY PARK KING COUNTY"`, `"HVAC UPGRADES"`,
+  `"4-30-2026"`). This is the same disease reading a different part of
+  the page furniture than either the p23-callout case above or the
+  prose-note case in B-16 — three distinct source materials (prose,
+  plan callouts, title-block sidebar text), one shared failure: unrelated
+  page text gets clustered into a table shape and reported as if it were
+  a real schedule. Not a document-specific quirk.
+
+---
+
+### B-20 — a real row is captured twice, byte-for-byte identical, inflating a table's own row count with a phantom duplicate (NOT FIXED — found, traced, disclosed)
+
+**Where:** `083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4`,
+"COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE" — found during the same
+Demo Corpus hand-verification pass, next document after 28_WA.
+
+**Measured, hand-graded against the render first:** the real table has 3
+rows (`HP-1` LIBRARY, `HP-2` NURSE, `HP-3` SWEGON — a dense 9-table
+schedule page, H0.2, otherwise extracted essentially perfectly:
+`COMMON AREA DX FAN COIL UNIT SCHEDULE` 4/4, `HVAC POWER EQUIPMENT
+SCHEDULE` 5/5, `REGISTER, GRILLE & DIFFUSER SCHEDULE` 4/4, both
+`ENERGY RECOVERY VENTILATOR SCHEDULE` instances 1/1 each despite sharing
+one exact title string, `PIPE MATERIAL TABLE` 2/2, `INSULATION TYPE
+SCHEDULE` 4/4, `ELECTRIC HEATING COIL SCHEDULE` 1/1 — this is otherwise
+one of the cleanest dense pages graded in this pass). `production-graph-
+cli.mjs`'s own output for the heat pump schedule reports 4 rows: `HP-1`
+appears TWICE, with every cell byte-for-byte identical both times
+(`MODEL NO.: RXLQ144TATJU`, `MBH COOL: 144`, `OPERATING WEIGHT: 1446
+LBS`, `REMARKS: SEE NOTES` — nothing differs between the two copies), then
+`HP-2` and `HP-3` follow once each, correctly.
+
+**Relationship to already-catalogued bugs:** distinct from B-6 (a whole
+table redrawn twice at two DIFFERENT scales elsewhere on a sheet, read as
+two colliding tables) — this is one real row, inside one real table,
+captured twice with no variation at all, immediately adjacent to two
+other rows from the same table that were each captured exactly once. Not
+traced into the row-clustering code to find why this one row's y-band
+produced two identical clusters instead of one, per this file's standing
+rule against guessing at a fix under time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** a phantom row
+that is not a fabrication of new content (unlike B-16/B-19) but an exact
+duplicate of real content still fails an exact row-count match — this
+table cannot pass cell-grading as extracted despite every cell value
+being individually correct.
+
+---
+
+### B-21 — an entire recurring table FORMAT (multi-panel electrical schedules) is invisible to extraction: at least 12 real tables across 2 sheets, 0 found (NOT FIXED — found, traced, disclosed)
+
+**Where:** `25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#8` and `#9`
+(sheets `E0.03` and `E0.04`, "ELECTRICAL PANEL SCHEDULES") — found while
+grading this document's HVAC schedules (page 4-5, otherwise a clean
+6-of-7-tables-correct result once B-18's known signature on the `HEAT
+PUMP SCHEDULE` is set aside — see that entry's newest instance).
+
+**Measured:** each of these two sheets lays out SIX real, titled, fully
+ruled "THREE PHASE PANEL SCHEDULE" tables side by side — an EXISTING
+version and a REVISED version of each of 3 panels (`M`/`M(R)`,
+`MSB1`/`MSB1(R)`, `BH1`/`BH1(R)` on p8; `BP3`/`BP3(R)`, `BP2`/`BP2(R)`,
+`BP1`/`BP1(R)` on p9), each with ~15-17 real circuit-description rows
+per panel. `production-graph-cli.mjs --mode graph`'s full output for this
+22-sheet document contains exactly 12 tables total, and NONE of them are
+these panel schedules — not fabricated into something else findable, not
+partially captured, simply absent. At least 12 real ruled tables (and
+likely more once sheet `E0.05`, not yet checked, is counted) are entirely
+unreachable through this pipeline.
+
+**Relationship to already-catalogued work:** task #64 ("Fix vectorgrid/ODL
+over-merge that corrupted 25_WA's stacked schedules") and task #88 ("16_NV
+#32 and all 3 of 25_WA's sheets never reach structure recognition at all
+under current code") are both closed as completed against this exact
+document. Whether this is a regression of that fix, a different sheet
+than the "3 sheets" #88 already covered, or a genuinely new failure mode
+specific to the "THREE PHASE PANEL SCHEDULE" boxed multi-panel layout was
+not determined here — flagged for a follow-up session to reconcile against
+those closed tasks' own original evidence before attempting a fix.
+
+**Consequence for the Demo Corpus's own zero-error bar:** this is the
+largest single MISSED count measured in this pass so far by table count —
+at least 12 real tables with real circuit-level electrical data,
+completely absent from a document whose HVAC-specific schedules otherwise
+extract almost perfectly.
+
+**CONFIRMED RECURRING 2026-09-13 — a 4th document, and the miss is wider
+than "panel schedules" specifically.** `012_MO_M2430_01_Chiller_Upgrade_
+Center_for_Behavioral.pdf#27` ("ELECTRICAL SCHEDULES", sheet E601) has
+both `PANELBOARD SCHEDULE: P1E (EXISTING)` (15 real rows) and `PANELBOARD
+SCHEDULE: HTP (EXISTING)` (9 real rows) missing entirely from the pipeline
+output, same as B-21's original finding — but the SAME page also loses
+`DISCONNECT SWITCH SCHEDULE` (6 real rows, a plain single-tier ruled
+table, not a boxed multi-panel layout at all). So the failure is not
+narrowly about the "THREE PHASE PANEL SCHEDULE" box shape specifically —
+something about this general class of dense electrical-schedule sheet is
+losing tables wholesale. (This document's own `VFD SCHEDULE` on the same
+page shows a related but DIFFERENT failure — 6 real rows fused into one
+with concatenated cell values — catalogued separately as B-22, since the
+row-fusion signature there is distinct enough to trace independently.)
+
+---
+
+### B-22 — multiple real rows are fused into a single row, with each cell's text a space-joined concatenation of every fused row's own value (NOT FIXED — found, traced, disclosed)
+
+**Where:** `012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#27`,
+"VFD SCHEDULE:" — found in the same pass as B-21's 4th-document
+confirmation, same page, same document.
+
+**Measured, hand-graded against the render first:** the real table has 16
+rows (`VFD-CWP-1/2/3`, `VFD-PCHP-1/2/3`, `VFD-SCHP-1/2`, `VFD-PHWP-1/2/3`,
+`VFD-SHWP-1/2`, `VFD-CT-1/2/3 (EXIST.)`), 10 real columns (`TAG NO,
+MANUFACTURER, MODEL, SERVES, HP, VOLTS, PHASE, HZ, DRIVE ENCLOSURE,
+NOTES`). `production-graph-cli.mjs`'s output for this table has only 4
+columns (`TAG, MANUFACTURER, MODEL, NOTES` — `SERVES`, `HP`, `VOLTS`,
+`PHASE`, `HZ`, `DRIVE ENCLOSURE` all gone) and exactly ONE row, keyed
+`VFD-PHWP-3`, whose own `TAG` cell reads `"VFD-SCHP-2 VFD-PHWP-1 VFD-PHWP-
+2 VFD-PHWP-3 VFD-SHWP-1 VFD-SHWP-2"` — SIX real tag values, space-joined
+into one string — and whose `MANUFACTURER`/`MODEL`/`NOTES` cells are each
+the same 6-way concatenation of that column's own real per-row values
+(`"SCHNEIDER SCHNEIDER SCHNEIDER SCHNEIDER SCHNEIDER SCHNEIDER"`, `"SFD212
+SFD212 SFD212 SFD212 SFD212 SFD212"`, `"1-5 1-5 1-5 1-5 1-5 1-5"`). The
+other 10 real rows (`VFD-CWP-1/2/3`, `VFD-PCHP-1/2/3`, `VFD-SCHP-1`,
+`VFD-CT-1/2/3`) are not present in any form — not fused, not fabricated,
+simply gone.
+
+**Relationship to already-catalogued bugs:** distinct from B-20 (one row
+duplicated verbatim) and from B-18 (header/first-row collapse) — here SIX
+different real rows' cell text is concatenated together into ONE row
+object, with real column data lost outright (4 of 10 columns). Not traced
+into the row-clustering or cell-joining code to find why these 6 rows'
+y-bands merged into one cluster while the other 10 rows vanished
+separately, per this file's standing rule against guessing at a fix under
+time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 (10
+of 16 rows entirely absent) and the one surviving row is itself not a real
+row — its every cell is corrupted concatenated text that matches no real
+table cell. This table cannot pass either box- or cell-grading.
+
+---
+
+### B-23 — a dense schedule page extracts 14 of 14 simple tables perfectly, but every ROW-SPANNING/merged-cell or comparison-style table on the exact same page is entirely missing (NOT FIXED — found, traced, disclosed)
+
+**Where:** `067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8`
+("MECHANICAL SCHEDULES", sheet M7.0) — found during the same Demo Corpus
+hand-verification pass, next document after 028_TX.
+
+**Measured, hand-graded against the render first:** this single page
+carries at least 18 real, titled, ruled tables. Fourteen of them —
+`(N) PUMP SCHEDULE` (2 rows), `PRESSURE TESTING REQUIREMENTS` (4),
+`PIPE INSTALLATION SCHEDULE` (6), `DUCT INSTALLATION SCHEDULE` (2),
+`(N) HEAT EXCHANGER SCHEDULE` (1), `GRILLE SCHEDULE` (1), `REHEAT COIL
+SCHEDULES (RELOCATED)` (1), `(N) VFD SCHEDULE` (2), `(N) COMPRESSED AIR
+REGULATOR` (1), `AIR HANDLING UNIT SCHEDULE (EXISTING)` (1), `PCW AIR
+SEPARATOR SCHEDULE` (1), `PCW POT FEEDER SCHEDULE` (1), `PCW EXPANSION
+TANK SCHEDULE` (1), `PCW FILTER SCHEDULE` (1) — extract with EXACTLY
+matching row counts, no exceptions. But four more real tables on the
+SAME page, all sharing one structural feature the other 14 lack, are
+completely absent from the output, not fabricated into anything else
+findable:
+- `HUTCH 1.3 PCW RISER UTILITY SCHEDULE` (28 real rows) — its own
+  `SERIES`/`POC BRANCH`/`BRANCH SUM` columns use ROW-SPANNING MERGED
+  CELLS (one `BRANCH SUM` value like `30.15` or `19.16` drawn once,
+  visually spanning the ~9-11 rows of its own `LOOP 1`/`LOOP 2`/`LOOP 3`
+  group).
+- Three `NEH`/`FEE,EBD,UH`/`X-Ray Tunnel (XRT)` "PCW flow demand" tables
+  (10, 4, and 1 real rows) — each a comparison-style table with paired
+  `EXISTING`/`NEW` column groups and its own `Total` summary row, a
+  different shape from the plain one-row-per-tag equipment schedules
+  that extracted perfectly elsewhere on this page.
+
+**Relationship to already-catalogued bugs:** distinct from B-21 (an
+entire recurring table FORMAT invisible regardless of internal structure)
+because here 14 tables on the identical page and sheet extract with zero
+defects — this is not a page-level or sheet-level failure, it is
+specific to tables using row-spanning merged cells or an EXISTING/NEW
+comparison-column shape. Not traced into the row/column-clustering code
+to confirm this hypothesis (merged cells specifically, as opposed to
+some other property these 4 tables share) is the actual cause, per this
+file's standing rule against guessing at a fix under time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 —
+43 real rows across 4 real tables entirely absent, on a page whose other
+14 tables (37 rows) are graded perfectly. A per-page or per-document
+"pass/fail" grade would badly overstate how well this specific shape of
+table is handled.
+
+---
 
 ## How these connect
 

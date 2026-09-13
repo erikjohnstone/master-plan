@@ -1,0 +1,54 @@
+# keys/DEMO_CORPUS.txt -- the frozen "walk-out proof" document set.
+# Selected by bakeoff/draw_demo_corpus.py using the goal document's own
+# suggested method verbatim: "every Nth document from a sorted manifest,
+# stratified by discipline" -- systematic, not random, reproducible with no
+# seed. Frozen before grading starts, same discipline as keys/HELDOUT.txt:
+# no swapping a document out because it embarrassed the score. May overlap
+# HELDOUT.txt -- the goal document says so explicitly.
+#
+# GRADING STATUS: NOT YET GRADED. Every table on every document below still
+# needs, per the goal document's own bar: self-supervised MISSED=0 hand-
+# confirmed by rendering the sheet; every box hand-graded blind (EoB<=4pt,
+# auto-accept does NOT apply here); every cell hand-transcribed off the
+# render and exact-matched (no cellocr.py cross-check substituting for
+# transcription here). This file names the set; it does not itself claim
+# any of that work is done.
+# population=113 real documents (reports/REAL_DOCUMENT_LIST-2026-09-13.txt)
+# selected: 32 documents, 821 tables (real, not yet graded)
+# Vol1_hvac_primary: 8/28 documents (every ~3.5th, proportional share of 30)
+# Vol1_other_primary: 1/3 documents (every ~3.0th, proportional share of 30)
+# Vol2_hvac_primary: 20/73 documents (every ~3.6th, proportional share of 30)
+# Vol2_other_primary: 3/9 documents (every ~3.0th, proportional share of 30)
+#
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral
+015_VA_P_095_Replace_Submarine_Pier_3_Utility
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04
+01_NY_VA_Northport_Dialysis_100CD
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C
+028_TX_Renovation_of_Building_615_Final_Design_Plans
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for
+037_AR_VA_Project_598_19_118_Replace_21_Air_Handling
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure
+042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure
+04_NV_VA_LasVegas_CentralUtilityPlant
+052_IL_VA_Project_537_17_115_Sterile_Processing
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid
+072_CA_CA07_2627_West_Valley_College_Science_Math
+075_MT_Renne_Library_Innovation_Learning_Studio
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX
+08_ME_BGS_Augusta_EastCampus_Renovation
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set
+11_CA_SDSU_EngSciences_Complex_100SD
+13_MI_MSU_LifeSciences_LabRenovation
+17_FL_SuwanneeHS_Courtyard_100CD
+20_TX_JudsonISD_MEP_Upgrades_Pkg6
+25_WA_DouglasCounty_Courthouse_HVAC_DDC
+28_WA_KCHA_PublicHousing_HVAC

@@ -10,7 +10,7 @@
 import { test, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, sheetDrawingGroup, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBasPointFunctionSchedule, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, sheetDrawingGroup, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -3308,6 +3308,30 @@ test("isReferenceCrossTable: OUTSIDE AIR flow-rate calc demotes without MODEL/MA
     "a title that does not name CONNECTION/CALCULATION/ISOLATION/OUTSIDE AIR is untouched");
 });
 
+test("isBasPointFunctionSchedule: a BMS control-points matrix demotes, a real equipment schedule that merely says POINT does not (task #82)", () => {
+  // Real header shape, read live off federal-attachment4-mechanical.pdf#20's
+  // own "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM".
+  const bmsHeaders = ["B-1", "POINT NAME", "HARDWARE TAG", "HARDWARE POINT TYPE",
+    "FAIL MODE FAIL ON (OPEN)", "FAIL MODE FAIL OFF (CLOSED)", "FAIL MODE LAST COMMANDED STATE", "FAIL MODE LOCAL DEFAULT",
+    "SOFTWARE NETWORK POINT", "SOFTWARE CALCULATED POINT", "SOFTWARE MAINTENANCE ALARM", "SOFTWARE CRITICAL ALARM",
+    "SOFTWARE 24 HOUR OPERATION", "ALARM LIMITS LOW LIMIT", "ALARM LIMITS HIGH LIMIT", "NOTES"];
+  assert.equal(isBasPointFunctionSchedule("HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM", bmsHeaders), true,
+    "a real FAIL MODE bank plus a real SOFTWARE-prefixed bank under a POINT FUNCTION SCHEDULE title is a control-points matrix");
+  assert.equal(isBasPointFunctionSchedule("HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - VAV BOXES", bmsHeaders), true);
+  assert.equal(
+    isBasPointFunctionSchedule("SET POINT SCHEDULE", ["MARK", "MANUFACTURER", "MODEL", "CFM"]),
+    false,
+    "title alone is never enough — a real equipment catalog schedule that happens to say POINT stays equipment",
+  );
+  assert.equal(
+    isBasPointFunctionSchedule("HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - MISC", ["TAG", "DESCRIPTION", "LOCATION"]),
+    false,
+    "the title family alone, with none of the real FAIL MODE/SOFTWARE column shape, is never enough either",
+  );
+  assert.equal(isBasPointFunctionSchedule("AIR HANDLING UNIT SCHEDULE", ["TAG", "MANUFACTURER", "MODEL", "CFM", "NOTES"]), false,
+    "an ordinary equipment schedule with neither the title nor the column shape is untouched");
+});
+
 test("UNIT TAG header is own-identity equipment anchor, not a qualified cross-reference (WP1.4)", () => {
   assert.equal(isBareAnchorHeader("UNIT TAG"), true);
   assert.equal(isQualifiedAnchorHeader("UNIT TAG"), false);
@@ -4305,5 +4329,220 @@ describe("scheduleTableFromODL: header-join loop skips spec-metadata rows (task 
     );
     assert.ok(t, "a real single-tier header must still build a table");
     assert.ok(t!.headers.some((h) => h === "POLE: A"), `the one genuinely colon-shaped real header must survive intact: got ${JSON.stringify(t!.headers)}`);
+  });
+});
+
+describe("scheduleTableFromODL: a caption drawn OUTSIDE the ruled grid still names the table (goal VECTORGRID_TABLE_BOXES.md, 2026-09-12)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 50, row * 20, col * 50 + 50 * colSpan, row * 20 + 20],
+    "row number": row, "column number": col, "row span": 1, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+
+  // Real shape, rendered and read live off 08_ME_BGS_Augusta_EastCampus_
+  // Renovation.pdf's own cover-sheet DRAWING LIST (49 real sheet rows):
+  // "DRAWING LIST" is its own free-floating, underlined text run printed
+  // ABOVE the ruled grid, never a cell of it — row 1 of the grid is the
+  // real per-column header (SHEET NUMBER / SHEET NAME / SCALE / a rotated
+  // "FOR CONSTRUCTION" strip), so neither the wide-single-cell title check
+  // nor the word-group-split check above ever finds a title, and none of
+  // SHEET NUMBER/SHEET NAME/SCALE clears EQUIPMENT_HEADERS/ROOM_HEADERS/
+  // FINISH_HEADERS. Before this fix: refused "unknown kind and no title",
+  // even though vectorgrid found the grid's own 52x8 geometry exactly.
+  const buildTable = (): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 200, 160],
+    "number of rows": 7, "number of columns": 4,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "SHEET NUMBER"), odlCell(1, 2, "SHEET NAME"), odlCell(1, 3, "SCALE"), odlCell(1, 4, "FOR CONSTRUCTION")] },
+      { type: "table row", "row number": 2, id: 1, cells: [odlCell(2, 1, "G 000"), odlCell(2, 2, "CODE INFORMATION AND ASSEMBLIES"), odlCell(2, 3, "AS SHOWN"), odlCell(2, 4, "X")] },
+      { type: "table row", "row number": 3, id: 2, cells: [odlCell(3, 1, "H 200"), odlCell(3, 2, "BASEMENT PLAN ASBESTOS ABATEMENT"), odlCell(3, 3, "1/8\" = 1'-0\""), odlCell(3, 4, "X")] },
+      { type: "table row", "row number": 4, id: 3, cells: [odlCell(4, 1, "D 101"), odlCell(4, 2, "FIRST FLOOR DEMOLITION AND PHASING PLAN"), odlCell(4, 3, "1/8\" = 1'-0\""), odlCell(4, 4, "X")] },
+      { type: "table row", "row number": 5, id: 4, cells: [odlCell(5, 1, "A 101"), odlCell(5, 2, "FIRST FLOOR PLAN"), odlCell(5, 3, "1/8\" = 1'-0\""), odlCell(5, 4, "X")] },
+      { type: "table row", "row number": 6, id: 5, cells: [odlCell(6, 1, "A 102"), odlCell(6, 2, "SECOND FLOOR PLAN"), odlCell(6, 3, "1/8\" = 1'-0\""), odlCell(6, 4, "X")] },
+      { type: "table row", "row number": 7, id: 6, cells: [odlCell(7, 1, "M 101"), odlCell(7, 2, "MECHANICAL FIRST FLOOR PLAN"), odlCell(7, 3, "AS SHOWN"), odlCell(7, 4, "X")] },
+    ],
+  });
+
+  it("is refused with no source spans to search — proves the fix is additive, not a relaxed default", () => {
+    const t = scheduleTableFromODL(buildTable(), "08_ME_test.pdf", IDENTITY, {});
+    assert.equal(t, null, "with no sourceSpans, this table must refuse exactly as it always has");
+  });
+
+  it("is refused when a caption exists but sits nowhere near this table (never borrows an unrelated caption)", () => {
+    const farSpans: GraphSpan[] = [{ str: "DRAWING LIST", x: 2000, y: 2000, w: 100, h: 15 }];
+    const t = scheduleTableFromODL(buildTable(), "08_ME_test.pdf", IDENTITY, { sourceSpans: farSpans });
+    assert.equal(t, null, "a caption far from this table's own bbox must never be borrowed");
+  });
+
+  it("recovers the table, kinded reference, once its real caption is found in the band above it", () => {
+    const spans: GraphSpan[] = [{ str: "DRAWING LIST", x: 20, y: -50, w: 100, h: 15 }];
+    const t = scheduleTableFromODL(buildTable(), "08_ME_test.pdf", IDENTITY, { sourceSpans: spans });
+    assert.ok(t, "the real caption above the grid must recover this table");
+    assert.equal(t!.kind, "reference", "no equipment/room/finish vocabulary applies — this is the generic, vocabulary-free reference kind");
+    assert.equal(t!.rows.length, 6, "all 6 real sheet rows must survive");
+    assert.deepEqual(t!.rows.map((r) => r.key), ["G000", "H200", "D101", "A101", "A102", "M101"]);
+  });
+
+  it("still prefers a real in-grid title over the out-of-grid fallback when both exist", () => {
+    const t2: ODLTable = {
+      type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 200, 180],
+      "number of rows": 8, "number of columns": 4,
+      rows: [
+        { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "REAL IN-GRID TITLE", 4)] },
+        ...buildTable().rows.map((r) => ({ ...r, "row number": r["row number"] + 1, cells: r.cells.map((c) => ({ ...c, "row number": c["row number"] + 1 })) })),
+      ],
+    };
+    const spans: GraphSpan[] = [{ str: "DRAWING LIST", x: 20, y: -50, w: 100, h: 15 }];
+    const t = scheduleTableFromODL(t2, "08_ME_test.pdf", IDENTITY, { sourceSpans: spans });
+    assert.ok(t, "must still build");
+    assert.notEqual(t!.title?.text, "DRAWING LIST", "an in-grid title always wins — the out-of-grid fallback only fires when row 0 found nothing");
+  });
+});
+
+describe("scheduleTableFromODL: a row whose own identity column is a pure drawn glyph still keeps its data (goal VECTORGRID_TABLE_BOXES.md's B-13, 2026-09-13)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 50, row * 20, col * 50 + 50 * colSpan, row * 20 + 20],
+    "row number": row, "column number": col, "row span": 1, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+
+  // Real shape, rendered and read live off 13_MI_MSU_LifeSciences_
+  // LabRenovation.pdf#28's own FIRE ALARM DEVICES SCHEDULE. vectorgrid's own
+  // geometry is exactly right (measured directly against its raw grid: 7
+  // row-bands, matching the real header plus 6 real data rows one-for-one)
+  // — the loss is entirely downstream, in buildRows' own `rawKey`/`rowKeyOf`
+  // gate. Three of the six real rows draw their SYMBOL cell as a pure
+  // vector glyph (a boxed "F", a circled "S", a filled dot) with NO text
+  // token anywhere in it; the other three carry a real drawn numeral
+  // ("15"/"30"/"60"). Before this fix, `rowKeyOf("")` failed and
+  // `if (!keyRes) continue` threw away the whole row — not just its own
+  // blank SYMBOL cell, its already-correctly-extracted DESCRIPTION/
+  // MANUFACTURER/CATALOG NO./REMARKS too.
+  const buildTable = (): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 250, 140],
+    "number of rows": 6, "number of columns": 5,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "FIRE ALARM DEVICES SCHEDULE", 5)] },
+      { type: "table row", "row number": 2, id: 1, cells: [odlCell(2, 1, "SYMBOL"), odlCell(2, 2, "DESCRIPTION"), odlCell(2, 3, "MANUFACTURER"), odlCell(2, 4, "CATALOG NO."), odlCell(2, 5, "REMARKS")] },
+      // SYMBOL is a boxed "F" drawn as a vector glyph — zero text.
+      { type: "table row", "row number": 3, id: 2, cells: [odlCell(3, 1, ""), odlCell(3, 2, "MANUAL PULL STATION"), odlCell(3, 3, "NATIONAL TIME AND SIGNAL CORPORATION"), odlCell(3, 4, "541S"), odlCell(3, 5, "MOUNT AT 46-INCHES TO CENTER OF BOX, UNO. PROVIDE BACKBOX AS RECOMMENDED BY FIRE ALARM SYSTEM MANUFACTURER.")] },
+      // SYMBOL is a circled "S" — zero text. REMARKS is the row's own
+      // LONGEST cell but must never be the fallback key source.
+      { type: "table row", "row number": 4, id: 3, cells: [odlCell(4, 1, ""), odlCell(4, 2, "CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR"), odlCell(4, 3, "NATIONAL TIME AND SIGNAL CORPORATION"), odlCell(4, 4, "DX900-PHOTO"), odlCell(4, 5, "PROVIDE BACKBOX AS RECOMMENDED BY FIRE ALARM SYSTEM MANUFACTURER.")] },
+      // SYMBOL is a filled dot — zero text. REMARKS here is a bare
+      // cross-reference ("REFER TO...") that genericRowKeyOf must reject
+      // outright — DESCRIPTION is the only column that can key this row.
+      { type: "table row", "row number": 5, id: 4, cells: [odlCell(5, 1, ""), odlCell(5, 2, "FIRE ALARM INTERLOCK / CONTROL CONNECTION"), odlCell(5, 3, "-"), odlCell(5, 4, "-"), odlCell(5, 5, "REFER TO LIGHTING CONTROL DIAGRAM ON SHEET E-010.")] },
+      // SYMBOL carries a real drawn numeral — the ordinary, already-working path.
+      { type: "table row", "row number": 6, id: 5, cells: [odlCell(6, 1, "15"), odlCell(6, 2, "COMBINATION AUDIO SPEAKER / VISUAL STROBE SIGNAL, WALL MOUNTED"), odlCell(6, 3, "NATIONAL TIME AND SIGNAL CORPORATION"), odlCell(6, 4, "SG-CXSS 15Z"), odlCell(6, 5, "MOUNT AT 80-INCHES AFF TO BOTTOM OF BOX, UNO. PROVIDE BACKBOX AS RECOMMENDED BY FIRE ALARM SYSTEM MANUFACTURER.")] },
+    ],
+  });
+
+  it("keeps all 4 real rows, keying the 3 blank-symbol rows off their own DESCRIPTION text", () => {
+    const t = scheduleTableFromODL(buildTable(), "13_MI_test.pdf#28", IDENTITY, {});
+    assert.ok(t, "the table must still build");
+    assert.equal(t!.kind, "equipment", "SYMBOL/DESCRIPTION/MANUFACTURER/REMARKS clears the equipment vocabulary bar");
+    assert.equal(t!.rows.length, 4, "all 4 real rows must survive, not just the 1 with a real drawn SYMBOL");
+    assert.deepEqual(t!.rows.map((r) => r.key), [
+      "MANUAL PULL STATION",
+      "CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR",
+      "FIRE ALARM INTERLOCK / CONTROL CONNECTION",
+      "15",
+    ]);
+  });
+
+  it("never uses a REMARKS-shaped cross-reference as the fallback key, and never a >100-char cell either", () => {
+    const t = scheduleTableFromODL(buildTable(), "13_MI_test.pdf#28", IDENTITY, {});
+    assert.ok(t);
+    const interlock = t!.rows.find((r) => r.key.startsWith("FIRE ALARM INTERLOCK"));
+    assert.ok(interlock, `expected the interlock row to key off its own DESCRIPTION, got keys: ${JSON.stringify(t!.rows.map((r) => r.key))}`);
+    assert.equal(interlock!.key, "FIRE ALARM INTERLOCK / CONTROL CONNECTION");
+    const pullStation = t!.rows.find((r) => r.key === "MANUAL PULL STATION");
+    assert.ok(pullStation, "the >100-char REMARKS cell must never become this row's key");
+    assert.equal(pullStation!.cells["CATALOG NO."]?.text, "541S", "the row's other real cells must still be populated");
+  });
+
+  it("leaves an ordinary real-tag row (SYMBOL='15') completely untouched", () => {
+    const t = scheduleTableFromODL(buildTable(), "13_MI_test.pdf#28", IDENTITY, {});
+    assert.ok(t);
+    const row15 = t!.rows.find((r) => r.key === "15");
+    assert.ok(row15, "the already-working real-tag path must be unaffected");
+    assert.equal(row15!.cells["CATALOG NO."]?.text, "SG-CXSS 15Z");
+  });
+
+  it("never manufactures a key when every column on the row is unkeyable", () => {
+    const t2: ODLTable = {
+      ...buildTable(),
+      "number of rows": 7,
+      rows: [
+        ...buildTable().rows,
+        // Blank SYMBOL, and every other column is either blank or a bare
+        // dash — nothing on this row can ever pass genericRowKeyOf, so it
+        // must be dropped exactly as it always was, not manufactured into
+        // a phantom row.
+        { type: "table row", "row number": 7, id: 6, cells: [odlCell(7, 1, ""), odlCell(7, 2, "-"), odlCell(7, 3, ""), odlCell(7, 4, "-"), odlCell(7, 5, "")] },
+      ],
+    };
+    const t = scheduleTableFromODL(t2, "13_MI_test.pdf#28", IDENTITY, {});
+    assert.ok(t);
+    assert.equal(t!.rows.length, 4, "the fully unkeyable row must never seed a phantom row");
+  });
+});
+
+describe("scheduleTableFromODL: a BMS point-function schedule never compiles as equipment (task #82, goal VECTORGRID_TABLE_BOXES.md, 2026-09-13)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 40, row * 20, col * 40 + 40 * colSpan, row * 20 + 20],
+    "row number": row, "column number": col, "row span": 1, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+
+  // Real shape, read live off federal-attachment4-mechanical.pdf#20's own
+  // "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM": column 0 is
+  // an unlabeled running row-index (1, 2, 3…), never a real device tag —
+  // the real per-point identity lives one column over, under HARDWARE TAG.
+  // Left equipment-kind, HARDWARE TAG/HARDWARE POINT TYPE alone clear
+  // EQUIPMENT_HEADERS' vocabulary bar and column 0's bare digits become
+  // each row's own "equipment tag" — see isBasPointFunctionSchedule's own
+  // comment for the full mechanism and B-3's earlier, narrower precedent.
+  // The FAIL MODE/SOFTWARE column banks are the real gate (title alone is
+  // deliberately never enough, per the unit test above), so this fixture
+  // keeps a real, if abbreviated, run of each — 2 FAIL MODE and 4 SOFTWARE
+  // columns, the same floor isBasPointFunctionSchedule itself requires.
+  const buildTable = (): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 440, 100],
+    "number of rows": 4, "number of columns": 10,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM", 10)] },
+      { type: "table row", "row number": 2, id: 1, cells: [
+        odlCell(2, 1, ""), odlCell(2, 2, "POINT NAME"), odlCell(2, 3, "HARDWARE TAG"), odlCell(2, 4, "HARDWARE POINT TYPE"),
+        odlCell(2, 5, "FAIL MODE FAIL ON (OPEN)"), odlCell(2, 6, "FAIL MODE FAIL OFF (CLOSED)"),
+        odlCell(2, 7, "SOFTWARE NETWORK POINT"), odlCell(2, 8, "SOFTWARE CALCULATED POINT"),
+        odlCell(2, 9, "SOFTWARE MAINTENANCE ALARM"), odlCell(2, 10, "SOFTWARE CRITICAL ALARM"),
+      ] },
+      { type: "table row", "row number": 3, id: 2, cells: [
+        odlCell(3, 1, "1"), odlCell(3, 2, "BOILER ALARM STATUS"), odlCell(3, 3, "AX-1"), odlCell(3, 4, "DI"),
+        odlCell(3, 5, ""), odlCell(3, 6, "X"), odlCell(3, 7, "X"), odlCell(3, 8, ""), odlCell(3, 9, "X"), odlCell(3, 10, ""),
+      ] },
+      { type: "table row", "row number": 4, id: 3, cells: [
+        odlCell(4, 1, "2"), odlCell(4, 2, "BOILER STATUS"), odlCell(4, 3, "AX-2"), odlCell(4, 4, "DI"),
+        odlCell(4, 5, ""), odlCell(4, 6, "X"), odlCell(4, 7, "X"), odlCell(4, 8, ""), odlCell(4, 9, "X"), odlCell(4, 10, ""),
+      ] },
+    ],
+  });
+
+  it("classifies reference-kind, not equipment, so its row-index column never enters the equipment-quantity compile", () => {
+    const t = scheduleTableFromODL(buildTable(), "fedmech_test.pdf#20", IDENTITY, {});
+    assert.ok(t, "the table must still build, not vanish");
+    assert.notEqual(t!.kind, "equipment",
+      `a BMS control-points matrix must never compile as equipment (got kind=${t!.kind}) — its row-index column ("1", "2"…) would otherwise become a phantom equipment tag`);
   });
 });
