@@ -139,8 +139,61 @@ def _q(v: float) -> float:
     return round(round(float(v) / Q) * Q, 2)
 
 
+def _effective_box(page) -> tuple:
+    """The box a renderer actually paints, in `page.mediabox`'s own already-
+    rotated, already-inverted coordinate convention.
+
+    A PDF page's CropBox — the visible/printable area — is not always the
+    MediaBox: real CAD/CAM exporters routinely emit a MediaBox large enough
+    to hold plotter registration marks or bleed well outside the sheet's own
+    visible border, with a materially smaller CropBox describing what an
+    ordinary viewer or renderer actually shows. pdf.js's own `getViewport()`
+    sizes and positions its output from the page's CropBox (intersected with
+    the MediaBox, per the PDF spec), not the MediaBox alone — confirmed live,
+    corpus-found (B-32's own trace, 013_MO_T2523_01_Replace_Boilers_Phase_2_
+    Building_29.pdf#23): MediaBox 3024x2160pt, CropBox (252.93,239.86)-
+    (2769.78,1927.04) → CropBox size × RENDER_SCALE=2 is EXACTLY the
+    viewport `vectorGridAdapter.ts`'s own `pageBoxAgrees` measured
+    (5033.6886×3374.3552) — not a coincidence, a confirmed match.
+
+    pdfplumber's own `page.width`/`page.height`/`page.bbox` default to the
+    MediaBox regardless of CropBox (`Page.bbox = self.mediabox` at
+    construction, never updated unless a caller explicitly crops), so using
+    them here silently measured the WRONG box on every such page — this
+    module's own coordinate-contract promise ("the same space a renderer
+    uses", `vectorgrid_rpc.py`'s own module docstring) was true for a
+    non-origin MediaBox (below) but not for a CropBox smaller than it.
+    `pageBoxAgrees` correctly refused rather than silently emitting wrong
+    boxes on this shape — but refusing disables vectorgrid for the whole
+    sheet, forcing a fallback to less reliable extractors. Measured
+    consequence on 013_MO#23: the sheet's own primary BOILERS equipment
+    schedule, correctly ruled and structured, garbled into one composite
+    row by the geometric fallback (TAKEOFF_BUG_CATALOGUE.md, B-32).
+
+    `page.cropbox` already falls back to the MediaBox when a page has no
+    explicit CropBox (pdfplumber's own construction: `if "CropBox" not in
+    page_obj.attrs: self.cropbox = self.mediabox`), and is normalised to the
+    identical rotated/inverted convention as `page.mediabox` — so no extra
+    conversion is needed here, only the intersection: a CropBox is defined
+    to sit within its MediaBox, but is intersected defensively rather than
+    trusted, since a malformed source PDF costs nothing to guard against.
+    """
+    mb = page.mediabox
+    cb = page.cropbox
+    x0 = max(float(mb[0]), float(cb[0]))
+    y0 = max(float(mb[1]), float(cb[1]))
+    x1 = min(float(mb[2]), float(cb[2]))
+    y1 = min(float(mb[3]), float(cb[3]))
+    if x1 <= x0 or y1 <= y0:
+        # A degenerate intersection (a malformed CropBox) is not usable —
+        # the MediaBox alone is still a real page box, so fall back to it
+        # rather than emit an empty or inverted one.
+        return float(mb[0]), float(mb[1]), float(mb[2]), float(mb[3])
+    return x0, y0, x1, y1
+
+
 def page_origin(page) -> tuple:
-    """The MediaBox corner pdfplumber measures everything from.
+    """The corner of the box `_effective_box` measures everything from.
 
     A PDF page's MediaBox does not have to start at (0,0), and on real CAD
     output it often does not: 009_FL…#30 and 078_US…#23 are
@@ -156,9 +209,14 @@ def page_origin(page) -> tuple:
     coordinate leaves this process — to crop a render, to highlight a cell in
     the UI, to hand a region to OCR. 32 of the 122 keyed tables sit on pages
     whose space is not the page's own.
+
+    Uses `_effective_box`'s own corner, not the raw MediaBox's — see its own
+    comment for why a CropBox smaller than the MediaBox needs the identical
+    origin correction as a non-origin MediaBox: a renderer's own (0,0) is
+    the CropBox's own corner, not the MediaBox's, whenever they differ.
     """
-    mb = page.mediabox
-    return float(mb[0]), float(mb[1])
+    x0, y0, _, _ = _effective_box(page)
+    return x0, y0
 
 
 def segments_from_page(page) -> list[tuple]:
@@ -794,7 +852,12 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         page = doc.pages[page_no - 1]
         segs = _snap_grid(segments_from_page(page))
         chars = page.chars
-        page_w, page_h = float(page.width), float(page.height)
+        # The renderer's own box, not pdfplumber's `page.width`/`page.height`
+        # (which default to the MediaBox regardless of CropBox) — see
+        # `_effective_box`'s own comment for why this must agree with
+        # `page_origin` on the SAME box.
+        _ebx0, _eby0, _ebx1, _eby1 = _effective_box(page)
+        page_w, page_h = _ebx1 - _ebx0, _eby1 - _eby0
         page_ox, page_oy = page_origin(page)
 
     rasters = [{"bbox": b, "cells": [], "n_cells": 0, "raster": True}

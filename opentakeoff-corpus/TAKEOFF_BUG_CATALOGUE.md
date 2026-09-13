@@ -2968,6 +2968,22 @@ rule against guessing at either without first measuring the shared
 signal precisely. Not fixed; disclosed with a corrected, much more
 specific mechanism than "column-header text fabricated into a title".
 
+**UPDATE 2026-09-13, same day: the deeper reason `BOILERS` never reached
+vectorgrid at all is now fixed — see B-43.** This page's own vectorgrid
+run was silently disabled entirely (a CropBox/MediaBox page-box
+mismatch, `vectorgrid.py` measuring the wrong box), forcing every table
+on it through the strictly weaker geometric fallback this entry's own
+garbled-row trace describes. With B-43's fix, `BOILERS`'s own row count
+is now correct (8/8), and the `HVAC PIPING MATERIAL SCHEDULE` split
+closes — but this document also carries a SEPARATE, independent,
+not-yet-root-caused defect (genuine duplicate/double-struck text in its
+own source, confirmed directly via PyMuPDF's raw word list) that still
+corrupts `GAS CONNECTED LOAD TABLE` and `VARIABLE FREQUENCY DRIVE
+SCHEDULE` even after B-43. `PUMPS`'s own complete absence, and the
+title-fabrication/misclassification mechanisms this entry names, are
+UNCHANGED — B-43 does not touch them. Full accounting in B-43; this
+document is closer to correct but still not clean.
+
 ### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (PARTIALLY FIXED 2026-09-13 — original document's untitled-phantom half closed; the duplicate-table half and 2 recurring instances remain open)
 
 **Where:**
@@ -3998,6 +4014,138 @@ nearest declined region was an unrelated isometric duct-detail drawing, due
 to a unit-conversion error (`×1.5` instead of `×3`), and left the real
 mechanism untraced. See the corrected write-up above for what is actually
 happening.
+
+---
+
+### B-43 — `vectorgrid.py` measures a page's own MediaBox instead of the box every renderer actually paints (its CropBox), silently disabling vectorgrid on any page where the two differ (FIXED 2026-09-13)
+
+**Found while investigating B-32.** 013_MO_T2523_01_Replace_Boilers_Phase_2_
+Building_29.pdf#23's trace (`OPENTAKEOFF_GRAPH_TRACE=1`) showed something
+B-32's own entry did not yet explain: `L1.8:vectorgrid did not run` for
+this sheet at all, with the exact reason `"vectorgrid measured
+3024x2160pt (x2 = 6048x4320) but the viewport is
+5033.6885999999995x3374.3552"`. Every table on this page was therefore
+already coming from the strictly weaker geometric fallback before it ever
+reached vectorgrid — the actual, deeper reason B-32's `BOILERS` schedule
+was garbled, not a defect in vectorgrid's own reading of it.
+
+**Root cause, confirmed exactly, not inferred.** This page's own MediaBox
+is `[0,0,3024,2160]`, but its CropBox is `(252.9337,239.8604)-
+(2769.778,1927.038)` — a real, deliberate CropBox smaller than the
+MediaBox, the ordinary way a CAD/CAM exporter marks its own plotter
+registration/bleed area as outside the sheet's own visible border.
+`vectorgrid.py`'s `find_tables()` measured `page_w, page_h =
+float(page.width), float(page.height)` — pdfplumber's own `Page.width`/
+`.height`, which default to the MediaBox regardless of CropBox (confirmed
+directly in pdfplumber's own source: `self.bbox = self.mediabox` at
+construction, never updated except by an explicit `.crop()` call the
+production pipeline never makes). But `pageBoxAgrees`
+(`vectorGridAdapter.ts`) compares that measurement against the viewport
+pdf.js's own `page.getViewport()` produces — and pdf.js sizes its
+viewport from the page's CropBox (intersected with the MediaBox, per the
+PDF spec), not the MediaBox alone. The exact arithmetic proves it, not
+just the shape of the mismatch: CropBox width×height = 2516.844×1687.178pt;
+× `RENDER_SCALE=2` = 5033.688×3374.356 — **the measured viewport, to 3
+decimal places.** `vectorgrid_rpc.py`'s own module docstring already
+promises "the same space a renderer uses" — that promise was already
+false on any page shaped like this one, a real, previously-unnoticed gap
+between the module's own stated contract and what it actually measured.
+
+**A second, independent consequence of the same gap, confirmed live:**
+`page_origin()` (this same file) returns the MediaBox's own corner for
+`segments_from_page()`'s own coordinate normalization — but PyMuPDF
+(`celltext.py`'s own text engine) already normalizes its OWN word
+positions to the CropBox's corner (`page.rect` is `(0,0,cropbox_w,
+cropbox_h)`, confirmed directly). On a page whose MediaBox happens to
+start at `(0,0)` (this one does), that means segments/cells stayed in
+raw, un-shifted MediaBox coordinates while PyMuPDF's own words were
+ALREADY shifted to CropBox-relative coordinates — a silent, constant
+misalignment between where `vectorgrid.py` thinks a cell's face is and
+where `celltext.py` thinks a word is, on any such page where vectorgrid's
+own `pageBoxAgrees` check happens not to trip (a rotation-only agreement,
+or a mismatch small enough to sit inside its tolerance). Not measured
+independently of the fix below, since the same root cause and the same
+fix close both.
+
+**Why `pageBoxAgrees` refusing was the right call, and not enough.**
+Refusing rather than silently emitting boxes in the wrong space is
+exactly this coordinate contract's own standing discipline (`vectorGrid
+Adapter.ts`'s own header comment), and it worked as designed here — but
+refusing disables vectorgrid for the WHOLE sheet, forcing every real
+table on it onto a strictly weaker fallback path. The right fix is
+measuring the correct box in the first place, not merely detecting the
+disagreement after the fact.
+
+**Fix**, `bakeoff/vectorgrid.py`: a new `_effective_box(page)` returns the
+MediaBox intersected with the CropBox (defensive against a malformed
+CropBox that PDF spec says should already sit inside the MediaBox, never
+trusted blindly); `page_origin()` now returns this box's own corner
+instead of the raw MediaBox's; `find_tables()`'s own `page_w`/`page_h`
+now come from the same box's width/height instead of `page.width`/
+`page.height`. `page.cropbox` already falls back to the MediaBox when a
+page defines no explicit CropBox (confirmed in pdfplumber's own
+construction), so this is a genuine no-op on every ordinary page and only
+changes behavior on the shape this entry measures.
+
+**Verified live.** Before the fix: `pageWidth`/`pageHeight` reported
+`3024`/`2160`; `pageBoxAgrees` refused with `"size"`; 0 vectorgrid tables
+on this sheet. After: `pageWidth`/`pageHeight` report `2516.8443`/
+`1687.1776` — an exact match to the viewport, confirmed via the RPC
+response directly, not just inferred from behavior — and vectorgrid runs,
+returning 7 raw candidates instead of 0.
+
+**Scope, measured, not guessed.** Scanned every PDF's own MediaBox/CropBox
+in `bulk/` (113 documents, 4,799 pages) and `raw/` (10 documents): exactly
+**1 document, 013_MO**, is affected — but severely, on **25 of its own 28
+pages (89%)**, meaning this single document had vectorgrid unconditionally
+disabled on nearly every sheet it has, regardless of that sheet's own
+content quality, before this fix. Whether other corpus locations
+(`takeoffs/`, documents outside these two directories) carry more
+instances was not checked under this pass.
+
+**Regression-checked clean.** Re-ran `production-graph-cli.mjs` against
+every vectorgrid-sourced document already verified this session
+(028_TX, 045_FL, 072_CA, 019_FL, 11_CA, 080_CA#17/#21, 063_MT#9) —
+every title and row count byte-identical before and after, confirming
+this fix is a true no-op for every page whose CropBox does not differ
+from its MediaBox, which is every page in this list.
+
+**Honest, NOT a claimed fix for B-32 itself.** Re-ran the full 28-page
+013_MO document before/after: the sheet's own final table COUNT is
+unchanged (12 both ways), but the CONTENT differs, and the result is
+genuinely mixed, not a clean win — measured directly, not assumed:
+- The `"DIA. (in)"` candidate (B-32's own misnamed `BOILERS` table) now
+  reports **8 rows**, matching the real, hand-confirmed count exactly
+  (previously 1 garbled composite row) — a real improvement in row
+  count, though its title is still wrong and it is still classified
+  `reference` rather than `equipment` — B-32's own title-fabrication and
+  misclassification mechanisms are UNCHANGED, unrelated code paths this
+  fix does not touch.
+- `HVAC PIPING MATERIAL SCHEDULE`'s own duplicate-title split (previously
+  two entries, `rows:1` and `rows:3`) is now one unified entry (`rows:4`)
+  — B-32's own table-split defect closed for this specific instance.
+- `GAS CONNECTED LOAD TABLE` went from `rows:5` (previously a 1-row
+  overcount against 4 real) to `rows:43` — WORSE, a large new overcount.
+  `VARIABLE FREQUENCY DRIVE SCHEDULE` split into two 1-row entries
+  (previously one 3-row entry; the real count is 1 row per this document's
+  own key). Traced to a SEPARATE, independent, not-yet-root-caused defect
+  in this specific document: PyMuPDF's own raw word list shows the SAME
+  title text (`"VARIABLE"`/`"FREQUENCY"`) drawn multiple times at several
+  distinct, nearby-but-different coordinates — genuine duplicate/double-
+  struck content in this document's own source, confirmed directly, not
+  inferred — which vectorgrid's own face-finder has no reason to expect
+  and no logic to consolidate. This is why 013_MO's own extraction remains
+  imperfect even after this fix: it has TWO independent defects layered on
+  the same pages, and this entry closes only the first.
+
+**Net assessment:** ships as a genuine coordinate-contract correctness
+fix, proven correct by exact arithmetic (not a heuristic), proven a
+no-op everywhere it does not apply, and proven to unlock at least one
+real, measurable improvement (BOILERS's own row count, the table-split
+closure) on the one document it touches — without overclaiming that it
+resolves B-32, whose own remaining defects (title fabrication,
+misclassification, and this newly-found duplicate-content issue) are
+distinct, unrelated code paths still open.
 
 ---
 
