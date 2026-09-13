@@ -1262,7 +1262,7 @@ none of them a real schedule:
 
 ---
 
-### B-20 — a real row is captured twice, byte-for-byte identical, inflating a table's own row count with a phantom duplicate (NOT FIXED — found, traced, disclosed)
+### B-20 — a real row is captured twice, byte-for-byte identical, inflating a table's own row count with a phantom duplicate (FIXED 2026-09-13)
 
 **Where:** `083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4`,
 "COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE" — found during the same
@@ -1287,16 +1287,57 @@ LBS`, `REMARKS: SEE NOTES` — nothing differs between the two copies), then
 table redrawn twice at two DIFFERENT scales elsewhere on a sheet, read as
 two colliding tables) — this is one real row, inside one real table,
 captured twice with no variation at all, immediately adjacent to two
-other rows from the same table that were each captured exactly once. Not
-traced into the row-clustering code to find why this one row's y-band
-produced two identical clusters instead of one, per this file's standing
-rule against guessing at a fix under time pressure.
+other rows from the same table that were each captured exactly once.
 
 **Consequence for the Demo Corpus's own zero-error bar:** a phantom row
 that is not a fabrication of new content (unlike B-16/B-19) but an exact
 duplicate of real content still fails an exact row-count match — this
 table cannot pass cell-grading as extracted despite every cell value
 being individually correct.
+
+**FIX (2026-09-13):** root-caused live, traced across the Python/TS
+boundary rather than guessed at. A real PDF drafting convention on this
+row — a doubled-stroke header/data divider, two full-width ruled lines
+2.46pt apart — creates a geometrically-real but textually-empty "sliver"
+row that survives `vectorgrid.py`'s own `MIN_CELL_SIDE = 2.0pt` filter
+(2.46 > 2.0) and is deliberately preserved by `vectorgrid_rpc.py`'s
+policy that a genuinely empty drawn cell is still part of the grid.
+Independently, a real internal hairline rule under only this row's
+ELECTRICAL DATA sub-columns (VOLTS/PHASE/MCA/MOCP) — not spanning the
+table's full width — splits those columns into two stacked sub-faces,
+each carrying duplicate text. That split's new y-coordinate becomes a
+spurious extra row-grid line via `vectorgrid_rpc.py`'s `_axis()`, so
+`_span()` computes `rowSpan=2` for every OTHER column's cell in that row
+(e.g. the TAG NO. cell, `"HP-1"`). ODL's own grid placement then places
+that `rowSpan=2` cell into BOTH the real row and the phantom sliver row,
+while the sub-divided columns independently duplicate their own value
+across both faces — producing a second row whose every cell exactly
+matches the row above it. This passes `buildRows`'s blank-spacer check
+(not blank — several cells carry inherited/duplicated text) and its key
+derivation (the inherited `"HP-1"` text resolves normally), and no
+duplicate-key guard existed on the `printedKeys=false` path, so it was
+pushed as a second, fully duplicate row.
+
+The real fix belongs in `vectorgrid_rpc.py`'s own row-axis construction
+(a candidate row-grid line should be trusted only when corroborated
+across the table's full width, not just some columns) and is left there
+for a follow-up — not attempted here under time pressure. Instead, added
+a narrowly-scoped guard immediately before `buildRows`'s own
+`rows.push(...)` in `web/src/lib/sheetgraph.ts`: a row whose key AND
+every cell value exactly match an already-emitted row is refused as a
+manufactured duplicate rather than a second real row — the same
+principle the `printedKeys=true` path already applies for its own
+duplicate-key case, safe here because two genuinely distinct rows never
+coincidentally share both the same key and every cell value.
+
+**Verified:** live re-run of `production-graph-cli.mjs --mode graph`
+against the real `083_MA` PDF now reports exactly 3 rows for the COMMON
+AREA - AIR COOLED HEAT PUMP SCHEDULE (`HP-1`, `HP-2`, `HP-3`), `HP-1`'s
+own cell content fully intact and correct. No regression: `cellscore.py`
+still reports 917/917 cells, 102/102 rows whole, identical to before the
+change; `boxscore.py`'s pre-existing 27-box scale-mismatch (137/164) was
+confirmed unrelated via `git stash` isolation — identical result with
+and without this change.
 
 ---
 
