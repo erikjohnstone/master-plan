@@ -1635,6 +1635,15 @@ table going missing) — not traced to a specific adjacent text line this
 time, so not asserted as the identical mechanism, just the same failure
 shape.
 
+**CONFIRMED RECURRING 2026-09-13 — a 3rd document, single-row
+over-count.** `032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#2`'s
+`SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE` reports `rows: 39`;
+direct `textSpans()` measurement (counting real `ACCU` type-column
+entries) confirms exactly 38 real rows. One phantom row, same family —
+the sibling `SPLIT SYSTEM INDOOR UNIT (EVAPORATOR) SCHEDULE` on the same
+sheet (38 real rows) matches exactly, so the over-count is specific to
+this one table, not a page-wide off-by-one.
+
 ### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (NOT FIXED — found, traced, disclosed)
 
 **Where:** `100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#7` (sheet
