@@ -37,9 +37,9 @@ real table count hand-confirmed, box/cell grading not yet done),
 blind and scored), `cell-graded` (box-graded, plus every cell hand-
 transcribed and exact-matched — this is PASS/FAIL for the document).
 
-**Status: 9 of 32 HELDOUT documents already missed-checked (via Demo
-Corpus overlap); 23 of 32 untouched as of this file's creation
-(2026-09-13). 0 of 32 have completed FULL box+cell grading.**
+**Status: 10 of 32 HELDOUT documents missed-checked (9 via Demo Corpus
+overlap, 1 new this session); 22 of 32 untouched. 0 of 32 have completed
+FULL box+cell grading.**
 
 | document | status | real tables found | notes |
 |---|---|---|---|
@@ -52,7 +52,7 @@ Corpus overlap); 23 of 32 untouched as of this file's creation
 | 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades | missed-checked | see Demo Corpus ledger; 2/2 box-graded (100% @4pt) | Via Demo Corpus overlap — see `DEMO_CORPUS_GRADING.md` for full writeup and box-tier evidence section. |
 | 13_MI_MSU_LifeSciences_LabRenovation | missed-checked | see Demo Corpus ledger; 6/6 box-graded (100% @4pt) | Via Demo Corpus overlap — see `DEMO_CORPUS_GRADING.md` for full writeup and box-tier evidence section. |
 | 28_WA_KCHA_PublicHousing_HVAC | missed-checked | see Demo Corpus ledger | Via Demo Corpus overlap — see `DEMO_CORPUS_GRADING.md` for full writeup (vectorgrid/ODL over-merge history, task #64). |
-| 100_OH_Butler_Tech_RTU_Welding_Source_Capture | not-started | — (census: 0 tables, 7 pages) | |
+| 100_OH_Butler_Tech_RTU_Welding_Source_Capture | missed-checked | 2 real hand-confirmed (1 correct, 1 missed) | Both the pre-computed census (0 tables) and the live pipeline's own `--mode graph` output (1 table) undercounted this small 7-page document. Hand-confirmed 2 real tables: DIFFUSER, GRILLE, AND REGISTER SCHEDULE (p5, sheet M1.0, role `plan`, 4 rows — correctly extracted, proving task #60's plan-role-schedule fix still works) and GAS INPUT SCHEDULE FOR BUTLER TECH (p7, sheet P1.0, role `plan`, 6 rows: 5 equipment + 1 total — completely missing from the pipeline's output, confirmed absent via full-JSON string search, not misattached). New bug filed: TAKEOFF_BUG_CATALOGUE.md's B-27 — a real title→non-tabular-metadata-block→header shape, related to but structurally distinct from the already-fixed #90 (fusion) and open #86 (header-below-caption). |
 | 19_CA_VistaUSD_DataCenter | not-started | — (census: 0 tables, 24 pages) | Flagged in task #72 as a "reports real schedules but 0 tables" case — needs re-check against that prior investigation's conclusion. |
 | 086_CA_Contra_Costa_College_Early_Learning_Center | not-started | — (census: 1 table, 8 pages) | |
 | 069_ID_ITD_District_2_Laboratory_Heating_Upgrades | not-started | — (census: 2 tables, 9 pages) | |

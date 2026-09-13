@@ -1617,6 +1617,53 @@ exact-match cell-grading on a second, otherwise-correct table (a phantom
 row). Both are real, concrete, measured reasons this document is not yet
 clean — not a shrunk sample, the actual page.
 
+### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (NOT FIXED — found, traced, disclosed)
+
+**Where:** `100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#7` (sheet
+P1.0, "PLUMBING FLOOR PLAN") — found starting the HELDOUT set's own
+missed-checking pass (`keys/HELDOUT_GRADING.md`), the same discipline as
+the Demo Corpus pass. This is a small (7-page) document where the
+pipeline's own live `--mode graph` output claims only 1 real table in
+the whole document (`DIFFUSER, GRILLE, AND REGISTER SCHEDULE`, page 5,
+correctly extracted with 4/4 rows on a `role: plan` sheet — proof that
+schedules-on-plan-role-sheets, task #60's own fix, is genuinely still
+working here); the pre-computed census (`VOLUME_FLOOR_CENSUS-2026-09-13.
+json`) separately claimed 0 tables for this document, an even larger
+undercount now superseded by this direct measurement.
+
+**Measured:** page 7 carries a second real, titled, ruled table, `GAS
+INPUT SCHEDULE FOR BUTLER TECH`, confirmed by render and by direct
+`textSpans()` extraction: `EQUIPMENT`/`LOAD (CFH)` header at y=1057.4,
+then 5 real equipment rows (`EXISTING LAB FURNACES`, `EXISTING WATER
+HEATER`, `NEW RTU` ×3) plus a `BUILDING TOTAL` summary row — 6 rows
+total. `production-graph-cli.mjs --mode graph` returns zero tables for
+this sheet (`role: plan`, `tables: 0`), and a full-JSON string search
+confirms `"GAS INPUT"` appears nowhere in the entire document's output —
+not misattached to another sheet or renamed, simply absent.
+
+**Structurally distinct from its own working sibling table** on page 5:
+this table's real title (`"GAS INPUT SCHEDULE FOR BUTLER TECH"`, y=938.9)
+is followed not directly by its header row but by FOUR lines of
+non-tabular `LABEL: VALUE` metadata (`SERVICE ADDRESS:`, `TOTAL
+EQUIVALENT LENGTH OF PIPE:`, `REQUIRED DELIVERY PRESSURE:`, `NUMBER OF
+METERS:`/`GAS SERVICE LENGTH:`, y=968.9-1028.9) before the real
+`EQUIPMENT`/`LOAD (CFH)` header at y=1057.4. This title→metadata-block→
+header shape is the same general pattern already named in task #90
+("header-JOIN loop no longer swallows pre-header spec-metadata rows into
+column headers") and #86 ("scheduleKeywordRegion misses the real header
+when a table's caption prints BELOW it, not above") — but #90's own fix
+was for a FUSION failure (metadata swallowed into the header), and this
+document's failure mode is total absence, not fusion. Whether this is a
+gap #90's fix didn't cover, or a distinct failure in the same code path,
+was not traced past this structural comparison, per this file's own
+standing rule against guessing at a fix under time pressure.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this document
+fails MISSED=0 — a real 6-row table on the only 7-page document graded
+so far in this set is entirely invisible to the production pipeline,
+despite its own immediate sibling table two pages earlier extracting
+perfectly. A real, concrete, measured reason this document is not clean.
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
