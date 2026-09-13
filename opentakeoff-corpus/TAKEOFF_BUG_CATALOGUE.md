@@ -2842,6 +2842,55 @@ traced further under this pass's own no-guessing-at-fixes rule.
 table (1 row) silently absent with no other signal that anything is
 wrong — small in row count, but a clean MISS nonetheless.
 
+**ROOT-CAUSE CONFIRMED 2026-09-13 (code-level, no fix applied — see
+below for why).** This entry's own original "plausibly a caption-
+keyword-matching gap" guess is CONFIRMED exactly, at a specific
+function: `web/src/lib/vectorTakeoffPipeline.ts`'s `isScheduleTarget()`
+(line 177). Traced live via a `qpdf`-sliced single page (page 133 alone)
+run through `production-graph-cli.mjs --mode graph` with
+`OPENTAKEOFF_GRAPH_TRACE=1` (cache cleared): the sheet's own role
+classifies as `plan` (confirmed via the trace's own `topology
+sheet=... role=plan` line), and `isScheduleTarget`'s gate for a
+`role: plan` sheet requires ONE of: (a) `ctx.role === "schedule"` — no;
+(b) `sheetHasScheduleCaption(ctx.spans)` — a printed caption containing
+the word `SCHEDULE` anywhere on the sheet — no, this sheet's only real
+table's own caption is `"LOUVER ANCHORING DETAIL"`; (c)
+`sheetHasPointsListCaption` — no; (d) `role === "legend" || role ===
+"unknown"` (this sheet is `plan`, so this branch and everything gated
+behind it, including the broader `sheetHasScheduleLanguage` vocabulary
+scan, never even runs). Every branch fails, `isScheduleTarget` returns
+`false`, and the ENTIRE sheet — not just this one table — is skipped by
+both vectorgrid (`L1.8:vectorgrid` stage measured `0` ms in the trace,
+confirming it never actually ran any per-sheet work) and the geometric
+extractor (gated the same way, `vectorTakeoffPipeline.ts:606`). The
+sheet's own final result: `"0 schedule tables"`, an exact match to the
+real, measured miss.
+
+**Why this is disclosed without a fix:** `isScheduleTarget`'s own
+comment names its exact purpose and history — it exists because "equipment
+words are everywhere on a floor plan," and running vectorgrid
+unconditionally on every `plan`/`unknown`-role sheet across a 500+
+document corpus was previously measured to cost real performance and
+introduce false-positive structure-hallucination risk (the comment's own
+prior fixes, 13_MI#10 and 009_FL#30/task #60, were both scoped narrowly
+to a printed `SCHEDULE` caption for exactly this reason). This table's
+own real caption has no `SCHEDULE`-family word at all, and it sits on a
+`MECHANICAL DETAILS` sheet — architecturally the exact shape (drawing
+details mixed with dimension/callout lines that can look grid-like) this
+gate was built to stay conservative about. Widening the gate to admit
+`plan`-role sheets more broadly is corpus-wide-blast-radius policy
+change, not a narrow fix, and needs a full corpus regression sweep (cost
+AND false-positive rate, not just this one document's recall) before
+shipping — not attempted here under this session's own standing rule
+against guessing at fixes under time pressure. A safer, narrower
+direction worth considering in a future session: a genuinely bordered/
+ruled-grid structural signal (not a vocabulary/caption match) as an
+ADDITIONAL, cheap pre-check specific to a `plan`-role sheet, so the gate
+stays conservative about cost/false-positives while still admitting a
+real ruled table with no `SCHEDULE` caption — not designed here, since it
+touches the same shared gate every one of this corpus's several hundred
+`plan`-role sheets passes through.
+
 ### B-38 — a two-row-header table's own unit-label sub-header row is read as the table's single data row, and the real data row underneath it vanishes (NOT FIXED — found, traced, disclosed)
 
 **Where:** `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8`
