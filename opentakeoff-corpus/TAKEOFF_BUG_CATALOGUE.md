@@ -1578,7 +1578,7 @@ table cell. This table cannot pass either box- or cell-grading.
 
 ---
 
-### B-23 — a dense schedule page extracts 14 of 14 simple tables perfectly, but every ROW-SPANNING/merged-cell or comparison-style table on the exact same page is entirely missing (NOT FIXED — found, traced, disclosed)
+### B-23 — a dense schedule page extracts 14 of 14 simple tables perfectly, but every ROW-SPANNING/merged-cell or comparison-style table on the exact same page is entirely missing (CORRECTED 2026-09-13)
 
 **Where:** `067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8`
 ("MECHANICAL SCHEDULES", sheet M7.0) — found during the same Demo Corpus
@@ -1624,9 +1624,32 @@ file's standing rule against guessing at a fix under time pressure.
 "pass/fail" grade would badly overstate how well this specific shape of
 table is handled.
 
+**CORRECTION (2026-09-13): this is a misdiagnosis, the same shape as
+B-21's own original 25_WA claim.** All 4 "missing" tables, including
+the one this entry describes as having real row-spanning merged
+`BRANCH SUM` cells, are genuine pasted raster images, not real vector
+tables with an unusual structure vectorgrid failed to parse. Direct
+measurement: the `HUTCH 1.3 PCW RISER UTILITY SCHEDULE` region and the
+combined `NEH`/`FEE,EBD,UH`/`X-Ray Tunnel (XRT)` "PCW flow demand"
+region each correspond EXACTLY to a real embedded PyMuPDF image
+placement rect (`page.get_images()`/`get_image_rects()`), and the
+page's own text layer carries 2293 total words, **zero** of them
+anywhere near either region (`page.get_text('words')`, checked
+directly). `vectorgrid.py`'s own `find_tables()` already correctly
+finds and marks both `raster=True, cells=[]` — its pixel-based
+`_image_is_a_table()` test doing exactly its job, same as B-21's
+25_WA correction. A rendered crop looks crisp and fully-ruled at
+normal zoom only because the pasted screenshot is itself high-DPI,
+which is exactly how this was originally misjudged without checking
+the underlying PDF structure. Per the goal document's own Scope rule,
+this is correct, disclosed-eligible behavior, not a bug — closing out
+this entry's own 4-table claim. See B-24's own entry below: the one
+REAL gap this correction surfaced (the disclosure itself wasn't
+reaching real output) is now fixed.
+
 ---
 
-### B-24 — a raster table's own placement is not reported at all, not even as a disclosed exclusion (NOT FIXED — found, traced, disclosed)
+### B-24 — a raster table's own placement is not reported at all, not even as a disclosed exclusion (FIXED 2026-09-13)
 
 **Where:** `067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8`,
 "PCW RISER DIAGRAM SCHEDULE - HUTCH 1.3" — found running
@@ -1662,6 +1685,41 @@ represents an undisclosed miss rather than a correct-but-silent
 exclusion, it is a second real defect on this page (alongside B-23's
 merged-cell tables) that a per-table-found accounting would hide inside
 an otherwise 14/14 clean result.
+
+**FIX (2026-09-13):** root-caused to which of the two possibilities —
+confirmed correct-but-silent exclusion, the same as B-21's/B-23's own
+corrections above (this exact region, and 2 others on the same
+document, are genuine pasted raster images: real embedded PyMuPDF
+placement rects, 0 PDF text words anywhere near any of them out of
+2293 total on the page). `vectorgrid.py`'s own `find_tables()` already
+finds and correctly marks all of them `raster=True`; the gap was
+purely downstream, in `runVectorTakeoffPipeline`'s own `report.notes`
+array being write-only — every note pushed onto it (this raster
+disclosure, and the pre-existing "L2 vectorgrid did not run" case)
+only ever reached the `OPENTAKEOFF_GRAPH_TRACE` debug dump in
+`session.ts`, never the real `graph.notes` an ordinary run — and the
+live app — actually reads.
+
+Fixed in two files: `vectorTakeoffPipeline.ts`'s
+`runL2VectorGridForSheet` now pushes a per-sheet note whenever that
+sheet's own raster count is nonzero; `session.ts`'s
+`runVectorTakeoffStack` now copies `report.notes` into `graph.notes`
+once, right after computing the report, before the
+`OPENTAKEOFF_GRAPH_TRACE`-gated debug dump. Purely additive (never
+removes or modifies a table), so this also naturally fixes the
+disclosure gap for the pre-existing "L2 vectorgrid did not run" case
+as a side effect of the same wiring fix.
+
+**Verified** against the real PDF: `067_CA_SLAC_LCLS_II_HE_Process_
+Cooling_Water_Skid.pdf#8` now emits `"2 raster table region(s) found
+and correctly excluded (pasted image, no ruled vector content to
+read) — not an extraction miss."` in the real `graph.notes` output,
+and sheet `#10` emits the same for its own 1 raster region. 18/18
+relevant unit tests pass (`test/vectorTakeoffPipeline.test.ts`,
+including an existing test that already asserted a refused engine's
+notes must reach `g.notes`). A full re-run of `012_MO_M2430_01` (a
+large 29-sheet document, no raster regions of its own) shows an
+identical 12 tables before and after this change, no crash.
 
 ---
 
