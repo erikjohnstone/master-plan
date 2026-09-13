@@ -494,3 +494,113 @@ scope (all vector-native, no raster/OCR path involved), not yet closed:**
   fix, and why the other 6 sets are provably unaffected (zero occurrences of
   any triggering vocabulary in their own source text, not just an unlikely
   false-positive).
+
+**Added 2026-09-13, from the Demo Corpus/HELDOUT hand-verification pass
+this goal's own Method requires (B-16 through B-40) — 13 real fixes shipped,
+9 more root-caused/corrected, all committed to `main`, none yet re-verified
+against the frozen corpus gates below as a full sweep (each was verified
+individually: full existing test suites, a new regression test per fix, and
+a live before/after diff on the real corpus PDF — see `TAKEOFF_BUG_CATALOGUE.md`
+for the full trace on each):**
+
+- **B-18 FIXED** — a table's real header row was absorbed into its title
+  string and the first real data row promoted to stand in for it, silently
+  dropping the table's true last row. Fixed in `celltext.py`
+  (`split_unruled_header_row`).
+- **B-20 FIXED** — a spurious row-grid line duplicated a real row. Fixed with
+  a duplicate-row guard in `sheetgraph.ts`'s `buildRows`.
+- **B-21/B-22 FIXED** (and **CORRECTED**: the entries' own original 25_WA
+  claim was a raster misdiagnosis, not a real code bug) — "CODE SECTION" was
+  misread as a section-drawing cross-reference, demoting a real electrical
+  panel schedule to non-table. Fixed in `sheetgraph.ts`'s role classifier.
+- **B-23/B-25 CORRECTED** — 2 more instances of the same raster
+  misdiagnosis pattern as B-21 (real pasted images mistaken for real vector
+  tables in an earlier hand-verification pass that never checked vector vs.
+  raster).
+- **B-24 FIXED** — raster-region exclusion disclosures never reached the
+  real `graph.notes` an ordinary run reads, only an internal debug dump.
+  Wired through in `session.ts`/`vectorTakeoffPipeline.ts`.
+- **B-40 FIXED** — a 2x coordinate-scale bug in this goal's own
+  `rulelinebox.py` ground-truth-authoring tool had silently corrupted 873
+  ground-truth rows across 46 `keys/*.tableboxes.csv` files (halved values
+  needed halving again). Fixed and all 873 rows corrected in place.
+- **B-36 FIXED** — a table's own internal column-group sub-header won as its
+  reported title over the real title sitting above the grid, because it
+  scored a zero-distance "gap" purely by sitting inside the table's own
+  bbox. Fixed with a containment guard in `scheduleLanguageScan.ts`'s
+  `nearbyScheduleCaption`.
+- **B-30/B-33 PARTIALLY FIXED** (title-block fabrication family — 2 of 6
+  total confirmed instances closed) — a drawing's own title-block grid (a
+  blank revisions log, or fields glued as one `"LABEL: VALUE"` string) was
+  read as a phantom reference-kind table. An existing, already-proven guard
+  (`isTitleBlockTable`) was wired into the ODL path (previously only in the
+  geometric extractor) and its vocabulary generalized to match periods and
+  glued colon-separated labels. The other 4 confirmed instances (prose-only
+  fabrications, not a ruled label:value grid) remain open.
+- **B-28 PARTIALLY FIXED** (title-collision half) — two genuinely distinct,
+  same-titled, same-row-keyed tables on one sheet were wrongly collapsed
+  into one by `collapseEquivalentPrimaryTables`, whose own dedup identity
+  had no position check at all. Fixed by requiring the two candidates'
+  regions to overlap before collapsing. The same document's own unrelated
+  page-9 total table blackout remains open.
+- **B-17 root cause CONFIRMED, not fixed** (corpus-wide gate; 2 unrelated
+  reconciliation bugs found and fixed along the way) — vectorgrid tries two
+  row-boundary hypotheses for one physical table; one correctly recovers the
+  title but fails its own row-keying and is refused whole (discarding the
+  title with it), the other keys correctly but starts below the title row.
+  Closing it needs a new orphaned-title channel through the refusal path,
+  not attempted here. Found and fixed along the way: `dedupCrossSourceTables`
+  and `adoptVectorGridTables` both discarded a losing candidate's own
+  correctly-recovered title with no carryover — both now carry it onto the
+  winner when the winner lacks one.
+- **B-26/B-31/B-38 root cause CONFIRMED, not fixed** (same risk class,
+  vectorgrid's own candidate-region geometry) — three independently-found
+  instances of vectorgrid emitting more than one candidate region for a
+  single real table (a disjoint header/data block split at a border-weight
+  rule for B-26; two overlapping candidates each misreading the header/data
+  boundary for B-38; the general family B-17 is also part of). All three
+  are precisely traced to the exact code and geometry involved; none are
+  fixed, because closing any of them means changing vectorgrid's own
+  block/candidate construction — shared, corpus-wide-blast-radius logic
+  this goal's own "ground truth means verified" standard says should not be
+  guessed at without a full regression sweep.
+- **B-37/B-27 root cause CONFIRMED, not fixed** (same corpus-wide gate) —
+  `isScheduleTarget`/`sheetHasScheduleCaption` (`vectorTakeoffPipeline.ts`,
+  `scheduleLanguageScan.ts`) skips an entire `plan`-role sheet whenever its
+  one real table's caption either has no `SCHEDULE`-family word at all
+  (B-37) or has `SCHEDULE` followed by more words rather than as the
+  caption's own terminal word (B-27, `"...SCHEDULE FOR BUTLER TECH"`).
+  Widening this gate is a corpus-wide admission-policy change with a real,
+  named false-positive risk (this exact function's own doc comment records
+  its narrow-by-design history); not attempted without a full corpus
+  regression sweep measuring both cost and false-positive rate.
+- **B-29 CORRECTED** — the entry's own original "two real tables silently
+  merged" diagnosis was wrong. Direct measurement of the surviving table's
+  own headers/rows/cells showed it is the sheet's real revisions log, not a
+  merge of the two HVAC schedules; the row-count match (1+2=3) was
+  coincidence. The real, still-open defects are two unrelated ones:
+  vectorgrid never proposes a candidate region for either small real HVAC
+  table at all, and the real revisions log's own title is a fabricated
+  title-block fragment.
+
+**Still open from this pass, not investigated:** B-16 (two side-by-side
+numbered-notes lists fused into one fabricated table via the geometric
+extractor's own `extractReferenceTableAt`/generic-column-band path — a
+different code area than the ODL/vectorgrid mechanisms above, not yet
+traced), B-19, B-32, B-34, plus the two deliberately-deferred harder halves
+of B-28 (page-9 blackout) and B-31 (a real, wide, room-keyed table dropped
+by the same block-split family as B-26).
+
+**Not yet done, and this remains the actual gate this file names:** none of
+the above changes the state of the Completion Gate or the Demo Corpus —
+the HELDOUT set's 688 tables and the Demo Corpus's 821 tables still have
+not been hand-graded box-by-box and cell-by-cell per this file's own bar.
+This session's fixes come FROM that hand-verification work (each bug above
+was found by rendering a real page and reading it by eye, per this file's
+own "ground truth means a human looked at the rendered page" rule) but
+grading itself — the actual volume number this file's Completion Gate and
+Demo Corpus sections require — has not resumed. The next concrete step
+toward this goal, not a substitute for it, is continuing that render-and-
+read hand-grading pass (next candidates: B-16's own document, then B-19/
+B-32/B-34's own documents) while fixing what it turns up, exactly as this
+session did.
