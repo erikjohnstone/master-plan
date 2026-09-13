@@ -1074,6 +1074,13 @@ content-correct and only the title-attachment layer fails — reinforcing
 that this is a distinct, common failure mode from the missing/fabricated-
 table bugs (B-16/B-19/B-25), not a rare one-off.
 
+**CONFIRMED RECURRING 2026-09-13 — an 8th document, starting the HELDOUT
+set's own missed-checking pass.**
+`26_CA_TransbayTower_Mechanical_64Sheets.pdf#11`'s `WATER FILTRATION
+UNIT` table (1 row: `WFU-62-1`, capacity/pump data all correct) surfaces
+as `title: ""` despite its own real title sitting at an ordinary position
+directly above the table. Same signature, same non-fix.
+
 ---
 
 ### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (NOT FIXED — found, traced, disclosed)
@@ -1617,6 +1624,17 @@ exact-match cell-grading on a second, otherwise-correct table (a phantom
 row). Both are real, concrete, measured reasons this document is not yet
 clean — not a shrunk sample, the actual page.
 
+**CONFIRMED RECURRING 2026-09-13 — the phantom-row half of this bug, a
+2nd document.** `26_CA_TransbayTower_Mechanical_64Sheets.pdf#10`'s second
+`FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)` table reports
+`rows: 19`; direct `textSpans()` measurement confirms only 17 real rows
+(`FPB-61-101` through `-109`, `FPB-61-201` through `-208`). Two phantom
+rows, same general family as the `EQUIPMENT STEAM TRAP` over-count above
+(a real table over-counting by a small, fixed number rather than a whole
+table going missing) — not traced to a specific adjacent text line this
+time, so not asserted as the identical mechanism, just the same failure
+shape.
+
 ### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (NOT FIXED — found, traced, disclosed)
 
 **Where:** `100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#7` (sheet
@@ -1663,6 +1681,74 @@ fails MISSED=0 — a real 6-row table on the only 7-page document graded
 so far in this set is entirely invisible to the production pipeline,
 despite its own immediate sibling table two pages earlier extracting
 perfectly. A real, concrete, measured reason this document is not clean.
+
+### B-28 — an entire dense schedule page (10 tables, 98 rows) is completely invisible despite dense, fully-reachable real text; a same-titled sibling table on another page is silently dropped by an apparent title-collision (NOT FIXED — found, traced, disclosed)
+
+**Where:** `26_CA_TransbayTower_Mechanical_64Sheets.pdf` — a 64-sheet
+tower mechanical set with 3 dense schedule pages (M0.09/#9, M0.10/#10,
+M0.11/#11, all three literally titled "MECHANICAL SCHEDULES" per the
+drawing title block). Found continuing the HELDOUT set's own missed-
+checking pass, this document picked for its unusually large table
+density relative to page count.
+
+**Measured, page #9 (M0.09) — total blackout.** Hand-transcribed all 10
+real, titled, ruled tables and their 98 total rows BEFORE viewing
+extractor output, using direct `textSpans()` coordinate extraction for
+every table (not eyeballing): `CUSTOM FACTORY-BUILT TRI-PATH MULTI-ZONE
+AIR HANDLING UNITS` fan-data table (12 rows) and its own damper/filter-
+data continuation table (12 rows, same 12 `AHU-` designations, no
+repeated `DESIGNATION` header — confirmed via its own `TRANSFER` column
+header instead), `CHILLER` (3), `HOT WATER BOILER` (1), `AIR HANDLING
+UNIT (COOLING)` (8), `AIR INLETS AND OUTLETS` (20), `PLATE AND FRAME HEAT
+EXCHANGER` (6), `FAN COIL` (22), `COOLING TOWER` (4), `PUMPS` (10) — 10
+tables, 98 rows, all independently verified by exact-coordinate text-span
+counts, not visual estimates. `production-graph-cli.mjs --mode graph`
+returns **zero tables** for this entire page. This is not a reachability
+problem: `textSpans()` finds **4,658 real text spans** on this one page
+(more than either of its two sibling pages, #10's 4,175 and #11's
+3,346 — both of which DID yield tables), ruling out the vector-outlined-
+glyph category (`086_CA`, `056_NY`, `020_MO`) outright. The sheet's own
+`role` is `detail`, not `schedule` — but #10 carries the exact same
+`detail` misclassification and still extracts all 5 of its own real
+tables correctly, so role misclassification alone does not explain a
+100% failure specific to this one page. The actual reason inside
+`sheetgraph.ts`'s table-region detector was not traced further, per this
+file's own standing rule against guessing at a fix under time pressure.
+
+**Measured, page #11 (M0.11) — a same-titled sibling table dropped.**
+This page has a `RELIEF AND INTAKE HOOD` table TWICE — two genuinely
+distinct physical tables (different `NOTES:` text: one references an
+"INTEGRATED CONTROL DAMPER", the other a "BAROMETRIC DAMPER... STAIR
+PRESSURIZATION MODE"), each with the identical 2 rows
+(`RAH-64-1`/`RAH-64-2`) and identical title text — a real, if unusual,
+drafting choice by the source document's own authors. The extractor's
+own output carries only ONE `RELIEF AND INTAKE HOOD` entry (`rows: 2`) —
+the second, distinct table is completely absent, consistent with a
+title-string collision silently merging or overwriting one table with
+the other rather than keeping both. `SINGLE DUCT CAV EXHAUST TERMINAL`
+(7 rows), `DAMPERS` (106 rows — the single largest table hand-verified
+in this whole session), `RADIANT FLOOR SCHEDULE` (3), and `SOUND TRAP
+SCHEDULE` (3) all match exactly. `WATER FILTRATION UNIT` (1 row) is a
+confirmed 8th instance of B-17's own title-loss signature (amended
+there, not re-described here).
+
+**Relationship to already-catalogued bugs:** the page #9 blackout is
+distinct from every other missing-table bug in this file — it is not a
+role-classification miss (B-9-style; ruled out by #10's own identical
+mis-tag still working), not a vector-outlined-glyph case (ruled out by
+span count), not a transposed-layout case (B-25; these are ordinary
+row-per-unit equipment tables identical in shape to the ones that DID
+extract on #10/#11), and affects 100% of a page's tables at once rather
+than one specific table — the largest-blast-radius missing-table finding
+in this entire session. The page #11 duplicate-title drop is a new
+mechanism (title-string collision) distinct from B-17 (title lost
+entirely, not a real title colliding with another real title).
+
+**Consequence for the HELDOUT set's own zero-error bar:** this single
+document fails MISSED=0 by 11 real tables (10 from the page #9 blackout,
+1 from the page #11 title collision) and 100 real rows — the largest
+single-document MISSED gap measured in this entire session, Demo Corpus
+included.
 
 ## What is working
 
