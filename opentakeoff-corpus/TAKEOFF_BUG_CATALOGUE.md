@@ -2386,7 +2386,7 @@ plausible-but-wrong "two tables merged" diagnosis with the measured,
 code-level truth, but does not fix either of the two real defects it
 uncovered.
 
-### B-30 — a code-compliance approval stamp's own disclaimer paragraph is fabricated into a phantom one-row table (PARTIALLY FIXED 2026-09-13 — the 4th documented instance closed, the other 3 remain open)
+### B-30 — a code-compliance approval stamp's own disclaimer paragraph is fabricated into a phantom one-row table (PARTIALLY FIXED 2026-09-13 — 2 of 4 documented recurrences now closed, 2 remain open with corrected, deeper root causes)
 
 **Where:** `098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8`
 (sheet M3.0, "HVAC SCHEDULES") — found continuing the HELDOUT set's own
@@ -2486,18 +2486,68 @@ SCHEDULE`, `FINNED PIPE RADIATION SCHEDULE`, `CABINET UNIT HEATER
 SCHEDULE`) keep their exact same row counts, titles, and kinds — the fix
 touches only the one phantom table.
 
-**Checked, not fixed, the other 3 documented instances:** re-ran the
-live pipeline against the original DOPL disclaimer paragraph (098_ID#8),
-the "AGENCY APPROVALS" signature box (080_CA#17/#21), and the
+**Checked, not fixed (at the time), the other 3 documented instances:**
+re-ran the live pipeline against the original DOPL disclaimer paragraph
+(098_ID#8), the "AGENCY APPROVALS" signature box (080_CA#17/#21), and the
 "SUSTAINMENT MAINTENANCE" project-name field (013_MO#20/#23) — all 3
-fabricated tables are STILL present, unaffected by this fix. None of
-their own row keys happen to match "REV" or any other
-`TITLE_BLOCK_ROW_LABELS` entry, and (unlike 12_MT) none of them appear
-to be a genuine ruled REV/DESCRIPTION/DATE-shaped grid at all — the DOPL
-and SUSTAINMENT MAINTENANCE cases in particular read as prose/plain-text
-title-block fields with no real tabular structure of their own, a
-structurally different fabrication shape from this specific fix and not
-traced further under this pass.
+fabricated tables were STILL present, unaffected by the 12_MT fix. None
+of their own row keys happened to match "REV" or any other
+`TITLE_BLOCK_ROW_LABELS` entry, and (unlike 12_MT) none of them appeared
+to be a genuine ruled REV/DESCRIPTION/DATE-shaped grid at all.
+
+**FIX 2026-09-13, same day, later pass — the "AGENCY APPROVALS" instance
+(080_CA#17/#21) closed, and it WAS this exact vocabulary-gap shape after
+all.** Traced live with a `qpdf`-sliced single page of each: this table
+is not prose at all — it comes through the SAME geometric, anchor-based
+`extractReferenceTableAt` path 12_MT's own fix already covers, and it IS
+a genuine title-block reference table (`headers: ["ISSUED FOR","REV",
+"DATE"]`, spanning the sheet's whole title-block column, `anchors` field
+present) with 3 real title-block rows keyed `"ISSUED FOR BID"`,
+`"SHEET TITLE"`, `"PROJECT NUMBER"`. Two of those three already matched
+`TITLE_BLOCK_ROW_LABELS` (`SHEET TITLE`, `PROJECT NUMBER`); only
+`"ISSUED FOR BID"` did not — the vocabulary already has bare `"ISSUED
+FOR"`, but this project's own seal/signature block prints the fuller
+phrase `"ISSUED FOR BID SEALS AND SIGNATURES"`, so `isTitleBlockTable`'s
+own "every row must match" rule failed on that one row alone and let the
+whole phantom through. **One line, one new literal vocabulary entry**
+(`"ISSUED FOR BID"`, `web/src/lib/sheetgraph.ts`'s `TITLE_BLOCK_ROW_
+LABELS`) — no new heuristic, no path wiring, reusing the exact mechanism
+12_MT's own fix already proved. **Verified live:** the phantom is gone on
+BOTH page #17 (0 tables left on that page — it was the only candidate)
+and page #21 (the phantom gone, its 3 other real tables —
+`TECHNOLOGY SYSTEMS PATHWAY SERVICES ROUGH-IN SCHEDULE`,
+`TELECOMMUNICATIONS CABLING SCHEDULE`, `CABLE SERVICE TYPES AND
+TERMINATIONS`, 1/1/9 rows — confirmed present and byte-identical before
+and after via a stashed before/after diff). Full regression: all 189
+`sheetgraph.test.ts` + `vectorTakeoffPipeline.test.ts` +
+`scheduleLanguageScan.test.ts` tests pass, identical count before and
+after (confirmed via the same stash-and-rerun check).
+
+**Still open, and their own root causes now more precisely characterized
+than "prose, not traced further":**
+- **098_ID#8's DOPL disclaimer is NOT prose fabrication at all** — traced
+  live (`vectorgrid_rpc.extract_grid` called directly, then a rendered
+  crop of the exact region): it is a genuinely real, small, ruled 2-column
+  reference table (`SYMBOL` / `AREA SERVED` headers, one real data row
+  `GD-1` / `STORAGE/REPAIR BAYS`) that a separate DOPL code-review approval
+  stamp graphic happens to overlap in the SAME page coordinates. The
+  stamp's own disclaimer text and the table's own real header/data text
+  get interleaved word-by-word into the same cells by whatever orders text
+  spans within a cell's bounds (confirmed: the header row's own real
+  `SYMBOL`/`AREA SERVED` text is present but jumbled mid-sentence inside
+  the disclaimer's own prose — `"not be violation SYMBOL of, standards,"`).
+  No existing vocabulary guard applies (the real headers are not
+  administrative-vocabulary row keys, and refusing the title alone would
+  still leave the header row corrupted); a real fix needs a way to tell
+  two geometrically-overlapping, unrelated text layers apart (font, color,
+  or z-order — none of which any code this file has read yet uses for this
+  purpose) — a materially different, harder problem than title-block-field
+  fabrication, not attempted here.
+- **013_MO#20/#23's "SUSTAINMENT MAINTENANCE"** — re-checked live after the
+  080_CA fix, confirmed still present and unaffected (correctly, since its
+  source is the project title-block's own name field, not a row-keyed
+  reference table this vocabulary mechanism reaches) — full context in
+  B-32.
 
 ### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (NOT FIXED — found, traced, disclosed)
 
@@ -2686,6 +2736,49 @@ point for a future session with the budget to (a) dump the REAL column
 0/1 content for this exact table cell-by-cell, (b) decide the right
 column-selection rule, and (c) run it against the full corpus gate
 before merging — not attempted here.
+
+**TRIED AND REVERTED (2026-09-13, same day): the obvious "swap keyColIdx to
+whichever duplicate-header sibling has more coverage" fix makes this exact
+table dramatically WORSE, not better — a real, disclosed negative result
+so a future session does not repeat it.** Implemented a narrow, targeted
+override (only touches columns that already share one pre-disambiguation
+header label, gated on the current pick covering under 50% of `dataRows`
+and a sibling covering at least 50%) and traced it live against this exact
+table: it correctly diagnoses the shape (`DESIGNATION` at 23.5% coverage,
+`DESIGNATION 2` at 96%, `dataRows.length=51` — matching this entry's own
+hand-count almost exactly) and correctly swaps `keyColIdx` from column 0 to
+column 1. **But the swap collapses the table from 33-35 rows to 1.** Traced
+why with the same live instrumentation: `DESIGNATION 2`'s real per-row text
+(`"TOTAL LOAD - MBH"`, `"MOTOR HP"`, …) almost entirely fails `rowKeyOf`'s
+strict `CODE_RE` gate (it is prose, not a catalog tag), so the strict pass
+on the new column recovers ~1 row; the "TRY BOTH" rescue then calls
+`findEvidencedKeyColumn()` as this entry's own earlier trace hoped it
+would — and it returns **nothing**, disproving that hope: several attribute
+names genuinely repeat verbatim across this table's own different
+equipment groups (`MOTOR HP`, `RPM`, `BHP`, … appear under BOTH the SUPPLY
+FAN and RETURN FAN sections), so column 1 fails the single-column
+uniqueness test, and the composite-pair search also fails because column 0
+(the only column that could disambiguate SUPPLY FAN from RETURN FAN) has
+its own group-name text on the divider row alone, not carried down as a
+rowspan across the attribute rows beneath it — so pairing column 0 with
+column 1 does not make attribute rows distinct either. **Reverted in full**
+(`git checkout -- web/src/lib/sheetgraph.ts`), confirmed byte-identical to
+before, no debug instrumentation left in the tree.
+
+**What this rules in for whoever fixes this next:** a correct fix cannot
+be a column-selection heuristic alone. It needs the missing piece this
+trace surfaces for the first time — propagating each group-divider row's
+own label (`"SUPPLY FAN"`, `"RETURN FAN"`, …) down to every attribute row
+beneath it until the next divider (the identical shape `buildRows`'s own
+section-header skip, `sheetgraph.ts:10634-10658`, currently DROPS rather
+than propagates), so the real per-row identity becomes the composite
+`(nearest-divider-label, attribute-name)` pair — genuinely distinct even
+when the attribute name alone repeats across groups. That is a change to
+row-group handling, not key-column selection, and touches the same shared,
+corpus-tuned function every other bug in this section warns about — still
+correctly left to a future session with the budget for a full corpus
+regression pass, now with the wrong approach ruled out in evidence rather
+than by inference.
 
 ### B-32 — the primary equipment table itself (BOILERS) goes missing on a boiler-replacement project, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, disclosed)
 

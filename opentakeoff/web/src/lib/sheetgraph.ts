@@ -3688,6 +3688,16 @@ const TITLE_BLOCK_ROW_LABELS = new Set([
   // period/colon-tolerant prefix check below, not by adding punctuation
   // variants here; only a genuinely new label needs a new entry.
   "PROJ MANAGER", "PROJECT MANAGER",
+  // The seal/signature block's own header is sometimes printed as one
+  // longer phrase rather than the bare "ISSUED FOR" already above — real,
+  // corpus-found (B-30, TAKEOFF_BUG_CATALOGUE.md,
+  // 080_CA_Contra_Costa_College_Science_Center_Conference.pdf#17/#21): the
+  // geometric extractor's own anchor-based reference-table reader spans the
+  // sheet's whole title-block column and keys one row "ISSUED FOR BID"
+  // (from "ISSUED FOR BID SEALS AND SIGNATURES"), which the bare "ISSUED
+  // FOR" entry does not match — a real title-block fixture, same as its
+  // shorter sibling, not a rewording that widens what counts as one.
+  "ISSUED FOR BID",
 ]);
 const isTitleBlockRowLabel = (key: string): boolean => {
   // Periods are abbreviation punctuation ("PROJ.", "NO.") that carries no
