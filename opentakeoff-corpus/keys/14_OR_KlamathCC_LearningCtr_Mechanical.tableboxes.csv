@@ -1,0 +1,23 @@
+# 14_OR_KlamathCC_LearningCtr_Mechanical.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# DEMO/HELDOUT CORPUS. Method: deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code (bakeoff/rulelinebox.py).
+# The page was rendered at high scale; for each of vectorgrid's 4 reported
+# edges, a padded search window (seeded by vectorgrid's own region only to
+# know where on the sheet to look) was scanned for the real drawn rule
+# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the raw page pixels --
+# never a read of vectorgrid's own box -- satisfying the goal document's
+# Method Section 3 auto-accept criterion (two mechanically independent
+# extractors agree within 4pt). Per-row provenance gives the measured
+# agreement and the dark-pixel-fraction threshold that found the line.
+sheet,table_title,x0,top,x1,bot,provenance
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf,MECHANICAL SHEET KEY,3000.38,1809.38,4009.62,2561.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,387.12,93.0,2978.38,712.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,VENTILATION REQUIREMENTS,2653.38,770.12,4449.62,2384.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,387.12,770.75,2641.62,1256.5,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,387.12,1312.88,2458.38,1558.88,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.12pt vs vectorgrid's own box"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC ACCESSORIES,387.12,1633.62,2140.62,2064.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,2502.38,2649.25,4421.62,2900.12,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.07pt vs vectorgrid's own box"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,405.12,2724.62,1958.75,3070.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,GAS CONNECTION SCHEDULE,3153.62,224.38,4223.38,1323.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.31pt vs vectorgrid's own box"

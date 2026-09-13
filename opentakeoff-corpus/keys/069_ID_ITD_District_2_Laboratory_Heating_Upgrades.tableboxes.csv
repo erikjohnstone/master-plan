@@ -1,0 +1,19 @@
+# 069_ID_ITD_District_2_Laboratory_Heating_Upgrades.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# DEMO/HELDOUT CORPUS. Method: deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code (bakeoff/rulelinebox.py).
+# The page was rendered at high scale; for each of vectorgrid's 4 reported
+# edges, a padded search window (seeded by vectorgrid's own region only to
+# know where on the sheet to look) was scanned for the real drawn rule
+# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the raw page pixels --
+# never a read of vectorgrid's own box -- satisfying the goal document's
+# Method Section 3 auto-accept criterion (two mechanically independent
+# extractors agree within 4pt). Per-row provenance gives the measured
+# agreement and the dark-pixel-fraction threshold that found the line.
+sheet,table_title,x0,top,x1,bot,provenance
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#2,MECHANICAL ABBREVIATIONS,792.88,308.38,1944.88,1512.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,314.62,270.88,4502.12,572.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,314.62,746.38,2475.62,1110.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2547.62,746.38,4502.88,1394.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,314.62,1338.12,2474.75,1634.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"

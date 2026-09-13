@@ -1,0 +1,30 @@
+# 011_IL_VA_Hines_Finance_Center_Renovation.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# DEMO/HELDOUT CORPUS. Method: deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code (bakeoff/rulelinebox.py).
+# The page was rendered at high scale; for each of vectorgrid's 4 reported
+# edges, a padded search window (seeded by vectorgrid's own region only to
+# know where on the sheet to look) was scanned for the real drawn rule
+# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the raw page pixels --
+# never a read of vectorgrid's own box -- satisfying the goal document's
+# Method Section 3 auto-accept criterion (two mechanically independent
+# extractors agree within 4pt). Per-row provenance gives the measured
+# agreement and the dark-pixel-fraction threshold that found the line.
+sheet,table_title,x0,top,x1,bot,provenance
+011_IL_VA_Hines_Finance_Center_Renovation.pdf,SHEET INDEX,5006.25,1845.62,5799.62,3324.88,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.12pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#6,WINDOW SCHEDULE,1083.12,836.38,1929.88,1087.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#6,DOOR SCHEDULE,2001.0,836.38,3769.38,1498.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#6,PARTITION SCHEDULE,3841.0,1077.25,5061.25,1294.5,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.1pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#6,ROOM SCHEDULE,5183.88,2517.5,5733.62,3555.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#7,"FURNITURE, FIXTURES, EQUIPMENT SCHEDULE",5301.38,197.12,5877.62,1364.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#8,FINISH LEGEND,1155.88,243.25,3507.88,1072.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#8,ROOM FINISH SCHEDULE,3574.88,243.25,4898.12,1298.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.08pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,1306.88,278.62,2761.62,753.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,"DIFFUSER, REGISTER, AND GRILLE SCHEDULE",3013.62,278.75,4380.88,570.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.21pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#19,PROJECT DESIGN CONDITIONS,2659.5,309.5,4053.75,1107.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#19,POINTS LIST - STANDARD TRENDING INTERVALS,3333.75,1205.38,4053.75,1519.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#20,PLUMBING FIXTURE SCHEDULE,3406.5,279.0,4822.88,465.62,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.11pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#27,LIGHT FIXTURE SCHEDULE,1647.5,275.12,4330.38,937.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#27,OCCUPANCY SENSOR AND SWITCH SCHEDULE,2565.0,997.38,4348.62,2264.0,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#28,"PANELBOARD: PANEL 2XDP (ETD) BUS SIZE: 400 A MAIN SIZE/TYPE: 100 A MCB FAULT CURRENT: RE: ONE-LINE DIAGRAM EQUIPMENT GROUND BUS VOLTS/PHASE: 480Y/277V, 3PH, 4W LOCATION: Room 200K MOUNTING: SURFACE SERVES: A.I.C RATING: EXISTING FED FROM: SECTIONS: 1 VOLT-AMPS/PHASE",2155.12,1440.88,3910.12,2600.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"

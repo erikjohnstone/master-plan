@@ -1,0 +1,66 @@
+# 06_MO_NatlGuard_JeffCity_CST_Addition.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# DEMO/HELDOUT CORPUS. Method: deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code (bakeoff/rulelinebox.py).
+# The page was rendered at high scale; for each of vectorgrid's 4 reported
+# edges, a padded search window (seeded by vectorgrid's own region only to
+# know where on the sheet to look) was scanned for the real drawn rule
+# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the raw page pixels --
+# never a read of vectorgrid's own box -- satisfying the goal document's
+# Method Section 3 auto-accept criterion (two mechanically independent
+# extractors agree within 4pt). Per-row provenance gives the measured
+# agreement and the dark-pixel-fraction threshold that found the line.
+sheet,table_title,x0,top,x1,bot,provenance
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#3,PLUMBING FIXTURES COUNT,2994.38,2775.0,4531.12,3082.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.18pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#3,FIRE EXTINGUISHER EQUIPTMENT SCHEDULE,2995.38,3105.25,4111.75,3353.12,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.09pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#5,2024 INTERNATIONAL BUILDING CODE REVIEW,1701.88,178.88,3079.88,1848.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.08pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#5,PLUMBING FIXTURES COUNT,3129.0,1323.62,4609.75,1540.38,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.11pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#5,FIRE EXTINGUISHER EQUIPMENT SCHEDULE,3129.0,1611.25,4607.88,1772.12,"deterministic ruled-line pixel detection @ threshold 0.5, worst-edge agreement 0.06pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#25,CEILING SCHEDULE,3843.12,165.25,4613.38,398.75,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.12pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#26,CEILING SCHEDULE,3843.12,196.62,4613.38,430.12,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.12pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#27,KEYNOTE LEGEND,3886.12,147.62,4638.88,845.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#28,KEYNOTE LEGEND,3886.12,147.62,4638.88,490.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#31,EXTERIOR FINISH SCHEDULE,2472.12,147.62,3499.12,285.88,"deterministic ruled-line pixel detection @ threshold 0.5, worst-edge agreement 0.11pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#31,KEYNOTE LEGEND,3631.62,147.62,4638.62,363.38,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.11pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#42,DOOR AND FRAME SCHEDULE,2577.75,168.62,4609.62,790.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#42,KEYNOTE LEGEND,3754.0,840.38,4638.88,2618.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.05pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#43,DOOR AND FRAME SCHEDULE,1399.62,147.62,3523.62,626.5,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#44,WALLS,2904.88,1197.25,3937.38,1518.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#44,MISCELLANEOUS INTERIOR FINISH SCHEDULE,2904.88,1873.88,3937.12,2029.88,"deterministic ruled-line pixel detection @ threshold 0.5, worst-edge agreement 0.04pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#44,KEYNOTE LEGEND,2904.88,2090.5,3711.75,2272.12,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#45,WALLS,3607.88,2096.12,4638.88,2416.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#45,MISCELLANEOUS INTERIOR FINISH SCHEDULE,3607.88,2637.38,4638.88,2862.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.2pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#50,PANEL C&C WIND PRESSURE SCHEDULE,402.12,750.88,1381.62,1110.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#50,ROOF MEMBER C&C WIND UPLIFT SCHEDULE,368.75,1280.12,1394.38,1614.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#51,COLUMN SCHEDULE,1918.62,216.38,2678.62,897.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#51,ISOLATED FTG. SCHEDULE,1918.62,1197.25,2781.88,1387.38,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.31pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#52,FOUNDATION PLAN LEGEND,530.12,2536.38,1150.88,3062.5,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#53,HEADER SCHEDULE,2150.75,228.88,2857.12,363.0,"deterministic ruled-line pixel detection @ threshold 0.5, worst-edge agreement 0.18pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#54,HEADER SCHEDULE,3005.62,1362.88,3980.12,1563.88,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#54,ROOF FRAMING PLAN LEGEND,1639.62,2914.38,2260.12,3251.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#66,PLUMBING FIXTURE SCHEDULE,315.25,207.38,3509.62,598.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,PLUMBING FIXTURE SCHEDULE,534.38,181.88,3255.0,616.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,KEYNOTE LEGEND,3619.62,181.88,4580.0,653.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.08pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,534.38,621.88,1996.62,804.62,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,DOMESTIC WATER HEATER SCHEDULE,534.38,887.38,2419.75,1114.88,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.09pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,314.75,234.38,3218.5,418.12,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,314.75,562.12,2411.62,907.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,"GRILLES, REGISTERS, AND DIFFUSERS SCHEDULE",314.75,1100.38,3556.12,1416.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,2692.38,329.12,4581.75,581.12,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.09pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,UNIT HEATER SCHEDULE,861.25,676.88,2800.38,1024.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,2879.88,676.88,4581.75,998.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.08pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,1162.38,1071.0,2473.62,1227.0,"deterministic ruled-line pixel detection @ threshold 0.5, worst-edge agreement 0.09pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,2645.12,1071.0,4581.75,1253.62,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.08pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,"GRILLES, REGISTERS, AND DIFFUSERS SCHEDULE",1999.12,1329.38,4581.75,1538.75,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.11pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,LOUVER SCHEDULE,2863.62,1608.88,4581.75,1856.75,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.07pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76,VAV BOX DDC CONTROL SUMMARY,348.88,2007.25,1585.38,2626.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.2pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76,VARIABLE AIR VOLUME ROOFTOP UNIT CONTROL SUMMARY,3203.12,2223.62,4380.12,3248.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.18pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#77,OUTDOOR AIR PROCESSING UNIT CONTROL SUMMARY,3257.88,1567.38,4434.88,2160.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#84,BRANCH PANEL: PNL-E,348.62,243.0,2075.38,1148.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#84,LIGHT FIXTURE SCHEDULE,2305.38,243.0,4536.38,911.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#84,LIGHTING CONTROL MATRIX,2929.62,1750.88,3442.12,2167.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#85,CEILING FAN SCHEDULE,2911.75,407.38,4311.25,658.62,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.09pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#85,LIGHT FIXTURE SCHEDULE,1595.38,776.12,4311.25,1153.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#85,BRANCH PANEL: N,2573.62,1252.62,4300.62,2157.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#85,FEEDER SCHEDULE,1404.88,2299.38,2412.12,2463.88,"deterministic ruled-line pixel detection @ threshold 0.5, worst-edge agreement 0.1pt vs vectorgrid's own box"

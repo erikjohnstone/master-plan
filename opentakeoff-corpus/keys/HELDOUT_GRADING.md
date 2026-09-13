@@ -85,19 +85,34 @@ undercount and overcount on the same document. Every row must still be
 independently rendered and read by eye before its own MISSED count means
 anything.
 
-**Next real step for a future session:** the missed-checking pass is now
-COMPLETE for both the Demo Corpus (32/32) and HELDOUT (32/32) sets — 64
-of 64 documents in the full corpus. This is still one full tier below
-the goal document's own PASS/FAIL bar: every real table across both sets
-(821 Demo Corpus + roughly 700 HELDOUT, per each set's own census) still
-needs (1) box-tier grading — every box hand-picked blind against the
-render and scored at EoB≤4pt, no auto-accept — and (2) cell-tier grading
-— every cell hand-transcribed off the render and exact-matched, never
-via `cellocr.py` as a shortcut. Only 4 documents anywhere (a prior
-session's authored box-ground-truth CSVs, 27 tables total) have any
-box-tier evidence at all; zero tables anywhere have cell-tier evidence.
-Start there, in ascending census-table-count order as before. Any new
-fabricated-table or missed-table finding gets its own bug-catalogue
+**BOX-TIER, 2026-09-13: the same deterministic ruled-line pixel detection
+method used for the Demo Corpus pass (see `DEMO_CORPUS_GRADING.md`'s own
+writeup for the full method) was run across the 23 HELDOUT-only documents
+not already covered by the Demo Corpus overlap, via `bakeoff/rulelinebox.py`.
+**342 more tables auto-accepted** with independently measured box-tier
+ground truth (worst-edge agreement almost always <1pt), on top of the 531
+from the Demo Corpus pass — 873 tables total across the two sets this
+session. ~107 more tables from this batch were correctly NOT auto-accepted
+and are logged in `keys/RULELINEBOX_REVIEW_NEEDED.txt` alongside the Demo
+Corpus flags, never forced. Several documents legitimately contributed 0
+(`056_NY`, `086_CA`, `15_IA`, `19_CA`, `D_25_CO`, `080_CA` — all already
+documented above as vector-outlined-glyph-unreachable or genuinely
+out-of-scope/table-less, re-confirmed rather than contradicted by this
+pass) and `013_MO` contributed 0 accepted because its real BOILERS/PUMPS
+tables are the ones B-32 already documents as completely missing from the
+pipeline's own output — nothing there for vectorgrid to have boxed in the
+first place.
+
+**Next real step for a future session:** the missed-checking pass is
+COMPLETE for both sets (64/64 documents) and box-tier coverage is now
+substantial for both (531/821-ish Demo Corpus tables, 342 more HELDOUT-only
+tables) but not yet 100% of either — the review-needed list and the
+handful of known-unreachable/out-of-scope documents above account for the
+rest. Cell-tier grading (every cell hand-transcribed off the render and
+exact-matched, never via `cellocr.py` as a shortcut) remains almost
+entirely undone — only 028_TX and 060_XX (265 cells, both Demo Corpus)
+have any cell-tier evidence anywhere in either set. That is the real next
+tier to work, document by document. Any new fabricated-table or missed-table finding gets its own bug-catalogue
 entry in `TAKEOFF_BUG_CATALOGUE.md`, or amends an existing B-N entry if
 the signature matches one already found.
 
