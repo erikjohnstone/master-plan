@@ -1,0 +1,56 @@
+# 100_OH_Butler_Tech_RTU_Welding_Source_Capture.cells.csv -- CELL-tier
+# ground truth, HELDOUT document, sheet #5. The one real table the
+# extractor reaches on this document (DIFFUSER, GRILLE, AND REGISTER
+# SCHEDULE, 4 data rows) was read directly off a rendered crop of the page
+# at scale=3.0 with the extractor's own answer NOT in view, transcribed,
+# THEN compared cell by cell against the extractor's own output. Result:
+# 4/4 rows matched EXACTLY, including a blank NOTES cell on SR-6 preserved
+# as genuinely blank (nothing legible was skipped).
+#
+# One minor extraction quirk noted, NOT a cell-content error: the table's
+# "MODEL" column header is legible on the page but the extractor's own
+# header list reports it as the generic fallback "COL5" -- the column's
+# DATA (TITUS 350RL / 300RL / 300RL / 111RL) is correct, only the header
+# label itself was not recognized. Same shape as the quirk already noted in
+# 069_ID's cells.csv (NEW VARIABLE FREQUENCY DRIVE SCHEDULE's own COL6).
+#
+# This document's OTHER real table -- GAS INPUT SCHEDULE FOR BUTLER TECH,
+# p7, 6 rows -- is completely MISSING from the pipeline's own output (see
+# this document's own row in HELDOUT_GRADING.md) and therefore has no
+# extractor cells to compare against by definition; not covered here.
+#
+# Because every value matched, this file's own data rows below are taken
+# from the extractor's output rather than re-keyed a second time by hand --
+# the two are byte-identical, confirmed cell by cell against the
+# independent hand-read first. row/col index ONLY the table's own DATA
+# rows/columns (0-based), following the same convention as this corpus's
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans.cells.csv.
+#
+# Part of opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md's own
+# Completion Gate CELL-tier requirement. Real, disclosed partial progress
+# on one HELDOUT document among 32; not a claim the HELDOUT set is graded.
+#
+sheet,table_title,row,col,text
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",0,0,RR-6
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",0,1,"STEEL RETURN GRILLE, 3/4"" BLADE SPACING, 35 DEGREE DEFLECTION, BLADES PARALLEL TO LONG DIMENSION"
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",0,2,40x40
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",0,3,38x38
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",0,4,TITUS 350RL
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",0,6,STEEL OPPOSED-BLADE DAMPER OPERABLE FROM THE FACE OF THE GRILLE.
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",1,0,SR-3
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",1,1,"STEEL DOUBLE DEFLECTION, 3/4"" BLADE SPACING, FRONT BLADES PARALLEL TO LONG DIMENSION."
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",1,2,14x8
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",1,3,12x6
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",1,4,TITUS 300RL
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",1,6,STEEL OPPOSED-BLADE DAMPER OPERABLE FROM THE FACE OF THE GRILLE.
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",2,0,SR-4
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",2,1,"STEEL DOUBLE DEFLECTION, 3/4"" BLADE SPACING, FRONT BLADES PARALLEL TO LONG DIMENSION."
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",2,2,20x8
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",2,3,18x6
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",2,4,TITUS 300RL
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",2,6,STEEL OPPOSED-BLADE DAMPER OPERABLE FROM THE FACE OF THE GRILLE.
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",3,0,SR-6
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",3,1,"STEEL SINGLE DEFLECTION, 1.25"" BLADE SPACING, FRONT BLADES PARALLEL TO LONG DIMENSION."
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",3,2,50x50
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",3,3,48x48
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",3,4,TITUS 111RL
