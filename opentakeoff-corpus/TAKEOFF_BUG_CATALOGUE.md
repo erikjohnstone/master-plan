@@ -1053,6 +1053,27 @@ signature, and `OUTDOOR DESIGN CONDITIONS` is dropped from the output
 entirely with no trace — only `DINING`, `CORRIDORS`, `OFFICES`, and `ALL
 OTHER SPACES` survive as real rows, 4 of the real 6.
 
+**CONFIRMED RECURRING 2026-09-13 — a 7th document, two more instances.**
+`096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf` shows this exact
+signature twice more, on two different sheets: `#20`'s `AIR COOLED
+CHILLER SCHEDULE` (4 rows: `CH-1`, `CH-2`, `HRC-1`, `HRC-2`, all correct)
+and `#22`'s `DIFFUSER / GRILLE SCHEDULE` (51 rows, all correct — the
+densest table hit by this bug so far). Both real titles are confirmed
+present as ordinary, legible vector text spans at the normal position
+directly above their own table (`textSpans()`: `"AIR COOLED CHILLER
+SCHEDULE"` at p20 y0=133.3, `"DIFFUSER / GRILLE SCHEDULE"` at p22
+y0=155.7 — both at the same top-of-page title row as their sibling
+tables' own titles), yet both surface as `title: ""` in the extractor's
+own output while every other table on the same two sheets (6 more on
+#20's sheet, including one — `SIDEWALL GRILLE SCHEDULE` — with a nearly
+identical name pattern that titled correctly) keeps its title intact.
+Row/cell content for both tables is otherwise fully correct (hand-
+verified against the render). This closes out 001_NC and 096_IN as two
+back-to-back documents in this pass where every table and every row is
+content-correct and only the title-attachment layer fails — reinforcing
+that this is a distinct, common failure mode from the missing/fabricated-
+table bugs (B-16/B-19/B-25), not a rare one-off.
+
 ---
 
 ### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (NOT FIXED — found, traced, disclosed)
