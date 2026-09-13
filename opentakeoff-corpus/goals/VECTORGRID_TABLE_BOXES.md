@@ -262,9 +262,20 @@ deliverable this whole file exists to produce.
 
 - The unseen MEP set that showed the merges is not in the corpus and has not
   been run. It is worth more than a hundred corpus pages and should be added.
-- Schedules on sheets the role classifier calls `plan` are never offered to
+- ~~Schedules on sheets the role classifier calls `plan` are never offered to
   the engine at all (`isScheduleTarget`) — five real panel schedules on
-  `009_FL#30`. That is recall lost before geometry is reached.
+  `009_FL#30`. That is recall lost before geometry is reached.~~ —
+  **STALE, re-verified 2026-09-13 — already fixed before this goal was even
+  opened.** `isScheduleTarget` (`web/src/lib/vectorTakeoffPipeline.ts`) calls
+  `sheetHasScheduleCaption`, which (`scheduleLanguageScan.ts`'s own
+  `joinCaptionLines`) was built specifically to survive `009_FL#30`'s
+  "EXISTING PANEL ELP SCHEDULE" caption arriving from pdf.js as three
+  separate spans — see task #60/#65's own prior completion and that
+  function's own doc comment naming this exact page. Live re-check on
+  current `main` (`production-graph-cli.mjs --mode graph` against the real
+  PDF): sheet `#30`'s role is still `plan`, and all 5 real panel schedules
+  (EXISTING PANEL MDP/ELP/LP1/LP2/LP3 SCHEDULE, 30-31 rows each) are found,
+  correctly kinded `equipment`. Nothing left to fix here.
 - `vectorgrid` declines a large share of what it finds: 53 declined against 90
   kept on `001_NC`, 22 against 28 on `016_NY`. Some of that is correct. How
   much is unknown.
