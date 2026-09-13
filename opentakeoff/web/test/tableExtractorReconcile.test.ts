@@ -3,12 +3,58 @@
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { dedupCrossSourceTables } from "../src/lib/tableExtractorReconcile.ts";
+import { collapseEquivalentPrimaryTables, dedupCrossSourceTables } from "../src/lib/tableExtractorReconcile.ts";
 import type { ScheduleTable, SheetGraph } from "../src/lib/sheetgraph.ts";
 
 function makeGraph(tables: ScheduleTable[]): SheetGraph {
   return { tables, sheets: [], rooms: [], unmatched_tags: [], callouts: [], buildings: [], revisions: [], sequence_narratives: [], notes: [], control_schematics: [] } as unknown as SheetGraph;
 }
+
+describe("collapseEquivalentPrimaryTables", () => {
+  it("does not collapse two genuinely distinct tables that share both title and row keys, when their regions don't overlap (B-28, 26_CA#11 RELIEF AND INTAKE HOOD)", () => {
+    // Real, corpus-found (TAKEOFF_BUG_CATALOGUE.md B-28): a source
+    // document drew "RELIEF AND INTAKE HOOD" twice on one sheet, each a
+    // real, physically distinct table (different NOTES text, one
+    // referencing an INTEGRATED CONTROL DAMPER, the other a BAROMETRIC
+    // DAMPER) but with the identical title AND identical row keys
+    // (RAH-64-1/RAH-64-2 in both). Before this fix, sharing title+keys
+    // alone collapsed them into one, silently dropping a whole real table.
+    const makeTable = (region: [number, number, number, number]): ScheduleTable => ({
+      kind: "equipment",
+      sheet: "s1",
+      title: { sheet: "s1", text: "RELIEF AND INTAKE HOOD", bbox: [0, 0, 1, 1] },
+      headers: ["MARK", "NOTES"],
+      rows: [
+        { key: "RAH-64-1", sheet: "s1", cells: { MARK: { text: "RAH-64-1", bbox: [0, 0, 1, 1] } } },
+        { key: "RAH-64-2", sheet: "s1", cells: { MARK: { text: "RAH-64-2", bbox: [0, 0, 1, 1] } } },
+      ],
+      region,
+    });
+    const tables = [makeTable([0, 0, 100, 100]), makeTable([500, 500, 600, 600])];
+    const removed = collapseEquivalentPrimaryTables(tables);
+    assert.equal(removed, 0);
+    assert.equal(tables.length, 2, "both real, physically distinct tables survive");
+  });
+
+  it("still collapses two readings of the SAME table (overlapping regions, same title+keys)", () => {
+    const a: ScheduleTable = {
+      kind: "equipment", sheet: "s1", title: { sheet: "s1", text: "PUMP SCHEDULE", bbox: [0, 0, 1, 1] },
+      headers: ["MARK"], rows: [{ key: "P-1", sheet: "s1", cells: { MARK: { text: "P-1", bbox: [0, 0, 1, 1] } } }],
+      region: [0, 0, 100, 100],
+    };
+    const b: ScheduleTable = {
+      kind: "equipment", sheet: "s1", title: { sheet: "s1", text: "PUMP SCHEDULE", bbox: [0, 0, 1, 1] },
+      headers: ["MARK", "GPM"],
+      rows: [{ key: "P-1", sheet: "s1", cells: { MARK: { text: "P-1", bbox: [0, 0, 1, 1] }, GPM: { text: "50", bbox: [0, 0, 1, 1] } } }],
+      region: [0, 0, 95, 95],
+    };
+    const tables = [a, b];
+    const removed = collapseEquivalentPrimaryTables(tables);
+    assert.equal(removed, 1);
+    assert.equal(tables.length, 1);
+    assert.equal(tables[0].headers.length, 2, "the more complete reading survives");
+  });
+});
 
 describe("dedupCrossSourceTables", () => {
   it("carries a losing candidate's own recovered title onto the surviving, more-complete candidate (B-17, 063_MT#9 MEP COORDINATION SCHEDULE)", () => {

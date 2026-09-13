@@ -65,7 +65,7 @@ export function duplicateKeyCount(t: ScheduleTable): number {
 }
 
 export function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number {
-  const seen = new Map<string, number>();
+  const seen = new Map<string, number[]>();
   const remove = new Set<number>();
   for (let i = 0; i < tables.length; i++) {
     const table = tables[i];
@@ -74,16 +74,47 @@ export function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number
     if (keys.length !== table.rows.length) continue;
     const title = table.title.text.toUpperCase().replace(/[^A-Z0-9]/g, "");
     const identity = `${table.sheet}\0${title}\0${keys.join("\0")}`;
-    const prior = seen.get(identity);
+    const candidates = seen.get(identity);
+    if (!candidates?.length) {
+      seen.set(identity, [i]);
+      continue;
+    }
+    // SAME TITLE AND SAME ROW KEYS IS NOT PROOF OF THE SAME TABLE.
+    //
+    // This identity was built to catch the ordinary case — one real table
+    // read twice by different extractors, landing at (near-)identical
+    // coordinates. Real, corpus-found (TAKEOFF_BUG_CATALOGUE.md B-28,
+    // 26_CA_TransbayTower_Mechanical_64Sheets.pdf#11): a source document
+    // can genuinely draw the SAME titled schedule shape twice on one
+    // sheet, each a real, physically distinct table with its own distinct
+    // NOTES text but the identical title AND the identical row keys
+    // (RAH-64-1/RAH-64-2 in both) — a real, if unusual, drafting choice,
+    // not a duplicate reading. Collapsing them on title+keys alone
+    // silently dropped one whole real table with no signal anything was
+    // wrong. Requiring the two candidates' own regions to overlap at all
+    // is the same evidence this file's other reconciliation functions
+    // already require before treating two tables as readings of "the
+    // same" one (see `dedupCrossSourceTables`'s own IoU bar) — deliberately
+    // the weakest possible bar (any overlap, not a ratio), since this
+    // function's own job is collapsing near-identical duplicates, not
+    // judging a borderline case; two genuinely different tables drawn
+    // elsewhere on the sheet essentially never share a page position.
+    //
+    // Checked against EVERY same-identity candidate seen so far, not just
+    // the most recent — three or more same-title/same-key tables on one
+    // sheet could otherwise mix a real duplicate pair with a genuinely
+    // distinct one, and comparing only against the last-seen index could
+    // miss the real duplicate sitting earlier in the list.
+    const prior = candidates.find((p) => bboxOverlapRatio(tables[p].region, table.region) > 0);
     if (prior == null) {
-      seen.set(identity, i);
+      candidates.push(i);
       continue;
     }
     const a = tableCompleteness(tables[prior]);
     const b = tableCompleteness(table);
     if (b.headers > a.headers || (b.headers === a.headers && b.cells > a.cells)) {
       remove.add(prior);
-      seen.set(identity, i);
+      candidates.splice(candidates.indexOf(prior), 1, i);
     } else {
       remove.add(i);
     }

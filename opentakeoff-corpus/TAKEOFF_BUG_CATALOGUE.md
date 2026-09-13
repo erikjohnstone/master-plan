@@ -2201,7 +2201,7 @@ against guessing at fixes under time pressure — recorded as a precise,
 bounded next step (a narrower `" FOR "` suffix pattern, corpus-validated
 for false positives) rather than an open-ended mystery.
 
-### B-28 — an entire dense schedule page (10 tables, 98 rows) is completely invisible despite dense, fully-reachable real text; a same-titled sibling table on another page is silently dropped by an apparent title-collision (NOT FIXED — found, traced, disclosed)
+### B-28 — an entire dense schedule page (10 tables, 98 rows) is completely invisible despite dense, fully-reachable real text; a same-titled sibling table on another page is silently dropped by an apparent title-collision (PARTIALLY FIXED 2026-09-13 — the page #11 title-collision half closed; the page #9 total blackout remains open)
 
 **Where:** `26_CA_TransbayTower_Mechanical_64Sheets.pdf` — a 64-sheet
 tower mechanical set with 3 dense schedule pages (M0.09/#9, M0.10/#10,
@@ -2268,6 +2268,47 @@ document fails MISSED=0 by 11 real tables (10 from the page #9 blackout,
 1 from the page #11 title collision) and 100 real rows — the largest
 single-document MISSED gap measured in this entire session, Demo Corpus
 included.
+
+**FIX 2026-09-13 — the page #11 title-collision half closed.** Direct
+code reading of `collapseEquivalentPrimaryTables`
+(`web/src/lib/tableExtractorReconcile.ts`) confirmed the exact
+mechanism this entry's own "consistent with a title-string collision"
+guess pointed at: its own dedup identity key is
+`${sheet}\0${title}\0${sorted row keys}` — SHEET + TITLE + ROW KEYS
+only, no region/position check at all. Both `RELIEF AND INTAKE HOOD`
+tables share the identical title AND the identical row keys
+(`RAH-64-1`/`RAH-64-2` in both), so they hash to the same identity and
+the function's own dedup logic treated the second one as a weaker
+reading of the first, discarding it outright — even though they sit at
+completely different page positions (`y≈894–1182` vs `y≈2201–2488`) and
+are genuinely different physical tables (confirmed by the render's own
+different `NOTES:` text on each).
+
+Fixed by requiring the two same-identity candidates' own regions to
+overlap AT ALL (the weakest possible bar — not a ratio) before treating
+them as the same table, matching the same "same physical table" evidence
+`dedupCrossSourceTables` already requires elsewhere in this file via its
+own IoU threshold. Two same-identity candidates seen more than once are
+now checked against every prior candidate with that identity, not just
+the most recently seen one (a 3rd table sharing the same title+keys
+could otherwise mix a real duplicate pair with a genuinely distinct
+one and miss the real duplicate).
+
+**Verification:** 2 new unit tests in `test/tableExtractorReconcile.test.ts`
+(non-overlapping same-title-and-keys tables both survive; overlapping
+same-title-and-keys tables still correctly collapse to the more complete
+reading). All 213+ tests across the 5 related suites pass. Live,
+`qpdf`-sliced page 11 before/after: before, 6 tables with one `RELIEF
+AND INTAKE HOOD`; after, 7 tables with both `RELIEF AND INTAKE HOOD`
+entries present at their own distinct regions — every other table on
+the page (titles, rows, kinds, regions) byte-identical, confirming the
+fix recovers exactly and only the one real table this bug's own entry
+measured as missing.
+
+**Page #9's total blackout remains open, not investigated in this
+pass** — a structurally distinct defect (10 tables, 100% of a page,
+ruled out as role-misclassification and vector-outlined-glyph by this
+entry's own original measurement) with its own, still-untraced cause.
 
 ### B-29 — two real, differently-structured tables are silently merged into one, and the merged result's title is fabricated from unrelated title-block text (NOT FIXED — found, traced, disclosed)
 
