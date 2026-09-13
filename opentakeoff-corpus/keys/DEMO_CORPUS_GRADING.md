@@ -9,17 +9,17 @@ shortcut). This file exists so a fresh session can see exactly how far
 grading has gotten without re-deriving it — the same reason
 `VERIFICATION_LEDGER.md` exists for the older "real mandate" effort.
 
-**Status, honestly: grading has JUST STARTED.** 17 of 32 documents have
+**Status, honestly: grading has JUST STARTED.** 18 of 32 documents have
 been hand-rendered and checked for real table count this session
-(2026-09-13); 0 of 32 have completed box+cell grading. The remaining ~15
-documents (~590 of the set's own 821 real tables) are untouched, and even
-among the 17 checked, at least two (25_WA, 067_CA) have real content this
-pass did not fully verify (25_WA: a 3rd panel-schedule sheet, E0.05, not
-rendered; 067_CA: pages 10 and 13's own "EQUIPMENT SCHEDULE"/"BASE PL
-SCHEDULE" not yet hand-confirmed). This is not a shrunk bar — it is the
-real number reached, stated plainly, per this goal's own non-negotiable
-rule against quietly reporting a smaller sample as if it were the whole
-thing.
+(2026-09-13); 0 of 32 have completed box+cell grading. The remaining ~14
+documents (~570 of the set's own 821 real tables) are untouched, and even
+among the 18 checked, several (25_WA, 067_CA, 13_MI) have real content
+this pass did not fully verify — 13_MI in particular is a large 36-sheet
+document where only 3 of its 19 extracted tables were hand-rendered and
+checked; the other 16 (pages 15, 20, 28, 30, 32) are noted but unverified.
+This is not a shrunk bar — it is the real number reached, stated plainly,
+per this goal's own non-negotiable rule against quietly reporting a
+smaller sample as if it were the whole thing.
 
 Status values: `not-started` (nothing done), `missed-checked` (rendered,
 real table count hand-confirmed, box/cell grading not yet done),
@@ -46,7 +46,7 @@ transcribed and exact-matched — this is PASS/FAIL for the document).
 | 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated | missed-checked | 9 real hand-confirmed, all 9 correct | Clean document. Page 16 (A-601): HOLLOW METAL DOOR SCHEDULE (4 rows), OVERHEAD DOOR SCHEDULE (4), SWING GATE SCHEDULE (7), ROOM FINISH SCHEDULE (12 rows — 101 + letters A through K inclusive; my own first hand-count of 11 missed row "I" and was corrected against the extractor's own row list, a hand-counting error on my part, not a pipeline defect). Page 23 (M-601): FAN SCHEDULE (1), LOUVER SCHEDULE (1), GAS UNIT HEATER SCHEDULE (2). Page 32 (E-601): LIGHTING FIXTURE SCHEDULE (2), PANELBOARD SCHEDULE (15 real circuit rows + 2 legitimate summary rows — TOTALS, CONNECTED LOAD — correctly captured, 17 total). All 9 tables match exactly. Notably this is a PANELBOARD SCHEDULE that extracts perfectly, in direct contrast to B-21's repeated panel-schedule misses on other documents — worth comparing this table's own layout against the failing ones when B-21 is eventually root-caused. |
 | 075_MT_Renne_Library_Innovation_Learning_Studio | missed-checked | 10 real hand-confirmed, all 10 correct | Clean document. Page 18 (M-601, "MECHANICAL SCHEDULES"): MINI-SPLIT AIR HANDLER UNIT SCHEDULE (2 rows), MINI-SPLIT HEAT PUMP SCHEDULE (2), ENERGY RECOVERY UNIT SUMMARY SCHEDULE (1), ELECTRIC DUCT COIL SCHEDULE (1), EXTERIOR AIR INLETS & OUTLETS SCHEDULE (2), INTERIOR AIR INLETS & OUTLETS SCHEDULE (4). Page 14 (A-601, "WINDOW & DOOR SCHEDULES & DETAILS"): DOOR SCHEDULE (4 rows), DOOR HARDWARE (4). All 10 match the production pipeline exactly. Also present, not hand-verified but plausibly correct: FINISH SCHEDULE (p11, 7 rows), PIPING/DUCT INSULATION SCHEDULEs (p15, 3+4 rows), Mechanical Equipment Connections (p22, 8 rows), and 3 correctly-out-of-scope sheet-index reference tables (INDEX OF DRAWINGS 31, ARCHITECTURAL SHEET INDEX 8, MECHANICAL SHEET INDEX 3). |
 | 17_FL_SuwanneeHS_Courtyard_100CD | missed-checked | 7 real hand-confirmed (4 correct, 3 damaged/missing) | Page 24 (M-2.0): ROOF TOP UNIT SCHEDULE (1 row) — matches exactly. Page 30 (E-4.0, "ELECTRICAL SCHEDULES"): Lighting Fixture Schedule (6 rows), EQUIPMENT CONNECTION SCHEDULE (1), BRANCH CIRCUIT WIRING SCHEDULE (Cu) (8) all match exactly; but of the 3 real "Branch Panel" schedules on the same page (EMDP 21 rows, HN7B 15 rows, LN7C 15 rows), EMDP surfaces as UNTITLED with a B-18-signature header/first-row fusion (5th confirmed instance), and HN7B/LN7C are both completely absent (same disease as B-21, now shown operating together with B-18 on one page) — both catalogue entries amended with this document's evidence rather than filed as new bugs. WALL FOUNDATION SCHEDULE (p19, 2 rows) was extracted but not independently rendered/verified. |
-| 13_MI_MSU_LifeSciences_LabRenovation | not-started | — (census: 17) | |
+| 13_MI_MSU_LifeSciences_LabRenovation | missed-checked | 3 real hand-confirmed, all 3 correct (large document, mostly unverified) | Large 36-sheet document; only partially checked given its size. Page 10 (A-003): EQUIPMENT SCHEDULE (7 rows, owner-furnished equipment — hospital bed, video conferencing, etc.) matches exactly. Page 26 (M-006): TRANSFER SILENCER SCHEDULE (1 row) and REGISTER, GRILLE AND DIFFUSER SCHEDULE (4 rows) both match exactly. The pipeline extracts 16 MORE tables across pages 15 (ROOM FINISH, DOOR, WINDOW schedules plus an 18-row UNTITLED table), 20 (PLUMBING FIXTURE SCHEDULE, suspiciously only 1 row), 28 (6 electrical/fire-alarm/lighting schedules), 30, and 32 (two same-titled "208/120V CIRCUIT SCHEDULE" tables correctly kept distinct, 36 and 26 rows) — NONE of these 16 were rendered or independently checked in this pass; noted honestly as unverified rather than claimed. |
 | 04_NV_VA_LasVegas_CentralUtilityPlant | not-started | — (census: 24) | |
 | 038_NC_VA_Project_637_22_700_EHRM_Infrastructure | not-started | — (census: 25) | |
 | 072_CA_CA07_2627_West_Valley_College_Science_Math | not-started | — (census: 26) | |
