@@ -152,6 +152,24 @@ describe("nearbyScheduleCaption", () => {
     });
   });
 
+  it("prefers a real title above the grid over the grid's own column-group sub-header (B-36, 089_FL#136)", () => {
+    // VRF SYSTEM SCHEDULE's real title bar sits above the ruled grid,
+    // separated by general notes (a real gap, dy > 0). HEAT PUMP UNIT is
+    // one of the table's own three column-group sub-headers, drawn INSIDE
+    // the grid's own header row (fully contained in the table region) —
+    // before the containment guard, its zero-gap position let it win over
+    // the real, farther-away title under the proximity-first sort.
+    const wideGrid: [number, number, number, number] = [600, 200, 1400, 900];
+    const spans = [
+      { str: "VRF SYSTEM SCHEDULE", x: 600, y: 40, w: 260, h: 24 },
+      { str: "HEAT PUMP UNIT", x: 1200, y: 210, w: 150, h: 18 },
+    ];
+    assert.deepEqual(nearbyScheduleCaption(spans, wideGrid, ""), {
+      text: "VRF SYSTEM SCHEDULE",
+      bbox: [600, 40, 860, 64],
+    });
+  });
+
   it("reconstructs real truncated vertical title suffixes rather than keeping only their last run", () => {
     const spans = [
       { str: "GRILLE, REGIST", x: 770, y: 267, w: 9, h: 67, rot: 90 },

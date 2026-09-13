@@ -2678,7 +2678,7 @@ diff (spanning both the Demo Corpus and HELDOUT sets) shows **zero**
 table differences anywhere else in the sample — no other document's
 table titles, kinds, or row counts changed.
 
-### B-36 — a multi-level table's own internal column-group sub-header is picked as the table's title instead of the real title text above it (NOT FIXED — found, traced, disclosed)
+### B-36 — a multi-level table's own internal column-group sub-header is picked as the table's title instead of the real title text above it (FIXED 2026-09-13)
 
 **Where:** `089_FL_Airport_Terminal_and_Hangar_Development.pdf#136`
 (sheet M-601, "MECHANICAL SCHEDULES") — found alongside B-35, closing
@@ -2766,6 +2766,54 @@ radius; per this session's own standing rule against guessing at fixes
 under time pressure, this trace is recorded as the starting point for a
 future session with the budget to validate either change against the
 full corpus regression sweep before shipping.
+
+**FIX 2026-09-13 — option (b) implemented: a candidate cannot be an
+external caption when it IS the grid.** `nearbyScheduleCaption`'s own
+header comment states its premise plainly — a real caption "sits in a
+narrow band above/beside" the table, never inside it. `HEAT PUMP UNIT`
+is a cell of the grid itself, so its bbox lies (almost) entirely inside
+`table.region` — meaning `dx = dy = 0` under the function's own gap
+math, which made it look like a zero-distance, unbeatable candidate
+under the proximity-first sort, always winning over a real title
+separated from the grid by intervening notes text (a real, positive
+gap). Added one containment check to the `eligible` filter in
+`web/src/lib/scheduleLanguageScan.ts`: a candidate whose bbox overlaps
+its own area with the table region by ≥95% on both axes (i.e., the
+candidate is essentially swallowed by the grid, not merely touching its
+edge) is excluded outright, before either the vertical or horizontal
+gap/overlap checks run. The 95% bar (not exact full containment) is
+deliberate — it lets an ordinary CAD-drafting/font-metric edge overlap
+of a genuine just-above caption through untouched, and only excludes a
+candidate that is essentially entirely inside the grid.
+
+This does not touch title RECOGNITION vocabulary (`isScheduleCaptionText`,
+`EQUIPMENT_TABLE_CAPTION_RE`, `SCHEDULE_CAPTION_RE` are all unchanged) or
+the proximity-first ranking itself — only which candidates are even
+allowed to enter that ranking. A genuine external caption, by
+definition, is never mostly coincident with the table it names, so this
+can only ever remove a self-referential candidate, never a real one.
+
+**Verification:**
+- New unit test in `test/scheduleLanguageScan.test.ts` reproduces this
+  exact shape (a real title above a wide grid vs. a column-group
+  sub-header fully inside it) and confirms the real title now wins.
+- All 22 `scheduleLanguageScan` tests pass (21 pre-existing + 1 new).
+- All 148 `sheetgraph.test.ts` tests pass — this filter is exercised by
+  every ODL-sourced table's title recovery, and nothing else moved.
+- All 18 `vectorTakeoffPipeline.test.ts` tests pass.
+- **Live, on the real bug:** re-ran `production-graph-cli.mjs --mode
+  graph` (fresh `OPENTAKEOFF_GRAPH_TRACE` cache) against a `qpdf`-sliced
+  single-page extract of `089_FL_Airport_Terminal_and_Hangar_Development.
+  pdf#136` (the full document is 177 pages; slicing avoids an
+  unnecessarily long run for a single-page verification, same technique
+  used for B-26's own decline-reason trace). Before the fix: title
+  `"HEAT PUMP UNIT"`. After: title `"VRF SYSTEM SCHEDULE"`, `rows: 12`
+  (matching the hand-confirmed count exactly, unchanged from before the
+  fix — only the title string moved). Directly diffed both runs' full
+  table lists (title/rows/kind for all 6 real tables on the page):
+  byte-identical except for this one title string — confirms the fix is
+  exactly and only the intended change, with zero effect on row counts,
+  cell data, or any of the page's other 5 tables.
 
 ### B-37 — a small, non-`SCHEDULE`-titled ruled table on a mechanical details sheet is completely missed (NOT FIXED — found, traced, disclosed)
 

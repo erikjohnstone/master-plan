@@ -405,6 +405,26 @@ export function nearbyScheduleCaption(
     const yOverlap = Math.max(0, Math.min(y1, ry1) - Math.max(y0, ry0));
     const dx = Math.max(0, rx0 - x1, x0 - rx1);
     const dy = Math.max(0, ry0 - y1, y0 - ry1);
+    // A candidate almost entirely INSIDE the table's own bounding box is not
+    // a caption drawn above or beside the grid -- this function's whole
+    // premise, stated in its own header comment, is "sit in a narrow band
+    // above/beside it". A real external caption is never nearly all its own
+    // area coincident with the table it names; a column-group sub-header
+    // drawn as part of the grid's own header row is exactly that. Real,
+    // corpus-found (TAKEOFF_BUG_CATALOGUE.md B-36, 089_FL#136): the real
+    // title "VRF SYSTEM SCHEDULE" sits above the grid, separated by a block
+    // of general notes (dy > 0, a real gap), while "HEAT PUMP UNIT" -- one
+    // of the table's OWN three column-group sub-headers, fully inside the
+    // grid's own bbox -- had dx = dy = 0 and so looked like a zero-gap,
+    // unbeatable candidate under the proximity-first sort below, winning
+    // over the real, farther-away title. A 0.95 containment bar (not exact
+    // full containment) keeps ordinary CAD-drafting/font-metric edge overlap
+    // of a genuine just-above caption from tripping this — only a candidate
+    // whose bbox is essentially entirely swallowed by the grid is excluded.
+    const insideWidth = x1 - x0;
+    const insideHeight = y1 - y0;
+    if (insideWidth > 0 && insideHeight > 0
+      && xOverlap / insideWidth >= 0.95 && yOverlap / insideHeight >= 0.95) return false;
     if (candidate.vertical) {
       const overlapRatio = yOverlap / Math.max(1, y1 - y0);
       return overlapRatio >= 0.3 && dx <= Math.max(120, 0.2 * rw);
