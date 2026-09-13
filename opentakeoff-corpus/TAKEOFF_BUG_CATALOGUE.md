@@ -1167,6 +1167,44 @@ none of them a real schedule:
 
 ---
 
+### B-20 — a real row is captured twice, byte-for-byte identical, inflating a table's own row count with a phantom duplicate (NOT FIXED — found, traced, disclosed)
+
+**Where:** `083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4`,
+"COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE" — found during the same
+Demo Corpus hand-verification pass, next document after 28_WA.
+
+**Measured, hand-graded against the render first:** the real table has 3
+rows (`HP-1` LIBRARY, `HP-2` NURSE, `HP-3` SWEGON — a dense 9-table
+schedule page, H0.2, otherwise extracted essentially perfectly:
+`COMMON AREA DX FAN COIL UNIT SCHEDULE` 4/4, `HVAC POWER EQUIPMENT
+SCHEDULE` 5/5, `REGISTER, GRILLE & DIFFUSER SCHEDULE` 4/4, both
+`ENERGY RECOVERY VENTILATOR SCHEDULE` instances 1/1 each despite sharing
+one exact title string, `PIPE MATERIAL TABLE` 2/2, `INSULATION TYPE
+SCHEDULE` 4/4, `ELECTRIC HEATING COIL SCHEDULE` 1/1 — this is otherwise
+one of the cleanest dense pages graded in this pass). `production-graph-
+cli.mjs`'s own output for the heat pump schedule reports 4 rows: `HP-1`
+appears TWICE, with every cell byte-for-byte identical both times
+(`MODEL NO.: RXLQ144TATJU`, `MBH COOL: 144`, `OPERATING WEIGHT: 1446
+LBS`, `REMARKS: SEE NOTES` — nothing differs between the two copies), then
+`HP-2` and `HP-3` follow once each, correctly.
+
+**Relationship to already-catalogued bugs:** distinct from B-6 (a whole
+table redrawn twice at two DIFFERENT scales elsewhere on a sheet, read as
+two colliding tables) — this is one real row, inside one real table,
+captured twice with no variation at all, immediately adjacent to two
+other rows from the same table that were each captured exactly once. Not
+traced into the row-clustering code to find why this one row's y-band
+produced two identical clusters instead of one, per this file's standing
+rule against guessing at a fix under time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** a phantom row
+that is not a fabrication of new content (unlike B-16/B-19) but an exact
+duplicate of real content still fails an exact row-count match — this
+table cannot pass cell-grading as extracted despite every cell value
+being individually correct.
+
+---
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.
