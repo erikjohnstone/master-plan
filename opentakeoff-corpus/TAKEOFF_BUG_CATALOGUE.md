@@ -1563,6 +1563,60 @@ discriminator: *before treating a column as an identifier, a span as a title, or
 marker, test the property that actually distinguishes it* — cardinality for an identifier,
 band-fill ratio for a title, column population for a data row.
 
+### B-26 — a real, wide, room-keyed table (not equipment-mark-keyed) is completely dropped, and a sibling table over-counts a title-block notes line as a data row (NOT FIXED — found, traced, disclosed)
+
+**Where:** `01_NY_VA_Northport_Dialysis_100CD.pdf#88` (sheet M701, "MECHANICAL
+SCHEDULES") — the sole dense mechanical-schedule sheet in this 162-sheet
+document, found during the same Demo Corpus hand-verification pass as
+B-16 through B-25, this document picked next in ascending census-count
+order.
+
+**Measured:** page 88 carries 11 real, titled, ruled tables, hand-
+transcribed before viewing extractor output: AIR HANDLING UNIT (2 rows),
+AIR INLETS & OUTLETS (11), PUMPS (1), STEAM HUMIDIFIERS (1), FANS (1),
+SOUND ATTENUATORS (1), **VENTILATION INDEX (37 rows)**, SINGLE DUCT AIR
+TERMINAL UNITS (25), EX FAN REBALANCE SCHEDULE (1), END-OF-MAIN STEAM
+LINE DRIP TRAP (1), EQUIPMENT STEAM TRAP (1 row: `ST-1`). `production-
+graph-cli.mjs --mode graph` finds only 10 of these — VENTILATION INDEX is
+completely absent from the entire document's 53-table output, confirmed
+by a title-string search across every sheet, not just misattached or
+retitled elsewhere. The other 9 equipment tables all match exactly.
+
+**Two distinct defects, same page:**
+1. **VENTILATION INDEX MISSED entirely.** This table's structure is
+   unlike every one of its 10 siblings on the same page: it is keyed by
+   `ROOM NO.`/`ROOM NAME` (37 real rows, e.g. `A360F`/`STATION 1`,
+   `A346`/`ADMIN HALLWAY`) rather than by an equipment `MARK` tag, and it
+   is unusually wide — roughly 24 columns of OA/ACH ventilation-rate data
+   (`OACH REQD`, `Total OACH`, `Total ACH`, `Design Heating/Cooling
+   Temp`, etc.) versus the 8-16 columns typical of the equipment
+   schedules on the same sheet that DID extract correctly. Not traced
+   past this structural comparison — whether the miss is a width limit,
+   a MARK-column requirement, or something else in the table-region
+   detector was not read line-by-line, per this file's own standing rule
+   against guessing at a fix under time pressure.
+2. **EQUIPMENT STEAM TRAP over-counts by one row.** The extractor reports
+   `rows: 2` for this table; direct `textSpans()` measurement of the
+   table's own region confirms only ONE real data row (`ST-1`, `ROOF`,
+   `AHU-1 PREHEAT COIL`, `838`, `1/4`, `FLOAT & THERMOSTATIC`, `1-1/2`,
+   `1`) — the very next line below the table, `"NOTES FOR EQUIPMENT
+   STEAM TRAP:"`, sits close beneath it and is the likely source of the
+   phantom second row, though the exact mechanism was not traced.
+
+**Relationship to already-catalogued bugs:** distinct from B-16/B-19/B-25
+(other missing-table shapes — fabricated-from-prose, whole-table-
+vanishes, transposed-layout) because the likely discriminator here is
+column count/key-column shape rather than rotation or a caption
+position; distinct from B-18/B-20 (row-fusion/duplication) because this
+is a single extra row, not a fused or duplicated real one. New bug
+number rather than an amendment to any of B-16 through B-25.
+
+**Consequence for the Demo Corpus's own zero-error bar:** this document
+fails MISSED=0 (one real 37-row table entirely absent) and also fails
+exact-match cell-grading on a second, otherwise-correct table (a phantom
+row). Both are real, concrete, measured reasons this document is not yet
+clean — not a shrunk sample, the actual page.
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
