@@ -2481,6 +2481,68 @@ model) is completely unreachable by any downstream compile. Confirmed on
 all 3 real tables on this one page; not yet checked against the rest of
 the corpus for prevalence.
 
+### B-39 — a real table below is completely missed, and the table above silently absorbs its whole region into its own box (found via the goal document's own required auto-accept audit) (NOT FIXED — found, traced, disclosed)
+
+**Where:** `038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#52`, found
+while running `opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md`'s own
+Method §3 required audit: "audit a random sample of the auto-accepted
+[boxes] ... publish the label error rate." A random, seeded (20260913)
+20-item sample of this session's 873 `rulelinebox.py` auto-accepted boxes
+was drawn and each genuinely re-graded by rendering the page and looking
+at the box drawn around it (no auto-accept, no seeded search window in
+the check itself) — the goal document's own definition of ground truth.
+
+**Measured:** vectorgrid's own reported box for `"Branch Panel: (E)
+4CL1-1"` is `[374.64, 222.72, 2102.64, 2609.04]`. Rendering the page and
+cropping exactly to that box shows TWO complete, distinct branch panel
+schedules stacked inside it: `Branch Panel: (E) 4CL1-1` (the real title,
+ending around 21 circuit rows + totals + notes) and, immediately below
+it with no visible gap in the box, a SECOND, fully independent table:
+`Branch Panel: A401A` (`Location: TR (EXPANDED) A401`, `Supply From: (E)
+4CL1-1` — confirmed at high zoom, not a misread of a similarly-named
+`A501A` table that genuinely exists elsewhere on this same page at a
+non-overlapping region `[374.64, 2660.16, 2102.64, 3743.04]`). A full
+string search of the extractor's own output for this document confirms
+`Branch Panel: A401A` does not appear ANYWHERE, under any title — a
+genuine, whole-table MISS, not a misattachment.
+
+**Why this passed auto-accept:** `rulelinebox.py`'s own independent
+pixel measurement found a real, solidly-drawn ruled line almost exactly
+at vectorgrid's own reported bottom edge (worst-edge agreement <0.1pt,
+per this document's own `.tableboxes.csv` row) — because that line IS
+real ink on the page: it is the real BOTTOM BORDER of the missed
+`A401A` table, not a fabricated line. Two mechanically independent
+extractors agreeing within 4pt here means exactly what the goal
+document's own "Non-negotiable" section warns it can mean: "two tools
+sharing a blind spot... agree confidently and both being wrong." Neither
+extractor is wrong about where a ruled line sits; vectorgrid is wrong
+about where ITS OWN table ends.
+
+**Consequence for the goal document's own audit requirement:** 1 error
+in a 20-item random sample = 5% disagreement rate, which is explicitly
+NOT "indistinguishable from zero" per Method §3's own rule ("If the
+audited disagreement rate is not indistinguishable from zero, auto-accept
+is broken and gets turned off — not re-tuned, not shrunk quietly, off —
+until the reason it's wrong is found"). The reason is now found and
+disclosed here (a missed table's region silently absorbed into a
+same-shaped neighboring table's own box, specifically in stacked
+branch-panel-schedule layouts) — this is not grounds to declare the
+other 872 auto-accepted boxes this session clean; it is grounds to treat
+this session's own `.tableboxes.csv` rows as real, disclosed, but
+UN-AUDITED-CLEAN evidence toward the corpus-wide/held-out gate (where
+Method §3 permits exactly this), never as a substitute for genuine human
+blind grading on the Demo Corpus (which already does not apply here
+regardless, per that section's own explicit rule — see the correction in
+`keys/DEMO_CORPUS_GRADING.md`).
+
+**Relationship to already-catalogued bugs:** distinct from B-33's
+same-title duplication and B-29/B-32's title-fabrication merges — here
+the surviving table's OWN title is correct and its OWN real data is
+correct; the defect is purely a box-extent error that happens to
+coincide with total silence about the second table's existence, which is
+what makes it invisible to every disclosure mechanism that isn't a
+genuine human eyes-on-the-box check.
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the

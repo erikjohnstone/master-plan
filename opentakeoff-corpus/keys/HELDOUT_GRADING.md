@@ -94,7 +94,15 @@ ground truth (worst-edge agreement almost always <1pt), on top of the 531
 from the Demo Corpus pass — 873 tables total across the two sets this
 session. ~107 more tables from this batch were correctly NOT auto-accepted
 and are logged in `keys/RULELINEBOX_REVIEW_NEEDED.txt` alongside the Demo
-Corpus flags, never forced. Several documents legitimately contributed 0
+Corpus flags, never forced. **The Method §3-required audit of a random
+sample of all 873 is `keys/RULELINEBOX_AUDIT.md`: 19/20 correct, 1/20
+wrong — a 5% disagreement rate, explicitly NOT "indistinguishable from
+zero" per the goal document's own rule. The one error (`038_NC...#52`) is
+a real table completely missing from the extractor's own output, its
+region silently absorbed into a neighboring table's box — full trace in
+`TAKEOFF_BUG_CATALOGUE.md`'s new B-39. These 873 rows are real,
+disclosed, Method-§3-eligible evidence toward this file's own corpus-wide
+gate, not a claim of zero-error, individually-verified ground truth.** Several documents legitimately contributed 0
 (`056_NY`, `086_CA`, `15_IA`, `19_CA`, `D_25_CO`, `080_CA` — all already
 documented above as vector-outlined-glyph-unreachable or genuinely
 out-of-scope/table-less, re-confirmed rather than contradicted by this
