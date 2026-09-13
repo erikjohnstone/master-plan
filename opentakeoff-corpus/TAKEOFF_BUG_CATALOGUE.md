@@ -2271,6 +2271,43 @@ against guessing at fixes under time pressure — recorded as a precise,
 bounded next step (a narrower `" FOR "` suffix pattern, corpus-validated
 for false positives) rather than an open-ended mystery.
 
+**THE PROPOSED NEXT STEP TRIED, MEASURED, AND PROVEN UNSAFE (2026-09-13,
+same day) — do not attempt this exact widening again.** Built the
+candidate regex this entry's own next-step named — extending
+`SCHEDULE_CAPTION_RE` (`scheduleLanguageScan.ts`) to also accept a
+trailing `SCHEDULES? FOR <2-29 char short caps suffix, no punctuation>`
+— and, rather than shipping it, ran the exact corpus regression sweep
+this entry said was required BEFORE shipping. Scanned every real text
+line containing the word `SCHEDULE` across `bulk/` (113 documents, via
+PyMuPDF's own `get_text()`, fast and independent of pdf.js's own span
+extraction) for the literal substring `SCHEDULES?\s+FOR\s+`: **318 real
+lines matched.** Ran EVERY ONE through the exact same 3-stage gate
+`sheetHasScheduleCaption` applies (length 8-78, `CAPTION_XREF_RE`
+prefix-reject, then the candidate widened regex): **65 of 318 (≈20%)
+would have false-positived the gate open** — real notes and callouts
+like `"F. REFER TO DIFFUSER SCHEDULE FOR DUCT RUNOUT SIZE UNLESS..."`,
+`"6. PANEL SCHEDULES FOR AFFECTED PANELS"`, `"EQUIPMENT SCHEDULES FOR
+ADDITIONAL"` (a line-wrapped fragment of a longer cross-reference
+sentence) — none a real table caption, every one a genuine numbered
+note or mid-sentence continuation that happens not to start with a
+`CAPTION_XREF_RE`-blocked word (numbered-bullet prefixes like `"F."`/
+`"9."`/`"6."` are the dominant shape, exactly the gap this entry's own
+risk paragraph named). **Only 1 of the 318 lines was the genuine article
+this fix was meant to admit** — `100_OH_Butler_Tech_RTU_Welding_Source_
+Capture.pdf`'s own `"GAS INPUT SCHEDULE FOR BUTLER TECH"`. A ~20%
+false-positive rate for a 1-in-318 real recovery is not a defensible
+trade on a shared, corpus-wide routing gate, so this widening is NOT
+implemented. This closes off the exact next step this entry itself
+proposed, with hard numbers rather than the risk staying a plausible-
+sounding guess for a future session to re-discover the hard way (the
+same lesson B-31's own tried-and-reverted fix taught: a next-step
+recommendation is a hypothesis, not a proof, until it is actually
+measured). A real fix for this specific shape would need a signal
+`CAPTION_XREF_RE` does not have today — recognizing a LEADING numbered-
+list marker (`"F. "`, `"9. "`, `"6. "`, digit/letter + period) as its own
+xref-adjacent rejection, independent of which word follows it — not
+designed or attempted here.
+
 ### B-28 — an entire dense schedule page (10 tables, 98 rows) is completely invisible despite dense, fully-reachable real text; a same-titled sibling table on another page is silently dropped by an apparent title-collision (PARTIALLY FIXED 2026-09-13 — the page #11 title-collision half closed; the page #9 total blackout remains open)
 
 **Where:** `26_CA_TransbayTower_Mechanical_64Sheets.pdf` — a 64-sheet
