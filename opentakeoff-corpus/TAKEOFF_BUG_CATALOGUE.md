@@ -975,7 +975,7 @@ yet; this is the first concrete, measured reason why, not a new admission.
 
 ---
 
-### B-17 — a real, correctly-extracted table loses its own title even though the title text sits at a normal, in-range gap (ROOT CAUSE CONFIRMED 2026-09-13 — not yet fixed; 2 related reconciliation gaps found and fixed along the way)
+### B-17 — a real, correctly-extracted table loses its own title even though the title text sits at a normal, in-range gap (NOT FIXED corpus-wide — 1 of 9 documented instances closed as a verified side effect of B-42, 2 confirmed still open, root cause itself unaddressed)
 
 **Where:** `063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9` — found
 during the same Demo Corpus hand-verification pass as B-16, this document
@@ -1166,10 +1166,80 @@ proving a winner's own title is never overwritten, and a case proving
 tables that don't overlap enough are never merged). All 212 tests across
 `sheetgraph.test.ts`/`vectorTakeoffPipeline.test.ts`/
 `scheduleLanguageScan.test.ts`/`tableExtractorReconcile.test.ts`/
-`schedulePlanReconcile.test.ts` pass. Confirmed live that neither change
-affects 063_MT#9 itself (re-ran before/after: `title: null` unchanged) —
-these are real, tested, disclosed improvements to a general risk the
-reconciliation layer had, not a claimed fix for this specific bug.
+`schedulePlanReconcile.test.ts` pass. Confirmed live at the time that
+neither change affects 063_MT#9 itself (re-ran before/after: `title:
+null` unchanged) — these were real, tested, disclosed improvements to a
+general risk the reconciliation layer had, not a claimed fix for this
+specific bug.
+
+**CLOSED for the original 063_MT#9 case (2026-09-13, later the same
+day) — an unplanned, verified side effect of the B-42 fix, not a change
+made for this bug.** B-42's fragment-merge rework of
+`extractScheduleTablesFromVectorGrid` (`vectorGridAdapter.ts`) stacks a
+structurally-refused fragment onto a geometrically-adjacent survivor —
+built for 028_TX's 3-way split schedule, but its own eligibility rule
+(`"no keyed data rows"` with `<= 3` rows, or `"no header block above the
+data"`) and adjacency check (same column count, vertically within ~30pt
+allowing overlap) generalize past that one document. 063_MT#9's own two
+row-boundary candidates for `MEP COORDINATION SCHEDULE - EXTRUDER LAB`
+are exactly that shape: the title-bearing candidate is refused with `"no
+keyed data rows"` at 2 rows (clears the `<= 3` gate), and its bbox
+overlaps the title-less survivor's own shifted region by the same kind
+of margin 028_TX's own seam does — so B-42's merge logic picks it up and
+reconstructs the same correct table this entry's own root-cause trace
+predicted a real fix would need to build. **Verified with a controlled
+before/after** (the pre-B-42 `vectorGridAdapter.ts`, checked out via
+`git show` and swapped in temporarily, then restored byte-identical):
+before, the sixth table on `063_MT#9` surfaces `title: null`, `rows: 2`;
+after, `title: "MEP COORDINATION SCHEDULE - EXTRUDER LAB"`, the same 2
+correct rows — this entry's own originally-measured case is now genuinely
+fixed, not merely coincidentally similar.
+
+**Checked whether the same side effect closes this bug's OTHER 8
+documented instances — mostly no, one inconclusive.** Re-ran the
+identical controlled before/after against every other instance's own
+source page:
+- `04_NV#32` and `096_IN#20`: both `SURGE TANK SCHEDULE`/`PUMP SCHEDULE`
+  (04_NV) and `AIR COOLED CHILLER SCHEDULE` (096_IN) already carry their
+  correct title in BOTH the pre- and post-B-42 single-page slice —
+  identical before and after, so this check is **inconclusive** for
+  these two: either the original defect required the full multi-page
+  document's own context to reproduce (plausible; every other bug in
+  this file measured on a single-page slice has reproduced cleanly, but
+  title-attachment specifically may cross-reference sibling sheets) or
+  it no longer reproduces for an unrelated reason. Neither confirmed
+  fixed nor confirmed still-broken by this pass; re-check against the
+  FULL document, not a slice, before crediting or discounting either.
+  (04_NV's own third instance, `STEAM RECOVERY HEAT EXCHANGER`, does not
+  appear in this page's own slice output at all, before or after —
+  a separate, unexplained absence, not traced here.)
+- `096_IN#22`'s `DIFFUSER / GRILLE SCHEDULE` (51 rows) and `26_CA#11`'s
+  `WATER FILTRATION UNIT` (1 row): both **still `title: null`, byte-
+  identical before and after** — genuinely unaffected. Consistent with
+  the root-cause trace's own prediction: B-42's merge only fires when the
+  refused candidate's own reason and row count clear its narrow
+  eligibility gate, which is not guaranteed (and evidently does not hold)
+  for every instance of this bug.
+- `042_VA#9`'s `HVAC DESIGN DATA` table was not re-diff'd (its own
+  failure shape — a WRONG title, not a null one, borrowed from an
+  internal sub-header — falls outside what B-42's merge logic could
+  plausibly touch, and the post-fix output already matches this entry's
+  own original description exactly).
+
+**Net effect:** this bug's own root cause (vectorgrid's two row-boundary
+candidates, `refuse()` discarding a correctly-recovered title) is
+UNCHANGED and still not directly fixed — the general orphaned-title
+plumbing this entry's own "why disclosed without a fix" section describes
+is still not built. What changed is that B-42's unrelated fragment-merge
+logic happens to also clear this bug's own original measured case,
+purely because both bugs are instances of the same deeper "vectorgrid
+proposes more than one candidate region for one physical table" family.
+At least 2 of this bug's 9 documented instances remain confirmed open
+(`096_IN#22`, `26_CA#11`), 1 more's failure shape is unchanged
+(`042_VA#9`), and 2 are inconclusive on a single-page slice
+(`04_NV#32`, `096_IN#20`'s original finding) — **not closed corpus-wide**,
+title still `NOT FIXED` as this entry's own header should keep saying
+until the real plumbing is built.
 
 ---
 
