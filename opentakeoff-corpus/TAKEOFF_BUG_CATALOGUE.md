@@ -1027,6 +1027,53 @@ row/cell content is right — a different failure shape than B-16's
 MISSED/fabricated pair, but still a concrete, measured reason this
 document is not yet clean.
 
+**CONFIRMED RECURRING 2026-09-13 — three more instances, one document.**
+`04_NV_VA_LasVegas_CentralUtilityPlant.pdf#32` ("MECHANICAL SCHEDULES AND
+DETAILS") shows this exact signature three more times on one page: `SURGE
+TANK SCHEDULE` (1 row, `T-1`), `STEAM RECOVERY HEAT EXCHANGER` (1 row,
+`HE-1`), and `PUMP SCHEDULE` (4 rows, `CWP-1..5`/`CHP-1..5`/`BP-1`/
+`IWP-1`) all surface as `title: null`, every cell content otherwise
+correct. `PUMP SCHEDULE` additionally loses several of its own real
+column headers to generic `COL1`/`COL10`/`COL11` placeholders despite
+every cell value being right — a title-loss and a partial header-loss
+happening together on the same table. The same page's `LOUVER SCHEDULE`
+survives with its title intact but polluted (`"LOUVER SCHEDULE LV #"`).
+Five real tables on one page, all with SOME title/header damage, zero
+with none — this is not a rare edge case on this document.
+
+**CONFIRMED RECURRING 2026-09-13 — a 6th document.**
+`042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#9`'s `HVAC DESIGN
+DATA` table (real rows: `OUTDOOR DESIGN CONDITIONS`, `KITCHEN (FOOD
+PRODUCTION)`, `DINING AREA (CAFETERIA)`, `CORRIDORS`, `OFFICES`, `ALL
+OTHER SPACES`) shows a double loss: the true title is gone (replaced by
+an internal sub-header, `"INDOOR AREA TEMPERATURE/HUMIDITY SETPOINTS"`,
+that is real text FROM the table but not its title), `KITCHEN (FOOD
+PRODUCTION)`'s own values are glued into `headers` per this bug's usual
+signature, and `OUTDOOR DESIGN CONDITIONS` is dropped from the output
+entirely with no trace — only `DINING`, `CORRIDORS`, `OFFICES`, and `ALL
+OTHER SPACES` survive as real rows, 4 of the real 6.
+
+**CONFIRMED RECURRING 2026-09-13 — a 7th document, two more instances.**
+`096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf` shows this exact
+signature twice more, on two different sheets: `#20`'s `AIR COOLED
+CHILLER SCHEDULE` (4 rows: `CH-1`, `CH-2`, `HRC-1`, `HRC-2`, all correct)
+and `#22`'s `DIFFUSER / GRILLE SCHEDULE` (51 rows, all correct — the
+densest table hit by this bug so far). Both real titles are confirmed
+present as ordinary, legible vector text spans at the normal position
+directly above their own table (`textSpans()`: `"AIR COOLED CHILLER
+SCHEDULE"` at p20 y0=133.3, `"DIFFUSER / GRILLE SCHEDULE"` at p22
+y0=155.7 — both at the same top-of-page title row as their sibling
+tables' own titles), yet both surface as `title: ""` in the extractor's
+own output while every other table on the same two sheets (6 more on
+#20's sheet, including one — `SIDEWALL GRILLE SCHEDULE` — with a nearly
+identical name pattern that titled correctly) keeps its title intact.
+Row/cell content for both tables is otherwise fully correct (hand-
+verified against the render). This closes out 001_NC and 096_IN as two
+back-to-back documents in this pass where every table and every row is
+content-correct and only the title-attachment layer fails — reinforcing
+that this is a distinct, common failure mode from the missing/fabricated-
+table bugs (B-16/B-19/B-25), not a rare one-off.
+
 ---
 
 ### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (NOT FIXED — found, traced, disclosed)
@@ -1117,6 +1164,20 @@ values). The other two panels on the identical page, `HN7B` (15 rows) and
 anything else findable — they are simply absent, the same disease as
 B-21. This single page shows both bugs operating together: one table
 survives corrupted (B-18's signature), two vanish outright (B-21's).
+
+**CONFIRMED RECURRING 2026-09-13 — a more severe variant, same page as
+the three-instance note above.** The SAME `04_NV_VA_LasVegas_
+CentralUtilityPlant.pdf#32`'s `COOLING TOWER SCHEDULE` shows the worst
+version of this disease measured yet: its real data row (`CT-1,2,3,4`,
+`EVAPCO AT-114-1024`, `2,400 GPM`, …) is not merely mislabeled — it is
+GONE. In its place, two fragments of the table's own multi-tier header
+row (`"MANUFACTURER"`/`"MODEL NUMBER"`/`"FLOW"`/`"FANS"`/`"MAX"` spanning
+two printed header lines) are each misread as a separate DATA row keyed
+`"FLOW"` and `"MODEL NUMBER"`. Same family as B-18 (header/data boundary
+confusion) but here the real content is lost outright rather than
+demoted into headers — worth flagging as the more severe end of this
+same failure spectrum, likely triggered by the two-line header this
+table's real caption uses where the others on this page use one line.
 
 ---
 
@@ -1372,6 +1433,99 @@ table is handled.
 
 ---
 
+### B-24 — a raster table's own placement is not reported at all, not even as a disclosed exclusion (NOT FIXED — found, traced, disclosed)
+
+**Where:** `067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8`,
+"PCW RISER DIAGRAM SCHEDULE - HUTCH 1.3" — found running
+`table-box-eval.mjs` against this document's own pre-existing
+hand-authored `keys/067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.
+tableboxes.csv` (authored in an earlier, separate ground-truth effort,
+not for this Demo Corpus pass), while checking real box-tier evidence
+against the goal's own EoB≤4pt bar for this session's grading pass.
+
+**Measured:** the authored ground truth records this table as a RASTER
+(a 645×659 embedded image) whose truth box is the image's own placement
+rectangle — the same convention used for `017_MD#14`'s raster table. All
+14 of this document's other authored tables on the same page score
+essentially perfect boxes (mean EoB 0.0pt) against `production-graph-
+cli.mjs`'s output. This 15th one does not appear in that output AT ALL —
+not as a found table, not as a disclosed-and-excluded raster, nothing.
+`table-box-eval.mjs` reports it `MISSING`.
+
+**Relationship to already-catalogued bugs and to the goal's own rule:**
+distinct from every other entry above because this is not a vector-table
+extraction failure — it's a gap in the goal's own explicit requirement
+that "Rasters/pasted images on these documents are still correctly
+EXCLUDED, not silently zeroed — that disclosure has to hold up live too"
+(`goals/VECTORGRID_TABLE_BOXES.md`, "The Demo Corpus" section). Silently
+returning nothing is indistinguishable, from the output alone, between
+"correctly recognized as an out-of-scope raster" and "never looked at
+this part of the page." Not traced into the raster-detection/disclosure
+code to find which of those two it actually is, per this file's standing
+rule against guessing at a fix under time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** if this
+represents an undisclosed miss rather than a correct-but-silent
+exclusion, it is a second real defect on this page (alongside B-23's
+merged-cell tables) that a per-table-found accounting would hide inside
+an otherwise 14/14 clean result.
+
+---
+
+### B-25 — a whole schedule sheet, correctly role-classified, yields ZERO tables: an entire transposed-format page (units as columns, not rows) is completely unreachable (NOT FIXED — found, traced, disclosed)
+
+**Where:** `037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#40`
+("MECHANICAL SCHEDULES", sheet MJ110) — found during the same Demo Corpus
+hand-verification pass, next document after 015_VA. This is the single
+worst result measured in this entire pass, by a wide margin.
+
+**Measured, hand-graded against the render first:** this page carries at
+least 6 real table blocks — two `RETURN FANS` tables (12 and 7 real fan
+units respectively, 19 total), `VARIABLE FREQUENCY DRIVES` (39 rows),
+`AIR COOLED WATER CHILLERS` (1 row), `SINGLE DUCT SUPPLY AIR TERMINALS`
+(6 rows), `AIR DEVICES` (2 rows) — roughly 67 real data rows in total.
+Every one of these tables is drawn TRANSPOSED relative to every other
+schedule measured in this pass: each column is one real equipment unit
+(`RF-1`, `RF-1A`, `RF-1B`, …), and each row is a spec label (`AREA
+SERVED`, `BASIS OF DESIGN`, `AIRFLOW (CFM)`, …) whose value is read
+ACROSS the row, not down a column. `production-graph-cli.mjs`'s full
+output for this entire 60-sheet document contains only 5 tables total,
+NONE of them from page 40 — its own `schedules: []` sheet-graph entry is
+empty. This is not a false-negative role classification: the sheet-graph
+record for `#40` is correctly tagged `role: "schedule"` (confidence 0.5,
+evidence `"MECHANICAL SCHEDULES"`) — the page is correctly recognized as
+a schedule sheet, and the table-extraction step running on it still finds
+nothing at all. The other 5 tables that DO exist in this document (pages
+31, 54-57) are all small reference-kind fragments unrelated to this
+page's own content — no fabrication, no partial credit, simply absent.
+
+**Relationship to already-catalogued work:** task #64 ("Fix vectorgrid/
+ODL over-merge that corrupted 25_WA's stacked schedules") was closed
+under the description "was mis-diagnosed as 'transposed matrix'" —
+meaning a PRIOR transposed-table complaint on a different document turned
+out to have a different root cause. This document's own table shape is
+genuinely, visibly transposed (spec labels down the left column, one real
+equipment unit per column to the right), and gets a completely different,
+much worse outcome (zero tables, not a corruption) than every row-per-
+unit schedule measured elsewhere in this pass. Whether the table-region
+detector's column/row clustering logic has any handling at all for this
+orientation was not traced into the code, per this file's standing rule
+against guessing at a fix under time pressure — but the sheer completeness
+of the miss (not one of ~67 rows survives in any form) suggests the
+detector may simply never consider this orientation as a candidate table
+shape at all.
+
+**Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 at
+the most extreme end measured in this pass — an entire correctly-
+identified schedule sheet's real content (67 rows across 6 tables) is
+100% absent from the pipeline's output, with no partial recovery and no
+disclosed reason. If transposed schedules are common elsewhere in the
+corpus (return-fan and AHU schedules with many units are a routine HVAC
+drafting convention), this could be a systemic recall gap much larger
+than any single document.
+
+---
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.
@@ -1408,6 +1562,107 @@ Fixing them one at a time produces three narrow patches. The structural fix is a
 discriminator: *before treating a column as an identifier, a span as a title, or a token as a
 marker, test the property that actually distinguishes it* — cardinality for an identifier,
 band-fill ratio for a title, column population for a data row.
+
+### B-26 — a real, wide, room-keyed table (not equipment-mark-keyed) is completely dropped, and a sibling table over-counts a title-block notes line as a data row (NOT FIXED — found, traced, disclosed)
+
+**Where:** `01_NY_VA_Northport_Dialysis_100CD.pdf#88` (sheet M701, "MECHANICAL
+SCHEDULES") — the sole dense mechanical-schedule sheet in this 162-sheet
+document, found during the same Demo Corpus hand-verification pass as
+B-16 through B-25, this document picked next in ascending census-count
+order.
+
+**Measured:** page 88 carries 11 real, titled, ruled tables, hand-
+transcribed before viewing extractor output: AIR HANDLING UNIT (2 rows),
+AIR INLETS & OUTLETS (11), PUMPS (1), STEAM HUMIDIFIERS (1), FANS (1),
+SOUND ATTENUATORS (1), **VENTILATION INDEX (37 rows)**, SINGLE DUCT AIR
+TERMINAL UNITS (25), EX FAN REBALANCE SCHEDULE (1), END-OF-MAIN STEAM
+LINE DRIP TRAP (1), EQUIPMENT STEAM TRAP (1 row: `ST-1`). `production-
+graph-cli.mjs --mode graph` finds only 10 of these — VENTILATION INDEX is
+completely absent from the entire document's 53-table output, confirmed
+by a title-string search across every sheet, not just misattached or
+retitled elsewhere. The other 9 equipment tables all match exactly.
+
+**Two distinct defects, same page:**
+1. **VENTILATION INDEX MISSED entirely.** This table's structure is
+   unlike every one of its 10 siblings on the same page: it is keyed by
+   `ROOM NO.`/`ROOM NAME` (37 real rows, e.g. `A360F`/`STATION 1`,
+   `A346`/`ADMIN HALLWAY`) rather than by an equipment `MARK` tag, and it
+   is unusually wide — roughly 24 columns of OA/ACH ventilation-rate data
+   (`OACH REQD`, `Total OACH`, `Total ACH`, `Design Heating/Cooling
+   Temp`, etc.) versus the 8-16 columns typical of the equipment
+   schedules on the same sheet that DID extract correctly. Not traced
+   past this structural comparison — whether the miss is a width limit,
+   a MARK-column requirement, or something else in the table-region
+   detector was not read line-by-line, per this file's own standing rule
+   against guessing at a fix under time pressure.
+2. **EQUIPMENT STEAM TRAP over-counts by one row.** The extractor reports
+   `rows: 2` for this table; direct `textSpans()` measurement of the
+   table's own region confirms only ONE real data row (`ST-1`, `ROOF`,
+   `AHU-1 PREHEAT COIL`, `838`, `1/4`, `FLOAT & THERMOSTATIC`, `1-1/2`,
+   `1`) — the very next line below the table, `"NOTES FOR EQUIPMENT
+   STEAM TRAP:"`, sits close beneath it and is the likely source of the
+   phantom second row, though the exact mechanism was not traced.
+
+**Relationship to already-catalogued bugs:** distinct from B-16/B-19/B-25
+(other missing-table shapes — fabricated-from-prose, whole-table-
+vanishes, transposed-layout) because the likely discriminator here is
+column count/key-column shape rather than rotation or a caption
+position; distinct from B-18/B-20 (row-fusion/duplication) because this
+is a single extra row, not a fused or duplicated real one. New bug
+number rather than an amendment to any of B-16 through B-25.
+
+**Consequence for the Demo Corpus's own zero-error bar:** this document
+fails MISSED=0 (one real 37-row table entirely absent) and also fails
+exact-match cell-grading on a second, otherwise-correct table (a phantom
+row). Both are real, concrete, measured reasons this document is not yet
+clean — not a shrunk sample, the actual page.
+
+### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (NOT FIXED — found, traced, disclosed)
+
+**Where:** `100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#7` (sheet
+P1.0, "PLUMBING FLOOR PLAN") — found starting the HELDOUT set's own
+missed-checking pass (`keys/HELDOUT_GRADING.md`), the same discipline as
+the Demo Corpus pass. This is a small (7-page) document where the
+pipeline's own live `--mode graph` output claims only 1 real table in
+the whole document (`DIFFUSER, GRILLE, AND REGISTER SCHEDULE`, page 5,
+correctly extracted with 4/4 rows on a `role: plan` sheet — proof that
+schedules-on-plan-role-sheets, task #60's own fix, is genuinely still
+working here); the pre-computed census (`VOLUME_FLOOR_CENSUS-2026-09-13.
+json`) separately claimed 0 tables for this document, an even larger
+undercount now superseded by this direct measurement.
+
+**Measured:** page 7 carries a second real, titled, ruled table, `GAS
+INPUT SCHEDULE FOR BUTLER TECH`, confirmed by render and by direct
+`textSpans()` extraction: `EQUIPMENT`/`LOAD (CFH)` header at y=1057.4,
+then 5 real equipment rows (`EXISTING LAB FURNACES`, `EXISTING WATER
+HEATER`, `NEW RTU` ×3) plus a `BUILDING TOTAL` summary row — 6 rows
+total. `production-graph-cli.mjs --mode graph` returns zero tables for
+this sheet (`role: plan`, `tables: 0`), and a full-JSON string search
+confirms `"GAS INPUT"` appears nowhere in the entire document's output —
+not misattached to another sheet or renamed, simply absent.
+
+**Structurally distinct from its own working sibling table** on page 5:
+this table's real title (`"GAS INPUT SCHEDULE FOR BUTLER TECH"`, y=938.9)
+is followed not directly by its header row but by FOUR lines of
+non-tabular `LABEL: VALUE` metadata (`SERVICE ADDRESS:`, `TOTAL
+EQUIVALENT LENGTH OF PIPE:`, `REQUIRED DELIVERY PRESSURE:`, `NUMBER OF
+METERS:`/`GAS SERVICE LENGTH:`, y=968.9-1028.9) before the real
+`EQUIPMENT`/`LOAD (CFH)` header at y=1057.4. This title→metadata-block→
+header shape is the same general pattern already named in task #90
+("header-JOIN loop no longer swallows pre-header spec-metadata rows into
+column headers") and #86 ("scheduleKeywordRegion misses the real header
+when a table's caption prints BELOW it, not above") — but #90's own fix
+was for a FUSION failure (metadata swallowed into the header), and this
+document's failure mode is total absence, not fusion. Whether this is a
+gap #90's fix didn't cover, or a distinct failure in the same code path,
+was not traced past this structural comparison, per this file's own
+standing rule against guessing at a fix under time pressure.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this document
+fails MISSED=0 — a real 6-row table on the only 7-page document graded
+so far in this set is entirely invisible to the production pipeline,
+despite its own immediate sibling table two pages earlier extracting
+perfectly. A real, concrete, measured reason this document is not clean.
 
 ## What is working
 
