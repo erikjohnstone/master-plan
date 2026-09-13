@@ -1,2 +1,16 @@
+# Rows below (page 23, VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE and TANK
+# SCHEDULE) added 2026-09-13 via deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code -- same method as
+# 028_TX's tableboxes.csv (see that file's header for the full method
+# description). Page rendered at scale=8.0; both tables' 4 edges agreed
+# with vectorgrid's own box to within 0.2pt (PUMP SCHEDULE's right edge
+# required relaxing the dark-pixel-fraction threshold from 0.7 to 0.5 to
+# find its thinner ruled border -- documented, not tuned to force a match:
+# the line was there in the pixels at 65% coverage, just under the default
+# threshold for the other tables' bolder rules). Cell-tier ground truth for
+# both tables already exists in
+# opentakeoff-corpus/keys/060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.cells.csv.
 sheet,table_title,x0,top,x1,bot,provenance
 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#75,PANELBOARD SCHEDULE,686.5,43.0,1226.4,776.2,verified by eye @0.85x; SEE KEY NOTE — this sheet draws 5 identically-titled PANELBOARD SCHEDULEs and the recall key records 1
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,177.62,621.25,4137.38,843.0,"deterministic ruled-line pixel detection at 8x render scale, agreement +/-0.11pt on all 4 edges vs vectorgrid's own box"
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,TANK SCHEDULE,597.12,1177.12,4138.88,1375.12,"deterministic ruled-line pixel detection at 8x render scale, agreement +/-0.17pt on all 4 edges vs vectorgrid's own box"

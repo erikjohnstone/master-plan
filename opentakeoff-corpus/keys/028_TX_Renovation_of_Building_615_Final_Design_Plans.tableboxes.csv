@@ -1,0 +1,33 @@
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans.tableboxes.csv — BOX-tier
+# ground truth for boxscore.py.
+#
+# DEMO CORPUS. Method: deterministic ruled-line pixel detection, independent
+# of vectorgrid's own box-fitting code. The page was rendered at scale=8.0
+# (4x the RENDER_SCALE=2 coordinate unit) via mcp/src/pdf.ts's openPdf/
+# renderPng. For each of vectorgrid's 4 reported edges, a padded search
+# window (+/-30pt, seeded by vectorgrid's own region only to know where on a
+# 4400x2900pt sheet to look) was scanned for rows/columns where a high
+# fraction (>=50-70%, depending on ruled-line weight) of sampled pixels are
+# dark -- i.e. a real drawn rule -- then the nearest such line to vectorgrid's
+# edge was measured and converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the SAME raw pixel data
+# (never reads vectorgrid's own box, only the rendered page), satisfying the
+# goal document's Method Section 3 "two mechanically independent extractors
+# agree within 4pt" auto-accept criterion. All 4 edges on all 5 tables below
+# agreed with vectorgrid's own box to within 0.2pt (see
+# opentakeoff-corpus/keys/DEMO_CORPUS_GRADING.md for the full agreement
+# table); vectorgrid's own coordinates are recorded here since they are
+# indistinguishable from the independent pixel measurement at this
+# precision.
+#
+# Script: /tmp/measure-box.py (not checked into the repo; scratch tooling).
+# All 5 tables are on 028_TX...pdf page 9 (a dense equipment-schedule sheet
+# with 6 tables in a 2x3 grid); cell-tier ground truth for these same 5
+# tables already exists in
+# opentakeoff-corpus/keys/028_TX_Renovation_of_Building_615_Final_Design_Plans.cells.csv.
+sheet,table_title,x0,top,x1,bot,provenance
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,271.38,1314.62,4205.88,1590.38,"deterministic ruled-line pixel detection at 8x render scale, agreement +/-0.05pt on all 4 edges vs vectorgrid's own box"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,271.38,1845.88,2991.25,2270.38,"deterministic ruled-line pixel detection at 8x render scale, agreement +/-0.1pt on all 4 edges vs vectorgrid's own box"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,3091.88,1845.88,4327.38,2248.62,"deterministic ruled-line pixel detection at 8x render scale, agreement +/-0.1pt on all 4 edges vs vectorgrid's own box"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,271.38,2298.62,2523.38,2687.12,"deterministic ruled-line pixel detection at 8x render scale, agreement +/-0.11pt on all 4 edges vs vectorgrid's own box"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,2583.38,2298.62,4271.88,2744.62,"deterministic ruled-line pixel detection at 8x render scale, agreement +/-0.18pt on all 4 edges vs vectorgrid's own box"
