@@ -1041,6 +1041,18 @@ survives with its title intact but polluted (`"LOUVER SCHEDULE LV #"`).
 Five real tables on one page, all with SOME title/header damage, zero
 with none — this is not a rare edge case on this document.
 
+**CONFIRMED RECURRING 2026-09-13 — a 6th document.**
+`042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#9`'s `HVAC DESIGN
+DATA` table (real rows: `OUTDOOR DESIGN CONDITIONS`, `KITCHEN (FOOD
+PRODUCTION)`, `DINING AREA (CAFETERIA)`, `CORRIDORS`, `OFFICES`, `ALL
+OTHER SPACES`) shows a double loss: the true title is gone (replaced by
+an internal sub-header, `"INDOOR AREA TEMPERATURE/HUMIDITY SETPOINTS"`,
+that is real text FROM the table but not its title), `KITCHEN (FOOD
+PRODUCTION)`'s own values are glued into `headers` per this bug's usual
+signature, and `OUTDOOR DESIGN CONDITIONS` is dropped from the output
+entirely with no trace — only `DINING`, `CORRIDORS`, `OFFICES`, and `ALL
+OTHER SPACES` survive as real rows, 4 of the real 6.
+
 ---
 
 ### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (NOT FIXED — found, traced, disclosed)
