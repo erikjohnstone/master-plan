@@ -1857,6 +1857,16 @@ context and this document's several other, distinct findings (a
 missing `BOILERS` table, a split-in-two real table, column-header-
 sourced title fabrications) are in B-32 below.
 
+**CONFIRMED RECURRING 2026-09-13 — a 4th document.**
+`12_MT_MSU_ReidHall_Renovation.pdf#28`'s otherwise perfectly-extracted
+5-table "MECHANICAL SCHEDULES" sheet (all 5 real tables — `SPLIT SYSTEM
+HEAT PUMP SCHEDULE`, `DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE`,
+`GRILLE - REGISTER - DIFFUSER SCHEDULE`, `FINNED PIPE RADIATION
+SCHEDULE`, `CABINET UNIT HEATER SCHEDULE` — match exactly, 17/17 rows)
+also carries a fabricated `title: "DRAWN BY: NT"`, `rows: 1` table,
+lifted from the sheet's own title-block drafter-name field. Same
+mechanism, yet another specific stamp/field source.
+
 ### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (NOT FIXED — found, traced, disclosed)
 
 **Where:** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf`, both of its
