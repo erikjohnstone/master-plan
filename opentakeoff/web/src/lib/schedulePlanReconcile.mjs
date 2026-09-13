@@ -7,16 +7,18 @@
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.mjs";
+import { isRepeatableAirDeviceSchedule } from "./symbolsweep.ts";
 
 /** @typedef {"MATCH"|"SCHEDULE_ONLY"|"PLAN_ONLY"|"REFUSED_NO_SCALE"|"REFUSED_NO_TEXT"|"AMBIGUOUS"} ReconcileStatus */
 
 /**
  * @param {object} p
- * @param {number} p.scheduledQty
- * @param {number} p.installedQty
+ * @param {number|null} p.scheduledQty
+ * @param {number|null} p.installedQty
  * @param {"resolved"|"refused"|"error"|undefined} [p.itemStatus]
  * @param {string|null|undefined} [p.failureType]
  * @param {string|null|undefined} [p.reason]
+ * @param {boolean} [p.scheduleDefinitionOnly]
  * @returns {ReconcileStatus}
  */
 export function classifyReconcileStatus({
@@ -25,6 +27,7 @@ export function classifyReconcileStatus({
   itemStatus,
   failureType,
   reason,
+  scheduleDefinitionOnly = false,
 }) {
   const r = String(reason || "");
   if (failureType === "REFUSED_NO_SCALE" || /\bset the scale\b|REFUSED_NO_SCALE/i.test(r)) {
@@ -33,8 +36,21 @@ export function classifyReconcileStatus({
   if (failureType === "AMBIGUOUS_ROW_KEY" || /ambiguous:.*schedule rows carry the key/i.test(r)) {
     return "AMBIGUOUS";
   }
+  if (failureType === "INCOMPLETE_PLAN_SEARCH" || /plan search incomplete|count is a floor|candidate work cap/i.test(r)) {
+    return "AMBIGUOUS";
+  }
   if (/exploded|vector-path|not drawable text|raw vector-path letterforms/i.test(r)) {
     return "REFUSED_NO_TEXT";
+  }
+  if (scheduleDefinitionOnly) {
+    if (itemStatus === "error") return "AMBIGUOUS";
+    if (itemStatus === "resolved" && installedQty != null) {
+      return installedQty > 0 ? "MATCH" : "SCHEDULE_ONLY";
+    }
+    return "SCHEDULE_ONLY";
+  }
+  if (scheduledQty == null || /unparseable.*qty|qty.*unparseable/i.test(r)) {
+    return "AMBIGUOUS";
   }
   if (itemStatus === "resolved" && installedQty > 0 && scheduledQty > 0) {
     if (installedQty >= scheduledQty) return "MATCH";
@@ -106,9 +122,12 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
  * `schedule_row` (`{ header: string }`, flat text, no bbox) — a cell entry is
  * read as `cell.text` when it's an object, else as the entry itself.
  * @param {{ cells?: Record<string, { text?: string } | string> }} row
- * @returns {{ qty: number, refused: boolean, reason: string|null }}
+ * @param {{ typeDefinition?: boolean }} [opts]
+ * @returns {{ qty: number|null, refused: boolean, reason: string|null,
+ *   basis: "printed_schedule_quantity"|"one_per_unique_schedule_row"|"unparseable_printed_quantity"|"type_definition_not_quantity",
+ *   source_header: string|null, source_text: string|null }}
  */
-export function scheduledQtyStatusFromRow(row) {
+export function scheduledQtyStatusFromRow(row, opts = {}) {
   for (const [header, cell] of Object.entries(row?.cells || {})) {
     // The trailing period is a real drafting spelling, not a typo — this
     // pattern already admits "NO." for exactly that reason, and "QTY." was
@@ -119,12 +138,48 @@ export function scheduledQtyStatusFromRow(row) {
     if (!/^(QTY|QUANTITY|COUNT|NO|#)\.?$/i.test(String(header || "").trim())) continue;
     const text = cell && typeof cell === "object" ? cell.text : cell;
     const raw = String(text || "").trim();
-    if (!raw) continue; // blank cell under a QTY header — no printed value to refuse on
-    const n = parseInt(raw, 10);
-    if (Number.isFinite(n) && n > 0) return { qty: n, refused: false, reason: null };
-    return { qty: 1, refused: true, reason: `QTY column present but unparseable ("${raw}")` };
+    // A QTY column with an empty or polluted cell is materially different
+    // from a schedule with no QTY column. Refuse instead of silently treating
+    // the physical row as one unit.
+    if (/^[1-9]\d*$/.test(raw)) return {
+      qty: Number(raw),
+      refused: false,
+      reason: null,
+      basis: "printed_schedule_quantity",
+      source_header: String(header).trim(),
+      source_text: raw,
+    };
+    return {
+      // Legacy numeric callers retain one-row cardinality, while `refused`
+      // prevents this fallback from being presented as a scheduled quantity.
+      qty: 1,
+      refused: true,
+      reason: raw
+        ? `QTY column present but unparseable ("${raw}")`
+        : "QTY column present but blank",
+      basis: "unparseable_printed_quantity",
+      source_header: String(header).trim(),
+      source_text: raw || null,
+    };
   }
-  return { qty: 1, refused: false, reason: null };
+  if (opts.typeDefinition) {
+    return {
+      qty: null,
+      refused: false,
+      reason: null,
+      basis: "type_definition_not_quantity",
+      source_header: null,
+      source_text: null,
+    };
+  }
+  return {
+    qty: 1,
+    refused: false,
+    reason: null,
+    basis: "one_per_unique_schedule_row",
+    source_header: null,
+    source_text: null,
+  };
 }
 
 /**
@@ -139,12 +194,18 @@ export function scheduledQtyFromRow(row) {
   return scheduledQtyStatusFromRow(row).qty;
 }
 
-function rowIdentityTag(row, identityHeaderRe = null) {
+/**
+ * Resolve the row's own device identity while retaining row.key as a legacy
+ * lookup alias. A qualified device column such as VALVE MARK outranks the
+ * served-equipment cross-reference in UNIT MARK.
+ * @param {object} row
+ * @param {RegExp|null} [identityHeaderRe]
+ * @returns {string|null}
+ */
+export function rowIdentityTag(row, identityHeaderRe = null) {
   // Return RAW mark text — normalizeEquipMark runs AFTER comma/slash split
   // (parity with compile uniqueFamily). Normalizing "AHU-1, HP-1" first would
   // strip to "AHU-1" and drop the outdoor HP half.
-  const id = row?.identity?.text || row?.identity?.key;
-  if (id) return String(id).trim();
   // Family-specific identity (e.g. VALVE MARK on HHW/CHW control-valve
   // schedules) must beat UNIT MARK / row.key — Object.entries order would
   // otherwise return the served equipment and inflate reconcile vs compile.
@@ -162,6 +223,8 @@ function rowIdentityTag(row, identityHeaderRe = null) {
       if (t) return t;
     }
   }
+  const id = row?.identity?.text || row?.identity?.key;
+  if (id) return String(id).trim();
   // Prefer MARK / EQUIP.TAG — bare TAG is often a grille type code on mixed sheets.
   for (const [header, cell] of Object.entries(row?.cells || {})) {
     if (/^(MARK|SYMBOL|UNIT MARK|EQUIP|DESIGNATION|UNIT NO|EQUIP NO|UNIT TAG|EQUIP\.?\s*TAG|ITEM NO)$/i.test(String(header || "").trim())) {
@@ -224,34 +287,62 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
     // real schedule row — read its printed QTY cell exactly like the compile
     // path does; a synthesized/legend-only item with no backing row still
     // defaults to 1 (one row = one unit), unchanged.
-    const scheduledQty = item.schedule_row ? scheduledQtyFromRow({ cells: item.schedule_row }) : 1;
-    const installedQty = item.status === "resolved" ? (item.quantity ?? 0) : 0;
+    const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(item.schedule?.title || "");
+    const qtyStatus = item.schedule_row
+      ? scheduledQtyStatusFromRow({ cells: item.schedule_row }, { typeDefinition: scheduleDefinitionOnly })
+      : scheduledQtyStatusFromRow({ cells: {} });
+    const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
+    // A refused/error sweep proves only that installed quantity could not be
+    // verified.  It does not prove zero devices exist on the plans.  Keep the
+    // quantity unknown so UI, MCP, Agent evidence, and CSV never turn a
+    // coverage gap into a confident zero.
+    const installedQty = item.status === "resolved" ? (item.quantity ?? 0) : null;
     const fail = failByTag.get(item.tag);
     const status = classifyReconcileStatus({
       scheduledQty,
       installedQty,
       itemStatus: item.status,
       failureType: fail?.type,
-      reason: item.reason || fail?.detail,
+      reason: qtyStatus.reason || item.reason || fail?.detail,
+      scheduleDefinitionOnly,
     });
     return {
+      row_id: `${item.schedule?.sheet || "(none)"}::${item.tag}`,
       tag: item.tag,
       family: item.equipment_type || item.category || null,
       scheduled_qty: scheduledQty,
+      scheduled_qty_basis: qtyStatus.basis,
+      scheduled_qty_source_header: qtyStatus.source_header,
+      scheduled_qty_source_text: qtyStatus.source_text,
       installed_qty: installedQty,
+      placement_count: item.status === "resolved" ? (item.placement_count ?? null) : null,
+      observed_plan_qty: item.plan_search_complete === false ? (item.quantity ?? null) : installedQty,
+      installed_qty_basis: item.quantity_basis ?? null,
+      search_scope: item.search_scope ?? null,
+      unlabeled_audit_complete: item.unlabeled_audit_complete ?? null,
+      plan_search_complete: item.plan_search_complete ?? null,
       status,
+      quantity_comparison: scheduleDefinitionOnly
+        ? "type_definition_vs_plan_count"
+        : "scheduled_vs_installed",
       schedule_cite: item.schedule
         ? {
             sheet: item.schedule.sheet,
             title: item.schedule.title,
             kind: item.schedule.kind,
+            ...(item.schedule.drawing_group ? { drawing_group: item.schedule.drawing_group } : {}),
           }
         : null,
       plan_cites: (item.drawing_locations || []).map((loc) => ({
         sheet: loc.sheet,
         at: loc.at,
+        ...(loc.bbox ? { bbox: loc.bbox } : {}),
+        ...(Number.isFinite(loc.score) ? { score: loc.score } : {}),
       })),
-      reason: item.reason || fail?.detail || null,
+      reason: qtyStatus.reason || item.reason || fail?.detail
+        || (scheduleDefinitionOnly
+          ? "This schedule row defines a repeatable air-device type; it does not state project quantity. Installed quantity is grounded from plan callouts."
+          : null),
     };
   });
 }
@@ -291,7 +382,7 @@ export function summarizeReconcile(rows) {
  * @param {{ label?: string, title?: string, titleRe?: RegExp, exclude?: RegExp,
  *   keyRe?: RegExp, blankKeyRe?: RegExp, altTitleRe?: RegExp, altKeyRe?: RegExp,
  *   identityHeaderRe?: RegExp, titledOnly?: boolean }} needle
- * @param {Map<string, { installedQty?: number, itemStatus?: string, reason?: string, failureType?: string, planCites?: object[] }>} [sweepByTag]
+ * @param {Map<string, { installedQty?: number|null, itemStatus?: string, reason?: string, failureType?: string, planCites?: object[] }>} [sweepByTag]
  */
 export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map()) {
   const rows = [];
@@ -357,31 +448,54 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         // Parity with compile uniqueFamily — continuation / duplicate extracts
         // of the same MARK must not inflate reconcile rows (Douglas HP-20).
         const canon = String(tag).toUpperCase().replace(/\s+/g, "");
-        if (!canon || seen.has(canon)) continue;
-        seen.add(canon);
-        const scheduledQty = scheduledQtyFromRow(row);
-        const sweep = sweepByTag.get(tag) || {};
-        const installedQty = sweep.installedQty ?? 0;
+        const tableFamily = title.toUpperCase().replace(/[^A-Z0-9]/g, "") || table.kind || "(untitled)";
+        const rowId = `${table.sheet}::${canon}`;
+        const scopeIdentity = `${canon}\0${tableFamily}\0${table.drawing_group || "(unscoped)"}`;
+        if (!canon || seen.has(scopeIdentity)) continue;
+        seen.add(scopeIdentity);
+        const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(title);
+        const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly });
+        const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
+        const sweep = sweepByTag.get(rowId) || sweepByTag.get(tag) || {};
+        const installedQty = Number.isFinite(sweep.installedQty) ? sweep.installedQty : null;
         const status = classifyReconcileStatus({
           scheduledQty,
           installedQty,
           itemStatus: sweep.itemStatus,
           failureType: sweep.failureType,
-          reason: sweep.reason,
+          reason: qtyStatus.reason || sweep.reason,
+          scheduleDefinitionOnly,
         });
         rows.push({
+          row_id: rowId,
           tag,
           family: needle?.label || null,
           scheduled_qty: scheduledQty,
+          scheduled_qty_basis: qtyStatus.basis,
+          scheduled_qty_source_header: qtyStatus.source_header,
+          scheduled_qty_source_text: qtyStatus.source_text,
           installed_qty: installedQty,
+          placement_count: Number.isFinite(sweep.placementCount) ? sweep.placementCount : null,
+          observed_plan_qty: Number.isFinite(sweep.observedPlanQty) ? sweep.observedPlanQty : installedQty,
+          installed_qty_basis: sweep.installedQtyBasis || null,
+          search_scope: sweep.searchScope || null,
+          unlabeled_audit_complete: typeof sweep.unlabeledAuditComplete === "boolean" ? sweep.unlabeledAuditComplete : null,
+          plan_search_complete: typeof sweep.planSearchComplete === "boolean" ? sweep.planSearchComplete : null,
           status,
+          quantity_comparison: scheduleDefinitionOnly
+            ? "type_definition_vs_plan_count"
+            : "scheduled_vs_installed",
           schedule_cite: {
             sheet: table.sheet,
             title: table.title?.text || null,
             kind: table.kind,
+            ...(table.drawing_group ? { drawing_group: table.drawing_group } : {}),
           },
           plan_cites: sweep.planCites || [],
-          reason: sweep.reason || null,
+          reason: qtyStatus.reason || sweep.reason
+            || (scheduleDefinitionOnly
+              ? "This schedule row defines a repeatable air-device type; it does not state project quantity. Installed quantity is grounded from plan callouts."
+              : null),
         });
       }
     }
@@ -435,7 +549,7 @@ export function familyNeedleFromSpecs(specs, family) {
  * @param {object} session Session with sweepScheduleRow(tag, opts)
  * @param {object} graph
  * @param {object} needle schedule family needle (titleRe, exclude, label)
- * @param {{ tags?: string[], evaluationFast?: boolean, sweepAll?: boolean }} [opts]
+ * @param {{ tags?: string[], evaluationFast?: boolean, sweepAll?: boolean, onProgress?: Function }} [opts]
  */
 export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, opts = {}) {
   const scaffold = reconcileScheduleFamilyFromGraph(graph, needle, new Map());
@@ -444,9 +558,13 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
     : null;
   const sweepAll = opts.sweepAll === true || (!tagFilter && opts.sweepAll !== false);
   const sweepByTag = new Map();
+  const total = scaffold.filter((row) => tagFilter ? tagFilter.has(row.tag.toUpperCase()) : sweepAll).length;
+  let processed = 0;
   for (const row of scaffold) {
     const shouldSweep = tagFilter ? tagFilter.has(row.tag.toUpperCase()) : sweepAll;
     if (!shouldSweep) continue;
+    const started = performance.now();
+    opts.onProgress?.({ phase: "reconcile_row", state: "start", tag: row.tag, processed, total });
     try {
       const r = await session.sweepScheduleRow(row.tag, {
         commit: false,
@@ -456,20 +574,41 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
         preferSheet: row.schedule_cite?.sheet ?? null,
         preferTitle: row.schedule_cite?.title ?? null,
       });
-      sweepByTag.set(row.tag, {
-        installedQty: r.found ?? 0,
-        itemStatus: "resolved",
+      sweepByTag.set(row.row_id || row.tag, {
+        installedQty: r.complete === false ? null : (r.found ?? 0),
+        placementCount: (r.sheets || []).reduce((sum, sheet) => sum + (sheet.matches || []).length, 0),
+        observedPlanQty: r.found ?? 0,
+        installedQtyBasis: r.anchor?.grounding_basis || "symbol_fingerprint",
+        searchScope: r.search_scope || null,
+        unlabeledAuditComplete: r.unlabeled_audit_complete ?? null,
+        planSearchComplete: r.complete !== false,
+        itemStatus: r.complete === false ? "refused" : "resolved",
+        failureType: r.complete === false ? "INCOMPLETE_PLAN_SEARCH" : null,
+        reason: r.complete === false
+          ? `Plan search incomplete: ${r.found ?? 0} grounded placement(s) observed, but at least one sheet hit its candidate work cap. The observed count is a floor, not an installed total.`
+          : null,
         planCites: (r.sheets || []).flatMap((ps) =>
-          (ps.matches || []).map((m) => ({ sheet: ps.sheet, at: m.at })),
+          (ps.matches || []).flatMap((m) => Array.from({ length: m.multiplier ?? 1 }, () => ({
+            sheet: ps.sheet,
+            at: m.at,
+            ...(m.tag_at ? { bbox: m.tag_at } : {}),
+            ...(Number.isFinite(m.score) ? { score: m.score } : {}),
+          }))),
         ),
       });
     } catch (e) {
-      sweepByTag.set(row.tag, {
-        installedQty: 0,
+      sweepByTag.set(row.row_id || row.tag, {
+        installedQty: null,
         itemStatus: "refused",
         reason: e?.message || String(e),
       });
     }
+    processed++;
+    opts.onProgress?.({
+      phase: "reconcile_row", state: "done", tag: row.tag, processed, total,
+      elapsed_ms: Math.round(performance.now() - started),
+      status: sweepByTag.get(row.row_id || row.tag)?.itemStatus,
+    });
   }
   const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag);
   return {
@@ -484,12 +623,21 @@ export const RECONCILE_CSV_HEADERS = [
   "Tag",
   "Family",
   "Scheduled qty",
+  "Scheduled qty basis",
   "Installed qty",
+  "Observed plan qty",
+  "Installed qty basis",
+  "Search scope",
+  "Unlabeled audit complete",
+  "Plan search complete",
   "Status",
   "Schedule sheet",
   "Schedule title",
   "Plan sheet(s)",
   "Notes",
+  "Schedule drawing group",
+  "Quantity comparison",
+  "Grounded placements",
 ];
 
 /**
@@ -504,12 +652,21 @@ export function reconcileRowsToCsv(rows) {
       row.tag,
       row.family || "",
       row.scheduled_qty,
+      row.scheduled_qty_basis || "",
       row.installed_qty,
+      row.observed_plan_qty,
+      row.installed_qty_basis || "",
+      row.search_scope || "",
+      row.unlabeled_audit_complete,
+      row.plan_search_complete,
       row.status,
       row.schedule_cite?.sheet || "",
       row.schedule_cite?.title || "",
       planSheets,
       (row.reason || "").replace(/"/g, '""'),
+      row.schedule_cite?.drawing_group || "",
+      row.quantity_comparison || "",
+      row.placement_count,
     ].map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","));
   }
   return `${lines.join("\n")}\n`;

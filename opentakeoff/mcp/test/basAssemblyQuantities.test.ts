@@ -42,7 +42,7 @@ test('equipment evidence excludes titled and header-inferred BAS point matrices'
   const inferredPoints = { ...common, title: null, headers: ['POINT', 'DESCRIPTION', 'AI', 'AO'],
     rows: [{ key: '1', sheet: 'controlled.pdf', cells: {} }] };
   const unrelated = ['DUCT CONSTRUCTION AND LEAKAGE SCHEDULE', 'LUMINAIRE SCHEDULE',
-    'EXISTING PANEL LP1 SCHEDULE'].map(text => ({ ...common,
+    'EXISTING PANEL LP1 SCHEDULE', 'PLUMBING FIXTURE SCHEDULE'].map(text => ({ ...common,
       title: { sheet: 'controlled.pdf', text, bbox: box }, headers: ['TAG'], rows: [] }));
   const captured = captureBasEquipmentTables([equipment, titledPoints, inferredPoints, ...unrelated]);
   assert.deepEqual(captured.tables.map(table => table.title?.text), ['AIR HANDLING UNIT SCHEDULE']);

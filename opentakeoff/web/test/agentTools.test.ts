@@ -78,6 +78,115 @@ test("deterministic BAS workflow tools delegate inspection and open only the req
   assert.match((await executeAgentTool(makeCtx().ctx, 'inspect_bas_workflow', { domain: 'point_soo' })).error, /not wired/);
 });
 
+test("run_complete_bas_takeoff executes every production stage in fixed order and stays review-required", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    compileCorpusTakeoff: async (kind: string, opts: unknown) => {
+      calls.push(["compile", kind, opts]);
+      return { kind, takeoff_id: `T-${kind}`, totals: { items: 1 }, exclusions: [] };
+    },
+    analyzeControlSchematics: async () => {
+      calls.push(["analyze", "control_schematics_and_risers"]);
+      return {
+        schema_version: "opentakeoff.control_schematic.v1",
+        schematics: [], risers: [],
+        totals: { schematics: 0, riser_diagrams: 0, explicit_points: 0, instruments_unmapped: 0, unresolved_crossings: 0 },
+        exclusions: [],
+      };
+    },
+    reconcileSchedulePlan: async (opts: unknown) => {
+      calls.push(["reconcile", opts]);
+      return {
+        summary: { total: 2, match: 1, schedule_only: 1 },
+        rows: [
+          { tag: "AHU-1", family: "AHU", scheduled_qty: 1, installed_qty: 1, status: "MATCH", plan_cites: [] },
+          { tag: "VAV-2", family: "VAV", scheduled_qty: 1, installed_qty: 0, status: "SCHEDULE_ONLY", reason: "not drawn", plan_cites: [] },
+        ],
+      };
+    },
+    inspectBasWorkflow: async (domain: string) => {
+      calls.push(["inspect", domain]);
+      return { domain, status: "not_started", blocker_count: 3, next_step: "estimator review", installed_quantity: null };
+    },
+    openBasWorkspace: (destination: string) => {
+      calls.push(["open", destination]);
+      return { opened: true, destination };
+    },
+  });
+  const out = await executeAgentTool(ctx, "run_complete_bas_takeoff", {});
+  assert.equal(out.execution_status, "completed");
+  assert.equal(out.release_status, "human_review_required");
+  assert.equal(out.human_review_required, true);
+  assert.deepEqual(out.compile_order, [
+    "hvac_equipment", "bas_points", "sequences", "control_valves", "embedded_coil_gaps",
+  ]);
+  assert.deepEqual(
+    calls.filter((call) => (call as unknown[])[0] === "compile").map((call) => (call as unknown[])[1]),
+    out.compile_order,
+  );
+  assert.deepEqual(out.analysis_order, ["control_schematics_and_risers", "schedule_plan_reconcile"]);
+  assert.deepEqual(calls.find((call) => (call as unknown[])[0] === "analyze"), ["analyze", "control_schematics_and_risers"]);
+  assert.equal(out.control_schematics.schema_version, "opentakeoff.control_schematic.v1");
+  assert.equal(out.reconcile.row_count, 2);
+  assert.equal(out.reconcile.exception_samples.length, 1);
+  assert.deepEqual(calls.find((call) => (call as unknown[])[0] === "reconcile"), [
+    "reconcile",
+    {
+      download: false,
+      categories: ["major_equipment", "air_terminal", "valve", "actuator", "damper", "sensor", "control_component"],
+      evaluationFast: true,
+    },
+  ]);
+  assert.equal(Object.keys(out.inspections).length, 5);
+  assert.deepEqual(calls.at(-1), ["open", "review_revisions_release"]);
+  assert.equal(out.bas_math_policy, "not_supplied_unresolved_preserved");
+  assert.equal(out.stages.hvac_equipment.status, "complete");
+  assert.equal(out.stages.control_schematics_and_risers.status, "partial");
+  assert.equal(out.stages.schedule_plan_reconcile.status, "partial");
+  assert.equal(out.stages.point_soo.status, "partial");
+  assert.equal(out.stages.point_soo.workflow_status, "not_started");
+  assert.equal(out.stages.point_soo.blocker_count, 3);
+  assert.ok(["point_soo", "equipment_templates", "assemblies_responsibility", "engineering_compatibility", "review_revisions_release"]
+    .every((domain) => out.stages[domain].status !== "complete"));
+});
+
+test("run_complete_bas_takeoff preserves independent evidence after one shared compile fails", async () => {
+  const attempted: string[] = [];
+  const later: string[] = [];
+  const { ctx } = makeCtx({
+    compileCorpusTakeoff: async (kind: string) => {
+      attempted.push(kind);
+      return kind === "sequences" ? { error: "index unavailable" } : { kind, takeoff_id: kind };
+    },
+    analyzeControlSchematics: async () => {
+      later.push("analyze");
+      return { schematics: [], risers: [], engineering_readiness: { status: "coverage_not_established" } };
+    },
+    reconcileSchedulePlan: async () => {
+      later.push("reconcile");
+      return { summary: { total: 0 }, rows: [] };
+    },
+    inspectBasWorkflow: async (domain: string) => {
+      later.push(domain);
+      return { domain, status: "current_with_open_findings" };
+    },
+    openBasWorkspace: () => {
+      later.push("workspace");
+      return { opened: true };
+    },
+  });
+  const out = await executeAgentTool(ctx, "run_complete_bas_takeoff", {});
+  assert.equal(out.execution_status, "partial");
+  assert.deepEqual(attempted, ["hvac_equipment", "bas_points", "sequences", "control_valves", "embedded_coil_gaps"]);
+  assert.equal(out.stages.sequences.status, "failed");
+  assert.equal(out.failures.length, 1);
+  assert.equal(out.failures[0].stage, "sequences");
+  assert.equal(out.stages.review_revisions_release.status, "partial");
+  assert.deepEqual(later, ["analyze", "reconcile", ...[
+    "point_soo", "equipment_templates", "assemblies_responsibility", "engineering_compatibility", "review_revisions_release",
+  ], "workspace"]);
+});
+
 test("query_table delegates whole-set cited cell filters", async () => {
   const { ctx } = makeCtx();
   const out = await executeAgentTool(ctx, "query_table", {
@@ -294,6 +403,32 @@ test("a capability throw becomes an error result (the loop must never crash)", a
   const { ctx } = makeCtx({ readSheetText: async () => { throw new Error("text layer exploded"); } });
   const out = await executeAgentTool(ctx, "read_sheet_text", { sheet: "plan.pdf" });
   assert.match(out.error, /read_sheet_text failed: text layer exploded/);
+});
+
+test("symbol_sweep forwards set scope, whole-symbol variant guard, and default affine policy", async () => {
+  const symbolDef = AGENT_TOOL_DEFS.find((d) => d.name === "symbol_sweep")!;
+  const oneClickDef = AGENT_TOOL_DEFS.find((d) => d.name === "one_click")!;
+  assert.deepEqual(symbolDef.input_schema.properties.scope?.enum, ["sheet", "set"]);
+  assert.equal(oneClickDef.input_schema.properties.scope, undefined,
+    "set-wide symbol scope must not leak onto the room flood tool");
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    symbolSweep: async (sheet: string, rect: unknown, opts: unknown) => {
+      calls.push([sheet, rect, opts]);
+      return { matches: [], withheld: [], complete: true };
+    },
+  });
+  const out = await executeAgentTool(ctx, "symbol_sweep", {
+    sheet: "plan.pdf",
+    seed_rect_norm: { x0: 0.1, y0: 0.2, x1: 0.3, y1: 0.4 },
+    scope: "set",
+    variant_guard: true,
+  });
+  assert.equal(out.complete, true);
+  const opts = (calls[0] as unknown[])[2] as Record<string, unknown>;
+  assert.equal(opts.variantGuard, true);
+  assert.equal(opts.scope, "set");
+  assert.equal((opts.affine as { enabled: boolean }).enabled, true);
 });
 
 // match_reference_symbol (accuracy-hardening plan Phase 0) — executeAgentTool's

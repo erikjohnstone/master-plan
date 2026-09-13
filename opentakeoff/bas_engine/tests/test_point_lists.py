@@ -206,6 +206,20 @@ def test_alias_rename_and_table_input_order_do_not_change_source_identities():
     assert original == review_point_lists(PointListInput.model_validate(real_input()))
 
 
+def test_point_rows_preserve_the_indexed_source_order_when_bbox_order_differs():
+    raw = real_input()
+    table = next(t for t in raw["tables"] if t["sheet"].endswith("#3"))
+    start = 1 if table["rows"] and any(
+        cell.get("text", "").strip().upper() == "POINT NAME"
+        for cell in table["rows"][0]["cells"].values()) else 0
+    assert len(table["rows"]) - start >= 2
+    table["rows"][start], table["rows"][start + 1] = table["rows"][start + 1], table["rows"][start]
+    result = matrix(review_point_lists(PointListInput.model_validate(raw)), 3)
+    assert [row.raw.model_dump() for row in result.rows] == [
+        row.model_dump() for row in result.raw.rows[result.header_rows:]
+    ]
+
+
 def test_local_row_duplicates_remain_visible_not_added_to_a_quantity():
     raw = real_input()
     table = next(t for t in raw["tables"] if t["sheet"].endswith("#3"))

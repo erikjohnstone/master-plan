@@ -10,10 +10,25 @@
 import { test, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, sheetDrawingGroup, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+
+test("sheetDrawingGroup accepts authored project-area titles and rejects table captions/prose", () => {
+  const scoped: SheetSpans = {
+    key: "set.pdf#6", sheet_number: "MH101",
+    spans: [sp("AIR OPS - FIRST FLOOR MECHANICAL DUCTWORK PLAN - AREA A", 10, 10)],
+  };
+  assert.equal(sheetDrawingGroup(scoped)?.group, "AIR OPS");
+  assert.equal(sheetDrawingGroup({
+    key: "set.pdf#44", sheet_number: "M-603",
+    spans: [sp("AIR OPS - MECHANICAL SCHEDULES", 10, 10)],
+  })?.group, "AIR OPS");
+  assert.equal(sheetDrawingGroup({
+    key: "set.pdf#1", spans: [sp("SUPPLY FAN SCHEDULE", 10, 10), sp("REFER TO MECHANICAL PLAN", 10, 30)],
+  }), null);
+});
 
 test("preferLastOverprintedText keeps the later visible CAD value", () => {
   const spans: GraphSpan[] = [

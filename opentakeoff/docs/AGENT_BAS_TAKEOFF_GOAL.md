@@ -141,7 +141,74 @@ drawing or that plan evidence proves physical/as-built installation.
 - UI and packaged MCP execute the same takeoff operations and return parity on
   quantities, statuses, citations, and refusals.
 
-## Phase 4 — production verification
+## Phase 4 — autonomous schematic, control-flow, and riser extraction
+
+This frontier is topological, not metric. It must not reuse floor-plan scale,
+distance, or unconstrained planar symbol-count assumptions as a substitute for
+connectivity. It is implemented on the shared graph path so Agent UI and MCP
+cannot disagree about devices, connections, flow, or counts.
+
+**Principal-engineer acceptance bar.** A detected title, a bag of labels, or an
+untyped vector graph is not an understood diagram. The production takeoff path
+may describe a schematic/riser as understood only when it can reconstruct, with
+per-claim evidence, the system and medium; equipment, ports, inline and tethered
+devices; branch/junction/crossing semantics; authored flow direction; floor and
+off-page continuation; normal/fail/control state where printed; and the
+applicable schedule, points-list, and sequence requirements. It must explain
+what each reconciled component does in this authored system and surface design
+conflicts the way a principal mechanical/BAS engineer would, while preserving
+unknowns wherever the documents do not prove an answer. Generic engineering
+expectations may identify a review question but may never become project truth
+without cited project evidence.
+
+- Research and declare the supported diagram grammar before implementation:
+  duct/pipe/process media, solid/dashed/signal line styles, arrows, junctions,
+  crossings without connection, off-page connectors, equipment envelopes,
+  instrument bubbles, inline devices, callouts, floor datums, and risers.
+  Standards-derived mappings are versioned and cited; project legends and
+  explicit drawing annotations override generic conventions.
+- Construct an evidence-preserving multilayer graph from native PDF vectors and
+  text. Nodes represent equipment ports, devices, instruments, junctions,
+  connectors, and floor crossings; edges retain medium, line style, direction,
+  page/bbox/vector provenance, and confidence. Ambiguous crossings or arrowless
+  segments remain unresolved rather than receiving invented direction.
+- Recover equipment envelopes and ordered flow paths only when supported by
+  connected geometry, arrow evidence, labels, and port adjacency. Report
+  branches, bypasses, parallel trains, recirculation loops, and disconnected
+  fragments without forcing them into a single linear chain.
+- Detect circular, hexagonal, and project-specific instrument/tag containers,
+  plus tethered and inline control devices. Parse their authored tokens, bind
+  them to the project legend or a cited maintained mapping, and infer AI/AO/DI/DO
+  only when signal type, controlled device behavior, or explicit point-list/SOO
+  evidence supports it. A mnemonic such as `D`, `M`, `V`, or `DP` alone is not
+  sufficient to invent I/O type or modulation.
+- Bind schematic titles, equipment tags, typical/template applicability, and
+  explicit references to schedule rows and SOO sections. Reconcile coil/device/
+  instrument capabilities in both directions and emit cited missing, extra,
+  ambiguous, and conflicting-scope findings.
+- Detect named floor datum lines and trace vertical risers across them, including
+  off-page continuation. Count isolation/balance/control valves, meters,
+  sensors, and other inline/tethered devices only from one-to-one cited graph
+  instances; distinguish a repeated typical diagram from installed multiplicity.
+- Keep topology separate from floor-plan installed-quantity evidence. A device
+  shown in a schematic proves design intent and connectivity, not automatically
+  one installed plan instance. Reconciliation exposes both operands and the
+  rule or reviewed multiplier connecting them.
+- Add authored ground truth for complete graphs, edge direction, connectivity,
+  crossings, instrument tokens/classes, equipment binding, floor assignment,
+  per-device counts, conflicts, and unresolveds. Include dense negatives,
+  arrowless diagrams, dashed-line ambiguity, repeated typicals, multi-page
+  continuations, and project-specific legends.
+- Gate adoption on exact per-instance citation/localization plus graph metrics,
+  not count alone: node/device precision and recall, edge precision and recall,
+  direction accuracy, connected-component integrity, schedule/SOO binding
+  accuracy, floor attribution, engineering-role/state accuracy, explanation
+  faithfulness, deterministic repeatability, runtime, and memory. The real-PDF
+  gate must include at least one air-system control schematic, one hydronic
+  piping/control diagram, one multi-floor mechanical riser, and one BAS network
+  riser from different projects; synthetic geometry is only a unit test.
+
+## Phase 5 — production verification
 
 - Unit and adversarial tests for symbol correspondence, quantity provenance,
   orchestration state, retries, malformed inputs, migrations, and exports.
@@ -174,7 +241,10 @@ This goal is complete only when:
    ceiling and required next technology are documented honestly;
 4. the real multi-page and holdout journeys pass their predeclared gates with
    no regression to VectorGrid or existing extraction behavior;
-5. the implementation, tests, method ledger, screenshots, and user walkthrough
+5. schematic/riser extraction meets its authored node, edge, direction,
+   binding, citation, and quantity gates on diverse real projects, while every
+   unsupported topology remains visibly unresolved;
+6. the implementation, tests, method ledger, screenshots, and user walkthrough
    are committed, pushed, reviewed through a green PR, and merged to `main`.
 
 “Perfect” means exact on the declared and independently reviewed production

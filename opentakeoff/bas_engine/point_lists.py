@@ -508,9 +508,13 @@ def review_point_lists(payload: PointListInput) -> PointListResult:
         local_keys = Counter(r.key for r in table.rows[start:])
         occurrences: Counter[str] = Counter()
         rows = []
-        for raw in sorted(table.rows[start:], key=lambda r: (
-                min((c.bbox[1] for c in r.cells.values() if c.bbox is not None), default=float("inf")),
-                r.key, digest(r.model_dump()))):
+        # `table.rows` is the indexed source order retained in `raw`.  Do not
+        # silently re-sort it by bbox: fragmented/merged vector tables can
+        # legitimately carry a non-monotonic y order, and the source-bound
+        # result must replay the exact matrix it cites.  Determinism comes from
+        # the owned input order; changing it here makes `rows` disagree with
+        # `raw.rows` and correctly fails the shared JS evidence contract.
+        for raw in table.rows[start:]:
             name = raw.cells[names[0]].text if len(names) == 1 and names[0] in raw.cells else ""
             row_issues = []
             if local_keys[raw.key] > 1:

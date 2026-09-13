@@ -22,6 +22,8 @@
 
 import { ROOM_LABEL_RE } from "./detectRooms";
 import { isEquipTag, joinGraphSpans } from "./equiptags";
+import type { ControlSchematicResult } from "./controlSchematic.ts";
+import { extractSequenceNarratives, type NarrativeSequenceBlock } from "./sequenceNarrative.ts";
 
 /** rot: text rotation in degrees, clockwise in device space (y down). Absent
  * or 0 = horizontal; 90/270 = a quarter-turn — the rotated-header case. When
@@ -331,6 +333,33 @@ export function sheetBuilding(sheet: SheetSpans): { building: string; evidence: 
   return { building, evidence: { sheet: sheet.key, text: span.str.trim(), bbox: bboxOf(span) } };
 }
 
+/**
+ * Project-local drawing group read from an authored sheet title. Multi-
+ * building/site sets commonly reuse short marks independently (CD-1 in AIR
+ * OPS, MTRACON, and ATCT), while never spelling those areas as `BUILDING X`.
+ * The group is accepted only from the explicit `name - ... MECHANICAL/HVAC
+ * ... PLAN|SCHEDULE|RISER|DIAGRAM|DETAIL|SECTION` title convention. A table
+ * caption such as `SUPPLY FAN SCHEDULE` and ordinary prose cannot qualify.
+ */
+export function sheetDrawingGroup(sheet: SheetSpans): { group: string; evidence: Evidence } | null {
+  const found = new Map<string, GraphSpan>();
+  for (const span of sheet.spans) {
+    const text = norm(span.str).replace(/\s+/g, " ").trim();
+    if (text.length < 8 || text.length > 140) continue;
+    const match = text.match(/^([A-Z0-9][A-Z0-9 &'/.]{1,38}?)\s+-\s+(.+)$/);
+    if (!match) continue;
+    const tail = match[2];
+    if (!/\b(?:MECHANICAL|HVAC|PLUMBING|CONTROLS?|DDC)\b/.test(tail)
+      || !/\b(?:PLAN|SCHEDULES?|RISER|DIAGRAM|DETAILS?|SECTIONS?)\b/.test(tail)) continue;
+    const group = match[1].replace(/\s+/g, " ").trim();
+    if (/^(?:GENERAL|TYPICAL|OVERALL|FIRST|SECOND|THIRD|ROOF|BASEMENT)$/.test(group)) continue;
+    if (!found.has(group)) found.set(group, span);
+  }
+  if (found.size !== 1) return null;
+  const [group, span] = [...found.entries()][0];
+  return { group, evidence: { sheet: sheet.key, text: span.str.trim(), bbox: bboxOf(span) } };
+}
+
 // ── revision markers (#87 phase 3) ──────────────────────────────────────────
 // A delta triangle ("Δ2", "2▲") or a REV tag ("REV 2") is drafting's flag that
 // the ink nearby CHANGED under a revision — the printed value is the current
@@ -518,6 +547,10 @@ export interface ScheduleTable {
   /** Building context the whole table answers for (its title's "BUILDING X",
    * else the sheet's), when one exists. Row-level qualifiers override it. */
   building?: string;
+  /** Explicit project/site area from the sheet title (for example AIR OPS),
+   * used only when the same short mark is independently defined in multiple
+   * named drawing groups. */
+  drawing_group?: string;
   /** True when the header row was read at a quarter-turn (rotated headers). */
   rotated_headers?: boolean;
   /** Present when the table continues across sheets: every fragment,
@@ -8042,7 +8075,7 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
 
 // ── the graph ───────────────────────────────────────────────────────────────
 export interface SheetGraphSchedule { kind: TableKind; title: string; rows: number; region: Bbox; continues?: string; rotated_headers?: boolean }
-export interface SheetGraphSheet { key: string; role: SheetRole; confidence: number; evidence: Evidence | null; building?: string; schedules: SheetGraphSchedule[] }
+export interface SheetGraphSheet { key: string; role: SheetRole; confidence: number; evidence: Evidence | null; building?: string; drawing_group?: string; schedules: SheetGraphSchedule[] }
 /** L3.5 topology summary per plan sheet (shared vector pipeline). */
 export interface SheetTopologySummary {
   nodes: number;
@@ -8125,6 +8158,13 @@ export interface SheetGraph {
   callouts: DetailCallout[];
   buildings: string[];                // every building designator the set names, sorted
   revisions: RevisionMarker[];        // every delta/REV marker the set carries — the sheet is under revision where these sit
+  /** Free-form authored SOO blocks retained from positioned spans. Separate
+   * from tables so adding narrative coverage cannot change VectorGrid/table
+   * selection, cell geometry, or bbox contracts. */
+  sequence_narratives?: NarrativeSequenceBlock[];
+  /** Additive control-diagram/riser evidence. It is built after table
+   * reconciliation and never participates in VectorGrid/table selection. */
+  control_schematics?: ControlSchematicResult;
   notes: string[];                    // named gaps found while building — never silent drops
   /** L3.5 MEP connectivity graph summaries keyed by sheet. */
   vector_topology?: Record<string, SheetTopologySummary>;
@@ -8136,6 +8176,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const withText = sheets.filter((s) => s.spans.length > 0);
   if (!withText.length) return { available: false, sheets: [], rooms: [], unmatched_tags: [], tables: [], callouts: [], buildings: [], revisions: [], notes: [] };
   const notes: string[] = [];
+  const sequenceNarratives = extractSequenceNarratives(withText);
 
   // revision markers, set-wide — where these sit, the current answer is the
   // POST-revision answer and the consumer should know the ink changed. Two
@@ -8160,11 +8201,14 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   // pass 0 — building vocabulary from TEXT (sheet titles, table titles): the
   // gate for qualified row keys, known before any extraction
   const ctxBySheet = new Map<string, string>();
+  const drawingGroupBySheet = new Map<string, string>();
   const buildings = new Set<string>();
   for (const s of withText) {
     for (const sp of s.spans) for (const b of buildingMentions(sp.str)) buildings.add(b);
     const ctx = sheetBuilding(s);
     if (ctx) ctxBySheet.set(s.key, ctx.building);
+    const drawingGroup = sheetDrawingGroup(s);
+    if (drawingGroup) drawingGroupBySheet.set(s.key, drawingGroup.group);
   }
 
   // pass 1 — roles + per-sheet table fragments
@@ -8809,6 +8853,15 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   }
 
   // compose the per-sheet view from the LOGICAL tables' parts
+  // Apply after continuation reconciliation so every final logical table,
+  // including one recovered/rebuilt by a later extractor, carries its source
+  // sheet's authored scope. A continuation spanning conflicting named groups
+  // is left unscoped; silently choosing either would cross-contaminate marks.
+  for (const table of tables) {
+    const partSheets = table.parts?.map((part) => part.sheet) ?? [table.sheet];
+    const groups = [...new Set(partSheets.map((sheet) => drawingGroupBySheet.get(sheet)).filter((group): group is string => !!group))];
+    if (groups.length === 1) table.drawing_group = groups[0];
+  }
   const outSheets: SheetGraphSheet[] = withText.map((s) => {
     const role = roles.get(s.key)!;
     const schedules: SheetGraphSchedule[] = [];
@@ -8827,10 +8880,23 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     const entry: SheetGraphSheet = { key: s.key, role: role.role, confidence: role.confidence, evidence: role.evidence, schedules };
     const b = ctxBySheet.get(s.key);
     if (b) entry.building = b;
+    const drawingGroup = drawingGroupBySheet.get(s.key);
+    if (drawingGroup) entry.drawing_group = drawingGroup;
     return entry;
   });
 
-  return { available: true, sheets: outSheets, rooms, unmatched_tags: unmatched, tables, callouts, buildings: [...buildings].sort(), revisions, notes };
+  return {
+    available: true,
+    sheets: outSheets,
+    rooms,
+    unmatched_tags: unmatched,
+    tables,
+    callouts,
+    buildings: [...buildings].sort(),
+    revisions,
+    sequence_narratives: sequenceNarratives,
+    notes,
+  };
 }
 
 // ── resolution ──────────────────────────────────────────────────────────────

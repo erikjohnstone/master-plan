@@ -23,7 +23,7 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, controlSchematicOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
@@ -760,6 +760,12 @@ No approval, installed count or complete requirement discovery. Changes stay in 
     return result;
   }));
 
+  server.registerTool("analyze_control_schematics", {
+    description: `Extract the loaded set's vector control schematics and riser/flow diagrams through the shared Session graph. Returns each diagram's exact title/region evidence, explicitly printed AI/AO/DI/DO tokens, unmapped instrument labels, equipment-to-schedule references, conservative line topology, authored floor datums, and vertical riser traces. Interior X crossings stay disconnected unless drawn junction geometry supports a connection; direction stays unknown unless a vector arrowhead supports it. Schematic occurrences are NEVER installed-plan quantity. Every result is review-required and source-cited in image pixels. ${COORDS}`,
+    inputSchema: {},
+    outputSchema: controlSchematicOutput,
+  }, run("analyze_control_schematics", () => session.controlSchematics()));
+
   server.registerTool("project_takeoff", {
     description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. Default detail is "compact" (stats + per-item tag/type/qty/status/schedule sheet + failures + tables_seen) so agent context stays usable on large sets; pass detail:"full" only when you need every schedule_row cell dump and extracted_tables. Installed counts come only from corroborated plan labels/geometry; structurally unavailable evidence returns a typed refusal. For pure schedule MARK counts by family, prefer query_table on the titled equipment schedules — do not invent extra units from vibration-isolation or other cross-reference tables. Load every file in the bid set first with load_plan + merge:true. Read-only; does not commit canvas shapes. ${COORDS}`,
     inputSchema: {
@@ -905,7 +911,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
   }));
 
   server.registerTool("reconcile_schedule_plan", {
-    description: `Reconcile scheduled equipment tags to plan drawings — contractor-grade table with Tag, Family, Scheduled qty, Installed qty, Status (MATCH | SCHEDULE_ONLY | PLAN_ONLY | REFUSED_NO_SCALE | REFUSED_NO_TEXT | AMBIGUOUS), schedule cite, and plan cite(s). Walks every equipment schedule row through sweep_schedule_row on the shared Session path — never invents plan locations. Optional family filter (e.g. "VAV", "FCU", "AHU") scopes to one schedule family. Pass path to write JSON; export_path writes reconcile.csv. Read-only; does not commit canvas shapes. ${COORDS}`,
+    description: `Reconcile scheduled equipment tags to plan drawings — contractor-grade table with Tag, Family, Scheduled qty, Installed qty, Status (MATCH | SCHEDULE_ONLY | PLAN_ONLY | REFUSED_NO_SCALE | REFUSED_NO_TEXT | AMBIGUOUS), schedule cite, and plan cite(s). A repeatable grille/register/diffuser row with no printed QTY is explicitly a type definition, not a fake scheduled quantity of 1; its MATCH means the definition was grounded to plan callouts and quantity_comparison says type_definition_vs_plan_count. Independently reused marks are scoped by authored drawing-group titles (building/site/area), never tag-prefix guesses. Walks every equipment schedule row through sweep_schedule_row on the shared Session path — never invents plan locations. Optional family filter (e.g. "VAV", "FCU", "AHU") scopes to one schedule family. Pass path to write JSON; export_path writes reconcile.csv. Read-only; does not commit canvas shapes. ${COORDS}`,
     inputSchema: {
       family: z.string().optional().describe('Optional family scope: VAV, FCU, AHU, pump, etc.'),
       categories: z.array(z.string()).optional().describe("Optional hvacTaxonomy category filter"),

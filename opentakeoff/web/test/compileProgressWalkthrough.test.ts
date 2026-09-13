@@ -66,3 +66,38 @@ test("Agent panel progress entries stay in the visible walkthrough list", async 
   assert.equal(progress.length, 2);
   assert.match(progress[0].text, /Loading/);
 });
+
+test("production reconcile emits graph-ready and row-level progress on the real shared CLI path", async (t) => {
+  if (!existsSync(PDF)) {
+    t.skip("fixture PDF missing");
+    return;
+  }
+  const tsx = resolveTsxLoader();
+  const child = spawn(process.execPath, [
+    "--import", pathToFileURL(tsx).href,
+    CLI,
+    "--mode", "reconcile",
+    "--evaluation-fast",
+    "--categories", "major_equipment,air_terminal,valve,actuator,damper,sensor,control_component",
+    "--pdf", PDF,
+  ], {
+    cwd: MCP,
+    env: { ...process.env, NODE_PATH: resolve(MCP, "node_modules") },
+  });
+  let stdout = "";
+  let stderr = "";
+  child.stdout.on("data", (d) => { stdout += d; });
+  child.stderr.on("data", (d) => { stderr += d; });
+  const code = await new Promise((resolveCode) => child.on("close", resolveCode));
+  assert.equal(code, 0, stderr.slice(0, 500));
+  const phases = parseProgressLines(stderr);
+  const graphReady = phases.find((p) => p.phase === "graph" && Number.isInteger(p.sheet_count));
+  assert.ok(graphReady, "post-index deadline needs an unambiguous graph-ready event");
+  const starts = phases.filter((p) => p.phase === "reconcile_row" && p.state === "start");
+  const dones = phases.filter((p) => p.phase === "reconcile_row" && p.state === "done");
+  assert.ok(starts.length > 0, "fixture must exercise real schedule rows");
+  assert.equal(dones.length, starts.length, "every started row reports completion");
+  assert.ok(dones.every((p) => Number.isInteger(p.elapsed_ms) && p.elapsed_ms >= 0));
+  const result = JSON.parse(stdout.trim().split("\n").filter(Boolean).at(-1)!);
+  assert.equal(result.rows.length, dones.length);
+});

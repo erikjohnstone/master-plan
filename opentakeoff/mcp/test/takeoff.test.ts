@@ -14,11 +14,80 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { Session } from "../src/session.ts";
-import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption } from "../src/takeoff.ts";
+import {
+  buildPlanSetTakeoff,
+  buildLegendTakeoff,
+  classifyLegendCaption,
+  classifyError,
+  hasAuthoredReconciliationStructure,
+  isInstalledEquipmentTakeoffTable,
+} from "../src/takeoff.ts";
 
 const DEMO = fileURLToPath(new URL("../../demo/sample-plan.pdf", import.meta.url));
 const LEGENDPLAN = fileURLToPath(new URL("./fixtures/legend-plan.pdf", import.meta.url));
 const SCALEGAP = fileURLToPath(new URL("./fixtures/legend-scale-gap.pdf", import.meta.url));
+
+test("classifyError: an unscoped reused group mark is a reviewable association refusal, not an engine error", () => {
+  assert.equal(classifyError('The mark "SG-1" is independently defined in drawing groups AIR OPS, ATCT, but set.pdf#31 has no authored drawing-group title. Those placements cannot be assigned to AIR OPS without guessing.'), "CROSS_SHEET_ASSOCIATION_FAILURE");
+});
+
+test("installed-equipment walk excludes BAS points rows while preserving ordinary equipment schedules", () => {
+  const points = {
+    sheet: "set.pdf#10",
+    kind: "equipment",
+    title: { text: "AHU DDC POINTS LIST", bbox: [0, 0, 100, 10] },
+    headers: ["MARK", "DESCRIPTION", "ALARM", "TREND"],
+    rows: [{ key: "AI01", cells: {} }],
+  } as any;
+  const equipment = {
+    sheet: "set.pdf#11",
+    kind: "equipment",
+    title: { text: "AIR HANDLING UNIT SCHEDULE", bbox: [0, 0, 100, 10] },
+    headers: ["MARK", "CFM"],
+    rows: [{ key: "AHU-1", cells: {} }],
+  } as any;
+
+  assert.equal(isInstalledEquipmentTakeoffTable(points), false);
+  assert.equal(isInstalledEquipmentTakeoffTable(equipment), true);
+});
+
+test("installed-equipment walk refuses anonymous one-cell plan crops but keeps structurally authored grids", () => {
+  const planCrop = {
+    sheet: "set.pdf#4",
+    kind: "equipment",
+    title: { text: "341.1-2", bbox: [100, 100, 200, 120] },
+    headers: ["COL1", "COL2", "COL3", "COL4"],
+    rows: [{
+      key: "CP-63381EV-6EV-5CP-5",
+      cells: { COL1: { text: "CP-6 338.1 EV-6 EV-5 CP-5" } },
+    }],
+  } as any;
+  const anonymousButStructured = {
+    ...planCrop,
+    rows: [{
+      key: "P-1",
+      cells: { COL1: { text: "P-1" }, COL2: { text: "120 GPM" } },
+    }],
+  } as any;
+  const namedSingleColumn = {
+    ...planCrop,
+    headers: ["MARK"],
+    rows: [{ key: "P-1", cells: { MARK: { text: "P-1" } } }],
+  } as any;
+
+  assert.equal(isInstalledEquipmentTakeoffTable(planCrop), false);
+  assert.equal(isInstalledEquipmentTakeoffTable(anonymousButStructured), true);
+  assert.equal(isInstalledEquipmentTakeoffTable(namedSingleColumn), true);
+  assert.equal(
+    hasAuthoredReconciliationStructure({ ...planCrop, kind: "reference" }),
+    false,
+    "the same pseudo-grid must not re-enter through the deferred reference-table pass",
+  );
+  assert.equal(
+    hasAuthoredReconciliationStructure({ ...anonymousButStructured, kind: "reference" }),
+    true,
+  );
+});
 
 // ── classifyLegendCaption (pure) ────────────────────────────────────────────
 
@@ -105,17 +174,18 @@ test("buildLegendTakeoff: no legend-role sheet in the set returns an honest empt
   assert.equal(r.stats.glyphs_seen, 0);
 });
 
-test("buildLegendTakeoff: a single-sheet fixture with no classifiable plan-role sheet still runs without throwing", async () => {
-  // legend-plan.pdf (scripts/make-legend-fixture.mjs) is a single sheet with
-  // no title-block text, so sheet_graph classifies it role:"unknown", not
-  // "legend" — buildLegendTakeoff must degrade to an honest empty result
-  // (no legend sheet recognized) rather than throw, exactly like the
-  // schedule-row pass above degrades on a set with nothing in scope.
+test("buildLegendTakeoff: a legend-only fixture discovers its real rows and refuses counts without scale", async () => {
+  // The generated fixture has a literal CONTROLS SYMBOLS title and four
+  // visually verified valve/damper rows. It is correctly legend-role under
+  // the current classifier; because it has no scale or plan sheet, each
+  // installed count must refuse rather than invent a legend-to-plan ratio.
   const s = new Session();
   await s.loadPlan(LEGENDPLAN);
   const r = await buildLegendTakeoff(s, { categories: ["valve", "actuator", "damper"] });
-  assert.deepEqual(r.legend_sheets_seen, []);
-  assert.deepEqual(r.items, []);
+  assert.deepEqual(r.legend_sheets_seen, [{ sheet: "legend-plan.pdf", glyphs_detected: 4 }]);
+  assert.equal(r.items.length, 4);
+  assert.ok(r.items.every((item) => item.status === "refused"));
+  assert.ok(r.items.every((item) => /No committed real-world scale/.test(item.reason || "")));
 });
 
 // This session's own investigation (SET 002, itd-d1-lab-mechanical.pdf):
@@ -131,40 +201,17 @@ test("buildLegendTakeoff: a single-sheet fixture with no classifiable plan-role 
 // total instances across the set) once the true size ratio was assumed
 // away — real, direct evidence a legend glyph's own drawn size is NOT a
 // reliable stand-in for its real installed size, so REFUSED_NO_SCALE is
-// correct here, not a bug to route around. legend-scale-gap.pdf
-// (make-legend-scale-gap-fixture.mjs) reproduces the exact real shape of
-// this in-repo: one legend-role sheet, one real detectable glyph, no scale
-// note anywhere on the page, no plan-role sheet in the set at all — so the
-// refusal is driven purely by the seed sheet's own gap, same as the real
-// corpus finding.
-test("buildLegendTakeoff: a legend sheet with no real-world scale anywhere REFUSES the glyph (REFUSED_NO_SCALE), but still discloses its real classification and its own on-sheet location — not an opaque wall", async () => {
+// correct here, not a bug to route around. The four-row legend-plan.pdf test
+// above pins that refusal. The smaller legend-scale-gap.pdf below carries
+// only one glyph/caption row; current legend learning requires structural
+// repetition before creating an inventory, so that separate fixture pins
+// the honest no-quorum outcome instead of weakening the detector.
+test("buildLegendTakeoff: a one-row legend without structural quorum remains an honest empty inventory", async () => {
   const s = new Session();
   await s.loadPlan(SCALEGAP);
   const r = await buildLegendTakeoff(s, { categories: ["valve", "actuator", "damper"] });
   assert.equal(r.legend_sheets_seen.length, 1);
-  assert.equal(r.legend_sheets_seen[0].glyphs_detected, 1);
-  assert.equal(r.items.length, 1);
-  const item = r.items[0];
-  assert.equal(item.status, "refused");
-  assert.equal(item.quantity, 0);
-  assert.equal(item.source, "legend_symbol");
-  // The real classification survives the refusal — a reader gets a named
-  // equipment type/category even though the count could not be verified.
-  assert.equal(item.equipment_type, "2-way electric control valve");
-  assert.equal(item.category, "valve");
-  // The glyph's own real on-sheet location is disclosed unconditionally —
-  // a real "go look here" pointer, never fabricated, never omitted just
-  // because the whole-set count itself was refused.
-  assert.ok(item.legend, "a legend_symbol item always carries its legend provenance");
-  assert.equal(item.legend!.sheet, "legend-scale-gap.pdf");
-  assert.ok(Array.isArray(item.legend!.at) && item.legend!.at.length === 2, "legend.at is a real [x,y] center, not omitted on a refusal");
-  const [ax, ay] = item.legend!.at;
-  assert.ok(Number.isFinite(ax) && Number.isFinite(ay) && ax > 0 && ay > 0, `legend.at should be a real coordinate, got ${JSON.stringify(item.legend!.at)}`);
-  // The reason names the ACTUAL sheet that's missing scale (the legend
-  // sheet itself, by key) rather than a blanket "(or a plan sheet in the
-  // set)" hedge when no plan sheet is even in scope here.
-  assert.match(item.reason!, /legend-scale-gap\.pdf/);
-  assert.match(item.reason!, /schematic/i);
-  assert.equal(r.failures.length, 1);
-  assert.equal(r.failures[0].type, "REFUSED_NO_SCALE");
+  assert.equal(r.legend_sheets_seen[0].glyphs_detected, 0);
+  assert.deepEqual(r.items, []);
+  assert.equal(r.failures.length, 0);
 });

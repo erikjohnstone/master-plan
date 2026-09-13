@@ -1,0 +1,85 @@
+{
+  "schema": "opentakeoff.sequence_narrative_ground_truth.v1",
+  "source_pdf": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "review_basis": "Human visual review of rendered vector PDF sheets M-703, M-705, and M-707 plus negative-control sheets G-002 and MI601. Expectations describe authored drawing evidence, not current engine output.",
+  "coordinate_frame": "render_scale_2_image_px_origin_top_left",
+  "pages": [
+    {
+      "page": 53,
+      "sheet_number": "M-703",
+      "expected_sequences": [
+        {
+          "title": "AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 8,
+          "minimum_evidence_spans": 150,
+          "required_phrases": [
+            "DOAH SUPPLY FAN, DOAH EXHAUST FAN, AND VARIABLE FREQUENCY DRIVES",
+            "SYSTEM SHALL OPERATE IN ONE OF THE FOLLOWING MODES",
+            "ALL MODULATING CONTROL SHALL BE PROPORTIONAL INTEGRAL (PI) CONTROL"
+          ],
+          "forbidden_phrases": [
+            "DDC SYSTEM NETWORK DIAGRAM"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 55,
+      "sheet_number": "M-705",
+      "expected_sequences": [
+        {
+          "title": "AIR OPS / MTRACON - AHU SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 12,
+          "minimum_evidence_spans": 95,
+          "required_phrases": [
+            "VARIABLE AIR VOLUME AHU SYSTEM",
+            "THE SUPPLY FAN SHALL RUN SUBJECT TO THE SUPPLY FAN START/STOP SIGNAL",
+            "DUCT STATIC PRESSURE"
+          ],
+          "forbidden_phrases": [
+            "POWERED VAV BOX CONTROL SEQUENCE"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 57,
+      "sheet_number": "M-707",
+      "expected_sequences": [
+        {
+          "title": "AIR OPS - CHW SYSTEM SEQUENCE OF OPERATION",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 4,
+          "minimum_evidence_spans": 65,
+          "required_phrases": [
+            "VARIABLE PRIMARY FLOW CONFIGURATION",
+            "CHILLER CONTROL VALVES",
+            "DIFFERENTIAL PRESSURE TRANSMITTERS"
+          ],
+          "forbidden_phrases": [
+            "DDC SYSTEM NETWORK DIAGRAM"
+          ]
+        }
+      ]
+    }
+  ],
+  "negative_pages": [
+    {
+      "page": 2,
+      "sheet_number": "G-002",
+      "expected_sequences": 0,
+      "review_note": "General notes that cross-reference sequences of operation are not sequence headings."
+    },
+    {
+      "page": 50,
+      "sheet_number": "MI601",
+      "expected_sequences": 0,
+      "review_note": "The abbreviation row 'SOO — SEQUENCE OF OPERATION' is a legend entry, not an authored sequence block."
+    }
+  ]
+}

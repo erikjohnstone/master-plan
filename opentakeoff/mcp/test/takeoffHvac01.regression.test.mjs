@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -8,9 +9,18 @@ import { loadFixtureSession } from "./helpers/loadFixtureGraph.mjs";
 
 const CORPUS = resolve(dirname(fileURLToPath(import.meta.url)), "../../../opentakeoff-corpus");
 const TAKEOFF = resolve(CORPUS, "takeoffs/T-HVAC-01-navfac-equipment");
+const CORRECTIONS = resolve(CORPUS, "ground_truth/hvac/navfac-cherry-point-tag-corrections.json");
 
 test("T-HVAC-01 compiler matches frozen truth quantities and cites", async () => {
-  const truth = loadTruth(resolve(TAKEOFF, "truth.json"));
+  const originalTruth = loadTruth(resolve(TAKEOFF, "truth.json"));
+  const truth = structuredClone(originalTruth);
+  const correctionOverlay = JSON.parse(readFileSync(CORRECTIONS, "utf8"));
+  for (const correction of correctionOverlay.corrections) {
+    const item = truth.categories[correction.category].items
+      .find((candidate) => candidate.tag === correction.previous_truth_tag);
+    assert.ok(item, `correction source tag missing: ${correction.previous_truth_tag}`);
+    item.tag = correction.corrected_printed_tag;
+  }
   const { graph, session } = await loadFixtureSession(CORPUS, TAKEOFF);
   const result = compileCorpusTakeoff(session, graph, "hvac_equipment");
 

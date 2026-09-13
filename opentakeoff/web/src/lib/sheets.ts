@@ -2,10 +2,10 @@
 // sheet-key codec, standard scales, title-block sheet numbers, drawn-scale notes.
 import * as pdfjsLib from "pdfjs-dist";
 import type { Token } from "./scheduleParse";
-import { parseSheetKey } from "./sheetKey";
-import { isStitchKey } from "./stitches";
-export { parseSheetKey, compareSheetKeys } from "./sheetKey"; // moved to a pdfjs-free module; re-exported for existing importers
-export type { ParsedSheetKey } from "./sheetKey";
+import { parseSheetKey } from "./sheetKey.ts";
+import { isStitchKey } from "./stitches.ts";
+export { parseSheetKey, compareSheetKeys } from "./sheetKey.ts"; // moved to a pdfjs-free module; re-exported for existing importers
+export type { ParsedSheetKey } from "./sheetKey.ts";
 
 export const RENDER_SCALE = 2.0;
 

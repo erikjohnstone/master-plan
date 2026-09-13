@@ -1,0 +1,65 @@
+{
+  "schema": "opentakeoff.air_device_group_quantity_ground_truth.v1",
+  "source_pdf": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "tag": "CD-1",
+  "review_basis": "Human visual review of rendered vector PDF plan sheets MH101, MH111, and MH121 and schedule sheets M-603, M-613, and M-622. Placement counts were independently cross-checked with Poppler text extraction; installed counts treat an authored parenthesized quantity as a multiplier for that one grounded placement.",
+  "identity_rule": "drawing_group + schedule_family + tag",
+  "schedule_family": "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+  "quantity_semantics": {
+    "scheduled_qty": null,
+    "scheduled_qty_basis": "type_definition_not_quantity",
+    "quantity_comparison": "type_definition_vs_plan_count",
+    "review_note": "These schedule rows define air-device types and do not print project quantities. A row must never be treated as scheduled quantity 1."
+  },
+  "cases": [
+    {
+      "drawing_group": "AIR OPS",
+      "schedule_page": 44,
+      "schedule_sheet_number": "M-603",
+      "plan_pages": [6, 7, 8, 9],
+      "representative_plan_sheet_number": "MH101",
+      "expected_placement_count": 32,
+      "expected_installed_quantity": 32,
+      "expected_status": "MATCH",
+      "independent_text_count": 32,
+      "multipliers": []
+    },
+    {
+      "drawing_group": "MTRACON",
+      "schedule_page": 47,
+      "schedule_sheet_number": "M-613",
+      "plan_pages": [12],
+      "representative_plan_sheet_number": "MH111",
+      "expected_placement_count": 21,
+      "expected_installed_quantity": 24,
+      "expected_status": "MATCH",
+      "independent_text_count": 21,
+      "multipliers": [
+        {
+          "printed_callout": "(4) CD-1",
+          "occurrences": 1,
+          "installed_units_represented": 4
+        }
+      ]
+    },
+    {
+      "drawing_group": "ATCT",
+      "schedule_page": 49,
+      "schedule_sheet_number": "M-622",
+      "plan_pages": [14],
+      "representative_plan_sheet_number": "MH121",
+      "expected_placement_count": 1,
+      "expected_installed_quantity": 1,
+      "expected_status": "MATCH",
+      "independent_text_count": 1,
+      "multipliers": []
+    }
+  ],
+  "negative_control": {
+    "tag": "SG-1",
+    "reused_by_groups": ["AIR OPS", "ATCT"],
+    "ungrouped_plan_page": 31,
+    "expected_status": "SCHEDULE_ONLY",
+    "review_note": "The lone plan occurrence is on a sheet without an authored drawing-group title. Assigning it to either independently defined SG-1 row would be a guess, so both rows must remain unresolved for human review."
+  }
+}

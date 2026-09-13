@@ -62,10 +62,21 @@ const projectTakeoffItem = z.object({
     sheet: z.string(),
     kind: z.string(),
     title: z.string().nullable(),
+    drawing_group: z.string().optional(),
   }).nullable(),
   schedule_row: z.record(z.string(), z.string()).nullable(),
   quantity: z.number(),
-  drawing_locations: z.array(z.object({ sheet: z.string(), at: point })),
+  placement_count: z.number().int().optional().describe("Distinct grounded plan callouts before authored `(N)`/TYP multipliers; quantity is installed units"),
+  drawing_locations: z.array(z.object({
+    sheet: z.string(),
+    at: point,
+    bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
+    score: z.number().optional(),
+  })),
+  quantity_basis: z.enum(["symbol_fingerprint", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
+  search_scope: z.enum(["exhaustive", "tagged_only", "explicit_note_set"]).nullable().optional(),
+  unlabeled_audit_complete: z.boolean().nullable().optional(),
+  plan_search_complete: z.boolean().nullable().optional(),
   siblings_excluded: z.array(z.string()),
   corroborated: z.boolean(),
   status: z.enum(["resolved", "refused", "error"]),
@@ -136,6 +147,78 @@ export const compileCorpusTakeoffOutput = {
   export_path: z.string().nullable().optional(),
 };
 
+const controlPixelBox = z.tuple([z.number(), z.number(), z.number(), z.number()]);
+const controlEvidence = z.object({
+  sheet: z.string(),
+  text: z.string(),
+  bbox: controlPixelBox.describe("Exact [x0,y0,x1,y1] source box in image pixels"),
+  source: z.enum(["text_span", "vector_geometry"]),
+});
+const controlTopology = z.object({
+  status: z.enum(["complete", "refused_too_dense", "no_vector_linework"]),
+  nodes: z.array(z.object({ id: z.number().int(), at: point, degree: z.number().int() })),
+  edges: z.array(z.object({
+    id: z.number().int(), a: z.number().int(), b: z.number().int(), length_px: z.number(),
+    direction: z.enum(["a_to_b", "b_to_a", "unknown"]),
+    evidence: z.object({ sheet: z.string(), bbox: controlPixelBox, source_segment: z.number().int() }),
+  })),
+  crossings: z.array(z.object({
+    at: point,
+    status: z.enum(["connected_junction_mark", "unresolved_crossing"]),
+    evidence: z.object({ sheet: z.string(), bbox: controlPixelBox }),
+  })),
+  arrows: z.array(z.object({
+    tip: point, shaft_edge: z.number().int(), direction: z.literal("toward_tip"),
+    evidence: z.object({ sheet: z.string(), bbox: controlPixelBox }),
+  })),
+  connected_components: z.number().int(), input_segments: z.number().int(), retained_segments: z.number().int(), note: z.string(),
+});
+
+/** Additive vector-first control-schematic/riser evidence; never an installed
+ * quantity claim and never a substitute for estimator review. */
+export const controlSchematicOutput = {
+  schema_version: z.literal("opentakeoff.control_schematic.v1"),
+  schematics: z.array(z.object({
+    id: z.string(), sheet: z.string(), title: z.string(), title_evidence: controlEvidence,
+    region: controlPixelBox,
+    explicit_points: z.array(z.object({
+      id: z.string(), point_type: z.enum(["AI", "AO", "DI", "DO"]), at: point,
+      evidence: controlEvidence, typing_basis: z.literal("explicit_printed_io_token"),
+    })),
+    point_totals: z.object({ AI: z.number().int(), AO: z.number().int(), DI: z.number().int(), DO: z.number().int(), total: z.number().int() }),
+    instruments: z.array(z.object({
+      id: z.string(), label: z.string(), at: point, evidence: controlEvidence,
+      io_type: z.null(), status: z.literal("unmapped_instrument_label"),
+    })),
+    equipment: z.array(z.object({
+      tag: z.string(), at: point, evidence: controlEvidence,
+      schedule_refs: z.array(z.object({ sheet: z.string(), title: z.string().nullable(), row_key: z.string(), bbox: controlPixelBox.nullable() })),
+    })),
+    component_labels: z.array(z.object({ label: z.string(), evidence: controlEvidence })),
+    media_labels: z.array(z.object({ label: z.string(), evidence: controlEvidence })),
+    sequence_refs: z.array(z.object({ id: z.string(), title: z.string(), status: z.string(), title_bbox: controlPixelBox })),
+    topology: controlTopology,
+    review: z.object({ human_review_required: z.literal(true), unresolved_crossings: z.number().int(), unmapped_instruments: z.number().int() }),
+  })),
+  risers: z.array(z.object({
+    id: z.string(), sheet: z.string(), title: z.string(), title_evidence: controlEvidence,
+    diagram_kind: z.enum(["riser", "flow", "network_architecture"]),
+    region: controlPixelBox,
+    datums: z.array(z.object({ label: z.string(), y: z.number(), evidence: controlEvidence })),
+    risers: z.array(z.object({
+      x: z.number(), from_datum: z.string(), to_datum: z.string(), bbox: controlPixelBox, direction: z.literal("unknown"),
+    })),
+    topology: controlTopology,
+    status: z.enum(["extracted", "insufficient_floor_datums", "no_vector_linework", "refused_too_dense"]),
+    human_review_required: z.literal(true),
+  })),
+  totals: z.object({
+    schematics: z.number().int(), riser_diagrams: z.number().int(), explicit_points: z.number().int(),
+    instruments_unmapped: z.number().int(), unresolved_crossings: z.number().int(),
+  }),
+  exclusions: z.array(z.string()),
+};
+
 /** Schedule ↔ plan reconciliation table (contractor columns + cites). */
 export const reconcileSchedulePlanOutput = {
   family_filter: z.string().nullable(),
@@ -156,23 +239,45 @@ export const reconcileSchedulePlanOutput = {
     total_drawn_instances: z.number().int(),
   }).passthrough(),
   rows: z.array(z.object({
+    row_id: z.string().optional().describe("Stable schedule-sheet + tag identity; distinguishes independently reused short marks"),
     tag: z.string(),
     family: z.string().nullable(),
-    scheduled_qty: z.number().int(),
-    installed_qty: z.number().int(),
+    scheduled_qty: z.number().int().nullable(),
+    scheduled_qty_basis: z.enum([
+      "printed_schedule_quantity",
+      "one_per_unique_schedule_row",
+      "unparseable_printed_quantity",
+      "type_definition_not_quantity",
+    ]).optional(),
+    scheduled_qty_source_header: z.string().nullable().optional(),
+    scheduled_qty_source_text: z.string().nullable().optional(),
+    // Null means the plan quantity could not be verified.  It is materially
+    // different from a verified zero and must remain distinct on every wire.
+    installed_qty: z.number().int().nullable(),
+    placement_count: z.number().int().nullable().optional().describe("Distinct grounded plan callouts before authored multipliers"),
+    observed_plan_qty: z.number().int().nullable().optional()
+      .describe("Grounded placements observed so far; differs from installed_qty only when an incomplete search makes this a floor, not a releasable total"),
+    installed_qty_basis: z.enum(["symbol_fingerprint", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
+    search_scope: z.enum(["exhaustive", "tagged_only", "explicit_note_set"]).nullable().optional(),
+    unlabeled_audit_complete: z.boolean().nullable().optional(),
+    plan_search_complete: z.boolean().nullable().optional(),
     // ERROR: classifyBasServedSweepOutcome's own outcome for a sweep that
     // threw something none of the other named refusals recognized
     // (web/src/lib/schedulePlanReconcile.mjs) — a real producible value the
     // enum was missing.
     status: z.enum(["MATCH", "SCHEDULE_ONLY", "PLAN_ONLY", "REFUSED_NO_SCALE", "REFUSED_NO_TEXT", "AMBIGUOUS", "ERROR"]),
+    quantity_comparison: z.enum(["scheduled_vs_installed", "type_definition_vs_plan_count"]).optional(),
     schedule_cite: z.object({
       sheet: z.string(),
       title: z.string().nullable(),
       kind: z.string().optional(),
+      drawing_group: z.string().optional(),
     }).nullable(),
     plan_cites: z.array(z.object({
       sheet: z.string(),
       at: z.array(z.number()).optional(),
+      bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
+      score: z.number().optional(),
     })),
     reason: z.string().nullable().optional(),
   })),
@@ -200,6 +305,7 @@ export const projectTakeoffOutput = {
     kind: z.string(),
     title: z.string().nullable(),
     rows: z.number().int(),
+    drawing_group: z.string().optional(),
   })),
   legend_sheets_seen: z.array(z.object({
     sheet: z.string(),
@@ -473,6 +579,15 @@ const sweepScaled = z.object({
 
 const sweepScaleAssumed = z.string().describe("#186: present when the true ratio is UNKNOWN (a scale is missing on the seed sheet or this one) and the sweep ran at 1:1 — an unstated ratio plus a zero count is not evidence of absence");
 
+const sweepTransformCompetition = z.object({
+  strategy: z.literal("rigid_baseline_affine_cited_additions"),
+  rigid_matches: z.number().int().describe("Placements accepted by the complete rigid + label pipeline"),
+  affine_matches: z.number().int().describe("Placements accepted by the complete affine + label pipeline before competition"),
+  affine_cited_additions: z.number().int().describe("Affine-only placements admitted because each owns a distinct same-family PDF tag box the rigid pass did not explain"),
+  affine_deferred: z.number().int().describe("Affine-only flexible fits retained for review instead of being counted without independent identity evidence"),
+  shared_tag_claims: z.number().int().describe("Exact PDF tag occurrences explained by both modes; the simpler rigid placement owns each one"),
+}).describe("Nested-model competition: rigid remains the baseline, while affine flexibility must earn an automatic addition with a distinct drawing citation");
+
 /** One plan sheet's results inside a set-wide sweep — its own match/withheld
  * lists, its own cap accounting, its own wall-clock. */
 const sweepSheetBlock = z.object({
@@ -487,6 +602,7 @@ const sweepSheetBlock = z.object({
   elapsed_ms: z.number().describe("Wall-clock for this sheet's sweep"),
   scaled: sweepScaled.optional(),
   scale_assumed: sweepScaleAssumed.optional(),
+  transform_competition: sweepTransformCompetition.optional(),
 });
 
 /** Sheets excluded from counting, disclosed one by one — a symbol drawn in a
@@ -529,6 +645,7 @@ export const symbolSweepOutput = {
   rejected_total: z.number().int().optional().describe("Set scope: placements counter-examples rejected across every swept sheet"),
   seed_committed: z.boolean().optional().describe("Present when commit_seed: true minted the seed instance into the batch (#296) — ea_total then includes it"),
   lum_gate: sweepLumGate.optional().describe("Sheet scope only. The stated stroke-luminance gate's accounting (#260): the tolerance, the seed's own luminance band, and every placement the geometry would have committed that the pen pulled under the bar — NEVER counted in found, never silent. Set scope accounts per sheet in sheets[]"),
+  transform_competition: sweepTransformCompetition.optional().describe("Sheet scope only. How rigid and affine labeled hypotheses were resolved without a position-radius guess"),
   candidates: sweepCandidates.optional().describe("Sheet scope only — set scope accounts per sheet in sheets[]"),
   complete: z.boolean().describe("True when every proposed placement was scored (every swept sheet, in set scope) and the count is a total. FALSE MEANS THE COUNT IS A FLOOR — acknowledge it before trusting found (#261)"),
   sheets: z.array(sweepSheetBlock).optional().describe("Set scope only: one entry per swept PLAN-role sheet, load order"),
@@ -1034,6 +1151,7 @@ export const sheetGraphOutput = {
     confidence: z.number().describe("0..1; mixed title signals halve it, a bare sheet-number convention stays under 0.5"),
     evidence: wireEvidence.optional(),
     building: z.string().optional().describe("The sheet's building context, when it names exactly one (BUILDING A / BLDG 2)"),
+    drawing_group: z.string().optional().describe("An authored project/site scope from the sheet title (for example AIR OPS), used to keep independently reused short marks in their own drawing group"),
     schedules: z.array(z.object({
       kind: z.string(), title: z.string(), rows: z.number().int(), region: wireBox,
       continues: z.string().optional().describe("Present on a continuation fragment ('… SCHEDULE — CONT'D'): the sheet carrying the table's base fragment. The fragments read as ONE table — resolve_tag and find_schedule already see the union"),
@@ -1081,6 +1199,7 @@ export const findScheduleOutput = {
     rows: z.number().int().describe("Total data rows — a continued schedule counts every fragment's rows"),
     headers: z.array(z.string()), region: wireBox.describe("Pass to view_sheet to look at the table (the BASE fragment's region when the table continues)"),
     building: z.string().optional().describe("The building this table answers for, when its title or sheet names one"),
+    drawing_group: z.string().optional().describe("The authored project/site scope carried by the table's source sheet"),
     rotated_headers: z.boolean().optional().describe("true when the column headers were read at a quarter-turn"),
     revised_rows: z.number().int().optional().describe("Rows carrying a delta/REV marker — the ink changed there; resolve those tags to see which"),
     parts: z.array(z.object({ sheet: z.string(), title: z.string(), rows: z.number().int(), region: wireBox }))
@@ -1107,6 +1226,7 @@ export const sweepScheduleRowOutput = {
     sheet: z.string(),
     table: z.string().describe("The table's title (or kind, when untitled)"),
     key: z.string(),
+    drawing_group: z.string().optional().describe("When this short mark is independently reused, the authored project/site group whose schedule and plan sheets were reconciled"),
     cells: z.record(z.string()).describe("The row's cells, header → text — what the schedule SAYS this mark is"),
     cell_citations: z.record(z.string(), z.object({
       text: z.string(),
@@ -1129,6 +1249,8 @@ export const sweepScheduleRowOutput = {
       .describe("Present only when corroborated is true. 'same_tag' = the tag's OWN second occurrence reproduced the fingerprint (the strong case). 'sibling_tag' = the tag is drawn exactly once, so a DIFFERENT row's own occurrence in the same schedule table reproduced it instead (corroborated_tag names which) — real evidence that the two marks share a symbol family, but weaker than a same-tag recurrence; audit before trusting the count"),
     corroborated_tag: z.string().optional().describe("Present only when corroborated_via is 'sibling_tag' — the sibling row's tag whose own drawn occurrence corroborated this fingerprint"),
     occurrences: z.number().int().describe("Drawn occurrences of the tag across all plan sheets"),
+    grounding_basis: z.enum(["symbol_fingerprint", "exact_plan_tag"]).optional()
+      .describe("Whether the placement is grounded by matched symbol geometry or, in tagged-only project mode, an exact plan-tag bbox for one uniquely marked equipment row; repeated drawing references to the same unique mark are disclosed as redundant_view rather than counted again"),
   }),
   found: z.number().int().describe("Matches carrying the row's own tag — the honest count, across every plan sheet"),
   sheets: z.array(z.object({

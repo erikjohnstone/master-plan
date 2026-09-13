@@ -12,9 +12,10 @@ import { tableRegionViaSidecar, tableStructureViaSidecar } from "../../web/src/l
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, sheetDrawingGroup, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
+import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
 import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
@@ -23,6 +24,7 @@ import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src
 import { basRestoreJson, readBasRestorePlan, type BasRestorePlan } from '../../web/src/lib/basRestore.ts';
 import type { BasSourceInventoryItem } from '../../web/src/lib/basSourceRetention.ts';
 import { readBasOriginalFile } from './basOriginalFile.ts';
+import { rowIdentityTag } from '../../web/src/lib/schedulePlanReconcile.mjs';
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -293,7 +295,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, isIndividuallyMarkedEquipmentSchedule, hasSymbolSweepPlanEvidence, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, countPrefixedFragmentedTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, hasRepeatableAirDevicePlacementQuorum, hasSymbolSweepPlanEvidence, type SweepOptions, type MatchOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -327,7 +329,7 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // here exactly as netroom.js's room detector already uses it, as a fallback
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
-import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
+import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, competeSweepModes, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel, type ResolvedSweepMode, type SweepModeCompetition } from "../../web/src/lib/symbollabels.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -2958,28 +2960,63 @@ export class Session {
       // enough on a real symbol to attach the seed's own nearby-tag lookup
       // to a NEIGHBORING symbol's tag instead of its own.
       const seedHint = labelPlacements([fp.rawCenter], s.spans, geo.segs, geo.lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] ?? null;
-      const rawRes = matchSymbol(fp, geo.segs, {
+      const matchOpts = {
         ...sweepOpts, lum: geo.lum, excludeCenter: fp.center,
         ...(seedHint ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
         ...(negatives.length ? { negatives } : {}),
-      });
-      // #308 — the drawing's own names. For a labeled family the sheet says
-      // what each already-geometric placement IS (a tag written beside it, or
-      // connected by a leader). Text may corroborate/demote geometry but can
-      // never manufacture a placement without vector evidence.
-      const rawLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, rawRes.matches, rawRes.withheld, undefined, fp.totalLen);
-      const corrected = reconcileSweepLabels(rawLbl.seed, rawRes.matches, rawLbl.matches, rawRes.withheld, rawLbl.withheld);
-      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F / positioning-parity
-      // fix — moved into symbollabels.ts's own positionMatchesToClosestReading
-      // so this correction is shared with TakeoffCanvas.jsx's manual
-      // Symbol-tool marquee, not an MCP-agent-only benefit. See that
-      // function's own doc comment for the full rationale.
-      const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
-      const positionedMatches = positioned.matches;
-      const positionedWithheld = positioned.withheld;
-      const positionedWithheldLabels = positioned.withheldLabels;
-      const res: SymbolMatchResult = { ...rawRes, matches: positionedMatches, withheld: positionedWithheld };
-      const lbl = { seed: rawLbl.seed, matches: corrected.matchLabels, withheld: positionedWithheldLabels };
+      };
+      const resolveMode = (raw: SymbolMatchResult): {
+        mode: ResolvedSweepMode;
+        corrected: ReturnType<typeof reconcileSweepLabels>;
+      } => {
+        // #308 — the drawing's own names. For a labeled family the sheet says
+        // what each already-geometric placement IS (a tag written beside it,
+        // or connected by a leader). Text may corroborate/demote geometry but
+        // can never manufacture a placement without vector evidence.
+        const labels = this.sweepLabels(s.spans!, geo, fp.rawCenter, raw.matches, raw.withheld, undefined, fp.totalLen);
+        const corrected = reconcileSweepLabels(labels.seed, raw.matches, labels.matches, raw.withheld, labels.withheld);
+        const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+        return {
+          corrected,
+          mode: {
+            matches: positioned.matches,
+            withheld: positioned.withheld,
+            matchLabels: corrected.matchLabels,
+            withheldLabels: positioned.withheldLabels,
+          },
+        };
+      };
+      const rawRes = matchSymbol(fp, geo.segs, matchOpts);
+      const affineResolved = resolveMode(rawRes);
+      let chosen = affineResolved.mode;
+      let corrected = affineResolved.corrected;
+      let modeCompetition: SweepModeCompetition["evidence"] | undefined;
+      let res: SymbolMatchResult = { ...rawRes, matches: chosen.matches, withheld: chosen.withheld };
+      if (sweepOpts.affine?.enabled) {
+        const rigidRaw = matchSymbol(fp, geo.segs, { ...matchOpts, affine: undefined });
+        const rigidResolved = resolveMode(rigidRaw);
+        const competed = competeSweepModes(seedHint, rigidResolved.mode, affineResolved.mode, Math.max(3 * (sweepOpts.tolPx ?? SWEEP_TOL_PX), 4));
+        chosen = competed;
+        corrected = {
+          ...rigidResolved.corrected,
+          matches: competed.matches,
+          withheld: competed.withheld,
+          matchLabels: competed.matchLabels,
+          withheldLabels: competed.withheldLabels,
+        };
+        modeCompetition = competed.evidence;
+        res = {
+          ...rigidRaw,
+          matches: competed.matches,
+          withheld: competed.withheld,
+          candidates: {
+            considered: rawRes.candidates.considered + rigidRaw.candidates.considered,
+            dropped: rawRes.candidates.dropped + rigidRaw.candidates.dropped,
+          },
+          complete: rawRes.complete && rigidRaw.complete,
+        };
+      }
+      const lbl = { seed: seedHint, matches: chosen.matchLabels, withheld: chosen.withheldLabels };
       let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
       if (opts.commit && (res.matches.length || opts.commitSeed)) {
         // #296 — commit_seed puts the seed instance first in the SAME batch:
@@ -3012,6 +3049,7 @@ export class Session {
         ...(res.rejected.length ? { rejected: res.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, ...(r.transform ? { transform: r.transform } : {}), by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(res.negatives ? { negatives: res.negatives.filter((n) => !!n).map((n) => ({ mode: n!.mode, segments: n!.segments, center: [round1(n!.center[0]), round1(n!.center[1])] as [number, number] })) } : {}),
         ...(res.lum_gate ? { lum_gate: res.lum_gate } : {}),
+        ...(modeCompetition ? { transform_competition: modeCompetition } : {}),
         ...((corrected.promoted || corrected.demoted) ? { label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } } : {}),
         candidates: res.candidates,
         complete: res.complete,
@@ -3085,7 +3123,7 @@ export class Session {
     if (!s.spans) s.spans = textSpans(s.page);
     // rawCenter, not center — see the sheet-scope path's own comment above.
     const seedLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, [], [], undefined, fp.totalLen).seed;
-    const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }; label_corroboration: { promoted: number; demoted: number } }[] = [];
+    const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }; label_corroboration: { promoted: number; demoted: number }; transform_competition?: SweepModeCompetition["evidence"] }[] = [];
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     for (const sh of this.sheetList()) {
       const role = roleOf.get(sh.key) ?? "unknown";
@@ -3116,17 +3154,18 @@ export class Session {
       // `lum: g2.lum` already does below.
       if (!sh.spans) sh.spans = textSpans(sh.page);
       const sheetTextBoxes: [number, number, number, number][] = sh.spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
+      const targetMatchOpts: MatchOptions = {
+        ...sweepOpts,
+        lum: g2.lum,
+        textBoxes: sheetTextBoxes,
+        ...(ratio.scale === 1 ? {} : { scale: ratio.scale }),
+        ...(sh.key === s.key ? { excludeCenter: fp.center } : {}),
+        ...(seedLbl ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
+        ...(negatives.length ? { negatives } : {}),
+      };
       let res: SymbolMatchResult;
       try {
-        res = matchSymbol(fp, g2.segs, {
-          ...sweepOpts,
-          lum: g2.lum,
-          textBoxes: sheetTextBoxes,
-          ...(ratio.scale === 1 ? {} : { scale: ratio.scale }),
-          ...(sh.key === s.key ? { excludeCenter: fp.center } : {}),
-          ...(seedLbl ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
-          ...(negatives.length ? { negatives } : {}),
-        });
+        res = matchSymbol(fp, g2.segs, targetMatchOpts);
       } catch (e) {
         // the engine's scale refusals (symbol shrinks inside tolerance, ratio
         // out of band) are instructions about THIS sheet, not a dead sweep —
@@ -3135,23 +3174,63 @@ export class Session {
         skipped.push({ sheet: sh.key, role, reason: e instanceof Error ? e.message : String(e) });
         continue;
       }
-      const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       // On the seed plan, keep the seed center in the one-to-one label
       // assignment even though it is excluded from the count. Otherwise its
       // own unique tag is left free to promote a second transform peak from a
       // neighboring/overlapped instance — a real FCU-5 set-wide overcount.
-      const rawLabels = this.sweepLabels(sh.spans, g2, sh.key === s.key ? fp.rawCenter : null, res.matches, res.withheld, seedLbl?.label, fp.totalLen * ratio.scale);
-      // A small fingerprint that is distinctive on its seed sheet may be
-      // ordinary title-block/detail geometry elsewhere in a large set. When
-      // the seed is named, set scope therefore requires every counted target
-      // to carry a same-family drawing tag; unlabeled geometry stays visible
-      // in withheld for review. Sheet scope preserves its established
-      // geometry-only behavior because nearby unlabeled repetitions there
-      // are often the intended takeoff.
-      const corrected = reconcileSweepLabels(seedLbl, res.matches, rawLabels.matches, res.withheld, rawLabels.withheld, { requireLabel: !!seedLbl });
-      res = { ...res, matches: corrected.matches, withheld: corrected.withheld };
-      const labels = { seed: null, matches: corrected.matchLabels, withheld: corrected.withheldLabels };
-      perSheet.push({ state: sh, ...res, elapsed_ms, scale: ratio, labels, label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } });
+      const resolveMode = (raw: SymbolMatchResult): {
+        mode: ResolvedSweepMode;
+        corrected: ReturnType<typeof reconcileSweepLabels>;
+      } => {
+        const rawLabels = this.sweepLabels(sh.spans!, g2, sh.key === s.key ? fp.rawCenter : null, raw.matches, raw.withheld, seedLbl?.label, fp.totalLen * ratio.scale);
+        // A small fingerprint that is distinctive on its seed sheet may be
+        // ordinary title-block/detail geometry elsewhere in a large set. When
+        // the seed is named, set scope therefore requires every counted target
+        // to carry a same-family drawing tag; unlabeled geometry stays visible
+        // in withheld for review.
+        const corrected = reconcileSweepLabels(seedLbl, raw.matches, rawLabels.matches, raw.withheld, rawLabels.withheld, { requireLabel: !!seedLbl });
+        return {
+          corrected,
+          mode: {
+            matches: corrected.matches,
+            withheld: corrected.withheld,
+            matchLabels: corrected.matchLabels,
+            withheldLabels: corrected.withheldLabels,
+          },
+        };
+      };
+      const affineResolved = resolveMode(res);
+      let chosen = affineResolved.mode;
+      let promoted = affineResolved.corrected.promoted;
+      let demoted = affineResolved.corrected.demoted;
+      let modeCompetition: SweepModeCompetition["evidence"] | undefined;
+      if (sweepOpts.affine?.enabled) {
+        let rigidRaw: SymbolMatchResult;
+        try {
+          rigidRaw = matchSymbol(fp, g2.segs, { ...targetMatchOpts, affine: undefined });
+        } catch (e) {
+          skipped.push({ sheet: sh.key, role, reason: `rigid verification pass failed: ${e instanceof Error ? e.message : String(e)}` });
+          continue;
+        }
+        const rigidResolved = resolveMode(rigidRaw);
+        const competed = competeSweepModes(seedLbl, rigidResolved.mode, affineResolved.mode, Math.max(3 * (sweepOpts.tolPx ?? SWEEP_TOL_PX), 4));
+        chosen = competed;
+        promoted = rigidResolved.corrected.promoted;
+        demoted = rigidResolved.corrected.demoted;
+        modeCompetition = competed.evidence;
+        res = {
+          ...rigidRaw,
+          candidates: {
+            considered: res.candidates.considered + rigidRaw.candidates.considered,
+            dropped: res.candidates.dropped + rigidRaw.candidates.dropped,
+          },
+          complete: res.complete && rigidRaw.complete,
+        };
+      }
+      res = { ...res, matches: chosen.matches, withheld: chosen.withheld };
+      const labels = { seed: null, matches: chosen.matchLabels, withheld: chosen.withheldLabels };
+      const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
+      perSheet.push({ state: sh, ...res, elapsed_ms, scale: ratio, labels, label_corroboration: { promoted, demoted }, ...(modeCompetition ? { transform_competition: modeCompetition } : {}) });
     }
 
     const found = perSheet.reduce((n, p) => n + p.matches.length, 0);
@@ -3233,6 +3312,7 @@ export class Session {
         ...(p.rejected.length ? { rejected: p.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, ...(r.transform ? { transform: r.transform } : {}), by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(p.lum_gate ? { lum_gate: p.lum_gate } : {}),
         ...((p.label_corroboration.promoted || p.label_corroboration.demoted) ? { label_corroboration: p.label_corroboration } : {}),
+        ...(p.transform_competition ? { transform_competition: p.transform_competition } : {}),
         candidates: p.candidates,
         complete: p.complete,
         elapsed_ms: p.elapsed_ms,
@@ -3517,14 +3597,19 @@ export class Session {
         h: Math.max(sp.y1 - sp.y0, 6),
         bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
       }));
-    const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
+    // Explicit `(N) TAG` fragments are safe to merge alongside bare exact
+    // spans because their authored count prefix makes them independently
+    // identifiable. The broader fragment match remains a fallback below.
+    const merged = [...exact, ...compoundTagOcc(sh.spans, key), ...countPrefixedFragmentedTagOcc(sh.spans, key)];
+    const dedupedMerged = merged.filter((occurrence, index) => !merged.slice(0, index).some((prior) =>
+      Math.hypot(prior.cx - occurrence.cx, prior.cy - occurrence.cy) <= Math.max(prior.h, occurrence.h)));
     const splitHyphen = splitHyphenTagOcc(sh.spans, key);
     const fragmented = allowFamilyQuorum
       ? familyQuorumFragmentedTagOcc(sh.spans, key)
       : fragmentedTagOcc(sh.spans, key);
     const deepHyphen = deepHyphenChainTagOcc(sh.spans, key);
-    const occurrences = merged.length
-      ? merged
+    const occurrences = dedupedMerged.length
+      ? dedupedMerged
       : (splitHyphen.length ? splitHyphen
         : fragmented.length ? fragmented
           : deepHyphen.length ? deepHyphen
@@ -3645,7 +3730,13 @@ export class Session {
     // return vs exhaust service): that row ANSWERS for each mark, and the
     // sweep runs on the mark as drawn on the plans, not the compound key.
     const canonKey = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
-    let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t) || rowKeyAnswersFor(r.key, tRaw)).map((r) => ({ tb, r })));
+    const identityOf = (row: { key?: string; cells?: Record<string, { text?: string }> }) =>
+      String(rowIdentityTag(row) || row.key || "").trim();
+    const rowAnswers = (row: { key?: string; cells?: Record<string, { text?: string }> }, key: string) =>
+      rowKeyAnswersFor(row.key || "", key) || rowKeyAnswersFor(identityOf(row), key);
+    let rowHits = graph.tables.flatMap((tb) => tb.rows
+      .filter((r) => rowAnswers(r, t) || rowAnswers(r, tRaw))
+      .map((r) => ({ tb, r })));
     let scheduleAliasNote: string | null = null;
     if (!rowHits.length && /[A-Z]$/.test(t)) {
       // A plan can omit a schedule's redundant trailing unit digit when
@@ -3654,7 +3745,7 @@ export class Session {
       // entire set contains exactly one strict one-digit extension; two
       // candidates remain unresolved rather than choosing by prefix.
       const numbered = graph.tables.flatMap((tb) => tb.rows
-        .filter((r) => canonKey(r.key).startsWith(t) && /^\d$/.test(canonKey(r.key).slice(t.length)))
+        .filter((r) => canonKey(identityOf(r)).startsWith(t) && /^\d$/.test(canonKey(identityOf(r)).slice(t.length)))
         .map((r) => ({ tb, r })));
       if (numbered.length === 1) {
         rowHits = numbered;
@@ -3906,30 +3997,65 @@ export class Session {
       throw new UserError(`Ambiguous: ${rowHits.length} schedule rows carry the key "${t}" — the same mark defined twice cannot seed one sweep. Marquee the marker yourself with symbol_sweep.`);
     }
     const { tb, r } = rowHits[0];
+    // A short type mark may be intentionally reused by independently named
+    // sites/buildings in one drawing package. Scope only when the sheet title
+    // proves at least two distinct groups defining this SAME schedule family
+    // and mark. This is not a prefix guess: both the schedule group and every
+    // included plan group come from authored title spans.
+    const selectedTitle = (tb.title?.text || "").toUpperCase().replace(/\s+/g, " ").trim();
+    const localDefinitionGroups = new Set(graph.tables.flatMap((candidate) => {
+      const title = (candidate.title?.text || "").toUpperCase().replace(/\s+/g, " ").trim();
+      if (!selectedTitle || title !== selectedTitle || !candidate.drawing_group) return [];
+      return candidate.rows.some((row) => rowAnswers(row, t) || rowAnswers(row, tRaw))
+        ? [candidate.drawing_group]
+        : [];
+    }));
+    const drawingGroupScope = tb.drawing_group && localDefinitionGroups.size >= 2
+      ? tb.drawing_group
+      : null;
     // This row's own mark(s) — split on "/" so a compound row key ("AC-1/
     // ACCU-1", "R1/E1") is never mistaken for a SIBLING of itself below: a
     // split-system pair's two component marks are each the row's OWN
     // identity, not another row's competing tag.
-    const ownMarks = new Set(canonKey(r.key).split("/").map((s) => s.trim()).filter(Boolean));
+    const selectedRowIdentity = identityOf(r);
+    const ownMarks = new Set(canonKey(selectedRowIdentity).split("/").map((s) => s.trim()).filter(Boolean));
     const tableSiblingKeys = [...new Set(tb.rows.flatMap((row) =>
-      canonKey(row.key).split("/").map((s) => s.trim()).filter(Boolean)))];
+      canonKey(identityOf(row)).split("/").map((s) => s.trim()).filter(Boolean)))];
     // sibling keys span EVERY table in the set, not just the row's own: a
     // marker labeled with any other schedule key is that mark's instance, and
     // disclosing it as "excluded, labeled 135" beats calling it unlabeled
     const siblings = opts.evaluationFast
       ? []
-      : [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
+      : [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(identityOf(row)).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
     const table = tb.title?.text || `${tb.kind} schedule`;
-    const airDeviceTable = /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table);
+    const airDeviceTable = isRepeatableAirDeviceSchedule(table);
 
     // 2. plan-role sheets, and every drawn occurrence of the tag on them
     const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
     const planTitleOf = new Map(graph.sheets.map((g) => [g.key, g.evidence?.text || ""] as const));
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     const planSheets: SheetState[] = [];
+    const ungroupedPlanSheets: SheetState[] = [];
     for (const sh of this.sheetList()) {
       const role = roleOf.get(sh.key) ?? "unknown";
-      if (role === "plan") planSheets.push(sh);
+      if (role === "plan") {
+        const planGroup = graph.sheets.find((sheet) => sheet.key === sh.key)?.drawing_group;
+        if (!drawingGroupScope || planGroup === drawingGroupScope) planSheets.push(sh);
+        else if (!planGroup) {
+          ungroupedPlanSheets.push(sh);
+          skipped.push({
+            sheet: sh.key,
+            role,
+            reason: `the mark is independently defined in ${[...localDefinitionGroups].join(", ")}; this plan sheet has no authored drawing-group title, so any occurrence cannot be assigned to ${drawingGroupScope} without guessing`,
+          });
+        } else {
+          skipped.push({
+            sheet: sh.key,
+            role,
+            reason: `the plan belongs to drawing group ${planGroup}, not the selected ${drawingGroupScope} schedule`,
+          });
+        }
+      }
       else {
         skipped.push({
           sheet: sh.key,
@@ -3962,7 +4088,11 @@ export class Session {
         if (!raw) continue;
         addCand(raw.replace(/^\(([NER])\)\s*/i, ""));
       }
-      addCand(r.key);
+      addCand(selectedRowIdentity);
+      // A control-valve schedule's row.key may be UNIT MARK while its own
+      // device identity is VALVE MARK. Never fall back from an undrawn valve
+      // mark to the served equipment tag and count the AHU/FCU as a valve.
+      if (canonKey(r.key) === canonKey(selectedRowIdentity)) addCand(r.key);
       const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
       if (!hasOcc(t)) {
         for (const cand of planTagCandidates) {
@@ -3997,6 +4127,14 @@ export class Session {
         }
       }
     }
+    if (drawingGroupScope) {
+      const ambiguousUngrouped = ungroupedPlanSheets
+        .map((sh) => ({ sh, occurrences: occOf(sh, t) }))
+        .filter((entry) => entry.occurrences.length > 0);
+      if (ambiguousUngrouped.length) {
+        throw new UserError(`The mark "${t}" is independently defined in drawing groups ${[...localDefinitionGroups].join(", ")}, but ${ambiguousUngrouped.map((entry) => `${entry.sh.key} (${entry.occurrences.length} occurrence${entry.occurrences.length === 1 ? "" : "s"})`).join(", ")} has no authored drawing-group title. Those placements cannot be assigned to ${drawingGroupScope} without guessing.`);
+      }
+    }
     const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
     if (!totalOcc) {
@@ -4010,6 +4148,198 @@ export class Session {
     // first in reading order. Deterministic throughout.
     const withOcc = occBySheet.filter((e) => e.occ.length > 0)
       .sort((a, b) => b.occ.length - a.occ.length || a.sh.ord - b.sh.ord);
+
+    // Project reconciliation has a much cheaper, equally honest case that
+    // the single-row interactive sweep used to discover only AFTER spending
+    // seconds trying fingerprints: an individually numbered equipment row
+    // with one or more exact tag occurrences on plan-role sheets. The
+    // existing post-match rule below already treats an exact tag as placement
+    // evidence when geometry is sparse/variable, and the individually-marked
+    // dedupe below ALWAYS collapses repeated appearances of one unique mark
+    // (plan/section/detail references) to one physical unit. In tagged-only
+    // mode, when none of those appearances carries an authored TYP
+    // multiplier, geometric search therefore cannot change either identity
+    // or quantity. Return that existing verdict immediately, with an explicit
+    // `exact_plan_tag` basis, and disclose every other exact occurrence as a
+    // redundant reference. Exhaustive mode is unchanged and still audits
+    // surrounding symbol geometry/unlabelled candidates.
+    const singletonTaggedEquipment = opts.evaluationFast
+      && isIndividuallyMarkedEquipmentSchedule(table)
+      && totalOcc > 0
+      && occBySheet.every(({ sh, occ }) => occ.every((entry) =>
+        typicalCountMultiplier(sh.spans || [], entry.bbox) === 1));
+    if (singletonTaggedEquipment) {
+      const keptSheet = withOcc[0].sh;
+      const kept = withOcc[0].occ[0];
+      const cells: Record<string, string> = {};
+      for (const [k, v] of Object.entries(r.cells)) cells[k] = v.text;
+      const cellCitations = Object.fromEntries(Object.entries(r.cells).map(([header, cell]) => [
+        header,
+        { text: cell.text, bbox: Session.wireBox(cell.bbox) },
+      ]));
+      const firstCell = r.cells[Object.keys(r.cells)[0]];
+      return {
+        tag: t,
+        search_scope: "tagged_only" as const,
+        unlabeled_audit_complete: false,
+        row: {
+          sheet: tb.sheet,
+          table,
+          key: t,
+          ...(drawingGroupScope ? { drawing_group: drawingGroupScope } : {}),
+          cells,
+          cell_citations: cellCitations,
+          citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
+        },
+        tag_citations: [{ sheet: keptSheet.key, bbox: Session.wireBox(kept.bbox) }],
+        anchor: {
+          sheet: keptSheet.key,
+          at: [round1(kept.cx), round1(kept.cy)] as [number, number],
+          rect: kept.bbox.map(round1),
+          segments: 0,
+          length_px: 0,
+          corroborated: false,
+          occurrences: totalOcc,
+          grounding_basis: "exact_plan_tag" as const,
+        },
+        found: 1,
+        sheets: planSheets.map((sh) => {
+          const isKept = sh === keptSheet;
+          const occurrences = occBySheet.find((entry) => entry.sh === sh)?.occ || [];
+          const redundant = occurrences.filter((entry) => entry !== kept);
+          return {
+            sheet: sh.key,
+            found: isKept ? 1 : 0,
+            matches: isKept ? [{
+              at: [round1(kept.cx), round1(kept.cy)] as [number, number],
+              score: 1,
+              rotation: 0,
+              mirrored: false,
+              tag_at: Session.wireBox(kept.bbox),
+              counted_from: "explicit_label" as const,
+            }] : [],
+            withheld: [],
+            excluded: [],
+            text_only: [],
+            candidates: { considered: 0, dropped: 0 },
+            complete: true,
+            elapsed_ms: 0,
+            ...(redundant.length ? {
+              redundant_view: redundant.map((entry) => ({
+                at: [round1(entry.cx), round1(entry.cy)] as [number, number],
+                score: 1,
+                rotation: 0,
+                mirrored: false,
+                tag_at: Session.wireBox(entry.bbox),
+                room: "(same individually marked equipment repeated in another plan/section/detail reference)",
+                kept_sheet: keptSheet.key,
+              })),
+            } : {}),
+          };
+        }),
+        complete: true,
+        skipped,
+        note: `${drawingGroupScope ? `The same mark is independently defined across drawing groups; this result is scoped to the authored ${drawingGroupScope} schedule and plan titles. ` : ""}The individually numbered schedule mark "${t}" has ${totalOcc} exact plan-tag occurrence${totalOcc === 1 ? "" : "s"}; repeated appearances of one unique equipment mark are drawing references to the same scheduled unit and were withheld from the installed count. Tagged-only project reconciliation uses the retained exact tag bbox as placement evidence; surrounding symbol geometry and unlabeled near-matches were not audited in this mode.`,
+      };
+    }
+
+    // Tagged-only reconciliation already has a conservative direct-label
+    // rule later in this method: on a plan where a substantial air-device
+    // annotation convention is proven, every exact mark is placement evidence.
+    // Diffusers/grilles/registers legitimately vary in face/neck
+    // size, so one rigid perimeter fingerprint cannot recover the whole
+    // family. Previously the expensive multi-anchor geometric search still
+    // ran first, then added every exact label anyway. A dense repeated mark
+    // could therefore spend minutes proving geometry that was incapable of
+    // changing the tagged-only quantity.
+    //
+    // Take that existing verdict directly only when the set clears the old
+    // >=10 family population AND every sheet carrying this row's mark carries
+    // >=4 independently keyed family marks itself. An isolated note/legend
+    // mention, or a sparse unproven convention, stays on the full geometric
+    // path. Exhaustive/manual symbol sweep behavior is untouched, and this
+    // return explicitly says unlabeled symbols were not audited.
+    const repeatableTagQuorumBySheet = new Map<SheetState, number>();
+    if (opts.evaluationFast && airDeviceTable) {
+      for (const { sh } of occBySheet) {
+        repeatableTagQuorumBySheet.set(sh,
+          tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0));
+      }
+    }
+    const activeRepeatableFamilyCounts = occBySheet
+      .filter(({ occ }) => occ.length > 0)
+      .map(({ sh }) => repeatableTagQuorumBySheet.get(sh) ?? 0);
+    const setRepeatableFamilyCount = [...repeatableTagQuorumBySheet.values()].reduce((sum, count) => sum + count, 0);
+    const taggedRepeatableAirDevice = opts.evaluationFast
+      && airDeviceTable
+      && hasRepeatableAirDevicePlacementQuorum(activeRepeatableFamilyCounts, setRepeatableFamilyCount);
+    if (taggedRepeatableAirDevice) {
+      const cells: Record<string, string> = {};
+      for (const [k, v] of Object.entries(r.cells)) cells[k] = v.text;
+      const cellCitations = Object.fromEntries(Object.entries(r.cells).map(([header, cell]) => [
+        header,
+        { text: cell.text, bbox: Session.wireBox(cell.bbox) },
+      ]));
+      const firstCell = r.cells[Object.keys(r.cells)[0]];
+      const sheets = occBySheet.map(({ sh, occ }) => {
+        const matches = occ.map((entry) => {
+          const multiplier = typicalCountMultiplier(sh.spans || [], entry.bbox);
+          return {
+            at: [round1(entry.cx), round1(entry.cy)] as [number, number],
+            score: 1,
+            rotation: 0,
+            mirrored: false,
+            tag_at: Session.wireBox(entry.bbox),
+            ...(multiplier > 1 ? { multiplier } : {}),
+            counted_from: "explicit_label" as const,
+          };
+        });
+        return {
+          sheet: sh.key,
+          found: matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0),
+          matches,
+          withheld: [],
+          excluded: [],
+          text_only: [],
+          candidates: { considered: 0, dropped: 0 },
+          complete: true,
+          elapsed_ms: 0,
+        };
+      });
+      const found = sheets.reduce((sum, sheet) => sum + sheet.found, 0);
+      const first = withOcc[0].occ[0];
+      return {
+        tag: t,
+        search_scope: "tagged_only" as const,
+        unlabeled_audit_complete: false,
+        row: {
+          sheet: tb.sheet,
+          table,
+          key: t,
+          ...(drawingGroupScope ? { drawing_group: drawingGroupScope } : {}),
+          cells,
+          cell_citations: cellCitations,
+          citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
+        },
+        tag_citations: sheets.flatMap((sheet) => sheet.matches.flatMap((match) =>
+          Array.from({ length: match.multiplier ?? 1 }, () => ({ sheet: sheet.sheet, bbox: match.tag_at })))),
+        anchor: {
+          sheet: withOcc[0].sh.key,
+          at: [round1(first.cx), round1(first.cy)] as [number, number],
+          rect: Session.wireBox(first.bbox),
+          segments: 0,
+          length_px: 0,
+          corroborated: true,
+          occurrences: totalOcc,
+          grounding_basis: "exact_plan_tag" as const,
+        },
+        found,
+        sheets,
+        complete: true,
+        skipped,
+        note: `${drawingGroupScope ? `The same mark is independently defined across drawing groups; this result is scoped to the authored ${drawingGroupScope} schedule and plan titles. ` : ""}Tagged-only reconciliation counted ${totalOcc} exact "${t}" plan mark${totalOcc === 1 ? "" : "s"} because the set shows ${setRepeatableFamilyCount} marks from the same repeatable air-device schedule family and every sheet carrying this mark shows at least four independently keyed family marks. Authored TYP/parenthesized multipliers are applied to installed quantity. Face/neck geometry may vary by scheduled size, so quantity is grounded to the exact plan-label bboxes; surrounding geometry and unlabelled devices were not audited in this mode.`,
+      };
+    }
     const anchorSheet = withOcc[0].sh;
     // Reassigned only by the same-sheet uncorroborated fallback below (Tier
     // 2), and only after every corroboration attempt against the ORIGINAL
@@ -4916,6 +5246,7 @@ export class Session {
     const firstCell = r.cells[Object.keys(r.cells)[0]];
     const capped = perSheet.filter((p) => p.candidates.dropped > 0);
     const notes: string[] = [];
+    if (drawingGroupScope) notes.push(`The same mark is independently defined across drawing groups; this result is scoped to the authored ${drawingGroupScope} schedule and plan titles.`);
     if (scheduleAliasNote) notes.push(scheduleAliasNote);
     if (accessoryNote) notes.push(accessoryNote);
     if (!corroborated) {
@@ -4929,7 +5260,7 @@ export class Session {
     if (inlineFp) notes.push(`No whole-shape marker recurs around this tag's own drawn text, so this anchored on the surrounding hatch fill's own real-world size/pitch instead (the register/grille fallback) — score is a size closeness, not a segment match; audit with view_sheet before trusting the count.`);
     if (supplementalInlineFp) notes.push(`Whole-shape matches were preserved and a separately corroborated hatch-size/pitch motif supplemented only this tag's still-unclaimed drawn occurrences; each occurrence contributes at most one count.`);
     const multiplied = perSheet.flatMap((p) => p.matches.filter((m) => (m.multiplier ?? 1) > 1));
-    if (multiplied.length) notes.push(`${multiplied.length} drawn callout(s) carry explicit TYP multipliers; their printed quantities were applied to the installed count.`);
+    if (multiplied.length) notes.push(`${multiplied.length} drawn callout(s) carry explicit authored multipliers (TYP or parenthesized quantity); their printed quantities were applied to the installed count.`);
     const textCounted = perSheet.flatMap((p) => p.matches.filter((m) => m.text_counted));
     if (textCounted.length) notes.push(`${textCounted.length} additional explicit placement labels were counted directly under a family-wide quorum.`);
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
@@ -4956,6 +5287,7 @@ export class Session {
         sheet: tb.sheet,
         table,
         key: t,
+        ...(drawingGroupScope ? { drawing_group: drawingGroupScope } : {}),
         cells,
         cell_citations: cellCitations,
         citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
@@ -4979,6 +5311,7 @@ export class Session {
         ...(corroborated ? { corroborated_via: corroboratedVia ? "sibling_tag" as const : "same_tag" as const } : {}),
         ...(corroboratedVia ? { corroborated_tag: corroboratedVia } : {}),
         occurrences: totalOcc,
+        grounding_basis: "symbol_fingerprint" as const,
       },
       found,
       sheets: perSheet.map((p) => ({
@@ -6062,6 +6395,7 @@ export class Session {
       if (skippedHeavy) this.graph.notes.push(`drawn-delta hunt skipped on ${skippedHeavy} sheet(s) — the set's linework exceeded the vector budget; text revision markers (Δ2 / REV 2) were still read everywhere`);
       const tStack = Date.now();
       await this.runVectorTakeoffStack(this.graph);
+      this.applyDrawingGroups(this.graph);
       this.graph.notes.push(
         `timing: L0/L1 spans+segments ${spansMs}ms over ${inputs.length} sheet(s)`
         + ` · L2 buildSheetGraph ${buildMs}ms · L1.8-L5 stack ${Date.now() - tStack}ms`,
@@ -6080,6 +6414,36 @@ export class Session {
       sheetHasDrawingIndexTitle: (key) => this.sheetHasDrawingIndexTitle(key),
       ocrRegion: (key, region) => this.ocrScheduleRegion(key, region),
     });
+  }
+
+  /** Re-apply authored drawing-group scope after every extractor has run.
+   * ODL/OCR may replace a geometric table with a richer instance after
+   * buildSheetGraph first annotated it; the source sheet remains the same,
+   * so derive the scope once from the immutable positioned spans and attach
+   * it to the final winning table. */
+  private applyDrawingGroups(graph: SheetGraph): void {
+    const groups = new Map<string, string>();
+    for (const state of this.sheets.values()) {
+      if (!state.spans) state.spans = textSpans(state.page);
+      const spans: GraphSpan[] = state.spans.map((span) => ({
+        str: span.str, x: span.x0, y: span.y0,
+        w: span.x1 - span.x0, h: span.y1 - span.y0,
+        ...(span.rot ? { rot: span.rot } : {}),
+      }));
+      const group = sheetDrawingGroup({ key: state.key, sheet_number: state.sheetNumber, spans });
+      if (group) groups.set(state.key, group.group);
+    }
+    for (const sheet of graph.sheets) {
+      const group = groups.get(sheet.key);
+      if (group) sheet.drawing_group = group;
+      else delete sheet.drawing_group;
+    }
+    for (const table of graph.tables) {
+      const partSheets = table.parts?.map((part) => part.sheet) ?? [table.sheet];
+      const found = [...new Set(partSheets.map((sheet) => groups.get(sheet)).filter((group): group is string => !!group))];
+      if (found.length === 1) table.drawing_group = found[0];
+      else delete table.drawing_group;
+    }
   }
 
   private async buildVectorSheetContexts(g: SheetGraph): Promise<VectorSheetContext[]> {
@@ -6109,12 +6473,20 @@ export class Session {
         // call), so this costs nothing on the common path where geometry
         // was already computed.
         const geo = await this.ensureGeometry(state);
+        // The diagram layer consumes the same vector evidence ensureGeometry
+        // just loaded. Previously `segs` was sampled before this await and
+        // never refreshed, so sheets whose geometry was not already warm
+        // reached the real Session/UI path as text-only even though geometry
+        // had just been computed. Direct extractor tests therefore found
+        // cited I/O tethers that the product path silently missed.
+        if (!segs?.length && geo?.segs?.length) segs = geo.segs;
         if (geo && state.widthPx * state.heightPx > 0) {
           rasterFrac = geo.imageArea / (state.widthPx * state.heightPx);
         }
       } catch { /* best-effort */ }
       out.push({
         key: sh.key,
+        sheet_number: state.sheetNumber ?? null,
         role: sh.role,
         spans,
         ...(segs?.length ? { segs } : {}),
@@ -6823,6 +7195,17 @@ export class Session {
     return this.ensureGraph();
   }
 
+  /** Shared control-schematic/riser result. A seeded pre-change graph may not
+   * carry the additive layer, so compute it from the same Session contexts
+   * rather than returning a misleading empty answer. */
+  async controlSchematics(): Promise<ControlSchematicResult> {
+    const graph = await this.ensureGraph();
+    if (!graph.control_schematics) {
+      graph.control_schematics = extractControlSchematics(await this.buildVectorSheetContexts(graph), graph);
+    }
+    return structuredClone(graph.control_schematics);
+  }
+
   /**
    * Install a precomputed SheetGraph (e.g. from the content-addressed
    * sheet-graph cache) after loadPlan. Skips rebuild; used by verify/demo
@@ -6831,6 +7214,7 @@ export class Session {
   seedPipelineGraph(graph: SheetGraph): void {
     if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
     this.graph = graph;
+    this.applyDrawingGroups(this.graph);
   }
 
   async sheetGraph() {
@@ -6846,6 +7230,7 @@ export class Session {
           sheet: s.key, role: s.role, confidence: s.confidence,
           ...(s.evidence ? { evidence: Session.wireEvidence(s.evidence) } : {}),
           ...(s.building ? { building: s.building } : {}),
+          ...(s.drawing_group ? { drawing_group: s.drawing_group } : {}),
           ...(detected ? { detected_scale: detected } : {}),
           schedules: s.schedules.map((t) => ({
             kind: t.kind, title: t.title, rows: t.rows, region: Session.wireBox(t.region),
@@ -6939,6 +7324,7 @@ export class Session {
         sheet: t.sheet, kind: t.kind, title: t.title?.text || "", rows: t.rows.length,
         headers: t.headers, region: Session.wireBox(t.region),
         ...(t.building ? { building: t.building } : {}),
+        ...(t.drawing_group ? { drawing_group: t.drawing_group } : {}),
         ...(t.rotated_headers ? { rotated_headers: true } : {}),
         ...(t.rows.some((r) => r.revision) ? { revised_rows: t.rows.filter((r) => r.revision).length } : {}),
         ...(t.parts ? { parts: t.parts.map((p) => ({ sheet: p.sheet, title: p.title, rows: p.rows, region: Session.wireBox(p.region) })) } : {}),
@@ -7042,12 +7428,16 @@ export class Session {
    */
   async explicitInstallationNotes(tag: string): Promise<Array<{
     sheet: string; at: [number, number]; text: string; level: string;
+    bbox: { x0: number; y0: number; x1: number; y1: number };
   }>> {
     const graph = await this.graphForPipeline();
     const planKeys = new Set(graph.sheets.filter((sheet) => sheet.role === "plan").map((sheet) => sheet.key));
     const escaped = tag.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const pattern = new RegExp(`(?:^|[^A-Z0-9])${escaped}\\s+ON\\s+(?:FLOOR|LEVEL)\\s+([A-Z0-9]+)`, "i");
-    const byLevel = new Map<string, { sheet: string; at: [number, number]; text: string; level: string }>();
+    const byLevel = new Map<string, {
+      sheet: string; at: [number, number]; text: string; level: string;
+      bbox: { x0: number; y0: number; x1: number; y1: number };
+    }>();
     for (const sheet of this.sheetList()) {
       if (!planKeys.has(sheet.key)) continue;
       if (!sheet.spans) sheet.spans = textSpans(sheet.page);
@@ -7062,6 +7452,7 @@ export class Session {
             at: [round1((span.x0 + span.x1) / 2), round1((span.y0 + span.y1) / 2)],
             text: span.str.trim(),
             level,
+            bbox: Session.wireBox([span.x0, span.y0, span.x1, span.y1]),
           });
         }
       }

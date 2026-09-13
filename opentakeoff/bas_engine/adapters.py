@@ -106,7 +106,15 @@ POINT_TYPE_CHANNELS = {
     "DI": "DI", "DIGITAL INPUT": "DI", "BI": "DI", "BINARY INPUT": "DI",
     "DO": "DO", "DIGITAL OUTPUT": "DO", "BO": "DO", "BINARY OUTPUT": "DO",
 }
-POINT_MARK = re.compile(r"^(AI|AO|BI|BO|DI|DO|AV|BV|MI|MO|MSV)\s*[-]?\s*[1-9]\d{0,3}\*?$", re.I)
+# SHOULD THIS BE ON THE SHARED PATH? Yes: a printed point mark determines
+# source-backed BAS point truth for both browser and MCP workflows.  Leading
+# zeroes are a common authored convention (AI01/BO001), not a different point
+# type.  Keep the token bounded to four digits and reject the all-zero form so
+# permissive numeric text never becomes a point by accident.
+POINT_MARK = re.compile(
+    r"^(AI|AO|BI|BO|DI|DO|AV|BV|MI|MO|MSV)\s*[-]?\s*(?=\d{1,4}\*?$)(?!0+\*?$)\d+\*?$",
+    re.I,
+)
 
 
 def column_type(header: str) -> tuple[Literal["physical", "soft"], str] | None:

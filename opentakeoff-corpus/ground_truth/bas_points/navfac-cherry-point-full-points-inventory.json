@@ -1,0 +1,48 @@
+{
+  "schema": "opentakeoff.bas_points_inventory_ground_truth.v2",
+  "source_pdf": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "set_id": "navfac-cherry-point-atc",
+  "authored_before_runner": true,
+  "quantity_semantics": "printed point-definition rows; section labels excluded; template applicability and installed controller totals remain separate",
+  "review": {
+    "method": "Independent visual review of rendered PDF pages 52, 54, 56, 58, 60, 62, 64-71, with direct pdftotext spot-checks. Counts follow the printed MARK rows under ANALOG INPUT, ANALOG OUTPUT, BINARY INPUT, and BINARY OUTPUT. The pre-existing five-list/122-row truth remains unchanged as an overlapping locked subset.",
+    "reviewed_pages": [52, 54, 56, 58, 60, 62, 64, 65, 66, 67, 68, 69, 70, 71]
+  },
+  "totals": {
+    "lists": 21,
+    "rows": 546,
+    "AI": 210,
+    "AO": 66,
+    "BI": 189,
+    "BO": 81
+  },
+  "lists": [
+    { "page": 52, "title": "AIR OPS DOAH DDC POINTS LIST", "rows": 67, "AI": 27, "AO": 7, "BI": 24, "BO": 9 },
+    { "page": 54, "title": "AIR OPS AHU DDC POINTS LIST", "rows": 31, "AI": 12, "AO": 3, "BI": 13, "BO": 3, "wildcard_marks": ["BI#", "BI##", "BO#"] },
+    { "page": 56, "title": "AIR OPS - CHW SYSTEM POINTS LIST", "rows": 33, "AI": 15, "AO": 3, "BI": 9, "BO": 6 },
+    { "page": 58, "title": "AIR OPS- HHW SYSTEM POINT LIST", "rows": 39, "AI": 16, "AO": 5, "BI": 12, "BO": 6 },
+    { "page": 60, "title": "MTRACON/ATCT - CHW SYSTEM POINT LIST", "rows": 63, "AI": 30, "AO": 8, "BI": 15, "BO": 10 },
+    { "page": 62, "title": "MTRACON/ATCT - HHW SYSTEM POINT LIST", "rows": 102, "AI": 43, "AO": 12, "BI": 29, "BO": 18, "expected_compiled_lists": 1, "authored_table_fragments": 2 },
+    { "page": 64, "title": "POINTS LIST DOAH-TI", "rows": 34, "AI": 13, "AO": 4, "BI": 13, "BO": 4 },
+    { "page": 65, "title": "POINTS LIST AHU-T1A/TIB", "rows": 62, "AI": 21, "AO": 7, "BI": 26, "BO": 8 },
+    { "page": 66, "title": "ATCT STAIR PRESSURIZATION DDC POINTS LIST", "rows": 12, "AI": 2, "AO": 2, "BI": 6, "BO": 2 },
+    { "page": 67, "title": "FCU WITH COOLING COILS DDC POINTS LIST", "rows": 9, "AI": 3, "AO": 1, "BI": 4, "BO": 1 },
+    { "page": 67, "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST", "rows": 11, "AI": 4, "AO": 2, "BI": 4, "BO": 1 },
+    { "page": 67, "title": "UNIT HEATER DDC POINTS LIST", "rows": 6, "AI": 2, "AO": 1, "BI": 2, "BO": 1 },
+    { "page": 68, "title": "CRAH DDC POINTS LIST", "rows": 13, "AI": 5, "AO": 2, "BI": 5, "BO": 1 },
+    { "page": 68, "title": "SFPVAV DDC POINTS LIST", "rows": 9, "AI": 4, "AO": 2, "BI": 2, "BO": 1 },
+    { "page": 69, "title": "UPS EXHAUST FAN DDC POINTS LIST", "rows": 4, "AI": 0, "AO": 0, "BI": 3, "BO": 1 },
+    { "page": 69, "title": "HUMIDIFIER DDC POINTS LIST", "rows": 5, "AI": 1, "AO": 0, "BI": 3, "BO": 1 },
+    { "page": 69, "title": "ELEVATOR MACHINE ROOM DDC POINTS LIST", "rows": 13, "AI": 5, "AO": 3, "BI": 4, "BO": 1 },
+    { "page": 69, "title": "BATHROOM EXHAUST FAN DDC POINTS LIST", "rows": 4, "AI": 0, "AO": 0, "BI": 3, "BO": 1 },
+    { "page": 70, "title": "AIR OPS H&V DDC POINTS LIST", "rows": 16, "AI": 3, "AO": 2, "BI": 6, "BO": 5 },
+    { "page": 71, "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST - OCCUPIED", "rows": 11, "AI": 4, "AO": 2, "BI": 4, "BO": 1 },
+    { "page": 71, "title": "REDUNDANT FCU DDC POINTS LIST", "rows": 2, "AI": 0, "AO": 0, "BI": 2, "BO": 0 }
+  ],
+  "negative_controls": {
+    "excluded_section_labels": ["ANALOG INPUT", "ANALOG OUTPUT", "BINARY INPUT", "BINARY OUTPUT"],
+    "narrative_title_not_a_points_list": "AHU-1 POINT LIST TABLE",
+    "family_named_points_list_not_hvac_equipment": "CRAH DDC POINTS LIST",
+    "expected_hvac_crah_items": 6
+  }
+}

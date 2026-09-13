@@ -19,6 +19,7 @@ const ROUTES = [
   "/__ot/sheet-graph",
   "/__ot/compile-corpus-takeoff",
   "/__ot/sweep-schedule-row",
+  "/__ot/symbol-sweep",
   "/__ot/count-marks",
   "/__ot/reconcile-schedule-plan",
   "/__ot/bas-assignment-demand",

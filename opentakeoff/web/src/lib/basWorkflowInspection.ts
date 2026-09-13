@@ -42,6 +42,21 @@ export const basWorkflowInspectionSchema = z.object({
 export type BasWorkflowInspection = z.infer<typeof basWorkflowInspectionSchema>;
 
 const metric = (key: string, label: string, value: number | string | null) => ({ key, label, value });
+const pointMetrics = (capture: Awaited<ReturnType<typeof verifyBasWorkflow>>['captures'][number]) => {
+  const rows = capture.points.matrices.flatMap(matrix => matrix.rows);
+  const listed = rows.filter(row => row.observations.length > 0);
+  const typed = listed.filter(row => row.observations.some(observation => observation.kind === 'declared_io'));
+  return {
+    rows,
+    metrics: [
+      metric('point_matrix_fragments', 'Point-list matrix fragments', capture.points.matrices.length),
+      metric('point_source_rows', 'Retained point-list source rows', rows.length),
+      metric('listed_point_rows', 'Listed point-definition rows', listed.length),
+      metric('typed_point_rows', 'Rows with source-printed physical I/O type', typed.length),
+      metric('point_type_review_rows', 'Listed rows requiring point-type review', listed.length - typed.length),
+    ],
+  };
+};
 
 /** This deliberately returns only bounded counts and issue codes. Exact source
  * evidence remains in the workspaces/project review and is never truncated into
@@ -87,10 +102,10 @@ export async function inspectBasWorkflow(raw: unknown, rawDomain: unknown, rawCa
   let next_step = relevant[0]?.next_step || 'Open the workspace and review the retained source-backed records.';
 
   if (domain === 'point_soo') {
-    const rows = capture.points.matrices.flatMap(matrix => matrix.rows);
+    const pointSummary = pointMetrics(capture), rows = pointSummary.rows;
     if (!capture.narrative_sources) {
       status = 'unavailable';
-      metrics = [metric('point_matrices', 'Point-list matrices', capture.points.matrices.length), metric('point_rows', 'Point-list rows', rows.length),
+      metrics = [...pointSummary.metrics,
         metric('sequence_regions', 'SOO regions', 0), metric('reviewed_links', 'Reviewed SOO ↔ point-list links', 0)];
       next_step = 'Recompile the original PDFs to retain narrative SOO source text; existing point-list evidence remains available.';
     } else {
@@ -98,7 +113,7 @@ export async function inspectBasWorkflow(raw: unknown, rawDomain: unknown, rawCa
       const clauses = view.sequences.regions.flatMap(region => region.clauses);
       const comparisons = view.comparisons.flatMap(comparison => comparison.requirements);
       const links = basActiveAssociations(workflow, captureId);
-      metrics = [metric('point_matrices', 'Point-list matrices', capture.points.matrices.length), metric('point_rows', 'Point-list rows', rows.length),
+      metrics = [...pointSummary.metrics,
         metric('read_observations', 'Deterministically read point observations', rows.reduce((n, row) => n + row.observations.filter(o => o.status === 'read').length, 0)),
         metric('sequence_regions', 'SOO regions', view.sequences.regions.length), metric('sequence_clauses', 'SOO clauses', clauses.length),
         metric('reviewed_links', 'Reviewed SOO ↔ point-list links', links.length),

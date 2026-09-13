@@ -74,6 +74,10 @@ test("rowsFromToolResult: sweep_schedule_row installed qty + attributes", () => 
   const rows = rowsFromToolResult("sweep_schedule_row", { tag: "VAV-1" }, {
     tag: "VAV-1",
     found: 3,
+    search_scope: "tagged_only",
+    unlabeled_audit_complete: false,
+    complete: true,
+    anchor: { grounding_basis: "exact_plan_tag" },
     tag_citations: [{ sheet: "mech.pdf#2", bbox: [10, 20, 30, 40] }],
     row: {
       sheet: "mech.pdf#6",
@@ -83,6 +87,9 @@ test("rowsFromToolResult: sweep_schedule_row installed qty + attributes", () => 
     },
   }, { workflow: "vav join" });
   assert.ok(rows.some((r) => r.field === "installed_quantity" && r.value === 3 && r.unit === "EA"));
+  const installed = rows.find((r) => r.field === "installed_quantity");
+  assert.equal(installed?.quantity_basis, "exact_plan_tag");
+  assert.match(installed?.note || "", /unlabeled audit: not run/);
   assert.ok(rows.some((r) => r.field === "CFM" && r.value === "2170"));
   assert.ok(!rows.some((r) => r.field === "MARK"));
 });
@@ -283,6 +290,86 @@ test("rowsFromCompiledTakeoff: HVAC categories → EAV rows for Takeoff panel", 
     },
   }, { workflow: "HVAC" });
   assert.ok(viaTool.some((r) => r.tag === "EF-1" && r.source_tool === "compile_corpus_takeoff"));
+});
+
+test("empty compiled taxonomy buckets and estimator metadata never become takeoff lines", () => {
+  const emptyHvacRows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-HVAC-01",
+    kind: "hvac_equipment",
+    categories: {
+      AHU: { count: 0, items: [] },
+      VAV: { count: 0, items: [] },
+    },
+    totals: { categories: 2, items: 0 },
+  });
+  assert.deepEqual(emptyHvacRows, []);
+
+  const emptyValveRows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-VALVE-01",
+    kind: "control_valves",
+    categories: { CHW_CONTROL_VALVE: { count: 0, items: [] } },
+    totals: { categories: 1, items: 0 },
+    estimator_status: {
+      estimator_complete: false,
+      meaning: "review still required",
+      gates: [{ gate: "plan_paint", status: "refuse_not_done", note: "not run" }],
+    },
+    estimator_product: {
+      printed_items: 0,
+      contractor_column_coverage: { missing_on_some_rows: [], note: "no printed rows" },
+      plan_paint: { status: "refuse_not_done", note: "not run", targets: [] },
+    },
+  });
+  assert.ok(emptyValveRows.length > 0, "workflow metadata remains retained for audit");
+  assert.deepEqual(
+    compileAgentTakeoff(emptyValveRows),
+    [],
+    "workflow metadata must not seed fake physical takeoff lines",
+  );
+
+  const emptyPointRows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-BAS-01",
+    kind: "bas_points",
+    categories: {
+      points_lists: {
+        lists: [{ title: "EMPTY POINT LIST", rows: 0, items: [] }],
+      },
+    },
+  });
+  assert.equal(emptyPointRows.some((row) => row.field === "schedule_count"), false);
+  assert.deepEqual(compileAgentTakeoff(emptyPointRows), []);
+});
+
+test("compiled schedule quantity provenance prevents legacy row-count fallback from becoming estimator truth", () => {
+  const rows = rowsFromCompiledTakeoff({
+    kind: "hvac_equipment",
+    categories: {
+      VAV: { items: [
+        {
+          tag: "VAV-12", quantity: 1, quantity_basis: "schedule_row_cardinality",
+          scheduled_qty: 4, scheduled_qty_basis: "printed_schedule_quantity",
+          unit: "EA", sheet_id: "m.pdf#1", table_title: "VAV SCHEDULE",
+        },
+        {
+          tag: "VAV-13", quantity: 1, quantity_basis: "schedule_row_cardinality",
+          scheduled_qty: null, scheduled_qty_basis: "unparseable_printed_quantity",
+          status: "REFUSED_UNPARSEABLE_QTY", reason: 'QTY column present but unparseable ("1 B")',
+          unit: "EA", sheet_id: "m.pdf#1", table_title: "VAV SCHEDULE",
+        },
+      ] },
+    },
+  });
+  const lines = compileAgentTakeoff(rows);
+  const known = lines.find((line) => line.tag === "VAV-12");
+  const refused = lines.find((line) => line.tag === "VAV-13");
+  assert.equal(known?.qty, 4);
+  assert.equal(known?.scheduled_qty, 4);
+  assert.equal(known?.quantity_basis, "printed_schedule_quantity");
+  assert.ok(refused, "the exception remains in the reviewable takeoff instead of disappearing");
+  assert.equal(refused?.qty, null);
+  assert.equal(refused?.scheduled_qty, null);
+  assert.equal(refused?.status, "quantity_unresolved");
+  assert.equal(refused?.quantity_basis, "unparseable_printed_quantity");
 });
 
 test("compileAgentTakeoff: corpus compile locks line count — scrap cannot inflate", () => {
@@ -1060,8 +1147,13 @@ test("reconcile_schedule_plan: EAV rows merge into ONE compiled line carrying sc
   const reconcileResult = {
     rows: [{
       tag: "VAV-1", family: "VAV", scheduled_qty: 6, installed_qty: 4, status: "SCHEDULE_ONLY",
+      observed_plan_qty: 4,
+      installed_qty_basis: "exact_plan_tag",
+      search_scope: "tagged_only",
+      unlabeled_audit_complete: false,
+      plan_search_complete: true,
       schedule_cite: { sheet: "set.pdf#5", title: "VAV SCHEDULE" },
-      plan_cites: [{ sheet: "set.pdf#12", at: [100, 200] }],
+      plan_cites: [{ sheet: "set.pdf#12", at: [100, 200], bbox: { x0: 90, y0: 190, x1: 110, y1: 210 } }],
       reason: "2 of 6 scheduled units not drawn on any plan sheet",
     }],
     summary: { total: 1, match: 0, schedule_only: 1, plan_only: 0, refused_no_scale: 0, refused_no_text: 0, ambiguous: 0 },
@@ -1079,6 +1171,9 @@ test("reconcile_schedule_plan: EAV rows merge into ONE compiled line carrying sc
   assert.equal(line.qty_kind, "installed");
   assert.equal(line.scheduled_qty, 6);
   assert.equal(line.installed_qty, 4);
+  assert.equal(line.quantity_basis, "exact_plan_tag");
+  assert.deepEqual(line.bbox_px, [90, 190, 110, 210]);
+  assert.match(line.notes, /unlabeled audit: not run/);
   assert.equal(line.status, "schedule_only");
   assert.equal(line.plan_sheet_id, "set.pdf#12");
   assert.equal(line.schedule_sheet_id, "set.pdf#5");
@@ -1116,4 +1211,89 @@ test("compileAgentTakeoff never invents qty=1 for an attr-only tag with no print
     assert.equal(line.qty, null, "no invented qty=1");
     assert.match(line.notes, /refused, not defaulted/);
   }
+});
+
+test("complete BAS takeoff exposes cited schematic/riser evidence without turning it into installed quantity", () => {
+  const control = {
+    schema_version: "opentakeoff.control_schematic.v1",
+    schematics: [{
+      id: "schematic:M6.1:1", sheet: "set.pdf#17", title: "AHU CONTROL SCHEMATIC",
+      title_evidence: { sheet: "set.pdf#17", text: "AHU CONTROL SCHEMATIC", bbox: [10, 20, 200, 40], source: "text_span" },
+      region: [10, 20, 600, 700],
+      explicit_points: [{
+        id: "point:M6.1:AI", point_type: "AI", at: [100, 200],
+        evidence: { sheet: "set.pdf#17", text: "AI", bbox: [95, 195, 105, 205], source: "text_span" },
+        typing_basis: "explicit_printed_io_token",
+      }],
+      point_totals: { AI: 1, AO: 0, DI: 0, DO: 0, total: 1 },
+      instruments: [], equipment: [], media_labels: [], sequence_refs: [],
+      topology: { status: "computed", crossings: [] },
+      semantic_status: "evidence_inventory",
+      review: { human_review_required: true, unresolved_crossings: 0, unmapped_instruments: 0 },
+    }],
+    risers: [{
+      id: "riser:M7.1:1", sheet: "set.pdf#22", title: "CHW RISER DIAGRAM",
+      title_evidence: { sheet: "set.pdf#22", text: "CHW RISER DIAGRAM", bbox: [20, 30, 180, 50], source: "text_span" },
+      datums: [{ label: "ROOF", evidence: { sheet: "set.pdf#22", text: "ROOF", bbox: [20, 90, 60, 100], source: "text_span" } }],
+      systems: [{
+        normalized_system: "chilled_water", authored_label: "CHW RISER DIAGRAM", interpretation_basis: "authored_diagram_title",
+        evidence: { sheet: "set.pdf#22", text: "CHW RISER DIAGRAM", bbox: [20, 30, 180, 50], source: "text_span" },
+      }],
+      service_groups: [{
+        label: "LOW CHWS/R RISER", normalized_system: "chilled_water", pressure_zone: "low", service_pair: "supply_return",
+        evidence: [{ sheet: "set.pdf#22", text: "LOW CHWS/R RISER", bbox: [180, 100, 205, 400], source: "text_span" }],
+      }],
+      continuations: [{
+        target_sheet: "M7.2", boundary: "bottom", text: "FOR CONTINUATION SEE SHEET M7.2",
+        evidence: { sheet: "set.pdf#22", text: "FOR CONTINUATION SEE SHEET M7.2", bbox: [200, 450, 500, 470], source: "text_span" },
+      }],
+      diagram_tags: [],
+      device_states: [{
+        device_tag: "V-1", state: "normally_open", authored_token: "NO", interpretation_basis: "one_to_one_local_tag_state_geometry",
+        state_evidence: { sheet: "set.pdf#22", text: "NO", bbox: [210, 200, 225, 215], source: "text_span" },
+      }],
+      network_transports: [],
+      network_components: [{
+        component_type: "ME Stack",
+        evidence: [{ sheet: "set.pdf#22", text: "ME Stack", bbox: [410, 120, 460, 135], source: "text_span" }],
+      }],
+      floor_placements: [{
+        subject_kind: "network_component", subject: "ME Stack", floor_label: "ROOF",
+        interpretation_basis: "authored_subject_inside_authored_floor_band",
+        subject_evidence: { sheet: "set.pdf#22", text: "ME Stack", bbox: [410, 120, 460, 135], source: "text_span" },
+        floor_evidence: { sheet: "set.pdf#22", text: "ROOF", bbox: [20, 90, 60, 100], source: "text_span" },
+      }],
+      trace_candidates: [{ from_datum: "ROOF", to_datum: "FIRST FLOOR", bbox: [200, 100, 202, 500], direction: "unknown" }],
+      semantic_status: "evidence_inventory",
+      review: { note: "Candidate geometry unresolved" },
+      status: "evidence_inventory",
+    }],
+    diagram_conflicts: [{
+      device_tag: "V-1", normalized_system: "chilled_water", conflict_type: "normal_state_mismatch", status: "design_clarification_required",
+      claims: [{
+        sheet: "set.pdf#22", diagram_title: "CHW RISER DIAGRAM", state: "normally_open",
+        state_evidence: { sheet: "set.pdf#22", text: "NO", bbox: [210, 200, 225, 215], source: "text_span" },
+      }],
+    }],
+    engineering_readiness: {
+      status: "evidence_inventory_only",
+      blockers: [{ code: "SEMANTIC_CONNECTIVITY_UNVERIFIED", count: 2 }],
+    },
+    totals: { schematics: 1, riser_diagrams: 1, explicit_points: 1, instruments_unmapped: 0, unresolved_crossings: 0 },
+    exclusions: [],
+  };
+  const rows = rowsFromToolResult("run_complete_bas_takeoff", {}, { control_schematics: control }, { workflow: "test" });
+  assert.ok(rows.some((row) => row.field === "POINT TYPE" && row.value === "AI"));
+  assert.ok(rows.some((row) => row.field === "authored_riser_service" && row.value === "LOW CHWS/R RISER"));
+  assert.ok(rows.some((row) => row.field === "diagram_system" && row.value === "chilled_water"));
+  assert.ok(rows.some((row) => row.field === "off_page_continuation" && row.value === "M7.2"));
+  assert.ok(rows.some((row) => row.field === "unresolved_vector_candidate_count" && row.value === 1));
+  assert.ok(rows.some((row) => row.field === "diagram_normal_state" && row.value === "normally_open"));
+  assert.ok(rows.some((row) => row.field === "authored_network_component" && row.value === "ME Stack"));
+  assert.ok(rows.some((row) => row.field === "authored_floor_placement" && row.value === "ROOF"));
+  assert.ok(rows.some((row) => row.field === "diagram_state_conflict" && row.value === "normally_open"));
+  assert.ok(rows.some((row) => row.field === "principal_engineering_readiness" && row.value === "evidence_inventory_only"));
+  assert.ok(!rows.some((row) => row.field === "riser_trace" || row.field === "riser_trace_count"));
+  assert.ok(rows.every((row) => row.field !== "installed_quantity" && row.field !== "quantity"));
+  assert.deepEqual(rows.find((row) => row.field === "POINT TYPE")?.bbox_px, [95, 195, 105, 205]);
 });

@@ -58,16 +58,18 @@ def test_row_point_type_value_is_directional_not_name_inferred(text, expected):
 
 
 @pytest.mark.parametrize("text,expected", [
-    ("AI1", "AI"), ("AO-12", "AO"), ("BI 3", "DI"), ("BO4*", "DO"),
-    ("MI1", None), ("AI", None), ("FAN-AI1", None), ("AI0", None),
+    ("AI1", "AI"), ("AI01", "AI"), ("AO-0012", "AO"), ("BI 3", "DI"), ("BO4*", "DO"),
+    ("MI1", None), ("AI", None), ("FAN-AI1", None), ("AI0", None), ("AI0000", None),
+    ("AI00001", None),
 ])
 def test_printed_point_mark_is_exact_and_directional(text, expected):
     assert point_mark_channel(text) == expected
 
 
 @pytest.mark.parametrize("text,expected", [
-    ("AI1", ("physical", "AI")), ("BI2", ("physical", "DI")),
-    ("AV3", ("soft", "AV")), ("MI1", ("soft", "MI")), ("FAN-AI1", None),
+    ("AI1", ("physical", "AI")), ("AI01", ("physical", "AI")), ("BI2", ("physical", "DI")),
+    ("AV003", ("soft", "AV")), ("MI1", ("soft", "MI")), ("FAN-AI1", None),
+    ("BO0000", None), ("AO00001", None),
 ])
 def test_printed_point_mark_retains_physical_versus_software_kind(text, expected):
     assert point_mark_kind(text) == expected

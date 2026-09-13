@@ -19,11 +19,14 @@ test('independently reviewed system equipment lists resolve exact named membersh
 test('literal tags/lists/ranges preserve suffixes and explicit padding without dropping members', () => {
   const cases: [string, string[]][] = [
     ['  ahu - 001 ', ['AHU-001']], ['AHU1', ['AHU1']], ['AHU-A-1B', ['AHU-A-1B']],
+    ['AHU-A1', ['AHU-A1']], ['VAV-M101', ['VAV-M101']], ['FCU-T8', ['FCU-T8']],
+    ['CV-CHW-BP-A', ['CV-CHW-BP-A']], ['HHWP-DOAH-T1', ['HHWP-DOAH-T1']],
     ['AHU-01, AHU-1', ['AHU-01', 'AHU-1']],
     ['EF-1 & EF-2; EF-3 AND EF-4', ['EF-1', 'EF-2', 'EF-3', 'EF-4']],
     ['VAV-008 through VAV-011', ['VAV-008', 'VAV-009', 'VAV-010', 'VAV-011']],
     ['AHU-9 to AHU-11', ['AHU-9', 'AHU-10', 'AHU-11']],
     ['F1-AHU-1A thru F1-AHU-3A', ['F1-AHU-1A', 'F1-AHU-2A', 'F1-AHU-3A']],
+    ['VAV-A101 thru VAV-A103', ['VAV-A101', 'VAV-A102', 'VAV-A103']],
     ['EF-0', ['EF-0']], ['AHU-1 THRU AHU-1', ['AHU-1']],
   ];
   for (const [raw, members] of cases) assert.deepEqual(parse(raw).members, members, raw);
@@ -39,7 +42,7 @@ test('explicit exceptions retain their evidence and subtract only established me
 
 test('partial, duplicate, alternative and incompatible expressions refuse atomically', () => {
   const cases = [
-    '', 'REFRIGERANT MONITORING', '3', 'ONLY (2) CHILLERS SHALL OPERATE',
+    '', 'REFRIGERANT MONITORING', 'AIR-HANDLER', '3', 'ONLY (2) CHILLERS SHALL OPERATE',
     'AHU-1 OR AHU-2', 'AHU-1/AHU-2', 'AHU-1, UNKNOWN', 'AHU-1,',
     'AHU-1 AND', 'AHU-1, AHU-1', 'AHU-1 THRU AHU-3, AHU-2',
     'AHU-1 EXCEPT AHU-1 EXCEPT AHU-2', 'AHU-1 EXCEPT AHU-1, AHU-1',

@@ -56,6 +56,33 @@ describe("sequenceExtract", () => {
     assert.deepEqual(seqs[0].impliedPoints, []);
   });
 
+  it("compiles free-form positioned-span narratives even when no table exists", () => {
+    const graph = {
+      tables: [],
+      sequence_narratives: [{
+        id: "narrative:set.pdf#19:100:500",
+        sheet: "set.pdf#19",
+        title: "AHU-1 SEQUENCE OF OPERATION",
+        title_evidence: { sheet: "set.pdf#19", text: "AHU-1 SEQUENCE OF OPERATION", bbox: [100, 500, 400, 525] },
+        region: [50, 50, 900, 500],
+        direction: "above_title",
+        status: "extracted",
+        sections: [{
+          heading: "OCCUPIED MODE",
+          body: "THE CONTROLLER SHALL ENABLE THE SUPPLY FAN.",
+          evidence: [{ sheet: "set.pdf#19", text: "THE CONTROLLER SHALL ENABLE THE SUPPLY FAN.", bbox: [70, 100, 430, 115] }],
+        }],
+      }],
+    };
+    const seqs = extractSequencesFromGraph(graph as unknown as SheetGraph);
+    assert.equal(seqs.length, 1);
+    assert.equal(seqs[0].status, "extracted");
+    assert.equal(seqs[0].sources[0], "narrative_spans");
+    assert.equal(seqs[0].sections[0].body, "THE CONTROLLER SHALL ENABLE THE SUPPLY FAN.");
+    assert.deepEqual(seqs[0].sections[0].evidence[0].bbox, [70, 100, 430, 115]);
+    assert.deepEqual(seqs[0].impliedPoints, []);
+  });
+
   it("compileSequencesTakeoff produces the same envelope shape as the other T-* compiles, never invents points", () => {
     const graph = {
       sheets: [{ key: "set.pdf#20", sheetNumber: "M6.1" }, { key: "set.pdf#21", sheetNumber: "M6.2" }],

@@ -5,6 +5,7 @@
  *   --mode graph              → write SheetGraph JSON to --out (or stdout if small)
  *   --mode compile --kind …   → compileCorpusTakeoff JSON on stdout
  *   --mode sweep --tag …      → Session.sweepScheduleRow JSON on stdout
+ *   --mode symbol_sweep        → Session.symbolSweep JSON on stdout
  *   --mode count_marks        → Session.countMarks JSON on stdout
  *   --mode reconcile          → reconcileSchedulePlan JSON on stdout
  *
@@ -52,6 +53,10 @@ const sweepTag = arg(process.argv, "--tag");
 const marksCsv = arg(process.argv, "--marks");
 const family = arg(process.argv, "--family");
 const tagsCsv = arg(process.argv, "--tags");
+const categoriesCsv = arg(process.argv, "--categories");
+const categories = categoriesCsv
+  ? categoriesCsv.split(",").map((s) => s.trim()).filter(Boolean)
+  : null;
 const familySweepAll = process.argv.includes("--family-sweep-all");
 // MCP's own real default is exhaustive (sweep_schedule_row's tagged_only
 // z.boolean().default(false), mcp/src/tools.ts) — every caller through this
@@ -60,6 +65,11 @@ const familySweepAll = process.argv.includes("--family-sweep-all");
 // what was asked, so the UI and MCP could disagree on an installed count
 // from the same tag. Opt-in flag now, matching the real default.
 const evaluationFast = process.argv.includes("--evaluation-fast");
+const symbolPdfIndex = Number(arg(process.argv, "--symbol-pdf-index") ?? 0);
+const symbolPage = Number(arg(process.argv, "--symbol-page") ?? 0);
+const symbolSeedRectRaw = arg(process.argv, "--symbol-seed-rect");
+const symbolScope = arg(process.argv, "--symbol-scope") || "sheet";
+const symbolOptionsRaw = arg(process.argv, "--symbol-options");
 const outPath = arg(process.argv, "--out");
 const pdfs = argsOf(process.argv, "--pdf").map((p) => resolve(p));
 if (!pdfs.length) {
@@ -72,6 +82,14 @@ if (mode === "compile" && !kind) {
 }
 if (mode === "sweep" && !sweepTag) {
   console.error("--tag required for --mode sweep");
+  process.exit(2);
+}
+if (mode === "symbol_sweep" && (
+  !Number.isInteger(symbolPdfIndex) || symbolPdfIndex < 0 || symbolPdfIndex >= pdfs.length
+  || !Number.isInteger(symbolPage) || symbolPage < 1 || !symbolSeedRectRaw
+  || !["sheet", "set"].includes(symbolScope)
+)) {
+  console.error("--mode symbol_sweep requires a valid --symbol-pdf-index, --symbol-page, --symbol-seed-rect and --symbol-scope sheet|set");
   process.exit(2);
 }
 
@@ -88,6 +106,31 @@ await session.loadPlan(pdfs[0]);
 for (let i = 1; i < pdfs.length; i++) {
   progress("load", `Merging plan ${i + 1} of ${pdfs.length}…`, { pdf_index: i + 1, pdf_count: pdfs.length });
   await session.loadPlan(pdfs[i], { merge: true });
+}
+
+// Symbol spotting is a geometry/text operation and deliberately does not
+// build the schedule/table graph. This is the exact Session product path the
+// MCP tool calls; the browser bridge uses it for set-wide sweeps so UI and MCP
+// cannot carry separate counting implementations.
+if (mode === "symbol_sweep") {
+  const seedRect = JSON.parse(symbolSeedRectRaw);
+  const symbolOptions = symbolOptionsRaw ? JSON.parse(symbolOptionsRaw) : {};
+  const sheet = `${basename(pdfs[symbolPdfIndex])}#${symbolPage}`;
+  progress("symbol_sweep", `Sweeping ${symbolScope === "set" ? "the plan set" : sheet} on shared Session path…`, {
+    scope: symbolScope,
+    sheet,
+  });
+  const result = await session.symbolSweep(sheet, {
+    seedRect,
+    scope: symbolScope,
+    rotations: symbolOptions.rotations !== false,
+    mirror: symbolOptions.mirror !== false,
+    ...(symbolOptions.tolerancePx != null ? { tolerancePx: symbolOptions.tolerancePx } : {}),
+    ...(symbolOptions.variantGuard === true ? { variantGuard: true } : {}),
+    ...(symbolOptions.luminanceTolerance != null ? { luminanceTolerance: symbolOptions.luminanceTolerance } : {}),
+    ...(symbolOptions.affine ? { affine: symbolOptions.affine } : {}),
+  });
+  await writeJsonAndExit(result);
 }
 
 progress("graph", "Building Session + ODL sheet graph (schedules, roles, tables)…");
@@ -149,8 +192,17 @@ if (mode === "reconcile") {
   const result = await reconcileSchedulePlan(session, {
     family,
     tags,
+    categories,
     evaluationFast,
     familySweepAll,
+    onProgress: (event) => {
+      if (event.state === "start") {
+        progress("reconcile_row", `Grounding schedule tag ${event.tag}…`, event);
+        return;
+      }
+      const total = event.total ? ` of ${event.total}` : "";
+      progress("reconcile", `Grounded ${event.processed}${total} schedule tag${event.processed === 1 ? "" : "s"} — ${event.tag} (${event.elapsed_ms ?? 0} ms).`, event);
+    },
   });
   await writeJsonAndExit(result);
 }

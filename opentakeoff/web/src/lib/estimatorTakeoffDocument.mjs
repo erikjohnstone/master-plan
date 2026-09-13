@@ -130,12 +130,16 @@ function mapValveOrDamperItem(item, cells, tableIndex, isDamper, family) {
   const tableId = tableIdFor(tableIndex, item.sheet_id, item.table_title);
   const evidence = collectEvidence(item.sheet_id, tableId, tag, cells, item);
   const systemTag = cells["Unit Mark"]?.text || cells["Served equipment"]?.text || "UNKNOWN";
+  const scheduledQuantity = Number.isInteger(item.scheduled_qty) && item.scheduled_qty > 0
+    ? item.scheduled_qty
+    : null;
   const actuator = {
     power: /PNEUM/i.test(cells.Actuator?.text || "") ? "pneumatic" : "UNKNOWN",
     springReturn: /SPRING/i.test(cells.Actuator?.text || ""),
     control: /MODULAT/i.test(cells.Actuator?.text || "") ? "modulating" : "UNKNOWN",
     signal: cells["Control signal"]?.text || "",
-    qty: 1,
+    qty: scheduledQuantity,
+    quantityBasis: item.scheduled_qty_basis || null,
     torqueInLb: null,
   };
   if (isDamper) {
@@ -147,7 +151,8 @@ function mapValveOrDamperItem(item, cells, tableIndex, isDamper, family) {
       sizeIn: parseSizePair(cells.Size?.text),
       failPosition: parseFail(cells["Fail position"]?.text) || "UNKNOWN",
       actuator,
-      quantity: 1,
+      quantity: scheduledQuantity,
+      quantityBasis: item.scheduled_qty_basis || null,
       confidence: evidence.length ? 0.86 : 0.55,
       evidence,
       sources: ["schedule"],
@@ -164,7 +169,8 @@ function mapValveOrDamperItem(item, cells, tableIndex, isDamper, family) {
     pressureClass: "",
     failPosition: parseFail(cells["Fail position"]?.text) || "UNKNOWN",
     actuator,
-    quantity: 1,
+    quantity: scheduledQuantity,
+    quantityBasis: item.scheduled_qty_basis || null,
     confidence: evidence.length ? 0.88 : 0.55,
     evidence,
     sources: ["schedule"],
@@ -308,13 +314,16 @@ function buildDiscrepancies(harness, valveCompile, basCompile, reconcileSummary)
   if (reconcileSummary?.rows) {
     for (const row of reconcileSummary.rows) {
       if (row.status === "SCHEDULE_ONLY" || row.status === "PLAN_ONLY") {
-        const scheduled = row.scheduledQty ?? row.scheduled_qty ?? 0;
-        const installed = row.installedQty ?? row.installed_qty ?? 0;
+        const scheduled = row.scheduledQty ?? row.scheduled_qty;
+        const installed = row.installedQty ?? row.installed_qty;
+        const counts = {};
+        if (typeof scheduled === "number") counts.scheduled = scheduled;
+        if (typeof installed === "number") counts.installed = installed;
         out.push({
           kind: row.status === "PLAN_ONLY" ? "valve-in-sequence-not-scheduled" : "valve-schedule-vs-plan",
           systemTag: row.systemTag || row.system_tag || "",
           itemRef: row.tag || "",
-          counts: { scheduled, installed },
+          counts,
           note: `Pillar B reconcile: ${row.status}`,
           evidence: row.cites || row.plan_cites || [],
         });

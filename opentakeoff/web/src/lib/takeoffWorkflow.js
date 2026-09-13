@@ -14,7 +14,7 @@
  * hardcode sheet numbers, building names, or locked counts.
  */
 
-/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"schedule_plan_reconcile"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"generic"} TakeoffIntent */
+/** @typedef {"complete_bas_takeoff"|"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"schedule_plan_reconcile"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"generic"} TakeoffIntent */
 
 /** Estimator phrasing: "takeoff", "take off", counts, rollups. */
 export function goalAsksTakeoff(g) {
@@ -102,12 +102,26 @@ export function corpusCompileKind(goal) {
   return null;
 }
 
+/** A BAS project takeoff, not a request limited to points alone. */
+export function goalAsksCompleteBasTakeoff(goal) {
+  const g = String(goal || "");
+  if (!goalAsksTakeoff(g) || !/\b(?:BAS|DDC|building[\s-]*automation)\b/i.test(g)) return false;
+  // Preserve the established multi-family HVAC project-rollup workflow. BAS
+  // appearing as one requested section does not turn that frozen scope into
+  // the new all-domain BAS lifecycle.
+  if (namedEquipmentFamilyCount(g) >= 3) return false;
+  const explicitlyPointsOnly = /\bpoints?(?:\s*list)?\b/i.test(g)
+    && !/\b(?:sequence|SOO|valves?|dampers?|equipment|reconcil|assembl|controller|end[\s-]*to[\s-]*end)\b/i.test(g);
+  return !explicitlyPointsOnly;
+}
+
 /**
  * @param {string} goal
  * @returns {TakeoffIntent}
  */
 export function classifyTakeoffIntent(goal) {
   const g = String(goal || "");
+  if (goalAsksCompleteBasTakeoff(g)) return "complete_bas_takeoff";
   const corpusKind = corpusCompileKind(g);
   if (corpusKind === "hvac_equipment") return "corpus_hvac";
   if (corpusKind === "bas_points") return "corpus_bas";
@@ -537,6 +551,29 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     const q = out?.query || args || {};
     return q.row_key == null && q.cell_contains == null && q.title;
   }).length;
+
+  if (intent === "complete_bas_takeoff") {
+    // A deterministic run may legitimately finish with one failed/refused
+    // independent stage while preserving valid results from the others. Once
+    // that inspectable receipt exists, let the Agent explain it; retry loops
+    // do not manufacture missing evidence and can repeat expensive work.
+    const executed = log.some(({ name, out }) => name === "run_complete_bas_takeoff"
+      && !out?.error && ["completed", "partial"].includes(out?.execution_status));
+    if (!executed) {
+      return {
+        phase: "compile",
+        allowedTools: ["run_complete_bas_takeoff"],
+        nextMove: "Call run_complete_bas_takeoff now. It deterministically compiles HVAC equipment, BAS points, sequences, control valves/dampers, embedded-coil valve gaps; reconciles schedule versus plan; inspects all five BAS workflows; and opens the estimator review workspace. Do not substitute a prose checklist or partial family crawl.",
+        blockReason: null,
+      };
+    }
+    return {
+      phase: "answer",
+      allowedTools: null,
+      nextMove: "Report the run_complete_bas_takeoff result concisely: extracted-scope totals, schedule-plan MATCH and exception counts, nonzero diagram blockers, exact workflow_status values, then the single next estimator action. A successful inspection is not a completed workflow. Do not invent hypothetical exception causes, repeat technical steps, or call the takeoff approved; a human remains the release authority.",
+      blockReason: null,
+    };
+  }
 
   if (intent === "corpus_hvac" || intent === "corpus_bas" || intent === "corpus_valves") {
     const kind = intent === "corpus_bas"

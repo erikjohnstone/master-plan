@@ -1,0 +1,49 @@
+{
+  "schema": "opentakeoff.cross_set_compile_correction_overlay.v1",
+  "review": {
+    "method": "Independent visual review of Poppler-rendered source pages, cross-checked with pdftotext -layout and the authored schedule row labels.",
+    "reason": "The frozen compile keys predate coverage of visibly authored air-device and expansion-tank schedule rows. These additive corrections preserve the original files and change only independently reviewed omissions."
+  },
+  "corrections": [
+    {
+      "set_id": "federal-mech",
+      "source_pdf": "raw/federal-attachment4-mechanical.pdf",
+      "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+      "page": 15,
+      "evidence": [
+        "GRILLE, REGISTER, AND DIFFUSER SCHEDULE has 23 authored rows: 12 supply, 8 return, and 3 exhaust devices.",
+        "EXPANSION TANK SCHEDULE has two authored equipment rows, ET-1 and ET-2."
+      ],
+      "totals": {
+        "items": 128
+      },
+      "categories": {
+        "GRD": 23,
+        "EXPANSION_TANK": 2
+      },
+      "bas_points": {
+        "rows": 26,
+        "AI": 12,
+        "AO": 8,
+        "BI": 4,
+        "BO": 2
+      }
+    },
+    {
+      "set_id": "itd-d1-lab",
+      "source_pdf": "raw/itd-d1-lab-mechanical.pdf",
+      "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+      "page": 13,
+      "evidence": [
+        "DIFFUSER SCHEDULE has seven authored rows, D-1 through D-7.",
+        "RETURN & EXHAUST GRILLE SCHEDULE has four authored rows, R-1 through R-4."
+      ],
+      "totals": {
+        "items": 97
+      },
+      "categories": {
+        "GRD": 11
+      }
+    }
+  ]
+}

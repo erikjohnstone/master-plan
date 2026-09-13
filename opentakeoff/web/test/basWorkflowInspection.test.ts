@@ -31,3 +31,17 @@ test('inspection rejects foreign captures and never turns missing capabilities i
   assert.ok(result.blocker_count > 0);
   assert.notEqual(result.status, 'in_progress');
 });
+
+test('point/SOO inspection separates retained source rows from typed physical point rows', async () => {
+  const fixture = await engineeringFixture({ withSequence: true });
+  const result = await inspectBasWorkflow(fixture.workflow, 'point_soo');
+  const metrics = Object.fromEntries(result.metrics.map(item => [item.key, item.value]));
+  assert.equal(typeof metrics.point_source_rows, 'number');
+  assert.equal(typeof metrics.listed_point_rows, 'number');
+  assert.equal(typeof metrics.typed_point_rows, 'number');
+  assert.equal(typeof metrics.point_type_review_rows, 'number');
+  assert.equal(metrics.listed_point_rows,
+    Number(metrics.typed_point_rows) + Number(metrics.point_type_review_rows));
+  assert.ok(Number(metrics.point_source_rows) >= Number(metrics.listed_point_rows));
+  assert.equal('point_rows' in metrics, false, 'ambiguous legacy label must not return');
+});

@@ -50,7 +50,7 @@ export function assertWp1CompileAcceptance(key, { hvac, bas, valve }) {
   }
   assert.equal(bas.totals.rows ?? bas.totals.items ?? 0, key.bas_points.rows,
     `${key.set_id} BAS empty/honest disclose`);
-  for (const field of ["alarm", "trend", "hardwired", "soft"]) {
+  for (const field of ["AI", "AO", "BI", "BO", "alarm", "trend", "hardwired", "soft"]) {
     if (key.bas_points[field] == null) continue;
     assert.equal(
       bas.totals[field] ?? 0,

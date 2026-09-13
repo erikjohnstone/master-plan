@@ -68,6 +68,11 @@ export function captureBasEquipmentTables(tables: unknown[]): BasEquipmentEviden
     if (/\bDUCT\s+(?:CONSTRUCTION|LEAKAGE)(?:\s+AND\s+LEAKAGE)?\s+SCHEDULE\b/.test(title)) return false;
     if (/\b(?:LUMINAIRE|LIGHTING\s+FIXTURE)\s+SCHEDULE\b/.test(title)) return false;
     if (/\b(?:PANEL|PANELBOARD|SWITCHBOARD)\b.*\bSCHEDULE\b/.test(title)) return false;
+    // Plumbing equipment can legitimately carry BAS points, but a fixture
+    // schedule is a fixture/product register. Short marks such as D-1 are
+    // routinely reused for mechanical dampers, so admitting this explicit
+    // family creates false template candidates (reproduced on ITD D-1 Lab).
+    if (/\bPLUMBING\s+FIXTURE\s+SCHEDULE\b/.test(title)) return false;
     return true;
   };
   return basEquipmentEvidenceSchema.parse({ schema_version: 'bas_equipment_evidence_v1',

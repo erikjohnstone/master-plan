@@ -116,12 +116,16 @@ export const AIR_TERMINALS: HvacComponent[] = [
   },
   { category: "air_terminal", name: "CAV box (constant air volume terminal)", tagPrefixes: ["CAV-"], note: "Commonly published convention; not independently observed on this project's own corpus (every real terminal-unit schedule found so far is variable-volume)." },
   { category: "air_terminal", name: "Fan-powered terminal unit", tagPrefixes: ["FPT-", "FPB-"], note: "Commonly published convention; not independently observed on this project's own corpus yet." },
-  { category: "air_terminal", name: "Linear supply diffuser", tagPrefixes: ["LD-"], scheduleKind: "equipment", note: "REAL, observed in NAVFAC's GRD SCHEDULE and across multiple ductwork-plan levels." },
-  { category: "air_terminal", name: "Transfer grille", tagPrefixes: ["TG-"], scheduleKind: "equipment", note: "REAL, observed in NAVFAC's GRD SCHEDULE." },
-  { category: "air_terminal", name: "Return grille", tagPrefixes: ["RG-", "EG-"], scheduleKind: "equipment", note: "REAL, observed in NAVFAC's GRD SCHEDULE." },
-  { category: "air_terminal", name: "Ceiling supply diffuser", tagPrefixes: ["CDA", "CDB"], scheduleKind: "equipment", note: "REAL, observed in Building 5406's GRILLE, REGISTER AND DIFFUSER SCHEDULE." },
-  { category: "air_terminal", name: "Return register", tagPrefixes: ["RRA"], scheduleKind: "equipment", note: "REAL, observed in Building 5406's GRILLE, REGISTER AND DIFFUSER SCHEDULE." },
-  { category: "air_terminal", name: "Exhaust register", tagPrefixes: ["ERA"], scheduleKind: "equipment", note: "REAL, observed in Building 5406's GRILLE, REGISTER AND DIFFUSER SCHEDULE." },
+  // Air outlets/inlets are repeatable distribution devices, not controlled
+  // terminal equipment. Keeping them in the same source array preserves the
+  // public taxonomy shape while the category lets a BAS takeoff include VAV/
+  // CAV/FPT controllers without walking every grille and diffuser symbol.
+  { category: "air_device", name: "Linear supply diffuser", tagPrefixes: ["LD-"], scheduleKind: "equipment", note: "REAL, observed in NAVFAC's GRD SCHEDULE and across multiple ductwork-plan levels." },
+  { category: "air_device", name: "Transfer grille", tagPrefixes: ["TG-"], scheduleKind: "equipment", note: "REAL, observed in NAVFAC's GRD SCHEDULE." },
+  { category: "air_device", name: "Return grille", tagPrefixes: ["RG-", "EG-"], scheduleKind: "equipment", note: "REAL, observed in NAVFAC's GRD SCHEDULE." },
+  { category: "air_device", name: "Ceiling supply diffuser", tagPrefixes: ["CD-", "CDA", "CDB"], scheduleKind: "equipment", note: "REAL, observed as CD-* in NAVFAC and CDA/CDB in Building 5406 GRILLE, REGISTER AND DIFFUSER schedules. CD-* overlaps combination damper and must be disambiguated by the owning schedule title." },
+  { category: "air_device", name: "Return register", tagPrefixes: ["RRA"], scheduleKind: "equipment", note: "REAL, observed in Building 5406's GRILLE, REGISTER AND DIFFUSER SCHEDULE." },
+  { category: "air_device", name: "Exhaust register", tagPrefixes: ["ERA"], scheduleKind: "equipment", note: "REAL, observed in Building 5406's GRILLE, REGISTER AND DIFFUSER SCHEDULE." },
 ];
 
 // ── major equipment ──────────────────────────────────────────────────────

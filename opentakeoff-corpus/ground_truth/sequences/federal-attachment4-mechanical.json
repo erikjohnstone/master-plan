@@ -1,0 +1,169 @@
+{
+  "schema": "opentakeoff.sequence_narrative_ground_truth.v1",
+  "source_pdf": "raw/federal-attachment4-mechanical.pdf",
+  "review_basis": "Human visual review of rendered vector PDF sheets M8.3, M8.6, and M8.8 plus negative-control sheet M8.5. Expectations describe authored drawing evidence, not current engine output.",
+  "coordinate_frame": "render_scale_2_image_px_origin_top_left",
+  "pages": [
+    {
+      "page": 19,
+      "sheet_number": "M8.3",
+      "expected_sequences": [
+        {
+          "title": "CHILLED WATER SYSTEM - SEQUENCE OF OPERATION",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 2,
+          "minimum_evidence_spans": 50,
+          "required_phrases": [
+            "THE CHILLED WATER SYSTEM SHALL CONSIST OF A SINGLE AIR COOLED CHILLER AND TWO VARIABLE PRIMARY CHILLED WATER PUMPS",
+            "THE BMS MODULATES THE DUTY CHILLED WATER PUMP TO MAINTAIN DIFFERENTIAL PRESSURE",
+            "THE CHILLED WATER BYPASS VALVE SHALL BE NORMALLY CLOSED"
+          ],
+          "forbidden_phrases": [
+            "CHILLER POWER CONSUMPTION",
+            "POINT NAME",
+            "PUMP START/STOP"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 22,
+      "sheet_number": "M8.6",
+      "expected_sequences": [
+        {
+          "title": "AHU - 1 SEQUENCE OF OPERATIONS",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 15,
+          "minimum_evidence_spans": 250,
+          "required_phrases": [
+            "THE SUPPLY AIR FANS ARE INTENDED TO OPERATE INDEPENDENT OF EACH OTHER",
+            "AN OPTIMAL START ROUTINE SHALL BE UTILIZED",
+            "DUCT STATIC PRESSURE RESET"
+          ],
+          "forbidden_phrases": [
+            "LEED IAQ PRE OCCUPANCY FLUSH"
+          ]
+        },
+        {
+          "title": "LEED IAQ PRE - OCCUPANCY FLUSH - OUT - SEQUENCE OF OPERATION",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 1,
+          "minimum_evidence_spans": 10,
+          "required_phrases": [
+            "THE AHU SHALL RUN @ 100% OUTSIDE AIR",
+            "ALL EXHAUST FANS SHALL BE COMMANDED OFF",
+            "THIS SEQUENCE SHALL BE INVISIBLE TO MAINTENANCE PERSONNEL"
+          ],
+          "forbidden_phrases": [
+            "SET POINT ADJUSTMENTS",
+            "MISCELLANEOUS ALARMS & SYSTEMS DIAGNOSTICS"
+          ]
+        }
+      ]
+    },
+    {
+      "page": 24,
+      "sheet_number": "M8.8",
+      "expected_sequences": [
+        {
+          "title": "TOILET EXHAUST FANS - SEQUENCE OF OPERATION:",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 2,
+          "minimum_evidence_spans": 10,
+          "required_phrases": [
+            "THE BMS SHALL INTERLOCK THE OPERATION OF THE EXHAUST FANS WITH THE OPERATION OF THE AIR HANDLING UNIT",
+            "ASSOCIATED DAMPER END SWITCH"
+          ],
+          "forbidden_phrases": [
+            "EMERGENCY SHUTDOWN CONTROL",
+            "LIGHTING CONTROL DIAGRAM"
+          ]
+        },
+        {
+          "title": "MECHANICAL ROOM EXHAUST FAN - SEQUENCE OF OPERATION:",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 1,
+          "minimum_evidence_spans": 10,
+          "required_phrases": [
+            "SPACE THERMOSTAT SHALL CONTROL THE EXHAUST FAN TO MAINTAIN A ROOM TEMPERATURE OF 80 F",
+            "BOTH DAMPER END SWITCHES SENSE THAT THE DAMPERS ARE FULLY OPEN"
+          ],
+          "forbidden_phrases": [
+            "LIGHTING CONTACTOR RELAY",
+            "EMERGENCY SHUTDOWN CONTROL"
+          ]
+        },
+        {
+          "title": "UNIT HEATER - SEQUENCE OF OPERATION:",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 1,
+          "minimum_evidence_spans": 7,
+          "required_phrases": [
+            "THE LOCAL THERMOSTAT WILL MODULATE THE HEATING HOT WATER VALVE AND CYCLE ON/OFF THE UNIT HEATER FAN",
+            "PERSONNEL MANUALLY SELECT THE DESIRED HIGH, MEDIUM, OR LOW FAN SPEEDS"
+          ],
+          "forbidden_phrases": [
+            "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE"
+          ]
+        },
+        {
+          "title": "FAN COIL UNIT - SEQUENCE OF OPERATION:",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 1,
+          "minimum_evidence_spans": 4,
+          "required_phrases": [
+            "THE BMS WILL MODULATE THE HEATING HOT WATER VALVE AND CYCLE ON/OFF THE FAN COIL FAN",
+            "SET POINT OF 72 F"
+          ],
+          "forbidden_phrases": [
+            "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE"
+          ]
+        },
+        {
+          "title": "DX SPLIT SYSTEM - SEQUENCE OF OPERATION:",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 1,
+          "minimum_evidence_spans": 8,
+          "required_phrases": [
+            "WALL MOUNTED TEMPERATURE SENSOR FOR MONITORING ROOM TEMPERATURE",
+            "AN ALARM SHALL BE ACTIVATED AT THE BMS'S OWS"
+          ],
+          "forbidden_phrases": [
+            "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE",
+            "ISSUED FOR"
+          ]
+        },
+        {
+          "title": "FINNED TUBE RADIATOR - SEQUENCE OF OPERATION:",
+          "direction": "below_title",
+          "status": "extracted",
+          "minimum_sections": 1,
+          "minimum_evidence_spans": 7,
+          "required_phrases": [
+            "THE BMS WILL MODULATE THE HEATING HOT WATER VALVE TO MAINTAIN SPACE TEMPERATURE",
+            "FINNED TUBE RADIATION HEATING SHALL BE ACTIVATED ONLY WHEN THE OUTSIDE AIR TEMPERATURE DROPS BELOW 55 F"
+          ],
+          "forbidden_phrases": [
+            "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE"
+          ]
+        }
+      ]
+    }
+  ],
+  "negative_pages": [
+    {
+      "page": 21,
+      "sheet_number": "M8.5",
+      "expected_sequences": 0,
+      "review_note": "The sheet note about verifying the accuracy and adequacy of the sequence of control is a requirement, not an SOO heading."
+    }
+  ]
+}

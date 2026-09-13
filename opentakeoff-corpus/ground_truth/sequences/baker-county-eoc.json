@@ -1,0 +1,38 @@
+{
+  "schema": "opentakeoff.sequence_narrative_ground_truth.v1",
+  "source_pdf": "raw/baker-county-eoc-bidset.pdf",
+  "review_basis": "Human visual review of rendered vector PDF page 40 and negative-control page 41. Expectations describe authored drawing evidence, not current engine output.",
+  "coordinate_frame": "render_scale_2_image_px_origin_top_left",
+  "pages": [
+    {
+      "page": 40,
+      "sheet_number": "M-701",
+      "expected_sequences": [
+        {
+          "title": "RTU - SEQUENCE OF OPERATIONS",
+          "direction": "above_title",
+          "status": "extracted",
+          "minimum_sections": 3,
+          "minimum_evidence_spans": 40,
+          "required_phrases": [
+            "THE ROOF TOP UNIT (RTU) IS COMPOSED OF OUTSIDE AND RETURN AIR 2-POSITION DAMPERS",
+            "UNIT SHALL BE ENERGIZED OR DE-ENERGIZED BASED ON OPTIMAL START PROGRAM",
+            "IF THE FIRE ALARM SYSTEM SIGNALS A GENERAL ALARM"
+          ],
+          "forbidden_phrases": [
+            "ROOF MOUNTED EXHAUST FAN DETAIL",
+            "SUPPLY DUCTWORK TAKE-OFFS DETAIL"
+          ]
+        }
+      ]
+    }
+  ],
+  "negative_pages": [
+    {
+      "page": 41,
+      "sheet_number": "M-702",
+      "expected_sequences": 0,
+      "review_note": "The note 'provide all components required for control as per the sequence of operations' is a cross-reference, not an SOO heading."
+    }
+  ]
+}

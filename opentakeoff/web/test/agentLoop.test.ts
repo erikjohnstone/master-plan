@@ -1189,3 +1189,32 @@ test("runAgentLoop seedSheetGraph:false leaves the first request as goal-only", 
   assert.equal(executed, 0);
   assert.deepEqual(requests[0].messages, [{ role: "user", content: "go" }]);
 });
+
+test("complete BAS workflow rejects a prose-only answer until the deterministic run succeeds", async () => {
+  const completeTool = {
+    name: "run_complete_bas_takeoff",
+    description: "Run every deterministic BAS takeoff stage and return a review-required result.",
+    input_schema: { type: "object", properties: {}, required: [] },
+  };
+  const { fn, requests } = scriptedFetch([
+    anthropicDone("Here is a generic BAS checklist."),
+    anthropicTurn("bas_1", "run_complete_bas_takeoff", {}),
+    anthropicDone("The deterministic BAS run completed and requires estimator review."),
+  ]);
+  const executed: string[] = [];
+  const result = await runAgentLoop({
+    cfg: CFG_A,
+    goal: "Run a BAS takeoff",
+    tools: [completeTool],
+    seedSheetGraph: false,
+    execute: (name) => {
+      executed.push(name);
+      return { execution_status: "completed", human_review_required: true };
+    },
+    fetchFn: fn as any,
+  });
+  assert.equal(result.status, "done");
+  assert.deepEqual(executed, ["run_complete_bas_takeoff"]);
+  assert.equal(requests.length, 3);
+  assert.ok(requests[1].messages.some((message: any) => /cannot answer.*succeeds/i.test(String(message.content))));
+});

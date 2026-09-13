@@ -1,0 +1,135 @@
+{
+  "schema": "opentakeoff.control_schematic_ground_truth.v1",
+  "source_pdf": "raw/itd-d1-lab-mechanical.pdf",
+  "review_basis": "Human visual review of rendered vector PDF pages M6.1-M6.5; expectations describe authored drawing evidence, not current engine output. M6.3 equipment bindings were cross-checked against the AHU and humidifier schedules; the same short D-1 token on the plumbing fixture schedule is an explicitly reviewed unrelated-discipline negative.",
+  "coordinate_frame": "render_scale_2_image_px_origin_top_left",
+  "pages": [
+    {
+      "page": 17,
+      "sheet_number": "M6.1",
+      "sequence_titles": [
+        "LAB EXHAUST SYSTEM SEQUENCE OF OPERATION",
+        "SPLIT SYSTEM SEQUENCE OF OPERATION"
+      ],
+      "control_diagram_titles": [
+        "LAB EXHAUST SYSTEM CONTROL SCHEMATIC",
+        "SPLIT SYSTEM CONTROL SCHEMATIC"
+      ],
+      "expected_sequence_bindings": {
+        "LAB EXHAUST SYSTEM CONTROL SCHEMATIC": ["LAB EXHAUST SYSTEM SEQUENCE OF OPERATION"],
+        "SPLIT SYSTEM CONTROL SCHEMATIC": ["SPLIT SYSTEM SEQUENCE OF OPERATION"]
+      },
+      "required_narrative_phrases": [
+        "THE DDC CONTROLLER SHALL VARY THE SPEED OF THE VFD'S",
+        "THE NEW SPACE TEMPERATURE SENSOR SHALL SIGNAL THE DDC CONTROLLER"
+      ],
+      "explicit_io_tokens": { "AI": 4, "AO": 1, "DI": 7, "DO": 6 },
+      "diagrams": [
+        { "title": "LAB EXHAUST SYSTEM CONTROL SCHEMATIC", "explicit_io_tokens": { "AI": 2, "AO": 1, "DI": 3, "DO": 2 }, "review_note": "Three printed DI bubbles are visible in the left schematic: two fan-status inputs and the high-static-pressure switch." },
+        { "title": "SPLIT SYSTEM CONTROL SCHEMATIC", "explicit_io_tokens": { "AI": 2, "AO": 0, "DI": 4, "DO": 4 }, "review_note": "Four printed DI bubbles are visible in the right schematic: overall alarm, two fan-status inputs, and compressor status." }
+      ]
+    },
+    {
+      "page": 18,
+      "sheet_number": "M6.2",
+      "sequence_titles": ["HEATING WATER SYSTEM SEQUENCE OF OPERATION"],
+      "control_diagram_titles": ["HEATING WATER SYSTEM CONTROL SCHEMATIC"],
+      "expected_sequence_bindings": {
+        "HEATING WATER SYSTEM CONTROL SCHEMATIC": ["HEATING WATER SYSTEM SEQUENCE OF OPERATION"]
+      },
+      "required_narrative_phrases": [
+        "THE HOT WATER HEATING SYSTEM SHALL CONSIST OF (2) HOT WATER BOILERS",
+        "HEATING WATER BYPASS CONTROL VALVE"
+      ],
+      "explicit_io_tokens": { "AI": 8, "AO": 1, "DI": 4, "DO": 0 },
+      "required_diagram_labels": ["HWP-1", "HWP-2", "B-1", "B-2", "BCV-1", "HWS", "HWR"]
+    },
+    {
+      "page": 19,
+      "sheet_number": "M6.3",
+      "sequence_titles": ["VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION"],
+      "control_diagram_titles": ["VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC"],
+      "expected_sequence_bindings": {
+        "VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC": ["VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION"]
+      },
+      "required_narrative_phrases": [
+        "MORNING WARM-UP / COOL-DOWN SHALL BE CONTROLLED BY AN OPTIMUM START / STOP MODE",
+        "DUCT STATIC PRESSURE RESET SCHEDULE"
+      ],
+      "explicit_io_tokens": { "AI": 7, "AO": 3, "DI": 3, "DO": 1 },
+      "required_diagram_labels": ["AHU-1", "DPT", "DA", "TT", "DX CC", "HUM-1"]
+      ,"diagrams": [
+        {
+          "title": "VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC",
+          "explicit_io_tokens": { "AI": 7, "AO": 3, "DI": 3, "DO": 1 },
+          "expected_io_bindings": [
+            { "instrument_label": "PDT", "point_type": "AI", "count": 1 },
+            { "instrument_label": "TT", "point_type": "AI", "count": 3 },
+            { "instrument_label": "P", "point_type": "AI", "count": 2 },
+            { "instrument_label": "CSR", "point_type": "DI", "count": 1 }
+          ],
+          "expected_schedule_bindings": [
+            { "tag": "AHU-1", "status": "bound", "schedule_title": "AIR HANDLING UNIT SCHEDULE" },
+            { "tag": "HUM-1", "status": "bound", "schedule_title": "HUMIDIFIER SCHEDULE" },
+            { "tag": "D-1", "status": "unbound", "rejected_schedule_title": "PLUMBING FIXTURE SCHEDULE" }
+          ],
+          "review_note": "Visual review confirms these seven explicit I/O bubbles are joined by their own vertical dashed control tether to the named instrument bubble. Other nearby mnemonics remain untyped."
+        }
+      ]
+    },
+    {
+      "page": 20,
+      "sheet_number": "M6.4",
+      "sequence_titles": [
+        "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION",
+        "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION"
+      ],
+      "control_diagram_titles": [
+        "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC",
+        "LAB VENTILATION WITH SNORKEL HOODS SYSTEM CONTROL SCHEMATIC"
+      ],
+      "expected_sequence_bindings": {
+        "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC": ["LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION"],
+        "LAB VENTILATION WITH SNORKEL HOODS SYSTEM CONTROL SCHEMATIC": ["LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION"]
+      },
+      "required_narrative_phrases": [
+        "HOT WATER REHEAT CONTROL VALVE",
+        "LABORATORY CONTROL SYSTEM AND THE BUILDING AUTOMATION SYSTEM"
+      ],
+      "explicit_io_tokens": { "AI": 4, "AO": 2, "DI": 3, "DO": 0 },
+      "diagrams": [
+        { "title": "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC", "explicit_io_tokens": { "AI": 2, "AO": 1, "DI": 2, "DO": 0 } },
+        { "title": "LAB VENTILATION WITH SNORKEL HOODS SYSTEM CONTROL SCHEMATIC", "explicit_io_tokens": { "AI": 2, "AO": 1, "DI": 1, "DO": 0 } }
+      ]
+    },
+    {
+      "page": 21,
+      "sheet_number": "M6.5",
+      "sequence_titles": [
+        "GENERAL EXHAUST FAN SEQUENCE OF OPERATION",
+        "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM SEQUENCE OF OPERATION",
+        "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION"
+      ],
+      "control_diagram_titles": [
+        "GENERAL EXHAUST FAN CONTROL SCHEMATIC",
+        "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM CONTROL SCHEMATIC",
+        "ELECTRIC UNIT HEATER CONTROL SCHEMATIC"
+      ],
+      "expected_sequence_bindings": {
+        "GENERAL EXHAUST FAN CONTROL SCHEMATIC": ["GENERAL EXHAUST FAN SEQUENCE OF OPERATION"],
+        "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM CONTROL SCHEMATIC": ["LAB VENTILATION WITH GENERAL EXHAUST SYSTEM SEQUENCE OF OPERATION"],
+        "ELECTRIC UNIT HEATER CONTROL SCHEMATIC": ["ELECTRIC UNIT HEATER SEQUENCE OF OPERATION"]
+      },
+      "required_narrative_phrases": [
+        "THIS SYSTEM IS STANDALONE AND NOT CONTROLLED BY THE DDC SYSTEM",
+        "THE FORCED AIR ELECTRIC HEATER SYSTEM CONSISTS OF AN ELECTRIC UNIT HEATER"
+      ],
+      "explicit_io_tokens": { "AI": 3, "AO": 1, "DI": 2, "DO": 0 },
+      "diagrams": [
+        { "title": "GENERAL EXHAUST FAN CONTROL SCHEMATIC", "explicit_io_tokens": { "AI": 0, "AO": 0, "DI": 0, "DO": 0 } },
+        { "title": "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM CONTROL SCHEMATIC", "explicit_io_tokens": { "AI": 2, "AO": 1, "DI": 1, "DO": 0 } },
+        { "title": "ELECTRIC UNIT HEATER CONTROL SCHEMATIC", "explicit_io_tokens": { "AI": 1, "AO": 0, "DI": 1, "DO": 0 } }
+      ]
+    }
+  ]
+}

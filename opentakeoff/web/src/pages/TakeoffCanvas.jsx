@@ -82,7 +82,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchAgainstLibrary, affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../lib/symbolsweep";
+import { matchSymbol, fingerprintSymbol, assertDistinctiveSymbolSeed, matchAgainstLibrary, affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -107,7 +107,7 @@ import { findLegendGlyphs, findGlyphNear, legendLearnStatus } from "../lib/legen
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
 import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
-import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
+import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, competeSweepModes, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
 // is set) — the owner's call, 2026-08-24: it serves no purpose on the sheet.
@@ -118,6 +118,43 @@ const SHOW_SCALE_GUIDE = false;
 const netWorker = typeof Worker !== "undefined" ? new Worker(new URL("../lib/netroom.worker.js", import.meta.url), { type: "module" }) : null;
 const netPending = new Map();   // req → {resolve}
 let netReq = 0;
+
+function resolveCanvasSweepMode(raw, { seedCenter, seedName, spans, segs, lum, symbolInkLengthPx, footprint }) {
+  let labels = [];
+  try {
+    labels = labelPlacements(
+      [seedCenter, ...raw.matches.map((m) => m.at), ...raw.withheld.map((w) => w.at)],
+      spans, segs, lum, {
+        preferredLabel: seedName?.label, preferredFamily: seedName?.family,
+        scores: [1, ...raw.matches.map((m) => m.score), ...raw.withheld.map((w) => w.score)],
+        eligible: [true, ...raw.matches.map(() => true), ...raw.withheld.map((w) => !w.hold)],
+        symbolInkLengthPx,
+      },
+    );
+  } catch { labels = []; }
+  const seedLabel = seedName || labels[0] || null;
+  const rawMatchCount = raw.matches.length;
+  const corrected = reconcileSweepLabels(
+    seedLabel,
+    raw.matches, raw.matches.map((_, i) => labels[1 + i] || null),
+    raw.withheld, raw.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
+  );
+  const positioned = positionMatchesToClosestReading(
+    corrected.matches, corrected.matchLabels,
+    corrected.withheld, corrected.withheldLabels,
+    footprint,
+  );
+  return {
+    seedLabel,
+    corrected,
+    mode: {
+      matches: positioned.matches,
+      withheld: positioned.withheld,
+      matchLabels: corrected.matchLabels,
+      withheldLabels: positioned.withheldLabels,
+    },
+  };
+}
 if (netWorker) netWorker.onmessage = (ev) => { const m = ev.data; const p = netPending.get(m.req); if (p) { netPending.delete(m.req); p.resolve(m); } };
 function netCall(msg) { return new Promise((resolve) => { const req = ++netReq; netPending.set(req, { resolve }); netWorker.postMessage({ ...msg, req }); }); }
 import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS } from "../lib/rastermask";
@@ -4979,6 +5016,7 @@ export default function TakeoffCanvas() {
     if (!segs || !segs.length) { setCommitMsg("This sheet has no vector linework (likely a scan) — the Symbol tool reads drawn segments.", "refusal"); return; }
     const lum = segLumRef.current.get(key);
     let res;
+    let labels = [];
     let seedName = null;
     let spans = null;
     let textBoxes;
@@ -4988,22 +5026,52 @@ export default function TakeoffCanvas() {
       // the seed fingerprint (mirrors agentSymbolSweep's own reorder below
       // and mcp/src/session.ts's) so the PDF's own text layer excludes
       // exploded-tag strokes from the seed's own `rel` too, not just the
-      // sheet-side sweep. Unlike `dropGlyphClusters` (deliberately left
-      // untouched here — see the predecessor doc's own Finding on this
-      // function), `textBoxes` reads an authoritative fact, not a
-      // geometric guess, so it carries none of that caution.
+      // sheet-side sweep. Keep the fingerprint contract identical to the
+      // Agent and MCP Session paths: transform mode must not silently change
+      // what belongs to the seed before the rigid/affine populations compete.
+      // The real browser corpus caught the old fork on a multi-sheet VAV case
+      // (10/13 here while Session found 13/13).
       spans = await ensureTextSpans(key);
       textBoxes = spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
-      fp = fingerprintSymbol(segs, rect, lum, { textBoxes });
+      fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false, textBoxes });
       assertDistinctiveSymbolSeed(fp);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
-      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's default flip — the manual
-      // Symbol-tool marquee had no options surface at all (it always ran
-      // rigid-only, unlike agentSymbolSweep which threads whatever `affine`
-      // its own caller supplies). Wiring the same AFFINE_WIRE_DEFAULT here
-      // is what "the manual marquee path turned on" (§3 Phase F step 3)
-      // means — canvas and agent cannot disagree on which symbols exist.
-      res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}), affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT), textBoxes });
+      const affine = affineOptionsFromWire(AFFINE_WIRE_DEFAULT);
+      const matchOpts = {
+        ...(lum ? { lum } : {}),
+        ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
+        affine,
+        textBoxes,
+        excludeCenter: fp.center,
+      };
+      const affineRaw = matchSymbol(fp, segs, matchOpts);
+      const rigidRaw = matchSymbol(fp, segs, { ...matchOpts, affine: undefined });
+      const affineResolved = resolveCanvasSweepMode(affineRaw, {
+        seedCenter: fp.center, seedName, spans, segs, lum,
+        symbolInkLengthPx: fp.totalLen, footprint: fp.footprint,
+      });
+      const rigidResolved = resolveCanvasSweepMode(rigidRaw, {
+        seedCenter: fp.center, seedName, spans, segs, lum,
+        symbolInkLengthPx: fp.totalLen, footprint: fp.footprint,
+      });
+      const competed = competeSweepModes(seedName, rigidResolved.mode, affineResolved.mode, 6);
+      res = {
+        ...rigidRaw,
+        seed: {
+          segments: fp.segments,
+          center: [Math.round(fp.center[0] * 10) / 10, Math.round(fp.center[1] * 10) / 10],
+          length_px: Math.round(fp.totalLen * 10) / 10,
+        },
+        matches: competed.matches,
+        withheld: competed.withheld,
+        candidates: {
+          considered: affineRaw.candidates.considered + rigidRaw.candidates.considered,
+          dropped: affineRaw.candidates.dropped + rigidRaw.candidates.dropped,
+        },
+        complete: affineRaw.complete && rigidRaw.complete,
+        transform_competition: competed.evidence,
+      };
+      labels = [seedName, ...competed.matchLabels, ...competed.withheldLabels];
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
       // instructions, exactly as the MCP surfaces them — and they are stated
@@ -5013,42 +5081,6 @@ export default function TakeoffCanvas() {
       setCommitMsg(String((e && e.message) || e), "refusal");
       return;
     }
-    let labels = [];
-    try {
-      spans = spans || await ensureTextSpans(key);
-      labels = labelPlacements(
-        [res.seed.center, ...res.matches.map((m) => m.at), ...res.withheld.map((w) => w.at)],
-        spans, segs, lum, {
-          preferredLabel: seedName?.label, preferredFamily: seedName?.family,
-          scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)],
-          // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2 C1 / Phase B — a held
-          // withheld row is disclosed geometry, never a corroboration
-          // candidate; excluding it here keeps a degenerate/contaminated fit
-          // from winning or being promoted on a real instance's own tag.
-          eligible: [true, ...res.matches.map(() => true), ...res.withheld.map((w) => !w.hold)],
-          symbolInkLengthPx: res.seed.length_px,
-        },
-      );
-    } catch { labels = []; }
-    // The seed's own placement still participates in the assignment above
-    // (so it can hold a text run and keep it from a neighboring instance),
-    // but its REPORTED identity is the uncontested `seedName` lookup, not the
-    // contested `labels[0]` — see mcp/src/session.ts's sweepLabels for the
-    // parity contract this mirrors.
-    const seedLabel = seedName || labels[0] || null;
-    const rawMatchCount = res.matches.length;
-    const corrected = reconcileSweepLabels(
-      seedLabel,
-      res.matches, res.matches.map((_, i) => labels[1 + i] || null),
-      res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
-    );
-    // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F / positioning-parity —
-    // shared with mcp/src/session.ts's own MCP tool paths (see that
-    // function's own doc comment) so the manual marquee reports the same
-    // corrected position an agent's symbol_sweep call would.
-    const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
-    res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
-    labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
     const L = (i) => labels[i] || null;
     const nM = res.matches.length;
     // One physical spot, ONE question. The engine discloses every rotational
@@ -6749,8 +6781,14 @@ export default function TakeoffCanvas() {
     } else {
       return { error: "symbol_sweep needs either a seed_rect_norm marquee or a seed_point_norm click." };
     }
+    if (opts.scope === "set") {
+      const shared = await fetchProductionSymbolSweep(key, rect, opts);
+      return normalizeProductionSymbolSweep(shared, key);
+    }
     const lum = segLumRef.current.get(key);
     let res;
+    let labels = [];
+    let correctionCounts = { promoted: 0, demoted: 0 };
     let seedName = null;
     let spans = null;
     let textBoxes;
@@ -6772,53 +6810,72 @@ export default function TakeoffCanvas() {
       fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false, textBoxes });
       assertDistinctiveSymbolSeed(fp);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
-      res = sweepSymbols(segs, rect, {
+      const matchOpts = {
         rotations: opts.rotations !== false,
         mirror: opts.mirror !== false,
         ...(opts.tolerancePx != null ? { tolPx: opts.tolerancePx } : {}),
         ...(lum ? { lum } : {}),
         ...(opts.luminanceTolerance != null ? { lumTol: opts.luminanceTolerance } : {}),
+        ...(opts.variantGuard ? { variantGuard: true } : {}),
         ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
         ...(opts.affine ? { affine: opts.affine } : {}),
         textBoxes,
+        excludeCenter: fp.center,
+      };
+      const affineRaw = matchSymbol(fp, segs, matchOpts);
+      const affineResolved = resolveCanvasSweepMode(affineRaw, {
+        seedCenter: fp.center, seedName, spans, segs, lum,
+        symbolInkLengthPx: fp.totalLen, footprint: fp.footprint,
       });
+      let chosen = affineResolved.mode;
+      let transformCompetition = null;
+      correctionCounts = {
+        promoted: affineResolved.corrected.promoted,
+        demoted: affineResolved.corrected.demoted,
+      };
+      let candidates = affineRaw.candidates;
+      let complete = affineRaw.complete;
+      let outputBase = affineRaw;
+      if (opts.affine?.enabled) {
+        const rigidRaw = matchSymbol(fp, segs, { ...matchOpts, affine: undefined });
+        outputBase = rigidRaw;
+        const rigidResolved = resolveCanvasSweepMode(rigidRaw, {
+          seedCenter: fp.center, seedName, spans, segs, lum,
+          symbolInkLengthPx: fp.totalLen, footprint: fp.footprint,
+        });
+        const competed = competeSweepModes(seedName, rigidResolved.mode, affineResolved.mode, Math.max(3 * (opts.tolerancePx || 2), 4));
+        chosen = competed;
+        transformCompetition = competed.evidence;
+        correctionCounts = {
+          promoted: rigidResolved.corrected.promoted,
+          demoted: rigidResolved.corrected.demoted,
+        };
+        candidates = {
+          considered: affineRaw.candidates.considered + rigidRaw.candidates.considered,
+          dropped: affineRaw.candidates.dropped + rigidRaw.candidates.dropped,
+        };
+        complete = affineRaw.complete && rigidRaw.complete;
+      }
+      res = {
+        // The competed population starts from rigid evidence, so use the
+        // corresponding rejection/luminance disclosures. Selected affine
+        // additions retain their own transform on each match.
+        ...outputBase,
+        seed: {
+          segments: fp.segments,
+          center: [Math.round(fp.center[0] * 10) / 10, Math.round(fp.center[1] * 10) / 10],
+          length_px: Math.round(fp.totalLen * 10) / 10,
+        },
+        matches: chosen.matches,
+        withheld: chosen.withheld,
+        candidates,
+        complete,
+        ...(transformCompetition ? { transform_competition: transformCompetition } : {}),
+      };
+      labels = [seedName, ...chosen.matchLabels, ...chosen.withheldLabels];
     } catch (e) {
       return { error: String((e && e.message) || e) };
     }
-    let labels = [];
-    try {
-      spans = spans || await ensureTextSpans(key);
-      labels = labelPlacements(
-        [res.seed.center, ...res.matches.map((m) => m.at), ...res.withheld.map((w) => w.at)],
-        spans, segs, lum, {
-          preferredLabel: seedName?.label, preferredFamily: seedName?.family,
-          scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)],
-          // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2 C1 / Phase B — a held
-          // withheld row is disclosed geometry, never a corroboration
-          // candidate; excluding it here keeps a degenerate/contaminated fit
-          // from winning or being promoted on a real instance's own tag.
-          eligible: [true, ...res.matches.map(() => true), ...res.withheld.map((w) => !w.hold)],
-          symbolInkLengthPx: res.seed.length_px,
-        },
-      );
-    } catch { labels = []; }
-    // The seed's own placement still participates in the assignment above,
-    // but its REPORTED identity is the uncontested `seedName` lookup — see
-    // mcp/src/session.ts's sweepLabels for the parity contract this mirrors.
-    const seedLabel = seedName || labels[0] || null;
-    const rawMatchCount = res.matches.length;
-    const corrected = reconcileSweepLabels(
-      seedLabel,
-      res.matches, res.matches.map((_, i) => labels[1 + i] || null),
-      res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
-    );
-    // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F / positioning-parity —
-    // shared with mcp/src/session.ts's own MCP tool paths (see that
-    // function's own doc comment) so the in-app agent tool reports the same
-    // corrected position an external MCP symbol_sweep call would.
-    const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
-    res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
-    labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
     const L = (i) => labels[i]?.label || null;
     const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
     const nM = res.matches.length;
@@ -6838,7 +6895,8 @@ export default function TakeoffCanvas() {
       rejected: (res.rejected || []).map((r) => ({ at: norm(r.at), reason: r.reason || "excluded" })),
       complete: res.complete,
       dropped: res.candidates?.dropped || 0,
-      ...((corrected.promoted || corrected.demoted) ? { label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } } : {}),
+      ...(res.transform_competition ? { transform_competition: res.transform_competition } : {}),
+      ...((correctionCounts.promoted || correctionCounts.demoted) ? { label_corroboration: correctionCounts } : {}),
     };
   }
 
@@ -7259,6 +7317,72 @@ export default function TakeoffCanvas() {
     }
   }
 
+  async function fetchProductionSymbolSweep(key, seedRect, opts = {}) {
+    const { file, page } = parseSheetKey(key);
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    const pdfIndex = names.indexOf(file);
+    if (pdfIndex < 0) return { error: `Seed sheet ${key} is not part of the loaded drawing set.` };
+    const fd = await buildProductionFormData({
+      symbolPdfIndex: pdfIndex,
+      symbolPage: page,
+      symbolSeedRect: JSON.stringify(seedRect),
+      symbolScope: opts.scope === "set" ? "set" : "sheet",
+      symbolOptions: JSON.stringify({
+        rotations: opts.rotations !== false,
+        mirror: opts.mirror !== false,
+        tolerancePx: opts.tolerancePx,
+        luminanceTolerance: opts.luminanceTolerance,
+        variantGuard: opts.variantGuard === true,
+        affine: opts.affine,
+      }),
+    });
+    if (!fd) return { error: "No PDF loaded." };
+    try {
+      const response = await fetch("/__ot/symbol-sweep", { method: "POST", body: fd });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) return { error: result.error || `symbol-sweep HTTP ${response.status}` };
+      return result;
+    } catch (error) {
+      return { error: `Shared Session symbol sweep failed: ${error?.message || error}` };
+    }
+  }
+
+  async function normalizeProductionSymbolSweep(result, seedKey) {
+    if (!result || result.error) return result;
+    const normAt = async (key, at) => {
+      const dims = await ensureSheetDims(key);
+      if (!dims || !Array.isArray(at)) return null;
+      return [+(at[0] / dims.w).toFixed(5), +(at[1] / dims.h).toFixed(5)];
+    };
+    const normalizeRows = async (key, rows = []) => Promise.all(rows.map(async (row) => {
+      const at = await normAt(key, row.at);
+      return at ? { ...row, at } : row;
+    }));
+    const seedAt = await normAt(seedKey, result.seed?.center || result.seed?.at);
+    const normalizedSheets = await Promise.all((result.sheets || []).map(async (sheetResult) => {
+      const dims = await ensureSheetDims(sheetResult.sheet);
+      return {
+        ...sheetResult,
+        ...(dims ? { image_size_px: [dims.w, dims.h] } : {}),
+        matches: await normalizeRows(sheetResult.sheet, sheetResult.matches),
+        withheld: await normalizeRows(sheetResult.sheet, sheetResult.withheld),
+        ...(sheetResult.rejected ? { rejected: await normalizeRows(sheetResult.sheet, sheetResult.rejected) } : {}),
+      };
+    }));
+    return {
+      ...result,
+      ...(result.seed ? {
+        seed: {
+          ...result.seed,
+          ...(seedAt ? { at: seedAt } : {}),
+          center: undefined,
+        },
+      } : {}),
+      sheets: normalizedSheets,
+      coordinate_frame: "normalized_0_1_per_sheet",
+    };
+  }
+
   async function fetchProductionCountMarks(marksOpt) {
     const fields = {};
     if (marksOpt?.length) fields.marks = marksOpt.join(",");
@@ -7278,14 +7402,49 @@ export default function TakeoffCanvas() {
     if (opts.family) fields.family = String(opts.family).trim();
     if (opts.familySweepAll) fields.familySweepAll = "1";
     if (opts.tags?.length) fields.tags = opts.tags.join(",");
+    if (opts.categories?.length) fields.categories = opts.categories.join(",");
+    if (opts.evaluationFast) fields.evaluationFast = "1";
     const fd = await buildProductionFormData(fields);
     if (!fd) return null;
     try {
-      const res = await fetch("/__ot/reconcile-schedule-plan", { method: "POST", body: fd });
-      if (!res.ok) return null;
+      const onProgress = typeof opts.onProgress === "function" ? opts.onProgress : null;
+      const res = await fetch("/__ot/reconcile-schedule-plan", {
+        method: "POST",
+        body: fd,
+        headers: onProgress ? { Accept: "application/x-ndjson" } : undefined,
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        return { error: err.error || `schedule-plan reconciliation HTTP ${res.status}` };
+      }
+      const ctype = String(res.headers.get("content-type") || "");
+      if (onProgress && /ndjson/i.test(ctype) && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buf = "";
+        let result = null;
+        const consume = (line) => {
+          if (!line.trim()) return;
+          const msg = JSON.parse(line);
+          if (msg.type === "progress") onProgress(msg);
+          else if (msg.type === "result") result = msg.result;
+          else if (msg.type === "error") throw new Error(msg.error || "schedule-plan reconciliation failed");
+        };
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += decoder.decode(value, { stream: true });
+          const lines = buf.split("\n");
+          buf = lines.pop() || "";
+          for (const line of lines) consume(line);
+        }
+        if (buf.trim()) consume(buf.trim());
+        if (!result) throw new Error("schedule-plan reconciliation stream ended without a result");
+        return result;
+      }
       return await res.json();
-    } catch {
-      return null;
+    } catch (error) {
+      return { error: `Production reconciliation failed: ${error?.message || error}` };
     }
   }
 
@@ -7591,6 +7750,21 @@ export default function TakeoffCanvas() {
       ...(notes.length ? { notes } : {}),
       counts: { rooms: g.rooms.length, unmatched_tags: g.unmatched_tags.length, schedules: g.tables.length, callouts: g.callouts.length },
     };
+  }
+
+  async function agentAnalyzeControlSchematics() {
+    const g = await ensureAgentGraph();
+    if (!g?.__production) {
+      return {
+        error: "Control schematic/riser analysis requires the shared production Session endpoint; the browser-only fallback graph does not claim topology.",
+      };
+    }
+    if (!g.control_schematics) {
+      return {
+        error: "The shared production graph did not provide control schematic/riser evidence. Rebuild the plan index before relying on this takeoff.",
+      };
+    }
+    return structuredClone(g.control_schematics);
   }
 
   async function agentResolveTag(tag) {
@@ -7951,13 +8125,35 @@ export default function TakeoffCanvas() {
   /** Schedule↔plan reconcile — shared schedulePlanReconcile + sweep_schedule_row path (WP4). */
   async function agentReconcileSchedulePlan(opts = {}) {
     const family = opts.family ? String(opts.family).trim() : null;
-    const remote = await agentMcpTool("reconcile_schedule_plan", { family });
+    const reportProgress = (p) => {
+      const message = String(p?.message || "Reconciling schedules to plan evidence…");
+      setAgentStatus(message);
+      const processed = Number(p?.processed || 0);
+      const total = Number(p?.total || 0);
+      const milestone = !processed || processed % 10 === 0 || (total > 0 && processed === total);
+      if (!milestone) return;
+      setAgentLog((log) => {
+        const next = { kind: "progress", text: message };
+        const last = log[log.length - 1];
+        if (last?.kind === "progress" && last.text === message) return log;
+        return [...log.slice(-199), next];
+      });
+    };
+    reportProgress({ message: "Reconciling schedule quantities to grounded plan evidence…" });
+    const remote = await agentMcpTool("reconcile_schedule_plan", {
+      family,
+      ...(opts.categories?.length ? { categories: opts.categories } : {}),
+      ...(opts.tags?.length ? { tags: opts.tags } : {}),
+      evaluation_fast: opts.evaluationFast === true,
+      family_sweep_all: opts.familySweepAll === true,
+    });
     if (remote && !remote.error) {
+      reportProgress({ message: `Reconciliation complete — ${remote.rows?.length || 0} schedule rows reviewed.` });
       pushReconcileToTakeoffPanel(remote, family);
       return remote;
     }
 
-    const prod = await fetchProductionReconcileSchedulePlan(opts);
+    const prod = await fetchProductionReconcileSchedulePlan({ ...opts, onProgress: reportProgress });
     if (prod && !prod.error && Array.isArray(prod.rows)) {
       const csv = reconcileRowsToCsv(prod.rows);
       if (opts.download !== false && prod.rows.length) {
@@ -7967,6 +8163,7 @@ export default function TakeoffCanvas() {
       pushReconcileToTakeoffPanel(prod, family);
       return { ...prod, csv, path: "production_session" };
     }
+    if (prod?.error && !family) return prod;
 
     const g = await ensureAgentGraph();
     if (!g.available) {
@@ -8016,6 +8213,7 @@ export default function TakeoffCanvas() {
   useEffect(() => {
     window.__opentakeoff = {
       compileCorpusTakeoff: (kind, opts) => agentCompileCorpusTakeoff(kind, opts),
+      analyzeControlSchematics: () => agentAnalyzeControlSchematics(),
       reconcileSchedulePlan: (opts) => agentReconcileSchedulePlan(opts),
       showCompiledTakeoff,
       openAgent: () => setAgentOpen(true),
@@ -8097,6 +8295,24 @@ export default function TakeoffCanvas() {
             );
             return { ok: true };
           } catch (e) { return { error: String(e?.message || e) }; }
+        },
+        // Product Agent path, not a second matcher. Set scope crosses the
+        // one-terminal Vite bridge into Session.symbolSweep so this probe can
+        // prove the exact browser/MCP implementation on multi-page fixtures.
+        agentSweep: async (key, rect, scope = "sheet") => {
+          const pp = panels.find((x) => x.key === key);
+          if (!pp?.img?.w || !pp?.img?.h) return { error: `sheet ${key} is not open` };
+          return agentSymbolSweep(key, {
+            x0: rect[0][0] / pp.img.w,
+            y0: rect[0][1] / pp.img.h,
+            x1: rect[1][0] / pp.img.w,
+            y1: rect[1][1] / pp.img.h,
+          }, {
+            scope,
+            rotations: true,
+            mirror: true,
+            affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT),
+          });
         },
         sweep: () => sweep,
         openSheets: (keys) => openSheets(keys, false),
@@ -8866,6 +9082,7 @@ export default function TakeoffCanvas() {
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
       compileCorpusTakeoff: agentCompileCorpusTakeoff,
+      analyzeControlSchematics: agentAnalyzeControlSchematics,
       inspectBasWorkflow: agentInspectBasWorkflow,
       openBasWorkspace: agentOpenBasWorkspace,
       reconcileSchedulePlan: agentReconcileSchedulePlan,
@@ -9350,6 +9567,8 @@ export default function TakeoffCanvas() {
     // Run History) but the panel shows plain-language status + the answer.
     // Full args/results still land in Run History via recordRunEvent.
     const STATUS = {
+      run_complete_bas_takeoff: "Running the complete BAS takeoff and reconciliation…",
+      analyze_control_schematics: "Reading control schematics and risers…",
       list_sheets: "Listing sheets in this set…",
       sheet_graph: "Mapping schedules and sheets…",
       find_schedule: "Finding the right schedule…",
@@ -9462,6 +9681,7 @@ export default function TakeoffCanvas() {
       // Sources / Agent (GOAL: Agent scrap ≠ Takeoff tab).
       const hasFinishedTakeoffSeed = (rows) => rows.some((r) => (
         r?.source_tool === "compile_corpus_takeoff"
+        || r?.source_tool === "analyze_control_schematics"
         || r?.source_tool === "takeoff_summary"
         || r?.source_tool === "project_takeoff"
         || r?.source_tool === "sweep_schedule_row"

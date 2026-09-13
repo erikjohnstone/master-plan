@@ -3,6 +3,7 @@
  * All reconstructed text is a reading aid; immutable source spans are authority.
  */
 import type { BasSourceContext, BasSourcePage, BasSourceSpan } from './basSources.ts';
+import { extractSequenceNarratives, type NarrativeSequenceBlock, type NarrativeSpanEvidence } from './sequenceNarrative.ts';
 
 type Box = BasSourceSpan['bbox_px'];
 export interface BasNarrativeLine {
@@ -72,6 +73,7 @@ const union = (boxes: Box[]): Box => [Math.min(...boxes.map(b => b[0])), Math.mi
 const horizontal = (s: BasSourceSpan) => ((s.rotation ?? 0) % 360 + 360) % 360 === 0
   && height(s.bbox_px) > 0 && s.bbox_px[2] > s.bbox_px[0];
 const marker = (text: string): string | null => text.match(/^(\d+(?:\.\d+)*(?:[.)])?|[A-Za-z][.)]|\((?:[A-Za-z]|\d{1,3}|[ivxIVX]{1,6})\))\s+/)?.[1] ?? null;
+const normalizedTitle = (text: string) => text.normalize('NFKC').toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim();
 
 /** Deliberately stricter than the legacy table-title presence detector: a prose
  * sentence merely mentioning a sequence is not a new heading/region. */
@@ -255,12 +257,105 @@ function discoverRegion(page: BasSourcePage, heading: BasNarrativeLine, lines: B
     bbox_px: union([...context.map(l => l.bbox_px), heading.bbox_px, ...body.map(line => line.bbox_px)]), boundary, review_required: true };
 }
 
+const sameBox = (a: Box, b: Box) => a.every((value, index) => Math.abs(value - b[index]) <= 0.01);
+const containsCenter = (outer: Box, inner: Box) => {
+  const x = (inner[0] + inner[2]) / 2, y = (inner[1] + inner[3]) / 2;
+  return x >= outer[0] - 0.01 && x <= outer[2] + 0.01 && y >= outer[1] - 0.01 && y <= outer[3] + 0.01;
+};
+
+/** The graph's canonical free-form SOO extractor already handles the two real
+ * drawing conventions: prose below a specification heading and prose above a
+ * construction-detail caption. Adapt that exact shared result back to owned
+ * source spans when the conservative headed-region pass could not recover a
+ * body. This is a source adapter only: text, boxes and engineering intent are
+ * never invented, and an unmappable evidence span fails the fallback closed. */
+function canonicalNarrativeRegion(page: BasSourcePage, block: NarrativeSequenceBlock,
+  prior?: BasNarrativeRegion): BasNarrativeRegion | null {
+  const evidenceLine = (evidence: NarrativeSpanEvidence, suffix: string): BasNarrativeLine | null => {
+    const span = page.spans.find(candidate => sameBox(candidate.bbox_px, evidence.bbox)
+      && candidate.text.replace(/\s+/g, ' ').trim() === evidence.text);
+    if (!span) return null;
+    return { line_id: `${span.span_id}:${suffix}`, span_ids: [span.span_id], bbox_px: [...span.bbox_px],
+      text: evidence.text, geometry_status: 'ordered' };
+  };
+  const exactHeading = page.spans.filter(span => sameBox(span.bbox_px, block.title_evidence.bbox)
+    && span.text.replace(/\s+/g, ' ').trim() === block.title);
+  const titleSpans = exactHeading.length ? exactHeading : page.spans.filter(span => horizontal(span)
+    && containsCenter(block.title_evidence.bbox, span.bbox_px));
+  if (!titleSpans.length) return null;
+  titleSpans.sort((a, b) => a.bbox_px[0] - b.bbox_px[0] || a.source_index - b.source_index);
+  const heading: BasNarrativeLine = {
+    line_id: `${page.page_id}:canonical-heading:${Math.min(...titleSpans.map(span => span.source_index))}`,
+    span_ids: titleSpans.map(span => span.span_id), bbox_px: union(titleSpans.map(span => span.bbox_px)),
+    text: block.title, geometry_status: 'ordered',
+  };
+  const blocks: BasNarrativeParagraph[] = [];
+  for (const [sectionIndex, section] of block.sections.entries()) {
+    const lines = section.evidence.map((evidence, evidenceIndex) =>
+      evidenceLine(evidence, `canonical-${sectionIndex}-${evidenceIndex}`));
+    if (lines.some(line => line === null)) return null;
+    const owned = lines as BasNarrativeLine[];
+    if (!owned.length) continue;
+    blocks.push({ kind: 'paragraph',
+      block_id: `${owned[0].span_ids[0]}:canonical-paragraph:${sectionIndex}`,
+      marker: marker(owned[0].text.trim()), indent_px: owned[0].bbox_px[0] - block.region[0], lines: owned });
+  }
+  const allLines = blocks.flatMap(item => item.lines);
+  return {
+    region_id: prior?.region_id ?? `${heading.line_id}:narrative`, page_id: page.page_id,
+    status: blocks.length ? 'body_detected' : 'heading_only', interpretation_status: 'uninterpreted',
+    title: block.title, heading, heading_context: [], blocks,
+    bbox_px: union([heading.bbox_px, ...allLines.map(line => line.bbox_px)]),
+    boundary: 'end_of_aligned_text', review_required: true,
+  };
+}
+
+function applyCanonicalNarrativeFallback(page: BasSourcePage, regions: BasNarrativeRegion[]): BasNarrativeRegion[] {
+  const sheet = page.sheet_keys[0] ?? page.page_id;
+  const blocks = extractSequenceNarratives([{ key: sheet, spans: page.spans.map(span => ({
+    str: span.text, x: span.bbox_px[0], y: span.bbox_px[1],
+    w: span.bbox_px[2] - span.bbox_px[0], h: span.bbox_px[3] - span.bbox_px[1],
+    ...(span.rotation !== undefined ? { rot: span.rotation } : {}),
+  })) }]);
+  const canonicalTitles = new Set(blocks.flatMap(block => [normalizedTitle(block.title)]));
+  // Title-only candidates are still useful review records when both shared
+  // lanes recognize them. A conservative-only heading rejected by the
+  // canonical title/abbreviation guards is not promoted into a phantom SOO
+  // (for example a glossary row whose definition says "sequence of operation").
+  const result = regions.filter(region => region.status !== 'heading_only'
+    || canonicalTitles.has(normalizedTitle(region.title))
+    || canonicalTitles.has(normalizedTitle(region.heading.text)));
+  for (const block of blocks) {
+    if (block.status !== 'extracted') continue;
+    const title = normalizedTitle(block.title);
+    const index = result.findIndex(region => normalizedTitle(region.title) === title
+      || normalizedTitle(region.heading.text) === title);
+    // The conservative source-accounting lane owns every region it could
+    // already bound, including conflicts. Canonical extraction is only the
+    // missing-direction fallback; it must never downgrade or overwrite an
+    // existing reviewed body/conflict with a different region hypothesis.
+    if (index >= 0 && result[index].status !== 'heading_only') continue;
+    const converted = canonicalNarrativeRegion(page, block, index >= 0 ? result[index] : undefined);
+    if (!converted) continue;
+    const convertedSpans = new Set(basNarrativeRegionLines(converted).flatMap(line => line.span_ids));
+    const overlapsEstablished = result.some((region, regionIndex) => regionIndex !== index
+      && region.status !== 'heading_only'
+      && basNarrativeRegionLines(region).some(line => line.span_ids.some(id => convertedSpans.has(id))));
+    if (overlapsEstablished) continue;
+    if (index >= 0) result[index] = converted;
+    else result.push(converted);
+  }
+  return result.sort((a, b) => centerY(a.heading.bbox_px) - centerY(b.heading.bbox_px)
+    || a.heading.bbox_px[0] - b.heading.bbox_px[0] || compareId(a.region_id, b.region_id));
+}
+
 /** Input is the validated buildBasSourceContext / Session snapshot. No I/O or
  * model calls, no table/quantity output, no cross-page implicit continuation. */
 export function discoverBasNarratives(context: BasSourceContext): BasNarrativeDiscovery {
   const pages = context.pages.map(page => {
     const lines = pageLines(page);
-    const regions = lines.filter(line => isBasNarrativeHeading(line.text)).map(heading => discoverRegion(page, heading, lines));
+    const regions = applyCanonicalNarrativeFallback(page,
+      lines.filter(line => isBasNarrativeHeading(line.text)).map(heading => discoverRegion(page, heading, lines)));
     const overlapping = new Set(lines.filter(line => line.geometry_status === 'overlapping_spans').flatMap(line => line.span_ids));
     const owners = new Map<string, BasNarrativeRegion[]>();
     for (const region of regions) {

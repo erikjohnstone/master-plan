@@ -66,6 +66,7 @@ const titleText = (title) => {
  *   sheet_id?: string|null, table_title?: unknown, column?: string|null,
  *   bbox_px?: number[]|null, table_bbox_px?: number[]|null, row_bbox_px?: number[]|null,
  *   source_tool?: string|null, note?: string|null,
+ *   quantity_basis?: string|null,
  * }} [opts]
  */
 export function makeTakeoffRow({
@@ -83,6 +84,7 @@ export function makeTakeoffRow({
   row_bbox_px = null,
   source_tool = null,
   note = null,
+  quantity_basis = null,
 } = {}) {
   const rawVal = typeof value === "object" && value !== null && !Array.isArray(value)
     ? cellText(value)
@@ -105,6 +107,7 @@ export function makeTakeoffRow({
     row_bbox_px: asBbox(row_bbox_px),
     source_tool: source_tool || null,
     note: note != null ? String(note) : null,
+    quantity_basis: quantity_basis != null ? String(quantity_basis) : null,
   };
 }
 
@@ -182,12 +185,23 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
   if (name === "sweep_schedule_row") {
     const tag = data.tag || args.tag || null;
     if (typeof data.found === "number") {
+      const coverage = [
+        data.search_scope ? `search scope: ${data.search_scope}` : null,
+        typeof data.unlabeled_audit_complete === "boolean"
+          ? `unlabeled audit: ${data.unlabeled_audit_complete ? "complete" : "not run"}`
+          : null,
+        typeof data.complete === "boolean"
+          ? `plan search: ${data.complete ? "complete" : "incomplete; count is a floor"}`
+          : null,
+      ].filter(Boolean).join("; ");
       rows.push(makeTakeoffRow({
         workflow, runId, tag, field: "installed_quantity", value: data.found, unit: "EA",
         sheet_id: data.tag_citations?.[0]?.sheet || data.anchor?.sheet || null,
         table_title: data.row?.table || null,
         bbox_px: data.tag_citations?.[0]?.bbox || null,
         source_tool: name,
+        quantity_basis: data.anchor?.grounding_basis || "symbol_fingerprint",
+        note: coverage || null,
       }));
     }
     const cells = data.row?.cells || {};
@@ -236,6 +250,7 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
         rows.push(makeTakeoffRow({
           workflow, runId, tag, field: "scheduled_quantity", value: row.scheduled_qty, unit: "EA",
           sheet_id: scheduleSheet, table_title: scheduleTitle, source_tool: name,
+          quantity_basis: row.scheduled_qty_basis || "printed_schedule_quantity",
         }));
       }
       // table_title is the line's GROUPING identity (takeoffLineKey groups by
@@ -244,10 +259,21 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
       // same convention sweep_schedule_row's own installed_quantity row
       // already uses (table_title: data.row?.table, not the plan sheet).
       if (typeof row.installed_qty === "number") {
+        const coverage = [
+          row.search_scope ? `search scope: ${row.search_scope}` : null,
+          typeof row.unlabeled_audit_complete === "boolean"
+            ? `unlabeled audit: ${row.unlabeled_audit_complete ? "complete" : "not run"}`
+            : null,
+          typeof row.plan_search_complete === "boolean"
+            ? `plan search: ${row.plan_search_complete ? "complete" : "incomplete; count is a floor"}`
+            : null,
+        ].filter(Boolean).join("; ");
         rows.push(makeTakeoffRow({
           workflow, runId, tag, field: "installed_quantity", value: row.installed_qty, unit: "EA",
           sheet_id: planCite?.sheet || null, table_title: scheduleTitle,
-          bbox_px: planCite?.at || null, source_tool: name,
+          bbox_px: planCite?.bbox || null, source_tool: name,
+          quantity_basis: row.installed_qty_basis || "plan_symbol_count",
+          note: coverage || null,
         }));
       }
       if (row.status) {
@@ -261,9 +287,222 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
         rows.push(makeTakeoffRow({
           workflow, runId, tag, field: "plan_tag", value: tag,
           sheet_id: planCite.sheet, table_title: scheduleTitle,
-          bbox_px: planCite.at || null, source_tool: name,
+          bbox_px: planCite.bbox || null, source_tool: name,
         }));
       }
+    }
+  }
+
+  if (name === "analyze_control_schematics" || (name === "run_complete_bas_takeoff" && data.control_schematics)) {
+    const controlData = name === "run_complete_bas_takeoff" ? data.control_schematics : data;
+    for (const schematic of controlData.schematics || []) {
+      const schematicTag = schematic.title || schematic.id || "CONTROL SCHEMATIC";
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: schematicTag, field: "explicit_point_tokens",
+        value: schematic.point_totals?.total ?? 0,
+        sheet_id: schematic.sheet || null, table_title: schematic.title || null,
+        bbox_px: schematic.title_evidence?.bbox || null, source_tool: name,
+        note: "Explicitly printed AI/AO/DI/DO tokens; not installed field-device quantity",
+      }));
+      for (const point of schematic.explicit_points || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: point.id || schematicTag, field: "POINT TYPE", value: point.point_type,
+          sheet_id: schematic.sheet || point.evidence?.sheet || null, table_title: schematic.title || null,
+          bbox_px: point.evidence?.bbox || null, source_tool: name,
+          note: point.typing_basis || "explicit_printed_io_token",
+        }));
+      }
+      for (const binding of schematic.io_bindings || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: binding.instrument_label || binding.instrument_id || schematicTag,
+          field: "instrument_io_binding", value: binding.point_type || "",
+          sheet_id: schematic.sheet || binding.instrument_evidence?.sheet || null, table_title: schematic.title || null,
+          bbox_px: binding.instrument_evidence?.bbox || null, source_tool: name,
+          note: `${binding.interpretation_basis || "explicit I/O plus vector tether"}; point cite ${JSON.stringify(binding.point_evidence?.bbox || null)}; tether cite ${JSON.stringify(binding.tether_evidence?.bbox || null)}`,
+        }));
+      }
+      for (const instrument of schematic.instruments || []) {
+        if (instrument.status === "mapped_to_explicit_io") continue;
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: instrument.id || instrument.label || schematicTag,
+          field: "instrument_label", value: instrument.label || "",
+          sheet_id: schematic.sheet || instrument.evidence?.sheet || null, table_title: schematic.title || null,
+          bbox_px: instrument.evidence?.bbox || null, source_tool: name,
+          note: "Unmapped instrument label — no I/O type inferred",
+        }));
+      }
+      for (const component of schematic.component_labels || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: schematicTag, field: "schematic_component", value: component.label || "",
+          sheet_id: schematic.sheet || component.evidence?.sheet || null, table_title: schematic.title || null,
+          bbox_px: component.evidence?.bbox || null, source_tool: name,
+          note: "Authored schematic component label; not installed quantity",
+        }));
+      }
+      for (const equipment of schematic.equipment || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: equipment.tag || schematicTag, field: "control_schematic_reference",
+          value: schematic.title || schematic.id || "control schematic",
+          sheet_id: schematic.sheet || equipment.evidence?.sheet || null, table_title: schematic.title || null,
+          bbox_px: equipment.evidence?.bbox || null, source_tool: name,
+          note: equipment.schedule_binding_status === "bound"
+            ? "Bound one-to-one to one cited HVAC/BAS schedule row"
+            : equipment.schedule_binding_status === "ambiguous"
+              ? `${equipment.schedule_refs?.length || 0} relevant schedule candidates; no unique binding established`
+              : `No relevant HVAC/BAS schedule row was established; ${equipment.rejected_schedule_refs?.length || 0} unrelated-discipline candidate(s) rejected`,
+        }));
+      }
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: schematicTag, field: "diagram_semantic_status",
+        value: schematic.semantic_status || "evidence_inventory",
+        sheet_id: schematic.sheet || null, table_title: schematic.title || null,
+        bbox_px: schematic.region || null, source_tool: name,
+        note: `raw vector graph: ${schematic.topology?.status || "unavailable"}; sequence binding: ${schematic.sequence_binding_status || "unbound"}; ${schematic.review?.unresolved_crossings ?? 0} unresolved crossing(s); ${schematic.review?.unmapped_instruments ?? 0} unmapped instrument label(s)`,
+      }));
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: schematicTag, field: "sequence_binding_status",
+        value: schematic.sequence_binding_status || "unbound",
+        sheet_id: schematic.sheet || null, table_title: schematic.title || null,
+        bbox_px: schematic.title_evidence?.bbox || null, source_tool: name,
+        note: (schematic.sequence_refs || []).map((ref) => ref.title).join("; ") || "No uniquely applicable authored SOO block was established",
+      }));
+    }
+    for (const riser of controlData.risers || []) {
+      const riserTag = riser.title || riser.id || "RISER DIAGRAM";
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: riserTag, field: "diagram_semantic_status", value: riser.semantic_status || "evidence_inventory",
+        sheet_id: riser.sheet || null, table_title: riser.title || null,
+        bbox_px: riser.title_evidence?.bbox || null, source_tool: name,
+        note: riser.review?.note || `${riser.status || "unknown"}; human engineering review required`,
+      }));
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: riserTag, field: "unresolved_vector_candidate_count",
+        value: (riser.trace_candidates || []).length,
+        sheet_id: riser.sheet || null, table_title: riser.title || null,
+        bbox_px: riser.region || riser.title_evidence?.bbox || null, source_tool: name,
+        note: "Diagnostic only: not a riser count, device count, or installed quantity",
+      }));
+      for (const datum of riser.datums || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: riserTag, field: "floor_datum", value: datum.label || "",
+          sheet_id: riser.sheet || datum.evidence?.sheet || null, table_title: riser.title || null,
+          bbox_px: datum.evidence?.bbox || null, source_tool: name,
+        }));
+        for (const alias of datum.aliases || []) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: riserTag, field: "floor_datum_alias", value: `${datum.label} = ${alias.label}`,
+            sheet_id: riser.sheet || alias.evidence?.sheet || null, table_title: riser.title || null,
+            bbox_px: alias.evidence?.bbox || null, source_tool: name,
+            note: "Two authored names at the same diagram elevation; counted as one floor datum",
+          }));
+        }
+      }
+      for (const system of riser.systems || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: riserTag, field: "diagram_system", value: system.normalized_system || "",
+          sheet_id: riser.sheet || system.evidence?.sheet || null, table_title: riser.title || null,
+          bbox_px: system.evidence?.bbox || null, source_tool: name,
+          note: `${system.interpretation_basis || "authored_diagram_title"}: ${system.authored_label || riser.title || ""}`,
+        }));
+      }
+      for (const service of riser.service_groups || []) {
+        const firstEvidence = service.evidence?.[0];
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: riserTag, field: "authored_riser_service", value: service.label || "",
+          sheet_id: riser.sheet || firstEvidence?.sheet || null, table_title: riser.title || null,
+          bbox_px: firstEvidence?.bbox || null, source_tool: name,
+          note: `${service.normalized_system || "unknown"}; ${service.pressure_zone || "pressure zone not printed"}; ${service.service_pair || "service pairing not printed"}; ${service.evidence?.length || 0} cited occurrence(s)`,
+        }));
+      }
+      for (const continuation of riser.continuations || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: riserTag, field: "off_page_continuation", value: continuation.target_sheet || "",
+          sheet_id: riser.sheet || continuation.evidence?.sheet || null, table_title: riser.title || null,
+          bbox_px: continuation.evidence?.bbox || null, source_tool: name,
+          note: `${continuation.boundary || "unknown"} boundary; ${continuation.text || "authored continuation"}`,
+        }));
+      }
+      for (const transport of riser.network_transports || []) {
+        const firstEvidence = transport.evidence?.[0];
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: riserTag, field: "authored_network_transport", value: transport.name || "",
+          sheet_id: riser.sheet || firstEvidence?.sheet || null, table_title: riser.title || null,
+          bbox_px: firstEvidence?.bbox || null, source_tool: name,
+          note: `${transport.kind || "unknown"}; ${transport.evidence?.length || 0} cited occurrence(s); transport presence does not prove unshown device connectivity`,
+        }));
+      }
+      for (const component of riser.network_components || []) {
+        const firstEvidence = component.evidence?.[0];
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: riserTag, field: "authored_network_component", value: component.component_type || "",
+          sheet_id: riser.sheet || firstEvidence?.sheet || null, table_title: riser.title || null,
+          bbox_px: firstEvidence?.bbox || null, source_tool: name,
+          note: `${component.evidence?.length || 0} cited occurrence(s); authored component labels are evidence, not installed quantity or proven connectivity`,
+        }));
+      }
+      for (const placement of riser.floor_placements || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: placement.subject || riserTag, field: "authored_floor_placement", value: placement.floor_label || "",
+          sheet_id: riser.sheet || placement.subject_evidence?.sheet || null, table_title: riser.title || null,
+          bbox_px: placement.subject_evidence?.bbox || null, source_tool: name,
+          note: `${placement.subject_kind || "diagram subject"}; ${placement.interpretation_basis || "authored floor band"}; floor cite ${JSON.stringify(placement.floor_evidence?.bbox || null)}; not installed quantity or proven connectivity`,
+        }));
+      }
+      for (const equipment of riser.diagram_tags || []) {
+        const firstEvidence = equipment.evidence?.[0];
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: equipment.tag || riserTag, field: "riser_diagram_tag",
+          value: riser.title || riser.id || "riser diagram",
+          sheet_id: riser.sheet || firstEvidence?.sheet || null, table_title: riser.title || null,
+          bbox_px: firstEvidence?.bbox || null, source_tool: name,
+          note: equipment.schedule_refs?.length
+            ? `${equipment.evidence?.length || 0} cited diagram occurrence(s); bound to ${equipment.schedule_refs.length} cited schedule row${equipment.schedule_refs.length === 1 ? "" : "s"}`
+            : `${equipment.evidence?.length || 0} cited diagram occurrence(s); classification, connectivity, and installed multiplicity remain unverified`,
+        }));
+      }
+      for (const state of riser.device_states || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: state.device_tag || riserTag, field: "diagram_normal_state", value: state.state || "",
+          sheet_id: riser.sheet || state.state_evidence?.sheet || null, table_title: riser.title || null,
+          bbox_px: state.state_evidence?.bbox || null, source_tool: name,
+          note: `${state.authored_token || ""}; ${state.interpretation_basis || "local authored tag/state geometry"}; not fail position or commanded operating state`,
+        }));
+      }
+    }
+    for (const conflict of controlData.diagram_conflicts || []) {
+      for (const claim of conflict.claims || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: conflict.device_tag || conflict.id || "DIAGRAM CONFLICT",
+          field: "diagram_state_conflict", value: claim.state || "",
+          sheet_id: claim.sheet || claim.state_evidence?.sheet || null,
+          table_title: claim.diagram_title || null,
+          bbox_px: claim.state_evidence?.bbox || null,
+          source_tool: name,
+          note: `${conflict.normalized_system || "unknown system"}; ${conflict.conflict_type || "conflict"}; ${conflict.status || "design clarification required"}`,
+        }));
+      }
+    }
+    for (const link of controlData.continuation_links || []) {
+      rows.push(makeTakeoffRow({
+        workflow, runId,
+        tag: link.from_sheet_number || link.from_diagram_id || "OFF-PAGE CONTINUATION",
+        field: "off_page_continuation_link",
+        value: link.to_sheet_number || "",
+        sheet_id: link.from_sheet || link.from_evidence?.sheet || null,
+        bbox_px: link.from_evidence?.bbox || null,
+        source_tool: name,
+        note: `${link.status || "unresolved"}; ${link.from_boundary || "unknown"} to ${link.to_boundary || "unknown"}; reciprocal cite ${JSON.stringify(link.to_evidence?.bbox || null)}. A reciprocal callout does not prove pipe, duct, wire, or installed-device connectivity.`,
+      }));
+    }
+    if (controlData.engineering_readiness) {
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: "BAS DIAGRAM COVERAGE", field: "principal_engineering_readiness",
+        value: controlData.engineering_readiness.status || "coverage_not_established",
+        source_tool: name,
+        note: (controlData.engineering_readiness.blockers || [])
+          .map((blocker) => `${blocker.code} (${blocker.count})`)
+          .join("; ") || "No deterministic diagram-semantic blockers remain; estimator review is still required",
+      }));
     }
   }
 
@@ -441,12 +680,23 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           table_bbox_px: item.table_bbox_px || null,
           row_bbox_px: item.row_bbox_px || null,
           source_tool, note: catName,
+          quantity_basis: item.quantity_basis || null,
         }));
-        if (typeof item.scheduled_qty === "number") {
+        if (typeof item.scheduled_qty === "number" && item.status !== "REFUSED_UNPARSEABLE_QTY") {
           rows.push(makeTakeoffRow({
             workflow, runId, tag, field: "scheduled_quantity",
             value: item.scheduled_qty, unit: item.unit || "EA",
             sheet_id: sheet, table_title: table, source_tool,
+            quantity_basis: item.scheduled_qty_basis || "printed_schedule_quantity",
+          }));
+        }
+        if (item.status === "REFUSED_UNPARSEABLE_QTY") {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "quantity_status",
+            value: item.status,
+            sheet_id: sheet, table_title: table, source_tool,
+            note: item.reason || "Printed schedule quantity could not be parsed",
+            quantity_basis: item.scheduled_qty_basis || "unparseable_printed_quantity",
           }));
         }
         rows.push(makeTakeoffRow({
@@ -490,7 +740,10 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           }
         }
       }
-      if (!items.length && typeof cat.count === "number") {
+      // A zero taxonomy bucket is scope metadata, not an extracted takeoff
+      // line.  Keep positive legacy rollups, but never turn the compiler's
+      // predeclared empty families into rows that look like found equipment.
+      if (!items.length && typeof cat.count === "number" && cat.count > 0) {
         rows.push(makeTakeoffRow({
           workflow, runId, tag: catName, field: "schedule_count", value: cat.count,
           unit: "EA", table_title: catName, source_tool, note: "category rollup",
@@ -659,7 +912,9 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           }
         }
       }
-      if (!items.length && typeof list.rows === "number") {
+      // Same rule for point-list envelopes: an authored positive aggregate
+      // remains useful, while an empty list is not a physical point row.
+      if (!items.length && typeof list.rows === "number" && list.rows > 0) {
         rows.push(makeTakeoffRow({
           workflow, runId, tag: list.title, field: "schedule_count", value: list.rows,
           unit: "EA", sheet_id: list.sheet_id || null, table_title: list.title,
@@ -961,6 +1216,7 @@ export function takeoffLeadColumns(lines = []) {
     // takeoff with no reconcile run never shows these, so the common case
     // stays exactly as compact as before.
     if (has((l) => l.qty_kind)) cols.push({ key: "qty_kind", label: "Qty basis" });
+    if (has((l) => l.quantity_basis)) cols.push({ key: "quantity_basis", label: "Quantity evidence" });
     if (has((l) => l.scheduled_qty != null)) cols.push({ key: "scheduled_qty", label: "Scheduled qty" });
     if (has((l) => l.installed_qty != null)) cols.push({ key: "installed_qty", label: "Installed qty" });
     // status already has its own trailing "Status" column on every export
@@ -1093,6 +1349,7 @@ export function lineLeadValue(line, key) {
   if (key === "manufacturer") return line.manufacturer || "";
   if (key === "model") return line.model || "";
   if (key === "qty_kind") return line.qty_kind || "";
+  if (key === "quantity_basis") return line.quantity_basis || "";
   if (key === "scheduled_qty") return line.scheduled_qty ?? "";
   if (key === "installed_qty") return line.installed_qty ?? "";
   return "";
@@ -1142,12 +1399,17 @@ export function isFinishedTakeoffSource(sourceTool) {
  */
 export function compileAgentTakeoff(rows = []) {
   const all = rows || [];
+  const hasCorpusCompile = all.some((row) => row?.source_tool === "compile_corpus_takeoff");
   const compileQtyRows = all.filter((row) => (
     row?.source_tool === "compile_corpus_takeoff"
-    && String(row.field || "") === "quantity"
+    && QTY_FIELDS.has(String(row.field || ""))
+    && String(row.field || "") !== "project_total"
     && row.tag
   ));
-  const corpusLocked = compileQtyRows.length > 0;
+  // Presence of a corpus compile locks the finished Takeoff even when it
+  // found zero rows. Otherwise estimator-status metadata (which also carries
+  // a tag) can seed fake zero-quantity equipment lines on evidence-poor sets.
+  const corpusLocked = hasCorpusCompile;
   const finishedSeedRows = corpusLocked
     ? compileQtyRows
     : all.filter((row) => (
@@ -1188,6 +1450,7 @@ export function compileAgentTakeoff(rows = []) {
         qty: null,
         unit: null,
         qty_kind: null,
+        quantity_basis: null,
         scheduled_qty: null,
         installed_qty: null,
         schedule_sheet_id: null,
@@ -1233,7 +1496,8 @@ export function compileAgentTakeoff(rows = []) {
 
   for (const row of scoped) {
     const isCompileQty = row?.source_tool === "compile_corpus_takeoff"
-      && String(row.field || "") === "quantity"
+      && QTY_FIELDS.has(String(row.field || ""))
+      && String(row.field || "") !== "project_total"
       && row.tag;
     const isFinishedSeed = isFinishedTakeoffSource(row?.source_tool) && row.tag;
     const g = resolveGroup(row, {
@@ -1266,7 +1530,9 @@ export function compileAgentTakeoff(rows = []) {
         g.qty = n;
         g.unit = row.unit || "EA";
         g.qty_kind = "installed";
+        g.quantity_basis = row.quantity_basis || "plan_symbol_count";
         g.installed_qty = n;
+        if (row.note) g.notes.push(row.note);
       }
     } else if (field === "scheduled_quantity") {
       const n = asNumber(row.value);
@@ -1278,16 +1544,25 @@ export function compileAgentTakeoff(rows = []) {
           g.qty = n;
           g.unit = row.unit || "EA";
           g.qty_kind = "scheduled";
+          g.quantity_basis = row.quantity_basis || "printed_schedule_quantity";
         }
       }
     } else if (field === "quantity") {
       const n = asNumber(row.value);
-      // Corpus compile quantity always wins for scheduled takeoff lines.
+      const isLegacyRowCardinality = row.source_tool === "compile_corpus_takeoff"
+        && row.quantity_basis === "schedule_row_cardinality";
+      // A compile row always seeds the line, but its legacy row-cardinality
+      // value is not itself a scheduled or installed quantity. A following
+      // scheduled_quantity row promotes the evidenced quantity instead.
       if (n != null && (row.source_tool === "compile_corpus_takeoff" || g.qty_kind !== "installed")) {
-        if (row.source_tool === "compile_corpus_takeoff" || g.qty_kind !== "scheduled") {
+        if (!isLegacyRowCardinality
+          && (row.source_tool === "compile_corpus_takeoff" || g.qty_kind !== "scheduled")) {
           g.qty = n;
           g.unit = row.unit || "EA";
-          g.qty_kind = row.source_tool === "compile_corpus_takeoff" ? "scheduled" : (g.qty_kind || "scheduled");
+          g.qty_kind = row.quantity_basis === "inferred_embedded_coil_gap"
+            ? "inferred_gap"
+            : (row.source_tool === "compile_corpus_takeoff" ? "scheduled" : (g.qty_kind || "scheduled"));
+          g.quantity_basis = row.quantity_basis || g.quantity_basis;
         }
       }
       if (row.bbox_px && (row.source_tool === "compile_corpus_takeoff" || !g.bbox_px)) {
@@ -1296,6 +1571,10 @@ export function compileAgentTakeoff(rows = []) {
       if (row.row_bbox_px && (row.source_tool === "compile_corpus_takeoff" || !g.row_bbox_px)) {
         g.row_bbox_px = row.row_bbox_px;
       }
+    } else if (field === "quantity_status") {
+      g.status = "quantity_unresolved";
+      if (row.note) g.notes.push(row.note);
+      g.quantity_basis = row.quantity_basis || "unparseable_printed_quantity";
     } else if (field === "mark_count" && g.qty_kind !== "installed" && g.qty_kind !== "scheduled") {
       const n = asNumber(row.value);
       if (n != null) {
@@ -1319,6 +1598,7 @@ export function compileAgentTakeoff(rows = []) {
         g.status = status;
         g.notes.push(`Plan: ${row.value}`);
       }
+      if (row.note) g.notes.push(row.note);
       if (row.sheet_id && !g.schedule_sheet_id) g.schedule_sheet_id = row.sheet_id;
     } else if (field === "plan_tag") {
       if (row.sheet_id) g.plan_sheet_id = row.sheet_id;
@@ -1360,7 +1640,7 @@ export function compileAgentTakeoff(rows = []) {
       g.notes.push("No printed or drawn quantity found for this tag — refused, not defaulted");
     }
     if (g.qty == null && !g.tag) continue; // drop empty junk
-    if (corpusLocked && (g.qty == null || !g.tag)) continue;
+    if (corpusLocked && !g.tag) continue;
 
     const mfr = pickAttr(g.attrs, ["MANUFACTURER", "MFR", "MANUFACTURER/MODEL", "MANUFACTURER / MODEL"]);
     const model = pickAttr(g.attrs, ["MODEL"]);
@@ -1433,6 +1713,7 @@ export function compileAgentTakeoff(rows = []) {
       qty: g.qty,
       unit: g.unit || (g.qty != null ? "EA" : null),
       qty_kind: g.qty_kind,
+      quantity_basis: g.quantity_basis,
       scheduled_qty: g.scheduled_qty,
       installed_qty: g.installed_qty,
       specs,

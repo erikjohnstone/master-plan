@@ -1,0 +1,42 @@
+{
+  "schema": "opentakeoff.network_riser_ground_truth.v1",
+  "source_pdf": "pdf/30__vol2__058__LBNL_Building_59_NERSC_Facility_Upgrade_II.pdf",
+  "source_sha256": "5c0d37ef255d621865fc7e0147ef7cad54321292e4f68d45ae97447d35b8e627",
+  "review_basis": "Independent full-page visual review of J601 identifies a five-level building-automation network riser with authored BACnet, BACnet/IP, BACnet MS/TP, CMnet, Modbus, UFT Network, Ethernet, TCP panel, CM controller, and ME Stack evidence. This gate verifies the cited evidence inventory only. It does not establish final addresses, a complete BACnet object database, field-wiring quantities, exact controller/card/terminal quantities, or unshown physical connectivity.",
+  "coordinate_frame": "pdf_viewport_px_origin_top_left",
+  "page": 214,
+  "sheet_number": "J601",
+  "title": "BUILDING AUTOMATION NETWORK RISER DIAGRAM",
+  "diagram_kind": "network_architecture",
+  "normalized_system": "building_automation_network",
+  "semantic_status": "evidence_inventory",
+  "floor_datums": [
+    "Roof - Level 5",
+    "Office - Level 4",
+    "Office - Level 3",
+    "Computing Level - Level 2",
+    "Mechanical Level - Level 1"
+  ],
+  "required_transports": [
+    { "kind": "protocol", "name": "BACnet" },
+    { "kind": "protocol", "name": "BACnet/IP" },
+    { "kind": "protocol", "name": "BACnet MS/TP" },
+    { "kind": "protocol", "name": "CMnet" },
+    { "kind": "protocol", "name": "Modbus" },
+    { "kind": "named_network", "name": "UFT Network" },
+    { "kind": "physical_link", "name": "Ethernet" }
+  ],
+  "required_tag_subset": [
+    "TCP-P1", "TCP-R1", "TCP-R2", "TCP-R3", "TCP-R4",
+    "CM-06", "CM-07", "CM-17", "CM-18"
+  ],
+  "required_floor_placements": [
+    { "subject": "TCP-P1", "floor_label": "Roof - Level 5" },
+    { "subject": "TCP-R1", "floor_label": "Roof - Level 5" },
+    { "subject": "TCP-R2", "floor_label": "Roof - Level 5" },
+    { "subject": "TCP-R3", "floor_label": "Roof - Level 5" },
+    { "subject": "TCP-R4", "floor_label": "Roof - Level 5" }
+  ],
+  "required_network_components": ["ME Stack"],
+  "negative_pages": [213, 215]
+}

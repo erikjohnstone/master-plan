@@ -6,10 +6,12 @@ import {
   classifyBasServedSweepOutcome,
   sweepBasServedMark,
   familyNeedleFromSpecs,
+  scheduledQtyStatusFromRow,
   reconcileRowsFromTakeoffItems,
   summarizeReconcile,
   reconcileScheduleFamilyFromGraph,
   reconcileRowsToCsv,
+  rowIdentityTag,
 } from "../src/lib/schedulePlanReconcile.mjs";
 import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
 import {
@@ -19,6 +21,16 @@ import {
 
 
 test("row identity prefers VALVE MARK over UNIT MARK (Pillar C valve join)", () => {
+  const valveRow = {
+    key: "CUH-A1",
+    identity: { header: "UNIT MARK", text: "CUH-A1" },
+    cells: {
+      "UNIT MARK": { text: "CUH-A1" },
+      "VALVE MARK": { text: "CV-CUH-A1-HHW" },
+    },
+  };
+  assert.equal(rowIdentityTag(valveRow, /^VALVE\s*MARK$/i), "CV-CUH-A1-HHW");
+  assert.equal(rowIdentityTag(valveRow), "CV-CUH-A1-HHW");
   const graph = {
     tables: [
       {
@@ -106,6 +118,73 @@ test("classifyReconcileStatus: MATCH, SCHEDULE_ONLY, REFUSED, AMBIGUOUS", () => 
   );
 });
 
+test("scheduled quantity distinguishes printed, row-cardinality, and unparseable evidence", () => {
+  assert.deepEqual(scheduledQtyStatusFromRow({ cells: { "QTY.": { text: "12" } } }), {
+    qty: 12,
+    refused: false,
+    reason: null,
+    basis: "printed_schedule_quantity",
+    source_header: "QTY.",
+    source_text: "12",
+  });
+  assert.equal(
+    scheduledQtyStatusFromRow({ cells: { MARK: { text: "VAV-1" } } }).basis,
+    "one_per_unique_schedule_row",
+  );
+  for (const text of ["", "1 B", "2 units", "0"]) {
+    const result = scheduledQtyStatusFromRow({ cells: { QTY: { text } } });
+    assert.equal(result.refused, true, JSON.stringify(text));
+    assert.equal(result.basis, "unparseable_printed_quantity");
+  }
+});
+
+test("repeatable air-device type rows never invent a scheduled quantity of one", () => {
+  assert.deepEqual(
+    scheduledQtyStatusFromRow(
+      { cells: { MARK: { text: "CD-1" }, TYPE: { text: "3-CONE SUPPLY" } } },
+      { typeDefinition: true },
+    ),
+    {
+      qty: null,
+      refused: false,
+      reason: null,
+      basis: "type_definition_not_quantity",
+      source_header: null,
+      source_text: null,
+    },
+  );
+  const [row] = reconcileRowsFromTakeoffItems([{
+    tag: "CD-1",
+    status: "resolved",
+    quantity: 24,
+    placement_count: 21,
+    schedule_row: { MARK: "CD-1", TYPE: "3-CONE SUPPLY" },
+    schedule: { sheet: "set.pdf#47", kind: "equipment", title: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE", drawing_group: "MTRACON" },
+    drawing_locations: [{ sheet: "set.pdf#12", at: [100, 200] }],
+  }]);
+  assert.equal(row.scheduled_qty, null);
+  assert.equal(row.scheduled_qty_basis, "type_definition_not_quantity");
+  assert.equal(row.installed_qty, 24);
+  assert.equal(row.placement_count, 21);
+  assert.equal(row.status, "MATCH", "the schedule definition is grounded to plan count; no fake 1-vs-24 comparison");
+  assert.equal(row.quantity_comparison, "type_definition_vs_plan_count");
+  assert.equal(row.schedule_cite.drawing_group, "MTRACON");
+});
+
+test("reconcile refuses a polluted printed QTY instead of reporting fallback one", () => {
+  const [row] = reconcileRowsFromTakeoffItems([{
+    tag: "VAV-1",
+    status: "resolved",
+    quantity: 1,
+    schedule_row: { QTY: "1 B" },
+    drawing_locations: [{ sheet: "m.pdf#2", at: [1, 2] }],
+  }]);
+  assert.equal(row.scheduled_qty, null);
+  assert.equal(row.scheduled_qty_basis, "unparseable_printed_quantity");
+  assert.equal(row.status, "AMBIGUOUS");
+  assert.match(row.reason, /unparseable/i);
+});
+
 test("classifyBasServedSweepOutcome: unanchored I/O tags → SCHEDULE_ONLY (not ERROR)", () => {
   const so = classifyBasServedSweepOutcome({
     error: new Error('Schedule row "AFMS-1" (DDC CONTROLLER INPUT/OUTPUT SUMMARY) cannot be geometrically anchored — its tag is not drawn on any plan sheet'),
@@ -136,8 +215,17 @@ test("reconcileRowsFromTakeoffItems maps takeoff items to contractor columns", (
       category: "terminal",
       status: "resolved",
       quantity: 1,
+      quantity_basis: "exact_plan_tag",
+      search_scope: "tagged_only",
+      unlabeled_audit_complete: false,
+      plan_search_complete: true,
       schedule: { sheet: "M-601.pdf#2", kind: "equipment", title: "VOLUME CONTROL BOX SCHEDULE" },
-      drawing_locations: [{ sheet: "M-601.pdf#5", at: [100, 200] }],
+      drawing_locations: [{
+        sheet: "M-601.pdf#5",
+        at: [100, 200],
+        bbox: { x0: 90, y0: 190, x1: 110, y1: 210 },
+        score: 1,
+      }],
     },
     {
       tag: "EF-2",
@@ -155,10 +243,40 @@ test("reconcileRowsFromTakeoffItems maps takeoff items to contractor columns", (
   assert.equal(rows[0].status, "MATCH");
   assert.equal(rows[0].scheduled_qty, 1);
   assert.equal(rows[0].installed_qty, 1);
+  assert.equal(rows[0].installed_qty_basis, "exact_plan_tag");
+  assert.equal(rows[0].search_scope, "tagged_only");
+  assert.equal(rows[0].unlabeled_audit_complete, false);
+  assert.equal(rows[0].plan_search_complete, true);
+  assert.deepEqual(rows[0].plan_cites[0].bbox, { x0: 90, y0: 190, x1: 110, y1: 210 });
   assert.equal(rows[1].status, "SCHEDULE_ONLY");
+  assert.equal(rows[1].installed_qty, null, "an unverified plan quantity must not be fabricated as zero");
   const summary = summarizeReconcile(rows);
   assert.equal(summary.match, 1);
   assert.equal(summary.schedule_only, 1);
+});
+
+test("an incomplete plan sweep exposes only an observed floor and reconciles AMBIGUOUS", () => {
+  const [row] = reconcileRowsFromTakeoffItems([{
+    tag: "VAV-9",
+    equipment_type: "VAV box",
+    status: "refused",
+    quantity: 3,
+    quantity_basis: "symbol_fingerprint",
+    search_scope: "exhaustive",
+    unlabeled_audit_complete: true,
+    plan_search_complete: false,
+    reason: "Plan search incomplete: 3 grounded placements observed; count is a floor.",
+    schedule: { sheet: "M-601.pdf#2", kind: "equipment", title: "VAV SCHEDULE" },
+    drawing_locations: [{ sheet: "M-601.pdf#5", at: [100, 200] }],
+  }], [{
+    type: "INCOMPLETE_PLAN_SEARCH",
+    tag: "VAV-9",
+    detail: "candidate work cap",
+  }]);
+  assert.equal(row.installed_qty, null);
+  assert.equal(row.observed_plan_qty, 3);
+  assert.equal(row.plan_search_complete, false);
+  assert.equal(row.status, "AMBIGUOUS");
 });
 
 test("reconcileScheduleFamilyFromGraph with sweep map", () => {
@@ -186,6 +304,28 @@ test("reconcileScheduleFamilyFromGraph with sweep map", () => {
   );
   assert.equal(rows.length, 1);
   assert.equal(rows[0].status, "MATCH");
+});
+
+test("family reconciliation preserves independently reused marks by authored drawing group", () => {
+  const row = () => ({
+    key: "CD-1",
+    cells: { MARK: { text: "CD-1" }, TYPE: { text: "3-CONE SUPPLY" } },
+  });
+  const graph = { tables: [
+    { kind: "equipment", sheet: "set.pdf#44", drawing_group: "AIR OPS", title: { text: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE" }, rows: [row()] },
+    { kind: "equipment", sheet: "set.pdf#47", drawing_group: "MTRACON", title: { text: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE" }, rows: [row()] },
+  ] };
+  const needle = { label: "GRD", titleRe: /GRILLE.*REGISTER.*DIFFUSER/i };
+  const sweeps = new Map([
+    ["set.pdf#44::CD-1", { installedQty: 32, placementCount: 32, itemStatus: "resolved" }],
+    ["set.pdf#47::CD-1", { installedQty: 24, placementCount: 21, itemStatus: "resolved" }],
+  ]);
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweeps);
+  assert.equal(rows.length, 2);
+  assert.deepEqual(rows.map((entry) => [entry.schedule_cite.drawing_group, entry.installed_qty]), [
+    ["AIR OPS", 32], ["MTRACON", 24],
+  ]);
+  assert.ok(rows.every((entry) => entry.status === "MATCH"));
 });
 
 test("reconcile scaffold accepts reference-kind GRILLE SCHEDULE via row.key (compile parity)", () => {
@@ -325,6 +465,11 @@ test("reconcileRowsToCsv emits contractor header row", () => {
       family: "VAV",
       scheduled_qty: 1,
       installed_qty: 1,
+      observed_plan_qty: 1,
+      installed_qty_basis: "exact_plan_tag",
+      search_scope: "tagged_only",
+      unlabeled_audit_complete: false,
+      plan_search_complete: true,
       status: "MATCH",
       schedule_cite: { sheet: "s.pdf#1", title: "VAV SCHEDULE" },
       plan_cites: [{ sheet: "s.pdf#2" }],
@@ -334,6 +479,12 @@ test("reconcileRowsToCsv emits contractor header row", () => {
   assert.match(csv, /^Tag,/);
   assert.match(csv, /VAV-1/);
   assert.match(csv, /MATCH/);
+  assert.match(csv, /Installed qty basis/);
+  assert.match(csv, /exact_plan_tag/);
+  assert.match(csv, /tagged_only/);
+  const [header, data] = csv.trim().split("\n");
+  assert.equal(header.split(",").length, data.split(",").length,
+    "every exported data field must align with exactly one header");
 });
 
 test("schedule_plan_reconcile intent is phrase-robust (≥5 phrasings)", () => {

@@ -43,6 +43,26 @@ test('Python point observations cross the strict shared boundary with unmodified
   assert.deepEqual(await runBasPointLists(payload), result);
 });
 
+test('Python preserves indexed source-row order when vector bbox order is non-monotonic', async () => {
+  const table = structuredClone(graph.tables[0]);
+  table.rows = [
+    { key: '2', sheet: 'fixture.pdf', cells: {
+      'POINT NAME': { text: 'Second authored row', bbox: [0, 60, 150, 70] },
+      AI: { text: 'X', bbox: [150, 60, 200, 70] },
+      ALARM: { text: '', bbox: [200, 60, 250, 70] },
+    } },
+    { key: '1', sheet: 'fixture.pdf', cells: {
+      'POINT NAME': { text: 'First authored row', bbox: [0, 20, 150, 30] },
+      AI: { text: 'X', bbox: [150, 20, 200, 30] },
+      ALARM: { text: '', bbox: [200, 20, 250, 30] },
+    } },
+  ];
+  const result = await runBasPointLists({ sources, tables: [table] });
+  assert.deepEqual(result.matrices[0].rows.map((row) => row.local_key), ['2', '1']);
+  assert.deepEqual(result.matrices[0].rows.map((row) => row.raw),
+    table.rows.map(({ key, cells }) => ({ key, cells })));
+});
+
 test('production BAS compile adds grounded observations without replacing legacy or math', async () => {
   const session = { basSourcesForPipeline: () => sources };
   const before = structuredClone(graph);

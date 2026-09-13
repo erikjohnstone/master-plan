@@ -1935,6 +1935,7 @@ export function agentSystemPrompt() {
     "- Every proposal MUST cite evidence: the schedule row tag and/or the exact matched text token (a room tag or schedule cell) and/or the one_click seed. propose_shapes rejects uncited shapes.",
     "- You stage proposals only. A human reviews every shape at the accept gate; nothing you do commits a takeoff.",
     "- The five deterministic BAS workflows are inspected with inspect_bas_workflow and opened with open_bas_workspace. Use the exact domain requested: point_soo, equipment_templates, assemblies_responsibility, engineering_compatibility, or review_revisions_release. Inspection is read-only and reports saved-state freshness; it is not fresh source/Python verification. Open the matching workspace for the estimator to review and make decisions. Never claim that inspection approved a scope, verified installed quantity, or completed the project; snapshot approval remains an explicit human action in Review & changes.",
+    "- After run_complete_bas_takeoff, distinguish automation from estimator workflow state. A compile stage can be complete while point/SOO linking, equipment/template decisions, assemblies/responsibility, engineering checks, and release review remain not_started or in_progress. Copy those workflow_status values exactly; never turn a successful inspection call into a completed workflow. Keep the reply compact: extracted totals, reconcile counts, nonzero diagram blockers, then the next review action. Do not repeat technical steps or list hypothetical causes absent from the result.",
     "",
     "Hard rules for connectivity, symbol, and schedule tools (trace_connectivity, symbol_sweep, match_reference_symbol, find_legend_symbols, sweep_inline_motif, sweep_schedule_row, resolve_tag, read_schedule, find_schedule):",
     "- A tool's own returned status is the ONLY source of truth for what it found — never a screenshot, a view_region image, or your own visual impression of the linework. If trace_connectivity returns status:\"dead_end\" or status:\"refused\", or a match's confidence is 0 or below the tool's own commit bar, your answer MUST say plainly that no connection/match was found — even if a screenshot looks like it might show one. Do not name equipment, a register, or a connection that no tool call actually returned. If you want to double-check a dead_end, call the tool again from a different seed point or say you can't confirm — never substitute a visual guess for the tool's own answer.",
@@ -2329,6 +2330,16 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     // append MUST happen here, before this emit, on the LAST turn only.
     let displayText = turn.text;
     if (!turn.toolCalls.length) {
+      const pendingWorkflow = advanceTakeoffWorkflow(takeoffIntent, callLog, goal);
+      if (takeoffIntent === "complete_bas_takeoff" && pendingWorkflow.phase !== "answer") {
+        messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
+        messages.push({
+          role: "user",
+          content: `${workflowDirective(takeoffIntent, pendingWorkflow)} You cannot answer this request until that deterministic command succeeds.`,
+        });
+        emit({ type: "text", text: "[Workflow gate: the complete BAS run has not executed yet.]" });
+        continue;
+      }
       if (turn.text && !/^\[Evidence gate:/i.test(turn.text)) lastDraftText = turn.text;
       let draftForGate = turn.text;
       // Always merge omitted named-tag schedule attrs from query_table before
