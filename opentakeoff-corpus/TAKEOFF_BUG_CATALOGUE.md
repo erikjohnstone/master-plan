@@ -1982,6 +1982,79 @@ a per-sheet basis — 11 of 12 real tables across 2 sheets have a wrong
 row count, totaling roughly 40 real rows silently dropped from an
 otherwise well-titled, well-classified set of tables.
 
+**ROOT-CAUSE TRACE (2026-09-13, code-level, no fix applied yet — see
+below for why):** traced live against
+`21_VA_OrangeCounty_PublicSafetyBldg.pdf#50`'s own `AIR HANDLING UNIT
+SCHEDULE` via temporary instrumentation in
+`web/src/lib/sheetgraph.ts`'s `scheduleTableFromODL` (added, exercised,
+then fully reverted — no debug code left in the tree). Two independent
+findings, confirmed by direct print of the real ODL grid this table
+produces:
+
+1. **The table's own header row carries a genuine duplicate column.**
+   `headers` comes back as `["DESIGNATION", "DESIGNATION 2", "AHU-1",
+   "AHU-2"]` — TWO columns both header-labeled "DESIGNATION" (the
+   second is this file's own duplicate-header disambiguation suffix,
+   confirmed at `sheetgraph.ts:10500-10505`, doing exactly what it's
+   built to do: rename a repeat, not explain why the ODL grid handed it
+   a repeat in the first place). `keyColIdx` (`sheetgraph.ts:10508`)
+   matches the FIRST "DESIGNATION" it finds via `headers.findIndex`,
+   landing on column 0 — but the real, single-column row-label text a
+   person reads off the page (`TOTAL LOAD - MBH`, `SENSIBLE LOAD -
+   MBH`, …) is a genuine two-column split artifact this table's own
+   narrow rotated row-GROUP divider (`COOLING COIL`/`SUPPLY FAN`/
+   `RETURN FAN`/`FILTER SECTION`, drawn in its own thin sub-column to
+   the left of the attribute names) creates in ODL's own grid — column
+   0 is real content on SOME rows (the identity block at top, the 4
+   category dividers, the 3 summary rows at bottom — confirmed exactly
+   15 non-blank cells via `textSpans()` x-band isolation) and blank
+   on the ~36 rows in between, whose real attribute name in fact sits
+   one column over. `rowKeyOf` under `kind==="finish"` (this table's
+   kind, per the "reference" classification) requires a `CODE_RE`-
+   shaped tag; measured directly, exactly 1 of those 15 real column-0
+   values (`REMARKS:` → `REMARKS`, 7 letters, an accidental match —
+   `CODE_RE`'s own `[A-Z]{1,4}[A-Z0-9]{0,4}` alternative has no hyphen
+   requirement and happens to also accept any short, no-hyphen,
+   ≤8-letter English word) clears it on the strict pass.
+2. **But the strict pass recovers 24 rows, not 1** — confirmed by direct
+   instrumentation (`rows.length(strict)=24` before any fallback runs)
+   — meaning column 0 in the REAL ODL grid carries more, and different,
+   text than the clean 15-value transcription above accounts for; this
+   was not fully resolved before the debug instrumentation was reverted
+   (see below). The subsequent `printedKeys=true` retry against the
+   SAME strict column (the "table has already proven its own key
+   column" rescue, `sheetgraph.ts:10946-10948`) brings the total to the
+   observed 35 — meaning the eventual 16-row loss is real rows that
+   never got a printed-key match under EITHER pass on column 0, most
+   plausibly rows whose true identity sits in the "DESIGNATION 2"
+   column this scan never tries. The final
+   `if (!rows.length) { findEvidencedKeyColumn(); … }` rescue
+   (`sheetgraph.ts:10952-10955`, which — checked directly against this
+   table's real row-label text — would very likely pick the RIGHT
+   column, since it requires ≥50% row coverage and column 0's real
+   ~29% coverage should fail that bar in column 0's favor) never runs
+   at all here, because `rows.length` is already nonzero (35) after the
+   two column-0 passes, and that rescue is gated on `!rows.length`
+   strictly.
+
+**Why this is disclosed without a fix:** a real fix needs to reconcile
+column 0's own actual (not assumed) content with the "DESIGNATION 2"
+column's real content, decide which single column (or composed pair)
+is this table's true row identity, and do so without breaking any of
+the many other real, corpus-tuned uses of `rowKeyOf`/`keyColIdx`/
+`findEvidencedKeyColumn` this same 11,000-line file already depends on
+— each guarded by its own extensively-documented, corpus-measured
+regression history (see this file's own header/row-key comments
+throughout `sheetgraph.ts:3828-4007`, `10500-10956`). Given this
+session's own standing rule against guessing at fixes under time
+pressure, and the real risk of a narrow, insufficiently-verified change
+silently regressing a different real table somewhere else in a 541+
+document corpus, this trace is recorded here as the concrete starting
+point for a future session with the budget to (a) dump the REAL column
+0/1 content for this exact table cell-by-cell, (b) decide the right
+column-selection rule, and (c) run it against the full corpus gate
+before merging — not attempted here.
+
 ### B-32 — the primary equipment table itself (BOILERS) goes missing on a boiler-replacement project, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, disclosed)
 
 **Where:**
