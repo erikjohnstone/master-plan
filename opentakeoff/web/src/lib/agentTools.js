@@ -1382,6 +1382,21 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
     sheet_count: Math.max(0, ...Object.values(compiles).map((value) => Number(value?.sheet_count || 0))),
     workstream_count: COMPLETE_BAS_COMPILE_STAGES.length,
     bas_math: compiles.bas_points?.bas_math || null,
+    // SHOULD THIS BE ON THE SHARED PATH? No: these are a lossless projection
+    // of the already-shared compiler totals for the consolidated browser
+    // header/empty state. They do not extract, classify, count, or reconcile.
+    coverage: {
+      equipment_items: Number(compiles.hvac_equipment?.totals?.items || 0),
+      point_lists: Number(compiles.bas_points?.totals?.lists || 0),
+      point_rows: Number(compiles.bas_points?.totals?.rows || 0),
+      sequences: Number(compiles.sequences?.totals?.sequences || 0),
+      sequence_sections: Number(compiles.sequences?.totals?.sections || 0),
+      control_valve_items: Number(compiles.control_valves?.totals?.items || 0),
+      embedded_coil_gaps: Number(compiles.embedded_coil_gaps?.totals?.gaps || 0),
+      control_schematics: Number(controlSchematics?.totals?.schematics || 0),
+      riser_diagrams: Number(controlSchematics?.totals?.riser_diagrams || 0),
+      reconcile_rows: Array.isArray(reconcileFull?.rows) ? reconcileFull.rows.length : 0,
+    },
   };
   const presented = await safely("present_complete_bas_takeoff", () => ctx.presentCompleteBasTakeoff(presentation));
   stages.present_complete_bas_takeoff = { status: presented?.error ? "failed" : "complete", error: presented?.error || null };

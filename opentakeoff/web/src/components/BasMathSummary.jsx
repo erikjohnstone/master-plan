@@ -28,6 +28,13 @@ export default function BasMathSummary({ result, onOpenCitation, filter = "" }) 
   const issues = result.diagnostics || [];
   const needle = filter.trim().toLowerCase();
   const points = needle ? result.points.filter((p) => [p.point_id, p.group_id, ...p.evidence.map((e) => e.text || "")].join(" ").toLowerCase().includes(needle)) : result.points;
+  const coverageSummary = !result.points.length
+    ? "No typed point-list or SOO requirements were available for calculation."
+    : result.source_coverage === "both"
+      ? "SOO and drawing-list capacity envelope."
+      : result.source_coverage === "soo_only"
+        ? "SOO requirements only."
+        : "Indexed point-list requirements only.";
   const evidence = (p) => (p.evidence || []).find((e) => e.bbox_px && e.sheet_id);
   const sourceButton = (p) => {
     const cite = evidence(p);
@@ -47,7 +54,7 @@ export default function BasMathSummary({ result, onOpenCitation, filter = "" }) 
       <button type="button" style={{ ...button, marginLeft: "auto" }} onClick={() => downloadText("bas-engineering.json", JSON.stringify(result, null, 2), "application/json")}>Export BAS JSON</button>
     </div>
     <p style={{ color: "var(--ink-muted)", lineHeight: 1.6, maxWidth: 960 }}>
-      {result.source_coverage === "both" ? "SOO and drawing-list capacity envelope." : result.source_coverage === "soo_only" ? "SOO requirements only." : "Indexed point-list requirements only."}
+      {coverageSummary}
       {" "}These are typed requirements, not verified installed-device counts. Software variables are separate from physical I/O. Unresolved source and engineering constraints remain below.
     </p>
     <Grid headings={channels} label="BAS physical requirement totals"><tr>{channels.map((channel) =>

@@ -156,13 +156,16 @@ try {
   const sequenceListCount = receipt.compiles?.sequences?.list_counts?.length || 0;
   const pointListCount = Number(receipt.compiles?.bas_points?.totals?.lists || 0);
   const pointListSummaryCount = receipt.compiles?.bas_points?.list_counts?.length || 0;
-  const compiledTakeoffRows = [
+  // The Takeoff tab is a contractor quantity schedule. SOO sections are
+  // grounded requirements in the sequence reader, not equipment rows with an
+  // invented quantity of one. Prove both product surfaces independently.
+  const quantityTakeoffRows = [
     receipt.compiles?.hvac_equipment?.totals?.items,
     receipt.compiles?.bas_points?.totals?.rows,
-    receipt.compiles?.sequences?.totals?.sections,
     receipt.compiles?.control_valves?.totals?.items,
     receipt.compiles?.embedded_coil_gaps?.totals?.gaps,
   ].reduce((sum, value) => sum + Number(value || 0), 0);
+  const sequenceSectionCount = Number(receipt.compiles?.sequences?.totals?.sections || 0);
   if (sequenceCount < minimums.sequences) {
     throw new Error(`Expected at least ${minimums.sequences} sequence-of-operations blocks; got ${sequenceCount}.`);
   }
@@ -228,7 +231,7 @@ try {
       hasScheduledQty: /Scheduled qty/i.test(text),
       hasInstalledQty: /Installed qty/i.test(text),
       hasStatus: /\bStatus\b/i.test(text),
-      hasEmptyState: /(?:\b0\s+lines?\b|no\s+(?:takeoff\s+)?(?:lines?|rows?|results?))/i.test(text),
+      hasEmptyState: /(?:\b0\s+lines?\b|no\s+(?:quantity-bearing\s+schedule\s+|takeoff\s+)?(?:lines?|rows?|results?))/i.test(text),
       hasCompleteBasHeading: /BAS PROJECT TAKEOFF/i.test(text),
       hasLastSubcompileHeading: /T-VALVE-EMBEDDED-01/i.test(text),
     };
@@ -241,13 +244,64 @@ try {
       && (!panelFacts.hasScheduledQty || !panelFacts.hasInstalledQty || !panelFacts.hasStatus)) {
     throw new Error("Takeoff UI is missing scheduled/installed/status reconciliation columns.");
   }
-  if (compiledTakeoffRows > 0 && (panelFacts.citeRows < 1 || panelFacts.citeTables < 1)) {
+  if (quantityTakeoffRows > 0 && (panelFacts.citeRows < 1 || panelFacts.citeTables < 1)) {
     throw new Error(`Takeoff citations are incomplete: rows=${panelFacts.citeRows}, tables=${panelFacts.citeTables}`);
   }
-  if (compiledTakeoffRows === 0 && !panelFacts.hasEmptyState) {
+  if (quantityTakeoffRows === 0 && !panelFacts.hasEmptyState) {
     throw new Error("Evidence-poor takeoff did not render a truthful empty-result state.");
   }
   await page.screenshot({ path: resolve(outDir, "02-takeoff-table.png"), fullPage: true });
+
+  let sequenceReaderFacts = null;
+  if (sequenceCount > 0) {
+    const reviewSequences = panel.getByRole("button", { name: "Review sequences", exact: true });
+    if (await reviewSequences.count()) {
+      await reviewSequences.click();
+    } else {
+      const pointsTab = panel.getByRole("button", { name: "Point lists", exact: true });
+      if (!await pointsTab.count()) throw new Error("Grounded sequences exist but the BAS evidence workspace is unavailable.");
+      await pointsTab.click();
+      const sequencesButton = panel.getByRole("button", { name: "Sequences & links", exact: true });
+      await sequencesButton.waitFor();
+      await sequencesButton.click();
+    }
+    const sequenceWorkspace = panel.getByRole("region", { name: "Sequences and comparison links", exact: true });
+    await sequenceWorkspace.waitFor();
+    const sequenceSelect = sequenceWorkspace.getByLabel("Sequence", { exact: true });
+    await sequenceSelect.waitFor();
+    const optionCount = await sequenceSelect.locator("option").count();
+    const clauseRows = await sequenceWorkspace.getByRole("table", { name: "Source sequence clauses", exact: true })
+      .locator("tbody > tr").count();
+    const sourceButtons = await sequenceWorkspace.getByRole("button", { name: "View source", exact: true }).count();
+    const viewSequenceEnabled = await sequenceWorkspace.getByRole("button", { name: "View sequence on drawing", exact: true }).isEnabled();
+    if (optionCount !== sequenceCount) {
+      throw new Error(`Sequence reader disagrees with compile: ${optionCount} options != ${sequenceCount} sequences.`);
+    }
+    if (sequenceSectionCount > 0 && (clauseRows < 1 || sourceButtons < 1 || !viewSequenceEnabled)) {
+      throw new Error(`Grounded sequence evidence is not inspectable: clauses=${clauseRows}, source_buttons=${sourceButtons}, view_enabled=${viewSequenceEnabled}.`);
+    }
+    const exportButton = sequenceWorkspace.getByRole("button", { name: "Export BAS evidence & history", exact: true });
+    const [sequenceDownload] = await Promise.all([page.waitForEvent("download"), exportButton.click()]);
+    const sequenceExportPath = resolve(outDir, "bas-evidence-and-history.takeoff.json");
+    await sequenceDownload.saveAs(sequenceExportPath);
+    const sequenceExport = JSON.parse(readFileSync(sequenceExportPath, "utf8"));
+    const exportedWorkflow = sequenceExport?.bas_workflow;
+    const activeCapture = exportedWorkflow?.captures?.find(
+      (capture) => capture.capture_id === exportedWorkflow.current_capture_id,
+    );
+    if (!activeCapture || !Array.isArray(activeCapture.narrative_sources?.pages)
+        || !activeCapture.narrative_sources.pages.length) {
+      throw new Error("Sequence evidence export omitted the active source-bound narrative capture.");
+    }
+    sequenceReaderFacts = {
+      options: optionCount,
+      selected_sequence_clause_rows: clauseRows,
+      selected_sequence_source_buttons: sourceButtons,
+      view_sequence_enabled: viewSequenceEnabled,
+      exported_source_pages: activeCapture.narrative_sources.pages.length,
+    };
+    await page.screenshot({ path: resolve(outDir, "04-sequence-reader.png"), fullPage: true });
+  }
 
   const workflow = panel.locator("button", { hasText: /^Workflow data$/ });
   if (await workflow.count()) {
@@ -261,7 +315,7 @@ try {
   const csvButton = panel.locator("button", { hasText: /^CSV$/ }).first();
   let csvHeader = null;
   const csvEnabled = await csvButton.isEnabled().catch(() => false);
-  if (compiledTakeoffRows > 0 && csvEnabled) {
+  if (quantityTakeoffRows > 0 && csvEnabled) {
     const [download] = await Promise.all([page.waitForEvent("download"), csvButton.click()]);
     const csvPath = resolve(outDir, "complete-bas-takeoff.csv");
     await download.saveAs(csvPath);
@@ -270,7 +324,7 @@ try {
     if (requiredCsvColumns.some((column) => !csvHeader.split(",").includes(column))) {
       throw new Error(`CSV lacks quantity provenance: ${csvHeader}`);
     }
-  } else if (compiledTakeoffRows > 0) {
+  } else if (quantityTakeoffRows > 0) {
     throw new Error("Non-empty takeoff did not expose a CSV export.");
   } else if (csvEnabled) {
     throw new Error("Empty takeoff exposed an active CSV export action.");
@@ -293,7 +347,8 @@ try {
     analysis_order: receipt.analysis_order,
     evidence_coverage: {
       minimums,
-      compiled_takeoff_rows: compiledTakeoffRows,
+      quantity_takeoff_rows: quantityTakeoffRows,
+      sequence_sections: sequenceSectionCount,
       point_lists: pointListCount,
       sequences: sequenceCount,
       control_schematics: controls.totals.schematics,
@@ -310,10 +365,11 @@ try {
     inspection_domains: Object.keys(receipt.inspections || {}),
     release_status: receipt.release_status,
     panel: panelFacts,
+    sequence_reader: sequenceReaderFacts,
     csv_header: csvHeader,
     page_errors: pageErrors,
     console_errors: consoleErrors.slice(0, 20),
-    artifacts: ["01-agent-result.png", "02-takeoff-table.png", "03-workflow-review.png", "complete-bas-takeoff.csv"]
+    artifacts: ["01-agent-result.png", "02-takeoff-table.png", "03-workflow-review.png", "04-sequence-reader.png", "complete-bas-takeoff.csv", "bas-evidence-and-history.takeoff.json"]
       .filter((name) => existsSync(resolve(outDir, name))),
   };
   writeFileSync(resolve(outDir, "summary.json"), JSON.stringify(summary, null, 2));

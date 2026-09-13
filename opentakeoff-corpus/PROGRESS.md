@@ -2008,3 +2008,60 @@ untouched.
   skips**, typecheck, production build, and lint (**0 errors; the same 3 pre-existing
   warnings**) pass. Live proof artifacts are at
   `/tmp/opentakeoff-complete-bas-agent-itd-d1-launcher/` on the coordinator host.
+
+### Tinker controls-only SOO generalization — 2026-09-13
+
+**Shared-path decision:** accepting a compact authored system tag after an SOO
+caption and delimiting the source body from an adjacent upstream detail change
+sequence truth, so both fixes live in the shared `sequenceNarrative.ts` path
+consumed by browser and MCP. The consolidated evidence counts, honest empty
+quantity state, direct sequence-reader navigation, and browser journey assertions
+are presentation/test concerns and remain surface-specific. VectorGrid, schedule
+row/column extraction, bbox semantics, and symbol recognition are unchanged.
+
+- Added an independently human-reviewed 31-page controls project from the focus
+  corpus: Tinker AFB IWCS monitoring/control drawings, SHA-256
+  `ffbae6e626baa25c4c2a1ab033ab596e647a5d3903853ecc07b4f8db297f854a`.
+  Versioned source: `raw/tinker-afb-iwcs-controls.pdf`; ground truth:
+  `ground_truth/sequences/tinker-afb-iwcs.json`.
+- Before the fix, the literal complete-Agent path found **0** sequences because
+  the five captions end with compact authored tags (`IW-LS-3`, `IW-LS-10`,
+  `IW-LS-2280`, `IW-LS-6N`, `IW-LS-6S`) without punctuation. The shared extractor
+  now returns the exact **5/5** captions and **30** retained sections on Y-301,
+  Y-302, Y-303, Y-304N, and Y-304S. Y-204 remains an exact zero negative control.
+- A matching detail caption above an under-detail SOO now forms a conservative
+  narrative boundary. Neighboring schematic labels such as `MS1 RUN AUTO SW`,
+  `TO IWTP`, `STATION VAULT`, and `FLOW METER` are excluded while every required
+  pump-control, sump-level, alarm, and horn-silence clause remains cited. A
+  negative unit case still rejects instruction prose that merely says to verify
+  a tagged sequence.
+- A controls-only upload no longer looks like a broken takeoff. The consolidated
+  header reports **5 sequences / 30 sections**, the Takeoff tab truthfully says
+  no quantity-bearing schedule rows were found, and a direct **Review sequences**
+  action opens the source-bound reader. Narrative sections are never converted
+  into fake equipment rows or an invented quantity of one.
+- The live, unmocked browser journey uploaded the real PDF and sent the literal
+  prompt **`Run a BAS takeoff.`**. It completed in **16.8 s post-index** under the
+  180 s SLA. The receipt contains all five compiler stages, reconciliation,
+  five workflow inspections, mandatory human review, **5 SOOs / 30 sections**,
+  and an honest zero for equipment, typed point-list, valve, schematic, riser,
+  and reconcile quantities absent from this drawing set. The reader exposes
+  all five sequence choices, six cited clause rows for the selected sequence,
+  six source buttons, drawing navigation, and a 4.1 MB source-bound BAS
+  evidence/history export. No page or console errors occurred. Artifacts:
+  `/tmp/opentakeoff-complete-bas-agent-tinker-final-3/`.
+- Real-PDF SOO corpus is now **4 documents / 12 positive pages / 5 negative
+  pages / 18 expected sequences**, all exact. Existing control-schematic and
+  control-network corpora also pass unchanged.
+- Final gates: web **3,089 pass / 0 fail / 13 intentional skips**, every configured
+  benchmark, typecheck, production build, and lint (**0 errors; same 3 warnings**);
+  MCP BAS **131/131**, revisions **33/33**, issues **6/6**, scope **17/17**, main
+  suite **305 pass / 0 fail / 113 intentional skips**, packaging/proof **4/4**,
+  and typecheck. The MCP cross-corpus structural compile completed in **581.2 s**.
+
+**Honest ceiling:** this closes the observed compact-tag/adjacent-detail SOO gap
+and proves a useful controls-only product journey. It does not convert narrative
+requirements into verified I/O types, establish equipment applicability without
+an estimator link, infer installed quantities from SOO prose, or prove arbitrary
+schematic/riser semantic graphs. Those remain explicit review blockers; the
+separate symbol-recognition workstream remains outside this branch.

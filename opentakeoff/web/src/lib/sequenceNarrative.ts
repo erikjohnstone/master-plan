@@ -34,7 +34,7 @@ export interface NarrativeSequenceBlock {
 }
 
 const SOO_PHRASE_RE = /\b(?:SEQUENCES?\s+OF\s+(?:OPERATIONS?|CONTROL)|CONTROLS?\s+(?:SEQUENCES?|NARRATIVE)|CONTROL\s+SEQUENCE)\b/i;
-const SOO_TITLE_RE = /^(?=.{8,180}$)(?:[A-Z0-9][A-Z0-9 /&(),.'\-–—]{0,110}\s+[-–—:]?\s*)?(?:SEQUENCES?\s+OF\s+(?:OPERATIONS?|CONTROL)|CONTROLS?\s+(?:SEQUENCES?|NARRATIVE)|CONTROL\s+SEQUENCE)(?:\s*[-–—:]\s*[A-Z0-9][A-Z0-9 /&(),.'\-–—]{0,70}|\s*\([^)]{1,70}\))?[:.]?$/i;
+const SOO_TITLE_RE = /^(?=.{8,180}$)(?:[A-Z0-9][A-Z0-9 /&(),.'\-–—]{0,110}\s+[-–—:]?\s*)?(?:SEQUENCES?\s+OF\s+(?:OPERATIONS?|CONTROL)|CONTROLS?\s+(?:SEQUENCES?|NARRATIVE)|CONTROL\s+SEQUENCE)(?:\s*[-–—:]\s*[A-Z0-9][A-Z0-9 /&(),.'\-–—]{0,70}|\s*\([^)]{1,70}\)|\s+[A-Z0-9][A-Z0-9/.\-]{1,35})?[:.]?$/i;
 const NON_TITLE_SENTENCE_RE = /\b(?:SHALL|WHEN|VERIFY|PROVIDE|PERFORM|DESCRIBED|RELATED|DISABLED|ADEQUACY|ACCURACY|REFER(?:ENCE)?|SEE|INSTALL|APPLIES|REQUIRED|ACHIEVE|ACCOMPLISH|ACCORDANCE)\b/i;
 const DETAIL_TITLE_RE = /\b(?:CONTROL(?:\s+SYSTEM)?\s+(?:SCHEMATIC|DIAGRAM)|RISER(?:\s+DIAGRAM)?|SEQUENCES?\s+OF\s+OPERATIONS?)\b/i;
 const SECTION_RE = /^(?:(?:\d+|[A-Z])\s*[.)]\s+|(?:GENERAL|DESCRIPTION|SYSTEM\s+DESCRIPTION|OCCUPIED(?:\s+MODE)?|UNOCCUPIED(?:\s+MODE)?|START(?:UP)?|SHUTDOWN|WARM[- ]?UP|COOL[- ]?DOWN|HEATING(?:\s+MODE)?|COOLING(?:\s+MODE)?|HUMIDIFICATION(?:\s+MODE)?|DEHUMIDIFICATION(?:\s+MODE)?|ALARMS?|SAFETIES|FAILURE\s+MODES?|POINTS?\s+LIST)\b[^.]{0,100}:?)/i;
@@ -345,7 +345,7 @@ export function extractSequenceNarratives(sheets: SheetSpans[]): NarrativeSequen
         && isStructuralLaneHeading(text);
     });
     for (const title of titles) {
-      const [x0, x1] = horizontalBounds(title, [...titles, ...structuralLaneMarkers], width, height);
+      let [x0, x1] = horizontalBounds(title, [...titles, ...structuralLaneMarkers], width, height);
       const vb = verticalBounds(title, titles, x0, x1, height);
       const titleKey = clean(title.str).toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
       const duplicates = filteredTitles.filter((candidate) =>
@@ -368,6 +368,53 @@ export function extractSequenceNarratives(sheets: SheetSpans[]): NarrativeSequen
         .replace(SOO_PHRASE_RE, "")
         .split(/[^A-Z0-9]+/)
         .filter((word) => word.length >= 3 && !["SYSTEM", "THE", "AND"].includes(word)));
+      const matchingDetailCaptionAbove = sheet.spans
+        .filter((span) => {
+          const text = clean(span.str).toUpperCase();
+          if (text.length < 8 || text.length > 180
+            || !/\b(?:DETAIL|SCHEMATIC|DIAGRAM)\b/.test(text)
+            || NON_TITLE_SENTENCE_RE.test(text)) return false;
+          const [, titleCy] = center(title);
+          const [spanCx, spanCy] = center(span);
+          if (spanCy >= titleCy || titleCy - spanCy > height * 0.55 || spanCx < x0 || spanCx > x1) return false;
+          const overlap = [...titleWords].filter((word) => text.includes(word)).length;
+          return overlap >= Math.min(2, titleWords.size);
+        })
+        .sort((a, b) => b.y - a.y)[0];
+      // Some authored detail cells place a schematic/detail first, its caption
+      // below the linework, then the SOO prose and the SOO caption at the very
+      // bottom. The matching upstream detail caption is an exact boundary:
+      // without it, short diagram labels ("PANEL TEMP", "MS1 AUX", etc.) are
+      // falsely retained as narrative evidence. Shared title tokens are needed
+      // so an unrelated adjacent detail cannot clip the sequence.
+      if (matchingDetailCaptionAbove) {
+        const captionBottom = matchingDetailCaptionAbove.y + (matchingDetailCaptionAbove.h || 0);
+        vb.above[0] = Math.max(vb.above[0], captionBottom + Math.max(1, (matchingDetailCaptionAbove.h || 0) * 0.15));
+        const numberedSteps = sheet.spans
+          .filter((span) => {
+            const text = clean(span.str);
+            const spanCy = span.y + (span.h || 0) / 2;
+            return /^(?:\d+|[A-Z])\s*[.)](?:\s+|$)/.test(text)
+              && overlapX(span, x0, x1)
+              && spanCy > captionBottom
+              && spanCy < title.y;
+          })
+          .sort((a, b) => a.y - b.y || a.x - b.x);
+        const firstNumberedStep = numberedSteps[0];
+        if (firstNumberedStep) {
+          // Retain the section heading immediately above the numbered prose,
+          // while dropping residual labels from the schematic that overlap
+          // the detail-caption baseline.
+          const headingReach = Math.max((firstNumberedStep.h || 0) * 2, (title.h || 0) * 1.2);
+          vb.above[0] = Math.max(vb.above[0], firstNumberedStep.y - headingReach);
+          const firstRowTolerance = Math.max(3, (firstNumberedStep.h || 0) * 0.6);
+          const firstRowMarkers = numberedSteps.filter((span) => Math.abs(span.y - firstNumberedStep.y) <= firstRowTolerance);
+          if (firstRowMarkers.length >= 2) {
+            const rightmostMarker = Math.max(...firstRowMarkers.map((span) => span.x));
+            x1 = Math.min(x1, rightmostMarker + width * 0.1);
+          }
+        }
+      }
       const matchingControlCaptionBelow = sheet.spans
         .filter((span) => {
           const text = clean(span.str).toUpperCase();

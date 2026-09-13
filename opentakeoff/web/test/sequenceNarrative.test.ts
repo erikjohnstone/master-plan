@@ -78,6 +78,53 @@ describe("free-form sequence narratives", () => {
     assert.match(blocks[0].sections[0].body, /INTERLOCK/);
   });
 
+  it("retains a compact authored system tag printed after an under-detail SOO title", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "lift-station.pdf#26",
+      spans: [
+        span("PUMP CONTROL", 80, 100, 150),
+        span("1. PUMP TO BE PROGRAMMED FOR LEAD / LAG CONTROL.", 80, 130, 410),
+        span("2. ROTATE LEAD WHEN BOTH PUMPS OFF.", 80, 160, 330),
+        span("02 BUILDING 214 SEQUENCE OF OPERATIONS IW-LS-3", 80, 410, 520, 24),
+      ],
+    }]);
+    assert.equal(blocks.length, 1);
+    assert.equal(blocks[0].title, "02 BUILDING 214 SEQUENCE OF OPERATIONS IW-LS-3");
+    assert.equal(blocks[0].direction, "above_title");
+    assert.match(blocks[0].sections.map((section) => section.body).join(" "), /LEAD \/ LAG CONTROL/);
+  });
+
+  it("uses the matching upstream detail caption to exclude schematic labels", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "lift-station.pdf#26",
+      spans: [
+        span("MS1 RUN AUTO SW", 80, 60, 160),
+        span("PANEL TEMP", 80, 90, 120),
+        span("01 BUILDING 214 LIFT STATION DETAIL IW-LS-3", 80, 240, 470, 22),
+        span("PUMP CONTROL", 80, 290, 150),
+        span("1. PUMP TO BE PROGRAMMED FOR LEAD / LAG CONTROL.", 80, 320, 410),
+        span("2. ROTATE LEAD WHEN BOTH PUMPS OFF.", 80, 350, 330),
+        span("PUMP START / STOP", 350, 290, 150),
+        span("1. MEASURE SUMP LEVEL.", 350, 320, 150),
+        span("STATION VAULT", 700, 330, 120),
+        span("02 BUILDING 214 SEQUENCE OF OPERATIONS IW-LS-3", 80, 410, 520, 24),
+      ],
+    }]);
+    const body = blocks[0].sections.map((section) => section.body).join(" ");
+    assert.match(body, /LEAD \/ LAG CONTROL/);
+    assert.doesNotMatch(body, /MS1 RUN|LIFT STATION DETAIL|STATION VAULT/);
+  });
+
+  it("still rejects an instruction that mentions a tagged sequence", () => {
+    const blocks = extractSequenceNarratives([{
+      key: "notes.pdf#1",
+      spans: [
+        span("VERIFY THE SEQUENCE OF OPERATIONS IW-LS-3.", 80, 100, 420),
+      ],
+    }]);
+    assert.deepEqual(blocks, []);
+  });
+
   it("rejects requirements that merely mention sequence of operation", () => {
     const blocks = extractSequenceNarratives([{
       key: "controls.pdf#1",

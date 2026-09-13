@@ -8022,6 +8022,7 @@ export default function TakeoffCanvas() {
       sheet_count: presentation.sheet_count,
       workstream_count: presentation.workstream_count,
       bas_math: presentation.bas_math || null,
+      coverage: presentation.coverage || null,
     });
     setShowTakeoffData(true);
     return { presented: true, kind: presentation.kind, changed_takeoff_truth: false };

@@ -38,3 +38,14 @@ test('BAS point filtering preserves global totals and failure is not a zero take
   assert.doesNotMatch(unavailable, /data-bas-total/);
   assert.match(unavailable, /Original schedule results are preserved/);
 });
+
+test('BAS engineering empty state does not imply a point-list source exists', () => {
+  const empty = render({ result: {
+    ...result,
+    source_coverage: 'point_list_only',
+    physical_total: { AI: 0, AO: 0, DI: 0, DO: 0 },
+    points: [],
+  } });
+  assert.match(empty, /No typed point-list or SOO requirements were available for calculation/);
+  assert.doesNotMatch(empty, /Indexed point-list requirements only/);
+});
