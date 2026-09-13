@@ -194,6 +194,159 @@ export interface VectorGridSheetResult {
   ms: number;
 }
 
+// ── SPLIT-FRAGMENT RECOVERY ─────────────────────────────────────────────────
+//
+// A single physical schedule is sometimes drawn as several separately-closed
+// ruled boxes rather than one continuous rectangle — real, corpus-found:
+// 028_TX page 1's "NOISE CONTROL DUCT SILENCER SCHEDULE" is a caption+header
+// band, a "FIRST FLOOR" section, and a "SECOND FLOOR" section, each its own
+// face in vectorgrid's planar line graph. `find_tables` correctly finds all
+// three; each is refused ALONE for a good, narrow reason (a caption/header
+// band with no data rows has "no keyed data rows"; a section body whose only
+// own row is its divider label has "no header block above the data" — see
+// that refusal's own comment in sheetgraph.ts for why it must not guess). The
+// rescue is pure geometry, decided here, never inside those refusals: a
+// fragment refused for exactly one of those two reasons, sitting directly
+// above or below another fragment (built or not) with the same column count
+// and outer x-extent, is stacked onto it and the UNCHANGED
+// `vectorGridTableToScheduleTable` pipeline is re-run on the combined piece.
+// Nothing here re-implements header or row detection.
+
+/** Grid-clustering tolerance for fragment geometry, in raw vectorgrid pt —
+ * the same TOL `vectorgrid_rpc.py`'s own docstring cites for column/row
+ * clustering, so a real shared column grid always clears it. */
+const FRAGMENT_X_TOL = 3;
+/** How far a fragment's own edge may sit from its neighbour's, in EITHER
+ * direction. Real, measured (028_TX page 1): adjacent faces there overlap by
+ * up to ~20pt rather than touching cleanly, because a divider row straddling
+ * the split lands partly in each piece's own measured bounds. Generous
+ * enough for that; tight enough that a genuinely separate table an inch or
+ * more down the page never qualifies. */
+const FRAGMENT_GAP_TOL = 30;
+
+function sameColumnGrid(a: VectorGridTable, b: VectorGridTable): boolean {
+  return a.cols === b.cols
+    && Math.abs(a.bbox[0] - b.bbox[0]) <= FRAGMENT_X_TOL
+    && Math.abs(a.bbox[2] - b.bbox[2]) <= FRAGMENT_X_TOL;
+}
+
+function verticallyAdjacent(a: VectorGridTable, b: VectorGridTable): boolean {
+  return Math.abs(b.bbox[1] - a.bbox[3]) <= FRAGMENT_GAP_TOL
+    || Math.abs(a.bbox[1] - b.bbox[3]) <= FRAGMENT_GAP_TOL;
+}
+
+// exported for tests
+function isFragmentAdjacent(a: VectorGridTable, b: VectorGridTable): boolean {
+  return sameColumnGrid(a, b) && verticallyAdjacent(a, b);
+}
+
+/** Is this refusal reason a STRUCTURAL fragment shape (a caption/header band
+ * with no data rows of its own, or a lone section-divider row with a little
+ * data under it) rather than a genuinely separate table that simply failed
+ * to key? Restricted narrowly — one exact refusal string, and the other
+ * confined to a small piece — so an unrelated real table that legitimately
+ * has no usable key column is never swept into a merge by accident. */
+function isMergeEligibleFragment(t: VectorGridTable, why: string): boolean {
+  if (why.startsWith("no header block above the data")) return true;
+  if (why.startsWith("no keyed data rows") && t.rows <= 3) return true;
+  return false;
+}
+
+/** Every cell of one row, as a position-and-text signature independent of
+ * cell identity — used only to detect a row captured twice (see
+ * `concatFragments`'s own comment). Empty string for a row with no cells at
+ * all, which never counts as a match below. */
+function rowSignature(t: VectorGridTable, row: number): string {
+  const cells = t.cells.filter((c) => c.row === row);
+  if (!cells.length) return "";
+  return cells
+    .slice()
+    .sort((x, y) => x.col - y.col)
+    .map((c) => `${c.col}:${(c.text || "").trim()}`)
+    .join("|");
+}
+
+/** Concatenate two fragments' own raw cells top-to-bottom by each one's own
+ * measured top edge (never call-site order), row numbers shifted so the
+ * bottom fragment's rows continue past the top's.
+ *
+ * ONE ROW OF OVERLAP IS DROPPED HERE, NOT LATER. Real, measured (028_TX
+ * page 1): vectorgrid's own adjacent faces for a split schedule overlap by
+ * up to ~20pt at the seam (see FRAGMENT_GAP_TOL's own comment), and the row
+ * straddling that overlap is captured WHOLE by both faces — the bottom
+ * fragment's own row 0 is then not a new row at all, but the same text as
+ * the top fragment's own last row, read twice. Concatenating both verbatim
+ * would silently double that one row and, worse, break
+ * findEvidencedKeyColumn's own uniqueness requirement on the combined table
+ * (two rows with an identical key is exactly what it exists to refuse) —
+ * measured live: this exact duplicate is what made a 028_TX FIRST-FLOOR +
+ * SECOND-FLOOR merge attempt fail with "no keyed data rows" even after every
+ * real divider row had already been stripped. The two rows are dropped to
+ * one only on an EXACT text match (position and content, not "close"), so a
+ * loose gap-tolerance false-positive on `isFragmentAdjacent` still cannot
+ * silently eat a real row it shouldn't. */
+function concatFragments(a: VectorGridTable, b: VectorGridTable): VectorGridTable {
+  const [top, bottom] = a.bbox[1] <= b.bbox[1] ? [a, b] : [b, a];
+  const topLast = rowSignature(top, top.rows - 1);
+  const bottomFirst = rowSignature(bottom, 0);
+  const duplicateSeamRow = topLast !== "" && topLast === bottomFirst;
+  const bottomCells = duplicateSeamRow
+    ? bottom.cells.filter((c) => c.row !== 0).map((c) => ({ ...c, row: c.row - 1 }))
+    : bottom.cells;
+  const bottomRows = bottom.rows - (duplicateSeamRow ? 1 : 0);
+  const rowOffset = top.rows;
+  return {
+    bbox: [
+      Math.min(top.bbox[0], bottom.bbox[0]),
+      Math.min(top.bbox[1], bottom.bbox[1]),
+      Math.max(top.bbox[2], bottom.bbox[2]),
+      Math.max(top.bbox[3], bottom.bbox[3]),
+    ],
+    rows: top.rows + bottomRows,
+    cols: top.cols,
+    raster: false,
+    cells: [
+      ...top.cells,
+      ...bottomCells.map((c) => ({ ...c, row: c.row + rowOffset })),
+    ],
+    assigned: (top.assigned || 0) + (bottom.assigned || 0),
+    orphan: (top.orphan || 0) + (bottom.orphan || 0),
+    straddle: (top.straddle || 0) + (bottom.straddle || 0),
+  };
+}
+
+/** Drop any row OTHER than row 0 that is a single cell spanning nearly the
+ * whole table width — a mid-table section-divider/group-label row, not real
+ * data (the same shape sheetgraph.ts's own row-builder already treats as a
+ * section-header inside a table it accepted whole; here it must be stripped
+ * BEFORE that point, because leaving its text in raw column-0 derails
+ * findEvidencedKeyColumn, which runs earlier over every raw row — measured
+ * live, 028_TX page 1: keyColIdx was never found with the divider row left
+ * in). Row 0 is exempt: a genuine title band has the identical raw shape
+ * (one cell spanning every column) and must survive — it is the table's own
+ * real caption, and dropping it here would trade one real defect for
+ * another. */
+function stripInteriorDividerRows(t: VectorGridTable): VectorGridTable {
+  const dividerRows = new Set<number>();
+  for (const c of t.cells) {
+    if (c.row > 0 && t.cols > 1 && (c.colSpan || 1) >= t.cols - 1) dividerRows.add(c.row);
+  }
+  if (!dividerRows.size) return t;
+  const kept = t.cells.filter((c) => !dividerRows.has(c.row));
+  const survivingRows = [...new Set(kept.map((c) => c.row))].sort((a, b) => a - b);
+  const renumber = new Map<number, number>(survivingRows.map((r, i) => [r, i]));
+  return {
+    ...t,
+    rows: survivingRows.length,
+    cells: kept.map((c) => ({ ...c, row: renumber.get(c.row)! })),
+  };
+}
+
+// exported for tests
+function stackFragments(a: VectorGridTable, b: VectorGridTable): VectorGridTable {
+  return stripInteriorDividerRows(concatFragments(a, b));
+}
+
 /** Run vectorgrid for one sheet. Throws on an engine failure or a coordinate
  * disagreement — never returns an empty list to mean "it did not run". */
 export async function extractScheduleTablesFromVectorGrid(
@@ -214,19 +367,54 @@ export async function extractScheduleTablesFromVectorGrid(
     );
   }
 
-  const out: ScheduleTable[] = [];
-  let skipped = 0, rasters = 0, cells = 0, orphanWords = 0;
-  const rejects: string[] = [];
+  interface Attempt { raw: VectorGridTable; built: ScheduleTable | null; why: string }
+
+  let rasters = 0;
+  const attempts: Attempt[] = [];
   for (const t of reply.tables) {
     if (t.raster) { rasters++; continue; }
-    cells += t.cells.length;
-    orphanWords += t.orphan || 0;
     let why = "raster or empty";
     const built = vectorGridTableToScheduleTable(t, page, ctx, scale, (r) => { why = r; });
-    if (built) out.push(built);
-    else { skipped++; rejects.push(`${t.rows}x${t.cols} at ${t.bbox.map(Math.round).join(",")}: ${why}`); }
+    attempts.push({ raw: t, built, why });
+  }
+
+  // Repeatedly stack one merge-eligible, still-unbuilt fragment onto a
+  // directly-adjacent neighbour (built or not) until nothing more merges.
+  // Bounded round count guards against any unforeseen cycle; every real
+  // fragment chain found in the corpus so far is 2-3 deep.
+  for (let round = 0; round < 6; round++) {
+    let mergedThisRound = false;
+    outer: for (let i = 0; i < attempts.length; i++) {
+      const cand = attempts[i];
+      if (cand.built || !isMergeEligibleFragment(cand.raw, cand.why)) continue;
+      for (let j = 0; j < attempts.length; j++) {
+        if (j === i) continue;
+        const other = attempts[j];
+        if (!isFragmentAdjacent(cand.raw, other.raw)) continue;
+        const mergedRaw = stackFragments(other.raw, cand.raw);
+        const rebuilt = vectorGridTableToScheduleTable(mergedRaw, page, ctx, scale);
+        if (rebuilt) {
+          attempts[j] = { raw: mergedRaw, built: rebuilt, why: "" };
+          attempts.splice(i, 1);
+          mergedThisRound = true;
+          break outer;
+        }
+      }
+    }
+    if (!mergedThisRound) break;
+  }
+
+  const out: ScheduleTable[] = [];
+  let skipped = 0, cells = 0, orphanWords = 0;
+  const rejects: string[] = [];
+  for (const a of attempts) {
+    cells += a.raw.cells.length;
+    orphanWords += a.raw.orphan || 0;
+    if (a.built) out.push(a.built);
+    else { skipped++; rejects.push(`${a.raw.rows}x${a.raw.cols} at ${a.raw.bbox.map(Math.round).join(",")}: ${a.why}`); }
   }
   return { tables: out, skipped, rasters, cells, orphanWords, rejects, ms: Date.now() - started };
 }
 
 export type { Bbox };
+export { isFragmentAdjacent, stackFragments };

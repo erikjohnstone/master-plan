@@ -3636,14 +3636,100 @@ first row — a table that reads exact-match on cell CONTENT in isolation
 values row-by-row) yet is structurally wrong in a way plain row/cell
 counting does not surface.
 
-**Attempted fix, reverted rather than shipped:** built a real fix in
-`web/src/lib/vectorGridAdapter.ts` — geometrically detect a refused
-fragment sitting directly below (or, it turns out, above) an accepted
-table with a matching column count and outer x-extent, strip its own
-divider row, and re-run the unmodified `scheduleTableFromODL` pipeline on
-the merged raw piece so its own existing rules (the section-header skip
-already fixed for 042_VA) do the rest. Live-tested against this exact
-document through three iterations:
+**FIXED (2026-09-13, same session, after the revert below was superseded).**
+The user explicitly rejected stopping at "disclosed but not fixed" for this
+bug and asked for the real fix; the three-way cluster merge described as
+the "well-scoped next step" below was implemented in full in
+`web/src/lib/vectorGridAdapter.ts`'s `extractScheduleTablesFromVectorGrid`,
+verified end-to-end against this exact document, and shipped.
+
+**What shipped:** `extractScheduleTablesFromVectorGrid` now runs in two
+phases. Phase 1 is unchanged — every raw vectorgrid piece is attempted
+independently, `{raw, built, why}` kept for all of them regardless of
+order. Phase 2 repeatedly (bounded to 6 rounds) finds an unbuilt fragment
+whose own refusal reason is a narrow, structural shape — `"no header block
+above the data"` unconditionally, or `"no keyed data rows"` only when the
+fragment has `<= 3` rows of its own (`isMergeEligibleFragment`) — and
+stacks it onto any geometrically-adjacent neighbour, built or not
+(`isFragmentAdjacent`: same column count, outer x-extent within 3pt, and
+vertically within 30pt allowing OVERLAP or gap in either direction — real,
+measured: adjacent faces here overlap by ~20pt rather than touching
+cleanly), then re-runs the unmodified `vectorGridTableToScheduleTable` on
+the merged piece. A successful merge replaces the neighbour's attempt and
+removes the consumed fragment, so the loop converges over multiple rounds
+without needing the three fragments to be adjacent pairwise in one pass.
+
+**The extra bug the three-way merge surfaced and that also needed fixing:**
+a naive concatenation of FIRST FLOOR onto SECOND FLOOR double-counted one
+row. Because adjacent vectorgrid faces overlap at the seam, SECOND FLOOR's
+own face had redundantly, silently re-captured FIRST FLOOR's own LAST real
+data row as its own "row 0" — concatenating both fragments verbatim would
+have duplicated that row and, worse, broken `findEvidencedKeyColumn`'s own
+uniqueness requirement on the merged table (two rows sharing an identical
+composite key is exactly the shape it exists to refuse). Fixed with an
+exact position+text row-signature comparison (`rowSignature`,
+`concatFragments`): if the bottom fragment's own row 0 signature exactly
+matches the top fragment's own last row, the bottom's row 0 is dropped
+before the rest are offset — position AND content must match exactly, not
+"close", so the generous adjacency-gap tolerance above can never silently
+eat a real row on its own. A second helper, `stripInteriorDividerRows`,
+drops any row other than row 0 that is a single cell spanning `>= cols-1`
+columns (a mid-table divider like "SECOND FLOOR") from the FULLY merged
+table — this has to run on the merged result, not per-fragment before
+merging, because `findEvidencedKeyColumn` scans raw column text before
+`buildRows`'s own per-row divider skip ever executes, and a divider row's
+text left anywhere in the raw grid corrupts its column-uniqueness check.
+Row 0 is deliberately exempt from this stripping: a genuine title band has
+the identical one-cell-spans-everything shape and must survive.
+
+**Verified live**, re-running `production-graph-cli.mjs` against this exact
+page (`p1-slice.pdf`) after the fix: the schedule now extracts as ONE
+16-row table titled `"NOISE CONTROL DUCT SILENCER SCHEDULE"` with its real
+11 column headers (`QTY.`, `LOCATION & SERVES`, `DUCT WIDTH (IN.)`, `DUCT
+HEIGHT (IN.)`, `AIR FLOW (CFM)`, `AIR VELOCITY (FPM)`, `PRESSURE DROP (IN.
+WG.)`, `DYNAMIC INSERTION LOSS (DB) @ 125 HZ`, `GENERATED NOISE (DB) @ 125
+HZ`, `MANUFACTURE /MODEL`, `NOTE`) and all 16 real keyed rows (14 FIRST
+FLOOR + 2 SECOND FLOOR, `GROUP REHEARSAL 123...` through `VEST 212...`) —
+matching this ledger's own earlier hand-transcription exactly, headers
+included, where the un-fixed pipeline previously returned a 13-row table
+falsely titled `"FIRST FLOOR"` with its own first data row misread as
+column headers.
+
+**Regression-checked, no changes needed elsewhere:** re-ran
+`production-graph-cli.mjs` on the saved page slices for every other
+document in this ledger with vectorgrid-sourced tables graded earlier this
+session — `045_FL` (3 tables, 9/10/5 rows), `072_CA` (6 tables, 11/6/1/22/
+1/11 rows), `019_FL` (8 real tables + 1 known pre-existing title-block
+false positive, unaffected), `11_CA` (4 tables including the 41-row VAV
+schedule) — every title and row count is byte-identical to the
+previously-recorded values, confirming the new merge logic is a true
+no-op for tables that are not split into fragments this way. Also added a
+synthetic 3-fragment regression test (`web/test/vectorGridAdapter.test.ts`,
+mirroring this exact document's own shape: a caption+header-only fragment,
+a FIRST-FLOOR body, a SECOND-FLOOR body with the seam-duplicate row) that
+exercises `isFragmentAdjacent`/`stackFragments` directly and asserts the
+fully-merged table's title, headers, and row keys — independent of the
+real PDF, to guard this fix against regression.
+
+**Design note on scope, preserved from the original next-step plan:** only
+clusters containing at least one originally-refused piece are ever
+attempted (`isMergeEligibleFragment` is deliberately narrow — one exact
+refusal string, and the other confined to `<= 3` rows), so two
+independently-successful standalone tables are never merged by accident;
+the regression check above is the live proof of that, not just a design
+intent.
+
+---
+
+### Earlier attempt (2026-09-13, superseded by the fix above — kept for the record)
+
+Before the fix above was completed, a first attempt at the same three-way
+merge was built, then reverted rather than shipped partially, on the
+reasoning that a two-body-only merge would still leave headers silently
+wrong. That reasoning was correct as far as it went, but the FULL three-way
+merge was in fact achievable in the same session and is what shipped above.
+Kept here for the record of how the diagnosis moved. Live-tested against
+this exact document through three iterations:
 1. First attempt: geometric adjacency check required the fragments to
    touch or have a small gap; the real fragments actually OVERLAP by
    ~20pt in their measured bounds, so nothing matched. Fixed by making the
@@ -3675,26 +3761,13 @@ standing convention is not to land a shared-code change until it is
 verified correct, and a 3-way cluster merge needs real design + a corpus
 regression pass before it is safe, not a quick patch under time pressure.
 
-**Real, well-scoped next step for whoever picks this up:** in
-`extractScheduleTablesFromVectorGrid` (`vectorGridAdapter.ts`), replace the
-single forward pass with two phases — (1) attempt every raw piece
-independently exactly as today, keeping `{raw, built, why}` for all of
-them regardless of order; (2) cluster pieces (built or refused) that share
-column count and outer x-extent and sit vertically adjacent (overlap or
-small gap, both bounded — the ~20-30pt tolerance measured live above),
-merge each cluster top-to-bottom stripping any interior divider-shaped row
-(a single cell spanning `cols-1` or more columns) wherever it falls, and
-re-run `vectorGridTableToScheduleTable` once per cluster. Only clusters
-containing at least one originally-refused piece should ever be attempted,
-so two independently-successful standalone tables are never merged by
-accident. Verify against 028_TX page 1 (expect one 16-row table titled
-"NOISE CONTROL DUCT SILENCER SCHEDULE" with real headers QTY./LOCATION &
-SERVES/.../NOTE) AND a full `cellscore.py`/`boxscore.py` corpus run before
-landing, since this touches every vectorgrid-sourced table in the corpus,
-not just this one document.
+**The next-step plan this attempt handed off** (two phases, geometric
+clustering, strip interior dividers, re-run the unmodified builder per
+cluster) is exactly what was implemented and shipped in the fix above —
+kept here unedited for the record rather than rewritten as if it had
+predicted its own outcome.
 
-**Not fixed.** Same reasoning as B-26/B-31/B-32, now with the actual
-scope and a concrete implementation plan instead of a guess.
+**Superseded — see the "FIXED" section above for the shipped result.**
 
 ---
 

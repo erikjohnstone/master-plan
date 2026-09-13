@@ -16,6 +16,8 @@ import {
   vectorGridTableToScheduleTable,
   pageBoxAgrees,
   viewportScale,
+  isFragmentAdjacent,
+  stackFragments,
   type VectorGridContext,
 } from "../src/lib/vectorGridAdapter.ts";
 import type { VectorGridTable } from "../src/lib/vectorGridClient.ts";
@@ -132,6 +134,93 @@ describe("vectorGridAdapter — structure", () => {
       cells: [], assigned: 0, orphan: 0, straddle: 0,
     };
     assert.equal(vectorGridTableToScheduleTable(raster, 3, ctx(), 3), null);
+  });
+});
+
+describe("vectorGridAdapter — split-fragment recovery (B-42, 028_TX page 1)", () => {
+  // Mirrors the real shape: a "NOISE CONTROL DUCT SILENCER SCHEDULE" split into
+  // a FIRST FLOOR section (own divider + data) directly above a SECOND FLOOR
+  // section (own divider + data), where vectorgrid's adjacent faces overlap
+  // by a few points at the seam and both capture the boundary row whole.
+  const FIRST_FLOOR: VectorGridTable = {
+    bbox: [100, 300, 400, 380], rows: 3, cols: 3, raster: false,
+    assigned: 9, orphan: 0, straddle: 0,
+    cells: [
+      cell(0, 0, "FIRST FLOOR", [100, 300, 400, 320], 1, 3),
+      cell(1, 0, "A-1", [100, 320, 200, 340]),
+      cell(1, 1, "2", [200, 320, 300, 340]),
+      cell(1, 2, "10", [300, 320, 400, 340]),
+      cell(2, 0, "A-2", [100, 340, 200, 360]),
+      cell(2, 1, "3", [200, 340, 300, 360]),
+      cell(2, 2, "12", [300, 340, 400, 360]),
+    ],
+  };
+  // SECOND_FLOOR's own face redundantly re-captured FIRST_FLOOR's own last
+  // row (A-2/3/12) whole, before its own divider and real data.
+  const SECOND_FLOOR: VectorGridTable = {
+    bbox: [100, 355, 400, 420], rows: 3, cols: 3, raster: false,
+    assigned: 9, orphan: 0, straddle: 0,
+    cells: [
+      cell(0, 0, "A-2", [100, 355, 200, 375]),
+      cell(0, 1, "3", [200, 355, 300, 375]),
+      cell(0, 2, "12", [300, 355, 400, 375]),
+      cell(1, 0, "SECOND FLOOR", [100, 375, 400, 395], 1, 3),
+      cell(2, 0, "B-1", [100, 395, 200, 415]),
+      cell(2, 1, "4", [200, 395, 300, 415]),
+      cell(2, 2, "8", [300, 395, 400, 415]),
+    ],
+  };
+
+  it("treats overlapping same-column-grid fragments as adjacent", () => {
+    assert.ok(isFragmentAdjacent(FIRST_FLOOR, SECOND_FLOOR));
+  });
+
+  it("refuses fragments on a different column grid or too far apart", () => {
+    const wideCols = { ...SECOND_FLOOR, cols: 4 };
+    assert.ok(!isFragmentAdjacent(FIRST_FLOOR, wideCols));
+    const farAway = { ...SECOND_FLOOR, bbox: [100, 1000, 400, 1065] as const };
+    assert.ok(!isFragmentAdjacent(FIRST_FLOOR, farAway as VectorGridTable));
+  });
+
+  it("drops the duplicated seam row and the interior divider, keeps row 0's own title shape", () => {
+    const merged = stackFragments(FIRST_FLOOR, SECOND_FLOOR);
+    // FIRST_FLOOR's title(divider), 2 real data rows, SECOND_FLOOR's own real
+    // data row — its own divider is interior and stripped, and the
+    // redundantly-recaptured A-2/3/12 row is not doubled.
+    assert.equal(merged.rows, 4);
+    const texts = (r: number) => merged.cells
+      .filter((c) => c.row === r)
+      .sort((a, b) => a.col - b.col)
+      .map((c) => c.text);
+    assert.deepEqual(texts(0), ["FIRST FLOOR"]);
+    assert.deepEqual(texts(1), ["A-1", "2", "10"]);
+    assert.deepEqual(texts(2), ["A-2", "3", "12"]);
+    assert.deepEqual(texts(3), ["B-1", "4", "8"]);
+    assert.ok(!merged.cells.some((c) => c.text === "SECOND FLOOR"),
+      "the interior divider row must not survive into the merged table");
+    assert.equal(merged.cells.filter((c) => c.text === "A-2").length, 1,
+      "the seam row must not be counted twice");
+  });
+
+  it("builds a correct, real schedule table from the 3-fragment merge", () => {
+    const CAPTION: VectorGridTable = {
+      bbox: [100, 200, 400, 300], rows: 2, cols: 3, raster: false,
+      assigned: 4, orphan: 0, straddle: 0,
+      cells: [
+        cell(0, 0, "NOISE CONTROL DUCT SILENCER SCHEDULE", [100, 200, 400, 250], 1, 3),
+        cell(1, 0, "TAG", [100, 250, 200, 300]),
+        cell(1, 1, "QTY", [200, 250, 300, 300]),
+        cell(1, 2, "SIZE", [300, 250, 400, 300]),
+      ],
+    };
+    const round1 = stackFragments(CAPTION, FIRST_FLOOR);
+    const final = stackFragments(round1, SECOND_FLOOR);
+    const built = vectorGridTableToScheduleTable(final, 3, ctx(), 3);
+    assert.ok(built, "the fully merged 3-fragment table must build");
+    assert.equal(built.title?.text, "NOISE CONTROL DUCT SILENCER SCHEDULE");
+    assert.deepEqual(built.headers, ["TAG", "QTY", "SIZE"]);
+    assert.equal(built.rows.length, 3);
+    assert.deepEqual(built.rows.map((r) => r.key), ["A-1", "A-2", "B-1"]);
   });
 });
 
