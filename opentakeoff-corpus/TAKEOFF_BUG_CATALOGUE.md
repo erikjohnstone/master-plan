@@ -2896,6 +2896,89 @@ model) is completely unreachable by any downstream compile. Confirmed on
 all 3 real tables on this one page; not yet checked against the rest of
 the corpus for prevalence.
 
+**ROOT-CAUSE TRACE CORRECTED 2026-09-13 (code-level, no fix applied — see
+below for why).** This entry's own original "plausible root cause"
+guess (the geometric extractor's `numeric-only sub-header
+discrimination gate`) was checked directly against the code and is
+WRONG — that gate lives in a different code path (the pure geometric
+extractor's `harvestNumericSubHeaders`, built for bare-number octave-
+band sub-headers) and is not reached by this table at all, which is
+read through `scheduleTableFromODL`. Traced live instead by re-running
+`production-graph-cli.mjs --mode graph` (`OPENTAKEOFF_GRAPH_TRACE=1`,
+cache cleared, `qpdf`-sliced to page 8 alone) and reading its full JSON
+output directly:
+
+1. **`vectorgrid` emits TWO overlapping candidate regions for the same
+   physical PUMP SCHEDULE table**, not one: `[346.32,1155.36,4393.2,
+   1334.16]` (kind `equipment`) and `[346.32,1158.9,4393.2,1410.72]`
+   (kind `reference`) — same table, same left/right/top edge, but two
+   different bottom edges 76.56pt apart. The shorter one's bottom edge
+   sits exactly at the boundary between the table's own 3-tier header
+   block and its single real data row; the taller one's bottom edge
+   sits below the data row. Both survive to the final graph output as
+   separate table entries — vectorgrid's own row-grid line detection is
+   genuinely ambiguous about which ruled line is this table's real
+   bottom edge, and nothing downstream deduplicates or reconciles the
+   two candidates into one correct table. This is the same general
+   family as B-26's block-split (a real single table's own row/column
+   grid gets cut at the wrong place), though the specific shape here is
+   two OVERLAPPING duplicate candidates rather than B-26's two disjoint
+   blocks.
+2. **The shorter (header-only) candidate's own row classification then
+   independently manufactures a phantom row.** `scheduleTableFromODL`'s
+   `maxCovered` yardstick (the "how many columns does this table's own
+   widest span-free row cover" calibration used to decide whether a
+   later row is "full coverage" like a data row, or "partial" like a
+   header tier) is computed ONLY from rows inside this candidate's own
+   `[bodyStart, R)` range — and because this candidate's own range ends
+   right at the header block's own bottom edge, the real data row is
+   never in scope to calibrate against. The table's own leaf unit-label
+   row (`TONS`/`[kW]`/`GPM`/`[L/s]`/`°F`/...) has no rowspan/colspan
+   cells of its own, so it becomes `maxCovered`'s own yardstick by
+   default, then trivially satisfies `fullCoverage` against a bar
+   calibrated FROM itself, clears `!grouped`, and falls to the
+   vocabulary tie-break — where physical units are not equipment-
+   schedule vocabulary (`ALL_HEADER_WORDS_ARR` has `MARK`/`LOCATION`/
+   `MANUFACTURER`/... but no `TONS`/`GPM`/`[kW]`), so it fails the 0.4
+   hit-rate bar and becomes the table's own first (and only) "data"
+   row — echoing its own leaf header text back as if it were data. This
+   file's own comment on this exact mechanism (search `AHU-1's own real
+   third header tier` in `sheetgraph.ts`) already names an equivalent
+   failure shape on a different document (096_IN's AHU SUPPLY FAN
+   SCHEDULE, `SINGLE POINT` spanning MCA/MOCP) — this is a second,
+   independently-found instance of the same known, disclosed limitation.
+3. **The taller (data-row-included) candidate then makes the mirror-
+   image mistake.** Because its own range DOES include the real data
+   row, and that row is the FIRST row after this candidate's own
+   (differently-computed) header boundary, the row-classification loop
+   treats the genuine data row (`CHWP1&2`/`MECHANICAL ROOM 126`/`530`/
+   `100`/...) as if it were itself a header row (kind `reference`, not
+   `equipment` — the ODL path's own no-vocabulary-hit fallback), and its
+   real values become that table's `headers[]` array — a second garbled
+   artifact of the exact same overlapping-candidate ambiguity, not
+   independently traced further.
+
+**Why this is disclosed without a fix:** the root defect (vectorgrid
+emitting two ambiguous, overlapping row-grid boundary candidates for one
+real table instead of resolving to a single correct one) is a
+geometric/block-boundary decision, the same class of change as B-26's
+block-merge gap — not a narrow, single-function fix, and this file's own
+`maxCovered`/vocabulary-tie-break mechanism is already extensively
+corpus-tuned with its own documented regression history (the 096_IN
+precedent this same comment block already guards). A safe fix needs
+either (a) vectorgrid-side deduplication/reconciliation of two heavily-
+overlapping same-table candidates before they ever reach
+`scheduleTableFromODL`, or (b) teaching `maxCovered`'s calibration to
+recognize a units/label vocabulary (`TONS`, `GPM`, `[kW]`, bracketed
+metric units, °F/°C, PSIG, etc.) as ALSO clearing the header tie-break,
+not just the equipment-identity vocabulary it already checks — either
+one is shared, corpus-wide-blast-radius logic, and per this session's
+own standing rule against guessing at fixes under time pressure, this
+corrected, now-precise trace (superseding the entry's own original,
+wrong guess about which gate is responsible) is recorded as the
+starting point for a future session with the budget to validate either
+change against the full corpus regression sweep before shipping.
+
 ### B-39 — a real table below is completely missed, and the table above silently absorbs its whole region into its own box (found via the goal document's own required auto-accept audit) (NOT FIXED — found, traced, disclosed)
 
 **Where:** `038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#52`, found
