@@ -2341,6 +2341,65 @@ recovered correctly, but this table would file, search, or group under
 the wrong name in any downstream product surface — a real, disclosed
 data-integrity gap despite the row count itself being clean.
 
+**ROOT-CAUSE TRACE (2026-09-13, code-level, no fix applied — see below
+for why):** traced by direct code reading of
+`web/src/lib/sheetgraph.ts`'s `scheduleTableFromODL` (title recovery,
+`titleCell`/`titleText`, lines 9758-9839 and 10279-10312) and
+`web/src/lib/scheduleLanguageScan.ts`'s `nearbyScheduleCaption` (lines
+306-446), the function that later call site invokes. Two-stage failure:
+
+1. **`titleCell` never captures `VRF SYSTEM SCHEDULE`.** The in-grid
+   title check (`sheetgraph.ts:9758-9839`) only recognizes a title as
+   ROW 0 of the ODL-detected ruled grid — either one cell spanning
+   `>= C-1` columns, or several word-group cells covering more than half
+   the columns with real gaps between them. On this sheet, `VRF SYSTEM
+   SCHEDULE` is drawn as its OWN separate title bar sitting ABOVE the
+   ruled grid (confirmed by the rendered page: the title bar is followed
+   by 4 numbered general notes and an "AIR HANDLER" sub-label before the
+   ruled column-header rows even begin) — the same "caption drawn
+   OUTSIDE the ruled grid" shape this exact function's own comment block
+   (lines 10283-10294) already names for 08_ME's `DRAWING LIST`, but that
+   rescue (`nearbyDrawingIndexCaptionText`) is scoped narrowly to
+   drawing-index vocabulary, not schedule captions, so it does not fire
+   here. `titleText` reaches line 10305 still empty or reduced to a
+   short/generic fragment.
+2. **`nearbyScheduleCaption`'s own eligibility gate only protects an
+   ALREADY-GOOD title.** Its filter (lines 397-402) rejects every
+   candidate outright when `currentTitle` is already non-empty, non-
+   generic, and not a short truncated `…SCHEDULE` fragment — exactly
+   right when `titleCell` succeeded. But because stage 1 left
+   `titleText` empty here, `currentCompact` is falsy and the gate never
+   engages, so EVERY nearby schedule-shaped caption on the sheet becomes
+   eligible. `HEAT PUMP UNIT` — one of the table's own column-group
+   sub-headers — genuinely matches `EQUIPMENT_TABLE_CAPTION_RE` (line 81:
+   requires an equipment-family keyword, `PUMP` here, immediately
+   followed by `UNITS?`) and sits geometrically much closer to the
+   table's own bounding box (it is literally one of the grid's own
+   header cells) than `VRF SYSTEM SCHEDULE`'s title bar (separated from
+   the grid by the general-notes block). The ranking sort (lines
+   427-443) is proximity-first (`gap(a) - gap(b)`), so the close, wrong
+   candidate wins over the correct but farther-away real title even
+   though `VRF SYSTEM SCHEDULE` itself independently matches
+   `SCHEDULE_CAPTION_RE` and is very likely also a candidate in the same
+   pool.
+
+**Why this is disclosed without a fix:** both functions are shared,
+corpus-tuned, heavily-commented title-recovery infrastructure used by
+every ODL-sourced table in the pipeline (`nearbyScheduleCaption`'s own
+header names 08_ME/NAVFAC-M-602/044_NY as real regression precedents it
+already guards against). A narrow fix needs to (a) teach stage 1 to
+recognize a real title bar separated from the grid by intervening notes
+text — not just an immediately-adjacent caption — without re-triggering
+the "narrow band above/beside it" false-positive class `nearbyScheduleCaption`'s
+own comments already document, or (b) bias stage 2's ranking against a
+candidate that is itself one of the SAME table's own header/column-group
+cells (a self-referential candidate a real external caption never is).
+Either changes shared ranking/recognition logic with corpus-wide blast
+radius; per this session's own standing rule against guessing at fixes
+under time pressure, this trace is recorded as the starting point for a
+future session with the budget to validate either change against the
+full corpus regression sweep before shipping.
+
 ### B-37 — a small, non-`SCHEDULE`-titled ruled table on a mechanical details sheet is completely missed (NOT FIXED — found, traced, disclosed)
 
 **Where:** `089_FL_Airport_Terminal_and_Hangar_Development.pdf#133`
