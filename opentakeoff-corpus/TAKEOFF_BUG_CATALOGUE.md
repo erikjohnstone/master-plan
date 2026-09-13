@@ -1083,7 +1083,7 @@ directly above the table. Same signature, same non-fix.
 
 ---
 
-### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (NOT FIXED — found, traced, disclosed)
+### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (FIXED 2026-09-13)
 
 **Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf#16`, "WINDOW
 SCHEDULE" — found during the same Demo Corpus hand-verification pass,
@@ -1185,6 +1185,64 @@ confusion) but here the real content is lost outright rather than
 demoted into headers — worth flagging as the more severe end of this
 same failure spectrum, likely triggered by the two-line header this
 table's real caption uses where the others on this page use one line.
+
+**FIX (2026-09-13):** root-caused live via `OPENTAKEOFF_GRAPH_TRACE=1`
+against a busted cache (`cachedSheetGraph` was silently serving a stale
+result and swallowing every trace line until `~/.cache/opentakeoff-sheet-
+graph` was cleared) — this is a `vectorgrid`/`celltext.py` geometry issue,
+not a `sheetgraph.ts` title-detection issue as originally suspected. A
+rendered crop of `08_ME#16` confirmed the real drawing: ONE outer ruled box
+encloses the caption, the header labels, AND every data row, with internal
+column dividers running only from the header row downward — no rule at all
+separates "WINDOW SCHEDULE" from the header labels below it, only the
+header/data boundary is drawn. `vectorgrid.py`'s face for that band is
+therefore geometrically correct (there is genuinely no internal division to
+find); `celltext.py`'s `cell_text()` then flattens that face's two real text
+lines ("WINDOW SCHEDULE" at y~1101-1117, the real 8-column header labels at
+y~1175-1199, a 58pt gap between them) into one string, exactly as it is
+supposed to for a genuinely wrapped multi-line cell — the bug is that this
+face was never one real cell to begin with.
+
+Added `split_unruled_header_row()` in `bakeoff/celltext.py`, called from
+`slot()` right after the existing `split_unruled_columns()` (same file,
+same "the evidence for a missing rule is in the text, not the ruling, so
+this lives here and not in vectorgrid" principle, same author) — the
+orthogonal case: that function widens one cell into several sharing its
+own column band; this one narrows a single TALL cell into a title piece
+and a header piece. Three safety constraints mirror that function's own
+three exactly, so this can only recover a real header, never invent one:
+(1) only the table's own topmost row, and only when it is a single
+undivided face; (2) that face's height must be a clear outlier against
+the median of every OTHER row in the same table (>= 2.2x — a genuinely
+tiny 2-row table with one short real header tier is never touched); (3)
+the candidate header band's own words must land ONE PER COLUMN on the
+x-boundaries every OTHER row already establishes, covering at least half
+of them, with no edge cutting a word — `place_loose_text`'s own rule,
+for the same reason.
+
+**Verified**, both against the real PDFs via `sidecar/vectorgrid_rpc.py`'s
+`extract_grid()` directly:
+- `08_ME_BGS_Augusta_EastCampus_Renovation.pdf#16`'s WINDOW SCHEDULE: title
+  correctly isolated ("WINDOW SCHEDULE"), the real 8-column header
+  (KEY/TYPE/BRICKMOLD TYPE/DIVIDED LIGHT TYPE/OPNG WIDTH +/-/OPNG HEIGHT
+  +/-/COUNT/NOTES) now lands as its own row split one-per-column, and all
+  14 real data rows (A-N, previously A was consumed as the fake header)
+  now appear correctly. Row O (previously entirely missing) now appears
+  too, though fused with the page's footer notes block below the table —
+  a real, different, secondary issue, not touched here, but strictly
+  better than total absence.
+- `28_WA_KCHA_PublicHousing_HVAC.pdf#2`'s AIR TERMINAL SCHEDULE: title
+  correctly isolated, and all 3 real data rows (`SG`, `RG`, `WTG` —
+  previously `SG` was consumed as the fake header) now appear correctly.
+  The header text itself stays merged across both columns here (a
+  conservative decline: the print doesn't leave a gap aligned with the
+  column boundary), which is the safety design working as intended rather
+  than forcing an uncertain split.
+
+No regression: `cellscore.py` still 917/917 cells, 102/102 rows;
+`boxscore.py` still 163/164 (the one open scorer artifact, unrelated —
+see B-40); `boxfit.py --backend vectorgrid` still 219/222, 0
+SPLIT/OVERRUN/SHORT/MERGED, identical before and after.
 
 ---
 
