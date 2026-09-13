@@ -2111,7 +2111,7 @@ this pass made no code change for B-26 — the `rows: 2` → `rows: 1`
 change is a genuine measurement of already-shipped code (B-18/B-40),
 not a new edit, so no separate regression run was needed for it.
 
-### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (NOT FIXED — found, traced, disclosed)
+### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (ROOT CAUSE CONFIRMED 2026-09-13 — not fixed, corpus-wide gate; see B-37 for the same mechanism's sibling case)
 
 **Where:** `100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#7` (sheet
 P1.0, "PLUMBING FLOOR PLAN") — found starting the HELDOUT set's own
@@ -2157,6 +2157,49 @@ fails MISSED=0 — a real 6-row table on the only 7-page document graded
 so far in this set is entirely invisible to the production pipeline,
 despite its own immediate sibling table two pages earlier extracting
 perfectly. A real, concrete, measured reason this document is not clean.
+
+**ROOT CAUSE CONFIRMED 2026-09-13 (code-level, precise — not fixed, same
+corpus-wide gate as B-37).** Traced live via a `qpdf`-sliced single page
++ `OPENTAKEOFF_GRAPH_TRACE=1`: the sheet's own role classifies `plan`
+("PLUMBING FLOOR PLAN"), and `L1.8:vectorgrid` measured `0` ms in the
+trace — confirming it never actually ran any per-sheet work, exactly the
+same signature as B-37's own confirmed finding. This is `isScheduleTarget`
+(`web/src/lib/vectorTakeoffPipeline.ts:177`) again, but the OTHER branch
+of the same gate: `sheetHasScheduleCaption` (`web/src/lib/
+scheduleLanguageScan.ts:130`) requires a caption whose OWN regex
+(`SCHEDULE_CAPTION_RE`) ends in `SCHEDULES?`, optionally followed by a
+short parenthetical — verified directly (`sheetHasScheduleCaption(["GAS
+INPUT SCHEDULE FOR BUTLER TECH"])` returns `false` in isolation). This
+table's own real caption has the word `SCHEDULE` in the MIDDLE, followed
+by `"FOR BUTLER TECH"` — a real, common drafting convention (`"<X>
+SCHEDULE FOR <owner/project>"`) the regex's own trailing-word anchor
+(`SCHEDULES?$`) does not admit, so the entire sheet is skipped exactly as
+B-27's own original "not traced" note suspected, now fully confirmed
+rather than guessed.
+
+**Why this is disclosed without a fix.** Unlike B-37 (no fix possible
+without a broader policy change to which sheets get offered at all),
+here a narrow regex widening is imaginable — allow a trailing `" FOR
+<short suffix>"` clause the same way the regex already allows a trailing
+parenthetical. But `SCHEDULE_CAPTION_RE` is the exact match test for
+`sheetHasScheduleCaption`, itself the sole caption-based gate for EVERY
+`plan`-role sheet in this 500+ document corpus (this file's own comment
+on the function states its narrow-by-design history: "the sheet that
+motivated this picked up one junk 1x3 region... so the gate stays as
+narrow as the evidence allows"). A `" FOR ..."` suffix is a real risk
+here specifically because `CAPTION_XREF_RE` only filters captions
+STARTING with `SEE`/`REFER`/etc. — a real cross-reference sentence that
+does NOT start with one of those words (a genuinely plausible drafting
+phrase, e.g. `"SIZE PER SCHEDULE FOR EACH UNIT TYPE"`) could plausibly
+clear every other structural bar (length, all-caps character class) and
+false-positive the whole gate open on an unrelated plan sheet. Widening
+a shared, corpus-wide admission gate on the strength of one document's
+own caption wording, without a full corpus regression sweep measuring
+the false-positive rate this exact function's own design history warns
+about, is not attempted here under this session's own standing rule
+against guessing at fixes under time pressure — recorded as a precise,
+bounded next step (a narrower `" FOR "` suffix pattern, corpus-validated
+for false positives) rather than an open-ended mystery.
 
 ### B-28 — an entire dense schedule page (10 tables, 98 rows) is completely invisible despite dense, fully-reachable real text; a same-titled sibling table on another page is silently dropped by an apparent title-collision (NOT FIXED — found, traced, disclosed)
 
