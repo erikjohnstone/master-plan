@@ -67,23 +67,25 @@ table on it, deletes the render immediately, auto-accepts only tables where
 every edge clears the tolerance — anything else is left unwritten and
 logged, never forced).
 
-Run across 30 of the 32 Demo Corpus documents this session (the 2 missing —
-`020_MO`, `052_IL` — have no cached `production-graph-cli.mjs` extraction
-yet and were skipped rather than paying for a fresh one under this pass's
-time budget): **527 tables auto-accepted** with real, independently
-measured box-tier ground truth (worst-edge agreement typically <0.2pt,
-almost always <1pt), written into each document's own
+Run across all 32 Demo Corpus documents (the last 2 — `020_MO`, `052_IL` —
+had no cached `production-graph-cli.mjs` extraction and got a fresh one,
+~5s each, to close out the set): **531 tables auto-accepted** with real,
+independently measured box-tier ground truth (worst-edge agreement
+typically <0.2pt, almost always <1pt), written into each document's own
 `keys/<id>.tableboxes.csv` with per-row provenance naming the measured
 agreement and the dark-pixel-fraction threshold that found the line.
 Roughly 103 more tables were correctly NOT auto-accepted (either no ruled
 line was found near an edge at any threshold, or a real line was found but
 disagreed by >4pt) — these are listed, with full detail, in
 `keys/RULELINEBOX_REVIEW_NEEDED.txt` for a human to actually adjudicate;
-none of them were forced into a `.tableboxes.csv`. This is real box-tier
+none of them were forced into a `.tableboxes.csv`. `052_IL` genuinely has 0
+schedule tables (confirmed by a full text-layer scan — see its row below),
+so it contributes nothing to either count, not a gap. This is real box-tier
 coverage for the large majority of tables in most of these documents, not a
 sample — but it is not yet 100% of any document (a handful of tables per
 doc typically land in the review-needed list), and it does not touch
-020_MO/052_IL, or cell-tier transcription, at all.
+cell-tier transcription at all, which still exists only for 028_TX and
+060_XX (265 cells, 2 documents).
 
 Status values: `not-started` (nothing done), `missed-checked` (rendered,
 real table count hand-confirmed, box/cell grading not yet done),

@@ -1,0 +1,18 @@
+# 020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# DEMO/HELDOUT CORPUS. Method: deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code (bakeoff/rulelinebox.py).
+# The page was rendered at high scale; for each of vectorgrid's 4 reported
+# edges, a padded search window (seeded by vectorgrid's own region only to
+# know where on the sheet to look) was scanned for the real drawn rule
+# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the raw page pixels --
+# never a read of vectorgrid's own box -- satisfying the goal document's
+# Method Section 3 auto-accept criterion (two mechanically independent
+# extractors agree within 4pt). Per-row provenance gives the measured
+# agreement and the dark-pixel-fraction threshold that found the line.
+sheet,table_title,x0,top,x1,bot,provenance
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf,APPLICABLE CODES,3144.62,1225.75,4555.25,1996.0,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#3,FINISH SCHEDULE,215.62,2271.88,3804.38,3383.88,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#22,BRANCH PANEL:LP1 BRANCH: POWER Normal Power VOLTAGE: 480Y/277 LOCATION: MAIN BUS: 400 A PHASES: 3 ENCLOSURE: NEMA 1 # BREAKERS: 84 MAIN DEVICE: MLO WIRES: 4 MOUNTING: Surface MCB TRIP: N/A AIC NOTES: RATING: EXISTING 18000 SQUARE D NF PANEL SUPPLY FROM: DP1 MCB FRAME: N/A,302.0,266.25,1815.5,1643.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#22,BRANCH PANEL:LP2A BRANCH: POWER Normal Power VOLTAGE: 480Y/277 LOCATION: Electrical Room 120 MAIN BUS: 400 A PHASES: 3 ENCLOSURE: NEMA 1 # BREAKERS: 48 MAIN DEVICE: MLO WIRES: 4 MOUNTING: Surface MCB TRIP: N/A AIC NOTES: RATING: EXISTING 18000 SQUARE D NF PANEL SUPPLY FROM: DP1 MCB FRAME: N/A,1978.25,266.25,3491.75,1210.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
