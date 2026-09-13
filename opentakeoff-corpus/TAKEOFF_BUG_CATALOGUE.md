@@ -1104,6 +1104,20 @@ a distinct sub-shape of the same bug, not a new bug number.
 row `A` do not exist in `rows` at all — they were reassigned to `headers`
 instead. This table cannot pass either box- or cell-grading as extracted.
 
+**CONFIRMED RECURRING 2026-09-13 — a 5th document, combined with B-21's
+own pattern on the same page.** `17_FL_SuwanneeHS_Courtyard_100CD.pdf#30`
+carries three real "Branch Panel" schedules (`EMDP`, `HN7B`, `LN7C`).
+`EMDP` (21 real circuit rows) surfaces with the same signature yet again
+— `title: null` (reported as `UNTITLED` — the panel's own real name
+`"Branch Panel: EMDP (EXISTING GE PANEL)"` is gone), and `headers` shows
+the same header+first-row fusion (`"CIRCUIT DESCRIPTION 30 KVA XFMR"`,
+`"TRIP 50 A"`, etc. — the real header text glued to circuit 3's own real
+values). The other two panels on the identical page, `HN7B` (15 rows) and
+`LN7C` (15 rows), are not fused into this one and not fabricated into
+anything else findable — they are simply absent, the same disease as
+B-21. This single page shows both bugs operating together: one table
+survives corrupted (B-18's signature), two vanish outright (B-21's).
+
 ---
 
 ### B-19 — two real schedule tables vanish entirely from the same document while unrelated floor-plan callout text nearby gets fused into a fabricated one-row table (NOT FIXED — found, traced, disclosed)
