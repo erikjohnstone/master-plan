@@ -1,0 +1,437 @@
+# 092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.cells.csv -- CELL-tier
+# ground truth, DEMO CORPUS document, sheet #11. All 8 real HVAC equipment
+# tables on this sheet (20 data rows total) were transcribed off a rendered
+# crop of the page at scale=3.0 (wide tables split into left/right halves)
+# and compared cell by cell against the extractor's own output. 20/20 rows
+# matched EXACTLY.
+#
+# METHODOLOGY NOTE, disclosed rather than glossed over: 5 of the 8 tables
+# (AIR COOLED CHILLER SCHEDULE, AUTOMATIC CONTROL DAMPER SCHEDULE, GRILLES/
+# REGISTERS/DIFFUSER SCHEDULE, DX COIL SCHEDULE, REFRIGERATION SCHEDULE --
+# 9 of the 20 rows) were transcribed genuinely BLIND, extractor's own
+# answer not in view, matching this goal's own required grading
+# discipline. The other 3 (FAN COIL SCHEDULE, CONDENSING UNIT SCHEDULE,
+# MECHANICAL/ELECTRICAL COORDINATION SCHEDULE -- 11 rows) were checked
+# AFTER the extractor's own output for this page had already been viewed
+# (an ordering mistake in this session, not a deliberate shortcut) -- their
+# values were independently re-read off the render and found to match, but
+# that check does not carry the same evidentiary weight as a genuinely
+# blind read and should not be cited as satisfying the Demo Corpus's own
+# strict blind-grading requirement for those 3 tables specifically. A
+# future session should re-verify those 11 rows blind if this document's
+# cell-tier status is ever cited as authoritative.
+#
+# Real content notes: REFRIGERATION SCHEDULE's own CH-1 row and AIR COOLED
+# CHILLER SCHEDULE's own CH-2 row describe the same physical chiller
+# (identical LEFT FIELD location, R134A/475 ton/SCREW data) under two
+# different tag numbers -- a real as-drawn cross-referencing quirk between
+# two different schedules' own tagging systems, confirmed by direct
+# reading, not an extraction error.
+#
+# row/col index ONLY each table's own DATA rows/columns (0-based),
+# following the same convention as this corpus's
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans.cells.csv.
+#
+# Part of opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md's own
+# Completion Gate CELL-tier requirement. Real, disclosed partial progress
+# on one Demo Corpus document among 32; not a claim the Demo Corpus is
+# graded (which also requires zero errors AND every box hand-graded blind
+# with no auto-accept -- see DEMO_CORPUS_GRADING.md's own correction).
+#
+sheet,table_title,row,col,text
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,0,CH 2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,1,LEFT FIELD
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,2,NEAR GATE 6
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,3,DAIKIN
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,4,AWV026A
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,5,AIR COOLED SCREW COMP.
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,6,24893
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,7,26813
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,8,523.2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,9,87.6
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,10,100.1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,11,475.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,12,475.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,13,9.715
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,14,18.06
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,15,9.715
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,16,2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,17,200
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,18,175
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,19,R134A
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,20,VFD
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,21,95.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,22,26
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,23,62.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,25,1136
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,26,23.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,27,54.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,28,44.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,29,570
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,30,440
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,31,700
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,32,600
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,33,460
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,34,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,35,3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),0,36,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,0,FCU 1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,1,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,2,LEVEL 200 SECTION 7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,3,LEVEL 200 SECTION 7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,4,CARRIER
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,5,42CAA03BLFY6YYAR
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,6,HORIZONTAL DUCTED
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,7,39
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,8,17.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,9,25.25
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,10,8.75
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,11,HIGH
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,12,300
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,13,1.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,14,0.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,15,8.6
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,16,4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,17,175.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,18,75.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,19,67.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,20,54.7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,21,54.1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,22,44.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,23,6.3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,24,3.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,25,0.35
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,26,277
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,27,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,28,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),0,29,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,0,FCU 2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,1,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,2,LEVEL 200 SECTION 7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,3,LEVEL 200 SECTION 7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,4,CARRIER
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,5,42DAA08LLFY6YYBR
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,6,HORIZONTAL DUCTED
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,7,79
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,8,27.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,9,28.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,10,16.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,11,HIGH
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,12,800
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,13,3.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,14,0.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,15,1.79
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,16,7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,17,175.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,18,75.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,19,67.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,20,61.6
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,21,60.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,22,44.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,23,20.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,24,19.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,25,1.35
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,26,277
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,27,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,28,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),1,29,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,0,FCU 3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,1,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,2,VISITORS CLUBHOUSE
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,3,VISITORS CLUBHOUSE
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,4,CARRIER
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,5,42DAA10BLFY6YYAR
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,6,HORIZONTAL DUCTED
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,7,90
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,8,27.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,9,32.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,10,16.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,11,HIGH
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,12,1000
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,13,5.3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,14,0.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,15,4.23
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,16,4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,17,175.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,18,75.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,19,67.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,20,59.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,21,58.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,22,44.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,23,24.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,24,15.1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,25,1.85
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,26,277
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,27,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,28,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),2,29,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,0,FCU 4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,1,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,2,ISFA CONF. ROOM
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,3,ISFA CONF. ROOM
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,4,CARRIER
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,5,42DAA12BLFY6YYAR
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,6,HORIZONTAL DUCTED
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,7,108
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,8,27.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,9,37.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,10,16.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,11,HIGH
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,12,1200
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,13,7.6
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,14,0.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,15,10.35
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,16,4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,17,175.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,18,75.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,19,67.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,20,59.3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,21,58.2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,22,44.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,23,34.6
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,24,21.3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,25,2.7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,26,277
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,27,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,28,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),3,29,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,0,FCU 5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,1,11
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,2,PRESSBOX
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,3,PRESSBOX
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,4,CARRIER
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,5,42DAA16BLFY6YYAR
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,6,HORIZONTAL DUCTED
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,7,124
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,8,27.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,9,47.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,10,16.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,11,HIGH
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,12,1600
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,13,10.9
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,14,0.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,15,7.84
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,16,4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,17,175.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,18,75.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,19,67.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,20,60.3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,21,59.1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,22,44.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,23,50.1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,24,31.8
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,25,3.7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,26,277
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,27,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,28,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),4,29,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),0,0,ACD 1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),0,1,VISITORS CLUBHOUSE
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),0,2,VISITORS CLUBHOUSE
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),0,3,RUSKIN
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),0,4,CDTI-50
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),0,5,12x10
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),0,6,OPPOSED
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),0,7,CLOSED
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),0,8,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),1,0,ACD 2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),1,1,ISFA CONFERENCE
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),1,2,PRESSBOX
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),1,3,RUSKIN
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),1,4,CDTI-50
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),1,5,VERIFY EXISTING
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),1,6,OPPOSED
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),1,7,CLOSED
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),1,8,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,0,A
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,1,PRICE
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,2,530FF
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,3,RETURN AIR FILTER GRILLE
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,4,RETURN
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,5,24x24
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,6,STEEL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,7,LAY-IN
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,8,30
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",0,9,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,0,CU 1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,1,PATIO AHU
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,2,200 LEVEL SECTION 2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,3,CARRIER
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,4,38APS030
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,5,1282
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,6,1282
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,7,88.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,8,40.3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,9,78.6
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,10,2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,11,SCROLL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,12,373.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,14,10.8
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,15,PURON
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,19,95.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,21,66.3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,22,90
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,23,460
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,24,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,25,3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),0,26,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,0,CU 2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,1,SCORE BOARD CONTROL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,2,200 LEVEL SECTION 5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,3,CARRIER
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,4,38AUDC16A0A6-0A0A0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,5,731
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,6,731
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,7,86.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,8,43.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,9,50.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,10,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,11,SCROLL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,12,185.7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,14,13.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,15,PURON
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,19,95.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,21,29.9
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,22,40
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,23,460
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,24,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,25,3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),1,26,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,0,CU 3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,1,SCORE BOARD CONTROL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,2,200 LEVEL SECTION 5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,3,CARRIER
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,4,38AUDC16A0A6-0A0A0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,5,731
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,6,731
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,7,86.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,8,43.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,9,50.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,10,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,11,SCROLL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,12,185.7
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,14,13.4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,15,PURON
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,19,95.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,21,29.9
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,22,40
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,23,460
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,24,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,25,3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),2,26,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,0,DC 1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,1,CU-1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,2,PATIO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,3,COMM. COILS
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,4,4DX-8-45 X 89.5 X 4 - 9 AL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,5,27.97
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,6,4
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,7,9
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,8,45.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,9,89.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,10,6.5
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,11,80.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,12,67.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,13,59.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,14,57.0
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,15,"12,000"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,16,"0.34"""
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,17,"377,970"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,18,"277,600"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),0,19,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,0,FCU
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,1,FAN COIL UNIT
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,2,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,3,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,4,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,5,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,6,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,7,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,8,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,9,EC
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,10,EC
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,11,277
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,12,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,13,3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,0,14,EXISTING DISCONNECT SWITCH MAY BE RE-USED.
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,0,CU
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,1,CONDENSING UNIT
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,2,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,3,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,4,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,5,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,6,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,7,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,8,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,9,EC
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,10,EC
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,11,460
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,12,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,1,13,3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,0,CH
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,1,CHILLER
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,2,MFG
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,3,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,4,MFG
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,5,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,6,NO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,7,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,8,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,9,-
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,10,EC
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,11,460
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,12,60
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,2,13,3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,0,CH 1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,1,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,2,LEFT FIELD
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,3,R134A
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,4,2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,5,549
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,6,SCREW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,7,2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,9,475
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,10,NO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,11,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,12,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,13,NO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,0,14,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,0,CU 1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,1,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,2,200 LEVEL ROOF
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,3,R410A
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,4,2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,6,SCROLL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,7,2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,9,30
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,10,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,11,NO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,12,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,13,NO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,1,14,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,0,CU 2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,1,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,2,500 LEVEL ROOF
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,3,R410A
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,4,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,6,SCROLL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,7,2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,9,15
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,10,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,11,NO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,12,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,13,NO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,2,14,SEE BELOW
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,0,CU 3
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,1,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,2,500 LEVEL ROOF
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,3,R410A
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,4,1
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,6,SCROLL
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,7,2
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,9,15
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,10,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,11,NO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,12,YES
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,13,NO
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3,14,SEE BELOW
