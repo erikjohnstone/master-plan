@@ -820,6 +820,101 @@ in both `mcp` and `web`; full corpus regression gate run cold-cache before
 commit (see the commit that lands this entry for the exact before/after
 numbers on the frozen 541-tag scored corpus).
 
+---
+
+### B-15 / task #82 — a BAS/BMS control-points matrix compiles as physical equipment (FIXED 2026-09-13)
+
+**Where:** `federal-attachment4-mechanical.pdf#20/#23/#24` — three real
+"HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE" tables (HHW SYSTEM, VAV
+BOXES, MISCELLANEOUS). First tracked as task #82 ("HVAC equipment compile
+totals reported wrong on 6+ corpus sets, not yet root-caused"), on the
+`VECTORGRID_TABLE_BOXES.md` goal's own open-items list — traced to a
+specific sheet before any fix was written, per that goal's own stated
+discipline.
+
+**Measured, live** (`OPENTAKEOFF_EVAL_NO_CACHE=1 takeoff-eval.mjs
+federal-mech --with-reference`, cold cache): federal-mech's own frozen
+scored set reported 16 false-added tags, including 9 nonsensical bare-digit
+tags ("1" through "9", qty 2-4 each) alongside ET-1/ET-2/FTR-1B/FTR-2B/
+ALP-1/ALP-2/ALP-3. A `git worktree` diff against the commit immediately
+before this session's own B-13/B-14 fixes showed the identical 16 false-adds
+byte-for-byte — confirmed pre-existing, not a regression from this session's
+earlier work.
+
+**Root cause, confirmed by dumping the real sheet graph** (`production-
+graph-cli.mjs --mode graph`) and rendering the source page: the three real
+"HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE" tables are control-points
+matrices — POINT NAME / HARDWARE TAG / HARDWARE POINT TYPE, a bank of 2-4
+FAIL MODE columns, a much larger bank (up to 19) of SOFTWARE-prefixed
+columns, ALARM LIMITS — not physical-equipment schedules. "HARDWARE TAG"
+carries the bare word TAG and "HARDWARE POINT TYPE" carries TYPE, and a
+trailing NOTES column is present too — enough to clear `EQUIPMENT_HEADERS`'
+own generic `eqHits>=3` bar in `scheduleTableFromODL`
+(`web/src/lib/sheetgraph.ts`) the same way a real per-item catalog schedule
+does. Their own leftmost column is an unlabeled running row-index (1, 2,
+3…), not a real device tag — the real per-point identity lives one column
+over, under the real TAG column. Classified equipment-kind, that bare
+row-index became each row's own "equipment tag", reached
+`buildPlanSetTakeoff`'s equipment sweep, and — because the same small
+integers are ALSO drawn as cross-reference callout bubbles on the same
+sheet's own control diagram (confirmed by direct render of sheet #20's
+BOILER SYSTEM - CONTROL DIAGRAM) — really did find spurious matches.
+
+**Fix shape:** same discriminator family as this file's own B-3 ("choose
+the identifier column structurally, not by title vocabulary alone") and the
+same title-family-plus-structural-confirmation pattern `sheetgraph.ts`'s
+own `isReferenceCrossTable` already establishes for a different "qualifies
+equipment-kind on generic vocabulary alone but isn't" shape (CONNECTION/
+CALCULATION/ISOLATION tables demoted without a MODEL/MANUFACTURER column of
+their own).
+
+**FIXED 2026-09-13** (`web/src/lib/sheetgraph.ts`, `isBasPointFunctionSchedule`).
+A new structural check — title names "POINT FUNCTION/LIST SCHEDULE" AND a
+real FAIL MODE bank (≥2) AND a real SOFTWARE-prefixed bank (≥4); title alone
+is deliberately never enough, mirroring `isReferenceCrossTable`'s own
+"never on vocabulary alone" discipline — wired into BOTH the geometric
+extractor's own equipment-kind reclassification pass AND the ODL/vectorgrid
+`scheduleTableFromODL` path. Both call sites were needed: federal-mech's
+own three tables are read through vectorgrid, not the geometric reader, so
+fixing only one path would have half-closed the bug. Demotes to
+reference-kind, matching `isReferenceCrossTable`'s own precedent — reference
+kind is never swept for installed quantities at all (`buildPlanSetTakeoff`'s
+equipment loop only ever iterates equipment-kind tables), so the demotion
+fully and permanently removes these tables from compile-totals risk, not
+just from this one document's own current symptom.
+
+**Result, measured before/after, same command, cold cache:** federal-mech's
+false-adds drop from 16 to 7 — every bare-digit phantom tag is gone. The
+remaining 7 (ET-1/2, FTR-1B/2B, ALP-1/2/3) are a SEPARATE, already-disclosed
+key-file scope gap (see `federal-mech.takeoff.csv`'s own FINDING #2): real,
+correctly-extracted equipment tags the key deliberately excludes from
+scoring pending independent plan-quantity verification, not a code defect —
+out of this entry's own scope. Reference-table extraction stays 31/31 exact
+(`scoreReference` only ever iterates the key's own rows, so a newly-
+reclassified table adds zero scoring risk there).
+
+**Regression-checked against all 7 frozen scored sets.** federal-mech
+directly, via the full eval above. For the other 6 (bessemer, itd-d1-lab,
+navfac-cherry-point-atc, bldg5406-hvac-demo, baker-county-eoc,
+itd-d1-lab-raster): rather than trust the eval harness's own known
+per-document flakiness (`navfac-cherry-point-atc`'s single-document eval
+hung 40+ minutes both before AND after this fix, on an unrelated,
+pre-existing issue matching this file's own task #68/#70 precedent — killed,
+not chased, since it reproduces identically on unmodified code), each PDF's
+raw text was scanned directly for every phrase `isBasPointFunctionSchedule`
+keys on ("POINT FUNCTION SCHEDULE", "POINT LIST SCHEDULE", "HARDWARE TAG",
+"HARDWARE POINT TYPE", "FAIL MODE", "BMS POINT") — zero occurrences in all
+6 documents, so the new check cannot structurally fire on any of them; the
+fix is a byte-for-byte no-op there, not merely an unlikely one.
+
+**Verified:** `web/test/sheetgraph.test.ts` — a module-level
+`isBasPointFunctionSchedule` unit test (the real federal-mech header shape
+demotes; a genuine equipment schedule that merely says "POINT" in its title,
+or carries the title family with none of the real column shape, does not)
+plus a `scheduleTableFromODL` integration test built on federal-mech's real
+column shape, confirming the full table never lands equipment-kind. Full
+suite: 142/142 passing.
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.

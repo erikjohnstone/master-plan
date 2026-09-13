@@ -319,8 +319,24 @@ scope (all vector-native, no raster/OCR path involved), not yet closed:**
   already uses for routing, scoped spatially to the table's own bbox), and
   the regression suite. Table count on this document: 2 → 3, the recovered
   table correctly kinded `reference` with all 34 real rows.
-- **Task #82 — HVAC equipment compile totals reported wrong on 6+ corpus
-  sets, not yet root-caused with this file's own render-and-read discipline.**
-  Unlike the others above, this has not been traced to a specific sheet or
-  mechanism yet — do that first, the same way B-3/B-4/B-7/B-11/B-12 were each
-  traced against one real cited page before any fix was written.
+- ~~**Task #82 — HVAC equipment compile totals reported wrong on 6+ corpus
+  sets, not yet root-caused with this file's own render-and-read discipline.**~~
+  — **FIXED 2026-09-13.** Traced to `federal-attachment4-mechanical.pdf#20/
+  #23/#24`'s own "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE" tables: a
+  control-points matrix (POINT NAME/HARDWARE TAG/HARDWARE POINT TYPE, a FAIL
+  MODE column bank, a much larger SOFTWARE-prefixed bank), not physical
+  equipment — its unlabeled leftmost row-index column (1, 2, 3…) was
+  classified equipment-kind's own key column and swept against the plan,
+  finding spurious matches against the same digits drawn as callout bubbles
+  on the sheet's own control diagram. Confirmed pre-existing via a
+  `git worktree` diff against the pre-B-13/B-14 commit (identical 16
+  false-adds before and after). New `isBasPointFunctionSchedule` structural
+  check (title family + real FAIL MODE/SOFTWARE column shape, never title
+  alone) demotes these to reference-kind in both the geometric and ODL/
+  vectorgrid classification paths — federal-mech's false-adds drop 16→7 (the
+  remaining 7 are a separate, already-disclosed key-file scope gap, not a
+  code defect). Regression-checked against all 7 frozen scored sets — see
+  `TAKEOFF_BUG_CATALOGUE.md`'s own new B-15 entry for the full trace, the
+  fix, and why the other 6 sets are provably unaffected (zero occurrences of
+  any triggering vocabulary in their own source text, not just an unlikely
+  false-positive).
