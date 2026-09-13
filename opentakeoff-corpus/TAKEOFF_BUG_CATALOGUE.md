@@ -2241,7 +2241,7 @@ family. Given this document's controls-diagram sheets span roughly
 M-701 through M-707 (not fully surveyed), this may be a wider source of
 phantom tables than the 2 instances confirmed here.
 
-### B-35 — a firm's own logo tagline text is fabricated into a phantom table, repeated across 13 different sheets of one document (NOT FIXED — found, traced, disclosed)
+### B-35 — a firm's own logo tagline text is fabricated into a phantom table, repeated across 13 different sheets of one document (FIXED 2026-09-13)
 
 **Where:** `089_FL_Airport_Terminal_and_Hangar_Development.pdf` — found
 closing out the HELDOUT set's own missed-checking pass (the 32nd and
@@ -2274,6 +2274,42 @@ across every other AVCON-drawn document in the corpus (not checked here).
 tables (52 phantom rows) in ONE document — the single largest phantom-
 table count found in the HELDOUT pass, on a document whose real HVAC
 schedule content (see below) is otherwise almost entirely clean.
+
+**FIX (2026-09-13):** root-caused live (via reverted debug
+instrumentation and a rendered-page check, both confirming the source is
+`scheduleTableFromODL`'s `kind === "unknown"` fallback in
+`web/src/lib/sheetgraph.ts`, NOT the geometric "structural reference"
+pass the bug's own shape first suggested — that pass already correctly
+excludes rotated/quarter-turned text via `isVertical()`). The existing
+guard for this exact bug family
+(`R - headerEnd <= 2 && headers.every(h => /^COL\d+$/.test(h))`,
+`sheetgraph.ts:10367-10369`, shipped for 067_CA_SLAC's own 8-sheet stamp-
+box case) doesn't fire here because AVCON's sidebar also carries a real
+ruled revision-history sub-grid, pushing its own row count past 2.
+Widening that single shared threshold was rejected as the fix (every
+other genuinely tiny real reference table in the corpus shares the same
+guard, and it has no notion of "this repeats identically elsewhere").
+
+Instead, added a new, purely additive post-processing pass in
+`mcp/src/session.ts`'s `enhanceTablesWithODL()` (right after all of a
+document's ODL tables are collected, before `collapseEquivalentPrimary
+Tables`): drop any `"reference"`-kind table whose headers are still the
+bare `COL1/COL2/…` fallback AND whose exact `(document, title, row
+count)` signature recurs on 3 or more DIFFERENT sheets of the same
+document — the shape both this bug and the SLAC precedent share, and one
+no genuine per-sheet-varying schedule exhibits.
+
+**Verified:** live re-run against the real document —
+`089_FL_Airport_Terminal_and_Hangar_Development.pdf` drops from 72 to 59
+schedule tables (exactly the 13 phantom rows removed, 0 remaining
+`"TRANSFORMING…"` entries anywhere in the output), while every real
+mechanical-equipment table on sheet M-601/#136 (`FAN SCHEDULE`,
+`ELECTRIC UNIT HEATER SCHEDULE`, `LOUVER SCHEDULE`, etc. — see this
+document's own HELDOUT_GRADING.md entry) extracts byte-identically
+before and after. A 25-document corpus-regression-sweep.mjs before/after
+diff (spanning both the Demo Corpus and HELDOUT sets) shows **zero**
+table differences anywhere else in the sample — no other document's
+table titles, kinds, or row counts changed.
 
 ### B-36 — a multi-level table's own internal column-group sub-header is picked as the table's title instead of the real title text above it (NOT FIXED — found, traced, disclosed)
 
