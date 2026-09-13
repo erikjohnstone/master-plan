@@ -10736,6 +10736,35 @@ export function scheduleTableFromODL(
         if (isCaption) continue;
       }
     }
+    // A row whose key AND every cell value exactly match an already-emitted
+    // row is not a second real row — it is the same physical row, captured
+    // twice. Real, corpus-found: TAKEOFF_BUG_CATALOGUE.md's B-20,
+    // 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4's own
+    // COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE (HP-1 emitted twice,
+    // byte-for-byte identical). Traced to vectorgrid_rpc.py's own row-grid
+    // axis: a genuine internal hairline rule under this row's own
+    // ELECTRICAL DATA sub-columns (VOLTS/PHASE/MCA/MOCP) — not spanning the
+    // table's full width — mints a spurious extra row-grid line; every
+    // OTHER column's cell (whose own rowSpan widens to swallow it) gets
+    // placed into both the real row and this phantom one via ODL's own
+    // rowspan handling, while the sub-divided columns independently
+    // duplicate their own value across both faces. The real fix belongs in
+    // vectorgrid's own row-axis construction (a candidate row-grid line
+    // should be trusted only when corroborated across the table's full
+    // width, not just some columns) — not guessed at here under time
+    // pressure. This guard only refuses to MANUFACTURE a second real row
+    // out of the symptom, the same principle the printedKeys path above
+    // already applies for its own duplicate-key case (never two rows
+    // sharing one printed key) — safe because two genuinely distinct rows
+    // never coincidentally share both the same key AND every cell value.
+    const dupOf = rows.find((existing) => existing.key === keyRes.key);
+    if (dupOf) {
+      const existingHeaders = Object.keys(dupOf.cells);
+      const newHeaders = Object.keys(cells);
+      const identical = existingHeaders.length === newHeaders.length
+        && existingHeaders.every((h) => dupOf.cells[h]?.text === cells[h]?.text);
+      if (identical) continue;
+    }
     emitted.add(r);
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
   }

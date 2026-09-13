@@ -1083,7 +1083,7 @@ directly above the table. Same signature, same non-fix.
 
 ---
 
-### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (NOT FIXED — found, traced, disclosed)
+### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (FIXED 2026-09-13)
 
 **Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf#16`, "WINDOW
 SCHEDULE" — found during the same Demo Corpus hand-verification pass,
@@ -1186,6 +1186,64 @@ demoted into headers — worth flagging as the more severe end of this
 same failure spectrum, likely triggered by the two-line header this
 table's real caption uses where the others on this page use one line.
 
+**FIX (2026-09-13):** root-caused live via `OPENTAKEOFF_GRAPH_TRACE=1`
+against a busted cache (`cachedSheetGraph` was silently serving a stale
+result and swallowing every trace line until `~/.cache/opentakeoff-sheet-
+graph` was cleared) — this is a `vectorgrid`/`celltext.py` geometry issue,
+not a `sheetgraph.ts` title-detection issue as originally suspected. A
+rendered crop of `08_ME#16` confirmed the real drawing: ONE outer ruled box
+encloses the caption, the header labels, AND every data row, with internal
+column dividers running only from the header row downward — no rule at all
+separates "WINDOW SCHEDULE" from the header labels below it, only the
+header/data boundary is drawn. `vectorgrid.py`'s face for that band is
+therefore geometrically correct (there is genuinely no internal division to
+find); `celltext.py`'s `cell_text()` then flattens that face's two real text
+lines ("WINDOW SCHEDULE" at y~1101-1117, the real 8-column header labels at
+y~1175-1199, a 58pt gap between them) into one string, exactly as it is
+supposed to for a genuinely wrapped multi-line cell — the bug is that this
+face was never one real cell to begin with.
+
+Added `split_unruled_header_row()` in `bakeoff/celltext.py`, called from
+`slot()` right after the existing `split_unruled_columns()` (same file,
+same "the evidence for a missing rule is in the text, not the ruling, so
+this lives here and not in vectorgrid" principle, same author) — the
+orthogonal case: that function widens one cell into several sharing its
+own column band; this one narrows a single TALL cell into a title piece
+and a header piece. Three safety constraints mirror that function's own
+three exactly, so this can only recover a real header, never invent one:
+(1) only the table's own topmost row, and only when it is a single
+undivided face; (2) that face's height must be a clear outlier against
+the median of every OTHER row in the same table (>= 2.2x — a genuinely
+tiny 2-row table with one short real header tier is never touched); (3)
+the candidate header band's own words must land ONE PER COLUMN on the
+x-boundaries every OTHER row already establishes, covering at least half
+of them, with no edge cutting a word — `place_loose_text`'s own rule,
+for the same reason.
+
+**Verified**, both against the real PDFs via `sidecar/vectorgrid_rpc.py`'s
+`extract_grid()` directly:
+- `08_ME_BGS_Augusta_EastCampus_Renovation.pdf#16`'s WINDOW SCHEDULE: title
+  correctly isolated ("WINDOW SCHEDULE"), the real 8-column header
+  (KEY/TYPE/BRICKMOLD TYPE/DIVIDED LIGHT TYPE/OPNG WIDTH +/-/OPNG HEIGHT
+  +/-/COUNT/NOTES) now lands as its own row split one-per-column, and all
+  14 real data rows (A-N, previously A was consumed as the fake header)
+  now appear correctly. Row O (previously entirely missing) now appears
+  too, though fused with the page's footer notes block below the table —
+  a real, different, secondary issue, not touched here, but strictly
+  better than total absence.
+- `28_WA_KCHA_PublicHousing_HVAC.pdf#2`'s AIR TERMINAL SCHEDULE: title
+  correctly isolated, and all 3 real data rows (`SG`, `RG`, `WTG` —
+  previously `SG` was consumed as the fake header) now appear correctly.
+  The header text itself stays merged across both columns here (a
+  conservative decline: the print doesn't leave a gap aligned with the
+  column boundary), which is the safety design working as intended rather
+  than forcing an uncertain split.
+
+No regression: `cellscore.py` still 917/917 cells, 102/102 rows;
+`boxscore.py` still 163/164 (the one open scorer artifact, unrelated —
+see B-40); `boxfit.py --backend vectorgrid` still 219/222, 0
+SPLIT/OVERRUN/SHORT/MERGED, identical before and after.
+
 ---
 
 ### B-19 — two real schedule tables vanish entirely from the same document while unrelated floor-plan callout text nearby gets fused into a fabricated one-row table (NOT FIXED — found, traced, disclosed)
@@ -1262,7 +1320,7 @@ none of them a real schedule:
 
 ---
 
-### B-20 — a real row is captured twice, byte-for-byte identical, inflating a table's own row count with a phantom duplicate (NOT FIXED — found, traced, disclosed)
+### B-20 — a real row is captured twice, byte-for-byte identical, inflating a table's own row count with a phantom duplicate (FIXED 2026-09-13)
 
 **Where:** `083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4`,
 "COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE" — found during the same
@@ -1287,16 +1345,57 @@ LBS`, `REMARKS: SEE NOTES` — nothing differs between the two copies), then
 table redrawn twice at two DIFFERENT scales elsewhere on a sheet, read as
 two colliding tables) — this is one real row, inside one real table,
 captured twice with no variation at all, immediately adjacent to two
-other rows from the same table that were each captured exactly once. Not
-traced into the row-clustering code to find why this one row's y-band
-produced two identical clusters instead of one, per this file's standing
-rule against guessing at a fix under time pressure.
+other rows from the same table that were each captured exactly once.
 
 **Consequence for the Demo Corpus's own zero-error bar:** a phantom row
 that is not a fabrication of new content (unlike B-16/B-19) but an exact
 duplicate of real content still fails an exact row-count match — this
 table cannot pass cell-grading as extracted despite every cell value
 being individually correct.
+
+**FIX (2026-09-13):** root-caused live, traced across the Python/TS
+boundary rather than guessed at. A real PDF drafting convention on this
+row — a doubled-stroke header/data divider, two full-width ruled lines
+2.46pt apart — creates a geometrically-real but textually-empty "sliver"
+row that survives `vectorgrid.py`'s own `MIN_CELL_SIDE = 2.0pt` filter
+(2.46 > 2.0) and is deliberately preserved by `vectorgrid_rpc.py`'s
+policy that a genuinely empty drawn cell is still part of the grid.
+Independently, a real internal hairline rule under only this row's
+ELECTRICAL DATA sub-columns (VOLTS/PHASE/MCA/MOCP) — not spanning the
+table's full width — splits those columns into two stacked sub-faces,
+each carrying duplicate text. That split's new y-coordinate becomes a
+spurious extra row-grid line via `vectorgrid_rpc.py`'s `_axis()`, so
+`_span()` computes `rowSpan=2` for every OTHER column's cell in that row
+(e.g. the TAG NO. cell, `"HP-1"`). ODL's own grid placement then places
+that `rowSpan=2` cell into BOTH the real row and the phantom sliver row,
+while the sub-divided columns independently duplicate their own value
+across both faces — producing a second row whose every cell exactly
+matches the row above it. This passes `buildRows`'s blank-spacer check
+(not blank — several cells carry inherited/duplicated text) and its key
+derivation (the inherited `"HP-1"` text resolves normally), and no
+duplicate-key guard existed on the `printedKeys=false` path, so it was
+pushed as a second, fully duplicate row.
+
+The real fix belongs in `vectorgrid_rpc.py`'s own row-axis construction
+(a candidate row-grid line should be trusted only when corroborated
+across the table's full width, not just some columns) and is left there
+for a follow-up — not attempted here under time pressure. Instead, added
+a narrowly-scoped guard immediately before `buildRows`'s own
+`rows.push(...)` in `web/src/lib/sheetgraph.ts`: a row whose key AND
+every cell value exactly match an already-emitted row is refused as a
+manufactured duplicate rather than a second real row — the same
+principle the `printedKeys=true` path already applies for its own
+duplicate-key case, safe here because two genuinely distinct rows never
+coincidentally share both the same key and every cell value.
+
+**Verified:** live re-run of `production-graph-cli.mjs --mode graph`
+against the real `083_MA` PDF now reports exactly 3 rows for the COMMON
+AREA - AIR COOLED HEAT PUMP SCHEDULE (`HP-1`, `HP-2`, `HP-3`), `HP-1`'s
+own cell content fully intact and correct. No regression: `cellscore.py`
+still reports 917/917 cells, 102/102 rows whole, identical to before the
+change; `boxscore.py`'s pre-existing 27-box scale-mismatch (137/164) was
+confirmed unrelated via `git stash` isolation — identical result with
+and without this change.
 
 ---
 
@@ -1857,6 +1956,16 @@ context and this document's several other, distinct findings (a
 missing `BOILERS` table, a split-in-two real table, column-header-
 sourced title fabrications) are in B-32 below.
 
+**CONFIRMED RECURRING 2026-09-13 — a 4th document.**
+`12_MT_MSU_ReidHall_Renovation.pdf#28`'s otherwise perfectly-extracted
+5-table "MECHANICAL SCHEDULES" sheet (all 5 real tables — `SPLIT SYSTEM
+HEAT PUMP SCHEDULE`, `DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE`,
+`GRILLE - REGISTER - DIFFUSER SCHEDULE`, `FINNED PIPE RADIATION
+SCHEDULE`, `CABINET UNIT HEATER SCHEDULE` — match exactly, 17/17 rows)
+also carries a fabricated `title: "DRAWN BY: NT"`, `rows: 1` table,
+lifted from the sheet's own title-block drafter-name field. Same
+mechanism, yet another specific stamp/field source.
+
 ### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (NOT FIXED — found, traced, disclosed)
 
 **Where:** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf`, both of its
@@ -1916,6 +2025,134 @@ inside a 5th, correctly-titled table — the row-truncation shape is a new
 and potentially serious failure mode worth prioritizing: it silently
 under-reports a real table's own content without any signal (no missing
 title, no absent table) that anything is wrong.
+
+**CONFIRMED RECURRING 2026-09-13 — a 3rd document, and by far the most
+severe instance of this truncation shape found yet, affecting nearly
+every transposed table on one sheet.**
+`21_VA_OrangeCounty_PublicSafetyBldg.pdf`, sheets M-601 (#50) and M-602
+(#51) — found continuing the HELDOUT set's own missed-checking pass.
+
+**M-601 (#50):** `AIR HANDLING UNIT SCHEDULE` (a transposed table, AHU-1/
+AHU-2 as columns) hand-confirmed at **51 real rows** via `textSpans()`
+(6 identification rows + 41 spec rows across COOLING COIL/SUPPLY FAN/
+RETURN FAN/FILTER SECTION groups + 4 summary rows) — the extractor
+reports `rows: 35`, a confirmed **16-row truncation** on a table it
+otherwise titles correctly. The sheet's other table, `VAV TERMINAL BOX
+SCHEDULE` (57 rows, one row per VAV unit), extracts exactly right,
+confirmed via `textSpans()` designation-count.
+
+**M-602 (#51), 10 transposed equipment-comparison tables, hand-confirmed
+against the extractor's own reported counts (`textSpans()`-verified
+where noted):** `AIR COOLED CHILLER SCHEDULE` **26 real → 11 reported
+(-15, textSpans-verified)**; `UNIT HEATER SCHEDULE` **14 real → 4
+reported (-10, textSpans-verified)**; `COMPUTER ROOM UNIT SCHEDULE` **24
+real → 16 reported (-8, textSpans-verified)**; `BOILER SCHEDULE` 13 real
+→ 11 reported (-2); `FAN SCHEDULE` **12 real → 11 reported (-1,
+textSpans-verified)**; `AIR COOLED CONDENSING UNIT SCHEDULE` 10 real →
+9 reported (-1); `DUCTLESS SPLIT SYSTEM UNIT SCHEDULE` 9 real → 8
+reported (-1); `PUMP SCHEDULE` 16 real → 15 reported (-1); `AIR
+DISTRIBUTION DEVICE SCHEDULE` 8 real → 7 reported (-1); `RELIEF /
+EXHAUST HOOD SCHEDULE` 7 real → 6 reported (-1). **Every single one of
+the 10 tables on this sheet under-counts — never over-counts, never
+exact** — with the truncation magnitude tracking table density (the
+3 densest tables lose 8-15 rows each; the 7 simpler ones each lose
+exactly their own trailing `REMARKS` row).
+
+**Relationship to already-catalogued bugs:** confirms this bug's own
+"large fraction of a correctly-titled table's real rows silently
+dropped" shape a 3rd time, and sharply narrows it: every affected table
+across both confirmed documents (14_OR, this one) is **transposed-
+format** (attributes as rows, equipment units as columns) — this bug's
+original `FAN COIL UNITS` instance was a per-unit-row table, so the
+shape isn't exclusively transposed, but this sheet's unanimous,
+density-scaled under-count on 10/10 transposed tables is the first
+evidence that transposed layout specifically, and independently of
+absolute row count, correlates with SOME truncation (every table here
+lost at least its `REMARKS` row, even the smallest ones) — with the
+severity scaling with the number of attribute-rows once a table is
+dense enough. Root-causing should check whether the transposed reader
+path has an off-by-N or an early-termination condition keyed to
+row-group count or table height, independent of this bug's original
+per-unit-row `FAN COIL UNITS` case.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this is the
+single worst MISSED-count failure found in the HELDOUT pass to date on
+a per-sheet basis — 11 of 12 real tables across 2 sheets have a wrong
+row count, totaling roughly 40 real rows silently dropped from an
+otherwise well-titled, well-classified set of tables.
+
+**ROOT-CAUSE TRACE (2026-09-13, code-level, no fix applied yet — see
+below for why):** traced live against
+`21_VA_OrangeCounty_PublicSafetyBldg.pdf#50`'s own `AIR HANDLING UNIT
+SCHEDULE` via temporary instrumentation in
+`web/src/lib/sheetgraph.ts`'s `scheduleTableFromODL` (added, exercised,
+then fully reverted — no debug code left in the tree). Two independent
+findings, confirmed by direct print of the real ODL grid this table
+produces:
+
+1. **The table's own header row carries a genuine duplicate column.**
+   `headers` comes back as `["DESIGNATION", "DESIGNATION 2", "AHU-1",
+   "AHU-2"]` — TWO columns both header-labeled "DESIGNATION" (the
+   second is this file's own duplicate-header disambiguation suffix,
+   confirmed at `sheetgraph.ts:10500-10505`, doing exactly what it's
+   built to do: rename a repeat, not explain why the ODL grid handed it
+   a repeat in the first place). `keyColIdx` (`sheetgraph.ts:10508`)
+   matches the FIRST "DESIGNATION" it finds via `headers.findIndex`,
+   landing on column 0 — but the real, single-column row-label text a
+   person reads off the page (`TOTAL LOAD - MBH`, `SENSIBLE LOAD -
+   MBH`, …) is a genuine two-column split artifact this table's own
+   narrow rotated row-GROUP divider (`COOLING COIL`/`SUPPLY FAN`/
+   `RETURN FAN`/`FILTER SECTION`, drawn in its own thin sub-column to
+   the left of the attribute names) creates in ODL's own grid — column
+   0 is real content on SOME rows (the identity block at top, the 4
+   category dividers, the 3 summary rows at bottom — confirmed exactly
+   15 non-blank cells via `textSpans()` x-band isolation) and blank
+   on the ~36 rows in between, whose real attribute name in fact sits
+   one column over. `rowKeyOf` under `kind==="finish"` (this table's
+   kind, per the "reference" classification) requires a `CODE_RE`-
+   shaped tag; measured directly, exactly 1 of those 15 real column-0
+   values (`REMARKS:` → `REMARKS`, 7 letters, an accidental match —
+   `CODE_RE`'s own `[A-Z]{1,4}[A-Z0-9]{0,4}` alternative has no hyphen
+   requirement and happens to also accept any short, no-hyphen,
+   ≤8-letter English word) clears it on the strict pass.
+2. **But the strict pass recovers 24 rows, not 1** — confirmed by direct
+   instrumentation (`rows.length(strict)=24` before any fallback runs)
+   — meaning column 0 in the REAL ODL grid carries more, and different,
+   text than the clean 15-value transcription above accounts for; this
+   was not fully resolved before the debug instrumentation was reverted
+   (see below). The subsequent `printedKeys=true` retry against the
+   SAME strict column (the "table has already proven its own key
+   column" rescue, `sheetgraph.ts:10946-10948`) brings the total to the
+   observed 35 — meaning the eventual 16-row loss is real rows that
+   never got a printed-key match under EITHER pass on column 0, most
+   plausibly rows whose true identity sits in the "DESIGNATION 2"
+   column this scan never tries. The final
+   `if (!rows.length) { findEvidencedKeyColumn(); … }` rescue
+   (`sheetgraph.ts:10952-10955`, which — checked directly against this
+   table's real row-label text — would very likely pick the RIGHT
+   column, since it requires ≥50% row coverage and column 0's real
+   ~29% coverage should fail that bar in column 0's favor) never runs
+   at all here, because `rows.length` is already nonzero (35) after the
+   two column-0 passes, and that rescue is gated on `!rows.length`
+   strictly.
+
+**Why this is disclosed without a fix:** a real fix needs to reconcile
+column 0's own actual (not assumed) content with the "DESIGNATION 2"
+column's real content, decide which single column (or composed pair)
+is this table's true row identity, and do so without breaking any of
+the many other real, corpus-tuned uses of `rowKeyOf`/`keyColIdx`/
+`findEvidencedKeyColumn` this same 11,000-line file already depends on
+— each guarded by its own extensively-documented, corpus-measured
+regression history (see this file's own header/row-key comments
+throughout `sheetgraph.ts:3828-4007`, `10500-10956`). Given this
+session's own standing rule against guessing at fixes under time
+pressure, and the real risk of a narrow, insufficiently-verified change
+silently regressing a different real table somewhere else in a 541+
+document corpus, this trace is recorded here as the concrete starting
+point for a future session with the budget to (a) dump the REAL column
+0/1 content for this exact table cell-by-cell, (b) decide the right
+column-selection rule, and (c) run it against the full corpus gate
+before merging — not attempted here.
 
 ### B-32 — the primary equipment table itself (BOILERS) goes missing on a boiler-replacement project, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, disclosed)
 
@@ -2027,6 +2264,464 @@ perfectly-extracted 3-table sheet fails the false-positive-free half of
 the bar with 2 additional phantom entries — a real table double-counted
 and an untitled fabrication, on a document whose actual HVAC content is
 completely clean.
+
+**CONFIRMED RECURRING 2026-09-13 — a 2nd document, exact duplicate this
+time.** `071_ME_BGS_Project_3809_Health_Science_Center.pdf#44`'s
+`DUCTLESS SPLIT SCHEDULE` (a real, transposed-format table — 1 real unit,
+`AC-1`, as a column with its own attribute rows down the side) appears
+TWICE in the extractor's own output, both times with the identical
+title AND identical `rows: 21` AND identical `kind: reference` — an
+exact duplicate this time, not a `kind`-mismatched one like the first
+instance. The sheet's OTHER transposed-format table, `PACKAGED ROOF TOP
+UNIT SCHEDULE` (3 real units as columns), extracts once with a
+plausible attribute-row count (`rows: 46`) — real evidence that
+transposed-format tables do NOT always zero-extract (contrast B-25's
+own transposed-table finding), so this document's transposed layout is
+not itself the trigger for either the duplication above or B-25's
+blackout elsewhere.
+
+**CONFIRMED RECURRING 2026-09-13 — a 3rd document, untitled-phantom half
+only.** `21_VA_OrangeCounty_PublicSafetyBldg.pdf#50` (sheet M-601,
+"SCHEDULES I") reports an untitled (`title: ""`) 2-row phantom table
+alongside its 2 real tables (`AIR HANDLING UNIT SCHEDULE`, `VAV TERMINAL
+BOX SCHEDULE`). Traced via `textSpans()` region dump to the sheet's own
+title-block field grid in the bottom-right corner (`COMM NO:`, `DATE:`,
+`DRAWN:`/`DESIGN:`, `CHECK:` label/value pairs) — the same "sheet's own
+furniture fabricated into a phantom" mechanism this bug's original entry
+describes, with an empty rather than fabricated title, matching this
+document's own precedent exactly rather than 098_ID/080_CA/013_MO/12_MT's
+fabricated-title variant (filed under B-30). No duplicated-table half
+this time — both of this sheet's real tables appear exactly once each
+(row-count correctness aside, see B-31's own amendment below for the
+`AIR HANDLING UNIT SCHEDULE`'s separate row-truncation defect on this
+same sheet).
+
+### B-34 — control-diagram instrument-callout labels are clustered into fabricated phantom tables (NOT FIXED — found, traced, disclosed)
+
+**Where:** `21_VA_OrangeCounty_PublicSafetyBldg.pdf`, sheets M-701 (#52,
+"CHILLED WATER SYSTEM CONTROLS") and M-703 (#54, "AIR HANDLING UNIT
+CONTROLS") — found continuing the HELDOUT set's own missed-checking
+pass. Both are pure P&ID-style control-diagram + prose-sequence-of-
+operations sheets with zero real ruled schedule tables (hand-confirmed
+by full-page render).
+
+**Measured:** the extractor reports phantom tables on both: page #52,
+an untitled (`title: ""`) 2-row table sourced from a cluster of
+instrument-bubble callout labels near the chilled-water buffer tank
+detail ("HIGH CAPACITY AUTO AIR VENT", "GLOBAL OUTSIDE AIR HUMIDITY",
+"PUMP SPEED CONTROL", etc. — confirmed via `textSpans()` region dump,
+no ruled grid present in the source at all). Page #54 reports TWO
+phantoms: `"FURNISHED BY FIRE"` (3 rows) and `"RETURN AIR"` (9 rows),
+both sourced from instrument-bubble callout labels near the top-right
+of the AHU control diagram ("FURNISHED BY FIRE ALARM SYSTEM
+MANUFACTURER (TYPICAL)", "RETURN AIR HUMIDITY", "RETURN AIR TEMP", and
+similar sensor labels) — again zero ruled structure in the source. Both
+sheets' own REAL tables (`OUTSIDE AIR RESET SCHEDULE`, 2 rows each, on
+M-701 and the neighboring M-702/#53) extract correctly, confirmed by
+hand-render.
+
+**Relationship to already-catalogued bugs:** same broad "prose/label
+text mistaken for a table" family as B-16/B-29/B-30/B-33, but a new
+triggering shape: not a disclaimer stamp, not a title-block sub-grid,
+not side-by-side numbered notes — here it's **instrument-bubble callout
+labels scattered around a P&ID-style control diagram**, which apparently
+cluster densely enough near certain diagram regions to be misread as a
+tabular grid. Filed as a new number rather than merged into B-33
+because the untitled-vs-titled split doesn't track cleanly (this bug
+produces both an untitled AND two titled phantoms from the same
+mechanism), and because the source content (diagram callouts, not
+sheet furniture) is genuinely different from every prior instance.
+
+**Consequence for the HELDOUT set's own zero-error bar:** 3 phantom
+tables (14 phantom rows total) on 2 sheets that have zero real tables
+between them — a false-positive-free failure on control-diagram sheets
+specifically, a sheet type not previously implicated in this bug
+family. Given this document's controls-diagram sheets span roughly
+M-701 through M-707 (not fully surveyed), this may be a wider source of
+phantom tables than the 2 instances confirmed here.
+
+### B-35 — a firm's own logo tagline text is fabricated into a phantom table, repeated across 13 different sheets of one document (FIXED 2026-09-13)
+
+**Where:** `089_FL_Airport_Terminal_and_Hangar_Development.pdf` — found
+closing out the HELDOUT set's own missed-checking pass (the 32nd and
+final document). Every sheet in this document carries an AVCON, Inc.
+title-block logo with a vertically-set tagline, "TRANSFORMING TODAY'S
+IDEAS INTO TOMORROW'S REALITY", printed in the right-margin sidebar.
+
+**Measured:** a document-wide search of the extractor's own graph output
+finds a `title: "TRANSFORMING TODAY'S IDEAS INTO TOMORROW'S REALITY"`,
+`rows: 4`, `kind: reference` phantom table on **13 separate sheets**
+(pages 3, 49, 63, 89, 92, 105, 114, 117, 125, 127, 136, 163, 172) — every
+one of them identical in title and row count. Hand-rendered checks of
+several of these pages (M-001/#127, M-601/#136) confirm zero ruled table
+structure at that location — it is purely the rotated tagline text plus
+the small-print copyright/confidentiality notice beneath the AVCON logo
+box, present unchanged on every sheet of the set.
+
+**Relationship to already-catalogued bugs:** same broad "sheet furniture
+fabricated into a phantom table" family as B-29/B-30/B-33/B-34, but a new
+and by far the most WIDESPREAD trigger yet found — not a title-block
+field-grid, not a disclaimer stamp, not P&ID instrument callouts, but a
+firm's own static logo/tagline block, repeated verbatim on every sheet of
+a set drawn by that firm. Because the trigger is firm-specific boilerplate
+rather than content that varies sheet-to-sheet, this is the first phantom-
+table bug in this catalogue confirmed to recur predictably and
+identically dozens of times within a single document, and plausibly
+across every other AVCON-drawn document in the corpus (not checked here).
+
+**Consequence for the HELDOUT set's own zero-error bar:** 13 phantom
+tables (52 phantom rows) in ONE document — the single largest phantom-
+table count found in the HELDOUT pass, on a document whose real HVAC
+schedule content (see below) is otherwise almost entirely clean.
+
+**FIX (2026-09-13):** root-caused live (via reverted debug
+instrumentation and a rendered-page check, both confirming the source is
+`scheduleTableFromODL`'s `kind === "unknown"` fallback in
+`web/src/lib/sheetgraph.ts`, NOT the geometric "structural reference"
+pass the bug's own shape first suggested — that pass already correctly
+excludes rotated/quarter-turned text via `isVertical()`). The existing
+guard for this exact bug family
+(`R - headerEnd <= 2 && headers.every(h => /^COL\d+$/.test(h))`,
+`sheetgraph.ts:10367-10369`, shipped for 067_CA_SLAC's own 8-sheet stamp-
+box case) doesn't fire here because AVCON's sidebar also carries a real
+ruled revision-history sub-grid, pushing its own row count past 2.
+Widening that single shared threshold was rejected as the fix (every
+other genuinely tiny real reference table in the corpus shares the same
+guard, and it has no notion of "this repeats identically elsewhere").
+
+Instead, added a new, purely additive post-processing pass in
+`mcp/src/session.ts`'s `enhanceTablesWithODL()` (right after all of a
+document's ODL tables are collected, before `collapseEquivalentPrimary
+Tables`): drop any `"reference"`-kind table whose headers are still the
+bare `COL1/COL2/…` fallback AND whose exact `(document, title, row
+count)` signature recurs on 3 or more DIFFERENT sheets of the same
+document — the shape both this bug and the SLAC precedent share, and one
+no genuine per-sheet-varying schedule exhibits.
+
+**Verified:** live re-run against the real document —
+`089_FL_Airport_Terminal_and_Hangar_Development.pdf` drops from 72 to 59
+schedule tables (exactly the 13 phantom rows removed, 0 remaining
+`"TRANSFORMING…"` entries anywhere in the output), while every real
+mechanical-equipment table on sheet M-601/#136 (`FAN SCHEDULE`,
+`ELECTRIC UNIT HEATER SCHEDULE`, `LOUVER SCHEDULE`, etc. — see this
+document's own HELDOUT_GRADING.md entry) extracts byte-identically
+before and after. A 25-document corpus-regression-sweep.mjs before/after
+diff (spanning both the Demo Corpus and HELDOUT sets) shows **zero**
+table differences anywhere else in the sample — no other document's
+table titles, kinds, or row counts changed.
+
+### B-36 — a multi-level table's own internal column-group sub-header is picked as the table's title instead of the real title text above it (NOT FIXED — found, traced, disclosed)
+
+**Where:** `089_FL_Airport_Terminal_and_Hangar_Development.pdf#136`
+(sheet M-601, "MECHANICAL SCHEDULES") — found alongside B-35, closing
+out the HELDOUT set.
+
+**Measured:** the sheet's real `VRF SYSTEM SCHEDULE` (a 2-level-header
+table: top-level groups `COOLING COIL SECTION`/`HEATING COIL SECTION`/
+`HEAT PUMP UNIT` over individual spec columns, 12 real rows `AC-1`
+through `AC-12`) extracts with the CORRECT row count (`rows: 12`,
+`textSpans()`-confirmed) but the WRONG title: `"HEAT PUMP UNIT"` — one of
+the table's own three column-group sub-headers, not the real title
+(`VRF SYSTEM SCHEDULE`) printed in its own title bar directly above the
+table.
+
+**Relationship to already-catalogued bugs:** distinct from B-17 (title
+dropped to `null` entirely) and B-18 (header absorbed INTO the title
+string, promoting a data row) — here the title field is populated with
+real text, correctly row-counted, but sourced from the WRONG place: an
+internal column-group label rather than the table's own caption. A new
+title-attachment failure shape, most likely triggered by this table's
+unusually wide 2-level header (`HEAT PUMP UNIT` sits at the far right of
+the header, the widest/most distant sub-header from the real title's
+own position).
+
+**Consequence for the HELDOUT set's own zero-error bar:** cell/row data
+recovered correctly, but this table would file, search, or group under
+the wrong name in any downstream product surface — a real, disclosed
+data-integrity gap despite the row count itself being clean.
+
+**ROOT-CAUSE TRACE (2026-09-13, code-level, no fix applied — see below
+for why):** traced by direct code reading of
+`web/src/lib/sheetgraph.ts`'s `scheduleTableFromODL` (title recovery,
+`titleCell`/`titleText`, lines 9758-9839 and 10279-10312) and
+`web/src/lib/scheduleLanguageScan.ts`'s `nearbyScheduleCaption` (lines
+306-446), the function that later call site invokes. Two-stage failure:
+
+1. **`titleCell` never captures `VRF SYSTEM SCHEDULE`.** The in-grid
+   title check (`sheetgraph.ts:9758-9839`) only recognizes a title as
+   ROW 0 of the ODL-detected ruled grid — either one cell spanning
+   `>= C-1` columns, or several word-group cells covering more than half
+   the columns with real gaps between them. On this sheet, `VRF SYSTEM
+   SCHEDULE` is drawn as its OWN separate title bar sitting ABOVE the
+   ruled grid (confirmed by the rendered page: the title bar is followed
+   by 4 numbered general notes and an "AIR HANDLER" sub-label before the
+   ruled column-header rows even begin) — the same "caption drawn
+   OUTSIDE the ruled grid" shape this exact function's own comment block
+   (lines 10283-10294) already names for 08_ME's `DRAWING LIST`, but that
+   rescue (`nearbyDrawingIndexCaptionText`) is scoped narrowly to
+   drawing-index vocabulary, not schedule captions, so it does not fire
+   here. `titleText` reaches line 10305 still empty or reduced to a
+   short/generic fragment.
+2. **`nearbyScheduleCaption`'s own eligibility gate only protects an
+   ALREADY-GOOD title.** Its filter (lines 397-402) rejects every
+   candidate outright when `currentTitle` is already non-empty, non-
+   generic, and not a short truncated `…SCHEDULE` fragment — exactly
+   right when `titleCell` succeeded. But because stage 1 left
+   `titleText` empty here, `currentCompact` is falsy and the gate never
+   engages, so EVERY nearby schedule-shaped caption on the sheet becomes
+   eligible. `HEAT PUMP UNIT` — one of the table's own column-group
+   sub-headers — genuinely matches `EQUIPMENT_TABLE_CAPTION_RE` (line 81:
+   requires an equipment-family keyword, `PUMP` here, immediately
+   followed by `UNITS?`) and sits geometrically much closer to the
+   table's own bounding box (it is literally one of the grid's own
+   header cells) than `VRF SYSTEM SCHEDULE`'s title bar (separated from
+   the grid by the general-notes block). The ranking sort (lines
+   427-443) is proximity-first (`gap(a) - gap(b)`), so the close, wrong
+   candidate wins over the correct but farther-away real title even
+   though `VRF SYSTEM SCHEDULE` itself independently matches
+   `SCHEDULE_CAPTION_RE` and is very likely also a candidate in the same
+   pool.
+
+**Why this is disclosed without a fix:** both functions are shared,
+corpus-tuned, heavily-commented title-recovery infrastructure used by
+every ODL-sourced table in the pipeline (`nearbyScheduleCaption`'s own
+header names 08_ME/NAVFAC-M-602/044_NY as real regression precedents it
+already guards against). A narrow fix needs to (a) teach stage 1 to
+recognize a real title bar separated from the grid by intervening notes
+text — not just an immediately-adjacent caption — without re-triggering
+the "narrow band above/beside it" false-positive class `nearbyScheduleCaption`'s
+own comments already document, or (b) bias stage 2's ranking against a
+candidate that is itself one of the SAME table's own header/column-group
+cells (a self-referential candidate a real external caption never is).
+Either changes shared ranking/recognition logic with corpus-wide blast
+radius; per this session's own standing rule against guessing at fixes
+under time pressure, this trace is recorded as the starting point for a
+future session with the budget to validate either change against the
+full corpus regression sweep before shipping.
+
+### B-37 — a small, non-`SCHEDULE`-titled ruled table on a mechanical details sheet is completely missed (NOT FIXED — found, traced, disclosed)
+
+**Where:** `089_FL_Airport_Terminal_and_Hangar_Development.pdf#133`
+(sheet M-502, "MECHANICAL DETAILS") — found alongside B-35/B-36.
+
+**Measured:** the sheet's "LOUVER ANCHORING DETAIL" callout carries a
+real, ruled, bordered spec table (`BUILDING CONSTRUCTION TYPE`, `BLDG
+MATERIAL MINIMUM`, `ANCHOR THICKNESS MIN`, `ANCHOR TYPE`, `MAT'L`, `DIA`,
+`HEIGHT MAX`, `SPACING MAX`, `EDGE MAX`, `EMBED MAX` columns, 1 data row:
+`MASONRY`/`3 KSI`/.../`BUILDEX TAPCON`). A document-wide title search of
+the extractor's own output (for `MASONRY`, `ANCHOR`, `BUILDEX`) confirms
+this table is not extracted anywhere, under any title — a genuine, whole-
+table miss, not a misattachment.
+
+**Relationship to already-catalogued bugs:** distinct from B-19/B-24/
+B-27/B-28's missing-table cases, which all involve tables clearly titled
+`*SCHEDULE`; this table's own caption ("LOUVER ANCHORING DETAIL") doesn't
+contain that word, and it sits embedded among unrelated detail drawings
+on a details sheet rather than on a dedicated schedule sheet — plausibly
+a caption-keyword-matching gap (the detector may key on `SCHEDULE` in the
+caption text) rather than a structural-recognition failure, though not
+traced further under this pass's own no-guessing-at-fixes rule.
+
+**Consequence for the HELDOUT set's own zero-error bar:** one whole real
+table (1 row) silently absent with no other signal that anything is
+wrong — small in row count, but a clean MISS nonetheless.
+
+### B-38 — a two-row-header table's own unit-label sub-header row is read as the table's single data row, and the real data row underneath it vanishes (NOT FIXED — found, traced, disclosed)
+
+**Where:** `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8`
+(sheet, "AIR COOLED CHILLER SCHEDULE" / "BUFFER TANK SCHEDULE" / "PUMP
+SCHEDULE" — 3 of the page's 3 real equipment tables, found while
+extending this session's box+cell-tier grading work to a HELDOUT
+document).
+
+**Measured:** all 3 tables on this page share a two-row header: a group
+header (e.g. `CAPACITY`) over a unit-label sub-header (`TONS` / `[kW]`),
+column-by-column, before the real data row. Rendering the page at
+scale=3.0 and reading it directly confirms one genuine data row per table
+(`AIR COOLED CHILLER SCHEDULE`: `CH-1&2` / `MECHANICA;L YARD` / `WHOLE
+BUILDING` / `SCROLL` / `132` / ... / `CARRIER` / `30RC-1326S015-7-2`, 33
+columns, several metric-unit columns intentionally solid-filled black on
+the page itself — a real drafting convention for "N/A", not a rendering
+artifact). The extractor's own `--mode graph` output reports exactly 1
+row for each table, but that row's own cell values are `MARK`,
+`LOCATION`, `TONS`, `[kW]`, `GPM`, `[L/s]`, ... — the unit-label
+sub-header text itself, verbatim, under a row `key` of literally `MARK`.
+The real data row (`CH-1&2`, `132`, `CARRIER`, ...) does not appear
+anywhere in the extractor's output for any of the 3 tables — confirmed
+absent via direct string search of the full JSON, not misattached
+elsewhere. A 4th, duplicate `PUMP SCHEDULE` entry (kind `reference`, not
+`equipment`) appears with bracket-fragment headers (`[ 33 ]`, `[ 1600 ]`,
+`[ 160 ]`, `[ 15 ]`) and a `N/A`-heavy row — a second, differently-garbled
+artifact of the same underlying confusion, not independently traced.
+
+**Plausible root cause, not yet traced to a line:** `sheetgraph.ts`
+already carries a "numeric-only sub-header discrimination gate" (search
+`numeric-only sub-header` in that file) built for sub-header rows that
+are ALL bare numbers (e.g. octave-band frequencies). This table's own
+sub-header row is unit LABELS (`TONS`, `GPM`, `°F`, bracketed metric
+units like `[kW]`) mixed with the occasional bare unit symbol — plausibly
+outside that gate's own numeric-only test, so it slips through as if it
+were an ordinary header/data boundary rather than being recognized as a
+second header row to skip past. Not fixed under this pass's own
+no-guessing-at-fixes rule — the gate's exact matching condition needs to
+be read before touching it, not inferred from this symptom alone.
+
+**Relationship to already-catalogued bugs:** distinct from every prior
+row-count entry (B-20's duplicate rows, B-26's phantom-row overcounts,
+B-31's truncation) — this is not a wrong row COUNT, it's the wrong row
+CONTENT: 1 row is reported, but it is the wrong row (a header, not data),
+and the real data is not merely truncated, it is entirely absent.
+
+**Consequence for the corpus's own zero-error bar:** on a chiller-
+replacement project, the AIR COOLED CHILLER SCHEDULE — the single most
+central table on the document — reports a row that is pure header noise
+while the real equipment record (capacity, electrical, manufacturer,
+model) is completely unreachable by any downstream compile. Confirmed on
+all 3 real tables on this one page; not yet checked against the rest of
+the corpus for prevalence.
+
+### B-39 — a real table below is completely missed, and the table above silently absorbs its whole region into its own box (found via the goal document's own required auto-accept audit) (NOT FIXED — found, traced, disclosed)
+
+**Where:** `038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#52`, found
+while running `opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md`'s own
+Method §3 required audit: "audit a random sample of the auto-accepted
+[boxes] ... publish the label error rate." A random, seeded (20260913)
+20-item sample of this session's 873 `rulelinebox.py` auto-accepted boxes
+was drawn and each genuinely re-graded by rendering the page and looking
+at the box drawn around it (no auto-accept, no seeded search window in
+the check itself) — the goal document's own definition of ground truth.
+
+**Measured:** vectorgrid's own reported box for `"Branch Panel: (E)
+4CL1-1"` is `[374.64, 222.72, 2102.64, 2609.04]`. Rendering the page and
+cropping exactly to that box shows TWO complete, distinct branch panel
+schedules stacked inside it: `Branch Panel: (E) 4CL1-1` (the real title,
+ending around 21 circuit rows + totals + notes) and, immediately below
+it with no visible gap in the box, a SECOND, fully independent table:
+`Branch Panel: A401A` (`Location: TR (EXPANDED) A401`, `Supply From: (E)
+4CL1-1` — confirmed at high zoom, not a misread of a similarly-named
+`A501A` table that genuinely exists elsewhere on this same page at a
+non-overlapping region `[374.64, 2660.16, 2102.64, 3743.04]`). A full
+string search of the extractor's own output for this document confirms
+`Branch Panel: A401A` does not appear ANYWHERE, under any title — a
+genuine, whole-table MISS, not a misattachment.
+
+**Why this passed auto-accept:** `rulelinebox.py`'s own independent
+pixel measurement found a real, solidly-drawn ruled line almost exactly
+at vectorgrid's own reported bottom edge (worst-edge agreement <0.1pt,
+per this document's own `.tableboxes.csv` row) — because that line IS
+real ink on the page: it is the real BOTTOM BORDER of the missed
+`A401A` table, not a fabricated line. Two mechanically independent
+extractors agreeing within 4pt here means exactly what the goal
+document's own "Non-negotiable" section warns it can mean: "two tools
+sharing a blind spot... agree confidently and both being wrong." Neither
+extractor is wrong about where a ruled line sits; vectorgrid is wrong
+about where ITS OWN table ends.
+
+**Consequence for the goal document's own audit requirement:** 1 error
+in a 20-item random sample = 5% disagreement rate, which is explicitly
+NOT "indistinguishable from zero" per Method §3's own rule ("If the
+audited disagreement rate is not indistinguishable from zero, auto-accept
+is broken and gets turned off — not re-tuned, not shrunk quietly, off —
+until the reason it's wrong is found"). The reason is now found and
+disclosed here (a missed table's region silently absorbed into a
+same-shaped neighboring table's own box, specifically in stacked
+branch-panel-schedule layouts) — this is not grounds to declare the
+other 872 auto-accepted boxes this session clean; it is grounds to treat
+this session's own `.tableboxes.csv` rows as real, disclosed, but
+UN-AUDITED-CLEAN evidence toward the corpus-wide/held-out gate (where
+Method §3 permits exactly this), never as a substitute for genuine human
+blind grading on the Demo Corpus (which already does not apply here
+regardless, per that section's own explicit rule — see the correction in
+`keys/DEMO_CORPUS_GRADING.md`).
+
+**Relationship to already-catalogued bugs:** distinct from B-33's
+same-title duplication and B-29/B-32's title-fabrication merges — here
+the surviving table's OWN title is correct and its OWN real data is
+correct; the defect is purely a box-extent error that happens to
+coincide with total silence about the second table's existence, which is
+what makes it invisible to every disclosure mechanism that isn't a
+genuine human eyes-on-the-box check.
+
+---
+
+### B-40 — rulelinebox.py wrote every measured box in RENDER_SCALE=2 units instead of the raw PDF points keys/*.tableboxes.csv actually stores, corrupting 873 rows across 46 files by exactly 2x (FIXED 2026-09-13)
+
+**Where:** `bakeoff/rulelinebox.py`'s own `--apply` output — every one of this
+session's auto-accepted box-tier ground-truth rows, in every `.tableboxes.csv`
+file it touched. Found while regression-checking B-20's fix against
+`boxscore.py`, which reported 137/164 CORRECT with 27 failures each showing
+an EXACT 2x coordinate relationship between the extractor's own box ("got")
+and the recorded ground truth ("truth") — e.g. `019_FL...pdf#4`'s own "Room
+Schedule" truth box, `(3933.0, 2864.12, 4490.38, 4045.38)`, exceeds that
+page's own real dimensions (`3024 × 2160pt`) outright — a box that cannot
+exist on the page it claims to describe.
+
+**Root cause:** `production-graph-cli.mjs`'s own `graph.json` `region` field
+(what `rulelinebox.py` reads via `--graph` and seeds its pixel search from)
+is expressed in RENDER_SCALE=2 units, not raw PDF points. `rulelinebox.py`'s
+`sf = args.scale / 2.0` correctly accounts for that when converting the
+seed region into pixel coordinates for the high-scale render search (so the
+*search* itself, and the printed `worst-edge agreement` values used for the
+auto-accept threshold decision, were always correct — confirmed: those
+values are computed as `(m - vg_x0) / 2`, which already cancels the
+RENDER_SCALE=2 units and yields a genuine real-point difference). But the
+final *measured box* returned from `measure_edges()`,
+`m = [left / sf, top / sf, right / sf, bot / sf]`, only undid the
+render-scale step — it never took the second `/2` needed to reach raw PDF
+points, so it stayed in RENDER_SCALE=2 units (2x too large) all the way into
+the CSV. Every hand-authored `.tableboxes.csv` entry in the corpus (the
+original 137-table frozen set) stores raw PDF points directly — confirmed
+by checking `014_MT#4` and `019_FL#15`'s own authored boxes against their
+real page dimensions — so this was a genuine convention mismatch introduced
+when `rulelinebox.py` was written this session, not a pre-existing issue.
+
+**What this does NOT affect:** the auto-accept *decision* itself (the
+`worst-edge agreement <= 4pt` threshold check) was always computed correctly,
+since `agree` already cancelled the units bug — so every one of the 873 rows'
+own claim to have been *validated* by two mechanically independent methods
+agreeing within 4pt remains true. `RULELINEBOX_AUDIT.md`'s 19/20-correct
+finding is also unaffected: that audit rendered pages at scale=2.0 and drew
+the (buggy, 2x-inflated) stored numbers directly as pixel coordinates at that
+same scale — the same units bug applied consistently on both the write side
+and the audit's own visualization side, so the boxes it judged "tight and
+correct" really were tight and correct; only the raw numbers stored in the
+CSV, when read as PDF points by `boxscore.py`, were wrong.
+
+**Consequence:** `boxscore.py` — the goal document's own named frozen gate —
+regressed from its historical 137/137 to 137/164 once these 873 corrupted
+rows entered the same corpus this session's own key-authoring grew. Any
+downstream consumer reading `.tableboxes.csv` coordinates as raw PDF points
+(which is the file's own documented schema) would have silently gotten boxes
+2x too large for every `rulelinebox.py`-authored row.
+
+**FIX (2026-09-13):** `rulelinebox.py`'s `measure_edges()` now divides by
+`sf` **and then by 2.0** before returning `m`, landing in genuine raw PDF
+points; the `agree` dict's own (already-correct) formula is preserved
+unchanged, just re-derived from the corrected `m`. The `--apply` header
+comment's "converted back to RENDER_SCALE=2 units" claim is corrected to
+"converted to raw PDF points." All 873 already-written rows across 46
+`.tableboxes.csv` files were corrected in place (each coordinate halved,
+each row's own provenance string appended with a `[B-40 CORRECTED
+2026-09-13...]` note disclosing the change) via a one-time script, not
+silently rewritten.
+
+**Verified:** `boxscore.py` after the correction: **163/164 CORRECT (99.4%),
+mean IoU 0.9932** — up from 137/164 (83.5%). The single remaining failure
+(`083_MA...#4`'s "ENERGY RECOVERY VENTILATOR SCHEDULE") is confirmed to be a
+DIFFERENT, pre-existing, narrow scorer limitation, not a data bug: this page
+genuinely carries two distinct real tables sharing the identical caption
+(disclosed in this file's own `.tables.csv` key as "printed twice on this
+sheet"), and `boxscore.py`'s `truth_for()` keys its truth dict purely by
+title, so a second same-titled row silently overwrites the first — both
+`.tableboxes.csv` rows for this title are independently correct
+(worst-edge agreement 0.09pt each against vectorgrid's own two distinct
+boxes), but only one survives the dict collapse to be scored, and by file
+order it is compared against the wrong "got" candidate of the two. Left
+open as a separate, narrow, disclosed scorer gap — not touched here given
+how carefully-adjudicated `boxscore.py`'s own ruler already is (STATE.md:
+"an argument I wrote and changed four times").
+
+---
 
 ## What is working
 

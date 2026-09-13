@@ -128,6 +128,7 @@ def slot(pdf: Path, table: dict, page_no: int = 1) -> tuple[dict, int, int, int]
             assigned += 1
             out[table["cells"][hits[0]]].append(w)
     out = split_unruled_columns(out)
+    out = split_unruled_header_row(out)
     out = place_loose_text(out, loose, table["bbox"])
     return out, assigned, orphan, straddle
 
@@ -258,6 +259,108 @@ def split_unruled_columns(cells: dict) -> dict:
                 part = [w for w in cells[b] if lo <= (w[0] + w[2]) / 2 <= hi]
                 if part:
                     out[(lo, b[1], hi, b[3])] = part
+    return out
+
+
+def split_unruled_header_row(cells: dict) -> dict:
+    """A drawn box can enclose BOTH a schedule's plain caption and its real
+    per-column header labels with no rule between them at all -- only the
+    header/data boundary is drawn, so vectorgrid's own face for that band is
+    geometrically correct (there is no internal division to find) and the
+    header's own labels collapse into it, becoming part of the reported
+    TITLE while the real first DATA row gets misread as the header instead.
+
+    Real, measured: TAKEOFF_BUG_CATALOGUE.md's B-18,
+    08_ME_BGS_Augusta_EastCampus_Renovation.pdf#16's WINDOW SCHEDULE. The
+    outer box's top face runs from "WINDOW SCHEDULE" down to the rule above
+    row A -- 121pt tall against every other row's ~25pt -- with "WINDOW"/
+    "SCHEDULE" at y~1101-1117 and the real header labels (KEY/TYPE/BRICKMOLD
+    TYPE/DIVIDED LIGHT TYPE/OPNG WIDTH +/-/OPNG HEIGHT +/-/COUNT/NOTES) at
+    y~1175-1199 -- a 58pt gap, next to nothing above and below it.
+
+    Same family as split_unruled_columns just above (the evidence for a
+    missing rule is in the text, not the ruling) but the orthogonal axis --
+    that function widens one cell into several sharing its own column band;
+    this narrows one cell's TALL band into a title piece and a header piece.
+    Three matching safety constraints, so this can only ever recover a real
+    header, never invent one:
+
+    1. Only the table's own TOPMOST row, and only when it is a single face
+       (already column-divided means this shape does not apply).
+    2. That face must be a clear outlier against every OTHER row's own
+       height in the SAME table -- a genuinely tiny table with one real
+       short header tier is never touched.
+    3. The candidate header band's own words must land ONE PER COLUMN on
+       the x-boundaries every OTHER row already establishes, covering at
+       least half of them, with no edge cutting a word -- place_loose_text's
+       own rule, for the same reason: a stray second title line cannot
+       coincidentally look like a real header naming most of the columns.
+    """
+    if len(cells) < 2:
+        return cells
+    boxes = list(cells)
+    top_y = min(round(b[1], 1) for b in boxes)
+    top_row = [b for b in boxes if round(b[1], 1) == top_y]
+    if len(top_row) != 1:
+        return cells
+    face = top_row[0]
+    other_h = sorted(b[3] - b[1] for b in boxes if b is not face)
+    if not other_h:
+        return cells
+    median_h = other_h[len(other_h) // 2]
+    face_h = face[3] - face[1]
+    if median_h <= 0 or face_h < median_h * 2.2:
+        return cells
+
+    words = [w for w in cells[face] if (w[4] or "").strip()]
+    if len(words) < 2:
+        return cells
+    words = sorted(words, key=lambda w: (w[1] + w[3]) / 2)
+    line_h = sum(w[3] - w[1] for w in words) / len(words)
+    bands = [[words[0]]]
+    for w in words[1:]:
+        prev_bot = max(x[3] for x in bands[-1])
+        if w[1] - prev_bot > line_h * 1.5:
+            bands.append([w])
+        else:
+            bands[-1].append(w)
+    if len(bands) < 2:
+        return cells
+    header_band = bands[-1]
+    title_words = [w for b in bands[:-1] for w in b]
+
+    edges = sorted({round(b[0], 1) for b in boxes if b is not face}
+                   | {round(b[2], 1) for b in boxes if b is not face})
+    if len(edges) < 3:
+        return cells
+
+    runs: list = []
+    for w in sorted(header_band, key=lambda w: w[0]):
+        if runs and w[0] <= runs[-1][1] + 2.0:
+            runs[-1][1] = max(runs[-1][1], w[2])
+        else:
+            runs.append([w[0], w[2]])
+    if any(a + 0.5 < e < z - 0.5 for a, z in runs for e in edges):
+        return cells
+
+    by_col: dict = defaultdict(list)
+    for lo, hi in zip(edges, edges[1:]):
+        part = [w for w in header_band if lo <= (w[0] + w[2]) / 2 <= hi]
+        if part:
+            by_col[(lo, hi)] = part
+    if len(by_col) < max(2, (len(edges) - 1) // 2):
+        return cells
+
+    out = dict(cells)
+    del out[face]
+    if title_words:
+        top = min(w[1] for w in title_words)
+        bot = max(w[3] for w in title_words)
+        out[(face[0], top, face[2], bot)] = title_words
+    hbot_top = min(w[1] for w in header_band)
+    hbot_bot = max(w[3] for w in header_band)
+    for (lo, hi), part in by_col.items():
+        out[(lo, hbot_top, hi, hbot_bot)] = part
     return out
 
 

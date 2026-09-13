@@ -1,0 +1,18 @@
+# 020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# DEMO/HELDOUT CORPUS. Method: deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code (bakeoff/rulelinebox.py).
+# The page was rendered at high scale; for each of vectorgrid's 4 reported
+# edges, a padded search window (seeded by vectorgrid's own region only to
+# know where on the sheet to look) was scanned for the real drawn rule
+# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the raw page pixels --
+# never a read of vectorgrid's own box -- satisfying the goal document's
+# Method Section 3 auto-accept criterion (two mechanically independent
+# extractors agree within 4pt). Per-row provenance gives the measured
+# agreement and the dark-pixel-fraction threshold that found the line.
+sheet,table_title,x0,top,x1,bot,provenance
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf,APPLICABLE CODES,1572.31,612.88,2277.62,998.0,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#3,FINISH SCHEDULE,107.81,1135.94,1902.19,1691.94,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#22,BRANCH PANEL:LP1 BRANCH: POWER Normal Power VOLTAGE: 480Y/277 LOCATION: MAIN BUS: 400 A PHASES: 3 ENCLOSURE: NEMA 1 # BREAKERS: 84 MAIN DEVICE: MLO WIRES: 4 MOUNTING: Surface MCB TRIP: N/A AIC NOTES: RATING: EXISTING 18000 SQUARE D NF PANEL SUPPLY FROM: DP1 MCB FRAME: N/A,151.0,133.12,907.75,821.56,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#22,BRANCH PANEL:LP2A BRANCH: POWER Normal Power VOLTAGE: 480Y/277 LOCATION: Electrical Room 120 MAIN BUS: 400 A PHASES: 3 ENCLOSURE: NEMA 1 # BREAKERS: 48 MAIN DEVICE: MLO WIRES: 4 MOUNTING: Surface MCB TRIP: N/A AIC NOTES: RATING: EXISTING 18000 SQUARE D NF PANEL SUPPLY FROM: DP1 MCB FRAME: N/A,989.12,133.12,1745.88,605.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"

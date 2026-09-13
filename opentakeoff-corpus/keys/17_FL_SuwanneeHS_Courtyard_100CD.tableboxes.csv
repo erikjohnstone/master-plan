@@ -1,0 +1,20 @@
+# 17_FL_SuwanneeHS_Courtyard_100CD.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# DEMO/HELDOUT CORPUS. Method: deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code (bakeoff/rulelinebox.py).
+# The page was rendered at high scale; for each of vectorgrid's 4 reported
+# edges, a padded search window (seeded by vectorgrid's own region only to
+# know where on the sheet to look) was scanned for the real drawn rule
+# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the raw page pixels --
+# never a read of vectorgrid's own box -- satisfying the goal document's
+# Method Section 3 auto-accept criterion (two mechanically independent
+# extractors agree within 4pt). Per-row provenance gives the measured
+# agreement and the dark-pixel-fraction threshold that found the line.
+sheet,table_title,x0,top,x1,bot,provenance
+17_FL_SuwanneeHS_Courtyard_100CD.pdf#14,STRUCTURAL SHEET INDEX,1871.5,144.75,2255.0,331.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+17_FL_SuwanneeHS_Courtyard_100CD.pdf#19,WALL FOUNDATION SCHEDULE,241.5,932.06,623.94,1067.06,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+17_FL_SuwanneeHS_Courtyard_100CD.pdf#24,ROOF TOP UNIT SCHEDULE,530.31,895.81,1777.56,1036.69,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+17_FL_SuwanneeHS_Courtyard_100CD.pdf#30,Lighting Fixture Schedule,985.81,98.31,2182.25,314.06,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.15pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+17_FL_SuwanneeHS_Courtyard_100CD.pdf#30,EQUIPMENT CONNECTION SCHEDULE,985.94,623.69,2059.5,711.81,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.18pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+17_FL_SuwanneeHS_Courtyard_100CD.pdf#30,BRANCH CIRCUIT WIRING SCHEDULE (Cu),2186.31,848.81,2513.69,1260.94,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"

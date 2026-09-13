@@ -6970,6 +6970,67 @@ export class Session {
         }
       }
     }
+    // A "reference"-kind table classified from an ODL grid whose own headers
+    // never matched any real vocabulary at all (bare COL1/COL2/… fallback —
+    // scheduleTableFromODL's own "unknown kind" comment block) is already a
+    // known shape for a firm's own STATIC title-block furniture, not a real
+    // schedule (TAKEOFF_BUG_CATALOGUE.md B-35: AVCON, Inc.'s own logo
+    // tagline, "TRANSFORMING TODAY'S IDEAS INTO TOMORROW'S REALITY", drawn
+    // inside a fully-ruled but purely decorative right-margin sidebar,
+    // generated an identical rows:4 phantom "table" on 13 separate sheets of
+    // one real document). scheduleTableFromODL's own existing guard for this
+    // family (its `R - headerEnd <= 2` check) already refuses the sibling
+    // 067_CA_SLAC "SLAC BUILDING INSPECTION OFFICE" stamp-box case — but only
+    // when that artifact's own row count survives blank-row filtering down
+    // to 2 or fewer. AVCON's sidebar also carries a real ruled revision-
+    // history sub-grid beside the tagline, so its own row count (4-11 across
+    // the 13 sheets) sails past that per-table ceiling untouched.
+    //
+    // Widening that ceiling globally is not the fix — every other genuinely
+    // tiny real reference table with no recognized header vocabulary
+    // anywhere in the corpus shares that exact same guard, and loosening one
+    // shared threshold to rescue a single firm's own boilerplate risks
+    // silently refusing some of them instead.
+    //
+    // What actually distinguishes this bug family from real content is not
+    // row count — it's that a firm's own static drafting furniture repeats
+    // BYTE-IDENTICALLY, sheet after sheet, while a real schedule's own row
+    // count and content vary sheet to sheet even when two sheets happen to
+    // share a title. So: once every table this pass found is collected, drop
+    // any COL-fallback-headered "reference" table whose exact (document,
+    // title, row count) signature recurs on 3 or more DIFFERENT sheets of
+    // the SAME document. The corpus already has two confirmed, independent
+    // instances of exactly this repeated-boilerplate shape (SLAC's 8-sheet
+    // stamp box, AVCON's 13-sheet tagline) and zero known real schedules
+    // that share this shape — a genuine per-sheet-varying schedule
+    // essentially never repeats an identical title+row-count 3+ times with
+    // no recognized column vocabulary at all.
+    {
+      const bySignature = new Map<string, { idx: number; sheet: string }[]>();
+      for (let i = 0; i < g.tables.length; i++) {
+        const t = g.tables[i];
+        if (t.kind !== "reference") continue;
+        if (!t.headers.length || !t.headers.every((h) => /^COL\d+$/.test(h))) continue;
+        const titleText = t.title?.text?.trim().toUpperCase();
+        if (!titleText) continue;
+        const doc = t.sheet.split("#")[0];
+        const sig = `${doc} ${titleText} ${t.rows.length}`;
+        let list = bySignature.get(sig);
+        if (!list) { list = []; bySignature.set(sig, list); }
+        list.push({ idx: i, sheet: t.sheet });
+      }
+      const drop = new Set<number>();
+      let boilerplateGroups = 0;
+      for (const list of bySignature.values()) {
+        if (new Set(list.map((e) => e.sheet)).size < 3) continue;
+        boilerplateGroups++;
+        for (const e of list) { drop.add(e.idx); touchedSheets.add(e.sheet); }
+      }
+      if (drop.size) {
+        g.tables = g.tables.filter((_, i) => !drop.has(i));
+        g.notes.push(`${drop.size} repeated-boilerplate "reference"-kind table(s) across ${boilerplateGroups} distinct signature(s) dropped (identical title/row-count sheet furniture, e.g. a firm's own logo tagline or stamp box, repeated on 3+ sheets of the same document — see TAKEOFF_BUG_CATALOGUE.md B-35).`);
+      }
+    }
     const equivalentCollapsed = collapseEquivalentPrimaryTables(g.tables);
     if (equivalentCollapsed) {
       g.notes.push(`${equivalentCollapsed} duplicate primary table read(s) from independent extractors were collapsed by exact sheet/title/key-set identity.`);
