@@ -2310,7 +2310,7 @@ pass** — a structurally distinct defect (10 tables, 100% of a page,
 ruled out as role-misclassification and vector-outlined-glyph by this
 entry's own original measurement) with its own, still-untraced cause.
 
-### B-29 — two real, differently-structured tables are silently merged into one, and the merged result's title is fabricated from unrelated title-block text (NOT FIXED — found, traced, disclosed)
+### B-29 — two real, differently-structured tables are silently merged into one, and the merged result's title is fabricated from unrelated title-block text (CORRECTED 2026-09-13 — the original "merge" diagnosis was wrong; real mechanism is two unrelated defects that coincidentally matched in row count)
 
 **Where:** `084_SC_H59_N054_FW_Building_112_Chiller_Addition.pdf#6`
 (sheet MP001, "MECHANICAL PIPING SCHEDULES & NOTES") — found continuing
@@ -2345,6 +2345,46 @@ fails cell-grading twice over on one small sheet — a real table (`WATER
 CIRCULATING PUMP SCHEDULE`) is invisible as its own entity, and the
 survivor's title doesn't match either real table it's supposed to
 represent.
+
+**CORRECTION 2026-09-13 (code-level, precise — the original "merge"
+theory was wrong).** Traced live via a `qpdf`-sliced single page +
+`OPENTAKEOFF_GRAPH_TRACE=1`, dumping the surviving table's own headers/
+rows/cells directly instead of trusting the row-count coincidence: the
+survivor is `headers: ["DATE","MARK","DESCRIPTION"]` with rows keyed
+`09/02/2020`/`10/02/2020`/`1/15/2021`, cells `MARK: "A"/"B"/"C"`,
+`DESCRIPTION: "ISSUED FOR REVIEW"/"ISSUED FOR REVIEW"/"CONSTRUCTION"` —
+this is the sheet's own REAL revisions log, a genuine 3-row table with
+real revision history, not a merge of the two HVAC schedules at all.
+`1 (chiller) + 2 (pump) = 3` was a coincidence of row count, not a
+causal merge — this file's own standing rule against guessing at
+mechanisms from a single measured number, not code, is exactly the
+lesson this correction re-confirms.
+
+The real picture is TWO unrelated, independently-confirmed defects on
+this sheet:
+1. **The two real HVAC schedules are never detected at all**, not
+   merged. The trace's own `vectorgrid` summary reports `"tables":0"`
+   for this entire page (0 successful vectorgrid tables) — the only
+   candidate region vectorgrid's own engine found anywhere on the page
+   is an unrelated `5x3` grid, declined `"unknown kind and no title"`.
+   Vectorgrid's own detector simply never proposed a candidate region at
+   either HVAC schedule's own location — a genuine geometric-detection
+   gap in vectorgrid itself (both real tables are small, 1 and 2 rows),
+   not a downstream reconciliation/merge decision, and not traced
+   further into vectorgrid's own Python-side grid-finding logic under
+   this pass's own standing rule.
+2. **The real revisions log's own title is wrong** — `"GREENVILLE -"` (a
+   truncated title-block project-name fragment) instead of its own real
+   caption (presumably `"REVISIONS"` or similar, not confirmed by this
+   pass). This is a genuine title-attachment defect, most likely a
+   `nearbyScheduleCaption`-family misattachment (same general class as
+   B-17/B-36), not independently re-traced to its own exact mechanism
+   here.
+
+Left open — this correction replaces the entry's own original,
+plausible-but-wrong "two tables merged" diagnosis with the measured,
+code-level truth, but does not fix either of the two real defects it
+uncovered.
 
 ### B-30 — a code-compliance approval stamp's own disclaimer paragraph is fabricated into a phantom one-row table (PARTIALLY FIXED 2026-09-13 — the 4th documented instance closed, the other 3 remain open)
 
