@@ -1,0 +1,193 @@
+# 069_ID_ITD_District_2_Laboratory_Heating_Upgrades.cells.csv -- CELL-tier
+# ground truth, HELDOUT document, sheet #5 ("MECHANICAL SCHEDULES"). All 4
+# real tables on this sheet (EXISTING AIR HANDLING UNIT SCHEDULE, EXISTING
+# CONDENSING HOT WATER BOILER SCHEDULE, NEW PUMP SCHEDULE, NEW VARIABLE
+# FREQUENCY DRIVE SCHEDULE -- 11 data rows total) were read directly off a
+# rendered crop of the page at scale=3.0 (the wide AHU SCHEDULE split into
+# left/right halves to stay legible) with the extractor's own answer NOT in
+# view, transcribed, THEN compared cell by cell against the extractor's own
+# output. Result: 11/11 rows matched EXACTLY across all 4 tables, including
+# an as-drawn source inconsistency preserved verbatim (NEW PUMP SCHEDULE's
+# own MOTOR RPM column: HWP-1/HWP-2/BP-1/BP-2 print "1,725"/"4,350" with a
+# comma, CWP-1/CWP-2 print "3325" with none -- real, on the page).
+#
+# One minor extraction quirk noted, NOT a cell-content error: NEW VARIABLE
+# FREQUENCY DRIVE SCHEDULE's 6th column header is legibly "MANUFACTURER AND
+# MODEL" on the page but the extractor's own header list reports it as the
+# generic fallback "COL6" -- the column's DATA ("ABB MODEL ACH 580" x2) is
+# correct, only the header label itself was not recognized. Recorded here
+# rather than silently normalized away; not filed as its own bug given the
+# narrow, single-instance, header-label-only scope.
+#
+# Because every value matched, this file's own data rows below are taken
+# from the extractor's output rather than re-keyed a second time by hand --
+# the two are byte-identical, confirmed cell by cell against the
+# independent hand-read first. row/col index ONLY each table's own DATA
+# rows/columns (0-based), following the same convention as this corpus's
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans.cells.csv.
+#
+# Part of opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md's own
+# Completion Gate CELL-tier requirement. Real, disclosed partial progress
+# on one HELDOUT document among 32; not a claim the HELDOUT set is graded.
+#
+sheet,table_title,row,col,text
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,0,AHU-1(E)
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,1,SEMI-CUSTOM
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,2,LABORATORIES
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,3,ECM
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,4,"16,400"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,5,2.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,6,5.1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,7,3.2 \ 6
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,8,460/3
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,9,"3,169"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,10,30% PG
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,11,842.7
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,12,842.7
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,13,"16,400"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,14,98.7
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,15,65.5
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,16,50.2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,17,46.9
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,18,500
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,19,0.8
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,20,45
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,21,55.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,22,177.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,23,18.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,24,50%
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,25,30% PG
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,26,960.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,27,"16,400"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,28,12.9
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,29,66.9
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,30,500
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,31,0.11
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,32,140
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,33,98.1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,34,48.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,35,5.1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,36,0.01
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,37,24.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,38,109.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,39,36.33
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,40,451
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,41,MERV 8
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,42,"2"""
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,43,MERV 13
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,44,"4"""
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,45,500
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,46,"2,150"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,47,"7,000"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,48,DAIKIN CAH044GDCM
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,0,49,"1 , 2"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,0,B-1(E)
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,1,HOT WATER LOOP
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,2,98.3%
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,3,NATURAL GAS
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,4,100.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,5,150.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,6,40.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,7,3.5
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,8,"1,000"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,9,982
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,10,LOCHINVAR FTX1000 (EXISTING)
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,0,11,"1 , 2"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,0,B-2(E)
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,1,HOT WATER LOOP
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,2,98.3%
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,3,NATURAL GAS
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,4,100.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,5,150.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,6,40.0
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,7,3.5
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,8,"1,000"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,9,982
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,10,LOCHINVAR FTX1000 (EXISTING)
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,1,11,"1 , 2"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,0,HWP-1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,1,HOT WATER LOOP
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,2,INLINE VARIABLE SECONDARY
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,3,80
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,4,40
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,5,71
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,6,2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,7,"1,725"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,8,460/3
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,9,60
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,10,B&G E-90 2AB
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,0,11,"1 , 2 , 3 , 4"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,0,HWP-2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,1,HOT WATER LOOP
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,2,INLINE VARIABLE SECONDARY
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,3,80
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,4,40
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,5,71
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,6,2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,7,"1,725"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,8,460/3
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,9,60
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,10,B&G E-90 2AB
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,1,11,"1 , 2 , 3 , 4"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,0,BP-1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,1,BOILER PUMP (B-1)
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,2,INLINE PRIMARY
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,3,40
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,4,15
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,5,-
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,6,1/3
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,7,"4,350"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,8,115/1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,9,35
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,10,GRUNDFOS MAGNA3 40-80
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,2,11,"1 , 2 , 3 , 4"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,0,BP-2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,1,BOILER PUMP (B-1)
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,2,INLINE PRIMARY
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,3,40
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,4,15
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,5,-
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,6,1/3
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,7,"4,350"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,8,115/1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,9,35
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,10,GRUNDFOS MAGNA3 40-80
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,3,11,"1 , 2 , 3 , 4"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,0,CWP-1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,1,CHILLED WATER LOOP
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,2,INLINE PRIMARY
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,3,185
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,4,55
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,5,67
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,6,5
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,7,3325
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,8,460/3
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,9,85
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,10,B&G E-90 2AAB
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,4,11,"1 , 2 , 3"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,0,CWP-2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,1,CHILLED WATER LOOP
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,2,INLINE PRIMARY
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,3,185
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,4,55
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,5,67
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,6,5
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,7,3325
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,8,460/3
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,9,85
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,10,B&G E-90 2AAB
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,5,11,"1 , 2 , 3"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,0,0,VFD-1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,0,1,MECHANICAL LOFT
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,0,2,2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,0,3,460/3
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,0,4,HWP-1
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,0,5,ABB MODEL ACH 580
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,0,7,"1 , 2 , 3 , 4"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,1,0,VFD-2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,1,1,MECHANICAL LOFT
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,1,2,2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,1,3,460/3
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,1,4,HWP-2
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,1,5,ABB MODEL ACH 580
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW VARIABLE FREQUENCY DRIVE SCHEDULE,1,7,"1 , 2 , 3 , 4"
