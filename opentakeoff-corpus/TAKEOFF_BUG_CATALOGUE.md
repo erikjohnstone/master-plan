@@ -2028,6 +2028,21 @@ the bar with 2 additional phantom entries — a real table double-counted
 and an untitled fabrication, on a document whose actual HVAC content is
 completely clean.
 
+**CONFIRMED RECURRING 2026-09-13 — a 2nd document, exact duplicate this
+time.** `071_ME_BGS_Project_3809_Health_Science_Center.pdf#44`'s
+`DUCTLESS SPLIT SCHEDULE` (a real, transposed-format table — 1 real unit,
+`AC-1`, as a column with its own attribute rows down the side) appears
+TWICE in the extractor's own output, both times with the identical
+title AND identical `rows: 21` AND identical `kind: reference` — an
+exact duplicate this time, not a `kind`-mismatched one like the first
+instance. The sheet's OTHER transposed-format table, `PACKAGED ROOF TOP
+UNIT SCHEDULE` (3 real units as columns), extracts once with a
+plausible attribute-row count (`rows: 46`) — real evidence that
+transposed-format tables do NOT always zero-extract (contrast B-25's
+own transposed-table finding), so this document's transposed layout is
+not itself the trigger for either the duplication above or B-25's
+blackout elsewhere.
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
