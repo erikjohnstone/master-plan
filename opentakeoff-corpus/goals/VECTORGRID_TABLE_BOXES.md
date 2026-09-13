@@ -289,13 +289,17 @@ scope (all vector-native, no raster/OCR path involved), not yet closed:**
   the two wrong turns before the right fix, and the regression suite. Table
   recovers all 6 real rows (was 3); a second, unrelated table elsewhere on
   the same document was also recovered as a side effect.
-- **B-10 / task #77 — a full-width section-divider row between two groups of
-  data rows bands into the narrow column beneath it** (`028_TX#p1` NOISE
-  CONTROL DUCT SILENCER SCHEDULE; `042_VA` "INDOOR AREA TEMPERATURE/HUMIDITY
-  SETPOINTS" is very likely the same failure mode on a different sheet, not
-  yet confirmed as such). Corrupts one row's quantity cell and produces a
-  correctly-disclosed but real one-unit undercount. Fix shape is named in
-  B-10 (test row population + x-band span, not position) but not applied.
+- ~~**B-10 / task #77 — a full-width section-divider row corrupts data**~~ —
+  **CLOSED, re-verified 2026-09-13 — was already fixed 2026-09-08 (`1ffa5e9b`),
+  five days before this goal was even opened.** `028_TX#p1` and `042_VA#9`
+  ARE the same failure mode, confirmed — a section-header row spanning
+  nearly the whole table width, excluded from `buildRows` before any
+  text-banding logic runs on it, which kills both this file's own
+  "smears into every column" symptom and B-10's own "bleeds into the
+  neighbor's narrow column" symptom through one mechanism. Live re-check on
+  current `main`: both named tables are clean (028_TX's QTY reads `"2"`,
+  not `"SECOND FLOOR 2"`; 042_VA has exactly its 4 real rows, no phantom
+  table). See `TAKEOFF_BUG_CATALOGUE.md`'s own updated B-10 entry.
 - ~~**Task #74 vs. `STATE.md` §2a item 4**~~ — **RESOLVED 2026-09-12, not stale
   on either side.** Both records were true at once, describing two DIFFERENT
   bugs on the same table: `STATE.md`'s dangle-discard fix genuinely fixed

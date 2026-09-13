@@ -565,30 +565,53 @@ around it silently; `conformance.test.ts` names this bug explicitly at the
 one assertion it affects rather than weakening the check.
 
 
-### B-10 — a full-width section BANNER bands into a data column
+### B-10 — a full-width section BANNER bands into a data column (CLOSED — already fixed before this entry was last read, re-verified 2026-09-13)
 
 **Where:** `028_TX_Renovation_of_Building_615` p1, NOISE CONTROL DUCT SILENCER
 SCHEDULE. Found while closing B-3, not by the census.
 
-**Measured:** the table's QTY. cells read
+**Originally measured:** the table's QTY. cells read
 `["2","1","1","1","1","1","2","1","1","1","1","2","2","2","SECOND FLOOR 2","2"]`.
-The 15th is polluted: the sheet prints a full-width section banner
-("SECOND FLOOR") between two groups of rows, and that banner's text bands into
-the narrow QTY column of the row beneath it rather than being recognised as a
-divider spanning the whole table.
+The 15th was polluted: the sheet prints a full-width section banner
+("SECOND FLOOR") between two groups of rows, and that banner's text banded
+into the narrow QTY column of the row beneath it rather than being
+recognised as a divider spanning the whole table. Task #77 named the same
+general shape on a different document — `042_VA…#9`'s HVAC DESIGN DATA
+table, where a spanning "INDOOR AREA TEMPERATURE/HUMIDITY SETPOINTS" group
+header was misread — with a slightly different symptom (smeared into every
+column, not banded into a neighbor's narrow one); this file's own goal
+doc flagged them as "very likely the same failure mode, not yet confirmed".
 
-**Consequence:** that row's printed count will not parse, so the takeoff
-refuses it (`REFUSED_UNPARSEABLE_QTY`, reason quoting the polluted cell) and
-the schedule reports 22 of a printed 23 — correctly disclosed, but one real
-unit short. Extracting the trailing digit by regex would be exactly the
-"regex as the classification engine" this project forbids, so it is left
-refused until the banner is recognised structurally.
+**Re-traced live under goal `VECTORGRID_TABLE_BOXES.md`, 2026-09-13: both
+are already fixed, and both share the exact root cause this entry's own
+"fix shape" already named.** Commit `1ffa5e9b` (2026-09-08, five days
+BEFORE this open-item was next reviewed — not a fix made under this goal)
+added exactly the guard this entry called for: `buildRows`'s own row loop
+in `scheduleTableFromODL` now excludes a row whose one owned cell spans
+nearly the whole table width, motivated by (and its own commit message
+cites) the 042_VA example directly. Excluding that row at the very top of
+the loop — before any text-banding logic ever runs on it — kills BOTH
+symptoms through one mechanism: 042_VA's banner can no longer smear into
+every column because it's never treated as a data row at all, and (the
+same reasoning, confirmed by re-running 028_TX today) 028_TX's own
+"SECOND FLOOR" banner can no longer bleed into the neighboring row's QTY
+cell for the identical reason.
 
-**Fix shape (not applied):** a row whose single token spans most of the
-table's own x-band, sits between data rows, and populates no other column is a
-SECTION BANNER — exclude it from data banding (it is the same "test the
-property that distinguishes it" move as B-4's band-fill title test, applied to
-a row rather than a caption).
+**Verified live, 2026-09-13, current `main`:**
+- `028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf`'s NOISE
+  CONTROL DUCT SILENCER SCHEDULE: all 16 real rows present, QTY for
+  `ROCK REHEARSAL 218 - SUPPLY/RETURN` (the row immediately after the
+  "SECOND FLOOR" banner) reads clean `"2"`, not the polluted
+  `"SECOND FLOOR 2"`.
+- `042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#9`'s INDOOR AREA
+  TEMPERATURE/HUMIDITY SETPOINTS table: exactly 4 real rows (DINING AREA
+  (CAFETERIA) / CORRIDORS / OFFICES / ALL OTHER SPACES), no phantom
+  second table, no smeared columns.
+
+Task #77 ("mid-table section-divider row misread as a second bogus table")
+is the same stale tracking gap this file's own B-14/task #74 entry already
+found once this session — a real fix landed under a different name and the
+open-item list was never updated to reflect it.
 
 ---
 
