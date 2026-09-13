@@ -1847,6 +1847,16 @@ anywhere. Same general mechanism as the DOPL disclaimer-stamp case above
 (title-block box content fabricated into a table), recurring on a
 completely different source document and a different specific stamp box.
 
+**CONFIRMED RECURRING 2026-09-13 — a 3rd document, twice on one
+document.** `013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf`
+fabricates a `title: "SUSTAINMENT MAINTENANCE"` phantom table on BOTH
+page #20 (`rows: 2`) and page #23 (`rows: 3`) — lifted from the title
+block's own project-name text, "1107TH THEATER AVIATION SUSTAINMENT
+MAINTENANCE GROUP", printed in the same corner of every sheet. Full
+context and this document's several other, distinct findings (a
+missing `BOILERS` table, a split-in-two real table, column-header-
+sourced title fabrications) are in B-32 below.
+
 ### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (NOT FIXED — found, traced, disclosed)
 
 **Where:** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf`, both of its
@@ -1906,6 +1916,81 @@ inside a 5th, correctly-titled table — the row-truncation shape is a new
 and potentially serious failure mode worth prioritizing: it silently
 under-reports a real table's own content without any signal (no missing
 title, no absent table) that anything is wrong.
+
+### B-32 — the primary equipment table itself (BOILERS) goes missing on a boiler-replacement project, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, disclosed)
+
+**Where:**
+`013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf`, both of its
+schedule pages (M-320/#20, M-500/#23) — found continuing the HELDOUT
+set's own missed-checking pass. Ironic given the project's own name: the
+one table the pipeline most needs to get right here, `BOILERS`, is one
+of the ones it drops.
+
+**Measured, page #20 (M-320).** Hand-confirmed 3 real tables:
+`CONTROL VALVES` (3 rows), `FLOW METER DEVICES` (3 rows), `TYPICAL
+BOILER BACnet/MSTP SOFTWARE POINTS LIST` (25 rows, a BAS point-list
+table). The extractor's own output: `CONTROL VALVES` matches (3/3);
+`FLOW METER DEVICES` reports `rows: 4` against 3 real (a 1-row
+overcount, same family as B-26); `TYPICAL BOILER BACnet/MSTP SOFTWARE
+POINTS LIST` is **completely absent** — 25 real rows gone; and a
+fabricated `"SUSTAINMENT MAINTENANCE"` table (`rows: 2`) appears,
+lifted from the sheet's own title-block project-name text ("1107TH
+THEATER AVIATION SUSTAINMENT MAINTENANCE GROUP") — the same title-block-
+fabrication mechanism as B-29/B-30, a 3rd confirmed document (amended
+into B-30 below rather than re-described here).
+
+**Measured, page #23 (M-500).** Hand-confirmed 6 real tables:
+`VARIABLE FREQUENCY DRIVE SCHEDULE` (1 row), `GAS CONNECTED LOAD TABLE`
+(4 rows, including its own total row), `HYDRONIC SPECIALTIES SCHEDULE`
+(a single-system attribute/value spec sheet, ~22 real attribute rows),
+`HVAC PIPING MATERIAL SCHEDULE` (3 real data rows), `PUMPS` (1 row),
+`BOILERS` (8 rows — the project's own namesake equipment). The
+extractor's own output is badly garbled:
+- `PUMPS` and `BOILERS` are **both completely absent** — the entire
+  primary equipment schedule for a boiler-replacement project is
+  invisible to the pipeline.
+- `HVAC PIPING MATERIAL SCHEDULE` appears **twice**, `rows: 1` and
+  `rows: 3` — the same real table (3 real data rows) split into two
+  separate reported entries under the identical title, the OPPOSITE
+  direction from B-28's title-collision (which merges two DIFFERENT
+  real tables into one; this splits ONE real table into two).
+- A fabricated `"CAPACITY (GAL)"` table (`rows: 9`) and a fabricated
+  `"DIA. (in)"` table (`rows: 1`) both appear — neither is a real table
+  title; both are column-header text lifted from deep inside the
+  `HYDRONIC SPECIALTIES SCHEDULE`/`PUMPS` tables' own header rows
+  (`"CAPACITY (GAL)"` is the `SHOT FEEDER` row group's own column
+  header; `"DIA. (in)"` is the `PUMPS` table's `IMPLR DIA. (in)` column
+  header) and fabricated into standalone table titles — a genuinely new
+  title-fabrication SOURCE (an internal column header, not adjacent
+  prose or a title-block stamp) distinct from B-16/B-29/B-30's own
+  fabrication sources.
+- A second `"SUSTAINMENT MAINTENANCE"` fabrication (`rows: 3`) appears,
+  same mechanism as page #20's instance.
+- `VARIABLE FREQUENCY DRIVE SCHEDULE` reports `rows: 3` against 1 real
+  row, and `GAS CONNECTED LOAD TABLE` reports `rows: 5` against 4 real
+  — both further phantom-row overcounts, B-26's own family.
+
+**Relationship to already-catalogued bugs:** the `"SUSTAINMENT
+MAINTENANCE"` fabrication is B-29/B-30's own title-block mechanism, a
+3rd confirmed document (amended into B-30). The `HVAC PIPING MATERIAL
+SCHEDULE` table-split is a new, previously unseen shape — not
+B-28 (which merges two real tables), the reverse: one real table
+reported as two. The `"CAPACITY (GAL)"`/`"DIA. (in)"` fabrications are
+a new title-fabrication SOURCE (internal column-header text, not prose
+or a stamp) — related in spirit to B-16/B-29/B-30 (something other than
+a table's own real title becomes its reported title) but distinct
+enough in mechanism to flag separately for whoever roots this out. The
+complete disappearance of `PUMPS` and `BOILERS` — the project's own
+central equipment — is the single most consequential missing-table
+finding of this document, consistent with the general missing-table
+pattern (B-16/B-19/B-25/B-28/B-31) but not attributed to one specific
+mechanism without further tracing.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this document
+fails MISSED=0 by 2 whole real tables (33 rows, including the project's
+own namesake `BOILERS` equipment) plus a garbled, duplicated, and
+partially-fabricated report on 4 more tables — the worst combination of
+failure shapes measured on a single document this session.
 
 ## What is working
 
