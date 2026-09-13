@@ -1027,6 +1027,20 @@ row/cell content is right — a different failure shape than B-16's
 MISSED/fabricated pair, but still a concrete, measured reason this
 document is not yet clean.
 
+**CONFIRMED RECURRING 2026-09-13 — three more instances, one document.**
+`04_NV_VA_LasVegas_CentralUtilityPlant.pdf#32` ("MECHANICAL SCHEDULES AND
+DETAILS") shows this exact signature three more times on one page: `SURGE
+TANK SCHEDULE` (1 row, `T-1`), `STEAM RECOVERY HEAT EXCHANGER` (1 row,
+`HE-1`), and `PUMP SCHEDULE` (4 rows, `CWP-1..5`/`CHP-1..5`/`BP-1`/
+`IWP-1`) all surface as `title: null`, every cell content otherwise
+correct. `PUMP SCHEDULE` additionally loses several of its own real
+column headers to generic `COL1`/`COL10`/`COL11` placeholders despite
+every cell value being right — a title-loss and a partial header-loss
+happening together on the same table. The same page's `LOUVER SCHEDULE`
+survives with its title intact but polluted (`"LOUVER SCHEDULE LV #"`).
+Five real tables on one page, all with SOME title/header damage, zero
+with none — this is not a rare edge case on this document.
+
 ---
 
 ### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (NOT FIXED — found, traced, disclosed)
@@ -1117,6 +1131,20 @@ values). The other two panels on the identical page, `HN7B` (15 rows) and
 anything else findable — they are simply absent, the same disease as
 B-21. This single page shows both bugs operating together: one table
 survives corrupted (B-18's signature), two vanish outright (B-21's).
+
+**CONFIRMED RECURRING 2026-09-13 — a more severe variant, same page as
+the three-instance note above.** The SAME `04_NV_VA_LasVegas_
+CentralUtilityPlant.pdf#32`'s `COOLING TOWER SCHEDULE` shows the worst
+version of this disease measured yet: its real data row (`CT-1,2,3,4`,
+`EVAPCO AT-114-1024`, `2,400 GPM`, …) is not merely mislabeled — it is
+GONE. In its place, two fragments of the table's own multi-tier header
+row (`"MANUFACTURER"`/`"MODEL NUMBER"`/`"FLOW"`/`"FANS"`/`"MAX"` spanning
+two printed header lines) are each misread as a separate DATA row keyed
+`"FLOW"` and `"MODEL NUMBER"`. Same family as B-18 (header/data boundary
+confusion) but here the real content is lost outright rather than
+demoted into headers — worth flagging as the more severe end of this
+same failure spectrum, likely triggered by the two-line header this
+table's real caption uses where the others on this page use one line.
 
 ---
 
