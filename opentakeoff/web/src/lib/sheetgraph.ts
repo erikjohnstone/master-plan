@@ -3666,6 +3666,16 @@ const TITLE_BLOCK_ROW_LABELS = new Set([
   "DATE", "SCALE", "ISSUED FOR", "REV DATE", "REVISION DATE",
   "DRAWN BY", "CHECKED BY", "APPROVED BY", "DESIGNED BY",
   "RIOCC", "RIOCO", "RIOCV",
+  // A blank REVISIONS log box (REV./DESCRIPTION/DATE column headers, no
+  // real revisions filled in yet) is itself a title-block fixture, same
+  // family as REV DATE/REVISION DATE above — real, corpus-found (B-30,
+  // TAKEOFF_BUG_CATALOGUE.md, 12_MT_MSU_ReidHall_Renovation.pdf#28): its
+  // own header row (REV./DESCRIPTION/DATE) was misread as a single data
+  // row keyed bare "REV" (the "." stripped by the same normalization
+  // every key here already goes through), reported as a phantom 1-row
+  // table whose fabricated title borrowed the nearby "DRAWN BY: NT"
+  // title-block field.
+  "REV",
 ]);
 const isTitleBlockRowLabel = (key: string): boolean =>
   TITLE_BLOCK_ROW_LABELS.has(norm(key).replace(/:+$/, "").trim());
@@ -11002,6 +11012,21 @@ export function scheduleTableFromODL(
     if (evidenced.length) buildRows(evidenced, true);
   }
   if (!rows.length) return refuse(`no keyed data rows (kind ${kind}, key column ${keyColIdx < 0 ? "col 0" : JSON.stringify(headers[keyColIdx])})`);
+  // A DRAWING'S OWN TITLE-BLOCK GRID IS NOT A SCHEDULE, HOWEVER IT IS READ.
+  //
+  // extractReferenceTableAt (this file, isTitleBlockTable's own comment) has
+  // long refused a title-block/approval-stamp box on exactly this evidence —
+  // every row key drawn from a small, closed, real administrative
+  // vocabulary — but that guard was only ever wired into the GEOMETRIC
+  // extractor's path, never this ODL one. The same title-block shape reaches
+  // the graph through here too: real, corpus-found (B-30, TAKEOFF_BUG_
+  // CATALOGUE.md, 12_MT_MSU_ReidHall_Renovation.pdf#28) — a blank REVISIONS
+  // log box (REV./DESCRIPTION/DATE headers, no real revisions filled in)
+  // read as a 1-row `reference` table keyed bare "REV", with a fabricated
+  // title borrowed from the nearby "DRAWN BY: NT" title-block field. Reusing
+  // the SAME closed vocabulary here (not inventing a second one) keeps this
+  // exactly as narrow as the geometric path's own already-proven guard.
+  if (isTitleBlockTable(rows)) return refuse("title-block/administrative table (every row key matches the closed title-block vocabulary)");
   const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
   headers.splice(0, headers.length, ...promotedHeaders);
   // Real, found-live gap (2026-09-03, 032_PA_Construct_EHRM_Infrastructure's

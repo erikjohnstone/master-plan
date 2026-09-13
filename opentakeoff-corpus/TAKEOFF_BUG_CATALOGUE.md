@@ -2172,7 +2172,7 @@ CIRCULATING PUMP SCHEDULE`) is invisible as its own entity, and the
 survivor's title doesn't match either real table it's supposed to
 represent.
 
-### B-30 — a code-compliance approval stamp's own disclaimer paragraph is fabricated into a phantom one-row table (NOT FIXED — found, traced, disclosed)
+### B-30 — a code-compliance approval stamp's own disclaimer paragraph is fabricated into a phantom one-row table (PARTIALLY FIXED 2026-09-13 — the 4th documented instance closed, the other 3 remain open)
 
 **Where:** `098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8`
 (sheet M3.0, "HVAC SCHEDULES") — found continuing the HELDOUT set's own
@@ -2233,6 +2233,57 @@ SCHEDULE`, `CABINET UNIT HEATER SCHEDULE` — match exactly, 17/17 rows)
 also carries a fabricated `title: "DRAWN BY: NT"`, `rows: 1` table,
 lifted from the sheet's own title-block drafter-name field. Same
 mechanism, yet another specific stamp/field source.
+
+**FIX 2026-09-13 — this 4th documented instance (12_MT's `"DRAWN BY:
+NT"`) closed.** Traced live via a `qpdf`-sliced single page +
+`OPENTAKEOFF_GRAPH_TRACE=1`: this specific phantom table's own row/header
+data (`headers: ["COL1","COL2","COL3"]`, one row `key: "REV"` with cell
+text `"REV."`/`"DESCRIPTION"`/`"DATE"`) revealed it is the sheet's own
+BLANK REVISIONS log box (a real ruled grid template — column headers
+REV./DESCRIPTION/DATE — with no actual revisions filled in on this
+sheet's first issue) read through `scheduleTableFromODL`, whose own
+header row got misread as a single data row; a nearby title-block field
+("DRAWN BY: NT") then got attached to it as a fabricated caption. This
+file already had exactly the right guard for this shape —
+`isTitleBlockTable`/`TITLE_BLOCK_ROW_LABELS` (this same file, `~line
+3662`), refusing any candidate table whose EVERY row key is drawn from a
+closed, real administrative vocabulary (`DRAWN BY`, `SHEET NO`, `REV
+DATE`, ...) — but it was wired into ONLY the geometric extractor's own
+`extractReferenceTableAt` path, never this ODL one, so the identical
+title-block shape reached the graph unblocked whenever it happened to be
+read through ODL instead.
+
+Two small, narrow changes in `web/src/lib/sheetgraph.ts`: (1) added
+`"REV"` to `TITLE_BLOCK_ROW_LABELS` (this table's own row key,
+normalized from `"REV."`) — a closed, unambiguous administrative term no
+real per-equipment/per-room schedule keys its rows on; (2) added one
+`isTitleBlockTable(rows)` guard to `scheduleTableFromODL`, right after
+its own "no keyed data rows" refusal, reusing the SAME existing function
+rather than inventing a second vocabulary or heuristic.
+
+**Verification:** all 148 `sheetgraph.test.ts` + 18
+`vectorTakeoffPipeline.test.ts` + 22 `scheduleLanguageScan.test.ts` tests
+pass unchanged. Live, on the real document: re-ran the pipeline against
+a `qpdf`-sliced single page of `12_MT_MSU_ReidHall_Renovation.pdf#28`
+before/after — the phantom `"DRAWN BY: NT"` table is gone, and all 5 real
+tables on the page (`SPLIT SYSTEM HEAT PUMP SCHEDULE`, `DUAL DUCT
+VARIABLE AIR VOLUME UNIT SCHEDULE`, `GRILLE - REGISTER - DIFFUSER
+SCHEDULE`, `FINNED PIPE RADIATION SCHEDULE`, `CABINET UNIT HEATER
+SCHEDULE`) keep their exact same row counts, titles, and kinds — the fix
+touches only the one phantom table.
+
+**Checked, not fixed, the other 3 documented instances:** re-ran the
+live pipeline against the original DOPL disclaimer paragraph (098_ID#8),
+the "AGENCY APPROVALS" signature box (080_CA#17/#21), and the
+"SUSTAINMENT MAINTENANCE" project-name field (013_MO#20/#23) — all 3
+fabricated tables are STILL present, unaffected by this fix. None of
+their own row keys happen to match "REV" or any other
+`TITLE_BLOCK_ROW_LABELS` entry, and (unlike 12_MT) none of them appear
+to be a genuine ruled REV/DESCRIPTION/DATE-shaped grid at all — the DOPL
+and SUSTAINMENT MAINTENANCE cases in particular read as prose/plain-text
+title-block fields with no real tabular structure of their own, a
+structurally different fabrication shape from this specific fix and not
+traced further under this pass.
 
 ### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (NOT FIXED — found, traced, disclosed)
 
