@@ -1399,7 +1399,7 @@ and without this change.
 
 ---
 
-### B-21 — an entire recurring table FORMAT (multi-panel electrical schedules) is invisible to extraction: at least 12 real tables across 2 sheets, 0 found (NOT FIXED — found, traced, disclosed)
+### B-21 — an entire recurring table FORMAT (multi-panel electrical schedules) is invisible to extraction: at least 12 real tables across 2 sheets, 0 found (CORRECTED + FIXED 2026-09-13)
 
 **Where:** `25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#8` and `#9`
 (sheets `E0.03` and `E0.04`, "ELECTRICAL PANEL SCHEDULES") — found while
@@ -1450,9 +1450,82 @@ page shows a related but DIFFERENT failure — 6 real rows fused into one
 with concatenated cell values — catalogued separately as B-22, since the
 row-fusion signature there is distinct enough to trace independently.)
 
+**CORRECTION (2026-09-13): the original 25_WA finding above was a
+misdiagnosis — this bug's real, surviving instance is the 012_MO
+document only.** Direct measurement: both `25_WA_DouglasCounty_
+Courthouse_HVAC_DDC.pdf#8` and `#9`'s six panel-schedule regions are
+each backed by a real, high-resolution embedded PyMuPDF image
+(`page.get_images()`/`get_image_rects()`, ~5.6 px/pt each), and the
+PDF's own text layer carries only 89 total words on EACH page, none
+of them anywhere near those regions (`page.get_text('words')`,
+checked both pages independently). `vectorgrid.py`'s own `find_tables()`
+correctly finds all 12 regions and correctly marks every one
+`raster=True, cells=[]` — its `_image_is_a_table()` pixel test doing
+exactly its job. A rendered crop looks crisp and fully-ruled at normal
+zoom only because the embedded image itself is high-DPI — visually
+indistinguishable from real vector linework, which is exactly how this
+was originally misjudged as "real, titled, fully ruled" tables without
+checking the underlying PDF structure. Per the goal document's own
+Scope rule ("Rasters and pasted images... detected and reported
+EXCLUDED, never counted as misses"), this is correct, disclosed
+behavior, not a bug — closing out the original 2-sheet, 12-table claim
+this entry opened with.
+
+**FIX (2026-09-13), for the one real surviving instance (012_MO, 4th
+document above):** root-caused live via `classifySheetRole()` called
+directly against the page's own real spans (`OPENTAKEOFF_GRAPH_TRACE=1`
+against a busted cache — `cachedSheetGraph` was serving a stale result
+and swallowing every trace line until `~/.cache/opentakeoff-sheet-graph`
+was cleared, same gotcha as B-18's own trace). `012_MO...#27`'s own
+sheet (E601) has 872 real text spans and **zero** vector-geometry
+segments extracted — `session.ts` gates that extraction on
+`classifySheetRole()` returning a role in
+`{plan, schedule, demolition, unknown}`, and this sheet resolved to
+role **"detail"** at 0.6 confidence (halved to 0.3 by dissent, but
+never overturned), off one stray span: `"VARIES (SEE CODE SECTION)"`
+— ordinary electrical-schedule vocabulary for a regulatory code
+section, found inside a real panel-schedule column, not the sheet's
+own title. It matched `sheetgraph.ts`'s own bare, unanchored
+`SECTIONS?\b` half of the "detail" role signal (0.6) — HIGHER than
+the sheet's own 5 real `"...SCHEDULE..."` spans, each of which
+individually classifies role "schedule" at 0.5 in isolation. So
+`segs` was never extracted, and `vectorgrid` never got a chance to
+run on 5 real, fully-ruled vector tables sitting right there on this
+sheet (confirmed via `vectorgrid.py`'s own `find_tables()` directly:
+173/322/4/82/255 real geometric cells across those 5 regions).
+
+Fixed with a narrow, additive negative lookbehind in `sheetgraph.ts`'s
+`ROLE_SIGNALS`, excluding only `"CODE SECTION"` — matching that same
+file's own existing `"ELEVATION NUMBER"` exclusion pattern two lines
+above it. Verified: `"WALL SECTIONS"`, `"BUILDING SECTION A-A"`,
+`"CROSS SECTION"`, `"DETAILS"`, `"MECHANICAL DETAILS"` all still
+match correctly — this never loosens a real section/detail-sheet
+title match anywhere else in the corpus, only excludes this one
+measured phrase shape.
+
+**Verified against the real PDF**, `production-graph-cli.mjs --mode
+graph`: page 27 now surfaces 4 tables where it previously surfaced 0 —
+`"DISCONNECT SWITCH SCHEDULE:"` (11 headers, 6 rows — matching the
+real table exactly) and `"VFD SCHEDULE:"` (10 headers, 16 rows, every
+cell byte-for-byte correct — see B-22's own updated entry) both now
+correctly titled and complete. Two more tables (19 headers, 30 rows
+and 24 rows respectively — the two PANELBOARD SCHEDULEs) also now
+surface with real content, though still `title: null` — a separate,
+already-catalogued title-attachment defect family (same class as
+B-17), not touched here.
+
+**No regression:** a full-corpus `table-box-eval.mjs` re-run (the
+app's own emitted regions, not just the raw Python engine) shows an
+identical 646/664 (97.3%) with the identical failure list before and
+after this change — this fix's own document (012_MO) isn't in that
+eval's currently-scoreable keyed set (a separate, pre-existing
+`resolveSetFiles` lookup gap for several split/rejoined documents,
+unrelated to this change), so its recovery was verified directly
+against the real PDF above instead.
+
 ---
 
-### B-22 — multiple real rows are fused into a single row, with each cell's text a space-joined concatenation of every fused row's own value (NOT FIXED — found, traced, disclosed)
+### B-22 — multiple real rows are fused into a single row, with each cell's text a space-joined concatenation of every fused row's own value (FIXED 2026-09-13)
 
 **Where:** `012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#27`,
 "VFD SCHEDULE:" — found in the same pass as B-21's 4th-document
@@ -1474,6 +1547,20 @@ SFD212 SFD212 SFD212 SFD212 SFD212"`, `"1-5 1-5 1-5 1-5 1-5 1-5"`). The
 other 10 real rows (`VFD-CWP-1/2/3`, `VFD-PCHP-1/2/3`, `VFD-SCHP-1`,
 `VFD-CT-1/2/3`) are not present in any form — not fused, not fabricated,
 simply gone.
+
+**FIX (2026-09-13):** fixed as a direct side effect of B-21's own fix
+below (same root cause: this sheet's role misclassified as "detail",
+so vectorgrid never ran on it at all, and whatever the OLD garbled
+single-row output came from was a different, downstream fallback path
+that no longer runs once vectorgrid gets a real chance). Verified
+against the real PDF: `production-graph-cli.mjs --mode graph` now
+reports "VFD SCHEDULE:" with the real 10 columns (`TAG NO,
+MANUFACTURER, MODEL, LOAD SERVES, LOAD HP, LOAD VOLTS, LOAD PHASE,
+LOAD HZ, DRIVE ENCLOSURE, NOTES`) and 16 real rows, every cell
+byte-for-byte correct against the real page — `VFD-CWP-1`: SCHNEIDER,
+SFD212, CWP-1, 30, 480, 3, 60, NEMA 1, 1-5; `VFD-CWP-2`/`VFD-CWP-3`
+identical shape with their own real values; no concatenation anywhere.
+See B-21's own entry for the fix itself and its regression evidence.
 
 **Relationship to already-catalogued bugs:** distinct from B-20 (one row
 duplicated verbatim) and from B-18 (header/first-row collapse) — here SIX
