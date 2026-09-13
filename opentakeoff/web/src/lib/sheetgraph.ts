@@ -3676,9 +3676,35 @@ const TITLE_BLOCK_ROW_LABELS = new Set([
   // table whose fabricated title borrowed the nearby "DRAWN BY: NT"
   // title-block field.
   "REV",
+  // A title-block template field is sometimes printed as ONE glued run,
+  // "PROJ. MANAGER: Designer" — the label, a colon, and an unfilled
+  // placeholder value, all one string with no separate label/value cells
+  // to split apart. Real, corpus-found (B-33, TAKEOFF_BUG_CATALOGUE.md,
+  // 023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8): row keys
+  // "PROJ. MANAGER: DESIGNER", "DRAWN BY: AUTHOR", "CHECKED BY: CHECKER",
+  // "CONTRACT NO.:" — the trailing-colon-only strip below never matches
+  // these (the colon sits mid-string, and "CONTRACT NO" already in this
+  // vocabulary carries a period this exact key does too). Handled by the
+  // period/colon-tolerant prefix check below, not by adding punctuation
+  // variants here; only a genuinely new label needs a new entry.
+  "PROJ MANAGER", "PROJECT MANAGER",
 ]);
-const isTitleBlockRowLabel = (key: string): boolean =>
-  TITLE_BLOCK_ROW_LABELS.has(norm(key).replace(/:+$/, "").trim());
+const isTitleBlockRowLabel = (key: string): boolean => {
+  // Periods are abbreviation punctuation ("PROJ.", "NO.") that carries no
+  // semantic distinction for this administrative-vocabulary match — only
+  // stripped for the comparison itself, never mutating the row's own key.
+  const stripPunct = (s: string) => s.replace(/\./g, "").replace(/:+$/, "").trim();
+  if (TITLE_BLOCK_ROW_LABELS.has(stripPunct(norm(key)))) return true;
+  // A LABEL: VALUE row glued into one string is still an administrative
+  // title-block row when the LABEL half (everything before the first
+  // colon) is this same closed vocabulary — the value half is never
+  // checked, so this never admits a real per-row identity that merely
+  // happens to contain a colon (a real key never does; CODE_RE-shaped
+  // tags and room numbers have none).
+  const colonIdx = key.indexOf(":");
+  if (colonIdx < 0) return false;
+  return TITLE_BLOCK_ROW_LABELS.has(stripPunct(norm(key.slice(0, colonIdx))));
+};
 // Every row, not merely most: a real reference table this rule must never
 // touch can legitimately carry ONE administrative-looking row (a genuine
 // "DATE" spec line) alongside its own real data rows — only a candidate

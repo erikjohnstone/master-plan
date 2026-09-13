@@ -2638,7 +2638,7 @@ own namesake `BOILERS` equipment) plus a garbled, duplicated, and
 partially-fabricated report on 4 more tables — the worst combination of
 failure shapes measured on a single document this session.
 
-### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (NOT FIXED — found, traced, disclosed)
+### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (PARTIALLY FIXED 2026-09-13 — original document's untitled-phantom half closed; the duplicate-table half and 2 recurring instances remain open)
 
 **Where:**
 `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8` (sheet
@@ -2704,6 +2704,68 @@ this time — both of this sheet's real tables appear exactly once each
 (row-count correctness aside, see B-31's own amendment below for the
 `AIR HANDLING UNIT SCHEDULE`'s separate row-truncation defect on this
 same sheet).
+
+**FIX 2026-09-13 — the original document's untitled-phantom half
+closed.** Same `TITLE_BLOCK_ROW_LABELS`/`isTitleBlockRowLabel` mechanism
+already extended for B-30's own 12_MT instance, generalized further:
+this document's title-block fields print as ONE glued run per cell —
+`"PROJ. MANAGER: Designer"`, `"DRAWN BY: Author"`, `"CHECKED BY:
+Checker"`, `"CONTRACT NO.:"` — label, colon, and an unfilled placeholder
+value (or nothing) all in a single string, with no separate label/value
+cells to split. The existing trailing-colon-only strip never matched a
+colon sitting mid-string, so none of these 4 rows cleared the
+vocabulary check and the whole box surfaced as a fabricated 4-row
+`title: null` table.
+
+Extended `isTitleBlockRowLabel` (`web/src/lib/sheetgraph.ts`) with two
+small, additive changes: (1) periods are now stripped before comparison
+(abbreviation punctuation like `"PROJ."`/`"NO."` carrying no semantic
+distinction for this vocabulary match), and (2) when the full
+(period/colon-stripped) key doesn't match, a second check splits the key
+on its FIRST colon and checks whether the LABEL half alone matches the
+vocabulary — the value half (a real name, or nothing) is never
+inspected, so this can never admit a genuine per-row identity that
+happens to contain a colon (no real MARK/TAG/room-number key ever does).
+Added `"PROJ MANAGER"`/`"PROJECT MANAGER"` to the vocabulary (a new,
+unambiguous administrative label); `"DRAWN BY"`, `"CHECKED BY"`,
+`"CONTRACT NO"` were already present and now match via the new prefix
+check.
+
+**Verification:** new unit test in `test/sheetgraph.test.ts`
+reproducing this exact glued-key shape. All 213 tests across
+`sheetgraph.test.ts`/`vectorTakeoffPipeline.test.ts`/
+`scheduleLanguageScan.test.ts`/`tableExtractorReconcile.test.ts`/
+`schedulePlanReconcile.test.ts` pass. Live, on the real document
+(`qpdf`-sliced page 8): the fabricated 4-row table is gone; the 3 real
+tables (`AIR COOLED CHILLER SCHEDULE`, `BUFFER TANK SCHEDULE`, `PUMP
+SCHEDULE`) are unchanged. Re-checked B-30's own 12_MT fix and the other
+3 open B-30 instances (098_ID, 080_CA, 013_MO) live post-change: 12_MT
+still clean, the other 3 still unaffected (their own fabrications are
+prose-only title-block text, not a ruled label:value grid, so this
+vocabulary-based mechanism was never going to reach them).
+
+**Checked, not fixed, this document's own duplicate-`PUMP SCHEDULE`
+half** — this is the SAME underlying mechanism this pass separately
+root-caused for B-38 (vectorgrid emitting two overlapping candidate
+regions for one physical table, one of which misreads the real data row
+as its own header) — re-confirmed live on this exact document; not
+independently re-fixed here since B-38's own entry already carries the
+full trace and the reasoning for why a fix needs vectorgrid-side
+candidate deduplication, corpus-wide-blast-radius work outside this
+pass's scope.
+
+**Checked, not fixed, the 2 recurring instances.** 071_ME's exact-
+duplicate `DUCTLESS SPLIT SCHEDULE` is the same B-38-family mechanism as
+above, not independently re-traced. 21_VA#50's own untitled phantom was
+re-dumped live post-fix: its row keys/cells are substantially MORE
+garbled than 023_US's clean case — one cell's own text is a long run of
+apparently unrelated numeric/equipment data concatenated with title-
+block fragments (`"0.36 85.0 300 105 / 150 28.54 0.50 4.88 8 0.051
+VCWF08 140 TRANE VAV-2-21 55.0 1 CHECK: SHEET TITLE"`), suggesting a
+column-band/region mis-assignment bleeding real data from the sheet's
+OTHER tables into this candidate, not a clean title-block-only capture
+this vocabulary mechanism can safely refuse — left open for a future
+pass with its own dedicated trace rather than guessed at here.
 
 ### B-34 — control-diagram instrument-callout labels are clustered into fabricated phantom tables (NOT FIXED — found, traced, disclosed)
 

@@ -3062,6 +3062,35 @@ test("reference kind negative control: a drawing's own title-block/approval-stam
     "the title block's own administrative rows never become a fake reference table");
 });
 
+test("reference kind negative control: a title-block field printed as ONE glued LABEL: VALUE string is still recognized (B-33, 023_US#8)", () => {
+  // Real, corpus-found (TAKEOFF_BUG_CATALOGUE.md B-33,
+  // 023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8): this
+  // title-block's own template fields print as ONE run each -- "PROJ.
+  // MANAGER: Designer", "DRAWN BY: Author", "CHECKED BY: Checker",
+  // "CONTRACT NO.:" -- label, colon, and an unfilled placeholder value (or
+  // nothing at all) all in a single cell, with no separate label/value
+  // columns to split. The trailing-colon-only strip TITLE_BLOCK_ROW_LABELS
+  // used before this fix never matched a colon sitting mid-string, so this
+  // whole box surfaced as a fabricated 4-row reference table with title:
+  // null. Confirmed this fixture reproduces the real bug shape and the fix
+  // refuses it.
+  const spans: GraphSpan[] = [
+    rh("A-E FIRM", 4013, 2802, 188), rh("USDA", 4201, 2802, 188),
+    rh("PROJ. MANAGER: Designer", 4013, 2823, 188), rh("EPM", 4201, 2823, 188),
+    rh("DRAWN BY: Author", 4013, 2891, 188), rh("PPM", 4201, 2891, 188),
+    rh("CHECKED BY: Checker", 4013, 2959, 188), rh("SAFETY & HEALTH", 4201, 2959, 188),
+    rh("CONTRACT NO.:", 4013, 3027, 188), rh("REAL PROPERTY", 4201, 3027, 188),
+  ];
+  const sheet: SheetSpans = {
+    key: "titleblock2.pdf#8", sheet_number: "M002",
+    spans,
+    segs: [4013, 2802, 5108, 2802], // a real ruled border, like a genuine title-block box
+  };
+  const g = buildSheetGraph([sheet]);
+  assert.ok(!g.tables.some((t) => t.kind === "reference" || t.title === null),
+    "a glued LABEL: VALUE title-block row is still recognized as administrative, not fabricated into a phantom table");
+});
+
 test("reference kind: a real table carrying ONE administrative-looking row alongside real data rows is still kept", () => {
   // Narrow-scoping proof for the title-block refusal above: isTitleBlockTable
   // only ever refuses a candidate whose ENTIRE row set is title-block
