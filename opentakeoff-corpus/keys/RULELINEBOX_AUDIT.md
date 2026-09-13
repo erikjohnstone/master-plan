@@ -1,5 +1,24 @@
 # RULELINEBOX_AUDIT.md — the Method §3 required audit of this session's auto-accepted boxes
 
+**CORRECTION (2026-09-13, same day, later): units bug found and fixed — the
+19/20 finding below is UNAFFECTED, but the stored coordinates it and every
+`.tableboxes.csv` row shared were 2x too large.** `rulelinebox.py` wrote its
+measured boxes in RENDER_SCALE=2 units instead of the raw PDF points
+`keys/*.tableboxes.csv` actually stores (confirmed against every
+hand-authored entry in the corpus) — see `TAKEOFF_BUG_CATALOGUE.md`'s new
+B-40 for the full trace. All 873 rows below were corrected in place (halved,
+each with its own disclosed correction note). The 19/20 visual judgment
+recorded here is unaffected: the audit rendered pages at scale=2.0 and drew
+the (then-buggy) stored numbers directly as pixel coordinates at that same
+scale, so the same units convention applied consistently on both the write
+side and this audit's own visualization — the boxes judged "tight and
+correct" really were. Only the raw numbers in the table below, if read as
+PDF points (which is what `boxscore.py` does), were wrong; `boxscore.py`
+itself went from 137/164 to 163/164 once the correction was applied.
+Reproducing this audit's own crops today would need the corrected
+(halved) coordinates, not the ones printed below, since those describe the
+pre-fix data as it was on 2026-09-13's first pass.
+
 `opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md` Method §3: "audit a
 random sample of auto-accepted labels and publish the label error rate
 alongside the score." "Volume, honestly": "audit a random sample of the

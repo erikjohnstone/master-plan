@@ -12,5 +12,5 @@
 # extractors agree within 4pt). Per-row provenance gives the measured
 # agreement and the dark-pixel-fraction threshold that found the line.
 sheet,table_title,x0,top,x1,bot,provenance
-D_25_CO_weld-mech-permit-set.pdf,MECHANICAL DRAWING INDEX,3528.62,227.5,4680.75,929.5,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
-D_25_CO_weld-mech-permit-set.pdf#6,DUCT SCHEDULE,957.5,1627.88,2109.5,3139.5,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+D_25_CO_weld-mech-permit-set.pdf,MECHANICAL DRAWING INDEX,1764.31,113.75,2340.38,464.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+D_25_CO_weld-mech-permit-set.pdf#6,DUCT SCHEDULE,478.75,813.94,1054.75,1569.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"

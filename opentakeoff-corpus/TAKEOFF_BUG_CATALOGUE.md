@@ -2584,6 +2584,87 @@ coincide with total silence about the second table's existence, which is
 what makes it invisible to every disclosure mechanism that isn't a
 genuine human eyes-on-the-box check.
 
+---
+
+### B-40 — rulelinebox.py wrote every measured box in RENDER_SCALE=2 units instead of the raw PDF points keys/*.tableboxes.csv actually stores, corrupting 873 rows across 46 files by exactly 2x (FIXED 2026-09-13)
+
+**Where:** `bakeoff/rulelinebox.py`'s own `--apply` output — every one of this
+session's auto-accepted box-tier ground-truth rows, in every `.tableboxes.csv`
+file it touched. Found while regression-checking B-20's fix against
+`boxscore.py`, which reported 137/164 CORRECT with 27 failures each showing
+an EXACT 2x coordinate relationship between the extractor's own box ("got")
+and the recorded ground truth ("truth") — e.g. `019_FL...pdf#4`'s own "Room
+Schedule" truth box, `(3933.0, 2864.12, 4490.38, 4045.38)`, exceeds that
+page's own real dimensions (`3024 × 2160pt`) outright — a box that cannot
+exist on the page it claims to describe.
+
+**Root cause:** `production-graph-cli.mjs`'s own `graph.json` `region` field
+(what `rulelinebox.py` reads via `--graph` and seeds its pixel search from)
+is expressed in RENDER_SCALE=2 units, not raw PDF points. `rulelinebox.py`'s
+`sf = args.scale / 2.0` correctly accounts for that when converting the
+seed region into pixel coordinates for the high-scale render search (so the
+*search* itself, and the printed `worst-edge agreement` values used for the
+auto-accept threshold decision, were always correct — confirmed: those
+values are computed as `(m - vg_x0) / 2`, which already cancels the
+RENDER_SCALE=2 units and yields a genuine real-point difference). But the
+final *measured box* returned from `measure_edges()`,
+`m = [left / sf, top / sf, right / sf, bot / sf]`, only undid the
+render-scale step — it never took the second `/2` needed to reach raw PDF
+points, so it stayed in RENDER_SCALE=2 units (2x too large) all the way into
+the CSV. Every hand-authored `.tableboxes.csv` entry in the corpus (the
+original 137-table frozen set) stores raw PDF points directly — confirmed
+by checking `014_MT#4` and `019_FL#15`'s own authored boxes against their
+real page dimensions — so this was a genuine convention mismatch introduced
+when `rulelinebox.py` was written this session, not a pre-existing issue.
+
+**What this does NOT affect:** the auto-accept *decision* itself (the
+`worst-edge agreement <= 4pt` threshold check) was always computed correctly,
+since `agree` already cancelled the units bug — so every one of the 873 rows'
+own claim to have been *validated* by two mechanically independent methods
+agreeing within 4pt remains true. `RULELINEBOX_AUDIT.md`'s 19/20-correct
+finding is also unaffected: that audit rendered pages at scale=2.0 and drew
+the (buggy, 2x-inflated) stored numbers directly as pixel coordinates at that
+same scale — the same units bug applied consistently on both the write side
+and the audit's own visualization side, so the boxes it judged "tight and
+correct" really were tight and correct; only the raw numbers stored in the
+CSV, when read as PDF points by `boxscore.py`, were wrong.
+
+**Consequence:** `boxscore.py` — the goal document's own named frozen gate —
+regressed from its historical 137/137 to 137/164 once these 873 corrupted
+rows entered the same corpus this session's own key-authoring grew. Any
+downstream consumer reading `.tableboxes.csv` coordinates as raw PDF points
+(which is the file's own documented schema) would have silently gotten boxes
+2x too large for every `rulelinebox.py`-authored row.
+
+**FIX (2026-09-13):** `rulelinebox.py`'s `measure_edges()` now divides by
+`sf` **and then by 2.0** before returning `m`, landing in genuine raw PDF
+points; the `agree` dict's own (already-correct) formula is preserved
+unchanged, just re-derived from the corrected `m`. The `--apply` header
+comment's "converted back to RENDER_SCALE=2 units" claim is corrected to
+"converted to raw PDF points." All 873 already-written rows across 46
+`.tableboxes.csv` files were corrected in place (each coordinate halved,
+each row's own provenance string appended with a `[B-40 CORRECTED
+2026-09-13...]` note disclosing the change) via a one-time script, not
+silently rewritten.
+
+**Verified:** `boxscore.py` after the correction: **163/164 CORRECT (99.4%),
+mean IoU 0.9932** — up from 137/164 (83.5%). The single remaining failure
+(`083_MA...#4`'s "ENERGY RECOVERY VENTILATOR SCHEDULE") is confirmed to be a
+DIFFERENT, pre-existing, narrow scorer limitation, not a data bug: this page
+genuinely carries two distinct real tables sharing the identical caption
+(disclosed in this file's own `.tables.csv` key as "printed twice on this
+sheet"), and `boxscore.py`'s `truth_for()` keys its truth dict purely by
+title, so a second same-titled row silently overwrites the first — both
+`.tableboxes.csv` rows for this title are independently correct
+(worst-edge agreement 0.09pt each against vectorgrid's own two distinct
+boxes), but only one survives the dict collapse to be scored, and by file
+order it is compared against the wrong "got" candidate of the two. Left
+open as a separate, narrow, disclosed scorer gap — not touched here given
+how carefully-adjudicated `boxscore.py`'s own ruler already is (STATE.md:
+"an argument I wrote and changed four times").
+
+---
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the

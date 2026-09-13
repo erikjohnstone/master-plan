@@ -12,4 +12,4 @@
 # extractors agree within 4pt). Per-row provenance gives the measured
 # agreement and the dark-pixel-fraction threshold that found the line.
 sheet,table_title,x0,top,x1,bot,provenance
-100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",708.0,110.75,2436.25,642.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#5,"DIFFUSER, GRILLE, AND REGISTER SCHEDULE",354.0,55.38,1218.12,321.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"

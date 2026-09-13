@@ -158,10 +158,26 @@ def measure_edges(png_path: Path, sf: float, region, pad_pt: float, thresholds=(
         right = nearest(v_lines, vg_x1 * sf)
         if None in (top, bot, left, right):
             continue
-        m = [left / sf, top / sf, right / sf, bot / sf]
+        # `region` (vg_x0..vg_y1) comes straight from production-graph-cli.mjs's
+        # own graph.json, whose `region` field is in RENDER_SCALE=2 units, not
+        # raw PDF points — confirmed empirically 2026-09-13 (found via a
+        # boxscore.py regression check: a written box exceeded its own page's
+        # real point dimensions by almost exactly 2x). `sf = args.scale / 2.0`
+        # already accounts for that when seeding the pixel search (vg_x0 * sf
+        # correctly lands on the render-at-args.scale pixel position), and the
+        # `agree` dict below is already correct for the same reason (dividing
+        # by 2 there converts a RENDER_SCALE=2-unit difference to real points).
+        # But `left / sf` etc. only undoes the render-scale step, leaving the
+        # RESULT in RENDER_SCALE=2 units — a SECOND `/2` is required to reach
+        # the raw PDF points that keys/<id>.tableboxes.csv actually stores
+        # (confirmed against every hand-authored entry in that file). This was
+        # the bug B-40 catalogues: 907 rows across 46 files were written 2x
+        # too large before this line existed; see the correction this commit
+        # also applies to every affected .tableboxes.csv.
+        m = [left / sf / 2.0, top / sf / 2.0, right / sf / 2.0, bot / sf / 2.0]
         agree = {
-            "left": round((m[0] - vg_x0) / 2, 2), "top": round((m[1] - vg_y0) / 2, 2),
-            "right": round((m[2] - vg_x1) / 2, 2), "bot": round((m[3] - vg_y1) / 2, 2),
+            "left": round((m[0] * 2 - vg_x0) / 2, 2), "top": round((m[1] * 2 - vg_y0) / 2, 2),
+            "right": round((m[2] * 2 - vg_x1) / 2, 2), "bot": round((m[3] * 2 - vg_y1) / 2, 2),
         }
         return [round(x, 2) for x in m], agree, frac
     return None, None, None
@@ -259,7 +275,8 @@ def main():
                 f.write("# The page was rendered at high scale; for each of vectorgrid's 4 reported\n")
                 f.write("# edges, a padded search window (seeded by vectorgrid's own region only to\n")
                 f.write("# know where on the sheet to look) was scanned for the real drawn rule\n")
-                f.write("# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a\n")
+                f.write("# nearest that edge, then converted to raw PDF points (matching every other\n")
+                f.write("# row in this file). This is a\n")
                 f.write("# second, mechanically independent measurement of the raw page pixels --\n")
                 f.write("# never a read of vectorgrid's own box -- satisfying the goal document's\n")
                 f.write("# Method Section 3 auto-accept criterion (two mechanically independent\n")

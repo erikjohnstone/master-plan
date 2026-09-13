@@ -12,5 +12,5 @@
 # extractors agree within 4pt). Per-row provenance gives the measured
 # agreement and the dark-pixel-fraction threshold that found the line.
 sheet,table_title,x0,top,x1,bot,provenance
-037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#31,HANGER STRAPS OR RODS,2658.38,1427.88,3348.62,1673.12,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.08pt vs vectorgrid's own box"
-037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#55,NEW CONSTRUCTION KEYED NOTES,4090.38,155.12,5937.62,343.88,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 2.74pt vs vectorgrid's own box"
+037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#31,HANGER STRAPS OR RODS,1329.19,713.94,1674.31,836.56,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 0.08pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"
+037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#55,NEW CONSTRUCTION KEYED NOTES,2045.19,77.56,2968.81,171.94,"deterministic ruled-line pixel detection @ threshold 0.6, worst-edge agreement 2.74pt vs vectorgrid's own box [B-40 CORRECTED 2026-09-13: original rulelinebox.py measurement was written in RENDER_SCALE=2 units instead of raw PDF points (2x too large); halved to match this file's own established convention -- see TAKEOFF_BUG_CATALOGUE.md]"

@@ -117,6 +117,16 @@ window. This file's per-document entries below that say "BOX-graded" or
 gate-legitimate work — not a Demo-Corpus pass — and should be read that
 way throughout.
 
+**SECOND CORRECTION (2026-09-13, later the same day): a units bug, found and
+fixed — see `TAKEOFF_BUG_CATALOGUE.md`'s new B-40 and `RULELINEBOX_AUDIT.md`'s
+own correction note.** `rulelinebox.py` wrote every measured box in
+RENDER_SCALE=2 units instead of the raw PDF points `.tableboxes.csv` actually
+stores — 873 rows across 46 files, 2x too large. This did NOT affect the
+auto-accept threshold decision itself (already computed correctly) or the
+audit's own 19/20 visual judgment (self-consistent under the same units
+convention) — only the stored coordinates, now corrected in place.
+`boxscore.py` went from 137/164 to 163/164 (99.4%) once fixed.
+
 Status values: `not-started` (nothing done), `missed-checked` (rendered,
 real table count hand-confirmed, box/cell grading not yet done),
 `box-graded` (missed-checked, plus every real table's box hand-picked
