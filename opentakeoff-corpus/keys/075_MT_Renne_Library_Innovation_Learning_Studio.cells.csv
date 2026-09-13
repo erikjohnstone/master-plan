@@ -1,0 +1,272 @@
+# 075_MT_Renne_Library_Innovation_Learning_Studio.cells.csv -- CELL-tier
+# ground truth, DEMO CORPUS document, sheet #18. All 6 real HVAC equipment
+# tables on this sheet (MINI-SPLIT AIR HANDLER UNIT SCHEDULE, MINI-SPLIT
+# HEAT PUMP SCHEDULE, ENERGY RECOVERY UNIT SUMMARY SCHEDULE, ELECTRIC DUCT
+# COIL SCHEDULE, EXTERIOR AIR INLETS & OUTLETS SCHEDULE, INTERIOR AIR
+# INLETS & OUTLETS SCHEDULE -- 12 data rows total) were read directly off a
+# rendered crop of the page at scale=3.0 (wide tables split into left/right
+# halves to stay legible) with the extractor's own answer NOT in view,
+# transcribed, THEN compared cell by cell against the extractor's own
+# output. Result: 12/12 rows matched EXACTLY, including a genuine
+# duplicate tag preserved verbatim (INTERIOR AIR INLETS & OUTLETS
+# SCHEDULE's own S-1L tag appears on two different rows with two different
+# NECK SIZE values, 6"/10" -- a real as-drawn duplicate, not a
+# transcription or extraction artifact).
+#
+# One edge case worth recording rather than silently smoothing over:
+# ELECTRIC DUCT COIL SCHEDULE's own DUCT SIZE WIDTH and HEIGHT cells are
+# drawn with a solid black fill directly over them on the page -- reading
+# the RENDER alone (this goal's own definition of ground truth: "a human
+# looked at the rendered page ... and wrote down the true cell content"),
+# a human cannot see a value there at all. The extractor reports `0"` for
+# both. Checked directly against the PDF's own text layer (`textSpans()`
+# at the exact coordinates under the black fill): two real `0"` text spans
+# genuinely exist there, just visually painted over -- the extractor's
+# answer is correct against the underlying document, even though it is
+# not verifiable from the rendered image alone. Recorded here as a MATCH
+# (the extractor's answer is right), with this note preserved so a future
+# grader does not either (a) silently agree without checking, or (b) mark
+# it wrong for being render-illegible without checking the text layer.
+#
+# Because every value matched, this file's own data rows below are taken
+# from the extractor's output rather than re-keyed a second time by hand --
+# the two are byte-identical, confirmed cell by cell against the
+# independent hand-read first (except the DUCT SIZE WIDTH/HEIGHT cells
+# above, confirmed via the text layer instead of the render, as noted).
+# row/col index ONLY each table's own DATA rows/columns (0-based),
+# following the same convention as this corpus's
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans.cells.csv.
+#
+# Part of opentakeoff-corpus/goals/VECTORGRID_TABLE_BOXES.md's own
+# Completion Gate CELL-tier requirement. Real, disclosed partial progress
+# on one Demo Corpus document among 32; not a claim the Demo Corpus is
+# graded (which also requires zero errors AND every box hand-graded blind
+# with no auto-accept -- see DEMO_CORPUS_GRADING.md's own correction).
+#
+sheet,table_title,row,col,text
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,0,AHU-1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,1,MULTI-POSITION AIR HANDLER UNIT
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,2,SAMSUNG
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,3,AC024BNZDCH/AA
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,4,HP-1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,5,HORIZONTAL
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,6,750 CFM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,7,325 CFM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,8,0.58 in-wg
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,9,1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,10,290.00 W
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,11,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,12,2 ton
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,13,22300 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,14,15800 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,15,27000 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,16,16200 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,17,ELECTRIC HEAT KIT
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,18,3 kW
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,19,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,20,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,21,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,22,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,23,MERV 8
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,24,110 lb
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,25,2.1 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,26,208 V
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,27,1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,0,28,"1,2"
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,0,AHU-2
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,1,MULTI-POSITION AIR HANDLER UNIT
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,2,SAMSUNG
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,3,AC024BNZDCH/AA
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,4,HP-2
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,5,HORIZONTAL
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,6,750 CFM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,7,325 CFM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,8,0.58 in-wg
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,9,1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,10,290.00 W
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,11,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,12,2 ton
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,13,22300 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,14,15800 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,15,27000 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,16,16200 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,17,ELECTRIC HEAT KIT
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,18,3 kW
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,19,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,20,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,21,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,22,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,23,MERV 8
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,24,110 lb
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,25,2.1 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,26,208 V
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,27,1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT AIR HANDLER UNIT SCHEDULE,1,28,"1,2"
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,0,HP-1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,1,HEAT PUMP
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,2,SAMSUNG
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,3,AC024BXADCH/AA
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,4,AHU-1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,5,HEAT PUMP
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,6,2 ton
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,7,22300 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,8,15800 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,9,27000 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,10,16200 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,11,R410A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,12,5.73 lb
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,13,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,14,-13.0 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,15,0.0 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,16,122 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,17,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,18,16.9
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,19,9.7
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,20,7.9
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,21,160 lb
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,22,17 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,23,24 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,24,30 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,25,208 V
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,26,1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,0,27,"1,2"
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,0,HP-2
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,1,HEAT PUMP
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,2,SAMSUNG
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,3,AC024BXADCH/AA
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,4,AHU-2
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,5,HEAT PUMP
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,6,2 ton
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,7,22300 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,8,15800 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,9,27000 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,10,16200 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,11,R410A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,12,5.73 lb
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,13,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,14,-13.0 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,15,0.0 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,16,122 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,17,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,18,16.9
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,19,9.7
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,20,7.9
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,21,160 lb
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,22,17 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,23,24 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,24,30 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,25,208 V
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,26,1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,MINI-SPLIT HEAT PUMP SCHEDULE,1,27,"1,2"
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,0,ERV-1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,1,ENERGY RECOVERY VENTILATOR
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,2,GREENHECK
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,3,MINICORE-5-VG-P
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,4,FIBER CORE
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,5,650 CFM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,6,0.50 in-wg
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,7,650 CFM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,8,0.50 in-wg
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,9,6580 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,10,92.0 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,11,81.0 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,12,86.0 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,13,30140 Btu/h
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,14,-13.0 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,15,37.4 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,16,TIMED EXHAUST
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,17,25.1 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,18,66%
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,19,MERV 8
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,20,215 lb
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,21,6.9 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,22,8.6 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,23,15 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,24,208 V
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ENERGY RECOVERY UNIT SUMMARY SCHEDULE,0,25,1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,0,DH-1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,1,ELECTRIC DUCT HEATER
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,2,ELECTRO INDUSTRIES
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,3,EM-WC1025H
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,4,650 CFM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,5,37.4 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,6,77.8 °F
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,7,1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,8,9.6 kW
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,9,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,10,"0"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,11,"0"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,12,"14"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,13,115 lb
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,14,40.0 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,15,50 A
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,16,240 V
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,ELECTRIC DUCT COIL SCHEDULE,0,17,1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,0,L-1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,1,LOUVER/DAMPER
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,2,GREENHECK
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,3,ESD-635
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,4,ALUMINIUM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,5,FIXED BLADE
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,6,650 CFM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,7,1.11 SF
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,8,715 FPM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,9,0.08 in-wg
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,10,"24"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,11,"18"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,12,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,13,MOTORIZED
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,14,24 V
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,0,15,ERV-1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,0,L-2
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,1,LOUVER/DAMPER
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,2,GREENHECK
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,3,ESD-635
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,4,ALUMINIUM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,5,FIXED BLADE
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,6,650 CFM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,7,1.11 SF
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,8,715 FPM
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,9,0.08 in-wg
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,10,"24"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,11,"18"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,12,Yes
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,13,MOTORIZED
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,14,24 V
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,EXTERIOR AIR INLETS & OUTLETS SCHEDULE,1,15,ERV-1
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,0,0,E-1L
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,0,1,PERFORATED DIFFUSER STEEL
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,0,2,TITUS
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,0,3,PAR
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,0,4,WHITE ENAMEL
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,0,5,"24""x24"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,0,6,"16""Ø"
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,0,7,TYPE 3 (LAY-IN)
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,0,8,---
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,1,0,R-1L
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,1,1,PERFORATED DIFFUSER STEEL
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,1,2,TITUS
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,1,3,PAR
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,1,4,WHITE ENAMEL
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,1,5,"24""x24"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,1,6,"12""Ø"
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,1,7,TYPE 3 (LAY-IN)
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,1,8,---
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,2,0,S-1L
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,2,1,PLAQUE FACE DIFFUSER
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,2,2,TITUS
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,2,3,OMNI
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,2,4,WHITE ENAMEL
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,2,5,"24""x24"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,2,6,"6""Ø"
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,2,7,TYPE 3 (LAY-IN)
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,2,8,---
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,3,0,S-1L
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,3,1,PLAQUE FACE DIFFUSER
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,3,2,TITUS
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,3,3,OMNI
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,3,4,WHITE ENAMEL
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,3,5,"24""x24"""
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,3,6,"10""Ø"
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,3,7,TYPE 3 (LAY-IN)
+075_MT_Renne_Library_Innovation_Learning_Studio.pdf#18,INTERIOR AIR INLETS & OUTLETS SCHEDULE,3,8,---
