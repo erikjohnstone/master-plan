@@ -1837,6 +1837,16 @@ fails MISSED=0's false-positive-free counterpart — a phantom table with
 no real basis pollutes an otherwise perfectly-extracted sheet (4/4 real
 tables correct).
 
+**CONFIRMED RECURRING 2026-09-13 — a 2nd document, twice on one
+document.** `080_CA_Contra_Costa_College_Science_Center_Conference.pdf`
+fabricates a `title: "AGENCY APPROVALS"`, `rows: 3` phantom table on BOTH
+page #17 and page #21 — confirmed by render: this is the empty
+signature/stamp title-block box labeled "AGENCY APPROVALS" printed in
+the same corner of every sheet in this set, not a real ruled table
+anywhere. Same general mechanism as the DOPL disclaimer-stamp case above
+(title-block box content fabricated into a table), recurring on a
+completely different source document and a different specific stamp box.
+
 ### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (NOT FIXED — found, traced, disclosed)
 
 **Where:** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf`, both of its
