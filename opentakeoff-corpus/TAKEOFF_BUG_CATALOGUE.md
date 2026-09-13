@@ -2850,7 +2850,7 @@ correctly left to a future session with the budget for a full corpus
 regression pass, now with the wrong approach ruled out in evidence rather
 than by inference.
 
-### B-32 — the primary equipment table itself (BOILERS) goes missing on a boiler-replacement project, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, disclosed)
+### B-32 — the primary equipment table (BOILERS) is present and correctly located but garbled into one composite row by a below-table footnotes list, PUMPS is genuinely missing, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, corrected, disclosed)
 
 **Where:**
 `013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf`, both of its
@@ -2924,6 +2924,49 @@ fails MISSED=0 by 2 whole real tables (33 rows, including the project's
 own namesake `BOILERS` equipment) plus a garbled, duplicated, and
 partially-fabricated report on 4 more tables — the worst combination of
 failure shapes measured on a single document this session.
+
+**CORRECTED 2026-09-13, same day: the `"DIA. (in)"` phantom is not a bare
+title-fabrication on an otherwise-uninvolved candidate — it IS the
+missing `BOILERS` table itself, badly garbled, not a separate
+mechanism.** Traced live (`OPENTAKEOFF_GRAPH_TRACE=1`, then a rendered
+crop of the real page at the candidate's own region): the `"DIA. (in)"`
+table's own `headers` are unmistakably `BOILERS`'s real columns (`MARK`,
+`SERVICE`, `FUEL TYPE`, `FLOW (GPM)`, ..., `MANUFACTURER & MODEL`), and
+the render confirms a genuine, cleanly-ruled 18+ column `BOILERS`
+schedule sits at those exact coordinates with 8 real data rows — this
+candidate's real region is correct, its column set is correct, but its
+`rows` array holds exactly **one** garbage row, not 8: every cell's own
+text is several real values concatenated together
+(`"SERVICE"`: `"1000 *SEE SEQUENCE SHEET 1. VIBRATION SPRING ISOLATORS
+MOUNTS 4. MOTORIZED GAS VALVE"`) rather than one real per-row value. The
+render explains why: several of `BOILERS`'s own real cells carry a tiny
+superscript footnote-reference digit inline with their value (`7-14"¹`,
+`4"/4"²`, `10"³`, `20/3P⁵`), referencing a real, separate `ACCESSORIES:`
+notes list of 5 numbered items printed directly below the table (no
+visible gap/rule the reader's own block-boundary logic apparently
+respects) — the SAME diseased shape B-16 names for two side-by-side
+prose lists, here one prose list glued onto the BOTTOM of a real ruled
+table instead of beside another list. The notes list's own numbered
+items got absorbed as if they were additional table content, and
+whatever collapsed the real 8 rows into 1 composite garbage row is not
+yet isolated (plausibly the same block/row-boundary confusion, not a
+separate defect) — not traced further under this pass. The `"CAPACITY
+(GAL)"` phantom (from `HYDRONIC SPECIALTIES SCHEDULE`) was NOT re-checked
+against its own render under this pass and may or may not share this
+exact mechanism; do not assume it does without the same live check.
+
+**Why this raises this bug's own priority, not just its precision:** a
+project's own namesake equipment schedule is not merely ABSENT (a
+recall gap) — it is present, correctly located, with the right columns,
+and destroyed at the row level by an adjacent notes list the reader
+never learned to stop at. The real fix likely lives in the same family
+as B-16's own disclosed need (a structural discriminator for "a
+repeating LABEL + LONG PROSE SENTENCE block is not more table rows",
+whether beside or below a real table) — worth root-causing together
+rather than as two separate efforts, given this session's own standing
+rule against guessing at either without first measuring the shared
+signal precisely. Not fixed; disclosed with a corrected, much more
+specific mechanism than "column-header text fabricated into a title".
 
 ### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (PARTIALLY FIXED 2026-09-13 — original document's untitled-phantom half closed; the duplicate-table half and 2 recurring instances remain open)
 
