@@ -37,8 +37,8 @@ real table count hand-confirmed, box/cell grading not yet done),
 blind and scored), `cell-graded` (box-graded, plus every cell hand-
 transcribed and exact-matched — this is PASS/FAIL for the document).
 
-**Status: 26 of 32 HELDOUT documents missed-checked (9 via Demo Corpus
-overlap, 17 new this session); 6 of 32 untouched. 0 of 32 have completed
+**Status: 27 of 32 HELDOUT documents missed-checked (9 via Demo Corpus
+overlap, 18 new this session); 5 of 32 untouched. 0 of 32 have completed
 FULL box+cell grading.**
 
 | document | status | real tables found | notes |
@@ -71,7 +71,7 @@ FULL box+cell grading.**
 | 011_IL_VA_Hines_Finance_Center_Renovation | missed-checked | 2 real hand-confirmed, all 2 correct, all 22 rows correct | Clean document. Sheet MH-101 (p16, "LEVEL 2 - MECHANICAL HVAC DUCT PLAN AND SCHEDULES") hand-confirmed to carry 2 real tables: EXISTING HEAT PUMP SCHEDULE (15 rows) and DIFFUSER, REGISTER, AND GRILLE SCHEDULE. Initial hand-count of the diffuser table came up 5 (RG-1, SD-1..SD-4) against the extractor's 7; re-verified via `textSpans()` and found the table's own `RETURN`/`SUPPLY` category-header rows sit on the same evenly-spaced row grid as the data rows (confirmed by consistent row-height spacing) — they are genuine table rows, not pure section dividers. The extractor was right (7/7); the hand-count was wrong, same self-correction category as 038_NC/031_MO precedents, not a pipeline defect. Both tables match exactly (22/22 rows). |
 | 071_ME_BGS_Project_3809_Health_Science_Center | not-started | — (census: 35 tables, 59 pages) | |
 | 12_MT_MSU_ReidHall_Renovation | not-started | — (census: 40 tables, 43 pages) | |
-| 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test | not-started | — (census: 43 tables, 27 pages) | |
+| 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test | missed-checked | 11 real hand-confirmed, all 11 correct, all 24 rows correct | Clean document. Sheet M-601 (p18, "SCHEDULES") hand-confirmed to carry 11 real tables: AIR HANDLING UNIT SCHEDULE (1 row), FIN TUBE RADIATION SCHEDULE (1), EXPANSION TANK SCHEDULE (1), CONVECTOR SCHEDULE (1), CONTROL DAMPER SCHEDULE (9), DIFFUSER/REGISTER/GRILLE SCHEDULE (4), AIR COOLED CONDENSING UNIT SCHEDULE (1), BOILER SCHEDULE (EXISTING) (1), PUMP SCHEDULE (2), FAN SCHEDULE (2), STATIONARY ROOF VENTILATOR SCHEDULE (1). All 11 match the production pipeline exactly (24/24 rows). |
 | 06_MO_NatlGuard_JeffCity_CST_Addition | not-started | — (census: 73 tables, 85 pages) | |
 | 21_VA_OrangeCounty_PublicSafetyBldg | not-started | — (census: 78 tables, 128 pages) | |
 | 089_FL_Airport_Terminal_and_Hangar_Development | not-started | — (census: 93 tables, 177 pages, largest) | |
