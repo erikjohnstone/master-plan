@@ -3564,7 +3564,141 @@ fix addresses the actual defect rather than only papering over its symptom.
 
 ---
 
-## B-42: mid-table floor-section divider hijacks the table's title AND silently drops the trailing section entirely (028_TX, "NOISE CONTROL DUCT SILENCER SCHEDULE")
+## B-42: a schedule drawn as separate ruled fragments (caption+headers, then each floor section) never gets reassembled — real rows AND real headers both lost (028_TX, "NOISE CONTROL DUCT SILENCER SCHEDULE")
+
+**Found 2026-09-13, CORRECTED same day after a deeper trace** — the first
+write-up of this entry (below the line, kept for the record of how the
+diagnosis moved) had a wrong unit conversion and stopped one layer too
+shallow. The real mechanism is bigger and worse than first reported.
+
+**The real page layout, confirmed by direct render at the correct pixel
+scale (`raw_pt × 3`, not `raw_pt × 1.5` — see correction below):** vectorgrid's
+own face-finder (`bakeoff/vectorgrid.py:find_tables`) sees this ONE physical
+schedule as **three separate closed ruled faces**, not one: (1) the caption
+"NOISE CONTROL DUCT SILENCER SCHEDULE" plus its 11 real column headers
+(QTY./LOCATION & SERVES/DUCT WIDTH/.../NOTE), (2) the FIRST FLOOR
+section — its own bold "FIRST FLOOR" divider label plus 14 real data
+rows, (3) the SECOND FLOOR section — its own "SECOND FLOOR" divider plus 2
+more real data rows. Confirmed directly with the bakeoff module's own
+`find_tables()` called standalone: exactly 8 candidate bboxes on this page,
+one of which (`(123.72,877.32)-(1566.24,1190.16)` raw pt) is the FIRST FLOOR
+piece and another (`(123.72,1169.88)-(1566.24,1259.28)`) is SECOND FLOOR —
+both real, both correctly found by the Python engine.
+
+**What happens to each of the three fragments in the TS layer
+(`scheduleTableFromODL`, `web/src/lib/sheetgraph.ts`):**
+- Fragment 1 (caption+headers, 0 data rows of its own) is refused with
+  `"no keyed data rows (kind equipment, key column col 0)"` — correctly,
+  since it has zero data rows and nothing here is wrong with that refusal
+  in isolation.
+- Fragment 2 (FIRST FLOOR) IS accepted, titled `"FIRST FLOOR"` — but with
+  a compounding defect nobody had reason to suspect from the outside: since
+  its own leading row is the "FIRST FLOOR" divider label (spanning nearly
+  every column) and it has no title/header rows of its own, the rescue at
+  `sheetgraph.ts:10166` (`if (headerEnd <= bodyStart && titleCell && R -
+  bodyStart >= 2) headerEnd = bodyStart + 1`) treats the divider as the
+  table's `titleCell` and then promotes the table's own FIRST REAL DATA ROW
+  ("2 | GROUP REHEARSAL 123 - SUPPLY/RETURN | 18 | 14 | 745 | ...") to serve
+  as its column headers. Confirmed live (`OPENTAKEOFF_DEBUG_KEYCOL`
+  instrumentation, removed after use): the accepted table's own `headers`
+  array is literally `["2","GROUP REHEARSAL 123 - SUPPLY/RETURN","18",
+  "14","745","426","0.16","36","21","PRICE/STC-55","1,2,3,4,5,6"]` — the
+  real column names (QTY., LOCATION & SERVES, DUCT WIDTH (IN.), ...) never
+  reach this table at all, because they live in Fragment 1, which was
+  refused and discarded. This also explains the previously-unexplained
+  13-vs-14-row discrepancy this ledger flagged but did not resolve: the
+  real first data row is consumed as a fake header, so only 13 of FIRST
+  FLOOR's 14 real rows ever reach `rows`.
+- Fragment 3 (SECOND FLOOR) is refused with `"no header block above the
+  data"` — its own only row is the "SECOND FLOOR" divider, so no header
+  block can be found within the fragment alone, and (per that refusal's own
+  code comment, `sheetgraph.ts:10161-10165`) it is deliberately NOT rescued
+  because a title-less fragment must not risk reading a real data row as a
+  header elsewhere in the corpus. It is dropped with nothing standing in
+  for it — not merged, not re-attempted, gone.
+
+  (**Correction to the first write-up:** that version converted this
+  fragment's declined-region coordinates using the wrong scale factor
+  [`×1.5`, treating them as `RENDER_SCALE=2` region-units] and rendered the
+  wrong part of the page, concluding this declined region was an unrelated
+  isometric duct-detail drawing. Re-rendering at the correct `×3` — these
+  coordinates are raw PDF points from `vectorgrid_rpc.py`'s own documented
+  space, and the render scale used throughout this session's grading was 3
+  — shows unambiguously that this declined region *is* SECOND FLOOR: its
+  divider label and both real data rows, `ROCK REHEARSAL 218` and
+  `VEST 212`, are directly visible in it.)
+
+**Net result:** the real 16-row, 11-column schedule survives as one 13-row
+table with a title ("FIRST FLOOR") that is not its real caption and column
+headers that are not real column names but literal data values from its own
+first row — a table that reads exact-match on cell CONTENT in isolation
+(this ledger's own 028_TX cell-tier pass never checked headers, only cell
+values row-by-row) yet is structurally wrong in a way plain row/cell
+counting does not surface.
+
+**Attempted fix, reverted rather than shipped:** built a real fix in
+`web/src/lib/vectorGridAdapter.ts` — geometrically detect a refused
+fragment sitting directly below (or, it turns out, above) an accepted
+table with a matching column count and outer x-extent, strip its own
+divider row, and re-run the unmodified `scheduleTableFromODL` pipeline on
+the merged raw piece so its own existing rules (the section-header skip
+already fixed for 042_VA) do the rest. Live-tested against this exact
+document through three iterations:
+1. First attempt: geometric adjacency check required the fragments to
+   touch or have a small gap; the real fragments actually OVERLAP by
+   ~20pt in their measured bounds, so nothing matched. Fixed by making the
+   tolerance symmetric (allow overlap or gap, both bounded).
+2. Second attempt: geometry matched and the merge ran, but the WHOLE
+   table then lost every row (`no keyed data rows`) — the divider row's
+   own text ("SECOND FLOOR") was still present in the merged raw cells and
+   confused the `findEvidencedKeyColumn` pass, which runs over raw
+   column-0 text *before* `buildRows`' own divider-row skip ever executes.
+   Fixed by stripping the divider row's own cells at merge time instead of
+   relying on that later skip.
+3. Third attempt (after the fix above): the merge of FIRST FLOOR +
+   SECOND FLOOR alone still failed, and tracing why is what surfaced the
+   FIRST FLOOR-side header-corruption defect described above — the real
+   fix needs a THREE-way fragment merge (caption+headers fragment,
+   prepended; FIRST FLOOR body; SECOND FLOOR body, appended), not a
+   two-way one, and the caption+headers fragment is refused and discarded
+   *before* FIRST FLOOR is even accepted in iteration order, so the
+   adapter's simple forward-only loop cannot reach it without a real
+   restructure (collect all fragments first, cluster geometrically
+   adjacent same-column pieces regardless of build order, merge each
+   cluster once).
+
+Reverted rather than merged partially: shipping just the two-body merge
+would still leave every affected table's headers wrong (silently — no
+error, just wrong column names), which is not an improvement over today's
+silent row loss, just a different silent defect. This codebase's own
+standing convention is not to land a shared-code change until it is
+verified correct, and a 3-way cluster merge needs real design + a corpus
+regression pass before it is safe, not a quick patch under time pressure.
+
+**Real, well-scoped next step for whoever picks this up:** in
+`extractScheduleTablesFromVectorGrid` (`vectorGridAdapter.ts`), replace the
+single forward pass with two phases — (1) attempt every raw piece
+independently exactly as today, keeping `{raw, built, why}` for all of
+them regardless of order; (2) cluster pieces (built or refused) that share
+column count and outer x-extent and sit vertically adjacent (overlap or
+small gap, both bounded — the ~20-30pt tolerance measured live above),
+merge each cluster top-to-bottom stripping any interior divider-shaped row
+(a single cell spanning `cols-1` or more columns) wherever it falls, and
+re-run `vectorGridTableToScheduleTable` once per cluster. Only clusters
+containing at least one originally-refused piece should ever be attempted,
+so two independently-successful standalone tables are never merged by
+accident. Verify against 028_TX page 1 (expect one 16-row table titled
+"NOISE CONTROL DUCT SILENCER SCHEDULE" with real headers QTY./LOCATION &
+SERVES/.../NOTE) AND a full `cellscore.py`/`boxscore.py` corpus run before
+landing, since this touches every vectorgrid-sourced table in the corpus,
+not just this one document.
+
+**Not fixed.** Same reasoning as B-26/B-31/B-32, now with the actual
+scope and a concrete implementation plan instead of a guess.
+
+---
+
+### Original write-up (2026-09-13, superseded above — kept for the record)
 
 **Found 2026-09-13** while extending genuine `pixelruler.py` box-tier grading to
 028_TX's 3 remaining tables (the ledger's earlier "5/8 box-graded" note). This
@@ -3577,57 +3711,14 @@ caption, exactly matching this file's own earlier hand-count).
 **What production actually returns for this page:** only 2 tables —
 `EXTERNAL STATIC PRESSURE SCHEDULE` (17 rows, correct) and one titled
 **`"FIRST FLOOR"`** (13 rows). The real caption above it, "NOISE CONTROL DUCT
-SILENCER SCHEDULE", is nowhere in the output as a title. **SECOND FLOOR's own
-2 rows (`ROCK REHEARSAL 218`, `VEST 212`) do not appear anywhere in the
-extracted graph at all** — not merged into the FIRST FLOOR table, not present
-as a separate table, and not even a *declined* candidate: `OPENTAKEOFF_GRAPH_TRACE=1`
-on a fresh (post cache-clear) run lists exactly 4 declined regions for this
-page, and none of their coordinates fall anywhere near SECOND FLOOR's own
-location (the nearest, `4x11 at 124,1170,1566,1259: no header block above the
-data`, converts to pixel (186,1755)-(2349,1888.5) at scale 3 — confirmed by
-direct render to be the page's unrelated "DUCT SILENCER DETAIL" isometric
-drawing with its dimension leader lines, not this schedule at all). SECOND
-FLOOR was never proposed as a candidate region in the first place, so there
-is nothing to decline — it is a true silent drop, not a rejected-and-logged
-one.
+SILENCER SCHEDULE", is nowhere in the output as a title. SECOND FLOOR's own
+2 rows do not appear anywhere in the extracted graph at all.
 
-**Root cause, mechanism-level:** this is the same block-split failure family
-already tracked (B-26's "block-split at y=1019", B-77's "mid-table
-section-divider row misread as a second bogus table") but with a new, worse
-symptom shape: the section-divider text itself ("FIRST FLOOR") is being
-promoted to stand in as the resulting sub-block's own *title* (rather than
-being recognized as a keyed data row or a non-title section header within one
-continuing table), and whatever block-splitting logic acts on the FIRST/SECOND
-divider only emits a candidate for the block *before* the split it detects —
-the trailing section past the last divider it processes is never revisited to
-emit its own candidate at all. Not traced to the exact function this session
-(the vectorgrid Python extractor's own row/block segmentation is upstream of
-the TS reconciliation layer this session's other findings have mostly lived
-in) — disclosed at the mechanism level, consistent with this catalogue's
-existing convention for findings of this shape.
-
-**Also affects box-tier interpretation:** the `"FIRST FLOOR"`-titled table's
-own `region` was still measured genuinely blind against its own true ruled
-extent and **passes** (worst edge ~0.97pt) — the box that DOES exist is
-correctly bounded. But grading that box alone materially overstates this
-table's health: the real schedule is a single 16-row table, of which 3 rows
-(the missing 2 SECOND FLOOR data rows, discovered mid-count to *also* be one
-short even on the FIRST FLOOR side: 13 reported vs 14 counted from the
-render, not yet independently re-verified cell-by-cell) are simply absent
-from any extracted table, and its own real caption is never attached to what
-survives.
-
-**Correction to this ledger's own earlier claim:** `028_TX`'s row in
-`keys/DEMO_CORPUS_GRADING.md` previously stated "all 8 correct" for this
-document's schedule count, based on an earlier pass's row-count check. That
-check evidently did not catch this table's true structure (single schedule,
-two floor sections) against the FIRST/SECOND FLOOR split now confirmed live
-— corrected in that file's own row.
-
-**Not fixed this session** — same reasoning as B-26/B-31/B-32: touching
-vectorgrid's shared block/row-segmentation logic needs the corpus-wide
-regression sweep this session's standing rule requires before a change with
-that blast radius, and the exact originating call needs isolating first.
+**Root cause (WRONG, corrected above):** this entry originally concluded the
+nearest declined region was an unrelated isometric duct-detail drawing, due
+to a unit-conversion error (`×1.5` instead of `×3`), and left the real
+mechanism untraced. See the corrected write-up above for what is actually
+happening.
 
 ---
 
