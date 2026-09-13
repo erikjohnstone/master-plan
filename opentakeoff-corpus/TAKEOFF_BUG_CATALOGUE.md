@@ -1029,6 +1029,108 @@ document is not yet clean.
 
 ---
 
+### B-18 — the real header row is absorbed into the title string, and the first real data row is promoted to take its place, silently dropping the true last row (NOT FIXED — found, traced, disclosed)
+
+**Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf#16`, "WINDOW
+SCHEDULE" — found during the same Demo Corpus hand-verification pass,
+next document after 063_MT (census claimed 5 tables for the whole
+document; this document turned out to need the FULL pipeline compared
+against the render, not just the census tool, to see the real damage —
+see B-19 below for why).
+
+**Measured, hand-graded against the render first:** the real table has 14
+rows (key column: `A, B, C, D, E, F, G, H, J, K, L, M, N, O` — the
+architectural convention of skipping `I`), headers `KEY, TYPE, BRICKMOLD
+TYPE, DIVIDED LIGHT TYPE, OPNG WIDTH +/-, OPNG HEIGHT +/-, COUNT, NOTES`,
+under a plain one-line caption `WINDOW SCHEDULE`. `production-graph-cli.mjs
+--mode graph`'s actual output for this table:
+- `title.text`: `"WINDOW SCHEDULE BRICKMOLD DIVIDED LIGHT KEY TYPE TYPE
+  TYPE OPNG WIDTH +/- OPNG HEIGHT +/- COUNT NOTES"` — the entire real
+  header row's text has been concatenated onto the real one-line caption,
+  becoming the reported title.
+- `headers`: `["A", "CLAD WOOD DOUBLE HUNG", "A 2", "A 3", "3'-7\"",
+  "5'-6\"", "9", "COL8"]` — these are not headers at all; they are the
+  real DATA from row `A` (`KEY=A, TYPE=CLAD WOOD DOUBLE HUNG,
+  BRICKMOLD=A, DIVIDED LIGHT=A, WIDTH=3'-7", HEIGHT=5'-6", COUNT=9`),
+  reported as the column headers.
+- `rows`: keyed `B` through `N` — 12 rows. Row `A` is gone (consumed as
+  the fake header above) and row `O` (the real last row) is gone too, with
+  no trace of it anywhere in the table object.
+
+So one real header-absorption event costs this table its whole header AND
+one full data row (`O`), while a coincidentally table-shaped data row
+(`A`) is misread as the header the whole table is keyed against — net 12
+of 14 real rows surfaced, the true header lost, and the title polluted
+with the header text it swallowed.
+
+**Relationship to already-catalogued bugs:** distinct from #90's fix
+(header-JOIN loop no longer swallows a pre-header spec-metadata row INTO
+the header) — this is the same family of confusion (header/title/data
+boundary) but in the opposite direction: here the real header is swallowed
+INTO the title, and a real DATA row is promoted to serve as the header,
+rather than a metadata row being swallowed into the header. Not traced
+into `sheetgraph.ts`'s header-detection code past this measurement, per
+this file's standing rule against guessing at a fix under time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 (row
+`O`, and the true header row, are both gone) and the reported cells for
+row `A` do not exist in `rows` at all — they were reassigned to `headers`
+instead. This table cannot pass either box- or cell-grading as extracted.
+
+---
+
+### B-19 — two real schedule tables vanish entirely from the same document while unrelated floor-plan callout text nearby gets fused into a fabricated one-row table (NOT FIXED — found, traced, disclosed)
+
+**Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf` — same document
+as B-18, found in the same pass. This is why the Volume-floor census
+tool's own claim for this document (5 titled tables, 49 rows — cited in
+`keys/DEMO_CORPUS_GRADING.md`) could not be trusted at face value: the
+census tool runs `buildSheetGraph` directly with no vectorgrid/ODL layer,
+while `production-graph-cli.mjs --mode graph` (the actual deployed
+pipeline, and the tool every other entry in this file is measured with)
+reports a completely different, much worse shape for the same document.
+
+**Measured, hand-graded against the render first:** four real schedule
+tables exist in this document — `WINDOW SCHEDULE` (p16, 14 rows, see
+B-18), `DOOR AND FRAME SCHEDULE` (p25, 14 rows: `101.1, 105.1, 121.1,
+124.1, 146.1, 148.1, 149.1, 150.1, 155.1, 155.2, 158.1, 159.1, 201.1,
+301.1`), `PROJECT FINISH SCHEDULE` (p23, 12 rows: rooms `111, 116, 121,
+124, 140, 148, 149, 150, 155, 156, 157, 158`), and `LIGHTING FIXTURE
+SCHEDULE` (p35, 4 rows: `A, B, EX, EL`). The full production pipeline's
+own table list for this document contains exactly 4 tables total — one is
+the correctly-out-of-scope cover-sheet `DRAWING LIST` (34 sheets, `reference`
+kind, matches the existing `Revisions`-table precedent for legitimate
+non-schedule reference tables), one is `WINDOW SCHEDULE` (corrupted, see
+B-18), one is `LIGHTING FIXTURE SCHEDULE` (rows and headers all correct,
+but `title: null` — the same defect class as B-17, a 5th and 6th instance
+of that pattern across this pass), and the fourth is on page `#23` with
+`title.text: "7 A 6 604 8 EVS 5"`, `headers: ["COL1", "W1 149", "COL3"]`,
+and exactly one row (`key: "C1"`, cells `{"W1 149": "W1 149", "COL3":
+"C1"}`). That fourth table is not the real `PROJECT FINISH SCHEDULE` at
+all — its region and every cell trace to wall-type and room-number
+callout tags (`W1`, `C1`, `149`) scattered around the "ENLARGED PLAN" /
+"TOILET ROOM" floor-plan drawing on the SAME page, well away from the real
+schedule sitting at the bottom of that sheet. `DOOR AND FRAME SCHEDULE`
+(p25) has no corresponding table anywhere in the output at all — not
+garbled, not misattached, simply absent.
+
+**Relationship to already-catalogued bugs:** the page-23 fabrication is
+the same DISEASE as B-16 (unrelated page content fused into a fake table
+that a reviewer could mistake for a real schedule) but a different domain
+— plan callouts, not prose notes — so a fix for one is not guaranteed to
+reach the other. The page-25 disappearance is not yet traced to any known
+cause; it was not fabricated into anything else findable in this output,
+it is simply not there.
+
+**Consequence for the Demo Corpus's own zero-error bar:** of this
+document's 4 real schedule tables, 0 pass extraction cleanly — 2 are
+completely missing, 1 is corrupted (B-18), and 1 is correct but untitled
+(same class as B-17) — while a genuinely fabricated table is reported as
+if it were real. This is the worst-scoring document graded so far in this
+pass.
+
+---
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.
