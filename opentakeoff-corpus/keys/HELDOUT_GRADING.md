@@ -37,9 +37,10 @@ real table count hand-confirmed, box/cell grading not yet done),
 blind and scored), `cell-graded` (box-graded, plus every cell hand-
 transcribed and exact-matched — this is PASS/FAIL for the document).
 
-**Status: 31 of 32 HELDOUT documents missed-checked (9 via Demo Corpus
-overlap, 22 new this session); 1 of 32 untouched. 0 of 32 have completed
-FULL box+cell grading.**
+**Status: 32 of 32 HELDOUT documents missed-checked (9 via Demo Corpus
+overlap, 23 new this session) — FULL PASS COMPLETE. 0 of 32 have
+completed FULL box+cell grading (the real, harder PASS/FAIL bar — see
+"Next real step" below).**
 
 | document | status | real tables found | notes |
 |---|---|---|---|
@@ -84,13 +85,21 @@ undercount and overcount on the same document. Every row must still be
 independently rendered and read by eye before its own MISSED count means
 anything.
 
-**Next real step for a future session:** continue down the `not-started`
-rows in ascending census-table-count order (smallest first, for the
-fastest per-document completions), same discipline as the Demo Corpus
-pass — render every page, hand-transcribe every real table before
-looking at the extractor's own answer, then compare. Any new
+**Next real step for a future session:** the missed-checking pass is now
+COMPLETE for both the Demo Corpus (32/32) and HELDOUT (32/32) sets — 64
+of 64 documents in the full corpus. This is still one full tier below
+the goal document's own PASS/FAIL bar: every real table across both sets
+(821 Demo Corpus + roughly 700 HELDOUT, per each set's own census) still
+needs (1) box-tier grading — every box hand-picked blind against the
+render and scored at EoB≤4pt, no auto-accept — and (2) cell-tier grading
+— every cell hand-transcribed off the render and exact-matched, never
+via `cellocr.py` as a shortcut. Only 4 documents anywhere (a prior
+session's authored box-ground-truth CSVs, 27 tables total) have any
+box-tier evidence at all; zero tables anywhere have cell-tier evidence.
+Start there, in ascending census-table-count order as before. Any new
 fabricated-table or missed-table finding gets its own bug-catalogue
 entry in `TAKEOFF_BUG_CATALOGUE.md`, or amends an existing B-N entry if
-the signature matches one already found in the Demo Corpus pass.
+the signature matches one already found.
 
 | 21_VA_OrangeCounty_PublicSafetyBldg | missed-checked | 12 real hand-confirmed, 1 clean, 11 wrong row counts; 4 phantom tables | Large (128-page) document, real mechanical-schedule content confined to 3 sheets: M-501/#47 (2 tables, both correct: `DRAIN SIZES SCHEDULE` 2 rows, `VAV BOX CONNECTION SCHEDULE` 7 rows), M-601/#50, M-602/#51. M-601's `VAV TERMINAL BOX SCHEDULE` (57 rows, textSpans-confirmed) is correct; its `AIR HANDLING UNIT SCHEDULE` is a **confirmed 16-row truncation** (51 real → 35 reported, textSpans-verified) — amended into B-31. M-602 carries 10 transposed equipment-comparison tables and **every single one under-counts**: `AIR COOLED CHILLER SCHEDULE` 26→11 (-15), `UNIT HEATER SCHEDULE` 14→4 (-10), `COMPUTER ROOM UNIT SCHEDULE` 24→16 (-8) — all 3 textSpans-verified — plus 7 more each short by 1-2 rows (`BOILER SCHEDULE` -2; `FAN SCHEDULE` -1, textSpans-verified; `AIR COOLED CONDENSING UNIT`, `DUCTLESS SPLIT SYSTEM UNIT`, `PUMP SCHEDULE`, `AIR DISTRIBUTION DEVICE SCHEDULE`, `RELIEF/EXHAUST HOOD SCHEDULE` each -1) — all amended into B-31 as its most severe confirmed instance yet. Separately, control-diagram sheets M-701/#52 and M-703/#54 (zero real ruled tables, hand-confirmed) each report phantom tables fabricated from instrument-bubble callout labels: an untitled 2-row phantom on #52 (traced to a pump-speed-control/expansion-tank label cluster — a DIFFERENT untitled-phantom instance than #50's title-block-sourced one, both amended into B-33/B-34 respectively), plus `"FURNISHED BY FIRE"` (3 rows) and `"RETURN AIR"` (9 rows) on #54 — filed as new bug **B-34** (control-diagram instrument-callout fabrication, a new triggering shape). M-701's and M-702/#53's real `OUTSIDE AIR RESET SCHEDULE` tables (2 rows each) both extract correctly. Plumbing (p30), electrical (p57-58, 83-96, 107, 116-118), and security/AV (p107, 116-117) schedule content surveyed via keyword scan and confirmed present but out of this pass's HVAC-equipment-schedule scope, not independently hand-verified. This is the single worst MISSED-count / row-accuracy failure found in the HELDOUT pass to date on a per-sheet basis. |
+| 089_FL_Airport_Terminal_and_Hangar_Development | missed-checked | 9 real hand-confirmed, 6 correct, 1 wrong title, 1 whole-table miss, 1 minor undercount; 13 phantom tables | The largest document in either set (177 pages, 93-table census). Mechanical-schedule content confined to a small block of M-series sheets identified via `M-###` sheet-number search: M-001/#127 (symbols/index only, 0 tables, correctly reported clean), M-101/102/103/HM-101 (floor plans, not surveyed for schedules — plan-callout scope only), M-501/#132 (0 real tables, correctly reported clean), M-502/#133 (1 real table, `LOUVER ANCHORING DETAIL`, 1 row — completely missing from extraction, filed as new bug **B-37**), M-503/#134 (0 real tables, correctly reported clean), M-504/#135 (`MECHANICAL KEY NOTES`, 4 real rows confirmed via textSpans — reported `rows: 3`, a minor 1-row undercount, not separately filed), M-601/#136 (7 real tables/37 rows, all textSpans-confirmed: `VRF SYSTEM SCHEDULE` 12, `FAN SCHEDULE` 3, `ELECTRIC UNIT HEATER SCHEDULE` 8, `INDOOR DX DOAS FAN COIL UNIT SCHEDULE` 1, `LOUVER SCHEDULE` 5, `OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE` 1, `DIFFUSERS, REGISTERS AND GRILLES SCHEDULE` 7 — 6 of 7 extract with correct title AND row count; `VRF SYSTEM SCHEDULE`'s 12 rows extract correctly but under the WRONG title, `"HEAT PUMP UNIT"` — one of the table's own column-group sub-headers, not its real caption — filed as new bug **B-36**), M-701/#137 (0 real tables, correctly reported clean). Separately, and by far the most significant finding on this document: the AVCON, Inc. title-block logo's own vertical tagline ("TRANSFORMING TODAY'S IDEAS INTO TOMORROW'S REALITY") is fabricated into an identical `rows: 4` phantom table on **13 different sheets** across the document (pages 3, 49, 63, 89, 92, 105, 114, 117, 125, 127, 136, 163, 172) — filed as new bug **B-35**, the most widespread single-document phantom-table finding of the whole session. Structural (foundation/beam/column/lintel schedules, p107-125), architectural (door/window/finish/accessory schedules, p47-92), electrical (panel/luminaire/conduit-fill schedules, p57-58, 83-96, 107, 116-118, 139-149), and plumbing (fixture/water-heater schedules, p163-176) schedule content surveyed via keyword scan and confirmed present but out of this pass's HVAC-equipment-schedule scope, not independently hand-verified. This closes the HELDOUT set's own 32/32 missed-checking pass. |

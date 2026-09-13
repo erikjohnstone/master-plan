@@ -2168,6 +2168,97 @@ family. Given this document's controls-diagram sheets span roughly
 M-701 through M-707 (not fully surveyed), this may be a wider source of
 phantom tables than the 2 instances confirmed here.
 
+### B-35 — a firm's own logo tagline text is fabricated into a phantom table, repeated across 13 different sheets of one document (NOT FIXED — found, traced, disclosed)
+
+**Where:** `089_FL_Airport_Terminal_and_Hangar_Development.pdf` — found
+closing out the HELDOUT set's own missed-checking pass (the 32nd and
+final document). Every sheet in this document carries an AVCON, Inc.
+title-block logo with a vertically-set tagline, "TRANSFORMING TODAY'S
+IDEAS INTO TOMORROW'S REALITY", printed in the right-margin sidebar.
+
+**Measured:** a document-wide search of the extractor's own graph output
+finds a `title: "TRANSFORMING TODAY'S IDEAS INTO TOMORROW'S REALITY"`,
+`rows: 4`, `kind: reference` phantom table on **13 separate sheets**
+(pages 3, 49, 63, 89, 92, 105, 114, 117, 125, 127, 136, 163, 172) — every
+one of them identical in title and row count. Hand-rendered checks of
+several of these pages (M-001/#127, M-601/#136) confirm zero ruled table
+structure at that location — it is purely the rotated tagline text plus
+the small-print copyright/confidentiality notice beneath the AVCON logo
+box, present unchanged on every sheet of the set.
+
+**Relationship to already-catalogued bugs:** same broad "sheet furniture
+fabricated into a phantom table" family as B-29/B-30/B-33/B-34, but a new
+and by far the most WIDESPREAD trigger yet found — not a title-block
+field-grid, not a disclaimer stamp, not P&ID instrument callouts, but a
+firm's own static logo/tagline block, repeated verbatim on every sheet of
+a set drawn by that firm. Because the trigger is firm-specific boilerplate
+rather than content that varies sheet-to-sheet, this is the first phantom-
+table bug in this catalogue confirmed to recur predictably and
+identically dozens of times within a single document, and plausibly
+across every other AVCON-drawn document in the corpus (not checked here).
+
+**Consequence for the HELDOUT set's own zero-error bar:** 13 phantom
+tables (52 phantom rows) in ONE document — the single largest phantom-
+table count found in the HELDOUT pass, on a document whose real HVAC
+schedule content (see below) is otherwise almost entirely clean.
+
+### B-36 — a multi-level table's own internal column-group sub-header is picked as the table's title instead of the real title text above it (NOT FIXED — found, traced, disclosed)
+
+**Where:** `089_FL_Airport_Terminal_and_Hangar_Development.pdf#136`
+(sheet M-601, "MECHANICAL SCHEDULES") — found alongside B-35, closing
+out the HELDOUT set.
+
+**Measured:** the sheet's real `VRF SYSTEM SCHEDULE` (a 2-level-header
+table: top-level groups `COOLING COIL SECTION`/`HEATING COIL SECTION`/
+`HEAT PUMP UNIT` over individual spec columns, 12 real rows `AC-1`
+through `AC-12`) extracts with the CORRECT row count (`rows: 12`,
+`textSpans()`-confirmed) but the WRONG title: `"HEAT PUMP UNIT"` — one of
+the table's own three column-group sub-headers, not the real title
+(`VRF SYSTEM SCHEDULE`) printed in its own title bar directly above the
+table.
+
+**Relationship to already-catalogued bugs:** distinct from B-17 (title
+dropped to `null` entirely) and B-18 (header absorbed INTO the title
+string, promoting a data row) — here the title field is populated with
+real text, correctly row-counted, but sourced from the WRONG place: an
+internal column-group label rather than the table's own caption. A new
+title-attachment failure shape, most likely triggered by this table's
+unusually wide 2-level header (`HEAT PUMP UNIT` sits at the far right of
+the header, the widest/most distant sub-header from the real title's
+own position).
+
+**Consequence for the HELDOUT set's own zero-error bar:** cell/row data
+recovered correctly, but this table would file, search, or group under
+the wrong name in any downstream product surface — a real, disclosed
+data-integrity gap despite the row count itself being clean.
+
+### B-37 — a small, non-`SCHEDULE`-titled ruled table on a mechanical details sheet is completely missed (NOT FIXED — found, traced, disclosed)
+
+**Where:** `089_FL_Airport_Terminal_and_Hangar_Development.pdf#133`
+(sheet M-502, "MECHANICAL DETAILS") — found alongside B-35/B-36.
+
+**Measured:** the sheet's "LOUVER ANCHORING DETAIL" callout carries a
+real, ruled, bordered spec table (`BUILDING CONSTRUCTION TYPE`, `BLDG
+MATERIAL MINIMUM`, `ANCHOR THICKNESS MIN`, `ANCHOR TYPE`, `MAT'L`, `DIA`,
+`HEIGHT MAX`, `SPACING MAX`, `EDGE MAX`, `EMBED MAX` columns, 1 data row:
+`MASONRY`/`3 KSI`/.../`BUILDEX TAPCON`). A document-wide title search of
+the extractor's own output (for `MASONRY`, `ANCHOR`, `BUILDEX`) confirms
+this table is not extracted anywhere, under any title — a genuine, whole-
+table miss, not a misattachment.
+
+**Relationship to already-catalogued bugs:** distinct from B-19/B-24/
+B-27/B-28's missing-table cases, which all involve tables clearly titled
+`*SCHEDULE`; this table's own caption ("LOUVER ANCHORING DETAIL") doesn't
+contain that word, and it sits embedded among unrelated detail drawings
+on a details sheet rather than on a dedicated schedule sheet — plausibly
+a caption-keyword-matching gap (the detector may key on `SCHEDULE` in the
+caption text) rather than a structural-recognition failure, though not
+traced further under this pass's own no-guessing-at-fixes rule.
+
+**Consequence for the HELDOUT set's own zero-error bar:** one whole real
+table (1 row) silently absent with no other signal that anything is
+wrong — small in row count, but a clean MISS nonetheless.
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
