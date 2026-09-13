@@ -10,7 +10,7 @@
 import { test, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBasPointFunctionSchedule, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -3293,6 +3293,30 @@ test("isReferenceCrossTable: OUTSIDE AIR flow-rate calc demotes without MODEL/MA
     "a title that does not name CONNECTION/CALCULATION/ISOLATION/OUTSIDE AIR is untouched");
 });
 
+test("isBasPointFunctionSchedule: a BMS control-points matrix demotes, a real equipment schedule that merely says POINT does not (task #82)", () => {
+  // Real header shape, read live off federal-attachment4-mechanical.pdf#20's
+  // own "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM".
+  const bmsHeaders = ["B-1", "POINT NAME", "HARDWARE TAG", "HARDWARE POINT TYPE",
+    "FAIL MODE FAIL ON (OPEN)", "FAIL MODE FAIL OFF (CLOSED)", "FAIL MODE LAST COMMANDED STATE", "FAIL MODE LOCAL DEFAULT",
+    "SOFTWARE NETWORK POINT", "SOFTWARE CALCULATED POINT", "SOFTWARE MAINTENANCE ALARM", "SOFTWARE CRITICAL ALARM",
+    "SOFTWARE 24 HOUR OPERATION", "ALARM LIMITS LOW LIMIT", "ALARM LIMITS HIGH LIMIT", "NOTES"];
+  assert.equal(isBasPointFunctionSchedule("HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM", bmsHeaders), true,
+    "a real FAIL MODE bank plus a real SOFTWARE-prefixed bank under a POINT FUNCTION SCHEDULE title is a control-points matrix");
+  assert.equal(isBasPointFunctionSchedule("HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - VAV BOXES", bmsHeaders), true);
+  assert.equal(
+    isBasPointFunctionSchedule("SET POINT SCHEDULE", ["MARK", "MANUFACTURER", "MODEL", "CFM"]),
+    false,
+    "title alone is never enough — a real equipment catalog schedule that happens to say POINT stays equipment",
+  );
+  assert.equal(
+    isBasPointFunctionSchedule("HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - MISC", ["TAG", "DESCRIPTION", "LOCATION"]),
+    false,
+    "the title family alone, with none of the real FAIL MODE/SOFTWARE column shape, is never enough either",
+  );
+  assert.equal(isBasPointFunctionSchedule("AIR HANDLING UNIT SCHEDULE", ["TAG", "MANUFACTURER", "MODEL", "CFM", "NOTES"]), false,
+    "an ordinary equipment schedule with neither the title nor the column shape is untouched");
+});
+
 test("UNIT TAG header is own-identity equipment anchor, not a qualified cross-reference (WP1.4)", () => {
   assert.equal(isBareAnchorHeader("UNIT TAG"), true);
   assert.equal(isQualifiedAnchorHeader("UNIT TAG"), false);
@@ -4453,5 +4477,57 @@ describe("scheduleTableFromODL: a row whose own identity column is a pure drawn 
     const t = scheduleTableFromODL(t2, "13_MI_test.pdf#28", IDENTITY, {});
     assert.ok(t);
     assert.equal(t!.rows.length, 4, "the fully unkeyable row must never seed a phantom row");
+  });
+});
+
+describe("scheduleTableFromODL: a BMS point-function schedule never compiles as equipment (task #82, goal VECTORGRID_TABLE_BOXES.md, 2026-09-13)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 40, row * 20, col * 40 + 40 * colSpan, row * 20 + 20],
+    "row number": row, "column number": col, "row span": 1, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+
+  // Real shape, read live off federal-attachment4-mechanical.pdf#20's own
+  // "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM": column 0 is
+  // an unlabeled running row-index (1, 2, 3…), never a real device tag —
+  // the real per-point identity lives one column over, under HARDWARE TAG.
+  // Left equipment-kind, HARDWARE TAG/HARDWARE POINT TYPE alone clear
+  // EQUIPMENT_HEADERS' vocabulary bar and column 0's bare digits become
+  // each row's own "equipment tag" — see isBasPointFunctionSchedule's own
+  // comment for the full mechanism and B-3's earlier, narrower precedent.
+  // The FAIL MODE/SOFTWARE column banks are the real gate (title alone is
+  // deliberately never enough, per the unit test above), so this fixture
+  // keeps a real, if abbreviated, run of each — 2 FAIL MODE and 4 SOFTWARE
+  // columns, the same floor isBasPointFunctionSchedule itself requires.
+  const buildTable = (): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 440, 100],
+    "number of rows": 4, "number of columns": 10,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM", 10)] },
+      { type: "table row", "row number": 2, id: 1, cells: [
+        odlCell(2, 1, ""), odlCell(2, 2, "POINT NAME"), odlCell(2, 3, "HARDWARE TAG"), odlCell(2, 4, "HARDWARE POINT TYPE"),
+        odlCell(2, 5, "FAIL MODE FAIL ON (OPEN)"), odlCell(2, 6, "FAIL MODE FAIL OFF (CLOSED)"),
+        odlCell(2, 7, "SOFTWARE NETWORK POINT"), odlCell(2, 8, "SOFTWARE CALCULATED POINT"),
+        odlCell(2, 9, "SOFTWARE MAINTENANCE ALARM"), odlCell(2, 10, "SOFTWARE CRITICAL ALARM"),
+      ] },
+      { type: "table row", "row number": 3, id: 2, cells: [
+        odlCell(3, 1, "1"), odlCell(3, 2, "BOILER ALARM STATUS"), odlCell(3, 3, "AX-1"), odlCell(3, 4, "DI"),
+        odlCell(3, 5, ""), odlCell(3, 6, "X"), odlCell(3, 7, "X"), odlCell(3, 8, ""), odlCell(3, 9, "X"), odlCell(3, 10, ""),
+      ] },
+      { type: "table row", "row number": 4, id: 3, cells: [
+        odlCell(4, 1, "2"), odlCell(4, 2, "BOILER STATUS"), odlCell(4, 3, "AX-2"), odlCell(4, 4, "DI"),
+        odlCell(4, 5, ""), odlCell(4, 6, "X"), odlCell(4, 7, "X"), odlCell(4, 8, ""), odlCell(4, 9, "X"), odlCell(4, 10, ""),
+      ] },
+    ],
+  });
+
+  it("classifies reference-kind, not equipment, so its row-index column never enters the equipment-quantity compile", () => {
+    const t = scheduleTableFromODL(buildTable(), "fedmech_test.pdf#20", IDENTITY, {});
+    assert.ok(t, "the table must still build, not vanish");
+    assert.notEqual(t!.kind, "equipment",
+      `a BMS control-points matrix must never compile as equipment (got kind=${t!.kind}) — its row-index column ("1", "2"…) would otherwise become a phantom equipment tag`);
   });
 });

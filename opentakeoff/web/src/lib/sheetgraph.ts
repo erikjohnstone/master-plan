@@ -3695,6 +3695,35 @@ const REFERENCE_CROSS_TABLE_RE = /\b(CONNECTION|CALCULATION|ISOLATION|OUTSIDE AI
 export const isReferenceCrossTable = (title: string, headers: string[]): boolean =>
   REFERENCE_CROSS_TABLE_RE.test(norm(title)) && !headers.some((h) => headerLabel(h, ["MODEL", "MANUFACTURER"]));
 
+// A BAS/BMS "POINT FUNCTION SCHEDULE" (or "POINT LIST SCHEDULE") is a
+// control-points matrix, not a physical-equipment schedule: each row names
+// a control POINT (a hardware I/O or a software behavior), not a unit with
+// its own drawn tag to count. Left equipment-kind, its "HARDWARE TAG"
+// column carries the bare word TAG and "HARDWARE POINT TYPE" carries
+// TYPE — enough, plus an almost-universal trailing NOTES column, to clear
+// EQUIPMENT_HEADERS' own generic eqHits>=3 bar the same way a real per-item
+// catalog schedule does — and its own LEFTMOST column is routinely an
+// unlabeled running row-index (1, 2, 3…), not a real device tag, because
+// the real per-point identity lives one column over, under "…TAG". Swept
+// as equipment, that bare row-index becomes each row's own "tag", chased
+// against the plan, and — because the same small integers are typically
+// ALSO drawn as cross-reference callout bubbles on the very same sheet's
+// own control diagram — really do find spurious matches. Measured live:
+// federal-mech's own three "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE"
+// tables (sheets #20/#23/#24) minted 16 phantom compile-total rows this
+// way, bare digit tags "1".."9" among them (task #82, goal
+// VECTORGRID_TABLE_BOXES.md). Same title-family-plus-structural-
+// confirmation discipline as isReferenceCrossTable just above: the title
+// names the family; the header shape (a real FAIL MODE bank together with
+// a much larger real SOFTWARE-prefixed bank) confirms it really is one, so
+// an unrelated equipment schedule that merely mentions "POINT" or
+// "SOFTWARE" in passing is never caught.
+const BAS_POINT_SCHEDULE_TITLE_RE = /\bPOINT (FUNCTION|LIST) SCHEDULE\b/;
+export const isBasPointFunctionSchedule = (title: string, headers: string[]): boolean =>
+  BAS_POINT_SCHEDULE_TITLE_RE.test(norm(title))
+  && headers.filter((h) => /\bFAIL MODE\b/.test(norm(h))).length >= 2
+  && headers.filter((h) => /^SOFTWARE\b/.test(norm(h))).length >= 4;
+
 // A real MEP-equipment family can hide behind a title that names NO
 // recognizable family at all, so isMepEquipmentSchedule's own title check
 // never gets a chance to run — real, found live (itd-d1-lab-mechanical.pdf's
@@ -8438,6 +8467,15 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
           // bare-anchor survivor) — see isReferenceCrossTable's own comment.
           notes.push(`${s.key}: "${t.title.text}" names a cross-reference/spec table about equipment defined elsewhere (no MODEL/MANUFACTURER column of its own) — reclassified as reference-kind so its own bare key column never competes as a second device definition.`);
           t.kind = "reference";
+        } else if (kind === "equipment" && t.title && isBasPointFunctionSchedule(t.title.text, t.headers)) {
+          // A BAS/BMS control-points matrix, not a physical-equipment
+          // schedule — see isBasPointFunctionSchedule's own comment. Its
+          // "HARDWARE TAG"/"HARDWARE POINT TYPE" columns cleared
+          // EQUIPMENT_HEADERS' own vocabulary bar, and its own leftmost
+          // column (an unlabeled running row-index, not a device tag)
+          // would otherwise become each row's own bogus "equipment tag".
+          notes.push(`${s.key}: "${t.title.text}" is a BAS/BMS point-function matrix (control points, not physical equipment) — reclassified as reference-kind so its unlabeled row-index column never becomes a phantom equipment tag.`);
+          t.kind = "reference";
         }
         // table-level building: its own title first, the sheet's context second
         const titleB = t.title ? buildingMentions(t.title.text) : [];
@@ -10263,6 +10301,15 @@ export function scheduleTableFromODL(
   // SCHEDULE row, defeating sweepScheduleRow's own accessory-narrowing
   // (which only fires with EXACTLY one bare-anchor survivor).
   if (kind === "equipment" && isReferenceCrossTable(titleText, headers)) {
+    kind = "reference";
+  }
+  // Same BAS/BMS control-points-matrix demotion as the geometric extractor's
+  // own pass above — see isBasPointFunctionSchedule's own comment. Reached
+  // from this ODL path too because federal-mech's own three "HVAC CONTROLS -
+  // BMS POINT FUNCTION SCHEDULE" tables (sheets #20/#23/#24) are read
+  // through vectorgrid, not the geometric reader — the fix has to live in
+  // both places or it only ever half-closes task #82.
+  if (kind === "equipment" && isBasPointFunctionSchedule(titleText, headers)) {
     kind = "reference";
   }
 
