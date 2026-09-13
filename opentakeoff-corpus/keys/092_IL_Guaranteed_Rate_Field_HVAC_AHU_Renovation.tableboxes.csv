@@ -1,0 +1,27 @@
+# 092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# DEMO/HELDOUT CORPUS. Method: deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code (bakeoff/rulelinebox.py).
+# The page was rendered at high scale; for each of vectorgrid's 4 reported
+# edges, a padded search window (seeded by vectorgrid's own region only to
+# know where on the sheet to look) was scanned for the real drawn rule
+# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the raw page pixels --
+# never a read of vectorgrid's own box -- satisfying the goal document's
+# Method Section 3 auto-accept criterion (two mechanically independent
+# extractors agree within 4pt). Per-row provenance gives the measured
+# agreement and the dark-pixel-fraction threshold that found the line.
+sheet,table_title,x0,top,x1,bot,provenance
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf,Sheet List Table,4149.0,879.88,4906.62,1439.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.14pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf,ISSUE/REVISION: ISSUE/REVISION:,5548.0,2793.25,5980.0,3323.25,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#9,ISSUE/REVISION:,5548.0,2793.25,5980.0,3323.25,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#10,ISSUE/REVISION:,5548.0,2793.25,5980.0,3323.25,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#10,VALVE TAG CHART FOR: XXXXXXX MOD: XXX AREA: XXX WING: XXX FLOOR: XXX,3715.88,3648.12,5228.38,3936.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,A I R C O O L E D C H I L L E R S C H E D U L E ( C H ),237.12,192.5,4638.38,469.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),237.12,1336.38,3518.0,1912.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.08pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,AUTOMATIC CONTROL DAMPER SCHEDULE (ACD),4177.75,1913.75,5515.88,2279.38,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,"GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",3967.75,2351.38,5515.88,2774.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.09pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,ISSUE/REVISION:,5548.0,2793.25,5980.0,3323.25,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.06pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,D X C O I L S C H E D U L E ( D C ),3499.75,2846.75,5515.88,3151.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,MECHANICAL / ELECTRICAL COORDINATION SCHEDULE,237.12,3256.12,2693.62,4155.25,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,REFRIGERATION SCHEDULE,3724.88,3513.62,5515.88,4155.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.12pt vs vectorgrid's own box"

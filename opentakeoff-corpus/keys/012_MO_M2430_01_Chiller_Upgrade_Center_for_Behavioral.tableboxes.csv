@@ -1,0 +1,22 @@
+# 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# DEMO/HELDOUT CORPUS. Method: deterministic ruled-line pixel detection,
+# independent of vectorgrid's own box-fitting code (bakeoff/rulelinebox.py).
+# The page was rendered at high scale; for each of vectorgrid's 4 reported
+# edges, a padded search window (seeded by vectorgrid's own region only to
+# know where on the sheet to look) was scanned for the real drawn rule
+# nearest that edge, then converted back to RENDER_SCALE=2 units. This is a
+# second, mechanically independent measurement of the raw page pixels --
+# never a read of vectorgrid's own box -- satisfying the goal document's
+# Method Section 3 auto-accept criterion (two mechanically independent
+# extractors agree within 4pt). Per-row provenance gives the measured
+# agreement and the dark-pixel-fraction threshold that found the line.
+sheet,table_title,x0,top,x1,bot,provenance
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#6,"COMPONENTS & CLADDING WIND PRESSURES (PSF) FLAT/GABLE/HIP ROOF, 0° < q ≤ 7°, 110 MPH (3 SEC GUST), EXPOSURE B, LRFD",2577.38,1853.5,4521.38,2465.5,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.11pt vs vectorgrid's own box"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,1118.88,215.62,4536.0,499.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,2364.0,824.62,4536.0,1193.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,EXPANSION TANK SCHEDULE:,2227.75,1777.12,4535.62,2050.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.25pt vs vectorgrid's own box"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,AIR SEPARATOR SCHEDULE:,1522.38,2122.12,2809.38,2474.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,2881.38,2122.12,4536.0,3206.75,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.1pt vs vectorgrid's own box"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CHEMICAL FEEDER SCHEDULE:,2071.38,2546.75,2809.38,2842.12,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.23pt vs vectorgrid's own box"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,1877.38,228.12,3221.38,3142.62,"deterministic ruled-line pixel detection @ threshold 0.7, worst-edge agreement 0.07pt vs vectorgrid's own box"

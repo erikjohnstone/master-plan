@@ -1,0 +1,121 @@
+# RULELINEBOX_REVIEW_NEEDED.txt -- box-tier candidates the deterministic
+# ruled-line detector (bakeoff/rulelinebox.py) could NOT auto-accept within
+# the goal document's 4pt tolerance, generated 2026-09-13 across the Demo
+# Corpus. Two categories:
+#   'no ruled line found' -- the search window found no drawn rule matching
+#     one or more of vectorgrid's edges at any dark-pixel-fraction threshold
+#     (0.7/0.6/0.5). Often a non-table region (title-block text, a callout)
+#     that vectorgrid should not have emitted as a table at all -- worth a
+#     quick look for a possible phantom-table bug, not just a grading gap.
+#   'measured ... worst edge >4pt' -- a real ruled line WAS found near each
+#     edge, but at least one edge disagrees with vectorgrid's own box by
+#     more than 4pt. Could be genuine box imprecision on vectorgrid's part,
+#     or the search window catching a neighboring rule instead of the
+#     table's own edge -- needs a human look at the actual render to tell
+#     which, not assumed either way.
+# NONE of these were written to any .tableboxes.csv -- only entries that
+# cleared the 4pt bar on every edge were auto-accepted (Method Section 3).
+#
+FLAG    015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 | DUCTLESS SPLIT SYSTEM SCHEDULE | vg=[198, 1182.02, 3602.64, 1377.6] | measured [180.5, 1182.12, 3635.38, 1377.38], agreement {'left': -8.75, 'top': 0.05, 'right': 16.37, 'bot': -0.11} (threshold 0.7) — worst edge 16.37pt > 4.0pt tolerance
+FLAG    015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#24 | CONDENSER WATER SYSTEM POINTS LIST | vg=[1539.48, 159.1199999999999, 2771.04, 2440.08] | measured [1540.12, 159.38, 2760.12, 2439.38], agreement {'left': 0.32, 'top': 0.13, 'right': -5.46, 'bot': -0.35} (threshold 0.7) — worst edge 5.46pt > 4.0pt tolerance
+FLAG    096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#2 | CELL D134 | vg=[2690.4, 1008.48, 2821, 1323.84] | measured [2690.38, 1008.38, 2822.75, 1308.88], agreement {'left': -0.01, 'top': -0.05, 'right': 0.88, 'bot': -7.48} (threshold 0.5) — worst edge 7.48pt > 4.0pt tolerance
+FLAG    096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#31 | SCHEDULE OF DDC POINTS | vg=[153.1, 153.7, 1227.4, 2765.5] | no ruled line found near one or more edges at any threshold
+FLAG    096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#35 | POWER BY EC | vg=[1529, 2302.4, 3614.3, 3019.2] | no ruled line found near one or more edges at any threshold
+FLAG    001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#69 | ONLY) | vg=[3916.82, 2734.32, 4052.16, 2819.04] | no ruled line found near one or more edges at any threshold
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#5 | DOOR SCHEDULE | vg=[667.1, 1374.3, 1978.9, 2304] | no ruled line found near one or more edges at any threshold
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#6 | ADDITIONAL NOTES | vg=[410.1, 1133.8, 2021.8, 1352.2] | measured [390.38, 1147.12, 2030.0, 1356.12], agreement {'left': -9.86, 'top': 6.66, 'right': 4.1, 'bot': 1.96} (threshold 0.7) — worst edge 9.86pt > 4.0pt tolerance
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#6 | LITER AIR POT | vg=[399.8, 1544.8, 1443.2, 2016] | measured [390.38, 1565.12, 1459.5, 2025.38], agreement {'left': -4.71, 'top': 10.16, 'right': 8.15, 'bot': 4.69} (threshold 0.7) — worst edge 10.16pt > 4.0pt tolerance
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#6 | ADDITIONAL NOTES | vg=[401.9, 1133.8, 2027.2, 2877.8] | measured [390.38, 1147.12, 2030.0, 2862.38], agreement {'left': -5.76, 'top': 6.66, 'right': 1.4, 'bot': -7.71} (threshold 0.7) — worst edge 7.71pt > 4.0pt tolerance
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#6 | LINE CONDUIT | vg=[399.5, 2925.3, 1519.4, 3520.8] | measured [390.38, 2945.88, 1520.38, 3531.62], agreement {'left': -4.56, 'top': 10.29, 'right': 0.49, 'bot': 5.41} (threshold 0.7) — worst edge 10.29pt > 4.0pt tolerance
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#6 | LINE CONDUIT | vg=[391.1, 2925.3, 2026.7, 3676.1] | measured [390.38, 2945.88, 2030.0, 3657.25], agreement {'left': -0.36, 'top': 10.29, 'right': 1.65, 'bot': -9.42} (threshold 0.7) — worst edge 10.29pt > 4.0pt tolerance
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#6 | LITER AIR POT | vg=[185.8, 1544.8, 1331.6, 2597.5] | no ruled line found near one or more edges at any threshold
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#6 | LINE CONDUIT | vg=[185.8, 2925.3, 1201.8, 3519.1] | no ruled line found near one or more edges at any threshold
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#24 | ENERGY SOURCE | vg=[269.3, 258.9, 1711, 519.8] | measured [251.62, 241.12, 1742.75, 525.62], agreement {'left': -8.84, 'top': -8.89, 'right': 15.88, 'bot': 2.91} (threshold 0.6) — worst edge 15.88pt > 4.0pt tolerance
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#24 | FOOD SERVICE EQUIPMENT SCHEDULE | vg=[272.2, 164.2, 1769.7000000000003, 795.8] | measured [251.62, 153.38, 1742.75, 811.12], agreement {'left': -10.29, 'top': -5.41, 'right': -13.48, 'bot': 7.66} (threshold 0.6) — worst edge 13.48pt > 4.0pt tolerance
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#24 | FOOD SERVICE EQUIPMENT SCHEDULE | vg=[272.2, 164.2, 1769.7000000000003, 795.8] | measured [251.62, 153.38, 1742.75, 811.12], agreement {'left': -10.29, 'top': -5.41, 'right': -13.48, 'bot': 7.66} (threshold 0.6) — worst edge 13.48pt > 4.0pt tolerance
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#24 | EASY BREADER | vg=[187.9, 879.7, 1534.5, 1888.1] | no ruled line found near one or more edges at any threshold
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#24 | 2LB-17 2LB-20 | vg=[3740.16, 1445.76, 3922.32, 1571.76] | no ruled line found near one or more edges at any threshold
+FLAG    042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#29 | PANEL: 2LB PANELBOARD... | vg=[323.28, 2601.84, 2321, 3765.84] | measured [323.12, 2601.75, 2306.12, 3765.75], agreement {'left': -0.08, 'top': -0.05, 'right': -7.44, 'bot': -0.05} (threshold 0.5) — worst edge 7.44pt > 4.0pt tolerance
+FLAG    08_ME_BGS_Augusta_EastCampus_Renovation.pdf#23 | 7 A 6 604 8 EVS 5 | vg=[3143.54, 1429.56, 3512, 1784.82] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 | AIR HANDLING UNIT SCHEDULE | vg=[257.28, 88.56, 1995.84, 194.16] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 | ELECTRIC DUCT HEATER SCHEDULE | vg=[1312.68, 888.84, 1995.84, 994.56] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#38 | BI - FREEZESTAT | vg=[163.2, 236.3, 507.9, 987.1] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#91 | LINES LINES AND AND REFERENCE REFERENCE SYMBOLS SYMBOLS | vg=[743.04, 960.84, 1624, 1179.78] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#110 | OPEN DRAIN | vg=[148.8, 321.7, 701.5, 1381.5] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#111 | SPRINKLER SCHEDULE | vg=[1763.88, 1409.04, 2085.48, 1521.36] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#119 | FIRE SPRINKLER | vg=[141.1, 853.2, 1323.2, 1133] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#122 | E | vg=[1933.2, 1336.8, 2090.64, 1461.96] | measured [1903.0, 1320.0, 2105.0, 1478.75], agreement {'left': -15.1, 'top': -8.4, 'right': 7.18, 'bot': 8.39} (threshold 0.6) — worst edge 15.1pt > 4.0pt tolerance
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#219 | DOOR SCHEDULE | vg=[927.96, 83.04, 2086.44, 199.68] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#234 | ABBREVIATIONS DUCTWORK PIPING, FITTINGS, AND VALVES GENERAL NOTES | vg=[108.36, 54.24, 2105.64, 136.08] | measured [108.25, 54.0, 2105.5, 108.88], agreement {'left': -0.05, 'top': -0.12, 'right': -0.07, 'bot': -13.6} (threshold 0.7) — worst edge 13.6pt > 4.0pt tolerance
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246 | WATER TREATMENT SYSTEM | vg=[237.6, 1100.64, 1177.92, 1206.36] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247 | FAN SCHEDULE | vg=[937.56, 368.76, 2076.12, 474.36] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247 | PARTICULATE FILTER SCHEDULE | vg=[1149.6, 561.96, 2076.12, 667.56] | measured [1149.5, 561.75, 2105.5, 667.5], agreement {'left': -0.05, 'top': -0.11, 'right': 14.69, 'bot': -0.03} (threshold 0.5) — worst edge 14.69pt > 4.0pt tolerance
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247 | AIR SEPARATOR | vg=[1457.52, 784.2, 2076.12, 874.8] | no ruled line found near one or more edges at any threshold
+FLAG    088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247 | EXPANSION TANK SCHEDULE (EXISTING TO BE REUSED) | vg=[1452, 949.56, 2076.12, 1040.28] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#7 | (NEW) W06 | vg=[2812.56, 1022.8107299804688, 3158.16, 1336.0467529296875] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#16 | 8" MATERIAL LIFT MANUF | vg=[3754.78, 478.08, 4638.96, 738.5] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#27 | PANEL JOINT | vg=[1745.3, 2934.2, 3209.7, 4211.5] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#33 | ARCHITECT/ENGINEER OF RECORD | vg=[1671.6, 3805, 2603.8, 4211.5] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#33 | DISPENSER, SSTL SHELF, | vg=[3737.04, 878.64, 4018.1, 943.66] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#33 | GH-1, | vg=[3959.76, 1006.32, 4082.18, 1128.96] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#33 | WP-1, | vg=[3959.76, 1137.6, 4082.18, 1294.54] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39 | WHERE OCCURS | vg=[187.9, 1957.8, 1563.2, 3394.6] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39 | BOX HEADER ELEVATION | vg=[187.9, 3375.4, 1157.1, 4211.5] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39 | BORROW LITE SILL - GWB | vg=[1671.6, 3670.6, 2308.7, 4211.5] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#49 | ARCHITECT/ENGINEER OF RECORD | vg=[1671.6, 3805, 2603.8, 4211.5] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#49 | FIRE EXTINGUISHER | vg=[2469.8, 2962.9, 3753.6, 4211.5] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#53 | VACUUM BREAKER | vg=[374.9, 1809.6, 2066.3, 2227.7] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#53 | EXPANSION JOINT | vg=[1572.5, 2359.9, 2162.1, 4211.5] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#73 | ELECTRICAL ABBREVIATION KEY | vg=[1689.4, 1285.8, 2550.9, 2353.9] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#73 | ARCHITECT/ENGINEER OF RECORD | vg=[1740.2, 3805, 2607.1, 3991.2] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#73 | THESE NOTES APPLY TO ALL ELECTRICAL SHEETS AND TRADES, INCLUDING BUT NOT LIMITED | vg=[2724, 1074.1, 4635.5, 1715.5] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#73 | ELECTRICAL EQUIPMENT TAGS | vg=[2719.9, 1677.7, 3640.6, 1885.2] | measured [2710.12, 1676.38, 3646.12, 1908.88], agreement {'left': -4.89, 'top': -0.66, 'right': 2.76, 'bot': 11.84} (threshold 0.7) — worst edge 11.84pt > 4.0pt tolerance
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#82 | ARCHITECT/ENGINEER OF RECORD | vg=[1740.2, 3805, 2607.1, 3991.2] | no ruled line found near one or more edges at any threshold
+FLAG    031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#90 | ARCHITECT/ENGINEER OF RECORD | vg=[1671.7, 3804.7, 2603.7, 4211.4] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#4 | 341.1-2 | vg=[1964.4, 2748.61767578125, 2187.4, 3212.16] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#4 | 38"x14" | vg=[1849.44, 3046.08, 1952.64, 3558.96] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#14 | AIR HANDLING UNIT HYDRONIC COIL SCHEDULE | vg=[2504.2, 990.6, 5829.4, 1296.7] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#14 | ELECTRONIC SECURITY / TELECOMMUNICATIONS | vg=[5488.8, 2030.9, 5983.5, 4209.4] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15 | ELECTRONIC SECURITY / TELECOMMUNICATIONS | vg=[5488.8, 2030.9, 5957.6, 3757.2] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#16 | ELECTRONIC SECURITY / TELECOMMUNICATIONS | vg=[5488.8, 2030.9, 5983.5, 4209.4] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#19 | ELECTRONIC SECURITY / TELECOMMUNICATIONS | vg=[5488.8, 2030.9, 5983.5, 4209.4] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#20 | ELECTRONIC SECURITY / TELECOMMUNICATIONS | vg=[5488.8, 2030.9, 5983.5, 4209.4] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#21 | ELECTRONIC SECURITY / TELECOMMUNICATIONS | vg=[5488.8, 2030.9, 5983.5, 4209.4] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#23 | SENSOR WITH LCD INDICATOR, | vg=[1032.7, 556.8, 2748.2, 1047.8] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#23 | VALVE CLOSED | vg=[872.4, 1860.5, 2766.7, 2369.3] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#23 | ELECTRONIC SECURITY / TELECOMMUNICATIONS | vg=[5488.8, 2030.9, 5983.5, 4209.4] | no ruled line found near one or more edges at any threshold
+FLAG    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#24 | ELECTRONIC SECURITY / TELECOMMUNICATIONS | vg=[5488.8, 2030.9, 5983.5, 4209.4] | no ruled line found near one or more edges at any threshold
+FLAG    012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#27 | VFD SCHEDULE: | vg=[1896.2, 240.8, 3041.5, 970.6] | no ruled line found near one or more edges at any threshold
+FLAG    072_CA_CA07_2627_West_Valley_College_Science_Math.pdf#14 | REVIEWED FOR | vg=[1327, 244, 5889.3, 849.6] | no ruled line found near one or more edges at any threshold
+FLAG    072_CA_CA07_2627_West_Valley_College_Science_Math.pdf#16 | Air Balance Redesign | vg=[4069.4, 1223.7, 5783.8, 2184.9] | no ruled line found near one or more edges at any threshold
+FLAG    072_CA_CA07_2627_West_Valley_College_Science_Math.pdf#16 | LAG SCREW SCHEDULE | vg=[3469.22, 3821.16, 3848.04, 3998.88] | no ruled line found near one or more edges at any threshold
+FLAG    038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#19 | VIGILENT DDC SYSTEM CONTROL MODULE | vg=[2119.2, 785.6, 4440.1, 3040.6] | no ruled line found near one or more edges at any threshold
+FLAG    17_FL_SuwanneeHS_Courtyard_100CD.pdf#25 | ELECTRICAL SYMBOL LEGEND | vg=[1058.4, 182.88, 4071.36, 579.095947265625] | no ruled line found near one or more edges at any threshold
+FLAG    075_MT_Renne_Library_Innovation_Learning_Studio.pdf#14 | DOOR SCHEDULE | vg=[395.52, 1952.88, 2094, 2636.2] | no ruled line found near one or more edges at any threshold
+FLAG    075_MT_Renne_Library_Innovation_Learning_Studio.pdf#15 | PIPING INSULATION SCHEDULE - INTERNATIONAL ENERGY CONSERVATION CODE | vg=[2035.2, 1569.36, 3069.36, 1799.76] | measured [2014.38, 1569.25, 3093.75, 1799.62], agreement {'left': -10.41, 'top': -0.05, 'right': 12.19, 'bot': -0.07} (threshold 0.7) — worst edge 12.19pt > 4.0pt tolerance
+FLAG    075_MT_Renne_Library_Innovation_Learning_Studio.pdf#22 | Mechanical Equipment Connections | vg=[685, 153.7, 2357, 462.2] | no ruled line found near one or more edges at any threshold
+FLAG    04_NV_VA_LasVegas_CentralUtilityPlant.pdf#32 | EXISTING SOV | vg=[461.1, 934.9, 1808.7000000000003, 1855.6] | no ruled line found near one or more edges at any threshold
+FLAG    04_NV_VA_LasVegas_CentralUtilityPlant.pdf#32 | COOLING TOWER SCHEDULE | vg=[431.1, 3380.3, 5708.6, 3502.5] | no ruled line found near one or more edges at any threshold
+FLAG    04_NV_VA_LasVegas_CentralUtilityPlant.pdf#32 | AT HANGER | vg=[2596.2, 2039.2, 2835.6, 2820.6] | no ruled line found near one or more edges at any threshold
+FLAG    04_NV_VA_LasVegas_CentralUtilityPlant.pdf#67 | TANK 8 HIGH LEVEL TANK 9 LOW LEVEL TANK 9 HIGH LEVEL ANNULAR SPACE ALARM | vg=[4034.88, 1123.2, 4682.88, 1391.04] | measured [4034.75, 1123.12, 4682.75, 1375.12], agreement {'left': -0.07, 'top': -0.04, 'right': -0.07, 'bot': -7.96} (threshold 0.6) — worst edge 7.96pt > 4.0pt tolerance
+FLAG    01_NY_VA_Northport_Dialysis_100CD.pdf#17 | NURSE STATION | vg=[1537.2, 2701.2, 2398.2, 4110] | no ruled line found near one or more edges at any threshold
+FLAG    01_NY_VA_Northport_Dialysis_100CD.pdf#17 | ACID DISTRIBUTION | vg=[2763.1, 1568.8, 3957.8, 4211.5] | no ruled line found near one or more edges at any threshold
+FLAG    01_NY_VA_Northport_Dialysis_100CD.pdf#42 | 3 | vg=[4042.08, 2811.6, 5175.84, 3422.4] | no ruled line found near one or more edges at any threshold
+FLAG    01_NY_VA_Northport_Dialysis_100CD.pdf#55 | T OR APPROVED EQUAL | vg=[451.2, 2727.4, 5881.5, 3380.4] | no ruled line found near one or more edges at any threshold
+FLAG    01_NY_VA_Northport_Dialysis_100CD.pdf#55 | SCHEDULED FLOOR TILE | vg=[1537.2, 3621.7, 2264, 4110] | no ruled line found near one or more edges at any threshold
+FLAG    01_NY_VA_Northport_Dialysis_100CD.pdf#58 | NURSE STATION | vg=[1537.2, 2987.8, 2264, 4110] | no ruled line found near one or more edges at any threshold
+FLAG    01_NY_VA_Northport_Dialysis_100CD.pdf#88 | EQUIPMENT STEAM TRAP | vg=[4360.3, 3444.4, 5869.6, 3875.5] | no ruled line found near one or more edges at any threshold
+FLAG    01_NY_VA_Northport_Dialysis_100CD.pdf#107 | BOX FOR CARD READER | vg=[1537.2, 3338.4, 2264, 4110] | no ruled line found near one or more edges at any threshold
+FLAG    092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11 | C O N D E N S I N G U N I T S C H E D U L E ( C U ) | vg=[237.24, 2383.08, 3688.8, 3055.4] | no ruled line found near one or more edges at any threshold
+FLAG    092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#12 | ISSUED FOR BID | vg=[5558.2, 355.9, 5916.1, 3420.7] | no ruled line found near one or more edges at any threshold
+FLAG    092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#13 | ISSUED FOR BID | vg=[2510.8, 355.9, 5916.1, 4133.5] | no ruled line found near one or more edges at any threshold
+FLAG    25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#3 | ENVELOPE REQUIREMENT FOR | vg=[1030.4, 899.1, 4188.8, 1247.9] | no ruled line found near one or more edges at any threshold
+FLAG    25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#7 | XFMR 'AP' | vg=[634.7, 1798.3, 3635.8, 2671.2] | no ruled line found near one or more edges at any threshold
+FLAG    25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#7 | FEEDER SCHEDULE | vg=[3710.4, 838.8, 4568.1, 3051.5] | no ruled line found near one or more edges at any threshold
+FLAG    28_WA_KCHA_PublicHousing_HVAC.pdf#2 | SPRING VIBRATION ISOLATOR | vg=[366.5, 984.7, 1531.3, 1375.9] | no ruled line found near one or more edges at any threshold
+FLAG    28_WA_KCHA_PublicHousing_HVAC.pdf#2 | REQUIRED, SEE | vg=[398.2, 1118.3, 1461.1, 2234.3] | no ruled line found near one or more edges at any threshold
+FLAG    11_CA_SDSU_EngSciences_Complex_100SD.pdf#25 | CONSTRUCTION SCHEDULE | vg=[456.3, 181, 3130.3, 1251] | no ruled line found near one or more edges at any threshold
+FLAG    11_CA_SDSU_EngSciences_Complex_100SD.pdf#25 | PLANTING AND LANDSCAPE | vg=[461.8, 1632.6, 2506.2, 2107.3] | no ruled line found near one or more edges at any threshold
+FLAG    11_CA_SDSU_EngSciences_Complex_100SD.pdf#25 | ORNAMENTAL GROUND COVER | vg=[461.8, 2058.6, 2506.2, 2307.9] | no ruled line found near one or more edges at any threshold
+FLAG    11_CA_SDSU_EngSciences_Complex_100SD.pdf#25 | BELOW GRADE BUILDING SLAB. | vg=[462.3, 2361.9, 2553.1, 2582] | no ruled line found near one or more edges at any threshold
+FLAG    11_CA_SDSU_EngSciences_Complex_100SD.pdf#106 | PLUMBING FIXTURE SCHEDULE | vg=[3559.9, 133.8, 5445.2, 1738.8] | no ruled line found near one or more edges at any threshold
