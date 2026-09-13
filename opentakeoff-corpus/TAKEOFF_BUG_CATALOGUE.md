@@ -1072,6 +1072,20 @@ rather than a metadata row being swallowed into the header. Not traced
 into `sheetgraph.ts`'s header-detection code past this measurement, per
 this file's standing rule against guessing at a fix under time pressure.
 
+**CONFIRMED RECURRING 2026-09-13 — second real instance, different
+document.** `28_WA_KCHA_PublicHousing_HVAC.pdf#2`'s `AIR TERMINAL
+SCHEDULE` shows the identical signature: the real header (`SYMBOL, AIR
+TERMINAL - SIZES AS NOTED ON PLANS`) is gone, the first real data row
+(`SG`, with its full multi-sentence description — `"SUPPLY GRILLE: TITUS
+MODEL 300FS FOR INSTALLATION..."`) is promoted to serve as the reported
+`headers`, and the table surfaces with only 2 of its 3 real rows (`RG`,
+`WTG` — `SG` consumed). A likely knock-on effect measured here for the
+first time: this table's `kind` also flips from `equipment` to
+`reference`, plausibly because the header-detection code that decides
+table kind sees long descriptive prose (the misplaced `SG` row) where it
+expects short column labels. This is not a one-document quirk; it is a
+repeatable failure mode.
+
 **Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 (row
 `O`, and the true header row, are both gone) and the reported cells for
 row `A` do not exist in `rows` at all — they were reassigned to `headers`
@@ -1128,6 +1142,28 @@ completely missing, 1 is corrupted (B-18), and 1 is correct but untitled
 (same class as B-17) — while a genuinely fabricated table is reported as
 if it were real. This is the worst-scoring document graded so far in this
 pass.
+
+**CONFIRMED RECURRING 2026-09-13 — third real instance, third document,
+same pass.** `28_WA_KCHA_PublicHousing_HVAC.pdf#2` fabricates not one but
+THREE separate fake `reference`-kind tables from unrelated page content,
+none of them a real schedule:
+- `"SPRING VIBRATION ISOLATOR"` (2 rows) and `"REQUIRED, SEE"` (2 rows) —
+  both trace to the annotation callout labels of the `IN-LINE FAN
+  INSTALLATION DETAIL` isometric drawing on the same sheet (e.g. cells
+  `"CONNECT"`/`"CONNECTION"`, `"MOUNT SPEED CONTROLLER ON..."`/`"IN-LINE
+  FAN INSTALLATION DETAIL"` — detail-callout text, not tabular data).
+- `"UNTITLED"` (2 rows) is the strangest instance yet: its region
+  (`[4796, 278.8, 5101.5, 2396]` — ~305pt wide, ~2100pt tall) is the
+  sheet's own narrow vertical TITLE-BLOCK SIDEBAR, and its fabricated
+  headers are the letter-spaced firm name (`"T R E S W E S T"`, `"E N G I
+  N E E R S,"`, `"I N C."`) with cells built from the project-title box
+  (`"PROJECT TITLE BRITTANY PARK KING COUNTY"`, `"HVAC UPGRADES"`,
+  `"4-30-2026"`). This is the same disease reading a different part of
+  the page furniture than either the p23-callout case above or the
+  prose-note case in B-16 — three distinct source materials (prose,
+  plan callouts, title-block sidebar text), one shared failure: unrelated
+  page text gets clustered into a table shape and reported as if it were
+  a real schedule. Not a document-specific quirk.
 
 ---
 
