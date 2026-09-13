@@ -915,6 +915,66 @@ plus a `scheduleTableFromODL` integration test built on federal-mech's real
 column shape, confirming the full table never lands equipment-kind. Full
 suite: 142/142 passing.
 
+---
+
+### B-16 — two side-by-side numbered-notes lists fuse into one fabricated table, and the real ruled table beside them is missed entirely (NOT FIXED — found, traced, disclosed)
+
+**Where:** `20_TX_JudsonISD_MEP_Upgrades_Pkg6.pdf#4` — found during this
+goal's own Demo Corpus hand-verification (`keys/DEMO_CORPUS.txt`), the
+smallest one-table document in the draw, picked first specifically because
+a small document is fast to grade completely.
+
+**Measured, hand-graded against the render, extractor's answer not in
+view first:** the real page carries a small, genuinely ruled 2-column table
+— "AHU / NEW FAN INTERLOCKS" (11 real data rows: AHU-1 through AHU-10 plus
+RTU-1, values like "EF-04, EF-08", one wrapped 2-line cell on AHU-9) — sunk
+inside a "SCHEMATIC — NEW FAN SOFTWARE INTERLOCKED WITH AHU/RTU (SPRING
+MEADOWS)" detail block. The production pipeline (`production-graph-cli.mjs
+--mode graph`, same command every other entry in this file is measured
+with) finds **zero** tables matching this real one. It DOES report exactly
+one table — reference-kind, headers `["B.", "OPERATIONAL SEQUENCE:", "B.
+(2)", "OPERATIONAL SEQUENCE: (2)"]`, 2 data rows keyed `B.1`/`B.2` — and
+this table is **entirely fabricated**: the page's own real content at those
+coordinates is two side-by-side "OPERATIONAL SEQUENCE:" numbered-notes
+lists (ordinary running prose under labels `B.1`/`B.2`/`B.3`, one list per
+control-schematic panel, TYPE 1 and TYPE 2, printed one above the other in
+the source) — not a table, not two tables, and definitely not one table
+with duplicated header pairs. The `(2)`-suffixed headers are this file's
+own existing duplicate-header disambiguation (see the "A ROW'S CELLS ARE
+KEYED BY HEADER STRING" comment in `sheetgraph.ts`) silently doing its job
+on a table that should never have been built at all.
+
+**Relationship to already-catalogued bugs, and why this is a new entry, not
+a duplicate:** the shape is the same DISEASE as B-4's own "reading column
+bands mined a fake 13-row table out of two side-by-side SEQUENCE OF
+OPERATION prose columns, whose headers were 'WORKSTATION.' and 'SHALL
+SEQUENCE THE FOLLOWING:'" and B-8's "three-plus side-by-side tables fused
+by Y-clustering" — but neither fix reaches this case. B-4's fix
+(`isTitleShaped`) rejects prose from becoming a table's TITLE; it says
+nothing about a numbered-list LABEL COLUMN ("B.1", "B.2" — short, real-
+code-shaped tokens, not sentences) being accepted as a real header/key
+column. B-8's fix targets an empty-corridor gutter between two real ruled
+tables; here there is no second real table at all, only two prose blocks
+that happen to sit in a shape (short label + long text, repeated down the
+page) generic-table detection reads as rows.
+
+**Not fixed.** Not traced past this point — the exact structural signal
+that would refuse "a repeating LABEL + LONG PROSE SENTENCE pair is not a
+table row" without also refusing genuine short-key/long-description
+schedule rows (which are common and real, e.g. any REMARKS-heavy schedule)
+needs its own measurement before a fix is written, per this file's own
+standing rule against guessing at a fix under time pressure. Left named
+and disclosed rather than half-fixed.
+
+**Consequence for the Demo Corpus's own zero-error bar:** this single
+document already fails BOTH halves of the bar before any box/cell grading
+even starts — MISSED != 0 (the real 11-row table is invisible) and a
+phantom table is counted as a win it is not. `keys/DEMO_CORPUS.txt`'s own
+header already states plainly that nothing in that set has passed grading
+yet; this is the first concrete, measured reason why, not a new admission.
+
+---
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.
