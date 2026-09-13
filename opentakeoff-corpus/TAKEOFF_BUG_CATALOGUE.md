@@ -1635,6 +1635,25 @@ table going missing) — not traced to a specific adjacent text line this
 time, so not asserted as the identical mechanism, just the same failure
 shape.
 
+**CONFIRMED RECURRING 2026-09-13 — a 3rd document, single-row
+over-count.** `032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#2`'s
+`SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE` reports `rows: 39`;
+direct `textSpans()` measurement (counting real `ACCU` type-column
+entries) confirms exactly 38 real rows. One phantom row, same family —
+the sibling `SPLIT SYSTEM INDOOR UNIT (EVAPORATOR) SCHEDULE` on the same
+sheet (38 real rows) matches exactly, so the over-count is specific to
+this one table, not a page-wide off-by-one.
+
+**CONFIRMED RECURRING 2026-09-13 — a 4th document, two-row
+over-count.** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3`'s
+`VENTILATION REQUIREMENTS` table reports `rows: 40`; direct `textSpans()`
+measurement confirms exactly 38 real rows (34 real room rows across 4
+`DOAS-`-grouped zones, plus 4 zone-subtotal rows) — includes a genuine
+duplicate room name, `CLASSROOM 135`, confirmed present twice at
+different y-positions under two different zones, ruled out as the
+source of the miscount. Found alongside B-31's own new row-truncation
+and missing-table findings on the same document.
+
 ### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (NOT FIXED — found, traced, disclosed)
 
 **Where:** `100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf#7` (sheet
@@ -1785,6 +1804,229 @@ fails cell-grading twice over on one small sheet — a real table (`WATER
 CIRCULATING PUMP SCHEDULE`) is invisible as its own entity, and the
 survivor's title doesn't match either real table it's supposed to
 represent.
+
+### B-30 — a code-compliance approval stamp's own disclaimer paragraph is fabricated into a phantom one-row table (NOT FIXED — found, traced, disclosed)
+
+**Where:** `098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#8`
+(sheet M3.0, "HVAC SCHEDULES") — found continuing the HELDOUT set's own
+missed-checking pass.
+
+**Measured:** the sheet carries 4 real, titled, ruled tables, all hand-
+confirmed and all extracted correctly by the production pipeline:
+`VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE (SHOP)` (1 row),
+`FAN SCHEDULE` (3), `DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT
+SCHEDULE` (2), `GAS-FIRED UNIT HEATER SCHEDULE` (4). But the pipeline
+also reports a 5th, fabricated table: `title: "approved contingent on
+the compliance"`, `rows: 1`, `kind: reference`. This title is a verbatim
+fragment of a Division of Occupational & Professional Licenses (DOPL)
+code-review approval stamp printed in the sheet's top-left corner —
+"These plans are approved contingent on the compliance with the mark-ups
+and notes applied. This approval shall not be construed to be an
+approval of any violation..." — a pure disclaimer paragraph with no
+columns, rows, or ruled structure whatsoever.
+
+**Relationship to already-catalogued bugs:** distinct from B-16 (two
+SIDE-BY-SIDE numbered-notes lists fusing into one fake table via a false
+column correlation) because here a SINGLE disclaimer paragraph, with no
+sibling list beside it, is misread as tabular on its own. Same general
+family (prose text mistaken for a table) but a different triggering
+shape — a new bug number rather than an amendment.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this document
+fails MISSED=0's false-positive-free counterpart — a phantom table with
+no real basis pollutes an otherwise perfectly-extracted sheet (4/4 real
+tables correct).
+
+**CONFIRMED RECURRING 2026-09-13 — a 2nd document, twice on one
+document.** `080_CA_Contra_Costa_College_Science_Center_Conference.pdf`
+fabricates a `title: "AGENCY APPROVALS"`, `rows: 3` phantom table on BOTH
+page #17 and page #21 — confirmed by render: this is the empty
+signature/stamp title-block box labeled "AGENCY APPROVALS" printed in
+the same corner of every sheet in this set, not a real ruled table
+anywhere. Same general mechanism as the DOPL disclaimer-stamp case above
+(title-block box content fabricated into a table), recurring on a
+completely different source document and a different specific stamp box.
+
+**CONFIRMED RECURRING 2026-09-13 — a 3rd document, twice on one
+document.** `013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf`
+fabricates a `title: "SUSTAINMENT MAINTENANCE"` phantom table on BOTH
+page #20 (`rows: 2`) and page #23 (`rows: 3`) — lifted from the title
+block's own project-name text, "1107TH THEATER AVIATION SUSTAINMENT
+MAINTENANCE GROUP", printed in the same corner of every sheet. Full
+context and this document's several other, distinct findings (a
+missing `BOILERS` table, a split-in-two real table, column-header-
+sourced title fabrications) are in B-32 below.
+
+### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (NOT FIXED — found, traced, disclosed)
+
+**Where:** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf`, both of its
+schedule pages (M002/#2, M003/#3) — found continuing the HELDOUT set's
+own missed-checking pass.
+
+**Measured, page #2 (M002, mistagged `role: detail`).** Hand-confirmed 5
+real tables: `FAN COIL UNITS` (18 rows, `FC-101` through `FC-210`,
+confirmed exactly via `textSpans()`), `DEDICATED OUTDOOR AIR SYSTEM` (4
+rows), `AIR COOLED CHILLER` (1 row), `HOT WATER CONDENSING BOILER` (2
+rows), `EXHAUST FANS` (1 row) — 26 rows total. The extractor reports only
+2 of these 5 tables: `HOT WATER CONDENSING BOILER` correct (2/2), but
+`FAN COIL UNITS` reports `rows: 2` against 18 real rows — a **16-row
+truncation on a table the extractor otherwise identifies and titles
+correctly**, a new failure shape not seen elsewhere in this file (every
+prior row-count bug in this catalogue either over-counts by 1-2 phantom
+rows, B-26, or the whole table is present/absent — never a large
+fraction of a correctly-titled table's own real rows silently dropped).
+`DEDICATED OUTDOOR AIR SYSTEM`, `AIR COOLED CHILLER`, and `EXHAUST FANS`
+are completely absent — 3 more real tables missing on the same page.
+
+**Measured, page #3 (M003, correctly tagged `role: schedule`).** Hand-
+confirmed 8 real tables (100 rows combined with page #2's real 26 —
+126 across the document), using `textSpans()` coordinate counts for the
+two dense tables: `HYDRONIC PUMPS` (8), `VENTILATION REQUIREMENTS` (38:
+34 real room rows across 4 `DOAS-`-grouped zones plus 4 zone-subtotal
+rows — genuinely includes `CLASSROOM 135` twice, confirmed as two
+distinct real rows at different y-positions under different DOAS zones,
+not a miscount), `SPLIT SYSTEM HEAT PUMPS` (4), `MAKE UP AIR UNITS` (1),
+`HYDRONIC ACCESSORIES` (10), `AIR DISTRIBUTION` (9), `ELECTRIC HEATERS`
+(3), `HEAT EXCHANGER` (1). The extractor finds 7 of these 8 — `AIR
+DISTRIBUTION` (9 rows) is completely absent, confirmed via a full-JSON
+title search, not misattached elsewhere. `VENTILATION REQUIREMENTS`
+reports `rows: 40` against the true 38 — a 2-row phantom-overcount,
+amended into B-26's own family below rather than re-described here. The
+other 6 tables all match exactly.
+
+**Relationship to already-catalogued bugs:** the `FAN COIL UNITS`
+16-row truncation is a genuinely new bug shape — filed here rather than
+folded into B-26 (which is exclusively small +1/+2 phantom-row
+OVER-counts) because this is a large fraction of REAL rows silently
+DROPPED from an otherwise correctly-identified table, the opposite
+direction and a different likely mechanism (a row-extraction limit or
+early-termination condition, not a stray adjacent line miscounted as
+data). The `AIR DISTRIBUTION` and page #2's 3 missing tables are plain
+missing-table cases, consistent with the general pattern already named
+across B-16/B-19/B-25/B-28 but not attributed to any one of them without
+further tracing.
+
+`VENTILATION REQUIREMENTS`'s own 40-vs-38 phantom-row overcount is the
+same small-overcount shape as B-26's other instances — amended there as
+a 4th confirmed document rather than re-described here.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this document
+fails MISSED=0 by 4 whole real tables (39 rows) plus a 16-row truncation
+inside a 5th, correctly-titled table — the row-truncation shape is a new
+and potentially serious failure mode worth prioritizing: it silently
+under-reports a real table's own content without any signal (no missing
+title, no absent table) that anything is wrong.
+
+### B-32 — the primary equipment table itself (BOILERS) goes missing on a boiler-replacement project, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, disclosed)
+
+**Where:**
+`013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf`, both of its
+schedule pages (M-320/#20, M-500/#23) — found continuing the HELDOUT
+set's own missed-checking pass. Ironic given the project's own name: the
+one table the pipeline most needs to get right here, `BOILERS`, is one
+of the ones it drops.
+
+**Measured, page #20 (M-320).** Hand-confirmed 3 real tables:
+`CONTROL VALVES` (3 rows), `FLOW METER DEVICES` (3 rows), `TYPICAL
+BOILER BACnet/MSTP SOFTWARE POINTS LIST` (25 rows, a BAS point-list
+table). The extractor's own output: `CONTROL VALVES` matches (3/3);
+`FLOW METER DEVICES` reports `rows: 4` against 3 real (a 1-row
+overcount, same family as B-26); `TYPICAL BOILER BACnet/MSTP SOFTWARE
+POINTS LIST` is **completely absent** — 25 real rows gone; and a
+fabricated `"SUSTAINMENT MAINTENANCE"` table (`rows: 2`) appears,
+lifted from the sheet's own title-block project-name text ("1107TH
+THEATER AVIATION SUSTAINMENT MAINTENANCE GROUP") — the same title-block-
+fabrication mechanism as B-29/B-30, a 3rd confirmed document (amended
+into B-30 below rather than re-described here).
+
+**Measured, page #23 (M-500).** Hand-confirmed 6 real tables:
+`VARIABLE FREQUENCY DRIVE SCHEDULE` (1 row), `GAS CONNECTED LOAD TABLE`
+(4 rows, including its own total row), `HYDRONIC SPECIALTIES SCHEDULE`
+(a single-system attribute/value spec sheet, ~22 real attribute rows),
+`HVAC PIPING MATERIAL SCHEDULE` (3 real data rows), `PUMPS` (1 row),
+`BOILERS` (8 rows — the project's own namesake equipment). The
+extractor's own output is badly garbled:
+- `PUMPS` and `BOILERS` are **both completely absent** — the entire
+  primary equipment schedule for a boiler-replacement project is
+  invisible to the pipeline.
+- `HVAC PIPING MATERIAL SCHEDULE` appears **twice**, `rows: 1` and
+  `rows: 3` — the same real table (3 real data rows) split into two
+  separate reported entries under the identical title, the OPPOSITE
+  direction from B-28's title-collision (which merges two DIFFERENT
+  real tables into one; this splits ONE real table into two).
+- A fabricated `"CAPACITY (GAL)"` table (`rows: 9`) and a fabricated
+  `"DIA. (in)"` table (`rows: 1`) both appear — neither is a real table
+  title; both are column-header text lifted from deep inside the
+  `HYDRONIC SPECIALTIES SCHEDULE`/`PUMPS` tables' own header rows
+  (`"CAPACITY (GAL)"` is the `SHOT FEEDER` row group's own column
+  header; `"DIA. (in)"` is the `PUMPS` table's `IMPLR DIA. (in)` column
+  header) and fabricated into standalone table titles — a genuinely new
+  title-fabrication SOURCE (an internal column header, not adjacent
+  prose or a title-block stamp) distinct from B-16/B-29/B-30's own
+  fabrication sources.
+- A second `"SUSTAINMENT MAINTENANCE"` fabrication (`rows: 3`) appears,
+  same mechanism as page #20's instance.
+- `VARIABLE FREQUENCY DRIVE SCHEDULE` reports `rows: 3` against 1 real
+  row, and `GAS CONNECTED LOAD TABLE` reports `rows: 5` against 4 real
+  — both further phantom-row overcounts, B-26's own family.
+
+**Relationship to already-catalogued bugs:** the `"SUSTAINMENT
+MAINTENANCE"` fabrication is B-29/B-30's own title-block mechanism, a
+3rd confirmed document (amended into B-30). The `HVAC PIPING MATERIAL
+SCHEDULE` table-split is a new, previously unseen shape — not
+B-28 (which merges two real tables), the reverse: one real table
+reported as two. The `"CAPACITY (GAL)"`/`"DIA. (in)"` fabrications are
+a new title-fabrication SOURCE (internal column-header text, not prose
+or a stamp) — related in spirit to B-16/B-29/B-30 (something other than
+a table's own real title becomes its reported title) but distinct
+enough in mechanism to flag separately for whoever roots this out. The
+complete disappearance of `PUMPS` and `BOILERS` — the project's own
+central equipment — is the single most consequential missing-table
+finding of this document, consistent with the general missing-table
+pattern (B-16/B-19/B-25/B-28/B-31) but not attributed to one specific
+mechanism without further tracing.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this document
+fails MISSED=0 by 2 whole real tables (33 rows, including the project's
+own namesake `BOILERS` equipment) plus a garbled, duplicated, and
+partially-fabricated report on 4 more tables — the worst combination of
+failure shapes measured on a single document this session.
+
+### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (NOT FIXED — found, traced, disclosed)
+
+**Where:**
+`023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8` (sheet
+M002, "MECHANICAL SCHEDULES") — a small, otherwise clean 3-table sheet,
+found continuing the HELDOUT set's own missed-checking pass.
+
+**Measured:** the sheet carries exactly 3 real tables, all correctly
+extracted: `AIR COOLED CHILLER SCHEDULE` (1 row), `BUFFER TANK SCHEDULE`
+(1 row), `PUMP SCHEDULE` (1 row, `CHWP-1&2`). But the extractor's own
+output lists **5** tables for this sheet: the 3 real ones, PLUS a
+second `PUMP SCHEDULE` entry (also `rows: 1`, `kind: reference` instead
+of `equipment`) that duplicates the real one under its own identical
+title, and PLUS an untitled (`title: ""`) 4-row table with no visible
+real counterpart anywhere on the rendered page — likely fabricated from
+the sheet's own title-block sub-grid (`PROJ. MANAGER`/`DRAWN BY`/
+`CHECKED BY`/`CONTRACT NO.` field-label rows, a 4-row grid in the same
+corner of every sheet in this set).
+
+**Relationship to already-catalogued bugs:** the duplicated `PUMP
+SCHEDULE` is a new shape — not B-29 (which merges two DIFFERENT real
+tables into one under a fabricated title) but the mirror case: ONE real
+table reported TWICE under its OWN correct title, with a different
+`kind` on the duplicate (`reference` vs the original's `equipment`),
+inflating this sheet's real table count by one. The untitled 4-row
+phantom is consistent with B-29/B-30's title-block-fabrication family in
+spirit (spurious content sourced from the sheet's own furniture) but
+with an empty rather than fabricated-string title, so filed alongside
+rather than merged into either.
+
+**Consequence for the HELDOUT set's own zero-error bar:** an otherwise
+perfectly-extracted 3-table sheet fails the false-positive-free half of
+the bar with 2 additional phantom entries — a real table double-counted
+and an untitled fabrication, on a document whose actual HVAC content is
+completely clean.
 
 ## What is working
 
