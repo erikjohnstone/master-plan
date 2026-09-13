@@ -35,6 +35,43 @@ not control how a consultant pastes a table into a sheet, and a metric that
 punishes or flatters us for it measures the wrong thing. Everything with real
 drawn linework is in scope, and nothing else is.
 
+**Vector-outlined-glyph pages join this exclusion, same reason, different
+shape.** Some CAD exports flatten every character to its own vector outline
+(a path shape, no character code at all) rather than a real embedded font —
+visually identical to normal text once rendered, but structurally there is no
+text layer AT ALL to read, by any means: not vectorgrid, not ODL, not a
+future OCR pass over the vector geometry, because there are no characters,
+only shapes with no assigned meaning. This is not a raster (the ink is real
+vector linework) and the naive reading of "real drawn linework is in scope"
+above would wrongly call it reachable. It is not: reachability is about
+whether characters exist to read, not about whether the ink is vector or
+raster. Already tracked as its own project-level category before this goal
+existed (task #66, "vector-outlined-glyph source PDFs, out-of-scope, not
+bugs"); formalized here because a hand-grading pass needs the written rule,
+not just institutional memory, to avoid mis-scoring one.
+
+**Measured, concrete example** (found live during this goal's own Demo
+Corpus hand-verification, 2026-09-13): `056_NY_VA_Project_632_19_106_
+Renovate_Pharmacy_Spaces.pdf` — a real, 6-page bulk-corpus document. Its own
+page 3 (drawing title "SCHEDULES") visibly carries four real, correctly-
+captioned schedule tables when rendered (AIR HANDLING UNIT SCHEDULE,
+HUMIDIFIER SCHEDULE, AIR INLETS/OUTLETS SCHEDULE, PUMP SCHEDULE) — a person
+looking at the rendered page reads them without difficulty. Measured
+directly (`textSpans()`, the same pdf.js text-layer read every extraction
+stage in this codebase is built on): pages 1-4 and 6 return **zero** text
+spans each; only page 5 (a `LEGEND` sheet) returns any (476). The four real
+schedules are drawn entirely in vector-outlined glyphs — not reachable by
+this platform's own stated method (text-layer discovery, Step 1) or by any
+vector-native successor, only by full OCR/vision. Correctly excluded, not a
+recall gap: this document's own real, honest table-found count is 0, and
+both this session's Volume-floor census and an earlier session's own
+`VERIFICATION_LEDGER.md` entry independently reached that same right answer
+— though that earlier entry's own stated REASON ("zero mentions of the word
+SCHEDULE anywhere") was imprecise (there are real SCHEDULE captions on the
+page; they are simply unreadable vector outlines, not absent) and is
+corrected here for any future session that renders this exact page and is
+tempted to call it a fresh miss.
+
 ## Non-negotiable: what "ground truth" means here
 
 This section governs how every word in Method and the Completion Gate is
