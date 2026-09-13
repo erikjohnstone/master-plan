@@ -10,6 +10,7 @@ import { keyText } from "../lib/keys.ts";
 import { Icon } from "../brand/icons.jsx";
 import AgentAnswer from "./AgentAnswer.jsx";
 import { useRevealDrawing } from "./WorkspaceDock.jsx";
+import { takeoffAccessAvailable } from "../lib/completeBasPresentation.js";
 
 const evidenceText = (ev) => {
   if (!ev) return "";
@@ -202,7 +203,7 @@ export default function AgentPanel({
   configured, running, status = "", log, thread = [], citations = [], proposals, condById, sheetLabel, units,
   fmtArea, onRun, onStop, onResetChat, onOpenCitation, onAccept, onReject, onAcceptAll, acceptableCount, onRejectAll,
   onOpenSettings, onClose,
-  onOpenTakeoff, takeoffRowCount = 0,
+  onOpenTakeoff, takeoffRowCount = 0, takeoffBadgeLabel = null,
   runHistory = [], historyOpen = false, onToggleHistory,
 }) {
   const [draft, setDraft] = useState("");
@@ -279,13 +280,13 @@ export default function AgentPanel({
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", background: "var(--cobalt)", color: "var(--accent-contrast)" }}>
         <Icon name="target" size={15} />
         <strong style={{ flex: 1, fontSize: 12.5 }}>Agent{proposals.length ? ` · ${proposals.length} pending` : ""}</strong>
-        {configured && Number(takeoffRowCount) > 0 && typeof onOpenTakeoff === "function" && (
+        {configured && takeoffAccessAvailable(takeoffRowCount, takeoffBadgeLabel) && typeof onOpenTakeoff === "function" && (
           <button
             onClick={onOpenTakeoff}
             title="Open Takeoff panel — structured workflow data"
             style={{ border: "none", background: "rgba(255,255,255,0.22)", color: "var(--accent-contrast)", cursor: "pointer", fontSize: 11, fontWeight: 650, padding: "2px 8px" }}
           >
-            Takeoff · {takeoffRowCount}
+            Takeoff · {takeoffBadgeLabel || takeoffRowCount}
           </button>
         )}
         {configured && thread.length > 0 && (
@@ -358,7 +359,7 @@ export default function AgentPanel({
                     {m.text}
                   </div>
                 )}
-                {m.role === "assistant" && Number(m.takeoffRows) > 0 && typeof onOpenTakeoff === "function" && (
+                {m.role === "assistant" && takeoffAccessAvailable(m.takeoffRows, takeoffBadgeLabel) && typeof onOpenTakeoff === "function" && (
                   <button
                     type="button"
                     onClick={onOpenTakeoff}
@@ -369,7 +370,7 @@ export default function AgentPanel({
                       letterSpacing: "0.06em", textTransform: "uppercase",
                     }}
                   >
-                    Open Takeoff · {m.takeoffRows}
+                    Open Takeoff{takeoffBadgeLabel ? ` · ${takeoffBadgeLabel}` : ` · ${m.takeoffRows}`}
                   </button>
                 )}
               </div>

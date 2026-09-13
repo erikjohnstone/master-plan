@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { runBasMath } from "../src/basMath.ts";
-import { compileProductionTakeoff } from "../src/productionTakeoff.ts";
+import { compileProductionTakeoff, compileProductionTakeoffs } from "../src/productionTakeoff.ts";
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import type { SheetGraph } from "../../web/src/lib/sheetgraph.ts";
 import { spawn } from "node:child_process";
@@ -72,6 +72,19 @@ test("shared production wrapper leaves all legacy results and graph values uncha
   assert.equal(bas_math.status, "review_required");
   assert.equal(JSON.stringify(graph), before);
   assert.deepEqual(await compileProductionTakeoff(null, graph, "hvac_equipment"), compileTakeoff(null, graph, "hvac_equipment"));
+});
+
+test("shared production batch is byte-for-byte parity with ordered individual compilers", async () => {
+  const graph = { available: true, sheets: [], tables: [], notes: [], rooms: [], unmatched_tags: [], callouts: [], buildings: [] } as unknown as SheetGraph;
+  const kinds = ["hvac_equipment", "sequences", "control_valves", "embedded_coil_gaps"];
+  const progress: unknown[] = [];
+  const batch = await compileProductionTakeoffs(null, graph, kinds.map((kind) => ({ kind })), (event) => progress.push(event));
+  for (const kind of kinds) {
+    assert.deepEqual(batch[kind], await compileProductionTakeoff(null, graph, kind));
+  }
+  assert.deepEqual(progress.map((event: any) => `${event.kind}:${event.state}`), kinds.flatMap((kind) => [
+    `${kind}:start`, `${kind}:done`,
+  ]));
 });
 
 test("singular indexed POINT LIST is consumed without modifying graph or legacy title selection", async () => {

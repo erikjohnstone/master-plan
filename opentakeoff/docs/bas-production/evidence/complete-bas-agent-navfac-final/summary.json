@@ -1,0 +1,467 @@
+{
+  "ok": true,
+  "prompt": "Run a BAS takeoff.",
+  "source_pdf": "/Users/erikjohnstone/Documents/ChatGPT/master-plan-agent-bas-integration/opentakeoff-corpus/raw/navfac-cherry-point-atc-mechanical.pdf",
+  "run_status": "done",
+  "execution_status": "completed",
+  "timing": {
+    "post_index_prompt_to_finish_ms": 37673,
+    "persisted_run_ms": 32420,
+    "sla_ms": 180000,
+    "within_sla": true
+  },
+  "compile_order": [
+    "hvac_equipment",
+    "bas_points",
+    "sequences",
+    "control_valves",
+    "embedded_coil_gaps"
+  ],
+  "analysis_order": [
+    "control_schematics_and_risers",
+    "schedule_plan_reconcile"
+  ],
+  "evidence_coverage": {
+    "minimums": {
+      "point_lists": 1,
+      "sequences": 1,
+      "control_schematics": 1,
+      "riser_diagrams": 1
+    },
+    "compiled_records": 1111,
+    "sequence_sections": 54,
+    "point_lists": 21,
+    "sequences": 8,
+    "control_schematics": 9,
+    "riser_diagrams": 1,
+    "explicit_schematic_point_tokens": 0,
+    "unresolved_crossings": 1359
+  },
+  "compile_summaries": {
+    "hvac_equipment": {
+      "takeoff_id": "T-HVAC-01",
+      "totals": {
+        "categories": 63,
+        "items": 396
+      },
+      "category_count": 63
+    },
+    "bas_points": {
+      "takeoff_id": "T-BAS-01",
+      "totals": {
+        "lists": 21,
+        "rows": 546,
+        "AI": 210,
+        "AO": 66,
+        "BI": 189,
+        "BO": 81,
+        "alarm": 164,
+        "trend": 243,
+        "hardwired": 0,
+        "soft": 0
+      },
+      "category_count": 21
+    },
+    "sequences": {
+      "takeoff_id": "T-SOO-01",
+      "totals": {
+        "sequences": 8,
+        "sections": 54,
+        "extracted": 8,
+        "narrative_only": 0,
+        "tabular_stub": 0,
+        "absent": 0
+      },
+      "category_count": 8
+    },
+    "control_valves": {
+      "takeoff_id": "T-VALVE-01",
+      "totals": {
+        "categories": 10,
+        "items": 163
+      },
+      "category_count": 10
+    },
+    "embedded_coil_gaps": {
+      "takeoff_id": "T-VALVE-EMBEDDED-01",
+      "totals": {
+        "coils_found": 159,
+        "gaps": 6
+      },
+      "category_count": 6
+    }
+  },
+  "reconciliation": {
+    "family_filter": null,
+    "summary": {
+      "total": 293,
+      "match": 141,
+      "schedule_only": 152,
+      "plan_only": 0,
+      "refused_no_scale": 0,
+      "refused_no_text": 0,
+      "ambiguous": 0
+    },
+    "takeoff_stats": {
+      "schedule_rows_total": 293,
+      "resolved": 141,
+      "refused": 152,
+      "errored": 0,
+      "total_drawn_instances": 141
+    },
+    "row_count": 293,
+    "exception_samples": [
+      {
+        "tag": "CV-CUH-A1-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-CUH-A1-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-DOAH-A1-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-DOAH-A1-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-DOAH-A2-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-DOAH-A2-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-FCU-A1-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-FCU-A1-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-FCU-A2-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-FCU-A2-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-FCU-A6-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-FCU-A6-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-FCU-A7-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-FCU-A7-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-FCU-A8-A-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-FCU-A8-A-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-FCU-A8-B-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-FCU-A8-B-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-FCU-A10-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-FCU-A10-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-FCU-A12-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-FCU-A12-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-FCU-A13-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-FCU-A13-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-UH-A1-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-UH-A1-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-UH-A2-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-UH-A2-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-VAV-A101-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-VAV-A101-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-VAV-102-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-VAV-102-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-VAV-A103-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-VAV-A103-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-VAV-A104-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-VAV-A104-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-VAV-A105-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-VAV-A105-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      },
+      {
+        "tag": "CV-VAV-A106A-HHW",
+        "family": "Pressure independent characterized control valve",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"CV-VAV-A106A-HHW\" (HHW CONTROL VALVE SCHEDULE on 9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf.pdf#44",
+        "plan_sheets": []
+      }
+    ],
+    "path": "production_session"
+  },
+  "inspection_domains": [
+    "point_soo",
+    "equipment_templates",
+    "assemblies_responsibility",
+    "engineering_compatibility",
+    "review_revisions_release"
+  ],
+  "release_status": "human_review_required",
+  "panel": {
+    "text": "BAS PROJECT TAKEOFF\nBAS project takeoff\n396 equipment records\n21 point lists · 546 rows\n8 sequences · 54 sections\n163 valve records · 6 coil gaps\n9 schematics · 1 riser/flow diagram\n141 plan-grounded matches · 152 exceptions\n11774 evidence fields\nConsolidated Agent run — equipment, BAS points, SOO, valves and coil gaps, diagram evidence, and schedule-to-plan reconciliation. Review exceptions and workflow decisions before release.\nCSV\nEXCEL\nPDF\nCLEAR\nTAKEOFF\nWORKFLOW DATA\nPOINT LISTS\nEQUIPMENT\nREVIEW & CHANGES\nBUILDING A · CHW CONTROL VALVE · 21\nBUILDING A · HHW CONTROL VALVE · 42\nAIR COOLED CHILLER · 2\nAIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION · 1\nAIR SEPARATOR · 6\nBOILER · 6\nCABINET UNIT HEATER · 5\nDEDICATED OUTDOOR AIR UNIT · 3\nDEHUMIDIFIER · 12\nEXPANSION TANK · 4\nFAN COIL UNIT · 42\nFAN · 8\nHUMIDIFIER · 12\nPUMP · 26\nUNIT HEATER · 6\nVARIABLE AIR VOLUME TERMINAL BOX · 52\nBUILDING M · CHW CONTROL VALVE · 17\nBUILDING M · HHW CONTROL VALVE · 33\nCOMPUTER ROOM AIR HANDLER TYPE · 6\nRANGE HOOD · 3\nBUILDING T · CHW CONTROL VALVE · 24\nBUILDING T · HHW CONTROL VALVE · 22\nAIR HANDLING UNIT · 4\nDEDICATED OUTDOOR AIR HANDLING UNIT · 1\nDUCT SILENCER · 2\nAIR COOLED HEAT RECOVERY CHILLER · 2\nAIR OPS - CHW SYSTEM POINTS LIST · 33\nAIR OPS AHU DDC POINTS LIST · 31\nAIR OPS DOAH DDC POINTS LIST · 67\nAIR OPS H&V DDC POINTS LIST · 16\nAIR OPS- HHW SYSTEM POINT LIST · 39\nATCT STAIR PRESSURIZATION DDC POINTS LIST · 12\nBATHROOM EXHAUST FAN DDC POINTS LIST · 4\nCHW CONTROL VALVE · 2\nCRAH DDC POINTS LIST · 13\nELEVATOR MACHINE ROOM DDC POINTS LIST · 13\nFCU WITH COOLING COILS DDC POINTS LIST · 9\nFCU WITH HEATING AND COOLING COILS DDC POINTS LIST · 11\nFCU WITH HEATING AND COOLING COILS DDC POINTS LIST - OCCUPIED · 11\nGRILLE, REGISTER, AND DIFFUSER · 30\nHHW CONTROL VALVE · 2\nHUMIDIFIER DDC POINTS LIST · 5\nMTRACON/ATCT - CHW SYSTEM POINT LIST · 63\nMTRACON/ATCT - HHW SYSTEM POINT LIST · 102\nPOINTS LIST AHU-T1A/TIB · 62\nPOINTS LIST DOAH-TI · 34\nREDUNDANT FCU DDC POINTS LIST · 2\nSFPVAV DDC POINTS LIST · 9\nUNIT HEATER DDC POINTS LIST · 6\nUPS EXHAUST FAN DDC POINTS LIST · 4\nBAS takeoff · Engineering\nReview required\nExport BAS JSON\n\nIndexed point-list requirements only. These are typed requirements, not verified installed-device counts. Software variables are separate from physical I/O. Unresolved source and engineering constraints remain below.\n\nAI\tAO\tDI\tDO\n210\t66\t187\t80\nPoints\nI/O capacity\nNetworks\nLicenses\nIssues · 50\n\nEach local point identity stays within its source table. Quantities be",
+    "citeRows": 3381,
+    "citeTables": 50,
+    "hasObjectObject": false,
+    "hasScheduledQty": true,
+    "hasInstalledQty": true,
+    "hasStatus": true,
+    "hasEmptyState": false,
+    "hasCompleteBasHeading": true,
+    "hasLastSubcompileHeading": false,
+    "hasMixedAggregateEa": false,
+    "coverage": {
+      "equipment_records": 396,
+      "point_lists": 21,
+      "point_rows": 546,
+      "sequences": 8,
+      "valve_records": 163,
+      "schematics": 9,
+      "risers": 1,
+      "reconcile_rows": 293,
+      "reconcile_matches": 141
+    }
+  },
+  "sequence_reader": {
+    "options": 8,
+    "selected_sequence_clause_rows": 10,
+    "selected_sequence_source_buttons": 10,
+    "view_sequence_enabled": true,
+    "exported_source_pages": 75
+  },
+  "csv_header": "Valve Mark,Unit Mark,Type,Qty,Unit,Qty basis,Quantity evidence,Scheduled qty,Installed qty,UNIT MARK,Served equipment,SERVICE,Size,VALVE SIZE (IN),PIPE SIZE,GPM,FLOWRATE (GPM),FLOW (GPM),CV,CONFIGURATION,NOTES,DESCRIPTION,CFM,OA CFM,HP,RPM,MOTOR RPM,ELECTRICAL VOLTS,FLA,REMARKS,ALARM,TREND,# OF PEOPLE,# PEOPLE,% RH,°F DB,1),A.,ACCEPTANCE VOLUME (GAL),AIRFLOW (CFM) MAX,AIRFLOW (CFM) MIN,AIRFLOW MAX,AIRFLOW MIN,B.,C.,CAPACITY (TONS),CAPACITY PINTS/HR,COIL LABEL,COMPRESSOR KW,COMPRESSOR KW/TON,COMPRESSOR STEPS,CONDENSER FAN DATA NO.,CONDENSER OAT (°F),control_schematic_reference,COOLING COIL # OF ROWS,COOLING COIL CHILLED WATER FLOW (GPM),COOLING COIL DATA # OF ROWS,COOLING COIL DATA EAT °FDB,COOLING COIL DATA EAT °FWB,COOLING COIL DATA ENT. AIR (°F) DB,COOLING COIL DATA ENT. AIR (°F) WB,COOLING COIL DATA ENT. WTR TEMP (°F),COOLING COIL DATA EWT °F,COOLING COIL DATA EXT. WTR TEMP (°F),COOLING COIL DATA GPM,COOLING COIL DATA LAT °FDB,COOLING COIL DATA LAT °FWB,COOLING COIL DATA LVG AIR (°F) DB,COOLING COIL DATA LVG AIR (°F)WB,COOLING COIL DATA LVG. AIR (°F) DB,COOLING COIL DATA LVG. AIR (°F) WB,COOLING COIL DATA LWT °F,COOLING COIL DATA LWT ºF,COOLING COIL DATA MAX WATER PRESSURE DROP (FT WC),COOLING COIL DATA MAX. COIL FV (FPM),COOLING COIL DATA PIPING RUNOUT SIZE (IN),COOLING COIL DATA SENSIBLE (MBH),COOLING COIL DATA SENSIBLE MBH,COOLING COIL DATA TOTAL (MBH),COOLING COIL DATA TOTAL MBH,COOLING COIL DATA W. P.D. FT. HD.,COOLING COIL DATA WTR P.D. FT. H20,COOLING COIL EAT °FDB,COOLING COIL EAT °FWB,COOLING COIL EAT DB (°F),COOLING COIL EAT WB (°F),COOLING COIL EWT (°F),COOLING COIL EWT °F,COOLING COIL GPM,COOLING COIL LAT °FDB,COOLING COIL LAT °FWB,COOLING COIL LAT DB (°F),COOLING COIL LAT WB (°F),COOLING COIL LWT (°F),COOLING COIL LWT °F,COOLING COIL MAX WATER PRESSURE DROP (FT WC),COOLING COIL MAX. COIL FACE VELOCITY (FPM),COOLING COIL MAX. COIL FV (FPM),COOLING COIL MAX. WATER PRESSURE DROP (FT. W.C.),COOLING COIL MIN. ROWS / MAX. FPI,COOLING COIL PIPING RUNOUT SIZE,COOLING COIL SENSIBLE (MBH),COOLING COIL SENSIBLE CAPACITY (MBTUH),COOLING COIL TOTAL (MBH),COOLING COIL TOTAL CAPACITY (MBTUH),COOLING MODE CONTROL,DESIGN OA (CFM),DISCONNECT PROVIDED BY,DUCT CONNECTION SIZE,DUCT MOUNTED HEATING COIL CAPACITY (MBH),DUCT MOUNTED HEATING COIL DUCT HEIGHT (IN),DUCT MOUNTED HEATING COIL DUCT WIDTH (IN),DUCT MOUNTED HEATING COIL EAT °FDB,DUCT MOUNTED HEATING COIL EWT °F,DUCT MOUNTED HEATING COIL GPM,DUCT MOUNTED HEATING COIL LAT °FDB,DUCT MOUNTED HEATING COIL LWT °F,DUCT MOUNTED HEATING COIL MAX AIR PRESSURE DROP (IN WG),DUCT MOUNTED HEATING COIL MAX WATER PRESSURE DROP (FT WC),ELECTRIC INPUT (KW),ELECTRICAL DATA FLA,ELECTRICAL DATA MCA,ELECTRICAL DATA MOCP,ELECTRICAL DATA PH,ELECTRICAL DATA VOLTS,ELECTRICAL DATA VOLTS/PH/HZ,ELECTRICAL FLA,ELECTRICAL HZ,ELECTRICAL MAX ECM FLA,ELECTRICAL MCA,ELECTRICAL MIN. MOTOR POWER (HP),ELECTRICAL MOCP,ELECTRICAL MOTOR HP,ELECTRICAL MOTOR TYPE,ELECTRICAL PH,ELECTRICAL PHASE,ELECTRICAL SPEED CONTROL,ELECTRICAL UNIT POWER (KW),ELECTRICAL V/HZ/PH,ELECTRICAL V/PH/HZ,ELECTRICAL VFD/STARTER/DISCONNECT PROVIDED BY,ELECTRICAL VOLTS/PH/HZ,ENT. WATER TEMP (°F),ESP (IN WG),EVAPORATOR EWT (°F),EVAPORATOR GPM,EVAPORATOR LWT (°F),EVAPORATOR PD (FT WC),EWT,EWT (°F),EWT (°F) / LWT(°F),EXHAUST FAN CFM,EXHAUST FAN EXTERNAL SP (IN WG),EXHAUST FAN MIN. MOTOR HP,EXHAUST FAN MOTOR (QTY) HP,FACE SIZE (IN),FAN AIRFLOW (CFM),FAN DATA (QTY) H.P.,FAN DATA CFM,FAN DATA CFM (CLG / HTG ),FAN DATA CFM (CLG/HTG),FAN DATA E.S.P. (IN WG),FAN DATA ESP (IN WG),FAN DATA ESP (IN. W.G.),FAN DATA FAN (QTY) H.P.,FAN DATA FLA,FAN DATA MOTOR (HP),FAN DATA NOMINAL H.P.,FAN DATA OA CFM,FAN DATA S.A. CFM (MAX),FAN DATA S.A. CFM (MIN),FAN DATA VOLTS/PH/HZ,FAN EXT. STATIC PRESSURE (IN. W.C.),FAN FAN MOTOR (QTY) HP,FAN TOTAL AIRFLOW (CFM),FAN V/HZ/PH,FILTER DATA FINAL FILTER MERV,FILTER DATA PREFILTER MERV,FILTER DATA TYPE,FLOW RATE (CFM),FLOW RATE (GPM),FOULING FACTOR (HR-FT^2-F/BTU),HEAT RECOVERY CONDENSER BUNDLE GPM,HEAT RECOVERY CONDENSER BUNDLE HEAT RECOVERY EWT (°F),HEAT RECOVERY CONDENSER BUNDLE HEAT RECOVERY LWT (°F),HEAT RECOVERY CONDENSER BUNDLE PD (FT WC),HEATING COIL DATA # OF ROWS,HEATING COIL DATA CAPACITY (MBH),HEATING COIL DATA EAT °FDB,HEATING COIL DATA ENT. AIR (°F) DB,HEATING COIL DATA ENT. WTR TEMP (°F),HEATING COIL DATA EWT (°F),HEATING COIL DATA EWT (°F) / LWT(°F),HEATING COIL DATA EWT °F,HEATING COIL DATA GPM,HEATING COIL DATA HHW ROUNTOUT SIZE (IN),HEATING COIL DATA LAT °FDB,HEATING COIL DATA LVG. AIR (°F) DB,HEATING COIL DATA LWT (°F),HEATING COIL DATA LWT °F,HEATING COIL DATA MAX PRESSURE DROP (FT WC),HEATING COIL DATA MAX PRESSURE DROP (IN WC),HEATING COIL DATA MAX WATER PRESSURE DROP (FT WC),HEATING COIL DATA MAX. COIL FV (FPM),HEATING COIL DATA MBH,HEATING COIL DATA PIPING RUNOUT SIZE,HEATING COIL DATA PIPING RUNOUT SIZE (IN),HEATING COIL DATA TOTAL CAPACITY (MBH),HEATING COIL DATA W. P.D. FT. HD.,HEATING COIL DATA WATER FLOW (GPM),HEATING COIL DATA WTR P.D. FT. H20,HEATING COIL DATA WTR TEMP ∆T (°F),HEATING COIL LAT TEMPERATURE SENSOR. ALSO ENERGIZE INLINE CIRCULATOR PUMP (HHWP,HHW ROUNTOUT SIZE (IN),HOOD DIMENSIONS (WXDXH),HOT WATER HEATING COIL DATA CAPACITY (MBH),HOT WATER HEATING COIL DATA EAT (°F),HOT WATER HEATING COIL DATA EWT (°F),HOT WATER HEATING COIL DATA FLOWRATE (GPM),HOT WATER HEATING COIL DATA HHW INLET SIZE (IN),HOT WATER HEATING COIL DATA LAT (°F),HOT WATER HEATING COIL DATA MAX WATER PRESSURE DROP (FT WC),LB/HR,LB/HR (MBH),LOCATION,LOW SPEED CFM,LVG. WATER TEMP (°F),LWT,LWT (°F),MAX ALLOWABLE PRESSURE DROP (FT WC),MAX ECM FLA,MAX NC,MAX PD (FT WC),MAX PRESSURE (PSI),MAX PRESSURE (PSIG),MAX PRESSURE DROP (FT WC),MAX PRESSURE DROP (IN WC),MAX PRIMARY AIRFLOW (CFM),MAX SONES,MAX TEMP (°F),MAX. PRESSURE DROP (FT WC),MIN INLET PRESS (IN WC),MIN PRIMARY AIRFLOW (CFM),MINIMUM EER,MINIMUM GROSS OUTPUT (MBH),MINIMUM INSERTION LOSS HZ 1000,MINIMUM INSERTION LOSS HZ 125,MINIMUM INSERTION LOSS HZ 2000,MINIMUM INSERTION LOSS HZ 250,MINIMUM INSERTION LOSS HZ 4000,MINIMUM INSERTION LOSS HZ 500,MINIMUM INSERTION LOSS HZ 63,MINIMUM INSERTION LOSS HZ 8000,MINIMUM IPLV,MOTOR (HP),MOUNTING,MOUNTING STYLE,Narrative,NATURAL GAS INPUT (MBH),NATURAL GAS OUTPUT (MBH),NECK SIZE (IN),OPERATING WEIGHT (LBS),PD (IN WG),plan_paint_prefer_schedule_title,PREHEAT COIL # OF ROWS,PREHEAT COIL CAPACITY (MBH),PREHEAT COIL EAT °FDB,PREHEAT COIL EWT °F,PREHEAT COIL GPM,PREHEAT COIL LAT °FDB,PREHEAT COIL LWT °F,PREHEAT COIL MAX WATER PRESSURE DROP (FT WC),PREHEAT COIL MAX. COIL FV (FPM),riser_diagram_tag,ROOM,SENSIBLE MBH,sequence_status,SERVED BY,SIZE CENTERLINE LENGTH (IN),SIZE HEIGHT (IN),SIZE WIDTH (IN),SOUND LEVEL (MAX NC),STARTER/ DISCONNECT PROVIDED BY,STARTER/DISCONNECT PROVIDED BY,SUPPLY FAN CFM,SUPPLY FAN EXTERNAL SP (IN WG),SUPPLY FAN MOTOR (QTY) HP,SYSTEM,SYSTEM TYPE,T),TDH (FT WC),THROW PATTERN,TOTAL CAPACITY (MBH),TOTAL VOLUME (GAL),TYPE MARK,UNIT TYPE,V/HZ/PH,V/P/HZ,V/PH/HZ,VAV BOX INLET DIAMETER (IN),VFD / DISCONNECT PROVIDED BY,VFD/STARTER / DISCONNECT BY,VFD/STARTER /DISCONNECT PROVIDED BY,VFD/STARTER/ DISCONNECT BY,VFD/STARTER/ DISCONNECT PROVIDED BY,VFD/STARTER/DISCONNECT PROVIDED BY,VOLT/PH,VOLT/PHASE/ HZ,VOLT/PHASE/HZ,WATER FLOW (GPM),Plan sheet,Schedule sheet,Schedule,Status,Notes,Workflow",
+  "page_errors": [],
+  "console_errors": [],
+  "artifacts": [
+    "01-agent-result.png",
+    "02-takeoff-table.png",
+    "03-workflow-review.png",
+    "04-sequence-reader.png",
+    "complete-bas-takeoff.csv",
+    "bas-evidence-and-history.takeoff.json"
+  ]
+}

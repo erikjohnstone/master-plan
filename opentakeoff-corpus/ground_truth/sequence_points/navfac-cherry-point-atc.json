@@ -1,0 +1,57 @@
+{
+  "schema": "opentakeoff.sequence_point_candidate_ground_truth.v1",
+  "source_pdf": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "review_basis": "Human visual review of rendered vector PDF sheets M-703, M-705, and MI730. Entries are explicit authored SOO labels with parenthetical source tags. They are review candidates, not inferred I/O types, installed quantities, controller assignments, or equipment applicability.",
+  "pages": [
+    {
+      "page": 53,
+      "sheet_number": "M-703",
+      "expected_candidates": [
+        { "variable": "DOAH SUPPLY FAN STATUS", "source_tag": "DOAHSF-S" },
+        { "variable": "DOAH EXHAUST FAN STATUS", "source_tag": "DOAHEF-S" },
+        { "variable": "PREHEAT COIL DISCHARGE AIR TEMPERATURE LOW LIMIT (FREEZESTAT)", "source_tag": "PH-DA-T-LL" },
+        { "variable": "SUPPLY AIR DUCT PRESSURE HIGH LIMIT", "source_tag": "SA-P-HL" },
+        { "variable": "SUPPLY AIR SMOKE", "source_tag": "SA-SMK" },
+        { "variable": "SUPPLY AIR DUCT PRESSURE HIGH LIMIT", "source_tag": "SA-P-HL" },
+        { "variable": "SUPPLY AIR SMOKE", "source_tag": "SA-SMK" },
+        { "variable": "DOAH DISCHARGE SETPOINT", "source_tag": "DOAHSA-T-SP" }
+      ]
+    },
+    {
+      "page": 55,
+      "sheet_number": "M-705",
+      "expected_candidates": [
+        { "variable": "SUPPLY FAN STATUS", "source_tag": "SF-S" },
+        { "variable": "SUPPLY AIR DUCT PRESSURE HIGH LIMIT", "source_tag": "SA-P-HL" },
+        { "variable": "SUPPLY AIR SMOKE", "source_tag": "SA-SMK" },
+        { "variable": "LOW LIMIT FREEZESTAT", "source_tag": "LL-F" },
+        { "variable": "AHU DISCHARGE PRESSURE HIGH LIMIT", "source_tag": "SA-P-HL" },
+        { "variable": "AHU SUCTION PRESSURE HIGH LIMIT", "source_tag": "SA-P-HL" },
+        { "variable": "SUPPLY AIR SMOKE", "source_tag": "SA-SMK" },
+        { "variable": "UNOCCUPIED FLOOR TEMPERATURE LOW LIMIT SETPOINT", "source_tag": "FLR-T-LL" },
+        { "variable": "UNOCCUPIED FLOOR TEMPERATURE HIGH LIMIT SETPOINT", "source_tag": "FLR-T-HL" },
+        { "variable": "DUCT STATIC PRESSURE SETPOINT", "source_tag": "SA-P-SP" },
+        { "variable": "SUPPLY AIR TEMPERATURE SETPOINT", "source_tag": "SA-T-SP" }
+      ]
+    },
+    {
+      "page": 64,
+      "sheet_number": "MI730",
+      "expected_candidates": [
+        { "variable": "DOAH SUPPLY FAN STATUS", "source_tag": "DOAHSF-S" },
+        { "variable": "PREHEAT COIL DISCHARGE AIR TEMPERATURE LOW LIMIT (FREEZESTAT)", "source_tag": "PH-DA-T-LL" },
+        { "variable": "SUPPLY AIR DUCT PRESSURE HIGH LIMIT", "source_tag": "SA-P-HL" },
+        { "variable": "SUPPLY AIR DUCT PRESSURE HIGH LIMIT", "source_tag": "SA-P-HL" },
+        { "variable": "DOAH PREHEAT COIL SETPOINT", "source_tag": "DOAHHC-T-SP" },
+        { "variable": "DOAH COOLING COIL SETPOINT", "source_tag": "DOAHCC-T-SP" },
+        { "variable": "DOAH DISCHARGE SETPOINT", "source_tag": "DOAHSA-T-SP" }
+      ]
+    }
+  ],
+  "negative_pages": [
+    { "page": 2, "sheet_number": "G-002", "expected_candidates": 0 },
+    { "page": 50, "sheet_number": "MI601", "expected_candidates": 0 },
+    { "page": 57, "sheet_number": "M-707", "expected_candidates": 0, "review_note": "The CHW narrative has control prose but no independently labeled parenthetical point lines." }
+  ]
+}

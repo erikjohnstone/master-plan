@@ -47,5 +47,9 @@ test('BAS engineering empty state does not imply a point-list source exists', ()
     points: [],
   } });
   assert.match(empty, /No typed point-list or SOO requirements were available for calculation/);
+  assert.match(empty, /evidence gap.not proof that the project requires zero I\/O/i);
+  assert.match(empty, /data-bas-empty-requirements/);
+  assert.match(empty, /Review 1 engineering evidence gap/);
+  assert.doesNotMatch(empty, /data-bas-total=/);
   assert.doesNotMatch(empty, /Indexed point-list requirements only/);
 });

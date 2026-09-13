@@ -4,6 +4,7 @@
  * Modes:
  *   --mode graph              → write SheetGraph JSON to --out (or stdout if small)
  *   --mode compile --kind …   → compileCorpusTakeoff JSON on stdout
+ *   --mode complete_bas       → five compilers + reconcile on one Session
  *   --mode sweep --tag …      → Session.sweepScheduleRow JSON on stdout
  *   --mode symbol_sweep        → Session.symbolSweep JSON on stdout
  *   --mode count_marks        → Session.countMarks JSON on stdout
@@ -23,7 +24,7 @@ import { basename, resolve } from "node:path";
 import { cachedSheetGraph } from "./sheetGraphCache.mjs";
 import { writeJsonAndExit } from "./cliJson.mjs";
 import { Session } from "../src/session.ts";
-import { compileProductionTakeoff } from "../src/productionTakeoff.ts";
+import { compileProductionTakeoff, compileProductionTakeoffs } from "../src/productionTakeoff.ts";
 import { reconcileSchedulePlan } from "../src/takeoff.ts";
 
 function argsOf(argv, name) {
@@ -39,8 +40,9 @@ function arg(argv, name) {
 }
 
 /** Emit a structured progress line the UI middleware can stream. */
+const processStartedAt = performance.now();
 function progress(phase, message, extra = {}) {
-  const payload = JSON.stringify({ phase, message, ...extra });
+  const payload = JSON.stringify({ phase, message, elapsed_ms: Math.round(performance.now() - processStartedAt), ...extra });
   process.stderr.write(`OT_PROGRESS\t${payload}\n`);
 }
 
@@ -205,6 +207,70 @@ if (mode === "reconcile") {
     },
   });
   await writeJsonAndExit(result);
+}
+
+if (mode === "complete_bas") {
+  // SHOULD THIS BE ON THE SHARED PATH? Yes. This is exactly the same five
+  // production compilers and the same shared reconcile function as the
+  // individual UI/MCP calls, but one loaded Session prevents a large drawing
+  // set from being reopened six times after it has already been indexed.
+  const compileOrder = [
+    "hvac_equipment",
+    "bas_points",
+    "sequences",
+    "control_valves",
+    "embedded_coil_gaps",
+  ];
+  const labels = {
+    hvac_equipment: "HVAC equipment",
+    bas_points: "BAS points",
+    sequences: "sequences-of-operations",
+    control_valves: "control valves",
+    embedded_coil_gaps: "embedded-coil valve gaps",
+  };
+  const compiles = await compileProductionTakeoffs(
+    session,
+    graph,
+    compileOrder.map((compileKind) => ({
+      kind: compileKind,
+      options: compileKind === "bas_points" && basMathOptions ? { bas_math: basMathOptions } : {},
+    })),
+    ({ kind: compileKind, index, total, state }) => {
+      progress("compile", state === "start"
+        ? `Compiling ${labels[compileKind] || compileKind} (${index + 1} of ${total})…`
+        : `Compiled ${labels[compileKind] || compileKind} (${index} of ${total}).`, {
+        kind: compileKind,
+        processed: index,
+        total,
+        state,
+      });
+    },
+  );
+  progress("reconcile", "Reconciling schedule quantities to grounded plan evidence…");
+  const reconcile = await reconcileSchedulePlan(session, {
+    categories,
+    evaluationFast,
+    onProgress: (event) => {
+      if (event.state === "start") {
+        progress("reconcile_row", `Grounding schedule tag ${event.tag}…`, event);
+        return;
+      }
+      const total = event.total ? ` of ${event.total}` : "";
+      progress("reconcile", `Grounded ${event.processed}${total} schedule tag${event.processed === 1 ? "" : "s"} — ${event.tag} (${event.elapsed_ms ?? 0} ms).`, event);
+    },
+  });
+  const controlSchematics = graph.control_schematics || await session.controlSchematics();
+  progress("done", "Complete BAS extraction and reconciliation finished.", {
+    compile_count: compileOrder.length,
+    reconcile_rows: reconcile.rows.length,
+  });
+  await writeJsonAndExit({
+    schema_version: "opentakeoff.complete_bas_batch.v1",
+    compile_order: compileOrder,
+    compiles,
+    control_schematics: controlSchematics,
+    reconcile,
+  });
 }
 
 if (mode !== "compile") {

@@ -5,7 +5,7 @@ import { basEquipmentEvidenceSchema, buildBasEquipmentCandidatesForVerifiedEvide
   ownBasEquipmentEvidencePassthrough, type BasEquipmentEvidence } from './basEquipmentEvidence.ts';
 import { basPointListsSchema, type BasPointLists } from './basPointLists.ts';
 import { basSourceContextSchema, type BasSourceContext } from './basSources.ts';
-import { compareBasSequenceMatrix, interpretBasSequences } from './basSequenceReconciliation.ts';
+import { BAS_SEQUENCE_RULE, compareBasSequenceMatrix, interpretBasSequences, type BasSequenceRuleVersion } from './basSequenceReconciliation.ts';
 
 const uuid = z.string().uuid(), id = z.string().min(1).max(512);
 const reason = z.string().trim().min(1).max(4096);
@@ -38,8 +38,8 @@ export type BasEquipmentReviewEvent = z.infer<typeof basEquipmentReviewEventSche
 /** Called against verified immutable capture evidence, including on import and
  * event replay. Selection by the operator/Agent is disclosed, not extracted fact. */
 export async function validateBasEquipmentRegister(sources: BasSourceContext, evidence: BasEquipmentEvidence,
-  points: BasPointLists, raw: unknown) {
-  return (await prepareBasEquipmentRegisterValidator(sources, evidence, points))(raw);
+  points: BasPointLists, raw: unknown, sequenceRuleVersion: BasSequenceRuleVersion = BAS_SEQUENCE_RULE) {
+  return (await prepareBasEquipmentRegisterValidator(sources, evidence, points, sequenceRuleVersion))(raw);
 }
 
 /** Shared batch seam: own the source inputs before awaiting candidate hashes.
@@ -47,11 +47,11 @@ export async function validateBasEquipmentRegister(sources: BasSourceContext, ev
  * receives the complete schema, ownership and conflict checks. No global cache
  * or caller-supplied "already verified" flag. Returned evidence is a fresh copy. */
 export async function prepareBasEquipmentRegisterValidator(sources: BasSourceContext, evidence: BasEquipmentEvidence,
-  points: BasPointLists) {
+  points: BasPointLists, sequenceRuleVersion: BasSequenceRuleVersion = BAS_SEQUENCE_RULE) {
   const context = basSourceContextSchema.parse(sources), ownedEvidence = basEquipmentEvidenceSchema.parse(evidence);
   ownBasEquipmentEvidencePassthrough(ownedEvidence);
   const validate = await prepareBasEquipmentRegisterValidatorForVerifiedWorkflow(
-    context, ownedEvidence, basPointListsSchema.parse(points));
+    context, ownedEvidence, basPointListsSchema.parse(points), sequenceRuleVersion);
   return (raw: unknown) => structuredClone(validate(raw));
 }
 
@@ -59,12 +59,13 @@ export async function prepareBasEquipmentRegisterValidator(sources: BasSourceCon
  * owned and may be shared by exact event-head views inside one workflow audit;
  * public callers use the wrapper above and retain a fresh-copy boundary. */
 export async function prepareBasEquipmentRegisterValidatorForVerifiedWorkflow(sources: BasSourceContext,
-  evidence: BasEquipmentEvidence, points: BasPointLists) {
+  evidence: BasEquipmentEvidence, points: BasPointLists,
+  sequenceRuleVersion: BasSequenceRuleVersion = BAS_SEQUENCE_RULE) {
   const context = sources, matrices = points;
   const candidates = await buildBasEquipmentCandidatesForVerifiedEvidence(context, evidence);
   const occurrences = new Map(candidates.tables.flatMap(t => t.rows.map(r => [r.occurrence_id, r] as const)));
   const sourceSpans = new Set(context.pages.flatMap(p => p.spans.map(s => s.span_id)));
-  const regions = new Map(interpretBasSequences(context).regions.map(r => [r.region_id, r]));
+  const regions = new Map(interpretBasSequences(context, sequenceRuleVersion).regions.map(r => [r.region_id, r]));
   return (raw: unknown) => {
     const register = basEquipmentRegisterSchema.parse(raw);
     const issues: Array<{ code: string; equipment_id?: string; assignment_id?: string; scope_id?: string }> = [];

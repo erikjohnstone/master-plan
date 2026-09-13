@@ -26,12 +26,12 @@ export function basActiveAssociations(workflow: BasWorkflow, captureId: string):
 export async function basSequenceView(workflow: BasWorkflow, captureId: string) {
   const capture = workflow.captures.find(c => c.capture_id === captureId);
   if (!capture?.narrative_sources) throw new Error('This older capture has no retained SOO text. Recompile the original PDFs.');
-  return reconcileBasSequencePoints(capture.narrative_sources, capture.points, basActiveAssociations(workflow, captureId));
+  return reconcileBasSequencePoints(capture.narrative_sources, capture.points, basActiveAssociations(workflow, captureId), capture.narrative_rule_version);
 }
 
 export function basSequenceCandidates(workflow: BasWorkflow, captureId: string) {
   const capture = workflow.captures.find(c => c.capture_id === captureId);
-  return capture?.narrative_sources ? interpretBasSequences(capture.narrative_sources) : null;
+  return capture?.narrative_sources ? interpretBasSequences(capture.narrative_sources, capture.narrative_rule_version) : null;
 }
 
 export async function applyBasReview(rawWorkflow: unknown, rawRequest: unknown,
@@ -50,7 +50,7 @@ export async function applyBasReview(rawWorkflow: unknown, rawRequest: unknown,
   if (basReviewHead(workflow, request.capture_id) !== request.expected_head) throw new Error('BAS review changed since this edit began. Reload the current comparison.');
   const action = request.action;
   if (action.kind === 'upsert') {
-    await reconcileBasSequencePoints(capture.narrative_sources, capture.points, [{ ...action.association, review_origin: origin }]);
+    await reconcileBasSequencePoints(capture.narrative_sources, capture.points, [{ ...action.association, review_origin: origin }], capture.narrative_rule_version);
   } else if (!basActiveAssociations(workflow, request.capture_id).some(a => a.region_id === action.region_id && a.matrix_id === action.matrix_id)) {
     throw new Error('The association to remove no longer exists');
   }

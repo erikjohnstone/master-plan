@@ -1,0 +1,185 @@
+{
+  "ok": true,
+  "prompt": "Run a BAS takeoff.",
+  "source_pdf": "../opentakeoff-corpus/raw/tinker-afb-iwcs-controls.pdf",
+  "run_status": "done",
+  "execution_status": "completed",
+  "timing": {
+    "post_index_prompt_to_finish_ms": 15664,
+    "persisted_run_ms": 15539,
+    "sla_ms": 180000,
+    "within_sla": true
+  },
+  "compile_order": [
+    "hvac_equipment",
+    "bas_points",
+    "sequences",
+    "control_valves",
+    "embedded_coil_gaps"
+  ],
+  "analysis_order": [
+    "control_schematics_and_risers",
+    "schedule_plan_reconcile"
+  ],
+  "evidence_coverage": {
+    "minimums": {
+      "point_lists": 0,
+      "sequences": 5,
+      "soo_point_candidates": 0,
+      "control_schematics": 0,
+      "riser_diagrams": 0
+    },
+    "compiled_records": 0,
+    "sequence_sections": 65,
+    "point_lists": 0,
+    "sequences": 5,
+    "soo_point_candidates": 0,
+    "control_schematics": 0,
+    "riser_diagrams": 0,
+    "explicit_schematic_point_tokens": 0,
+    "unresolved_crossings": 0
+  },
+  "compile_summaries": {
+    "hvac_equipment": {
+      "takeoff_id": "T-HVAC-01",
+      "totals": {
+        "categories": 63,
+        "items": 0
+      },
+      "category_count": 63
+    },
+    "bas_points": {
+      "takeoff_id": "T-BAS-01",
+      "totals": {
+        "lists": 0,
+        "rows": 0,
+        "AI": 0,
+        "AO": 0,
+        "BI": 0,
+        "BO": 0,
+        "alarm": 0,
+        "trend": 0,
+        "hardwired": 0,
+        "soft": 0
+      },
+      "category_count": 0
+    },
+    "sequences": {
+      "takeoff_id": "T-SOO-01",
+      "totals": {
+        "sequences": 5,
+        "sections": 65,
+        "extracted": 5,
+        "narrative_only": 0,
+        "tabular_stub": 0,
+        "absent": 0
+      },
+      "category_count": 5
+    },
+    "control_valves": {
+      "takeoff_id": "T-VALVE-01",
+      "totals": {
+        "categories": 10,
+        "items": 0
+      },
+      "category_count": 10
+    },
+    "embedded_coil_gaps": {
+      "takeoff_id": "T-VALVE-EMBEDDED-01",
+      "totals": {
+        "coils_found": 0,
+        "gaps": 0
+      },
+      "category_count": 0
+    }
+  },
+  "reconciliation": {
+    "family_filter": null,
+    "summary": {
+      "total": 0,
+      "match": 0,
+      "schedule_only": 0,
+      "plan_only": 0,
+      "refused_no_scale": 0,
+      "refused_no_text": 0,
+      "ambiguous": 0
+    },
+    "takeoff_stats": {
+      "schedule_rows_total": 0,
+      "resolved": 0,
+      "refused": 0,
+      "errored": 0,
+      "total_drawn_instances": 0
+    },
+    "row_count": 0,
+    "exception_samples": [],
+    "path": "production_session_batch"
+  },
+  "matched_source_comparison": null,
+  "inspection_domains": [
+    "point_soo",
+    "equipment_templates",
+    "assemblies_responsibility",
+    "engineering_compatibility",
+    "review_revisions_release"
+  ],
+  "release_status": "human_review_required",
+  "panel": {
+    "text": "BAS PROJECT TAKEOFF\nBAS project takeoff\n0 equipment records\n0 point lists\n5 sequences · 65 sections\n0 valve records\n88 cited source fields\nConsolidated Agent run — equipment, BAS points, SOO, valves and coil gaps, diagram evidence, and schedule-to-plan reconciliation. Review exceptions and workflow decisions before release.\nCSV\nEXCEL\nPDF\nCLEAR\nTAKEOFF\nWORKFLOW DATA\nPOINT LISTS\nEQUIPMENT\nREVIEW & CHANGES\nNo quantity-bearing schedule rows were found.\nThis controls evidence still includes 5 grounded sequences with 65 retained sections. No equipment quantity has been inferred from narrative text.\nREVIEW SEQUENCES\nEngineering inputs still needed\n\nNo typed point-list or SOO requirements were available for calculation. This is an evidence gap—not proof that the project requires zero I/O.\n\nExport engineering JSON\nReview 4 engineering evidence gaps",
+    "citeRows": 0,
+    "citeTables": 0,
+    "hasObjectObject": false,
+    "hasScheduledQty": false,
+    "hasInstalledQty": false,
+    "hasStatus": false,
+    "hasEmptyState": true,
+    "hasCompleteBasHeading": true,
+    "hasLastSubcompileHeading": false,
+    "hasMixedAggregateEa": false,
+    "resultGroupRail": null,
+    "maxCollapsedResultRowHeight": 61,
+    "coverage": {
+      "equipment_records": 0,
+      "point_lists": 0,
+      "point_rows": 0,
+      "point_type_review_rows": 0,
+      "sequences": 5,
+      "soo_point_candidates": 0,
+      "valve_records": 0,
+      "schematics": 0,
+      "risers": 0,
+      "reconcile_rows": 0,
+      "reconcile_matches": 0
+    }
+  },
+  "sequence_reader": {
+    "options": 5,
+    "extracted_body_count": 5,
+    "review_candidate_count": 0,
+    "selected_sequence": "02 BUILDING 214 SEQUENCE OF OPERATIONS IW-LS-3 · PDF page 26 · body detected",
+    "selected_sequence_clause_rows": 13,
+    "selected_sequence_source_buttons": 13,
+    "selected_sequence_point_source_buttons": 0,
+    "required_soo_tag": null,
+    "required_sequence_title": "02 BUILDING 214 SEQUENCE OF OPERATIONS IW-LS-3",
+    "forbidden_sequence_text": [
+      "BUILDING 214 LIFT STATION DETAIL",
+      "MS1 RUN AUTO SW",
+      "TO IWTP",
+      "STATION VAULT",
+      "FLOW METER"
+    ],
+    "view_sequence_enabled": true,
+    "exported_source_pages": 31
+  },
+  "csv_header": null,
+  "page_errors": [],
+  "console_errors": [],
+  "artifacts": [
+    "01-agent-result.png",
+    "02-takeoff-table.png",
+    "03-workflow-review.png",
+    "04-sequence-reader.png",
+    "bas-evidence-and-history.takeoff.json"
+  ]
+}

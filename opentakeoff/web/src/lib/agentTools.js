@@ -491,7 +491,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "run_complete_bas_takeoff",
-    description: "Run the deterministic end-to-end BAS takeoff journey in one command. This is orchestration only: it calls the existing shared production compilers for HVAC equipment, BAS points, unstructured/tabular sequences of operation, control valves/dampers, and embedded-coil valve gaps; analyzes vector control schematics, flow/piping diagrams, mechanical risers, and BAS network risers; then performs schedule-versus-installed-plan reconciliation, all five retained BAS workflow inspections, and opens the review workspace. Diagram evidence carries a separate principal-engineering readiness gate: a computed raw vector graph is never called understood, and unresolved crossings, service/port binding, direction, floor assignment, device state, and source reconciliation remain explicit blockers. It never invents controller capacities, spare policy, installed quantity, approvals, or missing source facts. Optional bas_math is accepted only when the estimator supplied/evidenced those policies. The result is always review-required, never an autonomous release decision.",
+    description: "Run the deterministic end-to-end BAS takeoff journey in one command. This is orchestration only: it calls the existing shared production compilers for HVAC equipment, BAS points, unstructured/tabular sequences of operation, control valves/dampers, and embedded-coil valve gaps; analyzes vector control schematics, flow/piping diagrams, mechanical risers, and BAS network risers; then performs schedule-versus-installed-plan reconciliation, all five retained BAS workflow inspections, and opens the consolidated Takeoff summary. Explicitly labeled SOO point candidates retain their exact tag and drawing spans for estimator review, but never acquire inferred I/O type, applicability, field wiring, or installed quantity. Diagram evidence carries a separate principal-engineering readiness gate: a computed raw vector graph is never called understood, and unresolved crossings, service/port binding, direction, floor assignment, device state, and source reconciliation remain explicit blockers. It never invents controller capacities, spare policy, installed quantity, approvals, or missing source facts. Optional bas_math is accepted only when the estimator supplied/evidenced those policies. The result is always review-required, never an autonomous release decision.",
     input_schema: {
       type: "object",
       properties: {
@@ -508,7 +508,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "compile_corpus_takeoff",
-    description: "PRIMARY tool for a COMPLETE HVAC, BAS, control-valve, sequence-of-operations, or embedded-coil-valve-gap takeoff of the loaded set. kind hvac_equipment (T-HVAC-01), bas_points (T-BAS-01), control_valves (T-VALVE-01: CHW+HHW CONTROL VALVE SCHEDULE — valve mark, served equipment, service, size, GPM, Cv), sequences (T-SOO-01: every SOO/control-sequence table or narrative-title hit, with section text and per-cell citations — never derives typed I/O points from the prose, that stays refuse_not_done on bas_points), or embedded_coil_gaps (T-VALVE-EMBEDDED-01: a hydronic coil that needs flow control always implies a control valve exists, even with no dedicated valve schedule of its own — walks EVERY equipment schedule for coil GPM+EWT/LWT data embedded in the row, cross-references against T-VALVE-01, and discloses any coil with no matching scheduled valve as a real, cited gap rather than a silent miss). Returns deterministic category/list counts, totals, exclusions, and empty-page accounting (same Session+ODL path as MCP). Opens TakeoffDataPanel with the finished takeoff. Prefer this over crawling find_schedule/query_table/read_schedule family-by-family when the goal asks for a complete set takeoff. Not for installed drawing counts (use sweep_schedule_row). Run control_valves AND embedded_coil_gaps together for a genuinely complete valve takeoff — control_valves alone misses coils with no dedicated schedule. download true (default) also downloads the workbook.",
+    description: "PRIMARY tool for a COMPLETE HVAC, BAS, control-valve, sequence-of-operations, or embedded-coil-valve-gap takeoff of the loaded set. kind hvac_equipment (T-HVAC-01), bas_points (T-BAS-01), control_valves (T-VALVE-01: CHW+HHW CONTROL VALVE SCHEDULE — valve mark, served equipment, service, size, GPM, Cv), sequences (T-SOO-01: every SOO/control-sequence table or narrative-title hit, with section text and per-cell citations; explicitly labeled point candidates retain exact tags/spans for review but never infer I/O type, applicability, field wiring, or installed quantity), or embedded_coil_gaps (T-VALVE-EMBEDDED-01: a hydronic coil that needs flow control always implies a control valve exists, even with no dedicated valve schedule of its own — walks EVERY equipment schedule for coil GPM+EWT/LWT data embedded in the row, cross-references against T-VALVE-01, and discloses any coil with no matching scheduled valve as a real, cited gap rather than a silent miss). Returns deterministic category/list counts, totals, exclusions, and empty-page accounting (same Session+ODL path as MCP). Opens TakeoffDataPanel with the finished takeoff. Prefer this over crawling find_schedule/query_table/read_schedule family-by-family when the goal asks for a complete set takeoff. Not for installed drawing counts (use sweep_schedule_row). Run control_valves AND embedded_coil_gaps together for a genuinely complete valve takeoff — control_valves alone misses coils with no dedicated schedule. download true (default) also downloads the workbook.",
     input_schema: {
       type: "object",
       properties: {
@@ -1262,7 +1262,9 @@ const COMPLETE_BAS_RECONCILE_CATEGORIES = [
  * contains no extraction, matching, reconciliation, or BAS engineering rules.
  */
 export async function runCompleteBasTakeoff(ctx, args = {}) {
-  const required = ["compileCorpusTakeoff", "analyzeControlSchematics", "reconcileSchedulePlan", "inspectBasWorkflow", "presentCompleteBasTakeoff", "openBasWorkspace"];
+  const hasSharedBatch = typeof ctx?.compileCompleteBasTakeoff === "function";
+  const required = ["inspectBasWorkflow", "presentCompleteBasTakeoff", "openBasWorkspace",
+    ...(hasSharedBatch ? [] : ["compileCorpusTakeoff", "analyzeControlSchematics", "reconcileSchedulePlan"])];
   const missing = required.filter((name) => typeof ctx?.[name] !== "function");
   if (missing.length) return { error: `Complete BAS takeoff is not wired: ${missing.join(", ")}.`, execution_status: "blocked" };
 
@@ -1296,16 +1298,45 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
     if (status === "unavailable") return "refused";
     return "partial";
   };
-  for (const kind of COMPLETE_BAS_COMPILE_STAGES) {
-    const out = await safely(kind, () => ctx.compileCorpusTakeoff(kind, {
+  let controlSchematics;
+  let reconcileFull;
+  if (hasSharedBatch) {
+    // One process, one loaded Session, one graph. The capability returns the
+    // exact existing compiler/reconcile results; this coordinator still owns
+    // only ordering, status projection and presentation.
+    const batch = await safely("complete_bas_batch", () => ctx.compileCompleteBasTakeoff({
       download,
-      ...(kind === "bas_points" && args.bas_math ? { bas_math: args.bas_math } : {}),
+      ...(args.bas_math ? { bas_math: args.bas_math } : {}),
+      categories: COMPLETE_BAS_RECONCILE_CATEGORIES,
+      evaluationFast: true,
     }));
-    compiles[kind] = out;
-    stages[kind] = { status: compileStatus(out), error: out?.error || null };
+    for (const kind of COMPLETE_BAS_COMPILE_STAGES) {
+      const out = batch?.error ? { error: batch.error } : batch?.compiles?.[kind];
+      compiles[kind] = out || { error: `Complete BAS batch omitted ${kind}.` };
+      if (!batch?.error && compiles[kind]?.error) failures.push({ stage: kind, error: compiles[kind].error });
+      stages[kind] = { status: compileStatus(compiles[kind]), error: compiles[kind]?.error || null };
+    }
+    controlSchematics = batch?.error ? { error: batch.error } : batch?.control_schematics;
+    reconcileFull = batch?.error ? { error: batch.error } : batch?.reconcile;
+    if (!batch?.error && controlSchematics?.error) failures.push({ stage: "control_schematics_and_risers", error: controlSchematics.error });
+    if (!batch?.error && reconcileFull?.error) failures.push({ stage: "schedule_plan_reconcile", error: reconcileFull.error });
+  } else {
+    for (const kind of COMPLETE_BAS_COMPILE_STAGES) {
+      const out = await safely(kind, () => ctx.compileCorpusTakeoff(kind, {
+        download,
+        ...(kind === "bas_points" && args.bas_math ? { bas_math: args.bas_math } : {}),
+      }));
+      compiles[kind] = out;
+      stages[kind] = { status: compileStatus(out), error: out?.error || null };
+    }
+    controlSchematics = await safely("control_schematics_and_risers", () => ctx.analyzeControlSchematics());
+    reconcileFull = await safely("schedule_plan_reconcile", () => ctx.reconcileSchedulePlan({
+      download,
+      categories: COMPLETE_BAS_RECONCILE_CATEGORIES,
+      evaluationFast: true,
+    }));
   }
-
-  const controlSchematics = await safely("control_schematics_and_risers", () => ctx.analyzeControlSchematics());
+  if (!controlSchematics) controlSchematics = { error: "Complete BAS batch omitted control-schematic evidence." };
   stages.control_schematics_and_risers = {
     status: controlSchematics?.error
       ? "failed"
@@ -1315,11 +1346,7 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
     error: controlSchematics?.error || null,
   };
 
-  const reconcileFull = await safely("schedule_plan_reconcile", () => ctx.reconcileSchedulePlan({
-    download,
-    categories: COMPLETE_BAS_RECONCILE_CATEGORIES,
-    evaluationFast: true,
-  }));
+  if (!reconcileFull) reconcileFull = { error: "Complete BAS batch omitted schedule-plan reconciliation." };
   // The complete reconcile rows are already merged into the Takeoff workspace
   // by the canvas capability. Keep the LLM transcript bounded: it needs the
   // totals plus a small exception sample, not thousands of repeated rows.
@@ -1370,10 +1397,12 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
       error: inspections[domain]?.error || null,
     };
   }
+  const pointSooMetrics = Object.fromEntries((inspections.point_soo?.metrics || [])
+    .map((metric) => [metric.key, metric.value]));
   // Presentation only. The five compilers and reconcile above remain the
   // canonical truth; this replaces the misleading last-subcompile heading in
   // the browser with one consolidated BAS-project heading. It must happen
-  // after every result row has reached Takeoff and before the review workspace
+  // after every result row has reached Takeoff and before the result workspace
   // opens. No quantity or readiness is calculated here.
   const presentation = {
     schema_version: "opentakeoff.complete_bas_presentation.v1",
@@ -1389,19 +1418,27 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
       equipment_items: Number(compiles.hvac_equipment?.totals?.items || 0),
       point_lists: Number(compiles.bas_points?.totals?.lists || 0),
       point_rows: Number(compiles.bas_points?.totals?.rows || 0),
+      point_type_review_rows: Number(pointSooMetrics.point_type_review_rows || 0),
       sequences: Number(compiles.sequences?.totals?.sequences || 0),
       sequence_sections: Number(compiles.sequences?.totals?.sections || 0),
+      soo_point_candidates: Number(pointSooMetrics.soo_labeled_point_candidates || 0),
       control_valve_items: Number(compiles.control_valves?.totals?.items || 0),
       embedded_coil_gaps: Number(compiles.embedded_coil_gaps?.totals?.gaps || 0),
       control_schematics: Number(controlSchematics?.totals?.schematics || 0),
       riser_diagrams: Number(controlSchematics?.totals?.riser_diagrams || 0),
       reconcile_rows: Array.isArray(reconcileFull?.rows) ? reconcileFull.rows.length : 0,
+      reconcile_match: Number(reconcileFull?.summary?.match || 0),
+      reconcile_schedule_only: Number(reconcileFull?.summary?.schedule_only || 0),
+      reconcile_plan_only: Number(reconcileFull?.summary?.plan_only || 0),
+      reconcile_ambiguous: Number(reconcileFull?.summary?.ambiguous || 0),
+      reconcile_refused: Number(reconcileFull?.summary?.refused_no_scale || 0)
+        + Number(reconcileFull?.summary?.refused_no_text || 0),
     },
   };
   const presented = await safely("present_complete_bas_takeoff", () => ctx.presentCompleteBasTakeoff(presentation));
   stages.present_complete_bas_takeoff = { status: presented?.error ? "failed" : "complete", error: presented?.error || null };
-  const workspace = await safely("open_review_workspace", () => ctx.openBasWorkspace("review_revisions_release"));
-  stages.open_review_workspace = { status: workspace?.error ? "failed" : "complete", error: workspace?.error || null };
+  const workspace = await safely("open_result_workspace", () => ctx.openBasWorkspace("takeoff_summary"));
+  stages.open_result_workspace = { status: workspace?.error ? "failed" : "complete", error: workspace?.error || null };
   return {
     workflow: "complete_bas_takeoff",
     execution_status: failures.length ? "partial" : "completed",

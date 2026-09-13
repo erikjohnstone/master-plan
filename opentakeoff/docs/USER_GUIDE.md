@@ -270,7 +270,19 @@ When the Agent runs **Run a BAS takeoff**, Takeoff opens as a consolidated **BAS
 project takeoff**. The heading represents the complete Agent journey, not the
 last equipment, points, sequence or valve compiler to finish. Use **Takeoff** for
 the combined cited rows and reconciliation, then the adjacent BAS workspaces for
-source interpretation and human review before release.
+source interpretation and human review before release. Its header keeps equipment
+records, point lists/rows, SOO records/sections, valve records/coil gaps, diagram
+records and reconciliation outcomes separate. These are different cardinalities,
+so neither the header nor the navigation badge adds them into an EA quantity;
+the navigation badge says **ready** after a consolidated run.
+
+Control-schematic and riser results distinguish extracted vector topology from
+verified engineering meaning. A discovered diagram may expose its authored title,
+equipment tags, explicit I/O tokens, instrument labels, media, floor datums,
+continuations, network transports, state conflicts and a linked SOO while still
+remaining an **evidence inventory**. Unresolved crossings, instruments or sequence
+bindings stay visible and keep release in human review; a computed line graph is
+not presented as a principal-engineer-verified control graph.
 
 On the development branch, **Review & changes → Drawing changes** manages
 source-set and page-correspondence history separately from equipment decisions.

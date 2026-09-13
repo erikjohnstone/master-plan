@@ -4,7 +4,7 @@
 import { z } from 'zod';
 import { basSourceContextSchema, type BasSourceContext } from './basSources.ts';
 import { canonicalBasJson } from './basCanonical.ts';
-import { interpretBasSequences } from './basSequenceReconciliation.ts';
+import { BAS_SEQUENCE_RULE_V1, interpretBasSequences } from './basSequenceReconciliation.ts';
 
 export const BAS_COMPONENT_SOURCE_RULE = 'explicit_component_declarations_1' as const;
 export const BAS_COMPONENT_SOURCE_RULE_V2 = 'explicit_component_declarations_2' as const;
@@ -108,7 +108,7 @@ function requirementBase(clauseId: string, role: string, subject: string) {
 // never a silent reinterpretation of accepted assembly evidence.
 function interpretBasComponentRequirementsV1(rawSources: BasSourceContext): z.infer<typeof componentRequirementsV1Schema> {
   const sources = basSourceContextSchema.parse(rawSources);
-  const sequences = interpretBasSequences(sources);
+  const sequences = interpretBasSequences(sources, BAS_SEQUENCE_RULE_V1);
   if (sequences.rule_version !== 'explicit_monitor_modulate_1' || sequences.discovery.rule_version !== 'horizontal_headed_regions_v1') {
     throw new Error('Component rule v1 requires its original narrative dependencies');
   }
@@ -178,7 +178,7 @@ function explicitComponentList(text: string | null, marker: string | null, claus
 
 function interpretBasComponentRequirementsV2(sources: BasSourceContext): z.infer<typeof componentRequirementsV2Schema> {
   const original = interpretBasComponentRequirementsV1(sources);
-  const sequences = interpretBasSequences(sources);
+  const sequences = interpretBasSequences(sources, BAS_SEQUENCE_RULE_V1);
   const blocks = new Map(sequences.regions.flatMap(region => region.raw.blocks.map(block => [block.block_id, { region, block }] as const)));
   const clauses = original.clauses.map(clause => {
     if (clause.components.length) return clause;

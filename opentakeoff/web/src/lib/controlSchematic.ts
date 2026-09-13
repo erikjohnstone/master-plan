@@ -118,7 +118,7 @@ export interface ControlSchematic {
   equipment: SchematicEquipmentTag[];
   component_labels: Array<{ label: string; evidence: ControlEvidence }>;
   media_labels: Array<{ label: string; evidence: ControlEvidence }>;
-  sequence_refs: Array<{ id: string; title: string; status: string; title_bbox: Bbox }>;
+  sequence_refs: Array<{ id: string; sheet: string; title: string; status: string; title_bbox: Bbox }>;
   sequence_binding_status: "bound" | "ambiguous" | "unbound";
   topology: SchematicTopology;
   semantic_status: "evidence_inventory" | "partial_connectivity" | "verified_semantic_graph";
@@ -297,7 +297,10 @@ export interface ControlSchematicResult {
   exclusions: string[];
 }
 
-const CONTROL_TITLE_RE = /\bCONTROL(?:\s+SYSTEM)?\s+SCHEMATIC\b/i;
+const CONTROL_TITLE_RE = /\b(?:(?:CONTROL(?:\s+SYSTEM)?\s+)?SCHEMATIC|CONTROL\s+DIAGRAM)\b/i;
+const CONTROL_TITLE_SUFFIX_RE = /\b(?:(?:CONTROL(?:\s+SYSTEM)?\s+)?SCHEMATIC(?:\s+AND\s+POINTS?\s+LIST)?|CONTROL\s+DIAGRAM)$/i;
+const EXPLICIT_CONTROL_SCHEMATIC_RE = /\b(?:CONTROL(?:\s+SYSTEM)?\s+SCHEMATIC|CONTROL\s+DIAGRAM)\b/i;
+const POINT_LIST_SUFFIX_RE = /\bSCHEMATIC\s+AND\s+POINTS?\s+LIST$/i;
 const RISER_TITLE_RE = /\b(?:RISER\s+DIAGRAM|FLOW\s+DIAGRAM|PIPING\s+DIAGRAM|NETWORK(?:\s+ARCHITECTURE)?\s+DIAGRAM|(?:CONDENSER|CHILLED|HEATING|HOT)\s+WATER\s+DIAGRAM|WATER\s+RISER)\b/i;
 const SEQUENCE_TITLE_RE = /\bSEQUENCES?\s+OF\s+OPERATIONS?\b/i;
 const IO_TYPES = new Set(["AI", "AO", "DI", "DO"]);
@@ -329,9 +332,13 @@ const evidenceFor = (sheet: string, span: GraphSpan): ControlEvidence => ({
 
 function isControlSchematicTitle(span: GraphSpan, height: number): boolean {
   const text = clean(span.str);
-  return CONTROL_TITLE_RE.test(text)
+  const explicitControlDiagram = /\bCONTROL\s+DIAGRAM$/i.test(text);
+  return Math.abs(Number(span.rot || 0)) <= 0.08
+    && CONTROL_TITLE_SUFFIX_RE.test(text)
     && !/\b(?:SYMBOLS?|LEGEND|DESIGNATION|REFERENCE)\b/i.test(text)
-    && span.h >= Math.max(16, height * 0.0075);
+    && span.h >= (explicitControlDiagram
+      ? Math.max(14, height * 0.0045)
+      : Math.max(16, height * 0.0075));
 }
 
 function expandedControlTitle(title: GraphSpan, spans: GraphSpan[]): GraphSpan {
@@ -363,14 +370,15 @@ function expandedControlTitle(title: GraphSpan, spans: GraphSpan[]): GraphSpan {
 
 function isRiserDiagramTitle(span: GraphSpan, height: number): boolean {
   const text = clean(span.str);
-  return RISER_TITLE_RE.test(text)
+  return Math.abs(Number(span.rot || 0)) <= 0.08
+    && RISER_TITLE_RE.test(text)
     && /(?:RISER\s+DIAGRAM|FLOW\s+DIAGRAM|PIPING\s+DIAGRAM|NETWORK(?:\s+ARCHITECTURE)?\s+DIAGRAM|(?:CONDENSER|CHILLED|HEATING|HOT)\s+WATER\s+DIAGRAM|WATER\s+RISER)$/i.test(text)
     && !/\b(?:DESIGNATION|WHERE|SHOWN|REFER|NOTE|NOTES)\b/i.test(text)
     && span.h >= Math.max(14, height * 0.0045);
 }
 
 function titleWords(text: string, remove: RegExp): Set<string> {
-  const stop = new Set(["SYSTEM", "SYSTEMS", "THE", "AND", "WITH", "CONTROL", "SCHEMATIC", "SEQUENCE", "SEQUENCES", "OF", "OPERATION", "OPERATIONS"]);
+  const stop = new Set(["SYSTEM", "SYSTEMS", "THE", "AND", "WITH", "CONTROL", "SCHEMATIC", "SEQUENCE", "SEQUENCES", "OF", "OPERATION", "OPERATIONS", "POINT", "POINTS", "LIST"]);
   const normalized = canon(text).replace(remove, "").split(/[^A-Z0-9]+/)
     .filter((word) => word.length >= 3 && !stop.has(word))
     .map((word) => word.length > 4 && word.endsWith("S") && !/(?:SS|US|IS)$/.test(word) ? word.slice(0, -1) : word);
@@ -382,19 +390,125 @@ function wordOverlap(a: Set<string>, text: string): number {
   return [...a].filter((word) => b.has(word)).length;
 }
 
-function laneBounds(title: GraphSpan, titles: GraphSpan[], width: number): [number, number] {
-  const cx = atOf(title)[0];
-  const lanes = titles.map(atOf).map(([x]) => x).filter((x) => Math.abs(x - cx) > width * 0.08);
+const SEQUENCE_SCOPE_WORDS = new Set([
+  "AIR", "OPS", "ATCT", "MTRACON", "MTRACTON", "BUILDING", "FACILITY", "AREA", "ZONE", "PROJECT",
+  "SYSTEM", "UNIT", "FAN", "PUMP",
+]);
+
+const GENERIC_SEQUENCE_TITLE_RE = /^(?:\d+(?:\.\d+)*\s+)?SEQUENCE\s+OF\s+OPERATIONS?\s*[:.]?$/i;
+
+function sequenceSystemOverlap(a: Set<string>, text: string): number {
+  const b = titleWords(text, /$^/);
+  return [...a].filter((word) => b.has(word) && !SEQUENCE_SCOPE_WORDS.has(word)).length;
+}
+
+type SequenceSystemFamily = "chilled_water" | "heating_water" | "condenser_water";
+
+/**
+ * Authored diagram and sequence captions often name the same hydronic plant by
+ * different but mechanically equivalent nouns (for example BOILER SYSTEM vs
+ * HEATING HOT WATER SYSTEM). Keep this vocabulary deliberately small and title
+ * scoped: it can rank a source-owned SOO relationship, but it cannot type
+ * equipment, infer points, or manufacture a relationship from body prose.
+ */
+function sequenceSystemFamilies(text: string): Set<SequenceSystemFamily> {
+  const value = canon(text);
+  const families = new Set<SequenceSystemFamily>();
+  if (/\b(?:CHILLED\s+WATER|CHW|CHILLER)\b/.test(value)) families.add("chilled_water");
+  if (/\b(?:HEATING(?:\s+HOT)?\s+WATER|HOT\s+WATER\s+HEATING|HHW|BOILER)\b/.test(value)) {
+    families.add("heating_water");
+  }
+  if (/\b(?:CONDENSER\s+WATER|CONDENSER\s+LOOP)\b/.test(value)) families.add("condenser_water");
+  return families;
+}
+
+function sequenceSystemFamilyOverlap(a: string, b: string): number {
+  const left = sequenceSystemFamilies(a);
+  const right = sequenceSystemFamilies(b);
+  return [...left].filter((family) => right.has(family)).length;
+}
+
+/**
+ * A bare `... SCHEMATIC` caption is common on real BAS sheets, but the word
+ * SCHEMATIC alone is not a control-diagram classifier. Admit that abbreviated
+ * caption only when the page also carries independent authored control
+ * structure: a uniquely bound SOO, a matching full title-block caption, or
+ * multiple I/O/instrument labels inside vector linework. This keeps plumbing,
+ * electrical and generic detail schematics out without requiring one firm's
+ * preferred title wording.
+ */
+function plainSchematicHasControlSupport(
+  ctx: ControlSheetContext,
+  title: GraphSpan,
+  sequenceBinding: Pick<ControlSchematic, "sequence_refs" | "sequence_binding_status">,
+  explicitPoints: SchematicPoint[],
+  instruments: SchematicInstrument[],
+  topology: SchematicTopology,
+): boolean {
+  const text = clean(title.str);
+  if (EXPLICIT_CONTROL_SCHEMATIC_RE.test(text) || POINT_LIST_SUFFIX_RE.test(text)) return true;
+  if (sequenceBinding.sequence_binding_status === "bound") return true;
+
+  const words = titleWords(text, CONTROL_TITLE_RE);
+  const matchingFullCaption = ctx.spans.some((span) => {
+    if (span === title) return false;
+    const candidate = clean(span.str);
+    return EXPLICIT_CONTROL_SCHEMATIC_RE.test(candidate)
+      && /\bPOINTS?\s+LIST$/i.test(candidate)
+      && wordOverlap(words, candidate) >= Math.min(2, words.size)
+      && sequenceSystemOverlap(words, candidate) >= 1;
+  });
+  if (matchingFullCaption) return true;
+
+  return topology.status === "computed"
+    && topology.retained_segments > 0
+    && (explicitPoints.length >= 2 || instruments.length >= 2);
+}
+
+function sheetPageIdentity(value: string): { source: string; page: number } | null {
+  const separator = value.lastIndexOf("#");
+  if (separator < 1) return null;
+  const page = Number(value.slice(separator + 1));
+  if (!Number.isInteger(page) || page < 0) return null;
+  return { source: value.slice(0, separator), page };
+}
+
+const TITLE_BLOCK_ANCHOR_RE = /^(?:DRAWING\s+(?:TITLE|NUMBER)|SHEET\s+(?:NAME|NUMBER)|PROJECT\s+(?:NUMBER|INFORMATION)|CONSULTANT|ISSUES|STAMP)$/i;
+
+function drawingFieldRight(spans: GraphSpan[], width: number): number {
+  const anchors = spans
+    .filter((span) => span.x >= width * 0.78 && TITLE_BLOCK_ANCHOR_RE.test(clean(span.str)))
+    .map((span) => span.x)
+    .sort((a, b) => a - b);
+  // A conventional title-block label in the far-right strip is authored
+  // evidence for the drawing-field boundary. If it is absent, preserve the
+  // established conservative page-edge cap rather than guessing a margin.
+  return anchors[0] ?? width * 0.93;
+}
+
+function laneBounds(title: GraphSpan, titles: GraphSpan[], width: number, height: number, rightLimit: number): [number, number] {
+  const [cx, cy] = atOf(title);
+  // Control-detail sheets frequently mix a four-column upper row with a
+  // double-width or full-width lower diagram. Captions in a remote row are not
+  // lane dividers. Keep only vertically relevant neighbors; when there is no
+  // neighbor, the authored drawing-field/title-block boundary owns the edge.
+  // The bounded 28% band is wide enough for unequal-height rows (for example a
+  // tall lighting-control detail beside two stacked HVAC details) without
+  // letting the opposite half of the sheet partition the current row.
+  const lanes = titles.map(atOf)
+    .filter(([, y]) => Math.abs(y - cy) <= height * 0.28)
+    .map(([x]) => x)
+    .filter((x) => Math.abs(x - cx) > width * 0.08);
   const left = lanes.filter((x) => x < cx).sort((a, b) => b - a)[0];
   const right = lanes.filter((x) => x > cx).sort((a, b) => a - b)[0];
   return [
-    Math.max(width * 0.015, left == null ? title.x - width * 0.34 : (left + cx) / 2),
-    Math.min(width * 0.93, right == null ? title.x + title.w + width * 0.34 : (right + cx) / 2),
+    Math.max(width * 0.015, left == null ? width * 0.015 : (left + cx) / 2),
+    Math.min(rightLimit, right == null ? rightLimit : (right + cx) / 2),
   ];
 }
 
 function diagramRegion(title: GraphSpan, titles: GraphSpan[], spans: GraphSpan[], width: number, height: number): Bbox {
-  const [x0, x1] = laneBounds(title, titles, width);
+  const [x0, x1] = laneBounds(title, titles, width, height, drawingFieldRight(spans, width));
   const titleCenterY = atOf(title)[1];
   const words = titleWords(title.str, CONTROL_TITLE_RE);
   const sequence = spans
@@ -414,7 +528,11 @@ function diagramRegion(title: GraphSpan, titles: GraphSpan[], spans: GraphSpan[]
   const start = sequence
     ? sequence.y + sequence.h
     : previousSameLane
-      ? (atOf(previousSameLane)[1] + titleCenterY) / 2
+      // Control-detail captions are conventionally printed at the bottom of
+      // each stacked detail. The previous caption's bottom edge is therefore
+      // the authored start of this detail; a midpoint clips the upper half of
+      // the next schematic and loses its instruments/equipment.
+      ? previousSameLane.y + (previousSameLane.h || 0)
       : Math.max(0, title.y - height * 0.42);
   return [x0, start, x1, title.y];
 }
@@ -867,18 +985,95 @@ function sequenceRefsFor(
   title: GraphSpan,
   sheet: string,
   narratives: NarrativeSequenceBlock[],
+  region: Bbox,
 ): Pick<ControlSchematic, "sequence_refs" | "sequence_binding_status"> {
   const words = titleWords(title.str, CONTROL_TITLE_RE);
+  if (!words.size) return { sequence_refs: [], sequence_binding_status: "unbound" };
   const ranked = narratives
     .filter((sequence) => sequence.sheet === sheet)
-    .map((sequence) => ({ sequence, overlap: wordOverlap(words, sequence.title) }))
+    .map((sequence) => ({
+      sequence,
+      overlap: wordOverlap(words, sequence.title),
+      system_overlap: sequenceSystemOverlap(words, sequence.title),
+      semantic_system_overlap: sequenceSystemFamilyOverlap(title.str, sequence.title),
+    }))
     .filter(({ overlap }) => overlap >= Math.min(2, words.size))
-    .sort((a, b) => b.overlap - a.overlap || a.sequence.title.localeCompare(b.sequence.title));
+    .sort((a, b) => b.overlap - a.overlap || b.system_overlap - a.system_overlap
+      || b.semantic_system_overlap - a.semantic_system_overlap || a.sequence.title.localeCompare(b.sequence.title));
+  // A same-sheet detail can use a terse numbered caption such as
+  // "3.2.3 SEQUENCE OF OPERATION – DOAH-T1" while its schematic title also
+  // carries a facility prefix. If it is the only authored sequence on that
+  // sheet, one specific shared system token is sufficient. Generic project
+  // words (AIR/OPS/ATCT/FAN/PUMP) cannot establish this link.
+  if (!ranked.length) {
+    const sameSheet = narratives.filter((sequence) => sequence.sheet === sheet);
+    ranked.push(...sameSheet
+      .map((sequence) => ({
+        sequence,
+        overlap: wordOverlap(words, sequence.title),
+        system_overlap: sequenceSystemOverlap(words, sequence.title),
+        semantic_system_overlap: sequenceSystemFamilyOverlap(title.str, sequence.title),
+      }))
+      .filter(({ system_overlap, semantic_system_overlap }) => system_overlap >= 1 || semantic_system_overlap >= 1)
+      .sort((a, b) => b.system_overlap - a.system_overlap
+        || b.semantic_system_overlap - a.semantic_system_overlap || a.sequence.title.localeCompare(b.sequence.title)));
+  }
+  // A detail may use the generic heading "SEQUENCE OF OPERATION" above its
+  // own specific "VAV BOX - CONTROL DIAGRAM" caption.  Title words cannot
+  // establish that relationship, but the authored detail envelope can: bind
+  // only source-owned same-sheet sequence headings whose title center lies
+  // inside this diagram region. One is bound; competing candidates remain
+  // ambiguous below. No nearest-neighbor or cross-region guess is made.
+  if (!ranked.length) {
+    ranked.push(...narratives
+      .filter((sequence) => sequence.sheet === sheet)
+      .filter((sequence) => GENERIC_SEQUENCE_TITLE_RE.test(clean(sequence.title)))
+      .filter((sequence) => {
+        const bbox = sequence.title_evidence.bbox;
+        const x = (bbox[0] + bbox[2]) / 2;
+        const y = (bbox[1] + bbox[3]) / 2;
+        return x >= region[0] && x <= region[2] && y >= region[1] && y <= region[3];
+      })
+      .map((sequence) => ({ sequence, overlap: 0, system_overlap: 0, semantic_system_overlap: 0 })));
+  }
+  // Issued sets commonly place a schematic on one sheet and its authored SOO
+  // on the immediately following sheet. Cross-sheet binding is deliberately
+  // narrower than same-sheet binding: same source PDF, adjacent page, at least
+  // two shared title words, at least one non-generic system anchor, and at
+  // least half of the shorter title covered. Anything else remains unbound.
+  if (!ranked.length) {
+    const current = sheetPageIdentity(sheet);
+    if (current) {
+      ranked.push(...narratives
+        .filter((sequence) => {
+          const candidate = sheetPageIdentity(sequence.sheet);
+          return candidate?.source === current.source && Math.abs(candidate.page - current.page) === 1;
+        })
+        .map((sequence) => {
+          const sequenceWords = titleWords(sequence.title, /$^/);
+          const overlap = wordOverlap(words, sequence.title);
+          return {
+            sequence,
+            overlap,
+            system_overlap: sequenceSystemOverlap(words, sequence.title),
+            semantic_system_overlap: sequenceSystemFamilyOverlap(title.str, sequence.title),
+            coverage: overlap / Math.max(1, Math.min(words.size, sequenceWords.size)),
+          };
+        })
+        .filter(({ overlap, system_overlap, coverage }) => overlap >= 2 && system_overlap >= 1 && coverage >= 0.5)
+        .sort((a, b) => b.overlap - a.overlap || b.system_overlap - a.system_overlap
+          || b.semantic_system_overlap - a.semantic_system_overlap || b.coverage - a.coverage
+          || a.sequence.title.localeCompare(b.sequence.title)));
+    }
+  }
   if (!ranked.length) return { sequence_refs: [], sequence_binding_status: "unbound" };
-  const best = ranked.filter(({ overlap }) => overlap === ranked[0].overlap);
+  const best = ranked.filter(({ overlap, system_overlap, semantic_system_overlap }) => overlap === ranked[0].overlap
+    && system_overlap === ranked[0].system_overlap
+    && semantic_system_overlap === ranked[0].semantic_system_overlap);
   return {
     sequence_refs: best.map(({ sequence }) => ({
       id: sequence.id,
+      sheet: sequence.sheet,
       title: sequence.title,
       status: sequence.status,
       title_bbox: sequence.title_evidence.bbox,
@@ -1568,7 +1763,8 @@ export function extractControlSchematics(contexts: ControlSheetContext[], graph?
           instrument.status = "mapped_to_explicit_io";
         }
       }
-      const sequenceBinding = sequenceRefsFor(title, ctx.key, narratives);
+      const sequenceBinding = sequenceRefsFor(title, ctx.key, narratives, region);
+      if (!plainSchematicHasControlSupport(ctx, title, sequenceBinding, explicitPoints, instruments, topology)) continue;
       schematics.push({
         id: `schematic:${ctx.key}:${Math.round(title.x)}:${Math.round(title.y)}`,
         sheet: ctx.key,

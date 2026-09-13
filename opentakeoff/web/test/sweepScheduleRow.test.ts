@@ -587,15 +587,23 @@ test("individually marked equipment schedules exclude repeatable type-symbol sch
   assert.equal(isIndividuallyMarkedEquipmentSchedule("VARIABLE AIR VOLUME TERMINAL BOX"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("VAV TERMINAL UNIT SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("VAV SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("AIR TERMINAL BOX SCHEDULE"), true,
+    "a uniquely numbered VAV-box family must not enter the repeatable diffuser-symbol path");
   assert.equal(isIndividuallyMarkedEquipmentSchedule("COMPUTER ROOM AIR HANDLER TYPE SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("HUMIDIFIER SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("AIR SEPARATOR SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("MECHANICAL SPECIALTY EQUIPMENT SCHEDULE", "Air separator"), true,
+    "an already-classified unique asset remains individually marked inside a generic multi-family schedule");
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("MECHANICAL SPECIALTY EQUIPMENT SCHEDULE", "Grille, register and diffuser"), false,
+    "a repeatable family cannot inherit unique-asset semantics from a generic title");
   assert.equal(isIndividuallyMarkedEquipmentSchedule("EXPANSION TANK SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("CHW CONTROL VALVE SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("FAN SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("RANGE HOOD SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("DUCT SILENCER SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("GRILLE, REGISTER, AND DIFFUSER SCHEDULE"), false);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("AIR TERMINAL DEVICE SCHEDULE"), false,
+    "generic terminal devices may be repeatable type marks; BOX is the structural distinction");
   assert.equal(isIndividuallyMarkedEquipmentSchedule("VAV DIFFUSER SCHEDULE"), false,
     "a VAV-qualified repeatable diffuser type remains a geometric count, not one unique unit");
   assert.equal(isIndividuallyMarkedEquipmentSchedule("PLUMBING FIXTURE SCHEDULE"), false);

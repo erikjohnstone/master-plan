@@ -45,3 +45,12 @@ test('point/SOO inspection separates retained source rows from typed physical po
   assert.ok(Number(metrics.point_source_rows) >= Number(metrics.listed_point_rows));
   assert.equal('point_rows' in metrics, false, 'ambiguous legacy label must not return');
 });
+
+test('sequence-only set requests the missing point-list source instead of offering an impossible link', async () => {
+  const fixture = await engineeringFixture({ withSequence: true, withPointMatrix: false });
+  const result = await inspectBasWorkflow(fixture.workflow, 'point_soo');
+  assert.equal(result.status, 'current_with_open_findings');
+  assert.match(result.next_step, /No point-list matrix was found/);
+  assert.match(result.next_step, /add the applicable controls point-list\/specification source/);
+  assert.doesNotMatch(result.next_step, /^Open Point lists/);
+});

@@ -9,7 +9,10 @@ import { basPointListsSchema } from './basPointLists.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 
-export const BAS_SEQUENCE_RULE = 'explicit_monitor_modulate_1' as const;
+export const BAS_SEQUENCE_RULE_V1 = 'explicit_monitor_modulate_1' as const;
+export const BAS_SEQUENCE_RULE = 'explicit_monitor_and_labeled_points_2' as const;
+export const BAS_SEQUENCE_RULES = [BAS_SEQUENCE_RULE_V1, BAS_SEQUENCE_RULE] as const;
+export type BasSequenceRuleVersion = typeof BAS_SEQUENCE_RULES[number];
 
 /** Deliberate literal equivalences, not fuzzy similarity or noun deletion. */
 export function normalizedBasVariable(text: string): string {
@@ -31,6 +34,23 @@ export interface MonitorRequirement {
   signal_type: null;
   installed_quantity: null;
 }
+
+export interface LabeledPointRequirement {
+  requirement_id: string;
+  kind: 'labeled_point_candidate';
+  variable: string;
+  normalized_variable: string;
+  source_tag: string;
+  /** Exact source fragments for this authored label. The surrounding clause
+   * remains available separately and is not implied to be interpreted. */
+  source_span_ids: string[];
+  operating_mode: null;
+  scope_status: 'requires_region_review';
+  signal_type: null;
+  installed_quantity: null;
+}
+
+export type BasSequenceRequirement = MonitorRequirement | LabeledPointRequirement;
 
 /** A narrow grammar must fail closed on scope-changing language. Retaining a
  * matched monitoring clause is not a claim to interpret its target numerically. */
@@ -57,13 +77,54 @@ function monitorClause(text: string, marker: string | null): { requirement: Omit
     scope_status: 'requires_region_review', signal_type: null, installed_quantity: null }, tail };
 }
 
+/**
+ * Capture an authored, labeled point requirement such as
+ * "SUPPLY FAN STATUS (SF-S)". The label and tag are retained literally. This
+ * does not infer AI/AO/DI/DO, field wiring, controller assignment, equipment
+ * applicability or installed quantity. Compound prose and unlabeled control
+ * intent remain uninterpreted for estimator review.
+ */
+function labeledPointLine(text: string, marker: string | null, sourceSpanIds: string[]): {
+  requirement: Omit<LabeledPointRequirement, 'requirement_id'>;
+  tail: string;
+} | null {
+  let input = text.trim();
+  if (input.length > 4096) return null;
+  if (marker && input.startsWith(`${marker} `)) input = input.slice(marker.length).trimStart();
+  const match = /^(.{3,220}?)\s+\(([A-Z][A-Z0-9]{0,15}(?:-[A-Z0-9]{1,16}){1,8})\)([\s\S]*)$/i.exec(input);
+  if (!match) return null;
+  const variable = match[1].replace(/\s+/g, ' ').trim();
+  const sourceTag = match[2].toUpperCase();
+  const suffix = match[3].trim();
+  // A point-list-like label may end at the tag or carry a concise authored
+  // threshold/value. If prose resumes after the tag, this is a mention inside
+  // an instruction, not an independently labeled requirement.
+  if (suffix && !/^[.:]$/.test(suffix)
+      && !/^(?:[.:]\s*)?(?:(?:[A-Z0-9-]{1,20}\s+)?[<>]=?\s*)?(?:[-+]?\d|TBD\b|ADJ\b)/i.test(suffix)) return null;
+  const tail = suffix.replace(/^[.:]\s*/, '');
+  // A label may contain nouns such as COMMAND or OPEN, but sentence-level
+  // actors/connectors indicate control prose rather than an authored point
+  // identity. Reject those instead of extracting a convenient parenthetical.
+  if (/[.;!?]/.test(variable)
+      || /\b(?:SHALL|MUST|MAY|WHEN|WHILE|IF|UNLESS|EXCEPT|REFER|SEE|ALSO|THEN|IS|ARE|WILL|TO|THE|BY|FROM|THAN|ABOVE|BELOW|DROPS?|RISES?|MAINTAIN|MODULATE|COMMANDED|ENERGI[ZS]E[DS]?|DISABLED?|ENABLED?)\b/i.test(variable)) return null;
+  const pointFunction = /\b(?:STATUS|ALARM|TEMPERATURE|PRESSURE|HUMIDITY|AIRFLOW|FLOW(?:RATE)?|POSITION|FREEZE\s*STAT|SMOKE|SET\s*POINT|SENSOR|SWITCH|ENABLE|START\s*\/\s*STOP|ON\s*\/\s*OFF|RESET|CONTROL|COMMAND)\b/i;
+  if (!pointFunction.test(variable)) return null;
+  return { requirement: {
+    kind: 'labeled_point_candidate', variable,
+    normalized_variable: normalizedBasVariable(variable), source_tag: sourceTag,
+    source_span_ids: [...sourceSpanIds],
+    operating_mode: null, scope_status: 'requires_region_review',
+    signal_type: null, installed_quantity: null,
+  }, tail };
+}
+
 function blockSpanIds(block: BasNarrativeBlock): string[] {
   return (block.kind === 'paragraph' ? block.lines : block.rows.flat()).flatMap(l => l.span_ids);
 }
 
 /** Recompute discovery from the same source snapshot; never accept foreign
  * pre-parsed paragraphs alongside unrelated source evidence. */
-export function interpretBasSequences(sources: BasSourceContext) {
+function interpretBasSequencesV1(sources: BasSourceContext) {
   const discovery = discoverBasNarratives(sources);
   const spans = new Map(sources.pages.flatMap(p => p.spans.map(s => [s.span_id, s] as const)));
   const regions = discovery.pages.flatMap(page => page.regions.map(region => ({
@@ -88,9 +149,44 @@ export function interpretBasSequences(sources: BasSourceContext) {
       };
     }),
   })));
-  return { schema_version: 'bas_sequence_requirements_v1' as const, rule_version: BAS_SEQUENCE_RULE,
+  return { schema_version: 'bas_sequence_requirements_v1' as const, rule_version: BAS_SEQUENCE_RULE_V1,
     discovery_complete: false as const, interpretation_complete: false as const,
     discovery, regions };
+}
+
+/**
+ * Versioned interpretation over retained source spans. V1 remains available
+ * for replay of existing capture fingerprints. V2 adds only explicit labeled
+ * point candidates; unsupported prose remains verbatim and uninterpreted.
+ */
+export function interpretBasSequences(sources: BasSourceContext,
+  ruleVersion: BasSequenceRuleVersion = BAS_SEQUENCE_RULE) {
+  const original = interpretBasSequencesV1(sources);
+  if (ruleVersion === BAS_SEQUENCE_RULE_V1) return original;
+  if (ruleVersion !== BAS_SEQUENCE_RULE) throw new Error('Unsupported BAS sequence interpretation rule');
+  const regions = original.regions.map(region => ({ ...region,
+    clauses: region.clauses.map((clause, index) => {
+      if (clause.requirements.length || clause.reading_text === null || region.raw.status !== 'body_detected') return clause;
+      const block = region.raw.blocks[index];
+      if (block?.kind !== 'paragraph') return clause;
+      // Point labels are line-local. Running an anchored expression over a
+      // joined multi-line paragraph can accidentally bind the first prose to a
+      // later parenthetical tag. Multiple explicit lines remain independent.
+      const matches = block.lines.flatMap((line, lineIndex) => {
+        const matched = labeledPointLine(line.text, lineIndex === 0 ? block.marker : null, line.span_ids);
+        return matched ? [{ lineIndex, ...matched }] : [];
+      });
+      if (!matches.length) return clause;
+      return { ...clause, status: 'partially_interpreted' as const,
+        requirements: matches.map(match => ({ requirement_id: `${clause.clause_id}:labeled-point:${match.lineIndex}`,
+          ...match.requirement })),
+        // The candidate identity is extracted, but its suffix and all adjacent
+        // instructions remain unparsed original text for estimator review.
+        uninterpreted_text: clause.reading_text };
+    }),
+  }));
+  return { ...original, schema_version: 'bas_sequence_requirements_v2' as const,
+    rule_version: BAS_SEQUENCE_RULE, regions };
 }
 
 const bounded = z.string().trim().min(1).max(512);
@@ -149,7 +245,10 @@ export function compareBasSequenceMatrix(region: ReturnType<typeof interpretBasS
     rows.forEach(r => matchedRows.add(r.row_id));
     const status = rows.length > 1 ? 'ambiguous_listed_rows' as const : rows.length === 1 ? 'listed' as const
       : labelsComplete ? 'not_listed_in_selected_matrix' as const : 'point_labels_unavailable' as const;
-    return { requirement, clause_id: c.clause_id, source_spans: c.source_spans, status,
+    const requirementSpanIds = requirement.kind === 'labeled_point_candidate'
+      ? new Set(requirement.source_span_ids) : null;
+    const sourceSpans = requirementSpanIds ? c.source_spans.filter(span => requirementSpanIds.has(span.span_id)) : c.source_spans;
+    return { requirement, clause_id: c.clause_id, source_spans: sourceSpans, status,
       listed_rows: structuredClone(rows), field_wiring_status: 'not_established' as const,
       installed_quantity: null };
   }));
@@ -157,8 +256,9 @@ export function compareBasSequenceMatrix(region: ReturnType<typeof interpretBasS
     matrix_issues: [...matrix.issues], quantity_basis: 'comparison_only' as const };
 }
 
-export async function reconcileBasSequencePoints(sources: BasSourceContext, rawPoints: unknown, rawAssociations: unknown) {
-  const sequences = interpretBasSequences(sources);
+export async function reconcileBasSequencePoints(sources: BasSourceContext, rawPoints: unknown, rawAssociations: unknown,
+  ruleVersion: BasSequenceRuleVersion = BAS_SEQUENCE_RULE) {
+  const sequences = interpretBasSequences(sources, ruleVersion);
   const points = basPointListsSchema.parse(rawPoints);
   const associations = associationSchema.parse(rawAssociations);
   const pageMap = new Map(sources.pages.map(p => [p.page_id, p]));
@@ -191,6 +291,8 @@ export async function reconcileBasSequencePoints(sources: BasSourceContext, rawP
     comparisons.push({ association: structuredClone(association), equipment_references: references,
       ...compareBasSequenceMatrix(region, matrix) });
   }
-  return { schema_version: 'bas_sequence_point_comparison_v1' as const, rule_version: BAS_SEQUENCE_RULE,
+  return { schema_version: ruleVersion === BAS_SEQUENCE_RULE_V1
+      ? 'bas_sequence_point_comparison_v1' as const : 'bas_sequence_point_comparison_v2' as const,
+    rule_version: ruleVersion,
     project_complete: false as const, sequences, comparisons };
 }

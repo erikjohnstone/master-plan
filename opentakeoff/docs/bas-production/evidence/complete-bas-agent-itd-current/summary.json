@@ -1,0 +1,213 @@
+{
+  "ok": true,
+  "prompt": "Run a BAS takeoff.",
+  "source_pdf": "../opentakeoff-corpus/raw/itd-d1-lab-mechanical.pdf",
+  "run_status": "done",
+  "execution_status": "completed",
+  "timing": {
+    "post_index_prompt_to_finish_ms": 15682,
+    "persisted_run_ms": 13424,
+    "sla_ms": 180000,
+    "within_sla": true
+  },
+  "compile_order": [
+    "hvac_equipment",
+    "bas_points",
+    "sequences",
+    "control_valves",
+    "embedded_coil_gaps"
+  ],
+  "analysis_order": [
+    "control_schematics_and_risers",
+    "schedule_plan_reconcile"
+  ],
+  "evidence_coverage": {
+    "minimums": {
+      "point_lists": 0,
+      "sequences": 13,
+      "soo_point_candidates": 0,
+      "control_schematics": 13,
+      "riser_diagrams": 0
+    },
+    "compiled_records": 139,
+    "sequence_sections": 79,
+    "point_lists": 0,
+    "sequences": 13,
+    "soo_point_candidates": 1,
+    "control_schematics": 13,
+    "riser_diagrams": 0,
+    "explicit_schematic_point_tokens": 74,
+    "unresolved_crossings": 497
+  },
+  "compile_summaries": {
+    "hvac_equipment": {
+      "takeoff_id": "T-HVAC-01",
+      "totals": {
+        "categories": 63,
+        "items": 97
+      },
+      "category_count": 63
+    },
+    "bas_points": {
+      "takeoff_id": "T-BAS-01",
+      "totals": {
+        "lists": 0,
+        "rows": 0,
+        "AI": 0,
+        "AO": 0,
+        "BI": 0,
+        "BO": 0,
+        "alarm": 0,
+        "trend": 0,
+        "hardwired": 0,
+        "soft": 0
+      },
+      "category_count": 0
+    },
+    "sequences": {
+      "takeoff_id": "T-SOO-01",
+      "totals": {
+        "sequences": 13,
+        "sections": 79,
+        "extracted": 13,
+        "narrative_only": 0,
+        "tabular_stub": 0,
+        "absent": 0
+      },
+      "category_count": 13
+    },
+    "control_valves": {
+      "takeoff_id": "T-VALVE-01",
+      "totals": {
+        "categories": 10,
+        "items": 31
+      },
+      "category_count": 10
+    },
+    "embedded_coil_gaps": {
+      "takeoff_id": "T-VALVE-EMBEDDED-01",
+      "totals": {
+        "coils_found": 20,
+        "gaps": 11
+      },
+      "category_count": 11
+    }
+  },
+  "reconciliation": {
+    "family_filter": null,
+    "summary": {
+      "total": 37,
+      "match": 36,
+      "schedule_only": 1,
+      "plan_only": 0,
+      "refused_no_scale": 0,
+      "refused_no_text": 0,
+      "ambiguous": 0
+    },
+    "takeoff_stats": {
+      "schedule_rows_total": 37,
+      "resolved": 36,
+      "refused": 1,
+      "errored": 0,
+      "total_drawn_instances": 48
+    },
+    "row_count": 37,
+    "exception_samples": [
+      {
+        "tag": "EF-4",
+        "family": "Fan (exhaust / supply / return / general)",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"EF-4\" (EXHAUST FAN SCHEDULE on 9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707.pdf#12) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "itd-d1-lab-mechanical.pdf#12",
+        "plan_sheets": []
+      }
+    ],
+    "path": "production_session_batch"
+  },
+  "matched_source_comparison": {
+    "row_tag": "AC-1",
+    "plan_sheet": "itd-d1-lab-mechanical.pdf#25",
+    "plan_highlight_sheet": "itd-d1-lab-mechanical.pdf#25",
+    "schedule_sheet": "itd-d1-lab-mechanical.pdf#28",
+    "schedule_highlight_sheet": "itd-d1-lab-mechanical.pdf#28",
+    "distinct_sources": true
+  },
+  "inspection_domains": [
+    "point_soo",
+    "equipment_templates",
+    "assemblies_responsibility",
+    "engineering_compatibility",
+    "review_revisions_release"
+  ],
+  "release_status": "human_review_required",
+  "panel": {
+    "text": "BAS PROJECT TAKEOFF\nBAS project takeoff\n97 equipment records\n0 point lists\n13 sequences · 79 sections · 1 labeled SOO points to review\n31 valve records · 11 coil gaps\n13 schematics · 0 riser/flow diagrams\n36 plan-grounded matches · 1 exceptions\n2086 cited source fields\nConsolidated Agent run — equipment, BAS points, SOO, valves and coil gaps, diagram evidence, and schedule-to-plan reconciliation. Review exceptions and workflow decisions before release.\nCSV\nEXCEL\nPDF\nCLEAR\nTAKEOFF\nWORKFLOW DATA\nPOINT LISTS\nEQUIPMENT\nREVIEW & CHANGES\n24 groups\nAIR COMPRESSOR · 1\nAIR HANDLING UNIT · 1\nBYPASS CONTROL VALVE · 1\nCANOPY HOOD · 4\nCONDENSING HOT WATER BOILER · 2\nCONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS) · 9\nDIFFUSER · 7\nDUCTLESS SPLIT HIGH WALL COOLING UNIT · 2\nELECTRIC HEATER · 9\nEXHAUST FAN · 6\nHOT WATER REHEAT COIL · 9\nHUMIDIFIER · 1\nLAB EXHAUST FAN · 1\nLOUVER · 2\nMECHANICAL SPECIALTY EQUIPMENT · 4\nPENTHOUSE · 1\nPRESSURE INDEPENDENT GENERAL EXHAUST VALVE · 7\nPRESSURE INDEPENDENT ROOM SUPPLY VALVE · 9\nPRESSURE INDEPENDENT SNORKEL EXHAUST VALVE · 5\nPUMP · 4\nRETURN & EXHAUST GRILLE · 4\nSNORKEL HOOD · 5\nSOUND ATTENUATOR · 1\nSPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS) · 2\nAIR COMPRESSOR SCHEDULE\n1 line · 1 EA · 12 fields\nTAG\tTYPE\tQTY\tUNIT\tQTY BASIS\tQUANTITY EVIDENCE\tSCHEDULED QTY\tINSTALLED QTY\tSOURCE COMPARISON\tDESCRIPTION\tMOTOR RPM\tREMARKS\tMANUFACTURER AND MODEL\tMOTOR HP\tMOTOR V/Ø\tOPERATING WEIGHT (LBS)\tPERFORMANCE PRESSURE (PSIG)\tPERFORMANCE SCFM\tRECEIVER DIAMETER\tRECEIVER GALLONS\tRECEIVER LENGTH\tSTATUS\t\nAC-1\tOIL-LESS ROTARY SCROLL\t1\tEA\tinstalled\tsymbol_fingerprint\t1\t1\tSchedule row · p.28Plan match · p.25\tLAB\t3530\t1 , 2\tGARDNER DENVER MODEL BENVS15D-Q\t7.5\t208/3\t1500\t116\t43\t24\"\t120\t75\"\tmatch\nDetails\n\tRemove\nAIR HANDLING UNIT SCHEDULE\n1 line · 1 EA · 12/47 fields\nTAG\tTYPE\tQTY\tUNIT\tQTY BASIS\tQUANTITY EVIDENCE\tSCHEDULED QTY\tINSTALLED QTY\tSOURCE COMPARISON\tREMARKS\tAHRI EER RATING\tAREA SERVED\tCOMBINATION FILTER FINAL FILTER DEPTH\tCOMBINATION FILTER FINAL FILTER EFF.\tCOMBINATION FILTER MAX FACE VELOCITY (FPM)\tCOMBINATION FILTER PRE-FILTER DEPTH\tCOMBINATION FILTER PRE-FILTER EFF.\tCONTROL_SCHEMATIC_REFERENCE\tDX / DEHUMIDIFICATION COOLING COIL AIR P.D. (W.C.)\tDX / DEHUMIDIFICATION COOLING COIL CAPACITY (MBH) SENSIBLE\tDX / DEHUMIDIFICATION COOLING COIL CAPACITY (MBH) TOTAL\tSTATUS\t\nAHU-1\tSEMI-CUSTOM\t1\tEA\tinstalled\texact_plan_tag\t1\t1\tSchedule row · p.15Plan match · p.6\t3 , 4 , 5 , 6\t10.8\tLABORATORIES\t4\"\tMERV 13\t500\t2\"\tMERV 8\tVARIABLE AIR VOLUME AIR HANDLING UNI",
+    "citeRows": 224,
+    "citeTables": 24,
+    "hasObjectObject": false,
+    "hasScheduledQty": true,
+    "hasInstalledQty": true,
+    "hasStatus": true,
+    "hasEmptyState": false,
+    "hasCompleteBasHeading": true,
+    "hasLastSubcompileHeading": false,
+    "hasMixedAggregateEa": false,
+    "resultGroupRail": {
+      "groups": 24,
+      "height_px": 45
+    },
+    "maxCollapsedResultRowHeight": 79,
+    "coverage": {
+      "equipment_records": 97,
+      "point_lists": 0,
+      "point_rows": 0,
+      "point_type_review_rows": 0,
+      "sequences": 13,
+      "soo_point_candidates": 1,
+      "valve_records": 31,
+      "schematics": 13,
+      "risers": 0,
+      "reconcile_rows": 37,
+      "reconcile_matches": 36
+    }
+  },
+  "sequence_reader": {
+    "options": 13,
+    "extracted_body_count": 13,
+    "review_candidate_count": 0,
+    "selected_sequence": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION · PDF page 16 · body detected",
+    "selected_sequence_clause_rows": 4,
+    "selected_sequence_source_buttons": 4,
+    "selected_sequence_point_source_buttons": 0,
+    "required_soo_tag": null,
+    "required_sequence_title": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION",
+    "forbidden_sequence_text": [
+      "CONTROL SYSTEM ARCHITECTURE",
+      "GLOBAL CONTROLLER",
+      "TO ADDITIONAL",
+      "CONTROLS LEGEND"
+    ],
+    "view_sequence_enabled": true,
+    "exported_source_pages": 29
+  },
+  "csv_header": "Valve Mark,Unit Mark,Type,Qty,Unit,Qty basis,Quantity evidence,Scheduled qty,Installed qty,Served equipment,SERVICE,GPM,FLOW (GPM),DESCRIPTION,NOMINAL SIZE,CFM,FLUID,MOTOR RPM,WEIGHT (LBS),REMARKS,AHRI EER RATING,AIR P.D. (IN W.C.),AIR STREAM SYSTEM DUCT CFM,AIR STREAM SYSTEM DUCT SIZE (WXH),AIRFLOW (CFM),AREA / SUPPLY VALVE SERVED,AREA R.H. / °F,AREA SERVED,BLOWER # OF FANS,BLOWER CFM,BLOWER CFM ACTUAL,BLOWER CFM DESIGN,BLOWER DRIVE,BLOWER ESP,BLOWER MAXIMUM RPM,BOILER FLOW (GPM),CAPACITY (MBH),CAPACITY FLOW (GPM),CAPACITY HEAD (FT),CAPACITY INPUT MBH,CAPACITY MIN EFF,CAPACITY OUTPUT MBH,CFM RANGE,COIL LABEL,COIL SIZE HEIGHT (IN),COIL SIZE WIDTH (IN),COL12,COL7,COMBINATION FILTER FINAL FILTER DEPTH,COMBINATION FILTER FINAL FILTER EFF.,COMBINATION FILTER MAX FACE VELOCITY (FPM),COMBINATION FILTER PRE-FILTER DEPTH,COMBINATION FILTER PRE-FILTER EFF.,CONTROL,control_schematic_reference,\"COOLING CAPACITY AT 95° OSA, 80° EDB, 62° EWB SENSIBLE MBH\",\"COOLING CAPACITY AT 95° OSA, 80° EDB, 62° EWB TOTAL MBH\",COOLING CAPACITY AT 95°F OSA SENSIBLE (MBH),COOLING CAPACITY AT 95°F OSA TOTAL (MBH),DIMENSIONS HEIGHT (IN),DIMENSIONS LENGTH (IN),DIMENSIONS WIDTH (IN),DUCT FPM,DX / DEHUMIDIFICATION COOLING COIL AIR P.D. (W.C.),DX / DEHUMIDIFICATION COOLING COIL CAPACITY (MBH) SENSIBLE,DX / DEHUMIDIFICATION COOLING COIL CAPACITY (MBH) TOTAL,DX / DEHUMIDIFICATION COOLING COIL CFM,DX / DEHUMIDIFICATION COOLING COIL E.A.T. (°F) D.B.,DX / DEHUMIDIFICATION COOLING COIL E.A.T. (°F) W.B.,DX / DEHUMIDIFICATION COOLING COIL L.A.T. (°F) D.B.,DX / DEHUMIDIFICATION COOLING COIL L.A.T. (°F) W.B.,DX / DEHUMIDIFICATION COOLING COIL MAX FACE VELOCITY (FPM),DX / DEHUMIDIFICATION COOLING COIL MAX RH,E.A.T. (°F),ELECTRIC REQUIREMENTS AMPS,ELECTRIC REQUIREMENTS V/∅,ELECTRICAL AMPS,ELECTRICAL FOR CONDENSING UNIT MCA,ELECTRICAL FOR CONDENSING UNIT MOCP,ELECTRICAL FOR CONDENSING UNIT V/Ø,ELECTRICAL HP PER FAN,ELECTRICAL HP/W,ELECTRICAL KW,ELECTRICAL OUTDOOR UNIT MCA,ELECTRICAL OUTDOOR UNIT MOCP,ELECTRICAL OUTDOOR UNIT V/Ø,ELECTRICAL REQUIREMENTS MCA,ELECTRICAL REQUIREMENTS MROPD,ELECTRICAL REQUIREMENTS V/PH,ELECTRICAL STEPS,ELECTRICAL V/Ø,ENTERING DISTRIBUTOR RH %,ENTERING DISTRIBUTOR TEMP.,EQUIPMENT DESCRIPTION,EWT,EWT (°F),EXHAUST AIRFLOW (CFM) MAX.,EXHAUST AIRFLOW (CFM) MIN.,EXHAUST DUCT SIZE,EXHAUST MATERIAL,EXHAUST VALVE,FACE AREA (SQ FT),FAN CFM,FAN HP,FAN RPM,FINISH,FLOW RANGE (GPM),FLUID P.D. (FT),FLUID PERFORMANCE E.W.T.,FLUID PERFORMANCE GPM,FLUID PERFORMANCE L.W.T.,FPI,FUEL,FURNACE OPERATING WEIGHT (LBS),GAS HEATING CAPACITY INPUT MBH,GAS HEATING CAPACITY OUTPUT MBH,GAS HEATING COIL CAPACITY (MBH) INPUT,GAS HEATING COIL CAPACITY (MBH) OUTPUT,GAS HEATING COIL CFM,GAS HEATING COIL E.A.T. (°F) D.B.,GAS HEATING COIL L.A.T. (°F) D.B.,GAS HEATING COIL MODULATION %,GAS INPUT MBH,HOT WATER COIL,HUMIDIFICATION COIL COIL AIR P.D. (FT),HUMIDIFICATION COIL COIL TYPE,HUMIDIFICATION COIL FACE AREA (FT2),HUMIDIFICATION COIL FACE VEL. (FPM),HUMIDIFICATION COIL FINNED HEIGHT (IN),HUMIDIFICATION COIL FINNED WIDTH (IN),HUMIDIFICATION COIL UNIT TAG,INDOOR / OUTDOOR WEIGHT (LBS),INSTALLED POSITION,L.A.T. (°F),LOCATION,LWT,LWT (°F),MANUFACTURER AND MODEL,MAX P.D. (FT H2O),MAXIMUM FACE VELOCITY (FPM),MAXIMUM P.D. (PSI),\"MAXIMUM PRESSURE DROP (\"\"WC)\",MAXIMUM SONES,MIN. EXHAUST DUCT VELOCITY (FPM),MIN. O.S.A. CFM,MIN. SEER2,MINIMUM DUCT VELOCITY (FPM),MINIMUM FREE (FT2) AREA,MINIMUM FREE AREA (SQ.FT.),MINIMUM SEER,MOTOR HP,MOTOR V/Ø,MOUNTING PLATFORM CEILING,MOUNTING PLATFORM WALL,NECK / RUNOUT SIZE,NOMINAL TONS,NUMBER OF TIERS,OPERATING WEIGHT (LBS),OPERATION,OSA CFM,OUTSIDE AIR RH %,OUTSIDE AIR TEMP.,P.D. (PSI),PERFORMANCE PRESSURE (PSIG),PERFORMANCE SCFM,PIPING RUNOUT SIZE,plan_paint_prefer_schedule_title,PRESSURE DROP (IN. W.C.) MAX.,PRESSURE DROP (IN. W.C.) MIN.,PRESSURE DROP (INCHES W.C.),RECEIVER DIAMETER,RECEIVER GALLONS,RECEIVER LENGTH,RECTANGULAR DEPTH,RECTANGULAR WIDTH,REQUIRED DYNAMIC INSERTION LOSS OCTAVE BAND OCTAVE BAND FREQUENCY 1000,REQUIRED DYNAMIC INSERTION LOSS OCTAVE BAND OCTAVE BAND FREQUENCY 125,REQUIRED DYNAMIC INSERTION LOSS OCTAVE BAND OCTAVE BAND FREQUENCY 2000,REQUIRED DYNAMIC INSERTION LOSS OCTAVE BAND OCTAVE BAND FREQUENCY 250,REQUIRED DYNAMIC INSERTION LOSS OCTAVE BAND OCTAVE BAND FREQUENCY 4000,REQUIRED DYNAMIC INSERTION LOSS OCTAVE BAND OCTAVE BAND FREQUENCY 500,REQUIRED DYNAMIC INSERTION LOSS OCTAVE BAND OCTAVE BAND FREQUENCY 63,REQUIRED DYNAMIC INSERTION LOSS OCTAVE BAND OCTAVE BAND FREQUENCY 8000,ROWS,SERVES,SIZE (IN),\"SNORKEL EXTRACTION ARM DIMENSIONS \"\"A\"\"\",\"SNORKEL EXTRACTION ARM DIMENSIONS \"\"B\"\"\",\"SNORKEL EXTRACTION ARM DIMENSIONS \"\"C\"\"\",STEAM CAPACITY LBS OF STEAM/HR,SUCTION DIFFUSER,SUPPLY FAN AIRFLOW (CFM) ACTUAL,SUPPLY FAN AIRFLOW (CFM) DESIGN,SUPPLY FAN CFM,SUPPLY FAN ESP,SUPPLY FAN HP,SUPPLY FAN HP/QTY,SUPPLY FAN RPM,SUPPLY FAN TSP,SUPPLY FAN TYPE,SUPPLY FAN V/Ø,SUPPLY FAN V/PH,SYSTEM SERVED,THERMAL EFFICIENCY,THROAT SIZE,TRIPLE DUTY VALVE,UNIT TYPE,VALVE AIRFLOW RANGE MAX (CFM),VALVE AIRFLOW RANGE MIN. (CFM),VALVE AIRFLOWS COOLING MODE,VALVE AIRFLOWS MAX (CFM),VALVE AIRFLOWS MIN. (CFM),VALVE AIRFLOWS MIN. (CFM) OCC.,VALVE AIRFLOWS MIN. (CFM) UNOCC.,VALVE INLET QUANTITY,VALVE INLET SIZE,VALVE OUTLET QUANTITY,VALVE OUTLET SIZE,VALVE TYPE,WATER SYSTEM,Plan sheet,Schedule sheet,Schedule,Status,Notes,Workflow",
+  "page_errors": [],
+  "console_errors": [],
+  "artifacts": [
+    "01-agent-result.png",
+    "02-takeoff-table.png",
+    "02a-plan-match-source.png",
+    "02b-schedule-row-source.png",
+    "03-workflow-review.png",
+    "04-sequence-reader.png",
+    "complete-bas-takeoff.csv",
+    "bas-evidence-and-history.takeoff.json"
+  ]
+}

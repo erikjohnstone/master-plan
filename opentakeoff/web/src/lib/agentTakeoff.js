@@ -1130,6 +1130,52 @@ const familyFromSchedule = (title, tag) => {
   return "Equipment";
 };
 
+const CANONICAL_CATEGORY_SCHEDULE_TITLE = Object.freeze({
+  PUMP: "PUMP SCHEDULE",
+  LOUVER: "LOUVER SCHEDULE",
+  GRD: "GRILLE, REGISTER AND DIFFUSER SCHEDULE",
+  EXPANSION_TANK: "EXPANSION AND COMPRESSION TANK SCHEDULE",
+});
+
+const compactFamilyTitle = (value) => String(value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const isOrderedSubsequence = (source, target) => {
+  let cursor = 0;
+  for (const char of target) if (source[cursor] === char) cursor++;
+  return cursor === source.length;
+};
+const hasBrokenCanonicalWord = (raw, canonical) => {
+  const rawWords = String(raw || "").toUpperCase().match(/[A-Z0-9]+/g) || [];
+  const canonicalWords = String(canonical || "").toUpperCase().match(/[A-Z0-9]+/g) || [];
+  for (let index = 0; index + 1 < rawWords.length; index++) {
+    const joined = rawWords[index] + rawWords[index + 1];
+    if (canonicalWords.some((word) => {
+      const missing = word.length - joined.length;
+      return missing >= 0 && missing <= 2 && isOrderedSubsequence(joined, word);
+    })) return true;
+  }
+  return false;
+};
+
+/**
+ * Repair display-only gaps from CAD text layers that omit isolated outlined
+ * glyphs (for example PU_P SCHEDULE while the page visibly says PUMP).
+ * The raw table_title remains untouched for evidence, lookup, and export.
+ * A canonical category can win only when the extracted title is identical
+ * after punctuation/spacing or is missing at most two ordered characters;
+ * arbitrary OCR substitutions and genuinely different titles remain raw.
+ */
+export function displayScheduleFamily(title, category) {
+  const raw = titleText(title) || "";
+  const canonical = CANONICAL_CATEGORY_SCHEDULE_TITLE[String(category || "").toUpperCase()];
+  if (!raw || !canonical) return raw;
+  const source = compactFamilyTitle(raw);
+  const target = compactFamilyTitle(canonical);
+  const missing = target.length - source.length;
+  if (source === target) return raw === canonical ? raw : (hasBrokenCanonicalWord(raw, canonical) ? canonical : raw);
+  if (missing < 0 || missing > 2 || !isOrderedSubsequence(source, target) || !hasBrokenCanonicalWord(raw, canonical)) return raw;
+  return canonical;
+}
+
 /** Spec value on a line by column header (case/space tolerant). */
 export function lineSpecValue(line, col) {
   if (!line?.specs) return "";
@@ -1144,23 +1190,51 @@ export function lineSpecCite(line, _col) {
   return lineLeadCite(line, "tag");
 }
 
-/** Cite for a lead cell (tag / qty) — whole schedule ROW when available. */
-export function lineLeadCite(line, key) {
-  if (!line?.sheet_id) return null;
-  if (key !== "tag" && key !== "qty" && key !== "unit_mark") return null;
-  const bbox = line.row_bbox_px || line.bbox_px;
-  if (!bbox) return null;
+/** Exact schedule-row side of a compiled/reconciled line. */
+export function lineScheduleCite(line) {
+  if (!line) return null;
+  const sheet = line.schedule_sheet_id || (!line.plan_sheet_id ? line.sheet_id : null);
+  const bbox = line.row_bbox_px || (!line.plan_sheet_id ? line.bbox_px : null);
+  if (!sheet || !bbox) return null;
   return {
-    sheet_id: line.sheet_id,
+    sheet_id: sheet,
     bbox_px: bbox,
+    column: "MARK",
+    field: "MARK",
+    value: line.tag,
+    tag: line.tag,
+    table_title: line.table_title,
+    kind: "row",
+  };
+}
+
+/** Exact first retained plan-marker side of a reconciliation result. */
+export function linePlanCite(line) {
+  if (!line?.plan_sheet_id || !line?.plan_bbox_px) return null;
+  return {
+    sheet_id: line.plan_sheet_id,
+    bbox_px: line.plan_bbox_px,
+    column: "PLAN MARK",
+    field: "plan_tag",
+    value: line.tag,
+    tag: line.tag,
+    table_title: line.table_title,
+    kind: "row",
+  };
+}
+
+/** Cite for a schedule-derived lead cell (tag / qty). */
+export function lineLeadCite(line, key) {
+  if (key !== "tag" && key !== "qty" && key !== "unit_mark") return null;
+  const cite = lineScheduleCite(line);
+  if (!cite) return null;
+  return {
+    ...cite,
     column: key === "unit_mark" ? "UNIT MARK" : "MARK",
     field: key === "unit_mark" ? "UNIT MARK" : "MARK",
     value: key === "unit_mark"
       ? (line.unit_mark || lineSpecValue(line, "Unit Mark") || line.tag)
       : line.tag,
-    tag: line.tag,
-    table_title: line.table_title,
-    kind: "row",
   };
 }
 
@@ -1464,6 +1538,7 @@ export function compileAgentTakeoff(rows = []) {
         table_bbox_px: null,
         row_bbox_px: null,
         building: null,
+        category: null,
         fromCompile: false,
       };
       groups.set(key, g);
@@ -1523,6 +1598,7 @@ export function compileAgentTakeoff(rows = []) {
     if (row.source_tool === "compile_corpus_takeoff") g.fromCompile = true;
     const field = String(row.field || "");
     const fieldU = field.toUpperCase();
+    if (field === "equipment_type" && !g.category) g.category = String(row.value || "").trim() || null;
 
     if (field === "installed_quantity") {
       const n = asNumber(row.value);
@@ -1655,7 +1731,11 @@ export function compileAgentTakeoff(rows = []) {
       }
     }
 
-    const typePick = pickAttr(g.attrs, ["TYPE", "POINT TYPE", "SERVICE", "DESCRIPTION", "equipment_type"]);
+    // Narrative descriptions can be long coil-gap or duty statements. They
+    // belong in the adaptive DESCRIPTION column, never in the compact Type
+    // lead column. Prefer authored type/service; the taxonomy code is only a
+    // fallback and is suppressed below when it merely repeats the family.
+    const typePick = pickAttr(g.attrs, ["TYPE", "POINT TYPE", "SERVICE", "equipment_type"]);
     let typeLabel = typePick?.value != null ? String(typePick.value) : null;
     // Category codes like AIR_COOLED_CHILLER are redundant when the schedule
     // title already names the family — drop them from the Type lead column.
@@ -1695,7 +1775,8 @@ export function compileAgentTakeoff(rows = []) {
       ? String(pickAttr(g.attrs, ["Unit Mark", "UNIT MARK", "Served equipment"]).value)
       : null;
 
-    const scheduleTitle = familyFromSchedule(g.table_title, g.tag);
+    const sourceScheduleTitle = familyFromSchedule(g.table_title, g.tag);
+    const scheduleTitle = displayScheduleFamily(sourceScheduleTitle, g.category);
     // Modular sections: Building · schedule when a building code is known
     // (multi-building valve sets). Otherwise keep the schedule title alone.
     const family = (building && /CONTROL\s+VALVE/i.test(scheduleTitle || ""))
@@ -1705,6 +1786,7 @@ export function compileAgentTakeoff(rows = []) {
       id: g.id,
       tag: g.tag,
       family,
+      category: g.category,
       building,
       unit_mark: unitMark,
       type: typeLabel,
@@ -1719,6 +1801,7 @@ export function compileAgentTakeoff(rows = []) {
       specs,
       spec_cites,
       plan_sheet_id: g.plan_sheet_id || null,
+      plan_bbox_px: g.plan_bbox_px || null,
       schedule_sheet_id: g.schedule_sheet_id || g.sheet_id || null,
       table_title: g.table_title,
       status: g.status || null, // blank Status column is noise — only set when real

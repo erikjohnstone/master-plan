@@ -28,12 +28,14 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
   const ready = computed.input === workflow;
   const result = ready ? computed.value : null;
   const regions = result?.sequences.regions || [];
+  const bodyRegions = regions.filter(region => region.raw.status === 'body_detected');
+  const reviewRegions = regions.filter(region => region.raw.status !== 'body_detected');
   const target = viewState?.sequenceReviewTarget;
   const selection = useMemo(() => target && result && target.captureId === capture.capture_id
     ? basSequenceReviewSelection(result, target) : null, [target, result, capture.capture_id]);
   const coverage = selection?.kind === 'coverage' || (!target && viewState?.sequencePane === 'coverage');
   const region = target ? regions.find(r => r.region_id === selection?.regionId)
-    : regions.find(r => r.region_id === viewState?.sequenceId) || regions.find(r => r.raw.status === 'body_detected') || regions[0];
+    : regions.find(r => r.region_id === viewState?.sequenceId) || bodyRegions[0] || reviewRegions[0];
   const references = useMemo(() => (capture.narrative_sources?.pages || []).flatMap(p => p.spans.map(s => ({ ...s, page_id: p.page_id, page_number: p.page_number }))), [capture]);
   const query = (draft.search || '').trim().toLowerCase();
   const found = useMemo(() => query.length < 2 ? [] : references.filter(s => s.text.toLowerCase().includes(query)), [references, query]);
@@ -50,6 +52,10 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
 
   async function source(pageId, span) {
     setError('');
+    if (!span?.bbox_px) {
+      setError('The exact source fragment is unavailable. Review the complete clause evidence; no nearby source was substituted.');
+      return;
+    }
     change({ sequenceScroll: proseScroll.current?.scrollTop || 0 });
     try {
       const response = await onOpenCitation?.({ page_id: pageId, sheet_id: pageId, bbox_px: span.bbox_px, value: span.text, kind: 'row' });
@@ -82,9 +88,19 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
       {target && !selection && <p role="alert">The exact finding target is no longer available in the active sequence view. No other clause or comparison has been substituted. Return to issue review for its original evidence.</p>}
       {coverage ? <BasSourceCoverage capture={capture} discovery={result.sequences.discovery} selectedPageId={selection?.pageId}
         state={viewState} onChange={patch => change({ sequencePane: 'coverage', ...patch })} onSource={source} /> : <>
+      <p className="bas-point-scope" data-sequence-reader-summary data-sequence-body-count={bodyRegions.length}
+        data-sequence-review-count={reviewRegions.length}>
+        <strong>{bodyRegions.length}</strong> extracted sequence {bodyRegions.length === 1 ? 'body' : 'bodies'}
+        {reviewRegions.length ? <> · <strong>{reviewRegions.length}</strong> source {reviewRegions.length === 1 ? 'candidate requires' : 'candidates require'} boundary review</> : null}
+      </p>
       <label className="bas-sequence-select">Sequence<select aria-label="Sequence" value={region?.region_id || ''} onChange={e => change({ sequenceReviewTarget: null, sequenceId: e.target.value, sequenceScroll: 0 })}>
         {!region && <option value="">Requested sequence unavailable</option>}
-        {regions.map(r => <option key={r.region_id} value={r.region_id}>{r.title} · PDF page {r.page_id.split(':p').at(-1)} · {r.raw.status.replaceAll('_', ' ')}</option>)}
+        {!!bodyRegions.length && <optgroup label={`Extracted sequence bodies (${bodyRegions.length})`}>
+          {bodyRegions.map(r => <option key={r.region_id} value={r.region_id}>{r.title} · PDF page {r.page_id.split(':p').at(-1)} · body detected</option>)}
+        </optgroup>}
+        {!!reviewRegions.length && <optgroup label={`Review candidates (${reviewRegions.length})`}>
+          {reviewRegions.map(r => <option key={r.region_id} value={r.region_id}>{r.title} · PDF page {r.page_id.split(':p').at(-1)} · {r.raw.status.replaceAll('_', ' ')}</option>)}
+        </optgroup>}
       </select></label>
       {!region ? <p>{target ? 'Choose Sequence reader to browse other retained regions explicitly.' : 'No headed sequence region was discovered. Unheaded and unsupported source text is not established absent.'}</p> : <>
         <div className="bas-point-heading"><h3 tabIndex={-1} data-review-target={!!selection && !selection.clauseId && !selection.matrixId}>{region.title}</h3><span>{region.clauses.length} retained blocks · source boundary requires review</span>
@@ -94,8 +110,13 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
             <tbody>{region.clauses.map((c, i) => <tr key={c.clause_id} data-clause-id={c.clause_id} tabIndex={-1} data-selected={selection?.clauseId === c.clause_id}
               data-review-target={selection?.clauseId === c.clause_id && !selection?.matrixId}><th scope="row">{region.raw.blocks[i].marker || i + 1}{selection?.clauseId === c.clause_id && <p>Review target</p>}</th>
               <td>{c.reading_text !== null ? c.reading_text : <table aria-label="Original sequence inset"><tbody>{region.raw.blocks[i].rows.map((row, ri) => <tr key={ri}>{row.map((cell, ci) => <td key={ci}>{cell.text}</td>)}</tr>)}</tbody></table>}</td>
-              <td>{c.requirements.length ? c.requirements.map(r => <div key={r.requirement_id}><strong>Monitor {r.variable}</strong>
-                {r.operating_mode && <p>{r.operating_mode}</p>}<p>Monitoring clause only. Signal type and applicability require review.</p></div>) : 'Not interpreted — review original text'}</td>
+              <td>{c.requirements.length ? c.requirements.map(r => <div key={r.requirement_id}>
+                <strong>{r.kind === 'monitor_variable' ? 'Monitor' : 'Review point'} {r.variable}</strong>
+                {r.kind === 'labeled_point_candidate' && <p>Source tag: <code>{r.source_tag}</code>{' '}
+                  <button type="button" disabled={!c.source_spans.some(span => r.source_span_ids.includes(span.span_id))}
+                    onClick={() => source(region.page_id,
+                      c.source_spans.find(span => r.source_span_ids.includes(span.span_id)))}>View point source</button></p>}
+                {r.operating_mode && <p>{r.operating_mode}</p>}<p>{r.kind === 'monitor_variable' ? 'Monitoring clause only.' : 'Explicit labeled SOO candidate.'} Signal type, applicability and quantity require review.</p></div>) : 'Not interpreted — review original text'}</td>
               <td><button type="button" disabled={!c.source_spans.length} onClick={() => source(region.page_id, c.source_spans.find(s => s.text.length > 10) || c.source_spans[0])}>View source</button></td>
             </tr>)}</tbody></table>
         </div>
@@ -125,7 +146,7 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
               data-matrix-id={c.association.matrix_id} data-requirement-id={r.requirement.requirement_id}
               data-selected={selection?.matrixId === c.association.matrix_id && selection?.requirementId === r.requirement.requirement_id}
               data-review-target={selection?.matrixId === c.association.matrix_id && selection?.requirementId === r.requirement.requirement_id}>
-              <th scope="row">{r.requirement.variable}{r.requirement.operating_mode && <p>{r.requirement.operating_mode}</p>}</th>
+              <th scope="row">{r.requirement.variable}{r.requirement.kind === 'labeled_point_candidate' && <p>SOO tag {r.requirement.source_tag}</p>}{r.requirement.operating_mode && <p>{r.requirement.operating_mode}</p>}</th>
               <td>{c.equipment_references.map(ref => ref.tag).join(' · ')}<p>{c.association.review_origin.replaceAll('_', ' ')}</p></td>
               <td>{r.listed_rows.length ? r.listed_rows.map(row => <button type="button" key={row.row_id} onClick={() => change({ mode: 'points', matrixId: c.association.matrix_id, rowId: row.row_id, filter: '' })}>{row.local_key} · {row.name}</button>) : 'No matching listed row'}</td>
               <td>{r.listed_rows.flatMap(row => row.observations.filter(o => o.kind === 'declared_io').map(o => `${o.channel} · ${o.value ?? 'ambiguous'}`)).join(', ') || 'Not established'}</td>

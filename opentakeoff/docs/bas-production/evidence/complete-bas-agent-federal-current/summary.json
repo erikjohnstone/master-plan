@@ -1,0 +1,290 @@
+{
+  "ok": true,
+  "prompt": "Run a BAS takeoff.",
+  "source_pdf": "../opentakeoff-corpus/raw/federal-attachment4-mechanical.pdf",
+  "run_status": "done",
+  "execution_status": "completed",
+  "timing": {
+    "post_index_prompt_to_finish_ms": 16964,
+    "persisted_run_ms": 13977,
+    "sla_ms": 180000,
+    "within_sla": true
+  },
+  "compile_order": [
+    "hvac_equipment",
+    "bas_points",
+    "sequences",
+    "control_valves",
+    "embedded_coil_gaps"
+  ],
+  "analysis_order": [
+    "control_schematics_and_risers",
+    "schedule_plan_reconcile"
+  ],
+  "evidence_coverage": {
+    "minimums": {
+      "point_lists": 0,
+      "sequences": 9,
+      "soo_point_candidates": 0,
+      "control_schematics": 13,
+      "riser_diagrams": 0
+    },
+    "compiled_records": 224,
+    "sequence_sections": 132,
+    "point_lists": 3,
+    "sequences": 12,
+    "soo_point_candidates": 0,
+    "control_schematics": 13,
+    "riser_diagrams": 1,
+    "explicit_schematic_point_tokens": 15,
+    "unresolved_crossings": 1061
+  },
+  "compile_summaries": {
+    "hvac_equipment": {
+      "takeoff_id": "T-HVAC-01",
+      "totals": {
+        "categories": 63,
+        "items": 128
+      },
+      "category_count": 63
+    },
+    "bas_points": {
+      "takeoff_id": "T-BAS-01",
+      "totals": {
+        "lists": 3,
+        "rows": 26,
+        "AI": 12,
+        "AO": 8,
+        "BI": 4,
+        "BO": 2,
+        "alarm": 0,
+        "trend": 0,
+        "hardwired": 0,
+        "soft": 0
+      },
+      "category_count": 3
+    },
+    "sequences": {
+      "takeoff_id": "T-SOO-01",
+      "totals": {
+        "sequences": 12,
+        "sections": 132,
+        "extracted": 12,
+        "narrative_only": 0,
+        "tabular_stub": 0,
+        "absent": 0
+      },
+      "category_count": 12
+    },
+    "control_valves": {
+      "takeoff_id": "T-VALVE-01",
+      "totals": {
+        "categories": 10,
+        "items": 0
+      },
+      "category_count": 10
+    },
+    "embedded_coil_gaps": {
+      "takeoff_id": "T-VALVE-EMBEDDED-01",
+      "totals": {
+        "coils_found": 70,
+        "gaps": 70
+      },
+      "category_count": 70
+    }
+  },
+  "reconciliation": {
+    "family_filter": null,
+    "summary": {
+      "total": 99,
+      "match": 95,
+      "schedule_only": 4,
+      "plan_only": 0,
+      "refused_no_scale": 0,
+      "refused_no_text": 0,
+      "ambiguous": 0
+    },
+    "takeoff_stats": {
+      "schedule_rows_total": 99,
+      "resolved": 95,
+      "refused": 4,
+      "errored": 0,
+      "total_drawn_instances": 95
+    },
+    "row_count": 99,
+    "exception_samples": [
+      {
+        "tag": "RF-1",
+        "family": "Fan (exhaust / supply / return / general)",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"RF-1\" (AIR HANDLING UNIT FAN SCHEDULE on b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10.pdf#14) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "federal-attachment4-mechanical.pdf#14",
+        "plan_sheets": []
+      },
+      {
+        "tag": "RF-2",
+        "family": "Fan (exhaust / supply / return / general)",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"RF-2\" (AIR HANDLING UNIT FAN SCHEDULE on b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10.pdf#14) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "federal-attachment4-mechanical.pdf#14",
+        "plan_sheets": []
+      },
+      {
+        "tag": "SF-1",
+        "family": "Fan (exhaust / supply / return / general)",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"SF-1\" (AIR HANDLING UNIT FAN SCHEDULE on b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10.pdf#14) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "federal-attachment4-mechanical.pdf#14",
+        "plan_sheets": []
+      },
+      {
+        "tag": "SF-2",
+        "family": "Fan (exhaust / supply / return / general)",
+        "scheduled_qty": 1,
+        "installed_qty": null,
+        "observed_plan_qty": null,
+        "installed_qty_basis": null,
+        "search_scope": null,
+        "unlabeled_audit_complete": null,
+        "plan_search_complete": null,
+        "status": "SCHEDULE_ONLY",
+        "reason": "Schedule row \"SF-2\" (AIR HANDLING UNIT FAN SCHEDULE on b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10.pdf#14) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: \"set\"}.",
+        "schedule_sheet": "federal-attachment4-mechanical.pdf#14",
+        "plan_sheets": []
+      }
+    ],
+    "path": "production_session_batch"
+  },
+  "matched_source_comparison": {
+    "row_tag": "AHU-1",
+    "plan_sheet": "federal-attachment4-mechanical.pdf#7",
+    "plan_highlight_sheet": "federal-attachment4-mechanical.pdf#7",
+    "schedule_sheet": "federal-attachment4-mechanical.pdf#14",
+    "schedule_highlight_sheet": "federal-attachment4-mechanical.pdf#14",
+    "distinct_sources": true,
+    "side_by_side_sheets": [
+      "federal-attachment4-mechanical.pdf#7",
+      "federal-attachment4-mechanical.pdf#14"
+    ],
+    "side_by_side_previews": [
+      {
+        "natural_width": 1040,
+        "natural_height": 680,
+        "alt": "Plan symbol evidence on M4.1, with the exact citation outlined."
+      },
+      {
+        "natural_width": 1600,
+        "natural_height": 453,
+        "alt": "Schedule row evidence on M7.1, with the exact citation outlined."
+      }
+    ]
+  },
+  "inspection_domains": [
+    "point_soo",
+    "equipment_templates",
+    "assemblies_responsibility",
+    "engineering_compatibility",
+    "review_revisions_release"
+  ],
+  "release_status": "human_review_required",
+  "required_schematic_binding": {
+    "title": "BOILER SYSTEM - CONTROL DIAGRAM",
+    "sheet": "federal-attachment4-mechanical.pdf#20",
+    "status": "bound",
+    "sequence_titles": [
+      "HEATING HOT WATER SYSTEM - SEQUENCE OF OPERATION"
+    ],
+    "instrument_labels": [
+      "VFD",
+      "FS",
+      "FM",
+      "VFD",
+      "DPT",
+      "DPT",
+      "FS",
+      "FM"
+    ]
+  },
+  "panel": {
+    "text": "BAS PROJECT TAKEOFF\nBAS project takeoff\n128 equipment records\n3 point lists · 26 rows\n12 sequences · 132 sections\n0 valve records · 70 coil gaps\n13 schematics · 1 riser/flow diagram\n95 plan-grounded matches · 4 exceptions\n3633 cited source fields\nConsolidated Agent run — equipment, BAS points, SOO, valves and coil gaps, diagram evidence, and schedule-to-plan reconciliation. Review exceptions and workflow decisions before release.\nCSV\nEXCEL\nPDF\nCLEAR\nTAKEOFF\nWORKFLOW DATA\nPOINT LISTS\nEQUIPMENT\nREVIEW & CHANGES\n20 groups\nAIR HANDLING UNIT HYDRONIC COIL · 2\nAIR HANDLING UNIT · 1\nAIR SEPARATOR · 2\nAIR-COOLED CONDENSING UNIT · 6\nARCHITECTURAL LOUVERED PENTHOUSE · 3\nCHILLER SCHEDULE (ELECTRIC AIR-COOLED) · 1\nDX FAN COIL UNIT · 6\nEXPANSION TANK · 2\nFIN TUBE RADIATION · 4\nGENERAL FAN · 4\nGRILLE, REGISTER, AND DIFFUSER · 23\nHOT WATER CONDENSING BOILER · 2\nHOT WATER FAN COIL UNIT · 1\nHVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM · 9\nHVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - MISCELLANEOUS · 2\nHVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - VAV BOXES · 15\nPUMP · 11\nSILENCER · 2\nUNIT HEATER SCHEDULE (HOT WATER) · 2\nVOLUME CONTROL BOX · 58\nAIR HANDLING UNIT HYDRONIC COIL SCHEDULE\n2 lines · 2 EA · 6 fields\nTAG\tTYPE\tQTY\tUNIT\tQTY BASIS\tQUANTITY EVIDENCE\tSOURCE COMPARISON\tGPM\tDESCRIPTION\tCOIL LABEL\tEWT\tLWT\tSERVED\t\nCHWC\tembedded_coil_gaps\t1\tEA\tinferred_gap\tinferred_embedded_coil_gap\t\n\t252.20\tEmbedded AIR HANDLING UNIT HYDRONIC COIL SCHEDULE — GPM 252.20, EWT 44, LWT 54 — no matching scheduled valve found\tAIR HANDLING UNIT HYDRONIC COIL SCHEDULE\t44\t54\tAHU-1\tRemove\nHWC\tembedded_coil_gaps\t1\tEA\tinferred_gap\tinferred_embedded_coil_gap\t\n\t30.60\tEmbedded AIR HANDLING UNIT HYDRONIC COIL SCHEDULE — GPM 30.60, EWT 140, LWT 109 — no matching scheduled valve found\tAIR HANDLING UNIT HYDRONIC COIL SCHEDULE\t140\t109\tAHU-1\tRemove\nAIR HANDLING UNIT SCHEDULE\n1 line · 1 EA · 12/18 fields\nTAG\tTYPE\tQTY\tUNIT\tQTY BASIS\tQUANTITY EVIDENCE\tSCHEDULED QTY\tINSTALLED QTY\tMANUFACTURER\tMODEL\tSOURCE COMPARISON\tACCESSORIES ENERGY RECOVERY WHEEL TAG\tACCESSORIES ENERGY RECOVERY WHEEL TYPE\tAIRFLOW DESIGN RETURN AIRFLOW\tAIRFLOW DESIGN SUPPLY AIR FLOW CFM\tAIRFLOW MINIMUM OUTSIDE AIR FLOW CFM\tAIRFLOW MINIMUM SUPPLY AIR FLOW CFM\tCOIL DATA COOLING CHW TAG\tCOIL DATA HEATING HW TAG\tCONTROL_SCHEMATIC_REFERENCE\tLOCATION\tPLAN_PAINT_PREFER_SCHEDULE_TITLE\tRELIEF FAN E.S.P\tSTATUS\t\nAHU-1\tAHU\t1\tEA\tinstalled\texact_plan_tag\t1\t1\tDAIKIN\tCAC/CAH\t\nCompare\nSchedule row · p.14\nPlan match · p.7\n\tERW-1\tAIR-TO-AIR\t21000\t25000",
+    "citeRows": 334,
+    "citeTables": 19,
+    "hasObjectObject": false,
+    "hasScheduledQty": true,
+    "hasInstalledQty": true,
+    "hasStatus": true,
+    "hasEmptyState": false,
+    "hasCompleteBasHeading": true,
+    "hasLastSubcompileHeading": false,
+    "hasMixedAggregateEa": false,
+    "resultGroupRail": {
+      "groups": 20,
+      "height_px": 45
+    },
+    "maxCollapsedResultRowHeight": 48,
+    "coverage": {
+      "equipment_records": 128,
+      "point_lists": 3,
+      "point_rows": 26,
+      "point_type_review_rows": 0,
+      "sequences": 12,
+      "soo_point_candidates": 0,
+      "valve_records": 0,
+      "schematics": 13,
+      "risers": 1,
+      "reconcile_rows": 99,
+      "reconcile_matches": 95
+    }
+  },
+  "sequence_reader": {
+    "options": 12,
+    "extracted_body_count": 12,
+    "review_candidate_count": 0,
+    "selected_sequence": "AHU - 1 SEQUENCE OF OPERATIONS · PDF page 22 · body detected",
+    "selected_sequence_clause_rows": 69,
+    "selected_sequence_source_buttons": 69,
+    "selected_sequence_point_source_buttons": 0,
+    "required_soo_tag": null,
+    "required_sequence_title": "AHU - 1 SEQUENCE OF OPERATIONS",
+    "forbidden_sequence_text": [
+      "LEED IAQ PRE - OCCUPANCY FLUSH - OUT"
+    ],
+    "view_sequence_enabled": true,
+    "exported_source_pages": 24
+  },
+  "csv_header": "Tag,Unit Mark,Type,Qty,Unit,Qty basis,Quantity evidence,Scheduled qty,Installed qty,Manufacturer,Model,SERVED EQUIPMENT,GPM,DESCRIPTION,FLUID,VOLTAGE,PHASE,REFRIGERANT,LENGTH,REMARKS,POINT NAME,ACCESSORIES ENERGY RECOVERY WHEEL TAG,ACCESSORIES ENERGY RECOVERY WHEEL TYPE,AIR CAPACITY DESIGN CFM,AIR CAPACITY MINIMUM CFM,AIRFLOW DESIGN RETURN AIRFLOW,AIRFLOW DESIGN SUPPLY AIR FLOW CFM,AIRFLOW MINIMUM OUTSIDE AIR FLOW CFM,AIRFLOW MINIMUM SUPPLY AIR FLOW CFM,AIRSIDE DATA AIR FLOW CFM,AIRSIDE DATA EAT DB °F,AIRSIDE DATA EXTERNAL SP I.W.G,AIRSIDE DATA HIGH SPEED CFM,AIRSIDE DATA LAT DB °F,AIRSIDE DATA LOW SPEED CFM,AIRSIDE DATA MAX AIR PD I.W.G,AIRSIDE DATA MAXIMUM AIR FLOW CFM,AIRSIDE DATA MIN INLET SP I.W.G.,AIRSIDE DATA MINIMUM AIR FLOW CFM,AIRSIDE DATA THROW,AIRSIDE DATA VOLUME CONTROL,AMBIENT TEMP °F,AREA SERVED,B-1,BASIS OF DESIGN MANUFACTURER,BASIS OF DESIGN MODEL,CAPACITY GPM,CAPACITY PER FT. BTU/HR,COIL DATA COOLING CHW TAG,COIL DATA HEATING HW TAG,COIL LABEL,COL1,CONDENSER FANS CONDENSER FAN CFM,CONDENSER FANS QUANTITY,CONNECTION SIZE (IN),control_schematic_reference,COOLING COIL DATA COOLING COIL DATA SENSIBLE CAPACITY BTU/HR,COOLING COIL DATA COOLING COIL DATA TOTAL CAPACITY BTU/HR,COOLING COIL DATA EAT DB °F,COOLING COIL DATA EAT WB °F,COOLING COIL DATA LAT DB °F,COOLING COIL DATA LAT WB °F,DESIGN AIR FLOW CFM,DESIGN PARAMETERS DESIGN FLOW GPM,DESIGN PARAMETERS EWT °F,DESIGN PARAMETERS INPUT MBH,DESIGN PARAMETERS LWT °F,DESIGN PARAMETERS MINIMUM EFFICIENCY AT 25% FIRING RATE,DISCHARGE HEAD FT.H20,DRY WEIGHT LBS,DUCT SIZE HEIGHT,DUCT SIZE WIDTH,DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 1 63 HZ,DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 2,DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 3,DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 4 500 HZ,\"DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 5 1,000 HZ\",\"DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 6 2,000 HZ\",\"DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 7 4,000 HZ\",\"DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W 8 8,000 HZ\",EAT DB °F,ELECTRICAL COMPRESSOR DATA COMP 1 RLA,ELECTRICAL COMPRESSOR DATA COMP 2 RLA,ELECTRICAL COMPRESSOR DATA COMP 3 RLA,ELECTRICAL COMPRESSOR DATA COMP 4 RLA,ELECTRICAL COMPRESSOR DATA COMPRESSOR QTY,ELECTRICAL CONDENSER DATA AMBIENT TEMPERATURE °F,ELECTRICAL CONDENSER DATA FAN FLA (EA),ELECTRICAL CONDENSER DATA FAN QTY,ELECTRICAL DATA FLA,ELECTRICAL DATA MAX KW AT DESIGN,ELECTRICAL DATA MOCP,ELECTRICAL DATA PHASE,ELECTRICAL DATA VOLTAGE,ELECTRICAL MAX KW AT DESIGN,ELECTRICAL PHASE,ELECTRICAL VOLTAGE,ENCLOSURE HEIGHT,ENCLOSURE WIDTH,EVAPORATOR SIDE DATA DESIGN WATER FLOW GPM,EVAPORATOR SIDE DATA EWT °F,EVAPORATOR SIDE DATA LWT °F,EVAPORATOR SIDE DATA NUMBER OF PASSES,EVAPORATOR SIDE DATA WATER MAX PD FT.H20,EWT,EWT °F,EXTERNAL SP I.W.G,FACE SIZE,FACE VELOCITY FPM,FAIL MODE FAIL OFF (CLOSED),FAIL MODE FAIL ON (OPEN),FAIL MODE LAST COMMANDED STATE,FAIL MODE LOCAL DEFAULT,FAN CONFIGURATION FAN TYPE,FAN CONFIGURATION WHEEL TYPE,FAN DATA HORSEPOWER,FAN DATA PHASE,FAN DATA RPM,FAN DATA VOLTAGE,FAN DATA WATTS,FAN RPM,FIRING RATE NATURAL GAS (CFH),FLOW GPM,FULL WEIGHT LBS,HARDWARE POINT TYPE,HARDWARE TAG,HEATING COIL DATA EAT DB °F,HEATING COIL DATA EWT °F,HEATING COIL DATA FLOW GPM,HEATING COIL DATA LAT DB °F,HEATING COIL DATA LWT °F,HEATING COIL DATA MAX PD FT.H2O,HEATING DATA EWT °F,HEATING DATA FLOW GPM,HEATING DATA LWT °F,HEATING DATA MAX PD FT.H2O,HEATING DATA MINIMUM CAPACITY BTU/HR,HORIZONTAL ROWS,HORSEPOWER,HYDRONIC REHEAT COIL DATA EAT (°F),HYDRONIC REHEAT COIL DATA EWT (°F),HYDRONIC REHEAT COIL DATA FLOW (GPM),HYDRONIC REHEAT COIL DATA LAT (°F),HYDRONIC REHEAT COIL DATA LWT (°F),HYDRONIC REHEAT COIL DATA MAX WATER PD FT. H20,HYDRONIC REHEAT COIL DATA PIPE CONNECTI ON SIZE IN,HYDRONIC REHEAT COIL DATA SENSIBLE CAPACITY (BTU/HR),INLET DIAMETER,LINEAR DIFFUSER DATA LENGTH [FT],LINEAR DIFFUSER DATA SLOT QUANTITY,LINEAR DIFFUSER DATA SLOT WIDTH [IN],LOCATION,LWT,LWT °F,MAX NC,MAX PD [IN-W.G],MAX RPM,MAX. P.D. (FT W.C.),MAXIMUM AIR PD I.W.G,MAXIMUM AIR PD I.W.G.,MAXIMUM AIRFLOW [CFM],MAXIMUM NOISE DATA DISCHARGE SOUND (NC),MAXIMUM NOISE DATA RADIATED SOUND (NC),MINIMUM ACCEPTANCE VOLUME GAL,MINIMUM AIRFLOW [CFM],MINIMUM CAPACITY BTU/HR,MINIMUM EFFICIENCY (%),MINIMUM FINS PER FOOT,MINIMUM NET COOLING CAPACITY TONS,MINIMUM NPSH FT.H2O,MINIMUM WATER FLOW GPM,MOTOR DATA HORSEPOWER,MOTOR DATA PHASE,MOTOR DATA RPM,MOTOR DATA VOLTAGE,MOUNTING,MOUNTING HEIGHT,NECK SIZE,NOMINAL CAPACITY TONS,\"OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 1 63 HZ\",\"OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 2 125 HZ\",\"OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 3 250 HZ\",\"OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 4 500 HZ\",\"OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 5 1,000 HZ\",\"OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 6 2,000 HZ\",\"OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 7 4,000 HZ\",\"OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W 8 8,000 HZ\",OPERATING PRESSURE MAX PSI,OPERATING PRESSURE MIN PSI,OPERATING WEIGHT,OPERATING WEIGHT LBS,PENTHOUSE THROAT SIZE HEIGHT,PENTHOUSE THROAT SIZE LENGTH,PENTHOUSE THROAT SIZE WIDTH,PIPE CONNECTIONS DISCHARGE,PIPE CONNECTIONS SUCTION,plan_paint_prefer_schedule_title,REFRIGERANT TYPE,RELIEF FAN E.S.P,RELIEF FAN RF QTY,RELIEF FAN RF TAG,riser_diagram_tag,ROOF OPENING LENGTH,ROOF OPENING WIDTH,SERVED,SIZE DATA CONNECTION SIZE,SIZE DATA DIAMETER,SIZE DATA HEIGHT,SOFTWARE ALARM INSTRUCTIONS,SOFTWARE ALARM LIMITS,SOFTWARE DIRECT DIGITAL CONTROL,SOFTWARE MAINTENANCE ALARM,SOFTWARE MAINTENANCE WORK ORDER,SOFTWARE PROGRAM START/STOP,SOFTWARE RUN TIME,SOFTWARE TOTALIZER,SOFTWARE TREND,STARTER TYPE,SUPPLY FAN E.S.P,SUPPLY FAN SF QTY,SUPPLY FAN SF TAG,SYSTEM,TANK VOLUME GAL,TEMPERATURE (°F),TEMPERATURE RANGE MAXIMUM °F,TEMPERATURE RANGE MINIMUM °F,TOTAL SP I.W.G,VERTICAL ROWS,VOLUME CONTROL,Plan sheet,Schedule sheet,Schedule,Status,Notes,Workflow",
+  "page_errors": [],
+  "console_errors": [],
+  "artifacts": [
+    "01-agent-result.png",
+    "02-takeoff-table.png",
+    "02-source-comparison.png",
+    "02a-plan-match-source.png",
+    "02b-schedule-row-source.png",
+    "03-workflow-review.png",
+    "04-sequence-reader.png",
+    "complete-bas-takeoff.csv",
+    "bas-evidence-and-history.takeoff.json"
+  ]
+}

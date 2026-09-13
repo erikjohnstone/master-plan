@@ -1,0 +1,158 @@
+{
+  "schema": "opentakeoff.control_schematic_ground_truth.v1",
+  "source_pdf": "raw/federal-attachment4-mechanical.pdf",
+  "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "review_basis": "Human visual review of rendered vector PDF sheets M8.3, M8.4, M8.7 and M8.8 (PDF pages 19, 20, 23 and 24). M8.3 and M8.4 each contain one hydronic control diagram, point-function schedule and authored SOO. M8.7 contains three vertically stacked VAV control details; only the upper and lower details have authored SEQUENCE OF OPERATION(S) headings. M8.8 contains eight authored control-diagram details; six have adjacent authored SOOs, while Lighting Control and Emergency Shutdown do not and are intentionally unbound. Expectations describe source truth, not prior engine output.",
+  "coordinate_frame": "render_scale_2_image_px_origin_top_left",
+  "expected_total_schematics": 13,
+  "pages": [
+    {
+      "page": 19,
+      "sheet_number": "M8.3",
+      "sequence_titles": [
+        "CHILLED WATER SYSTEM - SEQUENCE OF OPERATION"
+      ],
+      "control_diagram_titles": [
+        "CHILLED WATER SYSTEM - CONTROL DIAGRAM"
+      ],
+      "require_horizontal_title_evidence": true,
+      "expected_sequence_bindings": {
+        "CHILLED WATER SYSTEM - CONTROL DIAGRAM": [
+          "CHILLED WATER SYSTEM - SEQUENCE OF OPERATION"
+        ]
+      },
+      "required_diagram_labels": [
+        "CH-1",
+        "CWP-1",
+        "CWP-2",
+        "AHU-1",
+        "FM",
+        "DPT"
+      ]
+    },
+    {
+      "page": 20,
+      "sheet_number": "M8.4",
+      "sequence_titles": [
+        "HEATING HOT WATER SYSTEM - SEQUENCE OF OPERATION"
+      ],
+      "control_diagram_titles": [
+        "BOILER SYSTEM - CONTROL DIAGRAM"
+      ],
+      "require_horizontal_title_evidence": true,
+      "expected_sequence_bindings": {
+        "BOILER SYSTEM - CONTROL DIAGRAM": [
+          "HEATING HOT WATER SYSTEM - SEQUENCE OF OPERATION"
+        ]
+      },
+      "required_diagram_labels": [
+        "B-1",
+        "B-2",
+        "HWP-1",
+        "FM",
+        "DPT"
+      ]
+    },
+    {
+      "page": 23,
+      "sheet_number": "M8.7",
+      "sequence_titles": [
+        "SEQUENCE OF OPERATION",
+        "SEQUENCE OF OPERATIONS"
+      ],
+      "control_diagram_titles": [
+        "CONSTANT AIR VOLUME BOX - CONTROL DIAGRAM",
+        "VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM",
+        "DUAL MAXIMUM VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM"
+      ],
+      "require_horizontal_title_evidence": true,
+      "expected_sequence_refs": {
+        "CONSTANT AIR VOLUME BOX - CONTROL DIAGRAM": [
+          {
+            "page": 23,
+            "title": "SEQUENCE OF OPERATION"
+          }
+        ],
+        "DUAL MAXIMUM VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM": [
+          {
+            "page": 23,
+            "title": "SEQUENCE OF OPERATIONS"
+          }
+        ]
+      },
+      "expected_sequence_binding_status": {
+        "VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM": "unbound"
+      },
+      "required_diagram_labels": [
+        "T-5",
+        "MD-4",
+        "V-4",
+        "T-6",
+        "T-7",
+        "T-9",
+        "MD-5",
+        "V-5",
+        "T-10",
+        "T-11"
+      ]
+    },
+    {
+      "page": 24,
+      "sheet_number": "M8.8",
+      "sequence_titles": [
+        "TOILET EXHAUST FANS - SEQUENCE OF OPERATION:",
+        "MECHANICAL ROOM EXHAUST FAN - SEQUENCE OF OPERATION:",
+        "UNIT HEATER - SEQUENCE OF OPERATION:",
+        "FAN COIL UNIT - SEQUENCE OF OPERATION:",
+        "DX SPLIT SYSTEM - SEQUENCE OF OPERATION:",
+        "FINNED TUBE RADIATOR - SEQUENCE OF OPERATION:"
+      ],
+      "control_diagram_titles": [
+        "TOILET EXHAUST FANS - CONTROL DIAGRAM",
+        "MECHANICAL ROOM EXHAUST FAN - CONTROL DIAGRAM",
+        "UNIT HEATER - CONTROL DIAGRAM",
+        "FAN COIL UNIT - CONTROL DIAGRAM",
+        "FINNED TUBE RADIATOR - CONTROL DIAGRAM",
+        "DX SPLIT SYSTEM - CONTROL DIAGRAM",
+        "LIGHTING CONTROL DIAGRAM",
+        "EMERGENCY SHUTDOWN - CONTROL DIAGRAM"
+      ],
+      "require_horizontal_title_evidence": true,
+      "expected_sequence_bindings": {
+        "TOILET EXHAUST FANS - CONTROL DIAGRAM": [
+          "TOILET EXHAUST FANS - SEQUENCE OF OPERATION:"
+        ],
+        "MECHANICAL ROOM EXHAUST FAN - CONTROL DIAGRAM": [
+          "MECHANICAL ROOM EXHAUST FAN - SEQUENCE OF OPERATION:"
+        ],
+        "UNIT HEATER - CONTROL DIAGRAM": [
+          "UNIT HEATER - SEQUENCE OF OPERATION:"
+        ],
+        "FAN COIL UNIT - CONTROL DIAGRAM": [
+          "FAN COIL UNIT - SEQUENCE OF OPERATION:"
+        ],
+        "FINNED TUBE RADIATOR - CONTROL DIAGRAM": [
+          "FINNED TUBE RADIATOR - SEQUENCE OF OPERATION:"
+        ],
+        "DX SPLIT SYSTEM - CONTROL DIAGRAM": [
+          "DX SPLIT SYSTEM - SEQUENCE OF OPERATION:"
+        ]
+      },
+      "expected_sequence_binding_status": {
+        "LIGHTING CONTROL DIAGRAM": "unbound",
+        "EMERGENCY SHUTDOWN - CONTROL DIAGRAM": "unbound"
+      },
+      "required_diagram_labels": [
+        "T-1",
+        "T-4",
+        "T-13",
+        "V-1",
+        "V-3",
+        "CSR",
+        "SW-1",
+        "L-1",
+        "L-7"
+      ]
+    }
+  ]
+}

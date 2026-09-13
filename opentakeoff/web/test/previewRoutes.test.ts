@@ -18,6 +18,7 @@ function fakeServer() {
 const ROUTES = [
   "/__ot/sheet-graph",
   "/__ot/compile-corpus-takeoff",
+  "/__ot/complete-bas-takeoff",
   "/__ot/sweep-schedule-row",
   "/__ot/symbol-sweep",
   "/__ot/count-marks",

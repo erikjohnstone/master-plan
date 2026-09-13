@@ -39,6 +39,8 @@ import ToolMenu from "../components/ToolMenu.jsx";
 import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
+import { takeoffNavigationBadge } from "../lib/completeBasPresentation.js";
+import { renderPdfCitationPreview } from "../lib/citationComparison.js";
 import { assertBasAssignmentUpdate } from "../lib/basAssignmentDemandContract.ts";
 import { assertBasAssemblyCalculationUpdate } from "../lib/basAssemblyQuantityContract.ts";
 import { applyBasAssemblyReview } from "../lib/basAssemblyReview.ts";
@@ -632,6 +634,14 @@ export default function TakeoffCanvas() {
   const finishedTakeoffLineCount = useMemo(
     () => compileAgentTakeoff(agentTakeoffRows).length,
     [agentTakeoffRows],
+  );
+  // SHOULD THIS BE ON THE SHARED PATH? No: extraction truth remains unchanged;
+  // this prevents the canvas chrome from presenting unlike BAS record types as
+  // one quantity after a consolidated run.
+  const takeoffBadgeLabel = takeoffNavigationBadge(
+    lastCorpusTakeoffMeta,
+    finishedTakeoffLineCount,
+    agentTakeoffRows.length > 0,
   );
   // Demo / Playwright: seed or open Takeoff without a full agent run.
   useEffect(() => {
@@ -7461,6 +7471,83 @@ export default function TakeoffCanvas() {
     return finishResult(await res.json());
   }
 
+  async function fetchProductionCompleteBasTakeoff(opts = {}) {
+    const requestEpoch = ++basCompileEpochRef.current;
+    const loadEpoch = basLoadEpochRef.current;
+    const sourceSignature = basSourceSignatureRef.current;
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    if (!names.length) throw new Error("No PDF loaded");
+    const onProgress = typeof opts.onProgress === "function" ? opts.onProgress : null;
+    const fd = new FormData();
+    if (opts.bas_math != null) fd.append("bas_math", JSON.stringify(opts.bas_math));
+    if (opts.categories?.length) fd.append("categories", opts.categories.join(","));
+    if (opts.evaluationFast) fd.append("evaluationFast", "1");
+    const basShaToName = new Map();
+    for (const name of names) {
+      const bytes = await store.loadPdfData(name);
+      try { basShaToName.set(await sha256Hex(bytes), name); } catch { /* preserve unknown identities */ }
+      fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
+    }
+    onProgress?.({
+      phase: "upload",
+      message: `Uploading ${names.length} plan PDF${names.length === 1 ? "" : "s"} once for the complete BAS takeoff…`,
+    });
+    const res = await fetch("/__ot/complete-bas-takeoff", {
+      method: "POST",
+      body: fd,
+      headers: onProgress ? { Accept: "application/x-ndjson" } : undefined,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `complete-bas-takeoff HTTP ${res.status}`);
+    }
+    let batch = null;
+    const ctype = String(res.headers.get("content-type") || "");
+    if (onProgress && /ndjson/i.test(ctype) && res.body) {
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = "";
+      const consume = (line) => {
+        if (!line.trim()) return;
+        const msg = JSON.parse(line);
+        if (msg.type === "progress") onProgress(msg);
+        else if (msg.type === "result") batch = msg.result;
+        else if (msg.type === "error") throw new Error(msg.error || "complete BAS takeoff failed");
+      };
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split("\n");
+        buf = lines.pop() || "";
+        for (const line of lines) consume(line);
+      }
+      if (buf.trim()) consume(buf.trim());
+    } else {
+      batch = await res.json();
+    }
+    if (!batch || batch.schema_version !== "opentakeoff.complete_bas_batch.v1") {
+      throw new Error("Complete BAS endpoint returned an invalid result.");
+    }
+    if (requestEpoch !== basCompileEpochRef.current || loadEpoch !== basLoadEpochRef.current
+        || sourceSignature !== basSourceSignatureRef.current) {
+      throw new Error("The drawing set or saved workspace changed during BAS compilation. Run it again for the current project.");
+    }
+    // Presentation aliases only. The server keeps content-addressed filenames
+    // for cache identity; the canvas must navigate by the user's real names.
+    remapGraphSheetKeys(batch, basShaToName);
+    for (const compiled of Object.values(batch.compiles || {})) {
+      if (compiled?.bas_workflow) {
+        await verifyBasWorkflow(compiled.bas_workflow);
+        for (const capture of compiled.bas_workflow.captures) for (const source of capture.sources) {
+          if (basShaToName.has(source.sha256)) source.names = [basShaToName.get(source.sha256)];
+        }
+      }
+      basResultForCanvas(compiled, basShaToName);
+    }
+    return batch;
+  }
+
   // Single real fetch per (sig), however many callers want the production
   // graph at once — see agentGraphInFlightRef's own comment for the real bug
   // this closes. A resolved cache hit returns synchronously (well, in a
@@ -7904,39 +7991,23 @@ export default function TakeoffCanvas() {
     }
   }
 
-  async function agentCompileCorpusTakeoff(kind, opts = {}) {
-    // Same Session+ODL+compileCorpusTakeoff path as MCP — never geometric-only.
-    // Stream OT_PROGRESS phases into the Agent status/log so a long compile
-    // does not look frozen ("nothing is working").
-    const reportProgress = (p) => {
-      const message = String(p?.message || "Compiling the full takeoff…");
-      setAgentStatus(message);
-      setAgentLog((l) => {
-        const next = { kind: "progress", text: message };
-        const last = l[l.length - 1];
-        if (last?.kind === "progress" && last.text === message) return l;
-        return [...l.slice(-199), next];
-      });
-    };
-    let compiled;
-    try {
-      compiled = await fetchProductionCorpusTakeoff(kind, {
-        service: opts.service || null,
-        bas_math: opts.bas_math,
-        onProgress: reportProgress,
-      });
-    } catch (e) {
-      // If the production endpoint is down, refuse rather than silently under-count.
-      return {
-        error: `Production compile (Session+ODL) failed: ${e?.message || e}. `
-          + "UI must use the same graph pipeline as MCP — geometric-only fallback is disabled for compile_corpus_takeoff.",
-      };
-    }
+  function reportAgentTakeoffProgress(p) {
+    const message = String(p?.message || "Compiling the full takeoff…");
+    setAgentStatus(message);
+    setAgentLog((l) => {
+      const next = { kind: "progress", text: message };
+      const last = l[l.length - 1];
+      if (last?.kind === "progress" && last.text === message) return l;
+      return [...l.slice(-199), next];
+    });
+  }
+
+  async function finalizeAgentCompiledTakeoff(compiled, opts = {}) {
     if (compiled?.error) return compiled;
     if (!compiled?.takeoff_id && !compiled?.kind) {
       return { error: "Production compile returned an empty result." };
     }
-    reportProgress({
+    reportAgentTakeoffProgress({
       phase: "panel",
       message: "Opening Takeoff with contractor columns and cites…",
     });
@@ -7998,6 +8069,88 @@ export default function TakeoffCanvas() {
     };
   }
 
+  async function agentCompileCorpusTakeoff(kind, opts = {}) {
+    // Same Session+ODL+compileCorpusTakeoff path as MCP — never geometric-only.
+    // Stream OT_PROGRESS phases into the Agent status/log so a long compile
+    // does not look frozen ("nothing is working").
+    let compiled;
+    try {
+      compiled = await fetchProductionCorpusTakeoff(kind, {
+        service: opts.service || null,
+        bas_math: opts.bas_math,
+        onProgress: reportAgentTakeoffProgress,
+      });
+    } catch (e) {
+      // If the production endpoint is down, refuse rather than silently under-count.
+      return {
+        error: `Production compile (Session+ODL) failed: ${e?.message || e}. `
+          + "UI must use the same graph pipeline as MCP — geometric-only fallback is disabled for compile_corpus_takeoff.",
+      };
+    }
+    return finalizeAgentCompiledTakeoff(compiled, opts);
+  }
+
+  /**
+   * SHOULD THIS BE ON THE SHARED PATH? Split by responsibility. The endpoint
+   * executes the canonical compilers and reconcile in one shared Session;
+   * this browser adapter only feeds those unchanged results into existing UI
+   * state and downloads. No extraction, matching, quantity, cite or bbox rule
+   * is implemented here.
+   */
+  async function agentCompileCompleteBasTakeoff(opts = {}) {
+    let batch;
+    try {
+      // If the background schedule index is still building, join that exact
+      // in-flight request before starting the batch. Otherwise two cold CLI
+      // processes can build the same 65+ page graph concurrently, doubling
+      // CPU and making an early Agent prompt slower than simply waiting for
+      // the already-visible indexing state to become ready.
+      const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
+      reportAgentTakeoffProgress({
+        phase: "graph",
+        message: "Confirming the shared schedule index is ready…",
+      });
+      await getOrFetchProductionGraph(sig);
+      batch = await fetchProductionCompleteBasTakeoff({
+        bas_math: opts.bas_math,
+        categories: opts.categories,
+        evaluationFast: opts.evaluationFast === true,
+        onProgress: reportAgentTakeoffProgress,
+      });
+    } catch (e) {
+      return {
+        error: `Production complete BAS compile (shared Session+ODL) failed: ${e?.message || e}. `
+          + "No partial or browser-only quantity fallback was released.",
+      };
+    }
+    const compiles = {};
+    for (const kind of batch.compile_order || []) {
+      compiles[kind] = await finalizeAgentCompiledTakeoff(batch.compiles?.[kind], {
+        download: opts.download === true,
+      });
+    }
+    const reconcile = batch.reconcile;
+    if (reconcile && !reconcile.error && Array.isArray(reconcile.rows)) {
+      const csv = reconcileRowsToCsv(reconcile.rows);
+      if (opts.download === true && reconcile.rows.length) {
+        downloadText(`${exportBaseName()}.reconcile-all.csv`, csv, "text/csv");
+      }
+      pushReconcileToTakeoffPanel(reconcile, null);
+      batch.reconcile = { ...reconcile, csv, path: "production_session_batch" };
+      reportAgentTakeoffProgress({
+        phase: "reconcile",
+        message: `Reconciliation complete — ${reconcile.rows.length} schedule rows reviewed.`,
+      });
+    }
+    return {
+      schema_version: batch.schema_version,
+      compile_order: batch.compile_order,
+      compiles,
+      control_schematics: batch.control_schematics,
+      reconcile: batch.reconcile,
+    };
+  }
+
   /** SHOULD THIS BE ON THE SHARED PATH? Split by responsibility. The status
    * projection is shared (inspectBasWorkflow); opening React view state is
    * surface-specific and cannot change retained BAS truth. */
@@ -8024,6 +8177,7 @@ export default function TakeoffCanvas() {
       bas_math: presentation.bas_math || null,
       coverage: presentation.coverage || null,
     });
+    setBasViewState(previous => ({ ...previous, takeoffTab: "takeoff" }));
     setShowTakeoffData(true);
     return { presented: true, kind: presentation.kind, changed_takeoff_truth: false };
   }
@@ -8031,6 +8185,7 @@ export default function TakeoffCanvas() {
   function agentOpenBasWorkspace(destination) {
     if (!basWorkflowRef.current) return { error: "No retained BAS workflow is open. Compile a BAS takeoff first." };
     const routes = {
+      takeoff_summary: { takeoffTab: "takeoff" },
       point_soo: { takeoffTab: "points", mode: "sequences", sequenceScroll: 0 },
       equipment_templates: { takeoffTab: "equipment", equipment: { assemblyOverview: false, engineeringOverview: false } },
       assemblies_responsibility: { takeoffTab: "equipment", equipment: { assemblyOverview: true, engineeringOverview: false } },
@@ -8154,6 +8309,7 @@ export default function TakeoffCanvas() {
   useEffect(() => {
     window.__opentakeoff = {
       compileCorpusTakeoff: (kind, opts) => agentCompileCorpusTakeoff(kind, opts),
+      compileCompleteBasTakeoff: (opts) => agentCompileCompleteBasTakeoff(opts),
       analyzeControlSchematics: () => agentAnalyzeControlSchematics(),
       reconcileSchedulePlan: (opts) => agentReconcileSchedulePlan(opts),
       showCompiledTakeoff,
@@ -9023,6 +9179,7 @@ export default function TakeoffCanvas() {
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
       compileCorpusTakeoff: agentCompileCorpusTakeoff,
+      compileCompleteBasTakeoff: agentCompileCompleteBasTakeoff,
       analyzeControlSchematics: agentAnalyzeControlSchematics,
       inspectBasWorkflow: agentInspectBasWorkflow,
       presentCompleteBasTakeoff: agentPresentCompleteBasTakeoff,
@@ -11048,7 +11205,7 @@ export default function TakeoffCanvas() {
             <nav className="workspace-primary" aria-label="Workspace">
           <button type="button" onClick={() => setShowTakeoffData(true)} name="open-takeoff" data-workspace-nav="Takeoff" aria-pressed={showTakeoffData}
             title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export.">
-            <Icon name="takeoffs" size={15} /><span>Takeoff</span>{(finishedTakeoffLineCount > 0 || agentTakeoffRows.length > 0) && <small>{finishedTakeoffLineCount || "data"}</small>}
+            <Icon name="takeoffs" size={15} /><span>Takeoff</span>{takeoffBadgeLabel && <small>{takeoffBadgeLabel}</small>}
           </button>
             </nav>
         {cluster("Edit", <>
@@ -13056,6 +13213,7 @@ export default function TakeoffCanvas() {
             onClose={() => setAgentOpen(false)}
             onOpenTakeoff={() => setShowTakeoffData(true)}
             takeoffRowCount={finishedTakeoffLineCount}
+            takeoffBadgeLabel={lastCorpusTakeoffMeta?.kind === "complete_bas_takeoff" ? takeoffBadgeLabel : null}
             runHistory={runHistory}
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
@@ -13363,6 +13521,44 @@ export default function TakeoffCanvas() {
             setAgentTakeoffRows((rows) => rows.filter((r) => !ids.has(r.id)));
           }}
           onClose={() => setShowTakeoffData(false)}
+          onCompareCitations={async ({ plan, schedule, tag, line }) => {
+            if (!plan?.sheet_id || !plan?.bbox_px || !schedule?.sheet_id || !schedule?.bbox_px) {
+              const error = 'This row does not retain both exact source boxes, so comparison was refused.';
+              setCommitMsg(error);
+              return { error };
+            }
+            const preview = async (citation, kind) => {
+              const source = parseSheetKey(citation.sheet_id);
+              const doc = await docFor(source.file);
+              if (!doc || source.page < 1 || source.page > doc.numPages) {
+                throw new Error(`Source sheet ${citation.sheet_id} is not loaded.`);
+              }
+              const pdfPage = await doc.getPage(source.page);
+              const rendered = await renderPdfCitationPreview(pdfPage, citation.bbox_px, {
+                renderScale: RENDER_SCALE,
+                color: kind === 'plan' ? '#1f3fc7' : '#c47a10',
+                kind,
+              });
+              return { ...rendered, citation, sheet_id: citation.sheet_id, sheet_label: tabLabel(citation.sheet_id) };
+            };
+            try {
+              const [planPreview, schedulePreview] = await Promise.all([
+                preview(plan, 'plan'), preview(schedule, 'schedule'),
+              ]);
+              return {
+                tag: tag || plan.tag || schedule.tag || '', plan: planPreview, schedule: schedulePreview,
+                facts: {
+                  status: line?.status || null,
+                  scheduled_qty: line?.scheduled_qty ?? null,
+                  installed_qty: line?.installed_qty ?? null,
+                },
+              };
+            } catch (error) {
+              const message = error?.message || String(error);
+              setCommitMsg(`Could not compare sources: ${message}`);
+              return { error: message };
+            }
+          }}
           onOpenCitation={async (row, { originalFallback = false } = {}) => {
             if (row?.page_id) {
               try {
