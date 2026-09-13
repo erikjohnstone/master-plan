@@ -1842,7 +1842,7 @@ discriminator: *before treating a column as an identifier, a span as a title, or
 marker, test the property that actually distinguishes it* — cardinality for an identifier,
 band-fill ratio for a title, column population for a data row.
 
-### B-26 — a real, wide, room-keyed table (not equipment-mark-keyed) is completely dropped, and a sibling table over-counts a title-block notes line as a data row (NOT FIXED — found, traced, disclosed)
+### B-26 — a real, wide, room-keyed table (not equipment-mark-keyed) is completely dropped, and a sibling table over-counts a title-block notes line as a data row (PARTIALLY FIXED 2026-09-13 — phantom row closed as a side effect, the real miss traced but not yet fixed)
 
 **Where:** `01_NY_VA_Northport_Dialysis_100CD.pdf#88` (sheet M701, "MECHANICAL
 SCHEDULES") — the sole dense mechanical-schedule sheet in this 162-sheet
@@ -1925,6 +1925,101 @@ duplicate room name, `CLASSROOM 135`, confirmed present twice at
 different y-positions under two different zones, ruled out as the
 source of the miscount. Found alongside B-31's own new row-truncation
 and missing-table findings on the same document.
+
+**PARTIAL FIX 2026-09-13 — root cause of the VENTILATION INDEX miss now
+precisely traced (not fixed in code); the EQUIPMENT STEAM TRAP phantom
+row confirmed already closed as a side effect of other work this
+session.**
+
+**Phantom-row half — closed, mechanism not separately isolated.**
+Re-running `production-graph-cli.mjs --mode graph` against
+`01_NY_VA_Northport_Dialysis_100CD.pdf` (`OPENTAKEOFF_GRAPH_TRACE=1`,
+cache cleared first) now reports `rows: 1` for EQUIPMENT STEAM TRAP,
+matching the real, hand-counted count exactly — the `"NOTES FOR
+EQUIPMENT STEAM TRAP:"` line below the table is no longer being pulled
+in as a phantom second row. This document was not touched directly by
+any fix landed this session; the most likely explanation is a side
+effect of B-18's `split_unruled_header_row()` change in `celltext.py`
+(which changes how an oversized/adjacent text band gets attributed to a
+table's own face set) or of B-40's `rulelinebox.py` coordinate-scale
+fix altering which rows a ruled-line region considers "inside" its own
+box. The causal mechanism was not isolated to a specific line of code —
+this entry records the observed before/after (`rows: 2` → `rows: 1`),
+not a traced fix, in keeping with this file's own standing rule against
+asserting a mechanism that wasn't read line-by-line. The three other
+recurring instances (`26_CA` p10, `032_PA` p2, `14_OR` p3) have **not**
+been re-checked against current code as part of this pass — still open
+to confirm whether they are also now closed as the same side effect.
+
+**Real miss half — root cause precisely traced, fix deliberately not
+attempted.** Using `vectorgrid.py`'s own `find_tables()` directly against
+page 88 (bypassing the app's downstream pipeline) confirms the VENTILATION
+INDEX table's geometry IS detected at the vector-grid layer: 13 real
+(non-raster) candidate regions on the page, including one with 889 cells
+matching the expected size of this table. The table never reaches the
+app's own output because `vectorTakeoffPipeline.ts`'s reconciliation step
+splits it into two separate geometric **blocks**, cut at a border-weight
+rule between the header and the data:
+
+- Upper block, `3x24` at `[149, 901, 2055, 1019]` (page points) — the
+  "VENTILATION INDEX" title plus its multi-tier grouped header (`Total
+  OACH` / `Total ACH` / `Design` groups, each with individual leaf
+  headers). Declined with reason **"no keyed data rows (kind equipment,
+  key column col 0)"** — this block has no data rows of its own to key
+  against, since they live in the sibling block below.
+- Lower block, `38x24` at `[149, 1019, 2055, 1834]` — the 37 real
+  room-keyed data rows (`A360F`/`STATION 1`, `A360G`/`STATION 2`, ...,
+  `A346`/`ADMIN HALLWAY`, plus one apparent subtotal/total row).
+  Declined with reason **"unknown kind and no title"** — this block has
+  the real data but no title or header of its own, because those live in
+  the sibling block above, and the reconciler has no path to attribute a
+  title/header from one block onto a different block.
+
+Both decline reasons were recovered via a `qpdf --pages 85-92` slice of
+the full 162-page document (the full-document trace's own
+`declined_regions` array is capped at 64 entries and had silently
+dropped this page's specific reasons in the whole-document run — a
+known limitation of that debug field, not a document-specific issue).
+The exact split point, `y=1019`, was independently confirmed by
+rendering the page: it lands precisely on the ruled line directly below
+the header row and above the first data row (`A360F`), visually matching
+a border-weight rule the same as those documented elsewhere in this
+codebase's own precedent for legitimate block cuts (e.g. "a second title
+band is a second table"). Here, though, the cut is a false positive:
+both blocks share the exact same column x-extent (`col0..col23` identical
+on both sides), which every other real multi-block split precedent in
+this codebase does NOT — a real second table has its own independent
+column layout, while this is one table's header separated from its own
+body by a rule weight that should not, in this case, cut a block.
+
+**Why this was not fixed in code this pass.** Unlike B-18 (a single
+oversized cell split entirely inside `celltext.py`, with no `vectorgrid.
+py` face/block geometry touched), closing this gap requires changing
+block/connected-component construction or a post-hoc block-merge step in
+`vectorgrid.py`/`vectorTakeoffPipeline.ts` — reattaching an
+adjacent header-only block to a title-less data-only block when their
+column extents match. This codebase's own historical documentation (STATE.
+md and this catalogue's own precedents) repeatedly flags block-merge
+logic as a real source of regression when done without a narrow,
+well-tested rule — "merge must leave a block tessellating," "one region
+now has ONE owner." A safe version of this fix (merge two vertically
+adjacent blocks only when their column edges match within tolerance AND
+the upper block has no data rows of its own AND the lower block has no
+title of its own) is a plausible next step, but was deliberately not
+written and shipped under this pass's time pressure without a
+corresponding regression test proving it doesn't fuse unrelated
+sibling tables elsewhere in the corpus (a real risk: the 9 correctly-
+extracted equipment schedules on this same page sit close enough
+together that an overly broad merge rule could wrongly fuse two of
+them). Left open as the precise, actionable next step for whoever picks
+this up: the fix is now a bounded, well-specified block-merge rule, not
+an open-ended "table detector doesn't see wide/room-keyed tables"
+mystery.
+
+**Verification of no regression from the phantom-row observation itself:**
+this pass made no code change for B-26 — the `rows: 2` → `rows: 1`
+change is a genuine measurement of already-shipped code (B-18/B-40),
+not a new edit, so no separate regression run was needed for it.
 
 ### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (NOT FIXED — found, traced, disclosed)
 
