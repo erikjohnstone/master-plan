@@ -1,0 +1,95 @@
+{
+  "schema_version": "bas_holdout_evaluation_v1",
+  "evaluated_utc": "2026-09-12T19:10:33.620Z",
+  "split": "new_workflow_holdout",
+  "rules_frozen_before_open": true,
+  "production_rules_changed_from_result": false,
+  "document": {
+    "id": "19__vol2__094",
+    "rank": 19,
+    "title": "Orange County Regional History Center HVAC",
+    "pdf_sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+    "pages": 9,
+    "bytes": 1963054,
+    "independent_record_sha256": "9bdb2c358626b78aebe1330a7ada8f6431637df637e526007c99e3b3dbdad5ef",
+    "independent_record_review_status": "complete_with_documented_source_limitations",
+    "independent_record_claim_is_reverified": false
+  },
+  "source_accounting": {
+    "pages": 9,
+    "spans": 2289,
+    "no_text_pages": 0,
+    "exhaustive_partition": {
+      "body_region_span_ids": 0,
+      "heading_only_span_ids": 0,
+      "ambiguous_span_ids": 0,
+      "unassigned_horizontal_span_ids": 2230,
+      "unsupported_span_ids": 59,
+      "blank_span_ids": 0
+    },
+    "source_hash_and_page_count_match": true,
+    "workflow_schema_and_fingerprints_pass": true
+  },
+  "point_lists": {
+    "truth_kind": "no_authored_point_table",
+    "expected_tables": 0,
+    "expected_rows": 0,
+    "expected_diagram_callouts_not_tables": 0,
+    "actual_matrices": 0,
+    "actual_rows": 0,
+    "actual_observations": 0,
+    "authored_table_matches": [],
+    "unmatched_actual_candidates": []
+  },
+  "sequences": {
+    "authored_titled_regions": 0,
+    "authored_title_matches": [],
+    "authored_sequence_inventory_items": 0,
+    "authored_summary_groups": 4,
+    "authored_summary_clauses": 0,
+    "actual_regions": [],
+    "actual_region_count": 0,
+    "actual_clause_count": 0,
+    "discovery_complete": false,
+    "interpretation_complete": false
+  },
+  "equipment_candidates": {
+    "authored_schedule_counts": {
+      "tables": 4,
+      "rows": 11,
+      "building_scoped_tag_identities_including_outlet_types": 11,
+      "other_scheduled_tag_identities": 11
+    },
+    "actual_tables": 4,
+    "actual_rows": 11,
+    "rows_with_issues": 0,
+    "issue_codes": [],
+    "installed_quantity_values": [
+      null
+    ]
+  },
+  "initial_human_in_loop_state": {
+    "review_events": 0,
+    "equipment_events": 0,
+    "assembly_events": 0,
+    "engineering_events": 0,
+    "project_complete": false,
+    "installed_quantity": null,
+    "findings": 20,
+    "blockers": 20,
+    "findings_by_domain_severity_code": {
+      "points:blocker:SOURCE_DISCOVERY_COVERAGE_UNVERIFIED": 1,
+      "sequences:blocker:discovery_incomplete": 1,
+      "sequences:blocker:unassigned_horizontal_spans": 9,
+      "sequences:blocker:unsupported_spans": 8,
+      "sources:blocker:source_inventory_not_byte_verified": 1
+    }
+  },
+  "performance": {
+    "graph_ms": 9464,
+    "compile_and_capture_ms": 564,
+    "total_ms": 10574,
+    "peak_rss_bytes": 835321856
+  },
+  "assessment_boundary": "Independent source facts versus frozen automatic capture. Unmatched candidates require source review; they are not automatically labeled false positives. No human applicability, assembly, responsibility, compatibility, revision, approval, or installed-count decision is manufactured by this audit."
+}

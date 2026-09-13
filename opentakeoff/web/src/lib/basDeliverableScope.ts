@@ -1,9 +1,9 @@
 /** SHOULD THIS BE ON THE SHARED PATH? Yes. Exact claim/dependency selection is
  * shared truth. This compiler neither changes quantities nor grants approval. */
 import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
-import { inventoryForVerifiedBasRevision } from './basRevisionInventory.ts';
+import { inventoryForVerifiedBasRevisionWithOptions, transferPreparedBasRevisionInventoryViews } from './basRevisionInventory.ts';
 import type { BasRevisionItem } from './basRevisionInventoryContract.ts';
-import { canonicalBasJson } from './basCanonical.ts';
+import { canonicalBasJson, canonicalBasJsonByteLength } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 import { BAS_DELIVERABLE_SCOPE_RULE, assertBasScopeSize, basDeliverableScopeSpecSchema,
   basDeliverableScopeSchema, basDeliverableTargetKey, type BasDeliverableScope, type BasDeliverableTarget } from './basDeliverableScopeContract.ts';
@@ -29,13 +29,14 @@ export async function buildBasDeliverableScope(raw: unknown, rawSpecification: u
 
 /** Internal operation-local reuse only: caller must already own and verify the
  * workflow. Public input always enters through buildBasDeliverableScope. */
-export async function deliverableScopeForVerifiedWorkflow(workflow: BasWorkflow, rawSpecification: unknown, signal?: AbortSignal): Promise<BasDeliverableScope> {
+export async function deliverableScopeForVerifiedWorkflow(workflow: BasWorkflow, rawSpecification: unknown, signal?: AbortSignal,
+  options: { retainPreparedReviewViews?: boolean; consumePreparedWorkflowReviewViews?: boolean } = {}): Promise<BasDeliverableScope> {
   const specification = basDeliverableScopeSpecSchema.parse(rawSpecification);
   specification.included.sort(sortTargets);
   specification.excluded.sort((a, b) => sortTargets(a.target, b.target));
   specification.excluded.forEach(e => e.evidence.sort((a, b) => lexical(canonicalBasJson(a), canonicalBasJson(b))));
   signal?.throwIfAborted();
-  const inventory = await inventoryForVerifiedBasRevision(workflow, specification.basis, signal);
+  const inventory = await inventoryForVerifiedBasRevisionWithOptions(workflow, specification.basis, signal, options);
   const items = new Map(inventory.items.map(i => [i.item_id, i]));
   const lookup = new Map(inventory.items.map(i => [key(i.capture_id, i.kind, i.subject_id), i]));
   const resolve = (t: BasDeliverableTarget) => {
@@ -144,6 +145,9 @@ export async function deliverableScopeForVerifiedWorkflow(workflow: BasWorkflow,
     approved: false as const, project_complete: false as const, installed_quantity: null,
   };
   signal?.throwIfAborted();
-  assertBasScopeSize(edges, memberships, new TextEncoder().encode(canonicalBasJson(projection)).byteLength);
-  return basDeliverableScopeSchema.parse({ ...projection, inventory });
+  assertBasScopeSize(edges, memberships, canonicalBasJsonByteLength(projection));
+  const result = basDeliverableScopeSchema.parse({ ...projection, inventory });
+  if (options.retainPreparedReviewViews)
+    transferPreparedBasRevisionInventoryViews(workflow, inventory, result.inventory);
+  return result;
 }

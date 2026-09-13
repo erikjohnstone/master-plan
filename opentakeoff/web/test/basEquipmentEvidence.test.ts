@@ -30,6 +30,16 @@ test('literal schedule fields survive without row-key substitution or installed 
   assert.equal(row.page_id, `sha256:${'a'.repeat(64)}:p1`);
 });
 
+test('public candidate build owns every table and source before its first asynchronous hash', async () => {
+  const sourceInput = structuredClone(sources), evidence = captureBasEquipmentTables([table(), { ...table(), building: 'B' }]);
+  const expected = await buildBasEquipmentCandidates(structuredClone(sources), structuredClone(evidence));
+  const pending = buildBasEquipmentCandidates(sourceInput, evidence);
+  sourceInput.pages[0].sheet_keys[0] = 'mutated-after-call.pdf';
+  evidence.tables[0].rows[0].cells['TAG NO.'].text = 'MUTATED-AFTER-CALL';
+  evidence.tables[1].sheet = 'foreign-after-call.pdf';
+  assert.deepEqual(await pending, expected);
+});
+
 test('missing/ambiguous designation and quantities remain visible; component quantities never become units', async () => {
   const raw = table();
   raw.rows[0].cells.QTY.text = '3.5';

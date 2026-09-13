@@ -16,6 +16,7 @@ import { createSyncStore } from '../src/lib/sync/syncStore.js';
 import { buildLocalFirstStore } from '../src/lib/sync/composite.js';
 import { buildSyncedWorkspaceStore } from '../src/lib/sync/workspaceComposite.js';
 import { assertBasSnapshotStorageBounds } from '../src/lib/basSnapshotStore.js';
+import { prepareBasSnapshotLifecycleEvent } from '../src/lib/basSnapshotLifecycle.ts';
 
 beforeEach(() => { globalThis.indexedDB = new IDBFactory(); });
 test('browser storage source limits retain the predeclared archive boundary without allocating giant test PDFs', () => {
@@ -84,6 +85,28 @@ test('atomic browser save/replay keeps exact payload, originals and seal, withou
   assert.equal(readBasSnapshotPlan(reopened).payload_json, canonicalBasJson(f.payload));
   assert.equal(await localStore.loadBasSnapshot(f.plan.snapshot_id), null); assert.deepEqual((await localStore.listBasSnapshots()).items, []);
   assert.equal(await localStore.loadBasSource(f.source), null);
+});
+
+test('snapshot lifecycle appends atomically, replays exactly and never changes working annotations', async () => {
+  const f = await fixture(), store = createLocalStore('lifecycle'); await store.saveAnnotations(f.payload);
+  await store.saveBasSnapshot(f.plan, async () => f.bytes);
+  const before = await store.loadAnnotations(), opened = await store.loadBasSnapshot(f.plan.snapshot_id);
+  assert.ok(opened);
+  const initial = await store.loadBasSnapshotLifecycle(opened);
+  assert.equal(initial.state.status, 'approved'); assert.deepEqual(initial.events, []);
+  const event = await prepareBasSnapshotLifecycleEvent(readBasSnapshotPlan(opened).record, [], {
+    operation_id: uuid(965), expected_head: initial.state.head, reviewer: 'Controlled estimator',
+    reason: 'Controlled revocation', declared_at: '2026-09-11T18:00:00.000Z', action: { kind: 'revoke' },
+  }, 'operator_input');
+  const receipt = await store.saveBasSnapshotLifecycle(opened, event);
+  assert.equal(receipt.status, 'revoked'); assert.equal(receipt.annotations_changed, false);
+  await store.saveBasSnapshotLifecycle(opened, event);
+  const replayed = await store.loadBasSnapshotLifecycle(opened);
+  assert.equal(replayed.state.status, 'revoked'); assert.deepEqual(replayed.events, [event]);
+  assert.deepEqual(await store.loadAnnotations(), before);
+  const second = { ...event, operation_id: uuid(966), event_id: 'f'.repeat(64), previous_event_id: event.event_id };
+  await assert.rejects(store.saveBasSnapshotLifecycle(opened, second));
+  assert.equal((await store.loadBasSnapshotLifecycle(opened)).events.length, 1);
 });
 
 test('same exact retry is idempotent; conflicting retry identity refuses without replacing the snapshot', async () => {

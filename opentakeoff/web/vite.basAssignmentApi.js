@@ -1,6 +1,8 @@
 /** HTTP/process transport only. No extraction, interpretation or arithmetic. */
 import { spawn } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { z } from 'zod';
+import { runBasRevisionOperation } from '../mcp/src/basRevisionOperations.ts';
 
 const mcpRoot = fileURLToPath(new URL('../mcp/', import.meta.url));
 const cli = fileURLToPath(new URL('../mcp/scripts/bas-assignment-cli.mts', import.meta.url));
@@ -26,7 +28,55 @@ export function basWorkflowReplayMiddleware(resolveLoader) {
   return basQuantityMiddleware(resolveLoader, 'workflow-replay');
 }
 export function basRevisionMiddleware(resolveLoader) {
-  return basQuantityMiddleware(resolveLoader, 'revision');
+  // Revision comparison is already an isolated, bounded shared service: every
+  // numeric result crosses the Python process boundary in basMath.ts. Running
+  // its TypeScript dispatcher in this server avoids starting and loading a
+  // second Node+tsx process for every Preview/Reopen click. MCP calls the exact
+  // same dispatcher directly. No comparison, source, or quantity rule lives in
+  // this browser transport.
+  void resolveLoader;
+  const LIMIT = 128 * 1024 * 1024;
+  return async (req, res, next) => {
+    if (req.url?.split('?')[0] !== '/__ot/bas-revision') return next();
+    if (req.method !== 'POST') return send(res, 405, { error: 'POST only' });
+    if (!/^application\/json(?:;|$)/i.test(req.headers['content-type'] || '')) return send(res, 415, { error: 'JSON required' });
+    try {
+      if (req.headers['sec-fetch-site'] === 'cross-site' || (req.headers.origin && new URL(req.headers.origin).host !== req.headers.host)) {
+        return send(res, 403, { error: 'Same-origin calculation required' });
+      }
+    } catch { return send(res, 403, { error: 'Invalid request origin' }); }
+    const controller = new AbortController();
+    let timedOut = false, cancelled = false;
+    const onClose = () => { cancelled = true; controller.abort(); };
+    res.on?.('close', onClose);
+    const timer = setTimeout(() => { timedOut = true; controller.abort(); }, 45_000);
+    try {
+      const chunks = [];
+      let size = 0;
+      for await (const chunk of req) {
+        size += chunk.length;
+        if (size > LIMIT) {
+          clearTimeout(timer); res.off?.('close', onClose);
+          return send(res, 413, { error: 'BAS revision input exceeds 128 MiB' });
+        }
+        chunks.push(chunk);
+      }
+      let decoded;
+      try { decoded = JSON.parse(Buffer.concat(chunks).toString('utf8')); }
+      catch { clearTimeout(timer); res.off?.('close', onClose); return send(res, 400, { error: 'Invalid JSON' }); }
+      const payload = z.object({ workflow: z.unknown(), request: z.unknown() }).strict().parse(decoded);
+      const result = await runBasRevisionOperation(payload.workflow, payload.request, 'operator_input', { signal: controller.signal });
+      if (cancelled) return;
+      const bytes = Buffer.byteLength(JSON.stringify(result));
+      if (bytes > LIMIT) return send(res, 502, { error: 'BAS revision output exceeds 128 MiB' });
+      clearTimeout(timer); res.off?.('close', onClose); send(res, 200, result);
+    } catch (error) {
+      clearTimeout(timer); res.off?.('close', onClose);
+      if (cancelled) return;
+      if (timedOut) return send(res, 504, { error: 'BAS revision calculation timed out; no result accepted' });
+      send(res, 422, { error: error instanceof z.ZodError ? 'Invalid BAS revision payload' : error?.message || 'BAS revision operation unavailable' });
+    }
+  };
 }
 
 function basQuantityMiddleware(resolveLoader, kind) {

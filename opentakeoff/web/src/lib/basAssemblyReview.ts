@@ -4,8 +4,10 @@ import { canonicalBasJson } from './basCanonical.ts';
 import { atLeastBasWorkflowRevision } from './basWorkflowRevision.ts';
 import { basEquipmentHead, basEquipmentRegister } from './basEquipmentReview.ts';
 import { basAssemblyReviewRequestSchema, basAssemblyReviewEventSchema, basAssemblyInterpretationFingerprint,
-  emptyBasAssemblyRegister, validateBasAssemblyRegister, type BasAssemblyReviewEvent } from './basAssemblyRegister.ts';
+  emptyBasAssemblyRegister, validateBasAssemblyRegister, prepareBasAssemblyRegisterValidatorForVerifiedEquipment,
+  type BasAssemblyReviewEvent } from './basAssemblyRegister.ts';
 import { basAssemblyRegisterSchema } from './basAssemblyRegister.ts';
+import type { BasEquipmentAssignmentView } from './basEquipmentRegister.ts';
 import { interpretBasComponentRequirements } from './basComponentRequirements.ts';
 import { z } from 'zod';
 
@@ -41,6 +43,19 @@ export function basAssemblyCalculationState(workflow: BasWorkflow, captureId: st
 /** Keep an old assembly readable after equipment changes; do not reinterpret it
  * against the new members or pretend an old decision was rebased. */
 export async function basAssemblyView(workflow: BasWorkflow, captureId: string) {
+  return buildBasAssemblyView(workflow, captureId);
+}
+
+/** Internal projection seam for a workflow already verified by the owning
+ * operation. Reuse is allowed only when the view is for the exact equipment
+ * head pinned by the assembly; historical/stale heads take the full path. */
+export async function basAssemblyViewForVerifiedEquipment(workflow: BasWorkflow, captureId: string,
+  equipmentView: BasEquipmentAssignmentView) {
+  return buildBasAssemblyView(workflow, captureId, equipmentView);
+}
+
+async function buildBasAssemblyView(workflow: BasWorkflow, captureId: string,
+  verifiedEquipment?: BasEquipmentAssignmentView) {
   const capture = workflow.captures.find(c => c.capture_id === captureId);
   if (!capture?.narrative_sources || !capture.equipment_sources) throw new Error('Assembly review requires retained equipment and narrative sources');
   const event = workflow.assembly_events?.filter(e => e.capture_id === captureId).at(-1) ?? null;
@@ -48,8 +63,11 @@ export async function basAssemblyView(workflow: BasWorkflow, captureId: string) 
   const equipment = event ? workflow.equipment_events?.find(e => e.event_id === event.expected_equipment_head && e.capture_id === captureId)?.register
     : basEquipmentRegister(workflow, captureId);
   if (!equipment) throw new Error('Assembly history has no retained equipment decision');
-  const review = await validateBasAssemblyRegister(capture.narrative_sources, capture.equipment_sources, capture.points,
-    equipment, event?.register ?? emptyBasAssemblyRegister());
+  const review = verifiedEquipment && (!event || event.expected_equipment_head === head)
+    ? (await prepareBasAssemblyRegisterValidatorForVerifiedEquipment(capture.narrative_sources, verifiedEquipment))(
+      event?.register ?? emptyBasAssemblyRegister())
+    : await validateBasAssemblyRegister(capture.narrative_sources, capture.equipment_sources, capture.points,
+      equipment, event?.register ?? emptyBasAssemblyRegister());
   return { ...review, capture_id: captureId, review_head: event?.event_id ?? null, review_origin: event?.origin ?? null,
     equipment_head: event?.expected_equipment_head ?? head, current_equipment_head: head,
     dependency_status: !event ? 'not_reviewed' as const : event.expected_equipment_head === head ? 'current_dependencies' as const : 'stale_dependencies' as const,

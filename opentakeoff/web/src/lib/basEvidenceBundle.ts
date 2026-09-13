@@ -7,8 +7,9 @@ import { basSourceInventory, basRetainedSourceSchema, verifyBasSourceBytes, type
 import { parseTakeoffImport } from './importTakeoff.js';
 import { sha256Hex } from './graphKeys.js';
 import { basWorkflowReplayReceiptSchema } from './basWorkflowReplay.ts';
-import { BAS_SNAPSHOT_JSON_LIMIT, basSnapshotRecordSchema, readBasSnapshotPlan, assertBasSnapshotPlan, verifyBasSnapshot,
-  type BasSnapshotPlan, type BasSnapshotRecord } from './basSnapshot.ts';
+import { BAS_SNAPSHOT_JSON_LIMIT, basSnapshotRecordSchema, readBasSnapshotArchivePlan, assertBasSnapshotPlan,
+  prepareBasSnapshotArchiveInput, verifyBasSnapshotArchiveInput,
+  type BasSnapshotPlan, type BasSnapshotRecord, type BasSnapshotArchiveInput } from './basSnapshot.ts';
 import type { BasReadinessIO } from './basReadiness.ts';
 
 export const BAS_BUNDLE_LIMITS = Object.freeze({ sources: 10000, pdf: 512 * 1024 ** 2,
@@ -58,18 +59,28 @@ export async function prepareBasEvidenceBundle(rawPayload: unknown, guard: Guard
 /** Requires owned, freshly verified approval/reopen authority, never a caller's
  * saved ready flag. Actual durable delivery remains the transport's job. */
 export async function prepareBasSnapshotBundle(plan: BasSnapshotPlan, guard: Guard = noop) {
-  const owned = readBasSnapshotPlan(plan);
+  const owned = readBasSnapshotArchivePlan(plan);
   const current = () => { guard(); assertBasSnapshotPlan(plan); };
-  const result = await prepareArchive(JSON.parse(owned.payload_json), current, owned.record);
+  const result = await prepareArchive(null, current, owned.record, owned.payload_json, owned.inventory);
   return { ...result, manifest: basSnapshotBundleManifestSchema.parse(result.manifest) };
 }
-async function prepareArchive(rawPayload: unknown, guard: Guard, snapshot?: BasSnapshotRecord) {
+async function prepareArchive(rawPayload: unknown, guard: Guard, snapshot?: BasSnapshotRecord,
+  ownedPayloadJson?: string, ownedInventory?: BasSourceInventoryItem[]) {
   guard();
-  const bytes = encode(structuredClone(rawPayload));
+  // An owned snapshot plan already froze canonical payload JSON. Reuse those
+  // exact immutable bytes instead of materializing and serializing two objects.
+  const bytes = ownedPayloadJson === undefined ? encode(rawPayload) : new TextEncoder().encode(ownedPayloadJson);
   if (bytes.byteLength > BAS_BUNDLE_LIMITS.payload) throw new Error('BAS bundle takeoff JSON exceeds the supported size limit');
-  const payload = parseTakeoffImport(decoder.decode(bytes));
-  if (!payload.bas_workflow) throw new Error('BAS evidence bundle requires saved BAS history');
-  const inventory = await basSourceInventory(payload.bas_workflow); guard();
+  let inventory: BasSourceInventoryItem[];
+  if (ownedPayloadJson !== undefined) {
+    if (!snapshot || !ownedInventory) throw new Error('BAS snapshot archive requires owned source inventory');
+    inventory = ownedInventory;
+  } else {
+    const payload = parseTakeoffImport(decoder.decode(bytes));
+    if (!payload.bas_workflow) throw new Error('BAS evidence bundle requires saved BAS history');
+    inventory = await basSourceInventory(payload.bas_workflow);
+  }
+  guard();
   if (!inventory.length || inventory.length > BAS_BUNDLE_LIMITS.sources) throw new Error('BAS bundle requires 1–10000 original PDFs');
   if (inventory.some(i => i.source.byte_length > BAS_BUNDLE_LIMITS.pdf)) throw new Error('An original PDF exceeds the BAS bundle size limit');
   const snapshotBytes = snapshot ? encode(snapshot) : null, disclosure = snapshot ? snapshotReadme : readme;
@@ -127,18 +138,23 @@ const u32 = (v: DataView, offset: number) => v.getUint32(offset, true);
 /** Random access reads never inflate untrusted input or hold all PDF entries. */
 export async function openBasEvidenceBundle(reader: BasBundleReader, guard: Guard = noop) {
   const result = await openArchive(reader, guard, 'backup');
+  if (!result.payload) throw new Error('BAS evidence bundle did not return its payload');
   return { manifest: basEvidenceBundleManifestSchema.parse(result.manifest), bundle_id: result.bundle_id,
     payload: result.payload, readSource: result.readSource, verifyOriginals: result.verifyOriginals };
 }
 /** Reopening verifies historical approval only. It neither restores annotations
  * nor approves a current project. Source IO is always bound to archive originals. */
-export async function openBasSnapshotBundle(reader: BasBundleReader, io: Pick<BasReadinessIO, 'replayCalculations'> = {}, signal?: AbortSignal) {
+export async function openBasSnapshotBundle(reader: BasBundleReader,
+  io: Pick<BasReadinessIO, 'replayCalculations' | 'replayPreparedCalculations'> = {}, signal?: AbortSignal) {
   const guard = () => signal?.throwIfAborted();
   const result = await openArchive(reader, guard, 'snapshot');
-  const plan = await verifyBasSnapshot(result.payload, result.snapshot_record, {
-    replayCalculations: io.replayCalculations, readSource: source => result.readSource(source.source_id),
+  if (!result.snapshot_input || !result.snapshot_record) throw new Error('BAS snapshot archive is incomplete');
+  const verified = await verifyBasSnapshotArchiveInput(result.snapshot_input, result.snapshot_record, {
+    replayCalculations: io.replayCalculations, replayPreparedCalculations: io.replayPreparedCalculations,
+    readSource: source => result.readSource(source.source_id),
   }, signal);
-  return { ...result, manifest: basSnapshotBundleManifestSchema.parse(result.manifest), plan,
+  const { snapshot_input: _input, ...publicResult } = result;
+  return { ...publicResult, payload: verified.payload, manifest: basSnapshotBundleManifestSchema.parse(result.manifest), plan: verified.plan,
     status: 'verified_historical_scope' as const, current_working_state: 'not_evaluated' as const, restored: false as const };
 }
 async function openArchive(reader: BasBundleReader, guard: Guard, purpose: 'backup' | 'snapshot') {
@@ -199,9 +215,19 @@ async function openArchive(reader: BasBundleReader, guard: Guard, purpose: 'back
   if (decoder.decode(manifestBytes) !== canonicalBasJson(manifest)) throw new Error('Noncanonical BAS archive manifest');
   const payloadBytes = await contents(manifest.payload.path);
   if (payloadBytes.length !== manifest.payload.byte_length || await sha256Hex(payloadBytes) !== manifest.payload.sha256) throw new Error('BAS archive takeoff hash/length mismatch');
-  const payload = parseTakeoffImport(decoder.decode(payloadBytes));
-  if (decoder.decode(payloadBytes) !== canonicalBasJson(payload)) throw new Error('Noncanonical BAS archive takeoff JSON');
-  const inventory = await basSourceInventory(payload.bas_workflow); guard();
+  const payloadJson = decoder.decode(payloadBytes);
+  let payload: ReturnType<typeof parseTakeoffImport> | null = null;
+  let snapshot_input: BasSnapshotArchiveInput | null = null;
+  let inventory: BasSourceInventoryItem[];
+  if (purpose === 'snapshot') {
+    const prepared = await prepareBasSnapshotArchiveInput(payloadJson);
+    snapshot_input = prepared.input; inventory = prepared.inventory;
+  } else {
+    payload = parseTakeoffImport(payloadJson);
+    if (payloadJson !== canonicalBasJson(payload)) throw new Error('Noncanonical BAS archive takeoff JSON');
+    inventory = await basSourceInventory(payload.bas_workflow);
+  }
+  guard();
   const expected = inventory.map(item => ({ ...item, path: `sources/${item.source.sha256}.pdf` }));
   const isSnapshot = manifest.schema_version === 'bas_snapshot_bundle_v1';
   if (canonicalBasJson(expected) !== canonicalBasJson(manifest.sources) || entries.size !== inventory.length + (isSnapshot ? 4 : 3)) throw new Error('BAS archive source inventory does not own every entry');
@@ -222,7 +248,7 @@ async function openArchive(reader: BasBundleReader, guard: Guard, purpose: 'back
     if (!item) throw new Error('BAS archive does not own the requested original');
     const bytes = await verifyBasSourceBytes(item.source, await contents(item.path)); guard(); return bytes;
   }
-  return { manifest: structuredClone(manifest), bundle_id: bundleId, payload: structuredClone(payload), snapshot_record, readSource,
+  return { manifest: structuredClone(manifest), bundle_id: bundleId, payload, snapshot_input, snapshot_record, readSource,
     async verifyOriginals() { for (const item of manifest.sources) { await readSource(item.source.source_id); } guard(); },
   };
 }

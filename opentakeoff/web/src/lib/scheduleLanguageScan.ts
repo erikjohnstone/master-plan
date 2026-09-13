@@ -69,7 +69,16 @@ export function scanPillarGapLanguage(spans: GraphSpan[]): PillarGapLanguageHit[
  *
  *  LEGEND / LIST / INDEX are excluded on purpose: a legend is not a schedule,
  *  and a drawing index is a table nobody takes off. */
-const SCHEDULE_CAPTION_RE = /^[A-Z0-9][A-Z0-9 ,.'&/()#-]{4,70}SCHEDULES?$/;
+const SCHEDULE_CAPTION_RE = /^[A-Z0-9][A-Z0-9 ,.'&/()#-]{4,70}SCHEDULES?(?: \([A-Z0-9 &'/-]{2,30}\))?$/;
+
+/** Some equipment tables are captioned as the collection they enumerate,
+ * without the literal word SCHEDULE. This is intentionally available only
+ * to `nearbyScheduleCaption`, after a real grid has already been detected;
+ * it does NOT widen the plan-sheet routing gate above. The terminal
+ * UNITS/EQUIPMENT noun plus an HVAC-system noun keeps ordinary drawing prose
+ * and callouts out. Real example: `SPLIT SYSTEM AIR CONDITIONING UNITS` on
+ * bldg5406 M-601, immediately beside a separately titled chiller schedule. */
+const EQUIPMENT_TABLE_CAPTION_RE = /^(?=[A-Z0-9 ,.'&/()#-]{8,78}$)(?=.*\b(?:AIR\s+CONDITIONING|AIR\s+HANDLING|FAN\s+COIL|CONDENSING|ROOFTOP|PACKAGED|CHILLER|BOILER|PUMP|VARIABLE\s+AIR\s+VOLUME|TERMINAL)\b)[A-Z0-9 ,.'&/()#-]*\b(?:UNITS?|EQUIPMENT)$/;
 
 /** A cross-reference is not a caption. Plan sheets are covered in notes like
  *  "SEE EQUIPMENT SCHEDULE" and "REFER TO PANEL SCHEDULE", which end in the
@@ -246,6 +255,194 @@ export function nearbyDrawingIndexCaptionText(spans: GraphSpan[], region: Bbox):
   for (const sp of near) { const t = spanText(sp); if (isDrawingIndexTitle(t)) return t; }
   for (const t of joinCaptionLines(near)) if (isDrawingIndexTitle(t)) return t;
   return null;
+}
+
+export interface NearbyScheduleCaption {
+  text: string;
+  bbox: Bbox;
+}
+
+const bboxForSpans = (spans: GraphSpan[]): Bbox => [
+  Math.min(...spans.map((sp) => sp.x)),
+  Math.min(...spans.map((sp) => sp.y)),
+  Math.max(...spans.map((sp) => sp.x + sp.w)),
+  Math.max(...spans.map((sp) => sp.y + sp.h)),
+];
+
+const compactCaption = (text: string): string => text.toUpperCase().replace(/[^A-Z0-9]+/g, "");
+
+function isScheduleCaptionText(text: string): boolean {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  return normalized.length >= 8
+    && normalized.length <= 78
+    && !CAPTION_XREF_RE.test(normalized)
+    && (SCHEDULE_CAPTION_RE.test(normalized) || EQUIPMENT_TABLE_CAPTION_RE.test(normalized));
+}
+
+const COMPLETE_CAPTION_HEAD_RE = /^(?:AIR|PACKAGED|SPLIT|FAN|PUMP|CHILLER|BOILER|GRILLE|REGISTER|DIFFUSER|LOUVER|EXPANSION|COMPRESSION|CONTROL|BAS|DDC|HVAC|VARIABLE|SUPPLY|RETURN|EXHAUST|HEATING|COOLING|CONDENSING|WATER|STEAM|ELECTRIC|GAS|ROOFTOP|UNIT|EQUIPMENT|MECHANICAL)\b/;
+
+function hasCompleteCaptionHead(text: string): boolean {
+  return COMPLETE_CAPTION_HEAD_RE.test(text.replace(/\s+/g, " ").trim());
+}
+
+function isVerticalCaptionSpan(sp: GraphSpan): boolean {
+  if (sp.rot != null) return Math.abs(sp.rot % 180) === 90;
+  return spanText(sp).length >= 2 && sp.h > Math.max(12, 1.8 * sp.w);
+}
+
+/** Recover the printed title physically attached to one already-detected
+ * schedule grid. CAD exports routinely place that title outside the ruled
+ * table and, for narrow schedule strips, rotate it 90 degrees and split it
+ * into several source runs ("PU" + "P SCHEDULE", "LOU" +
+ * "ER SCHEDULE"). ODL can therefore find the grid and rows correctly while
+ * naming it only MARK, P SCHEDULE, or nothing at all.
+ *
+ * This does not discover tables or alter cells. It only associates a strict,
+ * standalone, upper-case `... SCHEDULE` caption with a grid that has already
+ * been found, and returns the exact source bbox as evidence. Candidates must
+ * overlap the grid on the axis perpendicular to the caption and sit in a
+ * narrow band above/beside it; unrelated schedule titles elsewhere on a busy
+ * sheet cannot compete. */
+export function nearbyScheduleCaption(
+  spans: GraphSpan[],
+  region: Bbox,
+  currentTitle = "",
+): NearbyScheduleCaption | null {
+  const [rx0, ry0, rx1, ry1] = region;
+  const rw = Math.max(1, rx1 - rx0);
+  const rh = Math.max(1, ry1 - ry0);
+  const candidates: Array<NearbyScheduleCaption & { vertical: boolean; parts: number; strongHead: boolean }> = [];
+  const seen = new Set<string>();
+
+  const add = (parts: GraphSpan[], vertical: boolean) => {
+    if (!parts.length) return;
+    const text = parts.map(spanText).join(" ").replace(/\s+/g, " ").trim();
+    if (!isScheduleCaptionText(text)) return;
+    const bbox = bboxForSpans(parts);
+    const key = `${compactCaption(text)}|${bbox.map((n) => Math.round(n)).join(",")}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    candidates.push({ text, bbox, vertical, parts: parts.length, strongHead: hasCompleteCaptionHead(text) });
+  };
+
+  for (const sp of spans) add([sp], isVerticalCaptionSpan(sp));
+
+  // Horizontal captions split into template/tag/template runs on one line.
+  const horizontal = spans.filter((sp) => !isVerticalCaptionSpan(sp));
+  const rows: GraphSpan[][] = [];
+  for (const sp of [...horizontal].sort((a, b) => a.y - b.y || a.x - b.x)) {
+    const row = rows.find((r) => Math.abs(r[0].y - sp.y) <= Math.max(2, 0.5 * Math.max(r[0].h || 12, sp.h || 12)));
+    if (row) row.push(sp); else rows.push([sp]);
+  }
+  for (const row of rows) {
+    row.sort((a, b) => a.x - b.x);
+    let cluster: GraphSpan[] = [];
+    const flush = () => {
+      if (cluster.length) add(cluster, false);
+      cluster = [];
+    };
+    for (const sp of row) {
+      if (!cluster.length) {
+        cluster = [sp];
+        continue;
+      }
+      const prev = cluster[cluster.length - 1];
+      const gap = sp.x - (prev.x + prev.w);
+      const maxGap = Math.max(60, 3 * Math.max(prev.h || 12, sp.h || 12));
+      if (gap <= maxGap) cluster.push(sp); else { flush(); cluster = [sp]; }
+    }
+    flush();
+  }
+
+  // Vertical captions are commonly split along the reading axis. Anchor each
+  // possible terminal `SCHEDULE` run, then prepend only tightly aligned runs.
+  const vertical = spans.filter(isVerticalCaptionSpan).sort((a, b) => a.x - b.x || a.y - b.y);
+  for (const terminal of vertical.filter((sp) => /SCHEDULES?\s*$/i.test(spanText(sp)))) {
+    const aligned = vertical
+      .filter((sp) => {
+        const terminalCx = terminal.x + terminal.w / 2;
+        const cx = sp.x + sp.w / 2;
+        // Split runs of one vertical title share essentially the same text
+        // axis. An 18px allowance was wide enough to pull an adjacent
+        // attribute tier into a complete caption (real chiller grid:
+        // OPERATING at x=634.5, title at x=649.1). Eight pixels still covers
+        // ordinary CAD run jitter while keeping neighboring columns apart.
+        return Math.abs(cx - terminalCx) <= Math.max(8, 0.75 * Math.max(terminal.w, sp.w));
+      })
+      .sort((a, b) => a.y - b.y);
+    const terminalIndex = aligned.indexOf(terminal);
+    if (terminalIndex < 0) continue;
+    let parts: GraphSpan[] = [terminal];
+    add(parts, true);
+    for (let i = terminalIndex - 1; i >= 0 && parts.length < 5; i--) {
+      const next = parts[0];
+      const gap = next.y - (aligned[i].y + aligned[i].h);
+      if (gap < -Math.max(4, 0.2 * Math.min(aligned[i].h, next.h)) || gap > 32) break;
+      parts = [aligned[i], ...parts];
+      add(parts, true);
+    }
+  }
+
+  const currentCompact = compactCaption(currentTitle);
+  const currentIsGeneric = /^(?:MARK|TAG|SYMBOL|ID|KEY|NO|NUMBER)$/.test(currentCompact);
+  // Length alone cannot distinguish a truncated source run ("P SCHEDULE")
+  // from a deliberately short but complete engineering title ("UNIT HEATER
+  // SCHEDULE"). Only the former is eligible to grow into a longer suffix
+  // match. Real NAVFAC M-602 otherwise borrowed CABINET UNIT HEATER SCHEDULE
+  // from the table above and its five UH-A rows were later collapsed as a
+  // duplicate of the genuinely separate cabinet-heater schedule.
+  const currentIsWeakSchedule = currentCompact.endsWith("SCHEDULE")
+    && currentCompact.length <= 18
+    && !hasCompleteCaptionHead(currentTitle);
+  const eligible = candidates.filter((candidate) => {
+    const compact = compactCaption(candidate.text);
+    if (currentCompact) {
+      if (!currentIsGeneric
+        && !(currentIsWeakSchedule && compact.length > currentCompact.length && compact.endsWith(currentCompact))) return false;
+    }
+    const [x0, y0, x1, y1] = candidate.bbox;
+    const xOverlap = Math.max(0, Math.min(x1, rx1) - Math.max(x0, rx0));
+    const yOverlap = Math.max(0, Math.min(y1, ry1) - Math.max(y0, ry0));
+    const dx = Math.max(0, rx0 - x1, x0 - rx1);
+    const dy = Math.max(0, ry0 - y1, y0 - ry1);
+    if (candidate.vertical) {
+      const overlapRatio = yOverlap / Math.max(1, y1 - y0);
+      return overlapRatio >= 0.3 && dx <= Math.max(120, 0.2 * rw);
+    }
+    const overlapRatio = xOverlap / Math.max(1, x1 - x0);
+    // A horizontal schedule caption belongs above (or in the shallow title
+    // tier at the top of) its grid. A caption deep inside this region is the
+    // title of a table below it, not this table. Real multi-table schedule
+    // pages exposed that lower-neighbour theft when a large rooftop schedule
+    // contained a tall remarks tier before its first ruled data row. Allow
+    // that wider authored title-to-header gap, but only in the correct
+    // direction.
+    const shallowTitleTier = y0 <= ry0 + Math.max(36, 0.1 * rh);
+    return overlapRatio >= 0.3
+      && shallowTitleTier
+      && dy <= Math.max(360, 0.75 * rh);
+  });
+  if (!eligible.length) return null;
+
+  eligible.sort((a, b) => {
+    const gap = (candidate: NearbyScheduleCaption & { vertical: boolean; parts: number; strongHead: boolean }): number => {
+      const [x0, y0, x1, y1] = candidate.bbox;
+      const dx = Math.max(0, rx0 - x1, x0 - rx1);
+      const dy = Math.max(0, ry0 - y1, y0 - ry1);
+      return candidate.vertical ? dx : dy;
+    };
+    // A complete engineering-title head wins over a truncated suffix. This
+    // distinguishes a genuine one-span `PACKAGED ... CHILLER SCHEDULE` from
+    // both (a) an aligned attribute prepended to it (`OPERATING PACKAGED…`)
+    // and (b) the last source run of a split title (`PRESSION TANK SCHEDULE`,
+    // `ER AND DIFFUSER SCHEDULE`, `P SCHEDULE`). When neither candidate has
+    // a complete head, prefer the more fully reconstructed run.
+    const head = Number(b.strongHead) - Number(a.strongHead);
+    if (head) return gap(a) - gap(b) || head;
+    return gap(a) - gap(b) || b.parts - a.parts || compactCaption(b.text).length - compactCaption(a.text).length;
+  });
+  const { text, bbox } = eligible[0];
+  return { text, bbox };
 }
 
 export function sheetHasScheduleLanguage(spans: GraphSpan[]): boolean {

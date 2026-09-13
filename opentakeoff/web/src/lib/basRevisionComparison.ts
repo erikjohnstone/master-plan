@@ -1,6 +1,6 @@
 /** One shared correspondence/declared-field/quantity-comparability authority.
  * No extraction, numeric deltas, approvals or workflow writes occur here. */
-import { verifyBasWorkflow } from './basWorkflow.ts';
+import { verifyBasWorkflow, type BasWorkflow } from './basWorkflow.ts';
 import { inventoryForVerifiedBasRevision, type BasRevisionItem, type BasRevisionInventory } from './basRevisionInventory.ts';
 import { revisionDeclaredFields, revisionQuantityContext, type RevisionIdentity, type RevisionLookup } from './basRevisionFields.ts';
 import { canonicalBasJson } from './basCanonical.ts';
@@ -17,8 +17,18 @@ const key = (capture: string, kind: BasRevisionItem['kind'], subject: string) =>
 const metricReviewKey = (before: string, after: string, metric: string) => canonicalBasJson([before, after, metric]);
 
 export async function prepareBasRevisionComparison(raw: unknown, rawRequest: unknown, signal?: AbortSignal) {
-  const request = basRevisionComparisonRequestSchema.parse(rawRequest); signal?.throwIfAborted();
+  // Own the request before the first await. Callers may mutate editor state
+  // while the comparatively expensive workflow verification is in flight.
+  const request = basRevisionComparisonRequestSchema.parse(rawRequest);
   const workflow = await verifyBasWorkflow(raw); signal?.throwIfAborted();
+  return prepareBasRevisionComparisonForVerifiedWorkflow(workflow, request, signal);
+}
+
+/** Internal shared fast path after verifyBasWorkflow has already owned and
+ * authenticated the complete record. It prevents revision preview/record/read
+ * from parsing and hashing the same multi-megabyte workflow twice. */
+export async function prepareBasRevisionComparisonForVerifiedWorkflow(workflow: BasWorkflow, rawRequest: unknown, signal?: AbortSignal) {
+  const request = basRevisionComparisonRequestSchema.parse(rawRequest); signal?.throwIfAborted();
   const before = await inventoryForVerifiedBasRevision(workflow, request.before, signal);
   const after = await inventoryForVerifiedBasRevision(workflow, request.after, signal);
   const old = new Map(before.items.map(i => [i.item_id, i])), next = new Map(after.items.map(i => [i.item_id, i]));

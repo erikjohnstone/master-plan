@@ -11,7 +11,8 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, splitHyphenTagOcc, isIndividuallyMarkedEquipmentSchedule, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, splitHyphenTagOcc, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, scheduleCountMultiplier as typicalCountMultiplier } from "../src/lib/schedulePlanReconcile.mjs";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -530,6 +531,35 @@ test("typicalCountMultiplier reads only an adjacent aligned TYP count", () => {
   assert.equal(typicalCountMultiplier([{ str: "TYP NOTE", x0: 100, y0: 130, x1: 160, y1: 149 }], [100, 100, 133, 119]), 1);
 });
 
+test("typicalCountMultiplier reads a parenthesized count only from inside the reconstructed tag bbox", () => {
+  const spans = [
+    { str: "(6) LD", x0: 100, y0: 200, x1: 156, y1: 225 },
+    { str: "(50) NOTE", x0: 700, y0: 200, x1: 780, y1: 225 },
+  ];
+  assert.equal(typicalCountMultiplier(spans, [100, 200, 174, 225]), 6);
+  assert.equal(typicalCountMultiplier(spans, [400, 200, 450, 225]), 1);
+});
+
+test("count-prefixed schedule tags reconstruct only the requested adjacent mark", () => {
+  const spans = [
+    { str: "(6) LD", x0: 100, y0: 200, x1: 158, y1: 220 },
+    { str: "-", x0: 160, y0: 200, x1: 165, y1: 220 },
+    { str: "1", x0: 167, y0: 200, x1: 176, y1: 220 },
+    { str: "2", x0: 400, y0: 200, x1: 409, y1: 220 },
+    { str: "(50) NOTE", x0: 700, y0: 200, x1: 790, y1: 220 },
+  ];
+  const found = countPrefixedScheduleTagOccurrences(spans, "LD-1");
+  assert.equal(found.length, 1);
+  assert.deepEqual(found[0].bbox, [100, 200, 176, 220]);
+  assert.equal(typicalCountMultiplier(spans, found[0].bbox), 6,
+    "the authored count and exact reconstructed tag stay on one evidence bbox");
+  assert.equal(countPrefixedScheduleTagOccurrences(spans, "LD-2").length, 0,
+    "an unrelated distant suffix must never be joined");
+  assert.equal(countPrefixedScheduleTagOccurrences([
+    { str: "(1) LD-1", x0: 100, y0: 200, x1: 170, y1: 220 },
+  ], "LD-1").length, 0, "a non-multiplier does not enter the authored-count path");
+});
+
 test("splitHyphenTagOcc recovers an exact adjacent two-run tag without fuzzy joining", () => {
   const spans = [
     { str: "SCHWP", x0: 100, y0: 200, x1: 160, y1: 220 },
@@ -554,7 +584,38 @@ test("individually marked equipment schedules exclude repeatable type-symbol sch
   assert.equal(isIndividuallyMarkedEquipmentSchedule("AIRHANDLINGUNITSCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("DEDICATED OUTDOOR AIR UNIT SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("SECONDARY CHILLED WATER PUMP SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("VARIABLE AIR VOLUME TERMINAL BOX"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("VAV TERMINAL UNIT SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("VAV SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("COMPUTER ROOM AIR HANDLER TYPE SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("HUMIDIFIER SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("AIR SEPARATOR SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("EXPANSION TANK SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("CHW CONTROL VALVE SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("FAN SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("RANGE HOOD SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("DUCT SILENCER SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("GRILLE, REGISTER, AND DIFFUSER SCHEDULE"), false);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("VAV DIFFUSER SCHEDULE"), false,
+    "a VAV-qualified repeatable diffuser type remains a geometric count, not one unique unit");
   assert.equal(isIndividuallyMarkedEquipmentSchedule("PLUMBING FIXTURE SCHEDULE"), false);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("LUMINAIRE SCHEDULE"), false);
+});
+
+test("repeatable air-device schedule gate excludes individually marked terminal equipment", () => {
+  assert.equal(isRepeatableAirDeviceSchedule("GRILLE, REGISTER, AND DIFFUSER SCHEDULE"), true);
+  assert.equal(isRepeatableAirDeviceSchedule("AIR DEVICE SCHEDULE"), true);
+  assert.equal(isRepeatableAirDeviceSchedule("VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE"), false);
+  assert.equal(isRepeatableAirDeviceSchedule("AIR HANDLING UNIT SCHEDULE"), false);
+  assert.equal(isRepeatableAirDeviceSchedule("CONTROL DAMPER SCHEDULE"), false);
+});
+
+test("repeatable air-device placement quorum requires set-wide and per-sheet evidence", () => {
+  assert.equal(hasRepeatableAirDevicePlacementQuorum([92, 24, 54, 58, 144, 9], 381), true,
+    "real multi-plan air-device populations clear both evidence gates");
+  assert.equal(hasRepeatableAirDevicePlacementQuorum([1], 381), false,
+    "one isolated mention on an otherwise rich set is not a placement convention");
+  assert.equal(hasRepeatableAirDevicePlacementQuorum([9], 9), false,
+    "a small one-sheet population does not manufacture the set-wide quorum");
+  assert.equal(hasRepeatableAirDevicePlacementQuorum([], 100), false);
 });

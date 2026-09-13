@@ -6,6 +6,7 @@ import { basSourceContextSchema, type BasSourceContext } from './basSources.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 import { parseBasEquipmentMembership, parseBasPrintedCount } from './basEquipmentMembership.ts';
+import { isBasPointsListTable } from './corpusTakeoff.mjs';
 
 const box = z.tuple([z.number().finite(), z.number().finite(), z.number().finite(), z.number().finite()])
   .refine(b => b[2] >= b[0] && b[3] >= b[1], 'Unordered equipment source box');
@@ -31,10 +32,53 @@ export const basEquipmentEvidenceSchema = z.object({
 export type BasEquipmentEvidence = z.infer<typeof basEquipmentEvidenceSchema>;
 export type BasEquipmentTable = BasEquipmentEvidence['tables'][number];
 
+/** Zod owns every declared object/array above but intentionally retains
+ * unknown graph metadata by reference. A verified workflow must own only those
+ * passthrough values before its first await; cloning the complete evidence
+ * would duplicate all already-owned schedule rows and cells. */
+export function ownBasEquipmentEvidencePassthrough(evidence: BasEquipmentEvidence): void {
+  const ownUnknown = (record: Record<string, unknown>, known: ReadonlySet<string>) => {
+    for (const key of Object.keys(record)) if (!known.has(key)) record[key] = structuredClone(record[key]);
+  };
+  const tableFields = new Set(['kind', 'sheet', 'title', 'headers', 'rows', 'region', 'building', 'parts']);
+  const rowFields = new Set(['key', 'sheet', 'building', 'cells']);
+  const cellFields = new Set(['text', 'bbox']);
+  const titleFields = new Set(['text', 'bbox', 'sheet']);
+  const partFields = new Set(['sheet', 'title', 'rows', 'region']);
+  for (const table of evidence.tables) {
+    ownUnknown(table, tableFields);
+    if (table.title) ownUnknown(table.title, titleFields);
+    for (const row of table.rows) {
+      ownUnknown(row, rowFields);
+      for (const cell of Object.values(row.cells)) ownUnknown(cell, cellFields);
+    }
+    for (const part of table.parts ?? []) ownUnknown(part, partFields);
+  }
+}
+
 export function captureBasEquipmentTables(tables: unknown[]): BasEquipmentEvidence {
+  const inBasEquipmentScope = (table: Record<string, unknown>) => {
+    if (isBasPointsListTable(table)) return false;
+    const title = String((table.title as { text?: unknown } | null)?.text ?? '').toUpperCase()
+      .replace(/\s+/g, ' ').trim();
+    // Graph `equipment` includes all MEP schedule disciplines. These captions
+    // describe construction criteria or electrical distribution, not a BAS-
+    // assignable equipment member. Keep unknown equipment schedules visible;
+    // exclude only explicit, structurally unrelated families.
+    if (/\bDUCT\s+(?:CONSTRUCTION|LEAKAGE)(?:\s+AND\s+LEAKAGE)?\s+SCHEDULE\b/.test(title)) return false;
+    if (/\b(?:LUMINAIRE|LIGHTING\s+FIXTURE)\s+SCHEDULE\b/.test(title)) return false;
+    if (/\b(?:PANEL|PANELBOARD|SWITCHBOARD)\b.*\bSCHEDULE\b/.test(title)) return false;
+    // Plumbing equipment can legitimately carry BAS points, but a fixture
+    // schedule is a fixture/product register. Short marks such as D-1 are
+    // routinely reused for mechanical dampers, so admitting this explicit
+    // family creates false template candidates (reproduced on ITD D-1 Lab).
+    if (/\bPLUMBING\s+FIXTURE\s+SCHEDULE\b/.test(title)) return false;
+    return true;
+  };
   return basEquipmentEvidenceSchema.parse({ schema_version: 'bas_equipment_evidence_v1',
     rule_version: 'schedule_members_1', scope: 'discovered_equipment_tables_only',
-    tables: tables.filter(t => t && typeof t === 'object' && 'kind' in t && t.kind === 'equipment') });
+    tables: tables.filter(t => t && typeof t === 'object' && 'kind' in t && t.kind === 'equipment'
+      && inBasEquipmentScope(t)) });
 }
 
 function pageAliases(sources: BasSourceContext) {
@@ -66,6 +110,19 @@ const quantityHeaders = new Set(['QTY', 'QUANTITY', 'COUNT']);
 
 export async function buildBasEquipmentCandidates(rawSources: unknown, rawEvidence: unknown) {
   const sources = basSourceContextSchema.parse(rawSources), evidence = basEquipmentEvidenceSchema.parse(rawEvidence);
+  // The evidence schema deliberately passes unknown graph metadata through.
+  // Own it before the first table hash awaits so public callers cannot mutate a
+  // later table while an earlier table is being digested.
+  ownBasEquipmentEvidencePassthrough(evidence);
+  return buildBasEquipmentCandidatesForVerifiedEvidence(sources, evidence);
+}
+
+/** Internal shared seam for evidence already owned by verifyBasWorkflow (or by
+ * the public wrapper immediately above). It changes no interpretation rule and
+ * exposes no request flag; it only avoids parsing the same retained schedule
+ * graph twice inside one source-backed workflow audit. */
+export async function buildBasEquipmentCandidatesForVerifiedEvidence(sources: BasSourceContext,
+  evidence: BasEquipmentEvidence) {
   const aliases = pageAliases(sources), copies = new Map<string, number>();
   const identity = equipmentIdentityPayload(evidence, sources);
   const tables = [];

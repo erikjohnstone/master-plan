@@ -50,6 +50,9 @@
 //   resolveTag(tag): Promise<ResolveResult>
 //   findSchedule(kind): Promise<FindScheduleResult>
 //   compileCorpusTakeoff(kind, opts): Promise<CompiledTakeoff | { error }>
+//   analyzeControlSchematics(): Promise<ControlSchematicResult | { error }>
+//   inspectBasWorkflow(domain, captureId?): Promise<BasWorkflowInspection | { error }>
+//   openBasWorkspace(destination): { opened, destination } | { error }
 //   exportTakeoff(): { downloaded, condition_count } | { error }   // real browser download
 //   exportReport(): { downloaded, condition_count } | { error }    // real browser download
 //   countMarks(marks|undefined): Promise<CountMarksResult>
@@ -297,20 +300,22 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "symbol_sweep",
-    description: "Find EVERY instance of a repeated plan symbol (a valve, a diffuser, any drafted glyph) from ONE example. Give a tight seed_rect around a single instance — only vector segments FULLY inside it define the symbol, so a loose rect that swallows wall linework fingerprints the wall, not the symbol. DON'T HAND-CROP A RECT: pass seed_point_norm instead — one point (normalized 0..1) anywhere on or near the instance — and the sheet's OWN connected linework at that point is clustered into the tight seed automatically (real-junction-aware, the same clustering find_legend_symbols uses on a legend, generalized off captions). Refused, never guessed, if no compact glyph-shaped cluster sits near the point. Exactly one of seed_rect_norm / seed_point_norm is required. Deterministic geometry, not vision: each placement scores as the length-weighted fraction of the seed's segments reproduced, under rotation/mirroring (both on by default — plan symbols get rotated). Score >= 0.92 is a match; 0.75-0.92 comes back in `withheld` with a reason — a near-match is a question to look at (view_region), never a silent commit. Refuses on a sheet with no vector linework (a scan) — say so rather than guessing. This tool only FINDS matches; use place_count or propose_shapes (measure_role: count) to stage them for review, one call per accepted match or batch.",
+    description: "Find every instance of one repeated vector plan symbol from a tight marquee or a one-click seed. The production matcher runs the complete rigid and bounded-affine searches as competing populations: exact PDF tag-token ownership preserves distinct labeled instances on dense grids, rigid evidence cannot be displaced by a neighboring affine fit, and affine adds an automatic count only when it owns a distinct same-family drawing tag. Unlabelled affine-only stretched/rotated candidates remain in withheld for estimator review instead of silently changing installed quantity. transform_competition reports rigid matches, affine matches, cited additions, and deferred candidates. Rotation and mirroring default on; affine defaults on. Score >= 0.92 is a match and 0.75-0.92 is review. Set variant_guard for a complete-symbol seed when richer variants with extra internal ink should be withheld. Refuses on raster-only sheets. This tool finds only; use place_count or propose_shapes to stage reviewed markers.",
     input_schema: {
       type: "object",
       properties: {
         sheet: { type: "string" },
+        scope: { type: "string", enum: ["sheet", "set"], description: "'sheet' searches the seed sheet only. 'set' uses the shared Session path to search every plan-role sheet and disclose skipped reference sheets. Default sheet." },
         seed_rect_norm: { ...REGION_SCHEMA, description: "Tight marquee around ONE example instance, normalized 0..1. Omit and pass seed_point_norm instead when you only have a rough point, not exact corners." },
         seed_point_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1 — one point on/near a single example instance. The sheet's own connected linework there is auto-clustered into a tight seed rect. Use this instead of seed_rect_norm unless you have exact corner coordinates." },
         rotations: { type: "boolean", description: "Also match 90/180/270-rotated placements. Default true." },
         mirror: { type: "boolean", description: "Also match mirrored placements. Default true." },
+        variant_guard: { type: "boolean", description: "Whole-symbol mode: demote placements carrying substantially more internal ink than the seed to review instead of counting them. Leave false for contained sub-shape seeds." },
         tolerance_px: { type: "number", minimum: 0.1, maximum: 20, description: "Endpoint match tolerance in image px. Default 2 (CAD jitter, not drift)." },
         luminance_tolerance: { type: "number", minimum: 0, maximum: 254, description: "Optional stroke-luminance gate (0=black..255=white) for flattened exports where a real device and a background twin are geometrically identical but drawn in different pen colors." },
         affine: {
           type: "object",
-          description: "ON by default (omit this entirely to get it) — also searches continuous (off-grid) rotation and bounded stretch/shear, not just 0/90/180/270, so a symbol drawn rotated ~37° or stretched to fit a tight run is proposable at all, not just low-scoring. A match under this gets a `transform` field disclosing the actual fit; a fit past max_stretch/max_shear_deg is withheld naming the distortion, never silently counted. Pass { enabled: false } to opt out to the old rigid-only search. KNOWN FAILURE MODE (docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md): on a sheet with a DENSE, REPEATING population of the same near-identical symbol (a grid of diffusers, VAV boxes, or similar), this can occasionally lock onto a NEIGHBORING instance's own geometry instead of the one being scored — a confidently-scored match at the wrong position, sometimes losing a real instance's own count entirely (measured: one real sheet dropped from 35/35 to 4/35 this way). The plain rigid pass has no such failure mode and reliably recovers 100% of real instances on a dense repeating grid. If a sweep over such a grid returns a count that looks wrong, RETRY with { enabled: false } and prefer that result for this seed.",
+          description: "ON by default (omit this entirely to get it) — also searches continuous (off-grid) rotation and bounded stretch/shear, not just 0/90/180/270. Rigid and affine populations now compete: rigid localizations are retained, while affine can add an automatic count only with distinct same-family drawing-tag evidence; other affine-only fits remain review questions. A fit past max_stretch/max_shear_deg is withheld and names the distortion. Pass { enabled: false } only for an intentionally rigid audit.",
           properties: {
             enabled: { type: "boolean", description: "Default true when this object is omitted entirely; false only if you pass this object yourself without setting it." },
             max_stretch: { type: "number", description: "Bound on scale_x/scale_y to commit as a match. Default 1.5." },
@@ -485,6 +490,23 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "run_complete_bas_takeoff",
+    description: "Run the deterministic end-to-end BAS takeoff journey in one command. This is orchestration only: it calls the existing shared production compilers for HVAC equipment, BAS points, unstructured/tabular sequences of operation, control valves/dampers, and embedded-coil valve gaps; analyzes vector control schematics, flow/piping diagrams, mechanical risers, and BAS network risers; then performs schedule-versus-installed-plan reconciliation, all five retained BAS workflow inspections, and opens the review workspace. Diagram evidence carries a separate principal-engineering readiness gate: a computed raw vector graph is never called understood, and unresolved crossings, service/port binding, direction, floor assignment, device state, and source reconciliation remain explicit blockers. It never invents controller capacities, spare policy, installed quantity, approvals, or missing source facts. Optional bas_math is accepted only when the estimator supplied/evidenced those policies. The result is always review-required, never an autonomous release decision.",
+    input_schema: {
+      type: "object",
+      properties: {
+        download: { type: "boolean", description: "Download each compiled workbook plus reconcile CSV. Default false; results always populate Takeoff." },
+        bas_math: { type: "object", description: "Optional evidenced/user-selected BAS engineering policies. Omit to preserve unresolved inputs rather than guessing." },
+      },
+      required: [],
+    },
+  },
+  {
+    name: "analyze_control_schematics",
+    description: "Read control schematics, control-flow/piping diagrams, mechanical risers, and BAS network risers through the shared vector Session path. Returns cited titles, explicit AI/AO/DI/DO tokens, unmapped instrument labels, schedule bindings, authored systems/services/protocols/components, floor-band placements, off-page continuations, normal-state conflicts, raw topology, and a separate principal-engineering readiness result. Raw vertical traces and plain crossings remain unresolved candidates until service, equipment-port, junction, and direction evidence proves a semantic graph. Schematic occurrences never become installed quantity. Every finding requires estimator review.",
+    input_schema: { type: "object", properties: {}, required: [] },
+  },
+  {
     name: "compile_corpus_takeoff",
     description: "PRIMARY tool for a COMPLETE HVAC, BAS, control-valve, sequence-of-operations, or embedded-coil-valve-gap takeoff of the loaded set. kind hvac_equipment (T-HVAC-01), bas_points (T-BAS-01), control_valves (T-VALVE-01: CHW+HHW CONTROL VALVE SCHEDULE — valve mark, served equipment, service, size, GPM, Cv), sequences (T-SOO-01: every SOO/control-sequence table or narrative-title hit, with section text and per-cell citations — never derives typed I/O points from the prose, that stays refuse_not_done on bas_points), or embedded_coil_gaps (T-VALVE-EMBEDDED-01: a hydronic coil that needs flow control always implies a control valve exists, even with no dedicated valve schedule of its own — walks EVERY equipment schedule for coil GPM+EWT/LWT data embedded in the row, cross-references against T-VALVE-01, and discloses any coil with no matching scheduled valve as a real, cited gap rather than a silent miss). Returns deterministic category/list counts, totals, exclusions, and empty-page accounting (same Session+ODL path as MCP). Opens TakeoffDataPanel with the finished takeoff. Prefer this over crawling find_schedule/query_table/read_schedule family-by-family when the goal asks for a complete set takeoff. Not for installed drawing counts (use sweep_schedule_row). Run control_valves AND embedded_coil_gaps together for a genuinely complete valve takeoff — control_valves alone misses coils with no dedicated schedule. download true (default) also downloads the workbook.",
     input_schema: {
@@ -511,6 +533,39 @@ export const AGENT_TOOL_DEFS = [
         },
       },
       required: ["kind"],
+    },
+  },
+  {
+    name: "inspect_bas_workflow",
+    description: "Inspect one of the five retained deterministic BAS workflows through the same validated shared services used by the Takeoff workspaces and MCP. Returns bounded counts, dependency freshness, issue codes and the exact next step for point/SOO coverage, equipment-template assignment, assemblies/responsibilities, engineering compatibility, or review/revisions/release. This is read-only: it does not approve, edit, infer installed quantity, or freshly verify original bytes/Python calculations.",
+    input_schema: {
+      type: "object",
+      properties: {
+        domain: {
+          type: "string",
+          enum: ["point_soo", "equipment_templates", "assemblies_responsibility", "engineering_compatibility", "review_revisions_release"],
+          description: "The deterministic BAS workflow to inspect.",
+        },
+        capture_id: {
+          type: "string",
+          description: "Optional retained capture SHA-256. Omit for the active drawing capture.",
+        },
+      },
+      required: ["domain"],
+    },
+  },
+  {
+    name: "open_bas_workspace",
+    description: "Open the correct spacious Takeoff workspace for one deterministic BAS workflow without changing any BAS evidence, quantities, decisions or approvals. Use after inspect_bas_workflow so the estimator can review sources and make the required human decisions.",
+    input_schema: {
+      type: "object",
+      properties: {
+        destination: {
+          type: "string",
+          enum: ["point_soo", "equipment_templates", "assemblies_responsibility", "engineering_compatibility", "review_revisions_release"],
+        },
+      },
+      required: ["destination"],
     },
   },
   {
@@ -924,10 +979,12 @@ export async function executeAgentTool(ctx, name, args) {
         // old rigid-only path. `{ affine: { enabled: false } }` still opts
         // a caller OUT explicitly.
         return await ctx.symbolSweep(args.sheet, args.seed_rect_norm ? clampRegion(args.seed_rect_norm) : null, {
+          scope: args.scope === "set" ? "set" : "sheet",
           rotations: args.rotations !== false,
           mirror: args.mirror !== false,
           tolerancePx: args.tolerance_px,
           luminanceTolerance: args.luminance_tolerance,
+          variantGuard: args.variant_guard === true,
           pointNorm: args.seed_point_norm,
           affine: affineOptionsFromWire(args.affine || AFFINE_WIRE_DEFAULT),
         });
@@ -1013,6 +1070,16 @@ export async function executeAgentTool(ctx, name, args) {
         return await ctx.findSchedule(kind);
       }
 
+      case "run_complete_bas_takeoff":
+        return await runCompleteBasTakeoff(ctx, args);
+
+      case "analyze_control_schematics": {
+        if (typeof ctx.analyzeControlSchematics !== "function") {
+          return { error: "Control schematic/riser analysis is not wired in this session." };
+        }
+        return await ctx.analyzeControlSchematics();
+      }
+
       case "compile_corpus_takeoff": {
         const kind = (args.kind || "").trim();
         if (!kind) return { error: "Pass kind: \"hvac_equipment\" / \"T-HVAC-01\", \"bas_points\" / \"T-BAS-01\", \"control_valves\" / \"T-VALVE-01\", \"sequences\" / \"T-SOO-01\", or \"embedded_coil_gaps\" / \"T-VALVE-EMBEDDED-01\"." };
@@ -1024,6 +1091,20 @@ export async function executeAgentTool(ctx, name, args) {
           service: args.service || null,
           bas_math: args.bas_math,
         });
+      }
+
+      case "inspect_bas_workflow": {
+        if (typeof ctx.inspectBasWorkflow !== "function") {
+          return { error: "inspect_bas_workflow is not wired in this session. Compile a BAS takeoff and reopen the Takeoff workspace." };
+        }
+        return await ctx.inspectBasWorkflow(args.domain, args.capture_id || null);
+      }
+
+      case "open_bas_workspace": {
+        if (typeof ctx.openBasWorkspace !== "function") {
+          return { error: "open_bas_workspace is not wired in this session." };
+        }
+        return ctx.openBasWorkspace(args.destination);
       }
 
       case "reconcile_schedule_plan": {
@@ -1144,4 +1225,169 @@ export async function executeAgentTool(ctx, name, args) {
     return { error: `Tool ${name} failed: ${String((e && e.message) || e)}` };
   }
   return { error: `Unknown tool: ${name}.` }; // unreachable; keeps the contract airtight
+}
+
+const COMPLETE_BAS_COMPILE_STAGES = [
+  "hvac_equipment",
+  "bas_points",
+  "sequences",
+  "control_valves",
+  "embedded_coil_gaps",
+];
+
+const COMPLETE_BAS_REVIEW_DOMAINS = [
+  "point_soo",
+  "equipment_templates",
+  "assemblies_responsibility",
+  "engineering_compatibility",
+  "review_revisions_release",
+];
+
+// BAS scope deliberately excludes repeatable air outlets/inlets (grilles,
+// registers, diffusers). Controlled terminal equipment such as VAV/CAV/FPT
+// remains `air_terminal` and is included. This is passed to the shared
+// Session reconcile; it is not a UI-side extraction fork.
+const COMPLETE_BAS_RECONCILE_CATEGORIES = [
+  "major_equipment",
+  "air_terminal",
+  "valve",
+  "actuator",
+  "damper",
+  "sensor",
+  "control_component",
+];
+
+/**
+ * Agent-surface coordinator over existing shared truth services. It deliberately
+ * contains no extraction, matching, reconciliation, or BAS engineering rules.
+ */
+export async function runCompleteBasTakeoff(ctx, args = {}) {
+  const required = ["compileCorpusTakeoff", "analyzeControlSchematics", "reconcileSchedulePlan", "inspectBasWorkflow", "openBasWorkspace"];
+  const missing = required.filter((name) => typeof ctx?.[name] !== "function");
+  if (missing.length) return { error: `Complete BAS takeoff is not wired: ${missing.join(", ")}.`, execution_status: "blocked" };
+
+  const download = args.download === true;
+  const compiles = {};
+  const stages = {};
+  const failures = [];
+  const safely = async (stage, operation) => {
+    try {
+      const out = await operation();
+      if (out?.error) failures.push({ stage, error: out.error });
+      return out;
+    } catch (error) {
+      const message = String(error?.message || error);
+      failures.push({ stage, error: message });
+      return { error: message };
+    }
+  };
+  const compileStatus = (out) => {
+    if (out?.error) return "failed";
+    if (out?.estimator_status?.gates?.some((gate) => gate?.status === "refuse_not_done")
+      || out?.estimator_product?.estimator_complete === false) return "partial";
+    return "complete";
+  };
+  const inspectionStageStatus = (out) => {
+    if (out?.error) return "failed";
+    // A successful inspection proves this workflow is wired and inspectable;
+    // it does not prove that the estimator completed it. Preserve the shared
+    // inspection state instead of relabelling `not_started` as `complete`.
+    const status = String(out?.status || "").toLowerCase();
+    if (status === "unavailable") return "refused";
+    return "partial";
+  };
+  for (const kind of COMPLETE_BAS_COMPILE_STAGES) {
+    const out = await safely(kind, () => ctx.compileCorpusTakeoff(kind, {
+      download,
+      ...(kind === "bas_points" && args.bas_math ? { bas_math: args.bas_math } : {}),
+    }));
+    compiles[kind] = out;
+    stages[kind] = { status: compileStatus(out), error: out?.error || null };
+  }
+
+  const controlSchematics = await safely("control_schematics_and_risers", () => ctx.analyzeControlSchematics());
+  stages.control_schematics_and_risers = {
+    status: controlSchematics?.error
+      ? "failed"
+      : controlSchematics?.engineering_readiness?.status === "principal_engineering_ready"
+        ? "complete"
+        : "partial",
+    error: controlSchematics?.error || null,
+  };
+
+  const reconcileFull = await safely("schedule_plan_reconcile", () => ctx.reconcileSchedulePlan({
+    download,
+    categories: COMPLETE_BAS_RECONCILE_CATEGORIES,
+    evaluationFast: true,
+  }));
+  // The complete reconcile rows are already merged into the Takeoff workspace
+  // by the canvas capability. Keep the LLM transcript bounded: it needs the
+  // totals plus a small exception sample, not thousands of repeated rows.
+  const reconcile = reconcileFull?.error ? reconcileFull : {
+    family_filter: reconcileFull?.family_filter ?? null,
+    summary: reconcileFull?.summary || null,
+    takeoff_stats: reconcileFull?.takeoff_stats || null,
+    row_count: Array.isArray(reconcileFull?.rows) ? reconcileFull.rows.length : 0,
+    exception_samples: (reconcileFull?.rows || [])
+      .filter((row) => row?.status !== "MATCH")
+      .slice(0, 20)
+      .map((row) => ({
+        tag: row.tag,
+        family: row.family ?? null,
+        scheduled_qty: row.scheduled_qty ?? null,
+        installed_qty: row.installed_qty ?? null,
+        observed_plan_qty: row.observed_plan_qty ?? null,
+        installed_qty_basis: row.installed_qty_basis ?? null,
+        search_scope: row.search_scope ?? null,
+        unlabeled_audit_complete: row.unlabeled_audit_complete ?? null,
+        plan_search_complete: row.plan_search_complete ?? null,
+        status: row.status,
+        reason: row.reason ?? null,
+        schedule_sheet: row.schedule_cite?.sheet ?? null,
+        plan_sheets: (row.plan_cites || []).map((cite) => cite.sheet).filter(Boolean),
+      })),
+    path: reconcileFull?.path || null,
+  };
+  const reconcileRows = Array.isArray(reconcileFull?.rows) ? reconcileFull.rows : [];
+  const reconcileStatuses = reconcileRows.map((row) => String(row?.status || "").toUpperCase());
+  stages.schedule_plan_reconcile = {
+    status: reconcileFull?.error
+      ? "failed"
+      : reconcileStatuses.length && reconcileStatuses.every((status) => status.startsWith("REFUSED"))
+        ? "refused"
+        : reconcileStatuses.some((status) => status !== "MATCH")
+          ? "partial"
+          : "complete",
+    error: reconcileFull?.error || null,
+  };
+  const inspections = {};
+  for (const domain of COMPLETE_BAS_REVIEW_DOMAINS) {
+    inspections[domain] = await safely(domain, () => ctx.inspectBasWorkflow(domain, null));
+    stages[domain] = {
+      status: inspectionStageStatus(inspections[domain]),
+      workflow_status: inspections[domain]?.status || null,
+      blocker_count: inspections[domain]?.blocker_count ?? null,
+      error: inspections[domain]?.error || null,
+    };
+  }
+  const workspace = await safely("open_review_workspace", () => ctx.openBasWorkspace("review_revisions_release"));
+  stages.open_review_workspace = { status: workspace?.error ? "failed" : "complete", error: workspace?.error || null };
+  return {
+    workflow: "complete_bas_takeoff",
+    execution_status: failures.length ? "partial" : "completed",
+    release_status: "human_review_required",
+    human_review_required: true,
+    compile_order: [...COMPLETE_BAS_COMPILE_STAGES],
+    analysis_order: ["control_schematics_and_risers", "schedule_plan_reconcile"],
+    compiles,
+    stages,
+    control_schematics: controlSchematics,
+    diagram_engineering_readiness: controlSchematics.engineering_readiness || null,
+    reconcile,
+    inspections,
+    workspace,
+    failures,
+    bas_math_policy: args.bas_math ? "user_or_evidence_supplied" : "not_supplied_unresolved_preserved",
+    note: "Takeoff is populated from shared deterministic services. Missing evidence and review gates remain explicit; no approval or installed quantity is inferred.",
+  };
 }

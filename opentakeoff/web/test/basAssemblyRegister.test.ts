@@ -7,7 +7,10 @@ import { basPointListsSchema } from '../src/lib/basPointLists.ts';
 import { captureBasEquipmentTables, buildBasEquipmentCandidates } from '../src/lib/basEquipmentEvidence.ts';
 import { emptyBasEquipmentRegister } from '../src/lib/basEquipmentRegister.ts';
 import { interpretBasComponentRequirements } from '../src/lib/basComponentRequirements.ts';
-import { emptyBasAssemblyRegister, validateBasAssemblyRegister, prepareBasAssemblyRegisterValidator, type BasAssemblyComponent, type BasAssemblyRegister } from '../src/lib/basAssemblyRegister.ts';
+import { basAssemblyInterpretationFingerprint, emptyBasAssemblyRegister, validateBasAssemblyRegister,
+  prepareBasAssemblyRegisterOperationForVerifiedEquipment, prepareBasAssemblyRegisterValidator,
+  type BasAssemblyComponent, type BasAssemblyRegister } from '../src/lib/basAssemblyRegister.ts';
+import { prepareBasEquipmentRegisterValidatorForVerifiedWorkflow } from '../src/lib/basEquipmentRegister.ts';
 import { captureBasEvidence, basEventFingerprint, mergeBasWorkflows, verifyBasWorkflow } from '../src/lib/basWorkflow.ts';
 import { applyBasEquipmentReview, basEquipmentHead } from '../src/lib/basEquipmentReview.ts';
 import { applyBasAssemblyReview, basAssemblyHead, basAssemblyView, basAssemblySummary } from '../src/lib/basAssemblyReview.ts';
@@ -69,6 +72,20 @@ test('prepared real-source interpretation cannot be modified through a previous 
   first.components[0].declarations[0].component.requirement_id = 'Tampered returned requirement';
   first.equipment_issues.length = 0;
   assert.deepEqual(prepared(input), expected);
+});
+
+test('operation-local assembly interpretation preserves exact fingerprint and rejects a different rule', async () => {
+  const input = register(component(), component(101, exhaust)), expected = await validate(input);
+  const equipmentValidator = await prepareBasEquipmentRegisterValidatorForVerifiedWorkflow(sources, evidence, points);
+  const equipmentView = equipmentValidator(equipment);
+  const operation = await prepareBasAssemblyRegisterOperationForVerifiedEquipment(
+    sources, equipmentView, input.source_rule_version);
+  assert.deepEqual(operation.interpretation, interpretBasComponentRequirements(sources, input.source_rule_version));
+  assert.equal(await operation.sourceInterpretationFingerprint(),
+    await basAssemblyInterpretationFingerprint(sources, input.source_rule_version));
+  assert.deepEqual(operation.validate(input), expected);
+  assert.throws(() => operation.validate({ ...input, source_rule_version: 'explicit_component_declarations_2' }),
+    /different prepared source interpretation rule/);
 });
 
 test('real source VFD roles remain distinct and all original evidence and applicability survive review', async () => {

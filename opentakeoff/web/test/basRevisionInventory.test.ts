@@ -4,12 +4,13 @@ import { readFileSync } from 'node:fs';
 import { revisionFixture, revisionBasis, addRevisionSourceSet } from './helpers/basRevisionFixture.ts';
 import { uuid, engineeringFixture } from './helpers/basEngineeringFixture.ts';
 import { buildBasRevisionInventory, basRevisionInventorySchema, assertBasRevisionInventorySize,
-  BAS_REVISION_ITEM_LIMIT, BAS_REVISION_INVENTORY_BYTES } from '../src/lib/basRevisionInventory.ts';
+  inventoryForVerifiedBasRevisionWithOptions, BAS_REVISION_ITEM_LIMIT, BAS_REVISION_INVENTORY_BYTES } from '../src/lib/basRevisionInventory.ts';
 import { prepareBasRevisionBasis, readBasRevisionState, basRevisionBasisSchema } from '../src/lib/basRevisionBasis.ts';
 import { applyBasEquipmentReview } from '../src/lib/basEquipmentReview.ts';
 import { applyBasAssemblyReview } from '../src/lib/basAssemblyReview.ts';
 import { captureBasEvidence, captureBasPoints, basCaptureIdentityPayload, mergeBasWorkflows, verifyBasWorkflow, type BasWorkflow } from '../src/lib/basWorkflow.ts';
 import { canonicalBasJson } from '../src/lib/basCanonical.ts';
+import { projectReviewForVerifiedBasWorkflow } from '../src/lib/basProjectReview.ts';
 
 test('predeclared item and byte budgets fail explicitly at the next entry, not through truncation', () => {
   assert.doesNotThrow(() => assertBasRevisionInventorySize(BAS_REVISION_ITEM_LIMIT, BAS_REVISION_INVENTORY_BYTES));
@@ -45,6 +46,19 @@ test('inventory retains raw data, source-grounded domains, quantity dimensions a
   assert.ok(inventory.items.some(i => i.kind === 'responsibility_claim' && i.origin === 'operator_input'));
   assert.equal(inventory.approved, false); assert.equal(inventory.source_bytes, 'not_verified');
   assert.deepEqual(await buildBasRevisionInventory(f.workflow, f.basis), inventory);
+});
+
+test('operation-owned inventory review views preserve project review parity and cannot cross workflow identity', async () => {
+  const f = await revisionFixture(), workflow = await verifyBasWorkflow(f.workflow);
+  const inventory = await inventoryForVerifiedBasRevisionWithOptions(workflow, f.basis, undefined,
+    { retainPreparedReviewViews: true });
+  const expected = await projectReviewForVerifiedBasWorkflow(workflow, workflow.current_capture_id!);
+  assert.deepEqual(await projectReviewForVerifiedBasWorkflow(workflow, workflow.current_capture_id!, inventory), expected);
+  assert.deepEqual(await projectReviewForVerifiedBasWorkflow(workflow, workflow.current_capture_id!, structuredClone(inventory)), expected,
+    'A copied inventory must fall back to full source-backed validation');
+  const separatelyVerified = await verifyBasWorkflow(f.workflow);
+  assert.deepEqual(await projectReviewForVerifiedBasWorkflow(separatelyVerified, separatelyVerified.current_capture_id!, inventory), expected,
+    'A different verified workflow object must not consume another operation context');
 });
 
 test('pinned basis stays historical; old assembly links never rebind to new equipment occurrences', async () => {

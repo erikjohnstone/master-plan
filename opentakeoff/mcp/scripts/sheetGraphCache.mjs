@@ -62,6 +62,11 @@ function sourceDigest() {
       // an edit to either served a stale cached graph silently.
       join(WEB_LIB, "detectRooms.ts"),
       join(WEB_LIB, "equiptags.ts"),
+      // L4.8 control/SOO evidence is persisted inside SheetGraph. Omitting
+      // these files served stale diagram titles, bindings and readiness after
+      // a real engine fix even though the PDF itself was unchanged.
+      join(WEB_LIB, "controlSchematic.ts"),
+      join(WEB_LIB, "sequenceNarrative.ts"),
       // The nine modules vectorTakeoffPipeline.ts itself imports (ODL/
       // sidecar/OCR/pillar-gap/schedule-fallback hooks) — same failure mode:
       // real pipeline changes here previously invalidated nothing.

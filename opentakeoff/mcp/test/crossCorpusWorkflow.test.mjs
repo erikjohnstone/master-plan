@@ -5,9 +5,10 @@
  * Uses sheet-graph + compile triplet caches so multi-set coverage stays fast when warm.
  */
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import test from "node:test";
+import test, { after } from "node:test";
 import { fileURLToPath } from "node:url";
 import { compileCorpusTakeoff } from "../src/corpusTakeoff.mjs";
 import {
@@ -21,11 +22,36 @@ import {
 } from "../../web/src/lib/takeoffWorkflow.js";
 import { cachedGraphForKey, cachedGraphForPdf } from "./helpers/loadKeySession.mjs";
 import { WP1_ACCEPTANCE_KEY_FILES } from "./helpers/wp1AcceptanceKeys.mjs";
+import { shutdownVectorGrid } from "../../web/src/lib/vectorGridClient.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
 const SAMPLES = resolve(HERE, "../../samples");
 const CROSS = resolve(CORPUS, "takeoffs/cross-set-compile");
+const REVIEWED_CORRECTIONS = resolve(
+  CORPUS,
+  "ground_truth/hvac/cross-set-compile-reviewed-corrections.json",
+);
+
+function reviewedCompileExpectation(key) {
+  const overlay = JSON.parse(readFileSync(REVIEWED_CORRECTIONS, "utf8"));
+  const correction = overlay.corrections?.find((item) => item.set_id === key.set_id);
+  if (!correction) return key;
+
+  assert.equal(correction.source_pdf, key.source_file, `${key.set_id} correction source`);
+  const source = readFileSync(resolve(CORPUS, correction.source_pdf));
+  assert.equal(
+    createHash("sha256").update(source).digest("hex"),
+    correction.source_sha256,
+    `${key.set_id} correction source hash`,
+  );
+
+  const reviewed = structuredClone(key);
+  reviewed.totals = { ...reviewed.totals, ...correction.totals };
+  reviewed.categories = { ...reviewed.categories, ...correction.categories };
+  reviewed.bas_points = { ...reviewed.bas_points, ...correction.bas_points };
+  return reviewed;
+}
 
 const SETS = [
   {
@@ -53,6 +79,12 @@ const SETS = [
     pdf: resolve(SAMPLES, "bessemer-mechanical-bidset.pdf"),
   },
 ];
+
+// Graph construction keeps one VectorGrid JSON-RPC process warm across every
+// corpus case. Production servers intentionally retain it; a finite node:test
+// process must release it after the last assertion or an otherwise-green gate
+// remains pending until CI kills it.
+after(async () => { await shutdownVectorGrid(); });
 
 async function graphForPdf(pdfPath, setId) {
   return cachedGraphForPdf(CORPUS, pdfPath, setId, "cross-corpus");
@@ -136,7 +168,7 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async (t) => {
       }
       scored += 1;
       const triplet = await cachedCompileTriplet(CORPUS, key, keyPath, graph);
-      assertWp1CompileAcceptance(key, triplet);
+      assertWp1CompileAcceptance(reviewedCompileExpectation(key), triplet);
     }),
   ));
   assert.ok(scored >= 2, `need ≥2 non-NAVFAC keyed sets scored, got ${scored}`);

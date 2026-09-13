@@ -1,11 +1,11 @@
 import { open, readFile, stat } from 'node:fs/promises';
-import { prepareBasEvidenceBundle, openBasEvidenceBundle } from '../../web/src/lib/basEvidenceBundle.ts';
+import { prepareBasEvidenceBundle, openBasEvidenceBundle, openBasSnapshotBundle } from '../../web/src/lib/basEvidenceBundle.ts';
 import { canonicalBasJson } from '../../web/src/lib/basCanonical.ts';
 import { verifyBasSourceBytes } from '../../web/src/lib/basSourceRetention.ts';
 import { sha256Hex } from '../../web/src/lib/graphKeys.js';
 import { writeAtomicArtifact } from './atomicArtifactFile.ts';
 import type { Session } from './session.ts';
-import { verifyBasWorkflowCalculations } from './basWorkflowReplay.ts';
+import { verifyBasWorkflowCalculations, verifyPreparedBasWorkflowCalculations } from './basWorkflowReplay.ts';
 
 export async function exportBasEvidenceBundle(session: Session, path: string, originals: string[], overwrite?: boolean) {
   const payload = structuredClone(session.exportPayload()), expected = canonicalBasJson(payload);
@@ -53,6 +53,24 @@ export async function withBasEvidenceBundleFile<T>(path: string, guard: () => vo
         if (!result.bytesRead) throw new Error('BAS evidence archive is truncated'); done += result.bytesRead; }
       return bytes;
     } }, guard);
+    return await use(archive);
+  } finally { await file.close(); }
+}
+
+/** Snapshot-purpose sibling. It always verifies exact originals and replays
+ * every saved Python calculation before yielding an owned snapshot plan. */
+export async function withBasSnapshotBundleFile<T>(path: string, signal: AbortSignal | undefined,
+  use: (archive: Awaited<ReturnType<typeof openBasSnapshotBundle>>) => Promise<T>) {
+  signal?.throwIfAborted();
+  const file = await open(path, 'r');
+  try {
+    const size = (await file.stat()).size;
+    const archive = await openBasSnapshotBundle({ size, async read(offset, length) {
+      signal?.throwIfAborted(); const bytes = new Uint8Array(length); let done = 0;
+      while (done < length) { const result = await file.read(bytes, done, length - done, offset + done);
+        if (!result.bytesRead) throw new Error('BAS snapshot archive is truncated'); done += result.bytesRead; }
+      signal?.throwIfAborted(); return bytes;
+    } }, { replayPreparedCalculations: plan => verifyPreparedBasWorkflowCalculations(plan, { signal }) }, signal);
     return await use(archive);
   } finally { await file.close(); }
 }

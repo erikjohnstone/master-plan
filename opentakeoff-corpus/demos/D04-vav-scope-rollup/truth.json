@@ -4,7 +4,7 @@
   "set_id": "federal-mech",
   "source_file": "federal-attachment4-mechanical.pdf",
   "ground_truth_completed_before_model_runs": true,
-  "derivation": "Independent unique VAV-* MARK inventory on VOLUME CONTROL BOX SCHEDULE (sheet #16). Non-VAV junk key SUITE100 excluded. 20% stratified find_text hand-count of 13 tags reconciled on plan sheets before any model run. Attribute values read from schedule cells for VAV-1/12/30/58.",
+  "derivation": "Independent unique VAV-* MARK inventory on VOLUME CONTROL BOX SCHEDULE (sheet #16). Visual source-page review confirms SUITE 100 is the architect address in the title block, not a schedule row; it is excluded from table truth. 20% stratified find_text hand-count of 13 tags reconciled on plan sheets before any model run. Attribute values read from schedule cells for VAV-1/12/30/58.",
   "hardness": {
     "sheet_count": 24,
     "stress_confirmed": "Dense VAV population (58 scheduled) with fragmented/repeated plan labels (hundreds of VAV- find_text hits across sheets). Rollup must use the schedule title-scan count, not plan-label frequency, and must not count non-VAV junk keys extracted into the schedule table."

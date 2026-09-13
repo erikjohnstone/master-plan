@@ -1,0 +1,34 @@
+{
+  "schema": "opentakeoff.control_network_ground_truth.v1",
+  "source_pdf": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "review_basis": "Human visual review of rendered vector PDF sheet MI701. Expectations describe authored network-diagram evidence, not current engine output.",
+  "coordinate_frame": "render_scale_2_image_px_origin_top_left",
+  "positive": {
+    "page": 51,
+    "sheet_number": "MI701",
+    "title": "DDC SYSTEM NETWORK DIAGRAM",
+    "diagram_kind": "network_architecture",
+    "semantic_status": "evidence_inventory",
+    "required_authored_labels": [
+      "DDC NETWORK LEGEND:",
+      "MEDIA CONVERTOR",
+      "BOILER PLANT MASTER",
+      "CHILLER PLANT MASTER",
+      "AHU MASTER",
+      "CONTROLLER",
+      "VAV BOX"
+    ],
+    "minimum_topology_nodes": 100,
+    "minimum_topology_edges": 100,
+    "review_note": "The sheet is a project-authored BAS/DDC network architecture with BACnet network line types and controller/device boxes. Raw vector topology is computable, but the complete semantic equipment-port-device graph is not independently proven. It is not a floor-by-floor piping riser and not installed-quantity evidence."
+  },
+  "negative": {
+    "page": 32,
+    "excluded_phrases": [
+      "DESIGNATION ON FLOW DIAGRAM",
+      "WHERE DIRT LEGS ARE SHOWN ON PIPE RISER DIAGRAMS AND/OR"
+    ],
+    "expected_diagrams": 0,
+    "review_note": "These are schedule/legend-note phrases, not diagram titles."
+  }
+}

@@ -14,10 +14,13 @@ add('points', ['SOURCE_DISCOVERY_COVERAGE_UNVERIFIED'], 'Review source-page cove
 add('points', ['PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES'], 'Resolve requirement identity across templates before using a project total. Known listed subtotals are not unique physical requirements.');
 add('points', ['SOURCE_PAGE_UNAVAILABLE', 'TABLE_REGION_UNAVAILABLE', 'POINT_CELL_REGION_UNAVAILABLE', 'POINT_NAME_REGION_UNAVAILABLE'], 'Inspect the original matrix and its missing source location. Do not treat ungrounded values as verified takeoff quantities.');
 add('points', ['POINT_COLUMNS_UNRESOLVED', 'POINT_NAME_COLUMN_UNRESOLVED', 'POINT_NAME_UNAVAILABLE', 'DUPLICATE_LOCAL_ROW_KEY',
-  'POINT_CELL_AMBIGUOUS', 'FOOTNOTE_TABLE_SCOPE_AMBIGUOUS', 'POINT_FOOTNOTE_UNRESOLVED', 'POINT_COLUMNS_UNINTERPRETED',
+  'POINT_CELL_AMBIGUOUS', 'POINT_TYPE_AMBIGUOUS', 'POINT_TYPE_COLUMN_UNRESOLVED', 'POINT_MARK_AMBIGUOUS',
+  'FOOTNOTE_TABLE_SCOPE_AMBIGUOUS', 'POINT_FOOTNOTE_UNRESOLVED', 'POINT_COLUMNS_UNINTERPRETED',
   'TYPED_SOURCE_CELLS_UNOBSERVED', 'AMBIGUOUS_SOURCE_VALUES_RETAINED', 'SOURCE_ROWS_REQUIRE_REVIEW',
   'point_columns_unobserved', 'point_columns_uninterpreted', 'point_observation_ambiguous'],
 'Open the point list and compare its original cells, column meanings and qualifiers. Unknown or unobserved is not zero.');
+add('points', ['SOURCE_SPAN_CORE_COLUMNS_ONLY'],
+  'The vector text layer recovered the printed point name, tag and I/O type, but other schedule columns were not reconstructed. Verify alarm, trend, fail-mode and notes columns against the drawing before release.');
 add('points', ['CONTROLLER_QUALIFIER_RETAINED_NOT_FIELD_WIRING'], 'Read the retained controller qualifier. Listed observations do not establish field wiring.', 'information');
 add('sequences', ['discovery_incomplete', 'page_no_text', 'heading_only', 'segmentation_conflict', 'unassigned_horizontal_spans',
   'unsupported_spans', 'ambiguous_spans', 'uninterpreted_clause', 'partially_interpreted_clause'],

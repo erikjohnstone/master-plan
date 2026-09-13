@@ -764,6 +764,12 @@ function uniqueFamily(graph, {
   for (const pass of [1, 2]) {
   for (const table of graph.tables || []) {
     const title = String(table.title?.text || "");
+    // A points-list caption can legitimately name its served equipment family
+    // (for example CRAH DDC POINTS LIST). It is still an I/O inventory, never
+    // an equipment schedule. Apply this boundary once for every HVAC family
+    // instead of relying on dozens of family-specific exclude regexes to stay
+    // perfectly synchronized with the BAS title/table grammar.
+    if (isBasPointsListTitle(title) || isBasPointsListTable(table)) continue;
     // Soft title match: exact regex first, then compact (no-space) form so
     // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
     // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
@@ -915,10 +921,12 @@ function uniqueFamily(graph, {
         const titleBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
           ? table.title.bbox
           : null;
-        // scheduled_qty/installed_qty/status/qty_kind are ADDITIVE — quantity
-        // stays exactly what it always was (one schedule row) so every scored
-        // key keeps reading the same field. scheduled_qty is the printed QTY
-        // cell when this table has one (the OTHER, real meaning of quantity);
+        // `quantity` remains the legacy physical-row cardinality so existing
+        // scorers and callers keep their contract. Its explicit basis prevents
+        // that compatibility field from masquerading as a printed or installed
+        // quantity. `scheduled_qty` is the printed QTY cell when present, or
+        // one-per-unique-row when the schedule genuinely has no QTY column.
+        // A printed-but-unparseable QTY is null and refused, never guessed.
         // installed_qty/status stay null until a reconcile_schedule_plan pass
         // merges plan-drawn counts onto this same tag — status here is a
         // compile-time-only disclosure (not a ReconcileStatus value) and is
@@ -927,10 +935,14 @@ function uniqueFamily(graph, {
         items.push({
           tag: one,
           quantity: 1,
-          scheduled_qty: qtyStatus.qty,
+          quantity_basis: "schedule_row_cardinality",
+          scheduled_qty: qtyStatus.refused ? null : qtyStatus.qty,
+          scheduled_qty_basis: qtyStatus.basis,
+          scheduled_qty_source_header: qtyStatus.source_header,
+          scheduled_qty_source_text: qtyStatus.source_text,
           installed_qty: null,
           status: qtyStatus.refused ? "REFUSED_UNPARSEABLE_QTY" : null,
-          qty_kind: "scheduled",
+          qty_kind: qtyStatus.refused ? "unresolved" : "scheduled",
           unit: "EA",
           sheet_id: table.sheet,
           table_title: title.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim(),
@@ -1962,15 +1974,24 @@ export function basEstimatorStatus({ lists, totals, sheets, product = null }) {
 export function isBasPointsListTitle(title) {
   const t = String(title || "").replace(/\s+/g, " ").trim();
   if (!t) return false;
-  if (/\bPOINTS\s+LIST\b/i.test(t)) return true;
+  // A controls narrative may call an explanatory section "POINT LIST
+  // TABLE" without printing a typed point grid. Keep that known narrative
+  // caption out while accepting both common authored table spellings:
+  // POINTS LIST and POINT LIST.
+  if (/\bPOINT\s+LIST\s+TABLE\b/i.test(t)) return false;
+  if (/\bPOINTS?\s+LIST\b/i.test(t)) return true;
   if (/\bDDC\s+POINTS\b/i.test(t)) return true;
   if (/\bI\s*\/\s*O\s+LIST\b/i.test(t)) return true;
   if (/\bIO\s+LIST\b/i.test(t)) return true;
   // Lab/VA DDC controller I/O summaries (device-point rows, not AI## MARK lists).
   if (/\bDDC\s+CONTROLLER\s+INPUT\s*\/?\s*OUTPUT\b/i.test(t)) return true;
   if (/\bCONTROLLER\s+I\s*\/?\s*O\s+(?:SUMMARY|LEGEND|LIST)\b/i.test(t)) return true;
-  // MISCELLANEOUS POINTS SCHEDULE / POINTS SCHEDULE (not SOO "point list table"
-  // narratives — those lack the SCHEDULE token after POINTS).
+  // Explicit object/interface matrices enumerate BAS-visible values even when
+  // the drafter did not put POINTS LIST in the caption.
+  if (/\bBACNET\s+INTERFACE\s+SCHEDULE\b/i.test(t)) return true;
+  // MISCELLANEOUS POINTS SCHEDULE / POINT FUNCTION SCHEDULE (not SOO
+  // "point list table" narratives — those lack the SCHEDULE token).
+  if (/\bPOINTS?\s+FUNCTION\s+SCHEDULE\b/i.test(t)) return true;
   if (/\bPOINTS?\s+SCHEDULE\b/i.test(t)) return true;
   return false;
 }
@@ -2005,7 +2026,58 @@ export function inferBasListTitle(table) {
 
 /** Column-label rows that are not countable I/O or points marks. */
 function isBasPointsHeaderRow(tag) {
-  return !tag || /^(TAG|MARK|SYMBOL|POINT|DESCRIPTION|NOTES?)$/i.test(tag);
+  return !tag || /^(?:TAG|MARK|SYMBOL|POINT|DESCRIPTION|NOTES?|(?:ANALOG|BINARY|DIGITAL)\s+(?:INPUT|OUTPUT))$/i.test(tag);
+}
+
+const BAS_POINT_TYPE_HEADER_RE = /^(?:HARDWARE\s+)?(?:POINT|I\s*\/?\s*O)\s+TYPE$/i;
+
+/**
+ * Resolve one printed BAS point type without guessing from the point name.
+ * The public takeoff vocabulary uses BI/BO; drawings commonly print the
+ * equivalent DI/DO terminology, so those exact authored values normalize to
+ * BI/BO while the unmodified source token remains on the item. Conflicting
+ * MARK and type-cell evidence is deliberately left untyped.
+ */
+function basPointTypeEvidence(row, tag) {
+  const markType = String(tag || "").toUpperCase().match(/^(AI|AO|BI|BO)[\s\-]?(?:\d|#+)/)?.[1] || null;
+  const raw = String(cellText(row, BAS_POINT_TYPE_HEADER_RE) || "").trim();
+  const normalized = raw.toUpperCase().replace(/[._-]+/g, " ").replace(/\s+/g, " ").trim();
+  const explicitType = ({
+    AI: "AI",
+    AO: "AO",
+    BI: "BI",
+    BO: "BO",
+    DI: "BI",
+    DO: "BO",
+    "ANALOG INPUT": "AI",
+    "ANALOG OUTPUT": "AO",
+    "BINARY INPUT": "BI",
+    "BINARY OUTPUT": "BO",
+    "DIGITAL INPUT": "BI",
+    "DIGITAL OUTPUT": "BO",
+    "DISCRETE INPUT": "BI",
+    "DISCRETE OUTPUT": "BO",
+  })[normalized] || null;
+
+  if (markType && explicitType && markType !== explicitType) {
+    return {
+      type: null,
+      raw,
+      basis: "conflicting_mark_and_point_type_cell",
+      status: "REFUSED_POINT_TYPE_CONFLICT",
+    };
+  }
+  if (markType && explicitType) {
+    return { type: markType, raw, basis: "mark_prefix_and_explicit_point_type_cell", status: "typed" };
+  }
+  if (markType) return { type: markType, raw: null, basis: "mark_prefix", status: "typed" };
+  if (explicitType) return { type: explicitType, raw, basis: "explicit_point_type_cell", status: "typed" };
+  return {
+    type: null,
+    raw: raw || null,
+    basis: raw ? "unrecognized_explicit_point_type_cell" : null,
+    status: raw ? "REFUSED_UNRECOGNIZED_POINT_TYPE" : "untyped",
+  };
 }
 
 /**
@@ -2046,14 +2118,20 @@ export function compileHvacTakeoff(sessionOrSheets, graph) {
 
   const pages = sheets.map((sheet) => {
     const key = sheet.key;
-    const tables = (graph.tables || []).filter((t) => t.sheet === key);
-    const titles = tables
-      .map((t) => String(t.title?.text || ""))
-      .filter((t) => t && !/GENERAL NOTES|VIBRATION|SOUND POWER|PIPING CONSTRUCTION/i.test(t) && !isBasPointsListTitle(t));
+    // Page accounting reports actual compiled HVAC scope, not merely any
+    // extracted table title on the page. Otherwise reference matrices,
+    // project-symbol legends, and BAS points lists can make a controls page
+    // look like an equipment-schedule page despite contributing zero HVAC
+    // items. Use the categories assembled above so reporting cannot drift
+    // from the compiler's own family boundaries.
+    const contributingItems = Object.values(categories)
+      .flatMap((category) => category.items || [])
+      .filter((item) => item.sheet_id === key);
+    const titles = [...new Set(contributingItems.map((item) => item.table_title).filter(Boolean))];
     return {
       sheet_id: key,
       sheet_number: sheet.sheetNumber ?? sheet.number ?? null,
-      status: titles.length === 0 ? "empty_for_hvac_equipment_schedules" : "has_hvac_equipment_schedule",
+      status: contributingItems.length === 0 ? "empty_for_hvac_equipment_schedules" : "has_hvac_equipment_schedule",
       titles,
     };
   });
@@ -2094,12 +2172,23 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     const extras = { alarm: 0, trend: 0, hardwired: 0, soft: 0 };
     const items = [];
     for (const row of table.rows || []) {
-      const tag = String(row.key || "").trim();
+      // The MARK cell is authored point identity. `row.key` is an extractor
+      // convenience and can retain a section-prefix fragment (for example
+      // "BI BI#") even when the cited MARK cell correctly reads "BI#".
+      // Prefer the evidence-bearing cell so type counts, exports, and Agent
+      // citations all refer to the same printed token.
+      const tag = String(cellText(row, /^MARK$/i) || row.key || "").trim();
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       if (isBasPointsHeaderRow(tag)) continue;
-      const m = tag.toUpperCase().match(/^(AI|AO|BI|BO)[\s\-]?\d/);
-      if (m) {
-        counts[m[1]] += 1;
+      // Some templates print a literal placeholder mark (BI#, BI##, BO#)
+      // for a repeated or field-numbered point. It is still an authored
+      // typed point row; the wildcard is not a reason to demote it to
+      // `other` or invent a number for it.
+      const pointType = basPointTypeEvidence(row, tag);
+      if (pointType.type) {
+        counts[pointType.type] += 1;
+      } else if (pointType.status === "REFUSED_POINT_TYPE_CONFLICT") {
+        counts.other += 1;
       } else {
         // PLC I/O LIST shape: device rows carry ANALOG/DIGITAL quantity cells
         // (not AI## MARK prefixes). Roll those into AI/BI point totals — set-
@@ -2131,10 +2220,14 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       items.push({
         tag,
         quantity: 1,
-        scheduled_qty: qtyStatus2.qty,
+        quantity_basis: "schedule_row_cardinality",
+        scheduled_qty: qtyStatus2.refused ? null : qtyStatus2.qty,
+        scheduled_qty_basis: qtyStatus2.basis,
+        scheduled_qty_source_header: qtyStatus2.source_header,
+        scheduled_qty_source_text: qtyStatus2.source_text,
         installed_qty: null,
         status: qtyStatus2.refused ? "REFUSED_UNPARSEABLE_QTY" : null,
-        qty_kind: "scheduled",
+        qty_kind: qtyStatus2.refused ? "unresolved" : "scheduled",
         unit: "EA",
         sheet_id: table.sheet,
         table_title: title,
@@ -2142,6 +2235,11 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         table_bbox_px: tableBbox,
         title_bbox_px: titleBbox,
         description: description || cellText(row, /DESCRIPTION/i) || null,
+        point_type: pointType.type,
+        point_type_raw: pointType.raw,
+        point_type_basis: pointType.basis,
+        point_type_status: pointType.status,
+        point_type_bbox_px: cellBbox(row, BAS_POINT_TYPE_HEADER_RE),
         cells,
         alarm: pointExtras.alarm,
         trend: pointExtras.trend,
@@ -2152,7 +2250,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     }
     // Empty after header skip → title-only schematic; disclose via exclusions, do not count.
     if (items.length === 0) continue;
-    lists.push({
+    const compiled = {
       title,
       sheet_id: table.sheet,
       rows: items.length,
@@ -2165,8 +2263,32 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       hardwired: extras.hardwired,
       soft: extras.soft,
       items,
-    });
+    };
+    // Vector/ODL table recovery can split one wide or tall authored points
+    // list into adjacent fragments. Same page + same normalized title is one
+    // logical list; keep the row-level citations but present and total it
+    // once. Whole duplicate tables are already removed by graph reconcile,
+    // so fragment counts add without suppressing legitimate repeated point
+    // definitions that happen to share a tag but have different descriptions.
+    const listKey = `${String(table.sheet)}\0${title.toUpperCase().replace(/\s+/g, " ").trim()}`;
+    const prior = lists.find((candidate) => candidate._merge_key === listKey);
+    if (prior) {
+      prior.rows += compiled.rows;
+      prior.AI += compiled.AI;
+      prior.AO += compiled.AO;
+      prior.BI += compiled.BI;
+      prior.BO += compiled.BO;
+      prior.alarm += compiled.alarm;
+      prior.trend += compiled.trend;
+      prior.hardwired += compiled.hardwired;
+      prior.soft += compiled.soft;
+      prior.items.push(...compiled.items);
+    } else {
+      lists.push({ ...compiled, _merge_key: listKey });
+    }
   }
+
+  for (const list of lists) delete list._merge_key;
 
   const totals = lists.reduce(
     (acc, l) => ({
@@ -2186,14 +2308,14 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
   const pages = sheets.map((sheet) => {
     const key = sheet.key;
     const tables = (graph.tables || []).filter((t) => t.sheet === key);
-    const titles = tables
+    const titles = [...new Set(tables
       .map((t) => {
         const raw = String(t.title?.text || "").trim();
         if (isBasPointsListTitle(raw)) return raw;
         if (isBasPointsListTable(t)) return inferBasListTitle(t);
         return "";
       })
-      .filter(Boolean);
+      .filter(Boolean))];
     return {
       sheet_id: key,
       sheet_number: sheet.sheetNumber ?? sheet.number ?? null,
@@ -2214,7 +2336,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO comes from authored MARK prefixes or exact POINT TYPE / HARDWARE POINT TYPE / I/O TYPE cells (DI/DO normalize to BI/BO while retaining the printed token). Conflicting authored types remain untyped. On I/O LIST device rows without typed marks/cells, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,
@@ -2638,19 +2760,20 @@ export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
         // (has_scheduled_valve: false) surface as takeoff items; a
         // corroborated coil is already represented by its own scheduled
         // valve row and would double-count if it appeared here too.
-        // No real schedule row backs a gap (it is an INFERRED absence, one
-        // per coil instance) — scheduled_qty is always exactly 1 by
-        // construction here, not read off a QTY column; still additive
-        // alongside the unchanged quantity field.
+        // No real schedule row backs a gap. It is an inferred absence, one per
+        // evidenced coil instance, and therefore must never be presented as a
+        // scheduled or installed quantity.
         items: gaps.map((g) => ({
           tag: g.tag || `${g.coilLabel}@${g.sheet}`,
           sheet_id: g.sheet,
           table_title: g.source_table_title,
           quantity: 1,
-          scheduled_qty: 1,
+          quantity_basis: "inferred_embedded_coil_gap",
+          scheduled_qty: null,
+          scheduled_qty_basis: null,
           installed_qty: null,
           status: null,
-          qty_kind: "scheduled",
+          qty_kind: "inferred_gap",
           unit: "EA",
           description: `Embedded ${g.coilLabel} — GPM ${g.gpm}${g.ewt ? `, EWT ${g.ewt}` : ""}${g.lwt ? `, LWT ${g.lwt}` : ""} — no matching scheduled valve found`,
           cells: {
@@ -2732,14 +2855,16 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
         if (aa !== bb) return aa - bb;
         return String(a).localeCompare(String(b));
       });
-      const rows = [["tag", "description", "qty", "unit", "scheduled_qty", "installed_qty", "status", "qty_kind", "building", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
+      const rows = [["tag", "description", "qty", "quantity_basis", "unit", "scheduled_qty", "scheduled_qty_basis", "installed_qty", "status", "qty_kind", "building", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
       for (const item of cat.items || []) {
         rows.push([
           item.tag,
           item.description || "",
           item.quantity,
+          item.quantity_basis ?? "",
           item.unit,
           item.scheduled_qty ?? "",
+          item.scheduled_qty_basis ?? "",
           item.installed_qty ?? "",
           item.status ?? "",
           item.qty_kind ?? "",
@@ -2779,16 +2904,20 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
         }
       }
       attrKeys.sort((a, b) => String(a).localeCompare(String(b)));
-      const rows = [["tag", "point_type", "description", "qty", "unit", "scheduled_qty", "installed_qty", "status", "qty_kind", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
+      const rows = [["tag", "point_type", "description", "qty", "quantity_basis", "unit", "scheduled_qty", "scheduled_qty_basis", "installed_qty", "status", "qty_kind", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
       for (const item of list.items || []) {
-        const pt = String(item.tag || "").toUpperCase().match(/^(AI|AO|BI|BO)/)?.[1] || "";
+        const pt = item.point_type
+          || String(item.tag || "").toUpperCase().match(/^(AI|AO|BI|BO)/)?.[1]
+          || "";
         rows.push([
           item.tag,
           pt,
           item.description || "",
           item.quantity,
+          item.quantity_basis ?? "",
           item.unit,
           item.scheduled_qty ?? "",
+          item.scheduled_qty_basis ?? "",
           item.installed_qty ?? "",
           item.status ?? "",
           item.qty_kind ?? "",
@@ -2809,10 +2938,10 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
   } else if (takeoff.kind === "embedded_coil_valve_gaps") {
     const items = takeoff.categories?.embedded_coil_gaps?.items || [];
     const rollup = [
-      ["tag", "sheet_id", "table_title", "qty", "unit", "scheduled_qty", "installed_qty", "status", "qty_kind", "description"],
+      ["tag", "sheet_id", "table_title", "qty", "quantity_basis", "unit", "scheduled_qty", "scheduled_qty_basis", "installed_qty", "status", "qty_kind", "description"],
       ...items.map((item) => [
-        item.tag, item.sheet_id, item.table_title, item.quantity, item.unit,
-        item.scheduled_qty ?? "", item.installed_qty ?? "", item.status ?? "", item.qty_kind ?? "",
+        item.tag, item.sheet_id, item.table_title, item.quantity, item.quantity_basis ?? "", item.unit,
+        item.scheduled_qty ?? "", item.scheduled_qty_basis ?? "", item.installed_qty ?? "", item.status ?? "", item.qty_kind ?? "",
         item.description || "",
       ]),
     ];

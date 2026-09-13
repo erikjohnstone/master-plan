@@ -1533,3 +1533,61 @@ test("query_table UNIT HEATER needle does not soft-match CABINET UNIT HEATER", (
   assert.equal(queryTitleMatchesNeedle("CABINET UNIT HEATER SCHEDULE", "UNIT HEATER SCHEDULE"), false);
   assert.equal(queryTitleMatchesNeedle("ELECTRIC UNIT HEATER SCHEDULE", "UNIT HEATER SCHEDULE"), true);
 });
+
+test("HVAC compile never treats a family-named BAS points list as installed equipment", () => {
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "CRAH DDC POINTS LIST" },
+        rows: [
+          { key: "AI01", cells: { MARK: { text: "AI01" } } },
+          { key: "BI01", cells: { MARK: { text: "BI01" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE" },
+        rows: [{ key: "CRAH-1", cells: { MARK: { text: "CRAH-1" } } }],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal((hvac.categories as FixtureCategories).CRAH.count, 1);
+  assert.equal((hvac.categories as FixtureCategories).CRAH.items[0].tag, "CRAH-1");
+  assert.deepEqual(hvac.page_accounting.pages.map((page: any) => page.status), []);
+});
+
+test("HVAC page accounting follows contributed equipment rather than unrelated tables", () => {
+  const graph = {
+    sheets: [
+      { key: "m.pdf#1", number: 1 },
+      { key: "m.pdf#2", number: 2 },
+      { key: "m.pdf#3", number: 3 },
+    ],
+    tables: [
+      {
+        kind: "reference", sheet: "m.pdf#1", title: { text: "GENERAL PROJECT SYMBOLS" },
+        rows: [{ key: "X", cells: {} }],
+      },
+      {
+        kind: "equipment", sheet: "m.pdf#2", title: { text: "CRAH DDC POINTS LIST" },
+        rows: [{ key: "AI01", cells: { MARK: { text: "AI01" } } }],
+      },
+      {
+        kind: "equipment", sheet: "m.pdf#3", title: { text: "COMPUTER ROOM AIR HANDLER SCHEDULE" },
+        rows: [{ key: "CRAH-1", cells: { MARK: { text: "CRAH-1" } } }],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.deepEqual(hvac.page_accounting.pages.map((page: any) => page.status), [
+    "empty_for_hvac_equipment_schedules",
+    "empty_for_hvac_equipment_schedules",
+    "has_hvac_equipment_schedule",
+  ]);
+  assert.deepEqual(hvac.page_accounting.pages[2].titles, ["COMPUTER ROOM AIR HANDLER SCHEDULE"]);
+});

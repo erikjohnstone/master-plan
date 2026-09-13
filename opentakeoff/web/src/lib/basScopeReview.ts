@@ -1,7 +1,8 @@
 /** Shared append-only scope / human coverage decisions. No extraction, waiver,
  * PDF-byte verification, Python arithmetic or approval. */
 import { z } from 'zod';
-import { verifyBasWorkflow, assertVerifiedBasWorkflowReferences, basEventFingerprint, type BasWorkflow } from './basWorkflow.ts';
+import { verifyBasWorkflow, verifyBasWorkflowWithPreparedReviewViews, assertVerifiedBasWorkflowReferences,
+  basEventFingerprint, type BasWorkflow } from './basWorkflow.ts';
 import { atLeastBasWorkflowRevision } from './basWorkflowRevision.ts';
 import { replayBasDrawingHistory } from './basDrawingRevision.ts';
 import { defaultBasRevisionBasis } from './basRevisionBasis.ts';
@@ -34,11 +35,15 @@ const currentSpec = (w: BasWorkflow, s: BasDeliverableScopeSpec): BasDeliverable
 const same = (a: unknown, b: unknown) => canonicalBasJson(a) === canonicalBasJson(b);
 
 /** Per-operation memoization only. Never trust an externally supplied preview. */
-function previews(w: BasWorkflow, signal?: AbortSignal) {
+function previews(w: BasWorkflow, signal?: AbortSignal,
+  retainPreparedReviewViews: (specification: BasDeliverableScopeSpec) => boolean = () => false,
+  consumePreparedWorkflowReviewViews: (specification: BasDeliverableScopeSpec) => boolean = () => false) {
   const cache = new Map<string, Promise<BasDeliverableScope>>();
   return (spec: BasDeliverableScopeSpec) => {
     const key = canonicalBasJson(spec);
-    const value = cache.get(key) ?? deliverableScopeForVerifiedWorkflow(w, spec, signal);
+    const value = cache.get(key) ?? deliverableScopeForVerifiedWorkflow(w, spec, signal,
+      { retainPreparedReviewViews: retainPreparedReviewViews(spec),
+        consumePreparedWorkflowReviewViews: consumePreparedWorkflowReviewViews(spec) });
     // Aggregate readiness can visit many historical bases. Keep only the
     // current and one historical projection, not an unbounded inventory cache.
     cache.delete(key); cache.set(key, value);
@@ -74,7 +79,7 @@ export async function applyBasScopeReview(raw: unknown, rawRequest: unknown, ori
   options = { ...options };
   const request = basScopeReviewRequestSchema.parse(rawRequest), checkedOrigin = z.enum(['operator_input', 'agent_proposal']).parse(origin);
   options.signal?.throwIfAborted();
-  const workflow = await verifyBasWorkflow(raw); options.signal?.throwIfAborted();
+  const workflow = await verifyBasWorkflowWithPreparedReviewViews(raw); options.signal?.throwIfAborted();
   const journal = history(workflow), previous = workflow.scope_events?.find(e => e.operation_id === request.operation_id);
   if (previous) {
     const { event_id: _event, scope_id: _scope, rule_version: _rule, origin: oldOrigin, created_at: _time,
@@ -85,7 +90,10 @@ export async function applyBasScopeReview(raw: unknown, rawRequest: unknown, ori
     options.signal?.throwIfAborted(); return { workflow, event: previous };
   }
   if (request.expected_head !== journal.head) throw new Error('BAS scope history changed; reload before saving');
-  const action = request.action, preview = previews(workflow, options.signal);
+  let preparedViewsAvailable = true;
+  const action = request.action, preview = previews(workflow, options.signal, () => false, () => {
+    const available = preparedViewsAvailable; preparedViewsAvailable = false; return available;
+  });
   let scope_id: string, result_fingerprint: string | null = null;
   if (action.kind === 'save_scope') {
     scope_id = action.specification.scope_id;
@@ -140,12 +148,24 @@ export async function inspectBasScopeHistory(raw: unknown) {
  * cannot establish its result. Never accept caller-supplied coverage arrays. */
 export async function prepareBasScopeReadiness(raw: unknown, eventId: string, signal?: AbortSignal) {
   sha.parse(eventId); signal?.throwIfAborted();
-  const workflow = await verifyBasWorkflow(raw), journal = history(workflow);
-  const scope = savedScope(workflow, eventId), preview = previews(workflow, signal);
+  const workflow = await verifyBasWorkflowWithPreparedReviewViews(raw); signal?.throwIfAborted();
+  return prepareBasScopeReadinessForVerifiedWorkflow(workflow, eventId, signal);
+}
+
+/** Internal shared composition seam. The caller must own the exact result of
+ * verifyBasWorkflow; public raw-input paths continue through the wrapper above.
+ * This prevents archive source verification and readiness from auditing the
+ * same immutable history twice in one operation. */
+export async function prepareBasScopeReadinessForVerifiedWorkflow(workflow: BasWorkflow, eventId: string, signal?: AbortSignal) {
+  sha.parse(eventId); signal?.throwIfAborted();
+  const journal = history(workflow);
+  const scope = savedScope(workflow, eventId), currentSpecification = currentSpec(workflow, scope.action.specification);
+  const isCurrent = (specification: BasDeliverableScopeSpec) => same(specification, currentSpecification);
+  const preview = previews(workflow, signal, isCurrent, isCurrent);
   if (journal.scopes.get(scope.scope_id)?.event_id !== scope.event_id)
     throw new Error('Readiness requires the current saved scope, not a superseded or withdrawn scope');
   const original = (await replayEvent(workflow, scope, preview)).value as BasDeliverableScope;
-  const current = await preview(currentSpec(workflow, scope.action.specification));
+  const current = await preview(currentSpecification);
   const coverage = [];
   for (const event of journal.coverage.values()) {
     signal?.throwIfAborted();

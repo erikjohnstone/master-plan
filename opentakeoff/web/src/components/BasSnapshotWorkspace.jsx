@@ -6,6 +6,7 @@ import { createBasSnapshotBrowser } from '../lib/basSnapshotBrowser.js';
 import { store } from '../lib/store.js';
 import { downloadText } from '../lib/totals.js';
 import { scopeWindow } from './basScopeEditorState.ts';
+import { basSnapshotLifecycleExport } from '../lib/basSnapshotLifecycle.ts';
 import BasSnapshotContents from './BasSnapshotContents.jsx';
 import BasSourceReader from './BasSourceReader.jsx';
 import './BasSnapshotWorkspace.css';
@@ -18,8 +19,9 @@ export default function BasSnapshotWorkspace({ workflow, restoreContext, state =
   const [listing, setListing] = useState(null), [cursors, setCursors] = useState([null]);
   const [busy, setBusy] = useState(''), [notice, setNotice] = useState(''), [error, setError] = useState('');
   const [confirmed, setConfirmed] = useState(false), [blockerPage, setBlockerPage] = useState(0);
+  const [currentness, setCurrentness] = useState(null), [lifecycleConfirmed, setLifecycleConfirmed] = useState(false);
   const [source, setSource] = useState(null);
-  const operation = useRef(null), retry = useRef(null), heading = useRef(null), fileInput = useRef(null), sourceReturn = useRef(null);
+  const operation = useRef(null), retry = useRef(null), heading = useRef(null), fileInput = useRef(null), lifecycleFileInput = useRef(null), sourceReturn = useRef(null);
   const change = patch => onStateChange(previous => ({ ...previous, ...patch }));
   const tab = workflow ? state.tab || 'prepare' : 'saved';
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function BasSnapshotWorkspace({ workflow, restoreContext, state =
     return () => { mounted.current = false; operation.current?.abort(); current.dispose(); };
   }, [adapter, restoreContext]);
   useEffect(() => {
-    const abort = new AbortController(); setCatalog(null); setCatalogError(''); setPreview(null); setConfirmed(false); retry.current = null;
+    const abort = new AbortController(); setCatalog(null); setCatalogError(''); setPreview(null); setConfirmed(false); setCurrentness(null); setLifecycleConfirmed(false); retry.current = null;
     if (workflow) catalogBasScope(workflow, {}, abort.signal).then(value => { if (!abort.signal.aborted) setCatalog(value); })
       .catch(e => { if (!abort.signal.aborted) setCatalogError(e.message); });
     return () => { abort.abort(); operation.current?.abort(); };
@@ -53,7 +55,7 @@ export default function BasSnapshotWorkspace({ workflow, restoreContext, state =
   const scopes = catalog?.scopes.filter(e => e.action.kind === 'save_scope') || [];
   const selected = scopes.find(e => e.event_id === state.scopeEventId);
   async function checkReadiness() {
-    setPreview(null); setConfirmed(false); setBlockerPage(0); retry.current = null;
+    setPreview(null); setConfirmed(false); setBlockerPage(0); setCurrentness(null); setLifecycleConfirmed(false); retry.current = null;
     await perform('Checking original PDFs, source coverage, findings and shared Python calculations…', async (signal, guard) => {
       const result = await client.current.preview(selected.event_id, { signal }); guard();
       setPreview(result); setNotice(result.readiness.status === 'blocked'
@@ -75,18 +77,49 @@ export default function BasSnapshotWorkspace({ workflow, restoreContext, state =
     });
   }
   const open = id => perform('Verifying the saved snapshot and its historical originals…', async (signal, guard) => {
-    setOpened(null); const result = await client.current.open(id, { signal }); guard(); setOpened(result); change({ snapshotId: id });
-    setNotice('Historical snapshot verified. This is not approval of the current working drawings or project.');
+    setOpened(null); setCurrentness(null); setLifecycleConfirmed(false); const result = await client.current.open(id, { signal }); guard(); setOpened(result); change({ snapshotId: id });
+    setNotice(`Historical snapshot verified. Lifecycle status: ${result.lifecycle.state.status}. Current working applicability has not been checked.`);
   });
   const exportSnapshot = () => perform('Replaying the snapshot and preparing its original-source evidence ZIP…', async (signal, guard) => {
     const result = await client.current.export(opened.record.snapshot_id, { signal }); guard(); downloadText(result.filename, result.blob, 'application/zip');
-    setNotice('Snapshot evidence ZIP downloaded. It preserves historical scope, decisions, calculations and original PDFs—not approval of later revisions.');
+    setNotice('Snapshot evidence ZIP downloaded. Download lifecycle JSON separately to retain later revocation/supersession and this session’s currentness check.');
   });
+  const exportLifecycle = () => {
+    const value = basSnapshotLifecycleExport(opened.record.snapshot_id, opened.lifecycle,
+      currentness || { status: 'not_evaluated' });
+    downloadText(`${opened.record.snapshot_id}.lifecycle.json`, JSON.stringify(value, null, 2), 'application/json');
+    setNotice('Snapshot lifecycle JSON downloaded. Keep it beside the immutable evidence ZIP.');
+  };
   const importSnapshot = file => perform('Verifying the imported historical snapshot before local storage…', async (signal, guard) => {
-    const result = await client.current.import(file, { signal }); guard(); setOpened(result); setPreview(null); setListing(null); setCursors([null]);
+    const result = await client.current.import(file, { signal }); guard(); setOpened(result); setPreview(null); setListing(null); setCursors([null]); setCurrentness(null); setLifecycleConfirmed(false);
     change({ tab: 'saved', snapshotId: result.record.snapshot_id });
     setNotice('Historical snapshot imported and verified. Your working annotations and current drawing set were not replaced.');
   });
+  const importLifecycle = file => perform('Verifying and importing snapshot lifecycle history…', async (signal, guard) => {
+    const result = await client.current.importLifecycle(file, { signal }); guard();
+    setOpened(result); setPreview(null); setListing(null); setCursors([null]); setCurrentness(null); setLifecycleConfirmed(false);
+    change({ tab: 'saved', snapshotId: result.record.snapshot_id });
+    setNotice(`Snapshot lifecycle imported and verified. Status: ${result.lifecycle.state.status}. Current working applicability has not been checked.`);
+  });
+  const checkCurrentness = () => perform('Comparing the verified snapshot scope with the current saved workflow…', async (signal, guard) => {
+    const result = await client.current.currentness(opened.plan, { signal }); guard(); setCurrentness(result);
+    setNotice(result.status === 'current_for_reviewed_scope'
+      ? 'The saved approval still applies to this exact reviewed scope. This is not whole-project or installed-quantity approval.'
+      : result.status === 'not_current_lifecycle' ? `This snapshot is ${result.lifecycle.status} and is not current.`
+        : 'The saved approval does not apply to the current reviewed scope. Resolve the reported blockers and create a new snapshot.');
+  });
+  async function recordLifecycle(event) {
+    event.preventDefault(); if (!opened || !lifecycleConfirmed) return;
+    const kind = state.lifecycleKind || 'revoke';
+    const action = kind === 'supersede' ? { kind, successor_snapshot_id: state.successorSnapshotId } : { kind };
+    await perform(`Recording snapshot ${kind}…`, async (signal, guard) => {
+      const result = await client.current.recordLifecycle(opened.plan, { operation_id: crypto.randomUUID(),
+        expected_head: opened.lifecycle.state.head, reviewer: state.lifecycleReviewer, reason: state.lifecycleReason,
+        declared_at: new Date().toISOString(), action }, { signal }); guard();
+      setOpened(result); setCurrentness(null); setLifecycleConfirmed(false);
+      setNotice(`Snapshot ${result.lifecycle.state.status}. The original approval and evidence remain immutable and inspectable.`);
+    });
+  }
   function showSource(ref) {
     sourceReturn.current = document.activeElement;
     setSource({ page_id: ref.page_id, ...(ref.bbox_px ? { bbox_px: ref.bbox_px } : {}), value: ref.text || '' });
@@ -105,9 +138,11 @@ export default function BasSnapshotWorkspace({ workflow, restoreContext, state =
         <button type="button" disabled={!!busy || !workflow} aria-pressed={tab === 'prepare'} onClick={() => { change({ tab: 'prepare' }); setNotice(''); setError(''); }}>Prepare snapshot</button>
         <button type="button" disabled={!!busy} aria-pressed={tab === 'saved'} onClick={savedTab}>Saved snapshots</button>
         <button type="button" disabled={!!busy} onClick={() => fileInput.current?.click()}>Import historical snapshot</button>
+        <button type="button" disabled={!!busy} onClick={() => lifecycleFileInput.current?.click()}>Import lifecycle JSON</button>
         {busy && <button type="button" onClick={() => operation.current?.abort()}>Cancel snapshot operation</button>}
       </nav>
       <input ref={fileInput} name="bas-snapshot-import" type="file" accept=".zip" hidden onChange={e => { const file = e.target.files?.[0]; e.target.value = ''; if (file) importSnapshot(file); }} />
+      <input ref={lifecycleFileInput} name="bas-snapshot-lifecycle-import" type="file" accept=".json,application/json" hidden onChange={e => { const file = e.target.files?.[0]; e.target.value = ''; if (file) importLifecycle(file); }} />
       <div role="status" aria-atomic="true" className="bas-snapshot-status">{notice}</div>
       {error && <p role="alert">{error}</p>}
       {tab === 'prepare' && <>
@@ -139,11 +174,27 @@ export default function BasSnapshotWorkspace({ workflow, restoreContext, state =
         })}>Next snapshots</button></div>
       </section>}
       {tab === 'saved' && opened && <section aria-label="Verified historical snapshot" className="bas-snapshot-declaration">
-        <div className="bas-point-heading"><h3>{opened.readiness.scope.specification.name}</h3><button type="button" disabled={!!busy} onClick={exportSnapshot}>Download snapshot evidence ZIP</button></div>
-        <p><strong>Verified historical scope · current applicability not evaluated</strong></p>
+        <div className="bas-point-heading"><h3>{opened.readiness.scope.specification.name}</h3><div className="bas-point-controls"><button type="button" disabled={!!busy} onClick={exportSnapshot}>Download snapshot evidence ZIP</button><button type="button" disabled={!!busy} onClick={exportLifecycle}>Download lifecycle JSON</button></div></div>
+        <p><strong>Verified historical scope · {opened.lifecycle?.state.status || 'approved'} · {currentness?.status?.replaceAll('_', ' ') || 'current applicability not evaluated'}</strong></p>
         <p>{opened.record.snapshot.declaration.reviewer} · {opened.record.snapshot.declaration.declared_at} (self-declared, local time record)</p>
         <p>{opened.record.snapshot.declaration.reason}</p>
-        <details><summary>Snapshot identity and guarantees</summary><code>{opened.record.snapshot_id}</code><p>Originals and saved calculations were checked on this opening. This is local tamper detection, not authenticated identity or server-enforced immutability. Later changes, revocation and supersession are not evaluated by this historical reader. Keep the evidence ZIP outside browser storage.</p></details>
+        {opened.lifecycle?.state.terminal_event && <p role="status"><strong>{opened.lifecycle.state.status}</strong> by {opened.lifecycle.state.terminal_event.declaration.reviewer} on {opened.lifecycle.state.terminal_event.declaration.declared_at}: {opened.lifecycle.state.terminal_event.declaration.reason}{opened.lifecycle.state.successor_snapshot_id ? ` · successor ${opened.lifecycle.state.successor_snapshot_id}` : ''}</p>}
+        <div className="bas-point-controls"><button type="button" disabled={!!busy} onClick={checkCurrentness}>Check against current saved work</button></div>
+        {currentness && <details open><summary>Currentness result</summary><p>{currentness.status.replaceAll('_', ' ')} · readiness {currentness.readiness_status.replaceAll('_', ' ')}</p>
+          {!!currentness.blocker_codes.length && <ul>{currentness.blocker_codes.map(code => <li key={code}><code>{code}</code></li>)}</ul>}
+          <p>Applies only to the reviewed scope. It never certifies the whole project or an installed quantity.</p></details>}
+        <details><summary>Snapshot identity and guarantees</summary><code>{opened.record.snapshot_id}</code><p>Originals and saved calculations were checked on this opening. This is local tamper detection, not authenticated identity or server-enforced immutability. Currentness is recalculated only when requested. Keep both the evidence ZIP and lifecycle JSON outside browser storage.</p></details>
+        {opened.lifecycle?.state.status === 'approved' && <form className="bas-snapshot-approval" onSubmit={recordLifecycle}>
+          <fieldset disabled={!!busy}><legend>Revoke or supersede this snapshot</legend>
+            <label>Release action<select value={state.lifecycleKind || 'revoke'} onChange={e => { change({ lifecycleKind: e.target.value }); setLifecycleConfirmed(false); }}><option value="revoke">Revoke</option><option value="supersede">Supersede with another snapshot</option></select></label>
+            {state.lifecycleKind === 'supersede' && <label>Successor snapshot ID<input required pattern="[a-f0-9]{64}" maxLength={64} value={state.successorSnapshotId || ''} onChange={e => { change({ successorSnapshotId: e.target.value }); setLifecycleConfirmed(false); }} /></label>}
+            <label>Reviewer (self-declared)<input required maxLength={512} value={state.lifecycleReviewer || ''} onChange={e => { change({ lifecycleReviewer: e.target.value }); setLifecycleConfirmed(false); }} /></label>
+            <label>Reason<textarea required maxLength={8192} value={state.lifecycleReason || ''} onChange={e => { change({ lifecycleReason: e.target.value }); setLifecycleConfirmed(false); }} /></label>
+            <label className="bas-snapshot-confirm"><input type="checkbox" checked={lifecycleConfirmed} onChange={e => setLifecycleConfirmed(e.target.checked)} />I understand this append-only action leaves the historical approval intact but makes it non-current.</label>
+            <button type="submit" disabled={!lifecycleConfirmed || !state.lifecycleReviewer?.trim() || !state.lifecycleReason?.trim()
+              || (state.lifecycleKind === 'supersede' && !/^[a-f0-9]{64}$/.test(state.successorSnapshotId || ''))}>Record {state.lifecycleKind || 'revoke'}</button>
+          </fieldset>
+        </form>}
       </section>}
       {readiness && <>
         <p className="bas-review-boundary">{readiness.scope.claims.length} included claims · {readiness.scope.exclusions.length} explicit exclusions · {readiness.sources.length} original versions · {readiness.replay?.calculation_verification === 'no_saved_calculations' ? 'No saved calculations to replay' : readiness.replay ? 'Saved calculations matched shared Python' : 'Calculations not verified'}</p>

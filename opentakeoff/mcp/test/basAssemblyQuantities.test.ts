@@ -30,6 +30,24 @@ import { parseTakeoffImport, mergeTakeoffImport } from '../../web/src/lib/import
 createRequire(new URL('../../web/package.json', import.meta.url))('fake-indexeddb/auto');
 
 const uuid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
+
+test('equipment evidence excludes titled and header-inferred BAS point matrices', () => {
+  const box = [0, 0, 100, 20];
+  const common = { kind: 'equipment', sheet: 'controlled.pdf', region: [0, 0, 500, 300] };
+  const equipment = { ...common, title: { sheet: 'controlled.pdf', text: 'AIR HANDLING UNIT SCHEDULE', bbox: box },
+    headers: ['TAG', 'CFM'], rows: [{ key: 'AHU-1', sheet: 'controlled.pdf', cells: { TAG: { text: 'AHU-1', bbox: box } } }] };
+  const titledPoints = { ...common,
+    title: { sheet: 'controlled.pdf', text: 'HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1', bbox: box },
+    headers: ['POINT NAME', 'TAG', 'POINT TYPE'], rows: [{ key: '1', sheet: 'controlled.pdf', cells: {} }] };
+  const inferredPoints = { ...common, title: null, headers: ['POINT', 'DESCRIPTION', 'AI', 'AO'],
+    rows: [{ key: '1', sheet: 'controlled.pdf', cells: {} }] };
+  const unrelated = ['DUCT CONSTRUCTION AND LEAKAGE SCHEDULE', 'LUMINAIRE SCHEDULE',
+    'EXISTING PANEL LP1 SCHEDULE', 'PLUMBING FIXTURE SCHEDULE'].map(text => ({ ...common,
+      title: { sheet: 'controlled.pdf', text, bbox: box }, headers: ['TAG'], rows: [] }));
+  const captured = captureBasEquipmentTables([equipment, titledPoints, inferredPoints, ...unrelated]);
+  assert.deepEqual(captured.tables.map(table => table.title?.text), ['AIR HANDLING UNIT SCHEDULE']);
+});
+
 async function fixture(componentList = false) {
   const source = buildBasSourceContext([{ sha256: 'a'.repeat(64), byte_length: 1, name: 'controlled.pdf', page_count: 1,
     pages: [{ page_number: 1, sheet_key: 'controlled.pdf', width_px: 1800, height_px: 1000, rotation: 0,

@@ -45,6 +45,22 @@ async function pointListsForSession(session: unknown, graph: SheetGraph) {
   }
 }
 
+function tablesForBasMath(graph: SheetGraph, pointResult: Awaited<ReturnType<typeof pointListsForSession>>) {
+  const points = pointResult?.bas_point_lists;
+  if (!points || !("matrices" in points)) return graph.tables;
+  const key = (table: { sheet?: unknown; title?: { text?: unknown } | null; region?: unknown }) => {
+    const sheet = String(table.sheet ?? "");
+    const title = String(table.title?.text ?? "").replace(/\s+/g, " ").trim().toUpperCase();
+    return title ? `${sheet}\u0000${title}` : `${sheet}\u0000${JSON.stringify(table.region ?? null)}`;
+  };
+  const matrices = points.matrices.map(matrix => matrix.raw);
+  const pointKeys = new Set(matrices.map(key));
+  // The retained point workflow may recover a missing/truncated core matrix
+  // from the same source spans. Replace the graph copy by source identity so
+  // Python math and the review workspace consume one listed-point truth.
+  return [...graph.tables.filter(table => !pointKeys.has(key(table))), ...matrices];
+}
+
 export async function compileProductionTakeoff(session: unknown, graph: SheetGraph, kind: string,
   opts: { service?: string; bas_math?: unknown; bas_review?: unknown; bas_equipment_review?: unknown; bas_assignment_demand?: unknown;
     bas_assembly_review?: unknown; bas_assembly_quantities?: unknown; bas_engineering_review?: unknown; bas_engineering_inspect?: unknown; bas_project_review?: unknown } = {}) {
@@ -58,10 +74,11 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
   // SHOULD THIS BE ON THE SHARED PATH? Yes: both UI CLI and MCP call here.
   // Source observations do not rewrite existing tables, printed totals or math.
   const pointLists = pointListsForSession(session, graph);
+  const pointResult = await pointLists;
   let bas_math;
   try {
     const sequences = compileSequencesTakeoff(session, graph);
-    bas_math = await runBasMath({ blueprint: { tables: graph.tables,
+    bas_math = await runBasMath({ blueprint: { tables: tablesForBasMath(graph, pointResult),
       sequence_count: sequences.totals.sequences, options: opts.bas_math ?? {} } });
   } catch (error) {
     // Preserve every original cell/cite/result. An unavailable math runtime is
@@ -69,7 +86,6 @@ export async function compileProductionTakeoff(session: unknown, graph: SheetGra
     bas_math = { engine: "bas_math_v1" as const, status: "unavailable" as const,
       project_complete: false as const, error: error instanceof Error ? error.message : "BAS math unavailable" };
   }
-  const pointResult = await pointLists;
   let equipmentSummary;
   let assignmentCalculation;
   let assemblySummary, assemblyCalculation, assemblyError;

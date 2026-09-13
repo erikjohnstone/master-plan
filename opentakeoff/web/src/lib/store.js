@@ -325,6 +325,20 @@ function basSourceStore(projectId = "") {
       return loadBasSnapshotInIdb({ withDb, projectId, snapshotId, guard, signal,
         io: { readSource: source => basSourceStore(projectId).loadBasSource(source), replayCalculations } });
     },
+    /** @param {any} plan @param {any} event @param {any} [options] */
+    async saveBasSnapshotLifecycle(plan, event, options = {}) {
+      const { guard = () => {}, signal } = options;
+      const { saveBasSnapshotLifecycleInIdb } = await import('./basSnapshotStore.js');
+      return withAnnotationCoordinator(projectId, () => saveBasSnapshotLifecycleInIdb({
+        withDb, projectId, plan, rawEvent: event, guard, signal,
+      }), { signal });
+    },
+    /** @param {any} plan @param {any} [options] */
+    async loadBasSnapshotLifecycle(plan, options = {}) {
+      const { guard = () => {}, signal } = options;
+      const { loadBasSnapshotLifecycleInIdb } = await import('./basSnapshotStore.js');
+      return loadBasSnapshotLifecycleInIdb({ withDb, projectId, plan, guard, signal });
+    },
     // Actual restore is local atomic delivery, not an ordinary import/save.
     // Sync and plain-local callers share this exact annotation-scope lease.
     /** @param {any} plan @param {any} loadSource

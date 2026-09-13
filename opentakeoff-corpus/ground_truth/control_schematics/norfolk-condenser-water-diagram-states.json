@@ -1,0 +1,51 @@
+{
+  "schema": "opentakeoff.piping_diagram_ground_truth.v1",
+  "source_pdf": "pdf/02__vol2__015__Norfolk_Submarine_Pier_3_Utility_Services.pdf",
+  "source_sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+  "review_basis": "Independent full-document visual ground truth identifies AM610 and AM702 as condenser-water diagrams, all V-1 through V-15 diagram aliases, and the AM610 normally-open versus AM702 normally-closed conflict for V-1, V-2, and V-4 through V-10. This additive gate verifies only explicit text-backed state tokens and the nine independently reviewed conflicts; it does not infer fail position, command state, or installed quantity.",
+  "coordinate_frame": "pdf_viewport_px_origin_top_left",
+  "pages": [
+    {
+      "page": 21,
+      "sheet_number": "AM610",
+      "title": "USB CONDENSER WATER PIPING DIAGRAM",
+      "diagram_kind": "piping",
+      "normalized_system": "condenser_water",
+      "required_valve_tags": ["V-1", "V-2", "V-3", "V-4", "V-5", "V-6", "V-7", "V-8", "V-9", "V-10", "V-11", "V-12", "V-13", "V-14", "V-15"],
+      "explicit_text_states": {
+        "V-1": "normally_open",
+        "V-2": "normally_open",
+        "V-3": "normally_open",
+        "V-4": "normally_open",
+        "V-5": "normally_open",
+        "V-6": "normally_open",
+        "V-7": "normally_open",
+        "V-8": "normally_open",
+        "V-9": "normally_open",
+        "V-10": "normally_open"
+      }
+    },
+    {
+      "page": 23,
+      "sheet_number": "AM702",
+      "title": "CONDENSER WATER DIAGRAM",
+      "diagram_kind": "piping",
+      "normalized_system": "condenser_water",
+      "required_valve_tags": ["V-1", "V-2", "V-3", "V-4", "V-5", "V-6", "V-7", "V-8", "V-9", "V-10", "V-11"],
+      "explicit_text_states": {
+        "V-1": "normally_closed",
+        "V-2": "normally_closed",
+        "V-3": "normally_open",
+        "V-4": "normally_closed",
+        "V-5": "normally_closed",
+        "V-6": "normally_closed",
+        "V-7": "normally_closed",
+        "V-8": "normally_closed",
+        "V-9": "normally_closed",
+        "V-10": "normally_closed",
+        "V-11": "normally_open"
+      }
+    }
+  ],
+  "expected_conflicts": ["V-1", "V-2", "V-4", "V-5", "V-6", "V-7", "V-8", "V-9", "V-10"]
+}

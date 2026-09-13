@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -8,9 +9,22 @@ import { loadFixtureSession } from "./helpers/loadFixtureGraph.mjs";
 
 const CORPUS = resolve(dirname(fileURLToPath(import.meta.url)), "../../../opentakeoff-corpus");
 const TAKEOFF = resolve(CORPUS, "takeoffs/T-VALVE-01-navfac-control-valves");
+const CORRECTIONS = resolve(CORPUS, "ground_truth/hvac/navfac-cherry-point-tag-corrections.json");
+
+function applyReviewedTagCorrections(truth) {
+  const corrected = structuredClone(truth);
+  const overlay = JSON.parse(readFileSync(CORRECTIONS, "utf8"));
+  for (const correction of overlay.corrections || []) {
+    const item = corrected.categories?.[correction.category]?.items
+      ?.find((candidate) => candidate.tag === correction.previous_truth_tag);
+    assert.ok(item, `correction source tag missing: ${correction.previous_truth_tag}`);
+    item.tag = correction.corrected_printed_tag;
+  }
+  return corrected;
+}
 
 test("T-VALVE-01 compiler matches frozen truth quantities and cites", async () => {
-  const truth = loadTruth(resolve(TAKEOFF, "truth.json"));
+  const truth = applyReviewedTagCorrections(loadTruth(resolve(TAKEOFF, "truth.json")));
   const { graph, session } = await loadFixtureSession(CORPUS, TAKEOFF);
   const result = compileCorpusTakeoff(session, graph, "control_valves");
 

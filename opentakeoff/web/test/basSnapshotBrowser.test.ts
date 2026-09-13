@@ -13,6 +13,7 @@ import { createBasSnapshotBrowser, replayBasSnapshotInBrowser } from '../src/lib
 import { prepareBasWorkflowReplay, BAS_WORKFLOW_REPLAY_RULE } from '../src/lib/basWorkflowReplay.ts';
 import { readBasSnapshotPlan } from '../src/lib/basSnapshot.ts';
 import { canonicalBasJson } from '../src/lib/basCanonical.ts';
+import { basSnapshotLifecycleExport } from '../src/lib/basSnapshotLifecycle.ts';
 beforeEach(() => { globalThis.indexedDB = new IDBFactory(); setActiveStore(); });
 const declaration = { operation_id: uuid(975), reviewer: 'Controlled browser unit test', reason: 'No real PDF or real operator approval', declared_at: '2026-09-10T20:00:00.000Z' };
 async function noCalculationTransport(_url: unknown, request: RequestInit = {}) {
@@ -53,6 +54,47 @@ test('browser preview, explicit save, fresh reopen and export/import preserve or
   assert.deepEqual(await target.loadAnnotations(), unrelated); assert.equal((await receiver.list()).items.length, 1);
   assert.deepEqual(readBasSnapshotPlan(imported.plan).record, readBasSnapshotPlan(saved.plan).record);
   assert.deepEqual(await target.listSheets(), []); f.client.dispose(); receiver.dispose();
+});
+
+test('browser checks selective currentness and records an explicit terminal lifecycle without touching the takeoff', async () => {
+  const f = await setup(), before = await f.adapter.loadAnnotations();
+  const saved = await f.client.approve(await f.client.preview(f.scope.event_id), declaration);
+  assert.ok(saved.lifecycle);
+  const current = await f.client.currentness(saved.plan);
+  assert.equal(current.status, 'current_for_reviewed_scope');
+  const revoked = await f.client.recordLifecycle(saved.plan, { operation_id: uuid(977),
+    expected_head: saved.lifecycle.state.head, reviewer: 'Controlled browser operator', reason: 'A drawing issue requires withdrawal',
+    declared_at: '2026-09-11T20:00:00.000Z', action: { kind: 'revoke' } });
+  assert.ok(revoked.lifecycle);
+  assert.equal(revoked.lifecycle.state.status, 'revoked'); assert.equal(revoked.receipt.committed, true);
+  assert.equal((await f.client.currentness(saved.plan)).status, 'not_current_lifecycle');
+  const exported = await f.client.export(saved.record.snapshot_id);
+  assert.equal(exported.lifecycle.state.status, 'revoked'); assert.match(exported.lifecycle_filename, /lifecycle\.json$/);
+  assert.deepEqual(await f.adapter.loadAnnotations(), before);
+});
+test('exported lifecycle restores only after the matching snapshot and preserves terminal release state', async () => {
+  const f = await setup(), saved = await f.client.approve(await f.client.preview(f.scope.event_id), declaration);
+  const revoked = await f.client.recordLifecycle(saved.plan, { operation_id: uuid(997),
+    expected_head: saved.lifecycle.state.head, reviewer: 'Controlled browser operator', reason: 'Restore the exact terminal history',
+    declared_at: '2026-09-11T21:00:00.000Z', action: { kind: 'revoke' } });
+  const exported = await f.client.export(saved.record.snapshot_id);
+  const sidecar = new Blob([JSON.stringify(basSnapshotLifecycleExport(saved.record.snapshot_id, exported.lifecycle))], { type: 'application/json' });
+  const target = createLocalStore('lifecycle-receiver'); setActiveStore(target);
+  await target.saveAnnotations({ schema: 'opentakeoff.takeoff_canvas.v1', shapes: [], project_name: 'Unrelated current work' });
+  const before = await target.loadAnnotations();
+  const receiver = createBasSnapshotBrowser({ adapter: target, readWorkspace: () => ({ pending: true, busy: true }), fetcher: noCalculationTransport });
+  await assert.rejects(receiver.importLifecycle(sidecar), /matching snapshot evidence ZIP/);
+  const imported = await receiver.import(exported.blob);
+  assert.equal(imported.lifecycle.state.status, 'approved', 'immutable ZIP does not silently import later lifecycle state');
+  const restored = await receiver.importLifecycle(sidecar);
+  assert.equal(restored.lifecycle.state.status, 'revoked');
+  assert.equal((await target.loadBasSnapshotLifecycle(restored.plan)).state.status, 'revoked');
+  await receiver.importLifecycle(sidecar); // exact retry is idempotent
+  assert.deepEqual(await target.loadAnnotations(), before);
+  const wrong = new Blob([JSON.stringify(basSnapshotLifecycleExport('c'.repeat(64), exported.lifecycle))]);
+  await assert.rejects(receiver.importLifecycle(wrong));
+  assert.equal((await target.loadBasSnapshotLifecycle(restored.plan)).state.status, 'revoked');
+  receiver.dispose();
 });
 test('preview refuses unsaved, busy, mismatched saved data and generation without any snapshot write', async () => {
   const f = await setup();

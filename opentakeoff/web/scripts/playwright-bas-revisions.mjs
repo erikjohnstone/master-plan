@@ -38,7 +38,9 @@ async function compare(key) {
   const response = await pending; assert.equal(response.status(), 200); const result = await response.json();
   await workspace.getByRole('table', { name: 'Requirements and quantities comparison', exact: true }).waitFor();
   await waitForAsync(() => workspace.getByRole('button', { name: 'Compare requirements and quantities', exact: true }).isEnabled());
-  timings[key] = Math.round(performance.now() - start); return result;
+  timings[key] = Math.round(performance.now() - start);
+  console.log(`${key}: ${timings[key]} ms`);
+  return result;
 }
 try {
   await page.goto(process.env.OT_UI_URL || 'http://127.0.0.1:5177', { waitUntil: 'domcontentloaded' });
@@ -147,5 +149,5 @@ try {
     controlled_hardware_inputs: true, approved: false, report_rows: paired.report.rows.length,
     explicit_pair: { before_item_id: before.item_id, after_item_id: after.item_id }, event_id: final.revision_events[0].event_id }, null, 2));
   console.log(JSON.stringify({ checks, timings, errors, out }));
-} catch (e) { await page.screenshot({ path: resolve(out, 'failure.png') }).catch(() => {}); await writeFile(resolve(out, 'failure.txt'), `${e.stack}\n${errors.join('\n')}`); throw e; }
+} catch (e) { await page.screenshot({ path: resolve(out, 'failure.png') }).catch(() => {}); await writeFile(resolve(out, 'failure.txt'), `${e.stack}\n${JSON.stringify({ timings, errors }, null, 2)}`); throw e; }
 finally { await browser.close(); }

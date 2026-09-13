@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   scanPillarGapLanguage,
+  nearbyScheduleCaption,
   sheetHasPointsListTitleSpans,
   sheetHasScheduleCaption,
   sheetHasScheduleLanguage,
@@ -57,6 +58,109 @@ describe("scheduleLanguageScan", () => {
       { str: "SOMETHING ELSE ENTIRELY OVER HERE", x: 900, y: 200, w: 260, h: 12 },
     ];
     assert.equal(sheetHasPointsListTitleSpans(unrelated), false);
+  });
+});
+
+describe("nearbyScheduleCaption", () => {
+  const region: [number, number, number, number] = [600, 40, 760, 700];
+
+  it("joins a split vertical equipment caption beside its table", () => {
+    const spans = [
+      { str: "PU", x: 780, y: 422, w: 12, h: 13, rot: 90 },
+      { str: "P SCHEDULE", x: 780, y: 442, w: 12, h: 55, rot: 90 },
+    ];
+    assert.deepEqual(nearbyScheduleCaption(spans, region, "P SCHEDULE"), {
+      text: "PU P SCHEDULE",
+      bbox: [780, 422, 792, 497],
+    });
+    assert.deepEqual(nearbyScheduleCaption(spans, region, ""), {
+      text: "PU P SCHEDULE",
+      bbox: [780, 422, 792, 497],
+    }, "a titleless grid must reconstruct the same split caption instead of keeping only P SCHEDULE");
+  });
+
+  it("replaces a generic in-grid MARK title with its exact nearby caption evidence", () => {
+    const spans = [{ str: "PACKAGED AIR COOLED CHILLER SCHEDULE", x: 770, y: 260, w: 12, h: 210, rot: 90 }];
+    assert.deepEqual(nearbyScheduleCaption(spans, region, "MARK"), {
+      text: "PACKAGED AIR COOLED CHILLER SCHEDULE",
+      bbox: [770, 260, 782, 470],
+    });
+  });
+
+  it("never replaces a complete existing schedule title", () => {
+    const spans = [{ str: "SUPPLY FAN SCHEDULE", x: 770, y: 260, w: 12, h: 120, rot: 90 }];
+    assert.equal(nearbyScheduleCaption(spans, region, "AIR HANDLING UNIT SCHEDULE"), null);
+  });
+
+  it("does not expand a short complete title into a neighboring schedule family", () => {
+    const spans = [{ str: "CABINET UNIT HEATER SCHEDULE", x: 620, y: 10, w: 220, h: 24 }];
+    assert.equal(
+      nearbyScheduleCaption(spans, [600, 120, 900, 360], "UNIT HEATER SCHEDULE"),
+      null,
+      "UNIT HEATER is a complete authored title, not a truncated suffix of CABINET UNIT HEATER",
+    );
+  });
+
+  it("does not borrow a schedule caption that is spatially unrelated to the table", () => {
+    const spans = [{ str: "SUPPLY FAN SCHEDULE", x: 1800, y: 1800, w: 12, h: 120, rot: 90 }];
+    assert.equal(nearbyScheduleCaption(spans, region, ""), null);
+  });
+
+  it("accepts an attached horizontal caption above a deep remarks tier", () => {
+    const tallSchedule: [number, number, number, number] = [645, 423, 4673, 845];
+    const spans = [{
+      str: "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+      x: 2030, y: 127, w: 1259, h: 46,
+    }];
+    assert.deepEqual(nearbyScheduleCaption(spans, tallSchedule, ""), {
+      text: "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+      bbox: [2030, 127, 3289, 173],
+    });
+  });
+
+  it("does not steal a lower schedule's caption from deep inside this table region", () => {
+    const tallSchedule: [number, number, number, number] = [645, 423, 4673, 845];
+    const spans = [{ str: "DIFFUSER-GRILLE SCHEDULE", x: 1336, y: 799, w: 530, h: 46 }];
+    assert.equal(nearbyScheduleCaption(spans, tallSchedule, ""), null);
+  });
+
+  it("prefers the attached HVAC UNITS table title over an adjacent longer schedule caption", () => {
+    const narrowRegion: [number, number, number, number] = [495, 45, 532, 620];
+    const spans = [
+      { str: "SPLIT SYSTEM AIR CONDITIONING UNITS", x: 539, y: 350, w: 9, h: 179, rot: 90 },
+      { str: "PACKAGED AIR COOLED CHILLER SCHEDULE", x: 649, y: 273, w: 9, h: 191, rot: 90 },
+    ];
+    assert.deepEqual(nearbyScheduleCaption(spans, narrowRegion, ""), {
+      text: "SPLIT SYSTEM AIR CONDITIONING UNITS",
+      bbox: [539, 350, 548, 529],
+    });
+  });
+
+  it("does not promote arbitrary prose ending in UNITS", () => {
+    const spans = [{ str: "PROVIDE TWO SPARE UNITS", x: 770, y: 260, w: 12, h: 120, rot: 90 }];
+    assert.equal(nearbyScheduleCaption(spans, region, ""), null);
+  });
+
+  it("does not prepend an aligned attribute header to an already-complete caption", () => {
+    const spans = [
+      { str: "NOMINAL OPERATING", x: 754, y: 215, w: 12, h: 35, rot: 90 },
+      { str: "PACKAGED AIR COOLED CHILLER SCHEDULE", x: 770, y: 260, w: 12, h: 210, rot: 90 },
+    ];
+    assert.deepEqual(nearbyScheduleCaption(spans, region, ""), {
+      text: "PACKAGED AIR COOLED CHILLER SCHEDULE",
+      bbox: [770, 260, 782, 470],
+    });
+  });
+
+  it("reconstructs real truncated vertical title suffixes rather than keeping only their last run", () => {
+    const spans = [
+      { str: "GRILLE, REGIST", x: 770, y: 267, w: 9, h: 67, rot: 90 },
+      { str: "ER AND DIFFUSER SCHEDULE", x: 770, y: 334, w: 9, h: 129, rot: 90 },
+    ];
+    assert.deepEqual(nearbyScheduleCaption(spans, region, ""), {
+      text: "GRILLE, REGIST ER AND DIFFUSER SCHEDULE",
+      bbox: [770, 267, 779, 463],
+    });
   });
 });
 

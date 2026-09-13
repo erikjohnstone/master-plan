@@ -11,7 +11,7 @@
 //
 // Everything here is pdfjs-free and node-tested (sheetKey.ts precedent).
 
-import { parseSheetKey } from "./sheetKey";
+import { parseSheetKey } from "./sheetKey.ts";
 
 export const STITCH_PREFIX = "stitch:";
 export function isStitchKey(k: unknown): k is string {

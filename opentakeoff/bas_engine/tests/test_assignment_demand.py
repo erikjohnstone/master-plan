@@ -58,7 +58,21 @@ def test_exact_scoped_multipliers_and_original_cells(mode, excluded, factor):
                 assert derived.status == "attribute_not_quantity" and derived.assigned_value is None
             else:
                 assert derived.assigned_value == original.value * factor
-    assert result.unique_requirement_total is None and result.installed_quantity is None
+    assert result.installed_quantity is None
+    if factor:
+        assert result.unique_requirement_total is not None
+        assert result.unique_requirement_total.physical_io.model_dump() == {
+            "AI": 2 * factor, "AO": 0, "DI": factor, "DO": factor}
+        assert [row.model_dump() for row in result.unique_requirement_total.software] == [
+            {"channel": "AV", "known_listed_value": 3 * factor}]
+        assert result.unique_requirement_total.requirement_instances == 7 * factor
+        assert result.unique_requirement_total.coverage == "selected_assignments_only"
+        assert result.unique_requirement_total.installed_quantity is None
+        assert "PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES" not in result.issues
+        assert all("UNIQUE_POINT_IDENTITIES_NOT_ESTABLISHED" not in row.issues for row in result.assignments)
+    else:
+        assert result.unique_requirement_total is None
+        assert "PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES" in result.issues
     assert not result.project_complete
     assert "physical_total" not in result.model_dump() and "hardware" not in result.model_dump()
 
@@ -101,9 +115,44 @@ def test_global_and_local_templates_flag_possible_overlap_even_with_disjoint_mem
     result = calculate_assignment_demand(request)
     assert all("MULTIPLE_TEMPLATES_REQUIRE_POINT_IDENTITY_REVIEW" in a.issues for a in result.assignments)
     assert result.unique_requirement_total is None
+    assert "PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES" in result.issues
+    assert all("UNIQUE_POINT_IDENTITIES_NOT_ESTABLISHED" in a.issues for a in result.assignments)
     other.scope_id = "scope-2"
     result = calculate_assignment_demand(request)
     assert all("MULTIPLE_TEMPLATES_REQUIRE_POINT_IDENTITY_REVIEW" not in a.issues for a in result.assignments)
+    assert result.unique_requirement_total is not None
+
+
+def test_missing_or_ambiguous_typed_values_withhold_unique_total_without_turning_them_into_zero():
+    request = payload()
+    row = request.points.matrices[0].rows[0]
+    obs = next(o for o in row.observations if o.channel == "AI")
+    obs.value = None
+    obs.status = "ambiguous"
+    obs.source.text = "?"
+    row.raw.cells["AI"].text = request.points.matrices[0].raw.rows[0].cells["AI"].text = "?"
+    result = calculate_assignment_demand(request)
+    assert result.unique_requirement_total is None
+    assert "PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES" in result.issues
+    assert result.assignments[0].known_listed_io_subtotal.AI == 0
+
+
+def test_two_disjoint_per_equipment_templates_have_one_exact_unique_listed_total():
+    request = payload()
+    other_matrix = copy.deepcopy(request.points.matrices[0])
+    other_matrix.matrix_id = "controlled-second-matrix"
+    for row in other_matrix.rows:
+        row.row_id += "-second"
+    request.points.matrices.append(other_matrix)
+    other = copy.deepcopy(request.assignments[0])
+    other.assignment_id = "assignment-2"
+    other.matrix_id = other_matrix.matrix_id
+    other.equipment_ids = ["unit-4", "unit-5"]
+    request.assignments.append(other)
+    result = calculate_assignment_demand(request)
+    assert result.unique_requirement_total is not None
+    assert result.unique_requirement_total.physical_io.model_dump() == {"AI": 10, "AO": 0, "DI": 5, "DO": 5}
+    assert result.unique_requirement_total.requirement_instances == 35
 
 
 @pytest.mark.parametrize("corruption", ["foreign_matrix", "duplicate_member", "foreign_exception", "duplicate_assignment",

@@ -2,6 +2,7 @@
 // basSnapshot owns approval/readiness. This module accepts only its owned plans.
 import { z } from 'zod';
 import { assertBasSnapshotPlan, readBasSnapshotPlan, verifyBasSnapshot, BAS_SNAPSHOT_JSON_LIMIT } from './basSnapshot.ts';
+import { basSnapshotLifecycleEventSchema, evaluateBasSnapshotLifecycle } from './basSnapshotLifecycle.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { basRestoreJson } from './basRestore.ts';
 import { verifyBasSourceBytes } from './basSourceRetention.ts';
@@ -229,4 +230,46 @@ export async function loadBasSnapshotInIdb({ withDb, projectId, snapshotId, io, 
     || JSON.parse(record.snapshot.readiness_json).sources.length !== metadata.source_count) throw conflict();
   const plan = await verifyBasSnapshot(JSON.parse(payloadJson), record, io, signal);
   check(); return plan;
+}
+
+/** Lifecycle events are separate from the immutable approved snapshot. The
+ * event head and operation mapping make a terminal append atomic/idempotent. */
+export async function saveBasSnapshotLifecycleInIdb({ withDb, projectId, plan, rawEvent, guard = () => {}, signal }) {
+  const { record } = readBasSnapshotPlan(plan), event = basSnapshotLifecycleEventSchema.parse(structuredClone(rawEvent));
+  await evaluateBasSnapshotLifecycle(record, [event]);
+  const check = () => { signal?.throwIfAborted(); assertBasSnapshotPlan(plan); guard(); };
+  const snapshotKey = key('local', projectId, record.snapshot_id), eventKey = key('lifecycle', projectId, record.snapshot_id, event.event_id);
+  const headKey = key('lifecycle_head', projectId, record.snapshot_id), operationKey = key('lifecycle_operation', projectId, event.operation_id);
+  return transaction(withDb, 'readwrite', check, (meta, safe) => {
+    const snapshot = meta.get(snapshotKey), head = meta.get(headKey), operation = meta.get(operationKey), prior = meta.get(eventKey);
+    prior.onsuccess = safe(() => {
+      if (snapshot.result === undefined) throw new Error('Snapshot is not stored in this browser project');
+      if (operation.result !== undefined) {
+        if (operation.result !== event.event_id || canonicalBasJson(prior.result ?? null) !== canonicalBasJson(event)) throw conflict();
+        return;
+      }
+      if (prior.result !== undefined) throw conflict();
+      const currentHead = head.result?.event_id ?? record.seal.event_id;
+      if (currentHead !== event.previous_event_id) throw new Error('Snapshot lifecycle changed. Reopen it before recording a release decision.');
+      if (head.result?.terminal === true) throw new Error('Snapshot lifecycle is already terminal');
+      meta.add(event, eventKey);
+      meta.put({ schema_version: 'bas_snapshot_lifecycle_head_v1', snapshot_id: record.snapshot_id,
+        event_id: event.event_id, terminal: true }, headKey);
+      meta.add(event.event_id, operationKey);
+    });
+  }, () => ({ snapshot_id: record.snapshot_id, event_id: event.event_id, committed: true,
+    status: event.action.kind === 'revoke' ? 'revoked' : 'superseded', annotations_changed: false,
+    durability_hint: 'strict' }), signal, 'strict');
+}
+
+export async function loadBasSnapshotLifecycleInIdb({ withDb, projectId, plan, guard = () => {}, signal }) {
+  const { record } = readBasSnapshotPlan(plan), check = () => { signal?.throwIfAborted(); assertBasSnapshotPlan(plan); guard(); };
+  const events = [];
+  await transaction(withDb, 'readonly', check, (meta, safe) => {
+    const r = meta.openCursor(IDBKeyRange.bound(key('lifecycle', projectId, record.snapshot_id, ''), key('lifecycle', projectId, record.snapshot_id, 'g')));
+    r.onsuccess = safe(() => { const cursor = r.result; if (!cursor) return; events.push(cursor.value); cursor.continue(); });
+  }, undefined, signal);
+  check();
+  const state = await evaluateBasSnapshotLifecycle(record, events); check();
+  return { events: events.map(event => structuredClone(event)), state };
 }

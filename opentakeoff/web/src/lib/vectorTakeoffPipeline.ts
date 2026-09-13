@@ -4,6 +4,7 @@
  * L4.5 VLM slot is ON — returns null when no backend configured.
  */
 import { buildMepGraph } from "./mepconnectivity.ts";
+import { extractControlSchematics } from "./controlSchematic.ts";
 import { scheduleTableFromOcrRegion, scheduleTableFromSidecarStructure, type OcrRegionResult } from "./rasterTableAssist.ts";
 import { sheetHasScheduleKeywords } from "./scheduleGridFallback.ts";
 import {
@@ -32,6 +33,8 @@ export type { VectorPipelineReport };
 
 export interface VectorSheetContext {
   key: string;
+  /** Authored sheet number, distinct from the internal document/page key. */
+  sheet_number?: string | null;
   role: string;
   spans: GraphSpan[];
   segs?: number[];
@@ -658,6 +661,21 @@ export async function runVectorTakeoffPipeline(
       await runL45OcrAssist(g, ctx, hooks, buildings, stats, touched, report);
     }
   });
+
+  // L4.8 is an additive, shared evidence layer. It consumes the final table
+  // graph for schedule binding, plus the same positioned spans/vector paths
+  // supplied to Session. It never mutates table selection, cell bboxes, or
+  // row/citation contracts.
+  report.layers_run.push("L4.8:control-schematics+risers");
+  g.control_schematics = await timed("L4.8:control-schematics+risers", () =>
+    extractControlSchematics(contexts, g));
+  if (g.control_schematics.totals.schematics || g.control_schematics.totals.riser_diagrams) {
+    report.notes.push(
+      `L4.8: extracted ${g.control_schematics.totals.schematics} control schematic(s), `
+      + `${g.control_schematics.totals.riser_diagrams} riser/flow diagram(s), and `
+      + `${g.control_schematics.totals.explicit_points} explicitly printed I/O point token(s).`,
+    );
+  }
 
   // L5 classification runs at compile_corpus_takeoff (header geometry + mark shape).
   report.layers_run.push("L5:classify@compile");

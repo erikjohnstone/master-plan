@@ -28,8 +28,9 @@ import {
   summarizeReconcile,
   reconcileScheduleFamilyWithSweeps,
   familyNeedleFromSpecs,
+  rowIdentityTag,
 } from "../../web/src/lib/schedulePlanReconcile.mjs";
-import { HVAC_FAMILY_SPECS } from "../../web/src/lib/corpusTakeoff.mjs";
+import { HVAC_FAMILY_SPECS, isBasPointsListTable } from "../../web/src/lib/corpusTakeoff.mjs";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
  * WHY a tag's takeoff came out the way it did, distinct from a raw error
@@ -49,6 +50,7 @@ export type FailureType =
   | "CROSS_SHEET_ASSOCIATION_FAILURE"
   | "REFUSED_NO_SCALE"
   | "REFUSED_NO_LINEWORK"
+  | "INCOMPLETE_PLAN_SEARCH"
   | "AMBIGUOUS_ROW_KEY"
   | "UNCLASSIFIED";
 
@@ -71,10 +73,27 @@ export interface TakeoffItem {
   tag: string;
   equipment_type: string | null;       // matched hvacTaxonomy component name, or null if unclassified
   category: string | null;             // HvacCategory, or null
-  schedule: { sheet: string; kind: string; title: string | null } | null;
+  schedule: { sheet: string; kind: string; title: string | null; drawing_group?: string } | null;
   schedule_row: Record<string, string> | null;
   quantity: number;
-  drawing_locations: Array<{ sheet: string; at: [number, number] }>;
+  /** Number of distinct grounded plan callouts before authored `(N)`/TYP
+   * multipliers are applied. `quantity` remains installed units. */
+  placement_count?: number;
+  drawing_locations: Array<{
+    sheet: string;
+    at: [number, number];
+    /** Exact plan-tag text bbox supporting this counted placement. */
+    bbox?: { x0: number; y0: number; x1: number; y1: number };
+    score?: number;
+  }>;
+  /** What proves the installed quantity; never inferred from the schedule. */
+  quantity_basis?: "symbol_fingerprint" | "exact_plan_tag" | "explicit_installation_note" | null;
+  /** Search coverage returned by the shared row sweep. */
+  search_scope?: "exhaustive" | "tagged_only" | "explicit_note_set" | null;
+  /** Whether untagged/near-match geometry was audited, distinct from exact-tag coverage. */
+  unlabeled_audit_complete?: boolean | null;
+  /** False means quantity is only an observed floor and must not be released as installed total. */
+  plan_search_complete?: boolean | null;
   siblings_excluded: string[];         // other real tags this sweep explicitly did NOT count as this one
   corroborated: boolean;               // whether the fingerprint match had 2+ real instances to cross-check
   status: "resolved" | "refused" | "error";
@@ -147,7 +166,7 @@ export interface PlanSetTakeoff {
   /** Complete deterministic table-query surface across every extracted kind. */
   extracted_tables: ExtractedTable[];
   failures: TakeoffFailure[];
-  tables_seen: Array<{ sheet: string; kind: string; title: string | null; rows: number }>;
+  tables_seen: Array<{ sheet: string; kind: string; title: string | null; rows: number; drawing_group?: string }>;
   legend_sheets_seen: Array<{ sheet: string; glyphs_detected: number }>;
   stats: {
     schedule_rows_total: number;
@@ -186,12 +205,57 @@ function taxonomyPrefixIndex(categories: string[] | null): HvacComponent[] {
  * recognize is still swept and reported, just with `equipment_type: null`
  * — an unrecognized real tag is real corpus evidence the taxonomy is
  * incomplete, not a reason to drop the row. */
-function classifyTag(tag: string, index: HvacComponent[]): HvacComponent | null {
+function scheduleCategoryHint(title: string | null | undefined): HvacComponent["category"] | null {
+  const value = String(title || "").toUpperCase();
+  if (/\b(?:GRILLE|REGISTER|DIFFUSER)\b|\bAIR\s+(?:DEVICE|OUTLET|INLET)\b/.test(value)) return "air_device";
+  if (/\b(?:VARIABLE\s+AIR\s+VOLUME|VOLUME\s+CONTROL\s+BOX|VAV\s+(?:BOX|TERMINAL|SCHEDULE)|CAV\s+(?:BOX|TERMINAL|SCHEDULE)|FAN[ -]POWERED\s+(?:BOX|TERMINAL))\b/.test(value)) return "air_terminal";
+  return null;
+}
+
+function classifyTag(tag: string, index: HvacComponent[], tableTitle?: string | null): HvacComponent | null {
   const t = tag.toUpperCase();
-  for (const c of index) {
+  const categoryHint = scheduleCategoryHint(tableTitle);
+  const candidates = categoryHint ? index.filter((component) => component.category === categoryHint) : index;
+  for (const c of candidates) {
     for (const p of c.tagPrefixes) if (t.startsWith(p)) return c;
   }
   return null;
+}
+
+/** Whether a graph table belongs in the installed-equipment row walk.
+ *
+ * BAS points lists are intentionally retained in `extracted_tables` and in
+ * the graph consumed by compile_corpus_takeoff(kind="bas_points"). Some real
+ * grids are classified as `equipment` because MARK is their first identity
+ * column, but AI01/AO01/BI01/BO01 are point identifiers, not installed asset
+ * tags. Letting those rows enter sweepScheduleRow both invents an equipment
+ * reconciliation problem and needlessly walks every plan sheet. The shared
+ * BAS table predicate owns that distinction for UI and MCP alike. */
+export function hasAuthoredReconciliationStructure(table: ScheduleTable): boolean {
+  // A vector plan can contain a tiny ruled enclosure around several nearby
+  // callouts. ODL correctly preserves that geometry as a table candidate,
+  // but an `equipment` kind alone is not enough to promote it into installed
+  // schedule truth. The tell is structural and set-agnostic: every column is
+  // anonymous (COL1, COL2, …) and every row has at most one populated cell.
+  // Such a crop has no authored identity/spec relationship to reconcile.
+  // Named one-column schedules (MARK, TAG, etc.) remain eligible, as do
+  // anonymous grids whose rows actually contain two or more distinct cells.
+  const headers = table.headers || [];
+  const anonymousHeaders = headers.length > 0
+    && headers.every((header) => /^COL\d+$/i.test(String(header || "").trim()));
+  if (anonymousHeaders) {
+    const maxPopulatedCells = Math.max(0, ...(table.rows || []).map((row) => (
+      Object.values(row.cells || {}).filter((cell) => String(cell?.text || "").trim()).length
+    )));
+    if (maxPopulatedCells < 2) return false;
+  }
+  return true;
+}
+
+export function isInstalledEquipmentTakeoffTable(table: ScheduleTable): boolean {
+  return table.kind === "equipment"
+    && !isBasPointsListTable(table)
+    && hasAuthoredReconciliationStructure(table);
 }
 
 /** Map a thrown sweep_schedule_row UserError's own message text to a
@@ -200,7 +264,7 @@ function classifyTag(tag: string, index: HvacComponent[]): HvacComponent | null 
  * message that matches none of these is real, disclosed evidence this
  * taxonomy needs to grow, not silently swallowed — it lands as
  * UNCLASSIFIED, with the full original message kept in `detail`. */
-function classifyError(message: string): FailureType {
+export function classifyError(message: string): FailureType {
   if (/no schedule row ".*" in the set/i.test(message)) return "TABLE_MATCH_FAILURE";
   if (/ambiguous:.*schedule rows carry the key/i.test(message)) return "AMBIGUOUS_ROW_KEY";
   if (/cannot be geometrically anchored/i.test(message)) return "SYMBOL_FALSE_NEGATIVE";
@@ -213,6 +277,9 @@ function classifyError(message: string): FailureType {
   if (/cannot be anchored:.*does not recur|no fingerprintable marker linework/i.test(message)) return "SYMBOL_FALSE_NEGATIVE";
   if (/no vector linework/i.test(message)) return "REFUSED_NO_LINEWORK";
   if (/no text layer/i.test(message)) return "TABLE_DISCOVERY_FAILURE";
+  if (/independently defined in drawing groups[\s\S]*no authored drawing-group title|cannot be assigned to .* without guessing/i.test(message)) {
+    return "CROSS_SHEET_ASSOCIATION_FAILURE";
+  }
   return "UNCLASSIFIED";
 }
 
@@ -253,6 +320,20 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
   /** Corpus scorer optimization: preserve counted row-tag matches while
    * omitting whole-sheet unlabeled/other-tag disclosure that no metric reads. */
   evaluationFast?: boolean;
+  /** Include the separate untagged legend-glyph inventory. Reconciliation
+   * consumes only tagged schedule-row items, so callers may skip this
+   * independent pass without changing any schedule/plan quantity decision. */
+  includeLegendSymbols?: boolean;
+  /** Shared progress telemetry for long project walks. It reports orchestration
+   * state only and never changes extraction, matching, or quantity decisions. */
+  onProgress?: (event: {
+    phase: "reconcile_row";
+    state: "start" | "done";
+    tag: string;
+    processed: number;
+    elapsed_ms?: number;
+    status?: TakeoffItem["status"];
+  }) => void;
 } = {}): Promise<PlanSetTakeoff> {
   const categories = opts.categories ?? null;
   const graph = await session.graphForPipeline();
@@ -315,6 +396,20 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
 
   const index = taxonomyPrefixIndex(categories);
   const seenTags = new Set<string>();
+  const seenRowScopes = new Set<string>();
+  let processedRows = 0;
+
+  // A schedule family is part of row identity. Two independently authored
+  // schedules may legally reuse the same short key for different assets, and
+  // multi-site packages may repeat the entire family in named drawing groups.
+  // Same-title/same-group duplicates have already been collapsed by the graph
+  // reconciler, so this composite key suppresses extractor echoes without
+  // discarding legitimate equipment.
+  const rowScopeIdentity = (tb: ScheduleTable, tag: string) => {
+    const canon = tag.toUpperCase().replace(/\s+/g, "");
+    const family = (tb.title?.text || tb.kind).toUpperCase().replace(/[^A-Z0-9]/g, "");
+    return `${canon}\0${family}\0${tb.drawing_group || "(unscoped)"}`;
+  };
 
   // Shared per-row resolver — the SAME sweep_schedule_row call, item shape,
   // and stats bookkeeping for every row this pipeline attempts, whichever
@@ -322,6 +417,8 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
   // (deferredReferenceRows) can reuse it verbatim instead of re-deriving the
   // same try/catch/classifyError bookkeeping a second time.
   async function resolveRow(tb: ScheduleTable, row: TableRow, tag: string, cls: HvacComponent | null): Promise<void> {
+    const started = performance.now();
+    opts.onProgress?.({ phase: "reconcile_row", state: "start", tag, processed: processedRows });
     out.stats.schedule_rows_total++;
     const cellsRaw: Record<string, string> = {};
     for (const [label, cell] of Object.entries(row.cells || {})) if (cell?.text) cellsRaw[label] = cell.text;
@@ -330,7 +427,10 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       tag,
       equipment_type: cls?.name ?? null,
       category: cls?.category ?? null,
-      schedule: { sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null },
+      schedule: {
+        sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null,
+        ...(tb.drawing_group ? { drawing_group: tb.drawing_group } : {}),
+      },
       schedule_row: cellsRaw,
       quantity: 0,
       drawing_locations: [],
@@ -375,35 +475,74 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         item.tag = alias;
       }
       item.quantity = r.found ?? 0;
+      item.placement_count = (r.sheets || []).reduce((sum: number, ps: any) => sum + (ps.matches || []).length, 0);
       item.drawing_locations = (r.sheets || []).flatMap((ps: any) =>
-        (ps.matches || []).map((m: any) => ({ sheet: ps.sheet, at: m.at as [number, number] })));
+        (ps.matches || []).flatMap((m: any) => Array.from({ length: m.multiplier ?? 1 }, () => ({
+          sheet: ps.sheet,
+          at: m.at as [number, number],
+          ...(m.tag_at ? { bbox: m.tag_at } : {}),
+          ...(Number.isFinite(m.score) ? { score: m.score } : {}),
+        }))));
+      item.quantity_basis = r.anchor?.grounding_basis ?? "symbol_fingerprint";
+      item.search_scope = r.search_scope === "tagged_only"
+        ? "tagged_only"
+        : r.search_scope === "exhaustive" ? "exhaustive" : null;
+      item.unlabeled_audit_complete = r.unlabeled_audit_complete ?? null;
+      item.plan_search_complete = r.complete !== false;
       item.corroborated = !!r.anchor?.corroborated;
-      item.status = "resolved";
-      out.stats.resolved++;
-      out.stats.total_drawn_instances += item.quantity;
+      if (r.complete === false) {
+        item.status = "refused";
+        item.reason = `Plan search incomplete: ${item.quantity} grounded placement${item.quantity === 1 ? "" : "s"} observed, but at least one sheet hit its candidate work cap. The observed count is a floor, not an installed total.`;
+        out.stats.refused++;
+        out.failures.push({ type: "INCOMPLETE_PLAN_SEARCH", tag: item.tag, sheet: tb.sheet, detail: item.reason });
+      } else {
+        item.status = "resolved";
+        out.stats.resolved++;
+        out.stats.total_drawn_instances += item.quantity;
+      }
     } catch (e: any) {
       const msg = e?.message || String(e);
       const installationNotes = await session.explicitInstallationNotes(tag);
       if (installationNotes.length === 1) {
         item.quantity = 1;
+        item.placement_count = 1;
         item.drawing_locations = [{
           sheet: installationNotes[0].sheet,
           at: installationNotes[0].at,
+          bbox: installationNotes[0].bbox,
         }];
+        item.quantity_basis = "explicit_installation_note";
+        item.search_scope = "explicit_note_set";
+        item.unlabeled_audit_complete = false;
+        item.plan_search_complete = true;
         item.status = "resolved";
         item.reason = `Counted from explicit installation note: "${installationNotes[0].text}"`;
         out.stats.resolved++;
         out.stats.total_drawn_instances++;
         out.items.push(item);
+        processedRows++;
+        opts.onProgress?.({
+          phase: "reconcile_row", state: "done", tag: item.tag, processed: processedRows,
+          elapsed_ms: Math.round(performance.now() - started), status: item.status,
+        });
         return;
       }
       const ft = classifyError(msg);
-      item.status = ft === "SYMBOL_FALSE_NEGATIVE" || ft === "AMBIGUOUS_ROW_KEY" ? "refused" : "error";
+      item.status = ft === "SYMBOL_FALSE_NEGATIVE"
+        || ft === "AMBIGUOUS_ROW_KEY"
+        || ft === "CROSS_SHEET_ASSOCIATION_FAILURE"
+        ? "refused"
+        : "error";
       item.reason = msg;
       if (item.status === "refused") out.stats.refused++; else out.stats.errored++;
       out.failures.push({ type: ft, tag: item.tag, sheet: tb.sheet, detail: msg });
     }
     out.items.push(item);
+    processedRows++;
+    opts.onProgress?.({
+      phase: "reconcile_row", state: "done", tag: item.tag, processed: processedRows,
+      elapsed_ms: Math.round(performance.now() - started), status: item.status,
+    });
   }
 
   // "reference"-kind tables (full-coverage-standard work) mostly have no
@@ -431,7 +570,10 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
   const deferredReferenceRows: { tb: ScheduleTable; row: TableRow; tag: string; cls: HvacComponent }[] = [];
 
   for (const tb of graph.tables) {
-    out.tables_seen.push({ sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null, rows: tb.rows.length });
+    out.tables_seen.push({
+      sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null, rows: tb.rows.length,
+      ...(tb.drawing_group ? { drawing_group: tb.drawing_group } : {}),
+    });
     const extracted: ExtractedTable = {
       sheet: tb.sheet,
       kind: tb.kind,
@@ -451,26 +593,29 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       // Sweeping their MARK keys as deferred "gap fillers" invents phantom
       // units from concatenated twin marks (AHU-T1AT1B, CH-MT1MT2) and blows
       // rollups. Keep them in reference_tables[] for disclosure; do not resolve.
-      if (isReferenceCrossTable(tb.title?.text || "", tb.headers || [])) continue;
+      if (isReferenceCrossTable(tb.title?.text || "", tb.headers || [])
+          || !hasAuthoredReconciliationStructure(tb)) continue;
       for (const row of tb.rows) {
-        const tag = (row.key || "").trim();
+        const tag = String(rowIdentityTag(row) || "").trim();
         if (!tag) continue;
-        const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null));
+        const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null), tb.title?.text);
         if (!cls) continue; // no real taxonomy hypothesis for this row's tag — not equipment-shaped, leave it to reference_tables[] alone
         if (categories && !categories.includes(cls.category)) continue; // out of this run's own declared scope
         deferredReferenceRows.push({ tb, row, tag, cls });
       }
       continue;
     }
-    if (tb.kind !== "equipment") continue; // this pipeline's own scope, matching hvacTaxonomy's scheduleKind convention
+    if (!isInstalledEquipmentTakeoffTable(tb)) continue;
     for (const row of tb.rows) {
-      const tag = (row.key || "").trim();
+      const tag = String(rowIdentityTag(row) || "").trim();
       if (!tag) continue;
       const canon = tag.toUpperCase().replace(/\s+/g, "");
-      if (seenTags.has(canon)) continue; // a compound "R1/E1" key answers once, not once per mark — sweep_schedule_row itself dedupes marks; this dedupes the OUTER loop only
+      const scopeIdentity = rowScopeIdentity(tb, tag);
+      if (seenRowScopes.has(scopeIdentity)) continue;
+      seenRowScopes.add(scopeIdentity);
       seenTags.add(canon);
 
-      const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null));
+      const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null), tb.title?.text);
       if (categories && (!cls || !categories.includes(cls.category))) continue; // out of this run's own declared scope — not a failure, just not requested; not counted in stats either
       await resolveRow(tb, row, tag, cls);
     }
@@ -508,11 +653,13 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
   // ever walks `graph.tables`). Wired in here by default so a plan-set
   // takeoff is complete without a second CLI invocation; kept as its own
   // exported function (below) so it stays independently callable/testable.
-  const legend = await buildLegendTakeoff(session, { categories });
-  out.legend_items = legend.items;
-  out.legend_sheets_seen = legend.legend_sheets_seen;
-  out.legend_stats = legend.stats;
-  out.failures.push(...legend.failures);
+  if (opts.includeLegendSymbols !== false) {
+    const legend = await buildLegendTakeoff(session, { categories });
+    out.legend_items = legend.items;
+    out.legend_sheets_seen = legend.legend_sheets_seen;
+    out.legend_stats = legend.stats;
+    out.failures.push(...legend.failures);
+  }
 
   return out;
 }
@@ -786,6 +933,15 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   evaluationFast?: boolean;
   /** When true with family, sweep every row in that family (not whole-set). */
   familySweepAll?: boolean;
+  onProgress?: (event: {
+    phase: "reconcile_row";
+    state: "start" | "done";
+    tag: string;
+    processed: number;
+    total?: number;
+    elapsed_ms?: number;
+    status?: string;
+  }) => void;
 } = {}): Promise<{
   rows: ReturnType<typeof reconcileRowsFromTakeoffItems>;
   summary: ReturnType<typeof summarizeReconcile>;
@@ -820,6 +976,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
     const scoped = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
       tags: tags ?? undefined,
       evaluationFast: opts.evaluationFast,
+      onProgress: opts.onProgress,
       // Family-only (no tag list): sweep every schedule row unless caller opts out.
       sweepAll: !tags?.length && opts.familySweepAll !== false,
     });
@@ -829,6 +986,11 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   const takeoff = await buildPlanSetTakeoff(session, {
     categories: opts.categories ?? null,
     evaluationFast: opts.evaluationFast,
+    onProgress: opts.onProgress,
+    // Reconcile rows are derived exclusively from takeoff.items. The prior
+    // unconditional legend pass could spend minutes finding a second,
+    // unconsumed inventory after every row had already been reconciled.
+    includeLegendSymbols: false,
   });
   let items = takeoff.items;
   const familyFilter = family;

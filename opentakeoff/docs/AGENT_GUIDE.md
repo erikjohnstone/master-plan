@@ -69,7 +69,9 @@ run an explicit comparison, read its bounded view, and record against the exact
 preview fingerprint. Saved comparisons replay pinned inputs; mismatches are not
 accepted as previous review. A cached view is a completed operation, not another
 Python replay; any BAS/load/restore change invalidates it. Export full comparison
-JSON and Session evidence. Approved takeoff snapshots remain unfinished.
+JSON and Session evidence. Use `inspect_bas_snapshot` for read-only verification
+of a human-approved source-inclusive snapshot; agents cannot approve, revoke or
+supersede it.
 
 Inspect historical BAS evidence using `view_sheet` with the exact saved `page_id`
 as `sheet`, and `original_pdf_path` when its bytes are not currently loaded. Do not
@@ -253,7 +255,7 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 53 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 55 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
 Forty descriptions is real token weight for a session that may never touch half of them, so the

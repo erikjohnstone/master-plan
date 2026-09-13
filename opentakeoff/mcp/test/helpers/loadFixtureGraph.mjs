@@ -7,8 +7,15 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { after } from "node:test";
 import { Session } from "../../src/session.ts";
 import { cachedSheetGraph } from "../../scripts/sheetGraphCache.mjs";
+import { shutdownVectorGrid } from "../../../web/src/lib/vectorGridClient.ts";
+
+// Fixture tests start the same lazy VectorGrid sidecar used by production.
+// Close it once each test file completes so Node can report the result and
+// move to the next file instead of retaining an idle Python child forever.
+after(async () => { await shutdownVectorGrid(); });
 
 async function readFixture(corpusRoot, fixtureDir) {
   const fixture = JSON.parse(await readFile(resolve(fixtureDir, "fixture.json"), "utf8"));

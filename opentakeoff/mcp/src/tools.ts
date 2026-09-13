@@ -8,6 +8,7 @@ import { basAssemblyReviewRequestSchema } from '../../web/src/lib/basAssemblyReg
 import { basAssemblyQuantityRequestSchema } from '../../web/src/lib/basAssemblyQuantityContract.ts';
 import { basEngineeringReviewRequestSchema, basEngineeringInspectRequestSchema } from '../../web/src/lib/basEngineeringRegister.ts';
 import { basProjectReviewRequestSchema } from '../../web/src/lib/basProjectReview.ts';
+import { inspectBasWorkflow, basWorkflowInspectionDomainSchema, basWorkflowInspectionSchema } from '../../web/src/lib/basWorkflowInspection.ts';
 import type { McpServer, RegisteredTool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { ok, okImage, fail, UserError, type ToolReply } from "./format.ts";
 import { UNDO_CAP, CONTEXT_MIN_LEN_PX, CONTEXT_MAX_SEGMENTS, CONTEXT_MAX_SEGMENTS_CEIL, type Session } from "./session.ts";
@@ -22,7 +23,7 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, controlSchematicOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
@@ -53,6 +54,7 @@ import { basIssueCommandSchema, basIssueTransportResultSchema } from '../../web/
 import { runBasIssueTransport } from './basIssueTransport.ts';
 import { basScopeCommandSchema, basScopeTransportResultSchema } from '../../web/src/lib/basScopeTransportContract.ts';
 import { runBasScopeTransport } from './basScopeTransport.ts';
+import { inspectBasSnapshotFile, basSnapshotFileInspectionSchema } from './basSnapshotFile.ts';
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -95,6 +97,31 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     },
     sendResourceListChanged: () => realServer.sendResourceListChanged(),
   };
+  server.registerTool('inspect_bas_workflow', {
+    description: `Inspect one of the five deterministic BAS workflows from the current retained, validated workflow: point_soo, equipment_templates, assemblies_responsibility, engineering_compatibility, or review_revisions_release. Returns the same bounded status projection as the browser Agent: counts, dependency freshness, grouped issue codes and an exact next step. It does not mutate history, verify original PDF bytes, freshly replay saved Python calculations, infer installed quantity, approve scope or declare the project complete. Use the domain-specific BAS tools to perform explicit review/calculation and bas_scope_review/bas_issue_review/bas_drawing_review for review controls. ${COORDS}`,
+    inputSchema: {
+      domain: basWorkflowInspectionDomainSchema,
+      capture_id: z.string().regex(/^[a-f0-9]{64}$/).optional().describe('Optional retained capture; omit for active capture.'),
+    },
+    outputSchema: { result: basWorkflowInspectionSchema },
+  }, run('inspect_bas_workflow', async ({ domain, capture_id }) => {
+    if (!session.basWorkflow) throw new UserError('No retained BAS workflow is loaded. Compile or import a BAS takeoff first.');
+    return { result: await inspectBasWorkflow(session.basWorkflow, domain, capture_id) };
+  }));
+  server.registerTool('inspect_bas_snapshot', {
+    description: `Open and verify a source-inclusive .otbas-snapshot.zip from disk. Always verifies the immutable snapshot/seal, exact takeoff payload, every original PDF byte and every saved Python calculation before reporting the self-declared historical scope. Optional lifecycle_path reads the separate append-only browser lifecycle JSON and replays revoke/supersede state. compare_current=true compares the snapshot with the currently loaded retained BAS workflow using selective scope dependencies, current original bytes and fresh Python replay; unrelated edits may remain current, relevant changes block. Optional workbook_path writes a readable non-commercial XLSX with summary, claims, exclusions, findings, sources and lifecycle tabs. This tool cannot approve, revoke or supersede; those are explicit operator actions. It never establishes project completeness or installed quantity. ${COORDS}`,
+    inputSchema: {
+      path: z.string().min(1).describe('Path to the .otbas-snapshot.zip evidence archive.'),
+      lifecycle_path: z.string().min(1).optional().describe('Optional .lifecycle.json sidecar exported by the browser.'),
+      compare_current: z.boolean().optional().describe('Freshly compare this historical scope with the current loaded BAS workflow.'),
+      workbook_path: z.string().min(1).optional().describe('Optional output .xlsx path for readable snapshot result tables.'),
+      overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
+    },
+    outputSchema: { result: basSnapshotFileInspectionSchema },
+  }, run('inspect_bas_snapshot', async ({ path, lifecycle_path, compare_current, workbook_path, overwrite }, context) => ({
+    result: await inspectBasSnapshotFile(session, path, { lifecyclePath: lifecycle_path, compareCurrent: compare_current,
+      workbookPath: workbook_path, overwrite, signal: context?.signal }),
+  })));
   server.registerTool('bas_scope_review', {
     description: `Build explicit BAS deliverable scopes and retain source-coverage review using the same shared services as the UI. No extraction, quantity changes, waiver or approval. command.action='catalog' lists reviewed drawing source_sets and scope history. Repeat with source_set_id to get the current pinned basis, available targets and original pages. Targets retain outside/unlocated evidence; catalog availability is not discovery completeness. Create a source set with bas_drawing_review if none exists. Use exact target/capture/page IDs and basis from these results, never names as identity.
 action='preview' takes specification:{schema_version:'bas_deliverable_scope_spec_v1',scope_id UUID,name,reason,basis,included:[{claim,capture_id,subject_id}],excluded:[{target,reason,consequence,evidence:[{capture_id,page_id,span_id:null|exact span ID}]}]}. Claims are scheduled_equipment, assigned_points, assembly_components, responsibilities, engineering_compatibility. At least one included claim and at most 2000 combined targets; no silent truncation. Exclusions omit deliverable claims, not prerequisites or shared loads. Preview retains original inventory, quantities, unknowns and diagnostics; it does not verify original bytes, replay Python or approve anything.
@@ -733,6 +760,12 @@ No approval, installed count or complete requirement discovery. Changes stay in 
     return result;
   }));
 
+  server.registerTool("analyze_control_schematics", {
+    description: `Extract the loaded set's vector control schematics and riser/flow diagrams through the shared Session graph. Returns each diagram's exact title/region evidence, explicitly printed AI/AO/DI/DO tokens, unmapped instrument labels, equipment-to-schedule references, conservative line topology, authored floor datums, and vertical riser traces. Interior X crossings stay disconnected unless drawn junction geometry supports a connection; direction stays unknown unless a vector arrowhead supports it. Schematic occurrences are NEVER installed-plan quantity. Every result is review-required and source-cited in image pixels. ${COORDS}`,
+    inputSchema: {},
+    outputSchema: controlSchematicOutput,
+  }, run("analyze_control_schematics", () => session.controlSchematics()));
+
   server.registerTool("project_takeoff", {
     description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. Default detail is "compact" (stats + per-item tag/type/qty/status/schedule sheet + failures + tables_seen) so agent context stays usable on large sets; pass detail:"full" only when you need every schedule_row cell dump and extracted_tables. Installed counts come only from corroborated plan labels/geometry; structurally unavailable evidence returns a typed refusal. For pure schedule MARK counts by family, prefer query_table on the titled equipment schedules — do not invent extra units from vibration-isolation or other cross-reference tables. Load every file in the bid set first with load_plan + merge:true. Read-only; does not commit canvas shapes. ${COORDS}`,
     inputSchema: {
@@ -878,7 +911,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
   }));
 
   server.registerTool("reconcile_schedule_plan", {
-    description: `Reconcile scheduled equipment tags to plan drawings — contractor-grade table with Tag, Family, Scheduled qty, Installed qty, Status (MATCH | SCHEDULE_ONLY | PLAN_ONLY | REFUSED_NO_SCALE | REFUSED_NO_TEXT | AMBIGUOUS), schedule cite, and plan cite(s). Walks every equipment schedule row through sweep_schedule_row on the shared Session path — never invents plan locations. Optional family filter (e.g. "VAV", "FCU", "AHU") scopes to one schedule family. Pass path to write JSON; export_path writes reconcile.csv. Read-only; does not commit canvas shapes. ${COORDS}`,
+    description: `Reconcile scheduled equipment tags to plan drawings — contractor-grade table with Tag, Family, Scheduled qty, Installed qty, Status (MATCH | SCHEDULE_ONLY | PLAN_ONLY | REFUSED_NO_SCALE | REFUSED_NO_TEXT | AMBIGUOUS), schedule cite, and plan cite(s). A repeatable grille/register/diffuser row with no printed QTY is explicitly a type definition, not a fake scheduled quantity of 1; its MATCH means the definition was grounded to plan callouts and quantity_comparison says type_definition_vs_plan_count. Independently reused marks are scoped by authored drawing-group titles (building/site/area), never tag-prefix guesses. Walks every equipment schedule row through sweep_schedule_row on the shared Session path — never invents plan locations. Optional family filter (e.g. "VAV", "FCU", "AHU") scopes to one schedule family. Pass path to write JSON; export_path writes reconcile.csv. Read-only; does not commit canvas shapes. ${COORDS}`,
     inputSchema: {
       family: z.string().optional().describe('Optional family scope: VAV, FCU, AHU, pump, etc.'),
       categories: z.array(z.string()).optional().describe("Optional hvacTaxonomy category filter"),

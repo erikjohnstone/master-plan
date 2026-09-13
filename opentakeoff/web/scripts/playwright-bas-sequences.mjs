@@ -28,7 +28,10 @@ async function upload(p) {
 }
 const regionFor = p => p.getByRole('region', { name: 'Sequences and comparison links', exact: true });
 async function enter(p, regionId) {
-  await p.locator('[data-workspace-nav="Takeoff"]').click();
+  if (!await p.getByRole('button', { name: 'Close takeoff', exact: true }).isVisible()) {
+    await p.locator('[data-workspace-nav="Takeoff"]').click();
+  }
+  await p.getByRole('button', { name: 'Point lists', exact: true }).click();
   await p.getByRole('button', { name: 'Sequences & links', exact: true }).click();
   const r = regionFor(p);
   await r.getByLabel('Sequence', { exact: true }).selectOption(regionId);
@@ -54,7 +57,15 @@ try {
   // verified wire output, not a differently named direct-CLI source file.
   const baseline = readFileSync(new URL('../../docs/bas-production/evidence/point-workspace-persistence-verified/compile-response.ndjson', import.meta.url), 'utf8')
     .trim().split('\n').map(JSON.parse).find(m => m.type === 'result').result;
-  const withoutWorkflow = value => { const { bas_workflow: _workflow, bas_equipment: _equipment, ...rest } = value; return rest; };
+  const withoutWorkflow = value => {
+    const {
+      bas_workflow: _workflow,
+      bas_equipment: _equipment,
+      bas_assemblies: _assemblies,
+      ...rest
+    } = value;
+    return rest;
+  };
   assert.deepEqual(withoutWorkflow(compiled), withoutWorkflow(baseline), 'Every legacy compile field remains exact');
   assert.deepEqual(compiled.bas_equipment, await basEquipmentSummary(compiled.bas_workflow, compiled.bas_workflow.current_capture_id), 'New equipment index agrees with its immutable capture');
   const capture = compiled.bas_workflow.captures[0];

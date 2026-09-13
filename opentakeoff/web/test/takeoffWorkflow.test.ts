@@ -13,6 +13,7 @@ import {
   isIllegalWorkflowTransition,
   workflowDirective,
   scaleRefuseMessage,
+  goalAsksCompleteBasTakeoff,
 } from "../src/lib/takeoffWorkflow.js";
 import { readFileSync } from "node:fs";
 
@@ -29,6 +30,37 @@ test("classifyTakeoffIntent maps points-list takeoffs", () => {
     "fcu_buildings",
   );
   assert.equal(classifyTakeoffIntent("Trace AHU-1 connectivity"), "connectivity");
+});
+
+test("a simple BAS takeoff prompt routes to the deterministic complete journey", () => {
+  const prompts = [
+    "Run a BAS takeoff",
+    "Do the complete building automation takeoff for this project",
+    "Run an end-to-end DDC takeoff with sequences, valves, equipment, and reconciliation",
+  ];
+  for (const prompt of prompts) {
+    assert.equal(goalAsksCompleteBasTakeoff(prompt), true, prompt);
+    assert.equal(classifyTakeoffIntent(prompt), "complete_bas_takeoff", prompt);
+    const before = advanceTakeoffWorkflow("complete_bas_takeoff", [], prompt);
+    assert.equal(before.phase, "compile");
+    assert.deepEqual(before.allowedTools, ["run_complete_bas_takeoff"]);
+    assert.equal(isIllegalWorkflowTransition(before, "compile_corpus_takeoff"), true);
+    const after = advanceTakeoffWorkflow("complete_bas_takeoff", [{
+      name: "run_complete_bas_takeoff",
+      out: { execution_status: "completed", human_review_required: true },
+    }], prompt);
+    assert.equal(after.phase, "answer");
+    const partial = advanceTakeoffWorkflow("complete_bas_takeoff", [{
+      name: "run_complete_bas_takeoff",
+      out: { execution_status: "partial", failures: [{ stage: "sequences", error: "unavailable" }], human_review_required: true },
+    }], prompt);
+    assert.equal(partial.phase, "answer", "an inspectable partial receipt must be reported instead of rerunning the whole workflow");
+  }
+  assert.equal(
+    classifyTakeoffIntent("Run a BAS points list takeoff"),
+    "points_takeoff",
+    "an explicitly point-only request retains the focused workflow",
+  );
 });
 
 test("symbol_sweep / connectivity / scale_refuse intents are phrase-robust", () => {

@@ -170,8 +170,9 @@ import { applyBasReview } from "../lib/basReview.ts";
 import { applyBasDrawingReview } from "../lib/basDrawingReview.ts";
 import { recordBasIssueFromUi } from "../components/basIssueClient.ts";
 import { recordBasScopeFromUi } from "../components/basScopeClient.ts";
-import { basRevisionOperationSchema, assertBasRevisionResponse } from "../lib/basRevisionOperations.ts";
+import { basRevisionOperationSchema, assertBasRevisionResponseForVerifiedWorkflow } from "../lib/basRevisionOperations.ts";
 import { applyBasEquipmentReview } from "../lib/basEquipmentReview.ts";
+import { inspectBasWorkflow } from "../lib/basWorkflowInspection.ts";
 import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
@@ -4996,12 +4997,10 @@ export default function TakeoffCanvas() {
       fp = fingerprintSymbol(segs, rect, lum, { textBoxes });
       assertDistinctiveSymbolSeed(fp);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
-      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's default flip — the manual
-      // Symbol-tool marquee had no options surface at all (it always ran
-      // rigid-only, unlike agentSymbolSweep which threads whatever `affine`
-      // its own caller supplies). Wiring the same AFFINE_WIRE_DEFAULT here
-      // is what "the manual marquee path turned on" (§3 Phase F step 3)
-      // means — canvas and agent cannot disagree on which symbols exist.
+      // Keep the proven manual-tool behavior until a transform competition
+      // implementation exists in the shared symbol library and passes the
+      // UI/MCP parity corpus. The previous branch called an API that was never
+      // exported and therefore made the production bundle uncompilable.
       res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}), affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT), textBoxes });
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
@@ -5020,20 +5019,11 @@ export default function TakeoffCanvas() {
         spans, segs, lum, {
           preferredLabel: seedName?.label, preferredFamily: seedName?.family,
           scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)],
-          // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2 C1 / Phase B — a held
-          // withheld row is disclosed geometry, never a corroboration
-          // candidate; excluding it here keeps a degenerate/contaminated fit
-          // from winning or being promoted on a real instance's own tag.
           eligible: [true, ...res.matches.map(() => true), ...res.withheld.map((w) => !w.hold)],
           symbolInkLengthPx: res.seed.length_px,
         },
       );
     } catch { labels = []; }
-    // The seed's own placement still participates in the assignment above
-    // (so it can hold a text run and keep it from a neighboring instance),
-    // but its REPORTED identity is the uncontested `seedName` lookup, not the
-    // contested `labels[0]` — see mcp/src/session.ts's sweepLabels for the
-    // parity contract this mirrors.
     const seedLabel = seedName || labels[0] || null;
     const rawMatchCount = res.matches.length;
     const corrected = reconcileSweepLabels(
@@ -5041,10 +5031,6 @@ export default function TakeoffCanvas() {
       res.matches, res.matches.map((_, i) => labels[1 + i] || null),
       res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
     );
-    // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F / positioning-parity —
-    // shared with mcp/src/session.ts's own MCP tool paths (see that
-    // function's own doc comment) so the manual marquee reports the same
-    // corrected position an agent's symbol_sweep call would.
     const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
     res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
     labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
@@ -6748,6 +6734,10 @@ export default function TakeoffCanvas() {
     } else {
       return { error: "symbol_sweep needs either a seed_rect_norm marquee or a seed_point_norm click." };
     }
+    if (opts.scope === "set") {
+      const shared = await fetchProductionSymbolSweep(key, rect, opts);
+      return normalizeProductionSymbolSweep(shared, key);
+    }
     const lum = segLumRef.current.get(key);
     let res;
     let seedName = null;
@@ -6777,6 +6767,7 @@ export default function TakeoffCanvas() {
         ...(opts.tolerancePx != null ? { tolPx: opts.tolerancePx } : {}),
         ...(lum ? { lum } : {}),
         ...(opts.luminanceTolerance != null ? { lumTol: opts.luminanceTolerance } : {}),
+        ...(opts.variantGuard ? { variantGuard: true } : {}),
         ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
         ...(opts.affine ? { affine: opts.affine } : {}),
         textBoxes,
@@ -6792,18 +6783,11 @@ export default function TakeoffCanvas() {
         spans, segs, lum, {
           preferredLabel: seedName?.label, preferredFamily: seedName?.family,
           scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)],
-          // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md §2 C1 / Phase B — a held
-          // withheld row is disclosed geometry, never a corroboration
-          // candidate; excluding it here keeps a degenerate/contaminated fit
-          // from winning or being promoted on a real instance's own tag.
           eligible: [true, ...res.matches.map(() => true), ...res.withheld.map((w) => !w.hold)],
           symbolInkLengthPx: res.seed.length_px,
         },
       );
     } catch { labels = []; }
-    // The seed's own placement still participates in the assignment above,
-    // but its REPORTED identity is the uncontested `seedName` lookup — see
-    // mcp/src/session.ts's sweepLabels for the parity contract this mirrors.
     const seedLabel = seedName || labels[0] || null;
     const rawMatchCount = res.matches.length;
     const corrected = reconcileSweepLabels(
@@ -6811,10 +6795,6 @@ export default function TakeoffCanvas() {
       res.matches, res.matches.map((_, i) => labels[1 + i] || null),
       res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
     );
-    // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F / positioning-parity —
-    // shared with mcp/src/session.ts's own MCP tool paths (see that
-    // function's own doc comment) so the in-app agent tool reports the same
-    // corrected position an external MCP symbol_sweep call would.
     const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
     res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
     labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
@@ -7258,6 +7238,72 @@ export default function TakeoffCanvas() {
     }
   }
 
+  async function fetchProductionSymbolSweep(key, seedRect, opts = {}) {
+    const { file, page } = parseSheetKey(key);
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    const pdfIndex = names.indexOf(file);
+    if (pdfIndex < 0) return { error: `Seed sheet ${key} is not part of the loaded drawing set.` };
+    const fd = await buildProductionFormData({
+      symbolPdfIndex: pdfIndex,
+      symbolPage: page,
+      symbolSeedRect: JSON.stringify(seedRect),
+      symbolScope: opts.scope === "set" ? "set" : "sheet",
+      symbolOptions: JSON.stringify({
+        rotations: opts.rotations !== false,
+        mirror: opts.mirror !== false,
+        tolerancePx: opts.tolerancePx,
+        luminanceTolerance: opts.luminanceTolerance,
+        variantGuard: opts.variantGuard === true,
+        affine: opts.affine,
+      }),
+    });
+    if (!fd) return { error: "No PDF loaded." };
+    try {
+      const response = await fetch("/__ot/symbol-sweep", { method: "POST", body: fd });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) return { error: result.error || `symbol-sweep HTTP ${response.status}` };
+      return result;
+    } catch (error) {
+      return { error: `Shared Session symbol sweep failed: ${error?.message || error}` };
+    }
+  }
+
+  async function normalizeProductionSymbolSweep(result, seedKey) {
+    if (!result || result.error) return result;
+    const normAt = async (key, at) => {
+      const dims = await ensureSheetDims(key);
+      if (!dims || !Array.isArray(at)) return null;
+      return [+(at[0] / dims.w).toFixed(5), +(at[1] / dims.h).toFixed(5)];
+    };
+    const normalizeRows = async (key, rows = []) => Promise.all(rows.map(async (row) => {
+      const at = await normAt(key, row.at);
+      return at ? { ...row, at } : row;
+    }));
+    const seedAt = await normAt(seedKey, result.seed?.center || result.seed?.at);
+    const normalizedSheets = await Promise.all((result.sheets || []).map(async (sheetResult) => {
+      const dims = await ensureSheetDims(sheetResult.sheet);
+      return {
+        ...sheetResult,
+        ...(dims ? { image_size_px: [dims.w, dims.h] } : {}),
+        matches: await normalizeRows(sheetResult.sheet, sheetResult.matches),
+        withheld: await normalizeRows(sheetResult.sheet, sheetResult.withheld),
+        ...(sheetResult.rejected ? { rejected: await normalizeRows(sheetResult.sheet, sheetResult.rejected) } : {}),
+      };
+    }));
+    return {
+      ...result,
+      ...(result.seed ? {
+        seed: {
+          ...result.seed,
+          ...(seedAt ? { at: seedAt } : {}),
+          center: undefined,
+        },
+      } : {}),
+      sheets: normalizedSheets,
+      coordinate_frame: "normalized_0_1_per_sheet",
+    };
+  }
+
   async function fetchProductionCountMarks(marksOpt) {
     const fields = {};
     if (marksOpt?.length) fields.marks = marksOpt.join(",");
@@ -7277,14 +7323,49 @@ export default function TakeoffCanvas() {
     if (opts.family) fields.family = String(opts.family).trim();
     if (opts.familySweepAll) fields.familySweepAll = "1";
     if (opts.tags?.length) fields.tags = opts.tags.join(",");
+    if (opts.categories?.length) fields.categories = opts.categories.join(",");
+    if (opts.evaluationFast) fields.evaluationFast = "1";
     const fd = await buildProductionFormData(fields);
     if (!fd) return null;
     try {
-      const res = await fetch("/__ot/reconcile-schedule-plan", { method: "POST", body: fd });
-      if (!res.ok) return null;
+      const onProgress = typeof opts.onProgress === "function" ? opts.onProgress : null;
+      const res = await fetch("/__ot/reconcile-schedule-plan", {
+        method: "POST",
+        body: fd,
+        headers: onProgress ? { Accept: "application/x-ndjson" } : undefined,
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        return { error: err.error || `schedule-plan reconciliation HTTP ${res.status}` };
+      }
+      const ctype = String(res.headers.get("content-type") || "");
+      if (onProgress && /ndjson/i.test(ctype) && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buf = "";
+        let result = null;
+        const consume = (line) => {
+          if (!line.trim()) return;
+          const msg = JSON.parse(line);
+          if (msg.type === "progress") onProgress(msg);
+          else if (msg.type === "result") result = msg.result;
+          else if (msg.type === "error") throw new Error(msg.error || "schedule-plan reconciliation failed");
+        };
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += decoder.decode(value, { stream: true });
+          const lines = buf.split("\n");
+          buf = lines.pop() || "";
+          for (const line of lines) consume(line);
+        }
+        if (buf.trim()) consume(buf.trim());
+        if (!result) throw new Error("schedule-plan reconciliation stream ended without a result");
+        return result;
+      }
       return await res.json();
-    } catch {
-      return null;
+    } catch (error) {
+      return { error: `Production reconciliation failed: ${error?.message || error}` };
     }
   }
 
@@ -7590,6 +7671,21 @@ export default function TakeoffCanvas() {
       ...(notes.length ? { notes } : {}),
       counts: { rooms: g.rooms.length, unmatched_tags: g.unmatched_tags.length, schedules: g.tables.length, callouts: g.callouts.length },
     };
+  }
+
+  async function agentAnalyzeControlSchematics() {
+    const g = await ensureAgentGraph();
+    if (!g?.__production) {
+      return {
+        error: "Control schematic/riser analysis requires the shared production Session endpoint; the browser-only fallback graph does not claim topology.",
+      };
+    }
+    if (!g.control_schematics) {
+      return {
+        error: "The shared production graph did not provide control schematic/riser evidence. Rebuild the plan index before relying on this takeoff.",
+      };
+    }
+    return structuredClone(g.control_schematics);
   }
 
   async function agentResolveTag(tag) {
@@ -7902,6 +7998,35 @@ export default function TakeoffCanvas() {
     };
   }
 
+  /** SHOULD THIS BE ON THE SHARED PATH? Split by responsibility. The status
+   * projection is shared (inspectBasWorkflow); opening React view state is
+   * surface-specific and cannot change retained BAS truth. */
+  async function agentInspectBasWorkflow(domain, captureId = null) {
+    const workflow = basWorkflowRef.current;
+    if (!workflow) return { error: "No retained BAS workflow is open. Run compile_corpus_takeoff with kind=\"bas_points\" first." };
+    try { return await inspectBasWorkflow(workflow, domain, captureId); }
+    catch (error) { return { error: `BAS workflow inspection failed: ${error?.message || error}` }; }
+  }
+
+  function agentOpenBasWorkspace(destination) {
+    if (!basWorkflowRef.current) return { error: "No retained BAS workflow is open. Compile a BAS takeoff first." };
+    const routes = {
+      point_soo: { takeoffTab: "points", mode: "sequences", sequenceScroll: 0 },
+      equipment_templates: { takeoffTab: "equipment", equipment: { assemblyOverview: false, engineeringOverview: false } },
+      assemblies_responsibility: { takeoffTab: "equipment", equipment: { assemblyOverview: true, engineeringOverview: false } },
+      engineering_compatibility: { takeoffTab: "equipment", equipment: { assemblyOverview: false, engineeringOverview: true } },
+      review_revisions_release: { takeoffTab: "review", projectReview: { snapshots: false, originalSources: false } },
+    };
+    const route = routes[destination];
+    if (!route) return { error: "Unknown BAS workspace destination." };
+    setBasViewState(previous => ({ ...previous, ...route,
+      ...(route.equipment ? { equipment: { ...previous?.equipment, ...route.equipment } } : {}),
+      ...(route.projectReview ? { projectReview: { ...previous?.projectReview, ...route.projectReview } } : {}),
+    }));
+    setShowTakeoffData(true);
+    return { opened: true, destination, changed_workflow: false, approval: "not_evaluated" };
+  }
+
   /** Push reconcile rows into the Takeoff panel — the ONLY thing this tool
    * used to do was download a standalone CSV; the rows never reached
    * agentTakeoffRows at all, so scheduled_qty/installed_qty/status never
@@ -7921,13 +8046,35 @@ export default function TakeoffCanvas() {
   /** Schedule↔plan reconcile — shared schedulePlanReconcile + sweep_schedule_row path (WP4). */
   async function agentReconcileSchedulePlan(opts = {}) {
     const family = opts.family ? String(opts.family).trim() : null;
-    const remote = await agentMcpTool("reconcile_schedule_plan", { family });
+    const reportProgress = (p) => {
+      const message = String(p?.message || "Reconciling schedules to plan evidence…");
+      setAgentStatus(message);
+      const processed = Number(p?.processed || 0);
+      const total = Number(p?.total || 0);
+      const milestone = !processed || processed % 10 === 0 || (total > 0 && processed === total);
+      if (!milestone) return;
+      setAgentLog((log) => {
+        const next = { kind: "progress", text: message };
+        const last = log[log.length - 1];
+        if (last?.kind === "progress" && last.text === message) return log;
+        return [...log.slice(-199), next];
+      });
+    };
+    reportProgress({ message: "Reconciling schedule quantities to grounded plan evidence…" });
+    const remote = await agentMcpTool("reconcile_schedule_plan", {
+      family,
+      ...(opts.categories?.length ? { categories: opts.categories } : {}),
+      ...(opts.tags?.length ? { tags: opts.tags } : {}),
+      evaluation_fast: opts.evaluationFast === true,
+      family_sweep_all: opts.familySweepAll === true,
+    });
     if (remote && !remote.error) {
+      reportProgress({ message: `Reconciliation complete — ${remote.rows?.length || 0} schedule rows reviewed.` });
       pushReconcileToTakeoffPanel(remote, family);
       return remote;
     }
 
-    const prod = await fetchProductionReconcileSchedulePlan(opts);
+    const prod = await fetchProductionReconcileSchedulePlan({ ...opts, onProgress: reportProgress });
     if (prod && !prod.error && Array.isArray(prod.rows)) {
       const csv = reconcileRowsToCsv(prod.rows);
       if (opts.download !== false && prod.rows.length) {
@@ -7937,6 +8084,7 @@ export default function TakeoffCanvas() {
       pushReconcileToTakeoffPanel(prod, family);
       return { ...prod, csv, path: "production_session" };
     }
+    if (prod?.error && !family) return prod;
 
     const g = await ensureAgentGraph();
     if (!g.available) {
@@ -7986,6 +8134,7 @@ export default function TakeoffCanvas() {
   useEffect(() => {
     window.__opentakeoff = {
       compileCorpusTakeoff: (kind, opts) => agentCompileCorpusTakeoff(kind, opts),
+      analyzeControlSchematics: () => agentAnalyzeControlSchematics(),
       reconcileSchedulePlan: (opts) => agentReconcileSchedulePlan(opts),
       showCompiledTakeoff,
       openAgent: () => setAgentOpen(true),
@@ -8067,6 +8216,24 @@ export default function TakeoffCanvas() {
             );
             return { ok: true };
           } catch (e) { return { error: String(e?.message || e) }; }
+        },
+        // Product Agent path, not a second matcher. Set scope crosses the
+        // one-terminal Vite bridge into Session.symbolSweep so this probe can
+        // prove the exact browser/MCP implementation on multi-page fixtures.
+        agentSweep: async (key, rect, scope = "sheet") => {
+          const pp = panels.find((x) => x.key === key);
+          if (!pp?.img?.w || !pp?.img?.h) return { error: `sheet ${key} is not open` };
+          return agentSymbolSweep(key, {
+            x0: rect[0][0] / pp.img.w,
+            y0: rect[0][1] / pp.img.h,
+            x1: rect[1][0] / pp.img.w,
+            y1: rect[1][1] / pp.img.h,
+          }, {
+            scope,
+            rotations: true,
+            mirror: true,
+            affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT),
+          });
         },
         sweep: () => sweep,
         openSheets: (keys) => openSheets(keys, false),
@@ -8836,6 +9003,9 @@ export default function TakeoffCanvas() {
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
       compileCorpusTakeoff: agentCompileCorpusTakeoff,
+      analyzeControlSchematics: agentAnalyzeControlSchematics,
+      inspectBasWorkflow: agentInspectBasWorkflow,
+      openBasWorkspace: agentOpenBasWorkspace,
       reconcileSchedulePlan: agentReconcileSchedulePlan,
       countMarks: agentCountMarks,
       sweepScheduleRow: agentSweepScheduleRow,
@@ -9318,6 +9488,8 @@ export default function TakeoffCanvas() {
     // Run History) but the panel shows plain-language status + the answer.
     // Full args/results still land in Run History via recordRunEvent.
     const STATUS = {
+      run_complete_bas_takeoff: "Running the complete BAS takeoff and reconciliation…",
+      analyze_control_schematics: "Reading control schematics and risers…",
       list_sheets: "Listing sheets in this set…",
       sheet_graph: "Mapping schedules and sheets…",
       find_schedule: "Finding the right schedule…",
@@ -9430,6 +9602,7 @@ export default function TakeoffCanvas() {
       // Sources / Agent (GOAL: Agent scrap ≠ Takeoff tab).
       const hasFinishedTakeoffSeed = (rows) => rows.some((r) => (
         r?.source_tool === "compile_corpus_takeoff"
+        || r?.source_tool === "analyze_control_schematics"
         || r?.source_tool === "takeoff_summary"
         || r?.source_tool === "project_takeoff"
         || r?.source_tool === "sweep_schedule_row"
@@ -13141,7 +13314,7 @@ export default function TakeoffCanvas() {
               body: JSON.stringify({ workflow: previous, request: operation }) });
             const result = await response.json(); guard();
             if (!response.ok) throw new Error(result.error || 'Revision service unavailable; no result accepted.');
-            const checked = await assertBasRevisionResponse(previous, operation, result); guard();
+            const checked = await assertBasRevisionResponseForVerifiedWorkflow(previous, operation, result); guard();
             if (checked.kind === 'record') { basWorkflowRef.current = checked.workflow; setBasWorkflow(checked.workflow); }
             return checked;
           }}
@@ -13202,7 +13375,11 @@ export default function TakeoffCanvas() {
             });
             if (result?.error) {
               setCommitMsg(`Could not open cite: ${result.error}`);
-              return;
+              // Let the workspace that initiated the navigation display the
+              // same refusal beside the evidence. Swallowing this here left a
+              // source button looking inert when a historical sheet revision
+              // was no longer open, even though no incorrect bbox was painted.
+              return { error: result.error };
             }
             const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
             if (markup) flyToMarkup(markup);

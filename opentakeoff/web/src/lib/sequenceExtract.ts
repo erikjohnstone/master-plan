@@ -9,6 +9,8 @@ import {
 } from "./corpusTakeoff.mjs";
 import type { ScheduleTable, SheetGraph } from "./sheetgraph.ts";
 import { cellEvidence, rowEvidence, titleEvidence } from "./takeoffEvidence.mjs";
+import { parseSheetKey } from "./sheetKey.ts";
+import type { NarrativeSpanEvidence } from "./sequenceNarrative.ts";
 
 export type SequenceStatus = "extracted" | "narrative_only" | "tabular_stub" | "absent";
 
@@ -110,9 +112,52 @@ export function extractSequencesFromGraph(graph: SheetGraph | null | undefined):
   );
 
   const out: ExtractedSequence[] = [];
+  const seen = new Set<string>();
+  const narrativeEvidence = (source: NarrativeSpanEvidence, rawId: string, kind: "header" | "body") => ({
+    page: parseSheetKey(source.sheet).page,
+    bbox: source.bbox,
+    layer: "L1",
+    kind,
+    rawIds: [rawId],
+    rawText: source.text,
+    confidence: 1,
+  });
+
+  // Free-form prose is retained independently of table extraction.  This is
+  // intentionally first: when VectorGrid/ODL also wraps the same narrative
+  // into a reference table, the exact positioned-spans version owns the
+  // duplicate rather than emitting two apparent sequences.
+  for (const narrative of graph?.sequence_narratives || []) {
+    const key = `${narrative.sheet}\u0000${narrative.title.replace(/\s+/g, " ").trim().toUpperCase()}`;
+    seen.add(key);
+    const allText = narrative.sections.map((section) => section.body).join(" ");
+    out.push({
+      id: narrative.id,
+      title: narrative.title,
+      systemTag: inferSystemTag(narrative.title, allText),
+      status: narrative.status === "extracted" ? "extracted" : "narrative_only",
+      sections: narrative.sections.map((section, sectionIndex) => ({
+        heading: section.heading,
+        body: section.body,
+        evidence: section.evidence.map((evidence, evidenceIndex) => narrativeEvidence(
+          evidence,
+          `${narrative.id}:section:${sectionIndex}:span:${evidenceIndex}`,
+          "body",
+        )),
+      })),
+      impliedPoints: [],
+      evidence: [narrativeEvidence(narrative.title_evidence, `${narrative.id}:title`, "header")],
+      sources: ["narrative_spans"],
+      sheet: narrative.sheet,
+      tableId: -1,
+    });
+  }
   tables.forEach((table, tableId) => {
     if (!isSequenceTable(table)) return;
     const title = String(table.title?.text || "").trim() || "(untitled sequence table)";
+    const key = `${table.sheet}\u0000${title.replace(/\s+/g, " ").trim().toUpperCase()}`;
+    if (seen.has(key)) return;
+    seen.add(key);
     const blob = tableHeaderBlob(table);
     const sections = sectionsFromTable(table, tableId);
     const status = sequenceStatus(table, sections);
@@ -165,8 +210,8 @@ export function extractSequencesFromGraph(graph: SheetGraph | null | undefined):
 
 const SEQUENCE_EXCLUSIONS = [
   "impliedPoints is always empty — this compiles SOO narrative sections with citations, it never derives typed AI/AO/BI/BO point counts from prose (that stays refuse_not_done on the bas_points path's own estimator_product.soo gate)",
-  "Non-tabular narrative pages with no schedule/table structure at all are not walked — only tables ODL/sheetgraph already extracted (title-hunt + row-shape detection); a pure-prose SOO sheet with zero table structure is disclosed via detectSooPresence's title-only hit, not section-extracted",
-  "Section boundaries are inferred from row/heading shape (numbered/lettered lists, SECTION/SEQUENCE headers) — a firm that writes its SOO as unbroken paragraph text with no such markers may extract as a single tabular_stub section rather than per-step sections",
+  "Narrative section boundaries come only from authored numbered/lettered steps and explicit mode/section headings; unbroken prose remains one cited Narrative section rather than being semantically rewritten",
+  "Narrative extraction scores prose above and below each SOO title because construction detail titles are commonly printed below their content; side-by-side and stacked title regions are partitioned, but ambiguous layouts remain review-required",
 ];
 
 /**
@@ -224,7 +269,7 @@ export function compileSequencesTakeoff(sessionOrSheets: unknown, graph: SheetGr
     categories: {
       sequences: {
         provenance:
-          "Every table this project's shared vector pipeline (sheetgraph.ts + ODL) already found and classified as a sequence-of-operations / control-sequence table (title match, or corpusTakeoff.mjs's detectSooPresence narrative-title hit when no table exists), walked row-by-row into headed sections with per-cell citations. Never invents section text; never derives typed points from it.",
+          "Free-form SOO prose is captured directly from the shared sheet graph's positioned spans, including construction details whose title is printed below the narrative; table-shaped SOO from VectorGrid/ODL remains supported and is deduplicated against the narrative span path. Every retained line carries its exact bbox. Never invents section text or derives typed points from it.",
         list: sequences.map((seq) => ({
           id: seq.id,
           title: seq.title,

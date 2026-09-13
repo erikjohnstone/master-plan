@@ -87,9 +87,10 @@ Development **Review & changes → Snapshots** checks a reviewed scope against i
 original PDFs, source coverage and shared Python calculations before explicit
 human approval. Saved snapshots reopen as verified historical records and travel
 with original PDFs in a separate evidence ZIP. Import does not replace working
-annotations. Records remain browser-local and unsigned. Current applicability,
-revocation/supersession, public MCP snapshot tools and the combined memory gate
-remain unfinished; this is not a complete production takeoff or Agent workflow.
+annotations. Records remain browser-local and unsigned. Currentness checks and
+append-only revocation/supersession are available; MCP and Agent inspection remain
+read-only. The combined memory gate remains open, so this is not a claim of an
+unattended, universally complete production takeoff.
 
 Local-first sync now retains compatible BAS history across known saved versions.
 Conflicting review branches produce **BAS sync needs review**, with an exportable
@@ -161,7 +162,11 @@ follows its recorded column order; original values and source boxes are unchange
 
 The shared issue-decision journal retains observed findings and corrective
 history through backups. Its public controls are described above; it cannot waive
-blockers or approve quantities. Approved snapshots remain in development.
+blockers or approve quantities. An estimator can create an explicitly approved,
+source-inclusive snapshot from **Review & changes**, reopen it with exact source
+and calculation verification, compare it with current saved work, and record an
+append-only revocation or supersession. Agent and MCP inspection remain read-only:
+they cannot approve, revoke, supersede, or certify a design.
 
 **Open original** provides a read-only page reader. Historical BAS citations also
 use it when their exact PDF is no longer active. Hash and saved page-frame checks
@@ -180,8 +185,9 @@ its originals, saved state and recovery journal. An empty workspace offers
 **Restore BAS evidence backup**. Historical PDFs do not enter active counting.
 MCP also previews and explicitly restores the same shared merge into its Session,
 retaining originals and previous state in an operation-owned local directory.
-Drawing correspondence and approved snapshots remain unfinished;
-see [browser restore proof](docs/bas-production/RESTORE_BROWSER_PROOF.md) and
+Drawing correspondence and approved snapshots are available through the bounded
+human-review workflow; the source/snapshot memory target remains open. See
+[browser restore proof](docs/bas-production/RESTORE_BROWSER_PROOF.md) and
 [MCP restore contract/proof](docs/bas-production/RESTORE_MCP_PROOF.md).
 See [format, limits and acceptance](docs/bas-production/EVIDENCE_BUNDLE_CONTRACT.md).
 
@@ -242,7 +248,7 @@ otherwise, and nothing an autonomous agent could call.
 
 OpenTakeoff is that engine, with two front ends over identical geometry:
 
-- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->53<!--/tool-count--> tools, on the
+- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->56<!--/tool-count--> tools, on the
   [official MCP registry](https://registry.modelcontextprotocol.io). An agent opens a plan,
   reads the title block, sets the scale, floods the rooms, checks its own work on a rendered
   overlay, and hands back a marked-up planset PDF.
@@ -650,7 +656,7 @@ plus a vision-capable model id.
 | **Voice** | Push-to-talk takeoff commands, recognized on-device in WebAssembly; audio never leaves the browser |
 | **View** | Light or **dark (negative print)**—sheet pixels inverted at draw time, exports follow |
 | **Storage** | IndexedDB + localStorage—client-only, nothing uploaded |
-| **MCP server** | <!--tool-count-->53<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
+| **MCP server** | <!--tool-count-->56<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
 | **Provenance** | Every shape records its scale, its method, its confidence, and whether a person or an agent made it |
 | **Capture (opt-in)** | Bundled [capture server](capture/README.md) banks each contributed takeoff as (geometry → label) training rows |
 | **Deploy** | One static build—Netlify, Vercel, GitHub Pages, Cloudflare Pages, S3, any static host |

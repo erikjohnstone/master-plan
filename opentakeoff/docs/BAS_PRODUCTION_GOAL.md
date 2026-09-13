@@ -9,7 +9,11 @@ Research, design, implement, and verify five complete BAS takeoff workflows:
 4. Engineering compatibility.
 5. Review, drawing revisions, and takeoff issue controls.
 
-After those five workflows, complete the research-gated final phase below for deformation-tolerant symbol extraction, plan reconciliation, and evidence-backed installed quantities, explicitly added by the user on 2026-09-09. This extension does not replace or shorten the five workflows.
+Superseding user instruction, 2026-09-12: finish and verify the five deterministic
+BAS workflows only. Do **not** implement, tune, or otherwise enter symbol
+recognition in this goal; another model owns that work. The historical symbol
+phase remains at the end of this document as delegated context, not an acceptance
+gate or implementation queue for this branch.
 
 Deliver an integrated, enterprise-quality workflow in the existing platform, supported by the available PDF corpus and independently checked evidence. This is not a pricing, labor, model-training, or broad platform-redesign project. The current BAS math engine is a foundation, not proof of complete project interpretation.
 
@@ -32,7 +36,8 @@ evidence-backed takeoff data and focus the estimator on exceptions, applicabilit
 and explicit approval; do not substitute manual reconstruction of the takeoff.
 Complete the five bounded workflows and their release/verification gates without
 requiring universal unattended understanding. This clarification does not waive
-source grounding, missing coverage, failed checks or the appended symbol phase.
+source grounding, missing coverage, failed checks, or any of the five deterministic
+workflow gates.
 
 The user additionally emphasizes substantial workload reduction, not merely a
 safe manual editor. Automatically perform supported extraction, organization,
@@ -139,11 +144,13 @@ Never weaken a key, scorer, threshold, or evidence requirement; never hardcode P
 - Capture and visually inspect screenshots/walkthroughs of point/SOO coverage, equipment mapping, assembly responsibilities, engineering checks, review, and revision comparison. No clipping, overlapping controls, hidden critical actions, or unreadable tables.
 - Keep a durable progress record with exact baseline, commits, accepted/rejected approaches, measured results, known boundaries, and next steps.
 - Commit coherent, tested work on the feature branch. No automatic main merge, deployment, or publication.
-- Finish only when all five agreed bounded workflows pass their acceptance gates end-to-end, the added final phase has reached its evidence-gated implementation or documented infeasibility outcome, source/contract safety is demonstrated, documentation and non-commercial exports agree with the UI, and the report accurately states remaining limitations. If an essential capability requires unavailable inputs or prohibited technology, report the precise decision needed rather than declaring a partial implementation production complete.
+- Finish only when all five agreed bounded workflows pass their acceptance gates end-to-end, source/contract safety is demonstrated, documentation and non-commercial exports agree with the UI, and the report accurately states remaining limitations. If an essential capability requires unavailable inputs or prohibited technology, report the precise decision needed rather than declaring a partial implementation production complete.
 
-## Final phase — researched symbol robustness and installed-plan reconciliation
+## Delegated historical phase — researched symbol robustness and installed-plan reconciliation
 
-Added by explicit user request on 2026-09-09. Execute after the five BAS workflows; research and baseline planning may begin earlier. The user specifically requires deep web research, fast execution, and no forced implementation if defensible research and experiments do not support a viable approach.
+Added by explicit user request on 2026-09-09 and removed from this branch by the
+superseding 2026-09-12 instruction. Another model owns this phase. Do not execute
+it here; the original requirements below are retained only to preserve context.
 
 1. Research original papers, official algorithm documentation, and relevant symbol-spotting evaluations. Compare geometric hashing, rotation/scale/affine normalization, anisotropic stretch, local primitive/topology descriptors, partial matching, robust registration, distance-based verification, coarse-to-fine candidate retrieval, spatial indexing, caching, and multi-sheet correspondence. Distinguish mathematics that accepts vector coordinates from image-only or trained methods. Record assumptions, runtime complexity, deformation limits, confusing-symbol controls, licensing/dependency implications, and applicability to this engine. Do not infer production performance from a paper's unrelated dataset.
 2. Map the actual legend-learning, symbol-sweep, candidate generation/verification, plan scoping, deduplication, citation, and installed-quantity production paths before proposing changes. Quantities and match decisions belong on the shared UI/MCP path. Keep VectorGrid table algorithms, output structure, and bbox semantics protected by the existing preservation gate; this extension is not blanket permission to alter table extraction.

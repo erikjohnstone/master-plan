@@ -2,6 +2,7 @@
 export default function BasAssignedValues({ calculation, assignmentId, stale, page: selectedPage, onPage, onSource, open, onOpenChange }) {
   const result = calculation?.result.assignments.find(a => a.assignment.assignment_id === assignmentId);
   if (!result) return null;
+  const unique = calculation.result.unique_requirement_total;
   const lines = result.rows.flatMap(row => row.observations.map(observation => ({ row, observation })));
   const page = Math.max(0, Math.min(selectedPage || 0, Math.ceil(lines.length / 50) - 1));
   return <details className="bas-point-disclosure" aria-label="Assigned listed values" open={!!open} onToggle={e => { if (e.currentTarget.open !== !!open) onOpenChange(e.currentTarget.open); }}>
@@ -10,7 +11,8 @@ export default function BasAssignedValues({ calculation, assignmentId, stale, pa
     <p>{result.assignment.applicability === 'system_once' ? 'The entire system matrix is applied once when its selection is nonempty.' : 'Each source value is applied to every included named equipment item.'} This is a listed-value derivation, not a verified installation or field-wiring count.</p>
     <p>Known listed I/O subtotal: {Object.entries(result.known_listed_io_subtotal).map(([channel, value]) => `${channel} ${value}`).join(' · ')}.</p>
     {!!result.known_listed_software_subtotals.length && <p>Known listed software: {result.known_listed_software_subtotals.map(s => `${s.channel} ${s.known_listed_value}`).join(' · ')}.</p>}
-    <p>{result.unobserved_typed_cells} typed cells not observed · {result.ambiguous_observations} ambiguous observations. Subtotals include known observations only; repeated physical requirements are not resolved or combined into a project total.</p>
+    {unique && !stale ? <p role="status"><strong>Unique listed requirement total for the reviewed assignment set: {unique.requirement_instances}</strong> · {Object.entries(unique.physical_io).map(([channel, value]) => `${channel} ${value}`).join(' · ')}{unique.software.length ? ` · ${unique.software.map(s => `${s.channel} ${s.known_listed_value}`).join(' · ')}` : ''}. The explicit assignment partition has no overlapping equipment/system template paths. This is not installed hardware or verified field wiring.</p>
+      : <p>{result.unobserved_typed_cells} typed cells not observed · {result.ambiguous_observations} ambiguous observations. Subtotals include known observations only; a unique project total is withheld until assignment identities are complete and non-overlapping.</p>}
     <div className="bas-point-grid" role="region" tabIndex={0} aria-label="Scrollable assigned values">
       <table aria-label="Assigned value derivation"><thead><tr><th>Point</th><th>Kind / channel</th><th>Listed value</th><th>Applications</th><th>Assigned value</th><th>Evidence</th></tr></thead><tbody>
         {lines.slice(page * 50, (page + 1) * 50).map(({ row, observation: o }) => <tr key={o.observation_id}>

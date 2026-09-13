@@ -284,7 +284,13 @@ change. Cached reads are not a new replay. `action:"export",view_id,path,overwri
 writes the full operation JSON atomically. Persist the project and full journal
 with `export_takeoff`, preferably a source-inclusive evidence bundle. Restore with
 `import_takeoff`. Exact retries retain history; stale/foreign/conflicting writes
-reject without adoption. Approved snapshots remain unfinished. There are 53 tools.
+reject without adoption. `inspect_bas_workflow` reports the bounded readiness of
+each deterministic BAS workflow from saved state. `inspect_bas_snapshot` verifies
+a browser-approved source-inclusive snapshot, optionally replays it against the
+current saved workflow, consumes an append-only lifecycle sidecar, and can write a
+readable non-commercial workbook. Both are read-only: snapshot approval,
+revocation and supersession remain explicit human actions in the browser. There
+are 55 tools.
 
 ### Drawing correspondence
 
@@ -446,8 +452,8 @@ includes document text, shape vertices, or result payload content.
 
 ### Staged tool exposure (opt-in)
 
-By default every client gets all 53 tool schemas on `tools/list`—the flat
-contract every published client already expects. Fifty descriptions is real
+By default every client gets all 55 tool schemas on `tools/list`—the flat
+contract every published client already expects. Fifty-five descriptions is real
 token weight for an agent session that may never touch half of them, so the
 server can instead stage the surface along the workflow it already teaches:
 

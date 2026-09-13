@@ -73,7 +73,7 @@ export function resolveTsxLoader() {
   );
 }
 
-function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, marks, family, tags, familySweepAll, evaluationFast, onProgress }) {
+function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, marks, family, tags, categories, familySweepAll, evaluationFast, symbol, onProgress, signal, postGraphTimeoutMs }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
     try {
@@ -92,12 +92,22 @@ function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, m
     if (marks?.length) args.push("--marks", marks.join(","));
     if (family) args.push("--family", family);
     if (tags?.length) args.push("--tags", tags.join(","));
+    if (categories?.length) args.push("--categories", categories.join(","));
     if (familySweepAll) args.push("--family-sweep-all");
     if (evaluationFast) args.push("--evaluation-fast");
+    if (symbol) {
+      args.push("--symbol-pdf-index", String(symbol.pdfIndex));
+      args.push("--symbol-page", String(symbol.page));
+      args.push("--symbol-seed-rect", JSON.stringify(symbol.seedRect));
+      args.push("--symbol-scope", symbol.scope);
+      args.push("--symbol-options", JSON.stringify(symbol.options || {}));
+    }
     for (const p of pdfPaths) args.push("--pdf", p);
     if (outPath) args.push("--out", outPath);
+    const detached = process.platform !== "win32";
     const child = spawn(process.execPath, args, {
       cwd: mcpRoot,
+      detached,
       env: {
         ...process.env,
         // Help Node find peer deps of tsx / mcp packages from either tree.
@@ -112,11 +122,42 @@ function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, m
     let stdout = "";
     let stderr = "";
     let stderrBuf = "";
+    let deadline = null;
+    let terminalError = null;
+    const stopChild = (error) => {
+      if (!terminalError) terminalError = error;
+      if (!child.pid || child.exitCode != null) return;
+      try {
+        if (detached) process.kill(-child.pid, "SIGTERM");
+        else child.kill("SIGTERM");
+      } catch { /* child may have exited between the checks */ }
+      const force = setTimeout(() => {
+        if (child.exitCode != null) return;
+        try {
+          if (detached) process.kill(-child.pid, "SIGKILL");
+          else child.kill("SIGKILL");
+        } catch { /* already stopped */ }
+      }, 1500);
+      force.unref?.();
+    };
+    const onAbort = () => stopChild(new Error("Takeoff request was cancelled; background extraction was stopped."));
+    if (signal?.aborted) onAbort();
+    else signal?.addEventListener?.("abort", onAbort, { once: true });
     const consumeProgressLine = (line) => {
       if (!line.startsWith("OT_PROGRESS\t")) return;
-      if (typeof onProgress !== "function") return;
       try {
-        onProgress(JSON.parse(line.slice("OT_PROGRESS\t".length)));
+        const event = JSON.parse(line.slice("OT_PROGRESS\t".length));
+        // The user's SLA begins after indexing. Arm the deadline only when
+        // the graph-ready event arrives, never while a large PDF is still
+        // being indexed. A timeout refuses the run and kills its process tree
+        // so an abandoned Agent cannot keep burning CPU invisibly.
+        if (!deadline && postGraphTimeoutMs > 0 && event.phase === "graph" && Number.isFinite(event.sheet_count)) {
+          deadline = setTimeout(() => stopChild(new Error(
+            `Automatic takeoff exceeded the ${Math.round(postGraphTimeoutMs / 1000)}-second post-index limit and was stopped. No incomplete quantities were released.`,
+          )), postGraphTimeoutMs);
+          deadline.unref?.();
+        }
+        if (typeof onProgress === "function") onProgress(event);
       } catch {
         /* ignore malformed progress */
       }
@@ -130,9 +171,19 @@ function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, m
       stderrBuf = parts.pop() || "";
       for (const line of parts) consumeProgressLine(line.trim());
     });
-    child.on("error", reject);
+    child.on("error", (error) => {
+      if (deadline) clearTimeout(deadline);
+      signal?.removeEventListener?.("abort", onAbort);
+      reject(terminalError || error);
+    });
     child.on("close", (code) => {
+      if (deadline) clearTimeout(deadline);
+      signal?.removeEventListener?.("abort", onAbort);
       if (stderrBuf.trim()) consumeProgressLine(stderrBuf.trim());
+      if (terminalError) {
+        reject(terminalError);
+        return;
+      }
       if (code !== 0) {
         // Strip progress lines from the error surface so the real failure shows.
         const errText = stderr
@@ -211,9 +262,12 @@ async function resolvePdfs(req) {
   let marks = null;
   let family = null;
   let tags = null;
+  let categories = null;
   let familySweepAll = false;
   let evaluationFast = false;
+  let symbol = null;
   let pdfPaths = [];
+  let fileNames = [];
   let tmpDir = null;
   if (ctype.includes("multipart/form-data")) {
     const mp = await readMultipart(req);
@@ -224,8 +278,20 @@ async function resolvePdfs(req) {
     marks = mp.fields.marks || null;
     family = mp.fields.family || null;
     tags = mp.fields.tags || null;
+    categories = mp.fields.categories
+      ? mp.fields.categories.split(",").map((value) => value.trim()).filter(Boolean)
+      : null;
     familySweepAll = mp.fields.familySweepAll === "1" || mp.fields.familySweepAll === "true";
     evaluationFast = mp.fields.evaluationFast === "1" || mp.fields.evaluationFast === "true";
+    if (mp.fields.symbolSeedRect) {
+      symbol = {
+        pdfIndex: Number(mp.fields.symbolPdfIndex || 0),
+        page: Number(mp.fields.symbolPage || 0),
+        seedRect: JSON.parse(mp.fields.symbolSeedRect),
+        scope: mp.fields.symbolScope || "sheet",
+        options: mp.fields.symbolOptions ? JSON.parse(mp.fields.symbolOptions) : {},
+      };
+    }
     if (!mp.files.length) throw Object.assign(new Error("file required"), { status: 400 });
     // A CONTENT-ADDRESSED SPOOL, NOT A FRESH TEMP DIR.
     //
@@ -249,6 +315,7 @@ async function resolvePdfs(req) {
       const pdfPath = join(spool, `${sha}.pdf`);
       if (!existsSync(pdfPath)) await writeFile(pdfPath, f.bytes);
       pdfPaths.push(pdfPath);
+      fileNames.push(f.filename || "plan.pdf");
     }
   } else {
     const body = await readJson(req);
@@ -259,8 +326,10 @@ async function resolvePdfs(req) {
     marks = body.marks || null;
     family = body.family || null;
     tags = body.tags || null;
+    categories = Array.isArray(body.categories) ? body.categories : null;
     familySweepAll = !!body.familySweepAll;
     evaluationFast = !!body.evaluationFast;
+    symbol = body.symbol || null;
     if (Array.isArray(body.pdfPaths) && body.pdfPaths.length) {
       pdfPaths = body.pdfPaths;
     } else if (body.pdfPath) {
@@ -268,8 +337,29 @@ async function resolvePdfs(req) {
     } else {
       throw Object.assign(new Error("pdfPath or multipart file required"), { status: 400 });
     }
+    fileNames = pdfPaths.map((p) => p.split(/[\\/]/).at(-1));
   }
-  return { kind, service, basMathOptions, pdfPaths, tmpDir, tag, marks, family, tags, familySweepAll, evaluationFast };
+  return { kind, service, basMathOptions, pdfPaths, fileNames, tmpDir, tag, marks, family, tags, categories, familySweepAll, evaluationFast, symbol };
+}
+
+function restoreUploadedSheetKeys(result, pdfPaths, fileNames) {
+  if (!result || typeof result !== "object") return result;
+  const aliases = new Map(pdfPaths.map((path, index) => [path.split(/[\\/]/).at(-1), fileNames[index] || path.split(/[\\/]/).at(-1)]));
+  const restore = (key) => {
+    if (typeof key !== "string") return key;
+    const hash = key.lastIndexOf("#");
+    const base = hash >= 0 ? key.slice(0, hash) : key;
+    const suffix = hash >= 0 ? key.slice(hash) : "";
+    return `${aliases.get(base) || base}${suffix}`;
+  };
+  if (Array.isArray(result.sheets)) {
+    result.sheets = result.sheets.map((row) => ({ ...row, sheet: restore(row.sheet) }));
+  }
+  if (Array.isArray(result.skipped)) {
+    result.skipped = result.skipped.map((row) => ({ ...row, sheet: restore(row.sheet) }));
+  }
+  if (result.seed?.sheet) result.seed = { ...result.seed, sheet: restore(result.seed.sheet) };
+  return result;
 }
 
 function wantsProgressStream(req) {
@@ -291,47 +381,76 @@ function writeNdjson(res, obj) {
 
 async function handle(req, res, mode) {
   let tmpDir = null;
-  const stream = mode === "compile" && wantsProgressStream(req);
+  const stream = (mode === "compile" || mode === "reconcile") && wantsProgressStream(req);
+  const abortController = new AbortController();
+  req.once?.("aborted", () => abortController.abort());
+  res.once?.("close", () => {
+    if (!res.writableEnded) abortController.abort();
+  });
   try {
     const resolved = await resolvePdfs(req);
     tmpDir = resolved.tmpDir;
-    const { kind, service, basMathOptions, pdfPaths, tag, marks, family, tags, familySweepAll, evaluationFast } = resolved;
+    const { kind, service, basMathOptions, pdfPaths, fileNames, tag, marks, family, tags, categories, familySweepAll, evaluationFast, symbol } = resolved;
     if (mode === "compile" && !kind) {
       return sendJson(res, 400, { error: "kind required" });
     }
     if (mode === "sweep" && !tag) {
       return sendJson(res, 400, { error: "tag required" });
     }
+    if (mode === "symbol_sweep" && !symbol) {
+      return sendJson(res, 400, { error: "symbol sweep parameters required" });
+    }
     if (mode === "graph") {
       const outPath = join(tmpDir || await mkdtemp(join(tmpdir(), "ot-graph-out-")), "graph.json");
       if (!tmpDir) tmpDir = resolve(outPath, "..");
-      await runCli({ mode: "graph", pdfPaths, outPath });
+      await runCli({ mode: "graph", pdfPaths, outPath, signal: abortController.signal });
       const raw = await readFile(outPath, "utf8");
       return sendJson(res, 200, raw);
     }
     if (mode === "sweep") {
-      const result = await runCli({ mode: "sweep", pdfPaths, tag, evaluationFast });
+      const result = await runCli({ mode: "sweep", pdfPaths, tag, evaluationFast, signal: abortController.signal });
       return sendJson(res, 200, result);
+    }
+    if (mode === "symbol_sweep") {
+      const result = await runCli({ mode: "symbol_sweep", pdfPaths, symbol, signal: abortController.signal });
+      return sendJson(res, 200, restoreUploadedSheetKeys(result, pdfPaths, fileNames));
     }
     if (mode === "count_marks") {
       const markList = marks
         ? String(marks).split(",").map((m) => m.trim()).filter(Boolean)
         : undefined;
-      const result = await runCli({ mode: "count_marks", pdfPaths, marks: markList });
+      const result = await runCli({ mode: "count_marks", pdfPaths, marks: markList, signal: abortController.signal });
       return sendJson(res, 200, result);
     }
     if (mode === "reconcile") {
       const tagList = tags
         ? String(tags).split(",").map((t) => t.trim()).filter(Boolean)
         : undefined;
+      if (stream) {
+        beginNdjson(res);
+        writeNdjson(res, {
+          type: "progress",
+          phase: "upload",
+          message: `Plans received (${pdfPaths.length} PDF${pdfPaths.length === 1 ? "" : "s"}) — starting schedule-to-plan reconciliation…`,
+        });
+      }
       const result = await runCli({
         mode: "reconcile",
         pdfPaths,
         family: family || undefined,
         tags: tagList,
+        categories,
         familySweepAll,
         evaluationFast,
+        signal: abortController.signal,
+        postGraphTimeoutMs: 180_000,
+        ...(stream ? { onProgress: (p) => writeNdjson(res, { type: "progress", ...p }) } : {}),
       });
+      if (stream) {
+        writeNdjson(res, { type: "result", result });
+        res.end();
+        return;
+      }
       return sendJson(res, 200, result);
     }
     if (stream) {
@@ -347,17 +466,18 @@ async function handle(req, res, mode) {
         pdfPaths,
         service,
         basMathOptions,
+        signal: abortController.signal,
         onProgress: (p) => writeNdjson(res, { type: "progress", ...p }),
       });
       writeNdjson(res, { type: "result", result });
       res.end();
       return;
     }
-    const result = await runCli({ mode: "compile", kind, pdfPaths, service, basMathOptions });
+    const result = await runCli({ mode: "compile", kind, pdfPaths, service, basMathOptions, signal: abortController.signal });
     sendJson(res, 200, result);
   } catch (err) {
     console.error(`[production-graph-api ${mode}]`, err);
-    if (stream && res.headersSent) {
+    if (stream && res.headersSent && !res.writableEnded && !res.destroyed) {
       writeNdjson(res, { type: "error", error: String(err?.message || err) });
       res.end();
       return;
@@ -377,6 +497,7 @@ const OT_ROUTES = [
   ["/__ot/sheet-graph", "graph"],
   ["/__ot/compile-corpus-takeoff", "compile"],
   ["/__ot/sweep-schedule-row", "sweep"],
+  ["/__ot/symbol-sweep", "symbol_sweep"],
   ["/__ot/count-marks", "count_marks"],
   ["/__ot/reconcile-schedule-plan", "reconcile"],
 ];

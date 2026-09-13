@@ -1,0 +1,19 @@
+{
+  "schema": "opentakeoff.ground_truth_correction_overlay.v1",
+  "source_pdf": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "set_id": "navfac-cherry-point-atc",
+  "review": {
+    "method": "Rendered page 49 visual review plus direct pdftotext -layout inspection of the HHW CONTROL VALVE SCHEDULE.",
+    "reason": "The authored VALVE MARK wraps after a trailing hyphen. Earlier truth joined the two lines while dropping that printed separator."
+  },
+  "corrections": [
+    {
+      "category": "HHW_CONTROL_VALVE",
+      "page": 49,
+      "table_title": "HHW CONTROL VALVE SCHEDULE",
+      "column": "VALVE MARK",
+      "previous_truth_tag": "HHWC-DOAH-T1HHW",
+      "corrected_printed_tag": "HHWC-DOAH-T1-HHW"
+    }
+  ]
+}

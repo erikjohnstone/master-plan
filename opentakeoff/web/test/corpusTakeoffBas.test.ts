@@ -18,6 +18,7 @@ import {
 describe("isBasPointsListTitle", () => {
   it("accepts POINTS / DDC / I/O list titles and rejects equipment schedules", () => {
     assert.equal(isBasPointsListTitle("POINTS LIST DOAH-TI"), true);
+    assert.equal(isBasPointsListTitle("AIR OPS HHW SYSTEM POINT LIST"), true);
     assert.equal(isBasPointsListTitle("FCU WITH COOLING COILS DDC POINTS LIST"), true);
     assert.equal(isBasPointsListTitle("I/O LIST WHITE STURGEON PLC"), true);
     assert.equal(isBasPointsListTitle("IO LIST PANEL A"), true);
@@ -26,6 +27,8 @@ describe("isBasPointsListTitle", () => {
     assert.equal(isBasPointsListTitle("CONTROLLER I/O SUMMARY"), true);
     assert.equal(isBasPointsListTitle("MISCELLANEOUS POINTS SCHEDULE"), true);
     assert.equal(isBasPointsListTitle("POINTS SCHEDULE"), true);
+    assert.equal(isBasPointsListTitle("HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1"), true);
+    assert.equal(isBasPointsListTitle("VARIABLE FREQUENCY DRIVE BACNET INTERFACE SCHEDULE"), true);
     // SOO narrative captions — not extractable typed points rows.
     assert.equal(isBasPointsListTitle("AHU-1 POINT LIST TABLE"), false);
     assert.equal(isBasPointsListTitle("FAN SCHEDULE"), false);
@@ -35,6 +38,82 @@ describe("isBasPointsListTitle", () => {
     assert.equal(isBasPointsListTitle("INPUT/OUTPUT SUMMARY"), false);
     assert.equal(isBasPointsListTitle("INPUT OUTPUT SUMMARY"), false);
     assert.equal(isBasPointsListTitle(""), false);
+  });
+});
+
+describe("compileBasTakeoff row semantics", () => {
+  it("does not count printed I/O section labels as points", () => {
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#1", number: 1 }],
+      tables: [{
+        kind: "equipment",
+        sheet: "set.pdf#1",
+        title: { text: "CRAH DDC POINTS LIST", bbox: [0, 0, 10, 10] },
+        rows: [
+          { key: "ANALOG INPUT", cells: { DESCRIPTION: { text: "ANALOG INPUT" } } },
+          { key: "AI01", cells: { DESCRIPTION: { text: "SPACE TEMPERATURE" } } },
+          { key: "ANALOG OUTPUT", cells: { DESCRIPTION: { text: "ANALOG OUTPUT" } } },
+          { key: "AO01", cells: { DESCRIPTION: { text: "CHW VALVE CONTROL" } } },
+          { key: "BINARY INPUT", cells: { DESCRIPTION: { text: "BINARY INPUT" } } },
+          { key: "BI01", cells: { DESCRIPTION: { text: "DIRTY FILTER SWITCH" } } },
+          { key: "BINARY OUTPUT", cells: { DESCRIPTION: { text: "BINARY OUTPUT" } } },
+          { key: "BO01", cells: { DESCRIPTION: { text: "FAN START/STOP" } } },
+        ],
+      }],
+    });
+
+    assert.equal(bas.totals.rows, 4);
+    assert.deepEqual(
+      { AI: bas.totals.AI, AO: bas.totals.AO, BI: bas.totals.BI, BO: bas.totals.BO },
+      { AI: 1, AO: 1, BI: 1, BO: 1 },
+    );
+    assert.deepEqual(
+      bas.categories.points_lists.lists[0].items.map((item) => item.tag),
+      ["AI01", "AO01", "BI01", "BO01"],
+    );
+  });
+
+  it("types wildcard marks and merges same-page fragments of one titled list", () => {
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#2", number: 2 }],
+      tables: [
+        {
+          kind: "reference",
+          sheet: "set.pdf#2",
+          title: { text: "PLANT HHW SYSTEM POINT LIST", bbox: [0, 0, 10, 10] },
+          rows: [
+            { key: "AI01", cells: { DESCRIPTION: { text: "SUPPLY TEMPERATURE" } } },
+            {
+              key: "BI BI##",
+              cells: {
+                MARK: { text: "BI##" },
+                DESCRIPTION: { text: "ISOLATION DAMPER CLOSED" },
+              },
+            },
+          ],
+        },
+        {
+          kind: "reference",
+          sheet: "set.pdf#2",
+          title: { text: "PLANT HHW SYSTEM POINT LIST", bbox: [20, 0, 30, 10] },
+          rows: [
+            { key: "AO01", cells: { DESCRIPTION: { text: "BYPASS VALVE CONTROL" } } },
+            { key: "BO", cells: { MARK: { text: "BO#" }, DESCRIPTION: { text: "DAMPER CONTROL" } } },
+          ],
+        },
+      ],
+    });
+
+    assert.equal(bas.totals.lists, 1);
+    assert.deepEqual(
+      { rows: bas.totals.rows, AI: bas.totals.AI, AO: bas.totals.AO, BI: bas.totals.BI, BO: bas.totals.BO },
+      { rows: 4, AI: 1, AO: 1, BI: 1, BO: 1 },
+    );
+    assert.deepEqual(bas.page_accounting.pages[0].titles, ["PLANT HHW SYSTEM POINT LIST"]);
+    assert.deepEqual(
+      bas.categories.points_lists.lists[0].items.map((item) => item.tag),
+      ["AI01", "BI##", "AO01", "BO#"],
+    );
   });
 });
 
@@ -213,6 +292,49 @@ describe("probeBasProofSpareColumnHeaders", () => {
 });
 
 describe("compileBasTakeoff I/O LIST", () => {
+  it("counts exact printed HARDWARE POINT TYPE cells and normalizes DI/DO to BI/BO", () => {
+    const graph = {
+      sheets: [{ key: "set.pdf#1", number: 1 }],
+      tables: [
+        {
+          sheet: "set.pdf#1",
+          title: { text: "BMS POINT FUNCTION SCHEDULE", bbox: [0, 0, 10, 10] },
+          rows: [
+            { key: "1", cells: { "HARDWARE POINT TYPE": { text: "AI", bbox: [10, 10, 20, 20] } } },
+            { key: "2", cells: { "HARDWARE POINT TYPE": { text: "AO", bbox: [10, 20, 20, 30] } } },
+            { key: "3", cells: { "HARDWARE POINT TYPE": { text: "DI", bbox: [10, 30, 20, 40] } } },
+            { key: "4", cells: { "HARDWARE POINT TYPE": { text: "DO", bbox: [10, 40, 20, 50] } } },
+          ],
+        },
+      ],
+    };
+    const bas = compileBasTakeoff(null, graph);
+    assert.deepEqual(
+      { AI: bas.totals.AI, AO: bas.totals.AO, BI: bas.totals.BI, BO: bas.totals.BO },
+      { AI: 1, AO: 1, BI: 1, BO: 1 },
+    );
+    assert.deepEqual(
+      bas.categories.points_lists.lists[0].items.map((item) => [item.point_type, item.point_type_raw]),
+      [["AI", "AI"], ["AO", "AO"], ["BI", "DI"], ["BO", "DO"]],
+    );
+  });
+
+  it("refuses conflicting MARK and explicit point-type evidence", () => {
+    const graph = {
+      sheets: [{ key: "set.pdf#1", number: 1 }],
+      tables: [{
+        sheet: "set.pdf#1",
+        title: { text: "AHU-1 POINTS LIST", bbox: [0, 0, 10, 10] },
+        rows: [{ key: "AI01", cells: { "HARDWARE POINT TYPE": { text: "DO", bbox: [10, 10, 20, 20] } } }],
+      }],
+    };
+    const bas = compileBasTakeoff(null, graph);
+    assert.equal(bas.totals.AI, 0);
+    assert.equal(bas.totals.BO, 0);
+    assert.equal(bas.categories.points_lists.lists[0].items[0].point_type, null);
+    assert.equal(bas.categories.points_lists.lists[0].items[0].point_type_status, "REFUSED_POINT_TYPE_CONFLICT");
+  });
+
   it("counts device I/O rows and skips the TAG header", () => {
     const graph = {
       sheets: [{ key: "set.pdf#1", number: 1 }],

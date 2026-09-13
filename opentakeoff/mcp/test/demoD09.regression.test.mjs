@@ -25,14 +25,14 @@ test("D09 production engine preserves room HVAC coordination evidence", async ()
   const room105 = (finish.rows || []).find((row) =>
     String(row.key || "").trim() === "105");
   assert.ok(room105, "room 105 must remain on the finish schedule");
-  assert.equal(cellText(room105, /^ROOM$/i), truth.expected.room_105_name.value);
+  assert.equal(cellText(room105, /^ROOM(?:\s+NAME)?$/i), truth.expected.room_105_name.value);
   assert.equal(cellText(room105, /^FLOOR$/i), truth.expected.room_105_floor.value);
-  assert.equal(cellText(room105, /^NUMBER$/i), truth.expected.room_105_number.value);
+  assert.equal(cellText(room105, /^(?:ROOM\s+)?NUMBER$/i), truth.expected.room_105_number.value);
 
   const room101 = (finish.rows || []).find((row) =>
     String(row.key || "").trim() === "101");
   assert.ok(room101, "room 101 must remain for follow-up");
-  assert.equal(cellText(room101, /^ROOM$/i), truth.follow_up.expected.room_101_name);
+  assert.equal(cellText(room101, /^ROOM(?:\s+NAME)?$/i), truth.follow_up.expected.room_101_name);
 
   const grille = graph.tables.find((table) =>
     /DIFFUSER-GRILLE SCHEDULE/i.test(table.title?.text || ""));

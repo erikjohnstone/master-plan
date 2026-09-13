@@ -79,7 +79,7 @@ test("federal-mech VAV reconcile scaffold matches compile count (schedule side)"
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const graph = await graphForPdf(pdf, key.set_id);
+  const graph = await graphForPdf(CORPUS, pdf, key.set_id);
   const compiled = compileCorpusTakeoff(null, graph, "hvac_equipment");
   const vavCompile = compiled.categories?.VAV?.count ?? 0;
   assert.equal(vavCompile, key.categories.VAV, "compile VAV matches key");
@@ -104,7 +104,7 @@ test("itd-d1-lab reconcile scaffold covers HHW valve schedule rows", async () =>
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const graph = await graphForPdf(pdf, key.set_id);
+  const graph = await graphForPdf(CORPUS, pdf, key.set_id);
   const valve = compileCorpusTakeoff(null, graph, "control_valves");
   assert.equal(valve.totals.items, key.control_valves.items);
 
@@ -1828,4 +1828,3 @@ test("Northport FAN reconcile: RF-1/RF-2 honest SCHEDULE_ONLY (no plan text)", a
   );
   assert.ok(result.rows.every((r) => (r.installed_qty || 0) === 0));
 });
-

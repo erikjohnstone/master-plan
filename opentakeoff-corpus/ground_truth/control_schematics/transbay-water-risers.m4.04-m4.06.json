@@ -1,0 +1,76 @@
+{
+  "schema": "opentakeoff.riser_ground_truth.v1",
+  "source_pdf": "pdf/28__vol1__26__Transbay_Tower_Mechanical_Schedules_and_Plans.pdf",
+  "source_sha256": "6873dbdbf3fa2e364c7daf5dfebceb98ab00cb34aab3b2468cac62832771ab43",
+  "review_basis": "Human visual review of full-page Poppler renders for M4.04, M4.05, and M4.06, cross-checked against positioned PDF text. This truth covers authored floor/service/continuation evidence only; it deliberately does not label the raw vector graph as a verified semantic riser graph.",
+  "coordinate_frame": "pdf_viewport_px_origin_top_left",
+  "negative_pages": [55],
+  "expected_continuation_links": [
+    { "from_sheet_number": "M4.04", "to_sheet_number": "M4.05", "status": "reciprocal" },
+    { "from_sheet_number": "M4.05", "to_sheet_number": "M4.06", "status": "reciprocal" }
+  ],
+  "pages": [
+    {
+      "page": 56,
+      "sheet_number": "M4.04",
+      "title": "MECHANICAL WATER RISER",
+      "diagram_kind": "riser",
+      "semantic_status": "evidence_inventory",
+      "floor_datums": [
+        "LEVEL 22", "LEVEL 21", "LEVEL 20", "LEVEL 19", "LEVEL 18", "LEVEL 17", "LEVEL 16", "LEVEL 15", "LEVEL 14", "LEVEL 13", "LEVEL 12", "LEVEL 11", "LEVEL 10", "LEVEL 9", "LEVEL 8", "LEVEL 7", "LEVEL 6", "LEVEL 5", "LEVEL 4", "LEVEL 3", "LEVEL 2", "LEVEL 1", "LEVEL P1", "LEVEL P2", "LEVEL P3"
+      ],
+      "floor_aliases": {},
+      "service_groups": [
+        { "label": "LOW CHW /R RISER", "normalized_system": "chilled_water", "pressure_zone": "low", "service_pair": "supply_return" },
+        { "label": "LOW HW /R RISER", "normalized_system": "heating_water", "pressure_zone": "low", "service_pair": "supply_return" },
+        { "label": "BUILDING CONDENSER RISER", "normalized_system": "condenser_water", "pressure_zone": null, "service_pair": "unspecified" }
+      ],
+      "continuations": [
+        { "target_sheet": "M4.05", "boundary": "top" }
+      ]
+    },
+    {
+      "page": 57,
+      "sheet_number": "M4.05",
+      "title": "M4.05 - MECHANICALWATER RISER DIAGRAM",
+      "diagram_kind": "riser",
+      "semantic_status": "evidence_inventory",
+      "floor_datums": [
+        "LEVEL 47", "LEVEL 46", "LEVEL 45", "LEVEL 44", "LEVEL 43", "LEVEL 42", "LEVEL 41", "LEVEL 40", "LEVEL 39", "LEVEL 38", "LEVEL 37", "LEVEL 36", "LEVEL 35", "LEVEL 34", "LEVEL 33", "LEVEL 32", "LEVEL 31", "LEVEL 30", "LEVEL 29", "LEVEL 28", "LEVEL 27", "LEVEL 26", "LEVEL 25", "LEVEL 24", "LEVEL 23", "LEVEL 22"
+      ],
+      "floor_aliases": {},
+      "service_groups": [
+        { "label": "BUILDING CONDENSER RISER", "normalized_system": "condenser_water", "pressure_zone": null, "service_pair": "unspecified" },
+        { "label": "HIGH CHW /R RISER", "normalized_system": "chilled_water", "pressure_zone": "high", "service_pair": "supply_return" },
+        { "label": "HIGH HW /R RISER", "normalized_system": "heating_water", "pressure_zone": "high", "service_pair": "supply_return" },
+        { "label": "LOW CHW /R RISER", "normalized_system": "chilled_water", "pressure_zone": "low", "service_pair": "supply_return" },
+        { "label": "LOW HW /R RISER", "normalized_system": "heating_water", "pressure_zone": "low", "service_pair": "supply_return" }
+      ],
+      "continuations": [
+        { "target_sheet": "M4.06", "boundary": "top" },
+        { "target_sheet": "M4.04", "boundary": "bottom" }
+      ]
+    },
+    {
+      "page": 58,
+      "sheet_number": "M4.06",
+      "title": "M4.06 - MECHANICALWATER RISER DIAGRAM",
+      "diagram_kind": "riser",
+      "semantic_status": "evidence_inventory",
+      "floor_datums": [
+        "ROOF LEVEL", "LEVEL 61", "LEVEL 60", "LEVEL 59", "LEVEL 58", "LEVEL 57", "LEVEL 56", "LEVEL 55", "LEVEL 54", "LEVEL 53", "LEVEL 52", "LEVEL 51", "LEVEL 50", "LEVEL 49", "LEVEL 48"
+      ],
+      "floor_aliases": {
+        "ROOF LEVEL": ["LEVEL 62"]
+      },
+      "service_groups": [
+        { "label": "BUILDING CONDENSER RISER", "normalized_system": "condenser_water", "pressure_zone": null, "service_pair": "unspecified" },
+        { "label": "HIGH CHW /R RISER", "normalized_system": "chilled_water", "pressure_zone": "high", "service_pair": "supply_return" },
+        { "label": "HIGH HW /R RISER", "normalized_system": "heating_water", "pressure_zone": "high", "service_pair": "supply_return" }
+      ],
+      "continuations": [
+        { "target_sheet": "M4.05", "boundary": "bottom" }
+      ]
+    }
+  ]
+}

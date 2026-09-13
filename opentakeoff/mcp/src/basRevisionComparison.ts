@@ -1,13 +1,14 @@
 /** Shared UI/MCP comparison service. Selectors and interpretation stay shared;
  * existing Python calculators replay saved records and compute every delta. */
 import { basRevisionComparisonSchema, basRevisionQuantityRequestSchema, BAS_REVISION_REPORT_BYTES,
-  prepareBasRevisionComparison } from '../../web/src/lib/basRevisionComparison.ts';
+  prepareBasRevisionComparison, prepareBasRevisionComparisonForVerifiedWorkflow } from '../../web/src/lib/basRevisionComparison.ts';
+import type { BasWorkflow } from '../../web/src/lib/basWorkflow.ts';
 import { selectBasRevisionState } from '../../web/src/lib/basRevisionBasis.ts';
 import { buildBasAssignmentDemandInput } from '../../web/src/lib/basAssignmentDemandContract.ts';
 import { buildBasAssemblyQuantityInput } from '../../web/src/lib/basAssemblyQuantityContract.ts';
 import { type BasReplayRecord } from '../../web/src/lib/basWorkflowReplay.ts';
 import { basWorkflowReplayBatches, BAS_REPLAY_BATCH_LIMITS } from './basWorkflowReplay.ts';
-import { replayBasWorkflowBatch, runBasRevisionQuantities } from './basMath.ts';
+import { replayBasWorkflowBatch, runBasRevisionBundle, runBasRevisionQuantities } from './basMath.ts';
 import { canonicalBasJson } from '../../web/src/lib/basCanonical.ts';
 import { z } from 'zod';
 
@@ -32,12 +33,24 @@ export function* basRevisionNumericBatches<K extends keyof NumericRequest>(field
 
 export async function compareBasRevisions(raw: unknown, rawRequest: unknown,
   options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}) {
+  return completeBasRevisionComparison(() => prepareBasRevisionComparison(raw, rawRequest, options.signal), options);
+}
+
+/** Internal path for revision review after the caller has already completed
+ * verifyBasWorkflow. The safe public helper above still owns arbitrary input. */
+export async function compareVerifiedBasRevisions(workflow: BasWorkflow, rawRequest: unknown,
+  options: { python?: string; timeoutMs?: number; signal?: AbortSignal } = {}) {
+  return completeBasRevisionComparison(() => prepareBasRevisionComparisonForVerifiedWorkflow(workflow, rawRequest, options.signal), options);
+}
+
+async function completeBasRevisionComparison(prepare: () => ReturnType<typeof prepareBasRevisionComparison>,
+  options: { python?: string; timeoutMs?: number; signal?: AbortSignal }) {
   const timeout = options.timeoutMs ?? 30000;
   if (!Number.isSafeInteger(timeout) || timeout < 0) throw new Error('BAS revision comparison timeout must be a finite nonnegative integer');
   const deadline = Date.now() + timeout;
   const guard = () => { options.signal?.throwIfAborted(); if (Date.now() >= deadline) throw new Error('BAS revision comparison timed out; no report accepted'); };
   const transport = () => ({ ...options, timeoutMs: Math.max(1, deadline - Date.now()) });
-  guard(); const prepared = await prepareBasRevisionComparison(raw, rawRequest, options.signal); guard();
+  guard(); const prepared = await prepare(); guard();
   const { workflow, request, report } = prepared;
   const states = [selectBasRevisionState(workflow, request.before), selectBasRevisionState(workflow, request.after)].flatMap(s => s.states);
   const saved = new Set<string>();
@@ -61,23 +74,45 @@ export async function compareBasRevisions(raw: unknown, rawRequest: unknown,
     }
   }
   const checked_saved_records: Array<{ kind: BasReplayRecord['kind']; record_id: string }> = [];
-  for await (const batch of basWorkflowReplayBatches(selectedRecords(), guard)) {
-    guard(); const receipt = await replayBasWorkflowBatch(batch, transport()); guard();
-    checked_saved_records.push(...receipt.checked_records);
-  }
+  const replayBatches: BasReplayRecord[][] = [];
+  for await (const batch of basWorkflowReplayBatches(selectedRecords(), guard)) replayBatches.push(batch);
   const pointMatrices: NumericRequest['point_matrices'] = [], captures = new Set<string>();
   for (const state of states) if (!captures.has(state.capture.capture_id)) {
     captures.add(state.capture.capture_id);
     pointMatrices.push(...state.capture.points.matrices.map(matrix => ({ capture_id: state.capture.capture_id, matrix })));
   }
   const checked_point_matrices: Array<{ capture_id: string; matrix_id: string }> = [];
-  for (const packet of basRevisionNumericBatches('point_matrices', pointMatrices)) {
-    guard(); const receipt = await runBasRevisionQuantities(packet, transport()); guard(); checked_point_matrices.push(...receipt.checked_point_matrices);
-  }
   const values = new Map<string, number>();
-  for (const packet of basRevisionNumericBatches('pairs', prepared.numericPairs)) {
-    guard(); const result = await runBasRevisionQuantities(packet, transport()); guard();
+  const pointBatches = [...basRevisionNumericBatches('point_matrices', pointMatrices)];
+  const pairBatches = [...basRevisionNumericBatches('pairs', prepared.numericPairs)];
+  const absorbQuantities = (result: Awaited<ReturnType<typeof runBasRevisionQuantities>>) => {
+    checked_point_matrices.push(...result.checked_point_matrices);
     for (const pair of result.pairs) values.set(canonicalBasJson([pair.row_id, pair.metric_key]), pair.delta);
+  };
+  const combinedRecords = replayBatches[0] ?? [];
+  const combinedQuantities: NumericRequest = {
+    point_matrices: pointBatches[0]?.point_matrices ?? [],
+    pairs: pairBatches[0]?.pairs ?? [],
+  };
+  const combinedEnvelope = { revision_bundle: { workflow_replay: { records: combinedRecords }, revision_quantities: combinedQuantities } };
+  const canBundle = (combinedRecords.length + combinedQuantities.point_matrices.length + combinedQuantities.pairs.length > 0)
+    && replayBatches.length <= 1 && pointBatches.length <= 1 && pairBatches.length <= 1
+    && Buffer.byteLength(JSON.stringify(combinedEnvelope)) <= BAS_REPLAY_BATCH_LIMITS.bytes;
+  if (canBundle) {
+    guard(); const result = await runBasRevisionBundle(combinedRecords, combinedQuantities, transport()); guard();
+    checked_saved_records.push(...result.workflow_replay.checked_records);
+    absorbQuantities(result.revision_quantities);
+  } else {
+    for (const batch of replayBatches) {
+      guard(); const receipt = await replayBasWorkflowBatch(batch, transport()); guard();
+      checked_saved_records.push(...receipt.checked_records);
+    }
+    for (const packet of pointBatches) {
+      guard(); absorbQuantities(await runBasRevisionQuantities(packet, transport())); guard();
+    }
+    for (const packet of pairBatches) {
+      guard(); absorbQuantities(await runBasRevisionQuantities(packet, transport())); guard();
+    }
   }
   const complete = basRevisionComparisonSchema.parse({ ...report, arithmetic: 'completed',
     calculation_verification: checked_saved_records.length ? 'selected_records_python_replayed' : 'no_selected_saved_calculations',

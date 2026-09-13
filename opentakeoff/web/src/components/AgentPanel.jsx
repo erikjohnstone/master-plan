@@ -22,6 +22,7 @@ const evidenceText = (ev) => {
 
 const LOG_STYLE = { status: "var(--ink-muted)", tool: "var(--cobalt)", text: "var(--ink)", error: "var(--c-danger)", progress: "var(--cobalt)" };
 const RUN_STATUS_STYLE = { running: "var(--cobalt)", done: "var(--c-positive)", error: "var(--c-danger)", aborted: "var(--ink-muted)" };
+const VISIBLE_PROGRESS_LIMIT = 5;
 
 // AgentAnswer.jsx used a THIRD alternative here (Loop nudge) and this one did
 // not, so a loop nudge rendered inside an answer but vanished from the log.
@@ -228,6 +229,10 @@ export default function AgentPanel({
   const threadRef = useRef(null);
   const logRef = useRef(null);
   const { steps, meta, progress, errors } = useMemo(() => splitLog(log), [log]);
+  // Five full compiles legitimately repeat load/graph phases. The status line
+  // already names the current operation; keep only recent milestones visible
+  // so progress does not become a transcript. Full steps remain inspectable.
+  const visibleProgress = useMemo(() => progress.slice(-VISIBLE_PROGRESS_LIMIT), [progress]);
   const hasAssistant = thread.some((m) => m.role === "assistant");
   const canFollowUp = hasAssistant && !running;
 
@@ -371,10 +376,10 @@ export default function AgentPanel({
             ))}
             {running && (
               <div data-agent-status style={{ marginBottom: 8 }}>
-                <div style={{ fontSize: 12.5, color: "var(--cobalt)", fontWeight: 600, marginBottom: progress.length ? 6 : 0 }}>
+                <div style={{ fontSize: 12.5, color: "var(--cobalt)", fontWeight: 600, marginBottom: visibleProgress.length ? 6 : 0 }}>
                   {status || "Working…"}
                 </div>
-                {progress.length > 0 && (
+                {visibleProgress.length > 0 && (
                   <ol
                     data-agent-compile-progress
                     style={{
@@ -389,13 +394,13 @@ export default function AgentPanel({
                       color: "var(--ink)",
                     }}
                   >
-                    {progress.map((e, i) => (
+                    {visibleProgress.map((e, i) => (
                       <li
                         key={`prog-${i}`}
                         style={{
-                          marginBottom: i === progress.length - 1 ? 0 : 4,
-                          fontWeight: i === progress.length - 1 ? 650 : 500,
-                          color: i === progress.length - 1 ? "var(--cobalt)" : "var(--ink-muted)",
+                          marginBottom: i === visibleProgress.length - 1 ? 0 : 4,
+                          fontWeight: i === visibleProgress.length - 1 ? 650 : 500,
+                          color: i === visibleProgress.length - 1 ? "var(--cobalt)" : "var(--ink-muted)",
                         }}
                       >
                         {e.text}

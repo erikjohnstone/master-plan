@@ -9,21 +9,39 @@ type Failure = 'empty_expression' | 'unsupported_syntax' | 'invalid_number' |
 export type BasMembership = { rule_version: typeof BAS_MEMBERSHIP_RULE; raw: string } & (
   { status: 'resolved'; members: string[]; exclusions: string[]; reason: null } |
   { status: 'unresolved'; members: null; exclusions: null; reason: Failure });
-type Tag = { prefix: string; separator: string; digits: string; suffix: string; value: number };
+type Tag = { stem: string; digits: string; suffix: string; value: number };
 const unresolved = (raw: string, reason: Failure): BasMembership =>
   ({ rule_version: BAS_MEMBERSHIP_RULE, raw, status: 'unresolved', members: null, exclusions: null, reason });
 
 function parseTag(text: string): Tag | null {
-  // Numeric-prefix and alphabetic-index formats need separate scoped grammars.
-  // Do not consume an arbitrary word or number as an equipment identifier.
+  // The numeric run is not always the token immediately after the first
+  // hyphen. Real schedules use building/system segments before it: AHU-A1,
+  // VAV-M101, HHWP-DOAH-T1 and F1-AHU-1A. Preserve the exact stem so a range
+  // can expand only between structurally identical tags.
   const spaced = text.trim().toUpperCase().replace(/\s*-\s*/g, '-');
-  const hyphenated = /^([A-Z][A-Z0-9]*(?:-[A-Z][A-Z0-9]*)*)-(\d+)([A-Z]*)$/.exec(spaced);
-  const plain = hyphenated ? null : /^([A-Z]+)(\d+)([A-Z]*)$/.exec(spaced);
-  const match = hyphenated || plain;
+  if (!/^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$/.test(spaced)) return null;
+  // AHU-1-3 can mean one literal tag or shorthand for a range. It remains
+  // unresolved unless the source authors an explicit THRU/TO relationship.
+  if (spaced.split('-').filter((part) => /^\d+$/.test(part)).length > 1) return null;
+  const match = /^(.*?)(\d+)([A-Z]*)$/.exec(spaced);
   if (!match) return null;
-  return { prefix: match[1], separator: hyphenated ? '-' : '', digits: match[2], suffix: match[3], value: Number(match[2]) };
+  const stem = match[1];
+  if (!/[A-Z]/.test(stem)) return null;
+  return { stem, digits: match[2], suffix: match[3], value: Number(match[2]) };
 }
-const label = (t: Tag, digits = t.digits) => `${t.prefix}${t.separator}${digits}${t.suffix}`;
+const label = (t: Tag, digits = t.digits) => `${t.stem}${digits}${t.suffix}`;
+
+function parseAtomicTag(text: string): string | null {
+  const tag = text.trim().toUpperCase().replace(/\s*-\s*/g, '-');
+  if (!/^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$/.test(tag)) return null;
+  if (tag.split('-').filter((part) => /^\d+$/.test(part)).length > 1) return null;
+  // A compact all-letter designation such as CV-CHW-BP-A is a legitimate
+  // schedule MARK. A generic two-word phrase such as AIR-HANDLER is not. The
+  // mark-column structure is already established by the caller, but retain a
+  // conservative lexical boundary for all-letter literals.
+  if (!/\d/.test(tag) && tag.split('-').length < 3) return null;
+  return tag;
+}
 
 function parseList(input: string): { values: string[]; reason: null } | { values: null; reason: Failure } {
   const values: string[] = [], seen = new Set<string>();
@@ -33,17 +51,26 @@ function parseList(input: string): { values: string[]; reason: null } | { values
     if (!piece.trim()) return fail('unsupported_syntax');
     const parts = piece.trim().split(/\s+(?:THRU|THROUGH|TO)\s+/i);
     if (parts.length > 2) return fail('unsupported_syntax');
+    if (parts.length === 1) {
+      const member = parseAtomicTag(parts[0]);
+      if (!member) return fail('unsupported_syntax');
+      const numeric = parseTag(parts[0]);
+      if (numeric && !Number.isSafeInteger(numeric.value)) return fail('invalid_number');
+      if (seen.has(member)) return fail('duplicate_member');
+      seen.add(member); values.push(member);
+      continue;
+    }
     const first = parseTag(parts[0]), last = parts.length === 2 ? parseTag(parts[1]) : first;
     if (!first || !last) return fail('unsupported_syntax');
     if (![first.value, last.value].every(n => Number.isSafeInteger(n) && n >= 0)) return fail('invalid_number');
-    if (first.prefix !== last.prefix || first.separator !== last.separator || first.suffix !== last.suffix) return fail('incompatible_range');
+    if (first.stem !== last.stem || first.suffix !== last.suffix) return fail('incompatible_range');
     if (last.value < first.value) return fail('descending_range');
     const padded = [first.digits, last.digits].some(d => d.length > 1 && d.startsWith('0'));
     if (padded && first.digits.length !== last.digits.length) return fail('ambiguous_padding');
     const size = last.value - first.value + 1;
     if (size > MAX_MEMBERS || values.length + size > MAX_MEMBERS) return fail('too_many_members');
     for (let offset = 0; offset < size; offset++) {
-      const digits = parts.length === 1 ? first.digits : String(first.value + offset).padStart(padded ? first.digits.length : 0, '0');
+      const digits = String(first.value + offset).padStart(padded ? first.digits.length : 0, '0');
       const member = label(first, digits);
       if (seen.has(member)) return fail('duplicate_member');
       seen.add(member); values.push(member);

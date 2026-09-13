@@ -51,13 +51,15 @@ test("B-3: a count-keyed schedule emits one line per physical row, not one per d
 test("B-3: the printed QTY. column is read (trailing period is a real spelling)", () => {
   const { out } = compile();
   const items = out.categories.DUCT_SILENCER.items;
-  // The sheet prints 23 across its 16 rows. 22 are read; the 16th refuses
-  // because a full-width section banner banded into that row's QTY cell
-  // ("SECOND FLOOR 2") — refuse-and-disclose, never a guessed digit.
+  // The sheet prints 23 across its 16 rows. Twenty are read exactly; two
+  // cells are contaminated by adjacent vector text ("1 B" and
+  // "SECOND FLOOR 2"). Both must refuse rather than parse a convenient
+  // leading digit and pretend it is verified.
   const sum = items.reduce((n, i) => n + (i.scheduled_qty || 0), 0);
   const refused = items.filter((i) => i.status === "REFUSED_UNPARSEABLE_QTY");
-  assert.equal(refused.length, 1, "the polluted QTY cell must be disclosed, not silently defaulted");
-  assert.equal(sum + 1, 23, `22 read + 1 refused must account for the sheet's printed 23: got ${sum}`);
+  assert.equal(refused.length, 2, "every polluted QTY cell must be disclosed, not silently defaulted");
+  assert.equal(sum, 20, `only exact positive integers may enter the verified subtotal: got ${sum}`);
+  assert.ok(refused.every((i) => i.scheduled_qty == null), "refused QTY values stay null, never fallback 1");
   assert.ok(items.some((i) => i.scheduled_qty === 2), "a printed QTY. of 2 must be read as 2, not 1");
 });
 

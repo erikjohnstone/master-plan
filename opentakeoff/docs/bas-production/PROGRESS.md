@@ -1,5 +1,274 @@
 # BAS production workflow progress
 
+## Final bounded BAS completion and frozen holdout audit — 2026-09-12
+
+The five deterministic, human-in-loop BAS workflows are wired through the same
+browser/MCP records and actual Python calculation authority. Final clean gates:
+Python **495 passed / 1 skipped** and mypy **21 files / 0 issues**; MCP **130 BAS
++ 33 revision + 6 issue + 17 scope** with typecheck; web **3,006/3,019** with
+13 expected fixture/model skips, zero failures, typecheck, benchmarks and build;
+MCP package build, distribution smoke, **4/4** packaging tests, and the exact
+**55-tool** registry check. Lint has zero errors and the same three existing
+`TakeoffCanvas.jsx` warnings.
+
+SHOULD THIS BE ON THE SHARED PATH? **Yes.** The final point changes decide shared
+schedule/point truth and Python math: row-oriented point types, exact printed
+physical and software marks, bounded source-span recovery for clipped point
+tables, same-source fragment merging, and explicit unobserved-column blockers.
+Point tables are not equipment candidates, and only explicit known cross-trade
+schedule families are excluded. The browser and MCP consume the same results.
+
+Real-PDF results include Eglin at **5/5 point matrices, 158/158 rows, AI 59 / AO
+33 / DI 41 / DO 25**, plus **17/17 equipment schedules and 132/132 rows** with
+installed quantity `null`; Albany's blind full-pipeline holdout at **2/2 and
+96/96** with no false physical I/O inference; and USDA's initial failure at 7/8
+and 50/75, followed by a source-only aggregate of 8 matrices and 75 rows. The final
+blind source-path reserve is an honestly retained **0/1 miss** on a control
+diagram truth item, with no post-open tuning.
+
+The exact evaluation roles, cold-path time/memory, source-record limitations,
+walkthrough screenshots, and remaining boundaries are recorded in
+`FINAL_ACCEPTANCE.md`, `evidence/frozen-holdout-final/README.md`, and
+`../BAS_TAKEOFF_WALKTHROUGH.md`.
+
+This pass does **not** change VectorGrid, table geometry, citations/bboxes,
+symbols, legends, OCR/vision, pricing, costing, labor, or installed-quantity
+logic. It does not claim specification ingestion, universal sequence
+interpretation, autonomous release, authenticated signatures, or performance
+closure for dense cold PDFs.
+
+## Snapshot memory gate passes after source-owned candidate reuse — 2026-09-12
+
+SHOULD THIS BE ON THE SHARED PATH? **Yes.** Candidate identity, equipment
+validation, revision inventory, readiness and snapshot replay are shared UI/MCP
+truth. Public candidate/register calls still own and schema-validate their
+inputs. Inside one already verified workflow audit, the exact source context,
+point matrices and equipment evidence are now passed to the same candidate
+builder without reparsing and recloning that schedule graph. A separate
+one-operation handoff reuses only exact equipment/assembly review views with
+matching workflow object and event heads, then consumes them. Capture identity
+normalization now copies only navigation-alias objects while canonicalizing the
+same bytes. No request flag or persistent trusted cache exists.
+
+The exact source-backed Fort Sam snapshot probe now passes its unchanged
+**536,870,912-byte incremental RSS** gate in four independent clean processes:
+**525,287,424**, **535,232,512**, **496,566,272** and **523,239,424 bytes**.
+The three-run confirmation measured setup **8.175–8.634 s**, preparation
+**1.433–1.638 s**, archive **0.089 s**, and reopen **1.648–1.717 s**. Each run
+retained the same two included claims, 458 issues, 31 saved records, exact
+924,578-byte original, and actual shared-Python verification. The narrowest
+passing margin is disclosed rather than treated as unlimited headroom.
+
+The broad web gate passes **3,005/3,018** with zero failures and the same 13
+expected fixture/model skips. Typecheck and production build pass; lint has zero
+errors and the same three existing `TakeoffCanvas.jsx` warnings. MCP passes 128
+BAS, 33 revision, six issue, and 17 scope/snapshot tests plus their declared
+performance gates with the configured Python runtime. Package build,
+distribution smoke, four packaging tests and the 55-tool metadata gate pass.
+
+The independent legacy MCP run spent **816,197 ms** successfully compiling every
+available corpus PDF structurally, then reproduced the recorded WP1 count drift
+for `bldg5406-hvac-demo`, `federal-mech`, and `itd-d1-lab`; D01/D02/D06 passed
+their production assertions while the recorded D03–D05 extraction expectations
+failed. Those files and all extraction/VectorGrid code are unchanged here. The
+failed corpus assertions left their Python table sidecars idle, so the runner
+was terminated after **1,083,807 ms** rather than misreported as a completed
+pass; tests the interrupt marked cancelled are not counted as executed.
+
+Rejected experiment: an exact canonical streaming/in-place SHA path preserved
+all identities and passed focused tests, but increased isolated peak RSS to
+**643,416,064 / 621,740,032 bytes** and roughly doubled several focused test
+times. It was removed completely. The accepted improvement eliminates duplicate
+validated work instead of replacing the hash algorithm.
+
+This checkpoint does **not** change VectorGrid, table extraction, row/column
+relationships, citations, bboxes, symbols, legends, thresholds, Python math,
+installed quantity, pricing or labor. It is a performance/certification
+checkpoint for the already completed five bounded human-in-loop workflows, not
+a blanket claim that every final corpus/holdout requirement is complete.
+
+## Snapshot allocation checkpoint — 2026-09-12
+
+SHOULD THIS BE ON THE SHARED PATH? **Yes.** Workflow verification, source
+inventory, calculation replay, readiness and snapshot identity are shared
+UI/MCP truth. This checkpoint changes only those shared composition boundaries
+and the core benchmark's ownership of superseded intermediates. It does not
+change VectorGrid, extraction, tables, row/column relationships, citations,
+bboxes, symbols, legends, Python arithmetic, installed quantity, pricing or
+labor.
+
+The shared workflow verifier now lets Zod own its declared strict fields once
+and separately owns only the nested unknown metadata deliberately retained by
+the equipment-evidence passthrough schema. Operation-local equipment, assembly
+and engineering views are reused only for their exact pinned capture/event
+heads; public raw entry points still perform full validation. Snapshot
+preparation carries the source inventory established by the same opaque verified
+plan instead of parsing the complete workflow again. MCP readiness sends an
+opaque record iterator to the actual Python replay service instead of copying
+and reverifying a second full workflow. There is no request flag, saved-ready
+bypass or caller-provided trusted object. New mutation-isolation and independent
+public-view parity tests cover these boundaries.
+
+The exact source-backed Fort Sam core journey remains functionally correct:
+the exact **924,578-byte** original and **3,528,351-byte** retained takeoff
+produce a **7,875,906-byte** archive; both included scheduled-equipment claims,
+all **458** findings and all **31** saved calculation records survive actual
+Python verification and reopen with the same snapshot and canonical takeoff.
+The latest isolated run measured setup **12.015 s**, preparation **1.947 s**,
+archive **0.089 s** and reopen **1.960 s**. This is a substantial time and
+allocation improvement over the previous checkpoint, but it is **not a memory
+pass**: incremental peak RSS was **586,776,576 bytes**, still **49,905,664
+bytes** above the unchanged **536,870,912-byte** gate. The failure remains
+enforced by the probe and is not relabeled or hidden.
+
+Current regression state: web **3,001/3,014 pass**, zero failures and the same
+13 expected fixture/model skips; typecheck and production build pass; lint has
+the same three existing `TakeoffCanvas.jsx` warnings and no errors. With the
+configured BAS Python environment, MCP passes **128 BAS + 33 revision + 6 issue
++ 17 scope/snapshot** tests and all included performance assertions. Package
+build, distribution smoke, BAS packaged-Python smoke, four packaging tests and
+the **55-tool** metadata check pass. Running that Python-dependent suite against
+the machine's bare `python3` correctly fails for missing Pydantic/Pytest; the
+configured production verifier is the passing environment reported here.
+
+This is a safe optimization checkpoint, not the production release gate. The
+five bounded human-in-loop workflows and their browser walkthrough evidence
+remain complete below; the separate source-backed snapshot peak-memory gate is
+still open.
+
+## Snapshot composition and final gate rerun — 2026-09-12
+
+SHOULD THIS BE ON THE SHARED PATH? **Yes.** Snapshot truth, original-source
+inventory, replay and export identity are shared UI/MCP authority. The archive
+reopen path now carries one opaque, privately owned canonical takeoff from ZIP
+validation into readiness replay. Its already fully verified workflow is reused
+within that operation instead of running the same equipment/assembly/engineering
+history audit again. Snapshot creation replaces its private pre-verification
+workflow with the audited equivalent before projection. There is no public skip
+flag; canonical bytes, schema, every event/fingerprint/register, source inventory,
+fresh original hashes, readiness and actual Python replay remain required. The
+ordinary backup format and public raw snapshot verifier retain their contracts.
+No extraction, VectorGrid, symbol, legend, table, bbox, citation or Python-math
+logic changed.
+
+Focused web security/persistence tests pass **67/67** and MCP snapshot/file tests
+pass **4/4** with configured Python. The full web rerun passes **2,999/3,012**
+with the same 13 existing skips and zero failures; typecheck, production build,
+and lint with the same three existing warnings pass. The full MCP BAS chain
+passes 128 BAS, 33 revision, six issue and 17 scope tests plus its configured
+benchmarks, production package build and distribution smoke check.
+
+The formerly slow scope benchmark passes when the heavily contended host clears:
+save **1.033–1.126 s**, coverage **0.995–1.096 s**, read after unrelated edit
+**1.466–1.577 s**, and **209,125,376-byte** incremental peak RSS, under unchanged
+5 s/512 MiB limits. Readiness passes at **1.652–1.975 s** and
+**388,333,568 bytes** under unchanged 10 s/512 MiB limits. The prior red scope
+run remains evidence of host contention, not a hidden pass.
+
+The fixed source-backed combined snapshot probe still fails its unchanged memory
+gate. Current exact functional roundtrip: setup **17.753 s**, prepare **2.947 s**,
+archive **0.548 s**, reopen **3.520 s**, two included claims, 458 retained issues,
+all 31 Python calculation records and the exact 924,578-byte Fort Sam original;
+incremental peak RSS **638,959,616 bytes** versus **536,870,912 allowed**. A V8
+allocation diagnostic showed archive/reopen estimated churn reduced from the
+historical 2.035/7.718 GB to 0.771/3.940 GB before the final retention cleanup,
+but peak RSS is still red and is not reported as production-passing.
+
+## Five deterministic workflows — final browser walkthroughs, 2026-09-12
+
+All five bounded BAS workflows now have successful public-browser walkthroughs
+against real retained PDF evidence. The implementation stays on the shared
+UI/MCP workflow and Python-calculation path; UI navigation remains surface-only.
+No VectorGrid, table, citation/bbox, legend, symbol-recognition or extraction
+algorithm was changed in this completion pass. Full estimator steps and inspected
+screenshots are in `../BAS_TAKEOFF_WALKTHROUGH.md`.
+
+- **Point lists:** Fort Sam production compile exposes all 12 reviewed matrices,
+  193 rows and exact source-cell navigation. Keyboard selection, light/dark at
+  1280/1440/1920, autosave, reload, full export and clean-context import pass.
+  Evidence: `evidence/five-workflows-points-final-6/`.
+- **Sequences:** all 18 original clauses remain retained; a source-backed link
+  produces a three-row supported comparison (two listed, one not listed), while
+  invalid references reject. Source-return drafts, themes, persistence, import
+  and append-only removal pass. Evidence:
+  `evidence/five-workflows-sequences-final-3/`.
+- **Equipment/templates:** a separate 29-page Behavioral Medicine project yields
+  14 independently keyed members. A reviewed system-once assignment, source
+  cells, controlled exception/recalculation, stale history, reload/export/import
+  and withdrawal pass through actual Python. Installed quantity stays null.
+  Evidence: `evidence/five-workflows-equipment-final-2/`.
+- **Assemblies/responsibilities:** original Fort Sam text yields distinct supply
+  VFD, exhaust VFD and onboard-controller components; factory furnish does not
+  imply install/wire/program/test. Explicit conflicts, source-preserving
+  resolution, group contributions, atomic rebasing, persistence/import and
+  withdrawal pass. Installed total stays null. Evidence:
+  `evidence/five-workflows-assemblies-final/`.
+- **Engineering:** a real 0–10 VDC drawing note plus clearly disclosed controlled
+  counterpart capabilities exercises unknown, then pass, exact provenance,
+  source navigation, Python replay, six responsive/theme layouts, persistence,
+  import and historical access after equipment withdrawal. This is one real
+  signal-note journey, not complete design verification. Evidence:
+  `evidence/five-workflows-engineering-final/`.
+- **Review:** the accumulated real workflow exposes 456 findings with paging,
+  filters, keyboard/source/domain routing, exact original bboxes, original-PDF
+  retain/verify/download/recovery and complete export parity. Evidence:
+  `evidence/five-workflows-review-final/`.
+- **Revisions:** a controlled page-reordered derivative of the real Fort Sam PDF
+  exercises cancelled comparison, explicit correspondence, stale-preview
+  rejection, source return, durable review, reload/Python replay and complete
+  export. Public timings were 7.551 s initial, 6.957 s paired, 11.785 s record and
+  7.500 s reopen. This is not an issued addendum. Evidence:
+  `evidence/five-workflows-revision-final-9/`.
+- **Snapshots:** readiness remains separate from approval; self-declared reviewer,
+  reason and confirmation are required. Save/reopen/currentness, append-only
+  revocation, separate ZIP/lifecycle downloads and empty-browser recovery pass
+  with exact original PDF rendering and unchanged annotations/counting sheets.
+  Evidence: `evidence/snapshot-lifecycle-final-5/`.
+- **Agent/MCP:** the existing Agent can inspect and open all five workflow domains;
+  the public MCP surface adds `inspect_bas_workflow` and `inspect_bas_snapshot`
+  for 55 tools total. Neither surface can silently approve, revoke, supersede or
+  manufacture installed quantity.
+
+Final-gate issues caught instead of hidden: the first full web run found a real
+pending-caller-mutation leak in revision request ownership; the shared comparison
+boundary now owns the request before its first await and the full 3,012-test rerun
+passes 2,999 with 13 existing skips. Python pytest passes 456 with one skip and
+configured mypy passes 21 source files. The generic room benchmark and production
+web build pass. Readiness on the 3.5 MB/456-finding retained workflow passes its
+10 s and 512 MiB limits at 5.315–6.741 s and 322,256,896 incremental bytes.
+
+An earlier scope-journal benchmark did not pass its predeclared 5 s operation
+limit while this host was heavily loaded. Its three save/coverage/read ranges were
+4.162–5.335/4.064–4.570/5.954–9.212 s; incremental peak RSS was 170,016,768 bytes.
+The unchanged rerun now passes with the exact results recorded above. MCP
+typecheck and the 128 BAS, 33 revision, six issue and 17 scope-focused tests pass;
+the package build, distribution smoke check and 55-tool metadata gate pass. Three
+conformance tests that timed out while the full real-PDF suite saturated shared
+sidecars pass in isolation (111/1.1/131 s). The full legacy corpus run still
+reproduces its recorded WP1 keyed-compile differences and D03–D05 extraction
+expectation failures; D01, D02, D06 and the all-available-PDF structural compile
+pass. None of the implicated VectorGrid/sheet-graph/symbol/extraction files is
+changed in this branch, and the failures are not relabeled as BAS-workflow passes.
+
+Known boundaries remain material. The Behavioral 29-page production graph
+exhausted the default 2 GiB Node heap and required a disclosed 4 GiB browser-test
+run. The real source-backed snapshot journey remains functionally correct but its
+previous measured incremental RSS is above the separate 512 MiB target. No spec
+book ingestion, learned/vision symbol work or field-installed verification is in
+this branch. These facts prevent a blanket production-complete claim even though
+the five bounded human-in-loop journeys now work end to end.
+
+## Five-workflow completion resumed; symbol work delegated — 2026-09-12
+
+The user resumed this goal with a superseding boundary: finish and verify the five
+deterministic BAS workflows, but do not enter symbol recognition because another
+model owns it. Symbol implementation is no longer an acceptance gate for this
+branch. Existing symbol, legend, VectorGrid, table, citation and bbox production
+code remains untouched. Current integration audit is focused on literal public
+wiring, durable review/export/replay, and an estimator walkthrough for workflows
+A–E. The browser Agent orchestration, unique-point reconciliation and remaining
+snapshot lifecycle/MCP gaps from the prior checkpoint remain open until verified.
+
 ## Public snapshot UI and user-requested merge checkpoint — 2026-09-10
 
 After `60a77a42`, Review & changes now connects the shared snapshot services to
