@@ -975,6 +975,60 @@ yet; this is the first concrete, measured reason why, not a new admission.
 
 ---
 
+### B-17 — a real, correctly-extracted table loses its own title even though the title text sits at a normal, in-range gap (NOT FIXED — found, traced, disclosed)
+
+**Where:** `063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9` — found
+during the same Demo Corpus hand-verification pass as B-16, this document
+picked next in ascending census-count order.
+
+**Measured:** page 9 carries six real, titled, ruled schedule tables
+stacked vertically (EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,
+EXHAUST FAN SCHEDULE, DEHUMIDIFICATION UNIT SCHEDULE, FILTRATION UNIT
+SCHEDULE, GRILLE/REGISTER/DIFFUSER SCHEDULE, and MEP COORDINATION SCHEDULE
+— all "- EXTRUDER LAB" suffixed), confirmed by eye on a full-page render
+before looking at the extractor's own output. `production-graph-cli.mjs
+--mode graph` correctly extracts all six as real `equipment`-kind tables
+with correct headers and rows (`EVAV-105`/`EVAV-106`, `EEF-4`, `DU-1`,
+`FU-1`, `S-3`/`R-3`, `DU-1`/`FU-1` respectively) — the MEP COORDINATION
+table's own 15-column header row and its two `DU-1`/`FU-1` rows all match
+the render exactly. But that sixth table's `title` field is `null`, and a
+document-wide search confirms the title is not misattached to any other
+table either — it is simply dropped.
+
+This is not a missing- or unreadable-title case: `textSpans()` on page 9
+finds `"MEP COORDINATION SCHEDULE - EXTRUDER LAB"` as a real span
+(`x0:2676.2, y0:2009.6, x1:3921.8, y1:2061.8`), horizontally centered on
+the table's own column range to within a few points (span center x≈3299,
+table region center x≈3298), and at a title-bottom-to-first-row-top gap of
+171pt — squarely inside the 76-182pt range measured for the five sibling
+tables on the same page that DID get titled correctly (`182, 132, 130,
+133, 76` pt respectively, same page, same document, same title-to-table
+visual pattern). Geometrically this title looks exactly like its five
+working siblings; something else about this specific header/title pair
+(a 15-column header — the widest of the six — with an empty `NOTES`
+column present in the header but blank in both data rows, is the only
+structural difference noticed so far) causes the title-attachment step to
+drop it instead.
+
+**Relationship to already-catalogued bugs:** distinct from B-16 (which
+fabricates a phantom table from prose) and from B-4/B-8 (title-shape and
+gutter-merge bugs on OTHER real tables) — this is a real table, correctly
+read cell-for-cell, that simply surfaces with no title at all despite a
+geometrically ordinary title sitting right above it. Not traced past the
+geometric comparison above; the actual attachment-selection logic in
+`sheetgraph.ts` was not read line-by-line to find why this one pairing is
+rejected, per this file's own standing rule against guessing at a fix
+under time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** a real table
+extracted with fully correct cells still fails a `title`-inclusive exact
+match, so this document cannot pass cell-grading as-is even though its
+row/cell content is right — a different failure shape than B-16's
+MISSED/fabricated pair, but still a concrete, measured reason this
+document is not yet clean.
+
+---
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.
