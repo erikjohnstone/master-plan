@@ -3498,6 +3498,72 @@ how carefully-adjudicated `boxscore.py`'s own ruler already is (STATE.md:
 
 ---
 
+## B-41: cross-table cell/span misattribution inflates a table's own `region` far past its ruled box (092_IL, "CONDENSING UNIT SCHEDULE")
+
+**Found 2026-09-13** during genuine `pixelruler.py` human-blind box-tier grading of
+`092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf` page 11 (Demo Corpus). Of this
+page's 8 real HVAC schedule tables, 7 passed box-tier cleanly (worst edge 0.23–2.73pt,
+all comfortably under the goal document's 4pt bar). The 8th, **"CONDENSING UNIT SCHEDULE
+(CU)"**, failed badly.
+
+**Evidence, measured blind, corner by corner:**
+- Extractor's stored `region` (raw PDF points, `RENDER_SCALE=2` region-space):
+  `[237.24, 2383.08, 3688.8, 3055.4]`.
+- Top-left corner: `pixelruler.py` two-pass reading (coarse `--step 20 --zoom 1`, fine
+  `--step 5-10 --zoom 4-6`) on a `render-page-hires.mjs --scale 3` render of page 11
+  measured the real ruled corner at (357, 4882.5)px → converted (`pixel/3×2`) to
+  (357.9, 3255.0) region-units — matches the stored `region`'s top-left within ~1pt.
+  **The top-left corner is correct.**
+- Bottom-right corner: the stored `region` claims (3688.8, 3055.4) → pixel (5533.2,
+  4583.1) at scale 3. But no ruled line exists anywhere near that pixel position — the
+  actual visible content there belongs to a completely different, adjacent table (the
+  "DX COIL SCHEDULE"'s own SERVICE column, which prints "CU-1" as the name of the
+  condensing unit that DX coil serves — confirmed by rendering the full row: `DC-1 |
+  CU-1 | PATIO...`). The CONDENSING UNIT SCHEDULE's own real ruled table — visually
+  confirmed by rendering its full 3-row grid (CU1/CU2/CU3, `SEE BELOW` NOTES column,
+  ELECTRICAL DATA columns) — ends at pixel (4830, 4203) → region-units (3220, 2802).
+- **Error: claimed region overshoots the real bottom-right corner by 468.8 region-units
+  horizontally (234.4pt) and 253.4 region-units vertically (126.7pt)** — roughly 30x the
+  4pt Demo Corpus tolerance on both axes.
+
+**Root cause, mechanism-level confirmed:** the extracted table's row `CU1` carries a
+`TAG` cell with bbox `[3644.8, 3036.6, 3688.8, 3055.4]` (text `"CU 1"`) — wildly
+displaced from every other cell in that same row (all at
+`y:[2617.44,2678.64]`, i.e. ~380 region-units higher up the page). This stray bbox's
+own corner is an *exact* match for the table's corrupted `region.x1/y1`
+(`3688.8, 3055.4`), and its coordinates land almost exactly on the DX COIL SCHEDULE
+row's own "CU-1" SERVICE-column text identified above. This is a **cross-table span
+misattribution**: a text span belonging to a neighboring table's cell was bound into
+this table's own row grid as if it were a `TAG` cell, and whatever downstream logic
+computes the table's overall bounding box does so via a simple min/max union over all
+of its cells' bboxes (`_table_bbox()` in `sidecar/tables.py:169-181` is exactly this
+pattern for the pdfplumber-sourced grid path — a plain `min(xs0), min(ys0), max(xs1),
+max(ys1)` over every cell, with no per-cell distance-from-neighbors sanity check) — so
+one bad cell silently drags the whole table's box far outside its own ruled lines.
+**Not yet traced to the exact call that produced the misattributed cell itself**
+(which extraction stage bound the DX COIL row's "CU-1" span into CONDENSING UNIT
+SCHEDULE's own `CU1.TAG` slot is upstream of `_table_bbox` and wasn't isolated this
+session) — disclosed as confirmed-at-the-mechanism-level, not fully pinpointed,
+consistent with this catalogue's existing convention for findings of this shape
+(e.g. B-27/B-37 cite an exact line; B-32/B-34 are mechanism-level only).
+
+**Impact:** this is exactly the failure class the Demo Corpus's own no-auto-accept box
+bar exists to catch — `rulelinebox.py`'s seeded-by-the-extractor's-own-region
+methodology would never have found this, because it *starts* from the same corrupted
+region to know where to scan and would have "confirmed" a box that isn't there.
+Genuinely blind pixel measurement (read the full page first, independently decide
+where the border is, only then check) is what caught it.
+
+**Not fixed this session** — a general per-cell-outlier guard on `_table_bbox()` (e.g.
+reject/flag a cell whose bbox center is implausibly far — several row-heights — from
+its row's own other cells before it can inflate the union) is the right shape of fix,
+but making that change safely needs the same corpus-wide regression sweep this
+session's own standing rule requires before touching a shared, blast-radius-large
+function, and the upstream span-misattribution call still needs isolating first so the
+fix addresses the actual defect rather than only papering over its symptom.
+
+---
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
