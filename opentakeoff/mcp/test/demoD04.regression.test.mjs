@@ -49,17 +49,23 @@ test("D04 production engine preserves pinned VAV scope-rollup evidence", async (
     String(row.key || "").toUpperCase().replace(/\s+/g, ""),
     row,
   ]));
-  const suite = byKey.get("SUITE100");
-  assert.ok(suite, "SUITE100 junk remarks row must still exist on the schedule table");
-  assert.ok(!/^VAV[\s\-]/i.test(String(suite.key || "")), "SUITE100 must not match the VAV family pattern");
+  // Source-page visual review confirms SUITE 100 is the architect's address
+  // in the title block, not a schedule row or remark. The old fixture pinned
+  // that extraction artifact merely to prove it was excluded from the VAV
+  // count; the stronger production invariant is that it never enters the
+  // table at all.
+  assert.ok(!byKey.has("SUITE100"), "title-block SUITE 100 must not become a schedule row");
 
   for (const tag of ["VAV-1", "VAV-12", "VAV-30", "VAV-58"]) {
     const row = byKey.get(tag.toUpperCase());
     assert.ok(row, `${tag} must remain on the volume control box schedule`);
     const stem = tag.toLowerCase().replace(/-/g, "_");
-    assert.equal(Number(cellText(row, /^CFM$/i)), truth.expected[`${stem}_cfm`].value);
-    assert.equal(Number(cellText(row, /^EAT\s*CFM$/i)), truth.expected[`${stem}_eat_cfm`].value);
-    assert.ok(Math.abs(Number(cellText(row, /^GPM$/i)) - truth.expected[`${stem}_gpm`].value) <= 0.05);
+    // Preserve the complete authored multi-tier headers. Older cached graphs
+    // flattened these to CFM / EAT CFM / GPM; the source table actually says
+    // MINIMUM AIR FLOW CFM, MAXIMUM AIR FLOW CFM, and FLOW (GPM).
+    assert.equal(Number(cellText(row, /MINIMUM AIR FLOW CFM$/i)), truth.expected[`${stem}_cfm`].value);
+    assert.equal(Number(cellText(row, /MAXIMUM AIR FLOW CFM$/i)), truth.expected[`${stem}_eat_cfm`].value);
+    assert.ok(Math.abs(Number(cellText(row, /FLOW \(GPM\)$/i)) - truth.expected[`${stem}_gpm`].value) <= 0.05);
     assert.equal(cellText(row, /MANUFACTURER/i).toUpperCase(), truth.expected[`${stem}_manufacturer`].value);
     assert.equal(cellText(row, /^MODEL$/i).toUpperCase(), truth.expected[`${stem}_model`].value);
   }

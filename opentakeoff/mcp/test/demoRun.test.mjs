@@ -436,7 +436,7 @@ test("demo runner repairs tool-key sheet citations before accepting a run", asyn
     },
   });
   assert.equal(requests.length, 2);
-  assert.match(requests[1].messages.at(-1).content, /required citation shape/);
+  assert.match(requests[1].messages.at(-1).content, /schema validation:.*sheet_id: Required.*required fields and citation shape/);
   assert.equal(result.answer.answer.equipment_tag.citations[0].sheet_id, "set.pdf#48");
 });
 

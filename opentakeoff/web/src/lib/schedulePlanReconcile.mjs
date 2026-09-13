@@ -7,9 +7,125 @@
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.mjs";
-import { isRepeatableAirDeviceSchedule } from "./symbolsweep.ts";
 
 /** @typedef {"MATCH"|"SCHEDULE_ONLY"|"PLAN_ONLY"|"REFUSED_NO_SCALE"|"REFUSED_NO_TEXT"|"AMBIGUOUS"} ReconcileStatus */
+
+/**
+ * Quantity-semantics policy: these schedule families assign a unique mark to
+ * one physical asset. Repeated appearances are normally plan/detail/section
+ * views of that asset, unlike diffuser/register type marks that intentionally
+ * repeat for every installed device. This belongs with reconciliation—not
+ * geometric recognition—so every UI/MCP quantity path consumes one policy.
+ */
+export function isIndividuallyMarkedEquipmentSchedule(title) {
+  const squashed = String(title || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return /(?:AIRHANDLING|COMPUTERROOMAIRHANDLER|CRAH|DEDICATEDOUT(?:SIDE|DOOR)AIR|FANCOIL|VARIABLEAIRVOLUME|VAV(?:BOX|TERMINAL|UNIT|SCHEDULE)|ENERGYRECOVERY|ROOFTOP|CONDENSINGUNIT|HEATPUMP|PUMP|BOILER|CHILLER|UNITHEATER|DEHUMIDIFIER|HUMIDIFIER|AIRSEPARATOR|EXPANSIONTANK|RADIANT(?:HEATER|PANEL)|RANGEHOOD|CONTROLVALVE|FANSCHEDULE|DUCTSILENCER|SOUNDATTENUATOR)/.test(squashed)
+    && !/(?:DIFFUSER|GRILLE|REGISTER|FIXTURE|LUMINAIRE)/.test(squashed);
+}
+
+/**
+ * A repeatable air-device schedule defines plan type marks, not individually
+ * numbered assets. Keeping this policy with reconciliation prevents quantity
+ * semantics from becoming an accidental symbol-matcher dependency.
+ */
+export function isRepeatableAirDeviceSchedule(title) {
+  const squashed = String(title || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return /(?:DIFFUSER|GRILLE|REGISTER|AIRDEVICE)/.test(squashed)
+    && !/(?:VAV|VARIABLEAIRVOLUME|TERMINALUNIT)/.test(squashed);
+}
+
+/**
+ * Exact tag occurrences can establish a repeatable air-device population only
+ * when the authored family is substantial across the set and on every active
+ * sheet. A lone note or small isolated cluster never becomes installed qty.
+ */
+export function hasRepeatableAirDevicePlacementQuorum(activeSheetFamilyCounts, setFamilyCount) {
+  return activeSheetFamilyCounts.length > 0
+    && setFamilyCount >= 10
+    && activeSheetFamilyCounts.every((count) => Number.isFinite(count) && count >= 4);
+}
+
+/**
+ * Read an explicit drafting multiplier attached to one tag callout. Both
+ * `TYP 8` and a parenthesized quantity inside the reconstructed tag bbox are
+ * authored quantity evidence; unrelated numbered notes are ignored.
+ */
+export function scheduleCountMultiplier(spans, tagBox) {
+  const [x0, y0, x1, y1] = tagBox;
+  const tagCx = (x0 + x1) / 2;
+  const tagH = Math.max(1, y1 - y0);
+  for (const span of spans) {
+    const match = String(span.str || "").trim().match(/^\((\d{1,3})\)(?:\s|$)/);
+    if (!match) continue;
+    const count = Number(match[1]);
+    if (!Number.isInteger(count) || count < 2 || count > 100) continue;
+    const verticalOverlap = Math.min(y1, span.y1) - Math.max(y0, span.y0);
+    const horizontalOverlap = Math.min(x1, span.x1) - Math.max(x0, span.x0);
+    if (verticalOverlap >= Math.min(tagH, Math.max(1, span.y1 - span.y0)) * 0.7
+      && horizontalOverlap > 0) return count;
+  }
+  for (const span of spans) {
+    const match = String(span.str || "").trim().match(/^TYP(?:ICAL)?\.?\s*(?:X\s*)?(\d{1,3})$/i);
+    if (!match) continue;
+    const count = Number(match[1]);
+    if (!Number.isInteger(count) || count < 2 || count > 100) continue;
+    const spanCx = (span.x0 + span.x1) / 2;
+    const spanH = Math.max(1, span.y1 - span.y0);
+    const verticalGap = Math.max(0, span.y0 - y1, y0 - span.y1);
+    const horizontalOverlap = Math.min(x1, span.x1) - Math.max(x0, span.x0);
+    const aligned = horizontalOverlap >= 0
+      || Math.abs(spanCx - tagCx) <= Math.max(x1 - x0, span.x1 - span.x0) * 0.75;
+    if (aligned && verticalGap <= Math.max(tagH, spanH) * 1.5) return count;
+  }
+  return 1;
+}
+
+/**
+ * Recover an exact `(N) TAG` assembled from adjacent text runs. This only
+ * starts from a parenthesized count and only joins prefixes of the requested
+ * mark on the same baseline, so it cannot manufacture a tag from prose.
+ */
+export function countPrefixedScheduleTagOccurrences(spans, key) {
+  const stripHyphen = (value) => value.replace(/-/g, "");
+  const target = stripHyphen(String(key || "").trim().toUpperCase());
+  if (!target) return [];
+  const normalized = (value) => String(value || "").trim().toUpperCase();
+  const out = [];
+  for (const start of spans) {
+    const prefixed = normalized(start.str).match(/^\((\d{1,3})\)\s*(.+)$/);
+    if (!prefixed) continue;
+    const count = Number(prefixed[1]);
+    let text = prefixed[2];
+    if (!Number.isInteger(count) || count < 2 || count > 100
+      || !text || !target.startsWith(stripHyphen(text))) continue;
+    let x0 = start.x0; let y0 = start.y0; let x1 = start.x1; let y1 = start.y1;
+    let current = start;
+    const used = new Set([start]);
+    for (let guard = 0; stripHyphen(text).length < target.length && guard < 4; guard++) {
+      const h = Math.max(current.y1 - current.y0, 6);
+      const next = spans
+        .filter((span) => {
+          if (used.has(span)) return false;
+          const candidate = text + normalized(span.str);
+          return target.startsWith(stripHyphen(candidate))
+            && Math.abs(span.y0 - current.y0) < h * 0.4
+            && span.x0 >= current.x0 - 1
+            && span.x0 - current.x1 < h * 1.5;
+        })
+        .sort((a, b) => Math.abs(a.x0 - current.x1) - Math.abs(b.x0 - current.x1))[0];
+      if (!next) break;
+      used.add(next);
+      text += normalized(next.str);
+      x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0);
+      x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
+      current = next;
+    }
+    if (stripHyphen(text) === target) {
+      out.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
+    }
+  }
+  return out;
+}
 
 /**
  * @param {object} p

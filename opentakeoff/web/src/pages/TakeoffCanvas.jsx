@@ -82,7 +82,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { matchSymbol, fingerprintSymbol, assertDistinctiveSymbolSeed, matchAgainstLibrary, affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../lib/symbolsweep";
+import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchAgainstLibrary, affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -107,7 +107,7 @@ import { findLegendGlyphs, findGlyphNear, legendLearnStatus } from "../lib/legen
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
 import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
-import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, competeSweepModes, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
+import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
 // is set) — the owner's call, 2026-08-24: it serves no purpose on the sheet.
@@ -118,43 +118,6 @@ const SHOW_SCALE_GUIDE = false;
 const netWorker = typeof Worker !== "undefined" ? new Worker(new URL("../lib/netroom.worker.js", import.meta.url), { type: "module" }) : null;
 const netPending = new Map();   // req → {resolve}
 let netReq = 0;
-
-function resolveCanvasSweepMode(raw, { seedCenter, seedName, spans, segs, lum, symbolInkLengthPx, footprint }) {
-  let labels = [];
-  try {
-    labels = labelPlacements(
-      [seedCenter, ...raw.matches.map((m) => m.at), ...raw.withheld.map((w) => w.at)],
-      spans, segs, lum, {
-        preferredLabel: seedName?.label, preferredFamily: seedName?.family,
-        scores: [1, ...raw.matches.map((m) => m.score), ...raw.withheld.map((w) => w.score)],
-        eligible: [true, ...raw.matches.map(() => true), ...raw.withheld.map((w) => !w.hold)],
-        symbolInkLengthPx,
-      },
-    );
-  } catch { labels = []; }
-  const seedLabel = seedName || labels[0] || null;
-  const rawMatchCount = raw.matches.length;
-  const corrected = reconcileSweepLabels(
-    seedLabel,
-    raw.matches, raw.matches.map((_, i) => labels[1 + i] || null),
-    raw.withheld, raw.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
-  );
-  const positioned = positionMatchesToClosestReading(
-    corrected.matches, corrected.matchLabels,
-    corrected.withheld, corrected.withheldLabels,
-    footprint,
-  );
-  return {
-    seedLabel,
-    corrected,
-    mode: {
-      matches: positioned.matches,
-      withheld: positioned.withheld,
-      matchLabels: corrected.matchLabels,
-      withheldLabels: positioned.withheldLabels,
-    },
-  };
-}
 if (netWorker) netWorker.onmessage = (ev) => { const m = ev.data; const p = netPending.get(m.req); if (p) { netPending.delete(m.req); p.resolve(m); } };
 function netCall(msg) { return new Promise((resolve) => { const req = ++netReq; netPending.set(req, { resolve }); netWorker.postMessage({ ...msg, req }); }); }
 import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS } from "../lib/rastermask";
@@ -5016,7 +4979,6 @@ export default function TakeoffCanvas() {
     if (!segs || !segs.length) { setCommitMsg("This sheet has no vector linework (likely a scan) — the Symbol tool reads drawn segments.", "refusal"); return; }
     const lum = segLumRef.current.get(key);
     let res;
-    let labels = [];
     let seedName = null;
     let spans = null;
     let textBoxes;
@@ -5026,52 +4988,20 @@ export default function TakeoffCanvas() {
       // the seed fingerprint (mirrors agentSymbolSweep's own reorder below
       // and mcp/src/session.ts's) so the PDF's own text layer excludes
       // exploded-tag strokes from the seed's own `rel` too, not just the
-      // sheet-side sweep. Keep the fingerprint contract identical to the
-      // Agent and MCP Session paths: transform mode must not silently change
-      // what belongs to the seed before the rigid/affine populations compete.
-      // The real browser corpus caught the old fork on a multi-sheet VAV case
-      // (10/13 here while Session found 13/13).
+      // sheet-side sweep. Unlike `dropGlyphClusters` (deliberately left
+      // untouched here — see the predecessor doc's own Finding on this
+      // function), `textBoxes` reads an authoritative fact, not a
+      // geometric guess, so it carries none of that caution.
       spans = await ensureTextSpans(key);
       textBoxes = spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
-      fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false, textBoxes });
+      fp = fingerprintSymbol(segs, rect, lum, { textBoxes });
       assertDistinctiveSymbolSeed(fp);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
-      const affine = affineOptionsFromWire(AFFINE_WIRE_DEFAULT);
-      const matchOpts = {
-        ...(lum ? { lum } : {}),
-        ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
-        affine,
-        textBoxes,
-        excludeCenter: fp.center,
-      };
-      const affineRaw = matchSymbol(fp, segs, matchOpts);
-      const rigidRaw = matchSymbol(fp, segs, { ...matchOpts, affine: undefined });
-      const affineResolved = resolveCanvasSweepMode(affineRaw, {
-        seedCenter: fp.center, seedName, spans, segs, lum,
-        symbolInkLengthPx: fp.totalLen, footprint: fp.footprint,
-      });
-      const rigidResolved = resolveCanvasSweepMode(rigidRaw, {
-        seedCenter: fp.center, seedName, spans, segs, lum,
-        symbolInkLengthPx: fp.totalLen, footprint: fp.footprint,
-      });
-      const competed = competeSweepModes(seedName, rigidResolved.mode, affineResolved.mode, 6);
-      res = {
-        ...rigidRaw,
-        seed: {
-          segments: fp.segments,
-          center: [Math.round(fp.center[0] * 10) / 10, Math.round(fp.center[1] * 10) / 10],
-          length_px: Math.round(fp.totalLen * 10) / 10,
-        },
-        matches: competed.matches,
-        withheld: competed.withheld,
-        candidates: {
-          considered: affineRaw.candidates.considered + rigidRaw.candidates.considered,
-          dropped: affineRaw.candidates.dropped + rigidRaw.candidates.dropped,
-        },
-        complete: affineRaw.complete && rigidRaw.complete,
-        transform_competition: competed.evidence,
-      };
-      labels = [seedName, ...competed.matchLabels, ...competed.withheldLabels];
+      // Keep the proven manual-tool behavior until a transform competition
+      // implementation exists in the shared symbol library and passes the
+      // UI/MCP parity corpus. The previous branch called an API that was never
+      // exported and therefore made the production bundle uncompilable.
+      res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}), affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT), textBoxes });
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
       // instructions, exactly as the MCP surfaces them — and they are stated
@@ -5081,6 +5011,29 @@ export default function TakeoffCanvas() {
       setCommitMsg(String((e && e.message) || e), "refusal");
       return;
     }
+    let labels = [];
+    try {
+      spans = spans || await ensureTextSpans(key);
+      labels = labelPlacements(
+        [res.seed.center, ...res.matches.map((m) => m.at), ...res.withheld.map((w) => w.at)],
+        spans, segs, lum, {
+          preferredLabel: seedName?.label, preferredFamily: seedName?.family,
+          scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)],
+          eligible: [true, ...res.matches.map(() => true), ...res.withheld.map((w) => !w.hold)],
+          symbolInkLengthPx: res.seed.length_px,
+        },
+      );
+    } catch { labels = []; }
+    const seedLabel = seedName || labels[0] || null;
+    const rawMatchCount = res.matches.length;
+    const corrected = reconcileSweepLabels(
+      seedLabel,
+      res.matches, res.matches.map((_, i) => labels[1 + i] || null),
+      res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
+    );
+    const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+    res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
+    labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
     const L = (i) => labels[i] || null;
     const nM = res.matches.length;
     // One physical spot, ONE question. The engine discloses every rotational
@@ -6787,8 +6740,6 @@ export default function TakeoffCanvas() {
     }
     const lum = segLumRef.current.get(key);
     let res;
-    let labels = [];
-    let correctionCounts = { promoted: 0, demoted: 0 };
     let seedName = null;
     let spans = null;
     let textBoxes;
@@ -6810,7 +6761,7 @@ export default function TakeoffCanvas() {
       fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false, textBoxes });
       assertDistinctiveSymbolSeed(fp);
       seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
-      const matchOpts = {
+      res = sweepSymbols(segs, rect, {
         rotations: opts.rotations !== false,
         mirror: opts.mirror !== false,
         ...(opts.tolerancePx != null ? { tolPx: opts.tolerancePx } : {}),
@@ -6820,62 +6771,33 @@ export default function TakeoffCanvas() {
         ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
         ...(opts.affine ? { affine: opts.affine } : {}),
         textBoxes,
-        excludeCenter: fp.center,
-      };
-      const affineRaw = matchSymbol(fp, segs, matchOpts);
-      const affineResolved = resolveCanvasSweepMode(affineRaw, {
-        seedCenter: fp.center, seedName, spans, segs, lum,
-        symbolInkLengthPx: fp.totalLen, footprint: fp.footprint,
       });
-      let chosen = affineResolved.mode;
-      let transformCompetition = null;
-      correctionCounts = {
-        promoted: affineResolved.corrected.promoted,
-        demoted: affineResolved.corrected.demoted,
-      };
-      let candidates = affineRaw.candidates;
-      let complete = affineRaw.complete;
-      let outputBase = affineRaw;
-      if (opts.affine?.enabled) {
-        const rigidRaw = matchSymbol(fp, segs, { ...matchOpts, affine: undefined });
-        outputBase = rigidRaw;
-        const rigidResolved = resolveCanvasSweepMode(rigidRaw, {
-          seedCenter: fp.center, seedName, spans, segs, lum,
-          symbolInkLengthPx: fp.totalLen, footprint: fp.footprint,
-        });
-        const competed = competeSweepModes(seedName, rigidResolved.mode, affineResolved.mode, Math.max(3 * (opts.tolerancePx || 2), 4));
-        chosen = competed;
-        transformCompetition = competed.evidence;
-        correctionCounts = {
-          promoted: rigidResolved.corrected.promoted,
-          demoted: rigidResolved.corrected.demoted,
-        };
-        candidates = {
-          considered: affineRaw.candidates.considered + rigidRaw.candidates.considered,
-          dropped: affineRaw.candidates.dropped + rigidRaw.candidates.dropped,
-        };
-        complete = affineRaw.complete && rigidRaw.complete;
-      }
-      res = {
-        // The competed population starts from rigid evidence, so use the
-        // corresponding rejection/luminance disclosures. Selected affine
-        // additions retain their own transform on each match.
-        ...outputBase,
-        seed: {
-          segments: fp.segments,
-          center: [Math.round(fp.center[0] * 10) / 10, Math.round(fp.center[1] * 10) / 10],
-          length_px: Math.round(fp.totalLen * 10) / 10,
-        },
-        matches: chosen.matches,
-        withheld: chosen.withheld,
-        candidates,
-        complete,
-        ...(transformCompetition ? { transform_competition: transformCompetition } : {}),
-      };
-      labels = [seedName, ...chosen.matchLabels, ...chosen.withheldLabels];
     } catch (e) {
       return { error: String((e && e.message) || e) };
     }
+    let labels = [];
+    try {
+      spans = spans || await ensureTextSpans(key);
+      labels = labelPlacements(
+        [res.seed.center, ...res.matches.map((m) => m.at), ...res.withheld.map((w) => w.at)],
+        spans, segs, lum, {
+          preferredLabel: seedName?.label, preferredFamily: seedName?.family,
+          scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)],
+          eligible: [true, ...res.matches.map(() => true), ...res.withheld.map((w) => !w.hold)],
+          symbolInkLengthPx: res.seed.length_px,
+        },
+      );
+    } catch { labels = []; }
+    const seedLabel = seedName || labels[0] || null;
+    const rawMatchCount = res.matches.length;
+    const corrected = reconcileSweepLabels(
+      seedLabel,
+      res.matches, res.matches.map((_, i) => labels[1 + i] || null),
+      res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
+    );
+    const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+    res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
+    labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
     const L = (i) => labels[i]?.label || null;
     const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
     const nM = res.matches.length;
@@ -6895,8 +6817,7 @@ export default function TakeoffCanvas() {
       rejected: (res.rejected || []).map((r) => ({ at: norm(r.at), reason: r.reason || "excluded" })),
       complete: res.complete,
       dropped: res.candidates?.dropped || 0,
-      ...(res.transform_competition ? { transform_competition: res.transform_competition } : {}),
-      ...((correctionCounts.promoted || correctionCounts.demoted) ? { label_corroboration: correctionCounts } : {}),
+      ...((corrected.promoted || corrected.demoted) ? { label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } } : {}),
     };
   }
 

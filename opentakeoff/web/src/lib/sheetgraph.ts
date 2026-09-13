@@ -24,7 +24,7 @@ import { ROOM_LABEL_RE } from "./detectRooms";
 import { isEquipTag, joinGraphSpans } from "./equiptags";
 import type { ControlSchematicResult } from "./controlSchematic.ts";
 import { extractSequenceNarratives, type NarrativeSequenceBlock } from "./sequenceNarrative.ts";
-import { nearbyDrawingIndexCaptionText } from "./scheduleLanguageScan.ts";
+import { nearbyDrawingIndexCaptionText, nearbyScheduleCaption } from "./scheduleLanguageScan.ts";
 
 /** rot: text rotation in degrees, clockwise in device space (y down). Absent
  * or 0 = horizontal; 90/270 = a quarter-turn — the rotated-header case. When
@@ -6070,10 +6070,21 @@ export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finis
   return out;
 }
 
-/** Extract equipment schedules drawn as an entire quarter-turned table.
- * Rotating only vertical text into a temporary coordinate space lets the
- * normal multi-table extractor retain all of its header, boundary, and
- * refusal rules. Evidence boxes are mapped back to the source sheet.
+/** Extract schedules drawn as an entire quarter-turned table. Rotating only
+ * vertical text into a temporary coordinate space lets the normal
+ * equipment, finish, and structural-reference extractors retain all of their
+ * header, boundary, and refusal rules. Evidence boxes are mapped back to the
+ * source sheet.
+ *
+ * Running only the equipment grammar here was not equivalent to an ordinary
+ * page. Real rotated MEP sheets can legitimately classify a catalog table
+ * through the other proven grammars: a FAN SCHEDULE whose columns are
+ * structurally valid but vocabulary-free is `reference`, while AIR SEPARATOR
+ * and GRILLE/REGISTER/DIFFUSER schedules can first clear the finish grammar.
+ * On an unrotated sheet buildSheetGraph already runs all three paths. The
+ * adapter must preserve that same coverage after rotation; the existing
+ * graph-level overlap/title/key deduplication still resolves independent
+ * reads of the same physical table.
  *
  * Only spans carrying an EXPLICIT `rot` are trusted here — never
  * isVertical's own shape fallback (a real horizontal token that long
@@ -6098,6 +6109,7 @@ const isExplicitlyVertical = (s: GraphSpan): boolean =>
 export function extractAllQuarterTurnedTables(
   sheet: SheetSpans,
   opts: ExtractOpts = {},
+  includeSupplementalKinds = false,
 ): ScheduleTable[] {
   const vertical = sheet.spans.filter(isExplicitlyVertical);
   if (vertical.length < 8) return [];
@@ -6116,7 +6128,12 @@ export function extractAllQuarterTurnedTables(
   };
   const restore = ([x0, y0, x1, y1]: Bbox): Bbox =>
     [pivot - y1, x0, pivot - y0, x1];
-  return extractAllTables(turned, "equipment", opts).map((table) => ({
+  const extracted = [
+    ...extractAllTables(turned, "equipment", opts),
+    ...(includeSupplementalKinds ? extractAllTables(turned, "finish", opts) : []),
+    ...(includeSupplementalKinds ? extractAllReferenceTables(turned) : []),
+  ];
+  return extracted.map((table) => ({
     ...table,
     rotated_headers: true,
     anchors: undefined,
@@ -7037,72 +7054,6 @@ function bandGenericDataRows(
     return toks.some((t) => /^\d+$/.test(t.str.trim()) && nearestAnchor(centerX(t), anchors) === button.label)
       && toks.filter((t) => nearestAnchor(centerX(t), anchors) !== anchors[0].label).length >= 2;
   };
-  // A logical row whose own identity/key column is a pure drawn glyph with
-  // NO extractable text anywhere in it can never seed a committed row in
-  // the main scan above (nothing ever lands within keyTol of keyColX for
-  // it) — and if that happens before the table's first successfully-keyed
-  // row, every one of its physical lines becomes an orphan with no
-  // accepted row close enough to fold onto below, so it is lost outright,
-  // not merely missing its own blank key cell. Real, corpus-found: goal
-  // VECTORGRID_TABLE_BOXES.md's B-13 — 13_MI_MSU_LifeSciences_
-  // LabRenovation.pdf#28's own FIRE ALARM DEVICES SCHEDULE draws its
-  // MANUAL PULL STATION / CEILING MOUNTED PHOTOELECTRIC SMOKE DETECTOR /
-  // FIRE ALARM INTERLOCK rows' own SYMBOL cells as pure vector glyphs (a
-  // boxed "F", a circled "S", a filled dot — zero text, confirmed directly
-  // off the page's own text spans) printed BEFORE the table's only
-  // naturally-keyed rows (COMBINATION AUDIO SPEAKER's own drawn "15"/"30"/
-  // "60" numerals, which happen to land on a WRAPPED, not first, physical
-  // line of their own row — a vertical-centering quirk of this drafter's
-  // row layout). All three real rows vanished whole: not just a blank
-  // SYMBOL, every DESCRIPTION/MANUFACTURER/CATALOG NO./REMARKS token too.
-  //
-  // Fixed the same way this file already tells a wrapped continuation
-  // line apart from a genuine new row everywhere else in this function:
-  // the gap since the previous line. Partition the orphan pool itself
-  // (independent of whether any accepted row is nearby) into runs at
-  // every gap >= newRowGapFloor — the identical test the main scan above
-  // already applies to keyed candidates, no new discriminator invented. A
-  // run that cannot reach ANY already-accepted row within `radius` is not
-  // a continuation of something already on the table; it is a whole row
-  // the main scan never got to seed at all. Its own first line is
-  // promoted into a new row using its own leading text as the key
-  // (genericRowKeyOf, the identical bar every other key already clears —
-  // the same fallback this function's own SYSTEM TYPE precedent above
-  // already uses whenever a real row has nothing better to key on), and
-  // every other member of that run folds onto it directly, since sharing
-  // a run makes them the same row by construction. Scoped to in-band
-  // orphans only (a `banded`-shaped orphan, never the separate left-
-  // overflow shape above, which already has its own working fold target)
-  // so this can never invent a row out of a KEY column's own wrapped
-  // overflow text.
-  if (newRowGapFloor > 0 && orphans.length) {
-    const bandedOnly = orphans.filter((o) => o.toks.some((t) => t.x >= x0 && t.x <= x1));
-    const ordered = bandedOnly.slice().sort((a, b) => a.y - b.y);
-    const runs: Array<{ toks: GraphSpan[]; y: number }[]> = [];
-    for (const o of ordered) {
-      const run = runs[runs.length - 1];
-      if (run && o.y - run[run.length - 1].y < newRowGapFloor) run.push(o);
-      else runs.push([o]);
-    }
-    const rescued = new Set<{ toks: GraphSpan[]; y: number }>();
-    for (const run of runs) {
-      if (run.length === 1 && (isSectionHeading(run[0].toks) || isUnkeyedButtonSubrow(run[0].toks))) continue;
-      const reachable = run.some((o) => { const { i, d } = nearest(o.y); return i >= 0 && d <= radius; });
-      if (reachable) continue;
-      const seedTok = run[0].toks[0];
-      if (!seedTok) continue;
-      const key = genericRowKeyOf(seedTok.str, headerLabelSet);
-      if (!key) continue;
-      const row: TableRow = { key, sheet: sheetKey, cells: {} };
-      for (const o of run) { add(row, o.toks); rescued.add(o); }
-      out.push(row);
-      outY.push(run[0].y);
-    }
-    if (rescued.size) {
-      for (let k = orphans.length - 1; k >= 0; k--) if (rescued.has(orphans[k])) orphans.splice(k, 1);
-    }
-  }
-
   for (const o of orphans) {
     if (isSectionHeading(o.toks) || isUnkeyedButtonSubrow(o.toks)) continue;
     const { i, d } = nearest(o.y);
@@ -8268,6 +8219,37 @@ export interface SheetGraph {
   vector_pipeline?: VectorPipelineReport;
 }
 
+/** Apply source-backed caption evidence to an already-extracted table when
+ * its present title is absent/generic/truncated. This is intentionally a
+ * graph-level operation: geometric, VectorGrid, and ODL candidates all pass
+ * through the same policy before title-driven classification, so UI and MCP
+ * cannot disagree merely because a different extractor won reconciliation. */
+export function recoverNearbyScheduleTableTitle(table: ScheduleTable, spans: GraphSpan[]): boolean {
+  const found = nearbyScheduleCaption(spans, table.region, table.title?.text ?? "");
+  if (!found) return false;
+  table.title = { sheet: table.sheet, text: found.text, bbox: found.bbox };
+  return true;
+}
+
+/** Remove printed BAS point-type divider rows from an extracted point list.
+ * These are visual section headings (ANALOG INPUT, BINARY OUTPUT, etc.), not
+ * point records. The gate requires a point-list title and a row whose sparse
+ * populated cells only repeat the divider text, so a genuine described point
+ * can never be removed merely because it mentions an I/O class. */
+export function stripBasPointSectionHeadingRows(table: ScheduleTable): number {
+  if (!/\b(?:POINTS?\s+LIST|I\s*\/\s*O\s+LIST)\b/i.test(table.title?.text ?? "")) return 0;
+  const before = table.rows.length;
+  table.rows = table.rows.filter((row) => {
+    const key = row.key.replace(/\s+/g, " ").trim().toUpperCase();
+    if (!/^(?:ANALOG|BINARY|DIGITAL) (?:INPUT|OUTPUT)$/.test(key)) return true;
+    const populated = Object.values(row.cells)
+      .map((cell) => cell.text.replace(/\s+/g, " ").trim().toUpperCase())
+      .filter(Boolean);
+    return populated.length > 2 || populated.some((text) => text !== key);
+  });
+  return before - table.rows.length;
+}
+
 export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const withText = sheets.filter((s) => s.spans.length > 0);
   if (!withText.length) return { available: false, sheets: [], rooms: [], unmatched_tags: [], tables: [], callouts: [], buildings: [], revisions: [], notes: [] };
@@ -8389,6 +8371,8 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       const wholeRefRegions: Bbox[] = [];
       const wholeRefTables: ScheduleTable[] = [];
       for (const bs of refSheets) for (const t of extractAllReferenceTables(bs, s)) {
+        recoverNearbyScheduleTableTitle(t, s.spans);
+        stripBasPointSectionHeadingRows(t);
         if (bs === s) { wholeRefRegions.push(t.region); wholeRefTables.push(t); }
         else {
           const overlapIdx = wholeRefRegions.findIndex((r) => bboxesIntersect(r, t.region));
@@ -8460,8 +8444,16 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       for (const bs of bands) {
         const extractOpts = { buildings, deltas: deltasBySheet.get(s.key) };
         const found = extractAllTables(bs, kind, extractOpts);
-        if (kind === "equipment") found.push(...extractAllQuarterTurnedTables(bs, extractOpts));
+        // The supplemental finish/reference grammars are safe under the same
+        // schedule-role boundary that already governs ordinary structural
+        // reference extraction above. On a control-narrative/detail sheet,
+        // rotated prose can align like rows and must never become a table;
+        // the established equipment grammar still runs there exactly as it
+        // did before this coverage was added.
+        if (kind === "equipment") found.push(...extractAllQuarterTurnedTables(bs, extractOpts, role.role === "schedule"));
         for (const t of found) {
+          recoverNearbyScheduleTableTitle(t, s.spans);
+          stripBasPointSectionHeadingRows(t);
           if (t.title && isReferenceOrSpecTable(t.title.text)) {
             notes.push(`${s.key}: "${t.title.text}" is a reference/cross-reference/specification table, not an instance schedule — its ${t.rows.length} rows are NOT indexed as takeoff instance tags`);
             droppedNamedTables.push(t);
@@ -9561,6 +9553,74 @@ function hasRowOrientedTitle(t: ODLTable, numRows: number): boolean {
   return longSpan.length === 1 && shortSpan.length >= 1;
 }
 
+/** A second, titleless form of the same quarter-turned schedule shape.
+ *
+ * VectorGrid deliberately returns the ruled GRID, not nearby free-floating
+ * caption text. On a fully sideways schedule that means the first native
+ * grid row can be `[CH-1] [MARK]`, the next `[TRANE/CGAM20]
+ * [MANUFACTURER/MODEL]`, and so on: attributes run down rows while the one
+ * actual equipment item occupies the value column. There is no in-grid
+ * full-height title cell for `hasRowOrientedTitle` to see even though the
+ * printed `... SCHEDULE` caption sits immediately beside the table.
+ *
+ * Rotating an arbitrary tall/narrow table would be destructive, so this
+ * gate requires four independent pieces of evidence together:
+ *   1. a tall/narrow grid (many attributes, very few native columns),
+ *   2. the first native row pairs a valid equipment mark with a bare
+ *      identity header to its right (`CH-1 | MARK`),
+ *   3. most native rows repeat the value-before-engineering-header shape,
+ *   4. an explicitly vertical, strict `... SCHEDULE` source caption is
+ *      physically attached to this exact table region.
+ *
+ * This is orientation normalization only. The original cell text and exact
+ * cell bboxes remain untouched by `rotateODLTable90`, and the normal table
+ * parser still has to independently classify and key the result afterward.
+ */
+function hasTitlelessRowOrientedSchedule(
+  t: ODLTable,
+  pageViewportTransform: number[],
+  sourceSpans: GraphSpan[] | undefined,
+): boolean {
+  const R = t["number of rows"], C = t["number of columns"];
+  if (!sourceSpans?.length || R < 4 || C < 2 || C > 4 || R < C * 2) return false;
+
+  const first = t.rows.find((row) => row["row number"] === 1);
+  if (!first) return false;
+  const firstCells = [...first.cells].sort((a, b) => a["column number"] - b["column number"]);
+  const anchor = firstCells.find((cell) => isBareAnchorHeader(odlCellText(cell)));
+  if (!anchor) return false;
+  const anchorColumn = anchor["column number"];
+  const hasMarkBeforeAnchor = firstCells.some((cell) =>
+    cell["column number"] < anchorColumn && !!rowKeyOf(odlCellText(cell), "equipment"));
+  if (!hasMarkBeforeAnchor) return false;
+
+  let pairedAttributeRows = 0;
+  let populatedRows = 0;
+  for (const row of t.rows) {
+    const cells = [...row.cells].sort((a, b) => a["column number"] - b["column number"]);
+    if (!cells.some((cell) => odlCellText(cell).trim())) continue;
+    populatedRows++;
+    const hasValue = cells.some((cell) => cell["column number"] < anchorColumn && odlCellText(cell).trim());
+    const hasHeader = cells.some((cell) =>
+      cell["column number"] >= anchorColumn
+      && headerLabels(odlCellText(cell), ALL_HEADER_WORDS_ARR).length > 0);
+    if (hasValue && hasHeader) pairedAttributeRows++;
+  }
+  if (populatedRows < 4 || pairedAttributeRows < Math.max(3, Math.ceil(populatedRows * 0.5))) return false;
+
+  const region = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
+  const caption = nearbyScheduleCaption(sourceSpans, region, "");
+  if (!caption) return false;
+  const [cx0, cy0, cx1, cy1] = caption.bbox;
+  const hasVerticalCaptionEvidence = sourceSpans.some((span) => {
+    const sx = span.x + span.w / 2, sy = span.y + span.h / 2;
+    if (sx < cx0 || sx > cx1 || sy < cy0 || sy > cy1) return false;
+    if (span.rot != null) return Math.abs(span.rot % 180) === 90;
+    return span.str.trim().length >= 2 && span.h > Math.max(12, 1.8 * span.w);
+  });
+  return hasVerticalCaptionEvidence;
+}
+
 /** Build one ScheduleTable straight from ODL's own detected grid. Returns
  * null when the table doesn't look like a recognized schedule shape at all
  * (kind classification fails to qualify) or carries no real keyed data rows
@@ -9676,7 +9736,10 @@ export function scheduleTableFromODL(
   if (t["number of rows"] < 2 || t["number of columns"] < 2) {
     return refuse(`grid too small: ${t["number of rows"]}x${t["number of columns"]}`);
   }
-  if (hasRowOrientedTitle(t, t["number of rows"])) t = rotateODLTable90(t);
+  if (hasRowOrientedTitle(t, t["number of rows"])
+    || hasTitlelessRowOrientedSchedule(t, pageViewportTransform, opts.sourceSpans)) {
+    t = rotateODLTable90(t);
+  }
   const R = t["number of rows"], C = t["number of columns"];
 
   // Expand rowspan/colspan into a full grid of cell references so a later
@@ -10214,6 +10277,9 @@ export function scheduleTableFromODL(
   else if (rmHits >= 3 && rmHits > finHits && surfaceHits >= 2) kind = "room-finish";
   else if (finHits >= 3) kind = "finish";
   let titleText = titleCell ? odlCellText(titleCell) : "";
+  let titleEvidenceBbox: Bbox | null = titleCell
+    ? odlBboxToProjectSpace(titleCell["bounding box"], pageViewportTransform)
+    : null;
   // A caption drawn OUTSIDE the ruled grid (its own free-floating text run
   // above the table, never a cell of it) is invisible to every check above —
   // they only ever look INSIDE row 0 for an in-grid title. Real, measured:
@@ -10230,6 +10296,19 @@ export function scheduleTableFromODL(
     const tableRegion = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
     const found = nearbyDrawingIndexCaptionText(opts.sourceSpans, tableRegion);
     if (found) titleText = found;
+  }
+  // Equipment schedule captions are also frequently drawn outside the grid,
+  // especially as split, quarter-turned source runs beside a narrow table.
+  // Associate only a strict nearby caption with this already-found table;
+  // never alter its grid, cells, rows, or region. A source-derived bbox is
+  // retained so the recovered name remains paintable/verifiable evidence.
+  if (opts.sourceSpans?.length) {
+    const tableRegion = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
+    const found = nearbyScheduleCaption(opts.sourceSpans, tableRegion, titleText);
+    if (found) {
+      titleText = found.text;
+      titleEvidenceBbox = found.bbox;
+    }
   }
   // Unlike the geometric extractor (which has its own vocabulary-free
   // structural "reference" pass, above extractAllTables), this function had
@@ -10889,11 +10968,12 @@ export function scheduleTableFromODL(
   const built: ScheduleTable = {
     kind,
     sheet: sheetKey,
-    title: titleCell ? { sheet: sheetKey, text: titleText, bbox: odlBboxToProjectSpace(titleCell["bounding box"], pageViewportTransform) } : null,
+    title: titleText && titleEvidenceBbox ? { sheet: sheetKey, text: titleText, bbox: titleEvidenceBbox } : null,
     headers,
     rows,
     region,
   };
+  stripBasPointSectionHeadingRows(built);
   // ODL sometimes recovers the right cell strings with grid boxes that miss
   // the painted glyphs (sideways / quarter-turned detections). Snap to exact
   // pdf.js spans when unique so query_table citations OCR-ground and paint.

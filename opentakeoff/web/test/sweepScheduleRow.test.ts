@@ -11,7 +11,8 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, splitHyphenTagOcc, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, hasRepeatableAirDevicePlacementQuorum, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, splitHyphenTagOcc, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, scheduleCountMultiplier as typicalCountMultiplier } from "../src/lib/schedulePlanReconcile.mjs";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -537,6 +538,26 @@ test("typicalCountMultiplier reads a parenthesized count only from inside the re
   ];
   assert.equal(typicalCountMultiplier(spans, [100, 200, 174, 225]), 6);
   assert.equal(typicalCountMultiplier(spans, [400, 200, 450, 225]), 1);
+});
+
+test("count-prefixed schedule tags reconstruct only the requested adjacent mark", () => {
+  const spans = [
+    { str: "(6) LD", x0: 100, y0: 200, x1: 158, y1: 220 },
+    { str: "-", x0: 160, y0: 200, x1: 165, y1: 220 },
+    { str: "1", x0: 167, y0: 200, x1: 176, y1: 220 },
+    { str: "2", x0: 400, y0: 200, x1: 409, y1: 220 },
+    { str: "(50) NOTE", x0: 700, y0: 200, x1: 790, y1: 220 },
+  ];
+  const found = countPrefixedScheduleTagOccurrences(spans, "LD-1");
+  assert.equal(found.length, 1);
+  assert.deepEqual(found[0].bbox, [100, 200, 176, 220]);
+  assert.equal(typicalCountMultiplier(spans, found[0].bbox), 6,
+    "the authored count and exact reconstructed tag stay on one evidence bbox");
+  assert.equal(countPrefixedScheduleTagOccurrences(spans, "LD-2").length, 0,
+    "an unrelated distant suffix must never be joined");
+  assert.equal(countPrefixedScheduleTagOccurrences([
+    { str: "(1) LD-1", x0: 100, y0: 200, x1: 170, y1: 220 },
+  ], "LD-1").length, 0, "a non-multiplier does not enter the authored-count path");
 });
 
 test("splitHyphenTagOcc recovers an exact adjacent two-run tag without fuzzy joining", () => {

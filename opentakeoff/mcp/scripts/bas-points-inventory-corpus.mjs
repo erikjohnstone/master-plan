@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { compileBasTakeoff, compileHvacTakeoff } from "../../web/src/lib/corpusTakeoff.mjs";
+import { shutdownVectorGrid } from "../../web/src/lib/vectorGridClient.ts";
 import { cachedSheetGraph } from "./sheetGraphCache.mjs";
 import { Session } from "../src/session.ts";
 
@@ -22,6 +23,7 @@ const pdfPath = resolve(corpus, truth.source_pdf);
 if (!existsSync(pdfPath)) throw new Error(`Source PDF not found: ${pdfPath}`);
 
 const session = new Session();
+try {
 await session.loadPlan(pdfPath);
 const fixturePath = process.env.OPENTAKEOFF_GRAPH_FIXTURE;
 const graph = fixturePath
@@ -113,3 +115,6 @@ const report = {
 };
 console.log(JSON.stringify(report, null, 2));
 if (errors.length) process.exitCode = 1;
+} finally {
+  await shutdownVectorGrid();
+}

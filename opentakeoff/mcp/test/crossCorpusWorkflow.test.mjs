@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import test from "node:test";
+import test, { after } from "node:test";
 import { fileURLToPath } from "node:url";
 import { compileCorpusTakeoff } from "../src/corpusTakeoff.mjs";
 import {
@@ -22,6 +22,7 @@ import {
 } from "../../web/src/lib/takeoffWorkflow.js";
 import { cachedGraphForKey, cachedGraphForPdf } from "./helpers/loadKeySession.mjs";
 import { WP1_ACCEPTANCE_KEY_FILES } from "./helpers/wp1AcceptanceKeys.mjs";
+import { shutdownVectorGrid } from "../../web/src/lib/vectorGridClient.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
@@ -78,6 +79,12 @@ const SETS = [
     pdf: resolve(SAMPLES, "bessemer-mechanical-bidset.pdf"),
   },
 ];
+
+// Graph construction keeps one VectorGrid JSON-RPC process warm across every
+// corpus case. Production servers intentionally retain it; a finite node:test
+// process must release it after the last assertion or an otherwise-green gate
+// remains pending until CI kills it.
+after(async () => { await shutdownVectorGrid(); });
 
 async function graphForPdf(pdfPath, setId) {
   return cachedGraphForPdf(CORPUS, pdfPath, setId, "cross-corpus");

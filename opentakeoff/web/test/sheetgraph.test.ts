@@ -10,10 +10,28 @@
 import { test, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBasPointFunctionSchedule, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, sheetDrawingGroup, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBasPointFunctionSchedule, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, sheetDrawingGroup, stripBasPointSectionHeadingRows, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+
+test("BAS point-list divider labels are not emitted as point records", () => {
+  const cell = (text: string) => ({ text, bbox: [0, 0, 10, 10] as [number, number, number, number] });
+  const table: ScheduleTable = {
+    kind: "equipment", sheet: "controls.pdf#1",
+    title: { sheet: "controls.pdf#1", text: "POINTS LIST AHU-1", bbox: [0, 0, 100, 10] },
+    headers: ["MARK", "DESCRIPTION", "ALARM"], region: [0, 0, 100, 100],
+    rows: [
+      { key: "AI01", sheet: "controls.pdf#1", cells: { MARK: cell("AI01"), DESCRIPTION: cell("SA TEMPERATURE") } },
+      { key: "ANALOG INPUT", sheet: "controls.pdf#1", cells: { MARK: cell("ANALOG INPUT"), DESCRIPTION: cell("ANALOG INPUT") } },
+      { key: "BINARY OUTPUT", sheet: "controls.pdf#1", cells: { MARK: cell("BINARY OUTPUT"), DESCRIPTION: cell("BINARY OUTPUT") } },
+      { key: "DIGITAL INPUT", sheet: "controls.pdf#1", cells: { MARK: cell("DIGITAL INPUT"), DESCRIPTION: cell("SMOKE DETECTOR"), ALARM: cell("YES") } },
+    ],
+  };
+  assert.equal(stripBasPointSectionHeadingRows(table), 2);
+  assert.deepEqual(table.rows.map((row) => row.key), ["AI01", "DIGITAL INPUT"],
+    "a described point is retained even when its mark text resembles a divider");
+});
 
 test("sheetDrawingGroup accepts authored project-area titles and rejects table captions/prose", () => {
   const scoped: SheetSpans = {
@@ -681,6 +699,44 @@ test("an entire quarter-turned equipment schedule is normalized and mapped back"
   assert.equal(table.rows[1].cells.GPM.text, "20");
   assert.ok(table.rows[0].cells.MODEL.bbox[0] < table.rows[0].cells.MODEL.bbox[2],
     "restored evidence is a valid source-space box");
+});
+
+test("quarter-turned schedules run the same finish and structural-reference grammars as ordinary pages", () => {
+  const vertical = (str: string, rowX: number, columnY: number): GraphSpan =>
+    ({ str, x: rowX, y: columnY, w: 8, h: Math.max(12, str.length * 5), rot: 90 });
+  const sheet: SheetSpans = {
+    key: "quarter-turned-mixed.pdf#1",
+    spans: [
+      // Catalog-valid but powered-equipment vocabulary-free: the existing
+      // structural reference path is the honest extraction route.
+      vertical("FAN SCHEDULE", 620, 20),
+      vertical("MARK", 600, 20), vertical("QTY.", 600, 100),
+      vertical("MANUFACTURER / MODEL", 600, 180), vertical("SERVICE", 600, 340),
+      vertical("EF-1", 580, 20), vertical("1", 580, 100),
+      vertical("ACME / X1", 580, 180), vertical("EXHAUST", 580, 340),
+      vertical("EF-2", 560, 20), vertical("1", 560, 100),
+      vertical("ACME / X2", 560, 180), vertical("EXHAUST", 560, 340),
+
+      // A specialty equipment schedule with MARK/MANUFACTURER/REMARKS
+      // clears the established finish grammar before title reclassification.
+      vertical("AIR SEPARATOR SCHEDULE", 300, 20),
+      vertical("MARK", 280, 20), vertical("MATERIAL", 280, 120),
+      vertical("FINISH", 280, 240), vertical("REMARKS", 280, 340),
+      vertical("AS-1", 260, 20), vertical("STEEL", 260, 120),
+      vertical("WHITE", 260, 240), vertical("SUPPLY", 260, 340),
+      vertical("AS-2", 240, 20), vertical("ALUMINUM", 240, 120),
+      vertical("WHITE", 240, 240), vertical("RETURN", 240, 340),
+    ],
+  };
+  const tables = extractAllQuarterTurnedTables(sheet, {}, true);
+  const fan = tables.find((table) => table.title?.text === "FAN SCHEDULE");
+  assert.ok(fan, "the structural-reference grammar must run after rotation");
+  assert.deepEqual(fan!.rows.map((row) => row.key), ["EF-1", "EF-2"]);
+  const separator = tables.find((table) => table.title?.text === "AIR SEPARATOR SCHEDULE");
+  assert.ok(separator, "the finish grammar must run after rotation");
+  assert.deepEqual(separator!.rows.map((row) => row.key), ["AS-1", "AS-2"]);
+  assert.ok(separator!.rows[0].cells.MATERIAL.bbox[0] < separator!.rows[0].cells.MATERIAL.bbox[2],
+    "recovered finish/reference evidence maps back to a valid source-space box");
 });
 
 // ── multi-building keys: room 134 in Building A ≠ 134 in Building B ─────────
@@ -4399,6 +4455,67 @@ describe("scheduleTableFromODL: a caption drawn OUTSIDE the ruled grid still nam
     const t = scheduleTableFromODL(t2, "08_ME_test.pdf", IDENTITY, { sourceSpans: spans });
     assert.ok(t, "must still build");
     assert.notEqual(t!.title?.text, "DRAWING LIST", "an in-grid title always wins — the out-of-grid fallback only fires when row 0 found nothing");
+  });
+});
+
+describe("scheduleTableFromODL: titleless quarter-turned VectorGrid schedules", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 50_000;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 30, row * 30, (col + colSpan) * 30, (row + 1) * 30],
+    "row number": row, "column number": col, "row span": 1, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+  const buildTable = (): ODLTable => {
+    const attributes: Array<[string, string]> = [
+      ["CH-1", "MARK"],
+      ["TRANE CGAM20", "MANUFACTURER MODEL"],
+      ["20", "NOMINAL CAPACITY TONS"],
+      ["480", "VOLTAGE"],
+      ["3", "PHASE"],
+      ["25.9", "MCA"],
+    ];
+    return {
+      type: "table", id: 1, "page number": 1, "bounding box": [30, 30, 120, 240],
+      "number of rows": attributes.length, "number of columns": 3,
+      rows: attributes.map(([value, header], index) => ({
+        type: "table row", "row number": index + 1, id: index,
+        cells: [odlCell(index + 1, 1, value), odlCell(index + 1, 2, header, 2)],
+      })),
+    };
+  };
+  const attachedVerticalCaption: GraphSpan[] = [
+    { str: "PACKAGED AIR COOLED CHILLER SCHEDULE", x: 130, y: 45, w: 14, h: 170, rot: 90 },
+  ];
+
+  it("rotates value-before-header attributes into one correctly keyed equipment row", () => {
+    const t = scheduleTableFromODL(buildTable(), "bldg5406-test.pdf#6", IDENTITY, {
+      sourceSpans: attachedVerticalCaption,
+    });
+    assert.ok(t, "the structurally evidenced quarter-turned schedule must extract");
+    assert.equal(t!.title?.text, "PACKAGED AIR COOLED CHILLER SCHEDULE");
+    assert.equal(t!.kind, "equipment");
+    assert.deepEqual(t!.rows.map((row) => row.key), ["CH-1"]);
+    assert.equal(t!.rows[0].cells.MARK?.text, "CH-1");
+    assert.equal(t!.rows[0].cells["MANUFACTURER MODEL"]?.text, "TRANE CGAM20");
+  });
+
+  it("does not rotate the same grid without an attached source caption", () => {
+    const t = scheduleTableFromODL(buildTable(), "negative-no-caption.pdf#1", IDENTITY, {});
+    assert.notEqual(t?.rows.length, 1, "the orientation repair must remain disabled without independent caption evidence");
+  });
+
+  it("does not rotate an ordinary tall narrow table whose first row is headers, not mark-before-MARK", () => {
+    const ordinary = buildTable();
+    ordinary.rows[0] = {
+      type: "table row", "row number": 1, id: 0,
+      cells: [odlCell(1, 1, "MARK"), odlCell(1, 2, "MANUFACTURER"), odlCell(1, 3, "MODEL")],
+    };
+    const t = scheduleTableFromODL(ordinary, "negative-ordinary.pdf#1", IDENTITY, {
+      sourceSpans: attachedVerticalCaption,
+    });
+    assert.notEqual(t?.rows.length, 1, "an attached caption alone must never transpose an ordinary table");
   });
 });
 

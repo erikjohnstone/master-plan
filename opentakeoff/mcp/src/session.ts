@@ -24,7 +24,7 @@ import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src
 import { basRestoreJson, readBasRestorePlan, type BasRestorePlan } from '../../web/src/lib/basRestore.ts';
 import type { BasSourceInventoryItem } from '../../web/src/lib/basSourceRetention.ts';
 import { readBasOriginalFile } from './basOriginalFile.ts';
-import { rowIdentityTag } from '../../web/src/lib/schedulePlanReconcile.mjs';
+import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, rowIdentityTag, scheduleCountMultiplier } from '../../web/src/lib/schedulePlanReconcile.mjs';
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -295,7 +295,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, countPrefixedFragmentedTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, hasRepeatableAirDevicePlacementQuorum, hasSymbolSweepPlanEvidence, type SweepOptions, type MatchOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, hasSymbolSweepPlanEvidence, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -329,7 +329,7 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // here exactly as netroom.js's room detector already uses it, as a fallback
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
-import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, competeSweepModes, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel, type ResolvedSweepMode, type SweepModeCompetition } from "../../web/src/lib/symbollabels.ts";
+import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -2960,63 +2960,20 @@ export class Session {
       // enough on a real symbol to attach the seed's own nearby-tag lookup
       // to a NEIGHBORING symbol's tag instead of its own.
       const seedHint = labelPlacements([fp.rawCenter], s.spans, geo.segs, geo.lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] ?? null;
-      const matchOpts = {
+      const rawRes = matchSymbol(fp, geo.segs, {
         ...sweepOpts, lum: geo.lum, excludeCenter: fp.center,
         ...(seedHint ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
         ...(negatives.length ? { negatives } : {}),
-      };
-      const resolveMode = (raw: SymbolMatchResult): {
-        mode: ResolvedSweepMode;
-        corrected: ReturnType<typeof reconcileSweepLabels>;
-      } => {
-        // #308 — the drawing's own names. For a labeled family the sheet says
-        // what each already-geometric placement IS (a tag written beside it,
-        // or connected by a leader). Text may corroborate/demote geometry but
-        // can never manufacture a placement without vector evidence.
-        const labels = this.sweepLabels(s.spans!, geo, fp.rawCenter, raw.matches, raw.withheld, undefined, fp.totalLen);
-        const corrected = reconcileSweepLabels(labels.seed, raw.matches, labels.matches, raw.withheld, labels.withheld);
-        const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
-        return {
-          corrected,
-          mode: {
-            matches: positioned.matches,
-            withheld: positioned.withheld,
-            matchLabels: corrected.matchLabels,
-            withheldLabels: positioned.withheldLabels,
-          },
-        };
-      };
-      const rawRes = matchSymbol(fp, geo.segs, matchOpts);
-      const affineResolved = resolveMode(rawRes);
-      let chosen = affineResolved.mode;
-      let corrected = affineResolved.corrected;
-      let modeCompetition: SweepModeCompetition["evidence"] | undefined;
-      let res: SymbolMatchResult = { ...rawRes, matches: chosen.matches, withheld: chosen.withheld };
-      if (sweepOpts.affine?.enabled) {
-        const rigidRaw = matchSymbol(fp, geo.segs, { ...matchOpts, affine: undefined });
-        const rigidResolved = resolveMode(rigidRaw);
-        const competed = competeSweepModes(seedHint, rigidResolved.mode, affineResolved.mode, Math.max(3 * (sweepOpts.tolPx ?? SWEEP_TOL_PX), 4));
-        chosen = competed;
-        corrected = {
-          ...rigidResolved.corrected,
-          matches: competed.matches,
-          withheld: competed.withheld,
-          matchLabels: competed.matchLabels,
-          withheldLabels: competed.withheldLabels,
-        };
-        modeCompetition = competed.evidence;
-        res = {
-          ...rigidRaw,
-          matches: competed.matches,
-          withheld: competed.withheld,
-          candidates: {
-            considered: rawRes.candidates.considered + rigidRaw.candidates.considered,
-            dropped: rawRes.candidates.dropped + rigidRaw.candidates.dropped,
-          },
-          complete: rawRes.complete && rigidRaw.complete,
-        };
-      }
-      const lbl = { seed: seedHint, matches: chosen.matchLabels, withheld: chosen.withheldLabels };
+      });
+      // #308 — the drawing's own names. For a labeled family the sheet says
+      // what each already-geometric placement IS (a tag written beside it,
+      // or connected by a leader). Text may corroborate/demote geometry but
+      // can never manufacture a placement without vector evidence.
+      const rawLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, rawRes.matches, rawRes.withheld, undefined, fp.totalLen);
+      const corrected = reconcileSweepLabels(rawLbl.seed, rawRes.matches, rawLbl.matches, rawRes.withheld, rawLbl.withheld);
+      const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+      const res: SymbolMatchResult = { ...rawRes, matches: positioned.matches, withheld: positioned.withheld };
+      const lbl = { seed: rawLbl.seed, matches: corrected.matchLabels, withheld: positioned.withheldLabels };
       let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
       if (opts.commit && (res.matches.length || opts.commitSeed)) {
         // #296 — commit_seed puts the seed instance first in the SAME batch:
@@ -3049,7 +3006,6 @@ export class Session {
         ...(res.rejected.length ? { rejected: res.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, ...(r.transform ? { transform: r.transform } : {}), by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(res.negatives ? { negatives: res.negatives.filter((n) => !!n).map((n) => ({ mode: n!.mode, segments: n!.segments, center: [round1(n!.center[0]), round1(n!.center[1])] as [number, number] })) } : {}),
         ...(res.lum_gate ? { lum_gate: res.lum_gate } : {}),
-        ...(modeCompetition ? { transform_competition: modeCompetition } : {}),
         ...((corrected.promoted || corrected.demoted) ? { label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } } : {}),
         candidates: res.candidates,
         complete: res.complete,
@@ -3123,7 +3079,7 @@ export class Session {
     if (!s.spans) s.spans = textSpans(s.page);
     // rawCenter, not center — see the sheet-scope path's own comment above.
     const seedLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, [], [], undefined, fp.totalLen).seed;
-    const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }; label_corroboration: { promoted: number; demoted: number }; transform_competition?: SweepModeCompetition["evidence"] }[] = [];
+    const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }; label_corroboration: { promoted: number; demoted: number } }[] = [];
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     for (const sh of this.sheetList()) {
       const role = roleOf.get(sh.key) ?? "unknown";
@@ -3154,18 +3110,17 @@ export class Session {
       // `lum: g2.lum` already does below.
       if (!sh.spans) sh.spans = textSpans(sh.page);
       const sheetTextBoxes: [number, number, number, number][] = sh.spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
-      const targetMatchOpts: MatchOptions = {
-        ...sweepOpts,
-        lum: g2.lum,
-        textBoxes: sheetTextBoxes,
-        ...(ratio.scale === 1 ? {} : { scale: ratio.scale }),
-        ...(sh.key === s.key ? { excludeCenter: fp.center } : {}),
-        ...(seedLbl ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
-        ...(negatives.length ? { negatives } : {}),
-      };
       let res: SymbolMatchResult;
       try {
-        res = matchSymbol(fp, g2.segs, targetMatchOpts);
+        res = matchSymbol(fp, g2.segs, {
+          ...sweepOpts,
+          lum: g2.lum,
+          textBoxes: sheetTextBoxes,
+          ...(ratio.scale === 1 ? {} : { scale: ratio.scale }),
+          ...(sh.key === s.key ? { excludeCenter: fp.center } : {}),
+          ...(seedLbl ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
+          ...(negatives.length ? { negatives } : {}),
+        });
       } catch (e) {
         // the engine's scale refusals (symbol shrinks inside tolerance, ratio
         // out of band) are instructions about THIS sheet, not a dead sweep —
@@ -3178,59 +3133,17 @@ export class Session {
       // assignment even though it is excluded from the count. Otherwise its
       // own unique tag is left free to promote a second transform peak from a
       // neighboring/overlapped instance — a real FCU-5 set-wide overcount.
-      const resolveMode = (raw: SymbolMatchResult): {
-        mode: ResolvedSweepMode;
-        corrected: ReturnType<typeof reconcileSweepLabels>;
-      } => {
-        const rawLabels = this.sweepLabels(sh.spans!, g2, sh.key === s.key ? fp.rawCenter : null, raw.matches, raw.withheld, seedLbl?.label, fp.totalLen * ratio.scale);
-        // A small fingerprint that is distinctive on its seed sheet may be
-        // ordinary title-block/detail geometry elsewhere in a large set. When
-        // the seed is named, set scope therefore requires every counted target
-        // to carry a same-family drawing tag; unlabeled geometry stays visible
-        // in withheld for review.
-        const corrected = reconcileSweepLabels(seedLbl, raw.matches, rawLabels.matches, raw.withheld, rawLabels.withheld, { requireLabel: !!seedLbl });
-        return {
-          corrected,
-          mode: {
-            matches: corrected.matches,
-            withheld: corrected.withheld,
-            matchLabels: corrected.matchLabels,
-            withheldLabels: corrected.withheldLabels,
-          },
-        };
-      };
-      const affineResolved = resolveMode(res);
-      let chosen = affineResolved.mode;
-      let promoted = affineResolved.corrected.promoted;
-      let demoted = affineResolved.corrected.demoted;
-      let modeCompetition: SweepModeCompetition["evidence"] | undefined;
-      if (sweepOpts.affine?.enabled) {
-        let rigidRaw: SymbolMatchResult;
-        try {
-          rigidRaw = matchSymbol(fp, g2.segs, { ...targetMatchOpts, affine: undefined });
-        } catch (e) {
-          skipped.push({ sheet: sh.key, role, reason: `rigid verification pass failed: ${e instanceof Error ? e.message : String(e)}` });
-          continue;
-        }
-        const rigidResolved = resolveMode(rigidRaw);
-        const competed = competeSweepModes(seedLbl, rigidResolved.mode, affineResolved.mode, Math.max(3 * (sweepOpts.tolPx ?? SWEEP_TOL_PX), 4));
-        chosen = competed;
-        promoted = rigidResolved.corrected.promoted;
-        demoted = rigidResolved.corrected.demoted;
-        modeCompetition = competed.evidence;
-        res = {
-          ...rigidRaw,
-          candidates: {
-            considered: res.candidates.considered + rigidRaw.candidates.considered,
-            dropped: res.candidates.dropped + rigidRaw.candidates.dropped,
-          },
-          complete: res.complete && rigidRaw.complete,
-        };
-      }
-      res = { ...res, matches: chosen.matches, withheld: chosen.withheld };
-      const labels = { seed: null, matches: chosen.matchLabels, withheld: chosen.withheldLabels };
+      const rawLabels = this.sweepLabels(sh.spans, g2, sh.key === s.key ? fp.rawCenter : null, res.matches, res.withheld, seedLbl?.label, fp.totalLen * ratio.scale);
+      // A small fingerprint that is distinctive on its seed sheet may be
+      // ordinary title-block/detail geometry elsewhere in a large set. When
+      // the seed is named, set scope therefore requires every counted target
+      // to carry a same-family drawing tag; unlabeled geometry stays visible
+      // in withheld for review.
+      const corrected = reconcileSweepLabels(seedLbl, res.matches, rawLabels.matches, res.withheld, rawLabels.withheld, { requireLabel: !!seedLbl });
+      res = { ...res, matches: corrected.matches, withheld: corrected.withheld };
+      const labels = { seed: null, matches: corrected.matchLabels, withheld: corrected.withheldLabels };
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
-      perSheet.push({ state: sh, ...res, elapsed_ms, scale: ratio, labels, label_corroboration: { promoted, demoted }, ...(modeCompetition ? { transform_competition: modeCompetition } : {}) });
+      perSheet.push({ state: sh, ...res, elapsed_ms, scale: ratio, labels, label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } });
     }
 
     const found = perSheet.reduce((n, p) => n + p.matches.length, 0);
@@ -3312,7 +3225,6 @@ export class Session {
         ...(p.rejected.length ? { rejected: p.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, ...(r.transform ? { transform: r.transform } : {}), by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(p.lum_gate ? { lum_gate: p.lum_gate } : {}),
         ...((p.label_corroboration.promoted || p.label_corroboration.demoted) ? { label_corroboration: p.label_corroboration } : {}),
-        ...(p.transform_competition ? { transform_competition: p.transform_competition } : {}),
         candidates: p.candidates,
         complete: p.complete,
         elapsed_ms: p.elapsed_ms,
@@ -3600,7 +3512,8 @@ export class Session {
     // Explicit `(N) TAG` fragments are safe to merge alongside bare exact
     // spans because their authored count prefix makes them independently
     // identifiable. The broader fragment match remains a fallback below.
-    const merged = [...exact, ...compoundTagOcc(sh.spans, key), ...countPrefixedFragmentedTagOcc(sh.spans, key)];
+    const authoredCounts = countPrefixedScheduleTagOccurrences(sh.spans, key) as TagOcc[];
+    const merged: TagOcc[] = [...exact, ...compoundTagOcc(sh.spans, key), ...authoredCounts];
     const dedupedMerged = merged.filter((occurrence, index) => !merged.slice(0, index).some((prior) =>
       Math.hypot(prior.cx - occurrence.cx, prior.cy - occurrence.cy) <= Math.max(prior.h, occurrence.h)));
     const splitHyphen = splitHyphenTagOcc(sh.spans, key);
@@ -4167,7 +4080,7 @@ export class Session {
       && isIndividuallyMarkedEquipmentSchedule(table)
       && totalOcc > 0
       && occBySheet.every(({ sh, occ }) => occ.every((entry) =>
-        typicalCountMultiplier(sh.spans || [], entry.bbox) === 1));
+        scheduleCountMultiplier(sh.spans || [], entry.bbox) === 1));
     if (singletonTaggedEquipment) {
       const keptSheet = withOcc[0].sh;
       const kept = withOcc[0].occ[0];
@@ -4283,7 +4196,7 @@ export class Session {
       const firstCell = r.cells[Object.keys(r.cells)[0]];
       const sheets = occBySheet.map(({ sh, occ }) => {
         const matches = occ.map((entry) => {
-          const multiplier = typicalCountMultiplier(sh.spans || [], entry.bbox);
+          const multiplier = scheduleCountMultiplier(sh.spans || [], entry.bbox);
           return {
             at: [round1(entry.cx), round1(entry.cy)] as [number, number],
             score: 1,
@@ -5200,7 +5113,7 @@ export class Session {
     // quantity; proximity and alignment gates live in the pure helper.
     for (const ps of perSheet) {
       for (const match of ps.matches) {
-        const multiplier = typicalCountMultiplier(ps.state.spans || [], match.tag_at);
+        const multiplier = scheduleCountMultiplier(ps.state.spans || [], match.tag_at);
         if (multiplier > 1) match.multiplier = multiplier;
       }
     }

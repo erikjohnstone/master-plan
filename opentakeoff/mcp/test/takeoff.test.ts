@@ -10,7 +10,7 @@
 // legend sheet in that set carries a title-block scale note — see this
 // session's own final report for the exact numbers and a visually-verified
 // match).
-import { test } from "node:test";
+import { after, test } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { Session } from "../src/session.ts";
@@ -22,6 +22,9 @@ import {
   hasAuthoredReconciliationStructure,
   isInstalledEquipmentTakeoffTable,
 } from "../src/takeoff.ts";
+import { shutdownVectorGrid } from "../../web/src/lib/vectorGridClient.ts";
+
+after(async () => { await shutdownVectorGrid(); });
 
 const DEMO = fileURLToPath(new URL("../../demo/sample-plan.pdf", import.meta.url));
 const LEGENDPLAN = fileURLToPath(new URL("./fixtures/legend-plan.pdf", import.meta.url));

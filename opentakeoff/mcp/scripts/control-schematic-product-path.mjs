@@ -3,6 +3,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { shutdownVectorGrid } from "../../web/src/lib/vectorGridClient.ts";
 import { Session } from "../src/session.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -21,6 +22,7 @@ if (!expectedPage || !expectedDiagram) throw new Error("Ground truth lacks the r
 
 const started = performance.now();
 const session = new Session();
+try {
 await session.loadPlan(pdfPath);
 const graph = await session.graphForPipeline();
 const elapsedMs = Math.round(performance.now() - started);
@@ -101,3 +103,6 @@ console.log(JSON.stringify({
   errors,
 }, null, 2));
 if (errors.length) process.exitCode = 1;
+} finally {
+  await shutdownVectorGrid();
+}

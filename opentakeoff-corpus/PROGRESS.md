@@ -1895,3 +1895,76 @@ are evidence inventories and bounded semantic relationships, not yet verified
 complete equipment-port-device graphs. Full edge/branch/port semantics,
 cross-sheet riser graph linkage, broader project diversity, Agent UI walkthrough,
 full regressions, merge, and push remain.
+
+## One-prompt Agent BAS integration closeout — 2026-09-13
+
+**Shared-path decision:** schedule/table identity, BAS point-list cleanup,
+schedule quantities, installed-plan quantities, reconciliation, citations, and
+control-schematic inventory are shared takeoff truth. Their changes live in the
+shared graph/reconciliation/session path consumed by both browser and MCP. UI
+interaction remains surface-specific. This closeout does not introduce or tune
+symbol-recognition thresholds; unfinished competing-sweep experiments were
+removed so this branch retains the last verified symbol behavior while the
+separate symbol workstream continues. VectorGrid row/column extraction and bbox
+contracts remain unchanged.
+
+- Recovered split/rotated schedule captions conservatively from geometric, ODL,
+  and VectorGrid tables. Complete authored captions are never expanded into a
+  neighboring schedule. On NAVFAC page 43 this preserves both the distinct
+  `CABINET UNIT HEATER SCHEDULE` and `UNIT HEATER SCHEDULE`, restoring the
+  previously frozen HVAC inventory to **396** without collapsing five UH rows.
+- Removed only sparse BAS section headings (`ANALOG/BINARY/DIGITAL INPUT/OUTPUT`)
+  from point-list rows while preserving real described points. NAVFAC D03 is
+  exactly **62** authored point rows rather than 66; point evidence retains its
+  source bbox/citation.
+- Corrected schedule-versus-installed semantics for individually marked
+  equipment, repeated air devices, authored quantity multipliers, and grouped
+  tags. Unknown plan placement remains refused/schedule-only rather than being
+  converted to zero or guessed.
+- Corrected two source truths after rendered-PDF review: Federal D04 contains
+  **58** VAV schedule rows (the apparent `SUITE 100` token is title-block text),
+  and Baker's complete caption is `PACKAGED ROOFTOP AIR CONDITIONING UNIT
+  SCHEDULE (GAS HEAT)`.
+- Exposed `analyze_control_schematics` in the intentional Agent setup stage and
+  retained cited schematic/riser evidence in the unified receipt. Added explicit
+  VectorGrid shutdown hooks so full MCP/corpus suites terminate instead of
+  appearing hung. Fixed the DXF export ownership stamp without changing export
+  geometry.
+
+### Real Agent UI product-path proof
+
+The literal prompt **`Run a BAS takeoff.`** was sent through the browser Agent
+UI with live Cerebras and no mocked tool responses or direct compiler shortcut:
+
+| Plan set | Post-index wall time | Evidence-backed result |
+| --- | ---: | --- |
+| NAVFAC Cherry Point | 38.2 s | 396 HVAC items; 21 point lists / 546 rows; 8 SOOs; 163 valves; 293 reconciliation rows; 9 schematics / 1 riser; 3,381 cited rows |
+| ITD laboratory | 62.6 s | 97 HVAC items; 13 SOOs; 31 valves; 37 reconciliation rows |
+| Baker County EOC | 106.5 s | 11 HVAC items; 2 SOOs; reconciliation 10/10 |
+| Federal attachment 4 | 108.1 s | 267 compiled rows; 3 point lists; 13 SOOs; 1 riser; 99 reconciliation rows |
+| Tarrant negative control | 11.5 s | Truthful empty equipment result; 0 line items; 1 cited riser-evidence record |
+
+All five runs completed below the three-minute post-index requirement. Artifacts
+(screenshots, recording, receipt/CSV) are retained under
+`/tmp/opentakeoff-complete-bas-agent-*` on the coordinator host.
+
+### Final verification before integration
+
+- Web: **3,085 pass / 0 fail / 13 intentional skips**; typecheck, lint
+  (**0 errors; 3 pre-existing warnings**), and production build pass.
+- MCP: BAS core **131/131**; revisions **33/33**; issues **6/6**; scope
+  **17/17**; main suite **305 pass / 0 fail / 113 intentional skips**;
+  packaging/proof **4/4**; typecheck passes. Cross-corpus structural compile
+  completed in **280.7 s**.
+- Shared focused symbol/sweep regression set: **217/217** passes with no new
+  recognition algorithm in this branch.
+- Python BAS suite: **502 pass / 1 skip**; mypy passes across 21 files.
+- Real-PDF BAS drawing, riser, piping-state, network-riser, points-inventory,
+  air-device-group, and product-path gates pass.
+
+**Honest ceiling:** this proves a fast, cited, human-reviewable BAS takeoff path
+on five diverse real product-path runs and guarded deterministic workflows. It
+does not prove perfect recognition on arbitrary drawings, complete semantic
+port/branch graphs for every schematic, or production-grade symbol recognition
+in dense affine cases. Those outputs remain explicit refusals/review items; the
+separate symbol workstream owns that remaining recognition frontier.
