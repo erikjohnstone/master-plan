@@ -1310,6 +1310,54 @@ table cell. This table cannot pass either box- or cell-grading.
 
 ---
 
+### B-23 — a dense schedule page extracts 14 of 14 simple tables perfectly, but every ROW-SPANNING/merged-cell or comparison-style table on the exact same page is entirely missing (NOT FIXED — found, traced, disclosed)
+
+**Where:** `067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8`
+("MECHANICAL SCHEDULES", sheet M7.0) — found during the same Demo Corpus
+hand-verification pass, next document after 028_TX.
+
+**Measured, hand-graded against the render first:** this single page
+carries at least 18 real, titled, ruled tables. Fourteen of them —
+`(N) PUMP SCHEDULE` (2 rows), `PRESSURE TESTING REQUIREMENTS` (4),
+`PIPE INSTALLATION SCHEDULE` (6), `DUCT INSTALLATION SCHEDULE` (2),
+`(N) HEAT EXCHANGER SCHEDULE` (1), `GRILLE SCHEDULE` (1), `REHEAT COIL
+SCHEDULES (RELOCATED)` (1), `(N) VFD SCHEDULE` (2), `(N) COMPRESSED AIR
+REGULATOR` (1), `AIR HANDLING UNIT SCHEDULE (EXISTING)` (1), `PCW AIR
+SEPARATOR SCHEDULE` (1), `PCW POT FEEDER SCHEDULE` (1), `PCW EXPANSION
+TANK SCHEDULE` (1), `PCW FILTER SCHEDULE` (1) — extract with EXACTLY
+matching row counts, no exceptions. But four more real tables on the
+SAME page, all sharing one structural feature the other 14 lack, are
+completely absent from the output, not fabricated into anything else
+findable:
+- `HUTCH 1.3 PCW RISER UTILITY SCHEDULE` (28 real rows) — its own
+  `SERIES`/`POC BRANCH`/`BRANCH SUM` columns use ROW-SPANNING MERGED
+  CELLS (one `BRANCH SUM` value like `30.15` or `19.16` drawn once,
+  visually spanning the ~9-11 rows of its own `LOOP 1`/`LOOP 2`/`LOOP 3`
+  group).
+- Three `NEH`/`FEE,EBD,UH`/`X-Ray Tunnel (XRT)` "PCW flow demand" tables
+  (10, 4, and 1 real rows) — each a comparison-style table with paired
+  `EXISTING`/`NEW` column groups and its own `Total` summary row, a
+  different shape from the plain one-row-per-tag equipment schedules
+  that extracted perfectly elsewhere on this page.
+
+**Relationship to already-catalogued bugs:** distinct from B-21 (an
+entire recurring table FORMAT invisible regardless of internal structure)
+because here 14 tables on the identical page and sheet extract with zero
+defects — this is not a page-level or sheet-level failure, it is
+specific to tables using row-spanning merged cells or an EXISTING/NEW
+comparison-column shape. Not traced into the row/column-clustering code
+to confirm this hypothesis (merged cells specifically, as opposed to
+some other property these 4 tables share) is the actual cause, per this
+file's standing rule against guessing at a fix under time pressure.
+
+**Consequence for the Demo Corpus's own zero-error bar:** MISSED != 0 —
+43 real rows across 4 real tables entirely absent, on a page whose other
+14 tables (37 rows) are graded perfectly. A per-page or per-document
+"pass/fail" grade would badly overstate how well this specific shape of
+table is handled.
+
+---
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.
