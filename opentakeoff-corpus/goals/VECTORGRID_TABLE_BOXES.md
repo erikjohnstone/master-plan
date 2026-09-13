@@ -217,7 +217,29 @@ how many tables have been hand-graded so far.
 **N = 2,341** (real tables found across all 113 real documents, 4,799 pages,
 0 failures — full per-document breakdown in the census JSON this run
 produced). 25% of N = **586** tables the held-out hand-graded sample must
-cover — not yet drawn (see the open item below).
+cover.
+
+**The split itself is drawn and frozen** (`keys/HELDOUT.txt`,
+`bakeoff/draw_heldout.py`, seed `20260913`): **32 documents, 688 tables
+(29.4% of N)**, clearing the 25% floor. This corpus does NOT stratify evenly
+across the six named disciplines — measured directly
+(`reports/DISCIPLINE_SCAN-2026-09-13.json`, the same text-layer-only scan
+speed class as the volume census, since findsheets.py/pdfplumber is the same
+infeasible 6-12s/page tool that forced the census substitution above): 101 of
+113 documents are HVAC/mechanical-PRIMARY (92.1% of N), BAS/controls
+vocabulary is present as a SECONDARY signal in 94 of 113 documents but never
+the single dominant vocabulary of a whole document, and only a small real
+tail is another-trade-PRIMARY (7 electrical, 4 structural, 1 plumbing, 0
+architectural). Stratifying on a fictional even six-way split would have
+diluted that real tail to near-zero representation; instead the draw
+stratifies on the two axes that are real and measured — Vol1 vs Vol2, and
+HVAC-primary vs. another-trade-primary — each stratum independently drawn to
+its own 25% floor (Vol1-HVAC 36.9%, Vol1-other 38.0%, Vol2-HVAC 25.0%,
+Vol2-other 39.5%), so the small tail disciplines are represented in
+proportion to their own real weight, not washed out by the corpus's own
+HVAC-heavy composition. Per this file's own "declared first, and frozen"
+rule: nothing in `keys/HELDOUT.txt` has been graded yet, and it must not be
+re-drawn once grading starts.
 
 Once N is known:
 

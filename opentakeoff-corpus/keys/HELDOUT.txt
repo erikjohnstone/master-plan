@@ -1,0 +1,46 @@
+# keys/HELDOUT.txt -- the frozen held-out document split.
+# Drawn once by bakeoff/draw_heldout.py, goal VECTORGRID_TABLE_BOXES.md's own
+# "declared first, and frozen" rule: NEVER used to change vectorgrid, and never
+# re-drawn to improve a score. If a held-out failure is worth fixing, the fix is
+# made against the tuning half (every document NOT in this list) and this split
+# is re-run untouched -- this file itself must not change once graded.
+# seed=20260913  population=113 real documents (reports/REAL_DOCUMENT_LIST-2026-09-13.txt)
+# N=2341 real tables (reports/VOLUME_FLOOR_CENSUS-2026-09-13.json)
+# selected: 32 documents, 688 tables (29.4% of N, floor was 25%)
+# Vol1_hvac_primary: 9/28 documents, 240/651 tables (36.9% of stratum, target was 25%)
+# Vol1_other_primary: 2/3 documents, 27/71 tables (38.0% of stratum, target was 25%)
+# Vol2_hvac_primary: 18/73 documents, 376/1505 tables (25.0% of stratum, target was 25%)
+# Vol2_other_primary: 3/9 documents, 45/114 tables (39.5% of stratum, target was 25%)
+#
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building
+011_IL_VA_Hines_Finance_Center_Renovation
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04
+023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory
+028_TX_Renovation_of_Building_615_Final_Design_Plans
+032_PA_Construct_EHRM_Infrastructure_Upgrades
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure
+04_NV_VA_LasVegas_CentralUtilityPlant
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades
+06_MO_NatlGuard_JeffCity_CST_Addition
+071_ME_BGS_Project_3809_Health_Science_Center
+080_CA_Contra_Costa_College_Science_Center_Conference
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades
+084_SC_H59_N054_FW_Building_112_Chiller_Addition
+086_CA_Contra_Costa_College_Early_Learning_Center
+089_FL_Airport_Terminal_and_Hangar_Development
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade
+100_OH_Butler_Tech_RTU_Welding_Source_Capture
+12_MT_MSU_ReidHall_Renovation
+13_MI_MSU_LifeSciences_LabRenovation
+14_OR_KlamathCC_LearningCtr_Mechanical
+15_IA_IowaState_Biorenewables_Lab
+19_CA_VistaUSD_DataCenter
+21_VA_OrangeCounty_PublicSafetyBldg
+26_CA_TransbayTower_Mechanical_64Sheets
+28_WA_KCHA_PublicHousing_HVAC
+D_25_CO_weld-mech-permit-set
