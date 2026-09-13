@@ -1750,6 +1750,42 @@ document fails MISSED=0 by 11 real tables (10 from the page #9 blackout,
 single-document MISSED gap measured in this entire session, Demo Corpus
 included.
 
+### B-29 — two real, differently-structured tables are silently merged into one, and the merged result's title is fabricated from unrelated title-block text (NOT FIXED — found, traced, disclosed)
+
+**Where:** `084_SC_H59_N054_FW_Building_112_Chiller_Addition.pdf#6`
+(sheet MP001, "MECHANICAL PIPING SCHEDULES & NOTES") — found continuing
+the HELDOUT set's own missed-checking pass, a small 13-page document
+picked for its low census table count.
+
+**Measured:** the sheet carries 2 real, titled, ruled tables with
+completely different column schemas: `AIR COOLED CHILLER SCHEDULE` (1
+row, `CH-1`) and `WATER CIRCULATING PUMP SCHEDULE` (2 rows, `CHWP-1`,
+`CHWP-2`) — confirmed by render, 3 real rows total.
+`production-graph-cli.mjs --mode graph` returns exactly ONE table for
+this sheet: `title: "GREENVILLE -"`, `rows: 3`. The row count (3) is
+precisely the SUM of the two real tables' own row counts (1+2), strongly
+indicating the two distinct tables were merged into a single reported
+entity. The fabricated title is neither real table's own title, nor
+`null`, nor `""` (this file's usual B-17 signature) — it is a truncated
+fragment of the sheet's own title-block text (`"GREENVILLE Technical
+College"`, the project owner's name, printed in the drawing's title
+block on the far right of the sheet, nowhere near either real table).
+
+**Relationship to already-catalogued bugs:** distinct from B-17 (title
+genuinely lost, `null`/`""`) because here a WRONG, fabricated title
+appears instead of an empty one; distinct from B-18/B-20 (row-fusion/
+duplication WITHIN one real table) because this merges TWO separate
+real tables with different column schemas into one reported table, not
+rows within a single table; distinct from B-28's page #9 (whole-page
+blackout, zero tables) because here a table IS produced, just a wrong,
+merged one. A new, previously unseen bug shape in this file.
+
+**Consequence for the HELDOUT set's own zero-error bar:** this document
+fails cell-grading twice over on one small sheet — a real table (`WATER
+CIRCULATING PUMP SCHEDULE`) is invisible as its own entity, and the
+survivor's title doesn't match either real table it's supposed to
+represent.
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
