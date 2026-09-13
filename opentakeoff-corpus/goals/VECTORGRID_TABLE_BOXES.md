@@ -278,7 +278,31 @@ deliverable this whole file exists to produce.
   correctly kinded `equipment`. Nothing left to fix here.
 - `vectorgrid` declines a large share of what it finds: 53 declined against 90
   kept on `001_NC`, 22 against 28 on `016_NY`. Some of that is correct. How
-  much is unknown.
+  much is unknown across the corpus at large — **partially measured
+  2026-09-13** (`OPENTAKEOFF_GRAPH_TRACE=1 production-graph-cli.mjs`, one
+  document at a time, real cold-cache runs): across the 5 of 7 frozen scored
+  sets safe to run this way (federal-mech, bessemer, itd-d1-lab,
+  bldg5406-hvac-demo, baker-county-eoc — `navfac-cherry-point-atc` excluded,
+  its single-document eval hangs 40+ minutes on an unrelated, already-tracked
+  pre-existing issue per this file's own B-15 verification; `itd-d1-lab-raster`
+  has no vector content at all, vectorgrid never runs on it), vectorgrid found
+  226 real regions total: **100 kept (44.2%), 126 declined (55.8%)** — a
+  materially higher decline rate than either single-document example above
+  named. Reason breakdown, summed across all 5 documents: "unknown kind and
+  no title" 43 (34.1% of declines — the same title-attachment failure family
+  B-14 fixed one instance of), "no keyed data rows (kind/key)" 40 (31.7% —
+  the same key-column family B-13/B-3/B-15 each fixed one instance of), "no
+  header block above the data" 38 (30.2%), "grid too small" 3 (2.4%),
+  "unknown kind, N grid rows below header" 2 (1.6%). This is a disclosed
+  **5-document sample**, not the ~224-PDF corpus — a full corpus sweep this
+  way is itself resource-risky (this session directly hit near-OOM twice
+  running unthrottled multi-document evals) and was not attempted; the real,
+  honest number for "how much of the decline rate is CORRECT vs. a real
+  recall gap" per-reason still requires rendering and reading a sample of
+  each reason's own declined regions by eye (this file's own "ground truth
+  means verified" standard), which this measurement does not yet do — it
+  establishes the real magnitude and the real reason distribution, not yet
+  the correctness of each decline.
 
 **Added 2026-09-12, from the running bug catalogue — confirmed real, in
 scope (all vector-native, no raster/OCR path involved), not yet closed:**
