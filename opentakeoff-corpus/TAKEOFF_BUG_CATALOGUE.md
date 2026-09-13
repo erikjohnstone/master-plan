@@ -2427,6 +2427,60 @@ traced further under this pass's own no-guessing-at-fixes rule.
 table (1 row) silently absent with no other signal that anything is
 wrong — small in row count, but a clean MISS nonetheless.
 
+### B-38 — a two-row-header table's own unit-label sub-header row is read as the table's single data row, and the real data row underneath it vanishes (NOT FIXED — found, traced, disclosed)
+
+**Where:** `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8`
+(sheet, "AIR COOLED CHILLER SCHEDULE" / "BUFFER TANK SCHEDULE" / "PUMP
+SCHEDULE" — 3 of the page's 3 real equipment tables, found while
+extending this session's box+cell-tier grading work to a HELDOUT
+document).
+
+**Measured:** all 3 tables on this page share a two-row header: a group
+header (e.g. `CAPACITY`) over a unit-label sub-header (`TONS` / `[kW]`),
+column-by-column, before the real data row. Rendering the page at
+scale=3.0 and reading it directly confirms one genuine data row per table
+(`AIR COOLED CHILLER SCHEDULE`: `CH-1&2` / `MECHANICA;L YARD` / `WHOLE
+BUILDING` / `SCROLL` / `132` / ... / `CARRIER` / `30RC-1326S015-7-2`, 33
+columns, several metric-unit columns intentionally solid-filled black on
+the page itself — a real drafting convention for "N/A", not a rendering
+artifact). The extractor's own `--mode graph` output reports exactly 1
+row for each table, but that row's own cell values are `MARK`,
+`LOCATION`, `TONS`, `[kW]`, `GPM`, `[L/s]`, ... — the unit-label
+sub-header text itself, verbatim, under a row `key` of literally `MARK`.
+The real data row (`CH-1&2`, `132`, `CARRIER`, ...) does not appear
+anywhere in the extractor's output for any of the 3 tables — confirmed
+absent via direct string search of the full JSON, not misattached
+elsewhere. A 4th, duplicate `PUMP SCHEDULE` entry (kind `reference`, not
+`equipment`) appears with bracket-fragment headers (`[ 33 ]`, `[ 1600 ]`,
+`[ 160 ]`, `[ 15 ]`) and a `N/A`-heavy row — a second, differently-garbled
+artifact of the same underlying confusion, not independently traced.
+
+**Plausible root cause, not yet traced to a line:** `sheetgraph.ts`
+already carries a "numeric-only sub-header discrimination gate" (search
+`numeric-only sub-header` in that file) built for sub-header rows that
+are ALL bare numbers (e.g. octave-band frequencies). This table's own
+sub-header row is unit LABELS (`TONS`, `GPM`, `°F`, bracketed metric
+units like `[kW]`) mixed with the occasional bare unit symbol — plausibly
+outside that gate's own numeric-only test, so it slips through as if it
+were an ordinary header/data boundary rather than being recognized as a
+second header row to skip past. Not fixed under this pass's own
+no-guessing-at-fixes rule — the gate's exact matching condition needs to
+be read before touching it, not inferred from this symptom alone.
+
+**Relationship to already-catalogued bugs:** distinct from every prior
+row-count entry (B-20's duplicate rows, B-26's phantom-row overcounts,
+B-31's truncation) — this is not a wrong row COUNT, it's the wrong row
+CONTENT: 1 row is reported, but it is the wrong row (a header, not data),
+and the real data is not merely truncated, it is entirely absent.
+
+**Consequence for the corpus's own zero-error bar:** on a chiller-
+replacement project, the AIR COOLED CHILLER SCHEDULE — the single most
+central table on the document — reports a row that is pure header noise
+while the real equipment record (capacity, electrical, manufacturer,
+model) is completely unreachable by any downstream compile. Confirmed on
+all 3 real tables on this one page; not yet checked against the rest of
+the corpus for prevalence.
+
 ## What is working
 
 Worth recording alongside the failures, because the bug list alone reads worse than the
