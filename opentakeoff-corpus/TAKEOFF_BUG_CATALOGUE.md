@@ -1723,7 +1723,7 @@ identical 12 tables before and after this change, no crash.
 
 ---
 
-### B-25 — a whole schedule sheet, correctly role-classified, yields ZERO tables: an entire transposed-format page (units as columns, not rows) is completely unreachable (NOT FIXED — found, traced, disclosed)
+### B-25 — a whole schedule sheet, correctly role-classified, yields ZERO tables: an entire transposed-format page (units as columns, not rows) is completely unreachable (CORRECTED 2026-09-13)
 
 **Where:** `037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#40`
 ("MECHANICAL SCHEDULES", sheet MJ110) — found during the same Demo Corpus
@@ -1774,6 +1774,34 @@ disclosed reason. If transposed schedules are common elsewhere in the
 corpus (return-fan and AHU schedules with many units are a routine HVAC
 drafting convention), this could be a systemic recall gap much larger
 than any single document.
+
+**CORRECTION (2026-09-13): a third instance of the same misdiagnosis
+as B-21's and B-23's own corrections above.** All 6 "transposed real
+vector tables" this entry describes are genuine pasted raster images,
+not real vector-drawn content vectorgrid failed to read because of its
+transposed orientation. Direct measurement: every one of
+`vectorgrid.py`'s own 6 candidate regions on page 40 exactly matches a
+real embedded PyMuPDF image placement rect, and the whole page carries
+only 253 PDF text words total — nowhere near enough for the ~67 real
+table rows this entry describes, and consistent with a page that is
+almost entirely pasted screenshots plus a title block. `vectorgrid.py`
+already correctly marks all 6 `raster=True`; after B-24's own fix
+(wiring the pipeline's raster-disclosure notes into the real
+`graph.notes` output), a live re-run now emits `"037_AR...#40: 6
+raster table region(s) found and correctly excluded... — not an
+extraction miss"` — plus the same disclosure for two more pages (`#41`,
+`#42`) that this entry never covered, each with their own 1 raster
+region. The "transposed" shape claim may well be visually accurate (a
+screenshot OF a transposed spreadsheet), but the underlying PDF
+representation is 100% raster, so this was never a real vector-table
+extraction failure. Per the goal document's own Scope rule, this is
+correct, disclosed behavior — closing out this entry's own 67-row
+claim, and its own "could be a systemic recall gap" concern above.
+
+Whether transposed schedules exist elsewhere in the corpus as GENUINE
+vector content vectorgrid still cannot read is a real, separate, and
+still-open question this correction does not answer — it answers only
+this specific document's own claim.
 
 ---
 
