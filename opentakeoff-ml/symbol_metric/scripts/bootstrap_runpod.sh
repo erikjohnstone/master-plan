@@ -37,7 +37,10 @@ PACKAGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # Build an isolated venv that retains that template's torch/CUDA packages,
 # rather than weakening its PEP 668 system-package protection.
 BASE_PYTHON="${PYTHON_BIN:-python}"
-VENV_DIR="${VENV_DIR:-$PACKAGE_ROOT/.venv-runpod}"
+# Dependencies are disposable Pod runtime state, so keep them on the local
+# container disk. Dataset, cache, and checkpoints remain under the attached
+# persistent volume paths passed by the caller.
+VENV_DIR="${VENV_DIR:-/workspace/opentakeoff-symbol-metric-venv}"
 if [[ ! -x "$VENV_DIR/bin/python" ]]; then
   "$BASE_PYTHON" -m venv --system-site-packages "$VENV_DIR"
 fi

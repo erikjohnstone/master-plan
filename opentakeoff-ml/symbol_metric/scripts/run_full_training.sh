@@ -38,8 +38,9 @@ if [[ -z "$DATASET" || -z "$SOURCE_ROOT" || -z "$HUB_CACHE" || -z "$RUN_DIR" ]];
 fi
 
 PACKAGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-if [[ -x "$PACKAGE_ROOT/.venv-runpod/bin/python" ]]; then
-  PYTHON_BIN="${PYTHON_BIN:-$PACKAGE_ROOT/.venv-runpod/bin/python}"
+DEFAULT_VENV="${VENV_DIR:-/workspace/opentakeoff-symbol-metric-venv}"
+if [[ -x "$DEFAULT_VENV/bin/python" ]]; then
+  PYTHON_BIN="${PYTHON_BIN:-$DEFAULT_VENV/bin/python}"
 else
   PYTHON_BIN="${PYTHON_BIN:-python}"
 fi
