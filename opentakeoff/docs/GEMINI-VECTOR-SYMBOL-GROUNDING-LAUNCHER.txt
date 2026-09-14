@@ -1,0 +1,20 @@
+/goal Work autonomously on the production vector-symbol goal in erikjohnstone/master-plan.
+
+First fetch origin and create a clean worktree from origin/main on a new branch named agent/vector-symbol-grounding-v2. Retrieve the full goal with:
+
+git show origin/codex/vector-symbol-grounding-next-goal:opentakeoff/docs/GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md
+
+Read that entire output and these files completely before acting:
+
+1. opentakeoff-corpus/GOAL.md
+2. opentakeoff/AGENTS.md
+3. the full goal retrieved from branch codex/vector-symbol-grounding-next-goal
+4. the predecessor Symbol Sweep goal/history files that document accepted and reverted approaches
+
+Execute GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md phase by phase. Do not merely summarize it. Keep all symbol truth, installed-quantity decisions, tag/leader/legend association, reconciliation, UI, Agent, and MCP behavior on one shared vector path. Do not modify VectorGrid/table extraction, schedule cell reconstruction, citations, bbox semantics, or existing data contracts. Do not add file/tag/page/coordinate-specific production logic, weaken ground truth, hide per-case overrides, or call a fixture option a fix.
+
+Start by reproducing the honest default, rigid, affine, browser-manual, browser-Agent, and MCP baselines. The 47-case score is not trustworthy unless effective per-case options and real UI behavior are reported separately. Then extend evidence truth to physical-body primitive ownership, build a shared sheet VectorSceneIndex, add high-recall multi-lane body proposals, enforce exclusive primitive ownership and one-to-one tag/body/schedule assignment with abstention, run rigid/affine verification only on isolated support, integrate Legend Learn as a project-local reference bank, and batch/caches the whole-set path to p95 under three minutes post-index.
+
+Use real-document positives, hard negatives, whole-project holdouts, exact source bboxes, parity tests, and before/after metrics. Update opentakeoff-corpus/PROGRESS.md and push each stable phase. Revert approaches that trade one correct family for another. Do not claim production readiness unless the goal's statistical precision, proposal recall, localization, ownership, parity, negative-control, and runtime gates are met. If the corpus is too small for a production claim, state the measured ceiling honestly and continue building the missing evaluation assets.
+
+Do not merge main. Push the execution branch and provide a final evidence-backed report, screenshots, exact commands/results, remaining ceilings, and the commit range for review.
