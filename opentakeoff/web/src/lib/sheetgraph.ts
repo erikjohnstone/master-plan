@@ -6183,6 +6183,27 @@ export function extractAllQuarterTurnedTables(
   const vertical = sheet.spans.filter(isExplicitlyVertical);
   if (vertical.length < 8) return [];
   const pivot = Math.max(...vertical.map((span) => span.x + (span.w || 0)));
+  // B-34 follow-on: sheet.segs (real vector ruling) was silently dropped
+  // here, so every rotated reference/structural table always reached
+  // hasNearbyRuledLine/singleRowSitsInDrawnGrid with segs=undefined. That's
+  // permissive for the former (no segs = assume ruled, see its own comment)
+  // but RESTRICTIVE for the latter (no segs = assume NOT ruled) — so once
+  // B-34 widened singleRowSitsInDrawnGrid's gate to 2-row candidates too,
+  // every real 2-row rotated reference table started failing a check it
+  // never even got to run its real geometry through. Fix: rotate the same
+  // linework the same way the spans themselves are rotated, point-for-point
+  // (px,py) -> (py, pivot-px) — the inverse of `restore` below — so the
+  // structural checks see the sheet's real ruling in the turned frame.
+  const turnSegs = (segs: ArrayLike<number> | undefined): number[] | undefined => {
+    if (!segs || !segs.length) return undefined;
+    const out: number[] = [];
+    const n = Math.floor(segs.length / 4);
+    for (let i = 0; i < n; i++) {
+      const x0 = segs[i * 4], y0 = segs[i * 4 + 1], x1 = segs[i * 4 + 2], y1 = segs[i * 4 + 3];
+      out.push(y0, pivot - x0, y1, pivot - x1);
+    }
+    return out;
+  };
   const turned: SheetSpans = {
     key: sheet.key,
     sheet_number: sheet.sheet_number,
@@ -6194,6 +6215,7 @@ export function extractAllQuarterTurnedTables(
       h: span.w || 0,
       rot: 0,
     })),
+    segs: turnSegs(sheet.segs),
   };
   const restore = ([x0, y0, x1, y1]: Bbox): Bbox =>
     [pivot - y1, x0, pivot - y0, x1];
@@ -6657,19 +6679,43 @@ function clusterGenericColumns(tokens: GraphSpan[]): Anchor[] {
  * gate entirely rather than refuse — the same graceful-degradation posture
  * this file already takes elsewhere; the shape + repeated-column-alignment
  * signals still apply on their own. */
-/** Is a SINGLE data row drawn inside real cell walls?
+/** Is a SMALL (1-2 row) data block drawn inside real cell walls?
  *
- * A one-row candidate is where the generic reader is least able to lean on
- * repetition, so it leans on the drafting instead: a real schedule row is
- * boxed — ruled off from its header above, closed below, and cut into the
- * header's own columns by verticals. A control schematic's scattered callouts
- * that happen to line up for one line have none of that geometry; its dense
- * linework runs through the labels, not around them in a grid.
+ * A one- or two-row candidate is where the generic reader is least able to
+ * lean on repetition, so it leans on the drafting instead: a real schedule
+ * row is boxed — ruled off from its header above, closed below, and cut into
+ * the header's own columns by verticals. A control schematic's scattered
+ * callouts that happen to line up for one line have none of that geometry;
+ * its dense linework runs through the labels, not around them in a grid.
+ * `region`'s own top/bottom edges are tested regardless of how many rows it
+ * spans, so this generalizes to a taller candidate without change — it asks
+ * "is this whole block boxed", not "is this exactly one row".
  *
  * Deliberately STRICTER than hasNearbyRuledLine, which fails OPEN when a
  * sheet supplies no segs: here no linework means the question cannot be
- * answered, and an unanswerable one-row candidate is refused exactly as it
- * was before this test existed.
+ * answered, and an unanswerable candidate is refused exactly as it was
+ * before this test existed.
+ *
+ * ORIGINALLY 1-row only — widened to 2 (2026-09-13, B-34,
+ * TAKEOFF_BUG_CATALOGUE.md) after this exact corpus disproved the design
+ * assumption the 1-row cutoff rested on. The call site's own comment argued
+ * a schematic's coincidental x-alignment "does not produce a SECOND real
+ * data row, because there is no real row/column grid underneath to produce
+ * one" — measured, corpus-found counter-example:
+ * 21_VA_OrangeCounty_PublicSafetyBldg.pdf#52 (a pure P&ID control-diagram
+ * sheet with zero real ruled tables) has an untitled 2-row phantom built
+ * from instrument-bubble callout labels ("HIGH CAPACITY AUTO AIR VENT",
+ * "GLOBAL OUTSIDE AIR HUMIDITY", …) that coincidentally cluster into TWO
+ * x-aligned lines, not one. Confirmed live: this exact candidate, and every
+ * other one this sheet's own dense schematic linework produced (~35, 1 to 6
+ * "rows" each), all fail this same grid check — the phantom slipped through
+ * only because its own row count (2) fell outside the check's own gate.
+ * Left at 2 rather than removing the gate outright: this file's own standing
+ * design keeps "a real table proves its own grid by repeating at least
+ * once" as the general rule for 3+ rows (its own comment cites real 3+ row
+ * reference tables this trusts on repetition alone), and this fix closes
+ * exactly the counter-example measured, not a broader claim that repetition
+ * is never trustworthy.
  */
 function singleRowSitsInDrawnGrid(
   segs: ArrayLike<number> | undefined, x0: number, x1: number,
@@ -7300,14 +7346,24 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // scattered schematic tags — HWR/HWS/CSR/sensor labels). Neither
     // produces a SECOND real data row, because there is no real row/column
     // grid underneath to produce one — it is one-off coincidental
-    // x-alignment, not a repeating structure. Every real reference table
-    // measured in this corpus (bessemer's own DUCTWORK INSULATION SCHEDULE:
-    // 2 rows; DUCTWORK INSULATION TYPE SCHEDULE: 3 rows; itd-d1-lab's own
-    // real ROOF DRAIN/LAVATORY SHIELD/ELECTRONIC EXHAUST VALVE tables: 4-13
-    // rows) clears this trivially — a genuine table proves its own grid by
-    // repeating at least once; this is the generic, vocabulary-free
-    // discriminator the mandate above asked for, not a corpus-specific
-    // title/tag hack.
+    // x-alignment, not a repeating structure... OR SO THIS COMMENT ORIGINALLY
+    // CLAIMED. B-34 (TAKEOFF_BUG_CATALOGUE.md) disproves it with a corpus
+    // counter-example: 21_VA_OrangeCounty_PublicSafetyBldg.pdf#52, a pure
+    // P&ID control-diagram sheet with zero real ruled tables, has an
+    // untitled 2-row phantom built from instrument-bubble callout labels
+    // that coincidentally cluster into TWO x-aligned lines, not one — the
+    // schematic's own dense linework is exactly what makes this possible at
+    // 2 rows where it wasn't measured at 1. `singleRowSitsInDrawnGrid` (see
+    // its own updated comment) is now applied through 2 rows, not just 1,
+    // closing that gap while still trusting 3+ rows on repetition alone —
+    // this file's own real reference tables (bessemer's own DUCTWORK
+    // INSULATION SCHEDULE: 2 rows — verified live it still clears the grid
+    // check, being genuinely ruled; DUCTWORK INSULATION TYPE SCHEDULE: 3
+    // rows; itd-d1-lab's own real ROOF DRAIN/LAVATORY SHIELD/ELECTRONIC
+    // EXHAUST VALVE tables: 4-13 rows) still clear this trivially — a
+    // genuine table proves its own grid by repeating OR by being drawn in
+    // real cell walls; this is the generic, vocabulary-free discriminator
+    // the mandate above asked for, not a corpus-specific title/tag hack.
     // …but "repeats at least once" is a PROXY for the grid, not the grid, and
     // the corpus says the proxy is wrong far more often than it is right: in
     // the 23-document recall sample a one-data-row schedule is ordinary, not
@@ -7324,7 +7380,7 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // no segs cannot distinguish the two, and the old refusal is the safe
     // answer there.
     if (banded.out.length < 1) return { table: null, nextIdx: toIdx };
-    if (banded.out.length < 2 && !singleRowSitsInDrawnGrid(sheet.segs, x0, x1, anchors, banded.region))
+    if (banded.out.length < 3 && !singleRowSitsInDrawnGrid(sheet.segs, x0, x1, anchors, banded.region))
       return { table: null, nextIdx: toIdx };
     // GOAL.md rule 26: a boxed, ruled, repeating-grid region whose own rows
     // are ENTIRELY drawn from the sheet's own title-block/approval-stamp

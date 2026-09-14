@@ -3214,7 +3214,7 @@ OTHER tables into this candidate, not a clean title-block-only capture
 this vocabulary mechanism can safely refuse — left open for a future
 pass with its own dedicated trace rather than guessed at here.
 
-### B-34 — control-diagram instrument-callout labels are clustered into fabricated phantom tables (NOT FIXED — found, traced, disclosed)
+### B-34 — control-diagram instrument-callout labels are clustered into fabricated phantom tables (PARTIAL FIX 2026-09-14: the 1-2 row instances close; 3+ row instances remain open by design)
 
 **Where:** `21_VA_OrangeCounty_PublicSafetyBldg.pdf`, sheets M-701 (#52,
 "CHILLED WATER SYSTEM CONTROLS") and M-703 (#54, "AIR HANDLING UNIT
@@ -3257,6 +3257,88 @@ specifically, a sheet type not previously implicated in this bug
 family. Given this document's controls-diagram sheets span roughly
 M-701 through M-707 (not fully surveyed), this may be a wider source of
 phantom tables than the 2 instances confirmed here.
+
+**FIX (2026-09-14) — the page #52 instance, and its whole 1-2-row
+class:** live debug instrumentation (`OPENTAKEOFF_DEBUG_B34`-gated
+`console.error` in `sheetgraph.ts`, added, run, and fully reverted —
+same discipline as B-32/B-33's own trace probes) confirmed that
+`singleRowSitsInDrawnGrid` — the existing ruled-box check that already
+protects the ordinary (non-rotated) 1-row reference-table path — ALSO
+correctly rejects the page #52 phantom the moment it is actually asked
+to run on it: the callout cluster has no real horizontal/vertical ruling
+above and below it, so the check returns `false` for it exactly as it
+does for every other unruled phantom this catalogue documents. The only
+reason it survived is that the check was gated to 1-row candidates only
+(`banded.out.length < 2`); the page #52 phantom happens to band as a
+2-row candidate, one row outside the gate. Widened the gate in
+`sheetgraph.ts` from `banded.out.length < 2` to `banded.out.length < 3`
+(the ordinary-table call site) so 2-row candidates get the same real
+ruled-box scrutiny 1-row candidates already did. `singleRowSitsInDrawnGrid`
+needed no logic change — its own top/bottom-rule and column-wall checks
+already generalize to any row count; only the row-count GATE deciding
+when to invoke it was too narrow. Verified this closes exactly the page
+#52 phantom and does not touch page #54's two larger (3-row, 9-row)
+phantoms, left open below.
+
+**Real-world verification, not assumed:** the code's own comment on
+this exact check names the bessemer-mechanical-bidset.pdf M601 sheet's
+real 2-row `DUCTWORK INSULATION SCHEDULE` as the case this widening
+risks breaking. Traced live against the real PDF: unaffected,
+byte-identical before/after, because that real table sits inside a
+complete drawn ruled box the synthetic phantom never had.
+
+**A second, related bug this surfaced and also fixed:** the same gate
+widening broke 4 of this repo's own pre-existing unit tests, all for
+the same reason — `singleRowSitsInDrawnGrid` returns `false`
+(unconditionally, not "assume ruled") when no `segs` are supplied, and
+`extractAllQuarterTurnedTables()` (the rotated/quarter-turned table
+path) was silently DROPPING `sheet.segs` entirely when building its
+internal rotated `SheetSpans` — every rotated reference/finish table
+candidate reached this check with `segs` always `undefined`, regardless
+of the real sheet's own ruling. Before this widening that never
+mattered (the gate excluded 2+-row candidates, and the rotated path's
+2-row candidates were never checked at all), but it meant the rotated
+path was flying blind on real ruling for years, relying entirely on the
+permissive default of `hasNearbyRuledLine` (which treats "no segs" as
+"assume ruled", the opposite default). Fixed by rotating `sheet.segs`
+into the turned frame the exact same way spans themselves are rotated
+(`(px,py) -> (py, pivot-px)`, the inverse of the same `restore()` this
+function already uses to map results back) and passing it through.
+
+**This fix is a second, independent, real win, not just a test
+patch:** live-traced against `bldg5406-hvac-demo-mechanical.pdf` (the
+corpus's own held-out doc for this quarter-turned path — see
+PROGRESS.md's "Building 5406's nine-row AIR TERMINAL BOX SCHEDULE").
+Before this fix: 26 rotated/quarter-turned "reference" tables. After:
+14. The 12 removed are ALL prose fragments from a rotated sequence-of-
+operations narrative sourced as phantom tables by the exact same
+mechanism as B-16/B-29/B-30/B-33/B-34 — titles like `"SHOW ON"`,
+`"AIR TEMPERATURE AND USE AS REQUIRED FOR SETPOINT"`, `"SETPOINT, THE
+ZONE DAMPER SHALL MODULATE BETWEEN THE"`, `"OVERRIDE THE SCHEDULE AND
+PLACE THE UNIT INTO AN OCCUPIED"`, `"MIXING VALVE"`, `"SITE FLOW
+INDICATOR"` — none of them real tables. Every genuine rotated schedule
+on that same document survives byte-identical: `AIR HANDLING UNIT
+SCHEDULE` (1 row), `AIR TERMINAL BOX SCHEDULE` (9 rows, the named
+regression precedent), `FAN SCHEDULE` (5 rows), `P SCHEDULE` (2 rows),
+`AIR SEPARATOR SCHEDULE` (1 row), `GRILLE, REGISTER AND DIFFUSER
+SCHEDULE` (7 rows) — all unchanged.
+
+**Full regression:** `node --import tsx --test test/sheetgraph.test.ts
+test/vectorTakeoffPipeline.test.ts test/scheduleLanguageScan.test.ts
+test/tableExtractorReconcile.test.ts test/schedulePlanReconcile.test.ts
+test/vectorGridAdapter.test.ts` — 231/231 pass (4 pre-existing fixtures
+needed their deliberately-minimal ruling geometry filled out to a
+complete ruled box now that the check they exercise runs on 2-row
+candidates too; no test assertion was weakened to get there).
+
+**What remains open:** page #54's own two larger phantoms
+(`"FURNISHED BY FIRE"`, 3 rows; `"RETURN AIR"`, 9 rows) are deliberately
+untouched — the gate stops at `< 3` on purpose, since a 3+-row phantom
+built the same way as a 3+-row real repeated-tier schedule table is a
+much harder discrimination the corpus has not yet supplied enough
+counter-examples to make safely. Re-verified live on this same slice
+(`21_VA_OrangeCounty_PublicSafetyBldg.pdf#54`): both phantoms still
+present, unchanged, exactly as expected.
 
 ### B-35 — a firm's own logo tagline text is fabricated into a phantom table, repeated across 13 different sheets of one document (FIXED 2026-09-13)
 

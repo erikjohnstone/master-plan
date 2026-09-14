@@ -727,6 +727,26 @@ test("quarter-turned schedules run the same finish and structural-reference gram
       vertical("AS-2", 240, 20), vertical("ALUMINUM", 240, 120),
       vertical("WHITE", 240, 240), vertical("RETURN", 240, 340),
     ],
+    // Real ruled boxes for both tables, given in the SAME original
+    // (pre-rotation) space as the spans above — extractAllQuarterTurnedTables
+    // rotates segs the identical way it rotates spans (B-34 follow-on fix:
+    // segs used to be silently dropped for the rotated path entirely). Each
+    // table gets a top/bottom rule pair plus 2 verticals landing on real
+    // column anchors, once transformed into the turned (reading) frame:
+    //  - FAN SCHEDULE (rowX 560-628, pivot=628): top/bottom rules land at
+    //    turned y=35/75, verticals at turned x=110 (QTY.) / 230 (MFR/MODEL).
+    //  - AIR SEPARATOR SCHEDULE (rowX 240-300): top/bottom rules land at
+    //    turned y=345/395, verticals at turned x=140 (MATERIAL) / 255 (FINISH).
+    segs: [
+      593, 0, 593, 400,   // FAN SCHEDULE: top rule (turned y=35)
+      553, 0, 553, 400,   // FAN SCHEDULE: bottom rule (turned y=75)
+      553, 110, 593, 110, // FAN SCHEDULE: QTY. column wall
+      553, 230, 593, 230, // FAN SCHEDULE: MANUFACTURER/MODEL column wall
+      283, 0, 283, 400,   // AIR SEPARATOR SCHEDULE: top rule (turned y=345)
+      233, 0, 233, 400,   // AIR SEPARATOR SCHEDULE: bottom rule (turned y=395)
+      233, 140, 283, 140, // AIR SEPARATOR SCHEDULE: MATERIAL column wall
+      233, 255, 283, 255, // AIR SEPARATOR SCHEDULE: FINISH column wall
+    ],
   };
   const tables = extractAllQuarterTurnedTables(sheet, {}, true);
   const fan = tables.find((table) => table.title?.text === "FAN SCHEDULE");
@@ -2886,7 +2906,23 @@ const REF_TABLE_SPANS: GraphSpan[] = [
 // 60% of the table's own column width — the real, measured "genuinely
 // boxed" signal (see hasNearbyRuledLine's own comment); every real table
 // this pass targets in the corpus is drawn boxed.
-const REF_TABLE_RULE = [150, 140, 1030, 140];
+//
+// Widened (2026-09-13, B-34, TAKEOFF_BUG_CATALOGUE.md) beyond the single
+// top rule this fixture originally carried: singleRowSitsInDrawnGrid now
+// also gates a 2-row candidate (not only a 1-row one), so a fixture meant
+// to represent "a real, genuinely ruled reference table" needs the same
+// full box a real one is drawn with — a bottom rule closing the block and
+// verticals cutting it into its own 3 columns — not just the one rule the
+// narrower, pre-fix check needed. Real bessemer M601 IS drawn this way in
+// the source PDF (confirmed live, unaffected by the fix); this fixture had
+// simply never needed to say so before.
+const REF_TABLE_RULE = [
+  150, 140, 1030, 140, // top: closes the header off from the data below
+  150, 245, 1030, 245, // bottom: closes the last data row off
+  219, 140, 219, 245,  // vertical: SYSTEM TYPE column wall
+  722, 140, 722, 245,  // vertical: INSULATION TYPE column wall
+  889, 140, 889, 245,  // vertical: INSULATION OR LINER THICKNESS column wall
+];
 
 test("reference kind: a real, vocabulary-free schedule table extracts correctly (real bessemer M601 coordinates)", () => {
   const sheet: SheetSpans = {
@@ -2972,7 +3008,18 @@ test("reference kind: button subrows do not corrupt their spanning control-stati
   ];
   const sheet: SheetSpans = {
     key: "controls.pdf#1", sheet_number: "E601", spans,
-    segs: [0, 75, 1140, 75],
+    // A complete ruled box, not just the top rule: since B-34 widened
+    // singleRowSitsInDrawnGrid to also gate 2-row candidates, this real
+    // 2-row table needs its bottom rule (below the last button subrow,
+    // y=145+19=164) and 2+ verticals landing near real column anchors
+    // (ZONES/CONTROLLED centers at 280, FUNCTION center at 760) or it
+    // would fail the grid check the same way a phantom now does.
+    segs: [
+      0, 75, 1140, 75,     // top: closes the header off from the data below
+      0, 170, 1140, 170,   // bottom: closes the last button subrow off
+      280, 75, 280, 170,   // vertical: ZONES / CONTROLLED column wall
+      760, 75, 760, 170,   // vertical: FUNCTION column wall
+    ],
   };
   const tab = buildSheetGraph([sheet]).tables.find((t) => t.title?.text === "LIGHTING CONTROL STATIONS");
   assert.ok(tab);
