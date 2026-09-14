@@ -60,9 +60,31 @@ const page = await context.newPage();
 page.setDefaultTimeout(120_000);
 const pageErrors = [];
 const consoleErrors = [];
+const structuredAiResponses = [];
 page.on("pageerror", (error) => pageErrors.push(String(error)));
 page.on("console", (message) => {
   if (message.type() === "error") consoleErrors.push(message.text());
+});
+page.on("response", async (response) => {
+  if (!response.url().includes("/cerebras-api/v1/chat/completions")) return;
+  try {
+    const body = await response.json();
+    const choice = body?.choices?.[0] || {};
+    const content = choice?.message?.content;
+    let contentParses = false;
+    if (typeof content === "string") {
+      try { JSON.parse(content); contentParses = true; } catch { /* diagnostic only */ }
+    }
+    structuredAiResponses.push({
+      status: response.status(),
+      finish_reason: choice?.finish_reason ?? null,
+      content_length: typeof content === "string" ? content.length : null,
+      reasoning_length: typeof choice?.message?.reasoning === "string" ? choice.message.reasoning.length : null,
+      content_parses: contentParses,
+    });
+  } catch {
+    structuredAiResponses.push({ status: response.status(), response_json: false });
+  }
 });
 
 await page.addInitScript(() => {
@@ -156,7 +178,7 @@ try {
   if (JSON.stringify(receipt.compile_order) !== JSON.stringify(expectedOrder)) {
     throw new Error(`Compile order drifted: ${JSON.stringify(receipt.compile_order)}`);
   }
-  const expectedAnalysisOrder = ["control_schematics_and_risers", "schedule_plan_reconcile"];
+  const expectedAnalysisOrder = ["control_schematics_and_risers", "schedule_plan_reconcile", "sequence_interpretation"];
   if (JSON.stringify(receipt.analysis_order) !== JSON.stringify(expectedAnalysisOrder)) {
     throw new Error(`Analysis order drifted: ${JSON.stringify(receipt.analysis_order)}`);
   }
@@ -240,6 +262,15 @@ try {
     throw new Error("The Agent bypassed the mandatory human release gate.");
   }
   if (!receipt.reconcile?.summary) throw new Error("The complete run has no schedule-plan reconciliation summary.");
+  const sequenceInterpretation = receipt.sequence_interpretation;
+  if (!["ready", "retained"].includes(sequenceInterpretation?.status)) {
+    throw new Error(`The complete run did not retain source-validated SOO interpretation: ${JSON.stringify(sequenceInterpretation)}`);
+  }
+  if (Number(sequenceInterpretation.coverage?.eligible_clauses || 0) !== sequenceSectionCount
+      || Number(sequenceInterpretation.coverage?.accepted_clauses || 0) < 1
+      || Number(sequenceInterpretation.behaviors || 0) < 1) {
+    throw new Error(`SOO interpretation coverage is not meaningful: ${JSON.stringify(sequenceInterpretation)}`);
+  }
 
   const agentText = await page.locator(".agent-workspace").innerText().catch(() => "");
   writeFileSync(resolve(outDir, "agent-result.txt"), agentText);
@@ -269,7 +300,27 @@ try {
   await page.waitForSelector('[aria-label="Takeoff"]');
   await page.waitForTimeout(750);
   const panel = page.locator('[aria-label="Takeoff"]');
-  const resultTab = panel.locator("button", { hasText: /^Takeoff$/ }).first();
+
+  // Capture the complete guided review journey against this same real Agent
+  // result. These are navigation-only actions: no checkbox is selected, no
+  // review decision is recorded, and no snapshot is approved.
+  const summaryView = panel.getByRole("button", { name: "Summary", exact: true });
+  await summaryView.click();
+  await panel.locator("[data-bas-estimator-overview]").waitFor();
+  await page.screenshot({ path: resolve(outDir, "02-journey-summary.png"), fullPage: true });
+
+  const captureStage = async (id, filename, readySelector) => {
+    await panel.locator(`[data-bas-journey-stage="${id}"]`).click();
+    if (readySelector) await panel.locator(readySelector).waitFor();
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: resolve(outDir, filename), fullPage: true });
+  };
+  await captureStage("scope", "03-stage-1-scope.png", '[aria-label="Scope and coverage"]');
+  await captureStage("equipment", "04-stage-2-equipment.png", 'table[aria-label="Equipment table"], [data-takeoff-group-rail]');
+  await captureStage("grounding", "05-stage-3-plan-grounding.png", '[data-takeoff-group-rail]');
+  await captureStage("points", "06-stage-4-points.png", '[aria-label="Grounded point lists"]');
+
+  const resultTab = panel.locator('[data-bas-journey-stage="equipment"]').first();
   if (await resultTab.count()) {
     await resultTab.click();
     await page.waitForTimeout(500);
@@ -397,7 +448,7 @@ try {
     await page.screenshot({ path: resolve(outDir, "02-source-comparison.png"), fullPage: true });
 
     await comparison.getByRole("button", { name: /Back to takeoff$/ }).click();
-    const comparisonResultTab = panel.locator("button", { hasText: /^Takeoff$/ }).first();
+    const comparisonResultTab = panel.locator('[data-bas-journey-stage="equipment"]').first();
     if (await comparisonResultTab.count()) await comparisonResultTab.click();
     const comparisonRow = panel.locator("tbody > tr").filter({ hasText: rowTag }).filter({
       has: page.locator(planAction),
@@ -419,7 +470,7 @@ try {
 
     await page.evaluate(() => window.__opentakeoff.openTakeoff());
     await panel.waitFor({ state: "visible" });
-    const reopenedResultTab = panel.locator("button", { hasText: /^Takeoff$/ }).first();
+    const reopenedResultTab = panel.locator('[data-bas-journey-stage="equipment"]').first();
     if (await reopenedResultTab.count()) await reopenedResultTab.click();
     const reopenedRow = panel.locator("tbody > tr").filter({ hasText: rowTag }).filter({
       has: page.locator(planAction),
@@ -460,12 +511,9 @@ try {
     if (await reviewSequences.count()) {
       await reviewSequences.click();
     } else {
-      const pointsTab = panel.getByRole("button", { name: "Point lists", exact: true });
-      if (!await pointsTab.count()) throw new Error("Grounded sequences exist but the BAS evidence workspace is unavailable.");
-      await pointsTab.click();
-      const sequencesButton = panel.getByRole("button", { name: "Sequences & links", exact: true });
-      await sequencesButton.waitFor();
-      await sequencesButton.click();
+      const controlsStage = panel.locator('[data-bas-journey-stage="controls"]');
+      if (!await controlsStage.count()) throw new Error("Grounded sequences exist but the BAS controls review stage is unavailable.");
+      await controlsStage.click();
     }
     const sequenceWorkspace = panel.getByRole("region", { name: "Sequences and comparison links", exact: true });
     await sequenceWorkspace.waitFor();
@@ -506,9 +554,11 @@ try {
     }
     const clauseTable = sequenceWorkspace.getByRole("table", { name: "Source sequence clauses", exact: true });
     const clauseRows = await clauseTable.locator("tbody > tr").count();
-    const sourceButtons = await sequenceWorkspace.getByRole("button", { name: "View source", exact: true }).count();
+    const sourceButtons = await sequenceWorkspace.getByRole("button", { name: "View full clause", exact: true }).count();
     const pointSourceButtons = sequenceWorkspace.getByRole("button", { name: "View point source", exact: true });
+    const aiEvidenceButtons = sequenceWorkspace.getByRole("button", { name: "View evidence", exact: true });
     const pointSourceButtonCount = await pointSourceButtons.count();
+    const aiEvidenceButtonCount = await aiEvidenceButtons.count();
     const viewSequenceEnabled = await sequenceWorkspace.getByRole("button", { name: "View sequence on drawing", exact: true }).isEnabled();
     if (readerCounts.body !== sequenceCount || optionCount !== readerCounts.body + readerCounts.review) {
       const labels = await sequenceSelect.locator("option").allTextContents();
@@ -517,10 +567,14 @@ try {
     if (sequenceSectionCount > 0 && (clauseRows < 1 || sourceButtons < 1 || !viewSequenceEnabled)) {
       throw new Error(`Grounded sequence evidence is not inspectable: clauses=${clauseRows}, source_buttons=${sourceButtons}, view_enabled=${viewSequenceEnabled}.`);
     }
-    if (minimums.soo_point_candidates > 0 && pointSourceButtonCount < 1) {
-      throw new Error("The selected grounded sequence exposes no exact labeled-point source action.");
+    if (minimums.soo_point_candidates > 0 && pointSourceButtonCount + aiEvidenceButtonCount < 1) {
+      throw new Error("The selected grounded sequence exposes no exact point or interpretation evidence action.");
     }
     const sequenceText = await sequenceWorkspace.innerText();
+    const aiCards = await sequenceWorkspace.locator("[data-ai-interpretation]").count();
+    if (aiCards < 1 || !/Source-validated proposal/i.test(sequenceText)) {
+      throw new Error("The retained SOO interpretation is absent from the sequence reader.");
+    }
     const clauseText = await clauseTable.innerText();
     if (requiredSooTag && !sequenceText.includes(requiredSooTag)) {
       throw new Error(`Required SOO tag is absent or truncated in the reader: ${requiredSooTag}`);
@@ -551,6 +605,8 @@ try {
       selected_sequence_clause_rows: clauseRows,
       selected_sequence_source_buttons: sourceButtons,
       selected_sequence_point_source_buttons: pointSourceButtonCount,
+      selected_sequence_ai_cards: aiCards,
+      selected_sequence_ai_evidence_buttons: aiEvidenceButtonCount,
       required_soo_tag: requiredSooTag || null,
       required_sequence_title: requiredSequenceTitle || null,
       forbidden_sequence_text: forbiddenSequenceText,
@@ -558,6 +614,7 @@ try {
       exported_source_pages: activeCapture.narrative_sources.pages.length,
     };
     await page.screenshot({ path: resolve(outDir, "04-sequence-reader.png"), fullPage: true });
+    await page.screenshot({ path: resolve(outDir, "04a-sequence-ai.png"), fullPage: true });
     if (pointSourceButtonCount) {
       if (!await pointSourceButtons.first().isEnabled()) throw new Error("The exact SOO point-source action is disabled.");
       const requiredCandidate = requiredSooTag
@@ -575,14 +632,17 @@ try {
     }
   }
 
-  const workflow = panel.locator("button", { hasText: /^Workflow data$/ });
+  await captureStage("exceptions", "08-stage-6-issues.png", '[aria-label="Project BAS review"]');
+  await captureStage("release", "09-stage-7-approve-export.png", '[aria-label="BAS snapshots"]');
+
+  const workflow = panel.getByRole("button", { name: "Audit data", exact: true });
   if (await workflow.count()) {
     await workflow.click();
     await page.waitForTimeout(500);
   }
   await page.screenshot({ path: resolve(outDir, "03-workflow-review.png"), fullPage: true });
 
-  const takeoffTab = panel.locator("button", { hasText: /^Takeoff$/ });
+  const takeoffTab = panel.locator('[data-bas-journey-stage="equipment"]');
   if (await takeoffTab.count()) await takeoffTab.click();
   const csvButton = panel.locator("button", { hasText: /^CSV$/ }).first();
   let csvHeader = null;
@@ -635,6 +695,7 @@ try {
       category_count: value?.category_count ?? null,
     }])),
     reconciliation: receipt.reconcile,
+    sequence_interpretation: sequenceInterpretation,
     matched_source_comparison: matchedSourceComparison,
     inspection_domains: Object.keys(receipt.inspections || {}),
     release_status: receipt.release_status,
@@ -644,7 +705,7 @@ try {
     csv_header: csvHeader,
     page_errors: pageErrors,
     console_errors: consoleErrors.slice(0, 20),
-    artifacts: ["01-agent-result.png", "02-takeoff-table.png", "02-source-comparison.png", "02a-plan-match-source.png", "02b-schedule-row-source.png", "03-workflow-review.png", "04-sequence-reader.png", "05-soo-point-source.png", "complete-bas-takeoff.csv", "bas-evidence-and-history.takeoff.json"]
+    artifacts: ["01-agent-result.png", "02-journey-summary.png", "03-stage-1-scope.png", "04-stage-2-equipment.png", "05-stage-3-plan-grounding.png", "06-stage-4-points.png", "04-sequence-reader.png", "04a-sequence-ai.png", "08-stage-6-issues.png", "09-stage-7-approve-export.png", "02-takeoff-table.png", "02-source-comparison.png", "02a-plan-match-source.png", "02b-schedule-row-source.png", "03-workflow-review.png", "05-soo-point-source.png", "complete-bas-takeoff.csv", "bas-evidence-and-history.takeoff.json"]
       .filter((name) => existsSync(resolve(outDir, name))),
   };
   writeFileSync(resolve(outDir, "summary.json"), JSON.stringify(summary, null, 2));
@@ -656,6 +717,7 @@ try {
     pageErrors.length ? `Page errors:\n${pageErrors.join("\n")}` : "Page errors: none captured",
     consoleErrors.length ? `Console errors:\n${consoleErrors.join("\n")}` : "Console errors: none captured",
   ].join("\n\n") + "\n");
+  writeFileSync(resolve(outDir, "structured-ai-diagnostics.json"), JSON.stringify(structuredAiResponses, null, 2));
   throw error;
 } finally {
   await context.close();

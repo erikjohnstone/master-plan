@@ -24,13 +24,20 @@
  */
 import { chromium } from "playwright";
 import { readFileSync, mkdirSync, writeFileSync, existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
 import { execSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
-const BENCH = "/home/user/master-plan/HVAC BAS Benchmark Collection";
+const webRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const BENCH = process.env.OT_SWEEP_BENCH
+  || resolve(webRoot, "../..", "HVAC BAS Benchmark Collection");
 const GT = resolve(BENCH, "ground_truth/symbol_sweep/cases.json");
 const OUT = process.env.OT_SWEEP_UI_OUT || "/tmp/ot-sweep-ui";
 const baseUrl = process.env.OT_UI_URL || "http://127.0.0.1:5173/";
+const surface = String(process.env.OT_SWEEP_UI_SURFACE || "manual").toLowerCase();
+if (!new Set(["manual", "agent"]).has(surface)) {
+  throw new Error(`Unsupported OT_SWEEP_UI_SURFACE ${JSON.stringify(surface)}; use manual or agent`);
+}
 
 const manifest = JSON.parse(readFileSync(GT, "utf8"));
 if (manifest.schema !== "opentakeoff.symbol_sweep_ground_truth.v1") {
@@ -72,7 +79,8 @@ async function waitForGraphProcsToDrain(maxCount = 1, maxWaitMs = 120_000) {
 function assignInstances(expected, predicted) {
   const choices = expected.map((e) => predicted
     .map((p, i) => ({ i, d: dist(e.at, p.at) }))
-    .filter((x) => x.d <= e.tolerance_px)
+    .filter((x) => x.d <= e.tolerance_px
+      && (e.page === undefined || predicted[x.i].page === e.page))
     .sort((a, b) => a.d - b.d || a.i - b.i));
   const owner = new Array(predicted.length).fill(-1);
   const visit = (ei, seen) => {
@@ -98,7 +106,12 @@ function assignInstances(expected, predicted) {
 const rows = [];
 let passed = 0, failed = 0;
 
-const browser = await chromium.launch({ headless: true, executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox", "--disable-dev-shm-usage"] });
+const browserPath = process.env.OT_BROWSER_PATH || "/opt/pw-browsers/chromium";
+const browser = await chromium.launch({
+  headless: true,
+  ...(existsSync(browserPath) ? { executablePath: browserPath } : {}),
+  args: ["--no-sandbox", "--disable-dev-shm-usage"],
+});
 
 for (const c of cases) {
   const errors = [];
@@ -126,70 +139,105 @@ for (const c of cases) {
   const page = await context.newPage();
   page.on("pageerror", (e) => errors.push(`pageerror ${String(e).slice(0, 200)}`));
   const started = Date.now();
+  const stageMs = { index: null, geometry: null, sweep: null };
   try {
     await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
     await page.waitForSelector('input[name="sheet-file"]', { state: "attached", timeout: 60_000 });
     await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
     await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
+    const indexedAt = Date.now();
+    stageMs.index = indexedAt - started;
 
     const key = await page.evaluate(async (pageNo) => {
       const k = window.__opentakeoff.probe.sheets()[0]?.key || "";
       const file = k.includes("#") ? k.slice(0, k.lastIndexOf("#")) : k;
-      const target = `${file}#${pageNo}`;
+      // Page 1 is the app's canonical bare file key; `file#1` names no panel
+      // or vector cache entry. Waiting on that invented key made the corpus's
+      // one page-1 case look like an eight-minute geometry timeout even while
+      // the real page was ready under `file`.
+      const target = pageNo === 1 ? file : `${file}#${pageNo}`;
       window.__opentakeoff.probe.openSheets([target]);
       return target;
     }, c.page);
-    // The corpus's largest sheets (100k+ segments) measured up to ~230s for
-    // this same extraction via the CLI path (mcp/scripts/symbol-sweep-
-    // corpus.mjs's own case-03 timings); 120s was too tight and produced a
-    // real timeout here, not a hang. 300s STILL timed out once, under
-    // contention from a prior case's still-draining server-side subprocess
-    // (waitForGraphProcsToDrain above exists specifically to prevent that
-    // contention going forward) — widened further for real margin.
     await page.waitForFunction((k) => (window.__opentakeoff.probe.segCount(k) || 0) > 0, key, { timeout: 480_000 });
+    const geometryReadyAt = Date.now();
+    stageMs.geometry = geometryReadyAt - indexedAt;
 
-    // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's own case-44 Finding: segCount
-    // going > 0 is NOT a reliable "runSymbolSweep can now read the segs"
-    // signal — traced directly (a temporary debug probe, not committed) to
-    // a real race where sweepRect's own probe.sweepRect() returns {ok:true}
-    // but runSymbolSweep silently refused with "no vector linework" because
-    // vectorSegsRef wasn't yet stably populated for this key, even though
-    // segCount() already reported >0. A 5s settle wait made it reproduce
-    // clean every time. Retry the sweep itself (not just the poll below) so
-    // a case that hits this race gets a real second attempt instead of a
-    // false "no review opened".
-    let swept = await page.evaluate(({ k, rect }) => window.__opentakeoff.probe.sweepRect(k, rect), { k: key, rect: c.seed_rect });
-    if (swept?.error) errors.push(`sweep error: ${swept.error}`);
-    let opened = await page.waitForFunction(() => window.__opentakeoff.probe.sweep() != null, null, { timeout: 15_000 }).then(() => true).catch(() => false);
-    if (!opened) {
-      await page.waitForTimeout(2000);
-      swept = await page.evaluate(({ k, rect }) => window.__opentakeoff.probe.sweepRect(k, rect), { k: key, rect: c.seed_rect });
-      if (swept?.error) errors.push(`sweep error (retry): ${swept.error}`);
-      // Poll, don't sleep a fixed amount — affine (continuous rotation +
-      // bounded stretch/shear) is the standard search now, and a dense
-      // sheet can take several real seconds to finish; a short fixed wait
-      // here was measured to occasionally read the review before React
-      // applied it.
-      await page.waitForFunction(() => window.__opentakeoff.probe.sweep() != null, null, { timeout: 60_000 }).catch(() => {});
+    let sweep = null;
+    if (c.scope === "set" || surface === "agent") {
+      // A set-wide symbol request is an Agent operation, not the manual
+      // marquee's sheet-only review. OT_SWEEP_UI_SURFACE=agent also exercises
+      // that same bridge for sheet requests, including its dense-sheet Session
+      // fallback. Exercise the real browser Agent bridge,
+      // which calls Session.symbolSweep through the production endpoint, and
+      // denormalize each returned sheet into the frozen PDF-pixel frame before
+      // applying the same one-to-one corpus scorer below.
+      const agentSweep = await page.evaluate(
+        ({ k, rect, scope }) => window.__opentakeoff.probe.agentSweep(k, rect, scope),
+        { k: key, rect: c.seed_rect, scope: c.scope === "set" ? "set" : "sheet" },
+      );
+      if (agentSweep?.error) errors.push(`agent sweep error: ${agentSweep.error}`);
+      else if (agentSweep) {
+        const pageOf = (sheet) => Number(String(sheet || "").slice(String(sheet || "").lastIndexOf("#") + 1));
+        const denorm = (at, dims) => [at[0] * dims[0], at[1] * dims[1]];
+        const seedAt = Array.isArray(agentSweep.seed?.at)
+          ? denorm(agentSweep.seed.at, c.page_size_px)
+          : agentSweep.seed?.center;
+        const sheetRows = c.scope === "set"
+          ? (agentSweep.sheets || []).map((sheet) => ({
+            sheet: sheet.sheet,
+            dims: sheet.image_size_px || c.page_size_px,
+            matches: sheet.matches || [],
+            withheld: sheet.withheld || [],
+          }))
+          : [{
+            sheet: key,
+            dims: agentSweep.image_size_px || c.page_size_px,
+            matches: agentSweep.matches || [],
+            withheld: agentSweep.withheld || [],
+          }];
+        sweep = {
+          seed: { at: seedAt, label: agentSweep.seed?.label ?? null },
+          matches: sheetRows.flatMap((sheet) => {
+            return sheet.matches.map((match) => ({
+              at: denorm(match.at, sheet.dims), score: match.score, page: pageOf(sheet.sheet),
+            }));
+          }),
+          questions: sheetRows.flatMap((sheet) => {
+            return sheet.withheld.map((match) => ({
+              at: denorm(match.at, sheet.dims), score: match.score, page: pageOf(sheet.sheet),
+            }));
+          }),
+        };
+        if (agentSweep.complete === false) errors.push("agent sweep incomplete: one or more candidate caps dropped work");
+      }
+    } else {
+      // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's own case-44 Finding:
+      // segCount going > 0 is NOT a reliable "runSymbolSweep can now read the
+      // segs" signal. Retry the real manual sweep itself so that narrow race
+      // cannot manufacture a false "no review opened" result.
+      let swept = await page.evaluate(({ k, rect }) => window.__opentakeoff.probe.sweepRect(k, rect), { k: key, rect: c.seed_rect });
+      if (swept?.error) errors.push(`sweep error: ${swept.error}`);
+      let opened = await page.waitForFunction(() => window.__opentakeoff.probe.sweep() != null, null, { timeout: 15_000 }).then(() => true).catch(() => false);
+      if (!opened) {
+        await page.waitForTimeout(2000);
+        swept = await page.evaluate(({ k, rect }) => window.__opentakeoff.probe.sweepRect(k, rect), { k: key, rect: c.seed_rect });
+        if (swept?.error) errors.push(`sweep error (retry): ${swept.error}`);
+        await page.waitForFunction(() => window.__opentakeoff.probe.sweep() != null, null, { timeout: 60_000 }).catch(() => {});
+      }
+      sweep = await page.evaluate(() => {
+        const s = window.__opentakeoff.probe.sweep();
+        if (!s) return null;
+        return {
+          seed: { at: s.seed.center, label: s.seed.label?.label ?? null },
+          matches: s.matches.map((m) => ({ at: m.at, score: m.score })),
+          // "questions" are the UI's own de-duplicated withheld clusters.
+          questions: s.questions.map((q) => ({ at: q.at, score: q.score })),
+        };
+      });
     }
-
-    const sweep = await page.evaluate(() => {
-      const s = window.__opentakeoff.probe.sweep();
-      if (!s) return null;
-      return {
-        seed: { at: s.seed.center, label: s.seed.label?.label ?? null },
-        matches: s.matches.map((m) => ({ at: m.at, score: m.score })),
-        // "questions" are the UI's own de-duplicated withheld clusters
-        // (symbol_sweep's raw `withheld`, merged when several rotational
-        // readings of one instance sit within a quarter-marquee radius —
-        // see runSymbolSweep's own comment on clusterR). Read the RAW
-        // per-reading `at` from each cluster's own first reading for the
-        // nearest-miss diagnostic below, same spirit as the MCP script's
-        // own nearest-withheld line.
-        questions: s.questions.map((q) => ({ at: q.at, score: q.score })),
-      };
-    });
-    if (!sweep) errors.push("no review opened");
+    stageMs.sweep = Date.now() - geometryReadyAt;
+    if (!sweep) errors.push(c.scope === "set" || surface === "agent" ? "no agent sweep result" : "no review opened");
     else {
       if (!errors.length && sweep.seed.label !== (c.seed.tag ?? null)) {
         errors.push(`seed tag ${sweep.seed.label ?? "<none>"} != ${c.seed.tag ?? "<none>"}`);
@@ -237,9 +285,10 @@ for (const c of cases) {
   const elapsedMs = Date.now() - started;
   const ok = errors.length === 0;
   if (ok) passed++; else failed++;
-  console.log(`${ok ? "PASS" : "FAIL"} ${c.id} in ${elapsedMs} ms`);
+  const timingSummary = `index=${stageMs.index ?? "?"} geometry=${stageMs.geometry ?? "?"} sweep=${stageMs.sweep ?? "?"}`;
+  console.log(`${ok ? "PASS" : "FAIL"} ${c.id} in ${elapsedMs} ms (${timingSummary})`);
   for (const e of errors) console.log(`  - ${e}`);
-  rows.push({ id: c.id, ok, elapsedMs, errors });
+  rows.push({ id: c.id, ok, elapsedMs, stageMs, errors });
 }
 
 await browser.close();

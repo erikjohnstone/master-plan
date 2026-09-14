@@ -135,6 +135,7 @@ export function countPrefixedScheduleTagOccurrences(spans, key) {
  * @param {string|null|undefined} [p.failureType]
  * @param {string|null|undefined} [p.reason]
  * @param {boolean} [p.scheduleDefinitionOnly]
+ * @param {"symbol_geometry"|"explicit_installation_note"|"tag_text_only"|"mixed_geometry_and_tag_text"|"unverified"|null} [p.installedEvidenceGrade]
  * @returns {ReconcileStatus}
  */
 export function classifyReconcileStatus({
@@ -144,6 +145,7 @@ export function classifyReconcileStatus({
   failureType,
   reason,
   scheduleDefinitionOnly = false,
+  installedEvidenceGrade = null,
 }) {
   const r = String(reason || "");
   if (failureType === "REFUSED_NO_SCALE" || /\bset the scale\b|REFUSED_NO_SCALE/i.test(r)) {
@@ -155,6 +157,12 @@ export function classifyReconcileStatus({
   if (failureType === "INCOMPLETE_PLAN_SEARCH" || /plan search incomplete|count is a floor|candidate work cap/i.test(r)) {
     return "AMBIGUOUS";
   }
+  // Exact authored text proves that a mark was printed on a plan. It does
+  // not, by itself, prove that the nearby glyph is the scheduled device or
+  // establish a releasable installed quantity. Keep this as a review state
+  // until the shared geometric path verifies the marker.
+  if (installedEvidenceGrade === "tag_text_only" || installedEvidenceGrade === "mixed_geometry_and_tag_text") return "AMBIGUOUS";
+  if (itemStatus === "resolved" && installedEvidenceGrade === "unverified") return "AMBIGUOUS";
   if (/exploded|vector-path|not drawable text|raw vector-path letterforms/i.test(r)) {
     return "REFUSED_NO_TEXT";
   }
@@ -212,6 +220,14 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
   }
   const found = Number(result?.found ?? 0) || 0;
   const cites = (result?.sheets || []).flatMap((ps) => ps.matches || []).length;
+  if (result?.anchor?.grounding_basis === "exact_plan_tag" && found >= 1) {
+    return {
+      status: "AMBIGUOUS",
+      found,
+      cites,
+      reason: "Exact plan tag text was found, but matching symbol geometry was not verified.",
+    };
+  }
   if (found >= 1 && cites >= 1) {
     return { status: "MATCH", found, cites };
   }
@@ -412,7 +428,23 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
     // verified.  It does not prove zero devices exist on the plans.  Keep the
     // quantity unknown so UI, MCP, Agent evidence, and CSV never turn a
     // coverage gap into a confident zero.
-    const installedQty = item.status === "resolved" ? (item.quantity ?? 0) : null;
+    const basis = item.quantity_basis ?? null;
+    const derivedEvidenceGrade = basis === "symbol_fingerprint" || basis === "tag_attached_vector"
+      ? "symbol_geometry"
+      : basis === "explicit_installation_note"
+        ? "explicit_installation_note"
+        : basis === "exact_plan_tag"
+          ? "tag_text_only"
+          : "unverified";
+    const installedEvidenceGrade = item.installed_evidence_grade || derivedEvidenceGrade;
+    const geometryVerified = item.status === "resolved" && installedEvidenceGrade === "symbol_geometry";
+    const hasGeometryEvidence = item.status === "resolved" && (installedEvidenceGrade === "symbol_geometry"
+      || installedEvidenceGrade === "mixed_geometry_and_tag_text");
+    const explicitInstallationVerified = item.status === "resolved" && installedEvidenceGrade === "explicit_installation_note";
+    const tagTextOnly = item.status === "resolved" && (installedEvidenceGrade === "tag_text_only"
+      || installedEvidenceGrade === "mixed_geometry_and_tag_text");
+    const installedQty = geometryVerified || explicitInstallationVerified ? (item.quantity ?? 0) : null;
+    const taggedPlanQty = tagTextOnly ? (item.tagged_plan_quantity ?? (basis === "exact_plan_tag" ? item.quantity : 0) ?? 0) : null;
     const fail = failByTag.get(item.tag);
     const status = classifyReconcileStatus({
       scheduledQty,
@@ -421,6 +453,7 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
       failureType: fail?.type,
       reason: qtyStatus.reason || item.reason || fail?.detail,
       scheduleDefinitionOnly,
+      installedEvidenceGrade,
     });
     return {
       row_id: `${item.schedule?.sheet || "(none)"}::${item.tag}`,
@@ -431,9 +464,16 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
       scheduled_qty_source_header: qtyStatus.source_header,
       scheduled_qty_source_text: qtyStatus.source_text,
       installed_qty: installedQty,
-      placement_count: item.status === "resolved" ? (item.placement_count ?? null) : null,
-      observed_plan_qty: item.plan_search_complete === false ? (item.quantity ?? null) : installedQty,
+      tagged_plan_qty: taggedPlanQty,
+      placement_count: hasGeometryEvidence || explicitInstallationVerified ? (item.placement_count ?? null) : null,
+      observed_plan_qty: installedEvidenceGrade === "mixed_geometry_and_tag_text"
+        || (item.plan_search_complete === false
+          && (basis === "symbol_fingerprint" || basis === "tag_attached_vector"))
+        ? (item.quantity ?? null)
+        : installedQty,
       installed_qty_basis: item.quantity_basis ?? null,
+      installed_evidence_grade: installedEvidenceGrade,
+      geometry_verified: geometryVerified,
       search_scope: item.search_scope ?? null,
       unlabeled_audit_complete: item.unlabeled_audit_complete ?? null,
       plan_search_complete: item.plan_search_complete ?? null,
@@ -449,16 +489,141 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
             ...(item.schedule.drawing_group ? { drawing_group: item.schedule.drawing_group } : {}),
           }
         : null,
-      plan_cites: (item.drawing_locations || []).map((loc) => ({
+      plan_cites: (hasGeometryEvidence ? (item.drawing_locations || []) : []).map((loc) => ({
         sheet: loc.sheet,
         at: loc.at,
         ...(loc.bbox ? { bbox: loc.bbox } : {}),
+        ...(loc.tag_bbox ? { tag_bbox: loc.tag_bbox } : {}),
         ...(Number.isFinite(loc.score) ? { score: loc.score } : {}),
+        ...(loc.attachment_via ? { attachment_via: loc.attachment_via } : {}),
+        ...(Number.isFinite(loc.attachment_distance_px) ? { attachment_distance_px: loc.attachment_distance_px } : {}),
+      })),
+      plan_tag_cites: (tagTextOnly ? (item.plan_tag_locations || item.drawing_locations || []) : []).map((loc) => ({
+        sheet: loc.sheet,
+        at: loc.at,
+        ...(loc.bbox ? { bbox: loc.bbox } : {}),
+      })),
+      plan_candidate_cites: (item.plan_candidate_locations || []).map((loc) => ({
+        sheet: loc.sheet,
+        at: loc.at,
+        ...(Number.isFinite(loc.score) ? { score: loc.score } : {}),
+        ...(loc.reason ? { reason: loc.reason } : {}),
+        ...(loc.hold ? { hold: loc.hold } : {}),
       })),
       reason: qtyStatus.reason || item.reason || fail?.detail
+        || (tagTextOnly
+          ? `Exact plan tag text was found ${taggedPlanQty} time${taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
+          : null)
         || (scheduleDefinitionOnly
           ? "This schedule row defines a repeatable air-device type; it does not state project quantity. Installed quantity is grounded from plan callouts."
           : null),
+    };
+  });
+}
+
+const exactDiagramTagKey = (value) => String(value || "")
+  .trim()
+  .toUpperCase()
+  .replace(/[‐‑‒–—−]/g, "-")
+  .replace(/\s+/g, "");
+
+const scheduleRefMatchesRow = (ref, row) => {
+  if (!ref?.sheet || !row?.schedule_cite?.sheet || ref.sheet !== row.schedule_cite.sheet) return false;
+  const refTitle = String(ref.title || "").trim().toUpperCase();
+  const rowTitle = String(row.schedule_cite.title || "").trim().toUpperCase();
+  return !refTitle || !rowTitle || refTitle === rowTitle;
+};
+
+/**
+ * Carry exact authored schematic/riser tag evidence into reconciliation
+ * without promoting a diagram occurrence into installed quantity. A device
+ * can be repeated on a control schematic and a piping diagram while still
+ * representing one physical scheduled valve; this evidence is therefore a
+ * separate corroboration axis from `plan_cites`/`installed_qty`.
+ *
+ * A short tag reused by multiple schedules is attached only when the diagram
+ * extractor's own schedule refs include this row. With one unique schedule
+ * row for the tag, an otherwise-unbound diagram token remains visible but is
+ * explicitly marked unbound rather than silently discarded.
+ *
+ * @param {Array<object>} rows reconcile rows
+ * @param {object|null|undefined} controls shared ControlSchematicResult
+ * @returns {Array<object>}
+ */
+export function attachDiagramCorroboration(rows, controls) {
+  const candidates = [];
+  for (const schematic of controls?.schematics || []) {
+    for (const equipment of schematic.equipment || []) {
+      candidates.push({
+        tag: equipment.tag,
+        sheet: equipment.evidence?.sheet || schematic.sheet,
+        title: schematic.title,
+        diagram_kind: "control_schematic",
+        bbox: equipment.evidence?.bbox || null,
+        source_text: equipment.evidence?.text || equipment.tag,
+        grounding_basis: "exact_authored_diagram_tag",
+        schedule_refs: equipment.schedule_refs || [],
+      });
+    }
+  }
+  for (const diagram of controls?.risers || []) {
+    for (const group of diagram.diagram_tags || []) {
+      for (const evidence of group.evidence || []) {
+        candidates.push({
+          tag: group.tag,
+          sheet: evidence?.sheet || diagram.sheet,
+          title: diagram.title,
+          diagram_kind: diagram.diagram_kind,
+          bbox: evidence?.bbox || null,
+          source_text: evidence?.text || group.tag,
+          grounding_basis: "exact_authored_diagram_tag",
+          schedule_refs: group.schedule_refs || [],
+        });
+      }
+    }
+  }
+
+  const rowCountByTag = new Map();
+  for (const row of rows || []) {
+    const key = exactDiagramTagKey(row?.tag);
+    if (key) rowCountByTag.set(key, (rowCountByTag.get(key) || 0) + 1);
+  }
+
+  return (rows || []).map((row) => {
+    const key = exactDiagramTagKey(row?.tag);
+    const cites = [];
+    const seen = new Set();
+    for (const candidate of candidates) {
+      if (!key || exactDiagramTagKey(candidate.tag) !== key) continue;
+      const matchingRefs = candidate.schedule_refs.filter((ref) => scheduleRefMatchesRow(ref, row));
+      if (candidate.schedule_refs.length && !matchingRefs.length) continue;
+      if (!candidate.schedule_refs.length && rowCountByTag.get(key) !== 1) continue;
+      const binding = candidate.schedule_refs.length === 1 && matchingRefs.length === 1
+        ? "bound"
+        : candidate.schedule_refs.length > 1 && matchingRefs.length
+          ? "ambiguous"
+          : "unbound";
+      const identity = `${candidate.sheet}\0${candidate.title}\0${candidate.diagram_kind}\0${JSON.stringify(candidate.bbox)}`;
+      if (seen.has(identity)) continue;
+      seen.add(identity);
+      cites.push({
+        sheet: candidate.sheet,
+        title: candidate.title,
+        diagram_kind: candidate.diagram_kind,
+        tag: candidate.tag,
+        ...(candidate.bbox ? { bbox: candidate.bbox } : {}),
+        source_text: candidate.source_text,
+        grounding_basis: candidate.grounding_basis,
+        schedule_binding_status: binding,
+      });
+    }
+    cites.sort((a, b) => String(a.sheet).localeCompare(String(b.sheet), undefined, { numeric: true })
+      || String(a.title).localeCompare(String(b.title))
+      || JSON.stringify(a.bbox || []).localeCompare(JSON.stringify(b.bbox || [])));
+    return {
+      ...row,
+      diagram_corroborated: cites.some((cite) => cite.schedule_binding_status === "bound"),
+      diagram_cites: cites,
     };
   });
 }
@@ -573,7 +738,15 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly });
         const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
         const sweep = sweepByTag.get(rowId) || sweepByTag.get(tag) || {};
-        const installedQty = Number.isFinite(sweep.installedQty) ? sweep.installedQty : null;
+        const reportedInstalledQty = Number.isFinite(sweep.installedQty) ? sweep.installedQty : null;
+        const installedEvidenceGrade = sweep.installedEvidenceGrade
+          || (sweep.installedQtyBasis === "symbol_fingerprint" || sweep.installedQtyBasis === "tag_attached_vector" ? "symbol_geometry"
+            : sweep.installedQtyBasis === "explicit_installation_note" ? "explicit_installation_note"
+              : sweep.installedQtyBasis === "exact_plan_tag" ? "tag_text_only" : "unverified");
+        const installedQty = installedEvidenceGrade === "symbol_geometry"
+          || installedEvidenceGrade === "explicit_installation_note"
+          ? reportedInstalledQty
+          : null;
         const status = classifyReconcileStatus({
           scheduledQty,
           installedQty,
@@ -581,6 +754,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           failureType: sweep.failureType,
           reason: qtyStatus.reason || sweep.reason,
           scheduleDefinitionOnly,
+          installedEvidenceGrade,
         });
         rows.push({
           row_id: rowId,
@@ -591,9 +765,12 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           scheduled_qty_source_header: qtyStatus.source_header,
           scheduled_qty_source_text: qtyStatus.source_text,
           installed_qty: installedQty,
+          tagged_plan_qty: Number.isFinite(sweep.taggedPlanQty) ? sweep.taggedPlanQty : null,
           placement_count: Number.isFinite(sweep.placementCount) ? sweep.placementCount : null,
           observed_plan_qty: Number.isFinite(sweep.observedPlanQty) ? sweep.observedPlanQty : installedQty,
           installed_qty_basis: sweep.installedQtyBasis || null,
+          installed_evidence_grade: installedEvidenceGrade,
+          geometry_verified: sweep.geometryVerified === true,
           search_scope: sweep.searchScope || null,
           unlabeled_audit_complete: typeof sweep.unlabeledAuditComplete === "boolean" ? sweep.unlabeledAuditComplete : null,
           plan_search_complete: typeof sweep.planSearchComplete === "boolean" ? sweep.planSearchComplete : null,
@@ -608,7 +785,15 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
             ...(table.drawing_group ? { drawing_group: table.drawing_group } : {}),
           },
           plan_cites: sweep.planCites || [],
+          plan_tag_cites: sweep.planTagCites || [],
+          plan_candidate_cites: sweep.planCandidateCites || [],
           reason: qtyStatus.reason || sweep.reason
+            || (installedEvidenceGrade === "tag_text_only"
+              ? `Exact plan tag text was found ${sweep.taggedPlanQty ?? 0} time${sweep.taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
+              : null)
+            || (reportedInstalledQty != null && installedEvidenceGrade === "unverified"
+              ? "A numeric plan quantity was reported without recognized grounding provenance, so it was withheld from installed quantity pending review."
+              : null)
             || (scheduleDefinitionOnly
               ? "This schedule row defines a repeatable air-device type; it does not state project quantity. Installed quantity is grounded from plan callouts."
               : null),
@@ -685,6 +870,10 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
       const r = await session.sweepScheduleRow(row.tag, {
         commit: false,
         evaluationFast: !!opts.evaluationFast,
+        // Tagged-only reconciliation still verifies the marker geometry in
+        // bounded windows around exact authored tags. It skips the expensive
+        // whole-sheet unlabeled audit, but never turns text alone into MATCH.
+        verifyTaggedGeometry: true,
         // A generic multi-family schedule title may not name the row's
         // already-classified equipment family (for example an AIR SEPARATOR
         // row inside MECHANICAL SPECIALTY EQUIPMENT SCHEDULE). Preserve that
@@ -696,11 +885,55 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
         preferSheet: row.schedule_cite?.sheet ?? null,
         preferTitle: row.schedule_cite?.title ?? null,
       });
+      const installedQtyBasis = r.anchor?.grounding_basis || "symbol_fingerprint";
+      const matchedCites = (r.sheets || []).flatMap((ps) =>
+        (ps.matches || []).flatMap((m) => Array.from({ length: m.multiplier ?? 1 }, () => ({
+          sheet: ps.sheet,
+          at: m.at,
+          ...(m.geometry_bbox || m.tag_at ? { bbox: m.geometry_bbox || m.tag_at } : {}),
+          ...(m.tag_at ? { tag_bbox: m.tag_at } : {}),
+          ...(Number.isFinite(m.score) ? { score: m.score } : {}),
+          ...(m.attachment_via ? { attachment_via: m.attachment_via } : {}),
+          ...(Number.isFinite(m.attachment_distance_px) ? { attachment_distance_px: m.attachment_distance_px } : {}),
+          ...(m.counted_from === "explicit_label" ? { counted_from: "explicit_label" } : {}),
+        }))),
+      );
+      const planTagCites = matchedCites.filter((cite) =>
+        installedQtyBasis === "exact_plan_tag" || cite.counted_from === "explicit_label");
+      const geometryCites = matchedCites.filter((cite) =>
+        (installedQtyBasis === "symbol_fingerprint" || installedQtyBasis === "tag_attached_vector")
+        && cite.counted_from !== "explicit_label");
+      const geometryPlacementCount = (r.sheets || []).reduce((sum, sheet) =>
+        sum + (sheet.matches || []).filter((match) => match.counted_from !== "explicit_label").length, 0);
+      const taggedPlanQty = planTagCites.length;
+      const observedPlanQty = geometryCites.length;
+      const mixedEvidence = taggedPlanQty > 0 && observedPlanQty > 0;
+      const tagTextOnly = taggedPlanQty > 0 && observedPlanQty === 0;
+      const geometryVerified = (installedQtyBasis === "symbol_fingerprint" || installedQtyBasis === "tag_attached_vector")
+        && taggedPlanQty === 0 && r.complete !== false;
+      const candidateCites = (r.sheets || []).flatMap((ps) =>
+        (ps.withheld || []).map((candidate) => ({
+          sheet: ps.sheet,
+          at: candidate.at,
+          ...(Number.isFinite(candidate.score) ? { score: candidate.score } : {}),
+          ...(candidate.reason ? { reason: candidate.reason } : {}),
+          ...(candidate.hold ? { hold: candidate.hold } : {}),
+        })),
+      );
       sweepByTag.set(row.row_id || row.tag, {
-        installedQty: r.complete === false ? null : (r.found ?? 0),
-        placementCount: (r.sheets || []).reduce((sum, sheet) => sum + (sheet.matches || []).length, 0),
-        observedPlanQty: r.found ?? 0,
-        installedQtyBasis: r.anchor?.grounding_basis || "symbol_fingerprint",
+        installedQty: geometryVerified ? observedPlanQty : null,
+        taggedPlanQty: taggedPlanQty || null,
+        placementCount: geometryPlacementCount || null,
+        observedPlanQty: observedPlanQty || null,
+        installedQtyBasis,
+        installedEvidenceGrade: mixedEvidence
+          ? "mixed_geometry_and_tag_text"
+          : tagTextOnly
+            ? "tag_text_only"
+            : installedQtyBasis === "symbol_fingerprint" || installedQtyBasis === "tag_attached_vector"
+              ? "symbol_geometry"
+              : "unverified",
+        geometryVerified,
         searchScope: r.search_scope || null,
         unlabeledAuditComplete: r.unlabeled_audit_complete ?? null,
         planSearchComplete: r.complete !== false,
@@ -708,15 +941,12 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
         failureType: r.complete === false ? "INCOMPLETE_PLAN_SEARCH" : null,
         reason: r.complete === false
           ? `Plan search incomplete: ${r.found ?? 0} grounded placement(s) observed, but at least one sheet hit its candidate work cap. The observed count is a floor, not an installed total.`
-          : null,
-        planCites: (r.sheets || []).flatMap((ps) =>
-          (ps.matches || []).flatMap((m) => Array.from({ length: m.multiplier ?? 1 }, () => ({
-            sheet: ps.sheet,
-            at: m.at,
-            ...(m.tag_at ? { bbox: m.tag_at } : {}),
-            ...(Number.isFinite(m.score) ? { score: m.score } : {}),
-          }))),
-        ),
+          : taggedPlanQty
+            ? `${taggedPlanQty} exact plan-tag observation${taggedPlanQty === 1 ? " was" : "s were"} not verified against matching symbol geometry${observedPlanQty ? `; ${observedPlanQty} separate geometry-grounded placement${observedPlanQty === 1 ? " was" : "s were"} retained as observed evidence` : ""}. Installed total remains unknown.`
+            : null,
+        planCites: geometryCites,
+        planTagCites,
+        planCandidateCites: candidateCites,
       });
     } catch (e) {
       sweepByTag.set(row.row_id || row.tag, {
@@ -747,8 +977,11 @@ export const RECONCILE_CSV_HEADERS = [
   "Scheduled qty",
   "Scheduled qty basis",
   "Installed qty",
+  "Tagged plan qty (unverified)",
   "Observed plan qty",
   "Installed qty basis",
+  "Installed evidence grade",
+  "Geometry verified",
   "Search scope",
   "Unlabeled audit complete",
   "Plan search complete",
@@ -756,10 +989,15 @@ export const RECONCILE_CSV_HEADERS = [
   "Schedule sheet",
   "Schedule title",
   "Plan sheet(s)",
+  "Tag-only plan sheet(s)",
+  "Plan candidate count",
   "Notes",
   "Schedule drawing group",
   "Quantity comparison",
   "Grounded placements",
+  "Diagram corroborated",
+  "Diagram sheet(s)",
+  "Diagram kind(s)",
 ];
 
 /**
@@ -770,14 +1008,20 @@ export function reconcileRowsToCsv(rows) {
   const lines = [RECONCILE_CSV_HEADERS.join(",")];
   for (const row of rows || []) {
     const planSheets = [...new Set((row.plan_cites || []).map((c) => c.sheet).filter(Boolean))].join("; ");
+    const planTagSheets = [...new Set((row.plan_tag_cites || []).map((c) => c.sheet).filter(Boolean))].join("; ");
+    const diagramSheets = [...new Set((row.diagram_cites || []).map((c) => c.sheet).filter(Boolean))].join("; ");
+    const diagramKinds = [...new Set((row.diagram_cites || []).map((c) => c.diagram_kind).filter(Boolean))].join("; ");
     lines.push([
       row.tag,
       row.family || "",
       row.scheduled_qty,
       row.scheduled_qty_basis || "",
       row.installed_qty,
+      row.tagged_plan_qty,
       row.observed_plan_qty,
       row.installed_qty_basis || "",
+      row.installed_evidence_grade || "",
+      row.geometry_verified,
       row.search_scope || "",
       row.unlabeled_audit_complete,
       row.plan_search_complete,
@@ -785,10 +1029,15 @@ export function reconcileRowsToCsv(rows) {
       row.schedule_cite?.sheet || "",
       row.schedule_cite?.title || "",
       planSheets,
+      planTagSheets,
+      (row.plan_candidate_cites || []).length,
       (row.reason || "").replace(/"/g, '""'),
       row.schedule_cite?.drawing_group || "",
       row.quantity_comparison || "",
       row.placement_count,
+      row.diagram_corroborated,
+      diagramSheets,
+      diagramKinds,
     ].map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","));
   }
   return `${lines.join("\n")}\n`;

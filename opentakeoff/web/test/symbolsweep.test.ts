@@ -161,6 +161,26 @@ test("candidate regions preserve in-window scores while pruning whole-sheet work
   assert.ok(focused.candidates.considered < full.candidates.considered / 20, "irrelevant whole-sheet proposals are never scored");
 });
 
+test("candidate regions preserve junction recovery for split-path symbols", () => {
+  const split = SYMBOL.flatMap(([ax, ay, bx, by]) => {
+    const mx = (ax + bx) / 2, my = (ay + by) / 2;
+    return [[ax, ay, mx, my], [mx, my, bx, by]] as [number, number, number, number][];
+  });
+  const segs = place([
+    { at: [0, 0] },
+    { at: [100, 0], segs: split },
+    { at: [200, 0], segs: split },
+  ]);
+  const fp = fingerprintSymbol(segs, RECT);
+  const full = matchSymbol(fp, segs);
+  const target = full.matches.find((m) => Math.abs(m.at[0] - 112) <= 2);
+  assert.ok(target, "split-path target is recovered by junction signatures");
+
+  const focused = matchSymbol(fp, segs, { candidateRegions: [{ center: target.at, radius: 4 }] });
+  assert.deepEqual(focused.matches, [target], "the tag window preserves the exact junction-derived match and score");
+  assert.equal(focused.withheld.length, 0);
+});
+
 test("rotated and mirrored copies: found when enabled, ignored when disabled", () => {
   const segs = place([
     { at: [0, 0] },
@@ -766,6 +786,19 @@ test("affine refinement: a near-grid rotated placement withheld under the rigid 
   assertNoCollapsedTransform([...affine.matches, ...affine.withheld]);
 });
 
+test("affine refinement exposes the already-scored rigid baseline from the same pass", () => {
+  const sc = 3, deg = 3;
+  const rectSc: [Point, Point] = [[RECT[0][0] * sc, RECT[0][1] * sc], [RECT[1][0] * sc, RECT[1][1] * sc]];
+  const segs = place([{ at: [0, 0], sc }, { at: [500, 0], sc, rot: deg }]);
+  const fp = fingerprintSymbol(segs, rectSc);
+  const rigid = matchSymbol(fp, segs, { excludeCenter: fp.center });
+  const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+  assert.ok(affine.rigid_baseline, "affine mode must carry the nested rigid reading used for source-tag arbitration");
+  assert.deepEqual(affine.rigid_baseline!.matches, rigid.matches);
+  assert.deepEqual(affine.rigid_baseline!.withheld, rigid.withheld);
+  assert.deepEqual(affine.rigid_baseline!.rejected, rigid.rejected);
+});
+
 test("affine refinement: affine OFF is a byte-for-byte no-op vs the plain rigid search", () => {
   const sc = 3, deg = 3;
   const rectSc: [Point, Point] = [[RECT[0][0] * sc, RECT[0][1] * sc], [RECT[1][0] * sc, RECT[1][1] * sc]];
@@ -863,6 +896,35 @@ test("Phase 1 tolerance widening: two ordinary RIGID matches (no widening needed
   for (const m of r.matches) assert.ok(!m.transform, "a plain rigid match must not carry a transform");
 });
 
+test("Phase 1 tolerance widening: a near-rigid fit that clears only by widening is review-only even when isolated", () => {
+  const sc = 3, deg = 1.5;
+  const rectSc: [Point, Point] = [[RECT[0][0] * sc, RECT[0][1] * sc], [RECT[1][0] * sc, RECT[1][1] * sc]];
+  const segs = place([{ at: [0, 0], sc }, { at: [500, 0], sc, rot: deg, jitter: 1.8 }]);
+  const fp = fingerprintSymbol(segs, rectSc);
+  const result = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+  assert.equal(result.matches.length, 0, "widening alone must not convert an isolated near-rigid approximation into an autonomous count");
+  const review = result.withheld.find((row) => /only after widening endpoint tolerance/.test(row.reason));
+  assert.ok(review, `expected an explicit tolerance-only review row, got ${JSON.stringify(result.withheld)}`);
+  assert.ok(review!.transform && review!.transform.tol_px > 2);
+});
+
+test("Phase 1 extra-ink audit uses the refined placement's disclosed tolerance, so explained export jitter is not relabeled as a richer assembly", () => {
+  const sc = 3, deg = 3, jitter = 1.8;
+  const rectSc: [Point, Point] = [[RECT[0][0] * sc, RECT[0][1] * sc], [RECT[1][0] * sc, RECT[1][1] * sc]];
+  const segs = place([{ at: [0, 0], sc }, { at: [500, 0], sc, rot: deg, jitter }]);
+  const fp = fingerprintSymbol(segs, rectSc);
+  const result = matchSymbol(fp, segs, { excludeCenter: fp.center, affine: { enabled: true } });
+
+  assert.equal(result.matches.length, 1,
+    `the isolated fitted copy should commit once its own residual tolerance explains its ink: ${JSON.stringify(result)}`);
+  const recovered = result.matches[0];
+  assert.ok(recovered.transform && recovered.transform.tol_px > 2,
+    "the fixture must require a widened disclosed tolerance, or it does not reproduce the regression");
+  assert.equal(recovered.extra, undefined,
+    "endpoint jitter already explained by the fit must not be counted again as extra linework");
+  assert.equal(result.withheld.filter((row) => /automatic affine bar/.test(row.reason)).length, 0);
+});
+
 // ── Phase 2 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md — continuous rotation ───────
 // The shared SYMBOL fixture above has its own accidental near-symmetry
 // (square + one diagonal admits a real combined mirror+rotation reading),
@@ -885,6 +947,18 @@ const placeAsym = (at: Point, deg: number, mir: boolean): number[] => {
   });
 };
 const asymRect: [Point, Point] = [[-31, -5], [16, 28]];
+
+const placeAsymWithExtra = (at: Point, deg: number): number[] => {
+  const extras: [number, number, number, number][] = [
+    [-24, 2, 9, 20], [-20, 2, 8, 18], [-15, 1, 8, 22],
+  ];
+  const th = (deg * Math.PI) / 180, c = Math.cos(th), s = Math.sin(th);
+  return [...ASYM2, ...extras].flatMap(([ax, ay, bx, by]) => {
+    const tx = (x: number, y: number): Point => [x * c - y * s + at[0], x * s + y * c + at[1]];
+    const a = tx(ax, ay), b = tx(bx, by);
+    return [a[0], a[1], b[0], b[1]];
+  });
+};
 
 for (const deg of [30, 57, 123, 211]) {
   test(`Phase 2: an off-grid rotation invisible to the rigid search (${deg}°) is found and disclosed`, () => {
@@ -912,6 +986,21 @@ test("Phase 2: a mirrored + 40° placement is found with mirrored:true", () => {
   assert.ok(Math.abs(affine.matches[0].transform!.rotation_deg - 40) < 3);
 });
 
+test("Phase 2: an affine-only richer assembly is withheld automatically, without requiring variant_guard", () => {
+  const seed = placeAsym([0, 0], 0, false);
+  const richer = placeAsymWithExtra([400, 0], 30);
+  const fp = fingerprintSymbol(seed, asymRect);
+  const result = matchSymbol(fp, [...seed, ...richer], {
+    excludeCenter: fp.center,
+    affine: { enabled: true },
+  });
+  assert.equal(result.matches.length, 0, "a changed assembly carrying more than the automatic affine extra-ink bar must not become installed quantity");
+  const review = result.withheld.find((row) => /automatic affine bar/.test(row.reason));
+  assert.ok(review, `expected the richer affine assembly to be disclosed for review, got ${JSON.stringify(result.withheld)}`);
+  assert.ok((review!.extra ?? 0) > 0.5, `the fixture must genuinely clear the >50% automatic bar, got ${JSON.stringify(review)}`);
+  assert.ok(review!.transform, "the guard is deliberately scoped to a non-rigid recovery");
+});
+
 test("Phase 2: a plain translated (0°) copy is still the rigid path's own clean match — no transform, and (the bug this test pins) no stale transform survives a merge tie against a spurious refined candidate", () => {
   const segs = [...placeAsym([0, 0], 0, false), ...placeAsym([400, 0], 0, false)];
   const fp = fingerprintSymbol(segs, asymRect);
@@ -928,6 +1017,28 @@ test("Phase 2: opts.rotations === false disables continuous rotation too, exactl
   const affine = matchSymbol(fp, segs, { excludeCenter: fp.center, rotations: false, affine: { enabled: true } });
   assert.equal(affine.matches.length, 0);
   assert.equal(affine.withheld.length, 0, "an explicit rotations:false means silence for an off-grid instance, exactly as it always has");
+});
+
+test("Phase 2: affineCandidateRegions bounds only affine work while the rigid audit stays whole-sheet", () => {
+  const seed = placeAsym([0, 0], 0, false);
+  const rotated = placeAsym([400, 0], 30, false);
+  const rigidCopy = placeAsym([800, 0], 0, false);
+  const fp = fingerprintSymbol(seed, asymRect);
+  const outside = matchSymbol(fp, [...seed, ...rotated, ...rigidCopy], {
+    excludeCenter: fp.center,
+    affine: { enabled: true },
+    affineCandidateRegions: [{ center: [800, 10], radius: 80 }],
+  });
+  assert.equal(outside.matches.length, 1, "the rigid copy remains visible outside any affine-only restriction");
+  assert.ok(Math.abs(outside.matches[0].at[0] - 800) < 40);
+  const inside = matchSymbol(fp, [...seed, ...rotated, ...rigidCopy], {
+    excludeCenter: fp.center,
+    affine: { enabled: true },
+    affineCandidateRegions: [{ center: [400, 10], radius: 80 }],
+  });
+  assert.equal(inside.matches.length, 2, "the in-region rotated recovery joins the unchanged whole-sheet rigid copy");
+  assert.ok(inside.matches.some((row) => row.transform?.via === "rotation"));
+  assert.ok(inside.matches.some((row) => !row.transform && Math.abs(row.at[0] - 800) < 40));
 });
 
 test("Phase 2: candidates.considered on a plain 0°-aligned grid does not blow up (guards the vote against a proposal explosion)", () => {

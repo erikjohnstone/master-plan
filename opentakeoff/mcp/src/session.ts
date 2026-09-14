@@ -295,7 +295,8 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, hasSymbolSweepPlanEvidence, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, hasSymbolSweepPlanEvidence, affineOptionsFromWire, AFFINE_WIRE_DEFAULT, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
+import { groundExactTagsToVectorGeometry, type TaggedVectorGroundingResult } from "../../web/src/lib/taggedVectorGrounding.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -329,7 +330,7 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // here exactly as netroom.js's room detector already uses it, as a fallback
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
-import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
+import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel, type SweepTransformCompetition } from "../../web/src/lib/symbollabels.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -2831,10 +2832,9 @@ export class Session {
     exclude?: [Point, Point][];
     luminanceTolerance?: number;
     commitSeed?: boolean;
-    /** docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
-     * default flip. Threaded straight through to matchSymbol; also gates
-     * the seed's own exploded-text filter (fingerprintSymbol's
-     * dropGlyphClusters, default on when affine.enabled). */
+    /** docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — on by default at this
+     * shared Session boundary. Threaded straight through to matchSymbol;
+     * callers may still pass enabled:false for an intentional rigid audit. */
     affine?: SweepOptions["affine"];
   }) {
     const s = this.sheet(name);
@@ -2898,9 +2898,10 @@ export class Session {
       // #260 — the stated stroke-luminance gate. The tolerance travels in the
       // shared opts; the CHANNEL is per target sheet, passed at each match.
       ...(typeof opts.luminanceTolerance === "number" ? { lumTol: opts.luminanceTolerance } : {}),
-      // docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
-      // default flip (§6's own default-off scaleSearch is untouched here).
-      ...(opts.affine ? { affine: opts.affine } : {}),
+      // The Session owns the production default so direct callers, MCP and
+      // browser bridges cannot drift. An explicit enabled:false remains the
+      // rigid-only diagnostic path; scaleSearch keeps its own bounded default.
+      affine: opts.affine ?? affineOptionsFromWire(AFFINE_WIRE_DEFAULT),
       // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase E — `s`'s own text
       // layer; the "set" scope block below builds each swept sheet's OWN
       // textBoxes fresh instead of reusing this one (a different sheet has
@@ -2970,8 +2971,19 @@ export class Session {
       // or connected by a leader). Text may corroborate/demote geometry but
       // can never manufacture a placement without vector evidence.
       const rawLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, rawRes.matches, rawRes.withheld, undefined, fp.totalLen);
-      const corrected = reconcileSweepLabels(rawLbl.seed, rawRes.matches, rawLbl.matches, rawRes.withheld, rawLbl.withheld);
-      const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+      const affineCorrected = reconcileSweepLabels(rawLbl.seed, rawRes.matches, rawLbl.matches, rawRes.withheld, rawLbl.withheld);
+      let corrected = affineCorrected;
+      let positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+      let transformCompetition: SweepTransformCompetition | null = null;
+      if (rawRes.rigid_baseline && rawLbl.seed) {
+        const rigidRaw = rawRes.rigid_baseline;
+        const rigidLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, rigidRaw.matches, rigidRaw.withheld, undefined, fp.totalLen);
+        const rigidCorrected = reconcileSweepLabels(rigidLbl.seed, rigidRaw.matches, rigidLbl.matches, rigidRaw.withheld, rigidLbl.withheld);
+        const arbitration = arbitrateAffineAgainstRigidLabels(rawLbl.seed, rigidCorrected, affineCorrected, fp.footprint);
+        corrected = arbitration;
+        positioned = { matches: arbitration.matches, withheld: arbitration.withheld, withheldLabels: arbitration.withheldLabels };
+        transformCompetition = sweepTransformCompetition(rigidCorrected, affineCorrected, arbitration);
+      }
       const res: SymbolMatchResult = { ...rawRes, matches: positioned.matches, withheld: positioned.withheld };
       const lbl = { seed: rawLbl.seed, matches: corrected.matchLabels, withheld: positioned.withheldLabels };
       let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
@@ -3007,6 +3019,7 @@ export class Session {
         ...(res.negatives ? { negatives: res.negatives.filter((n) => !!n).map((n) => ({ mode: n!.mode, segments: n!.segments, center: [round1(n!.center[0]), round1(n!.center[1])] as [number, number] })) } : {}),
         ...(res.lum_gate ? { lum_gate: res.lum_gate } : {}),
         ...((corrected.promoted || corrected.demoted) ? { label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } } : {}),
+        ...(transformCompetition ? { transform_competition: transformCompetition } : {}),
         candidates: res.candidates,
         complete: res.complete,
         ...(committed ? {
@@ -3079,7 +3092,7 @@ export class Session {
     if (!s.spans) s.spans = textSpans(s.page);
     // rawCenter, not center — see the sheet-scope path's own comment above.
     const seedLbl = this.sweepLabels(s.spans, geo, fp.rawCenter, [], [], undefined, fp.totalLen).seed;
-    const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }; label_corroboration: { promoted: number; demoted: number } }[] = [];
+    const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }; label_corroboration: { promoted: number; demoted: number }; transform_competition?: SweepTransformCompetition }[] = [];
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     for (const sh of this.sheetList()) {
       const role = roleOf.get(sh.key) ?? "unknown";
@@ -3139,11 +3152,25 @@ export class Session {
       // the seed is named, set scope therefore requires every counted target
       // to carry a same-family drawing tag; unlabeled geometry stays visible
       // in withheld for review.
-      const corrected = reconcileSweepLabels(seedLbl, res.matches, rawLabels.matches, res.withheld, rawLabels.withheld, { requireLabel: !!seedLbl });
+      const affineCorrected = reconcileSweepLabels(seedLbl, res.matches, rawLabels.matches, res.withheld, rawLabels.withheld, { requireLabel: !!seedLbl });
+      let corrected = affineCorrected;
+      let transformCompetition: SweepTransformCompetition | null = null;
+      if (res.rigid_baseline && seedLbl) {
+        const rigidRaw = res.rigid_baseline;
+        const rigidLabels = this.sweepLabels(sh.spans, g2, sh.key === s.key ? fp.rawCenter : null, rigidRaw.matches, rigidRaw.withheld, seedLbl.label, fp.totalLen * ratio.scale);
+        const rigidCorrected = reconcileSweepLabels(seedLbl, rigidRaw.matches, rigidLabels.matches, rigidRaw.withheld, rigidLabels.withheld, { requireLabel: true });
+        const arbitration = arbitrateAffineAgainstRigidLabels(seedLbl, rigidCorrected, affineCorrected, fp.footprint * ratio.scale);
+        corrected = arbitration;
+        transformCompetition = sweepTransformCompetition(rigidCorrected, affineCorrected, arbitration);
+      }
       res = { ...res, matches: corrected.matches, withheld: corrected.withheld };
       const labels = { seed: null, matches: corrected.matchLabels, withheld: corrected.withheldLabels };
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
-      perSheet.push({ state: sh, ...res, elapsed_ms, scale: ratio, labels, label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } });
+      perSheet.push({
+        state: sh, ...res, elapsed_ms, scale: ratio, labels,
+        label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted },
+        ...(transformCompetition ? { transform_competition: transformCompetition } : {}),
+      });
     }
 
     const found = perSheet.reduce((n, p) => n + p.matches.length, 0);
@@ -3225,6 +3252,7 @@ export class Session {
         ...(p.rejected.length ? { rejected: p.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, ...(r.transform ? { transform: r.transform } : {}), by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(p.lum_gate ? { lum_gate: p.lum_gate } : {}),
         ...((p.label_corroboration.promoted || p.label_corroboration.demoted) ? { label_corroboration: p.label_corroboration } : {}),
+        ...(p.transform_competition ? { transform_competition: p.transform_competition } : {}),
         candidates: p.candidates,
         complete: p.complete,
         elapsed_ms: p.elapsed_ms,
@@ -3619,6 +3647,11 @@ export class Session {
      * count remains complete; unlabeled/sibling near-match disclosure does
      * not, and the wire result states that distinction explicitly. */
     evaluationFast?: boolean;
+    /** Keep tagged-only work bounds, but require the shared geometric matcher
+     * to verify each exact tag's surrounding marker instead of returning the
+     * tag bbox as if it were a symbol match. Reconciliation uses this mode;
+     * it remains non-exhaustive for unlabeled geometry. */
+    verifyTaggedGeometry?: boolean;
     /** Already-classified schedule-row family from the shared takeoff
      * compiler. Generic multi-family schedule titles may omit this semantic;
      * the family can establish individually-marked quantity policy, but can
@@ -3631,10 +3664,8 @@ export class Session {
      * sweeps without a preference still refuse honest cross-family collisions. */
     preferSheet?: string | null;
     preferTitle?: string | null;
-    /** docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
-     * default flip. Threaded straight through to matchSymbol; also gates
-     * the anchor's own exploded-text filter (fingerprintSymbol's
-     * dropGlyphClusters, default on when affine.enabled). */
+    /** Shared affine recognition. Omitted means AFFINE_WIRE_DEFAULT; an
+     * explicit { enabled:false } retains rigid-only behavior for diagnosis. */
     affine?: SweepOptions["affine"];
   } = {}) {
     let tRaw = (tag || "").trim().toUpperCase();
@@ -4083,6 +4114,7 @@ export class Session {
     // redundant reference. Exhaustive mode is unchanged and still audits
     // surrounding symbol geometry/unlabelled candidates.
     const singletonTaggedEquipment = opts.evaluationFast
+      && !opts.verifyTaggedGeometry
       && individuallyMarkedTable
       && totalOcc > 0
       && occBySheet.every(({ sh, occ }) => occ.every((entry) =>
@@ -4179,7 +4211,7 @@ export class Session {
     // path. Exhaustive/manual symbol sweep behavior is untouched, and this
     // return explicitly says unlabeled symbols were not audited.
     const repeatableTagQuorumBySheet = new Map<SheetState, number>();
-    if (opts.evaluationFast && airDeviceTable) {
+    if (opts.evaluationFast && !opts.verifyTaggedGeometry && airDeviceTable) {
       for (const { sh } of occBySheet) {
         repeatableTagQuorumBySheet.set(sh,
           tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0));
@@ -4190,6 +4222,7 @@ export class Session {
       .map(({ sh }) => repeatableTagQuorumBySheet.get(sh) ?? 0);
     const setRepeatableFamilyCount = [...repeatableTagQuorumBySheet.values()].reduce((sum, count) => sum + count, 0);
     const taggedRepeatableAirDevice = opts.evaluationFast
+      && !opts.verifyTaggedGeometry
       && airDeviceTable
       && hasRepeatableAirDevicePlacementQuorum(activeRepeatableFamilyCounts, setRepeatableFamilyCount);
     if (taggedRepeatableAirDevice) {
@@ -4259,14 +4292,45 @@ export class Session {
         note: `${drawingGroupScope ? `The same mark is independently defined across drawing groups; this result is scoped to the authored ${drawingGroupScope} schedule and plan titles. ` : ""}Tagged-only reconciliation counted ${totalOcc} exact "${t}" plan mark${totalOcc === 1 ? "" : "s"} because the set shows ${setRepeatableFamilyCount} marks from the same repeatable air-device schedule family and every sheet carrying this mark shows at least four independently keyed family marks. Authored TYP/parenthesized multipliers are applied to installed quantity. Face/neck geometry may vary by scheduled size, so quantity is grounded to the exact plan-label bboxes; surrounding geometry and unlabelled devices were not audited in this mode.`,
       };
     }
-    const anchorSheet = withOcc[0].sh;
+    let anchorSheet = withOcc[0].sh;
     // Reassigned only by the same-sheet uncorroborated fallback below (Tier
     // 2), and only after every corroboration attempt against the ORIGINAL
     // anchor has been exhausted — `candFor`/`probes` close over this
     // binding, so a reassignment is picked up by their next call with no
     // other plumbing needed.
     let anchor = withOcc[0].occ[0];
-    const anchorGeo = await this.ensureGeometry(anchorSheet);
+    let anchorGeo = await this.ensureGeometry(anchorSheet);
+    // Tagged reconciliation does not need a repeated family template to
+    // establish identity: the exact PDF tag already does that. It DOES still
+    // need proof of a physical vector body. Verify every occurrence through
+    // the shared pure tag→adjacency/leader→geometry layer once, up front, so
+    // the per-sheet pass below never reruns a whole-sheet symbol matcher for
+    // each schedule row. This is a bounded evidence lane, not an unlabeled
+    // symbol-discovery shortcut; exhaustive/manual sweep remains unchanged.
+    const taggedVectorBySheet = new Map<string, TaggedVectorGroundingResult>();
+    if (opts.verifyTaggedGeometry) {
+      let selected: { sh: SheetState; match: TaggedVectorGroundingResult["matches"][number] } | null = null;
+      for (const entry of withOcc) {
+        const geometry = await this.ensureGeometry(entry.sh);
+        const grounded = groundExactTagsToVectorGeometry({
+          tag: t,
+          occurrences: entry.occ,
+          spans: entry.sh.spans || [],
+          segs: geometry.segs,
+          lum: geometry.lum,
+          width: entry.sh.widthPx,
+          height: entry.sh.heightPx,
+        });
+        taggedVectorBySheet.set(entry.sh.key, grounded);
+        if (!selected && grounded.matches.length) selected = { sh: entry.sh, match: grounded.matches[0] };
+      }
+      if (!selected) {
+        throw new UserError(`Schedule row "${t}" has ${totalOcc} exact plan-tag occurrence${totalOcc === 1 ? "" : "s"}, but none owns distinctive adjacent or leader-connected vector geometry. The tag is retained for review; installed quantity remains unknown.`);
+      }
+      anchorSheet = selected.sh;
+      anchor = selected.match.occurrence;
+      anchorGeo = await this.ensureGeometry(anchorSheet);
+    }
     if (!anchorGeo.segs.length) {
       throw new UserError(`${anchorSheet.key} carries the tag "${t}" but no vector linework — the marker cannot be fingerprinted on a scan.`);
     }
@@ -4274,9 +4338,10 @@ export class Session {
       rotations: opts.rotations ?? true,
       mirror: opts.mirror ?? true,
       tolPx: opts.tolerancePx ?? SWEEP_TOL_PX,
-      // docs/SYMBOL-SWEEP-AFFINE-GOAL.md Phase 5 — off by default until the
-      // default flip.
-      ...(opts.affine ? { affine: opts.affine } : {}),
+      // Production default: affine is the recovery model and the nested
+      // rigid pass remains the simpler baseline. classifySweepMatches
+      // arbitrates them by exact plan-tag bbox before quantity is decided.
+      affine: opts.affine ?? affineOptionsFromWire(AFFINE_WIRE_DEFAULT),
     };
     // corroborators: the tag's OTHER occurrences — same sheet when it has
     // them, else the next sheet that does; a tag drawn exactly once has none
@@ -4330,7 +4395,7 @@ export class Session {
     // sheet ends up tried as anchor below (sameSheetCorroFor), so this is
     // computed once, not per candidate anchor.
     const crossSheetCorro: Corro[] = [];
-    if (withOcc.length > 1) {
+    if (!opts.verifyTaggedGeometry && withOcc.length > 1) {
       const anchorDisc = disciplineOfSheetNumber(anchorSheet.sheetNumber);
       const rest = withOcc.slice(1);
       // unchanged filter: same discipline only when the anchor's own
@@ -4350,7 +4415,15 @@ export class Session {
       withOcc[0].occ.length > 1
         ? [{ sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.filter((o) => o !== candAnchor) }]
         : [];
-    const corroCandidates: Corro[] = [...sameSheetCorroFor(anchor), ...crossSheetCorro];
+    // Installed-quantity verification is tag-centric: the exact PDF tag is
+    // already the identity evidence, so require distinctive vector geometry
+    // at that tag instead of spending up to dozens of full matcher passes
+    // proving that a sibling/reference view happens to use the same drafting
+    // convention. General/exhaustive symbol sweep keeps recurrence
+    // corroboration unchanged because it must discover unlabeled instances.
+    const corroCandidates: Corro[] = opts.verifyTaggedGeometry
+      ? []
+      : [...sameSheetCorroFor(anchor), ...crossSheetCorro];
     const compoundRankingOcc = /\bLUMINAIRE\b/i.test(table)
       ? compoundTagOcc(anchorSheet.spans || [], t)
       : [];
@@ -4376,7 +4449,7 @@ export class Session {
     // full-sheet matchSymbol calls.
     const CROSS_TAG_MAX_TRIES = 16;
     const crossCandidates: (Corro & { tag: string })[] = [];
-    if (!corroCandidates.length) {
+    if (!opts.verifyTaggedGeometry && !corroCandidates.length) {
       const rowKeys = (k: string) => canonKey(k).split("/").map((s) => s.trim()).filter(Boolean);
       const tableSiblingKeys = [...new Set(
         tb.rows.filter((row) => !rowKeys(row.key).includes(t)).flatMap((row) => rowKeys(row.key)),
@@ -4406,7 +4479,14 @@ export class Session {
       try {
         // dropGlyphClusters no longer follows opts.affine.enabled — see
         // docs/SYMBOL-SWEEP-AFFINE-GOAL.md's Findings (2026-09-11).
-        cand = fingerprintSymbol(anchorGeo.segs, rect, undefined, { dropGlyphClusters: false });
+        cand = fingerprintSymbol(anchorGeo.segs, rect, undefined, {
+          dropGlyphClusters: false,
+          // The PDF text box is authoritative evidence for which short
+          // strokes belong to the printed tag, not the attached device.
+          // Long structural edges and symbol bodies remain protected by
+          // fingerprintSymbol's existing text-box span guard.
+          ...(opts.verifyTaggedGeometry ? { textBoxes: [anchor.bbox] } : {}),
+        });
       } catch (e) {
         // nothing fully inside yet → widen; a region-sized grab → bigger pads only get worse
         return e instanceof Error && /region, not one symbol/.test(e.message) ? "region" : null;
@@ -4417,6 +4497,16 @@ export class Session {
       // devices. Widen instead; if no pad ever captures real marker geometry,
       // the refusal below states it.
       if (cand.segments < 3) return null;
+      if (opts.verifyTaggedGeometry) {
+        try {
+          assertDistinctiveSymbolSeed(cand);
+        } catch {
+          // A tag underline, open leader fragment, or tiny text-shaped
+          // cluster is not physical installed equipment. Widen for more of
+          // the actual symbol; refuse if no pad produces distinctive ink.
+          return null;
+        }
+      }
       return { cand, rect };
     };
     // Does `cand` reproduce near one of `against`'s occurrences? Identical
@@ -4440,7 +4530,11 @@ export class Session {
         return false;
       }
       const pr = (probe.scaled ? probe.scaled.footprint_px : cand.footprint) / 2 + anchor.h;
-      return against.occ.some((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= pr));
+      const corroboratingMatches = [
+        ...(probe.rigid_baseline?.matches || []),
+        ...probe.matches,
+      ];
+      return against.occ.some((o) => corroboratingMatches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= pr));
     };
 
     let fp: SymbolFingerprint | null = null;
@@ -4465,7 +4559,16 @@ export class Session {
     // distinction: same-tag corroboration is stronger evidence (the identical
     // mark recurs) than cross-tag (a relative in the same table recurs).
     let corroboratedVia: string | null = null;
-    if (corroCandidates.length) {
+    if (opts.verifyTaggedGeometry) {
+      const direct = taggedVectorBySheet.get(anchorSheet.key)?.matches
+        .find((match) => match.occurrence === anchor);
+      // The preflight above selects only a verified attachment, so this is an
+      // internal invariant—not a new refusal branch with different doctrine.
+      if (!direct) throw new Error("Tagged vector grounding invariant failed: selected anchor attachment is missing");
+      fp = direct.fingerprint;
+      anchorRect = direct.rect;
+      corroborated = false;
+    } else if (corroCandidates.length) {
       // same-tag corroboration is REQUIRED once a second occurrence exists:
       // unchanged from before this change for the common case (exactly one
       // same-tag candidate to try) — a tag that recurs but whose WHOLE-SHAPE
@@ -4786,19 +4889,27 @@ export class Session {
     // marker resized to a 12×-smaller plan has a 12×-smaller footprint, and a
     // radius left at the seed's size would sweep up whatever tag happened to
     // be nearby. Unscaled sheets take the identical radius they always did.
-    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number]; multiplier?: number; text_counted?: boolean };
+    type CountedMatch = SweepMatch & {
+      tag_at: [number, number, number, number];
+      geometry_bbox?: [number, number, number, number];
+      attachment_via?: "adjacent" | "leader";
+      attachment_distance_px?: number;
+      multiplier?: number;
+      text_counted?: boolean;
+    };
     const perSheet: {
       state: SheetState;
       matches: CountedMatch[];
       withheld: SweepWithheld[];
       excluded: { at: Point; tag: string }[];
-      text_only: { at: Point }[];
+      text_only: { at: Point; reason?: string }[];
       candidates: { considered: number; dropped: number };
       complete: boolean;
       elapsed_ms: number;
       scale: { scale: number; known: boolean };
-      scaled?: NonNullable<SymbolMatchResult["scaled"]>;
-      redundant_view: (CountedMatch & { room: string; kept_sheet: string })[];
+        scaled?: NonNullable<SymbolMatchResult["scaled"]>;
+        model_arbitration?: { rigid_preferred: number; affine_added: number };
+        redundant_view: (CountedMatch & { room: string; kept_sheet: string })[];
     }[] = [];
     const luminaireCompoundSheets = /\bLUMINAIRE\b/i.test(table)
       ? new Set(planSheets.filter((sheet) =>
@@ -4826,11 +4937,47 @@ export class Session {
       const ratio = sweepRatio(anchorSheet, sh);
       const t0 = process.hrtime.bigint();
       const sibSpans: { key: string; cx: number; cy: number }[] = [];
-      for (const k of siblings) for (const o of occOf(sh, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
+      if (!opts.verifyTaggedGeometry) {
+        for (const k of siblings) for (const o of occOf(sh, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
+      }
       let matches: CountedMatch[], withheld: SweepWithheld[], excluded: { at: Point; tag: string }[],
-        text_only: { at: Point }[], candidates: { considered: number; dropped: number }, complete: boolean,
-        scaled: SymbolMatchResult["scaled"];
-      if (fp) {
+        text_only: { at: Point; reason?: string }[], candidates: { considered: number; dropped: number }, complete: boolean,
+        scaled: SymbolMatchResult["scaled"], model_arbitration: ReturnType<typeof classifySweepMatches>["model_arbitration"];
+      if (opts.verifyTaggedGeometry) {
+        const grounded = taggedVectorBySheet.get(sh.key)
+          ?? groundExactTagsToVectorGeometry({
+            tag: t,
+            occurrences: occ,
+            spans: sh.spans || [],
+            segs: g2.segs,
+            lum: g2.lum,
+            width: sh.widthPx,
+            height: sh.heightPx,
+          });
+        matches = grounded.matches.map((match) => ({
+          at: match.fingerprint.center,
+          // This lane verifies exact source-tag ownership of a distinctive
+          // vector body rather than comparing it to a repeated template.
+          // `attachment_via`/distance disclose that different score meaning.
+          score: 1,
+          rotation: 0,
+          mirrored: false,
+          tag_at: match.occurrence.bbox,
+          geometry_bbox: match.geometry_bbox,
+          attachment_via: match.label.via,
+          attachment_distance_px: match.label.distance_px,
+        }));
+        withheld = [];
+        excluded = [];
+        text_only = grounded.text_only.map((entry) => ({
+          at: [entry.occurrence.cx, entry.occurrence.cy],
+          reason: entry.reason,
+        }));
+        candidates = { considered: grounded.candidates_considered, dropped: 0 };
+        complete = true;
+        scaled = undefined;
+        model_arbitration = undefined;
+      } else if (fp) {
         let cls: ReturnType<typeof classifySweepMatches>;
         try {
           const radius = fp.footprint * ratio.scale / 2 + anchorHForSweep;
@@ -4844,7 +4991,7 @@ export class Session {
           skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
           continue;
         }
-        ({ matches, withheld, excluded, text_only, candidates, complete, scaled } = cls);
+        ({ matches, withheld, excluded, text_only, candidates, complete, scaled, model_arbitration } = cls);
         if (supplementalInlineFp && text_only.length) {
           const inlineRes = sweepInlineMotif(supplementalInlineFp, g2.segs, g2.meta, sh.upp);
           const supplement = classifyInlineMotifMatches(t, inlineRes, occ, sibSpans, anchor.h);
@@ -4915,7 +5062,7 @@ export class Session {
         // fixture convention with a compound-label quorum, bare matches on
         // sheets outside that convention are ambiguous collisions.
         matches = [];
-      } else if (/\bLUMINAIRE\b/i.test(table)) {
+      } else if (!opts.verifyTaggedGeometry && /\bLUMINAIRE\b/i.test(table)) {
         const familyCompoundCount = tableSiblingKeys.reduce((sum, key) =>
           sum + compoundTagOcc(sh.spans || [], key).length, 0);
         if (familyCompoundCount >= 10) {
@@ -4946,7 +5093,7 @@ export class Session {
       // which makes one rigid perimeter fingerprint intrinsically partial.
       // A large family-wide population on this plan proves that explicit
       // tag placement convention; supplement only this row's own labels.
-      if (airDeviceTable) {
+      if (!opts.verifyTaggedGeometry && airDeviceTable) {
         const familyTagCount = tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0);
         if (familyTagCount >= 10) {
           for (const tagged of occ) {
@@ -4969,7 +5116,7 @@ export class Session {
       // fixture schedule. Keep this deliberately narrower than all plumbing
       // fixtures: foundation/floor plans often redraw the same fixture
       // across views.
-      const roofFixturePlacement = /^(?:RD|HB)(?:-|$)/i.test(t)
+      const roofFixturePlacement = !opts.verifyTaggedGeometry && /^(?:RD|HB)(?:-|$)/i.test(t)
         && /\bROOF\s+PLAN\b/i.test(planTitleOf.get(sh.key) || "");
       if (roofFixturePlacement) {
         const familyTagCount = tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0);
@@ -4991,7 +5138,7 @@ export class Session {
       // itself placement evidence even when surrounding linework is too
       // sparse or variable to fingerprint. Repeatable type marks stay on
       // their stricter family-specific paths above.
-      if (individuallyMarkedTable && !matches.length && occ.length) {
+      if (!opts.verifyTaggedGeometry && individuallyMarkedTable && !matches.length && occ.length) {
         const tagged = occ[0];
         matches.push({
           at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
@@ -5021,6 +5168,7 @@ export class Session {
         candidates, complete, elapsed_ms, scale: ratio,
         redundant_view: [],
         ...(scaled ? { scaled } : {}),
+        ...(model_arbitration ? { model_arbitration } : {}),
       });
     }
 
@@ -5128,6 +5276,7 @@ export class Session {
     // schedule verdict and the seed citation on every marker, one undo step
     const found = perSheet.reduce((n, p) =>
       n + p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0), 0);
+
     let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
     if (opts.commit && found) {
       const ids: string[] = [];
@@ -5168,7 +5317,11 @@ export class Session {
     if (drawingGroupScope) notes.push(`The same mark is independently defined across drawing groups; this result is scoped to the authored ${drawingGroupScope} schedule and plan titles.`);
     if (scheduleAliasNote) notes.push(scheduleAliasNote);
     if (accessoryNote) notes.push(accessoryNote);
-    if (!corroborated) {
+    if (opts.verifyTaggedGeometry) {
+      const attached = perSheet.reduce((sum, sheet) => sum + sheet.matches.length, 0);
+      const unverified = perSheet.reduce((sum, sheet) => sum + sheet.text_only.length, 0);
+      notes.push(`${attached} exact plan-tag occurrence${attached === 1 ? "" : "s"} owned distinctive adjacent or leader-connected vector geometry and were retained as installed evidence.${unverified ? ` ${unverified} exact tag occurrence${unverified === 1 ? "" : "s"} lacked that physical attachment and remain review-only.` : ""} This tagged-only lane does not audit unlabeled symbols.`);
+    } else if (!corroborated) {
       notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence${crossCandidates.length ? `, and none of ${crossCandidates.length} sibling tag(s) from the same ${table} table reproduced it either` : ""}; audit the matches with view_sheet before trusting the count.`);
     } else if (corroboratedVia) {
       // weaker evidence than same-tag corroboration, disclosed rather than
@@ -5182,6 +5335,12 @@ export class Session {
     if (multiplied.length) notes.push(`${multiplied.length} drawn callout(s) carry explicit authored multipliers (TYP or parenthesized quantity); their printed quantities were applied to the installed count.`);
     const textCounted = perSheet.flatMap((p) => p.matches.filter((m) => m.text_counted));
     if (textCounted.length) notes.push(`${textCounted.length} additional explicit placement labels were counted directly under a family-wide quorum.`);
+    const modelArbitrated = perSheet.filter((p) => p.model_arbitration);
+    if (modelArbitrated.length) {
+      const rigidPreferred = modelArbitrated.reduce((sum, p) => sum + (p.model_arbitration?.rigid_preferred ?? 0), 0);
+      const affineAdded = modelArbitrated.reduce((sum, p) => sum + (p.model_arbitration?.affine_added ?? 0), 0);
+      notes.push(`Nested rigid/affine evidence was reconciled by exact plan-tag bbox: ${rigidPreferred} shared tag claim${rigidPreferred === 1 ? " kept" : "s kept"} the simpler rigid location; ${affineAdded} affine-only tagged placement${affineAdded === 1 ? " was" : "s were"} retained.`);
+    }
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
     // #186, same disclosure discipline as symbol_sweep: a ratio the count
     // depends on is stated, and an assumed ratio over an empty sheet is named
@@ -5190,7 +5349,15 @@ export class Session {
     if (rowRescaled.length) {
       notes.push(`Size ratio applied from the sheets' own scales: ${rowRescaled.map((p) => `${p.state.key} ×${p.scaled!.ratio}`).join(", ")} — the marker was resized from ${anchorSheet.key} before matching.`);
     }
-    const rowAssumed = perSheet.filter((p) => !p.scale.known && !p.matches.length);
+    const rowAssumed = perSheet.filter((p) =>
+      !p.scale.known
+      && !p.matches.length
+      // Tagged-only reconciliation deliberately skips plan sheets that do
+      // not carry this row's exact tag. Calling those sheets "swept at 1:1"
+      // is false: no geometry search ran there, and their scale cannot
+      // explain this tagged result. Exhaustive mode still reports every
+      // genuinely searched unscaled sheet exactly as before.
+      && (!opts.evaluationFast || occOf(p.state, t).length > 0));
     if (rowAssumed.length) {
       notes.push(`${rowAssumed.map((p) => p.state.key).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorSheet.key} or on them, so a different drawn scale there is a live explanation for the zero. set_scale on both ends to rule it out.`);
     }
@@ -5230,25 +5397,47 @@ export class Session {
         ...(corroborated ? { corroborated_via: corroboratedVia ? "sibling_tag" as const : "same_tag" as const } : {}),
         ...(corroboratedVia ? { corroborated_tag: corroboratedVia } : {}),
         occurrences: totalOcc,
-        grounding_basis: "symbol_fingerprint" as const,
+        grounding_basis: opts.verifyTaggedGeometry ? "tag_attached_vector" as const : "symbol_fingerprint" as const,
       },
       found,
       sheets: perSheet.map((p) => ({
         sheet: p.state.key,
         found: p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0),
-        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.transform ? { transform: m.transform } : {}), tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}), ...(m.text_counted ? { counted_from: "explicit_label" as const } : {}) })),
+        matches: p.matches.map((m) => ({
+          at: [round1(m.at[0]), round1(m.at[1])],
+          score: m.score,
+          rotation: m.rotation,
+          mirrored: m.mirrored,
+          ...(m.transform ? { transform: m.transform } : {}),
+          tag_at: Session.wireBox(m.tag_at),
+          ...(m.geometry_bbox ? { geometry_bbox: Session.wireBox(m.geometry_bbox) } : {}),
+          ...(m.attachment_via ? { attachment_via: m.attachment_via } : {}),
+          ...(m.attachment_distance_px !== undefined ? { attachment_distance_px: round1(m.attachment_distance_px) } : {}),
+          ...(m.multiplier ? { multiplier: m.multiplier } : {}),
+          ...(m.text_counted ? { counted_from: "explicit_label" as const } : {}),
+        })),
         withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.transform ? { transform: w.transform } : {}), ...(w.hold ? { hold: w.hold } : {}), reason: w.reason })),
         excluded: p.excluded.map((e) => ({ at: [round1(e.at[0]), round1(e.at[1])], tag: e.tag })),
-        text_only: p.text_only,
+        text_only: p.text_only.map((entry) => ({
+          at: [round1(entry.at[0]), round1(entry.at[1])],
+          ...(entry.reason ? { reason: entry.reason } : {}),
+        })),
         candidates: p.candidates,
         complete: p.complete,
         elapsed_ms: p.elapsed_ms,
         ...(p.scaled ? { scaled: p.scaled } : {}),
+        ...(p.model_arbitration ? { model_arbitration: p.model_arbitration } : {}),
         ...(p.scale.known ? {} : { scale_assumed: `no scale set on ${anchorSheet.key} or this sheet — swept at 1:1` }),
         ...(p.redundant_view.length ? {
           redundant_view: p.redundant_view.map((m) => ({
             at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored,
-            ...(m.transform ? { transform: m.transform } : {}), tag_at: Session.wireBox(m.tag_at), room: m.room, kept_sheet: m.kept_sheet,
+            ...(m.transform ? { transform: m.transform } : {}),
+            tag_at: Session.wireBox(m.tag_at),
+            ...(m.geometry_bbox ? { geometry_bbox: Session.wireBox(m.geometry_bbox) } : {}),
+            ...(m.attachment_via ? { attachment_via: m.attachment_via } : {}),
+            ...(m.attachment_distance_px !== undefined ? { attachment_distance_px: round1(m.attachment_distance_px) } : {}),
+            room: m.room,
+            kept_sheet: m.kept_sheet,
           })),
         } : {}),
       })),
@@ -7027,7 +7216,7 @@ export class Session {
         const titleText = t.title?.text?.trim().toUpperCase();
         if (!titleText) continue;
         const doc = t.sheet.split("#")[0];
-        const sig = `${doc} ${titleText} ${t.rows.length}`;
+        const sig = [doc, titleText, String(t.rows.length)].join("\u0000");
         let list = bySignature.get(sig);
         if (!list) { list = []; bySignature.set(sig, list); }
         list.push({ idx: i, sheet: t.sheet });

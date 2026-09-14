@@ -109,7 +109,7 @@ import { findLegendGlyphs, findGlyphNear, legendLearnStatus } from "../lib/legen
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
 import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
-import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
+import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
 // is set) — the owner's call, 2026-08-24: it serves no purpose on the sheet.
@@ -167,8 +167,13 @@ import Tip from "../components/Tip.jsx";
 import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet, tablesForSourceFiles } from "../lib/scheduleBrowse.js";
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
 import { basResultForCanvas } from "../lib/basBrowserResult.js";
-import { basWorkflowSchema, mergeBasWorkflows, resolveBasPage, verifyBasWorkflow } from "../lib/basWorkflow.ts";
+import { activeBasCapture, basWorkflowSchema, latestBasSequenceAiRun, mergeBasWorkflows, resolveBasPage,
+  retainBasSequenceAiRun, verifyBasWorkflow } from "../lib/basWorkflow.ts";
 import { applyBasReview } from "../lib/basReview.ts";
+import { applyBasSequenceAiReview } from "../lib/basSequenceAiReview.ts";
+import { BAS_SEQUENCE_AI_PROMPT_VERSION, executeBasSequenceAiInterpretation,
+  prepareBasSequenceAiBatches } from "../lib/basSequenceAi.ts";
+import { basCitationBoxes, basCitationFocusBox } from "../lib/basCitationGroup.ts";
 import { applyBasDrawingReview } from "../lib/basDrawingReview.ts";
 import { recordBasIssueFromUi } from "../components/basIssueClient.ts";
 import { recordBasScopeFromUi } from "../components/basScopeClient.ts";
@@ -198,7 +203,8 @@ import { runAgentLoop } from "../lib/agentLoop.js";
 import { runVoiceCommand, isAgentHandoffTrigger, shouldOfferAgentHandoff } from "../lib/voiceActions";
 import { createVoiceRecognizerClient } from "../lib/voiceRecognizerClient";
 import { startCapture, captureSupported } from "../lib/voiceCapture";
-import { aiConfig, isAiConfigured, visionQuery, classifySymbolPrompt, parseClassifyResponse } from "../lib/ai.js";
+import { aiConfig, isAiConfigured, visionQuery, classifySymbolPrompt, parseClassifyResponse,
+  structuredJsonQuery } from "../lib/ai.js";
 import { ALL_COMPONENT_NAMES } from "../lib/hvacTaxonomy.ts";
 import AccountChip from "../components/AccountChip.jsx";
 import PresenceChip from "../components/PresenceChip.jsx";
@@ -5006,11 +5012,9 @@ export default function TakeoffCanvas() {
       textBoxes = spans.map((sp) => [sp.x0, sp.y0, sp.x1, sp.y1]);
       fp = fingerprintSymbol(segs, rect, lum, { textBoxes });
       assertDistinctiveSymbolSeed(fp);
-      seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
-      // Keep the proven manual-tool behavior until a transform competition
-      // implementation exists in the shared symbol library and passes the
-      // UI/MCP parity corpus. The previous branch called an API that was never
-      // exported and therefore made the production bundle uncompilable.
+      seedName = labelPlacements([fp.rawCenter], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
+      // The shared matcher carries its nested rigid baseline in this same
+      // pass; the label layer below resolves the two readings by source tag.
       res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}), affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT), textBoxes });
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
@@ -5036,12 +5040,35 @@ export default function TakeoffCanvas() {
     } catch { labels = []; }
     const seedLabel = seedName || labels[0] || null;
     const rawMatchCount = res.matches.length;
-    const corrected = reconcileSweepLabels(
+    const affineCorrected = reconcileSweepLabels(
       seedLabel,
       res.matches, res.matches.map((_, i) => labels[1 + i] || null),
       res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
     );
-    const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+    let corrected = affineCorrected;
+    let positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+    let transformCompetition = null;
+    if (res.rigid_baseline && seedLabel) {
+      const rigidRaw = res.rigid_baseline;
+      const rigidLabels = labelPlacements(
+        [res.seed.center, ...rigidRaw.matches.map((m) => m.at), ...rigidRaw.withheld.map((w) => w.at)],
+        spans, segs, lum, {
+          preferredLabel: seedLabel.label, preferredFamily: seedLabel.family,
+          scores: [1, ...rigidRaw.matches.map((m) => m.score), ...rigidRaw.withheld.map((w) => w.score)],
+          eligible: [true, ...rigidRaw.matches.map(() => true), ...rigidRaw.withheld.map((w) => !w.hold)],
+          symbolInkLengthPx: res.seed.length_px,
+        },
+      );
+      const rigidCorrected = reconcileSweepLabels(
+        seedLabel,
+        rigidRaw.matches, rigidRaw.matches.map((_, i) => rigidLabels[1 + i] || null),
+        rigidRaw.withheld, rigidRaw.withheld.map((_, i) => rigidLabels[1 + rigidRaw.matches.length + i] || null),
+      );
+      const arbitration = arbitrateAffineAgainstRigidLabels(seedLabel, rigidCorrected, affineCorrected, fp.footprint);
+      corrected = arbitration;
+      positioned = { matches: arbitration.matches, withheld: arbitration.withheld, withheldLabels: arbitration.withheldLabels };
+      transformCompetition = sweepTransformCompetition(rigidCorrected, affineCorrected, arbitration);
+    }
     res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
     labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
     const L = (i) => labels[i] || null;
@@ -5073,6 +5100,7 @@ export default function TakeoffCanvas() {
       matches: res.matches.map((m, i) => ({ ...m, label: L(1 + i) })),
       questions,
       complete: res.complete, dropped: res.candidates.dropped,
+      ...(transformCompetition ? { transformCompetition } : {}),
       includeSeed: true, qIndex: 0, excludedTags: [],
     });
     setTool("select");
@@ -6466,6 +6494,11 @@ export default function TakeoffCanvas() {
   // agentProposals and only the accept gate below dispatches an `add` command.
   const AGENT_VIEW_MAX_EDGE = 1024;   // view_region crop cap (vision-model native range)
   const AGENT_TEXT_MAX_ITEMS = 600;   // read_sheet_text cap — a full E-size text layer would drown the context
+  // Above this real extracted-segment count, running the affine matcher on the
+  // browser UI thread is not interactive (the 41,785-segment tank sheet took
+  // ~29 min there versus 91.75 s through the shared Session route). Keep the
+  // exact same engine/evidence policy, but execute it off the UI thread.
+  const AGENT_SYMBOL_SWEEP_SERVER_SEGMENTS = 30_000;
 
   const agentPanelFor = (key) => {
     const p = agentStateRef.current.panels.find((x) => x.key === key);
@@ -6744,7 +6777,7 @@ export default function TakeoffCanvas() {
     } else {
       return { error: "symbol_sweep needs either a seed_rect_norm marquee or a seed_point_norm click." };
     }
-    if (opts.scope === "set") {
+    if (opts.scope === "set" || (segs.length >> 2) >= AGENT_SYMBOL_SWEEP_SERVER_SEGMENTS) {
       const shared = await fetchProductionSymbolSweep(key, rect, opts);
       return normalizeProductionSymbolSweep(shared, key);
     }
@@ -6770,7 +6803,7 @@ export default function TakeoffCanvas() {
       // docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase B).
       fp = fingerprintSymbol(segs, rect, lum, { dropGlyphClusters: false, textBoxes });
       assertDistinctiveSymbolSeed(fp);
-      seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
+      seedName = labelPlacements([fp.rawCenter], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
       res = sweepSymbols(segs, rect, {
         rotations: opts.rotations !== false,
         mirror: opts.mirror !== false,
@@ -6800,12 +6833,35 @@ export default function TakeoffCanvas() {
     } catch { labels = []; }
     const seedLabel = seedName || labels[0] || null;
     const rawMatchCount = res.matches.length;
-    const corrected = reconcileSweepLabels(
+    const affineCorrected = reconcileSweepLabels(
       seedLabel,
       res.matches, res.matches.map((_, i) => labels[1 + i] || null),
       res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
     );
-    const positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+    let corrected = affineCorrected;
+    let positioned = positionMatchesToClosestReading(corrected.matches, corrected.matchLabels, corrected.withheld, corrected.withheldLabels, fp.footprint);
+    let transformCompetition = null;
+    if (res.rigid_baseline && seedLabel) {
+      const rigidRaw = res.rigid_baseline;
+      const rigidLabels = labelPlacements(
+        [res.seed.center, ...rigidRaw.matches.map((m) => m.at), ...rigidRaw.withheld.map((w) => w.at)],
+        spans, segs, lum, {
+          preferredLabel: seedLabel.label, preferredFamily: seedLabel.family,
+          scores: [1, ...rigidRaw.matches.map((m) => m.score), ...rigidRaw.withheld.map((w) => w.score)],
+          eligible: [true, ...rigidRaw.matches.map(() => true), ...rigidRaw.withheld.map((w) => !w.hold)],
+          symbolInkLengthPx: res.seed.length_px,
+        },
+      );
+      const rigidCorrected = reconcileSweepLabels(
+        seedLabel,
+        rigidRaw.matches, rigidRaw.matches.map((_, i) => rigidLabels[1 + i] || null),
+        rigidRaw.withheld, rigidRaw.withheld.map((_, i) => rigidLabels[1 + rigidRaw.matches.length + i] || null),
+      );
+      const arbitration = arbitrateAffineAgainstRigidLabels(seedLabel, rigidCorrected, affineCorrected, fp.footprint);
+      corrected = arbitration;
+      positioned = { matches: arbitration.matches, withheld: arbitration.withheld, withheldLabels: arbitration.withheldLabels };
+      transformCompetition = sweepTransformCompetition(rigidCorrected, affineCorrected, arbitration);
+    }
     res = { ...res, matches: positioned.matches, withheld: positioned.withheld };
     labels = [seedLabel, ...corrected.matchLabels, ...positioned.withheldLabels];
     const L = (i) => labels[i]?.label || null;
@@ -6828,6 +6884,7 @@ export default function TakeoffCanvas() {
       complete: res.complete,
       dropped: res.candidates?.dropped || 0,
       ...((corrected.promoted || corrected.demoted) ? { label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } } : {}),
+      ...(transformCompetition ? { transform_competition: transformCompetition } : {}),
     };
   }
 
@@ -7235,7 +7292,17 @@ export default function TakeoffCanvas() {
   }
 
   async function fetchProductionSweepScheduleRow(tag, opts = {}) {
-    const fields = { tag };
+    const fields = {
+      tag,
+      sweepOptions: JSON.stringify({
+        rotations: opts.rotations,
+        mirror: opts.mirror,
+        tolerancePx: opts.tolerancePx,
+        preferSheet: opts.preferSheet,
+        preferTitle: opts.preferTitle,
+        affine: opts.affine,
+      }),
+    };
     if (opts.evaluationFast) fields.evaluationFast = "1";
     const fd = await buildProductionFormData(fields);
     if (!fd) return null;
@@ -7300,6 +7367,15 @@ export default function TakeoffCanvas() {
         ...(sheetResult.rejected ? { rejected: await normalizeRows(sheetResult.sheet, sheetResult.rejected) } : {}),
       };
     }));
+    const normalizedMatches = Array.isArray(result.matches)
+      ? await normalizeRows(seedKey, result.matches)
+      : null;
+    const normalizedWithheld = Array.isArray(result.withheld)
+      ? await normalizeRows(seedKey, result.withheld)
+      : null;
+    const normalizedRejected = Array.isArray(result.rejected)
+      ? await normalizeRows(seedKey, result.rejected)
+      : null;
     return {
       ...result,
       ...(result.seed ? {
@@ -7309,6 +7385,9 @@ export default function TakeoffCanvas() {
           center: undefined,
         },
       } : {}),
+      ...(normalizedMatches ? { matches: normalizedMatches } : {}),
+      ...(normalizedWithheld ? { withheld: normalizedWithheld } : {}),
+      ...(normalizedRejected ? { rejected: normalizedRejected } : {}),
       sheets: normalizedSheets,
       coordinate_frame: "normalized_0_1_per_sheet",
     };
@@ -7900,6 +7979,13 @@ export default function TakeoffCanvas() {
   }
 
   function clearTakeoffCiteHighlights() {
+    // Citation replacement can be followed immediately by a grouped paint.
+    // Keep the imperative agent ref in sync before React flushes so exact
+    // clause boxes cannot be appended onto stale prior evidence.
+    agentStateRef.current = {
+      ...agentStateRef.current,
+      markups: (agentStateRef.current.markups || []).filter((m) => m.source !== "takeoff_cite"),
+    };
     setMarkups((ms) => {
       const next = ms.filter((m) => m.source !== "takeoff_cite");
       agentStateRef.current = { ...agentStateRef.current, markups: next };
@@ -8090,6 +8176,48 @@ export default function TakeoffCanvas() {
     return finalizeAgentCompiledTakeoff(compiled, opts);
   }
 
+  /** Browser transport for the shared, source-bounded SOO interpreter. Raw
+   * model JSON never reaches workflow state; the shared validator owns every
+   * accepted quote, value and ontology projection before retention. */
+  async function agentInterpretBasSequences() {
+    const previous = basWorkflowRef.current;
+    const capture = activeBasCapture(previous);
+    if (!previous || !capture?.narrative_sources) {
+      return { status: "not_available", reason: "No retained sequence source was available." };
+    }
+    const cfg = aiConfig();
+    if (!(cfg.endpoint && cfg.model) || cfg.provider !== "openai") {
+      return { status: "not_configured", reason: "Strict structured SOO interpretation requires the configured platform model." };
+    }
+    const batches = prepareBasSequenceAiBatches(capture.narrative_sources, 8);
+    if (!batches.length) return { status: "not_found", eligible_clauses: 0 };
+    const existing = latestBasSequenceAiRun(previous, capture.capture_id);
+    if (existing?.prompt_version === BAS_SEQUENCE_AI_PROMPT_VERSION && existing.model === cfg.model) {
+      return { status: "retained", run_id: existing.run_id, coverage: existing.coverage,
+        behaviors: existing.interpretations.reduce((sum, item) => sum + item.behaviors.length, 0),
+        candidate_points: existing.interpretations.reduce((sum, item) => sum + item.candidate_points.length, 0) };
+    }
+    const epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
+    reportAgentTakeoffProgress({ phase: "sequence_interpretation",
+      message: `Interpreting ${batches.reduce((sum, batch) => sum + batch.clauses.length, 0)} SOO clauses with source validation…` });
+    const execution = await executeBasSequenceAiInterpretation(capture.narrative_sources, request => structuredJsonQuery({
+      cfg, system: request.system_prompt,
+      payload: { ...request.batch, validator_feedback: request.validator_feedback },
+      schema: request.response_json_schema, schemaName: "bas_sequence_interpretation", maxTokens: 12000,
+    }), { model: cfg.model, batch_size: 8, concurrency: 4, max_attempts: 2 });
+    if (basWorkflowRef.current !== previous || basLoadEpochRef.current !== epoch || basSourceSignatureRef.current !== signature) {
+      throw new Error("The BAS workspace or source PDFs changed during SOO interpretation. No stale result was saved.");
+    }
+    const updated = await retainBasSequenceAiRun(previous, capture.capture_id, execution.run);
+    basWorkflowRef.current = updated; setBasWorkflow(updated);
+    const behaviors = execution.run.interpretations.reduce((sum, item) => sum + item.behaviors.length, 0);
+    const candidatePoints = execution.run.interpretations.reduce((sum, item) => sum + item.candidate_points.length, 0);
+    reportAgentTakeoffProgress({ phase: "sequence_interpretation",
+      message: `SOO interpretation ready — ${behaviors} behaviors and ${candidatePoints} point candidates retained for review.` });
+    return { status: "ready", run_id: execution.run.run_id, coverage: execution.run.coverage,
+      behaviors, candidate_points: candidatePoints, attempts: execution.attempts };
+  }
+
   /**
    * SHOULD THIS BE ON THE SHARED PATH? Split by responsibility. The endpoint
    * executes the canonical compilers and reconcile in one shared Session;
@@ -8142,12 +8270,21 @@ export default function TakeoffCanvas() {
         message: `Reconciliation complete — ${reconcile.rows.length} schedule rows reviewed.`,
       });
     }
+    let sequence_interpretation;
+    try {
+      sequence_interpretation = await agentInterpretBasSequences();
+    } catch (error) {
+      sequence_interpretation = { status: "failed", error: error?.message || String(error) };
+      reportAgentTakeoffProgress({ phase: "sequence_interpretation",
+        message: "SOO source text is retained, but model interpretation needs attention." });
+    }
     return {
       schema_version: batch.schema_version,
       compile_order: batch.compile_order,
       compiles,
       control_schematics: batch.control_schematics,
       reconcile: batch.reconcile,
+      sequence_interpretation,
     };
   }
 
@@ -8177,7 +8314,7 @@ export default function TakeoffCanvas() {
       bas_math: presentation.bas_math || null,
       coverage: presentation.coverage || null,
     });
-    setBasViewState(previous => ({ ...previous, takeoffTab: "takeoff" }));
+    setBasViewState(previous => ({ ...previous, takeoffTab: "overview" }));
     setShowTakeoffData(true);
     return { presented: true, kind: presentation.kind, changed_takeoff_truth: false };
   }
@@ -8185,7 +8322,7 @@ export default function TakeoffCanvas() {
   function agentOpenBasWorkspace(destination) {
     if (!basWorkflowRef.current) return { error: "No retained BAS workflow is open. Compile a BAS takeoff first." };
     const routes = {
-      takeoff_summary: { takeoffTab: "takeoff" },
+      takeoff_summary: { takeoffTab: "overview" },
       point_soo: { takeoffTab: "points", mode: "sequences", sequenceScroll: 0 },
       equipment_templates: { takeoffTab: "equipment", equipment: { assemblyOverview: false, engineeringOverview: false } },
       assemblies_responsibility: { takeoffTab: "equipment", equipment: { assemblyOverview: true, engineeringOverview: false } },
@@ -8533,14 +8670,36 @@ export default function TakeoffCanvas() {
     // caller using MCP's naming and a caller using this bridge's own prior
     // naming both work.
     const taggedOnly = opts.tagged_only ?? opts.evaluationFast ?? false;
+    const preferSheet = opts.prefer_schedule_sheet ?? opts.preferSheet;
+    const preferTitle = opts.prefer_schedule_title ?? opts.preferTitle;
+    const affineWire = opts.affine || AFFINE_WIRE_DEFAULT;
+    // Agent JSON uses snake_case wire keys; direct deterministic callers may
+    // already supply Session-native camelCase. Normalize only for the local
+    // production bridge. The MCP tool keeps its declared wire contract.
+    const affineInternal = affineWire && (
+      Object.hasOwn(affineWire, "max_stretch")
+      || Object.hasOwn(affineWire, "max_shear_deg")
+      || Object.hasOwn(affineWire, "scale_search")
+    ) ? affineOptionsFromWire(affineWire) : affineWire;
     const remote = await agentMcpTool("sweep_schedule_row", {
       tag,
       tagged_only: taggedOnly,
       rotations: opts.rotations,
       mirror: opts.mirror,
+      affine: affineWire,
+      prefer_schedule_sheet: preferSheet,
+      prefer_schedule_title: preferTitle,
     });
     if (remote) return remote;
-    const prod = await fetchProductionSweepScheduleRow(t, { evaluationFast: taggedOnly });
+    const prod = await fetchProductionSweepScheduleRow(t, {
+      evaluationFast: taggedOnly,
+      rotations: opts.rotations,
+      mirror: opts.mirror,
+      tolerancePx: opts.tolerance_px,
+      preferSheet,
+      preferTitle,
+      affine: affineInternal,
+    });
     if (prod && !prod.error) return prod;
     return {
       error: "Production sweep_schedule_row (Session path) unavailable. "
@@ -8911,7 +9070,7 @@ export default function TakeoffCanvas() {
 
   async function agentHighlightCitation({
     sheet, bbox_px, text = "", row_key = "", column = "", table_title = "", value = "",
-    replaceTakeoffCite = false, source = null,
+    replaceTakeoffCite = false, source = null, recordCitation = true,
   }) {
     if (!Array.isArray(bbox_px) || bbox_px.length !== 4 || bbox_px.some((v) => !Number.isFinite(v))) {
       return { error: "bbox_px must contain four finite production image-pixel coordinates." };
@@ -8957,23 +9116,25 @@ export default function TakeoffCanvas() {
         return next;
       });
     }
-    setAgentCitations((list) => {
-      if (list.some((c) => c.id === result.id)) return list;
-      return [...list, {
-        id: result.id,
-        markupId: result.id,
-        sheet,
-        sheetLabel: tabLabel(sheet),
-        label,
-        text: fallback || label,
-        row_key: rowKey || undefined,
-        column: col || undefined,
-        table_title: tableTitle || undefined,
-        value: val || undefined,
-        bbox_px,
-        source: citeSource || undefined,
-      }];
-    });
+    if (recordCitation) {
+      setAgentCitations((list) => {
+        if (list.some((c) => c.id === result.id)) return list;
+        return [...list, {
+          id: result.id,
+          markupId: result.id,
+          sheet,
+          sheetLabel: tabLabel(sheet),
+          label,
+          text: fallback || label,
+          row_key: rowKey || undefined,
+          column: col || undefined,
+          table_title: tableTitle || undefined,
+          value: val || undefined,
+          bbox_px,
+          source: citeSource || undefined,
+        }];
+      });
+    }
     return {
       ...result,
       bbox_px,
@@ -13479,6 +13640,14 @@ export default function TakeoffCanvas() {
             setBasWorkflow(updated);
             return updated;
           }}
+          onBasSequenceAiReview={async request => {
+            const previous = basWorkflowRef.current;
+            const updated = await applyBasSequenceAiReview(previous, request, 'operator_input');
+            if (basWorkflowRef.current !== previous) throw new Error('The BAS workspace changed during this review. Reload the current interpretation before retrying.');
+            basWorkflowRef.current = updated;
+            setBasWorkflow(updated);
+            return updated;
+          }}
           onBasRevisionOperation={async (rawOperation, options = {}) => {
             const operation = basRevisionOperationSchema.parse(rawOperation);
             const previous = basWorkflowRef.current, epoch = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
@@ -13521,13 +13690,13 @@ export default function TakeoffCanvas() {
             setAgentTakeoffRows((rows) => rows.filter((r) => !ids.has(r.id)));
           }}
           onClose={() => setShowTakeoffData(false)}
-          onCompareCitations={async ({ plan, schedule, tag, line }) => {
+          onCompareCitations={async ({ plan, planTag, schedule, tag, line }) => {
             if (!plan?.sheet_id || !plan?.bbox_px || !schedule?.sheet_id || !schedule?.bbox_px) {
               const error = 'This row does not retain both exact source boxes, so comparison was refused.';
               setCommitMsg(error);
               return { error };
             }
-            const preview = async (citation, kind) => {
+            const preview = async (citation, kind, overlays = []) => {
               const source = parseSheetKey(citation.sheet_id);
               const doc = await docFor(source.file);
               if (!doc || source.page < 1 || source.page > doc.numPages) {
@@ -13536,14 +13705,25 @@ export default function TakeoffCanvas() {
               const pdfPage = await doc.getPage(source.page);
               const rendered = await renderPdfCitationPreview(pdfPage, citation.bbox_px, {
                 renderScale: RENDER_SCALE,
-                color: kind === 'plan' ? '#1f3fc7' : '#c47a10',
+                color: kind === 'schedule' ? '#c47a10' : '#1f3fc7',
                 kind,
+                overlays,
               });
-              return { ...rendered, citation, sheet_id: citation.sheet_id, sheet_label: tabLabel(citation.sheet_id) };
+              return { ...rendered, citation, overlays, sheet_id: citation.sheet_id, sheet_label: tabLabel(citation.sheet_id) };
             };
             try {
+              const drawingKind = plan.evidence_kind || 'plan';
+              const planOverlays = drawingKind === 'plan' ? [
+                { role: 'symbol', label: 'Physical symbol', color: '#1f3fc7', bbox: plan.bbox_px, citation: plan },
+                ...(planTag?.sheet_id === plan.sheet_id && planTag?.bbox_px
+                  ? [{ role: 'tag', label: 'Printed plan tag', color: '#c47a10', bbox: planTag.bbox_px, citation: planTag }]
+                  : []),
+              ] : [];
               const [planPreview, schedulePreview] = await Promise.all([
-                preview(plan, 'plan'), preview(schedule, 'schedule'),
+                preview(plan, drawingKind, planOverlays),
+                preview(schedule, 'schedule', [
+                  { role: 'schedule', label: 'Matching schedule row', color: '#c47a10', bbox: schedule.bbox_px, citation: schedule },
+                ]),
               ]);
               return {
                 tag: tag || plan.tag || schedule.tag || '', plan: planPreview, schedule: schedulePreview,
@@ -13576,30 +13756,50 @@ export default function TakeoffCanvas() {
               } catch (error) { if (!originalFallback) setCommitMsg(`Could not open BAS source: ${error.message}`); return { error: error.message }; }
             }
             if (!row?.sheet_id || !row?.bbox_px) return;
+            let exactSpans;
+            try {
+              exactSpans = basCitationBoxes(row);
+            } catch (error) {
+              if (!originalFallback) setCommitMsg(`Could not open BAS source: ${error.message}`);
+              return { error: error.message };
+            }
+            if (!exactSpans.length) return { error: 'This evidence has no valid source box.' };
             // Close the takeoff modal so the estimator can see the sheet highlight.
             setShowTakeoffData(false);
-            const result = await agentHighlightCitation({
-              sheet: row.sheet_id,
-              bbox_px: row.bbox_px,
-              row_key: row.tag || row.row_key || "",
-              column: row.column || row.field || "",
-              table_title: row.table_title || "",
-              value: String(row.value ?? row.qty ?? ""),
-              // One clear schedule-row paint — replace prior takeoff cites so
-              // the sheet is not covered in every MARK cell from the compile.
-              replaceTakeoffCite: row.kind === "row" || row.kind === "table" || !row.kind,
-              source: "takeoff_cite",
-            });
-            if (result?.error) {
-              setCommitMsg(`Could not open cite: ${result.error}`);
-              // Let the workspace that initiated the navigation display the
-              // same refusal beside the evidence. Swallowing this here left a
-              // source button looking inert when a historical sheet revision
-              // was no longer open, even though no incorrect bbox was painted.
-              return { error: result.error };
+            clearTakeoffCiteHighlights();
+            const results = [];
+            for (let index = 0; index < exactSpans.length; index += 1) {
+              const span = exactSpans[index];
+              const result = await agentHighlightCitation({
+                sheet: row.sheet_id,
+                bbox_px: span.bbox_px,
+                row_key: exactSpans.length === 1 ? (row.tag || row.row_key || "") : "",
+                column: exactSpans.length === 1 ? (row.column || row.field || "") : "",
+                table_title: row.table_title || "",
+                value: exactSpans.length === 1 ? String(row.value ?? row.qty ?? "") : "",
+                text: index === 0 ? (row.citation_label || span.text || row.value || '') : span.text,
+                replaceTakeoffCite: false,
+                source: "takeoff_cite",
+                // A multi-line clause is one source action, not one Agent card
+                // per PDF text run. Every exact box still remains painted.
+                recordCitation: index === 0,
+              });
+              if (result?.error) {
+                clearTakeoffCiteHighlights();
+                setCommitMsg(`Could not open cite: ${result.error}`);
+                return { error: result.error };
+              }
+              results.push(result);
             }
-            const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
-            if (markup) flyToMarkup(markup);
+            const markups = results.map(result => agentStateRef.current.markups.find((m) => m.id === result.id)).filter(Boolean);
+            const focus = basCitationFocusBox(exactSpans);
+            const dims = panelByKey(row.sheet_id)?.img;
+            if (markups[0] && focus && dims?.w && dims?.h) {
+              // Center the group using a temporary display extent. The canvas
+              // still paints only the individual immutable source boxes.
+              flyToMarkup({ ...markups[0], rect: [[focus[0] / dims.w, focus[1] / dims.h], [focus[2] / dims.w, focus[3] / dims.h]] });
+            } else if (markups[0]) flyToMarkup(markups[0]);
+            return { ...results[0], citation_count: results.length };
           }}
         />
       )}

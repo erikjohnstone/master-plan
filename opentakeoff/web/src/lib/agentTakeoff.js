@@ -67,6 +67,8 @@ const titleText = (title) => {
  *   bbox_px?: number[]|null, table_bbox_px?: number[]|null, row_bbox_px?: number[]|null,
  *   source_tool?: string|null, note?: string|null,
  *   quantity_basis?: string|null,
+ *   evidence_kind?: string|null, evidence_title?: string|null,
+ *   evidence_binding_status?: string|null,
  * }} [opts]
  */
 export function makeTakeoffRow({
@@ -85,6 +87,9 @@ export function makeTakeoffRow({
   source_tool = null,
   note = null,
   quantity_basis = null,
+  evidence_kind = null,
+  evidence_title = null,
+  evidence_binding_status = null,
 } = {}) {
   const rawVal = typeof value === "object" && value !== null && !Array.isArray(value)
     ? cellText(value)
@@ -108,6 +113,9 @@ export function makeTakeoffRow({
     source_tool: source_tool || null,
     note: note != null ? String(note) : null,
     quantity_basis: quantity_basis != null ? String(quantity_basis) : null,
+    evidence_kind: evidence_kind != null ? String(evidence_kind) : null,
+    evidence_title: evidence_title != null ? String(evidence_title) : null,
+    evidence_binding_status: evidence_binding_status != null ? String(evidence_binding_status) : null,
   };
 }
 
@@ -185,6 +193,11 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
   if (name === "sweep_schedule_row") {
     const tag = data.tag || args.tag || null;
     if (typeof data.found === "number") {
+      const quantityBasis = data.anchor?.grounding_basis || "symbol_fingerprint";
+      const firstMatch = (data.sheets || []).flatMap((sheet) =>
+        (sheet.matches || []).map((match) => ({ sheet: sheet.sheet, match })))[0] || null;
+      const tagOnly = quantityBasis === "exact_plan_tag"
+        || firstMatch?.match?.counted_from === "explicit_label";
       const coverage = [
         data.search_scope ? `search scope: ${data.search_scope}` : null,
         typeof data.unlabeled_audit_complete === "boolean"
@@ -195,14 +208,32 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
           : null,
       ].filter(Boolean).join("; ");
       rows.push(makeTakeoffRow({
-        workflow, runId, tag, field: "installed_quantity", value: data.found, unit: "EA",
-        sheet_id: data.tag_citations?.[0]?.sheet || data.anchor?.sheet || null,
+        workflow, runId, tag, field: tagOnly ? "tagged_plan_quantity" : "installed_quantity", value: data.found, unit: "EA",
+        sheet_id: firstMatch?.sheet || data.tag_citations?.[0]?.sheet || data.anchor?.sheet || null,
         table_title: data.row?.table || null,
-        bbox_px: data.tag_citations?.[0]?.bbox || null,
+        bbox_px: tagOnly
+          ? data.tag_citations?.[0]?.bbox || null
+          : firstMatch?.match?.geometry_bbox || data.tag_citations?.[0]?.bbox || null,
         source_tool: name,
-        quantity_basis: data.anchor?.grounding_basis || "symbol_fingerprint",
-        note: coverage || null,
+        quantity_basis: quantityBasis,
+        note: tagOnly
+          ? "Exact plan tag text only — matching device geometry and installed quantity are not verified."
+          : coverage || null,
+        ...(tagOnly ? {
+          evidence_kind: "plan_tag_text",
+          evidence_binding_status: "geometry_unverified",
+        } : {}),
       }));
+      if (!tagOnly && firstMatch?.match?.tag_at) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "plan_tag_observation", value: tag,
+          sheet_id: firstMatch.sheet, table_title: data.row?.table || null,
+          bbox_px: firstMatch.match.tag_at, source_tool: name,
+          note: `Exact authored plan tag attached to the verified vector body by ${firstMatch.match.attachment_via || "local geometry"}.`,
+          evidence_kind: "plan_tag_text",
+          evidence_binding_status: "geometry_verified",
+        }));
+      }
     }
     const cells = data.row?.cells || {};
     for (const [header, text] of Object.entries(cells)) {
@@ -258,7 +289,9 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
       // title here even when the field's own value/sheet is plan-side, the
       // same convention sweep_schedule_row's own installed_quantity row
       // already uses (table_title: data.row?.table, not the plan sheet).
-      if (typeof row.installed_qty === "number") {
+      const tagOnlyInstalledClaim = typeof row.installed_qty === "number"
+        && row.installed_qty_basis === "exact_plan_tag";
+      if (typeof row.installed_qty === "number" && !tagOnlyInstalledClaim) {
         const coverage = [
           row.search_scope ? `search scope: ${row.search_scope}` : null,
           typeof row.unlabeled_audit_complete === "boolean"
@@ -276,18 +309,79 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
           note: coverage || null,
         }));
       }
-      if (row.status) {
+      const taggedPlanQty = typeof row.tagged_plan_qty === "number"
+        ? row.tagged_plan_qty
+        : tagOnlyInstalledClaim
+          ? row.installed_qty
+          : null;
+      if (typeof taggedPlanQty === "number") {
         rows.push(makeTakeoffRow({
-          workflow, runId, tag, field: "plan_status", value: row.status,
-          sheet_id: scheduleSheet, table_title: scheduleTitle,
-          note: row.reason || null, source_tool: name,
+          workflow, runId, tag, field: "tagged_plan_quantity", value: taggedPlanQty, unit: "EA",
+          sheet_id: row.plan_tag_cites?.[0]?.sheet || (tagOnlyInstalledClaim ? planCite?.sheet : null), table_title: scheduleTitle,
+          bbox_px: row.plan_tag_cites?.[0]?.bbox || (tagOnlyInstalledClaim ? planCite?.bbox : null), source_tool: name,
+          quantity_basis: "exact_plan_tag",
+          note: "Exact plan tag text only — matching device geometry and installed quantity are not verified.",
+          evidence_kind: "plan_tag_text",
+          evidence_binding_status: "geometry_unverified",
         }));
       }
-      if (planCite?.sheet) {
+      if (row.status) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "plan_status", value: tagOnlyInstalledClaim ? "AMBIGUOUS" : row.status,
+          sheet_id: scheduleSheet, table_title: scheduleTitle,
+          note: tagOnlyInstalledClaim
+            ? "Exact plan tag text was reported as installed quantity, but symbol geometry was not verified; the Agent quarantined the claim for review."
+            : row.reason || null,
+          source_tool: name,
+        }));
+      }
+      if (planCite?.sheet && !tagOnlyInstalledClaim) {
         rows.push(makeTakeoffRow({
           workflow, runId, tag, field: "plan_tag", value: tag,
           sheet_id: planCite.sheet, table_title: scheduleTitle,
           bbox_px: planCite.bbox || null, source_tool: name,
+        }));
+        if (planCite.tag_bbox) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "plan_tag_observation", value: tag,
+            sheet_id: planCite.sheet, table_title: scheduleTitle,
+            bbox_px: planCite.tag_bbox, source_tool: name,
+            note: `Exact authored plan tag attached to the verified vector body by ${planCite.attachment_via || "local geometry"}.`,
+            evidence_kind: "plan_tag_text",
+            evidence_binding_status: "geometry_verified",
+          }));
+        }
+      }
+      const planTagCite = row.plan_tag_cites?.[0] || (tagOnlyInstalledClaim ? planCite : null);
+      if (planTagCite?.sheet) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "plan_tag_observation", value: tag,
+          sheet_id: planTagCite.sheet, table_title: scheduleTitle,
+          bbox_px: planTagCite.bbox || null, source_tool: name,
+          note: "Exact authored plan tag; symbol geometry is unverified and this is not an installed-quantity citation.",
+          evidence_kind: "plan_tag_text",
+          evidence_binding_status: "geometry_unverified",
+        }));
+      }
+      if (Array.isArray(row.plan_candidate_cites) && row.plan_candidate_cites.length) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "plan_candidate_count", value: row.plan_candidate_cites.length,
+          sheet_id: scheduleSheet, table_title: scheduleTitle, source_tool: name,
+          note: `${row.plan_candidate_cites.length} geometry candidate${row.plan_candidate_cites.length === 1 ? "" : "s"} withheld for estimator review; none is included in installed quantity.`,
+          evidence_kind: "plan_geometry_candidate",
+          evidence_binding_status: "review_required",
+        }));
+      }
+      for (const diagramCite of row.diagram_cites || []) {
+        if (!diagramCite?.sheet || !diagramCite?.bbox) continue;
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "diagram_tag", value: diagramCite.source_text || tag,
+          sheet_id: diagramCite.sheet, table_title: scheduleTitle,
+          bbox_px: diagramCite.bbox, source_tool: name,
+          evidence_kind: diagramCite.diagram_kind || "control_schematic",
+          evidence_title: diagramCite.title || null,
+          evidence_binding_status: diagramCite.schedule_binding_status || null,
+          note: "Authored diagram tag corroboration only; not installed quantity.",
         }));
       }
     }
@@ -1223,6 +1317,42 @@ export function linePlanCite(line) {
   };
 }
 
+/** Exact plan-tag text retained separately from a geometry-grounded marker. */
+export function linePlanTagCite(line) {
+  if (!line?.plan_tag_sheet_id || !line?.plan_tag_bbox_px) return null;
+  return {
+    sheet_id: line.plan_tag_sheet_id,
+    bbox_px: line.plan_tag_bbox_px,
+    column: "PLAN TAG TEXT",
+    field: "plan_tag_observation",
+    value: line.tag,
+    tag: line.tag,
+    table_title: line.table_title,
+    kind: "row",
+    evidence_kind: "plan_tag_text",
+    evidence_binding_status: line.plan_tag_binding_status || "geometry_unverified",
+  };
+}
+
+/** Exact authored schematic/riser occurrence retained separately from a plan-installed match. */
+export function lineDiagramCite(line) {
+  const cite = line?.diagram_cites?.[0];
+  if (!cite?.sheet_id || !cite?.bbox_px) return null;
+  return {
+    sheet_id: cite.sheet_id,
+    bbox_px: cite.bbox_px,
+    column: "DIAGRAM TAG",
+    field: "diagram_tag",
+    value: line.tag,
+    tag: line.tag,
+    table_title: line.table_title,
+    kind: "row",
+    evidence_kind: cite.evidence_kind || "control_schematic",
+    evidence_title: cite.evidence_title || null,
+    evidence_binding_status: cite.evidence_binding_status || null,
+  };
+}
+
 /** Cite for a schedule-derived lead cell (tag / qty). */
 export function lineLeadCite(line, key) {
   if (key !== "tag" && key !== "qty" && key !== "unit_mark") return null;
@@ -1293,6 +1423,7 @@ export function takeoffLeadColumns(lines = []) {
     if (has((l) => l.quantity_basis)) cols.push({ key: "quantity_basis", label: "Quantity evidence" });
     if (has((l) => l.scheduled_qty != null)) cols.push({ key: "scheduled_qty", label: "Scheduled qty" });
     if (has((l) => l.installed_qty != null)) cols.push({ key: "installed_qty", label: "Installed qty" });
+    if (has((l) => l.tagged_plan_qty != null)) cols.push({ key: "tagged_plan_qty", label: "Tag sightings · unverified" });
     // status already has its own trailing "Status" column on every export
     // (compiledTakeoffToCsv etc.) — not duplicated as a lead column here.
   }
@@ -1426,6 +1557,7 @@ export function lineLeadValue(line, key) {
   if (key === "quantity_basis") return line.quantity_basis || "";
   if (key === "scheduled_qty") return line.scheduled_qty ?? "";
   if (key === "installed_qty") return line.installed_qty ?? "";
+  if (key === "tagged_plan_qty") return line.tagged_plan_qty ?? "";
   return "";
 }
 
@@ -1527,8 +1659,14 @@ export function compileAgentTakeoff(rows = []) {
         quantity_basis: null,
         scheduled_qty: null,
         installed_qty: null,
+        tagged_plan_qty: null,
+        plan_candidate_count: 0,
         schedule_sheet_id: null,
         plan_sheet_id: null,
+        plan_tag_sheet_id: null,
+        plan_tag_bbox_px: null,
+        plan_tag_binding_status: null,
+        diagram_cites: [],
         table_title: null,
         workflows: new Set(),
         status: null,
@@ -1610,6 +1748,14 @@ export function compileAgentTakeoff(rows = []) {
         g.installed_qty = n;
         if (row.note) g.notes.push(row.note);
       }
+    } else if (field === "tagged_plan_quantity") {
+      const n = asNumber(row.value);
+      if (n != null) g.tagged_plan_qty = n;
+      if (row.note) g.notes.push(row.note);
+    } else if (field === "plan_candidate_count") {
+      const n = asNumber(row.value);
+      if (n != null) g.plan_candidate_count = Math.max(g.plan_candidate_count, n);
+      if (row.note) g.notes.push(row.note);
     } else if (field === "scheduled_quantity") {
       const n = asNumber(row.value);
       if (n != null) {
@@ -1680,6 +1826,26 @@ export function compileAgentTakeoff(rows = []) {
       if (row.sheet_id) g.plan_sheet_id = row.sheet_id;
       if (row.bbox_px) g.plan_bbox_px = row.bbox_px;
       g.status = g.status || "located";
+    } else if (field === "plan_tag_observation") {
+      if (row.sheet_id) g.plan_tag_sheet_id = row.sheet_id;
+      if (row.bbox_px) g.plan_tag_bbox_px = row.bbox_px;
+      if (row.evidence_binding_status) g.plan_tag_binding_status = row.evidence_binding_status;
+      if (row.note) g.notes.push(row.note);
+    } else if (field === "diagram_tag") {
+      if (row.sheet_id && row.bbox_px) {
+        const identity = `${row.sheet_id}\0${JSON.stringify(row.bbox_px)}\0${row.evidence_kind || ""}`;
+        if (!g.diagram_cites.some((cite) => cite.identity === identity)) {
+          g.diagram_cites.push({
+            identity,
+            sheet_id: row.sheet_id,
+            bbox_px: row.bbox_px,
+            evidence_kind: row.evidence_kind || "control_schematic",
+            evidence_title: row.evidence_title || null,
+            evidence_binding_status: row.evidence_binding_status || null,
+          });
+        }
+      }
+      if (row.note) g.notes.push(row.note);
     } else if (!SKIP_ATTR.has(field) && !SKIP_ATTR.has(fieldU) && row.value != null && String(row.value).trim() !== "") {
       // Prefer first non-empty; later richer tools can overwrite empty.
       if (g.attrs[field] == null || String(g.attrs[field]).trim() === "") {
@@ -1697,7 +1863,7 @@ export function compileAgentTakeoff(rows = []) {
       g.plan_sheet_id = row.sheet_id;
       if (row.bbox_px) g.plan_bbox_px = row.bbox_px;
       g.status = g.status || "located";
-    } else if (row.sheet_id && (field !== "installed_quantity" && field !== "plan_tag")) {
+    } else if (row.sheet_id && (field !== "installed_quantity" && field !== "plan_tag" && field !== "plan_tag_observation" && field !== "diagram_tag")) {
       if (!g.schedule_sheet_id) g.schedule_sheet_id = row.sheet_id;
     }
     if (row.bbox_px && !g.bbox_px && field !== "plan_status" && field !== "plan_tag" && field !== "installed_quantity") {
@@ -1798,10 +1964,16 @@ export function compileAgentTakeoff(rows = []) {
       quantity_basis: g.quantity_basis,
       scheduled_qty: g.scheduled_qty,
       installed_qty: g.installed_qty,
+      tagged_plan_qty: g.tagged_plan_qty,
+      plan_candidate_count: g.plan_candidate_count,
       specs,
       spec_cites,
       plan_sheet_id: g.plan_sheet_id || null,
+      plan_tag_sheet_id: g.plan_tag_sheet_id || null,
+      plan_tag_bbox_px: g.plan_tag_bbox_px || null,
+      plan_tag_binding_status: g.plan_tag_binding_status || null,
       plan_bbox_px: g.plan_bbox_px || null,
+      diagram_cites: g.diagram_cites.map(({ identity: _identity, ...cite }) => cite),
       schedule_sheet_id: g.schedule_sheet_id || g.sheet_id || null,
       table_title: g.table_title,
       status: g.status || null, // blank Status column is noise — only set when real
@@ -1847,7 +2019,7 @@ export function compiledTakeoffToCsv(lines) {
   const header = [
     ...lead.map((c) => c.label),
     ...specCols,
-    "Plan sheet", "Schedule sheet", "Schedule", "Status", "Notes", "Workflow",
+    "Verified plan sheet", "Tag-only plan sheet", "Schedule sheet", "Schedule", "Status", "Notes", "Workflow",
   ];
   const out = [header.map(esc).join(",")];
   for (const r of lines || []) {
@@ -1855,6 +2027,7 @@ export function compiledTakeoffToCsv(lines) {
       ...lead.map((c) => lineLeadValue(r, c.key)),
       ...specCols.map((c) => lineSpecValue(r, c)),
       r.plan_sheet_id || "",
+      r.plan_tag_sheet_id || "",
       r.schedule_sheet_id || "",
       r.table_title || "",
       r.status || "",
@@ -1917,7 +2090,7 @@ export async function downloadTakeoffXlsx(linesOrRows, filename = "takeoff.xlsx"
       const header = [
         ...lead.map((c) => c.label),
         ...cols,
-        "Plan sheet", "Schedule sheet", "Status", "Notes",
+        "Verified plan sheet", "Tag-only plan sheet", "Schedule sheet", "Status", "Notes",
       ];
       return {
         name: g.family || "Takeoff",
@@ -1930,6 +2103,7 @@ export async function downloadTakeoffXlsx(linesOrRows, filename = "takeoff.xlsx"
             }),
             ...cols.map((c) => lineSpecValue(r, c)),
             r.plan_sheet_id || "",
+            r.plan_tag_sheet_id || "",
             r.schedule_sheet_id || "",
             r.status || "",
             r.notes || "",
@@ -2019,7 +2193,7 @@ export async function buildTakeoffPdfBytes(linesOrRows, {
       y -= 14;
       const lead = (group.leadColumns || takeoffLeadColumns(group.lines)).filter((c) => c.key !== "unit");
       const specs = (group.specColumns || []).slice(0, Math.max(2, 6 - lead.length));
-      const headers = [...lead.map((c) => c.label), ...specs, "Plan", "Status"];
+      const headers = [...lead.map((c) => c.label), ...specs, "Verified plan", "Tag only", "Status"];
       const usable = pageWidth - margin * 2;
       const n = headers.length;
       const base = Math.floor(usable / Math.max(n, 1));
@@ -2043,7 +2217,7 @@ export async function buildTakeoffPdfBytes(linesOrRows, {
         const vals = [
           ...lead.map((c) => lineLeadValue(r, c.key)),
           ...specs.map((c) => lineSpecValue(r, c)),
-          r.plan_sheet_id || r.schedule_sheet_id || "", r.status || "",
+          r.plan_sheet_id || "", r.plan_tag_sheet_id || "", r.status || "",
         ];
         let xx = margin;
         vals.forEach((v, i) => {

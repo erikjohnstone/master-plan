@@ -5,6 +5,7 @@ import * as pdfjs from 'pdfjs-dist';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import { RENDER_SCALE } from '../lib/sheets.ts';
 import { prepareBasSourceView, assertBasSourceViewFrame, basSourceViewRegion } from '../lib/basSourceView.ts';
+import { basCitationBoxes, basCitationFocusBox } from '../lib/basCitationGroup.ts';
 import { findBasOriginal } from '../lib/basSourceBrowser.js';
 import { store } from '../lib/store.js';
 import './BasSourceReader.css';
@@ -15,7 +16,7 @@ const MAX_EDGE = 2000;
 export default function BasSourceReader({ workflow, request, adapter, onBack }) {
   const [loaded, setLoaded] = useState(null), [error, setError] = useState('');
   const [pageNumber, setPageNumber] = useState(Number(request.page_id.split(':p').at(-1)));
-  const [focus, setFocus] = useState(!!request.bbox_px), [zoom, setZoom] = useState('fit');
+  const [focus, setFocus] = useState(!!request.bbox_px || Array.isArray(request.source_spans)), [zoom, setZoom] = useState('fit');
   const [rendered, setRendered] = useState(null), [rendering, setRendering] = useState(true);
   const token = useRef(null), heading = useRef(null), mount = useRef(null);
   useEffect(() => { heading.current?.focus(); }, []);
@@ -25,7 +26,13 @@ export default function BasSourceReader({ workflow, request, adapter, onBack }) 
     let loading;
     setError(''); setLoaded(null);
     (async () => {
-      const view = await prepareBasSourceView(workflow, { page_id: request.page_id, ...(request.bbox_px ? { bbox_px: request.bbox_px } : {}) });
+      const exactSpans = basCitationBoxes(request);
+      const view = await prepareBasSourceView(workflow, { page_id: request.page_id,
+        ...(exactSpans[0] ? { bbox_px: exactSpans[0].bbox_px } : {}) });
+      // Validate every retained rectangle against the saved, exact page frame.
+      // The reader never accepts the first box as proof that its siblings fit.
+      await Promise.all(exactSpans.slice(1).map(span => prepareBasSourceView(workflow,
+        { page_id: request.page_id, bbox_px: span.bbox_px })));
       if (!current()) return;
       const bytes = await findBasOriginal(adapter, view, current);
       if (!current()) return;
@@ -33,7 +40,7 @@ export default function BasSourceReader({ workflow, request, adapter, onBack }) 
       loading = pdfjs.getDocument({ data: bytes, isEvalSupported: false, enableXfa: false });
       loading.onPassword = () => { if (current()) setError('This original is password-protected. It cannot be reviewed here without its password; no substitute was opened.'); void loading.destroy().catch(() => {}); };
       const doc = await loading.promise;
-      if (current()) setLoaded({ doc, view, operation });
+      if (current()) setLoaded({ doc, view, exactSpans, operation });
     })().catch(e => { if (current()) setError(e.message); });
     return () => { if (token.current === operation) token.current = null; void loading?.destroy().catch(() => {}); };
   }, [workflow, request, adapter]);
@@ -51,26 +58,33 @@ export default function BasSourceReader({ workflow, request, adapter, onBack }) 
       if (!current()) return;
       const original = page.getViewport({ scale: RENDER_SCALE });
       assertBasSourceViewFrame(view, { page_count: loaded.doc.numPages, width_px: original.width, height_px: original.height, rotation: page.rotate });
-      const region = basSourceViewRegion(view, original.width, original.height, atCitation && focus);
+      const exactSpans = atCitation ? loaded.exactSpans : [];
+      const focusBox = basCitationFocusBox(exactSpans);
+      const region = basSourceViewRegion(focusBox ? { ...view, bbox_px: focusBox } : view,
+        original.width, original.height, atCitation && focus);
       const scale = MAX_EDGE / Math.max(region.x1 - region.x0, region.y1 - region.y0);
       const canvas = document.createElement('canvas');
       canvas.width = Math.max(1, Math.round((region.x1 - region.x0) * scale));
       canvas.height = Math.max(1, Math.round((region.y1 - region.y0) * scale));
       canvas.setAttribute('role', 'img');
-      canvas.setAttribute('aria-label', `Original PDF page ${pageNumber}${view.bbox_px ? ' with original citation outlined' : ''}. Source wording is shown above when supplied.`);
+      canvas.setAttribute('aria-label', `Original PDF page ${pageNumber}${exactSpans.length ? ` with ${exactSpans.length} exact source ${exactSpans.length === 1 ? 'region' : 'regions'} outlined` : ''}. Source wording is shown above when supplied.`);
       const context = canvas.getContext('2d');
       const viewport = page.getViewport({ scale: RENDER_SCALE * scale, offsetX: -region.x0 * scale, offsetY: -region.y0 * scale });
       renderTask = page.render({ canvasContext: context, viewport, background: '#ffffff' });
       await renderTask.promise;
       if (!current()) return;
-      if (view.bbox_px) {
-        const [x0, y0, x1, y1] = view.bbox_px;
-        // Display-only outline on the isolated canvas. Original bbox unchanged.
+      if (exactSpans.length) {
         context.strokeStyle = '#1f3fc7'; context.lineWidth = 2;
-        context.strokeRect((x0 - region.x0) * scale, (y0 - region.y0) * scale, (x1 - x0) * scale, (y1 - y0) * scale);
+        for (const span of exactSpans) {
+          const [x0, y0, x1, y1] = span.bbox_px;
+          // Display-only outlines on the isolated canvas. Original bboxes stay
+          // unchanged; the focus union is never painted as if it were evidence.
+          context.strokeRect((x0 - region.x0) * scale, (y0 - region.y0) * scale, (x1 - x0) * scale, (y1 - y0) * scale);
+        }
       }
       mount.current?.replaceChildren(canvas);
-      setRendered({ page_id: view.page_id, bbox_px: view.bbox_px, frame: view.frame, region, width: canvas.width, height: canvas.height });
+      setRendered({ page_id: view.page_id, bbox_px: view.bbox_px, citation_count: exactSpans.length,
+        frame: view.frame, region, width: canvas.width, height: canvas.height });
       setRendering(false);
     })().catch(e => { if (current()) { setError(e.message); setRendering(false); } });
     return () => { active = false; renderTask?.cancel(); };
@@ -86,7 +100,9 @@ export default function BasSourceReader({ workflow, request, adapter, onBack }) 
       <strong>{loaded?.view.names.join(' / ') || (error ? 'Original could not be verified' : 'Checking exact PDF identity…')}</strong>
       {request.value && <p className="bas-source-reader-quote">Source wording: {String(request.value)}</p>}
       <details><summary>Source identity &amp; original coordinates</summary><code>{request.page_id}</code>
-        <p>Original citation box: {request.bbox_px ? JSON.stringify(request.bbox_px) : 'No located highlight requested'}</p>
+        <p>Original citation boxes: {loaded?.exactSpans?.length
+          ? loaded.exactSpans.map(span => JSON.stringify(span.bbox_px)).join(' · ')
+          : 'No located highlight requested'}</p>
         {loaded && <p>Exact bytes verified · {loaded.view.source.byte_length.toLocaleString()} bytes · {loaded.view.source.page_count} pages</p>}
         {rendered && <p>{rendered.frame ? 'Saved page frame verified' : 'No saved frame in legacy history; whole-page inspection only'} · no quantity, review or approval changed.</p>}</details>
     </div>
@@ -96,13 +112,13 @@ export default function BasSourceReader({ workflow, request, adapter, onBack }) 
         onChange={e => { const n = Number(e.target.value); if (Number.isInteger(n) && n >= 1 && n <= loaded.view.source.page_count) setPageNumber(n); }} /></label>
       <span>of {loaded.view.source.page_count}</span></> : <span>Page {pageNumber} · unverified</span>}
       <button type="button" disabled={!loaded || pageNumber >= loaded.view.source.page_count} onClick={() => setPageNumber(n => n + 1)}>Next page</button>
-      <button type="button" disabled={!loaded || !request.bbox_px} aria-pressed={pageNumber === citationPage && focus}
+      <button type="button" disabled={!loaded || !loaded.exactSpans.length} aria-pressed={pageNumber === citationPage && focus}
         onClick={() => { setPageNumber(citationPage); setFocus(true); setZoom('fit'); }}>Focus citation</button>
       <button type="button" disabled={!loaded} aria-pressed={!focus} onClick={() => { setFocus(false); setZoom('fit'); }}>Whole page</button>
       <label>Display<select aria-label="Source display size" value={zoom} onChange={e => setZoom(e.target.value)}><option value="fit">Fit</option><option value="1">100%</option><option value="2">200%</option></select></label>
     </nav>
     {error ? <p role="alert" className="bas-source-reader-error">Could not open the original: {error}</p> :
-      <p role="status" className="bas-source-reader-status">{!loaded ? 'Verifying original PDF…' : rendering ? 'Rendering original page…' : `Original page ${pageNumber} ready${rendered?.bbox_px ? ' · citation outlined in blue' : ''}`}</p>}
+      <p role="status" className="bas-source-reader-status">{!loaded ? 'Verifying original PDF…' : rendering ? 'Rendering original page…' : `Original page ${pageNumber} ready${rendered?.citation_count ? ` · ${rendered.citation_count} exact source ${rendered.citation_count === 1 ? 'region' : 'regions'} outlined in blue` : ''}`}</p>}
     <div className={`bas-source-viewport ${zoom === 'fit' ? 'is-fit' : 'is-zoomed'}`} tabIndex={0} role="region" aria-label="Scrollable original PDF">
       <div ref={mount} className="bas-source-render" style={zoom !== 'fit' && rendered ? { width: rendered.width * Number(zoom), height: rendered.height * Number(zoom) } : undefined} />
     </div>

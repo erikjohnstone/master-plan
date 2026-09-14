@@ -29,6 +29,8 @@ import { basIssueJournalSchema, type BasIssueReviewEvent } from './basIssueRevie
 import { validateBasIssueJournal } from './basIssueReviewHistory.ts';
 import { basScopeJournalSchema, type BasScopeReviewEvent } from './basScopeReviewContract.ts';
 import { validateBasScopeJournal } from './basScopeReviewHistory.ts';
+import { basSequenceAiRunSchema, verifyBasSequenceAiRun, type BasSequenceAiRun } from './basSequenceAi.ts';
+import { basSequenceAiReviewEventSchema, type BasSequenceAiReviewEvent } from './basSequenceAiReviewContract.ts';
 export { canonicalBasJson } from './basCanonical.ts';
 
 const sha = z.string().regex(/^[a-f0-9]{64}$/);
@@ -73,6 +75,8 @@ const basWorkflowFields = z.object({
   revision_events: basRevisionJournalSchema.optional(),
   issue_events: basIssueJournalSchema.optional(),
   scope_events: basScopeJournalSchema.optional(),
+  sequence_ai_runs: z.array(z.object({ capture_id: sha, run: basSequenceAiRunSchema }).strict()).max(10000).optional(),
+  sequence_ai_reviews: z.array(basSequenceAiReviewEventSchema).max(100000).optional(),
 }).strict();
 export const basWorkflowSchema = basWorkflowFields.superRefine(refineBasWorkflowReferences);
 function refineBasWorkflowReferences(w: z.infer<typeof basWorkflowFields>, ctx: z.RefinementCtx) {
@@ -94,6 +98,15 @@ function refineBasWorkflowReferences(w: z.infer<typeof basWorkflowFields>, ctx: 
   if (w.revision_events && !supports('bas_revision_8')) fail('Comparison review requires the comparison workflow revision');
   if (w.issue_events && !supports('bas_issues_9')) fail('Issue decisions require the issue workflow revision');
   if (w.scope_events && !supports('bas_scope_10')) fail('Scope decisions require the scope workflow revision');
+  if ((w.sequence_ai_runs || w.sequence_ai_reviews) && !supports('bas_sequence_ai_11')) fail('SOO AI interpretation requires the sequence AI workflow revision');
+  const sequenceAiRuns = new Set<string>();
+  for (const record of w.sequence_ai_runs ?? []) {
+    const capture = w.captures.find(c => c.capture_id === record.capture_id);
+    if (!capture?.narrative_sources) fail('SOO AI interpretation has no retained narrative capture');
+    const key = `${record.capture_id}:${record.run.run_id}`;
+    if (sequenceAiRuns.has(key)) fail('Duplicate SOO AI run identity');
+    sequenceAiRuns.add(key);
+  }
   const heads = new Map<string, string>(), operations = new Set<string>(), eventIds = new Set<string>();
   for (const event of w.review_events ?? []) {
     if (!ids.has(event.capture_id) || !w.captures.find(c => c.capture_id === event.capture_id)?.narrative_sources) fail('Review event has no retained narrative capture');
@@ -129,6 +142,17 @@ function refineBasWorkflowReferences(w: z.infer<typeof basWorkflowFields>, ctx: 
   for (const event of [...(w.drawing_events ?? []), ...(w.revision_events ?? []), ...(w.issue_events ?? []), ...(w.scope_events ?? [])]) {
     if (operations.has(event.operation_id) || eventIds.has(event.event_id)) fail('Duplicate BAS review operation/event');
     operations.add(event.operation_id); eventIds.add(event.event_id);
+  }
+  const sequenceAiHeads = new Map<string, string>();
+  for (const event of w.sequence_ai_reviews ?? []) {
+    const record = w.sequence_ai_runs?.find(value => value.capture_id === event.capture_id && value.run.run_id === event.run_id);
+    if (!record?.run.interpretations.some(value => value.interpretation_id === event.interpretation_id)) {
+      fail('SOO AI review target is not owned by a retained interpretation');
+    }
+    const key = `${event.capture_id}:${event.run_id}`;
+    if (event.expected_head !== (sequenceAiHeads.get(key) ?? null)) fail('Divergent or incomplete SOO AI review history');
+    if (operations.has(event.operation_id) || eventIds.has(event.event_id)) fail('Duplicate BAS review operation/event');
+    sequenceAiHeads.set(key, event.event_id); operations.add(event.operation_id); eventIds.add(event.event_id);
   }
   try {
     const drawings = replayBasDrawingHistory(w.captures, w.drawing_events);
@@ -207,7 +231,7 @@ export async function captureBasEvidence(sources: BasSourceContext, points: BasP
   return { schema_version: 'bas_workflow_v1', revision: equipment ? 'bas_equipment_3' : 'bas_evidence_2', captures: [checked], current_capture_id: checked.capture_id };
 }
 
-export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSchema>, 'event_id'> | Omit<BasEquipmentReviewEvent, 'event_id'> | Omit<BasAssemblyReviewEvent, 'event_id'> | Omit<BasEngineeringReviewEvent, 'event_id'> | Omit<BasDrawingEvent, 'event_id'> | Omit<BasRevisionReviewEvent, 'event_id'> | Omit<BasIssueReviewEvent, 'event_id'> | Omit<BasScopeReviewEvent, 'event_id'>) =>
+export const basEventFingerprint = (event: Omit<z.infer<typeof basReviewEventSchema>, 'event_id'> | Omit<BasEquipmentReviewEvent, 'event_id'> | Omit<BasAssemblyReviewEvent, 'event_id'> | Omit<BasEngineeringReviewEvent, 'event_id'> | Omit<BasDrawingEvent, 'event_id'> | Omit<BasRevisionReviewEvent, 'event_id'> | Omit<BasIssueReviewEvent, 'event_id'> | Omit<BasScopeReviewEvent, 'event_id'> | Omit<BasSequenceAiReviewEvent, 'event_id'>) =>
   sha256Hex(new TextEncoder().encode(canonicalBasJson(event)));
 
 export async function verifyBasWorkflow(raw: unknown): Promise<BasWorkflow> {
@@ -238,6 +262,14 @@ async function verifyBasWorkflowOwned(raw: unknown, retainPreparedReviewViews: b
   // Every retained field is owned above before the first asynchronous check.
   raw = undefined;
   for (const c of result.captures) if (await fingerprint(c) !== c.capture_id) throw new Error('BAS capture fingerprint mismatch; saved evidence was changed');
+  for (const record of result.sequence_ai_runs ?? []) {
+    const capture = result.captures.find(c => c.capture_id === record.capture_id)!;
+    await verifyBasSequenceAiRun(capture.narrative_sources!, record.run);
+  }
+  for (const event of result.sequence_ai_reviews ?? []) {
+    const { event_id, ...payload } = event;
+    if (await basEventFingerprint(payload) !== event_id) throw new Error('SOO AI review event fingerprint mismatch');
+  }
   const pairs = new Map<string, Set<string>>();
   for (const event of result.review_events ?? []) {
     const { event_id, ...payload } = event;
@@ -473,6 +505,18 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     if (previous && canonicalBasJson(previous) !== canonicalBasJson(event)) throw new Error('Conflicting scope event identity');
     scopeEvents.set(event.event_id, event);
   }
+  const sequenceAiRuns = new Map((left.sequence_ai_runs ?? []).map(record => [`${record.capture_id}:${record.run.run_id}`, record]));
+  for (const record of right.sequence_ai_runs ?? []) {
+    const key = `${record.capture_id}:${record.run.run_id}`, previous = sequenceAiRuns.get(key);
+    if (previous && canonicalBasJson(previous) !== canonicalBasJson(record)) throw new Error('Conflicting SOO AI run identity');
+    sequenceAiRuns.set(key, record);
+  }
+  const sequenceAiReviews = new Map((left.sequence_ai_reviews ?? []).map(event => [event.event_id, event]));
+  for (const event of right.sequence_ai_reviews ?? []) {
+    const previous = sequenceAiReviews.get(event.event_id);
+    if (previous && canonicalBasJson(previous) !== canonicalBasJson(event)) throw new Error('Conflicting SOO AI review event identity');
+    sequenceAiReviews.set(event.event_id, event);
+  }
   return basWorkflowSchema.parse({ ...left, captures: [...merged.values()],
     revision: atLeastBasWorkflowRevision(left.revision, right.revision),
     ...(events.size || left.review_events || right.review_events ? { review_events: [...events.values()] } : {}),
@@ -485,6 +529,8 @@ export function mergeBasWorkflows(current: unknown, incoming: unknown, activateI
     ...(revisionEvents.size || left.revision_events || right.revision_events ? { revision_events: [...revisionEvents.values()] } : {}),
     ...(issueEvents.size || left.issue_events || right.issue_events ? { issue_events: [...issueEvents.values()] } : {}),
     ...(scopeEvents.size || left.scope_events || right.scope_events ? { scope_events: [...scopeEvents.values()] } : {}),
+    ...(sequenceAiRuns.size || left.sequence_ai_runs || right.sequence_ai_runs ? { sequence_ai_runs: [...sequenceAiRuns.values()] } : {}),
+    ...(sequenceAiReviews.size || left.sequence_ai_reviews || right.sequence_ai_reviews ? { sequence_ai_reviews: [...sequenceAiReviews.values()] } : {}),
     current_capture_id: activateIncoming ? right.current_capture_id : left.current_capture_id ?? right.current_capture_id });
 }
 
@@ -503,6 +549,27 @@ export function retainBasWorkflowHistory(selected: unknown, ...versions: unknown
 
 export function activeBasCapture(workflow: BasWorkflow | null | undefined) {
   return workflow?.captures.find(c => c.capture_id === workflow.current_capture_id) ?? null;
+}
+
+export function latestBasSequenceAiRun(workflow: BasWorkflow | null | undefined, captureId: string): BasSequenceAiRun | null {
+  return (workflow?.sequence_ai_runs ?? []).filter(record => record.capture_id === captureId)
+    .map(record => record.run).sort((a, b) => b.generated_at.localeCompare(a.generated_at) || b.run_id.localeCompare(a.run_id))[0] ?? null;
+}
+
+/** Append one already source-validated interpretation run without changing
+ * capture identity, deterministic extraction, or any approval state. */
+export async function retainBasSequenceAiRun(rawWorkflow: unknown, captureId: string, rawRun: unknown): Promise<BasWorkflow> {
+  const workflow = await verifyBasWorkflow(rawWorkflow);
+  const capture = workflow.captures.find(value => value.capture_id === captureId);
+  if (!capture?.narrative_sources) throw new Error('SOO AI interpretation requires a retained narrative capture');
+  const run = await verifyBasSequenceAiRun(capture.narrative_sources, rawRun);
+  const previous = workflow.sequence_ai_runs?.find(record => record.capture_id === captureId && record.run.run_id === run.run_id);
+  if (previous) {
+    if (canonicalBasJson(previous.run) !== canonicalBasJson(run)) throw new Error('Conflicting SOO AI run identity');
+    return workflow;
+  }
+  return verifyBasWorkflow({ ...workflow, revision: atLeastBasWorkflowRevision(workflow.revision, 'bas_sequence_ai_11'),
+    sequence_ai_runs: [...(workflow.sequence_ai_runs ?? []), { capture_id: captureId, run }] });
 }
 
 /** Byte-bound source navigation shared by browser and headless consumers.

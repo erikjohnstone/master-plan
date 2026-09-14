@@ -6,6 +6,7 @@
  *   --mode compile --kind …   → compileCorpusTakeoff JSON on stdout
  *   --mode complete_bas       → five compilers + reconcile on one Session
  *   --mode sweep --tag …      → Session.sweepScheduleRow JSON on stdout
+ *                                (`--sweep-options` carries Session-native JSON)
  *   --mode symbol_sweep        → Session.symbolSweep JSON on stdout
  *   --mode count_marks        → Session.countMarks JSON on stdout
  *   --mode reconcile          → reconcileSchedulePlan JSON on stdout
@@ -67,6 +68,7 @@ const familySweepAll = process.argv.includes("--family-sweep-all");
 // what was asked, so the UI and MCP could disagree on an installed count
 // from the same tag. Opt-in flag now, matching the real default.
 const evaluationFast = process.argv.includes("--evaluation-fast");
+const sweepOptionsRaw = arg(process.argv, "--sweep-options");
 const symbolPdfIndex = Number(arg(process.argv, "--symbol-pdf-index") ?? 0);
 const symbolPage = Number(arg(process.argv, "--symbol-page") ?? 0);
 const symbolSeedRectRaw = arg(process.argv, "--symbol-seed-rect");
@@ -75,7 +77,7 @@ const symbolOptionsRaw = arg(process.argv, "--symbol-options");
 const outPath = arg(process.argv, "--out");
 const pdfs = argsOf(process.argv, "--pdf").map((p) => resolve(p));
 if (!pdfs.length) {
-  console.error("usage: production-graph-cli.mjs --mode graph|compile|sweep|count_marks|reconcile --pdf <path> [--pdf …] [--kind …] [--tag …] [--marks a,b] [--family VAV] [--tags a,b] [--family-sweep-all] [--service CHW|HHW] [--out …]");
+  console.error("usage: production-graph-cli.mjs --mode graph|compile|sweep|count_marks|reconcile --pdf <path> [--pdf …] [--kind …] [--tag …] [--sweep-options JSON] [--marks a,b] [--family VAV] [--tags a,b] [--family-sweep-all] [--service CHW|HHW] [--out …]");
   process.exit(2);
 }
 if (mode === "compile" && !kind) {
@@ -117,7 +119,11 @@ for (let i = 1; i < pdfs.length; i++) {
 if (mode === "symbol_sweep") {
   const seedRect = JSON.parse(symbolSeedRectRaw);
   const symbolOptions = symbolOptionsRaw ? JSON.parse(symbolOptionsRaw) : {};
-  const sheet = `${basename(pdfs[symbolPdfIndex])}#${symbolPage}`;
+  // Session's canonical key for page 1 is the bare filename; only later
+  // pages carry `#N`. Constructing `file#1` made the browser production
+  // bridge refuse every page-1 symbol request before matching began.
+  const sheetBase = basename(pdfs[symbolPdfIndex]);
+  const sheet = symbolPage === 1 ? sheetBase : `${sheetBase}#${symbolPage}`;
   progress("symbol_sweep", `Sweeping ${symbolScope === "set" ? "the plan set" : sheet} on shared Session path…`, {
     scope: symbolScope,
     sheet,
@@ -173,7 +179,17 @@ if (mode === "graph") {
 
 if (mode === "sweep") {
   progress("sweep", `Sweeping schedule row ${sweepTag} on shared Session path…`, { tag: sweepTag });
-  const result = await session.sweepScheduleRow(sweepTag, { evaluationFast });
+  const sweepOptions = sweepOptionsRaw ? JSON.parse(sweepOptionsRaw) : {};
+  const result = await session.sweepScheduleRow(sweepTag, {
+    evaluationFast,
+    ...(sweepOptions.verifyTaggedGeometry === true ? { verifyTaggedGeometry: true } : {}),
+    ...(typeof sweepOptions.rotations === "boolean" ? { rotations: sweepOptions.rotations } : {}),
+    ...(typeof sweepOptions.mirror === "boolean" ? { mirror: sweepOptions.mirror } : {}),
+    ...(typeof sweepOptions.tolerancePx === "number" ? { tolerancePx: sweepOptions.tolerancePx } : {}),
+    ...(typeof sweepOptions.preferSheet === "string" ? { preferSheet: sweepOptions.preferSheet } : {}),
+    ...(typeof sweepOptions.preferTitle === "string" ? { preferTitle: sweepOptions.preferTitle } : {}),
+    ...(sweepOptions.affine && typeof sweepOptions.affine === "object" ? { affine: sweepOptions.affine } : {}),
+  });
   await writeJsonAndExit(result);
 }
 

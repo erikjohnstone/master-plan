@@ -9,8 +9,10 @@ import {
   dedupeTakeoffRows,
   displayScheduleFamily,
   groupTakeoffByFamily,
+  lineDiagramCite,
   lineLeadCite,
   linePlanCite,
+  linePlanTagCite,
   lineScheduleCite,
   makeTakeoffRow,
   mergeTakeoffRows,
@@ -73,7 +75,7 @@ test("rowsFromToolResult: query_table expands full row cells for modular columns
   assert.ok(rows.some((r) => r.field === "PIPE SIZE"));
 });
 
-test("rowsFromToolResult: sweep_schedule_row installed qty + attributes", () => {
+test("rowsFromToolResult: sweep_schedule_row quarantines tag-only qty + preserves attributes", () => {
   const rows = rowsFromToolResult("sweep_schedule_row", { tag: "VAV-1" }, {
     tag: "VAV-1",
     found: 3,
@@ -89,12 +91,41 @@ test("rowsFromToolResult: sweep_schedule_row installed qty + attributes", () => 
       cell_citations: { CFM: { bbox: [5, 6, 7, 8] } },
     },
   }, { workflow: "vav join" });
-  assert.ok(rows.some((r) => r.field === "installed_quantity" && r.value === 3 && r.unit === "EA"));
-  const installed = rows.find((r) => r.field === "installed_quantity");
-  assert.equal(installed?.quantity_basis, "exact_plan_tag");
-  assert.match(installed?.note || "", /unlabeled audit: not run/);
+  assert.ok(!rows.some((r) => r.field === "installed_quantity"));
+  const observed = rows.find((r) => r.field === "tagged_plan_quantity");
+  assert.equal(observed?.value, 3);
+  assert.equal(observed?.quantity_basis, "exact_plan_tag");
+  assert.match(observed?.note || "", /not verified/i);
   assert.ok(rows.some((r) => r.field === "CFM" && r.value === "2170"));
   assert.ok(!rows.some((r) => r.field === "MARK"));
+});
+
+test("rowsFromToolResult: tag-attached vector sweep exposes separate symbol and tag citations", () => {
+  const rows = rowsFromToolResult("sweep_schedule_row", { tag: "VAV-1" }, {
+    tag: "VAV-1",
+    found: 1,
+    search_scope: "tagged_only",
+    unlabeled_audit_complete: false,
+    complete: true,
+    anchor: { grounding_basis: "tag_attached_vector" },
+    tag_citations: [{ sheet: "mech.pdf#2", bbox: [10, 20, 30, 40] }],
+    sheets: [{
+      sheet: "mech.pdf#2",
+      matches: [{
+        at: [50, 60],
+        geometry_bbox: [40, 50, 60, 70],
+        tag_at: [10, 20, 30, 40],
+        attachment_via: "leader",
+      }],
+    }],
+    row: { sheet: "mech.pdf#6", table: "VAV SCHEDULE", cells: {} },
+  }, { workflow: "vav join" });
+  const installed = rows.find((row) => row.field === "installed_quantity");
+  const tag = rows.find((row) => row.field === "plan_tag_observation");
+  assert.equal(installed?.quantity_basis, "tag_attached_vector");
+  assert.deepEqual(installed?.bbox_px, [40, 50, 60, 70]);
+  assert.deepEqual(tag?.bbox_px, [10, 20, 30, 40]);
+  assert.equal(tag?.evidence_binding_status, "geometry_verified");
 });
 
 test("compileAgentTakeoff: query_table / answer scrap alone → no Takeoff lines", () => {
@@ -1161,7 +1192,7 @@ test("reconcile_schedule_plan: EAV rows merge into ONE compiled line carrying sc
     rows: [{
       tag: "VAV-1", family: "VAV", scheduled_qty: 6, installed_qty: 4, status: "SCHEDULE_ONLY",
       observed_plan_qty: 4,
-      installed_qty_basis: "exact_plan_tag",
+      installed_qty_basis: "symbol_fingerprint",
       search_scope: "tagged_only",
       unlabeled_audit_complete: false,
       plan_search_complete: true,
@@ -1184,7 +1215,7 @@ test("reconcile_schedule_plan: EAV rows merge into ONE compiled line carrying sc
   assert.equal(line.qty_kind, "installed");
   assert.equal(line.scheduled_qty, 6);
   assert.equal(line.installed_qty, 4);
-  assert.equal(line.quantity_basis, "exact_plan_tag");
+  assert.equal(line.quantity_basis, "symbol_fingerprint");
   assert.deepEqual(line.bbox_px, [90, 190, 110, 210]);
   assert.match(line.notes, /unlabeled audit: not run/);
   assert.equal(line.status, "schedule_only");
@@ -1224,7 +1255,7 @@ test("reconciled line exposes separate schedule-row and plan-marker citations", 
   rows.push(...rowsFromToolResult("reconcile_schedule_plan", {}, {
     rows: [{
       tag: "VAV-2", scheduled_qty: 1, installed_qty: 1, status: "MATCH",
-      installed_qty_basis: "exact_plan_tag", schedule_cite: { sheet: "set.pdf#5", title: "VAV SCHEDULE" },
+      installed_qty_basis: "symbol_fingerprint", schedule_cite: { sheet: "set.pdf#5", title: "VAV SCHEDULE" },
       plan_cites: [{ sheet: "set.pdf#12", bbox: [90, 190, 110, 210] }],
     }], summary: { total: 1, match: 1 },
   }));
@@ -1235,6 +1266,72 @@ test("reconciled line exposes separate schedule-row and plan-marker citations", 
   assert.deepEqual(lineScheduleCite(line)?.bbox_px, [8, 18, 300, 42]);
   assert.equal(linePlanCite(line)?.sheet_id, "set.pdf#12");
   assert.deepEqual(linePlanCite(line)?.bbox_px, [90, 190, 110, 210]);
+});
+
+test("Agent quarantine prevents exact plan tag text from becoming an installed symbol match", () => {
+  const rows = rowsFromCompiledTakeoff({
+    kind: "hvac_equipment",
+    categories: { VAV: { items: [{
+      tag: "VAV-2", quantity: 1, quantity_basis: "printed_schedule_quantity",
+      sheet_id: "set.pdf#5", table_title: "VAV SCHEDULE",
+      bbox_px: [10, 20, 30, 40], row_bbox_px: [8, 18, 300, 42],
+    }] } },
+  });
+  rows.push(...rowsFromToolResult("reconcile_schedule_plan", {}, {
+    rows: [{
+      tag: "VAV-2", scheduled_qty: 1, installed_qty: 1, status: "MATCH",
+      installed_qty_basis: "exact_plan_tag", schedule_cite: { sheet: "set.pdf#5", title: "VAV SCHEDULE" },
+      plan_cites: [{ sheet: "set.pdf#12", bbox: [90, 190, 110, 210] }],
+    }], summary: { total: 1, match: 1 },
+  }));
+  const line = compileAgentTakeoff(rows)[0];
+  assert.equal(line.installed_qty, null);
+  assert.equal(line.tagged_plan_qty, 1);
+  assert.equal(line.qty_kind, "scheduled");
+  assert.equal(line.status, "ambiguous");
+  assert.equal(linePlanCite(line), null);
+  assert.deepEqual(linePlanTagCite(line), {
+    sheet_id: "set.pdf#12", bbox_px: [90, 190, 110, 210], column: "PLAN TAG TEXT",
+    field: "plan_tag_observation", value: "VAV-2", tag: "VAV-2", table_title: "VAV SCHEDULE",
+    kind: "row", evidence_kind: "plan_tag_text", evidence_binding_status: "geometry_unverified",
+  });
+  assert.match(line.notes, /symbol geometry.*not verified/i);
+});
+
+test("reconciled line exposes authored diagram evidence without promoting it to installed quantity", () => {
+  const rows = rowsFromCompiledTakeoff({
+    kind: "control_valves",
+    categories: { CHW_CONTROL_VALVE: { items: [{
+      tag: "CV-CH-A1", quantity: 1, quantity_basis: "printed_schedule_quantity",
+      sheet_id: "set.pdf#44", table_title: "CHW CONTROL VALVE SCHEDULE",
+      bbox_px: [10, 20, 30, 40], row_bbox_px: [8, 18, 300, 42],
+    }] } },
+  });
+  rows.push(...rowsFromToolResult("reconcile_schedule_plan", {}, {
+    rows: [{
+      tag: "CV-CH-A1", scheduled_qty: 1, installed_qty: null, status: "SCHEDULE_ONLY",
+      schedule_cite: { sheet: "set.pdf#44", title: "CHW CONTROL VALVE SCHEDULE" },
+      plan_cites: [],
+      diagram_corroborated: true,
+      diagram_cites: [{
+        sheet: "set.pdf#72", title: "AIR OPS - CHILLED WATER PIPING SCHEMATIC",
+        diagram_kind: "piping", tag: "CV-CH-A1", bbox: [50, 60, 70, 80],
+        source_text: "CV-CH-A1", grounding_basis: "exact_authored_diagram_tag",
+        schedule_binding_status: "bound",
+      }],
+    }], summary: { total: 1, match: 0, schedule_only: 1 },
+  }));
+  const line = compileAgentTakeoff(rows)[0];
+  assert.equal(line.qty_kind, "scheduled");
+  assert.equal(line.installed_qty, null);
+  assert.equal(linePlanCite(line), null);
+  assert.deepEqual(lineDiagramCite(line), {
+    sheet_id: "set.pdf#72", bbox_px: [50, 60, 70, 80], column: "DIAGRAM TAG", field: "diagram_tag",
+    value: "CV-CH-A1", tag: "CV-CH-A1", table_title: "CHW CONTROL VALVE SCHEDULE", kind: "row",
+    evidence_kind: "piping", evidence_title: "AIR OPS - CHILLED WATER PIPING SCHEMATIC",
+    evidence_binding_status: "bound",
+  });
+  assert.match(line.notes, /Authored diagram tag corroboration only/);
 });
 
 test("compileAgentTakeoff never invents qty=1 for an attr-only tag with no printed or drawn quantity", () => {

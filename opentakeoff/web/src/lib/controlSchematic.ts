@@ -301,6 +301,7 @@ const CONTROL_TITLE_RE = /\b(?:(?:CONTROL(?:\s+SYSTEM)?\s+)?SCHEMATIC|CONTROL\s+
 const CONTROL_TITLE_SUFFIX_RE = /\b(?:(?:CONTROL(?:\s+SYSTEM)?\s+)?SCHEMATIC(?:\s+AND\s+POINTS?\s+LIST)?|CONTROL\s+DIAGRAM)$/i;
 const EXPLICIT_CONTROL_SCHEMATIC_RE = /\b(?:CONTROL(?:\s+SYSTEM)?\s+SCHEMATIC|CONTROL\s+DIAGRAM)\b/i;
 const POINT_LIST_SUFFIX_RE = /\bSCHEMATIC\s+AND\s+POINTS?\s+LIST$/i;
+const HYDRONIC_PIPING_SCHEMATIC_RE = /\b(?:CONDENSER|CHILLED|HEATING|HOT)\s+WATER\s+PIPING\s+SCHEMATIC\b/i;
 const RISER_TITLE_RE = /\b(?:RISER\s+DIAGRAM|FLOW\s+DIAGRAM|PIPING\s+DIAGRAM|NETWORK(?:\s+ARCHITECTURE)?\s+DIAGRAM|(?:CONDENSER|CHILLED|HEATING|HOT)\s+WATER\s+DIAGRAM|WATER\s+RISER)\b/i;
 const SEQUENCE_TITLE_RE = /\bSEQUENCES?\s+OF\s+OPERATIONS?\b/i;
 const IO_TYPES = new Set(["AI", "AO", "DI", "DO"]);
@@ -335,6 +336,7 @@ function isControlSchematicTitle(span: GraphSpan, height: number): boolean {
   const explicitControlDiagram = /\bCONTROL\s+DIAGRAM$/i.test(text);
   return Math.abs(Number(span.rot || 0)) <= 0.08
     && CONTROL_TITLE_SUFFIX_RE.test(text)
+    && !HYDRONIC_PIPING_SCHEMATIC_RE.test(text)
     && !/\b(?:SYMBOLS?|LEGEND|DESIGNATION|REFERENCE)\b/i.test(text)
     && span.h >= (explicitControlDiagram
       ? Math.max(14, height * 0.0045)
@@ -371,8 +373,8 @@ function expandedControlTitle(title: GraphSpan, spans: GraphSpan[]): GraphSpan {
 function isRiserDiagramTitle(span: GraphSpan, height: number): boolean {
   const text = clean(span.str);
   return Math.abs(Number(span.rot || 0)) <= 0.08
-    && RISER_TITLE_RE.test(text)
-    && /(?:RISER\s+DIAGRAM|FLOW\s+DIAGRAM|PIPING\s+DIAGRAM|NETWORK(?:\s+ARCHITECTURE)?\s+DIAGRAM|(?:CONDENSER|CHILLED|HEATING|HOT)\s+WATER\s+DIAGRAM|WATER\s+RISER)$/i.test(text)
+    && (RISER_TITLE_RE.test(text) || HYDRONIC_PIPING_SCHEMATIC_RE.test(text))
+    && /(?:RISER\s+DIAGRAM|FLOW\s+DIAGRAM|PIPING\s+DIAGRAM|NETWORK(?:\s+ARCHITECTURE)?\s+DIAGRAM|(?:CONDENSER|CHILLED|HEATING|HOT)\s+WATER\s+(?:DIAGRAM|PIPING\s+SCHEMATIC)|WATER\s+RISER)$/i.test(text)
     && !/\b(?:DESIGNATION|WHERE|SHOWN|REFER|NOTE|NOTES)\b/i.test(text)
     && span.h >= Math.max(14, height * 0.0045);
 }
@@ -1570,7 +1572,7 @@ function extractRisers(ctx: ControlSheetContext, tables: ScheduleTable[]): Riser
       ? "network_architecture"
       : /FLOW\s+DIAGRAM$/i.test(titleText)
         ? "flow"
-        : /(?:PIPING\s+DIAGRAM|(?:CONDENSER|CHILLED|HEATING|HOT)\s+WATER\s+DIAGRAM)$/i.test(titleText)
+      : /(?:PIPING\s+DIAGRAM|(?:CONDENSER|CHILLED|HEATING|HOT)\s+WATER\s+(?:DIAGRAM|PIPING\s+SCHEMATIC))$/i.test(titleText)
           ? "piping"
           : "riser";
     // Riser/network titles conventionally sit below the diagram. Bound the

@@ -524,6 +524,24 @@ describe("control schematic extraction", () => {
     assert.deepEqual(result.risers[0].systems.map(({ normalized_system }) => normalized_system), ["condenser_water"]);
   });
 
+  it("classifies an authored hydronic PIPING SCHEMATIC as diagram evidence, not a generic control schematic", () => {
+    const result = extractControlSchematics([{
+      key: "M-801",
+      spans: [
+        span("CV-CH-A1", 140, 180, 80, 14),
+        span("CV-CH-A2", 440, 180, 80, 14),
+        span("AIR OPS - CHILLED WATER PIPING SCHEMATIC", 100, 500, 520, 20),
+      ],
+      width: 700,
+      height: 700,
+      segs: [100, 250, 600, 250],
+    }]);
+    assert.equal(result.schematics.length, 0);
+    assert.equal(result.risers.length, 1);
+    assert.equal(result.risers[0].diagram_kind, "piping");
+    assert.deepEqual(result.risers[0].diagram_tags.map(({ tag }) => tag).sort(), ["CV-CH-A1", "CV-CH-A2"]);
+  });
+
   it("pairs local valve-state tokens one-to-one and preserves cross-diagram conflicts", () => {
     const result = extractControlSchematics([
       {

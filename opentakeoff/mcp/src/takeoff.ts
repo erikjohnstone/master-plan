@@ -27,6 +27,7 @@ import {
   reconcileRowsFromTakeoffItems,
   summarizeReconcile,
   reconcileScheduleFamilyWithSweeps,
+  attachDiagramCorroboration,
   familyNeedleFromSpecs,
   rowIdentityTag,
 } from "../../web/src/lib/schedulePlanReconcile.mjs";
@@ -79,15 +80,38 @@ export interface TakeoffItem {
   /** Number of distinct grounded plan callouts before authored `(N)`/TYP
    * multipliers are applied. `quantity` remains installed units. */
   placement_count?: number;
+  /** Exact plan-label observations that have not yet been verified against
+   * matching device geometry. Never treated as installed quantity. */
+  tagged_plan_quantity?: number;
   drawing_locations: Array<{
     sheet: string;
     at: [number, number];
-    /** Exact plan-tag text bbox supporting this counted placement. */
+    /** Verified symbol/body bbox when available; legacy fingerprint rows may
+     * retain the exact tag box here until their own tight geometry box exists. */
     bbox?: { x0: number; y0: number; x1: number; y1: number };
+    /** Exact printed identity text, kept separately from the physical body. */
+    tag_bbox?: { x0: number; y0: number; x1: number; y1: number };
     score?: number;
+    attachment_via?: "adjacent" | "leader";
+    attachment_distance_px?: number;
+    counted_from?: "explicit_label";
+  }>;
+  plan_tag_locations?: Array<{
+    sheet: string;
+    at: [number, number];
+    bbox?: { x0: number; y0: number; x1: number; y1: number };
+  }>;
+  plan_candidate_locations?: Array<{
+    sheet: string;
+    at: [number, number];
+    score?: number;
+    reason?: string;
+    hold?: unknown;
   }>;
   /** What proves the installed quantity; never inferred from the schedule. */
-  quantity_basis?: "symbol_fingerprint" | "exact_plan_tag" | "explicit_installation_note" | null;
+  quantity_basis?: "symbol_fingerprint" | "tag_attached_vector" | "exact_plan_tag" | "explicit_installation_note" | null;
+  installed_evidence_grade?: "symbol_geometry" | "explicit_installation_note" | "tag_text_only" | "mixed_geometry_and_tag_text" | "unverified";
+  geometry_verified?: boolean;
   /** Search coverage returned by the shared row sweep. */
   search_scope?: "exhaustive" | "tagged_only" | "explicit_note_set" | null;
   /** Whether untagged/near-match geometry was audited, distinct from exact-tag coverage. */
@@ -446,6 +470,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         r = await session.sweepScheduleRow(tag, {
           commit: false,
           evaluationFast: opts.evaluationFast,
+          verifyTaggedGeometry: true,
           equipmentFamily: cls?.name ?? null,
           preferSheet: tb.sheet,
           preferTitle: tb.title?.text ?? null,
@@ -464,6 +489,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
           r = await session.sweepScheduleRow(alias, {
             commit: false,
             evaluationFast: opts.evaluationFast,
+            verifyTaggedGeometry: true,
             equipmentFamily: cls?.name ?? null,
             preferSheet: tb.sheet,
             preferTitle: tb.title?.text ?? null,
@@ -476,23 +502,59 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         }
         item.tag = alias;
       }
-      item.quantity = r.found ?? 0;
-      item.placement_count = (r.sheets || []).reduce((sum: number, ps: any) => sum + (ps.matches || []).length, 0);
-      item.drawing_locations = (r.sheets || []).flatMap((ps: any) =>
+      const quantityBasis = r.anchor?.grounding_basis ?? "symbol_fingerprint";
+      const matchedLocations = (r.sheets || []).flatMap((ps: any) =>
         (ps.matches || []).flatMap((m: any) => Array.from({ length: m.multiplier ?? 1 }, () => ({
           sheet: ps.sheet,
           at: m.at as [number, number],
-          ...(m.tag_at ? { bbox: m.tag_at } : {}),
+          ...(m.geometry_bbox || m.tag_at ? { bbox: m.geometry_bbox || m.tag_at } : {}),
+          ...(m.tag_at ? { tag_bbox: m.tag_at } : {}),
           ...(Number.isFinite(m.score) ? { score: m.score } : {}),
+          ...(m.attachment_via ? { attachment_via: m.attachment_via as "adjacent" | "leader" } : {}),
+          ...(Number.isFinite(m.attachment_distance_px) ? { attachment_distance_px: m.attachment_distance_px } : {}),
+          ...(m.counted_from === "explicit_label" ? { counted_from: "explicit_label" as const } : {}),
         }))));
-      item.quantity_basis = r.anchor?.grounding_basis ?? "symbol_fingerprint";
+      const planTagLocations = matchedLocations.filter((loc: any) =>
+        quantityBasis === "exact_plan_tag" || loc.counted_from === "explicit_label");
+      const geometryLocations = matchedLocations.filter((loc: any) =>
+        (quantityBasis === "symbol_fingerprint" || quantityBasis === "tag_attached_vector")
+        && loc.counted_from !== "explicit_label");
+      const geometryPlacementCount = (r.sheets || []).reduce((sum: number, ps: any) =>
+        sum + (ps.matches || []).filter((match: any) => match.counted_from !== "explicit_label").length, 0);
+      const allGeometryVerified = geometryLocations.length > 0 && planTagLocations.length === 0 && r.complete !== false;
+      item.quantity = geometryLocations.length;
+      item.tagged_plan_quantity = planTagLocations.length || undefined;
+      item.placement_count = geometryPlacementCount || undefined;
+      item.drawing_locations = geometryLocations;
+      item.plan_tag_locations = planTagLocations;
+      item.plan_candidate_locations = (r.sheets || []).flatMap((ps: any) =>
+        (ps.withheld || []).map((candidate: any) => ({
+          sheet: ps.sheet,
+          at: candidate.at as [number, number],
+          ...(Number.isFinite(candidate.score) ? { score: candidate.score } : {}),
+          ...(candidate.reason ? { reason: candidate.reason } : {}),
+          ...(candidate.hold ? { hold: candidate.hold } : {}),
+        })));
+      item.quantity_basis = quantityBasis;
+      item.installed_evidence_grade = geometryLocations.length && planTagLocations.length
+        ? "mixed_geometry_and_tag_text"
+        : geometryLocations.length
+          ? "symbol_geometry"
+          : planTagLocations.length
+            ? "tag_text_only"
+            : "unverified";
+      item.geometry_verified = allGeometryVerified;
       item.search_scope = r.search_scope === "tagged_only"
         ? "tagged_only"
         : r.search_scope === "exhaustive" ? "exhaustive" : null;
       item.unlabeled_audit_complete = r.unlabeled_audit_complete ?? null;
       item.plan_search_complete = r.complete !== false;
       item.corroborated = !!r.anchor?.corroborated;
-      if (r.complete === false) {
+      if (planTagLocations.length) {
+        item.status = "resolved";
+        item.reason = `${planTagLocations.length} exact plan-tag observation${planTagLocations.length === 1 ? " was" : "s were"} not verified against matching symbol geometry${geometryLocations.length ? `; ${geometryLocations.length} separate geometry-grounded placement${geometryLocations.length === 1 ? " was" : "s were"} retained as observed evidence` : ""}. Installed total remains unknown.`;
+        out.stats.resolved++;
+      } else if (r.complete === false) {
         item.status = "refused";
         item.reason = `Plan search incomplete: ${item.quantity} grounded placement${item.quantity === 1 ? "" : "s"} observed, but at least one sheet hit its candidate work cap. The observed count is a floor, not an installed total.`;
         out.stats.refused++;
@@ -514,6 +576,8 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
           bbox: installationNotes[0].bbox,
         }];
         item.quantity_basis = "explicit_installation_note";
+        item.installed_evidence_grade = "explicit_installation_note";
+        item.geometry_verified = false;
         item.search_scope = "explicit_note_set";
         item.unlabeled_audit_complete = false;
         item.plan_search_complete = true;
@@ -982,7 +1046,8 @@ export async function reconcileSchedulePlan(session: Session, opts: {
       // Family-only (no tag list): sweep every schedule row unless caller opts out.
       sweepAll: !tags?.length && opts.familySweepAll !== false,
     });
-    return { ...scoped, takeoff_stats: emptyStats };
+    const rows = attachDiagramCorroboration(scoped.rows, graph.control_schematics || await session.controlSchematics());
+    return { ...scoped, rows, summary: summarizeReconcile(rows), takeoff_stats: emptyStats };
   }
 
   const takeoff = await buildPlanSetTakeoff(session, {
@@ -1008,7 +1073,10 @@ export async function reconcileSchedulePlan(session: Session, opts: {
         || (famU === "AHU" && /AIR HANDLING/i.test(title));
     });
   }
-  const rows = reconcileRowsFromTakeoffItems(items, takeoff.failures);
+  const rows = attachDiagramCorroboration(
+    reconcileRowsFromTakeoffItems(items, takeoff.failures),
+    await session.controlSchematics(),
+  );
   return {
     rows,
     summary: summarizeReconcile(rows),

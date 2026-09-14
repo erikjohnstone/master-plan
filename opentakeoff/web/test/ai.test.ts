@@ -5,7 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   aiConfig, isAiConfigured, aiRequestUrl, buildVisionRequest, parseVisionResponse, scaleReadPrompt,
-  classifySymbolPrompt, parseClassifyResponse,
+  classifySymbolPrompt, parseClassifyResponse, buildStructuredJsonRequest, parseStructuredJsonResponse,
 } from "../src/lib/ai.js";
 import { scaleFromLabel, STANDARD_SCALES } from "../src/lib/sheets.js";
 
@@ -72,6 +72,25 @@ test("parseVisionResponse: both shapes, refusal, malformed", () => {
   assert.equal(parseVisionResponse("openai", { choices: [{ message: { content: [{ type: "text", text: "1/4\" = 1'-0\"" }] } }] }), "1/4\" = 1'-0\"");
   assert.equal(parseVisionResponse("openai", {}), null);
   assert.equal(parseVisionResponse("openai", null), null);
+});
+
+test("strict structured request keeps schema, payload and platform auth at the transport seam", () => {
+  const schema = { type: "object", additionalProperties: false, properties: { ok: { type: "boolean" } }, required: ["ok"] };
+  const request = buildStructuredJsonRequest({ endpoint: "/cerebras-api", apiKey: "", model: "gpt-oss-120b", provider: "openai" },
+    { system: "bounded", payload: { clause: "literal" }, schema, schemaName: "bas_soo", maxTokens: 99 }) as any;
+  assert.equal(request.url, "/cerebras-api/v1/chat/completions");
+  assert.ok(!("Authorization" in request.headers));
+  assert.equal(request.body.messages[1].content, '{"clause":"literal"}');
+  assert.deepEqual(request.body.response_format, { type: "json_schema", json_schema: { name: "bas_soo", strict: true, schema } });
+  assert.equal(request.body.max_completion_tokens, 99);
+  assert.throws(() => buildStructuredJsonRequest({ endpoint: "x", apiKey: "", model: "m", provider: "anthropic" },
+    { payload: {}, schema, schemaName: "x" }), /OpenAI-compatible/);
+});
+
+test("structured response parser refuses prose and malformed envelopes", () => {
+  assert.deepEqual(parseStructuredJsonResponse({ choices: [{ message: { content: '{"ok":true}' } }] }), { ok: true });
+  assert.equal(parseStructuredJsonResponse({ choices: [{ message: { content: "not json" } }] }), null);
+  assert.equal(parseStructuredJsonResponse({}), null);
 });
 
 test("scaleReadPrompt names every label and UNKNOWN", () => {

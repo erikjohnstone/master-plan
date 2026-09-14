@@ -132,7 +132,8 @@ test("run_complete_bas_takeoff executes every production stage in fixed order an
     calls.filter((call) => (call as unknown[])[0] === "compile").map((call) => (call as unknown[])[1]),
     out.compile_order,
   );
-  assert.deepEqual(out.analysis_order, ["control_schematics_and_risers", "schedule_plan_reconcile"]);
+  assert.deepEqual(out.analysis_order, ["control_schematics_and_risers", "schedule_plan_reconcile", "sequence_interpretation"]);
+  assert.equal(out.stages.sequence_interpretation.status, "refused");
   assert.deepEqual(calls.find((call) => (call as unknown[])[0] === "analyze"), ["analyze", "control_schematics_and_risers"]);
   assert.equal(out.control_schematics.schema_version, "opentakeoff.control_schematic.v1");
   assert.equal(out.reconcile.row_count, 2);
@@ -253,6 +254,11 @@ test("run_complete_bas_takeoff uses one shared Session batch when the product ca
           summary: { total: 1, match: 1, schedule_only: 0 },
           rows: [{ tag: "AHU-1", status: "MATCH", plan_cites: [] }],
         },
+        sequence_interpretation: {
+          status: "ready", run_id: "run-1",
+          coverage: { eligible_clauses: 4, accepted_clauses: 3, rejected_clauses: 1, missing_clauses: 0 },
+          behaviors: 5, candidate_points: 2,
+        },
       };
     },
     compileCorpusTakeoff: async () => { throw new Error("individual compile must not run"); },
@@ -274,6 +280,30 @@ test("run_complete_bas_takeoff uses one shared Session batch when the product ca
   assert.equal(out.reconcile.row_count, 1);
   assert.equal(out.presentation.coverage.control_schematics, 1);
   assert.equal(out.presentation.coverage.riser_diagrams, 1);
+  assert.equal(out.stages.sequence_interpretation.status, "complete");
+  assert.equal(out.sequence_interpretation.run_id, "run-1");
+});
+
+test("run_complete_bas_takeoff cannot report completed when extracted SOO interpretation fails", async () => {
+  const compileOrder = ["hvac_equipment", "bas_points", "sequences", "control_valves", "embedded_coil_gaps"];
+  const { ctx } = makeCtx({
+    compileCompleteBasTakeoff: async () => ({
+      compile_order: compileOrder,
+      compiles: Object.fromEntries(compileOrder.map((kind) => [kind, {
+        kind, totals: kind === "sequences" ? { sequences: 1, sections: 3 } : { items: 0 },
+      }])),
+      control_schematics: { totals: { schematics: 0, riser_diagrams: 0 }, engineering_readiness: { status: "coverage_not_established" } },
+      reconcile: { summary: { total: 0 }, rows: [] },
+      sequence_interpretation: { status: "failed", error: "Structured SOO request failed." },
+    }),
+    inspectBasWorkflow: async (domain: string) => ({ domain, status: "not_started", metrics: [] }),
+    presentCompleteBasTakeoff: () => ({ presented: true }),
+    openBasWorkspace: () => ({ opened: true }),
+  });
+  const out = await executeAgentTool(ctx, "run_complete_bas_takeoff", {});
+  assert.equal(out.execution_status, "partial");
+  assert.equal(out.stages.sequence_interpretation.status, "failed");
+  assert.deepEqual(out.failures.at(-1), { stage: "sequence_interpretation", error: "Structured SOO request failed." });
 });
 
 test("query_table delegates whole-set cited cell filters", async () => {
