@@ -123,6 +123,12 @@ export default function SweepReviewPanel({
       )}
       <div style={{ padding: "10px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
         <div><b style={{ fontFamily: "var(--f-display)", fontSize: "var(--fs-xl)" }}>{matchN}</b> of {sweep.matches.length} matched will commit{mLine && tagGroups.length <= 1 ? <span style={{ color: "var(--ink-soft)" }}> — {mLine}</span> : null}</div>
+        {sweep.transformCompetition && (
+          <div style={{ fontSize: "var(--fs-xs)", lineHeight: 1.45, color: "var(--ink-soft)" }}>
+            Rigid baseline {sweep.transformCompetition.rigid_matches}; affine recovered {sweep.transformCompetition.affine_cited_additions} cited placement{sweep.transformCompetition.affine_cited_additions === 1 ? "" : "s"}
+            {sweep.transformCompetition.affine_deferred ? `; ${sweep.transformCompetition.affine_deferred} held for review` : ""}.
+          </div>
+        )}
         {tagGroups.length > 1 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
             <div className="field-label">BY LABEL — UNTICK A TAG TO EXCLUDE IT</div>

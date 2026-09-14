@@ -2,17 +2,30 @@
 // replays every association; this component never derives quantities or IO.
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { basReviewHead, basSequenceView } from '../lib/basReview.ts';
+import { latestBasSequenceAiRun } from '../lib/basWorkflow.ts';
+import { basSequenceAiReviewDecisions, basSequenceAiReviewHead } from '../lib/basSequenceAiReview.ts';
+import { basCitationGroupRequest } from '../lib/basCitationGroup.ts';
 import { downloadText } from '../lib/totals.js';
 import { ANN_SCHEMA } from '../lib/store.js';
 import { basSequenceReviewSelection } from './basReviewNavigation.ts';
 import BasSourceCoverage from './BasSourceCoverage.jsx';
 import './BasPointsWorkspace.css';
 
-export default function BasSequencesWorkspace({ workflow, capture, viewState, onViewStateChange, onOpenCitation, onReview }) {
+const operatorLabel = { lt: '<', lte: '≤', eq: '=', gte: '≥', gt: '>', range: 'range' };
+function valueLabel(value) {
+  if (!value) return '';
+  const amount = value.operator === 'range' ? `${value.value}–${value.value_high}` : `${operatorLabel[value.operator]} ${value.value}`;
+  return `${amount}${value.unit ? ` ${value.unit}` : ''}${value.adjustable ? ' · adjustable' : ''}`;
+}
+function words(value) { return String(value || '').replaceAll('_', ' '); }
+
+export default function BasSequencesWorkspace({ workflow, capture, viewState, onViewStateChange, onOpenCitation, onReview, onAiReview }) {
   const [computed, setComputed] = useState({ input: null, value: null, error: '' });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [aiReasons, setAiReasons] = useState({});
+  const [aiBusy, setAiBusy] = useState('');
   const proseScroll = useRef(null), workspace = useRef(null);
   useEffect(() => {
     let live = true;
@@ -42,6 +55,10 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
   const selectedReference = references.find(s => s.span_id === draft.spanId);
   const comparisons = result?.comparisons.filter(c => c.association.region_id === region?.region_id) || [];
   const history = (workflow.review_events || []).filter(e => e.capture_id === capture.capture_id);
+  const aiRun = latestBasSequenceAiRun(workflow, capture.capture_id);
+  const aiByClause = useMemo(() => new Map((aiRun?.interpretations || []).map(item => [item.clause_id, item])), [aiRun]);
+  const aiDecisions = useMemo(() => aiRun ? basSequenceAiReviewDecisions(workflow, capture.capture_id, aiRun.run_id) : new Map(),
+    [workflow, capture.capture_id, aiRun]);
   useEffect(() => { if (ready && proseScroll.current) proseScroll.current.scrollTop = viewState?.sequenceScroll || 0; }, [ready, region?.region_id, viewState?.sequenceScroll]);
   useEffect(() => {
     if (ready && target && selection?.kind === 'sequence') {
@@ -50,15 +67,12 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
     }
   }, [ready, target, selection]);
 
-  async function source(pageId, span) {
+  async function source(pageId, spanOrSpans, label = 'Exact source evidence') {
     setError('');
-    if (!span?.bbox_px) {
-      setError('The exact source fragment is unavailable. Review the complete clause evidence; no nearby source was substituted.');
-      return;
-    }
     change({ sequenceScroll: proseScroll.current?.scrollTop || 0 });
     try {
-      const response = await onOpenCitation?.({ page_id: pageId, sheet_id: pageId, bbox_px: span.bbox_px, value: span.text, kind: 'row' });
+      const request = basCitationGroupRequest(pageId, Array.isArray(spanOrSpans) ? spanOrSpans : [spanOrSpans], label);
+      const response = await onOpenCitation?.(request);
       if (response?.error) setError(response.error);
     } catch (e) { setError(e.message); }
   }
@@ -71,6 +85,76 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
       setNotice(action.kind === 'remove' ? 'Link removed. Its earlier evidence and history are preserved.' : 'Comparison link recorded. This does not approve quantities or establish installed equipment.');
     } catch (e) { setError(e.message); } finally { setBusy(false); }
   }
+  async function applyAi(interpretation, decision) {
+    const reason = (aiReasons[interpretation.interpretation_id] || '').trim();
+    if (!reason || !aiRun) return;
+    setError(''); setNotice(''); setAiBusy(interpretation.interpretation_id);
+    try {
+      await onAiReview({ operation_id: crypto.randomUUID(), capture_id: capture.capture_id, run_id: aiRun.run_id,
+        interpretation_id: interpretation.interpretation_id,
+        expected_head: basSequenceAiReviewHead(workflow, capture.capture_id, aiRun.run_id), decision, reason });
+      setAiReasons(previous => ({ ...previous, [interpretation.interpretation_id]: '' }));
+      setNotice(decision === 'confirmed'
+        ? 'Interpretation confirmed against its cited source. Quantities and field wiring remain unapproved.'
+        : 'Interpretation rejected. Its source text and review history remain preserved.');
+    } catch (e) { setError(e.message); } finally { setAiBusy(''); }
+  }
+  function evidenceButton(item, label = 'View evidence') {
+    const ids = new Set((item?.evidence || []).flatMap(evidence => evidence.source_span_ids || []));
+    const evidenceReferences = references.filter(span => ids.has(span.span_id));
+    const pages = new Set(evidenceReferences.map(span => span.page_id));
+    const available = evidenceReferences.length > 0 && pages.size === 1;
+    return <button type="button" disabled={!available}
+      onClick={() => available && source(evidenceReferences[0].page_id, evidenceReferences,
+        `${label} · ${evidenceReferences.length} exact source ${evidenceReferences.length === 1 ? 'region' : 'regions'}`)}>{label}</button>;
+  }
+  function deterministicRequirements(clause) {
+    if (!clause.requirements.length) return null;
+    return <div className="bas-sequence-deterministic"><h4>Literal extraction</h4>{clause.requirements.map(requirement => {
+      const exact = requirement.kind === 'labeled_point_candidate'
+        ? clause.source_spans.filter(span => requirement.source_span_ids.includes(span.span_id))
+        : clause.source_spans;
+      return <div key={requirement.requirement_id}>
+        <strong>{requirement.kind === 'monitor_variable' ? 'Monitor' : 'Review point'} {requirement.variable}</strong>
+        {requirement.kind === 'labeled_point_candidate' && <p>Source tag: <code>{requirement.source_tag}</code>{' '}
+          <button type="button" disabled={!exact.length}
+            onClick={() => source(region.page_id, exact, `${requirement.source_tag} · literal SOO point`)}>View point source</button></p>}
+        {requirement.operating_mode && <p>{requirement.operating_mode}</p>}
+        <p>{requirement.kind === 'monitor_variable' ? 'Monitoring clause only.' : 'Explicit labeled SOO candidate.'} Signal type, applicability and quantity require review.</p>
+      </div>;
+    })}</div>;
+  }
+  function aiInterpretationCell(interpretation) {
+    const decision = aiDecisions.get(interpretation.interpretation_id);
+    const reason = aiReasons[interpretation.interpretation_id] || '';
+    return <div className="bas-sequence-ai-card" data-ai-interpretation={interpretation.interpretation_id}>
+      <div className="bas-sequence-ai-title"><strong>Source-validated proposal</strong>
+        <span>{decision ? `${decision.decision} by estimator` : 'Review required'}</span></div>
+      {!!interpretation.behaviors.length && <div className="bas-sequence-ai-group"><h4>Required behavior</h4>
+        {interpretation.behaviors.map(item => <article key={item.behavior_id}>
+          <p><strong>{words(item.kind)}</strong> · {item.subject} → {item.action}{item.object ? ` → ${item.object}` : ''}</p>
+          {item.condition && <p>When: {item.condition}</p>}
+          {item.threshold && <p>Threshold: {valueLabel(item.threshold)}</p>}
+          {item.delay && <p>Timing: {valueLabel(item.delay)}</p>}
+          {evidenceButton(item)}
+        </article>)}</div>}
+      {!!interpretation.candidate_points.length && <div className="bas-sequence-ai-group"><h4>Point candidates</h4>
+        {interpretation.candidate_points.map(item => <article key={item.point_id}>
+          <p><strong>{item.name}</strong> · {words(item.function)} · {item.io_type || 'I/O type not printed'}</p>
+          <p>{item.basis === 'explicit_requirement' ? 'Explicitly required in this clause' : 'Engineering inference — verify scope'}</p>
+          {evidenceButton(item)}
+        </article>)}</div>}
+      {decision && <p className="bas-sequence-ai-decision"><strong>{words(decision.decision)}</strong> · {decision.reason}</p>}
+      <label>Review note<input aria-label={`Review note for ${interpretation.summary.slice(0, 80)}`} value={reason}
+        onChange={event => setAiReasons(previous => ({ ...previous, [interpretation.interpretation_id]: event.target.value }))}
+        placeholder="What did you verify or reject?" /></label>
+      <div className="bas-sequence-ai-actions"><button type="button" disabled={!reason.trim() || aiBusy === interpretation.interpretation_id || !onAiReview}
+        onClick={() => applyAi(interpretation, 'confirmed')}>Confirm interpretation</button>
+        <button type="button" disabled={!reason.trim() || aiBusy === interpretation.interpretation_id || !onAiReview}
+          onClick={() => applyAi(interpretation, 'rejected')}>Reject</button></div>
+      <p className="bas-point-scope">This review does not approve installed quantity, I/O allocation, pricing, labor, or the complete takeoff.</p>
+    </div>;
+  }
   function submit(e) {
     e.preventDefault();
     apply({ kind: 'upsert', association: { region_id: region.region_id, matrix_id: draft.matrixId,
@@ -81,7 +165,7 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
   return <section ref={workspace} className="bas-point-workspace bas-sequence-workspace" aria-label="Sequences and comparison links">
     <div className="bas-point-heading"><button type="button" onClick={() => change({ mode: 'points' })}>← Point matrices</button>
       <h2>Sequences &amp; links</h2><button type="button" onClick={() => downloadText('bas-workflow.takeoff.json', JSON.stringify({ schema: ANN_SCHEMA, bas_workflow: workflow }, null, 2), 'application/json')}>Export BAS evidence &amp; history</button></div>
-    <p className="bas-point-scope">Original drawing text and reviewed comparisons. Listed points are not installed quantities. Discovery, interpretation and applicability remain incomplete.</p>
+    <p className="bas-point-scope">Original drawing text, source-validated model proposals and estimator decisions. Candidate points are not installed quantities or approved I/O.</p>
     {!ready ? <p role="status">Reading retained sequence evidence…</p> : computed.error ? <p role="alert">{computed.error}</p> : <>
       <div className="bas-point-controls"><button type="button" aria-pressed={!coverage} onClick={() => change({ sequenceReviewTarget: null, sequencePane: 'reader' })}>Sequence reader</button>
         <button type="button" aria-pressed={coverage} onClick={() => change({ sequenceReviewTarget: null, sequencePane: 'coverage' })}>Source coverage</button></div>
@@ -104,20 +188,19 @@ export default function BasSequencesWorkspace({ workflow, capture, viewState, on
       </select></label>
       {!region ? <p>{target ? 'Choose Sequence reader to browse other retained regions explicitly.' : 'No headed sequence region was discovered. Unheaded and unsupported source text is not established absent.'}</p> : <>
         <div className="bas-point-heading"><h3 tabIndex={-1} data-review-target={!!selection && !selection.clauseId && !selection.matrixId}>{region.title}</h3><span>{region.clauses.length} retained blocks · source boundary requires review</span>
-          <button type="button" onClick={() => source(region.page_id, { bbox_px: region.raw.bbox_px, text: region.title })}>View sequence on drawing</button></div>
+          <button type="button" onClick={() => source(region.page_id,
+            [{ page_id: region.page_id, bbox_px: region.raw.bbox_px, text: region.title }], 'Complete sequence region')}>View sequence on drawing</button></div>
         <div className="bas-point-grid bas-sequence-prose" ref={proseScroll} tabIndex={0} role="region" aria-label="Original sequence text">
           <table aria-label="Source sequence clauses"><thead><tr><th>Clause</th><th>Original drawing text</th><th>Current interpretation</th><th>Evidence</th></tr></thead>
             <tbody>{region.clauses.map((c, i) => <tr key={c.clause_id} data-clause-id={c.clause_id} tabIndex={-1} data-selected={selection?.clauseId === c.clause_id}
               data-review-target={selection?.clauseId === c.clause_id && !selection?.matrixId}><th scope="row">{region.raw.blocks[i].marker || i + 1}{selection?.clauseId === c.clause_id && <p>Review target</p>}</th>
               <td>{c.reading_text !== null ? c.reading_text : <table aria-label="Original sequence inset"><tbody>{region.raw.blocks[i].rows.map((row, ri) => <tr key={ri}>{row.map((cell, ci) => <td key={ci}>{cell.text}</td>)}</tr>)}</tbody></table>}</td>
-              <td>{c.requirements.length ? c.requirements.map(r => <div key={r.requirement_id}>
-                <strong>{r.kind === 'monitor_variable' ? 'Monitor' : 'Review point'} {r.variable}</strong>
-                {r.kind === 'labeled_point_candidate' && <p>Source tag: <code>{r.source_tag}</code>{' '}
-                  <button type="button" disabled={!c.source_spans.some(span => r.source_span_ids.includes(span.span_id))}
-                    onClick={() => source(region.page_id,
-                      c.source_spans.find(span => r.source_span_ids.includes(span.span_id)))}>View point source</button></p>}
-                {r.operating_mode && <p>{r.operating_mode}</p>}<p>{r.kind === 'monitor_variable' ? 'Monitoring clause only.' : 'Explicit labeled SOO candidate.'} Signal type, applicability and quantity require review.</p></div>) : 'Not interpreted — review original text'}</td>
-              <td><button type="button" disabled={!c.source_spans.length} onClick={() => source(region.page_id, c.source_spans.find(s => s.text.length > 10) || c.source_spans[0])}>View source</button></td>
+              <td>{aiByClause.has(c.clause_id) && aiInterpretationCell(aiByClause.get(c.clause_id))}
+                {deterministicRequirements(c)}
+                {!aiByClause.has(c.clause_id) && !c.requirements.length && 'Not interpreted — review original text'}</td>
+              <td><button type="button" disabled={!c.source_spans.length}
+                onClick={() => source(region.page_id, c.source_spans, `Clause ${region.raw.blocks[i].marker || i + 1} · complete source`)}>View full clause</button>
+                {!!c.source_spans.length && <small className="bas-sequence-evidence-count">{c.source_spans.length} exact source {c.source_spans.length === 1 ? 'region' : 'regions'}</small>}</td>
             </tr>)}</tbody></table>
         </div>
         <details className="bas-sequence-link-form" open={viewState?.linkFormOpen ?? !comparisons.length} onToggle={e => { if (e.target.open !== (viewState?.linkFormOpen ?? !comparisons.length)) change({ linkFormOpen: e.target.open }); }}>

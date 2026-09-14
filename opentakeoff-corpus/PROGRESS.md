@@ -1,5 +1,28 @@
 ## Active work
 
+2026-09-13 installed-quantity reconciliation checkpoint: the shared
+`sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
+plan-tag text into installed quantity. It now retains text-only observations
+separately, verifies surrounding vector geometry for production reconciliation,
+and counts only geometry-grounded placements or explicit installation notes.
+Mixed geometry/text evidence stays `AMBIGUOUS`; withheld candidates remain
+review items. Focused typecheck and 113 reconciliation/sweep/Agent tests pass.
+
+Real NAVFAC proof on the 75-page Cherry Point set: schedule mark
+`CV-CHW-BP-A` resolves to the exact tag bbox on page 29 and a distinct vector
+symbol at score 1.0 (`symbol_fingerprint`), installed quantity 1. After the
+75-sheet / 91-table graph was cached, the complete CLI product replay took
+**5.12 s**, with the actual tagged geometry match reporting **184.44 ms**.
+The result is intentionally `tagged_only`: it proves this tag-to-symbol match
+but does not claim a set-wide audit of untagged valve geometry. A separate
+exhaustive one-row sweep remained at full CPU beyond ten post-index minutes and
+was terminated; that path is not an acceptable interactive workflow. The fast
+result therefore establishes the production architecture—local geometric
+verification at every exact tag plus a separately bounded family-wide unlabeled
+audit—without weakening any score, affine rule, bbox, or VectorGrid contract.
+The Session disclosure was also corrected so sheets skipped for lacking the
+exact tag are no longer falsely described as unscaled sheets that were swept.
+
 2026-09-13 ITD D-1 generalization checkpoint: after the NAVFAC product-path
 proof, the same literal Agent prompt **Run a BAS takeoff.** passed on an unrelated
 29-sheet laboratory mechanical set in **15.682 s post-index** (**13.424 s
@@ -2156,3 +2179,20 @@ requirements into verified I/O types, establish equipment applicability without
 an estimator link, infer installed quantities from SOO prose, or prove arbitrary
 schematic/riser semantic graphs. Those remain explicit review blockers; the
 separate symbol-recognition workstream remains outside this branch.
+
+### Shared affine symbol arbitration checkpoint — 2026-09-13
+
+The shared Session symbol path now retains the complete rigid baseline inside
+the affine pass and arbitrates the fully labeled results by exact PDF tag bbox.
+The current 47-case manifest has zero `affine:false` and zero `variant_guard`
+exceptions; a fresh uninterrupted product-Session run passes **47/47** exact
+counts and authored one-to-one localizations. Agent/MCP replies retain explicit
+transform-competition and tag-corroboration accounting, and the browser
+fallback preserves options through the production CLI into Session. No
+VectorGrid, schedule/table, citation or bbox contract changed.
+
+Current supporting gates: focused engine 201/201; MCP conformance 19/19, tools
+101/101, bridge parity 3/3, packaging 4/4; full web 3,139 pass / 0 fail / 13
+intentional skips; typechecks/build/diff/lint pass (lint has the same three
+existing warnings). The fresh 47-case browser product-path gate is still in
+progress, so the repository-wide BAS goal remains active.

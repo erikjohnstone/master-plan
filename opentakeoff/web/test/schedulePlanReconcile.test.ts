@@ -10,7 +10,9 @@ import {
   reconcileRowsFromTakeoffItems,
   summarizeReconcile,
   reconcileScheduleFamilyFromGraph,
+  reconcileScheduleFamilyWithSweeps,
   reconcileRowsToCsv,
+  attachDiagramCorroboration,
   rowIdentityTag,
 } from "../src/lib/schedulePlanReconcile.mjs";
 import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
@@ -157,6 +159,10 @@ test("repeatable air-device type rows never invent a scheduled quantity of one",
     tag: "CD-1",
     status: "resolved",
     quantity: 24,
+    quantity_basis: "symbol_fingerprint",
+    search_scope: "exhaustive",
+    unlabeled_audit_complete: true,
+    plan_search_complete: true,
     placement_count: 21,
     schedule_row: { MARK: "CD-1", TYPE: "3-CONE SUPPLY" },
     schedule: { sheet: "set.pdf#47", kind: "equipment", title: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE", drawing_group: "MTRACON" },
@@ -207,7 +213,7 @@ test("classifyBasServedSweepOutcome: unanchored I/O tags → SCHEDULE_ONLY (not 
 
 });
 
-test("reconcileRowsFromTakeoffItems maps takeoff items to contractor columns", () => {
+test("reconcileRowsFromTakeoffItems never promotes an exact plan tag into a verified installed symbol", () => {
   const rows = reconcileRowsFromTakeoffItems([
     {
       tag: "VAV-1",
@@ -240,19 +246,84 @@ test("reconcileRowsFromTakeoffItems maps takeoff items to contractor columns", (
     { type: "SYMBOL_FALSE_NEGATIVE", tag: "EF-2", detail: "not drawn on any plan sheet" },
   ]);
   assert.equal(rows.length, 2);
-  assert.equal(rows[0].status, "MATCH");
+  assert.equal(rows[0].status, "AMBIGUOUS");
   assert.equal(rows[0].scheduled_qty, 1);
-  assert.equal(rows[0].installed_qty, 1);
+  assert.equal(rows[0].installed_qty, null);
+  assert.equal(rows[0].tagged_plan_qty, 1);
+  assert.equal(rows[0].installed_evidence_grade, "tag_text_only");
+  assert.equal(rows[0].geometry_verified, false);
   assert.equal(rows[0].installed_qty_basis, "exact_plan_tag");
   assert.equal(rows[0].search_scope, "tagged_only");
   assert.equal(rows[0].unlabeled_audit_complete, false);
   assert.equal(rows[0].plan_search_complete, true);
-  assert.deepEqual(rows[0].plan_cites[0].bbox, { x0: 90, y0: 190, x1: 110, y1: 210 });
+  assert.deepEqual(rows[0].plan_cites, []);
+  assert.deepEqual(rows[0].plan_tag_cites[0].bbox, { x0: 90, y0: 190, x1: 110, y1: 210 });
+  assert.match(rows[0].reason, /tag text.*symbol geometry/i);
   assert.equal(rows[1].status, "SCHEDULE_ONLY");
   assert.equal(rows[1].installed_qty, null, "an unverified plan quantity must not be fabricated as zero");
   const summary = summarizeReconcile(rows);
-  assert.equal(summary.match, 1);
+  assert.equal(summary.match, 0);
+  assert.equal(summary.ambiguous, 1);
   assert.equal(summary.schedule_only, 1);
+});
+
+test("geometry-grounded placements remain releasable installed quantity", () => {
+  const [row] = reconcileRowsFromTakeoffItems([{
+    tag: "VAV-1",
+    equipment_type: "VAV box",
+    category: "terminal",
+    status: "resolved",
+    quantity: 1,
+    quantity_basis: "symbol_fingerprint",
+    search_scope: "exhaustive",
+    unlabeled_audit_complete: true,
+    plan_search_complete: true,
+    schedule: { sheet: "M-601.pdf#2", kind: "equipment", title: "VOLUME CONTROL BOX SCHEDULE" },
+    drawing_locations: [{
+      sheet: "M-601.pdf#5",
+      at: [100, 200],
+      bbox: { x0: 90, y0: 190, x1: 110, y1: 210 },
+      score: 0.97,
+    }],
+  }]);
+  assert.equal(row.status, "MATCH");
+  assert.equal(row.installed_qty, 1);
+  assert.equal(row.tagged_plan_qty, null);
+  assert.equal(row.installed_evidence_grade, "symbol_geometry");
+  assert.equal(row.geometry_verified, true);
+  assert.equal(row.plan_cites.length, 1);
+  assert.deepEqual(row.plan_tag_cites, []);
+});
+
+test("tag-attached vector grounding is installed evidence and keeps symbol and tag boxes separate", () => {
+  const [row] = reconcileRowsFromTakeoffItems([{
+    tag: "CV-1",
+    equipment_type: "Control valve",
+    category: "valve",
+    status: "resolved",
+    quantity: 1,
+    quantity_basis: "tag_attached_vector",
+    search_scope: "tagged_only",
+    unlabeled_audit_complete: false,
+    plan_search_complete: true,
+    schedule: { sheet: "M-601.pdf#2", kind: "equipment", title: "CONTROL VALVE SCHEDULE" },
+    drawing_locations: [{
+      sheet: "M-601.pdf#5",
+      at: [140, 200],
+      bbox: { x0: 130, y0: 190, x1: 150, y1: 210 },
+      tag_bbox: { x0: 90, y0: 190, x1: 115, y1: 207 },
+      score: 1,
+      attachment_via: "leader",
+      attachment_distance_px: 2,
+    }],
+  }]);
+  assert.equal(row.status, "MATCH");
+  assert.equal(row.installed_qty, 1);
+  assert.equal(row.installed_qty_basis, "tag_attached_vector");
+  assert.equal(row.geometry_verified, true);
+  assert.deepEqual(row.plan_cites[0].bbox, { x0: 130, y0: 190, x1: 150, y1: 210 });
+  assert.deepEqual(row.plan_cites[0].tag_bbox, { x0: 90, y0: 190, x1: 115, y1: 207 });
+  assert.equal(row.plan_cites[0].attachment_via, "leader");
 });
 
 test("an incomplete plan sweep exposes only an observed floor and reconciles AMBIGUOUS", () => {
@@ -279,6 +350,76 @@ test("an incomplete plan sweep exposes only an observed floor and reconciles AMB
   assert.equal(row.status, "AMBIGUOUS");
 });
 
+test("diagram corroboration stays separate from installed quantity and preserves repeated authored evidence", () => {
+  const rows = attachDiagramCorroboration([{
+    tag: "CV-CH-A1",
+    status: "SCHEDULE_ONLY",
+    scheduled_qty: 1,
+    installed_qty: null,
+    placement_count: 0,
+    plan_cites: [],
+    schedule_cite: { sheet: "set.pdf#44", title: "CHW CONTROL VALVE SCHEDULE" },
+  }], {
+    schematics: [{
+      sheet: "set.pdf#56",
+      title: "CHILLER CONTROL SCHEMATIC",
+      equipment: [{
+        tag: "CV-CH-A1",
+        evidence: { sheet: "set.pdf#56", text: "CV-CH-A1", bbox: [10, 20, 30, 40] },
+        schedule_refs: [{ sheet: "set.pdf#44", title: "CHW CONTROL VALVE SCHEDULE" }],
+      }],
+    }],
+    risers: [{
+      sheet: "set.pdf#72",
+      title: "AIR OPS - CHILLED WATER PIPING SCHEMATIC",
+      diagram_kind: "piping",
+      diagram_tags: [{
+        tag: "CV-CH-A1",
+        schedule_refs: [{ sheet: "set.pdf#44", title: "CHW CONTROL VALVE SCHEDULE" }],
+        evidence: [{ sheet: "set.pdf#72", text: "CV-CH-A1", bbox: [50, 60, 70, 80] }],
+      }],
+    }],
+  }) as Array<any>;
+
+  assert.equal(rows[0].status, "SCHEDULE_ONLY");
+  assert.equal(rows[0].installed_qty, null, "two diagram appearances are not two installed devices");
+  assert.equal(rows[0].placement_count, 0);
+  assert.equal(rows[0].diagram_corroborated, true);
+  assert.deepEqual(rows[0].diagram_cites.map((cite: any) => [cite.sheet, cite.diagram_kind]), [
+    ["set.pdf#56", "control_schematic"],
+    ["set.pdf#72", "piping"],
+  ]);
+  assert.ok(rows[0].diagram_cites.every((cite: any) => cite.schedule_binding_status === "bound"));
+});
+
+test("diagram corroboration refuses an unscoped reused tag and CSV discloses bound evidence", () => {
+  const duplicateRows: Array<any> = [{
+    tag: "CV-1", status: "SCHEDULE_ONLY", installed_qty: null,
+    schedule_cite: { sheet: "a.pdf#10", title: "CHW CONTROL VALVE SCHEDULE" },
+  }, {
+    tag: "CV-1", status: "SCHEDULE_ONLY", installed_qty: null,
+    schedule_cite: { sheet: "a.pdf#20", title: "HHW CONTROL VALVE SCHEDULE" },
+  }];
+  const controls = {
+    schematics: [{
+      sheet: "a.pdf#30", title: "CONTROL SCHEMATIC",
+      equipment: [{ tag: "CV-1", evidence: { sheet: "a.pdf#30", text: "CV-1", bbox: [1, 2, 3, 4] }, schedule_refs: [] }],
+    }],
+    risers: [],
+  };
+  const unresolved = attachDiagramCorroboration(duplicateRows, controls) as Array<any>;
+  assert.ok(unresolved.every((row) => row.diagram_corroborated === false));
+  assert.ok(unresolved.every((row) => row.diagram_cites.length === 0));
+
+  const [bound] = attachDiagramCorroboration([duplicateRows[0]], controls) as Array<any>;
+  assert.equal(bound.diagram_corroborated, false, "a unique but unreferenced tag remains visible as unbound evidence");
+  assert.equal(bound.diagram_cites[0].schedule_binding_status, "unbound");
+  const csv = reconcileRowsToCsv([bound]);
+  assert.match(csv, /Diagram corroborated,Diagram sheet\(s\),Diagram kind\(s\)/);
+  assert.match(csv, /a\.pdf#30/);
+  assert.match(csv, /control_schematic/);
+});
+
 test("reconcileScheduleFamilyFromGraph with sweep map", () => {
   const graph = {
     tables: [{
@@ -295,7 +436,14 @@ test("reconcileScheduleFamilyFromGraph with sweep map", () => {
     }],
   };
   const sweepByTag = new Map([
-    ["VAV-1", { installedQty: 1, itemStatus: "resolved", planCites: [{ sheet: "plan.pdf#3" }] }],
+    ["VAV-1", {
+      installedQty: 1,
+      installedQtyBasis: "symbol_fingerprint",
+      installedEvidenceGrade: "symbol_geometry",
+      geometryVerified: true,
+      itemStatus: "resolved",
+      planCites: [{ sheet: "plan.pdf#3" }],
+    }],
   ]);
   const rows = reconcileScheduleFamilyFromGraph(
     graph,
@@ -304,6 +452,51 @@ test("reconcileScheduleFamilyFromGraph with sweep map", () => {
   );
   assert.equal(rows.length, 1);
   assert.equal(rows[0].status, "MATCH");
+});
+
+test("shared reconcile splits geometry matches, text fallbacks, and withheld candidates", async () => {
+  const graph = { tables: [{
+    kind: "equipment",
+    sheet: "set.pdf#2",
+    title: { text: "VAV SCHEDULE" },
+    rows: [{ key: "VAV-1", cells: { MARK: { text: "VAV-1" }, QTY: { text: "2" } } }],
+  }] };
+  let receivedSweepOptions: any = null;
+  const session = { sweepScheduleRow: async (_tag: string, options: any) => {
+    receivedSweepOptions = options;
+    return ({
+    found: 2,
+    complete: true,
+    search_scope: "exhaustive",
+    unlabeled_audit_complete: true,
+    anchor: { grounding_basis: "symbol_fingerprint" },
+    sheets: [{
+      sheet: "set.pdf#5",
+      matches: [
+        { at: [10, 20], score: 0.98, tag_at: { x0: 1, y0: 2, x1: 3, y1: 4 } },
+        { at: [30, 40], score: 1, tag_at: { x0: 5, y0: 6, x1: 7, y1: 8 }, counted_from: "explicit_label" },
+      ],
+      withheld: [{ at: [50, 60], score: 0.89, reason: "unlabeled geometry", hold: { kind: "unlabeled" } }],
+    }],
+    });
+  } };
+  const result = await reconcileScheduleFamilyWithSweeps(
+    session,
+    graph,
+    { label: "VAV", titleRe: /VAV SCHEDULE/i },
+    { sweepAll: true },
+  );
+  const [row] = result.rows;
+  assert.equal(receivedSweepOptions.verifyTaggedGeometry, true);
+  assert.equal(row.status, "AMBIGUOUS");
+  assert.equal(row.installed_qty, null, "a mixed row has no releasable installed total");
+  assert.equal(row.observed_plan_qty, 1, "verified geometry remains visible as an observation");
+  assert.equal(row.tagged_plan_qty, 1);
+  assert.equal(row.installed_evidence_grade, "mixed_geometry_and_tag_text");
+  assert.equal(row.geometry_verified, false);
+  assert.equal(row.plan_cites.length, 1);
+  assert.equal(row.plan_tag_cites.length, 1);
+  assert.equal(row.plan_candidate_cites.length, 1);
 });
 
 test("family reconciliation preserves independently reused marks by authored drawing group", () => {
@@ -317,8 +510,8 @@ test("family reconciliation preserves independently reused marks by authored dra
   ] };
   const needle = { label: "GRD", titleRe: /GRILLE.*REGISTER.*DIFFUSER/i };
   const sweeps = new Map([
-    ["set.pdf#44::CD-1", { installedQty: 32, placementCount: 32, itemStatus: "resolved" }],
-    ["set.pdf#47::CD-1", { installedQty: 24, placementCount: 21, itemStatus: "resolved" }],
+    ["set.pdf#44::CD-1", { installedQty: 32, placementCount: 32, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
+    ["set.pdf#47::CD-1", { installedQty: 24, placementCount: 21, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
   ]);
   const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweeps);
   assert.equal(rows.length, 2);

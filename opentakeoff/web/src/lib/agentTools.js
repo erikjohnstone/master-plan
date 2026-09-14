@@ -300,7 +300,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "symbol_sweep",
-    description: "Find every instance of one repeated vector plan symbol from a tight marquee or a one-click seed. The production matcher runs the complete rigid and bounded-affine searches as competing populations: exact PDF tag-token ownership preserves distinct labeled instances on dense grids, rigid evidence cannot be displaced by a neighboring affine fit, and affine adds an automatic count only when it owns a distinct same-family drawing tag. Unlabelled affine-only stretched/rotated candidates remain in withheld for estimator review instead of silently changing installed quantity. transform_competition reports rigid matches, affine matches, cited additions, and deferred candidates. Rotation and mirroring default on; affine defaults on. Score >= 0.92 is a match and 0.75-0.92 is review. Set variant_guard for a complete-symbol seed when richer variants with extra internal ink should be withheld. Refuses on raster-only sheets. This tool finds only; use place_count or propose_shapes to stage reviewed markers.",
+    description: "Find every instance of one repeated vector plan symbol from a tight marquee or a one-click seed. The production matcher runs the complete rigid and bounded-affine searches as competing populations: exact PDF tag-token ownership preserves distinct labeled instances on dense grids, rigid evidence cannot be displaced by a neighboring affine fit, and affine adds an automatic count only when it owns a distinct same-family drawing tag. When the sheet establishes a repeated labeling convention, unlabelled affine-only stretched/rotated candidates remain in withheld for estimator review instead of silently changing installed quantity; drawings without that independent tag evidence remain geometry-only and require review before commit. transform_competition reports rigid matches, affine matches, cited additions, and deferred candidates. Rotation and mirroring default on; affine defaults on. Score >= 0.92 is a match and 0.75-0.92 is review. Set variant_guard for a complete-symbol seed when richer variants with extra internal ink should be withheld. Refuses on raster-only sheets. This tool finds only; use place_count or propose_shapes to stage reviewed markers.",
     input_schema: {
       type: "object",
       properties: {
@@ -570,7 +570,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "reconcile_schedule_plan",
-    description: "Reconcile scheduled equipment tags to plan drawings on the loaded set. Returns contractor-grade rows: Tag, Family, Scheduled qty, Installed qty, Status (MATCH | SCHEDULE_ONLY | PLAN_ONLY | REFUSED_NO_SCALE | REFUSED_NO_TEXT | AMBIGUOUS), schedule cite, plan cite(s). Walks sweep_schedule_row on the shared Session path — never invents plan locations. Optional family scopes to one schedule family (VAV, FCU, AHU, pump, …). Prefer this over manual per-tag sweeps when the goal asks to reconcile a schedule to the plans.",
+    description: "Reconcile scheduled equipment to plan drawings on the loaded set. Installed qty is emitted only from geometry-grounded symbols or explicit installation notes. Exact plan tag text alone is tagged_plan_qty with AMBIGUOUS status; it is never a MATCH. plan_cites are verified geometry, plan_tag_cites are text-only review evidence, and plan_candidate_cites are withheld geometric proposals that never count automatically. Returns evidence grade and audit coverage so you must explain uncertainty rather than upgrade it. Optional family scopes to one schedule family (VAV, FCU, AHU, pump, …).",
     input_schema: {
       type: "object",
       properties: {
@@ -605,13 +605,23 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "sweep_schedule_row",
-    description: "Mint the search seed FROM a schedule row's own drawn tag, instead of you marqueeing an instance — reads the row (via resolve_tag's same tables) and sweeps every PLAN-role sheet in the whole set, not just whichever happen to be open right now. Anchors on the plan sheet with the most drawn occurrences of the tag, fingerprints the marker geometry around it, and — where the tag is drawn more than once anywhere in the set — CORROBORATES that fingerprint against a second occurrence (possibly on a different, differently-scaled sheet) before trusting it; a fingerprint that never recurs is refused rather than swept. Sweeps every plan sheet with the size ratio read from each sheet's own committed scale (a marker seeded on a 1/8\" plan and swept across a 1-1/2\"-detail sheet is resized accordingly; an unset scale on either end is disclosed, never silently assumed). A match is counted only when the marker geometry AND the row's own tag agree (a marker matching the shape but labeled with a sibling row's tag is excluded and named; a shape match with no nearby tag is withheld as a question; a drawn tag occurrence with no matching geometry nearby is reported text_only). Refuses rather than guesses when the tag isn't in any schedule, is ambiguous across tables, or has no fingerprintable linework that corroborates. When the same building letter appears on multiple equipment schedules (furnace + CU + OAU), pass prefer_schedule_title from the HVAC item's table_title (or prefer_schedule_sheet) so the sweep uniquely resolves — same Session preferTitle path MCP already uses; never invent plan hits. This tool only FINDS matches; use place_count or propose_shapes to stage the ones you want counted.",
+    description: "Mint the search seed FROM a schedule row's own drawn tag, instead of you marqueeing an instance — reads the row (via resolve_tag's same tables) and sweeps every PLAN-role sheet in the whole set, not just whichever happen to be open right now. Anchors on the plan sheet with the most drawn occurrences of the tag, fingerprints the marker geometry around it, and — where the tag is drawn more than once anywhere in the set — CORROBORATES that fingerprint against a second occurrence (possibly on a different, differently-scaled sheet) before trusting it; a fingerprint that never recurs is refused rather than swept. Sweeps every plan sheet with the size ratio read from each sheet's own committed scale (a marker seeded on a 1/8\" plan and swept across a 1-1/2\"-detail sheet is resized accordingly; an unset scale on either end is disclosed, never silently assumed). Continuous rotation/stretch recognition is on by default, nested with the rigid reading and reconciled by exact plan-tag bbox before quantity is decided. A match is counted only when the marker geometry AND the row's own tag agree (a marker matching the shape but labeled with a sibling row's tag is excluded and named; a shape match with no nearby tag is withheld as a question; a drawn tag occurrence with no matching geometry nearby is reported text_only). Refuses rather than guesses when the tag isn't in any schedule, is ambiguous across tables, or has no fingerprintable linework that corroborates. When the same building letter appears on multiple equipment schedules (furnace + CU + OAU), pass prefer_schedule_title from the HVAC item's table_title (or prefer_schedule_sheet) so the sweep uniquely resolves — same Session preferTitle path MCP already uses; never invent plan hits. This tool only FINDS matches; use place_count or propose_shapes to stage the ones you want counted.",
     input_schema: {
       type: "object",
       properties: {
         tag: { type: "string", description: "The schedule row's key exactly as drawn, e.g. 'PRV-1', 'CV-3', or 'VAV-12'." },
         rotations: { type: "boolean", description: "Also match 90/180/270-rotated markers. Default true." },
         mirror: { type: "boolean", description: "Also match mirrored markers. Default true." },
+        affine: {
+          type: "object",
+          description: "On by default. Continuous rotation and bounded stretch/shear recovery, arbitrated against the nested rigid reading by exact plan-tag bbox. Pass {enabled:false} only for diagnosis.",
+          properties: {
+            enabled: { type: "boolean" },
+            max_stretch: { type: "number", minimum: 1 },
+            max_shear_deg: { type: "number", minimum: 0 },
+            scale_search: { type: "boolean" },
+          },
+        },
         prefer_schedule_title: { type: "string", description: "When the same mark appears on multiple schedules, prefer the row whose table title matches (exact or …SCHEDULE stem). Pass HVAC compile table_title for inventory / served-equipment plan paint." },
         prefer_schedule_sheet: { type: "string", description: "When the same mark appears on multiple schedules, prefer the row on this sheet key." },
       },
@@ -1136,6 +1146,7 @@ export async function executeAgentTool(ctx, name, args) {
         return await ctx.sweepScheduleRow(tag, {
           rotations: args.rotations,
           mirror: args.mirror,
+          affine: args.affine || AFFINE_WIRE_DEFAULT,
           // Cross-family building letters (Carson B1 on furnace+CU+OAU): pass
           // HVAC table_title so Session preferTitle uniquely resolves — never invent.
           preferTitle: args.prefer_schedule_title || null,
@@ -1300,6 +1311,7 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
   };
   let controlSchematics;
   let reconcileFull;
+  let sequenceInterpretation = null;
   if (hasSharedBatch) {
     // One process, one loaded Session, one graph. The capability returns the
     // exact existing compiler/reconcile results; this coordinator still owns
@@ -1318,6 +1330,8 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
     }
     controlSchematics = batch?.error ? { error: batch.error } : batch?.control_schematics;
     reconcileFull = batch?.error ? { error: batch.error } : batch?.reconcile;
+    sequenceInterpretation = batch?.error ? { status: "failed", error: batch.error }
+      : batch?.sequence_interpretation || null;
     if (!batch?.error && controlSchematics?.error) failures.push({ stage: "control_schematics_and_risers", error: controlSchematics.error });
     if (!batch?.error && reconcileFull?.error) failures.push({ stage: "schedule_plan_reconcile", error: reconcileFull.error });
   } else {
@@ -1363,8 +1377,12 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
         family: row.family ?? null,
         scheduled_qty: row.scheduled_qty ?? null,
         installed_qty: row.installed_qty ?? null,
+        tagged_plan_qty: row.tagged_plan_qty ?? null,
         observed_plan_qty: row.observed_plan_qty ?? null,
         installed_qty_basis: row.installed_qty_basis ?? null,
+        installed_evidence_grade: row.installed_evidence_grade ?? null,
+        geometry_verified: row.geometry_verified === true,
+        plan_candidate_count: Array.isArray(row.plan_candidate_cites) ? row.plan_candidate_cites.length : 0,
         search_scope: row.search_scope ?? null,
         unlabeled_audit_complete: row.unlabeled_audit_complete ?? null,
         plan_search_complete: row.plan_search_complete ?? null,
@@ -1386,6 +1404,21 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
           ? "partial"
           : "complete",
     error: reconcileFull?.error || null,
+  };
+  const sequenceCount = Number(compiles.sequences?.totals?.sequences || 0);
+  const interpretationStatus = String(sequenceInterpretation?.status || "not_available");
+  const interpretationReady = interpretationStatus === "ready" || interpretationStatus === "retained";
+  const interpretationExpected = sequenceCount > 0;
+  if (interpretationExpected && !interpretationReady) {
+    const error = sequenceInterpretation?.error || sequenceInterpretation?.reason
+      || "Extracted SOO clauses were not model-interpreted.";
+    failures.push({ stage: "sequence_interpretation", error });
+  }
+  stages.sequence_interpretation = {
+    status: interpretationReady ? "complete" : interpretationExpected ? "failed" : "refused",
+    error: interpretationExpected && !interpretationReady
+      ? sequenceInterpretation?.error || sequenceInterpretation?.reason || "SOO interpretation unavailable."
+      : null,
   };
   const inspections = {};
   for (const domain of COMPLETE_BAS_REVIEW_DOMAINS) {
@@ -1445,12 +1478,13 @@ export async function runCompleteBasTakeoff(ctx, args = {}) {
     release_status: "human_review_required",
     human_review_required: true,
     compile_order: [...COMPLETE_BAS_COMPILE_STAGES],
-    analysis_order: ["control_schematics_and_risers", "schedule_plan_reconcile"],
+    analysis_order: ["control_schematics_and_risers", "schedule_plan_reconcile", "sequence_interpretation"],
     compiles,
     stages,
     control_schematics: controlSchematics,
     diagram_engineering_readiness: controlSchematics.engineering_readiness || null,
     reconcile,
+    sequence_interpretation: sequenceInterpretation,
     inspections,
     presentation,
     workspace,

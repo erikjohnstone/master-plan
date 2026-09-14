@@ -11,7 +11,9 @@ import {
   groupTakeoffByFamily,
   lineLeadCite,
   lineLeadValue,
+  lineDiagramCite,
   linePlanCite,
+  linePlanTagCite,
   lineScheduleCite,
   lineSpecValue,
 } from "../lib/agentTakeoff.js";
@@ -22,6 +24,8 @@ import BasEquipmentWorkspace from "./BasEquipmentWorkspace.jsx";
 import BasProjectReviewWorkspace from "./BasProjectReviewWorkspace.jsx";
 import BasSourceReader from "./BasSourceReader.jsx";
 import BasSourceComparison from "./BasSourceComparison.jsx";
+import BasTakeoffOverview from "./BasTakeoffOverview.jsx";
+import BasTakeoffJourney from "./BasTakeoffJourney.jsx";
 import { store } from '../lib/store.js';
 import { basReviewNavigation } from './basReviewNavigation.ts';
 import { completeBasHeaderCoverage } from '../lib/completeBasPresentation.js';
@@ -97,15 +101,25 @@ function shortSheet(sheet) {
 function SourceComparisonActions({ line, onOpenCitation, onCompareCitations, comparisonBusy }) {
   const schedule = lineScheduleCite(line);
   const plan = linePlanCite(line);
-  const hasPair = Boolean(schedule && plan);
+  const planTag = linePlanTagCite(line);
+  const diagram = lineDiagramCite(line);
+  const drawing = plan || diagram;
+  const hasPair = Boolean(schedule && drawing);
+  const diagramLabel = diagram?.evidence_kind === 'piping'
+    ? 'Piping diagram'
+    : diagram?.evidence_kind === 'riser'
+      ? 'Riser evidence'
+      : diagram?.evidence_kind === 'flow'
+        ? 'Flow diagram'
+        : 'Schematic evidence';
   return <div style={{ display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
     {hasPair && onCompareCitations && <button
       type="button"
       data-source-comparison-action="compare"
       disabled={comparisonBusy}
-      onClick={() => onCompareCitations({ plan, schedule, tag: line.tag, line })}
+      onClick={() => onCompareCitations({ plan: drawing, planTag, schedule, tag: line.tag, line })}
       style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0, color: "var(--paper-bright)", background: "var(--cobalt)", borderColor: "var(--cobalt)" }}
-      title={`Compare grounded plan match on ${line.plan_sheet_id} with source schedule row on ${line.schedule_sheet_id || line.sheet_id}`}
+      title={`Compare ${plan ? 'grounded plan match' : 'authored diagram evidence'} on ${drawing?.sheet_id} with source schedule row on ${line.schedule_sheet_id || line.sheet_id}`}
     >
       {comparisonBusy ? 'Opening…' : 'Compare'}
     </button>}
@@ -123,8 +137,40 @@ function SourceComparisonActions({ line, onOpenCitation, onCompareCitations, com
       style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0, color: "var(--cobalt)", borderColor: "var(--cobalt)" }}
       title={`Open the grounded plan match on ${line.plan_sheet_id}`}
     >
-      Plan match · {shortSheet(line.plan_sheet_id)}
-    </button> : line.status && <span data-no-plan-match style={{ color: "var(--ink-muted)" }}>No plan match</span>}
+      Symbol · {shortSheet(line.plan_sheet_id)}
+    </button> : planTag ? <button
+      type="button"
+      onClick={() => onOpenCitation?.(planTag)}
+      data-plan-tag-only
+      style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0, color: "var(--warning, #9a5a00)", borderColor: "var(--warning, #9a5a00)" }}
+      title={`Open the exact plan tag on ${planTag.sheet_id}. The nearby device symbol has not been geometrically verified.`}
+    >
+      Tag only · {shortSheet(planTag.sheet_id)}
+    </button> : line.status && <span data-no-plan-match style={{ color: "var(--ink-muted)" }}>No verified plan symbol</span>}
+    {plan && planTag && <button
+      type="button"
+      onClick={() => onOpenCitation?.(planTag)}
+      data-plan-tag-evidence
+      style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0 }}
+      title={planTag.evidence_binding_status === "geometry_verified"
+        ? `Open the exact printed tag attached to the verified symbol on ${planTag.sheet_id}`
+        : `Open the exact plan tag on ${planTag.sheet_id}`}
+    >
+      Tag · {shortSheet(planTag.sheet_id)}
+    </button>}
+    {!plan && diagram && <button
+      type="button"
+      onClick={() => onOpenCitation?.(diagram)}
+      style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0, color: "var(--cobalt)", borderColor: "var(--cobalt)" }}
+      title={`Open exact authored ${diagramLabel.toLowerCase()} on ${diagram.sheet_id}. This is corroboration, not installed quantity.`}
+    >
+      {diagramLabel} · {shortSheet(diagram.sheet_id)}
+    </button>}
+    {line.plan_candidate_count > 0 && <span
+      data-plan-candidates-review
+      title="Geometry candidates were found but withheld from installed quantity until estimator review."
+      style={{ color: "var(--warning, #9a5a00)" }}
+    >{line.plan_candidate_count} candidate{line.plan_candidate_count === 1 ? '' : 's'} need review</span>}
   </div>;
 }
 
@@ -137,6 +183,7 @@ export default function TakeoffDataPanel({
   basViewState,
   onBasViewStateChange,
   onBasReview,
+  onBasSequenceAiReview,
   onBasDrawingReview,
   onBasRevisionOperation,
   onBasIssueReview,
@@ -206,17 +253,63 @@ export default function TakeoffDataPanel({
     }
   };
   const closeSourceComparison = () => { comparisonRequest.current += 1; setComparisonBusy(false); setSourceComparison(null); };
-  const [localTab, setLocalTab] = useState(basWorkflow && (corpusMeta?.kind === 'bas_points' || !rows.length) ? "points" : "takeoff");
+  const completeBasRun = corpusMeta?.kind === "complete_bas_takeoff";
+  const [localTab, setLocalTab] = useState(completeBasRun ? "overview" : basWorkflow && (corpusMeta?.kind === 'bas_points' || !rows.length) ? "points" : "takeoff");
   const tab = basViewState?.takeoffTab || localTab;
   const setTab = value => {
     setLocalTab(value);
     onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: value }));
   };
-  const evidenceTab = tab === 'points' || tab === 'equipment' || tab === 'review';
+  const evidenceTab = tab === 'overview' || tab === 'points' || tab === 'equipment' || tab === 'review';
+  const snapshotView = basViewState?.projectReview?.snapshotView;
+  const scopedTakeoffVerified = snapshotView?.approvedWorkflow === basWorkflow
+    || snapshotView?.verifiedCurrentWorkflow === basWorkflow;
+  const inferredJourneyStage = tab === 'overview' ? 'scope'
+    : tab === 'takeoff' ? 'equipment'
+      : tab === 'points' ? basViewState?.mode === 'sequences' ? 'controls' : 'points'
+        : tab === 'review' ? basViewState?.projectReview?.snapshots ? 'release'
+          : basViewState?.projectReview?.scopeReview ? 'scope' : 'exceptions'
+          : tab === 'equipment' ? 'equipment' : 'exceptions';
+  const activeJourneyStage = basViewState?.journeyStage || inferredJourneyStage;
   const openReviewDomain = (issue, captureId) => {
     const route = basReviewNavigation(basViewState || {}, issue, basWorkflow, captureId);
     setLocalTab(route.takeoffTab);
     onBasViewStateChange?.(previous => basReviewNavigation(previous || {}, issue, basWorkflow, captureId));
+  };
+  const navigateOverview = destination => {
+    if (destination === 'sequences') {
+      setLocalTab('points');
+      onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: 'points', mode: 'sequences', sequenceScroll: 0 }));
+      return;
+    }
+    if (destination === 'points') {
+      setLocalTab('points');
+      onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: 'points', mode: 'lists' }));
+      return;
+    }
+    navigateJourney(destination === 'details' ? 'equipment' : destination);
+  };
+  const navigateJourney = destination => {
+    const update = patch => onBasViewStateChange?.(previous => ({ ...previous, journeyStage: destination, ...patch }));
+    if (destination === 'scope') {
+      setLocalTab('review');
+      update({ takeoffTab: 'review', projectReview: { ...(basViewState?.projectReview || {}), scopeReview: true, snapshots: false, drawingReview: false, revisionReview: false, originalSources: false } });
+      return;
+    }
+    if (destination === 'equipment' || destination === 'grounding') {
+      setLocalTab('takeoff'); update({ takeoffTab: 'takeoff' }); return;
+    }
+    if (destination === 'points' || destination === 'controls') {
+      setLocalTab('points'); update({ takeoffTab: 'points', mode: destination === 'controls' ? 'sequences' : 'lists', sequenceScroll: 0 }); return;
+    }
+    if (destination === 'release') {
+      setLocalTab('review');
+      update({ takeoffTab: 'review', projectReview: { ...(basViewState?.projectReview || {}), snapshots: true, scopeReview: false, drawingReview: false, revisionReview: false, originalSources: false,
+        snapshotView: { ...(basViewState?.projectReview?.snapshotView || {}), tab: 'prepare' } } });
+      return;
+    }
+    setLocalTab('review');
+    update({ takeoffTab: 'review', projectReview: { ...(basViewState?.projectReview || {}), snapshots: false, scopeReview: false, drawingReview: false, revisionReview: false, originalSources: false } });
   };
   const [filter, setFilter] = useState("");
   const [busy, setBusy] = useState("");
@@ -227,12 +320,15 @@ export default function TakeoffDataPanel({
 
   const visibleLines = useMemo(() => {
     const q = filter.trim().toLowerCase();
-    if (!q) return lines;
-    return lines.filter((r) =>
+    const staged = completeBasRun && activeJourneyStage === 'grounding'
+      ? lines.filter(line => lineScheduleCite(line) && (linePlanCite(line) || linePlanTagCite(line) || line.status))
+      : lines;
+    if (!q) return staged;
+    return staged.filter((r) =>
       [r.tag, r.type, r.description, r.manufacturer, r.model, r.sheet_id, r.table_title,
         r.family, r.attrs_text, r.notes, r.workflow, ...Object.values(r.specs || {})]
         .some((v) => String(v ?? "").toLowerCase().includes(q)));
-  }, [lines, filter]);
+  }, [lines, filter, completeBasRun, activeJourneyStage]);
 
   const visibleRows = useMemo(() => {
     const q = filter.trim().toLowerCase();
@@ -275,7 +371,6 @@ export default function TakeoffDataPanel({
     ?? corpusMeta?.totals?.rows
     ?? null;
   const takeoffId = corpusMeta?.takeoff_id || null;
-  const completeBasRun = corpusMeta?.kind === "complete_bas_takeoff";
   const completeCoverage = completeBasRun ? corpusMeta?.coverage : null;
   const completeHeader = completeBasHeaderCoverage(completeCoverage);
   const completeSequenceCount = completeHeader.sequences;
@@ -419,7 +514,8 @@ export default function TakeoffDataPanel({
               <span>{rows.length} cited source fields</span>
             </div>
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
-              {tab === "review" ? basViewState?.projectReview?.snapshots
+              {tab === "overview" ? "A guided estimator review of scope, grounding, BAS requirements, and open decisions. Raw extraction fields remain available in Audit data."
+                : tab === "review" ? basViewState?.projectReview?.snapshots
                 ? "Review a scoped snapshot with its exact original PDFs. Historical approval does not certify the current project."
                 : "Source-linked findings across the saved BAS workflow. Resolve inputs in their original workspace; this view does not grant approval."
                 : tab === "equipment" ? "Source-backed equipment identities and explicit template assignments. Original schedule evidence stays unchanged."
@@ -465,17 +561,27 @@ export default function TakeoffDataPanel({
           </button>
         </header>
 
-        <div style={{ display: "flex", gap: 2, padding: "0 20px", borderBottom: "1px solid var(--ink-faint)" }}>
+        {completeBasRun && <BasTakeoffJourney corpusMeta={corpusMeta} activeStage={activeJourneyStage} approved={scopedTakeoffVerified} onNavigate={navigateJourney} />}
+        {completeBasRun && <div className="bas-journey-utility" aria-label="Supporting takeoff views">
+          <span>Supporting data</span>
+          <button type="button" aria-pressed={tab === 'overview'} onClick={() => { setTab('overview'); onBasViewStateChange?.(previous => ({ ...previous, journeyStage: 'scope' })); }}>Summary</button>
+          <button type="button" aria-pressed={tab === 'equipment'} onClick={() => { setTab('equipment'); onBasViewStateChange?.(previous => ({ ...previous, journeyStage: 'equipment' })); }}>Equipment setup</button>
+          <button type="button" aria-pressed={tab === 'workflow'} onClick={() => { setTab('workflow'); onBasViewStateChange?.(previous => ({ ...previous, journeyStage: 'exceptions' })); }}>Audit data</button>
+        </div>}
+        {!completeBasRun && <div style={{ display: "flex", gap: 2, padding: "0 20px", borderBottom: "1px solid var(--ink-faint)" }}>
+          {completeBasRun && <button type="button" style={tabBtn(tab === "overview")} onClick={() => setTab("overview")}>
+            Overview
+          </button>}
           <button type="button" style={tabBtn(tab === "takeoff")} onClick={() => setTab("takeoff")}>
-            Takeoff
+            {completeBasRun ? "Takeoff detail" : "Takeoff"}
           </button>
           <button type="button" style={tabBtn(tab === "workflow")} onClick={() => setTab("workflow")}>
-            Workflow data
+            {completeBasRun ? "Audit data" : "Workflow data"}
           </button>
-          {basWorkflow && <button type="button" style={tabBtn(tab === "points")} onClick={() => setTab("points")}>Point lists</button>}
-          {basWorkflow && <button type="button" style={tabBtn(tab === "equipment")} onClick={() => setTab("equipment")}>Equipment</button>}
+          {basWorkflow && <button type="button" style={tabBtn(tab === "points")} onClick={() => setTab("points")}>{completeBasRun ? "BAS points & sequences" : "Point lists"}</button>}
+          {basWorkflow && <button type="button" style={tabBtn(tab === "equipment")} onClick={() => setTab("equipment")}>{completeBasRun ? "Scope setup" : "Equipment"}</button>}
           <button type="button" style={{ ...tabBtn(tab === 'review'), marginLeft: 'auto' }} onClick={() => setTab('review')}>Review &amp; changes</button>
-        </div>
+        </div>}
 
         {err && (
           <div style={{ padding: "8px 20px", color: "var(--c-danger)", fontSize: "var(--fs-s)" }}>{err}</div>
@@ -530,11 +636,12 @@ export default function TakeoffDataPanel({
 
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px", ...(tab === 'review' ? { display: 'flex', flexDirection: 'column', minHeight: 0 } : {}) }}>
           {tab !== 'review' && basViewState?.projectReview?.returnFromDomain && <button type="button" onClick={() => setTab('review')}>← Return to issue review</button>}
-          {tab === 'review' ? <BasProjectReviewWorkspace workflow={basWorkflow} state={basViewState?.projectReview}
+          {tab === 'overview' && completeBasRun ? <BasTakeoffOverview corpusMeta={corpusMeta} citedFieldCount={rows.length} onNavigate={navigateOverview} />
+            : tab === 'review' ? <BasProjectReviewWorkspace workflow={basWorkflow} state={basViewState?.projectReview}
             onStateChange={updater => onBasViewStateChange?.(previous => ({ ...previous, projectReview: updater(previous?.projectReview || {}) }))}
             onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} onDrawingReview={onBasDrawingReview} onRevisionOperation={onBasRevisionOperation} onIssueReview={onBasIssueReview} onScopeReview={onBasScopeReview} restoreContext={restoreContext} />
             : tab === "equipment" ? <BasEquipmentWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasEquipmentReview} onCalculate={onBasAssignmentCalculate} onAssemblyReview={onBasAssemblyReview} onAssemblyCalculate={onBasAssemblyCalculate} onEngineering={onBasEngineering} onOpenCitation={onOpenCitation} />
-            : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onOpenCitation={onOpenCitation} /> : <>
+            : tab === "points" ? <BasPointsWorkspace workflow={basWorkflow} viewState={basViewState} onViewStateChange={onBasViewStateChange} onReview={onBasReview} onAiReview={onBasSequenceAiReview} onOpenCitation={onOpenCitation} /> : <>
           {tab === "takeoff" ? (
             !lines.length ? (
               <div style={{ padding: "56px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: "var(--fs-l)", lineHeight: 1.5 }}>

@@ -7,7 +7,7 @@ import { ANN_SCHEMA } from '../lib/store.js';
 import BasSequencesWorkspace from './BasSequencesWorkspace.jsx';
 import './BasPointsWorkspace.css';
 
-export default function BasPointsWorkspace({ workflow, onOpenCitation, viewState, onViewStateChange, onReview }) {
+export default function BasPointsWorkspace({ workflow, onOpenCitation, viewState, onViewStateChange, onReview, onAiReview }) {
   const [validation, setValidation] = useState({ input: null, error: '', value: null });
   const [sourceError, setSourceError] = useState('');
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function BasPointsWorkspace({ workflow, onOpenCitation, viewState
     <p>{validation.error}</p><p>The saved record has not been discarded. Recompile the original source before using it.</p></section>;
   if (!capture) return <p className="bas-point-message">No point-list capture is selected.</p>;
   if (viewState?.mode === 'sequences') return <BasSequencesWorkspace workflow={validation.value} capture={capture}
-    onOpenCitation={onOpenCitation} viewState={viewState} onViewStateChange={onViewStateChange} onReview={onReview} />;
+    onOpenCitation={onOpenCitation} viewState={viewState} onViewStateChange={onViewStateChange} onReview={onReview} onAiReview={onAiReview} />;
   return <section aria-label="Grounded point lists" className="bas-point-workspace">
     <div className="bas-point-controls">
       <button type="button" onClick={() => change({ mode: 'sequences' })}>Sequences &amp; links</button>

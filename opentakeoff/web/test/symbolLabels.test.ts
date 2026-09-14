@@ -4,7 +4,7 @@
 // impostor (a same-shaped valve circle one fixture over) at 45 px.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { canonicalLabelFamily, labelTokens, labelPlacements, LABEL_ADJACENT_K, reconcileSweepLabels } from "../src/lib/symbollabels.ts";
+import { canonicalLabelFamily, labelTokens, labelPlacements, LABEL_ADJACENT_K, reconcileSweepLabels, arbitrateAffineAgainstRigidLabels, type PlacementLabel, type ReconciledSweepLabels } from "../src/lib/symbollabels.ts";
 
 const span = (str: string, x0: number, y0: number, w = 32, h = 17) => ({ str, x0, y0, x1: x0 + w, y1: y0 + h });
 
@@ -584,6 +584,26 @@ test("leader: an equipment route cannot turn a tiny inline sensor into the remot
   assert.equal(point, null);
 });
 
+test("label assignment honors each placement's own vector-ink length", () => {
+  const tokens = [
+    span("FCU-5", 96, 196, 72, 44),
+    span("FCU-6", 96, 496, 72, 44),
+  ];
+  const segs = [
+    172, 205, 260, 203, 260, 203, 385, 202,
+    172, 505, 260, 503, 260, 503, 385, 502,
+  ];
+  const labels = labelPlacements(
+    [[400, 200], [400, 500]],
+    tokens,
+    segs,
+    Uint8Array.from([0, 0, 0, 0]),
+    { scores: [1, 1], symbolInkLengthPxByPlacement: [60, 300] },
+  );
+  assert.equal(labels[0], null, "the tiny first candidate cannot inherit the second device's ink scale");
+  assert.equal(labels[1]?.label, "FCU-6");
+});
+
 test("leader: a multi-part equipment callout may begin at a tag-box corner", () => {
   const segs = [
     182, 225, 270, 215,
@@ -898,4 +918,65 @@ test("labelPlacements: a placement can lose its own nearest tag to a closer comp
   const contested = labelPlacements([seedPoint, competitor], [token], [], undefined, { scores: [1, 1] });
   assert.equal(contested[0], null, "in a shared assignment, the seed can lose its own tag to a closer competing placement");
   assert.equal(contested[1]?.label, "D10");
+});
+
+const placementLabel = (label: string, box: [number, number, number, number]): PlacementLabel => ({
+  label, via: "adjacent", distance_px: 4, token_bbox: box,
+});
+
+const reconciled = (
+  matches: ReconciledSweepLabels["matches"],
+  matchLabels: ReconciledSweepLabels["matchLabels"],
+): ReconciledSweepLabels => ({
+  matches, matchLabels, withheld: [], withheldLabels: [], promoted: 0, demoted: 0,
+});
+
+test("affine/rigid arbitration uses exact source-tag identity, not unsafe cross-model position", () => {
+  const seed = placementLabel("CD-1", [0, 0, 20, 10]);
+  const a = placementLabel("CD-1", [100, 100, 120, 110]);
+  const b = placementLabel("CD-1", [300, 100, 320, 110]);
+  const rigid = reconciled([
+    { at: [90, 90], score: 0.61, rotation: 0, mirrored: false },
+    { at: [290, 90], score: 0.58, rotation: 0, mirrored: false },
+  ], [a, b]);
+  const affine = reconciled([
+    // Both refined readings claim the same exact source boxes but have moved
+    // far away—mirrors the measured dense-grid corruption mechanism.
+    { at: [175, 155], score: 0.98, rotation: 0, mirrored: false, transform: { rotation_deg: 3, scale_x: 0.9, scale_y: 1.1, shear_deg: 2, mirrored: false, rms_px: 2, tol_px: 6, via: "rigid" } },
+    { at: [375, 155], score: 0.97, rotation: 0, mirrored: false, transform: { rotation_deg: 4, scale_x: 0.9, scale_y: 1.1, shear_deg: 2, mirrored: false, rms_px: 2, tol_px: 6, via: "rigid" } },
+    // On a three-tag repeated convention, an unlabeled affine-only row is a
+    // review question, not an extra installed diffuser.
+    { at: [500, 500], score: 0.96, rotation: 0, mirrored: false, transform: { rotation_deg: 7, scale_x: 1, scale_y: 1, shear_deg: 0, mirrored: false, rms_px: 1, tol_px: 4, via: "rotation" } },
+  ], [a, b, null]);
+  const result = arbitrateAffineAgainstRigidLabels(seed, rigid, affine, 60);
+  assert.deepEqual(result.matches.map((row) => row.at), [[90, 90], [290, 90]]);
+  assert.equal(result.rigid_preferred, 2);
+  assert.equal(result.affine_added, 0);
+  assert.equal(result.affine_unlabeled_withheld, 1);
+  assert.match(result.withheld[0].reason, /no CD-1-family drawing tag/);
+});
+
+test("affine/rigid arbitration retains a genuinely affine-only source-grounded placement", () => {
+  const seed = placementLabel("VAV-1", [0, 0, 30, 12]);
+  const stretched = placementLabel("VAV-2", [200, 200, 235, 212]);
+  const affineOnly = { at: [180, 190] as [number, number], score: 0.95, rotation: 17, mirrored: false, transform: { rotation_deg: 17, scale_x: 1.25, scale_y: 1, shear_deg: 1, mirrored: false, rms_px: 1, tol_px: 3, via: "affine" as const } };
+  const result = arbitrateAffineAgainstRigidLabels(
+    seed,
+    reconciled([], []),
+    reconciled([affineOnly], [stretched]),
+    60,
+  );
+  assert.deepEqual(result.matches, [affineOnly]);
+  assert.equal(result.matchLabels[0]?.label, "VAV-2");
+  assert.equal(result.rigid_preferred, 0);
+  assert.equal(result.affine_added, 1);
+});
+
+test("affine/rigid arbitration preserves affine behavior when the seed has no drawing label", () => {
+  const affineOnly = { at: [40, 50] as [number, number], score: 0.96, rotation: 33, mirrored: false, transform: { rotation_deg: 33, scale_x: 1, scale_y: 1, shear_deg: 0, mirrored: false, rms_px: 1, tol_px: 3, via: "rotation" as const } };
+  const affine = reconciled([affineOnly], [null]);
+  const result = arbitrateAffineAgainstRigidLabels(null, reconciled([], []), affine, 40);
+  assert.deepEqual(result.matches, [affineOnly]);
+  assert.equal(result.affine_added, 0);
+  assert.equal(result.rigid_preferred, 0);
 });

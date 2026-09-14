@@ -154,6 +154,21 @@
         "ATCT - STAIRWELL PRESSURIZATION SCHEMATIC": "unbound"
       },
       "review_note": "The drawing explicitly says to see fire-protection sheets FA502 and FA623 for control sequences; those sheets are not present in this mechanical source PDF, so no local SOO binding is asserted."
+    },
+    {
+      "page": 72,
+      "sheet_number": "M-801",
+      "sequence_titles": [],
+      "control_diagram_titles": [],
+      "riser_diagrams": [
+        {
+          "title": "AIR OPS - CHILLED WATER PIPING SCHEMATIC",
+          "diagram_kind": "piping",
+          "semantic_status": "evidence_inventory",
+          "required_diagram_tags": ["CV-CH-A1", "CV-CH-A2"]
+        }
+      ],
+      "review_note": "Human visual review confirms both control-valve tags are printed beside their drawn valve symbols. These are cited piping-schematic occurrences and do not independently establish installed quantity."
     }
   ]
 }

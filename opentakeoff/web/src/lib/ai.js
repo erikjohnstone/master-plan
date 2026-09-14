@@ -263,6 +263,30 @@ export function buildChatRequest(cfg, { system, messages, tools, maxTokens = 409
   };
 }
 
+/** OpenAI-compatible strict JSON-schema request. This is transport only; the
+ * caller must validate every returned claim against its own source contract. */
+export function buildStructuredJsonRequest(cfg, { system = "", payload, schema, schemaName, maxTokens = 12000 }) {
+  if (cfg.provider !== "openai") throw new Error("Strict structured interpretation requires an OpenAI-compatible endpoint.");
+  const headers = { "Content-Type": "application/json" };
+  if (cfg.apiKey) headers.Authorization = `Bearer ${cfg.apiKey}`;
+  return {
+    url: aiRequestUrl(cfg.endpoint, cfg.provider), headers,
+    body: {
+      model: cfg.model,
+      messages: [...(system ? [{ role: "system", content: system }] : []),
+        { role: "user", content: JSON.stringify(payload) }],
+      response_format: { type: "json_schema", json_schema: { name: schemaName, strict: true, schema } },
+      max_completion_tokens: maxTokens,
+    },
+  };
+}
+
+export function parseStructuredJsonResponse(json) {
+  const content = json?.choices?.[0]?.message?.content;
+  if (typeof content !== "string") return null;
+  try { return JSON.parse(content); } catch { return null; }
+}
+
 // ── the seam every AI consumer goes through ─────────────────────────────────
 
 /** Send one vision query to the user's configured endpoint. Throws with a
@@ -361,4 +385,43 @@ export async function chatWithTools({ cfg, system, messages, tools, maxTokens = 
   const json = await res.json().catch(() => null);
   if (!json || typeof json !== "object") throw new Error("The endpoint replied, but not with JSON.");
   return json;
+}
+
+/** Send one strict structured-output request. Authentication remains in the
+ * existing same-origin platform proxy; returned JSON is intentionally raw. */
+export async function structuredJsonQuery({ cfg, system, payload, schema, schemaName = "structured_result",
+  maxTokens = 12000, signal, fetchFn }) {
+  const c = cfg || aiConfig();
+  if (!(c.endpoint && c.model)) throw new Error("AI isn't configured — open AI settings first.");
+  const { url, headers, body } = buildStructuredJsonRequest(c, { system, payload, schema, schemaName, maxTokens });
+  let sig = signal;
+  try {
+    if (typeof AbortSignal !== "undefined" && typeof AbortSignal.any === "function" && typeof AbortSignal.timeout === "function") {
+      sig = signal ? AbortSignal.any([signal, AbortSignal.timeout(120000)]) : AbortSignal.timeout(120000);
+    }
+  } catch { /* keep caller signal */ }
+  let res;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      res = await (fetchFn || fetch)(url, { method: "POST", headers, body: JSON.stringify(body), signal: sig });
+    } catch (error) {
+      if (signal?.aborted || error?.name === "AbortError") throw error;
+      if (error?.name === "TimeoutError") throw new Error("SOO interpretation took more than 2 minutes for one batch.");
+      throw new Error("Couldn't reach the structured interpretation endpoint.");
+    }
+    if (res.ok) break;
+    if ((res.status === 429 || res.status === 503) && attempt < 4) {
+      const retryAfter = Number(res.headers?.get?.("retry-after"));
+      const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? Math.min(60_000, retryAfter * 1000) : Math.min(16_000, 2_000 * (2 ** attempt));
+      await new Promise(resolve => setTimeout(resolve, waitMs));
+      continue;
+    }
+    let detail = "";
+    try { detail = (await res.text()).slice(0, 240); } catch { /* ignore */ }
+    throw new Error(`Structured AI request failed (HTTP ${res.status})${detail ? `: ${detail}` : "."}`);
+  }
+  const json = await res.json().catch(() => null);
+  const parsed = parseStructuredJsonResponse(json);
+  if (parsed === null) throw new Error("The structured interpretation endpoint did not return valid JSON.");
+  return parsed;
 }

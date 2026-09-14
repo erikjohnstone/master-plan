@@ -3135,3 +3135,22 @@ Ground-truth validators corroborate authored assertions and source/render integr
 ### Next
 
 Add the tested shared source-version/text-only seam, then source accounting and narrative discovery. Preserve existing contracts/outputs. Connect durable BAS state before expanding UI functionality. Follow the complete implementation sequence and gates in `IMPLEMENTATION_PLAN.md`.
+
+## Shared symbol-grounding integration checkpoint — 2026-09-13
+
+The symbol workstream is now integrated locally into the shared Session path,
+not as a browser-only matcher. Rigid and affine labeled populations compete by
+exact PDF tag bbox, with rigid ownership preserved on shared claims and only
+distinct cited affine additions admitted automatically. `symbol_sweep` exposes
+the decision as `transform_competition`; the formerly undeclared
+`label_corroboration` field is now part of the MCP schema instead of being
+silently stripped. `sweep_schedule_row` browser fallback options and schedule
+preferences now survive the HTTP/CLI bridge into the same Session method.
+
+Fresh evidence: 47/47 real symbol cases pass with affine enabled and no
+per-case affine-off or variant-guard exception; 201/201 focused engine tests,
+19/19 MCP conformance tests, 101/101 MCP tool tests, 3/3 production bridge
+parity tests, 4/4 packaging tests, and 3,139/0/13-skip full web tests pass.
+Typechecks, build, diff check and lint (zero errors; three existing warnings)
+pass. Browser 47-case verification is still running, so this remains an active
+checkpoint rather than a production-completion claim.

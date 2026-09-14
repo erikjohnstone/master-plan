@@ -306,7 +306,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
         // Phase G outcome note for the exact corpus numbers this shipped
         // with. An explicit `{ enabled: false }` (or any partial object
         // without `enabled: true`) still opts a caller OUT, unchanged.
-      }).default(AFFINE_WIRE_DEFAULT).describe("docs/SYMBOL-SWEEP-AFFINE-GOAL.md — ON by default (docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md's own default-flip). Catches rotated-off-grid or distorted \"changed\" symbols automatically; pass { enabled: false } to opt out to the old rigid-only search. KNOWN FAILURE MODE (docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md, four separate measured engine-fix attempts, all reverted as unsafe): on a sheet with a DENSE, REPEATING population of the same near-identical symbol (a grid of diffusers, VAV boxes, or similar), this refinement can occasionally lock onto a NEIGHBORING instance's own geometry instead of the one it is scoring — producing a confidently-scored `match` at the wrong position, sometimes losing a real instance's own count entirely (measured: one real case dropped from 35/35 to 4/35 this way). The plain rigid pass has no such failure mode and is proven, corpus-wide, to recover 100% of real instances on every dense-grid case tested when this happens. If a sweep over a dense repeating grid returns a count that looks wrong (fewer instances than a quick visual scan of the sheet suggests, or matches sitting suspiciously close together / between two real positions), RETRY THE SAME SWEEP with `{ enabled: false }` and prefer that result for this specific seed — it is the more trustworthy read for a dense repeating grid, even though it misses genuinely rotated/distorted symbols elsewhere."),
+      }).default(AFFINE_WIRE_DEFAULT).describe("docs/SYMBOL-SWEEP-AFFINE-GOAL.md — ON by default. Runs the complete rigid and bounded-affine searches as nested competitors: when both readings claim the same exact PDF tag box, the simpler rigid location wins; an affine-only placement changes the automatic count only when it owns distinct same-family tag evidence. On a demonstrably labeled repeated family, unlabelled affine-only fits remain review questions. Unlabelled drawings remain geometry-only and require estimator review before commit. transform_competition discloses the accounting. Pass { enabled: false } only for an intentional rigid audit."),
     },
     outputSchema: symbolSweepOutput,
   }, run("symbol_sweep", (a) => session.symbolSweep(a.sheet, {
@@ -363,11 +363,11 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       prefer_schedule_sheet: z.string().optional().describe("When the same mark appears on multiple schedules (shared building letter), prefer the row on this sheet key"),
       prefer_schedule_title: z.string().optional().describe("When the same mark appears on multiple schedules, prefer the row whose table title matches (exact or …SCHEDULE stem)"),
       affine: z.object({
-        enabled: z.boolean().default(false).describe("Also search continuous (off-grid) rotation and bounded anisotropic stretch/shear for the marker, not just 0/90/180/270. Off by default (docs/SYMBOL-SWEEP-AFFINE-GOAL.md)"),
+        enabled: z.boolean().default(false).describe("Also search continuous (off-grid) rotation and bounded anisotropic stretch/shear for the marker, not just 0/90/180/270"),
         max_stretch: z.number().positive().default(1.5).describe("Bound on scale_x/scale_y to commit as a match. Default 1.5×"),
         max_shear_deg: z.number().positive().default(10).describe("Bound on |shear_deg| to commit as a match. Default 10°"),
         scale_search: z.boolean().default(false).describe("Also propose anisotropic stretch/shear a single rotated segment alone can't fix. Off by default even when affine.enabled is true"),
-      }).optional().describe("docs/SYMBOL-SWEEP-AFFINE-GOAL.md — off by default; see symbol_sweep's own affine option for the full explanation"),
+      }).default(AFFINE_WIRE_DEFAULT).describe("On by default. The shared classifier nests the rigid result inside the affine pass and resolves both by exact plan-tag bbox: shared tag claims keep the simpler rigid location; genuinely affine-only tagged placements add recall. Pass { enabled:false } only for diagnosis."),
     },
     outputSchema: sweepScheduleRowOutput,
   }, run("sweep_schedule_row", (a) => session.sweepScheduleRow(a.tag, {
@@ -378,7 +378,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
     evaluationFast: a.tagged_only,
     preferSheet: a.prefer_schedule_sheet,
     preferTitle: a.prefer_schedule_title,
-    ...(a.affine ? { affine: affineOptionsFromWire(a.affine) } : {}),
+    affine: affineOptionsFromWire(a.affine),
   })));
 
   server.registerTool("trace_connectivity", {
@@ -911,7 +911,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
   }));
 
   server.registerTool("reconcile_schedule_plan", {
-    description: `Reconcile scheduled equipment tags to plan drawings — contractor-grade table with Tag, Family, Scheduled qty, Installed qty, Status (MATCH | SCHEDULE_ONLY | PLAN_ONLY | REFUSED_NO_SCALE | REFUSED_NO_TEXT | AMBIGUOUS), schedule cite, and plan cite(s). A repeatable grille/register/diffuser row with no printed QTY is explicitly a type definition, not a fake scheduled quantity of 1; its MATCH means the definition was grounded to plan callouts and quantity_comparison says type_definition_vs_plan_count. Independently reused marks are scoped by authored drawing-group titles (building/site/area), never tag-prefix guesses. Walks every equipment schedule row through sweep_schedule_row on the shared Session path — never invents plan locations. Optional family filter (e.g. "VAV", "FCU", "AHU") scopes to one schedule family. Pass path to write JSON; export_path writes reconcile.csv. Read-only; does not commit canvas shapes. ${COORDS}`,
+    description: `Reconcile scheduled equipment tags to plan drawings — contractor-grade rows with separate Scheduled qty, verified Installed qty, tag-text observations, withheld geometric candidates, evidence grade, audit coverage, and source citations. MATCH requires recognized installed evidence: symbol geometry (or an explicit installation note), never tag text alone. exact_plan_tag is returned as tagged_plan_qty + plan_tag_cites with installed_qty:null and AMBIGUOUS until geometry or a human review verifies it. plan_cites are geometry-grounded; plan_candidate_cites remain review proposals and never count. A repeatable grille/register/diffuser row with no printed QTY is a type definition, not a fake scheduled quantity of 1. Independently reused marks are scoped by authored drawing-group titles (building/site/area), never tag-prefix guesses. Walks equipment rows through sweep_schedule_row on the shared Session path — never invents plan locations. Optional family filter (e.g. "VAV", "FCU", "AHU") scopes to one schedule family. Pass path to write JSON; export_path writes reconcile.csv. Read-only; does not commit canvas shapes. ${COORDS}`,
     inputSchema: {
       family: z.string().optional().describe('Optional family scope: VAV, FCU, AHU, pump, etc.'),
       categories: z.array(z.string()).optional().describe("Optional hvacTaxonomy category filter"),

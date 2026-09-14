@@ -115,6 +115,36 @@ for (const expected of truth.pages) {
       errors.push(`page ${expected.page}: ${JSON.stringify(schematic.title)} sequence binding expected ${expectedStatus}, got ${schematic.sequence_binding_status}`);
     }
   }
+  const pageDiagrams = controls.risers.filter((diagram) => diagram.sheet === key);
+  const expectedDiagrams = expected.riser_diagrams || [];
+  if (pageDiagrams.length !== expectedDiagrams.length) {
+    errors.push(`page ${expected.page}: expected ${expectedDiagrams.length} riser/flow/piping diagram(s), got ${pageDiagrams.length}`);
+  }
+  for (const wanted of expectedDiagrams) {
+    const diagram = pageDiagrams.find((candidate) => candidate.title === wanted.title);
+    if (!diagram) {
+      errors.push(`page ${expected.page}: missing diagram ${JSON.stringify(wanted.title)}`);
+      continue;
+    }
+    if (diagram.diagram_kind !== wanted.diagram_kind) {
+      errors.push(`page ${expected.page}: ${JSON.stringify(wanted.title)} kind expected ${wanted.diagram_kind}, got ${diagram.diagram_kind}`);
+    }
+    if (diagram.semantic_status !== (wanted.semantic_status || "evidence_inventory")) {
+      errors.push(`page ${expected.page}: ${JSON.stringify(wanted.title)} semantic status expected ${wanted.semantic_status || "evidence_inventory"}, got ${diagram.semantic_status}`);
+    }
+    if (!validBbox(diagram.title_evidence?.bbox)) {
+      errors.push(`page ${expected.page}: ${JSON.stringify(wanted.title)} lacks valid title evidence`);
+    }
+    const tags = new Set(diagram.diagram_tags.map(({ tag }) => tag));
+    for (const tag of wanted.required_diagram_tags || []) {
+      if (!tags.has(tag)) errors.push(`page ${expected.page}: ${JSON.stringify(wanted.title)} missing diagram tag ${JSON.stringify(tag)}`);
+    }
+    for (const group of diagram.diagram_tags.filter(({ tag }) => (wanted.required_diagram_tags || []).includes(tag))) {
+      if (!group.evidence.length || group.evidence.some(({ bbox }) => !validBbox(bbox))) {
+        errors.push(`page ${expected.page}: ${JSON.stringify(wanted.title)} tag ${JSON.stringify(group.tag)} lacks exact evidence bbox`);
+      }
+    }
+  }
   for (const [diagramTitle, expectedSequenceTitles] of Object.entries(expected.expected_sequence_bindings || {})) {
     const schematic = pageSchematics.find((candidate) => candidate.title === diagramTitle);
     if (!schematic) continue;
@@ -213,6 +243,13 @@ for (const expected of truth.pages) {
       semantic_status: schematic.semantic_status,
       topology_status: schematic.topology.status,
       unresolved_crossings: schematic.review.unresolved_crossings,
+    })),
+    extracted_diagrams: pageDiagrams.map((diagram) => ({
+      title: diagram.title,
+      diagram_kind: diagram.diagram_kind,
+      diagram_tags: diagram.diagram_tags.map(({ tag }) => tag),
+      semantic_status: diagram.semantic_status,
+      topology_status: diagram.topology.status,
     })),
   });
 }

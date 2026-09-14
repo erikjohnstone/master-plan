@@ -250,3 +250,21 @@ This goal is complete only when:
 “Perfect” means exact on the declared and independently reviewed production
 gates with visible uncertainty handling. It never means claiming certainty on
 unseen documents or unsupported evidence.
+
+## Verification checkpoint — 2026-09-13
+
+The shared symbol path now runs rigid and bounded-affine recognition as nested
+competitors and resolves labeled placements by exact source tag bbox. This
+removes the earlier eval-only affine-off escape hatch: the current 47-case
+manifest contains zero `affine:false` overrides, and a fresh uninterrupted
+Session-product run passes **47/47** exact counts and authored one-to-one
+localizations. The Agent/MCP output declares `transform_competition` and
+`label_corroboration`; schema round-trip tests prove neither explanation is
+stripped before it reaches the Agent. The browser fallback now preserves the
+same rotation, mirror, affine and schedule-disambiguation options through the
+production CLI into Session. VectorGrid, table rows, citations and bbox
+semantics were not changed.
+
+This is a symbol-path checkpoint, not completion of the larger BAS goal. The
+fresh-server 47-case browser gate and the remaining multi-project schematic,
+riser, full-Agent and holdout gates are still required.

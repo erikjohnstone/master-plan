@@ -216,16 +216,9 @@ export function affineOptionsFromWire(a: {
   return { enabled: a.enabled, maxStretch: a.max_stretch, maxShearDeg: a.max_shear_deg, scaleSearch: a.scale_search };
 }
 
-/** docs/SYMBOL-SWEEP-AFFINE-GOAL.md §3 Phase 5 step 6 — the affine wire
- * object's own default values. NOT currently wired into either tool schema's
- * own `.default(...)` (that attempt, commit `c1fd732`, was reverted — see
- * the goal doc's Findings: it shipped a real regression because the gate
- * that was meant to catch it never ran this code path). Kept as a standalone
- * export because `mcp/scripts/symbol-sweep-corpus.mjs` still needs it: the
- * corpus suite now applies it to EVERY case unconditionally, deliberately
- * independent of whatever the wire-level default currently is, so it stays
- * the real, standing gate a future default-flip attempt must clear on the
- * actual code path — not proof by proxy. */
+/** The single affine wire default used by the MCP schemas, browser Agent and
+ * corpus gates. Keeping the literal here prevents a UI/MCP default drift; the
+ * Session also owns the omitted-option fallback for direct production calls. */
 export const AFFINE_WIRE_DEFAULT = { enabled: true, max_stretch: 1.5, max_shear_deg: 10, scale_search: false } as const;
 
 /** §4.1 — disclosed on a row whenever affine refinement (not the rigid
@@ -387,6 +380,12 @@ export interface SweepResult {
   };
   matches: SweepMatch[];
   withheld: SweepWithheld[];
+  /** When affine matching is enabled, the same already-scored rigid proposals
+   * classified independently before refinement. This is internal evidence for
+   * the shared label layer: a drawing tag claimed by both models keeps the
+   * simpler rigid location, while a genuinely rotation/stretch-only tag can
+   * still retain the affine placement. No second geometric sweep is run. */
+  rigid_baseline?: RigidSymbolBaseline;
   /** Work accounting: dropped > 0 means the candidate ceiling bit and some
    * placements were never scored — the caller must be told. */
   candidates: { considered: number; dropped: number };
@@ -407,6 +406,12 @@ export interface SweepResult {
    * every placement the geometry would have committed and the pen did not,
    * named — a rejection is a question answered, and the caller can look. */
   lum_gate?: { tol: number; seed_lum: number[]; rejected: number; at: Point[] };
+}
+
+export interface RigidSymbolBaseline {
+  matches: SweepMatch[];
+  withheld: SweepWithheld[];
+  rejected: SweepRejected[];
 }
 
 export const SWEEP_TOL_PX = 2;
@@ -657,9 +662,38 @@ function glyphClusterMask(
     if (ra !== rb) parent[ra] = rb;
   };
   const link = Math.max(4 * tol, 4); // small letter-to-letter gap, not a search radius
+  // Exact spatial broad phase for the old all-pairs test below. Two segments
+  // can link only when at least one endpoint pair is within `link`; with a
+  // cell width of `link`, such endpoints must occupy the same or an adjacent
+  // cell. Candidate segment indices are sorted before the unchanged distance
+  // predicate runs, preserving the quadratic implementation's `(a,b)` order
+  // and therefore its deterministic union/group output while avoiding O(n²)
+  // work on dense CAD sheets.
+  const endpointCells = new Map<string, number[]>();
+  const cell = (v: number): number => Math.floor(v / link);
+  const addEndpoint = (segmentIndex: number, x: number, y: number): void => {
+    const key = `${cell(x)}:${cell(y)}`;
+    const entries = endpointCells.get(key);
+    if (entries) entries.push(segmentIndex);
+    else endpointCells.set(key, [segmentIndex]);
+  };
+  for (let k = 0; k < short.length; k++) {
+    const [ax, ay, bx, by] = pts[short[k]];
+    addEndpoint(k, ax, ay);
+    addEndpoint(k, bx, by);
+  }
   for (let a = 0; a < short.length; a++) {
     const [ax0, ay0, ax1, ay1] = pts[short[a]];
-    for (let b = a + 1; b < short.length; b++) {
+    const nearby = new Set<number>();
+    for (const [x, y] of [[ax0, ay0], [ax1, ay1]] as const) {
+      const cx = cell(x), cy = cell(y);
+      for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+        for (const b of endpointCells.get(`${cx + dx}:${cy + dy}`) || []) {
+          if (b > a) nearby.add(b);
+        }
+      }
+    }
+    for (const b of [...nearby].sort((x, y) => x - y)) {
       const [bx0, by0, bx1, by1] = pts[short[b]];
       const d = Math.min(
         Math.hypot(ax0 - bx0, ay0 - by0), Math.hypot(ax0 - bx1, ay0 - by1),
@@ -873,6 +907,11 @@ export interface SymbolFingerprint {
 export interface SymbolMatchResult {
   matches: SweepMatch[];
   withheld: SweepWithheld[];
+  /** Classified rigid evidence captured from this same candidate/scoring
+   * pass. Present only when affine matching was enabled. It is deliberately
+   * not a second `matchSymbol` result: candidates/work accounting still
+   * belongs to the one complete search reported by this object. */
+  rigid_baseline?: RigidSymbolBaseline;
   candidates: { considered: number; dropped: number };
   /** True when every proposed placement was scored — the count is a total.
    * False means the ceiling bit: the count is a FLOOR, not a total (#261). */
@@ -923,6 +962,13 @@ export interface MatchOptions extends SweepOptions {
    * interactive symbol_sweep calls leave this unset and retain the complete
    * whole-sheet search. */
   candidateRegions?: Array<{ center: Point; radius: number }>;
+  /** Optional work bound for AFFINE recovery only. Rigid candidates still
+   * search the full `candidateRegions` scope (the whole sheet when that is
+   * unset); continuous-rotation/stretch proposals and refinement run only
+   * near these known identity anchors. `sweep_schedule_row` uses the row's
+   * exact plan-tag occurrences because affine geometry outside them cannot
+   * affect installed quantity. Interactive symbol_sweep leaves this unset. */
+  affineCandidateRegions?: Array<{ center: Point; radius: number }>;
 }
 
 /** A fingerprint resized by a stated ratio, for matching against a sheet drawn
@@ -1431,6 +1477,9 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const { lengths, lenBucket, grid } = sheetMatchIndex(segs, tol);
   const regions = opts.candidateRegions?.filter((r) =>
     Number.isFinite(r.center[0]) && Number.isFinite(r.center[1]) && Number.isFinite(r.radius) && r.radius >= 0);
+  const affineRegionsSpecified = Array.isArray(opts.affineCandidateRegions);
+  const affineRegions = opts.affineCandidateRegions?.filter((r) =>
+    Number.isFinite(r.center[0]) && Number.isFinite(r.center[1]) && Number.isFinite(r.radius) && r.radius >= 0);
   // If a candidate centroid is inside a requested region, every one of its
   // anchor endpoints must be inside this expanded box. Querying the endpoint
   // index up front avoids walking the sheet-wide length bucket for every
@@ -1461,23 +1510,52 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     }
   }
   const activeLenBucket = focusedLenBucket ?? lenBucket;
+  let affineFocusedLenBucket: Map<number, number[]> | null = affineRegionsSpecified ? new Map() : null;
+  if (affineRegions?.length && affineFocusedLenBucket) {
+    const affineRegionSegments = new Set<number>();
+    let maxRelRadius = 0;
+    for (const r of rel) {
+      maxRelRadius = Math.max(maxRelRadius, Math.hypot(r[0], r[1]), Math.hypot(r[2], r[3]));
+    }
+    for (const region of affineRegions) {
+      const reach = region.radius + maxRelRadius + 2 * tol;
+      for (const i of grid.nearRect(
+        region.center[0] - reach, region.center[1] - reach,
+        region.center[0] + reach, region.center[1] + reach,
+      )) affineRegionSegments.add(i);
+    }
+    for (const i of affineRegionSegments) {
+      const bucket = Math.round(lengths[i]);
+      const entries = affineFocusedLenBucket.get(bucket);
+      if (entries) entries.push(i);
+      else affineFocusedLenBucket.set(bucket, [i]);
+    }
+  }
+  const affineActiveLenBucket = affineFocusedLenBucket ?? activeLenBucket;
   const insideRequestedRegion = (x: number, y: number): boolean =>
     !regions?.length || regions.some((r) => {
       const dx = x - r.center[0], dy = y - r.center[1];
       return dx * dx + dy * dy <= r.radius * r.radius;
     });
-  const bucketBand = (L: number): number[] => {
+  const insideAffineRegion = (x: number, y: number): boolean =>
+    !affineRegionsSpecified || !!affineRegions?.some((r) => {
+      const dx = x - r.center[0], dy = y - r.center[1];
+      return dx * dx + dy * dy <= r.radius * r.radius;
+    });
+  const bucketBandFrom = (bucket: Map<number, number[]>, L: number): number[] => {
     // every sheet segment with |len − L| ≤ 2·tol (both endpoints off by tol
     // can stretch/shrink the drawn length by up to 2·tol)
     const out: number[] = [];
     for (let b = Math.floor(L - 2 * tol); b <= Math.ceil(L + 2 * tol); b++) {
-      const a = activeLenBucket.get(b);
+      const a = bucket.get(b);
       if (a) for (const i of a) {
         if (Math.abs(lengths[i] - L) <= 2 * tol) out.push(i);
       }
     }
     return out;
   };
+  const bucketBand = (L: number): number[] => bucketBandFrom(activeLenBucket, L);
+  const affineBucketBand = (L: number): number[] => bucketBandFrom(affineActiveLenBucket, L);
 
   // anchor selection: rarest DISTINCT quantized lengths first (rarity prunes
   // hardest), longest first on ties so structure beats tick marks
@@ -1504,6 +1582,10 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     if (!old || residual < old.residual || (residual === old.residual && (ty < old.ty || (ty === old.ty && tx < old.tx)))) {
       proposalMap.set(key, { tx, ty, xf, residual });
     }
+  };
+  const proposeAffine = (tx: number, ty: number, xf: number, residual: number): void => {
+    if (!insideAffineRegion(tx, ty)) return;
+    propose(tx, ty, xf, residual);
   };
   for (let xi = 0; xi < xforms.length; xi++) {
     const { m } = xforms[xi];
@@ -1547,6 +1629,13 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
         });
         for (const tj of targets) {
           if (tj.dirs.length < dirs.length) continue;
+          // The target junction fixes the candidate centroid exactly for this
+          // transformed seed junction.  Reject centroids outside the caller's
+          // exact tag window before comparing direction signatures.  `propose`
+          // applies the same predicate below, so this only moves an existing
+          // rejection earlier; it cannot change matches, scores, or bboxes.
+          const tx = tj.x - anchor[0], ty = tj.y - anchor[1];
+          if (!insideRequestedRegion(tx, ty)) continue;
           const unused = new Set(tj.dirs.map((_, i) => i));
           let residual = 0, compatible = true;
           for (const a of dirs) {
@@ -1558,7 +1647,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
             if (best < 0 || bestD > angleTol) { compatible = false; break; }
             unused.delete(best); residual += bestD;
           }
-          if (compatible) propose(tj.x - anchor[0], tj.y - anchor[1], xi, residual);
+          if (compatible) propose(tx, ty, xi, residual);
         }
       }
     }
@@ -1583,7 +1672,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     const mirrorChoices: readonly boolean[] = (opts.mirror ?? true) ? [false, true] : [false];
     for (const anc of anchors) {
       const r = rel[anc.relIdx];
-      for (const j of bucketBand(anc.len)) {
+      for (const j of affineBucketBand(anc.len)) {
         const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
         // both sheet-segment directions — the undirected-endpoint symmetry
         // the rigid loop's two pairings already express
@@ -1598,7 +1687,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
             const m: [number, number, number, number] = mirror ? [-c, -s, -s, c] : [c, -s, s, c];
             const A = apply(m, r[0], r[1]);
             const tx = sx0 - A[0], ty = sy0 - A[1];
-            if (!insideRequestedRegion(tx, ty)) continue;
+            if (!insideRequestedRegion(tx, ty) || !insideAffineRegion(tx, ty)) continue;
             let thetaDeg = (theta * 180) / Math.PI;
             thetaDeg = ((thetaDeg % 360) + 360) % 360;
             // Within 6° of a rigid 0/90/180/270 multiple is already covered,
@@ -1620,7 +1709,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       const m: [number, number, number, number] = b.mirror ? [-c, -s, -s, c] : [c, -s, s, c];
       const xi = xforms.length;
       xforms.push({ rotation: Math.round(b.thetaDeg * 10) / 10, mirrored: b.mirror, m });
-      propose(b.tx, b.ty, xi, 0);
+      proposeAffine(b.tx, b.ty, xi, 0);
     }
   }
   // §4.1's `via` disclosure — which mechanism actually found a placement —
@@ -1692,7 +1781,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
         const lo = L / maxStretch, hi = L * maxStretch;
         const out: number[] = [];
         for (let b = Math.floor(lo); b <= Math.ceil(hi) && out.length < 64; b++) {
-          const a = activeLenBucket.get(b);
+          const a = affineActiveLenBucket.get(b);
           if (a) for (const i of a) {
             if (lengths[i] >= lo && lengths[i] <= hi) { out.push(i); if (out.length >= 64) break; }
           }
@@ -1772,7 +1861,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
               if (!Number.isFinite(decomp.scale_x) || !Number.isFinite(decomp.scale_y)
                 || decomp.scale_x < sanityLo || decomp.scale_x > sanityHi
                 || decomp.scale_y < sanityLo || decomp.scale_y > sanityHi) continue;
-              if (!insideRequestedRegion(fit.tx, fit.ty)) continue;
+              if (!insideRequestedRegion(fit.tx, fit.ty) || !insideAffineRegion(fit.tx, fit.ty)) continue;
               // The vote: a third, independent seed segment must also land
               // near a real sheet endpoint pair under this fitted affine —
               // mirrors Phase 2's ≥2-anchor vote, extended to a 3rd segment
@@ -1800,7 +1889,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       for (const b of stretchBuckets.values()) {
         const xi = xforms.length;
         xforms.push({ rotation: b.rotation, mirrored: b.mirrored, m: b.m });
-        propose(b.tx, b.ty, xi, 0);
+        proposeAffine(b.tx, b.ty, xi, 0);
       }
     }
   }
@@ -1947,7 +2036,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
    * §2.1's own refusal) or doesn't beat the rigid score; never throws. */
   const refine = (
     rigidM: [number, number, number, number], tx: number, ty: number, via: SweepTransform["via"],
-  ): { at: Point; score: number; m: [number, number, number, number]; transform: SweepTransform } | null => {
+  ): { at: Point; score: number; baseScore: number; m: [number, number, number, number]; transform: SweepTransform } | null => {
     if (!affineOn) return null;
     const corr = gatherCorrespondences(rel, rigidM, tx, ty, segs, wideGrid!, 6 * tol);
     const fit = fitAffine(corr);
@@ -1955,9 +2044,18 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     const decomp = decomposeAffine(fit.m);
     const tolFit = Math.min(Math.max(3 * fit.rms, tol), 3 * tol);
     const score = scoreAtTol(fit.m, fit.tx, fit.ty, tolFit, wideGrid!, wideBody!);
+    // A larger tolerance is useful discovery evidence, but it must not be
+    // confused with a transform actually reproducing the symbol. Re-score
+    // the fitted matrix at the original tolerance whenever widening changed
+    // the verdict; the label layer may corroborate the resulting review row,
+    // but unlabeled tolerance-only fits never become autonomous counts.
+    const baseScore = tolFit > tol && score >= scoreHigh
+      ? scoreAt(fit.m, fit.tx, fit.ty)
+      : score;
     return {
       at: [fit.tx, fit.ty],
       score,
+      baseScore,
       m: fit.m,
       transform: {
         rotation_deg: decomp.rotation_deg, scale_x: decomp.scale_x, scale_y: decomp.scale_y,
@@ -1972,8 +2070,14 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   // symmetric symbol — several transforms; centers agree within ~tol, so a
   // small merge radius collapses them to the best score (earliest transform
   // on ties: the plainest reading wins deterministically).
-  type Scored = SweepMatch & { xf: number; boundsFailed?: boolean; mAt?: [number, number, number, number] };
+  type Scored = SweepMatch & { xf: number; boundsFailed?: boolean; baseScore?: number; mAt?: [number, number, number, number] };
   const scored: Scored[] = [];
+  // Preserve the unrefined reading of every rigid proposal while it is
+  // already hot in this loop. Affine refinement can move a proposal onto a
+  // neighboring repeated symbol; the source tag layer needs the original
+  // nested-model reading to arbitrate that conflict. Capturing it here costs
+  // no second scoreAt call and no second sheet traversal.
+  const rigidScored: Scored[] = [];
   const ungated = { v: 0 };
   // Placements the geometry alone would have COMMITTED and the stated
   // luminance gate did not — the gate's cost, collected as placements rather
@@ -2007,8 +2111,13 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     // refined into a better fit is still "rigid" provenance (the guess that
     // located it was one of the 8 fixed matrices); Phase 2/3 candidates
     // report their own basis.
+    const baseRow: Scored = { at: [c.tx, c.ty], score, rotation: xforms[c.xf].rotation, mirrored: xforms[c.xf].mirrored, xf: c.xf };
+    if (!isDynamicCandidate) rigidScored.push(baseRow);
     const via: SweepTransform["via"] = c.xf < rigidXformCount ? "rigid" : c.xf < rotationXformCount ? "rotation" : "affine";
-    const refined = (score < scoreHigh || isDynamicCandidate) ? refine(xforms[c.xf].m, c.tx, c.ty, via) : null;
+    const affineAllowed = isDynamicCandidate || insideAffineRegion(c.tx, c.ty);
+    const refined = affineAllowed && (score < scoreHigh || isDynamicCandidate)
+      ? refine(xforms[c.xf].m, c.tx, c.ty, via)
+      : null;
     const accept = refined && (isDynamicCandidate ? refined.score >= score : refined.score > score);
     // A dynamic candidate's OWN guess matrix (a single anchor's rotation
     // estimate, or Phase 3's 4-point basis fit) can score below even the
@@ -2020,7 +2129,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       const gateScore = accept ? refined!.score : score;
       if (gateScore < proposalFloor) continue;
     }
-    const row: Scored = { at: [c.tx, c.ty], score, rotation: xforms[c.xf].rotation, mirrored: xforms[c.xf].mirrored, xf: c.xf };
+    const row: Scored = { ...baseRow };
     if (accept) {
       const withinBounds = affineWithinBounds(
         { rotation_deg: refined!.transform.rotation_deg, scale_x: refined!.transform.scale_x, scale_y: refined!.transform.scale_y, shear_deg: refined!.transform.shear_deg, mirrored: refined!.transform.mirrored },
@@ -2028,6 +2137,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       );
       row.at = refined!.at;
       row.score = refined!.score;
+      row.baseScore = refined!.baseScore;
       row.transform = refined!.transform;
       row.mAt = refined!.m;
       // A fit whose numbers are outside the stated bounds is disclosed
@@ -2059,8 +2169,6 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   // tolerances collapses those same-ink readings while remaining far below
   // the 25 px abutting-real-instance separation locked by sweepCoalesce.
   const mergeR = Math.max(3 * tol, 4);
-  const preliminary = mergeProposals(scored, mergeR);
-
   // Shadow suppression. A partially-symmetric symbol reads ALMOST as itself
   // under the wrong transform — square + diagonal without the stub — at a
   // center offset by up to the centroid's eccentricity. Those readings are
@@ -2075,42 +2183,47 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   // provisional readings occupy one non-overlap footprint, their median is a
   // transform-independent center hypothesis. Score it under every allowed
   // transform; this adds one placement hypothesis, never a label or a count.
-  const consensus: Scored[] = [];
-  const visited = new Set<number>();
-  for (let root = 0; root < preliminary.length; root++) {
-    if (visited.has(root)) continue;
-    // Fixed-radius around the best remaining reading, not transitive
-    // connectivity: a chain of unrelated low-score plan marks must not walk
-    // the cluster across a dense room.
-    const cluster: Scored[] = [preliminary[root]];
-    visited.add(root);
-    for (let j = root + 1; j < preliminary.length; j++) {
-      if (visited.has(j)) continue;
-      if (Math.hypot(preliminary[root].at[0] - preliminary[j].at[0], preliminary[root].at[1] - preliminary[j].at[1]) <= suppressR) {
-        visited.add(j); cluster.push(preliminary[j]);
-      }
-    }
-    if (cluster.length < 2) continue;
-    const xs = cluster.map((s) => s.at[0]).sort((a, b) => a - b);
-    const ys = cluster.map((s) => s.at[1]).sort((a, b) => a - b);
-    const mid = (a: number[]): number => a.length % 2 ? a[a.length >> 1] : (a[a.length / 2 - 1] + a[a.length / 2]) / 2;
-    const tx = mid(xs), ty = mid(ys);
-    if (cluster.some((s) => Math.hypot(s.at[0] - tx, s.at[1] - ty) <= mergeR)) continue;
-    let best: Scored | null = null;
-    // Only the ORIGINAL rigid symmetry group here, not every Phase 2 voted
-    // continuous rotation — this hypothesis test's own cost stays exactly
-    // what it was before that feature existed (see rigidXformCount).
-    for (let xi = 0; xi < rigidXformCount; xi++) {
-      const score = scoreAt(xforms[xi].m, tx, ty);
-      if (score < proposalFloor) continue;
-      const row: Scored = { at: [tx, ty], score, rotation: xforms[xi].rotation, mirrored: xforms[xi].mirrored, xf: xi };
-      if (!best || row.score > best.score || (row.score === best.score && row.xf < best.xf)) best = row;
-    }
-    if (best) consensus.push(best);
-  }
-  const kept = mergeProposals([...preliminary, ...consensus], mergeR).filter((s) => s.score >= scoreLow);
   const ex = opts.excludeCenter;
-  const away = ex ? kept.filter((s) => Math.hypot(s.at[0] - ex[0], s.at[1] - ex[1]) > suppressR) : kept;
+  const placementSurvivors = (input: Scored[]): Scored[] => {
+    const preliminary = mergeProposals(input, mergeR);
+    const consensus: Scored[] = [];
+    const visited = new Set<number>();
+    for (let root = 0; root < preliminary.length; root++) {
+      if (visited.has(root)) continue;
+      // Fixed-radius around the best remaining reading, not transitive
+      // connectivity: a chain of unrelated low-score plan marks must not walk
+      // the cluster across a dense room.
+      const cluster: Scored[] = [preliminary[root]];
+      visited.add(root);
+      for (let j = root + 1; j < preliminary.length; j++) {
+        if (visited.has(j)) continue;
+        if (Math.hypot(preliminary[root].at[0] - preliminary[j].at[0], preliminary[root].at[1] - preliminary[j].at[1]) <= suppressR) {
+          visited.add(j); cluster.push(preliminary[j]);
+        }
+      }
+      if (cluster.length < 2) continue;
+      const xs = cluster.map((s) => s.at[0]).sort((a, b) => a - b);
+      const ys = cluster.map((s) => s.at[1]).sort((a, b) => a - b);
+      const mid = (a: number[]): number => a.length % 2 ? a[a.length >> 1] : (a[a.length / 2 - 1] + a[a.length / 2]) / 2;
+      const tx = mid(xs), ty = mid(ys);
+      if (cluster.some((s) => Math.hypot(s.at[0] - tx, s.at[1] - ty) <= mergeR)) continue;
+      let best: Scored | null = null;
+      // Only the ORIGINAL rigid symmetry group here, not every Phase 2 voted
+      // continuous rotation — this hypothesis test's own cost stays exactly
+      // what it was before that feature existed (see rigidXformCount).
+      for (let xi = 0; xi < rigidXformCount; xi++) {
+        const score = scoreAt(xforms[xi].m, tx, ty);
+        if (score < proposalFloor) continue;
+        const row: Scored = { at: [tx, ty], score, rotation: xforms[xi].rotation, mirrored: xforms[xi].mirrored, xf: xi };
+        if (!best || row.score > best.score || (row.score === best.score && row.xf < best.xf)) best = row;
+      }
+      if (best) consensus.push(best);
+    }
+    const kept = mergeProposals([...preliminary, ...consensus], mergeR).filter((s) => s.score >= scoreLow);
+    return ex ? kept.filter((s) => Math.hypot(s.at[0] - ex[0], s.at[1] - ex[1]) > suppressR) : kept;
+  };
+  const away = placementSurvivors(scored);
+  const rigidAway = affineOn ? placementSurvivors(rigidScored) : null;
 
   // one physical spot per entry, seed shadow excluded, reading order — the
   // same treatment matches and withheld get, so the numbers are comparable
@@ -2231,38 +2344,43 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     const d = apply(m, centerOffset[0], centerOffset[1]);
     return [s.at[0] + d[0], s.at[1] + d[1]];
   };
-  const rejected: SweepRejected[] = [];
-  const survivors: Scored[] = [];
-  for (const sc of away) {
-    let killed: { by: number; neg: SymbolNegative; ev: number } | null = null;
-    for (let bi = 0; bi < negatives.length; bi++) {
-      const neg = negatives[bi];
-      if (!neg) continue;
-      // §3 Phase 1 step 4 — a refined placement's counter-example evidence
-      // is read under the FITTED matrix, not the nearest rigid one: the
-      // negative's canonical-frame linework must land where the placement
-      // actually is, and for a refined row that is `mAt`, not `xforms[xf]`.
-      const ev = evidenceAt(neg, sc.mAt ?? xforms[sc.xf].m, sc.at[0], sc.at[1]);
-      if (ev >= EXCLUDE_EVIDENCE_BAR && (!killed || ev > killed.ev)) killed = { by: bi, neg, ev };
+  const applyNegatives = (input: Scored[]): { survivors: Scored[]; rejected: SweepRejected[] } => {
+    const rejected: SweepRejected[] = [];
+    const survivors: Scored[] = [];
+    for (const sc of input) {
+      let killed: { by: number; neg: SymbolNegative; ev: number } | null = null;
+      for (let bi = 0; bi < negatives.length; bi++) {
+        const neg = negatives[bi];
+        if (!neg) continue;
+        // §3 Phase 1 step 4 — a refined placement's counter-example evidence
+        // is read under the FITTED matrix, not the nearest rigid one: the
+        // negative's canonical-frame linework must land where the placement
+        // actually is, and for a refined row that is `mAt`, not `xforms[xf]`.
+        const ev = evidenceAt(neg, sc.mAt ?? xforms[sc.xf].m, sc.at[0], sc.at[1]);
+        if (ev >= EXCLUDE_EVIDENCE_BAR && (!killed || ev > killed.ev)) killed = { by: bi, neg, ev };
+      }
+      if (killed) {
+        const at = disclosedAt(sc);
+        rejected.push({
+          at: [Math.round(at[0] * 10) / 10, Math.round(at[1] * 10) / 10] as Point,
+          score: Math.round(sc.score * 1000) / 1000,
+          rotation: sc.rotation,
+          mirrored: sc.mirrored,
+          by: killed.by,
+          mode: killed.neg.mode,
+          evidence: Math.round(killed.ev * 1000) / 1000,
+          reason: killed.neg.mode === "shape"
+            ? `matched the seed at ${Math.round(sc.score * 100)}%, but ${Math.round(killed.ev * 100)}% of counter-example ${killed.by + 1}'s extra linework is here too — the negative explains this placement at least as well`
+            : `matched the seed at ${Math.round(sc.score * 100)}%, but the line counter-example ${killed.by + 1} sits on runs through this placement UNBROKEN (${Math.round(killed.ev * 100)}% of it) — a real instance drawn over it would break it`,
+        });
+        continue;
+      }
+      survivors.push(sc);
     }
-    if (killed) {
-      const at = disclosedAt(sc);
-      rejected.push({
-        at: [Math.round(at[0] * 10) / 10, Math.round(at[1] * 10) / 10] as Point,
-        score: Math.round(sc.score * 1000) / 1000,
-        rotation: sc.rotation,
-        mirrored: sc.mirrored,
-        by: killed.by,
-        mode: killed.neg.mode,
-        evidence: Math.round(killed.ev * 1000) / 1000,
-        reason: killed.neg.mode === "shape"
-          ? `matched the seed at ${Math.round(sc.score * 100)}%, but ${Math.round(killed.ev * 100)}% of counter-example ${killed.by + 1}'s extra linework is here too — the negative explains this placement at least as well`
-          : `matched the seed at ${Math.round(sc.score * 100)}%, but the line counter-example ${killed.by + 1} sits on runs through this placement UNBROKEN (${Math.round(killed.ev * 100)}% of it) — a real instance drawn over it would break it`,
-      });
-      continue;
-    }
-    survivors.push(sc);
-  }
+    return { survivors, rejected };
+  };
+  const { survivors, rejected } = applyNegatives(away);
+  const rigidNegativeResult = rigidAway ? applyNegatives(rigidAway) : null;
 
   // ── 4c. precision (SWEEP_EXTRA_MAX): extra ink the seed lacks ──────────────
   // Only high-recall survivors need the check (it decides match vs withheld,
@@ -2314,8 +2432,19 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     // per-instance and computed fresh (cheap — one pass over `rel`).
     const m = s.mAt ?? xforms[s.xf].m;
     const bb = s.mAt ? relBBoxAt(s.mAt) : relBBoxFor(s.xf);
-    const bx0 = bb[0] + s.at[0] - tol, by0 = bb[1] + s.at[1] - tol;
-    const bx1 = bb[2] + s.at[0] + tol, by1 = bb[3] + s.at[1] + tol;
+    // A refined placement is scored against its disclosed residual tolerance.
+    // Rechecking its local ink at the smaller rigid tolerance falsely calls
+    // the very endpoint jitter that the fit already explained "extra" (the
+    // paired roof-drain corpus case reproduced this with a 100% fit). Use the
+    // placement's actual tolerance for COVERAGE only; candidate proposal and
+    // scoring remain at their existing tolerances, and genuinely distinct
+    // linework farther away still contributes to the richer-variant guard.
+    const placementTol = Math.max(tol, s.transform?.tol_px ?? tol);
+    const placementTol2 = placementTol * placementTol;
+    const nearPlacement = (x1: number, y1: number, x2: number, y2: number): boolean =>
+      (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) <= placementTol2;
+    const bx0 = bb[0] + s.at[0] - placementTol, by0 = bb[1] + s.at[1] - placementTol;
+    const bx1 = bb[2] + s.at[0] + placementTol, by1 = bb[3] + s.at[1] + placementTol;
     const placed = rel.map((r) => {
       const a = apply(m, r[0], r[1]), b = apply(m, r[2], r[3]);
       return [a[0] + s.at[0], a[1] + s.at[1], b[0] + s.at[0], b[1] + s.at[1]] as const;
@@ -2340,8 +2469,8 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     if ((dropGlyphOn || opts.textBoxes?.length) && candIdx.length) {
       const pts = candIdx.map((j) => [segs[j * 4], segs[j * 4 + 1], segs[j * 4 + 2], segs[j * 4 + 3]] as const);
       const localDiag = Math.max(bx1 - bx0, by1 - by0);
-      if (opts.textBoxes?.length) textMask = textBoxMask(pts, opts.textBoxes, tol, localDiag);
-      if (dropGlyphOn) glyphMask = glyphClusterMask(pts, tol, localDiag);
+      if (opts.textBoxes?.length) textMask = textBoxMask(pts, opts.textBoxes, placementTol, localDiag);
+      if (dropGlyphOn) glyphMask = glyphClusterMask(pts, placementTol, localDiag);
     }
     let extraLen = 0;
     for (let ci = 0; ci < candIdx.length; ci++) {
@@ -2353,43 +2482,14 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
         const sdx = t[2] - t[0], sdy = t[3] - t[1], tdx = qx - px, tdy = qy - py;
         const sLen = Math.hypot(sdx, sdy), tLen = Math.hypot(tdx, tdy);
         if (!sLen || !tLen || Math.abs((sdx * tdx + sdy * tdy) / (sLen * tLen)) < angleCos) continue;
-        if ((near(px, py, t[0], t[1]) && near(qx, qy, t[2], t[3]))
-          || (near(qx, qy, t[0], t[1]) && near(px, py, t[2], t[3]))
-          || (distToSeg(px, py, t[0], t[1], t[2], t[3]) <= tol && distToSeg(qx, qy, t[0], t[1], t[2], t[3]) <= tol)) { covered = true; break; }
+        if ((nearPlacement(px, py, t[0], t[1]) && nearPlacement(qx, qy, t[2], t[3]))
+          || (nearPlacement(qx, qy, t[0], t[1]) && nearPlacement(px, py, t[2], t[3]))
+          || (distToSeg(px, py, t[0], t[1], t[2], t[3]) <= placementTol && distToSeg(qx, qy, t[0], t[1], t[2], t[3]) <= placementTol)) { covered = true; break; }
       }
       if (!covered) extraLen += segLen(segs, j);
     }
     return extraLen / totalLen;
   };
-  const extraOf = new Map<Scored, number>();
-  for (const s of survivors) if (s.score >= scoreHigh) extraOf.set(s, extraFor(s));
-
-  // Physical-plausibility check for a refined placement that only clears
-  // scoreHigh under the widened tolerance (docs/SYMBOL-SWEEP-AFFINE-GOAL.md's
-  // Findings, 2026-09-11: Root Cause #1). Two genuinely distinct instances of
-  // the SAME symbol cannot sit within half the symbol's own bbox diagonal of
-  // each other without physically overlapping — the exact principle already
-  // stated and used above for shadow suppression (`suppressR`), just never
-  // enforced between two otherwise-independent accepted matches. Checked
-  // against the full 47-case ground truth before relying on it: the closest
-  // any two real same-family instances (including the seed) ever sit,
-  // corpus-wide, is 54.7px (`42-guaranteed-rate-m121-thermostat-bubbles`) —
-  // comfortably above a typical seed's own `suppressR`. Scoped ONLY to rows
-  // that NEEDED the widened tolerance (`transform.tol_px > tol`) to reach
-  // scoreHigh at all: a plain rigid match (no `transform`, or a refined one
-  // that didn't need widening) is never touched by this, so every
-  // pre-existing, already-tested rigid-only behavior is exactly unaffected.
-  const densitySuspect = new Set<Scored>();
-  for (const s of survivors) {
-    if (!(s.transform && s.transform.tol_px > tol && s.score >= scoreHigh && !s.boundsFailed)) continue;
-    for (const other of survivors) {
-      if (other === s || other.score < scoreHigh || other.boundsFailed) continue;
-      if (Math.hypot(other.at[0] - s.at[0], other.at[1] - s.at[1]) <= suppressR) { densitySuspect.add(s); break; }
-    }
-  }
-
-  const matches: SweepMatch[] = [];
-  const withheld: SweepWithheld[] = [];
   const pct = (v: number): number => Math.round(v * 1000) / 1000;
   const row = (s: Scored): SweepMatch => {
     const at = disclosedAt(s);
@@ -2401,96 +2501,135 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       ...(s.transform ? { transform: s.transform } : {}),
     };
   };
-  const isMatch = (s: Scored): boolean =>
-    s.score >= scoreHigh && !s.boundsFailed && !densitySuspect.has(s) && (!guardOn || (extraOf.get(s) ?? 0) <= extraBar);
-  for (const s of survivors) {
-    if (!isMatch(s)) continue;
-    const ev = extraOf.get(s) ?? 0;
-    // disclosure: a match carrying substantial extra ink is a variant SUSPECT
-    // — named on the row so it is looked at first, never hidden in the count
-    matches.push(ev > extraBar ? { ...row(s), extra: pct(ev) } : row(s));
-  }
-  for (const s of survivors) {
-    if (isMatch(s)) continue;
-    // A density-suspect row is ALWAYS within suppressR of the accepted match
-    // that made it suspect (that's the condition), so it must be disclosed
-    // here, before the general "shadow of an already-counted match" skip
-    // below silently drops it — this is a distinct reason, not a duplicate.
-    if (densitySuspect.has(s)) {
-      const t = s.transform!;
-      withheld.push({
-        ...row(s),
-        hold: "density",
-        reason: `matches ${Math.round(s.score * 100)}% of the seed only under a widened tolerance (±${t.tol_px} px vs the base ±${tol} px, fitted at ${t.rotation_deg}° / ${t.scale_x}×,${t.scale_y}×) AND sits within one symbol's own footprint (${Math.round(suppressR)} px) of another accepted match — two genuine instances of the same symbol cannot be this close without overlapping. This reads as noise from the same contaminated area, not a second real instance; view_sheet here and confirm before counting either reading`,
-      });
-      continue;
-    }
-    if (matches.some((m) => Math.hypot(m.at[0] - s.at[0], m.at[1] - s.at[1]) <= suppressR)) continue;
-    // §4.2 — a refined placement that clears scoreHigh but fails the stated
-    // affine bounds is disclosed with what it actually measured, never
-    // silently committed and never confused with the ordinary near-miss or
-    // extra-ink reasons below (those are about SCORE; this is about a
-    // transform the caller said not to trust).
-    if (s.boundsFailed && s.transform) {
-      const t = s.transform;
-      withheld.push({
-        ...row(s),
-        hold: "bounds",
-        reason: `matches ${Math.round(s.score * 100)}% of the seed under a ${t.scale_x}× / ${t.scale_y}× stretch and ${t.shear_deg}° shear (bar ${affineBounds.maxStretch}× / ${affineBounds.maxShearDeg}°) — that much distortion may be a different device drawn to look alike; view_sheet here and confirm, or raise affine.max_stretch if this drawing set genuinely stretches its symbols`,
-      });
-      continue;
-    }
-    if (s.score >= scoreHigh) {
-      const ev = extraOf.get(s) ?? 0;
-      withheld.push({
-        ...row(s), extra: pct(ev),
-        reason: `reproduces ${Math.round(s.score * 100)}% of the seed but carries ~${Math.round(ev * 100)}% extra linework the seed lacks (bar ${Math.round(extraBar * 100)}%) — under variant_guard a richer variant (a different grille/register/fixture type) is a question, not a count; look before counting it. If you meant to seed a contained sub-shape and count the richer symbols, drop variant_guard or pass a counter-example around the variant you DON'T mean`,
-      });
-      continue;
-    }
-    // Phase 4 of docs/SYMBOL-SWEEP-AFFINE-GOAL.md §4.2 — a plain score-based
-    // near-miss names WHICH seed segments are responsible, not just the
-    // percentage: the top 3 least-matched segments by length (and their
-    // orientation — horizontal/vertical/diagonal, computed from the
-    // segment's own endpoints, never an invented semantic label like
-    // "stub"/"tick"), so there is something concrete to go look at on the
-    // sheet. `detail` is scoreAt's own per-segment coverage, re-read here
-    // (never re-derived) at the row's exact kept placement — cheap, since
-    // this only runs for the few rows that reach the plain near-miss
-    // branch, never on the hot scoring path. The base sentence keeps this
-    // engine's own established "matched X% … (commit bar Y%)" wording
-    // (quoted verbatim in SweepReviewPanel.jsx's own comment, already a
-    // real product-facing convention) rather than §4.2's illustrative
-    // "reproduces X%" phrasing — a deliberate, disclosed choice, not a
-    // miss; see the Findings entry.
-    const detail: number[] = [];
-    scoreAt(s.mAt ?? xforms[s.xf].m, s.at[0], s.at[1], undefined, detail);
-    const orientationOf = (ax: number, ay: number, bx: number, by: number): "horizontal" | "vertical" | "diagonal" => {
-      const angDeg = (undirectedAngle(by - ay, bx - ax) * 180) / Math.PI; // [0, 180)
-      if (Math.min(angDeg, Math.abs(180 - angDeg)) <= 5) return "horizontal";
-      if (Math.abs(angDeg - 90) <= 5) return "vertical";
-      return "diagonal";
-    };
-    const missing = rel
-      .map((r, k) => ({ ax: r[0], ay: r[1], bx: r[2], by: r[3], len: r[4], frac: detail[k] ?? 0 }))
-      .filter((x) => x.frac < 0.5)
-      .sort((a, b) => b.len - a.len || b.frac - a.frac)
-      .slice(0, 3);
-    const missingPct = Math.max(0, 100 - Math.round(s.score * 100));
-    const missingText = missing.length
-      ? `; missing ${missing.map((x) => `the ${Math.round(x.len)} px ${orientationOf(x.ax, x.ay, x.bx, x.by)}`).join(" and ")} (${missingPct}% of linework)`
-      : "";
-    withheld.push({ ...row(s), reason: `matched ${Math.round(s.score * 100)}% of the seed's linework (commit bar ${Math.round(scoreHigh * 100)}%)${missingText} — likely a variant or an overlapped instance; look before counting it` });
-  }
   const order = (a: SweepMatch, b: SweepMatch): number =>
     a.at[1] - b.at[1] || a.at[0] - b.at[0] || a.rotation - b.rotation || Number(a.mirrored) - Number(b.mirrored);
-  matches.sort(order);
-  withheld.sort(order);
+  const classifySurvivors = (input: Scored[]): { matches: SweepMatch[]; withheld: SweepWithheld[] } => {
+    const extraOf = new Map<Scored, number>();
+    for (const s of input) if (s.score >= scoreHigh) extraOf.set(s, extraFor(s));
+
+    // Physical-plausibility check for a refined placement that only clears
+    // scoreHigh under the widened tolerance (docs/SYMBOL-SWEEP-AFFINE-GOAL.md's
+    // Findings, 2026-09-11: Root Cause #1). Two genuinely distinct instances of
+    // the SAME symbol cannot sit within half the symbol's own bbox diagonal of
+    // each other without physically overlapping — the exact principle already
+    // stated and used above for shadow suppression (`suppressR`).
+    const densitySuspect = new Set<Scored>();
+    for (const s of input) {
+      if (!(s.transform && s.transform.tol_px > tol && s.score >= scoreHigh && !s.boundsFailed)) continue;
+      for (const other of input) {
+        if (other === s || other.score < scoreHigh || other.boundsFailed) continue;
+        if (Math.hypot(other.at[0] - s.at[0], other.at[1] - s.at[1]) <= suppressR) { densitySuspect.add(s); break; }
+      }
+    }
+
+    const matches: SweepMatch[] = [];
+    const withheld: SweepWithheld[] = [];
+    const toleranceOnly = (s: Scored): boolean => {
+      if (!s.transform || s.transform.tol_px <= tol || (s.baseScore ?? s.score) >= scoreHigh) return false;
+      const angleDeltaDeg = Math.abs((((s.transform.rotation_deg - s.rotation + 180) % 360) + 360) % 360 - 180);
+      // A materially rotated/stretched fit may legitimately need more room
+      // for export jitter (the isolated 3° positive fixture is the boundary
+      // control). Near the originating rigid matrix, however, widening—not
+      // transformation—is what changed the verdict.
+      return angleDeltaDeg <= 2
+        && Math.abs(s.transform.scale_x - 1) <= 0.05
+        && Math.abs(s.transform.scale_y - 1) <= 0.05
+        && Math.abs(s.transform.shear_deg) <= 2
+        && s.transform.mirrored === s.mirrored;
+    };
+    const automaticAffineExtraBar = Math.max(0.5, 1.5 * extraBar);
+    const richerAffineVariant = (s: Scored): boolean =>
+      !!s.transform && !manual && (extraOf.get(s) ?? 0) > automaticAffineExtraBar;
+    const isMatch = (s: Scored): boolean =>
+      s.score >= scoreHigh
+      && !s.boundsFailed
+      && !densitySuspect.has(s)
+      && !toleranceOnly(s)
+      && !richerAffineVariant(s)
+      && (!guardOn || (extraOf.get(s) ?? 0) <= extraBar);
+    for (const s of input) {
+      if (!isMatch(s)) continue;
+      const ev = extraOf.get(s) ?? 0;
+      // disclosure: a match carrying substantial extra ink is a variant SUSPECT
+      // — named on the row so it is looked at first, never hidden in the count
+      matches.push(ev > extraBar ? { ...row(s), extra: pct(ev) } : row(s));
+    }
+    for (const s of input) {
+      if (isMatch(s)) continue;
+      // A density-suspect row is ALWAYS within suppressR of the accepted match
+      // that made it suspect (that's the condition), so it must be disclosed
+      // here, before the general "shadow of an already-counted match" skip.
+      if (densitySuspect.has(s)) {
+        const t = s.transform!;
+        withheld.push({
+          ...row(s),
+          hold: "density",
+          reason: `matches ${Math.round(s.score * 100)}% of the seed only under a widened tolerance (±${t.tol_px} px vs the base ±${tol} px, fitted at ${t.rotation_deg}° / ${t.scale_x}×,${t.scale_y}×) AND sits within one symbol's own footprint (${Math.round(suppressR)} px) of another accepted match — two genuine instances of the same symbol cannot be this close without overlapping. This reads as noise from the same contaminated area, not a second real instance; view_sheet here and confirm before counting either reading`,
+        });
+        continue;
+      }
+      if (matches.some((m) => Math.hypot(m.at[0] - s.at[0], m.at[1] - s.at[1]) <= suppressR)) continue;
+      if (s.boundsFailed && s.transform) {
+        const t = s.transform;
+        withheld.push({
+          ...row(s),
+          hold: "bounds",
+          reason: `matches ${Math.round(s.score * 100)}% of the seed under a ${t.scale_x}× / ${t.scale_y}× stretch and ${t.shear_deg}° shear (bar ${affineBounds.maxStretch}× / ${affineBounds.maxShearDeg}°) — that much distortion may be a different device drawn to look alike; view_sheet here and confirm, or raise affine.max_stretch if this drawing set genuinely stretches its symbols`,
+        });
+        continue;
+      }
+      if (toleranceOnly(s) && s.transform) {
+        const t = s.transform;
+        withheld.push({
+          ...row(s),
+          reason: `matches ${Math.round(s.score * 100)}% only after widening endpoint tolerance to ±${t.tol_px} px; the fitted transform reproduces ${Math.round((s.baseScore ?? 0) * 100)}% at the stated base ±${tol} px — useful discovery evidence, but not an autonomous count without a corroborating drawing tag`,
+        });
+        continue;
+      }
+      if (s.score >= scoreHigh) {
+        const ev = extraOf.get(s) ?? 0;
+        withheld.push({
+          ...row(s), extra: pct(ev),
+          reason: s.transform && ev > automaticAffineExtraBar
+            ? `reproduces ${Math.round(s.score * 100)}% of the seed only after affine refinement and carries ~${Math.round(ev * 100)}% extra linework the seed lacks (automatic affine bar ${Math.round(automaticAffineExtraBar * 100)}%) — a changed/richer assembly is review evidence, not an autonomous count; look before accepting it or provide a counter-example to state the intended variant`
+            : `reproduces ${Math.round(s.score * 100)}% of the seed but carries ~${Math.round(ev * 100)}% extra linework the seed lacks (bar ${Math.round(extraBar * 100)}%) — under variant_guard a richer variant (a different grille/register/fixture type) is a question, not a count; look before counting it. If you meant to seed a contained sub-shape and count the richer symbols, drop variant_guard or pass a counter-example around the variant you DON'T mean`,
+        });
+        continue;
+      }
+      const detail: number[] = [];
+      scoreAt(s.mAt ?? xforms[s.xf].m, s.at[0], s.at[1], undefined, detail);
+      const orientationOf = (ax: number, ay: number, bx: number, by: number): "horizontal" | "vertical" | "diagonal" => {
+        const angDeg = (undirectedAngle(by - ay, bx - ax) * 180) / Math.PI;
+        if (Math.min(angDeg, Math.abs(180 - angDeg)) <= 5) return "horizontal";
+        if (Math.abs(angDeg - 90) <= 5) return "vertical";
+        return "diagonal";
+      };
+      const missing = rel
+        .map((r, k) => ({ ax: r[0], ay: r[1], bx: r[2], by: r[3], len: r[4], frac: detail[k] ?? 0 }))
+        .filter((x) => x.frac < 0.5)
+        .sort((a, b) => b.len - a.len || b.frac - a.frac)
+        .slice(0, 3);
+      const missingPct = Math.max(0, 100 - Math.round(s.score * 100));
+      const missingText = missing.length
+        ? `; missing ${missing.map((x) => `the ${Math.round(x.len)} px ${orientationOf(x.ax, x.ay, x.bx, x.by)}`).join(" and ")} (${missingPct}% of linework)`
+        : "";
+      withheld.push({ ...row(s), reason: `matched ${Math.round(s.score * 100)}% of the seed's linework (commit bar ${Math.round(scoreHigh * 100)}%)${missingText} — likely a variant or an overlapped instance; look before counting it` });
+    }
+    matches.sort(order);
+    withheld.sort(order);
+    return { matches, withheld };
+  };
+  const { matches, withheld } = classifySurvivors(survivors);
+  const rigidBaseline = rigidNegativeResult ? {
+    ...classifySurvivors(rigidNegativeResult.survivors),
+    rejected: rigidNegativeResult.rejected.sort(order),
+  } : null;
   rejected.sort(order);
 
   return {
     matches,
     withheld,
+    ...(rigidBaseline ? { rigid_baseline: rigidBaseline } : {}),
     rejected,
     ...(negatives.length ? { negatives: negatives.map((neg) => (neg ? { mode: neg.mode, segments: neg.rel.length, center: neg.center } : null)) } : {}),
     candidates: { considered, dropped },
@@ -2529,11 +2668,15 @@ export function sweepSymbols(segs: number[], seedRect: [Point, Point], opts: Swe
   return {
     seed: {
       segments: fp.segments,
-      center: [Math.round(fp.center[0] * 10) / 10, Math.round(fp.center[1] * 10) / 10],
+      // The disclosed/label anchor is the full marquee's visual center; the
+      // filtered center remains the internal correspondence origin and the
+      // excludeCenter used above. This mirrors Session.symbolSweep exactly.
+      center: [Math.round(fp.rawCenter[0] * 10) / 10, Math.round(fp.rawCenter[1] * 10) / 10],
       length_px: Math.round(fp.totalLen * 10) / 10,
     },
     matches: m.matches,
     withheld: m.withheld,
+    ...(m.rigid_baseline ? { rigid_baseline: m.rigid_baseline } : {}),
     rejected: m.rejected,
     ...(m.negatives ? { negatives: m.negatives } : {}),
     candidates: m.candidates,
@@ -3174,6 +3317,85 @@ export interface SweepSheetResult {
   candidates: { considered: number; dropped: number };
   complete: boolean;
   scaled?: NonNullable<SymbolMatchResult["scaled"]>;
+  /** Present only for an affine-enabled sweep whose nested rigid evidence
+   * changed or corroborated the disposition. Exact plan-tag bboxes, not
+   * cross-model centroid proximity, are the arbitration identity. */
+  model_arbitration?: {
+    rigid_preferred: number;
+    affine_added: number;
+  };
+}
+
+interface TaggedSweepDisposition {
+  matches: SweepSheetMatch[];
+  excluded: Array<{ at: Point; tag: string }>;
+  withheld: SweepWithheld[];
+}
+
+const tagBoxKey = (box: [number, number, number, number]): string =>
+  box.map((value) => Math.round(value * 10) / 10).join(",");
+
+/** Nested rigid/affine arbitration for schedule-row sweeps.
+ *
+ * The exact PDF tag bbox is the stable identity key. If both models claim
+ * the same drawn tag, retain the simpler rigid location; this prevents an
+ * affine refinement that fitted a neighboring repeated symbol from moving
+ * an otherwise-correct installed placement. An affine-only tag claim is
+ * still retained, which is how a genuinely rotated/stretched instance adds
+ * recall. Geometry without this row's tag is review evidence in both models,
+ * never installed quantity. */
+export function arbitrateTaggedSweepModels(
+  rigid: TaggedSweepDisposition,
+  affine: TaggedSweepDisposition,
+  footprint: number,
+): TaggedSweepDisposition & { rigid_preferred: number; affine_added: number } {
+  const matches = [...rigid.matches];
+  const claimed = new Set(matches.map((match) => tagBoxKey(match.tag_at)));
+  const mergeR = Math.max(4, footprint / 2);
+  let rigidPreferred = 0;
+  let affineAdded = 0;
+
+  for (const match of affine.matches) {
+    const key = tagBoxKey(match.tag_at);
+    if (claimed.has(key)) {
+      rigidPreferred++;
+      continue;
+    }
+    matches.push(match);
+    claimed.add(key);
+    affineAdded++;
+  }
+
+  const withheld = [...rigid.withheld];
+  for (const row of affine.withheld) {
+    if (withheld.some((candidate) =>
+      Math.hypot(candidate.at[0] - row.at[0], candidate.at[1] - row.at[1]) <= mergeR)) continue;
+    // A model's alternate/near reading beside an occurrence that the final
+    // count already owns is not a second review item for the same device.
+    if (matches.some((match) =>
+      Math.hypot(match.at[0] - row.at[0], match.at[1] - row.at[1]) <= mergeR)) continue;
+    withheld.push(row);
+  }
+
+  const excluded = [...rigid.excluded];
+  for (const row of affine.excluded) {
+    if (excluded.some((candidate) => candidate.tag === row.tag
+      && Math.hypot(candidate.at[0] - row.at[0], candidate.at[1] - row.at[1]) <= mergeR)) continue;
+    excluded.push(row);
+  }
+
+  const byPos = (a: { at: Point }, b: { at: Point }) =>
+    a.at[1] - b.at[1] || a.at[0] - b.at[0];
+  matches.sort(byPos);
+  withheld.sort(byPos);
+  excluded.sort(byPos);
+  return {
+    matches,
+    withheld,
+    excluded,
+    rigid_preferred: rigidPreferred,
+    affine_added: affineAdded,
+  };
 }
 
 /** Step 4 of sweep_schedule_row, for ONE sheet: sweep it for the corroborated
@@ -3201,60 +3423,83 @@ export function classifySweepMatches(
   anchorH: number,
   opts: MatchOptions = {},
 ): SweepSheetResult {
-  const res = matchSymbol(fp, sheetSegs, { ...opts, ...(ratio.scale === 1 ? {} : { scale: ratio.scale }) });
-  const R = (res.scaled ? res.scaled.footprint_px : fp.footprint) / 2 + anchorH;
-  const matches: SweepSheetMatch[] = [];
-  const excluded: Array<{ at: Point; tag: string }> = [];
-  const withheld: SweepWithheld[] = [];
-  const matchedOcc = new Set<number>();
-  // Pass 1: find every match's nearest occurrence (if any) within R, without
-  // committing yet. One real drawn instance has exactly one leader/tag — two
-  // raw match centroids both landing within R of the SAME single occurrence
-  // is never two physical devices sharing one label, it is the marker's own
-  // nearby furniture (a leader-line stub, a text underline) independently
-  // clearing the score bar right next to itself and getting read as a second
-  // hit. Same doctrine matchSymbol's own shadow-suppression comment already
-  // states for the excludeCenter case ("two REAL instances can never sit
-  // within half a symbol diagonal of each other without physically
-  // overlapping") — applied here at the occurrence-claiming step so it also
-  // catches the case where BOTH centroids sit far enough apart to survive
-  // mergeR, but still both point at one tag (issue: sweep_schedule_row
-  // false-doubled EWH-1/EBB-8 on the bessemer set — see takeoff-eval.mjs).
-  const claims: Array<{ m: SweepMatch; oi: number }> = [];
-  const unclaimed: SweepMatch[] = [];
-  for (const m of res.matches) {
-    let oi = -1;
-    for (let k = 0; k < occ.length; k++) {
-      if (Math.hypot(m.at[0] - occ[k].cx, m.at[1] - occ[k].cy) <= R) { oi = k; break; }
+  const footprint = fp.footprint * ratio.scale;
+  const R = footprint / 2 + anchorH;
+  const res = matchSymbol(fp, sheetSegs, {
+    ...opts,
+    ...(ratio.scale === 1 ? {} : { scale: ratio.scale }),
+    // Schedule-row installed quantity can only use geometry that claims one
+    // of this row's exact plan-tag boxes. Keep rigid whole-sheet discovery
+    // for unlabeled/sibling audit, but bound the more expensive affine
+    // recovery to those identity neighborhoods.
+    affineCandidateRegions: opts.affineCandidateRegions
+      ?? occ.map((o) => ({ center: [o.cx, o.cy] as Point, radius: R })),
+  });
+  const classify = (
+    rawMatches: SweepMatch[],
+    rawWithheld: SweepWithheld[],
+  ): TaggedSweepDisposition => {
+    const matches: SweepSheetMatch[] = [];
+    const excluded: Array<{ at: Point; tag: string }> = [];
+    const withheld: SweepWithheld[] = [];
+    // Pass 1: find every match's nearest occurrence (if any) within R,
+    // without committing yet. One real drawn instance has exactly one
+    // leader/tag — two raw centroids claiming the same source box can never
+    // manufacture two installed devices.
+    const claims: Array<{ m: SweepMatch; oi: number }> = [];
+    const unclaimed: SweepMatch[] = [];
+    for (const m of rawMatches) {
+      let oi = -1;
+      for (let k = 0; k < occ.length; k++) {
+        if (Math.hypot(m.at[0] - occ[k].cx, m.at[1] - occ[k].cy) <= R) { oi = k; break; }
+      }
+      if (oi >= 0) claims.push({ m, oi }); else unclaimed.push(m);
     }
-    if (oi >= 0) claims.push({ m, oi }); else unclaimed.push(m);
+    const bestForOcc = new Map<number, SweepMatch>();
+    for (const { m, oi } of claims) {
+      const cur = bestForOcc.get(oi);
+      if (!cur || m.score > cur.score) bestForOcc.set(oi, m);
+    }
+    for (const { m, oi } of claims) {
+      if (bestForOcc.get(oi) === m) {
+        matches.push({ ...m, tag_at: occ[oi].bbox });
+        continue;
+      }
+      withheld.push({ ...m, reason: `the marker geometry matches near the "${tag}" tag, but a closer/better-scoring match already claims this same occurrence — most likely this instance's own leader-line or label furniture read a second time, not a second device; look before counting it` });
+    }
+    for (const m of unclaimed) {
+      const sib = siblingOcc.find((sp) => Math.hypot(m.at[0] - sp.cx, m.at[1] - sp.cy) <= R);
+      if (sib) { excluded.push({ at: m.at, tag: sib.key }); continue; }
+      withheld.push({ ...m, reason: `the marker geometry matches but carries no "${tag}" tag within its footprint — an unlabeled instance or a shared marker shape; look before counting it` });
+    }
+    // matchSymbol's own near-matches remain questions. Exact nearby tag text
+    // is noted but does not by itself promote sub-threshold geometry here.
+    for (const w of rawWithheld) {
+      const near = occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
+      withheld.push(near ? { ...w, reason: `${w.reason} — and the "${tag}" tag is drawn beside it` } : w);
+    }
+    return { matches, excluded, withheld };
+  };
+
+  const affineDisposition = classify(res.matches, res.withheld);
+  let disposition = affineDisposition;
+  let modelArbitration: SweepSheetResult["model_arbitration"];
+  if (res.rigid_baseline) {
+    const rigidDisposition = classify(res.rigid_baseline.matches, res.rigid_baseline.withheld);
+    const arbitration = arbitrateTaggedSweepModels(
+      rigidDisposition,
+      affineDisposition,
+      res.scaled ? res.scaled.footprint_px : fp.footprint,
+    );
+    disposition = arbitration;
+    if (arbitration.rigid_preferred || arbitration.affine_added) {
+      modelArbitration = {
+        rigid_preferred: arbitration.rigid_preferred,
+        affine_added: arbitration.affine_added,
+      };
+    }
   }
-  // Best-scoring claim per occurrence wins (ties broken by reading order —
-  // res.matches already arrives position-sorted, so the first claim seen for
-  // a tied score is the earliest); every other claim on that same occurrence
-  // is a real, disclosed question, not a silently dropped or silently
-  // double-counted match.
-  const bestForOcc = new Map<number, SweepMatch>();
-  for (const { m, oi } of claims) {
-    const cur = bestForOcc.get(oi);
-    if (!cur || m.score > cur.score) bestForOcc.set(oi, m);
-  }
-  for (const { m, oi } of claims) {
-    if (bestForOcc.get(oi) === m) { matchedOcc.add(oi); matches.push({ ...m, tag_at: occ[oi].bbox }); continue; }
-    withheld.push({ ...m, reason: `the marker geometry matches near the "${tag}" tag, but a closer/better-scoring match already claims this same occurrence — most likely this instance's own leader-line or label furniture read a second time, not a second device; look before counting it` });
-  }
-  for (const m of unclaimed) {
-    const sib = siblingOcc.find((sp) => Math.hypot(m.at[0] - sp.cx, m.at[1] - sp.cy) <= R);
-    if (sib) { excluded.push({ at: m.at, tag: sib.key }); continue; }
-    withheld.push({ ...m, reason: `the marker geometry matches but carries no "${tag}" tag within its footprint — an unlabeled instance or a shared marker shape; look before counting it` });
-  }
-  // matchSymbol's OWN near-matches (score in [scoreLow, scoreHigh)) — carried
-  // through, not dropped, with the tag-adjacency noted when this row's tag
-  // happens to sit right beside one (a real clue the near-match IS this row's).
-  for (const w of res.withheld) {
-    const near = occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
-    withheld.push(near ? { ...w, reason: `${w.reason} — and the "${tag}" tag is drawn beside it` } : w);
-  }
+  const { matches, excluded, withheld } = disposition;
   const byPos = (a: { at: Point }, b: { at: Point }) => a.at[1] - b.at[1] || a.at[0] - b.at[0];
   matches.sort(byPos); excluded.sort(byPos); withheld.sort(byPos);
   // An occurrence sitting at (or right beside) opts.excludeCenter is the
@@ -3262,15 +3507,17 @@ export function classifySweepMatches(
   // res.withheld before we ever see it (it's already counted — as the seed
   // — not an unexplained gap), so it must not fall through to text_only.
   const ex = opts.excludeCenter;
+  const matchedBoxes = new Set(matches.map((match) => tagBoxKey(match.tag_at)));
   const text_only = occ
-    .filter((o, k) => !matchedOcc.has(k)
-      && !res.withheld.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R)
+    .filter((o) => !matchedBoxes.has(tagBoxKey(o.bbox))
+      && !withheld.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R)
       && !(ex && Math.hypot(o.cx - ex[0], o.cy - ex[1]) <= R))
     .map((o) => ({ at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10] as Point }));
   return {
     matches, excluded, withheld, text_only,
     candidates: res.candidates, complete: res.complete,
     ...(res.scaled ? { scaled: res.scaled } : {}),
+    ...(modelArbitration ? { model_arbitration: modelArbitration } : {}),
   };
 }
 

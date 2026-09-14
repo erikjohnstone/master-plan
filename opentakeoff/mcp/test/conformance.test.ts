@@ -872,6 +872,16 @@ test("symbol_sweep scope 'set' and sweep_schedule_row: replies round-trip their 
   assert.ok(set.sheets.every((p: any) => typeof p.elapsed_ms === "number"), "every swept sheet reports its wall-clock");
   assert.ok(set.skipped.length >= 2 && set.skipped.every((s: any) => s.reason.length > 0), "every excluded sheet says why");
 
+  // A labeled plan sweep exercises the nested rigid/affine evidence contract.
+  // This must survive the tool's output-schema round trip: otherwise the
+  // Agent would receive a count but silently lose why affine was allowed (or
+  // refused) to change it.
+  const labeled = await callOk(client, "symbol_sweep", { sheet: "symbol-set.pdf", seed_rect: [[270, 794], [330, 854]] });
+  assert.deepEqual(z.object(symbolSweepOutput).parse(labeled), labeled, "transform competition is declared, not stripped from the Agent reply");
+  assert.equal(labeled.transform_competition?.strategy, "rigid_baseline_affine_cited_additions");
+  assert.equal(typeof labeled.transform_competition?.rigid_matches, "number");
+  assert.equal(typeof labeled.transform_competition?.affine_matches, "number");
+
   // schedule-row seeding, read then commit
   const row = await callOk(client, "sweep_schedule_row", { tag: "T1" });
   assert.deepEqual(z.object(sweepScheduleRowOutput).parse(row), row, "schema states every returned field — nothing stripped");

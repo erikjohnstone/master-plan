@@ -67,13 +67,33 @@ const projectTakeoffItem = z.object({
   schedule_row: z.record(z.string(), z.string()).nullable(),
   quantity: z.number(),
   placement_count: z.number().int().optional().describe("Distinct grounded plan callouts before authored `(N)`/TYP multipliers; quantity is installed units"),
+  tagged_plan_quantity: z.number().int().optional()
+    .describe("Exact plan-tag text observations whose surrounding device geometry is not yet verified; never installed quantity"),
   drawing_locations: z.array(z.object({
     sheet: z.string(),
     at: point,
     bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
+    tag_bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
     score: z.number().optional(),
+    attachment_via: z.enum(["adjacent", "leader"]).optional(),
+    attachment_distance_px: z.number().optional(),
+    counted_from: z.literal("explicit_label").optional(),
   })),
-  quantity_basis: z.enum(["symbol_fingerprint", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
+  plan_tag_locations: z.array(z.object({
+    sheet: z.string(),
+    at: point,
+    bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
+  })).optional(),
+  plan_candidate_locations: z.array(z.object({
+    sheet: z.string(),
+    at: point,
+    score: z.number().optional(),
+    reason: z.string().optional(),
+    hold: z.unknown().optional(),
+  })).optional(),
+  quantity_basis: z.enum(["symbol_fingerprint", "tag_attached_vector", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
+  installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "unverified"]).optional(),
+  geometry_verified: z.boolean().optional(),
   search_scope: z.enum(["exhaustive", "tagged_only", "explicit_note_set"]).nullable().optional(),
   unlabeled_audit_complete: z.boolean().nullable().optional(),
   plan_search_complete: z.boolean().nullable().optional(),
@@ -359,10 +379,14 @@ export const reconcileSchedulePlanOutput = {
     // Null means the plan quantity could not be verified.  It is materially
     // different from a verified zero and must remain distinct on every wire.
     installed_qty: z.number().int().nullable(),
+    tagged_plan_qty: z.number().int().nullable().optional()
+      .describe("Exact plan-tag text observations awaiting symbol-geometry verification; never included in installed_qty"),
     placement_count: z.number().int().nullable().optional().describe("Distinct grounded plan callouts before authored multipliers"),
     observed_plan_qty: z.number().int().nullable().optional()
       .describe("Grounded placements observed so far; differs from installed_qty only when an incomplete search makes this a floor, not a releasable total"),
-    installed_qty_basis: z.enum(["symbol_fingerprint", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
+    installed_qty_basis: z.enum(["symbol_fingerprint", "tag_attached_vector", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
+    installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "unverified"]).optional(),
+    geometry_verified: z.boolean().optional(),
     search_scope: z.enum(["exhaustive", "tagged_only", "explicit_note_set"]).nullable().optional(),
     unlabeled_audit_complete: z.boolean().nullable().optional(),
     plan_search_complete: z.boolean().nullable().optional(),
@@ -382,8 +406,35 @@ export const reconcileSchedulePlanOutput = {
       sheet: z.string(),
       at: z.array(z.number()).optional(),
       bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
+      tag_bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
       score: z.number().optional(),
+      attachment_via: z.enum(["adjacent", "leader"]).optional(),
+      attachment_distance_px: z.number().optional(),
     })),
+    plan_tag_cites: z.array(z.object({
+      sheet: z.string(),
+      at: z.array(z.number()).optional(),
+      bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
+    })).optional(),
+    plan_candidate_cites: z.array(z.object({
+      sheet: z.string(),
+      at: z.array(z.number()),
+      score: z.number().optional(),
+      reason: z.string().optional(),
+      hold: z.unknown().optional(),
+    })).optional(),
+    diagram_corroborated: z.boolean().optional()
+      .describe("True only when an exact authored diagram tag binds uniquely to this schedule row; never an installed-quantity claim"),
+    diagram_cites: z.array(z.object({
+      sheet: z.string(),
+      title: z.string(),
+      diagram_kind: z.enum(["control_schematic", "riser", "flow", "piping", "network_architecture"]),
+      tag: z.string(),
+      bbox: controlPixelBox.optional(),
+      source_text: z.string(),
+      grounding_basis: z.literal("exact_authored_diagram_tag"),
+      schedule_binding_status: z.enum(["bound", "ambiguous", "unbound"]),
+    })).optional(),
     reason: z.string().nullable().optional(),
   })),
   path: z.string().nullable().optional(),
@@ -693,6 +744,11 @@ const sweepTransformCompetition = z.object({
   shared_tag_claims: z.number().int().describe("Exact PDF tag occurrences explained by both modes; the simpler rigid placement owns each one"),
 }).describe("Nested-model competition: rigid remains the baseline, while affine flexibility must earn an automatic addition with a distinct drawing citation");
 
+const sweepLabelCorroboration = z.object({
+  promoted: z.number().int().describe("Geometric near-matches promoted because the drawing's own tag identifies the seed family"),
+  demoted: z.number().int().describe("Geometric matches withheld because the drawing's own tag identifies a different family"),
+}).describe("How the PDF's own tag text changed the disposition of already-detected vector geometry; text never creates a placement");
+
 /** One plan sheet's results inside a set-wide sweep — its own match/withheld
  * lists, its own cap accounting, its own wall-clock. */
 const sweepSheetBlock = z.object({
@@ -707,6 +763,7 @@ const sweepSheetBlock = z.object({
   elapsed_ms: z.number().describe("Wall-clock for this sheet's sweep"),
   scaled: sweepScaled.optional(),
   scale_assumed: sweepScaleAssumed.optional(),
+  label_corroboration: sweepLabelCorroboration.optional(),
   transform_competition: sweepTransformCompetition.optional(),
 });
 
@@ -750,6 +807,7 @@ export const symbolSweepOutput = {
   rejected_total: z.number().int().optional().describe("Set scope: placements counter-examples rejected across every swept sheet"),
   seed_committed: z.boolean().optional().describe("Present when commit_seed: true minted the seed instance into the batch (#296) — ea_total then includes it"),
   lum_gate: sweepLumGate.optional().describe("Sheet scope only. The stated stroke-luminance gate's accounting (#260): the tolerance, the seed's own luminance band, and every placement the geometry would have committed that the pen pulled under the bar — NEVER counted in found, never silent. Set scope accounts per sheet in sheets[]"),
+  label_corroboration: sweepLabelCorroboration.optional().describe("Sheet scope only. Drawing-tag promotions and demotions applied to already-geometric candidates"),
   transform_competition: sweepTransformCompetition.optional().describe("Sheet scope only. How rigid and affine labeled hypotheses were resolved without a position-radius guess"),
   candidates: sweepCandidates.optional().describe("Sheet scope only — set scope accounts per sheet in sheets[]"),
   complete: z.boolean().describe("True when every proposed placement was scored (every swept sheet, in set scope) and the count is a total. FALSE MEANS THE COUNT IS A FLOOR — acknowledge it before trusting found (#261)"),
@@ -1317,16 +1375,21 @@ export const findScheduleOutput = {
  * tag text sits within the marker footprint; everything else is disclosed. */
 const rowSweepPlacement = {
   at: z.tuple([z.number(), z.number()]).describe("The matched marker's centroid (image px)"),
-  score: z.number().describe("Length-weighted fraction of the anchor's segments matched within tolerance, 0..1"),
+  score: z.number().describe("For a repeated symbol fingerprint: length-weighted fraction of anchor segments matched within tolerance, 0..1. For tag_attached_vector grounding: 1 means the exact source tag was directly assigned to a distinctive local vector body; attachment_via and attachment_distance_px disclose that proof instead of implying template similarity"),
   rotation: z.number().describe("Detected rotation in degrees — 0 | 90 | 180 | 270 from the rigid search; a continuous value when `transform` is present"),
   mirrored: z.boolean(),
   transform: sweepTransform.optional().describe("Present only when affine search/refinement produced this placement (docs/SYMBOL-SWEEP-AFFINE-GOAL.md §4.1) — the actual fitted rotation/scale/shear, not just the nearest rigid guess"),
+  geometry_bbox: wireBox.optional().describe("Tight bbox of the verified vector symbol/body. Distinct from tag_at, which is the exact printed identity text"),
+  attachment_via: z.enum(["adjacent", "leader"]).optional().describe("How the exact source tag owns this vector body in tag_attached_vector mode"),
+  attachment_distance_px: z.number().optional().describe("Measured tag-to-body adjacency or leader endpoint distance in image px"),
+  counted_from: z.literal("explicit_label").optional()
+    .describe("Present when this placement was retained from exact tag text rather than matching marker geometry; it is review evidence, not verified installed symbol quantity"),
 };
 
 export const sweepScheduleRowOutput = {
   tag: z.string().describe("The row key as normalized (the tag as drawn)"),
   search_scope: z.enum(["exhaustive", "tagged_only"]).describe("exhaustive audits every plan sheet for unlabeled near-matches; tagged_only searches every exact tag occurrence but skips sheets that cannot contribute a tagged count"),
-  unlabeled_audit_complete: z.boolean().describe("false only in tagged_only mode, where the installed tagged count is complete but unlabeled/sibling geometry was not exhaustively audited"),
+  unlabeled_audit_complete: z.boolean().describe("false in tagged_only mode: exact tag text may be observed, but surrounding symbol geometry and unlabeled/sibling candidates were not exhaustively audited, so tag-only observations are not verified installed quantity"),
   row: z.object({
     sheet: z.string(),
     table: z.string().describe("The table's title (or kind, when untitled)"),
@@ -1354,8 +1417,8 @@ export const sweepScheduleRowOutput = {
       .describe("Present only when corroborated is true. 'same_tag' = the tag's OWN second occurrence reproduced the fingerprint (the strong case). 'sibling_tag' = the tag is drawn exactly once, so a DIFFERENT row's own occurrence in the same schedule table reproduced it instead (corroborated_tag names which) — real evidence that the two marks share a symbol family, but weaker than a same-tag recurrence; audit before trusting the count"),
     corroborated_tag: z.string().optional().describe("Present only when corroborated_via is 'sibling_tag' — the sibling row's tag whose own drawn occurrence corroborated this fingerprint"),
     occurrences: z.number().int().describe("Drawn occurrences of the tag across all plan sheets"),
-    grounding_basis: z.enum(["symbol_fingerprint", "exact_plan_tag"]).optional()
-      .describe("Whether the placement is grounded by matched symbol geometry or, in tagged-only project mode, an exact plan-tag bbox for one uniquely marked equipment row; repeated drawing references to the same unique mark are disclosed as redundant_view rather than counted again"),
+    grounding_basis: z.enum(["symbol_fingerprint", "tag_attached_vector", "exact_plan_tag"]).optional()
+      .describe("Whether installed evidence came from a repeated symbol fingerprint, an exact tag directly assigned to distinctive adjacent/leader-connected vector geometry, or only exact plan-tag text. exact_plan_tag is review-only, never installed quantity; repeated drawing references are disclosed as redundant_view"),
   }),
   found: z.number().int().describe("Matches carrying the row's own tag — the honest count, across every plan sheet"),
   sheets: z.array(z.object({
@@ -1366,11 +1429,18 @@ export const sweepScheduleRowOutput = {
       .describe("Questions, never counts: markers matching the geometry but carrying no tag (an unlabeled instance or a shared bubble shape), and near-miss scores in the [0.75, 0.92) band"),
     excluded: z.array(z.object({ at: z.tuple([z.number(), z.number()]), tag: z.string() }))
       .describe("Markers matching the geometry but labeled with a SIBLING row's tag — the bubble shape is shared across marks, so these belong to that row, not this one"),
-    text_only: z.array(z.object({ at: z.tuple([z.number(), z.number()]) }))
+    text_only: z.array(z.object({
+      at: z.tuple([z.number(), z.number()]),
+      reason: z.enum(["no_distinctive_local_geometry", "geometry_not_attached_to_exact_tag"]).optional(),
+    }))
       .describe("The tag drawn with NO matching marker geometry nearby — a note reference or a variant marker; a question, never a count"),
     candidates: z.object({ considered: z.number().int(), dropped: z.number().int() }),
     complete: z.boolean().describe("True when every proposed placement on this sheet was scored — false means this sheet's count is a FLOOR, not a total (#261)"),
     elapsed_ms: z.number().describe("Wall-clock for this sheet's sweep"),
+    model_arbitration: z.object({
+      rigid_preferred: z.number().int().nonnegative().describe("Exact plan-tag claims shared by both models whose installed location came from the simpler rigid reading"),
+      affine_added: z.number().int().nonnegative().describe("Exact plan-tag claims recovered only by affine rotation/stretch recognition and retained in installed quantity"),
+    }).optional().describe("Present when nested rigid/affine evidence affected or corroborated this sheet's result; identity is the exact source tag bbox, never centroid proximity"),
     scaled: sweepScaled.optional(),
     scale_assumed: sweepScaleAssumed.optional(),
     redundant_view: z.array(z.object({ ...rowSweepPlacement, tag_at: wireBox, room: z.string(), kept_sheet: z.string() }))

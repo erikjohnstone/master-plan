@@ -58,12 +58,27 @@ export interface PlacementLabel {
   family?: string;
   /** Source lettering height retained for annotation-context comparison. */
   text_height_px?: number;
+  /** Exact terminal point of a traced leader when endpoint-strict ownership
+   * was requested. Intermediate bends are deliberately never reported as a
+   * device target. */
+  leader_terminal_at?: Point;
 }
 
 export interface LabelPlacementOptions {
   /** When the seed itself is labeled, prefer that exact family while
    * resolving the sweep's other already-geometric candidates. */
   preferredLabel?: string;
+  /** Exact-tag verification already knows which source label is allowed to
+   * own the bounded geometry. When true, do not build assignment proposals
+   * for unrelated tokens on the same (potentially very dense) sheet. This is
+   * a workload bound only: callers must still provide `preferredLabel`, and
+   * the retained token goes through the identical adjacency/leader gates. */
+  restrictToPreferredLabel?: boolean;
+  /** Require a leader-owned placement to sit at the outer terminal of the
+   * traced route, not merely beside an intermediate segment endpoint. Exact
+   * tag→installed-geometry reconciliation enables this because accepting a
+   * pipe elbow crossed by the leader would manufacture installed quantity. */
+  requireLeaderTerminal?: boolean;
   /** Structural family carried by the already-resolved seed label. */
   preferredFamily?: string;
   /** Geometry confidence for each placement, aligned with `placements`.
@@ -76,6 +91,12 @@ export interface LabelPlacementOptions {
    * renaming a tiny point glyph reached through shared duct/control linework.
    * Omit only for callers that do not know the swept geometry. */
   symbolInkLengthPx?: number;
+  /** Per-placement form of `symbolInkLengthPx`. Direct tag→geometry
+   * verification can evaluate several differently sized local symbols in one
+   * assignment pass; retaining each candidate's own ink length avoids either
+   * rebuilding the label graph once per tag or pretending every device has
+   * the anchor's size. An entry takes precedence over the scalar fallback. */
+  symbolInkLengthPxByPlacement?: number[];
   /** Aligned with `placements`. A placement marked `false` is disclosed
    * geometry that is NOT a corroboration candidate — a `SweepWithheld.hold`
    * row (out-of-bounds or density-suspect: a degenerate or contaminated fit
@@ -372,7 +393,11 @@ function stackedBasPointTagTokens(spans: LabelSpan[]): LabelSpan[] {
   return candidates.length >= 2 ? candidates : [];
 }
 
+const LABEL_TOKEN_CACHE = new WeakMap<LabelSpan[], LabelSpan[]>();
+
 export function labelTokens(spans: LabelSpan[]): LabelSpan[] {
+  const cached = LABEL_TOKEN_CACHE.get(spans);
+  if (cached) return cached;
   const joined = joinHyphenatedTags(spans);
   const exactRuns = new Map<string, number>();
   for (const span of joined) {
@@ -441,8 +466,10 @@ export function labelTokens(spans: LabelSpan[]): LabelSpan[] {
   });
   const unconsumedOrdinary = ordinary.filter((token) =>
     !consumedByStackedEquipment(token) && !consumedByStackedPoint(token));
-  return [...unconsumedOrdinary, ...inlineAirflowFamilyTokens(spans), ...stacked, ...stackedPoints]
+  const tokens = [...unconsumedOrdinary, ...inlineAirflowFamilyTokens(spans), ...stacked, ...stackedPoints]
     .sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+  LABEL_TOKEN_CACHE.set(spans, tokens);
+  return tokens;
 }
 
 /** Adjacency radius, scaled off the token's own text height: this office's
@@ -529,6 +556,40 @@ function buildDarkIndex(segs: number[], lum: Uint8Array): DarkIndex {
   return { segs: dark, cells, cell };
 }
 
+interface LeaderSheetContext {
+  multiPen: boolean;
+  index: DarkIndex;
+}
+
+/** PDF vector geometry and luminance are immutable for the lifetime of a
+ * loaded sheet. A complete takeoff can verify hundreds of exact tags on the
+ * same sheet, so rebuilding the dark-segment leader index for every row is
+ * pure duplicate work. Weak keys keep this scoped to the sheet arrays. */
+const LEADER_SHEET_CONTEXT_CACHE = new WeakMap<number[], WeakMap<Uint8Array, LeaderSheetContext>>();
+
+function leaderSheetContext(segs: number[], lum: Uint8Array): LeaderSheetContext {
+  let byLuminance = LEADER_SHEET_CONTEXT_CACHE.get(segs);
+  if (!byLuminance) {
+    byLuminance = new WeakMap<Uint8Array, LeaderSheetContext>();
+    LEADER_SHEET_CONTEXT_CACHE.set(segs, byLuminance);
+  }
+  const cached = byLuminance.get(lum);
+  if (cached) return cached;
+  let darkLen = 0, totalLen = 0;
+  const n = segs.length >> 2;
+  for (let i = 0; i < n; i++) {
+    const length = Math.hypot(segs[i * 4 + 2] - segs[i * 4], segs[i * 4 + 3] - segs[i * 4 + 1]);
+    totalLen += length;
+    if (lum[i] < LEADER_DARK_LUM) darkLen += length;
+  }
+  const context = {
+    multiPen: totalLen > 0 && darkLen / totalLen <= LEADER_MAX_DARK_SHARE,
+    index: buildDarkIndex(segs, lum),
+  };
+  byLuminance.set(lum, context);
+  return context;
+}
+
 function nearDark(idx: DarkIndex, x: number, y: number): number[] {
   const out: number[] = [];
   const cx = Math.floor(x / idx.cell), cy = Math.floor(y / idx.cell);
@@ -586,6 +647,7 @@ interface LabelEdge {
   preferred: boolean;
   geometryScore: number;
   family?: string;
+  leaderTerminalAt?: Point;
 }
 
 function airflowValuesFor(t: LabelSpan, spans: LabelSpan[]): LabelSpan[] {
@@ -628,6 +690,29 @@ function equipmentLeaderStarts(t: LabelSpan): Point[] {
   ];
 }
 
+/** Retain only the outside end of a leader route. `chase` intentionally
+ * returns every reached segment endpoint for ordinary symbol labeling, but
+ * exact installed-quantity grounding must not treat an intermediate bend as
+ * the thing an arrow identifies. Distance is measured from the source text
+ * rectangle (rather than from one arbitrary start corner), and a small outer
+ * band preserves multi-stroke arrowheads at the same physical terminus. */
+function distanceFromTokenBox([x, y]: Point, token: LabelSpan): number {
+  return Math.hypot(
+    x < token.x0 ? token.x0 - x : x > token.x1 ? x - token.x1 : 0,
+    y < token.y0 ? token.y0 - y : y > token.y1 ? y - token.y1 : 0,
+  );
+}
+
+function outerLeaderTerminals(reach: Point[], token: LabelSpan): Point[] {
+  if (!reach.length) return [];
+  const measured = reach.map((point) => ({ point, distance: distanceFromTokenBox(point, token) }));
+  const farthest = Math.max(...measured.map((entry) => entry.distance));
+  const band = Math.max(LEADER_JOIN_PX * 2, 0.15 * farthest);
+  return measured
+    .filter((entry) => entry.distance >= farthest - band)
+    .map((entry) => entry.point);
+}
+
 /** Leader starts for the complete type/value callout, not just the type
  * glyph box. Real sheets sometimes draw the leader from the combined block's
  * outer edge; looking only beside "CD-1" misses that literal connection and
@@ -643,6 +728,62 @@ function calloutLeaderStarts(t: LabelSpan, values: LabelSpan[]): Point[] {
     rot: t.rot,
   };
   return leaderStarts(box);
+}
+
+const LEADER_TERMINAL_CACHE = new WeakMap<LabelSpan, WeakMap<number[], WeakMap<Uint8Array, Point[]>>>();
+
+/** Resolve the outside endpoints reached by one authored tag's literal
+ * leader. This is intentionally narrower than general label assignment: it
+ * does not choose or create geometry. Exact-tag grounding uses the returned
+ * points only as bounded places to inspect for a physical vector body. */
+export function leaderTerminalPointsForLabel(
+  token: LabelSpan,
+  spans: LabelSpan[],
+  segs: number[],
+  lum?: Uint8Array,
+): Point[] {
+  if (!lum?.length || !segs.length) return [];
+  let bySegments = LEADER_TERMINAL_CACHE.get(token);
+  if (!bySegments) {
+    bySegments = new WeakMap<number[], WeakMap<Uint8Array, Point[]>>();
+    LEADER_TERMINAL_CACHE.set(token, bySegments);
+  }
+  let byLuminance = bySegments.get(segs);
+  if (!byLuminance) {
+    byLuminance = new WeakMap<Uint8Array, Point[]>();
+    bySegments.set(segs, byLuminance);
+  }
+  const cached = byLuminance.get(lum);
+  if (cached) return cached;
+  const context = leaderSheetContext(segs, lum);
+  const equipmentInstance = !isStackedInstrumentFamily(token.family)
+    && (!!token.family || isEquipmentInstanceLabel(token.str));
+  if (!context.multiPen && !equipmentInstance) {
+    byLuminance.set(lum, []);
+    return [];
+  }
+  if (equipmentInstance && labelSpanRotation(token) % 180 !== 0) {
+    byLuminance.set(lum, []);
+    return [];
+  }
+  const values = airflowValuesFor(token, spans);
+  const starts = [
+    ...leaderStarts(token).map((point) => ({ point, firstJoin: LEADER_HOP_PX })),
+    ...calloutLeaderStarts(token, values).map((point) => ({ point, firstJoin: LEADER_CALLOUT_HOP_PX })),
+    ...(equipmentInstance ? equipmentLeaderStarts(token).map((point) => ({ point, firstJoin: LEADER_CALLOUT_HOP_PX })) : []),
+  ];
+  const terminals = outerLeaderTerminals(
+    starts.flatMap((start) => chase(context.index, start.point, start.firstJoin)),
+    token,
+  );
+  const deduped: Point[] = [];
+  for (const point of terminals) {
+    if (!deduped.some((old) => Math.hypot(old[0] - point[0], old[1] - point[1]) <= LEADER_JOIN_PX)) {
+      deduped.push(point);
+    }
+  }
+  byLuminance.set(lum, deduped);
+  return deduped;
 }
 
 const edgeCost = (e: LabelEdge): number =>
@@ -738,6 +879,7 @@ function assignEdges(placements: Point[], tokens: LabelSpan[], edges: LabelEdge[
         distance_px: Math.round(e.distance),
         token_bbox: [t.x0, t.y0, t.x1, t.y1],
         text_height_px: t.text_height_px ?? labelSpanHeight(t),
+        ...(e.leaderTerminalAt ? { leader_terminal_at: e.leaderTerminalAt } : {}),
         ...(e.family ? { family: e.family } : {}),
       };
     }
@@ -758,13 +900,16 @@ export function labelPlacements(
   lum?: Uint8Array,
   options: LabelPlacementOptions = {},
 ): (PlacementLabel | null)[] {
-  const tokens = labelTokens(spans);
+  const preferred = options.preferredLabel ? canonicalLabel(options.preferredLabel) : null;
+  const allTokens = labelTokens(spans);
+  const tokens = options.restrictToPreferredLabel && preferred
+    ? allTokens.filter((token) => canonicalLabel(token.str) === preferred)
+    : allTokens;
   if (!tokens.length || !placements.length) return placements.map(() => null);
 
   const edges: LabelEdge[] = [];
   const airflowValues = tokens.map((t) => airflowValuesFor(t, spans));
   const airflow = airflowValues.map((v) => v.length > 0);
-  const preferred = options.preferredLabel ? canonicalLabel(options.preferredLabel) : null;
   const preferredFamily = options.preferredFamily
     ? canonicalLabel(options.preferredFamily)
     : preferred ? sweepLabelFamily(preferred) : null;
@@ -778,11 +923,13 @@ export function labelPlacements(
     || isBasControlLabel(t.str)
     || DEVICE_CLASS_LABELS.has(canonicalLabel(t.str))
     || /^[A-Z]-[A-Z]{2,6}$/.test(canonicalLabel(t.str));
-  const tokenFitsSymbolInkScale = (t: LabelSpan): boolean => {
-    if (!tokenIsEquipmentInstance(t) || options.symbolInkLengthPx === undefined) return true;
+  const tokenFitsSymbolInkScale = (t: LabelSpan, placement: number): boolean => {
+    const symbolInkLengthPx = options.symbolInkLengthPxByPlacement?.[placement]
+      ?? options.symbolInkLengthPx;
+    if (!tokenIsEquipmentInstance(t) || symbolInkLengthPx === undefined) return true;
     const h = Math.max(labelSpanHeight(t), 8);
-    return Number.isFinite(options.symbolInkLengthPx)
-      && options.symbolInkLengthPx >= EQUIPMENT_TAG_MIN_INK_LENGTH_K * h;
+    return Number.isFinite(symbolInkLengthPx)
+      && symbolInkLengthPx >= EQUIPMENT_TAG_MIN_INK_LENGTH_K * h;
   };
   // A tag must choose the actual symbol peak, not a nearby fragment that
   // merely sits closer to the lettering. At 800 px of full-scale penalty,
@@ -796,7 +943,7 @@ export function labelPlacements(
     const [px, py] = placements[p];
     for (let ti = 0; ti < tokens.length; ti++) {
       const t = tokens[ti];
-      if (!tokenFitsSymbolInkScale(t)) continue;
+      if (!tokenFitsSymbolInkScale(t, p)) continue;
       const h = Math.max(labelSpanHeight(t), 8);
       const dx = (t.x0 + t.x1) / 2 - px, dy = (t.y0 + t.y1) / 2 - py;
       const d = Math.hypot(dx, dy);
@@ -827,24 +974,17 @@ export function labelPlacements(
 
   // ── leader: multi-pen sheets, plus high-specificity equipment tags ────────
   if (lum && lum.length) {
-    let darkLen = 0, totalLen = 0;
-    const n = segs.length >> 2;
-    for (let i = 0; i < n; i++) {
-      const L = Math.hypot(segs[i * 4 + 2] - segs[i * 4], segs[i * 4 + 3] - segs[i * 4 + 1]);
-      totalLen += L;
-      if (lum[i] < LEADER_DARK_LUM) darkLen += L;
-    }
-    const multiPen = totalLen > 0 && darkLen / totalLen <= LEADER_MAX_DARK_SHARE;
+    const context = leaderSheetContext(segs, lum);
+    const multiPen = context.multiPen;
     const equipmentInstance = (t: LabelSpan): boolean => tokenIsEquipmentInstance(t);
     // A one-pen plan cannot safely chase short generic marks through walls or
     // piping. A multi-part equipment instance tag is much more specific, and
     // may still use a literal short leader; retain the same tight 14 px pickup,
     // 3 px joins, and four-hop ceiling rather than widening spatial adjacency.
     if (multiPen || tokens.some(equipmentInstance)) {
-      const idx = buildDarkIndex(segs, lum);
+      const idx = context.index;
       for (let ti = 0; ti < tokens.length; ti++) {
         const t = tokens[ti];
-        if (!tokenFitsSymbolInkScale(t)) continue;
         if (!multiPen && !equipmentInstance(t)) continue;
         // A quarter-turned equipment mark is commonly printed inside an
         // inline coil, filter, or damper body. Its surrounding outline joins
@@ -858,17 +998,36 @@ export function labelPlacements(
           ...calloutLeaderStarts(t, airflowValues[ti]).map((point) => ({ point, firstJoin: LEADER_CALLOUT_HOP_PX })),
           ...(equipmentInstance(t) ? equipmentLeaderStarts(t).map((point) => ({ point, firstJoin: LEADER_CALLOUT_HOP_PX })) : []),
         ];
-        for (const start of starts) {
-          const reach = chase(idx, start.point, start.firstJoin);
+        const strictTargets = options.requireLeaderTerminal
+          ? leaderTerminalPointsForLabel(t, spans, segs, lum)
+          : [];
+        // A literal route leaving the tag owns the relationship. Do not let
+        // the intentionally broad equipment-adjacency radius certify some
+        // other body beside an intermediate leader segment when the arrow's
+        // outer end is elsewhere.
+        if (options.requireLeaderTerminal
+          && strictTargets.some((point) => distanceFromTokenBox(point, t) >= 1.5 * Math.max(labelSpanHeight(t), 8))) {
+          for (let edge = edges.length - 1; edge >= 0; edge--) {
+            if (edges[edge].token === ti && edges[edge].via === "adjacent") edges.splice(edge, 1);
+          }
+        }
+        const reachSets = options.requireLeaderTerminal
+          ? [strictTargets]
+          : starts.map((start) => chase(idx, start.point, start.firstJoin));
+        for (const leaderTargets of reachSets) {
           for (let p = 0; p < placements.length; p++) {
             if (options.eligible?.[p] === false) continue;
+            if (!tokenFitsSymbolInkScale(t, p)) continue;
             const h = Math.max(labelSpanHeight(t), 8);
             if (!placementInsideEmbeddedToken(t, placements[p][0], placements[p][1])) continue;
             const glyphPad = (options.scores?.[p] ?? 1) < LABEL_REVIEW_SCORE_LOW ? h * 0.6 : 2;
             if (!isEmbeddedLabelToken(t) && (options.scores?.[p] ?? 0) < LABEL_INTERNAL_GEOMETRY_MIN
               && placements[p][0] >= t.x0 - glyphPad && placements[p][0] <= t.x1 + glyphPad
               && placements[p][1] >= t.y0 - glyphPad && placements[p][1] <= t.y1 + glyphPad) continue;
-            const hit = reach.reduce((m, q) => Math.min(m, Math.hypot(q[0] - placements[p][0], q[1] - placements[p][1])), Infinity);
+            const target = leaderTargets
+              .map((q) => ({ q, distance: Math.hypot(q[0] - placements[p][0], q[1] - placements[p][1]) }))
+              .sort((a, b) => a.distance - b.distance)[0];
+            const hit = target?.distance ?? Infinity;
             if (hit <= LEADER_HIT_PX) edges.push({
               placement: p, token: ti, tag: t.str.trim(), via: "leader", distance: hit,
               // A literal equipment leader is stronger than the intentionally
@@ -878,6 +1037,7 @@ export function labelPlacements(
               preferred: preferredFamily !== null && (t.family ? canonicalLabel(t.family) : sweepLabelFamily(t.str)) === preferredFamily,
               assignmentDistance: hit + geometryPenalty(p),
               geometryScore: Math.max(0, Math.min(1, options.scores?.[p] ?? 1)),
+              ...(options.requireLeaderTerminal && target ? { leaderTerminalAt: target.q } : {}),
               ...(t.family ? { family: t.family } : {}),
             });
           }
@@ -1095,6 +1255,170 @@ export interface PositionedSweepMatches {
   matches: SweepMatch[];
   withheld: SweepWithheld[];
   withheldLabels: (PlacementLabel | null)[];
+}
+
+export interface AffineRigidLabelArbitration extends ReconciledSweepLabels {
+  /** Exact source-tag boxes for which the nested rigid model displaced the
+   * affine model's competing location. */
+  rigid_preferred: number;
+  /** Affine-only, source-grounded placements retained because no rigid
+   * candidate claimed their exact drawing tag. */
+  affine_added: number;
+  /** Unlabeled affine-only placements withheld on a sheet that demonstrably
+   * labels this repeated family, rather than silently inflating its count. */
+  affine_unlabeled_withheld: number;
+}
+
+export interface SweepTransformCompetition {
+  strategy: "rigid_baseline_affine_cited_additions";
+  rigid_matches: number;
+  affine_matches: number;
+  affine_cited_additions: number;
+  affine_deferred: number;
+  shared_tag_claims: number;
+}
+
+/** Public accounting for the same nested-model decision. Keep this shaping in
+ * the shared label layer so the canvas Agent and MCP cannot disagree about
+ * what rigid preserved, what affine recovered, or what stayed review-only. */
+export function sweepTransformCompetition(
+  rigid: ReconciledSweepLabels,
+  affine: ReconciledSweepLabels,
+  arbitration: AffineRigidLabelArbitration,
+): SweepTransformCompetition {
+  return {
+    strategy: "rigid_baseline_affine_cited_additions",
+    rigid_matches: rigid.matches.length,
+    affine_matches: affine.matches.length,
+    affine_cited_additions: arbitration.affine_added,
+    affine_deferred: arbitration.affine_unlabeled_withheld,
+    shared_tag_claims: arbitration.rigid_preferred,
+  };
+}
+
+const placementLabelBoxKey = (label: PlacementLabel | null | undefined): string | null =>
+  label?.token_bbox ? label.token_bbox.map((value) => Math.round(value * 10) / 10).join(",") : null;
+
+/** Nested-model arbitration for an affine-enabled, labeled sweep.
+ *
+ * Affine refinement is a superset of rigid matching, but on dense repeated
+ * drawings it can improve a numeric score by fitting a neighboring symbol's
+ * ink and thereby move a correct hypothesis away from the physical instance
+ * whose tag it later claims. The PDF's exact source-text box provides a stable
+ * identity key across the two readings: when both models claim that same box,
+ * retain the simpler rigid location; when only affine claims it, retain the
+ * non-rigid recovery. This is deliberately not a position-radius union—the
+ * displacement bug itself makes cross-model distance unsafe.
+ *
+ * An affine-only row with no tag remains countable when the drawing has no
+ * established labeling convention. Once three distinct same-family source
+ * boxes demonstrate that the family is systematically labeled, such a row is
+ * disclosed for review instead of silently becoming an extra installed item.
+ * Text never manufactures geometry: every input row already cleared the
+ * shared vector engine and label reconciliation gates. */
+export function arbitrateAffineAgainstRigidLabels(
+  seedLabel: PlacementLabel | null,
+  rigid: ReconciledSweepLabels,
+  affine: ReconciledSweepLabels,
+  footprint: number,
+): AffineRigidLabelArbitration {
+  const rigidPositioned = positionMatchesToClosestReading(
+    rigid.matches, rigid.matchLabels, rigid.withheld, rigid.withheldLabels, footprint,
+  );
+  const affinePositioned = positionMatchesToClosestReading(
+    affine.matches, affine.matchLabels, affine.withheld, affine.withheldLabels, footprint,
+  );
+  if (!seedLabel) {
+    return {
+      ...affine,
+      matches: affinePositioned.matches,
+      withheld: affinePositioned.withheld,
+      withheldLabels: affinePositioned.withheldLabels,
+      rigid_preferred: 0,
+      affine_added: 0,
+      affine_unlabeled_withheld: 0,
+    };
+  }
+
+  const seedFamily = placementLabelFamily(seedLabel);
+  const matches = [...rigidPositioned.matches];
+  const matchLabels = [...rigid.matchLabels];
+  const withheld = [...rigidPositioned.withheld];
+  const withheldLabels = [...rigidPositioned.withheldLabels];
+  const claimedBoxes = new Set(matchLabels.map(placementLabelBoxKey).filter((key): key is string => !!key));
+  const familyBoxes = new Set<string>();
+  const collectFamilyBox = (label: PlacementLabel | null | undefined): void => {
+    const key = placementLabelBoxKey(label);
+    if (key && label && placementLabelFamily(label) === seedFamily) familyBoxes.add(key);
+  };
+  collectFamilyBox(seedLabel);
+  matchLabels.forEach(collectFamilyBox);
+  affine.matchLabels.forEach(collectFamilyBox);
+  const establishedRepeatedLabelConvention = familyBoxes.size >= 3;
+  const mergeR = Math.max(4, footprint / 2);
+  let rigidPreferred = 0;
+  let affineAdded = 0;
+  let affineUnlabeledWithheld = 0;
+
+  for (let i = 0; i < affinePositioned.matches.length; i++) {
+    const row = affinePositioned.matches[i];
+    const label = affine.matchLabels[i] ?? null;
+    const key = placementLabelBoxKey(label);
+    if (key && claimedBoxes.has(key)) {
+      rigidPreferred++;
+      continue;
+    }
+    if (matches.some((candidate) => Math.hypot(candidate.at[0] - row.at[0], candidate.at[1] - row.at[1]) <= mergeR)) continue;
+    if (key) {
+      matches.push(row);
+      matchLabels.push(label);
+      claimedBoxes.add(key);
+      affineAdded++;
+      continue;
+    }
+    if (establishedRepeatedLabelConvention) {
+      affineUnlabeledWithheld++;
+      withheld.push({
+        ...row,
+        reason: `affine-only geometry has no ${seedLabel.label}-family drawing tag on a sheet where ${familyBoxes.size} distinct source-tag boxes establish a repeated labeling convention — disclosed for review, not counted`,
+      });
+      withheldLabels.push(null);
+      continue;
+    }
+    matches.push(row);
+    matchLabels.push(null);
+    affineAdded++;
+  }
+
+  // Retain affine-only questions that are neither the same physical reading
+  // nor another model's claim on the same exact text box. They are useful
+  // review evidence even when they are not allowed to change the count.
+  for (let i = 0; i < affinePositioned.withheld.length; i++) {
+    const row = affinePositioned.withheld[i];
+    const label = affinePositioned.withheldLabels[i] ?? null;
+    const key = placementLabelBoxKey(label);
+    if (key && claimedBoxes.has(key)) continue;
+    if (matches.some((candidate) => Math.hypot(candidate.at[0] - row.at[0], candidate.at[1] - row.at[1]) <= mergeR)) continue;
+    if (withheld.some((candidate) => Math.hypot(candidate.at[0] - row.at[0], candidate.at[1] - row.at[1]) <= mergeR)) continue;
+    withheld.push(row);
+    withheldLabels.push(label);
+  }
+
+  const order = (a: SweepMatch, b: SweepMatch): number =>
+    a.at[1] - b.at[1] || a.at[0] - b.at[0] || a.rotation - b.rotation || Number(a.mirrored) - Number(b.mirrored);
+  const pairedMatches = matches.map((row, i) => ({ row, label: matchLabels[i] ?? null })).sort((a, b) => order(a.row, b.row));
+  const pairedWithheld = withheld.map((row, i) => ({ row, label: withheldLabels[i] ?? null })).sort((a, b) => order(a.row, b.row));
+  return {
+    matches: pairedMatches.map(({ row }) => row),
+    matchLabels: pairedMatches.map(({ label }) => label),
+    withheld: pairedWithheld.map(({ row }) => row),
+    withheldLabels: pairedWithheld.map(({ label }) => label),
+    promoted: rigid.promoted,
+    demoted: rigid.demoted + affineUnlabeledWithheld,
+    rigid_preferred: rigidPreferred,
+    affine_added: affineAdded,
+    affine_unlabeled_withheld: affineUnlabeledWithheld,
+  };
 }
 
 /** docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md Phase F — a `hold: "density"` row

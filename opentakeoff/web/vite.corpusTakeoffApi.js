@@ -74,7 +74,7 @@ export function resolveTsxLoader() {
   );
 }
 
-function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, marks, family, tags, categories, familySweepAll, evaluationFast, symbol, onProgress, signal, postGraphTimeoutMs }) {
+function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol, onProgress, signal, postGraphTimeoutMs }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
     try {
@@ -96,6 +96,7 @@ function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, m
     if (categories?.length) args.push("--categories", categories.join(","));
     if (familySweepAll) args.push("--family-sweep-all");
     if (evaluationFast) args.push("--evaluation-fast");
+    if (sweepOptions) args.push("--sweep-options", JSON.stringify(sweepOptions));
     if (symbol) {
       args.push("--symbol-pdf-index", String(symbol.pdfIndex));
       args.push("--symbol-page", String(symbol.page));
@@ -266,6 +267,7 @@ async function resolvePdfs(req) {
   let categories = null;
   let familySweepAll = false;
   let evaluationFast = false;
+  let sweepOptions = null;
   let symbol = null;
   let pdfPaths = [];
   let fileNames = [];
@@ -284,6 +286,7 @@ async function resolvePdfs(req) {
       : null;
     familySweepAll = mp.fields.familySweepAll === "1" || mp.fields.familySweepAll === "true";
     evaluationFast = mp.fields.evaluationFast === "1" || mp.fields.evaluationFast === "true";
+    sweepOptions = mp.fields.sweepOptions ? JSON.parse(mp.fields.sweepOptions) : null;
     if (mp.fields.symbolSeedRect) {
       symbol = {
         pdfIndex: Number(mp.fields.symbolPdfIndex || 0),
@@ -330,6 +333,7 @@ async function resolvePdfs(req) {
     categories = Array.isArray(body.categories) ? body.categories : null;
     familySweepAll = !!body.familySweepAll;
     evaluationFast = !!body.evaluationFast;
+    sweepOptions = body.sweepOptions || null;
     symbol = body.symbol || null;
     if (Array.isArray(body.pdfPaths) && body.pdfPaths.length) {
       pdfPaths = body.pdfPaths;
@@ -340,7 +344,7 @@ async function resolvePdfs(req) {
     }
     fileNames = pdfPaths.map((p) => p.split(/[\\/]/).at(-1));
   }
-  return { kind, service, basMathOptions, pdfPaths, fileNames, tmpDir, tag, marks, family, tags, categories, familySweepAll, evaluationFast, symbol };
+  return { kind, service, basMathOptions, pdfPaths, fileNames, tmpDir, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol };
 }
 
 function restoreUploadedSheetKeys(result, pdfPaths, fileNames) {
@@ -391,7 +395,7 @@ async function handle(req, res, mode) {
   try {
     const resolved = await resolvePdfs(req);
     tmpDir = resolved.tmpDir;
-    const { kind, service, basMathOptions, pdfPaths, fileNames, tag, marks, family, tags, categories, familySweepAll, evaluationFast, symbol } = resolved;
+    const { kind, service, basMathOptions, pdfPaths, fileNames, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol } = resolved;
     if (mode === "compile" && !kind) {
       return sendJson(res, 400, { error: "kind required" });
     }
@@ -409,7 +413,7 @@ async function handle(req, res, mode) {
       return sendJson(res, 200, raw);
     }
     if (mode === "sweep") {
-      const result = await runCli({ mode: "sweep", pdfPaths, tag, evaluationFast, signal: abortController.signal });
+      const result = await runCli({ mode: "sweep", pdfPaths, tag, evaluationFast, sweepOptions, signal: abortController.signal });
       return sendJson(res, 200, result);
     }
     if (mode === "symbol_sweep") {

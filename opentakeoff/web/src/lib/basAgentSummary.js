@@ -54,6 +54,7 @@ function completeBasReply(payload) {
       takeoff_stats: reconcile.takeoff_stats || null,
       row_count: reconcile.row_count ?? reconcile.rows?.length ?? 0,
     } : null,
+    sequence_interpretation: payload.sequence_interpretation || null,
     workflow_reviews: inspections,
     top_open_findings: reviewIssues.slice(0, 8),
     result_workspace_opened: !payload.workspace?.error,
@@ -122,6 +123,7 @@ export function completeBasAnswerMarkdown(payload) {
   const sequences = n(coverage.sequences);
   const sequenceSections = n(coverage.sequence_sections);
   const sooCandidates = n(coverage.soo_point_candidates);
+  const sequenceInterpretation = payload?.sequence_interpretation || null;
   const valves = n(coverage.control_valve_items);
   const coilGaps = n(coverage.embedded_coil_gaps);
   const schematics = n(coverage.control_schematics);
@@ -150,6 +152,15 @@ export function completeBasAnswerMarkdown(payload) {
     lines.push(`- **${pointTypeReviews}** listed point row${pointTypeReviews === 1 ? "" : "s"} require${pointTypeReviews === 1 ? "s" : ""} I/O-type review; they are not promoted to typed physical points.`);
   }
   lines.push(`- Sequence evidence: **${sequences} sequences / ${sequenceSections} sections**.`);
+  if (["ready", "retained"].includes(sequenceInterpretation?.status)) {
+    const interpreted = n(sequenceInterpretation?.coverage?.accepted_clauses);
+    const eligible = n(sequenceInterpretation?.coverage?.eligible_clauses);
+    const rejected = n(sequenceInterpretation?.coverage?.rejected_clauses);
+    const missing = n(sequenceInterpretation?.coverage?.missing_clauses);
+    lines.push(`- Source-validated SOO proposals: **${interpreted} of ${eligible} clauses retained**, with **${n(sequenceInterpretation?.behaviors)} behaviors** and **${n(sequenceInterpretation?.candidate_points)} candidate points**; ${rejected} clauses were rejected and ${missing} were missing. Every proposal still requires estimator review.`);
+  } else if (sequences > 0) {
+    lines.push(`- Model-assisted SOO interpretation: **${String(sequenceInterpretation?.status || "not available").replaceAll("_", " ")}**. Original sequence text remains available, but no model proposal is presented as complete.`);
+  }
   if (sooCandidates > 0) {
     lines.push(`- **${sooCandidates}** explicit labeled SOO point candidate${sooCandidates === 1 ? "" : "s"} require${sooCandidates === 1 ? "s" : ""} estimator review; ${sooCandidates === 1 ? "it is" : "they are"} not typed I/O, field wiring, equipment applicability, or installed quantity.`);
   }

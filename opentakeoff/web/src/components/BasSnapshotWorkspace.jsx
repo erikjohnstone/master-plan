@@ -71,13 +71,15 @@ export default function BasSnapshotWorkspace({ workflow, restoreContext, state =
     } };
     await perform('Rechecking exact inputs and saving the scoped snapshot with its original PDFs…', async (signal, guard) => {
       const result = await client.current.approve(preview, retry.current.declaration, { signal }); guard();
-      setOpened(result); setPreview(null); setConfirmed(false); change({ tab: 'saved', snapshotId: result.record.snapshot_id });
+      setOpened(result); setPreview(null); setConfirmed(false); change({ tab: 'saved', snapshotId: result.record.snapshot_id,
+        approvedWorkflow: workflow, verifiedCurrentWorkflow: workflow });
       setNotice('Scoped snapshot saved in this browser project. Working annotations were not changed. Download its evidence ZIP for external backup.');
       setListing(null); setCursors([null]);
     });
   }
   const open = id => perform('Verifying the saved snapshot and its historical originals…', async (signal, guard) => {
-    setOpened(null); setCurrentness(null); setLifecycleConfirmed(false); const result = await client.current.open(id, { signal }); guard(); setOpened(result); change({ snapshotId: id });
+    setOpened(null); setCurrentness(null); setLifecycleConfirmed(false); const result = await client.current.open(id, { signal }); guard(); setOpened(result);
+    change({ snapshotId: id, approvedWorkflow: null, verifiedCurrentWorkflow: null });
     setNotice(`Historical snapshot verified. Lifecycle status: ${result.lifecycle.state.status}. Current working applicability has not been checked.`);
   });
   const exportSnapshot = () => perform('Replaying the snapshot and preparing its original-source evidence ZIP…', async (signal, guard) => {
@@ -103,6 +105,7 @@ export default function BasSnapshotWorkspace({ workflow, restoreContext, state =
   });
   const checkCurrentness = () => perform('Comparing the verified snapshot scope with the current saved workflow…', async (signal, guard) => {
     const result = await client.current.currentness(opened.plan, { signal }); guard(); setCurrentness(result);
+    change({ verifiedCurrentWorkflow: result.status === 'current_for_reviewed_scope' ? workflow : null });
     setNotice(result.status === 'current_for_reviewed_scope'
       ? 'The saved approval still applies to this exact reviewed scope. This is not whole-project or installed-quantity approval.'
       : result.status === 'not_current_lifecycle' ? `This snapshot is ${result.lifecycle.status} and is not current.`

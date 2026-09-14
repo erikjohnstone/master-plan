@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, splitHyphenTagOcc, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, arbitrateTaggedSweepModels, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, splitHyphenTagOcc, type Point, type RoomSweepInstance, type SweepSheetMatch, type SweepWithheld, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
 import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, scheduleCountMultiplier as typicalCountMultiplier } from "../src/lib/schedulePlanReconcile.mjs";
 
 const SYMBOL: [number, number, number, number][] = [
@@ -230,6 +230,38 @@ test("classifySweepMatches: cross-scale sweep — the fingerprint is resized per
   assert.equal(r.matches.length, 1, "found only because the ratio resized the seed before matching");
   assert.ok(r.scaled, "a non-1 ratio discloses what it cost (#186)");
   assert.equal(r.scaled!.ratio, 12);
+});
+
+test("schedule-row model arbitration keys identity to the exact plan tag bbox", () => {
+  const box1: [number, number, number, number] = [100, 100, 125, 112];
+  const box2: [number, number, number, number] = [300, 100, 325, 112];
+  const rigidMatch = (at: Point, tag_at: typeof box1): SweepSheetMatch => ({
+    at, tag_at, score: 0.93, rotation: 0, mirrored: false,
+  });
+  const affineMatch = (at: Point, tag_at: typeof box1): SweepSheetMatch => ({
+    at, tag_at, score: 0.99, rotation: 17, mirrored: false,
+    transform: {
+      rotation_deg: 17, scale_x: 1.2, scale_y: 1, shear_deg: 1,
+      mirrored: false, rms_px: 1, tol_px: 3, via: "rotation",
+    },
+  });
+  const rigid = {
+    matches: [rigidMatch([90, 90], box1)],
+    excluded: [],
+    withheld: [] as SweepWithheld[],
+  };
+  const affine = {
+    // The first refined centroid moved far away but still claims the SAME
+    // exact source tag. The second is a genuine affine-only tagged recovery.
+    matches: [affineMatch([175, 155], box1), affineMatch([290, 90], box2)],
+    excluded: [],
+    withheld: [] as SweepWithheld[],
+  };
+  const result = arbitrateTaggedSweepModels(rigid, affine, 60);
+  assert.deepEqual(result.matches.map((match) => match.at), [[90, 90], [290, 90]]);
+  assert.deepEqual(result.matches.map((match) => match.tag_at), [box1, box2]);
+  assert.equal(result.rigid_preferred, 1);
+  assert.equal(result.affine_added, 1);
 });
 
 // ── dedupeCrossDisciplineRoomViews ──────────────────────────────────────────

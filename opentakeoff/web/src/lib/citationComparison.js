@@ -13,6 +13,18 @@ const centeredSpan = (center, size, limit) => {
   return [start, start + bounded];
 };
 
+export function citationFocusBox(bboxes) {
+  if (!Array.isArray(bboxes) || !bboxes.length || bboxes.some((bbox) => !finiteBox(bbox))) {
+    throw new Error('Citation focus requires one or more finite bboxes.');
+  }
+  return [
+    Math.min(...bboxes.map((bbox) => bbox[0])),
+    Math.min(...bboxes.map((bbox) => bbox[1])),
+    Math.max(...bboxes.map((bbox) => bbox[2])),
+    Math.max(...bboxes.map((bbox) => bbox[3])),
+  ];
+}
+
 export function citationPreviewRegion(bbox, width, height, { kind = 'plan' } = {}) {
   if (!finiteBox(bbox) || !(width > 0) || !(height > 0)) {
     throw new Error('Citation preview requires a finite bbox and positive page frame.');
@@ -41,9 +53,11 @@ export function citationPreviewRegion(bbox, width, height, { kind = 'plan' } = {
   return { x0: rx0, y0: ry0, x1: rx1, y1: ry1 };
 }
 
-export async function renderPdfCitationPreview(page, bbox, { renderScale, color, kind = 'plan' }) {
+export async function renderPdfCitationPreview(page, bbox, { renderScale, color, kind = 'plan', overlays = [] }) {
   const original = page.getViewport({ scale: renderScale });
-  const region = citationPreviewRegion(bbox, original.width, original.height, { kind });
+  const drawnOverlays = overlays.length ? overlays : [{ bbox, color }];
+  const focus = citationFocusBox(drawnOverlays.map((overlay) => overlay.bbox));
+  const region = citationPreviewRegion(focus, original.width, original.height, { kind });
   const regionWidth = region.x1 - region.x0, regionHeight = region.y1 - region.y0;
   const previewScale = Math.min(2, 1600 / regionWidth, 900 / regionHeight);
   const canvas = document.createElement('canvas');
@@ -58,14 +72,17 @@ export async function renderPdfCitationPreview(page, bbox, { renderScale, color,
   });
   const task = page.render({ canvasContext: context, viewport, background: '#ffffff' });
   await task.promise;
-  const [x0, y0, x1, y1] = bbox;
-  context.fillStyle = `${color}1f`;
-  context.strokeStyle = color;
-  context.lineWidth = Math.max(3, 2 * previewScale);
-  context.fillRect((x0 - region.x0) * previewScale, (y0 - region.y0) * previewScale,
-    (x1 - x0) * previewScale, (y1 - y0) * previewScale);
-  context.strokeRect((x0 - region.x0) * previewScale, (y0 - region.y0) * previewScale,
-    (x1 - x0) * previewScale, (y1 - y0) * previewScale);
+  for (const overlay of drawnOverlays) {
+    const [x0, y0, x1, y1] = overlay.bbox;
+    const overlayColor = overlay.color || color;
+    context.fillStyle = `${overlayColor}1f`;
+    context.strokeStyle = overlayColor;
+    context.lineWidth = Math.max(3, 2 * previewScale);
+    context.fillRect((x0 - region.x0) * previewScale, (y0 - region.y0) * previewScale,
+      (x1 - x0) * previewScale, (y1 - y0) * previewScale);
+    context.strokeRect((x0 - region.x0) * previewScale, (y0 - region.y0) * previewScale,
+      (x1 - x0) * previewScale, (y1 - y0) * previewScale);
+  }
   return {
     image_url: canvas.toDataURL('image/png'),
     width: canvas.width,
