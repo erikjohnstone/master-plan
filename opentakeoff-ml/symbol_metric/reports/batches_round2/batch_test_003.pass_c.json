@@ -1,0 +1,327 @@
+{
+  "batch_id": "batch_test_003",
+  "pass": "context",
+  "instructions": "PASS C -- DRAWING-CONTEXT ADJUDICATION. For each pair you get a local context render around the candidate (context_image), a low-res full-page thumbnail (fullpage_image), the reference legend caption, and any nearby tag text. Read the context image directly. Judge whether this candidate plausibly is a real HVAC/BAS physical device consistent with the caption -- and NOT a title-block element, a general drafting symbol (north arrow, detail bubble, elevation target, section cut), boilerplate text, a table border, or an unrelated architectural/furniture item. 'no_physical_symbol' = the candidate region contains no real device body at all (blank space, pure text, a drafting convention symbol unrelated to HVAC/BAS). 'negative' = it is a real device but clearly NOT a plausible match for this caption (wrong device family, wrong sibling subtype, or the caption/context clearly refers to something else on this sheet). Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "PLUMBING DEMOLITION PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "PLUMBING DEMOLITION PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "PLUMBING DEMOLITION PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "GENERAL NOTES, LEGENDS, ROOM FINISH",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "GENERAL NOTES, LEGENDS, ROOM FINISH",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "GENERAL NOTES, LEGENDS, ROOM FINISH",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "INTERIOR FINISH PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "INTERIOR FINISH PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "INTERIOR FINISH PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "GENERAL NOTES AND TYPICAL DETAILS",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "GENERAL NOTES AND TYPICAL DETAILS",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "GENERAL NOTES AND TYPICAL DETAILS",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "09 21 16 - MTL STUD (DOUBLE)",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "09 21 16 - MTL STUD (DOUBLE)",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "09 21 16 - MTL STUD (DOUBLE)",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "08 80 00 - ONE-WAY GLASS",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "08 80 00 - ONE-WAY GLASS",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "08 80 00 - ONE-WAY GLASS",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "GROUND FLOOR PLAN - DEMO",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "GROUND FLOOR PLAN - DEMO",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "GROUND FLOOR PLAN - DEMO",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "PARTITION AS SCHEDULED",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "PARTITION AS SCHEDULED",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "PARTITION AS SCHEDULED",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70/fullpage.png",
+      "reference_caption": "S-1 AT NON-RATED DOORS",
+      "candidate_nearby_tag_text": "G01G",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64/fullpage.png",
+      "reference_caption": "S-1 AT NON-RATED DOORS",
+      "candidate_nearby_tag_text": "G01C",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0/fullpage.png",
+      "reference_caption": "S-1 AT NON-RATED DOORS",
+      "candidate_nearby_tag_text": "S-4",
+      "family_id": "bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "RESPONSIBILITY OF PROVIDING ALL DEMOLITION REQUIRED FOR THE",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "RESPONSIBILITY OF PROVIDING ALL DEMOLITION REQUIRED FOR THE",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "RESPONSIBILITY OF PROVIDING ALL DEMOLITION REQUIRED FOR THE",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    }
+  ]
+}

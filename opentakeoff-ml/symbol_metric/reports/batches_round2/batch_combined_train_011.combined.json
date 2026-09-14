@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_011",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_75",
+      "reference_caption": "www.alphastudio-design.com",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_75/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_75/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_75/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48",
+      "reference_caption": "ALPHASTUDIO DESIGN GROUP",
+      "candidate_nearby_tag_text": "D000",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_62",
+      "reference_caption": "ALPHASTUDIO DESIGN GROUP",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_62/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_62/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_62/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_65",
+      "reference_caption": "ALPHASTUDIO DESIGN GROUP",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_65/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_65/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_52_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_65/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48",
+      "reference_caption": "EXISTING WOOD STUD WALL",
+      "candidate_nearby_tag_text": "D000",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_9",
+      "reference_caption": "EXISTING WOOD STUD WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_9/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_9/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_9/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_1_8",
+      "reference_caption": "EXISTING WOOD STUD WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_1_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_1_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_66_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_1_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48",
+      "reference_caption": "HOLLOW METAL FRAME PER",
+      "candidate_nearby_tag_text": "D000",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_9",
+      "reference_caption": "HOLLOW METAL FRAME PER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_9/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_9/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_9/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_1_8",
+      "reference_caption": "HOLLOW METAL FRAME PER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_1_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_1_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_67_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_1_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48",
+      "reference_caption": "4X4 STUD WIDTH SOLID",
+      "candidate_nearby_tag_text": "D000",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_3_49",
+      "reference_caption": "4X4 STUD WIDTH SOLID",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_3_49/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_3_49/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_3_49/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8",
+      "reference_caption": "4X4 STUD WIDTH SOLID",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_61_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_8_231",
+      "reference_caption": "05/16/2016 - 100% CONSTRUCTION DOCUMENTS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_8_231/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_8_231/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_8_231/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_8_231",
+      "reference_caption": "05/16/2016 - 100% CONSTRUCTION DOCUMENTS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_8_231/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_8_231/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_8_231/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_42_7",
+      "reference_caption": "05/16/2016 - 100% CONSTRUCTION DOCUMENTS",
+      "candidate_nearby_tag_text": "L2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_42_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_42_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_1_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_42_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_30_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_31",
+      "reference_caption": "SHERWIN WILLIAMS 0072 DEEP MAROON",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_30_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_31/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_30_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_31/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_30_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_31/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_30_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_31",
+      "reference_caption": "SHERWIN WILLIAMS 0072 DEEP MAROON",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_30_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_31/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_30_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_31/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_30_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_30_31/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_25_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_24",
+      "reference_caption": "SUPPLY DUCT TO OR FROM ABOVE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_25_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_24/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_25_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_24/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_25_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_24/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_25_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_28_91",
+      "reference_caption": "SUPPLY DUCT TO OR FROM ABOVE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_25_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_28_91/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_25_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_28_91/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_34_25_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_28_91/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_42_7",
+      "reference_caption": "AM 9:10:47 5/27/2016",
+      "candidate_nearby_tag_text": "L2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_42_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_42_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_42_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_7_62",
+      "reference_caption": "AM 9:10:47 5/27/2016",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_7_62/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_7_62/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_7_62/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_7_68",
+      "reference_caption": "AM 9:10:47 5/27/2016",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_7_68/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_7_68/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:23_GA_MaconBibb_RecreationCenter_0_0_cand_bulk_vol1:23_GA_MaconBibb_RecreationCenter_7_68/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79",
+      "reference_caption": "INTERIOR SIGN MOUNTING HEIGHT LEGEND",
+      "candidate_nearby_tag_text": "T1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80",
+      "reference_caption": "INTERIOR SIGN MOUNTING HEIGHT LEGEND",
+      "candidate_nearby_tag_text": "T2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81",
+      "reference_caption": "INTERIOR SIGN MOUNTING HEIGHT LEGEND",
+      "candidate_nearby_tag_text": "T2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_30_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81",
+      "reference_caption": "FIRE EQUIPMENT IDENTIFICATION SIGN",
+      "candidate_nearby_tag_text": "T2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80",
+      "reference_caption": "FIRE EQUIPMENT IDENTIFICATION SIGN",
+      "candidate_nearby_tag_text": "T2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79",
+      "reference_caption": "FIRE EQUIPMENT IDENTIFICATION SIGN",
+      "candidate_nearby_tag_text": "T1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_33_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_53",
+      "reference_caption": "INTERIOR SIGNS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_53/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_53/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_53/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_53",
+      "reference_caption": "INTERIOR SIGNS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_53/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_53/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_53/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79",
+      "reference_caption": "INTERIOR SIGNS",
+      "candidate_nearby_tag_text": "T1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_31_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_8_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "IN-09.01,",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_8_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_8_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_8_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_8_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "IN-09.01,",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_8_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_8_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_8_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "FIN. FLR.",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "FIN. FLR.",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79",
+      "reference_caption": "FIN. FLR.",
+      "candidate_nearby_tag_text": "T1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_20_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_4_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "IN-09.01,",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_4_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_4_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_4_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_4_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "IN-09.01,",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_4_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_4_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_4_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_34_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80",
+      "reference_caption": "TYPE M.1",
+      "candidate_nearby_tag_text": "T2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_34_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_34_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_34_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/context.png"
+    }
+  ]
+}

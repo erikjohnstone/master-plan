@@ -1,0 +1,327 @@
+{
+  "batch_id": "batch_test_000",
+  "pass": "structural",
+  "instructions": "PASS A -- STRUCTURAL EVIDENCE ONLY. For each pair, judge only whether candidate_nearby_tag_text is a real authored tag/leader that identifies this specific candidate as the device the reference row names. A caption+tag word overlap is weak evidence; an exact/near-exact equipment tag next to the candidate is strong evidence (set strong_evidence:true only then). If there is no tag nearby, verdict should usually be 'ambiguous' (structural evidence alone can't decide) rather than a guess -- Pass B/C carry the rest of the decision. Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "reference_caption": "LIMIT OR POSITION SWITCH",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.6507,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94",
+      "reference_caption": "LIMIT OR POSITION SWITCH",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.6508,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93",
+      "reference_caption": "LIMIT OR POSITION SWITCH",
+      "candidate_nearby_tag_text": "R4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.651,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "reference_caption": "CONSTRUCTION DOCUMENTS",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.8464,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94",
+      "reference_caption": "CONSTRUCTION DOCUMENTS",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.847,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93",
+      "reference_caption": "CONSTRUCTION DOCUMENTS",
+      "candidate_nearby_tag_text": "R4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.8472,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_28",
+      "reference_caption": "ELECTRICAL LINETYPES",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0346,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_28",
+      "reference_caption": "ELECTRICAL LINETYPES",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0346,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "reference_caption": "ELECTRICAL LINETYPES",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.3178,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "reference_caption": "LIGHTING",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.4916,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94",
+      "reference_caption": "LIGHTING",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.4922,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93",
+      "reference_caption": "LIGHTING",
+      "candidate_nearby_tag_text": "R4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.4925,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": "R1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3741,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3741,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": "R3",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3741,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": "R1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0428,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0428,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": "R3",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0428,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": "R1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0315,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0315,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": "R3",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0315,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "reference_caption": "POWER",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.9623,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94",
+      "reference_caption": "POWER",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.963,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93",
+      "reference_caption": "POWER",
+      "candidate_nearby_tag_text": "R4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.9632,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "reference_caption": "E-001",
+      "candidate_nearby_tag_text": "R1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1964,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "reference_caption": "E-001",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1964,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75",
+      "reference_caption": "E-001",
+      "candidate_nearby_tag_text": "R3",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1964,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11",
+      "reference_caption": "H.D.",
+      "candidate_nearby_tag_text": "E-001",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1377,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "reference_caption": "H.D.",
+      "candidate_nearby_tag_text": "R1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3271,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "reference_caption": "H.D.",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3271,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38",
+      "reference_caption": "BUSINESS - B / LABORATORY, CLASSROOM, OFFICE",
+      "candidate_nearby_tag_text": "B120",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.285,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "reference_caption": "BUSINESS - B / LABORATORY, CLASSROOM, OFFICE",
+      "candidate_nearby_tag_text": "L2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.7238,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "reference_caption": "BUSINESS - B / LABORATORY, CLASSROOM, OFFICE",
+      "candidate_nearby_tag_text": "A201",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.8502,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "reference_caption": "100' w/ SPRINKLERS (TABLE 1006.2.1)",
+      "candidate_nearby_tag_text": "L2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5032,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "reference_caption": "100' w/ SPRINKLERS (TABLE 1006.2.1)",
+      "candidate_nearby_tag_text": "A6",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5809,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "reference_caption": "100' w/ SPRINKLERS (TABLE 1006.2.1)",
+      "candidate_nearby_tag_text": "A201",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.6328,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "reference_caption": "AREAS WITH NO ARCHITECTURAL SCOPE",
+      "candidate_nearby_tag_text": "A201",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1291,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "reference_caption": "AREAS WITH NO ARCHITECTURAL SCOPE",
+      "candidate_nearby_tag_text": "A6",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2011,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "reference_caption": "AREAS WITH NO ARCHITECTURAL SCOPE",
+      "candidate_nearby_tag_text": "L2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2358,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "reference_caption": "INTERIOR ELEVATION / PHOTO TAG",
+      "candidate_nearby_tag_text": "L2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3661,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    }
+  ]
+}

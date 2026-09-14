@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_003",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18",
+      "reference_caption": "Total Est. Demand: 0.45 kVA",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5",
+      "reference_caption": "Total Est. Demand: 0.45 kVA",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_13_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_41",
+      "reference_caption": "AREA OF MODIFICATION WORK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_13_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_41/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_13_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_41/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_13_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_41/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_13_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_42",
+      "reference_caption": "AREA OF MODIFICATION WORK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_13_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_42/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_13_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_42/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_13_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_42/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22",
+      "reference_caption": "FIRE ALARM HEAT DETECTOR",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18",
+      "reference_caption": "FIRE ALARM HEAT DETECTOR",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5",
+      "reference_caption": "FIRE ALARM HEAT DETECTOR",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_27_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63",
+      "reference_caption": "673-20-107. 0. 0-TN700. 11/13/23.pdf",
+      "candidate_nearby_tag_text": "SD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4",
+      "reference_caption": "673-20-107. 0. 0-TN700. 11/13/23.pdf",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5",
+      "reference_caption": "673-20-107. 0. 0-TN700. 11/13/23.pdf",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63",
+      "reference_caption": "1-1/2\"=1'-0\"",
+      "candidate_nearby_tag_text": "SD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5",
+      "reference_caption": "1-1/2\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7",
+      "reference_caption": "1-1/2\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63",
+      "reference_caption": "3/4\"=1'-0\"",
+      "candidate_nearby_tag_text": "SD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6",
+      "reference_caption": "3/4\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7",
+      "reference_caption": "3/4\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63",
+      "reference_caption": "1/4\"=1'-0\"",
+      "candidate_nearby_tag_text": "SD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5",
+      "reference_caption": "1/4\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6",
+      "reference_caption": "1/4\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_7_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63",
+      "reference_caption": "1/2\"=1'-0\"",
+      "candidate_nearby_tag_text": "SD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_166",
+      "reference_caption": "1/2\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_166/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_166/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_166/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4",
+      "reference_caption": "1/2\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_3_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_67",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_67/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_67/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_67/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_67",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_67/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_67/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_67/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63",
+      "reference_caption": "U.S. Department",
+      "candidate_nearby_tag_text": "SD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_1_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": "SD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_8_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63",
+      "reference_caption": "3/8\"=1'-0\"",
+      "candidate_nearby_tag_text": "SD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_171",
+      "reference_caption": "3/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_171/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_171/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_171/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9",
+      "reference_caption": "3/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_10_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_9/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4",
+      "reference_caption": "1\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4",
+      "reference_caption": "1\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63",
+      "reference_caption": "1\"=1'-0\"",
+      "candidate_nearby_tag_text": "SD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_8_5_cand_bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure_6_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32",
+      "reference_caption": "PRECAST/PRESTRESSED CONCRETE INSTITUTE",
+      "candidate_nearby_tag_text": "M-001",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58",
+      "reference_caption": "PRECAST/PRESTRESSED CONCRETE INSTITUTE",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19",
+      "reference_caption": "PRECAST/PRESTRESSED CONCRETE INSTITUTE",
+      "candidate_nearby_tag_text": "S-514",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_0_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_16_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32",
+      "reference_caption": "COMMISSIONING CAN TAKE PLACE",
+      "candidate_nearby_tag_text": "M-001",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_16_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_16_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_16_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_16_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32",
+      "reference_caption": "COMMISSIONING CAN TAKE PLACE",
+      "candidate_nearby_tag_text": "M-001",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_16_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_16_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_16_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_37_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_38",
+      "reference_caption": "COMMISSIONING CAN TAKE PLACE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_37_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_38/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_37_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_38/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_37_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_38/context.png"
+    }
+  ]
+}

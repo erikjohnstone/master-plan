@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_012",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_34_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79",
+      "reference_caption": "TYPE M.1",
+      "candidate_nearby_tag_text": "T1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_34_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_34_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_34_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79",
+      "reference_caption": "IN-04.01",
+      "candidate_nearby_tag_text": "T1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80",
+      "reference_caption": "IN-04.01",
+      "candidate_nearby_tag_text": "T2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_80/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81",
+      "reference_caption": "IN-04.01",
+      "candidate_nearby_tag_text": "T2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_21_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_81/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "7 1/2\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "7 1/2\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79",
+      "reference_caption": "7 1/2\"",
+      "candidate_nearby_tag_text": "T1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_11_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "7 1/2\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7",
+      "reference_caption": "7 1/2\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_0_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79",
+      "reference_caption": "7 1/2\"",
+      "candidate_nearby_tag_text": "T1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_4_10_cand_bulk_vol2:016_NY_Alter_Repair_Building_1624_Irish_Hill_Test_2_79/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_60",
+      "reference_caption": "MTRACON - MECHANICAL DUCT ROOF PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_60/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_60/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_60/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_60",
+      "reference_caption": "MTRACON - MECHANICAL DUCT ROOF PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_60/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_60/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_60/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86",
+      "reference_caption": "M27 (TYP)",
+      "candidate_nearby_tag_text": "M-509",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_0_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109",
+      "reference_caption": "MTRACON - MECHANICAL DUCT ROOF PLAN",
+      "candidate_nearby_tag_text": "B1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123",
+      "reference_caption": "MTRACON - MECHANICAL DUCT ROOF PLAN",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90",
+      "reference_caption": "MTRACON - MECHANICAL DUCT ROOF PLAN",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_20_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86",
+      "reference_caption": "ABBREVIATIONS AND NOTES.",
+      "candidate_nearby_tag_text": "M-509",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90",
+      "reference_caption": "ABBREVIATIONS AND NOTES.",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_91",
+      "reference_caption": "ABBREVIATIONS AND NOTES.",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_91/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_91/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_91/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123",
+      "reference_caption": "1305 EXECUTIVE BLVD.",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109",
+      "reference_caption": "1305 EXECUTIVE BLVD.",
+      "candidate_nearby_tag_text": "B1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90",
+      "reference_caption": "1305 EXECUTIVE BLVD.",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109",
+      "reference_caption": "FOR COMMANDER NAVFAC",
+      "candidate_nearby_tag_text": "B1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123",
+      "reference_caption": "FOR COMMANDER NAVFAC",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90",
+      "reference_caption": "FOR COMMANDER NAVFAC",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_5_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109",
+      "reference_caption": "FOR COMMANDER NAVFAC",
+      "candidate_nearby_tag_text": "B1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_109/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123",
+      "reference_caption": "FOR COMMANDER NAVFAC",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90",
+      "reference_caption": "FOR COMMANDER NAVFAC",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_21_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_112",
+      "reference_caption": "1305 EXECUTIVE BLVD.",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_112/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_112/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_112/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_112",
+      "reference_caption": "1305 EXECUTIVE BLVD.",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_112/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_112/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_112/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123",
+      "reference_caption": "1305 EXECUTIVE BLVD.",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_23_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_123/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90",
+      "reference_caption": "PRESSURE (IN WG)",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_90/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_91",
+      "reference_caption": "PRESSURE (IN WG)",
+      "candidate_nearby_tag_text": "M-501",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_91/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_91/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_91/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86",
+      "reference_caption": "PRESSURE (IN WG)",
+      "candidate_nearby_tag_text": "M-509",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_48_11_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27",
+      "reference_caption": "CHIEF ENG/ARCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27",
+      "reference_caption": "CHIEF ENG/ARCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86",
+      "reference_caption": "CHIEF ENG/ARCH",
+      "candidate_nearby_tag_text": "M-509",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_60_1_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27",
+      "reference_caption": "CHIEF ENG/ARCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27",
+      "reference_caption": "CHIEF ENG/ARCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_0_27/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86",
+      "reference_caption": "CHIEF ENG/ARCH",
+      "candidate_nearby_tag_text": "M-509",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_12_2_cand_bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations_72_86/context.png"
+    }
+  ]
+}

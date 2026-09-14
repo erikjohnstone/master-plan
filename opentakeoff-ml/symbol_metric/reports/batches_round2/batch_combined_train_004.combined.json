@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_004",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_37_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_38",
+      "reference_caption": "COMMISSIONING CAN TAKE PLACE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_37_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_38/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_37_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_38/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_37_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_38/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_30_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_49",
+      "reference_caption": "FREEZESTAT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_30_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_49/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_30_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_49/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_30_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_49/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_30_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_49",
+      "reference_caption": "FREEZESTAT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_30_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_49/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_30_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_49/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_30_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_49/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_36_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_40_11",
+      "reference_caption": "FREEZESTAT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_36_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_40_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_36_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_40_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_36_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_40_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_36_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_40_11",
+      "reference_caption": "FREEZESTAT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_36_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_40_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_36_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_40_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_36_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_40_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_17_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_25",
+      "reference_caption": "FLOW SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_17_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_17_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_24_17_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_16_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_41",
+      "reference_caption": "SECTION #",
+      "candidate_nearby_tag_text": "E3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_41/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_41/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_41/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19",
+      "reference_caption": "SECTION #",
+      "candidate_nearby_tag_text": "S-514",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58",
+      "reference_caption": "SECTION #",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_15_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32",
+      "reference_caption": "WALL TAG",
+      "candidate_nearby_tag_text": "M-001",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58",
+      "reference_caption": "WALL TAG",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19",
+      "reference_caption": "WALL TAG",
+      "candidate_nearby_tag_text": "S-514",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_5_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_41",
+      "reference_caption": "NCMA",
+      "candidate_nearby_tag_text": "E3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_41/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_41/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_41/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19",
+      "reference_caption": "NCMA",
+      "candidate_nearby_tag_text": "S-514",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58",
+      "reference_caption": "NCMA",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_14_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32",
+      "reference_caption": "OSHA",
+      "candidate_nearby_tag_text": "M-001",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_0_32/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58",
+      "reference_caption": "OSHA",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_78_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19",
+      "reference_caption": "OSHA",
+      "candidate_nearby_tag_text": "S-514",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_39_4_cand_bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project_52_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_0_22",
+      "reference_caption": "ADJACENT AREAS REGARDING HIGH-NOISE ACTIVITIES OR ACTIVITIES",
+      "candidate_nearby_tag_text": "A121",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_60_37",
+      "reference_caption": "ADJACENT AREAS REGARDING HIGH-NOISE ACTIVITIES OR ACTIVITIES",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_60_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_60_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_60_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_10_33",
+      "reference_caption": "ADJACENT AREAS REGARDING HIGH-NOISE ACTIVITIES OR ACTIVITIES",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_10_33/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_10_33/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_34_cand_raw:baker-county-eoc-bidset_10_33/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_0_22",
+      "reference_caption": "D. WHEN APPLICABLE, COORDINATE DEMOLITION SCHEDULE AND TIMES",
+      "candidate_nearby_tag_text": "A121",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_60_37",
+      "reference_caption": "D. WHEN APPLICABLE, COORDINATE DEMOLITION SCHEDULE AND TIMES",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_60_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_60_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_60_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_10_25",
+      "reference_caption": "D. WHEN APPLICABLE, COORDINATE DEMOLITION SCHEDULE AND TIMES",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_10_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_10_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_24_cand_raw:baker-county-eoc-bidset_10_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_0_22",
+      "reference_caption": "E. REFERENCE SPECIFICATIONS SECTIONS FOR CUTTING, PATCHING,",
+      "candidate_nearby_tag_text": "A121",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_60_37",
+      "reference_caption": "E. REFERENCE SPECIFICATIONS SECTIONS FOR CUTTING, PATCHING,",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_60_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_60_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_60_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_10_28",
+      "reference_caption": "E. REFERENCE SPECIFICATIONS SECTIONS FOR CUTTING, PATCHING,",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_10_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_10_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_27_cand_raw:baker-county-eoc-bidset_10_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_0_22",
+      "reference_caption": "H. COORDINATE REMOVAL /RELOCATION OF FURNITURE AND EXISTING",
+      "candidate_nearby_tag_text": "A121",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_60_37",
+      "reference_caption": "H. COORDINATE REMOVAL /RELOCATION OF FURNITURE AND EXISTING",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_60_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_60_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_60_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_10_37",
+      "reference_caption": "H. COORDINATE REMOVAL /RELOCATION OF FURNITURE AND EXISTING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_10_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_10_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_38_cand_raw:baker-county-eoc-bidset_10_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_0_22",
+      "reference_caption": "C. COORDINATE DEMOLITION SCOPE OF WORK WITH REQUIREMENTS",
+      "candidate_nearby_tag_text": "A121",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_60_37",
+      "reference_caption": "C. COORDINATE DEMOLITION SCOPE OF WORK WITH REQUIREMENTS",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_60_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_60_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_60_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_10_29",
+      "reference_caption": "C. COORDINATE DEMOLITION SCOPE OF WORK WITH REQUIREMENTS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_10_29/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_10_29/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_28_cand_raw:baker-county-eoc-bidset_10_29/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_0_22",
+      "reference_caption": "DEMOLITION PROCESS TO ENSURE COMPLIANCE WITH ALL SAFETY",
+      "candidate_nearby_tag_text": "A121",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_60_37",
+      "reference_caption": "DEMOLITION PROCESS TO ENSURE COMPLIANCE WITH ALL SAFETY",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_60_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_60_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_60_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_10_34",
+      "reference_caption": "DEMOLITION PROCESS TO ENSURE COMPLIANCE WITH ALL SAFETY",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_10_34/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_10_34/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_33_cand_raw:baker-county-eoc-bidset_10_34/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_0_22",
+      "reference_caption": "ENCOUNTERED, HALT WORK AND NOTIFY ARCHITECT IMMEDIATELY",
+      "candidate_nearby_tag_text": "A121",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_60_37",
+      "reference_caption": "ENCOUNTERED, HALT WORK AND NOTIFY ARCHITECT IMMEDIATELY",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_60_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_60_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_60_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_0_26",
+      "reference_caption": "ENCOUNTERED, HALT WORK AND NOTIFY ARCHITECT IMMEDIATELY",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_0_26/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_0_26/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_39_cand_raw:baker-county-eoc-bidset_0_26/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_0_22",
+      "reference_caption": "EQUIPMENT AND PERSONNEL DURING DEMOLITION. CONTRACTOR",
+      "candidate_nearby_tag_text": "A121",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_0_22/context.png"
+    }
+  ]
+}

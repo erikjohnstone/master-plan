@@ -1,0 +1,207 @@
+{
+  "batch_id": "batch_test_002",
+  "pass": "visual",
+  "instructions": "PASS B -- VISUAL IDENTITY ONLY. You are given two small cropped images per pair, 'symbol_left' and 'symbol_right' -- you do NOT know which is the trusted legend reference and which is the plan-page candidate, and you have no caption or tag text. Compare ONLY visual/shape identity: same enclosure shape, same internal strokes/ports, same count of connection points, allowing for line-weight, DPI, and minor clipping differences. 'positive' = same physical symbol type. 'negative' = clearly a different symbol/shape/or one image is text/blank/a line fragment, not a device body at all. 'ambiguous' = genuinely too small/degraded to tell. Set directional:true if the shape has an inherent left-right or rotational asymmetry that would change meaning if mirrored/rotated (an arrow, a check-valve body, an actuator with a directional marking). Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_9",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_9/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_9/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_10",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_10/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_10/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_11",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_11/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_11/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_12",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_12/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_12/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_1",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_1/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_1/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_1",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_1/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_1/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_0",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_0/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_0/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_0",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_0/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_0/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_0",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_0/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_0/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_52",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_52/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_52/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_40",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_40/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_40/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_41",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_41/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_41/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_3",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_3/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_3/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_17",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_17/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_17/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4/candidate_300.png"
+    }
+  ]
+}

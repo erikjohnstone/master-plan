@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_010",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_11_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_56_124",
+      "reference_caption": "CODE ANALYSIS - SOUTH ATTIC",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_11_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_56_124/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_11_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_56_124/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_11_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_56_124/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_4",
+      "reference_caption": "AUTO FIRE SPRINKLER RISER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_6",
+      "reference_caption": "AUTO FIRE SPRINKLER RISER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_3",
+      "reference_caption": "AUTO FIRE SPRINKLER RISER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_5_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_27",
+      "reference_caption": "NORMALLY OPEN OR NUMBER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_27/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_27/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_27/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_26",
+      "reference_caption": "NORMALLY OPEN OR NUMBER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_26/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_26/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_26/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_25",
+      "reference_caption": "NORMALLY OPEN OR NUMBER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_28_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_8",
+      "reference_caption": "COLD WATER FIXTURE UNIT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_9",
+      "reference_caption": "COLD WATER FIXTURE UNIT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_9/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_9/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_9/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_6",
+      "reference_caption": "COLD WATER FIXTURE UNIT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_7_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_15",
+      "reference_caption": "CUBIC FEET PER MINUTE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_17",
+      "reference_caption": "CUBIC FEET PER MINUTE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_17/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_17/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_17/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_18",
+      "reference_caption": "CUBIC FEET PER MINUTE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_16_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_14_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_42_211",
+      "reference_caption": "6\" INTERIOR STUD WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_14_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_42_211/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_14_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_42_211/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_14_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_42_211/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_14_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_42_211",
+      "reference_caption": "6\" INTERIOR STUD WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_14_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_42_211/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_14_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_42_211/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_14_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_42_211/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_6_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_7",
+      "reference_caption": "BASEMENT LOWER LEVEL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_6_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_6_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_6_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_6_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_7",
+      "reference_caption": "BASEMENT LOWER LEVEL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_6_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_7/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_6_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_7/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_6_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_7/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_18_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_19",
+      "reference_caption": "BASEMENT LOWER LEVEL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_18_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_18_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_18_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_18_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_19",
+      "reference_caption": "BASEMENT LOWER LEVEL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_18_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_18_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_18_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_49_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_36",
+      "reference_caption": "FLEXIBLE CONNECTION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_36/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_36/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_36/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_57",
+      "reference_caption": "FLEXIBLE CONNECTION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_57/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_57/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_57/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_58",
+      "reference_caption": "FLEXIBLE CONNECTION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_37_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_60",
+      "reference_caption": "BUILDING OFFICIALS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_60/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_60/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_78_60/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_0_2",
+      "reference_caption": "BUILDING OFFICIALS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_0_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_0_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_0_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_0_1",
+      "reference_caption": "BUILDING OFFICIALS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_0_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_0_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_104_47_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_0_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48",
+      "reference_caption": "INTERIOR FINISH TO MATCH EXISTING",
+      "candidate_nearby_tag_text": "D000",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_0",
+      "reference_caption": "INTERIOR FINISH TO MATCH EXISTING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_1",
+      "reference_caption": "INTERIOR FINISH TO MATCH EXISTING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_5_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48",
+      "reference_caption": "INTERIOR FINISH TO MATCH EXISTING",
+      "candidate_nearby_tag_text": "D000",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_25",
+      "reference_caption": "INTERIOR FINISH TO MATCH EXISTING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_13_12",
+      "reference_caption": "INTERIOR FINISH TO MATCH EXISTING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_13_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_13_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_28_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_13_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_75_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_15",
+      "reference_caption": "VISTA UNIFIED SCHOOL DISTRICT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_75_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_75_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_75_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_75_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_15",
+      "reference_caption": "VISTA UNIFIED SCHOOL DISTRICT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_75_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_75_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_75_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_65_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_4",
+      "reference_caption": "VISTA UNIFIED SCHOOL DISTRICT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_65_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_65_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_65_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_65_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_4",
+      "reference_caption": "VISTA UNIFIED SCHOOL DISTRICT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_65_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_65_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_9_65_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_11_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48",
+      "reference_caption": "WISEMAN AND ROHY STRUCTURAL",
+      "candidate_nearby_tag_text": "D000",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_87",
+      "reference_caption": "WISEMAN AND ROHY STRUCTURAL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_87/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_87/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_87/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_3_50",
+      "reference_caption": "WISEMAN AND ROHY STRUCTURAL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_3_50/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_3_50/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_0_8_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_3_50/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48",
+      "reference_caption": "www.alphastudio-design.com",
+      "candidate_nearby_tag_text": "D000",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_73",
+      "reference_caption": "www.alphastudio-design.com",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_73/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_73/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:19_CA_VistaUSD_DataCenter_7_56_cand_bulk_vol1:19_CA_VistaUSD_DataCenter_2_73/context.png"
+    }
+  ]
+}

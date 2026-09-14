@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_dev_004",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34",
+      "reference_caption": "(CAST IN PLACE OR PRECAST)",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34",
+      "reference_caption": "(CAST IN PLACE OR PRECAST)",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32",
+      "reference_caption": "(CAST IN PLACE OR PRECAST)",
+      "candidate_nearby_tag_text": "R3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_31",
+      "reference_caption": "(CAST IN PLACE OR PRECAST)",
+      "candidate_nearby_tag_text": "R5",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_31/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_31/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_14_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_31/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_9_32",
+      "reference_caption": "WALL / PARTITION TYPE TAG",
+      "candidate_nearby_tag_text": "H1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_9_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_9_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_9_32/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34",
+      "reference_caption": "WALL / PARTITION TYPE TAG",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_34/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32",
+      "reference_caption": "WALL / PARTITION TYPE TAG",
+      "candidate_nearby_tag_text": "R3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_19_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21",
+      "reference_caption": "WALL / PARTITION TYPE TAG",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22",
+      "reference_caption": "WALL / PARTITION TYPE TAG",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251",
+      "reference_caption": "WALL / PARTITION TYPE TAG",
+      "candidate_nearby_tag_text": "(V-3)",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_46_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "(V-3)",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_43_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_19_49",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "(T-1)",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_19_49/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_19_49/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_19_49/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_19_50",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "(T-2)",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_19_50/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_19_50/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_19_50/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_198",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_198/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_198/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_31_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_198/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "(V-3)",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_41_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251",
+      "reference_caption": "BUILDING CODE NOTE:",
+      "candidate_nearby_tag_text": "(V-3)",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_42_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21",
+      "reference_caption": "SHEET (TYP.)",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22",
+      "reference_caption": "SHEET (TYP.)",
+      "candidate_nearby_tag_text": "D1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_26_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251",
+      "reference_caption": "SHEET (TYP.)",
+      "candidate_nearby_tag_text": "(V-3)",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_34_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_251/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_196",
+      "reference_caption": "WALL SECTION",
+      "candidate_nearby_tag_text": "AS-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_196/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_196/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_196/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_9_32",
+      "reference_caption": "WALL SECTION",
+      "candidate_nearby_tag_text": "H1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_9_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_9_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_9_32/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_198",
+      "reference_caption": "WALL SECTION",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_198/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_198/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_23_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_18_198/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2",
+      "reference_caption": "AD07 ROOFING DEMO: TO EXTENT NECESSARY TO",
+      "candidate_nearby_tag_text": "AD11",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68",
+      "reference_caption": "AD07 ROOFING DEMO: TO EXTENT NECESSARY TO",
+      "candidate_nearby_tag_text": "TTE-13",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71",
+      "reference_caption": "AD07 ROOFING DEMO: TO EXTENT NECESSARY TO",
+      "candidate_nearby_tag_text": "TTE-15",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_5_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68",
+      "reference_caption": "AD11",
+      "candidate_nearby_tag_text": "TTE-13",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71",
+      "reference_caption": "AD11",
+      "candidate_nearby_tag_text": "TTE-15",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_49",
+      "reference_caption": "AD11",
+      "candidate_nearby_tag_text": "RF-4",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_49/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_49/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_49/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71",
+      "reference_caption": "16'",
+      "candidate_nearby_tag_text": "TTE-15",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68",
+      "reference_caption": "16'",
+      "candidate_nearby_tag_text": "TTE-13",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2",
+      "reference_caption": "16'",
+      "candidate_nearby_tag_text": "AD11",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_20_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71",
+      "reference_caption": "16'",
+      "candidate_nearby_tag_text": "TTE-15",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_71/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68",
+      "reference_caption": "16'",
+      "candidate_nearby_tag_text": "TTE-13",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_55_68/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2",
+      "reference_caption": "16'",
+      "candidate_nearby_tag_text": "AD11",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_13_cand_bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building_11_2/context.png"
+    }
+  ]
+}

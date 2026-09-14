@@ -1,0 +1,327 @@
+{
+  "batch_id": "batch_test_003",
+  "pass": "structural",
+  "instructions": "PASS A -- STRUCTURAL EVIDENCE ONLY. For each pair, judge only whether candidate_nearby_tag_text is a real authored tag/leader that identifies this specific candidate as the device the reference row names. A caption+tag word overlap is weak evidence; an exact/near-exact equipment tag next to the candidate is strong evidence (set strong_evidence:true only then). If there is no tag nearby, verdict should usually be 'ambiguous' (structural evidence alone can't decide) rather than a guess -- Pass B/C carry the rest of the decision. Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "PLUMBING DEMOLITION PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4528,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "PLUMBING DEMOLITION PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5767,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_8_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "PLUMBING DEMOLITION PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.2438,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "GENERAL NOTES, LEGENDS, ROOM FINISH",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2431,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "GENERAL NOTES, LEGENDS, ROOM FINISH",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3408,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_20_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "GENERAL NOTES, LEGENDS, ROOM FINISH",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.5763,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "INTERIOR FINISH PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4813,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "INTERIOR FINISH PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.6438,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_4_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "INTERIOR FINISH PLAN - FIRST FLOOR",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.1691,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5072,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.6939,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_3_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.1145,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "GENERAL NOTES AND TYPICAL DETAILS",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2424,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "GENERAL NOTES AND TYPICAL DETAILS",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4341,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_22_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "GENERAL NOTES AND TYPICAL DETAILS",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.6366,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "09 21 16 - MTL STUD (DOUBLE)",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.6102,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "09 21 16 - MTL STUD (DOUBLE)",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.9488,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_40_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "09 21 16 - MTL STUD (DOUBLE)",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.9613,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "08 80 00 - ONE-WAY GLASS",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.7283,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "08 80 00 - ONE-WAY GLASS",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.8036,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_35_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "08 80 00 - ONE-WAY GLASS",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.0537,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "GROUND FLOOR PLAN - DEMO",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2071,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "GROUND FLOOR PLAN - DEMO",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5664,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_0_33_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "GROUND FLOOR PLAN - DEMO",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.8592,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "PARTITION AS SCHEDULED",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4706,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "PARTITION AS SCHEDULED",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.0673,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_19_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "PARTITION AS SCHEDULED",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.3317,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_70",
+      "reference_caption": "S-1 AT NON-RATED DOORS",
+      "candidate_nearby_tag_text": "G01G",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1203,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_64",
+      "reference_caption": "S-1 AT NON-RATED DOORS",
+      "candidate_nearby_tag_text": "G01C",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3542,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_67_cand_bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center_9_0",
+      "reference_caption": "S-1 AT NON-RATED DOORS",
+      "candidate_nearby_tag_text": "S-4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.6931,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.1777,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.3086,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_45_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.592,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "RESPONSIBILITY OF PROVIDING ALL DEMOLITION REQUIRED FOR THE",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5852,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "RESPONSIBILITY OF PROVIDING ALL DEMOLITION REQUIRED FOR THE",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.7127,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "RESPONSIBILITY OF PROVIDING ALL DEMOLITION REQUIRED FOR THE",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.999,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1113,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.176,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_7_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3066,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1112,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    }
+  ]
+}

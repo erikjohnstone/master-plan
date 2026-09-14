@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_dev_002",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56",
+      "reference_caption": "EAST ENTRY LIGHTING PLAN",
+      "candidate_nearby_tag_text": "W3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40",
+      "reference_caption": "EAST ENTRY LIGHTING PLAN",
+      "candidate_nearby_tag_text": "ACT-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62",
+      "reference_caption": "EAST ENTRY LIGHTING PLAN",
+      "candidate_nearby_tag_text": "W3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_73_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_69",
+      "reference_caption": "FIRE ALARM ANNUNCIATOR",
+      "candidate_nearby_tag_text": "W3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_69/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_69/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_69/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_249",
+      "reference_caption": "FIRE ALARM ANNUNCIATOR",
+      "candidate_nearby_tag_text": "A203",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_249/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_249/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_249/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_229",
+      "reference_caption": "FIRE ALARM ANNUNCIATOR",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_229/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_229/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_94_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_229/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_12_72",
+      "reference_caption": "FIRE ALARM ANNUNCIATOR",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_12_72/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_12_72/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_12_72/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_12_72",
+      "reference_caption": "FIRE ALARM ANNUNCIATOR",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_12_72/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_12_72/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_12_72/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_229",
+      "reference_caption": "FIRE ALARM ANNUNCIATOR",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_229/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_229/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_80_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_229/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_60",
+      "reference_caption": "EMERGENCY LIGHTING FIXTURE ( INDICATES BRACKET, WALL MOUNTED",
+      "candidate_nearby_tag_text": "AI2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_60/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_60/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_60/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_61",
+      "reference_caption": "EMERGENCY LIGHTING FIXTURE ( INDICATES BRACKET, WALL MOUNTED",
+      "candidate_nearby_tag_text": "CWP-2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_61/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_61/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_61/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_52",
+      "reference_caption": "EMERGENCY LIGHTING FIXTURE ( INDICATES BRACKET, WALL MOUNTED",
+      "candidate_nearby_tag_text": "AI3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_52/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_52/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_43_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_52/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_46",
+      "reference_caption": "POINT OF CONNECTION, NEW-TO-EXISTING (SEE LEGEND NOTE 3)",
+      "candidate_nearby_tag_text": "AI8",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_46/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_46/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_46/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_9",
+      "reference_caption": "POINT OF CONNECTION, NEW-TO-EXISTING (SEE LEGEND NOTE 3)",
+      "candidate_nearby_tag_text": "AI4",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_9/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_9/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_9/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_36",
+      "reference_caption": "POINT OF CONNECTION, NEW-TO-EXISTING (SEE LEGEND NOTE 3)",
+      "candidate_nearby_tag_text": "AO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_36/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_36/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_22_41_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_36/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_45",
+      "reference_caption": "CONTROLS), WITH THE MAIN CONTROLLER LOCATED IN THE",
+      "candidate_nearby_tag_text": "AI6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_45/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_45/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_45/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_46",
+      "reference_caption": "CONTROLS), WITH THE MAIN CONTROLLER LOCATED IN THE",
+      "candidate_nearby_tag_text": "AI2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_46/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_46/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_46/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_48",
+      "reference_caption": "CONTROLS), WITH THE MAIN CONTROLLER LOCATED IN THE",
+      "candidate_nearby_tag_text": "AI1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_36_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_12_182",
+      "reference_caption": "U.S. DEPARTMENT OF AGRICULTURE- ANIMAL AND",
+      "candidate_nearby_tag_text": "A6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_12_182/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_12_182/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_12_182/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_48",
+      "reference_caption": "U.S. DEPARTMENT OF AGRICULTURE- ANIMAL AND",
+      "candidate_nearby_tag_text": "AI1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_45",
+      "reference_caption": "U.S. DEPARTMENT OF AGRICULTURE- ANIMAL AND",
+      "candidate_nearby_tag_text": "AI6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_45/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_45/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_0_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_45/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2",
+      "reference_caption": "TEMPERATURE SENSOR - SINGLE POINT PROBE",
+      "candidate_nearby_tag_text": "AI5",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_19",
+      "reference_caption": "TEMPERATURE SENSOR - SINGLE POINT PROBE",
+      "candidate_nearby_tag_text": "AI6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11",
+      "reference_caption": "TEMPERATURE SENSOR - SINGLE POINT PROBE",
+      "candidate_nearby_tag_text": "AI2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_18_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11",
+      "reference_caption": "TEMPERATURE SENSOR WITH THERMOWELL",
+      "candidate_nearby_tag_text": "AI2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2",
+      "reference_caption": "TEMPERATURE SENSOR WITH THERMOWELL",
+      "candidate_nearby_tag_text": "AI5",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_19",
+      "reference_caption": "TEMPERATURE SENSOR WITH THERMOWELL",
+      "candidate_nearby_tag_text": "AI6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_13_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34",
+      "reference_caption": "TEMPERATURE SENSOR WITH THERMOWELL",
+      "candidate_nearby_tag_text": "A1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6",
+      "reference_caption": "TEMPERATURE SENSOR WITH THERMOWELL",
+      "candidate_nearby_tag_text": "BI3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11",
+      "reference_caption": "TEMPERATURE SENSOR WITH THERMOWELL",
+      "candidate_nearby_tag_text": "AI2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_6_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_20",
+      "reference_caption": "MOTORIZED DAMPER - PARALLEL BLADE",
+      "candidate_nearby_tag_text": "AO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11",
+      "reference_caption": "MOTORIZED DAMPER - PARALLEL BLADE",
+      "candidate_nearby_tag_text": "AI2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2",
+      "reference_caption": "MOTORIZED DAMPER - PARALLEL BLADE",
+      "candidate_nearby_tag_text": "AI5",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_9_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_21_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6",
+      "reference_caption": "MOTORIZED DAMPER - PARALLEL BLADE",
+      "candidate_nearby_tag_text": "BI3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34",
+      "reference_caption": "MOTORIZED DAMPER - PARALLEL BLADE",
+      "candidate_nearby_tag_text": "A1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11",
+      "reference_caption": "MOTORIZED DAMPER - PARALLEL BLADE",
+      "candidate_nearby_tag_text": "AI2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_3_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6",
+      "reference_caption": "MOTORIZED DAMPER - PARALLEL BLADE",
+      "candidate_nearby_tag_text": "BI3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_19_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34",
+      "reference_caption": "MOTORIZED DAMPER - PARALLEL BLADE",
+      "candidate_nearby_tag_text": "A1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_1_34/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11",
+      "reference_caption": "MOTORIZED DAMPER - PARALLEL BLADE",
+      "candidate_nearby_tag_text": "AI2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_4_cand_bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building_18_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142",
+      "reference_caption": "Notes: 1-PROVIDE GEFP TYPE CIRCUIT BREAKER (30mA TRIP)",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142/context.png"
+    }
+  ]
+}

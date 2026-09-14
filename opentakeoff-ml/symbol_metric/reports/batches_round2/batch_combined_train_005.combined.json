@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_005",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_60_37",
+      "reference_caption": "EQUIPMENT AND PERSONNEL DURING DEMOLITION. CONTRACTOR",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_60_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_60_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_60_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_10_31",
+      "reference_caption": "EQUIPMENT AND PERSONNEL DURING DEMOLITION. CONTRACTOR",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_10_31/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_10_31/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_10_32_cand_raw:baker-county-eoc-bidset_10_31/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_60_37",
+      "reference_caption": "2021 OREGON ENERGY EFFICIENCY SPECIALTY CODE",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_60_37/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_60_37/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_60_37/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_0_22",
+      "reference_caption": "2021 OREGON ENERGY EFFICIENCY SPECIALTY CODE",
+      "candidate_nearby_tag_text": "A121",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_10_17",
+      "reference_caption": "2021 OREGON ENERGY EFFICIENCY SPECIALTY CODE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_10_17/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_10_17/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_0_13_cand_raw:baker-county-eoc-bidset_10_17/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_36_145_cand_raw:baker-county-eoc-bidset_42_62",
+      "reference_caption": "3410 K STREET BAKER CITY, OR 97814",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_36_145_cand_raw:baker-county-eoc-bidset_42_62/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_36_145_cand_raw:baker-county-eoc-bidset_42_62/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_36_145_cand_raw:baker-county-eoc-bidset_42_62/context.png"
+    },
+    {
+      "pair_id": "pair_leg_raw:baker-county-eoc-bidset_36_145_cand_raw:baker-county-eoc-bidset_42_62",
+      "reference_caption": "3410 K STREET BAKER CITY, OR 97814",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_36_145_cand_raw:baker-county-eoc-bidset_42_62/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_36_145_cand_raw:baker-county-eoc-bidset_42_62/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_raw:baker-county-eoc-bidset_36_145_cand_raw:baker-county-eoc-bidset_42_62/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_12",
+      "reference_caption": "MECHANICAL ROOF PLAN - AREA B",
+      "candidate_nearby_tag_text": "F2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_13",
+      "reference_caption": "MECHANICAL ROOF PLAN - AREA B",
+      "candidate_nearby_tag_text": "F2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_13/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_13/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_13/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2",
+      "reference_caption": "MECHANICAL ROOF PLAN - AREA B",
+      "candidate_nearby_tag_text": "ACU-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_11_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1",
+      "reference_caption": "HEATER",
+      "candidate_nearby_tag_text": "M05",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1",
+      "reference_caption": "HEATER",
+      "candidate_nearby_tag_text": "M05",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1",
+      "reference_caption": "ACU-1",
+      "candidate_nearby_tag_text": "M05",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1",
+      "reference_caption": "ACU-1",
+      "candidate_nearby_tag_text": "M05",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_6",
+      "reference_caption": "ACU-1",
+      "candidate_nearby_tag_text": "F1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_7_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6",
+      "reference_caption": "ACU-3",
+      "candidate_nearby_tag_text": "ACU-6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_7_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_7_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_7_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_7_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6",
+      "reference_caption": "ACU-3",
+      "candidate_nearby_tag_text": "ACU-6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_7_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_7_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_7_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_14_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_15",
+      "reference_caption": "ACU-1",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_14_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_14_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_14_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_14_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_15",
+      "reference_caption": "ACU-1",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_14_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_14_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_14_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_8_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6",
+      "reference_caption": "ACU-2",
+      "candidate_nearby_tag_text": "ACU-6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_8_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_8_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_8_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_8_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6",
+      "reference_caption": "ACU-2",
+      "candidate_nearby_tag_text": "ACU-6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_8_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_8_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_8_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2",
+      "reference_caption": "UNIT",
+      "candidate_nearby_tag_text": "ACU-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_12",
+      "reference_caption": "UNIT",
+      "candidate_nearby_tag_text": "F2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_13",
+      "reference_caption": "UNIT",
+      "candidate_nearby_tag_text": "F2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_13/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_13/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_3_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_84_13/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0",
+      "reference_caption": "M05",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0",
+      "reference_caption": "M05",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_1_cand_bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition_70_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_44",
+      "reference_caption": "D. NATIONAL FIRE PROTECTION ASSOCIATION EDITIONS",
+      "candidate_nearby_tag_text": "FP500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_44/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_44/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_44/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_92",
+      "reference_caption": "D. NATIONAL FIRE PROTECTION ASSOCIATION EDITIONS",
+      "candidate_nearby_tag_text": "C256",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_92/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_92/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_92/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_86",
+      "reference_caption": "D. NATIONAL FIRE PROTECTION ASSOCIATION EDITIONS",
+      "candidate_nearby_tag_text": "C252",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_86/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_86/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_42_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_86/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_15",
+      "reference_caption": "C. OCCUPATIONAL SAFETY AND HEALTH ACT (OSHA)",
+      "candidate_nearby_tag_text": "FP101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_54",
+      "reference_caption": "C. OCCUPATIONAL SAFETY AND HEALTH ACT (OSHA)",
+      "candidate_nearby_tag_text": "PD101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_53",
+      "reference_caption": "C. OCCUPATIONAL SAFETY AND HEALTH ACT (OSHA)",
+      "candidate_nearby_tag_text": "PD105",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_53/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_53/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_22_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_53/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_19",
+      "reference_caption": "EXISTING TO BE REMOVED BY THIS CONTRACTOR",
+      "candidate_nearby_tag_text": "FP101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_76",
+      "reference_caption": "EXISTING TO BE REMOVED BY THIS CONTRACTOR",
+      "candidate_nearby_tag_text": "C211",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_76/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_76/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_76/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_86",
+      "reference_caption": "EXISTING TO BE REMOVED BY THIS CONTRACTOR",
+      "candidate_nearby_tag_text": "C252",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_86/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_86/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_17_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_86/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_44",
+      "reference_caption": "(DARK, DASHED LINE, DEMOLITION PLANS)",
+      "candidate_nearby_tag_text": "FP500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_44/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_44/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_44/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_15",
+      "reference_caption": "(DARK, DASHED LINE, DEMOLITION PLANS)",
+      "candidate_nearby_tag_text": "FP101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_19",
+      "reference_caption": "(DARK, DASHED LINE, DEMOLITION PLANS)",
+      "candidate_nearby_tag_text": "FP101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_34_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_31_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_69_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_49",
+      "reference_caption": "FIRE PROTECTION - LEVEL 1 - AREA A",
+      "candidate_nearby_tag_text": "C231",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_69_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_49/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_69_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_49/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_69_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_49/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_69_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_29",
+      "reference_caption": "FIRE PROTECTION - LEVEL 1 - AREA A",
+      "candidate_nearby_tag_text": "P103",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_69_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_29/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_69_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_29/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_32_69_cand_bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates_17_29/context.png"
+    }
+  ]
+}

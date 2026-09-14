@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_018",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1",
+      "reference_caption": "3041 W Ave. K, Lancaster Ca 93536",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_2",
+      "reference_caption": "3041 W Ave. K, Lancaster Ca 93536",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_9_2",
+      "reference_caption": "3041 W Ave. K, Lancaster Ca 93536",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_9_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_9_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_9_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_9_3",
+      "reference_caption": "3041 W Ave. K, Lancaster Ca 93536",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_9_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_9_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_1_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_9_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_11_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_11",
+      "reference_caption": "T 562.497.2999 F 562.497.2990",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_11_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_11_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_4_11_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_11_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_12",
+      "reference_caption": "T 562.497.2999 F 562.497.2990",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_11_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_11_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_11_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_5_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1",
+      "reference_caption": "Demolition Partial Floor Plan",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_5_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_5_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_5_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_7_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4",
+      "reference_caption": "Bid and Construction Issue",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_7_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_7_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_7_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_7_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1",
+      "reference_caption": "Bid and Construction Issue",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_7_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_7_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_8_7_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_1_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_5_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4",
+      "reference_caption": "Abbreviations and Sheet",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_5_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_5_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_5_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_10_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4",
+      "reference_caption": "#AVC2017/2018-3CUPCCAA",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_10_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_10_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_10_cand_bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math_2_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_14_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_23",
+      "reference_caption": "BY STANLEY, HAGER OR APPROVED HINGES:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_14_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_23/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_14_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_23/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_14_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_23/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_14_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_24",
+      "reference_caption": "BY STANLEY, HAGER OR APPROVED HINGES:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_14_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_24/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_14_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_24/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_14_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_24/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_27_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_25",
+      "reference_caption": "2. CONTRACTOR RESPONSIBLE TO NOTIFY",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_27_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_27_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_27_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_12_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_13",
+      "reference_caption": "EXISTING WALL ASSEMBLY",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_12_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_13/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_12_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_13/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_12_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_13/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_25_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_24",
+      "reference_caption": "INT. HM DR JAMB DTL 3",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_25_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_24/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_25_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_24/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_25_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_24/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_18_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_28",
+      "reference_caption": "FOR PERMIT & BIDDING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_18_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_18_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_18_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_2_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_18_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_8_11",
+      "reference_caption": "FOR PERMIT & BIDDING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_18_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_8_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_18_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_8_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_18_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_8_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_21_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_38",
+      "reference_caption": "THRESHOLD AT HM DR 4",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_21_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_38/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_21_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_38/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_21_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_38/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_0_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_35_49",
+      "reference_caption": "PERIMETER SEAL TYP.",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_0_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_35_49/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_0_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_35_49/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_0_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_35_49/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_9_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_27",
+      "reference_caption": "FLOORING PER PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_9_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_27/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_9_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_27/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_9_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_27/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_9_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_26",
+      "reference_caption": "FLOORING PER PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_9_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_26/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_9_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_26/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_9_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_26/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_19_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_21",
+      "reference_caption": "TRIM PER ELEV",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_19_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_19_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_19_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_15_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_19_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_36",
+      "reference_caption": "TRIM PER ELEV",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_19_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_36/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_19_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_36/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_14_19_cand_bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom_0_36/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19",
+      "reference_caption": "EXISTING CONDITIONS & DEMOLITION PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_10_59",
+      "reference_caption": "EXISTING CONDITIONS & DEMOLITION PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_10_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_10_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_10_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_20_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_22",
+      "reference_caption": "GREENVILLE, SOUTH CAROLINA 29601",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_20_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_20_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_20_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_21_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_22",
+      "reference_caption": "CAVINESS LAMBERT ENGINEERING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_21_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_21_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_21_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28",
+      "reference_caption": "HVAC, PLUMBING ENGINEER:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29",
+      "reference_caption": "HVAC, PLUMBING ENGINEER:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28",
+      "reference_caption": "CIVIL ENGINEER:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30",
+      "reference_caption": "CIVIL ENGINEER:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_0_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_1",
+      "reference_caption": "Architecture",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_0_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_0_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_0_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_4_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_5_8",
+      "reference_caption": "Architecture",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_4_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_5_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_4_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_5_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_4_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_5_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18",
+      "reference_caption": "Architecture",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_10_59",
+      "reference_caption": "Architecture",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_10_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_10_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_19_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_10_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29",
+      "reference_caption": "ARCHITECT:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_29/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30",
+      "reference_caption": "ARCHITECT:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_28_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_12_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_9_27",
+      "reference_caption": "CIVIL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_12_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_9_27/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_12_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_9_27/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_0_12_cand_bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition_9_27/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:094_FL_Orange_County_Regional_History_Center_HVAC_7_11_cand_bulk_vol2:094_FL_Orange_County_Regional_History_Center_HVAC_1_370",
+      "reference_caption": "Center History Regional County Orange",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:094_FL_Orange_County_Regional_History_Center_HVAC_7_11_cand_bulk_vol2:094_FL_Orange_County_Regional_History_Center_HVAC_1_370/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:094_FL_Orange_County_Regional_History_Center_HVAC_7_11_cand_bulk_vol2:094_FL_Orange_County_Regional_History_Center_HVAC_1_370/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:094_FL_Orange_County_Regional_History_Center_HVAC_7_11_cand_bulk_vol2:094_FL_Orange_County_Regional_History_Center_HVAC_1_370/context.png"
+    }
+  ]
+}

@@ -1,0 +1,327 @@
+{
+  "batch_id": "batch_test_001",
+  "pass": "structural",
+  "instructions": "PASS A -- STRUCTURAL EVIDENCE ONLY. For each pair, judge only whether candidate_nearby_tag_text is a real authored tag/leader that identifies this specific candidate as the device the reference row names. A caption+tag word overlap is weak evidence; an exact/near-exact equipment tag next to the candidate is strong evidence (set strong_evidence:true only then). If there is no tag nearby, verdict should usually be 'ambiguous' (structural evidence alone can't decide) rather than a guess -- Pass B/C carry the rest of the decision. Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "reference_caption": "INTERIOR ELEVATION / PHOTO TAG",
+      "candidate_nearby_tag_text": "A201",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4727,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38",
+      "reference_caption": "INTERIOR ELEVATION / PHOTO TAG",
+      "candidate_nearby_tag_text": "B120",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.6577,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "reference_caption": "RETURN OR EXHAUST AIR GRILLE",
+      "candidate_nearby_tag_text": "A201",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1804,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6",
+      "reference_caption": "RETURN OR EXHAUST AIR GRILLE",
+      "candidate_nearby_tag_text": "S1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2048,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "reference_caption": "RETURN OR EXHAUST AIR GRILLE",
+      "candidate_nearby_tag_text": "A6",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2432,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7",
+      "reference_caption": "CEILING MOUNTED EXIT SIGN",
+      "candidate_nearby_tag_text": "A501",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0827,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6",
+      "reference_caption": "CEILING MOUNTED EXIT SIGN",
+      "candidate_nearby_tag_text": "S1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2208,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_0",
+      "reference_caption": "CEILING MOUNTED EXIT SIGN",
+      "candidate_nearby_tag_text": "M-005",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4764,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6",
+      "reference_caption": "FIRE ALARM SMOKE DETECTOR",
+      "candidate_nearby_tag_text": "S1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1185,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7",
+      "reference_caption": "FIRE ALARM SMOKE DETECTOR",
+      "candidate_nearby_tag_text": "A501",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1352,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "reference_caption": "FIRE ALARM SMOKE DETECTOR",
+      "candidate_nearby_tag_text": "A6",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3955,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "reference_caption": "5. DIFFUSERS AND COVERS:",
+      "candidate_nearby_tag_text": "L2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4383,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "reference_caption": "5. DIFFUSERS AND COVERS:",
+      "candidate_nearby_tag_text": "A201",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5686,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38",
+      "reference_caption": "5. DIFFUSERS AND COVERS:",
+      "candidate_nearby_tag_text": "B120",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5702,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6",
+      "reference_caption": "FIRE ALARM HEAT DETECTOR",
+      "candidate_nearby_tag_text": "S1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1184,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7",
+      "reference_caption": "FIRE ALARM HEAT DETECTOR",
+      "candidate_nearby_tag_text": "A501",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1352,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "reference_caption": "FIRE ALARM HEAT DETECTOR",
+      "candidate_nearby_tag_text": "A6",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3955,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7",
+      "reference_caption": "CEILING HEIGHT ELEVATION",
+      "candidate_nearby_tag_text": "A501",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1983,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_0",
+      "reference_caption": "CEILING HEIGHT ELEVATION",
+      "candidate_nearby_tag_text": "M-005",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2886,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_0",
+      "reference_caption": "CEILING HEIGHT ELEVATION",
+      "candidate_nearby_tag_text": "R2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2886,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_2",
+      "reference_caption": "Telephone (509) 662-4781 Facsimilie (509) 663-3253",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_2",
+      "reference_caption": "Telephone (509) 662-4781 Facsimilie (509) 663-3253",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_2",
+      "reference_caption": "Telephone (509) 662-4781 Facsimilie (509) 663-3253",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_2",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0487,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_3",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0487,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0814,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.1271,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_1",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.1271,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.1271,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.1271,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_1",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.1271,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.1271,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_3",
+      "reference_caption": "2/15/24",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_3",
+      "reference_caption": "2/15/24",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_3",
+      "reference_caption": "2/15/24",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_20",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0273,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_21",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0273,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_17",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.048,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_10",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0161,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_8",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0184,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    }
+  ]
+}

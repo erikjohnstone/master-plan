@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_007",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_5_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_10_57",
+      "reference_caption": "1. CHILLED WATER",
+      "candidate_nearby_tag_text": "W2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_5_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_10_57/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_5_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_10_57/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_5_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_10_57/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_5_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_23_16",
+      "reference_caption": "1. CHILLED WATER",
+      "candidate_nearby_tag_text": "V-3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_5_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_23_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_5_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_23_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_5_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_23_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_48",
+      "reference_caption": "SWITCH / HUB",
+      "candidate_nearby_tag_text": "SS-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_48/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_48/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_48/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_52",
+      "reference_caption": "SWITCH / HUB",
+      "candidate_nearby_tag_text": "B-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_52/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_52/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_52/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_60",
+      "reference_caption": "SWITCH / HUB",
+      "candidate_nearby_tag_text": "HWP-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_60/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_60/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_17_15_cand_bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04_19_60/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_10_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_62",
+      "reference_caption": "Fulton, MO 65251",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_10_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_62/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_10_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_62/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_10_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_62/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_10_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_62",
+      "reference_caption": "Fulton, MO 65251",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_10_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_62/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_10_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_62/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_10_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_62/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54",
+      "reference_caption": "ROOF POWER PLAN",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_42",
+      "reference_caption": "ROOF POWER PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_42/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_42/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_42/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_43",
+      "reference_caption": "ROOF POWER PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_43/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_43/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_1_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_43/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12",
+      "reference_caption": "PE-2019017814",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12",
+      "reference_caption": "PE-2019017814",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54",
+      "reference_caption": "PE-2019017814",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12",
+      "reference_caption": "PE-2019017814",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12",
+      "reference_caption": "PE-2019017814",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54",
+      "reference_caption": "PE-2019017814",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_12_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54",
+      "reference_caption": "SHEET TITLE:",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_40",
+      "reference_caption": "SHEET TITLE:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_40/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_40/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_40/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_4_13",
+      "reference_caption": "SHEET TITLE:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_4_13/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_4_13/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_4_13/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54",
+      "reference_caption": "SHEET TITLE:",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_40",
+      "reference_caption": "SHEET TITLE:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_40/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_40/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_40/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_4_13",
+      "reference_caption": "SHEET TITLE:",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_4_13/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_4_13/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_4_13/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54",
+      "reference_caption": "POWER PLAN",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_7_3",
+      "reference_caption": "POWER PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_7_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_7_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_7_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_45",
+      "reference_caption": "POWER PLAN",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_45/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_45/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_3_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_9_45/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_1_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54",
+      "reference_caption": "1/8\"=1'-0\"",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_4_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54",
+      "reference_caption": "GOVERNOR",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_3_54/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_6",
+      "reference_caption": "GOVERNOR",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_12_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_11_23",
+      "reference_caption": "GOVERNOR",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_11_23/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_11_23/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_13_5_cand_bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri_11_23/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_26",
+      "reference_caption": "MOUNTAIN HOME, AR 72653",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_26/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_26/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_26/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_27",
+      "reference_caption": "MOUNTAIN HOME, AR 72653",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_27/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_27/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_27/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6",
+      "reference_caption": "MOUNTAIN HOME, AR 72653",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28",
+      "reference_caption": "LITTLE ROCK, AR 72202",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_27",
+      "reference_caption": "LITTLE ROCK, AR 72202",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_27/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_27/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_27/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5",
+      "reference_caption": "LITTLE ROCK, AR 72202",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_6_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_5/context.png"
+    }
+  ]
+}

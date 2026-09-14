@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_015",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A019",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A135",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_3_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A019",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A135",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_22_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A019",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A135",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_15_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_0",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A135",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_24_3",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_24_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_24_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_5_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_24_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_6",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_6",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_7_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A019",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_10/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4",
+      "reference_caption": "Community College District",
+      "candidate_nearby_tag_text": "A135",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_12_2_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_0",
+      "reference_caption": "14000 Fruitvale Ave.",
+      "candidate_nearby_tag_text": "A1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4",
+      "reference_caption": "14000 Fruitvale Ave.",
+      "candidate_nearby_tag_text": "A135",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_19_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_24_3",
+      "reference_caption": "14000 Fruitvale Ave.",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_24_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_24_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_10_4_cand_bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC_24_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_88_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_87",
+      "reference_caption": "(415) 474-9500",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_88_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_87/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_88_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_87/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_88_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_87/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_88_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_87",
+      "reference_caption": "(415) 474-9500",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_88_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_87/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_88_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_87/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_88_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_87/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_29_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_29",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_29_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_29/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_29_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_29/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_29_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_29/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_29_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_29",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_29_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_29/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_29_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_29/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_29_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_29/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_13",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_13/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_13/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_13/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_2_12",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_2_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_2_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_2_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_3_12",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_3_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_3_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_12_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_3_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_21_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_45",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_45/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_45/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_45/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_46",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_46/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_46/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_46/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_47",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_47/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_47/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_45_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_47/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_64_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_63/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_78_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_77",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_78_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_77/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_78_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_77/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_78_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_77/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_78_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_77",
+      "reference_caption": "ADDENDUM 2",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_78_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_77/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_78_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_77/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_78_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_77/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_116",
+      "reference_caption": "PLUMBING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_116/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_116/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_116/context.png"
+    }
+  ]
+}

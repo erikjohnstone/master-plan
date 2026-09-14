@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_008",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28",
+      "reference_caption": "LEXINGTON, KY 40503",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28",
+      "reference_caption": "LEXINGTON, KY 40503",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28",
+      "reference_caption": "LEXINGTON, KY 40503",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_7_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30",
+      "reference_caption": "HODGES ENGINEERING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30",
+      "reference_caption": "HODGES ENGINEERING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30",
+      "reference_caption": "HODGES ENGINEERING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_9_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_3",
+      "reference_caption": "U.S. Department",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_4",
+      "reference_caption": "U.S. Department",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_20",
+      "reference_caption": "U.S. Department",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_0_1_cand_bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage_66_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25",
+      "reference_caption": "Approved: Associate Director",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20",
+      "reference_caption": "Approved: Associate Director",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21",
+      "reference_caption": "Approved: Associate Director",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_34_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_2",
+      "reference_caption": "WINDOW TREATMENT TYPE",
+      "candidate_nearby_tag_text": "AE-301",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20",
+      "reference_caption": "WINDOW TREATMENT TYPE",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21",
+      "reference_caption": "WINDOW TREATMENT TYPE",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_7_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_28",
+      "reference_caption": "BUILDING SECTION CUT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_28",
+      "reference_caption": "BUILDING SECTION CUT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25",
+      "reference_caption": "BUILDING SECTION CUT",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_27_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25",
+      "reference_caption": "ELEVATION NUMBER",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20",
+      "reference_caption": "ELEVATION NUMBER",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21",
+      "reference_caption": "ELEVATION NUMBER",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_24_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25",
+      "reference_caption": "PROJECT SITE",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20",
+      "reference_caption": "PROJECT SITE",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21",
+      "reference_caption": "PROJECT SITE",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_3",
+      "reference_caption": "PROJECT AREA",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_3",
+      "reference_caption": "PROJECT AREA",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_2",
+      "reference_caption": "PROJECT AREA",
+      "candidate_nearby_tag_text": "AE-301",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_1_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20",
+      "reference_caption": "PROJECT AREA",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20",
+      "reference_caption": "PROJECT AREA",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25",
+      "reference_caption": "PROJECT AREA",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_21_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25",
+      "reference_caption": "PROJECT SITE",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20",
+      "reference_caption": "PROJECT SITE",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21",
+      "reference_caption": "PROJECT SITE",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_26_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18",
+      "reference_caption": "DOOR NUMBER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18",
+      "reference_caption": "DOOR NUMBER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25",
+      "reference_caption": "DOOR NUMBER",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_19_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25",
+      "reference_caption": "of Veterans",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20",
+      "reference_caption": "of Veterans",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_20/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21",
+      "reference_caption": "of Veterans",
+      "candidate_nearby_tag_text": "AE500",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_0_20_cand_bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling_3_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_25",
+      "reference_caption": "FURNISH (1) 1-1/4\" DEDICATED CONDUIT FROM EACH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_25/context.png"
+    }
+  ]
+}

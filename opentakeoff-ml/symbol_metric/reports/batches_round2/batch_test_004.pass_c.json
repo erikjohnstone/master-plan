@@ -1,0 +1,263 @@
+{
+  "batch_id": "batch_test_004",
+  "pass": "context",
+  "instructions": "PASS C -- DRAWING-CONTEXT ADJUDICATION. For each pair you get a local context render around the candidate (context_image), a low-res full-page thumbnail (fullpage_image), the reference legend caption, and any nearby tag text. Read the context image directly. Judge whether this candidate plausibly is a real HVAC/BAS physical device consistent with the caption -- and NOT a title-block element, a general drafting symbol (north arrow, detail bubble, elevation target, section cut), boilerplate text, a table border, or an unrelated architectural/furniture item. 'no_physical_symbol' = the candidate region contains no real device body at all (blank space, pure text, a drafting convention symbol unrelated to HVAC/BAS). 'negative' = it is a real device but clearly NOT a plausible match for this caption (wrong device family, wrong sibling subtype, or the caption/context clearly refers to something else on this sheet). Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "release. Use the following precautions when",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "release. Use the following precautions when",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "release. Use the following precautions when",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "DRAWINGS AND SPECIFICATIONS.",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "DRAWINGS AND SPECIFICATIONS.",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "DRAWINGS AND SPECIFICATIONS.",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "Patient Risk Group Table",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "Patient Risk Group Table",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "Patient Risk Group Table",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22/fullpage.png",
+      "reference_caption": "CONTRACTING OFFICER.",
+      "candidate_nearby_tag_text": "E2",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18/fullpage.png",
+      "reference_caption": "CONTRACTING OFFICER.",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6/fullpage.png",
+      "reference_caption": "CONTRACTING OFFICER.",
+      "candidate_nearby_tag_text": "E1",
+      "family_id": "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_17",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_17/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_17/fullpage.png",
+      "reference_caption": "TYPICAL DEVICE ELEVATION DETAIL",
+      "candidate_nearby_tag_text": "DP3",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_6_90",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_6_90/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_6_90/fullpage.png",
+      "reference_caption": "TYPICAL DEVICE ELEVATION DETAIL",
+      "candidate_nearby_tag_text": "B2",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_18/fullpage.png",
+      "reference_caption": "TYPICAL DEVICE ELEVATION DETAIL",
+      "candidate_nearby_tag_text": "DP5",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_13",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_13/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_13/fullpage.png",
+      "reference_caption": "LIGHT SWITCH",
+      "candidate_nearby_tag_text": "D3",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_6_40",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_6_40/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_6_40/fullpage.png",
+      "reference_caption": "LIGHT SWITCH",
+      "candidate_nearby_tag_text": "D4",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_6/fullpage.png",
+      "reference_caption": "LIGHT SWITCH",
+      "candidate_nearby_tag_text": "D2",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_13",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_13/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_13/fullpage.png",
+      "reference_caption": "PUSH IN",
+      "candidate_nearby_tag_text": "D3",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_6/fullpage.png",
+      "reference_caption": "PUSH IN",
+      "candidate_nearby_tag_text": "D2",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_5",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_5/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_5/fullpage.png",
+      "reference_caption": "PUSH IN",
+      "candidate_nearby_tag_text": "D4",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_176",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_176/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_176/fullpage.png",
+      "reference_caption": "1P3-29",
+      "candidate_nearby_tag_text": "GP3",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_156",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_156/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_156/fullpage.png",
+      "reference_caption": "1P3-29",
+      "candidate_nearby_tag_text": "GP3",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_147",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_147/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_147/fullpage.png",
+      "reference_caption": "1P3-29",
+      "candidate_nearby_tag_text": "CF6",
+      "family_id": "bulk_vol1:24_IA_JohnsonCounty_Courthouse"
+    }
+  ]
+}

@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_dev_000",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6",
+      "reference_caption": "SINGLE DUCT VAV BOX WITHOUT REHEAT COIL",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8",
+      "reference_caption": "SINGLE DUCT VAV BOX WITHOUT REHEAT COIL",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16",
+      "reference_caption": "SINGLE DUCT VAV BOX WITHOUT REHEAT COIL",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_6_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16",
+      "reference_caption": "COMMUNICATION GATEWAY CONNECTION TO DDC",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16",
+      "reference_caption": "COMMUNICATION GATEWAY CONNECTION TO DDC",
+      "candidate_nearby_tag_text": "A019",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6",
+      "reference_caption": "COMMUNICATION GATEWAY CONNECTION TO DDC",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_23_12_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6",
+      "reference_caption": "OVERALL FLOOR PLAN - BUILDING B",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8",
+      "reference_caption": "OVERALL FLOOR PLAN - BUILDING B",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16",
+      "reference_caption": "OVERALL FLOOR PLAN - BUILDING B",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_1_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A019",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A019",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_9_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A019",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_23_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "A019",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6",
+      "reference_caption": "DSA APPLICATION NO: 01-122588",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_9_20_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6",
+      "reference_caption": "14000 Fruitvale Ave.",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8",
+      "reference_caption": "14000 Fruitvale Ave.",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16",
+      "reference_caption": "14000 Fruitvale Ave.",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_12_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6",
+      "reference_caption": "14000 Fruitvale Ave.",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8",
+      "reference_caption": "14000 Fruitvale Ave.",
+      "candidate_nearby_tag_text": "FCHH202",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_25_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16",
+      "reference_caption": "14000 Fruitvale Ave.",
+      "candidate_nearby_tag_text": "A017",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_5_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_10_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_18_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_2_18",
+      "reference_caption": "IDENTIFICATION STAMP",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_18_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_2_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_18_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_2_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_18_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_2_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_18_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_2_19",
+      "reference_caption": "IDENTIFICATION STAMP",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_18_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_2_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_18_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_2_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_11_18_cand_bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math_2_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_16",
+      "reference_caption": "DISCONNECT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_37_16",
+      "reference_caption": "DISCONNECT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_37_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_37_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_37_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_17",
+      "reference_caption": "DISCONNECT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_17/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_17/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_16_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_17/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_5_11",
+      "reference_caption": "DISCONNECT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_5_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_5_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_5_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_11",
+      "reference_caption": "DISCONNECT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_11",
+      "reference_caption": "DISCONNECT SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_10_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_4",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_4",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_4",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_4_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_17",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_17/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_17/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_17/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_18",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_18/context.png"
+    }
+  ]
+}

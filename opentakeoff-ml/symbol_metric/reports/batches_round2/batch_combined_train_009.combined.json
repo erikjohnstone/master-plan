@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_009",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_26",
+      "reference_caption": "FURNISH (1) 1-1/4\" DEDICATED CONDUIT FROM EACH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_26/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_26/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_26/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24",
+      "reference_caption": "FURNISH (1) 1-1/4\" DEDICATED CONDUIT FROM EACH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_28_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14",
+      "reference_caption": "QUADRUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15",
+      "reference_caption": "QUADRUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12",
+      "reference_caption": "QUADRUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_13",
+      "reference_caption": "QUADRUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_13/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_13/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_13/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14",
+      "reference_caption": "QUADRUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15",
+      "reference_caption": "QUADRUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_2",
+      "reference_caption": "FUSED SWITCH (\"XXAS/XXAF\" - SW AND FUSE AMP",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_3",
+      "reference_caption": "FUSED SWITCH (\"XXAS/XXAF\" - SW AND FUSE AMP",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_1",
+      "reference_caption": "FUSED SWITCH (\"XXAS/XXAF\" - SW AND FUSE AMP",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_0_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_6",
+      "reference_caption": "IN FINISHED SPACES, EXPOSED IN UNFINISHED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_9",
+      "reference_caption": "IN FINISHED SPACES, EXPOSED IN UNFINISHED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_9/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_9/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_9/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_10",
+      "reference_caption": "IN FINISHED SPACES, EXPOSED IN UNFINISHED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_10/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_10/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_7_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_10/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_23",
+      "reference_caption": "PANEL AND CIRCUIT DESIGNATION ARE NEXT TO",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_23/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_23/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_23/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24",
+      "reference_caption": "PANEL AND CIRCUIT DESIGNATION ARE NEXT TO",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21",
+      "reference_caption": "PANEL AND CIRCUIT DESIGNATION ARE NEXT TO",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_20_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_23",
+      "reference_caption": "A - 4-GANG FLOOR BOX, CORROSION RESISTANT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_23/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_23/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_23/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24",
+      "reference_caption": "A - 4-GANG FLOOR BOX, CORROSION RESISTANT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_24/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_16",
+      "reference_caption": "A - 4-GANG FLOOR BOX, CORROSION RESISTANT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_21_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_0_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14",
+      "reference_caption": "SIMPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16",
+      "reference_caption": "SIMPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12",
+      "reference_caption": "SIMPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15",
+      "reference_caption": "DUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16",
+      "reference_caption": "DUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_16/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12",
+      "reference_caption": "DUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_14_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_9",
+      "reference_caption": "DUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_9/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_9/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_9/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_10",
+      "reference_caption": "DUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_10/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_10/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_10/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12",
+      "reference_caption": "DUPLEX RECEPTACLE - CEILING MOUNT, WALL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_11_cand_bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC_20_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_40",
+      "reference_caption": "EMINENCE HIGH PERFORMANCE CEILING PAINT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_40/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_40/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_40/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_40",
+      "reference_caption": "EMINENCE HIGH PERFORMANCE CEILING PAINT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_40/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_40/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_40/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_15_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_18",
+      "reference_caption": "SPACE JOISTS @ A MAXIMUM SPACING OF",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_15_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_15_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_15_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_15_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_18",
+      "reference_caption": "SPACE JOISTS @ A MAXIMUM SPACING OF",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_15_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_15_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_15_32_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_10_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_21_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_22",
+      "reference_caption": "MOISTURE RESISTANT GYPSUM BOARD",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_21_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_21_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_21_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_21_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_22",
+      "reference_caption": "MOISTURE RESISTANT GYPSUM BOARD",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_21_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_21_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_21_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_19_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_176",
+      "reference_caption": "HPC HIGH PERFORMANCE COATING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_19_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_176/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_19_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_176/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_19_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_176/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_19_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_176",
+      "reference_caption": "HPC HIGH PERFORMANCE COATING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_19_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_176/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_19_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_176/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_19_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_176/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_28_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_70_123",
+      "reference_caption": "FIBERGLASS REINFORCED PANEL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_28_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_70_123/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_28_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_70_123/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_28_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_70_123/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_15_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_175",
+      "reference_caption": "SHERWIN WILLIAMS (EXTERIOR)",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_15_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_175/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_15_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_175/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_40_15_cand_bulk_vol1:03_FL_HurlburtField_ChildDevCenter_80_175/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_11_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_56_124",
+      "reference_caption": "CODE ANALYSIS - SOUTH ATTIC",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_11_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_56_124/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_11_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_56_124/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_35_11_cand_bulk_vol1:11_CA_SDSU_EngSciences_Complex_100SD_56_124/context.png"
+    }
+  ]
+}

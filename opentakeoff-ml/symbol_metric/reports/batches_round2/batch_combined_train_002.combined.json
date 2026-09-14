@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_002",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_21_116",
+      "reference_caption": "FREEZE PROTECTION NOTES",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_21_116/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_21_116/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_21_116/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59",
+      "reference_caption": "HVAC DEMO GENERAL NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30",
+      "reference_caption": "HVAC DEMO GENERAL NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76",
+      "reference_caption": "HVAC DEMO GENERAL NOTES",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_78_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59",
+      "reference_caption": "TEST AND BALANCE NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30",
+      "reference_caption": "TEST AND BALANCE NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_71",
+      "reference_caption": "TEST AND BALANCE NOTES",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_71/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_71/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_72_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_71/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59",
+      "reference_caption": "GATE VALVE",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30",
+      "reference_caption": "GATE VALVE",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_252",
+      "reference_caption": "GATE VALVE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_252/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_252/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_70_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_252/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_59_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_160",
+      "reference_caption": "EF-A2, EM1",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_59_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_160/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_59_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_160/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_59_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_160/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_59_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_160",
+      "reference_caption": "EF-A2, EM1",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_59_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_160/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_59_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_160/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_59_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_26_160/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_111",
+      "reference_caption": "XX-X",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_111/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_111/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_111/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59",
+      "reference_caption": "XX-X",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30",
+      "reference_caption": "XX-X",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_67_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30",
+      "reference_caption": "XX-X",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59",
+      "reference_caption": "XX-X",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_38",
+      "reference_caption": "XX-X",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_38/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_38/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_37_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_38/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22",
+      "reference_caption": "INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18",
+      "reference_caption": "INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5",
+      "reference_caption": "INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_46_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22",
+      "reference_caption": "depending upon the Area Class Designation",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18",
+      "reference_caption": "depending upon the Area Class Designation",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5",
+      "reference_caption": "depending upon the Area Class Designation",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_10_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22",
+      "reference_caption": "FIFTH FLOOR ELECTRICAL PLAN - PHASE 4",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18",
+      "reference_caption": "FIFTH FLOOR ELECTRICAL PLAN - PHASE 4",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5",
+      "reference_caption": "FIFTH FLOOR ELECTRICAL PLAN - PHASE 4",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_30_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22",
+      "reference_caption": "FIFTH FLOOR FIRE ALARM PLAN - PHASE 4",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18",
+      "reference_caption": "FIFTH FLOOR FIRE ALARM PLAN - PHASE 4",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5",
+      "reference_caption": "FIFTH FLOOR FIRE ALARM PLAN - PHASE 4",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_24_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22",
+      "reference_caption": "ICRA RISK ASSESSMENT - PHASE 4",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18",
+      "reference_caption": "ICRA RISK ASSESSMENT - PHASE 4",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5",
+      "reference_caption": "ICRA RISK ASSESSMENT - PHASE 4",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_1_20_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22",
+      "reference_caption": "Total Est. Demand: 26.89 kVA",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18",
+      "reference_caption": "Total Est. Demand: 26.89 kVA",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5",
+      "reference_caption": "Total Est. Demand: 26.89 kVA",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_40_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22",
+      "reference_caption": "FIFTH FLOOR PLAN LIFE SAFETY",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18",
+      "reference_caption": "FIFTH FLOOR PLAN LIFE SAFETY",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5",
+      "reference_caption": "FIFTH FLOOR PLAN LIFE SAFETY",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_4_14_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22",
+      "reference_caption": "Total Est. Demand: 0.45 kVA",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_20_43_cand_bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing_18_22/context.png"
+    }
+  ]
+}

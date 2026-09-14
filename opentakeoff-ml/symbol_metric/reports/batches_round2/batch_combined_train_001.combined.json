@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_001",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_2",
+      "reference_caption": "SEE STRUCTURAL PLANS SHEET: WWYK240146 S-001 FOR",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_2",
+      "reference_caption": "SEE STRUCTURAL PLANS SHEET: WWYK240146 S-001 FOR",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0",
+      "reference_caption": "AIR FORCE MATERIEL COMMAND",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0",
+      "reference_caption": "AIR FORCE MATERIEL COMMAND",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0",
+      "reference_caption": "AIR FORCE MATERIEL COMMAND",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0",
+      "reference_caption": "AIR FORCE MATERIEL COMMAND",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_0",
+      "reference_caption": "AIR FORCE MATERIEL COMMAND",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_1",
+      "reference_caption": "AIR FORCE MATERIEL COMMAND",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0",
+      "reference_caption": "AIR FORCE MATERIEL COMMAND",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0",
+      "reference_caption": "AIR FORCE MATERIEL COMMAND",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0",
+      "reference_caption": "AIR FORCE MATERIEL COMMAND",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_0_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_21_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_3",
+      "reference_caption": "GENERAL SYMBOLS,",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_25_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_3",
+      "reference_caption": "GENERAL SYMBOLS,",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_29_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_3",
+      "reference_caption": "GENERAL SYMBOLS,",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_1_4_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_19_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_17_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_5_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4",
+      "reference_caption": "INSTRUMENTATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_20_3_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_11_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_2",
+      "reference_caption": "TINKER AFB, OK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_3_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_2",
+      "reference_caption": "TINKER AFB, OK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_3",
+      "reference_caption": "TINKER AFB, OK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_18_2_cand_bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control_4_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59",
+      "reference_caption": "USFS / ROCKY MOUNTAIN RESEARCH STATION",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30",
+      "reference_caption": "USFS / ROCKY MOUNTAIN RESEARCH STATION",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_3_14",
+      "reference_caption": "USFS / ROCKY MOUNTAIN RESEARCH STATION",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_3_14/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_3_14/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_69_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_3_14/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59",
+      "reference_caption": "TEMP. CONTROL GEN'L NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30",
+      "reference_caption": "TEMP. CONTROL GEN'L NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_77",
+      "reference_caption": "TEMP. CONTROL GEN'L NOTES",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_77/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_77/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_76_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_77/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59",
+      "reference_caption": "COMMISSIONING GEN'L NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30",
+      "reference_caption": "COMMISSIONING GEN'L NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_21_116",
+      "reference_caption": "COMMISSIONING GEN'L NOTES",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_21_116/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_21_116/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_73_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_21_116/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59",
+      "reference_caption": "FREEZE PROTECTION NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30",
+      "reference_caption": "FREEZE PROTECTION NOTES",
+      "candidate_nearby_tag_text": "ET-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_0_75_cand_bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences_27_30/context.png"
+    }
+  ]
+}

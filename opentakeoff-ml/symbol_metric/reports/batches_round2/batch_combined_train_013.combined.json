@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_013",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_12_128",
+      "reference_caption": "ADMINISTRATION AIR HANDLING UNITS - AHU-3 & 6",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_12_128/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_12_128/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_12_128/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_12_128",
+      "reference_caption": "ADMINISTRATION AIR HANDLING UNITS - AHU-3 & 6",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_12_128/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_12_128/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_12_128/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_476",
+      "reference_caption": "ADMINISTRATION AIR HANDLING UNITS - AHU-3 & 6",
+      "candidate_nearby_tag_text": "VFD-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_476/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_476/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_128_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_476/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_81_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_193",
+      "reference_caption": "SEQUENCE OF OPERATIONS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_81_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_193/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_81_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_193/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_81_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_193/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_81_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_193",
+      "reference_caption": "SEQUENCE OF OPERATIONS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_81_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_193/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_81_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_193/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_81_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_193/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_23_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_59",
+      "reference_caption": "SEQUENCE OF OPERATIONS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_23_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_23_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_23_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_23_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_59",
+      "reference_caption": "SEQUENCE OF OPERATIONS",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_23_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_59/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_23_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_59/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_23_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_6_59/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_400",
+      "reference_caption": "SEQUENCE OF OPERATIONS",
+      "candidate_nearby_tag_text": "TS-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_400/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_400/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_400/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_278",
+      "reference_caption": "SEQUENCE OF OPERATIONS",
+      "candidate_nearby_tag_text": "V-3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_278/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_278/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_278/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_350",
+      "reference_caption": "SEQUENCE OF OPERATIONS",
+      "candidate_nearby_tag_text": "V-4",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_350/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_350/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_111_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_350/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_44_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_45",
+      "reference_caption": "SPEED/LEVEL/FL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_44_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_45/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_44_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_45/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_44_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_45/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_44_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_45",
+      "reference_caption": "SPEED/LEVEL/FL",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_44_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_45/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_44_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_45/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_44_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_45/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_170",
+      "reference_caption": "PERCENT OPEN",
+      "candidate_nearby_tag_text": "V-2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_170/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_170/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_170/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_278",
+      "reference_caption": "PERCENT OPEN",
+      "candidate_nearby_tag_text": "V-3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_278/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_278/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_278/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_129",
+      "reference_caption": "PERCENT OPEN",
+      "candidate_nearby_tag_text": "FM-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_129/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_129/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_52_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_129/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_50_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58",
+      "reference_caption": "FLOW SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_50_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_50_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_50_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_50_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58",
+      "reference_caption": "FLOW SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_50_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_50_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_50_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_58_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_74",
+      "reference_caption": "END SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_58_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_74/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_58_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_74/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_58_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_74/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_58_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_74",
+      "reference_caption": "END SWITCH",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_58_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_74/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_58_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_74/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_58_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_74/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_51_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58",
+      "reference_caption": "AUXILIARY",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_51_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_51_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_51_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_51_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58",
+      "reference_caption": "AUXILIARY",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_51_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_51_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_51_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_17_58/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_436",
+      "reference_caption": "VARIABLE",
+      "candidate_nearby_tag_text": "V-2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_436/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_436/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_436/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_433",
+      "reference_caption": "VARIABLE",
+      "candidate_nearby_tag_text": "V-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_433/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_433/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_433/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_428",
+      "reference_caption": "VARIABLE",
+      "candidate_nearby_tag_text": "V-3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_428/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_428/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_18_122_cand_bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab_16_428/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22",
+      "reference_caption": "FIRE EXTINGUISHER CABINET",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_18",
+      "reference_caption": "FIRE EXTINGUISHER CABINET",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_6",
+      "reference_caption": "FIRE EXTINGUISHER CABINET",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_16_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_42",
+      "reference_caption": "APOGEE PROJECT #: 18-327",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_42/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_42/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_42/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_42",
+      "reference_caption": "APOGEE PROJECT #: 18-327",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_42/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_42/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_42/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22",
+      "reference_caption": "APOGEE PROJECT #: 18-327",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_41_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22",
+      "reference_caption": "FIRE ALARM RISER",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_18",
+      "reference_caption": "FIRE ALARM RISER",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_6",
+      "reference_caption": "FIRE ALARM RISER",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_35_37_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_6_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_5",
+      "reference_caption": "PROJECT MANAGER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_6_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_6_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_6_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_6_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_5",
+      "reference_caption": "PROJECT MANAGER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_6_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_6_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_6_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_1_29",
+      "reference_caption": "U.S. Department",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_1_29/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_1_29/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_1_29/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_1_29",
+      "reference_caption": "U.S. Department",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_1_29/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_1_29/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_1_29/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22",
+      "reference_caption": "U.S. Department",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_0_27_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_26_22/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_32_33",
+      "reference_caption": "TYPICAL KEYNOTE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_32_33/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_32_33/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_32_33/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_32_33",
+      "reference_caption": "TYPICAL KEYNOTE",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_32_33/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_32_33/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_5_1_cand_bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing_32_33/context.png"
+    }
+  ]
+}

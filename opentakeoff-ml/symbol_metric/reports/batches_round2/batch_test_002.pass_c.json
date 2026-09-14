@@ -1,0 +1,327 @@
+{
+  "batch_id": "batch_test_002",
+  "pass": "context",
+  "instructions": "PASS C -- DRAWING-CONTEXT ADJUDICATION. For each pair you get a local context render around the candidate (context_image), a low-res full-page thumbnail (fullpage_image), the reference legend caption, and any nearby tag text. Read the context image directly. Judge whether this candidate plausibly is a real HVAC/BAS physical device consistent with the caption -- and NOT a title-block element, a general drafting symbol (north arrow, detail bubble, elevation target, section cut), boilerplate text, a table border, or an unrelated architectural/furniture item. 'no_physical_symbol' = the candidate region contains no real device body at all (blank space, pure text, a drafting convention symbol unrelated to HVAC/BAS). 'negative' = it is a real device but clearly NOT a plausible match for this caption (wrong device family, wrong sibling subtype, or the caption/context clearly refers to something else on this sheet). Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_9",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_9/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_9/fullpage.png",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_10",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_10/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_10/fullpage.png",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_11",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_11/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_11/fullpage.png",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_12",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_12/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_12/fullpage.png",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1/fullpage.png",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_1",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_1/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_1/fullpage.png",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_1",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_1/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_1/fullpage.png",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_0/fullpage.png",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_0/fullpage.png",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_0/fullpage.png",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/fullpage.png",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "HP-2",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/fullpage.png",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "SA-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/fullpage.png",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "H-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/fullpage.png",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "HP-2",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/fullpage.png",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "SA-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/fullpage.png",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "H-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100/fullpage.png",
+      "reference_caption": "HARDENING ACOUSTICAL SEALANT BOTH",
+      "candidate_nearby_tag_text": "R-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86/fullpage.png",
+      "reference_caption": "HARDENING ACOUSTICAL SEALANT BOTH",
+      "candidate_nearby_tag_text": "T-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/fullpage.png",
+      "reference_caption": "HARDENING ACOUSTICAL SEALANT BOTH",
+      "candidate_nearby_tag_text": "HP-2",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/fullpage.png",
+      "reference_caption": "FIRST FLOOR DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "HP-2",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/fullpage.png",
+      "reference_caption": "FIRST FLOOR DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "SA-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/fullpage.png",
+      "reference_caption": "FIRST FLOOR DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "H-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_52",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_52/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_52/fullpage.png",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "H-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4/fullpage.png",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "G001",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/fullpage.png",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "SA-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23/fullpage.png",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "F-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/fullpage.png",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "H-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/fullpage.png",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "SA-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_40",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_40/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_40/fullpage.png",
+      "reference_caption": "DEMO FLOOR PLAN KEYNOTES",
+      "candidate_nearby_tag_text": "R-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_41",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_41/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_41/fullpage.png",
+      "reference_caption": "DEMO FLOOR PLAN KEYNOTES",
+      "candidate_nearby_tag_text": "T-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_3",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_3/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_3/fullpage.png",
+      "reference_caption": "DEMO FLOOR PLAN KEYNOTES",
+      "candidate_nearby_tag_text": "RB1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41/fullpage.png",
+      "reference_caption": "ACOUSTIC BATT INSULATION",
+      "candidate_nearby_tag_text": "HP-2",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25/fullpage.png",
+      "reference_caption": "ACOUSTIC BATT INSULATION",
+      "candidate_nearby_tag_text": "SA-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/fullpage.png",
+      "reference_caption": "ACOUSTIC BATT INSULATION",
+      "candidate_nearby_tag_text": "H-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_17",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_17/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_17/fullpage.png",
+      "reference_caption": "WINDOW TYPE (SEE A600s)",
+      "candidate_nearby_tag_text": "SA-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23/fullpage.png",
+      "reference_caption": "WINDOW TYPE (SEE A600s)",
+      "candidate_nearby_tag_text": "F-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14/fullpage.png",
+      "reference_caption": "WINDOW TYPE (SEE A600s)",
+      "candidate_nearby_tag_text": "H-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100/fullpage.png",
+      "reference_caption": "WALL TYPE MODIFIERS:",
+      "candidate_nearby_tag_text": "R-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86/fullpage.png",
+      "reference_caption": "WALL TYPE MODIFIERS:",
+      "candidate_nearby_tag_text": "T-1",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4/fullpage.png",
+      "reference_caption": "WALL TYPE MODIFIERS:",
+      "candidate_nearby_tag_text": "G001",
+      "family_id": "bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+    }
+  ]
+}

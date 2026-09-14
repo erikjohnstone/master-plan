@@ -1,0 +1,207 @@
+{
+  "batch_id": "batch_test_000",
+  "pass": "visual",
+  "instructions": "PASS B -- VISUAL IDENTITY ONLY. You are given two small cropped images per pair, 'symbol_left' and 'symbol_right' -- you do NOT know which is the trusted legend reference and which is the plan-page candidate, and you have no caption or tag text. Compare ONLY visual/shape identity: same enclosure shape, same internal strokes/ports, same count of connection points, allowing for line-weight, DPI, and minor clipping differences. 'positive' = same physical symbol type. 'negative' = clearly a different symbol/shape/or one image is text/blank/a line fragment, not a device body at all. 'ambiguous' = genuinely too small/degraded to tell. Set directional:true if the shape has an inherent left-right or rotational asymmetry that would change meaning if mirrored/rotated (an arrow, a check-valve body, an actuator with a directional marking). Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_15_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_28",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_28/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_28/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_28",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_28/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_28/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_25_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_26_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_23_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_1_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_95/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_94/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_14_29_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_93/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_75/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_0_11/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_73/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_1_17_cand_bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project_24_74/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_53_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_27_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/reference_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/candidate_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_11_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/reference_300.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "symbol_left_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/candidate_300.png",
+      "symbol_right_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/reference_300.png"
+    }
+  ]
+}

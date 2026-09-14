@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_dev_001",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_18",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_17_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_4_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_5",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_5",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_1",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_1/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_1/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_1/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_2",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_2",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_2_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_5",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_5",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_5_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_29_0",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_29_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_29_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_29_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_29_0",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_29_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_29_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_29_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_0",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_1_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_36_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_14_3",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_14_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_14_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_14_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_18_3",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_18_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_18_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_18_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_3",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_3_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_3_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_0",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_35_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_14_0",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_14_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_14_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_14_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_18_0",
+      "reference_caption": "CONDUIT CAPPED",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_18_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_18_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_28_0_cand_bulk_vol1:27_WA_ColvilleTribes_Hatchery_Lab_18_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_147",
+      "reference_caption": "ELECTRIC STRIKE FURNISHED BY HARDWARE",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_147/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_147/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_147/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_153",
+      "reference_caption": "ELECTRIC STRIKE FURNISHED BY HARDWARE",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_153/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_153/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_153/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_46",
+      "reference_caption": "ELECTRIC STRIKE FURNISHED BY HARDWARE",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_46/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_46/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_61_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_46/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56",
+      "reference_caption": "EAST ENTRY ELECTRICAL REMOVALS PLAN",
+      "candidate_nearby_tag_text": "W3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40",
+      "reference_caption": "EAST ENTRY ELECTRICAL REMOVALS PLAN",
+      "candidate_nearby_tag_text": "ACT-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62",
+      "reference_caption": "EAST ENTRY ELECTRICAL REMOVALS PLAN",
+      "candidate_nearby_tag_text": "W3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_72_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_101",
+      "reference_caption": "EXISTING ACT CEILING TO REMAIN",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_101/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_101/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_101/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_82",
+      "reference_caption": "EXISTING ACT CEILING TO REMAIN",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_82/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_82/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_82/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_7_42",
+      "reference_caption": "EXISTING ACT CEILING TO REMAIN",
+      "candidate_nearby_tag_text": "A203",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_7_42/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_7_42/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_14_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_7_42/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_20_119",
+      "reference_caption": "BATT OR LOOSE FILL INSULATON",
+      "candidate_nearby_tag_text": "A602",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_20_119/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_20_119/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_20_119/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_69",
+      "reference_caption": "BATT OR LOOSE FILL INSULATON",
+      "candidate_nearby_tag_text": "W3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_69/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_69/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_69/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_249",
+      "reference_caption": "BATT OR LOOSE FILL INSULATON",
+      "candidate_nearby_tag_text": "A203",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_249/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_249/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_0_27_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_249/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_147",
+      "reference_caption": "REUSE AT WEST CORE CORRIDOR",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_147/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_147/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_147/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_153",
+      "reference_caption": "REUSE AT WEST CORE CORRIDOR",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_153/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_153/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_153/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_46",
+      "reference_caption": "REUSE AT WEST CORE CORRIDOR",
+      "candidate_nearby_tag_text": "C1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_46/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_46/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_62_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_46/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_101",
+      "reference_caption": "RECESSED LED LIGHT FIXTURE",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_101/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_101/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_101/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_82",
+      "reference_caption": "RECESSED LED LIGHT FIXTURE",
+      "candidate_nearby_tag_text": "W1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_82/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_82/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_6_82/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_7_42",
+      "reference_caption": "RECESSED LED LIGHT FIXTURE",
+      "candidate_nearby_tag_text": "A203",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_7_42/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_7_42/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_12_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_7_42/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56",
+      "reference_caption": "EAST ENTRY ELECTRICAL PLAN",
+      "candidate_nearby_tag_text": "W3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_56/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40",
+      "reference_caption": "EAST ENTRY ELECTRICAL PLAN",
+      "candidate_nearby_tag_text": "ACT-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_25_40/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62",
+      "reference_caption": "EAST ENTRY ELECTRICAL PLAN",
+      "candidate_nearby_tag_text": "W3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_33_71_cand_bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation_22_62/context.png"
+    }
+  ]
+}

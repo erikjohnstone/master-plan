@@ -1,0 +1,327 @@
+{
+  "batch_id": "batch_test_001",
+  "pass": "context",
+  "instructions": "PASS C -- DRAWING-CONTEXT ADJUDICATION. For each pair you get a local context render around the candidate (context_image), a low-res full-page thumbnail (fullpage_image), the reference legend caption, and any nearby tag text. Read the context image directly. Judge whether this candidate plausibly is a real HVAC/BAS physical device consistent with the caption -- and NOT a title-block element, a general drafting symbol (north arrow, detail bubble, elevation target, section cut), boilerplate text, a table border, or an unrelated architectural/furniture item. 'no_physical_symbol' = the candidate region contains no real device body at all (blank space, pure text, a drafting convention symbol unrelated to HVAC/BAS). 'negative' = it is a real device but clearly NOT a plausible match for this caption (wrong device family, wrong sibling subtype, or the caption/context clearly refers to something else on this sheet). Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/fullpage.png",
+      "reference_caption": "INTERIOR ELEVATION / PHOTO TAG",
+      "candidate_nearby_tag_text": "A201",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_34_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38/fullpage.png",
+      "reference_caption": "INTERIOR ELEVATION / PHOTO TAG",
+      "candidate_nearby_tag_text": "B120",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/fullpage.png",
+      "reference_caption": "RETURN OR EXHAUST AIR GRILLE",
+      "candidate_nearby_tag_text": "A201",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6/fullpage.png",
+      "reference_caption": "RETURN OR EXHAUST AIR GRILLE",
+      "candidate_nearby_tag_text": "S1",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_10_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/fullpage.png",
+      "reference_caption": "RETURN OR EXHAUST AIR GRILLE",
+      "candidate_nearby_tag_text": "A6",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7/fullpage.png",
+      "reference_caption": "CEILING MOUNTED EXIT SIGN",
+      "candidate_nearby_tag_text": "A501",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6/fullpage.png",
+      "reference_caption": "CEILING MOUNTED EXIT SIGN",
+      "candidate_nearby_tag_text": "S1",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_3_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_0/fullpage.png",
+      "reference_caption": "CEILING MOUNTED EXIT SIGN",
+      "candidate_nearby_tag_text": "M-005",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6/fullpage.png",
+      "reference_caption": "FIRE ALARM SMOKE DETECTOR",
+      "candidate_nearby_tag_text": "S1",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7/fullpage.png",
+      "reference_caption": "FIRE ALARM SMOKE DETECTOR",
+      "candidate_nearby_tag_text": "A501",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_5_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/fullpage.png",
+      "reference_caption": "FIRE ALARM SMOKE DETECTOR",
+      "candidate_nearby_tag_text": "A6",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_4/fullpage.png",
+      "reference_caption": "5. DIFFUSERS AND COVERS:",
+      "candidate_nearby_tag_text": "L2",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_18/fullpage.png",
+      "reference_caption": "5. DIFFUSERS AND COVERS:",
+      "candidate_nearby_tag_text": "A201",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_28_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_38/fullpage.png",
+      "reference_caption": "5. DIFFUSERS AND COVERS:",
+      "candidate_nearby_tag_text": "B120",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_14_6/fullpage.png",
+      "reference_caption": "FIRE ALARM HEAT DETECTOR",
+      "candidate_nearby_tag_text": "S1",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7/fullpage.png",
+      "reference_caption": "FIRE ALARM HEAT DETECTOR",
+      "candidate_nearby_tag_text": "A501",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_6_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_7_6/fullpage.png",
+      "reference_caption": "FIRE ALARM HEAT DETECTOR",
+      "candidate_nearby_tag_text": "A6",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_7/fullpage.png",
+      "reference_caption": "CEILING HEIGHT ELEVATION",
+      "candidate_nearby_tag_text": "A501",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_0_0/fullpage.png",
+      "reference_caption": "CEILING HEIGHT ELEVATION",
+      "candidate_nearby_tag_text": "M-005",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_13_1_cand_bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation_30_0/fullpage.png",
+      "reference_caption": "CEILING HEIGHT ELEVATION",
+      "candidate_nearby_tag_text": "R2",
+      "family_id": "bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_2",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_2/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_2/fullpage.png",
+      "reference_caption": "Telephone (509) 662-4781 Facsimilie (509) 663-3253",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_2",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_2/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_2/fullpage.png",
+      "reference_caption": "Telephone (509) 662-4781 Facsimilie (509) 663-3253",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_2",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_2/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_27_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_2/fullpage.png",
+      "reference_caption": "Telephone (509) 662-4781 Facsimilie (509) 663-3253",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_2",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_2/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_2/fullpage.png",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_3",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_3/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_3/fullpage.png",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_4_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0/fullpage.png",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5/fullpage.png",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_1",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_1/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_1/fullpage.png",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_7_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1/fullpage.png",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5/fullpage.png",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_1",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_1/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_1/fullpage.png",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_6_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1/fullpage.png",
+      "reference_caption": "200/150-3P",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_3",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_3/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_3/fullpage.png",
+      "reference_caption": "2/15/24",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_3",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_3/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_3/fullpage.png",
+      "reference_caption": "2/15/24",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_3",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_3/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_28_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_3/fullpage.png",
+      "reference_caption": "2/15/24",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_20",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_20/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_20/fullpage.png",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_21",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_21/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_21/fullpage.png",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_17",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_17/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_18_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_17/fullpage.png",
+      "reference_caption": "SYMBOL",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_10",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_10/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_10/fullpage.png",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_8",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_8/context.png",
+      "fullpage_image": "data/evidence/pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_8/fullpage.png",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "family_id": "bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+    }
+  ]
+}

@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_train_016",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_116",
+      "reference_caption": "PLUMBING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_116/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_116/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_116/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_120",
+      "reference_caption": "PLUMBING",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_120/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_120/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_115_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_120/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_95_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_95",
+      "reference_caption": "03/28/23",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_95_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_95/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_95_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_95/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_95_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_0_95/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_95_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_99",
+      "reference_caption": "03/28/23",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_95_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_99/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_95_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_99/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_95_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_1_99/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_2_4",
+      "reference_caption": "03/28/23",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_2_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_2_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_2_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_3_4",
+      "reference_caption": "03/28/23",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_3_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_3_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_3_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_4_4",
+      "reference_caption": "03/28/23",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_4_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_4_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_7_4_cand_bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center_4_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_18",
+      "reference_caption": "SIZE OF WIRES REQUIRED WITH UNIT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_18",
+      "reference_caption": "SIZE OF WIRES REQUIRED WITH UNIT",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_18/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_18/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_18/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11",
+      "reference_caption": "SIZE OF WIRES REQUIRED WITH UNIT",
+      "candidate_nearby_tag_text": "E-101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_36_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11",
+      "reference_caption": "TO EXISTING BUILDING NETWORK",
+      "candidate_nearby_tag_text": "E-101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4",
+      "reference_caption": "TO EXISTING BUILDING NETWORK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_6",
+      "reference_caption": "TO EXISTING BUILDING NETWORK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11",
+      "reference_caption": "TO EXISTING BUILDING NETWORK",
+      "candidate_nearby_tag_text": "E-101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4",
+      "reference_caption": "TO EXISTING BUILDING NETWORK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5",
+      "reference_caption": "TO EXISTING BUILDING NETWORK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11",
+      "reference_caption": "TO EXISTING BUILDING NETWORK",
+      "candidate_nearby_tag_text": "E-101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3",
+      "reference_caption": "TO EXISTING BUILDING NETWORK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5",
+      "reference_caption": "TO EXISTING BUILDING NETWORK",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_4_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_5/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_5_26",
+      "reference_caption": "CONDENSATE OVERFLOW ALARM",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_5_26/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_5_26/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_5_26/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_5_26",
+      "reference_caption": "CONDENSATE OVERFLOW ALARM",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_5_26/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_5_26/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_5_26/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11",
+      "reference_caption": "CONDENSATE OVERFLOW ALARM",
+      "candidate_nearby_tag_text": "E-101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_17_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_42",
+      "reference_caption": "Construction Documents",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_42/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_42/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_42/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_42",
+      "reference_caption": "Construction Documents",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_42/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_42/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_42/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11",
+      "reference_caption": "Construction Documents",
+      "candidate_nearby_tag_text": "E-101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_15_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11",
+      "reference_caption": "MANUFACTURER",
+      "candidate_nearby_tag_text": "E-101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_7_8",
+      "reference_caption": "MANUFACTURER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_7_8/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_7_8/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_7_8/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_4_25",
+      "reference_caption": "MANUFACTURER",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_4_25/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_4_25/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_37_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_4_25/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_14_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_3",
+      "reference_caption": "INTEGRATION.",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_14_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_14_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_14_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_14_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_3",
+      "reference_caption": "INTEGRATION.",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_14_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_3/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_14_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_3/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_14_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_3/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30",
+      "reference_caption": "RT-AI-04",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11",
+      "reference_caption": "RT-AI-04",
+      "candidate_nearby_tag_text": "E-101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_12",
+      "reference_caption": "RT-AI-04",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11",
+      "reference_caption": "RT-AI-04",
+      "candidate_nearby_tag_text": "E-101",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_0_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29",
+      "reference_caption": "RT-AI-04",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_29/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_12",
+      "reference_caption": "RT-AI-04",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_12/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_12/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_6_30_cand_bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC_3_12/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_41",
+      "reference_caption": "4. NATURAL GAS PIPING SYSTEMS",
+      "candidate_nearby_tag_text": "RTU-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_41/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_41/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_41/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_72",
+      "reference_caption": "4. NATURAL GAS PIPING SYSTEMS",
+      "candidate_nearby_tag_text": "DC-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_72/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_72/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_72/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_77",
+      "reference_caption": "4. NATURAL GAS PIPING SYSTEMS",
+      "candidate_nearby_tag_text": "MDP-9",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_77/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_77/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_35_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_77/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_92_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_96",
+      "reference_caption": "GENERAL CONTRACTOR, ETC.",
+      "candidate_nearby_tag_text": "MDP-12",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_92_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_96/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_92_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_96/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_6_92_cand_bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture_0_96/context.png"
+    }
+  ]
+}

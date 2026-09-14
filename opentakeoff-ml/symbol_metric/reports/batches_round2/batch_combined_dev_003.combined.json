@@ -1,0 +1,367 @@
+{
+  "batch_id": "batch_combined_dev_003",
+  "pass": "combined",
+  "instructions": "For EACH pair, perform three separate judgments IN ORDER, writing each one down before moving to the next, and do not let a later judgment revise an earlier one:\n(1) STRUCTURAL: judge only from candidate_nearby_tag_text -- is it a real authored tag/leader identifying this candidate as the referenced device? (weak evidence if absent/generic, strong_evidence:true only for a genuine specific tag match)\n(2) VISUAL: compare reference_image and candidate_image purely on shape/enclosure/internal-stroke identity, ignoring the caption text -- same physical symbol type?\n(3) CONTEXT: read context_image -- is this really a plausible HVAC/BAS device body consistent with reference_caption, not a title-block/drafting-convention/boilerplate element or an unrelated object?\nThen give ONE overall verdict (positive only if all three judgments genuinely support it; hard_negative/easy_negative/ambiguous/no_physical_symbol otherwise, matching CLAUDE-GEMINI-AUTONOMOUS-SYMBOL-MODEL-GOAL.md's acceptance policy) and directional:true if the symbol is asymmetric/direction-sensitive (check valve, flow arrow, actuator fail state). Output JSON: {\"batch_id\": \"...\", \"pass\": \"combined\", \"verdicts\": [{\"pair_id\": \"...\", \"structural_rationale\": \"...\", \"strong_evidence\": true|false, \"visual_rationale\": \"...\", \"visual_match\": true|false, \"context_rationale\": \"...\", \"verdict\": \"positive|hard_negative|easy_negative|ambiguous|no_physical_symbol\", \"directional\": true|false}]}. One entry per pair_id, none skipped.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76",
+      "reference_caption": "Notes: 1-PROVIDE GEFP TYPE CIRCUIT BREAKER (30mA TRIP)",
+      "candidate_nearby_tag_text": "AHU-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74",
+      "reference_caption": "Notes: 1-PROVIDE GEFP TYPE CIRCUIT BREAKER (30mA TRIP)",
+      "candidate_nearby_tag_text": "AHU-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_7_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142",
+      "reference_caption": "Baker City, Oregon",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76",
+      "reference_caption": "Baker City, Oregon",
+      "candidate_nearby_tag_text": "AHU-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74",
+      "reference_caption": "Baker City, Oregon",
+      "candidate_nearby_tag_text": "AHU-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_6_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142",
+      "reference_caption": "IN WORKSCOPE",
+      "candidate_nearby_tag_text": "CO2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_5_142/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76",
+      "reference_caption": "IN WORKSCOPE",
+      "candidate_nearby_tag_text": "AHU-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_76/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74",
+      "reference_caption": "IN WORKSCOPE",
+      "candidate_nearby_tag_text": "AHU-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_25_4_cand_bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet_24_74/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_2",
+      "reference_caption": "NORMALLY OPEN OR CLOSED AS SHOWN",
+      "candidate_nearby_tag_text": "AO-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_6",
+      "reference_caption": "NORMALLY OPEN OR CLOSED AS SHOWN",
+      "candidate_nearby_tag_text": "BO-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_0",
+      "reference_caption": "NORMALLY OPEN OR CLOSED AS SHOWN",
+      "candidate_nearby_tag_text": "EF-5",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_2_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_11",
+      "reference_caption": "NORMALLY OPEN OR CLOSED AS SHOWN",
+      "candidate_nearby_tag_text": "BI6",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_11/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_11/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_11/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_24",
+      "reference_caption": "NORMALLY OPEN OR CLOSED AS SHOWN",
+      "candidate_nearby_tag_text": "BI-2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_24/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_24/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_24/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_28",
+      "reference_caption": "NORMALLY OPEN OR CLOSED AS SHOWN",
+      "candidate_nearby_tag_text": "BI-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_28/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_28/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_5_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_28/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_6",
+      "reference_caption": "NORMALLY OPEN OR CLOSED AS SHOWN",
+      "candidate_nearby_tag_text": "BO-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_6/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_6/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_6/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_2",
+      "reference_caption": "NORMALLY OPEN OR CLOSED AS SHOWN",
+      "candidate_nearby_tag_text": "AO-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_0",
+      "reference_caption": "NORMALLY OPEN OR CLOSED AS SHOWN",
+      "candidate_nearby_tag_text": "EF-5",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_0/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_0/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_4_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_0/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_19",
+      "reference_caption": "MOTORIZED DAMPER, OPPOSED BLADE",
+      "candidate_nearby_tag_text": "BO-2",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_19/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_19/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_19/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_2",
+      "reference_caption": "MOTORIZED DAMPER, OPPOSED BLADE",
+      "candidate_nearby_tag_text": "EF-3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_2/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_2/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_17_2/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_52",
+      "reference_caption": "MOTORIZED DAMPER, OPPOSED BLADE",
+      "candidate_nearby_tag_text": "AI-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_52/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_52/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_12_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_52/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_238",
+      "reference_caption": "MOTORIZED DAMPER, OPPOSED BLADE",
+      "candidate_nearby_tag_text": "CCC-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_238/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_238/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_238/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_149",
+      "reference_caption": "MOTORIZED DAMPER, OPPOSED BLADE",
+      "candidate_nearby_tag_text": "V-11",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_149/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_149/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_149/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_144",
+      "reference_caption": "MOTORIZED DAMPER, OPPOSED BLADE",
+      "candidate_nearby_tag_text": "AI-12",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_144/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_144/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_43_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_144/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_115",
+      "reference_caption": "NOTEBOOK COMPUTER LOCATED IN",
+      "candidate_nearby_tag_text": "AI-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_115/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_115/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_115/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_23_15",
+      "reference_caption": "NOTEBOOK COMPUTER LOCATED IN",
+      "candidate_nearby_tag_text": "BI-5",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_23_15/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_23_15/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_23_15/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_102",
+      "reference_caption": "NOTEBOOK COMPUTER LOCATED IN",
+      "candidate_nearby_tag_text": "BI-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_102/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_102/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_45_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_102/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_152",
+      "reference_caption": "DIRECT DIGITAL CONTROLLER",
+      "candidate_nearby_tag_text": "AI-8",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_152/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_152/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_152/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_127",
+      "reference_caption": "DIRECT DIGITAL CONTROLLER",
+      "candidate_nearby_tag_text": "A1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_127/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_127/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_127/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45",
+      "reference_caption": "DIRECT DIGITAL CONTROLLER",
+      "candidate_nearby_tag_text": "BI-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_61_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_124",
+      "reference_caption": "NUMBER OF CONTROLLERS AND",
+      "candidate_nearby_tag_text": "AO-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_124/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_124/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_124/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_149",
+      "reference_caption": "NUMBER OF CONTROLLERS AND",
+      "candidate_nearby_tag_text": "V-11",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_149/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_149/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_22_149/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45",
+      "reference_caption": "NUMBER OF CONTROLLERS AND",
+      "candidate_nearby_tag_text": "BI-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_53_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_30",
+      "reference_caption": "COIL, ELECTRIC HEATING",
+      "candidate_nearby_tag_text": "BO-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_30/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_30/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_30/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_205",
+      "reference_caption": "COIL, ELECTRIC HEATING",
+      "candidate_nearby_tag_text": "P-5",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_205/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_205/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_205/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_186",
+      "reference_caption": "COIL, ELECTRIC HEATING",
+      "candidate_nearby_tag_text": "P-3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_186/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_186/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_32_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_186/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_266",
+      "reference_caption": "STATIC PRESSURE SENSOR",
+      "candidate_nearby_tag_text": "P-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_266/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_266/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_20_266/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_127",
+      "reference_caption": "STATIC PRESSURE SENSOR",
+      "candidate_nearby_tag_text": "A1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_127/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_127/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_24_127/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45",
+      "reference_caption": "STATIC PRESSURE SENSOR",
+      "candidate_nearby_tag_text": "BI-1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_21_63_cand_bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility_26_45/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_7_21",
+      "reference_caption": "(CAST IN PLACE OR PRECAST)",
+      "candidate_nearby_tag_text": "R1",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_7_21/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_7_21/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_7_21/context.png"
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32",
+      "reference_caption": "(CAST IN PLACE OR PRECAST)",
+      "candidate_nearby_tag_text": "R3",
+      "association_method_proposed": "authored_leader",
+      "reference_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32/reference_300.png",
+      "candidate_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32/candidate_300.png",
+      "context_image": "data/evidence/pair_leg_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_1_7_cand_bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU_6_32/context.png"
+    }
+  ]
+}

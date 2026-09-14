@@ -1,0 +1,263 @@
+{
+  "batch_id": "batch_test_004",
+  "pass": "structural",
+  "instructions": "PASS A -- STRUCTURAL EVIDENCE ONLY. For each pair, judge only whether candidate_nearby_tag_text is a real authored tag/leader that identifies this specific candidate as the device the reference row names. A caption+tag word overlap is weak evidence; an exact/near-exact equipment tag next to the candidate is strong evidence (set strong_evidence:true only then). If there is no tag nearby, verdict should usually be 'ambiguous' (structural evidence alone can't decide) rather than a guess -- Pass B/C carry the rest of the decision. Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1761,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_6_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "1. Clean work areas including all environmental surfaces,",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3067,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "release. Use the following precautions when",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.6223,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "release. Use the following precautions when",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.7525,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_40_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "release. Use the following precautions when",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.0322,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.8339,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.9622,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_42_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.2355,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0176,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.294,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_3_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "Includes, but is not limited to:",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4233,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "DRAWINGS AND SPECIFICATIONS.",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.218,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "DRAWINGS AND SPECIFICATIONS.",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.346,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_13_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "DRAWINGS AND SPECIFICATIONS.",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.6323,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "Patient Risk Group Table",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.4937,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "Patient Risk Group Table",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.6239,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_1_49_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "Patient Risk Group Table",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.9106,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_22",
+      "reference_caption": "CONTRACTING OFFICER.",
+      "candidate_nearby_tag_text": "E2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.1482,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_18",
+      "reference_caption": "CONTRACTING OFFICER.",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.278,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_5_30_cand_bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing_15_6",
+      "reference_caption": "CONTRACTING OFFICER.",
+      "candidate_nearby_tag_text": "E1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 2.556,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_17",
+      "reference_caption": "TYPICAL DEVICE ELEVATION DETAIL",
+      "candidate_nearby_tag_text": "DP3",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4804,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_6_90",
+      "reference_caption": "TYPICAL DEVICE ELEVATION DETAIL",
+      "candidate_nearby_tag_text": "B2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4845,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_3_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_18",
+      "reference_caption": "TYPICAL DEVICE ELEVATION DETAIL",
+      "candidate_nearby_tag_text": "DP5",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4928,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_13",
+      "reference_caption": "LIGHT SWITCH",
+      "candidate_nearby_tag_text": "D3",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1701,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_6_40",
+      "reference_caption": "LIGHT SWITCH",
+      "candidate_nearby_tag_text": "D4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1864,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_2_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_6",
+      "reference_caption": "LIGHT SWITCH",
+      "candidate_nearby_tag_text": "D2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2134,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_13",
+      "reference_caption": "PUSH IN",
+      "candidate_nearby_tag_text": "D3",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1412,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_6",
+      "reference_caption": "PUSH IN",
+      "candidate_nearby_tag_text": "D2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1904,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_0_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_5_5",
+      "reference_caption": "PUSH IN",
+      "candidate_nearby_tag_text": "D4",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1966,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_176",
+      "reference_caption": "1P3-29",
+      "candidate_nearby_tag_text": "GP3",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3301,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_156",
+      "reference_caption": "1P3-29",
+      "candidate_nearby_tag_text": "GP3",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3993,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:24_IA_JohnsonCounty_Courthouse_26_7_cand_bulk_vol1:24_IA_JohnsonCounty_Courthouse_15_147",
+      "reference_caption": "1P3-29",
+      "candidate_nearby_tag_text": "CF6",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5264,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    }
+  ]
+}

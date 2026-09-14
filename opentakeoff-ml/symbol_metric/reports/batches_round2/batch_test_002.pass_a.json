@@ -1,0 +1,327 @@
+{
+  "batch_id": "batch_test_002",
+  "pass": "structural",
+  "instructions": "PASS A -- STRUCTURAL EVIDENCE ONLY. For each pair, judge only whether candidate_nearby_tag_text is a real authored tag/leader that identifies this specific candidate as the device the reference row names. A caption+tag word overlap is weak evidence; an exact/near-exact equipment tag next to the candidate is strong evidence (set strong_evidence:true only then). If there is no tag nearby, verdict should usually be 'ambiguous' (structural evidence alone can't decide) rather than a guess -- Pass B/C carry the rest of the decision. Write your output as JSON: {\"batch_id\": \"<id>\", \"pass\": \"<structural|visual|context>\", \"verdicts\": [{\"pair_id\": \"...\", \"verdict\": \"positive|negative|ambiguous|no_physical_symbol\", \"strong_evidence\": true|false, \"directional\": true|false, \"rationale\": \"one or two sentences\"}]}. One verdict object per pair_id in the input. Do not skip any pair.",
+  "items": [
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_12_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_9",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0184,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_10",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.1002,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_11",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.1002,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_24_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_6_12",
+      "reference_caption": "XXX-#",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.1002,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_1",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_1",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_5_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_1",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_7_0",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_8_0",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_5_0_cand_bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC_9_0",
+      "reference_caption": "BHU",
+      "candidate_nearby_tag_text": null,
+      "association_method_proposed": "legend_similarity",
+      "shape_distance": 0.0,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "HP-2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0636,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "SA-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2111,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_3_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "H-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2221,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "HP-2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0636,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "SA-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2111,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_6_10_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "reference_caption": "FIRST FLOOR REFLECTED CEILING PLAN",
+      "candidate_nearby_tag_text": "H-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2221,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100",
+      "reference_caption": "HARDENING ACOUSTICAL SEALANT BOTH",
+      "candidate_nearby_tag_text": "R-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5039,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86",
+      "reference_caption": "HARDENING ACOUSTICAL SEALANT BOTH",
+      "candidate_nearby_tag_text": "T-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.0212,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_46_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "reference_caption": "HARDENING ACOUSTICAL SEALANT BOTH",
+      "candidate_nearby_tag_text": "HP-2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.4861,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "reference_caption": "FIRST FLOOR DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "HP-2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0636,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "reference_caption": "FIRST FLOOR DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "SA-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2111,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_22_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "reference_caption": "FIRST FLOOR DEMOLITION PLAN",
+      "candidate_nearby_tag_text": "H-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2221,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_52",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "H-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5192,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "G001",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5272,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_41_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "SA-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5317,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "F-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0894,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "H-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.1332,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_14_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "reference_caption": "GENERAL WALL TYPE NOTES:",
+      "candidate_nearby_tag_text": "SA-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2657,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_40",
+      "reference_caption": "DEMO FLOOR PLAN KEYNOTES",
+      "candidate_nearby_tag_text": "R-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0056,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_41",
+      "reference_caption": "DEMO FLOOR PLAN KEYNOTES",
+      "candidate_nearby_tag_text": "T-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0216,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_2_5_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_3",
+      "reference_caption": "DEMO FLOOR PLAN KEYNOTES",
+      "candidate_nearby_tag_text": "RB1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.0541,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_15_41",
+      "reference_caption": "ACOUSTIC BATT INSULATION",
+      "candidate_nearby_tag_text": "HP-2",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.5918,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_25",
+      "reference_caption": "ACOUSTIC BATT INSULATION",
+      "candidate_nearby_tag_text": "SA-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.6603,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_42_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "reference_caption": "ACOUSTIC BATT INSULATION",
+      "candidate_nearby_tag_text": "H-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.7494,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_17",
+      "reference_caption": "WINDOW TYPE (SEE A600s)",
+      "candidate_nearby_tag_text": "SA-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2338,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_9_23",
+      "reference_caption": "WINDOW TYPE (SEE A600s)",
+      "candidate_nearby_tag_text": "F-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.2743,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_12_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_8_14",
+      "reference_caption": "WINDOW TYPE (SEE A600s)",
+      "candidate_nearby_tag_text": "H-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.3183,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_100",
+      "reference_caption": "WALL TYPE MODIFIERS:",
+      "candidate_nearby_tag_text": "R-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.4435,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_7_86",
+      "reference_caption": "WALL TYPE MODIFIERS:",
+      "candidate_nearby_tag_text": "T-1",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 0.7016,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    },
+    {
+      "pair_id": "pair_leg_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_4_44_cand_bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation_0_4",
+      "reference_caption": "WALL TYPE MODIFIERS:",
+      "candidate_nearby_tag_text": "G001",
+      "association_method_proposed": "authored_leader",
+      "shape_distance": 1.0271,
+      "note": "association_method_proposed and shape_distance are an UNVERIFIED geometric guess, not evidence -- judge only from whether candidate_nearby_tag_text plausibly authored-tags/leaders this candidate as the referenced device."
+    }
+  ]
+}
