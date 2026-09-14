@@ -1,0 +1,16 @@
+{
+  "format": "opentakeoff-symbol-metric-onnx-v1",
+  "path": "/workspace/training/opentakeoff-symbol-metric-runs/v1/dinov2_vits14_symbol_metric_v1.onnx",
+  "input": [
+    "batch",
+    3,
+    280,
+    280
+  ],
+  "output": [
+    "batch",
+    256
+  ],
+  "checkpoint": "/workspace/training/opentakeoff-symbol-metric-runs/v1/best.pt",
+  "warning": "This ONNX artifact ranks visual candidates only. It cannot establish a symbol, tag, quantity, or citation by itself."
+}

@@ -1,0 +1,12 @@
+{
+  "format": "opentakeoff-symbol-metric-evaluation-v1",
+  "checkpoint": "/workspace/training/opentakeoff-symbol-metric-runs/v1/best.pt",
+  "split": "test",
+  "records": 1397,
+  "mean_two_view_cosine": 0.9662060141563416,
+  "weak_source_label_recall_at_1": 0.9089605734767026,
+  "weak_source_label_recall_at_5": 0.9627240143369176,
+  "weak_label_comparable_queries": 1395,
+  "elapsed_seconds": 4.457491962937638,
+  "warning": "Weak source-label retrieval and two-view cosine are pretraining diagnostics, not project-held-out legend-to-plan or installed-quantity accuracy."
+}

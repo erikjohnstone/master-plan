@@ -70,3 +70,10 @@ sidecar/.model_cache/
 # Voice model artifacts (~45 MB) — staged by web/scripts/fetch-voice-model.mjs
 # into public/ for same-origin serving; never committed (RFC #59)
 web/public/models/
+!web/public/models/
+!web/public/models/dinov2-symbol-metric-v1/
+!web/public/models/dinov2-symbol-metric-v1/dinov2_vits14_symbol_metric_v1.onnx
+
+# Trainable checkpoint is retained locally with the provenance record, but the
+# browser consumes only the ONNX artifact above.
+docs/models/dinov2-symbol-metric-v1/best.pt

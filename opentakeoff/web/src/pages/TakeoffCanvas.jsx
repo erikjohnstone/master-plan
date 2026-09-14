@@ -104,6 +104,7 @@ import { HVAC_REF_SHAPES } from "../lib/hvacRefShapes.ts";
 // library never scales to every firm's own house legend. findLegendGlyphs
 // auto-detects a job's own legend rows instead of requiring one.
 import { findLegendGlyphs, findGlyphNear, legendLearnStatus } from "../lib/legendlearn.ts";
+import { buildSahiTiles, sahiTileForPageBbox } from "../lib/symbolMetric.ts";
 // Accuracy-hardening plan Phase 4 — a register/grille mark embedded within a
 // tapered duct run has no independent whole-shape perimeter of its own; see
 // inlinemotif.ts's own header comment for the real, measured reason
@@ -6982,6 +6983,85 @@ export default function TakeoffCanvas() {
     };
   }
 
+  /**
+   * Browser production-path visual verification.
+   *
+   * SHOULD THIS BE ON THE SHARED PATH? No: obtaining raster pixels from a
+   * browser PDF.js page is surface-specific. The shared tile coordinates,
+   * image preparation, cosine scoring, and review-only decision contract are
+   * in symbolMetric.ts. This adapter is deliberately incapable of creating a
+   * shape, changing reconciliation, or accepting an installed quantity.
+   *
+   * `reference` and every `candidate` must be pre-proposed PHYSICAL-BODY
+   * bboxes, never a tag-text or schedule-table bbox. Vector/leader/legend
+   * ownership remains the source of truth; DINO supplies only a ranked visual
+   * check of those already-evidenced bodies.
+   */
+  async function agentVisualSymbolReview(request = {}) {
+    const normalize = (entry, role, index) => {
+      const sheet = String(entry?.sheet || entry?.sheet_id || "").trim();
+      const bbox = entry?.bbox_px;
+      if (!sheet || !Array.isArray(bbox) || bbox.length !== 4 || !bbox.every(Number.isFinite)
+        || !(bbox[2] > bbox[0]) || !(bbox[3] > bbox[1])) {
+        throw new Error(`${role}${index == null ? "" : ` ${index + 1}`} needs a loaded sheet and one finite physical-body bbox_px.`);
+      }
+      return { id: String(entry?.id || `${role}-${index ?? 0}`), sheet, bbox_px: [bbox[0], bbox[1], bbox[2], bbox[3]] };
+    };
+    try {
+      const reference = normalize(request.reference, "reference");
+      const candidates = Array.isArray(request.candidates) ? request.candidates.map((entry, index) => normalize(entry, "candidate", index)) : [];
+      if (!candidates.length) return { error: "Visual review needs at least one vector/legend-proposed physical-body candidate." };
+      if (new Set(candidates.map(candidate => candidate.id)).size !== candidates.length) {
+        return { error: "Each visual-review candidate needs a unique id." };
+      }
+      const requestedSizes = Array.isArray(request.tile_sizes)
+        ? request.tile_sizes.filter(size => Number.isFinite(size) && size >= 256 && size <= 2048).map(size => Math.round(size))
+        : undefined;
+      const { cropSahiCandidate, rankSymbolMetricImages, renderSahiPdfTile } = await import("../lib/symbolMetricBrowser.ts");
+      const renderedTiles = new Map();
+      const materialize = async (entry) => {
+        const panel = agentPanelFor(entry.sheet);
+        if (!panel?.img?.w || !panel?.img?.h) throw new Error(`Sheet ${entry.sheet} is not rendered; visual review will not substitute guessed page dimensions.`);
+        const source = parseSheetKey(entry.sheet);
+        const document = await docFor(source.file);
+        if (!document || source.page < 1 || source.page > document.numPages) throw new Error(`Original PDF for ${entry.sheet} is not loaded.`);
+        const tiles = buildSahiTiles(panel.img.w, panel.img.h, requestedSizes ? { tile_sizes: requestedSizes } : {});
+        const tile = sahiTileForPageBbox(tiles, entry.bbox_px);
+        if (!tile) throw new Error(`Physical body ${entry.id} does not fit completely in a scan tile; it was not sent to the model.`);
+        const cacheKey = `${entry.sheet}::${tile.id}`;
+        let rendered = renderedTiles.get(cacheKey);
+        if (!rendered) {
+          const page = await document.getPage(source.page);
+          rendered = await renderSahiPdfTile(page, tile, RENDER_SCALE);
+          renderedTiles.set(cacheKey, rendered);
+        }
+        return cropSahiCandidate(rendered, entry.bbox_px);
+      };
+      const referenceImage = await materialize(reference);
+      const candidateImages = await Promise.all(candidates.map(async candidate => ({ ...candidate, image: await materialize(candidate) })));
+      const ranked = await rankSymbolMetricImages(referenceImage, candidateImages.map(candidate => ({
+        id: candidate.id, image: candidate.image, value: candidate,
+      })));
+      return {
+        model: "dinov2_symbol_metric_v1",
+        decision: "ranked_review",
+        execution_provider: ranked.execution_provider,
+        reference: { sheet: reference.sheet, bbox_px: reference.bbox_px },
+        candidates: ranked.ranked.map(row => ({
+          id: row.id,
+          sheet: row.value.sheet,
+          bbox_px: row.value.bbox_px,
+          cosine_similarity: Number(row.cosine_similarity.toFixed(6)),
+          decision: row.decision,
+        })),
+        tiles_rendered: renderedTiles.size,
+        note: "Original PDF tiles and tight, pre-proposed physical-body crops were compared. This ranks review candidates only; it does not identify a tag, prove a legend relationship, or alter a count.",
+      };
+    } catch (error) {
+      return { error: error?.message || String(error) };
+    }
+  }
+
   // sweep_inline_motif (accuracy-hardening plan Phase 4) — a register/grille
   // mark embedded within a duct run, matched on its own hatch fill's
   // real-world size/pitch rather than exact whole-shape segment count (see
@@ -8508,6 +8588,12 @@ export default function TakeoffCanvas() {
         graphTables: () => graphTables,
         scheduleTables: () => currentGraphTables,
         openSchedules: () => setSchedulesOpen(true),
+        // Real browser/PDF.js path for the trained DINO verifier. Tests must
+        // pass actual physical-body bboxes (not tags or schedule rows); the
+        // result is expressly ranked review evidence and cannot mutate a
+        // takeoff. This also lets Playwright prove the deployed ONNX model is
+        // consuming original drawing tiles rather than a synthetic image.
+        visualSymbolReview: (request) => agentVisualSymbolReview(request),
         // Put an answer in the thread without a model call, so the answer's
         // OWN rendering — inline cites, meta chips, tables — is verifiable in
         // a container where api.cerebras.ai is unreachable. Citations are the

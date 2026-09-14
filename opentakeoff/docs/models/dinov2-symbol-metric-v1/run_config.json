@@ -1,0 +1,23 @@
+{
+  "dataset": "/workspace/training/HVAC_BAS_RTDETR/DINOv2_METRIC_V1",
+  "source_root": "/workspace/training/HVAC_BAS_RTDETR/TRAIN_NOW",
+  "output": "/workspace/training/opentakeoff-symbol-metric-runs/v1",
+  "hub_cache": "/workspace/training/dino-hub-cache",
+  "epochs": 20,
+  "batch_size": 32,
+  "num_workers": 4,
+  "lr_head": 0.0003,
+  "lr_backbone": 1e-05,
+  "weight_decay": 0.0001,
+  "temperature": 0.1,
+  "freeze_backbone_epochs": 1,
+  "augmentation_profile": "extended",
+  "use_weak_proxy_labels": true,
+  "proxy_weight": 0.15,
+  "seed": 20260914,
+  "save_every": 1,
+  "max_train_batches": 0,
+  "max_validation_batches": 0,
+  "resume": null,
+  "warning": "Auxiliary pretraining only; no production accuracy claim."
+}

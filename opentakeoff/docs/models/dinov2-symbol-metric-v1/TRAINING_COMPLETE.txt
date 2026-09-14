@@ -1,0 +1,1 @@
+Training completed. This checkpoint remains auxiliary visual pretraining; evaluate held-out reviewed project pairs before any product use.
