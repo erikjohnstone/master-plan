@@ -45,23 +45,54 @@ const masterRoot = path.resolve(here, "../../..");
 const corpusRoot = path.join(masterRoot, "HVAC BAS Benchmark Collection");
 const manifestPath = path.join(corpusRoot, "ground_truth/symbol_sweep/cases.json");
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-if (manifest.schema !== "opentakeoff.symbol_sweep_ground_truth.v1") {
+// v2 (GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1) is a strict additive
+// superset of v1 — every existing check below reads only v1-shaped fields,
+// so both schema versions run identically here. See ground_truth/
+// symbol_sweep/README.md's "Schema v2" section for the added, optional
+// per-instance/per-case fields this runner does not yet consume.
+const SUPPORTED_SCHEMAS = new Set([
+  "opentakeoff.symbol_sweep_ground_truth.v1",
+  "opentakeoff.symbol_sweep_ground_truth.v2",
+]);
+if (!SUPPORTED_SCHEMAS.has(manifest.schema)) {
   throw new Error(`Unsupported symbol ground-truth schema: ${manifest.schema}`);
 }
 
 const MODES = new Set(["manifest", "default", "rigid", "affine"]);
 let mode = "manifest";
+let reportV2Fields = false;
 const rest = [];
 for (const arg of process.argv.slice(2)) {
   const m = /^--mode=(.+)$/.exec(arg);
   if (m) {
     if (!MODES.has(m[1])) throw new Error(`Unknown --mode ${JSON.stringify(m[1])}; use one of ${[...MODES].join(", ")}`);
     mode = m[1];
+  } else if (arg === "--report-v2-fields") {
+    reportV2Fields = true;
   } else {
     rest.push(arg);
   }
 }
 const selected = new Set(rest);
+
+// Schema v2 field presence, reported additively — never consumed by any
+// existing check above or below. A case/instance missing a v2 field means
+// "not yet reviewed to this depth," not pass/fail; this exists purely so a
+// reader can ask "how much of the §4 evidence model does this case actually
+// carry" without hand-diffing cases.json.
+const CASE_V2_FIELDS = ["hard_negatives", "holdout_split"];
+const INSTANCE_V2_FIELDS = [
+  "context", "family", "tag_scope", "reference_source", "reference_bbox",
+  "reference_primitive_ids", "body_bbox", "body_polygon", "owned_primitive_ids",
+  "leader", "association_type", "carrier_attachment_points", "countable",
+  "countable_reason", "transform_family", "render",
+];
+function v2FieldsPresent(c) {
+  const caseFields = CASE_V2_FIELDS.filter((f) => Object.hasOwn(c, f));
+  const perInstance = c.instances.map((inst) => INSTANCE_V2_FIELDS.filter((f) => Object.hasOwn(inst, f)));
+  const instancesWithAny = perInstance.filter((f) => f.length).length;
+  return { case_fields: caseFields, instances_annotated: instancesWithAny, instances_total: c.instances.length, per_instance: perInstance };
+}
 const cases = selected.size ? manifest.cases.filter((c) => selected.has(c.id)) : manifest.cases;
 for (const id of selected) {
   if (!cases.some((c) => c.id === id)) throw new Error(`Unknown symbol-sweep case: ${id}`);
@@ -302,13 +333,17 @@ for (const c of cases) {
   rows.push({
     id: c.id, ok, campaign: c.campaign ?? "baseline", expected: c.instances.length, found: result?.found ?? 0,
     elapsed_ms: elapsedMs, errors, effective_options: sweepOpts, manifest_override_fields: overriddenFields,
+    ...(reportV2Fields ? { v2_fields: v2FieldsPresent(c) } : {}),
   });
   const overrideNote = overriddenFields.length ? ` [manifest override: ${overriddenFields.join(",")}]` : "";
+  const v2Note = reportV2Fields
+    ? (() => { const v = v2FieldsPresent(c); return ` [v2: ${v.instances_annotated}/${v.instances_total} instances, case fields: ${v.case_fields.join(",") || "none"}]`; })()
+    : "";
   if (isAffine) {
     const r = affineRows[affineRows.length - 1];
-    console.log(`${ok ? "PASS" : "FAIL"} [affine] ${c.id}: ${r.matched} matched, ${r.withheld} withheld, ${r.missing} missing / ${r.total} in ${elapsedMs} ms${overrideNote}`);
+    console.log(`${ok ? "PASS" : "FAIL"} [affine] ${c.id}: ${r.matched} matched, ${r.withheld} withheld, ${r.missing} missing / ${r.total} in ${elapsedMs} ms${overrideNote}${v2Note}`);
   } else {
-    console.log(`${ok ? "PASS" : "FAIL"} ${c.id}: ${result?.found ?? 0}/${c.instances.length} in ${elapsedMs} ms${overrideNote}`);
+    console.log(`${ok ? "PASS" : "FAIL"} ${c.id}: ${result?.found ?? 0}/${c.instances.length} in ${elapsedMs} ms${overrideNote}${v2Note}`);
   }
   for (const error of errors) console.log(`  - ${error}`);
 }

@@ -1,5 +1,5 @@
 {
-  "schema": "opentakeoff.symbol_sweep_ground_truth.v1",
+  "schema": "opentakeoff.symbol_sweep_ground_truth.v2",
   "updated": "2026-09-05",
   "cases": [
     {

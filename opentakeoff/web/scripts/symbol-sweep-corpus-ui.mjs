@@ -40,7 +40,10 @@ if (!new Set(["manual", "agent"]).has(surface)) {
 }
 
 const manifest = JSON.parse(readFileSync(GT, "utf8"));
-if (manifest.schema !== "opentakeoff.symbol_sweep_ground_truth.v1") {
+// v2 (GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1) is a strict additive
+// superset of v1 — this script reads only v1-shaped fields, so both schema
+// versions run identically here.
+if (!["opentakeoff.symbol_sweep_ground_truth.v1", "opentakeoff.symbol_sweep_ground_truth.v2"].includes(manifest.schema)) {
   throw new Error(`Unsupported symbol ground-truth schema: ${manifest.schema}`);
 }
 const selected = new Set(process.argv.slice(2));
