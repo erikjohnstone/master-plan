@@ -144,22 +144,31 @@
         "tag": null,
         "at": [989.9, 1065.2],
         "tolerance_px": 2,
-        "tag_bbox": null
+        "tag_bbox": null,
+        "family": "paired roof drain assembly",
+        "association_type": "leader",
+        "transform_family": "rigid",
+        "countable": true,
+        "reference_source": "manual_seed",
+        "body_bbox": [970.1, 1020.5, 1006.6, 1101.4],
+        "render": "reviews/04__vol2__062/p24-seed.png"
       },
       "instances": [
-        { "id": "roof-drain-pair-02", "at": [2605.3, 867.7], "tolerance_px": 6, "tag": null, "tag_bbox": null },
-        { "id": "roof-drain-pair-03", "at": [990.1, 1622.7], "tolerance_px": 6, "tag": null, "tag_bbox": null },
-        { "id": "roof-drain-pair-04", "at": [2605.3, 1622.8], "tolerance_px": 6, "tag": null, "tag_bbox": null },
-        { "id": "roof-drain-pair-05", "at": [2605.3, 2180.8], "tolerance_px": 6, "tag": null, "tag_bbox": null },
-        { "id": "roof-drain-pair-06", "at": [989.9, 2432.2], "tolerance_px": 6, "tag": null, "tag_bbox": null }
+        { "id": "roof-drain-pair-02", "at": [2605.3, 867.7], "tolerance_px": 6, "tag": null, "tag_bbox": null, "family": "paired roof drain assembly", "association_type": "leader", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2589.1, 830.4, 2624.2, 903.4], "render": "reviews/04__vol2__062/p24-roof-drain-pair-02.png" },
+        { "id": "roof-drain-pair-03", "at": [990.1, 1622.7], "tolerance_px": 6, "tag": null, "tag_bbox": null, "family": "paired roof drain assembly", "association_type": "leader", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [970.3, 1585.0, 1006.6, 1658.9], "render": "reviews/04__vol2__062/p24-roof-drain-pair-03.png" },
+        { "id": "roof-drain-pair-04", "at": [2605.3, 1622.8], "tolerance_px": 6, "tag": null, "tag_bbox": null, "family": "paired roof drain assembly", "association_type": "leader", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2589.1, 1583.8, 2624.2, 1658.9], "render": "reviews/04__vol2__062/p24-roof-drain-pair-04.png" },
+        { "id": "roof-drain-pair-05", "at": [2605.3, 2180.8], "tolerance_px": 6, "tag": null, "tag_bbox": null, "family": "paired roof drain assembly", "association_type": "leader", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2589.1, 2144.6, 2624.2, 2216.6], "render": "reviews/04__vol2__062/p24-roof-drain-pair-05.png" },
+        { "id": "roof-drain-pair-06", "at": [989.9, 2432.2], "tolerance_px": 6, "tag": null, "tag_bbox": null, "family": "paired roof drain assembly", "association_type": "leader", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [970.1, 2387.5, 1006.6, 2469.1], "render": "reviews/04__vol2__062/p24-roof-drain-pair-06.png" }
       ],
+      "holdout_split": "development",
       "review": {
         "render": "ground_truth/reviews/04__vol2__062/p24-p24-full-poppler.png",
         "method": "Full-page plumbing roof-plan review and exact two-ring OD-1/RD-1 assembly verification.",
         "notes": [
           "Six installed paired roof-drain assemblies are visible; each contains adjacent OD-1 and RD-1 ring symbols, so the seed leaves five expected assemblies.",
           "The paired-ring seed excludes the roof boundary and outgoing leaders. A stated 4 px tolerance is required for export jitter among otherwise identical ring assemblies.",
-          "The evaluation counts paired assemblies, not the twelve individual OD/RD rings and not their label text."
+          "The evaluation counts paired assemblies, not the twelve individual OD/RD rings and not their label text.",
+          "v2 (2026-09-14): body_bbox for every instance (seed included) computed from fingerprintSymbol's own retained segments on the real vector geometry (opentakeoff/mcp/scripts/annotate-body-bbox.mjs), not eyeballed from a raster crop — every reported center matches this case's frozen `at` to within 1.3px, confirming the same physical assembly was captured each time (724-732 segments per instance, consistent with the seed's own 732). Each ring pair connects to its 'OD-1'/'RD-1' capacity text by a real drawn leader (a short straight arrow at the seed; an L-shaped elbow leader at roof-drain-pair-05 — genuine per-instance routing variation, confirmed by direct render, not assumed uniform) — association_type is 'leader' throughout despite `tag` being null, because the connected text is a generic capacity label, not a per-instance unique identifier (the reason `tag`/`tag_bbox` stay null, unrelated to the leader's own existence). No rotation or scale variation observed across any of the 6 instances on this sheet — transform_family 'rigid' for all. reference_primitive_ids/owned_primitive_ids intentionally left unset (Phase 2's VectorSceneIndex does not exist yet); hard_negatives intentionally left unset (no exhaustive whole-sheet lookalike search performed this pass, only the confirmed-instance neighborhoods)."
         ]
       }
     },
