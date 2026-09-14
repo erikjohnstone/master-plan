@@ -3130,6 +3130,52 @@ title-fabrication/misclassification mechanisms this entry names, are
 UNCHANGED — B-43 does not touch them. Full accounting in B-43; this
 document is closer to correct but still not clean.
 
+**ROOT CAUSE CORRECTED 2026-09-14 — the "duplicate/double-struck text"
+theory above is wrong; re-measured live and it is a vectorgrid face-
+weld, the same disease family as B-32's own `073_MT` sliver precedent,
+just at a much smaller scale.** Re-checked the "genuine duplicate/
+double-struck text" claim directly: a page-wide PyMuPDF near-duplicate-
+word scan (same text, bbox within 2pt) finds exactly 2 pairs on this
+whole page, neither anywhere near `GAS CONNECTED LOAD TABLE` — that
+theory does not hold up.
+
+What is actually happening, confirmed by calling `vectorgrid.py`'s
+`find_tables()` directly and rendering both real tables' own regions:
+`GAS CONNECTED LOAD TABLE` (a real, small, 2-column/4-row box,
+`(159.6,435.5)-(581.7,633.4)` cropbox-relative pt) and `HYDRONIC
+SPECIALTIES SCHEDULE` (a real, separate, ~30-row attribute/value box,
+`(163.9,692.6)-(586.0,1203.6)`) sit only **59.2pt apart** — a real,
+visible gap, but a short one. `find_tables()` reports these as ONE
+362-cell table spanning both boxes end to end. This is exactly the
+mechanism the file's own `073_MT` comment names ("the blank sheet
+BETWEEN two stacked blocks... welds them exactly as a sliver does") —
+but that guard (`MAX_CELL_HFRAC`) is sized for the LARGE gaps in that
+precedent (270-341pt); a 59pt gap between two schedules stacked in the
+same column is comfortably under it, so the connecting blank face
+survives and the union-find adjacency step glues both real tables
+together with no border-weight wall to stop it (there is no drawn rule
+in the gap at all — nothing for the wall test to catch). Downstream,
+whatever assembles this bloated candidate's headers concatenates text
+across far more rows/columns than either real table has, producing the
+`headers` array's own visibly cumulative, ever-growing garbage strings.
+The `"COMBINATION IN EXISTING BUCKET WITH OVERLOADS HVAC HVAC PIPING
+WITHIN PIPING MATERIAL MCC MATERIAL SCHEDULE SCHEDULE"` hybrid title
+(mixing electrical/VFD text with `HVAC PIPING MATERIAL SCHEDULE`,
+repeated twice) on this same page is consistent with the identical
+mechanism applied to a different close-stacked pair, though not traced
+to the same pt-level precision here.
+
+**Not fixed.** A general fix (tightening `MAX_CELL_HFRAC` for a short
+blank connecting face, or extending the existing `cols_of`/`_row_agree
+ment` column-divergence test — already used to merge BACK over-eager
+weight cuts — to also REFUSE a union across an unruled gap when the two
+sides' own column sets diverge) touches every table in the corpus and
+needs the same before/after corpus-wide validation B-27's rejected
+threshold change was held to before it can ship; not attempted under
+this pass's budget. Filed as the corrected, precisely-measured root
+cause replacing the "duplicate/double-struck text" theory above, which
+does not survive a direct re-check.
+
 ### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (PARTIALLY FIXED 2026-09-13 — original document's untitled-phantom half closed; the duplicate-table half and 2 recurring instances remain open)
 
 **Where:**
