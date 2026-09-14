@@ -9916,6 +9916,20 @@ export function scheduleTableFromODL(
      * changes nothing — opt-in at the vectorgrid caller only, matching this
      * bug's own scope (found on an ODL table sourced through vectorgrid). */
     unitLabelSubHeader?: boolean;
+    /** B-19 (opt-in only — see synthesizeUnruledHeaderAbove's own doc): when
+     * this table has NO usable header inside its own ruled grid at all (the
+     * "no header block above the data" refusal below would otherwise fire),
+     * search the page's own text spans in the gap directly above the
+     * table's own top edge for words that land one-per-column on the
+     * column x-boundaries the table's own data cells already establish, and
+     * synthesize a header row from them when enough columns clear the bar
+     * AND the result independently clears this function's own header
+     * vocabulary bar. False/undefined (every existing caller) changes
+     * nothing — opt-in at the vectorgrid caller only, matching this bug's
+     * own found scope (an ODL table sourced through vectorgrid whose real
+     * header prints loose, with no rules of its own, above a ruled data
+     * grid that starts with genuinely blank spacer rows). */
+    unruledHeaderAbove?: boolean;
   } = {},
 ): ScheduleTable | null {
   const refuse = (reason: string): null => { opts.reject?.(reason); return null; };
@@ -10216,6 +10230,103 @@ export function scheduleTableFromODL(
     return { texts, hitRate: texts.length ? hits / texts.length : 0 };
   };
 
+  // B-19 (opts.unruledHeaderAbove only — see its own doc on this function's
+  // signature). A table can have NO usable header inside its own ruled grid
+  // at all: real, corpus-found, 08_ME_BGS_Augusta_EastCampus_Renovation.pdf
+  // #23's own PROJECT FINISH SCHEDULE — its own ruled grid's rows 0-1 are
+  // genuinely blank (every column owns a real cell, but every one of those
+  // cells is empty text; not the "no cells at all" shape the plain
+  // blank-spacer-row skip above already handles), row 2 is the real first
+  // data row (`111`/`STORAGE`/`EXIST QT`/...), and the real column names
+  // (`ROOM`/`FLOOR`/`WALL BASE`/`WALL MATL`/`WALL FINISH`/`CEILING MATL`/
+  // `CEILING FINISH`/`CEILING HEIGHT`/`NOTES`) sit ~61pt ABOVE the ruled
+  // grid's own top edge, typed loose with no rules of their own — never
+  // captured as an ODL cell at all, so no amount of header/data-boundary
+  // logic operating on the grid's own rows can ever recover them. The
+  // table is refused ("no header block above the data") though the reader
+  // found its data perfectly.
+  //
+  // Mirrors sidecar/celltext.py's own split_unruled_header_row safety
+  // constraints exactly (same family — a real header with no rules of its
+  // own — applied here to a header with NO face/cell of its own at all,
+  // rather than one glued onto the title inside a single over-tall face):
+  // a text span counts for a column only when it sits ENTIRELY inside that
+  // column's own established x-range (derived from the table's own DATA
+  // cells, which exist — with real bounding boxes — even on a row whose
+  // text is blank), never straddling a boundary, the same "no edge cutting
+  // a word" rule that automatically excludes a real wide caption or title
+  // span from ever counting toward any one column; and at least half the
+  // columns must get a match. A further, independent bar this celltext.py
+  // analog does not need (it already trusts vectorgrid's own face split):
+  // the synthesized labels must ALSO clear the exact same 0.4 header-
+  // vocabulary bar every other candidate in this function is held to
+  // (headerVocabHitRate) — column-aligned coincidence alone is not enough
+  // when there is no in-grid tier left to corroborate it structurally.
+  // Returns null on any failure, never a partial or guessed header.
+  const synthesizeUnruledHeaderAbove = (): string[] | null => {
+    if (!opts.unruledHeaderAbove || !opts.sourceSpans?.length) return null;
+    // GUARD, real and measured, not theoretical: `bodyStart > 0` means a
+    // title-shaped row-0 cell WAS found (the `wide.length === 1` structural
+    // test far above), even a blank one — and a blank structural title cell
+    // is exactly vectorgrid's own duplicate/overlapping-candidate signature
+    // this file's own B-38 fix already names (a truncated sibling candidate
+    // for a table that has a DIFFERENT, taller, correct candidate elsewhere
+    // — see this function's own "B-38 (real-data-row half)" doc a few lines
+    // above). Measured regression, found live: without this guard, this
+    // rescue "recovered" a header for 023_US_Chiller_Replacement's own
+    // truncated AIR COOLED CHILLER SCHEDULE duplicate (bodyStart=1, blank
+    // titleCell, real data at row 1) by reaching UP into the real header
+    // text that structurally belongs to the correct, taller sibling
+    // candidate for the SAME physical table — replacing that sibling's
+    // real, complete 4-tier compound header ("EVAPORATOR LWT °F", …) with
+    // this truncated candidate's own single-tier leaf labels ("°F", …) and
+    // creating a second, worse copy of an already-correct table. The real
+    // case this rescue exists for (08_ME's own PROJECT FINISH SCHEDULE) has
+    // `bodyStart === 0` — no title-shaped row-0 cell at all, genuinely
+    // nothing else this table's own structure could be a fragment of.
+    // Restricting to that exact shape closes the regression without a
+    // tuned, unprincipled distance threshold: the two cases are not
+    // reliably distinguishable by GAP size alone (61pt real vs. 79-114pt
+    // false-positive, measured — too close a margin to trust on unseen
+    // documents), but they ARE reliably distinguishable structurally.
+    if (bodyStart > 0) return null;
+    const colRange: (Bbox | null)[] = new Array(C).fill(null);
+    for (let c = 0; c < C; c++) {
+      for (let r = bodyStart; r < R; r++) {
+        const cell = grid[r][c];
+        if (cell) { colRange[c] = odlBboxToProjectSpace(cell["bounding box"], pageViewportTransform); break; }
+      }
+    }
+    if (colRange.some((b) => !b)) return null;
+    const tableTop = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform)[1];
+    // Generous enough for both measured real cases (celltext.py's own cited
+    // 58pt WINDOW SCHEDULE gap; this table's own measured ~61pt gap) while
+    // excluding a genuinely distant page title several hundred points up.
+    const GAP = 120;
+    const above = opts.sourceSpans.filter((s) => {
+      if (!s.str.trim()) return false;
+      const cy = s.y + s.h / 2;
+      return cy < tableTop && cy >= tableTop - GAP;
+    });
+    if (!above.length) return null;
+    const colLabelCandidate: string[] = new Array(C).fill("");
+    let hits = 0;
+    for (let c = 0; c < C; c++) {
+      const [cx0, , cx1] = colRange[c]!;
+      const matches = above
+        .filter((s) => s.x >= cx0 - 1 && s.x + s.w <= cx1 + 1)
+        .sort((a, b) => a.y - b.y || a.x - b.x);
+      if (!matches.length) continue;
+      colLabelCandidate[c] = matches.map((s) => s.str.trim()).join(" ");
+      hits++;
+    }
+    if (hits < Math.max(2, Math.floor(C / 2))) return null;
+    const texts = colLabelCandidate.filter(Boolean);
+    const vocabHits = texts.filter((s) => headerLabels(s, ALL_HEADER_WORDS_ARR).length > 0).length;
+    if (!texts.length || vocabHits / texts.length < 0.4) return null;
+    return colLabelCandidate;
+  };
+
   let headerEnd = bodyStart;
   let headerCandidateChecked = false;
   for (let r = bodyStart; r < R; r++) {
@@ -10321,7 +10432,8 @@ export function scheduleTableFromODL(
   // while this blank-cell candidate now falls through to the untouched
   // no-title path and refuses instead of fabricating a header.
   if (headerEnd <= bodyStart && titleCell && odlCellText(titleCell).trim() && R - bodyStart >= 2) headerEnd = bodyStart + 1;
-  if (headerEnd <= bodyStart) return refuse("no header block above the data");
+  const unruledHeader = headerEnd <= bodyStart ? synthesizeUnruledHeaderAbove() : null;
+  if (headerEnd <= bodyStart && !unruledHeader) return refuse("no header block above the data");
 
   // Compound per-column header label: concatenate each header row's OWN
   // cell text for that column top-to-bottom, deduping a cell that continues
@@ -10342,7 +10454,7 @@ export function scheduleTableFromODL(
   // lookup. Skip such a row's text from column-labeling — it already
   // counted toward headerEnd above (correctly: it is not a real data row
   // either), it simply contributes no per-column label.
-  const colLabel: string[] = new Array(C).fill("");
+  const colLabel: string[] = unruledHeader ? [...unruledHeader] : new Array(C).fill("");
   const lastSeen: (ODLTableCell | null)[] = new Array(C).fill(null);
   for (let r = bodyStart; r < headerEnd; r++) {
     const ownCellsHere = new Set<ODLTableCell>();

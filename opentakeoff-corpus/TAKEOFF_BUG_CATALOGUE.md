@@ -1461,7 +1461,7 @@ SPLIT/OVERRUN/SHORT/MERGED, identical before and after.
 
 ---
 
-### B-19 — two real schedule tables vanish entirely from the same document while unrelated floor-plan callout text nearby gets fused into a fabricated one-row table (NOT FIXED — root cause of the page-23 disappearance confirmed precisely; page-25 disappearance and the callout fabrication remain untraced)
+### B-19 — two real schedule tables vanish entirely from the same document while unrelated floor-plan callout text nearby gets fused into a fabricated one-row table (PARTIAL FIX 2026-09-14 — the page-23 real-table disappearance closes; the page-25 disappearance and the callout fabrication remain open)
 
 **Where:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf` — same document
 as B-18, found in the same pass. This is why the Volume-floor census
@@ -1596,6 +1596,110 @@ none of them a real schedule:
   plan callouts, title-block sidebar text), one shared failure: unrelated
   page text gets clustered into a table shape and reported as if it were
   a real schedule. Not a document-specific quirk.
+
+**FIX 2026-09-14 — the page-23 real-table disappearance, implemented per
+this entry's own proposed design.** This entry's own root-cause trace
+already named the exact missing capability: "for a candidate refused
+this way whose own topmost row(s) are blank, search the page's own text
+spans in the gap ABOVE the candidate's own bbox for words that land
+one-per-column on the x-boundaries the ruled data body already
+establishes... and synthesize a header row from them when enough columns
+clear the bar." Re-verified live before implementing (`qpdf`-sliced page
+23, `OPENTAKEOFF_GRAPH_TRACE=1`, then temporary row-by-row debug
+instrumentation in `scheduleTableFromODL`, reverted before commit): the
+refusal trace is precise but one detail differs from the original
+description — rows 0-1 are not "no cells at all," they are real ODL
+cells (one per column, matching this candidate's own `maxCovered`
+calibration) whose text is genuinely blank, which the existing
+"`!ownCells.size` → blank spacer row" check does not catch (it tests cell
+COUNT, not cell TEXT) — so row 0 is read as the header CANDIDATE, fails
+the vocabulary bar on its own empty text (`texts.length === 0`), and the
+one-shot design locks and breaks with `headerEnd` never advanced past
+`bodyStart`. The real column names sit ~15-61pt (measured) above the
+ruled grid's own top edge, typed loose with no rules of their own —
+structurally unreachable from inside the grid at all, exactly as this
+entry's own trace concluded.
+
+Implemented as a new `scheduleTableFromODL` rescue,
+`synthesizeUnruledHeaderAbove`, that runs only when the function is about
+to refuse with "no header block above the data." Mirrors
+`sidecar/celltext.py`'s own `split_unruled_header_row` safety
+constraints exactly (same family — a real header with no rules of its
+own — applied here to a header with no face/cell of its own at all,
+rather than one glued onto the title inside a single over-tall face): a
+text span counts for a column only when it sits ENTIRELY inside that
+column's own established x-range (derived from the table's own DATA
+cells, which carry real bounding boxes even on a row whose text is
+blank), never straddling a boundary — the same "no edge cutting a word"
+rule that automatically excludes a real wide caption or title span from
+ever counting toward any one column, with no special-case detection
+needed for that shape — and at least half the columns must get a match.
+A further, independent bar this celltext.py analog does not need (it
+already trusts vectorgrid's own face split): the synthesized labels must
+ALSO clear the exact same 0.4 header-vocabulary bar every other
+candidate in this function is held to — column-aligned coincidence alone
+is not enough when there is no in-grid tier left to corroborate it
+structurally.
+
+**A real regression was found and closed before shipping, not after.**
+The first version of this rescue (gated only by the vocabulary bar and a
+120pt search window) was checked against this session's own standing
+regression set before commit, per this file's own standing rule — and
+failed it: on `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf
+#8`, it "recovered" a header for a TRUNCATED, blank-titled duplicate
+candidate of the already-correct `AIR COOLED CHILLER SCHEDULE` (the same
+vectorgrid overlapping-candidate ambiguity B-38's own entry documents) by
+reaching UP into real header text that structurally belongs to a
+DIFFERENT, taller, correct sibling candidate for the SAME physical
+table — replacing that sibling's real 4-tier compound header
+("EVAPORATOR LWT °F", "ELECTRICAL COMPRESSOR MOTOR # COMP", …) with this
+truncated candidate's own single-tier leaf labels ("°F", "# COMP", …)
+and creating a second, worse copy of a table that already worked. Traced
+precisely (same debug-instrument-then-revert method): the false-positive
+candidate has `bodyStart === 1` (a blank, structurally-title-shaped row 0
+— exactly the shape this file's own B-38 fix already treats as
+suspicious) while the real B-19 case has `bodyStart === 0` (no
+title-shaped row-0 cell at all — genuinely nothing else this table's own
+structure could be a fragment of). Measured GAP distance alone could not
+reliably separate the two (61pt real vs. 79-114pt false-positive — too
+close a margin to trust on unseen documents), so the fix instead gates
+on this structural signal (`bodyStart === 0`), which cleanly separates
+every case measured. Gated behind a new `unruledHeaderAbove?: boolean`
+option (false/undefined preserves every existing caller exactly);
+enabled ONLY at `vectorGridAdapter.ts`'s own call site, matching this
+bug's own found scope (an ODL table sourced through vectorgrid).
+
+**Verified live:** `08_ME_BGS_Augusta_EastCampus_Renovation.pdf#23` goes
+from 1 table (the fabricated `"7 A 6 604 8 EVS 5"`, unchanged, see below)
+to 2 — the real `PROJEJCT FINISH SCHEDULE` (the document's own real
+drafting typo, "PROJEJCT," preserved verbatim) now extracts all 12 real
+rows (`111`/`116`/`121`/`124`/`140`/`148`/`149`/`150`/`155`/`156`/`157`/
+`158`), every cell value matching this entry's own original hand-count
+exactly, correctly classified `room-finish`. Headers recover most but
+not all of each real column name (`ROOM`/`FLOOR`/`BASE`/`WALL`/`WALL
+2`/`CEILING`/`CEILING 2`/`CEILING 3`/`NOTES` against the true `ROOM`/
+`FLOOR`/`WALL BASE`/`WALL MATL`/`WALL FINISH`/`CEILING MATL`/`CEILING
+FINISH`/`CEILING HEIGHT`/`NOTES` — a second word of a few two-word
+labels did not land inside its own column's strict x-range and was
+dropped, and the file's own duplicate-header disambiguation then
+numbered the resulting collisions) — a real, disclosed imperfection, not
+a blocking one: every real row is now present, correctly keyed, with
+correct cell values, which is the property this entry's own "consequence
+for the zero-error bar" section named as completely absent before this
+fix. Full regression: `tsc --noEmit` clean, 165/165 `sheetgraph.test.ts`
++ `vectorGridAdapter.test.ts` pass. Re-checked structurally (deep-equal
+minus timing fields) against every document already verified for B-38's
+own regression set (`21_VA...#50`, `#51`, `013_MO...#23`, `098_ID...#8`,
+`023_US...#8`, `093_ME...`, `28_WA...`) after the `bodyStart === 0` guard
+was added — zero content regression on all 7, including the specific
+`023_US...#8` false positive found and fixed above.
+
+**What remains open:** the page-23 `"7 A 6 604 8 EVS 5"` fabrication
+(plan-callout text fused into a fake table) is untouched by this fix —
+still reproduces exactly as originally described, a separate mechanism
+from the real-table miss this fix closes. Page 25's `DOOR AND FRAME
+SCHEDULE` disappearance is also untouched and still not traced (0 tables
+reported for that page, unchanged). Neither was attempted this pass.
 
 ---
 

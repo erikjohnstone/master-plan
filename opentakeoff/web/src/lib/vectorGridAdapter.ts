@@ -166,6 +166,14 @@ export function vectorGridTableToScheduleTable(
     // vectorgrid caller, not every scheduleTableFromODL caller, matching
     // this bug's own found scope.
     unitLabelSubHeader: true,
+    // B-19: vectorgrid's own row-grid line detection can genuinely find a
+    // real table's data body correctly while its own column-name row prints
+    // loose, with no rules of its own, above the ruled grid entirely — see
+    // scheduleTableFromODL's own unruledHeaderAbove/
+    // synthesizeUnruledHeaderAbove doc. Scoped to this one vectorgrid
+    // caller, matching this bug's own found scope (an ODL table sourced
+    // through vectorgrid).
+    unruledHeaderAbove: true,
   });
 }
 
