@@ -3287,6 +3287,61 @@ remain open too — this fix only recovers rows whose true identity was
 hidden behind a group-divider collision, not every kind of row loss named
 in this entry.
 
+**ROOT CAUSE OF THE `FAN COIL UNITS` INSTANCE NOW CONFIRMED 2026-09-14
+(code-level, precise — not fixed, same corpus-wide gate as B-27/B-37).**
+Traced live (`qpdf`-sliced page 2 alone, `OPENTAKEOFF_GRAPH_TRACE=1`):
+the sheet's own trace shows `"L1.8:vectorgrid":0` ms — vectorgrid never
+ran on this sheet at all, the identical signature already confirmed for
+B-27 and B-37. The sheet's own role classifies `detail` at confidence
+0.3 (a low-confidence guess, not `schedule`), and `isScheduleTarget`
+(`vectorTakeoffPipeline.ts:177`) only offers a non-`schedule`-role sheet
+to vectorgrid when its own printed caption clears `sheetHasScheduleCaption`
+or `sheetHasPointsListCaption` — confirmed by direct `textSpans()`
+measurement that this table's own real caption is the literal string
+`"FAN COIL UNITS"`, with no occurrence of the word `SCHEDULE` (or a
+points-list marker) anywhere near it on the page. Unlike B-27's own
+gap (a caption that DOES contain `SCHEDULE`, just not as a trailing
+word), no substring-based widening of `SCHEDULE_CAPTION_RE` could ever
+admit this caption — it contains the word nowhere at all. With
+vectorgrid never offered the sheet, the reported `rows: 2` comes from
+an older, pre-vectorgrid extraction stage instead — the exact
+degradation this codebase's own `isScheduleTarget` comment already
+warns about by name (citing `13_MI#10`: "the geometric extractor's
+older read — 3 of the table's 7 columns... while vectorgrid on that
+same page returns all 7 columns").
+
+**Proof the fix is real and available, not theoretical:** called
+`bakeoff/vectorgrid.py`'s own `find_tables()` and `sidecar/
+vectorgrid_rpc.py`'s own `extract_grid()` directly against this exact
+page, bypassing `isScheduleTarget` entirely. Vectorgrid's own raw
+geometry finds a 21x33 grid at this table's own region, and the
+resulting cell text contains ALL 18 real equipment tags this entry's
+own hand-count named (`FC-101` through `FC-109`, `FC-201` through
+`FC-210` except `FC-205`, a genuine gap in the source document's own
+equipment numbering, not a defect) — conclusive proof that vectorgrid
+itself reads this table correctly and completely; the entire defect is
+the routing gate that never lets it try.
+
+**Why this is disclosed without a fix.** This is a 3rd confirmed
+instance of the same `isScheduleTarget`/caption-gate family already
+named in B-27 and B-37, and B-27's own pass already measured, with hard
+numbers, exactly why widening this shared gate is dangerous without a
+full corpus sweep (a candidate `SCHEDULE...FOR...` widening false-
+positived 65 of 318 real corpus lines, ≈20%, for one genuine recovery).
+This instance's own caption doesn't even contain "SCHEDULE," so the
+needed fix is structurally different — likely either improving
+`classifySheetRole`'s own confidence for this sheet shape, or a new,
+non-caption-text structural signal (e.g., the sheet's own printed
+column headers independently clearing `ALL_HEADER_WORDS_ARR`'s
+vocabulary bar even with no "SCHEDULE" caption) — and neither was
+designed or attempted here, per this session's own standing rule
+against widening a shared, corpus-wide routing gate without the same
+corpus-wide false-positive measurement B-27's own pass already proved
+essential. Recorded as a precise, now fully-diagnosed next step, not an
+open mystery: the exact gate, the exact reason this specific caption
+shape defeats it, and direct proof vectorgrid's own extraction is
+already correct and waiting to be reached.
+
 ### B-32 — BOILERS and PUMPS are both consumed by a vectorgrid face-weld (2 confirmed instances, one document), a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, corrected, disclosed)
 
 **Where:**
