@@ -3549,7 +3549,7 @@ retracted: it is present, correctly drawn, and destroyed the same way
 `GAS CONNECTED LOAD TABLE` was — not a separate missing-table defect at
 all. Not fixed, same reasoning as above.
 
-### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (PARTIALLY FIXED 2026-09-13 — original document's untitled-phantom half closed; the duplicate-table half and 2 recurring instances remain open)
+### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (RE-VERIFIED 2026-09-14 — ALL THREE documented instances now fully closed, as a side effect of this session's own B-38/B-31 fixes)
 
 **Where:**
 `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8` (sheet
@@ -3655,28 +3655,56 @@ still clean, the other 3 still unaffected (their own fabrications are
 prose-only title-block text, not a ruled label:value grid, so this
 vocabulary-based mechanism was never going to reach them).
 
-**Checked, not fixed, this document's own duplicate-`PUMP SCHEDULE`
-half** — this is the SAME underlying mechanism this pass separately
-root-caused for B-38 (vectorgrid emitting two overlapping candidate
-regions for one physical table, one of which misreads the real data row
-as its own header) — re-confirmed live on this exact document; not
-independently re-fixed here since B-38's own entry already carries the
-full trace and the reasoning for why a fix needs vectorgrid-side
-candidate deduplication, corpus-wide-blast-radius work outside this
-pass's scope.
+**Checked, not fixed (at the time), this document's own duplicate-`PUMP
+SCHEDULE` half** — this is the SAME underlying mechanism this pass
+separately root-caused for B-38 (vectorgrid emitting two overlapping
+candidate regions for one physical table, one of which misreads the
+real data row as its own header) — re-confirmed live on this exact
+document; not independently re-fixed here since B-38's own entry
+already carries the full trace and the reasoning for why a fix needs
+vectorgrid-side candidate deduplication, corpus-wide-blast-radius work
+outside this pass's scope.
 
-**Checked, not fixed, the 2 recurring instances.** 071_ME's exact-
-duplicate `DUCTLESS SPLIT SCHEDULE` is the same B-38-family mechanism as
-above, not independently re-traced. 21_VA#50's own untitled phantom was
-re-dumped live post-fix: its row keys/cells are substantially MORE
-garbled than 023_US's clean case — one cell's own text is a long run of
-apparently unrelated numeric/equipment data concatenated with title-
-block fragments (`"0.36 85.0 300 105 / 150 28.54 0.50 4.88 8 0.051
-VCWF08 140 TRANE VAV-2-21 55.0 1 CHECK: SHEET TITLE"`), suggesting a
-column-band/region mis-assignment bleeding real data from the sheet's
+**Checked, not fixed (at the time), the 2 recurring instances.** 071_ME's
+exact-duplicate `DUCTLESS SPLIT SCHEDULE` is the same B-38-family
+mechanism as above, not independently re-traced. 21_VA#50's own untitled
+phantom was re-dumped live post-fix: its row keys/cells are substantially
+MORE garbled than 023_US's clean case — one cell's own text is a long
+run of apparently unrelated numeric/equipment data concatenated with
+title-block fragments (`"0.36 85.0 300 105 / 150 28.54 0.50 4.88 8
+0.051 VCWF08 140 TRANE VAV-2-21 55.0 1 CHECK: SHEET TITLE"`), suggesting
+a column-band/region mis-assignment bleeding real data from the sheet's
 OTHER tables into this candidate, not a clean title-block-only capture
 this vocabulary mechanism can safely refuse — left open for a future
 pass with its own dedicated trace rather than guessed at here.
+
+**RE-VERIFIED 2026-09-14 — ALL THREE instances now closed, confirmed
+live, no new code this pass.** B-38's own two fixes shipped this session
+(the unit-label leaf-tier recognition, then the title-corroboration-cell
+text requirement) are exactly the "vectorgrid-side candidate
+deduplication" this entry's own text said the duplicate-table half
+needed — re-checked all 3 documents fresh (`qpdf`-sliced pages, current
+code, no code touched for this re-check):
+
+- `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8` (the
+  original document): 3 tables total, exactly the 3 real ones
+  (`AIR COOLED CHILLER SCHEDULE`, `BUFFER TANK SCHEDULE`, `PUMP
+  SCHEDULE` now correctly keyed `CHWP1/CHWP2` with real cell data) — no
+  duplicate `PUMP SCHEDULE`, no untitled phantom.
+- `071_ME_BGS_Project_3809_Health_Science_Center.pdf#44`: `DUCTLESS
+  SPLIT SCHEDULE` now appears exactly once (`rows: 20`) — the exact
+  duplicate is gone. All 4 of the sheet's real tables present, none
+  duplicated.
+- `21_VA_OrangeCounty_PublicSafetyBldg.pdf#50`: exactly 2 tables, both
+  real (`AIR HANDLING UNIT SCHEDULE` — now 50 rows, B-31's own group-
+  divider fix's stated recovery — and `VAV TERMINAL BOX SCHEDULE`) — the
+  untitled 2-row phantom (previously found "substantially more garbled"
+  than the clean case) is gone too, evidently resolved by the same
+  combination of this session's B-31/B-38 fixes rather than needing its
+  own separate trace after all.
+
+No document in this entry's own history still shows a duplicate or
+untitled-phantom table. Closed.
 
 ### B-34 — control-diagram instrument-callout labels are clustered into fabricated phantom tables (PARTIAL FIX 2026-09-14: the 1-2 row instances close; 3+ row instances remain open by design)
 
