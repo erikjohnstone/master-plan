@@ -64,18 +64,28 @@
         "tag": null,
         "at": [1876.3, 755.6],
         "tolerance_px": 2,
-        "tag_bbox": null
+        "tag_bbox": null,
+        "family": "generator internal detail block",
+        "association_type": "unlabelled",
+        "transform_family": "rigid",
+        "countable": true,
+        "reference_source": "manual_seed",
+        "body_bbox": [1840.1, 730.1, 1923.4, 809.8],
+        "render": "reviews/02__vol2__015/p6-seed.png"
       },
       "instances": [
-        { "id": "generator-m1-core", "at": [1877.8, 1698.5], "tolerance_px": 3, "tag": null, "tag_bbox": null }
+        { "id": "generator-m1-core", "at": [1877.8, 1698.5], "tolerance_px": 3, "tag": null, "tag_bbox": null, "family": "generator internal detail block", "association_type": "unlabelled", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [1841.6, 1673.0, 1924.9, 1752.7], "render": "reviews/02__vol2__015/p6-generator-m1-core.png" }
       ],
+      "holdout_split": "development",
       "review": {
         "render": "ground_truth/reviews/02__vol2__015/page-06.png",
         "method": "Full-page plan review and exact repeated-vector comparison of the two installed generator blocks.",
         "notes": [
           "The seed is a 411-segment internal generator block inside M-2; the one non-seed instance is the identical internal block inside M-1.",
           "The seed excludes surrounding duct connections, room linework, and equipment text, which differ between the two generators.",
-          "No section, schedule, title-block, or unrelated equipment geometry is included."
+          "No section, schedule, title-block, or unrelated equipment geometry is included.",
+          "v2 (2026-09-14): rendered both locations at identical zoom (opentakeoff/mcp/scripts/render-region.mjs) and confirmed by direct visual comparison that M-1's and M-2's internal blocks are pixel-identical, matching the original review's own 'identical internal block' finding — a genuine rigid duplicate, not a look-alike. The seed's own body_bbox is vector-grounded (fingerprintSymbol on the frozen seed_rect, 411/411 segments retained, exact match to the original review note). The instance's body_bbox is NOT independently re-measured segment-by-segment: attempts to marquee it directly picked up 422-483 segments depending on rect padding (extra room/duct linework specific to the M-1 location, absent near M-2) and the resulting centroid drifted up to 4.8px off the frozen `at` — outside this instance's own 3px tolerance. Instead, since the two blocks are confirmed identical in shape, the instance's body_bbox is the seed's own tight bbox translated so its center lands exactly on the frozen, already-reviewed `at` — an honest, disclosed approximation grounded in a confirmed-identical reference shape, not an independently vector-measured bbox. Revisit with exact primitive-level correspondence once Phase 2's VectorSceneIndex exists.",
+          "variant_guard is required here because the seed (the internal block alone) is a real geometric SUBSET of the whole generator assembly visible on the sheet — without the guard, the richer surrounding equipment context risks being counted as an extra-ink variant of the same family rather than correctly staying outside the seed's own footprint."
         ]
       }
     },
