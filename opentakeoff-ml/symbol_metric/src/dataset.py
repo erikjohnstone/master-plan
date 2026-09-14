@@ -15,20 +15,61 @@ import json
 import random
 from pathlib import Path
 
+import numpy as np
 import torch
-from PIL import Image
+from PIL import Image, ImageEnhance
 from torch.utils.data import Dataset, Sampler
 
 from render_crops import to_model_input, MODEL_INPUT_SIZE
 
+# Symbols reviewed as directional (allowed_transforms == "none") must never
+# be geometrically perturbed -- flipping/rotating a check-valve body or a
+# flow arrow changes its physical meaning. Non-directional symbols
+# (allowed_transforms == "dihedral") are safe under the full 8-element
+# dihedral group (0/90/180/270 rotation x optional mirror): a diffuser
+# hexagon or a generic device outline reads the same either way. This is
+# also the only source of sample diversity for identities with fewer than K
+# real crops -- BalancedPKSampler otherwise repeats the same PNG bytes
+# verbatim, which several metric-learning miners mine zero pairs from (see
+# TASK_SPEC.md's training-pipeline review notes).
+_DIHEDRAL_OPS = [
+    lambda im: im,
+    lambda im: im.transpose(Image.ROTATE_90),
+    lambda im: im.transpose(Image.ROTATE_180),
+    lambda im: im.transpose(Image.ROTATE_270),
+    lambda im: im.transpose(Image.FLIP_LEFT_RIGHT),
+    lambda im: im.transpose(Image.FLIP_LEFT_RIGHT).transpose(Image.ROTATE_90),
+    lambda im: im.transpose(Image.FLIP_LEFT_RIGHT).transpose(Image.ROTATE_180),
+    lambda im: im.transpose(Image.FLIP_LEFT_RIGHT).transpose(Image.ROTATE_270),
+]
+
+
+def _augment(img: "Image.Image", allowed_transforms: str, rng: random.Random) -> "Image.Image":
+    if allowed_transforms == "dihedral":
+        img = _DIHEDRAL_OPS[rng.randrange(len(_DIHEDRAL_OPS))](img)
+    # Photometric jitter is always safe (never changes symbol identity or
+    # orientation), so it applies even to directional ("none") symbols.
+    img = ImageEnhance.Brightness(img).enhance(rng.uniform(0.85, 1.15))
+    img = ImageEnhance.Contrast(img).enhance(rng.uniform(0.85, 1.15))
+    return img
+
 
 class CropRecordDataset(Dataset):
-    def __init__(self, manifest_path: Path, crops_dir: Path, input_size: int = MODEL_INPUT_SIZE):
+    def __init__(self, manifest_path: Path, crops_dir: Path, input_size: int = MODEL_INPUT_SIZE,
+                 augment: bool = False, augment_seed: int = 0):
         self.records = [json.loads(l) for l in open(manifest_path) if l.strip()]
         self.crops_dir = Path(crops_dir)
         self.input_size = input_size
-        # Only positives get a real identity label; negatives get a
-        # sentinel id unique per record (never grouped with anything).
+        self.augment = augment
+        self._aug_rng = random.Random(augment_seed)
+        # Only positives get a real identity label; negatives each get their
+        # own unique singleton id past the positive range. Metric-learning
+        # losses/miners treat equal labels as same-class positive pairs, so
+        # a single shared sentinel (the previous behavior) would wrongly
+        # teach the model that any two unrelated negative crops are the same
+        # symbol; unique-per-record ids keep every negative a true negative
+        # against everything else while still serving as an in-batch
+        # negative for every real identity's proxy/anchor.
         identities = sorted({r["symbol_identity_id"] for r in self.records if r["verdict"] == "positive"})
         self.identity_to_label = {sid: i for i, sid in enumerate(identities)}
         self.num_positive_identities = len(identities)
@@ -40,7 +81,7 @@ class CropRecordDataset(Dataset):
         r = self.records[idx]
         if r["verdict"] == "positive":
             return self.identity_to_label[r["symbol_identity_id"]]
-        return -1  # negatives never share a positive label id
+        return self.num_positive_identities + idx
 
     def __getitem__(self, idx: int):
         r = self.records[idx]
@@ -48,7 +89,8 @@ class CropRecordDataset(Dataset):
         with open(img_path, "rb") as f:
             png_bytes = f.read()
         img = to_model_input(png_bytes, size=self.input_size)
-        import numpy as np
+        if self.augment:
+            img = _augment(img, r.get("allowed_transforms", "none"), self._aug_rng)
         arr = torch.from_numpy(np.array(img)).permute(2, 0, 1).float() / 255.0
         label = self.label_for(idx)
         return arr, label, r["record_id"]
@@ -95,7 +137,9 @@ class BalancedPKSampler(Sampler):
             yield b
 
     def __len__(self) -> int:
-        return max(1, len(self.identities) // max(1, self.p))
+        if not self.identities:
+            return 0  # __iter__ yields zero batches too -- let callers fail loudly, not silently
+        return -(-len(self.identities) // max(1, self.p))  # ceiling division, matching __iter__
 
 
 def collate_batch(items):

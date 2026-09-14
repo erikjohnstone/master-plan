@@ -55,6 +55,22 @@ LEGEND_ROW_MAX_GAP_PT = 130.0
 MAX_CANDIDATE_PAGES_PER_FAMILY = 20  # bounded runtime; sampled across the doc, not just the head
 TOP_K_PER_LEGEND_ROW = 5
 
+# Root-caused from real round-2 review evidence (dozens of independent agents,
+# spanning many unrelated families, all reporting the same failure mode):
+# is_legend_page is a PAGE-level flag ("the word LEGEND appears somewhere on
+# this page"), so once tripped, every glyph-shaped cluster ANYWHERE on that
+# page -- a title-block PE stamp, a street address, a sheet-index entry, a
+# north-arrow, a DSA permit stamp -- was being proposed as a "legend row" as
+# long as it had any text sitting near it. A real legend/schedule list is a
+# COLUMN of entries sharing a left edge; an isolated logo/stamp/divider
+# elsewhere on a page that merely contains the word "LEGEND" (a cover sheet
+# referencing "see symbol legend on E-001", a general-notes page, a drawing
+# index) will not have that column structure. Requiring column membership is
+# a direct, geometry-only fix for the dominant false-reference-row problem
+# observed across round 2 (see reports/CORPUS_INVENTORY.md round-2 note).
+LEGEND_COLUMN_X_TOL_PT = 3.0
+MIN_LEGEND_COLUMN_SIZE = 3
+
 
 def group_words_into_lines(words: list) -> list:
     lines: dict = {}
@@ -152,6 +168,24 @@ MAX_DRAWINGS_PER_PAGE = 6000  # extreme-density pages (large federal/hospital se
                                 # these specific pages rather than risk taking the shard down.
 
 
+def legend_column_members(clusters: list, x_tol: float = LEGEND_COLUMN_X_TOL_PT,
+                            min_size: int = MIN_LEGEND_COLUMN_SIZE) -> set:
+    """Indices into `clusters` that belong to a left-edge-aligned column of
+    >= min_size clusters (self included) on this page -- the geometric
+    signature of an actual legend/schedule list. O(n^2) but n is the
+    post-filter_symbol_candidates cluster count for one page (small)."""
+    n = len(clusters)
+    x0s = [c.bbox[0] for c in clusters]
+    keep = set()
+    for i in range(n):
+        count = 1 + sum(
+            1 for j in range(n) if j != i and abs(x0s[i] - x0s[j]) <= x_tol
+        )
+        if count >= min_size:
+            keep.add(i)
+    return keep
+
+
 def process_family(family_id: str, pdf_path: Path, limit_pages: int = MAX_CANDIDATE_PAGES_PER_FAMILY) -> dict:
     doc = pymupdf.open(pdf_path)
     n = doc.page_count
@@ -191,7 +225,10 @@ def process_family(family_id: str, pdf_path: Path, limit_pages: int = MAX_CANDID
         clusters = filter_symbol_candidates(clusters, words)
 
         if is_legend_page:
+            column_members = legend_column_members(clusters)
             for i, c in enumerate(clusters):
+                if i not in column_members:
+                    continue
                 nl = nearest_line_right_or_below(c.bbox, lines, LEGEND_ROW_MAX_GAP_PT)
                 if nl is None:
                     continue

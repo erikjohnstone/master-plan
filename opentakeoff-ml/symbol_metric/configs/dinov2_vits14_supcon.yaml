@@ -1,6 +1,8 @@
-# Mandatory loss challenger #2 (supervised contrastive; triplet is the
-# fallback variant train.py selects with --loss-variant triplet using the
-# same config shape).
+# Mandatory loss challenger #2 (supervised contrastive). The triplet variant
+# (losses.py's "triplet" branch) is selected the same way any loss is --
+# copy this file and set loss.name: triplet -- there is no separate
+# --loss-variant CLI flag (train.py has none; loss.name in this file is the
+# only selector train.py reads).
 model:
   backbone: dinov2_vits14
   hf_id: facebook/dinov2-small

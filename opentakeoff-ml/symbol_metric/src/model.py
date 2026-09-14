@@ -93,9 +93,17 @@ class ConvNextTinyBackbone(nn.Module):
     def set_trainable_last_n_blocks(self, n: int) -> None:
         for p in self.backbone.parameters():
             p.requires_grad_(False)
-        stages = list(self.backbone.stages)
-        for stage in stages[-max(1, n // 2):]:
-            for p in stage.parameters():
+        # Flatten every stage's blocks into one ordered list and unfreeze the
+        # last n of THOSE (mirroring DinoV2Backbone's "last n of 12
+        # transformer blocks" semantics exactly). The previous `stages[-(n
+        # // 2):]` unfroze whole ConvNeXt stages -- with unfreeze_last_n_blocks=4
+        # (every config's value) that was `stages[-2:]`, i.e. 12 of
+        # convnext_tiny's 18 total blocks (depths 3,3,9,3), vs DINOv2's 4 of
+        # 12 -- a much larger fraction of the network, breaking the
+        # apples-to-apples backbone comparison select_winner.py relies on.
+        all_blocks = [blk for stage in self.backbone.stages for blk in stage.blocks]
+        for blk in all_blocks[-n:]:
+            for p in blk.parameters():
                 p.requires_grad_(True)
         if hasattr(self.backbone, "norm_pre"):
             for p in self.backbone.norm_pre.parameters():

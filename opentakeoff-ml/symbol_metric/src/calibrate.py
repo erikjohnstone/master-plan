@@ -94,6 +94,18 @@ def apply_logistic(sim: float, params: dict) -> float:
 
 
 def pick_threshold(sims: np.ndarray, labels: np.ndarray, calib: dict, target_precision: float = 0.995) -> dict:
+    # Threshold selection itself deliberately ranks by raw cosine similarity
+    # and measures empirical (Wilson-bounded) precision directly against
+    # labels -- that is already exact and needs no calibrated probability to
+    # rank correctly. `calib` (the fitted logistic) is used here only to (a)
+    # report the calibrated accept-probability implied at the chosen cutoff,
+    # useful downstream metadata previously silently dropped since
+    # apply_logistic() was defined but never called anywhere in the
+    # pipeline, and (b) sanity-check the fit's sign: a non-positive
+    # coefficient would mean "higher similarity -> lower calibrated
+    # probability", a degenerate fit that should be visible in the report
+    # rather than silently accepted.
+    calibration_monotonic = calib.get("coef", 0.0) > 0
     order = np.argsort(-sims)
     best = None
     for cut_idx in range(1, len(order) + 1):
@@ -104,14 +116,18 @@ def pick_threshold(sims: np.ndarray, labels: np.ndarray, calib: dict, target_pre
         precision = successes / n
         lb = wilson_lower_bound(successes, n)
         if lb >= target_precision:
+            thr_sim = float(sims[chosen[-1]])
             best = {
-                "similarity_threshold": float(sims[chosen[-1]]),
+                "similarity_threshold": thr_sim,
+                "calibrated_probability_at_threshold": apply_logistic(thr_sim, calib),
+                "calibration_monotonic": calibration_monotonic,
                 "n_auto_accept_dev": n,
                 "precision_dev": precision,
                 "precision_lower_95ci": lb,
             }
     return best or {
         "similarity_threshold": float(sims.max()) if len(sims) else 1.0,
+        "calibration_monotonic": calibration_monotonic,
         "n_auto_accept_dev": 0,
         "precision_dev": None,
         "precision_lower_95ci": None,

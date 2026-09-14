@@ -20,7 +20,8 @@ import json
 from pathlib import Path
 
 
-def evaluate_contender(name: str, seed_dirs: list, target_precision: float = 0.995) -> dict:
+def evaluate_contender(name: str, seed_dirs: list, target_precision: float = 0.995,
+                        target_recall_at_10: float = 0.995) -> dict:
     seed_results = []
     for d in seed_dirs:
         d = Path(d)
@@ -56,6 +57,19 @@ def evaluate_contender(name: str, seed_dirs: list, target_precision: float = 0.9
             eligible = False
             reasons.append(f"{sr['seed_dir']}: training did not complete")
             continue
+        # Gate #1 (docstring): proposal recall@10 >= 99.5% on untouched
+        # (test) projects. This was previously loaded into seed_results but
+        # never actually checked here -- only used later to *rank* already-
+        # "eligible" contenders, so a contender with missing/None/terrible
+        # test recall@10 could still be marked eligible. Missing test
+        # metrics (e.g. test split evaluation never run) fails closed, same
+        # as every other gate below.
+        test_metrics = sr.get("test_metrics") or {}
+        recall10 = test_metrics.get("recall@10")
+        if recall10 is None or recall10 < target_recall_at_10:
+            eligible = False
+            reasons.append(f"seed {sr.get('seed')}: test recall@10 {recall10} < target {target_recall_at_10}")
+
         calib = sr.get("calibration")
         if not calib or calib.get("status") != "ok":
             eligible = False
@@ -85,6 +99,7 @@ def main() -> int:
     ap.add_argument("--runs-dir", default="runs")
     ap.add_argument("--out", required=True)
     ap.add_argument("--target-precision", type=float, default=0.995)
+    ap.add_argument("--target-recall-at-10", type=float, default=0.995)
     args = ap.parse_args()
 
     runs_dir = Path(args.runs_dir)
@@ -100,7 +115,8 @@ def main() -> int:
 
     results = []
     for name, dirs in contenders.items():
-        results.append(evaluate_contender(name, dirs, target_precision=args.target_precision))
+        results.append(evaluate_contender(name, dirs, target_precision=args.target_precision,
+                                           target_recall_at_10=args.target_recall_at_10))
 
     eligible_contenders = [r for r in results if r["eligible"]]
     if eligible_contenders:

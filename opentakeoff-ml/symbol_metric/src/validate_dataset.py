@@ -55,6 +55,7 @@ def main() -> int:
     n_tag_as_body = 0
     n_bad_directional = 0
     dup_within_split = defaultdict(int)
+    positive_identities_by_split = defaultdict(set)
 
     for split_name in ("train", "dev", "test"):
         manifest_path = EXPORT_DIR / split_name / "manifest.jsonl"
@@ -89,6 +90,8 @@ def main() -> int:
 
                 crop_hash_to_splits[r["crop_sha256"]].add(split_name)
                 family_to_splits[r["source_family_id"]].add(split_name)
+                if r["verdict"] == "positive":
+                    positive_identities_by_split[split_name].add(r["symbol_identity_id"])
 
                 if r["crop_sha256"] in seen_in_split:
                     dup_within_split[split_name] += 1
@@ -122,6 +125,21 @@ def main() -> int:
     print(f"test records using non-isolated review tier: {n_test_non_isolated}")
     if leaked_families:
         print(f"  {list(leaked_families.items())[:10]}", file=sys.stderr)
+
+    # Non-fatal: a split with zero positive identities means evaluate.py's
+    # retrieval metrics and calibrate.py's dev-pair fit degrade to
+    # None/"insufficient_dev_pairs" for that split (see train.py's
+    # checkpoint_selection.note), which is a real, honest consequence of a
+    # small corpus's positive yield rather than a pipeline defect -- report
+    # it here explicitly so it is diagnosed as a data-coverage fact up front
+    # rather than discovered only after a training run.
+    for split_name in ("train", "dev", "test"):
+        n_pos_ident = len(positive_identities_by_split.get(split_name, set()))
+        if n_pos_ident == 0:
+            print(f"WARN: split {split_name!r} has zero positive identities -- retrieval metrics/"
+                  f"calibration for this split will be undefined, not just weak", file=sys.stderr)
+        else:
+            print(f"positive identities in {split_name!r}: {n_pos_ident}")
 
     if n_schema_errors or n_tag_as_body or n_bad_directional or leaked_crops or leaked_families or n_test_non_isolated:
         ok = False
