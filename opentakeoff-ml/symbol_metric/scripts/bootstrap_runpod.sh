@@ -32,8 +32,13 @@ if [[ -z "$DATASET" || -z "$SOURCE_ROOT" || -z "$HUB_CACHE" ]]; then
 fi
 
 PACKAGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-python3 -m pip install --upgrade pip
-python3 -m pip install --requirement "$PACKAGE_ROOT/requirements-runpod.txt"
-python3 "$PACKAGE_ROOT/scripts/check_runpod_environment.py" --dataset "$DATASET" --source-root "$SOURCE_ROOT"
-python3 "$PACKAGE_ROOT/scripts/download_backbone.py" --cache-dir "$HUB_CACHE"
+# RunPod's current PyTorch images expose their CUDA-enabled environment as
+# `python`; `/usr/bin/python3` is a separately managed system interpreter.
+# Allow an explicit override for a custom image, but never silently install
+# dependencies into that system interpreter.
+PYTHON_BIN="${PYTHON_BIN:-python}"
+"$PYTHON_BIN" -m pip install --upgrade pip
+"$PYTHON_BIN" -m pip install --requirement "$PACKAGE_ROOT/requirements-runpod.txt"
+"$PYTHON_BIN" "$PACKAGE_ROOT/scripts/check_runpod_environment.py" --dataset "$DATASET" --source-root "$SOURCE_ROOT"
+"$PYTHON_BIN" "$PACKAGE_ROOT/scripts/download_backbone.py" --cache-dir "$HUB_CACHE"
 echo "RunPod environment is ready. The receipt is in $HUB_CACHE/opentakeoff_dinov2_vits14_receipt.json"

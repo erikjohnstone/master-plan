@@ -38,6 +38,7 @@ if [[ -z "$DATASET" || -z "$SOURCE_ROOT" || -z "$HUB_CACHE" || -z "$RUN_DIR" ]];
 fi
 
 PACKAGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PYTHON_BIN="${PYTHON_BIN:-python}"
 EPOCHS="${EPOCHS:-20}"
 BATCH_SIZE="${BATCH_SIZE:-32}"
 WORKERS="${WORKERS:-4}"
@@ -46,7 +47,7 @@ mkdir -p "$RUN_DIR"
 # Exact same-instance pairs are always present. The extra proxy term is an
 # explicit weak-label warm-up; training output labels it as such and its metric
 # must never be presented as plan-grounding or takeoff accuracy.
-TRAIN_COMMAND=(python3 "$PACKAGE_ROOT/scripts/train_metric.py"
+TRAIN_COMMAND=("$PYTHON_BIN" "$PACKAGE_ROOT/scripts/train_metric.py"
   --dataset "$DATASET"
   --source-root "$SOURCE_ROOT"
   --hub-cache "$HUB_CACHE"
@@ -61,7 +62,7 @@ if [[ -n "$RESUME" ]]; then
 fi
 "${TRAIN_COMMAND[@]}"
 
-python3 "$PACKAGE_ROOT/scripts/evaluate_metric.py" \
+"$PYTHON_BIN" "$PACKAGE_ROOT/scripts/evaluate_metric.py" \
   --dataset "$DATASET" \
   --source-root "$SOURCE_ROOT" \
   --hub-cache "$HUB_CACHE" \
@@ -71,7 +72,7 @@ python3 "$PACKAGE_ROOT/scripts/evaluate_metric.py" \
   --batch-size "$BATCH_SIZE" \
   --num-workers "$WORKERS"
 
-python3 "$PACKAGE_ROOT/scripts/export_onnx.py" \
+"$PYTHON_BIN" "$PACKAGE_ROOT/scripts/export_onnx.py" \
   --checkpoint "$RUN_DIR/best.pt" \
   --hub-cache "$HUB_CACHE" \
   --output "$RUN_DIR/dinov2_vits14_symbol_metric_v1.onnx"

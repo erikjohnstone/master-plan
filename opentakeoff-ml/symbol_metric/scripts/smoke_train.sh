@@ -7,7 +7,8 @@ if [[ $# -ne 4 ]]; then
   exit 2
 fi
 PACKAGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-python3 "$PACKAGE_ROOT/scripts/train_metric.py" \
+PYTHON_BIN="${PYTHON_BIN:-python}"
+"$PYTHON_BIN" "$PACKAGE_ROOT/scripts/train_metric.py" \
   --dataset "$1" --source-root "$2" --hub-cache "$3" --output "$4" \
   --epochs 1 --batch-size 4 --num-workers 0 --max-train-batches 2 --max-validation-batches 2
 test -f "$4/last.pt"
