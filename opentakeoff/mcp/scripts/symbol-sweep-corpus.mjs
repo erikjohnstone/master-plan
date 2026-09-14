@@ -1,6 +1,37 @@
 #!/usr/bin/env node
 // Frozen, symbol-only corpus evaluation. Expected answers are authored in
 // ground_truth/symbol_sweep/cases.json and are never inferred or rewritten.
+//
+// --mode=<manifest|default|rigid|affine> (default: manifest) — GEMINI-VECTOR-
+// SYMBOL-GROUNDING-GOAL.md Phase 0. A ground-truth case's own `options`
+// object (affine:false, variant_guard:true, tolerance_px, rotations:false,
+// mirror:false) is a fixture escape hatch a real user can never reach from
+// the browser's manual marquee tool (it takes no options at all — see
+// web/scripts/symbol-sweep-corpus-ui.mjs). A pass count that silently used
+// those per-case options is not proof the *default* production engine
+// passes. This flag makes that distinction explicit and reportable instead
+// of letting it hide behind one pass/fail count:
+//   manifest — respect each case's own `options` (today's historical mode).
+//   default  — ignore every case's `options`; every case gets nothing but
+//              {seedRect, scope}, so Session.symbolSweep's OWN internal
+//              default (session.ts: `affine: opts.affine ?? affineOptionsFromWire(AFFINE_WIRE_DEFAULT)`)
+//              decides — the exact same default a real user's browser
+//              marquee or a default MCP symbol_sweep call gets.
+//   rigid    — like `default`, plus affine forced OFF on every case
+//              ({affine:{enabled:false}}) — a whole-corpus rigid-only
+//              ablation, ignoring manifest per-case overrides.
+//   affine   — like `default`, plus affine forced ON on every case via the
+//              explicit wire default — included for symmetry/documentation;
+//              identical to `default` today because the production default
+//              already is affine-on, but kept as its own mode so a future
+//              change to the *default* itself doesn't silently collapse
+//              this ablation back into `default`.
+//
+// Every row also reports `effective_options` (what was actually sent to
+// Session.symbolSweep) and `manifest_override` (which fields, if any, this
+// case's own `options` changed from the plain production default) — so a
+// reader never has to cross-reference cases.json by hand to know whether a
+// given PASS used a fixture-only knob.
 import { createHash } from "node:crypto";
 import { createReadStream, readFileSync } from "node:fs";
 import path from "node:path";
@@ -18,10 +49,57 @@ if (manifest.schema !== "opentakeoff.symbol_sweep_ground_truth.v1") {
   throw new Error(`Unsupported symbol ground-truth schema: ${manifest.schema}`);
 }
 
-const selected = new Set(process.argv.slice(2));
+const MODES = new Set(["manifest", "default", "rigid", "affine"]);
+let mode = "manifest";
+const rest = [];
+for (const arg of process.argv.slice(2)) {
+  const m = /^--mode=(.+)$/.exec(arg);
+  if (m) {
+    if (!MODES.has(m[1])) throw new Error(`Unknown --mode ${JSON.stringify(m[1])}; use one of ${[...MODES].join(", ")}`);
+    mode = m[1];
+  } else {
+    rest.push(arg);
+  }
+}
+const selected = new Set(rest);
 const cases = selected.size ? manifest.cases.filter((c) => selected.has(c.id)) : manifest.cases;
 for (const id of selected) {
   if (!cases.some((c) => c.id === id)) throw new Error(`Unknown symbol-sweep case: ${id}`);
+}
+
+/** Resolve the exact opts object this run sends to Session.symbolSweep for
+ * one case, plus which fields (if any) diverge from the plain production
+ * default a real user gets with zero customization. Both are reported on
+ * every row so a fixture option can never again hide behind a bare PASS. */
+function resolveSweepOpts(c) {
+  const manifestOverride = {};
+  if (mode === "manifest") {
+    if (c.options?.tolerance_px) manifestOverride.tolerancePx = c.options.tolerance_px;
+    if (c.options?.variant_guard) manifestOverride.variantGuard = true;
+    if (c.options?.rotations === false) manifestOverride.rotations = false;
+    if (c.options?.mirror === false) manifestOverride.mirror = false;
+    // FIXED (GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 0): the previous
+    // `c.options?.affine === false ? {} : {affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT)}`
+    // ternary was a no-op — Session.symbolSweep's OWN internal default
+    // (session.ts) already falls back to the exact same
+    // `affineOptionsFromWire(AFFINE_WIRE_DEFAULT)` value when no `affine`
+    // key is sent at all, so the "disabled" branch produced identical
+    // options to the "default" branch. Verified empirically (case
+    // 01-cherry-mh111-cd1: {} vs {affine:{enabled:false}} vs
+    // {affine:default} — the first and third are byte-identical calls, and
+    // the corpus's own `options.affine:false` cases were therefore NEVER
+    // actually running rigid-only, contrary to every doc/comment describing
+    // them that way). Every one of the 8 `options.affine:false` cases has
+    // been running with affine ON this whole time under `manifest` mode.
+    if (c.options?.affine === false) manifestOverride.affine = { enabled: false };
+  }
+  const opts = { ...manifestOverride };
+  if (mode === "rigid") opts.affine = { enabled: false };
+  else if (mode === "affine") opts.affine = affineOptionsFromWire(AFFINE_WIRE_DEFAULT);
+  // mode === "default": send nothing beyond seedRect/scope — Session's own
+  // internal default decides, exactly like a real user with no overrides.
+  const overriddenFields = mode === "manifest" ? Object.keys(manifestOverride) : [];
+  return { opts, overriddenFields };
 }
 
 const sha256 = (file) => new Promise((resolve, reject) => {
@@ -117,34 +195,10 @@ for (const c of cases) {
   let result = null;
   let elapsedMs = 0;
   const scope = c.scope ?? "sheet";
+  const { opts: sweepOpts, overriddenFields } = resolveSweepOpts(c);
   if (sheet) {
     const started = performance.now();
-    result = await session.symbolSweep(sheet.sheet, {
-      seedRect: c.seed_rect,
-      scope,
-      ...(c.options?.tolerance_px ? { tolerancePx: c.options.tolerance_px } : {}),
-      ...(c.options?.variant_guard ? { variantGuard: true } : {}),
-      ...(c.options?.rotations === false ? { rotations: false } : {}),
-      ...(c.options?.mirror === false ? { mirror: false } : {}),
-      // docs/SYMBOL-SWEEP-AFFINE-GOAL.md §3 Phase 5 step 6 — the wire-level
-      // default flip was ATTEMPTED and REVERTED (see the goal doc's
-      // Findings): the two-run gate that supposedly cleared it never
-      // actually exercised this path, because this runner used to call
-      // session.symbolSweep with no `affine` at all, silently re-testing
-      // the unchanged rigid baseline every time. Fixing that (this change)
-      // is what surfaced the real regression that got the flip reverted.
-      // This now applies AFFINE_WIRE_DEFAULT unconditionally, independent
-      // of whatever the wire-level default currently is, so the corpus
-      // suite is a real, standing gate any FUTURE default-flip attempt must
-      // clear — it will show red for as long as the underlying bugs
-      // (dropGlyphClusters clipping real seed geometry; label-corroboration
-      // promoting affine-widened low-quality fits) remain unfixed, which is
-      // the correct, honest state for it to be in until they are. A case
-      // can opt out with `options.affine: false` (mirrors rotations/mirror
-      // above) if a future ground-truth case specifically needs the
-      // rigid-only path.
-      ...(c.options?.affine === false ? {} : { affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT) }),
-    });
+    result = await session.symbolSweep(sheet.sheet, { seedRect: c.seed_rect, scope, ...sweepOpts });
     elapsedMs = Math.round(performance.now() - started);
   }
   if (result) {
@@ -245,12 +299,16 @@ for (const c of cases) {
 
   const ok = errors.length === 0;
   if (!ok) failed++;
-  rows.push({ id: c.id, ok, campaign: c.campaign ?? "baseline", expected: c.instances.length, found: result?.found ?? 0, elapsed_ms: elapsedMs, errors });
+  rows.push({
+    id: c.id, ok, campaign: c.campaign ?? "baseline", expected: c.instances.length, found: result?.found ?? 0,
+    elapsed_ms: elapsedMs, errors, effective_options: sweepOpts, manifest_override_fields: overriddenFields,
+  });
+  const overrideNote = overriddenFields.length ? ` [manifest override: ${overriddenFields.join(",")}]` : "";
   if (isAffine) {
     const r = affineRows[affineRows.length - 1];
-    console.log(`${ok ? "PASS" : "FAIL"} [affine] ${c.id}: ${r.matched} matched, ${r.withheld} withheld, ${r.missing} missing / ${r.total} in ${elapsedMs} ms`);
+    console.log(`${ok ? "PASS" : "FAIL"} [affine] ${c.id}: ${r.matched} matched, ${r.withheld} withheld, ${r.missing} missing / ${r.total} in ${elapsedMs} ms${overrideNote}`);
   } else {
-    console.log(`${ok ? "PASS" : "FAIL"} ${c.id}: ${result?.found ?? 0}/${c.instances.length} in ${elapsedMs} ms`);
+    console.log(`${ok ? "PASS" : "FAIL"} ${c.id}: ${result?.found ?? 0}/${c.instances.length} in ${elapsedMs} ms${overrideNote}`);
   }
   for (const error of errors) console.log(`  - ${error}`);
 }
@@ -274,5 +332,16 @@ if (affineRows.length) {
   }
 }
 
-console.log(JSON.stringify({ schema: manifest.schema, cases: rows.length, passed: rows.length - failed, failed, results: rows, ...(affineRows.length ? { affine: affineRows } : {}) }, null, 2));
+const casesWithOverride = rows.filter((r) => r.manifest_override_fields.length).map((r) => r.id);
+console.log(JSON.stringify({
+  schema: manifest.schema,
+  path: "cli",
+  mode,
+  cases: rows.length,
+  passed: rows.length - failed,
+  failed,
+  cases_with_manifest_override: casesWithOverride,
+  results: rows,
+  ...(affineRows.length ? { affine: affineRows } : {}),
+}, null, 2));
 if (failed) process.exitCode = 1;

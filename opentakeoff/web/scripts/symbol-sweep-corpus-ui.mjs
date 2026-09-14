@@ -288,11 +288,28 @@ for (const c of cases) {
   const timingSummary = `index=${stageMs.index ?? "?"} geometry=${stageMs.geometry ?? "?"} sweep=${stageMs.sweep ?? "?"}`;
   console.log(`${ok ? "PASS" : "FAIL"} ${c.id} in ${elapsedMs} ms (${timingSummary})`);
   for (const e of errors) console.log(`  - ${e}`);
-  rows.push({ id: c.id, ok, elapsedMs, stageMs, errors });
+  rows.push({ id: c.id, ok, elapsed_ms: elapsedMs, elapsedMs, stageMs, errors });
 }
 
 await browser.close();
 
-writeFileSync(resolve(OUT, "results.json"), JSON.stringify({ schema: manifest.schema, cases: cases.length, passed, failed, results: rows }, null, 2));
+// GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 0 — `path`/`mode` make this
+// report comparable side-by-side with mcp/scripts/symbol-sweep-corpus.mjs's
+// own JSON (which carries the same two fields). Neither browser surface
+// takes an options parameter at all (the manual marquee's runSymbolSweep and
+// the agent bridge's agentSweep both hardcode affine: affineOptionsFromWire(
+// AFFINE_WIRE_DEFAULT) — see web/src/pages/TakeoffCanvas.jsx), so every run
+// through this script IS the honest, un-overridable production default —
+// there is no manifest-fixture escape hatch to disclose here, unlike the CLI
+// runner's `manifest` mode.
+writeFileSync(resolve(OUT, "results.json"), JSON.stringify({
+  schema: manifest.schema,
+  path: surface === "agent" ? "browser-agent" : "browser-manual",
+  mode: "default",
+  cases: cases.length,
+  passed,
+  failed,
+  results: rows,
+}, null, 2));
 console.log(`\n${passed} PASS / ${failed} FAIL (of ${cases.length}) — screenshots + results.json in ${OUT}`);
 process.exit(failed ? 1 : 0);
