@@ -34,9 +34,14 @@ fi
 PACKAGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # RunPod's current PyTorch images expose their CUDA-enabled environment as
 # `python`; `/usr/bin/python3` is a separately managed system interpreter.
-# Allow an explicit override for a custom image, but never silently install
-# dependencies into that system interpreter.
-PYTHON_BIN="${PYTHON_BIN:-python}"
+# Build an isolated venv that retains that template's torch/CUDA packages,
+# rather than weakening its PEP 668 system-package protection.
+BASE_PYTHON="${PYTHON_BIN:-python}"
+VENV_DIR="${VENV_DIR:-$PACKAGE_ROOT/.venv-runpod}"
+if [[ ! -x "$VENV_DIR/bin/python" ]]; then
+  "$BASE_PYTHON" -m venv --system-site-packages "$VENV_DIR"
+fi
+PYTHON_BIN="$VENV_DIR/bin/python"
 "$PYTHON_BIN" -m pip install --upgrade pip
 "$PYTHON_BIN" -m pip install --requirement "$PACKAGE_ROOT/requirements-runpod.txt"
 "$PYTHON_BIN" "$PACKAGE_ROOT/scripts/check_runpod_environment.py" --dataset "$DATASET" --source-root "$SOURCE_ROOT"

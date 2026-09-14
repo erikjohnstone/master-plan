@@ -38,7 +38,11 @@ if [[ -z "$DATASET" || -z "$SOURCE_ROOT" || -z "$HUB_CACHE" || -z "$RUN_DIR" ]];
 fi
 
 PACKAGE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PYTHON_BIN="${PYTHON_BIN:-python}"
+if [[ -x "$PACKAGE_ROOT/.venv-runpod/bin/python" ]]; then
+  PYTHON_BIN="${PYTHON_BIN:-$PACKAGE_ROOT/.venv-runpod/bin/python}"
+else
+  PYTHON_BIN="${PYTHON_BIN:-python}"
+fi
 EPOCHS="${EPOCHS:-20}"
 BATCH_SIZE="${BATCH_SIZE:-32}"
 WORKERS="${WORKERS:-4}"
