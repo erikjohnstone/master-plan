@@ -22,11 +22,19 @@ opentakeoff/mcp/scripts/_tmp_*/
 # the compact dated summaries under opentakeoff-corpus/reports/ itself.
 opentakeoff-corpus/reports/runs/
 
-# The 30-document HVAC/BAS benchmark lives on its own branch as Git LFS
-# objects (codex/symbol-sweep-corpus-accuracy). It is materialised here to run
-# against, never committed onto main: the PDFs are 526 MB and committing them
-# as plain blobs would put every byte in this history permanently. To get them:
+# The 30-document HVAC/BAS benchmark's source PDFs live on their own branch
+# as Git LFS objects (codex/symbol-sweep-corpus-accuracy). They are
+# materialised here (symlinked from an auxiliary worktree) to run against,
+# never committed onto this branch: 526 MB, and committing them as plain
+# blobs would put every byte in this history permanently. To get them:
 #   git lfs fetch origin refs/remotes/origin/codex/symbol-sweep-corpus-accuracy
-#   git checkout <that branch> -- "HVAC BAS Benchmark Collection"
-# then replace each pointer with .git/lfs/objects/<oid[:2]>/<oid[2:4]>/<oid>.
-HVAC BAS Benchmark Collection/
+#   git worktree add --detach <path> origin/codex/symbol-sweep-corpus-accuracy
+#   git lfs pull  # inside that worktree
+#   ln -s "<path>/HVAC BAS Benchmark Collection/pdf" "HVAC BAS Benchmark Collection/pdf"
+# ground_truth/symbol_sweep and ground_truth/legend_learn are NOT ignored —
+# GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 extends this ground truth
+# directly on this execution branch (small JSON/markdown, not LFS content;
+# the other ground_truth/ subtrees — work/, records/, verification/, tools/
+# — are unrelated table/schedule ground truth this goal must not touch, and
+# stay absent from this worktree rather than copied and ignored).
+HVAC BAS Benchmark Collection/pdf
