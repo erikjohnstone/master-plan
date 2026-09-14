@@ -93,10 +93,24 @@ browser-Agent surfaces were run, via web/scripts/symbol-sweep-corpus-ui.mjs
 against the real running app (not Session in-process), for the goal's
 stated minimum: the 4 known dense/repetitive cases (10, 11, 18, 23) plus
 the one now-confirmed affine-dependent case (04).
-That run was still in flight when this report was committed. Results will
-land as a follow-up commit on this branch rather than holding back the
-complete, stable CLI findings above.
-A full 47-case browser-path run (both surfaces) remains open for a later
+RESULT: both surfaces 5/5 PASS, 0 failures, real PDF uploads through the
+actual running app (localhost:5173), including case 04 -- confirms the
+browser's own hardcoded affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT)
+(identical on manual marquee and Agent bridge) recovers the same
+affine-dependent instances the CLI default mode found.
+
+  case                                     manual        agent
+  ----------------------------------------------------------------
+  04-itd-p30-paired-roof-drains             22.9 s        14.7 s
+  10-lovell-m100-cd1-ceiling-diffusers     193.8 s       301.1 s
+  11-st-louis-mh101-keyed-vav-thermostats   81.6 s        98.2 s
+  18-guaranteed-rate-set-fan-coil-units      40.3 s        42.1 s
+  23-st-cloud-set-vav-terminal-units       191.2 s       198.5 s
+
+Full per-stage (index/geometry/sweep) timings in reports/runs/ui-manual/
+results.json and reports/runs/ui-agent/results.json (gitignored raw
+artifacts). A full 47-case browser-path run (both surfaces) remains open
+for a later
 checkpoint -- each case uploads its real PDF through a fresh browser
 context and waits for the server-side sheet graph to build, materially
 slower than the CLI path.

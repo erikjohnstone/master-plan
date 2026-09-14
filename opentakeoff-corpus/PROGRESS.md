@@ -84,10 +84,15 @@ the goal's stated minimum ("profile at least the known dense/repetitive
 cases and one affine-positive case") — via
 `web/scripts/symbol-sweep-corpus-ui.mjs` against the real running app
 (`OT_SWEEP_UI_SURFACE=manual` then `=agent`), not just `Session` in-process.
-That run was still in flight when this checkpoint was committed (real
-PDF uploads through a fresh browser context, not a fast in-process call);
-its results will land as a follow-up commit on this same branch rather than
-holding back the CLI findings above, which are already complete and stable.
+**Both surfaces: 5/5 PASS, 0 failures, real PDF uploads through the actual
+running app** (`localhost:5173`, not `Session` in-process) — including case
+`04`, confirming the browser's own hardcoded
+`affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT)` (identical on both the
+manual marquee and the Agent bridge) recovers the same affine-dependent
+instances the CLI's `default` mode found. Per-case timings (index/geometry/
+sweep stage ms) are in `reports/runs/ui-manual/results.json` and
+`reports/runs/ui-agent/results.json` (gitignored raw artifacts).
+
 A full 47-case browser-path run (both surfaces) remains open — each case
 uploads its real PDF through a fresh browser context and waits for the
 server-side sheet graph to build, so a full run is materially slower than
