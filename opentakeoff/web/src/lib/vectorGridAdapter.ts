@@ -159,6 +159,13 @@ export function vectorGridTableToScheduleTable(
     ...(ctx.buildings ? { buildings: ctx.buildings } : {}),
     ...(reject ? { reject } : {}),
     sourceSpans: ctx.spans,
+    // B-38: vectorgrid's own row-grid line detection can genuinely emit a
+    // header-only candidate for a real table whose leaf tier is unit labels
+    // (TONS/GPM/[kW]/...) rather than column names — see
+    // scheduleTableFromODL's own unitLabelSubHeader doc. Scoped to this one
+    // vectorgrid caller, not every scheduleTableFromODL caller, matching
+    // this bug's own found scope.
+    unitLabelSubHeader: true,
   });
 }
 

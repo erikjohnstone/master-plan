@@ -9610,6 +9610,33 @@ function odlBboxToProjectSpace(b: number[], pageViewportTransform: number[]): Bb
 
 const ALL_HEADER_WORDS_ARR = [...ALL_HEADER_WORDS];
 
+// B-38: a closed set of unit/leaf-tier labels a table's own bottom header
+// tier prints instead of a per-column NAME — physical units and the handful
+// of bare descriptive labels real HVAC/plumbing schedules pair with them
+// (real, corpus-found: 023_US_Chiller_Replacement_at_U_S_Salinity_
+// Laboratory.pdf#8's own PUMP SCHEDULE leaf tier: FLUID/GPM/[L/S]/FT/[KPA]/
+// °F/[°C]/SP GR/MIN % EFF/HP/[KW]/PHASE/VOLT/MAX RPM/SPEED CONTROL). Used
+// ONLY for a WHOLE-CELL match (see isUnitLabelCell) — deliberately not
+// folded into ALL_HEADER_WORDS_ARR's own word-token substring matching,
+// which a real per-column DATA value can legitimately trip ("500 GPM" in
+// one cell) the same way B-32/B-26's own false-positive lessons warn
+// against for a shared, corpus-wide vocabulary.
+const UNIT_LABEL_WORDS = new Set([
+  "TONS", "TON", "KW", "GPM", "LPS", "L/S", "FT", "KPA", "F", "C", "IN",
+  "MM", "GAL", "L", "PSI", "PSIG", "HP", "RPM", "MAX RPM", "CFM", "MBH",
+  "BTUH", "BTU", "AMPS", "AMP", "VOLTS", "VOLT", "HZ", "LB", "LBS",
+  "SP GR", "MIN % EFF", "SPEED CONTROL", "FLUID", "PHASE", "EFF", "EFF.",
+]);
+/** Whole-cell (not word-split) match against UNIT_LABEL_WORDS — brackets
+ * and the degree sign stripped first ("[kW]" -> "KW", "°F" -> "F") since a
+ * unit-label leaf tier draws SI/metric alternates in brackets and Imperial
+ * ones with a bare degree sign, never mixed into a longer phrase the way a
+ * real data cell's own free text would be. */
+function isUnitLabelCell(raw: string): boolean {
+  const s = norm(raw).replace(/[\[\]]/g, "").replace(/°/g, "").trim();
+  return !!s && UNIT_LABEL_WORDS.has(s);
+}
+
 /** ODL reports its row/column grid in the PDF's own native (page-rotation-
  * oblivious) content-stream order. `odlBboxToProjectSpace` (above) already
  * corrects every cell's own GEOMETRY for the page's `/Rotate`, but a real
@@ -9855,6 +9882,40 @@ export function scheduleTableFromODL(
      * the header block, which is the same standard every accepted header
      * row already has to clear on its own. */
     chainHeaderCandidates?: boolean;
+    /** B-38: a table's own leaf header tier can be UNIT LABELS ("TONS",
+     * "[kW]", "GPM", "[L/s]", "°F") rather than column names, and physical
+     * units are not equipment-schedule vocabulary — `headerVocabHitRate`
+     * correctly finds no MARK/MANUFACTURER/... hits, fails the 0.4 bar, and
+     * this row becomes the table's own first "data" row, echoing its own
+     * unit labels back as if they were an equipment record. Real, corpus-
+     * found: `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8`'s
+     * own PUMP SCHEDULE prints a genuine 3-tier header (title / CIRCULATING
+     * FLUID group / FLUID·GPM·[L/s]·FT·[kPa]·°F·[°C]·SP GR·HP·[kW]·PHASE·
+     * VOLT·MAX RPM·SPEED CONTROL unit-label leaf tier) and vectorgrid's own
+     * row-grid line detection genuinely emits TWO overlapping row-boundary
+     * candidates for it (same shape as B-26/B-38's own already-documented
+     * ambiguity) — the shorter one's own range ends exactly at this leaf
+     * tier, so with no real data row ever in scope, the leaf tier itself
+     * becomes the manufactured phantom row.
+     *
+     * Deliberately NOT implemented by widening `extraHeaderVocab` (a
+     * substring/word-token match): a real per-column DATA value can
+     * legitimately CARRY a unit suffix in the same cell ("500 GPM"), so a
+     * token-level "does this text contain a unit word" test risks eating a
+     * real data row the same way B-32/B-26's own false-positive lessons
+     * warn against. This checks the OPPOSITE, narrower thing — every one of
+     * a row's own non-blank cells matches a closed unit vocabulary AS ITS
+     * WHOLE TEXT (case/space/bracket-normalized), which a real per-unit
+     * value practically never does (an equipment record's own values are
+     * numbers, tags, and manufacturer names, not bare unit symbols) — so
+     * this can only ever recognize a genuine unit-label tier, never a real
+     * data row that happens to mention a unit. 0.4 bar still applies
+     * identically to every OTHER vocabulary shape; this is a second,
+     * independent way a row can clear "is this still header", not a
+     * loosening of the first. False/undefined (every existing caller)
+     * changes nothing — opt-in at the vectorgrid caller only, matching this
+     * bug's own scope (found on an ODL table sourced through vectorgrid). */
+    unitLabelSubHeader?: boolean;
   } = {},
 ): ScheduleTable | null {
   const refuse = (reason: string): null => { opts.reject?.(reason); return null; };
@@ -10143,6 +10204,17 @@ export function scheduleTableFromODL(
     const hits = texts.filter((s) => headerLabels(s, vocab).length > 0).length;
     return { texts, hitRate: texts.length ? hits / texts.length : 0 };
   };
+  // B-38 (opts.unitLabelSubHeader only — see its own doc on this function's
+  // signature): the SAME 0.4 bar `headerVocabHitRate` already uses, against
+  // a WHOLE-CELL match on UNIT_LABEL_WORDS instead of a word-token
+  // substring match on the equipment-identity vocabulary — a second,
+  // independent way a row can clear "is this still header", never a
+  // loosening of the first.
+  const unitLabelHitRate = (ownCells: Set<ODLTableCell>): { texts: string[]; hitRate: number } => {
+    const texts = [...ownCells].map(odlCellText).filter(Boolean);
+    const hits = texts.filter(isUnitLabelCell).length;
+    return { texts, hitRate: texts.length ? hits / texts.length : 0 };
+  };
 
   let headerEnd = bodyStart;
   let headerCandidateChecked = false;
@@ -10157,7 +10229,8 @@ export function scheduleTableFromODL(
     if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
     if (!headerCandidateChecked) {
       const { texts, hitRate } = headerVocabHitRate(ownCells);
-      if (texts.length && hitRate >= 0.4) {
+      const unitHit = opts.unitLabelSubHeader ? unitLabelHitRate(ownCells) : null;
+      if ((texts.length && hitRate >= 0.4) || (unitHit && unitHit.texts.length && unitHit.hitRate >= 0.4)) {
         headerEnd = r + 1;
         // CHAIN (opt-in only — see opts.chainHeaderCandidates' own doc on
         // scheduleTableFromODL's signature): a row that PASSES does not

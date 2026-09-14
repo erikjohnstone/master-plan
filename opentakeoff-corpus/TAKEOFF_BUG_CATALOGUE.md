@@ -3822,7 +3822,7 @@ real ruled table with no `SCHEDULE` caption — not designed here, since it
 touches the same shared gate every one of this corpus's several hundred
 `plan`-role sheets passes through.
 
-### B-38 — a two-row-header table's own unit-label sub-header row is read as the table's single data row, and the real data row underneath it vanishes (NOT FIXED — found, traced, disclosed)
+### B-38 — a two-row-header table's own unit-label sub-header row is read as the table's single data row, and the real data row underneath it vanishes (PARTIAL FIX 2026-09-14 — the phantom-row half closes; the real-data-row half remains open)
 
 **Where:** `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8`
 (sheet, "AIR COOLED CHILLER SCHEDULE" / "BUFFER TANK SCHEDULE" / "PUMP
@@ -3958,6 +3958,64 @@ corrected, now-precise trace (superseding the entry's own original,
 wrong guess about which gate is responsible) is recorded as the
 starting point for a future session with the budget to validate either
 change against the full corpus regression sweep before shipping.
+
+**FIX (2026-09-14) — option (b) above, implemented narrowly and opt-in
+only; closes the phantom-row half of this bug.** Before implementing,
+re-verified this entry's own root-cause trace against the live document
+and found 2 of its 3 originally-cited tables (`AIR COOLED CHILLER
+SCHEDULE`, `BUFFER TANK SCHEDULE`) already extract correctly on current
+code — real keys (`CH-1&2`, `BT-1`), real values throughout, no
+duplicate candidates — an unrelated earlier fix in this same file
+already closed those two. Only `PUMP SCHEDULE` still shows the exact
+originally-diagnosed shape (a duplicate "equipment"-kind candidate
+whose own row 0 literally echoes its own header labels back as cell
+values, keyed `MARK`).
+
+Added a NEW, independent way for `scheduleTableFromODL`'s header/data
+boundary to recognize a row as "still header": alongside the existing
+`headerVocabHitRate` (a word-token substring match against the shared
+equipment-identity vocabulary), a new `unitLabelHitRate` checks the
+SAME 0.4 bar against a small, closed `UNIT_LABEL_WORDS` set (TONS, GPM,
+[kW], FT, [kPa], °F, HP, PHASE, VOLT, MAX RPM, SPEED CONTROL, …) —
+matched as a row's OWN CELL TEXT IN FULL (bracket/degree-stripped), not
+a word-token substring. Deliberately NOT built as an `extraHeaderVocab`
+widening (which IS a substring match): a real per-column DATA value can
+legitimately carry a unit suffix in the same cell ("500 GPM"), so a
+token-level "contains a unit word" test risks eating a real data row
+the same way B-32/B-26's own false-positive lessons warn against — the
+whole-cell-text requirement means only a genuinely bare unit label
+("GPM" and nothing else) can ever match, which no real equipment
+record's own value is. Gated behind a new `unitLabelSubHeader?: boolean`
+option (false/undefined preserves every existing caller exactly);
+enabled ONLY at `vectorGridAdapter.ts`'s own call site, matching this
+bug's own found scope (a vectorgrid-sourced ODL table).
+
+**Verified live:** `023_US_Chiller_Replacement_at_U_S_Salinity_
+Laboratory.pdf#8` goes from 4 reported tables to 3 — the duplicate,
+header-only `PUMP SCHEDULE` candidate (previously manufacturing a
+phantom row keyed `MARK`) now correctly finds no data rows in its own
+truncated range and refuses, exactly as intended; it no longer appears
+in the graph at all. Full regression: 231/231 tests pass, `tsc` clean.
+Re-checked byte-for-byte against every real document already verified
+live this session (`21_VA...#50`, `#51`, `013_MO...#23`,
+`098_ID...#8`, `093_ME...` (11pp), `28_WA...` (9pp)) — every one
+identical, row keys and cell keys both, confirming the new closed
+vocabulary's whole-cell-match requirement does not misfire on any real
+data row already in this session's own corpus.
+
+**What remains open:** the SECOND candidate for the same physical
+`PUMP SCHEDULE` (kind `reference`, the taller one whose own range
+includes the real data row) is untouched — its own real data
+(`CHWP1&2`/`MECHANICAL ROOM 126`/`530`/…) still lands in `headers[]`
+instead of a row's cells, per this entry's own original point 3. That
+is a different mechanism (the real data row itself being misclassified
+as a header, the mirror-image mistake, not a unit-label tier being
+misclassified as data) and needs its own trace before it can be fixed —
+not attempted this pass. The underlying vectorgrid ambiguity (two
+overlapping row-grid candidates for one physical table) is also
+unaddressed at its own source; this fix works entirely downstream of
+it, by making one of the two candidates correctly self-refuse rather
+than by deduplicating them before they reach `scheduleTableFromODL`.
 
 ### B-39 — a real table below is completely missed, and the table above silently absorbs its whole region into its own box (found via the goal document's own required auto-accept audit) (NOT FIXED — found, traced, disclosed)
 
