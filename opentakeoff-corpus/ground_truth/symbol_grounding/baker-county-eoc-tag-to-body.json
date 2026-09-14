@@ -1,0 +1,91 @@
+{
+  "schema": "opentakeoff.symbol_grounding_ground_truth.v1",
+  "source": "raw/baker-county-eoc-bidset.pdf",
+  "source_sha256": "1998d7daaac114b3780832b9cd6e017ed5b0342e6331ee025d4088fa47cc73cc",
+  "coordinate_space": "session_render_image_px",
+  "session_page_size_px": [5184.48, 3456],
+  "bbox_tolerance_px": 2.0,
+  "cases": [
+    {
+      "sheet": "M1.21",
+      "pdf_page": 39,
+      "tag": "RTU-1",
+      "equipment_family": "PACKAGED ROOFTOP AIR CONDITIONING UNIT",
+      "prefer_schedule_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+      "tag_bbox_image_px": [1614.5, 1973.8, 1660.5, 1992.8],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [1678.3, 1884.1, 1747.4, 1995.7],
+      "expected_semantic_method": "equipment_envelope",
+      "prohibited_false_symbol_bboxes_image_px": [
+        [1623.2, 1913.8, 1768.4, 2040.2]
+      ],
+      "review_note": "The accepted body is the heavy-line packaged rooftop-unit cabinet containing the circular fan mark. The larger prohibited rectangle is a surrounding clearance/connection envelope that includes the printed RTU-1 tag and therefore cannot be presented as the physical unit body."
+    },
+    {
+      "sheet": "M1.21",
+      "pdf_page": 39,
+      "tag": "RTU-2",
+      "equipment_family": "PACKAGED ROOFTOP AIR CONDITIONING UNIT",
+      "prefer_schedule_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+      "tag_bbox_image_px": [1583.3, 2531.7, 1629.2, 2550.8],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [1650.3, 2443.7, 1720.4, 2555.3],
+      "expected_semantic_method": "equipment_envelope",
+      "prohibited_false_symbol_bboxes_image_px": [
+        [1623.2, 2412.7, 1768.4, 2598.6]
+      ],
+      "review_note": "The accepted body is the heavy-line RTU-2 cabinet and not the much larger dashed/connection envelope. The exact printed tag is separate and must not be swallowed into the blue physical-body box."
+    },
+    {
+      "sheet": "M1.21",
+      "pdf_page": 39,
+      "tag": "CU-2",
+      "equipment_family": "CONDENSING UNIT",
+      "prefer_schedule_title": "CONDENSING UNIT SCHEDULE",
+      "tag_bbox_image_px": [1715.6, 1568.6, 1751.9, 1587.6],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [1706.2, 1601.6, 1757.6, 1620.6],
+      "expected_semantic_method": "equipment_envelope",
+      "prohibited_false_symbol_bboxes_image_px": [
+        [1714.4, 1568.4, 1753.5, 1592.8]
+      ],
+      "review_note": "CU-2 is the separate heavy rectangular condensing-unit body immediately below the boxed printed tag. The tag outline itself is a prohibited text container, not installed equipment."
+    },
+    {
+      "sheet": "M1.21",
+      "pdf_page": 39,
+      "tag": "CU-1",
+      "equipment_family": "CONDENSING UNIT",
+      "prefer_schedule_title": "CONDENSING UNIT SCHEDULE",
+      "tag_bbox_image_px": [1607.4, 2169.6, 1643.8, 2188.6],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [1666.7, 2171.3, 1706.6, 2188.0],
+      "expected_semantic_method": "equipment_envelope",
+      "prohibited_false_symbol_bboxes_image_px": [
+        [1606.3, 2169.5, 1645.3, 2193.8]
+      ],
+      "review_note": "CU-1 is the compact heavy rectangle to the right of its boxed tag. The text container is visually and geometrically distinct and must never self-verify."
+    },
+    {
+      "sheet": "M1.21",
+      "pdf_page": 39,
+      "tag": "EF-1",
+      "equipment_family": "EXHAUST FAN",
+      "prefer_schedule_title": "FAN SCHEDULE",
+      "tag_bbox_image_px": [1559.9, 2699.9, 1593.7, 2719.0],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [1562.6, 2734.1, 1591.8, 2763.2],
+      "expected_semantic_method": "legend_symbol",
+      "prohibited_false_symbol_bboxes_image_px": [
+        [1558.8, 2699.8, 1595.6, 2724.2]
+      ],
+      "review_note": "The plan body is the circular fan glyph beneath EF-1. Baker sheet M0.02 independently declares the project FAN glyph in SYMBOLS LEGEND - PIPING DIAGRAMS; the boxed EF-1 text is not the fan."
+    }
+  ],
+  "review": {
+    "method": "full-page and source-coordinate Session.viewSheet visual review plus exact PDF text and vector coordinates",
+    "status": "human_reviewed_positive_and_negative_controls",
+    "date": "2026-09-14",
+    "note": "This project adds sparse rooftop equipment, compact condensing units, and a real project-legend fan transfer. It explicitly pins physical bodies separately from tag boxes and clearance/connection envelopes."
+  }
+}

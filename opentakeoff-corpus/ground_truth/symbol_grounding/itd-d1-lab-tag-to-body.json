@@ -1,0 +1,41 @@
+{
+  "schema": "opentakeoff.symbol_grounding_ground_truth.v1",
+  "source": "raw/itd-d1-lab-mechanical.pdf",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "coordinate_space": "session_render_image_px",
+  "session_page_size_px": [4896, 3168],
+  "bbox_tolerance_px": 2.0,
+  "cases": [
+    {
+      "pdf_page": 4,
+      "tag": "EF-1",
+      "equipment_family": "EXHAUST FAN",
+      "prefer_schedule_title": "FAN SCHEDULE",
+      "tag_bbox_image_px": [2787.1, 532.2, 2807.2, 577.7],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [2682.2, 481.9, 2750.4, 528.7],
+      "expected_semantic_method": "authored_leader",
+      "review_note": "The stacked EF over 1 callout owns one leader-connected exhaust-fan body."
+    },
+    {
+      "pdf_page": 7,
+      "tag": "EH-5",
+      "equipment_family": "ELECTRIC UNIT HEATER",
+      "prefer_schedule_title": "ELECTRIC HEATER SCHEDULE",
+      "tag_bbox_image_px": [2980.3, 1536.8, 3002.2, 1582.3],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [2920.6, 1530.2, 2973.8, 1576.6],
+      "expected_semantic_method": "authored_leader",
+      "prohibited_false_symbol_bboxes_image_px": [
+        [3171.8, 2084.9, 3255.0, 2104.1]
+      ],
+      "review_note": "The accepted occurrence is the authored hexagonal EH over 5 equipment callout and its left-pointing leader to the heater. The separate parenthetical EH-5/EF-6 note below the fume hood is not installed-symbol evidence."
+    }
+  ],
+  "review": {
+    "method": "rendered source pages plus exact PDF text/vector coordinates and shared Session replay",
+    "status": "human_reviewed_positive_and_negative_controls",
+    "date": "2026-09-14",
+    "note": "This independent holdout pins split/stacked callout reconstruction and prevents an equipment-reference note from replacing the physical attachment."
+  }
+}

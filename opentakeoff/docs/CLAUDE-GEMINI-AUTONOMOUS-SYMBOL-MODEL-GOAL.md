@@ -87,6 +87,45 @@ Resolve the actual paths and verify rather than forcing these expected counts:
 
 Produce `reports/CORPUS_INVENTORY.json` and `reports/CORPUS_INVENTORY.md` with actual hashes, counts, page counts, drawing types, vector/raster status, legend availability, tags, symbol families, duplicates, split parts, revisions, and license/provenance notes.
 
+## Remote/cloud corpus bootstrap — mandatory before accepting a reduced ceiling
+
+If the bulk corpus is not already mounted, do not accept the 10-PDF repository subset as the corpus ceiling and do not retry Google Drive. The owner already published the two source archives as public GitHub release assets. Download them from GitHub, whose access is already required to fetch this specification:
+
+```bash
+CORPUS_DL="$PWD/.corpus-downloads"
+mkdir -p "$CORPUS_DL/vol1" "$CORPUS_DL/vol2"
+curl --fail --location --retry 5 --retry-all-errors \
+  'https://github.com/erikjohnstone/master-plan/releases/download/corpus/HVAC_BAS_Plan_Sets.zip' \
+  --output "$CORPUS_DL/HVAC_BAS_Plan_Sets.zip"
+curl --fail --location --retry 5 --retry-all-errors \
+  'https://github.com/erikjohnstone/master-plan/releases/download/corpus_2/HVAC_BAS_Plan_Sets_Vol2.zip' \
+  --output "$CORPUS_DL/HVAC_BAS_Plan_Sets_Vol2.zip"
+printf '%s  %s\n' \
+  '3de3d2f3802abac15b0482174e699a7b971aa81f6d02beb4f465d8fb738cf612' "$CORPUS_DL/HVAC_BAS_Plan_Sets.zip" \
+  'a0bea0c36e2f916cd94f28fd00dee1202f673ba121f94f7fbe31e4143b5590cc' "$CORPUS_DL/HVAC_BAS_Plan_Sets_Vol2.zip" \
+  | sha256sum --check
+unzip -q "$CORPUS_DL/HVAC_BAS_Plan_Sets.zip" -d "$CORPUS_DL/vol1"
+unzip -q "$CORPUS_DL/HVAC_BAS_Plan_Sets_Vol2.zip" -d "$CORPUS_DL/vol2"
+```
+
+Release provenance:
+
+- tag `corpus`, asset `HVAC_BAS_Plan_Sets.zip`, 552,425,946 bytes;
+- tag `corpus_2`, asset `HVAC_BAS_Plan_Sets_Vol2.zip`, 1,109,306,456 bytes.
+
+This specification branch also contains the small source manifests and reviewed symbol annotations at their expected paths:
+
+- `HVAC BAS Benchmark Collection/manifest.json`
+- `HVAC BAS Benchmark Collection/all_113_sets.csv`
+- `HVAC BAS Benchmark Collection/focus_30_coverage.csv`
+- `HVAC BAS Benchmark Collection/ground_truth/symbol_sweep/`
+- `HVAC BAS Benchmark Collection/ground_truth/legend_learn/`
+- `opentakeoff-corpus/ground_truth/symbol_grounding/`
+
+Use `manifest.json` and the source hashes to map the 30 focus documents to the released archive members. Reassemble split parts only according to the recorded `source_parts` order and verify the resulting SHA-256 against each focus entry. Do not silently substitute a different revision.
+
+If the shell lacks `curl` or `unzip`, install the ordinary package or use Python's standard library. If GitHub release asset download is also blocked, record the exact failed URL/status after one retry sequence and continue all code work against the available subset, but do not claim the reduced data is the available corpus or production-ready.
+
 ## Freeze the split before labeling
 
 1. Hash every PDF.

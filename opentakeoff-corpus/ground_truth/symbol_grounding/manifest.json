@@ -1,0 +1,49 @@
+{
+  "schema": "opentakeoff.symbol_grounding_manifest.v1",
+  "updated": "2026-09-14",
+  "coordinate_space": "session_render_image_px",
+  "split_policy": "project_held_out",
+  "documents": [
+    {
+      "truth_file": "navfac-cherry-point-atc-tag-to-body.json",
+      "project_id": "navfac-cherry-point-atc",
+      "split": "development",
+      "reviewed_cases": 5,
+      "strata": ["equipment_envelope", "authored_leader", "inline_pipe_device", "tag_absent", "hard_negative"]
+    },
+    {
+      "truth_file": "itd-d1-lab-tag-to-body.json",
+      "project_id": "itd-d1-laboratory",
+      "split": "held_out",
+      "reviewed_cases": 2,
+      "strata": ["authored_leader", "split_stacked_tag", "hard_negative"]
+    },
+    {
+      "truth_file": "federal-attachment4-tag-to-body.json",
+      "project_id": "federal-attachment4",
+      "split": "held_out",
+      "reviewed_cases": 2,
+      "strata": ["equipment_envelope", "authored_leader", "hard_negative"]
+    },
+    {
+      "truth_file": "baker-county-eoc-tag-to-body.json",
+      "project_id": "baker-county-eoc",
+      "split": "held_out",
+      "reviewed_cases": 5,
+      "strata": ["equipment_envelope", "legend_symbol", "sparse_equipment", "hard_negative"]
+    }
+  ],
+  "totals": {
+    "projects": 4,
+    "reviewed_real_pdf_cases": 14,
+    "development_cases": 5,
+    "held_out_cases": 9,
+    "legend_symbol_cases": 1,
+    "unresolved_negative_cases": 2
+  },
+  "target": {
+    "reviewed_real_pdf_cases": "200-300",
+    "minimum_projects": 10,
+    "note": "The exact achieved count must be reported; targets may not be padded with synthetic or production-authored labels."
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "schema": "opentakeoff.symbol_grounding_ground_truth.v2",
+  "source": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "coordinate_space": "session_render_image_px",
+  "session_page_size_px": [4896, 3168],
+  "bbox_tolerance_px": 2.0,
+  "cases": [
+    {
+      "sheet": "M-103",
+      "pdf_page": 12,
+      "tag": "FCU-M4B",
+      "equipment_family": "FAN COIL UNIT",
+      "prefer_schedule_title": "FAN COIL UNIT SCHEDULE",
+      "tag_bbox_image_px": [2149.0, 2426.8, 2237.7, 2451.8],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [2139.1, 2460.5, 2211.1, 2544.5],
+      "expected_semantic_method": "equipment_envelope",
+      "prohibited_false_symbol_bboxes_image_px": [
+        [2039.3, 2427.6, 2076.0, 2463.1],
+        [2190.0, 2429.3, 2196.7, 2457.4]
+      ],
+      "review_note": "The accepted body is the complete lower fan-coil cabinet immediately associated with FCU-M4B. The prohibited boxes are TG-2/text furniture and a thin vertical fragment, not equipment bodies."
+    },
+    {
+      "sheet": "M-103",
+      "pdf_page": 12,
+      "tag": "FCU-M5",
+      "equipment_family": "FAN COIL UNIT",
+      "prefer_schedule_title": "FAN COIL UNIT SCHEDULE",
+      "tag_bbox_image_px": [2330.4, 2444.0, 2405.9, 2469.1],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [2327.8, 2484.0, 2411.8, 2556.0],
+      "expected_semantic_method": "equipment_envelope",
+      "prohibited_false_symbol_bboxes_image_px": [
+        [2371.4, 2446.6, 2405.8, 2474.6]
+      ],
+      "review_note": "The accepted body is the complete rectangular FCU cabinet below the printed FCU-M5 tag. Vectorized lettering and short tag-adjacent strokes are not the body."
+    },
+    {
+      "sheet": "M-401",
+      "pdf_page": 29,
+      "tag": "CV-CHW-BP-A",
+      "equipment_family": "CONTROL VALVE",
+      "prefer_schedule_title": "BUILDING A - CHW CONTROL VALVE SCHEDULE",
+      "tag_bbox_image_px": [2566.8, 2019.7, 2703.3, 2044.8],
+      "expected_installed_evidence": "grounded_physical_body",
+      "expected_symbol_bbox_image_px": [2713.7, 1922.4, 2746.8, 1955.8],
+      "expected_semantic_method": "authored_leader",
+      "review_note": "The authored leader reaches the compact control-valve/actuator assembly. The accepted bbox is distinct from both the printed tag and the downstream piping equipment."
+    },
+    {
+      "tag": "CV-VAV-A101-HHW",
+      "equipment_family": "HEATING HOT WATER CONTROL VALVE",
+      "prefer_schedule_title": "HHW CONTROL VALVE SCHEDULE",
+      "expected_outcome": "tag_absent",
+      "prohibited_false_symbol_bboxes_image_px": [],
+      "review_note": "The individual VAV reheat-coil control valve is scheduled but is not separately tagged anywhere on a plan sheet. The nearby VAV-A101 equipment tag and HHW piping are not evidence of a distinct installed valve mark. Production must refuse instead of borrowing the served-equipment tag."
+    },
+    {
+      "tag": "CV-CH-A1",
+      "equipment_family": "CHILLED WATER CONTROL VALVE",
+      "prefer_schedule_title": "CHW CONTROL VALVE SCHEDULE",
+      "expected_outcome": "tag_absent",
+      "prohibited_false_symbol_bboxes_image_px": [],
+      "review_note": "The chiller-side valve is scheduled but not individually tagged on the plan near CH-A1. The chiller equipment tag and adjacent CHWS/CHWR piping must not be promoted into a control-valve installation."
+    }
+  ],
+  "review": {
+    "method": "rendered source pages plus exact PDF text/vector coordinates and shared Session replay",
+    "status": "human_reviewed_positive_and_negative_controls",
+    "date": "2026-09-14",
+    "note": "These cases pin body identity, exact tag identity, and known false local alternatives separately."
+  }
+}
