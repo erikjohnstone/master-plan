@@ -917,7 +917,7 @@ suite: 142/142 passing.
 
 ---
 
-### B-16 — two side-by-side numbered-notes lists fuse into one fabricated table, and the real ruled table beside them is missed entirely (NOT FIXED — found, traced, disclosed)
+### B-16 — two side-by-side numbered-notes lists fuse into one fabricated table, and the real ruled table beside them is missed entirely (CORRECTED 2026-09-14 — both halves closed, neither by a new fix)
 
 **Where:** `20_TX_JudsonISD_MEP_Upgrades_Pkg6.pdf#4` — found during this
 goal's own Demo Corpus hand-verification (`keys/DEMO_CORPUS.txt`), the
@@ -958,20 +958,75 @@ tables; here there is no second real table at all, only two prose blocks
 that happen to sit in a shape (short label + long text, repeated down the
 page) generic-table detection reads as rows.
 
-**Not fixed.** Not traced past this point — the exact structural signal
-that would refuse "a repeating LABEL + LONG PROSE SENTENCE pair is not a
-table row" without also refusing genuine short-key/long-description
-schedule rows (which are common and real, e.g. any REMARKS-heavy schedule)
-needs its own measurement before a fix is written, per this file's own
-standing rule against guessing at a fix under time pressure. Left named
-and disclosed rather than half-fixed.
+**Not fixed at the time this entry was first written.** Not traced past
+this point — the exact structural signal that would refuse "a repeating
+LABEL + LONG PROSE SENTENCE pair is not a table row" without also
+refusing genuine short-key/long-description schedule rows (which are
+common and real, e.g. any REMARKS-heavy schedule) needs its own
+measurement before a fix is written, per this file's own standing rule
+against guessing at a fix under time pressure. Left named and disclosed
+rather than half-fixed.
 
-**Consequence for the Demo Corpus's own zero-error bar:** this single
-document already fails BOTH halves of the bar before any box/cell grading
-even starts — MISSED != 0 (the real 11-row table is invisible) and a
-phantom table is counted as a win it is not. `keys/DEMO_CORPUS.txt`'s own
-header already states plainly that nothing in that set has passed grading
-yet; this is the first concrete, measured reason why, not a new admission.
+**Consequence for the Demo Corpus's own zero-error bar (at the time):**
+this single document already failed BOTH halves of the bar before any
+box/cell grading even starts — MISSED != 0 (the real 11-row table is
+invisible) and a phantom table is counted as a win it is not.
+`keys/DEMO_CORPUS.txt`'s own header already stated plainly that nothing
+in that set had passed grading yet; this was the first concrete, measured
+reason why, not a new admission.
+
+**RE-VERIFIED LIVE 2026-09-14 — both halves closed, neither by a change
+made this pass.** Re-ran `production-graph-cli.mjs --mode graph` against
+this exact page (`qpdf`-sliced to page 4 alone,
+`OPENTAKEOFF_GRAPH_TRACE=1`) as part of a fresh pass through this file's
+own open items.
+
+1. **The fabrication half is gone.** The pipeline now reports **zero**
+   tables for this page — not the originally-described 1 fabricated
+   `reference`-kind table (headers `["B.", "OPERATIONAL SEQUENCE:", "B.
+   (2)", "OPERATIONAL SEQUENCE: (2)"]`). `vectorgrid`'s own trace shows
+   both candidate regions it tried are correctly DECLINED ("unknown kind
+   and no title"; "no keyed data rows (kind reference, key column col
+   0)") rather than accepted. This was not a change made in this pass —
+   no code was touched to produce it — so it is an unclaimed, verified
+   side effect of unrelated fixes made earlier in this session (the same
+   pattern already seen in B-30's own `isTitleBlockTable` guard and
+   B-38's `unitLabelSubHeader` fix each incidentally closing an
+   originally-cited symptom before their own targeted fix was written).
+   Recorded here as confirmation, not claimed as new work.
+
+2. **The real 11-row table's miss is not a new, fixable defect — it is
+   the already-established, out-of-scope vector-outlined-glyph category**
+   (`HELDOUT_GRADING.md`'s own confirmed documents: `056_NY`, `020_MO`,
+   `086_CA`, `D_25_CO`; goal doc's own Scope rule: "vector-outlined-glyph
+   content is correctly EXCLUDED, not a pipeline defect"). Direct,
+   measured confirmation this pass: rendering the page (scale 1.5, full
+   page, then a 6x crop of the table's own region) shows the real `AHU |
+   NEW FAN INTERLOCKS` table exactly as this entry's own original
+   description states — a ruled 2-column box, `AHU-1` through `AHU-10`
+   plus `RTU-1` down the left column, `EF-04, EF-08` etc. down the right.
+   But `textSpans()` run against this exact page (same tool used
+   throughout this file to hand-verify every other document) finds
+   **zero** occurrences of `AHU-1`, `AHU-10`, `RTU-1`, `EF-0`, or even the
+   word `SCHEMATIC` anywhere on the page — despite `SCHEMATIC` printing
+   legibly FOUR times in the render (the detail's own title plus each of
+   the four `CONTROL SCHEMATIC` captions) and the table's own row labels
+   being read off the render directly above. This is the identical
+   signature already used to diagnose every other document in this
+   category (`086_CA`'s own entry: "only 31 real text spans exist on the
+   whole page, and every one is title-block boilerplate... literally NONE
+   of the 3 tables' own titles, column headers, or 28 data rows...appear
+   in the text layer at all") — the table's own cell content is drawn as
+   vector-outlined glyph geometry, not real PDF text objects, so no
+   text-based extractor (this one included) can recover it. A ruled-box
+   detector could in principle still find the table's own drawn lines,
+   but every cell would come back empty regardless — the miss is
+   guaranteed by the missing text layer, not by a box-detection gap.
+
+Both halves closed, correctly attributed: the fabrication half to an
+already-shipped, unrelated fix; the miss half to an already-documented,
+explicitly out-of-scope PDF-authoring limitation, not a new pipeline
+defect. No code change accompanies this entry.
 
 ---
 
