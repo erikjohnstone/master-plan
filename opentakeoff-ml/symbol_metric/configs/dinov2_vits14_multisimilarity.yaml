@@ -1,0 +1,33 @@
+# Mandatory loss challenger #1.
+model:
+  backbone: dinov2_vits14
+  hf_id: facebook/dinov2-small
+  projection_dim: 256
+  input_size: 280
+  dropout: 0.0
+loss:
+  name: multi_similarity
+sampler:
+  p_identities: 16
+  k_samples: 4
+optim:
+  name: adamw
+  phase1:
+    head_lr: 1.0e-4
+    backbone_lr: 0.0
+    epochs: 8
+    warmup_steps: 200
+  phase2:
+    head_lr: 1.0e-4
+    backbone_lr: 1.0e-5
+    unfreeze_last_n_blocks: 4
+    epochs: 12
+    warmup_steps: 200
+  schedule: warmup_cosine
+  weight_decay: 0.05
+precision: bf16
+seeds: [17, 42, 1337]
+early_stopping:
+  metric: dev_recall_at_5
+  patience_evals: 5
+  mode: max

@@ -1,0 +1,36 @@
+[1/29] bulk_vol1:04_NV_VA_LasVegas_CentralUtilityPlant: 0 legend rows, 203 plan candidates, 0 proposal pairs
+[2/29] bulk_vol1:08_ME_BGS_Augusta_EastCampus_Renovation: 522 legend rows, 2440 plan candidates, 2610 proposal pairs
+[3/29] bulk_vol1:12_MT_MSU_ReidHall_Renovation: 5 legend rows, 219 plan candidates, 25 proposal pairs
+[4/29] bulk_vol1:16_NV_CarsonValleyMS_HVAC_Replacement: 12 legend rows, 246 plan candidates, 60 proposal pairs
+[5/29] bulk_vol1:20_TX_JudsonISD_MEP_Upgrades_Pkg6: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[6/29] bulk_vol1:24_IA_JohnsonCounty_Courthouse: 5 legend rows, 667 plan candidates, 25 proposal pairs
+[7/29] bulk_vol1:28_WA_KCHA_PublicHousing_HVAC: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[8/29] bulk_vol2:001_NC_FY20_P_228_ATC_Tower_and_Air_Operations: 336 legend rows, 461 plan candidates, 1680 proposal pairs
+[9/29] bulk_vol2:009_FL_USDA_APHIS_Plant_Inspection_Station_Building: 392 legend rows, 870 plan candidates, 1960 proposal pairs
+[10/29] bulk_vol2:013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29: 0 legend rows, 93 plan candidates, 0 proposal pairs
+[11/29] bulk_vol2:017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[12/29] bulk_vol2:021_XX_Laboratory_building_mechanical_drawings_lab: 346 legend rows, 1565 plan candidates, 1730 proposal pairs
+[13/29] bulk_vol2:029_ME_BGS_Project_3548_MEANG_Building_493_Boiler: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[14/29] bulk_vol2:033_MN_VA_Project_656_18_301_Construct_Replace: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[15/29] bulk_vol2:037_AR_VA_Project_598_19_118_Replace_21_Air_Handling: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[16/29] bulk_vol2:041_IL_VA_Project_537_17_115_Sterile_Processing: 486 legend rows, 881 plan candidates, 2430 proposal pairs
+[17/29] bulk_vol2:045_FL_VA_Project_516_21_107_EHRM_Infrastructure: 0 legend rows, 156 plan candidates, 0 proposal pairs
+[18/29] bulk_vol2:049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile: 0 legend rows, 447 plan candidates, 0 proposal pairs
+[19/29] bulk_vol2:054_NV_VA_Project_654_212_Design_Build_Central: 0 legend rows, 100 plan candidates, 0 proposal pairs
+[20/29] bulk_vol2:058_CA_Lawrence_Berkeley_National_Laboratory_Building: 0 legend rows, 2 plan candidates, 0 proposal pairs
+[21/29] bulk_vol2:064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit: 79 legend rows, 517 plan candidates, 395 proposal pairs
+[22/29] bulk_vol2:069_ID_ITD_District_2_Laboratory_Heating_Upgrades: 6 legend rows, 15 plan candidates, 30 proposal pairs
+[23/29] bulk_vol2:074_CA_West_Valley_College_STEM_Classroom_HVAC: 46 legend rows, 362 plan candidates, 230 proposal pairs
+[24/29] bulk_vol2:080_CA_Contra_Costa_College_Science_Center_Conference: 46 legend rows, 565 plan candidates, 230 proposal pairs
+[25/29] bulk_vol2:086_CA_Contra_Costa_College_Early_Learning_Center: 17 legend rows, 958 plan candidates, 85 proposal pairs
+[26/29] bulk_vol2:091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[27/29] bulk_vol2:095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC: 49 legend rows, 224 plan candidates, 245 proposal pairs
+[28/29] bulk_vol2:100_OH_Butler_Tech_RTU_Welding_Source_Capture: 39 legend rows, 334 plan candidates, 195 proposal pairs
+[29/29] raw:itd-d1-lab-raster: 206 legend rows, 1197 plan candidates, 1030 proposal pairs
+{
+  "families_processed": 29,
+  "legend_rows_total": 2592,
+  "plan_candidates_total": 12522,
+  "proposal_pairs_total": 12960
+}
+wrote /home/user/worktrees/symbol-metric-v1/opentakeoff-ml/symbol_metric/reports/review_queue.shard3.jsonl

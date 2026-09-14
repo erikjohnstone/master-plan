@@ -1,0 +1,21 @@
+# Pinned dependency lock. Regenerate with:
+#   pip list --format=freeze | grep -iE "^(torch|transformers|timm|pytorch-metric-learning|pymupdf|pillow|numpy|imagehash|onnx|onnxruntime|scikit-learn|scipy|jsonschema|pyyaml)="
+#
+# torch is installed from plain PyPI (not download.pytorch.org, which this
+# session's egress policy blocks) -- CUDA wheels are bundled in the PyPI
+# build and run fine on a RunPod CUDA GPU; locally here it runs CPU-only
+# (no NVIDIA GPU in this sandbox) for smoke-testing only.
+torch==2.14.0
+transformers==5.17.0
+timm==1.0.29
+pytorch-metric-learning==2.9.0
+pymupdf==1.28.2
+pillow==12.3.0
+numpy==2.4.6
+ImageHash==4.3.2
+onnx==1.22.0
+onnxruntime==1.30.0
+scikit-learn==1.9.1
+scipy==1.17.1
+jsonschema==4.26.0
+PyYAML==6.0.1

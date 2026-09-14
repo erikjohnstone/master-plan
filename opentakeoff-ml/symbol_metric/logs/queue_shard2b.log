@@ -1,0 +1,21 @@
+[1/14] bulk_vol2:040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile: 0 legend rows, 272 plan candidates, 0 proposal pairs
+[2/14] bulk_vol2:044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers: 0 legend rows, 839 plan candidates, 0 proposal pairs
+[3/14] bulk_vol2:048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers: 0 legend rows, 51 plan candidates, 0 proposal pairs
+[4/14] bulk_vol2:053_VA_Renovate_Expand_Emergency_Room_System_VA: 0 legend rows, 124 plan candidates, 0 proposal pairs
+[5/14] bulk_vol2:057_US_VA_Project_626_15_106_Upgrade_Energy: 0 legend rows, 152 plan candidates, 0 proposal pairs
+[6/14] bulk_vol2:063_MT_Harrison_Hall_Extruder_Lab_132_Renovation: 49 legend rows, 189 plan candidates, 245 proposal pairs
+[7/14] bulk_vol2:068_US_Antelope_Valley_College_Applied_Arts_Math: 38 legend rows, 181 plan candidates, 190 proposal pairs
+[8/14] bulk_vol2:073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom: 113 legend rows, 519 plan candidates, 565 proposal pairs
+[9/14] bulk_vol2:078_US_CP25028_MSU_Union_Sparty_Store_Renovations: 279 legend rows, 561 plan candidates, 1395 proposal pairs
+[10/14] bulk_vol2:084_SC_H59_N054_FW_Building_112_Chiller_Addition: 17 legend rows, 411 plan candidates, 85 proposal pairs
+[11/14] bulk_vol2:089_FL_Airport_Terminal_and_Hangar_Development: 0 legend rows, 46 plan candidates, 0 proposal pairs
+[12/14] bulk_vol2:094_FL_Orange_County_Regional_History_Center_HVAC: 274 legend rows, 690 plan candidates, 1370 proposal pairs
+[13/14] bulk_vol2:098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade: 0 legend rows, 48 plan candidates, 0 proposal pairs
+[14/14] raw:federal-mech-legend-raster: 0 legend rows, 0 plan candidates, 0 proposal pairs
+{
+  "families_processed": 14,
+  "legend_rows_total": 770,
+  "plan_candidates_total": 4083,
+  "proposal_pairs_total": 3850
+}
+wrote /home/user/worktrees/symbol-metric-v1/opentakeoff-ml/symbol_metric/reports/review_queue.shard2b.jsonl

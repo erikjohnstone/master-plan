@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opentakeoff.local/schemas/reviewed_pair.schema.json",
+  "title": "OpenTakeoff symbol-metric reviewed training record",
+  "description": "One reviewed legend/reference -> candidate association record for the HVAC/BAS symbol-metric twin-encoder dataset. Immutable once written: a correction creates a new record referencing the superseded one via supersedes_record_id, never an in-place edit.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_id",
+    "schema_version",
+    "evidence_tier",
+    "project_id",
+    "source_family_id",
+    "source_pdf_sha256",
+    "source_pdf_relative_path",
+    "page_index",
+    "reference_id",
+    "reference_bbox",
+    "candidate_bbox",
+    "physical_body_bbox",
+    "tag_bbox",
+    "association_method",
+    "verdict",
+    "symbol_identity_id",
+    "directional",
+    "allowed_transforms",
+    "review_passes",
+    "final_adjudication",
+    "renderer_version",
+    "extraction_version",
+    "crop_version",
+    "crop_sha256",
+    "created_at"
+  ],
+  "properties": {
+    "record_id": { "type": "string", "pattern": "^rec_[a-f0-9]{16}$" },
+    "schema_version": { "const": "opentakeoff.symbol_metric.reviewed_pair.v1" },
+    "evidence_tier": {
+      "type": "string",
+      "enum": ["existing_human_reviewed", "agent_consensus_reviewed"]
+    },
+    "project_id": { "type": "string", "minLength": 1 },
+    "source_family_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Groups split parts, revisions, and duplicate plan sets so they never cross train/dev/test."
+    },
+    "source_pdf_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "source_pdf_relative_path": { "type": "string", "minLength": 1 },
+    "page_index": { "type": "integer", "minimum": 0 },
+    "sheet_number": { "type": ["string", "null"] },
+    "coordinate_frame": {
+      "type": "string",
+      "description": "e.g. pdf_points_origin_top_left, render_scale_2_image_px_origin_top_left"
+    },
+    "reference_id": { "type": "string", "minLength": 1 },
+    "reference_caption": { "type": ["string", "null"] },
+    "reference_bbox": { "$ref": "#/$defs/bbox" },
+    "candidate_bbox": { "$ref": "#/$defs/bbox" },
+    "physical_body_bbox": {
+      "oneOf": [{ "$ref": "#/$defs/bbox" }, { "type": "null" }]
+    },
+    "tag_bbox": {
+      "oneOf": [{ "$ref": "#/$defs/bbox" }, { "type": "null" }]
+    },
+    "association_method": {
+      "type": "string",
+      "enum": [
+        "authored_leader",
+        "envelope_ownership",
+        "inline_topology",
+        "legend_similarity",
+        "human_only",
+        "none"
+      ]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "positive",
+        "hard_negative",
+        "easy_negative",
+        "ambiguous",
+        "no_physical_symbol",
+        "not_countable"
+      ]
+    },
+    "symbol_identity_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Scoped as source_family_id + reviewed legend/reference identity. Two identically-named semantic devices from two firms are different identities."
+    },
+    "semantic_family": { "type": ["string", "null"] },
+    "directional": {
+      "type": "boolean",
+      "description": "True for check valves, flow arrows, actuator fail-open/closed, or any symbol whose meaning changes under rotation/reflection."
+    },
+    "allowed_transforms": {
+      "type": "string",
+      "enum": ["none", "rotate180", "rotate90", "dihedral"]
+    },
+    "reviewed_stretch_limit": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "max_x_scale": { "type": "number", "minimum": 1.0 },
+        "max_y_scale": { "type": "number", "minimum": 1.0 }
+      }
+    },
+    "review_passes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pass_a_structural", "pass_b_visual", "pass_c_context"],
+      "properties": {
+        "pass_a_structural": { "$ref": "#/$defs/review_pass" },
+        "pass_b_visual": { "$ref": "#/$defs/review_pass" },
+        "pass_c_context": { "$ref": "#/$defs/review_pass" }
+      }
+    },
+    "blind_audit": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "audited": { "type": "boolean" },
+        "audit_record_id": { "type": "string" },
+        "agreement": { "type": ["boolean", "null"] },
+        "notes": { "type": ["string", "null"] }
+      }
+    },
+    "final_adjudication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewer", "rationale", "reviewed_at"],
+      "properties": {
+        "reviewer": { "type": "string" },
+        "rationale": { "type": "string", "minLength": 1 },
+        "reviewed_at": { "type": "string", "format": "date-time" },
+        "escalated": { "type": "boolean" }
+      }
+    },
+    "renderer_version": { "type": "string" },
+    "extraction_version": { "type": "string" },
+    "crop_version": { "type": "string" },
+    "crop_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "parent_annotation_id": { "type": ["string", "null"] },
+    "supersedes_record_id": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "bbox": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4,
+      "description": "[x0, y0, x1, y1] in the record's coordinate_frame."
+    },
+    "review_pass": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "rationale", "reviewer", "reviewed_at", "order_randomized"],
+      "properties": {
+        "verdict": {
+          "type": "string",
+          "enum": ["positive", "negative", "ambiguous", "no_physical_symbol"]
+        },
+        "rationale": { "type": "string", "minLength": 1 },
+        "reviewer": { "type": "string" },
+        "reviewed_at": { "type": "string", "format": "date-time" },
+        "order_randomized": { "type": "boolean" },
+        "saw_prior_pass_verdict": {
+          "type": "boolean",
+          "description": "false = this pass ran as a genuinely isolated review (separate dispatch, no access to an earlier pass's verdict for this pair) -- the default and required for the test split and the blind-audit resample. true = this pass was formed in a single combined review call together with the other two passes for the same pair (a disclosed, resource-driven rigor tier used for a portion of train/dev), never for test-vault or audit records."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "families_processed": 29,
+  "legend_rows_total": 2421,
+  "plan_candidates_total": 15069,
+  "proposal_pairs_total": 12105,
+  "per_family": {
+    "bulk_vol1:02_UT_FAA_Ogden_AirTrafficControlTower": {
+      "split": "dev",
+      "legend_rows": 0,
+      "plan_candidates": 0,
+      "pairs": 0
+    },
+    "bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition": {
+      "split": "train",
+      "legend_rows": 4,
+      "plan_candidates": 39,
+      "pairs": 20
+    },
+    "bulk_vol1:10_MO_Hawthorn_PsychHospital_HVAC": {
+      "split": "train",
+      "legend_rows": 0,
+      "plan_candidates": 316,
+      "pairs": 0
+    },
+    "bulk_vol1:14_OR_KlamathCC_LearningCtr_Mechanical": {
+      "split": "test",
+      "legend_rows": 55,
+      "plan_candidates": 441,
+      "pairs": 275
+    },
+    "bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet": {
+      "split": "dev",
+      "legend_rows": 238,
+      "plan_candidates": 897,
+      "pairs": 1190
+    },
+    "bulk_vol1:22_GA_Valdosta_FireStation8_100CD": {
+      "split": "dev",
+      "legend_rows": 0,
+      "plan_candidates": 3333,
+      "pairs": 0
+    },
+    "bulk_vol1:26_CA_TransbayTower_Mechanical_64Sheets": {
+      "split": "train",
+      "legend_rows": 0,
+      "plan_candidates": 0,
+      "pairs": 0
+    },
+    "bulk_vol1:30_WA_SpokaneTransit_CoolingTower": {
+      "split": "train",
+      "legend_rows": 222,
+      "plan_candidates": 1004,
+      "pairs": 1110
+    },
+    "bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates": {
+      "split": "train",
+      "legend_rows": 291,
+      "plan_candidates": 604,
+      "pairs": 1455
+    },
+    "bulk_vol2:011_IL_VA_Hines_Finance_Center_Renovation": {
+      "split": "train",
+      "legend_rows": 0,
+      "plan_candidates": 88,
+      "pairs": 0
+    },
+    "bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility": {
+      "split": "dev",
+      "legend_rows": 373,
+      "plan_candidates": 1234,
+      "pairs": 1865
+    },
+    "bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04": {
+      "split": "train",
+      "legend_rows": 275,
+      "plan_candidates": 1544,
+      "pairs": 1375
+    },
+    "bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri": {
+      "split": "train",
+      "legend_rows": 71,
+      "plan_candidates": 387,
+      "pairs": 355
+    },
+    "bulk_vol2:031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for": {
+      "split": "train",
+      "legend_rows": 0,
+      "plan_candidates": 30,
+      "pairs": 0
+    },
+    "bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage": {
+      "split": "train",
+      "legend_rows": 6,
+      "plan_candidates": 46,
+      "pairs": 30
+    },
+    "bulk_vol2:039_TX_VA_Project_580_22_201_Replace_and_Upgrade": {
+      "split": "train",
+      "legend_rows": 85,
+      "plan_candidates": 209,
+      "pairs": 425
+    },
+    "bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling": {
+      "split": "train",
+      "legend_rows": 32,
+      "plan_candidates": 126,
+      "pairs": 160
+    },
+    "bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU": {
+      "split": "dev",
+      "legend_rows": 102,
+      "plan_candidates": 1175,
+      "pairs": 510
+    },
+    "bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing": {
+      "split": "test",
+      "legend_rows": 163,
+      "plan_candidates": 463,
+      "pairs": 815
+    },
+    "bulk_vol2:056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces": {
+      "split": "train",
+      "legend_rows": 0,
+      "plan_candidates": 22,
+      "pairs": 0
+    },
+    "bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building": {
+      "split": "dev",
+      "legend_rows": 5,
+      "plan_candidates": 127,
+      "pairs": 25
+    },
+    "bulk_vol2:067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid": {
+      "split": "train",
+      "legend_rows": 0,
+      "plan_candidates": 88,
+      "pairs": 0
+    },
+    "bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math": {
+      "split": "dev",
+      "legend_rows": 174,
+      "plan_candidates": 805,
+      "pairs": 870
+    },
+    "bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC": {
+      "split": "train",
+      "legend_rows": 42,
+      "plan_candidates": 119,
+      "pairs": 210
+    },
+    "bulk_vol2:083_MA_Town_Offices_Facilities_HVAC_System_Upgrades": {
+      "split": "train",
+      "legend_rows": 0,
+      "plan_candidates": 310,
+      "pairs": 0
+    },
+    "bulk_vol2:088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX": {
+      "split": "train",
+      "legend_rows": 43,
+      "plan_candidates": 76,
+      "pairs": 215
+    },
+    "bulk_vol2:093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades": {
+      "split": "train",
+      "legend_rows": 214,
+      "plan_candidates": 713,
+      "pairs": 1070
+    },
+    "bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project": {
+      "split": "test",
+      "legend_rows": 26,
+      "plan_candidates": 868,
+      "pairs": 130
+    },
+    "raw:bldg5406-hvac-demo-mechanical": {
+      "split": "train",
+      "legend_rows": 0,
+      "plan_candidates": 5,
+      "pairs": 0
+    }
+  }
+}

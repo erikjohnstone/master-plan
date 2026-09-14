@@ -1,0 +1,38 @@
+# Rendered evidence images are large (100s of MB) and 100% deterministically
+# regenerable from the source corpus PDFs + src/render_evidence_packets.py
+# given the frozen split manifest + review_queue.selected.jsonl. Never the
+# source of truth -- the reviewed ledger (data/reviewed/) is.
+data/evidence/
+
+# Raw per-shard proposal queues are large (tens of MB) and deterministically
+# regenerable from the corpus via src/build_review_queue.py (same
+# GAP_TOLERANCE_PT/MIN_CLUSTER_* constants, same corpus hash).
+reports/review_queue.shard*.jsonl
+reports/review_queue.jsonl
+
+# In-flight per-round agent dispatch batches -- transient working files,
+# regenerable from review_queue.selected.jsonl via prepare_review_batch.py.
+# The durable output of reviewing them is data/reviewed/reviewed_records.jsonl.
+reports/batches/
+
+# Python / build artifacts
+__pycache__/
+*.pyc
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+venv/
+.venv/
+
+# Training run outputs (large checkpoints/logs) -- kept out of git, uploaded
+# to the release bundle separately per scripts/download_artifacts.md.
+runs/
+checkpoints/
+*.onnx
+*.pt
+*.pth
+
+# Editor/OS cruft
+.DS_Store
+*.swp

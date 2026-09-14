@@ -1,0 +1,37 @@
+[1/30] bulk_vol1:01_NY_VA_Northport_Dialysis_100CD: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[2/30] bulk_vol1:05_MO_VA_StLouis_AHU_VAV_Replacement: 1 legend rows, 32 plan candidates, 5 proposal pairs
+[3/30] bulk_vol1:09_ME_BGS_KennebecValleyCC_Renovation: 109 legend rows, 224 plan candidates, 545 proposal pairs
+[4/30] bulk_vol1:13_MI_MSU_LifeSciences_LabRenovation: 295 legend rows, 985 plan candidates, 1475 proposal pairs
+[5/30] bulk_vol1:17_FL_SuwanneeHS_Courtyard_100CD: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[6/30] bulk_vol1:21_VA_OrangeCounty_PublicSafetyBldg: 137 legend rows, 320 plan candidates, 685 proposal pairs
+[7/30] bulk_vol1:25_WA_DouglasCounty_Courthouse_HVAC_DDC: 10 legend rows, 94 plan candidates, 50 proposal pairs
+[8/30] bulk_vol1:29_TX_JPS_Hospital_CentralPlant_Chiller: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[9/30] bulk_vol2:004_MO_T2504_03_Interior_and_Exterior_Renovation: 70 legend rows, 669 plan candidates, 350 proposal pairs
+[10/30] bulk_vol2:010_US_WWYK240146_Design_Implement_Monitoring_Control: 30 legend rows, 69 plan candidates, 150 proposal pairs
+[11/30] bulk_vol2:014_MT_USDA_Forest_Service_Missoula_Fire_Sciences: 331 legend rows, 907 plan candidates, 1655 proposal pairs
+[12/30] bulk_vol2:018_GA_USDA_ARS_U_S_National_Poultry_Research_Center: 0 legend rows, 138 plan candidates, 0 proposal pairs
+[13/30] bulk_vol2:023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory: 42 legend rows, 161 plan candidates, 210 proposal pairs
+[14/30] bulk_vol2:030_NY_VA_EHRM_Infrastructure_Upgrades_Construction: 0 legend rows, 88 plan candidates, 0 proposal pairs
+[15/30] bulk_vol2:034_NC_VA_Project_637_22_700_EHRM_Infrastructure: 0 legend rows, 20 plan candidates, 0 proposal pairs
+[16/30] bulk_vol2:038_NC_VA_Project_637_22_700_EHRM_Infrastructure: 0 legend rows, 99 plan candidates, 0 proposal pairs
+[17/30] bulk_vol2:042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[18/30] bulk_vol2:046_MI_Veterinary_Medical_Center_Replace_Elevators_3: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[19/30] bulk_vol2:050_IL_VA_Project_537_17_115_Sterile_Processing: 421 legend rows, 959 plan candidates, 2105 proposal pairs
+[20/30] bulk_vol2:055_US_VA_Project_673_20_107_EHRM_Infrastructure: 11 legend rows, 208 plan candidates, 55 proposal pairs
+[21/30] bulk_vol2:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project: 202 legend rows, 512 plan candidates, 1010 proposal pairs
+[22/30] bulk_vol2:066_MT_Barnard_Hall_111_Lithography_Lab_Renovation: 136 legend rows, 552 plan candidates, 680 proposal pairs
+[23/30] bulk_vol2:071_ME_BGS_Project_3809_Health_Science_Center: 244 legend rows, 699 plan candidates, 1220 proposal pairs
+[24/30] bulk_vol2:075_MT_Renne_Library_Innovation_Learning_Studio: 134 legend rows, 459 plan candidates, 670 proposal pairs
+[25/30] bulk_vol2:082_OR_Klamath_Community_College_Career_Learning: 78 legend rows, 775 plan candidates, 390 proposal pairs
+[26/30] bulk_vol2:087_US_Contra_Costa_College_Chiller_Replacement: 0 legend rows, 535 plan candidates, 0 proposal pairs
+[27/30] bulk_vol2:092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[28/30] bulk_vol2:096_IN_Vermillion_County_Jail_Mechanical_Bid_Set: 0 legend rows, 928 plan candidates, 0 proposal pairs
+[29/30] raw:baker-county-eoc-bidset: 83 legend rows, 383 plan candidates, 415 proposal pairs
+[30/30] raw:tarrant-county-mechanical: 0 legend rows, 11 plan candidates, 0 proposal pairs
+{
+  "families_processed": 30,
+  "legend_rows_total": 2334,
+  "plan_candidates_total": 9827,
+  "proposal_pairs_total": 11670
+}
+wrote /home/user/worktrees/symbol-metric-v1/opentakeoff-ml/symbol_metric/reports/review_queue.shard0.jsonl

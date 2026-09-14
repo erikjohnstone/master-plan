@@ -1,0 +1,36 @@
+[1/29] bulk_vol1:02_UT_FAA_Ogden_AirTrafficControlTower: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[2/29] bulk_vol1:06_MO_NatlGuard_JeffCity_CST_Addition: 11 legend rows, 39 plan candidates, 55 proposal pairs
+[3/29] bulk_vol1:10_MO_Hawthorn_PsychHospital_HVAC: 0 legend rows, 316 plan candidates, 0 proposal pairs
+[4/29] bulk_vol1:14_OR_KlamathCC_LearningCtr_Mechanical: 81 legend rows, 441 plan candidates, 405 proposal pairs
+[5/29] bulk_vol1:18_OR_BakerMS_HVAC_Electrical_FullSet: 240 legend rows, 897 plan candidates, 1200 proposal pairs
+[6/29] bulk_vol1:22_GA_Valdosta_FireStation8_100CD: 0 legend rows, 3333 plan candidates, 0 proposal pairs
+[7/29] bulk_vol1:26_CA_TransbayTower_Mechanical_64Sheets: 0 legend rows, 0 plan candidates, 0 proposal pairs
+[8/29] bulk_vol1:30_WA_SpokaneTransit_CoolingTower: 247 legend rows, 1004 plan candidates, 1235 proposal pairs
+[9/29] bulk_vol2:006_US_U2607_01_Interior_Renovations_C_Wing_Updates: 363 legend rows, 604 plan candidates, 1815 proposal pairs
+[10/29] bulk_vol2:011_IL_VA_Hines_Finance_Center_Renovation: 4 legend rows, 88 plan candidates, 20 proposal pairs
+[11/29] bulk_vol2:015_VA_P_095_Replace_Submarine_Pier_3_Utility: 456 legend rows, 1234 plan candidates, 2280 proposal pairs
+[12/29] bulk_vol2:019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04: 313 legend rows, 1544 plan candidates, 1565 proposal pairs
+[13/29] bulk_vol2:024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri: 84 legend rows, 387 plan candidates, 420 proposal pairs
+[14/29] bulk_vol2:031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for: 0 legend rows, 30 plan candidates, 0 proposal pairs
+[15/29] bulk_vol2:035_AR_564_19_101_Construct_New_Water_Storage: 7 legend rows, 46 plan candidates, 35 proposal pairs
+[16/29] bulk_vol2:039_TX_VA_Project_580_22_201_Replace_and_Upgrade: 87 legend rows, 209 plan candidates, 435 proposal pairs
+[17/29] bulk_vol2:043_FL_VA_Project_673_21_151_Replace_Air_Handling: 36 legend rows, 126 plan candidates, 180 proposal pairs
+[18/29] bulk_vol2:047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU: 137 legend rows, 1175 plan candidates, 685 proposal pairs
+[19/29] bulk_vol2:052_IL_VA_Project_537_17_115_Sterile_Processing: 186 legend rows, 463 plan candidates, 930 proposal pairs
+[20/29] bulk_vol2:056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces: 0 legend rows, 22 plan candidates, 0 proposal pairs
+[21/29] bulk_vol2:061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building: 6 legend rows, 127 plan candidates, 30 proposal pairs
+[22/29] bulk_vol2:067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid: 0 legend rows, 88 plan candidates, 0 proposal pairs
+[23/29] bulk_vol2:072_CA_CA07_2627_West_Valley_College_Science_Math: 210 legend rows, 805 plan candidates, 1050 proposal pairs
+[24/29] bulk_vol2:077_MT_Miller_Dining_Auxiliaries_Offices_HVAC: 43 legend rows, 119 plan candidates, 215 proposal pairs
+[25/29] bulk_vol2:083_MA_Town_Offices_Facilities_HVAC_System_Upgrades: 0 legend rows, 310 plan candidates, 0 proposal pairs
+[26/29] bulk_vol2:088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX: 49 legend rows, 76 plan candidates, 245 proposal pairs
+[27/29] bulk_vol2:093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades: 283 legend rows, 713 plan candidates, 1415 proposal pairs
+[28/29] bulk_vol2:097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project: 39 legend rows, 868 plan candidates, 195 proposal pairs
+[29/29] raw:bldg5406-hvac-demo-mechanical: 0 legend rows, 5 plan candidates, 0 proposal pairs
+{
+  "families_processed": 29,
+  "legend_rows_total": 2882,
+  "plan_candidates_total": 15069,
+  "proposal_pairs_total": 14410
+}
+wrote /home/user/worktrees/symbol-metric-v1/opentakeoff-ml/symbol_metric/reports/review_queue.shard1.jsonl
