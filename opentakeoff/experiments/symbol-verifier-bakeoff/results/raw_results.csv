@@ -1,0 +1,41 @@
+group_id,project_id,split,symbol_name,tag_name,target_physical_id,num_candidates,top1_candidate_id,top1_score,top1_decision,top1_abstain_reason,latency_ms,outcome,verifier
+eval_dev_valves_01,project_valves,dev,2-Way Control Valve,V-101,phys_v101,4,cand_v101_true,1.0,match,,1.422166998963803,SUCCESS_MATCH,deterministic_vector_baseline
+eval_dev_valves_02_orphaned_tag,project_valves,dev,2-Way Control Valve,V-102,,2,cand_v102_tag,0.0,reject,insufficient_linework_coverage,0.3965419891756028,REJECT_CORRECT,deterministic_vector_baseline
+eval_dev_air_01,project_air,dev,Fire Damper,FD-1,phys_fd1,3,cand_fd1_true,1.0,match,,1.1563329899217933,SUCCESS_MATCH,deterministic_vector_baseline
+eval_heldout_cherry_point_01,project_cherry_point,held_out,2-Way Modulating Valve,TCV-1,phys_ho_v1,4,cand_ho_v1_true,1.0,match,,1.3185830030124635,SUCCESS_MATCH,deterministic_vector_baseline
+eval_heldout_baker_01,project_baker_eoc,held_out,Supply Air Diffuser 24x24,SAD-1,phys_ho_sad1,3,cand_ho_diff_true,1.0,match,,1.5372500056400895,SUCCESS_MATCH,deterministic_vector_baseline
+eval_dev_valves_01,project_valves,dev,2-Way Control Valve,V-101,phys_v101,4,cand_v101_true,1.0,match,,5.4814999748487025,SUCCESS_MATCH,raster_template_matching
+eval_dev_valves_02_orphaned_tag,project_valves,dev,2-Way Control Valve,V-102,,2,cand_v102_tag,0.3643970191478729,reject,low_template_correlation,2.375374984694645,REJECT_CORRECT,raster_template_matching
+eval_dev_air_01,project_air,dev,Fire Damper,FD-1,phys_fd1,3,cand_fd1_true,1.0,match,,2.439917006995529,SUCCESS_MATCH,raster_template_matching
+eval_heldout_cherry_point_01,project_cherry_point,held_out,2-Way Modulating Valve,TCV-1,phys_ho_v1,4,cand_ho_v1_true,1.0,match,,4.699083016021177,SUCCESS_MATCH,raster_template_matching
+eval_heldout_baker_01,project_baker_eoc,held_out,Supply Air Diffuser 24x24,SAD-1,phys_ho_sad1,3,cand_ho_diff_true,1.0,match,,3.5157090169377625,SUCCESS_MATCH,raster_template_matching
+eval_dev_valves_01,project_valves,dev,2-Way Control Valve,V-101,phys_v101,4,cand_v101_true,1.0,match,,299.1099169885274,SUCCESS_MATCH,shape_context_descriptor
+eval_dev_valves_02_orphaned_tag,project_valves,dev,2-Way Control Valve,V-102,,2,cand_v102_tag,0.5400276184082031,reject,dissimilar_shape_context,146.96308301063254,REJECT_CORRECT,shape_context_descriptor
+eval_dev_air_01,project_air,dev,Fire Damper,FD-1,phys_fd1,3,cand_fd1_true,1.0,match,,147.8805420047138,SUCCESS_MATCH,shape_context_descriptor
+eval_heldout_cherry_point_01,project_cherry_point,held_out,2-Way Modulating Valve,TCV-1,phys_ho_v1,4,cand_ho_v1_true,1.0,match,,293.5024999896996,SUCCESS_MATCH,shape_context_descriptor
+eval_heldout_baker_01,project_baker_eoc,held_out,Supply Air Diffuser 24x24,SAD-1,phys_ho_sad1,3,cand_ho_diff_true,1.0,match,,220.22212500451133,SUCCESS_MATCH,shape_context_descriptor
+eval_dev_valves_01,project_valves,dev,2-Way Control Valve,V-101,phys_v101,4,cand_v101_true,1.0,match,,0.31008399673737586,SUCCESS_MATCH,vector_topology_descriptor
+eval_dev_valves_02_orphaned_tag,project_valves,dev,2-Way Control Valve,V-102,,2,cand_v102_tag,0.65,abstain,marginal_topology_match,0.10449998080730438,ABSTAIN_CORRECT,vector_topology_descriptor
+eval_dev_air_01,project_air,dev,Fire Damper,FD-1,phys_fd1,3,cand_fd1_true,1.0,match,,0.18629201804287732,SUCCESS_MATCH,vector_topology_descriptor
+eval_heldout_cherry_point_01,project_cherry_point,held_out,2-Way Modulating Valve,TCV-1,phys_ho_v1,4,cand_ho_v1_true,1.0,match,,0.23616699036210775,SUCCESS_MATCH,vector_topology_descriptor
+eval_heldout_baker_01,project_baker_eoc,held_out,Supply Air Diffuser 24x24,SAD-1,phys_ho_sad1,3,cand_ho_diff_true,1.0,match,,0.20991699420847,SUCCESS_MATCH,vector_topology_descriptor
+eval_dev_valves_01,project_valves,dev,2-Way Control Valve,V-101,phys_v101,4,cand_v101_true,1.0,match,,300.3871669934597,SUCCESS_MATCH,off_the_shelf_mobilenet_v3_metric
+eval_dev_valves_02_orphaned_tag,project_valves,dev,2-Way Control Valve,V-102,,2,cand_v102_tag,0.9073723554611206,reject,low_metric_embedding_similarity,149.0029590204358,REJECT_CORRECT,off_the_shelf_mobilenet_v3_metric
+eval_dev_air_01,project_air,dev,Fire Damper,FD-1,phys_fd1,3,cand_fd1_true,1.0000001192092896,match,,222.33004099689424,SUCCESS_MATCH,off_the_shelf_mobilenet_v3_metric
+eval_heldout_cherry_point_01,project_cherry_point,held_out,2-Way Modulating Valve,TCV-1,phys_ho_v1,4,cand_ho_v1_true,0.9999998807907104,match,,296.70058301417157,SUCCESS_MATCH,off_the_shelf_mobilenet_v3_metric
+eval_heldout_baker_01,project_baker_eoc,held_out,Supply Air Diffuser 24x24,SAD-1,phys_ho_sad1,3,cand_ho_diff_true,1.0000001192092896,match,,222.57424998679198,SUCCESS_MATCH,off_the_shelf_mobilenet_v3_metric
+eval_dev_valves_01,project_valves,dev,2-Way Control Valve,V-101,phys_v101,4,cand_v101_true,1.0,match,,76.15537499077618,SUCCESS_MATCH,hybrid_deterministic_metric_verifier
+eval_dev_valves_02_orphaned_tag,project_valves,dev,2-Way Control Valve,V-102,,2,cand_v102_tag,0.0,reject,clear_geometric_mismatch,0.3865000035148114,REJECT_CORRECT,hybrid_deterministic_metric_verifier
+eval_dev_air_01,project_air,dev,Fire Damper,FD-1,phys_fd1,3,cand_fd1_true,1.0,match,,1.1266250221524388,SUCCESS_MATCH,hybrid_deterministic_metric_verifier
+eval_heldout_cherry_point_01,project_cherry_point,held_out,2-Way Modulating Valve,TCV-1,phys_ho_v1,4,cand_ho_v1_true,1.0,match,,75.81541599938646,SUCCESS_MATCH,hybrid_deterministic_metric_verifier
+eval_heldout_baker_01,project_baker_eoc,held_out,Supply Air Diffuser 24x24,SAD-1,phys_ho_sad1,3,cand_ho_diff_true,1.0,match,,74.42662501125596,SUCCESS_MATCH,hybrid_deterministic_metric_verifier
+eval_dev_valves_01,project_valves,dev,2-Way Control Valve,V-101,phys_v101,4,cand_v101_true,1.0,match,,11.801417014794424,SUCCESS_MATCH,opencv_sift_keypoint_verifier
+eval_dev_valves_02_orphaned_tag,project_valves,dev,2-Way Control Valve,V-102,,2,cand_v102_tag,0.0,reject,insufficient_keypoints,2.230957994470373,REJECT_CORRECT,opencv_sift_keypoint_verifier
+eval_dev_air_01,project_air,dev,Fire Damper,FD-1,phys_fd1,3,cand_fd1_true,1.0,match,,2.628290996653959,SUCCESS_MATCH,opencv_sift_keypoint_verifier
+eval_heldout_cherry_point_01,project_cherry_point,held_out,2-Way Modulating Valve,TCV-1,phys_ho_v1,4,cand_ho_v1_true,1.0,match,,5.611957982182503,SUCCESS_MATCH,opencv_sift_keypoint_verifier
+eval_heldout_baker_01,project_baker_eoc,held_out,Supply Air Diffuser 24x24,SAD-1,phys_ho_sad1,3,cand_ho_diff_true,1.0,match,,3.8621250132564455,SUCCESS_MATCH,opencv_sift_keypoint_verifier
+eval_dev_valves_01,project_valves,dev,2-Way Control Valve,V-101,phys_v101,4,cand_v101_true,0.0,reject,insufficient_keypoints,1.7675830167718232,MISSED_TARGET,opencv_orb_keypoint_verifier
+eval_dev_valves_02_orphaned_tag,project_valves,dev,2-Way Control Valve,V-102,,2,cand_v102_tag,0.0,reject,insufficient_keypoints,0.3538339806254953,REJECT_CORRECT,opencv_orb_keypoint_verifier
+eval_dev_air_01,project_air,dev,Fire Damper,FD-1,phys_fd1,3,cand_fd1_true,0.0,reject,insufficient_keypoints,0.3990829864051193,MISSED_TARGET,opencv_orb_keypoint_verifier
+eval_heldout_cherry_point_01,project_cherry_point,held_out,2-Way Modulating Valve,TCV-1,phys_ho_v1,4,cand_ho_v1_true,0.0,reject,insufficient_keypoints,0.7367499929387122,MISSED_TARGET,opencv_orb_keypoint_verifier
+eval_heldout_baker_01,project_baker_eoc,held_out,Supply Air Diffuser 24x24,SAD-1,phys_ho_sad1,3,cand_ho_diff_true,0.0,reject,insufficient_keypoints,0.5645829951390624,MISSED_TARGET,opencv_orb_keypoint_verifier
