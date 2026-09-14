@@ -10620,6 +10620,15 @@ export function scheduleTableFromODL(
   // label exactly as read, so every existing lookup by header name still
   // resolves, and later duplicates get a numeric suffix so their data survives
   // instead of being overwritten by whichever column happened to come last.
+  // Recorded alongside the rename below (not re-derived from the renamed
+  // strings afterward, which would be ambiguous the moment a genuine header
+  // legitimately ends in a digit, e.g. "ZONE 2") — which real columns
+  // shared one label before disambiguation. B-31's own transposed-schedule
+  // rescue below needs exactly this: the sibling of a duplicate-labeled key
+  // column (e.g. "DESIGNATION"/"DESIGNATION 2") is the one place a table
+  // like this can carry each row's real identity when the key column itself
+  // is blank on that row.
+  const headerSiblingGroups = new Map<string, number[]>();
   {
     const seen = new Map<string, number>();
     for (let c = 0; c < headers.length; c++) {
@@ -10627,6 +10636,8 @@ export function scheduleTableFromODL(
       const n = seen.get(base) ?? 0;
       seen.set(base, n + 1);
       if (n > 0) headers[c] = `${base} ${n + 1}`;
+      const group = headerSiblingGroups.get(base);
+      if (group) group.push(c); else headerSiblingGroups.set(base, [c]);
     }
   }
 
@@ -10917,6 +10928,62 @@ export function scheduleTableFromODL(
     if (![...own].some((cl) => odlCellText(cl).trim())) continue;
     dataRows.push(r);
   }
+  // B-31: EVERY DATA ROW'S NEAREST GROUP-DIVIDER LABEL ABOVE IT, WHEN ONE
+  // EXISTS. Traced live (temporary instrumentation, added then fully
+  // reverted) against 21_VA_OrangeCounty_PublicSafetyBldg.pdf#50's own AIR
+  // HANDLING UNIT SCHEDULE: its group dividers ("COOLING COIL", "SUPPLY
+  // FAN", "RETURN FAN", "FILTER SECTION") are NOT full-width spanning rows
+  // (the shape the OTHER divider check above/in buildRows recognizes) — each
+  // is a NARROW cell in the key column alone (`"column span": 1`) that is
+  // TALL instead (`"row span"` 3-4), sitting beside real, distinct per-row
+  // attribute text in the sibling column for every row it covers. A row
+  // whose OWN key-column cell spans more than one row is therefore never
+  // this row's own identity — it is the group name for every row underneath
+  // it, printed once, exactly the shape a real per-row identity value
+  // (`"row span": 1`, confirmed on this same table's identity-block and
+  // summary rows) does not have. The label must keep propagating past the
+  // rowspan's own last row, too: this table only prints "SUPPLY FAN" across
+  // 4 grid rows but the group's own real attributes continue for 6 more
+  // grid rows with a blank key-column cell before "RETURN FAN" appears —
+  // real, corpus-found, the exact reason attribute names repeat verbatim
+  // across groups ("DRIVE TYPE", "(NO. OF MOTORS) @ HORSEPOWER", "VOLTAGE/
+  // PHASE" all appear under both SUPPLY FAN and RETURN FAN), which is what
+  // makes the attribute name ALONE not a real per-row identity — the group
+  // it belongs to is the other, unrecorded half. Read-only, used only by the
+  // additive rescue below; nothing here changes which rows any existing
+  // pass emits.
+  const groupKeyCol = keyColIdx >= 0 ? keyColIdx : 0;
+  const groupLabelForRow = new Map<number, string>();
+  {
+    let current: string | null = null;
+    let currentCellRef: ODLTableCell | null = null;
+    for (let r = headerEnd; r < R; r++) {
+      const cell = grid[r][groupKeyCol];
+      if (cell && cell["row number"] - 1 === r) {
+        if ((cell["row span"] || 1) > 1) {
+          const label = norm(odlCellText(cell)).replace(/\s+/g, " ").trim();
+          current = label || null;
+          currentCellRef = cell;
+          continue;
+        }
+        // A real, single-row value in the key column names itself — not
+        // part of any group's scope, and it ends whatever scope was open.
+        current = null;
+        currentCellRef = null;
+        continue;
+      }
+      if (cell && cell === currentCellRef) {
+        // Still inside the divider's own rowspan — just as much this
+        // group's row as the rows after the rowspan ends (real, corpus-
+        // found: this table's own FILTER SECTION divider spans 4 grid rows
+        // and its 2nd-4th rows were being silently missed here, treated as
+        // groupless, until this exact branch also recorded the label).
+        if (current) groupLabelForRow.set(r, current);
+        continue;
+      }
+      if (current) groupLabelForRow.set(r, current); // blank key cell, group still open
+    }
+  }
   const findEvidencedKeyColumn = (): number[] => {
     let evidenced = -1;
     if (dataRows.length >= 2) {
@@ -11098,6 +11165,87 @@ export function scheduleTableFromODL(
     if (missing.size) buildRows([strictKeyCol], true, missing);
   }
 
+  // B-31: A GROUP-DIVIDED ROW'S REAL IDENTITY CAN LIVE IN THE KEY COLUMN'S
+  // OWN DUPLICATE-HEADER SIBLING, PAIRED WITH ITS NEAREST GROUP LABEL.
+  //
+  // Real, corpus-found, traced live (temporary instrumentation, added and
+  // fully reverted): 21_VA_OrangeCounty_PublicSafetyBldg.pdf#50's own AIR
+  // HANDLING UNIT SCHEDULE reports `headers: ["DESIGNATION", "DESIGNATION
+  // 2", "AHU-1", "AHU-2"]` — a genuine two-column split this table's own
+  // narrow rotated row-group divider (COOLING COIL/SUPPLY FAN/RETURN FAN/
+  // FILTER SECTION) creates in ODL's own grid. Column 0 ("DESIGNATION")
+  // carries real text only on the identity block, the 4 group dividers, and
+  // the summary rows — blank everywhere else; the real attribute name a
+  // person reads off the page ("TOTAL LOAD - MBH", "MOTOR HP", …) sits in
+  // "DESIGNATION 2" instead. Every existing pass above only ever tries
+  // column 0, so those rows are never even attempted with the column that
+  // actually holds their text.
+  //
+  // `findEvidencedKeyColumn` above already exists to find exactly this kind
+  // of column, but a TRIED AND REVERTED attempt earlier this session proved
+  // it can never pick "DESIGNATION 2" alone: several attribute names
+  // legitimately repeat verbatim across this table's own different
+  // equipment groups (MOTOR HP/RPM/BHP appear under BOTH SUPPLY FAN and
+  // RETURN FAN), so the column fails `findEvidencedKeyColumn`'s own
+  // per-column uniqueness test, and its two-column pairing search fails too
+  // because column 0's own group-name text sits on the divider row alone,
+  // never carried down as a rowspan across the attribute rows beneath it —
+  // so no PAIR of real columns makes every row distinct either.
+  //
+  // This is why `groupLabelForRow` above exists: the divider's own label,
+  // remembered instead of discarded, is the missing half of that pair. This
+  // rescue only runs on rows STILL missing after every pass above (never
+  // touches an already-emitted row's key), only considers the key column's
+  // own duplicate-header sibling (the SAME "DESIGNATION"/"DESIGNATION 2"
+  // relationship the earlier header-dedup step already recorded, not an
+  // arbitrary other column), and only accepts a composite (group label +
+  // sibling text) key that does not collide with one already minted — the
+  // identical no-duplicate-keys invariant every other rescue in this
+  // function protects. A table with no group-divider rows, or whose key
+  // column has no duplicate-header sibling, is completely unaffected: both
+  // preconditions are rare enough in combination that this cannot change
+  // any table that already extracts correctly today.
+  if (emitted.size < dataRows.length && groupLabelForRow.size) {
+    let siblingCols: number[] = [];
+    for (const cols of headerSiblingGroups.values()) {
+      if (cols.includes(strictKeyCol)) { siblingCols = cols.filter((c) => c !== strictKeyCol); break; }
+    }
+    if (siblingCols.length) {
+      for (const r of dataRows) {
+        if (emitted.has(r)) continue;
+        const group = groupLabelForRow.get(r);
+        if (!group) continue;
+        for (const c of siblingCols) {
+          const cell = grid[r][c];
+          if (!cell || cell["row number"] - 1 !== r) continue;
+          const text = norm(odlCellText(cell)).replace(/\s+/g, " ").trim();
+          if (!text) continue;
+          const candidate = `${group} ${text}`;
+          if (!printedKeyOk(candidate)) continue;
+          if (rows.some((existing) => existing.key === candidate)) continue;
+          const texts = new Array(C).fill("");
+          for (let cc = 0; cc < C; cc++) {
+            const sourceCell = grid[r][cc];
+            if (!sourceCell) continue;
+            const text2 = odlCellText(sourceCell);
+            const bbox2 = odlBboxToProjectSpace(sourceCell["bounding box"], pageViewportTransform);
+            texts[cc] = opts.sourceSpans ? preferLastOverprintedText(text2, bbox2, opts.sourceSpans) : text2;
+          }
+          if (texts.every((s: string) => !s.trim())) break; // blank spacer row
+          const cells: Record<string, TableCell> = {};
+          for (let cc = 0; cc < C; cc++) {
+            if (!texts[cc]) continue;
+            const srcCell = grid[r][cc];
+            const bbox = srcCell ? odlBboxToProjectSpace(srcCell["bounding box"], pageViewportTransform) : odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
+            cells[headers[cc]] = { text: texts[cc], bbox };
+          }
+          emitted.add(r);
+          rows.push({ key: candidate, sheet: sheetKey, cells });
+          break;
+        }
+      }
+    }
+  }
 
   if (!rows.length) {
     const evidenced = findEvidencedKeyColumn();

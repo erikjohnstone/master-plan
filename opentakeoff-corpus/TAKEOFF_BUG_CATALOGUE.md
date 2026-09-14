@@ -2765,7 +2765,7 @@ than "prose, not traced further":**
   reference table this vocabulary mechanism reaches) — full context in
   B-32.
 
-### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (NOT FIXED — found, traced, disclosed)
+### B-31 — a real, correctly-titled table's row count is massively truncated (18 real rows reported as 2), and 4 more real tables vanish across the same document's 2 schedule pages (PARTIAL FIX 2026-09-14 — the transposed/group-divider truncation class closes; the 14_OR FAN COIL UNITS instance and a few unrelated 1-row gaps remain open)
 
 **Where:** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf`, both of its
 schedule pages (M002/#2, M003/#3) — found continuing the HELDOUT set's
@@ -2995,6 +2995,87 @@ corpus-tuned function every other bug in this section warns about — still
 correctly left to a future session with the budget for a full corpus
 regression pass, now with the wrong approach ruled out in evidence rather
 than by inference.
+
+**FIX (2026-09-14) — exactly the "propagate the divider label" approach
+above, done as a strictly ADDITIVE rescue, not a key-selection change.**
+Traced live (temporary instrumentation, added then fully reverted) exactly
+what this table's group dividers look like in the real ODL grid, and the
+original theory above was subtly wrong about their SHAPE: "COOLING COIL"/
+"SUPPLY FAN"/"RETURN FAN"/"FILTER SECTION" are NOT full-width spanning
+rows (the shape `buildRows`' own existing spanning-row skip recognizes) —
+each is a NARROW cell in the key column alone (`"column span": 1`) that is
+TALL instead (`"row span"` 3-4), sitting beside real, distinct per-row
+attribute text in the sibling column for every row it covers. A first
+implementation using the (wrong) full-width-row shape detected zero
+dividers and changed nothing; corrected to the real signal — **a row whose
+own key-column cell spans more than one row is a group label for every row
+underneath it, not that row's own identity** — and propagating it forward
+past both the divider's own rowspan AND the plain rows after it (this
+table prints "SUPPLY FAN" once across 4 grid rows, but the group's real
+attributes continue for 6 more rows with a blank key-column cell before
+"RETURN FAN" appears) is what makes `(group, attribute name)` composite
+keys distinct even when the bare attribute name repeats verbatim across
+groups (confirmed: "DRIVE TYPE", "(NO. OF MOTORS) @ HORSEPOWER", "VOLTAGE/
+PHASE" all appear under both SUPPLY FAN and RETURN FAN).
+
+Implementation, `web/src/lib/sheetgraph.ts`: (1) the header-dedup step
+that already renames a repeated header ("DESIGNATION" → "DESIGNATION 2")
+now also records which real columns shared a label, in a new
+`headerSiblingGroups` map — read-only bookkeeping, no behavior change on
+its own; (2) a new `groupLabelForRow` pass over the raw grid records, for
+every data row, the nearest group-divider label above it (by the row-span
+signal above), read-only and used only by the rescue below; (3) after
+every existing key-selection pass has run (strict CODE_RE, the evidenced-
+column "try both" pass, the same-column printed-key missing-row rescue),
+a new final rescue: for any row STILL unemitted, if a group label is
+active for it and the key column's own duplicate-header sibling column
+(from step 1 — never an arbitrary other column) has real text there,
+compose `${group} ${siblingText}` and admit it as a new row's key,
+subject to the same no-duplicate-keys invariant every other rescue in
+this function already enforces. A table with no group-divider rows, or
+whose key column has no duplicate-header sibling, is completely
+unaffected — this rescue can only ever ADD a row that was previously
+being silently dropped; it never changes an already-emitted row's key.
+
+**Verified live, not assumed:** `21_VA_OrangeCounty_PublicSafetyBldg.pdf#50`'s
+`AIR HANDLING UNIT SCHEDULE` — a real 51-data-row table (confirmed via the
+same instrumentation's own `dataRows` count) — goes from 33 rows (baseline,
+this session's committed code before this fix) to **50 rows** after. The
+one still-missing row (`"MINIMUM OUTDOOR AIR - CFM / DEMAND CONTROL
+VENTILATION MINIMUM - CFM"`) is a pre-existing, unrelated gap — it carries
+no group label at all (a genuine single-row identity value, column-span 2)
+and was already missing before this fix; not touched by this change.
+`21_VA_OrangeCounty_PublicSafetyBldg.pdf#51`'s `AIR COOLED CHILLER
+SCHEDULE` (this document's other confirmed instance of this bug shape)
+goes from 11 rows to **20 rows** (real count not independently re-hand-
+verified this pass, but the fix's own mechanism is identical). Every
+OTHER table on both sheets — including `VAV TERMINAL BOX SCHEDULE`
+(unaffected at 32 rows both before and after, a number that does not match
+this entry's own earlier "57 real rows, extracts exactly right" claim —
+flagged here as a discrepancy to re-verify, not silently reconciled) and
+the 9 other M-602 tables — is byte-for-byte unchanged.
+
+**Regression, corpus-wide:** all 231 `sheetgraph.test.ts`/
+`vectorTakeoffPipeline.test.ts`/`scheduleLanguageScan.test.ts`/
+`tableExtractorReconcile.test.ts`/`schedulePlanReconcile.test.ts`/
+`vectorGridAdapter.test.ts` tests pass, `tsc --noEmit` clean. Live-checked
+against 3 more real documents this same session had no reason to expect
+this rescue to touch — `093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_
+Upgrades.pdf` (11 pages, 7 tables) and `28_WA_KCHA_PublicHousing_HVAC.pdf`
+(9 pages, 4 tables) — full before/after JSON diff on every table's own
+row keys: byte-for-byte identical (the only diff in either file was a
+runtime-variance timing string, not table content).
+
+**What remains open:** `14_OR_KlamathCC_LearningCtr_Mechanical.pdf`'s own
+original `FAN COIL UNITS` instance (18 real rows reported as 2) is a
+PER-UNIT-ROW table, not a transposed/group-divider one — a different
+mechanism this fix does not touch, not re-investigated this pass. Any
+other 1-row-under-real-count gaps on 21_VA's own M-602 sheet not
+attributable to a group divider (most of its 10 tables lost exactly one
+trailing `REMARKS` row each, per this entry's own original measurement)
+remain open too — this fix only recovers rows whose true identity was
+hidden behind a group-divider collision, not every kind of row loss named
+in this entry.
 
 ### B-32 — the primary equipment table (BOILERS) is present and correctly located but garbled into one composite row by a below-table footnotes list, PUMPS is genuinely missing, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, corrected, disclosed)
 
