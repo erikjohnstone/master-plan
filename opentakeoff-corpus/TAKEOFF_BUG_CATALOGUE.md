@@ -3549,6 +3549,54 @@ retracted: it is present, correctly drawn, and destroyed the same way
 `GAS CONNECTED LOAD TABLE` was — not a separate missing-table defect at
 all. Not fixed, same reasoning as above.
 
+**ATTEMPTED 2026-09-14 — investigated a narrow post-hoc "un-weld" fix
+(split a welded candidate back into two at the blank connecting band,
+mirroring `vectorGridAdapter.ts`'s own SPLIT-FRAGMENT RECOVERY in
+reverse), specifically to avoid touching `find_tables()`'s own shared
+union-find core. Not shipped — the real per-row cell data for BOTH
+instances is meaningfully messier than this entry's own "two stacked
+blocks welded at one blank band" model, and a safe, narrow split rule
+cannot be written against it.**
+
+Pulled the raw welded candidate's own per-row/per-column membership
+directly via `vectorgrid_rpc.extract_grid()` for both instances (no
+code changed, pure measurement):
+
+- The `GAS CONNECTED LOAD TABLE`/`HYDRONIC SPECIALTIES SCHEDULE` weld
+  (79 rows × 12 cols, 362 cells) does have a real blank band at rows
+  13-14 separating the two source tables — but the `HYDRONIC` half
+  ITSELF (rows 15-78) is not one clean column-consistent block on its
+  own: its own row-by-row column membership ALTERNATES between two
+  different column sets almost every row (`cols=[3,5,8]` then
+  `cols=[1,3,5,8,11]` then back, repeating) — consistent with two
+  further sub-schedules (e.g. separate systems/zones) themselves
+  interleaved by the SAME column-clustering distortion, not a single
+  clean second table. A split rule that only knows to cut at the one
+  blank band would recover two pieces, neither of which is a clean,
+  correctly-keyed table on its own.
+- The `PUMPS`/`BOILERS` weld (10 rows × 79 cols, 290 cells) is worse:
+  there is no clean two-block structure to find at all. Row-by-row
+  column coverage swings wildly (`col_range 0-77`, then `4-77`, then a
+  single stray column, then `0-78`...) — confirming this instance
+  compounds the weld with the SEPARATE footnote/notes-list corruption
+  this entry's own earlier trace already found for `BOILERS` alone, not
+  a second clean instance of the simple weld shape.
+
+**Why this stays disclosed, not fixed.** A safe post-hoc split needs the
+welded candidate to actually decompose into two internally-consistent
+pieces at the point of the cut; neither real instance does. Writing a
+splitter that "works" against this specific tangled data without also
+firing on a genuinely single, correctly-drawn multi-tier table elsewhere
+in the corpus (the same false-positive risk this file's own B-27 pass
+already measured for a different gate) is not something this session's
+own discipline permits without the fix actually working cleanly on its
+own two cited cases first — and it does not. The real fix most likely
+needs to happen inside `find_tables()` itself (a genuinely different,
+larger-scope column-clustering defect distinct from the weld this entry
+already names), not as a downstream patch — consistent with, and now
+more precisely measured than, this entry's own standing "touches every
+table in the corpus, needs a full validation pass" caution.
+
 ### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (RE-VERIFIED 2026-09-14 — ALL THREE documented instances now fully closed, as a side effect of this session's own B-38/B-31 fixes)
 
 **Where:**
