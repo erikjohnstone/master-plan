@@ -74,10 +74,29 @@ source images or that cache.  It yields two independently transformed views of
 the **same physical annotation** by default, and preserves the source-local
 class as an optional proxy label for supervised warm-up.
 
-Use `symbol_metric_transforms.py` as the fixed first transform: it retains
+Use `symbol_metric_transforms.py` as the fixed final input transform: it retains
 aspect ratio, pads to 280×280, converts the drawing crop to grayscale, then
-replicates it to three channels for DINOv2-S/14. Apply random training
-augmentation *after* that canonical preparation; do not stretch symbols.
+replicates it to three channels for DINOv2-S/14. The RunPod trainer applies
+carefully bounded crop augmentation before that canonical preparation: it never
+rotates or mirrors symbols; its extended profile permits small anisotropic
+stretch only where the source class is not directional or asymmetric.
+
+## Run the actual model training on RunPod
+
+Read [`RUNPOD_ELI5.md`](RUNPOD_ELI5.md) from top to bottom. It begins with
+opening RunPod and gives copy-paste commands for transfer, GPU checks,
+backbone download, smoke training, real training, evaluation, and ONNX export.
+The only required tools are the scripts in this folder:
+
+| Script | What it does |
+| --- | --- |
+| `scripts/upload_data_to_runpod.sh` | Mac-side source-native upload of only the required packs |
+| `scripts/bootstrap_runpod.sh` | Installs runtime packages; verifies GPU + all 38,140 image paths; downloads pinned DINOv2 |
+| `scripts/smoke_train.sh` | Two-batch wiring test before paid training |
+| `scripts/run_full_training.sh` | Trains, evaluates, and writes ONNX in one command |
+| `scripts/train_metric.py` | The actual resumable PyTorch metric-learning trainer |
+| `scripts/evaluate_metric.py` | Clearly limited held-out pretraining diagnostics |
+| `scripts/export_onnx.py` | Exports the candidate-ranking encoder only |
 
 ## Non-negotiable release boundary
 

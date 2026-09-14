@@ -10,8 +10,9 @@ def prepare_symbol_image(image: Image.Image, size: int = 280) -> Image.Image:
 
     DINOv2 expects three channels, but engineering symbol ink is fundamentally
     grayscale.  Keeping the channels identical removes accidental colour from
-    mixed-source exports while preserving line geometry.  Random augmentation
-    belongs in the caller after this deterministic step.
+    mixed-source exports while preserving line geometry.  If an augmentation
+    needs to change crop geometry, apply it before this final aspect-preserving
+    preparation; never let it silently alter the 280×280 output contract.
     """
     if size < 1:
         raise ValueError("size must be positive")
