@@ -2589,6 +2589,51 @@ fails MISSED=0's false-positive-free counterpart — a phantom table with
 no real basis pollutes an otherwise perfectly-extracted sheet (4/4 real
 tables correct).
 
+**ROOT CAUSE CORRECTED 2026-09-14 — this is NOT a pure disclaimer
+paragraph, and the mechanism is a vectorgrid engine bug, not a text-
+classification one.** Traced live: called `bakeoff/vectorgrid.py`'s
+`find_tables()` directly on this exact page and rendered the phantom's
+own region (`(112.14, 109.56)`-`(303.46, 264.42)` raw pt) at 300dpi. The
+render shows the DOPL stamp's teal disclaimer text is a semi-transparent
+WATERMARK drawn on top of, not beside, the real `VEHICLE EXHAUST GAS
+DETECTION SYSTEM SCHEDULE (SHOP)` table's own left two columns —
+`SYMBOL` / `AREA SERVED` headers and a real `GD-1` / `STORAGE/REPAIR
+BAYS` data row are genuinely ruled and genuinely there, directly
+underneath the disclaimer text. `page.rects` confirms the stamp carries
+its own real vector bounding rectangle — stroke color `(0, 0.251,
+0.502)` (the same teal), right edge at `x=303.4558554399999` — landing,
+to 5 decimal places, on the EXACT x where the phantom's own bbox ends
+AND where the real schedule table's own next real column (`EXHAUST FAN
+MODEL...`, extracted correctly as its own separate table starting at
+that same x) begins. `find_tables()`'s border-weight wall test (`_border
+_weight`/`bw`, the same mechanism the file's own comments describe
+protecting "two schedules stacked on a shared rule" from merging) reads
+this coincidental stamp-rectangle edge as a real internal table wall and
+CUTS the real schedule table in half at that x — the left half (2 real
+columns, `SYMBOL`/`AREA SERVED`) then also inherits the stamp's own
+overlaid paragraph text as an unruled top cell, which `celltext.py`'s
+`split_unruled_header_row`/`split_unruled_columns` chop into the 2
+garbled "headers" this bug's title comes from.
+
+So the true shape is: a real, single schedule table is split into TWO
+separate "tables" by an unrelated stamp graphic's border coincidentally
+aligning with one of its real internal column boundaries, and the
+split-off left half is then mislabeled using the stamp's own overlaid
+watermark text. This is a different, and harder, bug than "prose
+mistaken for a table" — it is a face-adjacency/wall-detection false
+positive caused by two independently-drawn real vector objects
+(a review stamp, a schedule table) overlapping in the source PDF, which
+`find_tables()` has no way to know are unrelated from geometry alone.
+**Not fixed** — a general fix (distrust a wall whose weight comes from a
+rect drawn in a color that never appears as this sheet's own table-rule
+color, say) risks rejecting genuine color-coded table borders elsewhere
+in the corpus and needs a corpus-wide before/after count, the same bar
+B-27's rejected proposal was held to, before it can ship. Filed as the
+real, corrected root cause replacing the original (wrong) "pure
+disclaimer paragraph, no ruled structure" theory above, which the
+render disproves outright — real ruled structure is there, just
+partially borrowed by an overlapping stamp.
+
 **CONFIRMED RECURRING 2026-09-13 — a 2nd document, twice on one
 document.** `080_CA_Contra_Costa_College_Science_Center_Conference.pdf`
 fabricates a `title: "AGENCY APPROVALS"`, `rows: 3` phantom table on BOTH
