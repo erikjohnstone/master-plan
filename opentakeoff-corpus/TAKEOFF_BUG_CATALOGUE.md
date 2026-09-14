@@ -3077,7 +3077,7 @@ remain open too — this fix only recovers rows whose true identity was
 hidden behind a group-divider collision, not every kind of row loss named
 in this entry.
 
-### B-32 — the primary equipment table (BOILERS) is present and correctly located but garbled into one composite row by a below-table footnotes list, PUMPS is genuinely missing, a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, corrected, disclosed)
+### B-32 — BOILERS and PUMPS are both consumed by a vectorgrid face-weld (2 confirmed instances, one document), a real table splits into two duplicate-titled fragments, and column-header text is fabricated into table titles (NOT FIXED — found, traced, corrected, disclosed)
 
 **Where:**
 `013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf`, both of its
@@ -3256,6 +3256,33 @@ threshold change was held to before it can ship; not attempted under
 this pass's budget. Filed as the corrected, precisely-measured root
 cause replacing the "duplicate/double-struck text" theory above, which
 does not survive a direct re-check.
+
+**A 2nd confirmed instance, same document, even tighter gap — `PUMPS`'s
+own "genuine absence" is corrected too: it is not missing, it is
+consumed by the identical face-weld, merged into `BOILERS`.** Traced
+live the same way: rendered `PUMPS`'s own real region (a small, real,
+ruled box — `MARK`/`LOCATION`/`SERVES`/`GPM`/`HEAD`/… headers, one real
+`HHW CTP` data row, a `REMARKS:` list inside the same box) and measured
+its own bottom rule against `BOILERS`'s own top rule via `page.lines`:
+**≈20pt apart**, tighter than the `GAS CONNECTED LOAD TABLE`/`HYDRONIC
+SPECIALTIES SCHEDULE` gap above. The extractor's own `"DIA. (in)"`
+phantom (previously measured as BOILERS' own 8 real rows under one
+badly garbled composite header, back when B-43's CropBox fix was first
+verified) now has **79 columns** — a mix of `PUMPS`'s own real headers
+(`GPM`, `HEAD`, `IMPLR`, `NPSHR`, `VOLT/PH/HZ`, `RPM`, `MANUFACTURER`,
+`MODEL`) interleaved with `BOILERS`'s own (`BOILERS`, `EFF.`, `%`,
+`COL1`…`COL78` fallback fill for the rest) — and its `rows` are pure
+wreckage (`"PD"`, `"MARK"`×3, `"HHW"`×3, `"SEQUENCE"`). This is not a
+second, independent bug: it is the SAME `find_tables()` union-find
+weld this entry already root-caused, recurring a 2nd time within one
+document at an even smaller gap — real, corpus-found evidence that this
+disease is not a one-off, and any eventual general fix's corpus-wide
+validation pass should specifically include this document as a
+2-instance case, not just the 1-instance case above. `PUMPS`'s own
+"genuinely missing" framing in this entry's original write-up is
+retracted: it is present, correctly drawn, and destroyed the same way
+`GAS CONNECTED LOAD TABLE` was — not a separate missing-table defect at
+all. Not fixed, same reasoning as above.
 
 ### B-33 — a real table is reported twice under its own identical title, and an untitled phantom table appears alongside it (PARTIALLY FIXED 2026-09-13 — original document's untitled-phantom half closed; the duplicate-table half and 2 recurring instances remain open)
 
