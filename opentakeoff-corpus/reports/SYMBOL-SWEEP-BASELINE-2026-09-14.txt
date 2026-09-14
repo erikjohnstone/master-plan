@@ -1,0 +1,136 @@
+SYMBOL SWEEP — PHASE 0 HONEST BASELINE
+GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md, Phase 0
+Branch: agent/vector-symbol-grounding-v2 (from origin/main)
+Date: 2026-09-14
+Corpus: HVAC BAS Benchmark Collection (30 real docs, LFS on
+        origin/codex/symbol-sweep-corpus-accuracy), symbol_sweep cases.json
+        schema opentakeoff.symbol_sweep_ground_truth.v1, 47 cases
+        (30 baseline campaign + 17 extended campaign), 30 unique documents,
+        all 30 PDFs SHA-256-verified against frozen truth (30/30 match).
+
+REPRODUCE THIS REPORT
+  git lfs fetch origin refs/remotes/origin/codex/symbol-sweep-corpus-accuracy
+  # materialize "HVAC BAS Benchmark Collection" alongside the repo, e.g. via
+  # a detached worktree at origin/codex/symbol-sweep-corpus-accuracy, then
+  # symlink/copy its "HVAC BAS Benchmark Collection" dir next to this repo
+  # root (never stage it — see .gitignore)
+  cd opentakeoff/mcp
+  node --import tsx scripts/symbol-sweep-corpus.mjs --mode=manifest
+  node --import tsx scripts/symbol-sweep-corpus.mjs --mode=default
+  node --import tsx scripts/symbol-sweep-corpus.mjs --mode=rigid
+
+BUG FOUND + FIXED IN THE EVAL HARNESS (not the engine; mcp/scripts only)
+  mcp/scripts/symbol-sweep-corpus.mjs's `options.affine === false` per-case
+  escape hatch (8 of 47 cases: 01, 05, 06, 10, 11, 14, 18, 23) was a dead
+  branch. It sent {} instead of {affine:{enabled:false}}, and
+  Session.symbolSweep's own default (opts.affine ?? affineOptionsFromWire(
+  AFFINE_WIRE_DEFAULT)) silently substituted the exact same affine-ON value
+  the OTHER branch sends explicitly. Verified empirically on two cases
+  (01-cherry-mh111-cd1, 10-lovell-m100-cd1-ceiling-diffusers) before fixing:
+  the "disabled" branch, an explicit {affine:{enabled:false}}, and the
+  explicit default produced byte-identical match positions. These 8 cases
+  have been running with affine ON this whole time, contrary to every prior
+  doc describing them as rigid-only. Fixed in the same commit that added
+  the --mode flag; no web/src/lib production code touched.
+
+RESULTS — three full 47-case CLI runs, cross-validated
+
+  mode      passed   notes
+  --------  -------  -----------------------------------------------------
+  manifest  47/47    each case's real ground-truth `options`, now correctly
+                      applied (11 cases carry a disclosed override: 8
+                      affine, 2 variant_guard, 1 tolerance_px)
+  default   47/47    every override stripped -- {seedRect, scope} only, so
+                      Session.symbolSweep's own internal default decides.
+                      This is the true production default a real user's
+                      browser marquee or a default MCP call gets. 0
+                      overrides applied, by construction.
+  rigid     46/47    affine forced OFF on every case, ignoring manifest.
+                      1 failure: 04-itd-p30-paired-roof-drains, 2/5 found,
+                      missing roof-drain-pair-02/04/06 (all three withheld
+                      at ~90% seed-linework match, "missing the 4 px
+                      diagonal" -- a real, small affine-recoverable gap).
+
+The `default` row is the one that matters: with nothing a real user could
+tune away, the production default passes the entire frozen 47-case corpus,
+including every case documented for months as "dense-grid geometry
+borrowing" (01, 05, 06, 10, 11, 14, 18, 23) -- clean, not via a fixture
+escape hatch. This is the first time that claim has been checked with the
+escape hatch actually closed.
+
+`rigid` mode's one failure (case 04) is real, positive, per-case evidence
+that affine earns its place: 5/5 with affine on (manifest AND default),
+2/5 with it off. First concrete per-case evidence in this project's history
+that affine changes a real outcome, not just adds false-positive risk.
+
+RUNTIME (sweep-only -- Session.symbolSweep call time; EXCLUDES loadPlan/
+document indexing; NOT the goal's Phase 8 "post-index whole-set p95" gate,
+which is a different, larger-scope, not-yet-measured number)
+
+  mode      total(sum)  median   p95      max
+  --------  ----------  -------  -------  -------
+  manifest  27.7 min    5.3 s    204.9 s  300.5 s
+  default   31.1 min    5.2 s    219.3 s  288.3 s
+  rigid     17.8 min    3.7 s    129.2 s  153.5 s
+
+Affine costs real, measured time even where it changes nothing: case 10
+(lovell ceiling diffusers) costs +167s for an identical 35/35; case 03
+(colville tank array, the heaviest single sheet, ~100k+ segments) costs
++151s for an identical 23/23. Sub-quadratic proposal/verification through
+indexes (Phase 8) has not been done -- this is brute-forced per sheet today.
+
+SLOWEST 5 CASES (default mode)
+  28-transbay-m236-stair-pressurization-fans   288.3 s
+  10-lovell-m100-cd1-ceiling-diffusers         285.7 s
+  03-colville-m101-tank-array                  219.3 s
+  22-cbfm-m702-chiller-control-assemblies      207.5 s
+  38-cbfm-m702-primary-chilled-water-pumps     197.6 s
+
+BROWSER-PATH VERIFICATION -- partial, honest gap disclosed
+The goal asks for all 47 cases through CLI AND UI paths. Only CLI is
+complete (all 3 modes, 47/47 & 47/47 & 46/47 above). Browser-manual and
+browser-Agent surfaces were run, via web/scripts/symbol-sweep-corpus-ui.mjs
+against the real running app (not Session in-process), for the goal's
+stated minimum: the 4 known dense/repetitive cases (10, 11, 18, 23) plus
+the one now-confirmed affine-dependent case (04).
+That run was still in flight when this report was committed. Results will
+land as a follow-up commit on this branch rather than holding back the
+complete, stable CLI findings above.
+A full 47-case browser-path run (both surfaces) remains open for a later
+checkpoint -- each case uploads its real PDF through a fresh browser
+context and waits for the server-side sheet graph to build, materially
+slower than the CLI path.
+
+SHARED-PATH PARITY -- confirmed by direct code inspection, not doc trust
+Four independent call sites reference the IDENTICAL default expression
+(affineOptionsFromWire(AFFINE_WIRE_DEFAULT)):
+  - mcp/src/session.ts Session.symbolSweep's own internal default
+  - this corpus runner's explicit default
+  - web/src/pages/TakeoffCanvas.jsx's manual-marquee runSymbolSweep
+  - web/src/pages/TakeoffCanvas.jsx's Agent-bridge agentSweep
+One default, not four copies to drift. mcp/src/tools.ts's MCP wire schema
+has a documented, PRE-EXISTING nested-zod-default gap (an explicit, empty
+`affine: {}` disables affine via the inner field's own default; omitting
+the key -- the common real-agent case -- gets the correct on-by-default
+value). Reproduced live with a standalone zod parse test against the tool's
+real schema shape. Not a new finding; not changed here.
+
+PHASE 1 CORPUS STAGED AHEAD OF NEED
+113-document bulk release corpus (Vol1 552,425,946 B + Vol2 1,109,306,456 B,
+byte-size-verified against the goal doc) extracted/rejoined under
+opentakeoff-corpus/bulk/ (gitignored), cross-checked against
+takeoffs/cross-set-compile/*.compile.json: 113/113 present, 0 missing.
+Needed because SYMBOL-SWEEP-AFFINE-GOAL.md's own exhaustive prior search
+found ZERO real rotated/mirrored/anisotropically-stretched instances
+anywhere in the existing 30-document benchmark.
+
+SCOPE / WHAT THIS DOES NOT PROVE
+No web/src/lib production code changed this checkpoint. No VectorGrid/
+table extraction, schedule reconstruction, citation, or bbox code touched.
+web/test's symbol-sweep-family suite (374 tests) unaffected, still green.
+This proves the CURRENT rigid+affine engine honestly clears its own 47-case
+frozen gate by CLI with fixture escape hatches closed. It does NOT prove
+production readiness against this goal's actual bar: no proposal-recall/
+ownership/localization/identity metrics exist yet (Phase 1), no
+VectorSceneIndex/multi-lane proposal/exclusive ownership (Phases 2-4), and
+the full holdout/statistical gates in Section 14 are unmeasured.
