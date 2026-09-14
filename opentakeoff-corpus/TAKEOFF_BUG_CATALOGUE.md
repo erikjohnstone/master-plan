@@ -2225,7 +2225,7 @@ discriminator: *before treating a column as an identifier, a span as a title, or
 marker, test the property that actually distinguishes it* — cardinality for an identifier,
 band-fill ratio for a title, column population for a data row.
 
-### B-26 — a real, wide, room-keyed table (not equipment-mark-keyed) is completely dropped, and a sibling table over-counts a title-block notes line as a data row (PARTIALLY FIXED 2026-09-13 — phantom row closed as a side effect, the real miss traced but not yet fixed)
+### B-26 — a real, wide, room-keyed table (not equipment-mark-keyed) is completely dropped, and a sibling table over-counts a title-block notes line as a data row (RE-VERIFIED 2026-09-14 — the real miss (VENTILATION INDEX) is FIXED, confirmed live; the phantom-row half is fixed on the ORIGINAL document only — 3 other recurring instances still overcount, unchanged)
 
 **Where:** `01_NY_VA_Northport_Dialysis_100CD.pdf#88` (sheet M701, "MECHANICAL
 SCHEDULES") — the sole dense mechanical-schedule sheet in this 162-sheet
@@ -2403,6 +2403,57 @@ mystery.
 this pass made no code change for B-26 — the `rows: 2` → `rows: 1`
 change is a genuine measurement of already-shipped code (B-18/B-40),
 not a new edit, so no separate regression run was needed for it.
+
+**RE-VERIFIED 2026-09-14 — the real miss (VENTILATION INDEX) is FIXED,
+confirmed live; no code change made this pass.** Re-ran
+`production-graph-cli.mjs --mode graph` against a fresh `qpdf`-sliced
+page 88, no code touched. The `VENTILATION INDEX` table now extracts
+completely and correctly: `kind: equipment`, all 24 real headers
+(`ROOM NO.`/`ROOM NAME`/`AREA SF`/`CEILING HEIGHT FT`/`Total OACH`- and
+`Total ACH`- and `Design`-grouped columns, matching this entry's own
+originally-cited column names exactly), and all 37 real rows
+(`A360F`/`STATION 1` through `A340`), every cell value matching this
+entry's own original hand-count. The upper (header-only) and lower
+(data-only) blocks this entry's own root-cause trace found — same
+column extent, split at `y=1019` — are now correctly recombined: this
+document was NOT touched by any fix in this session, so the fix is an
+unclaimed side effect of `vectorGridAdapter.ts`'s own SPLIT-FRAGMENT
+RECOVERY mechanism (`isMergeEligibleFragment`/`isFragmentAdjacent`/
+`stackFragments`, documented in that file's own header) — a mechanism
+that structurally matches this entry's own proposed fix design almost
+exactly (merge two vertically adjacent blocks with matching column
+edges when the upper has no data rows of its own and the lower has no
+header of its own), and evidently already covers this exact case: the
+upper block's own refusal ("no keyed data rows", 3 rows) clears
+`isMergeEligibleFragment`'s existing `rows <= 3` bar, and the lower
+block (38 rows, "unknown kind and no title") only needs to be a valid
+merge TARGET, not independently eligible itself — which the existing
+code already allows. All 11 real tables on the page now match this
+entry's own hand count exactly (`AIR HANDLING UNIT`:2, `AIR INLETS &
+OUTLETS`:11, `PUMPS`:1, `STEAM HUMIDIFIERS`:1, `FANS`:1, `SOUND
+ATTENUATORS`:1, `VENTILATION INDEX`:37, `SINGLE DUCT AIR TERMINAL
+UNITS`:25, `EX FAN REBALANCE SCHEDULE`:1, `END-OF-MAIN STEAM LINE DRIP
+TRAP`:1, `EQUIPMENT STEAM TRAP`:1). This document is now fully clean.
+
+**CORRECTION — the phantom-row half is fixed on the ORIGINAL document
+only; the 3 other recurring instances remain open, unchanged.** Re-ran
+the same command against fresh `qpdf` slices of all 3 documents this
+entry's own "CONFIRMED RECURRING" notes named as not yet re-checked:
+`26_CA_TransbayTower_Mechanical_64Sheets.pdf#10`'s second `FAN POWERED
+TERMINAL UNIT SCHEDULE (SECTION 23 36 00)` still reports `rows: 19`
+against the true 17 (unchanged); `032_PA_Construct_EHRM_Infrastructure_
+Upgrades.pdf#2`'s `SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE` still
+reports `rows: 39` against the true 38 (unchanged); `14_OR_KlamathCC_
+LearningCtr_Mechanical.pdf#3`'s `VENTILATION REQUIREMENTS` still reports
+`rows: 40` against the true 38 (unchanged). Whatever closed the original
+document's own `EQUIPMENT STEAM TRAP` overcount (this entry's own text
+already declined to name a specific mechanism, guessing at B-18 or B-40
+as a side effect) evidently does not generalize to these 3 — the
+phantom-row family itself is NOT closed, only this one document's own
+instance of it. Left open, exactly as this entry's own text already
+said before this re-check: "not traced to a specific adjacent text line
+this time, so not asserted as the identical mechanism, just the same
+failure shape."
 
 ### B-27 — a real small table is completely dropped when a multi-line, non-tabular info block sits between its own title and its header row (ROOT CAUSE CONFIRMED 2026-09-13 — not fixed, corpus-wide gate; see B-37 for the same mechanism's sibling case)
 
