@@ -10302,7 +10302,25 @@ export function scheduleTableFromODL(
   // so a fragment with no title (a continuation band carved off the bottom of
   // a schedule, real on 12__vol2__028 page 1) still refuses rather than eating
   // its own first row of values.
-  if (headerEnd <= bodyStart && titleCell && R - bodyStart >= 2) headerEnd = bodyStart + 1;
+  //
+  // B-38 (real-data-row half): "the title cell as corroboration" means a
+  // PRINTED title — `titleCell` truthy only proves row 0 was a lone cell
+  // spanning (almost) every column (the structural test above), which a
+  // genuinely BLANK wide row-0 cell also satisfies. Measured, real:
+  // 023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8's second,
+  // untitled PUMP SCHEDULE candidate (vectorgrid's own duplicate/reference
+  // region for the same schedule, see this function's own unitLabelSubHeader
+  // doc) has exactly this shape — row 0 an empty spanning cell, row 1 its
+  // own real data (CHWP1&2/MECHANICAL ROOM 126/.../TACO/FI3011D, 0/23 unit-
+  // label or vocabulary hits) — and the old `titleCell &&` check treated
+  // that blank cell as a printed name corroborating "this is a schedule,
+  // the row below must be its header," promoting the real data row into
+  // `headers[]` instead of `dataRows[]`. Requiring the cell's own text to be
+  // non-empty keeps every cited real case above working (each has a genuine
+  // printed name: CONDENSING BOILER SCHEDULE, PCW AIR SEPARATOR SCHEDULE)
+  // while this blank-cell candidate now falls through to the untouched
+  // no-title path and refuses instead of fabricating a header.
+  if (headerEnd <= bodyStart && titleCell && odlCellText(titleCell).trim() && R - bodyStart >= 2) headerEnd = bodyStart + 1;
   if (headerEnd <= bodyStart) return refuse("no header block above the data");
 
   // Compound per-column header label: concatenate each header row's OWN

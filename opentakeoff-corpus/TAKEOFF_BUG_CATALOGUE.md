@@ -3822,7 +3822,7 @@ real ruled table with no `SCHEDULE` caption — not designed here, since it
 touches the same shared gate every one of this corpus's several hundred
 `plan`-role sheets passes through.
 
-### B-38 — a two-row-header table's own unit-label sub-header row is read as the table's single data row, and the real data row underneath it vanishes (PARTIAL FIX 2026-09-14 — the phantom-row half closes; the real-data-row half remains open)
+### B-38 — a two-row-header table's own unit-label sub-header row is read as the table's single data row, and the real data row underneath it vanishes (FIXED 2026-09-14 — both halves closed)
 
 **Where:** `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf#8`
 (sheet, "AIR COOLED CHILLER SCHEDULE" / "BUFFER TANK SCHEDULE" / "PUMP
@@ -4003,19 +4003,81 @@ identical, row keys and cell keys both, confirming the new closed
 vocabulary's whole-cell-match requirement does not misfire on any real
 data row already in this session's own corpus.
 
-**What remains open:** the SECOND candidate for the same physical
-`PUMP SCHEDULE` (kind `reference`, the taller one whose own range
-includes the real data row) is untouched — its own real data
-(`CHWP1&2`/`MECHANICAL ROOM 126`/`530`/…) still lands in `headers[]`
-instead of a row's cells, per this entry's own original point 3. That
-is a different mechanism (the real data row itself being misclassified
-as a header, the mirror-image mistake, not a unit-label tier being
-misclassified as data) and needs its own trace before it can be fixed —
-not attempted this pass. The underlying vectorgrid ambiguity (two
-overlapping row-grid candidates for one physical table) is also
-unaddressed at its own source; this fix works entirely downstream of
-it, by making one of the two candidates correctly self-refuse rather
-than by deduplicating them before they reach `scheduleTableFromODL`.
+**What remained open after the first fix:** the SECOND candidate for the
+same physical `PUMP SCHEDULE` (kind `reference`, the taller one whose
+own range includes the real data row) was untouched — its own real data
+(`CHWP1&2`/`MECHANICAL ROOM 126`/`530`/…) still landed in `headers[]`
+instead of a row's cells, per this entry's own original point 3. The
+underlying vectorgrid ambiguity (two overlapping row-grid candidates for
+one physical table) also remains unaddressed at its own source; both
+fixes below work entirely downstream of it, by making each candidate
+independently resolve correctly rather than by deduplicating them
+before they reach `scheduleTableFromODL`.
+
+**FIX 2 (2026-09-14) — the real-data-row half, traced and closed.**
+Instrumented `scheduleTableFromODL` with temporary row-by-row debug
+output (title, `bodyStart`/`headerEnd`, each row's own cell texts and
+spans — reverted before commit) and re-ran against this exact candidate.
+Found: the candidate's own header/data boundary loop correctly classifies
+row 1 (the real data row) as NOT still-header — `classifyBodyRow` returns
+`fullCoverage=true, grouped=false` (all 23 cells are its own, none span),
+and BOTH vocabulary tie-breaks correctly fail (`headerVocabHitRate`
+0.043, `unitLabelHitRate` 0 — the row is genuine equipment data, not a
+unit-label tier) — so the loop's own main pass correctly `break`s at row
+1 without ever extending `headerEnd` past `bodyStart`.
+
+The actual defect is downstream of that loop, in the separate "A TITLED
+SCHEDULE WITH DATA UNDER IT HAS A HEADER ROW" rescue (added for an
+earlier, unrelated fix — see that comment's own CONDENSING BOILER
+SCHEDULE / PCW AIR SEPARATOR SCHEDULE cases): `if (headerEnd <=
+bodyStart && titleCell && R - bodyStart >= 2) headerEnd = bodyStart + 1`.
+This checks `titleCell` truthiness — a JS object reference proving only
+that row 0 was structurally a lone cell spanning (almost) every column
+(the earlier `wide.length === 1` test) — never whether that cell carries
+actual printed text. This candidate's own row 0 IS such a structurally-
+wide cell, but it is BLANK (`odlCellText(titleCell)` is `""`, confirmed
+live via the same debug instrumentation) — vectorgrid's own duplicate/
+overlapping-candidate row-grid detection (point 1 above) produced it as
+an empty spacer, not a real caption. The rescue's own comment already
+says its corroboration is "a printed title cell that spans the table";
+the code checked existence, not printedness, so a blank structural cell
+satisfied it exactly as a real title would, promoting the genuine data
+row at `bodyStart+1` into the header block.
+
+Fixed by requiring the title cell's own text to be non-empty:
+`titleCell && odlCellText(titleCell).trim() && ...`. This is the
+narrowest possible correction to the exact gap in the rescue's own
+stated intent — every real, printed-title case the rescue was built for
+is unaffected (both still pass `.trim()` truthy), and only a blank
+structural cell now correctly fails to corroborate.
+
+**Verified live:** `023_US_Chiller_Replacement_at_U_S_Salinity_
+Laboratory.pdf#8`'s taller `PUMP SCHEDULE` candidate now reports
+`headers: ['MARK', 'SERVED', 'TYPE', 'FLUID', 'GPM', 'HP', 'KW', 'PHASE',
+'ELECTRICAL MOTOR VOLT', 'RPM', 'MANUFACTURER']` and one real data row
+keyed `CHWP1/CHWP2` with its own real cells (`SERVED`: "USDA Salinity
+Laboratory", `TYPE`: "END-SUCTION", …) — previously this same row's own
+values were the table's `headers[]` and its only "row" was keyed `N/A`
+(a leftover fragment of the blank continuation line beneath it). The
+page still resolves to exactly 3 tables (unchanged from FIX 1's own
+3-table result — this fix corrects a table's own internal header/data
+split, not the count of tables). Full regression: `tsc --noEmit` clean,
+149/149 `sheetgraph.test.ts` + 16/16 `vectorGridAdapter.test.ts` pass
+(full `web/` suite: 3059/3155 pass, the 70 failures/13 cancelled
+confirmed byte-identical present/absent this change — pre-existing
+sync/IndexedDB/Drive infra flakiness, unrelated to this file). Re-checked
+structurally (deep-equal, not just byte size) against every document
+already verified for FIX 1 (`21_VA...#50`, `#51`, `013_MO...#23`,
+`098_ID...#8`): every table's own title/headers/row-keys identical,
+zero regression. The two full documents (`093_ME...`, `28_WA...`) show
+only build-timing-noise differences (`stage_ms`, elapsed-time notes) —
+zero content difference in tables, rows, or cells.
+
+Both halves of this bug are now closed. The underlying vectorgrid
+ambiguity (two overlapping row-grid candidates for one physical table,
+point 1 above) is unchanged and could still, on some other document,
+produce a shape neither fix anticipates — not corpus-wide validated
+beyond the documents named above.
 
 ### B-39 — a real table below is completely missed, and the table above silently absorbs its whole region into its own box (found via the goal document's own required auto-accept audit) (NOT FIXED — found, traced, disclosed)
 
