@@ -1,6 +1,98 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+important correction to the batch A/B scouting reports, plus document
+013's PSV relief valve built end-to-end, verified geometrically, and then
+reverted for a precisely root-caused tag-distance reason (not a shape
+problem). Recorded here before either mistake could propagate into a
+landed case.
+
+**Correction first, since it affects which candidates are even eligible.**
+Cross-checking the scouting batches' document numbers against the
+"already spent" baseline-30 list and the frozen-holdout list recorded
+earlier this checkpoint (both from the Vol2 bulk pool) turned up real
+overlaps neither scouting agent could see, since that list wasn't handed
+to them:
+- Batch A's **009** candidate (ceiling supply-air diffuser, D6/D8/D10/D12)
+  is `05__vol2__009` — already baseline case 05. Not eligible for the
+  corpus-expansion 150+/12-new-document count; could only ever be an
+  "extended"-campaign case on an already-used document (a bucket already
+  closed out in full this checkpoint).
+- Batch B's **015** candidate (VLV-# valve family) is `02__vol2__015` —
+  already baseline case 02. Same disqualification.
+- Batch B's **018** candidate (SAG-1 supply-air-grille) is
+  `018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf` — one of the
+  three documents explicitly **frozen as holdout**, "reserved for a future
+  blind validation pass... never used for annotation or tuning." This one
+  is not just ineligible, it is a hard rule: **do not build a case from
+  document 018, ever, under this goal's current phase.**
+- Batch A's **004** and this entry's own **013** remain confirmed fresh:
+  neither is in the already-spent list nor the holdout list.
+Lesson for future scouting rounds, applied from now on: hand the scout
+the already-spent and holdout number lists up front, so a real geometric
+find is never wasted confirming a document that was never eligible.
+
+**Document 013's PSV relief valve** (M-300, "MO_T2523" boiler-replacement
+project) was built into a full candidate case exactly like case 13 (six
+boiler-bank valves + one separate rotated+mirrored instance, all
+symbolSweep-confirmed found=6/withheld=0/scores 0.935-1.0, all body_bbox
+computed via a real per-instance fingerprintSymbol pass, all positions
+rendered with --ring markers and viewed directly) -- then failed real
+corpus verification on the TAG side, not the geometry side: `found=6,
+expected=6` (the count and every position were exactly right), but every
+single instance, including the seed, came back "label <none> != PSV."
+
+Root-caused precisely rather than guessed: `Session.symbolSweep`'s
+plain-adjacency tag gate (`web/src/lib/symbollabels.ts`,
+`LABEL_ADJACENT_K = 2.2`) only reaches `2.2 * text_height` from a
+placement's center to a token's center for a token that isn't recognized
+as a numbered equipment-instance tag. "PSV" (no digit, so it fails
+`isEquipmentInstanceLabel`'s digit requirement, and isn't in the
+`DEVICE_CLASS_LABELS` set of `{ASC, VFD}`) never qualifies for the wider
+`LABEL_EQUIPMENT_ADJACENT_K = 5.5` reach a tag like "FS-1" would get.
+Measured actual distance from the seed's own fingerprint center to its
+"PSV" tag-box center: 69.3px, against a 2.2 x ~19.2px-tall-text = ~42px
+gate -- a clean, non-borderline miss, and the same ~69-95px gap recurs at
+every instance in this row (a repeated copy-pasted assembly, not
+per-instance bad luck), so no instance in this family was ever going to
+clear the gate. Not a multi-pen sheet and no other equipment-instance
+token exists on this sheet to unlock the separate leader-chase path
+either, so there was no fallback route to a real label.
+
+This is a genuine, current engine limitation (short digitless device
+codes like PSV/FCV/TI/PI drawn with a callout bubble a bit farther from
+the body than the generic-adjacency gate assumes) -- squarely a Phase 6
+("joint tag/leader/legend/schedule/body assignment") concern, not
+something to patch from Phase 1, and not something a ground-truth case
+can honestly route around: declaring `"tag": null` here would misstate
+what is plainly printed on the sheet, and declaring `"tag": "PSV"` fails
+verification as shown. Reverted the case entirely (cases.json restored to
+the exact prior 47-case state via `git checkout --`, review PNGs removed)
+rather than force either dishonest option. The curated source copy
+(`pdf/35__vol2__013__MO_T2523_Replace_Boilers_Phase_2_Building_29.pdf`,
+next open rank after 31-34) is left in place per this checkpoint's
+existing convention (31-34 are kept on disk despite their own reverted
+case attempts) in case a different, closer-tagged symbol on this same
+document is worth a future look.
+
+Real next step: before investing further per-instance effort in **004**'s
+S1 diffuser (the other batch-A find, confirmed fresh), check this exact
+same tag-distance math first -- "S1" does carry a digit and so may reach
+the wider equipment gate unlike "PSV," but batch A's own sweep already
+showed 41/46 matches unlabeled, so it needs the same precise
+distance-vs-gate check up front, not another full case build-then-revert.
+More generally: a scouted candidate's tag-to-symbol distance (roughly
+<40-50px for a plain digitless code, much wider for a proper hyphenated
+equipment tag) is now a required screen, alongside the existing
+tag-family-collision/text-layer/generic-glyph/rotation-centroid checks,
+before committing to a build.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth/documentation only —
+cases.json is back at its prior committed state; no production
+label-matching or matching-engine code was touched or should be, per this
+goal's own constraints.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 breadth-first legend screening, batch A (5 fresh Vol2 documents: 004,
 006, 008, 009, 013) — the breadth-first pivot pays off: 3 of 5 documents
 yield real, symbolSweep-sanity-checked candidates (a break from the run
