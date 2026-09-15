@@ -1,6 +1,83 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane D
+continued: "compact invariant path/subgraph signatures for fast
+lookup," tying Lane B's candidate bodies to Lane D's node attributes
+for the first time.
+
+New `web/src/lib/candidateBodySignature.ts`:
+`computeBodySignature(body, attrById)` / `computeBodySignatures(bodies,
+attributes)` — pure, builds one signature per Lane B `CandidateBody`
+from its members' Lane D `PrimitiveNodeAttributes`. Two real
+invariances delivered and proven, not assumed:
+
+- ORDER: a body's own `primitiveIds` have no canonical order (union-
+  find groups them arbitrarily), so signature entries are bucketed and
+  fully sorted (multi-key: type, curved, closed, length bucket, angle
+  bucket) before hashing.
+- ROTATION: every member's orientation is stated relative to the
+  body's own dominant orientation (the LONGEST member's own
+  orientation — a body's principal axis is best defined by its most
+  prominent stroke), quantized to `ANGLE_BUCKET_DEG` (10°) via an
+  UNSIGNED angular distance. Proven with a real rotated-geometry test
+  (the same shape re-extracted through a genuine 90° transform, not
+  just relabeled coordinates).
+
+A genuine mid-slice finding, not an assumption either way: the first
+draft test assumed mirroring would NOT be normalized and asserted
+different hashes — running it showed IDENTICAL hashes instead. Root
+cause, not a bug: `angleDiffMod180` is an unsigned distance, and a
+2-member body (two lines meeting at a point) carries no handedness to
+lose at that level of representation at all — an L and its mirror
+image are indistinguishable without a third reference point. Fixed
+the test to assert what is actually true and explain why, and
+corrected the module's own header comment to stop overclaiming a gap
+that does not exist at this representation size while being explicit
+that a 3+-member body with genuine spatial handedness (a Z vs. its
+mirror S) is UNTESTED and likely does not carry the same free
+invariance — a real, still-open question for a future slice, not
+quietly assumed solved.
+
+Hash: FNV-1a over the sorted entries (deterministic, "compact and
+fast," explicitly not cryptographic — the interface doc says a real
+lookup index would still verify a hash hit against the full entry
+list, same as any hash-bucketed index does, given a possible
+collision).
+
+New `web/test/candidateBodySignature.test.ts` (6 tests, 2 needed a
+correction after their first run as described above, all 6 passing
+now): order-invariance, rotation-invariance, a genuinely different
+shape signs differently, the mirror finding, sort-stability/dominant-
+orientation correctness, and an empty input.
+
+Real-sheet sanity check (USDA APHIS #1, 323 Lane B bodies): 226
+distinct signature hashes, 33 hash groups sharing more than one body
+(candidate repeated-symbol families), largest group 12 bodies — a
+plausible, real distribution (a repeatedly-drawn symbol like a
+diffuser sharing one signature; unique-hash bodies are exactly the
+"rare/distinctive" candidates goal §8 Lane D's own text names for
+fast lookup). 6ms for all 323 bodies.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (6/6, after the one correction above); confirmed the
+module loads cleanly from `mcp/` via tsx; real-sheet sanity check
+above. Does not modify `candidateBodyLaneB.ts`, `candidateBodyLaneD.ts`,
+`vectorSceneIndex.ts`, `vectorSceneRelations.ts`, or `oneclick.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same reasoning as every prior
+Lane B/D entry.
+
+Not done (Lane D's own remaining scope): mirror/chirality-invariance
+for 3+-member bodies (open question, not assumed either way); fuzzy/
+near-neighbor lookup across a bucket boundary; rare/distinctive-
+signature retrieval and spatial voting themselves (this slice builds
+the signatures that retrieval would query, not the retrieval); edge/
+relation attributes (Lane D's other half, still open per the prior
+entry). Lane A/C/E remain unstarted. Phase 3's own gate certification
+remains blocked on Phase 1's corpus reaching 150+/12. Phases 4-8 have
+not been started.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane D
 first slice: per-primitive node attributes, the foundation goal §8
 Lane D's own list requires before any compact signature/hashing or
 spatial voting can be built on top.
