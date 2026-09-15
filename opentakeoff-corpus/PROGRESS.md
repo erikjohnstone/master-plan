@@ -1,5 +1,112 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2
+(partial) — eligibility scoring for CONTESTED primitives. Requirement
+2's own full list is "direct Form/subpath membership, connectivity
+inside the proposed body, graph/path signature agreement, transform-
+consistent residual, style/layer agreement, carrier versus body
+classification, mutual reference-to-candidate and candidate-to-
+reference coverage." This slice builds exactly two of those seven
+signals — the two already fully buildable from this session's own
+infrastructure without further phases — and scores every contested
+primitive (`ownershipConflicts.ts`'s own output) against each proposal
+that claims it.
+
+New `web/src/lib/ownershipEligibility.ts`:
+`scoreContestedPrimitives(cluster, proposalsById, idx, junctions)`.
+- STYLE/LAYER AGREEMENT: for each proposal, computes a DOMINANT style
+  (mode of deviceLineWidth/dashed/layerId) from that proposal's own
+  EXCLUSIVE (uncontested) primitives only — the part of a proposal
+  nobody disputes is the most honest evidence of its real style — then
+  compares a contested primitive's own style against it. No exclusive
+  evidence at all is scored neutral (0.5), never 0, so a proposal isn't
+  falsely penalized just for having no undisputed ink to learn from.
+- CONNECTIVITY: what fraction of a contested primitive's own junction
+  neighbors belong to a proposal's exclusive set — physically touching
+  a proposal's own undisputed ink is real structural evidence for it.
+Deliberately NOT attempted (disclosed, real further work — the rest of
+requirement 2's list): graph/path signature agreement (per-body, not
+per-primitive-against-a-body — a different computation, not yet
+built); transform-consistent residual (needs Phase 5's rigid/affine
+verification, not built yet); carrier-vs-body classification; mutual
+reference-to-candidate/candidate-to-reference coverage (Phase 5/6
+territory). Requirements 3-8 (injective correspondence, explicit
+unowned/unassigned states, the actual assignment solver, an owned body
+bbox/polygon) are also not attempted — this module SCORES, it does
+not decide an outcome.
+
+New `web/test/ownershipEligibility.test.ts` (5 tests, all passing):
+a contested primitive matching one proposal's own dominant line width
+scores higher style agreement for that proposal, not the other's;
+a contested primitive junction-connected to one proposal's exclusive
+ink scores higher connectivity for that proposal; every contested
+primitive gets exactly one score entry per claiming proposal (never
+for a proposal that doesn't claim it); two disjoint proposals are
+reported uncontested by `detectOwnershipClusters` itself; and — added
+after reviewing the first draft, which asserted only on
+`detectOwnershipClusters`'s own separate output under a test titled as
+if it exercised `scoreContestedPrimitives` — a cluster constructed
+directly with an empty `contestedPrimitiveIds` array is passed straight
+into `scoreContestedPrimitives`, confirming it genuinely returns `[]`
+rather than the test merely re-asserting a different function's
+contract.
+
+Real-sheet validation (Cherry Point #12, same sheet as every other
+Phase 3/4 entry): ran the full pipeline through to eligibility scoring
+— 102,352 primitives, 5 ownership clusters, 3,356 total (contested
+primitive, claiming proposal) score entries. Cross-check: 3,356 ≈ 2 ×
+1,678 (the exact contested-primitive count the Phase 4 requirement-1
+entry above already recorded for this same sheet) — consistent with
+each contested primitive here being claimed by ~2 proposals on
+average, not a miscount. No crash, no score outside [0,1] (checked
+directly on all 3,356 entries), 427ms.
+
+A genuine finding from that validation, not a bug: every one of the
+3,356 scores came out numerically identical (styleAgreement 0.5,
+connectivity 0, score 0.25). Investigated rather than waved off: in
+all 5 real clusters, the cluster's `exclusivePrimitiveIds` is empty —
+every primitive in every cluster is claimed by 2+ proposals, with
+zero. Root cause, confirmed by direct containment check: each
+cluster's largest proposal is a Lane A whole-Form-invocation proposal,
+and several smaller Lane B connected-component proposals EXACTLY
+partition that Form's entire primitive set (their sizes sum precisely
+to the Form's own primitive count, e.g. 221+117+63+60+4+4+4+2 = 475),
+with zero left over and zero overlap between the small ones. That's
+Lane A and Lane B correctly disagreeing on GRANULARITY for the same
+real ink — "this whole Form call is one thing" versus "it's actually
+several disconnected physical pieces" — not a scoring defect: the
+neutral/zero fallbacks fire exactly as designed when there is no
+exclusive baseline anywhere in a cluster to compare against, and they
+did so on 100% of this sheet's real clusters. Disclosed limitation:
+this two-signal slice cannot yet break ties in this (at least locally
+common) whole-vs-parts pattern; doing so needs a signal not built
+here — most plausibly a completeness/granularity preference or the
+still-unbuilt graph/path signature agreement — real work for a later
+requirement-2 slice, not silently absorbed into this one.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (5/5); confirmed the module loads cleanly from `mcp/` via
+tsx; targeted regression on every direct dependency (`vectorSceneIndex
+.test.ts`, `vectorSceneRelations.test.ts`, `candidateProposalFusion
+.test.ts`, `ownershipConflicts.test.ts`, `candidateBodyLaneA.test.ts`,
+`candidateBodyLaneB.test.ts` — 52/52 passing); real-sheet check above.
+A broader same-session sweep of the full `web/test/` suite also
+surfaced 6 pre-existing failing files (`annotationGeneration.test.ts`,
+`basRestore.test.ts`, `basSnapshotBrowser.test.ts`,
+`basSnapshotStore.test.ts`, `basSyncHistory.test.ts`,
+`basSyncRestore.test.ts`) — confirmed unrelated: none imports anything
+this session touches, they predate this branch on `origin/main`, and
+one reproduces identically ("Promise resolution is still pending but
+the event loop has already resolved") run alone, outside any load from
+this sweep, so it isn't sweep-induced contention either. Not this
+slice's to fix — noted here only so it isn't mistaken for a regression
+this work caused. Does not modify `ownershipConflicts.ts`,
+`candidateProposalFusion.ts`, or any Lane A-E module.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — scoring which proposal a
+disputed primitive actually belongs to is squarely "whether it counts"
+and "what tag/body owns it."
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 (first real
 work) — "explicit body isolation and exclusive primitive ownership,"
 named by the goal document itself as "the load-bearing fix for dense
