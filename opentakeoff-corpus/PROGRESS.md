@@ -1,5 +1,103 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 — THIRD
+LANDED corpus-expansion case, and the largest by far:
+`50-klamath-m211-sd1-diffusers`, 46 instances (seed + 45), PASSING. Also
+folding in batch H's reconnaissance (072, 073, 074, 075, 077), which
+landed alongside this build and surfaces a genuinely new candidate for
+next.
+
+**Document 082 (Klamath Community College Career Learning Center), sheet
+M211** — SD-1 ceiling supply diffuser, 46 placements on one sheet (real
+rotation histogram {0:19, 90:5, 180:19, 270:2}, 6 mirrored). Curated copy
+committed as pdf/38__vol2__082__OR_Klamath_CC_Career_Learning.pdf (rank
+38). This is comfortably the largest single-sheet corpus-expansion find
+this checkpoint.
+
+Independently re-verified rather than trusting the scouting report's own
+"no false positives spotted" language (this checkpoint's own standing
+rule after document 057's miss): rendered a representative sample across
+every rotation/mirror bucket plus both segment-count outliers -- all
+genuine. But going instance-by-instance through the 9 auto-unlabeled
+matches (not just accepting "probably fine") found a real, disclosed
+collision: **2 of the 9 are NOT SD-1 at all.** Measuring each unlabeled
+match's nearest tag-like text found 7 genuinely near their own "SD-1"
+text (66-73px vs this drawing's ~35-44px adjacency gate -- the familiar
+partial distance-gate miss) but 2 sitting right beside an explicit,
+underlined "RG-1" return-grille tag with its own leader line. Rendered
+both directly: this document's RG-1 return grille uses the IDENTICAL
+icon block as its SD-1 supply diffuser -- a genuine, partial same-icon/
+different-tag collision (the same failure family that fully closed
+document 071, just far less severe here: 2 of 45, not the whole family).
+
+Handled honestly rather than worked around: all 9 unresolved instances
+stay `tag: null / association_type: unlabelled` (the established mixed-
+tag convention from cases 15/19/48/49), and the 2 confirmed-RG-1
+look-alikes additionally carry a distinct `family` string naming the
+collision explicitly in the ground truth itself, not just in a note, so
+a future reader (or a real Phase 6 tag/leader-assignment fix) can find
+them without re-discovering this. `exclude` remains unusable as a
+manifest override (confirmed again, same reason as document 011), and
+RG-1/SD-1 are pixel-identical blocks, so no rect or tolerance choice
+could separate them by geometry -- disclosure was the only honest path
+that keeps the case's excellent 43/45 real yield.
+
+Not pursued this pass, an open opportunity: sheet M211's own "SECTOR B"
+counterpart (page 6) carries roughly 34 more literal "SD-1" tags per the
+scout's count -- almost certainly a second, non-overlapping population of
+the same family, worth a real follow-up sweep/build.
+
+**Batch H reconnaissance (072, 073, 074, 075, 077) — 4 closures, 1 new
+promising lead:**
+- **072**'s FC-A fan coil and **075**'s S-1 diffuser: both real, clean
+  geometric families (075 especially: found=7/withheld=0, genuine
+  rotation+mirror strata, zero noise) closed on already-catalogued tag
+  problems -- FC-A fails the vocabulary floor outright (no digit, not in
+  the digitless allow-list), S-1 measured a clean 85.4px vs 39.6px gate
+  miss. Neither is a new failure mode, both precisely confirmed rather
+  than assumed.
+- **073**'s S-1 diffuser: a real, visually-confirmed 10-instance family
+  blocked by a genuine body-isolation defect -- the icon's own bounding
+  box unavoidably overlaps a variable-length flex-duct hatch per
+  instance (confirmed by direct segment inspection), and a tighter
+  circle-only seed tried to dodge it but picked up 9 confirmed false
+  positives on an unrelated duct-elbow-fitting family instead. Correctly
+  abandoned rather than forced through either seed choice.
+- **074** — a NEW caution for the standing exclusion list: this document
+  is a different-revision near-duplicate of already-screened document
+  072 (identical title block, project, room numbering; different SHA-256
+  but the same underlying drawing set, one bearing a later DSA approval
+  stamp). Same tag-vocabulary dead end confirmed independently anyway,
+  but flagging the project-duplicate finding itself as the more durable
+  lesson: **074 should not be used for corpus diversity even if its tag
+  problem were otherwise fixed**, the same class of caution already on
+  record for 050/052 vs. holdout 041, just discovered from a plain
+  duplicate rather than an explicit holdout relationship.
+- **077**'s R-10 return grille (24x12 PDR grille, visually distinct from
+  this document's S-10/11/12 diffuser family, which WAS a confirmed
+  same-icon/different-neck-size collision and correctly rejected) is a
+  strong, not-yet-built lead: found=15/withheld=0 on page 12 of a curved/
+  fan-shaped building, real leader-AND-adjacency label corroboration (a
+  genuinely new labeling stratum for this corpus), and an unusually
+  valuable FREE-ROTATION stratum (240.3, 209.7, 144, 225.2 degrees --
+  non-orthogonal installation angles from the curved floor plan, rarer
+  and more valuable than the usual 0/90/180/270 steps seen everywhere
+  else). Two of the 15 raw matches are confirmed contamination (a real
+  sibling "R-20" icon and an ambiguous fragment) needing exclusion before
+  a count is finalized, and page 13's 3 more "R-10" instances are
+  unswept. Real next step: finish 077's per-instance verification and
+  build it.
+
+Running tally: 3 landed cases, 91 total placements (seed + instances):
+39 on document 042 (CD-1), 6 on document 057 (OWS), 46 on document 082
+(SD-1). Roughly 30 documents scouted this checkpoint, one promising
+unbuilt lead (077) queued next.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth-only change
+(cases.json, a curated source PDF, review renders) plus a reconnaissance
+summary; no VectorGrid/table-extraction/schedule-reconstruction/citation/
+bbox-semantics or other production data-contract code touched.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 SECOND LANDED corpus-expansion case: `49-nashville-a001-ows-markers`, 6
 instances (seed + 5), PASSING — and a genuine self-caught error along the
