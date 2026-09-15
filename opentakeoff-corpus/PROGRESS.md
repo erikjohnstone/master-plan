@@ -1,5 +1,36 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6/7 — old-engine
+adapter follow-up: re-measured with the REAL production `matchSymbol`
+options, refining (not replacing) the entry directly below. The prior
+measurement used bare options (`{rotations:true}`); the real options
+`sweepScheduleRow` actually builds (session.ts:4389-4397 — `mirror:
+true`, `affine: affineOptionsFromWire(AFFINE_WIRE_DEFAULT)`, i.e.
+`{enabled:true, maxStretch:1.5, maxShearDeg:10, scaleSearch:false}`)
+were confirmed and used instead. Result: 28 real matches (up from 11),
+microF1 **0.7359** (up from 0.6947), microRecall 0.673, 3/20 at gate.
+
+PRECISE FINDING this refinement adds: even with the CORRECT base
+options, the same 9 of 20 real instances (`cd1-03,04,05,08,10,11,12,13,
+18`) remain unmatched by a single flat `matchSymbol` call — 2 more
+instances (`cd1-15`,`cd1-19`) were recovered by the correct options,
+but the harder 9 were not. This confirms `sweepScheduleRow`'s real
+~1800-line advantage over one `matchSymbol` call is NOT just option
+correctness — it has its own padding-ladder/anchor-retry/corroboration-
+escalation logic (the `candFor` ladder and related machinery audited in
+an earlier Phase 7 requirement-2 scoping slice) that recovers instances
+a single flat call cannot. Getting this adapter to real 19/19-equivalent
+recall needs `sweepScheduleRow`'s own FINAL, fully-escalated matches —
+which means either (a) a small, additive hook inside `session.ts` that
+also emits `EvidenceBodyLike` bodies from whatever matches
+`sweepScheduleRow` ultimately settles on (real, scoped, disclosed next
+step — NOT attempted here), or (b) hand-replicating its escalation
+logic in a standalone script, explicitly rejected as unnecessary
+duplication of ~1800 already-working lines. Confirms the adapter
+module itself (`sweepMatchEvidenceBody.ts`) needs no changes — the
+recall gap is entirely upstream, in which matches it's given, not in
+how it converts them.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6/7 — old-engine-
 to-evidence-graph adapter, the real follow-through on the strategic
 finding two entries below (feed evidenceGraph.ts from the OLD engine's
