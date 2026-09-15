@@ -1,5 +1,65 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane D
+first slice: per-primitive node attributes, the foundation goal §8
+Lane D's own list requires before any compact signature/hashing or
+spatial voting can be built on top.
+
+New `web/src/lib/candidateBodyLaneD.ts`:
+`computePrimitiveGraphAttributes(idx, junctions, opts?)` — pure,
+consumes a built `VectorSceneIndex` (slice 5) and a
+`computeVectorSceneJunctions` result (slice 6). Every attribute in
+Lane D's own list is already computable from what Phase 2 built:
+`type` (primType), `length`/`normalizedLength` (raw length divided by
+the sheet's own MEDIAN non-degenerate primitive length — scale-
+invariant without needing an absolute ft/px calibration this module
+has no access to), `orientationDeg` (mod 180, reusing
+vectorSceneRelations.ts's own convention), `deviceLineWidth`/`dashed`/
+`lineCap`/`lineJoin` (from the owning subpath's graphics state),
+`closed` (the owning subpath's own flag), `degreeA`/`degreeB` (the
+junction size at each of the primitive's own two endpoints, kept as a
+pair rather than collapsed to one number since which end is which is
+real information), and `curved` (primType === PRIM_BEZIER).
+
+Disclosed, not attempted in this slice: Lane D's OTHER half, edge/
+relation attributes (touching/gap/crossing/parallel/perpendicular/
+concentric/collinear/relative angle/length/displacement —
+vectorSceneRelations.ts's pair relations already compute several of
+these independently and could feed a future edge-attribute pass);
+compact invariant path/subgraph signature construction; rare/
+distinctive signature retrieval; spatial voting. This module is the
+node-attribute table those need, not the lane itself. "Modulo
+symmetry" is also disclosed as the coarse mod-180 grain only, not a
+finer per-family symmetry group a real signature might eventually want.
+
+New `web/test/candidateBodyLaneD.test.ts` (8 tests, all passing on the
+first run): type/length/curvature read straight from the primitive;
+orientation mod 180 (a segment and its reverse read identically);
+normalized length is 1 at the sheet's own median and scales correctly
+on a mixed-length sheet; width/style/closed passthrough through a
+dashed, capped/joined closed rectangle; local degree matches a real
+T-junction's size at each end; an empty sheet; the cap-breach path.
+
+Real-sheet sanity check (USDA APHIS #1, 3,942 primitives): reference
+length 2.52px, 461 curved primitives, 1,692 in closed subpaths, 0
+dashed — all fast (junctions 17ms, Lane D attributes 5ms) and
+plausible, nothing broken.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (8/8); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet sanity check above. Does not modify
+`vectorSceneIndex.ts`, `vectorSceneRelations.ts`, `candidateBodyLaneB.ts`,
+or `oneclick.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same reasoning as Lane B:
+deciding what forms a candidate symbol body (and the attributes a
+matcher would compare) is squarely "what symbol exists."
+
+Not done: Lane D's edge attributes, signature construction, and
+spatial voting (above); Lane A/C/E; proposal fusion across lanes; the
+Phase 3 gate's own recall certification (still blocked on Phase 1's
+corpus reaching 150+/12). Phases 4-8 have not been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — scouted
 document 088 (Phoenix Sky Harbor / PHX Sky Train, 260 pages, already
 locally rejoined, the other previously-identified open gap). Sampled
