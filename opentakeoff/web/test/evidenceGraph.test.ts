@@ -177,3 +177,43 @@ test("computeTagCorroboration: a tag whose only body edge reaches an INELIGIBLE 
   assert.deepEqual(corroboration.sources, ["body"]);
   assert.equal(corroboration.hasEligibleBodyEdge, false, "an ineligible body must never count as a real eligible pairing");
 });
+
+test("requirement 4 -- a schedule row explicitly qualified to a DIFFERENT building than this sheet's own declared scope is never matched, however well the label text agrees", () => {
+  const idx = buildIdx([closedRect(0, 0, 10, 10)]);
+  const graph = buildSheetEvidenceGraph(
+    idx, [], [span("CD-1", 0, 0)], [], undefined, [],
+    [{ key: "CD-1", sheet: "M101", cells: {}, building: "Building B" }],
+    { building: "Building A" },
+  );
+  assert.equal(graph.tagScheduleEdges.length, 0, "never merge same text across different, explicitly-named scopes");
+});
+
+test("requirement 4 -- a schedule row qualified to the SAME building as the sheet's own declared scope still matches normally", () => {
+  const idx = buildIdx([closedRect(0, 0, 10, 10)]);
+  const graph = buildSheetEvidenceGraph(
+    idx, [], [span("CD-1", 0, 0)], [], undefined, [],
+    [{ key: "CD-1", sheet: "M101", cells: {}, building: "Building A" }],
+    { building: "Building A" },
+  );
+  assert.equal(graph.tagScheduleEdges.length, 1);
+});
+
+test("requirement 4 -- when either side's own building/drawing_group is UNKNOWN (undefined), that is never treated as a forced non-match -- only a real, named disagreement blocks the edge", () => {
+  const idx = buildIdx([closedRect(0, 0, 10, 10)]);
+  // graph scope unknown, row names a building
+  const g1 = buildSheetEvidenceGraph(idx, [], [span("CD-1", 0, 0)], [], undefined, [], [{ key: "CD-1", sheet: "M101", cells: {}, building: "Building A" }]);
+  assert.equal(g1.tagScheduleEdges.length, 1);
+  // graph scope named, row's own building unknown
+  const g2 = buildSheetEvidenceGraph(idx, [], [span("CD-1", 0, 0)], [], undefined, [], [{ key: "CD-1", sheet: "M101", cells: {} }], { building: "Building A" });
+  assert.equal(g2.tagScheduleEdges.length, 1);
+});
+
+test("requirement 4 -- a DIFFERENT drawing_group also blocks the match, independently of building", () => {
+  const idx = buildIdx([closedRect(0, 0, 10, 10)]);
+  const graph = buildSheetEvidenceGraph(
+    idx, [], [span("CD-1", 0, 0)], [], undefined, [],
+    [{ key: "CD-1", sheet: "M101", cells: {}, drawingGroup: "AIR OPS" }],
+    { drawingGroup: "UTILITY PLANT" },
+  );
+  assert.equal(graph.tagScheduleEdges.length, 0);
+});

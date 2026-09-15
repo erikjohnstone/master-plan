@@ -22,8 +22,9 @@
 // - requirement 3's own remaining edge-level scoring beyond tag
 //   corroboration (see THIRD slice, below) — no single collapsed
 //   confidence exists anywhere in this module, by design.
-// - requirement 4 (duplicate-tag resolution within drawing/building/
-//   floor/discipline scope).
+// - requirement 4's own remaining scope (see FOURTH slice, below —
+//   building/drawing_group only; floor/discipline are real further
+//   work, no existing module found for them).
 // - requirements 5-9 (the accepted-installed-quantity state machine:
 //   MATCH/SCHEDULE_ONLY/PLAN_ONLY/UNCLASSIFIED_PLAN_SYMBOL/TAG_ONLY).
 //
@@ -41,6 +42,24 @@
 // stronger evidence than one reached by a single source — exactly the
 // same "preserve which lanes voted" idea `candidateProposalFusion.ts`'s
 // own `votingLanes` already established for bodies, now applied to tags.
+//
+// FOURTH slice, same file: requirement 4 — "Resolve duplicate tags
+// within drawing/building/floor/discipline scope. Never merge same
+// text across different scopes automatically." `buildSheetEvidenceGraph`
+// already builds ONE graph per sheet (requirement 1's own design), so
+// cross-SHEET merging is impossible by construction — a graph never
+// even sees another sheet's own tags. The real remaining risk this
+// slice addresses: the SAME sheet's own schedule can carry rows
+// independently qualified to different buildings/drawing groups
+// (sheetgraph.ts's own real `ScheduleTable.building`/`drawing_group`,
+// audited, not invented). New optional `graphScope` parameter and
+// `ScheduleNode.building`/`drawingGroup`: a schedule row naming a
+// building/drawing_group that DISAGREES with the graph's own declared
+// scope is never matched to a tag, however well the label text agrees
+// — either side unknown is never treated as a forced non-match, only a
+// real, NAMED disagreement blocks the edge. "Floor" and "discipline"
+// have no existing reusable scope-detection module anywhere in this
+// codebase (searched directly) — real further work, not approximated.
 //
 // AUDITED BEFORE BUILDING (dedicated investigation, this checkpoint):
 // every non-body, non-carrier node kind the goal names already has a
@@ -116,6 +135,15 @@ export interface EvidenceScheduleRowLike {
   key: string;
   sheet: string;
   cells: Readonly<Record<string, { text: string }>>;
+  /** requirement 4's own scope guard: sheetgraph.ts's own real
+   *  `ScheduleTable.building`/`drawing_group` (or a row-level
+   *  `building` qualifier overriding it) — when this row and the
+   *  graph's own declared `scope` (see `buildSheetEvidenceGraph`)
+   *  BOTH name one and they differ, this row is never matched, no
+   *  matter how well the label text agrees. Undefined means unknown,
+   *  never treated as a forced non-match. */
+  building?: string;
+  drawingGroup?: string;
 }
 
 /** The minimal shape a legend reference needs — structurally satisfied
@@ -171,6 +199,25 @@ export interface ScheduleNode {
   key: string;
   sheet: string;
   cells: Readonly<Record<string, { text: string }>>;
+  building?: string;
+  drawingGroup?: string;
+}
+
+/** requirement 4: "Resolve duplicate tags within drawing/building/floor/
+ *  discipline scope. Never merge same text across different scopes
+ *  automatically." `buildSheetEvidenceGraph` already builds ONE graph
+ *  per sheet, so a graph never even SEES another sheet's own tags —
+ *  cross-SHEET merging is impossible by construction, not merely
+ *  guarded. The real remaining risk this type addresses: the SAME
+ *  sheet's own schedule can carry rows independently qualified to
+ *  different buildings/drawing groups (sheetgraph.ts's own real,
+ *  already-established `ScheduleTable.building`/`drawing_group` fields
+ *  — audited, not invented). "Floor" and "discipline" have no existing
+ *  reusable scope-detection module in this codebase (searched directly,
+ *  not assumed) — real further work, not silently approximated here. */
+export interface SheetScope {
+  building?: string;
+  drawingGroup?: string;
 }
 
 /** A tag<->body candidate edge: real underlying evidence (via, distance,
@@ -254,6 +301,7 @@ export function buildSheetEvidenceGraph(
   lum: Uint8Array | undefined,
   legendEntries: readonly EvidenceLegendEntryLike[],
   scheduleRows: readonly EvidenceScheduleRowLike[],
+  graphScope: SheetScope = {},
 ): EvidenceGraph {
   const spans = labelSpans as LabelSpan[];
   const tokens = labelTokens(spans);
@@ -277,7 +325,7 @@ export function buildSheetEvidenceGraph(
   });
 
   const legends: LegendNode[] = legendEntries.map((e, i) => ({ id: i, caption: e.caption, primitiveIds: e.primitiveIds, rect: e.rect }));
-  const schedules: ScheduleNode[] = scheduleRows.map((r, i) => ({ id: i, key: r.key, sheet: r.sheet, cells: r.cells }));
+  const schedules: ScheduleNode[] = scheduleRows.map((r, i) => ({ id: i, key: r.key, sheet: r.sheet, cells: r.cells, building: r.building, drawingGroup: r.drawingGroup }));
 
   // tag<->body: reuse labelPlacements DIRECTLY (the same adjacency/leader
   // primitive taggedVectorGrounding.ts already relies on for one tag at a
@@ -297,10 +345,20 @@ export function buildSheetEvidenceGraph(
   // tag<->schedule and tag<->legend: identity match via markid.ts's own
   // marksEqual, the same normalization already used for schedule/tag
   // reconciliation elsewhere — never a bespoke comparison here.
+  // Requirement 4's own scope guard: a schedule row naming a DIFFERENT
+  // building/drawing_group than this graph's own declared scope is
+  // never matched, however well the label text agrees — "never merge
+  // same text across different scopes automatically." Either side
+  // unknown (undefined) is never treated as a forced non-match; only a
+  // real, named DISAGREEMENT blocks the edge.
+  const scopeConflicts = (a?: string, b?: string): boolean => a !== undefined && b !== undefined && a !== b;
   const tagScheduleEdges: TagScheduleEdge[] = [];
   for (const tag of tags) {
     for (const sched of schedules) {
-      if (marksEqual(tag.label, sched.key)) tagScheduleEdges.push({ tagId: tag.id, scheduleId: sched.id });
+      if (!marksEqual(tag.label, sched.key)) continue;
+      if (scopeConflicts(sched.building, graphScope.building)) continue;
+      if (scopeConflicts(sched.drawingGroup, graphScope.drawingGroup)) continue;
+      tagScheduleEdges.push({ tagId: tag.id, scheduleId: sched.id });
     }
   }
   const tagLegendEdges: TagLegendEdge[] = [];

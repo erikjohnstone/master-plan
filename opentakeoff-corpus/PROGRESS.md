@@ -1,5 +1,52 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 fourth slice
+— requirement 4: "Resolve duplicate tags within drawing/building/floor/
+discipline scope. Never merge same text across different scopes
+automatically." Same `evidenceGraph.ts` from the three entries below.
+
+KEY REALIZATION, confirmed rather than assumed: `buildSheetEvidenceGraph`
+already builds ONE graph per sheet (requirement 1's own design) — a
+graph never even SEES another sheet's own tags, so cross-SHEET merging
+is impossible BY CONSTRUCTION, not merely guarded against. The real
+remaining risk within one sheet: its own schedule can carry rows
+independently qualified to different buildings/drawing groups
+(sheetgraph.ts's own real, already-established `ScheduleTable.building`/
+`drawing_group` fields — confirmed by direct audit, not invented).
+
+NEW `SheetScope` (`{building?, drawingGroup?}`), an optional third
+parameter on `buildSheetEvidenceGraph`; `ScheduleNode` gained matching
+`building`/`drawingGroup` fields. The tag<->schedule match now refuses
+a row whose OWN named building/drawing_group DISAGREES with the graph's
+own declared scope — however well the label text agrees — while either
+side being unknown (undefined) is never treated as a forced non-match,
+only a real, NAMED disagreement blocks the edge. Backward compatible:
+the new parameter defaults to `{}`, so every existing 6-argument call
+is unaffected.
+
+DISCLOSED, NOT ATTEMPTED: "floor" and "discipline" scope — searched
+directly across this codebase (not assumed absent) and no existing
+reusable scope-detection module was found for either; real further
+work, not approximated with an invented heuristic. This slice also does
+not attempt "resolve duplicate tags" in the sense of merging two
+same-label same-scope TOKEN detections into one (labelTokens' own
+existing span-joining already handles the common real cause of that —
+overlapping/split text runs — so this was not re-investigated as a
+separate gap here).
+
+4 new tests: a schedule row naming a different building than the
+graph's own declared scope blocks the match; the same building still
+matches normally; either side unknown is never a forced non-match; a
+different drawing_group also blocks the match independently of
+building. 19/19 evidenceGraph tests green; full related suite
+(evidenceGraph, symbolLabels, legendReferenceBank, legendlearn, markid,
+carrierClassification, candidateProposalFusion, rigidAffineVerify,
+ownershipAssignment, ownershipBody) 338/338 green. `tsc --noEmit` clean.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same isolated module, backward
+compatible, no existing VectorGrid/table/schedule/citation/bbox code
+touched.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 third slice —
 requirement 3: "Score eligible edges using independently disclosed
 evidence. Do not compress all reasoning into a single unexplained
