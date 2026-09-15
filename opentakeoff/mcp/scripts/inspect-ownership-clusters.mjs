@@ -36,6 +36,17 @@
 // already expose (VectorSceneIndex, Lane B, Lane A), so a truncated page
 // is reported as `analysis_incomplete: true` with the real reason(s)
 // rather than silently passing as if it were whole.
+//
+// ITERATIVE REPAIR MIGRATION (real, 2026-09-15): switched the per-cluster
+// contested resolution from the static, one-round `resolveClusterOwnership`
+// to `resolveClusterOwnershipIteratively` (ownershipAssignment.ts's own
+// Phase 4 requirement 7 conflict-repair mechanism) once that mechanism was
+// itself built, tested, and real-corpus-validated (see PROGRESS.md) to
+// resolve strictly more contested primitives than the static rule on real
+// documents, never fewer, with the same gate holding throughout. Two new
+// per-page fields (`max_repair_rounds`, `clusters_hit_round_cap`) disclose
+// how much repair actually ran, same "disclosed work, never silent"
+// convention as `analysis_incomplete` above.
 import { resolve } from "node:path";
 import { openPdf, OPS } from "../src/pdf.ts";
 import { extractVectorGeometry } from "../../web/src/lib/oneclick.ts";
@@ -45,8 +56,7 @@ import { proposeCandidateBodiesLaneB } from "../../web/src/lib/candidateBodyLane
 import { computeFormContentSignatures } from "../../web/src/lib/candidateBodyLaneA.ts";
 import { fuseProposals } from "../../web/src/lib/candidateProposalFusion.ts";
 import { detectOwnershipClusters } from "../../web/src/lib/ownershipConflicts.ts";
-import { scoreContestedPrimitives } from "../../web/src/lib/ownershipEligibility.ts";
-import { resolveClusterOwnership, resolveExclusiveOwnership } from "../../web/src/lib/ownershipAssignment.ts";
+import { resolveClusterOwnershipIteratively, resolveExclusiveOwnership } from "../../web/src/lib/ownershipAssignment.ts";
 import { computeOwnedBodies } from "../../web/src/lib/ownershipBody.ts";
 
 const args = process.argv.slice(2);
@@ -104,6 +114,8 @@ try {
       ambiguous: 0,
       owned_bodies: 0,
       empty_bodies: 0,
+      max_repair_rounds: 0,
+      clusters_hit_round_cap: 0,
       gate_double_claims: [], // real violations, if any -- an empty array here is the gate HOLDING
     };
 
@@ -111,11 +123,12 @@ try {
     for (const cluster of clusters) {
       entry.contested_primitives += cluster.contestedPrimitiveIds.length;
       entry.exclusive_primitives += cluster.exclusivePrimitiveIds.length;
-      const scores = scoreContestedPrimitives(cluster, proposalsById, idx, junctions);
       const exclusiveDecisions = resolveExclusiveOwnership(cluster, proposalsById);
-      const contestedResult = resolveClusterOwnership(cluster, scores);
+      const contestedResult = resolveClusterOwnershipIteratively(cluster, proposalsById, idx, junctions);
       entry.assigned += contestedResult.assignedCount;
       entry.ambiguous += contestedResult.ambiguousCount;
+      entry.max_repair_rounds = Math.max(entry.max_repair_rounds, contestedResult.rounds);
+      if (contestedResult.hitRoundCap) entry.clusters_hit_round_cap++;
 
       const ownedBodies = computeOwnedBodies(exclusiveDecisions, contestedResult.decisions, idx, cluster.proposalIds);
       for (const b of ownedBodies) {

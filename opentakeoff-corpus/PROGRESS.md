@@ -1,6 +1,41 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 7 —
+migrated `inspect-ownership-clusters.mjs` itself over to
+`resolveClusterOwnershipIteratively` (the disclosed next step named at
+the end of the entry directly below), closing the gap between "the
+mechanism exists and is validated" and "the project's own permanent
+diagnostic actually uses it." Swapped the per-cluster
+`resolveClusterOwnership(cluster, scores)` call for
+`resolveClusterOwnershipIteratively(cluster, proposalsById, idx,
+junctions)` (dropping the now-unused direct `scoreContestedPrimitives`
+import, since the iterative function calls it internally per round);
+added two new disclosed per-page fields, `max_repair_rounds` (the most
+rounds any single cluster on that page actually needed) and
+`clusters_hit_round_cap` (how many clusters were cut off by the disclosed
+cap rather than reaching real stable convergence) — same "disclosed work,
+never silent" convention as the script's own pre-existing
+`analysis_incomplete`/`incomplete_reasons` fields.
+
+Re-ran the script directly (not just the scratch comparison harness) on
+the same 2 real documents already spot-checked below to confirm the
+migration reproduces the exact same numbers a real run, not just a
+scratch script, actually gets: Syracuse VA EHRM now reports
+`assigned: 9675` (up from the pre-migration script's own 9652),
+`max_repair_rounds: 8`, `clusters_hit_round_cap: 0`, gate still holds;
+SLAC LCLS-II reports `assigned: 4051` unchanged (`max_repair_rounds: 1`
+confirms its own 14 remaining ambiguous primitives are genuine ties, not
+merely uniterated), gate still holds. `scripts/` is not part of the mcp
+package's own tsconfig `include` (confirmed — it never type-checked this
+file even before this change, being a plain runtime `.mjs`), so
+correctness here rests on the direct real-document re-runs above, not a
+`tsc --noEmit` pass. SHOULD THIS BE ON THE SHARED PATH? Yes — same
+answer as the entry below now fully realized: every real diagnostic run
+going forward gets the strictly-better-or-equal iterative resolution
+for free, with the two new fields disclosing exactly how much repair
+work actually happened on each page.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 7 —
 iterative conflict repair (`resolveClusterOwnershipIteratively`, new in
 ownershipAssignment.ts). Addresses this module's own long-disclosed gap
 ("a true joint solve would let assigning one contested primitive change
