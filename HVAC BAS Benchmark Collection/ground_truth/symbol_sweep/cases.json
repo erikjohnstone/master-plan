@@ -443,24 +443,30 @@
         "tag": "1-VAV-2",
         "at": [2550.7, 1280.6],
         "tolerance_px": 2,
-        "tag_bbox": [2540.9, 1296.4, 2580.3, 1309.4]
+        "tag_bbox": [2540.9, 1296.4, 2580.3, 1309.4],
+        "family": "wall thermostat assembly",
+        "association_type": "adjacent",
+        "transform_family": "rigid",
+        "countable": true,
+        "reference_source": "manual_seed",
+        "body_bbox": [2512.8, 1257.1, 2574.5, 1319.5]
       },
       "instances": [
-        { "id": "new-thermostat-vav-3", "at": [3267.6, 1274.6], "tolerance_px": 3, "tag": "1-VAV-3", "tag_bbox": [3255.1, 1296.4, 3294.6, 1309.4] },
-        { "id": "new-thermostat-vav-4", "at": [2069.3, 1360.1], "tolerance_px": 3, "tag": "1-VAV-4", "tag_bbox": [1990.3, 1328.8, 2029.8, 1341.8] },
-        { "id": "new-thermostat-vav-1", "at": [2265.4, 1585.2], "tolerance_px": 3, "tag": "1-VAV-1", "tag_bbox": [2253.8, 1598.6, 2293.3, 1611.6] },
-        { "id": "new-thermostat-vav-9", "at": [3774.8, 1742.9], "tolerance_px": 3, "tag": "1-VAV-9", "tag_bbox": [3748.8, 1765.6, 3788.2, 1778.6] },
-        { "id": "new-thermostat-vav-7", "at": [2692.6, 1867.8], "tolerance_px": 3, "tag": "1-VAV-7", "tag_bbox": [2641.0, 1895.7, 2680.4, 1908.7] },
-        { "id": "new-thermostat-vav-6", "at": [2265.2, 1880.9], "tolerance_px": 3, "tag": "1-VAV-6", "tag_bbox": [2317.4, 1895.7, 2356.9, 1908.7] },
-        { "id": "new-thermostat-vav-8", "at": [2822.2, 1883.8], "tolerance_px": 3, "tag": "1-VAV-8", "tag_bbox": [2812.1, 1895.7, 2851.5, 1908.7] },
-        { "id": "new-thermostat-vav-10", "at": [4081.5, 1949.5], "tolerance_px": 3, "tag": "1-VAV-10", "tag_bbox": [4068.0, 1963.6, 4113.2, 1976.6] },
-        { "id": "new-thermostat-vav-11", "at": [2058.7, 2103.6], "tolerance_px": 3, "tag": "1-VAV-11", "tag_bbox": [1981.7, 2125.6, 2026.9, 2138.6] },
-        { "id": "new-thermostat-vav-12", "at": [2263.0, 2256.4], "tolerance_px": 3, "tag": "1-VAV-12", "tag_bbox": [2247.8, 2271.3, 2293.0, 2284.3] },
-        { "id": "new-thermostat-vav-17", "at": [3568.8, 2293.4], "tolerance_px": 3, "tag": "1-VAV-17", "tag_bbox": [3507.8, 2304.2, 3553.0, 2317.2] },
-        { "id": "new-thermostat-vav-15", "at": [2820.0, 2335.4], "tolerance_px": 3, "tag": "1-VAV-15", "tag_bbox": [2825.0, 2394.2, 2870.2, 2407.2] },
-        { "id": "new-thermostat-vav-16", "at": [3241.7, 2530.8], "tolerance_px": 3, "tag": "1-VAV-16", "tag_bbox": [3277.0, 2560.0, 3322.2, 2573.0] },
-        { "id": "new-thermostat-vav-13", "at": [2564.6, 2540.8], "tolerance_px": 3, "tag": "1-VAV-13", "tag_bbox": [2511.4, 2586.2, 2556.6, 2599.2] },
-        { "id": "new-thermostat-vav-14", "at": [2740.3, 2583.4], "tolerance_px": 3, "tag": "1-VAV-14", "tag_bbox": [2708.4, 2560.0, 2753.6, 2573.0] }
+        { "id": "new-thermostat-vav-3", "at": [3267.6, 1274.6], "tolerance_px": 3, "tag": "1-VAV-3", "tag_bbox": [3255.1, 1296.4, 3294.6, 1309.4], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [3227, 1251.1, 3291.4, 1309.4] },
+        { "id": "new-thermostat-vav-4", "at": [2069.3, 1360.1], "tolerance_px": 3, "tag": "1-VAV-4", "tag_bbox": [1990.3, 1328.8, 2029.8, 1341.8], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2031.1, 1332, 2098.3, 1372.3] },
+        { "id": "new-thermostat-vav-1", "at": [2265.4, 1585.2], "tolerance_px": 3, "tag": "1-VAV-1", "tag_bbox": [2253.8, 1598.6, 2293.3, 1611.6], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed" },
+        { "id": "new-thermostat-vav-9", "at": [3774.8, 1742.9], "tolerance_px": 3, "tag": "1-VAV-9", "tag_bbox": [3748.8, 1765.6, 3788.2, 1778.6], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [3720.7, 1719.1, 3801.6, 1777.4] },
+        { "id": "new-thermostat-vav-7", "at": [2692.6, 1867.8], "tolerance_px": 3, "tag": "1-VAV-7", "tag_bbox": [2641.0, 1895.7, 2680.4, 1908.7], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2638.3, 1844.4, 2720.6, 1904.9] },
+        { "id": "new-thermostat-vav-6", "at": [2265.2, 1880.9], "tolerance_px": 3, "tag": "1-VAV-6", "tag_bbox": [2317.4, 1895.7, 2356.9, 1908.7], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2210.6, 1867.9, 2291.3, 1918.1] },
+        { "id": "new-thermostat-vav-8", "at": [2822.2, 1883.8], "tolerance_px": 3, "tag": "1-VAV-8", "tag_bbox": [2812.1, 1895.7, 2851.5, 1908.7], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2768.9, 1860.2, 2845.9, 1922.4] },
+        { "id": "new-thermostat-vav-10", "at": [4081.5, 1949.5], "tolerance_px": 3, "tag": "1-VAV-10", "tag_bbox": [4068.0, 1963.6, 4113.2, 1976.6], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [4029.1, 1926, 4105.2, 1971.6] },
+        { "id": "new-thermostat-vav-11", "at": [2058.7, 2103.6], "tolerance_px": 3, "tag": "1-VAV-11", "tag_bbox": [1981.7, 2125.6, 2026.9, 2138.6], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed" },
+        { "id": "new-thermostat-vav-12", "at": [2263.0, 2256.4], "tolerance_px": 3, "tag": "1-VAV-12", "tag_bbox": [2247.8, 2271.3, 2293.0, 2284.3], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2207.8, 2233, 2286.7, 2295.4] },
+        { "id": "new-thermostat-vav-17", "at": [3568.8, 2293.4], "tolerance_px": 3, "tag": "1-VAV-17", "tag_bbox": [3507.8, 2304.2, 3553.0, 2317.2], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [3520.8, 2269.9, 3587.8, 2331.1] },
+        { "id": "new-thermostat-vav-15", "at": [2820.0, 2335.4], "tolerance_px": 3, "tag": "1-VAV-15", "tag_bbox": [2825.0, 2394.2, 2870.2, 2407.2], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2780.6, 2307.4, 2845.7, 2371.9] },
+        { "id": "new-thermostat-vav-16", "at": [3241.7, 2530.8], "tolerance_px": 3, "tag": "1-VAV-16", "tag_bbox": [3277.0, 2560.0, 3322.2, 2573.0], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [3190.6, 2500.3, 3270.7, 2568.5] },
+        { "id": "new-thermostat-vav-13", "at": [2564.6, 2540.8], "tolerance_px": 3, "tag": "1-VAV-13", "tag_bbox": [2511.4, 2586.2, 2556.6, 2599.2], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2509.9, 2512.8, 2590.6, 2576.2] },
+        { "id": "new-thermostat-vav-14", "at": [2740.3, 2583.4], "tolerance_px": 3, "tag": "1-VAV-14", "tag_bbox": [2708.4, 2560.0, 2753.6, 2573.0], "family": "wall thermostat assembly", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2687, 2562.5, 2767.2, 2607.1] }
       ],
       "review": {
         "render": "ground_truth/reviews/11__vol1__05/p25-p25-full-poppler.png",
@@ -469,7 +475,8 @@
           "Sixteen new wall-thermostat assemblies carry keyed note 1 and a local 1-VAV equipment reference; the VAV-2 thermostat is the seed, leaving fifteen expected placements.",
           "The seed includes the thermostat circle plus its keyed-note box. Each accepted physical marker owns one unique small-format 1-VAV-# text box in the same annotation context.",
           "The sheet repeats most VAV IDs in larger terminal-unit callouts. Those differently sized text runs cannot corroborate a thermostat symbol, and each equipment instance ID may validate only one physical placement.",
-          "VAV-5 has no thermostat assembly on this sheet. The unkeyed VAV-18 thermostat is existing rather than keyed new work; terminal bodies, control-valve circles, duct fittings, room tags, and architectural boxes are excluded."
+          "VAV-5 has no thermostat assembly on this sheet. The unkeyed VAV-18 thermostat is existing rather than keyed new work; terminal bodies, control-valve circles, duct fittings, room tags, and architectural boxes are excluded.",
+          "v2 review: rendered the full page with all 16 rings (reviews/11__vol1__05/p25-overview.png) plus tight crops for the seed and four instances (vav-1, vav-4, vav-7, vav-11), and viewed each with the Read tool (a fifth crop incidentally shows vav-6's own tag text at frame edge but not its ring, so vav-6 itself was pattern-extended, not individually confirmed). Every ring actually viewed lands on the same compact two-glyph assembly the seed itself uses -- a circular T thermostat glyph immediately beside a square keyed-note '1' box, with the 1-VAV-# text run close by (max tag-to-at distance across all 16 is 75px, well short of anything resembling a routed leader) -- so association_type is adjacent and transform_family rigid throughout; no rotation or mirroring was observed in any of the instances actually viewed. body_bbox for the seed and every instance was computed via one batched fingerprintSymbol pass over the seed_rect's own asymmetric half-extents (55.7px toward the T-glyph, 29.3px toward the note-box) applied around each instance's frozen at, and 13 of 15 instances converged cleanly (segment counts 0.8x-3.0x the seed's own 41). Two did not: new-thermostat-vav-1 (4.5x, adjacent to an office-door swing/hinge glyph confirmed in its own render) and new-thermostat-vav-11 (4.0x, adjacent to control-valve hardware confirmed in its own wide render) both have their assembly at the expected location -- rings visibly on the right two-glyph shape in both crops -- but the fixed-size rect also pulls in real neighboring architectural or valve linework at those two specific spots, so both are left with no body_bbox rather than a bbox contaminated by unrelated geometry, the same standard applied to case 10's duct-adjacent outlier."
         ]
       }
     },
