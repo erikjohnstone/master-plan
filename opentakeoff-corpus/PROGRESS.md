@@ -1,5 +1,78 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 6:
+web/src/lib/vectorSceneRelations.ts. The first concrete piece of goal
+§7's "intersections, T-junctions, X-junctions, endpoints, collinearity,
+near-parallel and near-perpendicular relations" line — endpoint
+clustering and junction-degree classification. Collinearity/parallel/
+perpendicular PAIR relations (as opposed to endpoint junctions) remain
+open for a further slice; so does true mid-segment intersection
+(two segments crossing without sharing an endpoint).
+
+`computeVectorSceneJunctions(idx, opts?)` takes a built
+`VectorSceneIndex` (slice 5) and groups primitive endpoints into
+junctions using a grid-bucketed near-neighbor merge (the same cell-
+hash idea `geometry.js`'s existing `buildSnapGrid`/`nearestSnap`
+already use in this codebase) rather than an O(n²) all-pairs scan, so
+cost stays near-linear in primitive count. Each junction is classified
+by degree and, at degree 2, by angle:
+
+- 1 member -> "dangling" (nothing else touches this end)
+- 2 members ~180° apart (within `PASS_THROUGH_ANGLE_TOL_DEG`, 15°) ->
+  "pass-through" — one straight run split into two primitives (a
+  dashed line, a multi-lineTo chain), not a real topological joint
+- 2 members at any other angle -> "corner"
+- 3 members -> "t", 4 members -> "x", more -> "multi"
+
+Clip-only primitives (SEG_CLIP) never contribute endpoints — a clip
+rectangle's own four corners are not drafted joints, matching the
+"invisible ink, never a wall" treatment SEG_CLIP already gets
+everywhere else in this codebase. `RELATIONS_MAX_PRIMITIVES` (50,000,
+disclosed, overridable via `opts.maxPrimitives`) reuses the same
+"incomplete state, not partial silent truth" cap discipline slice 5's
+`buildVectorSceneIndex` established: a breach returns `incomplete:
+true` and an empty junction list, never a silent partial pass.
+
+Deliberately NOT wired into `buildVectorSceneIndex`'s own
+`intersections` stub field yet — that stays an empty array with
+"intersections" still named in `notYetImplemented` until this
+contract has proven out on real sheets (junction classification is
+new and untested against real drafted noise: near-miss endpoints,
+near-collinear-but-not-quite corners, hatch/poché ink that shouldn't
+count as a joint at all). Wiring it in is real further work for a
+follow-up slice, same "prove the contract before wiring it in"
+discipline slice 5 used for its own cache.
+
+New `web/test/vectorSceneRelations.test.ts` (8 tests, all passing on
+the first run): a lone segment's two dangling ends; two collinear
+segments meeting end-to-end classify as pass-through, not corner; two
+segments at a right angle classify as corner; three segments at one
+point classify as T; four as X; near-but-not-pixel-exact endpoints
+still merge within `JUNCTION_SNAP_TOL`; a clip rectangle contributes
+zero endpoints while a real stroked segment through the same point
+still contributes its own two; and the cap-breach path.
+
+Verification: `npx tsc --noEmit` clean. New test file plus every
+directly-related test file (vectorSceneIndex, capJoin, formDepth,
+dashState, primType) re-run individually — 0 failures. Confirmed
+`vectorSceneRelations.ts` loads cleanly from `mcp/` via tsx, same
+shared-path parity check as slice 5. Does not modify
+`vectorSceneIndex.ts` or `oneclick.ts`, so no broader regression sweep
+was needed.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same shared `web/src/lib/`
+path `vectorSceneIndex.ts` and `oneclick.ts` already live on.
+
+Not done (open, narrowing list): collinearity/near-parallel/near-
+perpendicular PAIR relations; true mid-segment intersections (crossing
+without a shared endpoint); wiring junctions into
+`buildVectorSceneIndex`'s own `intersections` field; Form XObject
+identity/content-signature hashing; text-span/exploded-text-mask
+integration; a real spatial index; curve fidelity beyond chord-
+sampling; wiring the index into `graphForPipeline`/Session's pipeline;
+the gate's memory/build-time measurements and 5-PDF parity evidence.
+None of Phases 3-8 have been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 5:
 web/src/lib/vectorSceneIndex.ts. The phase's own LITERAL named
 deliverable ("build one shared VectorSceneIndex") — slices 1-4 all
