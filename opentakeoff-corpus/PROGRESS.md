@@ -1,5 +1,53 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 2 — COMPLETE:
+all 47 baseline/extended cases now carry full v2 depth (family,
+association_type, transform_family, countable, reference_source,
+body_bbox where a clean isolated body could be computed). Started this
+pass at 11/47; finished it, including the four remaining large cases not
+covered by the entry directly below: `43-carson-m601-vlc853e-controller-
+modules` (26 instances, a perfectly regular 3-row x 9/9/8-column
+169.2px grid -- computed programmatically rather than by hand, one
+already-disclosed geometry variant, furnace-b3-controller, correctly
+left without body_bbox), `45-slac-m63-analog-input-callouts` (16
+instances; 4 of them -- 03, 04, 13, 16 -- are this case's own
+already-disclosed "half-turned callouts," confirmed by a consistent
+~9-10px centroid offset and 2 extra segments versus a naive same-size
+upright rect, left without body_bbox for the same reason doc-037/011's
+rotated instances taught this checkpoint not to trust a translated rect
+across a real orientation change), `46-usda-m701-primary-circulation-
+pumps` (7 instances, clean), and `47-nist-m801-airflow-diagram-fans` (11
+instances, clean -- and a nice confirmation of the transform_family
+convention: the 5 return/exhaust-fan instances consistently returned 82
+segments against the 6 supply-fan instances' 79, exactly matching this
+case's own note naming "mirrored return/exhaust orientation").
+
+Every one of the 47 cases has now been individually re-confirmed through
+the real `symbol-sweep-corpus.mjs --report-v2-fields` runner (not just the
+standalone batch tool) with zero regressions -- no v1 field (`at`, `tag`,
+`tolerance_px`, `tag_bbox`, `seed_rect`, instance count) was touched in
+any of this pass's edits, so every case's existing pass/fail behavior is
+provably unchanged. A full whole-corpus run (all 47 together, not just
+per-batch) is the last confirmation step, kicked off in the background
+before this note was written.
+
+This closes out Phase 1 item 2 in full: "review and annotate every
+failure/edge case in the 47-case set with physical-body ownership, tag
+bbox, and association type." Phase 1's remaining open item is #3 (150+
+new instances across 12+ documents from outside the original 30), which
+this checkpoint's five reverted/stalled sourcing attempts (P1/P2, HOA,
+document 037, document 011, document 020) already showed is a slow,
+high-friction search -- the next real step there, not a new document
+gamble on the first try: revisit document 037's own explicitly-deferred
+LT/KT richer/poorer-variant case (already scouted, never built) and
+document 049's rotated-valve finding (already scouted, failed real
+verification once at the seed's original precision) before spending
+reconnaissance effort on entirely fresh documents again.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Same as the entry below: additive
+v2 ground-truth metadata only, no v1 field touched, no `web/src/lib` or
+`mcp/src` production code changed.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — strategic pivot
 to the baseline/extended 47-case backlog, and a large batch of v2 annotation
 landed: 11 -> 43 of 47 cases now carry full v2 depth.
