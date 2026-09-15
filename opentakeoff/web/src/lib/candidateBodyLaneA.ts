@@ -32,22 +32,51 @@
 //   yet emit them as CandidateBody-shaped proposals.
 // - Requirement 3: excluding forms whose content is mostly text/page
 //   furniture/title blocks/borders/repeated non-countable stuff — no
-//   content-type filtering is applied; every invocation with at least one
-//   resolvable primitive gets a signature.
+//   FORM-level content-type filtering is applied; every invocation with
+//   at least one resolvable VISIBLE primitive gets a signature. (A
+//   narrower, primitive-LEVEL filter was added below after real-sheet
+//   ground-truth checking — see next paragraph — but that is not the
+//   same thing as this requirement's own form-level classification,
+//   which remains undone.)
 // - Requirement 4's own corroboration step (legend/tag/schedule) — this
 //   slice states structural evidence only, never a family name.
+//
+// INVISIBLE-INK FIX (added after real-sheet visual ground-truth checking
+// — see invisibleInk.ts's own header and PROGRESS.md for the full Cherry
+// Point #12 finding): a Form invocation's own `primitiveIds` — and
+// therefore its signature and local bbox — now EXCLUDES primitives
+// `isLikelyInvisibleInk` flags (white-on-white masking ink, a real,
+// common CAD/Revit export technique with no visible presence). Before
+// this fix, a Form's own "content" and downstream FusedProposal bbox
+// (candidateProposalFusion.ts consumes `primitiveIds` directly) could be
+// — and on a real corpus sheet, was — 91%-97% invisible masking geometry,
+// corrupting every eligibility/carrier signal computed from it. This
+// changes what `primitiveIds` MEANS: from "every primitive this Do call
+// touched" to "every VISIBLE primitive this Do call touched" — a real,
+// intentional, disclosed change to this module's own output.
 import type { VectorSceneIndex } from "./vectorSceneIndex.ts";
 import type { FormInvocation } from "./oneclick.ts";
 import type { PrimitiveNodeAttributes } from "./candidateBodyLaneD.ts";
 import type { BodySignature } from "./candidateBodySignature.ts";
 import { computeBodySignature } from "./candidateBodySignature.ts";
+import { isLikelyInvisibleInk, type InvisibleInkOptions } from "./invisibleInk.ts";
 
 export const LANE_A_MAX_PRIMITIVES = 250_000;
 
 export interface FormInvocationSignature {
   invocationId: number;
   depth: number;
+  /** VISIBLE primitive ids only — see the module header's own INVISIBLE-
+   *  INK FIX for why this excludes `isLikelyInvisibleInk`-flagged
+   *  primitives, and `excludedInvisibleCount` below for how many were
+   *  dropped. */
   primitiveIds: number[];
+  /** how many of this invocation's own primitives were excluded as
+   *  invisible ink — reported explicitly so a caller can see when a
+   *  Form's real content was mostly (or entirely) masking geometry,
+   *  rather than that fact silently disappearing into a smaller
+   *  `primitiveIds` count with no explanation. */
+  excludedInvisibleCount: number;
   signature: BodySignature | null;
 }
 
@@ -83,7 +112,7 @@ function invertPoint(t: readonly number[], px: number, py: number): [number, num
 export function computeFormContentSignatures(
   idx: VectorSceneIndex,
   formInvocations: readonly FormInvocation[],
-  opts: { maxPrimitives?: number } = {},
+  opts: { maxPrimitives?: number } & InvisibleInkOptions = {},
 ): LaneAResult {
   const cap = opts.maxPrimitives ?? LANE_A_MAX_PRIMITIVES;
   const n = idx.primitives.length;
@@ -97,17 +126,25 @@ export function computeFormContentSignatures(
 
   const transformById = new Map(formInvocations.map((inv) => [inv.id, inv] as const));
   const byInvocation = new Map<number, number[]>();
+  const excludedByInvocation = new Map<number, number>();
   for (const sp of idx.subpaths) {
     if (sp.formInvocationId === 0) continue; // page-level ink, not a Form XObject invocation
     let arr = byInvocation.get(sp.formInvocationId);
     if (!arr) { arr = []; byInvocation.set(sp.formInvocationId, arr); }
-    for (const pid of sp.primitiveIds) arr.push(pid);
+    for (const pid of sp.primitiveIds) {
+      if (isLikelyInvisibleInk(idx.primitives[pid], opts)) {
+        excludedByInvocation.set(sp.formInvocationId, (excludedByInvocation.get(sp.formInvocationId) ?? 0) + 1);
+        continue;
+      }
+      arr.push(pid);
+    }
   }
 
   const results: FormInvocationSignature[] = [];
   for (const inv of formInvocations) {
     const primitiveIds = byInvocation.get(inv.id) ?? [];
-    if (primitiveIds.length === 0) { results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds: [], signature: null }); continue; }
+    const excludedInvisibleCount = excludedByInvocation.get(inv.id) ?? 0;
+    if (primitiveIds.length === 0) { results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds: [], excludedInvisibleCount, signature: null }); continue; }
 
     const attrById = new Map<number, PrimitiveNodeAttributes>();
     let bx0 = Infinity, by0 = Infinity, bx1 = -Infinity, by1 = -Infinity;
@@ -131,10 +168,10 @@ export function computeFormContentSignatures(
       if (ly0 < by0) by0 = ly0; if (ly0 > by1) by1 = ly0; if (ly1 < by0) by0 = ly1; if (ly1 > by1) by1 = ly1;
     }
 
-    if (degenerate) { results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds, signature: null }); continue; }
+    if (degenerate) { results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds, excludedInvisibleCount, signature: null }); continue; }
     const body = { id: inv.id, primitiveIds, x0: bx0, y0: by0, x1: bx1, y1: by1 };
     const signature = computeBodySignature(body, attrById);
-    results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds, signature });
+    results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds, excludedInvisibleCount, signature });
   }
 
   const byHash = new Map<string, number[]>();

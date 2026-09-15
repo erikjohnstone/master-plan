@@ -1,5 +1,73 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — wired the
+just-built `invisibleInk.ts` detector into `candidateBodyLaneA.ts`
+itself, the real fix the prior entry disclosed but deliberately did
+not rush. `computeFormContentSignatures` now excludes any primitive
+`isLikelyInvisibleInk` flags from a Form invocation's own
+`primitiveIds` (and therefore its signature and local bbox) — a real,
+intentional, disclosed change to what that field MEANS, from "every
+primitive this Do call touched" to "every VISIBLE primitive this Do
+call touched." A new `excludedInvisibleCount` field on
+`FormInvocationSignature` reports how many were dropped per invocation,
+so the fact is visible to a caller rather than silently disappearing
+into a smaller count.
+
+New tests in `web/test/candidateBodyLaneA.test.ts` (now 8): a fixture
+reproducing the real shape of the finding (one visible stroke + two
+white-ink strokes in one invocation) confirms exactly 1 primitive
+survives and `excludedInvisibleCount` reports 2; an invocation whose
+ENTIRE content is invisible ink reports a null signature (nothing real
+to sign) with the exclusion count still disclosed, not silently
+dropped to a bare empty result. All 6 pre-existing Lane A tests still
+pass unchanged (none of their synthetic fixtures set a stroke color,
+so none were near the invisible-ink threshold).
+
+REAL-SHEET IMPACT, measured end-to-end through eligibility scoring and
+assignment (Cherry Point #12): `laneA_totalExcludedInvisible` is
+exactly 1,618 — matching the earlier investigation's own whole-sheet
+count precisely (a clean cross-check: every real white-ink primitive
+on this sheet lives inside a Form invocation, none at page level).
+Total CONTESTED score entries dropped from 3,356 to 120 — a ~96%
+reduction — because the bulk of what looked like "real ownership
+disputes" were artifacts of Lane A's bloated, invisible-ink-inclusive
+proposals overlapping Lane B's own small visible-content bodies. With
+that false contest population removed, 0 of the remaining genuinely-
+contested primitives are assigned (60 ambiguous, all tied at one
+score value) — the SAME degenerate-tie shape as before, just on a
+much smaller, more honestly-characterized real problem.
+
+THIS SUPERSEDES the "carrier signal integration" entry's own headline
+number two entries above ("resolveClusterOwnership now confidently
+assigns 48 of the 1,678 previously-all-ambiguous contested
+primitives"): that 48/1,678 result was computed on the PRE-FIX,
+invisible-ink-corrupted proposal set. It is not being retracted as
+wrong — it accurately reported what that code did at the time — but it
+no longer describes this pipeline's current, corrected behavior, and a
+reader should not treat both entries as simultaneously describing
+today's real numbers. The carrier signal itself (`carrierClassification
+.ts`, wired into `scoreContestedPrimitives`) is UNCHANGED and remains a
+real, tested, working signal — it simply has a different, smaller,
+more honest population to work on now, and on this specific sheet's
+remaining 60 contested primitives it does not currently break the tie
+(consistent with the sheet's own real content: the previously-"48
+assigned" cases were carrier-outlier decisions made partly FROM
+invisible-ink siblings, which no longer exist to compare against).
+
+No crash on the 3 other corpus sheets checked (all still 0 ownership
+clusters, 0 excluded-invisible, unchanged from every prior entry).
+
+Verification: `npx tsc --noEmit` clean; every affected test file
+re-run (`candidateBodyLaneA.test.ts` 8/8, `candidateProposalFusion
+.test.ts` 6/6, `ownershipConflicts.test.ts` 6/6, `ownershipEligibility
+.test.ts` 6/6, `ownershipAssignment.test.ts` 5/5, `ownershipBody
+.test.ts` 3/3, `carrierClassification.test.ts` 5/5, `invisibleInk
+.test.ts` 9/9 — 48 tests total, zero needed a single assertion
+changed); mcp import parity confirmed; real-sheet checks above.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — what a Form invocation's own
+content actually IS underlies every downstream ownership decision.
+
 2026-09-15 GOAL.md's own standing rule ("A census pass... is not ground
 truth... real ground truth means an agent actually rendered the page
 and looked at it") — applied to this effort's own real-sheet

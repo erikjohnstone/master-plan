@@ -9,13 +9,14 @@ import { computeFormContentSignatures } from "../src/lib/candidateBodyLaneA.ts";
 
 const OPS = {
   constructPath: 10, moveTo: 11, lineTo: 12, curveTo: 13, curveTo2: 14, curveTo3: 15, closePath: 16, rectangle: 17,
-  paintFormXObjectBegin: 33, paintFormXObjectEnd: 34,
+  paintFormXObjectBegin: 33, paintFormXObjectEnd: 34, setStrokeRGBColor: 40,
 } as const;
 const ID = [1, 0, 0, 1, 0, 0];
 type Op = [number, unknown[] | null];
 const opList = (ops: Op[]) => ({ fnArray: ops.map((o) => o[0]), argsArray: ops.map((o) => o[1]) });
 const line = (x1: number, y1: number, x2: number, y2: number): Op =>
   [OPS.constructPath, [[OPS.moveTo, OPS.lineTo], [x1, y1, x2, y2]]];
+const strokeRGB = (r: number, g: number, b: number): Op => [OPS.setStrokeRGBColor, [r, g, b]];
 const formBegin = (matrix: number[]): Op => [OPS.paintFormXObjectBegin, [matrix, null]];
 const formEnd = (): Op => [OPS.paintFormXObjectEnd, null];
 
@@ -78,6 +79,34 @@ test("Lane A: a nested invocation is signed independently of its parent", () => 
   const inner = r.invocations.find((i) => i.depth === 2)!;
   assert.ok(outer.signature && inner.signature);
   assert.notEqual(outer.signature!.hash, inner.signature!.hash);
+});
+
+test("Lane A: white-ink (invisible) primitives are excluded from an invocation's own primitiveIds and reported as excludedInvisibleCount, not silently signed as real content", () => {
+  // real-sheet finding (Cherry Point #12, see invisibleInk.ts/PROGRESS.md):
+  // a Form's own content can be dominated by white-on-white masking ink
+  // — this reproduces the same shape at fixture scale: one real visible
+  // stroke plus two white (invisible) ones inside the same invocation.
+  const r = signaturesFor([
+    formBegin([1, 0, 0, 1, 0, 0]),
+    line(0, 0, 40, 0),                              // visible (default black)
+    strokeRGB(255, 255, 255), line(40, 0, 40, 15),  // invisible — white ink
+    line(40, 15, 60, 15),                            // still white (color persists)
+    formEnd(),
+  ]);
+  assert.equal(r.invocations.length, 1);
+  assert.equal(r.invocations[0].primitiveIds.length, 1, "only the one visible primitive remains");
+  assert.equal(r.invocations[0].excludedInvisibleCount, 2, "both white-ink primitives are counted as excluded, not silently dropped");
+});
+
+test("Lane A: an invocation whose content is ENTIRELY invisible ink reports a null signature (no visible content to sign), with the exclusion count still disclosed", () => {
+  const r = signaturesFor([
+    formBegin([1, 0, 0, 1, 0, 0]),
+    strokeRGB(255, 255, 255), line(0, 0, 40, 0), line(40, 0, 40, 15),
+    formEnd(),
+  ]);
+  assert.equal(r.invocations[0].signature, null);
+  assert.deepEqual(r.invocations[0].primitiveIds, []);
+  assert.equal(r.invocations[0].excludedInvisibleCount, 2);
 });
 
 test("Lane A: a primitive-count cap breach reports incomplete instead of a silent partial pass", () => {
