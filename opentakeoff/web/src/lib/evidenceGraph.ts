@@ -25,8 +25,10 @@
 // - requirement 4's own remaining scope (see FOURTH slice, below —
 //   building/drawing_group only; floor/discipline are real further
 //   work, no existing module found for them).
-// - requirements 5-9 (the accepted-installed-quantity state machine:
-//   MATCH/SCHEDULE_ONLY/PLAN_ONLY/UNCLASSIFIED_PLAN_SYMBOL/TAG_ONLY).
+// - requirement 9 (exposing physical/textual/schedule evidence in a UI
+//   compare view — this module already exposes every field a caller
+//   would need, blue/orange/gray/schedule-cite is a rendering choice,
+//   not something this pure module itself renders).
 //
 // THIRD slice, same file: `computeTagCorroboration` — requirement 3's
 // own "score eligible edges using independently disclosed evidence, do
@@ -60,6 +62,20 @@
 // real, NAMED disagreement blocks the edge. "Floor" and "discipline"
 // have no existing reusable scope-detection module anywhere in this
 // codebase (searched directly) — real further work, not approximated.
+//
+// FIFTH slice, same file: `classifyInstalledEvidence` — requirements
+// 5-8, the accepted-installed-quantity five-way outcome (MATCH,
+// SCHEDULE_ONLY, PLAN_ONLY, UNCLASSIFIED_PLAN_SYMBOL, TAG_ONLY_REVIEW).
+// Built entirely from what the graph already discloses (requirement 2's
+// own eligibility, requirement 4's own scope-guarded schedule match, a
+// legend match for family identity); see that function's own docstring
+// for exactly how each item of requirement 5's own checklist is
+// satisfied — including one item ("no stronger contradictory candidate")
+// that needs NO new logic at all, since `labelPlacements`'s own already-
+// tested maximum-cardinality assignment guarantees a tag names at most
+// one body by construction. Disclosed, not attempted: "family identity
+// from exact vector reference" (a Phase 5 rigid/affine match against a
+// known family seed — this graph has no such signal wired in yet).
 //
 // AUDITED BEFORE BUILDING (dedicated investigation, this checkpoint):
 // every non-body, non-carrier node kind the goal names already has a
@@ -281,6 +297,90 @@ export function computeTagCorroboration(graph: EvidenceGraph): TagCorroboration[
     const hasEligibleBodyEdge = bodyEdges.some((e) => (bodyById.get(e.bodyId)?.ineligibleReasons.length ?? 1) === 0);
     return { tagId: tag.id, sources, hasEligibleBodyEdge };
   });
+}
+
+/** Requirements 6-8's own five-way outcome. Never a boolean "matched or
+ *  not" — the goal explicitly names each state as distinct, and this
+ *  slice preserves that: an unproven-family plan symbol is NOT the same
+ *  disclosed state as a schedule row nobody drew, even though a naive
+ *  reading might collapse both to "not installed." */
+export type InstalledClassification =
+  | "MATCH"
+  | "SCHEDULE_ONLY"
+  | "PLAN_ONLY"
+  | "UNCLASSIFIED_PLAN_SYMBOL"
+  | "TAG_ONLY_REVIEW";
+
+export interface ClassifiedInstance {
+  classification: InstalledClassification;
+  tagId: number | null;
+  bodyId: number | null;
+  scheduleId: number | null;
+  legendId: number | null;
+}
+
+/** Pure: requirements 5-8's own classification, built entirely on top
+ *  of an already-built `EvidenceGraph` and its own `TagCorroboration`
+ *  (no new evidence is gathered here — this function only DECIDES among
+ *  the five named outcomes from what the graph already discloses).
+ *
+ *  Requirement 5's own checklist, and how each item is actually
+ *  satisfied here:
+ *  - "a physical body with owned primitives" / "source sheet and body
+ *    bbox" -> the body node itself.
+ *  - "no ownership conflict" -> the body's own `ineligibleReasons` is
+ *    empty (this is exactly what "eligible" means, per requirement 2).
+ *  - "family identity from exact vector reference or agreeing tag +
+ *    legend/schedule evidence" -> a schedule match OR a legend match on
+ *    the SAME tag (never inferred from geometry alone). "Exact vector
+ *    reference" (a Phase 5 rigid/affine match against a known family
+ *    seed) is real further work — this graph has no such signal wired
+ *    in yet, disclosed rather than approximated with a geometry guess.
+ *  - "no stronger contradictory candidate" -> `labelPlacements`'s own
+ *    maximum-cardinality one-to-one assignment already guarantees a
+ *    tag names AT MOST one body and a body is named by AT MOST one tag
+ *    (confirmed directly against symbolLabels.test.ts's own "one token
+ *    names at most one placement" contract) — there is no second,
+ *    competing tag<->body edge for this function to compare against by
+ *    construction, so this item needs no new logic here.
+ *
+ *  Two passes: every TAG gets exactly one classification (a tag always
+ *  represents SOME real drawn evidence); every SCHEDULE ROW no tag on
+ *  this sheet even names gets its own SCHEDULE_ONLY entry too — a row
+ *  nobody drew a tag for is just as real a "schedule exists, no
+ *  qualifying body" case as one whose tag failed to reach a body. */
+export function classifyInstalledEvidence(graph: EvidenceGraph): ClassifiedInstance[] {
+  const corroboration = new Map(computeTagCorroboration(graph).map((c) => [c.tagId, c] as const));
+  const out: ClassifiedInstance[] = [];
+
+  for (const tag of graph.tags) {
+    const hasEligibleBodyEdge = corroboration.get(tag.id)!.hasEligibleBodyEdge;
+    const bodyEdge = graph.tagBodyEdges.find((e) => e.tagId === tag.id) ?? null;
+    const scheduleEdge = graph.tagScheduleEdges.find((e) => e.tagId === tag.id) ?? null;
+    const legendEdge = graph.tagLegendEdges.find((e) => e.tagId === tag.id) ?? null;
+
+    let classification: InstalledClassification;
+    if (hasEligibleBodyEdge) {
+      classification = scheduleEdge ? "MATCH" : legendEdge ? "PLAN_ONLY" : "UNCLASSIFIED_PLAN_SYMBOL";
+    } else {
+      classification = scheduleEdge ? "SCHEDULE_ONLY" : "TAG_ONLY_REVIEW";
+    }
+    out.push({
+      classification,
+      tagId: tag.id,
+      bodyId: hasEligibleBodyEdge ? bodyEdge!.bodyId : null,
+      scheduleId: scheduleEdge?.scheduleId ?? null,
+      legendId: legendEdge?.legendId ?? null,
+    });
+  }
+
+  const scheduleIdsWithATag = new Set(graph.tagScheduleEdges.map((e) => e.scheduleId));
+  for (const sched of graph.schedules) {
+    if (scheduleIdsWithATag.has(sched.id)) continue;
+    out.push({ classification: "SCHEDULE_ONLY", tagId: null, bodyId: null, scheduleId: sched.id, legendId: null });
+  }
+
+  return out;
 }
 
 function bodyAnchor(b: EvidenceBodyLike): Point {

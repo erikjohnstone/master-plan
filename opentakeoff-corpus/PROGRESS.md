@@ -1,5 +1,55 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 fifth slice —
+requirements 5-8: the accepted-installed-quantity five-way outcome
+(MATCH, SCHEDULE_ONLY, PLAN_ONLY, UNCLASSIFIED_PLAN_SYMBOL,
+TAG_ONLY_REVIEW). Same `evidenceGraph.ts` from the four entries below.
+
+NEW `classifyInstalledEvidence(graph)`: built entirely from what the
+graph already discloses — no new evidence gathered, only a DECISION
+among the five named outcomes. Requirement 5's own checklist, and
+exactly how each item is satisfied:
+- "a physical body with owned primitives" / "source sheet and body
+  bbox" -> the body node itself.
+- "no ownership conflict" -> the body's own `ineligibleReasons` is
+  empty (requirement 2's own "eligible").
+- "family identity from exact vector reference or agreeing tag +
+  legend/schedule evidence" -> a schedule match OR a legend match on
+  the SAME tag, never inferred from geometry alone.
+- "no stronger contradictory candidate" -> needs NO new logic at all —
+  `labelPlacements`'s own already-tested maximum-cardinality one-to-one
+  assignment guarantees a tag names at most one body by construction
+  (confirmed directly against symbolLabels.test.ts's own "one token
+  names at most one placement" contract), so there is never a second
+  competing tag<->body edge to compare against here.
+
+Two passes: every tag gets exactly one classification; every schedule
+row NO tag on the sheet even names also gets its own SCHEDULE_ONLY
+entry (tagId null) — a row nobody drew a tag for is just as real a
+"schedule exists, no qualifying body" case as one whose tag failed to
+reach a body.
+
+7 new tests, one per requirement-6/7/8 branch plus the "nobody named
+this row" case and an explicit "ineligible body never upgrades the
+outcome" check. 26/26 evidenceGraph tests green; full related suite
+(evidenceGraph, symbolLabels, legendReferenceBank, legendlearn, markid,
+carrierClassification, candidateProposalFusion, rigidAffineVerify,
+ownershipAssignment, ownershipBody) 345/345 green. `tsc --noEmit` clean.
+
+DISCLOSED, NOT ATTEMPTED: "family identity from exact vector reference"
+(a Phase 5 rigid/affine match against a known family seed — this graph
+has no such signal wired in yet; only the tag+legend/schedule
+agreement route is decidable today). Requirement 9 (exposing evidence
+in a UI compare view) is a rendering choice on top of fields this
+module already exposes, not something a pure module renders itself —
+disclosed as out of this module's own scope, not silently skipped.
+Phase 6's own remaining requirements are now none beyond what's
+disclosed here; Phase 7 (reconciliation + Legend Learn integration) and
+Phase 8 (performance engineering) remain fully open.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same isolated module, no
+existing VectorGrid/table/schedule/citation/bbox code touched.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 fourth slice
 — requirement 4: "Resolve duplicate tags within drawing/building/floor/
 discipline scope. Never merge same text across different scopes

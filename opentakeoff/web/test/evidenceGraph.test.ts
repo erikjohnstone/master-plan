@@ -7,7 +7,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { extractVectorGeometry } from "../src/lib/oneclick.ts";
 import { buildVectorSceneIndex } from "../src/lib/vectorSceneIndex.ts";
-import { buildSheetEvidenceGraph, computeTagCorroboration } from "../src/lib/evidenceGraph.ts";
+import { buildSheetEvidenceGraph, computeTagCorroboration, classifyInstalledEvidence } from "../src/lib/evidenceGraph.ts";
 
 const OPS = {
   constructPath: 10, moveTo: 11, lineTo: 12, curveTo: 13, curveTo2: 14, curveTo3: 15, closePath: 16, rectangle: 17,
@@ -216,4 +216,71 @@ test("requirement 4 -- a DIFFERENT drawing_group also blocks the match, independ
     { drawingGroup: "UTILITY PLANT" },
   );
   assert.equal(graph.tagScheduleEdges.length, 0);
+});
+
+test("classifyInstalledEvidence: requirement 6 -- MATCH when a tag reaches BOTH an eligible body and a schedule row", () => {
+  const idx = buildIdx([closedRect(93, 125, 10, 10)]);
+  const body = { id: 0, primitiveIds: idx.primitives.map((_, i) => i), x0: 93, y0: 125, x1: 103, y1: 135 };
+  const graph = buildSheetEvidenceGraph(
+    idx, [body], [span("FD1", 90, 92, 12)], [], undefined, [],
+    [{ key: "FD1", sheet: "M101", cells: {} }],
+  );
+  const [c] = classifyInstalledEvidence(graph);
+  assert.equal(c.classification, "MATCH");
+  assert.equal(c.bodyId, 0);
+  assert.equal(c.scheduleId, 0);
+});
+
+test("classifyInstalledEvidence: requirement 6 -- SCHEDULE_ONLY when a tag reaches a schedule row but NO eligible body", () => {
+  const idx = buildIdx([closedRect(0, 0, 10, 10)]);
+  const graph = buildSheetEvidenceGraph(idx, [], [span("FD1", 0, 0)], [], undefined, [], [{ key: "FD1", sheet: "M101", cells: {} }]);
+  const [c] = classifyInstalledEvidence(graph);
+  assert.equal(c.classification, "SCHEDULE_ONLY");
+  assert.equal(c.bodyId, null);
+});
+
+test("classifyInstalledEvidence: requirement 6 -- a schedule row NOBODY on the sheet even names is its OWN SCHEDULE_ONLY entry, with tagId null", () => {
+  const idx = buildIdx([]);
+  const graph = buildSheetEvidenceGraph(idx, [], [], [], undefined, [], [{ key: "AHU-9", sheet: "M101", cells: {} }]);
+  const classifications = classifyInstalledEvidence(graph);
+  assert.equal(classifications.length, 1);
+  assert.deepEqual(classifications[0], { classification: "SCHEDULE_ONLY", tagId: null, bodyId: null, scheduleId: 0, legendId: null });
+});
+
+test("classifyInstalledEvidence: requirement 7 -- PLAN_ONLY when a tag reaches an eligible body and a legend (family proven) but no schedule row", () => {
+  const idx = buildIdx([closedRect(93, 125, 10, 10)]);
+  const body = { id: 0, primitiveIds: idx.primitives.map((_, i) => i), x0: 93, y0: 125, x1: 103, y1: 135 };
+  const graph = buildSheetEvidenceGraph(
+    idx, [body], [span("FD1", 90, 92, 12)], [], undefined,
+    [{ caption: "FD1", primitiveIds: [], rect: [[0, 0], [10, 10]] }],
+    [],
+  );
+  const [c] = classifyInstalledEvidence(graph);
+  assert.equal(c.classification, "PLAN_ONLY");
+  assert.equal(c.legendId, 0);
+});
+
+test("classifyInstalledEvidence: requirement 7 -- UNCLASSIFIED_PLAN_SYMBOL when a tag reaches an eligible body but family identity is NOT proven (no schedule, no legend agreement)", () => {
+  const idx = buildIdx([closedRect(93, 125, 10, 10)]);
+  const body = { id: 0, primitiveIds: idx.primitives.map((_, i) => i), x0: 93, y0: 125, x1: 103, y1: 135 };
+  const graph = buildSheetEvidenceGraph(idx, [body], [span("FD1", 90, 92, 12)], [], undefined, [], []);
+  const [c] = classifyInstalledEvidence(graph);
+  assert.equal(c.classification, "UNCLASSIFIED_PLAN_SYMBOL");
+});
+
+test("classifyInstalledEvidence: requirement 8 -- TAG_ONLY_REVIEW when only an exact printed tag is found, no body and no schedule row", () => {
+  const idx = buildIdx([]);
+  const graph = buildSheetEvidenceGraph(idx, [], [span("FD1", 0, 0)], [], undefined, [], []);
+  const [c] = classifyInstalledEvidence(graph);
+  assert.equal(c.classification, "TAG_ONLY_REVIEW");
+  assert.deepEqual(c, { classification: "TAG_ONLY_REVIEW", tagId: 0, bodyId: null, scheduleId: null, legendId: null });
+});
+
+test("classifyInstalledEvidence: an INELIGIBLE (empty) body edge never counts as a real body for classification -- reads as SCHEDULE_ONLY/TAG_ONLY_REVIEW exactly as if no body edge existed at all", () => {
+  const idx = buildIdx([closedRect(93, 125, 10, 10)]);
+  const emptyBody = { id: 0, primitiveIds: [], x0: 93, y0: 125, x1: 103, y1: 135 };
+  const graph = buildSheetEvidenceGraph(idx, [emptyBody], [span("FD1", 90, 92, 12)], [], undefined, [], []);
+  const [c] = classifyInstalledEvidence(graph);
+  assert.equal(c.classification, "TAG_ONLY_REVIEW", "an ineligible body must never upgrade the outcome");
+  assert.equal(c.bodyId, null);
 });
