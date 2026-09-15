@@ -1,6 +1,28 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `22-cbfm-m702-chiller-control-assemblies`'s own last
+two gaps, `chiller-2-controls-assembly` and `chiller-1-controls-
+assembly`, closing that case to 3/3 (seed + both instances). This
+case's own prior note explicitly cited `pressbox-fcu5-11` as its own
+precedent for withholding body_bbox (a same-size-rect fingerprintSymbol
+pass pulled in a neighboring numbered I/O bubble grid, 596/621 segments
+against the seed's own 533-564). Applied the exact technique just
+validated on that precedent instead of a fixed-size rect: this bank's
+three `at` values differ by exactly 404.4 and 808.8 in y with IDENTICAL
+x — a pure, exact vertical repeat — so translated the seed's own
+already-verified body_bbox by that same offset for each instance.
+Rendered all three (seed, chiller-2, chiller-1) with corner-ring
+markers over their own real geometry: all three show the identical
+relative layout with no neighboring I/O bubble ink falling inside the
+box at either translated position — the contamination the prior note
+found was specific to fingerprintSymbol's own search rect, not to the
+body_bbox itself translated directly. Added via a surgical single-line
+Edit per instance (checked as a 4-insertion/3-deletion diff) plus an
+appended correcting review note; the case's prior note is left
+untouched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `18-guaranteed-rate-set-fan-coil-units`'s own last
 missing instance, `pressbox-fcu5-11`, closing that case to 12/12
 (seed + 11 instances). This case's own prior note had explicitly
