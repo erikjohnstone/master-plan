@@ -70,7 +70,11 @@ export interface BodySignature {
   hash: string;
 }
 
-function angleDiffMod180(a: number, b: number): number {
+/** Exported for ownershipEligibility.ts's own graph/path signature
+ *  agreement signal, which needs the identical relative-angle convention
+ *  at the single-primitive grain this module uses at the whole-body
+ *  grain — kept as one function, not two independently-drifting copies. */
+export function angleDiffMod180(a: number, b: number): number {
   const d = Math.abs(a - b) % 180;
   return d > 90 ? 180 - d : d;
 }

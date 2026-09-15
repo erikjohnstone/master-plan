@@ -42,24 +42,49 @@
 //   any proposal with no Lane A evidence at all (this signal has nothing
 //   to say about a pure Lane B proposal), scores 1, neutral-favorable.
 //
+// - GRAPH/PATH SIGNATURE AGREEMENT (added after candidateBodySignature.ts
+//   shipped a per-BODY signature — this is the per-PRIMITIVE-against-a-
+//   proposal computation that module's own header named as future work,
+//   not a duplicate of it). Reuses candidateBodyLaneD.ts's own node
+//   attributes and candidateBodySignature.ts's own bucketing constants and
+//   angleDiffMod180 helper: for each claiming proposal, establishes a
+//   dominant orientation from that proposal's own EXCLUSIVE members only
+//   (same "trust only undisputed evidence" principle as style/carrier
+//   above), then builds the SAME (type, curved, closed, lengthBucket,
+//   angleBucket-relative-to-dominant) signature entry candidateBodySignature
+//   uses per exclusive member. A contested primitive scores 1 for a
+//   proposal when ITS OWN entry (computed relative to THAT proposal's own
+//   dominant orientation) exactly matches one already present among that
+//   proposal's own exclusive entries — real structural evidence this
+//   primitive's own shape/length/angle is already "expected" by that
+//   proposal's own undisputed body, not merely similar by raw style. A
+//   proposal with no exclusive members (no dominant orientation to define
+//   at all) cannot evaluate this signal and scores the same neutral-
+//   favorable 0.5 convention as styleAgreement's own no-evidence case —
+//   disclosed limitation, not a gap unique to this signal: PROGRESS.md's
+//   own structural finding (every real cluster found so far is all-
+//   contested, zero exclusive primitives anywhere) means this signal, like
+//   style and connectivity before it, is neutral on exactly the real-corpus
+//   shape that matters most; it has teeth only on a PARTIAL-overlap
+//   cluster, which is real but not yet the common case measured.
+//
 // Deliberately NOT attempted in this slice (disclosed, real further
-// work — the rest of requirement 2's own list): graph/path signature
-// agreement (candidateBodySignature.ts's own signatures are per-BODY, not
-// per-primitive-against-a-body — comparing a single contested primitive's
-// own local role against a signature is a different computation, not yet
-// built); transform-consistent residual (needs Phase 5's own rigid/affine
-// verification, which has not been built); mutual reference-to-candidate/
-// candidate-to-reference coverage (Phase 5/6 territory). Requirements 3-8
-// (injective correspondence, explicit unowned/unassigned states, the
-// actual assignment solver, an owned body bbox/polygon) are handled by
-// sibling modules (ownershipAssignment.ts, ownershipBody.ts) or not yet
-// attempted — this module SCORES, it does not decide an outcome.
+// work — the rest of requirement 2's own list): transform-consistent
+// residual (needs Phase 5's own rigid/affine verification, which has not
+// been built); mutual reference-to-candidate/candidate-to-reference
+// coverage (Phase 5/6 territory). Requirements 3-8 (injective
+// correspondence, explicit unowned/unassigned states, the actual
+// assignment solver, an owned body bbox/polygon) are handled by sibling
+// modules (ownershipAssignment.ts, ownershipBody.ts) or not yet attempted
+// — this module SCORES, it does not decide an outcome.
 import type { VectorSceneIndex } from "./vectorSceneIndex.ts";
 import type { Junction } from "./vectorSceneRelations.ts";
 import type { FusedProposal } from "./candidateProposalFusion.ts";
 import type { OwnershipCluster } from "./ownershipConflicts.ts";
 import { classifyCarrierPrimitives } from "./carrierClassification.ts";
 import { assessFormPlausibility } from "./formPlausibility.ts";
+import { computePrimitiveGraphAttributes, type PrimitiveNodeAttributes } from "./candidateBodyLaneD.ts";
+import { ANGLE_BUCKET_DEG, LENGTH_BUCKET_STEP, angleDiffMod180 } from "./candidateBodySignature.ts";
 
 export interface EligibilityScore {
   primitiveId: number;
@@ -68,10 +93,11 @@ export interface EligibilityScore {
   connectivity: number;     // 0-1
   carrierAgreement: number; // 0-1 — 0 iff flagged carrier-like within this proposal's own set
   formPlausibilityAgreement: number; // 0-1 — 0 iff this is an implausible-as-one-symbol Lane A proposal
-  /** simple, disclosed, unweighted average of the four signals above —
+  graphSignatureAgreement: number; // 0-1 — 1 iff this primitive's own shape/length/angle already matches one of this proposal's own exclusive members
+  /** simple, disclosed, unweighted average of the five signals above —
    *  not a calibrated model (goal's own longer requirement-2 list has
-   *  three more signals this slice does not compute; a real combined
-   *  score needs all of them, not just these four). */
+   *  two more signals this slice does not compute; a real combined
+   *  score needs all of them, not just these five). */
   score: number;
 }
 
@@ -84,6 +110,18 @@ function mode<T>(values: T[]): T | null {
   let best: T = values[0], bestCount = 0;
   for (const [v, c] of counts) if (c > bestCount) { bestCount = c; best = v; }
   return best;
+}
+
+/** The same (type, curved, closed, lengthBucket, angleBucket) tuple
+ *  candidateBodySignature.ts's own SignatureEntry uses, computed for ONE
+ *  primitive relative to a caller-supplied dominant orientation (a whole
+ *  proposal's own exclusive members, here — not a whole body's own full
+ *  member list, which is what that module computes it for). Stringified
+ *  for Set membership; the exact tuple shape doesn't need to be public. */
+function signatureEntryKey(attr: PrimitiveNodeAttributes, dominantOrientationDeg: number): string {
+  const lengthBucket = Math.round(attr.normalizedLength / LENGTH_BUCKET_STEP);
+  const angleBucket = Math.round(angleDiffMod180(attr.orientationDeg, dominantOrientationDeg) / ANGLE_BUCKET_DEG);
+  return `${attr.type ?? -1}|${attr.curved ? 1 : 0}|${attr.closed ? 1 : 0}|${lengthBucket}|${angleBucket}`;
 }
 
 function dominantStyleOf(idx: VectorSceneIndex, primitiveIds: readonly number[]): DominantStyle {
@@ -105,10 +143,20 @@ export function scoreContestedPrimitives(
   idx: VectorSceneIndex,
   junctions: readonly Junction[],
 ): EligibilityScore[] {
+  // Lane D node attributes, computed once for the WHOLE sheet (Lane D's own
+  // normalizedLength needs the sheet-wide reference length, not a
+  // cluster-local one — same convention computePrimitiveGraphAttributes
+  // already documents). A cap breach or empty index degrades to an empty
+  // attribute list; graphSignatureAgreement then falls back to its own
+  // neutral 0.5 for every primitive, the same as "no exclusive evidence."
+  const { attributes: laneDAttributes } = computePrimitiveGraphAttributes(idx, junctions);
+  const attrById = new Map(laneDAttributes.map((a) => [a.primitiveId, a] as const));
+
   const exclusiveSetByProposal = new Map<number, Set<number>>();
   const styleByProposal = new Map<number, DominantStyle>();
   const primitiveSetByProposal = new Map<number, Set<number>>();
   const carrierFlagByProposal = new Map<number, Map<number, boolean>>();
+  const graphSigByProposal = new Map<number, { dominantOrientationDeg: number; entryKeys: Set<string> } | null>();
   const exclusiveIdSet = new Set(cluster.exclusivePrimitiveIds);
   const contestedIdSet = new Set(cluster.contestedPrimitiveIds);
   for (const propId of cluster.proposalIds) {
@@ -126,6 +174,19 @@ export function scoreContestedPrimitives(
     const flagByPrimitive = new Map<number, boolean>();
     for (const r of carrierResults) flagByPrimitive.set(r.primitiveId, r.isCarrierLike);
     carrierFlagByProposal.set(propId, flagByPrimitive);
+
+    // graph/path signature agreement, computed once per proposal from its
+    // own exclusive members only — see this module's own header above.
+    const exclusiveAttrs = exclusive.map((pid) => attrById.get(pid)).filter((a): a is PrimitiveNodeAttributes => !!a);
+    if (exclusiveAttrs.length === 0) {
+      graphSigByProposal.set(propId, null); // no dominant orientation to define — signal not evaluable
+    } else {
+      let dominant = exclusiveAttrs[0];
+      for (const a of exclusiveAttrs) if (a.length > dominant.length) dominant = a;
+      const dominantOrientationDeg = dominant.orientationDeg;
+      const entryKeys = new Set(exclusiveAttrs.map((a) => signatureEntryKey(a, dominantOrientationDeg)));
+      graphSigByProposal.set(propId, { dominantOrientationDeg, entryKeys });
+    }
   }
 
   // reverse index: a CONTESTED primitive id -> every proposal in this
@@ -197,9 +258,17 @@ export function scoreContestedPrimitives(
       const formPlausible = formPlausibleByProposal.get(propId) ?? true; // no Lane A evidence: not this signal's concern
       const formPlausibilityAgreement = formPlausible ? 1 : 0;
 
+      const graphSig = graphSigByProposal.get(propId) ?? null;
+      const pAttr = attrById.get(pid);
+      let graphSignatureAgreement = 0.5; // no exclusive evidence to compare against: neutral, not zero
+      if (graphSig && pAttr) {
+        const key = signatureEntryKey(pAttr, graphSig.dominantOrientationDeg);
+        graphSignatureAgreement = graphSig.entryKeys.has(key) ? 1 : 0;
+      }
+
       results.push({
-        primitiveId: pid, proposalId: propId, styleAgreement, connectivity, carrierAgreement, formPlausibilityAgreement,
-        score: (styleAgreement + connectivity + carrierAgreement + formPlausibilityAgreement) / 4,
+        primitiveId: pid, proposalId: propId, styleAgreement, connectivity, carrierAgreement, formPlausibilityAgreement, graphSignatureAgreement,
+        score: (styleAgreement + connectivity + carrierAgreement + formPlausibilityAgreement + graphSignatureAgreement) / 5,
       });
     }
   }

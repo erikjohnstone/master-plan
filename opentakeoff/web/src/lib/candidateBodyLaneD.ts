@@ -87,7 +87,7 @@ function median(values: number[]): number {
  *  and its own computeVectorSceneJunctions result. Never mutates either. */
 export function computePrimitiveGraphAttributes(
   idx: VectorSceneIndex,
-  junctions: Junction[],
+  junctions: readonly Junction[],
   opts: { maxPrimitives?: number } = {},
 ): LaneDResult {
   const cap = opts.maxPrimitives ?? LANE_D_MAX_PRIMITIVES;

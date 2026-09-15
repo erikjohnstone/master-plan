@@ -147,6 +147,56 @@ test("ownership eligibility: a Lane A proposal that shatters into many Lane B ri
   assert.ok(forLaneBRival.score > forLaneA.score, "the Lane B rival should now win this tie on form plausibility alone");
 });
 
+test("ownership eligibility: a contested primitive whose own shape/length/angle already matches one proposal's own exclusive signature scores higher graph-signature agreement for that proposal", () => {
+  // proposal 0's exclusive (id 0) and the contested primitive (id 1) are
+  // BOTH 10-unit horizontal lines — same type/length/angle, so the
+  // contested one's own signature entry (computed relative to proposal
+  // 0's own dominant orientation, which IS id 0's own 0 degrees) exactly
+  // matches id 0's own entry. Proposal 1's exclusive (id 2) is ALSO a
+  // 10-unit line (same length, so carrier's own sibling-ratio check ties
+  // at "not an outlier" for both proposals, not a confound) but at 45
+  // degrees instead of 0 — a real angle mismatch, not a length one, so
+  // the contested primitive's own angle relative to proposal 1's own
+  // dominant (45 degrees) lands in a different angle bucket. All three
+  // primitives are far apart (no shared junctions: connectivity ties at 0
+  // for both) and default style (styleAgreement ties at 1 for both), and
+  // both proposals are Lane B only (formPlausibilityAgreement ties at 1
+  // for both) — isolating graphSignatureAgreement as the only signal that
+  // can differ.
+  const geo = extractVectorGeometry(opList([
+    line(0, 0, 10, 0),                 // primitive 0 — proposal 0's exclusive, 10 units @ 0deg
+    line(1000, 1000, 1010, 1000),      // primitive 1 — CONTESTED, 10 units @ 0deg
+    line(2000, 2000, 2007.0711, 2007.0711), // primitive 2 — proposal 1's exclusive, 10 units @ 45deg
+  ]), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  const proposals = [proposal(0, [0, 1]), proposal(1, [2, 1])];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters } = detectOwnershipClusters(proposals);
+  assert.equal(clusters.length, 1);
+  const scores = scoreContestedPrimitives(clusters[0], proposalsById, idx, junctions);
+  const forP0 = scores.find((s) => s.proposalId === 0)!;
+  const forP1 = scores.find((s) => s.proposalId === 1)!;
+  assert.equal(forP0.graphSignatureAgreement, 1, "the contested line's own shape/length/angle already matches proposal 0's own exclusive entry");
+  assert.equal(forP1.graphSignatureAgreement, 0, "the SAME contested line, evaluated relative to proposal 1's own 45-degree dominant orientation, lands in a different angle bucket");
+  assert.equal(forP0.styleAgreement, forP1.styleAgreement, "test premise: style ties");
+  assert.equal(forP0.connectivity, forP1.connectivity, "test premise: connectivity ties (no shared junctions anywhere)");
+  assert.equal(forP0.carrierAgreement, forP1.carrierAgreement, "test premise: carrier ties (equal-length siblings on both sides)");
+  assert.ok(forP0.score > forP1.score, "graph-signature agreement alone should make proposal 0 the better overall fit here");
+});
+
+test("ownership eligibility: a proposal with zero exclusive primitives has no dominant orientation to define, so graph-signature agreement is the neutral-favorable 0.5, not 0", () => {
+  const geo = extractVectorGeometry(opList([line(0, 0, 10, 0), line(10, 0, 20, 0)]), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  const proposals = [proposal(0, [0, 1]), proposal(1, [1])];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters } = detectOwnershipClusters(proposals);
+  const scores = scoreContestedPrimitives(clusters[0], proposalsById, idx, junctions);
+  const forP1 = scores.find((s) => s.proposalId === 1)!;
+  assert.equal(forP1.graphSignatureAgreement, 0.5, "proposal 1 owns nothing exclusively (its only primitive is the contested one itself) — no dominant orientation, not evaluable, neutral rather than penalized");
+});
+
 test("ownership eligibility: a cluster with an empty contestedPrimitiveIds array produces no scores at all, from scoreContestedPrimitives itself", () => {
   // Constructed directly (not via detectOwnershipClusters, which never emits
   // a cluster with zero contested primitives) so this test genuinely

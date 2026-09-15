@@ -1,5 +1,65 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2
+— added the FIFTH of the seven listed eligibility signals to
+`ownershipEligibility.ts`: graph/path signature agreement. This is
+genuinely new work, not a Phase 1 gap-fill — the first work this
+checkpoint has done outside Phase 1 requirement 2 gap-closure. Re-read
+the full goal doc, opentakeoff/AGENTS.md, and opentakeoff-corpus/GOAL.md
+(the latter's own outline plus its introduction/first 19 rules and its
+current-execution-policy/mandate sections in full — GOAL.md's own 39
+historical rules are almost entirely table/schedule-extraction bugs,
+explicitly out of this goal's own scope per its Hard Rule 1, so read for
+structure and transferable method rather than line-by-line) before
+starting, since this session's own context had been compacted and the
+prior segment's specifics were no longer available to reason from.
+Confirmed `codex/vector-symbol-grounding-next-goal`'s own single commit
+is byte-identical to the goal doc already on this branch — nothing new
+to merge from it.
+
+The new signal reuses `candidateBodyLaneD.ts`'s own per-primitive node
+attributes and `candidateBodySignature.ts`'s own bucketing constants
+(exported `angleDiffMod180` for reuse, previously private) to build the
+SAME (type, curved, closed, lengthBucket, angleBucket-relative-to-
+dominant) signature entry that module already computes per whole body,
+but at the single-contested-primitive-against-one-proposal grain that
+module's own header named as future work. For each proposal, a dominant
+orientation and signature-entry set is built from its own EXCLUSIVE
+members only (same "trust only undisputed evidence" principle already
+used for style/carrier); a contested primitive scores 1 for a proposal
+when its own entry (computed relative to THAT proposal's own dominant
+orientation) exactly matches one already present among that proposal's
+own exclusive entries, 0 if not, and the same neutral-favorable 0.5 as
+styleAgreement's own convention when a proposal has no exclusive members
+to compare against at all. Disclosed limitation, consistent with this
+checkpoint's own earlier structural finding (every real cluster measured
+so far is all-contested, zero exclusive primitives anywhere): like style
+and connectivity before it, this signal is neutral on exactly the real-
+corpus shape that matters most, and has teeth only on a partial-overlap
+cluster — real, but not yet the common case measured.
+
+Two new tests added (9 total, up from 7): one isolating
+graphSignatureAgreement as the only differing signal between two
+proposals (style/connectivity/carrier/form-plausibility all tied by
+construction), one covering the neutral-0.5 no-exclusive-evidence case.
+`ownershipEligibility.ts`'s own `score` is now an unweighted average of
+five signals, not four; `ownershipAssignment.ts` (the only downstream
+consumer) only ranks by the generic `.score` field, so no change needed
+there — confirmed by reading its own call site, then reconfirmed by its
+own 5/5 tests passing unchanged. Widened
+`computePrimitiveGraphAttributes`'s own `junctions` parameter from
+`Junction[]` to `readonly Junction[]` (a pure function, never mutates it)
+so `ownershipEligibility.ts` could pass its own already-readonly
+parameter through without a cast. Full affected suite green: 9/9
+ownershipEligibility, 5/5 ownershipAssignment, 8/8 candidateBodyLaneD,
+6/6 candidateBodySignature, 3/3 ownershipBody, clean `tsc --noEmit`
+across the whole `web` package. Two of the seven requirement-2 signals
+remain: transform-consistent residual (needs Phase 5's own rigid/affine
+verification, not yet built) and mutual reference-to-candidate coverage
+(Phase 5/6 territory) — both still disclosed as real further work in the
+module's own header, updated to reflect this signal now being done
+rather than pending.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `45-slac-m63-analog-input-callouts`'s own last four
 gaps (callouts 03, 04, 13, 16), closing that case to 17/17. This was
