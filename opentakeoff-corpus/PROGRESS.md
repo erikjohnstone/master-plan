@@ -1,5 +1,42 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 second slice
+— requirement 2's own two hard-eligibility checks decidable from what a
+body already discloses: "empty-body" (zero primitives) and "conflicting
+candidate" (a caller-disclosed still-contested Phase 4 cluster
+membership). Same `evidenceGraph.ts` from the entry directly below.
+
+`EvidenceBodyLike` gained an optional `contested?: boolean` (omitted ->
+uncontested, never guessed); `BodyNode` gained `ineligibleReasons:
+("empty-body"|"conflicting-candidate")[]`. Per the goal's own explicit
+wording — "may be DISPLAYED but cannot steal a tag" — an ineligible
+body's own tag<->body edges are NEVER removed from `tagBodyEdges`, only
+the body's own reasons list is populated; a later assignment step (real
+further work) is what would actually refuse to let such a body win.
+
+3 new tests: a zero-primitive body is marked empty-body while its own
+edge stays in the graph for display; a caller-disclosed contested body
+is marked conflicting-candidate; an ordinary eligible body gets an
+explicit EMPTY reasons list (not merely an absent field) — the same
+"explicit state, never a silent default" discipline Phase 4's own
+AssignmentDecision already established. 12/12 evidenceGraph tests green;
+full related suite (evidenceGraph, symbolLabels, legendReferenceBank,
+legendlearn, markid, carrierClassification, candidateProposalFusion,
+rigidAffineVerify, ownershipAssignment, ownershipBody) 331/331 green.
+`tsc --noEmit` clean.
+
+DISCLOSED, NOT ATTEMPTED: requirement 2's remaining two reasons,
+"bounds-failed" and "topology-impossible" — "bounds-failed" most
+naturally maps to Phase 5's own `verifyIsolatedSupport` returning
+`insufficient_evidence` against a real reference, which this slice has
+no natural reference to fit against yet (Phase 6 has not yet reached
+the point of picking a reference per family); "topology-impossible"
+needs its own dedicated definition, not invented here. Everything else
+disclosed in the entry below still applies unchanged.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same isolated module, no
+existing VectorGrid/table/schedule/citation/bbox code touched.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 first slice —
 "joint tag, leader, legend, schedule, and body assignment," requirement
 1 only: "Build one evidence graph per sheet/local region: tag tokens,

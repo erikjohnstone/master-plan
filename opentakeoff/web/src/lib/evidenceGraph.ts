@@ -1,13 +1,24 @@
 // GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 — "joint tag, leader,
-// legend, schedule, and body assignment." FIRST slice: requirement 1
-// only — "Build one evidence graph per sheet/local region: tag tokens,
+// legend, schedule, and body assignment." FIRST slice: requirement 1 —
+// "Build one evidence graph per sheet/local region: tag tokens,
 // candidate bodies, leaders, legend references, schedule identities,
 // system/carrier attachments" — plus the minimal CANDIDATE edges needed
-// to connect them. Deliberately NOT the rest of Phase 6 (disclosed, not
-// silently skipped):
-// - requirement 2 (hard eligibility: bounds-failed/topology-impossible/
-//   empty-body/conflicting candidates barred from stealing a tag) —
-//   real further work once candidate edges exist to filter.
+// to connect them. SECOND slice, same file: requirement 2's two
+// hard-eligibility checks decidable from what a body already discloses
+// — "empty-body" (zero primitives) and "conflicting candidate" (a
+// caller-disclosed still-contested Phase 4 cluster membership, via the
+// new optional `EvidenceBodyLike.contested` field). Per the goal's own
+// wording ("may be DISPLAYED but cannot steal a tag"), an ineligible
+// body's own tag<->body edges are never removed — only the body's own
+// `ineligibleReasons` is populated, for a later assignment step to
+// actually enforce. Deliberately NOT the rest of Phase 6 (disclosed,
+// not silently skipped):
+// - requirement 2's remaining two reasons, "bounds-failed" and
+//   "topology-impossible" — real further work: "bounds-failed" most
+//   naturally maps to Phase 5's own `verifyIsolatedSupport` returning
+//   `insufficient_evidence` against a real reference, which this slice
+//   has no natural reference to fit against yet; "topology-impossible"
+//   needs its own dedicated definition this slice does not invent.
 // - requirement 3 (independently disclosed EDGE SCORING, never a single
 //   unexplained confidence) — this slice's own edges carry their real
 //   underlying evidence (distance, via, match kind) but no combined
@@ -69,11 +80,18 @@ import { marksEqual } from "./markid.ts";
 /** The minimal shape a candidate body needs — structurally satisfied by
  *  a Phase 3 `FusedProposal`, a Phase 4 `OwnedBody`, or any equivalent
  *  caller-built body, passed straight through with no copying required
- *  beyond what this module itself adds. */
+ *  beyond what this module itself adds. `contested`, when the caller
+ *  can supply it (Phase 4's own `detectOwnershipClusters` split — a
+ *  body that came from a still-unresolved cluster rather than an
+ *  uncontested proposal or an already-resolved OwnedBody), feeds
+ *  requirement 2's own "conflicting candidate" hard-eligibility check
+ *  below; omitted (not every caller has this yet) defaults to
+ *  uncontested, never guessed as contested. */
 export interface EvidenceBodyLike {
   id: number;
   primitiveIds: readonly number[];
   x0: number; y0: number; x1: number; y1: number;
+  contested?: boolean;
 }
 
 /** The minimal shape a schedule row needs — structurally satisfied by
@@ -105,6 +123,12 @@ export interface TagNode {
   leaderTerminals: Point[];
 }
 
+/** Requirement 2's own two named hard-eligibility failures this slice
+ *  can actually decide from what a body already discloses (see this
+ *  module's own header for "bounds-failed"/"topology-impossible" — real
+ *  further work, not guessed at here). */
+export type IneligibilityReason = "empty-body" | "conflicting-candidate";
+
 export interface BodyNode {
   id: number;
   primitiveIds: readonly number[];
@@ -113,6 +137,12 @@ export interface BodyNode {
    *  compare against, honestly reported rather than guessed (the same
    *  contract classifyCarrierPrimitives itself already discloses). */
   carrierAttachment: { hasCarrierLikeInk: boolean; carrierPrimitiveIds: number[] } | null;
+  /** requirement 2: "Bounds-failed, topology-impossible, empty-body, or
+   *  conflicting candidates may be DISPLAYED but cannot steal a tag" —
+   *  so an ineligible body's own tag<->body edges are NOT removed from
+   *  `tagBodyEdges` above (still inspectable), only marked here for a
+   *  later assignment step to actually enforce. Empty when eligible. */
+  ineligibleReasons: IneligibilityReason[];
 }
 
 export interface LegendNode {
@@ -193,7 +223,10 @@ export function buildSheetEvidenceGraph(
     const carrierAttachment = classes.length === 0 || classes.every((c) => c.extentRatio === null)
       ? null
       : { hasCarrierLikeInk: classes.some((c) => c.isCarrierLike), carrierPrimitiveIds: classes.filter((c) => c.isCarrierLike).map((c) => c.primitiveId) };
-    return { id: b.id, primitiveIds: b.primitiveIds, x0: b.x0, y0: b.y0, x1: b.x1, y1: b.y1, carrierAttachment };
+    const ineligibleReasons: IneligibilityReason[] = [];
+    if (b.primitiveIds.length === 0) ineligibleReasons.push("empty-body");
+    if (b.contested) ineligibleReasons.push("conflicting-candidate");
+    return { id: b.id, primitiveIds: b.primitiveIds, x0: b.x0, y0: b.y0, x1: b.x1, y1: b.y1, carrierAttachment, ineligibleReasons };
   });
 
   const legends: LegendNode[] = legendEntries.map((e, i) => ({ id: i, caption: e.caption, primitiveIds: e.primitiveIds, rect: e.rect }));

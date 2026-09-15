@@ -88,6 +88,28 @@ test("evidence graph: a tag matching a legend caption produces a tag<->legend ed
   assert.equal(graph.tagLegendEdges[0].legendId, graph.legends[0].id);
 });
 
+test("evidence graph: requirement 2 -- a body with zero primitives is marked ineligible as empty-body, but its own tag<->body edge STAYS in the graph for display (the goal's own 'may be displayed but cannot steal a tag')", () => {
+  const idx = buildIdx([closedRect(93, 125, 10, 10)]);
+  const body = { id: 0, primitiveIds: [], x0: 93, y0: 125, x1: 103, y1: 135 };
+  const graph = buildSheetEvidenceGraph(idx, [body], [span("FD1", 90, 92, 12)], [], undefined, [], []);
+  assert.deepEqual(graph.bodies[0].ineligibleReasons, ["empty-body"]);
+  assert.equal(graph.tagBodyEdges.length, 1, "the edge is not removed -- only the body is marked ineligible");
+});
+
+test("evidence graph: requirement 2 -- a body the caller discloses as still-contested (an unresolved Phase 4 cluster) is marked ineligible as a conflicting candidate", () => {
+  const idx = buildIdx([closedRect(93, 125, 10, 10)]);
+  const body = { id: 0, primitiveIds: idx.primitives.map((_, i) => i), x0: 93, y0: 125, x1: 103, y1: 135, contested: true };
+  const graph = buildSheetEvidenceGraph(idx, [body], [], [], undefined, [], []);
+  assert.deepEqual(graph.bodies[0].ineligibleReasons, ["conflicting-candidate"]);
+});
+
+test("evidence graph: requirement 2 -- an ordinary non-empty, uncontested body is fully eligible (empty reasons list, not merely absent)", () => {
+  const idx = buildIdx([closedRect(93, 125, 10, 10)]);
+  const body = { id: 0, primitiveIds: idx.primitives.map((_, i) => i), x0: 93, y0: 125, x1: 103, y1: 135 };
+  const graph = buildSheetEvidenceGraph(idx, [body], [], [], undefined, [], []);
+  assert.deepEqual(graph.bodies[0].ineligibleReasons, []);
+});
+
 test("evidence graph: a body made of only ONE subpath has no carrier comparison to make -- honestly null, never a guessed false", () => {
   const idx = buildIdx([closedRect(0, 0, 10, 10)]);
   const body = { id: 0, primitiveIds: idx.primitives.map((_, i) => i), x0: 0, y0: 0, x1: 10, y1: 10 };
