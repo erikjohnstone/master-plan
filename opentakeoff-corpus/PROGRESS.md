@@ -1,5 +1,103 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 — FOURTH
+LANDED corpus-expansion case: `51-bruneau-m1-1-uh-unit-heaters`, 4
+instances (seed + 3), PASSING. Also folding in the rest of batch J's
+reconnaissance (035, 086, 087, 088, 089, 091, 093, 100), which finally
+applied the stricter verbatim-reporting requirement set after document
+077's inflated summary, and it shows: no more "zero noise" claims that
+don't hold up.
+
+**Document 098 (ITD District 3, Bruneau Maintenance Shed), sheet M1.1**
+-- UH suspended gas-fired unit heater, exactly 4 instances (UH-1 through
+UH-4, a small building's complete population, not a sample). found=3/
+withheld=0, all 4 score 1.0, each individually rendered (not sampled)
+and confirmed against its own hexagonal "UH / #" tag with a drawn leader
+arrow. Real rotation (0/90/180) and mirroring (all 3 non-seed instances)
+strata, each visually confirmed as a genuinely different physical
+mounting orientation of the same detailed multi-part icon (flue
+penetration, diamond air-throw indicator, damper-circle duct detail,
+body box) -- not a shape coincidence. `association_type: adjacent`
+throughout, per this corpus's own convention (a literal per-instance tag
+connected by a line is "adjacent" even when a leader arrow is drawn;
+"leader" is reserved for null-tag placements) -- corrected during the
+build from an initial draft that mislabeled this "leader" by prose
+description rather than reading the engine's own `label_via: "adjacent"`
+value.
+
+Second sheet-number-extractor disclosure this checkpoint (after case
+49's "CD-1"): the engine's title-block extractor returns nothing at all
+for this sheet's "M1.1" (confirmed the number is exploded/vector text,
+not a real PDF text run, same as case 49's finding) -- `engine_sheet_number:
+null` added per the README's own documented escape hatch after the first
+verification attempt failed on exactly this, not guessed at in advance.
+Curated copy committed as pdf/39__vol2__098__ID_ITD_D3_Bruneau_Maintenance_Shed.pdf
+(rank 39, reusing the slot vacated when document 077's staged-but-unused
+copy was removed).
+
+This is the smallest case landed this checkpoint (4 instances vs.
+6/39/46 for the prior three) but the cleanest: zero withheld noise, zero
+false positives after individually rendering every single match.
+
+**Rest of batch J (035, 086, 087, 088, 089, 091, 093, 100) — 7 closures,
+1 flagged-but-blocked family, applying the new verbatim-reporting rule
+throughout:**
+- **035, 086, 087, 091**: narrow-scope dead ends (checklist item 5/8) --
+  every repeating-looking tag confirmed by census to be a singleton
+  physical unit referenced 2-7x across schedule/plan/detail text, not a
+  repeated placement. Nothing new here beyond confirming the pattern
+  again on four more documents.
+- **088** (Phoenix Sky Harbor, 22-part/260-page set): genuinely
+  incomplete, not a rejection -- only 3 of 22 parts (one "station" of a
+  people-mover project) were sampled in the time available, and that
+  station's real diffuser-type schedule (D1-D5) has no located
+  corresponding plan view in the parts checked. Flagged honestly as an
+  open gap for a future scout with more budget, not folded into a false
+  "no candidate" verdict for the whole document.
+- **089** (airport terminal/hangar): three distinct, tool-confirmed
+  closures on one document -- diffusers represented only as duct-branch
+  callouts with no drawn body glyph at all (nothing to seed), AC units
+  using the already-disqualified "plain rectangle" pattern (not even
+  swept, per precedent), and EUH electric unit heaters swept directly:
+  found=74, but 73 of 74 (98.6%) turned out to be the hangar's own
+  roof-purlin/framing structural grid, confirmed by their rigid two-
+  column, regular-y-interval repetition -- only 1 of 74 was a real,
+  labeled EUH-8. A clean, decisive check-3 ubiquitous-generic-glyph
+  rejection, verbatim numbers included.
+- **093** (Jonesboro heat pumps): the most useful "near miss" of the
+  batch. IU wall-mounted heat-pump indoor units are real and countable
+  (20 total, a legitimate AHU-#-style multi-instance tag family) --  but
+  the seed's vector shape aliases with this document's own architectural
+  beam-pocket/soffit detail. Sheet 1: found=9, and the scout individually
+  rendered all 9 (not a sample) -- 4 of 9 (44%) were confirmed false,
+  including one that landed squarely on the printed title-block date
+  text. Sheet 2, re-seeded fresh: found=34, and the engine's own note
+  confirmed every genuine IU on that floor already shows up correctly in
+  the WITHHELD bucket cross-labeled to its own sibling tag -- meaning the
+  34 "found" matches are ADDITIONAL contamination, not real placements,
+  confirmed by rendering a sample pair onto the identical beam-pocket
+  glyph. Correctly left unbuilt: a real device, a real Phase-4-style
+  body-isolation problem, not a quick fix.
+- **100**: two clean, decisive closures -- SR-3/SR-4 return-grille
+  "icon" is literally just a 2-segment arrow, and `Session.symbolSweep`
+  itself refused it outright ("too little geometry to identify one
+  physical symbol," the engine's own hard rejection, not a judgment
+  call); the one real distinctive diffuser glyph on the sheet is a
+  confirmed singleton (found=0, withheld=6, all clustered at the sheet's
+  own legend box).
+
+Running tally: 4 landed cases, 95 total placements (39+6+46+4) across 4
+documents. Roughly 40 documents now scouted this checkpoint across 11
+batches; the surveyed slice of the Vol2 bulk pool this checkpoint's scout
+prompts covered is close to exhausted (088's other 19 parts remain a
+real, explicitly-flagged gap; the pool itself has ~145 documents total,
+so plenty remain unscouted beyond what was sampled).
+
+SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth-only change
+(cases.json, a curated source PDF, review renders) plus a reconnaissance
+summary; no VectorGrid/table-extraction/schedule-reconstruction/citation/
+bbox-semantics or other production data-contract code touched.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 document 077's R-10 return grille, flagged as this checkpoint's "strongest
 not-yet-built lead" two entries below, re-verified independently and

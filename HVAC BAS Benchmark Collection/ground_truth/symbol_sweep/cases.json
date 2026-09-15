@@ -2130,6 +2130,48 @@
           "SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth-only change (cases.json, a curated source PDF, and review renders); no VectorGrid/table-extraction/schedule-reconstruction/citation/bbox-semantics or other production data-contract code touched."
         ]
       }
+    },
+    {
+      "id": "51-bruneau-m1-1-uh-unit-heaters",
+      "campaign": "corpus-expansion",
+      "document_id": "39__vol2__098",
+      "source_pdf": "pdf/39__vol2__098__ID_ITD_D3_Bruneau_Maintenance_Shed.pdf",
+      "source_sha256": "3421253856ed0593d8e7be982a2f54e3fc24e004e2ffd0eea029dfa9ed7176f3",
+      "page": 6,
+      "sheet_number": "M1.1",
+      "engine_sheet_number": null,
+      "page_size_px": [5184, 3456],
+      "seed_rect": [[1830, 995], [1930, 1155]],
+      "seed": {
+        "tag": "UH-1",
+        "at": [1885, 1075.2],
+        "tolerance_px": 2,
+        "tag_bbox": [2012.4, 1101.2, 2034.7, 1146.5],
+        "family": "UH suspended gas-fired unit heater (roof/wall flue penetration, diamond air-throw indicator, body box)",
+        "association_type": "adjacent",
+        "transform_family": "rigid",
+        "countable": true,
+        "reference_source": "manual_seed",
+        "body_bbox": [1856.2, 995.4, 1913.8, 1149.8],
+        "render": "reviews/39__vol2__098/p6-overview.png"
+      },
+      "instances": [
+        { "id": "uh-3", "at": [4430.9, 1075.2], "tolerance_px": 3, "tag": "UH-3", "tag_bbox": [4237.1, 1161.9, 4259.4, 1207.3], "family": "UH suspended gas-fired unit heater (roof/wall flue penetration, diamond air-throw indicator, body box)", "association_type": "adjacent", "transform_family": "mirrored", "countable": true, "reference_source": "manual_seed", "body_bbox": [4402.2, 995.4, 4459.8, 1149.8], "render": "reviews/39__vol2__098/p6-overview.png" },
+        { "id": "uh-4", "at": [4483.3, 2488.1], "tolerance_px": 3, "tag": "UH-4", "tag_bbox": [4225.2, 2455.9, 4247.5, 2501.3], "family": "UH suspended gas-fired unit heater (roof/wall flue penetration, diamond air-throw indicator, body box)", "association_type": "adjacent", "transform_family": "mirrored", "countable": true, "reference_source": "manual_seed", "body_bbox": [4434.6, 2408.3, 4529.2, 2551.1], "render": "reviews/39__vol2__098/p6-overview.png" },
+        { "id": "uh-2", "at": [1885, 2743.1], "tolerance_px": 3, "tag": "UH-2", "tag_bbox": [2012.4, 2656.7, 2034.7, 2701.9], "family": "UH suspended gas-fired unit heater (roof/wall flue penetration, diamond air-throw indicator, body box)", "association_type": "adjacent", "transform_family": "mirrored", "countable": true, "reference_source": "manual_seed", "body_bbox": [1856.2, 2668.4, 1925, 2822.8], "render": "reviews/39__vol2__098/p6-overview.png" }
+      ],
+      "review": {
+        "render": "reviews/39__vol2__098/p6-overview.png",
+        "method": "Session.symbolSweep(scope: sheet, commit:false); rendered and individually inspected the seed and all 3 matches directly (not sampled) via --ring markers.",
+        "notes": [
+          "GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 corpus-expansion case, sourced from opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf (confirmed NOT baseline-30, NOT holdout, NOT the VA-537-17-115 avoid-list). Curated copy committed as pdf/39__vol2__098__ID_ITD_D3_Bruneau_Maintenance_Shed.pdf (rank 39, replacing an earlier same-rank staging copy for document 077's R-10 lead, which was closed without landing and its rank-39 file removed rather than left stale).",
+          "Sheet M1.1 ('HVAC New Work Plan') carries exactly 4 UH suspended gas-fired unit heaters (UH-1 through UH-4), each a genuinely distinct, individually tagged (hexagonal 'UH / #' tag box with a drawn leader arrow to the body) equipment instance -- a small building's complete unit-heater population, not a sampled subset. found=3/withheld=0, all 4 (seed+3) score 1.0 and auto-label to their own correct distinct tag. association_type is 'adjacent' per this corpus's own established convention (a literal, resolvable per-instance tag connected by a line/arrow is 'adjacent' here; 'leader' is reserved for null-tag placements identified only by a leader arrow, e.g. case 04's roof-drain pairs) -- even though a leader arrow is visually drawn, matching the label_via:\"adjacent\" the engine itself reports, not \"leader\".",
+          "Real rotation (0/90/180 degrees) AND mirroring (mirrored:true on all 3 non-seed instances) strata, individually rendered and confirmed, not just counted: each instance shows the same detailed multi-part icon (flue penetration, diamond air-throw indicator, connecting duct with a small damper-circle detail, rectangular body) in a genuinely different physical orientation matching how each unit heater is actually mounted (ceiling-suspended at different points along the building, flue penetrating a different wall/roof direction per unit) -- not a shape coincidence.",
+          "Sheet-number extractor note: 'M1.1' is drawn as exploded/vector title-block text on this sheet (confirmed empirically -- textSpans returns no 'M1' or 'M1.1' token anywhere on the page despite 'SHEET NAME'/'DATE'/'CHECKED' labels around it extracting fine), the same class of issue already disclosed for case 49's sheet A-001. sheet_number records the visually-audited printed truth (confirmed directly by rendering the title block); engine_sheet_number will be set from the corpus runner's own first verification attempt if it disagrees, per the README's own documented convention, rather than guessed at here.",
+          "This is the smallest corpus-expansion case landed this checkpoint (4 total instances, versus 6/39/46 for the three preceding ones) but is fully clean: zero withheld noise, zero false positives after individually rendering every single match (not a sample), with real rotation+mirror diversity in one small, tidy family.",
+          "SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth-only change (cases.json, a curated source PDF, and review renders); no VectorGrid/table-extraction/schedule-reconstruction/citation/bbox-semantics or other production data-contract code touched."
+        ]
+      }
     }
   ]
 }
