@@ -1,6 +1,64 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed 5 of case `10-lovell-m100-cd1-ceiling-diffusers`'s own 7
+previously-uncomputed body_bbox instances (cd1-16, cd1-09, cd1-14,
+cd1-35, cd1-36), continuing the same real-render-and-verify discipline
+as the d10-05 entry just above, on a case that turned out much more
+tractable.
+
+The case's own prior note explained precisely why these 7 never got a
+body_bbox: cd1-16 sits where a duct elbow is fused onto the diffuser
+(a real contested-geometry case); the other six have their frozen `at`
+sitting ON the tag rather than the body, reached only via a leader
+line, so a naive fixed-size rect around `at` just grabs tag-adjacent
+clutter. The note explicitly named "Phase 4 (exclusive primitive
+ownership)" as the needed tool — this pass tested that directly.
+
+What actually worked was simpler than full ownership-conflict
+resolution: rendering each region (`session.viewSheet`) to trace the
+leader (or, for cd1-16, to see the duct/diffuser boundary directly),
+then querying `buildVectorSceneIndex`/`proposeCandidateBodiesLaneB`
+directly and filtering to DARK (lum<100), THICK (deviceLineWidth>=2)
+primitives — a direct style filter that cleanly separated the
+diffuser's own thinner/darker square-cross linework from the
+duct/background around it, in every case tried. Every one of the 5
+new `body_bbox` values was visually verified by rendering the
+candidate rectangle's own 4 corners as markers and confirming they
+land exactly on the symbol's own corners — not accepted on the numbers
+alone.
+
+cd1-35 surfaced a real, worth-stating-precisely subtlety: it is a
+genuine 45-degree-rotated instance (like the case's own already-
+confirmed cd1-34), so its correct axis-aligned bbox does NOT touch the
+diamond shape's own visual outline at all — an AABB's corners
+necessarily fall in the empty space beyond a rotated shape's own
+vertices. Caught an initial misreading of exactly this before
+finalizing: checked each bbox edge against the diamond's own 4 extreme
+vertices individually (each within ~1 unit) rather than expecting the
+corner markers to touch the outline, which they correctly do not for
+any rotated shape.
+
+Two of the 7 (cd1-17, cd1-22) were NOT completed this pass: both
+leaders were traced to a duct-mounted arrow/transition marker rather
+than an unambiguous square-cross diffuser glyph within the rendered
+crop. Forcing a body_bbox from an uncertain identification would
+repeat exactly the fabricated-rectangle outcome the case's own prior
+note already declined for a different reason — left open and
+disclosed rather than guessed.
+
+Updated `cases.json` with 5 surgical, minimal text edits (one per
+instance, each anchored on its own full original line for uniqueness
+since instance ids like "cd1-16" repeat across unrelated cases/
+documents elsewhere in the same file) plus one appended review note —
+confirmed valid JSON and a minimal diff (7 insertions / 6 deletions)
+before committing, avoiding the same full-file-reformatting mistake
+caught and reverted in the d10-05 entry above.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth annotation only;
+no engine code changed.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — pivoted from Phase 4 depth to a neglected front: completing the v2
 annotation of already-identified instances. First, checked where Phase
 1's OWN numeric gate (requirement 3: "at least 150 additional real
