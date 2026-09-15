@@ -1,5 +1,81 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 (first real
+work) — "explicit body isolation and exclusive primitive ownership,"
+named by the goal document itself as "the load-bearing fix for dense
+repeated arrays." FIRST slice: requirement 1's DETECTION half — "for
+every local cluster of overlapping proposals, construct a primitive-
+to-instance ownership problem" — finding which proposals conflict and
+which specific primitives are contested, the necessary first step
+before any of requirements 2-8 (eligibility scoring, injective
+correspondence, the actual assignment solver, an owned body bbox/
+polygon) can run.
+
+New `web/src/lib/ownershipConflicts.ts`:
+`detectOwnershipClusters(proposals)` takes Phase 3's own
+`FusedProposal[]` (proposal fusion, the entry just below) and unions
+proposals that share at least one primitive (union-find over
+PROPOSALS, not primitives), then reports each resulting cluster's
+`contestedPrimitiveIds` (claimed by 2+ proposals in that cluster) and
+`exclusivePrimitiveIds` (claimed by exactly 1) separately —
+distinguishing "this cluster has a real ownership dispute" from "these
+proposals merely happen to be near each other." Proposals that share
+nothing with anything else are reported as `uncontested`, so a caller
+can tell "checked, no conflict" apart from "not yet checked."
+
+A correctness property proven directly, not assumed: three proposals
+chained A-B (sharing one primitive) and B-C (sharing a different one)
+form ONE transitive cluster, not two separate pairs — A and C are only
+connected THROUGH B, and a naive pairwise check would miss that; union-
+find catches it by construction, and the test asserts it explicitly.
+Also proven: a primitive claimed by three proposals at once still
+counts as exactly one contested id, not three.
+
+New `web/test/ownershipConflicts.test.ts` (6 tests, all passing on the
+first run): zero-overlap proposals are uncontested; one shared
+primitive forms one cluster with that primitive (and only that one)
+contested; the three-proposal transitive-chain property above; a
+primitive claimed three ways counts once; an isolated proposal and a
+conflicting pair are reported independently in the same call; an
+empty proposal list.
+
+Real-sheet validation (Cherry Point #12, the same sheet Phase 3's own
+fusion entry just profiled): 73,259 fused proposals → 5 real clusters,
+73,204 uncontested (an accounting check confirmed uncontested count +
+every cluster's own member count sums back to exactly 73,259 — nothing
+silently dropped or double-counted), 1,678 total contested primitive
+ids across those 5 clusters. A real, honest, plausible result: the
+overwhelming majority of proposals never conflict at all (Lane B is
+already exclusive by construction; conflicts arise only where a Lane A
+invocation partially overlaps a Lane B body — exactly where they
+should), with a small number of real, identifiable disputes. 76ms at
+real scale.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (6/6); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet check above with an explicit conservation-of-count
+cross-check, not just "it ran." Does not modify
+`candidateProposalFusion.ts` or any Lane A-E module.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — deciding which primitives are
+disputed between candidate instances is squarely "whether it counts"
+and "what tag/body owns it," the shared-path doctrine's own example
+categories.
+
+Not done (requirements 2-8, the much larger remaining scope of this
+phase): eligibility scoring (Form/subpath membership, connectivity,
+graph/path signature agreement, transform-consistent residual, style/
+layer agreement, carrier-vs-body classification, mutual coverage);
+injective/mutual correspondence for distinctive reference primitives;
+the explicit unowned/background and unassigned/ambiguous STATES a real
+resolution needs; the actual assignment solver (minimum-cost bipartite
+assignment for small clusters, a documented approximation + conflict
+repair for large repeated grids); producing an owned body bbox/polygon
+from post-resolution primitives. This slice only detects and reports —
+it decides no outcome. Phase 3's own gate certification remains
+blocked on Phase 1's corpus reaching 150+/12. Phases 5-8 have not been
+started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — proposal
 fusion, goal §8's own closing subsection after the five lanes:
 "Deduplicate proposals by primitive overlap and body identity, not
