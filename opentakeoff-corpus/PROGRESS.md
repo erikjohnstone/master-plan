@@ -1,6 +1,33 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `43-carson-m601-vlc853e-controller-modules`'s own last
+missing instance, `furnace-b3-controller`, closing that case to 26/26.
+The case's prior review note had explicitly left this one out, reasoning
+from a fingerprintSymbol variant score; queried the real Lane B vector
+geometry directly instead (extractVectorGeometry -> buildVectorSceneIndex
+-> proposeCandidateBodiesLaneB, filtered to dark/thick primitives, the
+same technique used for the cd1-* diffuser completions below) and found
+a clean 3-primitive rectangle body at [1602, 980.88, 1731.6, 1096.32],
+corner-marker-verified to land exactly on the enclosure's own real
+corners. That box alone undershoots this case's own established sibling
+convention, though: every other reviewed instance in the same row is
+frozen with y1 22.8px below its own box's bottom edge, for a small
+triangular connector notch down to the shared BACnet trunk line. Traced
+furnace-b3-controller's own notch directly in the vector data (a 3-
+segment diagonal/vertical/horizontal run) and confirmed its tip sits at
+y=1119.12, matching the sibling row's y1=1119.1 to rounding — so the
+final body_bbox [1602, 980.9, 1731.6, 1119.1] combines this instance's
+own vector-verified x-range with a notch depth independently re-derived
+from this instance's own geometry, not copied from siblings unchecked.
+Added to cases.json via a surgical single-line Edit (anchored on the
+full original instance line, per this file's own established mistake-
+avoidance discipline — checked as a 3-insertion/2-deletion diff before
+committing) plus an appended correcting review note; did not touch or
+remove the case's prior note, which remains accurate about the other 25
+instances.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed 5 of case `10-lovell-m100-cd1-ceiling-diffusers`'s own 7
 previously-uncomputed body_bbox instances (cd1-16, cd1-09, cd1-14,
 cd1-35, cd1-36), continuing the same real-render-and-verify discipline
