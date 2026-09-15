@@ -1445,10 +1445,16 @@
         "tag": null,
         "at": [4632.5, 1999.6],
         "tolerance_px": 2,
-        "tag_bbox": null
+        "tag_bbox": null,
+        "family": "inline centrifugal supply fan",
+        "association_type": "unlabelled",
+        "transform_family": "rigid",
+        "countable": true,
+        "reference_source": "manual_seed",
+        "body_bbox": [4560.7, 1941.4, 4689.6, 2052]
       },
       "instances": [
-        { "id": "dedicated-outdoor-air-inline-supply-fan", "at": [4335.1, 3221.9], "tolerance_px": 2, "tag": null, "tag_bbox": null }
+        { "id": "dedicated-outdoor-air-inline-supply-fan", "at": [4335.1, 3221.9], "tolerance_px": 2, "tag": null, "tag_bbox": null, "family": "inline centrifugal supply fan", "association_type": "unlabelled", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [4263.4, 3163.7, 4392.2, 3274.3] }
       ],
       "review": {
         "render": "ground_truth/reviews/19__vol2__094/p6-p6-full-poppler.png",
@@ -1457,7 +1463,8 @@
           "This extended-campaign case uses the inline centrifugal-fan glyph rather than the document's baseline three-way control-valve actuator. The constant-volume AHU fan is the seed and the dedicated-outdoor-air AHU fan is the sole non-seed repeat.",
           "The 26-segment fingerprint captures the scroll perimeter and discharge neck while excluding the surrounding duct, air-direction breaks, sensors, filter, coil, and humidity instruments. The second fan reproduces it exactly at score 1.000 in a different schematic position.",
           "The upper variable-air-volume AHU contains a visually related but internally richer fan/motor assembly. It is a legitimate different convention and is not silently collapsed into the simpler inline-fan family.",
-          "The schematic names the AHU systems in their captions rather than attaching a literal equipment tag to either tight fan body, so null labels are intentional. No nearby CV, DPS, TS, HS, AI, AO, DI, or DO tag may rename a fan."
+          "The schematic names the AHU systems in their captions rather than attaching a literal equipment tag to either tight fan body, so null labels are intentional. No nearby CV, DPS, TS, HS, AI, AO, DI, or DO tag may rename a fan.",
+          "v2 review: rendered a wide region covering both schematics with both rings (reviews/19__vol2__094/p6-overview.png) plus individual tight crops of the seed and the instance (p6-seed.png, p6-instance.png), and viewed all three with the Read tool. Both crops show the identical scroll-shaped fan housing and discharge-neck outline at the same scale and orientation, with no tag or leader anywhere nearby in either schematic -- confirming association_type unlabelled (there is no identifier attached to either body at all, unlike case 14's enclosed T-5 label) and transform_family rigid. body_bbox for the seed and the one instance was computed via one batched fingerprintSymbol pass and converged exactly: both report the identical 26-segment, 169.9px-footprint fingerprint, the vector-level confirmation of this case's own 'reproduces it exactly at score 1.000' note."
         ]
       }
     },
