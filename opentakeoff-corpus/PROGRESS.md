@@ -1,5 +1,74 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane C
+requirement 1 — "generate local search regions from exact tag token
+boxes." New `proposeTagSearchRegionBody` in `candidateBodyLaneC.ts`
+(alongside the existing requirement-3 slice). Motivated directly by the
+entry three below this one (Phase 4 gate 3's own corpus-wide F1 finding:
+Lane B's junction-based touching-only union-find fragments a real symbol
+drawn with non-touching strokes) and the entry directly below (a LOCAL
+density-relative fix for that SAME gap was tried and REJECTED — 100%
+real-corpus leak rate from transitive "chaining" through unrelated
+nearby ink). This slice is a DIFFERENT, safer mechanism for the same
+underlying problem: a fixed-radius region anchored at ONE tag's own bbox
+is bounded by construction, not a transitive graph closure — it cannot
+chain arbitrarily far the way nearest-neighbor union-find provably did,
+because its own extent is capped at a disclosed `pad` regardless of what
+ink lies just beyond that radius.
+
+CALIBRATED AGAINST REAL DATA FIRST, same discipline as the rejected fix:
+checked every real cases.json instance carrying BOTH a tag_bbox and a
+body_bbox (only Cherry Point's own 20-instance CD-1 family has this on
+every instance among the 3 documents already used for calibration this
+checkpoint) for whether a symmetric pad-px region around the tag_bbox
+(a) captures most of that instance's own real body-region primitives and
+(b) never reaches into a NEIGHBORING instance's own tag or body region.
+pad=60: 66.9% recall, 0 unsafe overlaps. pad=80: 82.6% recall, 0 unsafe
+overlaps. pad=100: 85.6% recall but 3 REAL unsafe overlaps appear.
+`DEFAULT_TAG_REGION_PAD_PX=80` is chosen from this measurement, at the
+edge of confirmed safety, not a guess — and re-verified against the
+ACTUAL shipped function (not just the calibration prototype) before
+disclosing these numbers in the module's own header: identical 82.6%
+recall, 0 unsafe overlaps, 20/20 instances produced a proposal.
+
+DISCLOSED LIMITATION, found by the SAME calibration check: this only
+helps families that actually carry a per-instance tag. Colville's own
+dense 24-tank array (this checkpoint's own hardest real dense-grid case)
+has ZERO instances with a per-instance tag_bbox at all — this mechanism
+has nothing to anchor to there and cannot help; that case remains Lane
+B/proximity territory, still unsolved. Requirement 4's own discipline
+("never report the tag bbox or an arbitrary leader endpoint as the
+physical symbol body") is upheld by construction, not merely stated: the
+proposal's own bbox is computed from the primitives actually found
+inside the region (full containment, the same broad-phase-then-filter
+convention legendReferenceBank.ts already uses — checked directly, not
+assumed, since the calibration prototype used strict containment and
+the first implementation draft did not, an inconsistency caught and
+fixed before shipping), never the region or the tag bbox itself.
+
+5 new tests (12 total in candidateBodyLaneC.test.ts, up from 7): a real
+symbol near a tag is captured with its own real bbox, never the tag's;
+nothing in range returns null rather than a degenerate proposal; a
+primitive only partially overlapping the region (grazing its edge) is
+excluded; `pad` is a real tunable knob; the disclosed 80px default
+applies when omitted. Full affected suite green (61/61: LaneC, LaneB,
+candidateProposalFusion, ownershipAssignment, ownershipEligibility,
+ownershipConflicts, ownershipBody, vectorSceneSpatialIndex). `tsc
+--noEmit` clean.
+
+DISCLOSED, NOT ATTEMPTED HERE: wiring this proposal into
+candidateProposalFusion.ts / the ownership pipeline and re-measuring
+Phase 4 gate 3's own corpus-wide F1 to prove a real improvement — this
+slice builds and calibrates the mechanism itself, it does not yet change
+what the rest of the pipeline sees. Requirement 2 (leader-line following)
+remains unattempted. An asymmetric or per-family-tuned search direction
+was deliberately not attempted either — this slice is symmetric padding
+in all four directions, simple and general rather than tuned to one
+family's own layout. SHOULD THIS BE ON THE SHARED PATH? Yes — real,
+tested, real-corpus-calibrated mechanism, additive (a new exported
+function alongside the existing untouched `findAdjacentBody`), zero
+existing exports changed.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane B — a
 third real attempt at the proximity-merge fix (the two entries below
 ruled out fixed and normalized GLOBAL thresholds; this one tried a
