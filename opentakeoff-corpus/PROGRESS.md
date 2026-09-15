@@ -1,5 +1,78 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane B — a
+third real attempt at the proximity-merge fix (the two entries below
+ruled out fixed and normalized GLOBAL thresholds; this one tried a
+LOCAL, density-relative rule instead) was BUILT, TESTED, and then
+REJECTED by real-corpus validation. Disclosed here in full, including
+its own failure mode with concrete numbers, rather than either silently
+discarding a real negative result or leaving broken code sitting in the
+tree that a future session could mistake for working. No code survives
+this entry — `candidateBodyProximityMerge.ts` and its own test file were
+written, validated, found unsafe, and DELETED; nothing was committed
+before this write-up.
+
+DESIGN: for each Lane B body, computed a "core distance" — the gap to
+its own SINGLE nearest other body (k=1, the safe choice this attempt's
+own testing arrived at: k=3 was tried first and immediately found to
+leak past a real instance's own few siblings into the NEXT instance
+whenever that instance had fewer than k members, reusing a synthetic
+6-instance dense-grid test to catch it before real validation, exactly
+per this project's own "measure before you build" discipline). Two
+bodies merge (via union-find, so groups form transitively) iff their gap
+is at most `factor` x the smaller of their own two core distances — the
+same core-distance idea DBSCAN uses to avoid one global density
+threshold, addressing the exact reason the two entries below's global
+thresholds failed (a page mixes many different real stroke scales).
+7 real unit tests (synthetic, isolated geometry) ALL PASSED, including
+the two safety-critical ones this project's own gate cares about most: a
+dense grid of 6 separate 3-fragment instances stayed 6 separate merged
+groups (never chained into one), and two 5-fragment clusters 1000px
+apart merged only within themselves.
+
+REAL-CORPUS VALIDATION (the step that actually matters, per this
+project's own repeated finding that clean synthetic tests are necessary
+but never sufficient): ran the SAME mechanism against real Lane B output
+on the same 3 calibration documents (Cherry Point, Colville, Klamath).
+RESULT: FAILS on real data. Every single one of the 20+24+46 real
+ground-truth instances across all 3 documents leaked outside its own
+boundary — not a rare edge case, a 100% failure rate. Colville's own
+tank array shows the clearest damage: each real tank has ~30-35 own Lane
+B fragments, but the best-matching merged group per tank averaged
+400-1000+ primitives (tank-20 and tank-21 both reached triple digits shy
+of 1000) — several DIFFERENT tanks' own ink, and unrelated nearby
+piping/dimension-line geometry, chained together into one giant blob.
+
+ROOT CAUSE: the classic density-based-clustering "chaining" failure
+DBSCAN itself is well known for. The clean synthetic tests only ever
+placed ISOLATED symbol fragments with nothing else nearby — every real
+sheet instead has abundant OTHER real ink (walls, ducts, dimension
+lines, neighboring symbols) sitting near a real symbol's own fragments.
+A short "bridge" of such unrelated ink, each link individually
+satisfying the local core-distance test, transitively unions two
+otherwise well-separated real instances (or a real instance and nearby
+non-symbol clutter) into one group via union-find's own transitive
+closure — exactly the failure mode a same-symbol-only synthetic scene
+can never exercise, however many of THOSE scenes are tested.
+
+DISCLOSED, NOT YET SOLVED: a working fix needs to break chaining
+specifically, not just pick better distance math — candidate directions
+for whoever attempts this next, none tried here: requiring MUTUAL
+k-nearest-neighbor status (a bridge point structurally cannot be
+"nearest" to too many things transitively) instead of a one-sided ratio
+test; capping a merged group's own primitive count or bbox area against
+its own sibling instances' typical size before accepting it; or
+excluding primitives carrierClassification.ts already flags as carrier-
+like (real duct/pipe/wall ink, not decorative symbol material) from ever
+participating in a merge chain in the first place, since that
+classification already exists for exactly this "which ink isn't part of
+a countable symbol" question. SHOULD THIS BE ON THE SHARED PATH? The
+code: no — it does not work, and a passing synthetic test suite already
+proved insufficient once this checkpoint, so it must not sit in the tree
+looking safe. This entry: yes, as the corpus-wide failure data (concrete
+per-tank inflation, 100% leak rate) any real next attempt needs to avoid
+repeating this same disproven design.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane B —
 follow-up to the calibration entry directly below: does normalizing the
 same 3 documents' own within/between gap distances by the sheet's OWN
