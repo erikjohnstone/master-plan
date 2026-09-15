@@ -1,5 +1,68 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 gate — the
+prior entry's own scope-boundary finding named two ways forward; this
+is the second one, "a dedicated real-sheet dense-grid check," built as
+a detector only (not a fix to conflict detection). Confirmed via
+`grep`, per GOAL.md's own "audit before you build" rule, that no Lane-
+B-equivalent of Lane A's own `repeatedGroups` existed before this
+slice, and that its two real dependencies (`computeBodySignatures`,
+`computePrimitiveGraphAttributes`) already exist and are already
+tested — this slice reuses both unchanged.
+
+New `web/src/lib/candidateBodyRepeatedGroups.ts`:
+`groupRepeatedLaneBBodies(bodies, attributes)` generalizes Lane A's own
+already-shipped "group by identical signature hash" rule
+(`computeFormContentSignatures`'s own `repeatedGroups`) to raw-geometry
+Lane B bodies Lane A can never see — the exact gap the prior entry
+named. Deliberately NOT attempted (disclosed): judging whether a
+group's own member count is a PLAUSIBLE real symbol count (a signature-
+bucket collision between unrelated small shapes is possible and would
+show up as a false "repeated group"); the gate's own "suppress
+neighbor-borrowed phantoms" half, which needs real page-position/
+spacing comparison, not attempted here.
+
+New `web/test/candidateBodyRepeatedGroups.test.ts` (5 tests, all
+passing): a raw-geometry "grid" of the same symbol drawn 5 times with
+NO Form XObject at all groups correctly as one group of 5; the SAME
+symbol placed at a different ROTATION (proven meaningfully — both
+placements built from ONE extraction call so the test genuinely
+exercises this module's own grouping, not just the underlying
+signature module's own already-proven invariance in isolation) still
+groups with the original; a genuinely different shape does not
+contaminate the group; no-repeats and empty-sheet cases handled
+without a crash.
+
+REAL-SHEET VALIDATION, and a genuine caveat found by NOT stopping at
+the numbers (GOAL.md's own standing rule, applied again): ran this
+against the two sheets already confirmed this session to have ZERO
+Form XObjects and ZERO ownership clusters — exactly the scope-boundary
+case. `tarrant-county-mechanical.pdf#1`: 1,133 real repeated groups
+found, covering 7,036 of 9,021 bodies (78%) — a striking number.
+`bldg5406-hvac-demo-mechanical.pdf#1`: 417 groups, 3,617 of 4,119
+bodies (88%). Rendered a real crop of the LARGEST group (264 members,
+each a tiny 3-primitive, ~3×0.5-unit body) before writing this up as a
+success — it is a decorative dashed rope/dot BORDER pattern around a
+professional-engineer seal stamp ("...RENE[WAL]... PROFESS[IONAL]..."
+visible in the same crop), not equipment symbols. The module is
+working exactly as designed — this IS real, correct structural
+repetition — but it is NOT evidence the gate's own "preserve all real
+[SYMBOL] instances" concern is satisfied for genuine equipment; it is
+evidence the module needs a size/context filter (or a different real
+corpus example) before its own counts can be read as a dense-EQUIPMENT-
+grid check. Disclosed honestly rather than reported as a clean win.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (5/5); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet checks above, including the visual check that caught
+the border-decoration caveat before it could be overclaimed. Does not
+modify `candidateBodySignature.ts`, `candidateBodyLaneD.ts`,
+`candidateBodyLaneA.ts`, or `candidateBodyLaneB.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes, once the size/context filter
+above exists — recognizing genuine repeated real-world instances is
+squarely "whether it counts."
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4's own gate —
 a scope-boundary finding, stated plainly rather than left implicit,
 using real evidence this session already gathered (no new code, no new
