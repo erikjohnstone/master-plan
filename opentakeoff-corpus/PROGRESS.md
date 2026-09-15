@@ -1,5 +1,78 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — resumed
+corpus growth, document 093 (Jonesboro Heat Pump Upgrades, ME BGS
+Project 3845, already locally staged from a prior census — small,
+11 pages, an already-rejoined single PDF). Real investigation, a real
+defect found, and an honest decision NOT to force a case through this
+pass — recorded here rather than silently dropped.
+
+Sheet `E-101` (page 11) carries a real IU-1..IU-20 wall-mounted heat
+pump indoor-unit family drawn to scale on two floor plans (first
+floor + basement, one sheet). Located and tightly isolated a clean
+seed rect for `IU-13` via direct `extractVectorGeometry` primitive
+inspection (not eyeballed): `[[429,247],[467.5,333]]`, confirmed by
+rendering the exact bbox back and checking it was clean of neighboring
+text/hardware.
+
+First tried the raw `fingerprintSymbol`/`matchSymbol` functions
+directly (bypassing `Session`) — capped out around 0.88, zero
+accepts. Root cause: `Session.symbolSweep`'s affine-on-by-default
+wrapper is NOT the same as calling `matchSymbol` with default options,
+which is rigid-only — a real, worth-recording distinction for anyone
+scouting seeds this way in future: always go through `Session.
+symbolSweep` (`new Session()` → `loadPlan` → `symbolSweep`, the exact
+pattern `symbol-sweep-corpus.mjs` itself uses), never the bare
+matcher, or a real affine-only match reads as a false miss.
+
+Through `Session.symbolSweep` (defaults, scope: sheet): `found: 8`,
+`complete: true`, real high scores (six at 1.000, one 0.936, one
+0.925), correct seed label `IU-13`. Rendered and visually confirmed
+several of the 8 accepted matches are real IU units (IU-3, IU-13
+itself, IU-15) — not false positives, not OU (outdoor unit)
+contamination despite OU's own icon sharing the same vertical-stripe
+motif (confirmed by direct crop — OU-3 does look similar, a real
+richer/poorer-style visual sibling, but did not appear in the accepted
+8).
+
+Real defect found, not previously known: two of the 8 "accepted"
+matches — `[1575,331]` (rot180) and `[1620,348]` (rot0, mirrored) —
+are the SAME physical IU-15 icon, confirmed by rendering both
+coordinates together in one wide crop: there is only one icon there.
+The engine accepted two different transform hypotheses (rot180 vs.
+rot0+mirror) against one near-symmetric icon and did not merge them —
+`mergeProposals`'s own merge radius apparently does not cover the
+~48px separation between the two hypothesis centers for an icon this
+size. This means the TRUE distinct count from this seed is 7, not 8 —
+`found: 8` is itself wrong on this real sheet, not just an artifact of
+my own scouting.
+
+Decision: NOT fixing `mergeProposals`/the rigid-hypothesis dedup logic
+in this pass, and NOT landing a case for this family yet. Both are
+deliberate, not a shortcut:
+- A merge/dedup fix in `symbolsweep.ts` is core shared-path matching
+  logic with wide blast radius across every existing case — it
+  deserves its own focused, fully-tested slice (reproduce, focused
+  failing test, smallest fix, full 51-case regression), not a fix
+  bundled inside a corpus-growth task under time pressure. Recorded
+  here so it is not lost: reproduction is exactly the seed rect and
+  sheet above.
+- Building a ground-truth case around a seed that is currently known
+  to double-count would either bake in a documented-wrong "expected"
+  count (dishonest) or require deciding how to represent the dedup
+  defect in the schema before the defect itself is understood well
+  enough to state precisely — safer to fix the engine first, or pick
+  a cleaner seed, than to guess at either right now.
+
+This document/family stays open (its own real signal is genuine and
+worth returning to — 7 real, clean, camera-ready instances plus a
+found engine defect is a good return for one seed), not silently
+dropped. Vol2 088 (Phoenix Sky Harbor, 22 parts, the other previously-
+identified open gap) remains untouched this pass.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Investigation and a documented
+finding — no code or ground-truth file changed this entry.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md — correcting a
 recurring Stop-hook claim that Phase 0 "was not executed in this
 session" and that reading a 3,991-line document across a context
