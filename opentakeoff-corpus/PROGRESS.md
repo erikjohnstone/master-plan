@@ -1,5 +1,71 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane D's
+own edge/relation attributes, the second half of its named list
+("touching, gap distance, crossing, T-junction, parallel,
+perpendicular, concentric, collinear, relative angle, relative length,
+and normalized displacement"), completing the node+edge attribute
+foundation the lane's own signature/hashing work builds on.
+
+New `web/src/lib/candidateBodyEdgeAttributes.ts`:
+`computeEdgeAttributes(idx, junctions, pairRelations, attributes,
+referenceLength)` restates the pairs `computeVectorSceneJunctions`
+(touching/T-junction) and `computeVectorScenePairRelations` (parallel/
+perpendicular/collinear) ALREADY identified, with the rest of Lane
+D's list attached — never a new all-pairs scan of its own, so it
+inherits those two modules' own disclosed caps rather than adding a
+third source of combinatorial risk. Per pair: `touching` +
+`junctionKind`, `parallel`/`perpendicular`/`collinear`,
+`relativeAngleDeg` (always computed, not just when classified parallel
+or perpendicular — an oblique pair still has a real relative angle),
+`relativeLength` (longer/shorter ratio, order-independent), `gapDistance`
+(nearest-endpoint distance, null when touching — a shared point has no
+meaningful gap), and `normalizedDisplacement` (midpoint-to-midpoint
+vector divided by the SAME reference length
+`computePrimitiveGraphAttributes` uses, so it agrees on scale with
+`normalizedLength`).
+
+Covers everything on Lane D's edge list except "crossing" (true mid-
+segment intersection without a shared endpoint — still the one
+unimplemented named §7 relation) and "concentric" (needs circle/arc
+detection, deferred since Phase 2 slice 1's own primType work) — both
+explicitly omitted rather than approximated.
+
+New `web/test/candidateBodyEdgeAttributes.test.ts` (7 tests, all
+passing on the first run): corner touching with the real junction
+kind and no gap distance; parallel non-touching with a real gap
+distance; collinear pairs also read parallel (collinear implies
+parallel); relative length as an order-independent ratio; normalized
+displacement direction and scale; two genuinely unrelated oblique
+segments produce NO edge record at all (proving the "never scan a
+pair neither module already flagged" claim, not just asserting it);
+an empty sheet.
+
+Real-sheet sanity check (USDA APHIS #1, 3,942 primitives): 102,737
+edge records in 126ms; touching 3,229, parallel 50,739, perpendicular
+49,442, collinear 1,376 — the parallel/perpendicular/collinear counts
+match slice 9's own PROGRESS.md log for this exact sheet exactly,
+confirming the integration restates the same underlying pairs rather
+than silently recomputing something different.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (7/7); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet sanity check above (numeric cross-check against a
+prior independent log, not just "it ran"). Does not modify
+`candidateBodyLaneB.ts`, `candidateBodyLaneD.ts`,
+`candidateBodySignature.ts`, `vectorSceneIndex.ts`,
+`vectorSceneRelations.ts`, or `oneclick.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same reasoning as every prior
+Lane B/D entry.
+
+Not done: "crossing" and "concentric" (above); feeding these edge
+attributes INTO the body signature (`candidateBodySignature.ts`)
+itself — this slice computes them, a future one would use them to
+enrich or cross-check a body's own signature; Lane A/C/E remain
+unstarted. Phase 3's own gate certification remains blocked on Phase
+1's corpus reaching 150+/12. Phases 4-8 have not been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane D
 continued: "compact invariant path/subgraph signatures for fast
 lookup," tying Lane B's candidate bodies to Lane D's node attributes
