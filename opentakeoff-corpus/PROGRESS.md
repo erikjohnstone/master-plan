@@ -32,24 +32,47 @@ clean one-line error (fixed mid-slice — it originally threw an
 uncaught exception with a raw stack trace, now caught and reported
 cleanly, exit 2).
 
-IN PROGRESS, DISCLOSED: a real baseline capture
-(`node --import tsx scripts/symbol-sweep-corpus.mjs --mode=default`,
-matching real production defaults) was launched in the background
-against the full real 47-case corpus to become the actual reference
-snapshot any future requirement-2/3 change gets diffed against. Per
-this project's own repeatedly-confirmed lesson that a background-task
-"completed" notification reports only the launcher-wrapper process
-finishing, not the real worker, this was directly re-verified: the
-notification fired after ~1 case, but `ps aux` showed the real node
-worker still running (102% CPU, genuinely computing, not stalled), and
-the log had only 2/47 cases at that point. As of this entry the real
-worker is still running (5/47 cases logged; per-case time is highly
-variable, 7.7s-201s observed so far) — the real committed baseline
-artifact and its self-diff-against-itself sanity check are real
-further work for the next slice, not yet done. The tool above is
-already fully validated on its own logic via the synthetic fixtures;
-what remains is purely capturing and committing the real reference
-data, and re-running the same sanity check against it.
+REAL BASELINE CAPTURED AND VERIFIED (2026-09-15, `--mode=default`,
+matching real production defaults, run to completion in the
+background): the corpus has GROWN to 51 cases (a "corpus-expansion"
+campaign added cases beyond the 47 documented 2026-09-11 in
+SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md) — the tool itself never hardcoded a
+count, so this is a real finding, not a bug. Result: 49/51 pass on
+current, unmodified production code. The 2 known, PRE-EXISTING (not
+caused by anything this session touched) failures, disclosed here as
+part of the honest baseline rather than fixed (out of this slice's
+scope):
+  - `23-st-cloud-set-vav-terminal-units`: 13/13 found, but flagged —
+    "no one-to-one localization for 1 instance: mh10b2-vav-4c" (nearest
+    match is 292.8px away at a real but different score/location).
+  - `49-nashville-a001-ows-markers`: 7 found vs 5 expected, with
+    "incomplete candidate search (148163 dropped)" — a work-cap/search
+    truncation issue, itself in-scope evidence for Phase 8 (`no silent
+    candidate drops or hidden work-cap truncation` is a named Phase 8
+    gate item), not this slice.
+
+Per this project's own repeatedly-confirmed lesson that a
+background-task "completed" notification reports only the
+launcher-wrapper process finishing, not the real worker, this was
+directly re-verified multiple times during the run (`ps aux` + a
+background watcher blocking on the real worker PID's own exit, not the
+notification) before trusting the final JSON as complete.
+
+Sanity check: diffing the real captured report against itself with
+`symbol-sweep-shadow-diff.mjs` reports `unchanged: 51`, 0 regressions,
+0 new passes, exit 0 — the tool is now validated against both
+synthetic fixtures AND real corpus-shaped data.
+
+CORRECTED PLAN, per `corpus-sweep-diff.mjs`'s own already-established
+working method for the (separate, table-extraction) sheetgraph gate:
+baseline/candidate reports are generated FRESH immediately
+before/after the change under test, NOT committed as static repo
+artifacts — the corpus and the rest of the pipeline keep moving (as
+this very slice's own 47->51 finding demonstrates), so a stale
+committed snapshot would silently drift and could produce false
+regressions or a false clean bill later. The captured report from this
+slice is kept only as an immediate working reference for the very next
+real step (starting requirement 2/3), not committed to the repo.
 
 DISCLOSED, NOT ATTEMPTED: the actual symbol_sweep/sweep_schedule_row
 internals refactor (Phase 7 requirements 2/3) and the new

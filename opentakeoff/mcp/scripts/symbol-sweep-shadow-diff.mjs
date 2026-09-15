@@ -3,14 +3,23 @@
 // harness for requirements 2/3 (refactoring symbol_sweep/sweep_schedule_row
 // to consume the new candidate/ownership/verifier modules). Per the
 // dedicated Phase 7 audit (PROGRESS.md): that refactor has the largest
-// blast radius of anything in Phase 7 — a real 47/47-case corpus
-// regression gate (docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md) plus 244+
-// existing unit/conformance/parity tests — and should not be attempted
-// without a way to validate any internal change against that same corpus
-// BEFORE swapping the real path. This is that tool's own comparison half;
-// symbol-sweep-corpus.mjs (unmodified, already real, already mature)
-// remains the one and only thing that actually RUNS the corpus — this
-// script never re-implements that, only diffs two of its own JSON reports.
+// blast radius of anything in Phase 7 — a real, growing corpus regression
+// gate (docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md; 47 cases as documented
+// 2026-09-11, 51 measured 2026-09-15 — read `.cases` from the report
+// itself, never hardcode a count) plus 244+ existing unit/conformance/
+// parity tests — and should not be attempted without a way to validate
+// any internal change against that same corpus BEFORE swapping the real
+// path. This is that tool's own comparison half; symbol-sweep-corpus.mjs
+// (unmodified, already real, already mature) remains the one and only
+// thing that actually RUNS the corpus — this script never re-implements
+// that, only diffs two of its own JSON reports.
+//
+// Per the working method `corpus-sweep-diff.mjs` already established for
+// the (unrelated, table-extraction) sheetgraph gate: baseline/candidate
+// reports are generated FRESH immediately before/after the change under
+// test, never committed as static repo artifacts — the corpus and the
+// rest of the pipeline keep moving, so a stale committed snapshot would
+// silently drift and produce false regressions/false clean bills.
 //
 // USAGE:
 //   node --import tsx scripts/symbol-sweep-corpus.mjs --mode=default > baseline.json
