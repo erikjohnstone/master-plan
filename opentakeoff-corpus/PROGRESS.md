@@ -1,5 +1,78 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 7:
+pairwise collinearity/near-parallel/near-perpendicular relations,
+extending `web/src/lib/vectorSceneRelations.ts` (slice 6) with
+`computeVectorScenePairRelations`. Together with slice 6's junctions,
+this covers every named relation in goal §7's line except true
+mid-segment intersection (two segments crossing without sharing an
+endpoint), which remains open.
+
+Orientation is direction MOD 180° (an undirected line and its reverse
+are the same orientation), bucketed into 2°-wide bins
+(`PARALLEL_ANGLE_TOL_DEG`, doing double duty as the bucket width) so
+comparisons stay near-linear in primitive count for the common case: a
+real sheet has thousands of segments but only a handful of dominant
+orientations, so only same-/near-orientation buckets (parallel) or the
+bucket ~90° away (perpendicular) are ever compared — never a full
+O(n²) sweep. Wraparound at the 0°/180° boundary is handled by modular
+bucket indexing (bucket 89's neighbors include bucket 0), proven by a
+dedicated test (two segments at ~179.5° and ~0.5° — 1° apart in
+wrapped space, not the 179° a naive diff would compute — still match).
+
+Collinear = parallel AND on the same infinite line: the perpendicular
+distance from one segment's own start point to the other's line
+(`COLLINEAR_OFFSET_TOL`, 0.75px, same grain as `JUNCTION_SNAP_TOL`).
+Every collinear pair is necessarily also a parallel pair (reported in
+both lists) — offset-but-parallel pairs appear only in `parallelPairs`.
+
+The one case that would otherwise degenerate is a hatch/fill family
+piling hundreds of same-orientation strokes into one bucket:
+`PAIR_RELATIONS_MAX_BUCKET` (250, disclosed, overridable) skips
+exhaustive pairing within an oversized bucket rather than emitting
+tens of thousands of "trivially parallel" pairs among one hatch
+pattern's own strokes — noise this codebase's existing hatch
+classifier (`classifyHatchSegs`, named in oneclick.ts's own header
+comment) already owns. A skip sets `incomplete: true` with a stated
+reason, same cap discipline as every prior slice; `PAIR_RELATIONS_
+MAX_PRIMITIVES` (20,000) bounds the overall input size the same way.
+Clip-only primitives are excluded, matching `computeVectorSceneJunctions`.
+
+Not wired into `buildVectorSceneIndex`'s own `intersections` stub
+yet, same "prove the contract before wiring it in" reasoning as
+junctions (slice 6) and the cache (slice 5).
+
+Extended `web/test/vectorSceneRelations.test.ts` with 8 new tests (16
+total in the file now, all passing on the first run after one test
+had to be corrected — see below): same-line pairs are both parallel
+and collinear; offset-parallel pairs are parallel but not collinear; a
+right-angle pair is perpendicular, not parallel; an oblique 45° pair
+is neither; the 0°/180° wraparound case; clip-exclusion; the overall
+primitive cap; and the per-bucket cap. One test's own fixture needed a
+second pass: the wraparound test's two line endpoints were originally
+miscalculated (produced a 45°-ish pair, not a near-wrap pair) —
+caught immediately by the assertion failing, fixed by computing the
+actual dy needed for a ~0.5° slope over a run of 10 (`10 * tan(0.5°) ≈
+0.0873`) for both lines, re-verified passing.
+
+Verification: `npx tsc --noEmit` clean. New/extended test file plus
+`vectorSceneIndex.test.ts` re-run — 0 failures. Confirmed the module
+still loads cleanly from `mcp/` via tsx. Does not modify
+`vectorSceneIndex.ts` or `oneclick.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same shared `web/src/lib/`
+path.
+
+Not done (narrowing further): true mid-segment intersection (crossing
+without a shared endpoint) is now the ONLY named §7 relation left
+unimplemented; wiring junctions/pair-relations into the index's own
+`intersections` field; Form XObject identity/content-signature
+hashing; text-span/exploded-text-mask integration; a real spatial
+index; curve fidelity beyond chord-sampling; wiring the index into
+`graphForPipeline`/Session's pipeline; the gate's memory/build-time
+measurements and 5-PDF parity evidence. None of Phases 3-8 have been
+started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 6:
 web/src/lib/vectorSceneRelations.ts. The first concrete piece of goal
 §7's "intersections, T-junctions, X-junctions, endpoints, collinearity,

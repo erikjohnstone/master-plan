@@ -1,14 +1,16 @@
-// GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 §7 — the first concrete
-// piece of "intersections, T-junctions, X-junctions, endpoints,
-// collinearity, near-parallel and near-perpendicular relations": endpoint
-// clustering and junction-degree classification. A pure, additive consumer
-// of a built VectorSceneIndex — it never mutates the index and is NOT yet
+// GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 §7 — concrete pieces of
+// "intersections, T-junctions, X-junctions, endpoints, collinearity,
+// near-parallel and near-perpendicular relations": endpoint clustering and
+// junction-degree classification (computeVectorSceneJunctions), plus
+// pairwise collinearity/near-parallel/near-perpendicular relations
+// (computeVectorScenePairRelations). Both are pure, additive consumers of
+// a built VectorSceneIndex — neither mutates the index, and NEITHER is yet
 // wired into `buildVectorSceneIndex`'s own `intersections` field (that
 // field stays an empty stub — see vectorSceneIndex.ts's own
 // `notYetImplemented` — until this contract has proven out on real sheets,
 // per the same "prove the contract before wiring it in" discipline slice 5
-// used for the cache). Collinearity/parallel/perpendicular PAIR relations
-// (as opposed to endpoint junctions) are a separate further slice.
+// used for the cache). True mid-segment intersection (two segments
+// crossing without sharing an endpoint) remains open for a further slice.
 import type { VectorSceneIndex } from "./vectorSceneIndex.ts";
 
 /** Coordinate tolerance (image px) for "the same point" — two endpoints
@@ -158,4 +160,170 @@ export function computeVectorSceneJunctions(
     id, x: c.x, y: c.y, members: c.members, kind: classify(c.members),
   }));
   return { junctions, incomplete: false, incompleteReason: null };
+}
+
+// ── collinearity / near-parallel / near-perpendicular pair relations ──────
+// The second piece of goal §7's relations line. Orientation is direction
+// MOD 180° (an undirected line and its reverse are the same orientation),
+// bucketed into 2°-wide bins so comparisons stay near-linear in the common
+// case: a real sheet has thousands of segments but only a handful of
+// dominant orientations, so only same-/near-orientation (parallel) or
+// ~90°-offset (perpendicular) buckets are ever compared against each
+// other — never a full O(n²) sweep. The one case that still degenerates
+// (a single hatch/fill family piling hundreds of parallel strokes into one
+// bucket) is capped per-bucket (PAIR_RELATIONS_MAX_BUCKET) rather than
+// exhaustively paired — that many "X is parallel to Y" facts among one
+// hatch's own strokes is noise this codebase's existing hatch classifier
+// (classifyHatchSegs, oneclick.ts's own header comment) already owns, not
+// a fact a symbol-grounding consumer needs restated per-pair.
+
+/** "Near-parallel": two segments whose orientations differ by at most this
+ *  many degrees. Also the bucket width, so a bucket's own tolerance and its
+ *  neighbor-search radius always agree. */
+export const PARALLEL_ANGLE_TOL_DEG = 2;
+/** "Near-perpendicular": two segments whose orientations differ from a
+ *  clean 90° by at most this many degrees. */
+export const PERPENDICULAR_ANGLE_TOL_DEG = 2;
+/** Collinear = parallel AND on the same infinite line: the perpendicular
+ *  distance from one segment's own start point to the other's line, in
+ *  image px, within this tolerance. Same grain as JUNCTION_SNAP_TOL — a
+ *  real "continues the same wall" case never lands sub-pixel-exact. */
+export const COLLINEAR_OFFSET_TOL = 0.75;
+/** Same disclosed-cap ethos as RELATIONS_MAX_PRIMITIVES: overall input
+ *  size bound for this pass. */
+export const PAIR_RELATIONS_MAX_PRIMITIVES = 20_000;
+/** Per-orientation-bucket cap. A bucket beyond this size is almost always
+ *  one hatch/fill family's own many parallel strokes, not a set of facts
+ *  worth reporting pairwise — see the module-level comment above. */
+export const PAIR_RELATIONS_MAX_BUCKET = 250;
+
+const ANGLE_BUCKET_DEG = PARALLEL_ANGLE_TOL_DEG;
+const NUM_BUCKETS = Math.round(180 / ANGLE_BUCKET_DEG);
+const PERP_BUCKET_SPAN = Math.round(90 / ANGLE_BUCKET_DEG);
+
+export interface PairRelation { aId: number; bId: number; angleDeg: number; }
+export interface CollinearPair extends PairRelation { offset: number; }
+
+export interface PairRelationsResult {
+  parallelPairs: PairRelation[];
+  perpendicularPairs: PairRelation[];
+  collinearPairs: CollinearPair[];
+  incomplete: boolean;
+  incompleteReason: string | null;
+}
+
+function orientationDeg(dx: number, dy: number): number {
+  // mod 180, not 360: an undirected line and its reverse direction are the
+  // same orientation. A zero-length segment has none — callers skip it
+  // before this is reached.
+  const deg = (Math.atan2(dy, dx) * 180) / Math.PI;
+  return ((deg % 180) + 180) % 180;
+}
+
+function orientationDiffDeg(a: number, b: number): number {
+  const d = Math.abs(a - b) % 180;
+  return d > 90 ? 180 - d : d;
+}
+
+function bucketOf(orientation: number): number {
+  return Math.floor(orientation / ANGLE_BUCKET_DEG) % NUM_BUCKETS;
+}
+
+interface OrientedEntry { id: number; x0: number; y0: number; ux: number; uy: number; orientation: number; }
+
+/** Pairwise collinearity/near-parallel/near-perpendicular relations among
+ *  a built VectorSceneIndex's own primitives. Like
+ *  computeVectorSceneJunctions, this is a standalone pure function, NOT
+ *  wired into buildVectorSceneIndex's own `intersections` stub yet — see
+ *  PROGRESS.md for the same "prove the contract before wiring it in"
+ *  reasoning. Clip-only primitives (invisible ink) are excluded, matching
+ *  computeVectorSceneJunctions. */
+export function computeVectorScenePairRelations(
+  idx: VectorSceneIndex,
+  opts: {
+    maxPrimitives?: number; maxBucket?: number;
+    parallelTolDeg?: number; perpendicularTolDeg?: number; collinearOffsetTol?: number;
+  } = {},
+): PairRelationsResult {
+  const capN = opts.maxPrimitives ?? PAIR_RELATIONS_MAX_PRIMITIVES;
+  const capBucket = opts.maxBucket ?? PAIR_RELATIONS_MAX_BUCKET;
+  const parallelTol = opts.parallelTolDeg ?? PARALLEL_ANGLE_TOL_DEG;
+  const perpTol = opts.perpendicularTolDeg ?? PERPENDICULAR_ANGLE_TOL_DEG;
+  const collinearTol = opts.collinearOffsetTol ?? COLLINEAR_OFFSET_TOL;
+
+  const n = idx.primitives.length;
+  if (n > capN) {
+    return {
+      parallelPairs: [], perpendicularPairs: [], collinearPairs: [],
+      incomplete: true,
+      incompleteReason: `primitive count ${n} exceeds the ${capN}-primitive pair-relations cap; no pairs were computed`,
+    };
+  }
+
+  const buckets: OrientedEntry[][] = Array.from({ length: NUM_BUCKETS }, () => []);
+  for (const p of idx.primitives) {
+    if (p.clip) continue;
+    const dx = p.x1 - p.x0, dy = p.y1 - p.y0;
+    const len = Math.hypot(dx, dy);
+    if (len < 1e-9) continue;   // degenerate segment, no orientation to compare
+    const orientation = orientationDeg(dx, dy);
+    buckets[bucketOf(orientation)].push({ id: p.id, x0: p.x0, y0: p.y0, ux: dx / len, uy: dy / len, orientation });
+  }
+
+  const skippedBuckets = new Set<number>();
+  const parallelPairs: PairRelation[] = [];
+  const collinearPairs: CollinearPair[] = [];
+  const seenParallel = new Set<string>();
+  const pairKey = (a: number, b: number) => (a < b ? `${a}:${b}` : `${b}:${a}`);
+
+  for (let bi = 0; bi < NUM_BUCKETS; bi++) {
+    const own = buckets[bi];
+    if (own.length === 0) continue;
+    const group: OrientedEntry[] = [];
+    for (let d = -1; d <= 1; d++) group.push(...buckets[(bi + d + NUM_BUCKETS) % NUM_BUCKETS]);
+    if (group.length > capBucket) { skippedBuckets.add(bi); continue; }
+    for (const a of own) {
+      for (const b of group) {
+        if (a.id === b.id) continue;
+        const key = pairKey(a.id, b.id);
+        if (seenParallel.has(key)) continue;
+        const diff = orientationDiffDeg(a.orientation, b.orientation);
+        if (diff > parallelTol) continue;
+        seenParallel.add(key);
+        const lo = Math.min(a.id, b.id), hi = Math.max(a.id, b.id);
+        parallelPairs.push({ aId: lo, bId: hi, angleDeg: diff });
+        const nx = -a.uy, ny = a.ux;   // A's own normal
+        const offset = (b.x0 - a.x0) * nx + (b.y0 - a.y0) * ny;
+        if (Math.abs(offset) <= collinearTol) collinearPairs.push({ aId: lo, bId: hi, angleDeg: diff, offset });
+      }
+    }
+  }
+
+  const perpendicularPairs: PairRelation[] = [];
+  const seenPerp = new Set<string>();
+  for (let bi = 0; bi < NUM_BUCKETS; bi++) {
+    const own = buckets[bi];
+    if (own.length === 0) continue;
+    const group: OrientedEntry[] = [];
+    for (let d = -1; d <= 1; d++) group.push(...buckets[(bi + PERP_BUCKET_SPAN + d + NUM_BUCKETS) % NUM_BUCKETS]);
+    if (own.length > capBucket || group.length > capBucket) { skippedBuckets.add(bi); continue; }
+    for (const a of own) {
+      for (const b of group) {
+        const key = pairKey(a.id, b.id);
+        if (seenPerp.has(key)) continue;
+        const diff = orientationDiffDeg(a.orientation, b.orientation);
+        if (Math.abs(diff - 90) > perpTol) continue;
+        seenPerp.add(key);
+        perpendicularPairs.push({ aId: Math.min(a.id, b.id), bId: Math.max(a.id, b.id), angleDeg: diff });
+      }
+    }
+  }
+
+  return {
+    parallelPairs, perpendicularPairs, collinearPairs,
+    incomplete: skippedBuckets.size > 0,
+    incompleteReason: skippedBuckets.size > 0
+      ? `${skippedBuckets.size} orientation bucket(s) exceeded the ${capBucket}-primitive pair cap (likely a dense hatch/fill family) and were skipped, not exhaustively paired`
+      : null,
+  };
 }
