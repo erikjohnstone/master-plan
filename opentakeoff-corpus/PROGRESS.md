@@ -1,5 +1,49 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+document 077's R-10 return grille, flagged as this checkpoint's "strongest
+not-yet-built lead" two entries below, re-verified independently and
+CLOSED as unsuitable rather than built. A third instance this checkpoint
+of a scouting report's "clean" claim not holding up under the orchestrator's
+own re-render -- worth stating plainly again, not softening.
+
+Re-ran the EXACT seed rect the batch reported ([2110,1065]-[2150,1089],
+page 12): the batch's own summary said "found=15, withheld=0... zero
+noise." My independent re-run of that same call returned found=15,
+**withheld=39**, not 0 -- a stark, unexplained discrepancy on an
+identical, deterministic call. Looking at the 15 "matches" itself found
+real cause for concern regardless of the withheld-count mismatch: 10 of
+15 score below 0.85 on pure geometry (as low as 0.555), promoted into
+the family only via label corroboration to "R-10," not real geometric
+confidence; the withheld bucket shows genuine, high-score confusion with
+sibling families S-10 (2x, up to 0.891), S-11, S-12, and even "HP-5A" (a
+withheld match at 0.902) -- the same shape reading as multiple different
+real device types depending only on which text happens to sit nearest.
+
+Rendered the single lowest-scoring "match" (0.555, labeled R-10 via
+corroboration) directly rather than taking the label's word for it: the
+ring lands on **empty space** -- a bare duct run, no grille/diffuser icon
+anywhere near it. This is a confirmed false positive, not a borderline
+call. Given the broader pattern (majority-low geometric scores, dense
+cross-family collision in withheld, and now one outright empty-space
+promotion), this candidate is closed as too ambiguous to build, not
+merely "needs a bit more per-instance verification" as the scouting
+report framed it. No case attempted, no cases.json touched, no curated
+PDF kept (the rank-39 copy staged in advance was removed rather than left
+as a stale, unused artifact).
+
+Real lesson for this checkpoint's own practice, restated because it kept
+recurring: a batch's summary numbers (found/withheld counts, "zero
+noise," "visually confirmed") are a lead to re-run, never a fact to build
+from directly -- this is the third confirmed case this checkpoint
+(after document 057's plumbing-icon false positives) where the
+orchestrator's own re-render caught something the report missed or
+mischaracterized. No process change proposed beyond continuing to do
+exactly this before every build.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Reconnaissance/verification only;
+no files changed.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 2/3 — the
 background full-corpus re-run kicked off right after landing case 48
 (CD-1) has finished: 48/48 PASS, 0 failures, confirming zero regressions
