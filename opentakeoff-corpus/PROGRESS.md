@@ -1,5 +1,61 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — document 020
+(Missouri Highway Patrol Troop C HVAC upgrade) scouted via a background
+reconnaissance agent and independently spot-checked; not yet a case,
+and a real ambiguity surfaced that the next pass should resolve before
+investing in full annotation.
+
+The scout identified page 8 (sheet M-202, a real to-scale duct plan) with
+a hexagon-tag family "S-7" (7 apparent instances, CFM value below the
+tag, same "(type)/(CFM)" convention document 011 used) as the strongest
+candidate, plus "S-9"/"S-10"/"R-2" as secondary candidates on the same
+sheet. Independent spot-checking (own renders, not the scout's coordinates
+taken on faith) found:
+
+- This document's own HVAC legend (page 4, sheet M-001, "AIR DISTRIBUTION
+  DEVICE" section) draws "SUPPLY AIR DIFFUSER" as a plain square with a
+  full diagonal X -- the SAME family of symbol already characterized (and
+  reverted) in document 011. What's actually visible near several "S-7"
+  hex tags on page 8 is a DIFFERENT, round two-tone (black/white
+  quartered) disc icon positioned at duct-riser/elbow junctions, not
+  touching or connected to the hex tag by any drawn leader. This round
+  icon does not appear anywhere in the page-4 legend at all -- it is
+  most likely a round-duct fitting/turn annotation (a common CAD
+  convention independent of air-terminal type), not the diffuser body
+  itself, though this is not yet confirmed either way.
+- Direct `fingerprintSymbol` inspection of two of these round-disc
+  locations returned 103 and 209 raw segments respectively (vs. a clean
+  vector icon's usual 10-30) -- consistent with a hatch-filled rendering
+  (many short fill strokes forming the black/white quarters) rather than
+  a small number of clean line/curve primitives, which would make it a
+  fragile, high-noise rigid-fingerprint target even if it does turn out
+  to be the right symbol.
+- This document also has no real PDF text layer on its plan pages (all
+  labels are exploded/drawn as vector paths, confirmed by the scout and
+  independently by an empty `textSpans` read on page 8) -- so, unlike
+  every case built so far this checkpoint, tag verification here cannot
+  use a `textSpans` proximity cross-check at all; every instance/family
+  disambiguation would have to be done by rendering and reading each tag
+  by eye, a real added cost for this specific document.
+
+Not reverted (nothing was ever drafted into `cases.json` for this
+document), just not yet resolved: the open question, before spending
+further annotation effort here, is what this document's own real
+"SUPPLY AIR DIFFUSER" body glyph looks like at an actual installed
+instance (the plain square-X from the legend, drawn somewhere near but
+not colocated with the hex tag and round disc), and whether the round
+disc is a real, distinct, useful secondary family (round-duct fitting) or
+just visual noise to exclude. Real next step: render a wider area around
+one "S-7" tag (not just the immediate 300px crop already tried) looking
+specifically for a square-X glyph matching the legend's own drawn
+convention, before deciding whether this document is a viable
+corpus-expansion source at all.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Reconnaissance and independent
+spot-verification only -- no cases.json change, no production code
+touched.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — document 011
 supply-diffuser case (draft "48-hines-mh101-supply-diffusers-sd3"), built,
 verified, and reverted. Fourth reverted corpus-expansion attempt this
