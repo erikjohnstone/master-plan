@@ -269,11 +269,23 @@ row filled in the table below.
 
 ### Phase 1 — one graph, with provenance
 
-1. Extend `extractVectorGeometry` (or a parallel per-segment array) to carry
-   line style: pdf.js `OPS.setDash` state at stroke time (dashed / dotted /
-   solid) and the existing pen nibble. Keep `meta` byte-compatible; every
-   existing consumer must be bit-identical (`wallnetwork`, `netroom`,
-   `symbolsweep` tests are the regression net).
+1. **`OPS.setDash` is a dead end on this corpus — measured, not assumed.**
+   Probed directly (2026-09-15): `openPdf` + `page.operatorList()` on
+   Bessemer p6 (63,842 ops, 30,647 strokes), ITD p4 (59,874 ops, 27,244
+   strokes), and NAVFAC MH101 p6 (92,538 ops, 39,178 strokes) — `OPS.setDash`
+   fires **zero** times on all three, including across Bessemer's own
+   thermostat-to-baseboard-heater control lines, which render visibly dashed.
+   These CAD exports draw a dash pattern as many short, evenly-spaced,
+   collinear STROKED segments, never the PDF dash operator. Extend
+   `extractVectorGeometry` (or a parallel per-segment array) to carry line
+   style computed GEOMETRICALLY instead: reuse `oneclick.ts`'s own existing
+   short-collinear-run detection (already commented as handling "dash-pattern
+   pen-down artifacts", `oneclick.ts:594,606-608,657,660`, built for
+   `markPolylineArcs`) as the basis for a `dashed` classification — a chain of
+   short (sub-inch, scale-aware) collinear segments at regular gaps is dashed;
+   one long stroke is solid. Keep `meta` byte-compatible; every existing
+   consumer must be bit-identical (`wallnetwork`, `netroom`, `symbolsweep`
+   tests are the regression net).
 2. Make `buildMepGraph` the only topology builder: add option flags for
    `controlSchematic.ts`'s crossing rule (`unresolved_crossing` unless a
    junction mark vouches) and arrowhead direction, port `hasJunctionMark`
@@ -442,9 +454,9 @@ not this goal's goes to `TAKEOFF_BUG_CATALOGUE.md`, not into a side fix.
 
 ## Open at the time of writing
 
-- Whether pdf.js's operator list preserves `setDash` per path on the corpus's
-  CAD exports, or whether dashes arrive exploded — check on Bessemer p6's
-  thermostat lines first; Phase 1 depends on the answer.
+- ~~Whether pdf.js's operator list preserves `setDash`...~~ — **answered
+  2026-09-15, see Phase 1 §1 above: `setDash` never fires on this corpus's
+  CAD exports; dash detection must be geometric.**
 - `federal-mech` (~511K segments) has never had `buildMepGraph` timed; L3.5
   already runs it there silently. Measure before Phase 1 changes anything.
 - The arXiv and MDPI papers above could not be fetched from this container
