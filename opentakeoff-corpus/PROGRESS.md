@@ -1,6 +1,33 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `11-st-louis-mh101-keyed-vav-thermostats`'s own last
+two gaps, new-thermostat-vav-1 and -vav-11, closing that case to 16/16.
+This case's prior note used a FIXED asymmetric search window (55.7px
+toward the T-glyph, 29.3px toward the note-box) around each instance's
+own `at`, and found the technique itself imprecise across the board
+(13 of 15 converged at 0.8x-3.0x the seed's own segment count, meaning
+even "accepted" instances include some incidental context) -- withheld
+only these two because their own local clutter (a door-swing hinge,
+control-valve hardware) pushed them to 4.0-4.5x. Rather than reproduce
+that same imprecise window, located each instance's own T-circle and
+note-box directly by their distinctive real signature (a 17-primitive,
+~27-diameter circle and a 4-primitive, ~34x34 square, both confirmed
+identical at the seed and at every other already-accepted instance
+checked) and took their union. Neither the door-swing hinge (8
+primitives) nor the valve hardware (10 primitives) matches that
+signature, so neither is pulled in. Found vav-11's own box sits below-
+left of its circle rather than the seed's own above-right -- real,
+disclosed per-instance placement variation the case's own 'rigid, no
+rotation' finding already allows (each individual glyph is undistorted;
+only the two glyphs' own relative arrangement differs). Rendered both
+candidates with corner-ring markers directly against the real geometry:
+both wrap the T-circle and note-box tightly, with the contaminating
+marks clearly outside the box in each. Added via a surgical edit per
+instance plus an appended correcting review note; the case's prior
+note is left untouched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `39-jvwtp-h601-rooftop-di-point-callouts`'s own six
 non-seed gaps, closing that case to 7/7. This case's own prior note
 withheld all six for the same reason: a search rect matching the case's
