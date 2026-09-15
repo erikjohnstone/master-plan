@@ -1,6 +1,42 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane A
+requirement 3 — closed the loop on the touchesPageEdge finding below:
+(1) validated the hypothesis against real data instead of just one
+sheet's own visual inspection — checked all 422 real, reviewed
+body_bbox ground-truth entries across the WHOLE benchmark corpus (every
+case, every document) against each one's own real page_size_px; zero
+touch their own page's edge within the same 1-unit tolerance. Real,
+decisive, corpus-wide evidence (not a sample of one) that a genuine
+countable symbol is never drawn flush against the literal page
+boundary. (2) Wired the flag into an actual exclusion:
+candidateProposalFusion.ts's own `fuseProposals` now drops a
+`touchesPageEdge`-flagged invocation from Lane A's own candidate set
+before matching, so it never gets the Form-identity boost (the ["A","B"]
+two-lane corroboration) that let it out-compete real Lane B evidence for
+ownership in the first place. The underlying ink is not deleted from
+consideration — a Lane B body that would have matched a flagged
+invocation still becomes its own independent ["B"]-only proposal,
+exactly as any other unmatched Lane B body already does; only the
+Lane-A-specific boost is withheld. Automatic and opt-in by the caller's
+own upstream choice: a caller that never supplies `pageBounds` to
+computeFormContentSignatures sees `touchesPageEdge` at its default
+`false` for every invocation, so the exclusion is a no-op for it —
+`fuseProposals`'s own signature needed no new option. Verified
+end-to-end against the real document this was found on (Cherry Point
+Air Traffic Tower #11): re-ran the full Lane A -> Lane B -> fusion ->
+detectOwnershipClusters chain with and without `pageBounds` supplied —
+5 real ownership clusters WITHOUT it, 0 WITH it, all 5 of the same real
+title-block-furniture clusters this finding was built to catch. 2 new
+tests (9 total in candidateProposalFusion.test.ts, up from 7): one
+proving the exclusion fires on a page-edge-flagged shape, one proving
+the SAME shape still fuses normally when `pageBounds` is omitted (the
+opt-in contract, not a silent behavior change for existing callers).
+Full affected suite green (12/12 candidateBodyLaneA, 9/9
+candidateProposalFusion, 6/6 ownershipConflicts, 9/9 ownershipEligibility,
+5/5 ownershipAssignment, 3/3 ownershipBody), clean `tsc --noEmit`.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane A
 requirement 3 — real finding + fix: title-block/border furniture was
 entering the ownership pipeline unexcluded, exactly as this module's own
 header had already disclosed ("no FORM-level content-type filtering is

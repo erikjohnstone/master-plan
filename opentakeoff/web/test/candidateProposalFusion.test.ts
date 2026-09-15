@@ -24,12 +24,12 @@ const closedRect = (x: number, y: number, w: number, h: number): Op =>
 const formBegin = (matrix: number[]): Op => [OPS.paintFormXObjectBegin, [matrix, null]];
 const formEnd = (): Op => [OPS.paintFormXObjectEnd, null];
 
-function fuseFor(ops: Op[]) {
+function fuseFor(ops: Op[], laneAOpts?: Parameters<typeof computeFormContentSignatures>[2]) {
   const geo = extractVectorGeometry(opList(ops), ID, OPS);
   const idx = buildVectorSceneIndex(geo);
   const { junctions } = computeVectorSceneJunctions(idx);
   const { bodies } = proposeCandidateBodiesLaneB(idx, junctions);
-  const laneA = computeFormContentSignatures(idx, geo.formInvocations ?? []);
+  const laneA = computeFormContentSignatures(idx, geo.formInvocations ?? [], laneAOpts);
   return { idx, bodies, laneA, fused: fuseProposals(idx, bodies, laneA.invocations) };
 }
 
@@ -46,6 +46,23 @@ test("proposal fusion: the SAME ink discovered by both Lane B (connectivity) and
   assert.deepEqual(fused[0].votingLanes.slice().sort(), ["A", "B"]);
   assert.ok(fused[0].evidence.laneA && fused[0].evidence.laneB);
   assert.equal(fused[0].primitiveIds.length, 4, "the union is still just the rectangle's own 4 edges — nothing was double-counted");
+});
+
+test("proposal fusion: a Form invocation flagged touchesPageEdge (real title-block/border furniture, see candidateBodyLaneA.ts's own header) does NOT get the Lane A boost -- its matching Lane B body stands alone instead of fusing into an [A,B] proposal", () => {
+  const pageBounds = { width: 100, height: 100 };
+  const { fused } = fuseFor(
+    [formBegin(ID), closedRect(0, 0, 10, 10), formEnd()], // touches x=0 and y=0 -- real page-edge furniture
+    { pageBounds },
+  );
+  assert.equal(fused.length, 1, "the underlying ink is still proposed -- just by Lane B alone, not boosted by Lane A");
+  assert.deepEqual(fused[0].votingLanes, ["B"], "no Lane A vote for a page-edge-flagged invocation");
+  assert.ok(!fused[0].evidence.laneA && fused[0].evidence.laneB);
+});
+
+test("proposal fusion: the SAME shape as the page-edge exclusion test above still fuses normally when pageBounds is NOT supplied -- the exclusion is opt-in by the caller's own upstream choice, not a hardcoded behavior change", () => {
+  const { fused } = fuseFor([formBegin(ID), closedRect(0, 0, 10, 10), formEnd()]); // no pageBounds this time
+  assert.equal(fused.length, 1);
+  assert.deepEqual(fused[0].votingLanes.slice().sort(), ["A", "B"], "without pageBounds, touchesPageEdge defaults false and this fuses exactly as the pre-existing 'same ink' test above expects");
 });
 
 test("proposal fusion: two SEPARATE, non-overlapping bodies never merge just because they are both real", () => {

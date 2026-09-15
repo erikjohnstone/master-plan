@@ -36,6 +36,30 @@
 //   lane") — this slice fuses and orders, it does not yet produce the
 //   ablation report that instruction calls for.
 //
+// PAGE-EDGE FURNITURE EXCLUSION (Phase 3 Lane A requirement 3, real
+// finding — see candidateBodyLaneA.ts's own header and PROGRESS.md for
+// the full Cherry Point Air Traffic Tower #11 investigation): a Form
+// invocation candidateBodyLaneA.ts flags `touchesPageEdge` (its own real
+// page-space bbox touches the page's own left/top/right/bottom edge) is
+// real title-block/border furniture, not a symbol, on the one real sheet
+// this was found and fixed against — corroborated by checking this
+// project's OWN 422 real, reviewed body_bbox ground-truth entries across
+// the whole benchmark corpus: not one touches its own page's edge within
+// the same 1-unit tolerance, real evidence a genuine countable symbol is
+// never drawn flush against the literal page boundary. Excluded here,
+// at the fusion step, rather than upstream in candidateBodyLaneA.ts
+// itself: a flagged invocation still participates in Lane B's own
+// independent connected-component proposals (a Lane B body that would
+// have matched it instead becomes its own ["B"]-only proposal, exactly
+// as an unmatched body already does) — this only withholds the Form-
+// identity BOOST (the ["A","B"] two-lane corroboration a real symbol
+// gets), it does not delete the underlying geometry from consideration
+// entirely. A caller that never supplies `pageBounds` to
+// computeFormContentSignatures sees every invocation's own
+// `touchesPageEdge` at its default `false`, so this exclusion is a
+// no-op for it — automatic, opt-in-by-upstream-choice, no new option
+// needed on this function's own signature.
+//
 // REAL BUG FOUND AND FIXED (Phase 4 real-sheet validation, tinker-afb-
 // iwcs-controls.pdf#13): when ONE Lane A invocation's own primitive set
 // is EXHAUSTIVELY PARTITIONED by SEVERAL Lane B bodies (the real,
@@ -124,7 +148,7 @@ export function fuseProposals(
 ): FusedProposal[] {
   const threshold = opts.overlapThreshold ?? DEFAULT_OVERLAP_THRESHOLD;
   const laneASets = laneAInvocations
-    .filter((inv) => inv.primitiveIds.length > 0)
+    .filter((inv) => inv.primitiveIds.length > 0 && !inv.touchesPageEdge)
     .map((inv) => ({ inv, set: new Set(inv.primitiveIds) }));
 
   // reverse index: primitive id -> Lane A entries touching it, so only
