@@ -1,5 +1,56 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane B —
+calibration study for the fix the entry directly below names as real
+further work ("spatial-proximity clustering, grouping nearby but non-
+touching short strokes within a radius, not junction-based union"), run
+BEFORE attempting that fix, per this project's own "measure before you
+build" discipline — and it found a real reason not to build the naive
+version. Not a code change; a scratch measurement, disclosed here rather
+than silently discarded, because it rules out an entire class of
+otherwise-plausible implementations before one gets built and regresses
+the "dense-grid cases preserve all real instances" gate.
+
+METHOD: for 3 real documents spanning the corpus's own repeated-symbol
+scale range (Cherry Point CD-1, 19 instances; Colville's 24-tank array,
+the densest known real grid; Klamath SD-1 diffusers, 45 instances, the
+corpus's largest repeated-symbol case), used each instance's own real
+reviewed body_bbox to measure, for every real Lane B body already
+generated on that page: (a) the largest gap between two Lane B bodies
+that both lie inside the SAME instance's own bbox — the real within-
+symbol fragmentation distance any fix must bridge — versus (b) the
+smallest gap between a Lane B body inside one instance's bbox and a Lane
+B body inside a DIFFERENT, neighboring instance's bbox — the real
+between-symbol distance any fix must never cross.
+
+RESULT: no single fixed pixel threshold is safe across all three.
+Cherry Point: within-max 57.6px, between-min 105.6px (comfortable ~1.8x
+margin). Colville's own dense tank array: within-max 87.8px, between-min
+104.8px (margin collapses to ~1.2x). Klamath: within-max 25.4px,
+between-min 68.9px. A threshold large enough to bridge Colville's own
+87.8px within-symbol gaps (needs >=88px) EXCEEDS Klamath's own 68.9px
+between-symbol minimum — the exact failure mode the goal's own gate
+forbids: merging two adjacent but physically DIFFERENT real diffuser
+instances into one phantom combined body. The absolute pixel scale of
+"safe" varies by document (rendering DPI/scale differs sheet to sheet,
+confirmed elsewhere this checkpoint via page_size_px), so an absolute
+constant cannot generalize — this is not a case of picking a better
+number, the numbers themselves prove no single constant works.
+
+IMPLICATION FOR THE REAL FIX (still not attempted here): the proximity
+criterion needs to be SCALE-RELATIVE, not an absolute pixel constant —
+normalized against local primitive scale the same way
+candidateBodySignature.ts's own `normalizedLength` already handles
+cross-document scale differences elsewhere in this exact codebase, not a
+new, second normalization convention. This calibration data is handed
+to whoever builds that normalized version next, so the first real
+attempt can be validated against these same 3 documents' own already-
+measured numbers rather than starting from zero. SHOULD THIS BE ON THE
+SHARED PATH? Yes, as calibration data for the next real attempt — this
+entry itself, not a script (the measurement was a throwaway scratch
+probe, deliberately not promoted to mcp/scripts/ since it answers one
+calibration question, not a repeatable diagnostic need going forward).
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4's own gate 3 —
 measured, for the first time in this project, "Ownership precision/
 recall/F1 is reported separately; auto-accepted instances require at
