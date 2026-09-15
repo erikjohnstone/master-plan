@@ -1,5 +1,80 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — document 011
+supply-diffuser case (draft "48-hines-mh101-supply-diffusers-sd3"), built,
+verified, and reverted. Fourth reverted corpus-expansion attempt this
+checkpoint, and a genuinely new failure mode: unlike the document-037 case
+above (a real per-instance geometry problem), this one failed for exactly
+the document-010 P1/P2 reason — a same-icon/different-tag sibling
+collision — except this time the collision was caught only after full
+annotation, not before, which is itself the lesson worth recording.
+
+Document `011_IL_VA_Hines_Finance_Center_Renovation.pdf`, page 16 (drawing
+MH-101, a real to-scale Level-2 mechanical duct plan with an on-sheet
+"Diffuser, Register, and Grille Schedule"), has SD-1 through SD-4 ceiling
+diffuser types, all drawn with the IDENTICAL square+diagonal-X icon and
+distinguished from each other only by their printed tag (SD-1/SD-2/SD-3/
+SD-4), not by any visual difference in the glyph itself. This was not
+obvious up front:
+
+- The seed's own raw `fp.rel` segments were inspected directly before
+  drafting anything (applying the document-037 lesson from the start this
+  time). The full 54x54px box+both-diagonals icon turned out to score only
+  0-6 real matches at >=92% under `Session.symbolSweep`, because a
+  hand-drawn flex-duct connector overlaps the box's own bottom-right corner
+  by a different amount at nearly every installed instance, breaking a
+  different edge/diagonal each time. Narrowing the seed_rect to just the
+  box's top-left corner plus one full diagonal (entirely clear of every
+  observed connector-overlap zone) recovered 9 real matches at score
+  >=0.936 — a legitimate, disclosed fix, the same kind of deliberate
+  fragment-sizing this checkpoint has used throughout, not a guard weakened.
+- Cross-referencing all 9 matches against the sheet's own text runs (a
+  direct `textSpans` proximity lookup, not assumed) confirmed 5 are
+  genuinely tagged "SD-3" and 4 are the identical icon tagged "SD-1" — the
+  same same-tag-not-same-shape situation as document 010's P1/P2 pumps.
+  This was caught and correctly recorded as `hard_negatives` before the
+  case was considered done, and two of the five real SD-3 instances were
+  additionally confirmed as genuine mirrored placements (visually spot-
+  checked, not just trusted from the matcher's own rotation/mirror label,
+  per the document-037 lesson) — real, valuable, first-of-their-kind
+  mirrored-instance ground truth for this corpus if the case had landed.
+- It didn't land. Running the finished draft through the real CLI corpus
+  runner (`--report-v2-fields`, not just the standalone tools) surfaced a
+  problem no amount of careful annotation could fix: the runner's own
+  count check has no way to exclude the 4 known SD-1 look-alikes from its
+  raw match count (`exclude` is a live `SweepOptions` production input,
+  not one of the runner's supported manifest-override fields — only
+  `tolerance_px`, `variant_guard`, `rotations`, `mirror`, and `affine` are).
+  So the count came back 9 (5 real SD-3 + 4 real-but-wrong-family SD-1),
+  permanently failing `count 9 != 5` no matter how the hard_negatives were
+  documented. This is structurally the exact P1/P2 problem, just reached by
+  a different road: a symbol_sweep case cannot be built at all around a
+  family whose icon is shared with a same-page sibling tag, regardless of
+  how carefully the real instances are separated from the false ones by
+  hand — the count check has no hook for that separation. The whole
+  document/`SD-1`-mismatch discovery already existed as a plain fact in
+  the raw match list from the very first sweep; the mistake was going on
+  to fully annotate all five real instances, two mirror-confirmation
+  renders, and a full review write-up before checking whether the sibling
+  collision was fatal to the case shape itself, rather than checking that
+  first.
+
+New standing rule, sharper than "verify every candidate through the real
+engine": **the moment a family's raw match/withheld list includes ANY
+instance whose nearest tag is a different literal string, check
+immediately whether the corpus runner's manifest-override mechanism can
+exclude it — and if it cannot (as with plain count mismatches from a
+same-icon sibling), stop and pick a different family before doing any
+further per-instance annotation, not after.** `cases.json` is back to
+exactly 47 cases (verified by direct JSON parse); the review PNGs and the
+copied source PDF (`pdf/34__vol2__011__...`, document_id `34`, now spent
+but unused, same status as document_id `33` from the earlier document-010
+attempts) were never committed, so nothing else needed to be undone.
+
+SHOULD THIS BE ON THE SHARED PATH? No. This pass only drafted, verified,
+and reverted ground-truth data plus this progress note — no
+`web/src/lib` or `mcp/src` production code changed.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — document 037
 ceiling-diffuser case (draft "48-ar-va-ahu21-reflected-ceiling-diffusers"),
 built, verified, and reverted. Third reverted corpus-expansion attempt this
