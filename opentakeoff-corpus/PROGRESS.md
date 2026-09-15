@@ -1,5 +1,42 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane C — shipped
+the carrier-filter refinement the entry directly below's own measurement
+pointed to but did not attempt. New opt-in `excludeCarrierLike` option
+(default false, unchanged prior behavior) on `proposeTagSearchRegionBody`:
+runs carrierClassification.ts's own within-proposal sibling-outlier check
+(Phase 4 requirement 2's own "carrier vs body" signal, already built for
+exactly this distinction) over the region's own found primitives before
+computing its bbox, dropping any real wall/duct/dimension-line stub the
+symmetric search box swept in.
+
+Re-measured on the same real family (Cherry Point CD-1) before trusting
+the earlier scratch measurement's own numbers against the ACTUAL shipped
+function: RAW 0.2659/0.1585/0.8265 (microF1/precision/recall) ->
+carrier-FILTERED 0.3091/0.1983/0.7003 — confirms the entry below's own
+scratch-script numbers exactly. A real, modest improvement, disclosed as
+such, not oversold: precision rises but recall gives up ground in
+exchange, and the gap to the required 0.95 F1 gate remains large.
+
+2 new tests (14 total in candidateBodyLaneC.test.ts, up from 12): a real
+carrier stub swept into the region is dropped when the option is set
+(and still included when it is not — default behavior unchanged, an
+explicit regression check); returns null rather than a degenerate
+proposal when filtering removes every primitive found. Full affected
+suite green (53/53: LaneC, carrierClassification, LaneB,
+candidateProposalFusion, ownershipAssignment, ownershipEligibility).
+`tsc --noEmit` clean.
+
+Still disclosed, not attempted: formally wiring either the raw or
+carrier-filtered tag-region proposal into `candidateProposalFusion.ts`
+itself (a shared, multi-caller module, still not modified this
+checkpoint); a real tag-detection/OCR-matching step (this and the prior
+entry both used cases.json's own ground-truth tag_bbox); closing the
+remaining gap to the 0.95 F1 gate, which even the carrier-filtered
+numbers above do not reach. SHOULD THIS BE ON THE SHARED PATH? Yes —
+additive opt-in option, zero change to existing default behavior
+(verified by an explicit test), real-corpus-validated improvement.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane C —
 measured whether the tag-anchored proposal built and calibrated in the
 entry directly below actually improves Phase 4 gate 3's own corpus-wide

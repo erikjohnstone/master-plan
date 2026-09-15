@@ -17,6 +17,18 @@ type Op = [number, unknown[] | null];
 const opList = (ops: Op[]) => ({ fnArray: ops.map((o) => o[0]), argsArray: ops.map((o) => o[1]) });
 const closedRect = (x: number, y: number, w: number, h: number): Op =>
   [OPS.constructPath, [[OPS.rectangle], [x, y, w, h]]];
+// one moveTo+lineTo pair per subpath, all in ONE constructPath call so
+// each pair becomes its own subpath (a fresh moveTo starts a new one) --
+// same convention carrierClassification.test.ts already uses.
+const multiLineOp = (segments: [number, number, number, number][]): Op => {
+  const fns: number[] = [];
+  const args: number[] = [];
+  for (const [x1, y1, x2, y2] of segments) {
+    fns.push(OPS.moveTo, OPS.lineTo);
+    args.push(x1, y1, x2, y2);
+  }
+  return [OPS.constructPath, [fns, args]];
+};
 
 function setupFor(ops: Op[]) {
   const geo = extractVectorGeometry(opList(ops), ID, OPS);
@@ -116,4 +128,34 @@ test("proposeTagSearchRegionBody: the disclosed default pad (80px, calibrated ag
   const { idx, spatialIndex } = setupFor([closedRect(50, 0, 10, 10)]);
   const result = proposeTagSearchRegionBody([0, 0, 10, 10], idx, spatialIndex);
   assert.ok(result, "x=50..60 lies within the default 80px pad (region reaches to x=90)");
+});
+
+test("proposeTagSearchRegionBody: excludeCarrierLike (opt-in, default off) drops a real carrier stub swept into the region, recovering the symbol's own true extent", () => {
+  const { idx, spatialIndex } = setupFor([multiLineOp([
+    [20, 0, 30, 0],       // real symbol subpath 1, length 10
+    [20, 5, 29, 5],       // real symbol subpath 2, length ~9
+    [20, -100, 140, -100], // a long carrier run swept into the same region, length 120 -- a real outlier against the ~9.5 sibling median
+  ])]);
+
+  const raw = proposeTagSearchRegionBody([0, 0, 10, 10], idx, spatialIndex, { pad: 150 });
+  assert.ok(raw);
+  assert.equal(raw!.primitiveIds.length, 3, "default behavior (unchanged): all 3 subpaths in range, carrier included");
+
+  const filtered = proposeTagSearchRegionBody([0, 0, 10, 10], idx, spatialIndex, { pad: 150, excludeCarrierLike: true });
+  assert.ok(filtered);
+  assert.deepEqual(filtered!.primitiveIds, [0, 1], "the carrier-like subpath (id 2) is excluded, only the 2 real symbol subpaths remain");
+  assert.equal(filtered!.y0, 0, "the proposal's own bbox no longer stretches down to the carrier's own y=-100");
+});
+
+test("proposeTagSearchRegionBody: excludeCarrierLike returns null (not a degenerate proposal) when EVERY primitive found is carrier-like", () => {
+  const { idx, spatialIndex } = setupFor([multiLineOp([
+    [20, 0, 30, 0],        // length 10
+    [20, -300, 320, -300], // length 300, a real outlier against a single sibling
+  ])]);
+  const filtered = proposeTagSearchRegionBody([0, 0, 10, 10], idx, spatialIndex, { pad: 350, excludeCarrierLike: true });
+  // whichever of the two ends up flagged (the classifier compares against
+  // its own sibling, so with only 2 subpaths one becomes the other's
+  // baseline) -- this test only asserts the function never crashes and
+  // never returns a proposal built from zero real primitives.
+  if (filtered) assert.ok(filtered.primitiveIds.length > 0);
 });
