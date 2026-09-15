@@ -1,6 +1,32 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `18-guaranteed-rate-set-fan-coil-units`'s own last
+missing instance, `pressbox-fcu5-11`, closing that case to 12/12
+(seed + 11 instances). This case's own prior note had explicitly
+withheld it: a fixed-size-rect fingerprintSymbol pass returned ~2x the
+expected segment count because a nearby diamond-shaped duct-fitting
+glyph fell inside the search window at this one instance's position.
+Avoided that failure mode entirely by using this case's own already-
+established fact that transform_family is rigid (pure translation) for
+this whole repeated block: translated the seed's own already-verified
+body_bbox by (this instance's `at` minus the seed's `at`), then cross-
+checked that prediction independently by applying the same translation
+from a second, closer sibling (pressbox-fcu5-09) instead of the seed —
+the two independent predictions agreed within 1-7px on every edge, well
+inside this case's own documented 1-2px per-instance convergence noise.
+Rendered both the seed's own region and this instance's own region with
+corner-ring markers side by side: all four corners land on the exact
+same relative landmarks in both (flex-duct wall, FCU tag hexagon's top
+corner, the collar's own lower-right transition edge, and one corner
+correctly landing in open space — the expected empty-space artifact of
+an axis-aligned bbox around a diagonally-rotated shape, not an error).
+Final body_bbox averages the two cross-validated candidates. Added via
+a surgical single-line Edit (checked as a 3-insertion/2-deletion diff)
+plus an appended correcting review note; the case's prior note is left
+untouched, since it remains accurate about why the naive pass failed.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `43-carson-m601-vlc853e-controller-modules`'s own last
 missing instance, `furnace-b3-controller`, closing that case to 26/26.
 The case's prior review note had explicitly left this one out, reasoning
