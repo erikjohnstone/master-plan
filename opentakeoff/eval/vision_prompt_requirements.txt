@@ -1,0 +1,6 @@
+# Kept outside package.json: this is a GPU/CPU research evaluator, not a web or
+# MCP runtime dependency. Install in an isolated venv/on a dedicated GPU pod.
+transformers>=4.57.0,<5
+opencv-python-headless>=4.10.0
+safetensors>=0.5.0
+scipy>=1.14.0
