@@ -1,6 +1,29 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `45-slac-m63-analog-input-callouts`'s own last four
+gaps (callouts 03, 04, 13, 16), closing that case to 17/17. This was
+the LAST of the original Phase 1 requirement-2 case list from this
+checkpoint's own opening survey -- all ten cases with missing v2 fields
+identified at that survey are now closed. The prior note attributed all
+four to 'half-turned callouts' (a rotation-dependent-centroid issue);
+none is actually rotated. Located each one's own real Lane B body
+directly (the exact 5-primitive signature the seed's own body_bbox
+already is) instead of a same-size search rect: callout-03 and -04 each
+have exactly one such candidate, matching the seed's own horizontal
+dimensions precisely. callout-13 and -16 each had TWO same-size
+5-primitive candidates close together (a second AI/DO-family callout
+sits nearby on this dense sheet); disambiguated each pair using the
+instance's own already-trusted tag_bbox, which overlaps only one
+candidate in each case. Corner-ring renders confirm all four land
+exactly on their own AI callout's outline, with 13/16 specifically
+confirmed as the correct AI-tagged box of its own pair, not the nearby
+DO-tagged decoy. The prior note's 9-10px centroid miss came from the
+naive same-size-rect approach itself, not from any real rotation.
+Added via surgical edits plus an appended correcting review note; the
+case's prior note is left untouched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `23-st-cloud-set-vav-terminal-units`'s own last two
 gaps, mh10b3-vav-21b and mh10b2-vav-4c, closing that case to 14/14.
 vav-21b just needed a WIDER crop than the prior pass used: past the
