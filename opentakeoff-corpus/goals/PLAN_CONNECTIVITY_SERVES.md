@@ -291,9 +291,25 @@ row filled in the table below.
    junction mark vouches) and arrowhead direction, port `hasJunctionMark`
    and the arrow detector into `mepconnectivity.ts`, and have
    `topologyFor` call it. Edges gain `style`, `direction`, `sourceSeg`.
-3. Delete or repurpose L3.5 `runL35Topology`: either it stores the graph the
-   takeoff will consume (Phase 5) or it stops paying for noding it throws
-   away. Measure the cost on `federal-mech` (~511K segments) before and after.
+3. **Delete or repurpose L3.5 `runL35Topology` — measured 2026-09-15, and the
+   case is now unambiguous.** `OPENTAKEOFF_GRAPH_TRACE=1
+   production-graph-cli.mjs --mode graph --pdf federal-attachment4-mechanical.pdf`
+   (real cold-cache run, sidecar off): total sheet-graph build 62,387ms;
+   `L3.5:topology` alone is **34,661ms — 55.6% of the entire build, the single
+   largest stage** (`L2:ODL` 13,172ms, `L1.8:vectorgrid` 80ms, `L4` 1ms,
+   `L4.5` 0ms, `L4.8` 411ms). Of 24 sheets, only 2 were `topologyEligible`
+   with segments and actually completed (854ms on 5,293 segs, 3,533ms on
+   12,078 segs — `report.topology_sheets: 2`) — the pipeline's own disclosed
+   note says topology was **skipped outright on sheet #9 "(topology budget
+   spent)"**, i.e. this stage already hits an internal time ceiling and
+   silently abandons a dense sheet's topology today, on a real document,
+   with nobody downstream ever finding out (nothing reads
+   `graph.vector_topology` except `enrichSystemTags`, which never reads the
+   graph itself — see the audit above). Either store the graph the takeoff
+   will actually consume (Phase 5) or stop paying for this — there is no
+   third option that keeps 34.7s of silent, partially-abandoned, unconsumed
+   work in the critical path. Re-measure the same command after this phase's
+   change and put the before/after here.
 
 **Gate 1:** flags off ⇒ `mep-trace-eval.mjs` 3/3 unchanged byte-for-byte and
 `tools.test.ts:2033` still asserts the old crossing behaviour;
@@ -457,8 +473,9 @@ not this goal's goes to `TAKEOFF_BUG_CATALOGUE.md`, not into a side fix.
 - ~~Whether pdf.js's operator list preserves `setDash`...~~ — **answered
   2026-09-15, see Phase 1 §1 above: `setDash` never fires on this corpus's
   CAD exports; dash detection must be geometric.**
-- `federal-mech` (~511K segments) has never had `buildMepGraph` timed; L3.5
-  already runs it there silently. Measure before Phase 1 changes anything.
+- ~~`federal-mech` has never had `buildMepGraph` timed...~~ — **answered
+  2026-09-15, see Phase 1 §3 above: L3.5 costs 34,661ms (55.6% of the whole
+  build) and already silently abandons a dense sheet on a time budget.**
 - The arXiv and MDPI papers above could not be fetched from this container
   (egress blocked). Read them from a machine that can before Phase 5's API
   design; the seven-operator list is worth matching name-for-name.
