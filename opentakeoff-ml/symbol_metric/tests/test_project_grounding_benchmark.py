@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 from project_grounding_benchmark import CASE_SCHEMA, PREDICTION_SCHEMA, iou, score  # noqa: E402
 from import_symbol_grounding_truth import import_truth  # noqa: E402
-from run_controlled_bakeoff import gate_decision  # noqa: E402
+from run_controlled_bakeoff import SCHEMA as BAKEOFF_SCHEMA, gate_decision, run  # noqa: E402
 
 
 PDF_HASH = "a" * 64
@@ -127,6 +127,37 @@ class ProjectGroundingBenchmarkTest(unittest.TestCase):
         decision, checks = gate_decision(control, experiment, [{"metric": "metrics.selected_precision", "direction": "higher", "minimum_delta": 0}])
         self.assertEqual(decision, "diagnostic_only_not_promotable")
         self.assertTrue(checks[0]["passed"])
+
+    def test_bakeoff_executes_declared_command_and_writes_audit_report(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            control = {
+                "production_evidence_eligible": False,
+                "metrics": {"selected_precision": 0.8},
+            }
+            candidate = {
+                "production_evidence_eligible": False,
+                "metrics": {"selected_precision": 0.9},
+            }
+            (root / "control.json").write_text(json.dumps(control), encoding="utf-8")
+            write_candidate = "import json; from pathlib import Path; Path('candidate.json').write_text(json.dumps(" + repr(candidate) + "))"
+            config = {
+                "schema": BAKEOFF_SCHEMA,
+                "control": {"id": "control", "evaluation_json": "control.json"},
+                "comparison_gates": [{"metric": "metrics.selected_precision", "direction": "higher", "minimum_delta": 0}],
+                "experiments": [{
+                    "id": "candidate",
+                    "hypothesis": "This test proves the runner executes only its declared command.",
+                    "command": [sys.executable, "-c", write_candidate],
+                    "evaluation_json": "candidate.json",
+                }],
+            }
+            output = root / "report.json"
+            report = run(config, root, output, dry_run=False, resume=False, max_experiments=None)
+            persisted = json.loads(output.read_text(encoding="utf-8"))
+        self.assertEqual(report["experiments"][0]["status"], "completed")
+        self.assertEqual(report["experiments"][0]["decision"], "diagnostic_only_not_promotable")
+        self.assertEqual(persisted["experiments"][0]["id"], "candidate")
 
 
 if __name__ == "__main__":
