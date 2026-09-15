@@ -1,6 +1,45 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+breadth-first legend screening, batch C (5 fresh Vol2 documents: 019, 021,
+023, 024, 028) — 0 viable candidates, all closed with confirmed reasons
+rather than left ambiguous. Per this checkpoint's own new plan ("screen
+several documents' legends against the accumulated checklist before
+committing to a deep single-symbol rect investigation"), delegated three
+parallel scouting passes across 15 never-touched Vol2 documents; this is
+the first batch back.
+
+Failure modes hit, each confirmed by rendering plus a real
+`Session.symbolSweep(scope:"sheet", commit:false)` call, never guessed
+from a legend or filename alone: (1) 019 — a same-icon/different-tag
+type-schedule collision worse than the already-closed document 011 SD
+case: the S1-1/S1-2/S1-3/S1-4 "supply" icons are pixel-identical, and the
+engine's own label matcher cannot even isolate the S1 family from its own
+numbered siblings (only recovers the "S1" prefix, not the suffix) —
+`found=109, withheld=3672` on one seed, with the withheld/promoted
+reasons naming S2/R1/R3/S4/E1 and room-number label collisions directly.
+(2) 021 — no usable text layer on any plan sheet: confirmed by dumping
+every span on a full ceiling plan (only 10 spans total, all garbled
+custom-font strings or title-block metadata; every diffuser tag and room
+number is exploded vector paths, not real text) — the same structural
+problem already on record for document 020. (3)-(4) 023 and 024 — project
+scope too narrow: every installed item carries a unique one-off tag
+(chillers CH-1/CH-2, RTU-101..104), nothing repeats under one literal tag
+anywhere in the plan sheets; 023's own duct-symbol legend has the same
+same-icon/different-type-tag structure that killed 011, but is unused
+boilerplate — the project never places a diffuser. (5) 028 — no to-scale
+plan view anywhere in the document at all (details, P&IDs, sequences,
+point-list tables only) — nothing to seed a symbol_sweep candidate
+against, structurally, before any symbol-level screening question even
+applies.
+
+None of these were close calls. Batches A (004, 006, 008, 009, 013) and B
+(014-018) still running; will fold their findings in as they land.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Reconnaissance only — no files
+edited, no cases.json change, no commits from the scouting pass itself.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 document 049's rotated-valve lead, definitively closed. Retried with the
 more surgical seed rect planned in the entry below: re-located the exact
 valve row via `textSpans` ("990 SF/ 1066 SF", "CSDE1"), rendered high-zoom
