@@ -151,18 +151,43 @@ test("proposal fusion: a Lane C body with no overlap at all becomes its own inde
   assert.equal(cOnly!.evidence.laneC!.bodyId, 7, "the caller-assigned id on the laneCBodies entry is preserved");
 });
 
-test("proposal fusion: a Lane C body that SHARES primitives with an existing Lane B proposal is added as its OWN separate proposal, never Jaccard-deduped or merged into it -- the overlap is left for the ownership pipeline's own contested-primitive machinery to arbitrate", () => {
-  const { idx, bodies, laneA } = fuseFor([closedRect(0, 0, 10, 10)]);
-  const laneBBody = bodies[0];
-  // a Lane C region that swept in the SAME 4 primitives plus one more --
-  // exactly the real shape a tag-search region takes when it captures a
-  // Lane B fragment plus surrounding clutter.
-  const laneCBody = { id: 3, primitiveIds: [...laneBBody.primitiveIds, 999], x0: -5, y0: -5, x1: 15, y1: 15 };
+test("proposal fusion: a Lane C body that is a NEAR-TOTAL duplicate of an existing Lane B proposal is MERGED into it, not left as a separate, self-tying competitor -- the real bug this module's own header discloses (45-slac-m63-analog-input-callouts's own seed instance: an already-correct, uncontested Lane B body turned into an unresolvable empty tie by its own byte-for-byte Lane C duplicate)", () => {
+  // a second, disconnected line is real, separate Lane B evidence of its
+  // OWN (never touching the rect) -- included only so the Lane C body
+  // below can reference a real extra primitive id without crashing bbox
+  // computation; it must stay untouched by the rect+C merge.
+  const { idx, bodies, laneA } = fuseFor([closedRect(0, 0, 10, 10), line(1000, 1000, 1010, 1000)]);
+  const rectBody = bodies.find((b) => b.primitiveIds.length === 4)!;
+  const lineBody = bodies.find((b) => b.primitiveIds.length === 1)!;
+  const extraId = lineBody.primitiveIds[0];
+  // 4 of 5 primitives shared with the rect's own Lane B proposal --
+  // Jaccard 4/5 = 0.8, near-total overlap, the SAME dedup rule the Lane
+  // A/B merge above already applies, now extended to Lane C.
+  const laneCBody = { id: 3, primitiveIds: [...rectBody.primitiveIds, extraId], x0: -5, y0: -5, x1: 1010, y1: 1000 };
   const fused = fuseProposals(idx, bodies, laneA.invocations, [laneCBody]);
-  assert.equal(fused.length, 2, "the Lane B proposal and the overlapping Lane C proposal both survive as distinct proposals");
-  const cProposal = fused.find((f) => f.evidence.laneC)!;
-  const bProposal = fused.find((f) => f.evidence.laneB && !f.evidence.laneC)!;
-  assert.ok(cProposal && bProposal);
-  assert.deepEqual(cProposal.primitiveIds.slice().sort((a, b) => a - b), [...laneBBody.primitiveIds, 999].sort((a, b) => a - b), "Lane C's own primitiveIds are reported as-is, never trimmed to remove the shared ink");
-  assert.deepEqual(bProposal.primitiveIds, laneBBody.primitiveIds, "Lane B's own proposal is completely untouched by the overlapping Lane C proposal");
+  assert.equal(fused.length, 2, "the merged rect+C body, plus the totally unrelated separate line body untouched -- never one proposal, since two real distinct physical things are here");
+  const merged = fused.find((f) => f.evidence.laneC)!;
+  const untouched = fused.find((f) => f !== merged)!;
+  assert.deepEqual(merged.votingLanes, ["B", "C"], "the rect's own Lane B proposal absorbed Lane C's near-duplicate, not left to contest it");
+  assert.ok(merged.evidence.laneB && merged.evidence.laneC);
+  assert.deepEqual(merged.primitiveIds.slice().sort((a, b) => a - b), [...rectBody.primitiveIds, extraId].sort((a, b) => a - b), "the union of both lanes' own ink, nothing dropped");
+  assert.deepEqual(untouched.votingLanes, ["B"], "the separate line body is real, distinct Lane B evidence -- untouched by the rect's own merge");
+  assert.deepEqual(untouched.primitiveIds, lineBody.primitiveIds);
+});
+
+test("proposal fusion: a Lane C body that SWEEPS a Lane B fragment as a SMALL part of a much larger region stays its OWN independent proposal -- low Jaccard against any one fragment it covers, never merged, preserving Lane C's whole point (recovering fragmentation Lane B alone cannot)", () => {
+  // a big swept region containing one real fragment's own 4 primitives
+  // plus 20 other real (never dereferenced-and-crashing on a fake id)
+  // primitives -- Jaccard 4/24 is well under the merge threshold.
+  const manyOps = [closedRect(0, 0, 10, 10)];
+  for (let i = 0; i < 20; i++) manyOps.push(line(2000 + i * 20, 2000, 2010 + i * 20, 2000));
+  const { idx, bodies, laneA } = fuseFor(manyOps);
+  const sweptBody = bodies[0];
+  const otherIds = idx.primitives.map((_, i) => i).filter((i) => !sweptBody.primitiveIds.includes(i));
+  const laneCBody = { id: 9, primitiveIds: [...sweptBody.primitiveIds, ...otherIds], x0: -5, y0: -5, x1: 2410, y1: 2010 };
+  const fused = fuseProposals(idx, bodies, laneA.invocations, [laneCBody]);
+  assert.equal(fused.length, bodies.length + 1, "every original Lane B fragment survives, plus the Lane C sweep as its own independent proposal");
+  const cOnly = fused.find((f) => f.votingLanes.length === 1 && f.evidence.laneC);
+  assert.ok(cOnly, "the sweep never merges into any one small fragment it covers");
+  assert.equal(cOnly!.primitiveIds.length, laneCBody.primitiveIds.length);
 });

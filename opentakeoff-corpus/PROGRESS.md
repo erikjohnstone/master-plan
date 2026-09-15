@@ -1,5 +1,76 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2 —
+a real REGRESSION found by root-causing individual worst-precision
+instances from the full-corpus Lane C + coverageAgreement measurement
+(several entries below), not merely accepted as an aggregate cost.
+
+FINDING: filtering that run's own instance-level detail (not just the
+aggregate) by lowest precision surfaced a suspicious pattern — several
+totally unrelated families (SLAC's own analog-input callouts, JVWTP's
+own ladder relay coils and rooftop AI callouts) each scored precision
+0.000 with an identical fp=4, tp=0. Traced end to end on
+45-slac-m63-analog-input-callouts's own seed instance: Lane C's
+tag-search proposal correctly recovered the REAL 5-primitive callout
+body (confirmed directly — its own bbox landed almost exactly on the
+real body_bbox) — the SAME 5 primitives an already-correct, previously
+UNCONTESTED Lane B proposal already owned. Contested against its own
+byte-for-byte duplicate, both proposals tied EXACTLY on every
+eligibility signal (topScore 0.667, margin 0), and
+ownershipAssignment.ts's own explicit "never guess on a close margin"
+design (by design, not a bug — see that module's own header) correctly
+refused to pick either. Both ended up with an EMPTY owned body. The
+scoring script's own best-match search then fell back to the only other
+proposal whose giant bbox happened to overlap this instance — an
+unrelated, page-spanning 4-primitive body — producing the observed
+fp=4, tp=0. Confirmed against the baseline (no Lane C) run: this exact
+instance scored precision 0.6, recall 1, f1 0.75 there, matching a real
+local Lane B proposal correctly. Lane C's own presence, not some
+unrelated pre-existing issue, caused this specific regression.
+
+ROOT CAUSE, precisely: `candidateProposalFusion.ts`'s own deliberate
+choice (Lane C requirement 1's entry, several below) to add every Lane C
+body as an independent `["C"]` proposal, NEVER Jaccard-deduped against
+Lane A/B — reasoned at the time as necessary because a tag region
+typically SWEEPS OVER many small Lane B fragments at once, and a 1:1
+"best match" dedup rule (like the existing Lane A/B one) does not fit
+that shape. That reasoning is still correct for the SWEEP case, but
+missed a DIFFERENT, real case this instance embodies: Lane C sometimes
+rediscovers a body Lane B ALREADY found correctly and completely, with
+near-total overlap, not a sweep at all.
+
+FIX, in `candidateProposalFusion.ts`: Lane C bodies are now checked for
+near-total Jaccard overlap (the SAME `threshold`/dedup rule the existing
+Lane A/B merge already uses, and the same two-pass "collect matches,
+commit only the single best one per target, every other match stays
+independent" shape) against the Lane A/B proposals already fused. This
+is NOT the previously-rejected many-to-one sweep rule: a real sweep's
+own Jaccard against any ONE small fragment it covers is mathematically
+LOW (a small fragment is a small fraction of the union), so the merge
+only ever fires on real near-total overlap — proven directly with two
+new tests (a near-duplicate case that now merges into one `["B","C"]`
+proposal; a genuine 24-fragment sweep that stays fully independent,
+Jaccard 4/24 well under threshold), not merely argued from the math.
+The full affected suite (candidateProposalFusion,
+ownershipAssignment, ownershipConflicts, ownershipEligibility,
+ownershipBody, candidateBodyLaneA/B/C, rigidAffineVerify,
+vectorSceneIndex/SpatialIndex/Relations, symbolAffine, symbolsweep,
+taggedVectorGrounding) is 239/239 green. `tsc --noEmit` clean. One
+existing test (asserting the OLD "never dedup" behavior for a
+near-duplicate case) updated to reflect the new, deliberately narrower
+design; its own root cause (a hardcoded placeholder primitive id the
+mock idx never actually had, previously unreachable since dedup never
+fired) fixed too, using a real primitive id instead.
+
+Full-corpus re-measurement (--with-lane-c, same 422-instance ground
+truth) launched to quantify the real aggregate effect of this fix — see
+the next entry once it completes, not assumed here.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — a real regression, found by
+tracing actual worst-case instances rather than accepting an aggregate
+number, root-caused precisely, and fixed narrowly without reintroducing
+the previously-rejected sweep-dedup mistake.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 5 first slice
 follow-up — real-corpus validation of the entry directly below's own new
 `rigidAffineVerify.ts`, run against two real families instead of only

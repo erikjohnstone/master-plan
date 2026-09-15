@@ -91,22 +91,37 @@
 // candidateBodyLaneC.ts's own `proposeTagSearchRegionBody` (Phase 3 Lane
 // C requirement 1) produces real, useful proposals — measured
 // corpus-wide, PROGRESS.md: a 4.3x microF1 improvement on the one real
-// family it could help — but is DELIBERATELY NOT Jaccard-deduped against
-// Lane A/B here the way A and B dedupe against each other above. A tag
-// region typically SWEEPS OVER many small Lane B fragments at once (the
-// exact fragmentation this mechanism exists to work around), so a 1:1
-// "best match" dedup rule does not fit its own shape; inventing a
-// bespoke many-to-one dedup rule here would risk exactly the kind of
-// silent, unvalidated assumption this project's own real-corpus
-// discipline warns against. Instead, each Lane C body is added as its
-// own independent `["C"]` proposal, and any primitive overlap this
-// creates with an existing Lane A/B proposal is left for
-// ownershipConflicts.ts's own `detectOwnershipClusters` and the rest of
-// Phase 4's already-built, already-tested arbitration machinery to
-// resolve as a real CONTESTED primitive, using real evidence (style,
-// connectivity, carrier, form-plausibility, graph-signature) — the same
-// machinery already built for exactly this "which proposal actually
-// owns this shared ink" question, reused rather than reimplemented.
+// family it could help. Originally left entirely UN-deduped against Lane
+// A/B (every overlap left for ownershipConflicts.ts's own arbitration to
+// resolve as a real contested primitive), reasoning that a tag region
+// typically SWEEPS OVER many small Lane B fragments at once, so a 1:1
+// "best match" dedup rule (like the Lane A/B one above) does not fit its
+// own shape.
+//
+// REAL BUG FOUND AND FIXED (full-corpus Phase 4 gate-3 measurement,
+// PROGRESS.md): that blanket non-dedup choice missed a DIFFERENT, real
+// case a full-corpus run surfaced directly — 45-slac-m63-analog-input-
+// callouts's own seed instance. There, Lane C's tag-search region
+// rediscovered the SAME 5 primitives an already-correct, previously
+// UNCONTESTED Lane B body already owned — a near-EXACT duplicate, not a
+// multi-fragment sweep. Left uncontested, that would have stayed
+// correct; contested against its own byte-for-byte duplicate, the two
+// proposals tied EXACTLY on every eligibility signal (margin 0), and
+// ownershipAssignment.ts's own explicit "never guess on a close margin"
+// design correctly refused to pick either — both ended up with an EMPTY
+// owned body, turning a previously correct match into nothing.
+//
+// FIX: Lane C bodies are now checked for a near-total Jaccard overlap
+// (the SAME `threshold`/dedup rule the Lane A/B merge above already
+// uses, and the same two-pass "collect matches, commit only the single
+// best one per target, every other match stays its own independent
+// proposal" shape) against the Lane A/B proposals already fused above.
+// This is NOT the rejected many-to-one sweep rule: a real sweep's own
+// Jaccard against any ONE small fragment it covers is mathematically
+// LOW (a small fragment is a small fraction of the union), so this only
+// ever fires on real near-total overlap — confirmed directly against
+// the real corpus case above, not merely argued. A genuine sweep still
+// adds its own independent `["C"]` proposal exactly as before, unaffected.
 import type { CandidateBody } from "./candidateBodyLaneB.ts";
 import type { FormInvocationSignature } from "./candidateBodyLaneA.ts";
 
@@ -278,9 +293,42 @@ export function fuseProposals(
     });
   }
 
-  // Lane C bodies — added as independent ["C"] proposals, never Jaccard-
-  // deduped against Lane A/B; see this module's own header for why.
+  // Lane C bodies — merged into an already-fused Lane A/B proposal only
+  // on near-total Jaccard overlap (see this module's own header: a real
+  // corpus regression, not a hypothetical); every other Lane C body adds
+  // its own independent ["C"] proposal exactly as before.
+  interface LaneCMatch { body: CandidateBody; score: number; }
+  const laneCMatchesByTarget = new Map<number, LaneCMatch[]>();
+  const unmatchedLaneC: CandidateBody[] = [];
   for (const body of laneCBodies) {
+    const bodySet = new Set(body.primitiveIds);
+    let bestIdx = -1, bestScore = 0;
+    for (let i = 0; i < fused.length; i++) {
+      const score = jaccard(bodySet, new Set(fused[i].primitiveIds));
+      if (score > bestScore) { bestScore = score; bestIdx = i; }
+    }
+    if (bestIdx >= 0 && bestScore >= threshold) {
+      let arr = laneCMatchesByTarget.get(bestIdx);
+      if (!arr) { arr = []; laneCMatchesByTarget.set(bestIdx, arr); }
+      arr.push({ body, score: bestScore });
+    } else {
+      unmatchedLaneC.push(body);
+    }
+  }
+  for (const [targetIdx, matches] of laneCMatchesByTarget) {
+    matches.sort((a, b) => b.score - a.score || a.body.id - b.body.id);
+    const [best, ...rest] = matches;
+    const target = fused[targetIdx];
+    const unionIds = [...new Set([...target.primitiveIds, ...best.body.primitiveIds])].sort((a, b) => a - b);
+    const { x0, y0, x1, y1 } = bbox(idx, unionIds);
+    const votingLanes = (target.votingLanes.includes("C") ? target.votingLanes.slice() : [...target.votingLanes, "C" as LaneVote]).sort();
+    fused[targetIdx] = {
+      ...target, primitiveIds: unionIds, x0, y0, x1, y1, votingLanes,
+      evidence: { ...target.evidence, laneC: { bodyId: best.body.id, primitiveCount: best.body.primitiveIds.length } },
+    };
+    for (const m of rest) unmatchedLaneC.push(m.body); // real, distinct Lane C evidence -- never silently dropped
+  }
+  for (const body of unmatchedLaneC) {
     fused.push({
       id: nextId++, primitiveIds: body.primitiveIds.slice(), x0: body.x0, y0: body.y0, x1: body.x1, y1: body.y1,
       votingLanes: ["C"],
