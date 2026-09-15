@@ -1,5 +1,48 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 fifth slice —
+requirement 5: "Preserve existing MATCH, SCHEDULE_ONLY, PLAN_ONLY,
+REFUSED, and AMBIGUOUS semantics; add evidence states additively."
+
+NEW state: `PLAN_ONLY_UNCLASSIFIED`, added to `classifyReconcileStatus`
+(schedulePlanReconcile.mjs) — the SAME real distinction
+`evidenceGraph.ts`'s own `classifyInstalledEvidence` (Phase 6) already
+makes between "PLAN_ONLY" (family identity actually proven) and
+"UNCLASSIFIED_PLAN_SYMBOL" (a body was found, but nothing establishes
+what family it actually is), now bridged into the EXISTING
+reconciliation vocabulary for the first time — real, if still partial,
+integration between Phase 6's own new evidence graph and Phase 7's own
+reconciliation output.
+
+SAFETY, per the audit's own explicit warning two entries below
+("changing branch order/precedence risks silently reclassifying
+existing rows — add new states LAST, gate behind new explicit evidence
+fields, never reorder existing conditionals"), followed exactly: new
+optional `familyIdentityProven` parameter, default `null`. Added as the
+LAST check before the existing PLAN_ONLY return, touching NO earlier
+conditional's own order. Every existing caller (which never passes the
+new parameter) gets the byte-identical classification as before —
+confirmed by a dedicated test asserting `familyIdentityProven` omitted
+returns PLAN_ONLY unchanged, `true` also stays PLAN_ONLY (positively
+proven is not a new state), and only an explicit `false` returns the
+new state.
+
+1 new test. `tsc --noEmit` clean. `schedulePlanReconcile.test.ts`
+28/28, `session.test.ts` 21/21 (the same real regression net used two
+entries below).
+
+DISCLOSED, NOT ATTEMPTED: actually wiring a real caller to compute
+`familyIdentityProven` from `evidenceGraph.ts`'s own
+`classifyInstalledEvidence` output (this slice adds the vocabulary,
+not the integration call site — real further work, kept separate to
+validate the new state's own safety in isolation first). Phase 7's own
+remaining requirements 2/3 (symbol_sweep/sweep_schedule_row internals)
+and the new MEP-corroboration call site remain deferred per the
+audit's own ordering, four entries below.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — additive, zero behavior change
+for any existing caller, validated against the real regression net.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 fourth slice
 — requirement 4's narrow gating: "a one-row schedule may imply one
 scheduled asset only when the schedule contract proves that." Plus a

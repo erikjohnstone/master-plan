@@ -8,7 +8,23 @@
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.mjs";
 
-/** @typedef {"MATCH"|"SCHEDULE_ONLY"|"PLAN_ONLY"|"REFUSED_NO_SCALE"|"REFUSED_NO_TEXT"|"AMBIGUOUS"} ReconcileStatus */
+/** @typedef {"MATCH"|"SCHEDULE_ONLY"|"PLAN_ONLY"|"PLAN_ONLY_UNCLASSIFIED"|"REFUSED_NO_SCALE"|"REFUSED_NO_TEXT"|"AMBIGUOUS"} ReconcileStatus */
+// GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 requirement 5:
+// "Preserve existing MATCH, SCHEDULE_ONLY, PLAN_ONLY, REFUSED, and
+// AMBIGUOUS semantics; add evidence states additively." `PLAN_ONLY_
+// UNCLASSIFIED` is the one new state this slice adds: the SAME real
+// distinction evidenceGraph.ts's own `classifyInstalledEvidence`
+// (Phase 6) already makes between "PLAN_ONLY" (family identity
+// actually proven) and "UNCLASSIFIED_PLAN_SYMBOL" (a body was found,
+// but nothing establishes what family it actually is) — this bridges
+// that Phase 6 distinction into the EXISTING reconciliation vocabulary
+// for the first time. Added as the LAST check before the existing
+// PLAN_ONLY return, gated behind a brand-new `familyIdentityProven`
+// parameter that defaults to `null` ("not supplied") — every existing
+// caller, which never passes it, gets the EXACT SAME classification as
+// before, unchanged; only a caller that explicitly wires Phase 6
+// evidence in and states `familyIdentityProven: false` ever sees the
+// new state. No earlier conditional's own order was touched.
 
 /**
  * Quantity-semantics policy: these schedule families assign a unique mark to
@@ -136,6 +152,11 @@ export function countPrefixedScheduleTagOccurrences(spans, key) {
  * @param {string|null|undefined} [p.reason]
  * @param {boolean} [p.scheduleDefinitionOnly]
  * @param {"symbol_geometry"|"explicit_installation_note"|"tag_text_only"|"mixed_geometry_and_tag_text"|"unverified"|null} [p.installedEvidenceGrade]
+ * @param {boolean|null} [p.familyIdentityProven] Phase 7 requirement 5's own
+ *   additive evidence state (see this file's own ReconcileStatus typedef
+ *   comment): null/omitted (every existing caller) never changes behavior;
+ *   `false` on what would otherwise classify PLAN_ONLY instead returns the
+ *   new PLAN_ONLY_UNCLASSIFIED state.
  * @returns {ReconcileStatus}
  */
 export function classifyReconcileStatus({
@@ -144,6 +165,7 @@ export function classifyReconcileStatus({
   itemStatus,
   failureType,
   reason,
+  familyIdentityProven = null,
   scheduleDefinitionOnly = false,
   installedEvidenceGrade = null,
 }) {
@@ -185,7 +207,9 @@ export function classifyReconcileStatus({
     if (itemStatus === "refused") return "SCHEDULE_ONLY";
     return "SCHEDULE_ONLY";
   }
-  if (installedQty > 0 && scheduledQty === 0) return "PLAN_ONLY";
+  if (installedQty > 0 && scheduledQty === 0) {
+    return familyIdentityProven === false ? "PLAN_ONLY_UNCLASSIFIED" : "PLAN_ONLY";
+  }
   return "SCHEDULE_ONLY";
 }
 

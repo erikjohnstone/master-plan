@@ -121,6 +121,13 @@ test("classifyReconcileStatus: MATCH, SCHEDULE_ONLY, REFUSED, AMBIGUOUS", () => 
   );
 });
 
+test("Phase 7 requirement 5 -- PLAN_ONLY_UNCLASSIFIED is a new, purely additive evidence state: every existing caller (familyIdentityProven omitted) is UNCHANGED, only an explicit false opts into the new state", () => {
+  const base = { scheduledQty: 0, installedQty: 2, itemStatus: "resolved" as const };
+  assert.equal(classifyReconcileStatus(base), "PLAN_ONLY", "omitted -- identical to every existing caller today");
+  assert.equal(classifyReconcileStatus({ ...base, familyIdentityProven: true }), "PLAN_ONLY", "positively proven -- still PLAN_ONLY, not a new state");
+  assert.equal(classifyReconcileStatus({ ...base, familyIdentityProven: false }), "PLAN_ONLY_UNCLASSIFIED", "explicitly disproven/unproven -- the one new state this slice adds");
+});
+
 test("scheduled quantity distinguishes printed, row-cardinality, and unparseable evidence", () => {
   assert.deepEqual(scheduledQtyStatusFromRow({ cells: { "QTY.": { text: "12" } } }), {
     qty: 12,
