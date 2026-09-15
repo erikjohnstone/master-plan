@@ -1,5 +1,92 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 — first
+real-corpus validation of `evidenceGraph.ts` (all five entries below
+were synthetic-fixture-tested only until now), plus a built-then-
+REJECTED performance fix, full disclosure below of why it was rejected
+rather than kept. No code changed in this entry beyond the revert
+itself — `evidenceGraph.ts`/`evidenceGraph.test.ts` are exactly as the
+entry below left them.
+
+METHOD: ran `buildSheetEvidenceGraph` against Cherry Point's own real
+MH111 sheet (01-cherry-mh111-cd1), using `mcp/src/pdf.ts`'s own
+`textSpans(pg)` for real positioned text (this module's first-ever use
+of real PDF text, not hand-built spans) and the REAL Phase 3/4 pipeline
+output (Lane B -> fuseProposals -> detectOwnershipClusters -> owned
+bodies) for candidate bodies, exactly as a real caller would wire it.
+
+CONFIRMED WORKING: real integration is mechanically correct — no crash,
+real `textSpans()` output flows cleanly into `labelTokens`/
+`labelPlacements`. Real tag count matches ground truth exactly: 20 real
+"CD-1" tokens found on the sheet, precisely matching cases.json's own
+20 real ground-truth CD-1 instances (seed + 19). This is a genuine,
+positive, unprompted real-data confirmation of `labelTokens`'s own tag
+detection working correctly at real scale, not merely asserted.
+
+REAL PERFORMANCE FINDING, measured not assumed: this same real sheet
+produced 73,254 real candidate bodies (uncontested Lane B/A fusion
+proposals — detectOwnershipClusters found ZERO contested clusters,
+confirming this count is a direct, disclosed consequence of Phase 4's
+own already-documented Lane B fragmentation, not a new bug). Calling
+`labelPlacements` with all 73,254 real anchor points is impractically
+slow (multiple minutes, not completing within reasonable patience) — a
+concrete real-corpus instance of exactly the "tags x sheets x all
+segments" anti-pattern Phase 8 (performance engineering) explicitly
+names to avoid. Timing the REST of the real pipeline on this exact
+sheet (openPdf 152ms, buildVectorSceneIndex 51ms, laneB 79ms,
+fuseProposals 58ms, detectOwnershipClusters 263ms, ownership resolution
+0ms — all under 700ms combined) confirms the cost is squarely inside
+`buildSheetEvidenceGraph`'s own reuse of `labelPlacements`, not
+upstream, already-existing pipeline code.
+
+BUILT, MEASURED, AND REJECTED (full disclosure, the same discipline the
+earlier proximity-merge module's own delete-after-real-data-failure
+entry established): a spatial pre-filter — narrow `labelPlacements`'s
+own candidate set to bodies within a generous margin of at least one
+real tag before calling it — seemed like an obviously safe, correct
+optimization (never drops a real candidate, only skips bodies nowhere
+near any real tag). Measured directly against this exact real sheet
+before committing: the tag union bbox ALREADY spans [201,266]-
+[4723,3048] on a 4896x3168 page — nearly the full sheet — so a global
+margin filter keeps 73,254/73,254 bodies, zero reduction. Tightened to
+a real PER-TAG check (not a global union) at a much smaller 300px
+margin: STILL keeps 72,789/73,254 (99.4%). Real tags and real Lane-B
+fragments are BOTH distributed near-uniformly across this entire real,
+busy mechanical sheet (195 tags across a 4896x3168 page average ~282px
+apart — comparable to or smaller than any reasonable adjacency margin),
+so no geometric proximity filter can meaningfully reduce the candidate
+set on this class of real sheet. The fix was reverted rather than kept
+as ineffective dead weight (git-clean before it was ever committed —
+no false "fixed" claim ever reached the shared history).
+
+HONEST CONCLUSION: this is a real, disclosed, UNSOLVED performance
+problem, not something this Phase 6 slice can fix on its own. A real
+fix needs one of: (a) Phase 4's own already-documented Lane B
+fragmentation actually reduced (far fewer, larger real candidate
+bodies to begin with — the root cause, not a symptom worth patching
+here), or (b) Phase 8's own dedicated "coarse-to-fine search" work
+(the goal's own explicit later phase for exactly this class of
+problem). Neither is Phase 6's own job. `buildSheetEvidenceGraph`
+remains functionally correct (per its own 26/26 synthetic tests and
+this real-data mechanical confirmation) but is NOT YET SAFE to call
+with a real sheet's own full raw candidate-body population without
+either fragmentation being fixed upstream or a real coarse-to-fine
+integration existing downstream — disclosed here so nobody wires this
+module into a real pipeline believing it is already performant at
+scale.
+
+Also observed, NOT investigated further (disclosed as an open question,
+not chased): every sampled real CD-1 tag<->body edge reported the exact
+same `distancePx: 18` — plausibly a real, consistent drafting
+convention on this specific sheet (CD-1 callouts placed at a fixed
+offset from their own symbol), but not confirmed against the drawing
+itself; flagged rather than assumed either way.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes as a disclosure — no functional
+code changed (the ineffective fix was reverted pre-commit); the real,
+measured performance limitation is now recorded so Phase 7/8 work
+inherits an accurate picture rather than an untested assumption.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 fifth slice —
 requirements 5-8: the accepted-installed-quantity five-way outcome
 (MATCH, SCHEDULE_ONLY, PLAN_ONLY, UNCLASSIFIED_PLAN_SYMBOL,
