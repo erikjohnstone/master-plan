@@ -19,14 +19,28 @@
 //   `insufficient_evidence` against a real reference, which this slice
 //   has no natural reference to fit against yet; "topology-impossible"
 //   needs its own dedicated definition this slice does not invent.
-// - requirement 3 (independently disclosed EDGE SCORING, never a single
-//   unexplained confidence) — this slice's own edges carry their real
-//   underlying evidence (distance, via, match kind) but no combined
-//   score.
+// - requirement 3's own remaining edge-level scoring beyond tag
+//   corroboration (see THIRD slice, below) — no single collapsed
+//   confidence exists anywhere in this module, by design.
 // - requirement 4 (duplicate-tag resolution within drawing/building/
 //   floor/discipline scope).
 // - requirements 5-9 (the accepted-installed-quantity state machine:
 //   MATCH/SCHEDULE_ONLY/PLAN_ONLY/UNCLASSIFIED_PLAN_SYMBOL/TAG_ONLY).
+//
+// THIRD slice, same file: `computeTagCorroboration` — requirement 3's
+// own "score eligible edges using independently disclosed evidence, do
+// not compress all reasoning into a single unexplained confidence."
+// Rather than inventing an unvalidated numeric weight for `via`/
+// `distancePx` (this project's own established discipline: no
+// unvalidated threshold without real corpus grounding — see
+// ownershipEligibility.ts's own header on the same point), this slice
+// reports which INDEPENDENT evidence sources (body geometry, schedule
+// row, legend reference) actually corroborate each tag, and separately
+// whether any of its own body edges reach an ELIGIBLE body (requirement
+// 2's own concern). A tag corroborated by all three is real, disclosed,
+// stronger evidence than one reached by a single source — exactly the
+// same "preserve which lanes voted" idea `candidateProposalFusion.ts`'s
+// own `votingLanes` already established for bodies, now applied to tags.
 //
 // AUDITED BEFORE BUILDING (dedicated investigation, this checkpoint):
 // every non-body, non-carrier node kind the goal names already has a
@@ -187,6 +201,39 @@ export interface EvidenceGraph {
   tagBodyEdges: TagBodyEdge[];
   tagScheduleEdges: TagScheduleEdge[];
   tagLegendEdges: TagLegendEdge[];
+}
+
+export type EvidenceSource = "body" | "schedule" | "legend";
+
+export interface TagCorroboration {
+  tagId: number;
+  /** every independent evidence source that actually reaches this tag —
+   *  never a single collapsed number (requirement 3's own concern). */
+  sources: EvidenceSource[];
+  /** true only when at least one of this tag's own body edges reaches a
+   *  body with an EMPTY `ineligibleReasons` — a tag reaching only
+   *  ineligible bodies still gets "body" in `sources` above (the goal's
+   *  own "may be displayed"), but this field is what a later assignment
+   *  step should actually check before accepting the pairing. */
+  hasEligibleBodyEdge: boolean;
+}
+
+/** Pure: for every tag in `graph`, reports which independent evidence
+ *  sources corroborate it and whether any reaches an eligible body.
+ *  Never mutates `graph`. Operates on an already-built EvidenceGraph, so
+ *  it composes with `buildSheetEvidenceGraph` rather than folding into
+ *  it. */
+export function computeTagCorroboration(graph: EvidenceGraph): TagCorroboration[] {
+  const bodyById = new Map(graph.bodies.map((b) => [b.id, b] as const));
+  return graph.tags.map((tag) => {
+    const bodyEdges = graph.tagBodyEdges.filter((e) => e.tagId === tag.id);
+    const sources: EvidenceSource[] = [];
+    if (bodyEdges.length > 0) sources.push("body");
+    if (graph.tagScheduleEdges.some((e) => e.tagId === tag.id)) sources.push("schedule");
+    if (graph.tagLegendEdges.some((e) => e.tagId === tag.id)) sources.push("legend");
+    const hasEligibleBodyEdge = bodyEdges.some((e) => (bodyById.get(e.bodyId)?.ineligibleReasons.length ?? 1) === 0);
+    return { tagId: tag.id, sources, hasEligibleBodyEdge };
+  });
 }
 
 function bodyAnchor(b: EvidenceBodyLike): Point {

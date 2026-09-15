@@ -1,5 +1,50 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 third slice —
+requirement 3: "Score eligible edges using independently disclosed
+evidence. Do not compress all reasoning into a single unexplained
+confidence." Same `evidenceGraph.ts` from the two entries below.
+
+DESIGN CHOICE, disclosed: rather than inventing an unvalidated numeric
+weight for `via`/`distancePx` (this project's own established
+discipline — no unvalidated threshold without real corpus grounding,
+the same reasoning ownershipEligibility.ts's own header already states),
+this slice reports which INDEPENDENT evidence sources actually
+corroborate each tag — body geometry, schedule row, legend reference —
+the same "preserve which lanes voted" idea candidateProposalFusion.ts's
+own `votingLanes` already established for bodies, now applied to tags.
+
+NEW `computeTagCorroboration(graph)`: pure, operates on an
+already-built `EvidenceGraph` (composes with `buildSheetEvidenceGraph`
+rather than folding into it). Returns one `TagCorroboration` per tag:
+`sources` (`"body"|"schedule"|"legend"`, only the ones actually
+present — never inflated), and `hasEligibleBodyEdge` (true only when at
+least one of the tag's own body edges reaches a body with an EMPTY
+`ineligibleReasons` — requirement 2's own concern, reused rather than
+re-decided here). A tag reaching only an INELIGIBLE body still reports
+"body" in `sources` (the goal's own "may be displayed"), but
+`hasEligibleBodyEdge` stays false — the two questions ("is there
+evidence at all" vs "is it evidence a later step may act on") are kept
+separate, never conflated into one boolean or one score.
+
+3 new tests: all-three-sources corroboration; single-source
+corroboration (never inflated); an ineligible-body edge still counts as
+displayed evidence but not as eligible corroboration. 15/15
+evidenceGraph tests green; full related suite (evidenceGraph,
+symbolLabels, legendReferenceBank, legendlearn, markid,
+carrierClassification, candidateProposalFusion, rigidAffineVerify,
+ownershipAssignment, ownershipBody) 334/334 green. `tsc --noEmit` clean.
+
+DISCLOSED, NOT ATTEMPTED: any numeric/ranked scoring beyond source-count
+disclosure (real further work, and only once real corpus data justifies
+a specific weighting — the same discipline this project has held to
+throughout); requirement 2's remaining "bounds-failed"/"topology-
+impossible" reasons; requirements 4-9, unchanged from the two entries
+below.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same isolated module, no
+existing VectorGrid/table/schedule/citation/bbox code touched.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 second slice
 — requirement 2's own two hard-eligibility checks decidable from what a
 body already discloses: "empty-body" (zero primitives) and "conflicting

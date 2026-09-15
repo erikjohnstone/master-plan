@@ -7,7 +7,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { extractVectorGeometry } from "../src/lib/oneclick.ts";
 import { buildVectorSceneIndex } from "../src/lib/vectorSceneIndex.ts";
-import { buildSheetEvidenceGraph } from "../src/lib/evidenceGraph.ts";
+import { buildSheetEvidenceGraph, computeTagCorroboration } from "../src/lib/evidenceGraph.ts";
 
 const OPS = {
   constructPath: 10, moveTo: 11, lineTo: 12, curveTo: 13, curveTo2: 14, curveTo3: 15, closePath: 16, rectangle: 17,
@@ -146,4 +146,34 @@ test("evidence graph: two candidate bodies each get their OWN tag<->body edge wh
   const tagLabel = (id: number) => graph.tags.find((t) => t.id === id)!.label;
   assert.equal(tagLabel(byBody.get(0)!), "FD1");
   assert.equal(tagLabel(byBody.get(1)!), "FD2");
+});
+
+test("computeTagCorroboration: requirement 3 -- a tag reached by all three independent sources (body, schedule, legend) reports all three, never a single collapsed number", () => {
+  const idx = buildIdx([closedRect(93, 125, 10, 10)]);
+  const body = { id: 0, primitiveIds: idx.primitives.map((_, i) => i), x0: 93, y0: 125, x1: 103, y1: 135 };
+  const graph = buildSheetEvidenceGraph(
+    idx, [body], [span("FD1", 90, 92, 12)], [], undefined,
+    [{ caption: "FD1", primitiveIds: [], rect: [[0, 0], [10, 10]] }],
+    [{ key: "FD1", sheet: "M101", cells: {} }],
+  );
+  const [corroboration] = computeTagCorroboration(graph);
+  assert.deepEqual(corroboration.sources.slice().sort(), ["body", "legend", "schedule"]);
+  assert.equal(corroboration.hasEligibleBodyEdge, true);
+});
+
+test("computeTagCorroboration: a tag reached by only ONE source reports only that one -- never inflated by absent evidence", () => {
+  const idx = buildIdx([closedRect(0, 0, 10, 10)]);
+  const graph = buildSheetEvidenceGraph(idx, [], [span("FD1", 0, 0)], [], undefined, [], []);
+  const [corroboration] = computeTagCorroboration(graph);
+  assert.deepEqual(corroboration.sources, []);
+  assert.equal(corroboration.hasEligibleBodyEdge, false);
+});
+
+test("computeTagCorroboration: a tag whose only body edge reaches an INELIGIBLE (empty) body still reports 'body' in sources (the goal's own 'may be displayed'), but hasEligibleBodyEdge stays false", () => {
+  const idx = buildIdx([closedRect(93, 125, 10, 10)]);
+  const body = { id: 0, primitiveIds: [], x0: 93, y0: 125, x1: 103, y1: 135 };
+  const graph = buildSheetEvidenceGraph(idx, [body], [span("FD1", 90, 92, 12)], [], undefined, [], []);
+  const [corroboration] = computeTagCorroboration(graph);
+  assert.deepEqual(corroboration.sources, ["body"]);
+  assert.equal(corroboration.hasEligibleBodyEdge, false, "an ineligible body must never count as a real eligible pairing");
 });
