@@ -51,6 +51,19 @@
 // and controller modules score near 0). This is a MEASUREMENT and
 // DIAGNOSIS, not a fix -- the fix (spatial-proximity clustering in Lane
 // B, or a body-merging step) is real further work, not attempted here.
+//
+// --with-lane-c (2026-09-15): optionally generates a
+// candidateBodyLaneC.ts `proposeTagSearchRegionBody` proposal for every
+// ground-truth instance that carries a real `tag_bbox` (using the
+// ground truth's OWN tag position -- a disclosed proxy for a real tag-
+// detection step, not attempted here) and wires it into `fuseProposals`
+// via its own `laneCBodies` parameter, alongside `ownershipEligibility.ts`'s
+// own `coverageAgreement` signal (built specifically so a Lane C proposal
+// can win contested primitives without needing exclusive evidence). Real
+// corpus data: 33 of 51 cases carry per-instance tag_bbox on at least one
+// instance (far more than the single Cherry Point family originally
+// checked) -- see PROGRESS.md for the full-corpus result this flag
+// produced.
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -65,6 +78,7 @@ import { fuseProposals } from "../../web/src/lib/candidateProposalFusion.ts";
 import { detectOwnershipClusters } from "../../web/src/lib/ownershipConflicts.ts";
 import { resolveExclusiveOwnership, resolveClusterOwnershipIteratively } from "../../web/src/lib/ownershipAssignment.ts";
 import { computeOwnedBodies } from "../../web/src/lib/ownershipBody.ts";
+import { proposeTagSearchRegionBody } from "../../web/src/lib/candidateBodyLaneC.ts";
 
 // this script lives at <repo>/opentakeoff/mcp/scripts/ -- three levels up
 // is <repo>, where the ground-truth corpus and its PDFs both live,
@@ -75,18 +89,23 @@ const PDF_ROOT = join(REPO_ROOT, "HVAC BAS Benchmark Collection");
 const casesPath = join(REPO_ROOT, "HVAC BAS Benchmark Collection/ground_truth/symbol_sweep/cases.json");
 const data = JSON.parse(readFileSync(casesPath, "utf8"));
 
-// optional: --doc SUBSTRING restricts to cases whose own document_id/id
-// contains SUBSTRING (debugging a single document fast); no args = the
-// full real corpus.
-const docFilter = process.argv[2] === "--doc" ? process.argv[3] : null;
+// optional flags (any order): --doc SUBSTRING restricts to cases whose
+// own document_id/id contains SUBSTRING (debugging a single document
+// fast); --with-lane-c wires candidateBodyLaneC.ts's own tag-anchored
+// proposals in, see this script's own header above.
+const args = process.argv.slice(2);
+const docFlagIdx = args.indexOf("--doc");
+const docFilter = docFlagIdx >= 0 ? args[docFlagIdx + 1] : null;
+const withLaneC = args.includes("--with-lane-c");
+console.error(`mode: ${withLaneC ? "WITH Lane C" : "baseline (no Lane C)"}${docFilter ? `, --doc ${docFilter}` : ""}`);
 
-const groundTruth = []; // { caseId, instId, sourcePdf, page, bodyBbox }
+const groundTruth = []; // { caseId, instId, sourcePdf, page, bodyBbox, tagBbox }
 for (const c of data.cases) {
   if (docFilter && !c.document_id.includes(docFilter) && !c.id.includes(docFilter)) continue;
   const insts = [{ ...c.seed, id: c.seed?.id ? `${c.id}::${c.seed.id}` : `${c.id}::seed` }, ...(c.instances ?? []).map((i) => ({ ...i, id: `${c.id}::${i.id}` }))];
   for (const inst of insts) {
     if (!inst || !inst.body_bbox) continue;
-    groundTruth.push({ caseId: c.id, instId: inst.id, sourcePdf: c.source_pdf, page: c.page, bodyBbox: inst.body_bbox });
+    groundTruth.push({ caseId: c.id, instId: inst.id, sourcePdf: c.source_pdf, page: c.page, bodyBbox: inst.body_bbox, tagBbox: inst.tag_bbox ?? null });
   }
 }
 console.error(`ground truth instances: ${groundTruth.length}`);
@@ -126,7 +145,17 @@ for (const [key, gts] of byPage) {
     const laneB = proposeCandidateBodiesLaneB(idx, junctions);
     const pageBounds = { width: pg.viewport.width, height: pg.viewport.height };
     const laneA = computeFormContentSignatures(idx, geo.formInvocations ?? [], { pageBounds });
-    const fused = fuseProposals(idx, laneB.bodies, laneA.invocations);
+
+    const laneCBodies = [];
+    if (withLaneC) {
+      for (const gt of gts) {
+        if (!gt.tagBbox) continue;
+        const proposal = proposeTagSearchRegionBody(gt.tagBbox, idx, spatialIndex, { excludeCarrierLike: true });
+        if (proposal) laneCBodies.push({ id: laneCBodies.length, primitiveIds: proposal.primitiveIds, x0: proposal.x0, y0: proposal.y0, x1: proposal.x1, y1: proposal.y1 });
+      }
+    }
+
+    const fused = fuseProposals(idx, laneB.bodies, laneA.invocations, laneCBodies);
     const proposalsById = new Map(fused.map((p) => [p.id, p]));
     const { clusters, uncontested } = detectOwnershipClusters(fused);
 
