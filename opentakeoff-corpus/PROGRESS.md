@@ -1,5 +1,103 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 5:
+web/src/lib/vectorSceneIndex.ts. The phase's own LITERAL named
+deliverable ("build one shared VectorSceneIndex") — slices 1-4 all
+extended `extractVectorGeometry` additively (per requirement 1) and
+laid the groundwork this module consumes; this is the first slice that
+actually creates the index module the phase title names.
+
+New file, pure and additive: `buildVectorSceneIndex(geo, opts?)` reads
+a `VectorGeometry` (never mutates it) and restates it with stable
+per-primitive and per-subpath ids instead of the raw parallel-array/
+byte-flag/range convention a consumer would otherwise have to know:
+
+- `IndexedPrimitive` per flattened segment: id (its own position),
+  endpoints, `primType` (or null if the source geometry predates that
+  field), decoded paint flags (curved/clip/fillOnly/polyArc) and device
+  line width straight from the meta byte instead of a bit test at every
+  call site, resolved stroke luminance, resolved layer id (via
+  layerOf/layerIds, null when unlayered/unavailable), and which
+  subpath it belongs to.
+- `IndexedSubpath` per drawn figure: id, bbox, closed/dashed/formDepth/
+  lineCap/lineJoin/fillLum passthrough, and its own primitiveIds list
+  spelled out (never the internal [i0,i1) range convention).
+- `notYetImplemented`: a disclosed list of goal §7 requirements this
+  BUILD never populates (`textSpans`, `formIdentity`, `intersections`,
+  `spatialIndex`) — the point of naming these explicitly is that a
+  reader can tell "not implemented yet" apart from "this sheet
+  genuinely has none" once one of them IS implemented and its name
+  comes off the list.
+- `incomplete`/`incompleteReason` (requirement 6, memory accounting/
+  cap): `VECTOR_SCENE_INDEX_MAX_PRIMITIVES` (250,000, disclosed and
+  tunable, not yet benchmarked against this goal's own "largest sheet"
+  measurement — that measurement itself remains open) stops the build
+  short rather than truncating silently; a breach flips `incomplete`
+  true with a stated reason, and every subpath's `primitiveIds` is
+  clipped to only what was actually indexed. `opts.maxPrimitives` lets
+  a test exercise the breach path without allocating hundreds of
+  thousands of segments.
+- `getOrBuildVectorSceneIndex(docHash, page, geo)` / cache (requirement
+  4): a Map keyed by `${docHash}::${page}::v${VECTOR_SCENE_INDEX_VERSION}`.
+  Baking the module's own version into the key means bumping
+  `VECTOR_SCENE_INDEX_VERSION` invalidates every previously-cached
+  entry deterministically, by construction, with no explicit sweep —
+  satisfying "invalidate deterministically" without a second mechanism
+  to keep in sync. `clearVectorSceneIndexCache()` is a test-only escape
+  hatch.
+
+Requirement 5 ("Browser and Session/MCP must serialize or consume the
+same shared index contract"): satisfied by PLACEMENT and verified by
+import, not yet by WIRING. The module lives in `web/src/lib/`, the one
+shared path both the browser canvas and MCP/Session already import
+`oneclick.ts` from (confirmed: `node --import tsx -e "require(...)"`
+from inside `mcp/` loads `vectorSceneIndex.ts` cleanly). Actually
+wiring it into the live `graphForPipeline`/Session pipeline is real
+further work, deliberately NOT done in this slice — the goal's own §7
+note is explicit: "Deliver one commit for extraction/index contracts
+and parity; do not change final count decisions yet." Wiring it in
+would touch existing pipeline call sites and risk exactly the kind of
+final-count change that note warns against before the contract itself
+has had a chance to prove out.
+
+New `web/test/vectorSceneIndex.test.ts` (9 tests): stable primitive
+ids/endpoints/flag-decode; primitive→subpath membership and the
+reverse primitiveIds restatement; subpath-level graphics-state
+passthrough (dash/cap/join/formDepth/closed) round-tripping through a
+Form XObject exactly as slice 2-4's own tests proved at the
+`extractVectorGeometry` level; layer resolution to real OCG ids vs.
+null for unlayered ink; the `notYetImplemented` disclosure; the
+cap-breach path; and three cache tests (hit returns the same object,
+distinct docHash/page produce distinct entries, `clearCache` forces a
+rebuild). One test initially failed (`closed` read false) — root
+cause: `closePath` is a MINI-OP inside one `constructPath` call in the
+real pdf.js op-stream shape, not a standalone top-level op, the same
+lesson `geometry.test.ts`'s own existing fixtures already encode;
+fixed by building a single `constructPath` call with
+`[moveTo, lineTo, closePath]` together rather than a separate
+`closePath` op afterward, then re-verified all 9 pass.
+
+Verification: `npx tsc --noEmit` clean. All test files touched or
+newly added run individually — 0 failures. This module does not
+change `oneclick.ts` or any existing consumer, so no broader
+regression sweep was needed beyond confirming nothing already imports
+it; a fresh `grep` confirmed nothing does yet, exactly as intended for
+"contracts and parity" before wiring.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — this module IS the shared
+path the goal asks for; that is its entire purpose.
+
+Not done in this slice (left open, same running list as before, now
+narrower): Form XObject object identity/content-signature hashing;
+text-span/exploded-text-mask integration; intersection/T-junction/
+X-junction/endpoint/collinearity/parallel/perpendicular relations; a
+real spatial index; curve fidelity beyond chord-sampling (requirement
+3); actually wiring `getOrBuildVectorSceneIndex` into
+`graphForPipeline`/Session's pipeline; the memory-cap/build-time
+measurements the gate calls for on real small/median/largest sheets;
+the required "≥5 real PDFs show browser/MCP parity" and "no VectorGrid
+regression" gate evidence. None of Phases 3-8 have been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 4:
 line cap and line join. The last two of the goal's own named
 "graphics-state attributes available from pdf.js" list (CTM, line
