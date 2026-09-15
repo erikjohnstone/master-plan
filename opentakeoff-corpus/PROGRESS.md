@@ -1,6 +1,26 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `29-syracuse-m704-control-sensor-bubbles`'s own last
+gap, `motorized-damper-occupancy-sensor-bubble`, closing that case to
+6/6. This case's own prior note left it unset because a naive pass
+returned 57 segments against the seed's own 34. Every clean sibling in
+this case, seed included, is an exact circle of diameter 59.3 centered
+on its own `at` — confirmed directly against this SAME motorized-damper
+diagram's own other bubble (motorized-damper-space-temperature-bubble,
+already accepted at exactly 59.3x59.3, centered within 0.25px of its
+own `at`). Built the candidate as that fixed 29.65 radius around this
+instance's own `at`, then rendered it with corner-ring markers directly
+against the real geometry: all four corners land exactly on the
+circle's own outline, with a nearby "OC" text label and a dashed
+control-line crossing both clearly outside the box — the 57-vs-34
+excess was specific to whatever wider or offset search window the
+naive pass used, not to this tight circle-only body. Added via a
+surgical single-line Edit (checked as a 3-insertion/2-deletion diff)
+plus an appended correcting review note; the case's prior note is left
+untouched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `22-cbfm-m702-chiller-control-assemblies`'s own last
 two gaps, `chiller-2-controls-assembly` and `chiller-1-controls-
 assembly`, closing that case to 3/3 (seed + both instances). This
