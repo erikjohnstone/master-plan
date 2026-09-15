@@ -1,5 +1,128 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — corpus-expansion
+sourcing pass: three new documents scouted in depth, zero new cases committed
+this pass, and the reasons are themselves real findings worth keeping.
+
+Following the holdout freeze and campaign convention below, three fresh
+documents were scouted for candidate instances (parallel reconnaissance
+agents, reconnaissance only — nothing they reported was trusted as ground
+truth without independent re-verification): `037_AR_VA_Project_598_19_118_
+Replace_21_Air_Handling` (a VA hospital AHU/chiller replacement), `049_IL_VA_
+Solicitation_36C77623B0051_Expand_Sterile` (turned out, on direct text-scan
+of all 27 pages, to be a plumbing-only volume, not the expected HVAC one —
+the scout adapted and found real value anyway, see below), and
+`010_US_WWYK240146_Design_Implement_Monitoring_Control` (the same PDF
+already tracked elsewhere in this repo as `raw/tinker-afb-iwcs-controls.pdf`
+for an unrelated sequence-of-operations benchmark, confirmed by an identical
+source_sha256 -- a BAS/instrumentation controls document). Three cases were
+drafted from document 010, independently verified, and then deliberately
+removed rather than committed once real problems surfaced. Recording the
+attempt and the reason for reverting it is the point of this entry, per the
+goal's own "revert approaches trading one correct family for another" rule.
+
+- **Attempt 1 -- submersible lift-station pump icons (P1/P2), reverted.** Five
+  lift-station detail sheets (Y-301..Y-304S, one per building) each show an
+  identical pair of pump icons labeled 'P1' and 'P2' directly inside the body.
+  A batched fingerprintSymbol pass across all five sheets found all ten
+  placements converge on the identical 21-segment, ~178.8px-footprint
+  fingerprint -- genuine, confirmed vector-level evidence that the icon itself
+  is an exact rigid repeat. Two real problems surfaced only once this was run
+  through the actual CLI corpus runner (`--report-v2-fields`), not just
+  computed by hand:
+  1. `scope: "set"` failed outright: `Session.symbolSweep`'s own
+     `requireCrossScale` guard correctly refused to sweep a seed sitting on an
+     NTS ('SCALE: NTS', no fixed scale by definition) detail sheet against a
+     working set that also contains real scaled site/floor-plan sheets
+     (1"=10', 1"=30' detected on other pages of the same document) without a
+     stated scale ratio. Restructured as five independent `scope: "sheet"`
+     cases to route around this -- a real, disclosed structural limitation of
+     this specific document, not a bug to route around by weakening the guard.
+  2. Once running per-sheet, the engine correctly refused to count P2 as
+     another instance of the P1 family at all: 'the drawing labels this
+     placement "P2" outside the seed family "P1"'. This was the actually
+     important finding -- P1 and P2 are genuinely two different physical
+     pumps, and this corpus's own established convention (case 01's repeated
+     'CD-1', case 18's repeated 'FCU-5') is that a symbol_sweep family is
+     every placement sharing the SAME literal tag, not every placement
+     sharing a shape. Treating P1+P2 as one family was a case-authoring
+     mistake, not an engine gap, so the fix was to pick a different family,
+     not to fight the engine's correct refusal.
+- **Attempt 2 -- HOA (Hand-Off-Auto) switch boxes, reverted.** Same five
+  sheets have two boxes per sheet both literally labeled 'HOA' -- the
+  right replacement family, matching the engine's own same-tag semantics.
+  All ten placements converged on an identical 4-segment fingerprint after
+  the rect was tightened to exclude a keyed-note circle bubble sitting
+  just above the second box (an early wider rect inflated that instance's
+  segment count from 4 to 70 -- a useful confirmation that the circle is
+  real, separate geometry). But run through the engine directly
+  (`session.symbolSweep`, not just the batch tool), the seed's own 4-segment
+  plain-rectangle fingerprint also matched the RTU panel's own label box at
+  score 1.0 with no detected tag ('label: undefined') -- a real, confirmed
+  look-alike collision: two semantically unrelated boxes (a hand-off-auto
+  switch and the panel enclosure's own name label) happen to be drawn as
+  the exact same plain rectangle, and the engine's own labeling heuristic
+  could not disambiguate the RTU box's enclosed text the way it could the
+  seed's. A quick check of a third candidate family (the 'CR' control-relay
+  circle) was worse still -- 11 spurious matches against generic small
+  circular junction/wire marks elsewhere on the same dense schematic.
+  Conclusion, not yet resolved: this document's electrical/instrumentation
+  schematic style relies on many small, generic, low-segment glyphs (plain
+  boxes, plain circles) that are not individually distinctive enough for
+  reliable vector-only fingerprinting on their own -- correctly
+  disambiguating them would need the fuller tag-scope/context evidence
+  Phase 6 is meant to add, not a bigger or more careful seed_rect. Committing
+  any of these three attempts as passing cases would have meant either
+  quietly narrowing the rect until the engine's real, correct objection
+  went away (exactly the 'per-case option trading a correct family for
+  another' anti-pattern) or shipping a case with an undisclosed alias
+  collision. Reverted instead; the fingerprint data above is preserved here
+  as a real, useful characterization of this document's difficulty rather
+  than being thrown away with the reverted case.
+- **Documents 037 and 049 -- scouted, not yet formalized.** Document 037's
+  best find is a genuine architectural Reflected Ceiling Plan (part02 page
+  28, drawing AE111) with a real ceiling-tile grid and 15+ repeated
+  diffuser-family instances, plus a confirmed look-alike pair discovered
+  during direct verification (not just reported by the scout): the same
+  square+diagonal-X+small-circle glyph appears in at least two visually
+  distinct builds on this one sheet -- a single-square version (confirmed
+  clean, 29-segment fingerprint, at the 'CHIEF PM&RS' room) and a
+  nested-double-square version (confirmed clean, 46-segment fingerprint, at
+  the 'LT/KT OFFICE' room) -- a real 'richer/poorer look-alike variant' per
+  the goal's own required stratum, not a coordinate error (both were
+  independently re-rendered and visually confirmed distinct). The scout's
+  other reported instance locations for this same room cluster did not
+  resolve cleanly on the first re-check (rings landed in blank space near,
+  not on, the real glyphs -- the scout's own report disclosed these
+  coordinates were read off a wide overview render, not individually
+  re-zoomed) and would need a further precise re-localization pass before
+  they can become real ground truth. Document 049 (plumbing, not the
+  expected HVAC content) independently found the corpus's first-ever
+  confirmed real ROTATED instance: a check-valve/backflow-preventer bowtie
+  icon drawn axis-aligned in the orthogonal part of a building and rotated
+  ~45 degrees in a diagonal corridor elsewhere on the same sheet, visually
+  confirmed via paired tight crops -- exactly the rotated-instance gap the
+  predecessor research flagged as completely unfilled in the existing
+  47-case corpus. Neither document's finds were converted into committed
+  cases this pass; both need the same precise per-instance re-localization
+  and CLI-runner verification the pump-icon/HOA attempts above went
+  through, which ran out of time this session.
+- **Net effect on the corpus**: still 47 cases, all previously committed
+  work intact and unchanged. Zero new corpus-expansion cases landed this
+  pass. What did land: a validated methodology (batch fingerprint first,
+  then ALWAYS confirm through the actual CLI runner / `session.symbolSweep`
+  directly before trusting a family, not just the standalone annotation
+  script) and three concrete, reusable findings (the tag-family-not-shape
+  convention, the requireCrossScale/NTS-detail-sheet structural limit, and
+  the plain-box/plain-circle low-distinctiveness problem) that the next
+  sourcing pass should apply from the start rather than rediscover.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Every action this pass was
+scouting, verification, and reverted draft ground-truth data plus this
+progress note -- no `web/src/lib` production code changed, and the one
+production behavior exercised (`requireCrossScale`) was read and correctly
+worked around in the ground-truth structure, never weakened.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — holdout project
 identities frozen before new-instance sourcing begins, per the goal's own
 gate ("Holdout project identities are frozen before implementation begins").
