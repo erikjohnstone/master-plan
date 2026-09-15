@@ -1,5 +1,86 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane A's own
+disclosed requirement 3 ("excluding forms whose content is mostly
+text/page furniture/title blocks/borders/repeated non-countable
+stuff") — the concrete direction the prior entry's own structural
+finding pointed to: primitive-level signals (style/connectivity/
+carrier) are mathematically unable to discriminate a Lane-A-vs-Lane-B
+dispute (exclusive baseline is always empty for that shape), so real
+progress needs a FORM-LEVEL judgment instead.
+
+New `web/src/lib/formPlausibility.ts`: `assessFormPlausibility(input,
+opts?)` flags a Lane A Form proposal as implausible-as-one-symbol via
+two structural signals, both built from facts already available
+elsewhere in this pipeline — no new geometry, no regex, no per-project
+convention:
+- SHATTER COUNT: how many disjoint Lane B components share primitives
+  with the Form. A real symbol is typically one connected figure or a
+  small handful; the two real cases this session found (Cherry Point's
+  8-way, Tinker's 259-way) both shatter far more than that.
+- ASPECT RATIO: a title block/border/margin strip is often a long thin
+  rectangle; a typical symbol isn't.
+Reports EXACTLY which check(s) failed (`reasons: ("shatter"|"aspect")[]`),
+never a bare boolean. THIS IS A DETECTOR ONLY — not wired into
+`ownershipEligibility.ts`/`ownershipAssignment.ts`; disclosed as such
+in the module's own header.
+
+New `web/test/formPlausibility.test.ts` (7 tests, all passing):
+regression fixtures lock in both real cases this session found
+(Cherry Point's 8-way shatter + its real 176.584×37.052 bbox; Tinker's
+259-way shatter) as synthetic test cases; a compact low-shatter form
+is NOT flagged; both thresholds are shown to be real, tunable knobs;
+degenerate (zero-height, zero-area) bboxes are handled without a
+crash or a NaN. One test's own first draft asserted the Cherry Point
+fixture would fail BOTH signals — running it showed its real aspect
+ratio (≈4.77) is genuinely below the default 6 threshold, so only
+"shatter" fires by default; fixed to assert the verified real
+behavior, with a second call at a stricter (still reasonable) 4
+threshold demonstrating the aspect signal on the same real bbox,
+rather than silently loosening the default to make the first
+assumption true.
+
+REAL-SHEET VALIDATION AGAINST THE LIVE PIPELINE (not just the
+regression fixtures) surfaced something worth stating precisely
+rather than letting it look like a contradiction: running this
+detector against Cherry Point #12's CURRENT live cluster output now
+shows `componentCount: 3` per cluster, not the 8 the fixtures above
+lock in. This is coherent, not a bug: the invisible-ink fix (two
+entries above) already shrank Lane A's own proposal for each cluster
+down to just its 12 real visible primitives, so several of the
+original 8 Lane B pieces — the ones consisting entirely of now-
+excluded invisible ink — no longer share any primitive with Lane A at
+all and dropped out of the contested cluster entirely. The fixtures
+still correctly test THIS MODULE's own behavior on a real, previously-
+measured shape; they are not a live mirror of today's pipeline output,
+same as the "48/1,678 assigned" number two entries back. Live result
+on Cherry Point #12: 4 of 5 clusters read plausible (low shatter,
+moderate aspect); 1 is flagged (aspect ratio 6.42, just past the
+default threshold). Live result on tinker-afb-iwcs-controls.pdf#13:
+its real 259-shatter cluster is correctly flagged (shatter, aspect
+ratio ≈1.0 — a square-ish bbox, showing the shatter signal alone is
+doing the real work there); its OTHER, unrelated small cluster
+(componentCount 1, aspect ≈4.1) correctly reads as plausible.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (7/7); confirmed the module loads cleanly from `mcp/`
+via tsx; real-sheet checks above (live pipeline output on both anchor
+sheets, not just synthetic fixtures). Does not modify
+`candidateBodyLaneA.ts`, `ownershipEligibility.ts`,
+`ownershipAssignment.ts`, or any other already-shipped module.
+
+Disclosed real further work, explicit in the module's own header: an
+actual "reject/keep this whole Form" DECISION needs this signal
+combined with real evidence about the Form's own Lane B pieces (text-
+glyph shape, hatch density) — page-furniture classification proper,
+not attempted here; and wiring a plausibility verdict into
+`ownershipEligibility.ts`'s own combined score (as `carrierClassification
+.ts` was wired in two entries back) is real, separate, disclosed work.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes, once wired in — whether a
+whole Form even IS a candidate symbol underlies every downstream
+ownership decision for that dispute shape.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — a general,
 structural finding from broadening real-sheet validation beyond Cherry
 Point #12 (a disclosed gap: every prior entry's "real-sheet
