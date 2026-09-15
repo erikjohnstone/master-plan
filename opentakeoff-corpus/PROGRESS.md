@@ -1,5 +1,40 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — holdout project
+identities frozen before new-instance sourcing begins, per the goal's own
+gate ("Holdout project identities are frozen before implementation begins").
+
+The 145-document Vol2 bulk pool (`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/`)
+has ~25 numbers already spent on the existing 47-case corpus (`001, 009, 012,
+014, 015, 017, 019, 021, 028, 030, 031, 033, 040, 044, 053, 058, 061, 062,
+067, 069, 092, 094, 095, 096, 097`), leaving well over 100 untouched real
+documents to draw the required 150+/12+ new instances from. Before sourcing
+any of them, the following three are frozen as holdout — reserved for a
+future blind validation pass once Phases 2-8 land, never used for annotation
+or tuning:
+
+- `041_IL_VA_Project_537_17_115_Sterile_Processing.pdf` (dense
+  sterile-processing corridor, same building archetype as case 10's Lovell
+  set — a genuine train/holdout split within one archetype, not just across
+  archetypes)
+- `043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf` (same archetype as
+  the AHU-replacement document chosen for active sourcing below, for the
+  same reason)
+- `018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf` (distinct
+  building type, held out as a general-purpose blind check)
+
+Active sourcing starts with three other, disjoint documents chosen for their
+likely strata coverage, none previously touched by this corpus: `037_AR_VA_
+Project_598_19_118_Replace_21_Air_Handling.pdf` (21 AHUs replaced — dense
+VAV/diffuser-grid candidate), `049_IL_VA_Solicitation_36C77623B0051_Expand_
+Sterile.pdf` (another sterile-processing expansion, a second real sample of
+the family case 10 showed has rotated instances), and `010_US_WWYK240146_
+Design_Implement_Monitoring_Control.pdf` (a controls/BAS document, candidate
+for the inline valve/damper/sensor and note-bubble/arrowhead-negative
+strata). This is a first batch, not the full 12+; more documents will be
+drawn from the same untouched pool in later checkpoints and each new pick
+recorded here before annotation starts on it.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 checkpoint — v2
 schema annotated onto all 11 disclosed-override cases; the 150+/12-document
 new-instance sourcing has not started.
