@@ -1,5 +1,13 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 2/3 — the
+background full-corpus re-run kicked off right after landing case 48
+(CD-1) has finished: 48/48 PASS, 0 failures, confirming zero regressions
+across all baseline/extended/corpus-expansion cases through that point.
+Cases 49 (OWS) and 50 (SD-1) were each already verified individually at
+build time (PASS). SHOULD THIS BE ON THE SHARED PATH? No, a verification
+run only.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 — THIRD
 LANDED corpus-expansion case, and the largest by far:
 `50-klamath-m211-sd1-diffusers`, 46 instances (seed + 45), PASSING. Also
