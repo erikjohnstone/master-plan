@@ -1,5 +1,87 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 — FIRST
+LANDED corpus-expansion case: `48-patriot-cafe-mh102-cd1-diffusers`, 38
+instances, PASSING. Batch D's document 042 scout (CD-1 ceiling diffuser)
+was the strongest lead yet -- built and verified end to end rather than
+just reported.
+
+Document `042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf` (sheet
+1-MH102-N, a dense kitchen/cafe ceiling supply-diffuser plan), confirmed
+NOT in the already-spent baseline-30 list and NOT holdout. Curated copy
+committed as `pdf/36__vol2__042__VA_Renovate_VCS_Patriot_Cafe.pdf` (rank
+36). Re-seeded from an already-CD-1-labeled instance (rather than the
+scout's own exploratory seed, which itself sat too far from its nearest
+CD-1 text to auto-label) -- `Session.symbolSweep` came back found=38,
+withheld=18 on the first real attempt, with the seed AND 25 of 38 matches
+cleanly auto-labeling "CD-1". This is the first candidate this checkpoint
+where re-seeding from a confirmed-labeled position was enough to clear
+the tag-distance problem that closed documents 004 and 013 outright --
+worth noting as a real, reusable technique, not just luck: when a scout's
+own seed doesn't label, try re-seeding from one of the sweep's own
+already-labeled matches before giving up on the family.
+
+Verification work, each step actually done, not assumed:
+- Full-page render with a --ring marker burned in at the seed and all 38
+  matches (reviews/36__vol2__042/p11-full-overview.png), viewed directly
+  -- every ring lands on a genuine CD-1 square+circle-X body; the two
+  visually-similar siblings on the same sheet (CD-2's different
+  rectangular icon, and EG-1/EG-2/CG-1 grilles) are visibly distinct and,
+  per the engine's own withheld-vs-matches split, never promoted into the
+  matches bucket at all -- not the same-icon/different-tag collision that
+  closed documents 011 and 019.
+- body_bbox computed for all 39 (seed + 38) via one batched
+  fingerprintSymbol pass over a uniform 45x45px window per instance;
+  segment counts ranged 73-147 (footprint_px 40.4-57.9, consistently
+  tight). Rendered and viewed the two extremes directly rather than
+  trusting the spread alone: the 147-segment instance sits beside a duct
+  transition fitting partly inside the fixed window, the 73-segment one
+  sits near a wall corner with less surrounding ductwork -- both show the
+  identical correct body at the ring, real local-context variation like
+  case 23's VAV terminals, not contamination.
+- 13 of the 38 matches score just as well geometrically (many exactly
+  1.0) but sit too far from any unclaimed CD-1 text in this dense grid to
+  auto-label. Declared honestly as tag: null / association_type:
+  unlabelled rather than a forced/dishonest tag or a completeness-check
+  failure from silently dropping them -- the same mixed-tag pattern
+  cases 15 and 19 already establish in this corpus.
+- Rotation (0/90/180/270 degrees) and mirroring (6 of 38 instances) are
+  both genuinely present -- the square-plus-dashed-corner-tick body
+  visibly reorients under rotation, unlike a plain symmetric square.
+- First real-verification attempt failed on ONE unrelated thing: the
+  engine's own title-block sheet-number extractor reads "CD-1" (almost
+  certainly confused by how numerous and prominent the CD-1 tag text is
+  on this sheet) instead of the visually-confirmed true printed sheet
+  number "1-MH102-N". Used the README's own documented escape hatch for
+  exactly this situation -- `sheet_number` keeps the visually audited
+  truth, `engine_sheet_number: "CD-1"` discloses the current extractor's
+  actual (wrong) output -- rather than either lying about the printed
+  sheet number or leaving the case failing.
+- Built via precise line-splicing (Python readlines/writelines matching
+  the file's existing compact-instance-line style), NOT a JSON
+  parse/dump round-trip -- caught and reverted one JSON round-trip
+  mistake mid-build (it would have reformatted the entire 1850-line file,
+  9274 insertions for what should be a ~80-line addition) before it was
+  ever committed.
+- Case re-verified individually (PASS, 38/38) after the sheet-number fix;
+  a full 48-case corpus re-run is in progress to confirm zero regressions
+  on the other 47 (kicked off in the background, not yet complete at
+  commit time -- will be confirmed in a follow-up note).
+
+This is a genuinely large single contribution: 38 instances from one
+document, versus the 150+/12-document target, with real rotation and
+mirroring strata already included. Real next step: batch D's remaining
+documents (029, 034, 036, 039) were dead ends (no repeating tagged
+family) and batch E (045-050) is still running; once both finish, either
+pick the next candidate or launch another scouting round with the same
+corrected checklist (already-spent/holdout exclusions, tag-distance
+screen, and now the "re-seed from an already-labeled match" technique).
+
+SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth-only change
+(cases.json, a curated source PDF, and review renders); no VectorGrid/
+table-extraction/schedule-reconstruction/citation/bbox-semantics or other
+production data-contract code touched.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 important correction to the batch A/B scouting reports, plus document
 013's PSV relief valve built end-to-end, verified geometrically, and then
