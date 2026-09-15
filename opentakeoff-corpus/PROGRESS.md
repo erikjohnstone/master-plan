@@ -1,5 +1,90 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — proposal
+fusion, goal §8's own closing subsection after the five lanes:
+"Deduplicate proposals by primitive overlap and body identity, not
+center distance alone. Preserve which lanes voted and their evidence.
+Top-K ordering may use deterministic evidence weights... Include a
+no-body proposal when only a tag exists." With all five lanes now
+landed, this is the natural next milestone and closes out Phase 3's
+own named structure (lanes, then fusion) even though the phase's
+recall GATE itself stays blocked on Phase 1's corpus, as already
+recorded.
+
+New `web/src/lib/candidateProposalFusion.ts`:
+`fuseProposals(idx, laneBBodies, laneAInvocations, opts?)` fuses Lane
+B's connected-component bodies with Lane A's Form-XObject-invocation
+bodies — the two lanes whose own output is already `CandidateBody`-
+shaped (a primitive id set + bbox); Lane D/E are attribute/reference
+infrastructure the other lanes already consume, not independent body
+generators, so they have nothing of their own shape to fuse yet.
+
+Dedup rule, following the goal's own explicit instruction not to use
+center distance alone: primitive-SET Jaccard overlap
+(`DEFAULT_OVERLAP_THRESHOLD`, 0.5), computed only between a Lane B body
+and a Lane A invocation that actually SHARE a primitive (a reverse
+index, never an all-pairs scan). Two proposals merge into one
+`FusedProposal` carrying BOTH lanes' own evidence
+(`evidence.laneB`/`evidence.laneA`, never collapsed into a bare
+boolean) when the same physical ink was discovered two ways — a real
+scenario proven directly: a rectangle inside a Form XObject invocation
+is found once by Lane B's own subpath/junction connectivity and once
+because it sits inside a `Do` call, and fusion correctly produces ONE
+proposal, not two, with the union of primitive ids never double-
+counted.
+
+A real, disclosed subtlety proven by a dedicated test, not assumed:
+an invocation whose own primitives are only a SMALL FRACTION of a much
+larger Lane B body (1 of 5 primitives, Jaccard 0.2) correctly stays
+TWO separate proposals — overlap alone isn't containment, and a small
+intersection is not the same evidence as "this is the same body."
+
+Ordering: more voting lanes ranks first, ties broken by primitive
+count — disclosed as a simple deterministic rule, explicitly NOT a
+calibrated evidence-weight model (goal's own "record ablations for
+each lane" is not attempted in this slice).
+
+New `web/test/candidateProposalFusion.test.ts` (6 tests, all passing
+on the first run, one construction corrected mid-writing: an initial
+closed-loop test shape accidentally revisited one point, creating a
+degree-3 T-junction that split the intended single Lane B body per
+`candidateBodyLaneB.ts`'s own atomic-junction design — caught before
+the test ran wrong assertions, not after, by re-checking the shape's
+own junction structure against that module's already-documented split
+behavior, and rebuilt as an open zigzag chain instead).
+
+Real-sheet validation (Cherry Point #12, 102,352 primitives): 73,254
+Lane B bodies + 5 Lane A invocations with primitives fused to 73,259
+proposals in 47ms — 0 fused as both-lane matches on this specific
+sheet (an honest result: this sheet's 5 real Form XObject invocations
+apparently each span content that never reaches 50% overlap with any
+single Lane B component, plausible when an invocation's own content
+spans multiple disconnected sub-shapes), 73,254 B-only, 5 A-only — no
+proposal silently dropped.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (6/6); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet check above at real scale (73k+ bodies, 47ms). Does
+not modify `candidateBodyLaneA.ts`, `candidateBodyLaneB.ts`,
+`candidateBodyLaneC.ts`, `candidateBodyLaneD.ts`,
+`candidateBodySignature.ts`, `legendReferenceBank.ts`,
+`vectorSceneIndex.ts`, `vectorSceneRelations.ts`, or `oneclick.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — deduplicating what counts as
+one physical symbol body across independent evidence sources is
+squarely "whether it counts," the shared-path doctrine's own example
+category.
+
+Not done: folding Lane E (legend references) in as a third proposal
+source (real further work — a legend reference informing a plan-side
+proposal belongs with Phase 6's joint assignment, not this slice);
+Lane C's own "no-body proposal when only a tag exists" sentinel is
+defined (`NoBodyProposal`) but not yet wired to an actual `findAdjacentBody`
+miss in one combined call; calibrated/weighted evidence scoring;
+per-lane ablation records. Phase 3's own gate certification remains
+blocked on Phase 1's corpus reaching 150+/12. Phases 4-8 have not been
+started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane A
 first slice, the last of the five lanes to get real code: "group Form
 XObject/content-signature invocations by normalized local content"
