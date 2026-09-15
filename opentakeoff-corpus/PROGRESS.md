@@ -1,6 +1,54 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+document 049's rotated-valve lead, definitively closed. Retried with the
+more surgical seed rect planned in the entry below: re-located the exact
+valve row via `textSpans` ("990 SF/ 1066 SF", "CSDE1"), rendered high-zoom
+crops of page 10, and found a genuinely isolated (non-touching) upright
+bowtie instance the original attempt hadn't used (the original seed's
+valve was fused to two neighbors; this one has a clear gap on both
+sides — confirmed visually with a `--ring` marker dead-center on it).
+
+First tried a tight rect around just the bowtie diamond, excluding the
+hook above and the pipe stem below, per this checkpoint's "isolate the
+invariant core" hypothesis. Ran it through `Session.symbolSweep`
+directly (scope: sheet) rather than trusting the segment count: 101 raw
+matches / 104 withheld on one sheet — the bare diamond alone is exactly
+as generic as document 037's plain rectangle. Widened the rect to
+include the coupling hook above (more curved, distinctive geometry) and
+re-swept: still 46 matches at score 1.0, most immediately explained by
+their `reason` — "geometry cleared the match bar, but the drawing labels
+this placement '<tag>' outside the seed family" — where `<tag>` was
+SK-2, FCO-1, MB-1, RD, HAC-BD181F, HAC-BC107G, BC106G: sinks, cleanouts,
+mixing boxes, roof drains, and room labels, at rotations of 0/90/180/270,
+none of them valves. This is a new failure mode, distinct from plain
+low-distinctiveness: the "bowtie" glyph is not a valve-specific symbol on
+this sheet at all — it is this riser diagram's generic pipe-fitting/union
+mark, reused at every joint across completely unrelated equipment
+families. It has no coherent single "family" to count in the v2 schema
+sense (`countable: true` requires a discrete real-world device, not a
+structural connector drawn at every pipe junction). No rect size fixes
+this — the earlier 0.79-0.81 near-miss and this checkpoint's 46-101
+generic-match sweeps are two symptoms of the same underlying fact.
+Closing this lead for good; not attempting a third rect on it.
+
+Real next step for Phase 1 item 3: no leads remain open from prior
+scouting (010 HOA, 037 richer-variant, 011 SD-3, 020 S-7, 049 rotated
+valve — five for five closed, all honestly documented, zero silently
+dropped). Genuinely fresh document/symbol sourcing, done breadth-first
+this time — screen several bulk-corpus documents' legends against the
+now-large accumulated checklist (tag-family collision risk, text-layer
+presence, background-grid contamination, ubiquitous-generic-glyph risk
+like this entry's finding, rotation-centroid instability) *before*
+committing to a deep single-symbol rect investigation on any one of
+them — rather than repeating the slow one-symbol-at-a-time pattern that
+produced this run of five closures.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Reconnaissance and verification
+only — no cases.json change (nothing was ever drafted into a case this
+pass), no production code touched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 document 037's "richer/poorer look-alike variant" lead, definitively
 closed (not just deferred this time). Re-scouted fresh: the LT/KT OFFICE
 room (GE101J, page 28) does contain a real "nested double-square"
