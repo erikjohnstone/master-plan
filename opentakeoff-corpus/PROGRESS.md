@@ -1,5 +1,85 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 (first real
+work) — Lane B: subpath/connected-component candidate-body proposal.
+Every named Phase 2 gate item is now closed (see the two entries just
+below), so this begins Phase 3 per the goal's own phase-by-phase
+structure. Honest caveat stated up front: Phase 3's OWN gate ("correct-
+body proposal recall at least 99.5% at K=10... at least 98% in every
+required stratum") cannot be measured yet — Phase 1's own gate requires
+"at least 150 additional real symbol instances across at least 12
+documents before tuning the new engine" (§6 item 3), and this session's
+corpus stands at ~95 instances across 4 fresh documents, short of that.
+Lane B's IMPLEMENTATION does not itself require the full corpus (it is
+pure geometry, no tuning against ground truth), so building and unit-
+testing it now is legitimate; CERTIFYING its recall against the gate
+is not, and is not claimed here.
+
+New `web/src/lib/candidateBodyLaneB.ts`:
+`proposeCandidateBodiesLaneB(idx, junctions, opts?)` — pure, consumes a
+built `VectorSceneIndex` (slice 5) and a `computeVectorSceneJunctions`
+result (slice 6), never mutates either. Union-find over primitive ids:
+(1) every primitive within one subpath is trivially one component (a
+subpath IS one contiguous drawn figure); (2) primitives joined at a
+LOW-degree junction (dangling/pass-through/corner) merge; a HIGH-degree
+junction (t/x/multi) is a split point — its members do NOT merge across
+it. This is requirement 2's "split components at high-degree junctions"
+half.
+
+Two design limitations stated in the module's own header comment and
+proven by a dedicated test, not discovered later and patched over:
+- A junction is treated ATOMICALLY (continue-through or split) for ALL
+  its members at once — a classic inline-tee (a carrier running straight
+  through a T-junction with only a third segment branching off) splits
+  into three separate singletons here, even though the two collinear
+  through-arms could in principle stay joined while only the branch
+  peels off. Caught by writing the test BEFORE fixing the assumption:
+  first draft expected 2 components sized [1,2]; running it produced 3
+  singletons; re-derived the correct expectation from the actual (and,
+  on reflection, more honest for a first slice) atomic-junction design
+  rather than silently special-casing the test to hide the limitation.
+- Requirement 2's other half, "split at long carrier runs," is NOT
+  attempted — this module has no scale (ft/px) to judge "long" against,
+  and `web/src/lib/mepconnectivity.ts` already solves exactly this for
+  MEP carrier classification per the goal document's own diagnosis of
+  the existing codebase; reusing it belongs in a follow-up slice, not a
+  reimplementation here ("audit before you build," opentakeoff-corpus/
+  GOAL.md's own standing rule 2). Requirement 3 (carrier attachment
+  ports) and requirement 4 (alternative segmentations under ambiguity)
+  are also not attempted.
+
+New `web/test/candidateBodyLaneB.test.ts` (8 tests, all passing): a
+closed rectangle is one component; two segments at a corner merge; a
+T-junction splits all three members into singletons (see above); an
+X-junction splits into four; two non-touching figures never merge;
+bbox correctness; an empty sheet proposes nothing; the cap-breach path.
+
+Real-sheet sanity check (USDA APHIS #1, 3,942 primitives): 323
+candidate bodies in 3ms. Size distribution: 78 singletons, 191 sized
+2-5, 26 sized 6-20 (plausible real equipment symbols), 28 sized >20
+(up to 360 — plausibly carrier runs the "long carrier run" limitation
+above predicts, not a surprise).
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (8/8); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet sanity check above. Does not modify `vectorSceneIndex.ts`,
+`vectorSceneRelations.ts`, or `oneclick.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — deciding what forms a
+candidate symbol body is squarely "what symbol exists," the shared-path
+doctrine's own example category (AGENTS.md); lives in `web/src/lib`
+alongside every other VectorSceneIndex-family module.
+
+Not done (Phase 3's much larger remaining scope): the per-pair/angle-
+aware junction refinement and long-carrier-run splitting noted above;
+Lane A (PDF reusable-object identity/content-signature — depends on
+the Form XObject identity work Phase 2 deferred); Lane C (tag/leader-
+led regions — depends on text-span integration Phase 2 deferred); Lane
+D (attributed graph/path hashing); Lane E (legend-reference retrieval);
+proposal fusion/deduplication across lanes; the Phase 3 gate's own
+99.5%/98% recall certification (blocked on Phase 1's corpus reaching
+150+/12, as stated above). Phases 4-8 have not been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md — added the goal
 document itself as a standing file on this execution branch
 (`opentakeoff/docs/GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md`), byte-
