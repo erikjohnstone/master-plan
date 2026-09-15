@@ -1,5 +1,55 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 8:
+web/src/lib/vectorSceneSpatialIndex.ts — "spatial index entries", the
+goal §7 requirement `VectorSceneIndex.spatialIndex` (slice 5) stubs
+out as `null`. A uniform grid over primitive bounding boxes: the
+standard, simplest-that-works broad phase. `buildSpatialIndex(idx,
+opts?)` buckets every primitive by every grid cell its bbox overlaps;
+`querySpatialIndex(index, x0,y0,x1,y1)` returns deduplicated, sorted
+candidate primitive ids whose bbox overlaps the query rectangle — a
+broad-phase result (no false negatives, but a caller does its own
+exact test for anything finer than bbox overlap). `DEFAULT_SPATIAL_
+CELL_SIZE` (32px) is disclosed and overridable, not yet tuned against
+real sheets. Same disclosed-cap discipline as every prior slice:
+`SPATIAL_INDEX_MAX_PRIMITIVES` (250,000) — a breach reports
+`incomplete: true` and every query on that index returns `[]` rather
+than a silent partial result.
+
+Named explicitly as the piece true mid-segment intersection detection
+(goal §7's one remaining unimplemented named relation, per slice 7's
+own PROGRESS entry) needs to stay near-linear instead of an O(n²)
+all-pairs scan — bucket by bbox first, only exact-test pairs whose
+cells actually overlap. Building that on top of this index is a
+further slice, deliberately not attempted here; this slice is the
+spatial-index contract alone, proven independently of any consumer.
+
+New `web/test/vectorSceneSpatialIndex.test.ts` (6 tests, all passing
+on the first run): a query finds an overlapping primitive and misses a
+far one; a primitive spanning several cells is found from any one of
+them; results stay deduplicated/sorted across many overlapping query
+cells; bounds cover every primitive's bbox; an empty index has null
+bounds and answers every query with nothing; the cap-breach path.
+
+Verification: `npx tsc --noEmit` clean. New test file passes
+individually; confirmed the module loads cleanly from `mcp/` via tsx.
+Standalone new file — does not modify `vectorSceneIndex.ts`,
+`vectorSceneRelations.ts`, or `oneclick.ts`, so no broader regression
+sweep was needed.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same shared `web/src/lib/`
+path.
+
+Not done (narrowing further — goal §7's own list is now down to a
+handful of items): true mid-segment intersection built on top of this
+spatial index; wiring junctions/pair-relations/spatial index into
+`VectorSceneIndex`'s own `intersections`/`spatialIndex` fields; Form
+XObject identity/content-signature hashing; text-span/exploded-text-
+mask integration; curve fidelity beyond chord-sampling; wiring the
+index into `graphForPipeline`/Session's pipeline; the gate's memory/
+build-time measurements and 5-PDF parity evidence. None of Phases 3-8
+have been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 7:
 pairwise collinearity/near-parallel/near-perpendicular relations,
 extending `web/src/lib/vectorSceneRelations.ts` (slice 6) with
