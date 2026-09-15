@@ -1,5 +1,23 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md — full 51-case corpus
+regression confirms zero end-to-end impact from Phase 2 slices 1-8.
+The `symbol-sweep-corpus.mjs --report-v2-fields` run kicked off after
+landing slice 5 (vectorSceneIndex.ts) has now finished end to end,
+covering slices 1-8's cumulative changes to `oneclick.ts` (primType,
+dashed, formDepth, lineCap/lineJoin) plus the three new standalone
+modules (vectorSceneIndex.ts, vectorSceneRelations.ts,
+vectorSceneSpatialIndex.ts, none of which any existing consumer
+imports yet): 51/51 PASS, 0 FAIL. Matches every case's own
+individually-verified result from Phase 1's own corpus-expansion work,
+confirming Phase 2's additive-only extraction changes have not moved
+a single symbol-sweep outcome. Recorded here as the final close-out
+confirmation for this batch of Phase 2 work, the same pattern used for
+Phase 1 item 2's own full-corpus close-out entry.
+
+SHOULD THIS BE ON THE SHARED PATH? No. A verification run only — no
+file changes.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 8:
 web/src/lib/vectorSceneSpatialIndex.ts — "spatial index entries", the
 goal §7 requirement `VectorSceneIndex.spatialIndex` (slice 5) stubs
