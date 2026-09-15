@@ -1,5 +1,57 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — made the
+throwaway diagnostic script behind the last two entries permanent
+(`mcp/scripts/inspect-ownership-clusters.mjs`, matching the existing
+`inspect-vector-scene-relations.mjs` convention; no such script existed
+before this checkpoint, confirmed by checking `mcp/scripts/` and
+`web/bench/` first), then used it to gather real, disclosed, multi-
+document Phase 4 gate evidence beyond the one document the fix was
+found and fixed against:
+- Cherry Point Air Traffic Tower #11 (re-run via the new permanent
+  script): confirms the touchesPageEdge fix holds — 0 ownership
+  clusters, gate holds.
+- Norfolk Submarine Pier 3 Utility Services #1-5: 1 real cluster per
+  page (351 proposals, ~1563 contested primitives, 0 exclusive, 100%
+  resolved, 0 ambiguous, gate holds on every page). Inspected directly:
+  one Lane A "whole Form" claim (a compact ~288x287 square, identical
+  page-space bbox on every page checked — a repeated PER-PAGE OVERLAY,
+  not per-sheet content) shattered by exactly 350 small Lane B sub-
+  proposals (~25-29 primitives each, ~10x14 units) — the SAME
+  structural shape this project's own form-plausibility signal was
+  built to resolve (see formPlausibility.ts/PROGRESS.md's own earlier
+  Cherry Point/Tinker AFB findings), now confirmed generalizing
+  correctly to a THIRD, previously untested real document at a larger
+  shatter count (350-way) than either prior real case. This repeated
+  overlay does NOT touch the page edge (its own bbox sits well inside
+  the sheet), so it is NOT caught by the touchesPageEdge fix — likely a
+  key-map/compass/scale graphic repeated per sheet, not yet identified
+  further; disclosed as a real, different-shaped repeated-furniture
+  pattern the existing form-plausibility signal already handles safely,
+  not a new gap requiring a fix this pass.
+- Colville White Sturgeon Fish Hatchery #1-3: 2 real clusters per page,
+  ~8341-8365 contested primitives, ~160 exclusive, ~3523 owned bodies,
+  96.7-96.9% resolved with a REAL, nonzero ambiguous count (262-275) on
+  every page — the first real-corpus evidence gathered this checkpoint
+  of the ambiguous-abstain state actually firing on genuine ambiguity
+  rather than resolving to exactly 0 or 100%. Gate holds on every page.
+  Same near-identical contested/exclusive/owned counts across all three
+  pages suggest another repeated per-page template element, not
+  individually traced this pass (disclosed, not chased further, per
+  this project's own "don't sink unlimited time in one outlier, keep
+  the per-set loop moving" discipline).
+
+Aggregate real-corpus result across all 9 real page-runs checked this
+pass, spanning 3 independent real documents/projects (never the same
+document twice): Phase 4's own core gate — "no primitive can support
+two accepted physical instances" — HOLDS on every single one, zero
+double-claims found anywhere. This is the first time this checkpoint's
+own ownership-assignment code has been measured against real corpus
+documents rather than only synthetic unit fixtures; previously-built
+signals (form plausibility especially) are shown holding up on
+documents they were never tuned against, consistent with this project's
+own standing "never hardcode to what's currently in the corpus" rule.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane A
 requirement 3 — closed the loop on the touchesPageEdge finding below:
 (1) validated the hypothesis against real data instead of just one
