@@ -1,5 +1,84 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+breadth-first legend screening, batch A (5 fresh Vol2 documents: 004,
+006, 008, 009, 013) — the breadth-first pivot pays off: 3 of 5 documents
+yield real, symbolSweep-sanity-checked candidates (a break from the run
+of five straight closures earlier this checkpoint), 2 are honest
+structural dead ends. Every candidate below was checked with a real
+`Session.symbolSweep(scope:"sheet", commit:false)` call before being
+called promising, not inferred from a legend or filename.
+
+Candidates found (not yet built into cases — next step is a focused
+deep-dive on each):
+- **004** (M-104, page 36): "S1" ceiling supply-diffuser icon (square
+  outline, checkerboard-fill diamond/X body — a real diffuser, not a
+  plain rect). Seed [[798,604],[840,647]]. Sweep: found 46, withheld 42,
+  scores clustered 0.94-1.0. Same-icon-different-size-tag siblings exist
+  (S2/S3/S4/R1/E1) — sweep only on S1, siblings are a collision hazard
+  like doc-011's, not a defect in this seed. Rotation (0/90/180/270) AND
+  mirroring (5/46) both already present in the raw matches — a real
+  strata two-fer if it holds up under per-instance verification. Auto
+  label-corroboration is weak for this drawing's two-box "TAG / CFM"
+  convention (41/46 unlabeled, one spot-checked mislabel from an
+  unrelated nearby "RTU-6" callout) — a real disclosed limitation, not a
+  shape problem; per-instance tag confirmation will need to read the
+  adjacent text box directly rather than trust the auto-label.
+- **009** (MH101, page 15): ceiling supply-air diffuser (square+full-X,
+  confirmed against the doc's own M-001 "AIR DISTRIBUTION DEVICES"
+  legend), tagged by neck size (D6/D8/D10/D12). Seed auto-resolved via
+  seedPoint to [1197.9,2913.3]-[1235.7,2951.1]. Sweep: found 14, withheld
+  29, scores 0.969-1.0, 8/14 labeled (4 correctly D12/D12/D12/D8, 3
+  cross-attributed to a nearby VAV's leader tip — a leader/tag
+  cross-attribution hazard, not a shape defect). Withheld reasons already
+  surface a genuine richer/poorer sibling (the legend's own "return or
+  transfer" single-diagonal icon, correctly rejected at ~78% for missing
+  the second diagonal) and one real stretched/sheared near-miss
+  (0.917, 0.92x/0.92x stretch + 10.4 deg shear) — the engine finding its
+  own required-strata bonuses unprompted is a good distinctiveness
+  signal. Cross-sheet recurrence on MH102 not yet independently
+  confirmed (text scan came back empty; not re-verified by render).
+  Secondary VAV-1-# leader-tagged terminal lead explored but left
+  unconfirmed — no distinct closed-body glyph could be established this
+  pass (the "box" may just be the duct's own double-line wall); not
+  disqualified, just not ready.
+- **013** (M-300, page 18): pressure-safety-relief-valve (PSV) ISA glyph
+  — a compound triangle+3-line "spring" symbol, tagged literally "PSV".
+  Two OTHER glyphs on this same document's P&ID diagrams were tried
+  first and correctly rejected before this one, recorded for the "no
+  lead silently dropped" discipline: a plain instrument-bubble circle
+  (FCV/PI/TI/PSV all share one undifferentiated circle — the "plain
+  circle" disqualifier) and a small valve tick-mark near boiler B-001's
+  drain line (found 39/withheld 313 on one seed — the identical
+  ubiquitous-generic-fitting signature that just closed document 049).
+  The PSV glyph itself: seed [[1210,1740],[1252,1775]] (9 segments).
+  Sweep: found 6, withheld 0 — a sharp, clean signal, zero noise. All 6
+  score 0.935-1.0; five sit ~175px apart matching the doc's 6-boiler bank
+  (one genuine relief valve per boiler, visually confirmed), the sixth is
+  a DIFFERENT diagram location at rotation 90 deg AND mirrored:true,
+  score 0.935 — a real rotated+mirrored instance the engine caught on its
+  own. 7 confirmed instances total (6 matches + seed) on this sheet
+  alone; sibling sheet M-310 carries "PSV" 10 more times in its own text
+  layer (likely a mirrored second-boiler-plant diagram, i.e. a
+  "duplicated across contexts" bonus) but not yet independently
+  re-verified by render/sweep there.
+
+Dead ends (structural, not fixable mistakes): **006** — only generic
+circled keyed-note bubbles (same digit reused across 15+ unrelated
+rooms), no discrete per-instance equipment tag exists on the sheet at
+all. **008** — every tagged device in the whole document (UH-1, UH-2,
+EF-1) is a singleton; nothing recurs to sweep.
+
+Real next step: pick one of the three candidates above (013's PSV looks
+like the lowest-risk first build — zero sweep noise, a rotated+mirrored
+instance already caught) and take it through the full per-instance
+verification/body_bbox/PROGRESS.md/commit workflow used throughout this
+checkpoint, rather than leaving it as an unverified sweep result. Batch B
+(014-018) still running.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Reconnaissance only — no files
+edited, no cases.json change, no commits from the scouting pass itself.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 2 — full
 corpus re-run confirms zero regressions from the v2-annotation pass.
 The full-corpus `symbol-sweep-corpus.mjs --report-v2-fields` run kicked
