@@ -1,5 +1,126 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 first slice —
+"joint tag, leader, legend, schedule, and body assignment," requirement
+1 only: "Build one evidence graph per sheet/local region: tag tokens,
+candidate bodies, leaders, legend references, schedule identities,
+system/carrier attachments." First real work on Phase 6.
+
+AUDITED BEFORE BUILDING (dedicated investigation, this checkpoint, same
+discipline as Phase 5's own audit): every non-body node kind the goal
+names already has a real, tested, shared-path source in this large
+codebase, confirmed directly rather than assumed:
+- tag tokens + leaders: symbollabels.ts's own `labelTokens` (raw
+  positioned text spans -> real tag-shaped spans, already shared by the
+  canvas Symbol tool and MCP symbol_sweep) and
+  `leaderTerminalPointsForLabel` (one token's own traced leader
+  endpoints). `labelPlacements` (point-in, PlacementLabel-out, already
+  encoding `via: adjacent|leader` and `distance_px`) is the SAME
+  primitive `taggedVectorGrounding.ts` already uses for one tag at a
+  time — reused directly here, called once for every candidate body's
+  own anchor point instead of one tag at a time.
+- legend references: legendReferenceBank.ts's own `buildLegendReferenceBank`
+  output, already built on this project's own Phase 2/3 spatial index.
+- schedule identities: sheetgraph.ts's own `TableRow.key` — read-only,
+  this module never touches sheetgraph.ts or schedule reconstruction
+  itself, per the goal's own explicit rule; only the two fields
+  (`key`, `sheet`, `cells`) it actually needs are declared as a
+  structural local type, never sheetgraph.ts's own full surface.
+- identity matching (tag label <-> schedule key <-> legend caption):
+  markid.ts's own `marksEqual`, the same normalization schedule/tag
+  reconciliation already uses elsewhere — never a bespoke string
+  comparison invented here.
+- system/carrier attachments: carrierClassification.ts's own
+  `classifyCarrierPrimitives`, run once per body — modeled as an
+  ATTRIBUTE on each body node (`carrierAttachment`), not a separate
+  free-standing node type: the goal's own wording names a property of a
+  body's own ink, not an independent entity with its own identity
+  elsewhere in the graph, a disclosed design choice.
+- candidate bodies: this project's own Phase 3/4 output — a
+  `FusedProposal` or resolved `OwnedBody` both already share the same
+  minimal `{id, primitiveIds, x0,y0,x1,y1}` shape the new module
+  accepts structurally, so either passes through with no copying.
+One documented trap re-confirmed and avoided: `symbolsweep.ts`'s own
+`matchSymbol`/`fingerprintSymbol` must never be called raw for any
+affine/geometry need here (rigid-only by its own bare default) — same
+discipline `rigidAffineVerify.ts` already established, reused rather
+than re-litigated.
+
+NEW `evidenceGraph.ts`: `buildSheetEvidenceGraph(idx, bodies, labelSpans,
+segs, lum, legendEntries, scheduleRows)` assembles `TagNode[]`,
+`BodyNode[]` (each carrying its own `carrierAttachment`),
+`LegendNode[]`, `ScheduleNode[]`, plus three candidate-edge lists —
+`TagBodyEdge` (via + distance, reusing `labelPlacements` directly),
+`TagScheduleEdge`, `TagLegendEdge` (both via `marksEqual`). Every input
+is something a caller already computed elsewhere; this module only
+assembles and draws the minimal real candidate edges — it never
+re-extracts text, re-parses a schedule, or re-detects a legend glyph.
+
+9 new tests (evidenceGraph.test.ts): a real tag<->body edge via plain
+adjacency, carrying real via/distance (never a single collapsed
+confidence, per requirement 3's own concern for later); a far tag
+produces no edge; a tag matching a schedule key produces a
+tag<->schedule edge; hyphen/space variants still match (markid.ts's own
+normalization) while an unrelated key does not; a tag matching a legend
+caption produces a tag<->legend edge; a single-subpath body's own
+carrier attachment is honestly null (nothing to compare against, never
+a guessed false); a body combining a small glyph with a much longer run
+correctly flags the long run as carrier-like; a fully empty sheet
+produces every list empty, never a crash; two separate tag/body pairs
+each get their own edge, never one tag silently claiming two bodies.
+One real test-fixture bug caught and fixed along the way: the first
+draft placed a candidate body's own bbox EXACTLY coincident with its
+naming tag's own text box — `labelPlacements` correctly refuses that
+degenerate case (a candidate "sitting inside its own glyph box"), so
+the fixture was rebuilt using the SAME proven adjacency fixture
+symbolLabels.test.ts's own suite already relies on, with the body at
+its own separate, real nearby location. `tsc --noEmit` clean, 9/9 pass.
+
+DISCLOSED, NOT ATTEMPTED in this slice: requirement 2 (hard eligibility
+— bounds-failed/topology-impossible/empty-body/conflicting candidates
+barred from stealing a tag); requirement 3's own real edge SCORING
+beyond raw candidate evidence; requirement 4 (duplicate-tag resolution
+within drawing/building/floor/discipline scope); requirements 5-9 (the
+accepted-installed-quantity state machine itself). Also not attempted:
+validation against real corpus data (this slice's own synthetic tests
+prove the assembly logic; a real-sheet smoke test, analogous to Phase
+5's own real-corpus validation, is real further work). This is real
+groundwork for Phase 6, not a completed phase.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — new, isolated module; touches
+no existing VectorGrid/table/schedule/citation/bbox code, and every
+non-body input is read-only reuse of already-tested infrastructure.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2
+follow-up — the real full-corpus (422-instance) re-measurement of the
+Lane C near-duplicate dedup fix (entry two below), completed.
+
+RESULT: microF1 0.3939 -> 0.3965 (macroF1 0.391 -> 0.415),
+microPrecision roughly flat (0.4231 -> 0.4221), microRecall 0.3685 ->
+0.3739 — a small aggregate move. The metric this fix specifically
+targeted moved more clearly: atOrAboveGate95 (Phase 4's own strict
+per-instance >=0.95 F1 gate) DOUBLED, 4/405 -> 8/405 (0.99% -> 1.98%) —
+still far below baseline's 13/405 (3.21%, no Lane C at all), but a real,
+disclosed, direction-correct recovery of exactly the failure mode the
+fix targeted (an already-correct match destroyed by tying with its own
+Lane C duplicate).
+
+HONEST READING: the small aggregate move (vs. the much larger
+atOrAboveGate95 change) means this exact bug class — Lane C exactly
+rediscovering an already-complete Lane B body — is real but affects a
+SMALL minority of the corpus's 405 evaluable instances. The much larger,
+still-open aggregate precision cost (0.86 baseline -> ~0.42 with Lane C)
+is a DIFFERENT, broader problem: Lane C's tag-anchored regions
+over-claiming ink that was never really theirs, not the near-duplicate
+tie this fix addressed. That broader precision problem remains real,
+disclosed, further work — not conflated with this fix's own narrower,
+real, now-measured effect.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes as a measurement/disclosure entry
+— no code changed here, this is the honest corpus-scale confirmation of
+the fix two entries below, with its real (modest, not overstated) size
+disclosed plainly.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2 —
 a real REGRESSION found by root-causing individual worst-precision
 instances from the full-corpus Lane C + coverageAgreement measurement
