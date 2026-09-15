@@ -1,5 +1,85 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 — "integrate
+with reconciliation and Legend Learn," first real work. FIRST slice:
+requirement 8, "Keep stable vector-body crops and reference IDs in the
+output contract for a future DINOv2 metric verifier."
+
+AUDITED BEFORE BUILDING (dedicated Phase 7 investigation, this
+checkpoint — Phase 7 is fundamentally riskier than Phases 0-6: it
+means touching EXISTING, production-relied-upon code — `Session`,
+`symbol_sweep`, `sweep_schedule_row`, `schedulePlanReconcile.mjs` —
+not just adding new isolated files). Key findings driving this
+checkpoint's own scoping:
+- `Session.graphForPipeline()` (mcp/src/session.ts:7386) IS the
+  "documented shared pipeline object" the goal names for requirement
+  1 — a real, singular target, confirmed rather than guessed.
+- `symbol_sweep`'s own output contract is large, richly-evolved, and
+  guarded by a real 47/47-case corpus regression gate
+  (docs/SYMBOL-SWEEP-CLEAN-CORPUS-GOAL.md) plus 244+ existing unit/
+  conformance/parity tests across 4 files — refactoring its internals
+  (requirement 2) is real, necessary work but HIGH RISK and explicitly
+  deferred until a shadow/parallel-run harness exists to validate any
+  change against that same corpus before swapping the real path.
+- `sweep_schedule_row` is ALREADY called once per schedule row from
+  TWO real production call sites (schedulePlanReconcile.mjs,
+  takeoff.ts) — confirming requirement 3's own "do not rerun whole-
+  sheet geometry once per schedule row" describes a REAL, present
+  pattern, not a hypothetical.
+- The hardcoded quantity=1 fallback requirement 4 wants narrowed
+  (never removed outright — a real single-asset schedule genuinely
+  implies qty=1) lives at schedulePlanReconcile.mjs's own
+  `scheduledQtyStatusFromRow`, guarded by 26 existing tests.
+- Requirement 8 (this slice) and requirement 6 (Legend Learn's own
+  "accepted row" concept, real further work, not attempted here) are
+  confirmed genuinely NEW, additive infrastructure — no existing
+  contract to preserve, lowest real risk, correctly ordered first.
+
+NEW `bodyReferenceId.ts`: `computeVectorBodyCrop(sheetKey, primitiveIds,
+bbox)` — a stable reference id (SHA-256 hex) plus the crop region
+(sorted primitiveIds + bbox) for one body's own real ink on one real
+sheet. REUSES, rather than reinvents, an already-tested shared-path
+convention found during the audit: basSequenceReconciliation.ts's own
+`digest(value) = sha256Hex(canonicalBasJson(value))`
+(basCanonical.ts + graphKeys.js) — the SAME deterministic, key-sorted
+JSON-then-SHA-256 pattern already used elsewhere in this codebase for
+stable content identity, not a second hash scheme.
+
+STABILITY CONTRACT, and why it matters: the id depends ONLY on sheet
+identity + the body's own primitiveIds (sorted internally, so upstream
+collection order never changes it) — never on array position in
+whatever proposal list currently holds it, and never on any sibling
+proposal's own existence. This is deliberately NOT a cross-document
+visual fingerprint (comparing two different sheets' similar-looking
+symbols is exactly the future DINOv2 verifier's own job, per the goal's
+own text) — only a stable way for different pipeline stages, and a
+future crop-based verifier, to keep referring to "this exact body" a
+crop renderer (Phase 8's own real further work, not attempted here)
+would still need to build.
+
+6 new tests: determinism across independent calls; insertion-order
+independence; different sheet -> different id; different primitive set
+-> different id; bbox/sheetKey carried through unchanged, real 64-char
+lowercase-hex output; empty primitive set handled safely. 44/44 across
+the affected suite (bodyReferenceId, basSequenceReconciliation,
+evidenceGraph) green, confirming the shared digest utilities are
+unaffected. `tsc --noEmit` clean.
+
+DISCLOSED, NOT ATTEMPTED: actually rendering a real image/vector crop
+for a DINOv2 model (Phase 8's own concern); wiring this into any real
+output contract yet (this is a standalone utility, not yet called from
+Session/evidenceGraph.ts — deliberately additive-only, so nothing
+existing depends on it before it is proven useful). Requirements 1-7 of
+Phase 7 remain fully open, ordered per the audit's own recommendation:
+6 (Legend Learn) and 1 (additive-only SheetGraph field) next, then 4's
+narrow fix, then 5's additive evidence states, then 2/3 only behind a
+shadow-corpus harness, then the new MEP-corroboration call site last.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — new, isolated, purely additive
+module; touches no existing VectorGrid/table/schedule/citation/bbox
+code, and reuses an already-tested hash convention rather than adding
+a second one.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6 — first
 real-corpus validation of `evidenceGraph.ts` (all five entries below
 were synthetic-fixture-tested only until now), plus a built-then-
