@@ -152,3 +152,17 @@ test("pair relations: an oversized orientation bucket is skipped and disclosed, 
   assert.deepEqual(r.parallelPairs, [], "the oversized bucket was skipped, not partially paired");
   assert.match(r.incompleteReason!, /exceeded the 3-primitive pair cap/);
 });
+
+test("pair relations: a total-pair safety ceiling stops the scan mid-computation with a disclosed incomplete state, rather than growing unbounded", () => {
+  // 6 mutually-parallel horizontal strokes at distinct offsets: C(6,2) = 15
+  // possible parallel pairs. A ceiling of 3 must stop well short of that,
+  // report incomplete, and never throw — this is the safety net added
+  // after a real sheet's hatch family crashed a naively unbounded Set
+  // (see PAIR_RELATIONS_MAX_TOTAL_PAIRS's own comment).
+  const ops: Op[] = [];
+  for (let i = 0; i < 6; i++) ops.push(line(0, i * 10, 10, i * 10));
+  const r = pairRelationsFor(ops, { maxBucket: 100, maxTotalPairs: 3 });
+  assert.equal(r.incomplete, true);
+  assert.match(r.incompleteReason!, /reached the 3-pair safety ceiling/);
+  assert.equal(r.parallelPairs.length, 3, "stops exactly at the ceiling, not before or after");
+});

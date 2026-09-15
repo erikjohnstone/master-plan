@@ -1,5 +1,94 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 9:
+real-sheet validation of slices 6-7's caps, plus a hard-ceiling
+crash fix found by that validation. New `mcp/scripts/
+inspect-vector-scene-relations.mjs` (committed, matching the existing
+`inspect-control-diagram.mjs` convention): runs extraction + the
+VectorSceneIndex/junctions/pair-relations/spatial-index build against
+REAL PDF pages and reports counts, kind distributions, and per-stage
+timing — the "prove the contract on real sheets" step slices 5-8's own
+entries all said was still owed before wiring any of this into
+`buildVectorSceneIndex`'s own stub fields.
+
+Ran it against `01__vol2__001__…Cherry_Point…#12` (case 01's own
+sheet, 102,352 primitives — unusually dense) and
+`09__vol2__014__…Missoula…#1` (5,303-junction sheet, more typical).
+Findings, and the fixes they drove:
+
+- Junctions: 102,352 primitives clustered in 220-252ms with a sane
+  kind distribution (dangling/pass-through/corner/t/x/multi all
+  populated, none implausibly dominant) — but the sheet immediately
+  hit `RELATIONS_MAX_PRIMITIVES`'s old default of 50,000, an untested
+  guess. Raised to 250,000 to match `VECTOR_SCENE_INDEX_MAX_PRIMITIVES`,
+  justified directly by this timing, not just consistency for its own
+  sake.
+- Pair relations, worse: this same sheet has EVERY ONE of its 90
+  orientation buckets over the 250-primitive default
+  (`PAIR_RELATIONS_MAX_BUCKET`) — it is a genuinely hatch-saturated
+  sheet. Probing what raising that cap would actually produce: 1,000
+  → 3,524,177 parallel + 3,197,371 perpendicular pairs in 10.8s; 3,000
+  → 5,564,543 + 4,871,825 in 21.3s; 6,000 → **crashed** (`RangeError:
+  Set maximum size exceeded`, V8's own Set capacity limit) partway
+  through. This confirms slice 7's own design reasoning ("that many
+  parallel-pair facts among one hatch's own strokes is noise the
+  existing hatch classifier already owns") was correct — not a
+  hypothesis, a measured fact — so `PAIR_RELATIONS_MAX_BUCKET` (250)
+  was NOT raised. What DID need fixing: a caller overriding it upward
+  got an unhandled crash instead of a disclosed incomplete state,
+  which this codebase's whole cap discipline exists to prevent. Added
+  `PAIR_RELATIONS_MAX_TOTAL_PAIRS` (500,000): a hard ceiling,
+  independent of the per-bucket cap, checked incrementally during both
+  the parallel and perpendicular scans — a breach now stops the scan
+  and returns `incomplete: true` with a stated reason instead of
+  letting the `seenParallel`/`seenPerp` Sets grow into the crash.
+  Re-ran the exact previously-crashing case (`maxBucket: 6000` on the
+  same sheet): now returns cleanly in 485ms with `incomplete: true`
+  and the new reason, 500,000 parallel pairs computed then stopped.
+- Also raised `PAIR_RELATIONS_MAX_PRIMITIVES` (the overall gate before
+  bucketing even starts) from an untested 20,000 to 250,000, matching
+  the other two caps — the real bottleneck this sheet exposed is the
+  per-bucket cap, not the overall size, so a large-but-not-uniformly-
+  hatch-dense sheet should still get useful signal for its non-hatch
+  orientations rather than being refused outright for its size alone.
+  Confirmed on the Missoula sheet: at the new defaults, 6 of its
+  buckets were skipped (hatch) but the rest still produced 188,039
+  parallel, 178,425 perpendicular, and 1,453 collinear pairs in 391ms
+  — real, useful, safely-bounded signal, exactly the intended
+  middle ground between "refuse the whole sheet" and "explode".
+
+New test: a total-pair safety-ceiling test proving the scan stops
+exactly at the ceiling with a disclosed incomplete state and never
+throws, using a small ceiling override so the test doesn't need to
+generate hundreds of thousands of real pairs itself.
+`web/test/vectorSceneRelations.test.ts` is now 17 tests, all passing.
+
+Verification: `npx tsc --noEmit` clean; vectorSceneRelations/
+vectorSceneIndex/vectorSceneSpatialIndex test files re-run
+individually, 0 failures; the new diagnostic script re-run against
+both real sheets confirms the fix end to end (no crash, correct
+incomplete disclosures, sane counts on both a hatch-saturated sheet
+and a typical one).
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same shared `web/src/lib/`
+path; the new diagnostic script lives in `mcp/scripts/`, matching
+where every other real-PDF inspection tool in this codebase already
+lives.
+
+Not done (unchanged from slice 8's own list, this slice was
+validation/hardening, not new relation coverage): true mid-segment
+intersection built on the spatial index; wiring
+junctions/pair-relations/spatial-index into `VectorSceneIndex`'s own
+stub fields (now genuinely closer — the caps are evidence-based rather
+than guessed, which was the stated precondition); Form XObject
+identity/content-signature hashing; text-span/exploded-text-mask
+integration; curve fidelity beyond chord-sampling; wiring the index
+into `graphForPipeline`/Session's pipeline; the gate's own formal
+memory/build-time measurement writeup and 5-PDF parity evidence (this
+slice's two-sheet timing table is real evidence toward that, not the
+full formal pass the gate calls for). None of Phases 3-8 have been
+started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md — full 51-case corpus
 regression confirms zero end-to-end impact from Phase 2 slices 1-8.
 The `symbol-sweep-corpus.mjs --report-v2-fields` run kicked off after

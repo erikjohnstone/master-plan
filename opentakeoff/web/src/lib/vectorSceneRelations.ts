@@ -31,8 +31,18 @@ export const PASS_THROUGH_ANGLE_TOL_DEG = 15;
 /** Disclosed safety cap (same ethos as VECTOR_SCENE_INDEX_MAX_PRIMITIVES):
  *  clustering is near-linear (grid-bucketed, not all-pairs) but still
  *  real work per primitive, and a cap breach must produce an incomplete
- *  state rather than a silent partial pass over an oversized sheet. */
-export const RELATIONS_MAX_PRIMITIVES = 50_000;
+ *  state rather than a silent partial pass over an oversized sheet.
+ *  Matches VECTOR_SCENE_INDEX_MAX_PRIMITIVES exactly (raised from an
+ *  initial, untested 50,000 guess): measured directly against a real,
+ *  unusually dense sheet in this repo's own corpus
+ *  (01__vol2__001…#12, 102,352 primitives) via
+ *  mcp/scripts/inspect-vector-scene-relations.mjs — full clustering over
+ *  every primitive on that sheet took 252ms and produced a sane kind
+ *  distribution (dangling/pass-through/corner/t/x/multi all populated,
+ *  none dominating implausibly), so this cap was raised to match the
+ *  index's own ceiling rather than being independently, more
+ *  conservatively guessed. */
+export const RELATIONS_MAX_PRIMITIVES = 250_000;
 
 export interface JunctionMember {
   primitiveId: number;
@@ -190,12 +200,46 @@ export const PERPENDICULAR_ANGLE_TOL_DEG = 2;
  *  real "continues the same wall" case never lands sub-pixel-exact. */
 export const COLLINEAR_OFFSET_TOL = 0.75;
 /** Same disclosed-cap ethos as RELATIONS_MAX_PRIMITIVES: overall input
- *  size bound for this pass. */
-export const PAIR_RELATIONS_MAX_PRIMITIVES = 20_000;
+ *  size bound for this pass. Raised to match RELATIONS_MAX_PRIMITIVES/
+ *  VECTOR_SCENE_INDEX_MAX_PRIMITIVES (from an initial, untested 20,000
+ *  guess) once real measurement (see PAIR_RELATIONS_MAX_BUCKET below)
+ *  showed the REAL bottleneck on a dense sheet is the per-bucket cap, not
+ *  this overall one — a large sheet that is not uniformly hatch-dense
+ *  should still get useful pair relations for its non-hatch orientations
+ *  rather than being refused outright for its size alone. */
+export const PAIR_RELATIONS_MAX_PRIMITIVES = 250_000;
 /** Per-orientation-bucket cap. A bucket beyond this size is almost always
  *  one hatch/fill family's own many parallel strokes, not a set of facts
- *  worth reporting pairwise — see the module-level comment above. */
+ *  worth reporting pairwise — see the module-level comment above.
+ *  VALIDATED, not guessed: probed directly against the same real, dense
+ *  corpus sheet RELATIONS_MAX_PRIMITIVES cites (102,352 primitives,
+ *  every one of its 90 orientation buckets over 250 members — it is an
+ *  unusually hatch-heavy sheet). Raising this cap to see what pairwise
+ *  relations would say inside those buckets: maxBucket=1000 produced
+ *  3,524,177 parallel pairs (+3,197,371 perpendicular) in 10.8s;
+ *  maxBucket=3000 produced 5,564,543 (+4,871,825) in 21.3s; maxBucket=
+ *  6000 CRASHED (`RangeError: Set maximum size exceeded`, V8's own Set
+ *  capacity limit) partway through computing them. This is not a
+ *  hypothetical scale concern — it is what a real architectural/MEP
+ *  sheet's hatch families actually do to an all-pairs report, and it
+ *  confirms the design reasoning above rather than being an arbitrary
+ *  guess: 250 stays well clear of both the multi-million-pair noise
+ *  floor and the crash zone. See also PAIR_RELATIONS_MAX_TOTAL_PAIRS
+ *  below, added specifically because of the observed crash — a caller
+ *  overriding this cap upward now gets a disclosed incomplete state
+ *  instead of an unhandled exception. */
 export const PAIR_RELATIONS_MAX_BUCKET = 250;
+/** Hard ceiling on total pairs found, independent of PAIR_RELATIONS_
+ *  MAX_BUCKET — a safety net, not a normal-path limit (the per-bucket
+ *  cap above is what keeps ordinary runs far below this). Added after
+ *  observing a real crash (see PAIR_RELATIONS_MAX_BUCKET's comment):
+ *  Set.add throws once the JS engine's own internal Set capacity is
+ *  exceeded, which is an unhandled exception, not an incomplete state —
+ *  exactly the "partial silent truth" this codebase's cap discipline
+ *  exists to avoid, except worse (a crash instead of a wrong answer).
+ *  A caller who overrides maxBucket upward without also raising this
+ *  now gets a stated incomplete result instead. */
+export const PAIR_RELATIONS_MAX_TOTAL_PAIRS = 500_000;
 
 const ANGLE_BUCKET_DEG = PARALLEL_ANGLE_TOL_DEG;
 const NUM_BUCKETS = Math.round(180 / ANGLE_BUCKET_DEG);
@@ -241,12 +285,13 @@ interface OrientedEntry { id: number; x0: number; y0: number; ux: number; uy: nu
 export function computeVectorScenePairRelations(
   idx: VectorSceneIndex,
   opts: {
-    maxPrimitives?: number; maxBucket?: number;
+    maxPrimitives?: number; maxBucket?: number; maxTotalPairs?: number;
     parallelTolDeg?: number; perpendicularTolDeg?: number; collinearOffsetTol?: number;
   } = {},
 ): PairRelationsResult {
   const capN = opts.maxPrimitives ?? PAIR_RELATIONS_MAX_PRIMITIVES;
   const capBucket = opts.maxBucket ?? PAIR_RELATIONS_MAX_BUCKET;
+  const capTotalPairs = opts.maxTotalPairs ?? PAIR_RELATIONS_MAX_TOTAL_PAIRS;
   const parallelTol = opts.parallelTolDeg ?? PARALLEL_ANGLE_TOL_DEG;
   const perpTol = opts.perpendicularTolDeg ?? PERPENDICULAR_ANGLE_TOL_DEG;
   const collinearTol = opts.collinearOffsetTol ?? COLLINEAR_OFFSET_TOL;
@@ -275,7 +320,15 @@ export function computeVectorScenePairRelations(
   const collinearPairs: CollinearPair[] = [];
   const seenParallel = new Set<string>();
   const pairKey = (a: number, b: number) => (a < b ? `${a}:${b}` : `${b}:${a}`);
+  // Hard safety net, independent of capBucket — see PAIR_RELATIONS_MAX_
+  // TOTAL_PAIRS's own comment: a real dense sheet with capBucket overridden
+  // upward can generate millions of pairs and crash the `seenParallel`/
+  // `seenPerp` Sets outright (observed directly, not a theoretical risk).
+  // This stops short of that with a disclosed incomplete state instead.
+  let totalPairsFound = 0;
+  let ceilingHit = false;
 
+  parallelScan:
   for (let bi = 0; bi < NUM_BUCKETS; bi++) {
     const own = buckets[bi];
     if (own.length === 0) continue;
@@ -295,35 +348,42 @@ export function computeVectorScenePairRelations(
         const nx = -a.uy, ny = a.ux;   // A's own normal
         const offset = (b.x0 - a.x0) * nx + (b.y0 - a.y0) * ny;
         if (Math.abs(offset) <= collinearTol) collinearPairs.push({ aId: lo, bId: hi, angleDeg: diff, offset });
+        if (++totalPairsFound >= capTotalPairs) { ceilingHit = true; break parallelScan; }
       }
     }
   }
 
   const perpendicularPairs: PairRelation[] = [];
   const seenPerp = new Set<string>();
-  for (let bi = 0; bi < NUM_BUCKETS; bi++) {
-    const own = buckets[bi];
-    if (own.length === 0) continue;
-    const group: OrientedEntry[] = [];
-    for (let d = -1; d <= 1; d++) group.push(...buckets[(bi + PERP_BUCKET_SPAN + d + NUM_BUCKETS) % NUM_BUCKETS]);
-    if (own.length > capBucket || group.length > capBucket) { skippedBuckets.add(bi); continue; }
-    for (const a of own) {
-      for (const b of group) {
-        const key = pairKey(a.id, b.id);
-        if (seenPerp.has(key)) continue;
-        const diff = orientationDiffDeg(a.orientation, b.orientation);
-        if (Math.abs(diff - 90) > perpTol) continue;
-        seenPerp.add(key);
-        perpendicularPairs.push({ aId: Math.min(a.id, b.id), bId: Math.max(a.id, b.id), angleDeg: diff });
+  if (!ceilingHit) {
+    perpScan:
+    for (let bi = 0; bi < NUM_BUCKETS; bi++) {
+      const own = buckets[bi];
+      if (own.length === 0) continue;
+      const group: OrientedEntry[] = [];
+      for (let d = -1; d <= 1; d++) group.push(...buckets[(bi + PERP_BUCKET_SPAN + d + NUM_BUCKETS) % NUM_BUCKETS]);
+      if (own.length > capBucket || group.length > capBucket) { skippedBuckets.add(bi); continue; }
+      for (const a of own) {
+        for (const b of group) {
+          const key = pairKey(a.id, b.id);
+          if (seenPerp.has(key)) continue;
+          const diff = orientationDiffDeg(a.orientation, b.orientation);
+          if (Math.abs(diff - 90) > perpTol) continue;
+          seenPerp.add(key);
+          perpendicularPairs.push({ aId: Math.min(a.id, b.id), bId: Math.max(a.id, b.id), angleDeg: diff });
+          if (++totalPairsFound >= capTotalPairs) { ceilingHit = true; break perpScan; }
+        }
       }
     }
   }
 
-  return {
-    parallelPairs, perpendicularPairs, collinearPairs,
-    incomplete: skippedBuckets.size > 0,
-    incompleteReason: skippedBuckets.size > 0
-      ? `${skippedBuckets.size} orientation bucket(s) exceeded the ${capBucket}-primitive pair cap (likely a dense hatch/fill family) and were skipped, not exhaustively paired`
-      : null,
-  };
+  const incomplete = skippedBuckets.size > 0 || ceilingHit;
+  let incompleteReason: string | null = null;
+  if (ceilingHit) {
+    incompleteReason = `total pair count reached the ${capTotalPairs}-pair safety ceiling mid-computation; remaining pairs were not computed`;
+  } else if (skippedBuckets.size > 0) {
+    incompleteReason = `${skippedBuckets.size} orientation bucket(s) exceeded the ${capBucket}-primitive pair cap (likely a dense hatch/fill family) and were skipped, not exhaustively paired`;
+  }
+
+  return { parallelPairs, perpendicularPairs, collinearPairs, incomplete, incompleteReason };
 }
