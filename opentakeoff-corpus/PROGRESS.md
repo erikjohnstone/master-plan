@@ -1,5 +1,69 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4's own gate —
+a scope-boundary finding, stated plainly rather than left implicit,
+using real evidence this session already gathered (no new code, no new
+real-sheet probing needed). The gate reads: "Dense-grid cases preserve
+all real instances and suppress neighbor-borrowed phantoms." Every
+Phase 4 module built this session (`ownershipConflicts.ts` through
+`formPlausibility.ts`'s own integration) only ever ACTS on primitives
+that `detectOwnershipClusters` reports as contested — and per this
+session's own structural finding (two Phase 4 entries above),
+`detectOwnershipClusters` can only EVER report a conflict between a
+Lane A (Form XObject) proposal and a Lane B (connected-component)
+proposal, because Lane B's own components are mutually disjoint by
+construction and Lane A's own invocations are mutually disjoint by
+construction.
+
+CONCRETE IMPLICATION: a dense grid of REPEATED SYMBOLS drawn as raw,
+non-Form-XObject geometry (no `Do` calls at all — the same physical
+icon simply drawn N times as ordinary paths, a real, common CAD export
+style distinct from the "insert block via Form XObject" style Cherry
+Point/Tinker's own real cases used) generates ZERO Lane A invocations,
+and therefore can NEVER enter `detectOwnershipClusters`'s own view at
+all — every one of its Lane B components becomes its own independent,
+automatically-uncontested proposal, with NONE of this session's own
+eligibility/carrier/form-plausibility/assignment machinery ever
+running on it. Confirmed directly from this session's own already-
+gathered real numbers, not a new probe: `tarrant-county-mechanical
+.pdf#1` (110,763 primitives) and `bldg5406-hvac-demo-mechanical.pdf#1`
+(17,385 primitives) both measured `laneA_invocations: 0` and
+`ownership_clusters: 0` earlier this session, with all 9,021 and 4,119
+of their own fused proposals respectively reported `uncontested` —
+neither ever touched by any Phase 4 module at all.
+
+This is NOT necessarily a defect — for a raw-geometry dense grid,
+`candidateBodyLaneB.ts`'s own connected-component correctness (Phase 3
+territory, already gated by its own tests) is the ENTIRE line of
+defense the gate's own "preserve all real instances and suppress
+neighbor-borrowed phantoms" language depends on; Phase 4's own
+ownership-resolution machinery has nothing to add when there is no
+second lane's proposal to dispute against in the first place. But it
+IS a real, disclosed scope boundary worth stating plainly: this
+session's substantial Phase 4 work (4 eligibility signals, per-
+primitive assignment, owned-body bboxes, a form-plausibility detector,
+a real fusion bug fix) resolves disputes ONLY for the Lane-A-vs-Lane-B
+shape: it says nothing new about, and provides no additional
+verification for, a raw-geometry repeated-symbol grid — the gate's own
+"dense-grid" language most naturally evokes. Confirming the gate holds
+for THAT case rests entirely on Lane B's own already-shipped
+correctness, not on anything built this Phase 4 session.
+
+Real further work, disclosed rather than attempted here: either (a)
+extend `detectOwnershipClusters`'s own conflict detection to also
+catch Lane-B-vs-Lane-B disputes that current, disjoint-by-construction
+union-find design cannot see today (would need a DIFFERENT notion of
+"conflict" than shared primitives, since Lane B bodies never share a
+primitive by definition — perhaps spatial/signature-similarity-based),
+or (b) treat this as intentionally out of Phase 4's own scope and rely
+on Phase 3's Lane B tests plus a dedicated real-sheet dense-grid gate
+check (not yet built) to validate the raw-geometry case directly.
+Neither attempted in this entry — this is the finding, stated
+precisely so the next session does not have to rediscover it.
+
+No new code — a real, evidence-based scope-boundary entry only. Does
+not modify any shipped module.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — closing the
 last disclosed gap from this session's own investigative chain: fixed a
 real bug in `candidateProposalFusion.ts` (Phase 3's own proposal-fusion
