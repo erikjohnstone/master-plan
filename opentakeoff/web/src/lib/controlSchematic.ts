@@ -11,6 +11,7 @@ import type {
   Bbox, GraphSpan, ScheduleTable, SheetGraph,
 } from "./sheetgraph.ts";
 import type { NarrativeSequenceBlock } from "./sequenceNarrative.ts";
+import { hasJunctionMark, detectArrowDirections } from "./mepconnectivity.ts";
 
 export interface ControlSheetContext {
   key: string;
@@ -556,23 +557,12 @@ function segmentIntersection(a: RawSeg, b: RawSeg): { x: number; y: number; ta: 
   return { x: a.x1 + ta * adx, y: a.y1 + ta * ady, ta, tb };
 }
 
-function hasJunctionMark(segs: RawSeg[], candidates: number[], x: number, y: number): boolean {
-  const radius = 8;
-  const near = candidates.map((index) => segs[index]).filter((seg) => {
-    const len = Math.hypot(seg.x2 - seg.x1, seg.y2 - seg.y1);
-    return len <= radius * 1.6
-      && Math.hypot(seg.x1 - x, seg.y1 - y) <= radius
-      && Math.hypot(seg.x2 - x, seg.y2 - y) <= radius;
-  });
-  if (near.length < 5) return false;
-  const quadrants = new Set<number>();
-  for (const seg of near) {
-    const mx = (seg.x1 + seg.x2) / 2 - x, my = (seg.y1 + seg.y2) / 2 - y;
-    quadrants.add((mx >= 0 ? 1 : 0) + (my >= 0 ? 2 : 0));
-  }
-  return quadrants.size >= 3;
-}
-
+// PLAN_CONNECTIVITY_SERVES.md Phase 1 item 2: this was a private, exact
+// duplicate of mepconnectivity.ts's own hasJunctionMark (same radius, same
+// >=5-segment/>=3-quadrant rule) — two copies of the identical junction-
+// mark rule living in two different topology builders. Now imported from
+// the one place it's defined; RawSeg's extra `source` field is structurally
+// compatible with the shared function's own segment shape.
 function spatialCellsFor(bbox: Bbox): string[] {
   const x0 = Math.floor((bbox[0] - SNAP_PX) / SPATIAL_CELL_PX);
   const y0 = Math.floor((bbox[1] - SNAP_PX) / SPATIAL_CELL_PX);
@@ -710,42 +700,24 @@ function topologyFor(sheet: string, segsFlat: number[] | undefined, region: Bbox
     }
   });
 
-  const arrows: SchematicArrow[] = [];
-  for (let nodeId = 0; nodeId < nodes.length; nodeId++) {
-    const node = nodes[nodeId];
-    const incident = node.edges.map((edgeId) => edges[edgeId]);
-    const short = incident.filter((edge) => edge.length_px >= 4 && edge.length_px <= 32);
-    for (let i = 0; i < short.length; i++) {
-      for (let j = i + 1; j < short.length; j++) {
-        const vector = (edge: SchematicEdge): [number, number] => {
-          const other = edge.a === nodeId ? nodes[edge.b].at : nodes[edge.a].at;
-          const len = Math.max(edge.length_px, 1e-9);
-          return [(other[0] - node.at[0]) / len, (other[1] - node.at[1]) / len];
-        };
-        const va = vector(short[i]), vb = vector(short[j]);
-        const angle = Math.acos(Math.max(-1, Math.min(1, va[0] * vb[0] + va[1] * vb[1]))) * 180 / Math.PI;
-        if (angle < 25 || angle > 100) continue;
-        const bx = va[0] + vb[0], by = va[1] + vb[1];
-        const bl = Math.hypot(bx, by);
-        if (bl < 0.2) continue;
-        const ux = bx / bl, uy = by / bl;
-        const shaft = incident
-          .filter((edge) => edge.id !== short[i].id && edge.id !== short[j].id && edge.length_px > Math.max(short[i].length_px, short[j].length_px) * 1.4)
-          .map((edge) => ({ edge, v: vector(edge) }))
-          .filter(({ v }) => v[0] * ux + v[1] * uy > 0.9)
-          .sort((a, b) => b.edge.length_px - a.edge.length_px)[0];
-        if (!shaft || arrows.some((arrow) => arrow.shaft_edge === shaft.edge.id)) continue;
-        shaft.edge.direction = shaft.edge.a === nodeId ? "b_to_a" : "a_to_b";
-        arrows.push({
-          tip: node.at, shaft_edge: shaft.edge.id, direction: "toward_tip",
-          evidence: {
-            sheet,
-            bbox: [node.at[0] - 34, node.at[1] - 34, node.at[0] + 34, node.at[1] + 34],
-          },
-        });
-      }
-    }
-  }
+  // PLAN_CONNECTIVITY_SERVES.md Phase 1 item 2: the arrowhead-geometry rule
+  // itself now lives once, in mepconnectivity.ts's detectArrowDirections
+  // (ported verbatim from this exact loop) — this module's own node/edge
+  // shapes already match its generic `{at, edges}` / `{a, b, length}`
+  // contract almost exactly; only SchematicEdge's `length_px` (vs `length`)
+  // needs an adapter, which changes nothing about the algorithm itself.
+  const detected = detectArrowDirections(nodes, edges.map((e) => ({ a: e.a, b: e.b, length: e.length_px })));
+  const arrows: SchematicArrow[] = detected.map((arrow) => {
+    const shaft = edges[arrow.shaftEdge];
+    shaft.direction = arrow.tipEnd === "a" ? "b_to_a" : "a_to_b";
+    return {
+      tip: arrow.tip, shaft_edge: arrow.shaftEdge, direction: "toward_tip",
+      evidence: {
+        sheet,
+        bbox: [arrow.tip[0] - 34, arrow.tip[1] - 34, arrow.tip[0] + 34, arrow.tip[1] + 34],
+      },
+    };
+  });
 
   let components = 0;
   const visited = new Set<number>();

@@ -130,6 +130,76 @@ export function hasJunctionMark(
   return quadrants.size >= 3;
 }
 
+/** A node's own two short incident edges forming a compact wide-angle
+ *  V — the drawn shape of a vector arrowhead — with a third, meaningfully
+ *  longer incident edge roughly bisecting that V from the outside: the
+ *  arrow's shaft. PLAN_CONNECTIVITY_SERVES.md Phase 1 item 2 / #22 prep,
+ *  ported verbatim from controlSchematic.ts's own private per-node loop
+ *  inside `topologyFor` (that module's only user of directionality) — a
+ *  second, generic (module-shape-agnostic) copy of the exact same
+ *  geometry, not a reimplementation. Takes plain node/edge arrays rather
+ *  than a MepGraph directly: no current buildMepGraph caller consumes
+ *  edge direction (duct/pipe tracing has no drawn arrowhead convention to
+ *  read), so this stays a standalone utility until one does, the same way
+ *  hasJunctionMark started as one before buildMepGraph's own crossing gate
+ *  needed it. Returns one shaft-edge direction per detected arrow rather
+ *  than mutating anything — every existing caller's own edge/arrow record
+ *  shape differs (MepEdge has no `direction` field; SchematicEdge's is
+ *  named differently), so applying the result back onto a caller's own
+ *  edges is left to the caller, same as topologyFor's own post-loop
+ *  assignment did. */
+export interface ArrowDetectNode { at: Point; edges: number[]; }
+export interface ArrowDetectEdge { a: number; b: number; length: number; }
+export interface DetectedArrow {
+  /** The node the arrowhead's own tip sits at. */
+  tip: Point;
+  /** Index into the `edges` array passed in — the arrow's shaft, now
+   *  known to run "toward" this arrow's own tip node. */
+  shaftEdge: number;
+  /** Which end of the shaft edge the tip is at, in that edge's own (a, b)
+   *  terms — the caller's own direction vocabulary maps onto this. */
+  tipEnd: "a" | "b";
+}
+export function detectArrowDirections(
+  nodes: ArrowDetectNode[],
+  edges: ArrowDetectEdge[],
+): DetectedArrow[] {
+  const nodeEdges: number[][] = nodes.map((n) => n.edges);
+  const arrows: DetectedArrow[] = [];
+  const usedShafts = new Set<number>();
+  for (let nodeId = 0; nodeId < nodes.length; nodeId++) {
+    const node = nodes[nodeId];
+    const incident = nodeEdges[nodeId].map((ei) => ({ ei, e: edges[ei] }));
+    const short = incident.filter(({ e }) => e.length >= 4 && e.length <= 32);
+    for (let i = 0; i < short.length; i++) {
+      for (let j = i + 1; j < short.length; j++) {
+        const vector = ({ e }: { e: ArrowDetectEdge }): [number, number] => {
+          const otherId = e.a === nodeId ? e.b : e.a;
+          const other = nodes[otherId].at;
+          const len = Math.max(e.length, 1e-9);
+          return [(other[0] - node.at[0]) / len, (other[1] - node.at[1]) / len];
+        };
+        const va = vector(short[i]), vb = vector(short[j]);
+        const angle = Math.acos(Math.max(-1, Math.min(1, va[0] * vb[0] + va[1] * vb[1]))) * 180 / Math.PI;
+        if (angle < 25 || angle > 100) continue;
+        const bx = va[0] + vb[0], by = va[1] + vb[1];
+        const bl = Math.hypot(bx, by);
+        if (bl < 0.2) continue;
+        const ux = bx / bl, uy = by / bl;
+        const shaft = incident
+          .filter(({ ei, e }) => ei !== short[i].ei && ei !== short[j].ei && e.length > Math.max(short[i].e.length, short[j].e.length) * 1.4)
+          .map((cand) => ({ ...cand, v: vector(cand) }))
+          .filter(({ v }) => v[0] * ux + v[1] * uy > 0.9)
+          .sort((a, b) => b.e.length - a.e.length)[0];
+        if (!shaft || usedShafts.has(shaft.ei)) continue;
+        usedShafts.add(shaft.ei);
+        arrows.push({ tip: node.at, shaftEdge: shaft.ei, tipEnd: shaft.e.a === nodeId ? "a" : "b" });
+      }
+    }
+  }
+  return arrows;
+}
+
 export interface BuildMepGraphOpts {
   /** Image-px -> world/mask px factor. Default 1 (already in world space). */
   ws?: number;

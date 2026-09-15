@@ -6,7 +6,10 @@
 // speed practice), not hand-derived and then coded to match.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildMepGraph, traceConnectivity, hasJunctionMark, type MepGraph } from "../src/lib/mepconnectivity.ts";
+import {
+  buildMepGraph, traceConnectivity, hasJunctionMark, detectArrowDirections,
+  type MepGraph, type ArrowDetectNode, type ArrowDetectEdge,
+} from "../src/lib/mepconnectivity.ts";
 import type { LayerInfo } from "../src/lib/layers.ts";
 
 // ── buildMepGraph ────────────────────────────────────────────────────────
@@ -538,4 +541,62 @@ test("hasJunctionMark: custom radiusPx changes both the length ceiling and dista
   ];
   assert.equal(hasJunctionMark(segs, [0, 1, 2, 3, 4], 0, 0), false, "6-9px endpoints exceed the default 8px radius");
   assert.equal(hasJunctionMark(segs, [0, 1, 2, 3, 4], 0, 0, 16), true, "the same ticks qualify under a wider 16px radius");
+});
+
+// ── detectArrowDirections — ported verbatim from controlSchematic.ts's own
+//    private per-node loop (PLAN_CONNECTIVITY_SERVES.md Phase 1 item 2) ──
+
+// A real drawn arrowhead's shape: a long shaft (A -> TIP) plus two short
+// "wing" edges at TIP spread into a compact V, both real controlSchematic.ts
+// fixtures and this shared port must read identically.
+function arrowFixture(): { nodes: ArrowDetectNode[]; edges: ArrowDetectEdge[] } {
+  const nodes: ArrowDetectNode[] = [
+    { at: [0, 0], edges: [0] },       // 0: A, the shaft's far end
+    { at: [100, 0], edges: [0, 1, 2] }, // 1: TIP
+    { at: [85, 10], edges: [1] },     // 2: wing endpoint
+    { at: [85, -10], edges: [2] },    // 3: wing endpoint
+  ];
+  const edges: ArrowDetectEdge[] = [
+    { a: 0, b: 1, length: 100 },
+    { a: 1, b: 2, length: Math.hypot(15, 10) },
+    { a: 1, b: 3, length: Math.hypot(15, 10) },
+  ];
+  return { nodes, edges };
+}
+
+test("detectArrowDirections: a real shaft+wings shape is detected, tip and shaft correctly identified", () => {
+  const { nodes, edges } = arrowFixture();
+  const arrows = detectArrowDirections(nodes, edges);
+  assert.equal(arrows.length, 1);
+  assert.deepEqual(arrows[0].tip, [100, 0]);
+  assert.equal(arrows[0].shaftEdge, 0, "the long A-TIP edge is the shaft, never one of the two short wings");
+  assert.equal(arrows[0].tipEnd, "b", "TIP is edge 0's own b endpoint");
+});
+
+test("detectArrowDirections: wings spread too narrow (near-parallel) are never an arrowhead", () => {
+  const { nodes, edges } = arrowFixture();
+  // Both wings nearly parallel to the shaft itself (angle well under the 25 deg floor).
+  nodes[2].at = [85, 1]; nodes[3].at = [85, -1];
+  edges[1].length = Math.hypot(15, 1); edges[2].length = Math.hypot(15, 1);
+  assert.equal(detectArrowDirections(nodes, edges).length, 0);
+});
+
+test("detectArrowDirections: a shaft not meaningfully longer than the wings is never picked", () => {
+  const { nodes, edges } = arrowFixture();
+  // Shrink the shaft to just over the wing length — below the 1.4x margin.
+  nodes[0].at = [80, 0];
+  edges[0].length = 20;
+  assert.equal(detectArrowDirections(nodes, edges).length, 0, "a short 'shaft' this close to the wings' own length is not a real shaft");
+});
+
+test("detectArrowDirections: the same shaft edge is never claimed by two different arrows", () => {
+  const { nodes, edges } = arrowFixture();
+  // A second, independent wing pair at the SAME tip node competing for the
+  // identical shaft — only the first-found arrow may claim it.
+  nodes.push({ at: [86, 9], edges: [] }, { at: [86, -9], edges: [] });
+  edges.push({ a: 1, b: 4, length: Math.hypot(14, 9) }, { a: 1, b: 5, length: Math.hypot(14, 9) });
+  nodes[1].edges.push(3, 4);
+  const arrows = detectArrowDirections(nodes, edges);
+  const shaftIds = new Set(arrows.map((a) => a.shaftEdge));
+  assert.equal(shaftIds.size, arrows.length, "no shaft edge is ever reused across two different detected arrows");
 });

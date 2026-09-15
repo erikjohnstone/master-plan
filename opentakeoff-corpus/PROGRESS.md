@@ -110,12 +110,28 @@ browser bundle (`mepconnectivity.ts` is shared between the MCP backend
 and the web app) — fixed with the same `typeof process !== "undefined"`
 guard `vectorTakeoffPipeline.ts` already uses for its own env flag.
 
-**Next queue — Phase 1 item 2's remaining piece (not started):** unify
-`mepconnectivity.ts`'s `buildMepGraph` and `controlSchematic.ts`'s own
-separate `topologyFor` into one graph builder — port the arrowhead
-detector in as another reusable, default-OFF option flag, then have
-`topologyFor` call `buildMepGraph` instead of maintaining a parallel
-implementation.
+De-duplicated the second piece of Phase 1 item 2: `controlSchematic.ts`'s
+own private `hasJunctionMark` (an exact duplicate) now imports the shared
+`mepconnectivity.ts` export instead, and its per-node arrowhead-detection
+loop is ported verbatim as a new standalone export,
+`detectArrowDirections` (plain node/edge arrays, not bolted onto
+`MepGraph` — no `buildMepGraph` caller consumes edge direction today, so
+adding it to every one of `buildMepGraph`/`resolveOnGraph`/
+`bridgeDanglingGaps`'s return sites for a not-yet-connected consumer would
+widen the shared path without a real need). 4 new direct unit tests,
+43/43 in `mepconnectivity.test.ts`; `controlSchematic.test.ts` unchanged,
+26/26 — both swaps verified byte-identical.
+
+**Next queue — Phase 1 item 2's remaining piece (not started, genuinely
+its own increment):** have `controlSchematic.ts`'s own `topologyFor`
+actually CALL `buildMepGraph` instead of maintaining a second, parallel
+noding implementation. Not a small drop-in: `topologyFor` runs its own
+O(n²)-bounded pairwise intersection (never JTS), has its own two-ceiling
+`refused_too_dense` ceiling distinct from `buildMepGraph`'s
+coarsen-and-retry, records explicit per-crossing evidence `buildMepGraph`
+has no equivalent for, and returns a wholly different output shape. See
+`PLAN_CONNECTIVITY_SERVES.md`'s Phase 1 item 2 section for the precise
+list of what a real merge needs.
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact

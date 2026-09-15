@@ -381,17 +381,50 @@ the phase that fixes it. This is what "the ruler before the fix" is for.
    (`mep-trace-eval.mjs bessemer itd-d1-lab`) scoring the IDENTICAL 3/3,
    100%/100%/0 as the original baseline.
 
-   **Still open:** port the arrowhead detector into `mepconnectivity.ts`
-   (edges need `direction`), add `style`/`sourceSeg` to `MepEdge`, and have
-   `controlSchematic.ts`'s own `topologyFor` actually CALL `buildMepGraph`
-   instead of maintaining a second, parallel implementation — mapping its
-   exact existing output shape (`SchematicTopology`: nodes/edges/crossings/
-   arrows/connected_components, the `MAX_TOPOLOGY_SEGMENTS`/
-   `MAX_INTERSECTION_CANDIDATES` refusal semantics) onto `MepGraph`'s shape
-   without changing a single existing assertion in `controlSchematic.test.ts`
-   or the `test:bas-drawings`/`test:bas-risers`/`test:bas-network-riser`
-   corpus gates. This is its own dedicated, carefully-tested increment —
-   budget it separately, not as a quick follow-on.
+   **Also landed, 2026-09-15 (later the same session):** both duplicated
+   pieces of geometry are now de-duplicated, not just the one named above.
+   `controlSchematic.ts`'s own private `hasJunctionMark` (an exact,
+   byte-for-byte duplicate — same radius, same rule) is deleted; it now
+   imports the shared export. Its own per-node arrowhead-detection loop
+   (the short-wing-pair-plus-longer-shaft geometry that sets `edge.direction`)
+   is ported verbatim as a new export, `detectArrowDirections` — a standalone
+   utility over plain `{at, edges}` node / `{a, b, length}` edge arrays
+   rather than a `MepGraph`-coupled option, since no `buildMepGraph` caller
+   consumes edge direction today (duct/pipe tracing has no drawn-arrowhead
+   convention to read) — bolting a `direction` field and an `arrows` output
+   onto `MepGraph` itself, and threading it through every one of
+   `buildMepGraph`/`resolveOnGraph`/`bridgeDanglingGaps`'s several return
+   sites, for a feature only one, not-yet-connected consumer needs would
+   widen the shared path's surface without a real caller yet — the same
+   restraint `hasJunctionMark` itself started under before the crossing gate
+   gave it one. 4 new direct unit tests (a real shaft+wings shape detected
+   correctly; wings spread too narrow rejected; a shaft not meaningfully
+   longer than its wings rejected; the same shaft never claimed by two
+   arrows), 43/43 in `mepconnectivity.test.ts`. `controlSchematic.test.ts`
+   unchanged, 26/26, both swaps proved byte-identical.
+
+   **Still open, genuinely its own increment:** have `controlSchematic.ts`'s
+   own `topologyFor` actually CALL `buildMepGraph` instead of maintaining a
+   second, parallel noding implementation. Read `topologyFor` in full before
+   attempting this — it is NOT a small drop-in once the two pieces above are
+   ported: it runs its OWN O(n²)-bounded pairwise segment-intersection (never
+   JTS), enforces two segment/candidate-count refusal ceilings
+   (`MAX_TOPOLOGY_SEGMENTS`, `MAX_INTERSECTION_CANDIDATES`) with their own
+   `refused_too_dense` status distinct from `buildMepGraph`'s
+   coarsen-and-retry, records each interior crossing as an explicit
+   `{at, status, evidence}` entry in a `crossings` array (`buildMepGraph`'s
+   own gate has no equivalent — it silently keeps segments separate, it
+   never reports WHICH coordinates were refused or why), and returns a
+   completely different output shape (`SchematicTopology`: nodes carry
+   `degree`, edges carry `length_px`/`direction`/`evidence`, plus
+   `connected_components`/`input_segments`/`retained_segments`/`status`/
+   `note` — none of which `MepGraph` has). Making `topologyFor` call
+   `buildMepGraph` for its actual noding means either giving `MepGraph`
+   crossing-evidence recording and a segment-count refusal mode it has no
+   other caller for, or writing a real adapter layer that reimplements
+   those two things on top of `buildMepGraph`'s own output — genuinely
+   its own dedicated, carefully-tested increment, not a quick follow-on to
+   the two ports above.
 3. **Delete or repurpose L3.5 `runL35Topology` — measured 2026-09-15, and the
    case is now unambiguous.** `OPENTAKEOFF_GRAPH_TRACE=1
    production-graph-cli.mjs --mode graph --pdf federal-attachment4-mechanical.pdf`
