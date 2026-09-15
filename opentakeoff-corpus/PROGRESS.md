@@ -1,5 +1,43 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 requirement 6
+— real self-caught gap in the diagnostic script the entry below built:
+running it against 6 MORE independent real documents (Vermillion County
+Jail, Albany VA Main Boiler, Missoula Fire Sciences, NIST Gaithersburg
+Building 101 — 2 pages each, plus re-confirming the 3 already reported)
+surfaced NIST Gaithersburg Building 101 #2 reading back exactly 250000
+primitives — VectorSceneIndex's own VECTOR_SCENE_INDEX_MAX_PRIMITIVES
+cap, a suspiciously round number worth checking rather than trusting.
+Confirmed real: the page's own true segment count is 544652, more than
+double the cap — buildVectorSceneIndex had silently (from the script's
+own prior perspective) truncated it, exactly the "incomplete state, not
+partial silent truth" scenario Phase 2's own requirement 6 exists to
+prevent, and the script had reported `gate_holds: true, resolved_fraction:
+1` for that page without ever checking whether the analysis behind that
+result was actually complete.
+
+Fixed the script itself (not a library module this time — the gap was
+in the diagnostic tool's own reporting, not in VectorSceneIndex/Lane B/
+Lane A, each of which already exposes its own real `incomplete`/
+`incompleteReason` pair correctly): now collects and surfaces every
+incomplete flag across the whole chain (`idx`, Lane B, Lane A) as
+`analysis_incomplete` + `incomplete_reasons`, so a truncated page is
+reported honestly instead of silently passing as whole. Re-ran all 15
+previously-reported real page-runs from the last two entries through
+the fixed script to check whether any of THEM were also silently
+truncated without my noticing: none were — Cherry Point, Norfolk (all
+5), Colville (all 3), Vermillion, Albany, and Missoula all confirm
+`analysis_incomplete: false`, so no correction is owed to those already-
+committed findings. Only the one new page found this pass needed the
+fix at all.
+
+Real aggregate update: 21 total real page-runs now checked across 8
+independent documents (Cherry Point, Norfolk, Colville, Vermillion,
+Albany, Missoula, NIST Gaithersburg, plus the original touchesPageEdge
+fix's own re-check) — Phase 4's own core gate still holds on every
+completed page, and the one incomplete page is now honestly flagged as
+such rather than silently counted as a clean pass.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — made the
 throwaway diagnostic script behind the last two entries permanent
 (`mcp/scripts/inspect-ownership-clusters.mjs`, matching the existing

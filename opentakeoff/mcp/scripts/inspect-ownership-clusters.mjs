@@ -18,6 +18,24 @@
 // support two accepted physical instances") by checking for a primitive
 // id claimed by two different accepted OwnedBody entries anywhere on the
 // page, not just trusting the pipeline's own internal invariants.
+//
+// INCOMPLETE-STATE FIX (real, found running this very script against
+// NIST Gaithersburg Building 101 #2): the first version of this script
+// reported `gate_holds: true, resolved_fraction: 1` for that page
+// without ever checking whether the analysis it ran that check against
+// was actually complete. It was not — idx.primitives.length read back
+// exactly 250000, VectorSceneIndex's own VECTOR_SCENE_INDEX_MAX_PRIMITIVES
+// cap, meaning the real page's own segment count exceeded the cap and
+// buildVectorSceneIndex silently (from this script's own prior
+// perspective) truncated, with its own real `incomplete`/
+// `incompleteReason` fields carrying the honest explanation this script
+// simply never looked at. Reporting a clean gate result over data that
+// was never fully indexed is exactly the "partial silent truth" the goal
+// document's own Phase 2 requirement 6 explicitly forbids — now fixed by
+// reading and surfacing every incomplete flag this chain's own modules
+// already expose (VectorSceneIndex, Lane B, Lane A), so a truncated page
+// is reported as `analysis_incomplete: true` with the real reason(s)
+// rather than silently passing as if it were whole.
 import { resolve } from "node:path";
 import { openPdf, OPS } from "../src/pdf.ts";
 import { extractVectorGeometry } from "../../web/src/lib/oneclick.ts";
@@ -52,7 +70,8 @@ try {
     const geo = extractVectorGeometry(await page.operatorList(), page.viewport.transform, OPS);
     const idx = buildVectorSceneIndex(geo);
     const { junctions } = computeVectorSceneJunctions(idx);
-    const { bodies } = proposeCandidateBodiesLaneB(idx, junctions);
+    const laneB = proposeCandidateBodiesLaneB(idx, junctions);
+    const { bodies } = laneB;
     const pageBounds = { width: page.viewport.width, height: page.viewport.height };
     const laneA = computeFormContentSignatures(idx, geo.formInvocations ?? [], { pageBounds });
     const fused = fuseProposals(idx, bodies, laneA.invocations);
@@ -60,8 +79,17 @@ try {
     const { clusters, uncontested } = detectOwnershipClusters(fused);
     const t1 = now();
 
+    // See the module header's own INCOMPLETE-STATE FIX note: every stage
+    // that can silently truncate reports its own incomplete/reason pair
+    // already — this just collects and surfaces them, rather than
+    // trusting a clean-looking gate result over data that was never
+    // fully indexed in the first place.
+    const incompleteReasons = [idx.incompleteReason, laneB.incompleteReason, laneA.incompleteReason].filter(Boolean);
+
     const entry = {
       sheet: `${pdfPath.split("/").at(-1)}#${pageNumber}`,
+      analysis_incomplete: idx.incomplete || laneB.incomplete || laneA.incomplete,
+      incomplete_reasons: incompleteReasons,
       primitives: idx.primitives.length,
       laneB_bodies: bodies.length,
       laneA_invocations: laneA.invocations.length,
