@@ -1,5 +1,54 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 requirement 3 —
+"Batch all schedule families per sheet index. Do not rerun whole-sheet
+geometry once per schedule row." VERIFIED ALREADY SATISFIED, no code
+change. Dispatched a dedicated read-only audit (mirroring this
+project's own audit-before-build discipline) into exactly where
+`Session.sweepScheduleRow`'s per-row loop touches sheet geometry
+(session.ts ~4362-4385, calling
+`groundExactTagsToVectorGeometry`/`taggedVectorGrounding.ts`, which
+calls `labelPlacements`/`symbollabels.ts:896`).
+
+FINDING, independently re-verified by direct commit/code inspection
+(not taken on the audit's word alone): this exact concern was already
+fixed, by someone else's prior work, in commit `13dea24c`
+("Harden end-to-end BAS Agent takeoff review (#94)", 2026-09-13, two
+days before this entry) — `symbollabels.ts` carries
+`LABEL_TOKEN_CACHE`/`LEADER_SHEET_CONTEXT_CACHE`, module-level WeakMaps
+keyed on `spans`/`segs` array IDENTITY, with the commit's own comment:
+"A complete takeoff can verify hundreds of exact tags on the same
+sheet, so rebuilding the dark-segment leader index for every row is
+pure duplicate work." `fingerprintSymbol` (symbolsweep.ts) separately
+already uses a per-sheet spatial index WeakMap
+(`sheetMatchIndexes`). The identity-stability these WeakMaps depend on
+is real: `SheetState.geo`/`.spans` are each set exactly once per sheet
+via an `if (!s.geo)`/`if (!s.spans)` guard (session.ts ~1386, ~1324)
+and never rebuilt for the Session's life. The real batch driver,
+`buildPlanSetTakeoff` (mcp/src/takeoff.ts:342), walks every schedule
+row against ONE already-loaded `session`, calling `sweepScheduleRow`
+once per row — so these caches already carry over across different
+tags/rows hitting the same sheet in the actual production path. The
+`sweepScheduleRow` code itself even already says so in its own
+comment directly above the loop: "Verify every occurrence through the
+shared pure tag→adjacency/leader→geometry layer once, up front, so
+the per-sheet pass below never reruns a whole-sheet symbol matcher for
+each schedule row." Requirement 3 is not a gap; it is a completed,
+shipped, self-documenting design decision that predates this
+session's own work on this goal.
+
+The only place batching does NOT apply is `production-graph-cli.mjs`
+(one `--tag` per process) — irrelevant, since a single-tag process has
+no repeat work to eliminate in the first place.
+
+No new field, no new cache, no code change made — writing one would
+have been pure duplication of existing, working infrastructure. This
+shrinks Phase 7's remaining real scope to just requirement 2 (the
+symbol_sweep/sweep_schedule_row internals refactor onto the shared
+candidate/ownership/verifier modules — an architectural consolidation,
+NOT a caching problem) and requirement 7 (MEP corroboration, deferred
+until after requirement 2 per the original audit's ordering).
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 shadow/parallel-run
 harness — the Phase 7 audit's own explicit prerequisite ("recommend a
 shadow/parallel-run harness against the 47-case corpus before swapping
