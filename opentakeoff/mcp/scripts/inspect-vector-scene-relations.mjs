@@ -29,6 +29,12 @@ if (pages.some((page) => !Number.isInteger(page) || page < 1)) {
 }
 
 const now = () => performance.now();
+// Best-effort heap delta around buildVectorSceneIndex specifically (goal §7
+// gate: "Index build time and memory are measured on small, median, and
+// largest sheets") — gc() is only callable with --expose-gc, so this
+// degrades to an un-forced (noisier, GC-timing-dependent) delta rather than
+// failing when the flag isn't passed; noted in the report either way.
+const heapMB = () => process.memoryUsage().heapUsed / (1024 * 1024);
 
 const doc = await openPdf(pdfPath);
 const results = [];
@@ -38,7 +44,10 @@ try {
     const t0 = now();
     const geometry = extractVectorGeometry(await page.operatorList(), page.viewport.transform, OPS);
     const t1 = now();
+    if (global.gc) global.gc();
+    const heapBefore = heapMB();
     const idx = buildVectorSceneIndex(geometry);
+    const heapAfterIndex = heapMB();
     const t2 = now();
     const junctionsResult = computeVectorSceneJunctions(idx);
     const t3 = now();
@@ -61,6 +70,8 @@ try {
         pairRelations: Math.round(t4 - t3),
         spatialIndex: Math.round(t5 - t4),
       },
+      buildIndex_heapDeltaMB: Math.round((heapAfterIndex - heapBefore) * 10) / 10,
+      gcForced: !!global.gc,
       junctions: {
         total: junctionsResult.junctions.length,
         by_kind: kindCounts,

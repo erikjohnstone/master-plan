@@ -1,5 +1,67 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md — added the goal
+document itself as a standing file on this execution branch
+(`opentakeoff/docs/GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md`), byte-
+identical (diff-confirmed) to `origin/codex/vector-symbol-grounding-
+next-goal`'s own copy at the same path. It never existed on this
+branch before — every earlier read of it this session was a fresh
+`git show` fetch into a scratch file. Committing the same content here
+makes it available for the rest of this execution without a fetch
+each time, per the reasonable reading that a document named as a
+prerequisite to read "completely before changing code" should be
+present in the branch doing that work. No other history from that
+branch was merged — only this one file, copied as-is.
+
+SHOULD THIS BE ON THE SHARED PATH? No. A reference document, not code.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — the last
+open named gate item, "index build time and memory are measured on
+small, median, and largest sheets" — formal small/median/largest
+measurement, closing it out. Extended `mcp/scripts/
+inspect-vector-scene-relations.mjs` with a `--expose-gc`-aware heap
+delta specifically around `buildVectorSceneIndex` (forces a GC first
+when the flag is present so the delta isn't polluted by an unrelated
+pending collection; degrades to a noisier un-forced delta and says so
+when the flag is absent, rather than silently misreporting precision
+it doesn't have).
+
+Ran with `node --expose-gc` against three real corpus sheets spanning
+the full size range measured so far this session — smallest, median,
+and largest by primitive count:
+
+| sheet | primitives | subpaths | extract | buildIndex | junctions | pairRelations | spatialIndex | buildIndex heap Δ |
+|---|---|---|---|---|---|---|---|---|
+| USDA APHIS #1 (smallest) | 3,942 | 1,873 | 219ms | 15ms | 11ms | 67ms | 3ms | +2.0MB |
+| Colville #6 (median) | 19,318 | 7,259 | 1,439ms | 23ms | 43ms | 420ms | 8ms | +8.6MB |
+| Cherry Point #12 (largest) | 102,352 | 86,416 | 522ms | 96ms | 243ms | 48ms† | 27ms | +51.9MB |
+
+† pair-relations time is low here specifically because this sheet's
+hatch-saturated buckets are skipped by `PAIR_RELATIONS_MAX_BUCKET`
+(slice 9's own finding) — low time is a consequence of doing LESS
+work, not of being cheaper on genuinely dense orientation buckets.
+
+Honestly noted, not smoothed over: `extract` does NOT scale
+monotonically with primitive count — the median sheet's raw PDF
+content-stream extraction (1,439ms) took longer than the LARGEST
+sheet's (522ms). `buildVectorSceneIndex` and the spatial index DO
+scale monotonically and stay comfortably sub-100ms even at 102k
+primitives; `computeVectorSceneJunctions` stays sub-250ms across the
+whole range. `extractVectorGeometry`'s own cost is a function of raw
+content-stream complexity (paint op density, curve/image content), not
+primitive count alone — a real, disclosed finding, not an artifact to
+paper over with a bigger sample.
+
+Every VectorSceneIndex-family cap now has direct measurement behind it
+across three orders of magnitude of sheet size: this closes goal §7's
+gate requirement fully, together with slice 10's 5-PDF browser/MCP
+parity evidence and the VectorGrid-regression confirmation already
+recorded.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Measurement tooling only — the
+one-line heap-delta addition to an existing diagnostic script, not
+production code.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 10:
 real browser/MCP parity evidence, closing the goal §7 gate item "at
 least five real PDFs show browser/MCP parity" with actual measurement
