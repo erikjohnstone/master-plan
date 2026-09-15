@@ -1,6 +1,29 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `44-itd-d2-m41-temperature-transmitters`'s own last
+two gaps, both chiller water-temperature transmitters, closing that
+case to 3/3. This one differs from every prior completion this
+session: the two withheld instances are "quarter-turned contextual
+variants" (rotated, not pure translations) with a same-size-rect
+attempt reaching 220-226 segments against the seed's own 34. Queried
+the real Lane B geometry directly and found each instance's own body is
+made of exactly the same THREE real pieces the seed's own accepted box
+already uses: a circle+text bubble (an identical 32-primitive, ~54-
+diameter circle at all three instances), a short up-stem stopping right
+at its own dash-dot signal-line transition, and a stub reaching to its
+own process pipe. Each instance's own up-stem is a genuinely different
+length (18.8 and 26.8 units vs the seed's 12), and the process
+connection runs down instead of sideways (both exactly 39.6 units,
+matching the seed's own stub length) -- real, disclosed, per-instance
+variation, not a rigid copy. Rendered both candidates with corner-ring
+markers directly against the real geometry: all four corners land at
+the same two real transitions the seed's own box uses, with the nearby
+hatched valve/thermowell marks clearly outside the box in both. Added
+via a surgical edit per instance plus an appended correcting review
+note; the case's prior note is left untouched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `38-cbfm-m702-primary-chilled-water-pumps`'s own last
 two gaps, `primary-chilled-water-pump-2` and `-pump-3`, closing that
 case to 3/3. This case's own prior note withheld both: a same-size-rect
