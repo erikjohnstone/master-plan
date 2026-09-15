@@ -1,5 +1,17 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 2 — full
+corpus re-run confirms zero regressions from the v2-annotation pass.
+The full-corpus `symbol-sweep-corpus.mjs --report-v2-fields` run kicked
+off after finishing all 47 cases' v2 fields (see entry further below)
+has now finished end to end: 47/47 PASS, 0 failures, matching every
+case's own individually-verified result from that pass. Recorded here as
+the final close-out confirmation for Phase 1 item 2, not just the
+in-progress spot check noted earlier.
+
+SHOULD THIS BE ON THE SHARED PATH? No. A verification run only — no file
+changes.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 breadth-first legend screening, batch C (5 fresh Vol2 documents: 019, 021,
 023, 024, 028) — 0 viable candidates, all closed with confirmed reasons
