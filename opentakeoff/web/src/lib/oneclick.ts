@@ -77,6 +77,16 @@ export interface SubPath {
    *  0 (black) to 255 (white). Meaningful on a filled figure: dark is solid
    *  material — poché — and pale is a finish wash. */
   fillLum: number;
+  /** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — the `d` (setDash)
+   *  operator's array in force when the figure was built, non-empty and not
+   *  all-zero (a PDF may legally state `[] 0 d` for "solid", which reads the
+   *  same as never calling setDash — both leave this false). Dash state is
+   *  graphics state exactly like stroke/fill colour: it cannot change
+   *  mid-path, so one bit per figure is the right grain, the same reasoning
+   *  `fillLum` already uses. A property-line boundary, a hidden/phantom
+   *  duct run, or a demolition-scope outline is drawn dashed by convention;
+   *  a symbol's own body linework virtually never is. */
+  dashed: boolean;
 }
 /** A positioned text item, image px: (x, y) is the baseline START, w/h the
  *  rendered extent. The text layer is evidence about the DRAWING that the
@@ -369,10 +379,11 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
     sp = null;
   };
   let pathFill = 0;                 // the fill colour of the path being built
+  let pathDashed = false;           // the dash state of the path being built
   const openSub = (flags: number, at: Point) => {
     sealSub();
     const k = metaArr.length;
-    sp = { i0: k, i1: k, x0: at[0], y0: at[1], x1: at[0], y1: at[1], closed: false, flags, fillLum: pathFill };
+    sp = { i0: k, i1: k, x0: at[0], y0: at[1], x1: at[0], y1: at[1], closed: false, flags, fillLum: pathFill, dashed: pathDashed };
   };
   // every segment push goes through this, so a subpath's range and bbox can
   // never drift from what actually landed in segs
@@ -409,7 +420,12 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   // PDF's initial fill colour is black, same as stroke, so 0 is the right
   // default and an uncoloured file costs nothing.
   let fillLum = 0;
-  const stack: Array<[number[], number, number, number]> = [];
+  // graphics-state dash pattern (Phase 2): true once `d`/setDash states a
+  // non-empty, not-all-zero array. PDF's initial dash state is solid, so
+  // false is the right default. `[] 0 d` (explicitly solid) also reads
+  // false — it is not a distinct state from never having called setDash.
+  let dashed = false;
+  const stack: Array<[number[], number, number, number, boolean]> = [];
   // Marked-content / Optional Content (#85): a purely SEQUENTIAL stack — not
   // graphics state, so save/restore never touches it, and a Form XObject with
   // /OC arrives as its own begin/end pair around the form's ops (the worker
@@ -443,11 +459,12 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   };
   for (let i = 0; i < fns.length; i++) {
     const fn = fns[i], args = A[i];
-    if (fn === OPS.save) stack.push([m.slice(), lw, lum, fillLum]);
-    else if (fn === OPS.restore) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; } }
+    if (fn === OPS.save) stack.push([m.slice(), lw, lum, fillLum, dashed]);
+    else if (fn === OPS.restore) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; } }
     else if (fn === OPS.transform) m = mul(m, args);
     else if (fn === OPS.setLineWidth) lw = args[0];
     else if (fn === OPS.setGState) { for (const pr of args[0] || []) if (pr && pr[0] === "LW") lw = pr[1]; }
+    else if (fn === OPS.setDash && args) { const arr = args[0]; dashed = Array.isArray(arr) && arr.length > 0 && arr.some((v: number) => v > 0); }
     else if (fn === OPS.setStrokeRGBColor && args) { const L = strokeLuminance(args); if (L !== null) lum = L; }
     // FILL luminance, the same device strokeLuminance already applies to
     // strokes (#260) — and the fact that finally answers "is this ink WALL".
@@ -457,8 +474,8 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
     // indistinguishable until now, which is why a wall test had to fall back
     // to guessing at a figure's shape.
     else if (fn === OPS.setFillRGBColor && args) { const L = strokeLuminance(args); if (L !== null) fillLum = L; }
-    else if (fn === OPS.paintFormXObjectBegin) { stack.push([m.slice(), lw, lum, fillLum]); if (args && args[0]) m = mul(m, args[0]); }
-    else if (fn === OPS.paintFormXObjectEnd) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; } }
+    else if (fn === OPS.paintFormXObjectBegin) { stack.push([m.slice(), lw, lum, fillLum, dashed]); if (args && args[0]) m = mul(m, args[0]); }
+    else if (fn === OPS.paintFormXObjectEnd) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; } }
     else if (fn === OPS.beginMarkedContent) { mcStack.push(-1); }
     else if (fn === OPS.beginMarkedContentProps) {
       // worker emits ["OC", data] where data is {type:"OCG", id}, an OCMD
@@ -547,6 +564,7 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       const pathLayer = curLayer;   // one path = one marked-content scope (#85)
       const pathLum = lum;          // stroke color cannot change mid-path (#260)
       pathFill = fillLum;           // …and neither can the fill colour
+      pathDashed = dashed;          // …nor the dash state
       const visit = (p: Point) => { points.push(p); };
       const lineTo = (p: Point) => { if (cur) { segs.push(cur[0], cur[1], p[0], p[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); primTypeArr.push(PRIM_LINE); noteSeg(cur, p); } cur = p; visit(p); };
       for (const op of ops) {

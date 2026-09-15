@@ -1,5 +1,44 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 2:
+dash-pattern graphics state. Second of the goal's named "graphics-state
+attributes available from pdf.js" (line width, stroke/fill luminance,
+and clip state — via SEG_CLIP — were already tracked; dash pattern is
+the next one; cap/join/miter remain open).
+
+Added `dashed: boolean` to `SubPath` (not a new per-segment array like
+`primType` — dash state is graphics state exactly like stroke/fill
+colour, constant for the whole figure it was drawn under, so `SubPath`
+is the right grain, matching `fillLum`'s own existing precedent).
+`false` (solid) is the correct default matching PDF's own initial state,
+and `[] 0 d` (the spec's own explicit-solid form) reads identically to
+never calling `setDash` at all, not as a third state. Threaded through
+the same save/restore and Form-XObject-begin/end graphics-state stack
+that already carries line width/stroke lum/fill lum (extended that
+tuple from 4 elements to 5, `[m, lw, lum, fillLum, dashed]`, both push
+sites updated together).
+
+Existing hand-built `SubPath` fixtures in `drawnrooms.test.ts` and
+`geometry.test.ts` (4 total) needed one field added each (`dashed:
+false`) since `SubPath`'s own established convention is that every
+field on a constructed record is required, only the array as a whole is
+optional (matching how `fillLum`/`flags`/`closed` already work) — a
+mechanical, safe fix, not a behavior change, caught immediately by
+reading for every existing `SubPath` literal in the repo before calling
+the slice done.
+
+Verified the same way as slice 1: every test file touching
+`extractVectorGeometry` or its consumers (13 files this time, including
+`drawnrooms.test.ts` this slice actually touched) run individually
+before and after — 278 tests, all green both times. New focused test
+file `dashState.test.ts` (5 tests): solid-by-default, dashed-after-
+setDash, the `[] 0 d`/all-zero-array edge cases both read solid, and
+save-restore/Form-XObject round-tripping the dash state correctly.
+Confirmed the MCP/Session side still imports cleanly.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — same shared
+`extractVectorGeometry`, same reasoning as slice 1.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — FIRST SLICE
 started: primitive-type provenance in `extractVectorGeometry`
 (web/src/lib/oneclick.ts). Phase 1's corpus work (48 landed instances
