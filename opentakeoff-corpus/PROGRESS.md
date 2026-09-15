@@ -1,6 +1,31 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `38-cbfm-m702-primary-chilled-water-pumps`'s own last
+two gaps, `primary-chilled-water-pump-2` and `-pump-3`, closing that
+case to 3/3. This case's own prior note withheld both: a same-size-rect
+pass reached into a neighboring numbered I/O bubble grid (1140/1144
+segments against the seed's own 962-1001). Translated the seed's own
+body_bbox by each instance's own real pitch instead, confirmed directly
+in the vector data (each pump's own 3-wide I/O grid divider set repeats
+at an exact +289.56 offset, matching the `at` deltas to rounding).
+Direct renders of all three assemblies side by side show the identical
+relative layout in each. Found and disclosed a genuine but SMALL edge
+case, distinct from the prior naive attempt's contamination: the seed's
+own already-accepted body_bbox stops mid-column through its own 3-wide
+grid (columns 1-2 included, column 3 excluded) rather than at a clean
+edge, so translating it verbatim leaves each instance's own left edge
+about 3.4 sheet units inside the previous pump's own excluded third
+grid column. Quantified directly in the vector data (23 of 3755
+primitives touching the translated box also touch that 3.4-unit
+sliver) — nearly two orders of magnitude smaller than the prior naive
+attempt's own reported contamination, and a structural property of the
+seed's own already-accepted cut repeating exactly, not a new failure.
+Added via a surgical edit per instance (checked as a minimal diff)
+plus an appended correcting review note disclosing the sliver; the
+case's prior note is left untouched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `29-syracuse-m704-control-sensor-bubbles`'s own last
 gap, `motorized-damper-occupancy-sensor-bubble`, closing that case to
 6/6. This case's own prior note left it unset because a naive pass
