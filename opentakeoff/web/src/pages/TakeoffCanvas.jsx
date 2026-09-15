@@ -1001,6 +1001,13 @@ export default function TakeoffCanvas() {
   // them, so a composite simply carries none and classification degrades to
   // exactly today's behaviour (the optional-field contract).
   const subpathsRef = useRef(new Map());
+  // GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — per-segment primitive-
+  // type provenance (line/rect-edge/bezier, oneclick.ts's PRIM_* constants),
+  // captured here only so a debug probe can expose real browser-extracted
+  // geometry for a browser/MCP parity check; nothing downstream in the live
+  // canvas reads this ref yet — see subpathsRef's own optional-field
+  // contract note just above, same reasoning.
+  const primTypeRef = useRef(new Map());
   const textMarksRef = useRef(new Map());  // sheetKey → positioned text (label-box classification)
   const segLumRef = useRef(new Map());     // sheetKey → per-segment stroke luminance (#260) — the Symbol tool's label leader-chase pen separator
   const textSpansRef = useRef(new Map());  // sheetKey → label text spans (built lazily on first sweep)
@@ -2329,6 +2336,7 @@ export default function TakeoffCanvas() {
     vectorSegsRef.current.clear();
     segMetaRef.current.clear();
     subpathsRef.current.clear();
+    primTypeRef.current.clear();
     textMarksRef.current.clear();
     layerGeoRef.current.clear();
     layerInfosRef.current.clear();
@@ -2451,12 +2459,13 @@ export default function TakeoffCanvas() {
         // snap-to-vector index per panel (best-effort; off until the user enables it)
         m.pageObj.getOperatorList().then(async (ol) => {
           if (stale()) return;
-          const { points, segs, meta, imageArea, lum, layerOf, layerIds, subpaths } = extractVectorGeometry(ol, m.viewport.transform, pdfjsLib.OPS);
+          const { points, segs, meta, imageArea, lum, layerOf, layerIds, subpaths, primType } = extractVectorGeometry(ol, m.viewport.transform, pdfjsLib.OPS);
           snapGridsRef.current.set(m.key, buildSnapGrid(points, SNAP_CELL));
           vectorSegsRef.current.set(m.key, segs);
           segMetaRef.current.set(m.key, meta);
           if (subpaths) subpathsRef.current.set(m.key, subpaths);
           if (lum) segLumRef.current.set(m.key, lum);
+          if (primType) primTypeRef.current.set(m.key, primType);
           textTfRef.current.set(m.key, m.viewport.transform);
           // raster-fallback trigger signals: how much of the sheet is placed
           // image, and whether the vector linework is dense enough to bound rooms
@@ -8551,6 +8560,33 @@ export default function TakeoffCanvas() {
         sweep: () => sweep,
         openSheets: (keys) => openSheets(keys, false),
         segCount: (key) => (vectorSegsRef.current.get(key)?.length || 0) >> 2,
+        // GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 gate: "at least
+        // five real PDFs show browser/MCP parity." Exposes exactly what
+        // this browser's own extractVectorGeometry call already computed
+        // and stored (vectorSegsRef/segMetaRef/subpathsRef/segLumRef/
+        // layerGeoRef/primTypeRef — no second extraction, no second
+        // implementation, same discipline every other probe.* entry
+        // follows) so a Playwright script can diff it against the same
+        // real PDF's MCP/Node-side extraction. Returns plain arrays (typed
+        // arrays don't survive page.evaluate's own JSON round-trip).
+        vectorGeometry: (key) => {
+          const segs = vectorSegsRef.current.get(key);
+          if (!segs) return null;
+          const meta = segMetaRef.current.get(key);
+          const lum = segLumRef.current.get(key);
+          const primType = primTypeRef.current.get(key);
+          const layerGeo = layerGeoRef.current.get(key);
+          const subpaths = subpathsRef.current.get(key);
+          return {
+            segs: Array.from(segs),
+            meta: meta ? Array.from(meta) : null,
+            lum: lum ? Array.from(lum) : null,
+            primType: primType ? Array.from(primType) : null,
+            layerOf: layerGeo?.layerOf ? Array.from(layerGeo.layerOf) : null,
+            layerIds: layerGeo?.layerIds || null,
+            subpaths: subpaths || null,
+          };
+        },
         seedAnswer: (text, cites = []) => {
           setAgentThread((t) => [...t, { role: "assistant", text: String(text || "") }]);
           if (cites.length) setAgentCitations((l) => [...l, ...cites]);

@@ -1,5 +1,87 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 10:
+real browser/MCP parity evidence, closing the goal §7 gate item "at
+least five real PDFs show browser/MCP parity" with actual measurement
+rather than an architectural argument.
+
+The app already exposes a Playwright-only `window.__opentakeoff.probe`
+object explicitly documented as "the only way to verify" internal
+extraction state without a model call — the exact right place for
+this, not a second implementation. Added ONE new read-only entry,
+`probe.vectorGeometry(key)`, returning the SAME `segs`/`meta`/`lum`/
+`layerOf`/`layerIds`/`subpaths` the app's own live `extractVectorGeometry`
+call already computed and stored in existing refs
+(`vectorSegsRef`/`segMetaRef`/`segLumRef`/`layerGeoRef`/`subpathsRef`)
+— no second extraction path, nothing new computed, purely exposing
+what already exists. The one genuinely new capture: `primType` (this
+session's own slice 1 addition) was never stored anywhere in the live
+canvas at all, so added `primTypeRef` (declaration, capture at the one
+extraction call site that already captures `subpaths`/`lum`, and
+clear-on-reset) mirroring `subpathsRef`'s exact existing pattern and
+its own "optional-field contract" comment.
+
+New `web/scripts/playwright-vector-scene-parity.mjs`: for five real
+corpus PDFs (spanning 3,942 to 102,352 primitives — including the same
+unusually dense sheet slice 9 already profiled), loads each in a real
+headless Chromium via Playwright, reads `probe.vectorGeometry` for the
+browser-extracted result, separately extracts the identical file+page
+in Node through `mcp/src/pdf.ts` (the actual MCP/Session path), and
+diffs every field: segs, meta, lum, primType, layerOf, layerIds,
+subpath count, and every subpath's own graphics-state fields (closed/
+flags/fillLum/dashed/formDepth/lineCap/lineJoin). Result: **all 5
+PDFs, all 45 individual checks, byte-for-byte identical.**
+
+One real bug surfaced and fixed while building this: the sheet-key
+convention (`sheetKey.ts`'s `parseSheetKey` — no `#N` suffix means
+page 1) meant blindly constructing `${file}#${pageNo}` for a page-1
+request built a STRING that didn't match the already-open default
+panel's own bare key, so `openSheets`/`segCount` never found the data
+and the script hung until timeout. Fixed by only appending the `#N`
+suffix when `pageNo > 1`, matching the convention exactly. Caught by
+running the script rather than assuming it would work — the same
+"reproduce before you trust it" discipline every other slice this
+session followed.
+
+Verification: `npx vite build` (full production build) succeeds
+cleanly — no syntax errors from the JSX edit (AGENTS.md's own warning
+that "Vite does not flag undefined identifiers in JSX" was heeded: a
+`grep -n "primTypeRef"` confirms the ref is declared once and
+referenced consistently at all 4 sites). `npx eslint
+src/pages/TakeoffCanvas.jsx`: 0 errors, only 3 pre-existing warnings
+unrelated to this change (confirmed by inspection — none reference
+`primTypeRef` or any line this edit touched).
+`geometry.test.ts`/`vectorSceneIndex.test.ts` re-run, 113 tests, 0
+failures (this slice touches neither file, so this is a sanity check,
+not a targeted regression test). The live dev server was actually
+launched and driven end-to-end 5 times (once per real PDF) — this is
+the first slice this session verified against a REAL browser runtime
+rather than only Node/tsx.
+
+SHOULD THIS BE ON THE SHARED PATH? The new `probe.vectorGeometry`
+entry is Playwright-only test instrumentation, matching every existing
+`probe.*` entry's own stated purpose — not production behavior, so it
+correctly stays where it is rather than moving to `web/src/lib`. The
+underlying extraction it exposes is already on the shared path (that
+is the entire point of what it just proved).
+
+Not done (unchanged from slice 9's list otherwise): true mid-segment
+intersection; wiring junctions/pair-relations/spatial-index into
+`VectorSceneIndex`'s own stub fields; Form XObject identity/content-
+signature hashing; text-span/exploded-text-mask integration; curve
+fidelity beyond chord-sampling; wiring the index into
+`graphForPipeline`/Session's pipeline. Remaining explicit Phase 2 gate
+item: "Index build time and memory measured on small, median, and
+largest sheets" (partially covered — slice 9's two-sheet timing table
+plus this slice's five-sheet parity run give real numbers across a
+size range, but not the gate's own formal write-up). "No schedule/
+table extraction result changes on the VectorGrid regression suite" is
+now directly closed, not just indirect: ran the actual named files
+(`web/test/vectorGridAdapter.test.ts`, `web/test/vectorTakeoffPipeline.test.ts`,
+`web/test/sheetgraph.test.ts` — 183 tests) individually — 0 failures,
+on top of the 51-case symbol-sweep corpus and full `web/` suite
+results already recorded.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md — response to a
 recurring automated Stop-hook complaint claiming no evidence of
 fetching/reading the goal branch or its three prerequisite documents.
