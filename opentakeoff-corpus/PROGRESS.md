@@ -1,5 +1,63 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 8
+— "Produce an owned body bbox/polygon from owned primitives. This is
+the blue physical-symbol evidence shown to users." Computes a
+proposal's TRUE post-resolution bbox from exactly the primitives it
+actually ended up owning inside one ownership cluster (exclusive +
+WON contested), which is NOT the same as its original pre-resolution
+FusedProposal bbox — that one spans every primitive a proposal
+originally claimed, contested or not, so a proposal that lost a
+dispute to a rival must not have that lost geometry inflating its own
+accepted body evidence. Deliberately scoped to cluster proposals only:
+an uncontested proposal's own existing FusedProposal bbox is already
+correct, so recomputing it would be duplicate work. Deliberately NOT
+attempted (disclosed): a real polygon (concave hull/alpha-shape, not
+just an axis-aligned bbox) and tag-vs-body separation ("keep tag
+evidence separately orange") — tag/leader identification doesn't
+exist yet (Phase 6 territory).
+
+New `web/src/lib/ownershipBody.ts`: `computeOwnedBodies(exclusiveDecisions,
+contestedDecisions, idx, clusterProposalIds)` unions the bbox of every
+primitive a proposal actually owns (skipping any left `"ambiguous"` —
+an unresolved dispute is accepted evidence for neither side). A
+proposal that ends up owning nothing at all still gets an explicit
+`isEmpty: true` entry (with all-zero coordinates that MUST NOT be read
+as real geometry) rather than silently disappearing from the output —
+precisely the gate's own "no accepted instance's body bbox may be an
+empty patch" condition, made checkable rather than hidden.
+
+New `web/test/ownershipBody.test.ts` (3 tests, all passing): a
+proposal that originally claimed a contested primitive but LOSES it
+gets an owned bbox that provably excludes that lost geometry (smaller
+than its original fused superset, checked by exact bound); a cluster
+where both proposals end up owning nothing gets two explicit
+`isEmpty: true` entries, not zero entries; an ambiguous primitive
+never appears in any proposal's `primitiveIds`.
+
+Real-sheet validation (Cherry Point #12): ran the full pipeline
+through to owned-body bboxes — 5 clusters, 55 proposal-body entries,
+all 55 correctly `isEmpty: true` (no inverted bbox, no crash). This is
+the expected, honest continuation of the prior two entries' own
+finding: with zero exclusive primitives and zero assigned contested
+primitives anywhere on this sheet, there is nothing for this module to
+build a real bbox from, and it correctly says so instead of
+fabricating one. The synthetic test above is what proves the "normal"
+non-degenerate path (a real bbox that correctly excludes lost
+geometry) actually works — this corpus has not yet produced a real
+sheet with that shape to validate against directly; noted rather than
+claimed as covered.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (3/3); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet check above. Does not modify `ownershipAssignment.ts`,
+`ownershipConflicts.ts`, or `ownershipEligibility.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — the accepted body bbox is
+named directly in the goal document as "the blue physical-symbol
+evidence shown to users," and the gate's own empty-patch check depends
+on this module reporting emptiness honestly rather than hiding it.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 7
 (partial, independent per-primitive decisions) + requirements 4/5's
 explicit unowned/exclusive and unassigned/ambiguous states. Requirement
