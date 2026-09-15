@@ -1,5 +1,76 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — FIRST SLICE
+started: primitive-type provenance in `extractVectorGeometry`
+(web/src/lib/oneclick.ts). Phase 1's corpus work (48 landed instances
+across 4 fresh documents, extensive scouting) is real but not literally
+at the "150+/12 documents" gate yet; Phase 2's own gate text says the
+150+/12 requirement blocks "tuning the new engine" (phases 3+), not
+building the shared extraction/index layer Phase 2 itself is about — so
+starting Phase 2's lowest-risk, most foundational slice now, in parallel
+with continuing to opportunistically grow Phase 1's corpus, is faithful
+to the goal's actual dependency structure, not a shortcut around it.
+
+**What shipped:** a new `primType?: Uint8Array` field on `VectorGeometry`,
+one byte per segment, recording which content-stream operator actually
+drew it — `PRIM_LINE` (a freeform `lineTo` OR a `closePath`'s implicit
+closing edge — geometrically the same straight chord, so not a separate
+category), `PRIM_RECT_EDGE` (one of an explicit `re` operator's 4 edges),
+`PRIM_BEZIER` (a `curveTo` tessellation chord). This is the first of
+Phase 2's named requirements ("primitive type: line, rectangle edge,
+Bezier/curve approximation, circle/ellipse approximation when
+recoverable") — circle/ellipse recovery (grouping a closed bezier/
+polyarc run that fits one circle) is real further work, deliberately
+deferred to its own slice rather than folded in here half-verified.
+
+**Why this one first:** `meta`'s existing SEG_* bits already fully
+commit BOTH nibbles of its byte (low nibble = SEG_CURVE/CLIP/FILLONLY/
+POLYARC, high nibble = device line width, 0-15) — there was no free bit
+to repurpose, confirming the goal's own instruction to "extend...
+additively": a new fact needs a new array, not a wider existing one, to
+stay byte-for-byte compatible with every current consumer. `primType` is
+therefore a brand-new, fully optional array; nothing about `points`,
+`segs`, `meta`, `imageArea`, `maxImageArea`, `lum`, `layerOf`, `layerIds`,
+or `subpaths` changed in shape, order, or values.
+
+**Verification, per the goal's own "Required implementation discipline"
+(baseline first, focused test, smallest change, run affected tests)**:
+- Baseline: ran every test file touching `extractVectorGeometry` or its
+  consumers BEFORE changing anything — geometry, layerExtract, gapBridge,
+  strokeLum, layerIoU, canvas-geometry, vectorGridAdapter,
+  vectorTakeoffPipeline, taggedVectorGrounding, symbolsweep — all green
+  (129+11+16+18+6+76 tests, exact counts recorded in this session's tool
+  output).
+- New focused test file `web/test/primType.test.ts` (5 tests): proves
+  `PRIM_LINE`/`PRIM_RECT_EDGE`/`PRIM_BEZIER` values on constructed
+  fixtures for each operator, confirms `primType.length === meta.length`
+  always, confirms a closePath edge reads `PRIM_LINE`, confirms a real
+  bezier chord's `primType` and `meta`'s own `SEG_CURVE` bit are
+  independent facts that both fire together rather than one replacing
+  the other, and confirms array order/length hold across a mixed
+  line+rect+curve path. All 5 pass.
+- Re-ran every test file from the baseline list AFTER the change: same
+  green result, zero regressions, zero changed test counts.
+- Confirmed the MCP/Session side (opentakeoff/mcp/src/session.ts) still
+  imports and runs cleanly (it consumes the same `extractVectorGeometry`
+  via the shared `web/src/lib` path).
+
+**Not done yet, explicitly** (Phase 2 has many more named requirements:
+graphics-state dash/cap/join/clip-state tracking, Form XObject nesting/
+identity/content-signature, text-span and exploded-text-mask
+integration, intersection/junction/collinearity relations, a real spatial
+index, document-hash+page+version caching, memory accounting with a
+disclosed cap) — this is one small, reviewable, fully-tested slice of a
+much larger phase, landed and pushed on its own rather than held for a
+single giant "Phase 2 complete" commit that the goal's own discipline
+(`work in small, reviewable commits... push the branch after every
+stable phase`) argues against building.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — `extractVectorGeometry` lives
+in `web/src/lib/oneclick.ts` and is already the one shared implementation
+both the browser canvas and Session/MCP consume; this change extends
+that same single function, additively, for both callers at once.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 document 032 (the one "quick confirm-or-skip" gap from the pool census
 below) checked and closed, confirming the 5/5 EHRM-project pattern

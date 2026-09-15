@@ -87,7 +87,7 @@ export interface TextMark { x: number; y: number; w: number; h: number }
  *  keeps hand-built geometry (rastermask, tests) and stitched composites
  *  working unchanged. */
 export interface InkContext { subpaths?: SubPath[] | null; texts?: TextMark[] | null; dimTexts?: DimTextMark[] | null }
-export interface VectorGeometry { points: Point[]; segs: number[]; meta: Uint8Array; imageArea: number; maxImageArea: number; lum?: Uint8Array; layerOf?: Int32Array; layerIds?: string[]; subpaths?: SubPath[]; }
+export interface VectorGeometry { points: Point[]; segs: number[]; meta: Uint8Array; imageArea: number; maxImageArea: number; lum?: Uint8Array; layerOf?: Int32Array; layerIds?: string[]; subpaths?: SubPath[]; primType?: Uint8Array; }
 export interface MaskObj { mask: Uint8Array; mw: number; mh: number; ws: number; softCount: number; mppf?: number; }  // mppf: mask px per foot (0/absent = scale unknown)
 export interface RegionResult { region: Uint8Array; mw: number; mh: number; ws: number; count?: number; }
 export type FloodResult =
@@ -201,6 +201,22 @@ export const SEG_CLIP = 2;          // clip-only path (endPath) — invisible in
 export const SEG_FILLONLY = 4;      // filled-not-stroked path (solid poché outlines classify normally)
 export const SEG_POLYARC = 8;       // provenance: SEG_CURVE came from markPolylineArcs, not a bezier op
 // meta high nibble = device line width, ceil'd and capped at 15 (0 = hairline)
+
+// GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — primitive-type provenance,
+// one byte per segment in its own array (never repurposing meta's bits: both
+// nibbles of meta are already fully committed — SEG_* fills the low nibble,
+// device line width the high one — so a new fact needs a new array, not a
+// wider one, to stay byte-for-byte additive for every existing consumer).
+// PRIM_LINE covers both an explicit lineTo AND a closePath's implicit closing
+// edge: the two are geometrically identical (a straight chord), and the goal
+// document's own primitive list names "line, rectangle edge, Bezier/curve
+// approximation, circle/ellipse approximation" — not a fifth "closing edge"
+// category. Circle/ellipse recovery (grouping a closed bezier/polyarc run
+// that fits one circle) is real further work, deliberately deferred to its
+// own slice rather than folded in here half-verified.
+export const PRIM_LINE = 0;         // freeform lineTo or closePath edge
+export const PRIM_RECT_EDGE = 1;    // one of a `re` (OPS.rectangle) operator's 4 edges
+export const PRIM_BEZIER = 2;       // a curveTo tessellation chord (SEG_CURVE already marks this in meta; primType restates it as an explicit provenance value rather than a bit test)
 
 // polyline arc detection (markPolylineArcs) — the SHAPE thresholds are
 // dimensionless geometry (turn angles, ratios), but detection as a whole is
@@ -341,6 +357,7 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   const segs: number[] = [];
   const metaArr: number[] = [];
   const lumArr: number[] = [];
+  const primTypeArr: number[] = [];
   const subpaths: SubPath[] = [];
   // the subpath under construction: opened by moveTo/rectangle, sealed when
   // the next one opens or the op stream ends. A figure that contributed no
@@ -531,7 +548,7 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       const pathLum = lum;          // stroke color cannot change mid-path (#260)
       pathFill = fillLum;           // …and neither can the fill colour
       const visit = (p: Point) => { points.push(p); };
-      const lineTo = (p: Point) => { if (cur) { segs.push(cur[0], cur[1], p[0], p[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); noteSeg(cur, p); } cur = p; visit(p); };
+      const lineTo = (p: Point) => { if (cur) { segs.push(cur[0], cur[1], p[0], p[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); primTypeArr.push(PRIM_LINE); noteSeg(cur, p); } cur = p; visit(p); };
       for (const op of ops) {
         if (op === OPS.moveTo) { cur = tx(co[c], co[c + 1]); start = cur; openSub(flags, cur); visit(cur); c += 2; }
         else if (op === OPS.lineTo) { lineTo(tx(co[c], co[c + 1])); c += 2; }
@@ -549,17 +566,17 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
               u * u * u * p0[0] + 3 * u * u * t * p1[0] + 3 * u * t * t * p2[0] + t * t * t * p3[0],
               u * u * u * p0[1] + 3 * u * u * t * p1[1] + 3 * u * t * t * p2[1] + t * t * t * p3[1],
             ];
-            if (cur) { segs.push(cur[0], cur[1], q[0], q[1]); metaArr.push(flags | SEG_CURVE); lumArr.push(pathLum); layerOfArr.push(pathLayer); noteSeg(cur, q); }
+            if (cur) { segs.push(cur[0], cur[1], q[0], q[1]); metaArr.push(flags | SEG_CURVE); lumArr.push(pathLum); layerOfArr.push(pathLayer); primTypeArr.push(PRIM_BEZIER); noteSeg(cur, q); }
             cur = q;
           }
           visit(p3);
         }
-        else if (op === OPS.closePath) { if (cur && start) { segs.push(cur[0], cur[1], start[0], start[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); noteSeg(cur, start); closeSub(); cur = start; } }
+        else if (op === OPS.closePath) { if (cur && start) { segs.push(cur[0], cur[1], start[0], start[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); primTypeArr.push(PRIM_LINE); noteSeg(cur, start); closeSub(); cur = start; } }
         else if (op === OPS.rectangle) {
           const x = co[c], y = co[c + 1], w = co[c + 2], h = co[c + 3]; c += 4;
           const q: Point[] = [tx(x, y), tx(x + w, y), tx(x + w, y + h), tx(x, y + h)];
           openSub(flags, q[0]);                       // a rect is its own figure
-          for (let k = 0; k < 4; k++) { const a = q[k], b = q[(k + 1) % 4]; segs.push(a[0], a[1], b[0], b[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); noteSeg(a, b); visit(a); }
+          for (let k = 0; k < 4; k++) { const a = q[k], b = q[(k + 1) % 4]; segs.push(a[0], a[1], b[0], b[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); primTypeArr.push(PRIM_RECT_EDGE); noteSeg(a, b); visit(a); }
           closeSub();
           cur = q[0]; start = q[0];
         }
@@ -569,7 +586,7 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   sealSub();
   const meta = Uint8Array.from(metaArr);
   markPolylineArcs(segs, meta);
-  return { points, segs, meta, imageArea, maxImageArea, lum: Uint8Array.from(lumArr), layerOf: Int32Array.from(layerOfArr), layerIds, subpaths };
+  return { points, segs, meta, imageArea, maxImageArea, lum: Uint8Array.from(lumArr), layerOf: Int32Array.from(layerOfArr), layerIds, subpaths, primType: Uint8Array.from(primTypeArr) };
 }
 
 // ── 1b. polyline arc detection ─────────────────────────────────────────────
