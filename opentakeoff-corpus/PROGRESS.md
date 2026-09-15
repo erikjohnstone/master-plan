@@ -1,5 +1,34 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — scouted
+document 088 (Phoenix Sky Harbor / PHX Sky Train, 260 pages, already
+locally rejoined, the other previously-identified open gap). Sampled
+text spans across the set for common HVAC tag patterns (VAV/FCU/CD/SD/
+EF/RF/CU/HP/AHU/VLV/DMP), found a promising cluster on sheet
+B04-RBEL0413 (p.65, "MECHANICAL POWER FLOOR PLAN... BACK-OF-HOUSE
+DETAILS"): CU-1 through CU-5, AHU-1, FCU-1, EF-1.
+
+Rendered and inspected the CU family directly before trusting the text
+hit count: each "CU-N" tag connects via a curved leader arrow to a
+rounded-rectangle "G/WP" (ground/weatherproof) DISCONNECT SWITCH
+symbol — real drawn ink, but it is the equipment's electrical
+disconnect, not the condensing unit's own physical body. The actual
+CU-1..CU-5 units themselves are not drawn on this sheet at all (an
+electrical power/connection sheet, not an equipment layout sheet).
+goal §4's own schema wants "physical symbol body bbox and owned
+primitive IDs" for the installed equipment itself — a disconnect
+switch reached only by a leader arrow is closer to the schema's own
+"note bubble"/annotation-adjacent hard-negative category than a
+positive instance. Closed this specific lead without landing a case:
+correctly identifying "this isn't the right kind of evidence" before
+building on it is the same discipline as verifying a real one, and
+prevents a case that would misrepresent what "physical symbol body"
+means in this corpus. Document 088 is 260 pages; this was a sampled,
+not exhaustive, pass — other sheets in the set may still carry a
+genuine equipment-layout family and remain unscouted.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Investigation only.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — precise
 root cause for the IU-15 double-count noted in the entry just below,
 and a reasoned decision not to patch it. Read `mergeProposals` and its
