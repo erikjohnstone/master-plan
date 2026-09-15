@@ -1,5 +1,77 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 5 first slice
+follow-up — real-corpus validation of the entry directly below's own new
+`rigidAffineVerify.ts`, run against two real families instead of only
+synthetic geometry, plus one real bug this validation found and fixed.
+
+METHOD, and one real methodological correction along the way: the first
+attempt fed `verifyIsolatedSupport` primitive sets recovered from raw
+ground-truth `body_bbox` containment (the SAME convention
+`score-ownership-against-ground-truth.mjs` uses for scoring F1). That
+convention is right for scoring "how much of the true symbol's ink did
+this pipeline capture," but WRONG for validating a verifier whose own
+name is "isolated support" — Cherry Point's own CD-1 (ceiling diffuser)
+family showed why directly: several instances' raw bbox contained 2-3x
+the seed's own primitive count (nearby duct linework crossing the
+diffuser's own bbox), and the verifier correctly refused to call that
+contaminated ink rigid. Corrected by re-running against the REAL
+pipeline's own predicted bodies instead (Lane B -> fuseProposals ->
+detectOwnershipClusters -> resolveClusterOwnershipIteratively's own
+best-F1-matched output per instance, the same wiring
+score-ownership-against-ground-truth.mjs already uses) — a fair test of
+what Phase 5 will actually receive as input once wired in.
+
+RESULT 1, Colville's own 24-tank array (transform_family: "rigid" per
+cases.json itself, real predicted bodies ~333-363 primitives each): 1 of
+5 instances checked verifies rigid outright (mirror_rot90, matching the
+label ambiguity a near-circular motif's own genuine rotational symmetry
+predicts); the other 4 fall through to verified_affine with small real
+residuals (0.58-1.06px over 100+ real inliers) rather than
+insufficient_evidence — never a false negative on real rigid data, but
+a real, disclosed LIMIT: `mutualNearestCorrespondences`'s own dense/
+near-symmetric-point-set correspondence ambiguity (many nearly-
+equidistant candidate matches on a circular boundary) suppresses the
+rigid inlier FRACTION below the 60% threshold even when the underlying
+transform is genuinely rigid. Not tuned around here — `DEFAULT_
+RIGID_INLIER_FRACTION`'s own header already discloses it is untuned;
+this is now a concrete, real number behind that disclosure, not a fix.
+
+RESULT 2, Cherry Point's own CD-1 family, against REAL predicted bodies:
+revealed a genuine, real bug, not merely a limitation. Phase 4's own
+still-open gate 3 (documented several entries below) means the current
+pipeline's own predicted body for every CD-1 instance is a tiny fragment
+(3-5 primitives against a real ~64-214-primitive symbol). Feeding two
+such fragments to `verifyIsolatedSupport` produced `verified_rigid` even
+for a SINGLE primitive matched against a single primitive (inliers 1/1,
+residual 0.168) — a vacuous result: one point carries no real shape at
+all, so every one of the 8 rigid transforms trivially maps it onto
+itself. FIX: new `DEFAULT_MIN_ABSOLUTE_SUPPORT = 3` floor (below it,
+`insufficient_evidence` regardless of the fraction) — 3 is the minimum
+point count that meaningfully constrains a 2D rigid transform (2 points
+still leave an unresolved mirror ambiguity). Re-verified directly: the
+1-primitive and 2-primitive CD-1 instances now correctly read
+`insufficient_evidence`; every 3+-primitive instance (still tiny
+fragments, but no longer vacuous) is unaffected; Colville's own result
+above is unaffected (its own smallest compared set is >100). 2 new tests
+added (single-point and exactly-2-point cases), 11/11 total green, `tsc
+--noEmit` clean.
+
+HONEST INTEGRATION FINDING, not fixed here: even past the new floor,
+most CD-1 instances still "verify_rigid" on 3-5-point fragments with
+small residual — a real, non-vacuous fit, but of an INCOMPLETE symbol,
+not the goal's own envisioned isolated support. This is a genuine
+dependency, not a flaw in this module: Phase 5's own "verified" states
+only become trustworthy confirmations of symbol identity once Phase 4's
+own gate 3 (>=0.95 primitive F1, still open per several entries below)
+stops handing it fragments this small. Recorded here as a concrete,
+measured reason Phase 4's own gate matters to Phase 5, not assumed.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — a real bug (a vacuous
+"verified" result on a single point) found and fixed via real-corpus
+validation before this module was ever wired into anything else, exactly
+the discipline the rest of this project already holds itself to.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 5 first slice —
 rigid/affine verification on isolated support, requirements 1-3 and 5.
 Preceded by a dedicated investigation of the existing mature

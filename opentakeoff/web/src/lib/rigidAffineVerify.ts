@@ -104,6 +104,19 @@ export const DEFAULT_INLIER_TOLERANCE_PX = 3;
  *  point count that must be real mutual inliers before a rigid transform
  *  is accepted outright (requirement 2's own "first verifier"). */
 export const DEFAULT_RIGID_INLIER_FRACTION = 0.6;
+/** Real-corpus finding, not a hypothetical: validating this module
+ *  against the CURRENT pipeline's own predicted bodies for Cherry Point's
+ *  CD-1 family (still badly fragmented by Phase 4's own open gate 3 — 3-5
+ *  primitives against a real ~64-214-primitive symbol) surfaced a
+ *  genuine degenerate case a fraction-only threshold cannot catch: 1-2
+ *  points carry no real shape at all, so a 1-point candidate against a
+ *  1-point reference trivially "verifies rigid" at inlierFraction 1.0 —
+ *  every rigid transform maps a single point onto its own image with
+ *  zero real geometric constraint. Below this absolute floor, the result
+ *  is honestly `insufficient_evidence` regardless of the fraction. 3 is
+ *  the minimum point count that constrains a 2D rigid transform beyond a
+ *  translation (2 points still leave an unresolved mirror ambiguity). */
+export const DEFAULT_MIN_ABSOLUTE_SUPPORT = 3;
 
 export type VerificationState = "verified_rigid" | "verified_affine" | "insufficient_evidence";
 
@@ -199,14 +212,21 @@ export function verifyIsolatedSupport(
   idx: VectorSceneIndex,
   candidatePrimitiveIds: readonly number[],
   referencePrimitiveIds: readonly number[],
-  opts: { inlierTolerance?: number; rigidInlierFraction?: number; affineBounds?: AffineBounds } = {},
+  opts: { inlierTolerance?: number; rigidInlierFraction?: number; affineBounds?: AffineBounds; minAbsoluteSupport?: number } = {},
 ): VerificationResult {
   const tolerance = opts.inlierTolerance ?? DEFAULT_INLIER_TOLERANCE_PX;
   const rigidFraction = opts.rigidInlierFraction ?? DEFAULT_RIGID_INLIER_FRACTION;
   const bounds = opts.affineBounds ?? DEFAULT_AFFINE_BOUNDS;
+  const minAbsoluteSupport = opts.minAbsoluteSupport ?? DEFAULT_MIN_ABSOLUTE_SUPPORT;
   const comparedAgainst = Math.min(candidatePrimitiveIds.length, referencePrimitiveIds.length);
 
   if (candidatePrimitiveIds.length === 0 || referencePrimitiveIds.length === 0) {
+    return { state: "insufficient_evidence", inlierCount: 0, comparedAgainst, residual: null };
+  }
+  // real-corpus finding (see DEFAULT_MIN_ABSOLUTE_SUPPORT's own comment):
+  // too few points to constrain a rigid/affine transform at all, however
+  // well they happen to fit — never a false "verified" on a vacuous match.
+  if (comparedAgainst < minAbsoluteSupport) {
     return { state: "insufficient_evidence", inlierCount: 0, comparedAgainst, residual: null };
   }
 

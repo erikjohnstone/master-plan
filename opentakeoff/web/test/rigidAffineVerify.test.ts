@@ -115,6 +115,19 @@ test("verifyIsolatedSupport: empty candidate or reference primitive sets are hon
   assert.equal(r2.state, "insufficient_evidence");
 });
 
+test("verifyIsolatedSupport: a single-primitive candidate against a single-primitive reference is honestly insufficient, never a vacuous 'verified rigid' -- a real corpus finding (Cherry Point CD-1's own current fragmented predicted bodies), not a hypothetical", () => {
+  const idx = buildIdx([line(0, 0, 10, 0), line(1000, 1000, 1010, 1000)]);
+  const result = verifyIsolatedSupport(idx, [1], [0]);
+  assert.equal(result.state, "insufficient_evidence", "1 point carries no real shape -- every rigid transform trivially maps it onto its own image");
+  assert.equal(result.inlierCount, 0);
+});
+
+test("verifyIsolatedSupport: exactly 2 points (below the absolute floor) are also honestly insufficient, even though they translate/rotate perfectly onto each other", () => {
+  const idx = buildIdx([line(0, 0, 10, 0), line(1000, 1000, 1010, 1000)]);
+  const result = verifyIsolatedSupport(idx, [0, 1], [0, 1]);
+  assert.equal(result.state, "insufficient_evidence");
+});
+
 test("mutualNearestCorrespondences: a real many-to-one collapse is rejected -- two source points both nearest to the SAME target point produce at most one mutual pair, never two", () => {
   const as: Point[] = [[0, 0], [0.1, 0]]; // two source points very close together
   const bs: Point[] = [[5, 5]]; // one distant target point, nearest to BOTH
