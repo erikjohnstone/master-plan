@@ -92,6 +92,52 @@ cases.json is back at its prior committed state; no production
 label-matching or matching-engine code was touched or should be, per this
 goal's own constraints.
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 — the
+tag-distance check from the entry above applied to document 004's S1
+diffuser BEFORE another full build, per that entry's own stated next
+step. Same failure mode, confirmed quantitatively rather than assumed:
+the seed's own fingerprint center sits 56.3px from its nearest "S1" text
+(gate at this text's height: 2.2 x 16 = 35.2px -- misses by a wide
+margin), and across the whole sheet's ~46 raw matches only 3 ever
+resolved an "S1" label at all (one of the batch's own report already
+flagged this: "41/46 matches carry no resolved label"). "S1" does carry a
+digit, unlike "PSV," so in principle it could qualify for the wider
+5.5x-text-height equipment-instance reach -- but empirically it mostly
+doesn't, and tracing the exact remaining gate condition
+(`isEquipTag`/`canonicalLabelFamily`/`isBasControlLabel`'s further
+exclusions) any deeper starts to shade into reading matching-engine
+internals for their own sake rather than screening a candidate, so this
+was not pursued further. Net: doc-004 is a second confirmed instance of
+the same pattern, not a second distinct failure mode.
+
+Both of this checkpoint's two confirmed-fresh candidates (004, 013) now
+share this exact problem, and the other three scouted candidates are
+disqualified for the unrelated reasons above (009/015 already-baseline,
+018 frozen-holdout) -- so this round of scouting (15 documents, batches
+A/B/C) is fully spent without a landed corpus-expansion case. Not a
+wasted round: it produced five closed leads with distinct, precisely
+diagnosed root causes (ubiquitous generic glyph, tag-family collision,
+absent/garbled text layer, narrow scope with no repeating family, and now
+tag-distance/label-adjacency-gate mismatch) plus one important scouting-
+process correction (check already-spent/holdout status before, not
+after, a scout invests effort).
+
+Real next step, sharpened for the next scouting round: prefer candidates
+whose tag uses the corpus's own already-proven-reliable hyphenated
+equipment-instance format (`LETTERS-DIGITS`, e.g. "FS-1", "AHU-2", "VLV-
+12" -- the format every currently-passing case with a non-null tag
+already uses) sitting close to the body, over a bare short device code
+(no hyphen, e.g. "S1," "PSV," "D12") in a separate tag/value-box
+convention -- the latter is now confirmed twice to frequently exceed the
+current engine's adjacency reach regardless of whether it nominally
+"has a digit." Screening this up front (measure the seed's own nearest
+same-family tag distance against ~2.2x that text's height before any
+other investment) is now a required step alongside the five checks
+already in the standing checklist.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Read-only distance check against
+an already-reverted candidate; no files changed except this note.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 breadth-first legend screening, batch A (5 fresh Vol2 documents: 004,
 006, 008, 009, 013) — the breadth-first pivot pays off: 3 of 5 documents
