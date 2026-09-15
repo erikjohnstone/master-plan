@@ -633,33 +633,53 @@ export async function runVectorTakeoffPipeline(
   // no-op. So this is a reporting nicety, and it must never be the reason an
   // estimator waits 45 minutes to ask their first question.
   //
-  // Bounded two ways, both deterministic and both recorded: a per-sheet
-  // segment ceiling that skips the pathological sheets outright, and a
-  // cumulative budget that stops the stage once it has spent its time. Sheets
-  // that are skipped are NAMED in the report rather than silently dropped —
-  // the same discipline the drawn-delta vector budget already uses.
-  report.layers_run.push("L3.5:topology");
-  await timed("L3.5:topology", () => {
-    const maxSegs = Number(process.env.OPENTAKEOFF_TOPOLOGY_MAX_SEGMENTS || 150_000);
-    const budgetMs = Number(process.env.OPENTAKEOFF_TOPOLOGY_BUDGET_MS || 30_000);
-    let spent = 0;
-    const skipped: string[] = [];
-    for (const ctx of contexts) {
-      if (!topologyEligible(ctx)) continue;
-      const segCount = (ctx.segs?.length ?? 0) / 4;
-      if (segCount > maxSegs) { skipped.push(`${ctx.key} (${Math.round(segCount)} segments)`); continue; }
-      if (spent >= budgetMs) { skipped.push(`${ctx.key} (topology budget spent)`); continue; }
-      spent += runL35Topology(g, ctx, report);
-    }
-    if (skipped.length) {
-      report.notes.push(
-        `L3.5: topology skipped on ${skipped.length} sheet(s) — linework too dense or the `
-        + `stage's time budget was spent. Tables, rows and every takeoff number are `
-        + `unaffected; only the pipeline_topology summary omits these sheets. `
-        + skipped.slice(0, 6).join(", ") + (skipped.length > 6 ? ", …" : ""),
-      );
-    }
-  });
+  // OFF BY DEFAULT (PLAN_CONNECTIVITY_SERVES.md Phase 1 item 3) — measured
+  // 2026-09-15 on the real 24-sheet federal-mech document: this stage alone
+  // cost 34,661ms, 55.6% of the ENTIRE sheet-graph build (the single
+  // largest stage; L2:ODL was 13,172ms) — while its only real consumer,
+  // topologyConsumer.ts's enrichSystemTags, reads `hasTopology` (whether
+  // graph.vector_topology is non-empty) only to decide whether to spread an
+  // item's OWN ALREADY-"UNKNOWN" systemTag into a new object still holding
+  // the literal string "UNKNOWN" — traced directly to its real caller
+  // (estimatorTakeoffDocument.mjs) and confirmed: no output VALUE anywhere
+  // differs between this stage having run and not having run. Every table,
+  // row and takeoff number is unaffected either way (same disclosure the
+  // skip-note below already made for individual skipped sheets). No test in
+  // either package asserts on `topology_sheets` or `vector_topology` at all
+  // (checked directly before this change, not assumed). Bounded two ways
+  // when explicitly enabled, both deterministic and both recorded: a
+  // per-sheet segment ceiling that skips the pathological sheets outright,
+  // and a cumulative budget that stops the stage once it has spent its
+  // time. Sheets that are skipped are NAMED in the report rather than
+  // silently dropped — the same discipline the drawn-delta vector budget
+  // already uses. Set OPENTAKEOFF_L35_TOPOLOGY=1 to re-enable (e.g. for a
+  // future Phase 5 real consumer, or manual diagnostics) — the machinery
+  // is kept, not deleted, exactly so that future consumer has something to
+  // build on rather than starting over.
+  if (process.env.OPENTAKEOFF_L35_TOPOLOGY) {
+    report.layers_run.push("L3.5:topology");
+    await timed("L3.5:topology", () => {
+      const maxSegs = Number(process.env.OPENTAKEOFF_TOPOLOGY_MAX_SEGMENTS || 150_000);
+      const budgetMs = Number(process.env.OPENTAKEOFF_TOPOLOGY_BUDGET_MS || 30_000);
+      let spent = 0;
+      const skipped: string[] = [];
+      for (const ctx of contexts) {
+        if (!topologyEligible(ctx)) continue;
+        const segCount = (ctx.segs?.length ?? 0) / 4;
+        if (segCount > maxSegs) { skipped.push(`${ctx.key} (${Math.round(segCount)} segments)`); continue; }
+        if (spent >= budgetMs) { skipped.push(`${ctx.key} (topology budget spent)`); continue; }
+        spent += runL35Topology(g, ctx, report);
+      }
+      if (skipped.length) {
+        report.notes.push(
+          `L3.5: topology skipped on ${skipped.length} sheet(s) — linework too dense or the `
+          + `stage's time budget was spent. Tables, rows and every takeoff number are `
+          + `unaffected; only the pipeline_topology summary omits these sheets. `
+          + skipped.slice(0, 6).join(", ") + (skipped.length > 6 ? ", …" : ""),
+        );
+      }
+    });
+  }
 
   // L4 cross-source dedup + equivalent collapse
   report.layers_run.push("L4:reconcile-dedup");
