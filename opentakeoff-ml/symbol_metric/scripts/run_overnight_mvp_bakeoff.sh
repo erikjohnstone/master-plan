@@ -31,8 +31,8 @@ LOG="$REPORT_ROOT/supervisor.log"
 exec >>"$LOG" 2>&1
 
 echo "[$(date --iso-8601=seconds)] successive-halving bakeoff started"
-echo "Stage 1: 10 DINO + 8 RT-DETR validation-only screens. Stage 2: three finalists per model."
-echo "Held-out tests run only once per Stage-2 finalist. No result can auto-release into OpenTakeoff."
+echo "Stage 1: 10 DINO + 8 RT-DETR validation-only screens. Stage 2: six intermediate retrains per model. Stage 3: three full finalists per model."
+echo "Held-out tests run only once per Stage-3 finalist. No result can auto-release into OpenTakeoff."
 
 if test -n "$WAIT_PID"; then
   echo "Waiting for the pre-existing training chain PID $WAIT_PID."
@@ -72,8 +72,17 @@ run_dino_screen() {
   "$DINO_PYTHON" "$TRAIN_DINO" --dataset "$DATA_ROOT/DINOv2_METRIC_V1" --source-root "$SOURCE_ROOT" --output "$output" --hub-cache "$DINO_HUB_CACHE" --epochs 6 --batch-size 32 --num-workers 4 --lr-head 0.0003 --lr-backbone 0.00001 --weight-decay 0.0001 --seed 20260916 --save-every 1 "${options[@]}"
 }
 
+run_dino_refinement() {
+  local identifier="$1" output="$DINO_RUN_ROOT/overnight-stage2/$1"
+  if ! test -f "$output/TRAINING_COMPLETE.txt"; then
+    echo "[$(date --iso-8601=seconds)] DINO intermediate retrain $identifier"
+    read -r -a options <<< "$(dino_options "$identifier")"
+    "$DINO_PYTHON" "$TRAIN_DINO" --dataset "$DATA_ROOT/DINOv2_METRIC_V1" --source-root "$SOURCE_ROOT" --output "$output" --hub-cache "$DINO_HUB_CACHE" --epochs 12 --batch-size 32 --num-workers 4 --lr-head 0.0003 --lr-backbone 0.00001 --weight-decay 0.0001 --seed 20260916 --save-every 1 "${options[@]}"
+  fi
+}
+
 run_dino_final() {
-  local identifier="$1" output="$DINO_RUN_ROOT/overnight-stage2/$1" evaluation="$REPORT_ROOT/dino/final/$1.test.json"
+  local identifier="$1" output="$DINO_RUN_ROOT/overnight-stage3/$1" evaluation="$REPORT_ROOT/dino/final/$1.test.json"
   if ! test -f "$output/TRAINING_COMPLETE.txt"; then
     echo "[$(date --iso-8601=seconds)] DINO finalist $identifier"
     read -r -a options <<< "$(dino_options "$identifier")"
@@ -86,10 +95,14 @@ run_dino_final() {
 
 dino_ids=(warm-extended-proxy015 warm-extended-no-weak warm-conservative-proxy015 warm-extended-proxy005 warm-extended-proxy030 warm-extended-temp007 warm-extended-freeze3 real-extended-proxy015 real-conservative-proxy015 real-extended-no-weak)
 for identifier in "${dino_ids[@]}"; do run_dino_screen "$identifier" || echo "DINO screen $identifier failed; leave it out of the shortlist."; done
-dino_selector=(--kind dino --top-k 3 --output "$REPORT_ROOT/dino/stage1-shortlist.json")
+dino_selector=(--kind dino --top-k 6 --output "$REPORT_ROOT/dino/stage1-shortlist.json")
 for identifier in "${dino_ids[@]}"; do test -f "$DINO_RUN_ROOT/overnight-stage1/$identifier/metrics.jsonl" && dino_selector+=(--candidate "$identifier=$DINO_RUN_ROOT/overnight-stage1/$identifier/metrics.jsonl"); done
 "$DINO_PYTHON" "$SELECT" "${dino_selector[@]}"
-while IFS= read -r identifier; do run_dino_final "$identifier" || echo "DINO finalist $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/dino/stage1-shortlist.json")
+while IFS= read -r identifier; do run_dino_refinement "$identifier" || echo "DINO intermediate $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/dino/stage1-shortlist.json")
+dino_refine_selector=(--kind dino --top-k 3 --output "$REPORT_ROOT/dino/stage2-shortlist.json")
+for identifier in "${dino_ids[@]}"; do test -f "$DINO_RUN_ROOT/overnight-stage2/$identifier/metrics.jsonl" && dino_refine_selector+=(--candidate "$identifier=$DINO_RUN_ROOT/overnight-stage2/$identifier/metrics.jsonl"); done
+"$DINO_PYTHON" "$SELECT" "${dino_refine_selector[@]}"
+while IFS= read -r identifier; do run_dino_final "$identifier" || echo "DINO finalist $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/dino/stage2-shortlist.json")
 
 if test -f "$DINO_RUN_ROOT/v1/best.pt" && ! test -f "$REPORT_ROOT/dino/real-only-v1-control.test.json"; then
   "$DINO_PYTHON" "$EVAL_DINO" --dataset "$DATA_ROOT/DINOv2_METRIC_V1" --source-root "$SOURCE_ROOT" --checkpoint "$DINO_RUN_ROOT/v1/best.pt" --hub-cache "$DINO_HUB_CACHE" --output "$REPORT_ROOT/dino/real-only-v1-control.test.json" --split test
@@ -121,8 +134,15 @@ run_rtdetr_screen() {
   read -r -a options <<< "$(rtdetr_options "$identifier")"
   "$RTDETR_PYTHON" "$RTDETR_SCREEN" --data-root "$DATA_ROOT" --pack 07_pid_valves_and_heat_exchangers --output "$output" --batch-size 8 --workers 4 --seed "$(rtdetr_seed "$identifier")" --skip-held-out-test "${options[@]}"
 }
-run_rtdetr_final() {
+run_rtdetr_refinement() {
   local identifier="$1" output="$RTDETR_ROOT/runs/overnight-stage2-$1"
+  test -f "$output/validation_only.json" && { echo "RT-DETR intermediate $identifier already exists."; return 0; }
+  echo "[$(date --iso-8601=seconds)] RT-DETR intermediate retrain $identifier"
+  read -r -a options <<< "$(rtdetr_options "$identifier" | sed 's/--epochs [0-9][0-9]*/--epochs 12/')"
+  "$RTDETR_PYTHON" "$RTDETR_SCREEN" --data-root "$DATA_ROOT" --pack 07_pid_valves_and_heat_exchangers --output "$output" --batch-size 8 --workers 4 --seed "$(rtdetr_seed "$identifier")" --skip-held-out-test "${options[@]}"
+}
+run_rtdetr_final() {
+  local identifier="$1" output="$RTDETR_ROOT/runs/overnight-stage3-$1"
   test -f "$output/held_out_test.json" && { echo "RT-DETR finalist $identifier already evaluated."; return 0; }
   echo "[$(date --iso-8601=seconds)] RT-DETR finalist $identifier"
   read -r -a options <<< "$(rtdetr_final_options "$identifier")"
@@ -131,14 +151,18 @@ run_rtdetr_final() {
 
 rtdetr_ids=(control-seed16 control-seed17 control-seed18 weight-low weight-high head-low head-high epoch-eight)
 for identifier in "${rtdetr_ids[@]}"; do run_rtdetr_screen "$identifier" || echo "RT-DETR screen $identifier failed; leave it out of the shortlist."; done
-rtdetr_selector=(--kind rtdetr --top-k 3 --output "$REPORT_ROOT/rtdetr/stage1-shortlist.json")
+rtdetr_selector=(--kind rtdetr --top-k 6 --output "$REPORT_ROOT/rtdetr/stage1-shortlist.json")
 for identifier in "${rtdetr_ids[@]}"; do test -f "$RTDETR_ROOT/runs/overnight-stage1-$identifier/best-val/best_validation.json" && rtdetr_selector+=(--candidate "$identifier=$RTDETR_ROOT/runs/overnight-stage1-$identifier/best-val/best_validation.json"); done
 "$DINO_PYTHON" "$SELECT" "${rtdetr_selector[@]}"
-while IFS= read -r identifier; do run_rtdetr_final "$identifier" || echo "RT-DETR finalist $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/rtdetr/stage1-shortlist.json")
+while IFS= read -r identifier; do run_rtdetr_refinement "$identifier" || echo "RT-DETR intermediate $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/rtdetr/stage1-shortlist.json")
+rtdetr_refine_selector=(--kind rtdetr --top-k 3 --output "$REPORT_ROOT/rtdetr/stage2-shortlist.json")
+for identifier in "${rtdetr_ids[@]}"; do test -f "$RTDETR_ROOT/runs/overnight-stage2-$identifier/best-val/best_validation.json" && rtdetr_refine_selector+=(--candidate "$identifier=$RTDETR_ROOT/runs/overnight-stage2-$identifier/best-val/best_validation.json"); done
+"$DINO_PYTHON" "$SELECT" "${rtdetr_refine_selector[@]}"
+while IFS= read -r identifier; do run_rtdetr_final "$identifier" || echo "RT-DETR finalist $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/rtdetr/stage2-shortlist.json")
 
 RT_BASELINE="$RTDETR_ROOT/runs/valve-control-rtdetr-r50vd-v3/held_out_test.json"
 rtdetr_rank=(--kind rtdetr --baseline "$RT_BASELINE" --output "$REPORT_ROOT/rtdetr/final-ranking.json")
-for identifier in "${rtdetr_ids[@]}"; do test -f "$RTDETR_ROOT/runs/overnight-stage2-$identifier/held_out_test.json" && rtdetr_rank+=(--candidate "$identifier=$RTDETR_ROOT/runs/overnight-stage2-$identifier/held_out_test.json"); done
+for identifier in "${rtdetr_ids[@]}"; do test -f "$RTDETR_ROOT/runs/overnight-stage3-$identifier/held_out_test.json" && rtdetr_rank+=(--candidate "$identifier=$RTDETR_ROOT/runs/overnight-stage3-$identifier/held_out_test.json"); done
 test -f "$RT_BASELINE" && "$DINO_PYTHON" "$RANK" "${rtdetr_rank[@]}"
 
 echo "[$(date --iso-8601=seconds)] bakeoff complete"

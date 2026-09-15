@@ -77,10 +77,10 @@ may compare pretraining diagnostics but cannot establish a production model.
 `scripts/run_overnight_mvp_bakeoff.sh` is a finite, predeclared **successive-
 halving** RunPod queue. It waits for the in-progress DINO synthetic-init
 experiment, then runs ten DINO and eight RT-DETR treatments through a short,
-validation-only screen. The script selects three finalists from each family,
-retrains those finalists at full length, and evaluates each selected checkpoint
-exactly once on its untouched test split. It never changes the dataset, class
-taxonomy, score threshold, or product.
+validation-only screen. It retains six candidates per family for an
+intermediate validation-only retrain, then retains three finalists per family
+for full training and one evaluation on each untouched test split. It never
+changes the dataset, class taxonomy, score threshold, or product.
 
 The broad screen deliberately cannot open test annotations or images. For
 RT-DETR the queue creates a checksum-recorded, validation-only copy of the
