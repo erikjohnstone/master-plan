@@ -1,5 +1,88 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane E
+first slice: a graph signature + reference primitive set per legend
+glyph, item 3 of Lane E's own four-item list ("Carry legend source
+bbox, caption, family candidates, graph signature, content signature,
+and reference primitive set").
+
+Audited before building, per GOAL.md's own standing rule 2: read
+`web/src/lib/legendlearn.ts` in full first. `findLegendGlyphs` already
+extracts real legend rows with caption, caption_bbox, rect, seedable,
+kind, aligned_rows, member_rects — mature, existing capability, not
+reimplemented. The goal document's own diagnosis names exactly what's
+missing on top of that: "there is no unified project-local reference
+bank carrying a legend glyph's vector graph ... into the shared
+matcher." New `web/src/lib/legendReferenceBank.ts` is that missing
+piece: `buildLegendReferenceBank(glyphs, idx, spatialIndex,
+attributes)` resolves the real primitives inside each glyph's own
+rect(s) via the Phase 2 spatial index, then reuses Phase 3 Lane D's
+own `computeBodySignature` (`candidateBodySignature.ts`) unchanged —
+never a second signature algorithm.
+
+`querySpatialIndex` is a broad phase by its own documentation (bbox
+overlap, not exact containment) — a neighboring caption's underline or
+an adjacent row's edge can graze a glyph's query rect without being
+that glyph's own ink. Added the exact-containment filter a broad phase
+always needs a caller to supply (a primitive's own bbox must be fully
+inside the glyph rect, not merely overlapping it), proven by a
+dedicated test (a line whose own bbox extends well past a small glyph
+rect is correctly excluded).
+
+`member_rects` (a disconnected multi-part glyph — legendlearn.ts's own
+existing concept for a glyph split across several visual pieces) union
+together rather than only querying the outer `rect`, so a real split
+glyph's primitives from every one of its own pieces are counted.
+
+Disclosed, not attempted: item 2 (clustering variant/near-duplicate
+rows into one family with several stored shapes — this slice is one
+entry per legend ROW, exactly as `findLegendGlyphs` found it); item 4
+(caption/tag/schedule schema narrowing); "content signature" (item 3's
+other half — Lane A's own deferred Form-XObject work is the natural
+source, not built yet); wiring this bank into `symbol_sweep`'s actual
+matcher (Phase 7's own integration item — this slice builds the bank,
+does not consume it anywhere).
+
+New `web/test/legendReferenceBank.test.ts` (5 tests, all passing on
+the first run): a glyph rect covering a real closed figure gets its
+primitives and a real signature; a primitive only grazing (not
+contained by) the rect is excluded; `member_rects` union correctly;
+input order and one-entry-per-glyph across multiple glyphs; an empty
+glyph list.
+
+Real end-to-end integration check (not just unit-level): ran the ACTUAL
+`findLegendGlyphs` against real `textSpans` on a real corpus sheet
+(Missoula #1) — 84 real legend glyphs found (RECTANGULAR DUCTWORK,
+ROUND DUCTWORK, VERTICAL TRANSITION, etc.), fed straight into the new
+bank: 84 bank entries, every one with a real resolved signature, 66
+flagged seedable (passthrough from `findLegendGlyphs`'s own judgment
+unchanged). 7ms for all 84. One real bug surfaced and fixed IN THE
+INTEGRATION SCRIPT, not in production code: `textSpans` returns
+`{str, ...}` while `findLegendGlyphs` expects `{text, ...}`
+(`LegendSpan`'s own field name) — passing the wrong shape crashed
+`mergeCaptionLines` on `cur.text.trimEnd()`. Confirmed by reading the
+stack trace that this was a mismatched call-site mapping in the
+scratch integration script, not a defect in `legendlearn.ts` or the
+new module, fixed the mapping, re-ran clean.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (5/5); confirmed the module loads cleanly from `mcp/` via
+tsx; real end-to-end integration above. Does not modify
+`legendlearn.ts`, `candidateBodySignature.ts`, `candidateBodyLaneD.ts`,
+`vectorSceneSpatialIndex.ts`, `vectorSceneIndex.ts`, or
+`vectorSceneRelations.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — a project-local legend
+reference bank is explicitly named shared-path material in Phase 7's
+own integration item, and this module lives in `web/src/lib`
+alongside every other VectorSceneIndex-family module.
+
+Not done: Lane E items 2 and 4, content signature, matcher wiring
+(above); Lane A remains the only fully unstarted lane now (B, C, D, E
+all have real, tested first slices). Phase 3's own gate certification
+remains blocked on Phase 1's corpus reaching 150+/12. Phases 4-8 have
+not been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane C
 first slice: no-leader tag/body adjacency (requirement 3 of Lane C's
 four — "Support no-leader adjacency as a separate evidence type" — the
