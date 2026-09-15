@@ -85,6 +85,32 @@ test("proposal fusion: ordering ranks more-voted proposals first, ties broken by
   assert.deepEqual(fused.map((f) => f.id), [0, 1]);
 });
 
+test("proposal fusion: a Lane A invocation exhaustively partitioned by TWO Lane B bodies fuses with only the BEST one — the other stays its own distinct proposal, never a duplicate", () => {
+  // real bug found on tinker-afb-iwcs-controls.pdf#13: one Form's own
+  // primitives split cleanly into two separate Lane B connected
+  // components (no junction between them, e.g. two disjoint rectangles
+  // in one Form) — the ORIGINAL fusion let BOTH bodies independently
+  // "win" a merge with the same Lane A invocation, producing two
+  // FusedProposals with byte-for-byte IDENTICAL primitiveIds.
+  const { fused } = fuseFor([
+    formBegin(ID), closedRect(0, 0, 10, 10), closedRect(100, 0, 10, 10), formEnd(),
+  ]);
+  // exactly 2 proposals: one ["A","B"] merge (best body) + one ["B"]-only
+  // (the other body) — never two identical ["A","B"] duplicates.
+  assert.equal(fused.length, 2, "one A+B merge and one B-only proposal, not a duplicated A+B pair");
+  const merged = fused.find((f) => f.votingLanes.length === 2)!;
+  const bOnly = fused.find((f) => f.votingLanes.length === 1)!;
+  assert.ok(merged && bOnly, "exactly one merged and one B-only proposal");
+  assert.equal(bOnly.votingLanes[0], "B");
+  assert.notDeepEqual(merged.primitiveIds.slice().sort(), bOnly.primitiveIds.slice().sort(), "the two proposals must never end up with the identical primitive set");
+  // the merged proposal's own primitiveIds still covers BOTH rectangles
+  // (Lane A's own full 8-primitive set, same as before this fix for the
+  // WINNING body) — only the DUPLICATE second copy is gone, not real
+  // information.
+  assert.equal(merged.primitiveIds.length, 8);
+  assert.equal(bOnly.primitiveIds.length, 4, "the losing body keeps its own real 4-primitive identity, not silently dropped");
+});
+
 test("proposal fusion: an empty sheet fuses to nothing", () => {
   const { fused } = fuseFor([]);
   assert.deepEqual(fused, []);

@@ -35,6 +35,32 @@
 // - Ablation records per lane (goal's own "record ablations for each
 //   lane") — this slice fuses and orders, it does not yet produce the
 //   ablation report that instruction calls for.
+//
+// REAL BUG FOUND AND FIXED (Phase 4 real-sheet validation, tinker-afb-
+// iwcs-controls.pdf#13): when ONE Lane A invocation's own primitive set
+// is EXHAUSTIVELY PARTITIONED by SEVERAL Lane B bodies (the real,
+// structurally-common pattern PROGRESS.md's own Phase 4 entry documents
+// — Lane B's own connected components falling entirely inside one
+// Form), the ORIGINAL version of this function iterated Lane B bodies
+// independently and let EACH one separately "win" a merge with the SAME
+// Lane A invocation — since Lane A's own set is a strict superset of
+// any one matching Lane B body, EVERY such merge produced the identical
+// union (= Lane A's own full set), so two (or more) DISTINCT
+// FusedProposals ended up with byte-for-byte IDENTICAL primitiveIds,
+// contested against EACH OTHER for no real reason — confirmed on real
+// data: tinker-afb-iwcs-controls.pdf#13 produced exactly this shape (two
+// proposals, ids 0 and 1, both `votingLanes: ["A","B"]`, both the exact
+// same 8 primitives), and `ownershipEligibility.ts`'s own signals could
+// never break that self-tie because there was nothing REAL to
+// distinguish — one proposal was a pointless duplicate of the other.
+//
+// FIX: Lane B bodies matching a Lane A invocation above threshold are
+// now collected FIRST, grouped by invocation; only the single BEST
+// match (highest Jaccard, ties broken by lowest Lane B body id for
+// determinism) is fused into the ["A","B"] proposal. Every OTHER Lane B
+// body that also matched the same invocation becomes its own
+// independent `["B"]`-only proposal — real, distinct Lane B evidence,
+// never silently dropped and never duplicated.
 import type { CandidateBody } from "./candidateBodyLaneB.ts";
 import type { FormInvocationSignature } from "./candidateBodyLaneA.ts";
 
@@ -117,6 +143,15 @@ export function fuseProposals(
   const fused: FusedProposal[] = [];
   let nextId = 0;
 
+  // PASS 1: for every Lane B body, find its own best Lane A match (if
+  // any clears the threshold) — collected, not yet committed. See the
+  // module header's own REAL BUG FOUND AND FIXED note for why this is
+  // now a two-pass design: committing a merge immediately, body by
+  // body, let several bodies independently "win" the SAME Lane A
+  // invocation and each receive an identical duplicate proposal.
+  interface Match { body: CandidateBody; entry: (typeof laneASets)[number]; score: number; }
+  const matchesByInvocation = new Map<number, Match[]>();
+  const unmatchedBodies: CandidateBody[] = [];
   for (const body of laneBBodies) {
     const bodySet = new Set(body.primitiveIds);
     const candidates = new Map<number, typeof laneASets[number]>();
@@ -131,24 +166,49 @@ export function fuseProposals(
     }
 
     if (bestMatch && bestScore >= threshold) {
-      usedLaneA.add(bestMatch.inv.invocationId);
-      const unionIds = [...new Set([...body.primitiveIds, ...bestMatch.inv.primitiveIds])].sort((a, b) => a - b);
-      const { x0, y0, x1, y1 } = bbox(idx, unionIds);
-      fused.push({
-        id: nextId++, primitiveIds: unionIds, x0, y0, x1, y1,
-        votingLanes: ["A", "B"],
-        evidence: {
-          laneB: { bodyId: body.id, primitiveCount: body.primitiveIds.length },
-          laneA: { invocationId: bestMatch.inv.invocationId, depth: bestMatch.inv.depth, hasSignature: !!bestMatch.inv.signature },
-        },
-      });
+      let arr = matchesByInvocation.get(bestMatch.inv.invocationId);
+      if (!arr) { arr = []; matchesByInvocation.set(bestMatch.inv.invocationId, arr); }
+      arr.push({ body, entry: bestMatch, score: bestScore });
     } else {
+      unmatchedBodies.push(body);
+    }
+  }
+
+  // PASS 2: for each Lane A invocation with 1+ matching Lane B bodies,
+  // merge with exactly the BEST one (highest Jaccard; ties broken by
+  // lowest Lane B body id, for a deterministic, reproducible choice).
+  // Every OTHER matching body becomes its own independent Lane-B-only
+  // proposal — real, distinct evidence, never silently dropped, never
+  // duplicated.
+  for (const [invocationId, matches] of matchesByInvocation) {
+    matches.sort((a, b) => b.score - a.score || a.body.id - b.body.id);
+    const [best, ...rest] = matches;
+    usedLaneA.add(invocationId);
+    const unionIds = [...new Set([...best.body.primitiveIds, ...best.entry.inv.primitiveIds])].sort((a, b) => a - b);
+    const { x0, y0, x1, y1 } = bbox(idx, unionIds);
+    fused.push({
+      id: nextId++, primitiveIds: unionIds, x0, y0, x1, y1,
+      votingLanes: ["A", "B"],
+      evidence: {
+        laneB: { bodyId: best.body.id, primitiveCount: best.body.primitiveIds.length },
+        laneA: { invocationId, depth: best.entry.inv.depth, hasSignature: !!best.entry.inv.signature },
+      },
+    });
+    for (const m of rest) {
       fused.push({
-        id: nextId++, primitiveIds: body.primitiveIds.slice(), x0: body.x0, y0: body.y0, x1: body.x1, y1: body.y1,
+        id: nextId++, primitiveIds: m.body.primitiveIds.slice(), x0: m.body.x0, y0: m.body.y0, x1: m.body.x1, y1: m.body.y1,
         votingLanes: ["B"],
-        evidence: { laneB: { bodyId: body.id, primitiveCount: body.primitiveIds.length } },
+        evidence: { laneB: { bodyId: m.body.id, primitiveCount: m.body.primitiveIds.length } },
       });
     }
+  }
+
+  for (const body of unmatchedBodies) {
+    fused.push({
+      id: nextId++, primitiveIds: body.primitiveIds.slice(), x0: body.x0, y0: body.y0, x1: body.x1, y1: body.y1,
+      votingLanes: ["B"],
+      evidence: { laneB: { bodyId: body.id, primitiveCount: body.primitiveIds.length } },
+    });
   }
 
   // Lane A invocations no Lane B body claimed — still a real proposal,

@@ -1,5 +1,68 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — closing the
+last disclosed gap from this session's own investigative chain: fixed a
+real bug in `candidateProposalFusion.ts` (Phase 3's own proposal-fusion
+module) responsible for the "duplicate proposal" edge case flagged two
+entries back and left uninvestigated at the time.
+
+ROOT CAUSE, found by direct inspection of tinker-afb-iwcs-controls
+.pdf#13's own cluster 0: one Lane A invocation's 8-primitive set was
+EXHAUSTIVELY PARTITIONED by exactly two Lane B bodies (4 primitives
+each — the same structurally-common pattern the earlier structural-
+finding entry documents, just at n=2 instead of n=3 or n=259). The
+ORIGINAL `fuseProposals` iterated Lane B bodies independently and
+committed a merge immediately for each one; since Lane A's own set is
+a strict superset of EITHER matching body, BOTH bodies independently
+computed the identical union (= Lane A's own full 8), producing TWO
+DISTINCT FusedProposals with byte-for-byte IDENTICAL primitiveIds,
+contested against each other for zero real reason —
+`ownershipEligibility.ts`'s own signals could never break that tie
+because there was nothing real to distinguish.
+
+FIX: restructured into two passes. Pass 1 collects every Lane B body's
+own best Lane A match (if it clears the Jaccard threshold) without
+committing. Pass 2 groups these by invocation; only the single BEST
+match (highest Jaccard, ties broken by lowest Lane B body id for
+determinism) is merged into the `["A","B"]` proposal — every OTHER
+Lane B body that also matched the same invocation becomes its own
+independent `["B"]`-only proposal, real and distinct, never silently
+dropped and never duplicated.
+
+New test in `web/test/candidateProposalFusion.test.ts` (now 7): one
+Form containing two disjoint rectangles (two separate Lane B
+components, each Jaccard-tied with the same Lane A invocation at
+exactly the 0.5 threshold) now fuses into exactly 2 proposals — one
+`["A","B"]` merge (8 primitives) and one `["B"]`-only (4 primitives,
+the losing body's own real identity preserved) — asserted to never be
+identical sets. All 6 pre-existing tests pass unchanged (none exercised
+the multi-match case before — confirmed a genuine prior gap, not a
+regression this fix introduced).
+
+REAL-SHEET VALIDATION: re-ran the full pipeline on both anchor sheets
+with an explicit duplicate-set check across every real cluster.
+`duplicateProposalSetFound: false` on both. On tinker-afb-iwcs-
+controls.pdf#13 specifically: the cluster's own ambiguous count
+dropped further, from 8 to 4 — the 4 primitives ONLY the winning
+(merged) proposal claims are now correctly recognized as EXCLUSIVE to
+it (direct membership, zero ambiguity, not even scored), leaving just
+the 4 primitives both proposals' own sets genuinely share as the real,
+remaining contested dispute. Cherry Point #12's own numbers are
+UNCHANGED by this fix (12 assigned, 48 ambiguous, 120 total scores,
+identical to the prior entry) — confirmed its own real clusters never
+hit this specific multi-match pattern, so nothing there needed fixing.
+
+Verification: `npx tsc --noEmit` clean; new test passes, all 6 prior
+fusion tests pass unchanged (7/7 total); full downstream test surface
+re-run (`ownershipConflicts.test.ts` 6/6, `ownershipEligibility
+.test.ts` 7/7, `ownershipAssignment.test.ts` 5/5, `ownershipBody
+.test.ts` 3/3, `candidateBodyLaneA.test.ts` 8/8, `candidateBodyLaneB
+.test.ts` 8/8 — 37 tests, zero needed a single assertion changed); mcp
+import parity confirmed; real-sheet checks above (with an explicit
+duplicate-set check, not just aggregate counts). Does not modify
+`ownershipEligibility.ts`, `ownershipAssignment.ts`, `ownershipBody
+.ts`, `candidateBodyLaneA.ts`, or `candidateBodyLaneB.ts`.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — wired
 `formPlausibility.ts` into `scoreContestedPrimitives`'s own combined
 score as a 4th signal, `formPlausibilityAgreement`. This is the payoff
