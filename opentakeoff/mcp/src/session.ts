@@ -337,6 +337,9 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // state at all — retrofitting a lazy per-sheet cache INTO that pure
 // function would be a much larger, riskier change than this one).
 import { buildVectorSceneIndex, type VectorSceneIndex } from "../../web/src/lib/vectorSceneIndex.ts";
+import { buildSpatialIndex, type SpatialIndex } from "../../web/src/lib/vectorSceneSpatialIndex.ts";
+import { sweepMatchToEvidenceBody } from "../../web/src/lib/sweepMatchEvidenceBody.ts";
+import type { EvidenceBodyLike } from "../../web/src/lib/evidenceGraph.ts";
 // Accuracy plan Phase 2 — on an unlayered/weakly-layered sheet, a layer-role
 // exclusion alone can't tell architectural wall ink apart from real MEP
 // linework (there's no layer to exclude by). networkWallSegs is
@@ -3719,6 +3722,25 @@ export class Session {
     /** Shared affine recognition. Omitted means AFFINE_WIRE_DEFAULT; an
      * explicit { enabled:false } retains rigid-only behavior for diagnosis. */
     affine?: SweepOptions["affine"];
+    /** Phase 6/7 — also derive a real, geometrically-accurate
+     * EvidenceBodyLike per accepted match (evidenceGraph.ts's own input
+     * shape), via sweepMatchEvidenceBody.ts's already-validated converter.
+     * Opt-in and additive: omitted (default), every existing caller's wire
+     * response is byte-identical to today. See PROGRESS.md for the real
+     * measured validation of this converter (Cherry Point CD-1, real
+     * ground truth, microF1 0.7359) — this flag is the first real wiring
+     * of that converter into a live call path, not yet the full
+     * buildSheetEvidenceGraph/classifyInstalledEvidence run.
+     * NOT YET reachable through the MCP `sweep_schedule_row` tool or the
+     * browser Agent tool — tools.ts's own inputSchema has no wire field
+     * for this yet, and outputs.ts's `sweepScheduleRowOutput` has no
+     * `evidence_bodies` field, so a real MCP/canvas caller cannot request
+     * or see this today. Reachable only via a direct
+     * `Session.sweepScheduleRow(tag, { includeEvidenceBodies: true })`
+     * call (internal server-side code, or a test) until that wire is
+     * added — a real, disclosed, separate next step, not attempted here
+     * to keep this slice's own scope to the Session-level mechanism. */
+    includeEvidenceBodies?: boolean;
   } = {}) {
     let tRaw = (tag || "").trim().toUpperCase();
     let t = tRaw.replace(/\s+/g, "");
@@ -5324,6 +5346,33 @@ export class Session {
       }
     }
 
+    // Phase 6/7 — opt-in: derive a real EvidenceBodyLike per accepted
+    // match, from THIS row's own final, fully-escalated matches (every
+    // dedup/multiplier pass above has already run), not a bare
+    // matchSymbol call — PROGRESS.md's own measurement found a flat call
+    // misses several hard real instances this row's anchor/corroboration
+    // escalation above already recovers. `anchorRect` is the same seed
+    // rect already carried through this whole function (used at the
+    // citation below); every match here came from a fingerprint built
+    // against it, so it is the correct seed for every one of them.
+    let evidenceBodies: EvidenceBodyLike[] | undefined;
+    if (opts.includeEvidenceBodies && anchorRect) {
+      const seedRect = { x0: anchorRect[0][0], y0: anchorRect[0][1], x1: anchorRect[1][0], y1: anchorRect[1][1] };
+      const spatialIndexBySheet = new Map<string, SpatialIndex>();
+      evidenceBodies = [];
+      let bodyId = 0;
+      for (const ps of perSheet) {
+        const vsIdx = await this.vectorSceneIndexFor(ps.state.key);
+        if (!vsIdx) continue;
+        let spIdx = spatialIndexBySheet.get(ps.state.key);
+        if (!spIdx) { spIdx = buildSpatialIndex(vsIdx); spatialIndexBySheet.set(ps.state.key, spIdx); }
+        for (const match of ps.matches) {
+          const body = sweepMatchToEvidenceBody(bodyId, match, seedRect, vsIdx, spIdx);
+          if (body) { evidenceBodies.push(body); bodyId++; }
+        }
+      }
+    }
+
     // 5. commit — condition minted FROM the row (its key IS the tag), the
     // schedule verdict and the seed citation on every marker, one undo step
     const found = perSheet.reduce((n, p) =>
@@ -5498,6 +5547,7 @@ export class Session {
       ...(committed ?? {}),
       ...(notes.length ? { note: notes.join(" ") } : {}),
       ...(capped.length ? { warning: `Work cap: candidate placements were dropped un-scored on ${capped.map((p) => p.state.key).join(", ")} — sweep those sheets singly with symbol_sweep and reconcile the counts.` } : {}),
+      ...(evidenceBodies ? { evidenceBodies } : {}),
     };
   }
 

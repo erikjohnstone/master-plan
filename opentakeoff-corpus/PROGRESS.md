@@ -1,5 +1,63 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6/7 — wired
+`sweepMatchEvidenceBody.ts`'s converter into `Session.sweepScheduleRow`
+itself, the real first live call-path integration (two entries below
+built and validated the converter standalone; this slice is the actual
+wiring).
+
+CHANGE, additive, opt-in (`session.ts`): new `includeEvidenceBodies?:
+boolean` option, default omitted. When true, right after `sweepScheduleRow`'s
+own final match list is fully settled — after EVERY dedup/multiplier
+pass, before the commit stage (verified exact hook point via a
+dedicated read-only audit first, not guessed) — each sheet's own
+already-cached `VectorSceneIndex` (`vectorSceneIndexFor`) plus a freshly
+built `SpatialIndex` converts every real `CountedMatch` (a `SweepMatch`
+superset, `at`/`rotation`/`transform` untouched at this point) through
+the converter, using the SAME `anchorRect` every match's own fingerprint
+was already built against. Result rides as a new `evidenceBodies` key
+on the return object, via the same `...(x ? {x} : {})` conditional-spread
+convention already used for `note`/`warning` — omitted entirely (not an
+empty array) when the flag is off, so every existing caller's wire
+value is byte-identical to before this change.
+
+VALIDATED: `tsc` clean (mcp + web). Full relevant regression net run
+before commit — `session.test.ts` 22/22 (1 new: `includeEvidenceBodies`
+omitted keeps the field absent AND `found` unchanged; `true` produces a
+real, non-degenerate, uniquely-ID'd body per real marker on the SAME
+`symbol-set.pdf` fixture tools.test.ts's own T1 tests already use — a
+real corpus attempt was tried first and hit a real, pre-existing,
+unrelated ambiguity, disclosed below, not worked around by relaxing the
+test), `tools.test.ts` 101/101, `conformance.test.ts` 18/19 + `symbolSweepAffineParity.test.ts`
+3/3 (the 1 conformance failure — a `SMOKEY MOUNTAIN AC-18` schedule
+lookup — directly confirmed PRE-EXISTING via `git stash`/re-run on the
+unmodified baseline, nothing to do with this change), plus
+`reconcileWorkflow.test.mjs`/`rowsymBessemer.regression.test.mjs` (real,
+long-running — see next entry for the result once the background
+worker completes; a genuine wait, not a guessed pass, per this
+project's own repeated lesson about trusting a "completed" notification
+over the real worker).
+
+DISCLOSED, NOT YET DONE: NOT reachable through the actual MCP
+`sweep_schedule_row` tool or the browser Agent tool yet — `tools.ts`'s
+`inputSchema` has no wire field for this flag, and `outputs.ts`'s
+`sweepScheduleRowOutput` has no `evidence_bodies` field, so a real
+MCP/canvas caller cannot request or see this today; reachable only via
+a direct `Session.sweepScheduleRow` call (internal code or a test).
+Also disclosed: a real, live attempt to validate this end-to-end against
+Cherry Point CD-1 (the real corpus case used throughout this converter's
+own validation) hit a real, pre-existing, unrelated finding — the tag
+"CD-1" is genuinely defined across 3 separate real schedule tables in
+that project, and `sweepScheduleRow` correctly REFUSES rather than
+guess which one (existing, intentional safety behavior, not a bug this
+slice introduced or needs to fix) — `preferSheet` alone does not
+disambiguate a same-sheet multi-table collision; `preferTitle` would,
+but finding the real table titles hit an unrelated `sheetGraph()` call
+that timed out in a quick script, not pursued further given the
+controlled-fixture test above already gives real, honest coverage of
+the mechanism itself. Still not attempted anywhere: actually running
+`buildSheetEvidenceGraph`/`classifyInstalledEvidence` with these bodies.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6/7 — old-engine
 adapter follow-up: re-measured with the REAL production `matchSymbol`
 options, refining (not replacing) the entry directly below. The prior

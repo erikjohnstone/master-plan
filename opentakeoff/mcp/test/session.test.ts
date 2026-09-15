@@ -492,6 +492,37 @@ test("symbol_sweep: a withheld row held for a reason unrelated to score (an out-
   assert.match(w.reason, /stretch/);
 });
 
+// GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6/7 — the opt-in
+// `includeEvidenceBodies` field on sweepScheduleRow. Uses the SAME
+// SYMSET fixture tools.test.ts's own T1 tests use (5 real tagged
+// markers on plan sheets), not the real corpus (a real Cherry Point
+// document was tried directly and hit a real, pre-existing, unrelated
+// ambiguity — the same schedule key defined across 3 real tables —
+// exactly the kind of case this fixture avoids by design).
+test("sweep_schedule_row includeEvidenceBodies: omitted keeps the wire byte-identical to today; true adds real, geometrically-sane bodies", async () => {
+  const SYMSET = fileURLToPath(new URL("./fixtures/symbol-set.pdf", import.meta.url));
+  const s = new Session();
+  await s.loadPlan(SYMSET);
+
+  const without = await s.sweepScheduleRow("T1") as { found: number; evidenceBodies?: unknown };
+  assert.equal(without.evidenceBodies, undefined, "omitted flag: no evidenceBodies field at all, not an empty array");
+
+  const with_ = await s.sweepScheduleRow("T1", { includeEvidenceBodies: true }) as {
+    found: number;
+    evidenceBodies?: Array<{ id: number; primitiveIds: number[]; x0: number; y0: number; x1: number; y1: number }>;
+  };
+  assert.equal(with_.found, without.found, "the flag must not change the row's own counted/decision logic");
+  assert.ok(Array.isArray(with_.evidenceBodies), "true: evidenceBodies is a real array");
+  assert.ok(with_.evidenceBodies!.length > 0, "the fixture's real markers must produce at least one real body");
+  for (const b of with_.evidenceBodies!) {
+    assert.ok(b.primitiveIds.length > 0, "a body is never empty ink");
+    assert.ok(b.x1 > b.x0 && b.y1 > b.y0, "a body's bbox is a real, non-degenerate rectangle");
+    assert.deepEqual(b.primitiveIds, [...b.primitiveIds].sort((a, c) => a - c), "primitiveIds are ascending, matching every other body-shaped module's convention");
+  }
+  const ids = with_.evidenceBodies!.map((b) => b.id);
+  assert.equal(new Set(ids).size, ids.length, "every body's id is unique within this row's own result");
+});
+
 // Real, found live: this file (and, checked directly, every other MCP test
 // file — none of them call this) never tears down the persistent Python
 // vectorgrid sidecar a real Session.loadPlan/graph build starts. Same shape
