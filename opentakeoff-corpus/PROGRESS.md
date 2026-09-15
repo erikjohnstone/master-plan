@@ -1,5 +1,66 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — strategic pivot
+to the baseline/extended 47-case backlog, and a large batch of v2 annotation
+landed: 11 -> 43 of 47 cases now carry full v2 depth.
+
+After five consecutive corpus-expansion sourcing attempts this checkpoint
+(P1/P2, HOA, document 037, document 011, document 020) were reverted or
+stalled before landing a new case — each for a real, structural reason, not
+a fixable mistake — the honest read is that hunting new documents from the
+bulk corpus is currently the highest-risk, lowest-throughput way to make
+Phase 1 progress. Phase 1 item 2 ("review and annotate every failure/edge
+case in the 47-case set") was itself still far from done: only 11 of 47
+cases (the ones with a disclosed manifest override) had been taken to v2
+depth; the other 36 -- entirely real, already-verified, already-passing
+cases from the original baseline/extended campaigns -- had zero v2
+annotation. Formalizing already-correct ground truth into v2 fields carries
+none of the "wrong assumption about a new document" risk that burned the
+last five attempts, so this pass switched to that backlog instead.
+
+Landed this pass, each following the same discipline used for the original
+11 (fingerprintSymbol-computed body_bbox via `annotate-case-bboxes.mjs`,
+cross-checked against every case's own existing review notes, verified
+through the real `symbol-sweep-corpus.mjs --report-v2-fields` runner
+afterward, never assumed): cases 03, 07, 08, 09, 12, 13, 15, 16, 17, 19, 20,
+21, 22, 24, 25, 28, 30, 31, 32, 34, 35, 36, 37, 38, 40, 42, 44 -- 27 cases,
+covering families from simple two-instance pump/valve pairs up through
+dense multi-instance BAS point-callout and condensing-unit banks.
+
+Two genuine, disclosed limitations found and handled the same way this
+checkpoint has handled every other one -- honestly, not papered over:
+
+- **Real contamination from adjacent, same-sheet BAS point-bubble grids**
+  (cases 22, 38, 44): a same-size rect translated from the seed's own
+  position to an instance's position sometimes sweeps in part of a
+  neighboring numbered I/O bubble grid that the seed's own position happens
+  to sit clear of. Confirmed by direct render for one instance in each case
+  (segment counts inflated 14-560% over the seed's own). Per this corpus's
+  existing standard (case 05's d10-05, case 18's pressbox-fcu5-11): body_bbox
+  left unset for the affected instances rather than shipped padded with
+  neighboring geometry, with the finding disclosed in each case's own
+  review notes.
+- **Real overlap from tight vertical stacking** (case 39): seven BAS
+  point-callout capsules stacked at ~77px spacing with a 100px-tall
+  seed_rect means any same-size rect reaches into the next capsule.
+  All six non-seed instances confirmed identically contaminated (85
+  segments vs the seed's own 66) -- body_bbox left unset for all six,
+  disclosed in the review notes, `at`/tag_bbox unaffected.
+
+Remaining: 4 large cases still need v2 depth --
+`43-carson-m601-vlc853e-controller-modules` (26 instances),
+`45-slac-m63-analog-input-callouts` (16 instances),
+`46-usda-m701-primary-circulation-pumps` (7 instances), and
+`47-nist-m801-airflow-diagram-fans` (11 instances) -- 60 more instances
+total. Real next step for the next pass, not a new document search.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Every change this pass is additive
+v2 ground-truth metadata (family/association_type/transform_family/
+countable/reference_source/body_bbox) on already-existing, already-passing
+cases -- no v1 field touched, no `web/src/lib` or `mcp/src` production code
+changed. Verified via direct JSON diff and the real corpus runner, not
+assumed additive.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — document 020
 (Missouri Highway Patrol Troop C HVAC upgrade) scouted via a background
 reconnaissance agent and independently spot-checked; not yet a case,
