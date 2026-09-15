@@ -1,5 +1,44 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — full-corpus
+page-1 sweep using the now-fixed inspect-ownership-clusters.mjs (see the
+entry below for the incomplete-state fix this run relies on). Ran page
+1 of the remaining 32 documents not yet individually checked this
+checkpoint, completing coverage of effectively the WHOLE 39-document
+benchmark corpus (only part02 of the split 31__vol2__037 document was
+not separately run; part01 was) — well past goal §11's own "at least 12
+development/validation projects" bar for this gate.
+
+Result: Phase 4's own core gate — no primitive can support two accepted
+physical instances — HOLDS on every one of the 32 pages, zero double-
+claims anywhere. Two more real incomplete/truncated pages found and
+correctly flagged this time (proving the incomplete-state fix below
+generalizes, not a one-off patch for the single page that found it):
+31__vol2__037 part01 (real segment count 670195, 2.7x the 250000 cap)
+and 33__vol2__010__WWYK240146_Monitoring_Control (real segment count
+2199678, nearly 8.8x the cap — the single densest real sheet measured
+this checkpoint). Both honestly reported as incomplete rather than a
+silent partial pass.
+
+Real spread of outcomes across the 32 pages, not cherry-picked: about
+half show zero ownership clusters at all (no Form-XObject/Lane-B
+overlap contention on that sheet); several resolve 100% with zero
+ambiguous (Lovell Federal, IL VA Sterile Processing, Klamath CC — the
+last at 7042/7042 contested primitives); several show a real, nonzero
+ambiguous count consistent with genuine abstention rather than forced
+guessing (ITD District 1: 4/1208; SLAC: 14/4065; ITD District 2:
+4/1209; Syracuse VA: 48/9700; MO_T2523 Boilers: 24/23130 across 13
+separate clusters — the most clusters found on any single real sheet
+this checkpoint; Bruneau Maintenance Shed: 2/1227). No anomaly, no gate
+violation, no unexplained outcome found on any of the 32.
+
+Combined with the 7 documents individually investigated in the entries
+below (Cherry Point, Norfolk, Colville, Vermillion, Albany, Missoula,
+NIST Gaithersburg), this checkpoint has now run Phase 4's own ownership-
+assignment code against effectively every real document in the
+benchmark corpus at least once, not a curated sample — the gate holds
+on all of it.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 requirement 6
 — real self-caught gap in the diagnostic script the entry below built:
 running it against 6 MORE independent real documents (Vermillion County
