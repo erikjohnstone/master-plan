@@ -1,5 +1,48 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+document 037's "richer/poorer look-alike variant" lead, definitively
+closed (not just deferred this time). Re-scouted fresh: the LT/KT OFFICE
+room (GE101J, page 28) does contain a real "nested double-square"
+variant next to the single-square-with-sprinkler-mark family already
+characterized (and reverted) earlier this checkpoint. Applying this
+checkpoint's own hardest-won lesson from the start -- inspect the seed's
+actual `fp.rel` segments before trusting any visual read -- a tight rect
+around just the nested square returned exactly 4 segments: a plain
+72x72px rectangle outline, with NO diagonal or distinguishing ink at all
+once the shared background ceiling-grid pattern is (correctly) excluded.
+
+Ran it through `Session.symbolSweep` directly rather than guessing from
+the segment count alone (the standing rule from this checkpoint's very
+first reverted attempts): 164 raw "found" matches and 862 withheld
+candidates on this one sheet. A plain rectangle is exactly as
+undistinguished on this densely-gridded reflected ceiling plan as the
+HOA switch-box's plain rectangle was on document 010's schematic --
+matching essentially every regular ceiling-tile corner on the page.
+Same failure mode, same conclusion: not a viable symbol_sweep seed,
+full stop. This closes one of the two remaining leads named in the
+entry below as "the real next step, not a new document gamble" --
+concretely and for good, not left dangling for a third look.
+
+Remaining open lead: document 049's rotated valve (visually confirmed
+real, failed real verification once at the seed's original precision --
+see the entry further below for the original finding). Not re-attempted
+this pass. Real next step for Phase 1 item 3, in order: (1) retry
+document 049 with a more surgical seed rect isolating just the
+invariant "bowtie" core, since the original attempt's own withheld
+scores (0.79-0.81) were close enough to the 92% bar that a tighter,
+connector/hatch-avoiding rect (the same fix that worked for document
+011's SD-3 flex-connector problem) might clear it; (2) if that also
+fails, genuinely fresh document sourcing is the only remaining path to
+Phase 1 item 3's 150+/12-document gate, and should apply every lesson
+on this page from the very first raw-match list (tag-family collisions,
+fp.rel inspection, text-layer availability) rather than rediscovering
+them per document.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Reconnaissance and verification
+only -- no cases.json change (nothing was ever drafted into a case this
+pass), no production code touched.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 2 — COMPLETE:
 all 47 baseline/extended cases now carry full v2 depth (family,
 association_type, transform_family, countable, reference_source,
