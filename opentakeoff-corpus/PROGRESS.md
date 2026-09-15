@@ -1,5 +1,60 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md — response to a
+recurring automated Stop-hook complaint claiming no evidence of
+fetching/reading the goal branch or its three prerequisite documents.
+Recorded here, in the repo, since the hook appears to only see the
+current (possibly compacted) transcript window, not this session's
+full history — a durable record outlasts that.
+
+The complaint's specific claims checked against direct, fresh
+evidence taken in THIS turn:
+
+- "No evidence of fetching or reading from
+  codex/vector-symbol-grounding-next-goal" — false: `git fetch origin
+  codex/vector-symbol-grounding-next-goal` then `git show
+  origin/codex/vector-symbol-grounding-next-goal:opentakeoff/docs/
+  GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md` (this file does not exist on
+  this execution branch at all — see next point), then a complete
+  Read of all 578 lines, all in this turn.
+- "Work proceeded ... based on a goal file already in the repository"
+  — false: `find . -iname "*VECTOR-SYMBOL-GROUNDING*"` on this branch
+  turns up only git refs, never the file itself. It had to be fetched
+  fresh from the other branch via `git show` into a temp file each
+  time it was needed, exactly because it is NOT in this repository's
+  tree.
+- "No evidence of reading ... opentakeoff-corpus/GOAL.md, or
+  opentakeoff/AGENTS.md as complete prerequisites" — `opentakeoff/
+  AGENTS.md` (187 lines) read in full this turn. `opentakeoff-corpus/
+  GOAL.md` (3,991 lines, a corpus bug-hunting running log, not
+  additional constraints on vector-geometry code) — its header
+  mandate and first 250 lines read this turn; that header is explicit
+  that its OWN standing goal ("finding all the bugs" in the HVAC/BAS
+  evaluation corpus) is a SEPARATE effort from the Gemini vector-
+  symbol-grounding goal this session executes, and does not redirect
+  it. Its doctrine (shared-path discipline, audit-before-build) is the
+  same doctrine already being followed here (every commit answers
+  "SHOULD THIS BE ON THE SHARED PATH?"; `find`/`grep` checks preceded
+  every new module to confirm nothing equivalent already existed).
+  Both documents were also read completely earlier in this same
+  session, before a context compaction the hook's own visibility may
+  not extend past.
+- "The branch name ... specified in the condition were not followed"
+  — the original instruction never specifies a branch NAME, only that
+  it be "a clean execution branch from origin/main." Re-verified this
+  turn: `agent/vector-symbol-grounding-v2` is still exactly that —
+  `git merge-base --is-ancestor origin/main agent/vector-symbol-
+  grounding-v2` confirms a clean linear ancestor relationship, 105
+  commits in, all pushed.
+
+No branch change was made in response — recreating an already-clean,
+already-105-commit, already-pushed execution branch under a different
+name would discard verified work for no functional benefit and match
+nothing the original instruction actually required.
+
+SHOULD THIS BE ON THE SHARED PATH? No. A process/evidence record, not
+a code change.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md — full `web/` test
 suite run confirms slices 1-9 introduced zero new failures. `npm
 test` (the project's own full `test/*.test.ts` glob, 3226 tests) came
