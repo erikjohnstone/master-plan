@@ -16,9 +16,19 @@ all plan-role pages in the file (`scope: "set"`). A case records:
 
 The first 30 cases are the one-case-per-document baseline. Cases carrying
 `"campaign": "extended"` deliberately exercise additional, different symbol
-families on those same source documents. The expanded campaign is cumulative:
-new discoveries never replace the baseline and every fix must keep all prior
-cases passing.
+families on those same 30 source documents. Cases carrying
+`"campaign": "corpus-expansion"` are the GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md
+Phase 1 "150+ instances across 12+ documents" requirement: real symbol
+families sourced from documents that are NOT among the original 30 (drawn
+from the wider `opentakeoff-corpus/bulk/` release-asset pool), specifically
+chosen to cover strata (dense grids, no-leader adjacency, multi-bend leaders,
+rotated/mirrored/stretched instances, look-alikes, unlabelled negatives,
+etc.) the original 30-document baseline was already shown to have zero real
+examples of. Both expanded campaigns are cumulative: new discoveries never
+replace the baseline and every fix must keep all prior cases passing. A
+handful of Vol2 documents are deliberately frozen as holdout and never
+annotated for any campaign — see `opentakeoff-corpus/PROGRESS.md` for the
+current holdout list and the rationale for each pick.
 
 When a PDF has exploded its printed title-block text into raw vector paths,
 `sheet_number` remains the visually audited printed truth and the optional
