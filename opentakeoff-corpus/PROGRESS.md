@@ -1,5 +1,61 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — wired
+`carrierClassification.ts` into `scoreContestedPrimitives`'s own
+combined score, closing the "not yet wired in" gap disclosed in the
+carrier-classification entry just below. `EligibilityScore` gains a
+third field, `carrierAgreement` (0-1): for each contested primitive
+scored against a claiming proposal, `classifyCarrierPrimitives` is run
+against THAT proposal's own full `primitiveIds` (computed once per
+proposal, not once per contested primitive); a primitive flagged
+carrier-like WITHIN that specific proposal's own body — a within-body
+outlier relative to that proposal's own siblings — scores 0 (real
+negative evidence it doesn't belong with that proposal's other
+members); not flagged, including "not evaluable" (a single-subpath
+proposal has no sibling to judge by), scores 1, neutral-favorable
+rather than penalized for missing evidence. `score` is now the
+unweighted average of all three signals built so far, not two.
+
+New test in `web/test/ownershipEligibility.test.ts` (now 6 tests):
+constructs a contested primitive that is a dramatic length outlier
+among one proposal's own short siblings but the ONLY member of a
+rival proposal's own set (not evaluable there) — confirms
+`carrierAgreement` is 0 for the first proposal and 1 for the second,
+and that this alone (style and connectivity are tied 0.5/0 for both
+by construction in this fixture) is enough to make the second
+proposal's overall `score` higher.
+
+Real-sheet re-validation (Cherry Point #12): this is where the signal
+earns its keep. Every prior entry's own finding was that this sheet's
+5 real clusters have zero exclusive primitives, so all 3,356 scores
+came out identically tied (0.25) and 0 of 1,678 contested primitives
+were ever assigned. With the carrier signal wired in: 2 distinct score
+values now appear (0.167 and 0.5, replacing the single tied 0.25), and
+`resolveClusterOwnership` now confidently ASSIGNS 48 of the 1,678
+previously-all-ambiguous contested primitives (1,630 remain
+ambiguous) — a real, measurable, honestly partial improvement on the
+exact degenerate case the prior entries identified needed "a signal
+not built here." Not a full fix: 1,630 of 1,678 are still ambiguous on
+this sheet, consistent with a sheet whose clusters are dominated by
+comparable-length repeated content where the carrier outlier check
+has little to distinguish. No crash, no score outside [0,1], no
+`carrierAgreement` value besides 0/1, across all 3,356 real score
+computations. The 3 other corpus sheets checked have 0 ownership
+clusters at all on the pages tested (per the prior entries' own
+finding), so nothing new to validate there — confirmed no crash on
+those either.
+
+Verification: `npx tsc --noEmit` clean; every affected test file
+re-run (`ownershipEligibility.test.ts` 6/6, `ownershipAssignment
+.test.ts` 5/5, `ownershipBody.test.ts` 3/3, `carrierClassification
+.test.ts` 5/5, `ownershipConflicts.test.ts` 6/6 — none needed a single
+assertion changed, since all pre-existing tests use relative
+comparisons or state checks, never an exact `.score` value); confirmed
+`ownershipEligibility.ts` still loads cleanly from `mcp/` via tsx;
+real-sheet checks above. Does not modify `ownershipAssignment.ts`,
+`ownershipBody.ts`, `ownershipConflicts.ts`, or `carrierClassification
+.ts` itself.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2
 (partial, third of seven signals) — "carrier versus body classification."
 A CARRIER is the underlying utility run a symbol sits on or near (a

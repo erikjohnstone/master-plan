@@ -85,6 +85,31 @@ test("ownership eligibility: two proposals sharing zero primitives are both unco
   assert.deepEqual(uncontested.sort(), [0, 1]);
 });
 
+test("ownership eligibility: a contested primitive that reads as a carrier outlier WITHIN one proposal's own body scores lower carrier agreement for that proposal specifically", () => {
+  // proposal 0 claims two short siblings (subpaths ~10 units) PLUS the
+  // contested long one (1000 units) — within proposal 0's own set, the
+  // long one is a dramatic outlier (carrierClassification.ts's own
+  // sibling-median check), so it should score carrierAgreement 0 for
+  // proposal 0. Proposal 1 claims ONLY the contested primitive — a
+  // single-subpath set has no sibling to judge by, so it's "not
+  // evaluable" and scores the neutral-favorable carrierAgreement 1.
+  const fns = [OPS.moveTo, OPS.lineTo, OPS.moveTo, OPS.lineTo, OPS.moveTo, OPS.lineTo];
+  const args = [0, 0, 10, 0, 0, 2, 11, 2, 0, 4, 1000, 4];
+  const geo = extractVectorGeometry(opList([[OPS.constructPath, [fns, args]]]), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  const proposals = [proposal(0, [0, 1, 2]), proposal(1, [2])];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters } = detectOwnershipClusters(proposals);
+  assert.deepEqual(clusters[0].contestedPrimitiveIds, [2]);
+  const scores = scoreContestedPrimitives(clusters[0], proposalsById, idx, junctions);
+  const forP0 = scores.find((s) => s.proposalId === 0)!;
+  const forP1 = scores.find((s) => s.proposalId === 1)!;
+  assert.equal(forP0.carrierAgreement, 0, "primitive 2 is a dramatic outlier among proposal 0's own short siblings");
+  assert.equal(forP1.carrierAgreement, 1, "proposal 1 has no sibling subpath to judge by — not evaluable, scored neutral-favorable");
+  assert.ok(forP1.score > forP0.score, "the carrier signal should make proposal 1 the better overall fit here");
+});
+
 test("ownership eligibility: a cluster with an empty contestedPrimitiveIds array produces no scores at all, from scoreContestedPrimitives itself", () => {
   // Constructed directly (not via detectOwnershipClusters, which never emits
   // a cluster with zero contested primitives) so this test genuinely
