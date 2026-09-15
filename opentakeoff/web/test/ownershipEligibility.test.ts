@@ -197,6 +197,78 @@ test("ownership eligibility: a proposal with zero exclusive primitives has no do
   assert.equal(forP1.graphSignatureAgreement, 0.5, "proposal 1 owns nothing exclusively (its only primitive is the contested one itself) — no dominant orientation, not evaluable, neutral rather than penalized");
 });
 
+test("ownership eligibility: coverageAgreement scores near 1 for a proposal whose own full claim SUBSUMES a rival's own full claim, and correspondingly low for the subsumed rival -- the real Lane C shape (a tag-anchored region sweeping up an already-fragmented Lane B piece), needing no exclusive evidence at all", () => {
+  const geo = extractVectorGeometry(opList([
+    line(0, 0, 10, 0),   // primitive 0 -- proposal A's own extra ink
+    line(20, 0, 30, 0),  // primitive 1 -- CONTESTED, claimed by both A and B
+    line(40, 0, 50, 0),  // primitive 2 -- proposal A's own extra ink
+  ]), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  const proposals = [proposal(0, [0, 1, 2]), proposal(1, [1])];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters } = detectOwnershipClusters(proposals);
+  assert.deepEqual(clusters[0].contestedPrimitiveIds, [1]);
+  const scores = scoreContestedPrimitives(clusters[0], proposalsById, idx, junctions);
+  const forA = scores.find((s) => s.proposalId === 0)!;
+  const forB = scores.find((s) => s.proposalId === 1)!;
+  assert.equal(forA.coverageAgreement, 1, "proposal A's own full {0,1,2} set fully contains rival B's own full {1} set");
+  assert.ok(Math.abs(forB.coverageAgreement - 1 / 3) < 1e-9, "proposal B's own full {1} set covers only 1 of rival A's own 3 members");
+});
+
+test("ownership eligibility: coverageAgreement responds to REAL subsumption, not simply 'I am the bigger proposal' -- two EQUALLY large proposals score differently depending on whether they actually contain their own rival's full set", () => {
+  const geo = extractVectorGeometry(opList([
+    // pair 1: Big (10 members) fully subsumes Small1's own single primitive.
+    line(0, 0, 10, 0), line(20, 0, 30, 0), line(40, 0, 50, 0), line(60, 0, 70, 0), line(80, 0, 90, 0),
+    line(100, 0, 110, 0), line(120, 0, 130, 0), line(140, 0, 150, 0), line(160, 0, 170, 0), line(180, 0, 190, 0), // primitives 0-9
+    // pair 2: Big2 (10 members, the SAME size as Big) does NOT fully
+    // subsume Small2 -- Small2 has one extra primitive of its own.
+    line(500, 0, 510, 0), line(520, 0, 530, 0), line(540, 0, 550, 0), line(560, 0, 570, 0), line(580, 0, 590, 0),
+    line(600, 0, 610, 0), line(620, 0, 630, 0), line(640, 0, 650, 0), line(660, 0, 670, 0), line(680, 0, 690, 0), // primitives 10-19
+    line(1000, 0, 1010, 0), // primitive 20 -- Small2's own EXTRA primitive, not in Big2 at all
+  ]), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  const proposals = [
+    proposal(0, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),   // Big
+    proposal(1, [0]),                               // Small1 -- entirely inside Big
+    proposal(2, [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]), // Big2 -- same size as Big
+    proposal(3, [10, 20]),                          // Small2 -- only PARTLY inside Big2
+  ];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters, uncontested } = detectOwnershipClusters(proposals);
+  assert.equal(uncontested.length, 0, "both pairs share a primitive, so both proposals in each pair are contested");
+  assert.equal(clusters.length, 2, "the two pairs share nothing with each other -- two separate clusters, not one merged one");
+
+  const bigCluster = clusters.find((c) => c.proposalIds.includes(0))!;
+  const big2Cluster = clusters.find((c) => c.proposalIds.includes(2))!;
+  const bigScores = scoreContestedPrimitives(bigCluster, proposalsById, idx, junctions);
+  const big2Scores = scoreContestedPrimitives(big2Cluster, proposalsById, idx, junctions);
+  const forBig = bigScores.find((s) => s.proposalId === 0)!;
+  const forBig2 = big2Scores.find((s) => s.proposalId === 2)!;
+  assert.equal(forBig.coverageAgreement, 1, "Big fully subsumes Small1's own single primitive, despite being 10x its size");
+  assert.equal(forBig2.coverageAgreement, 0.5, "Big2 is the SAME size as Big but only covers 1 of Small2's own 2 primitives -- real subsumption, not raw size, decides the score");
+  assert.ok(forBig.coverageAgreement > forBig2.coverageAgreement, "two equally-sized proposals score differently based on actual containment");
+});
+
+test("ownership eligibility: coverageAgreement averages over ALL of a contested primitive's actual rivals, not just one", () => {
+  const geo = extractVectorGeometry(opList([
+    line(0, 0, 10, 0),  // primitive 0 -- CONTESTED among all three proposals
+    line(20, 0, 30, 0), // primitive 1 -- proposal X's own extra ink
+  ]), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  // X = {0,1} (2 members); Y = {0} (1 member, fully inside X); Z = {0} (1 member, fully inside X).
+  const proposals = [proposal(0, [0, 1]), proposal(1, [0]), proposal(2, [0])];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters } = detectOwnershipClusters(proposals);
+  assert.deepEqual(clusters[0].contestedPrimitiveIds, [0]);
+  const scores = scoreContestedPrimitives(clusters[0], proposalsById, idx, junctions);
+  const forX = scores.find((s) => s.proposalId === 0)!;
+  // X's own rivals are Y and Z, both fully contained (ratio 1 each) -- average 1.
+  assert.equal(forX.coverageAgreement, 1, "X fully subsumes BOTH of its real rivals, averaged over exactly those two, not diluted by anything else");
+});
+
 test("ownership eligibility: a cluster with an empty contestedPrimitiveIds array produces no scores at all, from scoreContestedPrimitives itself", () => {
   // Constructed directly (not via detectOwnershipClusters, which never emits
   // a cluster with zero contested primitives) so this test genuinely

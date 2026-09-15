@@ -163,7 +163,14 @@ test("ownership assignment (iterative): a primitive touching only a CONTESTED ne
   const iterByPid = new Map(iterative.decisions.map((d) => [d.primitiveId, d]));
   assert.equal(iterByPid.get(1)?.proposalId, 0);
   assert.equal(iterByPid.get(2)?.proposalId, 0, "round 1 confirming primitive 1 as proposal 0's evidence lets round 2 correctly resolve primitive 2 too");
-  assert.equal(iterByPid.get(2)?.topScore, 1, "primitive 2's connectivity is now 1/1 -- its only neighbor is now confirmed proposal 0 evidence");
+  // 5 of 6 signals are now a perfect 1 for proposal 0 (connectivity is
+  // 1/1 -- its only neighbor is now confirmed evidence); coverageAgreement
+  // stays the same real 2/3 it was in round 0 (proposal 0's own full set
+  // {0,1,2} and proposal 1's own full set {1,2,3} mutually contain 2 of
+  // each other's 3 members, unaffected by round 1's own confirmation),
+  // giving (1+1+1+1+1+2/3)/6 = 17/18, not a clean 1 -- this signal is
+  // real, not a rounding artifact of the other five.
+  assert.ok(Math.abs((iterByPid.get(2)?.topScore ?? 0) - 17 / 18) < 1e-9, "5 of 6 signals are perfect; coverageAgreement's own real 2/3 keeps the average just under 1");
 });
 
 test("ownership assignment (iterative): a disclosed maxRounds cap stops further repair honestly -- the cut-off primitive is reported ambiguous, never silently dropped or guessed", () => {

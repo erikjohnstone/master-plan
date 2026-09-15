@@ -1,5 +1,58 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2 —
+new 6th eligibility signal, `coverageAgreement`, closing the real gap the
+entry directly below's own wiring measurement diagnosed: a Lane C
+proposal almost never has exclusive primitives of its own, so the five
+existing signals (all built on "trust only undisputed/exclusive
+evidence") default to neutral for it, and it rarely won a real contested
+primitive even when it was objectively the more complete candidate.
+
+SIGNAL: needs no exclusive evidence at all — for a contested primitive's
+actual rival claimants, computes what fraction of EACH rival's own FULL
+primitiveIds set this proposal's own FULL set contains, averaged over
+those rivals. A proposal that fully subsumes its rivals' own ink scores
+near 1; NOT simply "whichever proposal is bigger" — verified directly by
+a dedicated test where two EQUALLY-sized proposals score differently
+(1.0 vs 0.5) purely because one actually contains its own rival's full
+set and the other doesn't. Precomputed once per ordered PAIR of
+proposals in a cluster (not once per contested primitive — the quantity
+is primitive-independent), keeping it cheap even for a cluster with
+thousands of contested primitives but far fewer distinct proposals. Not
+the goal's own listed "mutual reference-to-candidate/candidate-to-
+reference coverage" (that is Lane E's legend-bank question, still
+unattempted) — a different, additional signal, same spirit as
+formPlausibilityAgreement's own earlier addition beyond the literal
+seven-item list.
+
+4 new tests in ownershipEligibility.test.ts (full subsumption scores
+near 1, the subsumed rival scores low; two equally-sized proposals score
+differently based on real containment, not size; averaging over
+multiple real rivals; existing empty-cluster contract unaffected) — 93
+total across the affected suite, all green. Two existing exact-value
+assertions (ownershipAssignment.test.ts) updated for the new /6
+denominator (previously /5) with the real new numbers explained, not
+silently patched; one used an epsilon comparison after finding a 1-ULP
+floating-point mismatch between hand-computed and runtime values. `tsc
+--noEmit` clean.
+
+REAL-CORPUS RESULT, on the exact same measurement the entry below used:
+Cherry Point CD-1 through the real wired pipeline (fuseProposals ->
+detectOwnershipClusters -> resolveClusterOwnershipIteratively) now
+reaches microF1 0.4027 (precision 0.2883, recall 0.6680) — up from 0.171
+without this signal, and NOW ABOVE the earlier ad hoc "add to a scoring
+pool" estimate (0.337) the entry two below this one used before real
+wiring existed. A 5.1x improvement over the 0.0789 baseline (no Lane C
+at all). Per-instance spread is real and wide (0.046 to 0.846 F1 across
+the 20 instances) — HONEST LIMIT: still 0/20 instances reach the
+required 0.95 gate. This is real, substantial, measured progress toward
+Phase 4's own gate 3, not a closed gate.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — additive (new signal field,
+existing five signals and every other caller of `EligibilityScore`
+unaffected in shape), real-corpus-validated improvement, with its own
+honest ceiling disclosed alongside the win.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — formally
 wired Lane C into `candidateProposalFusion.ts` itself, the "not attempted
 here" item disclosed in the last several entries below, AND found (by

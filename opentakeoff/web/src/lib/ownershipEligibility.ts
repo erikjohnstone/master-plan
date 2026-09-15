@@ -68,15 +68,43 @@
 //   shape that matters most; it has teeth only on a PARTIAL-overlap
 //   cluster, which is real but not yet the common case measured.
 //
+// - PROPOSAL-COVERAGE AGREEMENT (added after wiring Lane C's own
+//   tag-anchored proposals into candidateProposalFusion.ts, and the real
+//   gap that wiring's own corpus measurement found — PROGRESS.md: a Lane
+//   C proposal almost never has any EXCLUSIVE primitives of its own,
+//   since it sweeps up already-fragmented rivals wholesale, so all five
+//   signals above default to neutral for it and it rarely wins a real
+//   contested primitive even when it is objectively the more complete
+//   candidate). NOT the goal's own listed "mutual reference-to-candidate
+//   and candidate-to-reference coverage" (that is Lane E's legend-
+//   reference-bank-vs-plan-candidate question, still unattempted, Phase
+//   5/6 territory) — this is a different, additional signal, in the same
+//   spirit as formPlausibilityAgreement's own addition beyond the
+//   literal seven-item list, built to close a real measured gap rather
+//   than to check off a goal-document line item. For a contested
+//   primitive's actual rival claimants (the OTHER proposals also
+//   claiming it, not every proposal in the cluster), computes what
+//   fraction of EACH rival's own FULL primitiveIds set this proposal's
+//   own FULL set contains, averaged over those rivals — needs no
+//   exclusive evidence at all, so it can discriminate exactly where the
+//   five signals above structurally cannot. A proposal that fully
+//   subsumes its rivals' own ink scores near 1; two proposals that
+//   merely brush past each other at one shared primitive (real,
+//   separate symbols, not a fragment-vs-whole relationship) score low on
+//   BOTH sides, not a false win for whichever happens to be larger —
+//   verified directly by this module's own tests, not merely assumed.
+//
 // Deliberately NOT attempted in this slice (disclosed, real further
 // work — the rest of requirement 2's own list): transform-consistent
 // residual (needs Phase 5's own rigid/affine verification, which has not
 // been built); mutual reference-to-candidate/candidate-to-reference
-// coverage (Phase 5/6 territory). Requirements 3-8 (injective
-// correspondence, explicit unowned/unassigned states, the actual
-// assignment solver, an owned body bbox/polygon) are handled by sibling
-// modules (ownershipAssignment.ts, ownershipBody.ts) or not yet attempted
-// — this module SCORES, it does not decide an outcome.
+// coverage (Phase 5/6 territory, Lane E's own legend-reference-bank
+// question — not the same as this slice's own new proposal-coverage
+// signal above). Requirements 3-8 (injective correspondence, explicit
+// unowned/unassigned states, the actual assignment solver, an owned body
+// bbox/polygon) are handled by sibling modules (ownershipAssignment.ts,
+// ownershipBody.ts) or not yet attempted — this module SCORES, it does
+// not decide an outcome.
 import type { VectorSceneIndex } from "./vectorSceneIndex.ts";
 import type { Junction } from "./vectorSceneRelations.ts";
 import type { FusedProposal } from "./candidateProposalFusion.ts";
@@ -94,10 +122,22 @@ export interface EligibilityScore {
   carrierAgreement: number; // 0-1 — 0 iff flagged carrier-like within this proposal's own set
   formPlausibilityAgreement: number; // 0-1 — 0 iff this is an implausible-as-one-symbol Lane A proposal
   graphSignatureAgreement: number; // 0-1 — 1 iff this primitive's own shape/length/angle already matches one of this proposal's own exclusive members
-  /** simple, disclosed, unweighted average of the five signals above —
+  /** 0-1 — how much of EACH actual rival's own full claimed set (for
+   *  this SAME contested primitive) this proposal's own full claimed set
+   *  subsumes, averaged over those rivals. Unlike the five signals
+   *  above, this one needs no exclusive evidence at all — it compares
+   *  full primitiveIds sets directly, so a proposal that structurally
+   *  never has exclusive members (Lane C's own tag-anchored regions,
+   *  which by design sweep up already-fragmented rivals wholesale) can
+   *  still win real contested primitives on real evidence instead of
+   *  defaulting to every other signal's own neutral 0.5. See this
+   *  module's own header for the real gap this was built to close and
+   *  PROGRESS.md for the corpus measurement that found it. */
+  coverageAgreement: number;
+  /** simple, disclosed, unweighted average of the six signals above —
    *  not a calibrated model (goal's own longer requirement-2 list has
    *  two more signals this slice does not compute; a real combined
-   *  score needs all of them, not just these five). */
+   *  score needs all of them, not just these six). */
   score: number;
 }
 
@@ -241,6 +281,26 @@ export function scoreContestedPrimitives(
     formPlausibleByProposal.set(propId, result.plausibleAsSingleSymbol);
   }
 
+  // pairwise proposal-coverage: containmentRatio.get(`${containerId}|${containedId}`)
+  // = what fraction of containedId's own FULL primitiveIds set also
+  // appears in containerId's own FULL set. Computed ONCE per ordered
+  // pair of proposals in this cluster (a quantity independent of which
+  // contested primitive is currently being scored), not once per
+  // primitive — a cluster can have thousands of contested primitives but
+  // typically far fewer distinct proposals, so this stays cheap.
+  const containmentRatio = new Map<string, number>();
+  for (const containerId of cluster.proposalIds) {
+    const containerSet = primitiveSetByProposal.get(containerId) ?? new Set<number>();
+    for (const containedId of cluster.proposalIds) {
+      if (containerId === containedId) continue;
+      const containedSet = primitiveSetByProposal.get(containedId) ?? new Set<number>();
+      if (containedSet.size === 0) { containmentRatio.set(`${containerId}|${containedId}`, 0); continue; }
+      let contained = 0;
+      for (const cpid of containedSet) if (containerSet.has(cpid)) contained++;
+      containmentRatio.set(`${containerId}|${containedId}`, contained / containedSet.size);
+    }
+  }
+
   // primitiveId -> ids of OTHER primitives sharing a junction with it
   const neighborsOf = new Map<number, Set<number>>();
   for (const j of junctions) {
@@ -286,9 +346,17 @@ export function scoreContestedPrimitives(
         graphSignatureAgreement = graphSig.entryKeys.has(key) ? 1 : 0;
       }
 
+      const rivals = [...(claimantsOfContested.get(pid) ?? [])].filter((r) => r !== propId);
+      let coverageAgreement = 0.5; // a contested primitive always has 2+ claimants by definition, so this default is defensive, not load-bearing
+      if (rivals.length > 0) {
+        let sum = 0;
+        for (const rivalId of rivals) sum += containmentRatio.get(`${propId}|${rivalId}`) ?? 0;
+        coverageAgreement = sum / rivals.length;
+      }
+
       results.push({
-        primitiveId: pid, proposalId: propId, styleAgreement, connectivity, carrierAgreement, formPlausibilityAgreement, graphSignatureAgreement,
-        score: (styleAgreement + connectivity + carrierAgreement + formPlausibilityAgreement + graphSignatureAgreement) / 5,
+        primitiveId: pid, proposalId: propId, styleAgreement, connectivity, carrierAgreement, formPlausibilityAgreement, graphSignatureAgreement, coverageAgreement,
+        score: (styleAgreement + connectivity + carrierAgreement + formPlausibilityAgreement + graphSignatureAgreement + coverageAgreement) / 6,
       });
     }
   }
