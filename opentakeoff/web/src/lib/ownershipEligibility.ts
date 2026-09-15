@@ -26,6 +26,21 @@
 //   scores 0 agreement for X; not flagged (including "not evaluable" —
 //   a single-subpath proposal has no sibling to judge by) scores 1,
 //   neutral-favorable rather than penalized for missing evidence.
+// - FORM PLAUSIBILITY AGREEMENT (added after formPlausibility.ts, and
+//   the PROGRESS.md structural finding that motivated it: every real
+//   ownership cluster found across 5 real documents is a Lane-A-Form-
+//   vs-Lane-B-components dispute with ZERO exclusive primitives, so the
+//   three signals above are structurally unable to discriminate it —
+//   this is the form-LEVEL signal that can). For a proposal carrying
+//   Lane A evidence (`votingLanes` includes `"A"`), `assessFormPlausibility`
+//   is run once against that Form's own bbox and its own real "shatter
+//   count" (how many OTHER proposals in this same cluster share a
+//   primitive with it — almost always the Lane B components partitioning
+//   it, per the structural finding). An implausible Form scores 0
+//   agreement for every primitive it contests (real evidence its own
+//   claim is the wrong one, not the Lane B side's); a plausible Form, or
+//   any proposal with no Lane A evidence at all (this signal has nothing
+//   to say about a pure Lane B proposal), scores 1, neutral-favorable.
 //
 // Deliberately NOT attempted in this slice (disclosed, real further
 // work — the rest of requirement 2's own list): graph/path signature
@@ -44,6 +59,7 @@ import type { Junction } from "./vectorSceneRelations.ts";
 import type { FusedProposal } from "./candidateProposalFusion.ts";
 import type { OwnershipCluster } from "./ownershipConflicts.ts";
 import { classifyCarrierPrimitives } from "./carrierClassification.ts";
+import { assessFormPlausibility } from "./formPlausibility.ts";
 
 export interface EligibilityScore {
   primitiveId: number;
@@ -51,10 +67,11 @@ export interface EligibilityScore {
   styleAgreement: number;   // 0-1
   connectivity: number;     // 0-1
   carrierAgreement: number; // 0-1 — 0 iff flagged carrier-like within this proposal's own set
-  /** simple, disclosed, unweighted average of the three signals above —
+  formPlausibilityAgreement: number; // 0-1 — 0 iff this is an implausible-as-one-symbol Lane A proposal
+  /** simple, disclosed, unweighted average of the four signals above —
    *  not a calibrated model (goal's own longer requirement-2 list has
-   *  four more signals this slice does not compute; a real combined
-   *  score needs all of them, not just these three). */
+   *  three more signals this slice does not compute; a real combined
+   *  score needs all of them, not just these four). */
   score: number;
 }
 
@@ -93,6 +110,7 @@ export function scoreContestedPrimitives(
   const primitiveSetByProposal = new Map<number, Set<number>>();
   const carrierFlagByProposal = new Map<number, Map<number, boolean>>();
   const exclusiveIdSet = new Set(cluster.exclusivePrimitiveIds);
+  const contestedIdSet = new Set(cluster.contestedPrimitiveIds);
   for (const propId of cluster.proposalIds) {
     const proposalPrims = proposalsById.get(propId)?.primitiveIds ?? [];
     primitiveSetByProposal.set(propId, new Set(proposalPrims));
@@ -108,6 +126,38 @@ export function scoreContestedPrimitives(
     const flagByPrimitive = new Map<number, boolean>();
     for (const r of carrierResults) flagByPrimitive.set(r.primitiveId, r.isCarrierLike);
     carrierFlagByProposal.set(propId, flagByPrimitive);
+  }
+
+  // reverse index: a CONTESTED primitive id -> every proposal in this
+  // cluster claiming it — built once, used below to compute each Lane A
+  // proposal's own real "shatter count" (how many OTHER proposals it
+  // actually shares a primitive with) without an O(proposals^2) scan.
+  const claimantsOfContested = new Map<number, Set<number>>();
+  for (const propId of cluster.proposalIds) {
+    for (const pid of primitiveSetByProposal.get(propId) ?? []) {
+      if (!contestedIdSet.has(pid)) continue;
+      let claimants = claimantsOfContested.get(pid);
+      if (!claimants) { claimants = new Set(); claimantsOfContested.set(pid, claimants); }
+      claimants.add(propId);
+    }
+  }
+
+  // form plausibility agreement, computed once per Lane A proposal — see
+  // formPlausibility.ts's own header and this module's own header above
+  // for why this signal exists at the FORM level, not the primitive
+  // level. A pure Lane B proposal has no plausibility concern of this
+  // kind, so it is simply absent from this map (treated as neutral-
+  // favorable below, same convention as carrier's own "not evaluable").
+  const formPlausibleByProposal = new Map<number, boolean>();
+  for (const propId of cluster.proposalIds) {
+    const proposal = proposalsById.get(propId);
+    if (!proposal || !proposal.votingLanes.includes("A")) continue;
+    const others = new Set<number>();
+    for (const pid of primitiveSetByProposal.get(propId) ?? []) {
+      for (const c of claimantsOfContested.get(pid) ?? []) if (c !== propId) others.add(c);
+    }
+    const result = assessFormPlausibility({ x0: proposal.x0, y0: proposal.y0, x1: proposal.x1, y1: proposal.y1, componentCount: others.size });
+    formPlausibleByProposal.set(propId, result.plausibleAsSingleSymbol);
   }
 
   // primitiveId -> ids of OTHER primitives sharing a junction with it
@@ -144,9 +194,12 @@ export function scoreContestedPrimitives(
       const isCarrierLike = carrierFlagByProposal.get(propId)?.get(pid) ?? false;
       const carrierAgreement = isCarrierLike ? 0 : 1;
 
+      const formPlausible = formPlausibleByProposal.get(propId) ?? true; // no Lane A evidence: not this signal's concern
+      const formPlausibilityAgreement = formPlausible ? 1 : 0;
+
       results.push({
-        primitiveId: pid, proposalId: propId, styleAgreement, connectivity, carrierAgreement,
-        score: (styleAgreement + connectivity + carrierAgreement) / 3,
+        primitiveId: pid, proposalId: propId, styleAgreement, connectivity, carrierAgreement, formPlausibilityAgreement,
+        score: (styleAgreement + connectivity + carrierAgreement + formPlausibilityAgreement) / 4,
       });
     }
   }

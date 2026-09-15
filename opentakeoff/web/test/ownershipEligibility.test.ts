@@ -24,6 +24,10 @@ function proposal(id: number, primitiveIds: number[]): FusedProposal {
   return { id, primitiveIds, x0: 0, y0: 0, x1: 1, y1: 1, votingLanes: ["B"], evidence: {} };
 }
 
+function laneAProposal(id: number, primitiveIds: number[], bbox: { x0: number; y0: number; x1: number; y1: number }): FusedProposal {
+  return { id, primitiveIds, ...bbox, votingLanes: ["A"], evidence: {} };
+}
+
 test("ownership eligibility: a contested primitive matching one proposal's own dominant line width scores higher style agreement for that proposal", () => {
   // proposal 0's exclusive primitive (id 0) is thin (width default 1);
   // proposal 1's exclusive primitive (id 2) is thick (setLineWidth 15,
@@ -108,6 +112,39 @@ test("ownership eligibility: a contested primitive that reads as a carrier outli
   assert.equal(forP0.carrierAgreement, 0, "primitive 2 is a dramatic outlier among proposal 0's own short siblings");
   assert.equal(forP1.carrierAgreement, 1, "proposal 1 has no sibling subpath to judge by — not evaluable, scored neutral-favorable");
   assert.ok(forP1.score > forP0.score, "the carrier signal should make proposal 1 the better overall fit here");
+});
+
+test("ownership eligibility: a Lane A proposal that shatters into many Lane B rivals (real structural finding — see formPlausibility.ts) scores 0 form-plausibility agreement, letting a Lane B rival win the tie", () => {
+  // real shape found on Cherry Point #12 and tinker-afb-iwcs-controls.pdf#13:
+  // one Lane A "whole Form" proposal (compact bbox, so aspect ratio never
+  // confounds this) whose own 6 primitives are EACH separately contested
+  // by a different single-primitive Lane B proposal — a 6-way shatter,
+  // above the default 5 threshold. Six identical-length segments avoid
+  // triggering the carrier signal as a confound; no primitive shares a
+  // junction with any other, so connectivity ties at 0 for everyone; no
+  // proposal here has its OWN exclusive primitives, so style ties at the
+  // neutral 0.5 for everyone too — isolating formPlausibilityAgreement as
+  // the only signal that can differ.
+  const segs: Op[] = [];
+  for (let i = 0; i < 6; i++) segs.push(line(i * 100, 0, i * 100 + 10, 0));
+  const geo = extractVectorGeometry(opList(segs), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+
+  const laneA = laneAProposal(0, [0, 1, 2, 3, 4, 5], { x0: 0, y0: 0, x1: 10, y1: 10 });
+  const laneBRivals = [1, 2, 3, 4, 5, 6].map((id) => proposal(id, [id - 1]));
+  const proposals = [laneA, ...laneBRivals];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters } = detectOwnershipClusters(proposals);
+  assert.equal(clusters.length, 1);
+  assert.equal(clusters[0].exclusivePrimitiveIds.length, 0, "test premise: matches the real structural finding — nothing exclusive anywhere");
+
+  const scores = scoreContestedPrimitives(clusters[0], proposalsById, idx, junctions);
+  const forLaneA = scores.find((s) => s.primitiveId === 0 && s.proposalId === 0)!;
+  const forLaneBRival = scores.find((s) => s.primitiveId === 0 && s.proposalId === 1)!;
+  assert.equal(forLaneA.formPlausibilityAgreement, 0, "the 6-way-shattered Lane A proposal is flagged implausible");
+  assert.equal(forLaneBRival.formPlausibilityAgreement, 1, "a pure Lane B proposal has no plausibility concern of this kind");
+  assert.ok(forLaneBRival.score > forLaneA.score, "the Lane B rival should now win this tie on form plausibility alone");
 });
 
 test("ownership eligibility: a cluster with an empty contestedPrimitiveIds array produces no scores at all, from scoreContestedPrimitives itself", () => {

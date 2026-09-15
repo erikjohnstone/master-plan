@@ -1,5 +1,64 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — wired
+`formPlausibility.ts` into `scoreContestedPrimitives`'s own combined
+score as a 4th signal, `formPlausibilityAgreement`. This is the payoff
+of the session's own investigative chain (visual ground truth →
+invisible-ink finding → Lane A fix → the structural finding that
+primitive-level signals can never discriminate a Lane-A-vs-Lane-B
+dispute → the form-plausibility detector) landing on the real numbers.
+
+For a proposal carrying Lane A evidence (`votingLanes` includes `"A"`),
+`assessFormPlausibility` is now run once per proposal against its own
+bbox and its own REAL shatter count (every other proposal in the same
+cluster sharing a primitive with it — computed via a reverse index
+over contested primitives, not an O(proposals²) scan, real at
+Tinker's own 260-proposal cluster scale). An implausible Form scores 0
+agreement for every primitive it contests; a plausible Form, or any
+proposal with no Lane A evidence (a pure Lane B proposal — this signal
+has nothing to say about it), scores 1, neutral-favorable. `score` is
+now the average of four signals, not three.
+
+New test in `web/test/ownershipEligibility.test.ts` (now 7): a Lane A
+proposal shattering into 6 separate Lane B rivals (above the default
+5 threshold) — with style, connectivity, and carrier all deliberately
+tied by construction — scores 0 form-plausibility agreement, and this
+alone flips the winner to the Lane B rival. All 6 pre-existing tests
+pass unchanged.
+
+REAL-SHEET IMPACT — the clearest, largest result any single Phase 4
+slice has produced this session:
+- **tinker-afb-iwcs-controls.pdf#13** (the real 259-way-shatter,
+  12,042-primitive case the structural-finding entry found): of
+  12,050 total contested primitives, **12,042 are now confidently
+  ASSIGNED** — up from 0. The 8 that remain ambiguous are exactly the
+  separately-flagged duplicate-proposal edge case from that same
+  entry (two identical 8-primitive proposals contested against each
+  other) — not a new gap, the one already disclosed and left
+  uninvestigated.
+- **Cherry Point #12**: 12 of 60 contested primitives now assigned
+  (up from 0) — smaller, because most of its own clusters already
+  read as plausible (shatter count 3, below threshold) after the
+  invisible-ink fix; the signal only moves the one cluster flagged on
+  aspect ratio.
+No crash, no score outside [0,1], across both real sheets.
+
+Verification: `npx tsc --noEmit` clean; every affected test file
+re-run (`ownershipEligibility.test.ts` 7/7, `ownershipAssignment
+.test.ts` 5/5, `ownershipBody.test.ts` 3/3, `carrierClassification
+.test.ts` 5/5, `formPlausibility.test.ts` 7/7, `ownershipConflicts
+.test.ts` 6/6, `candidateProposalFusion.test.ts` 6/6 — 39 tests total,
+zero needed a single assertion changed); mcp import parity confirmed;
+real-sheet checks above. Does not modify `formPlausibility.ts`,
+`ownershipAssignment.ts`, `ownershipBody.ts`, `carrierClassification
+.ts`, `candidateBodyLaneA.ts`, or `ownershipConflicts.ts`.
+
+Still disclosed as open: the 8-primitive duplicate-proposal edge case
+(unfixed, flagged two entries above); requirement 2's remaining three
+signals (graph/path signature agreement, transform-consistent
+residual, mutual reference-to-candidate coverage); requirements 3 and
+7's own full joint solve/large-grid conflict repair.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane A's own
 disclosed requirement 3 ("excluding forms whose content is mostly
 text/page furniture/title blocks/borders/repeated non-countable
