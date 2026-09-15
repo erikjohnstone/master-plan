@@ -1,5 +1,115 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 checkpoint — v2
+schema annotated onto all 11 disclosed-override cases; the 150+/12-document
+new-instance sourcing has not started.
+
+Phase 0 (below) found 11 of the 47 frozen cases carry a disclosed manifest
+override in their `options` field (8 `affine:false`, 2 `variant_guard:true`,
+1 already covered by an existing tolerance override) — the cases the
+predecessor project's own history flagged as its hardest dense/repetitive/
+affine-sensitive corner. Phase 1's schema-v2 annotation work (`context`,
+`family`, `association_type`, `transform_family`, `countable`,
+`reference_source`, `body_bbox`, plus case-level `review.notes`) targeted
+exactly these 11 first, on the reasoning that the cases already known to be
+hardest are the ones worth the most annotation depth before spending time on
+the 36 cases that already pass clean with no override. All 11 are now done
+and pushed: `01-cherry-mh111-cd1`, `02-norfolk-am104-generator-core`,
+`04-itd-p30-paired-roof-drains`, `05-usda-mh101-d10-air-devices`,
+`06-vermillion-m210a-ss15-cell-devices`, `10-lovell-m100-cd1-ceiling-diffusers`,
+`11-st-louis-mh101-keyed-vav-thermostats`, `14-usda-m701-t5-ice-storage-tanks`,
+`18-guaranteed-rate-set-fan-coil-units`, `23-st-cloud-set-vav-terminal-units`,
+`41-orange-county-m201-inline-supply-fans`.
+
+**Method, used identically across all 11**: for each case, render the full
+sheet (or, for multi-page cases, every sheet involved) with a ring marker at
+every seed/instance `at` and view it; compute `body_bbox` for the seed and
+every instance in one batched, vector-grounded `fingerprintSymbol` pass
+(`mcp/scripts/annotate-case-bboxes.mjs`, new this checkpoint) using the
+seed_rect's own half-extents transposed onto each instance's frozen `at`;
+cross-check every result's segment count and centroid against the seed's own
+fingerprint; render and individually view a representative sample plus every
+outlier the batch pass flagged; write `family`/`association_type`/
+`transform_family` from what was actually seen, never assumed from the v1 tag
+alone; and — the operative rule — when a rect's fingerprint is contaminated
+by real adjacent geometry (a fused duct fitting, neighboring hardware) or
+lands on the wrong feature entirely (an `at` anchored to a tag rather than a
+body, a duct-transition joint with no visible terminal glyph), leave
+`body_bbox` out entirely rather than report a bounding box that isn't a pure
+body footprint. Across the 11 cases' 131 total placements (seed + every
+instance), 118 got a vector-grounded `body_bbox` and 13 were left uncomputed
+with a named, disclosed reason in that case's own `review.notes` — never
+silently dropped, never guessed:
+
+| case | placements | body_bbox | uncomputed reason |
+|---|---|---|---|
+| 01 | 20/20 | 20 | — |
+| 02 | 2/2 | 2 | — |
+| 04 | 6/6 | 6 | — |
+| 05 | 6 | 5 | `d10-05`: 3 rect attempts all land in open space near a wall line, real glyph elsewhere |
+| 06 | 14/14 | 14 | — |
+| 10 | 36 | 29 | 7: 6 have `at` anchored to the tag (not the body) with the real diffuser reached by an unrendered leader; 1 is real duct/turning-vane fusion at the body's own location |
+| 11 | 16 | 14 | 2: real assembly, contaminated by adjacent door-hinge / control-valve linework at that specific spot |
+| 14 | 3/3 | 3 | — |
+| 18 | 12 | 11 | 1: real assembly, contaminated by an adjacent numbered duct fitting |
+| 23 | 14 | 12 | 2: one `at` sits on a bare duct joint with no terminal-box glyph anywhere nearby; one ring sits inside a dashed clearance outline offset from its own visible box |
+| 41 | 2/2 | 2 | — |
+
+**Two findings worth carrying into Phase 4 (exclusive primitive ownership) by
+name, not just as a number in the table above.** First, case 10 surfaced a
+real second `at`-anchoring convention this corpus hadn't previously named:
+most instances anchor `at` to the symbol body (tag elsewhere), but a
+same-size population anchors `at` to the *tag* instead, with the real body
+reached by an unrendered leader — a naive tag-to-`at` distance heuristic
+alone misses this population entirely (it looks "adjacent" by distance when
+it is actually a leader relationship with the roles reversed), and case 10's
+own review note now documents nine leader instances where the same simple
+heuristic would have found roughly half that many. Second, case 23 supplied
+the converse warning: `mh10b2-vav-6`'s tag-to-`at` distance (137px) looks
+leader-scale by the numbers alone, but its own rendered crop shows a plain
+adjacent tag with no leader line — proving the same heuristic produces false
+positives just as readily as false negatives, in the same case. Neither
+finding changes any engine code this checkpoint; both are named here so
+Phase 6's joint tag/leader/legend assignment work starts from evidence, not
+from a distance threshold that has now been shown wrong in both directions.
+
+**Two cases independently reproduced their own v1 "exact repeat" claims at
+the vector level**, not just by trusting the existing text: case 14's three
+T-5 ice-storage tanks and case 41's two inline supply fans each returned
+byte-identical segment counts and footprints across every placement in the
+batched pass — the seed and every instance are the same fingerprint,
+translated. Both cases also clarified `association_type` in a way the v1
+schema had no field for: case 14's "T-5" identifier is vector line-art
+baked into the body itself (`association_type: enclosed`), and case 41's two
+fans have no identifier attached to either body at all
+(`association_type: unlabelled`, the schematic names the AHU system in a
+caption instead) — genuinely different from every `adjacent`/`leader` case
+elsewhere in this batch, and now distinguished as such in the schema instead
+of being forced into "adjacent" by default.
+
+**Not yet started**: the goal's other, much larger Phase 1 requirement —
+150+ new real symbol instances across 12+ documents from the already-staged
+113-document bulk corpus (`opentakeoff-corpus/bulk/`), covering the required
+strata (dense grids, no-leader adjacency, multi-bend leaders, inline symbols,
+rotated/mirrored/stretched instances, look-alikes, duplicated tags across
+scopes, negatives) that the predecessor research already proved the existing
+30-document benchmark has zero of. The 36 cases without a disclosed manifest
+override were also not touched this checkpoint — they already pass clean
+under Phase 0's `default` mode with zero options set, so annotation depth on
+the known-hardest 11 was prioritized first; whether the remaining 36 warrant
+the same v2 treatment before or after the new-instance sourcing work is an
+open sequencing question, not a decision made here.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Every change this checkpoint is
+ground-truth corpus data (`HVAC BAS Benchmark Collection/ground_truth/
+symbol_sweep/cases.json` and its `reviews/` render evidence) plus one new
+annotation-aid script (`mcp/scripts/annotate-case-bboxes.mjs`, evaluation
+tooling only). No `web/src/lib` production code changed. No VectorGrid/table
+extraction, schedule reconstruction, citation, or bbox-computation code used
+by the production sweep was touched — the `body_bbox` values added here are
+new evidence *about* existing frozen ground truth, not a change to how the
+engine computes anything.
+
 2026-09-14 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 0 checkpoint — honest
 symbol_sweep baselines frozen before any engine change; full commands/JSON
 under `reports/runs/` (gitignored) and `reports/SYMBOL-SWEEP-BASELINE-
