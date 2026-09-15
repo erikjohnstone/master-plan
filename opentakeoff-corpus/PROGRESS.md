@@ -1,5 +1,47 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — precise
+root cause for the IU-15 double-count noted in the entry just below,
+and a reasoned decision not to patch it. Read `mergeProposals` and its
+two call sites in `symbolsweep.ts` in full rather than guessing.
+
+The consensus/shadow-suppression logic that exists SPECIFICALLY for
+"a symmetric variant casts one reading from each side of its true
+center" (the code's own comment, `placementSurvivors`) uses `suppressR
+= max(mergeR, footprint / 2)`, where `footprint` is the diagonal of
+the seed's own tight bbox. For the IU-13 seed: bbox 37.68 × 86.88px →
+diagonal 94.7px → `suppressR` = 47.35px. The two rejected-as-distinct
+IU-15 hypotheses (rot180 at [1575,331], rot0+mirrored at [1620,348])
+sit 48.1px apart — beyond `suppressR` by only **0.75px**. This is not
+a broad structural gap; it is a razor-thin miss, and the reason is the
+icon's own real asymmetry: the small side notch visible in every
+render this session took of it means the two transform hypotheses'
+centroids do not land at the same point the way a perfectly symmetric
+icon's would, pushing their separation just past half the bbox
+diagonal.
+
+Decision, on reflection, unchanged but now for a sharper reason: this
+is not a clear-cut engine bug to fix, it is one asymmetric icon sitting
+right at a deliberately, evidence-tuned boundary. The code's own
+comment states the assumption `suppressR` depends on directly: "two
+REAL instances can never sit within half a symbol diagonal of each
+other without physically overlapping" — true for most icons, but this
+one's own asymmetry is exactly what makes it a near-miss. Widening
+`suppressR` (or changing how `footprint` is computed) to catch this
+one icon risks merging genuinely distinct nearby real instances on
+sheets this margin was tuned against (the White Sturgeon tank array
+history already recorded in the code's own comment) — exactly the
+"improves one case, regresses another" outcome goal §15's own
+discipline says to revert, not commit. A principled fix (if one
+exists) needs the same rigor as every other change here: reproduce,
+focused failing test, smallest change, full 51-case regression, real
+negative controls — not a guess made under a corpus-growth task's time
+budget. Left open, precisely characterized, not silently dropped and
+not guessed at.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Investigation only, no code or
+ground-truth changes.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — resumed
 corpus growth, document 093 (Jonesboro Heat Pump Upgrades, ME BGS
 Project 3845, already locally staged from a prior census — small,
