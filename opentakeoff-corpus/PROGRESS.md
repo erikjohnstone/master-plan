@@ -1,5 +1,45 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2
+follow-up — a real performance bug in the entry directly below's own new
+`coverageAgreement` signal, found and fixed BEFORE it ever reached a
+committed full-corpus result. Caught by actually launching the real
+full-corpus F1 scoring run (baseline + `--with-lane-c`, both freshly
+extended per the entry two below), not by a synthetic benchmark: the run
+stalled on Colville's own dense 24-tank array, its memory climbing past
+4GB and still rising, killed rather than left to OOM or produce a
+silent partial result.
+
+ROOT CAUSE: `coverageAgreement`'s own pairwise containment precompute
+iterated every ORDERED PAIR of proposals directly in a cluster, on the
+stated assumption "a cluster can have thousands of contested primitives
+but typically far fewer distinct proposals." Real data flatly disproved
+that assumption: Colville's own one real cluster there has **3525**
+distinct proposals (confirmed by direct inspection, not guessed), making
+the naive precompute ~12.4 MILLION pairs — run FRESH every round of
+`resolveClusterOwnershipIteratively`'s own repair loop (up to 10 rounds).
+
+FIX: only compute the containment ratio for proposal pairs that actually
+co-claim at least one contested primitive together, reusing the
+already-built `claimantsOfContested` map — its own per-primitive
+claimant sets are typically small (2-3 proposals) even when a cluster's
+own TOTAL proposal count is enormous, since a real contested primitive
+rarely has more than a handful of real rivals. Turns the cost into
+O(contested primitives x avg-claimants^2) instead of O(total
+proposals^2). Verified directly against Colville again after the fix
+(not just re-run and hoped): completes with bounded memory (peaked
+~460MB, not unbounded and climbing), `gate_holds: true`, 9 real repair
+rounds, no crash or timeout. Full affected suite green (55/55). `tsc
+--noEmit` clean. The signal's own VALUES are unchanged by this fix, only
+how cheaply they are computed — no re-measurement of the Cherry Point
+numbers from the entry below was needed or performed.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — a real correctness-adjacent fix
+(unbounded memory growth on real corpus data is a genuine defect) found
+and closed before it ever reached a merged/relied-upon full-corpus
+result, exactly the kind of thing this project's own "measure at corpus
+scale before trusting a synthetic test" discipline exists to catch.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2 —
 new 6th eligibility signal, `coverageAgreement`, closing the real gap the
 entry directly below's own wiring measurement diagnosed: a Lane C
