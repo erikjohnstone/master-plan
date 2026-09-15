@@ -87,6 +87,44 @@ const SEG_CLIP_BIT = 2;
 const DEFAULT_SNAP_FT = 0.15;
 const PX_PER_FT_GUESS = 12;
 
+// PLAN_CONNECTIVITY_SERVES.md Phase 1 item 2 / Phase 2 (#22) prep — a real
+// drawn junction dot/hatch mark, ported verbatim from controlSchematic.ts's
+// own private hasJunctionMark (that module's crossing-vs-junction rule for
+// schematic/riser topology). Same fixed px radius that module already
+// carries and is already tested against; kept literal rather than
+// scale-derived for fidelity to that existing, proven behavior.
+const DEFAULT_JUNCTION_MARK_RADIUS_PX = 8;
+
+/** A compact cluster of ≥5 short segments (each no longer than 1.6x the
+ *  radius) spread across ≥3 of the 4 quadrants around (x,y) — the drawn
+ *  shape of a real junction dot/hatch mark. A pure crossing (two lines
+ *  merely passing through the same point, drawn at different real
+ *  elevations with no intent to connect) essentially never produces this;
+ *  a real T/tee/cross junction often does. `candidates` is the caller's
+ *  own pre-filtered nearby-segment index list (never the whole sheet) —
+ *  see buildMepGraph's own spatial bucket for the reference caller. */
+export function hasJunctionMark(
+  segs: Array<{ x1: number; y1: number; x2: number; y2: number }>,
+  candidates: number[],
+  x: number,
+  y: number,
+  radiusPx: number = DEFAULT_JUNCTION_MARK_RADIUS_PX,
+): boolean {
+  const near = candidates.map((i) => segs[i]).filter((seg) => {
+    const len = Math.hypot(seg.x2 - seg.x1, seg.y2 - seg.y1);
+    return len <= radiusPx * 1.6
+      && Math.hypot(seg.x1 - x, seg.y1 - y) <= radiusPx
+      && Math.hypot(seg.x2 - x, seg.y2 - y) <= radiusPx;
+  });
+  if (near.length < 5) return false;
+  const quadrants = new Set<number>();
+  for (const seg of near) {
+    const mx = (seg.x1 + seg.x2) / 2 - x, my = (seg.y1 + seg.y2) / 2 - y;
+    quadrants.add((mx >= 0 ? 1 : 0) + (my >= 0 ? 2 : 0));
+  }
+  return quadrants.size >= 3;
+}
+
 export interface BuildMepGraphOpts {
   /** Image-px -> world/mask px factor. Default 1 (already in world space). */
   ws?: number;
@@ -109,6 +147,26 @@ export interface BuildMepGraphOpts {
   excludeSegs?: Uint8Array;
   /** Junction-coincidence tolerance in feet. Default DEFAULT_SNAP_FT. */
   snapFt?: number;
+  /** DEFAULT OFF (undefined/false reproduces today's behavior byte-for-
+   *  byte — see the Gate 1 requirement in PLAN_CONNECTIVITY_SERVES.md).
+   *  When true, a junction coordinate where NO original segment actually
+   *  ENDS (every segment touching it only passes through — a pure
+   *  interior-interior crossing) only coalesces into one shared,
+   *  cross-segment-connected node when `hasJunctionMark` finds real drawn
+   *  junction evidence nearby; otherwise each crossing segment keeps its
+   *  own separate node at that coordinate (geometrically coincident, never
+   *  topologically connected) — the fix for known-gaps ledger item #22
+   *  (real ducts/pipes at different elevations legitimately cross without
+   *  connecting). A genuine T/tee/corner (at least one segment's own
+   *  endpoint lands there) is NEVER gated by this option — real junction
+   *  evidence from the drawing's own topology always wins regardless of
+   *  a hatch mark being present or not. */
+  requireJunctionMarkForCrossings?: boolean;
+  /** Radius (image px) hasJunctionMark searches for corroborating short
+   *  segments. Default DEFAULT_JUNCTION_MARK_RADIUS_PX (8px, matching
+   *  controlSchematic.ts's own already-tested value). Only meaningful when
+   *  requireJunctionMarkForCrossings is true. */
+  junctionMarkRadiusPx?: number;
 }
 
 const q = (v: number, grid: number) => Math.round(v / grid) * grid;
@@ -241,8 +299,14 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
   const nodeIndex = new Map<string, number>();
   const nodes: MepNode[] = [];
   const edges: MepEdge[] = [];
-  const nodeFor = (x: number, y: number): number => {
-    const key = coordKey(x, y);
+  // keyOverride: when present, coalesce ONLY with other calls sharing the
+  // identical override string, never with the plain coordinate — how a
+  // gated (un-vouched, non-endpoint) crossing point keeps each segment's
+  // own node separate at the same (x,y). Omitted (the default, and always
+  // the case when requireJunctionMarkForCrossings is off), this is
+  // byte-identical to the original plain coordKey(x,y) lookup.
+  const nodeFor = (x: number, y: number, keyOverride?: string): number => {
+    const key = keyOverride ?? coordKey(x, y);
     const existing = nodeIndex.get(key);
     if (existing !== undefined) return existing;
     const idx = nodes.length;
@@ -250,13 +314,79 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
     nodeIndex.set(key, idx);
     return idx;
   };
-  const addEdge = (ax: number, ay: number, bx: number, by: number, segIdx: number) => {
+  const addEdge = (
+    ax: number, ay: number, bx: number, by: number, segIdx: number,
+    aKey?: string, bKey?: string,
+  ) => {
     if (ax === bx && ay === by) return;
     const { system, confidence } = systemForLayer(layerIdFor(segIdx));
-    const a = nodeFor(ax, ay), b = nodeFor(bx, by);
+    const a = nodeFor(ax, ay, aKey), b = nodeFor(bx, by, bKey);
     const ei = edges.length;
     edges.push({ a, b, length: Math.hypot(bx - ax, by - ay), system, systemConfidence: confidence });
     nodes[a].edges.push(ei); nodes[b].edges.push(ei);
+  };
+
+  // ── crossing gate (default OFF — see BuildMepGraphOpts's own doc) ──────
+  // endpointKeys: every coordinate where some ORIGINAL segment actually
+  // ends — a real junction there always coalesces exactly as before,
+  // regardless of any hatch-mark evidence. crossingVouched: for every
+  // OTHER junction coordinate (a pure interior-interior crossing), whether
+  // real drawn junction-mark evidence corroborates connecting it — cached,
+  // since the same coordinate is tested once per participating segment.
+  let endpointKeys: Set<string> | null = null;
+  let crossingVouched: ((key: string) => boolean) | null = null;
+  if (opts.requireJunctionMarkForCrossings) {
+    endpointKeys = new Set<string>();
+    for (const s of survivors) {
+      endpointKeys.add(coordKey(s.x1, s.y1));
+      endpointKeys.add(coordKey(s.x2, s.y2));
+    }
+    const radiusPx = opts.junctionMarkRadiusPx ?? DEFAULT_JUNCTION_MARK_RADIUS_PX;
+    // spatial bucket over survivor MIDPOINTS — the same provable-pruning
+    // idea the junction spatial index below already uses for the same
+    // reason (never test every segment against every candidate point).
+    const markCell = Math.max(radiusPx * 2, 16);
+    const segBuckets = new Map<string, number[]>();
+    survivors.forEach((s, idx) => {
+      const mx = (s.x1 + s.x2) / 2, my = (s.y1 + s.y2) / 2;
+      const k = `${Math.floor(mx / markCell)},${Math.floor(my / markCell)}`;
+      let b = segBuckets.get(k);
+      if (!b) { b = []; segBuckets.set(k, b); }
+      b.push(idx);
+    });
+    const nearbySegs = (x: number, y: number): number[] => {
+      const cx = Math.floor(x / markCell), cy = Math.floor(y / markCell);
+      const out: number[] = [];
+      for (let bx = cx - 1; bx <= cx + 1; bx++) {
+        for (let by = cy - 1; by <= cy + 1; by++) {
+          const cand = segBuckets.get(`${bx},${by}`);
+          if (cand) out.push(...cand);
+        }
+      }
+      return out;
+    };
+    const vouchedCache = new Map<string, boolean>();
+    crossingVouched = (key: string): boolean => {
+      const cached = vouchedCache.get(key);
+      if (cached !== undefined) return cached;
+      const [jx, jy] = key.split(",").map(Number);
+      const v = hasJunctionMark(survivors, nearbySegs(jx, jy), jx, jy, radiusPx);
+      vouchedCache.set(key, v);
+      return v;
+    };
+  }
+  // The node key a specific (jx,jy) split point on segment segIdx should
+  // use — undefined (plain shared coordKey, coalescing across every
+  // segment touching that point) unless the gate is on AND this point is
+  // a pure, un-vouched crossing, in which case a segment-scoped key keeps
+  // this segment's own node separate from any other segment's own node at
+  // the identical coordinate.
+  const effectiveKey = (jx: number, jy: number, segIdx: number): string | undefined => {
+    if (!endpointKeys || !crossingVouched) return undefined;
+    const k = coordKey(jx, jy);
+    if (endpointKeys.has(k)) return undefined;
+    if (crossingVouched(k)) return undefined;
+    return `${k}#seg${segIdx}`;
   };
 
   // Spatial index over the junctions, so the per-segment scan below never
@@ -319,13 +449,23 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
       }
     }
     interior.sort((a, b) => a - b);
-    let prevX = s.x1, prevY = s.y1;
+    // prevKey threads each interior split point's own effectiveKey through
+    // to the NEXT addEdge call that starts there, so a single point on
+    // THIS segment is referenced by the identical key both times it's
+    // used (the edge ending there and the edge starting there) — the
+    // segment's own internal chain always stays connected to itself; only
+    // a DIFFERENT segment's own reference to the same coordinate can end
+    // up gated apart. The segment's own true start (undefined here) and
+    // true end (undefined in the final call below) are never gated —
+    // gating only ever applies to a point STRICTLY INTERIOR to a segment.
+    let prevX = s.x1, prevY = s.y1, prevKey: string | undefined;
     for (const t of interior) {
       const jx = q(s.x1 + t * dx, solvedGrid), jy = q(s.y1 + t * dy, solvedGrid);
-      addEdge(prevX, prevY, jx, jy, s.segIdx);
-      prevX = jx; prevY = jy;
+      const jKey = effectiveKey(jx, jy, s.segIdx);
+      addEdge(prevX, prevY, jx, jy, s.segIdx, prevKey, jKey);
+      prevX = jx; prevY = jy; prevKey = jKey;
     }
-    addEdge(prevX, prevY, s.x2, s.y2, s.segIdx);
+    addEdge(prevX, prevY, s.x2, s.y2, s.segIdx, prevKey, undefined);
   }
 
   return { nodes, edges, layerSignal, quantGridPx: solvedGrid, junctionTests };

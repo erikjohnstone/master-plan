@@ -352,25 +352,46 @@ the phase that fixes it. This is what "the ruler before the fix" is for.
    one long stroke is solid. Keep `meta` byte-compatible; every existing
    consumer must be bit-identical (`wallnetwork`, `netroom`, `symbolsweep`
    tests are the regression net).
-2. **Not started — items 1 and 3 are done (see the commits on this branch
-   and the Numbers table below); this is next.** Make `buildMepGraph` the
-   only topology builder: add option flags for `controlSchematic.ts`'s
-   crossing rule (`unresolved_crossing` unless a junction mark vouches) and
-   arrowhead direction, port `hasJunctionMark` and the arrow detector into
-   `mepconnectivity.ts`, and have `topologyFor` call it. Edges gain
-   `style`, `direction`, `sourceSeg`. **This is materially harder than items
-   1/3, diagnosed before starting rather than discovered mid-refactor:**
-   `buildMepGraph`'s own `nodeFor(x,y)` (mepconnectivity.ts, the junction-
-   interior-split loop around lines 256-320) COALESCES every segment
-   passing through the same quantized coordinate into one shared node
-   today — an interior crossing and a real T-junction are structurally
-   identical to it right now. Gating "only connect two crossing segments
-   when a junction mark vouches" means each crossing segment needs its OWN
-   node by default, sharing one only when vouched for — a real change to
-   that split logic, not a flag bolted on top. Budget this as its own
-   dedicated, carefully-tested increment (own commit, own before/after on
-   `mep-trace-eval.mjs` AND the schematic corpus gates), not a quick
-   follow-on to items 1/3.
+2. **Half done, 2026-09-15 — the junction-mark/crossing-gate machinery is
+   ported, tested, and real-corpus-verified; the `topologyFor` unification
+   is not started.** Make `buildMepGraph` the only topology builder.
+
+   **Landed:** `hasJunctionMark` ported verbatim from `controlSchematic.ts`'s
+   own private function into `mepconnectivity.ts` as a tested export.
+   `buildMepGraph` gained `requireJunctionMarkForCrossings` (default OFF —
+   the whole point) and `junctionMarkRadiusPx`: when the flag is on, a
+   junction coordinate where NO original segment actually ends (a pure
+   interior-interior crossing) only coalesces into one connected node when
+   real junction-mark evidence corroborates it; a genuine T/tee (a real
+   endpoint lands there) is NEVER gated. The hard part this item's own
+   earlier diagnosis named — `nodeFor(x,y)` coalescing every segment
+   through a shared coordinate — is solved by threading an optional
+   per-segment node-key override through `nodeFor`/`addEdge`, computed once
+   per interior split point and reused for both edges that touch it, so a
+   segment's own internal chain stays connected to itself while a
+   DIFFERENT, un-vouched crossing segment gets its own separate node at the
+   identical coordinate. 11 new tests (6 on `buildMepGraph`'s own gate
+   behavior — default-off parity, an un-vouched crossing splitting, a real
+   mark vouching it back, a genuine T never gated, a segment's own chain
+   surviving a mix of a real junction and a gated crossing on itself, a
+   custom radius — plus 5 direct `hasJunctionMark` unit tests), all green
+   (39/39 in `mepconnectivity.test.ts`). Verified byte-identical default
+   behavior three ways: the pre-existing 28 tests unchanged, `tools.test.ts`'s
+   12 `trace_connectivity` tests unchanged, and a real corpus re-run
+   (`mep-trace-eval.mjs bessemer itd-d1-lab`) scoring the IDENTICAL 3/3,
+   100%/100%/0 as the original baseline.
+
+   **Still open:** port the arrowhead detector into `mepconnectivity.ts`
+   (edges need `direction`), add `style`/`sourceSeg` to `MepEdge`, and have
+   `controlSchematic.ts`'s own `topologyFor` actually CALL `buildMepGraph`
+   instead of maintaining a second, parallel implementation — mapping its
+   exact existing output shape (`SchematicTopology`: nodes/edges/crossings/
+   arrows/connected_components, the `MAX_TOPOLOGY_SEGMENTS`/
+   `MAX_INTERSECTION_CANDIDATES` refusal semantics) onto `MepGraph`'s shape
+   without changing a single existing assertion in `controlSchematic.test.ts`
+   or the `test:bas-drawings`/`test:bas-risers`/`test:bas-network-riser`
+   corpus gates. This is its own dedicated, carefully-tested increment —
+   budget it separately, not as a quick follow-on.
 3. **Delete or repurpose L3.5 `runL35Topology` — measured 2026-09-15, and the
    case is now unambiguous.** `OPENTAKEOFF_GRAPH_TRACE=1
    production-graph-cli.mjs --mode graph --pdf federal-attachment4-mechanical.pdf`

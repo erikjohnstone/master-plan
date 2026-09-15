@@ -6,7 +6,7 @@
 // speed practice), not hand-derived and then coded to match.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildMepGraph, traceConnectivity, type MepGraph } from "../src/lib/mepconnectivity.ts";
+import { buildMepGraph, traceConnectivity, hasJunctionMark, type MepGraph } from "../src/lib/mepconnectivity.ts";
 import type { LayerInfo } from "../src/lib/layers.ts";
 
 // ── buildMepGraph ────────────────────────────────────────────────────────
@@ -385,4 +385,157 @@ test("traceConnectivity: a fitting symbol sitting well OFF the gap's own line ne
     mppf: 10, bridgeFt: 1,
   });
   assert.equal(r.status, "dead_end");
+});
+
+// ── crossing gate (PLAN_CONNECTIVITY_SERVES.md Phase 1 item 2 / #22 prep) ──
+// requireJunctionMarkForCrossings — default OFF, and every test above this
+// point already proves the default is untouched (28/28 pass with the
+// option never mentioned). These tests exercise the option itself.
+
+function bfsComponent(g: ReturnType<typeof buildMepGraph>, start: number): Set<number> {
+  const seen = new Set<number>([start]);
+  const queue = [start];
+  for (let i = 0; i < queue.length; i++) {
+    for (const ei of g.nodes[queue[i]].edges) {
+      const e = g.edges[ei];
+      const next = e.a === queue[i] ? e.b : e.a;
+      if (!seen.has(next)) { seen.add(next); queue.push(next); }
+    }
+  }
+  return seen;
+}
+function nodeNear(g: ReturnType<typeof buildMepGraph>, x: number, y: number): number {
+  let best = -1, bestD = Infinity;
+  g.nodes.forEach((n, i) => { const d = Math.hypot(n.x - x, n.y - y); if (d < bestD) { bestD = d; best = i; } });
+  return best;
+}
+
+// a real drawn junction dot: 5 tiny ticks (each ~2.8 long, well under the
+// 8px*1.6 length ceiling) with both endpoints within 8px of (cx,cy) but
+// (deliberately, so a tick's own endpoint can never quantize to the
+// SAME grid cell as the crossing point itself and get misread as a real
+// endpoint touching it — a real trap this test file's own first draft hit)
+// no closer than ~4.2px, midpoints spread across all 4 quadrants.
+function junctionMarkTicksAt(cx: number, cy: number): number[] {
+  return [
+    cx + 3, cy + 3, cx + 5, cy + 5, // quadrant (+,+)
+    cx - 5, cy + 3, cx - 3, cy + 5, // quadrant (-,+)
+    cx + 3, cy - 5, cx + 5, cy - 3, // quadrant (+,-)
+    cx - 5, cy - 5, cx - 3, cy - 3, // quadrant (-,-)
+    cx + 4, cy + 3, cx + 6, cy + 5, // a 5th tick (quadrant repeats, only count matters here)
+  ];
+}
+
+test("buildMepGraph: DEFAULT (flag off) — a true interior crossing still coalesces into one component, exactly like today", () => {
+  // horizontal (0,50)-(200,50) crossing vertical (100,0)-(100,100) at a
+  // true interior point on BOTH — no shared endpoint, the exact #22 shape.
+  const segs = [0, 50, 200, 50, 100, 0, 100, 100];
+  const g = buildMepGraph(segs, {});
+  const a = nodeNear(g, 0, 50), b = nodeNear(g, 100, 0);
+  assert.ok(bfsComponent(g, a).has(b), "flag off must reproduce today's behavior: the crossing connects");
+});
+
+test("buildMepGraph: requireJunctionMarkForCrossings — an un-vouched pure crossing splits into two separate components", () => {
+  const segs = [0, 50, 200, 50, 100, 0, 100, 100];
+  const g = buildMepGraph(segs, { requireJunctionMarkForCrossings: true });
+  const a = nodeNear(g, 0, 50), b = nodeNear(g, 100, 0);
+  assert.ok(!bfsComponent(g, a).has(b), "with no junction-mark evidence, the horizontal and vertical runs must NOT connect");
+  // each run must still be internally connected to its OWN far end
+  assert.ok(bfsComponent(g, a).has(nodeNear(g, 200, 50)), "the horizontal run stays connected to itself");
+  assert.ok(bfsComponent(g, b).has(nodeNear(g, 100, 100)), "the vertical run stays connected to itself");
+});
+
+test("buildMepGraph: requireJunctionMarkForCrossings — a real drawn junction mark at the crossing restores the connection", () => {
+  const crossing = [0, 50, 200, 50, 100, 0, 100, 100];
+  const segs = [...crossing, ...junctionMarkTicksAt(100, 50)];
+  const g = buildMepGraph(segs, { requireJunctionMarkForCrossings: true });
+  const a = nodeNear(g, 0, 50), b = nodeNear(g, 100, 0);
+  assert.ok(bfsComponent(g, a).has(b), "real junction-mark evidence must vouch the crossing back into one component");
+});
+
+test("buildMepGraph: requireJunctionMarkForCrossings — a REAL T-junction (a real endpoint, not a pure crossing) is never gated, mark or no mark", () => {
+  // the vertical stub's own endpoint touches the horizontal run's midpoint
+  // — a genuine T, not a crossing. No junction-mark ticks anywhere nearby.
+  const segs = [0, 50, 200, 50, 100, 50, 100, 100];
+  const g = buildMepGraph(segs, { requireJunctionMarkForCrossings: true });
+  const a = nodeNear(g, 0, 50), b = nodeNear(g, 100, 100);
+  assert.ok(bfsComponent(g, a).has(b), "a real T-junction must always connect, regardless of the crossing gate");
+});
+
+test("buildMepGraph: requireJunctionMarkForCrossings — a segment's own internal chain stays connected to itself even when one of its own interior points is a gated crossing", () => {
+  // the horizontal run has TWO interior events: a real T at x=50 (a stub
+  // ending there) and an un-vouched crossing at x=150 (a second vertical
+  // line merely passing through). The horizontal run's own two ends must
+  // still reach each other THROUGH both points; only the crossing
+  // vertical line must fail to join it.
+  const segs = [
+    0, 50, 200, 50,   // the horizontal run
+    50, 50, 50, 100,  // a real T stub ending at (50,50) — on the horizontal run
+    150, 0, 150, 100, // an unrelated crossing at (150,50) — no endpoint there, no mark
+  ];
+  const g = buildMepGraph(segs, { requireJunctionMarkForCrossings: true });
+  const left = nodeNear(g, 0, 50), right = nodeNear(g, 200, 50);
+  assert.ok(bfsComponent(g, left).has(right), "the horizontal run's own two ends must stay connected through both of its own interior events");
+  const tStub = nodeNear(g, 50, 100);
+  assert.ok(bfsComponent(g, left).has(tStub), "the real T-stub must connect (it has a true endpoint at the junction)");
+  const crossingTop = nodeNear(g, 150, 0);
+  assert.ok(!bfsComponent(g, left).has(crossingTop), "the un-vouched crossing must not connect to the horizontal run");
+});
+
+test("buildMepGraph: requireJunctionMarkForCrossings with a custom junctionMarkRadiusPx", () => {
+  const crossing = [0, 50, 200, 50, 100, 0, 100, 100];
+  // ticks built for an 8px radius default should NOT vouch under a much
+  // tighter 2px radius (their own endpoints sit up to ~5.7px from center).
+  const segs = [...crossing, ...junctionMarkTicksAt(100, 50)];
+  const gTight = buildMepGraph(segs, { requireJunctionMarkForCrossings: true, junctionMarkRadiusPx: 2 });
+  const a = nodeNear(gTight, 0, 50), b = nodeNear(gTight, 100, 0);
+  assert.ok(!bfsComponent(gTight, a).has(b), "ticks built for the default radius must not vouch under a much tighter radius");
+});
+
+// ── hasJunctionMark (the ported primitive itself) ───────────────────────
+
+test("hasJunctionMark: fewer than 5 nearby short segments is never a mark", () => {
+  const segs = [
+    { x1: 2, y1: 2, x2: 4, y2: 4 }, { x1: -4, y1: 2, x2: -2, y2: 4 },
+    { x1: 2, y1: -4, x2: 4, y2: -2 }, { x1: -4, y1: -4, x2: -2, y2: -2 },
+  ];
+  assert.equal(hasJunctionMark(segs, [0, 1, 2, 3], 0, 0), false);
+});
+
+test("hasJunctionMark: 5+ short segments in only 2 quadrants is never a mark", () => {
+  const segs = [
+    { x1: 2, y1: 2, x2: 4, y2: 4 }, { x1: 3, y1: 3, x2: 5, y2: 5 },
+    { x1: 2, y1: -4, x2: 4, y2: -2 }, { x1: 3, y1: -3, x2: 5, y2: -1 },
+    { x1: 2.5, y1: 2.5, x2: 4.5, y2: 4.5 },
+  ];
+  assert.equal(hasJunctionMark(segs, [0, 1, 2, 3, 4], 0, 0), false, "only 2 distinct quadrants (both x>=0) must not qualify");
+});
+
+test("hasJunctionMark: a segment too long to be a junction tick is excluded even if otherwise well-placed", () => {
+  const segs = [
+    { x1: 2, y1: 2, x2: 4, y2: 4 }, { x1: -4, y1: 2, x2: -2, y2: 4 },
+    { x1: 2, y1: -4, x2: 4, y2: -2 }, { x1: -4, y1: -4, x2: -2, y2: -2 },
+    { x1: -5, y1: -5, x2: 100, y2: 100 }, // far too long — a real drawn line, not a mark tick
+  ];
+  assert.equal(hasJunctionMark(segs, [0, 1, 2, 3, 4], 0, 0), false, "4 real ticks alone is below the 5-segment floor once the long line is excluded");
+});
+
+test("hasJunctionMark: a candidate list is honored — segments not passed in are never considered", () => {
+  const segs = [
+    { x1: 2, y1: 2, x2: 4, y2: 4 }, { x1: -4, y1: 2, x2: -2, y2: 4 },
+    { x1: 2, y1: -4, x2: 4, y2: -2 }, { x1: -4, y1: -4, x2: -2, y2: -2 },
+    { x1: 1, y1: 1, x2: 3, y2: 3 },
+  ];
+  assert.equal(hasJunctionMark(segs, [0, 1, 2], 0, 0), false, "only 3 candidates passed in — below the 5-segment floor regardless of what else exists in segs");
+  assert.equal(hasJunctionMark(segs, [0, 1, 2, 3, 4], 0, 0), true, "the full candidate list clears both the count and quadrant-spread bars");
+});
+
+test("hasJunctionMark: custom radiusPx changes both the length ceiling and distance gate", () => {
+  const segs = [
+    { x1: 6, y1: 6, x2: 8, y2: 8 }, { x1: -8, y1: 6, x2: -6, y2: 8 },
+    { x1: 6, y1: -8, x2: 8, y2: -6 }, { x1: -8, y1: -8, x2: -6, y2: -6 },
+    { x1: 7, y1: 7, x2: 9, y2: 9 },
+  ];
+  assert.equal(hasJunctionMark(segs, [0, 1, 2, 3, 4], 0, 0), false, "6-9px endpoints exceed the default 8px radius");
+  assert.equal(hasJunctionMark(segs, [0, 1, 2, 3, 4], 0, 0, 16), true, "the same ticks qualify under a wider 16px radius");
 });
