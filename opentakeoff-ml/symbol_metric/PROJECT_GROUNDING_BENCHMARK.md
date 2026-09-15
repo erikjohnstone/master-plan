@@ -80,6 +80,8 @@ The candidate producer writes one
 record must disclose:
 
 - tiled inference (`tile_size_px`, nonzero overlap, and global merge method);
+- an exact provenance digest for every checkpoint file actually loaded (not
+  merely a HuggingFace `config.json`);
 - full case latency;
 - **every** candidate actually considered, each carrying a detector score and
   DINO similarity to the project legend/confirmed anchor; and
@@ -88,6 +90,38 @@ record must disclose:
 The evaluator will not accept a prediction whose candidate list is incomplete,
 whose selected id was not actually evaluated, or whose tile information is
 hidden. This prevents hand-picked “best box” demos.
+
+## Produce a tiled cascade manifest
+
+`scripts/run_symbol_grounding_cascade.py` creates that manifest from selected
+offline checkpoints. It runs RT-DETR over overlapping high-resolution page
+tiles, converts every tile detection to original-page coordinates, applies
+class-aware global NMS only after all tiles have been considered, then compares
+every remaining crop to an independently supplied legend or confirmed-anchor
+crop with DINO. It does not discover an anchor, trace a leader, bind a schedule
+row, or calculate an installed quantity.
+
+Each request records immutable page geometry supplied by review/context—not a
+model answer:
+
+```json
+{"schema":"opentakeoff.symbol_grounding_request.v1","case_id":"example:AHU-1","source_image_path":"example/page-04.png","anchor_bbox_image_px":[10,20,80,90],"tag_bbox_image_px":[300,400,360,420]}
+```
+
+The default selection thresholds deliberately withhold every candidate. A
+threshold must be frozen before held-out testing to emit a proposal, and a
+candidate substantially overlapping the tag text box is withheld even if its
+visual score is high.
+
+```sh
+python3 scripts/run_symbol_grounding_cascade.py \
+  --requests /data/reviewer_requests.jsonl \
+  --source-root /data/rendered_pages \
+  --rtdetr-checkpoint /runs/rtdetr/best-val \
+  --dino-checkpoint /runs/dino/best.pt \
+  --dino-hub-cache /workspace/dino-hub-cache \
+  --output /runs/cascade_predictions.jsonl
+```
 
 ## Run
 
