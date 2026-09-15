@@ -1,5 +1,91 @@
 ## Active work
 
+2026-09-15 GOAL.md's own standing rule ("A census pass... is not ground
+truth... real ground truth means an agent actually rendered the page
+and looked at it") — applied to this effort's own real-sheet
+validation for the first time, and it immediately paid off. Every
+prior Phase 4 entry's "real-sheet validation" was numeric only (counts,
+score ranges, no-crash) — never an actual rendered look at the region a
+written finding was about. Rendering Cherry Point #12's own cluster-0
+region via `mcp/src/session.ts`'s `viewSheet` (same RENDER_SCALE
+image-px space `extractVectorGeometry`'s own geometry already uses, no
+coordinate conversion needed) showed BLANK WHITE where the "biggest
+proposal" (475 primitives) supposedly lives — confirmed not a
+mis-drawn crop by marking the exact bbox corners with `viewSheet`'s own
+`marks: {ring: [...]}` overlay and rendering a wider surrounding region,
+which showed real content nearby (a rotated "FILE NAME: C:\Revit_
+Projects\..." Revit file-path stamp, a scale note "1/8" = 1'-0"", a
+partial circle) but nothing inside the bbox itself.
+
+ROOT CAUSE, found by checking the primitives directly rather than
+guessing: they carry `lum: 255` — pure white stroke color. A real,
+common CAD/Revit export technique (white-ink masking drawn behind a
+label so it stays legible over hatching), not a parsing bug. Precise
+measured scope: whole-sheet, only 1,618 of 102,352 primitives (1.6%)
+are white-ink; but WITHIN each of the sheet's 5 real ownership
+clusters, the DOMINANT (Lane A whole-Form) proposal is 91%-97% white
+ink by primitive count (463/475, 437/449, 383/395, 211/223, 124/136) —
+and the remaining ~12 non-white primitives in each is consistently the
+same count as the earlier-reported "12 clip" primitives per cluster,
+strongly suggesting they're the same small set. This precisely and
+completely explains the "exact partition" finding two entries above:
+Lane A's own content-signature computation
+(`candidateBodyLaneA.ts`) currently has no notion of visible-vs-
+invisible ink, so a Form's "whole content" proposal is built almost
+entirely from masking geometry a human never sees, while Lane B's
+small connected components (correctly) include the handful of genuinely
+visible strokes as their own separate tiny bodies — meaning every
+downstream eligibility/carrier signal computed against these clusters'
+own EXCLUSIVE-primitive baselines this session has been substantially
+built from invisible ink's own style/connectivity facts, not real
+visible symbol evidence.
+
+This is a real, significant, disclosed limitation of the whole Phase
+3/4 pipeline as it stands — NOT retrofitted right now: fixing it means
+changing what primitive set Lane A (and possibly Lane B) build a
+proposal FROM, which touches already-shipped, tested modules with
+real downstream blast radius (every real-sheet number reported in the
+prior 5 entries would need re-measuring). Scoped down to what's safe
+and real right now: a standalone, tested detector.
+
+New `web/src/lib/invisibleInk.ts`: `isLikelyInvisibleInk(primitive,
+opts?)` flags a primitive whose `lum >= 250` (default, tunable) as
+invisible against a white page — explicitly disclosed as ASSUMING a
+white page background (unverified against a colored-background
+counter-example, real but rare in this corpus). `summarizeInvisibleInk
+(primitiveIds, idx, opts?)` reports total/invisible/visible/unknown-lum
+counts for a primitive set — generalized from the one-off script logic
+used to characterize the finding above.
+
+New `web/test/invisibleInk.test.ts` (9 tests, all passing): threshold
+behavior at and around the boundary; `null` lum is never flagged (no
+evidence, not treated as suspicious by default); `lumThreshold` is a
+real tunable knob; a dedicated regression fixture LOCKS IN Cherry Point
+#12's own real cluster-0 numbers (475 total, 463 invisible, 12
+visible) as a synthetic test case, so this specific real discovery
+can never silently regress; an unresolvable primitive id is skipped,
+not thrown on.
+
+Real-sheet validation across 4 corpus PDFs: whole-sheet invisible-ink
+fractions of 1.58% (Cherry Point #12, exactly reproducing the number
+found during investigation), 0.05% (tarrant-county-mechanical), and 0%
+on the other two — real, plausible, sheet-dependent variation in
+drafting/export convention, not a single-sheet artifact.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (9/9); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet checks above. Does NOT modify `candidateBodyLaneA.ts`,
+`candidateBodyLaneB.ts`, `candidateProposalFusion.ts`,
+`ownershipEligibility.ts`, or any other already-shipped module — this
+is a detector only. Wiring it into Lane A's own content-signature
+computation (excluding invisible-ink primitives from what a Form's
+"content" is built from) is real, necessary, disclosed further work,
+not attempted in this slice.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes, once wired in — what counts as
+a symbol's real visible content is squarely "whether it counts" toward
+accepted evidence; this slice is the detector, not yet the wiring.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — wired
 `carrierClassification.ts` into `scoreContestedPrimitives`'s own
 combined score, closing the "not yet wired in" gap disclosed in the
