@@ -1,5 +1,71 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane C
+first slice: no-leader tag/body adjacency (requirement 3 of Lane C's
+four — "Support no-leader adjacency as a separate evidence type" — the
+one requirement with no leader-line-tracing dependency, so the
+natural first cut).
+
+New `web/src/lib/candidateBodyLaneC.ts`:
+`findAdjacentBody(tagBbox, bodies, primitiveToBodyId, spatialIndex,
+opts?)` — given one tag token's own bbox (the same image-px space
+VectorSceneIndex primitives live in; `mcp/src/pdf.ts`'s own
+`textSpans` already produce this), queries the Phase 2 spatial index
+(slice 8) for primitives near the tag, maps them to their owning Lane
+B candidate bodies via a new `buildPrimitiveToBodyMap` reverse index,
+and returns the body with the smallest real bbox-to-bbox gap
+(`bboxGapDistance`, exported since a caller scoring many tags wants
+the identical metric) within a disclosed threshold
+(`DEFAULT_MAX_ADJACENT_DISTANCE_PX`, 60px — a mechanism default, not
+yet calibrated against real corpus geometry). Near-linear: only
+bodies the spatial index actually returns for the padded tag region
+are ever compared, never every body on the sheet.
+
+Disclosed, not attempted in this slice: requirement 1 (tag boxes as
+search regions feeding a BROADER candidate search — this slice only
+scores adjacency to bodies Lane B already proposed); requirement 2
+(leader-line following — bounded bends, consistent stroke style,
+stopping before a carrier — a materially different algorithm);
+requirement 4's fuller discipline once leader-following exists.
+goal §4's own seven-way association_type vocabulary (enclosed/
+adjacent/leader/inline/shared callout/schedule-only/unlabelled) is not
+adjudicated here either — this answers "is a body plausibly adjacent,"
+not which category applies.
+
+New `web/test/candidateBodyLaneC.test.ts` (7 tests, all passing on the
+first run): `bboxGapDistance` correctness (touching, horizontal gap,
+3-4-5 diagonal gap); a tag finds the one nearby body; a tag correctly
+finds the NEARER of two bodies, not just the first one the spatial
+index happens to return; nothing within the search radius returns
+null rather than a distant false match; a caller-supplied
+`maxDistance` is honored; `buildPrimitiveToBodyMap` covers every
+primitive in every body exactly once.
+
+Real-sheet sanity check (USDA APHIS #1, first 200 real text spans via
+`textSpans`): 89 found an adjacent body within the default 60px, 111
+did not — plausible for a real sheet's text (many spans are room
+labels, dimension strings, and notes with no equipment body nearby,
+not every text span is an equipment tag). 7ms for 200 lookups.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (7/7); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet sanity check above using real extracted text, not
+synthetic bboxes. Does not modify `candidateBodyLaneB.ts`,
+`candidateBodyLaneD.ts`, `candidateBodyEdgeAttributes.ts`,
+`candidateBodySignature.ts`, `vectorSceneIndex.ts`,
+`vectorSceneRelations.ts`, `vectorSceneSpatialIndex.ts`, or
+`oneclick.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — deciding which body a tag is
+plausibly associated with is squarely "what tag owns it," the shared-
+path doctrine's own example category.
+
+Not done: Lane C's requirements 1, 2, and the fuller discipline under
+4 (above); Lane A/E remain unstarted; the association_type
+vocabulary itself. Phase 3's own gate certification remains blocked
+on Phase 1's corpus reaching 150+/12. Phases 4-8 have not been
+started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane D's
 own edge/relation attributes, the second half of its named list
 ("touching, gap distance, crossing, T-junction, parallel,

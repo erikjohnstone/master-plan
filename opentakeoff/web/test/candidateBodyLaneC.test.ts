@@ -1,0 +1,77 @@
+// GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane C — first slice:
+// no-leader tag/body adjacency, via the spatial index.
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { extractVectorGeometry } from "../src/lib/oneclick.ts";
+import { buildVectorSceneIndex } from "../src/lib/vectorSceneIndex.ts";
+import { computeVectorSceneJunctions } from "../src/lib/vectorSceneRelations.ts";
+import { proposeCandidateBodiesLaneB } from "../src/lib/candidateBodyLaneB.ts";
+import { buildSpatialIndex } from "../src/lib/vectorSceneSpatialIndex.ts";
+import { bboxGapDistance, buildPrimitiveToBodyMap, findAdjacentBody } from "../src/lib/candidateBodyLaneC.ts";
+
+const OPS = {
+  constructPath: 10, moveTo: 11, lineTo: 12, curveTo: 13, curveTo2: 14, curveTo3: 15, closePath: 16, rectangle: 17,
+} as const;
+const ID = [1, 0, 0, 1, 0, 0];
+type Op = [number, unknown[] | null];
+const opList = (ops: Op[]) => ({ fnArray: ops.map((o) => o[0]), argsArray: ops.map((o) => o[1]) });
+const closedRect = (x: number, y: number, w: number, h: number): Op =>
+  [OPS.constructPath, [[OPS.rectangle], [x, y, w, h]]];
+
+function setupFor(ops: Op[]) {
+  const geo = extractVectorGeometry(opList(ops), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  const { bodies } = proposeCandidateBodiesLaneB(idx, junctions);
+  const spatialIndex = buildSpatialIndex(idx);
+  const primitiveToBodyId = buildPrimitiveToBodyMap(bodies);
+  return { bodies, spatialIndex, primitiveToBodyId };
+}
+
+test("bboxGapDistance: overlapping or touching boxes are 0 apart", () => {
+  assert.equal(bboxGapDistance([0, 0, 10, 10], [5, 5, 15, 15]), 0);
+  assert.equal(bboxGapDistance([0, 0, 10, 10], [10, 0, 20, 10]), 0);
+});
+
+test("bboxGapDistance: separated boxes report the real gap, diagonal included", () => {
+  assert.equal(bboxGapDistance([0, 0, 10, 10], [20, 0, 30, 10]), 10, "horizontal gap");
+  assert.equal(bboxGapDistance([0, 0, 10, 10], [13, 14, 20, 20]), 5, "3-4-5 diagonal gap");
+});
+
+test("Lane C: a tag sitting right next to one body finds it, within the default threshold", () => {
+  const { bodies, spatialIndex, primitiveToBodyId } = setupFor([closedRect(0, 0, 10, 10)]);
+  const result = findAdjacentBody([15, 2, 25, 8], bodies, primitiveToBodyId, spatialIndex);
+  assert.equal(result.nearestBodyId, bodies[0].id);
+  assert.equal(result.distance, 5);
+});
+
+test("Lane C: a tag finds the NEARER of two bodies, not just the first found", () => {
+  const { bodies, spatialIndex, primitiveToBodyId } = setupFor([
+    closedRect(0, 0, 10, 10),
+    closedRect(200, 0, 10, 10),
+  ]);
+  // tag sits just past the far body's own left edge, at x=195 — closer to
+  // body 2 (200..210) than body 1 (0..10)
+  const result = findAdjacentBody([185, 2, 195, 8], bodies, primitiveToBodyId, spatialIndex);
+  const farBody = bodies.find((b) => b.x0 === 200)!;
+  assert.equal(result.nearestBodyId, farBody.id);
+  assert.equal(result.distance, 5);
+});
+
+test("Lane C: nothing within the search radius returns null, not a distant false match", () => {
+  const { bodies, spatialIndex, primitiveToBodyId } = setupFor([closedRect(0, 0, 10, 10)]);
+  const result = findAdjacentBody([10000, 10000, 10010, 10010], bodies, primitiveToBodyId, spatialIndex);
+  assert.equal(result.nearestBodyId, null);
+  assert.equal(result.distance, null);
+});
+
+test("Lane C: a caller-supplied maxDistance is honored (a body just past it is excluded)", () => {
+  const { bodies, spatialIndex, primitiveToBodyId } = setupFor([closedRect(0, 0, 10, 10)]);
+  const result = findAdjacentBody([16, 2, 26, 8], bodies, primitiveToBodyId, spatialIndex, { maxDistance: 5, searchPad: 20 });
+  assert.equal(result.nearestBodyId, null, "the real gap here is 6px, just over the 5px cap");
+});
+
+test("Lane C: buildPrimitiveToBodyMap covers every primitive in every body exactly once", () => {
+  const { bodies, primitiveToBodyId } = setupFor([closedRect(0, 0, 10, 10), closedRect(100, 0, 10, 10)]);
+  for (const body of bodies) for (const pid of body.primitiveIds) assert.equal(primitiveToBodyId.get(pid), body.id);
+});
