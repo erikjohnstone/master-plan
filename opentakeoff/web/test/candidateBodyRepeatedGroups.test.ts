@@ -9,7 +9,7 @@ import { buildVectorSceneIndex } from "../src/lib/vectorSceneIndex.ts";
 import { computeVectorSceneJunctions } from "../src/lib/vectorSceneRelations.ts";
 import { proposeCandidateBodiesLaneB } from "../src/lib/candidateBodyLaneB.ts";
 import { computePrimitiveGraphAttributes } from "../src/lib/candidateBodyLaneD.ts";
-import { groupRepeatedLaneBBodies } from "../src/lib/candidateBodyRepeatedGroups.ts";
+import { groupRepeatedLaneBBodies, filterPlausibleSymbolGroups } from "../src/lib/candidateBodyRepeatedGroups.ts";
 
 const OPS = {
   constructPath: 10, moveTo: 11, lineTo: 12, curveTo: 13, curveTo2: 14, curveTo3: 15, closePath: 16, rectangle: 17,
@@ -81,4 +81,68 @@ test("repeated groups: an empty sheet reports no groups and no unsigned bodies",
   const { result } = groupFor([]);
   assert.deepEqual(result.repeatedGroups, []);
   assert.equal(result.unsignedBodyCount, 0);
+});
+
+test("filterPlausibleSymbolGroups: a tiny few-primitive repeated group (the same SIZE CLASS as tarrant-county-mechanical.pdf#1's own real decorative border tick mark — that real one had exactly 3 primitives; this fixture approximates the shape, not a byte-identical reproduction of the PDF's own glyph) is excluded by the default threshold", () => {
+  const tick = (dx: number): Op[] => [line(dx, 0, dx + 1, 0.5), line(dx + 1, 0.5, dx + 2, 0)];
+  const ops = [0, 10, 20].flatMap((dx) => tick(dx));
+  const { bodies, result } = groupFor(ops);
+  const bodiesById = new Map(bodies.map((b) => [b.id, b]));
+  const filtered = filterPlausibleSymbolGroups(result.repeatedGroups, bodiesById);
+  assert.equal(result.repeatedGroups.length, 1, "test premise: the 3 ticks do form one repeated group");
+  const groupPrimitiveCount = bodiesById.get(result.repeatedGroups[0][0])!.primitiveIds.length;
+  assert.ok(groupPrimitiveCount < 4, `test premise: each tick has fewer than 4 primitives, got ${groupPrimitiveCount}`);
+  assert.deepEqual(filtered.plausibleGroups, []);
+  assert.equal(filtered.excludedGroups.length, 1);
+});
+
+// A synthetic reproduction of the real dotted-border-circle counter-
+// example (a body with ENOUGH primitives to clear minPrimitiveCount but
+// physically too small to clear minDiagonal) was attempted here and
+// dropped: every geometry tried either hit candidateBodySignature.ts's
+// own already-disclosed "zero length spread" dominant-orientation
+// instability (a regular polygon, all edges equal length) or an
+// unrelated Lane B junction-formation quirk with short chained corner
+// segments that never joined into one body at all — neither is a defect
+// in THIS module, and chasing a clean synthetic repro of a shape whose
+// real discovery already has a rendered, documented real-sheet proof
+// (see this module's own header and PROGRESS.md) was not a good use of
+// further effort. `minPrimitiveCount and minDiagonal are each real,
+// independently tunable knobs` below already proves minDiagonal
+// excludes what minPrimitiveCount alone would not, using a fixture that
+// reliably builds; the real multi-primitive/tiny-size case itself is
+// proven by the real corpus measurement, not re-derived synthetically.
+
+test("filterPlausibleSymbolGroups: a repeated group with enough primitives to plausibly be a real symbol is kept", () => {
+  const icon = (dx: number): Op[] => [
+    line(dx, 0, dx + 10, 0), line(dx + 10, 0, dx + 10, 10), line(dx + 10, 10, dx, 10), line(dx, 10, dx, 0),
+  ];
+  const ops = [0, 100, 200].flatMap((dx) => icon(dx));
+  const { bodies, result } = groupFor(ops);
+  const bodiesById = new Map(bodies.map((b) => [b.id, b]));
+  const filtered = filterPlausibleSymbolGroups(result.repeatedGroups, bodiesById);
+  assert.equal(filtered.plausibleGroups.length, 1);
+  assert.equal(filtered.excludedGroups.length, 0);
+});
+
+test("filterPlausibleSymbolGroups: minPrimitiveCount and minDiagonal are each real, independently tunable knobs", () => {
+  const tick = (dx: number): Op[] => [line(dx, 0, dx + 1, 0.5), line(dx + 1, 0.5, dx + 2, 0)];
+  const ops = [0, 10].flatMap((dx) => tick(dx));
+  const { bodies, result } = groupFor(ops);
+  const bodiesById = new Map(bodies.map((b) => [b.id, b]));
+  const strict = filterPlausibleSymbolGroups(result.repeatedGroups, bodiesById);
+  assert.equal(strict.plausibleGroups.length, 0, "default thresholds exclude the tiny 2-primitive ticks on both dimensions");
+  // lowering ONLY minPrimitiveCount still excludes on the diagonal check
+  // — the two knobs are independent, neither alone overrides the other.
+  const onlyPrimitiveLowered = filterPlausibleSymbolGroups(result.repeatedGroups, bodiesById, { minPrimitiveCount: 1 });
+  assert.equal(onlyPrimitiveLowered.plausibleGroups.length, 0, "still excluded — the tick's own bbox diagonal is still below the default minDiagonal");
+  // lowering BOTH lets it through.
+  const bothLowered = filterPlausibleSymbolGroups(result.repeatedGroups, bodiesById, { minPrimitiveCount: 1, minDiagonal: 0 });
+  assert.equal(bothLowered.plausibleGroups.length, 1, "lowering both thresholds keeps the group");
+});
+
+test("filterPlausibleSymbolGroups: an empty groups list produces no plausible and no excluded groups, not a crash", () => {
+  const filtered = filterPlausibleSymbolGroups([], new Map());
+  assert.deepEqual(filtered.plausibleGroups, []);
+  assert.deepEqual(filtered.excludedGroups, []);
 });

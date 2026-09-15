@@ -1,5 +1,65 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 gate — added
+`filterPlausibleSymbolGroups` to `candidateBodyRepeatedGroups.ts`,
+directly following through on the prior entry's own honest caveat
+("needs a size/context filter... before its own counts can be read as
+a dense-EQUIPMENT-grid check"). Found a SECOND real false positive in
+the process, disclosed rather than smoothed over.
+
+FIRST filter dimension, `minPrimitiveCount` (default 4): excludes a
+body with too few primitives to plausibly be a real equipment icon —
+motivated by the prior entry's own real find (a 3-primitive decorative
+rope-border tick mark).
+
+SECOND real counter-example, found by visually re-checking the
+FILTER's own output rather than trusting the smaller numbers alone
+(same GOAL.md standing rule, applied a third time this session): the
+primitive-count-only filter's own largest surviving "plausible" group
+(57 members) was STILL decorative — the same sheet's dotted border,
+each dot a small filled circle that decomposes into ~16 bezier
+primitives despite being visually tiny. Primitive count alone was not
+sufficient. Added a second, independent dimension, `minDiagonal`
+(default 8, the body's own bbox diagonal) — a body physically too
+small is excluded regardless of primitive count. Neither threshold is
+a calibrated classifier; both are real, measured, disclosed knobs
+chosen to exclude the two concrete false positives found this session,
+stated as exactly that in the module's own header.
+
+New tests in `web/test/candidateBodyRepeatedGroups.test.ts` (now 9,
+one net addition — see below): the original tiny-tick-mark test still
+passes; a new test proves `minPrimitiveCount` and `minDiagonal` are
+each independently real (lowering ONE alone is not enough to admit a
+tiny body — both gates must open); a repeated group with enough
+primitives AND enough size is kept. One planned test — a synthetic
+reproduction of the dotted-circle case itself (enough primitives, too
+small) — was ATTEMPTED and DROPPED after two real synthetic-fixture
+failures unrelated to this module's own correctness: a regular-polygon
+fixture hit `candidateBodySignature.ts`'s own already-disclosed "zero
+length spread" dominant-orientation instability, and a chained-corner
+fixture hit an unrelated Lane B junction-formation quirk that never
+joined the segments into one body at all. Disclosed rather than
+silently reworked into a misleadingly-passing test: the real shape's
+own discovery already has a rendered, documented real-sheet proof, and
+chasing a clean synthetic repro of it was not a good use of further
+effort once two attempts surfaced unrelated fixture problems instead.
+
+REAL-SHEET RE-VALIDATION after the fix: `tarrant-county-mechanical
+.pdf#1`'s own largest PLAUSIBLE group dropped from 57 (the dotted
+circle, now correctly excluded) to 24 — a much more modest, believable
+count for a real repeated symbol. 69 of the original 1,133 groups
+(228 bodies) now remain in the "plausible" bucket. Stated honestly,
+not overclaimed: the remaining 69 groups have NOT been individually
+visually confirmed as real equipment — two real false positives were
+found and fixed in this exact set through visual spot-checks, and
+there is no reason to assume a third does not remain. This filter
+narrows the search space; it does not certify it.
+
+Verification: `npx tsc --noEmit` clean; test file passes (9/9); mcp
+import parity confirmed; real-sheet re-validation above. Does not
+modify `groupRepeatedLaneBBodies` itself, `candidateBodySignature.ts`,
+or `candidateBodyLaneD.ts`.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 gate — the
 prior entry's own scope-boundary finding named two ways forward; this
 is the second one, "a dedicated real-sheet dense-grid check," built as
