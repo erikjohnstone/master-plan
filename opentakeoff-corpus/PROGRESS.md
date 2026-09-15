@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md — full `web/` test
+suite run confirms slices 1-9 introduced zero new failures. `npm
+test` (the project's own full `test/*.test.ts` glob, 3226 tests) came
+back 3156 pass / 70 fail. Every one of the 70 failures lives in one of
+11 test files, none of them touched by any Phase 2 slice this session
+(`annotationGeneration`, `basRestore`, `basSnapshotBrowser`,
+`basSnapshotStore`, `basSyncHistory`, `basSyncRestore`, `fsProvider`,
+`graphDrive`, `m365Composite`, `syncStore`, `tableRecallGaps`) — sync/
+Drive/BAS-annotation/schedule-recall areas, disjoint from
+`oneclick.ts`/`vectorSceneIndex.ts`/`vectorSceneRelations.ts`/
+`vectorSceneSpatialIndex.ts` and the 2 fixture files this session
+touched (`drawnrooms.test.ts`, `geometry.test.ts`).
+
+Verified this is pre-existing rather than assumed: added a temporary
+git worktree at commit `29a962b` (the last commit before Phase 2
+slice 1), symlinked in the existing `node_modules` rather than
+reinstalling, and re-ran the two most substantive-looking failures
+directly. Both reproduce IDENTICALLY at that baseline, before any
+Phase 2 work existed: `basSnapshotStore.test.ts` fails with
+"Coordinated takeoff sync and restore require a browser with Web
+Locks support" — a browser-API gap in the Node test runner, not a
+code defect Phase 2 introduced; `tableRecallGaps.test.ts`'s "B-12:
+single-data-row schedules drawn in a real grid are extracted" fails
+with the identical assertion message pre-Phase-2 too. Removed the
+worktree after confirming. Combined with the disjoint file list above,
+this rules out Phase 2 slices 1-9 as the cause of any of the 70
+failures — none of them are new, and none of them touch the
+extraction/index/relations/spatial-index code this session added.
+
+SHOULD THIS BE ON THE SHARED PATH? No. A verification run only — no
+file changes (the temporary worktree used for the baseline comparison
+was removed, not committed).
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 9:
 real-sheet validation of slices 6-7's caps, plus a hard-ceiling
 crash fix found by that validation. New `mcp/scripts/
