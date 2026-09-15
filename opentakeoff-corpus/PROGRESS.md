@@ -1,5 +1,90 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — document 037
+ceiling-diffuser case (draft "48-ar-va-ahu21-reflected-ceiling-diffusers"),
+built, verified, and reverted. Third reverted corpus-expansion attempt this
+checkpoint, and the most instructive one: the failure this time was not a
+wrong family or scope choice (attempts 1-2, document 010, below) but a wrong
+assumption about which geometry a visually-obvious symbol actually resolves
+to under `fingerprintSymbol`.
+
+The seed (part02 page 28, drawing AE111, the 'CHIEF PM&RS' room's ceiling
+tile) looks, on a normal render, like a square ceiling tile with a full
+corner-to-corner diagonal X plus a small centered circle carrying its own
+diagonal cross (the "diffuser+sprinkler combo" flagged by the prior scouting
+pass). Following this checkpoint's own established rule -- verify every
+candidate through `Session.symbolSweep` directly, never trust the standalone
+batch tool alone -- surfaced two real problems in sequence, both fixed
+correctly per the goal's own rules, before a third, deeper problem forced
+the revert:
+
+1. Default sweep (rotations enabled, the production default) returned 33
+   raw matches against an expected 8 non-seed instances. Diagnosed as the
+   square-diagonal-X-plus-circled-X shape's 4-fold rotational self-symmetry
+   producing up to 4 equally-valid rotation hypotheses per physical tile --
+   confirmed by rendering one 4-member raw-match cluster and finding all 4
+   rings on a single physical tile. Fixed correctly, not by weakening
+   anything: `options: { rotations: false }` is an already-documented,
+   already-precedented fixture escape hatch in `symbol-sweep-corpus.mjs`'s
+   own "manifest" mode (the same mechanism 8 existing cases already use via
+   `options.affine: false`), transparently reported through
+   `manifest_override_fields`/`cases_with_manifest_override` rather than
+   hidden. With rotation search off, the raw match count became exactly 8 --
+   confirming the physical-instance count was right all along.
+2. But the runner then failed on "no one-to-one localization for 8
+   instances": every one of the 8 hand-derived instance centers (built
+   earlier this checkpoint by proximity-clustering the 33 raw rotation-
+   hypothesis matches) sat 37.6-49.5px away from the engine's own real
+   matched center for that same tile -- systematically offset in Y, not
+   random noise. Direct inspection of the seed's own raw `fp.rel` segments
+   (dumped via a one-off script calling `fingerprintSymbol` directly, not
+   inferred from any render) explained why: the visually-obvious
+   corner-to-corner diagonal X is NOT part of the matched fingerprint at
+   all -- it never appears in `fp.rel`. What the seed's 29-segment
+   fingerprint actually captured is a ~72px horizontal line plus a small
+   ~24px circled-X positioned well off that line's center, most likely
+   because the big diagonal tile pattern is shared/continuous background
+   ceiling-grid geometry that a length-based heuristic elsewhere in the
+   matcher correctly excludes as too large to be a compact symbol. My own
+   hand-placed instance centers were built by eyeballing the visually
+   salient (but geometrically irrelevant) big diagonal-X tile pattern, not
+   the actual small asymmetric residual signature the engine matches on --
+   a real methodology gap, not an engine bug.
+   Attempting to correct this by re-centering rects on the engine's own
+   reported match points made it worse in a revealing way: 4 of the 8
+   instances (occtherapy-2, secretary-2, secretary-3, occtherapy-3)
+   recomputed a clean ~48px-tall body_bbox matching the seed almost exactly,
+   but the other 4 (ltkt-office, occtherapy-1, ltkt-office-2, secretary-1)
+   picked up contamination -- inflated to 36-56 segments and 56-69px-tall
+   boxes, meaning a naively-sized re-centered rect swept in extra
+   unrelated ink for roughly half the instances. Properly resolving this
+   would mean deriving a tight, per-instance rect from first principles at
+   each of the 8 real locations (not by symmetric offset from a mis-derived
+   center) and re-verifying every one individually -- a full redo, not a
+   correction.
+
+Given the depth of rework required and this checkpoint's own standing rule
+(revert rather than tune a case until an engine objection disappears),
+reverted the draft entirely: `cases.json` is back to exactly 47 cases,
+verified by direct JSON parse (no trace of the draft remains; nothing was
+ever committed, so there was nothing to undo in git history). New standing
+methodological rule, on top of the "always verify through the real engine"
+rule attempts 1-2 established: **before trusting any hand-derived instance
+center, dump and inspect the seed's own raw `fp.rel` segments at least
+once, to confirm what geometry is actually being fingerprinted.** A
+visually obvious, symmetric-looking background/grid pattern common across
+a whole architectural sheet (here, the ceiling-tile diagonal-X grid) can be
+silently excluded by the matcher's own length-based filtering, leaving a
+much smaller, off-center, easy-to-mis-locate residual signature as the
+real match target -- clustering raw match coordinates or eyeballing a
+render is not a substitute for checking the actual matched segments.
+
+SHOULD THIS BE ON THE SHARED PATH? No. This pass only drafted, verified,
+and reverted ground-truth data plus this progress note -- no
+`web/src/lib` or `mcp/src` production code changed, and the one existing
+option surfaced (`options.rotations: false`) is a pre-existing, documented
+fixture mechanism used exactly as designed, not a new capability.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 — corpus-expansion
 sourcing pass: three new documents scouted in depth, zero new cases committed
 this pass, and the reasons are themselves real findings worth keeping.
