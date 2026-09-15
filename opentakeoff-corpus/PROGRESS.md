@@ -1,5 +1,63 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 4:
+line cap and line join. The last two of the goal's own named
+"graphics-state attributes available from pdf.js" list (CTM, line
+width, stroke/fill, luminance, dash pattern, cap, join, clip state —
+every other one was already tracked as of slice 2/pre-existing work).
+Miter limit is NOT in that named list, so it is intentionally not added
+here — no scope creep beyond what the goal document actually asks for.
+
+Added `lineCap: number` and `lineJoin: number` to `SubPath`, PDF spec
+numbering passed straight through unchanged (cap: 0 butt/1 round/2
+square; join: 0 miter/1 round/2 bevel), both defaulting to 0 to match
+PDF's own initial graphics state, so an unstyled file costs nothing.
+Same reasoning as `dashed`: cannot change mid-path, so one value per
+figure is the right grain, tracked via `lineCap`/`lineJoin` graphics-
+state variables alongside `lw`/`lum`/`fillLum`/`dashed`, captured into
+`pathCap`/`pathJoin` at the same `constructPath`-entry point those use,
+and round-tripped through both the save/restore stack (extended from a
+5-tuple to a 7-tuple) and the Form XObject Begin/End pair (identical
+extension, same as every prior graphics-state field).
+
+Followed the discipline in order this time: wrote the focused test
+file first (`web/test/capJoinState.test.ts`, 3 tests), confirmed it
+failed (fields undefined) before touching `oneclick.ts`, then
+implemented, then re-verified. All 3 new tests pass.
+
+Fixed the same 4 pre-existing hand-built `SubPath` literals in
+drawnrooms.test.ts/geometry.test.ts (now needing `lineCap: 0, lineJoin:
+0` on top of the fields prior slices added) via the same grep-first-
+fix-everywhere-at-once `sed` pass — the practice keeps paying off
+exactly as expected every time `SubPath` gains a new required field.
+
+Verification: `npx tsc --noEmit` clean. Every test file importing
+`oneclick.ts`/`SubPath` run individually — now 21 files, 297 cases
+(added capJoinState.test.ts and formDepth.test.ts to the list run for
+slice 3) — 0 failures. MCP/Session side (`mcp/src/session.ts`) still
+loads cleanly via tsx.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — `oneclick.ts` is the one
+shared vector-extraction implementation; no separate path exists.
+
+This closes out the goal document's explicit graphics-state list for
+Phase 2's gate ("unit fixtures prove transforms, nested forms, curves,
+dash/cap/join where available, subpaths, layers, and primitive IDs") —
+transforms, subpaths, layers, and primitive IDs already existed before
+this session; curves (chord-sampled, not yet a better approximation),
+dash, cap, and join are now all fixture-proven. Curve fidelity beyond
+chord-sampling (goal requirement 3: "preserve curves better than a
+single chord when the source operator provides controls") remains
+open, as does everything else Section 7 lists that is not a
+per-SubPath graphics-state scalar: the actual `vectorSceneIndex.ts`
+shared module itself (the phase's literal named deliverable — extending
+`extractVectorGeometry` has been laying its groundwork, but the index
+module has not been started), Form XObject object identity/content
+signature, text spans/exploded-text masks, intersection/junction/
+collinearity/parallel/perpendicular relations, a real spatial index,
+document-hash+page+parser-version caching, and memory accounting with
+a disclosed cap. None of Phases 3-8 have been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 3:
 Form XObject nesting depth. Before writing any tracking logic, read this
 build's own pdf.js worker source (`web/node_modules/pdfjs-dist/build/

@@ -24,7 +24,7 @@ function rect(x: number, y: number, w: number, h: number, flags = 0, segs: numbe
   const i0 = segs.length >> 2;
   const q: Array<[number, number]> = [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   for (let k = 0; k < 4; k++) { const a = q[k], b = q[(k + 1) % 4]; segs.push(a[0], a[1], b[0], b[1]); }
-  sps.push({ i0, i1: segs.length >> 2, x0: x, y0: y, x1: x + w, y1: y + h, closed: true, flags, fillLum: 0, dashed: false, formDepth: 0 });
+  sps.push({ i0, i1: segs.length >> 2, x0: x, y0: y, x1: x + w, y1: y + h, closed: true, flags, fillLum: 0, dashed: false, formDepth: 0, lineCap: 0, lineJoin: 0 });
   return { segs, sps };
 }
 
@@ -47,7 +47,7 @@ test("drawnRegions: a room-sized closed figure is a candidate; a tag box is not"
 
 test("drawnRegions: an open figure is never a candidate, whatever its size", () => {
   const segs = [0, 0, 200, 0, 200, 0, 200, 200];
-  const sps: SubPath[] = [{ i0: 0, i1: 2, x0: 0, y0: 0, x1: 200, y1: 200, closed: false, flags: 0, fillLum: 0, dashed: false, formDepth: 0 }];
+  const sps: SubPath[] = [{ i0: 0, i1: 2, x0: 0, y0: 0, x1: 200, y1: 200, closed: false, flags: 0, fillLum: 0, dashed: false, formDepth: 0, lineCap: 0, lineJoin: 0 }];
   assert.deepEqual(drawnRegions(segs, sps, FT), []);
 });
 

@@ -87,6 +87,19 @@ export interface SubPath {
    *  duct run, or a demolition-scope outline is drawn dashed by convention;
    *  a symbol's own body linework virtually never is. */
   dashed: boolean;
+  /** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — the `J` (setLineCap)
+   *  operator's value in force when the figure was built: 0 butt, 1 round,
+   *  2 square (PDF spec numbering, passed through unchanged). PDF's initial
+   *  line cap is butt (0), so 0 is the right default and an unstyled file
+   *  costs nothing. Graphics state exactly like dash/fill colour — cannot
+   *  change mid-path, so one value per figure is the right grain. */
+  lineCap: number;
+  /** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — the `j` (setLineJoin)
+   *  operator's value in force when the figure was built: 0 miter, 1 round,
+   *  2 bevel (PDF spec numbering, passed through unchanged). PDF's initial
+   *  line join is miter (0), so 0 is the right default. Same per-figure
+   *  grain as `lineCap` and for the same reason. */
+  lineJoin: number;
   /** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — Form XObject nesting
    *  depth: 0 at page level, 1 inside one `Do`-invoked form's own content
    *  stream, 2 inside a form invoked from within that form, and so on.
@@ -396,10 +409,12 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   let pathFill = 0;                 // the fill colour of the path being built
   let pathDashed = false;           // the dash state of the path being built
   let pathFormDepth = 0;            // …nor which Form XObject nesting it lives in
+  let pathCap = 0;                  // …nor the line cap
+  let pathJoin = 0;                 // …nor the line join
   const openSub = (flags: number, at: Point) => {
     sealSub();
     const k = metaArr.length;
-    sp = { i0: k, i1: k, x0: at[0], y0: at[1], x1: at[0], y1: at[1], closed: false, flags, fillLum: pathFill, dashed: pathDashed, formDepth: pathFormDepth };
+    sp = { i0: k, i1: k, x0: at[0], y0: at[1], x1: at[0], y1: at[1], closed: false, flags, fillLum: pathFill, dashed: pathDashed, formDepth: pathFormDepth, lineCap: pathCap, lineJoin: pathJoin };
   };
   // every segment push goes through this, so a subpath's range and bbox can
   // never drift from what actually landed in segs
@@ -441,6 +456,13 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   // false is the right default. `[] 0 d` (explicitly solid) also reads
   // false — it is not a distinct state from never having called setDash.
   let dashed = false;
+  // graphics-state line cap/join (Phase 2), the last two of the goal's own
+  // named "graphics-state attributes available from pdf.js" (CTM, line
+  // width, stroke/fill, luminance, dash pattern, cap, join, clip state).
+  // PDF's initial cap is butt (0) and initial join is miter (0), so both
+  // default to 0 and an unstyled file costs nothing.
+  let lineCap = 0;
+  let lineJoin = 0;
   // Form XObject nesting depth (Phase 2): a plain counter, not part of the
   // save/restore graphics-state tuple — it only changes on Begin/End, never
   // on q/Q, and a form's own internal q/Q pairs must not perturb it. Confirmed
@@ -450,7 +472,7 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   // per-object identity (same XObject reused twice ⇒ same subpath signature)
   // would need a content-hash and is deliberately deferred to a later slice.
   let formDepth = 0;
-  const stack: Array<[number[], number, number, number, boolean]> = [];
+  const stack: Array<[number[], number, number, number, boolean, number, number]> = [];
   // Marked-content / Optional Content (#85): a purely SEQUENTIAL stack — not
   // graphics state, so save/restore never touches it, and a Form XObject with
   // /OC arrives as its own begin/end pair around the form's ops (the worker
@@ -484,12 +506,14 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   };
   for (let i = 0; i < fns.length; i++) {
     const fn = fns[i], args = A[i];
-    if (fn === OPS.save) stack.push([m.slice(), lw, lum, fillLum, dashed]);
-    else if (fn === OPS.restore) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; } }
+    if (fn === OPS.save) stack.push([m.slice(), lw, lum, fillLum, dashed, lineCap, lineJoin]);
+    else if (fn === OPS.restore) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; lineCap = p[5]; lineJoin = p[6]; } }
     else if (fn === OPS.transform) m = mul(m, args);
     else if (fn === OPS.setLineWidth) lw = args[0];
     else if (fn === OPS.setGState) { for (const pr of args[0] || []) if (pr && pr[0] === "LW") lw = pr[1]; }
     else if (fn === OPS.setDash && args) { const arr = args[0]; dashed = Array.isArray(arr) && arr.length > 0 && arr.some((v: number) => v > 0); }
+    else if (fn === OPS.setLineCap && args) lineCap = args[0];
+    else if (fn === OPS.setLineJoin && args) lineJoin = args[0];
     else if (fn === OPS.setStrokeRGBColor && args) { const L = strokeLuminance(args); if (L !== null) lum = L; }
     // FILL luminance, the same device strokeLuminance already applies to
     // strokes (#260) — and the fact that finally answers "is this ink WALL".
@@ -499,8 +523,8 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
     // indistinguishable until now, which is why a wall test had to fall back
     // to guessing at a figure's shape.
     else if (fn === OPS.setFillRGBColor && args) { const L = strokeLuminance(args); if (L !== null) fillLum = L; }
-    else if (fn === OPS.paintFormXObjectBegin) { stack.push([m.slice(), lw, lum, fillLum, dashed]); if (args && args[0]) m = mul(m, args[0]); formDepth++; }
-    else if (fn === OPS.paintFormXObjectEnd) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; } if (formDepth > 0) formDepth--; }
+    else if (fn === OPS.paintFormXObjectBegin) { stack.push([m.slice(), lw, lum, fillLum, dashed, lineCap, lineJoin]); if (args && args[0]) m = mul(m, args[0]); formDepth++; }
+    else if (fn === OPS.paintFormXObjectEnd) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; lineCap = p[5]; lineJoin = p[6]; } if (formDepth > 0) formDepth--; }
     else if (fn === OPS.beginMarkedContent) { mcStack.push(-1); }
     else if (fn === OPS.beginMarkedContentProps) {
       // worker emits ["OC", data] where data is {type:"OCG", id}, an OCMD
@@ -591,6 +615,8 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       pathFill = fillLum;           // …and neither can the fill colour
       pathDashed = dashed;          // …nor the dash state
       pathFormDepth = formDepth;    // …nor which Form XObject nesting it lives in
+      pathCap = lineCap;            // …nor the line cap
+      pathJoin = lineJoin;          // …nor the line join
       const visit = (p: Point) => { points.push(p); };
       const lineTo = (p: Point) => { if (cur) { segs.push(cur[0], cur[1], p[0], p[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); primTypeArr.push(PRIM_LINE); noteSeg(cur, p); } cur = p; visit(p); };
       for (const op of ops) {
