@@ -692,6 +692,16 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   const seedR = resolveOnGraph(walked, from, tolPx);
   walked = seedR.graph;
   const seed = seedR.node;
+  // Set OPENTAKEOFF_TRACE_DEBUG=1 to see exactly which node/edge a seed or
+  // equipment placement resolved to — real diagnostic that earned its
+  // keep during the Phase 2 crossing-gate investigation (see
+  // PLAN_CONNECTIVITY_SERVES.md): "which edge did resolveOnGraph actually
+  // pick" is the first question any future seed-resolution bug needs
+  // answered, same discipline vectorTakeoffPipeline.ts's own
+  // OPENTAKEOFF_GRAPH_TRACE already carries. Off by default, zero cost.
+  if (process.env.OPENTAKEOFF_TRACE_DEBUG) {
+    console.error(`TRACE_DEBUG seed resolved to node ${seed} at (${seed != null ? walked.nodes[seed].x : "?"},${seed != null ? walked.nodes[seed].y : "?"}) tolPx=${tolPx}`);
+  }
   if (seed == null) {
     return { status: "refused", layer_signal, confidence: 0, factors: [], reason: "The seed point isn't on any traced linework — click directly on a drawn pipe/duct/conduit line." };
   }
@@ -704,6 +714,9 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   for (const eq of opts.equipmentSymbols) {
     const r = resolveOnGraph(walked, eq.at, tolPx);
     walked = r.graph;
+    if (process.env.OPENTAKEOFF_TRACE_DEBUG) {
+      console.error(`TRACE_DEBUG equipment ${eq.id} resolved to node ${r.node} at (${r.node != null ? walked.nodes[r.node].x : "?"},${r.node != null ? walked.nodes[r.node].y : "?"})`);
+    }
     if (r.node != null && !equipAtNode.has(r.node)) equipAtNode.set(r.node, eq);
   }
 

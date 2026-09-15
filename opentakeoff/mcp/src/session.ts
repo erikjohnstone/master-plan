@@ -3463,6 +3463,22 @@ export class Session {
       // entirely" comment) — trace_connectivity itself just never got the
       // same treatment until now.
       try {
+        // Phase 2 (#22, PLAN_CONNECTIVITY_SERVES.md) — the
+        // requireJunctionMarkForCrossings gate itself is built and tested
+        // (mepconnectivity.test.ts, 39/39), but NOT yet flipped on here.
+        // Attempted and reverted 2026-09-15: flipping it surfaced a real,
+        // root-caused regression on the itd-d1-lab real corpus case
+        // (mep-trace-eval.mjs 3/3 -> 2/3) — on this unlayered sheet, a
+        // callout leader-arrow line crosses the real duct within seed
+        // tolerance of the human-authored seed point, and
+        // resolveOnGraph's own nearest-edge tie-break can splice the seed
+        // onto the now-gated (correctly disconnected) short arrow-crossing
+        // fragment instead of the real, longer duct edge — even though
+        // the REST of that same real 42-hop duct run stays perfectly
+        // intact under the gate (confirmed directly: 41 of 42 hops still
+        // connect; only the very first hop, right at the seed, breaks).
+        // See PLAN_CONNECTIVITY_SERVES.md's Phase 2 section for the full
+        // diagnosis and the scoped fix this needs before flipping here.
         s.mepGraph = buildMepGraph(geo.segs, {
           meta: geo.meta, layerOf: geo.layerOf, layers: s.layers, excludeSegs, mppf,
         });

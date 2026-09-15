@@ -2030,6 +2030,19 @@ test("trace_connectivity: a stub reaching no equipment is a real dead_end, named
 // so a duct and a pipe that merely cross on the page (different real
 // elevations) trace as CONNECTED. This test locks in that CURRENT behavior
 // — a future fix to #22 changes this assertion, not silently drifts past it.
+//
+// The FIX for this (mepconnectivity.ts's requireJunctionMarkForCrossings)
+// is built and thoroughly tested (mepconnectivity.test.ts, 39/39) and
+// DOES correctly flip this exact fixture's own result to "reached"/AHU-3
+// when passed explicitly — but is NOT YET flipped on for the real MCP/UI
+// callers this test exercises end to end. Attempted and reverted
+// 2026-09-15: flipping mcp/src/session.ts's own default surfaced a real,
+// root-caused regression on the real itd-d1-lab corpus case
+// (mep-trace-eval.mjs 3/3 -> 2/3) — see that file's own reverted comment
+// and PLAN_CONNECTIVITY_SERVES.md's Phase 2 section for the full
+// diagnosis. This test therefore still pins the OLD, current production
+// behavior, same as before — not a step backward, a correct disclosure of
+// where production actually stands today.
 test("trace_connectivity: an unrelated crossing (not a real connection) currently traces as ambiguous — a known, disclosed limitation (#22)", async () => {
   const client = await pair();
   await call(client, "load_plan", { path: MEPPLAN });

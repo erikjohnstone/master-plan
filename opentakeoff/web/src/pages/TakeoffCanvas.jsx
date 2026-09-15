@@ -7086,6 +7086,13 @@ export default function TakeoffCanvas() {
       // cached so a sheet that can't be noded doesn't pay noding's real cost
       // (up to ~30s) again on every subsequent trace call against it.
       try {
+        // Phase 2 (#22, PLAN_CONNECTIVITY_SERVES.md) — mirrors
+        // mcp/src/session.ts's own ensureMepGraph exactly, including its
+        // own reverted default-flip: the requireJunctionMarkForCrossings
+        // gate is built and tested but not yet safe to flip on here — see
+        // that comment (and PLAN_CONNECTIVITY_SERVES.md's Phase 2 section)
+        // for the real, root-caused seed-resolution regression this
+        // surfaced on the real itd-d1-lab corpus case.
         graph = buildMepGraph(segs, { meta, layerOf: geo?.layerOf, layers: infos, excludeSegs, mppf });
       } catch (e) {
         graph = { nodingError: String((e && e.message) || e) };
