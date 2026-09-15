@@ -97,8 +97,8 @@ and short-duration variations. It never enables horizontal flips because that
 would invent directional HVAC/BAS symbol semantics. Failed or incomplete runs
 are not selected on resume.
 
-Start it once in a detached process, passing the PID of the already-running
-DINO supervisor so it cannot contend for the same GPU:
+On one GPU, start it once in a detached process, passing the PID of the
+already-running DINO supervisor so it cannot contend for the same GPU:
 
 ```sh
 nohup /workspace/training/symbol-metric-bakeoff/opentakeoff-ml/symbol_metric/scripts/run_overnight_mvp_bakeoff.sh \
@@ -108,3 +108,21 @@ nohup /workspace/training/symbol-metric-bakeoff/opentakeoff-ml/symbol_metric/scr
 The ranking files intentionally say `diagnostic_best_not_promotable`. They
 select the checkpoint to carry into the real grounding benchmark; they do not
 authorize software integration or installed quantity decisions.
+
+### Parallel-pod roles
+
+When independent pods share the immutable data volume, the predeclared queue
+can use three isolated roles without opening a held-out split early. Each role
+must use the same `REPORT_ROOT`; each writes its own role-named supervisor log.
+
+1. `BAKEOFF_ROLE=dino-screen` runs only the ten validation-only DINO screens,
+   writes the frozen stage-one shortlist, and exits.
+2. `BAKEOFF_ROLE=dino-final` waits for that shortlist, then performs the six
+   intermediate DINO runs, three full DINO finalists, and their one-time tests.
+3. `BAKEOFF_ROLE=rtdetr` runs the detector's complete independent successive-
+   halving queue. Its validation-only wrapper never opens the test split until
+   each stage-three finalist.
+
+This is parallel **experimentation**, not concurrent training on one GPU. Give
+each process a distinct GPU pod and do not launch the legacy `sequential` role
+at the same time, or the shared run directories would contend.

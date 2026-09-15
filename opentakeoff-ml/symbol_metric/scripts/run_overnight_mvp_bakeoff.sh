@@ -8,6 +8,7 @@
 set -u -o pipefail
 
 WAIT_PID="${1:-}"
+BAKEOFF_ROLE="${BAKEOFF_ROLE:-sequential}"
 WORKTREE="${WORKTREE:-/workspace/training/symbol-metric-bakeoff}"
 DINO_PYTHON="${DINO_PYTHON:-/workspace/training/master-plan/opentakeoff-ml/symbol_metric/.venv-runpod/bin/python}"
 RTDETR_PYTHON="${RTDETR_PYTHON:-/workspace/training/rtdetr-finetune/venv/bin/python}"
@@ -27,24 +28,28 @@ TRAIN_RTDETR="$RTDETR_ROOT/train_rtdetr_pack.py"
 RTDETR_SCREEN="$REPORT_ROOT/runtime/rtdetr_validation_only.py"
 
 mkdir -p "$REPORT_ROOT/dino/screen" "$REPORT_ROOT/dino/final" "$REPORT_ROOT/rtdetr/screen" "$REPORT_ROOT/rtdetr/final" "$REPORT_ROOT/runtime"
-LOG="$REPORT_ROOT/supervisor.log"
+case "$BAKEOFF_ROLE" in
+  sequential|dino-screen|dino-final|rtdetr) ;;
+  *) echo "Unknown BAKEOFF_ROLE: $BAKEOFF_ROLE" >&2; exit 64 ;;
+esac
+LOG="$REPORT_ROOT/$BAKEOFF_ROLE.log"
 exec >>"$LOG" 2>&1
 
-echo "[$(date --iso-8601=seconds)] successive-halving bakeoff started"
+echo "[$(date --iso-8601=seconds)] successive-halving bakeoff started; role=$BAKEOFF_ROLE"
 echo "Stage 1: 10 DINO + 8 RT-DETR validation-only screens. Stage 2: six intermediate retrains per model. Stage 3: three full finalists per model."
 echo "Held-out tests run only once per Stage-3 finalist. No result can auto-release into OpenTakeoff."
 
-if test -n "$WAIT_PID"; then
+if test -n "$WAIT_PID" && test "$BAKEOFF_ROLE" = "sequential"; then
   echo "Waiting for the pre-existing training chain PID $WAIT_PID."
   while kill -0 "$WAIT_PID" 2>/dev/null; do sleep 60; done
 fi
 
-if ! test -f "$DINO_RUN_ROOT/real-after-synthetic-v2/TRAINING_COMPLETE.txt"; then
-  echo "Required synthetic-init -> real training did not complete. Refusing to contend with it."
+if test "$BAKEOFF_ROLE" != "rtdetr" && ! test -f "$DINO_RUN_ROOT/synthetic-pid-research-v2/best.pt"; then
+  echo "Synthetic initialization checkpoint missing. Refusing the DINO matrix."
   exit 2
 fi
-if ! test -f "$DINO_RUN_ROOT/synthetic-pid-research-v2/best.pt"; then
-  echo "Synthetic initialization checkpoint missing. Refusing the DINO matrix."
+if test "$BAKEOFF_ROLE" = "sequential" && ! test -f "$DINO_RUN_ROOT/real-after-synthetic-v2/TRAINING_COMPLETE.txt"; then
+  echo "Required synthetic-init -> real training did not complete. Refusing the sequential queue."
   exit 2
 fi
 
@@ -94,22 +99,52 @@ run_dino_final() {
 }
 
 dino_ids=(warm-extended-proxy015 warm-extended-no-weak warm-conservative-proxy015 warm-extended-proxy005 warm-extended-proxy030 warm-extended-temp007 warm-extended-freeze3 real-extended-proxy015 real-conservative-proxy015 real-extended-no-weak)
-for identifier in "${dino_ids[@]}"; do run_dino_screen "$identifier" || echo "DINO screen $identifier failed; leave it out of the shortlist."; done
-dino_selector=(--kind dino --top-k 6 --output "$REPORT_ROOT/dino/stage1-shortlist.json")
-for identifier in "${dino_ids[@]}"; do test -f "$DINO_RUN_ROOT/overnight-stage1/$identifier/metrics.jsonl" && dino_selector+=(--candidate "$identifier=$DINO_RUN_ROOT/overnight-stage1/$identifier/metrics.jsonl"); done
-"$DINO_PYTHON" "$SELECT" "${dino_selector[@]}"
-while IFS= read -r identifier; do run_dino_refinement "$identifier" || echo "DINO intermediate $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/dino/stage1-shortlist.json")
-dino_refine_selector=(--kind dino --top-k 3 --output "$REPORT_ROOT/dino/stage2-shortlist.json")
-for identifier in "${dino_ids[@]}"; do test -f "$DINO_RUN_ROOT/overnight-stage2/$identifier/metrics.jsonl" && dino_refine_selector+=(--candidate "$identifier=$DINO_RUN_ROOT/overnight-stage2/$identifier/metrics.jsonl"); done
-"$DINO_PYTHON" "$SELECT" "${dino_refine_selector[@]}"
-while IFS= read -r identifier; do run_dino_final "$identifier" || echo "DINO finalist $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/dino/stage2-shortlist.json")
+run_dino_stage1() {
+  for identifier in "${dino_ids[@]}"; do run_dino_screen "$identifier" || echo "DINO screen $identifier failed; leave it out of the shortlist."; done
+  dino_selector=(--kind dino --top-k 6 --output "$REPORT_ROOT/dino/stage1-shortlist.json")
+  for identifier in "${dino_ids[@]}"; do test -f "$DINO_RUN_ROOT/overnight-stage1/$identifier/metrics.jsonl" && dino_selector+=(--candidate "$identifier=$DINO_RUN_ROOT/overnight-stage1/$identifier/metrics.jsonl"); done
+  "$DINO_PYTHON" "$SELECT" "${dino_selector[@]}"
+}
 
-if test -f "$DINO_RUN_ROOT/v1/best.pt" && ! test -f "$REPORT_ROOT/dino/real-only-v1-control.test.json"; then
-  "$DINO_PYTHON" "$EVAL_DINO" --dataset "$DATA_ROOT/DINOv2_METRIC_V1" --source-root "$SOURCE_ROOT" --checkpoint "$DINO_RUN_ROOT/v1/best.pt" --hub-cache "$DINO_HUB_CACHE" --output "$REPORT_ROOT/dino/real-only-v1-control.test.json" --split test
+wait_for_shared_artifact() {
+  local artifact="$1" description="$2"
+  until test -f "$artifact"; do
+    echo "[$(date --iso-8601=seconds)] waiting for $description: $artifact"
+    sleep 60
+  done
+}
+
+run_dino_stage2_and_final() {
+  while IFS= read -r identifier; do run_dino_refinement "$identifier" || echo "DINO intermediate $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/dino/stage1-shortlist.json")
+  dino_refine_selector=(--kind dino --top-k 3 --output "$REPORT_ROOT/dino/stage2-shortlist.json")
+  for identifier in "${dino_ids[@]}"; do test -f "$DINO_RUN_ROOT/overnight-stage2/$identifier/metrics.jsonl" && dino_refine_selector+=(--candidate "$identifier=$DINO_RUN_ROOT/overnight-stage2/$identifier/metrics.jsonl"); done
+  "$DINO_PYTHON" "$SELECT" "${dino_refine_selector[@]}"
+  while IFS= read -r identifier; do run_dino_final "$identifier" || echo "DINO finalist $identifier failed."; done < <("$DINO_PYTHON" -c 'import json,sys; print("\\n".join(json.load(open(sys.argv[1]))["selected_ids"]))' "$REPORT_ROOT/dino/stage2-shortlist.json")
+
+  if test -f "$DINO_RUN_ROOT/v1/best.pt" && ! test -f "$REPORT_ROOT/dino/real-only-v1-control.test.json"; then
+    "$DINO_PYTHON" "$EVAL_DINO" --dataset "$DATA_ROOT/DINOv2_METRIC_V1" --source-root "$SOURCE_ROOT" --checkpoint "$DINO_RUN_ROOT/v1/best.pt" --hub-cache "$DINO_HUB_CACHE" --output "$REPORT_ROOT/dino/real-only-v1-control.test.json" --split test
+  fi
+  dino_rank=(--kind dino --baseline "$REPORT_ROOT/dino/real-only-v1-control.test.json" --output "$REPORT_ROOT/dino/final-ranking.json")
+  for identifier in "${dino_ids[@]}"; do test -f "$REPORT_ROOT/dino/final/$identifier.test.json" && dino_rank+=(--candidate "$identifier=$REPORT_ROOT/dino/final/$identifier.test.json"); done
+  test -f "$REPORT_ROOT/dino/real-only-v1-control.test.json" && "$DINO_PYTHON" "$RANK" "${dino_rank[@]}"
+}
+
+if test "$BAKEOFF_ROLE" != "rtdetr"; then
+  if test "$BAKEOFF_ROLE" = "dino-final"; then
+    wait_for_shared_artifact "$REPORT_ROOT/dino/stage1-shortlist.json" "DINO validation shortlist from dino-screen"
+  else
+    run_dino_stage1
+  fi
+  if test "$BAKEOFF_ROLE" = "dino-screen"; then
+    echo "[$(date --iso-8601=seconds)] DINO screen complete; a separate dino-final role must consume the frozen shortlist."
+    exit 0
+  fi
+  run_dino_stage2_and_final
+  if test "$BAKEOFF_ROLE" = "dino-final"; then
+    echo "[$(date --iso-8601=seconds)] DINO final role complete"
+    exit 0
+  fi
 fi
-dino_rank=(--kind dino --baseline "$REPORT_ROOT/dino/real-only-v1-control.test.json" --output "$REPORT_ROOT/dino/final-ranking.json")
-for identifier in "${dino_ids[@]}"; do test -f "$REPORT_ROOT/dino/final/$identifier.test.json" && dino_rank+=(--candidate "$identifier=$REPORT_ROOT/dino/final/$identifier.test.json"); done
-test -f "$REPORT_ROOT/dino/real-only-v1-control.test.json" && "$DINO_PYTHON" "$RANK" "${dino_rank[@]}"
 
 "$DINO_PYTHON" "$PREPARE_RTDETR" --source "$TRAIN_RTDETR" --output "$RTDETR_SCREEN"
 
