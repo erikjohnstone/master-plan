@@ -352,11 +352,25 @@ the phase that fixes it. This is what "the ruler before the fix" is for.
    one long stroke is solid. Keep `meta` byte-compatible; every existing
    consumer must be bit-identical (`wallnetwork`, `netroom`, `symbolsweep`
    tests are the regression net).
-2. Make `buildMepGraph` the only topology builder: add option flags for
-   `controlSchematic.ts`'s crossing rule (`unresolved_crossing` unless a
-   junction mark vouches) and arrowhead direction, port `hasJunctionMark`
-   and the arrow detector into `mepconnectivity.ts`, and have
-   `topologyFor` call it. Edges gain `style`, `direction`, `sourceSeg`.
+2. **Not started — items 1 and 3 are done (see the commits on this branch
+   and the Numbers table below); this is next.** Make `buildMepGraph` the
+   only topology builder: add option flags for `controlSchematic.ts`'s
+   crossing rule (`unresolved_crossing` unless a junction mark vouches) and
+   arrowhead direction, port `hasJunctionMark` and the arrow detector into
+   `mepconnectivity.ts`, and have `topologyFor` call it. Edges gain
+   `style`, `direction`, `sourceSeg`. **This is materially harder than items
+   1/3, diagnosed before starting rather than discovered mid-refactor:**
+   `buildMepGraph`'s own `nodeFor(x,y)` (mepconnectivity.ts, the junction-
+   interior-split loop around lines 256-320) COALESCES every segment
+   passing through the same quantized coordinate into one shared node
+   today — an interior crossing and a real T-junction are structurally
+   identical to it right now. Gating "only connect two crossing segments
+   when a junction mark vouches" means each crossing segment needs its OWN
+   node by default, sharing one only when vouched for — a real change to
+   that split logic, not a flag bolted on top. Budget this as its own
+   dedicated, carefully-tested increment (own commit, own before/after on
+   `mep-trace-eval.mjs` AND the schematic corpus gates), not a quick
+   follow-on to items 1/3.
 3. **Delete or repurpose L3.5 `runL35Topology` — measured 2026-09-15, and the
    case is now unambiguous.** `OPENTAKEOFF_GRAPH_TRACE=1
    production-graph-cli.mjs --mode graph --pdf federal-attachment4-mechanical.pdf`

@@ -1,5 +1,72 @@
 ## Active work
 
+2026-09-15 PLAN_CONNECTIVITY_SERVES.md Phase 0 + Phase 1 (items 1, 3)
+checkpoint: Phase 0 gate met — `keys/{bessemer,itd-d1-lab,
+navfac-cherry-point-atc,bldg5406-hvac-demo}.serves.csv` (49 rows, 14
+negatives), each hand-rendered/hand-traced by a delegated subagent and
+independently re-verified by the coordinator against every self-flagged
+least-confident row before commit. `mcp/scripts/serves-eval.mjs` (the
+ruler) validated against a synthetic fixture reusing already-verified
+`bessemer.mep.csv` coordinates, then run for real: hand-seeded baseline is
+12.1% served-correct / 28.6% refusal-correct across all 49 rows, with four
+sheets failing in four distinct, root-caused ways (NAVFAC: JTS noding
+fails outright on the whole sheet, 0/16 refused regardless of seed; Bessemer:
+device-glyph seed tolerance + dashed control lines reached the wrong
+adjacent thermostat; ITD: a second, previously-untested duct chain misses
+entirely; bldg5406: an over-broad hand-seeded equipment-candidate list
+produces false ambiguity instead of a clean reach). Full detail and the
+report: `opentakeoff-corpus/goals/PLAN_CONNECTIVITY_SERVES.md`,
+`opentakeoff-corpus/reports/SERVES-EVAL-2026-09-15.txt`.
+
+Phase 1 item 1: `web/src/lib/dashdetect.ts` — geometric straight-dash
+detection (measured: `OPS.setDash` fires zero times across ~97,000 real
+stroke ops on three sampled sheets, so this corpus's dashes must be read
+from short collinear gap-separated segment chains, never the PDF dash
+operator). Purely additive (meta's own packed byte has no free bit — every
+low-nibble bit is a `SEG_*` flag, the high nibble is the pen width — so
+this ships as a separate parallel array). 13 unit tests, plus one
+regression-locking the exact real shape found on Bessemer p6 (a bent
+T-to-EBB control line splits into an unflagged too-short leg and a fully-
+flagged 7-piece leg, matching the verified key's own coordinates almost
+exactly). Real-data-validated directly against extracted Bessemer p6
+geometry before writing that lock.
+
+Phase 1 item 3: L3.5 `runL35Topology` gated off by default
+(`OPENTAKEOFF_L35_TOPOLOGY=1` to re-enable) rather than deleted — measured
+directly (federal-mech, 24 sheets): this stage alone cost 34,661ms, 55.6%
+of the whole 62,387ms sheet-graph build, for a real consumer
+(`enrichSystemTags`) whose output was traced and confirmed byte-identical
+whether the stage runs or not. Re-measured after the change: 62,387ms →
+13,183ms, a 78.9% total-build reduction on the same document. Verified via
+a focused, targeted test run (176/176, covering the exact changed file's
+own test plus its real caller chain) rather than this container's giant
+multi-file `node --test <hundreds of files>` invocations, both of which
+hung well past their own timeouts on this specific container and had to
+be killed — a real, disclosed container-resource limitation, not a code
+issue (confirmed one such hang was genuinely mid-progress via `ps` CPU
+usage before it stalled). Separately confirmed via `git stash` that the
+pre-existing `npm run test:bas` failure (65/107, all "actual shared Python
+service" / "...HTTP bridge" tests — a live Python backend this container
+doesn't run) is identical on the clean baseline, unrelated to this work.
+
+**Next queue — Phase 1 item 2 (not started):** unify `mepconnectivity.ts`'s
+`buildMepGraph` and `controlSchematic.ts`'s own separate `topologyFor` into
+one graph builder — port `hasJunctionMark` (a compact ≥5-short-segment,
+≥3-quadrant cluster) and the arrowhead detector in as reusable,
+default-OFF option flags, then have `topologyFor` call `buildMepGraph`
+instead of maintaining a parallel implementation. This is materially
+harder than items 1/3: `buildMepGraph`'s `nodeFor(x,y)` today COALESCES
+every segment passing through the same quantized coordinate into one
+shared node — an interior crossing and a real T-junction currently look
+identical to it. Gating "only connect at a crossing when a junction mark
+vouches" needs each crossing segment to get its OWN node by default and
+only share one when vouched — a structural change to the junction-
+interior-split logic (`mepconnectivity.ts` lines ~256-320), not a bolt-on
+flag. Do this as its own dedicated, carefully-tested increment; Gate 1
+(flags off ⇒ byte-identical on `mep-trace-eval.mjs` 3/3 and
+`tools.test.ts:2033`) is the hard constraint the whole port must clear
+before Phase 2 is allowed to flip the default.
+
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
 plan-tag text into installed quantity. It now retains text-only observations
