@@ -24,11 +24,13 @@ const formEnd = (): Op => [OPS.paintFormXObjectEnd, null];
 // leg meeting at a corner, always drawn identically inside the form.
 const L_LOCAL: Op[] = [line(0, 0, 40, 0), line(40, 0, 40, 15)];
 
-function signaturesFor(ops: Op[]) {
+function signaturesFor(ops: Op[], opts?: Parameters<typeof computeFormContentSignatures>[2]) {
   const geo = extractVectorGeometry(opList(ops), ID, OPS);
   const idx = buildVectorSceneIndex(geo);
-  return computeFormContentSignatures(idx, geo.formInvocations ?? []);
+  return computeFormContentSignatures(idx, geo.formInvocations ?? [], opts);
 }
+
+const closedRect = (x: number, y: number, w: number, h: number): Op => [OPS.constructPath, [[OPS.rectangle], [x, y, w, h]]];
 
 test("Lane A: page-level ink (no Form XObject at all) produces no invocation signatures", () => {
   const r = signaturesFor([line(0, 0, 10, 0)]);
@@ -107,6 +109,55 @@ test("Lane A: an invocation whose content is ENTIRELY invisible ink reports a nu
   assert.equal(r.invocations[0].signature, null);
   assert.deepEqual(r.invocations[0].primitiveIds, []);
   assert.equal(r.invocations[0].excludedInvisibleCount, 2);
+});
+
+test("Lane A: an invocation whose own page-space bbox touches the page's own edge is flagged touchesPageEdge, real Cherry Point Air Traffic Tower #11 shape (see this module's own header)", () => {
+  // real finding: three nested axis-aligned rectangles (a title-block
+  // cell's own border + an internal divider box), pure black, sitting
+  // flush against the page's own left edge (x=0) and bottom edge
+  // (y = the sheet's own height) -- reproduced here at the same relative
+  // shape, smaller scale. A real symbol is never expected to sit flush
+  // against the literal page boundary (real drawings keep a margin).
+  const pageBounds = { width: 500, height: 300 };
+  const r = signaturesFor([
+    formBegin([1, 0, 0, 1, 0, 0]),
+    closedRect(0, 280, 200, 20), // outer box: x in [0,200], y in [280,300] -- touches x=0 AND y=height(300)
+    closedRect(2, 282, 196, 16), // inner divider box, inset by 2 on every side
+    formEnd(),
+  ]);
+  assert.equal(r.invocations.length, 1);
+  assert.equal(r.invocations[0].touchesPageEdge, false, "test premise: pageBounds was NOT supplied on this first call, so the flag stays false even though the shape does touch the edge");
+
+  const r2 = signaturesFor([
+    formBegin([1, 0, 0, 1, 0, 0]),
+    closedRect(0, 280, 200, 20),
+    closedRect(2, 282, 196, 16),
+    formEnd(),
+  ], { pageBounds });
+  assert.equal(r2.invocations[0].touchesPageEdge, true, "with pageBounds supplied, this real title-block-cell shape is correctly flagged");
+});
+
+test("Lane A: an invocation drawn safely inside the page margins is NOT flagged touchesPageEdge, even with pageBounds supplied", () => {
+  const pageBounds = { width: 500, height: 300 };
+  const r = signaturesFor([
+    formBegin([1, 0, 0, 1, 100, 100]), ...L_LOCAL, formEnd(), // well inside [500,300]
+  ], { pageBounds });
+  assert.equal(r.invocations[0].touchesPageEdge, false);
+});
+
+test("Lane A: touchesPageEdge tolerates near-edge floating-point placement (within PAGE_EDGE_TOLERANCE), not just an exact 0", () => {
+  const pageBounds = { width: 500, height: 300 };
+  const r = signaturesFor([
+    formBegin([1, 0, 0, 1, 0.3, 0]), ...L_LOCAL, formEnd(), // x0 lands at 0.3, not exactly 0
+  ], { pageBounds });
+  assert.equal(r.invocations[0].touchesPageEdge, true, "0.3 units from the edge is within the disclosed tolerance, not a real margin");
+});
+
+test("Lane A: an invocation with empty primitiveIds (fully invisible or no content) is never flagged touchesPageEdge, regardless of pageBounds", () => {
+  const pageBounds = { width: 500, height: 300 };
+  const r = signaturesFor([formBegin([1, 0, 0, 1, 0, 0]), formEnd()], { pageBounds });
+  assert.equal(r.invocations[0].primitiveIds.length, 0);
+  assert.equal(r.invocations[0].touchesPageEdge, false, "nothing to test against the page edge");
 });
 
 test("Lane A: a primitive-count cap breach reports incomplete instead of a silent partial pass", () => {

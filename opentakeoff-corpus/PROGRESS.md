@@ -1,5 +1,49 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane A
+requirement 3 — real finding + fix: title-block/border furniture was
+entering the ownership pipeline unexcluded, exactly as this module's own
+header had already disclosed ("no FORM-level content-type filtering is
+applied"). Found by building a small diagnostic script (none existed —
+checked mcp/scripts/ and web/bench/ first, per GOAL.md's own "audit
+before you build" rule) that runs the FULL Lane A -> Lane B -> fusion ->
+detectOwnershipClusters chain against a real document end to end
+(nothing in this session had exercised that whole chain together
+before) and reports real numbers plus a direct gate check ("no primitive
+owned by two accepted instances"). Ran it against Cherry Point Air
+Traffic Tower page 11 (a real corpus PDF): 5 real ownership clusters
+appeared, all with identical shape (an "A"-lane 12-primitive proposal
+contested by three "B"-lane sub-proposals). Inspected one directly:
+three nested axis-aligned rectangles, pure black, 2px rule lines — a
+real title-block cell (border + internal divider), not a symbol — whose
+own page-space bbox touches the page's own left edge (x0=0) and bottom
+edge (y1=3168, the sheet's own height) exactly.
+
+Fix: added an optional, disclosed `touchesPageEdge` flag to
+`candidateBodyLaneA.ts`'s own `FormInvocationSignature`, computed from
+each invocation's own REAL PAGE-SPACE bbox (not the local/inverted bbox
+already computed for signature hashing) against a caller-supplied
+`pageBounds`. General and dimension-free (works identically on any
+document's own page size, not a hardcoded coordinate — GOAL.md's own
+Hard Rule 3), backward compatible (omitting `pageBounds` leaves the flag
+`false` for every caller that hasn't opted in yet), and a disclosed FLAG
+rather than a silent drop, matching this module's own established
+convention (`excludedInvisibleCount`) and every other signal built this
+checkpoint (carrier, form-plausibility, graph-signature) — it states a
+fact, a later stage decides what to do with it. Verified directly
+against the real document: exactly 5 of 25 real Lane A invocations get
+flagged, and the flagged invocation's own primitiveIds are byte-
+identical to the 12 primitives independently inspected by hand,
+confirming the flag catches exactly the real furniture found, nothing
+more or less on this sheet. 4 new tests (12 total, up from 8) including
+a regression fixture reproducing the real Cherry Point shape at fixture
+scale. Not yet wired into `fuseProposals` or `detectOwnershipClusters`
+to actually EXCLUDE a flagged invocation from proposal fusion — that is
+the real next step this finding motivates, disclosed rather than done
+here, since silently excluding needs its own corpus-wide check that a
+real countable symbol never legitimately touches the page edge (this
+session's hypothesis, not yet validated at scale).
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2
 — added the FIFTH of the seven listed eligibility signals to
 `ownershipEligibility.ts`: graph/path signature agreement. This is

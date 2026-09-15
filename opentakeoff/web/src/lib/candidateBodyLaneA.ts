@@ -41,6 +41,42 @@
 // - Requirement 4's own corroboration step (legend/tag/schedule) — this
 //   slice states structural evidence only, never a family name.
 //
+// PAGE-EDGE FURNITURE FLAG (added after a real Cherry Point Air Traffic
+// Tower #11 finding — see PROGRESS.md): running the FULL Lane A -> Lane B
+// -> fusion -> ownership-cluster chain against that real sheet surfaced 5
+// real ownership clusters, all sitting at the exact SAME y range near the
+// bottom of the page. Inspecting one directly (invocation 81's own 12
+// primitives) showed three nested axis-aligned rectangles, pure black
+// (lum 0), non-degenerate 2px rule lines — a real title-block/border cell,
+// not a symbol — whose own PAGE-SPACE bbox touches the page's own left
+// edge (x0 = 0) and bottom edge (y1 = the sheet's own height) EXACTLY.
+// This is real, direct evidence for requirement 3's own still-disclosed
+// gap above: nothing currently excludes page furniture, so a title-block
+// cell competes for primitive ownership against Lane B's own natural
+// nested-box decomposition of the same ink, corrupting the eligibility
+// scores computed from it with a real cluster that names no real symbol
+// at all.
+//
+// `touchesPageEdge` below is a disclosed FLAG, not a silent drop — this
+// module states a fact about an invocation's own real page-space extent;
+// it does not decide whether to exclude it, matching this session's own
+// established "disclose, let a later stage decide" convention (the exact
+// same shape as `excludedInvisibleCount` above, `classifyCarrierPrimitives`'s
+// own isCarrierLike, and `assessFormPlausibility`'s own reasons list — none
+// of those silently drops primitives either). The rule itself is general
+// and dimension-free — "does this invocation's own real page-space bbox
+// touch x=0, y=0, x=pageWidth, or y=pageHeight" — not a hardcoded
+// coordinate, filename, or sheet number (goal document's own Hard Rule 3),
+// so it applies identically to any document's own title block/border,
+// not just this one real corpus sheet. A real countable symbol is not
+// expected to have a vertex sitting exactly at the literal page boundary
+// (real drawings keep a margin) — untested against a large corpus sample,
+// disclosed as a hypothesis this flag lets a caller test, not a proven
+// universal rule. Only computed when `opts.pageBounds` is supplied
+// (optional, backward compatible) — omitting it leaves every invocation's
+// own `touchesPageEdge` at `false`, never `null`/`undefined`, so a caller
+// can always branch on it without a null check.
+//
 // INVISIBLE-INK FIX (added after real-sheet visual ground-truth checking
 // — see invisibleInk.ts's own header and PROGRESS.md for the full Cherry
 // Point #12 finding): a Form invocation's own `primitiveIds` — and
@@ -78,6 +114,12 @@ export interface FormInvocationSignature {
    *  `primitiveIds` count with no explanation. */
   excludedInvisibleCount: number;
   signature: BodySignature | null;
+  /** true iff this invocation's own real page-space bbox touches the
+   *  page's own left/top/right/bottom edge — see the module header's own
+   *  PAGE-EDGE FURNITURE FLAG section. Always `false` (never null) when
+   *  `opts.pageBounds` was not supplied, or when this invocation's own
+   *  primitiveIds is empty (nothing to test). */
+  touchesPageEdge: boolean;
 }
 
 export interface LaneAResult {
@@ -109,10 +151,20 @@ function invertPoint(t: readonly number[], px: number, py: number): [number, num
 /** Pure: groups a VectorSceneIndex's own Form XObject invocations by a
  *  content signature computed from their LOCAL (placement-inverted)
  *  geometry. Never mutates `idx` or `formInvocations`. */
+export interface PageBounds { width: number; height: number; }
+
+/** Default tolerance (page units) for the page-edge touch test — floating-
+ *  point placement transforms rarely land an exact 0 or width/height, but
+ *  drafting software commonly does (see the module header's own real
+ *  Cherry Point finding, which landed at x0 EXACTLY 0). A tiny, disclosed
+ *  tolerance, not zero, so a real border that lands at 0.001 due to
+ *  transform rounding is not missed on a technicality. */
+export const PAGE_EDGE_TOLERANCE = 1;
+
 export function computeFormContentSignatures(
   idx: VectorSceneIndex,
   formInvocations: readonly FormInvocation[],
-  opts: { maxPrimitives?: number } & InvisibleInkOptions = {},
+  opts: { maxPrimitives?: number; pageBounds?: PageBounds } & InvisibleInkOptions = {},
 ): LaneAResult {
   const cap = opts.maxPrimitives ?? LANE_A_MAX_PRIMITIVES;
   const n = idx.primitives.length;
@@ -140,11 +192,32 @@ export function computeFormContentSignatures(
     }
   }
 
+  const pageBounds = opts.pageBounds;
+  /** page-space (not local/inverted) bbox touch test — see the module
+   *  header's own PAGE-EDGE FURNITURE FLAG section. Reads idx.primitives
+   *  directly, independent of the local/inverted bbox this function
+   *  computes below for signature hashing, which is a different bbox in a
+   *  different coordinate space entirely. */
+  function touchesPageEdgeOf(primitiveIds: readonly number[]): boolean {
+    if (!pageBounds || primitiveIds.length === 0) return false;
+    let px0 = Infinity, py0 = Infinity, px1 = -Infinity, py1 = -Infinity;
+    for (const pid of primitiveIds) {
+      const p = idx.primitives[pid];
+      if (p.x0 < px0) px0 = p.x0; if (p.x1 > px1) px1 = p.x1;
+      if (p.y0 < py0) py0 = p.y0; if (p.y1 > py1) py1 = p.y1;
+      if (p.x1 < px0) px0 = p.x1; if (p.x0 > px1) px1 = p.x0;
+      if (p.y1 < py0) py0 = p.y1; if (p.y0 > py1) py1 = p.y0;
+    }
+    return px0 <= PAGE_EDGE_TOLERANCE || py0 <= PAGE_EDGE_TOLERANCE
+      || px1 >= pageBounds.width - PAGE_EDGE_TOLERANCE || py1 >= pageBounds.height - PAGE_EDGE_TOLERANCE;
+  }
+
   const results: FormInvocationSignature[] = [];
   for (const inv of formInvocations) {
     const primitiveIds = byInvocation.get(inv.id) ?? [];
     const excludedInvisibleCount = excludedByInvocation.get(inv.id) ?? 0;
-    if (primitiveIds.length === 0) { results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds: [], excludedInvisibleCount, signature: null }); continue; }
+    const touchesPageEdge = touchesPageEdgeOf(primitiveIds);
+    if (primitiveIds.length === 0) { results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds: [], excludedInvisibleCount, signature: null, touchesPageEdge }); continue; }
 
     const attrById = new Map<number, PrimitiveNodeAttributes>();
     let bx0 = Infinity, by0 = Infinity, bx1 = -Infinity, by1 = -Infinity;
@@ -168,10 +241,10 @@ export function computeFormContentSignatures(
       if (ly0 < by0) by0 = ly0; if (ly0 > by1) by1 = ly0; if (ly1 < by0) by0 = ly1; if (ly1 > by1) by1 = ly1;
     }
 
-    if (degenerate) { results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds, excludedInvisibleCount, signature: null }); continue; }
+    if (degenerate) { results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds, excludedInvisibleCount, signature: null, touchesPageEdge }); continue; }
     const body = { id: inv.id, primitiveIds, x0: bx0, y0: by0, x1: bx1, y1: by1 };
     const signature = computeBodySignature(body, attrById);
-    results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds, excludedInvisibleCount, signature });
+    results.push({ invocationId: inv.id, depth: inv.depth, primitiveIds, excludedInvisibleCount, signature, touchesPageEdge });
   }
 
   const byHash = new Map<string, number[]>();
