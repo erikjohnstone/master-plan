@@ -56,11 +56,16 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--max-train-batches", type=int, default=0, help="Nonzero only for a smoke run")
     parser.add_argument("--max-validation-batches", type=int, default=0, help="Nonzero only for a smoke run")
     parser.add_argument("--resume", type=Path, help="Checkpoint to resume")
+    parser.add_argument("--init-network", type=Path, help="Prior metric checkpoint: load encoder/projection only, with a fresh optimizer and proxy head")
     args = parser.parse_args()
     if args.epochs < 1 or args.batch_size < 2 or args.num_workers < 0:
         parser.error("epochs must be >= 1, batch-size >= 2, and num-workers >= 0")
     if not 0.0 <= args.proxy_weight <= 1.0:
         parser.error("proxy-weight must be between 0 and 1")
+    if args.resume and args.init_network:
+        parser.error("--resume and --init-network are mutually exclusive")
+    if args.init_network and not args.init_network.is_file():
+        parser.error(f"--init-network checkpoint does not exist: {args.init_network}")
     return args
 
 
@@ -152,7 +157,11 @@ def main() -> int:
     seed_everything(args.seed)
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / "run_config.json").write_text(
-        json.dumps({**vars(args), "warning": "Auxiliary pretraining only; no production accuracy claim."}, default=str, indent=2) + "\n",
+        json.dumps({
+            **vars(args),
+            "initialization": "warm-start network weights with fresh optimizer/proxy head" if args.init_network else "official DINOv2 backbone with fresh projection",
+            "warning": "Auxiliary pretraining only; no production accuracy claim.",
+        }, default=str, indent=2) + "\n",
         encoding="utf-8",
     )
     train_data = SymbolPairDataset(args.dataset, args.source_root, "train", args.augmentation_profile, args.seed)
@@ -162,6 +171,11 @@ def main() -> int:
     validation_data = SymbolPairDataset(args.dataset, args.source_root, "val", "conservative", args.seed + 7)
     device = torch.device("cuda")
     network = TwinMetricNet(load_dinov2_backbone(args.hub_cache)).to(device)
+    if args.init_network:
+        initialized = torch.load(args.init_network, map_location=device, weights_only=False)
+        if initialized.get("format") != "opentakeoff-symbol-metric-checkpoint-v1":
+            raise ValueError("--init-network is not an OpenTakeoff symbol-metric v1 checkpoint")
+        network.load_state_dict(initialized["network"])
     proxy_loss = ProxyAnchorLoss(len(train_data.labels)).to(device) if args.use_weak_proxy_labels else None
     parameter_groups: list[dict[str, Any]] = [
         {"params": network.backbone.parameters(), "lr": args.lr_backbone},
