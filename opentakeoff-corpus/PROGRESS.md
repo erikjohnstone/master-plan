@@ -1,5 +1,78 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — a general,
+structural finding from broadening real-sheet validation beyond Cherry
+Point #12 (a disclosed gap: every prior entry's "real-sheet
+validation" for the non-degenerate/exclusive-primitive path was
+synthetic only). Swept every page of 4 further real corpus PDFs
+(baker-county-eoc-bidset ×65, federal-attachment4-mechanical ×24,
+itd-d1-lab-mechanical ×29, tinker-afb-iwcs-controls ×31 — 149 pages)
+through the full pipeline to `detectOwnershipClusters`. Result: 45+
+real ownership clusters found across pages with real content, and
+**every single one has `exclusivePrimitiveIds.length === 0`** — the
+same shape found on Cherry Point #12, now confirmed general across 2
+independently-sourced real document sets (NAVFAC/Cherry Point and
+Tinker AFB), not a one-sheet artifact.
+
+REASONED OUT, not just observed: this appears to be a MATHEMATICALLY
+NECESSARY consequence of how Lane A and Lane B are each built, not
+coincidence. Lane B's own connected components exhaustively partition
+ALL primitives (union-find over subpath+junction adjacency — every
+primitive belongs to exactly one component). Lane A groups primitives
+by `formInvocationId` (every primitive belongs to at most one Form
+invocation, or none). Two DIFFERENT Lane B proposals can never share a
+primitive (disjoint by construction) and two DIFFERENT Lane A
+invocations can never share one either (disjoint by construction) — so
+EVERY real ownership cluster this pipeline can ever produce is a
+Lane-A-Form vs. Lane-B-components dispute. On every real sheet checked
+so far, a Form's own subpaths never cross the Form's boundary via a
+shared junction with outside geometry, so Lane B's components fall
+entirely INSIDE or OUTSIDE any given Form — and when a Form has 2+
+Lane B components inside it, they exhaustively partition its own
+primitive set (confirmed exactly at large scale on tinker-afb-iwcs-
+controls.pdf#13's cluster 1: one 12,042-primitive Lane A proposal,
+259 separate Lane B proposals, summed proposal sizes = 24,084 =
+EXACTLY 2× the Form's own primitive count — a perfect 1-to-1 double
+claim, zero residual, zero gap). Whenever this holds, every primitive
+in the cluster is claimed by exactly 2 proposals (never 1), so
+`exclusivePrimitiveIds` is necessarily empty — not a data quirk to
+chase further, a structural property of this pipeline's own lane
+design as it stands.
+
+A smaller, separate, also-real observation from the same sweep
+(tinker-afb-iwcs-controls.pdf#13 cluster 0): two DIFFERENT proposals
+(ids 0 and 1), each independently `votingLanes: ["A","B"]` (meaning
+each already internally agreed with itself), turned out to have
+IDENTICAL 8-primitive sets — contested against EACH OTHER, not
+merged. This looks like a real fusion-dedup edge case (two distinct
+Form invocations, or a Lane A/Lane B pairing quirk, producing what
+should arguably be one proposal, not two identical ones) — flagged
+here as a genuine observation, NOT investigated further or fixed in
+this slice; disclosed rather than silently left for a future session
+to rediscover from scratch.
+
+IMPLICATION FOR NEXT WORK, stated plainly rather than left implicit:
+primitive-level signals scored against an "exclusive baseline" (style/
+connectivity/carrier — everything `ownershipEligibility.ts` currently
+computes) are structurally unable to discriminate a Lane-A-vs-Lane-B
+dispute, because that baseline is mathematically guaranteed to be
+empty for this dispute shape. Making real progress on this specific,
+now-confirmed-common pattern needs a FORM-LEVEL judgment instead —
+something closer to Lane A's own already-disclosed, not-yet-attempted
+requirement 3 ("excluding forms whose content is mostly text/page
+furniture/title blocks/borders/repeated non-countable stuff"): is the
+WHOLE Form a plausible single physical symbol, or is it better
+explained as several disjoint pieces (Lane B's own view)? That is a
+real, well-scoped, concrete direction for a future Phase 3/4 slice —
+not attempted here; this entry is the finding and the reasoning behind
+it, not the fix.
+
+No new code in this slice — a real-sheet investigation entry only,
+following the same "document a significant negative/structural finding
+honestly rather than force a fix under time pressure" practice used
+earlier this session (the mergeProposals suppressR defect, the CU
+family misidentification). Does not modify any shipped module.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — wired the
 just-built `invisibleInk.ts` detector into `candidateBodyLaneA.ts`
 itself, the real fix the prior entry disclosed but deliberately did
