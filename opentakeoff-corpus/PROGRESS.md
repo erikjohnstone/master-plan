@@ -1,6 +1,93 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+SECOND LANDED corpus-expansion case: `49-nashville-a001-ows-markers`, 6
+instances (seed + 5), PASSING — and a genuine self-caught error along the
+way worth recording plainly, not glossing over.
+
+Batch F scouted document 057 (Nashville VAMC Energy Management System)
+and reported an "Operator Work Stations (OWS)" green-dot marker as a
+strong candidate, 8 instances, "no false positives spotted." Re-verified
+independently before building, per this checkpoint's own standing rule
+(never trust a subagent's visual claim without an orchestrator render
+pass): the seed and 5 matches (rotation 0, unmirrored, score 1.0) really
+are clean green OWS dots at named staff rooms (Foreman, Office, Boiler
+Operator) — but the other 2 reported "matches" (rotation 90, one also
+mirrored) are a COMPLETELY DIFFERENT blue plumbing-fixture icon pair
+(rooms B-101/B-102, D-113D/D-113E), picked up only because the affine
+solver's rotation/mirror search found enough coincidental geometric
+resemblance in a plain filled circle. The batch report's "no false
+positives spotted" was simply wrong on this point. Caught by rendering
+both anomalous matches myself, not by re-reading the batch's own
+screenshots-in-words.
+
+Fix: `options: {rotations: false, mirror: false}` (a documented,
+precedented manifest override already used elsewhere in this corpus for
+different reasons, e.g. case 01's `affine:false` -- not a new escape
+hatch invented for convenience). With both disabled, the sweep returns
+exactly the 5 real, visually-confirmed matches and zero contamination.
+Cost: no rotation/mirror stratum claim for this case (the only "rotated"
+instances found were the false positives), a smaller and plainer result
+than hoped, but honest.
+
+`tag: null / association_type: "unlabelled"` throughout — genuinely no
+per-instance code exists on the sheet (only a graphic legend naming the
+CLASS, "Operator Work Stations (OWS)"; confirmed the legend text itself
+is exploded/vector, not real PDF text, by textSpans returning nothing
+for it and then finding it by eye on a full-page render instead).
+
+Also caught and fixed before landing: pasted the wrong next case number
+first (`48-nashville-...`, colliding with the same-checkpoint case
+`48-patriot-cafe-...` landed a few commits earlier) — caught by a
+straight `grep` for duplicate ids before running verification, renumbered
+to 49. A second, independent reminder that every mechanical step in this
+build chain still needs a real check, not an assumption, even late in a
+session with a lot of successful precedent behind it.
+
+Also folding in **batch G's findings** (063, 064, 066, 068, 071 — all
+confirmed clear of exclusion lists) since they landed alongside this
+build: zero candidates, three clean too-narrow-scope dead ends (063, 066,
+068 — single-room jobs, nothing repeats enough to count) and two
+precisely-closed real geometric families, worth recording for the
+checklist:
+- **064**'s S-1 ceiling diffuser (8 instances, found=6/withheld=1, scores
+  0.987-1.0, real rotation+mirror bonus) closed on tag distance — but
+  with a sharper nuance than previously recorded: a hyphen+digit tag is
+  NOT automatically safe. `isEquipmentInstanceLabel()` only grants the
+  wide 5.5x reach to a 3+-hyphen-segment tag or a letter-class-compactable
+  prefix (AHU, HWP-style); a short 2-segment "type mark" like S-1 (or
+  CD-1, R-1) is gated exactly like a bare digitless code. Measured 66.9px
+  actual vs ~39.4px gate, uniformly across all 8 instances (a real,
+  structural miss, not an unlucky seed) — declining `tag: null` here would
+  be dishonest since "S-1" is plainly printed right at every icon, just
+  outside the gate. Checklist item 6/7 updated with this nuance below.
+- **071**'s S1/S2/S3/R1 ceiling registers — a confirmed check-2
+  same-icon/multiple-tag collision, and not just visually: seeding S1
+  directly returned withheld matches labeled "S3", "G-5", and several
+  "TOVAV-G-#" VAV-leader tokens in the SAME raw family, i.e. the
+  geometric family cross-attaches to unrelated leader text too. A clean,
+  decisive reject.
+
+**Checklist update (supersedes the plain "hyphen+digit = safe" framing in
+the standing check 6/7 language):** the wide equipment-instance label
+reach requires either 3+ hyphen-segments or a compactable multi-letter
+family prefix — a bare two-letter-or-fewer type/schedule code before the
+hyphen (S-1, CD-1, R-1, D-1 style) gets only the narrow ~2.2x reach same
+as a no-hyphen bare code, regardless of the digit. Screen for this
+explicitly, don't assume hyphenation alone clears the gate.
+
+Running tally: 2 landed cases (44 instances total across documents 042
+and 057), roughly 25 documents now scouted this checkpoint, ~10 with a
+real-but-disqualified candidate (honest closures for seven distinct,
+precisely-diagnosed reasons), the rest clean scope-based dead ends.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth-only change
+(cases.json, a curated source PDF, and review renders) plus documentation
+of a self-caught scouting-report error and a batch-G recon summary; no
+VectorGrid/table-extraction/schedule-reconstruction/citation/bbox-
+semantics or other production data-contract code touched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 batch E scouting (045, 046, 047, 048, 050): four honest dead ends, and
 one real, clean, small candidate (050's SD-2 diffuser) DECLINED on
 purpose, not built, over a holdout-integrity concern the scout correctly

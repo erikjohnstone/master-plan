@@ -2003,6 +2003,51 @@
           "SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth-only change (cases.json, a curated source PDF, and review renders); no VectorGrid/table-extraction/schedule-reconstruction/citation/bbox-semantics or other production data-contract code touched."
         ]
       }
+    },
+    {
+      "id": "49-nashville-a001-ows-markers",
+      "campaign": "corpus-expansion",
+      "document_id": "37__vol2__057",
+      "source_pdf": "pdf/37__vol2__057__VA_Nashville_EMS_Upgrade.pdf",
+      "source_sha256": "004acf19591ee60642861d5b3d885361af09cc8b53db3924763c576fe3a23558",
+      "page": 4,
+      "sheet_number": "A-001",
+      "page_size_px": [6048, 4320],
+      "options": { "rotations": false, "mirror": false },
+      "seed_rect": [[2112.3, 1392.3], [2126.7, 1408.5]],
+      "seed": {
+        "tag": null,
+        "at": [2120, 1401],
+        "tolerance_px": 2,
+        "tag_bbox": null,
+        "family": "operator work station (OWS) marker: solid filled circle",
+        "association_type": "unlabelled",
+        "transform_family": "rigid",
+        "countable": true,
+        "reference_source": "manual_seed",
+        "body_bbox": [2113.5, 1393.6, 2126.5, 1408.3],
+        "render": "reviews/37__vol2__057/p4-full-overview.png"
+      },
+      "instances": [
+        { "id": "ows-01", "at": [2104, 1382.6], "tolerance_px": 3, "tag": null, "tag_bbox": null, "family": "operator work station (OWS) marker: solid filled circle", "association_type": "unlabelled", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2097.1, 1374.6, 2110.2, 1390.1], "render": "reviews/37__vol2__057/p4-full-overview.png" },
+        { "id": "ows-02", "at": [2249, 1383.6], "tolerance_px": 3, "tag": null, "tag_bbox": null, "family": "operator work station (OWS) marker: solid filled circle", "association_type": "unlabelled", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2242.2, 1377.7, 2255.3, 1391.2], "render": "reviews/37__vol2__057/p4-full-overview.png" },
+        { "id": "ows-03", "at": [2153.8, 1452.6], "tolerance_px": 3, "tag": null, "tag_bbox": null, "family": "operator work station (OWS) marker: solid filled circle", "association_type": "unlabelled", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2147.3, 1445.3, 2160.3, 1459.9], "render": "reviews/37__vol2__057/p4-full-overview.png" },
+        { "id": "ows-04", "at": [2533.6, 1534.4], "tolerance_px": 3, "tag": null, "tag_bbox": null, "family": "operator work station (OWS) marker: solid filled circle", "association_type": "unlabelled", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2527.1, 1527.1, 2540.6, 1542.1], "render": "reviews/37__vol2__057/p4-full-overview.png" },
+        { "id": "ows-05", "at": [2551.5, 1563.7], "tolerance_px": 3, "tag": null, "tag_bbox": null, "family": "operator work station (OWS) marker: solid filled circle", "association_type": "unlabelled", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [2544.7, 1557.8, 2557.7, 1571.2], "render": "reviews/37__vol2__057/p4-full-overview.png" }
+      ],
+      "review": {
+        "render": "reviews/37__vol2__057/p4-full-overview.png",
+        "method": "Session.symbolSweep(scope: sheet, commit:false) seeded via seedPoint on one green OWS dot; full-page and tight renders viewed directly. First sweep attempt (default rotations/mirror) returned 2 additional 'matches' that were VISUALLY CONFIRMED FALSE POSITIVES -- a completely different blue plumbing-fixture icon elsewhere on the sheet, picked up only under a 90-degree-rotation or mirror search -- so options: {rotations:false, mirror:false} (a documented, precedented manifest override, not a guard weakening) was applied to exclude that contamination; the resulting clean sweep (found=5, withheld=14, all score 1.0, rotation 0, unmirrored) matches the direct visual count exactly.",
+        "notes": [
+          "GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 corpus-expansion case, sourced from opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/057_US_VA_Project_626_15_106_Upgrade_Energy.pdf (Nashville VAMC Energy Management System / BAS upgrade -- confirmed NOT in the already-spent baseline-30 list, NOT frozen holdout, NOT the VA-537-17-115 avoid-list). Curated verbatim copy committed as pdf/37__vol2__057__VA_Nashville_EMS_Upgrade.pdf (rank 37).",
+          "Sheet A-001 ('Nashville Work Areas: Basement & 1st Floors') carries its own graphic legend box (title-block-style, exploded/vector text -- textSpans returns nothing for it, confirmed empirically, so it was read directly off the rendered page rather than assumed) reading 'Legend: [green filled circle] Operator Work Stations (OWS)' and '[square outline] Fan Room Locations'. OWS is a facility/BAS marker -- a solid filled circle placed at staffed control locations -- not a duct/pipe/valve device, a genuinely new symbol category for this corpus's corpus-expansion campaign.",
+          "IMPORTANT CORRECTION TO THE ORIGINAL SCOUTING REPORT: the scout's report claimed 'No false positives spotted' for this candidate's raw 7-match sweep. Independently re-rendering and viewing all 7 matches directly (not trusting the report) found this was WRONG: 2 of the 7 raw matches (both under a rotation/mirror transform) land on a completely unrelated blue plumbing-fixture icon pair (a sink/toilet-like symbol next to rooms 'B-101'/'B-102' and 'D-113D'/'D-113E'), not a green OWS dot at all. This is exactly the discipline this checkpoint keeps re-learning: a subagent's 'visually confirmed' claim is not a substitute for the orchestrator's own render-and-view pass before landing a case.",
+          "Fixed by disclosing options: {rotations:false, mirror:false} (case-level manifest override, not a guard weakening -- the two false-positive matches were geometrically real matches under those specific transforms, just not the SAME symbol) -- the same class of documented escape hatch already used elsewhere in this corpus (e.g. case 01's options.affine:false). With both disabled, the sweep returns exactly the 5 real, visually-confirmed instances (plus the seed = 6 total), all score 1.0, rotation 0, unmirrored -- matching the direct visual count on the rendered page exactly, with zero contamination.",
+          "tag: null / association_type: unlabelled is honest here, not a workaround: there is no per-instance identifier printed next to any OWS dot anywhere on the sheet (confirmed both by a textSpans proximity check -- the nearest text at every instance is always a room name like 'MA[INTENANCE] FOREMAN E-07', 'OFFICE E-08', never an OWS-specific code -- and by the legend itself naming only the CLASS, 'Operator Work Stations (OWS)', not individual instance codes). This is the same already-precedented pattern as case 050's diffuser and cases 15/19's mixed-tag families, just fully unlabelled rather than partially.",
+          "No rotation/mirror stratum is claimed for this case (options disables both searches after the false-positive finding) -- a smaller, plainer case than hoped, but an honest one. This document's 2nd/3rd and 5th/6th floor sheets (A-002/A-003) were checked by the scouting pass and appear not to repeat this OWS convention; not independently re-verified pixel-by-pixel this pass.",
+          "SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth-only change (cases.json, a curated source PDF, and review renders); no VectorGrid/table-extraction/schedule-reconstruction/citation/bbox-semantics or other production data-contract code touched."
+        ]
+      }
     }
   ]
 }
