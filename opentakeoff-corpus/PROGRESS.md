@@ -1,5 +1,104 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4's own gate 3 —
+measured, for the first time in this project, "Ownership precision/
+recall/F1 is reported separately; auto-accepted instances require at
+least 0.95 primitive F1 against reviewed bodies." Every prior diagnostic
+this checkpoint (inspect-ownership-clusters.mjs) checked the OTHER two
+Phase 4 gates — "no primitive supports two accepted instances" and,
+structurally, "no accepted instance is an empty patch" — but never this
+one, because it needs primitive-level ground truth, not just a clean-
+looking internal invariant. New permanent script,
+`mcp/scripts/score-ownership-against-ground-truth.mjs`.
+
+GROUND TRUTH -> PRIMITIVE SET, honestly disclosed: cases.json stores
+body_bbox as a pixel rectangle, not a primitive id list —
+`reference_primitive_ids`/`owned_primitive_ids` are explicitly unset on
+every one of the 422 real instances (checked directly), deferred per the
+review notes' own account until VectorSceneIndex existed; it now does,
+but nobody has gone back to populate them. This script infers the
+ground-truth primitive set the SAME way legendReferenceBank.ts already
+does for a legend glyph's own reference primitives — full bbox
+containment via the spatial index's broad-phase query, then an exact
+containment filter — never a second, different convention invented here.
+Coordinate compatibility confirmed directly before trusting anything:
+`page.viewport.width/height` equals each case's own `page_size_px`
+exactly (Cherry Point p12: 4896x3168 both ways), so body_bbox needs no
+scale conversion against `idx.primitives`. PREDICTED BODY: for each
+ground-truth instance, every final predicted body (an uncontested
+proposal as-is, or a resolved cluster's own OwnedBody via
+`resolveClusterOwnershipIteratively`) whose bbox overlaps body_bbox at
+all is scored by primitive-set F1 against the ground-truth set; the
+single best-F1 body is "the" prediction — the real question the gate
+asks (does the system's own accepted-instance concept correctly capture
+this real symbol's ink), not a bbox-IoU proxy for it.
+
+RESULT (full corpus, all 422 ground-truth instances, 51 cases, 40
+document-page groups — the whole real benchmark corpus this gate has
+ground truth for): the gate does NOT hold yet. 405/422 evaluable (17
+excluded honestly as "zero primitives contained in body_bbox," not
+silently scored zero — see cases below); of those 405,
+**microF1 0.204, microPrecision 0.863, microRecall 0.116, macroF1
+0.334, and only 13/405 (3.2%) reach the required 0.95 F1**. This is not
+noise or a labeling artifact — Cherry Point's own CD-1 ceiling-diffuser
+family alone (20/20 real instances) shows precision EXACTLY 1.0 on every
+single instance (the pipeline never once claims a wrong primitive) while
+recall averages 4.1% (tp typically 2-5 primitives against a real gtSize
+of 60-210) — a clean, unambiguous signature of systematic UNDER-capture,
+not random error.
+
+ROOT CAUSE, diagnosed not just measured: the corpus-wide result splits
+cleanly by symbol drawing style, and that split IS the explanation.
+TOP performers (microF1, whole case): 20-jvwtp-e603-ladder-relay-coils
+1.000 (4/4 at gate), 40-jvwtp-e603-pilot-lights 0.970,
+21-jvwtp-h601-rooftop-ai-point-callouts 0.940,
+42-guaranteed-rate-m121-thermostat-bubbles 0.939 — all small, SINGLE
+connected schematic glyphs (a coil, a circle/bubble callout) where Lane
+B's own junction-touching convention already captures the whole real
+shape in one body. BOTTOM performers: 01-cherry-mh111-cd1 0.079,
+10-lovell-m100-cd1-ceiling-diffusers 0.025,
+43-carson-m601-vlc853e-controller-modules 0.091,
+04-itd-p30-paired-roof-drains 0.047, 24-eglin-m82-building-controllers
+0.017, 02-norfolk-am104-generator-core 0.006,
+07-ames-mh101e-vav-e-terminals 0.006 — all mechanical/equipment symbols
+drawn with MANY separate strokes (grille/hatch patterns, multi-part
+equipment outlines). This directly generalizes a finding already
+disclosed for exactly ONE case in cases.json's own review notes
+(case 05-usda-mh101-d10-air-devices, instance d10-05: "the diagonal
+hatch marks are drawn as short, NON-TOUCHING, criss-crossing strokes
+with no shared endpoints, so candidateBodyLaneB.ts's own junction-based
+union-find never connects them... Phase 4's machinery resolves CONTESTED
+primitives between competing proposals; it has nothing to act on when
+Lane B never groups the ink into one proposal in the first place") from
+a single suspected case to a corpus-wide, quantified, 51-case pattern:
+Lane B's touching-only union-find systematically fragments any real
+symbol drawn with non-touching strokes into many small disconnected
+bodies, and nothing downstream currently unions them back into one
+accepted instance — so no single predicted body can ever reach high
+recall against such a symbol's own full ground-truth extent, however
+good the ownership-assignment machinery built this checkpoint is at its
+own job (correctly refusing to mis-claim the OTHER symbols' ink is
+exactly why precision stays near-perfect throughout).
+
+DISCLOSED, NOT ATTEMPTED HERE: fixing this (the real fix that d10-05's
+own review note already named as "real further work" a session ago —
+spatial-proximity clustering, grouping nearby but non-touching short
+strokes within a radius, not junction-based union; or a body-merging
+step downstream of Lane B) is a significant, repository-wide-impact
+change to Lane B's own core grouping algorithm (candidateBodyLaneB.ts
+feeds every proposal in the whole pipeline) and is NOT attempted in this
+pass — this measurement-and-diagnosis is the deliverable, giving the
+next session a precise, quantified, root-caused target instead of a
+vague "F1 seems low somewhere." Also disclosed: this measures the
+CURRENT pipeline's own single-owned-body concept specifically, a fair
+proxy for Phase 4's own primitive-ownership machinery, not yet the full
+Phase 6/7 pipeline (tag association, schedule reconciliation).
+SHOULD THIS BE ON THE SHARED PATH? Yes — the script is a real,
+re-runnable regression gate for whatever fixes Lane B's fragmentation
+next: re-run it before and after to prove the fix actually moves the
+needle rather than trusting an internal invariant that says nothing
+about real symbol capture.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 7 —
 migrated `inspect-ownership-clusters.mjs` itself over to
 `resolveClusterOwnershipIteratively` (the disclosed next step named at
