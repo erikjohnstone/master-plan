@@ -1,5 +1,82 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 fourth slice
+— requirement 4's narrow gating: "a one-row schedule may imply one
+scheduled asset only when the schedule contract proves that." Plus a
+real memory-investigation false alarm along the way, fully disclosed.
+
+CONFIRMED GAP: `isIndividuallyMarkedEquipmentSchedule` (schedulePlanReconcile.mjs)
+already gates INSTALLED (plan-side) quantity semantics in
+`mcp/src/session.ts`'s own `sweepScheduleRow` (3 real call sites), but
+was NEVER consulted by the SCHEDULED (row-side) `scheduledQtyStatusFromRow`'s
+own "no QTY column" fallback (`basis: "one_per_unique_schedule_row"`) —
+a real, confirmed gap, not hypothetical.
+
+WHY THE REFUSAL ITSELF WAS NOT NARROWED (a deliberate, disclosed
+choice, not an oversight): `isIndividuallyMarkedEquipmentSchedule`'s
+own regex is HVAC-equipment-specific (air handlers, VAV, boilers,
+pumps, ...). Flipping the fallback to refuse whenever this check fails
+would wrongly refuse real, legitimate one-row-per-asset schedules from
+OTHER trades (electrical panels, plumbing fixtures) that this
+HVAC-specific regex was never meant to cover — confirmed directly with
+a dedicated test (`isIndividuallyMarkedEquipmentSchedule("ELECTRICAL
+PANEL SCHEDULE")` returns false, yet that schedule is just as
+legitimately one-row-per-asset), not merely argued. Narrowing the
+refusal safely needs the regex broadened to cover more trades first —
+real further work, not attempted here.
+
+FIX MADE INSTEAD, purely additive: new optional
+`opts.individuallyMarkedEquipment` on `scheduledQtyStatusFromRow`;
+when a caller supplies it, the result gains a `familyEvidenceVerified`
+field disclosing whether the one-row assumption was actually PROVEN
+(true), actively checked and NOT matched (false), or never checked at
+all (field absent — "unproven" is kept distinct from "positively
+disproven"). The `qty`/`refused` values themselves are UNCHANGED for
+every existing caller — zero regression risk on real quantity/cost
+output, while still honestly answering "was this actually proven"
+rather than silently assuming it. Both real call sites in
+schedulePlanReconcile.mjs now compute and pass this from the row's own
+real title.
+
+REAL MEMORY-INVESTIGATION FALSE ALARM, fully disclosed rather than
+quietly dropped: validating this change against `mcp/test/session.test.ts`
++ `mcp/test/reconcileWorkflow.test.mjs` together first appeared to show
+a real, severe regression — memory climbing to 7.4GB / 20+ minutes CPU
+time on what should have been a small, additive change. Investigated
+rather than assumed: isolated `reconcileWorkflow.test.mjs` alone (with
+and without the fix) stayed memory-flat (~1GB) in both cases; the real
+cause was an artifact of this SAME investigation's own earlier
+commands — node's test runner spawns each test FILE as its own
+parallel child process, and an earlier interrupted background run had
+left a SECOND, redundant `reconcileWorkflow.test.mjs` process
+competing for the same machine's resources at the same time as a new
+one — never a leak in this module or the fix. Confirmed directly via
+`/proc/<pid>/stat` CPU-tick deltas (genuine, continuous computation,
+never a stall) and a clean side-by-side comparison against the
+UNMODIFIED baseline. Along the way, a real, PRE-EXISTING, unrelated
+test failure was found and disclosed rather than chased: "federal-mech
+VAV reconcile scaffold matches compile count (schedule side)" fails
+(55 !== 58) on the baseline code with NO changes of mine applied at
+all — not this project's to fix in this slice, noted here so it is not
+mistaken for something this change caused.
+
+VALIDATION: `tsc --noEmit` clean. `schedulePlanReconcile.test.ts`
+27/27 (1 new test covering all three disclosure states: unchecked,
+verified-true, verified-false-but-still-not-refused). `session.test.ts`
+21/21. The slower, real-corpus `reconcileWorkflow.test.mjs` was
+confirmed memory-stable and free of any NEW failure type over an
+extended, directly-monitored run (its own pre-existing unrelated
+failure aside) rather than waited out to its absolute final line,
+given its confirmed-inherent slowness on the unmodified baseline too —
+disclosed honestly as a bounded, not exhaustive, check of that
+specific file.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — zero-regression-risk additive
+disclosure to real quantity-computation code, validated against the
+fast suites plus a bounded, monitored check of the slow real-corpus
+one; the memory scare was fully run to ground rather than assumed
+either way.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 third slice —
 requirement 1: "Add the VectorSceneIndex ... to Session.graphForPipeline
 or the documented shared pipeline object." First real modification to

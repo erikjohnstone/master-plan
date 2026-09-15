@@ -7,6 +7,7 @@ import {
   sweepBasServedMark,
   familyNeedleFromSpecs,
   scheduledQtyStatusFromRow,
+  isIndividuallyMarkedEquipmentSchedule,
   reconcileRowsFromTakeoffItems,
   summarizeReconcile,
   reconcileScheduleFamilyFromGraph,
@@ -138,6 +139,42 @@ test("scheduled quantity distinguishes printed, row-cardinality, and unparseable
     assert.equal(result.refused, true, JSON.stringify(text));
     assert.equal(result.basis, "unparseable_printed_quantity");
   }
+});
+
+test("Phase 7 requirement 4 -- the one-per-row fallback's own family evidence is honestly disclosed, never silently assumed, and the qty/refused values themselves stay UNCHANGED (zero regression risk for every existing caller)", () => {
+  // omitted opts (every existing caller before this change): no
+  // familyEvidenceVerified field at all -- "not checked," never "checked
+  // and failed."
+  const unchecked = scheduledQtyStatusFromRow({ cells: { MARK: { text: "VAV-1" } } });
+  assert.equal(unchecked.qty, 1);
+  assert.equal(unchecked.refused, false);
+  assert.equal(unchecked.basis, "one_per_unique_schedule_row");
+  assert.equal("familyEvidenceVerified" in unchecked, false);
+
+  // a real HVAC equipment family (isIndividuallyMarkedEquipmentSchedule's
+  // own already-tested regex) -- positively verified, disclosed true.
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("AIR HANDLING UNIT SCHEDULE"), true);
+  const verified = scheduledQtyStatusFromRow(
+    { cells: { MARK: { text: "AHU-1" } } },
+    { individuallyMarkedEquipment: isIndividuallyMarkedEquipmentSchedule("AIR HANDLING UNIT SCHEDULE") },
+  );
+  assert.equal(verified.qty, 1, "the actual quantity is UNCHANGED by this disclosure");
+  assert.equal(verified.refused, false, "still not refused -- this is additive disclosure, not a new refusal");
+  assert.equal(verified.familyEvidenceVerified, true);
+
+  // an electrical panel schedule -- a real, individually-marked, one-row-
+  // per-asset schedule in its own trade, but OUTSIDE this HVAC-specific
+  // regex's own family list. Disclosed as unverified, but STILL not
+  // refused -- exactly why the refusal itself was NOT narrowed (that
+  // would have wrongly refused this real, legitimate case).
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("ELECTRICAL PANEL SCHEDULE"), false);
+  const otherTrade = scheduledQtyStatusFromRow(
+    { cells: { MARK: { text: "PANEL-1" } } },
+    { individuallyMarkedEquipment: isIndividuallyMarkedEquipmentSchedule("ELECTRICAL PANEL SCHEDULE") },
+  );
+  assert.equal(otherTrade.qty, 1, "a real, legitimate one-row-per-asset schedule from another trade is never wrongly refused");
+  assert.equal(otherTrade.refused, false);
+  assert.equal(otherTrade.familyEvidenceVerified, false, "honestly disclosed as unverified by this HVAC-specific regex, not silently assumed true");
 });
 
 test("repeatable air-device type rows never invent a scheduled quantity of one", () => {

@@ -253,11 +253,33 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
  * `cells` (`{ header: { text, bbox } }`) and a mcp/src/takeoff.ts TakeoffItem's
  * `schedule_row` (`{ header: string }`, flat text, no bbox) — a cell entry is
  * read as `cell.text` when it's an object, else as the entry itself.
+ *
+ * GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 requirement 4: "a one-row
+ * schedule may imply one scheduled asset only when the schedule contract
+ * proves that." `isIndividuallyMarkedEquipmentSchedule` (this same file)
+ * already proves exactly that for the INSTALLED (plan-side) quantity path
+ * (mcp/src/session.ts's own sweepScheduleRow) but was never consulted on
+ * this SCHEDULED (row-side) "one_per_unique_schedule_row" fallback — a
+ * real, confirmed gap, not a hypothetical. NOT flipped to a refusal here:
+ * that function's own regex is HVAC-equipment-specific (air handlers,
+ * VAV, boilers, pumps, ...), so real corpus schedules for OTHER trades
+ * (electrical panels, plumbing fixtures) that are JUST as legitimately
+ * "one row = one asset" would start being wrongly refused — a real
+ * functional regression this project's own corpus almost certainly
+ * contains, not merely a theoretical risk. Disclosed instead, additively:
+ * `opts.individuallyMarkedEquipment`, when a caller supplies it (from
+ * `isIndividuallyMarkedEquipmentSchedule` against the row's own real
+ * title/family), surfaces as `familyEvidenceVerified` on the result —
+ * the qty/refused values themselves are UNCHANGED for every existing
+ * caller, so this is zero-regression-risk while still answering "was
+ * this actually proven" honestly rather than silently assuming it.
+ * Narrowing the real refusal itself (once the equipment regex covers
+ * enough trades to do so safely) is real further work, not attempted here.
  * @param {{ cells?: Record<string, { text?: string } | string> }} row
- * @param {{ typeDefinition?: boolean }} [opts]
+ * @param {{ typeDefinition?: boolean, individuallyMarkedEquipment?: boolean }} [opts]
  * @returns {{ qty: number|null, refused: boolean, reason: string|null,
  *   basis: "printed_schedule_quantity"|"one_per_unique_schedule_row"|"unparseable_printed_quantity"|"type_definition_not_quantity",
- *   source_header: string|null, source_text: string|null }}
+ *   source_header: string|null, source_text: string|null, familyEvidenceVerified?: boolean }}
  */
 export function scheduledQtyStatusFromRow(row, opts = {}) {
   for (const [header, cell] of Object.entries(row?.cells || {})) {
@@ -309,6 +331,13 @@ export function scheduledQtyStatusFromRow(row, opts = {}) {
     refused: false,
     reason: null,
     basis: "one_per_unique_schedule_row",
+    // honestly disclosed, never silently assumed: true only when a caller
+    // actually checked isIndividuallyMarkedEquipmentSchedule against this
+    // row's own real title/family; omitted opts (the common case today)
+    // means "not checked," not "checked and failed" — the field is absent
+    // rather than false so a caller can tell "unproven" apart from
+    // "positively disproven" (this fallback never fires for the latter).
+    ...(opts.individuallyMarkedEquipment !== undefined ? { familyEvidenceVerified: opts.individuallyMarkedEquipment } : {}),
     source_header: null,
     source_text: null,
   };
@@ -420,9 +449,10 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
     // path does; a synthesized/legend-only item with no backing row still
     // defaults to 1 (one row = one unit), unchanged.
     const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(item.schedule?.title || "");
+    const individuallyMarkedEquipment = isIndividuallyMarkedEquipmentSchedule(item.schedule?.title || "");
     const qtyStatus = item.schedule_row
-      ? scheduledQtyStatusFromRow({ cells: item.schedule_row }, { typeDefinition: scheduleDefinitionOnly })
-      : scheduledQtyStatusFromRow({ cells: {} });
+      ? scheduledQtyStatusFromRow({ cells: item.schedule_row }, { typeDefinition: scheduleDefinitionOnly, individuallyMarkedEquipment })
+      : scheduledQtyStatusFromRow({ cells: {} }, { individuallyMarkedEquipment });
     const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
     // A refused/error sweep proves only that installed quantity could not be
     // verified.  It does not prove zero devices exist on the plans.  Keep the
@@ -735,7 +765,8 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         if (!canon || seen.has(scopeIdentity)) continue;
         seen.add(scopeIdentity);
         const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(title);
-        const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly });
+        const individuallyMarkedEquipment = isIndividuallyMarkedEquipmentSchedule(title);
+        const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly, individuallyMarkedEquipment });
         const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
         const sweep = sweepByTag.get(rowId) || sweepByTag.get(tag) || {};
         const reportedInstalledQty = Number.isFinite(sweep.installedQty) ? sweep.installedQty : null;
