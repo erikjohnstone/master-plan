@@ -1,5 +1,46 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+Vol2/HVAC_BAS_Plan_Sets_Vol2 pool census after landing case 51: the
+directory this checkpoint's ~11 scouting batches drew from is now, by
+direct `ls` of the actual bulk folder, essentially exhausted. Recorded
+here so the next session doesn't re-scout ground already covered.
+
+Full listing (81 documents/document-groups) cross-checked against every
+number this checkpoint has touched: every one is now either already-
+spent baseline-30, frozen holdout (018/041/043), the VA-537-17-115
+avoid-list (050/052), the 074-is-a-duplicate-of-072 avoid case, landed
+(042/057/082/098), or scouted to an explicit dead end/closure across
+batches A-J. Only three genuine gaps remain, each already characterized
+enough to act on directly rather than re-scout from scratch:
+- **032_PA_Construct_EHRM_Infrastructure_Upgrades** — never opened, but
+  matches a now-5/5 pattern: every other "EHRM Infrastructure" -titled
+  Vol2 document checked this checkpoint (034, 036, 038-adjacent-by-
+  project-number, 045, 055) turned out to be a civil/BAS-controls-only
+  scope with no to-scale mechanical duct/diffuser plan. Worth a quick
+  confirm-or-skip check, not a full batch, given the pattern's strength.
+- **088_..._Phoenix_Sky_Harbor (22 parts)** — only 3 of 22 parts sampled;
+  a real diffuser type schedule (D1-D5) was found with no located plan
+  view in the sampled station. A genuinely open gap, not a rejection —
+  worth a dedicated pass across more of the remaining 19 parts (other
+  people-mover "stations" on the same airport project) if pursued.
+- **093_..._Jonesboro_Heat_Pump_Upgrades** — a real, countable IU
+  device (20 genuine instances) blocked by contamination from an
+  aliasing architectural beam-pocket glyph, confirmed dominant on one
+  sheet and present but a minority on another. Buildable in principle
+  with a materially different, more surgical seed isolating only
+  IU-specific geometry away from the beam-pocket silhouette — real
+  per-instance verification work, not a quick retry.
+
+The broader Vol2 bulk pool is reported elsewhere as ~145 documents
+total; this checkpoint's batches were built from the ~81 actually present
+in the `HVAC_BAS_Plan_Sets_Vol2` folder as currently materialized on
+disk, so a future session pulling from a fuller release/asset snapshot
+may find additional untouched documents beyond this specific census.
+
+SHOULD THIS BE ON THE SHARED PATH? No. A directory census/documentation
+note; no files changed.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 — FOURTH
 LANDED corpus-expansion case: `51-bruneau-m1-1-uh-unit-heaters`, 4
 instances (seed + 3), PASSING. Also folding in the rest of batch J's
