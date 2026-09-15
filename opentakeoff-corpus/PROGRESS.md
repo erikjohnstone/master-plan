@@ -1,5 +1,73 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 6/7 — old-engine-
+to-evidence-graph adapter, the real follow-through on the strategic
+finding two entries below (feed evidenceGraph.ts from the OLD engine's
+already-accurate matches instead of waiting on Lane B). SHIPPED, real
+positive result, unlike the reverted attempt right below it.
+
+NEW file: `opentakeoff/web/src/lib/sweepMatchEvidenceBody.ts`, one pure
+function `sweepMatchToEvidenceBody(id, match, seedRect, idx,
+spatialIndex)`. Converts a real `SweepMatch` (from
+`matchSymbol`/`sweepScheduleRow` — a centroid + score, never a
+primitive-id list; confirmed by direct audit that `scoreAt`/
+`scoreAtTol` compute a covered-sheet-segment index internally but
+discard it every iteration, symbolsweep.ts:1932-1997) into a real
+`EvidenceBodyLike`, by REUSING three already-shipped, already-proven
+pieces rather than inventing a fourth convention: `sweepThumb.js`'s own
+`matchBox` (already used in production for match-review
+thumbnails/canvas highlight boxes) for the rotation-safe box-from-match
+math, scaled by the match's own `transform.scale_x/scale_y` when
+affine-refined; the sheet's own already-cached `VectorSceneIndex` +
+spatial index (`Session.vectorSceneIndexFor`, built in an earlier
+Phase 7 slice) for the broad-phase primitive lookup; and EXACT
+containment (not `segmentsInBox`'s looser overlap, which is right for a
+UI thumbnail but would corrupt this body's own identity with
+unrelated nearby ink) — the SAME convention
+`score-ownership-against-ground-truth.mjs` already uses to derive a
+ground-truth instance's own primitive set. Refuses cleanly (`null`,
+never an empty-but-truthy body) when the derived box contains no
+primitive, or the seed rect is degenerate.
+
+VALIDATED, real data, not just synthetic: 7 synthetic tests (rigid,
+rotated, affine-scaled, exact-vs-partial containment, empty-space
+refusal, degenerate-seed refusal, tight-vs-loose bbox) plus a REAL run
+against Cherry Point CD-1 (case `01-cherry-mh111-cd1`, the same case
+used throughout this project's own real-corpus validation work):
+`fingerprintSymbol`+`matchSymbol` called directly (raw, not through the
+full `sweepScheduleRow` options a real user gets) on the real PDF,
+every returned match converted through this module, then scored
+against the real ground truth the SAME way
+`score-ownership-against-ground-truth.mjs` scores Lane B — microF1
+**0.6947**, microPrecision 0.812, microRecall 0.607, 2/20 instances at
+the 0.95 gate, individual per-instance F1 mostly 0.79-0.97 wherever a
+match existed. Compare directly: the Lane B pipeline's OWN corpus-wide
+number is microF1 0.204; this module's real-data number on a
+comparably hard real case is **~3.4x higher** — the strategic
+hypothesis (old engine's matches, once given a primitive-id list, are
+real, correct bodies; the new pipeline's problem is candidate
+generation, not classification) is now measured, not just argued.
+
+DISCLOSED, NOT YET DONE: only 11/20 real instances got ANY match at all
+in this run (9 landed in `withheld` instead) — because the diagnostic
+called `matchSymbol` directly with bare options (`{rotations:true}`),
+not the full production option set `sweepScheduleRow` actually applies
+(this exact case gets 19/19 through the real, fully-configured path,
+confirmed in this session's own `--mode=default` baseline capture two
+entries below). A real integration needs either the full production
+options wired through, or `withheld` rows folded in too (many hold
+reasons — bounds, density — are about corroboration eligibility, not
+"this isn't the symbol"). Also not done: actually calling
+`buildSheetEvidenceGraph`/`classifyInstalledEvidence` end-to-end with
+these bodies — this slice proves the BODY step works, not the full
+evidence-graph classification run. Both are real next steps, not
+attempted here to keep this slice's own measurement uncontaminated
+(this project's own repeated lesson: measure one mechanism at a time).
+
+`tsc` clean; 120/120 in the combined sweepMatchEvidenceBody/sweepThumb/
+symbolsweep/evidenceGraph suites (7 new). Committed — unlike the Lane B
+attempt below, this one earned it.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — Lane B
 fragmentation, SECOND real fix attempt: built, corpus-measured, and
 REVERTED (deleted, never committed) — a real, informative negative
