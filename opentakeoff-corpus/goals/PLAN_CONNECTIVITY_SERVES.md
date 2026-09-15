@@ -264,8 +264,74 @@ threshold weakening to move a number, full test suite before every commit.
    Print it here even if it is terrible; it probably is, and that is the
    point.
 
-**Gate 0:** key with ≥ 40 rows and ≥ 8 negatives; ruler committed; baseline
-row filled in the table below.
+**Gate 0 — MET, 2026-09-15.** 49 real rows across all 4 named sets (bessemer
+13/6 negatives, itd-d1-lab 9/2, navfac-cherry-point-atc 16/3,
+bldg5406-hvac-demo 11/3 — 14 negatives total), every row hand-authored by
+rendering and looking, independently spot-verified by the coordinator
+against each key's own self-flagged least-confident rows before commit
+(see the four `keys/*.serves.csv` commits on this branch), `serves-eval.mjs`
+built and validated against a synthetic fixture reusing already-verified
+`bessemer.mep.csv` coordinates before being trusted on real data. Baseline
+run: `reports/SERVES-EVAL-2026-09-15.txt`.
+
+```
+set                          rows   served R   refusal R   false-conf   path-coll
+bessemer                       13    20.0%      16.7%           2          0
+itd-d1-lab                      9    42.9%      50.0%           0          0
+navfac-cherry-point-atc        16     0.0%       0.0%           0          0
+bldg5406-hvac-demo             11     0.0%      66.7%           0          0
+CORPUS                         49    12.1%      28.6%           2          0
+```
+
+**This is exactly as bad as expected — a device's own glyph is not a click
+on its duct, and it is worth stating precisely why, because the four sets
+fail in four DIFFERENT ways, each pointing at a different later phase:**
+
+- **NAVFAC — 0% served, 0% refusal, every one of 16 rows `refused`.**
+  Diagnosed directly (not assumed): the SAME reason string fires for every
+  row — `"This sheet's own linework could not be reliably noded for
+  connectivity tracing"`. JTS noding fails at every retry grid on this
+  ~92,538-op sheet, so `buildMepGraph` returns null and NOTHING traces here
+  today, regardless of seed quality. This is a SECOND real, disclosed
+  instance of the same failure class `docs/MEP-CONNECTIVITY-EVAL.md`
+  already names for `baker-county-eoc`'s M1.21 — and it lands on the one
+  sheet this goal explicitly chose as "the production shape of the whole
+  goal." Phase 1 must re-test NAVFAC's own noding as a named gate item, not
+  just the 3 existing `*.mep.csv` cases — a refactor that stays
+  byte-identical on 3 easy cases while the hardest real sheet in the corpus
+  still refuses on everything has not actually been gated on the thing that
+  matters.
+- **Bessemer — 20%/16.7%, 2 false-confident.** All 3 `SR-1` rows `dead_end`
+  from the device's OWN glyph even though the near-identical duct-centerline
+  seed in `bessemer.mep.csv` reaches `HP-1` cleanly — the register symbol
+  sits near, not exactly on, the traced duct stroke, outside
+  `DEFAULT_SEED_TOL_FT`/`quantGridPx`. Both false-confident hits are `T`
+  (thermostat) rows: seeded near `EBB-1`/`EBB-3`, the walk reached the
+  ADJACENT `EBB-2`/`EBB-4` instead — because dashed control-line segments
+  get noded and walked exactly like solid duct ink today, with no dash
+  signal to keep two nearby control runs apart. Both failure shapes are
+  named, disclosed risks already in this file (Phase 1 dash detection,
+  Phase 4 ports) — this is the first real, measured evidence for both.
+- **ITD-d1-lab — 42.9%/50%, the least-broken set.** The first EQ.19/CH-1/
+  EQ.10 chain (already proven in `itd-d1-lab.mep.csv`) mostly still resolves;
+  the SECOND, previously-untested EQ.19/EQ.10/CH-3 chain into `EF-3` misses
+  entirely (`dead_end`) — a genuinely new, real gap this key is the first to
+  surface, not a re-measurement of what was already known.
+- **bldg5406 — 0% served, but 66.7% refusal (its unconnected/ambiguous rows
+  mostly DO score correctly) — every `served` row instead comes back
+  `ambiguous`.** This is the OPPOSITE failure from NAVFAC's total refusal:
+  the graph nodes fine, but the Phase 0 baseline's own equipment-candidate
+  list (every "served" row's equipment on that sheet — 8 VAV/FCU bodies on
+  one busy floor plan) is too broad for a device seeded onto a SHARED trunk
+  before its own dedicated branch — the walk reaches several VAV bodies
+  within the hop limit and correctly, honestly refuses to pick one. This is
+  not a bug in `traceConnectivity`'s own ambiguity doctrine (picking one
+  would be worse) — it is the clearest possible demonstration of why Phase 4
+  needs to scope the equipment candidate list to what a device's own PORT
+  can actually reach, not hand it every piece of equipment on the sheet.
+
+Four sets, four distinct, named, root-caused failure modes, each mapped to
+the phase that fixes it. This is what "the ruler before the fix" is for.
 
 ### Phase 1 — one graph, with provenance
 
@@ -315,7 +381,11 @@ row filled in the table below.
 `tools.test.ts:2033` still asserts the old crossing behaviour;
 `npm run test:bas-drawings`, `test:bas-risers`, `test:bas-network-riser`
 green (schematic corpus gates); web + mcp typecheck and full test suites
-green.
+green. **Also required, named because of the Phase 0 baseline finding
+above:** re-run `serves-eval.mjs` on `navfac-cherry-point-atc` specifically
+and report whether this sheet nodes at all now — 0/16 refused today on the
+single most production-representative sheet in the corpus is not
+acceptable to leave unmeasured through a phase that touches noding.
 
 ### Phase 2 — a crossing is not a junction (#22)
 
@@ -460,7 +530,7 @@ not this goal's goes to `TAKEOFF_BUG_CATALOGUE.md`, not into a side fix.
 | phase | date | commit | rows | served-correct | refusal-correct | false-confident | no-seed | notes |
 |---|---|---|---|---|---|---|---|---|
 | baseline (`trace_connectivity`, hand-seeded, 3 `*.mep.csv` rows) | 2026-09-15 | main | 3 | 2/2 | 1/1 | 0 | no | the only real cases that exist today |
-| 0 | | | | | | | | |
+| 0 | 2026-09-15 | (this commit) | 49 | 4/33 (12.1%) | 4/14 (28.6%) | 2 | no | 4 sets, 4 distinct failure modes: NAVFAC total noding refusal, Bessemer seed-tolerance + dash false-confidence, ITD a genuinely new untested-chain gap, bldg5406 over-broad candidate-list ambiguity — see "Gate 0 — MET" above |
 | 1 | | | | | | | | |
 | 2 | | | | | | | | |
 | 3 | | | | | | | | |
