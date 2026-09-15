@@ -1,5 +1,99 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 — Lane B
+fragmentation, SECOND real fix attempt: built, corpus-measured, and
+REVERTED (deleted, never committed) — a real, informative negative
+result, not a hasty one.
+
+DESIGN: `candidateBodyBoundedMerge.ts` (mutual nearest-neighbor + a
+relative size cap), structurally different from the FIRST attempt
+(`candidateBodyProximityMerge.ts`, a one-sided k=1-NN union-find that
+leaked at a 100% rate through unrelated ink, exploding Colville's tank
+groups to 400-1000+ primitives — see the entry below this one). This
+attempt required BOTH sides of a pair to agree the other was their own
+single nearest OTHER group before merging (no one-sided "close enough"
+claim), plus a merge-time cap refusing any union whose resulting bbox
+diagonal would exceed a per-sheet multiple of the sheet's own median
+pre-merge group diagonal (reusing carrierClassification.ts's own
+median-of-siblings convention, never a global constant, consistent with
+calibration already ruling out any fixed or referenceLength-normalized
+distance value — Colville's own within-instance max gap, 87.8px,
+exceeds Klamath's between-instance min gap, 68.9px).
+
+MEASURED, not assumed: real full run against Colville (the exact
+document that broke the first attempt), via a temporary
+`--with-bounded-merge` flag on `score-ownership-against-ground-truth.mjs`
+(reverted along with the module). Baseline microF1 0.1749, recall
+0.0958. One round: 487/12293 groups merged, microF1 0.1753 (no real
+change). RESULT: a single round of mutual-NN is structurally a
+MATCHING — each group has exactly one "nearest," so mutual agreement
+caps it at ONE partner — it can only ever pair two fragments, never
+assemble the dozens a real severely-fragmented instance is broken into.
+
+Made iterative (`maxRounds`, feeding output back as input) to test
+whether that was the real limiter. Empirically, mutual-NN's own
+agreement requirement is genuinely safer than the first attempt's
+one-sided check — even with the cap loosened to effectively unlimited
+(ratio 1000), it CONVERGED (2953 pairs, stopped growing) rather than
+running away to swallow the whole sheet, unlike the first attempt. But
+convergence still landed on oversized blobs (max body 1071 primitives,
+3x the real 331-primitive target) once the cap was loose, and even the
+TIGHT cap (ratio 3, 20 rounds: max body grew 160->267 primitives,
+approaching but not reaching the 331 target) only moved microF1 from
+0.1749 to 0.1776 — bigger merged bodies did not translate into bodies
+that actually correspond 1:1 with a single real ground-truth instance.
+
+ROOT CAUSE, now confirmed rather than hypothesized: Colville's own size
+percentiles (primitive count p50=2 p75=3 p90=4 p95=11 p99=32; diagonal
+p50=6.7px p95=48.9px p99=499px) show the sheet's Lane B population is
+so dominated by tiny debris (median 2 primitives) that NO population-
+relative statistic computed from Lane B's own current, already-broken
+output can safely serve as a proxy for "how big one real instance
+should be" — even the 99th percentile (32 primitives) is far below a
+real instance's true size (up to 331). A cap tight enough to be safe is
+self-defeatingly small; loosened enough to matter, it lets unrelated
+content merge.
+
+STRATEGIC FINDING, the real payoff of this slice: the OLD, currently-
+live `symbolsweep.ts` engine (`matchSymbol`/template affine matching)
+gets 49/51 on the real corpus INCLUDING complex multi-stroke symbols,
+while the NEW bottom-up Lane A/B/C geometric-clustering pipeline scores
+near zero on exactly those same complex multi-stroke cases (see the
+entry below). This is now understood as a METHODOLOGICAL difference,
+not a tunable-parameter gap: template matching searches directly for
+shapes resembling a seed, independent of whether the real ink happens
+to be drawn as touching or separate strokes; bottom-up clustering must
+first correctly SEGMENT arbitrary ink into components before any
+matching can happen at all, and two serious, differently-designed
+attempts at that segmentation step have both failed on real data. This
+argues against Phase 7 requirement 2 (consolidating onto the NEW
+candidate/ownership modules) as currently the right move for complex
+symbols, and suggests evidenceGraph.ts's (Phase 6) generic
+`EvidenceBodyLike` input could, in principle, be fed by the OLD
+engine's own successful match results instead of waiting on Lane B to
+become viable — a real, disclosed, NOT-YET-ATTEMPTED alternative
+integration path worth real consideration before any further Lane B
+fix attempt.
+
+`tsc`/tests were transiently green throughout (7 synthetic tests
+covering mutual-NN, non-mutual rejection, the size cap, isolation, and
+iteration) before the whole module was deleted — the failure is a real
+measured-against-ground-truth result, not an implementation bug; the
+code itself worked exactly as designed. Deleted per this project's own
+standing rule that a fix real data disproves does not sit in the tree
+"looking safe": `candidateBodyBoundedMerge.ts`,
+`web/test/candidateBodyBoundedMerge.test.ts`, and the `--with-bounded-merge`
+wiring in `score-ownership-against-ground-truth.mjs` are all gone;
+`git status` confirms a clean revert.
+
+DISCLOSED, NOT ATTEMPTED: carrier-aware bridge exclusion (a third
+candidate direction named in prior entries) was never tried in
+isolation here — moot given even the core mutual-NN+cap mechanism
+itself doesn't help enough to be worth layering further safeguards
+onto yet. The strategic finding above (old engine as evidenceGraph.ts's
+real input source) is the more promising next direction, not a further
+Lane B patch.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 requirement 3 —
 "Batch all schedule families per sheet index. Do not rerun whole-sheet
 geometry once per schedule row." VERIFIED ALREADY SATISFIED, no code
