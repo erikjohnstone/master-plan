@@ -1,6 +1,34 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+document 032 (the one "quick confirm-or-skip" gap from the pool census
+below) checked and closed, confirming the 5/5 EHRM-project pattern
+rather than breaking it. Full 85-page tag-token census (every
+`LETTERS-DIGITS`-shaped token, not just a spot check): the only
+tokens repeating 3+ times are S-9/S-10/S-11/S-12 and P-13..P-18 (all
+appearing an identical, suspicious 9x each — the signature of a sheet-
+index or schedule-header line repeated across a fixed run of pages, not
+physical placements), plus what are plainly refrigerant type codes
+(R-407C, R-454B) and sheet numbers (M-110/M-130/M-140/M-160/M-170/M-180).
+No genuine equipment-instance family anywhere in the census. Closed
+without a render pass — the token-frequency signature alone (identical
+counts across dissimilar prefixes, refrigerant/sheet-number tokens
+mixed in) was decisive enough not to warrant one, consistent with how
+confidently narrow this pattern has read on the other 4 EHRM documents
+already checked with full renders. 6/6 for the EHRM-project pattern now.
+
+Practical stopping point for this checkpoint's Phase 1 item 3 push: all
+three pool-census gaps are now accounted for (032 closed above; 088 and
+093 remain open but require substantially more effort than a quick
+check — a multi-part sampling pass and real per-instance seed rework,
+respectively — not appropriate to force into this same stretch). The
+readily-available Vol2 pool is exhausted at the depth this checkpoint's
+scouting was operating at.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Reconnaissance only; no files
+changed.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
 Vol2/HVAC_BAS_Plan_Sets_Vol2 pool census after landing case 51: the
 directory this checkpoint's ~11 scouting batches drew from is now, by
 direct `ls` of the actual bulk folder, essentially exhausted. Recorded
