@@ -9,11 +9,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from PIL import Image
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 from project_grounding_benchmark import CASE_SCHEMA, PREDICTION_SCHEMA, iou, score  # noqa: E402
 from import_symbol_grounding_truth import import_truth  # noqa: E402
 from run_controlled_bakeoff import SCHEMA as BAKEOFF_SCHEMA, gate_decision, run  # noqa: E402
+from build_grounding_review_queue import PROPOSAL_SCHEMA, build_queue  # noqa: E402
 
 
 PDF_HASH = "a" * 64
@@ -158,6 +161,31 @@ class ProjectGroundingBenchmarkTest(unittest.TestCase):
         self.assertEqual(report["experiments"][0]["status"], "completed")
         self.assertEqual(report["experiments"][0]["decision"], "diagnostic_only_not_promotable")
         self.assertEqual(persisted["experiments"][0]["id"], "candidate")
+
+    def test_review_queue_renders_questions_without_self_labeling(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source_root = root / "source"
+            source_root.mkdir()
+            Image.new("RGB", (100, 100), "white").save(source_root / "page.png")
+            proposal = {
+                "schema": PROPOSAL_SCHEMA,
+                "proposal_id": "p1",
+                "project_id": "project-a",
+                "source_pdf_sha256": PDF_HASH,
+                "source_image_path": "page.png",
+                "equipment_family": "FAN COIL UNIT",
+                "tag": "FCU-1",
+                "tag_bbox_image_px": [10, 10, 20, 20],
+                "candidate_regions": [{"candidate_id": "candidate-1", "bbox_image_px": [30, 30, 60, 60]}],
+            }
+            queue = build_queue([proposal], source_root, root / "queue", 30, 2.0)
+            output_root = root / "queue"
+            persisted = json.loads((output_root / "review_queue.jsonl").read_text().strip())
+            self.assertEqual(queue[0]["review_status"], "needs_independent_human_review")
+            self.assertIsNone(queue[0]["review_decision"]["accepted_candidate_id"])
+            self.assertNotIn("expected_symbol_bbox_image_px", queue[0])
+            self.assertTrue((output_root / persisted["packet_image_path"]).is_file())
 
 
 if __name__ == "__main__":

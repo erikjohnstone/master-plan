@@ -53,6 +53,26 @@ case-level prohibited box is valuable negative control, but is not a claim that
 the reviewer has labeled all non-target bodies on the drawing. The current 14
 real cases are an anti-regression seed, not enough for an acceptance claim.
 
+## Build a reviewer queue without self-labeling
+
+`scripts/build_grounding_review_queue.py` turns independently discovered tag
+and candidate regions into visual review packets. It draws the exact printed
+tag in orange and all candidate regions in blue, but labels **none** of those
+candidates as correct. The output is deliberately a `needs_independent_human_review`
+queue, not ground truth.
+
+```sh
+python3 scripts/build_grounding_review_queue.py \
+  --proposals /data/discovery_proposals.jsonl \
+  --source-root /data/rendered_pages \
+  --output /data/grounding-review-queue
+```
+
+Each discovery proposal supplies the immutable source PDF hash, rendered page
+path, exact tag bbox, candidate bboxes, family, and tag. A reviewer chooses a
+full physical body, rejects candidates, or records `unresolved` / `tag_absent`.
+Only then can it become a benchmark case.
+
 ## Prediction manifest
 
 The candidate producer writes one
