@@ -1,6 +1,31 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `23-st-cloud-set-vav-terminal-units`'s own last two
+gaps, mh10b3-vav-21b and mh10b2-vav-4c, closing that case to 14/14.
+vav-21b just needed a WIDER crop than the prior pass used: past the
+dashed access-clearance outline the prior pass's own note already
+named sits the real terminal box (the same side-box-plus-main-body-
+plus-funnel-cone shape every other confirmed instance uses); located
+its own Lane B bodies directly and took their union, corner-ring-
+verified. vav-4c is a bigger, genuine finding: its recorded `at` was
+simply WRONG, not just missing a body_bbox. Checking the area around
+the instance's OWN tag_bbox (never tried by the prior pass, whose crops
+were all centered on the same wrong `at`) found a real, clearly labeled
+'VAV-4C / 605 CFM' terminal box 267 sheet units away from the recorded
+`at`, which sits instead on a bare downstream duct run belonging to
+this same unit -- explaining how the error likely happened (the seed
+process anchored to the duct network, not the equipment symbol).
+Corrected `at` to that real box's own centroid and added its vector-
+grounded, corner-ring-verified body_bbox. Self-confirming: the at-to-
+tag distance with the corrected `at` is 64.7px, in line with every
+other 'adjacent' instance in this case, versus the recorded `at`'s own
+262.1px, which the prior note had already flagged as anomalous ('the
+largest in the case') without tracing it to its cause. Added both via
+surgical edits plus an appended correcting review note per instance;
+the case's prior note is left untouched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `11-st-louis-mh101-keyed-vav-thermostats`'s own last
 two gaps, new-thermostat-vav-1 and -vav-11, closing that case to 16/16.
 This case's prior note used a FIXED asymmetric search window (55.7px
