@@ -1,5 +1,58 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane C —
+measured whether the tag-anchored proposal built and calibrated in the
+entry directly below actually improves Phase 4 gate 3's own corpus-wide
+F1 metric (the entry two below this one), the "not attempted here" item
+that entry's own commit explicitly disclosed. Not a code change — a
+scratch measurement, disclosed here rather than left unexamined.
+
+METHOD: rather than modify `candidateProposalFusion.ts` (a shared,
+multi-caller module used by every existing diagnostic and test this
+checkpoint) to formally wire in a third lane, added the new
+`proposeTagSearchRegionBody` proposals as an ADDITIONAL candidate source
+directly alongside the existing pipeline's own final predicted bodies
+(uncontested proposals + resolved cluster OwnedBody results) — a
+legitimate, disclosed proxy for "what if this were wired in" that never
+risks the shared fusion module's own already-tested dedup logic. Used
+cases.json's own real tag_bbox per instance (Cherry Point CD-1's own 20
+real instances) as the tag position — this measurement's own disclosed
+proxy for a real tag-DETECTION step, which is not attempted here either.
+
+RESULT: a real, substantial improvement, with an honest cost. microF1
+rises from 0.0789 (baseline: existing Lane A+B fusion + ownership
+machinery alone, matching this checkpoint's own earlier corpus-wide
+finding) to 0.3372 — a 4.3x improvement — driven by microRecall rising
+from 0.0411 to 0.7632. The cost: microPrecision DROPS from a perfect
+1.0000 to 0.2164. Investigated rather than left as a bare number: a
+STRICTER safety check (does any tag-region proposal's own claimed
+primitives actually intersect a DIFFERENT real instance's own ground-
+truth primitive set — not just whether its bounding RECTANGLE overlaps a
+neighbor's, the check the entry below already ran) found ZERO
+cross-instance primitive claims across all 20 instances. The precision
+drop is NOT the core Phase 4 gate failing (no primitive supports two
+accepted instances still holds, confirmed at the primitive level, not
+merely the bbox level) — it is the tag-anchored region sweeping in real
+but UNCOUNTED surrounding ink (walls, dimension lines, other page
+furniture near the tag) that belongs to no instance's own ground truth
+at all, a real, different, and less severe problem than double-claiming
+a neighbor's own symbol.
+
+HONEST LIMITS, not overclaimed: still 0/20 instances reach the required
+0.95 F1 even with Lane C added — a real, large step in the right
+direction, not a closed gate. This measurement used the ground truth's
+own real tag_bbox rather than a real tag-detection/OCR-matching step
+(disclosed further work), and did not filter the search region's own
+contents by anything (e.g. excluding carrierClassification.ts-flagged
+duct/wall/pipe ink, which would likely recover much of the lost
+precision) — a real, concrete, promising next refinement this
+measurement points to but does not attempt.
+
+SHOULD THIS BE ON THE SHARED PATH? The measurement: yes, as evidence
+this direction is worth the real integration work (formally wiring Lane
+C into candidateProposalFusion.ts, with carrier-ink filtering to recover
+precision) that this entry's own scope did not attempt.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane C
 requirement 1 — "generate local search regions from exact tag token
 boxes." New `proposeTagSearchRegionBody` in `candidateBodyLaneC.ts`
