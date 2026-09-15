@@ -3463,24 +3463,46 @@ export class Session {
       // entirely" comment) — trace_connectivity itself just never got the
       // same treatment until now.
       try {
-        // Phase 2 (#22, PLAN_CONNECTIVITY_SERVES.md) — the
-        // requireJunctionMarkForCrossings gate itself is built and tested
-        // (mepconnectivity.test.ts, 39/39), but NOT yet flipped on here.
-        // Attempted and reverted 2026-09-15: flipping it surfaced a real,
-        // root-caused regression on the itd-d1-lab real corpus case
-        // (mep-trace-eval.mjs 3/3 -> 2/3) — on this unlayered sheet, a
-        // callout leader-arrow line crosses the real duct within seed
-        // tolerance of the human-authored seed point, and
-        // resolveOnGraph's own nearest-edge tie-break can splice the seed
-        // onto the now-gated (correctly disconnected) short arrow-crossing
-        // fragment instead of the real, longer duct edge — even though
-        // the REST of that same real 42-hop duct run stays perfectly
-        // intact under the gate (confirmed directly: 41 of 42 hops still
-        // connect; only the very first hop, right at the seed, breaks).
-        // See PLAN_CONNECTIVITY_SERVES.md's Phase 2 section for the full
-        // diagnosis and the scoped fix this needs before flipping here.
+        // Phase 2 (#22, PLAN_CONNECTIVITY_SERVES.md) — flipped on
+        // 2026-09-15. A first attempt (same day) flipped this and found a
+        // real regression on the itd-d1-lab real corpus case
+        // (mep-trace-eval.mjs 3/3 -> 2/3), reverted pending root cause. The
+        // diagnosis written at that time (a leader-arrow fragment breaking
+        // the seed's very first hop) turned out to rest on a buggy
+        // comparison script that checked the graph's raw, unspliced edge
+        // list instead of the actual spliced graph traceConnectivity walks
+        // — re-diagnosed from scratch by instrumenting the real BFS
+        // directly, and the true causes were two, both fixed in
+        // mepconnectivity.ts, neither specific to this one sheet:
+        //  1. The gate correctly removes false shortcuts through un-vouched
+        //     crossings, but that legitimately makes some real paths need
+        //     more hops once those shortcuts are gone (measured: the same
+        //     real verified duct run needs 59 hops ungated, 80 gated) —
+        //     DEFAULT_MAX_HOPS (60) was never tuned for that inflation, so
+        //     a gated graph now gets its own DEFAULT_MAX_HOPS_GATED.
+        //  2. resolveOnGraph's pure nearest-edge pick can, once the gate
+        //     splits an un-vouched crossing apart, land a seed on a newly-
+        //     isolated short fragment of a double-line duct's own OTHER
+        //     boundary line instead of the real, richly-connected network
+        //     sitting just as close (well within seed tolerance) — fixed by
+        //     preferring the larger connected component among near-tied
+        //     candidates, scoped to gated graphs only (see resolveOnGraph's
+        //     own comment).
+        // DEFAULT_MAX_HOPS_GATED was deliberately measured conservatively:
+        // a first value (120) fixed the above but was itself rejected after
+        // it opened a NEW false-confident result elsewhere on this same
+        // sheet (a spurious multi-hundred-unit path, almost certainly this
+        // unlayered sheet's own imperfectly-vouched wall linework, bridging
+        // two unrelated real duct zones) — the smaller value that still
+        // covers every verified real case without reaching that spurious
+        // path is the one shipped. Full re-verification after both fixes:
+        // mepconnectivity.test.ts 39/39, mep-trace-eval.mjs back to 3/3,
+        // serves-eval.mjs's 49-row corpus unchanged except one row (GEV-1)
+        // improving from a false "reached" to an honest "dead_end" — no
+        // other row regressed.
         s.mepGraph = buildMepGraph(geo.segs, {
           meta: geo.meta, layerOf: geo.layerOf, layers: s.layers, excludeSegs, mppf,
+          requireJunctionMarkForCrossings: true,
         });
       } catch (e) {
         s.mepGraph = null;

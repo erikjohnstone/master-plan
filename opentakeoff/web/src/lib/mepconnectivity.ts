@@ -71,6 +71,11 @@ export interface MepGraph {
    *  a property of the machine, not of this scan. Counted work is the
    *  thing the fix actually changed, and it is deterministic. */
   junctionTests: number;
+  /** Whether this graph was built with requireJunctionMarkForCrossings
+   *  on. traceConnectivity reads this back to pick its own default hop
+   *  budget (see DEFAULT_MAX_HOPS_GATED's own comment) — a real,
+   *  measured effect of the gate on real corpus paths, not a guess. */
+  crossingGated: boolean;
 }
 
 // Mirrors wallnetwork.ts's own SEG_CLIP bit exactly — invisible ink is
@@ -292,7 +297,7 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
   if (!solved) {
     throw new Error(`This sheet's linework could not be reliably noded for connectivity tracing (JTS noding failed at every retry grid up to ${gridAttempts[gridAttempts.length - 1].toFixed(2)}px) — the underlying error: ${lastErr instanceof Error ? lastErr.message : String(lastErr)}`);
   }
-  if (!survivors.length) return { nodes: [], edges: [], layerSignal, quantGridPx: solvedGrid, junctionTests: 0 };
+  if (!survivors.length) return { nodes: [], edges: [], layerSignal, quantGridPx: solvedGrid, junctionTests: 0, crossingGated: !!opts.requireJunctionMarkForCrossings };
 
   // ── split each ORIGINAL segment at every junction that lies strictly
   //    inside it — never at its own two endpoints, which are already nodes ──
@@ -468,7 +473,7 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
     addEdge(prevX, prevY, s.x2, s.y2, s.segIdx, prevKey, undefined);
   }
 
-  return { nodes, edges, layerSignal, quantGridPx: solvedGrid, junctionTests };
+  return { nodes, edges, layerSignal, quantGridPx: solvedGrid, junctionTests, crossingGated: !!opts.requireJunctionMarkForCrossings };
 }
 
 // ── the tracing query ────────────────────────────────────────────────────
@@ -514,6 +519,47 @@ export interface TraceResult {
 }
 
 const DEFAULT_MAX_HOPS = 60;
+// Real, corpus-found (PLAN_CONNECTIVITY_SERVES.md Phase 2, #22): the
+// crossing gate (requireJunctionMarkForCrossings) removes false shortcuts
+// through un-vouched crossings (e.g. a hatch-fill tick or a different
+// duct/pipe run merely passing through) — connections that let BFS jump
+// between two nearby, otherwise-unconnected pieces of real linework. On a
+// densely hatched real double-line duct, the CORRECT path (verified by
+// rendering and following the drawn duct by eye — see
+// itd-d1-lab.serves.csv's EQ.19->EF-1 row) can legitimately need
+// noticeably more hops once those shortcuts are gone: measured directly on
+// that exact real case (itd-d1-lab-mechanical.pdf#4, seed [2173,347] to
+// EF-1), the gate-off graph reaches EF-1 in 59 hops, but the SAME real
+// topological path in the gated graph needs 80 (confirmed connected, not
+// broken, by raising maxHops and re-tracing — the walked node path matches
+// the key's own hand-verified duct route point-for-point). DEFAULT_MAX_HOPS
+// was never tuned with that inflation in mind, so a gated graph gets its
+// own, higher default here rather than either (a) raising the global
+// default and silently changing today's shipped gate-off behavior for
+// everyone, or (b) leaving gated traces to falsely dead_end on real,
+// connected, correctly-longer paths.
+//
+// Deliberately a SMALL margin over that one measured real need (80), not a
+// generous multiplier — a first attempt at 120 was tried and rejected after
+// direct evidence it costs more than it fixes: on this same real sheet, a
+// second, physically distinct EQ.19 tag (near Janitor 105, its own local
+// riser to its own EF-3 unit) sat an honest dead_end under every cap up to
+// ~100, but at 118 hops a spurious path opens up crossing into the
+// UNRELATED EF-1/Residency-Lab duct system — almost certainly this
+// unlayered sheet's own wall linework (layer_signal:none means
+// wallnetwork.ts's own wall-vouching, a real but disclosed-imperfect
+// heuristic, is this graph's only defense against exactly that, see
+// ensureMepGraph's own comment) rather than a real physical duct tie
+// between the two zones. Confirmed directly: at maxHops 90 the same
+// EQ.19(#2) row goes back to its prior, honest dead_end while the verified
+// 80-hop EF-1 case still reaches — false-confident is a strictly worse
+// failure than a dead_end (this module's whole refusal doctrine), so once
+// real evidence showed a bigger cap trades one for the other, the smaller,
+// still-sufficient value is the only defensible choice. Not a universal
+// guarantee for every future corpus addition — a future verified case that
+// needs more gets the same documented-ceiling treatment as DEFAULT_MAX_HOPS
+// itself, re-measured against this exact trade-off, never a silent bump.
+const DEFAULT_MAX_HOPS_GATED = 90;
 const DEFAULT_SEED_TOL_FT = 1.0;
 // Provisional — no real MEP corpus has measured this yet (a named open risk
 // in the maturity plan doc), same honesty as buildMepGraph's own
@@ -543,6 +589,8 @@ function resolveOnGraph(graph: MepGraph, pt: Point, tolPx: number): { graph: Mep
     const d = Math.hypot(n.x - pt[0], n.y - pt[1]);
     if (d < bestNodeD) { bestNodeD = d; bestNode = i; }
   }
+  // Pass 1: the single closest edge overall — the common, unambiguous case
+  // (one real duct nearby, nothing to prefer between).
   let bestEdge = -1, bestEdgeD = Infinity, bestT = 0, bestAt: Point = [0, 0];
   for (let i = 0; i < graph.edges.length; i++) {
     const e = graph.edges[i];
@@ -555,6 +603,66 @@ function resolveOnGraph(graph: MepGraph, pt: Point, tolPx: number): { graph: Mep
     const px = a.x + t * dx, py = a.y + t * dy;
     const d = Math.hypot(pt[0] - px, pt[1] - py);
     if (d < bestEdgeD) { bestEdgeD = d; bestEdge = i; bestT = t; bestAt = [px, py]; }
+  }
+  // Pass 2 — ONLY when this graph was built with requireJunctionMarkForCrossings
+  // (graph.crossingGated): default/off behavior above is untouched byte-for-
+  // byte, same discipline as buildMepGraph's own flag (Gate 1,
+  // PLAN_CONNECTIVITY_SERVES.md). Real, corpus-found (Phase 2 investigation,
+  // itd-d1-lab-mechanical.pdf#4, seed [2328,448]): once the gate splits an
+  // un-vouched crossing apart, the sheet's own double-line duct boundary can
+  // leave a short RUN of the "other" boundary line stranded as its own tiny
+  // isolated component — and that stranded fragment can sit measurably
+  // CLOSER to a seed than the real, richly-connected duct network (measured:
+  // d=3.4px to a 4-node/72px-long isolated fragment vs d=10.2px to the real
+  // network, both well inside the seed's own tolPx tolerance). Fragment
+  // length is no help distinguishing them (the isolated fragment here was
+  // even the LONGER of the two edges) — component size is: a real duct
+  // network is large, a gate-created stranded fragment is small. Among every
+  // edge within the seed's own tolPx (not the fine quantGridPx grid — this
+  // is a real placement-tolerance question, not a noding-precision one),
+  // prefer the one whose endpoint belongs to the larger connected component
+  // (capped, so this never costs a full graph traversal per candidate);
+  // ties broken by distance, then by edge length, for full determinism.
+  if (graph.crossingGated && bestEdge >= 0) {
+    const CAP = 200;
+    const componentSizeCapped = (start: number): number => {
+      const visited = new Set<number>([start]);
+      const queue = [start];
+      for (let qi = 0; qi < queue.length && visited.size < CAP; qi++) {
+        const cur = queue[qi];
+        for (const ei of graph.nodes[cur].edges) {
+          const e = graph.edges[ei];
+          const next = e.a === cur ? e.b : e.a;
+          if (visited.has(next)) continue;
+          visited.add(next); queue.push(next);
+          if (visited.size >= CAP) break;
+        }
+      }
+      return visited.size;
+    };
+    let bestCompSize = componentSizeCapped(graph.edges[bestEdge].a);
+    let bestLen = graph.edges[bestEdge].length;
+    for (let i = 0; i < graph.edges.length; i++) {
+      if (i === bestEdge) continue;
+      const e = graph.edges[i];
+      const a = graph.nodes[e.a], b = graph.nodes[e.b];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const len2 = dx * dx + dy * dy;
+      if (len2 === 0) continue;
+      let t = ((pt[0] - a.x) * dx + (pt[1] - a.y) * dy) / len2;
+      t = Math.max(0, Math.min(1, t));
+      const px = a.x + t * dx, py = a.y + t * dy;
+      const d = Math.hypot(pt[0] - px, pt[1] - py);
+      if (d > tolPx || d > bestEdgeD + tolPx) continue;
+      const compSize = componentSizeCapped(e.a);
+      const better = compSize > bestCompSize
+        || (compSize === bestCompSize && (d < bestEdgeD - 1e-9
+          || (Math.abs(d - bestEdgeD) <= 1e-9 && e.length > bestLen)));
+      if (better) {
+        bestCompSize = compSize; bestLen = e.length;
+        bestEdge = i; bestEdgeD = d; bestT = t; bestAt = [px, py];
+      }
+    }
   }
   // an existing node wins ties (never splice a redundant near-duplicate)
   if (bestNode >= 0 && bestNodeD <= tolPx && bestNodeD <= bestEdgeD + 1e-9) return { graph, node: bestNode };
@@ -578,7 +686,7 @@ function resolveOnGraph(graph: MepGraph, pt: Point, tolPx: number): { graph: Mep
   const ei2 = edges.length;
   edges.push({ a: newIdx, b: e.b, length: Math.hypot(b.x - bestAt[0], b.y - bestAt[1]), system: e.system, systemConfidence: e.systemConfidence, ...(e.bridged ? { bridged: true } : {}) });
   nodes[newIdx].edges.push(ei2); b.edges.push(ei2);
-  return { graph: { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx, junctionTests: graph.junctionTests }, node: newIdx };
+  return { graph: { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx, junctionTests: graph.junctionTests, crossingGated: graph.crossingGated }, node: newIdx };
 }
 
 /** Bridge a real drawn gap between two dead-end (degree-1) node endpoints —
@@ -623,7 +731,7 @@ function bridgeDanglingGaps(graph: MepGraph, symbols: Point[], bridgePx: number)
       nodes[danglers[b].i].edges.push(ei);
     }
   }
-  return { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx, junctionTests: graph.junctionTests };
+  return { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx, junctionTests: graph.junctionTests, crossingGated: graph.crossingGated };
 }
 
 /** Walk the graph from `from`, looking for exactly one reachable equipment
@@ -699,7 +807,7 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   // pick" is the first question any future seed-resolution bug needs
   // answered, same discipline vectorTakeoffPipeline.ts's own
   // OPENTAKEOFF_GRAPH_TRACE already carries. Off by default, zero cost.
-  if (process.env.OPENTAKEOFF_TRACE_DEBUG) {
+  if ((typeof process !== "undefined" && process.env?.OPENTAKEOFF_TRACE_DEBUG)) {
     console.error(`TRACE_DEBUG seed resolved to node ${seed} at (${seed != null ? walked.nodes[seed].x : "?"},${seed != null ? walked.nodes[seed].y : "?"}) tolPx=${tolPx}`);
   }
   if (seed == null) {
@@ -714,13 +822,13 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   for (const eq of opts.equipmentSymbols) {
     const r = resolveOnGraph(walked, eq.at, tolPx);
     walked = r.graph;
-    if (process.env.OPENTAKEOFF_TRACE_DEBUG) {
+    if ((typeof process !== "undefined" && process.env?.OPENTAKEOFF_TRACE_DEBUG)) {
       console.error(`TRACE_DEBUG equipment ${eq.id} resolved to node ${r.node} at (${r.node != null ? walked.nodes[r.node].x : "?"},${r.node != null ? walked.nodes[r.node].y : "?"})`);
     }
     if (r.node != null && !equipAtNode.has(r.node)) equipAtNode.set(r.node, eq);
   }
 
-  const maxHops = opts.maxHops ?? DEFAULT_MAX_HOPS;
+  const maxHops = opts.maxHops ?? (graph.crossingGated ? DEFAULT_MAX_HOPS_GATED : DEFAULT_MAX_HOPS);
   const parent = new Map<number, number>();
   const depth = new Map<number, number>([[seed, 0]]);
   const visited = new Set<number>([seed]);
@@ -739,6 +847,19 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
       if (visited.has(next)) continue;
       visited.add(next); parent.set(next, cur); depth.set(next, d + 1);
       queue.push(next);
+    }
+  }
+  // Same OPENTAKEOFF_TRACE_DEBUG flag as the seed/equipment resolution
+  // logging above — this is what actually found the DEFAULT_MAX_HOPS_GATED
+  // fix: printing the real BFS's own visited set and hitCap directly
+  // (against the ACTUAL walked graph, not an external reimplementation)
+  // showed a gated trace hitting the hop cap with an equipment node it
+  // never got to visit, one call site instead of a symptom guessed at from
+  // outside. Kept for the same reason the two blocks above were.
+  if ((typeof process !== "undefined" && process.env?.OPENTAKEOFF_TRACE_DEBUG)) {
+    console.error(`TRACE_DEBUG BFS from seed=${seed}: visited=${visited.size}/${walked.nodes.length} nodes, hitCap=${hitCap}`);
+    for (const [node, eq] of equipAtNode) {
+      console.error(`TRACE_DEBUG equipment ${eq.id} node=${node} inVisited=${visited.has(node)}`);
     }
   }
 

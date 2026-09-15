@@ -49,23 +49,73 @@ pre-existing `npm run test:bas` failure (65/107, all "actual shared Python
 service" / "...HTTP bridge" tests — a live Python backend this container
 doesn't run) is identical on the clean baseline, unrelated to this work.
 
-**Next queue — Phase 1 item 2 (not started):** unify `mepconnectivity.ts`'s
-`buildMepGraph` and `controlSchematic.ts`'s own separate `topologyFor` into
-one graph builder — port `hasJunctionMark` (a compact ≥5-short-segment,
-≥3-quadrant cluster) and the arrowhead detector in as reusable,
-default-OFF option flags, then have `topologyFor` call `buildMepGraph`
-instead of maintaining a parallel implementation. This is materially
-harder than items 1/3: `buildMepGraph`'s `nodeFor(x,y)` today COALESCES
-every segment passing through the same quantized coordinate into one
-shared node — an interior crossing and a real T-junction currently look
-identical to it. Gating "only connect at a crossing when a junction mark
-vouches" needs each crossing segment to get its OWN node by default and
-only share one when vouched — a structural change to the junction-
-interior-split logic (`mepconnectivity.ts` lines ~256-320), not a bolt-on
-flag. Do this as its own dedicated, carefully-tested increment; Gate 1
-(flags off ⇒ byte-identical on `mep-trace-eval.mjs` 3/3 and
-`tools.test.ts:2033`) is the hard constraint the whole port must clear
-before Phase 2 is allowed to flip the default.
+Phase 1 item 2 (partial — `hasJunctionMark` port, not the `topologyFor`
+unification) plus Phase 2 (#22, "a crossing is not a junction"): ported
+`hasJunctionMark` from `controlSchematic.ts` into `mepconnectivity.ts` as
+an exported, tested function, and gave `buildMepGraph` a
+`requireJunctionMarkForCrossings` option (default off, proved
+byte-identical — Gate 1 met) that gives each un-vouched interior crossing
+its own per-segment node instead of coalescing every segment through a
+shared coordinate into one node regardless of whether a real junction is
+drawn there. 39/39 `mepconnectivity.test.ts`.
+
+Flipping the option on for the two real callers (`mcp/src/session.ts`,
+`TakeoffCanvas.jsx`) took two attempts. The first attempt regressed
+`mep-trace-eval.mjs` 3/3 → 2/3 on the real itd-d1-lab corpus case and was
+reverted with a diagnosis that later turned out to be wrong — the
+diagnostic script compared the wrong graph object (the raw unspliced
+graph, not the one `traceConnectivity` actually walks after
+`resolveOnGraph` splices the seed/equipment in). Re-diagnosed by
+instrumenting the real BFS directly and found two genuine, general causes:
+(1) removing false shortcuts through un-vouched crossings legitimately
+makes some real paths need more hops (measured 59→80 hops on the same
+verified real duct run), so a gated graph now gets its own, higher default
+hop budget (`DEFAULT_MAX_HOPS_GATED`); (2) `resolveOnGraph`'s pure
+nearest-edge pick could land a seed on a just-isolated short fragment of a
+double-line duct's own other boundary instead of the real, richly-
+connected network sitting just as close — fixed by preferring the larger
+connected component among near-tied candidates (capped BFS, scoped to
+gated graphs only). A generous hop budget (120) was tried and rejected
+after it opened a NEW false-confident result elsewhere on the same sheet
+(a spurious long walk through what is almost certainly unclassified wall
+linework); the smaller, still-sufficient `DEFAULT_MAX_HOPS_GATED = 90`
+ships instead. Full re-verification, real default (no env var):
+`mepconnectivity.test.ts` 39/39, `tools.test.ts` 101/101 (including the
+crossing case now asserting the fixed `reached`/`AHU-3`), `mep-trace-
+eval.mjs` back to 3/3, `serves-eval.mjs`'s full 49-row corpus unchanged
+except one row improving (false `reached` → honest `dead_end`) and none
+regressing. Both real callers now pass `requireJunctionMarkForCrossings:
+true` by default. Full diagnosis: `PLAN_CONNECTIVITY_SERVES.md`'s Phase 2
+section.
+
+`TakeoffCanvas.jsx`'s `agentTraceConnectivity` now also paints its walked
+path directly on the sheet as a bright neon-blue line (reuses the existing
+freehand-highlight markup shape, `color: "#00e5ff"`, a new `opacity`
+override so it reads as a crisp traced line rather than a translucent
+highlighter stroke — every hand-drawn highlight omits the override and is
+unaffected), cleared and repainted on every new trace so re-tracing never
+stacks lines. Verified in a real browser, not just unit tests: a new
+`scripts/playwright-trace-connectivity-highlight.mjs` (same
+`window.__opentakeoff.probe` convention every other UI-proof script in
+this repo already uses) drives the real ITD corpus PDF end to end —
+uploads it, opens page 4, runs the real agent tool with the same
+seed/equipment as the `EQ.19`→`EF-1` `.serves.csv` row, confirms the
+painted markup's color/opacity/point-count, and screenshots the result.
+The zoomed screenshot shows the line following the exact real duct route
+the hand-authored key describes (main duct, corner, into the `HEV 1`/`EF
+1` unit body). This run also caught and fixed a real bug: the
+`OPENTAKEOFF_TRACE_DEBUG` instrumentation added during the Phase 2
+diagnosis above read `process.env` unguarded, which crashes in the
+browser bundle (`mepconnectivity.ts` is shared between the MCP backend
+and the web app) — fixed with the same `typeof process !== "undefined"`
+guard `vectorTakeoffPipeline.ts` already uses for its own env flag.
+
+**Next queue — Phase 1 item 2's remaining piece (not started):** unify
+`mepconnectivity.ts`'s `buildMepGraph` and `controlSchematic.ts`'s own
+separate `topologyFor` into one graph builder — port the arrowhead
+detector in as another reusable, default-OFF option flag, then have
+`topologyFor` call `buildMepGraph` instead of maintaining a parallel
+implementation.
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact

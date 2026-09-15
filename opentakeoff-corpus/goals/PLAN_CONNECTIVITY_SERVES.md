@@ -430,11 +430,10 @@ other (a real T), or (c) both edges share style and system AND a fitting
 placement sits at the crossing. Flip `tools.test.ts:2033` deliberately, with
 the new assertion, in the same commit.
 
-**Attempted and reverted, 2026-09-15 — real, root-caused, not a guess.**
-(a) and (b) are what Phase 1 item 2 already built and proved
-byte-identical when off; (c) was never reached. Flipped
-`requireJunctionMarkForCrossings: true` on in both real callers
-(`mcp/src/session.ts`'s `ensureMepGraph`, `TakeoffCanvas.jsx`'s
+**First attempt, 2026-09-15 — reverted same day.** (a) and (b) are what
+Phase 1 item 2 already built and proved byte-identical when off; (c) was
+never reached. Flipped `requireJunctionMarkForCrossings: true` on in both
+real callers (`mcp/src/session.ts`'s `ensureMepGraph`, `TakeoffCanvas.jsx`'s
 `agentTraceConnectivity`), got the exact expected fix on the synthetic
 `mep-plan.pdf` fixture (`tools.test.ts`'s own crossing case went from
 `ambiguous` to a clean `reached`/`AHU-3`, never `PANEL-1`), then re-ran
@@ -442,58 +441,75 @@ byte-identical when off; (c) was never reached. Flipped
 regressed: `bessemer` stayed 2/2, but `itd-d1-lab` (the case whose own
 `.mep.csv` note says a human visually confirmed "the tool's own real trace
 walks 47 real hops through this exact visually-confirmed path") flipped
-from `reached`/`EF-1` to `dead_end`.
+from `reached`/`EF-1` to `dead_end`. Reverted the flip and `tools.test.ts`'s
+assertion the same day, with a diagnosis written into both — a
+leader-arrow line crossing the duct right at the seed, tricking
+`resolveOnGraph`'s nearest-edge pick onto a short isolated fragment.
 
-**Diagnosed before reverting, not assumed:** wrote a direct comparison
-script (build the same sheet's graph with the flag off vs. on, walk the
-OLD graph's own successful 42-hop path, and check whether each consecutive
-hop still has an edge under the NEW graph). 41 of 42 hops still connect
-perfectly — the real duct run itself is untouched by the gate. Only hop 1,
-right at the seed's own point, breaks. Rendered the exact real location
-(scale 10, `itd-d1-lab-mechanical.pdf#4`, around image px `[2328,448]`):
-a real volume-damper symbol sits directly on the duct's own dashed
-centerline — exactly where the human-authored seed was placed — and a
-thin vertical callout leader-arrow line (from an `EQ.19`/`CH-1` hexagon
-tag above) crosses straight through the duct within a few pixels of that
-same point. This is an **unlayered** sheet (`layer_signal: "none"`), so
-nothing today excludes annotation/leader ink from the MEP graph at all —
-under the OLD ungated behavior this never mattered (every crossing merged
-regardless of what it was), but the moment the gate correctly refuses to
-treat a bare arrow-crossing as a real connection, `resolveOnGraph`'s own
-nearest-edge tie-break (pure smallest-distance, no length preference) can
-splice the seed onto that now-isolated, tiny arrow-crossing fragment
-instead of the real, much longer duct edge sitting just as close.
+**That diagnosis was wrong — re-diagnosed correctly, later the same
+session.** The comparison script behind it walked the OLD (ungated)
+graph's own successful path and checked each hop against the NEW graph's
+raw, unspliced `edges` array — which never contains the fresh sub-edges
+`resolveOnGraph` splices into its own returned graph copy during a real
+`traceConnectivity` call. Comparing against the wrong graph object made
+hop 1 look broken when it was never being checked correctly at all. Re-ran
+the diagnosis by instrumenting the ACTUAL BFS inside `traceConnectivity`
+(the real `walked` graph, `visited` set and `hitCap`, gated behind the
+existing `OPENTAKEOFF_TRACE_DEBUG` flag — see its own comment) and found
+two real, distinct causes, neither the leader-arrow story:
 
-**This is not a reason to abandon the fix — #22 is real and this gate is
-the correct shape for it — it is a reason not to ship the flip until the
-seed-resolution side of it is handled too.** Reverted only the two real
-callers' own option (back to `false`, matching every test/eval that
-existed before this attempt) and `tools.test.ts`'s assertion (back to
-`ambiguous`, with a comment explaining exactly why, not silently). Kept
-everything Phase 1 item 2 built: the gate itself, `hasJunctionMark`, and
-all 39 `mepconnectivity.test.ts` tests, including the ones that prove this
-exact fixture's crossing DOES resolve correctly when the flag is passed
-directly — the mechanism is proven; only "safe to flip on for every real
-seed on an unlayered sheet" is not yet proven.
+1. **The gate legitimately makes some real paths need more hops.**
+   Removing false shortcuts through un-vouched crossings is the whole
+   point of the gate, but it means BFS can no longer cut through them —
+   measured directly on the itd-d1-lab `.serves.csv` `EQ.19`→`EF-1` row
+   (seed `[2173,347]`): the ungated graph reaches `EF-1` in 59 hops, the
+   SAME real duct run (walked node path matches the key's own hand-traced
+   route point-for-point) needs 80 hops once gated. `DEFAULT_MAX_HOPS`
+   (60) was never tuned for that inflation. Fixed by giving a gated graph
+   its own, slightly higher default (`DEFAULT_MAX_HOPS_GATED`,
+   `MepGraph.crossingGated` threading the signal from `buildMepGraph`
+   through to `traceConnectivity` — see both symbols' own comments).
+2. **`resolveOnGraph`'s pure nearest-edge pick can land on a
+   just-isolated fragment.** On the `.mep.csv` `[2328,448]`→`EF-1` case,
+   the gate splits the sheet's own double-line duct boundary apart at an
+   un-vouched crossing, stranding a short run of the "other" boundary
+   line as its own tiny (4-node) component — and that fragment sits
+   measurably CLOSER to the seed (3.4px) than the real, richly-connected
+   duct network (10.2px), both inside seed tolerance. Edge length is no
+   help here (the isolated fragment was the LONGER of the two candidates)
+   — component size is: fixed by having `resolveOnGraph` prefer the
+   candidate edge belonging to the larger connected component (a capped
+   BFS, so this never costs a full graph traversal) among edges within
+   seed tolerance, scoped to `graph.crossingGated` only so the ungated
+   default path is untouched — see `resolveOnGraph`'s own comment.
 
-**Scoped follow-up this needs before the flip is safe (own increment, not
-attempted here):** make `resolveOnGraph`'s candidate selection prefer a
-meaningfully LONGER nearby edge over a short one when both are within
-seed tolerance — a short edge born from a just-applied crossing gate is
-far more likely to be an annotation/leader-line artifact than a real duct
-run, and this is a general property (not a special case for this one
-sheet) worth having independent of #22. Needs its own dedicated
-before/after against the full `mepconnectivity.test.ts` suite (this
-function is used for EVERY seed/equipment resolution, not just gated
-crossings, so a change here has broad ripple potential) plus a re-run of
-`mep-trace-eval.mjs` proving `itd-d1-lab` recovers without breaking
-`bessemer`, before the two real callers can safely pass
-`requireJunctionMarkForCrossings: true` again.
+**A generous hop budget has its own real cost, found the same way.** A
+first value for `DEFAULT_MAX_HOPS_GATED` (120) fixed both cases above, but
+re-running the FULL `serves-eval.mjs` corpus (not just the one row already
+under investigation) surfaced a NEW false-confident result on a different
+row of the same sheet: a second, physically distinct `EQ.19` tag (near
+Janitor 105, its own local riser to its own `EF-3` unit) went from an
+honest `dead_end` (its behavior under the shipped, gate-off default) to
+confidently reaching the WRONG equipment (`EF-1`, the unrelated
+Residency-Lab unit) via a spurious ~700-unit path — almost certainly this
+unlayered sheet's own imperfectly-vouched wall linework (`layer_signal:
+"none"` means `wallnetwork.ts`'s wall exclusion, a disclosed-imperfect
+heuristic, is this graph's only defense against exactly that). A
+false-confident answer is a strictly worse failure than a dead_end (this
+module's whole refusal doctrine) — a bigger cap traded one for the other,
+so it was rejected. The smaller `DEFAULT_MAX_HOPS_GATED = 90` (a modest
+margin over the one verified real need of 80, not a generous multiplier)
+covers every verified real case while staying below the spurious path.
 
-**Gate 2 — NOT MET.** `serves-eval` false-confident change: not measured
-(the flip that would move it was reverted). `mep-trace-eval`: reverting
-kept it at the original 3/3 — a flip that dropped it to 2/3 was rejected,
-not shipped as if it were 3/3.
+**Gate 2 — MET.** Re-verified after both fixes, real default (no env var):
+`mepconnectivity.test.ts` 39/39; `mep-trace-eval.mjs` back to 3/3;
+`tools.test.ts`'s crossing case now asserts the FIXED behavior
+(`reached`/`AHU-3`, `tools.test.ts:2036`) and the full 101-test file
+passes; `serves-eval.mjs`'s full 49-row corpus is unchanged from the
+gate-off baseline except ONE row (`itd-d1-lab`, `GEV-1`) improving from a
+false `reached` to an honest `dead_end` — no row regressed. Both real
+callers (`mcp/src/session.ts`, `TakeoffCanvas.jsx`) now pass
+`requireJunctionMarkForCrossings: true` by default.
 
 ### Phase 3 — double-line runs become one edge
 
@@ -628,7 +644,7 @@ not this goal's goes to `TAKEOFF_BUG_CATALOGUE.md`, not into a side fix.
 | baseline (`trace_connectivity`, hand-seeded, 3 `*.mep.csv` rows) | 2026-09-15 | main | 3 | 2/2 | 1/1 | 0 | no | the only real cases that exist today |
 | 0 | 2026-09-15 | (this commit) | 49 | 4/33 (12.1%) | 4/14 (28.6%) | 2 | no | 4 sets, 4 distinct failure modes: NAVFAC total noding refusal, Bessemer seed-tolerance + dash false-confidence, ITD a genuinely new untested-chain gap, bldg5406 over-broad candidate-list ambiguity — see "Gate 0 — MET" above |
 | 1 | | | | | | | | |
-| 2 | 2026-09-15 | (this commit) | — | — | — | — | no | ATTEMPTED, REVERTED — mep-trace-eval regressed 3/3->2/3 (itd-d1-lab: a callout leader-arrow crosses the real duct within seed tolerance on an unlayered sheet; resolveOnGraph's nearest-edge tie-break picked the now-gated short arrow fragment over the real, longer duct edge). Root-caused precisely (41/42 of the real path's own hops stay connected; only the seed's own first hop breaks). Machinery from Phase 1 item 2 stays landed; the two real callers' own flag reverted to off. Needs resolveOnGraph's own length-aware tie-break fixed first (scoped above) before re-attempting |
+| 2 | 2026-09-15 | (this commit) | 49 | 4/33 (12.1%) | 4/14 (28.6%) | 2 | no | `requireJunctionMarkForCrossings: true` now ON in both real callers. First attempt regressed mep-trace-eval 3/3->2/3; root cause turned out to be a buggy diagnostic script (checked the unspliced graph, not the one traceConnectivity actually walks), corrected by instrumenting the real BFS. Two real, general fixes: DEFAULT_MAX_HOPS_GATED (a gated graph legitimately needs more hops once false crossing-shortcuts are gone — measured 59->80 hops on the same real path) and resolveOnGraph preferring the larger connected component over a just-isolated fragment among near-tied seed candidates. mep-trace-eval back to 3/3; serves-eval's 49-row corpus unchanged except GEV-1 improving false-`reached`->honest-`dead_end` (still counted 2 false-confident/4/33 served above — GEV-1 was a refusal-not-honored row, not a served one; see Phase 2 section for the exact before/after). tools.test.ts:2036 now asserts the fixed reached/AHU-3 behavior |
 | 3 | | | | | | | | |
 | 4 | | | | | | | | |
 | 5 | | | | | | | | |

@@ -111,7 +111,7 @@ test("buildMepGraph: a real, densely crosshatched sheet can defeat JTS's noding 
 
 test("buildMepGraph: an empty sheet (no segments) returns an empty graph, not a throw", () => {
   const g = buildMepGraph([], {});
-  assert.deepEqual(g, { nodes: [], edges: [], layerSignal: "none", quantGridPx: 1.7999999999999998, junctionTests: 0 });
+  assert.deepEqual(g, { nodes: [], edges: [], layerSignal: "none", quantGridPx: 1.7999999999999998, junctionTests: 0, crossingGated: false });
 });
 
 test("buildMepGraph: excludeSegs drops exactly the marked segments", () => {

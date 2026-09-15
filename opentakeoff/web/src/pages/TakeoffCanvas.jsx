@@ -7088,12 +7088,12 @@ export default function TakeoffCanvas() {
       try {
         // Phase 2 (#22, PLAN_CONNECTIVITY_SERVES.md) — mirrors
         // mcp/src/session.ts's own ensureMepGraph exactly, including its
-        // own reverted default-flip: the requireJunctionMarkForCrossings
-        // gate is built and tested but not yet safe to flip on here — see
-        // that comment (and PLAN_CONNECTIVITY_SERVES.md's Phase 2 section)
-        // for the real, root-caused seed-resolution regression this
-        // surfaced on the real itd-d1-lab corpus case.
-        graph = buildMepGraph(segs, { meta, layerOf: geo?.layerOf, layers: infos, excludeSegs, mppf });
+        // own flip-then-revert-then-real-fix history: see that comment for
+        // the full diagnosis (a hop-budget effect of removing false
+        // shortcuts, plus a resolveOnGraph seed-splice fix, both in
+        // mepconnectivity.ts) and why requireJunctionMarkForCrossings is
+        // now safe to turn on here too.
+        graph = buildMepGraph(segs, { meta, layerOf: geo?.layerOf, layers: infos, excludeSegs, mppf, requireJunctionMarkForCrossings: true });
       } catch (e) {
         graph = { nodingError: String((e && e.message) || e) };
       }
@@ -7114,6 +7114,28 @@ export default function TakeoffCanvas() {
       bridgeFt: opts.bridgeFt,
       mppf: upp ? 1 / upp : 0,
     });
+    // Paint the walked path as a bright neon-blue line directly on the sheet
+    // — the estimator's own visual confirmation that the trace followed the
+    // drawn duct/pipe it claims to, the same "don't just trust the JSON"
+    // discipline every other agent tool's citation highlight already gives.
+    // Reuses the existing freehand-highlight markup shape (pts + color),
+    // with an explicit high opacity override (see that renderer's own
+    // comment) so this reads as a crisp traced line, not a translucent
+    // highlighter stroke. Only ever drawn for a real "reached" result —
+    // ambiguous/dead_end/refused have no walked path to show.
+    clearTracePathHighlights();
+    if (result.path && result.path.length >= 2) {
+      const id = uid("mk");
+      const rec = {
+        id, created_at: nowIso(), sheet_id: key, rfi_id: "", condition_id: "",
+        type: "highlight", pts: result.path.map(norm), color: "#00e5ff", opacity: 0.9, w: 0.006,
+        source: "trace_connectivity",
+        text: result.reachedEquipment ? `Traced to ${result.reachedEquipment.id}` : "Traced connectivity",
+      };
+      setMarkups((ms) => [...ms, rec]);
+      agentStateRef.current = { ...agentStateRef.current, markups: [...agentStateRef.current.markups, rec] };
+      setShowMarkups(true);
+    }
     return {
       status: result.status,
       ...(result.path ? { path: result.path.map(norm) } : {}),
@@ -8001,6 +8023,23 @@ export default function TakeoffCanvas() {
     setAgentCitations((list) => list.filter((c) => c.source !== "takeoff_cite"));
   }
 
+  // agentTraceConnectivity's own painted path — cleared before every new
+  // trace so re-tracing (a different seed, a corrected equipment list)
+  // shows only the CURRENT run's line, never an accumulating stack of
+  // every path ever traced this session. Same source-tag-filter idiom as
+  // clearTakeoffCiteHighlights above.
+  function clearTracePathHighlights() {
+    agentStateRef.current = {
+      ...agentStateRef.current,
+      markups: (agentStateRef.current.markups || []).filter((m) => m.source !== "trace_connectivity"),
+    };
+    setMarkups((ms) => {
+      const next = ms.filter((m) => m.source !== "trace_connectivity");
+      agentStateRef.current = { ...agentStateRef.current, markups: next };
+      return next;
+    });
+  }
+
   // The Schedules panel paints with its OWN source, so browsing never disturbs
   // the compile's provenance highlights and closing the panel takes its own
   // ink with it. Same discipline as takeoff_cite: one source string buys a
@@ -8521,6 +8560,11 @@ export default function TakeoffCanvas() {
         // real objects agentHighlightCitation produces; nothing here fakes the
         // jump, which still goes through openAgentCitation.
         cite: (args) => agentHighlightCitation(args),
+        // Same pass-through discipline as `cite` above — the real
+        // trace_connectivity agent tool, not a second implementation, so
+        // Playwright can verify its painted path (color, opacity) the same
+        // way it verifies any other agent-tool visual effect.
+        traceConnectivity: (key, opts) => agentTraceConnectivity(key, opts),
         // Run a real sweep from a seed rect in SHEET IMAGE PX — the frame the
         // frozen symbol-sweep ground truth records its seed_rect in — so the
         // review UI can be driven with the corpus's own fixtures instead of a
@@ -12356,7 +12400,11 @@ export default function TakeoffCanvas() {
                         // boost). Weight (×) multiplies the stored width like every markup.
                         const ip = m.pts.map(([nx, ny]) => [nx * p.img.w, ny * p.img.h]);
                         if (ip.length < 2) return null;
-                        const sw = (m.w || 0.01) * p.img.w * w, o = darkMode ? 0.42 : 0.32;
+                        // m.opacity: an explicit override for a markup that IS a precise
+                        // traced line (trace_connectivity's own path highlight, below) rather
+                        // than a translucent freehand highlighter stroke — every existing
+                        // hand-drawn highlight omits it and keeps its exact prior look.
+                        const sw = (m.w || 0.01) * p.img.w * w, o = m.opacity != null ? m.opacity : (darkMode ? 0.42 : 0.32);
                         const ink = m.tip === "chisel"
                           ? <path d={"M" + chiselRibbon(ip, sw, 45).map((q) => q.join(",")).join(" L") + " Z"} fill={m.color || "#ffd60a"} fillOpacity={o} />
                           : <path d={strokePathD(ip)} fill="none" stroke={m.color || "#ffd60a"} strokeOpacity={o} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" />;

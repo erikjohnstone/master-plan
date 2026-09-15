@@ -2024,33 +2024,29 @@ test("trace_connectivity: a stub reaching no equipment is a real dead_end, named
   assert.match(r.data.reason, /ran out of connected linework/i);
 });
 
-// A REAL, DISCLOSED, NOT-YET-SOLVED limitation (maturity plan §6 risk #2 /
-// known-gaps ledger item 22), pinned rather than hidden: JTS's own noding
-// splits two lines at a true interior crossing into a real 4-way junction,
-// so a duct and a pipe that merely cross on the page (different real
-// elevations) trace as CONNECTED. This test locks in that CURRENT behavior
-// — a future fix to #22 changes this assertion, not silently drifts past it.
+// Was a REAL, DISCLOSED limitation (maturity plan §6 risk #2 / known-gaps
+// ledger item 22): JTS's own noding splits two lines at a true interior
+// crossing into a real 4-way junction, so a duct and a pipe that merely
+// cross on the page (different real elevations) traced as CONNECTED.
 //
-// The FIX for this (mepconnectivity.ts's requireJunctionMarkForCrossings)
-// is built and thoroughly tested (mepconnectivity.test.ts, 39/39) and
-// DOES correctly flip this exact fixture's own result to "reached"/AHU-3
-// when passed explicitly — but is NOT YET flipped on for the real MCP/UI
-// callers this test exercises end to end. Attempted and reverted
-// 2026-09-15: flipping mcp/src/session.ts's own default surfaced a real,
-// root-caused regression on the real itd-d1-lab corpus case
-// (mep-trace-eval.mjs 3/3 -> 2/3) — see that file's own reverted comment
-// and PLAN_CONNECTIVITY_SERVES.md's Phase 2 section for the full
-// diagnosis. This test therefore still pins the OLD, current production
-// behavior, same as before — not a step backward, a correct disclosure of
-// where production actually stands today.
-test("trace_connectivity: an unrelated crossing (not a real connection) currently traces as ambiguous — a known, disclosed limitation (#22)", async () => {
+// Fixed 2026-09-15: mcp/src/session.ts's own ensureMepGraph now flips
+// mepconnectivity.ts's requireJunctionMarkForCrossings on by default. A
+// first attempt at this same flip was reverted the same day after a real
+// regression on the itd-d1-lab corpus case — see session.ts's own comment
+// for the full corrected diagnosis (a hop-budget effect of removing false
+// shortcuts, plus a resolveOnGraph seed-splice fix, both root-caused and
+// fixed in mepconnectivity.ts, re-verified against mepconnectivity.test.ts
+// (39/39), mep-trace-eval.mjs (back to 3/3) and serves-eval.mjs's 49-row
+// corpus (one row improved, none regressed) before flipping here again.
+test("trace_connectivity: an unrelated crossing (not a real connection) no longer coalesces into one junction (#22)", async () => {
   const client = await pair();
   await call(client, "load_plan", { path: MEPPLAN });
   const r = await call(client, "trace_connectivity", {
     sheet: MEPKEY, from: [500, 600],
     equipment: [{ id: "AHU-3", at: [900, 600] }, { id: "PANEL-1", at: [600, 1100] }],
   });
-  assert.equal(r.data.status, "ambiguous", "current behavior: the crossing is read as a real junction — see #22");
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.reached_equipment?.id, "AHU-3");
 });
 
 test("trace_connectivity: refuses when no equipment placements are supplied at all", async () => {
