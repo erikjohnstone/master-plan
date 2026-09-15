@@ -1,5 +1,54 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 second slice
+— requirement 6, Legend Learn integration: "accepted legend row creates
+a reference candidate, not a count. Family binding records caption/
+schema/tag evidence. Multiple symbol variants remain separate. Unsafe/
+nonseedable rows remain unavailable for automatic sweep."
+
+Confirmed by the same Phase 7 audit (entry below): no existing
+"accepted legend row" workflow exists anywhere in this codebase —
+`legendlearn.ts`'s own `findLegendGlyphs` only detects and discloses
+`seedable`; nothing today persists an explicit accepted state. This is
+genuinely new integration work on top of `legendReferenceBank.ts`
+(Phase 0-6), not a refactor of an existing accept-flow.
+
+NEW `legendReferenceAcceptance.ts`: `acceptLegendReference(entry,
+evidence)` and batch `acceptLegendReferences(entries, evidenceFor?)`.
+Each of the goal's own four sub-requirements maps to one concrete,
+tested property:
+- "not a count" -> `AcceptedLegendReference`'s own shape structurally
+  has no quantity field at all (`Object.keys` is exactly
+  `["entry","familyBinding"]`) — confirmed by a dedicated test, not
+  merely asserted in a comment.
+- "family binding records caption/schema/tag evidence" -> three
+  independently-disclosed fields, never compressed into one confidence;
+  missing evidence is honestly `null`, never fabricated.
+- "multiple symbol variants remain separate" -> `acceptLegendReferences`
+  is a 1:1 map, never a group-by; two real variants sharing one caption
+  are accepted as two distinct references, confirmed directly.
+- "unsafe/nonseedable rows remain unavailable" -> a nonseedable entry
+  (`legendReferenceBank.ts`'s own already-computed `seedable`, the
+  single source of truth, never re-decided here) is refused outright
+  (`accepted: null, refusalReason: "not-seedable"`) and CANNOT be
+  forced through by supplying strong evidence — confirmed by a
+  dedicated test that tries exactly that and still gets refused.
+
+8 new tests. 228/228 across the affected suite (legendReferenceAcceptance,
+legendReferenceBank, legendlearn, bodyReferenceId, evidenceGraph) green.
+`tsc --noEmit` clean.
+
+DISCLOSED, NOT ATTEMPTED: wiring this into any real UI/API accept
+action (this is a standalone, additive utility a future accept-flow
+would call, not the flow itself); connecting an `AcceptedLegendReference`
+back into Phase 6's own `tagLegendEdges` gate (real further work — this
+slice governs whether a legend entry is ELIGIBLE to back that edge, not
+how a caller wires the two together).
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — new, isolated, purely additive
+module; touches no existing VectorGrid/table/schedule/citation/bbox
+code or legendlearn.ts's own detection contract.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 — "integrate
 with reconciliation and Legend Learn," first real work. FIRST slice:
 requirement 8, "Keep stable vector-body crops and reference IDs in the
