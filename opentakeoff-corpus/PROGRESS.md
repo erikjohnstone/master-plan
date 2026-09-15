@@ -1,5 +1,73 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2
+(partial, third of seven signals) — "carrier versus body classification."
+A CARRIER is the underlying utility run a symbol sits on or near (a
+duct, pipe, wire, or wall segment) as distinct from the symbol's own
+BODY ink; a proposal that claims a stub of a carrier passing near or
+through it should not have that stub treated as intrinsic body
+evidence.
+
+FIRST DESIGN REJECTED BY REAL-SHEET VALIDATION, disclosed rather than
+quietly discarded: the first version compared a primitive's own
+subpath bbox against its CONTAINING PROPOSAL's own bbox. This is
+mathematically vacuous — both Lane A and Lane B build a proposal's
+primitiveIds from WHOLE subpaths, never a partial one, so a member
+subpath's own bbox is always a subset of (or equal to) its own
+proposal's bbox by construction. Running it against Cherry Point #12
+(73,259 real proposals, 104,030 primitive classifications) produced
+`maxRatio: 1` and zero carrier flags — not "this sheet has no
+carriers," but "this signal cannot ever fire against this pipeline's
+own proposals." Caught by real-sheet testing before being documented
+as working, exactly the discipline this corpus's own prior entries
+have followed.
+
+CORRECTED DESIGN, in new `web/src/lib/carrierClassification.ts`:
+`classifyCarrierPrimitives(proposalPrimitiveIds, idx, opts?)` compares
+each subpath's own diagonal against the MEDIAN diagonal of its SIBLING
+subpaths within the SAME proposal — meaningful for a proposal spanning
+several distinct subpaths glued together at junctions (real for Lane B
+bodies crossing a pass-through/corner junction). One subpath
+dramatically longer than its siblings inside the same candidate body
+is real structural evidence it's a carrier passing through, not
+intrinsic symbol ink. A proposal made of only ONE distinct subpath has
+no sibling to compare against and is honestly reported `extentRatio:
+null` — never defaulted to "not a carrier" by assumption.
+
+New `web/test/carrierClassification.test.ts` (5 tests, all passing):
+an outlier subpath (1000 units) among short siblings (~10 units) is
+flagged, its siblings are not; subpaths of comparable length are none
+of them flagged against each other; a single-subpath proposal reports
+null, not a false negative; `extentRatioThreshold` shown to be a real
+tunable knob; multiple primitives sharing one subpath get the same
+classification (computed once per subpath, not once per primitive).
+
+Real-sheet validation across 4 corpus PDFs (Cherry Point #12,
+tarrant-county-mechanical, bldg5406-hvac-demo-mechanical, weld-county-
+mechanical-permit): no crash, no negative ratio, anywhere. On Cherry
+Point #12 specifically: 6,344 of 73,259 real proposals actually span
+2+ distinct subpaths (the signal is meaningfully applicable, not
+vacuous, for a real, non-trivial subset); 82,833 of 104,030 primitive
+classifications correctly report `null` (single-subpath proposals);
+1,744 (1.68% of the applicable ones) flagged carrier-like, with a real
+max ratio of ~604×. The other 3 sheets: smaller but consistent
+non-zero carrier fractions (0.009%-0.41%) and real max ratios
+(8.7×-16.9×) — plausible variation across differently-drawn real
+sheets, not a single-sheet artifact.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (5/5); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet checks above. Does not modify `ownershipEligibility.ts`,
+`ownershipAssignment.ts`, `ownershipBody.ts`, or any Lane A-E module —
+this signal is not yet WIRED into `scoreContestedPrimitives`'s own
+combined score (that integration, and the remaining four of
+requirement 2's seven listed signals, are real further work, not
+attempted here).
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — distinguishing carrier ink
+from body ink is squarely "whether it counts" toward a symbol's own
+accepted evidence.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 8
 — "Produce an owned body bbox/polygon from owned primitives. This is
 the blue physical-symbol evidence shown to users." Computes a
