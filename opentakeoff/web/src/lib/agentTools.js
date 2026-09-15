@@ -59,6 +59,9 @@
 //   sweepScheduleRow(tag, opts): Promise<SweepScheduleRowResult>   // whole-set, cross-scale corroborated (Phase 3)
 //   findText(sheet, q, region|null, limit): Promise<{ count, truncated, hits }>            // whole-set aware (Phase 4)
 //   sheetContext(sheet, region|null, minLenPx, maxSegments): Promise<SheetContextResult>    // whole-set aware
+//   visualSymbolReview({reference,candidates,tile_sizes?}): Promise<{decision:"ranked_review",...}>
+//     Browser DINO visual verifier. Inputs are already-proposed physical-body
+//     bboxes, never tags/table cells; it cannot mutate takeoff truth.
 //   detectRooms(sheet, opts): Promise<DetectRoomsResult> | { error }   // FIND-ONLY; sheet must be open
 //   exportDxf(sheet|undefined, units|undefined): { downloaded, ... } | { error }            // real browser download
 //   exportMarkedPdf(includeMarkups): Promise<{ downloaded, bytes } | { error }>              // real browser download
@@ -378,6 +381,36 @@ export const AGENT_TOOL_DEFS = [
       type: "object",
       properties: { sheet: { type: "string" } },
       required: ["sheet"],
+    },
+  },
+  {
+    // SHOULD THIS BE ON THE SHARED PATH? No. This is an in-canvas review
+    // action over pre-existing physical-body evidence. It cannot resolve a
+    // schedule row, change reconciliation, or create an installed quantity;
+    // its coordinate/ranking contract is shared in symbolMetric.ts.
+    name: "rank_visual_symbol_candidates",
+    description: "Rank already-proposed PHYSICAL symbol bodies by visual similarity to one physical reference body using the bundled DINOv2 symbol-metric model. Use only after vector/legend/leader work has produced real body bboxes; a tag-text bbox and a schedule-cell bbox are invalid inputs. This is review evidence only: it returns ranked_review candidates with their original page bboxes, never a match/accept decision, never a tag association, never a count. On dense plan symbols it may be less useful than the vector matcher; do not use it to replace symbol_sweep or sweep_schedule_row. A human must inspect the original drawing, tag/leader, and cited schedule row before accepting any proposal.",
+    input_schema: {
+      type: "object",
+      properties: {
+        reference: {
+          type: "object",
+          description: "Trusted physical symbol body: {id?, sheet, bbox_px:[x0,y0,x1,y1]}. It must be a complete body, not text or a table cell.",
+          properties: { id: { type: "string" }, sheet: { type: "string" }, bbox_px: { type: "array", items: { type: "number" } } },
+          required: ["sheet", "bbox_px"],
+        },
+        candidates: {
+          type: "array",
+          description: "One or more distinct, pre-proposed physical bodies to rank; each is {id, sheet, bbox_px:[x0,y0,x1,y1]}.",
+          items: {
+            type: "object",
+            properties: { id: { type: "string" }, sheet: { type: "string" }, bbox_px: { type: "array", items: { type: "number" } } },
+            required: ["id", "sheet", "bbox_px"],
+          },
+        },
+        tile_sizes: { type: "array", items: { type: "number" }, description: "Optional page-tile sizes in original rendered pixels. Omit for the validated defaults." },
+      },
+      required: ["reference", "candidates"],
     },
   },
   {
@@ -1022,6 +1055,12 @@ export async function executeAgentTool(ctx, name, args) {
         if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
         return await ctx.findLegendSymbols(args.sheet);
       }
+
+      case "rank_visual_symbol_candidates":
+        if (typeof ctx.visualSymbolReview !== "function") {
+          return { error: "The local visual symbol verifier is not available in this canvas session." };
+        }
+        return await ctx.visualSymbolReview(args);
 
       case "sweep_inline_motif": {
         if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };

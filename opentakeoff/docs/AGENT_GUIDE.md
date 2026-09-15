@@ -194,6 +194,16 @@ and a `status` (matched / schedule-only / plan-only / …) with citations both w
 quantities and the status per line — never just the schedule count — the same "never a numbers
 report alone" discipline as the standard finish above.
 
+**Visual similarity is a review aid, not a symbol detector.** After `find_legend_symbols`,
+`symbol_sweep`, a leader trace, or a person has already proposed *complete physical-body*
+bounding boxes, `rank_visual_symbol_candidates` may rank those bodies against one trusted
+physical reference with the bundled DINOv2 metric model. Give it neither a tag-text box nor a
+schedule-cell box. Its reply is deliberately `ranked_review`: it cannot discover bodies, link a
+tag, approve a candidate, alter a reconciliation result, or change installed quantity. Open the
+original drawing and verify the body plus its tag/leader and cited schedule row before accepting
+anything. On dense repeated plan marks, prefer the vector matcher when it has stronger measured
+recall; the visual model is an optional way to prioritize a finite review queue.
+
 ## 4. Withheld is not a failure — it is the answer
 
 Four tools measure things they then decline to commit, and say why. The arrays they hand back are

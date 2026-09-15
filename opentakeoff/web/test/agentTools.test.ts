@@ -589,6 +589,40 @@ test("find_legend_symbols: a valid call passes through to the canvas's own detec
   assert.deepEqual(calls, ["plan.pdf"]);
 });
 
+// The visual model is review-only. This test guards the important product
+// boundary: tool dispatch can return the canvas ranking, but must not call any
+// proposal/quantity mutation capability as a side effect.
+test("rank_visual_symbol_candidates: forwards only physical-body evidence and stays review-only", async () => {
+  const calls: unknown[] = [];
+  const { ctx, calls: mutations } = makeCtx({
+    visualSymbolReview: async (request: unknown) => {
+      calls.push(request);
+      return {
+        model: "dinov2_symbol_metric_v1",
+        decision: "ranked_review",
+        candidates: [{ id: "candidate-1", cosine_similarity: 0.93, decision: "ranked_review" }],
+      };
+    },
+  });
+  const request = {
+    reference: { sheet: "plan.pdf", bbox_px: [10, 20, 40, 60] },
+    candidates: [{ id: "candidate-1", sheet: "plan.pdf", bbox_px: [80, 90, 120, 140] }],
+  };
+  const out = await executeAgentTool(ctx, "rank_visual_symbol_candidates", request);
+  assert.equal(out.decision, "ranked_review");
+  assert.deepEqual(calls, [request]);
+  assert.deepEqual(mutations.proposeShapes, [], "visual ranking may not stage or commit a count");
+});
+
+test("rank_visual_symbol_candidates: returns a named capability error when unavailable", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "rank_visual_symbol_candidates", {
+    reference: { sheet: "plan.pdf", bbox_px: [10, 20, 40, 60] },
+    candidates: [{ id: "candidate-1", sheet: "plan.pdf", bbox_px: [80, 90, 120, 140] }],
+  });
+  assert.match(out.error, /visual symbol verifier is not available/);
+});
+
 // sweep_inline_motif (accuracy-hardening plan Phase 4) — executeAgentTool's
 // own dispatch/shaping layer only; fingerprintInlineMotif/sweepInlineMotif's
 // own logic is covered directly by web/test/inlinemotif.test.ts and

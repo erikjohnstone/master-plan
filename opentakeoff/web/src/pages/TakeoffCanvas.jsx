@@ -9411,6 +9411,10 @@ export default function TakeoffCanvas() {
       symbolSweep: agentSymbolSweep,
       matchReferenceSymbol: agentMatchReferenceSymbol,
       findLegendSymbols: agentFindLegendSymbols,
+      // Review-only DINO ranking of caller-supplied physical-body evidence.
+      // It is intentionally outside the schedule/reconcile shared path: this
+      // cannot resolve a tag, mutate a citation, or set installed quantity.
+      visualSymbolReview: agentVisualSymbolReview,
       sweepInlineMotif: agentSweepInlineMotif,
       traceConnectivity: agentTraceConnectivity,
       listShapes: agentListShapes,
