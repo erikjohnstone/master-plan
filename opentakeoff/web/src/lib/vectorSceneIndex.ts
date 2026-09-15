@@ -77,6 +77,12 @@ export interface IndexedSubpath {
   fillLum: number;
   dashed: boolean;
   formDepth: number;
+  /** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane A — which Form
+   *  XObject INVOCATION this subpath belongs to (0 = page level). Unlike
+   *  `formDepth`, this is unique per `Do` call, never reused, so two
+   *  subpaths from separate same-depth invocations are distinguishable —
+   *  see oneclick.ts's own `SubPath.formInvocationId` doc for why. */
+  formInvocationId: number;
   lineCap: number;
   lineJoin: number;
   /** this subpath's own segment ids, in original order; clipped to what was
@@ -171,6 +177,7 @@ export function buildVectorSceneIndex(geo: VectorGeometry, opts: BuildOptions = 
       fillLum: sp.fillLum,
       dashed: sp.dashed,
       formDepth: sp.formDepth,
+      formInvocationId: sp.formInvocationId,
       lineCap: sp.lineCap,
       lineJoin: sp.lineJoin,
       primitiveIds,

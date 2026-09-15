@@ -1,5 +1,113 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane A
+first slice, the last of the five lanes to get real code: "group Form
+XObject/content-signature invocations by normalized local content"
+(requirement 1). This is the one slice this session that had to touch
+`oneclick.ts` again (the protected core) — full discipline applied:
+baseline test run first, focused failing test written before any
+production change, smallest additive change, full regression after.
+
+Confirmed in Phase 2 slice 3: `paintFormXObjectBegin` exposes only
+`[matrix, bbox|null]` — no object id or name — so per-invocation
+identity needs the goal's own named fallback, "a stable normalized
+content signature from the nested operation sequence and local
+coordinates." `formDepth` alone (Phase 2) cannot supply this: two
+SEPARATE invocations at the same nesting depth are indistinguishable
+by depth alone.
+
+`oneclick.ts` additions (mirrors `formDepth`'s own existing pattern
+exactly): `SubPath.formInvocationId` — 0 at page level, otherwise a
+monotonically increasing id unique to ONE `Do` call, never reused even
+across sibling invocations at the same depth (restored on `End` via a
+small stack, the same restore-on-End shape `formDepth` already uses,
+kept separate since a sibling needs a genuinely NEW id, not its
+parent's). New `VectorGeometry.formInvocations: FormInvocation[]` —
+one record per invocation (id, its own full page-space placement
+transform, depth), the transform being what a downstream module
+inverts to recover local coordinates. `vectorSceneIndex.ts`'s own
+`IndexedSubpath` updated to carry `formInvocationId` through, the same
+threading `formDepth` already got in slice 5.
+
+New `web/test/formInvocation.test.ts` (5 tests, written and confirmed
+FAILING before the `oneclick.ts` change, all passing after): page-level
+reads 0; two separate same-depth invocations get different ids
+(formDepth cannot tell them apart); ids are never reused, even
+returning to a shallower invocation after a nested one; each recorded
+invocation carries its own real transform and depth; an unbalanced End
+never underflows. Fixed the same 4 pre-existing hand-built `SubPath`
+literals (`drawnrooms.test.ts`, `geometry.test.ts`) via the same
+grep-first-fix-everywhere-at-once `sed` pass used for every prior
+required-field addition.
+
+New `web/src/lib/candidateBodyLaneA.ts`:
+`computeFormContentSignatures(idx, formInvocations, opts?)` groups
+subpaths by `formInvocationId`, inverts each invocation's own
+placement transform (closed-form 2×2 affine inverse, guarded against a
+degenerate/non-invertible matrix) to map its primitives back to LOCAL
+coordinates, builds synthetic `PrimitiveNodeAttributes` from those
+local coordinates (only `length`/`orientationDeg` actually change
+under inversion — `type`/`curved`/`closed`/`dashed`/`lineCap`/
+`lineJoin`/junction degree are placement-invariant and pass through
+unchanged), and reuses Lane D's own `computeBodySignature`
+(`candidateBodySignature.ts`) UNCHANGED — never a second signature
+algorithm. Invocations sharing an identical hash are grouped as
+`repeatedGroups` — "a repeated form is structural evidence" (goal's
+own requirement 4 wording), stated before any legend/tag/schedule
+corroboration, not instead of it.
+
+A genuine design point worth recording: local coordinates need NO
+separate per-sheet length normalization the way Lane D's own
+`normalizedLength` does — two invocations of the identical Form
+XObject share the literal same content stream, so their local
+coordinates are already identical by construction before either
+invocation's own placement transform is applied. Raw local length is
+used as `normalizedLength` directly, and the test suite proves the
+consequence: the SAME local shape placed at two different positions
+AND at a genuine 90° rotation (via a real matrix inversion, not
+relabeled coordinates) signs identically.
+
+New `web/test/candidateBodyLaneA.test.ts` (6 tests, all passing on the
+first run): no Form XObject at all produces no signatures; two
+placements of the same content at different position AND rotation
+sign identically; two placements of a genuinely different shape sign
+differently; an invocation with no vector content (image-only/empty
+form) reports a null signature, not a crash; a nested invocation signs
+independently of its parent; the cap-breach path.
+
+Real-sheet validation (Cherry Point #12, the same sheet Phase 2
+slices 9-10 already profiled — confirmed via that same sheet's own
+earlier finding that it genuinely uses Form XObjects, unlike most
+other sheets checked this session which use none at all): 25 real
+invocations, 5 resolved to a real signature (20 had no resolvable
+vector content — image/text-only forms), 0 repeated groups on this
+particular sheet — an honest result, not padded: not every real sheet
+has literally repeated Form XObjects, and this one apparently doesn't
+at the content-signature level. 14ms.
+
+Verification: `npx tsc --noEmit` clean. Full regression sweep — 34
+test files, 546+ individual tests, including the actual named
+VectorGrid regression files (`vectorGridAdapter.test.ts`,
+`vectorTakeoffPipeline.test.ts`, `sheetgraph.test.ts`) — 0 failures.
+Confirmed both `oneclick.ts` and the new module load cleanly from
+`mcp/` via tsx. Real-sheet checks on both the synthetic-fixture layer
+and an actual corpus PDF.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — the `oneclick.ts` additions
+are the one shared extraction implementation; `candidateBodyLaneA.ts`
+lives in `web/src/lib` alongside every other Lane/VectorSceneIndex
+module.
+
+Not done: Lane A requirements 2 (fusing invocations into
+CandidateBody-shaped proposals for cross-lane dedup), 3 (excluding
+text/furniture/border-heavy forms), and 4's own corroboration step
+(above); with all five lanes now touched, PROPOSAL FUSION across
+lanes (goal §8's own "deduplicate proposals by primitive overlap and
+body identity... preserve which lanes voted... top-K ordering...
+no-body proposal") is the next natural Phase 3 milestone, not yet
+started. Phase 3's own gate certification remains blocked on Phase 1's
+corpus reaching 150+/12. Phases 4-8 have not been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — Lane E
 first slice: a graph signature + reference primitive set per legend
 glyph, item 3 of Lane E's own four-item list ("Carry legend source

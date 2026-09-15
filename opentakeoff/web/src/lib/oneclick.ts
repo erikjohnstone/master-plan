@@ -115,6 +115,18 @@ export interface SubPath {
    *  XObject cases" (both named corpus strata in Phase 1) actually need to
    *  be told apart from page-level ink first. */
   formDepth: number;
+  /** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane A — Form XObject
+   *  invocation identity: 0 at page level, otherwise a monotonically
+   *  increasing id unique to ONE `Do` call, never reused, even across two
+   *  invocations that happen to share the same `formDepth`. `formDepth`
+   *  alone cannot tell two SEPARATE same-depth invocations apart from each
+   *  other — this can. Paired with `VectorGeometry.formInvocations`' own
+   *  per-invocation placement transform, a downstream module can invert
+   *  that transform to recover LOCAL coordinates for the normalized
+   *  content-signature hash this interface's own `formDepth` doc already
+   *  named as the deferred fallback when object identity (confirmed
+   *  unavailable — see that doc) is not exposed. */
+  formInvocationId: number;
 }
 /** A positioned text item, image px: (x, y) is the baseline START, w/h the
  *  rendered extent. The text layer is evidence about the DRAWING that the
@@ -125,7 +137,15 @@ export interface TextMark { x: number; y: number; w: number; h: number }
  *  keeps hand-built geometry (rastermask, tests) and stitched composites
  *  working unchanged. */
 export interface InkContext { subpaths?: SubPath[] | null; texts?: TextMark[] | null; dimTexts?: DimTextMark[] | null }
-export interface VectorGeometry { points: Point[]; segs: number[]; meta: Uint8Array; imageArea: number; maxImageArea: number; lum?: Uint8Array; layerOf?: Int32Array; layerIds?: string[]; subpaths?: SubPath[]; primType?: Uint8Array; }
+/** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane A — one Form
+ *  XObject invocation (one `Do` call), recorded once per invocation
+ *  regardless of how many subpaths it contains. `transform` is the FULL
+ *  page-space CTM in effect at that invocation's own start (the running
+ *  transform composed with the form's own placement matrix) — a
+ *  downstream module inverts this to map that invocation's own subpaths
+ *  back to local coordinates for a content-signature hash. */
+export interface FormInvocation { id: number; transform: number[]; depth: number; }
+export interface VectorGeometry { points: Point[]; segs: number[]; meta: Uint8Array; imageArea: number; maxImageArea: number; lum?: Uint8Array; layerOf?: Int32Array; layerIds?: string[]; subpaths?: SubPath[]; primType?: Uint8Array; formInvocations?: FormInvocation[]; }
 export interface MaskObj { mask: Uint8Array; mw: number; mh: number; ws: number; softCount: number; mppf?: number; }  // mppf: mask px per foot (0/absent = scale unknown)
 export interface RegionResult { region: Uint8Array; mw: number; mh: number; ws: number; count?: number; }
 export type FloodResult =
@@ -409,12 +429,13 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   let pathFill = 0;                 // the fill colour of the path being built
   let pathDashed = false;           // the dash state of the path being built
   let pathFormDepth = 0;            // …nor which Form XObject nesting it lives in
+  let pathFormInvocationId = 0;     // …nor which Form XObject INVOCATION it lives in
   let pathCap = 0;                  // …nor the line cap
   let pathJoin = 0;                 // …nor the line join
   const openSub = (flags: number, at: Point) => {
     sealSub();
     const k = metaArr.length;
-    sp = { i0: k, i1: k, x0: at[0], y0: at[1], x1: at[0], y1: at[1], closed: false, flags, fillLum: pathFill, dashed: pathDashed, formDepth: pathFormDepth, lineCap: pathCap, lineJoin: pathJoin };
+    sp = { i0: k, i1: k, x0: at[0], y0: at[1], x1: at[0], y1: at[1], closed: false, flags, fillLum: pathFill, dashed: pathDashed, formDepth: pathFormDepth, formInvocationId: pathFormInvocationId, lineCap: pathCap, lineJoin: pathJoin };
   };
   // every segment push goes through this, so a subpath's range and bbox can
   // never drift from what actually landed in segs
@@ -472,6 +493,20 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   // per-object identity (same XObject reused twice ⇒ same subpath signature)
   // would need a content-hash and is deliberately deferred to a later slice.
   let formDepth = 0;
+  // Form XObject INVOCATION identity (Phase 3 Lane A): a monotonically
+  // increasing id, unique per Do call, never reused — formDepth alone
+  // cannot tell two SEPARATE invocations apart when they share the same
+  // nesting depth (two forms called one after another at page level, say),
+  // and per-invocation identity is exactly what Lane A's own "group Form
+  // XObject invocations" requirement needs. formInvocationStack restores
+  // the ENCLOSING invocation's own id on End, the same restore-on-End
+  // shape formDepth already uses, but tracked separately since it is not a
+  // simple increment/decrement — a sibling invocation must get a genuinely
+  // NEW id, not its parent's.
+  let formInvocationCounter = 0;
+  let formInvocationId = 0;
+  const formInvocationStack: number[] = [];
+  const formInvocations: FormInvocation[] = [];
   const stack: Array<[number[], number, number, number, boolean, number, number]> = [];
   // Marked-content / Optional Content (#85): a purely SEQUENTIAL stack — not
   // graphics state, so save/restore never touches it, and a Form XObject with
@@ -523,8 +558,19 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
     // indistinguishable until now, which is why a wall test had to fall back
     // to guessing at a figure's shape.
     else if (fn === OPS.setFillRGBColor && args) { const L = strokeLuminance(args); if (L !== null) fillLum = L; }
-    else if (fn === OPS.paintFormXObjectBegin) { stack.push([m.slice(), lw, lum, fillLum, dashed, lineCap, lineJoin]); if (args && args[0]) m = mul(m, args[0]); formDepth++; }
-    else if (fn === OPS.paintFormXObjectEnd) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; lineCap = p[5]; lineJoin = p[6]; } if (formDepth > 0) formDepth--; }
+    else if (fn === OPS.paintFormXObjectBegin) {
+      stack.push([m.slice(), lw, lum, fillLum, dashed, lineCap, lineJoin]);
+      if (args && args[0]) m = mul(m, args[0]);
+      formDepth++;
+      formInvocationStack.push(formInvocationId);
+      formInvocationId = ++formInvocationCounter;
+      formInvocations.push({ id: formInvocationId, transform: m.slice(), depth: formDepth });
+    }
+    else if (fn === OPS.paintFormXObjectEnd) {
+      const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; lineCap = p[5]; lineJoin = p[6]; }
+      if (formDepth > 0) formDepth--;
+      formInvocationId = formInvocationStack.length ? formInvocationStack.pop()! : 0;
+    }
     else if (fn === OPS.beginMarkedContent) { mcStack.push(-1); }
     else if (fn === OPS.beginMarkedContentProps) {
       // worker emits ["OC", data] where data is {type:"OCG", id}, an OCMD
@@ -615,6 +661,7 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       pathFill = fillLum;           // …and neither can the fill colour
       pathDashed = dashed;          // …nor the dash state
       pathFormDepth = formDepth;    // …nor which Form XObject nesting it lives in
+      pathFormInvocationId = formInvocationId; // …nor which Form XObject invocation
       pathCap = lineCap;            // …nor the line cap
       pathJoin = lineJoin;          // …nor the line join
       const visit = (p: Point) => { points.push(p); };
@@ -656,7 +703,7 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   sealSub();
   const meta = Uint8Array.from(metaArr);
   markPolylineArcs(segs, meta);
-  return { points, segs, meta, imageArea, maxImageArea, lum: Uint8Array.from(lumArr), layerOf: Int32Array.from(layerOfArr), layerIds, subpaths, primType: Uint8Array.from(primTypeArr) };
+  return { points, segs, meta, imageArea, maxImageArea, lum: Uint8Array.from(lumArr), layerOf: Int32Array.from(layerOfArr), layerIds, subpaths, primType: Uint8Array.from(primTypeArr), formInvocations };
 }
 
 // ── 1b. polyline arc detection ─────────────────────────────────────────────
