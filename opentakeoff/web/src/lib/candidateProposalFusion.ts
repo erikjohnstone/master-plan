@@ -85,10 +85,32 @@
 // body that also matched the same invocation becomes its own
 // independent `["B"]`-only proposal — real, distinct Lane B evidence,
 // never silently dropped and never duplicated.
+//
+// LANE C, added (optional `laneCBodies` parameter, defaults to none —
+// every existing caller's own 3-argument call is unaffected):
+// candidateBodyLaneC.ts's own `proposeTagSearchRegionBody` (Phase 3 Lane
+// C requirement 1) produces real, useful proposals — measured
+// corpus-wide, PROGRESS.md: a 4.3x microF1 improvement on the one real
+// family it could help — but is DELIBERATELY NOT Jaccard-deduped against
+// Lane A/B here the way A and B dedupe against each other above. A tag
+// region typically SWEEPS OVER many small Lane B fragments at once (the
+// exact fragmentation this mechanism exists to work around), so a 1:1
+// "best match" dedup rule does not fit its own shape; inventing a
+// bespoke many-to-one dedup rule here would risk exactly the kind of
+// silent, unvalidated assumption this project's own real-corpus
+// discipline warns against. Instead, each Lane C body is added as its
+// own independent `["C"]` proposal, and any primitive overlap this
+// creates with an existing Lane A/B proposal is left for
+// ownershipConflicts.ts's own `detectOwnershipClusters` and the rest of
+// Phase 4's already-built, already-tested arbitration machinery to
+// resolve as a real CONTESTED primitive, using real evidence (style,
+// connectivity, carrier, form-plausibility, graph-signature) — the same
+// machinery already built for exactly this "which proposal actually
+// owns this shared ink" question, reused rather than reimplemented.
 import type { CandidateBody } from "./candidateBodyLaneB.ts";
 import type { FormInvocationSignature } from "./candidateBodyLaneA.ts";
 
-export type LaneVote = "A" | "B";
+export type LaneVote = "A" | "B" | "C";
 
 export interface FusedProposal {
   id: number;
@@ -103,6 +125,11 @@ export interface FusedProposal {
   evidence: {
     laneB?: { bodyId: number; primitiveCount: number };
     laneA?: { invocationId: number; depth: number; hasSignature: boolean };
+    /** `bodyId` here is the caller-assigned id on the `laneCBodies` entry
+     *  passed to `fuseProposals` (candidateBodyLaneC.ts's own
+     *  `TagRegionProposal` carries no id of its own — a caller building
+     *  these typically indexes them by tag or instance). */
+    laneC?: { bodyId: number; primitiveCount: number };
   };
 }
 
@@ -137,13 +164,16 @@ function jaccard(a: ReadonlySet<number>, b: ReadonlySet<number>): number {
 
 /** Pure: fuses Lane B candidate bodies with Lane A invocation bodies
  *  (those carrying at least one primitive) by primitive-set Jaccard
- *  overlap. Never mutates either input. Requires an object exposing
- *  `primitives` (a built VectorSceneIndex) purely to compute a fused
- *  bbox — it never reads any other field. */
+ *  overlap, then adds any `laneCBodies` (default none — see this
+ *  module's own header on why Lane C is added rather than deduped) as
+ *  independent `["C"]` proposals. Never mutates any input. Requires an
+ *  object exposing `primitives` (a built VectorSceneIndex) purely to
+ *  compute a fused bbox — it never reads any other field. */
 export function fuseProposals(
   idx: { primitives: { x0: number; y0: number; x1: number; y1: number }[] },
   laneBBodies: readonly CandidateBody[],
   laneAInvocations: readonly FormInvocationSignature[],
+  laneCBodies: readonly CandidateBody[] = [],
   opts: { overlapThreshold?: number } = {},
 ): FusedProposal[] {
   const threshold = opts.overlapThreshold ?? DEFAULT_OVERLAP_THRESHOLD;
@@ -245,6 +275,16 @@ export function fuseProposals(
       id: nextId++, primitiveIds: ids, x0, y0, x1, y1,
       votingLanes: ["A"],
       evidence: { laneA: { invocationId: entry.inv.invocationId, depth: entry.inv.depth, hasSignature: !!entry.inv.signature } },
+    });
+  }
+
+  // Lane C bodies — added as independent ["C"] proposals, never Jaccard-
+  // deduped against Lane A/B; see this module's own header for why.
+  for (const body of laneCBodies) {
+    fused.push({
+      id: nextId++, primitiveIds: body.primitiveIds.slice(), x0: body.x0, y0: body.y0, x1: body.x1, y1: body.y1,
+      votingLanes: ["C"],
+      evidence: { laneC: { bodyId: body.id, primitiveCount: body.primitiveIds.length } },
     });
   }
 

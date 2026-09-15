@@ -132,3 +132,37 @@ test("proposal fusion: an empty sheet fuses to nothing", () => {
   const { fused } = fuseFor([]);
   assert.deepEqual(fused, []);
 });
+
+test("proposal fusion: omitting laneCBodies entirely reproduces the exact pre-Lane-C behavior -- every existing 3-argument call is unaffected", () => {
+  const { idx, bodies, laneA } = fuseFor([formBegin(ID), closedRect(0, 0, 10, 10), formEnd()]);
+  const withoutLaneC = fuseProposals(idx, bodies, laneA.invocations);
+  const withEmptyLaneC = fuseProposals(idx, bodies, laneA.invocations, []);
+  assert.deepEqual(withoutLaneC, withEmptyLaneC);
+});
+
+test("proposal fusion: a Lane C body with no overlap at all becomes its own independent ['C'] proposal", () => {
+  const { idx, bodies, laneA } = fuseFor([closedRect(0, 0, 10, 10)]);
+  const laneCBody = { id: 7, primitiveIds: [], x0: 1000, y0: 1000, x1: 1010, y1: 1010 };
+  const fused = fuseProposals(idx, bodies, laneA.invocations, [laneCBody]);
+  assert.equal(fused.length, 2, "the original Lane B proposal plus the new independent Lane C one");
+  const cOnly = fused.find((f) => f.votingLanes.length === 1 && f.evidence.laneC);
+  assert.ok(cOnly);
+  assert.deepEqual(cOnly!.votingLanes, ["C"]);
+  assert.equal(cOnly!.evidence.laneC!.bodyId, 7, "the caller-assigned id on the laneCBodies entry is preserved");
+});
+
+test("proposal fusion: a Lane C body that SHARES primitives with an existing Lane B proposal is added as its OWN separate proposal, never Jaccard-deduped or merged into it -- the overlap is left for the ownership pipeline's own contested-primitive machinery to arbitrate", () => {
+  const { idx, bodies, laneA } = fuseFor([closedRect(0, 0, 10, 10)]);
+  const laneBBody = bodies[0];
+  // a Lane C region that swept in the SAME 4 primitives plus one more --
+  // exactly the real shape a tag-search region takes when it captures a
+  // Lane B fragment plus surrounding clutter.
+  const laneCBody = { id: 3, primitiveIds: [...laneBBody.primitiveIds, 999], x0: -5, y0: -5, x1: 15, y1: 15 };
+  const fused = fuseProposals(idx, bodies, laneA.invocations, [laneCBody]);
+  assert.equal(fused.length, 2, "the Lane B proposal and the overlapping Lane C proposal both survive as distinct proposals");
+  const cProposal = fused.find((f) => f.evidence.laneC)!;
+  const bProposal = fused.find((f) => f.evidence.laneB && !f.evidence.laneC)!;
+  assert.ok(cProposal && bProposal);
+  assert.deepEqual(cProposal.primitiveIds.slice().sort((a, b) => a - b), [...laneBBody.primitiveIds, 999].sort((a, b) => a - b), "Lane C's own primitiveIds are reported as-is, never trimmed to remove the shared ink");
+  assert.deepEqual(bProposal.primitiveIds, laneBBody.primitiveIds, "Lane B's own proposal is completely untouched by the overlapping Lane C proposal");
+});

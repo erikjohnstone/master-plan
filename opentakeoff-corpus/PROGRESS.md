@@ -1,5 +1,82 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 — formally
+wired Lane C into `candidateProposalFusion.ts` itself, the "not attempted
+here" item disclosed in the last several entries below, AND found (by
+actually measuring through the real pipeline rather than trusting the
+earlier ad hoc estimate) that the real improvement is smaller than that
+estimate suggested — an honest correction, not a bigger win.
+
+WIRING: `fuseProposals` gains a new optional `laneCBodies` parameter
+(default `[]` — every existing 3-argument call, in both permanent
+scripts and every existing test, is byte-for-byte unaffected, confirmed
+by an explicit regression test asserting identical output with the
+parameter omitted vs. passed as `[]`). Deliberately NOT Jaccard-deduped
+against Lane A/B the way A and B dedupe against each other: a tag region
+typically sweeps over MANY small Lane B fragments at once (the exact
+fragmentation problem it exists to work around), so a 1:1 best-match
+dedup rule doesn't fit its shape, and inventing a bespoke many-to-one
+dedup rule risked exactly the kind of unvalidated bespoke assumption
+this project's own discipline warns against. Instead each Lane C body is
+added as its own independent `["C"]` proposal, and any resulting
+primitive overlap with an existing Lane A/B proposal is left for
+`ownershipConflicts.ts`'s own `detectOwnershipClusters` and Phase 4's
+already-built, already-tested contested-primitive arbitration to
+resolve using real evidence — reusing tested machinery instead of
+writing new dedup logic. Verified directly, not assumed: ran a small
+real scene through the actual wired pipeline (a Lane C proposal
+identical to an existing Lane B body) and confirmed it produces one real
+contested cluster, scored via the existing 5 signals, correctly
+resolved as honest ambiguity (a genuine tie, not a crash or a silent
+wrong answer).
+
+CORRECTED MEASUREMENT: re-ran Cherry Point's own CD-1 family through the
+REAL wired pipeline (fuseProposals -> detectOwnershipClusters ->
+resolveClusterOwnershipIteratively -> computeOwnedBodies), not the
+scratch "add to a candidate pool, pick whichever matches best" shortcut
+the two entries below this one used. Result: microF1 rises from 0.0789
+to 0.1708 (2.2x) — real, but well short of the 4.3x (to 0.3372) the
+earlier ad hoc measurement suggested. The earlier number was an
+optimistic upper bound, not a preview of real integration: it let each
+ground-truth instance pick whichever candidate (Lane C included) matched
+best, without ever making the SAME proposals actually compete for the
+SAME contested primitives the way the real pipeline does.
+
+ROOT CAUSE OF THE GAP, diagnosed rather than left as a bare discrepancy:
+a Lane C proposal, by its own nature, almost never has any EXCLUSIVE
+primitives of its own — everything it claims is also claimed by some
+Lane B fragment it swept up. `ownershipEligibility.ts`'s own 5 signals
+are built on "trust only undisputed/exclusive evidence" (each proposal's
+dominant style/orientation/carrier baseline is computed from ITS OWN
+exclusive members) — with no exclusive members to build a baseline from,
+several signals fall back to their own documented neutral-favorable
+default (0.5) for Lane C specifically, so many contested primitives end
+up genuinely, honestly ambiguous rather than actually awarded to the
+better-supported (larger, more complete) Lane C proposal. This is a
+real, structural mismatch between HOW Lane C proposals are shaped
+(large, inclusive, rarely exclusive) and HOW the existing scoring
+signals were built (favoring small, tightly-exclusive proposals) — not a
+bug in either module, a genuine design tension disclosed here for
+whoever attempts to close it next.
+
+DISCLOSED, NOT ATTEMPTED HERE: a coverage-style eligibility signal
+(when one contested proposal's own claimed set is a near-superset of
+another's, and the smaller one has no exclusive evidence of its own
+either, prefer the more complete one) that could let Lane C's own real
+advantage actually win contested primitives instead of defaulting to
+neutral — a real, concrete next step this measurement points to, not
+attempted in this pass. 12 new/updated tests across
+candidateProposalFusion.test.ts (backward-compat, independent-proposal,
+overlap-left-for-arbitration) — full affected suite green (65/65). `tsc
+--noEmit` clean. Both permanent scripts (inspect-ownership-clusters.mjs,
+score-ownership-against-ground-truth.mjs) re-run directly to confirm
+their own existing 3-argument calls are unaffected by the new parameter.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — additive, backward-compatible,
+real-corpus-verified, and the corrected (smaller but real) number is
+more valuable on the shared path than the earlier optimistic one would
+have been if left uncorrected.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane C — shipped
 the carrier-filter refinement the entry directly below's own measurement
 pointed to but did not attempt. New opt-in `excludeCarrierLike` option
