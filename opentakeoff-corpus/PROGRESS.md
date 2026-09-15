@@ -1,5 +1,62 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 third slice —
+requirement 1: "Add the VectorSceneIndex ... to Session.graphForPipeline
+or the documented shared pipeline object." First real modification to
+EXISTING production code this session (`mcp/src/session.ts`) — every
+prior increment (Phases 0-7's first two slices) was a new, isolated
+file. Handled with the extra care that risk profile demands.
+
+DE-RISKED BEFORE WRITING CODE: read `Session.sheetGraph()` (the wire-
+facing method backing the real `sheet_graph` MCP tool) directly to
+confirm it does NOT return `graphForPipeline()`'s own raw internal
+`SheetGraph` object — it builds its own separate, explicitly
+hand-curated projection (own comment: "not sheetGraph()'s own
+wire-summarized counts"). This means a new internal-only `SheetGraph`/
+`SheetState` field can never bloat the real MCP wire response unless
+someone deliberately adds it to `sheetGraph()`'s own field list too,
+which this slice does not do — confirmed directly, not assumed, before
+touching the file.
+
+DESIGN: a `VectorSceneIndex` is inherently PER-SHEET, unlike
+`graphForPipeline()`'s own whole-document-set `SheetGraph` — retrofitting
+a lazy per-sheet cache into `buildSheetGraph` (a PURE function over
+`SheetSpans[]`, no access to per-sheet session state at all) would be a
+much larger, riskier change than adding one new accessor. Instead,
+mirrored the EXACT existing pattern `ensureMepGraph`/`SheetState.mepGraph`
+already establishes for a comparable lazy, potentially-expensive,
+per-sheet structure: new optional `SheetState.vectorSceneIndex`
+(undefined = not built, null = zero vector segments — same convention
+`mepGraph` already uses), a private `ensureVectorSceneIndex(s)` builder
+cached by identity on the sheet's own state object (so it is
+automatically invalidated whenever a sheet reloads, exactly like every
+other lazy cache — never a separate cache with its own different
+lifecycle), and a new public `Session.vectorSceneIndexFor(sheetKey)`
+accessor next to `graphForPipeline()`. Far simpler than `ensureMepGraph`
+itself: `buildVectorSceneIndex` is a pure function of `VectorGeometry`
+alone (already extracted and cached by `ensureGeometry`) — no layer
+exclusion, no wall-vouching, no noding that can fail.
+
+VALIDATION: `tsc --noEmit` clean across the whole mcp package.
+`test/session.test.ts` (21/21) and `test/tools.test.ts` (101/101,
+including the `sheet_graph` wire-contract test) both green — the exact
+regression net the Phase 7 audit (two entries below) named as the real
+risk surface for this file, run before committing rather than assumed
+safe.
+
+DISCLOSED, NOT ATTEMPTED: the "project-local legend reference bank"
+half of requirement 1 (needs `findLegendGlyphs` plus a spatial index
+and `PrimitiveNodeAttributes[]` — more construction than this slice's
+own scope; real further work, not rushed alongside this one to keep
+each change reviewable and low-risk on its own). `vectorSceneIndexFor`
+is not yet called by anything — purely additive, proven safe before
+any real consumer exists, matching this project's own established
+"measure before you trust" discipline now applied to production code,
+not just new modules.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — additive, mirrors an existing
+pattern exactly, full regression suite green before commit.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 second slice
 — requirement 6, Legend Learn integration: "accepted legend row creates
 a reference candidate, not a count. Family binding records caption/

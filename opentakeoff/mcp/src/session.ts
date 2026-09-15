@@ -323,6 +323,20 @@ import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, class
 // doctrine as sweep_schedule_row/resolve_tag above.
 import { buildMepGraph, traceConnectivity as traceMepConnectivity, type MepGraph, type TraceResult as MepTraceResult } from "../../web/src/lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
+// GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 requirement 1 — "Add
+// the VectorSceneIndex ... to Session.graphForPipeline or the
+// documented shared pipeline object." A VectorSceneIndex is inherently
+// PER-SHEET, unlike graphForPipeline()'s own whole-document-set
+// SheetGraph, so it is exposed here the same way every other lazy,
+// per-sheet, potentially-expensive structure already is (ensureGeometry,
+// ensureMepGraph's own mepGraph cache) — a private ensureX(s) builder
+// cached on SheetState, plus a new public accessor next to
+// graphForPipeline. Never touches graphForPipeline()/ensureGraph()'s
+// own SheetGraph construction itself (buildSheetGraph is a pure
+// function over SheetSpans[], with no access to per-sheet session
+// state at all — retrofitting a lazy per-sheet cache INTO that pure
+// function would be a much larger, riskier change than this one).
+import { buildVectorSceneIndex, type VectorSceneIndex } from "../../web/src/lib/vectorSceneIndex.ts";
 // Accuracy plan Phase 2 — on an unlayered/weakly-layered sheet, a layer-role
 // exclusion alone can't tell architectural wall ink apart from real MEP
 // linework (there's no layer to exclude by). networkWallSegs is
@@ -723,6 +737,15 @@ interface SheetState {
    * (isError:true, a bare JTS coordinate dump, not the tool's own documented
    * TraceResult shape) instead of a clean, doctrine-consistent refusal. */
   mepGraphNodingError?: string;
+  /** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2/7 — the shared
+   * VectorSceneIndex (candidate-body proposal/ownership/rigid-affine
+   * verification's own common substrate), built once per sheet and
+   * cached exactly like `mepGraph`. undefined = not built yet; null =
+   * the sheet has zero vector segments (mirrors `mepGraph`'s own null
+   * convention — never a distinct "empty" representation). Not yet
+   * read by any existing consumer (Phase 7 requirement 1's own first
+   * slice) — purely additive. */
+  vectorSceneIndex?: VectorSceneIndex | null;
 }
 
 /** sheet_context decimation defaults (issue #29) — declared and stable, never
@@ -3472,6 +3495,35 @@ export class Session {
       }
     }
     return s.mepGraph;
+  }
+
+  /** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2/7 — the shared
+   * VectorSceneIndex, built once per sheet and cached exactly like
+   * `ensureMepGraph`'s own `mepGraph`, including its null convention for
+   * a sheet with zero vector segments. Far simpler than ensureMepGraph:
+   * buildVectorSceneIndex is a pure function of VectorGeometry alone —
+   * no layer exclusion, no wall-vouching, no noding that can fail. */
+  private async ensureVectorSceneIndex(s: SheetState): Promise<VectorSceneIndex | null> {
+    if (s.vectorSceneIndex === undefined) {
+      const geo = await this.ensureGeometry(s);
+      s.vectorSceneIndex = geo.segs.length ? buildVectorSceneIndex(geo) : null;
+    }
+    return s.vectorSceneIndex;
+  }
+
+  /** Phase 7 requirement 1's own first slice: the shared VectorSceneIndex
+   * for one sheet, reachable through Session the same way graphForPipeline()
+   * exposes the shared SheetGraph — "for internal, same-package
+   * orchestration" (a VectorSceneIndex is inherently per-sheet, unlike
+   * graphForPipeline()'s own whole-document-set SheetGraph, so it is its
+   * own accessor rather than a new SheetGraph field). Returns null for an
+   * unknown sheet key or a sheet with zero vector segments — never throws
+   * on either, since a caller probing "does this sheet have real vector
+   * geometry" is a normal, expected question, not a usage error. */
+  async vectorSceneIndexFor(sheetKey: string): Promise<VectorSceneIndex | null> {
+    const s = this.sheets.get(sheetKey);
+    if (!s) return null;
+    return this.ensureVectorSceneIndex(s);
   }
 
   /** trace_connectivity (Phase 4) — which valve belongs to which equipment,
