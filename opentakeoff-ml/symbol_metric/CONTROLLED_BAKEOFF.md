@@ -71,3 +71,40 @@ The initial 14 real tag-to-body cases are useful to catch catastrophic
 regressions but do not meet the 200-case / 10-project project-grounding
 coverage floor. Until that reviewer-owned benchmark exists, unattended runs
 may compare pretraining diagnostics but cannot establish a production model.
+
+## Overnight MVP candidate queue
+
+`scripts/run_overnight_mvp_bakeoff.sh` is a finite, predeclared **successive-
+halving** RunPod queue. It waits for the in-progress DINO synthetic-init
+experiment, then runs ten DINO and eight RT-DETR treatments through a short,
+validation-only screen. The script selects three finalists from each family,
+retrains those finalists at full length, and evaluates each selected checkpoint
+exactly once on its untouched test split. It never changes the dataset, class
+taxonomy, score threshold, or product.
+
+The broad screen deliberately cannot open test annotations or images. For
+RT-DETR the queue creates a checksum-recorded, validation-only copy of the
+existing validated harness; the original harness stays untouched and is used
+only for each finalist's one full test evaluation. DINO selection uses its
+declared validation loss with same-crop recall solely as a tie-breaker. These
+are useful scheduling signals, not proof of plan grounding.
+
+The declared DINO screen varies only synthetic warm start, conservative versus
+extended bounded augmentation, auxiliary weak-proxy weight, temperature, and
+brief backbone freeze; real-only controls are included. The detector screen
+uses three fixed-control seeds plus one-at-a-time learning-rate, weight-decay,
+and short-duration variations. It never enables horizontal flips because that
+would invent directional HVAC/BAS symbol semantics. Failed or incomplete runs
+are not selected on resume.
+
+Start it once in a detached process, passing the PID of the already-running
+DINO supervisor so it cannot contend for the same GPU:
+
+```sh
+nohup /workspace/training/symbol-metric-bakeoff/opentakeoff-ml/symbol_metric/scripts/run_overnight_mvp_bakeoff.sh \
+  7297 > /workspace/training/overnight-mvp-launch.log 2>&1 &
+```
+
+The ranking files intentionally say `diagnostic_best_not_promotable`. They
+select the checkpoint to carry into the real grounding benchmark; they do not
+authorize software integration or installed quantity decisions.

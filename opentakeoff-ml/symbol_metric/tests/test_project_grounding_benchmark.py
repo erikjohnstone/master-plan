@@ -17,6 +17,9 @@ from project_grounding_benchmark import CASE_SCHEMA, PREDICTION_SCHEMA, iou, sco
 from import_symbol_grounding_truth import import_truth  # noqa: E402
 from run_controlled_bakeoff import SCHEMA as BAKEOFF_SCHEMA, gate_decision, run  # noqa: E402
 from build_grounding_review_queue import PROPOSAL_SCHEMA, build_queue  # noqa: E402
+from rank_model_diagnostics import compare  # noqa: E402
+from select_bakeoff_candidates import select  # noqa: E402
+from prepare_rtdetr_validation_runner import prepare  # noqa: E402
 
 
 PDF_HASH = "a" * 64
@@ -186,6 +189,40 @@ class ProjectGroundingBenchmarkTest(unittest.TestCase):
             self.assertIsNone(queue[0]["review_decision"]["accepted_candidate_id"])
             self.assertNotIn("expected_symbol_bbox_image_px", queue[0])
             self.assertTrue((output_root / persisted["packet_image_path"]).is_file())
+
+    def test_diagnostic_ranking_never_claims_release(self) -> None:
+        baseline = {
+            "weak_source_label_recall_at_1": 0.7,
+            "weak_source_label_recall_at_5": 0.8,
+            "mean_two_view_cosine": 0.9,
+        }
+        candidate = {
+            "weak_source_label_recall_at_1": 0.8,
+            "weak_source_label_recall_at_5": 0.9,
+            "mean_two_view_cosine": 0.95,
+        }
+        result = compare("dino", baseline, [("candidate", candidate)])
+        self.assertEqual(result["winner"], "candidate")
+        self.assertEqual(result["decision"], "diagnostic_best_not_promotable")
+
+    def test_validation_shortlist_does_not_open_a_test_report(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            metric_file = root / "metrics.jsonl"
+            metric_file.write_text("\n".join((
+                json.dumps({"epoch": 0, "validation": {"loss": 0.4, "same_crop_recall_at_1": 0.9}}),
+                json.dumps({"epoch": 1, "validation": {"loss": 0.2, "same_crop_recall_at_1": 0.8}}),
+            )), encoding="utf-8")
+            result = select("dino", [("candidate", metric_file)], 1)
+        self.assertEqual(result["selected_ids"], ["candidate"])
+        self.assertEqual(result["decision"], "validation_shortlist_only")
+
+    def test_rtdetr_screen_runner_refuses_to_instantiate_test_split(self) -> None:
+        source = '''def parse_args():\n    parser.add_argument("--hflip", action="store_true",\n                        help="Enable only for an audited flip-safe taxonomy.")\n    return parser.parse_args()\n\n    test_set = CocoPackDataset(pack_root, "test", processor, None)\n    test_loader = DataLoader(test_set, shuffle=False, **kwargs)\n    best_model = RTDetrForObjectDetection.from_pretrained(best_dir).to(device)\n'''
+        generated = prepare(source)
+        self.assertIn("--skip-held-out-test", generated)
+        self.assertIn("None if args.skip_held_out_test", generated)
+        self.assertIn("held-out test intentionally unopened", generated)
 
 
 if __name__ == "__main__":
