@@ -1,5 +1,76 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— pivoted from Phase 4 depth to a neglected front: completing the v2
+annotation of already-identified instances. First, checked where Phase
+1's OWN numeric gate (requirement 3: "at least 150 additional real
+symbol instances across at least 12 documents") actually stands, since
+this session's own summary carried a stale "95 instances/4 documents"
+figure from earlier in the session: `HVAC BAS Benchmark Collection/
+ground_truth/symbol_sweep/cases.json` (schema v2, 51 cases) currently
+holds 374 non-seed instances across 34 documents — both figures
+already well past the stated gate. Requirement 3's own numeric bar
+looks satisfied; requirement 2 ("review and annotate EVERY failure/
+edge case... with physical-body ownership, tag bbox, and association
+type") is not: 31 of the 374 instances across 13 cases in 11 documents
+are still missing one or more v2 fields (body_bbox/tag_bbox/
+association_type) — a precise, bounded, real remaining gap, listed in
+full by case id this pass.
+
+Picked the smallest, most tractable gap first: case `05-usda-mh101-
+d10-air-devices`'s own `d10-05` (one missing instance). Its existing
+review notes already carried a detailed, honest prior account of why
+it was left incomplete (three rect-based attempts failed; the
+position "sits in open space near a room-partition wall"), ending
+with an explicit prediction: this needs "the isolation Phase 4's
+exclusive-ownership work will provide." Given this session built
+exactly that machinery, this was a real, concrete opportunity to test
+a specific prior prediction against now-existing tools — not a
+speculative retry.
+
+REAL INVESTIGATION, REAL CORRECTION: rendered the region fresh via
+`session.viewSheet`. First traced a distractor — a visible leader line
+near the frozen `at` point — and confirmed by close render that it
+points to an unrelated gray architectural/plumbing dot near a
+different room, not this diffuser; ruled out and disclosed so a future
+pass doesn't re-chase it. Found the real glyph immediately adjacent to
+the D10/230 tag as expected for this family's "adjacent" association:
+NOT the plain square arrow-cross its 4 already-annotated siblings
+share, but a rectangular linear-diffuser/register symbol (box + curved
+duct-run + diagonal cross-hatch + arrowhead) — a real, disclosed
+visual difference, plausible for a device in an odd-shaped shower/
+toilet room, not investigated further as a possible mis-tag.
+
+Queried the real Lane B geometry directly in the glyph's own region to
+find precisely why 3 prior rect-based attempts failed — and found the
+same reason means this session's OWN Phase 4 ownership machinery does
+NOT help either, correcting the case's own prior prediction: the
+diagonal hatch marks are short, NON-TOUCHING, criss-crossing strokes
+with no shared endpoints, so `candidateBodyLaneB.ts`'s own junction-
+based union-find never connects them — dozens of isolated 1-primitive
+bodies, never entering any ownership CLUSTER at all. Phase 4's
+machinery resolves CONTESTED primitives between competing proposals;
+it has nothing to act on when Lane B never groups the ink into one
+proposal to begin with — the SAME scope-boundary this session already
+documented for raw-geometry repeated-symbol grids, now confirmed by a
+real, independent case to extend to a single symbol's own internal
+non-touching hatch marks too. The real fix needs spatial-proximity
+clustering (grouping nearby-but-non-touching short strokes within a
+radius), a genuinely different mechanism than junction-based union —
+real further work, not attempted here.
+
+d10-05's own `body_bbox` is still NOT computed — disclosed, not
+forced. Updated `cases.json` itself (surgical, minimal diff — a Python
+JSON round-trip was tried first, reformatted the ENTIRE 280KB file's
+own array layout as a side effect, and was reverted in favor of a
+precise text edit) with this corrected finding as a new review note,
+appended after the existing one rather than replacing it, so the
+prior investigator's own reasoning stays visible alongside the
+correction.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Ground-truth annotation and
+investigation only; no engine code changed.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 gate — added
 `filterPlausibleSymbolGroups` to `candidateBodyRepeatedGroups.ts`,
 directly following through on the prior entry's own honest caveat
