@@ -135,6 +135,23 @@ function dominantStyleOf(idx: VectorSceneIndex, primitiveIds: readonly number[])
   return { deviceLineWidth: mode(widths), dashed: dashes.length ? mode(dashes) : null, layerId: layers.length ? mode(layers) : undefined };
 }
 
+export interface ScoreContestedPrimitivesOptions {
+  /** per-proposal EXTRA primitive ids to treat as if they were exclusive
+   *  when computing that proposal's own style/connectivity/carrier/graph-
+   *  signature evidence — the hook `resolveClusterOwnershipIteratively`
+   *  (ownershipAssignment.ts) uses to feed an earlier round's own
+   *  resolved contested primitives back in as real evidence for a later
+   *  round, per this module's own header's disclosed "a true joint
+   *  solve would let assigning one contested primitive change another's
+   *  own connectivity evidence" gap. A caller-supplied id not actually
+   *  present in that proposal's own `primitiveIds` is silently ignored
+   *  (defensive; every real caller's own ids are already a subset by
+   *  construction — see resolveClusterOwnershipIteratively's own
+   *  header). Omitting this entirely reproduces the exact non-iterative
+   *  behavior this module always had before iterative repair existed. */
+  additionalExclusiveByProposal?: ReadonlyMap<number, ReadonlySet<number>>;
+}
+
 /** Pure: scores every contested primitive in `cluster` against every
  *  proposal in the cluster that claims it. Never mutates any input. */
 export function scoreContestedPrimitives(
@@ -142,7 +159,9 @@ export function scoreContestedPrimitives(
   proposalsById: ReadonlyMap<number, FusedProposal>,
   idx: VectorSceneIndex,
   junctions: readonly Junction[],
+  opts: ScoreContestedPrimitivesOptions = {},
 ): EligibilityScore[] {
+  const { additionalExclusiveByProposal } = opts;
   // Lane D node attributes, computed once for the WHOLE sheet (Lane D's own
   // normalizedLength needs the sheet-wide reference length, not a
   // cluster-local one — same convention computePrimitiveGraphAttributes
@@ -162,7 +181,8 @@ export function scoreContestedPrimitives(
   for (const propId of cluster.proposalIds) {
     const proposalPrims = proposalsById.get(propId)?.primitiveIds ?? [];
     primitiveSetByProposal.set(propId, new Set(proposalPrims));
-    const exclusive = proposalPrims.filter((pid) => exclusiveIdSet.has(pid));
+    const additional = additionalExclusiveByProposal?.get(propId);
+    const exclusive = proposalPrims.filter((pid) => exclusiveIdSet.has(pid) || (additional?.has(pid) ?? false));
     exclusiveSetByProposal.set(propId, new Set(exclusive));
     styleByProposal.set(propId, dominantStyleOf(idx, exclusive));
 

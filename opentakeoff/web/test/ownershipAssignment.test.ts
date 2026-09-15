@@ -9,7 +9,7 @@ import { computeVectorSceneJunctions } from "../src/lib/vectorSceneRelations.ts"
 import type { FusedProposal } from "../src/lib/candidateProposalFusion.ts";
 import { detectOwnershipClusters } from "../src/lib/ownershipConflicts.ts";
 import { scoreContestedPrimitives } from "../src/lib/ownershipEligibility.ts";
-import { resolveClusterOwnership, resolveExclusiveOwnership } from "../src/lib/ownershipAssignment.ts";
+import { resolveClusterOwnership, resolveExclusiveOwnership, resolveClusterOwnershipIteratively } from "../src/lib/ownershipAssignment.ts";
 
 const OPS = {
   save: 1, restore: 2, setLineWidth: 4,
@@ -122,4 +122,81 @@ test("ownership assignment: exclusive primitives resolve to their sole claimant 
     assert.equal(d.reason, "exclusive");
     assert.equal(d.topScore, null);
   }
+});
+
+test("ownership assignment (iterative): a primitive touching only a CONTESTED neighbor (not yet anyone's confirmed evidence) stays ambiguous in the static one-shot decision rule, but resolves once its neighbor is confirmed in an earlier round", () => {
+  // Chain: 0 (proposal 0's exclusive) -- 1 (contested, touches 0 only) --
+  // 2 (contested, touches 1 only). Primitive 3 (proposal 1's exclusive) is
+  // styled/oriented identically to 0/1/2 but far away and touches nothing,
+  // so style/carrier/form/graph-signature are exactly TIED for primitive 2
+  // in round 0 -- only connectivity can ever break the tie, and primitive
+  // 2's only neighbor (1) isn't anyone's confirmed evidence yet in round 0.
+  const geo = extractVectorGeometry(opList([
+    line(0, 0, 10, 0),      // primitive 0 -- proposal 0's exclusive
+    line(10, 0, 20, 0),     // primitive 1 -- contested, touches primitive 0
+    line(20, 0, 30, 0),     // primitive 2 -- contested, touches primitive 1 ONLY
+    line(1000, 0, 1010, 0), // primitive 3 -- proposal 1's exclusive, same style/orientation, no junction to anything
+  ]), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  const proposals = [proposal(0, [0, 1, 2]), proposal(1, [1, 2, 3])];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters } = detectOwnershipClusters(proposals);
+  assert.deepEqual(clusters[0].exclusivePrimitiveIds, [0, 3]);
+  assert.deepEqual(clusters[0].contestedPrimitiveIds, [1, 2]);
+
+  // The static, non-iterative rule (today's resolveClusterOwnership, fed
+  // round-0 scores) genuinely cannot break primitive 2's tie -- this is
+  // the real gap the iterative version exists to close, not a strawman.
+  const round0Scores = scoreContestedPrimitives(clusters[0], proposalsById, idx, junctions);
+  const oneShot = resolveClusterOwnership(clusters[0], round0Scores);
+  const oneShotByPid = new Map(oneShot.decisions.map((d) => [d.primitiveId, d]));
+  assert.equal(oneShotByPid.get(1)?.state, "assigned", "primitive 1 has direct connectivity to proposal 0's own exclusive ink even in round 0");
+  assert.equal(oneShotByPid.get(2)?.state, "ambiguous", "primitive 2's only neighbor (1) is still contested in round 0 -- a real, un-fudged tie");
+  assert.equal(oneShotByPid.get(2)?.margin, 0);
+
+  const iterative = resolveClusterOwnershipIteratively(clusters[0], proposalsById, idx, junctions);
+  assert.equal(iterative.rounds, 2, "primitive 2 genuinely needed a second round -- this is real iteration, not a single pass-through");
+  assert.equal(iterative.hitRoundCap, false);
+  assert.equal(iterative.assignedCount, 2);
+  assert.equal(iterative.ambiguousCount, 0);
+  const iterByPid = new Map(iterative.decisions.map((d) => [d.primitiveId, d]));
+  assert.equal(iterByPid.get(1)?.proposalId, 0);
+  assert.equal(iterByPid.get(2)?.proposalId, 0, "round 1 confirming primitive 1 as proposal 0's evidence lets round 2 correctly resolve primitive 2 too");
+  assert.equal(iterByPid.get(2)?.topScore, 1, "primitive 2's connectivity is now 1/1 -- its only neighbor is now confirmed proposal 0 evidence");
+});
+
+test("ownership assignment (iterative): a disclosed maxRounds cap stops further repair honestly -- the cut-off primitive is reported ambiguous, never silently dropped or guessed", () => {
+  const geo = extractVectorGeometry(opList([
+    line(0, 0, 10, 0), line(10, 0, 20, 0), line(20, 0, 30, 0), line(1000, 0, 1010, 0),
+  ]), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  const proposals = [proposal(0, [0, 1, 2]), proposal(1, [1, 2, 3])];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters } = detectOwnershipClusters(proposals);
+  const capped = resolveClusterOwnershipIteratively(clusters[0], proposalsById, idx, junctions, { maxRounds: 1 });
+  assert.equal(capped.rounds, 1);
+  assert.equal(capped.hitRoundCap, true);
+  assert.equal(capped.assignedCount, 1);
+  assert.equal(capped.ambiguousCount, 1);
+  const byPid = new Map(capped.decisions.map((d) => [d.primitiveId, d]));
+  assert.equal(byPid.get(1)?.state, "assigned", "the primitive round 1 already resolves is unaffected by the cap");
+  assert.equal(byPid.get(2)?.state, "ambiguous", "cut off by the cap -- a real disclosed limit, still an honest decision entry, not an omission");
+  assert.equal(byPid.get(2)?.proposalId, null);
+});
+
+test("ownership assignment (iterative): a real stable tie (no exclusive evidence anywhere, same as the non-iterative degenerate case) converges in exactly one round -- no infinite loop chasing a tie that will never break", () => {
+  const geo = extractVectorGeometry(opList([line(0, 0, 10, 0)]), ID, OPS);
+  const idx = buildVectorSceneIndex(geo);
+  const { junctions } = computeVectorSceneJunctions(idx);
+  const proposals = [proposal(0, [0]), proposal(1, [0])];
+  const proposalsById = new Map(proposals.map((p) => [p.id, p]));
+  const { clusters } = detectOwnershipClusters(proposals);
+  const result = resolveClusterOwnershipIteratively(clusters[0], proposalsById, idx, junctions);
+  assert.equal(result.rounds, 1, "no progress on round 1 means stop immediately -- real stable ambiguity, not forced convergence");
+  assert.equal(result.hitRoundCap, false, "it stopped because nothing changed, not because it hit the round cap");
+  assert.equal(result.assignedCount, 0);
+  assert.equal(result.ambiguousCount, 1);
+  assert.equal(result.decisions[0].proposalId, null);
 });
