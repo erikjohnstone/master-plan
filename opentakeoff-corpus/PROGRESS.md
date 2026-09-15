@@ -1,6 +1,46 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane B —
+follow-up to the calibration entry directly below: does normalizing the
+same 3 documents' own within/between gap distances by the sheet's OWN
+`referenceLength` (candidateBodyLaneD.ts's own per-sheet median segment
+length, already used for `normalizedLength` elsewhere in this exact
+codebase) fix the cross-document portability problem the raw-pixel
+numbers already ruled out? Tested directly rather than assumed, per this
+project's own "measure, don't guess" discipline — a natural-seeming fix
+(reuse the existing per-sheet scale factor) deserves the same real
+scrutiny as the naive one before either gets built.
+
+RESULT: normalizing does NOT fix it. Cherry Point: within-max 34.3x
+referenceLength, between-min 62.9x (margin 1.83x, similar to the raw
+numbers). Colville's own dense tank array: within-max 34.9x, between-min
+41.6x — margin COLLAPSES to 1.19x, statistically identical to its own
+UN-normalized margin. Klamath: within-max 17.7x, between-min 47.8x. A
+single normalized threshold (~35-36x referenceLength) technically
+threads all three, but Colville's own real margin around it is under 5
+units of slack on either side — not a safe, confident threshold, just a
+narrower version of the same problem restated in different units.
+
+DIAGNOSIS: a single PER-PAGE scalar (raw pixels or normalized by a
+page-wide median) cannot represent the right scale for this problem,
+because it mixes together every different stroke scale present on one
+sheet (thin diffuser hatch marks, thick wall lines, dimension leaders)
+into one global number, diluting exactly the local signal that
+distinguishes "this symbol's own internal stroke spacing" from "the gap
+to the next symbol over." REVISED IMPLICATION for the real fix (still
+not attempted here): the proximity criterion likely needs to be LOCAL
+and density-relative — e.g. a DBSCAN-style core-distance/k-nearest-
+neighbor-relative rule, where a gap counts as "close" only relative to
+THIS body's own immediate neighborhood's typical spacing, not a single
+global constant of any kind (raw or normalized). This corrects this
+entry's own predecessor's more optimistic implication ("reuse
+normalizedLength") with a real, measured reason it falls short, rather
+than letting a plausible-sounding first guess stand unverified.
+SHOULD THIS BE ON THE SHARED PATH? Yes, as calibration data — same
+disclosure as the entry below; still no code change, still ruling out
+an approach before it gets built rather than after it regresses a gate.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 3 Lane B —
 calibration study for the fix the entry directly below names as real
 further work ("spatial-proximity clustering, grouping nearby but non-
 touching short strokes within a radius, not junction-based union"), run
