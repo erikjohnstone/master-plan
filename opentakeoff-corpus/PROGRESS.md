@@ -1,6 +1,24 @@
 ## Active work
 
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
+— completed case `39-jvwtp-h601-rooftop-di-point-callouts`'s own six
+non-seed gaps, closing that case to 7/7. This case's own prior note
+withheld all six for the same reason: a search rect matching the case's
+own 100px seed_rect overlapped into the adjacent capsule above/below,
+since these seven capsules stack at only ~77px pitch. The seed's own
+REAL, tight body_bbox is only 41.1px tall, though -- comfortably inside
+that 77px pitch with room on both sides, confirmed directly by
+rendering the seed's own corner-ring box and seeing a clean gap to the
+next capsule below. Translated the seed's own tight box by each
+instance's own `at` delta and verified two of the six with corner-ring
+renders (the nearest instance and the farthest, five repeats out, to
+rule out cumulative drift): both land exactly on their own capsule's
+outline with clean gaps on both sides. The other four use the
+identical, verified per-instance delta. Added via a surgical edit per
+instance plus an appended correcting review note; the case's prior
+note is left untouched.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 requirement 2
 — completed case `44-itd-d2-m41-temperature-transmitters`'s own last
 two gaps, both chiller water-temperature transmitters, closing that
 case to 3/3. This one differs from every prior completion this
