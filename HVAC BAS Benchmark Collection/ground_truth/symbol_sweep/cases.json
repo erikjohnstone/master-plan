@@ -558,11 +558,17 @@
         "tag": null,
         "at": [4529.7, 1867.7],
         "tolerance_px": 2,
-        "tag_bbox": null
+        "tag_bbox": null,
+        "family": "ice storage tank (T-5)",
+        "association_type": "enclosed",
+        "transform_family": "rigid",
+        "countable": true,
+        "reference_source": "manual_seed",
+        "body_bbox": [4488.8, 1789.3, 4569.4, 1920.8]
       },
       "instances": [
-        { "id": "east-wing-t5-2", "at": [4657.4, 1867.7], "tolerance_px": 3, "tag": null, "tag_bbox": null },
-        { "id": "east-wing-t5-3", "at": [4779.3, 1867.7], "tolerance_px": 3, "tag": null, "tag_bbox": null }
+        { "id": "east-wing-t5-2", "at": [4657.4, 1867.7], "tolerance_px": 3, "tag": null, "tag_bbox": null, "family": "ice storage tank (T-5)", "association_type": "enclosed", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [4616.5, 1789.3, 4697.1, 1920.8] },
+        { "id": "east-wing-t5-3", "at": [4779.3, 1867.7], "tolerance_px": 3, "tag": null, "tag_bbox": null, "family": "ice storage tank (T-5)", "association_type": "enclosed", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [4738.4, 1789.3, 4819, 1920.8] }
       ],
       "review": {
         "render": "ground_truth/reviews/14__vol2__021/p14-p14-full-poppler.png",
@@ -571,7 +577,8 @@
           "The East Wing schematic contains three T-5 ice-storage tanks; the left tank is the seed, leaving two expected placements.",
           "The seed contains the complete tank body and its outlined T-5 identifier. Both accepted East Wing placements are exact 1.000 vector repeats.",
           "The West Wing schematic contains three visually similar T-6 tanks. Their outlined identifier is part of the vector fingerprint, and all three remain below acceptance at approximately 0.811 rather than leaking into the T-5 result.",
-          "Pumps, valves, strainers, expansion tanks, heat exchangers, pipe-size marks, flow arrows, notes, and title-block graphics are excluded."
+          "Pumps, valves, strainers, expansion tanks, heat exchangers, pipe-size marks, flow arrows, notes, and title-block graphics are excluded.",
+          "v2 review: rendered the full three-tank East Wing schematic with all three rings (reviews/14__vol2__021/p14-overview.png) plus individual tight crops of the seed and both instances (p14-seed.png, p14-east-wing-t5-2.png, p14-east-wing-t5-3.png), and viewed all four with the Read tool -- every crop is pixel-identical apart from the ring position, directly confirming the exact-repeat claim below by eye, not just by tag count. The 'T-5' identifier is drawn as vector line-art directly inside the tank outline, not a separate PDF text run, so v1 correctly carries tag/tag_bbox as null; association_type is enclosed rather than adjacent/leader since the identifier is graphically part of the body, not an external callout. body_bbox for the seed and both instances was computed via one batched fingerprintSymbol pass and converged exactly: all three report the identical 143-segment, 154.3px-footprint fingerprint with centers landing on their own frozen at to within 0.3px, which is the vector-level confirmation of this case's own note that the two accepted placements are exact 1.000 repeats of the seed. transform_family is rigid (pure horizontal translation, no rotation or scale)."
         ]
       }
     },
@@ -685,20 +692,26 @@
         "tag": "FCU-5",
         "at": [4046.3, 1824.4],
         "tolerance_px": 2,
-        "tag_bbox": [4004.4, 1887.2, 4039.3, 1931.6]
+        "tag_bbox": [4004.4, 1887.2, 4039.3, 1931.6],
+        "family": "fan coil unit (duct-transition body)",
+        "association_type": "adjacent",
+        "transform_family": "rigid",
+        "countable": true,
+        "reference_source": "manual_seed",
+        "body_bbox": [3991, 1773.7, 4107.2, 1875]
       },
       "instances": [
-        { "id": "pressbox-fcu5-01", "page": 9, "at": [4609.9, 1039.4], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4573.0, 1098.8, 4607.8, 1143.1] },
-        { "id": "pressbox-fcu5-02", "page": 9, "at": [4471.0, 1237.9], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4433.8, 1307.3, 4468.6, 1351.6] },
-        { "id": "pressbox-fcu5-03", "page": 9, "at": [4337.2, 1430.5], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4361.6, 1351.8, 4396.5, 1396.2] },
-        { "id": "pressbox-fcu5-04", "page": 9, "at": [4192.0, 1632.6], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4146.6, 1693.8, 4181.5, 1738.2] },
-        { "id": "conference-fcu4", "page": 9, "at": [4736.1, 1712.3], "tolerance_px": 3, "tag": "FCU-4", "tag_bbox": [4741.8, 1769.3, 4776.7, 1813.7] },
-        { "id": "pressbox-fcu5-06", "page": 9, "at": [3916.2, 2007.7], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3874.0, 2073.2, 3908.8, 2117.5] },
-        { "id": "pressbox-fcu5-07", "page": 9, "at": [3766.9, 2199.0], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3735.0, 2268.6, 3769.9, 2312.9] },
-        { "id": "pressbox-fcu5-08", "page": 9, "at": [3635.9, 2380.9], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3597.5, 2444.0, 3632.3, 2488.4] },
-        { "id": "pressbox-fcu5-09", "page": 9, "at": [3479.6, 2566.6], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3439.8, 2631.7, 3474.7, 2676.0] },
-        { "id": "pressbox-fcu5-10", "page": 9, "at": [3334.0, 2742.6], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3284.2, 2800.8, 3319.0, 2845.1] },
-        { "id": "pressbox-fcu5-11", "page": 9, "at": [3163.1, 2944.7], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3107.6, 2999.4, 3142.5, 3043.8] }
+        { "id": "pressbox-fcu5-01", "page": 9, "at": [4609.9, 1039.4], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4573.0, 1098.8, 4607.8, 1143.1], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [4553.9, 991.1, 4668.2, 1089.8] },
+        { "id": "pressbox-fcu5-02", "page": 9, "at": [4471.0, 1237.9], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4433.8, 1307.3, 4468.6, 1351.6], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [4415.2, 1188.4, 4533.2, 1287.7] },
+        { "id": "pressbox-fcu5-03", "page": 9, "at": [4337.2, 1430.5], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4361.6, 1351.8, 4396.5, 1396.2], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [4281.4, 1375.9, 4395.6, 1480.8] },
+        { "id": "pressbox-fcu5-04", "page": 9, "at": [4192.0, 1632.6], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4146.6, 1693.8, 4181.5, 1738.2], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [4136.2, 1582, 4254.4, 1683] },
+        { "id": "conference-fcu4", "page": 9, "at": [4736.1, 1712.3], "tolerance_px": 3, "tag": "FCU-4", "tag_bbox": [4741.8, 1769.3, 4776.7, 1813.7], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [4684.4, 1658.4, 4780.7, 1756.3] },
+        { "id": "pressbox-fcu5-06", "page": 9, "at": [3916.2, 2007.7], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3874.0, 2073.2, 3908.8, 2117.5], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [3861, 1957, 3969.4, 2057.2] },
+        { "id": "pressbox-fcu5-07", "page": 9, "at": [3766.9, 2199.0], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3735.0, 2268.6, 3769.9, 2312.9], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [3711.6, 2145.1, 3824.6, 2248.4] },
+        { "id": "pressbox-fcu5-08", "page": 9, "at": [3635.9, 2380.9], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3597.5, 2444.0, 3632.3, 2488.4], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [3581.9, 2327.9, 3695, 2431] },
+        { "id": "pressbox-fcu5-09", "page": 9, "at": [3479.6, 2566.6], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3439.8, 2631.7, 3474.7, 2676.0], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [3425.5, 2513.5, 3533.3, 2616.7] },
+        { "id": "pressbox-fcu5-10", "page": 9, "at": [3334.0, 2742.6], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3284.2, 2800.8, 3319.0, 2845.1], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed", "body_bbox": [3280, 2689.6, 3385.7, 2792.6] },
+        { "id": "pressbox-fcu5-11", "page": 9, "at": [3163.1, 2944.7], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3107.6, 2999.4, 3142.5, 3043.8], "family": "fan coil unit (duct-transition body)", "association_type": "adjacent", "transform_family": "rigid", "countable": true, "reference_source": "manual_seed" }
       ],
       "review": {
         "render": "ground_truth/reviews/18__vol2__092/p9-p9-full-poppler-poppler.png",
@@ -707,7 +720,8 @@
           "M1.41 contains eleven installed FCU-5 assemblies and one installed FCU-4 assembly with the same fan-coil body; one FCU-5 is the seed, leaving eleven expected placements. The schedule independently lists FCU-5 QTY 11 and FCU-4 QTY 1.",
           "Each FCU identity is a divided tag with FCU above its schedule/type number. Eleven distinct same-style FCU-5 tag blocks establish that 5 is a repeated schedule type, not one globally unique asset ID; every accepted placement owns its own exact tag-block box.",
           "Two geometrically similar fan-coil assemblies at the top of the plan sit inside the N.I.C. area and carry no FCU tag. Both remain explicitly withheld rather than being promoted from shape alone.",
-          "The case runs with scope set. All eight plan-role sheets are searched completely, while the mechanical cover/legend, elevation, and three schedule sheets are disclosed as skipped reference pages. No table extraction path is invoked by symbol sweep."
+          "The case runs with scope set. All eight plan-role sheets are searched completely, while the mechanical cover/legend, elevation, and three schedule sheets are disclosed as skipped reference pages. No table extraction path is invoked by symbol sweep.",
+          "v2 review: rendered the full plan region with all twelve rings (reviews/18__vol2__092/p9-overview.png) plus individual tight crops of the seed and four instances -- conference-fcu4, pressbox-fcu5-07, and both a tight and a wider crop of pressbox-fcu5-11 (p9-seed.png, p9-conference-fcu4.png, p9-pressbox-fcu5-07.png, p9-pressbox-fcu5-11.png, p9-fcu5-11-wide.png) -- and viewed all six with the Read tool. The whole plan is drawn on a single consistent diagonal (the building itself, not per-instance rotation), and every fan-coil body actually viewed sits at that same shared angle with its FCU tag hexagon immediately below-left and no leader line, so association_type is adjacent and transform_family is rigid throughout -- the shared page-wide diagonal does not change the relative seed-to-instance transform, which is pure translation. body_bbox for the seed and all eleven instances was computed via one batched fingerprintSymbol pass and converged tightly for ten of eleven (74-80 segments against the seed's own 77, centers within 1-2px of their own frozen at). pressbox-fcu5-11 returned 140 segments (nearly 2x) despite its center converging just as tightly; its own tight crop shows only the plain body (no visible extra linework in that narrower frame), but the wider crop confirms a diamond-shaped duct-fitting glyph (a numbered flow fitting) sitting close enough downstream to be pulled into the fixed-size rect. Per the same standard used for case 10's and case 11's duct/hardware-adjacent outliers, this is left with no body_bbox rather than one padded with a neighboring fitting's geometry."
         ]
       }
     },
