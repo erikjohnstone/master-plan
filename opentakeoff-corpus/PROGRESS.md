@@ -1,5 +1,86 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 3:
+Form XObject nesting depth. Before writing any tracking logic, read this
+build's own pdf.js worker source (`web/node_modules/pdfjs-dist/build/
+pdf.worker.mjs`, `OPS.paintFormXObjectBegin` call site, ~line 30550) per
+the goal document's own explicit instruction not to assume what the op
+exposes. Confirmed: `const args = group ? [matrix, null] : [matrix,
+bbox];` — no object id, no reference, no name at all. So per-invocation
+IDENTITY (telling two placements of the SAME reusable Form XObject apart
+from two different-but-similar ones — needed for the "reusable Form
+XObject" corpus stratum's harder half) is not free here; a real answer
+needs a normalized content-signature hash over the form's own op stream,
+which is real further work and is deliberately DEFERRED to its own slice.
+
+What depth alone already buys: it separates page-level ink from ink
+drawn inside a Form XObject's own content stream, which is what
+"symbols embedded in duct/pipe carriers" and "reusable Form XObject
+cases" (both named Phase 1 corpus strata) need to be told apart from
+ordinary page ink first, before identity is ever attempted.
+
+Added `formDepth: number` to `SubPath` (a REQUIRED field, like every
+other `SubPath` field except the array-level optionals on
+`VectorGeometry`) — 0 at page level, +1 per `Do`-invoked form, restored
+on that form's End. Implemented as a plain counter (`let formDepth = 0`)
+alongside `lw`/`lum`/`fillLum`/`dashed`, but deliberately NOT part of
+the save/restore 5-tuple those live in: forms nest strictly on
+Begin/End, never on q/Q, and a form's own internal q/Q pairs must not
+perturb it (verified by a dedicated test: dash state round-trips
+through both save/restore AND Begin/End, but a Begin/End pair changes
+only depth, not anything living in the q/Q stack). Incremented in the
+`OPS.paintFormXObjectBegin` handler, decremented in
+`OPS.paintFormXObjectEnd`, with an underflow guard (`if (formDepth > 0)
+formDepth--`) so a malformed/unbalanced stream can never produce a
+negative depth. Threaded into `openSub` via a `pathFormDepth` capture
+taken at the same point as `pathFill`/`pathDashed`, right before
+`constructPath` starts walking the op list — the same "graphics state
+cannot change mid-path" reasoning both of those already use.
+
+New focused test file `web/test/formDepth.test.ts` (5 tests, following
+the exact fixture-construction pattern `dashState.test.ts` established):
+page-level ink reads 0; one Begin/End pair reads 1 inside and 0 again
+after; nested Begin/End reads 2 then unwinds one level at a time; a
+stray End with no matching Begin never goes negative; depth is tracked
+independently of dash/save-restore state sitting alongside it in the
+same op stream. All 5 pass.
+
+Fixed the 4 pre-existing hand-built `SubPath` literals in
+`drawnrooms.test.ts` and `geometry.test.ts` (2 each) to add
+`formDepth: 0`, using the same grep-first-fix-everywhere-at-once
+discipline written up for the `dashed` field: `grep -rln "dashed: false"
+web/test/` to find every occurrence across the whole test tree (not just
+the ones hit by accident), then one `sed -i` pass across both files,
+then a confirming grep showing all 4 lines fixed. Worth repeating for
+every future required-field addition to `SubPath`.
+
+Verification: `npx tsc --noEmit` on `web/` — clean, zero errors. Ran
+every test file that imports `oneclick.ts` or `SubPath` individually
+(19 files, 265+ individual test cases across primType, dashState,
+formDepth, drawnrooms, geometry, layerExtract, gapBridge, strokeLum,
+layerIoU, benchScore, detectLadder, detectRooms, doorWedge, doorseal,
+hatchFamilies, rastermask, resolutionInvariance, ringTidy, rules,
+sweepNegative) — 0 failures, 0 regressions. Confirmed the MCP/Session
+side (`mcp/src/session.ts`, which imports `oneclick.ts` transitively)
+still loads cleanly via `node --import tsx`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — `oneclick.ts` is the one
+shared vector-extraction implementation used by both the browser canvas
+and MCP/Session; there is no separate path to diverge onto.
+
+Not done in this slice, left open for later Phase 2 work: Form XObject
+content-signature hashing (true per-invocation identity, the harder
+half of the "reusable Form XObject" stratum); cap/join/miter-limit
+graphics state (the remaining named "graphics-state attributes
+available from pdf.js" after line width, stroke/fill luminance, clip
+state, dash pattern, and now form depth); circle/ellipse-approximation
+recovery (grouping a closed bezier/polyarc run fitting one circle, a
+further `primType` value deferred since slice 1); text-span and
+exploded-text-mask integration into the shared index; junction/
+collinearity/parallel/perpendicular relational analysis; a real spatial
+index; document-hash+page+parser-version caching; memory accounting
+with a disclosed cap. None of Phases 3-8 have been started.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — slice 2:
 dash-pattern graphics state. Second of the goal's named "graphics-state
 attributes available from pdf.js" (line width, stroke/fill luminance,

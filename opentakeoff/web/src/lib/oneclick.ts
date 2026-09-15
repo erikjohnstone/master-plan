@@ -87,6 +87,21 @@ export interface SubPath {
    *  duct run, or a demolition-scope outline is drawn dashed by convention;
    *  a symbol's own body linework virtually never is. */
   dashed: boolean;
+  /** GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 2 — Form XObject nesting
+   *  depth: 0 at page level, 1 inside one `Do`-invoked form's own content
+   *  stream, 2 inside a form invoked from within that form, and so on.
+   *  Confirmed by reading this pdf.js build's own worker source before
+   *  assuming anything (the goal's own explicit instruction): `Do` on a
+   *  Form XObject emits `paintFormXObjectBegin` with ONLY `[matrix, bbox |
+   *  null]` — no object id, no reference, no name — so per-invocation
+   *  IDENTITY (telling two placements of the SAME reusable block apart from
+   *  two coincidentally similar but different ones) is not free here and is
+   *  real further work (a normalized content-signature hash), deliberately
+   *  deferred to its own slice. Depth alone is already useful on its own:
+   *  it is what "symbols embedded in duct/pipe carriers" and "reusable Form
+   *  XObject cases" (both named corpus strata in Phase 1) actually need to
+   *  be told apart from page-level ink first. */
+  formDepth: number;
 }
 /** A positioned text item, image px: (x, y) is the baseline START, w/h the
  *  rendered extent. The text layer is evidence about the DRAWING that the
@@ -380,10 +395,11 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   };
   let pathFill = 0;                 // the fill colour of the path being built
   let pathDashed = false;           // the dash state of the path being built
+  let pathFormDepth = 0;            // …nor which Form XObject nesting it lives in
   const openSub = (flags: number, at: Point) => {
     sealSub();
     const k = metaArr.length;
-    sp = { i0: k, i1: k, x0: at[0], y0: at[1], x1: at[0], y1: at[1], closed: false, flags, fillLum: pathFill, dashed: pathDashed };
+    sp = { i0: k, i1: k, x0: at[0], y0: at[1], x1: at[0], y1: at[1], closed: false, flags, fillLum: pathFill, dashed: pathDashed, formDepth: pathFormDepth };
   };
   // every segment push goes through this, so a subpath's range and bbox can
   // never drift from what actually landed in segs
@@ -425,6 +441,15 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   // false is the right default. `[] 0 d` (explicitly solid) also reads
   // false — it is not a distinct state from never having called setDash.
   let dashed = false;
+  // Form XObject nesting depth (Phase 2): a plain counter, not part of the
+  // save/restore graphics-state tuple — it only changes on Begin/End, never
+  // on q/Q, and a form's own internal q/Q pairs must not perturb it. Confirmed
+  // by direct inspection of pdf.js (pdf.worker.mjs, OPS.paintFormXObjectBegin)
+  // that the op's args are only `[matrix, bbox | null]` — no object id or
+  // name at all — so depth is the identity signal available here; true
+  // per-object identity (same XObject reused twice ⇒ same subpath signature)
+  // would need a content-hash and is deliberately deferred to a later slice.
+  let formDepth = 0;
   const stack: Array<[number[], number, number, number, boolean]> = [];
   // Marked-content / Optional Content (#85): a purely SEQUENTIAL stack — not
   // graphics state, so save/restore never touches it, and a Form XObject with
@@ -474,8 +499,8 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
     // indistinguishable until now, which is why a wall test had to fall back
     // to guessing at a figure's shape.
     else if (fn === OPS.setFillRGBColor && args) { const L = strokeLuminance(args); if (L !== null) fillLum = L; }
-    else if (fn === OPS.paintFormXObjectBegin) { stack.push([m.slice(), lw, lum, fillLum, dashed]); if (args && args[0]) m = mul(m, args[0]); }
-    else if (fn === OPS.paintFormXObjectEnd) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; } }
+    else if (fn === OPS.paintFormXObjectBegin) { stack.push([m.slice(), lw, lum, fillLum, dashed]); if (args && args[0]) m = mul(m, args[0]); formDepth++; }
+    else if (fn === OPS.paintFormXObjectEnd) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; dashed = p[4]; } if (formDepth > 0) formDepth--; }
     else if (fn === OPS.beginMarkedContent) { mcStack.push(-1); }
     else if (fn === OPS.beginMarkedContentProps) {
       // worker emits ["OC", data] where data is {type:"OCG", id}, an OCMD
@@ -565,6 +590,7 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       const pathLum = lum;          // stroke color cannot change mid-path (#260)
       pathFill = fillLum;           // …and neither can the fill colour
       pathDashed = dashed;          // …nor the dash state
+      pathFormDepth = formDepth;    // …nor which Form XObject nesting it lives in
       const visit = (p: Point) => { points.push(p); };
       const lineTo = (p: Point) => { if (cur) { segs.push(cur[0], cur[1], p[0], p[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); primTypeArr.push(PRIM_LINE); noteSeg(cur, p); } cur = p; visit(p); };
       for (const op of ops) {
