@@ -1,5 +1,68 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 —
+batch E scouting (045, 046, 047, 048, 050): four honest dead ends, and
+one real, clean, small candidate (050's SD-2 diffuser) DECLINED on
+purpose, not built, over a holdout-integrity concern the scout correctly
+surfaced rather than silently resolving.
+
+**045, 046, 047, 048 — all rule-2/5 dead ends** (unique one-off tags
+cross-referenced across schedule/plan/detail sheets, not repeated
+physical placements; confirmed by rendering specific repeated-looking
+tokens and finding they're pipe-run labels, header-zone labels, or
+architectural elevator-car labels, not equipment instances). One useful
+new data point from 045: TM/BT sensor-tag boxes are geometrically clean
+(found=6/withheld=0) but structurally CANNOT ever auto-label under the
+current engine -- traced to `labelTokens()`'s admission filter in
+`symbollabels.ts`: a bare 2-letter, no-digit, non-hyphenated,
+non-catalogued token never becomes a label candidate at all, a harder
+and more absolute vocabulary gap than document 013/004's distance-gate
+misses (where the token at least tries to compete, just too far away).
+Worth its own checklist line: a candidate tag needs SOME digit or
+hyphen or catalogued-exception membership to have any chance, full stop,
+independent of distance.
+
+**050 — a real, verified, clean candidate correctly withheld.** SD-2
+ceiling diffuser (page 17/MH-101-4): found=3, withheld=6 (including one
+explicit `hold:"density"` near-duplicate correctly excluded), scores
+0.932-0.959, genuine 0/90/270-degree rotation stratum, all 4 instances
+(seed+3) individually rendered and confirmed. `tag: null` is honest here,
+not a workaround -- there is no per-instance tag on the sheet at all
+(the only "SD-2" text is a schedule-table entry), a real "unlabelled"
+convention already precedented in this corpus, not a distance-gate
+failure like 045's TM/BT.
+
+The scout flagged, rather than silently resolved, that document 050
+shares VA Project #537-17-115 and the same building (Jesse Brown VAMC,
+Chicago) as the FROZEN HOLDOUT document 041 -- confirmed a different
+SHA-256/file/construction phase (041 = Phase 3 SPS Remodel, 050 = Phase 4
+Fifth Floor Remodel), so it is not literally the frozen file. Decision:
+DO NOT build this case. Document 041 was deliberately chosen as holdout
+specifically to test generalization *within one archetype* ("a genuine
+train/holdout split within one archetype, not just across archetypes" --
+see the original holdout-freeze entry). Annotating 050 -- the same
+project, same building, almost certainly the same drafting hand and
+conventions, just a different floor/phase -- would specifically undermine
+that exact intended test, for a payoff of only 4 instances on one small
+sheet. Low reward, real integrity risk: not worth it. Extending the
+exclusion list (informal, not a new frozen-holdout entry, since 050 genuinely
+is a different, real document that could still be used for something else
+later if the holdout question is ever revisited): document 052 (also
+Vol2, also project 537-17-115, per the bulk pool's own file list) is
+preemptively flagged with the same caution and should not be scouted
+without this same judgment call being made explicitly again, not
+silently.
+
+Running tally after this batch: 1 landed case (38 instances, document
+042), ten total documents scouted with a real candidate (042 built, 004,
+009, 013, 015, 018, 050 all found-but-disqualified/reverted for distinct
+honest reasons), and roughly 20 documents now confirmed dead ends. Full
+48-case corpus regression re-run kicked off after landing case 48; not
+yet complete as of this note.
+
+SHOULD THIS BE ON THE SHARED PATH? No. Reconnaissance and a documented
+judgment call only -- no cases.json change, no files edited.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 1 item 3 — FIRST
 LANDED corpus-expansion case: `48-patriot-cafe-mh102-cd1-diffusers`, 38
 instances, PASSING. Batch D's document 042 scout (CD-1 ceiling diffuser)
