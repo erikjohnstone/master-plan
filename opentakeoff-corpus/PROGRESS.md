@@ -1,5 +1,94 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 7
+(partial, independent per-primitive decisions) + requirements 4/5's
+explicit unowned/exclusive and unassigned/ambiguous states. Requirement
+7 asks for "deterministic branch-and-bound, min-cost flow, or another
+exact/controlled method for small clusters" — a JOINT solve where
+assigning one contested primitive can change another's own evidence
+within the same cluster. This slice is deliberately smaller than that:
+it resolves each contested primitive's ownership INDEPENDENTLY from
+the prior slice's static eligibility scores, not jointly/iteratively.
+Disclosed explicitly in the module header, not silently presented as
+the full algorithm.
+
+New `web/src/lib/ownershipAssignment.ts`:
+- `resolveClusterOwnership(cluster, scores, opts?)`: for every
+  contested primitive, sorts its `EligibilityScore[]` entries
+  descending, and accepts the top claimant only when it leads the
+  runner-up by at least `opts.minMargin` (default 0.05) — otherwise
+  reports the primitive `"ambiguous"` (`proposalId: null`), requirement
+  5's own "explicit unassigned candidate state so ambiguity can
+  abstain." Never guesses on a near-tie.
+- `resolveExclusiveOwnership(cluster, proposalsById)`: resolves the
+  OTHER half of a cluster — primitives claimed by exactly one proposal
+  — by direct membership alone (requirement 2's first listed signal,
+  already conclusive), no scoring needed. Together the two functions
+  give a caller a complete per-cluster ownership picture.
+- Every `AssignmentDecision` carries at most one `proposalId` by
+  construction (or `null`) — this is what makes Phase 4's own gate ("no
+  primitive can support two accepted physical instances") hold
+  structurally, not just by convention.
+- Requirement 6 (minimum-cost bipartite/rectangular assignment) is
+  explicitly NOT this module: the goal document names that for
+  "tag-to-body and schedule-to-body matching," a different, later
+  (Phase 6) problem, not primitive-to-instance ownership within a
+  cluster — noted in the header so the two aren't conflated later.
+
+New `web/test/ownershipAssignment.test.ts` (5 tests, all passing): a
+decisive winner (clear style + connectivity lead) is assigned, not left
+ambiguous; a real degenerate tie (no exclusive evidence anywhere in the
+cluster — the exact pattern requirement 2's own real-sheet validation
+found) is reported ambiguous with `margin: 0`, never guessed;
+`minMargin` is shown to be a real, tunable threshold by running the
+same scores at both an unreachable (0.99) and a permissive (0) margin
+and getting opposite decisions; no decision ever names more than one
+`proposalId`; exclusive primitives resolve to their sole claimant via
+`resolveExclusiveOwnership` with `reason: "exclusive"` and no score.
+
+Real-sheet validation: ran the full pipeline through to assignment
+decisions on Cherry Point #12 (102,352 primitives, 5 clusters, 1,678
+contested primitives) plus 6 further sheet/page combinations across 3
+other corpus PDFs (tarrant-county-mechanical, weld-county-mechanical-
+permit, bldg5406-hvac-demo-mechanical) — no crash anywhere, and an
+explicit conservation check (no primitive receives two decisions
+across the whole run) held on every sheet. Also checked 5 further
+Cherry Point pages (3, 5, 8, 15, 20; total primitive counts ranging
+8,612 to 144,273 — genuinely different per page, confirming no stale-
+index caching) and every one reported the identical 5 clusters/1,678
+contested/0 exclusive breakdown: consistent with this drawing set
+reusing one shared title-block/legend/general-notes Form XObject
+verbatim across every sheet, which real construction sets commonly do
+— a real cross-page consistency check that increases confidence in
+Lane A/B/fusion/ownershipConflicts.ts's own correctness rather than
+indicating a bug, though not independently confirmed against the PDF's
+own content stream. On Cherry Point #12 (and every other Cherry Point
+page checked) specifically: 0 of 1,678 contested primitives were
+assigned — every
+single one came back ambiguous, because (per the prior entry's own
+root-cause finding) none of that sheet's 5 clusters has ANY exclusive
+primitive to score against. This is the correct, honest behavior given
+that upstream finding, not a new defect — but it's also a real,
+disclosed limitation of THIS slice: on a sheet shaped like this one,
+an independent-decision resolver contributes nothing yet; unblocking
+it needs either the still-undone joint solve (assigning primitives
+together can let Lane B's own smaller components "vote" on the larger
+Lane A body's true membership) or a different signal entirely (a
+completeness/granularity preference, as the prior entry already named).
+The other 3 sheets produced 0 clusters at all on the pages checked —
+real variation in how heavily each sheet's Form XObjects overlap Lane
+B's own connected components, not a gap in this module.
+
+Verification: `npx tsc --noEmit` clean; new test file passes
+individually (5/5); confirmed the module loads cleanly from `mcp/` via
+tsx; real-sheet checks above. Does not modify `ownershipConflicts.ts`
+or `ownershipEligibility.ts`.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — the actual accept/abstain
+decision for a disputed primitive is squarely "whether it counts" and
+"what tag/body owns it," and Phase 4's own gate depends on this
+module's structural at-most-one-proposal guarantee.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2
 (partial) — eligibility scoring for CONTESTED primitives. Requirement
 2's own full list is "direct Form/subpath membership, connectivity
