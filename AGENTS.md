@@ -31,19 +31,22 @@ non-obvious.
 
 When working autonomously toward the corpus goal:
 
-**No subagents.** The coordinator alone implements, runs shell commands, profiles,
-and verifies. Do not dispatch `Task` subagents (`explore`, `debug`, `computerUse`,
-etc.), cloud workers, or any delegated agent for corpus-goal work unless the user
-explicitly re-enables delegation.
+**Subagents allowed.** The user has explicitly re-enabled delegation. The
+coordinator may dispatch `Task`/`Agent` subagents and cloud workers for
+corpus-goal work, subject to the same discipline as coordinator-only work:
+narrow, well-scoped tasks with a clear owner, no worker holding the critical
+path hostage, and every worker result independently reproduced and verified
+before it is trusted (see 5 below).
 
-1. Keep implementation, testing, and integration on the coordinator VM as the
-   critical path. Do not dispatch cloud workers unless the user explicitly
-   re-enables them; repeated cloud-state failures made them negative expected
-   value for the current run.
-2. If cloud workers are re-enabled, use Composer 2.5 Fast unless the user
+1. Keep final implementation, testing, and integration decisions on the
+   coordinator as the critical path. Delegated work (subagents or cloud
+   workers) is welcome, but the coordinator remains responsible for
+   verifying and integrating it — never merge a worker's claim unchecked.
+2. When dispatching cloud workers, use Composer 2.5 Fast unless the user
    explicitly changes the model. Assign only short, isolated, non-overlapping
-   tasks; never make their output a dependency of coordinator progress.
-3. While authorized cloud workers are active, maintain a recurring two-minute
+   tasks; never make their output a dependency of coordinator progress without
+   independent verification first.
+3. While cloud workers are active, maintain a recurring two-minute
    health check against their backend lifecycle state. Immediately account for
    workers in `ERROR`; do not rely only on delayed completion notifications or
    the last progress message visible in the UI.
