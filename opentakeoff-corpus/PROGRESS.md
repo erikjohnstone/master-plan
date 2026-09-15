@@ -1,5 +1,62 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 shadow/parallel-run
+harness — the Phase 7 audit's own explicit prerequisite ("recommend a
+shadow/parallel-run harness against the 47-case corpus before swapping
+the real path") for the deferred, highest-blast-radius requirements 2/3
+(refactoring symbol_sweep/sweep_schedule_row internals to consume the
+new candidate/ownership/verifier modules).
+
+NEW file: `opentakeoff/mcp/scripts/symbol-sweep-shadow-diff.mjs`. A pure
+comparison tool, not a new corpus runner: it takes two JSON report
+files already produced by the EXISTING, unmodified
+`symbol-sweep-corpus.mjs` (same `--mode`, required — it refuses to
+compare reports run in different modes) and reports, per case id:
+NEW REGRESSIONS (passed in baseline, now fails — printed loudest,
+first, drives a non-zero exit code), NEW PASSES (real improvement,
+explicitly never used to excuse a regression elsewhere), found-count
+drift with ok status unchanged (informational, still worth a human
+look), and cases missing from/new to the candidate run. It never runs,
+calls, or modifies `symbol-sweep-corpus.mjs`, `session.ts`, or
+`symbolsweep.ts` — the actual internals refactor (requirements 2/3)
+remains untouched and still deferred.
+
+VALIDATED against 4 synthetic fixtures (not yet the real corpus — see
+below): a self-diff (identical baseline/candidate) reports 0
+regressions/0 new passes/all-unchanged, exit 0; a mixed fixture
+exercising all 4 non-trivial branches at once (one regression, one new
+pass, one found-count drift, one case new to the candidate) reports
+each correctly and exits 1; a mode-mismatch fixture is refused with
+exit 2; a malformed report (no `.results` array) is refused with a
+clean one-line error (fixed mid-slice — it originally threw an
+uncaught exception with a raw stack trace, now caught and reported
+cleanly, exit 2).
+
+IN PROGRESS, DISCLOSED: a real baseline capture
+(`node --import tsx scripts/symbol-sweep-corpus.mjs --mode=default`,
+matching real production defaults) was launched in the background
+against the full real 47-case corpus to become the actual reference
+snapshot any future requirement-2/3 change gets diffed against. Per
+this project's own repeatedly-confirmed lesson that a background-task
+"completed" notification reports only the launcher-wrapper process
+finishing, not the real worker, this was directly re-verified: the
+notification fired after ~1 case, but `ps aux` showed the real node
+worker still running (102% CPU, genuinely computing, not stalled), and
+the log had only 2/47 cases at that point. As of this entry the real
+worker is still running (5/47 cases logged; per-case time is highly
+variable, 7.7s-201s observed so far) — the real committed baseline
+artifact and its self-diff-against-itself sanity check are real
+further work for the next slice, not yet done. The tool above is
+already fully validated on its own logic via the synthetic fixtures;
+what remains is purely capturing and committing the real reference
+data, and re-running the same sanity check against it.
+
+DISCLOSED, NOT ATTEMPTED: the actual symbol_sweep/sweep_schedule_row
+internals refactor (Phase 7 requirements 2/3) and the new
+MEP-corroboration call site (requirement 7) remain deferred until this
+harness is proven against real corpus data, per the audit's own
+explicit ordering.
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 7 fifth slice —
 requirement 5: "Preserve existing MATCH, SCHEDULE_ONLY, PLAN_ONLY,
 REFUSED, and AMBIGUOUS semantics; add evidence states additively."
