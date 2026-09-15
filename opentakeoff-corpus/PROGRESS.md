@@ -1,5 +1,119 @@
 ## Active work
 
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 5 first slice —
+rigid/affine verification on isolated support, requirements 1-3 and 5.
+Preceded by a dedicated investigation of the existing mature
+symbolsweep.ts/symbolAffine.ts production system (its own 47-case default
+gate is what Phase 5's own gate explicitly says must not regress): the
+investigation found production `matchSymbol`'s correspondence and
+topology logic is tightly coupled to its own `EndpointGrid` and
+one-directional `gatherCorrespondences` — not safely reusable in
+isolation — while its 5 PURE MATH exports (`fitAffine`, `decomposeAffine`,
+`affineWithinBounds`, `AFFINE_MIN_SINGULAR`, `DEFAULT_AFFINE_BOUNDS`) are
+genuinely pure and safe to import directly, unmodified. Also surfaced a
+real documented production trap (PROGRESS.md's own "Jonesboro Heat Pump
+Upgrades" entry): calling `matchSymbol` raw bypasses `Session`'s own
+default option wrapper and silently runs rigid-only, since
+`matchSymbol`'s own bare default has affine OFF while production's real
+default (`AFFINE_WIRE_DEFAULT`) has it ON — noted here so this module's
+own future integration doesn't repeat it.
+
+NEW `rigidAffineVerify.ts`: `verifyIsolatedSupport(idx, candidateIds,
+referenceIds)` tries the 8 fixed 0/90/180/270-degree x mirror rigid
+symmetries FIRST (reimplemented fresh — `symbolsweep.ts`'s own
+`transformsFor` is module-private/unexported), accepting a rigid
+transform outright once >= `DEFAULT_RIGID_INLIER_FRACTION` (0.6) of the
+smaller shape's own points land within `DEFAULT_INLIER_TOLERANCE_PX` (3)
+after a NEW mutual/injective nearest-neighbor correspondence pass
+(`mutualNearestCorrespondences` — built fresh, not `symbolAffine.ts`'s own
+one-directional, `EndpointGrid`-coupled `gatherCorrespondences`; a
+dedicated test confirms a real many-to-one collapse produces at most one
+mutual pair, never a double-assignment). Falls through to a BOUNDED
+affine refinement, via `symbolAffine.ts`'s own unmodified `fitAffine` +
+`decomposeAffine` + `affineWithinBounds` (direct import, zero changes to
+that file), only when rigid alone is insufficient. Returns one of three
+honest states — `verified_rigid`, `verified_affine`, or
+`insufficient_evidence` — never a false positive on unrelated geometry.
+
+9 new tests in rigidAffineVerify.test.ts: exact identity match verifies
+rigid with near-zero residual; a REAL 90-degree PDF CTM rotation
+(independently extracted, not merely relabeled) verifies rigid, not
+affine-only; an unrelated structurally-different shape stays
+insufficient; a bounded 1.3x/0.85x anisotropic stretch verifies affine,
+never rigid; empty candidate/reference sets are handled safely without a
+crash or false positive; a many-to-one collapse is rejected; real
+reciprocal nearest neighbors are found; all 8 RIGID_TRANSFORMS are
+independently verified as real orthogonal (det=+-1, unit/orthogonal
+columns) matrices with 8 distinct labels; primitiveMidpoints returns the
+real per-primitive midpoint. One real bug caught and fixed before this
+shipped: the first test-file draft destructured a translated candidate
+glyph's own coordinates directly out of a raw Op's internal args shape
+(`[opsList, coordsList]`), silently producing a garbled `ops` array whose
+`for...of` loop matched nothing and emitted zero segments for the whole
+candidate half — caught by the resulting test failure (`Cannot read
+properties of undefined`), not assumed away; fixed by deriving GLYPH from
+typed coordinate quads directly instead of reaching back into an Op's own
+internal shape. `tsc --noEmit` clean; 9/9 new tests pass.
+
+DISCLOSED, NOT ATTEMPTED in this slice: requirement 4's own full
+coverage/topology signals beyond point-correspondence inliers; the goal's
+full 9-state evidence vocabulary (only 3 states exist so far); running or
+verifying against the production 47-case gate itself — this module has
+never been wired into `symbolsweep.ts`/`Session` at all, it is a
+standalone, independently-tested primitive, not yet integrated;
+requirements 6-9 (topology-aware repeated-instance grouping, the joint
+tag/leader assignment those later requirements build on). This is real
+groundwork for Phase 5, not a completed phase.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes — new, isolated, independently
+tested module; touches no existing VectorGrid/table/schedule/citation/
+bbox code and imports only pure, unmodified math from symbolAffine.ts.
+
+2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2 —
+the full 33-case (40 (pdf,page) groups, 422 ground-truth instances)
+corpus-wide result of Lane C + `coverageAgreement`, the measurement the
+two entries below this one left in progress. Same
+`score-ownership-against-ground-truth.mjs` script, `--with-lane-c` vs
+baseline, run to completion in the background (baseline finished first,
+confirming microF1 0.2044 exactly matches the number already on record;
+`--with-lane-c` finished after the performance fix two entries below,
+consistent with its own bounded-memory Colville-alone check).
+
+RESULT: microF1 0.2044 -> 0.3939 (macroF1 0.334 -> 0.391) — roughly a
+1.9x corpus-wide microF1 improvement, a real, substantial, CORPUS-WIDE
+confirmation of the Cherry-Point-only 5.1x figure two entries below (a
+single-case number was always going to be more extreme than the full
+corpus's own average).
+
+HONEST TRADEOFF, disclosed rather than smoothed over: this is a
+recall-for-precision trade, not a free win. microPrecision fell from
+0.863 to 0.423 while microRecall rose from 0.116 to 0.368 — Lane C's
+tag-anchored regions recover real fragmented ink (raising recall a lot)
+but also let some proposals claim primitives that were not really theirs
+(lowering precision). The STRICT per-instance gate (Phase 4's own >=0.95
+F1 requirement) actually got WORSE by instance count: atOrAboveGate95
+fell from 13/405 (3.2%) to 4/405 (1.0%) even as the aggregate micro/macro
+F1 roughly doubled — a small number of previously-near-perfect instances
+are now being pulled slightly below the strict gate by Lane C's broader
+(and occasionally over-eager) claims, even though the corpus-wide average
+is clearly better. Neither number is cherry-picked over the other here;
+both are reported because Phase 4's own gate 3 cares about the STRICT
+per-instance count, not the aggregate.
+
+Pre-existing, unrelated to this change (confirmed present in BOTH the
+baseline and --with-lane-c runs): pdf/10 (Lovell Federal Health Care
+Center) trips a 250000-primitive safety cap and analyzes incomplete — not
+a regression from Lane C, not investigated further here.
+
+SHOULD THIS BE ON THE SHARED PATH? Yes as a measurement/disclosure entry
+— no code changed here, this is the honest corpus-scale writeup of work
+already on the shared path in the two entries below. Gate 3 (>=0.95 F1)
+remains open; Lane C + coverageAgreement is real, disclosed progress, not
+a closed gate, and its own precision cost at corpus scale is a genuine
+open problem for whatever comes next (arbitration between competing Lane
+C claims, or a confidence-weighted variant of coverageAgreement, are the
+natural next things to try — not attempted here).
+
 2026-09-15 GEMINI-VECTOR-SYMBOL-GROUNDING-GOAL.md Phase 4 requirement 2
 follow-up — a real performance bug in the entry directly below's own new
 `coverageAgreement` signal, found and fixed BEFORE it ever reached a
