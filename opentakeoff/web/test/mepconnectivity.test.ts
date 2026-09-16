@@ -867,3 +867,15 @@ test("buildMepGraph: detectDashedLines flags every edge split from a detected da
   assert.equal(dashedEdges.length, 6, "every one of the 6 dash pieces becomes its own flagged edge");
   assert.equal(solidEdges.length, 1, "the one long solid run is never flagged");
 });
+
+test("buildMepGraph: detectDashedLines threads dashRunId onto every dashed edge of the SAME run, absent elsewhere (Phase 5 item 1, first increment)", () => {
+  const dashed = dashRun(0, 0, 6, 20, 20);
+  const solid = [500, 500, 500, 900];
+  const g = buildMepGraph([...dashed, ...solid], { mppf: 100, detectDashedLines: true });
+  const dashedEdges = g.edges.filter((e) => e.dashed);
+  const solidEdges = g.edges.filter((e) => !e.dashed);
+  const runIds = new Set(dashedEdges.map((e) => e.dashRunId));
+  assert.equal(runIds.size, 1, "every dashed edge of this one real run shares the same dashRunId");
+  assert.ok(![...runIds].includes(undefined), "a dashed edge always carries a real dashRunId");
+  assert.ok(solidEdges.every((e) => e.dashRunId === undefined), "a non-dashed edge never carries a dashRunId");
+});

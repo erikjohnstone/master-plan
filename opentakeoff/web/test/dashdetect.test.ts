@@ -6,7 +6,7 @@
 // dashdetect.corpus.test.ts) — not a plausible-looking guess.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { detectDashedSegs } from "../src/lib/dashdetect.ts";
+import { detectDashedSegs, detectDashedRuns } from "../src/lib/dashdetect.ts";
 
 // build a straight run of `count` dashes of length `dashLen` separated by
 // `gap`, starting at (x0,y0) and running along +x.
@@ -167,4 +167,46 @@ test("detectDashedSegs: a real bent (L-shaped) control line — short horizontal
   const out = detectDashedSegs(segs);
   assert.deepEqual([...out.slice(0, 2)], [0, 0], "the short horizontal leg alone must stay unflagged (below minCount)");
   assert.ok([...out.slice(2)].every((v) => v === 1), "the real 7-piece vertical leg must be fully flagged");
+});
+
+// ── detectDashedRuns (Phase 5 item 1, first increment) ───────────────────
+// The run-identity output detectDashedSegs's own internal `chain` already
+// computed and discarded — see dashdetect.ts's own DashDetectResult doc
+// comment for why "same run" vs. "different run" is load-bearing (never
+// bridge two different runIds on proximity alone).
+
+test("detectDashedRuns: flags exactly match detectDashedSegs's own output (a pure refactor, not a behavior change)", () => {
+  const segs = dashRun(0, 0, 10, 4, 4);
+  const { flags } = detectDashedRuns(segs);
+  assert.deepEqual([...flags], [...detectDashedSegs(segs)]);
+});
+
+test("detectDashedRuns: every piece of ONE real dash run shares the SAME runId", () => {
+  const segs = dashRun(0, 0, 10, 4, 4);
+  const { runIds } = detectDashedRuns(segs);
+  const ids = new Set(runIds);
+  assert.equal(ids.size, 1, "one continuous run must be exactly one runId");
+  assert.ok(![...runIds].includes(-1), "every piece of a real run must carry a real (non -1) runId");
+});
+
+test("detectDashedRuns: two SEPARATE runs (different pens, geometrically far apart) get DIFFERENT runIds", () => {
+  const runA = dashRun(0, 0, 10, 4, 4);          // meta undefined -> same pen as runB unless given metaBytes
+  const runB = dashRun(1000, 1000, 10, 4, 4);    // far away, but pens differ below to force a real chain break
+  const segs = [...runA, ...runB];
+  const meta = new Uint8Array(20);
+  for (let i = 10; i < 20; i++) meta[i] = 0x10; // a different pen width nibble breaks the chain (sameMeta check)
+  const { flags, runIds } = detectDashedRuns(segs, meta);
+  assert.ok([...flags].every((v) => v === 1), "both runs individually still qualify as real dash runs");
+  const idsA = new Set([...runIds].slice(0, 10));
+  const idsB = new Set([...runIds].slice(10, 20));
+  assert.equal(idsA.size, 1);
+  assert.equal(idsB.size, 1);
+  assert.notEqual([...idsA][0], [...idsB][0], "two geometrically and stylistically distinct runs must never share a runId");
+});
+
+test("detectDashedRuns: a non-dash segment always carries runId -1", () => {
+  const segs = [0, 0, 200, 0]; // one long solid segment, below minCount as a dash run
+  const { flags, runIds } = detectDashedRuns(segs);
+  assert.deepEqual([...flags], [0]);
+  assert.deepEqual([...runIds], [-1]);
 });

@@ -871,6 +871,44 @@ JTS-noding-connected to each other at all today), which needs its own
 gap-bridging design analogous to Phase 3's own centerline-corner bridging,
 not a quick flag on the existing walk.
 
+**A second, small prerequisite piece landed the same day (2026-09-16),
+after a dedicated research pass** (reading `dashdetect.ts`'s own internal
+chain-building, `ductcenterline.ts`'s own `bridgeCornerGaps` as the named
+precedent, and both modules' own real-bug histories) confirmed exactly
+what a real gap-bridging design needs and doesn't have yet: `dashdetect.ts`
+already computes which segments belong to the SAME dash run internally
+(the `chain` array `classify()` receives) but discarded that grouping the
+instant it set a flat `1` flag — two dash pieces from the SAME run and two
+pieces from two DIFFERENT, unrelated runs were geometrically
+indistinguishable in its own output. `detectDashedSegs` is now a thin
+wrapper over a new `detectDashedRuns(segs, meta?, opts?)` that returns
+`{flags, runIds}` — `runIds[i]` is a stable ordinal id shared by every
+segment of the same real run, `-1` for a non-dash segment — computed by
+the SAME internal logic, not a second implementation (`detectDashedSegs`'s
+own 13 existing tests pass unchanged, confirming the refactor is
+byte-identical). `buildMepGraph`'s own `detectDashedLines` option now
+threads a new, equally additive `MepEdge.dashRunId` field alongside the
+existing `dashed` flag when the option is on. 4 new `dashdetect.test.ts`
+tests + 1 new `mepconnectivity.test.ts` test, all passing; both packages
+typecheck clean.
+
+This is deliberately NOT the bridging mechanism itself — it is the one
+piece of information a future bridging step would need and didn't have.
+The research explicitly named why bridging on proximity alone is unsafe
+here (the SAME real over-connection risk shape `ductcenterline.ts`'s own
+history already proved: a first radius-search open-end bridge merged a
+real duct run with a nearby unrelated baseboard-heater control line on
+real Bessemer data) — a positive run-identity signal like this one must
+be gap-bridging's OWN primary gate, not a nice-to-have. **Still not
+attempted:** the actual gap-bridging function (its own new opt-in
+`buildMepGraph` flag, mirroring `bridgeCornerGaps`'s own local
+width/pitch-scaled tolerance design), the walk that crosses it, and — per
+the research's own explicit finding — the mandatory real-corpus
+verification against Bessemer's actual T-thermostat-to-baseboard-heater
+lines a synthetic fixture alone cannot substitute for (every comparable
+cross-system over-connection bug in this codebase's own history was found
+only against real, dense corpus data, never a synthetic fixture).
+
 **Items 2 and 4 landed, 2026-09-16, on explicit authorization** (this
 session's own Stop-hook condition named a starting commit that no amount
 of forward work on Phases 0–4 could ever reproduce — a structurally

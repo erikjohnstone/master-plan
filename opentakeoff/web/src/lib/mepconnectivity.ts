@@ -35,7 +35,7 @@ import { classifyMepLayerName, mepLayerSignal, type MepSystemRole } from "./meps
 import type { LayerInfo } from "./layers.ts";
 import type { Bbox } from "./sheetgraph.ts";
 import { extractDuctCenterlines } from "./ductcenterline.ts";
-import { detectDashedSegs } from "./dashdetect.ts";
+import { detectDashedRuns } from "./dashdetect.ts";
 
 export type LayerSignal = "none" | "weak" | "strong";
 export type Point = [number, number];
@@ -69,6 +69,16 @@ export interface MepEdge {
    *  lines) to prefer or restrict to, never used by traceConnectivity's
    *  own ordinary duct/pipe walk today. */
   dashed?: boolean;
+  /** Present only when `dashed` is true — the SAME run id
+   *  dashdetect.ts's own detectDashedRuns assigns (see its own doc
+   *  comment): two dashed edges sharing a dashRunId are the SAME real
+   *  dash run and may be bridged together; two dashed edges with
+   *  DIFFERENT dashRunIds are not known to be the same run and must never
+   *  be bridged on proximity alone. A real, disclosed prerequisite for a
+   *  future `relation: "controls"` gap-bridging walk (Phase 5 item 1) —
+   *  the actual bridging mechanism itself is NOT built here, only the run
+   *  identity it would need. */
+  dashRunId?: number;
 }
 export interface MepGraph {
   nodes: MepNode[]; edges: MepEdge[]; layerSignal: LayerSignal;
@@ -449,7 +459,7 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
   // discipline held uniformly, not selectively), a real, unmeasured
   // per-sheet cost this project's own performance history (buildMepGraph's
   // own junction-scan fix) says never to assume is free.
-  const dashedSegs = opts.detectDashedLines ? detectDashedSegs(segs, opts.meta, { mppf: ppf }) : null;
+  const dashedRuns = opts.detectDashedLines ? detectDashedRuns(segs, opts.meta, { mppf: ppf }) : null;
   const addEdge = (
     ax: number, ay: number, bx: number, by: number, segIdx: number,
     aKey?: string, bKey?: string,
@@ -458,9 +468,10 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
     const { system, confidence } = systemForLayer(layerIdFor(segIdx));
     const a = nodeFor(ax, ay, aKey), b = nodeFor(bx, by, bKey);
     const ei = edges.length;
+    const dashed = dashedRuns && dashedRuns.flags[segIdx] === 1;
     edges.push({
       a, b, length: Math.hypot(bx - ax, by - ay), system, systemConfidence: confidence,
-      ...(dashedSegs && dashedSegs[segIdx] ? { dashed: true as const } : {}),
+      ...(dashed ? { dashed: true as const, dashRunId: dashedRuns!.runIds[segIdx] } : {}),
     });
     nodes[a].edges.push(ei); nodes[b].edges.push(ei);
   };

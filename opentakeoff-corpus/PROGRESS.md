@@ -1,5 +1,29 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5 item 1, a second small
+prerequisite piece: `dashdetect.ts`'s own internal same-run grouping (the
+`chain` array `classify()` already builds, previously discarded the
+instant a flat flag was set) is now a real, exposed output —
+`detectDashedSegs` is a thin wrapper over a new `detectDashedRuns(segs,
+meta?, opts?)` returning `{flags, runIds}`, `runIds[i]` a stable ordinal
+id shared by every segment of the SAME real dash run (-1 for non-dash).
+`buildMepGraph`'s `detectDashedLines` option threads a matching new
+`MepEdge.dashRunId` field alongside its existing `dashed` flag. A
+dedicated research pass (reading `dashdetect.ts` and `ductcenterline.ts`'s
+own `bridgeCornerGaps` as the named precedent) confirmed this run identity
+is the one real, missing prerequisite a future gap-bridging walk needs —
+and confirmed WHY: bridging two dash pieces on proximity alone repeats the
+exact real over-connection risk shape already proven elsewhere in this
+codebase (`ductcenterline.ts`'s own reverted radius-search bug, which
+merged a real duct with an unrelated control line on real Bessemer data).
+4 new `dashdetect.test.ts` tests + 1 new `mepconnectivity.test.ts` test,
+all passing; the 13 pre-existing `detectDashedSegs` tests pass unchanged,
+confirming the refactor is byte-identical. Still not attempted: the
+actual gap-bridging function, the walk crossing it, and the mandatory
+real-corpus verification against Bessemer's own dashed control lines a
+synthetic fixture can't substitute for. Full detail: the plan doc's own
+Phase 5 section.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 4 item 2, first increment:
 `expandBodyAwareTarget(graph, candidate, inkPad)` in `mepconnectivity.ts`
 — an equipment/device candidate that already carries its own real bbox

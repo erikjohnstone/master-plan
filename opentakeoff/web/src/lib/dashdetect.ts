@@ -69,23 +69,48 @@ const ANGLE_TOL = (3 * Math.PI) / 180;
 // participates in a straight dashed control line.
 const SEG_NONDASH_MASK = 0b1111;
 
-/** One byte per segment (same shape/order as `segs`): 1 when that segment
- *  is part of a detected straight dashed run, 0 otherwise. Pure — never
- *  mutates `segs` or `meta`. Relies on the SAME array-order-is-path-order
- *  assumption oneclick.ts's own markPolylineArcs already depends on for
- *  gap-joining dash-gapped arc chords (a PDF content stream strokes a
- *  path's pieces, dashed or not, in drawing order — consecutive segs
- *  entries are consecutive pieces of the same stroked path). */
-export function detectDashedSegs(segs: number[], meta?: Uint8Array, opts: DashDetectOpts = {}): Uint8Array {
+export interface DashDetectResult {
+  /** Same shape/values as detectDashedSegs's own return — see that
+   *  function's own doc comment. */
+  flags: Uint8Array;
+  /** -1 for a non-dash segment; otherwise a stable ordinal id (0, 1, 2,
+   *  …) shared by every segment `classify` accepted into the SAME chain —
+   *  the exact grouping this module already computes internally (the
+   *  local `chain` array below) and previously discarded the instant
+   *  `flush()` set `flags[i]=1`, before Phase 5 item 1
+   *  (PLAN_CONNECTIVITY_SERVES.md) needed it. Two segments sharing a
+   *  runId are the SAME dash run and may be bridged together; two
+   *  DIFFERENT dash-flagged segments with different runIds are NOT known
+   *  to be the same run and must never be bridged on proximity alone — a
+   *  real, measured failure shape elsewhere in this codebase
+   *  (`ductcenterline.ts`'s own history: a first radius-search bridge
+   *  attempt merged a real duct run with a nearby, unrelated
+   *  baseboard-heater control line on real Bessemer data) that a future
+   *  dash-gap bridge must not repeat by using proximity as its own
+   *  primary gate. */
+  runIds: Int32Array;
+}
+
+/** The same detection `detectDashedSegs` runs, additionally reporting
+ *  which segments belong to the SAME dash run (see `DashDetectResult`'s
+ *  own doc comment) — Phase 5 item 1's own first, purely additive
+ *  increment: the actual gap-bridging walk this run identity would drive
+ *  is real, separate, larger work (its own new opt-in `buildMepGraph`
+ *  flag, verified against real Bessemer control-line data, not a
+ *  synthetic fixture alone — see PLAN_CONNECTIVITY_SERVES.md's own
+ *  research trail) and is NOT attempted here. */
+export function detectDashedRuns(segs: number[], meta?: Uint8Array, opts: DashDetectOpts = {}): DashDetectResult {
   const n = segs.length >> 2;
-  const out = new Uint8Array(n);
+  const flags = new Uint8Array(n);
+  const runIds = new Int32Array(n).fill(-1);
   const minCount = opts.minCount ?? DEFAULT_MIN_COUNT;
-  if (n < minCount) return out;
+  if (n < minCount) return { flags, runIds };
   const feetTrueCeiling = opts.mppf && opts.mppf > 0 ? MAX_DASH_FT * opts.mppf : undefined;
 
   const len = (i: number) => Math.hypot(segs[i * 4 + 2] - segs[i * 4], segs[i * 4 + 3] - segs[i * 4 + 1]);
   const angle = (i: number) => Math.atan2(segs[i * 4 + 3] - segs[i * 4 + 1], segs[i * 4 + 2] - segs[i * 4]);
 
+  let nextRunId = 0;
   const classify = (idxs: number[]) => {
     if (idxs.length < minCount) return;
     const first = idxs[0], last = idxs[idxs.length - 1];
@@ -101,7 +126,8 @@ export function detectDashedSegs(segs: number[], meta?: Uint8Array, opts: DashDe
       const dashLen = Math.max(len(a), len(b), 1e-6);
       if (gap > dashLen * MAX_GAP_TO_DASH_RATIO) return;
     }
-    for (const i of idxs) out[i] = 1;
+    const id = nextRunId++;
+    for (const i of idxs) { flags[i] = 1; runIds[i] = id; }
   };
 
   let chain: number[] = [];
@@ -123,5 +149,16 @@ export function detectDashedSegs(segs: number[], meta?: Uint8Array, opts: DashDe
     chain.push(i);
   }
   flush();
-  return out;
+  return { flags, runIds };
+}
+
+/** One byte per segment (same shape/order as `segs`): 1 when that segment
+ *  is part of a detected straight dashed run, 0 otherwise. Pure — never
+ *  mutates `segs` or `meta`. Relies on the SAME array-order-is-path-order
+ *  assumption oneclick.ts's own markPolylineArcs already depends on for
+ *  gap-joining dash-gapped arc chords (a PDF content stream strokes a
+ *  path's pieces, dashed or not, in drawing order — consecutive segs
+ *  entries are consecutive pieces of the same stroked path). */
+export function detectDashedSegs(segs: number[], meta?: Uint8Array, opts: DashDetectOpts = {}): Uint8Array {
+  return detectDashedRuns(segs, meta, opts).flags;
 }
