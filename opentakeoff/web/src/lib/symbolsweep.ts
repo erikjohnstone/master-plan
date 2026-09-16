@@ -3182,6 +3182,26 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
  * convention, and exactly one same-sized bare suffix must sit near two of
  * those siblings. A page's ordinary detail/dimension numeral cannot satisfy
  * that shape by itself.
+ *
+ * PROXIMITY BOUND, real measured regression (2026-09-16, bessemer-
+ * mechanical-bidset.pdf sheet #7, "Second Floor Mechanical Plan"): at the
+ * previous 25x-median-height radius, a sheet-wide KEYNOTE callout digit
+ * ("1", the reference number for a circled keynote near the laundry room,
+ * unrelated to any tag) sat within radius of TWO real EBB-* siblings
+ * (EBB-5 at 172px, EBB-6 at 218px, against a ~19.15px median sibling
+ * height — 25x = ~479px, comfortably admitting both), satisfying the
+ * nearby>=2 gate and getting recovered as a phantom "EBB-1" even though
+ * EBB-1 is genuinely drawn, correctly, on a DIFFERENT sheet. A keynote
+ * digit is exactly the "ordinary … numeral" this function's own doc
+ * comment above says must not satisfy this shape — the radius was simply
+ * loose enough to admit one anyway on a large, sparse sheet. 10x keeps
+ * both original calibration tests passing with real margin (their own
+ * real distances top out at ~91px against a 10px median height, i.e. a
+ * required multiplier of ~9) while excluding this real false positive
+ * (which needs a multiplier of at least ~11.4 to admit its second
+ * sibling) — a tag's own suffix and its labeled siblings are the same
+ * local drawn cluster (a duct run, a room, a wall), not "somewhere on the
+ * same sheet."
  */
 export function familySuffixTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   const target = key.trim().toUpperCase().replace(/\s+/g, "");
@@ -3207,7 +3227,7 @@ export function familySuffixTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
     const cx = (span.x0 + span.x1) / 2, cy = (span.y0 + span.y1) / 2;
     const nearby = siblings.filter(({ span: sibling }) => {
       const sx = (sibling.x0 + sibling.x1) / 2, sy = (sibling.y0 + sibling.y1) / 2;
-      return Math.hypot(cx - sx, cy - sy) <= medianH * 25;
+      return Math.hypot(cx - sx, cy - sy) <= medianH * 10;
     });
     return nearby.length >= 2;
   });

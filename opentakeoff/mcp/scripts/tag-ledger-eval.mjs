@@ -22,7 +22,7 @@
 // resolution). Pass --baseline to reuse an already-dumped JSON (faster
 // iteration, and lets a --producer swap happen later without touching this
 // script, per the Phase 0.3 plan text).
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { resolveSetFiles, validateSets } from "./corpusFiles.mjs";
 import { buildTagOccurrenceBaseline } from "./tag-occurrence-baseline.mjs";
@@ -187,8 +187,10 @@ if (isMain) {
   const [corpusDir, setId] = argv.filter((a) => !a.startsWith("--"));
   const baselineIdx = argv.indexOf("--baseline");
   const baselinePath = baselineIdx >= 0 ? argv[baselineIdx + 1] : null;
+  const outIdx = argv.indexOf("--out");
+  const outPath = outIdx >= 0 ? argv[outIdx + 1] : null;
   if (!corpusDir || !setId) {
-    console.error("usage: node --import tsx scripts/tag-ledger-eval.mjs <corpus-dir> <setId> [--baseline path.json]");
+    console.error("usage: node --import tsx scripts/tag-ledger-eval.mjs <corpus-dir> <setId> [--baseline path.json] [--out path.json]");
     process.exit(2);
   }
   const corpus = resolve(corpusDir);
@@ -212,5 +214,16 @@ if (isMain) {
     baseline = await buildTagOccurrenceBaseline(files);
   }
   const score = scoreTagLedger(key, baseline);
-  console.log(JSON.stringify({ set_id: setId, ...score }, null, 2));
+  const payload = JSON.stringify({ set_id: setId, ...score }, null, 2);
+  // Prefer a direct file write over stdout: this environment has shown
+  // console.log output redirected via `>` land on the wrong stream or get
+  // truncated under load (see tag-occurrence-baseline.mjs's own header
+  // note and TAG_LEDGER_BASELINE.md) — writeFileSync sidesteps that
+  // entirely, the same fix already applied there.
+  if (outPath) {
+    writeFileSync(outPath, payload);
+    console.error(`[tag-ledger-eval] wrote ${outPath}`);
+  } else {
+    console.log(payload);
+  }
 }

@@ -644,6 +644,28 @@ test("familySuffixTagOcc: ambiguous nearby bare suffixes remain unresolved", () 
   assert.equal(familySuffixTagOcc(spans, "VAV-6").length, 0);
 });
 
+test("familySuffixTagOcc: a sheet-wide keynote digit must not recover as a family suffix (real regression, bessemer-mechanical-bidset.pdf sheet #7)", () => {
+  // Real captured spans (bldg5406-hvac-demo… no — bessemer-mechanical-
+  // bidset.pdf's own "Second Floor Mechanical Plan"): EBB-5..8 are four
+  // real, complete electric-baseboard-heater siblings scattered across a
+  // real floor plan (not a tight cluster), and a bare "1" elsewhere on the
+  // same sheet is a real keynote callout's reference number, not any
+  // device's missing tag prefix — EBB-1 is genuinely drawn on a DIFFERENT
+  // sheet entirely. At the old 25x-median-height radius this "1" sat
+  // within range of two siblings (EBB-5, EBB-6) and got wrongly recovered
+  // as a phantom second EBB-1. At the field's own reasonable local-cluster
+  // scale it must not.
+  const spans: FlatSpan[] = [
+    { str: "EBB-5", x0: 2805.4, y0: 1212.3, x1: 2862.8, y1: 1231.4 },
+    { str: "EBB-6", x0: 2888.9, y0: 1590.3, x1: 2946.3, y1: 1609.4 },
+    { str: "EBB-7", x0: 2781.8, y0: 1951.5, x1: 2839.2, y1: 1970.6 },
+    { str: "EBB-8", x0: 2844.7, y0: 2816.2, x1: 2902.1, y1: 2835.4 },
+    { str: "1", x0: 2844.2, y0: 1383.6, x1: 2854.9, y1: 1402.8 },
+  ];
+  assert.equal(familySuffixTagOcc(spans, "EBB-1").length, 0,
+    "a keynote reference digit must not be recovered as a missing tag prefix suffix just because it sits somewhere on the same large sheet as real family siblings");
+});
+
 test("seed diagnostics: centroid and total length are the fingerprint's own", () => {
   const segs = place([{ at: [0, 0] }, { at: [100, 0] }]);
   const r = sweepSymbols(segs, RECT);
