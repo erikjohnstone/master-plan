@@ -142,7 +142,15 @@ row-driven tool audited (`sweepScheduleRow`, `countMarks`,
 `buildPlanSetTakeoff`) today, for reasons that have nothing to do with tag
 text recognition.
 
-## bldg5406-hvac-demo — partial (not keyed yet, one major finding)
+## bldg5406-hvac-demo — second complete ground-truth key, scored (100%/100% after fixes)
+
+Stale section title from earlier in this session, kept for the history
+below but corrected here: this set's key IS written and committed
+(`keys/bldg5406-hvac-demo.tagocc.csv`, 32 `ROW_LABEL` + 43
+`PLAN_INSTANCE` + 1 `NOTE_MENTION`), and after the two real bugs found
+below were fixed (see "Both confirmed bugs are now fixed" further down),
+this set scores a clean 100% tag→row recall / 100% row→tag exact match,
+zero misses in either direction.
 
 2 of 4 plan-role pages read (M-101 fully; M-501/M-502/M-503 detail sheets
 skimmed — correctly excluded from occurrence search, though M-503 draws a

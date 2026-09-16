@@ -563,3 +563,17 @@ handle (GOAL.md §8 redundancy criterion), with D1–D8 measured true.
 - **Table recall** (the baker-county `CU-*` class) is out of scope and remains
   the ceiling on D3 for those rows; the ledger discloses them as
   `UNSCHEDULED` rather than dropping them, which is the honest outcome.
+- **Never run corpus-eval (or any full-corpus job) concurrently with
+  ground-truth authoring or another heavy test suite.** Confirmed
+  concretely this session: running `corpus-eval.mjs --report` alongside
+  `test:shared-path`, the mcp core suite, and the web suite at once
+  produced a run where every scored set dropped sharply — including a
+  10-tag, 8-page document that should be immune to mere slowness — a
+  strong signal of races on the shared, content-addressed on-disk
+  sheet-graph cache (`cachedSheetGraph`), not a real regression.
+  `opentakeoff-corpus/GOAL.md` already states this rule; this is the
+  concrete evidence for why every future Phase 0/4/6 gate run must
+  respect it, and any harness that auto-backgrounds slow commands after a
+  timeout should be checked afterward for processes that outlived their
+  useful work (a stuck sidecar handshake left ten zombie node+python pairs
+  running unnoticed for over half an hour in this same session).
