@@ -2520,13 +2520,20 @@ export class Session {
     const MARK_RE = /^[A-Z]{1,3}-?\d{1,3}[A-Z]?$/;
 
     // mark vocabulary: stated, or read off the schedule tables' row keys —
-    // a compound key ("R1 / E1") contributes each of its marks
+    // a compound key ("R1 / E1") contributes each of its marks. H8 (plans/
+    // 03-schedule-row-to-drawn-tag-reconciliation-plan.md): this used to
+    // read row.key directly, so a row whose identity lives in a header
+    // row.key doesn't carry (the same "EQUIP NO" shape uniqueFamily used to
+    // drop, corpusTakeoff.mjs's own H8 fix) was invisible to the census
+    // even though sweepScheduleRow/reconcileScheduleFamilyFromGraph already
+    // resolve it correctly via the shared rowIdentityTag.
     type RowCite = { sheet: string; key: string; table: string };
     const rowCite = new Map<string, RowCite>();
     for (const tb of graph.tables) {
       const table = tb.title?.text || `${tb.kind} schedule`;
       for (const row of tb.rows) {
-        for (const part of canon(row.key).split("/").filter(Boolean)) {
+        const identity = String(rowIdentityTag(row) || row.key || "");
+        for (const part of canon(identity).split("/").filter(Boolean)) {
           if (!rowCite.has(part)) rowCite.set(part, { sheet: tb.sheet, key: row.key, table });
         }
       }

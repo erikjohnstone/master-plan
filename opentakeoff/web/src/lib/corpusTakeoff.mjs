@@ -7,7 +7,7 @@
  * CHANGELOG + reset to 0/5.
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
-import { scheduledQtyStatusFromRow } from "./schedulePlanReconcile.mjs";
+import { scheduledQtyStatusFromRow, rowIdentityTag } from "./schedulePlanReconcile.mjs";
 import { VALVES, ACTUATORS, DAMPERS } from "./hvacTaxonomy.ts";
 import { disciplineOfSheetNumber } from "./symbolsweep.ts";
 
@@ -833,27 +833,26 @@ function uniqueFamily(graph, {
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
       let tag = rowKey;
       if (countKeyedIdentCol) {
+        // A count-keyed table's row has no per-row tag identity at all (see
+        // identifierColumnByCardinality's own comment) — the chosen column IS
+        // the identity, never something rowIdentityTag's MARK/TAG-header
+        // chain should second-guess.
         const ident = String(row.cells?.[countKeyedIdentCol]?.text || "").trim();
         if (ident) tag = ident;
-      }
-      // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
-      // Colville FAN SCHEDULE shares a TAG column with grille type codes (1S/2R)
-      // while row.key correctly holds EF-1.
-      const markCell = cellText(row, /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|UNIT\s*TAG|ITEM\s*NO)$/i);
-      if (markCell) tag = String(markCell).replace(/^["'\s]+|["'\s]+$/g, "").trim();
-      // Ampersand-paired TAG ("RF-1 & 2") beats a glued row.key ("RF-12") — Northport
-      // blank return-fan schedule. Still never prefer bare grille-type TAG codes.
-      const tagCell = cellText(row, /^TAG$/i);
-      if (
-        tagCell
-        && /&/.test(tagCell)
-        && /^[A-Za-z]{1,8}[\s\-]?\d/i.test(tagCell.trim())
-      ) {
-        tag = String(tagCell).replace(/^["'\s]+|["'\s]+$/g, "").trim();
-      }
-      if (identityHeaderRe) {
-        const ident = cellText(row, identityHeaderRe);
-        if (ident) tag = String(ident).replace(/^["'\s]+|["'\s]+$/g, "").trim();
+      } else {
+        // H8 (plans/03-schedule-row-to-drawn-tag-reconciliation-plan.md):
+        // this used to be a second, independently-maintained copy of the
+        // same header-preference chain rowIdentityTag already implements for
+        // sweepScheduleRow/reconcileScheduleFamilyFromGraph — the two copies
+        // had drifted (this one never recognized "EQUIP NO" as an identity
+        // header, and picked whichever of UNIT MARK/VALVE MARK came first in
+        // column order instead of always preferring VALVE MARK), so an
+        // "EQUIP NO"-keyed schedule row that sweep_schedule_row/
+        // reconcile_schedule_plan resolved correctly was silently dropped
+        // from this compile path's HVAC family count for the identical
+        // input (baker-county-eoc-bidset.pdf#41). One identity function now.
+        const ident = rowIdentityTag(row, identityHeaderRe);
+        if (ident) tag = ident;
       }
       // Always expand slash compounds (CWP-1/CWP-2). Comma-split only when a
       // key filter can pick family marks (DFC-1 , DCU-1). Untagged titled
