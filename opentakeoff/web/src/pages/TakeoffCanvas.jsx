@@ -2153,7 +2153,19 @@ export default function TakeoffCanvas() {
   const docFor = useCallback((file) => {
     let t = pdfDocsRef.current.get(file);
     if (!t) {
-      t = store.loadPdfData(file).then((data) => pdfjsLib.getDocument({ data }));
+      // The single choke point for "load this sheet's bytes" — ensureSheetDims
+      // swallows a failure here into a friendly "Sheet X not found", but other
+      // direct callers (e.g. the Compare preview below) surface docFor's own
+      // rejection verbatim. store.js's raw message ("PDF not found in local
+      // store: <name>") names no cause and no fix; give every caller a
+      // message that does, once, here, instead of leaking the bare string.
+      t = store.loadPdfData(file).then((data) => pdfjsLib.getDocument({ data })).catch((error) => {
+        throw new Error(
+          `Sheet "${file}" has no bytes in this browser's local storage (${error.message}). `
+          + "It's likely a stale reference — open the Sheets panel, remove that sheet from the project, "
+          + "and re-add the original PDF if it's still needed.",
+        );
+      });
       // never cache a FAILED load: a file removed and re-added under the same
       // name (Manage → remove, then re-open) would otherwise pin the removal-
       // race rejection for the life of the view and refuse to ever render
@@ -7250,6 +7262,26 @@ export default function TakeoffCanvas() {
   // browser cannot spawn the JVM OpenDataLoader CLI, so the Vite/dev (and
   // later API) endpoint builds that same graph server-side. Geometric-only
   // buildSheetGraph remains a last-resort fallback when the endpoint is down.
+  // Every whole-set upload loop below needs ALL sheets' bytes, not just one
+  // match — unlike the citation-resolution loop, silently skipping a sheet
+  // here would upload an incomplete plan set and risk a silently-wrong
+  // compile, so this still fails loudly. But the raw store.js message ("PDF
+  // not found in local store: <name>") gives no next step — a sheet's local
+  // bytes can go missing (a different browser/device, cleared site data, a
+  // stale project saved before a since-fixed bug) with no way back except
+  // re-adding the PDF. Name the sheet and the fix, not just the failure.
+  async function loadPdfDataOrExplain(name) {
+    try {
+      return await store.loadPdfData(name);
+    } catch (error) {
+      throw new Error(
+        `Sheet "${name}" has no bytes in this browser's local storage (${error.message}). `
+        + "It's likely a stale reference — open the Sheets panel, remove that sheet from the project, "
+        + "and re-add the original PDF if it's still needed, then try again.",
+      );
+    }
+  }
+
   async function fetchProductionSheetGraph() {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) return null;
@@ -7264,7 +7296,7 @@ export default function TakeoffCanvas() {
     // this is the one place that can rebuild what the spool discarded.
     const shaToName = new Map();
     for (const name of names) {
-      const bytes = await store.loadPdfData(name);
+      const bytes = await loadPdfDataOrExplain(name);
       try { shaToName.set(await sha256Hex(bytes), name); } catch { /* no WebCrypto: keys stay as sent */ }
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
@@ -7285,7 +7317,7 @@ export default function TakeoffCanvas() {
       if (v != null && v !== "") fd.append(k, String(v));
     }
     for (const name of names) {
-      const bytes = await store.loadPdfData(name);
+      const bytes = await loadPdfDataOrExplain(name);
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
     return fd;
@@ -7493,7 +7525,7 @@ export default function TakeoffCanvas() {
       return basResultForCanvas(result, basShaToName);
     };
     for (const name of names) {
-      const bytes = await store.loadPdfData(name);
+      const bytes = await loadPdfDataOrExplain(name);
       try { basShaToName.set(await sha256Hex(bytes), name); } catch { /* preserve unknown identities */ }
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
@@ -7570,7 +7602,7 @@ export default function TakeoffCanvas() {
     if (opts.evaluationFast) fd.append("evaluationFast", "1");
     const basShaToName = new Map();
     for (const name of names) {
-      const bytes = await store.loadPdfData(name);
+      const bytes = await loadPdfDataOrExplain(name);
       try { basShaToName.set(await sha256Hex(bytes), name); } catch { /* preserve unknown identities */ }
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
