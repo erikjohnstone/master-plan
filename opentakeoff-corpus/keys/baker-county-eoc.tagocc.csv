@@ -1,0 +1,126 @@
+# keys/baker-county-eoc.tagocc.csv -- occurrence-level ground truth for
+# plans/03-schedule-row-to-drawn-tag-reconciliation-plan.md Phase 0.
+#
+# Authored 2026-09-16 from opentakeoff-corpus/raw/baker-county-eoc-
+# bidset.pdf (65 pages). This document was flagged by the original audit
+# for compound luminaire tags ("R1 /C-11" style, an electrical-luminaire
+# family NOT covered by this key) and "RTU-01 vs RTU-1" spelling variants
+# (mechanical, covered below). Coordinates are production "image px"
+# (pt x RENDER_SCALE=2, origin top-left, y down). Every row is a real PDF
+# text span, grounded via the same textSpans()/session.sheet(...).spans
+# the production pipeline itself reads, cross-checked against rendered
+# page images.
+#
+# SCOPE: this key covers exactly one family group -- the mechanical
+# "EQUIP NO"-keyed equipment on sheet M6.01 (RTU-1, RTU-2, CU-1, CU-2,
+# EF-1, ERV-01, FCU-1, FCU-2, EWH-1, EWH-2) -- chosen because it is the
+# EXACT real-document shape a live production code comment
+# (mcp/src/session.ts:3877-3888) already names as a historically-real
+# regression trigger, and because this session's clean corpus-eval re-run
+# independently caught the SAME family being silently dropped by
+# `compile_corpus_takeoff` today (H8; see TAG_LEDGER_BASELINE.md). Not
+# covered: the CD-1/RG-1/EG-1 diffuser-grille family (page 41, many
+# instances, not sampled), the luminaire family (page 59, this plan's own
+# named "R1 /C-11" compound-tag hypothesis, not sampled), and all
+# architectural/electrical/plumbing schedules.
+#
+# Real page->role map for the pages this key covers:
+#   #38 plan      M1.01 "MECHANICAL - LEVEL 1 PLAN" -- FCU-1, FCU-2,
+#       ERV-01, EWH-1, EWH-2 drawn instances. RTU-1/RTU-2 are ALSO
+#       mentioned here, correctly spelled, but only inside a longer note
+#       sentence run ("...UP TO RTU-1. TRANSITION TO UNIT AS REQUIRED.")
+#       -- a NOTE_MENTION, not a standalone span, so not captured as its
+#       own row below (would need manual sub-span extraction; the
+#       spelling-consistency point it would make is already established
+#       by the roof-plan PLAN_INSTANCE rows below).
+#   #39 plan      M1.21 "MECHANICAL - ROOF PLAN" -- RTU-1, RTU-2, CU-1,
+#       CU-2, EF-1 drawn instances (the actual rooftop equipment)
+#   #41 schedule  M6.01 "MECHANICAL SCHEDULES" -- carries SIX separate
+#       schedule/reference tables relevant to this family (see below)
+#
+# H2 LEAD, CHECKED CAREFULLY, NOT CONFIRMED AS A DRAWN-TAG CASE: sheet
+# #41 hosts a "REQUIRED OUTSIDE AIR FLOW RATE" ventilation worksheet whose
+# own subtotal-group rows spell the two rooftop units "RTU-01" and
+# "RTU-02" (zero-padded) -- different from every other appearance of
+# these tags in the document (the schedule's own EQUIP NO column, the
+# NATURAL GAS CALCULATION table's TAG column, and -- decisively -- the
+# actual drawn roof-plan instance on sheet #39, ALL spelled "RTU-1"/
+# "RTU-2"). Visually confirmed on the rendered roof plan: the physical
+# equipment is tagged "RTU-1"/"RTU-2" there, matching the schedule. Since
+# this plan's H2 is specifically about a tag DRAWN on a plan sheet being
+# spelled differently from its schedule row, and the one real drawn
+# instance matches the schedule exactly, **H2 does not reproduce here** --
+# the "RTU-01"/"RTU-02" spelling exists only in an off-plan calculation
+# worksheet, never on a to-scale plan. Recorded below as class OTHER
+# (not PLAN_INSTANCE) for exactly this reason, with the distinction
+# spelled out in each row's own note.
+#
+# RELATED, DISTINCT FINDING FOUND SCORING THIS KEY: `RTU-1`, `RTU-2`, and
+# `EF-1` are silently excluded even from THIS SESSION'S OWN baseline tool
+# (mcp/scripts/tag-occurrence-baseline.mjs) -- confirmed by dumping its
+# output directly: `buildTagOccurrenceBaseline`'s `rowsOut` contains no
+# entry at all for these three row keys, because `rowIdentityTag(row) ||
+# row.key` returns falsy for their specific row objects (the code's own
+# `if (!rawTag) continue;` guard silently drops them before any
+# occurrence search is even attempted). `CU-1`/`CU-2`/`EWH-1`/`EWH-2`/
+# `ERV-01`/`FCU-1` are NOT affected the same way -- they resolve fine, and
+# in fact resolve TWICE (once each from M6.01's own schedule and again
+# from a second real table, sheet #60's "MECHANICAL EQUIPMENT CONNECTION
+# SCHEDULE", which independently lists the same equipment for electrical-
+# connection sizing -- a real second ROW_LABEL source this key does not
+# separately ground, not a bug in the baseline). Root cause for the
+# RTU-1/RTU-2/EF-1 exclusion specifically was NOT fully traced this
+# session (candidates: the same identity-column collision the codebase's
+# own session.ts:3877-3888 comment documents for RTU-1/RTU-2 against the
+# NATURAL GAS CALCULATION table's competing TAG-keyed row, though that
+# comment describes a different function's -- sweepScheduleRow's own
+# isQualifiedAnchorHeader -- disambiguation, not rowIdentityTag itself;
+# EF-1's cause is unexplained by that theory alone). Flagged for Phase 2,
+# not resolved here -- this key's own tag-ledger-eval score reflects it
+# as `unresolvedShouldResolve` for these 3 rows precisely because the
+# baseline never produces a candidate to match against, not because the
+# text-occurrence ladder failed to find real, correctly-spelled,
+# correctly-drawn instances (confirmed present on sheet #39 by direct
+# `tagOccurrencesForKey` call, independent of `rowIdentityTag`).
+#
+# H8 CORPUS-SCALE CONFIRMATION, THE REASON THIS KEY EXISTS: every row in
+# this family is genuinely, correctly drawn on a plan sheet (confirmed
+# below) with a genuinely correct schedule row (confirmed below) -- the
+# occurrence ladder and the sheet-role classifier both work fine for this
+# family on this document (unlike federal-mech's VAV family, where the
+# carrying sheets were themselves misclassified). Yet this session's
+# clean, isolated corpus-eval re-run shows every single one of these 10
+# tags comes back `status=not_in_output` from `compile_corpus_takeoff` --
+# meaning the defect is neither a text-search miss nor a sheet-role gate,
+# it is specifically the row-identity-extraction bug (H8, `uniqueFamily`
+# in web/src/lib/corpusTakeoff.mjs not recognizing an "EQUIP NO" header
+# the shared `rowIdentityTag` helper already handles) documented in
+# TAG_LEDGER_BASELINE.md's dedicated H8 section. This key exists to give
+# that finding a real, grounded, occurrence-level fixture, not just a
+# corpus-eval summary line.
+sheet,page,text_as_drawn,x0,y0,x1,y1,rot,class,row_table,row_key,note
+baker-county-eoc-bidset.pdf#41,41,RTU-1,676.6,642.1,720.9,661.0,0,ROW_LABEL,PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT),RTU-1,
+baker-county-eoc-bidset.pdf#41,41,RTU-2,676.6,689.1,720.9,708.0,0,ROW_LABEL,PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT),RTU-2,
+baker-county-eoc-bidset.pdf#41,41,CU-1,2874.7,2067.2,2910.0,2086.1,0,ROW_LABEL,SPLIT SYSTEM CONDENSING UNIT SCHEDULE,CU-1,
+baker-county-eoc-bidset.pdf#41,41,CU-2,2874.7,2098.9,2910.0,2117.8,0,ROW_LABEL,SPLIT SYSTEM CONDENSING UNIT SCHEDULE,CU-2,
+baker-county-eoc-bidset.pdf#41,41,EF-1,2661.6,1591.5,2694.4,1610.4,0,ROW_LABEL,FAN SCHEDULE,EF-1,
+baker-county-eoc-bidset.pdf#41,41,ERV-01,2484.0,1143.0,2537.0,1161.8,0,ROW_LABEL,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-01,
+baker-county-eoc-bidset.pdf#41,41,FCU-1,3224.6,2993.9,3269.0,3012.7,0,ROW_LABEL,SPLIT SYSTEM FAN COIL UNIT SCHEDULE,FCU-1,
+baker-county-eoc-bidset.pdf#41,41,FCU-2,3224.6,3023.9,3269.0,3042.7,0,ROW_LABEL,SPLIT SYSTEM FAN COIL UNIT SCHEDULE,FCU-2,
+baker-county-eoc-bidset.pdf#41,41,EWH-1,3168.5,2495.9,3217.2,2514.7,0,ROW_LABEL,ELECTRIC UNIT HEATER SCHEDULE,EWH-1,
+baker-county-eoc-bidset.pdf#41,41,EWH-2,3168.5,2531.4,3217.2,2550.2,0,ROW_LABEL,ELECTRIC UNIT HEATER SCHEDULE,EWH-2,
+baker-county-eoc-bidset.pdf#41,41,RTU-1,1526.6,2179.3,1583.8,2198.9,0,OTHER,PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT),RTU-1,"NATURAL GAS CALCULATION table's own ""NEW EQUIPMENT"" row (keyed TAG, spelled RTU-1, matching the real schedule -- a reference/cross-check table, not a ROW_LABEL or a PLAN_INSTANCE"
+baker-county-eoc-bidset.pdf#41,41,RTU-2,1526.6,2215.3,1583.8,2234.9,0,OTHER,PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT),RTU-2,"NATURAL GAS CALCULATION table's own ""NEW EQUIPMENT"" row (keyed TAG, spelled RTU-2, matching the real schedule"
+baker-county-eoc-bidset.pdf#41,41,RTU-01,662.9,2904.3,721.0,2924.9,0,OTHER,PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT),RTU-1,"SPELLING VARIANT, H2 lead -- REQUIRED OUTSIDE AIR FLOW RATE worksheet's own subtotal-group row spells this unit ""RTU-01"" (zero-padded), not ""RTU-1"" as the real equipment schedule (page 41, same sheet) and the roof plan (page 39, sheet M1.21) both spell it. NOT a drawn PLAN_INSTANCE -- this worksheet is an airflow calculation table, not a to-scale plan -- so this is NOT a confirmed H2 case in this plan's strict ""drawn tag spelling differs from schedule"" sense (the roof plan's own drawn instance correctly matches the schedule's spelling). Recorded here because it is a real, visually-confirmed same-document spelling inconsistency relevant to any future row-identity reconciliation across schedule vs. reference/calculation tables (Phase 2 scope), even though it does not move this plan's own tag-to-row/row-to-tag ledger scoring."
+baker-county-eoc-bidset.pdf#41,41,RTU-02,662.9,3114.3,721.0,3134.9,0,OTHER,PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT),RTU-2,"SPELLING VARIANT, same as RTU-01 above, for RTU-2 -- REQUIRED OUTSIDE AIR FLOW RATE worksheet spells it ""RTU-02"""
+baker-county-eoc-bidset.pdf#41,41,ERV-01,662.9,3174.1,721.0,3194.6,0,OTHER,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-01,"REQUIRED OUTSIDE AIR FLOW RATE worksheet's own row for this unit, spelled identically to the schedule (ERV-01) -- no spelling variant here, included for completeness alongside the RTU-01/RTU-02 variants above"
+baker-county-eoc-bidset.pdf#38,38,FCU-2,1771.9,1583.2,1818.1,1602.2,0,PLAN_INSTANCE,SPLIT SYSTEM FAN COIL UNIT SCHEDULE,FCU-2,
+baker-county-eoc-bidset.pdf#38,38,FCU-1,1738.8,2199.5,1785.0,2218.6,0,PLAN_INSTANCE,SPLIT SYSTEM FAN COIL UNIT SCHEDULE,FCU-1,
+baker-county-eoc-bidset.pdf#38,38,ERV-01,1510.3,2224.0,1565.1,2243.0,0,PLAN_INSTANCE,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-01,
+baker-county-eoc-bidset.pdf#38,38,EWH-2,1605.8,2808.6,1656.3,2827.7,0,PLAN_INSTANCE,ELECTRIC UNIT HEATER SCHEDULE,EWH-2,
+baker-county-eoc-bidset.pdf#38,38,EWH-1,1232.9,2851.1,1283.4,2870.2,0,PLAN_INSTANCE,ELECTRIC UNIT HEATER SCHEDULE,EWH-1,
+baker-county-eoc-bidset.pdf#39,39,CU-2,1715.6,1568.6,1751.9,1587.6,0,PLAN_INSTANCE,SPLIT SYSTEM CONDENSING UNIT SCHEDULE,CU-2,
+baker-county-eoc-bidset.pdf#39,39,RTU-1,1614.5,1973.8,1660.5,1992.8,0,PLAN_INSTANCE,PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT),RTU-1,
+baker-county-eoc-bidset.pdf#39,39,CU-1,1607.4,2169.6,1643.8,2188.6,0,PLAN_INSTANCE,SPLIT SYSTEM CONDENSING UNIT SCHEDULE,CU-1,
+baker-county-eoc-bidset.pdf#39,39,RTU-2,1583.3,2531.7,1629.2,2550.8,0,PLAN_INSTANCE,PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT),RTU-2,
+baker-county-eoc-bidset.pdf#39,39,EF-1,1559.9,2699.9,1593.7,2719.0,0,PLAN_INSTANCE,FAN SCHEDULE,EF-1,
