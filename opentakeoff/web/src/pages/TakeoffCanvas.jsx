@@ -13745,8 +13745,15 @@ export default function TakeoffCanvas() {
                 const generation = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
                 const loaded = [];
                 for (const name of [...new Set(sheets.map(s => s.name))]) {
-                  const bytes = await store.loadPdfData(name);
-                  loaded.push({ name, sha256: await sha256Hex(bytes) });
+                  // One stale/orphaned sheet entry (bytes no longer in local
+                  // storage) must not sink every citation in the project — only
+                  // the citations that actually need THAT sheet should fail.
+                  // Skip it here; resolveBasPage below still matches against
+                  // whatever sheets DID load.
+                  try {
+                    const bytes = await store.loadPdfData(name);
+                    loaded.push({ name, sha256: await sha256Hex(bytes) });
+                  } catch { /* sheet unavailable — resolve against the rest */ }
                 }
                 const sheet = resolveBasPage(row.page_id, loaded);
                 if (!sheet || generation !== basLoadEpochRef.current || signature !== basSourceSignatureRef.current) {
