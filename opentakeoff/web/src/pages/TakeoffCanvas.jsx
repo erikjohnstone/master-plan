@@ -7483,6 +7483,13 @@ export default function TakeoffCanvas() {
           if (basShaToName.has(source.sha256)) source.names = [basShaToName.get(source.sha256)];
         }
       }
+      // Presentation aliases only, same as fetchProductionSheetGraph/
+      // fetchProductionCompleteBasTakeoff — the server keeps content-addressed
+      // filenames for cache identity, but every sheet key anywhere in this
+      // result (categories/items/schedule/legend citations, not just
+      // bas_math/bas_point_lists) must read back as the canvas's real names,
+      // or every "Project takeoff" citation for this kind fails to open.
+      remapGraphSheetKeys(result, basShaToName);
       return basResultForCanvas(result, basShaToName);
     };
     for (const name of names) {
@@ -13745,8 +13752,15 @@ export default function TakeoffCanvas() {
                 const generation = basLoadEpochRef.current, signature = basSourceSignatureRef.current;
                 const loaded = [];
                 for (const name of [...new Set(sheets.map(s => s.name))]) {
-                  const bytes = await store.loadPdfData(name);
-                  loaded.push({ name, sha256: await sha256Hex(bytes) });
+                  // One stale/orphaned sheet entry (bytes no longer in local
+                  // storage) must not sink every citation in the project — only
+                  // the citations that actually need THAT sheet should fail.
+                  // Skip it here; resolveBasPage below still matches against
+                  // whatever sheets DID load.
+                  try {
+                    const bytes = await store.loadPdfData(name);
+                    loaded.push({ name, sha256: await sha256Hex(bytes) });
+                  } catch { /* sheet unavailable — resolve against the rest */ }
                 }
                 const sheet = resolveBasPage(row.page_id, loaded);
                 if (!sheet || generation !== basLoadEpochRef.current || signature !== basSourceSignatureRef.current) {
