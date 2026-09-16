@@ -9118,6 +9118,43 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     }
   }
 
+  // pass 2c — role correction from real extracted tables: extractAllTables
+  // (above, pass 1) already ran on EVERY sheet regardless of role and only
+  // ever returns a table that already cleared its own real header/row
+  // vocabulary bar — a structural read (real headers, real rows), not a
+  // text-keyword guess, and the one signal on this whole file that is
+  // corpus-measured far more reliable than classifySheetRole's regex ever
+  // is. No title is required: the table's own extraction already vetted it
+  // structurally, titled or not (real, found live: a real equipment table
+  // whose title text never made it into the extractable layer still reads
+  // its headers/rows fine — the exact class of sheet this pass exists for).
+  // Only ever promotes "unknown" → "schedule": a sheet the regex hunt
+  // already called plan/detail/elevation/demolition/legend keeps that call
+  // untouched, since a real plan sheet routinely carries a small inset
+  // schedule without BEING a schedule sheet (the same ambiguity documented
+  // on classifySheetRole's own RUBRIC) — this pass only fills the one case
+  // where regex found nothing at all and a real table proves the sheet is
+  // not actually unclassifiable.
+  {
+    const scheduleEvidenceBySheet = new Map<string, ScheduleTable>();
+    for (const t of tables) {
+      if (t.kind === "reference") continue;
+      const perSheetRows = t.parts?.length
+        ? t.parts.map((p) => [p.sheet, p.rows] as const)
+        : [[t.sheet, t.rows.length] as const];
+      for (const [sheetKey, rowCount] of perSheetRows) {
+        if (rowCount >= 2 && !scheduleEvidenceBySheet.has(sheetKey)) scheduleEvidenceBySheet.set(sheetKey, t);
+      }
+    }
+    for (const [sheetKey, t] of scheduleEvidenceBySheet) {
+      const role = roles.get(sheetKey);
+      if (role && role.role === "unknown") {
+        const evidence: Evidence = t.title ?? { sheet: sheetKey, text: `${t.kind.toUpperCase()} TABLE (${t.headers.join("/")})`, bbox: t.region };
+        roles.set(sheetKey, { role: "schedule", confidence: 0.95, evidence });
+      }
+    }
+  }
+
   // pass 3 — room tags (full building vocabulary known) + callouts. Room tags
   // read off PLAN-role sheets AND unknowns — a schedule sheet's room-number
   // column must not mint phantom rooms, so schedule/legend sheets contribute
