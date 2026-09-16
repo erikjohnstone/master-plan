@@ -436,22 +436,48 @@ still produces near-total silence on a document shaped like this one. Two
 concrete, evidence-backed requirements from that finding, not just the
 general hardening above:
 
-1. **Title-block priority.** Two of the three federal-mech
-   misclassifications (`role=detail` evidence `"GRID. SEE ARCHITECTURAL
-   PLANS AND DETAILS."`; `role=schedule` evidence `"Room Schedule"`) picked
-   an incidental in-body keyword match over the sheet's own prominent,
-   unambiguous title-block "DRAWING TITLE" text ("GROUND FLOOR AIR
-   TERMINALS", "GROUND FLOOR DUCT PLAN"). The title-block field must be
-   read and take priority over any other in-page text when present and
-   legible.
-2. **Content-based promotion, independent of stated title.** The third
-   misclassification is a genuine ambiguity title-block priority alone
-   cannot fix: a real, to-scale, 58-VAV-tag floor plan whose own title
-   block reads "HVAC ZONE LEGEND" (it also carries a hatch-legend key).
-   A sheet whose title says legend/schedule/other but which has
-   substantial to-scale linework plus a high density of distinct
-   equipment-family tags must be detectable and promoted into the
-   plan search space regardless of its stated title.
+`classifySheetRole` (`web/src/lib/sheetgraph.ts`) has no concept of
+title-block position at all — it scores every span on the sheet as a flat
+bag against `ROLE_SIGNALS` and the strongest hit wins, so "prioritize the
+title block" is not a mechanism this classifier has; the real gaps,
+verified directly against the live regex, are narrower and more specific
+than that:
+
+1. **Two real title shapes this classifier's plan regex cannot recognize
+   under any tier**, found on federal-mech's own sheets #3 and #4 (word
+   order confirmed against the live regex, not just inferred from the
+   evidence field): a device/terminal-type title with no literal "PLAN"
+   word at all ("GROUND FLOOR AIR TERMINALS" — `planBase.test(...)` is
+   `false`), and a non-enlarged "<discipline> <drawing-type noun> PLAN"
+   word order ("GROUND FLOOR DUCT PLAN" — "DUCT" sits between "FLOOR" and
+   "PLAN", the same shape the enlarged-plan widening already fixed for
+   "MECHANICAL ROOM ENLARGED DUCT PLAN" but this title isn't "enlarged").
+   With no competing plan hit, whatever else matches on the sheet
+   (a stray note containing "DETAILS", a small embedded "Room Schedule"
+   table) wins outright, no dissent-halving even applies. Any widening
+   must be checked against the same document's sheet #1 ("MECHANICAL
+   FLOOR PLAN SYMBOLS" — a legend, not a plan — already a confirmed
+   real false positive for the existing "FLOOR PLAN" shape) before being
+   accepted, per this file's own "generalizes across ≥2 real documents"
+   bar for touching this regex.
+2. **Content-based promotion, independent of stated title.** Federal-
+   mech's page #2 is a genuine ambiguity regex widening cannot fix: a
+   real, to-scale, 58-VAV-tag floor plan whose own title block reads
+   "HVAC ZONE LEGEND" (it also carries a hatch-legend key, so the title is
+   accurate to *part* of the sheet's purpose). A sheet whose title says
+   legend/schedule/other but which has substantial to-scale linework plus
+   a high density of distinct equipment-family tags must be detectable
+   and promoted into the plan search space regardless of its stated
+   title.
+
+Full detail, including the exact regex tested and its confirmed
+false-positive direction: `opentakeoff-corpus/TAG_LEDGER_BASELINE.md`,
+"federal-mech — sheet-role misclassification breaks `sweep_schedule_row`
+almost completely." Not attempted in that session: `classifySheetRole` is
+shared, corpus-wide, and far larger-blast-radius than the two occurrence-
+ladder functions fixed in the same session — a change here needs the full
+corpus eval re-run clean afterward, which is exactly this phase's own
+gate, not something to rush ahead of it.
 
 Gate 4: zero key PLAN_INSTANCE occurrences on sheets the graph skips, across
 keyed sets and the held-out documents. Add federal-mech's page `#2`

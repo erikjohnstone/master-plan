@@ -383,21 +383,52 @@ population of the building — are all misclassified away from `plan`.
 (`graph.sheets[i].evidence`, the exact text span the classifier used to
 decide role):
 
-- **Pages #3 and #4 (the clear bugs):** the classifier's evidence is not
-  the sheet's own title block at all. Page #3's evidence is `"GRID. SEE
-  ARCHITECTURAL PLANS AND DETAILS."` — a fragment of a generic sheet note
-  ("AIR TERMINALS LOCATED IN AREAS WITH ACOUSTICAL CEILING TILES SHALL BE
-  COORDINATED WITH THE CEILING GRID. SEE ARCHITECTURAL PLANS AND
-  DETAILS.") that happens to contain the word "DETAILS," picked over the
-  sheet's own prominent, unambiguous title-block text "GROUND FLOOR AIR
-  TERMINALS." Page #4's evidence is literally `"Room Schedule"` — the
-  heading of one of three small schedule tables tucked in a page corner,
-  picked over the sheet's own title-block text "GROUND FLOOR DUCT PLAN."
-  In both cases the correct signal is present, readable, and ignored; an
-  incidental keyword match elsewhere on the page wins instead. This is a
-  fixable classifier bug: the sheet's own title-block "DRAWING TITLE"
-  field should be authoritative over any in-body note or embedded table
-  text.
+- **Pages #3 and #4 (verified against `classifySheetRole`'s actual regex
+  tiers in `web/src/lib/sheetgraph.ts`, not just the stored evidence —
+  and more precise than "the title was outranked"): the sheet's own
+  title-block text does not match ANY plan-role signal at all**, so there
+  was never a competing plan hit for the classifier to weigh against the
+  winning schedule/detail one — this is a real regex-coverage gap, the
+  same class of gap this file's own comments document being fixed
+  before (e.g. the "MECHANICAL - LEVEL N ENLARGED PLAN" and
+  room-scoped "ENLARGED PLAN" widenings, one of them *citing this same
+  document's own sheet #7*). Confirmed directly: `planBase.test("GROUND
+  FLOOR AIR TERMINALS")` and `planBase.test("GROUND FLOOR DUCT
+  PLAN")` both return `false` against the live regex.
+  - Page #3's title, **"GROUND FLOOR AIR TERMINALS," contains the word
+    "PLAN" nowhere at all** — a real plan-sheet naming convention (name
+    the terminal/device type, never say "PLAN") this classifier cannot
+    recognize as a plan title under any tier; only the weak sheet-number
+    fallback (`^(A|M|E|P|S|FP)-?1\d\d`, confidence 0.4) could have saved
+    it, and that fallback only runs when a sheet has *zero* signal hits —
+    it never gets the chance here because the generic sheet note
+    `"...SEE ARCHITECTURAL PLANS AND DETAILS."` produces a real `detail`
+    hit (0.6) first.
+  - Page #4's title, **"GROUND FLOOR DUCT PLAN," does contain "PLAN,"**
+    but the base plan regex requires a fixed discipline word
+    (FLOOR/MECHANICAL/HVAC/etc.) *directly* adjacent to "PLAN" — here
+    "DUCT" sits between "FLOOR" and "PLAN," so it fails the same way
+    "MECHANICAL ROOM ENLARGED DUCT PLAN" used to before the enlarged-plan
+    widening, except this title isn't an "enlarged" plan either, so
+    neither existing widening reaches it. The genuinely stronger
+    `"Room Schedule"` hit (0.85, matching `SCHEDULE_TITLE_RE`) wins
+    outright — no dissent-halving even applies, because there's no
+    competing plan hit to dissent with.
+
+  So the actionable fix is not "prioritize the title block" in the
+  abstract — `classifySheetRole` has no concept of title-block position
+  at all, it scores every span on the sheet as a flat bag and the
+  strongest signal wins — it is specifically: **widen the plan-title
+  regex to recognize (a) a generic device/terminal-type title with no
+  literal "PLAN" word, and (b) a non-enlarged "<discipline> <drawing-type
+  noun> PLAN" word order** (a plain "DUCT PLAN"/"PIPING PLAN", not just
+  the already-fixed "ENLARGED …PLAN" shape). Both are real, standard AEC
+  title conventions on this one document alone; the existing code's own
+  comments show this file's fix history already treats "structure first,
+  regex confirms, generalizes across ≥2 real documents" as the bar for
+  this kind of widening — this finding supplies the evidence for the
+  next such widening, it does not attempt it here (see the "not attempted
+  now, and why" note below).
 - **Page #2 (a genuine ambiguity, not simply a bug):** its own title block
   really does say "HVAC ZONE LEGEND" — the classifier read the sheet's own
   stated purpose correctly. The defect here is that a real, to-scale,
@@ -409,14 +440,35 @@ decide role):
   content-based signal (to-scale linework plus a high density of distinct
   equipment-family tags) that can promote a sheet into the plan search
   space regardless of its stated title.
-- **Page #1 (the same mechanism, opposite direction, low severity):** a
-  pure legend/symbols sheet is wrongly *included* as `plan` because its
-  evidence text, "MECHANICAL FLOOR PLAN SYMBOLS" (a section heading
-  meaning "the legend of symbols used on floor plans"), contains the
-  literal substring "FLOOR PLAN." This doesn't cause a missed tag — the
-  sheet has none to find — but it's the same underlying weakness
-  (keyword-in-evidence-text treated as equivalent to an authoritative
-  title) misfiring in the safe direction instead of the costly one.
+- **Page #1 (a real regex false-positive, opposite direction, low
+  severity):** a pure legend/symbols sheet is wrongly *included* as
+  `plan` because its section heading "MECHANICAL FLOOR PLAN SYMBOLS"
+  genuinely does match the base plan regex (`planBase.test("MECHANICAL
+  FLOOR PLAN SYMBOLS")` → `true` — "FLOOR" sits directly before "PLAN",
+  same shape as a real title). This doesn't cost a missed tag — the sheet
+  has none to find — but it shows the same regex has a real, opposite-
+  direction false-positive mode: a *legend of plan symbols* reads the
+  same to this signal as an actual plan title. Any fix to (b) above
+  (recognizing more "<word> PLAN" shapes) should be checked against this
+  false-positive direction too, not just the two misses.
+
+**Not attempted in this session, deliberately.** Every prior widening of
+this exact regex block (read in full above it) was validated against
+multiple real corpus documents before being accepted, and this plan's own
+Phase 4 gate (`Gate 4` below) explicitly requires broader ground-truth
+coverage than Phase 0 currently has before sheet-role changes are
+considered safe — `classifySheetRole` is a shared, corpus-wide function
+with a far larger blast radius than the two occurrence-ladder functions
+fixed earlier this session (`familySuffixTagOcc`, `compoundTagOcc`, both
+narrow, independently unit-tested pure functions). A regex change here
+without re-running the full corpus eval afterward risks silently
+regressing another document's sheet roles with no one noticing until
+much later — exactly the class of mistake this session's own corrupted
+corpus-eval run (see "Test suite findings" below) is a live example of
+what happens under time/resource pressure. This finding is handed to
+Phase 4 fully root-caused, with the exact regex, the exact failing
+strings, and a verified false-positive direction to guard against,
+rather than risking a rushed fix now.
 
 **Quantified, not just qualitative.** A direct script (not
 `sweep_schedule_row`, which won't touch these sheets at all, but
