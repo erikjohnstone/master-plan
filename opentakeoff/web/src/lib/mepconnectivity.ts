@@ -33,6 +33,7 @@ import Coordinate from "jsts/org/locationtech/jts/geom/Coordinate.js";
 import UnaryUnionOp from "jsts/org/locationtech/jts/operation/union/UnaryUnionOp.js";
 import { classifyMepLayerName, mepLayerSignal, type MepSystemRole } from "./mepsystems.ts";
 import type { LayerInfo } from "./layers.ts";
+import { extractDuctCenterlines } from "./ductcenterline.ts";
 
 export type LayerSignal = "none" | "weak" | "strong";
 export type Point = [number, number];
@@ -47,6 +48,15 @@ export interface MepEdge {
    *  symbol placement (traceConnectivity's own doing, added after the base
    *  graph is built) — never set by buildMepGraph itself. */
   bridged?: boolean;
+  /** "centerline" when this edge is buildMepGraph's OWN synthesized
+   *  double-line-duct centerline (detectDoubleLineDuctCenterlines, Phase
+   *  3) rather than a literal sub-piece of one drawn segment — the
+   *  original boundary edges stay in the graph unchanged as provenance;
+   *  this is additive. Absent for every other edge, including a
+   *  centerline's own corner-bridge pieces (ductcenterline.ts's own
+   *  `bridged` flag on those folds into this edge's `bridged` above, not
+   *  a second `derived` value). */
+  derived?: "centerline";
 }
 export interface MepGraph {
   nodes: MepNode[]; edges: MepEdge[]; layerSignal: LayerSignal;
@@ -242,6 +252,24 @@ export interface BuildMepGraphOpts {
    *  controlSchematic.ts's own already-tested value). Only meaningful when
    *  requireJunctionMarkForCrossings is true. */
   junctionMarkRadiusPx?: number;
+  /** DEFAULT OFF (undefined/false reproduces today's behavior byte-for-
+   *  byte, same Gate-1 discipline as requireJunctionMarkForCrossings
+   *  above). When true, ductcenterline.ts's own parallel-pair detector
+   *  runs over `segs` and any duct-width match gets a NEW, synthesized
+   *  `derived: "centerline"` edge added to the graph (system: "ductwork"),
+   *  bridged into the rest of the graph at its own open ends — the
+   *  original boundary edges are never removed or altered, this is purely
+   *  additive. "A corridor is also two parallel lines"
+   *  (PLAN_CONNECTIVITY_SERVES.md's own Phase 3 warning) — never flip this
+   *  on for an unlayered sheet without deliberately sizing
+   *  ductMinWidthFt/ductMaxWidthFt first. */
+  detectDoubleLineDuctCenterlines?: boolean;
+  /** Plausible duct width floor/ceiling, real feet — forwarded verbatim to
+   *  ductcenterline.ts's own findDuctPairs; see that module's own defaults
+   *  and disclosed-provisional caveat. Only meaningful when
+   *  detectDoubleLineDuctCenterlines is true. */
+  ductMinWidthFt?: number;
+  ductMaxWidthFt?: number;
 }
 
 const q = (v: number, grid: number) => Math.round(v / grid) * grid;
@@ -541,6 +569,100 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
       prevX = jx; prevY = jy; prevKey = jKey;
     }
     addEdge(prevX, prevY, s.x2, s.y2, s.segIdx, prevKey, undefined);
+  }
+
+  // ── Phase 3 (PLAN_CONNECTIVITY_SERVES.md): double-line duct centerlines,
+  //    default OFF (Gate-1 discipline — see this option's own doc). Purely
+  //    additive: every boundary node/edge above is untouched; this only
+  //    ever ADDS new nodes/edges tagged derived: "centerline".
+  //
+  //    Requires a REAL, caller-supplied mppf — never the PX_PER_FT_GUESS
+  //    fallback `ppf` above silently uses for everything else. Found
+  //    live, not a defensive guess: on a real corpus sheet whose scale
+  //    hadn't been set, the width gate (meant to be measured in real
+  //    feet) became a meaningless-for-that-sheet guessed pixel range,
+  //    matching so many segment pairs the candidate scan hit its own
+  //    ceiling (ductcenterline.ts's own ledger). "A corridor is also two
+  //    parallel lines" already means this gate needs real, deliberate
+  //    tuning per PLAN_CONNECTIVITY_SERVES.md's own Phase 3 warning; a
+  //    guessed scale makes that gate not just imprecise but meaningless. ─
+  if (opts.detectDoubleLineDuctCenterlines && opts.mppf && opts.mppf > 0) {
+    // The SAME survivor filtering the rest of this function already
+    // applied (excludeSegs, the meta SEG_CLIP bit) — never the raw,
+    // unfiltered `segs`. Found live, not a defensive guess: an excluded
+    // wall or annotation segment is exactly the kind of ink
+    // wallnetwork.ts's own vouching and layers.ts's own role classing
+    // already decided is NOT real MEP linework, and without this filter
+    // a wall's own double line (this module's header comment already
+    // names "a corridor is also two parallel lines") could be matched as
+    // a plausible duct boundary on the identical un-vetted footing a real
+    // duct gets.
+    const centerlineSegs: number[] = [];
+    for (const s of survivors) centerlineSegs.push(s.x1, s.y1, s.x2, s.y2);
+    const centerlineNet = extractDuctCenterlines(centerlineSegs, opts.mppf, {
+      minWidthFt: opts.ductMinWidthFt, maxWidthFt: opts.ductMaxWidthFt,
+    });
+    if (centerlineNet.edges.length) {
+      // A dedicated key namespace (never the plain coordKey) so a
+      // centerline node is never accidentally coalesced with a real
+      // boundary node landing at the identical coordinate — geometrically
+      // near-impossible (a centerline sits at the perpendicular midpoint
+      // between two boundaries) but never assumed, only guaranteed.
+      const clNodeId = centerlineNet.nodes.map((n) => nodeFor(n.at[0], n.at[1], `centerline#${n.at[0]},${n.at[1]}`));
+      for (const e of centerlineNet.edges) {
+        const a = clNodeId[e.a], b = clNodeId[e.b];
+        if (a === b) continue;
+        const ei = edges.length;
+        // Synthesized, not drawn ink — a real but lower confidence than an
+        // actual traced segment; a corner bridge (interpolated across a
+        // real gap, see ductcenterline.ts's own bridgeCornerGaps) is one
+        // step further removed again.
+        edges.push({
+          a, b, length: e.length, system: "ductwork", systemConfidence: e.bridged ? 0.4 : 0.6,
+          derived: "centerline", ...(e.bridged ? { bridged: true as const } : {}),
+        });
+        nodes[a].edges.push(ei); nodes[b].edges.push(ei);
+      }
+      // Bridge each centerline network's own genuine OPEN end (degree 1
+      // within the centerline sub-network alone, i.e. never bridged to
+      // another leg by ductcenterline.ts itself) to the EXACT existing
+      // boundary node its own DuctPair anchor names — never a radius
+      // search over nearby linework. A first version searched every
+      // existing node within a duct-width-scaled radius instead, and on a
+      // real, dense corpus sheet (Bessemer) that was a real, measured
+      // regression, not a hypothetical one: 2,128 real centerline edges
+      // produced 56,162 radius-search bridge edges, densely enough to
+      // connect what should be separate systems (a duct run and a nearby
+      // baseboard-heater control line) into one component — a previously
+      // clean `reached`/HP-1 result on that sheet's own SR-1 rows turned
+      // into `ambiguous`, and honest `unconnected` refusals elsewhere on
+      // the same sheet dropped from 4/6 to 1/6. The anchor IS the specific
+      // real segment endpoint (segA's or segB's own) that bounded this
+      // exact centerline piece's own overlap range — quantized the same
+      // way every other coordinate in this graph is, so it looks up the
+      // literal existing node ordinary noding already made for it, not a
+      // guess at what's nearby.
+      centerlineNet.nodes.forEach((n, i) => {
+        if (n.edges.length !== 1 || !n.anchor) return;
+        const clId = clNodeId[i];
+        // Usually one anchor; a duct whose two boundaries have the
+        // identical overlap extent (two same-length parallel lines, the
+        // ordinary case) ties at both, and both real endpoints get
+        // bridged — see findDuctPairs's own anchor1/anchor2 comment for
+        // why this must never be an either/or pick.
+        for (const anchor of n.anchor) {
+          const ax = q(anchor[0], solvedGrid), ay = q(anchor[1], solvedGrid);
+          const anchorNodeId = nodeIndex.get(coordKey(ax, ay));
+          if (anchorNodeId == null || anchorNodeId === clId) continue;
+          const ei = edges.length;
+          edges.push({
+            a: clId, b: anchorNodeId, length: Math.hypot(nodes[anchorNodeId].x - n.at[0], nodes[anchorNodeId].y - n.at[1]),
+            system: "ductwork", systemConfidence: 0.4, derived: "centerline", bridged: true,
+          });
+          nodes[clId].edges.push(ei); nodes[anchorNodeId].edges.push(ei);
+        }
+      });
+    }
   }
 
   return { nodes, edges, layerSignal, quantGridPx: solvedGrid, junctionTests, crossingGated: !!opts.requireJunctionMarkForCrossings };

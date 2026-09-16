@@ -559,6 +559,113 @@ width gate; a corridor is also two parallel lines.
 ITD 12"ø runs traced; no regression on the 47-case symbol-sweep corpus
 (symbol bodies are made of parallel pairs too — prove they are not eaten).
 
+**Built, 2026-09-16 — Gate 3 NOT MET, with a precise, verified reason,
+not abandoned.** New module `web/src/lib/ductcenterline.ts`; `buildMepGraph`
+gained `detectDoubleLineDuctCenterlines` (default OFF, Gate-1 discipline)
+plus `ductMinWidthFt`/`ductMaxWidthFt`. Real, disclosed history, not a
+straight line to the final design:
+
+1. **First attempt: literal JTS `Polygonizer`/`VoronoiDiagramBuilder`,
+   abandoned with a measured reason.** Buffer each matched boundary by its
+   own half-width, union into a footprint, take a Voronoi-diagram medial
+   axis. This is the textbook technique for skeletonizing an ARBITRARY
+   polygon, but densifying a long straight boundary into the many site
+   points a faithful medial axis needs also makes the Voronoi diagram
+   produce many short "rung" edges between ADJACENT same-side points — real
+   Voronoi edges, not the medial axis, and length-based pruning alone does
+   not reliably tell the two apart (confirmed directly: a plain 200x60px
+   rectangle produced 100+ spurious edges instead of one clean centerline).
+   A duct's own boundary is a network of matched PAIRS of near-straight
+   segments, not an arbitrary blob, and this module already computes which
+   segment matches which and over what range to find those pairs in the
+   first place — the centerline between an already-known pair is just their
+   midline. Switched techniques; kept the Voronoi attempt's own reasoning
+   here rather than silently swapping it out.
+2. **The matched-pair midline itself needed two real fixes, both found by
+   testing on hand-built elbow/stub fixtures before ever touching real
+   data.** A real elbow's own two legs' own midlines do NOT meet at the
+   corner (each is bounded by the SHORTER of its two matched boundaries,
+   and a real cut/mitered inner corner ends short on both legs — measured:
+   a 60px-wide 90-degree elbow left a real ~45px gap). Fixed with
+   `bridgeCornerGaps`, tolerance scaled to the LOCAL matched width (not a
+   sheet-wide constant — a first version using a global ceiling wrongly
+   joined a duct's own two unrelated open ends across an unrelated 289px
+   gap). Second: a SHORT duct stub's own two real ends sat within that same
+   width-scaled tolerance of EACH OTHER and got "bridged" to themselves, a
+   meaningless self-loop — fixed with a Union-Find check refusing to bridge
+   any pair already connected in the network as it stands. 9 unit tests
+   lock both fixes (`ductcenterline.test.ts`).
+3. **Integrating into `buildMepGraph` needed a real per-sheet scale, and a
+   density ceiling.** Without `opts.mppf`, the width gate falls back to
+   `PX_PER_FT_GUESS` — on Bessemer's real ~38K segments this made the
+   width ceiling meaningless for that sheet's own actual scale and the
+   candidate-pair scan grew past what a `Set` can hold
+   (`RangeError: Set maximum size exceeded`). Fixed two ways: centerline
+   detection now requires a REAL `opts.mppf` (never the guess), and
+   `ductcenterline.ts` gained `MAX_CANDIDATE_PAIRS` (2,000,000, matching
+   `controlSchematic.ts`'s own `MAX_INTERSECTION_CANDIDATES` precedent) so
+   a dense sheet degrades to a partial result instead of crashing.
+4. **The open-end bridge into the rest of the graph needed two more real
+   fixes — this is where the real corpus run actually mattered.** First
+   version: bridge every centerline open end to every EXISTING node within
+   a width-scaled radius. Measured directly on real Bessemer data
+   (13 rows, all equipment placements as candidates together): 2,128 real
+   centerline edges produced 56,162 radius-search bridges — dense enough to
+   connect what should be separate systems (a supply-duct run and a nearby
+   baseboard-heater control line) into one component. Result: refusal-
+   honored dropped from 4/6 to 1/6 on this same sheet (honest `unconnected`
+   rows started reading `ambiguous`), a real regression, not an improvement.
+   Root-caused and fixed: each `DuctPair` already knows exactly which two
+   original boundary segments it came from, so bridging can name the EXACT
+   real segment endpoint (`anchor1`/`anchor2`) that bounded the overlap at
+   each end — the literal coordinate ordinary noding already turned into a
+   graph node — instead of searching a radius for whatever's nearby. A
+   second real bug surfaced immediately after: a duct whose two boundaries
+   share the identical overlap extent (two same-length parallel lines, the
+   ORDINARY case) ties at both ends, and an either/or anchor pick silently
+   bridged only one side every time — fixed by checking both independently
+   and bridging both when tied (`anchor1`/`anchor2` are now `Point[]`, not
+   `Point`). Re-run on the same real Bessemer 13-row sheet after both
+   fixes: ON and OFF now produce IDENTICAL results (served 0/7, refusal-
+   honored 4/6, false-confident 0, both runs) — the over-connection
+   regression is gone, confirmed, not assumed.
+5. **The specific Gate 3 target (Bessemer `SR-1`→`HP-1`) is still not
+   reached, and the reason is now precisely diagnosed, not a mystery.**
+   `SR-1`'s own key-authored seed lands nearest a small (15-node), densely-
+   interconnected, but topologically ISOLATED component — the register
+   symbol's OWN drawn hatch-fill glyph, not the duct. The real, extracted
+   centerline for this exact duct run does exist, but sits ~43px away —
+   outside ordinary seed-resolution tolerance, and outside what the new
+   exact-anchor bridging (correctly) reaches, since it only bridges to a
+   SPECIFIC segment's own literal endpoint, never a general "search
+   nearby." The width-search version that used to "reach" this case only
+   did so by bridging into unrelated linework broadly enough to eventually
+   connect through it — not a real fix, the false-confident-adjacent
+   over-connection item 4 above found and reverted. Trading that back in
+   to hit this one metric would be reintroducing a proven regression for
+   an unproven gain — refused, same "prefer an honest documented ceiling
+   over an unsafe heuristic" discipline as the rest of this project.
+
+**Gate 3 — NOT MET.** What IS verified: `ductcenterline.ts` 9/9,
+`mepconnectivity.test.ts` 55/55 (12 new, covering both real bugs above),
+`controlSchematic.test.ts` 26/26 unchanged, full mcp `tools.test.ts`
+101/101 unchanged, `mep-trace-eval.mjs` unchanged 3/3, and a full real-sheet
+before/after on Bessemer's own 13-row `serves.csv` proving zero regression
+(flag stays OFF for every real caller — `session.ts`/`TakeoffCanvas.jsx`
+were not touched this phase). What is NOT yet true: the mechanism does not
+yet reach across a seed landing on a register glyph's own isolated hatch
+ink to the real duct centerline sitting nearby — that is a seed-resolution
+problem (the same general class Phase 2's own `resolveOnGraph` component-
+size fix addressed for a DIFFERENT cause), not a centerline-extraction bug,
+and is scoped as its own follow-up: either widen `resolveOnGraph`'s own
+tie-break to also prefer a nearby real centerline over a small isolated
+component (mirroring the crossing-gate fix's own reasoning), or give
+seed resolution a documented, disclosed larger tolerance specifically
+when a centerline-augmented graph is in play. Not attempted here — this
+phase's own scope was already the centerline mechanism itself, proven
+safe; widening seed resolution again is exactly the kind of shared-path
+change that needs its own dedicated, carefully-tested increment.
+
 ### Phase 4 — ports, not clicks
 
 1. For every device placement (`symbol_sweep` match, `sweep_schedule_row`
@@ -678,7 +785,7 @@ not this goal's goes to `TAKEOFF_BUG_CATALOGUE.md`, not into a side fix.
 | 0 | 2026-09-15 | (this commit) | 49 | 4/33 (12.1%) | 4/14 (28.6%) | 2 | no | 4 sets, 4 distinct failure modes: NAVFAC total noding refusal, Bessemer seed-tolerance + dash false-confidence, ITD a genuinely new untested-chain gap, bldg5406 over-broad candidate-list ambiguity — see "Gate 0 — MET" above |
 | 1 | | | | | | | | |
 | 2 | 2026-09-15 | (this commit) | 49 | 4/33 (12.1%) | 4/14 (28.6%) | 2 | no | `requireJunctionMarkForCrossings: true` now ON in both real callers. First attempt regressed mep-trace-eval 3/3->2/3; root cause turned out to be a buggy diagnostic script (checked the unspliced graph, not the one traceConnectivity actually walks), corrected by instrumenting the real BFS. Two real, general fixes: DEFAULT_MAX_HOPS_GATED (a gated graph legitimately needs more hops once false crossing-shortcuts are gone — measured 59->80 hops on the same real path) and resolveOnGraph preferring the larger connected component over a just-isolated fragment among near-tied seed candidates. mep-trace-eval back to 3/3; serves-eval's 49-row corpus unchanged except GEV-1 improving false-`reached`->honest-`dead_end` (still counted 2 false-confident/4/33 served above — GEV-1 was a refusal-not-honored row, not a served one; see Phase 2 section for the exact before/after). tools.test.ts:2036 now asserts the fixed reached/AHU-3 behavior |
-| 3 | | | | | | | | |
+| 3 | 2026-09-16 | (this commit) | — | 0/7 (Bessemer, unchanged) | 4/6 (unchanged) | 0 | no | Gate 3 NOT MET. Built and safety-verified (ductcenterline.ts, buildMepGraph's detectDoubleLineDuctCenterlines, default OFF): matched-pair centerline extraction + corner-gap bridging (2 real bugs found/fixed on synthetic elbow/stub fixtures) + exact-anchor open-end bridging into the boundary graph (a radius-search first attempt regressed real Bessemer refusal-honored 4/6->1/6, root-caused and fixed — see Phase 3 section for the full trail). Real Bessemer before/after now byte-for-byte identical (flag stays off for every real caller). Specific Gate 3 target not hit: SR-1's own seed lands on an isolated register-glyph hatch mesh, real centerline sits ~43px away, outside both seed tolerance and the (correctly conservative) exact-anchor bridge — a seed-resolution follow-up, not a centerline bug |
 | 4 | | | | | | | | |
 | 5 | | | | | | | | |
 | 6 (held-out) | | | | | | | | |

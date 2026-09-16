@@ -7014,6 +7014,45 @@ export default function TakeoffCanvas() {
     };
   }
 
+  // Real corpus double-line duct linework carries lots of short, closely-
+  // spaced segments (hatch-fill crossings, the duct's own two boundary
+  // lines splitting at every one) that a walked path faithfully passes
+  // through — geometrically real, but visually a jittery, hard-to-read
+  // saw-tooth when drawn point-for-point at full fidelity. Standard
+  // Douglas-Peucker simplification (drop a point only when it sits within
+  // `epsilonPx` of the straight line between its still-kept neighbors)
+  // collapses those near-collinear runs into clean strokes along the SAME
+  // route, endpoints and real turns untouched — this only ever prunes
+  // points redundant to what's already implied by their neighbors, never
+  // reroutes anything. Used ONLY for the painted line below; the path
+  // returned to the caller stays full-fidelity.
+  function simplifyPath(pts, epsilonPx) {
+    if (pts.length < 3) return pts;
+    const eps2 = epsilonPx * epsilonPx;
+    const distSq = (p, a, b) => {
+      const dx = b[0] - a[0], dy = b[1] - a[1];
+      const len2 = dx * dx + dy * dy;
+      if (len2 === 0) return (p[0] - a[0]) ** 2 + (p[1] - a[1]) ** 2;
+      let t = ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / len2;
+      t = Math.max(0, Math.min(1, t));
+      const px = a[0] + t * dx, py = a[1] + t * dy;
+      return (p[0] - px) ** 2 + (p[1] - py) ** 2;
+    };
+    const out = [];
+    const recurse = (first, last) => {
+      let maxD = 0, idx = -1;
+      for (let i = first + 1; i < last; i++) {
+        const d = distSq(pts[i], pts[first], pts[last]);
+        if (d > maxD) { maxD = d; idx = i; }
+      }
+      if (maxD > eps2 && idx !== -1) { recurse(first, idx); recurse(idx, last); }
+      else out.push(pts[last]);
+    };
+    out.push(pts[0]);
+    recurse(0, pts.length - 1);
+    return out;
+  }
+
   // trace_connectivity (maturity plan Phase 4) — which valve belongs to
   // which equipment, walked through the sheet's own drawn linework. Mirrors
   // agentSymbolSweep's own shape exactly: normalized 0..1 points in and out
@@ -7126,9 +7165,14 @@ export default function TakeoffCanvas() {
     clearTracePathHighlights();
     if (result.path && result.path.length >= 2) {
       const id = uid("mk");
+      // 4 image-px (RENDER_SCALE 2 -> 2pt at the PDF's own scale) — enough
+      // to collapse the real duct linework's own dense hatch-crossing/
+      // double-line splitting into clean strokes, well under this stroke's
+      // own ~half-width so no real turn the drawing actually shows is lost.
+      const drawnPts = simplifyPath(result.path, 4).map(norm);
       const rec = {
         id, created_at: nowIso(), sheet_id: key, rfi_id: "", condition_id: "",
-        type: "highlight", pts: result.path.map(norm), color: "#00e5ff", opacity: 0.9, w: 0.006,
+        type: "highlight", pts: drawnPts, color: "#00e5ff", opacity: 0.9, w: 0.006,
         source: "trace_connectivity",
         text: result.reachedEquipment ? `Traced to ${result.reachedEquipment.id}` : "Traced connectivity",
       };

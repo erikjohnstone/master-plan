@@ -122,6 +122,36 @@ widen the shared path without a real need). 4 new direct unit tests,
 43/43 in `mepconnectivity.test.ts`; `controlSchematic.test.ts` unchanged,
 26/26 — both swaps verified byte-identical.
 
+Phase 3 (double-line duct centerlines, `web/src/lib/ductcenterline.ts` +
+`buildMepGraph`'s new `detectDoubleLineDuctCenterlines`, default OFF):
+built, safety-verified against real corpus data, Gate 3 NOT MET. Matches
+plausible-duct-width parallel boundary pairs and adds the midline as a new
+"ductwork" graph edge; a first Voronoi/Polygonizer-based design was tried
+and abandoned after a measured, real pitfall (dense boundary sampling
+produces many spurious short "rung" edges a simple length prune can't
+reliably separate from the real centerline — see the goal doc's own Phase
+3 section for the full trail). The simpler matched-pair-midline design
+needed two real fixes on synthetic elbow/stub fixtures (a real corner's
+own two legs don't geometrically meet; a short stub's own two ends can
+wrongly self-bridge) before ever touching real data, and the graph-
+integration step needed two more found ONLY by testing on the real
+Bessemer sheet: a first radius-search bridge (open centerline ends to any
+nearby existing node) over-connected a dense real sheet enough to turn
+4/6 honest refusals into 1/6 (previously-correct `unconnected` rows
+started reading `ambiguous`) — replaced with an exact-anchor bridge (each
+DuctPair already names the specific real boundary-segment endpoint that
+bounded it; bridge to THAT literal node, never a radius search), re-
+verified byte-for-byte identical to the flag-off baseline on the same
+real sheet. The specific Gate 3 target (Bessemer's 3 `SR-1`→`HP-1` rows)
+still isn't reached: `SR-1`'s own seed lands on an isolated register-
+glyph hatch mesh, not the duct, and the real extracted centerline sits
+~43px away — a seed-resolution gap, not a centerline-extraction bug,
+scoped as its own follow-up (widen `resolveOnGraph`'s own component-size
+tie-break, the same mechanism Phase 2 already built for a different
+cause, to also prefer a nearby real centerline over a closer isolated
+component). 21 new tests total (9 `ductcenterline.test.ts` + 12
+`mepconnectivity.test.ts`), full real-sheet before/after included.
+
 **Next queue — Phase 1 item 2's remaining piece (not started, genuinely
 its own increment):** have `controlSchematic.ts`'s own `topologyFor`
 actually CALL `buildMepGraph` instead of maintaining a second, parallel
@@ -131,7 +161,9 @@ O(n²)-bounded pairwise intersection (never JTS), has its own two-ceiling
 coarsen-and-retry, records explicit per-crossing evidence `buildMepGraph`
 has no equivalent for, and returns a wholly different output shape. See
 `PLAN_CONNECTIVITY_SERVES.md`'s Phase 1 item 2 section for the precise
-list of what a real merge needs.
+list of what a real merge needs. Also queued: Phase 3's own seed-
+resolution follow-up above, and Phase 4 (device ports, not hand-seeded
+clicks).
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact

@@ -600,3 +600,81 @@ test("detectArrowDirections: the same shaft edge is never claimed by two differe
   const shaftIds = new Set(arrows.map((a) => a.shaftEdge));
   assert.equal(shaftIds.size, arrows.length, "no shaft edge is ever reused across two different detected arrows");
 });
+
+// ── buildMepGraph: detectDoubleLineDuctCenterlines (Phase 3) ──────────────
+
+test("buildMepGraph: default OFF reproduces today's behavior byte-identical even when double-line duct linework is present", () => {
+  const segs = [0, 0, 200, 0, 0, 60, 200, 60];
+  const withFlag = buildMepGraph(segs, {});
+  const withoutOpt = buildMepGraph(segs);
+  assert.deepEqual(withFlag, withoutOpt, "passing {} explicitly must not change anything");
+  assert.equal(withFlag.edges.every((e) => !e.derived), true, "no synthesized centerline edge appears unless explicitly requested");
+});
+
+test("buildMepGraph: detectDoubleLineDuctCenterlines adds the centerline plus its own end-bridges for a straight double-line duct, boundary edges untouched", () => {
+  const segs = [0, 0, 200, 0, 0, 60, 200, 60];
+  const off = buildMepGraph(segs, {});
+  const on = buildMepGraph(segs, { detectDoubleLineDuctCenterlines: true, mppf: 100 });
+  assert.equal(on.edges.filter((e) => !e.derived).length, off.edges.length, "every original boundary edge survives unchanged");
+  const centerline = on.edges.filter((e) => e.derived === "centerline");
+  const real = centerline.filter((e) => !e.bridged);
+  const bridges = centerline.filter((e) => e.bridged);
+  assert.equal(real.length, 1, "exactly one real centerline segment, matched from the two boundaries");
+  assert.equal(real[0].system, "ductwork");
+  // Each of the centerline's own two open ends bridges to the EXACT real
+  // boundary-segment endpoint(s) its own DuctPair anchor names (never a
+  // radius search over nearby linework — a real, measured regression on
+  // the Bessemer corpus found a radius search over-connects a dense real
+  // sheet, see this option's own comment). This duct's two boundaries
+  // share the identical overlap extent (both same-length lines), so both
+  // ends tie and bridge to BOTH real boundary endpoints — 2 ends x 2
+  // boundaries = 4 bridges (see findDuctPairs's own anchor1/anchor2
+  // comment for why an either/or pick would silently drop one side here).
+  assert.equal(bridges.length, 4);
+  // The whole thing — both original boundary edges (previously two
+  // disconnected pieces of ink) plus the new centerline and its bridges —
+  // is now ONE walkable connected component.
+  const visited = new Set([0]);
+  const queue = [0];
+  for (let qi = 0; qi < queue.length; qi++) {
+    const cur = queue[qi];
+    for (const ei of on.nodes[cur].edges) {
+      const e = on.edges[ei];
+      const next = e.a === cur ? e.b : e.a;
+      if (!visited.has(next)) { visited.add(next); queue.push(next); }
+    }
+  }
+  assert.equal(visited.size, on.nodes.length, "the two previously-disconnected boundary lines are now one component via the centerline");
+});
+
+test("buildMepGraph: a centerline's own open end bridges into the existing boundary graph, making the whole run walkable in one component", () => {
+  // Duct with the centerline offset from a real T-tap on the outer
+  // boundary — the tap's own node must be reachable from a seed placed on
+  // the centerline once bridged in.
+  const segs = [
+    0, 0, 200, 0,     // outer boundary
+    0, 60, 200, 60,   // inner boundary
+    100, 0, 100, -50, // a real branch tapping the outer boundary's own midpoint
+  ];
+  const g = buildMepGraph(segs, { detectDoubleLineDuctCenterlines: true, mppf: 100 });
+  const centerlineEdge = g.edges.find((e) => e.derived === "centerline" && !e.bridged);
+  assert.ok(centerlineEdge, "the centerline itself is found");
+  // BFS from one centerline node — the branch tap (near (100,-50)) must be reachable
+  const start = centerlineEdge!.a;
+  const visited = new Set([start]);
+  const queue = [start];
+  for (let qi = 0; qi < queue.length; qi++) {
+    const cur = queue[qi];
+    for (const ei of g.nodes[cur].edges) {
+      const e = g.edges[ei];
+      const next = e.a === cur ? e.b : e.a;
+      if (!visited.has(next)) { visited.add(next); queue.push(next); }
+    }
+  }
+  // Tolerance wide enough for buildMepGraph's own coordinate quantization
+  // (snapFt * mppf here is 15px) — this test is about reachability, not
+  // sub-grid coordinate precision.
+  const branchTip = g.nodes.findIndex((n) => Math.abs(n.x - 100) < 10 && Math.abs(n.y - (-50)) < 10);
+  assert.ok(branchTip >= 0, "the branch tap's own tip node exists");
+  assert.ok(visited.has(branchTip), "the branch is reachable from the centerline through the bridged boundary graph");
+});
