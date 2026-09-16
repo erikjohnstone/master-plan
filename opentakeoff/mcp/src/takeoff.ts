@@ -989,6 +989,33 @@ export async function buildLegendTakeoff(session: Session, opts: { categories?: 
   return result;
 }
 
+/** PLAN_CONNECTIVITY_SERVES.md Phase 5 item 3: attaches a `served_by`
+ * result (Phase 5 item 2's own `Session.servedBy`) onto every one of a
+ * row's own `plan_cites[]` that carries a real geometry-verified `bbox` —
+ * the schedule item's own drawn PLACEMENT becomes the "device" seed, and
+ * the caller-supplied `equipment` list is the SAME candidate-list shape
+ * `served_by`/`devices_of` already require (this module has no device-
+ * discovery pipeline of its own and does not invent one here). Mutates
+ * `rows` in place; `session.servedBy` reuses its own per-sheet cached MEP
+ * graph, so repeated cites on the same sheet cost one BFS each, not one
+ * graph rebuild each. A cite with no `bbox` (tag-text-only evidence, or a
+ * bare point) is left untouched — `served_by` needs a real device bbox to
+ * compute ports from (Phase 4 item 1's own `computePorts`), and this never
+ * fabricates one. */
+export async function attachServedByToPlanCites(
+  session: Session,
+  rows: ReturnType<typeof reconcileRowsFromTakeoffItems>,
+  equipment: Array<{ id: string; at: [number, number]; label?: string; bbox?: [number, number, number, number] }>,
+  inkPad?: number,
+): Promise<void> {
+  for (const row of rows as any[]) {
+    for (const cite of (row.plan_cites ?? []) as any[]) {
+      if (!cite.bbox) continue;
+      cite.served_by = await session.servedBy(cite.sheet, { device: cite.bbox, equipment, inkPad });
+    }
+  }
+}
+
 /** Schedule↔plan reconcile table for a loaded set — walks every equipment
  * schedule row through sweep_schedule_row (via buildPlanSetTakeoff) and
  * classifies MATCH / SCHEDULE_ONLY / REFUSED_* / AMBIGUOUS. Shared UI+MCP. */
@@ -999,6 +1026,12 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   evaluationFast?: boolean;
   /** When true with family, sweep every row in that family (not whole-set). */
   familySweepAll?: boolean;
+  /** Phase 5 item 3, opt-in: candidate equipment placements (the SAME shape
+   * served_by/devices_of already take) to walk each row's own geometry-
+   * verified plan_cites against. Omitted (the default): rows are returned
+   * exactly as before this option existed, byte-identical. */
+  servedByEquipment?: Array<{ id: string; at: [number, number]; label?: string; bbox?: [number, number, number, number] }> | null;
+  servedByInkPad?: number;
   onProgress?: (event: {
     phase: "reconcile_row";
     state: "start" | "done";
@@ -1047,6 +1080,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
       sweepAll: !tags?.length && opts.familySweepAll !== false,
     });
     const rows = attachDiagramCorroboration(scoped.rows, graph.control_schematics || await session.controlSchematics());
+    if (opts.servedByEquipment?.length) await attachServedByToPlanCites(session, rows, opts.servedByEquipment, opts.servedByInkPad);
     return { ...scoped, rows, summary: summarizeReconcile(rows), takeoff_stats: emptyStats };
   }
 
@@ -1077,6 +1111,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
     reconcileRowsFromTakeoffItems(items, takeoff.failures),
     await session.controlSchematics(),
   );
+  if (opts.servedByEquipment?.length) await attachServedByToPlanCites(session, rows, opts.servedByEquipment, opts.servedByInkPad);
   return {
     rows,
     summary: summarizeReconcile(rows),

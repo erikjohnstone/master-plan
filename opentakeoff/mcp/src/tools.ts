@@ -1057,13 +1057,20 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       tags: z.array(z.string()).optional().describe("Optional MARK tags to sweep (scoped reconcile — fast)"),
       evaluation_fast: z.boolean().optional().describe("Use evaluation-fast sweep (corpus/demo speed)"),
       family_sweep_all: z.boolean().optional().describe("When family set and tags omitted, sweep every row in that family only"),
+      equipment: z.array(z.object({
+        id: z.string().describe("The equipment's own tag, e.g. 'AHU-1'"),
+        at: pointSchema.describe("Its placement (image px), from your own prior symbol_sweep/sweep_schedule_row result"),
+        label: z.string().optional(),
+        bbox: bboxSchema.optional().describe("This equipment's own real bounding box (image px), when known — resolves via whatever real linework enters this box's own boundary instead of `at` alone, same served_by/devices_of doctrine. Falls back to `at` when omitted or when the box touches no linework at all."),
+      })).optional().describe("Phase 5 item 3, opt-in: when supplied, every geometry-verified plan_cites[] entry that carries its own bbox gets a served_by field — the SAME read-only walk served_by exposes, pre-run from that exact drawn placement against this candidate list. Omitted (the default): rows come back exactly as before this parameter existed."),
+      ink_pad: z.number().nonnegative().optional().describe("Expand each plan citation's own bbox, and any equipment entry's own bbox, by this many image px before checking for port crossings (served_by's own ink_pad). Only used when equipment is supplied. Default 0"),
       path: z.string().optional().describe("Optional JSON file path for the reconcile table"),
       export_path: z.string().optional().describe("Optional directory for reconcile.csv export"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: reconcileSchedulePlanOutput,
   }, run("reconcile_schedule_plan", async ({
-    family, categories, tags, evaluation_fast, family_sweep_all,
+    family, categories, tags, evaluation_fast, family_sweep_all, equipment, ink_pad,
     path: outPath, export_path: exportPath, overwrite,
   }) => {
     const result = await reconcileSchedulePlan(session, {
@@ -1072,6 +1079,8 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       tags: tags ?? null,
       evaluationFast: evaluation_fast,
       familySweepAll: family_sweep_all,
+      servedByEquipment: equipment ?? null,
+      servedByInkPad: ink_pad,
     });
     if (outPath) {
       await assertWritable(outPath, "json", overwrite);

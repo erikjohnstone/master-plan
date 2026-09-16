@@ -1149,8 +1149,8 @@ packages' `npm run typecheck` are clean; `mcp/scripts/check-tool-count.mjs
 --write` brought `TOOL_NAMES.length` from 56 to 61 and refreshed
 `README.md`/`docs/USER_GUIDE.md`'s markers.
 
-**Not attempted:** item 1 (the dashed-gap controls walk — see above,
-unchanged from the prior entry); item 3
+**Not attempted at that point:** item 1 (the dashed-gap controls walk —
+see above, unchanged from the prior entry); item 3
 (`reconcile_schedule_plan`'s `drawing_locations[]` gaining a `served_by`
 field, and `highlight_citation` painting an arbitrary walked path for
 callers other than these five tools' own internal painting). Painting
@@ -1164,6 +1164,61 @@ duct/pipe/conduit graph `trace_connectivity` always has — they do not yet
 add any controls/dashed-line capability; a `T`-thermostat-to-equipment
 walk across a dashed control line is still unsupported by any tool in
 this codebase today.
+
+**`highlight_citation`'s own half of item 3 landed the same day, in the
+Gate 5/Gate 3 follow-up entry above** (`agentTools.js`'s tool def gained
+`path_px`, mutually exclusive with `bbox_px`) — noted here too since that
+entry didn't cross-reference Phase 5's own item list at the time: any
+caller can now cite a real walked connectivity path with the same crisp
+neon-blue trace style `path_between`/`served_by` already paint, built
+directly in `TakeoffCanvas.jsx`'s `agentHighlightCitation` rather than
+widened through `agentAnnotate`'s own more heavily-used contract.
+
+**`reconcile_schedule_plan`'s own half of item 3 lands 2026-09-16.**
+`mcp/src/takeoff.ts` gained a new exported `attachServedByToPlanCites`,
+called from `reconcileSchedulePlan` right before each of its two return
+points, opt-in via a new `servedByEquipment` parameter (the identical
+`{id, at, label?, bbox?}` candidate shape `served_by`/`devices_of` already
+take): when supplied, every one of a row's own `plan_cites[]` that
+carries a real geometry-verified `bbox` gets a `served_by` field — that
+exact plan PLACEMENT becomes the device seed, walked via
+`Session.servedBy` (Phase 5 item 2, reusing its own per-sheet cached MEP
+graph, so repeated cites on one sheet cost one BFS each, not one graph
+rebuild each) against the caller's candidate list. A cite with no `bbox`
+(tag-text-only evidence) is left untouched — this never fabricates a
+device seed the way it never fabricates a body-bbox elsewhere in this
+plan. Wired end to end: `mcp/src/outputs.ts`'s `reconcileSchedulePlanOutput`
+gained a `served_by` field on `plan_cites[]` (a small `reconcilePlanCiteServedBy`
+schema declared LOCALLY rather than reusing the existing `servedByOutput`
+const, which is declared further down this same file — referencing it here
+would have been a forward reference to a `const` binding, a real TDZ throw
+at module-import time caught before it shipped, not merely a lint nit);
+`mcp/src/tools.ts`'s `reconcile_schedule_plan` tool gained optional
+`equipment`/`ink_pad` inputs, byte-identical to today when omitted (no new
+tool registered — `check-tool-count.mjs` confirms `TOOL_NAMES.length`
+unchanged at 61). 3 new tests in `mcp/test/tools.test.ts` against the
+existing real `mep-plan.pdf` fixture (reusing the exact known-good
+coordinates `served_by`'s own tests already use, not new guessed ones):
+a bbox-carrying cite reaches the one real equipment it's wired to, a
+no-bbox cite is left untouched, and a real T-branch cite folds into
+`ambiguous` exactly like `served_by`'s own junction-level ambiguity.
+Tested as the focused composition it actually is (a hand-built `rows`
+array through the new helper directly), not re-proving `servedBy`'s own
+already-tested walk correctness or manufacturing a heavy new schedule+
+symbol-sweep fixture this increment doesn't need. Both packages' `npm run
+typecheck` clean; `mcp`'s own `tools.test.ts` 123/123.
+
+**Still not attempted:** full `agentTools.js`/`TakeoffCanvas.jsx` UI parity
+for this same `equipment` candidate list — `agentReconcileSchedulePlan`
+has three separate code paths (the real MCP call, a production-session
+fallback, and a browser-only no-MCP fallback using
+`reconcileScheduleFamilyWithSweeps` directly) and none of them source or
+pass an equipment candidate list today; wiring one through would need the
+same `ensureAgentMepGraph`-based real-sweep sourcing `agentServedBy`/
+`agentDevicesOf` already do, a real, separate, larger UI increment the
+plan's own literal text for this item never named (it scoped `served_by`
+specifically to `mcp/src/outputs.ts`) — not attempted here on that basis,
+disclosed rather than silently left inconsistent.
 
 **Gate 5 — PARTIALLY MET at commit time.** MCP/UI parity tests: met —
 `mcp/test/tools.test.ts` (18 new + all 12 pre-existing `trace_connectivity`

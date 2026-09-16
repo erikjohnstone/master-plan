@@ -1,5 +1,44 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5 item 3's own
+`reconcile_schedule_plan` half lands: a new exported
+`attachServedByToPlanCites` in `mcp/src/takeoff.ts`, called from
+`reconcileSchedulePlan` right before each of its two return points,
+opt-in via a new `servedByEquipment` parameter (the identical
+`{id, at, label?, bbox?}` shape `served_by`/`devices_of` already take).
+When supplied, every row's own `plan_cites[]` entry that carries a real
+geometry-verified `bbox` gets a `served_by` field — that exact drawn
+placement becomes the device seed, walked via `Session.servedBy` (Phase 5
+item 2) against the caller's candidate list; a cite with no bbox is left
+untouched, never fabricating a device seed. Wired end to end:
+`outputs.ts`'s `reconcileSchedulePlanOutput` gained a `served_by` field on
+`plan_cites[]` via a small schema declared LOCALLY (referencing the
+existing `servedByOutput` const directly would have been a forward
+reference to a `const` declared later in the same file — a real TDZ throw
+at module-import time, caught by actually importing the module and
+checking before shipping, not just by `tsc --noEmit` passing); `tools.ts`'s
+`reconcile_schedule_plan` tool gained optional `equipment`/`ink_pad`
+inputs, byte-identical when omitted — no new tool registered
+(`check-tool-count.mjs` confirms `TOOL_NAMES.length` unchanged at 61). 3
+new tests in `mcp/test/tools.test.ts` against the existing real
+`mep-plan.pdf` fixture, reusing `served_by`'s own already-verified real
+coordinates rather than guessing new ones: a bbox-carrying cite reaches
+its one real equipment, a no-bbox cite is left untouched, and a real
+T-branch cite folds into `ambiguous` exactly like `served_by`'s own
+junction-level ambiguity — tested as the focused composition it is, not
+a re-proof of `servedBy`'s own already-tested walk or a heavy new
+schedule+symbol-sweep fixture this increment doesn't need. Both packages'
+typecheck clean; `mcp/test/tools.test.ts` 123/123. Also corrected a real
+doc-sync gap found along the way: `highlight_citation`'s own `path_px`
+half of this same item landed earlier the same day but was never
+cross-referenced into Phase 5's own item list — fixed here too, rather
+than left stale. Not attempted: full `agentTools.js`/`TakeoffCanvas.jsx`
+UI parity for the new equipment candidate list (`agentReconcileSchedulePlan`
+has three separate code paths, none of which source a real equipment
+list today) — a real, separate, larger UI increment the plan's own
+literal text for this item never named. Full detail: the plan doc's own
+Phase 5 section.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 4 item 2's own "shared trunk
 is one component, not ambiguity" rule now lands: `traceConnectivity`
 filters a reached equipment out of its ambiguity decision whenever that

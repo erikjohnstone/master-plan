@@ -344,6 +344,22 @@ export const controlSchematicOutput = {
   exclusions: z.array(z.string()),
 };
 
+// Mirrors servedByOutput's own shape exactly (defined later in this file,
+// alongside the served_by/devices_of tool schemas it's grouped with) —
+// declared locally here rather than referenced forward, since a top-level
+// `const` used before its own declaration further down this module would
+// throw at import time (a TDZ error), not merely a lint nit.
+const reconcilePlanCiteServedBy = z.object({
+  status: z.enum(["reached", "ambiguous", "dead_end", "refused"]),
+  reached_equipment: z.object({ id: z.string(), at: point }).optional(),
+  path: z.array(point).optional(),
+  branches: z.array(z.object({ equipment: z.string(), at: point, path: z.array(point) })).optional(),
+  layer_signal: z.enum(["none", "weak", "strong"]),
+  confidence: z.number(),
+  factors: z.array(z.string()),
+  reason: z.string().optional(),
+});
+
 /** Schedule ↔ plan reconciliation table (contractor columns + cites). */
 export const reconcileSchedulePlanOutput = {
   family_filter: z.string().nullable(),
@@ -410,6 +426,8 @@ export const reconcileSchedulePlanOutput = {
       score: z.number().optional(),
       attachment_via: z.enum(["adjacent", "leader"]).optional(),
       attachment_distance_px: z.number().optional(),
+      served_by: reconcilePlanCiteServedBy.optional()
+        .describe("Phase 5 item 3, present only when the caller supplied `equipment` candidates: served_by walked from this exact plan placement's own bbox — the identical read-only operator the served_by tool exposes, just pre-run per citation. Absent (not merely refused) when no equipment list was supplied."),
     })),
     plan_tag_cites: z.array(z.object({
       sheet: z.string(),

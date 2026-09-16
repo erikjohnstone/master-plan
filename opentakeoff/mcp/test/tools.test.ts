@@ -15,6 +15,7 @@ import { buildServer } from "../server.ts";
 import { Session, sanitizeApprovals } from "../src/session.ts";
 import { openPdf, positionedText } from "../src/pdf.ts";
 import { sweepScheduleRowOutput } from "../src/outputs.ts";
+import { attachServedByToPlanCites } from "../src/takeoff.ts";
 // the canvas's own tally — the same function the marked-set cover prints from
 import { approvalTally } from "../../web/src/lib/approvals.js";
 // the rules engine's own mask builder — the #207 test plants a synthetic
@@ -2299,6 +2300,54 @@ test("devices_of: refuses when no device placements are supplied at all", async 
   const r = await call(client, "devices_of", { sheet: MEPKEY, equipment: [480, 180, 520, 220], devices: [] });
   assert.equal(r.data.status, "refused");
   assert.match(r.data.reason, /sweep the target family first/);
+});
+
+// ── reconcile_schedule_plan: served_by wiring (Phase 5 item 3) ──────────
+// reconcile_schedule_plan has no device-discovery pipeline of its own, so
+// this is deliberately tested as the real, focused composition it is —
+// attachServedByToPlanCites reusing session.servedBy (already proven above,
+// same MEPPLAN fixture, same real coordinates) against a hand-built rows
+// array shaped exactly like reconcileRowsFromTakeoffItems's own real output
+// — not a re-test of servedBy's own walk correctness, and not a full
+// schedule+symbol-sweep fixture this increment doesn't need to prove its
+// own wiring is correct.
+test("attachServedByToPlanCites: attaches served_by onto a plan_cite carrying a real bbox, reaching the one real equipment it's actually wired to", async () => {
+  const session = new Session();
+  await session.loadPlan(MEPPLAN);
+  const rows: any[] = [{
+    tag: "SEED",
+    plan_cites: [{ sheet: MEPKEY, at: [100, 200], bbox: [80, 190, 120, 210] }],
+  }];
+  await attachServedByToPlanCites(session, rows, [{ id: "AHU-1", at: [500, 200] }]);
+  const cite = rows[0].plan_cites[0];
+  assert.ok(cite.served_by, "served_by attached to the one real bbox-carrying cite");
+  assert.equal(cite.served_by.status, "reached");
+  assert.equal(cite.served_by.reached_equipment.id, "AHU-1");
+});
+
+test("attachServedByToPlanCites: a plan_cite with no bbox (tag-text-only evidence) is left untouched, never fabricating a device seed", async () => {
+  const session = new Session();
+  await session.loadPlan(MEPPLAN);
+  const rows: any[] = [{
+    tag: "SEED",
+    plan_cites: [{ sheet: MEPKEY, at: [100, 200] }],
+  }];
+  await attachServedByToPlanCites(session, rows, [{ id: "AHU-1", at: [500, 200] }]);
+  assert.equal(rows[0].plan_cites[0].served_by, undefined);
+});
+
+test("attachServedByToPlanCites: a real T-branch plan_cite reaching two different equipment reports ambiguous, never picks one", async () => {
+  const session = new Session();
+  await session.loadPlan(MEPPLAN);
+  const rows: any[] = [{
+    tag: "SEED",
+    plan_cites: [{ sheet: MEPKEY, at: [100, 400], bbox: [80, 390, 120, 410] }],
+  }];
+  await attachServedByToPlanCites(session, rows, [{ id: "VAV-1", at: [500, 400] }, { id: "VAV-2", at: [300, 560] }]);
+  const cite = rows[0].plan_cites[0];
+  assert.equal(cite.served_by.status, "ambiguous");
+  const ids = cite.served_by.branches.map((b: any) => b.equipment).sort();
+  assert.deepEqual(ids, ["VAV-1", "VAV-2"]);
 });
 
 // ── body-aware bbox resolution (Phase 4 item 2, first increment) ────────
