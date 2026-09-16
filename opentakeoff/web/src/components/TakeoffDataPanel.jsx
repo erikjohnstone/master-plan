@@ -215,7 +215,19 @@ export default function TakeoffDataPanel({
     setSourceView(null); setSourceComparison(null); setComparisonBusy(false);
   }, [basWorkflow, adapter]);
   const onOpenCitation = async row => {
-    if (!row?.page_id || !basWorkflow) return onCanvasCitation?.(row);
+    // A plain citation click (Schedule row / Symbol / Tag / table header) never
+    // touched `err` before — only Compare and export did. That left a failed
+    // Compare/export's red banner stuck at the top of the panel through every
+    // later citation click, success or not, reading as "nothing works" even
+    // when the click that just ran actually succeeded. Every citation attempt
+    // now clears the banner up front and reports its own failure, same as
+    // Compare already does.
+    setErr('');
+    if (!row?.page_id || !basWorkflow) {
+      const result = await onCanvasCitation?.(row);
+      if (result?.error) setErr(result.error);
+      return result;
+    }
     const opener = document.activeElement;
     // Preserve normal live-sheet navigation/overlays. Only unavailable originals
     // (or an explicit Original PDFs action) use the isolated evidence reader.

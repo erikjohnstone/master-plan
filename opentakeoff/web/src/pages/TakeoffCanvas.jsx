@@ -7308,7 +7308,13 @@ export default function TakeoffCanvas() {
     return remapGraphSheetKeys(await res.json(), shaToName);
   }
 
-  /** Shared Session plan tools — same path as MCP (WP5). Falls back to local port when endpoint unavailable. */
+  /** Shared Session plan tools — same path as MCP (WP5). Falls back to local port when endpoint unavailable.
+   * Returns shaToName alongside the form data so every caller can remap its
+   * OWN response's sheet keys — the endpoint spools uploads content-addressed
+   * (<sha256>.pdf) same as compile-corpus-takeoff/sheet-graph, and every
+   * caller here (sweep_schedule_row, symbol-sweep, count-marks, reconcile-
+   * schedule-plan) hands sheet-keyed data straight back to the takeoff panel
+   * as citations, so it needs the same remap those two already get. */
   async function buildProductionFormData(extraFields = {}) {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) return null;
@@ -7316,11 +7322,13 @@ export default function TakeoffCanvas() {
     for (const [k, v] of Object.entries(extraFields)) {
       if (v != null && v !== "") fd.append(k, String(v));
     }
+    const shaToName = new Map();
     for (const name of names) {
       const bytes = await loadPdfDataOrExplain(name);
+      try { shaToName.set(await sha256Hex(bytes), name); } catch { /* no WebCrypto: keys stay as sent */ }
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
-    return fd;
+    return { fd, shaToName };
   }
 
   async function fetchProductionSweepScheduleRow(tag, opts = {}) {
@@ -7336,12 +7344,13 @@ export default function TakeoffCanvas() {
       }),
     };
     if (opts.evaluationFast) fields.evaluationFast = "1";
-    const fd = await buildProductionFormData(fields);
-    if (!fd) return null;
+    const built = await buildProductionFormData(fields);
+    if (!built) return null;
+    const { fd, shaToName } = built;
     try {
       const res = await fetch("/__ot/sweep-schedule-row", { method: "POST", body: fd });
       if (!res.ok) return null;
-      return await res.json();
+      return remapGraphSheetKeys(await res.json(), shaToName);
     } catch {
       return null;
     }
@@ -7352,7 +7361,7 @@ export default function TakeoffCanvas() {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     const pdfIndex = names.indexOf(file);
     if (pdfIndex < 0) return { error: `Seed sheet ${key} is not part of the loaded drawing set.` };
-    const fd = await buildProductionFormData({
+    const built = await buildProductionFormData({
       symbolPdfIndex: pdfIndex,
       symbolPage: page,
       symbolSeedRect: JSON.stringify(seedRect),
@@ -7366,12 +7375,13 @@ export default function TakeoffCanvas() {
         affine: opts.affine,
       }),
     });
-    if (!fd) return { error: "No PDF loaded." };
+    if (!built) return { error: "No PDF loaded." };
+    const { fd, shaToName } = built;
     try {
       const response = await fetch("/__ot/symbol-sweep", { method: "POST", body: fd });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) return { error: result.error || `symbol-sweep HTTP ${response.status}` };
-      return result;
+      return remapGraphSheetKeys(result, shaToName);
     } catch (error) {
       return { error: `Shared Session symbol sweep failed: ${error?.message || error}` };
     }
@@ -7428,12 +7438,13 @@ export default function TakeoffCanvas() {
   async function fetchProductionCountMarks(marksOpt) {
     const fields = {};
     if (marksOpt?.length) fields.marks = marksOpt.join(",");
-    const fd = await buildProductionFormData(fields);
-    if (!fd) return null;
+    const built = await buildProductionFormData(fields);
+    if (!built) return null;
+    const { fd, shaToName } = built;
     try {
       const res = await fetch("/__ot/count-marks", { method: "POST", body: fd });
       if (!res.ok) return null;
-      return await res.json();
+      return remapGraphSheetKeys(await res.json(), shaToName);
     } catch {
       return null;
     }
@@ -7446,8 +7457,9 @@ export default function TakeoffCanvas() {
     if (opts.tags?.length) fields.tags = opts.tags.join(",");
     if (opts.categories?.length) fields.categories = opts.categories.join(",");
     if (opts.evaluationFast) fields.evaluationFast = "1";
-    const fd = await buildProductionFormData(fields);
-    if (!fd) return null;
+    const built = await buildProductionFormData(fields);
+    if (!built) return null;
+    const { fd, shaToName } = built;
     try {
       const onProgress = typeof opts.onProgress === "function" ? opts.onProgress : null;
       const res = await fetch("/__ot/reconcile-schedule-plan", {
@@ -7482,9 +7494,9 @@ export default function TakeoffCanvas() {
         }
         if (buf.trim()) consume(buf.trim());
         if (!result) throw new Error("schedule-plan reconciliation stream ended without a result");
-        return result;
+        return remapGraphSheetKeys(result, shaToName);
       }
-      return await res.json();
+      return remapGraphSheetKeys(await res.json(), shaToName);
     } catch (error) {
       return { error: `Production reconciliation failed: ${error?.message || error}` };
     }
