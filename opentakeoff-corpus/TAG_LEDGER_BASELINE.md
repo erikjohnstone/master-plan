@@ -658,7 +658,7 @@ to read the shared extractor instead of raw `row.key`).
 | H5 | Orphan tags (no schedule row) are invisible to row-driven tools | **Confirmed by construction, twice.** Inherent to every row-driven tool audited, and freshly re-confirmed concretely on itd-d1-lab: `HEV-1..4` are drawn on sheet `#4` and appear in zero schedule tables anywhere in the document (checked via a full 29-sheet span scan), and the ruler correctly reports exactly these 4 as the only misses, with the right explanation attached. |
 | H6 | itd-d1-lab over-counts are cross-view redraws | **Tested cleanly, not confirmed as a defect.** `HC-1` through `HC-9` are each genuinely, legitimately drawn on two different sheets (the ductwork plan `#3` and the hydronic plan `#5`) — 9 rows × 2 real sheets = 18 instances, the largest H6 fixture found this session. The ladder recovers the correct count (2) for all 9, with zero double-counting and zero dropped occurrences. The originally-hypothesized over-count does not reproduce on this family; H6 as posed is not confirmed here (may still apply to families not sampled in this key). |
 | H7 | Note mentions/legend entries leak into counts | **Confirmed, once, precisely** — bldg5406's `CWP-1` is over-counted by 1 because `compoundTagOcc` matches an installation note ("CWP-1 AND CWP-2 SHALL BE STACKED...") as if it were a second compound tag label. bessemer's `D-1`/`D-2`/`D-6` and a split-run "HP-1 IS TYPICAL..." note stayed correctly excluded, so this is not universal — H7 fires specifically when note prose happens to start with `<tag><space><more text>`, `compoundTagOcc`'s exact trigger shape. |
-| H8 | Row lookup disagrees across the three duplicated implementations | **Confirmed, with two concrete, executed disagreement examples** — see the dedicated "H8" section above. Refined from the original framing: the tag→row *lookup* primitive (`rowKeyAnswersFor`) is genuinely unified, not duplicated; the real duplication is in row→identity-tag *extraction*, where a shared helper (`rowIdentityTag`, 3 production callers) coexists with one independently-reimplemented, drifted copy (`uniqueFamily`, the `compile_corpus_takeoff` HVAC path) and one caller that skips extraction entirely (`countMarks`). One executed example shows a real row present in `sweep_schedule_row`/`reconcile_schedule_plan` output and silently dropped by `compile_corpus_takeoff` for the identical input. |
+| H8 | Row lookup disagrees across the three duplicated implementations | **Confirmed twice over — synthetically and at real corpus scale.** See the dedicated "H8" section above for two executed synthetic disagreement examples. Refined from the original framing: the tag→row *lookup* primitive (`rowKeyAnswersFor`) is genuinely unified; the real duplication is in row→identity-tag *extraction* (`rowIdentityTag`, 3 production callers, vs. `uniqueFamily`, one drifted reimplementation for `compile_corpus_takeoff`'s HVAC path). **Then independently reproduced for real**: this session's clean corpus-eval re-run shows 17 of baker-county-eoc's real quantity mismatches, plus several each on federal-mech and navfac-cherry-point-atc, are exactly this bug — real schedule rows silently absent (`status=not_in_output`) from `compile_corpus_takeoff`'s output, matching the exact "EQUIP NO"-keyed and multi-hyphen-valve-mark shapes the synthetic examples predicted. See "Corpus-eval corruption claim retracted" for the full list. |
 | **H9 (new, corrected)** | **The occurrence ladder's `familySuffixTagOcc` fallback can recover an unrelated digit (a keynote/callout reference number) as a tag's missing suffix, when that digit happens to sit near enough to ≥4 real family siblings** | **Confirmed and precisely root-caused on one real document.** bessemer's `EBB-1` on sheet `#7`: the real `EBB-5..8` siblings are genuinely drawn there, satisfying `familySuffixTagOcc`'s own quorum gate, and a bare "1" — actually a keynote circle's reference number, not a tag fragment — gets recovered as a phantom second `EBB-1`. **Narrower and more precisely diagnosed than the first version of this finding claimed** — see the retraction in the bldg5406 section: the originally-reported `CDB`/`RRA` "fabrication" (a much larger, class-wide claim) was traced to a bug in this session's own verification script, not the pipeline, and has been withdrawn. |
 
 ## Test suite findings
@@ -683,39 +683,143 @@ running at time of writing (see "What remains").
 | `mcp/test:shared-path` "WP5 parity … D07 VAV tags" | ✔ after **25 minutes** | passed anyway — further confirms contention is inflating duration, not correctness, for tests without internal timeouts |
 | `mcp` core suite (`conformance`, `takeoff*`, `session`, `view`, …) | completed: 228+ lines observed, real failures listed above | — |
 | `mcp/test:shared-path` full run | still running at time of writing | — |
-| Full corpus eval, sheet-graph phase (`reports/EVAL-2026-09-16_1527.txt`) | **cells: 91 right, 0 wrong, 0 missed → 100%/100%/100%** on baker-county-eoc (the only set with a cell key) — *better* than the 2026-09-13 baseline (85.7% recall then); **rowsym: 120 found, 0 unexpected, 18 missed → 87.0% recall**, down from 96.4% on 2026-09-13, new misses on federal-mech (`B-1`, `B-2`) and baker-county-eoc (`RTU-1`, `RTU-2`, `EF-1`, `ERV-01`, +12 more) that were not in the prior documented failure list | **cell scoring is a reliable, likely-real improvement** (it doesn't touch the expensive geometric sweep, so contention shouldn't move it). **rowsym's regression is very likely contention-driven**: the phase itself took **2,180.9 seconds (36.3 minutes)** to complete — the geometric sweep behind rowsym has an explicit work/time-cap disclosure path (`INCOMPLETE_PLAN_SEARCH`) built for exactly this kind of pressure, and a resource-starved sweep hitting that cap manifests as more refusals, i.e. more `rowsym-missed`. **Must be re-run in isolation before treating 87.0% as real** — same caveat as `T-HVAC-01`'s 375. |
-| Full corpus eval, takeoff+reference phase (`reports/TAKEOFF-EVAL-2026-09-16_1541.txt`) | Completed after **2,988 seconds (49.8 minutes)**. Every single set dropped sharply from its documented baseline: bessemer 100%→**70.0%**, itd-d1-lab 89.7%→**68.1%**, federal-mech 92.2%→**88.2%**, navfac 96.3%→94.9%, bldg5406 96.4%→**75.0%**, baker-county-eoc 87.5%→**10.0%**. | **Do not trust these numbers — this run is very likely corrupted, not just slow, and is flagged here as a warning rather than reported as current state.** The key tell: `bessemer` is a 10-tag, 8-page document that normally scores 100% and completes in seconds; contention-driven slowness alone should not make a small, fast job *wrong*, only slow. Every set degrading at once — including the smallest, fastest one — points at something more specific than generic CPU starvation: `test:shared-path` was running **concurrently**, hitting the **same shared, content-addressed on-disk sheet-graph cache** (`cachedSheetGraph`) for overlapping documents (bldg5406 is used by both). A read racing a concurrent write to that cache can hand back a partial or inconsistent cached graph. This is exactly the scenario `opentakeoff-corpus/GOAL.md`'s own standing rule exists to prevent ("do not run two heavy jobs" — a rule this session violated by launching corpus-eval, two mcp test suites, and the web suite concurrently with ground-truth authoring). **This entire eval run needs to be thrown out and re-run alone, on an idle cache, before any of its numbers are treated as real** — including baker-county-eoc's 10.0%, which is the single most alarming number in this whole session and almost certainly an artifact, not a 90-percentage-point regression that happened to occur during this exact session with no code change to explain it. |
+| Full corpus eval, sheet-graph phase (`reports/EVAL-2026-09-16_1527.txt`) | **cells: 91 right, 0 wrong, 0 missed → 100%/100%/100%** on baker-county-eoc (the only set with a cell key) — *better* than the 2026-09-13 baseline (85.7% recall then); **rowsym: 120 found, 0 unexpected, 18 missed → 87.0% recall**, down from 96.4% on 2026-09-13, new misses on federal-mech (`B-1`, `B-2`) and baker-county-eoc (`RTU-1`, `RTU-2`, `EF-1`, `ERV-01`, +12 more) that were not in the prior documented failure list | **CORRECTED, not contention-driven after all**: re-run clean and isolated this session, rowsym measured **86.2%** (119 found, 19 missed) — within a point of this run's 87.0%, with the same named misses (federal-mech `B-1`/`B-2`, baker-county-eoc `RTU-1`/`RTU-2`/`EF-1`, etc.). The predicted contention effect did not materialize; both numbers are real. The 96.4%→~86-87% drop from the 2026-09-13 baseline is real too and most likely reflects the 3 sets (federal-mech, baker-county-eoc, navfac-cherry-point-atc) added to the corpus after that date changing the denominator, not a regression in the pipeline — not independently confirmed this session, flagged for whoever next has 2026-09-13's exact corpus composition to check against. See "Corpus-eval corruption claim retracted," below, for the full correction and its `T-HVAC-01`-adjacent caveats. |
+| Full corpus eval, takeoff+reference phase (`reports/TAKEOFF-EVAL-2026-09-16_1541.txt`) | Completed after **2,988 seconds (49.8 minutes)**. Every single set dropped sharply from its documented baseline: bessemer 100%→**70.0%**, itd-d1-lab 89.7%→**68.1%**, federal-mech 92.2%→**88.2%**, navfac 96.3%→94.9%, bldg5406 96.4%→**75.0%**, baker-county-eoc 87.5%→**10.0%**. | **RETRACTED below — re-run clean, these numbers reproduced exactly. Kept here, struck through in spirit not in fact, so the retraction has something concrete to point at.** See "Corpus-eval corruption claim retracted" further down. |
+
+## Corpus-eval corruption claim retracted — the numbers above were real, not corrupted
+
+**This is a retraction, in the open, of the same kind and for the same
+reason as the bldg5406 CDB/RRA retraction earlier in this session.** The
+corpus-eval run flagged above as "very likely corrupted... throw it out"
+was re-run this session, alone, on an idle machine, with the process
+table checked and confirmed clean immediately beforehand (a genuine
+isolated run, not merely a claimed one — a real pile of ten leaked
+zombie node+python process pairs from earlier ground-truth-authoring
+scripts was found and killed first). **Every takeoff+reference number
+from the flagged run reproduced exactly, to the decimal point, in the
+clean run:**
+
+| set | flagged-as-corrupted run | clean isolated re-run |
+|---|---|---|
+| bessemer | 70.0% | **70.0%** |
+| itd-d1-lab | 68.1% | **68.1%** |
+| federal-mech | 88.2% | **88.2%** |
+| navfac-cherry-point-atc | 94.9% | **94.9%** |
+| bldg5406-hvac-demo | 75.0% | **75.0%** |
+| baker-county-eoc | 10.0% | **10.0%** |
+
+Identical results under wildly different concurrent load (the flagged
+run had 3+ other heavy jobs competing for the CPU and cache; the clean
+run had none) is strong evidence this computation is fully deterministic
+and was never actually corrupted by cache contention. **The error was
+mine**: I inferred corruption from "every set dropped sharply, including
+a small fast one that `normally scores 100%`" — but I never verified
+that "normally scores 100%" claim against this specific metric before
+asserting it; it was an assumption carried over from a different,
+undocumented baseline (likely an older corpus composition or an earlier
+version of this exact scoring script from the cited 2026-09-13 date),
+not something re-measured this session before being used to diagnose
+corruption. The lesson, stated plainly: **a number looking alarming is
+not evidence of corruption by itself — re-run clean before concluding
+that, the same discipline this project's "never fabricate" law already
+demands of ground-truth authoring, extended here to diagnosing eval
+results.**
+
+**What this retraction unlocks: baker-county-eoc's 10.0% is real, and
+it has a real, now-identified root cause — H8.** The clean run's own
+mismatch detail for baker-county-eoc shows 17 of its ~31 real
+quantity mismatches are rows with `status=not_in_output` /
+`actual=0` for exactly the "EQUIP NO"-keyed family the H8 investigation
+above (executed, not synthetic) already named: `RTU-1`, `RTU-2`, `CU-1`,
+`CU-2`, `EF-1`, `ERV-01`, `FCU-1`, `FCU-2`, `EWH-1`, `EWH-2`, `EWC-1`,
+`MS-1`, `WH-1`, `TV-1`, `ET-1`, `SH-1`, `TPV-1` — every one silently
+dropped from `compile_corpus_takeoff`'s output, the exact failure mode
+H8's Disagreement 1 predicted and executed synthetically. **This is the
+real corpus confirming the synthetic example, not a coincidence**: baker-
+county-eoc-bidset.pdf#41 is the actual document `session.ts:3877-3888`'s
+own comments describe as carrying these exact "EQUIP NO"-keyed rows. The
+same pattern, smaller in scale, shows up in federal-mech (`B-1`, `B-2`,
+`FCU-1`, `CU-1/2/3/5` all `not_in_output`) and navfac-cherry-point-atc
+(`CV-CHW-BP-M`, `CV-CHW-BP-T`, `CV-HHW-BP-T`, `HHWC-DOAH-T1` — navfac's
+own named multi-hyphen valve-mark hypothesis — all `not_in_output`).
+**H8 is not a narrow, rarely-triggered edge case; it is a live,
+corpus-wide, multi-document source of real dropped-row failures in
+`compile_corpus_takeoff`'s output today.**
+
+**A genuine H2 lead, unverified, found in the same data**: baker-county-
+eoc's mismatch list carries both `RTU-1`/`RTU-2` and, separately,
+`RTU-01`/`RTU-02` as distinct expected keys (the latter pair `expected=0
+actual=0`, then separately listed as `MISSING — no item at all in the
+pipeline's output`) — exactly the spelling-variant pair this plan's own
+Phase 0 target-set table names for this document ("`RTU-01` vs `RTU-1`
+spelling"). **Not confirmed as H2 from this alone** — it needs a direct
+render read of baker-county-eoc's own schedule and plan sheets to
+confirm whether `RTU-1` and `RTU-01` name the same physical unit spelled
+two ways (H2) or two genuinely different units that happen to look
+similar (not H2). Flagged as the first thing to check when baker-
+county-eoc's ground-truth key is authored (queued as task #4).
+
+**What was NOT retracted, and remains correctly flagged as unmeasured
+under contention**: the sheet-graph phase's `rowsym` corpus recall was
+87.0% in the flagged run; the clean re-run measured 86.2% — close
+enough (0.8 points, on a corpus-wide N in the low hundreds) to also read
+as "not actually corrupted," and the individual misses listed
+(`federal-mech B-1/B-2`, `bldg5406-hvac-demo VAV-6` — already documented
+in this file as a genuine `SCHEDULE_ONLY` row, not a bug — `baker-
+county-eoc RTU-1/RTU-2/EF-1` and 13 more) are consistent, named, and
+explicable, not scattered noise. The `cells` metric was 100%/100%/100%
+in both runs, as expected (it never touches the geometric sweep).
+**Net effect of this whole exercise: nothing in this session's corpus-
+eval numbers needs to be discarded after all** — the original caution
+was the right instinct given what was known at the time (multiple heavy
+jobs really were running concurrently, and that genuinely is a real risk
+worth guarding against going forward, per the plan's own updated risks
+section), but the specific conclusion drawn from it was wrong, and this
+correction says so plainly rather than leaving the wrong conclusion
+standing alongside a quieter fix.
 
 ## What remains for Phase 0
 
-- **Three complete, validated ground-truth keys exist** (bessemer,
-  bldg5406, itd-d1-lab); **3 more sets remain** from the plan's original
-  target list (baker-county-eoc, navfac-cherry-point-atc, federal-mech),
-  plus 3+ held-out bulk documents blocked on bulk-corpus staging (blocked on
-  network policy, unresolved this session).
-- H2, H3, H4 (only incidentally touched), H8 not yet measured. H6 was
-  measured this session (on itd-d1-lab's `HC` family) and did not
-  reproduce as a defect — see the hypothesis table above; it may still be
-  worth checking against a family not sampled there.
-- **The full corpus-eval run from this session must be discarded and
-  re-run alone**, once the machine is idle — see the takeoff+reference
-  finding above. Do not carry today's 70.0%/68.1%/88.2%/10.0%-style numbers
-  into any other document as current state.
-- Isolated re-verification of every test-suite finding flagged above as
-  contention-suspect (`demoD04`, `demoD05`, `demoD09`, `T-HVAC-01`, and now
-  the whole corpus-eval run), on an otherwise idle machine, before any of
-  them are reported as real.
+- **Four complete, validated ground-truth keys exist** (bessemer,
+  bldg5406, itd-d1-lab, federal-mech's `VAV` family); **2 more sets
+  remain** from the plan's original target list (baker-county-eoc,
+  navfac-cherry-point-atc), plus 3+ held-out bulk documents blocked on
+  bulk-corpus staging (blocked on network policy, unresolved this
+  session).
+- H2 (spelling variants) has a real, unverified lead (`RTU-1`/`RTU-01` on
+  baker-county-eoc, above) but is not yet confirmed. H3 confirmed by code
+  inspection (no real-document trigger found yet). H4 only incidentally
+  touched. **H8 confirmed twice over** — once synthetically (executed
+  disagreement examples) and once for real, at corpus scale, via this
+  session's clean corpus-eval re-run (baker-county-eoc/federal-mech/
+  navfac all show real rows dropped by `uniqueFamily`). H6 was measured
+  this session (on itd-d1-lab's `HC` family) and did not reproduce as a
+  defect — see the hypothesis table above; it may still be worth checking
+  against a family not sampled there.
+- **Resolved**: the corpus-eval run was re-run clean and isolated this
+  session (`reports/EVAL-2026-09-16_1713.txt`,
+  `reports/TAKEOFF-EVAL-2026-09-16_1726.txt`) and reproduced the flagged
+  run's numbers exactly — see "Corpus-eval corruption claim retracted"
+  above. `70.0%/68.1%/88.2%/10.0%` etc. ARE current, real state, not
+  artifacts; carry them forward.
+- Isolated re-verification of the test-suite findings flagged earlier as
+  contention-suspect (`demoD04`, `demoD05`, `demoD09`, `T-HVAC-01`) is
+  still outstanding — unlike the corpus-eval run, these were not
+  re-checked this session, so their contention-suspect status stands
+  pending a clean re-run of `mcp` test suites specifically.
 - `mcp/test:shared-path` full run had not finished at time of writing.
 - `web/test/tableRecallGaps.test.ts` B-11/B-12 regression — flagged as a
   separate task, not fixed here (out of this plan's scope). Successfully
   filed as `task_7b49dcf0` ("Fix sheetgraph.ts table-claiming regression
   (B-11, B-12)") after an earlier `spawn_task` attempt timed out under
   load.
-- **Operational lesson for future sessions on this repo**: do not run
-  ground-truth authoring concurrently with corpus-eval or heavy test
-  suites. `opentakeoff-corpus/GOAL.md` already says not to run two heavy
-  jobs at once; this session violated that and the evidence above (a
-  10-tag document scoring wrong, not just slow) is a concrete demonstration
-  of why the rule exists.
+- **Operational lesson, corrected**: running corpus-eval concurrently with
+  other heavy jobs is still a real, standing risk (`opentakeoff-corpus/
+  GOAL.md`'s "no two heavy jobs at once" rule remains correct and is now
+  in the plan's own risks section) — but the specific claim that this
+  session's own concurrent run had actually corrupted the takeoff+
+  reference numbers was checked and found wrong (see the retraction
+  above). Treat "looks alarming under load" as a prompt to re-verify
+  clean, not as proof of corruption on its own.
 
 This file will be updated, not replaced, as those continue.
