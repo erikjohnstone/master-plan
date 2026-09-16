@@ -8071,13 +8071,28 @@ export default function TakeoffCanvas() {
             }))
             : null,
     });
+    const workflowName = meta.workflow || compiled.takeoff_id || "corpus takeoff";
     const rows = rowsFromCompiledTakeoff(compiled, {
-      workflow: meta.workflow || compiled.takeoff_id || "corpus takeoff",
+      workflow: workflowName,
       runId: meta.runId || null,
       source_tool: "compile_corpus_takeoff",
     });
     if (rows.length) {
-      setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, rows));
+      // A corpus compile is a full, authoritative re-derivation of this
+      // workflow's takeoff, not incremental evidence — mergeTakeoffRows'
+      // dedupe key includes sheet_id, so a re-run whose citations now
+      // resolve to a DIFFERENT sheet_id (e.g. after a remap fix, or a
+      // revised drawing) never collides with the stale row and both would
+      // otherwise coexist. compileAgentTakeoff then takes the FIRST row it
+      // sees per tag/field ("first wins"), so the old, possibly-wrong
+      // citation would keep winning forever, no matter how many times the
+      // takeoff is re-run. Drop this workflow's previous compile_corpus_takeoff
+      // rows before merging the fresh ones in, so a re-run actually replaces
+      // its own prior citations instead of piling up beside them.
+      setAgentTakeoffRows((prev) => mergeTakeoffRows(
+        prev.filter((row) => !(row.source_tool === "compile_corpus_takeoff" && row.workflow === workflowName)),
+        rows,
+      ));
       setShowTakeoffData(true);
       // Audit trail on the blueprints: one highlight per schedule table + per tag row.
       void paintCompiledTakeoffHighlights(compiled);
