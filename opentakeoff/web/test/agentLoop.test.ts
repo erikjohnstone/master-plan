@@ -1099,6 +1099,36 @@ test("max-iterations cap stops a model that never finishes", async () => {
   assert.ok(MAX_AGENT_ITERATIONS >= 8);   // the real cap leaves room for a full schedule→measure→propose run
 });
 
+test("evidence-gate thrash: a model that keeps re-submitting the same refused answer stops instead of spinning to max_iterations", async () => {
+  const REFUSAL = "No matching control valve row was found.";
+  let calls = 0;
+  // The model never calls a tool — it just keeps re-asserting the same
+  // refused final answer, exactly like the transcript that motivated this:
+  // 9 real tool calls happened earlier (not modeled here; requiredEvidenceCorrection
+  // only looks at callLog, which stays empty), then ~30 identical
+  // "[Evidence gate: ...Before refusing, call query_table...]" turns with no
+  // new tool call in between.
+  const fn = async () => { calls++; return resp(anthropicDone(REFUSAL)); };
+  const events: any[] = [];
+  const res = await runAgentLoop({
+    cfg: CFG_A, goal: "Give me the matching control valve for CH-A1", tools: TOOLS,
+    execute: () => ({ error: "should never be called — model never issues a tool_use" }),
+    onEvent: (ev) => events.push(ev),
+    maxIterations: 80, fetchFn: fn as any,
+  });
+  // Must NOT burn the whole iteration budget repeating the identical gate message.
+  assert.equal(res.status, "done");
+  assert.ok(calls <= 5, `expected the loop to give up quickly, got ${calls} model round-trips`);
+  const gateEvents = events.filter((e) => e.type === "text" && /^\[Evidence gate:/.test(e.text || ""));
+  assert.ok(gateEvents.length <= 3, `expected at most 3 repeated gate messages before giving up, got ${gateEvents.length}`);
+  // Every emitted gate message must be the identical correction — proves this
+  // is genuinely the same-rejection-repeating case, not a red herring.
+  assert.ok(gateEvents.every((e) => /Before refusing, call query_table/.test(e.text)));
+  // The final answer must say plainly that the gate could not be satisfied,
+  // not silently return the refused text as if it were accepted.
+  assert.match(res.text || "", /Evidence gate could not be satisfied/);
+});
+
 test("malformed model output → error status + event, not a crash", async () => {
   for (const bad of [{ nonsense: true }, { content: "not-an-array" }, null]) {
     const { fn } = scriptedFetch([bad]);
