@@ -41,7 +41,7 @@ structure before regex, audit before build.
 | §11 | The MCP and in-app agent surface |
 | §12 | Verification: ground truth, metrics, gates |
 | §13 | Phased roadmap with acceptance criteria |
-| §14 | Open decisions for the user |
+| §14 | The six decisions the research settled |
 | Appendices | Label grammar, default tables, touch-point file map, bugs to file |
 
 ---
@@ -1564,24 +1564,33 @@ fittings and hangers. The moat items (§4.3) land in Phases 3–6.
 
 ---
 
-## 14. Open decisions for the user
+## 14. Decisions (settled 2026-09-16)
 
-1. **One condition per system with per-segment sizes (recommended) vs one condition per
-   size.** The plan supports both; the default seed conditions and the agent's habit
-   follow the choice.
-2. **Deduct fitting lengths from straight LF** (QuoteSoft Auto Elbow behaviour) — off by
-   default in the plan; a per-assembly switch.
-3. **Adopted hanger table default** (MSS SP-58 vs IPC vs IMC vs UPC) — plan default MSS
-   SP-58 for mechanical piping, IPC for plumbing; project setting overrides.
-4. **BAS linear in the Python engine or the TS assembly module** — plan recommends TS only
-   unless BAS deliverable-scope claims must cite it.
-5. **Whether to open the corpus mandate** (`NEXT_GOAL_LOOP.md:179` "No duct-LF scope
-   creep") formally, and where the linear ground-truth track sits relative to the schedule/
-   points goal loop.
-6. **Which licensed labor source, if any, to integrate via user import** (MCAA WebLEM,
-   Wendes, SMACNA) so priced exports carry the estimator's own units.
+These were open questions in the first draft; the research answers them, so they are
+decisions now. The executable goal that carries them is
+`opentakeoff-corpus/goals/LINEAR_TAKEOFF.md` ("Decisions" table).
 
----
+1. **One condition per system, sizes on segments** (per-size conditions stay available as
+   templates). AutoBid tracks size-change vertices; Canaveral reads size per segment; the
+   one-tool-per-size habit in Bluebeam/STACK/PlanSwift exists only because those tools
+   have no per-segment data. Reducers and transitions are only countable this way.
+2. **Fitting lengths are not deducted from straight LF by default**; a per-assembly
+   `deduct_fittings` switch exists for QuoteSoft-style shops. RSMeans, Wendes and the MCAA
+   joint method all take straight duct/pipe off by centreline length and count fittings
+   separately; deducting by default under-orders straight material.
+3. **Default hanger tables:** duct IMC 603.10 + SMACNA 5-1/5-2 by size class; mechanical
+   piping MSS SP-58 Table 4; plumbing IPC 308.5; UPC 313.3 / IMC 305.4 selectable as the
+   project's adopted code. The three code tables disagree, so it is a project setting with
+   a defensible default.
+4. **BAS linear is a TypeScript assembly quantity, not a `bas_engine` contract.** The
+   Python engine has no length unit, integer-only counts, a no-pricing doctrine and states
+   it is not a cable-routing solver; its scope claims cite point counts, which exist.
+5. **The corpus mandate is formally opened** by the goal file; `NEXT_GOAL_LOOP.md` carries
+   a dated amendment. The linear loop has its own gates and must leave corpus-eval
+   unchanged.
+6. **No licensed labor tables ship.** Graded [M] defaults plus a CSV import of the
+   estimator's own units (`family,size_key,joint_type,unit,hours,source`; MCAA WebLEM
+   layout first).
 
 ## Appendix A — Size and system grammar (normalised; all sizes to inches)
 
