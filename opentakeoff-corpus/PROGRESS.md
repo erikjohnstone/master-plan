@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-16 follow-up: the "grader error rate" metric below, initially
+reported NOT MET/impossible-from-this-session, is now MEASURED. Rather
+than keep trying from inside a session already contaminated by having
+read `serves-eval.mjs`'s own full miss-list multiple times earlier the
+same day, delegated the blind re-grade to a freshly-spawned subagent
+with zero conversation history — the actual fix for "impossible from
+here," not a reason to give up on the metric. Gave it 6 tuning-half rows
+(device_tag/x/y/relation only, no answers), instructions to render each
+via `view_sheet` with a marker ring burned in at the exact coordinate,
+record independent judgments FIRST, and only then read the real key CSV
+rows to compare. Result: 4/6 clean first-pass agreement, 2/6
+disagreements — and on both, the fresh grader's own re-inspection (not
+a revision of its already-recorded call, a genuine second look) found
+ITS OWN trace to be the error, not the key's (one over-traced past a
+duct trunk's real endpoint onto an unrelated riser; one found a real
+branching control run the key already correctly splits into two rows,
+where the grader's single pass just hadn't traced far enough to find
+the second leg). Net: 6/6 resolved agreement with the key, 33% raw
+first-pass disagreement — the real number this metric asks for, and
+genuinely informative on its own (even a careful independent read gets
+it wrong a third of the time on a first pass, which is why the original
+key's own multi-crop tracing discipline is warranted, not excessive).
+Plan doc's own Completion gate section and its "Bottom line" updated to
+reflect this is now MEASURED, not merely attempted-and-abandoned; the
+overall gate verdict (NOT MET, `no-seed`/`crossing cases` still block
+it) is unchanged, since neither of those is something a grader-accuracy
+check could close.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md's own "Completion gate" section
 (the whole-project bar, distinct from any single phase's own gate) now
 carries a full, honest status report against every named metric, rather
