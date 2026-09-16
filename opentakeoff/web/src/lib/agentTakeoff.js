@@ -1863,7 +1863,12 @@ export function compileAgentTakeoff(rows = []) {
       g.plan_sheet_id = row.sheet_id;
       if (row.bbox_px) g.plan_bbox_px = row.bbox_px;
       g.status = g.status || "located";
-    } else if (row.sheet_id && (field !== "installed_quantity" && field !== "plan_tag" && field !== "plan_tag_observation" && field !== "diagram_tag")) {
+    } else if (row.sheet_id && (field !== "installed_quantity" && field !== "plan_tag" && field !== "plan_tag_observation" && field !== "diagram_tag"
+      // A valve compile's plan_paint hint is emitted BEFORE the tag's quantity
+      // row and only says which schedule to prefer when re-sweeping; letting it
+      // win "first row sets schedule_sheet_id" handed every Schedule row cite a
+      // hint's sheet key instead of the cited row's own.
+      && field !== "plan_paint_prefer_schedule_title")) {
       if (!g.schedule_sheet_id) g.schedule_sheet_id = row.sheet_id;
     }
     if (row.bbox_px && !g.bbox_px && field !== "plan_status" && field !== "plan_tag" && field !== "installed_quantity") {

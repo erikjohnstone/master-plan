@@ -1438,3 +1438,40 @@ test("complete BAS takeoff exposes cited schematic/riser evidence without turnin
   assert.ok(rows.every((row) => row.field !== "installed_quantity" && row.field !== "quantity"));
   assert.deepEqual(rows.find((row) => row.field === "POINT TYPE")?.bbox_px, [95, 195, 105, 205]);
 });
+
+test("control_valves: a plan_paint hint row must not hand the Schedule row cite a spooled hash", async () => {
+  // Real failure, found live on a 75-page valve set: compile-corpus-takeoff
+  // spools uploads as <sha256>.pdf, and for control_valves ONLY it also emits
+  // estimator_product.plan_paint.targets with prefer_schedule_sheet copied
+  // from item.sheet_id. Those hint rows land in the EAV stream BEFORE the
+  // tag's quantity row; compileAgentTakeoff keeps the first sheet it sees per
+  // tag, and prefer_schedule_sheet was not a remapped key — so every Schedule
+  // row cite opened "<hash>.pdf#47" while the correctly remapped quantity row
+  // sat one line below it. hvac_equipment has no such rows, which is why it
+  // never reproduced there.
+  const { remapGraphSheetKeys } = await import("../src/lib/graphKeys.js");
+  const HASH = "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf";
+  const spooled = `${HASH}.pdf#47`;
+  const compiled: any = {
+    kind: "control_valves", takeoff_id: "T-VALVE-01",
+    estimator_status: { estimator_complete: false, gates: [] },
+    estimator_product: { printed_items: 1, plan_paint: { status: "refuse_not_done",
+      targets: [{ tag: "CV-AHU-A1-CHW", prefer_schedule_title: "CHW CONTROL VALVE SCHEDULE", prefer_schedule_sheet: spooled }] } },
+    categories: { CHW_CONTROL_VALVE: { count: 1, items: [{
+      tag: "CV-AHU-A1-CHW", quantity: 1, unit: "EA", sheet_id: spooled, table_title: "CHW CONTROL VALVE SCHEDULE",
+      bbox_px: [1709, 583, 1918, 617], row_bbox_px: [1557, 583, 2547, 617], scheduled_qty: 1,
+    }] } },
+  };
+  remapGraphSheetKeys(compiled, new Map([[HASH, "atc-tower.pdf"]]));
+  const rows = rowsFromCompiledTakeoff(compiled, { workflow: "T-VALVE-01", source_tool: "compile_corpus_takeoff" });
+  // the hint row is emitted first and must itself be remapped
+  const hint = rows.find((r) => r.field === "plan_paint_prefer_schedule_title");
+  assert.equal(hint?.sheet_id, "atc-tower.pdf#47");
+  assert.ok(rows.indexOf(hint!) < rows.findIndex((r) => r.field === "quantity"));
+  const line = compileAgentTakeoff(rows).find((l) => l.tag === "CV-AHU-A1-CHW");
+  assert.equal(lineScheduleCite(line)?.sheet_id, "atc-tower.pdf#47");
+  // and even with an UN-remapped hint (any future hint field), the cite must
+  // still be the quantity row's own sheet, never the hint's
+  const stale = rows.map((r) => r.field === "plan_paint_prefer_schedule_title" ? { ...r, sheet_id: spooled } : r);
+  assert.equal(lineScheduleCite(compileAgentTakeoff(stale).find((l) => l.tag === "CV-AHU-A1-CHW"))?.sheet_id, "atc-tower.pdf#47");
+});
