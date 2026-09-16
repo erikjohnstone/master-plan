@@ -303,8 +303,44 @@ export interface BuildMepGraphOpts {
    *  same way as everything else here rather than assumed free — a real,
    *  unmeasured per-sheet cost on top of noding, not yet worth paying by
    *  default until a real consumer (Phase 5's own `relation: "controls"`)
-   *  exists. */
+   *  exists.
+   *
+   *  REAL, DISCLOSED GAP found 2026-09-16 verifying `bridgeDashedGaps`
+   *  below against real Bessemer data: this detector flagged 13,216 of
+   *  28,998 real sheet edges (45.6%) as "dashed," in runs as large as 502
+   *  pieces — sampled geometry shows tight alternating ~5px zigzag
+   *  segments, unmistakably a HATCH/CROSSHATCH FILL PATTERN, not a real
+   *  dashed line. The SAME chain tolerance that correctly accepts a real
+   *  exporter's reversed-path-winding dash pieces (this module's own
+   *  tested "reversed-direction" case) also accepts a zigzag hatch fill's
+   *  own alternating strokes on real, dense, unlayered CAD data — never
+   *  caught before because no prior test ran this detector over a WHOLE
+   *  real sheet and checked how much of it gets flagged. Do not treat
+   *  `dashed: true` as reliable evidence of a real dashed line on a real
+   *  sheet without first excluding hatch-fill ink (mirroring how
+   *  buildMepGraph's own wall-vouching already excludes architectural ink
+   *  before MEP noding — `hatchFamilies.ts` already exists in this
+   *  codebase for exactly this kind of pattern classification) — not
+   *  attempted here, PLAN_CONNECTIVITY_SERVES.md Phase 5 item 1's own
+   *  next real, dedicated increment. */
   detectDashedLines?: boolean;
+  /** DEFAULT OFF, and only takes effect when `detectDashedLines` is ALSO
+   *  on (an edge needs its own `dashRunId` for this to have anything to
+   *  bridge). Joins every real drawn GAP between two consecutive dash
+   *  pieces of the SAME run (dashdetect.ts's own detectDashedRuns run
+   *  identity) with a synthetic edge — the pieces are never
+   *  JTS-noding-connected to each other on their own (that gap is
+   *  literally what makes a line look dashed), so this is the only way a
+   *  future `relation: "controls"` walk can ever cross one at all.
+   *  Bridging is gated on SHARING a dashRunId, never on proximity alone —
+   *  two DIFFERENT dash runs (even two adjacent, parallel control-wire
+   *  home-runs) are never joined just because they sit close together,
+   *  the identical real over-connection risk shape
+   *  `detectDoubleLineDuctCenterlines`'s own bridging above already found
+   *  and fixed once (a radius-search bridge merging a real duct with an
+   *  unrelated control line on real Bessemer data) — dashRunId's own
+   *  equality check is the safety gate a proximity tolerance can't be. */
+  bridgeDashedGaps?: boolean;
 }
 
 const q = (v: number, grid: number) => Math.round(v / grid) * grid;
@@ -709,6 +745,49 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
           nodes[clId].edges.push(ei); nodes[anchorNodeId].edges.push(ei);
         }
       });
+    }
+  }
+
+  // ── dashed-gap bridging (Phase 5 item 1, PLAN_CONNECTIVITY_SERVES.md) ──
+  // See BuildMepGraphOpts.bridgeDashedGaps's own doc comment for the full
+  // doctrine. Edges sharing a dashRunId are grouped in the SAME order
+  // addEdge already created them (buildMepGraph processes survivors
+  // strictly in the order detectDashedRuns itself walked them to assign
+  // that id) — the exact run order, so consecutive entries in each group
+  // are genuinely adjacent dash pieces, not an arbitrary pairing.
+  if (opts.bridgeDashedGaps && opts.detectDashedLines) {
+    const byRun = new Map<number, number[]>();
+    for (let i = 0; i < edges.length; i++) {
+      const e = edges[i];
+      if (!e.dashed || e.dashRunId == null) continue;
+      let list = byRun.get(e.dashRunId);
+      if (!list) { list = []; byRun.set(e.dashRunId, list); }
+      list.push(i);
+    }
+    for (const runEdgeIdx of byRun.values()) {
+      for (let k = 1; k < runEdgeIdx.length; k++) {
+        const prev = edges[runEdgeIdx[k - 1]], cur = edges[runEdgeIdx[k]];
+        // The closest pair of endpoints between two consecutive dash
+        // pieces is the real gap this exact dash cadence actually draws —
+        // the exporter may alternate path winding direction between
+        // pieces (dashdetect.ts's own "reversed-direction" case), so all
+        // 4 endpoint combinations are checked, never assumed a->a.
+        let bestA = -1, bestB = -1, bestD = Infinity;
+        for (const pa of [prev.a, prev.b]) {
+          for (const pb of [cur.a, cur.b]) {
+            if (pa === pb) continue;
+            const d = Math.hypot(nodes[pa].x - nodes[pb].x, nodes[pa].y - nodes[pb].y);
+            if (d < bestD) { bestD = d; bestA = pa; bestB = pb; }
+          }
+        }
+        if (bestA < 0) continue;
+        const ei = edges.length;
+        edges.push({
+          a: bestA, b: bestB, length: bestD, system: prev.system, systemConfidence: 0.4,
+          dashed: true, dashRunId: prev.dashRunId, bridged: true,
+        });
+        nodes[bestA].edges.push(ei); nodes[bestB].edges.push(ei);
+      }
     }
   }
 

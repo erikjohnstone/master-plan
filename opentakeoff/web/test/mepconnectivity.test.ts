@@ -879,3 +879,73 @@ test("buildMepGraph: detectDashedLines threads dashRunId onto every dashed edge 
   assert.ok(![...runIds].includes(undefined), "a dashed edge always carries a real dashRunId");
   assert.ok(solidEdges.every((e) => e.dashRunId === undefined), "a non-dashed edge never carries a dashRunId");
 });
+
+// ── bridgeDashedGaps (Phase 5 item 1, second increment — the actual walk
+// this run identity exists for) ──────────────────────────────────────────
+
+test("buildMepGraph: bridgeDashedGaps joins every consecutive gap of one real dash run into a single connected component", () => {
+  const dashed = dashRun(0, 0, 6, 20, 20); // 6 pieces -> 5 real gaps between them
+  const g = buildMepGraph(dashed, { mppf: 100, detectDashedLines: true, bridgeDashedGaps: true });
+  const dashedEdges = g.edges.filter((e) => e.dashed);
+  const bridgeEdges = dashedEdges.filter((e) => e.bridged);
+  assert.equal(bridgeEdges.length, 5, "6 dash pieces have exactly 5 real gaps between them");
+  // the whole run must now be ONE connected component, walkable end to end.
+  const tolPx = seedTolPx(g, 100);
+  const info = describeComponent(g, [0, 0], tolPx); // the very first dash piece's own start
+  assert.ok(info);
+  assert.equal(info!.edgeCount, dashedEdges.length, "every original dash piece plus every real bridge is walkable from one end of the run");
+});
+
+test("buildMepGraph: bridgeDashedGaps never bridges across TWO DIFFERENT dash runs, even ones sitting close together", () => {
+  const runA = dashRun(0, 0, 4, 20, 20);
+  const runB = dashRun(500, 0, 4, 20, 20); // a second, unrelated run far away
+  const g = buildMepGraph([...runA, ...runB], { mppf: 100, detectDashedLines: true, bridgeDashedGaps: true });
+  const tolPx = seedTolPx(g, 100);
+  const infoA = describeComponent(g, [0, 0], tolPx);
+  const infoB = describeComponent(g, [500, 0], tolPx);
+  assert.ok(infoA && infoB);
+  assert.notDeepEqual(infoA!.bbox, infoB!.bbox, "two real, separate dash runs must never merge into one component");
+  assert.ok(infoA!.bbox[2] < 500, "runA's own component never reaches into runB's own coordinate range");
+});
+
+test("buildMepGraph: bridgeDashedGaps has no effect when detectDashedLines itself is off (dependent flag, never a silent default)", () => {
+  const dashed = dashRun(0, 0, 6, 20, 20);
+  const g = buildMepGraph(dashed, { mppf: 100, bridgeDashedGaps: true }); // detectDashedLines omitted
+  assert.ok(g.edges.every((e) => e.dashed === undefined && e.bridged === undefined));
+});
+
+test("buildMepGraph: bridgeDashedGaps correctly pairs endpoints even when dash pieces alternate winding direction", () => {
+  // pieces 0,2,4 run left->right; pieces 1,3,5 are stored reversed
+  // (right->left) — dashdetect.ts's own "reversed-direction" real export
+  // shape. The real gap is always between the visually adjacent ends,
+  // never assumed to be a fixed a->a pairing — proven here by the whole
+  // run still forming ONE connected, fully-walkable component (a wrong
+  // pairing would either fail to connect some pieces, or connect the
+  // wrong ones, leaving describeComponent's own edgeCount short). Exact
+  // bridge length isn't asserted here — buildMepGraph's own default
+  // quantization grid at this mppf can shift a small-scale fixture's
+  // exact coordinates (the same real effect this file's own
+  // detectDashedLines test above sizes its dashes to avoid), so
+  // connectivity, not literal distance, is this test's own real claim.
+  const segs: number[] = [];
+  let x = 0;
+  for (let i = 0; i < 6; i++) {
+    if (i % 2 === 0) segs.push(x, 0, x + 20, 0);
+    else segs.push(x + 20, 0, x, 0);
+    x += 40;
+  }
+  const g = buildMepGraph(segs, { mppf: 100, detectDashedLines: true, bridgeDashedGaps: true });
+  const dashedEdges = g.edges.filter((e) => e.dashed);
+  const bridgeEdges = dashedEdges.filter((e) => e.bridged);
+  assert.equal(dashedEdges.length, 11, "6 original dash pieces + 5 real bridges");
+  assert.equal(bridgeEdges.length, 5);
+  // Seeded exactly at the first piece's own real (quantized) node
+  // coordinate, not a midpoint — a mid-edge seed would trigger
+  // resolveOnGraph's own splice (see this file's earlier describeComponent
+  // tests' identical note) and change the edge count for an unrelated
+  // reason.
+  const tolPx = seedTolPx(g, 100);
+  const info = describeComponent(g, [g.nodes[0].x, g.nodes[0].y], tolPx);
+  assert.ok(info);
+  assert.equal(info!.edgeCount, 11, "the whole alternating-winding run is still one fully connected component");
+});

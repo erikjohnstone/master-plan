@@ -729,6 +729,42 @@ MET as the plan's own gate defines it (Bessemer `SR-1`→`HP-1` served BY
 DEFAULT), since that still needs `detectDoubleLineDuctCenterlines` on,
 which still needs its own scale-aware corpus pass first.
 
+**The scale-aware corpus pass this note asked for is now DONE, with a
+definitive, disclosed verdict: the flag stays opt-in, not a new default —
+measured, not assumed.** A one-off diagnostic script applied each real
+sheet's own `detected_scale` (`use_detected: true` — mppf actually > 0,
+unlike every existing eval script) across the FULL tuning-half corpus
+(bessemer 13 `serves.csv` rows, itd-d1-lab 9 rows — the frozen held-out
+sets untouched) and ran every row through the raw-point
+`traceConnectivity` path TWICE, flag off vs. on. Result: **zero score
+differences on either set** (bessemer 0/7 served, 4/6 refusal-honored,
+0 false-confident, byte-identical both ways; itd-d1-lab 0/7 served, 1/2
+refusal-honored, 0 false-confident, byte-identical both ways) — the
+over-connection regression Phase 3's own item 4 already fixed stays
+fixed under real scale too, and the raw-point path (with no bbox) simply
+never benefits from centerline synthesis either way, exactly as diagnosed
+above (a raw point still snaps to its own nearest glyph regardless of
+what the centerline mechanism adds elsewhere in the graph).
+
+But a SEPARATE, real, measured cost rules out flipping the default
+anyway: timing the SAME two real sheets' own `buildMepGraph` call with
+the flag off vs. on found bessemer's own build time going from 923ms to
+3164ms (+2240ms, 2.4x) and itd-d1-lab's from 3936ms to 4489ms (+553ms,
+14%) — a real, per-sheet cost every caller would pay on every build,
+overwhelmingly for sheets that have no double-line ducts to extract a
+centerline from at all. This is the same "never assume a mechanism is
+free" discipline Phase 1 item 3's own L3.5 gating already established
+for this exact module. **Verdict: the flag correctly stays default OFF**
+— not because turning it on is unsafe (it measurably is not, on real
+data), but because its real cost isn't currently worth paying by default
+for a benefit (body-aware bbox resolution) that itself requires a caller
+to already have a real device/equipment bbox, which most callers still
+don't per Phase 4 item 2's own remaining scope. A caller that DOES have
+real bboxes and DOES want double-line duct connectivity has a clear,
+disclosed, informed choice to opt in per-sheet — Gate 3 itself stays NOT
+MET as a DEFAULT-behavior gate, which is the honest, correct outcome
+given this real cost/benefit picture, not an unresolved question anymore.
+
 ### Phase 4 — ports, not clicks
 
 1. For every device placement (`symbol_sweep` match, `sweep_schedule_row`
@@ -908,6 +944,71 @@ verification against Bessemer's actual T-thermostat-to-baseboard-heater
 lines a synthetic fixture alone cannot substitute for (every comparable
 cross-system over-connection bug in this codebase's own history was found
 only against real, dense corpus data, never a synthetic fixture).
+
+**The actual bridging mechanism landed the same day — correctly
+implemented and safely gated, but the mandatory real-corpus verification
+above found a real, serious, PRE-EXISTING problem one level down, and the
+whole feature is NOT recommended for use until it's fixed.** `buildMepGraph`
+gained `bridgeDashedGaps` (default OFF, dependent on `detectDashedLines`):
+for each `dashRunId` group, consecutive pieces (in the same order
+`detectDashedRuns` walked them) are joined across their real drawn gap by
+a synthetic edge, choosing whichever of the 4 endpoint-pair combinations
+is geometrically closest (handles the exporter alternating path winding
+direction between pieces). Bridging is gated on sharing a `dashRunId`,
+never proximity — exactly the safety property the research called for.
+5 new synthetic tests (a clean run bridges into one component; two
+separate runs never merge even sitting close together; the flag has no
+effect when `detectDashedLines` itself is off; alternating winding
+direction still resolves correctly), all passing; byte-identical to
+today when unused (60 existing tests unchanged); typecheck clean.
+
+**Then verified against the real Bessemer T-thermostat/EBB-heater lines
+this whole item exists for, exactly as the research demanded — and the
+result is a real, serious finding, not a clean win.** With real scale
+applied, `detectDashedLines` (Phase 1, already shipped default-OFF
+BEFORE this session, not new code from today) flags **13,216 of 28,998
+edges — 45.6% of the entire real sheet** — as "dashed," organized into
+228 "runs," the ten largest sized 502, 349, 289, 275, 252, 251, 241, 237,
+132, 130 pieces. Sampling the actual flagged geometry: tight, alternating
+horizontal/vertical ~5px zigzag segments — unmistakably a HATCH/CROSSHATCH
+FILL PATTERN (a wall, floor, or equipment-symbol fill drawn as many short
+alternating strokes), not a real dashed control line at all. A real
+control line run is a handful to a few dozen pieces; 502 collinear-ish
+tiny alternating pieces in "one run" is a hatch fill being misread as a
+dash cadence — the SAME chain-building tolerance that correctly handles a
+real exporter's reversed-winding dash pieces (dashdetect.ts's own
+explicitly-tested "reversed-direction" case) also, on real dense
+unlayered CAD data, accepts a zigzag hatch fill's own alternating strokes.
+This is a genuine, previously-undiscovered gap in `detectDashedLines`
+itself — every prior test of that module (Phase 1) used either a narrow
+hand-built synthetic fixture or a synthetic REPRODUCTION of one specific
+measured real shape, never a full real sheet checked for how MUCH of it
+gets flagged. Consequence, measured directly: raw-point `traceConnectivity`
+results for the real T→EBB-1/2/3/4 rows are BYTE-IDENTICAL with the flag
+on vs. off (dead_end/ambiguous/ambiguous/ambiguous, unchanged) — the T/EBB
+symbols' own glyph-vs-real-line resolution problem (the same class Gate 3
+already named) means dash bridging alone changes nothing for a raw-point
+caller. But composing it with this session's own new
+`expandBodyAwareTarget` (bbox-aware resolution) is where it turns
+actively dangerous: three DIFFERENT real T thermostats (which the key
+says connect to EBB-2, EBB-3, and EBB-4 respectively — three different,
+real, distinct devices) all confidently "reached" EBB-2 — a real,
+measured false-confident result, caused by the hatch-fill-as-dash-run
+misclassification bridging unrelated ink into one connected mass, the
+IDENTICAL over-connection risk shape this whole item's own design
+doctrine was written to prevent (see `detectDoubleLineDuctCenterlines`'s
+own reverted radius-search bug above). **Verdict: `bridgeDashedGaps`
+stays implemented, tested, and default OFF, but is NOT currently
+recommended for any real caller to enable** — not because its own
+bridging logic is unsafe (the run-id gate does exactly what it was
+designed to do), but because the `detectDashedLines` signal it depends on
+is not yet reliable on real, dense, unlayered CAD sheets. The real,
+scoped, necessary next step this finding names precisely: teach
+`detectDashedSegs`/`detectDashedRuns` to exclude hatch-fill ink before
+classification (mirroring how `buildMepGraph`'s own wall-vouching already
+excludes architectural ink before MEP noding — `hatchFamilies.ts` already
+exists in this codebase for exactly this kind of pattern classification)
+— not attempted here, a real, separate, dedicated increment of its own.
 
 **Items 2 and 4 landed, 2026-09-16, on explicit authorization** (this
 session's own Stop-hook condition named a starting commit that no amount

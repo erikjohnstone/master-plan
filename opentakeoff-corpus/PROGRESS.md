@@ -1,5 +1,45 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md — two closed verdicts, both reached
+by real-corpus verification rather than synthetic fixtures alone, per this
+plan's own standing discipline. (1) Gate 3's centerline-flag default
+question is now definitively answered: a one-off scale-aware diagnostic
+that actually calls `set_scale` with each sheet's own real `detected_scale`
+(neither `serves-eval.mjs` nor `mep-trace-eval.mjs` ever did — so every
+prior "ON/OFF identical" claim was vacuously true, since centerline
+detection never engaged at mppf=0) ran `detectDoubleLineDuctCenterlines`
+ON vs OFF across the full tuning-half corpus (bessemer + itd-d1-lab):
+zero score regressions either sheet, but a real, measured build-time cost
+(bessemer 923ms→3164ms, +2.4x; itd-d1-lab 3936ms→4489ms, +14%) with no
+benefit to callers lacking bboxes. Verdict: the flag correctly stays
+default OFF — cost, not safety, is the reason. (2) Phase 5 item 1's actual
+gap-bridging mechanism is now implemented: `BuildMepGraphOpts
+.bridgeDashedGaps` (default OFF, dependent on `detectDashedLines`) joins
+consecutive same-`dashRunId` edges across their real gap via the closest
+of 4 endpoint-pair combinations, gated on run identity alone, never
+proximity — 5 new synthetic tests, all passing. Verifying it against real
+Bessemer data (as this plan's own discipline requires before recommending
+any bbox/gap-bridging mechanism) surfaced a serious, previously-unknown,
+disclosed finding: the pre-existing `detectDashedLines` detector (shipped
+in an earlier phase, not new this session) misclassifies hatch/crosshatch
+fill as dashed runs on real dense CAD sheets — 13,216 of 28,998 real
+Bessemer edges (45.6%) flagged, in runs up to 502 pieces, sampled geometry
+unmistakably zigzag hatch fill, not real dashed lines. Composing this with
+`bridgeDashedGaps` + `expandBodyAwareTarget` produced a real false-
+confident result (3 distinct real T-thermostats all wrongly "reaching" the
+same equipment, EBB-2). Verdict: `bridgeDashedGaps` is implemented, tested,
+and default OFF, but is NOT recommended for any real caller to enable
+until hatch-fill ink is excluded from dash detection (mirroring wall-
+vouching's own exclusion pattern; `hatchFamilies.ts` already exists for
+this classification) — a real, separate, not-yet-attempted next increment,
+documented both in this plan's own Phase 5 section and directly in
+`mepconnectivity.ts`'s own `detectDashedLines` doc comment so a future
+reader of the code itself sees the risk, not only this doc. Prefer an
+honest documented ceiling over an unsafe heuristic: this is why the
+mechanism ships disabled and unrecommended rather than wired into any
+default path. Full detail: the plan doc's own Phase 3 and Phase 5
+sections.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5 item 1, a second small
 prerequisite piece: `dashdetect.ts`'s own internal same-run grouping (the
 `chain` array `classify()` already builds, previously discarded the
