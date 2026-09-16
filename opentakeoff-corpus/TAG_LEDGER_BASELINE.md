@@ -187,9 +187,24 @@ the H7 note-text mechanism above). Every other count is correct, including
 the three (`CDB`, `RRA`, `CDA`) this session first, wrongly, flagged as
 fabricated.
 
-`keys/bldg5406-hvac-demo.tagocc.csv` is not yet written — the corrected
-grounded data above is what the key needs; writing it is the next concrete
-step, not blocked on anything further.
+`keys/bldg5406-hvac-demo.tagocc.csv` is **written and committed**: 32
+`ROW_LABEL` rows (including a compound `AC-1 / ACCU-1` schedule row split
+correctly into its two real plan tags) and 43 `PLAN_INSTANCE` rows, plus one
+`NOTE_MENTION` row documenting the confirmed `CWP-1` false positive in
+place. `VAV-6` has a real row label and zero plan instances anywhere —
+recorded as an intentional absence (`SCHEDULE_ONLY`), not a gap.
+
+**Ruler result**, run end-to-end against the corrected key:
+
+```
+tag_to_row: 43 key plan instances, 43 matched, recall 100%
+row_to_tag: 26 row groups, 25 exact count matches, 96.2%
+```
+
+The single row→tag miss is exactly the one confirmed, root-caused bug
+above (`CWP-1`, expected 1, actual 2) — nothing else. Two ground-truth keys
+in, the ruler is producing clean, fully explained results with no
+unaccounted-for discrepancy.
 
 **Independent confirmation of the plan's central thesis, on a real,
 previously-scored document.** The corpus's own committed evaluation
@@ -243,22 +258,33 @@ running at time of writing (see "What remains").
 | `mcp` core suite (`conformance`, `takeoff*`, `session`, `view`, …) | completed: 228+ lines observed, real failures listed above | — |
 | `mcp/test:shared-path` full run | still running at time of writing | — |
 | Full corpus eval, sheet-graph phase (`reports/EVAL-2026-09-16_1527.txt`) | **cells: 91 right, 0 wrong, 0 missed → 100%/100%/100%** on baker-county-eoc (the only set with a cell key) — *better* than the 2026-09-13 baseline (85.7% recall then); **rowsym: 120 found, 0 unexpected, 18 missed → 87.0% recall**, down from 96.4% on 2026-09-13, new misses on federal-mech (`B-1`, `B-2`) and baker-county-eoc (`RTU-1`, `RTU-2`, `EF-1`, `ERV-01`, +12 more) that were not in the prior documented failure list | **cell scoring is a reliable, likely-real improvement** (it doesn't touch the expensive geometric sweep, so contention shouldn't move it). **rowsym's regression is very likely contention-driven**: the phase itself took **2,180.9 seconds (36.3 minutes)** to complete — the geometric sweep behind rowsym has an explicit work/time-cap disclosure path (`INCOMPLETE_PLAN_SEARCH`) built for exactly this kind of pressure, and a resource-starved sweep hitting that cap manifests as more refusals, i.e. more `rowsym-missed`. **Must be re-run in isolation before treating 87.0% as real** — same caveat as `T-HVAC-01`'s 375. |
-| Full corpus eval, takeoff+reference phase | still running at time of writing (the sheet-graph phase alone took 36 minutes; this phase runs full compiles, not sweeps, so its own runtime is unknown) | too early to report — will update when it completes |
+| Full corpus eval, takeoff+reference phase (`reports/TAKEOFF-EVAL-2026-09-16_1541.txt`) | Completed after **2,988 seconds (49.8 minutes)**. Every single set dropped sharply from its documented baseline: bessemer 100%→**70.0%**, itd-d1-lab 89.7%→**68.1%**, federal-mech 92.2%→**88.2%**, navfac 96.3%→94.9%, bldg5406 96.4%→**75.0%**, baker-county-eoc 87.5%→**10.0%**. | **Do not trust these numbers — this run is very likely corrupted, not just slow, and is flagged here as a warning rather than reported as current state.** The key tell: `bessemer` is a 10-tag, 8-page document that normally scores 100% and completes in seconds; contention-driven slowness alone should not make a small, fast job *wrong*, only slow. Every set degrading at once — including the smallest, fastest one — points at something more specific than generic CPU starvation: `test:shared-path` was running **concurrently**, hitting the **same shared, content-addressed on-disk sheet-graph cache** (`cachedSheetGraph`) for overlapping documents (bldg5406 is used by both). A read racing a concurrent write to that cache can hand back a partial or inconsistent cached graph. This is exactly the scenario `opentakeoff-corpus/GOAL.md`'s own standing rule exists to prevent ("do not run two heavy jobs" — a rule this session violated by launching corpus-eval, two mcp test suites, and the web suite concurrently with ground-truth authoring). **This entire eval run needs to be thrown out and re-run alone, on an idle cache, before any of its numbers are treated as real** — including baker-county-eoc's 10.0%, which is the single most alarming number in this whole session and almost certainly an artifact, not a 90-percentage-point regression that happened to occur during this exact session with no code change to explain it. |
 
 ## What remains for Phase 0
 
-- `keys/bldg5406-hvac-demo.tagocc.csv` — not started as a file; 2 of 4 plan
-  sheets read, enough context gathered to finish it next.
-- 7 more sets from the plan's target list (baker-county-eoc, navfac,
-  federal-mech, itd-d1-lab, plus 3+ held-out bulk documents — the last group
-  blocked on bulk-corpus staging, which is blocked on network policy).
-- H2, H3, H4, H6, H8 not yet measured.
+- **Two complete, validated ground-truth keys exist** (bessemer, bldg5406);
+  **5 more sets remain** from the plan's original target list
+  (baker-county-eoc, navfac-cherry-point-atc, federal-mech, itd-d1-lab),
+  plus 3+ held-out bulk documents blocked on bulk-corpus staging (blocked on
+  network policy, unresolved this session).
+- H2, H3, H4 (only incidentally touched), H6, H8 not yet measured.
+- **The full corpus-eval run from this session must be discarded and
+  re-run alone**, once the machine is idle — see the takeoff+reference
+  finding above. Do not carry today's 70.0%/68.1%/88.2%/10.0%-style numbers
+  into any other document as current state.
 - Isolated re-verification of every test-suite finding flagged above as
-  contention-suspect (`demoD04`, `demoD05`, `demoD09`, `T-HVAC-01`), on an
-  otherwise idle machine.
-- The full corpus-eval report (takeoff/reference/graph phases) and the
-  `test:shared-path` full run had not finished at time of writing.
+  contention-suspect (`demoD04`, `demoD05`, `demoD09`, `T-HVAC-01`, and now
+  the whole corpus-eval run), on an otherwise idle machine, before any of
+  them are reported as real.
+- `mcp/test:shared-path` full run had not finished at time of writing.
 - `web/test/tableRecallGaps.test.ts` B-11/B-12 regression — flagged as a
-  separate task, not fixed here (out of this plan's scope).
+  separate task, not fixed here (out of this plan's scope); the
+  `spawn_task` call itself timed out under load and should be retried.
+- **Operational lesson for future sessions on this repo**: do not run
+  ground-truth authoring concurrently with corpus-eval or heavy test
+  suites. `opentakeoff-corpus/GOAL.md` already says not to run two heavy
+  jobs at once; this session violated that and the evidence above (a
+  10-tag document scoring wrong, not just slow) is a concrete demonstration
+  of why the rule exists.
 
 This file will be updated, not replaced, as those continue.

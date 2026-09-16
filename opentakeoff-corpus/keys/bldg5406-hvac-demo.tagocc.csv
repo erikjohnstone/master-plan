@@ -1,0 +1,133 @@
+# keys/bldg5406-hvac-demo.tagocc.csv -- occurrence-level ground truth for
+# plans/03-schedule-row-to-drawn-tag-reconciliation-plan.md Phase 0.
+#
+# Authored 2026-09-16 from opentakeoff-corpus/raw/bldg5406-hvac-demo-
+# mechanical.pdf (23 pages). Every bbox is grounded by Session.findText
+# (independent of the occurrence-recovery ladder under test) or, for
+# compound tag+value PDF runs, by direct span inspection -- never hand-
+# measured from a render. Coordinates are production "image px"
+# (pt x RENDER_SCALE=2, origin top-left, y down).
+#
+# Real page->role map for the pages this key covers:
+#   #2  plan      M-101 (mechanical plan) -- every PLAN_INSTANCE row below
+#   #6  schedule  M-601 (Mechanical Schedules 1) -- AHU/VAV/AC-ACCU/EF/CH rows
+#   #7  schedule  M-602 (Mechanical Schedules 2) -- CWP/L/AS/ET/CD*/SR*/RR*/ER* rows
+#   #14 plan      carries a second real ET-1 instance (not otherwise examined this session)
+#   #18 (unexamined this session except for CP-1's own row label)
+#   #3,4,5 detail M-501/502/503 -- correctly excluded from occurrence search;
+#     M-503 draws a real chilled-water schematic naming genuine project
+#     equipment (CH-1, CWP-1, CWP-2, ET-1, AS-1) -- a diagram reference, not
+#     a to-scale plan instance; not included as a row below (see
+#     TAG_LEDGER_BASELINE.md's note on this for Phase 3's classifier design).
+#
+# Two real, confirmed defects found authoring this key (both written up in
+# full, with root cause, in TAG_LEDGER_BASELINE.md):
+#
+#  1. CWP-1's note-text row below (class NOTE_MENTION) is the text
+#     "CWP-1 AND CWP-2 SHALL BE STACKED AND MOUNTED TO..." -- a general
+#     installation note. compoundTagOcc currently counts this as a SECOND
+#     drawn PLAN_INSTANCE of CWP-1, which is wrong. Confirmed instance of H7
+#     (note text leaking into a count).
+#
+#  2. NOT reproduced in this key file directly (it lives on bessemer, see
+#     that key's own EBB-1 note), but relevant context: familySuffixTagOcc
+#     can recover an unrelated keynote/callout digit as a phantom tag suffix
+#     when it sits near >=4 real family siblings. Not observed on this
+#     document, but the same fallback strategy is live here too (this
+#     document's own GRILLE/REGISTER/DIFFUSER family has >=4 siblings drawn
+#     with distinct marks) -- worth a deliberate stress-test in a future
+#     session, not something this key currently exercises or disproves.
+#
+# CORRECTION NOTE (kept for the record -- see TAG_LEDGER_BASELINE.md for the
+# full account): an earlier pass this session wrongly concluded CDB and RRA
+# were almost entirely fabricated by the occurrence ladder, based on an
+# overly strict exact-match verification filter that discarded legitimate
+# "TAG VALUE" compound PDF runs (e.g. the real drawn label is "CDB 290",
+# tag and CFM value in ONE rotated text run). That claim was retracted. The
+# PLAN_INSTANCE rows for CDB/RRA/CDA below reflect the corrected, verified
+# reality: compoundTagOcc handles this drafting convention correctly, and
+# every one of these rows is a real, confirmed instance.
+#
+# VAV-6 has a real ROW_LABEL (on the M-601 schedule) but ZERO drawn plan
+# instances anywhere on sheet #2 or #14 (checked directly, unfiltered raw
+# substring search, zero hits) -- a genuine SCHEDULE_ONLY case, not a data
+# gap in this key. No PLAN_INSTANCE row exists for VAV-6 below; that
+# absence is itself the ground truth.
+#
+sheet,page,text_as_drawn,x0,y0,x1,y1,rot,class,row_table,row_key,note
+bldg5406-hvac-demo-mechanical.pdf#6,6,AHU-1,1107.2,56.4,1113.1,74.2,0,ROW_LABEL,AIR HANDLING UNIT SCHEDULE,AHU-1,
+bldg5406-hvac-demo-mechanical.pdf#6,6,VAV-1,973.9,68.1,979.8,85.2,0,ROW_LABEL,AIR TERMINAL BOX SCHEDULE,VAV-1,
+bldg5406-hvac-demo-mechanical.pdf#6,6,VAV-2,961.2,67.7,967.1,84.7,0,ROW_LABEL,AIR TERMINAL BOX SCHEDULE,VAV-2,
+bldg5406-hvac-demo-mechanical.pdf#6,6,VAV-3,948.4,67.7,954.3,84.7,0,ROW_LABEL,AIR TERMINAL BOX SCHEDULE,VAV-3,
+bldg5406-hvac-demo-mechanical.pdf#6,6,VAV-4,935.7,67.7,941.6,84.7,0,ROW_LABEL,AIR TERMINAL BOX SCHEDULE,VAV-4,
+bldg5406-hvac-demo-mechanical.pdf#6,6,VAV-5,922.9,67.7,928.8,84.7,0,ROW_LABEL,AIR TERMINAL BOX SCHEDULE,VAV-5,
+bldg5406-hvac-demo-mechanical.pdf#6,6,VAV-6,910.2,67.7,916.1,84.7,0,ROW_LABEL,AIR TERMINAL BOX SCHEDULE,VAV-6,
+bldg5406-hvac-demo-mechanical.pdf#6,6,VAV-7,897.4,67.7,903.3,84.8,0,ROW_LABEL,AIR TERMINAL BOX SCHEDULE,VAV-7,
+bldg5406-hvac-demo-mechanical.pdf#6,6,VAV-8,884.7,67.7,890.6,84.8,0,ROW_LABEL,AIR TERMINAL BOX SCHEDULE,VAV-8,
+bldg5406-hvac-demo-mechanical.pdf#6,6,VAV-9,871.9,67.7,877.8,84.7,0,ROW_LABEL,AIR TERMINAL BOX SCHEDULE,VAV-9,
+bldg5406-hvac-demo-mechanical.pdf#6,6,EF-1,770.5,55.5,776.4,68.4,0,ROW_LABEL,FAN SCHEDULE,EF-1,
+bldg5406-hvac-demo-mechanical.pdf#6,6,EF-2,757.8,55.1,763.7,67.8,0,ROW_LABEL,FAN SCHEDULE,EF-2,
+bldg5406-hvac-demo-mechanical.pdf#6,6,EF-3,745.1,55.1,751,67.9,0,ROW_LABEL,FAN SCHEDULE,EF-3,
+bldg5406-hvac-demo-mechanical.pdf#6,6,EF-4,732.3,55.1,738.2,67.8,0,ROW_LABEL,FAN SCHEDULE,EF-4,
+bldg5406-hvac-demo-mechanical.pdf#6,6,EF-5,719.6,55.1,725.5,67.9,0,ROW_LABEL,FAN SCHEDULE,EF-5,
+bldg5406-hvac-demo-mechanical.pdf#6,6,CH-1,607.3,62.2,613.2,76,0,ROW_LABEL,PACKAGED AIR COOLED CHILLER SCHEDULE,CH-1,
+bldg5406-hvac-demo-mechanical.pdf#7,7,CWP-1,739.5,63.8,745.4,82.8,0,ROW_LABEL,PUMP SCHEDULE,CWP-1,
+bldg5406-hvac-demo-mechanical.pdf#7,7,CWP-2,726.7,63.5,732.6,82.5,0,ROW_LABEL,PUMP SCHEDULE,CWP-2,
+bldg5406-hvac-demo-mechanical.pdf#7,7,L-1,640.6,73.1,646.5,81.6,0,ROW_LABEL,LOUVER SCHEDULE,L-1,
+bldg5406-hvac-demo-mechanical.pdf#7,7,L-2,624.4,72.8,630.3,81.2,0,ROW_LABEL,LOUVER SCHEDULE,L-2,
+bldg5406-hvac-demo-mechanical.pdf#7,7,AS-1,931.4,86.5,937.3,99.6,0,ROW_LABEL,AIR SEPARATOR SCHEDULE,AS-1,
+bldg5406-hvac-demo-mechanical.pdf#7,7,ET-1,844.1,90.8,850,103.6,0,ROW_LABEL,EXPANSION AND COMPRESSION TANK SCHEDULE,ET-1,
+bldg5406-hvac-demo-mechanical.pdf#7,7,CDA,1109.4,62.3,1115.3,74.8,0,ROW_LABEL,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDA,
+bldg5406-hvac-demo-mechanical.pdf#7,7,CDB,1096.2,62.4,1102.1,75,0,ROW_LABEL,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,
+bldg5406-hvac-demo-mechanical.pdf#7,7,CDC,1082.9,62.2,1088.8,75.1,0,ROW_LABEL,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDC,
+bldg5406-hvac-demo-mechanical.pdf#7,7,SRA,1069.6,62.4,1075.4,74.6,0,ROW_LABEL,GRILLE REGISTER AND DIFFUSER SCHEDULE,SRA,
+bldg5406-hvac-demo-mechanical.pdf#7,7,RRA,1056.3,62.2,1062.2,74.7,0,ROW_LABEL,GRILLE REGISTER AND DIFFUSER SCHEDULE,RRA,
+bldg5406-hvac-demo-mechanical.pdf#7,7,RRB,1043,62.3,1048.9,74.9,0,ROW_LABEL,GRILLE REGISTER AND DIFFUSER SCHEDULE,RRB,
+bldg5406-hvac-demo-mechanical.pdf#7,7,ERA,1029.7,62.3,1035.6,74.5,0,ROW_LABEL,GRILLE REGISTER AND DIFFUSER SCHEDULE,ERA,
+bldg5406-hvac-demo-mechanical.pdf#18,18,CP-1,508.1,152.8,514,166.2,0,ROW_LABEL,EQUIPMENT SCHEDULE,CP-1,
+bldg5406-hvac-demo-mechanical.pdf#6,6,AC-1 / ACCU-1,499.9,58.8,505.8,99.4,0,ROW_LABEL,SPLIT SYSTEM AIR CONDITIONING UNITS,AC-1,compound row serves both AC-1 (indoor) and ACCU-1 (outdoor); drawn separately on the plan as two distinct real tags
+bldg5406-hvac-demo-mechanical.pdf#6,6,AC-1 / ACCU-1,499.9,58.8,505.8,99.4,0,ROW_LABEL,SPLIT SYSTEM AIR CONDITIONING UNITS,ACCU-1,compound row serves both AC-1 (indoor) and ACCU-1 (outdoor); drawn separately on the plan as two distinct real tags
+bldg5406-hvac-demo-mechanical.pdf#2,2,AHU-1,785.3,763.9,791.2,781.7,0,PLAN_INSTANCE,AIR HANDLING UNIT SCHEDULE,AHU-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,AHU-1,791.3,892.7,797.2,910.5,0,PLAN_INSTANCE,AIR HANDLING UNIT SCHEDULE,AHU-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,VAV-1,894,680.3,911.2,686.2,0,PLAN_INSTANCE,AIR TERMINAL BOX SCHEDULE,VAV-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,VAV-2,764.8,432.6,770.7,449.7,0,PLAN_INSTANCE,AIR TERMINAL BOX SCHEDULE,VAV-2,
+bldg5406-hvac-demo-mechanical.pdf#2,2,VAV-3,706.9,424.1,712.8,441.2,0,PLAN_INSTANCE,AIR TERMINAL BOX SCHEDULE,VAV-3,
+bldg5406-hvac-demo-mechanical.pdf#2,2,VAV-4,735.9,576.3,753.1,582.2,0,PLAN_INSTANCE,AIR TERMINAL BOX SCHEDULE,VAV-4,
+bldg5406-hvac-demo-mechanical.pdf#2,2,VAV-5,751.3,630.7,768.5,636.6,0,PLAN_INSTANCE,AIR TERMINAL BOX SCHEDULE,VAV-5,
+bldg5406-hvac-demo-mechanical.pdf#2,2,VAV-7,894.7,745.8,911.9,751.7,0,PLAN_INSTANCE,AIR TERMINAL BOX SCHEDULE,VAV-7,
+bldg5406-hvac-demo-mechanical.pdf#2,2,VAV-8,898.1,765.5,915.3,771.3,0,PLAN_INSTANCE,AIR TERMINAL BOX SCHEDULE,VAV-8,
+bldg5406-hvac-demo-mechanical.pdf#2,2,VAV-9,706,747.3,723.2,753.2,0,PLAN_INSTANCE,AIR TERMINAL BOX SCHEDULE,VAV-9,
+bldg5406-hvac-demo-mechanical.pdf#2,2,AC-1,1012.2,841.7,1018.1,855.2,0,PLAN_INSTANCE,SPLIT SYSTEM AIR CONDITIONING UNITS,AC-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,ACCU-1,1040.7,915.3,1046.5,937.4,0,PLAN_INSTANCE,SPLIT SYSTEM AIR CONDITIONING UNITS,ACCU-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,EF-1,882,891.8,887.9,904.6,0,PLAN_INSTANCE,FAN SCHEDULE,EF-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,EF-4,713.8,891.3,719.7,904.1,0,PLAN_INSTANCE,FAN SCHEDULE,EF-4,
+bldg5406-hvac-demo-mechanical.pdf#2,2,EF-5,915,901.3,920.9,914.1,0,PLAN_INSTANCE,FAN SCHEDULE,EF-5,
+bldg5406-hvac-demo-mechanical.pdf#2,2,CH-1,725.1,1000.6,731,1014.4,0,PLAN_INSTANCE,PACKAGED AIR COOLED CHILLER SCHEDULE,CH-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,CWP-2,681.6,830.1,687.5,849.1,0,PLAN_INSTANCE,PUMP SCHEDULE,CWP-2,
+bldg5406-hvac-demo-mechanical.pdf#2,2,L-1,633,771.8,638.9,780.3,0,PLAN_INSTANCE,LOUVER SCHEDULE,L-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,L-2,633.6,805.5,639.5,814,0,PLAN_INSTANCE,LOUVER SCHEDULE,L-2,
+bldg5406-hvac-demo-mechanical.pdf#2,2,AS-1,678.2,736.7,684.1,749.8,0,PLAN_INSTANCE,AIR SEPARATOR SCHEDULE,AS-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,ET-1,680.9,772.9,686.8,785.7,0,PLAN_INSTANCE,EXPANSION AND COMPRESSION TANK SCHEDULE,ET-1,
+bldg5406-hvac-demo-mechanical.pdf#14,14,ET-1,757.5,772.7,762,782.4,0,PLAN_INSTANCE,EXPANSION AND COMPRESSION TANK SCHEDULE,ET-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,ERA,857.1,632.9,862.9,645.1,0,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,ERA,
+bldg5406-hvac-demo-mechanical.pdf#2,2,ERA,773.1,695.8,779,708,0,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,ERA,
+bldg5406-hvac-demo-mechanical.pdf#2,2,ERA,747.5,710.6,753.4,722.8,0,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,ERA,
+bldg5406-hvac-demo-mechanical.pdf#14,14,CP-1,746.1,818.4,752,831.9,0,PLAN_INSTANCE,EQUIPMENT SCHEDULE,CP-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,RRA,1007.1,166.5,1013,191.5,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,RRA,"drawn as ""RRA 495"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,RRA,1007.1,285.5,1013,310.5,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,RRA,"drawn as ""RRA 495"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,RRA,1007.1,404.5,1013,429.5,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,RRA,"drawn as ""RRA 495"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,RRA,1007.1,523.5,1013,548.5,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,RRA,"drawn as ""RRA 495"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,RRA,817.4,590.7,823.3,603.2,0,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,RRA,
+bldg5406-hvac-demo-mechanical.pdf#2,2,CWP-1,674.4,828.4,680.3,847.4,90,PLAN_INSTANCE,PUMP SCHEDULE,CWP-1,
+bldg5406-hvac-demo-mechanical.pdf#2,2,CWP-1 AND CWP-2 SHALL BE STACKED AND MOUNTED TO,1068.3,980.8,1074.2,1150.4,90,NOTE_MENTION,PUMP SCHEDULE,CWP-1,"general installation note, NOT a second drawn instance -- confirmed H7 bug: compoundTagOcc currently miscounts this as a PLAN_INSTANCE, see TAG_LEDGER_BASELINE.md"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDA,707.6,511.5,713.5,536.5,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDA,"drawn as ""CDA 160"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDA,1014.8,716.9,1020.7,729.5,0,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDA,
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDB,874.7,204.7,880.6,229.6,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,"drawn as ""CDB 290"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDB,944.3,204.7,950.2,229.6,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,"drawn as ""CDB 290"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDB,876.1,341.1,882,366.1,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,"drawn as ""CDB 265"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDB,942.3,341.1,948.2,366.1,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,"drawn as ""CDB 265"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDB,873.3,459,879.2,484,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,"drawn as ""CDB 265"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDB,942.3,460.1,948.2,485.2,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,"drawn as ""CDB 265"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDB,778.3,592.1,784.2,617,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,"drawn as ""CDB 230"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDB,942.3,595.3,948.2,620.4,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,"drawn as ""CDB 265"" (tag + CFM value, one rotated PDF run)"
+bldg5406-hvac-demo-mechanical.pdf#2,2,CDB,876.2,595.7,882.1,620.6,90,PLAN_INSTANCE,GRILLE REGISTER AND DIFFUSER SCHEDULE,CDB,"drawn as ""CDB 265"" (tag + CFM value, one rotated PDF run)"
