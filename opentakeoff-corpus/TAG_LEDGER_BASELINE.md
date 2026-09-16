@@ -120,7 +120,7 @@ row-driven tool audited (`sweepScheduleRow`, `countMarks`,
 `buildPlanSetTakeoff`) today, for reasons that have nothing to do with tag
 text recognition.
 
-## bldg5406-hvac-demo — partial (not keyed yet)
+## bldg5406-hvac-demo — partial (not keyed yet, one major finding)
 
 2 of 4 plan-role pages read (M-101 fully; M-501/M-502/M-503 detail sheets
 skimmed — correctly excluded from occurrence search, though M-503 draws a
@@ -132,6 +132,53 @@ the same sheet) nor a to-scale `PLAN_INSTANCE`; it needs its own
 treatment or an explicit "diagram reference" class, otherwise it risks being
 either silently dropped or wrongly double-counted against the real plan
 instance of the same equipment).
+
+**Major finding: the occurrence ladder fabricates occurrences from unrelated
+text for short, letter-only air-device family marks — not a ±1 duplicate,
+an 800%+ over-count.** Grounding the full row vocabulary with `find_text`
+(independent of the ladder) against `tagOccurrencesForKey`'s own raw output:
+
+| tag | baseline `drawn_count` | `find_text` exact hits | verdict |
+|---|---|---|---|
+| `CDB` | 9 | **0** | **all 9 fabricated** |
+| `RRA` | 5 | **1** | **4 of 5 fabricated** |
+| `CDA` | 2 | 1 | 1 fabricated (same class as `EBB-1`) |
+| `ERA` | 3 | 3 | ✅ matches — correct |
+| `AHU-1` | 2 | 2, at two genuinely distinct positions | ✅ matches — correct, not a bug |
+| `CWP-1` | 2 | **1** | 1 fabricated (same class as `EBB-1`) |
+| `ET-1` | 2 | 2, on two different sheets (`#2`, `#14`) | ✅ matches — a real cross-sheet duplicate, correct |
+| every `VAV-1..9`, `AC-1`, `ACCU-1`, `EF-1/4/5`, `CH-1`, `L-1/2`, `AS-1`, `CP-1` | 1 each | 1 each, matching bboxes | ✅ all correct |
+
+Inspecting the raw ladder output (`tagOccurrencesForKey`, before `find_text`
+narrows to exact matches) for `CDB` and `RRA` directly: the fabricated hits
+share a distinctive shape the one real hit doesn't — **narrow (~6px wide),
+tall (~25px) bounding boxes at suspiciously regular vertical spacing**
+(`RRA`'s four false hits sit at y = 179, 298, 417, 536 — exactly 119px
+apart), roughly **double the height of the confirmed real hit** (~12.5px).
+This is not the shape of a 2–3 letter tag; it is the shape of a **rotated
+duct-size label** (the render shows exactly this convention — vertical
+"12x10", "16x8" callouts running alongside ductwork). The strong working
+hypothesis: one of the ladder's fallback recovery strategies (most likely
+`familySuffixTagOcc` or `fragmentedTagOcc`, both gated to trigger only after
+a family-wide quorum/prefix match, per their own doc comments) is matching
+fragments of rotated dimension text as if they were air-device family
+letters, for exactly the short, digit-less, letter-only tag shape this
+schedule family uses (`CDA`/`CDB`/`CDC`/`SRA`/`RRA`/`RRB`/`ERA`).
+
+**This revises and generalizes H9** from "a ±1 duplicate-detection gap" to:
+**the occurrence-recovery ladder can fabricate a large number of false
+occurrences for an entire tag-shape class (short, letter-only, no digit),
+not just double-count a real one.** This is the single highest-priority,
+concretely-confirmed defect this session found for Phase 1 to fix — it
+would make a naive drawn-count for `CDB` wrong by 900% if shipped as-is.
+Not yet root-caused to the exact function/line (would need instrumenting
+`tagOccurrencesOnSheet`'s branch selection per call, not done this session);
+the shape evidence above is strong but circumstantial.
+
+`keys/bldg5406-hvac-demo.tagocc.csv` is not yet written — the priority
+became documenting this finding precisely over completing the file this
+session; the grounded data above (in `/tmp/bldg5406-grounding.json` if the
+scratch files survive, otherwise easily re-run) is what the key needs.
 
 **Independent confirmation of the plan's central thesis, on a real,
 previously-scored document.** The corpus's own committed evaluation
@@ -160,7 +207,7 @@ these 5 real installed items as disclosed evidence instead of silence.
 | H6 | itd-d1-lab over-counts are cross-view redraws | Not yet measured — itd-d1-lab not examined this session |
 | H7 | Note mentions/legend entries leak into counts | Small favorable sample only (bessemer's `D-1`/`D-2`/`D-6` correctly report 0; a split-run "HP-1 IS TYPICAL..." note correctly did not inflate `HP-1`'s plan-instance count) — not a real stress test yet |
 | H8 | Row lookup disagrees across the three duplicated implementations | Not yet measured |
-| **H9 (new)** | **The occurrence-recovery ladder can itself over-count a real single instance** | **Confirmed on a real document** — bessemer's `EBB-1`, verified three ways (visual read, `find_text`, and the ruler's row→tag scoring all agree the ladder's own `2` is wrong) |
+| **H9 (new)** | **The occurrence-recovery ladder fabricates occurrences, up to an entire class of tag shapes at once, not just ±1 duplicates** | **Confirmed on two real documents.** bessemer's `EBB-1`: ladder says 2, real is 1 (visual + `find_text` + ruler agree). bldg5406's `CDB`: ladder says **9**, `find_text` finds **0** — every single one fabricated. `RRA`: ladder says 5, real is 1. Shape evidence (narrow/tall boxes at regular spacing, ~2x a real hit's height) points at rotated duct-size labels being misread as short letter-only family marks (`CDA/CDB/CDC/SRA/RRA/RRB/ERA`-shaped). **Highest-priority Phase 1 finding this session produced.** |
 
 ## Test suite findings
 
