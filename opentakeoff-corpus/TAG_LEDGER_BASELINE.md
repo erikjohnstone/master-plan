@@ -29,165 +29,178 @@ number here as a closed gate.
   were launched concurrently with ground-truth authoring work. A schema
   round-trip test that normally completes in milliseconds
   (`detect_rooms assign mode`, in `test/conformance.test.ts`) took **99.8
-  seconds** and still passed — direct evidence of the scale of the slowdown.
-  Several test failures observed this session are very likely artifacts of
-  that contention (see "Test suite findings" below) and need re-verification
-  in isolation before being treated as real. This file says explicitly,
-  per finding, which is which.
+  seconds** and still passed. A `planToolParity.test.mjs` test took **25
+  minutes** and still passed. Several failures observed this session are
+  very likely artifacts of that contention; each is marked below with a
+  confidence assessment, not asserted as real.
+- One real tooling bug found and fixed in this session's own scripts:
+  `console.log(...)` immediately followed by process exit **silently
+  truncates output to zero bytes** when stdout is a redirected pipe/file
+  under load — Node does not guarantee the async write flushes before exit.
+  Every ad hoc grounding script in this session now writes its result via
+  `fs.writeFileSync` instead of `console.log`+exit. Worth remembering for any
+  future CLI tooling in this codebase that pipes to a file.
 
-## Tooling built this session
+## Tooling built and validated this session
 
 - `Session.tagOccurrencesForKey` (`mcp/src/session.ts`) — a small, additive,
   public wrapper around the existing private `tagOccurrencesOnSheet` text
   ladder. No duplicated logic, no geometry.
 - `mcp/scripts/tag-occurrence-baseline.mjs` — walks every schedule row's
   identity mark across every plan-role sheet and reports where that text is
-  drawn (sheet, bbox, count), using only the wrapper above. This is the
-  Phase 0.3 "pipeline occurrences" baseline, text-only per the plan's own
-  rule.
+  drawn (sheet, bbox, count), using only the wrapper above. Text-only per
+  the plan's own rule.
 - `mcp/scripts/tag-ledger-eval.mjs` — the ruler. Scores a
   `keys/<set>.tagocc.csv` occurrence key against the baseline above, in both
-  directions (tag→row and row→tag), with binned misses. Not yet run against
-  a real key in this session (no key was finished in time — see below); its
-  own logic has not been exercised end-to-end yet and should be treated as
-  unverified until it is.
+  directions (tag→row and row→tag), with binned misses. **Now run
+  end-to-end against a real, hand-authored key (bessemer) and confirmed
+  working** — see results below.
 
-Committed as `fba82a9` on `claude/tender-meitner-4efhoz`.
+Committed as `fba82a9` on `claude/tender-meitner-4efhoz`, plus this file at
+`ac30182`.
 
-## Ground truth authored this session
+## bessemer — first complete ground-truth key, scored
 
-**bessemer** (`opentakeoff/samples/bessemer-mechanical-bidset.pdf`, 8 pages)
-— fully read by rendering every page and cross-referencing every schedule
-against every plan sheet. `keys/bessemer.tagocc.csv` is **not yet written**
-(blocked on exact-bbox grounding, see below) but the content is worked out:
+`keys/bessemer.tagocc.csv` is **written and committed**: 20 `ROW_LABEL` rows
+and 45 `PLAN_INSTANCE` rows, every one with a `find_text`-grounded exact
+bbox (an independent code path from the occurrence ladder under test — plain
+substring match on pdf.js text runs, no compound/fragment/hyphen-chain
+recovery), not a hand-measured pixel guess. Authored by rendering all 8 real
+pages of `opentakeoff/samples/bessemer-mechanical-bidset.pdf` and reading
+each one directly.
 
-| Sheet | Role | What's there |
-|---|---|---|
-| p1 (MP001) | legend | Abbreviations/symbol legend, no device tags |
-| p2 (P100) | schedule (pipeline) / **actually a plan** | Underslab Plumbing Plan — misclassified role (see finding below); `FD-1` drawn 4×, `WB-1` 0× |
-| p3 (P101) | plan | First Floor Plumbing Plan — `FD-1` ×4, `WB-1` ×1 |
-| p4 (P102) | plan | Second Floor Plumbing Plan — `FD-1` ×4, `WB-1` ×1 |
-| p5 (P501) | detail | Plumbing details, no device tags (only a "(SEE SCHEDULE)" note mention) |
-| p6 (M101) | plan | First Floor Mechanical Plan — `SR-1`, `SR-2`, `TG-1`, `TG-2`, `HP-1`, `EF-1`, `EWH-1`, `EBB-1..4` all drawn here |
-| p7 (M102) | plan | Second Floor Mechanical Plan — `EBB-5..8` only (ductwork for 2nd floor is routed in attic, no registers shown on this sheet — confirmed by the sheet's own note) |
-| p8 (M601) | schedule | Mechanical Schedules — the row source for every mark above |
+**Ruler result** (`tag-ledger-eval.mjs` against `tag-occurrence-baseline.mjs`'s
+live output):
 
-**Finding: page 2 (P100) is misclassified.** The pipeline's sheet-role
-classifier calls it `schedule` (confidence 0.425); it is actually the
-Underslab Plumbing Plan — a real plan sheet with 4 drawn `FD-1` instances.
-Because my baseline producer only walks `plan`-role sheets (matching what
-`sweepScheduleRow`/`countMarks` do), **this page's 4 `FD-1` occurrences are
-invisible to every row-driven tool today.** This is a first, concrete,
-real instance of finding H1 (tags on misclassified sheets are never
-counted) — not hypothetical.
+```
+tag_to_row: 45 key plan instances, 30 matched, recall 66.7%
+row_to_tag: 17 row groups, 14 exact count matches, 82.4%
+```
 
-Cross-checking the baseline producer's own output against this reading:
+The 15-instance recall gap and the one wrong-count row are **not diffuse
+noise — every one of them is one of two already-understood, named causes**:
 
-| tag | table | baseline drawn_count | visual read | agreement |
-|---|---|---|---|---|
-| SR-1 | DIFFUSER, GRILLE, REGISTER SCHEDULE | 7 | not individually recounted (dense duct labels); page-6-only, plausible | pending exact grounding |
-| SR-2 | " | 2 | same | pending |
-| TG-1 | " | 6 | same | pending |
-| TG-2 | " | 4 | same | pending |
-| EF-1 | FAN SCHEDULE | 1 | confirmed, 1 (p6) | ✅ match |
-| EWH-1 | ELECTRIC WALL HEATER SCHEDULE | 1 | confirmed, 1 (p6) | ✅ match |
-| HP-1 | VARIABLE REFRIGERANT PACKAGED HEAT PUMP | 1 | confirmed, 1 (p6) | ✅ match |
-| EBB-1 | ELECTRIC BASEBOARD HEATER SCHEDULE | **2** | confirmed, 1 (p6, near MECHANICAL) | ❌ **open discrepancy** |
-| EBB-2..8 | " | 1 each | confirmed, 1 each (4 on p6, 4 on p7) | ✅ match |
-| D-1, D-2, D-6 | DUCTWORK INSULATION TYPE SCHEDULE | 0 | confirmed — these are insulation TYPE codes referenced inside schedule table text only, never drawn as plan instance tags | ✅ match (correct zero) |
+1. **`FD-1` (13 instances) and `WB-1` (2 instances) are entirely invisible
+   to the baseline** — all 15 of the 15 `unresolvedShouldResolve` misses.
+   Root cause, checked directly: `graph.tables` has **zero entries** for
+   sheet `#2` (`graph.tables.filter(t => t.sheet === '...#2')` → `[]`). The
+   small "Plumbing Fixture Schedule" table that defines `FD-1`/`WB-1` is not
+   extracted **at all**, independent of the sheet's role misclassification
+   (see below) — a genuine table-recall miss, not a reconciliation-layer
+   bug, and out of this plan's scope to fix (it's `sheetgraph.ts`
+   extraction, the class of defect `TAKEOFF_BUG_CATALOGUE.md` already
+   documents dozens of instances of, e.g. B-16/B-28). Because there is no
+   row, there is no row-scope for the baseline's row-driven walk to search
+   for, at all — this is **not** a text-occurrence-finding failure; the
+   occurrence ladder was never even invoked for these tags.
+2. **`EBB-1` shows `drawn_count: 2` in the row→tag miss list, expected 1 —
+   a real, confirmed defect in the occurrence-recovery ladder itself.**
+   `find_text("EBB-1")` on the same plan sheet (`#6`) returns exactly **one**
+   exact hit; a full-page visual read agrees. `tagOccurrencesOnSheet`'s own
+   recovery ladder reports two. This is a genuine duplicate-detection bug —
+   two different recovery strategies (most likely `compoundTagOcc` and the
+   exact-match pass, or two strategies both matching the same span) are
+   producing overlapping, undeduplicated hits for this one drawn instance.
+   **New hypothesis for Phase 1 (H9):** the occurrence ladder's own
+   dedup-by-distance step does not cover every pair of recovery strategies —
+   confirmed on a real document, not hypothetical.
 
-**Open discrepancy: `EBB-1` reports drawn_count 2, but a full-page visual
-read found it once.** Not yet resolved — needs the exact-bbox grounding
-pass (in progress, see below) to determine whether this is a real
-duplicate-detection bug in the occurrence ladder (e.g., `compoundTagOcc`
-double-counting against a nearby fragment) or a second real occurrence I
-missed at this render resolution. **Do not treat `EBB-1`'s count as
-verified until this is resolved.**
+Every other tag in the key (`SR-1` ×7, `SR-2` ×2, `TG-1` ×6, `TG-2` ×4,
+`HP-1` ×1, `EF-1` ×1, `EWH-1` ×1, `EBB-2..8` ×1 each, `D-1`/`D-2`/`D-6` ×0)
+**matched exactly** between the hand-authored key, `find_text`, and the
+occurrence baseline — three-way agreement, high confidence.
 
-**bldg5406-hvac-demo** (`opentakeoff-corpus/raw/bldg5406-hvac-demo-mechanical.pdf`,
-23 pages) — partially read (2 of 4 plan-role pages viewed). No key written
-yet. One significant cross-check already done:
+**Compound finding on sheet `#2` (Underslab Plumbing Plan):** it is
+misclassified by `classifySheetRole` as `schedule` (0.425 confidence)
+*and* its own schedule table is never extracted into `graph.tables` at all.
+These are two independent, compounding defects. Together they make this
+sheet's entire real device population — 5 drawn `FD-1` instances plus the
+`FD-1`/`WB-1` row definitions themselves — 100% invisible to every
+row-driven tool audited (`sweepScheduleRow`, `countMarks`,
+`buildPlanSetTakeoff`) today, for reasons that have nothing to do with tag
+text recognition.
 
-**Finding: the text-only baseline finds tags the full geometric pipeline
-refuses.** The corpus's own committed evaluation report
+## bldg5406-hvac-demo — partial (not keyed yet)
+
+2 of 4 plan-role pages read (M-101 fully; M-501/M-502/M-503 detail sheets
+skimmed — correctly excluded from occurrence search, though M-503 draws a
+real chilled-water piping *schematic* naming genuine project equipment
+(`CH-1`, `CWP-1`, `CWP-2`, `ET-1`, `AS-1`) — a real, valuable nuance for
+Phase 3's classifier design: a schematic naming real equipment is neither a
+generic `DETAIL_CALLOUT` (like the illustrative `AHU-1` nameplate mockup on
+the same sheet) nor a to-scale `PLAN_INSTANCE`; it needs its own
+treatment or an explicit "diagram reference" class, otherwise it risks being
+either silently dropped or wrongly double-counted against the real plan
+instance of the same equipment).
+
+**Independent confirmation of the plan's central thesis, on a real,
+previously-scored document.** The corpus's own committed evaluation
 (`reports/EVAL-2026-09-13_0024.txt`) lists `EF-1`, `EF-4`, `EF-5`, `CH-1`,
-`AS-1` as the 5 `rowsym-missed` entries for this set — "real drawn symbols
-NOT anchored by sweep_schedule_row." This session's text-only baseline
-(`tag-occurrence-baseline.mjs`, zero geometry) finds **all five as drawn
-exactly once each**, and a direct visual read of sheet M-101 (page 2)
-confirms `EF-1`, `EF-4`, `EF-5`, `CH-1`, `AS-1`, and `AC-1`/`ACCU-1` are
-genuinely drawn there. This is the plan's central thesis, independently
-confirmed on a real, previously-scored document: **text-only tag discovery
-can succeed exactly where the full geometric-fingerprint pipeline refuses**
-— because `sweepScheduleRow`'s refusal is about failing to build/corroborate
-a *geometric* fingerprint around the tag, which says nothing about whether
-the tag's *text* is findable and resolvable to its row. A production ledger
-that reports "text found, row resolved, geometry unverified" instead of a
-bare refusal would recover exactly these 5 real installed items as
-disclosed (not silently assumed) evidence.
+`AS-1` as the 5 `rowsym-missed` tags for this set — "real drawn symbols NOT
+anchored by `sweep_schedule_row`." This session's text-only baseline
+(zero geometry) finds **all five as drawn exactly once each**; a direct
+visual read of sheet M-101 confirms all five (plus `AC-1`/`ACCU-1`) are
+genuinely drawn there. **Text-only tag discovery succeeds exactly where the
+full geometric-fingerprint pipeline refuses** — because `sweepScheduleRow`'s
+refusal is about failing to build/corroborate a *geometric* fingerprint,
+which says nothing about whether the tag's *text* is findable and
+resolvable to its row. A production ledger reporting "text found, row
+resolved, geometry unverified" instead of a bare refusal recovers exactly
+these 5 real installed items as disclosed evidence instead of silence.
 
-## Hypothesis verdicts (H1–H8, from the audit)
+## Hypothesis verdicts (H1–H9, from the audit)
 
 | # | Hypothesis | Verdict this session |
 |---|---|---|
-| H1 | Tags on unknown/misclassified-role sheets are never counted | **Confirmed, concretely** — bessemer p2 (Underslab Plumbing Plan, misclassified `schedule`) carries 4 real `FD-1` instances invisible to every row-driven tool |
-| H2 | Hyphen/space drawn-text variants are missed | Not yet measured — no variant-spelling case identified in bessemer or bldg5406 yet; needs a set with real spelling drift (itd-d1-lab is the flagged candidate, not yet examined this session) |
-| H3 | First-non-empty ladder drops mixed split/whole tags on one sheet | Not yet measured directly; the `EBB-1` double-count (below) may be a related but different failure mode (over-count, not under-count) — needs resolution |
-| H4 | Rotated tags are missed | Not yet measured — no rotated-tag case identified yet |
-| H5 | Orphan tags (no schedule row) are invisible to row-driven tools | **Confirmed by construction** — the baseline producer is row-driven by design and cannot discover an orphan; this is inherent to every tool audited (`sweepScheduleRow`, `countMarks`, `buildPlanSetTakeoff`), not a bug found on a specific document |
+| H1 | Tags on unknown/misclassified-role sheets are never counted | **Confirmed, concretely, and found to compound with a second defect** — bessemer p2 is both misclassified *and* its table is never extracted at all; its entire device population is invisible for two independent reasons |
+| H2 | Hyphen/space drawn-text variants are missed | Not yet measured — no variant-spelling case identified in bessemer or bldg5406 yet; itd-d1-lab remains the flagged candidate |
+| H3 | First-non-empty ladder drops mixed split/whole tags on one sheet | Not yet measured directly; superseded in priority by the *new*, confirmed H9 over-count finding on the same code path |
+| H4 | Rotated tags are missed | Not yet measured |
+| H5 | Orphan tags (no schedule row) are invisible to row-driven tools | **Confirmed by construction**, inherent to every row-driven tool audited |
 | H6 | itd-d1-lab over-counts are cross-view redraws | Not yet measured — itd-d1-lab not examined this session |
-| H7 | Note mentions/legend entries leak into counts | Partial negative signal: bessemer's `D-1`/`D-2`/`D-6` (schedule-internal type references) correctly report 0 plan instances, and the "(SEE SCHEDULE)" note on p5 was not picked up as a false instance — but this is a small, favorable sample, not a real stress test |
-| H8 | Row lookup disagrees across the three duplicated implementations | Not yet measured — requires running `sweepScheduleRow`'s inline lookup, `uniqueFamily`, and `reconcileScheduleFamilyFromGraph` side by side on the same tag, not done this session |
+| H7 | Note mentions/legend entries leak into counts | Small favorable sample only (bessemer's `D-1`/`D-2`/`D-6` correctly report 0; a split-run "HP-1 IS TYPICAL..." note correctly did not inflate `HP-1`'s plan-instance count) — not a real stress test yet |
+| H8 | Row lookup disagrees across the three duplicated implementations | Not yet measured |
+| **H9 (new)** | **The occurrence-recovery ladder can itself over-count a real single instance** | **Confirmed on a real document** — bessemer's `EBB-1`, verified three ways (visual read, `find_text`, and the ruler's row→tag scoring all agree the ladder's own `2` is wrong) |
 
-**New finding not in the original audit:** the text-only occurrence ladder
-can itself **over-count** a real single instance (the `EBB-1` = 2 vs.
-visually-confirmed 1 discrepancy). If confirmed as a real bug rather than a
-missed second instance, this is a **new, ninth hypothesis** for Phase 1 to
-carry forward: the occurrence recovery ladder's dedup-by-distance step may
-not cover every pair of recovery strategies.
+## Test suite findings
 
-## Test suite findings (from re-establishing Phase 0.1 baselines)
-
-Ran under the CPU contention described above. Confidence noted per finding.
+Ran under the CPU contention described above; the web suite and one mcp
+suite finished during this session, the other two mcp jobs are still
+running at time of writing (see "What remains").
 
 | Test | Result | Assessment |
 |---|---|---|
-| `web` (`npm run check`) | typecheck ✅, lint ✅ (3 pre-existing warnings, matches `PROGRESS.md`); full test run still in progress at time of writing | reliable so far |
-| `mcp` typecheck | ✅ clean (both workspaces) | reliable |
-| `test/conformance.test.ts` "sheet graph (#87)" | ✖ after 69.9s (normally sub-second) | **very likely contention timeout** — needs isolated re-run |
-| `test/conformance.test.ts` "detect_rooms assign mode" | ✔ after 99.8s (normally sub-second) | same signature, passed anyway — direct proof of the scale of slowdown |
-| `test/demoD04.regression.test.mjs` | ✖ in 128ms | **fast failure, not contention** — needs real investigation, not yet done |
-| `test/demoD05.regression.test.mjs` | ✖ in 15.5s | ambiguous — could be genuine slowness or partial contention; needs isolated re-run |
-| `test/demoD09.regression.test.mjs` | ✖ in 890ms — "packaged rooftop schedule must remain extractable" fails; every earlier assertion in the same test (room finish, diffuser/grille) passed | **likely a fixture-cache race**: `loadFixtureGraph` reads a shared, content-addressed on-disk cache (`cachedSheetGraph`), and this test ran concurrently with 3+ other suites reading/writing the same cache directory for overlapping fixture PDFs. Needs isolated re-run before treating as real. |
-| `test/safewrite.test.ts` "an unreadable file fails CLOSED" | ✖ in 3.2ms | **root-cause identified, not a code bug**: the test `chmod`s a file to `0o000` and expects a read to be refused; this container runs every process as `root`, and root bypasses Linux DAC permission bits, so the file stays readable. Environment artifact, not a pipeline defect. |
-| `test/takeoffHvac01.regression.test.mjs` "T-HVAC-01 … frozen truth" | ✖ **after 1,165,303ms (19.4 minutes)** — got 375, expected 396 (the exact number `STATE.md` documents as the current passing baseline) | **almost certainly contention-degraded, not a regression** — a single-document compile against this same NAVFAC set is documented elsewhere in this repo completing in 5–38 seconds with a warm graph cache; 19 minutes is 30–200× that. The compiler's own `INCOMPLETE_PLAN_SEARCH` disclosure path exists precisely for a sweep hitting a work/time cap, which is exactly what heavy multi-process contention would trigger. **Must be re-run in isolation before this 375 is reported anywhere as real.** |
-| `test:shared-path` "WP1 keyed compile acceptance on ≥2 non-NAVFAC sets" | ✖ | **explained, not a regression**: the test needs ≥2 non-NAVFAC sets from the bulk corpus, which is entirely absent in this environment (see above); dozens of "no rejoined PDF" skip lines immediately precede the failure in the log, confirming the precondition, not the code, is what's unmet here |
-| Full corpus eval (`corpus-eval.mjs --report`) | still running at time of writing; table-recall phase completed in 129.9s | too early to report — the takeoff/reference/graph phases for the 7 scored sets have not yet produced output |
+| `web` full suite (`npm test` in `web/`) | **3,202 tests, 3,187 pass, 2 fail, 13 skip** — close to the documented 2026-09-13 baseline (3,144/3,131/0/13); the delta is explained by normal development between then and now, not by anything this session touched | mostly reliable; see the two real failures below |
+| `web/test/tableRecallGaps.test.ts` B-11, B-12 | ✖✖, both in ~150ms — **pure, deterministic, fixture-based (no PDF/bulk-corpus/Java/Python dependency), so not a contention artifact.** A real candidate regression in `sheetgraph.ts`'s table-claiming logic, found incidentally, outside this plan's scope. | **Queued as a separate task** (`spawn_task` call to the session, which itself timed out under load — the task description is preserved below in case it needs re-filing) rather than fixed here |
+| `mcp` typecheck (both workspaces) | ✅ clean | reliable |
+| `mcp/test/conformance.test.ts` "sheet graph (#87)" | ✖ after 69.9s (normally sub-second) | very likely contention timeout |
+| `mcp/test/conformance.test.ts` "detect_rooms assign mode" | ✔ after 99.8s (normally sub-second) | passed anyway — proves the scale of slowdown |
+| `mcp/test/demoD04.regression.test.mjs` | ✖ in 128ms | fast failure, not contention-explicable — **still needs real investigation**, not done this session |
+| `mcp/test/demoD05.regression.test.mjs` | ✖ in 15.5s | ambiguous — needs isolated re-run |
+| `mcp/test/demoD09.regression.test.mjs` | ✖ in 890ms, "packaged rooftop schedule must remain extractable" — every earlier assertion in the same test passed | likely a shared on-disk fixture-graph-cache race with 3+ concurrent suites reading/writing the same cache; needs isolated re-run |
+| `mcp/test/safewrite.test.ts` "an unreadable file fails CLOSED" | ✖ in 3.2ms | **root-caused, not a code bug**: `chmod 0o000` doesn't block root, and this container runs every process as root |
+| `mcp/test/takeoffHvac01.regression.test.mjs` | ✖ after **19.4 minutes** — 375 vs the documented-passing 396 | almost certainly contention-degraded (a warm-cache compile of this same set is documented elsewhere in this repo at 5–38s; 19 minutes is 30–200× that, and the compiler's own `INCOMPLETE_PLAN_SEARCH` disclosure exists precisely for a sweep hitting a work/time cap under load) — **must be re-run in isolation before treating as real** |
+| `mcp/test:shared-path` "WP1 keyed compile acceptance on ≥2 non-NAVFAC sets" | ✖ | **explained, not a regression** — needs ≥2 bulk-corpus non-NAVFAC sets, entirely absent here |
+| `mcp/test:shared-path` "WP5 parity … D07 VAV tags" | ✔ after **25 minutes** | passed anyway — further confirms contention is inflating duration, not correctness, for tests without internal timeouts |
+| `mcp` core suite (`conformance`, `takeoff*`, `session`, `view`, …) | completed: 228+ lines observed, real failures listed above | — |
+| `mcp/test:shared-path` full run | still running at time of writing | — |
+| Full corpus eval, sheet-graph phase (`reports/EVAL-2026-09-16_1527.txt`) | **cells: 91 right, 0 wrong, 0 missed → 100%/100%/100%** on baker-county-eoc (the only set with a cell key) — *better* than the 2026-09-13 baseline (85.7% recall then); **rowsym: 120 found, 0 unexpected, 18 missed → 87.0% recall**, down from 96.4% on 2026-09-13, new misses on federal-mech (`B-1`, `B-2`) and baker-county-eoc (`RTU-1`, `RTU-2`, `EF-1`, `ERV-01`, +12 more) that were not in the prior documented failure list | **cell scoring is a reliable, likely-real improvement** (it doesn't touch the expensive geometric sweep, so contention shouldn't move it). **rowsym's regression is very likely contention-driven**: the phase itself took **2,180.9 seconds (36.3 minutes)** to complete — the geometric sweep behind rowsym has an explicit work/time-cap disclosure path (`INCOMPLETE_PLAN_SEARCH`) built for exactly this kind of pressure, and a resource-starved sweep hitting that cap manifests as more refusals, i.e. more `rowsym-missed`. **Must be re-run in isolation before treating 87.0% as real** — same caveat as `T-HVAC-01`'s 375. |
+| Full corpus eval, takeoff+reference phase | still running at time of writing (the sheet-graph phase alone took 36 minutes; this phase runs full compiles, not sweeps, so its own runtime is unknown) | too early to report — will update when it completes |
 
-**Action required before any of the fast-but-unexplained-by-contention
-failures (`demoD04`, `demoD05`) can be called real or dismissed:** re-run
-`node --import tsx --test test/demoD04.regression.test.mjs
-test/demoD05.regression.test.mjs test/demoD09.regression.test.mjs
-test/safewrite.test.ts` alone, on an otherwise idle machine, and read the
-actual assertion diff (this session captured D09's diff and safewrite's
-cause but not D04's or D05's full detail).
+## What remains for Phase 0
 
-## What remains for Phase 0 (not done this session)
-
-- `keys/bessemer.tagocc.csv` — content is determined (table above) but not
-  yet written; blocked on resolving the `EBB-1` discrepancy with exact-bbox
-  grounding (`find_text`-based, script written and queued, running slowly
-  under contention).
-- `keys/bldg5406-hvac-demo.tagocc.csv` — not started; 2 of 4 plan sheets read.
+- `keys/bldg5406-hvac-demo.tagocc.csv` — not started as a file; 2 of 4 plan
+  sheets read, enough context gathered to finish it next.
 - 7 more sets from the plan's target list (baker-county-eoc, navfac,
   federal-mech, itd-d1-lab, plus 3+ held-out bulk documents — the last group
   blocked on bulk-corpus staging, which is blocked on network policy).
-- `tag-ledger-eval.mjs` has not been run against a real key yet — its own
-  logic is unverified end-to-end.
-- H2, H3 (confirm/refute), H4, H6, H8 not yet measured.
+- H2, H3, H4, H6, H8 not yet measured.
 - Isolated re-verification of every test-suite finding flagged above as
-  contention-suspect.
-- The full corpus-eval report (takeoff/reference/graph phases) had not
-  finished at time of writing.
+  contention-suspect (`demoD04`, `demoD05`, `demoD09`, `T-HVAC-01`), on an
+  otherwise idle machine.
+- The full corpus-eval report (takeoff/reference/graph phases) and the
+  `test:shared-path` full run had not finished at time of writing.
+- `web/test/tableRecallGaps.test.ts` B-11/B-12 regression — flagged as a
+  separate task, not fixed here (out of this plan's scope).
 
 This file will be updated, not replaced, as those continue.

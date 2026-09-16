@@ -1,0 +1,128 @@
+# keys/bessemer.tagocc.csv -- occurrence-level ground truth for
+# plans/03-schedule-row-to-drawn-tag-reconciliation-plan.md Phase 0.
+#
+# Authored 2026-09-16 by rendering all 8 real pages of
+# opentakeoff/samples/bessemer-mechanical-bidset.pdf (scale 3.0,
+# render-page-hires.mjs) and reading each one directly, cross-referenced
+# against every schedule table. Every bbox below is grounded by
+# Session.findText (a code path independent of the occurrence-recovery
+# ladder under test -- plain substring match on pdf.js text runs, no
+# compound/fragment/hyphen-chain recovery), not hand-measured from the
+# render. Coordinates are production "image px" (pt x RENDER_SCALE=2,
+# origin top-left, y down) -- the same space tagOccurrencesForKey/
+# tagOccurrencesOnSheet report in, so bbox comparisons need no conversion.
+#
+# Real page->role map (bessemer-mechanical-bidset.pdf, this document only
+# has 8 pages, not 9):
+#   #1 legend      MP001 Abbreviations/Symbol Legend/Notes -- no device tags
+#   #2 MISCLASSIFIED as schedule by the pipeline (0.425 confidence); it is
+#      actually a real plan sheet -- Underslab Plumbing Plan (P100). Draws
+#      its own small "PLUMBING FIXTURE SCHEDULE" table (FD-1, WB-1 row
+#      labels, both real, both confirmed by find_text) plus 5 real drawn
+#      FD-1 instances on the plan itself.
+#      COMPOUND FINDING, stronger than plain role misclassification:
+#      `graph.tables` has ZERO entries for this sheet -- the schedule table
+#      is not extracted AT ALL (checked directly: `graph.tables.filter(t =>
+#      t.sheet === '...#2')` returns `[]`), independent of role. So FD-1/
+#      WB-1's ROW_LABEL rows below are the tag as READ OFF THE RENDER, not
+#      as read off a row `sheetgraph.ts` currently extracts -- there is no
+#      such row in the graph today, at all, on any role. This is a genuine
+#      table-recall miss (the class TAKEOFF_BUG_CATALOGUE.md documents
+#      repeatedly, e.g. B-16/B-28), not yet root-caused here (out of scope
+#      for this plan -- table recall is a `sheetgraph.ts` extraction
+#      question, not a tag/row reconciliation question). Combined with the
+#      role misclassification, this sheet's entire real device population
+#      (FD-1 x5 plan + x1 row, WB-1 x1 row) is 100% invisible to every
+#      row-driven tool today, for two independent, compounding reasons.
+#   #3 plan        P101 First Floor Plumbing Plan -- FD-1 x4, WB-1 x1
+#   #4 plan        P102 Second Floor Plumbing Plan -- FD-1 x4, WB-1 x1
+#   #5 detail      P501 Plumbing Details -- no device tags (illustrative only)
+#   #6 plan        M101 First Floor Mechanical Plan -- SR-1/SR-2/TG-1/TG-2/
+#      HP-1/EF-1/EWH-1/EBB-1..4 all drawn here
+#   #7 plan        M102 Second Floor Mechanical Plan -- EBB-5..8 only
+#      (2nd-floor ductwork is routed in the attic per the sheet's own note;
+#      no registers/grilles/HP/EF/EWH drawn on this sheet)
+#   #8 schedule    M601 Mechanical Schedules -- the row source for every
+#      mark on p6/p7 (D-1/D-2/D-6, DIFFUSER-GRILLE-REGISTER, ELECTRIC WALL
+#      HEATER, ELECTRIC BASEBOARD HEATER, VARIABLE REFRIGERANT PACKAGED
+#      HEAT PUMP, FAN schedules all live here)
+#
+# Real bug found authoring this key: the occurrence-recovery ladder
+# (tagOccurrencesOnSheet, mcp/src/session.ts) reports EBB-1 drawn TWICE on
+# sheet #6; find_text (independent substring match) finds it exactly ONCE,
+# and a full-page visual read agrees with find_text. This is a real
+# duplicate-detection defect in the ladder's own recovery/dedup logic, not
+# a second real instance. Carried into TAG_LEDGER_BASELINE.md as a new
+# hypothesis (H9) for Phase 1 to fix.
+#
+# Not included: a full row-by-row cell grounding of every schedule column
+# (only the identity/MARK cell each row is keyed on). ROW_LABEL rows below
+# cite the row's own identity cell, matching row_key exactly.
+#
+sheet,page,text_as_drawn,x0,y0,x1,y1,rot,class,row_table,row_key,note
+bessemer-mechanical-bidset.pdf#8,8,SR-1,3015.1,2040.8,3057.8,2059.7,0,ROW_LABEL,DIFFUSER GRILLE REGISTER SCHEDULE,SR-1,
+bessemer-mechanical-bidset.pdf#8,8,SR-2,3015.1,2066.7,3057.8,2085.6,0,ROW_LABEL,DIFFUSER GRILLE REGISTER SCHEDULE,SR-2,
+bessemer-mechanical-bidset.pdf#8,8,TG-1,3015.1,2092.6,3057.8,2111.5,0,ROW_LABEL,DIFFUSER GRILLE REGISTER SCHEDULE,TG-1,
+bessemer-mechanical-bidset.pdf#8,8,TG-2,3015.1,2118.3,3057.8,2137.2,0,ROW_LABEL,DIFFUSER GRILLE REGISTER SCHEDULE,TG-2,
+bessemer-mechanical-bidset.pdf#8,8,HP-1,2780.4,2531.1,2823.1,2550.0,0,ROW_LABEL,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,
+bessemer-mechanical-bidset.pdf#8,8,EF-1,2608.1,2986.1,2648.8,3005.0,0,ROW_LABEL,FAN SCHEDULE,EF-1,
+bessemer-mechanical-bidset.pdf#8,8,EWH-1,3536.6,1079.1,3597.3,1098.0,0,ROW_LABEL,ELECTRIC WALL HEATER SCHEDULE,EWH-1,
+bessemer-mechanical-bidset.pdf#8,8,EBB-1,3392.6,1352.5,3446.8,1371.4,0,ROW_LABEL,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-1,
+bessemer-mechanical-bidset.pdf#8,8,EBB-2,3392.6,1378.4,3446.8,1397.3,0,ROW_LABEL,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-2,
+bessemer-mechanical-bidset.pdf#8,8,EBB-3,3392.6,1404.3,3446.8,1423.2,0,ROW_LABEL,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-3,
+bessemer-mechanical-bidset.pdf#8,8,EBB-4,3392.6,1430.2,3446.8,1449.1,0,ROW_LABEL,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-4,
+bessemer-mechanical-bidset.pdf#8,8,EBB-5,3392.6,1455.9,3446.8,1474.8,0,ROW_LABEL,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-5,
+bessemer-mechanical-bidset.pdf#8,8,EBB-6,3392.6,1481.8,3446.8,1500.7,0,ROW_LABEL,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-6,
+bessemer-mechanical-bidset.pdf#8,8,EBB-7,3392.6,1507.7,3446.8,1526.6,0,ROW_LABEL,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-7,
+bessemer-mechanical-bidset.pdf#8,8,EBB-8,3392.6,1533.7,3446.8,1552.6,0,ROW_LABEL,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-8,
+bessemer-mechanical-bidset.pdf#8,8,D-1,3606.5,713.8,3636.7,732.7,0,ROW_LABEL,DUCTWORK INSULATION TYPE SCHEDULE,D-1,type code; never drawn as a plan instance tag
+bessemer-mechanical-bidset.pdf#8,8,D-2,3606.5,772.4,3636.7,791.3,0,ROW_LABEL,DUCTWORK INSULATION TYPE SCHEDULE,D-2,type code; never drawn as a plan instance tag
+bessemer-mechanical-bidset.pdf#8,8,D-6,3606.5,819.9,3636.7,838.8,0,ROW_LABEL,DUCTWORK INSULATION TYPE SCHEDULE,D-6,type code; never drawn as a plan instance tag
+bessemer-mechanical-bidset.pdf#2,2,FD-1,2071.4,446.9,2113.2,465.8,0,ROW_LABEL,PLUMBING FIXTURE SCHEDULE,FD-1,graph.tables has NO entry for this sheet -- this row exists on the drawing but not in today's extracted graph at all (table-recall miss, not just role)
+bessemer-mechanical-bidset.pdf#2,2,WB-1,2071.4,472.9,2118.4,491.8,0,ROW_LABEL,PLUMBING FIXTURE SCHEDULE,WB-1,graph.tables has NO entry for this sheet -- this row exists on the drawing but not in today's extracted graph at all (table-recall miss, not just role)
+bessemer-mechanical-bidset.pdf#6,6,SR-1,1296.0,1062.6,1332.5,1078.8,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,SR-1,
+bessemer-mechanical-bidset.pdf#6,6,SR-1,3668.4,1062.6,3704.9,1078.8,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,SR-1,
+bessemer-mechanical-bidset.pdf#6,6,SR-1,1644.5,1067.4,1681.0,1083.6,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,SR-1,
+bessemer-mechanical-bidset.pdf#6,6,SR-1,2023.2,1073.7,2059.7,1089.8,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,SR-1,
+bessemer-mechanical-bidset.pdf#6,6,SR-1,2178.5,1634.8,2215.0,1651.0,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,SR-1,
+bessemer-mechanical-bidset.pdf#6,6,SR-1,2898.0,1679.2,2934.5,1695.4,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,SR-1,
+bessemer-mechanical-bidset.pdf#6,6,SR-1,1111.9,1695.0,1148.5,1711.2,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,SR-1,
+bessemer-mechanical-bidset.pdf#6,6,SR-2,2899.2,1073.7,2935.7,1089.8,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,SR-2,
+bessemer-mechanical-bidset.pdf#6,6,SR-2,3225.8,1073.7,3262.4,1089.8,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,SR-2,
+bessemer-mechanical-bidset.pdf#6,6,TG-1,1463.5,1152.9,1500.1,1169.0,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-1,
+bessemer-mechanical-bidset.pdf#6,6,TG-1,1574.6,1218.4,1611.2,1234.6,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-1,
+bessemer-mechanical-bidset.pdf#6,6,TG-1,3357.8,1290.9,3394.4,1307.0,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-1,
+bessemer-mechanical-bidset.pdf#6,6,TG-1,3487.7,1290.9,3524.2,1307.0,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-1,
+bessemer-mechanical-bidset.pdf#6,6,TG-1,1418.4,1458.6,1454.9,1474.8,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-1,
+bessemer-mechanical-bidset.pdf#6,6,TG-1,1373.5,1539.7,1410.1,1555.9,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-1,
+bessemer-mechanical-bidset.pdf#6,6,TG-2,2114.4,1176.6,2150.9,1192.8,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-2,
+bessemer-mechanical-bidset.pdf#6,6,TG-2,2680.3,1180.7,2716.9,1196.9,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-2,
+bessemer-mechanical-bidset.pdf#6,6,TG-2,2805.4,1180.7,2841.9,1196.9,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-2,
+bessemer-mechanical-bidset.pdf#6,6,TG-2,2219.5,1186.0,2256.1,1202.2,0,PLAN_INSTANCE,DIFFUSER GRILLE REGISTER SCHEDULE,TG-2,
+bessemer-mechanical-bidset.pdf#6,6,HP-1,2242.1,1116.0,2285.8,1135.2,0,PLAN_INSTANCE,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,
+bessemer-mechanical-bidset.pdf#6,6,EF-1,1621.4,1720.3,1662.8,1739.5,0,PLAN_INSTANCE,FAN SCHEDULE,EF-1,
+bessemer-mechanical-bidset.pdf#6,6,EWH-1,3514.1,1675.9,3575.3,1695.1,0,PLAN_INSTANCE,ELECTRIC WALL HEATER SCHEDULE,EWH-1,
+bessemer-mechanical-bidset.pdf#6,6,EBB-1,2407.2,1021.5,2464.6,1040.6,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-1,drawn exactly once -- see B-header note; the ladder under test falsely doubles this to 2
+bessemer-mechanical-bidset.pdf#6,6,EBB-2,2497.2,1463.8,2554.6,1483.0,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-2,
+bessemer-mechanical-bidset.pdf#6,6,EBB-3,2386.6,1817.8,2444.0,1837.0,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-3,
+bessemer-mechanical-bidset.pdf#6,6,EBB-4,2497.2,2606.7,2554.6,2625.8,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-4,
+bessemer-mechanical-bidset.pdf#7,7,EBB-5,2805.4,1212.3,2862.8,1231.4,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-5,
+bessemer-mechanical-bidset.pdf#7,7,EBB-6,2888.9,1590.3,2946.3,1609.4,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-6,
+bessemer-mechanical-bidset.pdf#7,7,EBB-7,2781.8,1951.5,2839.2,1970.6,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-7,
+bessemer-mechanical-bidset.pdf#7,7,EBB-8,2844.7,2816.2,2902.1,2835.4,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-8,
+bessemer-mechanical-bidset.pdf#2,2,FD-1,2509.0,1033.2,2551.5,1052.4,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,on the sheet the pipeline misclassifies as role=schedule -- H1
+bessemer-mechanical-bidset.pdf#2,2,FD-1,2900.4,1132.8,2943.0,1152.0,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,on the sheet the pipeline misclassifies as role=schedule -- H1
+bessemer-mechanical-bidset.pdf#2,2,FD-1,2411.5,1237.2,2454.1,1256.4,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,on the sheet the pipeline misclassifies as role=schedule -- H1
+bessemer-mechanical-bidset.pdf#2,2,FD-1,2791.2,2683.7,2833.8,2702.9,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,on the sheet the pipeline misclassifies as role=schedule -- H1
+bessemer-mechanical-bidset.pdf#2,2,FD-1,2411.8,2709.6,2454.3,2728.8,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,on the sheet the pipeline misclassifies as role=schedule -- H1
+bessemer-mechanical-bidset.pdf#3,3,FD-1,2987.3,1171.4,3029.8,1190.6,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,
+bessemer-mechanical-bidset.pdf#3,3,FD-1,2389.2,1196.9,2431.7,1216.1,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,
+bessemer-mechanical-bidset.pdf#3,3,FD-1,2389.4,2639.3,2432.0,2658.5,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,
+bessemer-mechanical-bidset.pdf#3,3,FD-1,2986.8,2639.3,3029.3,2658.5,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,
+bessemer-mechanical-bidset.pdf#4,4,FD-1,2996.2,1367.5,3038.7,1386.7,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,
+bessemer-mechanical-bidset.pdf#4,4,FD-1,2398.8,1393.0,2441.3,1412.2,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,
+bessemer-mechanical-bidset.pdf#4,4,FD-1,2996.2,2831.3,3038.7,2850.5,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,
+bessemer-mechanical-bidset.pdf#4,4,FD-1,2398.8,2835.1,2441.3,2854.3,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,FD-1,
+bessemer-mechanical-bidset.pdf#3,3,WB-1,2664.0,1474.8,2712.5,1494.0,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,WB-1,
+bessemer-mechanical-bidset.pdf#4,4,WB-1,2631.8,1627.4,2680.4,1646.6,0,PLAN_INSTANCE,PLUMBING FIXTURE SCHEDULE,WB-1,
+bessemer-mechanical-bidset.pdf#6,6,HP-1 IS TYPICAL OF ALL UNITS.,3505.9,330.8,3761.5,349.9,0,NOTE_MENTION,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,General Notes text; "HP-" is a separate preceding PDF text run from this same drawn sentence, bbox covers only the "1 IS TYPICAL..." run found by find_text
