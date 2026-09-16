@@ -15,7 +15,7 @@ and a system on every segment; the *assembly* is what a run resolves to per foot
 and per run.
 
 **Relationship to the corpus mandate.** `opentakeoff-corpus/GOAL.md` and
-`takeoffs/NEXT_GOAL_LOOP.md` explicitly deferred duct LF ("No duct-LF scope creep",
+`opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md` explicitly deferred duct LF ("No duct-LF scope creep",
 `NEXT_GOAL_LOOP.md:179`; "Kamai-class duct LF … Out of scope (GOAL duct-LF deferred)",
 `VECTOR_TAKEOFF_ENGINE_RESEARCH.md:402`). This plan is the deliberate opening of that scope.
 It keeps every standing rule that made the schedule/points work trustworthy: shared path,
@@ -355,8 +355,9 @@ Attachment is by equipment UUID + scope UUID, never by tag or device class. `REA
 Bessemer *DUCTWORK INSULATION SCHEDULE* (SYSTEM TYPE / INSULATION TYPE / thickness) land
 verbatim as `ReferenceTableRow{key, cells}` (`takeoff.ts:139–149`) — **a size/system-keyed
 insulation rate table is already extractable, with cell citations**. Nothing carries LF.
-`takeoffWorkflow.js:220–224` classifies goals mentioning "duct length / LF" as
-`scale_refuse` — today "duct length" is a refusal category, not a takeoff kind.
+`takeoffWorkflow.js:225–232` classified goals mentioning "duct length / LF" as
+`scale_refuse` at audit time — "duct length" was a refusal category, not a takeoff
+kind (WP0.6 has since re-routed this to `linear_run`).
 
 **HVAC taxonomy** (`hvacTaxonomy.ts:28`): `valve | actuator | damper | air_terminal |
 air_device | major_equipment | sensor | control_component` — no ductwork, piping,
@@ -368,11 +369,12 @@ never appear as domain concepts.
 **Report/export.** Column getters `reportColumns.js:12–32` (`lf`, `lf_net`, `waste_lf` …);
 the first 13 CSV columns are frozen by a golden test (`:55–57`); dynamic families append
 via ctx maps "never as new row fields" — the `ROLL_FIELDS` block (`:236–246`) is the
-precedent for a derived-quantity family. `opentakeoff.report.v1` (`totals.js:471–499`,
-mirrored `outputs.ts:1207–1233`) has an additive `roll_goods` block — the precedent for a
-`linear_runs` block. XLSX tabs `xlsx.js:278–284`. `outputs.ts:959` pins
-`measure_role` to the five-value enum, so a *new* role would fail `export_takeoff`
-validation; keeping `"linear"` and adding fields does not.
+precedent for a derived-quantity family. `opentakeoff.report.v1` (`totals.js:579–585`,
+mirrored `outputs.ts:1236`) has an additive `roll_goods` block — the precedent for a
+`linear_runs` block. XLSX tabs `xlsx.js:278–284`. `outputs.ts:970` (and its two other
+identical copies, `:1102`, `:1128`) pins `measure_role` to the five-value enum, so a
+*new* role would fail `export_takeoff` validation; keeping `"linear"` and adding
+fields does not.
 
 **Persistence.** Save is passthrough (`store.js:264–296`, `cloudStore.js:357`); hydrate runs
 named sanitizers that leave other shape fields untouched; sync (`sync/merge.js:185`) is a
@@ -388,7 +390,7 @@ sheets), `bldg5406-hvac-demo`, `weld-county` (OCG layers), `baker-county-eoc`.
 **Attachment points, ranked** (from the audit; §7 and §13 use these):
 1. Shape: keep `measure_role:"linear"`, add `run{}` (§7) — update `shapeMetrics.js:31–35`,
    `totals.js:38–53`, `S:375` `MeasureRole`/`Shape`, `S:2037–2045`, `T:241–249`,
-   `outputs.ts:959–961`.
+   `outputs.ts:970`.
 2. Condition: `system`, `size`, `assembly_id`, `hanger_spacing_ft`, `allowance_pct` —
    `canvasUtil.js:93–104`, `plays.js:7`, `S:395–411`, `T:660–682`, `agentTools.js:784–815`,
    `TakeoffsPanel.jsx:998–1006`.
@@ -398,9 +400,9 @@ sheets), `bldg5406-hvac-demo`, `weld-county` (OCG layers), `baker-county-eoc`.
 4. A pure size-keyed rate module (`web/src/lib/linear/rates.ts`, modelled on
    `coverage.js:172–188`), seedable from cited reference tables (`takeoffEvidence.mjs:12–38`).
 5. Report: `reportColumns.js:12–72` (frozen-13 rule), `linear_runs` block in `reportJson`
-   and `outputs.ts:1207–1233`, a new XLSX tab, `dxf.ts:184–190` already writes `-LINEAR`.
+   and `outputs.ts:1236`, a new XLSX tab, `dxf.ts:184–190` already writes `-LINEAR`.
 6. Agent gate: `agentTools.js:862` `MEASURE_ROLES` + `"linear"` with `minPts 2`;
-   `takeoffWorkflow.js:220–224` re-routes LF goals to a `linear_run` workflow.
+   `takeoffWorkflow.js:225–232` re-routes LF goals to a `linear_run` workflow.
 7. MCP verb in `TOOL_STAGES.measure` (`staging.ts:20–25`) committing through
    `Session.commit` (`S:1668`) with withheld branches (pattern: `deriveTransitions`).
 8. Python engine only if source-cited assembly discipline is required for BAS linear
@@ -866,8 +868,11 @@ run, plus a `family` id, with evidence — never a hard-coded pen.
 1. **Exclude** `SEG_CLIP`, `SEG_FILLONLY`, segments inside text boxes (existing
    `texts`/`TextMark` seam), segments on layers classified `annotation` or `finish-pattern`
    (`layers.ts`), hatch rows (`classifyHatchSegs`), and everything `wallnetwork.ts` vouches
-   as wall when the layer signal is weak — the same `excludeSegs` composition
-   `ensureMepGraph` already builds (`S:3437`).
+   as wall when the layer signal is weak. Only PART of this is already built: `ensureMepGraph`'s
+   own `excludeSegs` (`S:3440–3465`) already excludes `annotation`/`finish-pattern`/`hidden`
+   layer roles and folds in the same `networkWallSegs` wall-vouching fallback — reuse those
+   two pieces. `SEG_CLIP`/`SEG_FILLONLY`, text-box, and hatch-row exclusion are NOT part of
+   `ensureMepGraph`'s mask; `strokes.ts` adds those itself.
 2. **Family by (pen nibble, dash code, layer, lum, colour).** Histogram the survivors.
    Evidence ranking, highest first: (a) an OCG layer name classified `ductwork`/`piping`/
    `controls` by `classifyMepLayerName` with confidence ≥ 0.85 (Weld: `M-HVAC-DUCT` 3,690
@@ -1390,7 +1395,7 @@ like `planToolParity.test.mjs`); resolution is deterministic and pure (golden JS
 | `revisions.js` / `snapshotDiff.js` | bid-revision compare | + per-size and fitting fields |
 | Profile `.otprofile` | assembly library + rate tables | + `assemblies`, `rate_tables` sections |
 | `agentTools.js` / `agentLoop.js` | in-app agent | + `trace_run`, `propose_runs` (§11) |
-| `takeoffWorkflow.js:220` | goal router | LF goals → `linear_run` workflow instead of `scale_refuse` |
+| `takeoffWorkflow.js:225` | goal router | LF goals → `linear_run` workflow instead of `scale_refuse` |
 
 ### 9.3 What is explicitly *not* on the shared path
 

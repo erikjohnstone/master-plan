@@ -8,7 +8,7 @@ each step is measured, and what is never allowed. It is written for an
 autonomous coordinator (Sonnet 5, ultracode) running a goal loop; read it top
 to bottom once, then work THE QUEUE.
 
-This goal deliberately opens scope that `takeoffs/NEXT_GOAL_LOOP.md:179` closed
+This goal deliberately opens scope that `opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md:179` closed
 ("No duct-LF scope creep"). The user opened it on 2026-09-16. Every other
 standing rule in `AGENTS.md`, `GOAL.md` ("Platform mandate") and
 `GOAL_LOOPS.md` (laws, anti-gaming) still applies verbatim.
@@ -20,9 +20,9 @@ standing rule in `AGENTS.md`, `GOAL.md` ("Platform mandate") and
 |---|---|---|
 | D1 | **One condition per system, sizes on segments.** `SA`, `HHWS`, `CHWR` are conditions; every segment carries its own size; the report breaks LF, fittings, hangers and insulation out per size. Per-size conditions remain available as templates for estimators who work that way. | AutoBid's run model tracks size-change vertices ("HotSpot"); Canaveral reads size per segment; Bluebeam/STACK/PlanSwift's one-tool-per-size is a workaround for lacking per-segment data (plan §4.1). Per-segment size is what makes reducers/transitions countable at all. |
 | D2 | **Do not deduct fitting lengths from straight LF by default.** Straight LF is centreline length between run ends; fittings are separate line items by piece (duct) or joint (pipe). A per-assembly switch `deduct_fittings` exists for shops that price like QuoteSoft's Auto Elbow. | RSMeans takes duct off "by the linear foot for each size" and prices fittings and hangers per each; Wendes per-piece and per-pound methods count fittings separately; MCAA joint method counts joints, not take-outs (research 02 §A2, §B3, §D3). Deducting by default under-orders straight duct. |
-| D3 | **Default hanger tables:** duct = IMC 603.10 ceiling (10 ft) with SMACNA 5-1/5-2 by size class; mechanical piping (hydronic, steam, refrigerant) = MSS SP-58 Table 4; plumbing (domestic water, DWV, gas) = IPC 308.5. UPC 313.3 and IMC 305.4 selectable as the project's adopted code. | The three code tables disagree (copper tubing: IPC 6/10 ft by size, IMC 8 ft, UPC 6/10 ft at 1½"); MSS SP-58 is the standard specs reference for mechanical hangers; IPC is the plumbing code most jurisdictions adopt (research 02 §B1). The adopted code is a project property, so it is a setting with a defensible default, not a global constant. |
+| D3 | **Default hanger tables:** duct = IMC 603.10 ceiling (10 ft) with SMACNA 5-1/5-2 by size class; mechanical piping (hydronic, steam, refrigerant) = MSS SP-58 Table 4; plumbing (domestic water, DWV, gas) = IPC 308.5. UPC 313.3 and IMC 305.4 selectable as the project's adopted code. | The duct half (IMC 603.10, SMACNA 5-1/5-2) is research 02 §A3; the three PIPING code tables disagree (copper tubing: IPC 6/10 ft by size, IMC 8 ft, UPC 6/10 ft at 1½"), MSS SP-58 is the standard specs reference for mechanical hangers, and IPC is the plumbing code most jurisdictions adopt (research 02 §B1). The adopted code is a project property, so it is a setting with a defensible default, not a global constant. |
 | D4 | **BAS linear lives in the TypeScript assembly module, not `bas_engine`.** Cable LF, conduit LF and tubing LF are takeoff quantities priced by `assembly.ts` like duct and pipe; `bas_engine` is not touched by this goal. | `bas_engine` has no length unit, integer-only counts, an explicit no-pricing doctrine and states it is "not an arbitrary floor-plan cable-routing solver" (plan §2.9). Its deliverable-scope claims cite point counts, which already exist; cable LF is a quantity, not an engineering-review claim. If a future scope contract must cite cable LF, add a separate exclusive envelope then. |
-| D5 | **The corpus mandate is formally opened for linear takeoff by this goal file.** `takeoffs/NEXT_GOAL_LOOP.md` carries a dated amendment pointing here; this loop runs beside the schedule/points loop with its own gates and never dilutes theirs (corpus-eval must not move). | User direction 2026-09-16; the plan's §3 evidence shows the geometry is clean enough on real sets to do this deterministically. |
+| D5 | **The corpus mandate is formally opened for linear takeoff by this goal file.** `opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md` carries a dated amendment pointing here; this loop runs beside the schedule/points loop with its own gates and never dilutes theirs (corpus-eval must not move). | User direction 2026-09-16; the plan's §3 evidence shows the geometry is clean enough on real sets to do this deterministically. |
 | D6 | **No licensed labor tables ship.** Defaults are the graded [M] order-of-magnitude grid. The profile gains a **CSV import** for the estimator's own licensed units with the schema `family,size_key,joint_type,unit,hours,source` — MCAA WebLEM export layout first, generic second. | MCAA WebLEM is the mechanical industry's labor-unit reference and is licensed (research 02 §B3); Wendes and SMACNA tables likewise. Shipping them is not an option; importing the user's own is what AutoBid/FastPIPE/QuoteSoft effectively do. |
 
 ---
@@ -57,9 +57,12 @@ WHO       Sonnet 5 coordinator in ultracode mode. Execution policy in
     node --import tsx $P/probe.mts ../samples/bessemer-mechanical-bidset.pdf
     node --import tsx $P/ductwidth.mts
     node --import tsx $P/trace-proto.mts ../samples/bessemer-mechanical-bidset.pdf 6 4 36 '^12"x6"$'
-  Expected (plan §3): M101 38,339 segs, pen 4 = 624; 12"x6" pair spacing
-  36.0 px; chain 18.2 ft in < 2 ms after a < 400 ms index. If YOUR numbers
-  differ, say so and stop.
+  Expected (plan §3): M101 38,339 segs, pen 4 = 624 raw (probe.mts's per-nibble
+  tally, no filtering) — trace-proto.mts's own line above prints 619 (SEG_CLIP
+  and len<0.05px segments dropped before the walk; both counts are correct,
+  they measure different stages), then 12"x6" pair spacing 36.0 px; chain
+  18.2 ft in < 2 ms after a < 400 ms index. If YOUR numbers differ, say so
+  and stop.
   Read once: plans/03-linear-takeoff-hvac-bas-plan.md §1, §2.11, §6, §7,
   §8, §12, §13; opentakeoff/AGENTS.md; opentakeoff-corpus/GOAL_LOOPS.md
   (LAWS, ANTI-GAMING).
@@ -104,7 +107,7 @@ WHO       Sonnet 5 coordinator in ultracode mode. Execution policy in
        opentakeoff-corpus/PROGRESS.md   (your entries under "Active work")
 
 ════ WHAT YOU NEVER TOUCH ══════════════════════════════════════════════
-  opentakeoff-corpus/keys/**, graphs/**, sets.json, ground_truth/** except
+  opentakeoff-corpus/keys/**, reports/**, sets.json, ground_truth/** except
     ground_truth/linear/** (yours, under the HELD-OUT rules)
   The schedule/points/valve pipeline: sheetgraph.ts, corpusTakeoff.mjs,
     vectorTakeoffPipeline.ts, symbolsweep.ts internals, mepconnectivity.ts
@@ -114,7 +117,7 @@ WHO       Sonnet 5 coordinator in ultracode mode. Execution policy in
     bench/linear, you never edit the existing ruler
   Condition palettes, seeded colours (user data per AGENTS.md)
   Any file under opentakeoff/bas_engine/** (D4: BAS linear is TypeScript)
-  The five frozen CSV columns' order/semantics (reportColumns.js:55-57)
+  The 13 frozen CSV columns' order/semantics (reportColumns.js:55-57)
 
 ════ THE PROBLEM (measured, plan §2-§3) ════════════════════════════════
   The canvas has a manual Linear tool that stores one LF number per
@@ -173,9 +176,11 @@ WHO       Sonnet 5 coordinator in ultracode mode. Execution policy in
 
   WP0  HYGIENE (1 week). Nothing else starts before this is green.
     0.1 mcp/src/session.ts measureLine + measurePolygon (+ measureSurface if
-        the doctrine says so): stamp origin.reviewed:false and proposed_ts
-        exactly as deriveTransitions does (S:2452-2456). Test: a measure_line
-        commit exported by export_takeoff and parsed by
+        the doctrine says so): stamp origin.reviewed:false exactly as
+        deriveTransitions does (S:2477, "reviewed: false" in its commit()
+        call — proposed_ts is a TakeoffCanvas.jsx-only field, from its rule-
+        propose/accept flow, session.ts's commit() never writes it). Test: a
+        measure_line commit exported by export_takeoff and parsed by
         web/src/lib/importTakeoff.js lands PENDING. (plan bug B-L1)
     0.2 Apply scaleWarningFor to measureLine and measureSurface
         (S:2037-2072). Test in mcp/test/scalewarn.test.ts. (B-L2)
@@ -186,9 +191,10 @@ WHO       Sonnet 5 coordinator in ultracode mode. Execution policy in
     0.4 Load-time shape sanitizer (measure_role in the enum, verts_norm a
         finite [n>=2][2] array in [0,1], computed healed) in the hydrate
         path, additive, with a test. (B-L4)
-    0.5 README.md / FEATURES.md / USER_GUIDE.md: remove "Curved Line" tool
-        drift (B-L3). Docs only.
-    0.6 takeoffWorkflow.js:220-224: goals mentioning LF / duct length / pipe
+    0.5 README.md / FEATURES.md: remove "Curved Line" tool drift (B-L3).
+        USER_GUIDE.md never had this drift — checked, no change needed there.
+        Docs only.
+    0.6 takeoffWorkflow.js:225-232: goals mentioning LF / duct length / pipe
         length no longer classify as scale_refuse; classify as
         linear_run (workflow to be filled in WP7) with a test.
     0.7 mepsystems.ts: add M-CONT-* / CONT / STAT tokens to CONTROLS with a
@@ -219,7 +225,7 @@ WHO       Sonnet 5 coordinator in ultracode mode. Execution policy in
         in TakeoffCanvas.jsx; all decisions in web/src/lib/linear/.
     1.4 Outputs, additive: per-size rows in the Takeoffs panel; Report
         "Linear runs" tab; report.v1 `linear_runs` block (mirror of
-        roll_goods, totals.js:471-499 + outputs.ts:1207-1233); XLSX tab;
+        roll_goods, totals.js:579-585 + outputs.ts:1236); XLSX tab;
         DXF layer per size (OT-<TAG>-LINEAR-<SIZE>); marked-set size on the
         chip; revisions.js + snapshotDiff.js fields. Frozen-13 CSV untouched
         (report-csv-golden.test.ts stays green unchanged).
@@ -281,8 +287,13 @@ WHO       Sonnet 5 coordinator in ultracode mode. Execution policy in
        (prefs.js), default OFF until GATE 4.
     3.1 strokes.ts: exclusion (SEG_CLIP, SEG_FILLONLY, text boxes, annotation /
         finish-pattern layers, hatch rows, networkWallSegs vouch when layer
-        signal is weak — the same excludeSegs composition ensureMepGraph
-        builds, S:3437); families by (pen nibble, dash, layer, lum, rgb);
+        signal is weak). Only PART of this is already built: ensureMepGraph's
+        own excludeSegs (S:3440-3465) already excludes annotation/finish-
+        pattern/hidden layer roles and folds in the same networkWallSegs
+        wall-vouching fallback — reuse those two pieces. SEG_CLIP/
+        SEG_FILLONLY, text-box, and hatch-row exclusion are NOT part of
+        ensureMepGraph's mask; strokes.ts adds those itself. Families by
+        (pen nibble, dash, layer, lum, rgb);
         evidence grades a-d of plan §6.2; StrokeClasses output with named
         factors. Test on Bessemer (pen 4), ITD (pen 3), Weld (M-HVAC-DUCT).
     3.2 index.ts: flatbush (ISC) over candidate segment bboxes + kdbush over
