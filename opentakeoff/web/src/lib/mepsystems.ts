@@ -56,6 +56,13 @@ const ELECTRICAL = new Set([
 ]);
 const CONTROLS = new Set([
   "BAS", "CTRL", "CTRLS", "CONTROLS", "DDC", "TSTAT", "THERMOSTAT", "SENSR", "SENSOR",
+  // "CONT"/"STAT" (#linear-takeoff B-L?): real, measured layer name on a real
+  // corpus sheet — Weld County p7's "M-CONT-STAT" layer (40 real OCG layers
+  // on that sheet) tokenizes to ["M","CONT","STAT"] and read `unknown` before
+  // this, the only layer on that sheet carrying real controls linework. Both
+  // are whole-token matches, same discipline as every other entry here —
+  // never a substring, never a guess off "M-" alone.
+  "CONT", "STAT",
 ]);
 // AIA discipline designators, same set layers.ts's own DISCIPLINES uses —
 // graded per-system below since "M-" is genuinely ambiguous between

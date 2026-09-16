@@ -196,11 +196,15 @@ test("measure: polygon SF and line LF at scale; deletion removes the shape", asy
   assert.equal(s.shapes.length, 2);
   assert.equal(s.shapes[1].measure_role, "linear");
   assert.equal(s.shapes[1].computed.area_sf, 0);
-  // agent-supplied coordinates: a hand trace by a machine hand, never human
+  // agent-supplied coordinates: a hand trace by a machine hand, never human.
+  // reviewed: false (B-L1) — this used to assert `undefined` here, which WAS
+  // the bug: an unstamped origin let an agent measure_line/measure_polygon
+  // import as already-inked (importTakeoff.js's pendingCount and the canvas
+  // accept gate both test `=== false` specifically, not falsiness).
   for (const shp of s.shapes) {
     assert.equal(shp.origin?.method, "manual");
     assert.equal(shp.origin?.actor, "agent");
-    assert.equal(shp.origin?.reviewed, undefined, "measure commits claim no review state");
+    assert.equal(shp.origin?.reviewed, false, "measure commits are pencil, never ink (B-L1)");
   }
   s.deleteShape(poly.shape_id!);
   assert.equal(s.shapes.length, 1);

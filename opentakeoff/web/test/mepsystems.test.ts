@@ -48,6 +48,20 @@ test("classifyMepLayerName: controls tokens", () => {
   assert.equal(classifyMepLayerName("TSTAT").system, "controls");
 });
 
+test("classifyMepLayerName: M-CONT-STAT (real layer, Weld County p7's 40-layer OCG set) reads controls, not unknown", () => {
+  // Real, measured (plan §3.1): this sheet's own layer table carries
+  // M-HVAC-DUCT, M-HVAC-EQPM, M-PIPE-FITTING, M-PIPE-CD, M-ANNO and
+  // M-CONT-STAT — the LAST one read "unknown" before CONT/STAT were added,
+  // the only controls-bearing layer on that sheet.
+  const r = classifyMepLayerName("M-CONT-STAT");
+  assert.equal(r.system, "controls");
+  assert.ok(r.confidence > 0.2, "a real token classifies with real confidence, not the unknown floor");
+  // whole-token discipline: a name that merely CONTAINS "cont" as a substring
+  // of something else must not match — CONT/STAT are exact tokens, never
+  // a regex .includes().
+  assert.equal(classifyMepLayerName("CONTINUOUS-FOOTING").system, "unknown");
+});
+
 test("classifyMepLayerName: degenerate names (unnamed/flattened) refuse cleanly, same as layers.ts's own doctrine", () => {
   assert.equal(classifyMepLayerName("").system, "unknown");
   assert.equal(classifyMepLayerName("0").system, "unknown");

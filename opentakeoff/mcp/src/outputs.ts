@@ -638,6 +638,7 @@ export const measureSurfaceOutput = {
   area_sf: z.number().describe("length_lf × height_ft — the wall SF committed"),
   npts: z.number().int(),
   shape_id: z.string(),
+  warning: z.string().optional().describe("Mixed-scale warning (#153): a scale note disagreeing with the sheet's sits in the measured region — verify before trusting these numbers"),
 };
 
 /** place_count (#146) — EA markers, one shape per point, scale-free. */
@@ -889,6 +890,7 @@ export const measureLineOutput = {
   length_lf: z.number(),
   npts: z.number().int(),
   shape_id: z.string().optional().describe("Present when condition was passed and the shape committed"),
+  warning: z.string().optional().describe("Mixed-scale warning (#153): a scale note disagreeing with the sheet's sits in the measured region — verify before trusting these numbers"),
 };
 
 /** conditionTotals row (web/src/lib/totals.js) minus presentation fields —

@@ -192,7 +192,28 @@ test("every tool: canonical valid call → schema-valid structuredContent mirror
   assert.equal(ocShape.origin.method, "one_click_v1");
   assert.equal(ocShape.origin.reviewed, false, "no human review gate exists here");
   assert.ok(Array.isArray(ocShape.origin.seed_norm));
-  assert.equal(exported.shapes.find((s: any) => s.id === poly.shape_id).origin.method, "manual");
+  const polyShape = exported.shapes.find((s: any) => s.id === poly.shape_id);
+  assert.equal(polyShape.origin.method, "manual");
+  // B-L1: measure_polygon and measure_line used to omit reviewed:false, so an
+  // agent hand-trace imported into the canvas as already-inked instead of
+  // pencil — every other agent commit (one_click_v1 above, symbol_sweep,
+  // agent_v1 derives, cutout_v1) already stamped it; these two didn't.
+  assert.equal(polyShape.origin.reviewed, false, "measure_polygon must not import as already-inked (B-L1)");
+  const lineShape = exported.shapes.find((s: any) => s.id === line.shape_id);
+  assert.equal(lineShape.origin.method, "manual");
+  assert.equal(lineShape.origin.reviewed, false, "measure_line must not import as already-inked (B-L1)");
+
+  // End-to-end proof, not just the origin field in isolation: an
+  // export_takeoff payload from this server, run through the SAME merge the
+  // canvas's Sheet-menu "Import takeoff…" uses, lands every agent-committed
+  // shape PENDING (dashed) in an empty project — never pre-approved ink.
+  const { mergeTakeoffImport } = await import("../../web/src/lib/importTakeoff.js");
+  const { payload: importedPayload, note: importNote } = mergeTakeoffImport({}, exported);
+  assert.equal(importNote.shapes_pending, exported.shapes.length, "every agent-commit shape lands pending on import (B-L1)");
+  assert.ok(
+    importedPayload.shapes.every((s: any) => s.origin?.reviewed === false),
+    "no imported shape is ink on arrival",
+  );
 
   const text = await callOk(client, "read_sheet_text", { sheet: KEY });
   assert.ok(text.items.length >= 4);

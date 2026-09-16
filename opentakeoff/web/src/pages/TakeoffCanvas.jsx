@@ -144,6 +144,7 @@ import { shapesInZone, shapeCenter } from "../lib/zone.js";
 import { sanitizeSheetLevels } from "../lib/sheetLevels.js";
 import { sanitizeConditionColumns, sanitizeConditionAttrs, renameColumnValue, columnLabel } from "../lib/conditionColumns.js";
 import { sanitizeShapeLabels, sanitizeShapeLabelsOnShapes, renameShapeLabel, shapeLabelValue } from "../lib/shapeLabels.js";
+import { sanitizeShapesOnLoad } from "../lib/shapeSanitize.ts";
 import { buildMarkedSetPdf, downloadBytes } from "../lib/markedset.js";
 import { loadProfiles } from "../lib/identity.js";
 import { resolveBranding, loadBrandingSelection } from "../lib/branding.js";
@@ -1875,7 +1876,7 @@ export default function TakeoffCanvas() {
     // `replace` command + reset: hydrate is a whole-array non-edit (no stamps,
     // no counters) and a loaded/restored timeline starts with EMPTY undo/redo
     // stacks — recorded inverses from the replaced project must never fire here.
-    dispatchShape({ type: "replace", shapes: sanitizeShapeLabelsOnShapes(a.shapes || []) }, { reset: true });   // strip a corrupt shape.label at hydrate (identity-preserving); other shape fields untouched
+    dispatchShape({ type: "replace", shapes: sanitizeShapeLabelsOnShapes(sanitizeShapesOnLoad(a.shapes || [])) }, { reset: true });   // sanitizeShapesOnLoad (#linear-takeoff B-L4) drops what cannot be priced/rendered at all (bad role, non-finite/missing verts, wrong id types) BEFORE the label-only sanitizer runs on what survives
     // normalize hydrated markups: legacy workspaces may hold markups with no id
     // (pre-dating the id field) — seed a stable id + default rfi_id so the new
     // select / edit / delete / move / RFI-link flows (all keyed on m.id) work on them.

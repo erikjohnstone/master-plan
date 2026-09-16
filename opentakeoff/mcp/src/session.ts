@@ -2028,7 +2028,8 @@ export class Session {
     let shape_id: string | undefined;
     // agent-supplied coordinates are a hand trace by a machine hand: manual
     // method, agent actor — and never reviewed (no human affirmed anything).
-    if (opts.condition) shape_id = this.commit(s, opts.condition, opts.role, verts, { area_sf, perimeter_lf }, { method: "manual", actor: "agent" }).id;
+    // reviewed: false — a hand trace by a machine hand is pencil, never ink.
+    if (opts.condition) shape_id = this.commit(s, opts.condition, opts.role, verts, { area_sf, perimeter_lf }, { method: "manual", actor: "agent", reviewed: false }).id;
     this.flushCommits("measure_polygon");
     const mixed = this.scaleWarningFor(s, verts);
     return { area_sf, perimeter_lf, nverts: verts.length, ...(shape_id ? { shape_id } : {}), ...(mixed ? { warning: mixed } : {}) };
@@ -2039,10 +2040,14 @@ export class Session {
     if (s.upp == null) throw new UserError(this.scaleGate(s));
     const length_lf = round2(openLen(pts) * s.upp);
     let shape_id: string | undefined;
-    // area_sf stays 0 — the canvas only mints border SF when the condition has a thickness
-    if (opts.condition) shape_id = this.commit(s, opts.condition, "linear", pts, { area_sf: 0, perimeter_lf: length_lf }, { method: "manual", actor: "agent" }).id;
+    // area_sf stays 0 — the canvas only mints border SF when the condition has a thickness.
+    // reviewed: false — an agent-drawn line is pencil until a human affirms it,
+    // same as every other agent commit (ShapeOrigin's own invariant, previously
+    // unstamped here — see measure_line/measure_polygon parity).
+    if (opts.condition) shape_id = this.commit(s, opts.condition, "linear", pts, { area_sf: 0, perimeter_lf: length_lf }, { method: "manual", actor: "agent", reviewed: false }).id;
     this.flushCommits("measure_line");
-    return { length_lf, npts: pts.length, ...(shape_id ? { shape_id } : {}) };
+    const mixed = this.scaleWarningFor(s, pts);
+    return { length_lf, npts: pts.length, ...(shape_id ? { shape_id } : {}), ...(mixed ? { warning: mixed } : {}) };
   }
 
   /** Surface Area — the canvas's Surface tool (commitSurface): an OPEN run
@@ -2065,10 +2070,12 @@ export class Session {
       c.height_ft = opts.height_ft;
     }
     const LF = openLen(pts) * s.upp;
-    const shape = this.commit(s, opts.condition, "surface_area", pts, { area_sf: round2(LF * h), perimeter_lf: round2(LF) }, { method: "manual", actor: "agent" });
+    // reviewed: false — pencil until a human affirms it, same as every agent commit.
+    const shape = this.commit(s, opts.condition, "surface_area", pts, { area_sf: round2(LF * h), perimeter_lf: round2(LF) }, { method: "manual", actor: "agent", reviewed: false });
     shape.height_ft = h;
     this.flushCommits("measure_surface");
-    return { condition: c.finish_tag, height_ft: h, length_lf: round2(LF), area_sf: round2(LF * h), npts: pts.length, shape_id: shape.id };
+    const mixed = this.scaleWarningFor(s, pts);
+    return { condition: c.finish_tag, height_ft: h, length_lf: round2(LF), area_sf: round2(LF * h), npts: pts.length, shape_id: shape.id, ...(mixed ? { warning: mixed } : {}) };
   }
 
   /** derive_base (#148): the estimator's most mechanical derivation — wall
@@ -2757,7 +2764,11 @@ export class Session {
     const s = this.sheet(name);
     const ids = points.map(([x, y], i) =>
       this.commit(s, opts.condition, "count", [[x, y]], { count: 1 },
-        opts.origins?.[i] ? { ...opts.origins[i] } : { method: "manual", actor: "agent" }).id);
+        // reviewed: false on the default (no explicit origin) path — a caller
+        // that DOES pass origins (e.g. an inked symbol-sweep commit) states
+        // its own reviewed value and is trusted, same as every other origin
+        // pass-through in this file.
+        opts.origins?.[i] ? { ...opts.origins[i] } : { method: "manual", actor: "agent", reviewed: false }).id);
     this.flushCommits(opts.tool ?? "place_count");
     const c = this.conditions.find((x) => x.finish_tag === opts.condition)!;
     const ea_total = this.shapes

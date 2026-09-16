@@ -477,7 +477,7 @@ thresholding, polarity detection for blueprint negatives, a gap-bridging pass fo
 faded ink—and badges the result so you verify the edges before committing. On CAD exports
 that publish a layer tree, One-Click reads the declared roles instead of inferring them.
 
-Plus the full manual kit—**Area, Rectangle, Linear, Curved Line, Surface Area (walls),
+Plus the full manual kit—**Area, Rectangle, Linear, Surface Area (walls),
 Count**, and **Cut Out** deducts—and a **Zone check** that answers "what's in this wing?"
 without touching the takeoff.
 
@@ -652,7 +652,7 @@ plus a vision-capable model id.
 |---|---|
 | **Ingest** | PDF, image, or `.zip` plan set—unpacked in-browser, multi-page, multi-file, up to 4 sheets side-by-side |
 | **Scale** | Auto-detect the drawn note, calibrate from a known dimension, or verify one with a graded check—per sheet |
-| **Measure** | One-Click Area (vector flood + raster fallback), Area, Rectangle, Linear, Curved Line, Surface Area, Count, Cut Out deducts, ⟂ Transitions, Zone check—imperial or metric |
+| **Measure** | One-Click Area (vector flood + raster fallback), Area, Rectangle, Linear, Surface Area (every one of Area/Linear/Cut Out/Surface Area carries a **╱ Straight / ⌒ Curve** switch, `Q`, for bowed walls and radius corners), Count, Cut Out deducts, ⟂ Transitions, Zone check—imperial or metric |
 | **Drawing aids** | 45°/90° angle lock with `⇧` hard-lock, live angle + segment-length readout at the cursor, endpoint Snap (beta) |
 | **Conditions** | Color + CAD hatch per finish, waste %, ×N multiplier, wall height, border thickness, schedule import, browser-wide library |
 | **Supporting Materials** | Labor + subfloor type, coverage rate × basis (incl. figured seam LF) → rounded order quantities, trowel/roller presets, grout calculator |

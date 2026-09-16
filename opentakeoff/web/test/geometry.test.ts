@@ -629,8 +629,64 @@ const OPSX = { moveTo: 1, lineTo: 2, curveTo: 3, curveTo2: 4, curveTo3: 5, close
   paintFormXObjectBegin: 30, paintFormXObjectEnd: 31, beginMarkedContent: 32, beginMarkedContentProps: 33,
   endMarkedContent: 34, paintImageXObject: 40, paintInlineImageXObject: 41, paintImageMaskXObject: 42,
   paintImageXObjectRepeat: 43, paintImageMaskXObjectRepeat: 44, paintImageMaskXObjectGroup: 45,
-  paintInlineImageXObjectGroup: 46 };
+  paintInlineImageXObjectGroup: 46, setDash: 50 };
 const IDENT = [1, 0, 0, 1, 0, 0];
+
+// ── dash + stroke-RGB capture (#linear-takeoff B-L5) ────────────────────────
+test("extractVectorGeometry: dash + stroke RGB are captured per segment, save/restore round-trips both", () => {
+  const seg = (x0: number) => [[OPSX.moveTo, OPSX.lineTo], [x0, 0, x0 + 10, 0]];
+  const items: Array<[number, unknown[]]> = [
+    [OPSX.constructPath, seg(0)],                             // #0: default — solid, black
+    [OPSX.setStrokeRGBColor, [255, 0, 0]],
+    [OPSX.setDash, [[6, 4], 0]],
+    [OPSX.constructPath, seg(20)],                            // #1: red, dashed [6,4]
+    [OPSX.save, []],
+    [OPSX.setStrokeRGBColor, [0, 255, 0]],
+    [OPSX.setDash, [[1, 3], 0]],
+    [OPSX.constructPath, seg(40)],                            // #2: green, dotted [1,3] — inside save
+    [OPSX.restore, []],
+    [OPSX.constructPath, seg(60)],                            // #3: back to red, dashed [6,4]
+    [OPSX.stroke, []],
+  ];
+  const g = extractVectorGeometry(opsFor(items, OPSX), IDENT, OPSX);
+  assert.equal(g.segs.length / 4, 4, "one segment per constructPath call");
+  assert.ok(g.dash, "dash array present");
+  assert.ok(g.dashPatterns, "dash pattern table present");
+  assert.ok(g.strokeRgb, "stroke RGB array present");
+
+  // #0: solid (index 0), default black
+  assert.equal(g.dash![0], 0);
+  assert.deepEqual(g.dashPatterns![0], [], "index 0 is always solid");
+  assert.deepEqual([g.strokeRgb![0], g.strokeRgb![1], g.strokeRgb![2]], [0, 0, 0]);
+
+  // #1: red, dashed [6,4] — a NEW pattern, so index 1
+  assert.equal(g.dash![1], 1);
+  assert.deepEqual(g.dashPatterns![1], [6, 4]);
+  assert.deepEqual([g.strokeRgb![3], g.strokeRgb![4], g.strokeRgb![5]], [255, 0, 0]);
+
+  // #2: green, dotted [1,3] — a SECOND new pattern, index 2, inside the save
+  assert.equal(g.dash![2], 2);
+  assert.deepEqual(g.dashPatterns![2], [1, 3]);
+  assert.deepEqual([g.strokeRgb![6], g.strokeRgb![7], g.strokeRgb![8]], [0, 255, 0]);
+
+  // #3: restore popped the save — back to red/dashed[6,4], same index as #1,
+  // never a new (duplicate) table entry
+  assert.equal(g.dash![3], 1, "restore rewinds the dash state, and the pattern is reused, not re-added");
+  assert.deepEqual([g.strokeRgb![9], g.strokeRgb![10], g.strokeRgb![11]], [255, 0, 0]);
+  assert.equal(g.dashPatterns!.length, 3, "exactly solid + 2 distinct patterns — restore never grows the table");
+});
+
+test("extractVectorGeometry: with no setDash/setStrokeRGBColor at all, output is unchanged (additive fields default solid/black)", () => {
+  const ops = opsFor([
+    [OPSX.constructPath, [[OPSX.moveTo, OPSX.lineTo, OPSX.lineTo], [0, 0, 10, 0, 10, 10]]],
+    [OPSX.stroke, []],
+  ], OPSX);
+  const g = extractVectorGeometry(ops, IDENT, OPSX);
+  assert.equal(g.segs.length / 4, 2);
+  assert.deepEqual(Array.from(g.dash!), [0, 0]);
+  assert.deepEqual(g.dashPatterns, [[]]);
+  assert.deepEqual(Array.from(g.strokeRgb!), [0, 0, 0, 0, 0, 0]);
+});
 
 test("subpaths: one moveTo run is one figure; its range covers exactly its segments", () => {
   const ops = opsFor([
