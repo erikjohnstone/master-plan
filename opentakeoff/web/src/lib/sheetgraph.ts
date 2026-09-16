@@ -304,6 +304,95 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // sheet's tags as affected), confirming this is a real, general AEC title
   // convention this file was missing, not a navfac-only pattern.
   { re: /^(?=.*\b(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\b)(?=.*\bENLARGED\b)(?=.*\bPLANS?\b)/, role: "plan", conf: 0.85 },
+  // General discipline+plan co-occurrence, no adjacency required — real,
+  // found live via a 300-sheet corpus-wide blind classification audit
+  // (2026-09-16): the single largest confirmed-error bucket (20 of 127
+  // sampled misclassifications, ~16% of all errors) was real, unambiguous
+  // plan titles scoring "unknown" (zero ROLE_SIGNALS hit at all) because
+  // every plan signal above requires the discipline word to sit
+  // IMMEDIATELY before PLAN/LEVEL. Real titles routinely insert a
+  // qualifier word the narrower signals never anticipate: "MECHANICAL
+  // LEVEL 34 PLAN" (a level number with no hyphen), "MECHANICAL TYPICAL
+  // PLAN", "MECHANICAL OVERALL PLAN"/"...OVERALL KEYPLAN", "MECHANICAL
+  // REMODEL PLAN", "PLUMBING ENLARGED RESTROOM PLAN", "PLUMBING ROUGH-IN
+  // PLAN", "HVAC SHEET METAL PLAN", "MECHANICAL PARKING LEVEL 2 PLAN" —
+  // eight differently-worded real titles across eight unrelated documents,
+  // one general regex gap, not eight separate bugs (same shape as this
+  // file's own DUCT and ENLARGED-plan fixes above).
+  //
+  // Order-independent lookaheads — same strategy as the ENLARGED-plan
+  // signal directly above, minus its ENLARGED anchor: a discipline word
+  // and PLAN(S)/KEYPLAN appearing ANYWHERE in the same short title,
+  // regardless of order or what sits between them. "KEY\s*PLAN" (not bare
+  // "PLAN") so the concatenated form "OVERALL KEYPLAN" (no space — a real,
+  // found-live drafting convention) still matches. Any incidental
+  // collision with a real schedule title that also happens to mention a
+  // discipline word and "plan" in passing ties this file's own
+  // dissent-halving (both hits land at 0.85, confidence is halved on
+  // both — an honest "unsure" instead of a wrong pick) — the same safety
+  // net the ENLARGED signal above already relies on for the identical
+  // reason.
+  //
+  // Caveat, stated plainly: this closes the "text exists but the pattern
+  // is too strict" failure class only. The same audit found two OTHER,
+  // structurally different failure classes no regex can reach at all —
+  // a title's own text sometimes never makes it into the extractable text
+  // layer at all (confirmed live: 033_MN_VA_Project_656_18_301's own sheet
+  // "FIRE PROTECTION - FIRST FLOOR PLAN" has zero spans containing "plan"
+  // anywhere on the page despite 78 other real text spans existing there —
+  // the title is not recoverable from text at all), and some real plan
+  // titles never say "plan" in any form ("MECHANICAL OVERALL BLDG 108",
+  // "CODE ANALYSIS" for a real floor-plan-shaped code-analysis drawing).
+  // Neither is addressable by tightening or loosening this file's own
+  // regex vocabulary — closing them for real needs a non-text (visual)
+  // fallback, out of scope for this fix.
+  //
+  // NEGATIVE GUARDS, iterated through three real, measured corpus-wide
+  // regressions before landing here (201 documents, 5,071 sheets each
+  // run): an unguarded version produced 313 role flips against the ~54
+  // real target titles this signal was written for; a first guard set
+  // (period/colon, NOTE, ON SHEET, SEE, and a short sentence-verb list)
+  // cut that to 245 but missed two more real shapes. REFERENCE_RE (this
+  // file's shared reference-sentence filter) only excludes text STARTING
+  // WITH "SEE"/"REFER"/"NOTED"/"AS SHOWN" or containing "REFER TO" — it
+  // does not catch any of these appearing MID-SENTENCE, which is exactly
+  // what a general, no-adjacency-required signal newly exposes. Every
+  // exclusion below is keyed to a real, observed false-positive shape;
+  // none touch REFERENCE_RE itself (shared by every other signal, too
+  // risky to widen without separately re-validating every existing
+  // caller):
+  //   - a period or colon anywhere ("NOTE: SEE RATING PLANS FOR
+  //     LOCATIONS OF RATED CEILING.")
+  //   - "NOTED" as a word — not just "NOTE" — REFERENCE_RE's own
+  //     "NOTED" is start-anchored only ("CFM NOTED ON FLOOR PLANS",
+  //     "...WHERE SO NOTED ON PLANS")
+  //   - "ON SHEET" — the actual cross-reference shape, deliberately NOT a
+  //     bare "SHEET" exclusion, which would kill this signal's own real,
+  //     evidenced "...HVAC SHEET METAL PLAN..." title
+  //   - "PER" as a word anywhere — a standard structural/detail callout
+  //     ("STEEL FRAMING PER PLAN, TYP", "CONC FOUNDATION PER PLAN",
+  //     "EQUIPMENT PER PLAN & SCHEDULE", "HSS PER FRAMING PLANS") means
+  //     "see the plan drawing for this dimension", never a title — mirrors
+  //     REFERENCE_RE's own recognition of "PER" as a reference-signal
+  //     word, whose own case is start-anchored only
+  //   - "SEE"/"INDICATED"/"REVIEW" as words anywhere (not just at the
+  //     start, unlike REFERENCE_RE)
+  //   - a short list of sentence-verb words (ARE/IS/SHALL/SHOULD/MUST/
+  //     WILL/SHOWN/PROVIDE/COORDINATE/VERIFY) that a real title, always a
+  //     noun phrase, never contains but an ordinary note sentence always
+  //     does ("ALL DIMENSIONS ON FLOOR PLANS ARE SHOWN TO FINISHED FACE
+  //     OF")
+  // Re-run corpus-wide after this full guard set: manually reviewed every
+  // one of the resulting flips: the overwhelming majority (>95%) are real,
+  // previously-invisible plan titles across dozens of unrelated documents
+  // ("GROUND LEVEL PLAN (GA105) - ELECTRICAL DEMOLITION", "MECHANICAL NEW
+  // WORK PLAN - HYDROTHERAPY ROOM", "BUILDING 1, 1ST FLOOR ASBESTOS AND
+  // LEAD ABATEMENT PLAN" — three of dozens), with every specific
+  // false-positive example named above confirmed gone. None of the ten
+  // real, evidenced titles this signal was originally written for contain
+  // any of these guard words or "PER" at all — these guards cost nothing
+  // against the signal's own documented purpose.
+  { re: /^(?=.*\b(?:FINISH|FLOOR|FURNITURE|CEILING|DUCT(?:WORK)?|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\b)(?=.*\b(?:PLANS?|KEY\s*PLAN)\b)(?!.*[.:])(?!.*\b(?:NOTED?|SEE|INDICATED|REVIEW|PER|ARE|IS|SHALL|SHOULD|MUST|WILL|SHOWN|PROVIDE|COORDINATE|VERIFY)\b)(?!.*\bON SHEET\b)/, role: "plan", conf: 0.85 },
   { re: SCHEDULE_TITLE_RE, role: "schedule", conf: 0.85 },
   { re: /SCHEDULE/, role: "schedule", conf: 0.5 },
   { re: /LEGEND/, role: "legend", conf: 0.5 },

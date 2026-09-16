@@ -216,14 +216,29 @@ test("sheet roles: an ENLARGED/PARTIAL qualifier between the level number and PL
   assert.ok(enlarged.confidence >= 0.8);
   const partial = classifySheetRole({ key: "g", sheet_number: "M401", spans: [sp("MECHANICAL - LEVEL 2 PARTIAL PLAN", 100, 700)] });
   assert.equal(partial.role, "plan");
-  // an unrelated qualifier word must still correctly fail — this widening is
-  // two specific, named words, not a generic gap that bridges anything in
-  // between the level number and PLAN. ("REFLECTED CEILING PLAN" is not a
-  // useful negative control here — it already, correctly, matches the base
-  // discipline-word-adjacent-to-PLAN alternative via "CEILING...PLAN", a
-  // real, legitimate plan title unrelated to this fix.)
+  // an unrelated qualifier word must still correctly fail THIS signal
+  // specifically — it is two named words (ENLARGED/PARTIAL), not a generic
+  // gap that bridges anything between the level number and PLAN. ("REFLECTED
+  // CEILING PLAN" is not a useful negative control here — it already,
+  // correctly, matches the base discipline-word-adjacent-to-PLAN alternative
+  // via "CEILING...PLAN", a real, legitimate plan title unrelated to this
+  // fix.)
+  //
+  // UPDATED (2026-09-16, the general discipline+plan co-occurrence signal
+  // below): this title is STILL correctly rejected by the narrow
+  // ENLARGED/PARTIAL signal being tested above, but it now legitimately
+  // matches role "plan" overall via the separate, later, more general
+  // signal — "MECHANICAL - LEVEL 1 PRELIMINARY PLAN" is a real, ordinary
+  // plan title (PRELIMINARY is a standard AEC revision-status qualifier,
+  // e.g. a "PRELIMINARY — NOT FOR CONSTRUCTION" phase label, not a
+  // different document type), so this is a correct, wider outcome, not a
+  // regression. This title was always a synthetic defensive example for
+  // the ENLARGED/PARTIAL signal's own narrow scope, never a real,
+  // documented corpus false-positive — nothing here contradicts that
+  // signal's own narrowness, which the assertion above already covers.
   const other = classifySheetRole({ key: "h", sheet_number: "M401", spans: [sp("MECHANICAL - LEVEL 1 PRELIMINARY PLAN", 100, 700)] });
-  assert.notEqual(other.role, "plan", "an unrelated qualifier word must not classify as plan via this widened pattern");
+  assert.equal(other.role, "plan", "a real plan title with an unrelated revision-status qualifier word now correctly matches the general discipline+plan co-occurrence signal");
+  assert.ok(other.confidence >= 0.8);
 });
 
 test("sheet roles: DUCT (not just DUCTWORK) adjacent to PLAN classifies plan (federal-mech's own real sheet #4)", () => {
@@ -306,6 +321,75 @@ test("sheet roles: a bare 'ROOM SCHEDULE' title scores its own lower confidence 
   const qualified = classifySheetRole({ key: "c", sheet_number: "A101", spans: [sp("ROOM SCHEDULE - LEVEL 1", 100, 700)] });
   assert.equal(qualified.role, "schedule");
   assert.ok(qualified.confidence >= 0.8);
+});
+
+test("sheet roles: a discipline word and PLAN co-occurring anywhere in the title classifies plan, even with a qualifier word between them", () => {
+  // Real, found live via a 300-sheet corpus-wide blind classification audit
+  // (2026-09-16): the single largest confirmed-error bucket (20 of 127
+  // sampled misclassifications) was real plan titles scoring "unknown"
+  // because every plan signal in this file required the discipline word
+  // to sit IMMEDIATELY before PLAN/LEVEL. Eight differently-worded real
+  // titles across eight unrelated documents, one general regex gap.
+  const cases: Array<[string, string]> = [
+    ["MECHANICAL LEVEL 34 PLAN", "26_CA_TransbayTower (no hyphen before LEVEL, unlike the existing LEVEL-N-PLAN signal)"],
+    ["MECHANICAL TYPICAL PLAN - LEVELS 37-48", "26_CA_TransbayTower"],
+    ["MECHANICAL OVERALL KEYPLAN", "013_MO_T2523 (concatenated KEYPLAN, no space)"],
+    ["MECHANICAL OVERALL PLAN", "013_MO_T2523-style OVERALL qualifier"],
+    ["FIRST FLOOR MECHANICAL REMODEL PLAN", "12_MT_MSU_ReidHall_Renovation"],
+    ["PLUMBING ENLARGED RESTROOM PLAN", "004_MO_T2504 (already also ENLARGED-covered; must still resolve)"],
+    ["ENLARGED FOODSERVICE PLUMBING ROUGH-IN PLAN", "03_FL_HurlburtField_ChildDevCenter"],
+    ["FIRST FLOOR HVAC SHEET METAL PLAN - AREA B", "13_MI_MSU_LifeSciences_LabRenovation"],
+    ["MECHANICAL PARKING LEVEL 2 PLAN", "26_CA_TransbayTower_Mechanical_64Sheets"],
+    ["HVAC PIPING FLOOR PLANS", "072_CA_CA07_2627 (plural PLANS, not singular PLAN)"],
+  ];
+  for (const [title, provenance] of cases) {
+    const r = classifySheetRole({ key: title, sheet_number: "M-1", spans: [sp(title, 100, 700)] });
+    assert.equal(r.role, "plan", `"${title}" (${provenance}) must classify plan`);
+    assert.ok(r.confidence >= 0.8, `"${title}" must win at full confidence, no dissent`);
+  }
+  // Must NOT fire on a bare discipline word with no plan/keyplan text at
+  // all — this is a co-occurrence signal, not "any discipline word wins".
+  const noPlan = classifySheetRole({ key: "x", sheet_number: "M-9", spans: [sp("MECHANICAL SCHEDULE OF EQUIPMENT", 100, 700)] });
+  assert.notEqual(noPlan.role, "plan", "a discipline word with no PLAN/KEYPLAN text anywhere must not classify plan via this signal");
+});
+
+test("sheet roles: the general discipline+plan co-occurrence signal never fires on a note/reference sentence that merely mentions a plan in passing", () => {
+  // Real, measured regression caught before commit: a first version of the
+  // co-occurrence signal above with no guards at all was run corpus-wide
+  // (201 documents, 5,071 sheets) and produced 313 role flips, not the ~54
+  // real target titles it was written for. REFERENCE_RE (this file's
+  // shared reference-sentence filter, tested earlier in the same loop)
+  // only excludes text STARTING WITH "SEE"/"REFER"/"NOTED"/"AS SHOWN" or
+  // containing "REFER TO" — it does not catch SEE/NOTE appearing
+  // MID-SENTENCE, exactly the shape a no-adjacency-required signal newly
+  // exposes. Every title below is a REAL string found in that corpus-wide
+  // run, misclassified "plan" before these guards were added.
+  const badCases: Array<[string, string]> = [
+    ["EQUIPMENT. SEE NEW WORK PLAN ON SHEET M13.", "a cross-sheet reference sentence, not this sheet's own title"],
+    ["NOTE: SEE RATING PLANS FOR LOCATIONS OF RATED CEILING.", "a general note — REFERENCE_RE's own vocabulary doesn't include \"NOTE:\""],
+    ["ALL DIMENSIONS ON FLOOR PLANS ARE SHOWN TO FINISHED FACE OF", "a dimensioning note fragment"],
+    ["REFLECTED CEILING PLANS AND EQUIPMENT OF ALL TRADES.", "a coordination note fragment"],
+    ["DUCT SIZES ON PLANS (SEE", "a truncated note fragment referencing the plans, not titling this sheet as one"],
+    // Found in a SECOND corpus-wide re-run after the first guard set above
+    // landed (245 flips, down from 313, but still not clean):
+    ["CFM NOTED ON FLOOR PLANS", "REFERENCE_RE's own \"NOTED\" exclusion is start-anchored only; this signal's own guard needed NOTED, not just NOTE"],
+    ["LINE PLENUM & DUCT TO AIR OUTLET WHERE SO NOTED ON PLANS", "same NOTED gap, a real installation-note fragment"],
+    ["CONTROL PANEL FOR EQUIPMENT ITEM INDICATED ON PLAN", "a callout note, not a title"],
+    ["STEEL FRAMING PER PLAN, TYP", "a standard structural callout (\"see the plan for this dimension\"), not a title"],
+    ["CONC FOUNDATION PER PLAN", "same PER PLAN callout shape"],
+    ["EQUIPMENT PER PLAN & SCHEDULE", "same PER PLAN callout shape"],
+    ["REVIEW PLANS AND EXISTING SITE", "an instruction sentence, not a title"],
+  ];
+  for (const [title, why] of badCases) {
+    const r = classifySheetRole({ key: title, sheet_number: "M-1", spans: [sp(title, 100, 700)] });
+    assert.notEqual(r.role, "plan", `"${title}" (${why}) must not classify plan via the general co-occurrence signal`);
+  }
+  // The guards must not cost any of the ten real, evidenced target titles
+  // the signal exists for — none of them contain a period, colon, "NOTE",
+  // "ON SHEET", or "SEE", so all ten must still match after the guards.
+  const stillGood = classifySheetRole({ key: "y", sheet_number: "M-2", spans: [sp("FIRST FLOOR HVAC SHEET METAL PLAN - AREA B", 100, 700)] });
+  assert.equal(stillGood.role, "plan", "a bare \"SHEET\" inside \"SHEET METAL\" (not \"ON SHEET\") must not be excluded by the ON SHEET guard");
+  assert.ok(stillGood.confidence >= 0.8);
 });
 
 test("sheet roles: a real SHEET INDEX cover page is never misattributed as one of the sheet types it lists (ledger, later session)", () => {
