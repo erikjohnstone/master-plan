@@ -1,5 +1,30 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md's own "Completion gate" section
+(the whole-project bar, distinct from any single phase's own gate) now
+carries a full, honest status report against every named metric, rather
+than being left silent. served/refusal-correct/false-confident: reported
+(unchanged, 12.1%/28.6%/2). no-seed: NOT MET (every number is hand-
+seeded; needs the full device-discovery pipeline this session has
+repeatedly and correctly declined to build unilaterally). crossing
+cases: NOT MET and not measurable today (no supply/return sub-
+distinction exists). grader error rate: attempted via a real 5-row blind
+spot-check (tuning-half rows, re-rendered with a burned-in marker ring
+at each row's own exact coordinate) — discovered partway through that
+every sampled row had already been seen via serves-eval.mjs's own
+miss-list output, read multiple times earlier the same day for
+regression verification, making a genuinely blind second pass
+impossible from inside this same session; disclosed as a real,
+discovered methodological limit, not skipped. cost: measured directly
+on a bounded 8-sheet sample of federal-mech (mean 25,422.8ms/sheet) and
+navfac-cherry-point-atc (mean 3,767.0ms/sheet) — a full-set sweep
+genuinely timed out on navfac's own real noding cost. Bottom line,
+stated plainly: the completion gate is NOT MET as a whole, and cannot be
+closed through further small increments — the remaining distance is
+concentrated in the device-discovery pipeline this plan's own "What not
+to do" section already flags as possibly warranting a separate goal
+document. Full detail: the plan doc's own Completion gate section.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 4 item 2's own
 layer-boundary refusal, coarser real version: `traceConnectivity`'s BFS
 now refuses to cross from one recognized `MepSystemRole` into a

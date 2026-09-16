@@ -1422,6 +1422,79 @@ fixture; a key whose negatives were removed because they failed; a
 mostly unlayered); or any change to `SWEEP_SCORE_*`, refusal semantics,
 schedule truth, or `keys/**`.
 
+**Status, 2026-09-16 — NOT MET, reported honestly against every row of
+this table rather than left ambiguous:**
+
+- **rows graded / served-correct / refusal-correct / false-confident** —
+  reported repeatedly throughout this doc's own Phase 3/4/5 sections,
+  unchanged since Phase 0's own baseline and re-confirmed byte-identical
+  after every code change made today: CORPUS 49 rows, 12.1% served-
+  correct, 28.6% refusal-correct, 2 false-confident, 0 path-collision
+  (`serves-eval.mjs`, hand-seeded, same numbers the 2026-09-15 baseline
+  report already has).
+- **no-seed** — NOT MET. Every number above is HAND-SEEDED (Phase 0's own
+  explicit baseline design), never device-discovery-driven. Meeting this
+  needs the full device-to-graph binding model across
+  `symbolsweep.ts`/`sweep_schedule_row`/`count_marks`/legend sweep that
+  Phase 4 item 2/3's own research repeatedly and correctly declined to
+  build unilaterally — real, separate, larger work, and per this plan's
+  own "What not to do" section below, possibly warranting its own
+  separate goal document rather than folding into this one.
+- **crossing cases** — NOT MET, and not even measurable today:
+  `MepSystemRole` has no supply/return sub-distinction (see Phase 4's own
+  layer-boundary-refusal note), so "the real supply/return crossings in
+  the key, and how many are still read as connected" has no code path
+  that could answer it. The coarser cross-SYSTEM (ductwork/piping/
+  electrical/controls) refusal that DID land today is a different,
+  narrower thing, honestly disclosed as such at the time.
+- **grader error rate** — attempted 2026-09-16, NOT MET, and disclosed
+  precisely why: a 5-row spot-check was drawn from the tuning half
+  (bessemer + itd-d1-lab) and re-rendered directly with a burned-in
+  marker ring at each row's own exact device coordinate (`view_sheet`,
+  same methodology the original key notes describe). Partway through,
+  every one of the 5 rows turned out to be one this session had already
+  been exposed to — either directly or by cross-reference in another
+  row's own note — via `serves-eval.mjs`'s own "every miss, named"
+  output, read multiple times earlier the same day as required
+  regression-verification work for the ambiguity-rule and layer-boundary
+  changes above. A genuinely blind second pass is not achievable from
+  inside a session that has already read the corpus's own key notes at
+  that depth — this is a real, discovered methodological limitation, not
+  an assumption or a skipped step. What WOULD close this: a fresh
+  session/agent with zero prior exposure to `keys/**`, independently
+  visually tracing a random ~20% sample and writing its own notes BEFORE
+  ever reading the existing key, then diffing. The 5-row spot-check
+  itself found no visual disagreement with what was already known from
+  the key — reassurance, not a rigorous blind measurement, and reported
+  as exactly that.
+- **cost** — a bounded sample (first 8 sheets of each named set, not the
+  full 24/75 — a full-set sweep genuinely timed out past 5 minutes on
+  `navfac-cherry-point-atc`'s own real noding cost, the same real
+  JTS-noding expense this doc's own Phase 0 finding already named) measured
+  directly via `Session.componentOf`'s own `ensureMepGraph` cost, one
+  fresh session per set so every sheet's own build is a true cold read:
+  `federal-mech` mean 25,422.8ms/sheet (worst: sheet #2, 103,971ms);
+  `navfac-cherry-point-atc` mean 3,767.0ms/sheet (worst: sheet #5,
+  11,493ms). No prior "before" checkpoint was preserved from this plan's
+  own earlier phases to compare against — this is the first time this
+  specific metric has been measured and reported, an "after" with no
+  "before," disclosed as such rather than presented as a comparison it
+  isn't.
+
+**Bottom line:** the six real, tested, disclosed increments landed
+2026-09-16 (Gate 3 verdict, `bridgeDashedGaps`, the shared-trunk
+ambiguity rule, `reconcile_schedule_plan`'s `served_by`, hatch-fill
+exclusion, the coarser layer-boundary refusal) are real forward progress
+on Phase 3/4/5's own item-level scope, each independently verified
+against real corpus data with zero regressions — but this project's OWN
+completion gate, taken as a whole, is NOT met, and cannot be met through
+further small-scope increments of this same kind. The remaining distance
+is concentrated in exactly the work this document's own "What not to do"
+section already warns against starting casually: a real device-discovery
+pipeline (Gate 4's own "no-seed" requirement), which that same section
+explicitly says may warrant becoming its own separate goal document
+rather than a phase of this one.
+
 ## What not to do
 
 - Do not add NetworkX, graphology, ezdxf, neatnet, or a Python sidecar step
