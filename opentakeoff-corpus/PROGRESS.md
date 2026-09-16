@@ -1,5 +1,34 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md — Gate 5 follow-up, Phase 5 item 3
+(partial), and a real Gate 3 diagnostic advance. `web`'s full `npm run
+check` finished: 3,178 pass / 70 fail, every failure traced to one real,
+confirmed, pre-existing environment gap (this container's Node has no Web
+Locks API — `annotationCoordinator.js`'s own coordinated-sync path throws
+directly), concentrated in 6 unrelated snapshot/sync test files that
+import none of this phase's own changed modules (checked, not assumed) —
+Gate 5 is now MET. `highlight_citation` gained `path_px`: any caller can
+now cite a real walked connectivity path (not just path_between/served_by's
+own internal painting) with the same crisp neon-blue trace style, built
+directly rather than widening `agentAnnotate`'s own more heavily-used
+contract. The `reconcile_schedule_plan` half of item 3 (a `served_by`
+field on its own per-row plan citations) turned out to need its own new
+equipment-candidate input parameter — reconcile_schedule_plan has no
+concept of "which equipment a device might connect to" today — a real,
+separate design decision, not wired this session. Separately: Phase 3's
+own Gate 3 gap (Bessemer SR-1→HP-1) is now precisely understood with a
+verified-in-isolation fix path (both SR-1's seed AND HP-1's own equipment
+placement resolve onto their own isolated device-glyph components rather
+than the real duct trunk; `computePorts` on each end's own resolved-
+component bbox, with the centerline flag on, finds real ports in the same
+9,124-node component, and a direct walk between them succeeds at 291
+hops) — not shipped, since it only works with `detectDoubleLineDuct
+Centerlines` on, and flipping that flag's own default requires its own
+scale-aware full-corpus regression pass that has never actually been run
+(a real, newly-found gap in the flag's own prior "ON/OFF identical"
+verification, which never called `set_scale` for any corpus sheet). Full
+detail in the plan doc's own Phase 3 and Gate 5 sections.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5, items 2 and 4 (on explicit
 user authorization to expand an already-shipped, agent-facing tool surface
 — a materially riskier change than anything else in this plan, correctly

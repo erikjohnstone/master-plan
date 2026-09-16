@@ -830,19 +830,20 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "highlight_citation",
-    description: "Paint an exact production-API citation bbox on the real blueprint as a highlight markup (no auto-navigation). Pass the cited sheet and bbox_px unchanged (from query_table cells, find_text hit.bbox_px, or sweep_schedule_row citations). The Agent panel shows a clickable source card the estimator uses to jump there on demand — pass row_key, column, table_title, and value whenever known so the card title is human-readable (e.g. VAV-1 · CFM = 350), not a naked fragment. Call this for every factual answer backed by cited evidence. Do not draw overlay words on top of the cell value.",
+    description: "Paint an exact production-API citation on the real blueprint as a highlight markup (no auto-navigation) — EITHER a static region (bbox_px, from query_table cells, find_text hit.bbox_px, or sweep_schedule_row citations) OR a real walked connectivity path (path_px, e.g. re-citing a path_between/served_by result's own `path` later in the same run without re-walking it) — pass exactly one, never both. A path cite paints the same crisp neon-blue trace path_between/served_by's own reached result already paints, distinct from a static region's ordinary highlight, so the estimator can tell the two kinds of evidence apart at a glance. The Agent panel shows a clickable source card the estimator uses to jump there on demand — pass row_key, column, table_title, and value whenever known so the card title is human-readable (e.g. VAV-1 · CFM = 350), not a naked fragment. Call this for every factual answer backed by cited evidence. Do not draw overlay words on top of the cell value.",
     input_schema: {
       type: "object",
       properties: {
         sheet: { type: "string" },
-        bbox_px: { type: "array", items: { type: "number" } },
+        bbox_px: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] production image px — a static cited region." },
+        path_px: { type: "array", items: { type: "array", items: { type: "number" } }, description: "[[x,y],...] production image px, at least 2 points — a real walked connectivity path (e.g. a served_by/path_between result's own `path`)." },
         text: { type: "string", description: "Fallback short label if structured fields are unavailable." },
         row_key: { type: "string", description: "Equipment/MARK tag for this cell when known (e.g. VAV-1)." },
         column: { type: "string", description: "Schedule column/header for this cell when known (e.g. CFM, GPM)." },
         table_title: { type: "string", description: "Schedule title when known (e.g. VOLUME CONTROL BOX SCHEDULE)." },
         value: { type: "string", description: "Exact cell value being cited when known." },
       },
-      required: ["sheet", "bbox_px"],
+      required: ["sheet"],
     },
   },
   {

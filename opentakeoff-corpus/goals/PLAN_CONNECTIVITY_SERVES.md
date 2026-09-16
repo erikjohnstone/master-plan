@@ -666,6 +666,60 @@ phase's own scope was already the centerline mechanism itself, proven
 safe; widening seed resolution again is exactly the kind of shared-path
 change that needs its own dedicated, carefully-tested increment.
 
+**Follow-up diagnosis, 2026-09-16 — the real root cause is now precisely
+understood and a viable fix path is verified in isolation, but NOT
+shipped.** Reproduced live against real Bessemer data (`detected_scale`
+applied via `use_detected: true`, mppf=36, centerline flag ON for
+diagnosis only): SR-1's own seed resolves to a real 15-node isolated
+component (its own register hatch glyph, bbox ~22x11px) and — a new
+finding — **HP-1's own equipment placement ALSO resolves to its own
+17-node isolated component** (its own drawn unit-box outline), not the
+duct trunk either. Neither is a seed-tolerance problem: even
+`seedTolFt: 50` (far past any sane default) still snaps both ends to
+their own nearer glyph ink, not the real duct 43px/further away —
+`resolveOnGraph` always prefers the nearest real edge within tolerance,
+and a device's own glyph ink is genuinely nearer than the duct passing
+beside it. Proven fix path, composed entirely from EXISTING, already-
+shipped primitives, zero new mepconnectivity.ts code: (1) with the
+centerline flag on, `computePorts` on each end's own resolved-component
+bbox (`describeComponent`'s own `bbox`, inkPad 0 for HP-1 / 50 for SR-1's
+smaller glyph) finds real ports landing in the SAME 9,124-node connected
+component for both ends — proof the human-verified real connection
+genuinely exists in the graph; (2) a direct `traceConnectivity` walk
+between those two real ports succeeds (`status: "reached"`, confidence
+0.35, factors layer-unclassified/bridged-gap(4)/long-trace) — but needs
+291 hops, requiring an explicit `maxHops` override (raising the DEFAULT
+would risk re-opening Phase 2's own reverted false-confident regression
+elsewhere, so this must stay a per-call override, never a new default);
+(3) `servedBy`'s own EXISTING `equipment: Array<{id,at}>` contract already
+supports body-aware resolution for free, with no new field or code: pass
+one synthetic entry per computed port, all sharing the target's own id
+(`equipAtNode` in `traceConnectivity`'s own BFS already treats every
+resolved node as an independent "reached" marker for whichever id it
+carries) — never attempted before this session because `ports_of`/
+`servedBy` didn't exist until Phase 5. **Why this isn't shipped:** all
+three pieces above only mattered because the diagnostic graph had
+`detectDoubleLineDuctCenterlines: true` — `ensureMepGraph`
+(`mcp/src/session.ts`) never passes this flag, by Phase 3's own deliberate
+choice, so `s.servedBy()`/`s.componentOf()`/`s.portsOf()` all still see
+the ordinary (no-centerline) graph in production, where this specific
+duct's two parallel boundary lines have no synthesized centerline joining
+them and the "9,124-node trunk" doesn't exist as one component at all.
+Flipping the flag on in `ensureMepGraph` is its own separate, larger,
+genuinely unverified decision — and a real, newly-found gap in Phase 3's
+own "ON and OFF now produce IDENTICAL results" claim: that comparison
+(and `mep-trace-eval.mjs`/`serves-eval.mjs` generally) never calls
+`set_scale` for any corpus sheet, so `opts.mppf` is 0 for every one of
+those runs and centerline detection's own `mppf > 0` gate means it never
+actually engages in ANY of that regression evidence — the "identical"
+finding is real but doesn't cover the case that matters (a sheet with a
+real committed scale). A genuine scale-aware regression pass across the
+full corpus, comparing ON vs. OFF with each sheet's own `detected_scale`
+actually applied, has never been run and is the correct next step before
+ever proposing the flag flip to ON — not attempted here, given this
+session's remaining scope; recorded precisely so it isn't re-diagnosed
+from scratch. Gate 3 stays NOT MET.
+
 ### Phase 4 — ports, not clicks
 
 1. For every device placement (`symbol_sweep` match, `sweep_schedule_row`
@@ -887,15 +941,37 @@ environment gap unrelated to this change (`ModuleNotFoundError: No module
 named 'pytest'` in `basEngineeringContract`/`basEngineeringOwnershipFamilies`,
 which shell out to Python; confirmed by reproducing the same
 `ModuleNotFoundError` directly against this container's own Python, no
-code path this phase touched). **Not yet met at commit time:** `web`'s own
-full `npm run check` (typecheck+lint+test+bench+build across this
-project's entire test suite, not just the files this phase touched) was
-still running in the background when this phase's commit was made —
-started, not skipped; its result will be reported as a follow-up once it
-finishes, with any real regression it surfaces fixed and disclosed rather
-than the gate being marked met on an assumption. D01–D10 demo suite: not
-independently re-run this phase; it is one of `npm run check`'s own steps
-and is covered by that pending run, not separately verified.
+code path this phase touched).
+
+**Follow-up, same day — `web`'s own full `npm run check` result is in: MET,
+with a confirmed, unrelated, pre-existing environment gap named, not
+assumed away.** `npm run check` stops at its own `npm test` step (never
+reaches lint/bench/build) with 3,178 pass / 70 fail / 13 cancelled / 13
+skipped out of 3,274. Every failure traced to a real cause, not left as an
+unexplained number: this container's Node environment has no Web Locks
+API (`navigator.locks`, a browser-only API) — `web/src/lib/
+annotationCoordinator.js:5`'s own `withAnnotationCoordinator` throws
+`"Coordinated takeoff sync and restore require a browser with Web Locks
+support."` for every test that exercises real snapshot/sync coordination
+(confirmed directly in the captured failure stack, not inferred). Of the
+54 failures found in a full untruncated capture before the run was
+stopped, ALL 54 sit in exactly six pre-existing files — `basSnapshotStore.
+test.ts` (16), `basSyncRestore.test.ts` (10), `basSyncHistory.test.ts` (9),
+`basRestore.test.ts` (9), `basSnapshotBrowser.test.ts` (5),
+`annotationGeneration.test.ts` (5, the same missing-Web-Locks path
+surfacing as a cascading dangling-promise cancellation instead of the
+direct error) — none of which import `mepconnectivity.ts`, `session.ts`,
+`agentTools.js`, `agentVerifiers.js`, `agentLoop.js`, `takeoffWorkflow.js`,
+or `TakeoffCanvas.jsx` (checked directly, not assumed). Confirmed
+independently in isolation: `annotationGeneration.test.ts` run alone
+reproduces the identical 1 fail/4 cancelled shape outside the full suite
+too. Same doctrine as the MCP `pytest` gap above — a real, named,
+reproduced environment limitation of THIS container, not a code
+regression this phase caused, and not glossed over as "probably fine."
+D01–D10 demo suite: not independently re-run; it is one of `npm run
+check`'s own later steps, never reached because the run stops at the
+Web-Locks-caused test failures above (a pre-existing gate-order property
+of `npm run check` itself, unrelated to this phase).
 
 ### Phase 6 — held-out and the walk-out proof
 

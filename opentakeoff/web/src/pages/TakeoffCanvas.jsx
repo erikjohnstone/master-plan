@@ -9368,17 +9368,37 @@ export default function TakeoffCanvas() {
   }
 
   async function agentHighlightCitation({
-    sheet, bbox_px, text = "", row_key = "", column = "", table_title = "", value = "",
+    sheet, bbox_px, path_px, text = "", row_key = "", column = "", table_title = "", value = "",
     replaceTakeoffCite = false, source = null, recordCitation = true,
   }) {
-    if (!Array.isArray(bbox_px) || bbox_px.length !== 4 || bbox_px.some((v) => !Number.isFinite(v))) {
+    // Phase 5 item 3 (PLAN_CONNECTIVITY_SERVES.md) — path_px lets ANY caller
+    // cite a walked connectivity path (not just path_between/served_by's own
+    // internal painting), e.g. a served_by result an agent wants to re-cite
+    // later in the same run without re-walking it. Mutually exclusive with
+    // bbox_px on purpose: a static schedule/table region and a walked path
+    // are two different kinds of evidence, never conflated into one markup.
+    const hasBbox = Array.isArray(bbox_px);
+    const hasPath = Array.isArray(path_px);
+    if (!hasBbox && !hasPath) {
+      return { error: "Pass bbox_px (four finite production image-pixel coordinates) or path_px (a walked path, at least two [x,y] points)." };
+    }
+    if (hasBbox && (bbox_px.length !== 4 || bbox_px.some((v) => !Number.isFinite(v)))) {
       return { error: "bbox_px must contain four finite production image-pixel coordinates." };
+    }
+    if (hasPath && (path_px.length < 2 || path_px.some((p) => !Array.isArray(p) || p.length !== 2 || !Number.isFinite(p[0]) || !Number.isFinite(p[1])))) {
+      return { error: "path_px must be an array of at least two [x,y] finite production image-pixel points." };
     }
     const dims = await ensureSheetDims(sheet);
     if (!dims) return { error: `Sheet ${sheet} not found.` };
-    const [x0, y0, x1, y1] = bbox_px;
-    if (!(x1 > x0 && y1 > y0) || x0 < 0 || y0 < 0 || x1 > dims.w || y1 > dims.h) {
-      return { error: "bbox_px is degenerate or outside the cited sheet." };
+    let x0, y0, x1, y1;
+    if (hasBbox) {
+      [x0, y0, x1, y1] = bbox_px;
+      if (!(x1 > x0 && y1 > y0) || x0 < 0 || y0 < 0 || x1 > dims.w || y1 > dims.h) {
+        return { error: "bbox_px is degenerate or outside the cited sheet." };
+      }
+    }
+    if (hasPath && path_px.some(([px, py]) => px < 0 || py < 0 || px > dims.w || py > dims.h)) {
+      return { error: "path_px has a point outside the cited sheet." };
     }
     if (replaceTakeoffCite) clearTakeoffCiteHighlights();
     const rowKey = String(row_key || "").trim();
@@ -9394,16 +9414,41 @@ export default function TakeoffCanvas() {
       if (col && val) return `${col} = ${val}`;
       return fallback || "Cited source";
     })();
-    const result = await agentAnnotate({
-      sheet,
-      type: "highlight",
-      // Keep label text on the markup record for lists/tool results, but the
-      // canvas never draws it inside the rect (would cover the cited value).
-      text: label,
-      rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
-      source: citeSource,
-    });
-    if (result.error) return result;
+    let result;
+    if (hasPath) {
+      // A walked path is a real trace, not a static region — reuse the
+      // exact crisp neon-blue trace style path_between/served_by's own
+      // "reached" result already paints (simplifyPath + explicit high
+      // opacity), rather than the softer freehand-highlighter default a
+      // plain rect citation uses, so an estimator can tell "this cite IS a
+      // walked connectivity path" apart from "this cite is a static
+      // schedule/table region" at a glance. Built directly (bypassing
+      // agentAnnotate, same as agentServedBy/agentTraceConnectivity's own
+      // painting) since agentAnnotate's own "highlight" type only accepts
+      // rect today — a real, narrow, self-contained addition rather than
+      // widening that shared, more heavily-used function's own contract.
+      const norm = ([px, py]) => [+(px / dims.w).toFixed(5), +(py / dims.h).toFixed(5)];
+      const id = uid("mk");
+      const rec = {
+        id, created_at: nowIso(), sheet_id: sheet, rfi_id: "", condition_id: "",
+        type: "highlight", pts: simplifyPath(path_px, 4).map(norm), color: "#00e5ff", opacity: 0.9, w: 0.006,
+        text: label, source: citeSource,
+      };
+      setMarkups((ms) => [...ms, rec]);
+      agentStateRef.current = { ...agentStateRef.current, markups: [...agentStateRef.current.markups, rec] };
+      result = { id, sheet, type: "highlight" };
+    } else {
+      result = await agentAnnotate({
+        sheet,
+        type: "highlight",
+        // Keep label text on the markup record for lists/tool results, but the
+        // canvas never draws it inside the rect (would cover the cited value).
+        text: label,
+        rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
+        source: citeSource,
+      });
+      if (result.error) return result;
+    }
     // Estimator-clarity: paint quietly — do NOT auto-fly the viewport.
     // Source cards in the Agent panel are how the estimator jumps on demand.
     setShowMarkups(true);
@@ -9429,14 +9474,16 @@ export default function TakeoffCanvas() {
           column: col || undefined,
           table_title: tableTitle || undefined,
           value: val || undefined,
-          bbox_px,
+          ...(hasBbox ? { bbox_px } : {}),
+          ...(hasPath ? { path_px } : {}),
           source: citeSource || undefined,
         }];
       });
     }
     return {
       ...result,
-      bbox_px,
+      ...(hasBbox ? { bbox_px } : {}),
+      ...(hasPath ? { path_px } : {}),
       text: label,
       row_key: rowKey || null,
       column: col || null,
