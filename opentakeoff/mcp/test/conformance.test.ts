@@ -260,6 +260,28 @@ test("every tool: canonical valid call → schema-valid structuredContent mirror
   const revRow = (await callOk(client, "takeoff_summary")).conditions.find((r: any) => r.finish_tag === "CPT-1");
   assert.deepEqual({ w: revRow.waste_pct, m: revRow.multiplier }, { w: 0, m: 1 }, "undo restores both knobs verbatim");
 
+  // #linear-takeoff (plan §7.2, decision D1): edit_condition's routed-system
+  // identity fields — additive alongside waste/multiplier, echoed the same way,
+  // restored by undo the same way. CPT-1 is a flooring condition in real life,
+  // but the tool doesn't care what family a tag belongs to — these four knobs
+  // are orthogonal to waste/multiplier/roll_setup and never conflict with them.
+  const sysSet = await callOk(client, "edit_condition", { condition: "CPT-1",
+    family: "duct_rect", system: "SA", size: { kind: "rect", w_in: 12, h_in: 6 }, assembly_id: "asm-duct-rect-2wg-r6" });
+  assert.deepEqual(
+    { family: sysSet.family, system: sysSet.system, size: sysSet.size, assembly_id: sysSet.assembly_id },
+    { family: "duct_rect", system: "SA", size: { kind: "rect", w_in: 12, h_in: 6 }, assembly_id: "asm-duct-rect-2wg-r6" },
+  );
+  const sysExported = await callOk(client, "export_takeoff", {});
+  const cptCond = sysExported.conditions.find((c: any) => c.finish_tag === "CPT-1");
+  assert.deepEqual(cptCond.size, { kind: "rect", w_in: 12, h_in: 6 }, "the routed-system identity round-trips through export, not just the reply");
+  await callOk(client, "undo_last", { n: 1 });
+  const sysExportedUndone = await callOk(client, "export_takeoff", {});
+  const cptCondUndone = sysExportedUndone.conditions.find((c: any) => c.finish_tag === "CPT-1");
+  assert.equal(cptCondUndone.family, undefined, "undo removes a freshly-set family/system/size/assembly_id, not just resets waste/multiplier");
+  assert.equal(cptCondUndone.system, undefined);
+  assert.equal(cptCondUndone.size, undefined);
+  assert.equal(cptCondUndone.assembly_id, undefined);
+
   // condition twins (#205): mint → follow → split → exact inverses, then the
   // session goes back to pre-twins state so the later tests see what they expect
   const twin = await callOk(client, "duplicate_condition", { condition: "CPT-1", label: "Level 2" });
@@ -431,6 +453,8 @@ test("schema-invalid arguments: -32602 validation error naming the tool; the ses
   await callViolation(client, "edit_condition", { condition: "CPT-1", waste_pct: -5 });    // negative waste
   await callViolation(client, "edit_condition", { condition: "CPT-1", multiplier: 0 });    // 0 silently means 1 on the canvas — rejected
   await callViolation(client, "edit_condition", { condition: "CPT-1", waste_pct: "ten" }); // wrong type
+  await callViolation(client, "edit_condition", { condition: "CPT-1", size: { kind: "rect", d_in: 8 } }); // #linear-takeoff: d_in belongs to "round", not "rect" — the discriminated union rejects the mismatch
+  await callViolation(client, "edit_condition", { condition: "CPT-1", size: { kind: "hex", w_in: 4 } });  // #linear-takeoff: "hex" isn't one of the four known kinds
 
   // none of that touched the session — a real call still works on the same pair
   const r = await callOk(client, "one_click", { sheet: KEY, x: 600, y: 1084 });

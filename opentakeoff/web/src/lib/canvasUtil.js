@@ -97,6 +97,15 @@ export const instantiateTemplate = (t) => ({
   ...(t.thickness_in != null ? { thickness_in: t.thickness_in } : {}),
   ...(t.laborType != null ? { laborType: t.laborType } : {}),
   ...(t.subfloorType != null ? { subfloorType: t.subfloorType } : {}),
+  // #linear-takeoff WP1.2 (plan §7.2, decision D1): a routed-system
+  // condition — ONE condition per SYSTEM (e.g. "SA", "HHWS"), size lives on
+  // the segment (linear/run.ts), this is only the DEFAULT a manual run
+  // seeds from. Purely additive — a flooring/architectural condition never
+  // carries any of these four fields.
+  ...(t.family != null ? { family: t.family } : {}),
+  ...(t.system != null ? { system: t.system } : {}),
+  ...(t.size ? { size: { ...t.size } } : {}),
+  ...(t.assembly_id != null ? { assembly_id: t.assembly_id } : {}),
   ...(t.roll_setup ? { roll_setup: { ...t.roll_setup } } : {}),   // #136 — deep-copied like grout: a template's roll spec must never be shared by reference
   // instantiateMaterial (lib/materials.js) deep-copies the nested grout
   // geometry — a shallow spread here aliased the CT-1 seed's one grout object

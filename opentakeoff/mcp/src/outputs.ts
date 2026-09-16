@@ -17,6 +17,7 @@ import { basAssemblyCalculationSchema } from '../../web/src/lib/basAssemblyQuant
 import { basEngineeringSummarySchema } from '../../web/src/lib/basEngineeringReview.ts';
 import { basProjectReviewSchema } from '../../web/src/lib/basProjectReview.ts';
 import { basEvidenceBundleInspectionSchema } from '../../web/src/lib/basEvidenceBundle.ts';
+import { runSizeSchema } from '../../web/src/lib/linear/types.ts';
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -1273,6 +1274,12 @@ export const editConditionOutput = {
   multiplier: z.number().describe("The condition's quantity multiplier after this write"),
   height_ft: z.number().optional().describe("The condition's wall height after this write — present once set (measure_surface multiplies traced LF by it)"),
   roll_setup: z.object({}).passthrough().optional().describe("The condition's roll-goods setup after this write — present while opted in"),
+  // #linear-takeoff (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md, plan §7.2):
+  // routed-system identity, echoed the same way family/height_ft already are.
+  family: z.string().optional().describe("The condition's assembly family after this write — present once set"),
+  system: z.string().optional().describe("The condition's system tag after this write — present once set"),
+  size: runSizeSchema.optional().describe("The condition's default run size after this write — present once set"),
+  assembly_id: z.string().optional().describe("The condition's assembly id after this write — present once set"),
   roll: z.object({
     condition_id: z.string(), finish_tag: z.string(), material: z.string(),
     roll_width_ft: z.number(), roll_length_ft: z.number(),

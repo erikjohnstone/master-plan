@@ -18,6 +18,7 @@ import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src
 import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
+import type { RunSize } from "../../web/src/lib/linear/types.ts";
 import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
 import { activeBasCapture, mergeBasWorkflows, type BasWorkflow } from "../../web/src/lib/basWorkflow.ts";
 import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src/lib/basNarratives.ts";
@@ -407,6 +408,16 @@ export interface Condition {
    * condition roll goods — material class + the packing engine's spec fields,
    * exactly the object the canvas persists (web/src/lib/rollTakeoff.js). */
   roll_setup?: Record<string, unknown>;
+  // #linear-takeoff WP1.2 (plan §7.2, decision D1): a routed-system
+  // condition — ONE condition per SYSTEM (e.g. "SA", "HHWS"), not per size;
+  // size lives on the segment (linear/run.ts's `run.size_overrides`), this
+  // is only the DEFAULT a manual run seeds from. Additive — a flooring/
+  // architectural condition never carries any of these four fields, mirrors
+  // web/src/lib/canvasUtil.js's instantiateTemplate exactly.
+  family?: string;
+  system?: string;
+  size?: RunSize;
+  assembly_id?: string;
   materials: MaterialRow[];
 }
 
@@ -795,7 +806,7 @@ export type JournalPayload =
   | { op: "delete"; tool: string; removed: { shape: Shape; index: number }[] }
   | { op: "materials"; tool: string; condition_id: string; before: MaterialRow[]; dropped_before?: string[];
       family?: { condition_id: string; before: MaterialRow[]; dropped_before?: string[] }[] }
-  | { op: "condition"; tool: string; condition_id: string; before: { waste_pct: number; multiplier: number; height_ft?: number; roll_setup?: Record<string, unknown> } }
+  | { op: "condition"; tool: string; condition_id: string; before: { waste_pct: number; multiplier: number; height_ft?: number; roll_setup?: Record<string, unknown>; family?: string; system?: string; size?: RunSize; assembly_id?: string } }
   | { op: "duplicate_condition"; tool: string; condition_id: string; parent_id: string; parent_had_family: boolean }
   | { op: "split_condition"; tool: string; condition_id: string; before: { variant_of?: string; materials?: unknown; materials_dropped?: string[] } }
   | { op: "approval"; tool: string; inverse: ApprovalCommand }
@@ -5830,9 +5841,10 @@ export class Session {
     return { seamByShape: seamLfByShape(byCond) as Map<string, number> };
   }
 
-  editCondition(tag: string, opts: { waste_pct?: number; multiplier?: number; height_ft?: number; roll_setup?: Record<string, unknown> | null }) {
-    if (opts.waste_pct === undefined && opts.multiplier === undefined && opts.height_ft === undefined && opts.roll_setup === undefined) {
-      throw new UserError("Nothing to change — pass at least one of waste_pct, multiplier, height_ft, roll_setup.");
+  editCondition(tag: string, opts: { waste_pct?: number; multiplier?: number; height_ft?: number; roll_setup?: Record<string, unknown> | null; family?: string; system?: string; size?: RunSize; assembly_id?: string }) {
+    if (opts.waste_pct === undefined && opts.multiplier === undefined && opts.height_ft === undefined && opts.roll_setup === undefined
+      && opts.family === undefined && opts.system === undefined && opts.size === undefined && opts.assembly_id === undefined) {
+      throw new UserError("Nothing to change — pass at least one of waste_pct, multiplier, height_ft, roll_setup, family, system, size, assembly_id.");
     }
     const c = this.conditions.find((x) => x.finish_tag === tag);
     if (!c) {
@@ -5842,10 +5854,19 @@ export class Session {
     const before = {
       waste_pct: c.waste_pct, multiplier: c.multiplier, height_ft: c.height_ft,
       roll_setup: c.roll_setup ? structuredClone(c.roll_setup) : undefined,
+      // #linear-takeoff WP1.2: snapshotted the same as roll_setup, so
+      // undo_last restores a routed-system condition's identity verbatim.
+      family: c.family, system: c.system,
+      size: c.size ? { ...c.size } : undefined,
+      assembly_id: c.assembly_id,
     };
     if (opts.waste_pct !== undefined) c.waste_pct = opts.waste_pct;
     if (opts.multiplier !== undefined) c.multiplier = opts.multiplier;
     if (opts.height_ft !== undefined) c.height_ft = opts.height_ft;
+    if (opts.family !== undefined) c.family = opts.family;
+    if (opts.system !== undefined) c.system = opts.system;
+    if (opts.size !== undefined) c.size = { ...opts.size };
+    if (opts.assembly_id !== undefined) c.assembly_id = opts.assembly_id;
     if (opts.roll_setup !== undefined) {
       if (opts.roll_setup === null) {
         delete c.roll_setup; // opt out — the condition is trade-agnostic again
@@ -5876,6 +5897,10 @@ export class Session {
       condition: tag, condition_id: c.id, waste_pct: c.waste_pct, multiplier: c.multiplier,
       ...(c.height_ft !== undefined ? { height_ft: c.height_ft } : {}),
       ...(c.roll_setup ? { roll_setup: c.roll_setup } : {}),
+      ...(c.family !== undefined ? { family: c.family } : {}),
+      ...(c.system !== undefined ? { system: c.system } : {}),
+      ...(c.size ? { size: c.size } : {}),
+      ...(c.assembly_id !== undefined ? { assembly_id: c.assembly_id } : {}),
       ...(roll ? { roll } : {}),
     };
   }
@@ -6017,6 +6042,14 @@ export class Session {
           else c.height_ft = e.before.height_ft;
           if (e.before.roll_setup === undefined) delete c.roll_setup;
           else c.roll_setup = e.before.roll_setup;
+          if (e.before.family === undefined) delete c.family;
+          else c.family = e.before.family;
+          if (e.before.system === undefined) delete c.system;
+          else c.system = e.before.system;
+          if (e.before.size === undefined) delete c.size;
+          else c.size = e.before.size;
+          if (e.before.assembly_id === undefined) delete c.assembly_id;
+          else c.assembly_id = e.before.assembly_id;
         }
         undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 0 });
       } else if (e.op === "duplicate_condition") {
