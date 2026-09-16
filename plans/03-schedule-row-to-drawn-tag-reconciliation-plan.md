@@ -7,6 +7,19 @@ file:line or a report path so it can be checked.
 
 ## 0. The goal, stated exactly
 
+**The end state, in product terms.** An estimator loads a set they have never
+seen, types **"Run a control valve takeoff"** or **"Run a BAS takeoff"** or
+**"Run an HVAC takeoff"**, and the agent runs it. Every row in the resulting
+takeoff is grounded: the estimator can click the row and be shown, on the
+drawing, where that row's tag is drawn — every place it is drawn — with the
+schedule cell and the plan text both highlighted. A row whose tag is drawn
+nowhere says so. A tag drawn on the plans that no row lists shows up as its own
+line. The point is to be able to show the customer that the row's tag exists on
+the drawing. No symbol recognition is involved in getting there; the tag text
+on the plan is the evidence.
+
+**The engine goal that delivers it.**
+
 > Two directions, one ledger, text only.
 >
 > **Tag → row.** Every place a tag is drawn on a plan — `VAV-1`, a valve mark,
@@ -143,6 +156,19 @@ timed on its own because it has never existed as a separable step; it is wired
 inside the geometric sweep. It has also never been budgeted for a full set end
 to end through the UI.
 
+**F6. Today the agent grounds rows only through the geometric sweep, and only when told to.**
+The agent's takeoff contract (`web/src/lib/agentLoop.js:2029`) says: compile
+first, then `reconcile_schedule_plan`, then `sweep_schedule_row` per mark "so
+plan locations paint," then `highlight_citation`. The compile itself
+(`compileProductionTakeoff`, `mcp/src/productionTakeoff.ts`) does no grounding;
+its lines carry `installed_qty: null`. Grounding arrives only if the model
+follows through, one geometric sweep per row, and the panel
+(`web/src/components/TakeoffDataPanel.jsx:764`, `onOpenCitation`) can then
+open a schedule or plan cite. So "show me this row's tag on the drawing"
+exists, but it is optional, model-driven, geometry-priced, and absent from the
+compiled line itself. The end state needs it to be part of the compile,
+text-priced, and on every line without the model having to ask.
+
 ### 1.3 Smaller findings worth carrying into the plan
 
 - **Row lookup is duplicated by hand.** `reconcileScheduleFamilyFromGraph`
@@ -192,6 +218,7 @@ tag → row direction; D4 is row → tag; the rest are production properties.
 | D7 | Whole-set ledger for a 75-sheet set completes inside a stated budget through the deployed UI, with no geometry call on the path | timed run, Playwright, call-graph assertion |
 | D8 | Sheets skipped for role are disclosed with the count of tag-shaped text they carry | ledger `skipped[]` |
 | D9 | `drawn_count` is never written into `installed_qty`, `quantity`, or any EA total | unit test on the reconcile/compile producers |
+| D10 | The literal prompts "Run a control valve takeoff", "Run a BAS takeoff", "Run an HVAC takeoff" through the unmocked browser Agent produce a takeoff whose every line carries its drawn instances (or a named disclosure), and clicking any line opens the sheet at the tag's bbox with the schedule cell highlighted alongside | Playwright on the keyed sets and two held-out sets; DOM + export assertions |
 
 ---
 
@@ -357,10 +384,37 @@ Shared `buildTagLedger(session, graph)` on the Session path, then MCP
 - Disclosure: `skipped_sheets[{sheet, role, tag_shaped_text_count}]` so a
   skipped `M2.01` with 40 tag-shaped runs is loud.
 
-Gate 3: D1–D5 and D9 measured on the keyed sets; agent "complete takeoff" and
-UI Takeoff panel show both directions (a tag list that opens its row, a row
-list that opens its drawn instances); export carries occurrence rows and
-per-row instance rows with citations.
+**3.1 Wire the ledger into the compiled takeoff line.** Every line emitted by
+`compileCorpusTakeoff` / `compileProductionTakeoff` for `hvac_equipment`,
+`control_valves`, and the served-equipment / device tags of `bas_points`
+carries `plan_instances[]` (sheet, bbox, text as drawn, `recovered_via`,
+`redundant_view_of`), `drawn_count`, `distinct_count`, and
+`grounding_status` ∈ `DRAWN` | `NOT_DRAWN` | `AMBIGUOUS`. This happens inside
+the compile on the shared Session path — not as a follow-up tool the model may
+or may not call. The existing `installed_qty: null` stays null.
+
+**3.2 The agent contract.** `agentLoop.js`'s takeoff instructions change from
+"compile, then reconcile, then sweep so it paints" to "compile; every line is
+already grounded; report `grounding_status` per line and list `UNSCHEDULED`
+tags." `sweep_schedule_row` remains available as the optional geometric lane
+and is no longer on the required path. The four MCP doc surfaces and
+`TOOL_STAGES` follow.
+
+**3.3 The panel.** Every takeoff line gets a "show on drawing" action that opens
+the plan sheet at the first instance's bbox with the schedule cell highlighted
+in the schedule sheet, and a per-instance list to step through the rest
+(`TakeoffDataPanel.jsx` `onOpenCitation` already opens one cite; this extends it
+to the instance list). `UNSCHEDULED` tags render as their own lines with the
+same action, pointing at the plan only.
+
+**3.4 Export.** CSV/XLSX carry `drawn_count`, `distinct_count`,
+`grounding_status`, and one instance-row sheet (`tag, sheet, page, bbox, text_as_drawn`).
+
+Gate 3: D1–D5, D9, and D10 measured on the keyed sets. The three literal prompts
+run through the real Agent UI on itd-d1-lab, navfac, and bldg5406; every line
+shows `DRAWN` with openable instances, `NOT_DRAWN` with the searched sheets
+named, or `AMBIGUOUS` with candidates. Screenshots and receipts land under
+`opentakeoff/docs/bas-production/evidence/` the way the existing Agent proofs do.
 
 ### Phase 4 — Sheet coverage and role hardening
 
@@ -382,7 +436,8 @@ keyed sets and the held-out documents.
   (target under 30 s post-index — text only, from Phase 0.5 numbers);
   occurrence cache per sheet (`tagOccurrenceCache` already exists, :3520)
   persisted with the graph cache; deterministic output.
-- Playwright: real document, "reconcile everything", DOM + export equal to CLI.
+- Playwright: real documents, the three literal prompts, DOM + export equal to
+  CLI, every line's "show on drawing" action verified to land on the tag text.
 
 Gate 5: D7 timed and green in the deployed build.
 
