@@ -7483,6 +7483,13 @@ export default function TakeoffCanvas() {
           if (basShaToName.has(source.sha256)) source.names = [basShaToName.get(source.sha256)];
         }
       }
+      // Presentation aliases only, same as fetchProductionSheetGraph/
+      // fetchProductionCompleteBasTakeoff — the server keeps content-addressed
+      // filenames for cache identity, but every sheet key anywhere in this
+      // result (categories/items/schedule/legend citations, not just
+      // bas_math/bas_point_lists) must read back as the canvas's real names,
+      // or every "Project takeoff" citation for this kind fails to open.
+      remapGraphSheetKeys(result, basShaToName);
       return basResultForCanvas(result, basShaToName);
     };
     for (const name of names) {
