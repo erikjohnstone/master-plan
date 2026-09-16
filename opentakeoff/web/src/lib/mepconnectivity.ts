@@ -35,6 +35,7 @@ import { classifyMepLayerName, mepLayerSignal, type MepSystemRole } from "./meps
 import type { LayerInfo } from "./layers.ts";
 import type { Bbox } from "./sheetgraph.ts";
 import { extractDuctCenterlines } from "./ductcenterline.ts";
+import { detectDashedSegs } from "./dashdetect.ts";
 
 export type LayerSignal = "none" | "weak" | "strong";
 export type Point = [number, number];
@@ -58,6 +59,16 @@ export interface MepEdge {
    *  `bridged` flag on those folds into this edge's `bridged` above, not
    *  a second `derived` value). */
   derived?: "centerline";
+  /** true when this edge's own ORIGINAL segment was part of a detected
+   *  dashed run (dashdetect.ts's own detectDashedSegs, Phase 1 item 1 —
+   *  this corpus's own real CAD exports never use the PDF setDash
+   *  operator, so straight dash cadences must be read geometrically).
+   *  Only ever set when detectDashedLines is on; a real, disclosed line-
+   *  style signal for a future `relation: "controls"` walk (Phase 5 item
+   *  1 — Bessemer's own real T-thermostat-to-baseboard-heater dashed
+   *  lines) to prefer or restrict to, never used by traceConnectivity's
+   *  own ordinary duct/pipe walk today. */
+  dashed?: boolean;
 }
 export interface MepGraph {
   nodes: MepNode[]; edges: MepEdge[]; layerSignal: LayerSignal;
@@ -271,6 +282,19 @@ export interface BuildMepGraphOpts {
    *  detectDoubleLineDuctCenterlines is true. */
   ductMinWidthFt?: number;
   ductMaxWidthFt?: number;
+  /** DEFAULT OFF (undefined/false reproduces today's behavior byte-for-
+   *  byte, same Gate-1 discipline as every other option here). When true,
+   *  dashdetect.ts's own detectDashedSegs runs once over `segs` and every
+   *  resulting edge inherits `dashed: true` from whichever ORIGINAL
+   *  segment it split from — purely a label on existing edges, never a
+   *  change to which edges exist or how they connect (unlike
+   *  requireJunctionMarkForCrossings/detectDoubleLineDuctCenterlines,
+   *  this can't itself create a topology regression), but still gated the
+   *  same way as everything else here rather than assumed free — a real,
+   *  unmeasured per-sheet cost on top of noding, not yet worth paying by
+   *  default until a real consumer (Phase 5's own `relation: "controls"`)
+   *  exists. */
+  detectDashedLines?: boolean;
 }
 
 const q = (v: number, grid: number) => Math.round(v / grid) * grid;
@@ -418,6 +442,14 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
     nodeIndex.set(key, idx);
     return idx;
   };
+  // Purely a label on edges that already exist — never changes which
+  // edges exist or how they connect, so unlike the crossing gate/
+  // centerline options above this can't itself cause a topology
+  // regression — but still computed only when asked for (Gate-1
+  // discipline held uniformly, not selectively), a real, unmeasured
+  // per-sheet cost this project's own performance history (buildMepGraph's
+  // own junction-scan fix) says never to assume is free.
+  const dashedSegs = opts.detectDashedLines ? detectDashedSegs(segs, opts.meta, { mppf: ppf }) : null;
   const addEdge = (
     ax: number, ay: number, bx: number, by: number, segIdx: number,
     aKey?: string, bKey?: string,
@@ -426,7 +458,10 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
     const { system, confidence } = systemForLayer(layerIdFor(segIdx));
     const a = nodeFor(ax, ay, aKey), b = nodeFor(bx, by, bKey);
     const ei = edges.length;
-    edges.push({ a, b, length: Math.hypot(bx - ax, by - ay), system, systemConfidence: confidence });
+    edges.push({
+      a, b, length: Math.hypot(bx - ax, by - ay), system, systemConfidence: confidence,
+      ...(dashedSegs && dashedSegs[segIdx] ? { dashed: true as const } : {}),
+    });
     nodes[a].edges.push(ei); nodes[b].edges.push(ei);
   };
 

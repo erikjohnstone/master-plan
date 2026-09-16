@@ -722,3 +722,48 @@ test("computePorts: inkPad expands the box before testing crossings", () => {
   assert.equal(computePorts(g, [100, 0, 200, 100]).length, 0, "the duct never reaches the box at all");
   assert.equal(computePorts(g, [100, 0, 200, 100], 20).length, 1, "a 20px ink pad reaches the duct's own real end");
 });
+
+// ── detectDashedLines (Phase 5 item 1 prep) ────────────────────────────────
+
+function dashRun(x0: number, y0: number, count: number, dashLen: number, gap: number): number[] {
+  const out: number[] = [];
+  let x = x0;
+  for (let i = 0; i < count; i++) {
+    out.push(x, y0, x + dashLen, y0);
+    x += dashLen + gap;
+  }
+  return out;
+}
+
+test("buildMepGraph: default OFF never sets a dashed field, even on real dash-shaped linework", () => {
+  const segs = dashRun(0, 0, 6, 4, 4);
+  const g = buildMepGraph(segs, { mppf: 100 });
+  assert.ok(g.edges.every((e) => e.dashed === undefined));
+});
+
+test("buildMepGraph: detectDashedLines flags every edge split from a detected dashed run, and none of a solid one", () => {
+  // Dash/gap sized well above buildMepGraph's own default quantization
+  // grid (DEFAULT_SNAP_FT * mppf = 0.15*100 = 15px here) — found live: a
+  // first version of this test used 4px dashes, smaller than that grid,
+  // and buildMepGraph's own quantizeSurvivors silently dropped every one
+  // of them as degenerate-after-rounding (x1 === x2), leaving nothing for
+  // this option to even flag. This test is about the dashed FIELD, not
+  // dashdetect.ts's own detection math (already covered in
+  // dashdetect.test.ts), so a dash size safely clear of that grid is the
+  // right fixture, not a smaller mppf that would just move the same
+  // problem rather than avoid it.
+  const dashed = dashRun(0, 0, 6, 20, 20);
+  // A different ANGLE, not just a different position — dashdetect.ts's own
+  // chain-building only breaks on a position gap relative to the max of
+  // the two pieces' own lengths, so a long, merely-horizontal solid run
+  // can still read as "close enough" to extend the dash chain (confirmed
+  // directly), corrupting the whole chain's own classification once the
+  // final length-ceiling check sees that one oversized member. A solid
+  // run at a genuinely different angle breaks the chain unambiguously.
+  const solid = [500, 500, 500, 900]; // vertical, unrelated angle — never dash-shaped
+  const g = buildMepGraph([...dashed, ...solid], { mppf: 100, detectDashedLines: true });
+  const dashedEdges = g.edges.filter((e) => e.dashed);
+  const solidEdges = g.edges.filter((e) => !e.dashed);
+  assert.equal(dashedEdges.length, 6, "every one of the 6 dash pieces becomes its own flagged edge");
+  assert.equal(solidEdges.length, 1, "the one long solid run is never flagged");
+});

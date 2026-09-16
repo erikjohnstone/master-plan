@@ -738,6 +738,37 @@ standalone building block for that future work, not a partial `serves()`.
 suite untouched; the connectivity intent in `takeoffWorkflow.js:1019`
 rewritten to prefer `served_by` over hand-seeded traces.
 
+**One prerequisite piece of item 1 landed, 2026-09-16 — the walk itself,
+the new operators, and everything else are not started.**
+`buildMepGraph` gained `detectDashedLines` (default OFF): when on,
+`dashdetect.ts`'s own `detectDashedSegs` (Phase 1 item 1) runs once over
+`segs` and every resulting edge inherits `dashed: true` from whichever
+ORIGINAL segment it split from. Purely a label on edges that already
+exist — unlike `requireJunctionMarkForCrossings`/
+`detectDoubleLineDuctCenterlines` this can never itself cause a topology
+regression (it changes no node, no edge, no connectivity, only annotates
+what's already there) — but still gated behind an explicit option rather
+than assumed free, since it is a real, unmeasured per-sheet cost on top of
+noding. 2 unit tests; found and fixed a real test-fixture bug along the
+way (a synthetic dash run shorter than `buildMepGraph`'s own default
+quantization grid — `DEFAULT_SNAP_FT * mppf` — quantizes to a degenerate
+point and gets silently dropped by `quantizeSurvivors`, unrelated to this
+option's own logic; the fix was sizing the fixture's dashes above the
+grid, not touching the option).
+
+**Not attempted — the actual walk.** A `relation: "controls"` trace needs
+to cross the real GAPS between consecutive dash pieces (that is what makes
+a line look dashed in the first place — the pieces are not
+JTS-noding-connected to each other at all today), which needs its own
+gap-bridging design analogous to Phase 3's own centerline-corner bridging,
+not a quick flag on the existing walk. Items 2–4 (new read-only MCP/UI
+operators, `reconcile_schedule_plan` wiring, `agentLoop.js`/
+`agentVerifiers.js`/`check-tool-count.mjs` updates) change an
+already-shipped tool surface other automated agents call today — a
+materially larger and more consequential decision than anything else in
+this phase, and not something to make unilaterally as a tail extension of
+an already-long session. Scoped as their own dedicated, focused effort.
+
 ### Phase 6 — held-out and the walk-out proof
 
 Before any tuning beyond Phase 2, write `keys/SERVES_HELDOUT.txt`: whole

@@ -1,5 +1,21 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5, one prerequisite piece:
+`buildMepGraph` gained `detectDashedLines` (default OFF) — every edge
+split from a segment `dashdetect.ts`'s own `detectDashedSegs` (Phase 1
+item 1) flags as part of a dashed run inherits `dashed: true`. Purely a
+label on edges that already exist, so unlike the crossing-gate/centerline
+options this can never itself cause a topology regression, but still
+gated the same way as everything else here. 2 unit tests; found and fixed
+a real test-fixture bug along the way (a synthetic dash run smaller than
+buildMepGraph's own default quantization grid quantizes to a degenerate
+point and gets silently dropped, unrelated to this option's own logic).
+The actual `relation: "controls"` walk (crossing the real gaps between
+dash pieces — they are not noding-connected to each other at all today)
+and the new read-only MCP/UI operators (`served_by`, `devices_of`, etc.,
+which change an already-shipped tool surface other agents call) are not
+attempted — scoped as their own dedicated effort in the goal doc.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 4 item 1: `mepconnectivity.ts`
 gained `computePorts(graph, bbox, inkPad?)` — every point a graph edge
 crosses a device placement's own bbox boundary, never the centroid; 5 unit
