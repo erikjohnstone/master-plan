@@ -2381,6 +2381,16 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
   let lastDraftText = "";
   let lastWordingCorrection = "";
   let wordingCorrectionStreak = 0;
+  // needsMoreTools corrections ("call query_table...") had no thrash guard at
+  // all — unlike wording corrections, which force-strip after 2 repeats, a
+  // model that keeps re-submitting the same rejected answer instead of
+  // actually calling the suggested tool could spin the identical
+  // "[Evidence gate: ...]" message for the rest of maxIterations (80) with
+  // zero forward progress, reading as a hang. Track it the same way: same
+  // correction text AND no new tool call landed since we last saw it.
+  let lastToolCorrection = "";
+  let toolCorrectionStreak = 0;
+  let callLogLenAtLastToolCorrection = -1;
   let answerNudgeSent = false;
   let consecutiveHighlightOnlyTurns = 0;
 
@@ -2651,9 +2661,33 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         } else {
           lastWordingCorrection = "";
           wordingCorrectionStreak = 0;
+          const noNewTools = callLog.length === callLogLenAtLastToolCorrection;
+          if (correction === lastToolCorrection && noNewTools) toolCorrectionStreak += 1;
+          else { lastToolCorrection = correction; toolCorrectionStreak = 1; }
+          callLogLenAtLastToolCorrection = callLog.length;
+          // Two identical rejections with no new tool call in between means the
+          // model is re-submitting the same answer instead of doing what the
+          // gate asked. Give up cleanly rather than burn the rest of
+          // maxIterations repeating the same message: return the last draft
+          // plus an honest note that the requested evidence lookup did not run.
+          if (toolCorrectionStreak >= 3) {
+            const notes = runVerifiers(callLog, goal);
+            let giveUpText = String(draftForGate || lastDraftText || "").trim();
+            giveUpText += `${giveUpText ? "\n\n" : ""}Evidence gate could not be satisfied: ${correction} `
+              + "Stopping after repeated identical corrections rather than retrying the same answer indefinitely — "
+              + "the fields above are grounded in the tool calls actually made; anything the gate flagged was not confirmed.";
+            if (notes.length) giveUpText = `${giveUpText}\n\n${notes.join("\n\n")}`;
+            lastDraftText = giveUpText;
+            emit({ type: "text", text: giveUpText });
+            messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
+            emit({ type: "done", text: giveUpText });
+            return { status: "done", text: giveUpText, iterations: iterations + 1 };
+          }
         }
         const toolDirective = needsMoreTools
-          ? "Use tools only if this correction requires new evidence or paint; otherwise emit the complete replacement answer now."
+          ? (toolCorrectionStreak >= 2
+            ? "You already received this exact correction and did not call the suggested tool. Call it now, with real arguments, as your ONLY action this turn — do not write any answer text yet."
+            : "Use tools only if this correction requires new evidence or paint; otherwise emit the complete replacement answer now.")
           : "Do not call any tools. Emit the complete replacement answer now.";
         messages.push({
           role: "user",
