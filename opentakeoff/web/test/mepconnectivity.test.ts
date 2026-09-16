@@ -8,6 +8,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   buildMepGraph, traceConnectivity, hasJunctionMark, detectArrowDirections, computePorts,
+  describeComponent, seedTolPx,
   type MepGraph, type ArrowDetectNode, type ArrowDetectEdge,
 } from "../src/lib/mepconnectivity.ts";
 import type { LayerInfo } from "../src/lib/layers.ts";
@@ -721,6 +722,63 @@ test("computePorts: inkPad expands the box before testing crossings", () => {
   const g = buildMepGraph(segs, {});
   assert.equal(computePorts(g, [100, 0, 200, 100]).length, 0, "the duct never reaches the box at all");
   assert.equal(computePorts(g, [100, 0, 200, 100], 20).length, 1, "a 20px ink pad reaches the duct's own real end");
+});
+
+// ── describeComponent / component_of (Phase 5 item 2) ─────────────────────
+
+test("describeComponent: a single straight run is one component with both its own real open ends", () => {
+  const segs = [0, 0, 200, 0];
+  const g = buildMepGraph(segs, {});
+  // Seeded exactly at the run's own endpoint (an existing graph node) —
+  // resolveOnGraph's own "an existing node wins ties" rule means this
+  // never triggers its mid-edge splice, so the numbers below describe the
+  // graph's own real topology, not a splice byproduct (that mechanic is
+  // already covered by traceConnectivity's own seed-resolution tests).
+  const info = describeComponent(g, [0, 0], seedTolPx(g, undefined));
+  assert.ok(info);
+  assert.equal(info!.nodeCount, 2);
+  assert.equal(info!.edgeCount, 1);
+  assert.equal(info!.openEnds.length, 2, "both endpoints of an isolated run are real degree-1 open ends");
+  assert.deepEqual(info!.systems, ["unknown"]);
+});
+
+test("describeComponent: a T-junction's component includes every branch, not just the seed's own leg", () => {
+  const segs = [0, 0, 200, 0, 100, 0, 100, 100]; // horizontal run + a stub off its midpoint
+  const g = buildMepGraph(segs, {});
+  // Seeded at the junction's own quantized graph coordinate (buildMepGraph's
+  // own snap grid can shift the literal input 100 by up to quantGridPx —
+  // same idiom this file's very first buildMepGraph test already uses to
+  // find it) — the literal input point [100,0] sits collinear on the
+  // now-quantized horizontal edge but 0.8px off the actual node, which
+  // resolveOnGraph correctly reads as "closer to the edge" and splices,
+  // same mechanic traceConnectivity's own seed resolution already lives
+  // by; seeding at the real node avoids conflating that with this test's
+  // own subject (whole-component enumeration).
+  const junction = g.nodes.find((n) => Math.abs(n.x - 100) < 5 && Math.abs(n.y - 0) < 5)!;
+  assert.ok(junction);
+  const info = describeComponent(g, [junction.x, junction.y], seedTolPx(g, undefined));
+  assert.ok(info);
+  assert.equal(info!.nodeCount, 4, "the run's own 2 ends + the junction + the stub's own free end");
+  assert.equal(info!.edgeCount, 3, "the whole T (2 horizontal pieces + the stub), not a 1-edge slice");
+  assert.equal(info!.openEnds.length, 3, "the run's own two ends plus the stub's own free end — the T-junction itself is degree 3, never an open end");
+});
+
+test("describeComponent: two lines that never touch report two DIFFERENT, disjoint components", () => {
+  const segs = [0, 0, 100, 0, 300, 0, 400, 0];
+  const g = buildMepGraph(segs, {});
+  // Seeded exactly at each run's own endpoint (see the splice note above).
+  const a = describeComponent(g, [0, 0], seedTolPx(g, undefined));
+  const b = describeComponent(g, [300, 0], seedTolPx(g, undefined));
+  assert.ok(a && b);
+  assert.equal(a!.edgeCount, 1);
+  assert.equal(b!.edgeCount, 1);
+  assert.notDeepEqual(a!.bbox, b!.bbox, "genuinely separate runs never share one component's own bbox");
+});
+
+test("describeComponent: refuses (returns null) when the point isn't on any traced linework", () => {
+  const segs = [0, 0, 200, 0];
+  const g = buildMepGraph(segs, {});
+  assert.equal(describeComponent(g, [500, 500], seedTolPx(g, undefined)), null);
 });
 
 // ── detectDashedLines (Phase 5 item 1 prep) ────────────────────────────────

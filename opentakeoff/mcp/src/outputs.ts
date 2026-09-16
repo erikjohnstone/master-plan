@@ -1482,6 +1482,86 @@ export const traceConnectivityOutput = {
   reason: z.string().optional().describe("dead_end/refused only — why, and what to do about it"),
 };
 
+const mepSystemEnum = z.enum(["piping", "ductwork", "electrical", "controls", "unknown"]);
+const mepLayerSignalEnum = z.enum(["none", "weak", "strong"]);
+const bboxTuple = z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1], image px");
+
+/** ports_of (Phase 5 item 2 of the HVAC/BAS maturity plan) — every point a
+ * placement's own bbox actually connects to the sheet's drawn linework
+ * (mepconnectivity.ts's own computePorts, Phase 4 item 1). A placement
+ * with zero ports is a real, useful answer, never itself a refusal —
+ * `refused` here only means the sheet has no MEP graph at all. */
+export const portsOfOutput = {
+  status: z.enum(["ok", "refused"]),
+  ports: z.array(point).optional().describe("ok only — every point a graph edge crosses this bbox's boundary, deduplicated by exact coordinate. Empty means this placement has no drawn connection to trace from"),
+  reason: z.string().optional().describe("refused only"),
+};
+
+/** path_between (Phase 5 item 2) — trace_connectivity's own walk with the
+ * target supplied directly rather than an equipment list. A single target
+ * can never legitimately produce "ambiguous" (that status only fires on
+ * 2+ DISTINCT equipment ids, and this call only ever supplies the one). */
+export const pathBetweenOutput = {
+  status: z.enum(["reached", "dead_end", "refused"]),
+  path: z.array(point).optional().describe("reached only — the walked node-by-node path from `from` to `to`, image px"),
+  layer_signal: mepLayerSignalEnum,
+  system: mepSystemEnum.optional().describe("reached only, and only when every edge on the walked path agrees"),
+  confidence: z.number(),
+  factors: z.array(z.string()),
+  reason: z.string().optional().describe("dead_end/refused only — why, and what to do about it"),
+};
+
+/** component_of (Phase 5 item 2) — describes the WHOLE connected component
+ * a point resolves onto, without a second target to walk toward. */
+export const componentOfOutput = {
+  status: z.enum(["resolved", "refused"]),
+  at: point.optional().describe("resolved only — the point actually resolved to (a node, or a point spliced mid-edge)"),
+  node_count: z.number().int().optional(),
+  edge_count: z.number().int().optional(),
+  bbox: bboxTuple.optional().describe("resolved only — this component's own bounding box"),
+  systems: z.array(mepSystemEnum).optional().describe("resolved only — every distinct MEP system role among this component's own edges; more than one is a real, disclosed signal, never collapsed to a guess"),
+  open_ends: z.array(point).optional().describe("resolved only — this component's own degree-1 nodes (dead ends / open drawn ends), capped at 50"),
+  open_ends_truncated: z.boolean().optional().describe("resolved only — true when more open ends exist than were returned"),
+  reason: z.string().optional().describe("refused only"),
+};
+
+/** served_by (Phase 5 item 2) — which ONE of the supplied equipment
+ * placements a device connects to, walked from every point the device's
+ * own bbox touches drawn linework (computePorts) rather than a single
+ * assumed seed. Multiple distinct equipment reached from different ports
+ * folds into "ambiguous", never narrowed to one. */
+export const servedByOutput = {
+  status: z.enum(["reached", "ambiguous", "dead_end", "refused"]),
+  reached_equipment: z.object({ id: z.string(), at: point }).optional()
+    .describe("reached only — the one equipment placement a real walked path actually connects to"),
+  path: z.array(point).optional().describe("reached only"),
+  branches: z.array(z.object({
+    equipment: z.string(), at: point, path: z.array(point),
+  })).optional().describe("ambiguous only — every DIFFERENT equipment placement reachable from at least one of the device's own ports, never narrowed to one"),
+  layer_signal: mepLayerSignalEnum,
+  confidence: z.number(),
+  factors: z.array(z.string()),
+  reason: z.string().optional().describe("ambiguous/dead_end/refused only — why, and what to do about it"),
+};
+
+/** devices_of (Phase 5 item 2) — the inverse of served_by: every one of the
+ * supplied device placements a piece of equipment actually connects to.
+ * Unlike served_by, MANY devices reached is the expected outcome (an AHU
+ * legitimately serves many diffusers), so every reachable candidate is
+ * reported, never treated as a conflict. */
+export const devicesOfOutput = {
+  status: z.enum(["reached", "dead_end", "refused"]),
+  served: z.array(z.object({
+    id: z.string(), at: point, path: z.array(point),
+    system: mepSystemEnum.optional(),
+    confidence: z.number(), factors: z.array(z.string()),
+  })).optional().describe("reached only — every supplied device placement a real walked path actually reaches from the equipment's own ports"),
+  layer_signal: mepLayerSignalEnum,
+  confidence: z.number().describe("reached: the MINIMUM per-device confidence among `served` — never overstates the least-certain member. 0 otherwise"),
+  factors: z.array(z.string()),
+  reason: z.string().optional().describe("dead_end/refused only — why, and what to do about it"),
+};
+
 /** sheet_context (issue #29): vectors + text + hatch families of one region,
  * in one frame. Structured-only by design — the raster stays view_sheet's
  * job, and frame agreement is a contract on the echoed region rect rather

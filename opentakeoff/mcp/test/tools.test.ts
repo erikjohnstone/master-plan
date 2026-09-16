@@ -2153,6 +2153,154 @@ test("trace_connectivity: the mirror-image seed (bottom stub, top equipment) is 
   assert.equal(r.data.status, "dead_end");
 });
 
+// ── ports_of / path_between / component_of / served_by / devices_of ─────
+// (maturity plan Phase 5 item 2) — the read-only operator surface built on
+// the same cached per-sheet graph trace_connectivity itself walks, real
+// end-to-end against the identical MEPPLAN fixture and coordinates the
+// trace_connectivity tests above already establish (the straight run
+// 100,200->AHU-1 500,200; the T-branch 100,400 forking to VAV-1 500,400 /
+// VAV-2 300,560; the FAR stub at 700,1000 that dead-ends). Bboxes below
+// were measured against the real fixture (a small script probing ports_of
+// directly), not guessed — each bbox tightly straddles one of those exact
+// coordinates.
+
+test("ports_of: a bbox straddling a real drawn run reports its one real crossing point", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "ports_of", { sheet: MEPKEY, bbox: [80, 190, 120, 210] });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "ok");
+  assert.equal(r.data.ports.length, 1);
+  assert.ok(Math.abs(r.data.ports[0][1] - 199.8) < 1, "the crossing sits on the real run's own y, not a centroid guess");
+});
+
+test("ports_of: a bbox with no drawn connection reports zero ports, not a refusal", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "ports_of", { sheet: MEPKEY, bbox: [680, 980, 720, 1020] });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "ok");
+  assert.deepEqual(r.data.ports, []);
+});
+
+test("ports_of: refuses on a scanned sheet with no vector linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SCAN });
+  const r = await call(client, "ports_of", { sheet: SCAN_KEY, bbox: [0, 0, 100, 100] });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /no traced vector linework/);
+});
+
+test("path_between: reaches a real target point supplied directly, no equipment list needed", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "path_between", { sheet: MEPKEY, from: [100, 200], to: [500, 200] });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "reached");
+  assert.ok(Array.isArray(r.data.path) && r.data.path.length >= 2);
+  assert.equal(r.data.reached_equipment, undefined, "path_between never leaks its own internal synthetic target id");
+});
+
+test("path_between: a target too far from any linework is a real dead_end, same doctrine as an unreachable equipment placement", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "path_between", { sheet: MEPKEY, from: [100, 200], to: [999, 999] });
+  assert.equal(r.data.status, "dead_end");
+  assert.match(r.data.reason, /ran out of connected linework/i);
+});
+
+test("path_between: refuses when `from` itself isn't on any traced linework", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "path_between", { sheet: MEPKEY, from: [999, 999], to: [500, 200] });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /isn't on any traced linework/);
+});
+
+test("component_of: describes the whole real run as one component with both its own open ends", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "component_of", { sheet: MEPKEY, at: [100, 200] });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "resolved");
+  assert.equal(r.data.node_count, 2);
+  assert.equal(r.data.edge_count, 1);
+  assert.equal(r.data.open_ends.length, 2);
+  assert.deepEqual(r.data.systems, ["unknown"]);
+});
+
+test("component_of: refuses when the point isn't on any traced linework", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "component_of", { sheet: MEPKEY, at: [999, 999] });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /isn't on any traced linework/);
+});
+
+test("served_by: a device's own port reaches the one real equipment it's actually wired to", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "served_by", {
+    sheet: MEPKEY, device: [80, 190, 120, 210],
+    equipment: [{ id: "AHU-1", at: [500, 200] }],
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.reached_equipment.id, "AHU-1");
+});
+
+test("served_by: a device on a real T-branch reaching two different equipment is ambiguous, never picks one", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "served_by", {
+    sheet: MEPKEY, device: [80, 390, 120, 410],
+    equipment: [{ id: "VAV-1", at: [500, 400] }, { id: "VAV-2", at: [300, 560] }],
+  });
+  assert.equal(r.data.status, "ambiguous");
+  const ids = r.data.branches.map((b: any) => b.equipment).sort();
+  assert.deepEqual(ids, ["VAV-1", "VAV-2"]);
+});
+
+test("served_by: refuses when the device's own bbox crosses no drawn linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "served_by", {
+    sheet: MEPKEY, device: [680, 980, 720, 1020],
+    equipment: [{ id: "FAR", at: [700, 1000] }],
+  });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /does not cross any drawn linework/);
+});
+
+test("served_by: refuses when no equipment placements are supplied at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "served_by", { sheet: MEPKEY, device: [80, 190, 120, 210], equipment: [] });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /sweep the target family first/);
+});
+
+test("devices_of: reports every real supplied device an equipment's own port actually reaches, never the unreachable one", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "devices_of", {
+    sheet: MEPKEY, equipment: [480, 180, 520, 220],
+    devices: [{ id: "SEED", at: [100, 200] }, { id: "FAR", at: [700, 1000] }],
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.served.length, 1);
+  assert.equal(r.data.served[0].id, "SEED");
+});
+
+test("devices_of: refuses when no device placements are supplied at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "devices_of", { sheet: MEPKEY, equipment: [480, 180, 520, 220], devices: [] });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /sweep the target family first/);
+});
+
 // #296 — the seed is installed work in sheet scope. Found in live validation:
 // four × on a plumbing plan with five drains, and the unmarked one was the
 // seed, correctly flagged as a miss by the estimator auditing the render.

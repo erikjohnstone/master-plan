@@ -63,6 +63,92 @@ test("count_marks: every mark has a real confirmed count — no note", () => {
   assert.deepEqual(runVerifiers(callLog), []);
 });
 
+// ── ports_of / path_between / component_of / served_by / devices_of ─────
+// (maturity plan Phase 5 item 4) — proactive checkers, see each function's
+// own header comment in agentVerifiers.js for why.
+
+test("ports_of: a real zero-ports result — a note fires", () => {
+  const callLog = [
+    { id: "1", name: "ports_of", args: {}, out: { status: "ok", ports: [] } },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /ZERO real drawn connections/);
+});
+
+test("ports_of: a real non-empty ports result — no note", () => {
+  const callLog = [
+    { id: "1", name: "ports_of", args: {}, out: { status: "ok", ports: [[0.5, 0.5]] } },
+  ];
+  assert.deepEqual(runVerifiers(callLog), []);
+});
+
+test("path_between: every call dead_end/refused — a note fires", () => {
+  const callLog = [
+    { id: "1", name: "path_between", args: {}, out: { status: "dead_end" } },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /every path_between call in this run returned dead_end or refused/);
+});
+
+test("path_between: a real reached — no note", () => {
+  const callLog = [
+    { id: "1", name: "path_between", args: {}, out: { status: "reached", path: [[0.1, 0.1], [0.5, 0.5]] } },
+  ];
+  assert.deepEqual(runVerifiers(callLog), []);
+});
+
+test("component_of: a real resolved size — a note discloses it", () => {
+  const callLog = [
+    { id: "1", name: "component_of", args: {}, out: { status: "resolved", node_count: 2, edge_count: 1 } },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /2 node\(s\)\/1 edge\(s\)/);
+});
+
+test("component_of: a real refusal — a note fires", () => {
+  const callLog = [
+    { id: "1", name: "component_of", args: {}, out: { status: "refused", reason: "not on any traced linework" } },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /status:"refused"/);
+});
+
+test("served_by: a real ambiguous result — a note names the real candidates, never picks one", () => {
+  const callLog = [
+    { id: "1", name: "served_by", args: {}, out: { status: "ambiguous", branches: [{ equipment: "VAV-1", at: [0.1, 0.1], path: [] }, { equipment: "VAV-2", at: [0.2, 0.2], path: [] }] } },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /VAV-1/);
+  assert.match(notes[0], /VAV-2/);
+});
+
+test("served_by: a real clean reached result — no note", () => {
+  const callLog = [
+    { id: "1", name: "served_by", args: {}, out: { status: "reached", reached_equipment: { id: "AHU-1", at: [0.5, 0.5] } } },
+  ];
+  assert.deepEqual(runVerifiers(callLog), []);
+});
+
+test("devices_of: confirmed devices are named, and a dead_end call is disclosed", () => {
+  const callLog = [
+    { id: "1", name: "devices_of", args: {}, out: { status: "reached", served: [{ id: "VAV-1", at: [0.1, 0.1], path: [] }] } },
+    { id: "2", name: "devices_of", args: {}, out: { status: "dead_end" } },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /VAV-1/);
+  assert.match(notes[0], /dead_end\/refused/);
+});
+
+test("devices_of: no dead_end and nothing confirmed — no note (nothing was ever called meaningfully)", () => {
+  assert.deepEqual(runVerifiers([]), []);
+});
+
 test("both verifiers can fire together in one run, independently", () => {
   const callLog = [
     { id: "1", name: "trace_connectivity", args: { from_norm: [0.1, 0.1] }, out: { status: "dead_end" } },
@@ -72,8 +158,22 @@ test("both verifiers can fire together in one run, independently", () => {
   assert.equal(notes.length, 2);
 });
 
-test("the registry itself declares exactly the tools this session has real evidence for — a deliberate, named list, not a guess", () => {
-  assert.deepEqual(AGENT_VERIFIERS.map((v) => v.tool), ["trace_connectivity", "count_marks", "read_schedule", "sweep_schedule_row", "highlight_citation"]);
+// Every entry below either has real, live-observed evidence of its own
+// (trace_connectivity, count_marks, read_schedule, sweep_schedule_row,
+// highlight_citation — see each checker's own header comment), or is the
+// maturity plan's own Phase 5 item 4 (PLAN_CONNECTIVITY_SERVES.md):
+// ports_of/path_between/component_of/served_by/devices_of share
+// trace_connectivity's own already-PROVEN status-enum/refusal-doctrine
+// output shape by direct construction (same status field, same "a
+// dead_end/refused/ambiguous result is not license to guess" risk), so
+// they're protected proactively rather than waiting for a fresh live
+// hallucination on each one — still a deliberate, named list, not a
+// blanket default for every tool this file could theoretically cover.
+test("the registry itself declares exactly the tools this session has real evidence for, or the same already-proven risk shape — a deliberate, named list, not a guess", () => {
+  assert.deepEqual(AGENT_VERIFIERS.map((v) => v.tool), [
+    "trace_connectivity", "ports_of", "path_between", "component_of", "served_by", "devices_of",
+    "count_marks", "read_schedule", "sweep_schedule_row", "highlight_citation",
+  ]);
 });
 
 // ── read_schedule row-key disclosure ────────────────────────────────────────

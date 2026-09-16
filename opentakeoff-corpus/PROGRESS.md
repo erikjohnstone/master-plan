@@ -1,5 +1,35 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5, items 2 and 4 (on explicit
+user authorization to expand an already-shipped, agent-facing tool surface
+— a materially riskier change than anything else in this plan, correctly
+escalated rather than decided unilaterally): five new read-only graph
+operators — `ports_of`, `path_between`, `component_of`, `served_by`,
+`devices_of` — on `Session`, registered as MCP tools, and mirrored with
+real parity in `agentTools.js`/`TakeoffCanvas.jsx` (a new shared
+`ensureAgentMepGraph` helper extracted from `agentTraceConnectivity`'s own
+graph-build/cache block). Each reuses `traceConnectivity`'s own tested BFS
+and `computePorts` (Phase 4 item 1) rather than a new walk implementation;
+`served_by` folds ambiguous branches across multiple device ports the same
+way `trace_connectivity`'s own junction ambiguity does, while `devices_of`
+deliberately treats many real hits as the expected outcome, not a
+conflict. `agentLoop.js`/`agentVerifiers.js` got the same "tool status is
+the only truth" treatment (5 new proactive checkers, disclosed honestly as
+extending an already-proven risk shape rather than a fresh live
+hallucination on each), and `takeoffWorkflow.js`'s connectivity gate now
+prefers `served_by`/`devices_of` over a hand-picked seed. 18 new MCP
+end-to-end tests (real `mep-plan.pdf` fixture, coordinates measured live,
+not guessed) + 4 + 11 + 10 new/updated unit tests across the `web`
+package; both packages typecheck clean; `check-tool-count.mjs` brought
+the MCP tool count from 56 to 61. Item 1 (the actual dashed-gap controls
+walk — Phase 5's own title) and item 3 (`reconcile_schedule_plan`/
+`highlight_citation` wiring) remain NOT attempted; the new operators walk
+the SAME ordinary duct/pipe/conduit graph as before, adding no
+controls/dashed-line capability. `web`'s own full `npm run check` was
+still running in the background at commit time — targeted suites all
+pass; the broader sweep's result follows up separately. Full detail:
+`opentakeoff-corpus/goals/PLAN_CONNECTIVITY_SERVES.md`'s Phase 5 section.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 6: `keys/SERVES_HELDOUT.txt`
 drawn — `navfac-cherry-point-atc` (Phase 0's own worst-scoring set and the
 plan's own named walk-out-proof target) and `bldg5406-hvac-demo` frozen

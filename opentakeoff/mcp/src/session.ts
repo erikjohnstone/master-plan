@@ -321,7 +321,8 @@ import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, class
 // this project's own vendored JTS port for robust noding (see the module's
 // own header comment); traceConnectivity is the refusal-honest query, same
 // doctrine as sweep_schedule_row/resolve_tag above.
-import { buildMepGraph, traceConnectivity as traceMepConnectivity, type MepGraph, type TraceResult as MepTraceResult } from "../../web/src/lib/mepconnectivity.ts";
+import { buildMepGraph, traceConnectivity as traceMepConnectivity, computePorts, describeComponent, seedTolPx, type MepGraph, type TraceResult as MepTraceResult, type ComponentInfo, type LayerSignal, type Point as MepPoint } from "../../web/src/lib/mepconnectivity.ts";
+import type { MepSystemRole } from "../../web/src/lib/mepsystems.ts";
 import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // Accuracy plan Phase 2 — on an unlayered/weakly-layered sheet, a layer-role
 // exclusion alone can't tell architectural wall ink apart from real MEP
@@ -3533,9 +3534,7 @@ export class Session {
     if (!graph) {
       return {
         status: "refused", layer_signal: "none", confidence: 0, factors: [],
-        reason: s.mepGraphNodingError
-          ? `This sheet's own linework could not be reliably noded for connectivity tracing (a real, dense-CAD-geometry edge case — e.g. a heavily crosshatched region crossing the run — not missing linework). Try view_sheet on the seed's own region and trace a shorter, less-cluttered run instead.`
-          : "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing.",
+        reason: this.mepGraphRefusalReason(s),
       };
     }
     const mppf = s.upp ? 1 / s.upp : 0;
@@ -3547,6 +3546,246 @@ export class Session {
       bridgeFt: opts.bridgeFt,
       mppf,
     });
+  }
+
+  /** The refusal reason for "this sheet has no MEP graph at all" — shared
+   * by traceConnectivity and every Phase 5 read-only operator built on the
+   * same ensureMepGraph cache (PLAN_CONNECTIVITY_SERVES.md item 2), so the
+   * two real distinct causes (a genuine noding failure vs. no vector
+   * linework at all) are worded identically everywhere instead of
+   * drifting apart across near-duplicate refusal strings. Extracted from
+   * traceConnectivity's own inline text above — zero behavior change. */
+  private mepGraphRefusalReason(s: SheetState): string {
+    return s.mepGraphNodingError
+      ? `This sheet's own linework could not be reliably noded for connectivity tracing (a real, dense-CAD-geometry edge case — e.g. a heavily crosshatched region crossing the run — not missing linework). Try view_sheet on the seed's own region and trace a shorter, less-cluttered run instead.`
+      : "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing.";
+  }
+
+  /** ports_of (Phase 5 item 2) — every point a placement's own bbox
+   * actually connects to the sheet's drawn linework, not an assumed
+   * centroid seed. A thin wrapper over mepconnectivity.ts's own
+   * computePorts (Phase 4 item 1); refuses only when the sheet has no MEP
+   * graph at all — a placement with zero ports is a real, useful answer
+   * ("this device has no drawn connection to trace from"), never itself a
+   * refusal. */
+  async portsOf(name: string, opts: { bbox: Bbox; inkPad?: number }): Promise<
+    | { status: "ok"; ports: MepPoint[] }
+    | { status: "refused"; reason: string }
+  > {
+    const s = this.sheet(name);
+    const graph = await this.ensureMepGraph(s);
+    if (!graph) return { status: "refused", reason: this.mepGraphRefusalReason(s) };
+    return { status: "ok", ports: computePorts(graph, opts.bbox, opts.inkPad ?? 0) };
+  }
+
+  /** path_between (Phase 5 item 2) — the click-driven trace_connectivity
+   * walk with the target supplied directly instead of an equipment list,
+   * reusing traceConnectivity's own tested BFS unchanged rather than a
+   * second implementation. A single target can never legitimately produce
+   * "ambiguous" (that status only fires when 2+ DISTINCT equipment ids are
+   * reachable, and this call only ever supplies the one). */
+  async pathBetween(name: string, opts: {
+    from: Point; to: Point;
+    fittings?: Array<{ at: Point }>;
+    maxHops?: number;
+    seedTolFt?: number;
+    bridgeFt?: number;
+  }): Promise<MepTraceResult> {
+    return this.traceConnectivity(name, {
+      from: opts.from,
+      equipment: [{ id: "to", at: opts.to }],
+      fittings: opts.fittings,
+      maxHops: opts.maxHops,
+      seedTolFt: opts.seedTolFt,
+      bridgeFt: opts.bridgeFt,
+    });
+  }
+
+  /** component_of (Phase 5 item 2) — describes the WHOLE connected
+   * component a point resolves onto (node/edge counts, its own bbox,
+   * which MEP systems appear on it, and its own open/degree-1 ends)
+   * without needing a second target to walk toward. Thin wrapper over
+   * mepconnectivity.ts's own describeComponent, sharing traceConnectivity's
+   * own seed-resolution tolerance doctrine via the same exported
+   * seedTolPx rather than a second heuristic for "is this point on the
+   * graph." */
+  async componentOf(name: string, opts: { at: Point; seedTolFt?: number }): Promise<
+    | ({ status: "resolved" } & ComponentInfo)
+    | { status: "refused"; reason: string }
+  > {
+    const s = this.sheet(name);
+    const graph = await this.ensureMepGraph(s);
+    if (!graph) return { status: "refused", reason: this.mepGraphRefusalReason(s) };
+    const mppf = s.upp ? 1 / s.upp : 0;
+    const tolPx = seedTolPx(graph, mppf, opts.seedTolFt);
+    const info = describeComponent(graph, opts.at, tolPx);
+    if (!info) {
+      return { status: "refused", reason: "The point isn't on any traced linework — click directly on a drawn pipe/duct/conduit line." };
+    }
+    return { status: "resolved", ...info };
+  }
+
+  /** served_by (Phase 5 item 2) — which ONE of the supplied equipment
+   * placements a device actually connects to, walked from every point
+   * the device's own bbox touches the sheet's drawn linework (computePorts,
+   * Phase 4 item 1) rather than a single assumed seed. Multiple distinct
+   * equipment reached from different ports is a real fork, folded into
+   * "ambiguous" exactly like traceConnectivity's own junction-level
+   * ambiguity — never narrowed to one by proximity or port order. */
+  async servedBy(name: string, opts: {
+    device: Bbox; inkPad?: number;
+    equipment: Array<{ id: string; at: Point; label?: string }>;
+    fittings?: Array<{ at: Point }>;
+    maxHops?: number;
+    seedTolFt?: number;
+    bridgeFt?: number;
+  }): Promise<{
+    status: "reached" | "ambiguous" | "dead_end" | "refused";
+    layer_signal: LayerSignal;
+    confidence: number;
+    factors: string[];
+    reached_equipment?: { id: string; at: MepPoint };
+    path?: MepPoint[];
+    branches?: Array<{ equipment: string; at: MepPoint; path: MepPoint[] }>;
+    reason?: string;
+  }> {
+    const s = this.sheet(name);
+    const graph = await this.ensureMepGraph(s);
+    if (!graph) {
+      return { status: "refused", layer_signal: "none", confidence: 0, factors: [], reason: this.mepGraphRefusalReason(s) };
+    }
+    if (!opts.equipment.length) {
+      return {
+        status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [],
+        reason: "No equipment placements supplied — sweep the target family first (symbol_sweep or sweep_schedule_row), then pass their placements here.",
+      };
+    }
+    const ports = computePorts(graph, opts.device, opts.inkPad ?? 0);
+    if (!ports.length) {
+      return {
+        status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [],
+        reason: "This device's own bbox does not cross any drawn linework — nothing to trace a connection from. Widen inkPad if the device's own drawn leg/leader extends past its placement bbox, or confirm the placement is correct.",
+      };
+    }
+    const mppf = s.upp ? 1 / s.upp : 0;
+    const perPort = ports.map((port) => traceMepConnectivity(graph, port, {
+      equipmentSymbols: opts.equipment,
+      fittingSymbols: opts.fittings,
+      maxHops: opts.maxHops,
+      seedTolFt: opts.seedTolFt,
+      bridgeFt: opts.bridgeFt,
+      mppf,
+    }));
+    // Every distinct equipment id any port's own trace reached — via a
+    // clean "reached" OR contributed to that port's own "ambiguous" branch
+    // set (a real fork belongs to the device just as much as a clean hit
+    // does; folding it in, rather than discarding it, is the same "never
+    // silently narrow a real branch" doctrine traceConnectivity's own
+    // ambiguous status already lives by).
+    const distinct = new Map<string, { at: MepPoint; path: MepPoint[] }>();
+    for (const r of perPort) {
+      if (r.status === "reached" && r.reachedEquipment) {
+        if (!distinct.has(r.reachedEquipment.id)) distinct.set(r.reachedEquipment.id, { at: r.reachedEquipment.at, path: r.path ?? [] });
+      } else if (r.status === "ambiguous" && r.branches) {
+        for (const b of r.branches) {
+          if (b.leads_to && !distinct.has(b.leads_to)) distinct.set(b.leads_to, { at: b.at, path: [] });
+        }
+      }
+    }
+    const layer_signal = graph.layerSignal;
+    const factors = [...new Set(perPort.flatMap((r) => r.factors))];
+    if (distinct.size >= 2) {
+      return {
+        status: "ambiguous", layer_signal, confidence: 0, factors,
+        branches: [...distinct.entries()].map(([id, v]) => ({ equipment: id, at: v.at, path: v.path })),
+        reason: `${distinct.size} different equipment placements (${[...distinct.keys()].join(", ")}) are each reachable from at least one of this device's own ${ports.length} port(s) — a real branch, not picked from; view_sheet to decide by looking.`,
+      };
+    }
+    if (distinct.size === 1) {
+      const [[id, v]] = distinct;
+      const hit = perPort.find((r) => r.status === "reached" && r.reachedEquipment?.id === id);
+      return {
+        status: "reached", layer_signal, confidence: hit?.confidence ?? 1, factors,
+        reached_equipment: { id, at: v.at }, path: v.path,
+      };
+    }
+    return {
+      status: "dead_end", layer_signal, confidence: 0, factors,
+      reason: `This device's own ${ports.length} port(s) connect to drawn linework, but none reached any of the ${opts.equipment.length} supplied equipment placements within the hop limit — a genuine dead end, an off-sheet run, or raise max_hops and retry.`,
+    };
+  }
+
+  /** devices_of (Phase 5 item 2) — the inverse of served_by: which of the
+   * supplied device placements a piece of equipment actually connects to.
+   * Unlike served_by, MANY devices reached is the normal, expected
+   * outcome here (an AHU legitimately serves many diffusers) rather than
+   * a conflict to disclose as ambiguous — so this walks each candidate
+   * device independently from every one of the equipment's own ports
+   * (computePorts) and reports every one a real path actually reaches,
+   * reusing traceConnectivity's own single-target BFS per candidate
+   * rather than a new multi-target walk. */
+  async devicesOf(name: string, opts: {
+    equipment: Bbox; inkPad?: number;
+    devices: Array<{ id: string; at: Point; label?: string }>;
+    fittings?: Array<{ at: Point }>;
+    maxHops?: number;
+    seedTolFt?: number;
+    bridgeFt?: number;
+  }): Promise<{
+    status: "reached" | "dead_end" | "refused";
+    layer_signal: LayerSignal;
+    confidence: number;
+    factors: string[];
+    served?: Array<{ id: string; at: MepPoint; path: MepPoint[]; system?: MepSystemRole; confidence: number; factors: string[] }>;
+    reason?: string;
+  }> {
+    const s = this.sheet(name);
+    const graph = await this.ensureMepGraph(s);
+    if (!graph) {
+      return { status: "refused", layer_signal: "none", confidence: 0, factors: [], reason: this.mepGraphRefusalReason(s) };
+    }
+    if (!opts.devices.length) {
+      return {
+        status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [],
+        reason: "No device placements supplied — sweep the target family first (symbol_sweep or sweep_schedule_row), then pass their placements here.",
+      };
+    }
+    const ports = computePorts(graph, opts.equipment, opts.inkPad ?? 0);
+    if (!ports.length) {
+      return {
+        status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [],
+        reason: "This equipment's own bbox does not cross any drawn linework — nothing to trace a connection from. Widen inkPad if the equipment's own drawn leg/leader extends past its placement bbox, or confirm the placement is correct.",
+      };
+    }
+    const mppf = s.upp ? 1 / s.upp : 0;
+    const served: Array<{ id: string; at: MepPoint; path: MepPoint[]; system?: MepSystemRole; confidence: number; factors: string[] }> = [];
+    const seenIds = new Set<string>();
+    for (const port of ports) {
+      for (const d of opts.devices) {
+        if (seenIds.has(d.id)) continue;
+        const r = traceMepConnectivity(graph, port, {
+          equipmentSymbols: [d],
+          fittingSymbols: opts.fittings,
+          maxHops: opts.maxHops,
+          seedTolFt: opts.seedTolFt,
+          bridgeFt: opts.bridgeFt,
+          mppf,
+        });
+        if (r.status === "reached" && r.reachedEquipment) {
+          seenIds.add(d.id);
+          served.push({ id: d.id, at: r.reachedEquipment.at, path: r.path ?? [], ...(r.system ? { system: r.system } : {}), confidence: r.confidence, factors: r.factors });
+        }
+      }
+    }
+    const layer_signal = graph.layerSignal;
+    if (served.length) {
+      const factors = [...new Set(served.flatMap((x) => x.factors))];
+      return { status: "reached", layer_signal, confidence: Math.min(...served.map((x) => x.confidence)), factors, served };
+    }
+    return {
+      status: "dead_end", layer_signal, confidence: 0, factors: [],
+      reason: `This equipment's own ${ports.length} port(s) connect to drawn linework, but none reached any of the ${opts.devices.length} supplied device placements within the hop limit — a genuine dead end, an off-sheet run, or raise max_hops and retry.`,
+    };
   }
 
   /** Positioned tag occurrences are immutable for a loaded document. A full

@@ -43,6 +43,74 @@ function checkTraceConnectivity(calls) {
   return "[Automated check: every trace_connectivity call in this run returned dead_end or refused — no connection was confirmed by any tool. Any equipment, register, or tag name mentioned above beyond that fact is an unverified visual guess, not a tool-confirmed result.]";
 }
 
+// ── ports_of / path_between / component_of / served_by / devices_of ─────
+// (maturity plan Phase 5 item 4) — proactive, not yet motivated by an
+// observed live hallucination the way every checker above was: the plan's
+// own text asks for "the same 'tool status is the only truth' treatment
+// for the new operators" as part of building them, on the same real risk
+// shape checkTraceConnectivity above already proved (a model overriding a
+// tool's own dead_end/refused/ambiguous with a visual guess) rather than
+// waiting for a fresh live failure on each new tool before protecting it —
+// exactly what this file's own header says the registry exists to let a
+// future tool inherit cheaply. Disclosed here as proactive so it is never
+// mistaken for the same kind of live-proven finding as the ones above.
+
+function checkPortsOf(calls) {
+  const zero = calls.filter(({ out }) => out && out.status === "ok" && Array.isArray(out.ports) && out.ports.length === 0);
+  if (!zero.length) return null;
+  return "[Automated check: ports_of found ZERO real drawn connections for at least one placement checked this run (status: \"ok\", ports: []) — that placement has no traced linework entering its own bbox. Any claim that it connects to a duct/pipe/conduit is not from this tool and must not be stated as confirmed.]";
+}
+
+function checkPathBetween(calls) {
+  if (!calls.length) return null;
+  const everReached = calls.some(({ out }) => out && out.status === "reached");
+  if (everReached) return null;
+  return "[Automated check: every path_between call in this run returned dead_end or refused — no path was confirmed by any tool. Any claim that these two points connect is an unverified visual guess, not a tool-confirmed result.]";
+}
+
+function checkComponentOf(calls) {
+  const resolved = calls.filter(({ out }) => out && out.status === "resolved" && typeof out.node_count === "number");
+  const refused = calls.filter(({ out }) => out && out.status === "refused").length;
+  if (!resolved.length && !refused) return null;
+  const bits = [];
+  if (resolved.length) bits.push(`component_of resolved this run with real sizes: ${resolved.map((c) => `${c.out.node_count} node(s)/${c.out.edge_count} edge(s)`).join("; ")}`);
+  if (refused) bits.push(`${refused} component_of call(s) this run returned status:"refused" (the point isn't on any traced linework) — never describe that point as connected to anything`);
+  return `[Automated check: ${bits.join(". ")}.]`;
+}
+
+function checkServedBy(calls) {
+  if (!calls.length) return null;
+  const everReached = calls.some(({ out }) => out && out.status === "reached");
+  const ambiguous = calls.filter(({ out }) => out && out.status === "ambiguous");
+  if (everReached && !ambiguous.length) return null;
+  const bits = [];
+  if (!everReached) bits.push('every served_by call in this run returned ambiguous, dead_end, or refused — no single equipment connection was confirmed by any tool');
+  if (ambiguous.length) {
+    const names = ambiguous.flatMap((c) => (c.out.branches || []).map((b) => b.equipment)).filter(Boolean);
+    bits.push(`${ambiguous.length} call(s) returned status:"ambiguous" with candidates [${[...new Set(names)].join(", ")}] — none of these was picked by the tool; naming just one as THE answer is not tool-confirmed`);
+  }
+  return `[Automated check: ${bits.join("; ")}.]`;
+}
+
+function checkDevicesOf(calls) {
+  if (!calls.length) return null;
+  const confirmedIds = new Set();
+  let anyDeadEnd = false;
+  for (const { out } of calls) {
+    if (out?.status === "reached" && Array.isArray(out.served)) {
+      for (const s of out.served) if (s && typeof s.id === "string") confirmedIds.add(s.id);
+    } else if (out?.status === "dead_end" || out?.status === "refused") {
+      anyDeadEnd = true;
+    }
+  }
+  if (!confirmedIds.size && !anyDeadEnd) return null;
+  const bits = [confirmedIds.size
+    ? `devices_of confirmed exactly these devices as reached this run: ${[...confirmedIds].join(", ")}`
+    : "devices_of confirmed NO devices as reached this run"];
+  if (anyDeadEnd) bits.push("at least one call returned dead_end/refused — no device was confirmed by that call");
+  return `[Automated check: ${bits.join("; ")}. Any device tag named above that isn't in this list was never confirmed by devices_of this run.]`;
+}
+
 /** count_marks: real, found live (accuracy-hardening plan, the same demo
  * session that motivated this whole file) — asked to count RG-1/CD-1
  * registers, `count_marks` honestly reported `count: 0` (real withheld
@@ -158,6 +226,11 @@ function checkHighlightedCitations(calls) {
  * hand-written backstop wired into the loop itself. */
 export const AGENT_VERIFIERS = [
   { tool: "trace_connectivity", check: checkTraceConnectivity },
+  { tool: "ports_of", check: checkPortsOf },
+  { tool: "path_between", check: checkPathBetween },
+  { tool: "component_of", check: checkComponentOf },
+  { tool: "served_by", check: checkServedBy },
+  { tool: "devices_of", check: checkDevicesOf },
   { tool: "count_marks", check: checkCountMarks },
   { tool: "read_schedule", check: checkScheduleRowKeys },
   { tool: "sweep_schedule_row", check: checkSweepScheduleRow },

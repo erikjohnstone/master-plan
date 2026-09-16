@@ -25,6 +25,7 @@ import {
   markVerdictOutput, deleteVerdictOutput,
   sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, controlSchematicOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
+  portsOfOutput, pathBetweenOutput, componentOfOutput, servedByOutput, devicesOfOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
@@ -61,6 +62,7 @@ import { inspectBasSnapshotFile, basSnapshotFileInspectionSchema } from './basSn
 const COORDS = "Coordinates are image px at render scale 2.0: PDF pt × 2, origin top-left, y down (the browser canvas's native space). Sheet payloads carry dims in both px and pt.";
 
 const pointSchema = z.tuple([z.number(), z.number()]);
+const bboxSchema = z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1], image px");
 const roleSchema = z.enum(["floor_area", "deduct"]).default("floor_area");
 // #85 — per-call layer overrides on the flood mask. sheet_info's layer table
 // is the vocabulary; include forces a layer's ink to plot as hard boundary,
@@ -414,6 +416,136 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       ...(r.branches ? { branches: r.branches } : {}),
       layer_signal: r.layer_signal,
       ...(r.system ? { system: r.system } : {}),
+      confidence: r.confidence,
+      factors: r.factors,
+      ...(r.reason ? { reason: r.reason } : {}),
+    };
+  }));
+
+  server.registerTool("ports_of", {
+    description: `Where a placement's own drawn connections actually enter its footprint — every point the sheet's noded connectivity graph (same one trace_connectivity walks, cached per sheet) crosses a bbox boundary, never an assumed centroid seed. A placement with an empty ports list has no drawn connection to trace from at all — that is a real, useful answer to "is this device connected to anything," not a refusal. status "refused" fires only when the sheet itself has no traced vector linework to check against (a scan, or a real noding failure) — same two named reasons trace_connectivity itself refuses for. Feed the result straight into path_between, served_by, or trace_connectivity's own \`from\` instead of guessing a seed point by eye. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      bbox: bboxSchema.describe("The placement's own bounding box (image px) — from your own prior symbol_sweep/sweep_schedule_row result"),
+      ink_pad: z.number().nonnegative().optional().describe("Expand the bbox by this many image px before checking for crossings — use the symbol's own drawn ink margin when its glyph extends past the swept bbox. Default 0"),
+    },
+    outputSchema: portsOfOutput,
+  }, run("ports_of", async (a) => {
+    const r = await session.portsOf(a.sheet, { bbox: a.bbox, inkPad: a.ink_pad });
+    return r.status === "ok"
+      ? { status: "ok" as const, ports: r.ports }
+      : { status: "refused" as const, reason: r.reason };
+  }));
+
+  server.registerTool("path_between", {
+    description: `trace_connectivity's own walk with the destination supplied directly instead of a candidate equipment list — for "does A connect to B", not "which of these does A connect to". Pass two points ON drawn pipe/duct/conduit linework (ports_of gives you exact ones from a placement's own bbox instead of an eyeballed seed); the same cached per-sheet connectivity graph is walked from \`from\` looking for \`to\`. status "reached" carries the full walked path and, when every edge agrees, the MEP system. status "dead_end" means the run ran out of connected linework, or \`to\` sits too far from any traced line to count as reached, before hitting max_hops (raise it and retry) — distinguished from hitting the cap by the reason text, same as trace_connectivity. status "refused" fires with a named reason when \`from\` itself isn't on any traced linework, or the sheet has none at all. Shares every other real, disclosed limit trace_connectivity already carries (layer_signal, bridged gaps via fittings, crossing-vs-connecting ambiguity) — read that tool's own description for the full list. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      from: pointSchema.describe("Seed point (image px) ON the drawn pipe/duct/conduit line to start the walk from"),
+      to: pointSchema.describe("Target point (image px) the walk is looking for — from ports_of, or any other already-swept placement"),
+      fittings: z.array(z.object({ at: pointSchema })).optional()
+        .describe("Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, but ONLY where one of these sits geometrically in it. Omit to disable bridging entirely"),
+      max_hops: z.number().int().positive().optional().describe("Edge-hops to walk before giving up (default 60)"),
+      seed_tol_ft: z.number().positive().optional().describe("How close (feet) `from`/`to` must sit to the graph's own linework to count as 'on' it (default 1.0)"),
+      bridge_ft: z.number().positive().optional().describe("Widest real drawn gap (feet) a fitting placement may bridge (default 2.0)"),
+    },
+    outputSchema: pathBetweenOutput,
+  }, run("path_between", async (a) => {
+    const r = await session.pathBetween(a.sheet, {
+      from: a.from, to: a.to, fittings: a.fittings,
+      maxHops: a.max_hops, seedTolFt: a.seed_tol_ft, bridgeFt: a.bridge_ft,
+    });
+    return {
+      status: (r.status === "ambiguous" ? "dead_end" : r.status) as "reached" | "dead_end" | "refused",
+      ...(r.path ? { path: r.path } : {}),
+      layer_signal: r.layer_signal,
+      ...(r.system ? { system: r.system } : {}),
+      confidence: r.confidence,
+      factors: r.factors,
+      ...(r.reason ? { reason: r.reason } : {}),
+    };
+  }));
+
+  server.registerTool("component_of", {
+    description: `Describes the WHOLE connected component a point resolves onto in the sheet's noded connectivity graph (same one trace_connectivity walks) — how much drawn linework it's part of, its own bounding box, which MEP systems appear on it, and its own open (degree-1/dead-end) points — without needing a second target to walk toward. Use it to check "is this drawn line connected to anything real" or "how far does this run actually go" before spending a trace on it, or to find a run's own open ends as path_between/trace_connectivity seeds. status "refused" fires with a named reason when the point isn't on any traced linework, or the sheet has none at all. \`systems\` naming more than one role is a real, disclosed signal (a shared trunk drawn on an uncoded layer, or two genuinely different systems noded together), never collapsed to a single guess. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      at: pointSchema.describe("Point (image px) to resolve onto the connectivity graph"),
+      seed_tol_ft: z.number().positive().optional().describe("How close (feet) the point must sit to the graph's own linework to count as 'on' it (default 1.0)"),
+    },
+    outputSchema: componentOfOutput,
+  }, run("component_of", async (a) => {
+    const r = await session.componentOf(a.sheet, { at: a.at, seedTolFt: a.seed_tol_ft });
+    return r.status === "resolved"
+      ? {
+          status: "resolved" as const, at: r.at, node_count: r.nodeCount, edge_count: r.edgeCount,
+          bbox: r.bbox, systems: r.systems, open_ends: r.openEnds, open_ends_truncated: r.openEndsTruncated,
+        }
+      : { status: "refused" as const, reason: r.reason };
+  }));
+
+  server.registerTool("served_by", {
+    description: `Which ONE of the supplied equipment placements a device actually connects to — trace_connectivity's own walk, run from every point the device's own bbox touches drawn linework (ports_of, computed internally) instead of a single hand-picked seed. status "reached" names the one equipment placement a real walked path from some port actually connects to. status "ambiguous" fires when different ports (or a single port's own junction) reach TWO OR MORE different equipment placements — every candidate is named with its own port/path, and NONE is ever picked for you; view_sheet and decide by looking, same doctrine trace_connectivity's own ambiguity already lives by. status "dead_end" means the device's own ports connect to linework but none reached a supplied equipment placement within max_hops. status "refused" fires with a named reason on: no equipment placements supplied, the device's own bbox crossing no drawn linework at all (nothing to trace from — widen ink_pad or check the placement), or the sheet having no traced vector linework. Shares trace_connectivity's own real, disclosed limits (layer_signal, bridged gaps via fittings, crossing-vs-connecting ambiguity). ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      device: bboxSchema.describe("The device's own bounding box (image px) — from your own prior symbol_sweep/sweep_schedule_row result"),
+      ink_pad: z.number().nonnegative().optional().describe("Expand the device bbox by this many image px before checking for port crossings. Default 0"),
+      equipment: z.array(z.object({
+        id: z.string().describe("The equipment's own tag, e.g. 'AHU-1'"),
+        at: pointSchema.describe("Its placement (image px), from your own prior symbol_sweep/sweep_schedule_row result"),
+        label: z.string().optional(),
+      })).default([]).describe("Real, already-swept equipment placements this device might connect to. An empty/omitted list is a NAMED refusal, not a silent 'found nothing'"),
+      fittings: z.array(z.object({ at: pointSchema })).optional()
+        .describe("Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, but ONLY where one of these sits geometrically in it"),
+      max_hops: z.number().int().positive().optional().describe("Edge-hops to walk before giving up (default 60)"),
+      seed_tol_ft: z.number().positive().optional().describe("How close (feet) equipment points must sit to the graph's own linework to count as 'on' it (default 1.0)"),
+      bridge_ft: z.number().positive().optional().describe("Widest real drawn gap (feet) a fitting placement may bridge (default 2.0)"),
+    },
+    outputSchema: servedByOutput,
+  }, run("served_by", async (a) => {
+    const r = await session.servedBy(a.sheet, {
+      device: a.device, inkPad: a.ink_pad, equipment: a.equipment, fittings: a.fittings,
+      maxHops: a.max_hops, seedTolFt: a.seed_tol_ft, bridgeFt: a.bridge_ft,
+    });
+    return {
+      status: r.status,
+      ...(r.reached_equipment ? { reached_equipment: r.reached_equipment } : {}),
+      ...(r.path ? { path: r.path } : {}),
+      ...(r.branches ? { branches: r.branches } : {}),
+      layer_signal: r.layer_signal,
+      confidence: r.confidence,
+      factors: r.factors,
+      ...(r.reason ? { reason: r.reason } : {}),
+    };
+  }));
+
+  server.registerTool("devices_of", {
+    description: `The inverse of served_by: every one of the supplied device placements a piece of equipment actually connects to, walked from every point the equipment's own bbox touches drawn linework (ports_of, computed internally). Unlike served_by, MANY devices reached is the normal, expected outcome (an AHU legitimately serves many diffusers) — every reachable candidate is reported in \`served\`, never treated as a conflict to narrow down. status "reached" carries one entry per confirmed device, each with its own walked path, confidence, and factors. status "dead_end" means the equipment's own ports connect to linework but none reached any supplied device within max_hops. status "refused" fires with a named reason on: no device placements supplied, the equipment's own bbox crossing no drawn linework at all, or the sheet having no traced vector linework. Shares trace_connectivity's own real, disclosed limits (layer_signal, bridged gaps via fittings, crossing-vs-connecting ambiguity). ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      equipment: bboxSchema.describe("The equipment's own bounding box (image px) — from your own prior symbol_sweep/sweep_schedule_row result"),
+      ink_pad: z.number().nonnegative().optional().describe("Expand the equipment bbox by this many image px before checking for port crossings. Default 0"),
+      devices: z.array(z.object({
+        id: z.string().describe("The device's own tag, e.g. 'VAV-12'"),
+        at: pointSchema.describe("Its placement (image px), from your own prior symbol_sweep/sweep_schedule_row result"),
+        label: z.string().optional(),
+      })).default([]).describe("Real, already-swept device placements this equipment might connect to. An empty/omitted list is a NAMED refusal, not a silent 'found nothing'"),
+      fittings: z.array(z.object({ at: pointSchema })).optional()
+        .describe("Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, but ONLY where one of these sits geometrically in it"),
+      max_hops: z.number().int().positive().optional().describe("Edge-hops to walk before giving up (default 60)"),
+      seed_tol_ft: z.number().positive().optional().describe("How close (feet) device points must sit to the graph's own linework to count as 'on' it (default 1.0)"),
+      bridge_ft: z.number().positive().optional().describe("Widest real drawn gap (feet) a fitting placement may bridge (default 2.0)"),
+    },
+    outputSchema: devicesOfOutput,
+  }, run("devices_of", async (a) => {
+    const r = await session.devicesOf(a.sheet, {
+      equipment: a.equipment, inkPad: a.ink_pad, devices: a.devices, fittings: a.fittings,
+      maxHops: a.max_hops, seedTolFt: a.seed_tol_ft, bridgeFt: a.bridge_ft,
+    });
+    return {
+      status: r.status,
+      ...(r.served ? { served: r.served } : {}),
+      layer_signal: r.layer_signal,
       confidence: r.confidence,
       factors: r.factors,
       ...(r.reason ? { reason: r.reason } : {}),

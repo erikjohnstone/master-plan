@@ -650,6 +650,124 @@ test("trace_connectivity: a valid call reshapes at_norm → at and passes throug
   }]);
 });
 
+// ports_of / path_between / component_of / served_by / devices_of (maturity
+// plan Phase 5 item 2) — executeAgentTool's own dispatch/shaping layer
+// only, same discipline as trace_connectivity's own tests above; the real
+// aggregation logic lives in TakeoffCanvas.jsx's agentPortsOf/agentPathBetween/
+// agentComponentOf/agentServedBy/agentDevicesOf and mirrors mcp/src/session.ts's
+// own portsOf/pathBetween/componentOf/servedBy/devicesOf, covered directly by
+// mcp/test/tools.test.ts and web/test/mepconnectivity.test.ts.
+
+test("ports_of: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "ports_of", { sheet: "other.pdf", bbox_norm: [0.1, 0.1, 0.2, 0.2] });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("ports_of: a malformed bbox_norm is a named error, not a crash", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "ports_of", { sheet: "plan.pdf", bbox_norm: [0.1, 0.1] });
+  assert.match(out.error, /bbox_norm/);
+});
+
+test("ports_of: a valid call passes bbox/inkPad through to the canvas's own computePorts wrapper unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    portsOf: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { status: "ok", ports: [[0.15, 0.1]] }; },
+  });
+  const out = await executeAgentTool(ctx, "ports_of", { sheet: "plan.pdf", bbox_norm: [0.1, 0.1, 0.2, 0.2], ink_pad: 5 });
+  assert.equal(out.status, "ok");
+  assert.deepEqual(calls[0], ["plan.pdf", { bbox: [0.1, 0.1, 0.2, 0.2], inkPad: 5 }]);
+});
+
+test("path_between: a malformed to_norm is a named error, not a crash", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "path_between", { sheet: "plan.pdf", from_norm: [0.1, 0.1], to_norm: [0.5] });
+  assert.match(out.error, /to_norm/);
+});
+
+test("path_between: a valid call reshapes at_norm → at and passes through unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    pathBetween: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { status: "reached", path: [[0.1, 0.1], [0.5, 0.5]], layer_signal: "none", confidence: 0.9, factors: [] }; },
+  });
+  const out = await executeAgentTool(ctx, "path_between", {
+    sheet: "plan.pdf", from_norm: [0.1, 0.1], to_norm: [0.5, 0.5],
+    fittings: [{ at_norm: [0.3, 0.3] }], bridge_ft: 3,
+  });
+  assert.equal(out.status, "reached");
+  assert.deepEqual(calls[0], ["plan.pdf", {
+    from: [0.1, 0.1], to: [0.5, 0.5],
+    fittings: [{ at: [0.3, 0.3] }],
+    maxHops: undefined, seedTolFt: undefined, bridgeFt: 3,
+  }]);
+});
+
+test("component_of: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "component_of", { sheet: "other.pdf", at_norm: [0.1, 0.1] });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("component_of: a valid call passes at/seedTolFt through unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    componentOf: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { status: "resolved", at: [0.1, 0.1], node_count: 2, edge_count: 1, bbox: [0.1, 0.1, 0.2, 0.1], systems: ["unknown"], open_ends: [[0.1, 0.1], [0.2, 0.1]], open_ends_truncated: false }; },
+  });
+  const out = await executeAgentTool(ctx, "component_of", { sheet: "plan.pdf", at_norm: [0.1, 0.1], seed_tol_ft: 2 });
+  assert.equal(out.status, "resolved");
+  assert.deepEqual(calls[0], ["plan.pdf", { at: [0.1, 0.1], seedTolFt: 2 }]);
+});
+
+test("served_by: a malformed device_norm is a named error, not a crash", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "served_by", { sheet: "plan.pdf", device_norm: [0.1, 0.1], equipment: [{ id: "AHU-1", at_norm: [0.5, 0.5] }] });
+  assert.match(out.error, /device_norm/);
+});
+
+test("served_by: a valid call reshapes device_norm/equipment through unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    servedBy: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { status: "reached", reached_equipment: { id: "AHU-1", at: [0.5, 0.5] }, path: [[0.1, 0.1], [0.5, 0.5]], layer_signal: "none", confidence: 0.9, factors: [] }; },
+  });
+  const out = await executeAgentTool(ctx, "served_by", {
+    sheet: "plan.pdf", device_norm: [0.1, 0.1, 0.2, 0.2],
+    equipment: [{ id: "AHU-1", at_norm: [0.5, 0.5] }],
+    fittings: [{ at_norm: [0.3, 0.3] }],
+  });
+  assert.equal(out.status, "reached");
+  assert.deepEqual(calls[0], ["plan.pdf", {
+    device: [0.1, 0.1, 0.2, 0.2], inkPad: undefined,
+    equipment: [{ id: "AHU-1", at: [0.5, 0.5], label: undefined }],
+    fittings: [{ at: [0.3, 0.3] }],
+    maxHops: undefined, seedTolFt: undefined, bridgeFt: undefined,
+  }]);
+});
+
+test("devices_of: a malformed equipment_norm is a named error, not a crash", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "devices_of", { sheet: "plan.pdf", equipment_norm: [0.1, 0.1], devices: [{ id: "VAV-1", at_norm: [0.5, 0.5] }] });
+  assert.match(out.error, /equipment_norm/);
+});
+
+test("devices_of: a valid call reshapes equipment_norm/devices through unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    devicesOf: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { status: "reached", served: [{ id: "VAV-1", at: [0.5, 0.5], path: [[0.1, 0.1], [0.5, 0.5]], confidence: 0.9, factors: [] }], layer_signal: "none", confidence: 0.9, factors: [] }; },
+  });
+  const out = await executeAgentTool(ctx, "devices_of", {
+    sheet: "plan.pdf", equipment_norm: [0.1, 0.1, 0.2, 0.2],
+    devices: [{ id: "VAV-1", at_norm: [0.5, 0.5] }],
+  });
+  assert.equal(out.status, "reached");
+  assert.deepEqual(calls[0], ["plan.pdf", {
+    equipment: [0.1, 0.1, 0.2, 0.2], inkPad: undefined,
+    devices: [{ id: "VAV-1", at: [0.5, 0.5], label: undefined }],
+    fittings: [],
+    maxHops: undefined, seedTolFt: undefined, bridgeFt: undefined,
+  }]);
+});
+
 test("pickAgentEvidence: null-safe, array-safe, whitelist-only", () => {
   assert.equal(pickAgentEvidence(null), null);
   assert.equal(pickAgentEvidence([1, 2]), null);

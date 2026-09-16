@@ -85,7 +85,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
 import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchAgainstLibrary, affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../lib/symbolsweep";
-import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
+import { buildMepGraph, traceConnectivity as traceMepConnectivity, computePorts, describeComponent, seedTolPx } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
 // layer-role exclusion alone can't tell architectural wall ink apart from
@@ -7060,12 +7060,20 @@ export default function TakeoffCanvas() {
   // server's raw image px), the MEP graph built once per sheet and cached
   // (mepGraphCacheRef) — buildMepGraph is real, measured work (up to ~30s on
   // a dense real sheet), so tracing several seeds must not pay it twice.
-  async function agentTraceConnectivity(key, opts = {}) {
+  // Shared by agentTraceConnectivity and every Phase 5 read-only operator
+  // below (ports_of/path_between/component_of/served_by/devices_of,
+  // PLAN_CONNECTIVITY_SERVES.md item 2) — extracted unchanged from
+  // agentTraceConnectivity's own graph-build/cache block so five new
+  // agent functions don't each duplicate this sheet's own wall-vouching,
+  // noding-failure caching, and norm/denorm conversion. Returns
+  // { ok:true, p, graph, denorm, norm } or { ok:false, refusal } where
+  // `refusal` is a ready-to-return TraceResult-shaped refused reply.
+  async function ensureAgentMepGraph(key) {
     const p = agentPanelFor(key);
-    if (!p) return { error: `Sheet ${key} isn't rendered yet — try again in a moment.` };
+    if (!p) return { ok: false, refusal: { error: `Sheet ${key} isn't rendered yet — try again in a moment.` } };
     const segs = vectorSegsRef.current.get(key);
     if (!segs || !segs.length) {
-      return { status: "refused", layer_signal: "none", confidence: 0, factors: [], reason: "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing." };
+      return { ok: false, refusal: { status: "refused", layer_signal: "none", confidence: 0, factors: [], reason: "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing." } };
     }
     const denorm = ([x, y]) => [x * p.img.w, y * p.img.h];
     const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
@@ -7139,8 +7147,15 @@ export default function TakeoffCanvas() {
       mepGraphCacheRef.current.set(key, graph);
     }
     if (graph.nodingError) {
-      return { status: "refused", layer_signal: "none", confidence: 0, factors: [], reason: "This sheet's own linework could not be reliably noded for connectivity tracing (a real, dense-CAD-geometry edge case — e.g. a heavily crosshatched region crossing the run — not missing linework). Try view_region on the seed's own area and trace a shorter, less-cluttered run instead." };
+      return { ok: false, refusal: { status: "refused", layer_signal: "none", confidence: 0, factors: [], reason: "This sheet's own linework could not be reliably noded for connectivity tracing (a real, dense-CAD-geometry edge case — e.g. a heavily crosshatched region crossing the run — not missing linework). Try view_region on the seed's own area and trace a shorter, less-cluttered run instead." } };
     }
+    return { ok: true, p, graph, denorm, norm };
+  }
+
+  async function agentTraceConnectivity(key, opts = {}) {
+    const ensured = await ensureAgentMepGraph(key);
+    if (!ensured.ok) return ensured.refusal;
+    const { graph, denorm, norm } = ensured;
     if (!Array.isArray(opts.equipment) || !opts.equipment.length) {
       return { status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [], reason: "No equipment symbols supplied — sweep the target family first (symbol_sweep or sweep_schedule_row), then pass their placements here." };
     }
@@ -7190,6 +7205,190 @@ export default function TakeoffCanvas() {
       confidence: result.confidence,
       factors: result.factors,
       ...(result.reason ? { reason: result.reason } : {}),
+    };
+  }
+
+  // ── ports_of / path_between / component_of / served_by / devices_of ────
+  // (maturity plan Phase 5 item 2) — MCP/UI parity for the read-only
+  // operator surface mcp/src/session.ts's own portsOf/pathBetween/
+  // componentOf/servedBy/devicesOf methods already ship; same aggregation
+  // logic, same refusal doctrine, same shared ensureAgentMepGraph cache
+  // above instead of session.ts's ensureMepGraph. Painting the walked
+  // path (agentTraceConnectivity's own neon-blue highlight) is kept for
+  // path_between and served_by's reached case, where a single real path
+  // is the whole answer; ports_of/component_of/devices_of return data
+  // only — painting a whole component or several devices' own paths at
+  // once is real, separate design work (item 3's own highlight_citation
+  // wiring), not attempted here.
+
+  async function agentPortsOf(key, opts = {}) {
+    const ensured = await ensureAgentMepGraph(key);
+    if (!ensured.ok) return ensured.refusal.error ? ensured.refusal : { status: "refused", reason: ensured.refusal.reason };
+    const { graph, denorm, norm } = ensured;
+    if (!Array.isArray(opts.bbox) || opts.bbox.length !== 4) return { error: "Pass bbox as [x0,y0,x1,y1] normalized 0..1." };
+    const bbox = [...denorm([opts.bbox[0], opts.bbox[1]]), ...denorm([opts.bbox[2], opts.bbox[3]])];
+    const ports = computePorts(graph, bbox, opts.inkPad || 0);
+    return { status: "ok", ports: ports.map(norm) };
+  }
+
+  async function agentPathBetween(key, opts = {}) {
+    if (!Array.isArray(opts.from) || opts.from.length !== 2) return { error: "Pass from as [x,y] normalized 0..1." };
+    if (!Array.isArray(opts.to) || opts.to.length !== 2) return { error: "Pass to as [x,y] normalized 0..1." };
+    const result = await agentTraceConnectivity(key, {
+      from: opts.from,
+      equipment: [{ id: "target", at: opts.to }],
+      fittings: opts.fittings,
+      maxHops: opts.maxHops,
+      seedTolFt: opts.seedTolFt,
+      bridgeFt: opts.bridgeFt,
+    });
+    if (result.error) return result;
+    // A single target can never legitimately produce "ambiguous" (that
+    // status only fires on 2+ DISTINCT equipment ids, and this call only
+    // ever supplies the one) — defensive remap, same as mcp/src/tools.ts's
+    // own path_between mapping.
+    const status = result.status === "ambiguous" ? "dead_end" : result.status;
+    return {
+      status,
+      ...(result.path ? { path: result.path } : {}),
+      layer_signal: result.layer_signal,
+      ...(result.system ? { system: result.system } : {}),
+      confidence: result.confidence,
+      factors: result.factors,
+      ...(result.reason ? { reason: result.reason } : {}),
+    };
+  }
+
+  async function agentComponentOf(key, opts = {}) {
+    const ensured = await ensureAgentMepGraph(key);
+    if (!ensured.ok) return ensured.refusal.error ? ensured.refusal : { status: "refused", reason: ensured.refusal.reason };
+    const { graph, denorm, norm } = ensured;
+    if (!Array.isArray(opts.at) || opts.at.length !== 2) return { error: "Pass at as [x,y] normalized 0..1." };
+    const upp = agentUpp(key);
+    const tolPx = seedTolPx(graph, upp ? 1 / upp : 0, opts.seedTolFt);
+    const info = describeComponent(graph, denorm(opts.at), tolPx);
+    if (!info) return { status: "refused", reason: "The point isn't on any traced linework — click directly on a drawn pipe/duct/conduit line." };
+    return {
+      status: "resolved",
+      at: norm(info.at),
+      node_count: info.nodeCount,
+      edge_count: info.edgeCount,
+      bbox: [...norm([info.bbox[0], info.bbox[1]]), ...norm([info.bbox[2], info.bbox[3]])],
+      systems: info.systems,
+      open_ends: info.openEnds.map(norm),
+      open_ends_truncated: info.openEndsTruncated,
+    };
+  }
+
+  async function agentServedBy(key, opts = {}) {
+    const ensured = await ensureAgentMepGraph(key);
+    if (!ensured.ok) return ensured.refusal;
+    const { graph, denorm, norm } = ensured;
+    if (!Array.isArray(opts.equipment) || !opts.equipment.length) {
+      return { status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [], reason: "No equipment placements supplied — sweep the target family first (symbol_sweep or sweep_schedule_row), then pass their placements here." };
+    }
+    if (!Array.isArray(opts.device) || opts.device.length !== 4) return { error: "Pass device as [x0,y0,x1,y1] normalized 0..1." };
+    const deviceBbox = [...denorm([opts.device[0], opts.device[1]]), ...denorm([opts.device[2], opts.device[3]])];
+    const ports = computePorts(graph, deviceBbox, opts.inkPad || 0);
+    if (!ports.length) {
+      return { status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [], reason: "This device's own bbox does not cross any drawn linework — nothing to trace a connection from. Widen inkPad if the device's own drawn leg/leader extends past its placement bbox, or confirm the placement is correct." };
+    }
+    const upp = agentUpp(key);
+    const mppf = upp ? 1 / upp : 0;
+    const equipmentSymbols = opts.equipment.map((e) => ({ id: e.id, at: denorm(e.at), ...(e.label ? { label: e.label } : {}) }));
+    const fittingSymbols = opts.fittings?.length ? opts.fittings.map((f) => ({ at: denorm(f.at) })) : undefined;
+    const perPort = ports.map((port) => traceMepConnectivity(graph, port, {
+      equipmentSymbols, fittingSymbols, maxHops: opts.maxHops, seedTolFt: opts.seedTolFt, bridgeFt: opts.bridgeFt, mppf,
+    }));
+    // Every distinct equipment id any port's own trace reached — via a
+    // clean "reached" OR contributed to that port's own "ambiguous" branch
+    // set — same aggregation mcp/src/session.ts's own servedBy already
+    // uses and the same "never silently narrow a real branch" doctrine
+    // trace_connectivity's own ambiguity already lives by.
+    const distinct = new Map();
+    for (const r of perPort) {
+      if (r.status === "reached" && r.reachedEquipment) {
+        if (!distinct.has(r.reachedEquipment.id)) distinct.set(r.reachedEquipment.id, { at: r.reachedEquipment.at, path: r.path || [] });
+      } else if (r.status === "ambiguous" && r.branches) {
+        for (const b of r.branches) {
+          if (b.leads_to && !distinct.has(b.leads_to)) distinct.set(b.leads_to, { at: b.at, path: [] });
+        }
+      }
+    }
+    const layer_signal = graph.layerSignal;
+    const factors = [...new Set(perPort.flatMap((r) => r.factors))];
+    clearTracePathHighlights();
+    if (distinct.size >= 2) {
+      return {
+        status: "ambiguous", layer_signal, confidence: 0, factors,
+        branches: [...distinct.entries()].map(([id, v]) => ({ equipment: id, at: norm(v.at), path: v.path.map(norm) })),
+        reason: `${distinct.size} different equipment placements (${[...distinct.keys()].join(", ")}) are each reachable from at least one of this device's own ${ports.length} port(s) — a real branch, not picked from; view_region and decide by looking.`,
+      };
+    }
+    if (distinct.size === 1) {
+      const [[id, v]] = distinct;
+      const hit = perPort.find((r) => r.status === "reached" && r.reachedEquipment?.id === id);
+      if (v.path.length >= 2) {
+        const drawnPts = simplifyPath(v.path, 4).map(norm);
+        const rec = {
+          id: uid("mk"), created_at: nowIso(), sheet_id: key, rfi_id: "", condition_id: "",
+          type: "highlight", pts: drawnPts, color: "#00e5ff", opacity: 0.9, w: 0.006,
+          source: "served_by", text: `Served by ${id}`,
+        };
+        setMarkups((ms) => [...ms, rec]);
+        agentStateRef.current = { ...agentStateRef.current, markups: [...agentStateRef.current.markups, rec] };
+        setShowMarkups(true);
+      }
+      return {
+        status: "reached", layer_signal, confidence: hit?.confidence ?? 1, factors,
+        reached_equipment: { id, at: norm(v.at) }, path: v.path.map(norm),
+      };
+    }
+    return {
+      status: "dead_end", layer_signal, confidence: 0, factors,
+      reason: `This device's own ${ports.length} port(s) connect to drawn linework, but none reached any of the ${opts.equipment.length} supplied equipment placements within the hop limit — a genuine dead end, an off-sheet run, or raise max_hops and retry.`,
+    };
+  }
+
+  async function agentDevicesOf(key, opts = {}) {
+    const ensured = await ensureAgentMepGraph(key);
+    if (!ensured.ok) return ensured.refusal;
+    const { graph, denorm, norm } = ensured;
+    if (!Array.isArray(opts.devices) || !opts.devices.length) {
+      return { status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [], reason: "No device placements supplied — sweep the target family first (symbol_sweep or sweep_schedule_row), then pass their placements here." };
+    }
+    if (!Array.isArray(opts.equipment) || opts.equipment.length !== 4) return { error: "Pass equipment as [x0,y0,x1,y1] normalized 0..1." };
+    const equipBbox = [...denorm([opts.equipment[0], opts.equipment[1]]), ...denorm([opts.equipment[2], opts.equipment[3]])];
+    const ports = computePorts(graph, equipBbox, opts.inkPad || 0);
+    if (!ports.length) {
+      return { status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [], reason: "This equipment's own bbox does not cross any drawn linework — nothing to trace a connection from. Widen inkPad if the equipment's own drawn leg/leader extends past its placement bbox, or confirm the placement is correct." };
+    }
+    const upp = agentUpp(key);
+    const mppf = upp ? 1 / upp : 0;
+    const fittingSymbols = opts.fittings?.length ? opts.fittings.map((f) => ({ at: denorm(f.at) })) : undefined;
+    const served = [];
+    const seenIds = new Set();
+    for (const port of ports) {
+      for (const d of opts.devices) {
+        if (seenIds.has(d.id)) continue;
+        const r = traceMepConnectivity(graph, port, {
+          equipmentSymbols: [{ id: d.id, at: denorm(d.at), ...(d.label ? { label: d.label } : {}) }],
+          fittingSymbols, maxHops: opts.maxHops, seedTolFt: opts.seedTolFt, bridgeFt: opts.bridgeFt, mppf,
+        });
+        if (r.status === "reached" && r.reachedEquipment) {
+          seenIds.add(d.id);
+          served.push({ id: d.id, at: norm(r.reachedEquipment.at), path: (r.path || []).map(norm), ...(r.system ? { system: r.system } : {}), confidence: r.confidence, factors: r.factors });
+        }
+      }
+    }
+    const layer_signal = graph.layerSignal;
+    if (served.length) {
+      const factors = [...new Set(served.flatMap((x) => x.factors))];
+      return { status: "reached", layer_signal, confidence: Math.min(...served.map((x) => x.confidence)), factors, served };
+    }
+    return {
+      status: "dead_end", layer_signal, confidence: 0, factors: [],
+      reason: `This equipment's own ${ports.length} port(s) connect to drawn linework, but none reached any of the ${opts.devices.length} supplied device placements within the hop limit — a genuine dead end, an off-sheet run, or raise max_hops and retry.`,
     };
   }
 
@@ -8609,6 +8808,11 @@ export default function TakeoffCanvas() {
         // Playwright can verify its painted path (color, opacity) the same
         // way it verifies any other agent-tool visual effect.
         traceConnectivity: (key, opts) => agentTraceConnectivity(key, opts),
+        portsOf: (key, opts) => agentPortsOf(key, opts),
+        pathBetween: (key, opts) => agentPathBetween(key, opts),
+        componentOf: (key, opts) => agentComponentOf(key, opts),
+        servedBy: (key, opts) => agentServedBy(key, opts),
+        devicesOf: (key, opts) => agentDevicesOf(key, opts),
         // Run a real sweep from a seed rect in SHEET IMAGE PX — the frame the
         // frozen symbol-sweep ground truth records its seed_rect in — so the
         // review UI can be driven with the corpus's own fixtures instead of a
@@ -9422,6 +9626,11 @@ export default function TakeoffCanvas() {
       findLegendSymbols: agentFindLegendSymbols,
       sweepInlineMotif: agentSweepInlineMotif,
       traceConnectivity: agentTraceConnectivity,
+      portsOf: agentPortsOf,
+      pathBetween: agentPathBetween,
+      componentOf: agentComponentOf,
+      servedBy: agentServedBy,
+      devicesOf: agentDevicesOf,
       listShapes: agentListShapes,
       deleteShapes: agentDeleteShapes,
       reassignShapes: agentReassignShapes,

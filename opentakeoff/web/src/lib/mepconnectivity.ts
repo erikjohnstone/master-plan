@@ -810,6 +810,20 @@ const DEFAULT_BRIDGE_FT = 2.0;
  *  vertex. Never mutates the input graph; a caller resolving several points
  *  in sequence must thread the returned graph into the next call, since a
  *  second point landing on the same edge must see the first splice. */
+/** The real seed/equipment resolution tolerance (px) for this graph — never
+ *  narrower than the grid quantizeSurvivors actually snapped this graph's
+ *  own coordinates to (graph.quantGridPx), whatever seedTolFt the caller
+ *  asked for. Extracted from traceConnectivity's own tolPx line (Phase 5,
+ *  PLAN_CONNECTIVITY_SERVES.md item 2) so every new read-only operator
+ *  built on the same resolveOnGraph seed-snapping shares this doctrine
+ *  (see traceConnectivity's own header comment for the full history)
+ *  instead of reimplementing it a second way — zero behavior change where
+ *  traceConnectivity already computed this inline. */
+export function seedTolPx(graph: MepGraph, mppf: number | undefined, seedTolFt?: number): number {
+  const ppf = mppf && mppf > 0 ? mppf : PX_PER_FT_GUESS;
+  return Math.max((seedTolFt ?? DEFAULT_SEED_TOL_FT) * ppf, graph.quantGridPx);
+}
+
 function resolveOnGraph(graph: MepGraph, pt: Point, tolPx: number): { graph: MepGraph; node: number | null } {
   let bestNode = -1, bestNodeD = Infinity;
   for (let i = 0; i < graph.nodes.length; i++) {
@@ -1013,7 +1027,7 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   // from ordinary quantization alone, independent of whatever seedTolFt the
   // caller asked for, so the tolerance actually used is never allowed
   // narrower than the grid that produced the graph being searched.
-  const tolPx = Math.max((opts.seedTolFt ?? DEFAULT_SEED_TOL_FT) * ppf, graph.quantGridPx);
+  const tolPx = seedTolPx(graph, opts.mppf, opts.seedTolFt);
 
   // Gap bridging (only when fittingSymbols was supplied) — a NEW graph, the
   // one actually walked below; the caller's own graph is never mutated.
@@ -1215,4 +1229,78 @@ export function computePorts(graph: MepGraph, bbox: Bbox, inkPad: number = 0): P
     }
   }
   return ports;
+}
+
+// ── component_of (Phase 5 item 2, PLAN_CONNECTIVITY_SERVES.md) ──────────
+// A point's own local connected component — "is this drawn line connected
+// to anything at all, and how much" without needing a second target to
+// walk toward, the read-only counterpart to a full traceConnectivity walk.
+// Reuses resolveOnGraph's own seed-snapping unchanged (same tolerance
+// doctrine as traceConnectivity's seed, via the shared seedTolPx above) —
+// never a second heuristic for "is this point on the graph."
+
+export interface ComponentInfo {
+  /** The point actually resolved to on the graph (a node, or a point
+   *  spliced mid-edge) — never the raw input point once it snapped. */
+  at: Point;
+  nodeCount: number;
+  edgeCount: number;
+  bbox: Bbox;
+  /** Every distinct MEP system role among this component's own edges —
+   *  more than one is a real, disclosed signal (a shared trunk drawn on
+   *  one uncoded layer, or two genuinely different systems noded
+   *  together), never collapsed to a single guess. */
+  systems: MepSystemRole[];
+  /** This component's own degree-1 nodes (dead ends / open drawn ends),
+   *  capped at COMPONENT_OPEN_ENDS_CAP; `openEndsTruncated` discloses when
+   *  more exist rather than silently dropping them (no-silent-caps
+   *  doctrine, PLAN_CONNECTIVITY_SERVES.md "What not to do"). */
+  openEnds: Point[];
+  openEndsTruncated: boolean;
+}
+
+const COMPONENT_OPEN_ENDS_CAP = 50;
+
+/** Resolve `pt` onto the graph and describe its WHOLE connected component —
+ *  an exact, uncapped BFS (unlike resolveOnGraph's own capped tie-break
+ *  scan above, this IS the deliverable, not a heuristic), bounded only by
+ *  the graph's own real size. Returns null when `pt` isn't on any traced
+ *  linework within `tolPx`, the same refusal condition traceConnectivity's
+ *  own seed resolution already uses. */
+export function describeComponent(graph: MepGraph, pt: Point, tolPx: number): ComponentInfo | null {
+  const { graph: walked, node } = resolveOnGraph(graph, pt, tolPx);
+  if (node == null) return null;
+  const visited = new Set<number>([node]);
+  const queue = [node];
+  const edgeIds = new Set<number>();
+  for (let qi = 0; qi < queue.length; qi++) {
+    const cur = queue[qi];
+    for (const ei of walked.nodes[cur].edges) {
+      edgeIds.add(ei);
+      const e = walked.edges[ei];
+      const next = e.a === cur ? e.b : e.a;
+      if (!visited.has(next)) { visited.add(next); queue.push(next); }
+    }
+  }
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  const systems = new Set<MepSystemRole>();
+  for (const ei of edgeIds) systems.add(walked.edges[ei].system);
+  const openEndsAll: Point[] = [];
+  for (const n of visited) {
+    const nd = walked.nodes[n];
+    if (nd.x < x0) x0 = nd.x;
+    if (nd.x > x1) x1 = nd.x;
+    if (nd.y < y0) y0 = nd.y;
+    if (nd.y > y1) y1 = nd.y;
+    if (nd.edges.length === 1) openEndsAll.push([nd.x, nd.y]);
+  }
+  return {
+    at: [walked.nodes[node].x, walked.nodes[node].y],
+    nodeCount: visited.size,
+    edgeCount: edgeIds.size,
+    bbox: [x0, y0, x1, y1],
+    systems: [...systems],
+    openEnds: openEndsAll.slice(0, COMPONENT_OPEN_ENDS_CAP),
+    openEndsTruncated: openEndsAll.length > COMPONENT_OPEN_ENDS_CAP,
+  };
 }

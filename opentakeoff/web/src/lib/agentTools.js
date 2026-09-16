@@ -360,6 +360,119 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "ports_of",
+    description: "Where a placement's own drawn connections actually enter its footprint — every point the sheet's noded connectivity graph (same one trace_connectivity walks, cached per sheet) crosses a bbox boundary, never an assumed centroid seed. A placement with an empty ports list has no drawn connection to trace from at all — that is a real, useful answer to 'is this device connected to anything,' not a refusal. status 'refused' fires only when the sheet itself has no traced vector linework to check against. Feed the result straight into path_between/served_by or trace_connectivity's own from_norm instead of guessing a seed point by eye.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        bbox_norm: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] normalized 0..1 — the placement's own bounding box, from your own prior symbol_sweep/sweep_schedule_row result." },
+        ink_pad: { type: "number", description: "Expand the bbox by this many image px before checking for crossings — use the symbol's own drawn ink margin when its glyph extends past the swept bbox. Default 0." },
+      },
+      required: ["sheet", "bbox_norm"],
+    },
+  },
+  {
+    name: "path_between",
+    description: "trace_connectivity's own walk with the destination supplied directly instead of a candidate equipment list — for 'does A connect to B', not 'which of these does A connect to'. Pass two points ON drawn pipe/duct/conduit linework (ports_of gives you exact ones from a placement's own bbox instead of an eyeballed seed). status 'reached' carries the full walked path and, when every edge agrees, the MEP system — and paints the same neon-blue trace on the sheet trace_connectivity's own reached result does. status 'dead_end' means the run ran out of connected linework, or the target sits too far from any traced line to count as reached, before hitting max_hops. status 'refused' fires with a named reason when the seed point itself isn't on any traced linework, or the sheet has none at all. Shares every other real, disclosed limit trace_connectivity already carries.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        from_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1 — the seed point, ON the drawn pipe/duct/conduit line." },
+        to_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1 — the target point the walk is looking for, e.g. from ports_of." },
+        fittings: {
+          type: "array",
+          description: "Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, only where one of these sits geometrically in it.",
+          items: { type: "object", properties: { at_norm: { type: "array", items: { type: "number" } } } },
+        },
+        max_hops: { type: "number", description: "Edge-hops to walk before giving up. Default 60." },
+        seed_tol_ft: { type: "number", description: "How close (feet) from_norm/to_norm must sit to the graph's own linework to count as 'on' it. Default 1.0." },
+        bridge_ft: { type: "number", description: "Widest real drawn gap (feet) a fitting placement may bridge. Default 2.0." },
+      },
+      required: ["sheet", "from_norm", "to_norm"],
+    },
+  },
+  {
+    name: "component_of",
+    description: "Describes the WHOLE connected component a point resolves onto in the sheet's noded connectivity graph (same one trace_connectivity walks) — how much drawn linework it's part of, its own bounding box, which MEP systems appear on it, and its own open (degree-1/dead-end) points — without needing a second target to walk toward. Use it to check 'is this drawn line connected to anything real' or 'how far does this run actually go' before spending a trace on it, or to find a run's own open ends as path_between/trace_connectivity seeds. status 'refused' fires with a named reason when the point isn't on any traced linework, or the sheet has none at all. `systems` naming more than one role is a real, disclosed signal, never collapsed to a single guess.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        at_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1 — point to resolve onto the connectivity graph." },
+        seed_tol_ft: { type: "number", description: "How close (feet) the point must sit to the graph's own linework to count as 'on' it. Default 1.0." },
+      },
+      required: ["sheet", "at_norm"],
+    },
+  },
+  {
+    name: "served_by",
+    description: "Which ONE of the supplied equipment placements a device actually connects to — trace_connectivity's own walk, run from every point the device's own bbox touches drawn linework (ports_of, computed internally) instead of a single hand-picked seed. status 'reached' names the one equipment placement a real walked path from some port actually connects to, and paints the same neon-blue trace trace_connectivity's own reached result does. status 'ambiguous' fires when different ports (or a single port's own junction) reach TWO OR MORE different equipment placements — every candidate is named with its own port/path, and NONE is ever picked for you; view_region and decide by looking. status 'dead_end' means the device's own ports connect to linework but none reached a supplied equipment placement within max_hops. status 'refused' fires with a named reason on: no equipment placements supplied, the device's own bbox crossing no drawn linework at all, or the sheet having no traced vector linework. Shares trace_connectivity's own real, disclosed limits.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        device_norm: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] normalized 0..1 — the device's own bounding box, from your own prior symbol_sweep/sweep_schedule_row result." },
+        ink_pad: { type: "number", description: "Expand the device bbox by this many image px before checking for port crossings. Default 0." },
+        equipment: {
+          type: "array",
+          description: "Real, already-swept equipment placements this device might connect to — required; an empty/omitted list is a named refusal.",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string", description: "The equipment's own tag, e.g. 'AHU-1'." },
+              at_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1." },
+              label: { type: "string" },
+            },
+          },
+        },
+        fittings: {
+          type: "array",
+          description: "Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, only where one of these sits geometrically in it.",
+          items: { type: "object", properties: { at_norm: { type: "array", items: { type: "number" } } } },
+        },
+        max_hops: { type: "number", description: "Edge-hops to walk before giving up. Default 60." },
+        seed_tol_ft: { type: "number", description: "How close (feet) equipment points must sit to the graph's own linework to count as 'on' it. Default 1.0." },
+        bridge_ft: { type: "number", description: "Widest real drawn gap (feet) a fitting placement may bridge. Default 2.0." },
+      },
+      required: ["sheet", "device_norm", "equipment"],
+    },
+  },
+  {
+    name: "devices_of",
+    description: "The inverse of served_by: every one of the supplied device placements a piece of equipment actually connects to, walked from every point the equipment's own bbox touches drawn linework (ports_of, computed internally). Unlike served_by, MANY devices reached is the normal, expected outcome (an AHU legitimately serves many diffusers) — every reachable candidate is reported in `served`, never treated as a conflict to narrow down. status 'reached' carries one entry per confirmed device, each with its own walked path, confidence, and factors (no painting — many devices reached at once is a separate visual design not attempted here, see served_by/trace_connectivity for the single-path case). status 'dead_end' means the equipment's own ports connect to linework but none reached any supplied device within max_hops. status 'refused' fires with a named reason on: no device placements supplied, the equipment's own bbox crossing no drawn linework at all, or the sheet having no traced vector linework.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        equipment_norm: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] normalized 0..1 — the equipment's own bounding box, from your own prior symbol_sweep/sweep_schedule_row result." },
+        ink_pad: { type: "number", description: "Expand the equipment bbox by this many image px before checking for port crossings. Default 0." },
+        devices: {
+          type: "array",
+          description: "Real, already-swept device placements this equipment might connect to — required; an empty/omitted list is a named refusal.",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string", description: "The device's own tag, e.g. 'VAV-12'." },
+              at_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1." },
+              label: { type: "string" },
+            },
+          },
+        },
+        fittings: {
+          type: "array",
+          description: "Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, only where one of these sits geometrically in it.",
+          items: { type: "object", properties: { at_norm: { type: "array", items: { type: "number" } } } },
+        },
+        max_hops: { type: "number", description: "Edge-hops to walk before giving up. Default 60." },
+        seed_tol_ft: { type: "number", description: "How close (feet) device points must sit to the graph's own linework to count as 'on' it. Default 1.0." },
+        bridge_ft: { type: "number", description: "Widest real drawn gap (feet) a fitting placement may bridge. Default 2.0." },
+      },
+      required: ["sheet", "equipment_norm", "devices"],
+    },
+  },
+  {
     name: "match_reference_symbol",
     description: "Identify a drawn HVAC/BAS component by SHAPE alone — no seed, no marquee: every symbol in this project's own hand-digitized reference library (real valve/damper geometry, never scraped from any dataset) is matched against this sheet's own drawn linework, at this sheet's own committed real-world scale. Deterministic geometry, exactly like symbol_sweep's own engine (same fingerprint/score/rotation-mirror machinery) — never vision, never a guess. Each library shape reports its own found/matches/withheld exactly like a symbol_sweep result: score >= 0.92 is a match, the 0.75-0.92 band comes back withheld with a reason (a near-match is a question you answer by LOOKING, view_region at its `at`), never silently dropped and never silently promoted. Needs a committed scale — a reference shape has no sheet of its own, so its real-world size can only be converted to THIS sheet's pixels via its own upp; no scale set, no match attempt, refused with a named reason. names restricts which library shapes to check (case-insensitive); omit to check the WHOLE library in one call — PREFER omitting it: some library shapes are a real, deliberate geometric SUBSET of another (a 2-way control valve's own body is a 3-way's identical body minus one leg), and matching them side by side in the SAME call is what lets a smaller shape's own false subset-match get disambiguated against the larger one automatically (disclosed as withheld, naming which larger shape it really is) — filtering to just the smaller shape alone loses that protection and can report a false clean match. The library is deliberately small and grows only when a shape has real corpus evidence behind it — a shape not yet in the library will never appear in the reply, so an empty/all-zero result does not mean 'nothing here,' only 'nothing in today's library.' Corroborate any match against the sheet's own schedule/tag evidence (resolve_tag, sweep_schedule_row) before trusting it as identification rather than a shape hypothesis.",
     input_schema: {
@@ -1006,6 +1119,60 @@ export async function executeAgentTool(ctx, name, args) {
         return await ctx.traceConnectivity(args.sheet, {
           from: args.from_norm,
           equipment: (args.equipment || []).map((e) => ({ id: e.id, at: e.at_norm, label: e.label })),
+          fittings: (args.fittings || []).map((f) => ({ at: f.at_norm })),
+          maxHops: args.max_hops,
+          seedTolFt: args.seed_tol_ft,
+          bridgeFt: args.bridge_ft,
+        });
+      }
+
+      case "ports_of": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        if (!Array.isArray(args.bbox_norm) || args.bbox_norm.length !== 4) return { error: "Pass bbox_norm as [x0,y0,x1,y1] normalized 0..1." };
+        return await ctx.portsOf(args.sheet, { bbox: args.bbox_norm, inkPad: args.ink_pad });
+      }
+
+      case "path_between": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        if (!Array.isArray(args.from_norm) || args.from_norm.length !== 2) return { error: "Pass from_norm as [x,y] normalized 0..1." };
+        if (!Array.isArray(args.to_norm) || args.to_norm.length !== 2) return { error: "Pass to_norm as [x,y] normalized 0..1." };
+        return await ctx.pathBetween(args.sheet, {
+          from: args.from_norm,
+          to: args.to_norm,
+          fittings: (args.fittings || []).map((f) => ({ at: f.at_norm })),
+          maxHops: args.max_hops,
+          seedTolFt: args.seed_tol_ft,
+          bridgeFt: args.bridge_ft,
+        });
+      }
+
+      case "component_of": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        if (!Array.isArray(args.at_norm) || args.at_norm.length !== 2) return { error: "Pass at_norm as [x,y] normalized 0..1." };
+        return await ctx.componentOf(args.sheet, { at: args.at_norm, seedTolFt: args.seed_tol_ft });
+      }
+
+      case "served_by": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        if (!Array.isArray(args.device_norm) || args.device_norm.length !== 4) return { error: "Pass device_norm as [x0,y0,x1,y1] normalized 0..1." };
+        return await ctx.servedBy(args.sheet, {
+          device: args.device_norm,
+          inkPad: args.ink_pad,
+          equipment: (args.equipment || []).map((e) => ({ id: e.id, at: e.at_norm, label: e.label })),
+          fittings: (args.fittings || []).map((f) => ({ at: f.at_norm })),
+          maxHops: args.max_hops,
+          seedTolFt: args.seed_tol_ft,
+          bridgeFt: args.bridge_ft,
+        });
+      }
+
+      case "devices_of": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        if (!Array.isArray(args.equipment_norm) || args.equipment_norm.length !== 4) return { error: "Pass equipment_norm as [x0,y0,x1,y1] normalized 0..1." };
+        return await ctx.devicesOf(args.sheet, {
+          equipment: args.equipment_norm,
+          inkPad: args.ink_pad,
+          devices: (args.devices || []).map((d) => ({ id: d.id, at: d.at_norm, label: d.label })),
           fittings: (args.fittings || []).map((f) => ({ at: f.at_norm })),
           maxHops: args.max_hops,
           seedTolFt: args.seed_tol_ft,

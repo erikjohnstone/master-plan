@@ -1020,16 +1020,24 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
   if (intent === "connectivity") {
     const allowed = [
       "list_sheets", "sheet_graph", "set_scale", "view_sheet", "view_region",
-      "symbol_sweep", "sweep_schedule_row", "trace_connectivity", "highlight_citation",
+      "symbol_sweep", "sweep_schedule_row",
+      "trace_connectivity", "ports_of", "path_between", "component_of", "served_by", "devices_of",
+      "highlight_citation",
     ];
+    // Phase 5 item 2/Gate 5 (PLAN_CONNECTIVITY_SERVES.md) — "walked" now
+    // means any of the five real graph-walk tools, not trace_connectivity
+    // alone; served_by/devices_of/path_between all reuse the identical
+    // reached/ambiguous/dead_end/refused doctrine trace_connectivity's own
+    // gate already enforced here.
+    const WALK_TOOLS = new Set(["trace_connectivity", "path_between", "served_by", "devices_of"]);
     const hasTrace = (callLog || []).some(({ name, out }) =>
-      name === "trace_connectivity" && out && !out.error);
+      WALK_TOOLS.has(name) && out && !out.error);
     return surveyThenTitleTools(hasGraph, (() => {
       if (!hasTrace) {
         return {
           phase: "spot_cites",
           allowedTools: allowed,
-          nextMove: "Sweep valve/equipment placements first, then trace_connectivity from a seed ON drawn pipe/duct linework. "
+          nextMove: "Sweep valve/equipment placements first. Prefer served_by (or devices_of) from a device/equipment's own bbox — real computed ports, not an eyeballed seed — over trace_connectivity's hand-picked seed point when a bbox is available; ports_of gives exact seed points for path_between/trace_connectivity when it isn't. "
             + "Never claim connectivity from proximity alone. Honor reached/ambiguous/dead_end/refused statuses.",
           blockReason: null,
         };
@@ -1037,7 +1045,7 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
       return {
         phase: "answer",
         allowedTools: null,
-        nextMove: "Report the walked status with cites. If ambiguous, name every candidate — never pick one. If refused, copy the tool reason.",
+        nextMove: "Report the walked status with cites. If ambiguous, name every candidate — never pick one. If refused, copy the tool reason. devices_of's served list is the complete real answer — never state a device beyond what it actually returned.",
         blockReason: null,
       };
     })());

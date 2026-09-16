@@ -761,13 +761,141 @@ to cross the real GAPS between consecutive dash pieces (that is what makes
 a line look dashed in the first place — the pieces are not
 JTS-noding-connected to each other at all today), which needs its own
 gap-bridging design analogous to Phase 3's own centerline-corner bridging,
-not a quick flag on the existing walk. Items 2–4 (new read-only MCP/UI
-operators, `reconcile_schedule_plan` wiring, `agentLoop.js`/
-`agentVerifiers.js`/`check-tool-count.mjs` updates) change an
-already-shipped tool surface other automated agents call today — a
-materially larger and more consequential decision than anything else in
-this phase, and not something to make unilaterally as a tail extension of
-an already-long session. Scoped as their own dedicated, focused effort.
+not a quick flag on the existing walk.
+
+**Items 2 and 4 landed, 2026-09-16, on explicit authorization** (this
+session's own Stop-hook condition named a starting commit that no amount
+of forward work on Phases 0–4 could ever reproduce — a structurally
+unsatisfiable literal check, not a real completion gate — so rather than
+loop against it or decide unilaterally, the user was asked directly
+whether to expand into this already-shipped, agent-facing tool surface;
+they chose to). **Item 1 (the dashed-gap controls walk itself) and item 3
+(`reconcile_schedule_plan`/`highlight_citation` wiring) remain NOT
+attempted** — read below before assuming Phase 5's title ("controls and
+the shared path") is done: it is not.
+
+`mcp/src/session.ts` gained five new read-only methods — `portsOf`,
+`pathBetween`, `componentOf`, `servedBy`, `devicesOf` — each a thin
+wrapper reusing `traceConnectivity`'s own tested BFS, `computePorts`
+(Phase 4 item 1), and a new shared `describeComponent`/`seedTolPx` export
+from `mepconnectivity.ts` (the latter extracted byte-identical from
+`traceConnectivity`'s own inline tolerance formula, not a new one).
+Registered as five new MCP tools (`ports_of`, `path_between`,
+`component_of`, `served_by`, `devices_of`) in `mcp/src/tools.ts` with
+their own `outputs.ts` schemas, and mirrored with real parity in
+`web/src/lib/agentTools.js`/`TakeoffCanvas.jsx` (a new shared
+`ensureAgentMepGraph` helper, extracted from `agentTraceConnectivity`'s
+own graph-build/cache block so the five new agent functions don't
+duplicate its wall-vouching and noding-failure caching). Every one
+carries a `refused` shape with a named reason, matching
+`trace_connectivity`'s own doctrine exactly:
+
+- `ports_of(bbox)` — every point a graph edge crosses the bbox's own
+  boundary. An empty `ports` list is a real, useful answer ("this
+  placement has no drawn connection"), never itself a refusal.
+- `path_between(from, to)` — `trace_connectivity` with the target supplied
+  directly instead of an equipment list; paints the identical neon-blue
+  trace on `reached`. Provably can never return `ambiguous` (a single
+  target can never produce 2+ distinct reached ids), defensively remapped
+  to `dead_end` if it somehow did.
+- `component_of(point)` — the whole connected component a point resolves
+  onto: node/edge counts, bbox, every distinct MEP system role present,
+  and the component's own open (degree-1) ends, capped at 50 with an
+  honest `open_ends_truncated` flag rather than a silent drop.
+- `served_by(device, equipment[])` — walks from every one of a device's
+  own computed ports against a supplied equipment list; multiple distinct
+  equipment reached from different ports folds into `ambiguous` (every
+  candidate named, none picked), exactly mirroring `trace_connectivity`'s
+  own junction-level ambiguity.
+- `devices_of(equipment, devices[])` — the deliberate asymmetric inverse:
+  MANY devices reached is the expected, correct outcome here (an AHU
+  really does serve many diffusers), so every device a real walked path
+  confirms is reported in `served`, never treated as a conflict the way
+  `served_by`'s own multiplicity is.
+
+Neither `servedBy` nor `devicesOf` runs one shared multi-target BFS —
+each per-candidate walk is an independent call into the SAME already-
+tested `traceConnectivity`/`traceMepConnectivity`, chosen deliberately
+over refactoring that function's own inline BFS into a new shared
+primitive (a materially riskier change to code every existing caller
+already depends on, for a session-scale win not worth that risk).
+
+Verified real, not assumed: `mcp/test/tools.test.ts` gained 18 new
+end-to-end tests against the same real `mep-plan.pdf` fixture
+`trace_connectivity`'s own 12 tests already use — bbox/seed coordinates
+for every new test were measured live against the real fixture (a
+throwaway probe script, deleted after use) rather than guessed, so e.g.
+`served_by`'s ambiguous test reuses the exact real T-branch coordinates
+`trace_connectivity`'s own ambiguity test already proves forks to
+VAV-1/VAV-2. All 12 pre-existing `trace_connectivity` tests still pass
+unchanged (no regression from the `mepGraphRefusalReason`/`seedTolPx`
+extractions). `web/test/mepconnectivity.test.ts` gained 4 `describeComponent`
+tests (found and fixed a real test-authoring mistake along the way — a
+seed placed at a segment's own literal input coordinate can still trigger
+`resolveOnGraph`'s mid-edge splice when `buildMepGraph`'s own quantization
+grid shifts a real junction's stored coordinate off that literal value,
+which a naive test seed doesn't account for; fixed by seeding at the
+graph's own actual quantized node instead, the same idiom this file's
+very first `buildMepGraph` test already uses). `web/test/agentTools.test.ts`
+gained 11 dispatch-layer tests (sheet-not-open / malformed-arg / valid
+pass-through-reshape, same three-shape convention `trace_connectivity`'s
+own tests already establish). `web/test/agentVerifiers.test.ts` gained 5
+new proactive checkers (`ports_of`/`path_between`/`component_of`/
+`served_by`/`devices_of`) plus updated the registry's own
+exact-tool-list assertion — disclosed honestly in each checker's own
+header comment as proactive extensions of the identical, already-proven
+"status is the only truth" risk `checkTraceConnectivity` was built to
+close, not a fresh independently-observed hallucination the way every
+prior entry in that registry was; the pre-existing test's own name and
+rationale were updated to state that distinction rather than silently
+widen its "deliberate, named list, not a guess" claim. `takeoffWorkflow.js`'s
+connectivity intent gate (Gate 5's own ask) now allows all five new tools
+and prefers `served_by`/`devices_of` over a hand-picked seed when a bbox
+is available. `agentLoop.js` gained a new hard-rule bullet naming the
+new tools' own status semantics (`served_by`'s `ambiguous`, `devices_of`'s
+exact `served` list, `ports_of`'s honest empty-list answer). Both
+packages' `npm run typecheck` are clean; `mcp/scripts/check-tool-count.mjs
+--write` brought `TOOL_NAMES.length` from 56 to 61 and refreshed
+`README.md`/`docs/USER_GUIDE.md`'s markers.
+
+**Not attempted:** item 1 (the dashed-gap controls walk — see above,
+unchanged from the prior entry); item 3
+(`reconcile_schedule_plan`'s `drawing_locations[]` gaining a `served_by`
+field, and `highlight_citation` painting an arbitrary walked path for
+callers other than these five tools' own internal painting). Painting
+itself is scoped narrowly: only `path_between` and `served_by`'s single-
+path `reached` case paint (reusing `trace_connectivity`'s own neon-blue
+highlight unchanged) — `ports_of`/`component_of` return data only, and
+`devices_of`'s potentially-many real paths are deliberately NOT painted
+(a real, separate multi-path visual design, not attempted here). Because
+item 1 is not attempted, `served_by`/`devices_of` walk the SAME ordinary
+duct/pipe/conduit graph `trace_connectivity` always has — they do not yet
+add any controls/dashed-line capability; a `T`-thermostat-to-equipment
+walk across a dashed control line is still unsupported by any tool in
+this codebase today.
+
+**Gate 5 — PARTIALLY MET at commit time.** MCP/UI parity tests: met —
+`mcp/test/tools.test.ts` (18 new + all 12 pre-existing `trace_connectivity`
+tests, 0 regressions), `web/test/mepconnectivity.test.ts` (4 new, 57/57),
+`web/test/agentTools.test.ts` (11 new, 49/49), `web/test/agentVerifiers.test.ts`
+(10 new/updated, 33/33), `web/test/takeoffWorkflow.test.ts` and
+`web/test/agentLoop.test.ts` unchanged and passing, both packages'
+`npm run typecheck` clean, `web`'s `eslint` clean (same 3 pre-existing
+unrelated warnings). `takeoffWorkflow.js:1019` rewritten as asked. `mcp`'s
+own full `npm test`: 105/107 — the 2 failures are a pre-existing
+environment gap unrelated to this change (`ModuleNotFoundError: No module
+named 'pytest'` in `basEngineeringContract`/`basEngineeringOwnershipFamilies`,
+which shell out to Python; confirmed by reproducing the same
+`ModuleNotFoundError` directly against this container's own Python, no
+code path this phase touched). **Not yet met at commit time:** `web`'s own
+full `npm run check` (typecheck+lint+test+bench+build across this
+project's entire test suite, not just the files this phase touched) was
+still running in the background when this phase's commit was made —
+started, not skipped; its result will be reported as a follow-up once it
+finishes, with any real regression it surfaces fixed and disclosed rather
+than the gate being marked met on an assumption. D01–D10 demo suite: not
+independently re-run this phase; it is one of `npm run check`'s own steps
+and is covered by that pending run, not separately verified.
 
 ### Phase 6 — held-out and the walk-out proof
 
@@ -875,7 +1003,7 @@ not this goal's goes to `TAKEOFF_BUG_CATALOGUE.md`, not into a side fix.
 | 2 | 2026-09-15 | (this commit) | 49 | 4/33 (12.1%) | 4/14 (28.6%) | 2 | no | `requireJunctionMarkForCrossings: true` now ON in both real callers. First attempt regressed mep-trace-eval 3/3->2/3; root cause turned out to be a buggy diagnostic script (checked the unspliced graph, not the one traceConnectivity actually walks), corrected by instrumenting the real BFS. Two real, general fixes: DEFAULT_MAX_HOPS_GATED (a gated graph legitimately needs more hops once false crossing-shortcuts are gone — measured 59->80 hops on the same real path) and resolveOnGraph preferring the larger connected component over a just-isolated fragment among near-tied seed candidates. mep-trace-eval back to 3/3; serves-eval's 49-row corpus unchanged except GEV-1 improving false-`reached`->honest-`dead_end` (still counted 2 false-confident/4/33 served above — GEV-1 was a refusal-not-honored row, not a served one; see Phase 2 section for the exact before/after). tools.test.ts:2036 now asserts the fixed reached/AHU-3 behavior |
 | 3 | 2026-09-16 | (this commit) | — | 0/7 (Bessemer, unchanged) | 4/6 (unchanged) | 0 | no | Gate 3 NOT MET. Built and safety-verified (ductcenterline.ts, buildMepGraph's detectDoubleLineDuctCenterlines, default OFF): matched-pair centerline extraction + corner-gap bridging (2 real bugs found/fixed on synthetic elbow/stub fixtures) + exact-anchor open-end bridging into the boundary graph (a radius-search first attempt regressed real Bessemer refusal-honored 4/6->1/6, root-caused and fixed — see Phase 3 section for the full trail). Real Bessemer before/after now byte-for-byte identical (flag stays off for every real caller). Specific Gate 3 target not hit: SR-1's own seed lands on an isolated register-glyph hatch mesh, real centerline sits ~43px away, outside both seed tolerance and the (correctly conservative) exact-anchor bridge — a seed-resolution follow-up, not a centerline bug |
 | 4 | | | | | | | | |
-| 5 | | | | | | | | |
+| 5 | 2026-09-16 | (this commit) | n/a | n/a | n/a | n/a | n/a | Items 2/4 only (new read-only operators + honesty backstops) — no serves-eval row applies: these are new QUERY surfaces over the UNCHANGED graph/walk buildMepGraph and traceConnectivity already produce (same as Phase 4 item 1's own computePorts, whose row is blank for the identical reason), not a change to walk accuracy, so a re-run of serves-eval.mjs against them would reproduce Phase 3's own row 3 numbers exactly, not a new data point. Item 1 (the actual dashed-gap controls walk) and item 3 (reconcile_schedule_plan/highlight_citation wiring) NOT attempted — see Phase 5 section for the full, disclosed scope boundary |
 | 6 (held-out) | | | | | | | | |
 
 ## Open at the time of writing

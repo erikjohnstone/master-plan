@@ -22,6 +22,7 @@ export const TOOL_STAGES: Record<string, readonly string[]> = {
     "measure_surface", "place_count", "count_marks", "symbol_sweep", "sweep_schedule_row",
     "project_takeoff", "compile_corpus_takeoff", "reconcile_schedule_plan", "derive_base", "derive_transitions", "trace_connectivity",
     "match_reference_symbol", "find_legend_symbols", "sweep_inline_motif",
+    "ports_of", "path_between", "component_of", "served_by", "devices_of",
   ],
   revise: [
     "inspect_bas_workflow",
