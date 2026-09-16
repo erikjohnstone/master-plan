@@ -8,7 +8,7 @@ number here as a closed gate.
 
 ## Corpus-wide proof, read this first
 
-Five ground-truth keys, run through `tag-ledger-eval.mjs` against the
+Six ground-truth keys, run through `tag-ledger-eval.mjs` against the
 production pipeline, identical methodology, no cherry-picking (every set
 this session built a key for is included):
 
@@ -19,25 +19,32 @@ this session built a key for is included):
 | itd-d1-lab | 68 | 100.0% | 59 | 100.0% |
 | federal-mech (`VAV` family) | 117 | **0.0%** | 58 | **1.7%** |
 | baker-county-eoc (`EQUIP NO` family) | 10 | 70.0% | 10 | **10.0%** |
-| **CORPUS TOTAL** | **283** | **52.3%** | **170** | **60.0%** |
+| navfac-cherry-point-atc (bypass-valve family) | 7 | **28.6%** | 6 | **33.3%** |
+| **CORPUS TOTAL** | **290** | **51.7%** | **176** | **59.1%** |
 
 **This is the real, current, corpus-wide state of the capability this
 plan exists to build — not a hypothetical, not a single bad document.**
-Two of five real documents reconcile perfectly (bldg5406, itd-d1-lab).
-Two others fail badly, for two completely different, independently
-root-caused reasons: federal-mech because the sheets carrying its tags
-are misclassified away from `role: "plan"` (see below), baker-county-eoc
-because row-identity extraction silently drops or duplicates rows
-depending on which of several duplicated extraction paths runs (H8, also
-below). Every failure in this table has a name, a file, and a line
-number — none of it is unexplained. The two fixes already identified
-(one regex word, `web/src/lib/sheetgraph.ts` ~line 205; one dropped
-`uniqueFamily` reimplementation, `web/src/lib/corpusTakeoff.mjs:750-979`)
-would very plausibly move federal-mech and a meaningful share of
-baker-county-eoc's failures toward the 100% end of this table — neither
-fix has been applied yet, deliberately, pending the broader corpus
-validation Phase 4/2's own gates require (see each finding's own section
-for why).
+Two of six real documents reconcile perfectly (bldg5406, itd-d1-lab).
+Three others fail badly, for defects that trace to only two root causes
+across all three: federal-mech because the sheets carrying its tags are
+misclassified away from `role: "plan"` (see below), baker-county-eoc AND
+navfac-cherry-point-atc because row-identity extraction silently drops or
+duplicates rows depending on which of several duplicated extraction
+paths runs (H8, also below) — navfac's own version of H8 additionally
+involves a real multi-building-area project where several genuinely
+different rows share one naming shape (`CV-<CHW|HHW>-BP-<area>`),
+suggesting drawing-group scoping is implicated too, not just header-
+regex coverage. Every failure in this table has a name, a file, and (for
+federal-mech and baker-county-eoc) a line number — none of it is
+unexplained; navfac's is a confirmed instance of the same H8 defect
+class, not yet independently re-traced to its own exact line. The two
+fixes already identified (one regex word, `web/src/lib/sheetgraph.ts`
+~line 205; one dropped `uniqueFamily` reimplementation,
+`web/src/lib/corpusTakeoff.mjs:750-979`) would very plausibly move
+federal-mech and a meaningful share of baker-county-eoc's and navfac's
+failures toward the 100% end of this table — neither fix has been
+applied yet, deliberately, pending the broader corpus validation
+Phase 4/2's own gates require (see each finding's own section for why).
 
 **Read next: "federal-mech — sheet-role misclassification breaks
 `sweep_schedule_row` almost completely," below.** On this real,
@@ -738,6 +745,50 @@ diffuser-grille family (many instances, page 41) and the luminaire
 family (page 59, this plan's own named `R1 /C-11` compound-tag
 hypothesis) — both out of this key's scope.
 
+## navfac-cherry-point-atc — sixth ground-truth key, scored 33.3% (a third real H8 document)
+
+`keys/navfac-cherry-point-atc.tagocc.csv`: 14 rows (7 `ROW_LABEL` + 7
+`PLAN_INSTANCE`) covering this plan's own named hypothesis — "multi-
+hyphen valve marks `CV-CHW-BP-A`" — chosen for the same reason as
+baker-county-eoc's key: this session's clean corpus-eval re-run
+independently caught exactly this family (`CV-CHW-BP-M`, `CV-CHW-BP-T`,
+`CV-HHW-BP-T`, `HHWC-DOAH-T1`) being dropped by `compile_corpus_takeoff`.
+
+**The real structure, worth stating plainly**: this project covers THREE
+physically separate building areas — AIR OPS, MTRACON, and ATCT (the
+tower) — each with its own bypass control valve, independently lettered
+per area (`A`/`A1`, `M`, `T`) but sharing one naming convention,
+`CV-<CHW|HHW>-BP-<area>`. This is a real, structural multi-building-group
+case (the exact kind Session's own `drawingGroupScope` machinery exists
+for), not a spelling inconsistency, and not the same shape as
+baker-county-eoc's "EQUIP NO" collision.
+
+**Ruler result**: `tag_to_row` recall 28.6% (2/7), `row_to_tag` exact
+match **33.3%** (2/6 real row-groups; the 7th `ROW_LABEL`, `CV-CHW-BP-T`,
+is a confirmed `SCHEDULE_ONLY` row — zero drawn instances anywhere in
+this 75-page document, verified by a full-document span scan, correctly
+excluded from the denominator rather than counted as a miss). Only
+`CV-CHW-BP-A` (AIR OPS) and `CV-HHW-BP-M` (MTRACON) resolve correctly;
+`CV-HHW-BP-A`, `CV-CHW-BP-M`, `CV-HHW-BP-T`, and `HHWC-DOAH-T1` (drawn
+twice, both instances lost) all fail. The failing set is not the AIR OPS
+sheets, not the CHW-vs-HHW split, not any single area — it is a mixed,
+scattered pattern across all three building areas and both fluid loops,
+consistent with independent per-row identity-extraction fragility (H8)
+rather than one clean, single-cause bug.
+
+Root cause not independently re-traced to an exact line this session
+(unlike baker-county-eoc, where `rowIdentityTag`'s return value was
+directly inspected) — this key's purpose is to give H8 a third
+real-document confirmation with a genuinely different failure shape
+(multi-building-area naming collision, not a header-regex gap), for
+Phase 2 to pick up already-scoped rather than needing its own discovery
+pass.
+
+Not yet done for this set: ground truth for the much larger
+`VAV-M#`/`VAV-A###`/`AHU`/`CRAH`/`FCU`/`CUH`/`DOAH` families visible on
+the same schedule pages (many dozens of instances per family, not
+sampled); 49 of this document's 75 pages unexamined.
+
 ## Hypothesis verdicts (H1–H9, from the audit)
 
 | # | Hypothesis | Verdict this session |
@@ -749,7 +800,7 @@ hypothesis) — both out of this key's scope.
 | H5 | Orphan tags (no schedule row) are invisible to row-driven tools | **Confirmed by construction, twice.** Inherent to every row-driven tool audited, and freshly re-confirmed concretely on itd-d1-lab: `HEV-1..4` are drawn on sheet `#4` and appear in zero schedule tables anywhere in the document (checked via a full 29-sheet span scan), and the ruler correctly reports exactly these 4 as the only misses, with the right explanation attached. |
 | H6 | itd-d1-lab over-counts are cross-view redraws | **Tested cleanly, not confirmed as a defect.** `HC-1` through `HC-9` are each genuinely, legitimately drawn on two different sheets (the ductwork plan `#3` and the hydronic plan `#5`) — 9 rows × 2 real sheets = 18 instances, the largest H6 fixture found this session. The ladder recovers the correct count (2) for all 9, with zero double-counting and zero dropped occurrences. The originally-hypothesized over-count does not reproduce on this family; H6 as posed is not confirmed here (may still apply to families not sampled in this key). |
 | H7 | Note mentions/legend entries leak into counts | **Confirmed, once, precisely** — bldg5406's `CWP-1` is over-counted by 1 because `compoundTagOcc` matches an installation note ("CWP-1 AND CWP-2 SHALL BE STACKED...") as if it were a second compound tag label. bessemer's `D-1`/`D-2`/`D-6` and a split-run "HP-1 IS TYPICAL..." note stayed correctly excluded, so this is not universal — H7 fires specifically when note prose happens to start with `<tag><space><more text>`, `compoundTagOcc`'s exact trigger shape. |
-| H8 | Row lookup disagrees across the three duplicated implementations | **Confirmed twice over — synthetically and at real corpus scale.** See the dedicated "H8" section above for two executed synthetic disagreement examples. Refined from the original framing: the tag→row *lookup* primitive (`rowKeyAnswersFor`) is genuinely unified; the real duplication is in row→identity-tag *extraction* (`rowIdentityTag`, 3 production callers, vs. `uniqueFamily`, one drifted reimplementation for `compile_corpus_takeoff`'s HVAC path). **Then independently reproduced for real**: this session's clean corpus-eval re-run shows 17 of baker-county-eoc's real quantity mismatches, plus several each on federal-mech and navfac-cherry-point-atc, are exactly this bug — real schedule rows silently absent (`status=not_in_output`) from `compile_corpus_takeoff`'s output, matching the exact "EQUIP NO"-keyed and multi-hyphen-valve-mark shapes the synthetic examples predicted. See "Corpus-eval corruption claim retracted" for the full list. |
+| H8 | Row lookup disagrees across the three duplicated implementations | **Confirmed four times over — synthetically, at corpus scale, and now with two dedicated ground-truth keys on two different real documents.** See the dedicated "H8" section above for two executed synthetic disagreement examples. Refined from the original framing: the tag→row *lookup* primitive (`rowKeyAnswersFor`) is genuinely unified; the real duplication is in row→identity-tag *extraction* (`rowIdentityTag`, 3 production callers, vs. `uniqueFamily`, one drifted reimplementation for `compile_corpus_takeoff`'s HVAC path). **Reproduced for real at corpus scale**: this session's clean corpus-eval re-run shows 17 of baker-county-eoc's real quantity mismatches, plus several each on federal-mech and navfac-cherry-point-atc, are exactly this bug. **Then confirmed with occurrence-level ground truth on two documents, two different failure shapes**: baker-county-eoc (10% row-to-tag exact match — `rowIdentityTag` returns falsy for 3 rows outright, 6 others double-count across two real tables) and navfac-cherry-point-atc (33.3% — a genuine multi-building-area naming collision, `CV-<CHW|HHW>-BP-<area>` shared across 3 real, physically distinct building areas). See "Corpus-eval corruption claim retracted" and each set's own dedicated section for the full detail. |
 | **H9 (new, corrected)** | **The occurrence ladder's `familySuffixTagOcc` fallback can recover an unrelated digit (a keynote/callout reference number) as a tag's missing suffix, when that digit happens to sit near enough to ≥4 real family siblings** | **Confirmed and precisely root-caused on one real document.** bessemer's `EBB-1` on sheet `#7`: the real `EBB-5..8` siblings are genuinely drawn there, satisfying `familySuffixTagOcc`'s own quorum gate, and a bare "1" — actually a keynote circle's reference number, not a tag fragment — gets recovered as a phantom second `EBB-1`. **Narrower and more precisely diagnosed than the first version of this finding claimed** — see the retraction in the bldg5406 section: the originally-reported `CDB`/`RRA` "fabrication" (a much larger, class-wide claim) was traced to a bug in this session's own verification script, not the pipeline, and has been withdrawn. |
 
 ## Test suite findings
@@ -871,28 +922,31 @@ standing alongside a quieter fix.
 
 ## What remains for Phase 0
 
-- **Five complete, validated ground-truth keys exist** (bessemer,
-  bldg5406, itd-d1-lab, federal-mech's `VAV` family, baker-county-eoc's
-  `EQUIP NO` family) — see the corpus-wide table at the top of this file;
-  **1 more set remains** from the plan's original target list
-  (navfac-cherry-point-atc), plus 3+ held-out bulk documents blocked on
-  bulk-corpus staging (blocked on network policy, unresolved this
-  session).
+- **All six of the plan's originally-targeted Phase 0 sets now have
+  complete, validated ground-truth keys** (bessemer, bldg5406, itd-d1-lab,
+  federal-mech's `VAV` family, baker-county-eoc's `EQUIP NO` family,
+  navfac-cherry-point-atc's bypass-valve family) — see the corpus-wide
+  table at the top of this file. What remains from the plan's own target
+  list is 3+ held-out bulk documents, blocked on bulk-corpus staging
+  (blocked on network policy, unresolved this session). Every key so far
+  is a curated family within its document, not exhaustive coverage of
+  every schedule family — each key's own header states exactly what was
+  and wasn't sampled.
 - H2 (spelling variants): checked carefully on baker-county-eoc
   (`RTU-1`/`RTU-01`) and found NOT to reproduce as a drawn-tag case — the
   alternate spelling exists only in an off-plan worksheet, never on a
   drawn plan instance. Still unconfirmed as a live defect anywhere in the
   corpus. H3 confirmed by code inspection (no real-document trigger found
-  yet). H4 only incidentally touched. **H8 confirmed three times over** —
+  yet). H4 only incidentally touched. **H8 confirmed four times over** —
   synthetically (executed disagreement examples), at corpus scale via the
-  clean corpus-eval re-run, and now with its own dedicated ground-truth
-  key (baker-county-eoc, 10% row-to-tag exact match, entirely explained
-  by two distinct identity-extraction defects, neither a text-search or
-  sheet-role issue) — baker-county-eoc, federal-mech, and navfac all show
-  real rows dropped by `uniqueFamily`. H6 was measured this session (on
-  itd-d1-lab's `HC` family) and did not reproduce as a defect — see the
-  hypothesis table above; it may still be worth checking against a
-  family not sampled there.
+  clean corpus-eval re-run, and now with two dedicated ground-truth keys
+  on two different real documents (baker-county-eoc, 10% row-to-tag exact
+  match, two distinct identity-extraction defects fully traced;
+  navfac-cherry-point-atc, 33.3%, a third failure shape — multi-
+  building-area naming collision — not yet traced to an exact line).
+  H6 was measured this session (on itd-d1-lab's `HC` family) and did not
+  reproduce as a defect — see the hypothesis table above; it may still be
+  worth checking against a family not sampled there.
 - **Resolved**: the corpus-eval run was re-run clean and isolated this
   session (`reports/EVAL-2026-09-16_1713.txt`,
   `reports/TAKEOFF-EVAL-2026-09-16_1726.txt`) and reproduced the flagged

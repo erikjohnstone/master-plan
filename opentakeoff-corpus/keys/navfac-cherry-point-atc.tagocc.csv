@@ -1,0 +1,87 @@
+# keys/navfac-cherry-point-atc.tagocc.csv -- occurrence-level ground
+# truth for plans/03-schedule-row-to-drawn-tag-reconciliation-plan.md
+# Phase 0.
+#
+# Authored 2026-09-16 from opentakeoff-corpus/raw/navfac-cherry-point-atc-
+# mechanical.pdf (75 pages, this corpus's densest real HVAC/BAS set).
+# This document was flagged by the original audit for "multi-hyphen valve
+# marks CV-CHW-BP-A" -- covered directly below. Coordinates are
+# production "image px" (pt x RENDER_SCALE=2, origin top-left, y down).
+# Every row is a real PDF text span, grounded via textSpans()/
+# session.sheet(...).spans, cross-checked against rendered page images.
+#
+# SCOPE: this key covers exactly the multi-hyphen "bypass control valve"
+# family (CV-CHW-BP-*, CV-HHW-BP-*) plus HHWC-DOAH-T1 -- chosen because
+# this session's clean corpus-eval re-run independently caught this exact
+# family being dropped by `compile_corpus_takeoff` today (all four,
+# `CV-CHW-BP-M`, `CV-CHW-BP-T`, `CV-HHW-BP-T`, `HHWC-DOAH-T1`, showed
+# `status=not_in_output`; see TAG_LEDGER_BASELINE.md). Not covered: the
+# much larger VAV-M#/VAV-A###/AHU/CRAH/FCU/CUH/DOAH families visible in
+# the same schedule tables (many dozens of instances, not sampled).
+#
+# THE REAL STRUCTURE, NOT OBVIOUS FROM THE TAG NAME ALONE: this project
+# covers THREE physically separate building areas -- AIR OPS, MTRACON,
+# and ATCT (the tower) -- confirmed directly from each area's own
+# "<AREA> - MECHANICAL SCHEDULES" title block (sheets #44 "AIR OPS",
+# #47 "MTRACON", #49 "ATCT"). Each area has its OWN HHW/CHW bypass
+# control valve, independently numbered/lettered per area (A/A1 for AIR
+# OPS, M for MTRACON, T for ATCT) but sharing the identical "CV-<CHW|HHW>-
+# BP-<area>" naming convention -- a real, structural multi-building-group
+# case, not a spelling inconsistency. Each area's own schedule table
+# lists the SAME valve mark in both its "UNIT MARK" and "VALVE MARK"
+# columns (e.g. AIR OPS's HHW bypass row reads "CV-HHW-BP-A1" in both
+# columns) -- this key grounds the left/UNIT MARK column as the
+# canonical ROW_LABEL bbox for each row, not both columns as separate
+# rows, since they are the same row's identity duplicated, not two
+# distinct rows.
+#
+# Real page->role map for the pages this key covers:
+#   #29 plan      (AIR OPS building area) -- CV-CHW-BP-A, CV-HHW-BP-A
+#       drawn instances
+#   #30 plan      (MTRACON building area) -- CV-CHW-BP-M, CV-HHW-BP-M
+#       drawn instances
+#   #31 plan      (ATCT building area) -- CV-HHW-BP-T, HHWC-DOAH-T1 (x2,
+#       genuinely drawn twice on this one sheet) drawn instances.
+#       CV-CHW-BP-T has NO drawn instance found anywhere on this sheet or
+#       any other of this document's 75 pages (see SCHEDULE_ONLY note
+#       below) -- ATCT's own CHW bypass valve is a real schedule row with
+#       zero drawn plan occurrences, the SCHEDULE_ONLY pattern already
+#       documented on bldg5406's VAV-6.
+#   #44 schedule  M-603 "AIR OPS - MECHANICAL SCHEDULES" -- CV-HHW-BP-A1,
+#       CV-CHW-BP-A ROW_LABELs (among many other AIR OPS equipment/valve
+#       schedules on the same sheet, not sampled)
+#   #47 schedule  M-613 "MTRACON - MECHANICAL SCHEDULES" -- CV-HHW-BP-M,
+#       CV-CHW-BP-M ROW_LABELs
+#   #49 schedule  M-622 "ATCT - MECHANICAL SCHEDULES" -- CV-HHW-BP-T,
+#       CV-CHW-BP-T, HHWC-DOAH-T1 ROW_LABELs
+#
+# H8 CORPUS-SCALE CONFIRMATION, A THIRD REAL DOCUMENT: this session's
+# clean, isolated corpus-eval re-run shows `CV-CHW-BP-M`, `CV-CHW-BP-T`,
+# `CV-HHW-BP-T`, and `HHWC-DOAH-T1` all come back `status=not_in_output`
+# from `compile_corpus_takeoff`, the same symptom already root-caused on
+# baker-county-eoc (H8, row-identity-extraction drift between
+# `rowIdentityTag` and `uniqueFamily`) and consistent with this
+# document's own additional wrinkle: a genuinely multi-building-area
+# project where several DIFFERENT real rows share the identical
+# "CV-<CHW|HHW>-BP-<area>" naming shape, differing only in the area
+# suffix -- exactly the kind of ambiguity a row-identity extractor that
+# does not correctly scope by drawing_group/building-area could conflate
+# or drop. Root cause not independently re-traced for this specific
+# document this session (unlike baker-county-eoc, where `rowIdentityTag`
+# was directly inspected) -- flagged as a second real-document data point
+# for Phase 2, not a fully re-diagnosed one.
+sheet,page,text_as_drawn,x0,y0,x1,y1,rot,class,row_table,row_key,note
+navfac-cherry-point-atc-mechanical.pdf#44,44,CV-HHW-BP-A1,2410.8,680.5,2555.8,705.8,0,ROW_LABEL,HHW CONTROL VALVE SCHEDULE (AIR OPS),CV-HHW-BP-A1,
+navfac-cherry-point-atc-mechanical.pdf#44,44,CV-CHW-BP-A,3468.7,749.4,3602.7,774.7,0,ROW_LABEL,CHW CONTROL VALVE SCHEDULE (AIR OPS),CV-CHW-BP-A,
+navfac-cherry-point-atc-mechanical.pdf#47,47,CV-HHW-BP-M,417.6,514.2,554.9,539.5,0,ROW_LABEL,HHW CONTROL VALVE SCHEDULE (MTRACON),CV-HHW-BP-M,
+navfac-cherry-point-atc-mechanical.pdf#47,47,CV-CHW-BP-M,1564.3,652.2,1701.6,677.5,0,ROW_LABEL,CHW CONTROL VALVE SCHEDULE (MTRACON),CV-CHW-BP-M,
+navfac-cherry-point-atc-mechanical.pdf#49,49,CV-HHW-BP-T,2757.6,1688.0,2890.5,1713.4,0,ROW_LABEL,HHW CONTROL VALVE SCHEDULE (ATCT),CV-HHW-BP-T,
+navfac-cherry-point-atc-mechanical.pdf#49,49,CV-CHW-BP-T,3645.8,1688.0,3778.8,1713.4,0,ROW_LABEL,CHW CONTROL VALVE SCHEDULE (ATCT),CV-CHW-BP-T,"SCHEDULE_ONLY -- a real ROW_LABEL, confirmed by a full-document (75-page) span scan to have zero drawn PLAN_INSTANCE occurrences anywhere in this document. Not a gap in this key's own coverage; a genuine absence, the same SCHEDULE_ONLY pattern documented on bldg5406's VAV-6."
+navfac-cherry-point-atc-mechanical.pdf#49,49,HHWC-DOAH-T1,2746.8,2289.0,2901.9,2314.3,0,ROW_LABEL,HHW CONTROL VALVE SCHEDULE (ATCT),HHWC-DOAH-T1,
+navfac-cherry-point-atc-mechanical.pdf#29,29,CV-CHW-BP-A,2566.8,2019.7,2703.3,2044.8,0,PLAN_INSTANCE,CHW CONTROL VALVE SCHEDULE (AIR OPS),CV-CHW-BP-A,
+navfac-cherry-point-atc-mechanical.pdf#29,29,CV-HHW-BP-A,2548.1,2443.3,2684.9,2468.4,0,PLAN_INSTANCE,HHW CONTROL VALVE SCHEDULE (AIR OPS),CV-HHW-BP-A,
+navfac-cherry-point-atc-mechanical.pdf#30,30,CV-CHW-BP-M,1195.9,2102.3,1336.0,2127.4,0,PLAN_INSTANCE,CHW CONTROL VALVE SCHEDULE (MTRACON),CV-CHW-BP-M,
+navfac-cherry-point-atc-mechanical.pdf#30,30,CV-HHW-BP-M,2138.2,2298.1,2278.3,2323.2,0,PLAN_INSTANCE,HHW CONTROL VALVE SCHEDULE (MTRACON),CV-HHW-BP-M,
+navfac-cherry-point-atc-mechanical.pdf#31,31,CV-HHW-BP-T,1973.5,753.0,2109.2,778.1,0,PLAN_INSTANCE,HHW CONTROL VALVE SCHEDULE (ATCT),CV-HHW-BP-T,
+navfac-cherry-point-atc-mechanical.pdf#31,31,HHWC-DOAH-T1,606.0,1244.3,763.6,1269.4,0,PLAN_INSTANCE,HHW CONTROL VALVE SCHEDULE (ATCT),HHWC-DOAH-T1,
+navfac-cherry-point-atc-mechanical.pdf#31,31,HHWC-DOAH-T1,2031.4,1247.4,2188.9,1272.5,0,PLAN_INSTANCE,HHW CONTROL VALVE SCHEDULE (ATCT),HHWC-DOAH-T1,
