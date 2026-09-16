@@ -1,5 +1,17 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 6: `keys/SERVES_HELDOUT.txt`
+drawn — `navfac-cherry-point-atc` (Phase 0's own worst-scoring set and the
+plan's own named walk-out-proof target) and `bldg5406-hvac-demo` frozen
+from here forward, never used to tune a future threshold or decide
+whether a fix "worked." Disclosed honestly: this is not "before any
+tuning," since Phase 3 already used real `bessemer` data for a real fix
+before this file existed — `bessemer`/`itd-d1-lab` stay the tuning half
+rather than pretending that history didn't happen. The walk-out proof
+itself (a real person who has never seen the tool picking ten devices
+live) is not attempted — it requires a human participant this session
+cannot supply, a genuine blocker, not a skipped step.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5, one prerequisite piece:
 `buildMepGraph` gained `detectDashedLines` (default OFF) — every edge
 split from a segment `dashdetect.ts`'s own `detectDashedSegs` (Phase 1

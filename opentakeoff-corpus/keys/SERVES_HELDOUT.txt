@@ -1,0 +1,40 @@
+# keys/SERVES_HELDOUT.txt -- the frozen held-out sheet split for
+# PLAN_CONNECTIVITY_SERVES.md (the "which drawn equipment does this drawn
+# device connect to" maturity plan), same "declared first, and frozen" rule
+# keys/HELDOUT.txt already established for the unrelated
+# VECTORGRID_TABLE_BOXES.md goal: NEVER used to change a threshold, a
+# default, or a gate value in this plan, and never re-drawn to improve a
+# score. If a held-out failure is worth fixing, the fix is made and
+# verified against the tuning half (every set NOT in this list) and this
+# split is re-run untouched.
+#
+# Drawn 2026-09-16, NOT before any tuning as the plan's own Phase 6 asks
+# for -- an honest gap, disclosed rather than hidden: Phase 0's baseline
+# measurement and Phase 2's crossing-gate diagnosis/fix (2026-09-15) both
+# ran against the FULL 4-set keyed corpus, including navfac-cherry-point-atc
+# below, before this split existed. Phase 3's centerline work (2026-09-16)
+# specifically root-caused and fixed a real regression using bessemer's own
+# real data -- bessemer is NOT held out, precisely because it was already
+# a tuning-half sheet by the time this file was drawn. From this file's own
+# creation forward, every set listed below is frozen: no future phase may
+# read its own serves-eval numbers to decide a threshold, a default, or
+# whether a fix "worked" -- report both splits, the same discipline
+# HELDOUT_GRADING.md already uses for its own corpus.
+#
+# Selection: navfac-cherry-point-atc is the plan's OWN explicitly named
+# walk-out-proof target (Phase 6's own text: "on NAVFAC MH101, a person who
+# has never seen the tool picks any air device"), and per Phase 0's own
+# Gate 0 finding was the SINGLE WORST-SCORING set in the entire baseline
+# (0/16 refused -- total JTS noding refusal on the real 75-sheet Cherry
+# Point set) -- exactly the kind of sheet a held-out split exists to keep
+# honest, not a convenient easy one. bldg5406-hvac-demo is also held out:
+# its own Phase 0 finding (an over-broad hand-seeded equipment-candidate
+# list producing false ambiguity) is a distinct failure mode from
+# navfac's, so the frozen split covers two different real failure classes,
+# not one. bessemer and itd-d1-lab remain the tuning half -- both were
+# already used for real, disclosed tuning decisions (Phase 2, Phase 3)
+# before this file existed, and untangling that after the fact would only
+# manufacture a false appearance of a clean split.
+#
+navfac-cherry-point-atc
+bldg5406-hvac-demo

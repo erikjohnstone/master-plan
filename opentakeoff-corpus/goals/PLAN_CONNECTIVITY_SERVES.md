@@ -778,6 +778,34 @@ tool picks any air device; the platform names its VAV or FCU with the path
 painted, or says exactly why it cannot. Do it for ten devices they choose,
 record each as a row.
 
+**`keys/SERVES_HELDOUT.txt` drawn 2026-09-16 — `navfac-cherry-point-atc`
+and `bldg5406-hvac-demo` frozen, `bessemer`/`itd-d1-lab` remain the tuning
+half.** Disclosed honestly, not hidden: this is NOT "before any tuning
+beyond Phase 2" as this phase's own text asks — Phase 3's centerline work
+(2026-09-16) already used real `bessemer` data to root-cause and fix a
+real regression, and that happened before this file existed. Drawing the
+split now still protects every future phase's own numbers on
+`navfac-cherry-point-atc` (Phase 0's own single worst-scoring set — 0/16
+refused, total JTS noding failure — and the plan's own explicitly named
+walk-out-proof target) and `bldg5406-hvac-demo` (a distinct failure mode,
+over-broad candidate-list ambiguity) from here forward; untangling
+`bessemer`/`itd-d1-lab`'s own already-spent tuning history after the fact
+would only manufacture a false appearance of a clean split that was never
+actually kept. See the file's own header for the full reasoning.
+
+**The walk-out proof itself is NOT attempted, and cannot be by this
+session alone: it explicitly requires a real human being "who has never
+seen the tool" making live, spontaneous device choices** — the entire
+point of the exercise is that a person, not the same system being tested,
+picks what to try. This is a genuine, disclosed blocker on human
+availability, not a step skipped or simulated. When a human is available
+to run it: render NAVFAC MH101, have them point to any ten air devices of
+their own choosing (not a pre-selected list), run whichever of Phase 4's
+own `serves()`/Phase 5's own `served_by()` (once built) or today's
+hand-seeded `trace_connectivity` is available at the time against each,
+and record every one — reached-with-path-painted, or refused-with-a-named-
+reason — as its own row, honestly, including any the tool gets wrong.
+
 ## Completion gate
 
 Reported together, tuning and held-out splits separately, every time:
