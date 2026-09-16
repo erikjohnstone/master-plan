@@ -94,16 +94,28 @@ noise — every one of them is one of two already-understood, named causes**:
    for, at all — this is **not** a text-occurrence-finding failure; the
    occurrence ladder was never even invoked for these tags.
 2. **`EBB-1` shows `drawn_count: 2` in the row→tag miss list, expected 1 —
-   a real, confirmed defect in the occurrence-recovery ladder itself.**
-   `find_text("EBB-1")` on the same plan sheet (`#6`) returns exactly **one**
-   exact hit; a full-page visual read agrees. `tagOccurrencesOnSheet`'s own
-   recovery ladder reports two. This is a genuine duplicate-detection bug —
-   two different recovery strategies (most likely `compoundTagOcc` and the
-   exact-match pass, or two strategies both matching the same span) are
-   producing overlapping, undeduplicated hits for this one drawn instance.
-   **New hypothesis for Phase 1 (H9):** the occurrence ladder's own
-   dedup-by-distance step does not cover every pair of recovery strategies —
-   confirmed on a real document, not hypothetical.
+   root-caused precisely, not just observed.** The real `EBB-1` lives on
+   sheet `#6` (1 exact hit, confirmed by `find_text` and by eye). The
+   *second* "instance" the baseline reports sits on a **different sheet**,
+   `#7` (Second Floor Mechanical Plan) — which draws no diffuser/register
+   work at all (ductwork for the 2nd floor is routed in the attic, per that
+   sheet's own note), only `EBB-5..8`. Calling every ladder strategy
+   directly against sheet `#7`'s spans in isolation: `familySuffixTagOcc`
+   alone returns exactly this hit, at exactly this bbox. It fires because
+   sheet `#7` legitimately draws 4 complete `EBB-*` siblings (`EBB-5..8`,
+   satisfying that function's own ≥4-sibling quorum requirement) *and*
+   carries a lone, same-text-height bare digit **"1"** nearby — which is
+   not a missing-prefix tag suffix at all, but a **keynote callout
+   reference number** (a numbered circle referencing the sheet's own
+   general note, the same convention visible near the laundry room on this
+   exact sheet). `familySuffixTagOcc`'s own doc comment claims "a page's
+   ordinary detail/dimension numeral cannot satisfy that shape by itself" —
+   a keynote-circle digit evidently can, since it shares the same bare,
+   same-height, near-siblings shape the function is designed to accept.
+   **Confirmed root cause, not a hypothesis**: `familySuffixTagOcc` cannot
+   currently distinguish a real orphaned tag suffix from an unrelated
+   keynote/callout digit that happens to sit near enough to a real family's
+   siblings.
 
 Every other tag in the key (`SR-1` ×7, `SR-2` ×2, `TG-1` ×6, `TG-2` ×4,
 `HP-1` ×1, `EF-1` ×1, `EWH-1` ×1, `EBB-2..8` ×1 each, `D-1`/`D-2`/`D-6` ×0)
@@ -133,52 +145,51 @@ treatment or an explicit "diagram reference" class, otherwise it risks being
 either silently dropped or wrongly double-counted against the real plan
 instance of the same equipment).
 
-**Major finding: the occurrence ladder fabricates occurrences from unrelated
-text for short, letter-only air-device family marks — not a ±1 duplicate,
-an 800%+ over-count.** Grounding the full row vocabulary with `find_text`
-(independent of the ladder) against `tagOccurrencesForKey`'s own raw output:
+**Retraction, found and corrected within this same session.** An earlier
+version of this section claimed `CDB` (baseline: 9) and `RRA` (baseline: 5)
+were almost entirely fabricated, based on a `find_text` grounding pass that
+found 0 and 1 *exact* hits respectively. **That claim was wrong, and the
+error was in this session's own verification script, not the pipeline.**
+The exact-match filter used to grid `find_text`'s results discarded
+legitimate hits where the real drawn text is the tag **and its CFM value
+in one combined, rotated PDF text run** — e.g. the real drawn label reads
+`"CDB 290"` (rot 90°), not bare `"CDB"`. Dumping the *raw*, unfiltered spans
+starting with each tag's canonical prefix confirms all 9 `CDB` hits and 4
+of `RRA`'s 5 hits are exactly this real, legitimate pattern (`"CDB 290"`,
+`"CDB 265"`, `"CDB 230"`, `"RRA 495"` ×4 — each a distinct drawn diffuser
+with its own airflow reading). **The baseline's counts for `CDB` (9), `RRA`
+(5), and `CDA` (2) are correct.** `compoundTagOcc` (the function matching
+these) is working as designed — it exists precisely to recognize a tag
+glued to trailing content in one PDF run, and this air-device convention
+is exactly its target case, not a bug. Lesson for the eventual Phase 3
+key-authoring process: **a grounding script must never filter to an exact
+canonical match** when checking a ladder built to recognize compound runs;
+it must dump raw spans and read them, the way this correction did.
 
-| tag | baseline `drawn_count` | `find_text` exact hits | verdict |
-|---|---|---|---|
-| `CDB` | 9 | **0** | **all 9 fabricated** |
-| `RRA` | 5 | **1** | **4 of 5 fabricated** |
-| `CDA` | 2 | 1 | 1 fabricated (same class as `EBB-1`) |
-| `ERA` | 3 | 3 | ✅ matches — correct |
-| `AHU-1` | 2 | 2, at two genuinely distinct positions | ✅ matches — correct, not a bug |
-| `CWP-1` | 2 | **1** | 1 fabricated (same class as `EBB-1`) |
-| `ET-1` | 2 | 2, on two different sheets (`#2`, `#14`) | ✅ matches — a real cross-sheet duplicate, correct |
-| every `VAV-1..9`, `AC-1`, `ACCU-1`, `EF-1/4/5`, `CH-1`, `L-1/2`, `AS-1`, `CP-1` | 1 each | 1 each, matching bboxes | ✅ all correct |
+**What *is* a real, confirmed bug in this set: `CWP-1` is over-counted by
+one, and the cause is genuinely a false positive, of the H7 kind
+(note/prose text miscounted as a plan instance).** The real spans starting
+with `"CWP-1"` are: one bare `"CWP-1"` tag (the real drawn instance), and
+one general installation note reading `"CWP-1 AND CWP-2 SHALL BE STACKED
+AND MOUNTED TO..."`. `compoundTagOcc`'s own guard (key, then a token
+boundary, then `/` or whitespace, then more alphanumeric text in the same
+run) does not distinguish "a real compound identity label" from "an
+ordinary sentence that happens to start with a tag name" — the note text
+satisfies the same shape a real `"R1 /C-11"`-style compound label would.
+**This is a genuine, confirmed instance of H7**, the first this session
+found rather than merely failed to rule out.
 
-Inspecting the raw ladder output (`tagOccurrencesForKey`, before `find_text`
-narrows to exact matches) for `CDB` and `RRA` directly: the fabricated hits
-share a distinctive shape the one real hit doesn't — **narrow (~6px wide),
-tall (~25px) bounding boxes at suspiciously regular vertical spacing**
-(`RRA`'s four false hits sit at y = 179, 298, 417, 536 — exactly 119px
-apart), roughly **double the height of the confirmed real hit** (~12.5px).
-This is not the shape of a 2–3 letter tag; it is the shape of a **rotated
-duct-size label** (the render shows exactly this convention — vertical
-"12x10", "16x8" callouts running alongside ductwork). The strong working
-hypothesis: one of the ladder's fallback recovery strategies (most likely
-`familySuffixTagOcc` or `fragmentedTagOcc`, both gated to trigger only after
-a family-wide quorum/prefix match, per their own doc comments) is matching
-fragments of rotated dimension text as if they were air-device family
-letters, for exactly the short, digit-less, letter-only tag shape this
-schedule family uses (`CDA`/`CDB`/`CDC`/`SRA`/`RRA`/`RRB`/`ERA`).
+Net, corrected picture for bldg5406: of the full row vocabulary grounded
+(`AHU-1`, `VAV-1..9`, `AC-1`, `ACCU-1`, `EF-1/2/3/4/5`, `CH-1`, `CWP-1/2`,
+`L-1/2`, `AS-1`, `ET-1`, `CDA/CDB/CDC`, `SRA`, `RRA/RRB`, `ERA`, `CP-1` — 31
+row keys), only **`CWP-1` is a real, confirmed miscount** (over by 1, via
+the H7 note-text mechanism above). Every other count is correct, including
+the three (`CDB`, `RRA`, `CDA`) this session first, wrongly, flagged as
+fabricated.
 
-**This revises and generalizes H9** from "a ±1 duplicate-detection gap" to:
-**the occurrence-recovery ladder can fabricate a large number of false
-occurrences for an entire tag-shape class (short, letter-only, no digit),
-not just double-count a real one.** This is the single highest-priority,
-concretely-confirmed defect this session found for Phase 1 to fix — it
-would make a naive drawn-count for `CDB` wrong by 900% if shipped as-is.
-Not yet root-caused to the exact function/line (would need instrumenting
-`tagOccurrencesOnSheet`'s branch selection per call, not done this session);
-the shape evidence above is strong but circumstantial.
-
-`keys/bldg5406-hvac-demo.tagocc.csv` is not yet written — the priority
-became documenting this finding precisely over completing the file this
-session; the grounded data above (in `/tmp/bldg5406-grounding.json` if the
-scratch files survive, otherwise easily re-run) is what the key needs.
+`keys/bldg5406-hvac-demo.tagocc.csv` is not yet written — the corrected
+grounded data above is what the key needs; writing it is the next concrete
+step, not blocked on anything further.
 
 **Independent confirmation of the plan's central thesis, on a real,
 previously-scored document.** The corpus's own committed evaluation
@@ -201,13 +212,13 @@ these 5 real installed items as disclosed evidence instead of silence.
 |---|---|---|
 | H1 | Tags on unknown/misclassified-role sheets are never counted | **Confirmed, concretely, and found to compound with a second defect** — bessemer p2 is both misclassified *and* its table is never extracted at all; its entire device population is invisible for two independent reasons |
 | H2 | Hyphen/space drawn-text variants are missed | Not yet measured — no variant-spelling case identified in bessemer or bldg5406 yet; itd-d1-lab remains the flagged candidate |
-| H3 | First-non-empty ladder drops mixed split/whole tags on one sheet | Not yet measured directly; superseded in priority by the *new*, confirmed H9 over-count finding on the same code path |
-| H4 | Rotated tags are missed | Not yet measured |
+| H3 | First-non-empty ladder drops mixed split/whole tags on one sheet | Not yet measured directly |
+| H4 | Rotated tags are missed | **Partially refuted, incidentally** — rotated (90°) tag+value runs (`"CDB 290"`, `"RRA 495"`) are found correctly by `compoundTagOcc` on bldg5406; rotation itself was not the obstacle in any case examined this session. Not a full test of H4 (no case of a *missed* rotated tag was found) but the cases seen all resolved correctly. |
 | H5 | Orphan tags (no schedule row) are invisible to row-driven tools | **Confirmed by construction**, inherent to every row-driven tool audited |
 | H6 | itd-d1-lab over-counts are cross-view redraws | Not yet measured — itd-d1-lab not examined this session |
-| H7 | Note mentions/legend entries leak into counts | Small favorable sample only (bessemer's `D-1`/`D-2`/`D-6` correctly report 0; a split-run "HP-1 IS TYPICAL..." note correctly did not inflate `HP-1`'s plan-instance count) — not a real stress test yet |
+| H7 | Note mentions/legend entries leak into counts | **Confirmed, once, precisely** — bldg5406's `CWP-1` is over-counted by 1 because `compoundTagOcc` matches an installation note ("CWP-1 AND CWP-2 SHALL BE STACKED...") as if it were a second compound tag label. bessemer's `D-1`/`D-2`/`D-6` and a split-run "HP-1 IS TYPICAL..." note stayed correctly excluded, so this is not universal — H7 fires specifically when note prose happens to start with `<tag><space><more text>`, `compoundTagOcc`'s exact trigger shape. |
 | H8 | Row lookup disagrees across the three duplicated implementations | Not yet measured |
-| **H9 (new)** | **The occurrence-recovery ladder fabricates occurrences, up to an entire class of tag shapes at once, not just ±1 duplicates** | **Confirmed on two real documents.** bessemer's `EBB-1`: ladder says 2, real is 1 (visual + `find_text` + ruler agree). bldg5406's `CDB`: ladder says **9**, `find_text` finds **0** — every single one fabricated. `RRA`: ladder says 5, real is 1. Shape evidence (narrow/tall boxes at regular spacing, ~2x a real hit's height) points at rotated duct-size labels being misread as short letter-only family marks (`CDA/CDB/CDC/SRA/RRA/RRB/ERA`-shaped). **Highest-priority Phase 1 finding this session produced.** |
+| **H9 (new, corrected)** | **The occurrence ladder's `familySuffixTagOcc` fallback can recover an unrelated digit (a keynote/callout reference number) as a tag's missing suffix, when that digit happens to sit near enough to ≥4 real family siblings** | **Confirmed and precisely root-caused on one real document.** bessemer's `EBB-1` on sheet `#7`: the real `EBB-5..8` siblings are genuinely drawn there, satisfying `familySuffixTagOcc`'s own quorum gate, and a bare "1" — actually a keynote circle's reference number, not a tag fragment — gets recovered as a phantom second `EBB-1`. **Narrower and more precisely diagnosed than the first version of this finding claimed** — see the retraction in the bldg5406 section: the originally-reported `CDB`/`RRA` "fabrication" (a much larger, class-wide claim) was traced to a bug in this session's own verification script, not the pipeline, and has been withdrawn. |
 
 ## Test suite findings
 

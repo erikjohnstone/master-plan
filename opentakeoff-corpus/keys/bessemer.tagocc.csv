@@ -102,7 +102,7 @@ bessemer-mechanical-bidset.pdf#6,6,TG-2,2219.5,1186.0,2256.1,1202.2,0,PLAN_INSTA
 bessemer-mechanical-bidset.pdf#6,6,HP-1,2242.1,1116.0,2285.8,1135.2,0,PLAN_INSTANCE,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,
 bessemer-mechanical-bidset.pdf#6,6,EF-1,1621.4,1720.3,1662.8,1739.5,0,PLAN_INSTANCE,FAN SCHEDULE,EF-1,
 bessemer-mechanical-bidset.pdf#6,6,EWH-1,3514.1,1675.9,3575.3,1695.1,0,PLAN_INSTANCE,ELECTRIC WALL HEATER SCHEDULE,EWH-1,
-bessemer-mechanical-bidset.pdf#6,6,EBB-1,2407.2,1021.5,2464.6,1040.6,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-1,drawn exactly once -- see B-header note; the ladder under test falsely doubles this to 2
+bessemer-mechanical-bidset.pdf#6,6,EBB-1,2407.2,1021.5,2464.6,1040.6,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-1,drawn exactly once. The ladder under test also reports a phantom 2nd instance on sheet #7 -- root-caused: familySuffixTagOcc recovers a keynote circle's bare reference digit "1" (near the real EBB-5..8 siblings on that sheet) as a false family-suffix match. See TAG_LEDGER_BASELINE.md H9.
 bessemer-mechanical-bidset.pdf#6,6,EBB-2,2497.2,1463.8,2554.6,1483.0,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-2,
 bessemer-mechanical-bidset.pdf#6,6,EBB-3,2386.6,1817.8,2444.0,1837.0,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-3,
 bessemer-mechanical-bidset.pdf#6,6,EBB-4,2497.2,2606.7,2554.6,2625.8,0,PLAN_INSTANCE,ELECTRIC BASEBOARD HEATER SCHEDULE,EBB-4,
