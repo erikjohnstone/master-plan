@@ -85,7 +85,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
 import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchAgainstLibrary, affineOptionsFromWire, AFFINE_WIRE_DEFAULT } from "../lib/symbolsweep";
-import { buildMepGraph, traceConnectivity as traceMepConnectivity, computePorts, describeComponent, seedTolPx } from "../lib/mepconnectivity.ts";
+import { buildMepGraph, traceConnectivity as traceMepConnectivity, computePorts, describeComponent, seedTolPx, expandBodyAwareTarget } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
 // layer-role exclusion alone can't tell architectural wall ink apart from
@@ -7160,8 +7160,16 @@ export default function TakeoffCanvas() {
       return { status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [], reason: "No equipment symbols supplied — sweep the target family first (symbol_sweep or sweep_schedule_row), then pass their placements here." };
     }
     const upp = agentUpp(key);
+    const denormBbox = ([x0, y0, x1, y1]) => [...denorm([x0, y0]), ...denorm([x1, y1])];
+    // Phase 4 item 2, first increment: an equipment entry carrying its own
+    // real bbox resolves via computePorts (Phase 4 item 1) instead of a
+    // single raw point — see expandBodyAwareTarget's own doc comment.
+    // Byte-identical to today when no entry supplies a bbox.
+    const equipmentSymbols = opts.equipment.flatMap((e) => expandBodyAwareTarget(graph, {
+      id: e.id, at: denorm(e.at), ...(e.label ? { label: e.label } : {}), ...(e.bbox ? { bbox: denormBbox(e.bbox) } : {}),
+    }, opts.inkPad ?? 0));
     const result = traceMepConnectivity(graph, denorm(opts.from), {
-      equipmentSymbols: opts.equipment.map((e) => ({ id: e.id, at: denorm(e.at), ...(e.label ? { label: e.label } : {}) })),
+      equipmentSymbols,
       fittingSymbols: opts.fittings?.length ? opts.fittings.map((f) => ({ at: denorm(f.at) })) : undefined,
       maxHops: opts.maxHops,
       seedTolFt: opts.seedTolFt,
@@ -7236,11 +7244,12 @@ export default function TakeoffCanvas() {
     if (!Array.isArray(opts.to) || opts.to.length !== 2) return { error: "Pass to as [x,y] normalized 0..1." };
     const result = await agentTraceConnectivity(key, {
       from: opts.from,
-      equipment: [{ id: "target", at: opts.to }],
+      equipment: [{ id: "target", at: opts.to, ...(opts.toBbox ? { bbox: opts.toBbox } : {}) }],
       fittings: opts.fittings,
       maxHops: opts.maxHops,
       seedTolFt: opts.seedTolFt,
       bridgeFt: opts.bridgeFt,
+      inkPad: opts.inkPad,
     });
     if (result.error) return result;
     // A single target can never legitimately produce "ambiguous" (that
@@ -7295,7 +7304,11 @@ export default function TakeoffCanvas() {
     }
     const upp = agentUpp(key);
     const mppf = upp ? 1 / upp : 0;
-    const equipmentSymbols = opts.equipment.map((e) => ({ id: e.id, at: denorm(e.at), ...(e.label ? { label: e.label } : {}) }));
+    const denormBbox = ([x0, y0, x1, y1]) => [...denorm([x0, y0]), ...denorm([x1, y1])];
+    // Phase 4 item 2, first increment — see agentTraceConnectivity's own comment.
+    const equipmentSymbols = opts.equipment.flatMap((e) => expandBodyAwareTarget(graph, {
+      id: e.id, at: denorm(e.at), ...(e.label ? { label: e.label } : {}), ...(e.bbox ? { bbox: denormBbox(e.bbox) } : {}),
+    }, opts.inkPad || 0));
     const fittingSymbols = opts.fittings?.length ? opts.fittings.map((f) => ({ at: denorm(f.at) })) : undefined;
     const perPort = ports.map((port) => traceMepConnectivity(graph, port, {
       equipmentSymbols, fittingSymbols, maxHops: opts.maxHops, seedTolFt: opts.seedTolFt, bridgeFt: opts.bridgeFt, mppf,
@@ -7365,14 +7378,18 @@ export default function TakeoffCanvas() {
     }
     const upp = agentUpp(key);
     const mppf = upp ? 1 / upp : 0;
+    const denormBbox = ([x0, y0, x1, y1]) => [...denorm([x0, y0]), ...denorm([x1, y1])];
     const fittingSymbols = opts.fittings?.length ? opts.fittings.map((f) => ({ at: denorm(f.at) })) : undefined;
     const served = [];
     const seenIds = new Set();
     for (const port of ports) {
       for (const d of opts.devices) {
         if (seenIds.has(d.id)) continue;
+        // Phase 4 item 2, first increment — see agentTraceConnectivity's own comment.
         const r = traceMepConnectivity(graph, port, {
-          equipmentSymbols: [{ id: d.id, at: denorm(d.at), ...(d.label ? { label: d.label } : {}) }],
+          equipmentSymbols: expandBodyAwareTarget(graph, {
+            id: d.id, at: denorm(d.at), ...(d.label ? { label: d.label } : {}), ...(d.bbox ? { bbox: denormBbox(d.bbox) } : {}),
+          }, opts.inkPad || 0),
           fittingSymbols, maxHops: opts.maxHops, seedTolFt: opts.seedTolFt, bridgeFt: opts.bridgeFt, mppf,
         });
         if (r.status === "reached" && r.reachedEquipment) {

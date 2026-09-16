@@ -344,9 +344,11 @@ export const AGENT_TOOL_DEFS = [
               id: { type: "string", description: "The equipment's own tag, e.g. 'AHU-1'." },
               at_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1." },
               label: { type: "string" },
+              bbox_norm: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] normalized 0..1 — this equipment's own real bounding box, when known. Resolves via whatever real linework enters this box's own boundary instead of at_norm alone, so this equipment's OWN drawn glyph ink is never mistaken for the real duct/pipe passing beside it." },
             },
           },
         },
+        ink_pad: { type: "number", description: "Expand any equipment bbox_norm by this many image px before checking for crossings. Default 0. No effect on equipment entries without their own bbox_norm." },
         fittings: {
           type: "array",
           description: "Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, only where one of these sits geometrically in it. Omit to disable bridging entirely.",
@@ -381,6 +383,8 @@ export const AGENT_TOOL_DEFS = [
         sheet: { type: "string" },
         from_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1 — the seed point, ON the drawn pipe/duct/conduit line." },
         to_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1 — the target point the walk is looking for, e.g. from ports_of." },
+        to_bbox_norm: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] normalized 0..1 — the target's own real bounding box, when known. Resolves via whatever real linework enters this box's own boundary instead of to_norm alone, so the target's OWN drawn glyph ink is never mistaken for the real connection passing beside it." },
+        ink_pad: { type: "number", description: "Expand to_bbox_norm by this many image px before checking for crossings. Default 0. No effect without to_bbox_norm." },
         fittings: {
           type: "array",
           description: "Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, only where one of these sits geometrically in it.",
@@ -414,7 +418,7 @@ export const AGENT_TOOL_DEFS = [
       properties: {
         sheet: { type: "string" },
         device_norm: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] normalized 0..1 — the device's own bounding box, from your own prior symbol_sweep/sweep_schedule_row result." },
-        ink_pad: { type: "number", description: "Expand the device bbox by this many image px before checking for port crossings. Default 0." },
+        ink_pad: { type: "number", description: "Expand the device bbox, and any equipment entry's own bbox_norm, by this many image px before checking for port crossings. Default 0." },
         equipment: {
           type: "array",
           description: "Real, already-swept equipment placements this device might connect to — required; an empty/omitted list is a named refusal.",
@@ -424,6 +428,7 @@ export const AGENT_TOOL_DEFS = [
               id: { type: "string", description: "The equipment's own tag, e.g. 'AHU-1'." },
               at_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1." },
               label: { type: "string" },
+              bbox_norm: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] normalized 0..1 — this equipment's own real bounding box, when known. Resolves via whatever real linework enters this box's own boundary instead of at_norm alone." },
             },
           },
         },
@@ -447,7 +452,7 @@ export const AGENT_TOOL_DEFS = [
       properties: {
         sheet: { type: "string" },
         equipment_norm: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] normalized 0..1 — the equipment's own bounding box, from your own prior symbol_sweep/sweep_schedule_row result." },
-        ink_pad: { type: "number", description: "Expand the equipment bbox by this many image px before checking for port crossings. Default 0." },
+        ink_pad: { type: "number", description: "Expand the equipment bbox, and any device entry's own bbox_norm, by this many image px before checking for port crossings. Default 0." },
         devices: {
           type: "array",
           description: "Real, already-swept device placements this equipment might connect to — required; an empty/omitted list is a named refusal.",
@@ -457,6 +462,7 @@ export const AGENT_TOOL_DEFS = [
               id: { type: "string", description: "The device's own tag, e.g. 'VAV-12'." },
               at_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1." },
               label: { type: "string" },
+              bbox_norm: { type: "array", items: { type: "number" }, description: "[x0,y0,x1,y1] normalized 0..1 — this device's own real bounding box, when known. Resolves via whatever real linework enters this box's own boundary instead of at_norm alone." },
             },
           },
         },
@@ -1119,11 +1125,12 @@ export async function executeAgentTool(ctx, name, args) {
         if (!Array.isArray(args.from_norm) || args.from_norm.length !== 2) return { error: "Pass from_norm as [x,y] normalized 0..1." };
         return await ctx.traceConnectivity(args.sheet, {
           from: args.from_norm,
-          equipment: (args.equipment || []).map((e) => ({ id: e.id, at: e.at_norm, label: e.label })),
+          equipment: (args.equipment || []).map((e) => ({ id: e.id, at: e.at_norm, label: e.label, ...(e.bbox_norm ? { bbox: e.bbox_norm } : {}) })),
           fittings: (args.fittings || []).map((f) => ({ at: f.at_norm })),
           maxHops: args.max_hops,
           seedTolFt: args.seed_tol_ft,
           bridgeFt: args.bridge_ft,
+          inkPad: args.ink_pad,
         });
       }
 
@@ -1140,6 +1147,8 @@ export async function executeAgentTool(ctx, name, args) {
         return await ctx.pathBetween(args.sheet, {
           from: args.from_norm,
           to: args.to_norm,
+          toBbox: args.to_bbox_norm,
+          inkPad: args.ink_pad,
           fittings: (args.fittings || []).map((f) => ({ at: f.at_norm })),
           maxHops: args.max_hops,
           seedTolFt: args.seed_tol_ft,
@@ -1159,7 +1168,7 @@ export async function executeAgentTool(ctx, name, args) {
         return await ctx.servedBy(args.sheet, {
           device: args.device_norm,
           inkPad: args.ink_pad,
-          equipment: (args.equipment || []).map((e) => ({ id: e.id, at: e.at_norm, label: e.label })),
+          equipment: (args.equipment || []).map((e) => ({ id: e.id, at: e.at_norm, label: e.label, ...(e.bbox_norm ? { bbox: e.bbox_norm } : {}) })),
           fittings: (args.fittings || []).map((f) => ({ at: f.at_norm })),
           maxHops: args.max_hops,
           seedTolFt: args.seed_tol_ft,
@@ -1173,7 +1182,7 @@ export async function executeAgentTool(ctx, name, args) {
         return await ctx.devicesOf(args.sheet, {
           equipment: args.equipment_norm,
           inkPad: args.ink_pad,
-          devices: (args.devices || []).map((d) => ({ id: d.id, at: d.at_norm, label: d.label })),
+          devices: (args.devices || []).map((d) => ({ id: d.id, at: d.at_norm, label: d.label, ...(d.bbox_norm ? { bbox: d.bbox_norm } : {}) })),
           fittings: (args.fittings || []).map((f) => ({ at: f.at_norm })),
           maxHops: args.max_hops,
           seedTolFt: args.seed_tol_ft,

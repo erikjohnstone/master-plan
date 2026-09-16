@@ -720,6 +720,15 @@ ever proposing the flag flip to ON — not attempted here, given this
 session's remaining scope; recorded precisely so it isn't re-diagnosed
 from scratch. Gate 3 stays NOT MET.
 
+**Later same day:** the fix-path piece #3 above (body-aware bbox
+resolution instead of a single raw point) shipped for real as Phase 4
+item 2's own first increment (`expandBodyAwareTarget`, see that section)
+— re-verified there against this exact real Bessemer case with the
+shipped function itself, not a diagnostic workaround. Gate 3 is still NOT
+MET as the plan's own gate defines it (Bessemer `SR-1`→`HP-1` served BY
+DEFAULT), since that still needs `detectDoubleLineDuctCenterlines` on,
+which still needs its own scale-aware corpus pass first.
+
 ### Phase 4 — ports, not clicks
 
 1. For every device placement (`symbol_sweep` match, `sweep_schedule_row`
@@ -771,6 +780,51 @@ and still keep every existing caller's own contract) than a single
 session should make unilaterally without it being the session's own
 primary, dedicated focus. `computePorts` itself is a real, tested,
 standalone building block for that future work, not a partial `serves()`.
+
+**Item 2's own first, safe increment landed, 2026-09-16 — a real device
+binder function, not the full walk-to-BODY/shared-trunk/layer-boundary
+scope above.** A dedicated research pass (parallel readers over
+`symbolsweep.ts`, `taggedVectorGrounding.ts`, `mcp/src/outputs.ts`'s
+`drawing_locations[]`, `count_marks`, the legend sweep path, and
+`symbollabels.ts`'s own leader-chase algorithm) confirmed the full scope's
+own real cost (a body-bbox source doesn't exist uniformly today — only
+the verified `sweep_schedule_row` path and legend sweep already carry
+one; `symbollabels.ts`'s leader chase is a second, independent, dark-
+ink-only bounded BFS that isn't a drop-in replacement onto this graph)
+but also surfaced a real, small, purely-additive slice worth shipping on
+its own: `mepconnectivity.ts` gained `expandBodyAwareTarget(graph,
+candidate, inkPad)` — when a caller-supplied equipment/device candidate
+already carries its own real bbox (not discovered here, only used when
+given), it resolves via `computePorts` (Phase 4 item 1) instead of a
+single raw point, exactly the same "walk onto whatever real linework
+enters this footprint, not the footprint's own glyph ink" idea `ports_of`
+already gives seeds. Wired as an optional `bbox`/`toBbox` field into
+`trace_connectivity`, `path_between`, `served_by`, and `devices_of` (MCP
++ UI parity, both packages) — byte-identical to today whenever a
+candidate omits its own bbox, or the bbox touches no linework at all.
+
+This landed BECAUSE of, and directly closes the mechanism gap in, the
+Phase 3 Gate 3 diagnosis below: reproduced live on real Bessemer data,
+`expandBodyAwareTarget` (the actual shipped function, not a hand-rolled
+workaround) resolves BOTH SR-1's own device bbox and HP-1's own equipment
+bbox onto the real, shared 9,124-node duct trunk, and a walk between them
+succeeds (`status: "reached"`, 286 hops, confidence 0.35) — the identical
+real case Gate 3 names, now solved by real, tested, shipped code, though
+NOT enabled by default (see Gate 3's own note on why
+`detectDoubleLineDuctCenterlines` itself can't safely flip to on yet). 4
+new unit tests in `mepconnectivity.test.ts` (a synthetic reproduction of
+the exact isolated-glyph-vs-real-duct shape) and 5 new end-to-end MCP
+tests in `tools.test.ts` (a deliberately off-linework raw point that only
+resolves once its own real bbox is supplied), all passing; both packages'
+typecheck and lint clean.
+
+**Still not attempted:** everything item 2's own larger scope names above
+(the ambiguity-rule rewrite treating a shared trunk as one component, the
+layer-boundary refusal, the ambiguity-rule composition into `serves()`
+proper) and all of item 3 (migrating `symbollabels.ts`'s own leader chase
+onto this graph) — this increment gives future callers a real body-bbox
+INPUT capability, it does not itself discover a body-bbox, walk to a
+component-aware notion of "reached", or refuse across a layer boundary.
 
 ### Phase 5 — controls and the shared path
 
@@ -1078,7 +1132,7 @@ not this goal's goes to `TAKEOFF_BUG_CATALOGUE.md`, not into a side fix.
 | 1 | | | | | | | | |
 | 2 | 2026-09-15 | (this commit) | 49 | 4/33 (12.1%) | 4/14 (28.6%) | 2 | no | `requireJunctionMarkForCrossings: true` now ON in both real callers. First attempt regressed mep-trace-eval 3/3->2/3; root cause turned out to be a buggy diagnostic script (checked the unspliced graph, not the one traceConnectivity actually walks), corrected by instrumenting the real BFS. Two real, general fixes: DEFAULT_MAX_HOPS_GATED (a gated graph legitimately needs more hops once false crossing-shortcuts are gone — measured 59->80 hops on the same real path) and resolveOnGraph preferring the larger connected component over a just-isolated fragment among near-tied seed candidates. mep-trace-eval back to 3/3; serves-eval's 49-row corpus unchanged except GEV-1 improving false-`reached`->honest-`dead_end` (still counted 2 false-confident/4/33 served above — GEV-1 was a refusal-not-honored row, not a served one; see Phase 2 section for the exact before/after). tools.test.ts:2036 now asserts the fixed reached/AHU-3 behavior |
 | 3 | 2026-09-16 | (this commit) | — | 0/7 (Bessemer, unchanged) | 4/6 (unchanged) | 0 | no | Gate 3 NOT MET. Built and safety-verified (ductcenterline.ts, buildMepGraph's detectDoubleLineDuctCenterlines, default OFF): matched-pair centerline extraction + corner-gap bridging (2 real bugs found/fixed on synthetic elbow/stub fixtures) + exact-anchor open-end bridging into the boundary graph (a radius-search first attempt regressed real Bessemer refusal-honored 4/6->1/6, root-caused and fixed — see Phase 3 section for the full trail). Real Bessemer before/after now byte-for-byte identical (flag stays off for every real caller). Specific Gate 3 target not hit: SR-1's own seed lands on an isolated register-glyph hatch mesh, real centerline sits ~43px away, outside both seed tolerance and the (correctly conservative) exact-anchor bridge — a seed-resolution follow-up, not a centerline bug |
-| 4 | | | | | | | | |
+| 4 | 2026-09-16 | (this commit) | n/a | n/a | n/a | n/a | n/a | Item 1 (computePorts) + item 2's own first increment (expandBodyAwareTarget) only — no serves-eval row applies, same reason as Phase 5's own row: a new resolution INPUT capability over the unchanged graph/walk, not an accuracy change to score. Verified directly against the real Bessemer SR-1->HP-1 Gate 3 case instead (see Phase 3's own follow-up note): the shipped function correctly resolves both ends onto the real shared trunk once centerline detection is on. Items 2's own larger scope (ambiguity-rule rewrite, layer-boundary refusal) and item 3 (leader-chase migration) NOT attempted |
 | 5 | 2026-09-16 | (this commit) | n/a | n/a | n/a | n/a | n/a | Items 2/4 only (new read-only operators + honesty backstops) — no serves-eval row applies: these are new QUERY surfaces over the UNCHANGED graph/walk buildMepGraph and traceConnectivity already produce (same as Phase 4 item 1's own computePorts, whose row is blank for the identical reason), not a change to walk accuracy, so a re-run of serves-eval.mjs against them would reproduce Phase 3's own row 3 numbers exactly, not a new data point. Item 1 (the actual dashed-gap controls walk) and item 3 (reconcile_schedule_plan/highlight_citation wiring) NOT attempted — see Phase 5 section for the full, disclosed scope boundary |
 | 6 (held-out) | | | | | | | | |
 

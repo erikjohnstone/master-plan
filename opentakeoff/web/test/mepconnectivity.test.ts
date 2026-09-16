@@ -8,7 +8,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   buildMepGraph, traceConnectivity, hasJunctionMark, detectArrowDirections, computePorts,
-  describeComponent, seedTolPx,
+  describeComponent, seedTolPx, expandBodyAwareTarget,
   type MepGraph, type ArrowDetectNode, type ArrowDetectEdge,
 } from "../src/lib/mepconnectivity.ts";
 import type { LayerInfo } from "../src/lib/layers.ts";
@@ -779,6 +779,48 @@ test("describeComponent: refuses (returns null) when the point isn't on any trac
   const segs = [0, 0, 200, 0];
   const g = buildMepGraph(segs, {});
   assert.equal(describeComponent(g, [500, 500], seedTolPx(g, undefined)), null);
+});
+
+// ── expandBodyAwareTarget (Phase 4 item 2, first increment) ──────────────
+// The exact real Gate 3 failure shape (Bessemer SR-1->HP-1,
+// PLAN_CONNECTIVITY_SERVES.md Phase 3), reproduced synthetically: a
+// device's own drawn glyph ink can form its own small, isolated graph
+// component sitting CLOSER to the device's own raw point than the real
+// duct passing right beside it — so a raw-point seed/target resolves onto
+// the glyph, never the duct. A caller-supplied bbox lets resolution find
+// the real duct entering that bbox's own boundary instead.
+
+test("expandBodyAwareTarget: an equipment's own real bbox finds the real duct passing beside it, when its raw point would land on its own isolated glyph", () => {
+  const segs = [
+    0, 50, 300, 50,      // the real trunk
+    150, 50, 150, 100,   // a real stub branching down off the trunk, ending at (150,100)
+    150, 105, 160, 105,  // the equipment's OWN isolated glyph ink -- near, but not touching, the stub's end
+  ];
+  const g = buildMepGraph(segs, {});
+  const rawPoint: [number, number] = [155, 105]; // the equipment's own raw centroid -- sits ON its own glyph
+  const bbox: [number, number, number, number] = [148, 103, 162, 108]; // the equipment's own tight glyph bbox
+
+  // Without a bbox: unchanged from today -- just echoes the raw point.
+  const pointOnly = expandBodyAwareTarget(g, { id: "EQ-1", at: rawPoint });
+  assert.deepEqual(pointOnly, [{ id: "EQ-1", at: rawPoint }]);
+  const viaPointOnly = traceConnectivity(g, [10, 50], { equipmentSymbols: pointOnly });
+  assert.equal(viaPointOnly.status, "dead_end", "the raw point lands on the equipment's own isolated glyph, never reachable from the trunk");
+
+  // With its own real bbox (inkPad reaching the stub's own real end): resolves
+  // via whatever real linework enters the box's own boundary instead.
+  const expanded = expandBodyAwareTarget(g, { id: "EQ-1", at: rawPoint, bbox }, 5);
+  assert.ok(expanded.length >= 1 && expanded.every((c) => c.id === "EQ-1"));
+  const viaBbox = traceConnectivity(g, [10, 50], { equipmentSymbols: expanded });
+  assert.equal(viaBbox.status, "reached", "the real stub entering the equipment's own bbox boundary is found, even though its own glyph ink is isolated");
+  assert.equal(viaBbox.reachedEquipment?.id, "EQ-1");
+});
+
+test("expandBodyAwareTarget: no bbox, or a bbox touching no linework, falls back to the raw point unchanged", () => {
+  const segs = [0, 0, 200, 0];
+  const g = buildMepGraph(segs, {});
+  assert.deepEqual(expandBodyAwareTarget(g, { id: "X", at: [50, 0] }), [{ id: "X", at: [50, 0] }]);
+  assert.deepEqual(expandBodyAwareTarget(g, { id: "X", at: [50, 0], bbox: [500, 500, 510, 510] }), [{ id: "X", at: [50, 0] }]);
+  assert.deepEqual(expandBodyAwareTarget(g, { id: "X", at: [50, 0], label: "Fan-1" }), [{ id: "X", at: [50, 0], label: "Fan-1" }]);
 });
 
 // ── detectDashedLines (Phase 5 item 1 prep) ────────────────────────────────

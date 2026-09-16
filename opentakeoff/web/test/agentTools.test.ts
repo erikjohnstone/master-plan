@@ -646,7 +646,7 @@ test("trace_connectivity: a valid call reshapes at_norm → at and passes throug
     from: [0.1, 0.2],
     equipment: [{ id: "AHU-1", at: [0.5, 0.5], label: undefined }],
     fittings: [{ at: [0.3, 0.3] }],
-    maxHops: undefined, seedTolFt: undefined, bridgeFt: 3,
+    maxHops: undefined, seedTolFt: undefined, bridgeFt: 3, inkPad: undefined,
   }]);
 });
 
@@ -697,7 +697,7 @@ test("path_between: a valid call reshapes at_norm → at and passes through unch
   });
   assert.equal(out.status, "reached");
   assert.deepEqual(calls[0], ["plan.pdf", {
-    from: [0.1, 0.1], to: [0.5, 0.5],
+    from: [0.1, 0.1], to: [0.5, 0.5], toBbox: undefined, inkPad: undefined,
     fittings: [{ at: [0.3, 0.3] }],
     maxHops: undefined, seedTolFt: undefined, bridgeFt: 3,
   }]);
@@ -742,6 +742,19 @@ test("served_by: a valid call reshapes device_norm/equipment through unchanged",
     fittings: [{ at: [0.3, 0.3] }],
     maxHops: undefined, seedTolFt: undefined, bridgeFt: undefined,
   }]);
+});
+
+test("served_by: an equipment entry's own bbox_norm reshapes to bbox unchanged (Phase 4 item 2)", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    servedBy: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { status: "reached", reached_equipment: { id: "AHU-1", at: [0.5, 0.5] }, path: [[0.1, 0.1], [0.5, 0.5]], layer_signal: "none", confidence: 0.9, factors: [] }; },
+  });
+  await executeAgentTool(ctx, "served_by", {
+    sheet: "plan.pdf", device_norm: [0.1, 0.1, 0.2, 0.2],
+    equipment: [{ id: "AHU-1", at_norm: [0.5, 0.5], bbox_norm: [0.48, 0.48, 0.52, 0.52] }],
+  });
+  const [, opts] = calls[0] as [string, { equipment: unknown }];
+  assert.deepEqual(opts.equipment, [{ id: "AHU-1", at: [0.5, 0.5], label: undefined, bbox: [0.48, 0.48, 0.52, 0.52] }]);
 });
 
 test("devices_of: a malformed equipment_norm is a named error, not a crash", async () => {

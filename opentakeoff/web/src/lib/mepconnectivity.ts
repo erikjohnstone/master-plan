@@ -1231,6 +1231,40 @@ export function computePorts(graph: MepGraph, bbox: Bbox, inkPad: number = 0): P
   return ports;
 }
 
+// ── body-aware target expansion (Phase 4 item 2, first increment) ───────
+// PLAN_CONNECTIVITY_SERVES.md Phase 4 item 2 names "serves()'s own
+// walk-to-equipment-BODY semantics" as real, separate, larger work
+// (a new device-to-graph binding model spanning symbol_sweep/
+// sweep_schedule_row/count_marks/legend sweep) — NOT attempted here. This
+// is the one safe, small, purely-additive slice of it a 2026-09-16
+// diagnosis (the Bessemer SR-1->HP-1 Gate 3 gap) directly motivated and
+// verified in isolation: a target's own bbox, when the caller already has
+// one (e.g. sweep_schedule_row's own geometry_bbox/tag_at, or a legend
+// glyph's own rect — this function does not discover a bbox, only uses
+// one it's given), lets resolution walk onto whatever REAL linework
+// enters that bbox's own boundary (via computePorts, Phase 4 item 1)
+// instead of a single raw point — which can land on the target's OWN
+// drawn glyph ink when that glyph happens to form its own small, isolated
+// graph component (the exact, corpus-verified Gate 3 failure shape: a
+// device's own symbol can sit closer to a naive seed than the real duct
+// passing beside it). Byte-identical to today's point-only behavior when
+// no bbox is supplied, or when the supplied bbox yields zero ports —
+// this only ever adds a candidate, never removes or changes the existing
+// point-based one.
+export interface BodyAwareCandidate { id: string; at: Point; label?: string; bbox?: Bbox }
+
+export function expandBodyAwareTarget(
+  graph: MepGraph,
+  candidate: BodyAwareCandidate,
+  inkPad: number = 0,
+): Array<{ id: string; at: Point; label?: string }> {
+  const point = { id: candidate.id, at: candidate.at, ...(candidate.label ? { label: candidate.label } : {}) };
+  if (!candidate.bbox) return [point];
+  const ports = computePorts(graph, candidate.bbox, inkPad);
+  if (!ports.length) return [point];
+  return ports.map((at) => ({ id: candidate.id, at, ...(candidate.label ? { label: candidate.label } : {}) }));
+}
+
 // ── component_of (Phase 5 item 2, PLAN_CONNECTIVITY_SERVES.md) ──────────
 // A point's own local connected component — "is this drawn line connected
 // to anything at all, and how much" without needing a second target to

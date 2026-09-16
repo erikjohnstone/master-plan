@@ -392,12 +392,14 @@ No approval, installed count or complete requirement discovery. Changes stay in 
         id: z.string().describe("The equipment's own tag, e.g. 'AHU-1'"),
         at: pointSchema.describe("Its placement (image px), from your own prior symbol_sweep/sweep_schedule_row result"),
         label: z.string().optional(),
+        bbox: bboxSchema.optional().describe("This equipment's own real bounding box (image px), when known — resolves via whatever real linework enters this box's own boundary instead of `at` alone, so this equipment's OWN drawn glyph ink (if it forms its own small isolated graph component) is never mistaken for the real duct/pipe passing beside it. Falls back to `at` when omitted or when the box touches no linework at all."),
       })).default([]).describe("Real, already-swept equipment placements this trace might reach. An empty/omitted list is a NAMED refusal (status: \"refused\"), not a silent 'found nothing' or a protocol-level rejection"),
       fittings: z.array(z.object({ at: pointSchema })).optional()
         .describe("Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, but ONLY where one of these sits geometrically in it. Omit to disable bridging entirely"),
       max_hops: z.number().int().positive().optional().describe("Edge-hops to walk before giving up (default 60)"),
       seed_tol_ft: z.number().positive().optional().describe("How close (feet) the seed/equipment points must sit to the graph's own linework to count as 'on' it (default 1.0)"),
       bridge_ft: z.number().positive().optional().describe("Widest real drawn gap (feet) a fitting placement may bridge (default 2.0) — a gap wider than this is never bridged regardless of what sits in it"),
+      ink_pad: z.number().nonnegative().optional().describe("Expand any equipment `bbox` by this many image px before checking for crossings. Default 0. No effect on equipment entries without their own bbox"),
     },
     outputSchema: traceConnectivityOutput,
   }, run("trace_connectivity", async (a) => {
@@ -408,6 +410,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       maxHops: a.max_hops,
       seedTolFt: a.seed_tol_ft,
       bridgeFt: a.bridge_ft,
+      inkPad: a.ink_pad,
     });
     return {
       status: r.status,
@@ -443,6 +446,8 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       sheet: z.string(),
       from: pointSchema.describe("Seed point (image px) ON the drawn pipe/duct/conduit line to start the walk from"),
       to: pointSchema.describe("Target point (image px) the walk is looking for — from ports_of, or any other already-swept placement"),
+      to_bbox: bboxSchema.optional().describe("The target's own real bounding box (image px), when known (e.g. sweep_schedule_row's own geometry_bbox) — resolves via whatever real linework enters this box's own boundary instead of a single raw point, so the target's OWN drawn glyph ink (if it forms its own small isolated component) is never mistaken for the real connection passing beside it. Falls back to `to` alone when omitted or when this box touches no linework at all."),
+      ink_pad: z.number().nonnegative().optional().describe("Expand to_bbox by this many image px before checking for crossings. Default 0. No effect without to_bbox"),
       fittings: z.array(z.object({ at: pointSchema })).optional()
         .describe("Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, but ONLY where one of these sits geometrically in it. Omit to disable bridging entirely"),
       max_hops: z.number().int().positive().optional().describe("Edge-hops to walk before giving up (default 60)"),
@@ -452,7 +457,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
     outputSchema: pathBetweenOutput,
   }, run("path_between", async (a) => {
     const r = await session.pathBetween(a.sheet, {
-      from: a.from, to: a.to, fittings: a.fittings,
+      from: a.from, to: a.to, toBbox: a.to_bbox, inkPad: a.ink_pad, fittings: a.fittings,
       maxHops: a.max_hops, seedTolFt: a.seed_tol_ft, bridgeFt: a.bridge_ft,
     });
     return {
@@ -489,11 +494,12 @@ No approval, installed count or complete requirement discovery. Changes stay in 
     inputSchema: {
       sheet: z.string(),
       device: bboxSchema.describe("The device's own bounding box (image px) — from your own prior symbol_sweep/sweep_schedule_row result"),
-      ink_pad: z.number().nonnegative().optional().describe("Expand the device bbox by this many image px before checking for port crossings. Default 0"),
+      ink_pad: z.number().nonnegative().optional().describe("Expand the device bbox, and any equipment entry's own bbox, by this many image px before checking for port crossings. Default 0"),
       equipment: z.array(z.object({
         id: z.string().describe("The equipment's own tag, e.g. 'AHU-1'"),
         at: pointSchema.describe("Its placement (image px), from your own prior symbol_sweep/sweep_schedule_row result"),
         label: z.string().optional(),
+        bbox: bboxSchema.optional().describe("This equipment's own real bounding box (image px), when known — resolves via whatever real linework enters this box's own boundary instead of `at` alone, so this equipment's OWN drawn glyph ink (if it forms its own small isolated graph component) is never mistaken for the real duct/pipe passing beside it. Falls back to `at` when omitted or when the box touches no linework at all."),
       })).default([]).describe("Real, already-swept equipment placements this device might connect to. An empty/omitted list is a NAMED refusal, not a silent 'found nothing'"),
       fittings: z.array(z.object({ at: pointSchema })).optional()
         .describe("Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, but ONLY where one of these sits geometrically in it"),
@@ -524,11 +530,12 @@ No approval, installed count or complete requirement discovery. Changes stay in 
     inputSchema: {
       sheet: z.string(),
       equipment: bboxSchema.describe("The equipment's own bounding box (image px) — from your own prior symbol_sweep/sweep_schedule_row result"),
-      ink_pad: z.number().nonnegative().optional().describe("Expand the equipment bbox by this many image px before checking for port crossings. Default 0"),
+      ink_pad: z.number().nonnegative().optional().describe("Expand the equipment bbox, and any device entry's own bbox, by this many image px before checking for port crossings. Default 0"),
       devices: z.array(z.object({
         id: z.string().describe("The device's own tag, e.g. 'VAV-12'"),
         at: pointSchema.describe("Its placement (image px), from your own prior symbol_sweep/sweep_schedule_row result"),
         label: z.string().optional(),
+        bbox: bboxSchema.optional().describe("This device's own real bounding box (image px), when known — resolves via whatever real linework enters this box's own boundary instead of `at` alone, so this device's OWN drawn glyph ink (if it forms its own small isolated graph component) is never mistaken for the real duct/pipe passing beside it. Falls back to `at` when omitted or when the box touches no linework at all."),
       })).default([]).describe("Real, already-swept device placements this equipment might connect to. An empty/omitted list is a NAMED refusal, not a silent 'found nothing'"),
       fittings: z.array(z.object({ at: pointSchema })).optional()
         .describe("Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, but ONLY where one of these sits geometrically in it"),

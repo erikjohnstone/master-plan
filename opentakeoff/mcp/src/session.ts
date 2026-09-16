@@ -321,7 +321,7 @@ import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, class
 // this project's own vendored JTS port for robust noding (see the module's
 // own header comment); traceConnectivity is the refusal-honest query, same
 // doctrine as sweep_schedule_row/resolve_tag above.
-import { buildMepGraph, traceConnectivity as traceMepConnectivity, computePorts, describeComponent, seedTolPx, type MepGraph, type TraceResult as MepTraceResult, type ComponentInfo, type LayerSignal, type Point as MepPoint } from "../../web/src/lib/mepconnectivity.ts";
+import { buildMepGraph, traceConnectivity as traceMepConnectivity, computePorts, describeComponent, seedTolPx, expandBodyAwareTarget, type MepGraph, type TraceResult as MepTraceResult, type ComponentInfo, type LayerSignal, type Point as MepPoint } from "../../web/src/lib/mepconnectivity.ts";
 import type { MepSystemRole } from "../../web/src/lib/mepsystems.ts";
 import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // Accuracy plan Phase 2 — on an unlayered/weakly-layered sheet, a layer-role
@@ -3523,11 +3523,12 @@ export class Session {
    * every other geometry tool that consumes an already-swept placement. */
   async traceConnectivity(name: string, opts: {
     from: Point;
-    equipment: Array<{ id: string; at: Point; label?: string }>;
+    equipment: Array<{ id: string; at: Point; label?: string; bbox?: Bbox }>;
     fittings?: Array<{ at: Point }>;
     maxHops?: number;
     seedTolFt?: number;
     bridgeFt?: number;
+    inkPad?: number;
   }): Promise<MepTraceResult> {
     const s = this.sheet(name);
     const graph = await this.ensureMepGraph(s);
@@ -3539,7 +3540,7 @@ export class Session {
     }
     const mppf = s.upp ? 1 / s.upp : 0;
     return traceMepConnectivity(graph, opts.from, {
-      equipmentSymbols: opts.equipment,
+      equipmentSymbols: opts.equipment.flatMap((e) => expandBodyAwareTarget(graph, e, opts.inkPad ?? 0)),
       fittingSymbols: opts.fittings,
       maxHops: opts.maxHops,
       seedTolFt: opts.seedTolFt,
@@ -3583,21 +3584,28 @@ export class Session {
    * reusing traceConnectivity's own tested BFS unchanged rather than a
    * second implementation. A single target can never legitimately produce
    * "ambiguous" (that status only fires when 2+ DISTINCT equipment ids are
-   * reachable, and this call only ever supplies the one). */
+   * reachable, and this call only ever supplies the one — even with
+   * toBbox expanding it into several port candidates, per
+   * expandBodyAwareTarget's own doc comment, they all still share the one
+   * "to" id). Optional toBbox (Phase 4 item 2's first increment) resolves
+   * the target via its own real drawn-ink bbox instead of a single raw
+   * point when the caller already has one. */
   async pathBetween(name: string, opts: {
-    from: Point; to: Point;
+    from: Point; to: Point; toBbox?: Bbox;
     fittings?: Array<{ at: Point }>;
     maxHops?: number;
     seedTolFt?: number;
     bridgeFt?: number;
+    inkPad?: number;
   }): Promise<MepTraceResult> {
     return this.traceConnectivity(name, {
       from: opts.from,
-      equipment: [{ id: "to", at: opts.to }],
+      equipment: [{ id: "to", at: opts.to, ...(opts.toBbox ? { bbox: opts.toBbox } : {}) }],
       fittings: opts.fittings,
       maxHops: opts.maxHops,
       seedTolFt: opts.seedTolFt,
       bridgeFt: opts.bridgeFt,
+      inkPad: opts.inkPad,
     });
   }
 
@@ -3634,7 +3642,7 @@ export class Session {
    * ambiguity — never narrowed to one by proximity or port order. */
   async servedBy(name: string, opts: {
     device: Bbox; inkPad?: number;
-    equipment: Array<{ id: string; at: Point; label?: string }>;
+    equipment: Array<{ id: string; at: Point; label?: string; bbox?: Bbox }>;
     fittings?: Array<{ at: Point }>;
     maxHops?: number;
     seedTolFt?: number;
@@ -3668,8 +3676,13 @@ export class Session {
       };
     }
     const mppf = s.upp ? 1 / s.upp : 0;
+    // Phase 4 item 2, first increment: an equipment entry carrying its own
+    // real bbox resolves via computePorts (Phase 4 item 1) instead of a
+    // single raw point — see expandBodyAwareTarget's own doc comment.
+    // Byte-identical to today when no entry supplies a bbox.
+    const equipmentSymbols = opts.equipment.flatMap((e) => expandBodyAwareTarget(graph, e, opts.inkPad ?? 0));
     const perPort = ports.map((port) => traceMepConnectivity(graph, port, {
-      equipmentSymbols: opts.equipment,
+      equipmentSymbols,
       fittingSymbols: opts.fittings,
       maxHops: opts.maxHops,
       seedTolFt: opts.seedTolFt,
@@ -3726,7 +3739,7 @@ export class Session {
    * rather than a new multi-target walk. */
   async devicesOf(name: string, opts: {
     equipment: Bbox; inkPad?: number;
-    devices: Array<{ id: string; at: Point; label?: string }>;
+    devices: Array<{ id: string; at: Point; label?: string; bbox?: Bbox }>;
     fittings?: Array<{ at: Point }>;
     maxHops?: number;
     seedTolFt?: number;
@@ -3763,8 +3776,9 @@ export class Session {
     for (const port of ports) {
       for (const d of opts.devices) {
         if (seenIds.has(d.id)) continue;
+        // Phase 4 item 2, first increment — see servedBy's own comment.
         const r = traceMepConnectivity(graph, port, {
-          equipmentSymbols: [d],
+          equipmentSymbols: expandBodyAwareTarget(graph, d, opts.inkPad ?? 0),
           fittingSymbols: opts.fittings,
           maxHops: opts.maxHops,
           seedTolFt: opts.seedTolFt,

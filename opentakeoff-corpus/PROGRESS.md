@@ -1,5 +1,31 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 4 item 2, first increment:
+`expandBodyAwareTarget(graph, candidate, inkPad)` in `mepconnectivity.ts`
+— an equipment/device candidate that already carries its own real bbox
+resolves via `computePorts` (Phase 4 item 1) instead of a single raw
+point, so its own drawn glyph ink (when isolated) is never mistaken for
+the real duct passing beside it. Wired as an optional `bbox`/`toBbox`
+field into `trace_connectivity`, `path_between`, `served_by`, and
+`devices_of` (MCP + UI parity), byte-identical when omitted. Directly
+motivated by, and re-verified against, the real Bessemer SR-1->HP-1 Gate
+3 case from the same day's earlier diagnosis — the shipped function
+itself (not a hand-rolled workaround) resolves both ends onto the real
+shared duct trunk once centerline detection is on, closing the mechanism
+gap that diagnosis found, though the centerline flag itself still isn't
+on by default (needs its own scale-aware corpus pass first, per that same
+diagnosis). 4 new unit tests (a synthetic reproduction of the isolated-
+glyph-vs-real-duct shape) + 5 new end-to-end MCP tests (a deliberately
+off-linework raw point only resolved via its own real bbox), all passing;
+both packages typecheck/lint clean. A dedicated research pass first
+mapped the FULL Phase 4 item 2/3 scope (device-to-graph binding across
+symbol_sweep/sweep_schedule_row/count_marks/legend sweep, the shared-
+trunk-is-one-component ambiguity rule, layer-boundary refusal,
+symbollabels.ts's leader-chase migration) and confirmed it remains real,
+separate, larger work — not attempted beyond this one safe slice. Full
+detail: `opentakeoff-corpus/goals/PLAN_CONNECTIVITY_SERVES.md`'s Phase 4
+section and Phase 3's own follow-up note.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md — Gate 5 follow-up, Phase 5 item 3
 (partial), and a real Gate 3 diagnostic advance. `web`'s full `npm run
 check` finished: 3,178 pass / 70 fail, every failure traced to one real,

@@ -2301,6 +2301,69 @@ test("devices_of: refuses when no device placements are supplied at all", async 
   assert.match(r.data.reason, /sweep the target family first/);
 });
 
+// ── body-aware bbox resolution (Phase 4 item 2, first increment) ────────
+// A real, corpus-motivated capability (the Bessemer SR-1->HP-1 Gate 3
+// diagnosis, PLAN_CONNECTIVITY_SERVES.md Phase 3): an equipment/device
+// candidate that also supplies its own real bbox resolves via whatever
+// linework enters that bbox's own boundary, not a single raw point —
+// verified here by deliberately supplying an off-linework `at` (50px from
+// AHU-1's real line) that a raw point alone cannot resolve, alongside a
+// real bbox that still finds it.
+
+test("trace_connectivity: an equipment's own bbox reaches it even when its own raw point sits too far off the linework to resolve", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 200],
+    equipment: [{ id: "AHU-1", at: [500, 250], bbox: [480, 180, 520, 220] }],
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.reached_equipment.id, "AHU-1");
+});
+
+test("trace_connectivity: the same off-linework raw point alone (no bbox) is a real dead_end", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 200],
+    equipment: [{ id: "AHU-1", at: [500, 250] }],
+  });
+  assert.equal(r.data.status, "dead_end");
+});
+
+test("served_by: an equipment's own bbox reaches it even when its own raw point sits too far off the linework", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "served_by", {
+    sheet: MEPKEY, device: [80, 190, 120, 210],
+    equipment: [{ id: "AHU-1", at: [500, 250], bbox: [480, 180, 520, 220] }],
+  });
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.reached_equipment.id, "AHU-1");
+});
+
+test("devices_of: a device's own bbox is reached even when its own raw point sits too far off the linework", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "devices_of", {
+    sheet: MEPKEY, equipment: [480, 180, 520, 220],
+    devices: [{ id: "SEED", at: [100, 250], bbox: [80, 190, 120, 210] }],
+  });
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.served.length, 1);
+  assert.equal(r.data.served[0].id, "SEED");
+});
+
+test("path_between: to_bbox reaches the target even when `to` alone sits too far off the linework", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "path_between", {
+    sheet: MEPKEY, from: [100, 200], to: [500, 250], to_bbox: [480, 180, 520, 220],
+  });
+  assert.equal(r.data.status, "reached");
+});
+
 // #296 — the seed is installed work in sheet scope. Found in live validation:
 // four × on a plumbing plan with five drains, and the unmarked one was the
 // seed, correctly flagged as a miss by the estimator auditing the render.
