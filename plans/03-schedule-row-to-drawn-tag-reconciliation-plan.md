@@ -7,19 +7,28 @@ file:line or a report path so it can be checked.
 
 ## 0. The goal, stated exactly
 
-> Every place a tag is drawn on a plan — `VAV-1`, a valve mark, a grille mark,
-> a pump mark — traces back to exactly one schedule row, or is disclosed as a
-> tag the schedule does not answer for. Enterprise production ready: the same
-> answer from the UI, the agent, and MCP; measured on documents the code has
-> never seen; refusal-honest; bounded time.
+> Two directions, one ledger, text only.
+>
+> **Tag → row.** Every place a tag is drawn on a plan — `VAV-1`, a valve mark,
+> a grille mark, a pump mark — traces back to exactly one schedule row, or is
+> disclosed as a tag the schedule does not answer for.
+>
+> **Row → tag.** Every schedule row lists every place its tag is drawn, or is
+> disclosed as a row the plans never draw.
+>
+> Enterprise production ready: the same answer from the UI, the agent, and MCP;
+> measured on documents the code has never seen; refusal-honest; bounded time.
 
-**Explicit non-goals for this plan.** Symbol counting is *not* the deliverable.
-Whole-sheet fingerprint sweeps for untagged glyphs, the legend-glyph inventory
-(`buildLegendTakeoff`), the reference-shape library (`match_reference_symbol`),
-and the RT-DETR track (`plans/01-…`) stay out of scope. Geometry is used here
-for one thing only: grading the evidence behind a tag occurrence (is there a
-drawn body attached to this text?). The unit of work is the **tag occurrence**,
-not the symbol.
+**Explicit non-goals for this plan — no geometry, none.** Symbol counting,
+symbol matching, fingerprint sweeps, tag-to-body attachment, evidence grading,
+the legend-glyph inventory (`buildLegendTakeoff`), the reference-shape library
+(`match_reference_symbol`), and the RT-DETR track (`plans/01-…`) are all out of
+scope. This plan does not call, extend, or depend on `symbolsweep.ts` matching,
+`taggedVectorGrounding.ts`, or the geometric lane inside `sweepScheduleRow`.
+The unit of work is the **drawn tag text occurrence** and the **schedule row**.
+The ledger reports a *drawn count* per row as a text fact; whether that count
+is a releasable installed quantity is the existing geometry lane's question and
+stays exactly where it is, untouched.
 
 ---
 
@@ -37,7 +46,7 @@ The row↔tag machinery lives in these places:
 | Schedule tables, rows, row keys, sheet roles | `web/src/lib/sheetgraph.ts` (`buildSheetGraph`, `rowKeyAnswersFor` :4098, `classifySheetRole` :306) | 11,540 lines |
 | Row lookup for a tag (identity column, alias, accessory-row narrowing, shadow extracts, drawing-group scope) | inline inside `Session.sweepScheduleRow`, `mcp/src/session.ts:3677–~4000` | ~320 lines, not a callable function |
 | Where a tag is drawn on a sheet | `Session.tagOccurrencesOnSheet` :3522 + six recovery helpers in `web/src/lib/symbolsweep.ts` (`compoundTagOcc` :2883, `splitHyphenTagOcc` :2914, `fragmentedTagOcc` :2974, `familyQuorumFragmentedTagOcc` :3019, `deepHyphenChainTagOcc` :3125, `familySuffixTagOcc` :3186) | |
-| Tag text ↔ drawn body attachment (evidence grade) | `web/src/lib/taggedVectorGrounding.ts`, `web/src/lib/symbollabels.ts` (`labelTokens` :398, `labelPlacements` :896) | |
+| Tag text ↔ drawn body attachment (evidence grade) — **out of scope here, listed for orientation only** | `web/src/lib/taggedVectorGrounding.ts`, `web/src/lib/symbollabels.ts` (`labelTokens` :398, `labelPlacements` :896) | |
 | Row-driven sweep of one tag across the set | `Session.sweepScheduleRow` :3639–5450 | **1,811 lines in one method** |
 | Value-annotated census (`S1` over `200`) | `Session.countMarks` :2514 | |
 | Whole-set row walk (scored pipeline) | `mcp/src/takeoff.ts` `buildPlanSetTakeoff` :342 | |
@@ -128,10 +137,11 @@ call an MCP endpoint from `localStorage` or `/__ot/*` on the Vite dev server
 (`vite.corpusTakeoffApi.js:567 configureServer`). The Netlify static build has
 neither; the UI then returns "Production … unavailable" (`TakeoffCanvas.jsx:8629`, `:8705`).
 On the 75-sheet NAVFAC set an exhaustive one-row sweep ran past ten minutes and
-was killed; the tagged-only lane matched in 184 ms (`PROGRESS.md`, 2026-09-13).
-Production reconcile therefore runs `verifyTaggedGeometry: true` + tagged-only,
-which is the right trade for this goal (text occurrences drive; geometry only
-grades) but has never been budgeted for a full set end to end through the UI.
+was killed (`PROGRESS.md`, 2026-09-13) — that cost is geometry, not text. The
+text-only work (find every tag occurrence, resolve each to a row) has never been
+timed on its own because it has never existed as a separable step; it is wired
+inside the geometric sweep. It has also never been budgeted for a full set end
+to end through the UI.
 
 ### 1.3 Smaller findings worth carrying into the plan
 
@@ -150,10 +160,11 @@ grades) but has never been budgeted for a full set end to end through the UI.
   match with `text_counted: true` (`session.ts:5057–5147`), only when
   `verifyTaggedGeometry` is false. Reconcile and the scored pipeline pass `true`,
   MCP `sweep_schedule_row` defaults to `false`. Same tool, two answers by caller.
-- **Evidence grading is sound and should be kept.** `tag_text_only` and
-  `mixed_geometry_and_tag_text` reconcile to `AMBIGUOUS`; only
-  `symbol_geometry`/`tag_attached_vector`/`explicit_installation_note` release an
-  installed quantity (`schedulePlanReconcile.mjs:167–170`, `takeoff.ts:539–545`).
+- **Evidence grading is a separate lane and is not touched.** `tag_text_only`
+  reconciles to `AMBIGUOUS` for installed quantity; only geometry or an explicit
+  note releases one (`schedulePlanReconcile.mjs:167–170`, `takeoff.ts:539–545`).
+  This plan leaves that doctrine and that code alone. The ledger's `drawn_count`
+  is a new, separate column; it never feeds `installed_qty`.
 - **Redundant-view dedup is real and load-bearing** (`dedupeCrossDisciplineRoomViews`,
   `dedupeAlignedSameSheetViews`; 25 tests). The 09-07 over-counts on itd-d1-lab
   (`TP-2` 12→23, `TD-1` 2→8, `US-1` 1→7) are plumbing fixtures redrawn across
@@ -166,19 +177,21 @@ grades) but has never been budgeted for a full set end to end through the UI.
 
 ## 2. Definition of done
 
-A tag occurrence ledger exists for every loaded set and, on a held-out document
-never used to fix anything, all of the following measure true:
+A tag ledger exists for every loaded set and, on a held-out document never
+used to fix anything, all of the following measure true. D1–D3 are the
+tag → row direction; D4 is row → tag; the rest are production properties.
 
 | # | Criterion | Measured by |
 |---|---|---|
 | D1 | Every tag-shaped text occurrence on every sheet appears in the ledger exactly once with sheet, bbox, text as drawn, rotation, and `recovered_via` | ledger-eval occurrence recall/precision vs Phase 0 keys |
 | D2 | Every occurrence carries one class: `ROW_LABEL`, `PLAN_INSTANCE`, `NOTE_MENTION`, `LEGEND_ENTRY`, `DETAIL_CALLOUT`, `TITLE_BLOCK`, `UNCLASSIFIED` | class accuracy vs keys |
 | D3 | Every `PLAN_INSTANCE` resolves to exactly one row (`row_id`, cell citation) or to `UNSCHEDULED` / `AMBIGUOUS(candidates)` — never silently dropped | row-resolution accuracy vs keys; zero occurrences absent from output |
-| D4 | Every schedule row lists its instances; rows with none are `SCHEDULE_ONLY`; `PLAN_ONLY` is populated from orphans | reconcile-eval |
+| D4 | Every schedule row lists every occurrence that resolved to it (`instances[]`, `drawn_count`, per-sheet breakdown); rows with none are `SCHEDULE_ONLY`; `PLAN_ONLY` rows are minted from `UNSCHEDULED` occurrences | row→tag recall/precision vs keys (inverse of D3, checked independently) |
 | D5 | One grammar, one occurrence finder, one row resolver — used by MCP, UI, agent, compile, reconcile | parity tests; grep shows one implementation |
 | D6 | No filename, sheet number, tag literal, or corpus id in production logic | review + held-out gate |
-| D7 | Whole-set ledger for a 75-sheet set completes inside a stated budget through the deployed UI | timed run, Playwright |
+| D7 | Whole-set ledger for a 75-sheet set completes inside a stated budget through the deployed UI, with no geometry call on the path | timed run, Playwright, call-graph assertion |
 | D8 | Sheets skipped for role are disclosed with the count of tag-shaped text they carry | ledger `skipped[]` |
+| D9 | `drawn_count` is never written into `installed_qty`, `quantity`, or any EA total | unit test on the reconcile/compile producers |
 
 ---
 
@@ -207,11 +220,12 @@ Record both tagged-only and full-sweep numbers side by side. Stage `bulk/`
 **0.2 Author the occurrence-level key.** New key type `keys/<set>.tagocc.csv`:
 
 ```
-sheet,page,text_as_drawn,x0,y0,x1,y1,rot,class,row_table,row_key,evidence,note
+sheet,page,text_as_drawn,x0,y0,x1,y1,rot,class,row_table,row_key,note
 ```
 - `class` ∈ ROW_LABEL | PLAN_INSTANCE | NOTE_MENTION | LEGEND_ENTRY | DETAIL_CALLOUT | TITLE_BLOCK | OTHER
 - `row_table`/`row_key` filled for ROW_LABEL and PLAN_INSTANCE; `UNSCHEDULED` when the plan draws a tag no schedule lists
-- `evidence` ∈ body_adjacent | leader | bubble | bare_text | unknown (what a human sees, not what the pipeline says)
+- No geometry column. What a human reads off the render is the tag text, its position, what kind of text it is, and which row it names. Nothing about bodies, leaders, or bubbles.
+- The same key yields the row → tag truth by inversion: for every `row_table`/`row_key`, the set of occurrences that name it.
 - Authored **from renders** (`mcp/scripts/render-page-hires.mjs`), scope written
   before any pipeline output is looked at, never edited to pass. Same discipline
   as `keys/HELDOUT.txt`.
@@ -233,13 +247,17 @@ schedule sheets for ROW_LABEL occurrences only.
 
 **0.3 Build the ruler.** `mcp/scripts/tag-ledger-eval.mjs`: bbox-IoU match
 (≥0.5) between key occurrences and pipeline occurrences; report per set and per
-class: recall, precision, class accuracy, row-resolution accuracy, and a binned
-miss list (`missed-occurrence`, `wrong-class`, `wrong-row`, `unresolved-should-resolve`,
-`phantom`). Deliberately dumb; never tuned to a score. Until Phase 3 exists,
-the "pipeline occurrences" are assembled from `sweepScheduleRow` per row
-(`tag_citations` + `text_only` + `excluded`) and `countMarks`; a
-`--producer` flag selects the source so Phase 3's ledger can be compared to
-the row-driven baseline on identical keys.
+class, in both directions:
+- tag → row: occurrence recall, precision, class accuracy, row-resolution accuracy;
+- row → tag: for every key row, the pipeline's `instances[]` vs the key's inverted set (recall, precision, `drawn_count` exact);
+- binned misses (`missed-occurrence`, `wrong-class`, `wrong-row`, `unresolved-should-resolve`, `phantom`, `row-missing-instances`, `row-extra-instances`).
+
+Deliberately dumb; never tuned to a score. Until Phase 3 exists, the baseline
+"pipeline occurrences" are the text facts the current code already computes
+before any geometry runs: `Session.tagOccurrencesOnSheet` for every row key on
+every sheet plus the inline row lookup at `session.ts:3677`, exposed through a
+small read-only script (no matching, no fingerprints). A `--producer` flag
+selects the source so Phase 3's ledger is compared on identical keys.
 
 **0.4 Measure the hypotheses.** Each gets a number and a one-line verdict in
 `opentakeoff-corpus/TAG_LEDGER_BASELINE.md`:
@@ -255,10 +273,12 @@ the row-driven baseline on identical keys.
 | H7 | Note mentions and legend entries leak into counts | wrong-class bin PLAN_INSTANCE←NOTE/LEGEND |
 | H8 | Row lookup disagrees across the three copies | for every key PLAN_INSTANCE, compare `sweepScheduleRow` row vs `uniqueFamily` row vs `reconcileScheduleFamilyFromGraph` row |
 
-**0.5 Cost baseline.** Time `reconcile_schedule_plan` (tagged-only,
-`verifyTaggedGeometry`) end to end on navfac via `production-graph-cli.mjs`
-and via the UI (`run-ui-takeoff-n5.mjs`); record wall time, peak RSS, and
-whether the deployed static build can run it at all.
+**0.5 Cost baseline.** Time the text-only work in isolation on navfac
+(75 sheets): occurrence enumeration for every row key on every sheet, plus row
+lookup for every occurrence, via the 0.3 script. Record wall time and peak RSS
+post-index. Separately record whether the deployed static build can reach the
+Session path at all. Do not time the geometric sweep; it is not on this plan's
+path.
 
 **Gate 0.** Keys for ≥9 sets committed; ruler committed with its own unit tests;
 baseline table filled; each hypothesis has a verdict (confirmed / refuted /
@@ -278,7 +298,7 @@ and the UI.
   `recovered_via` (exact | compound | authored_count | split_hyphen | fragmented
   | deep_chain | family_suffix | stacked | rotated). Precision guards stay
   (token boundary, short-mark overcount, sheet-number suffix).
-- Rotated runs: rotate the fragment-chain geometry by the span's own `rot`.
+- Rotated runs: rotate the fragment-chain text-box positions by the span's own `rot`.
 - Stacked `VAV` over `1` handled by `stackedEquipmentTagTokens`, moved here.
 - Every hit records the vocabulary check from `spanAnswersFor` (shared bare
   marks stay unresolved with candidates).
@@ -318,19 +338,29 @@ Shared `buildTagLedger(session, graph)` on the Session path, then MCP
   the same baseline) → NOTE_MENTION; else PLAN_INSTANCE.
 - Resolve each PLAN_INSTANCE with Phase 2; orphans → `UNSCHEDULED`; shared bare
   marks → `AMBIGUOUS` with candidates.
-- Evidence grade per occurrence from the existing bounded tagged-geometry
-  verifier (`groundExactTagsToVectorGeometry`) — text-only stays `AMBIGUOUS`
-  for installed quantity exactly as today. **No whole-sheet symbol sweep.**
+- **No geometry on this path.** No fingerprint, no body attachment, no
+  luminance, no `symbolsweep` matching call. A call-graph test asserts it.
 - Cross-view dedup (`dedupeCrossDisciplineRoomViews`, `dedupeAlignedSameSheetViews`)
-  becomes an occurrence attribute (`redundant_view_of`), never a deletion.
-- Reconcile consumes the ledger: `PLAN_ONLY` from `UNSCHEDULED`; per-row
-  `instances[]`; `sweep_schedule_row` becomes a filtered view of the ledger
-  for one row plus its optional exhaustive geometry audit.
+  is text-and-position logic already; it becomes an occurrence attribute
+  (`redundant_view_of`), never a deletion, so `drawn_count` and
+  `distinct_count` are both reported.
+- Row → tag: every row gets `instances[]` (sheet, bbox, text as drawn,
+  `recovered_via`, `redundant_view_of`), `drawn_count`, `distinct_count`, and a
+  per-sheet breakdown; rows with none are `SCHEDULE_ONLY` with the sheets that
+  were searched named.
+- Reconcile consumes the ledger for the text columns: `PLAN_ONLY` from
+  `UNSCHEDULED`; `tagged_plan_qty` and `plan_tag_cites` from `instances[]`.
+  `installed_qty` and the geometry cites keep coming from where they come from
+  today; this plan does not route around or into that lane.
+- `sweep_schedule_row`'s own row lookup and occurrence discovery become calls
+  into the Phase 1–2 modules; its geometric matching is left as is.
 - Disclosure: `skipped_sheets[{sheet, role, tag_shaped_text_count}]` so a
   skipped `M2.01` with 40 tag-shaped runs is loud.
 
-Gate 3: D1–D5 measured on the keyed sets; agent "complete takeoff" and UI
-Takeoff panel show the ledger; export carries occurrence rows with citations.
+Gate 3: D1–D5 and D9 measured on the keyed sets; agent "complete takeoff" and
+UI Takeoff panel show both directions (a tag list that opens its row, a row
+list that opens its drawn instances); export carries occurrence rows and
+per-row instance rows with citations.
 
 ### Phase 4 — Sheet coverage and role hardening
 
@@ -349,9 +379,9 @@ keyed sets and the held-out documents.
   service behind the same MCP contract, or the Session engine in a worker. The
   Vite bridge stays dev-only. Documented in `docs/DEPLOYMENT.md`.
 - Budget: full-set ledger on the 75-sheet navfac set within a stated wall time
-  (target under 60 s post-index, from Phase 0.5 numbers); occurrence cache per
-  sheet (`tagOccurrenceCache` already exists, :3520) persisted with the graph
-  cache; deterministic output.
+  (target under 30 s post-index — text only, from Phase 0.5 numbers);
+  occurrence cache per sheet (`tagOccurrenceCache` already exists, :3520)
+  persisted with the graph cache; deterministic output.
 - Playwright: real document, "reconcile everything", DOM + export equal to CLI.
 
 Gate 5: D7 timed and green in the deployed build.
@@ -371,8 +401,12 @@ handle (GOAL.md §8 redundancy criterion), with D1–D8 measured true.
   or corpus id in production logic.
 - Keys are read-only once authored; a wrong key is corrected with a rendered
   proof and a changelog line, never edited to pass.
-- Never promote text to installed quantity. Text proves a tag was printed;
-  geometry or an explicit note proves a thing was installed.
+- The ledger reports drawn counts, never installed quantity. Text proves a tag
+  was printed and which row it names; nothing in this plan claims more, and
+  nothing in this plan changes how installed quantity is decided.
+- No geometry on the ledger path. If a classification or resolution question
+  seems to need a drawn body to answer, it is disclosed as `UNCLASSIFIED` or
+  `AMBIGUOUS`, not solved with a sweep.
 - Shared path for anything that decides "which row / how many / where"
   (`AGENTS.md`). Surface-specific only for chrome.
 - Every miss is either fixed or disclosed by name in the output. Silence is a
@@ -387,8 +421,9 @@ handle (GOAL.md §8 redundancy criterion), with D1–D8 measured true.
 - **`bulk/` is unbacked and absent here.** Phase 0.1 must stage it; if egress
   fails, Phase 0 keys still cover the seven in-repo sets and the plan proceeds
   with a smaller held-out tier, stated as such.
-- **`sweepScheduleRow` is 1,811 lines.** Phases 1–2 extract from it; the
-  exhaustive geometry lane inside it is not rewritten by this plan.
+- **`sweepScheduleRow` is 1,811 lines.** Phases 1–2 extract its text parts
+  (row lookup, occurrence discovery) into shared modules and call back into
+  them; every geometric line in it is left exactly where it is.
 - **Classification of NOTE_MENTION vs PLAN_INSTANCE** is the likely hardest
   precision problem once recall rises; Phase 0's wrong-class bin sizes it
   before we commit to a method.
