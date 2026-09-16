@@ -57,7 +57,9 @@ export function remapKey(key, shaToName) {
 /** Keys the graph carries under these names, at any depth. Walking by KEY NAME
  *  rather than rewriting every string that merely looks like one keeps room
  *  numbers, cell text and titles untouched. */
-const KEY_FIELDS = new Set(["sheet", "key", "sheet_id", "sheet_key"]);
+// prefer_schedule_sheet: corpusTakeoff.mjs copies item.sheet_id into it for
+// every valve-compile plan_paint target, so it is a spooled key like the rest.
+const KEY_FIELDS = new Set(["sheet", "key", "sheet_id", "sheet_key", "prefer_schedule_sheet"]);
 
 /** Deep, in-place remap of every sheet key in a freshly parsed graph.
  *  Returns the same object. Cycles are tolerated. */
