@@ -3560,6 +3560,22 @@ export class Session {
     return occurrences;
   }
 
+  /** Read-only, text-only access to the production tag-occurrence ladder
+   * above, for the tag-reconciliation ledger's baseline/eval tooling
+   * (plans/03-schedule-row-to-drawn-tag-reconciliation-plan.md Phase 0/1).
+   * Calls the SAME private method every geometric caller uses — no
+   * duplicated logic, no geometry: tagOccurrencesOnSheet never reads
+   * `sh.segs`, only `sh.spans`. Exists so ledger tooling can measure "where
+   * is this key's text drawn" without going through sweepScheduleRow's own
+   * geometric fingerprint/verification lane, which this plan explicitly
+   * does not depend on. */
+  tagOccurrencesForKey(sheetKey: string, key: string, allowFamilyQuorum = false): TagOcc[] {
+    const sh = this.sheet(sheetKey);
+    if (!sh.spans) sh.spans = textSpans(sh.page);
+    const canonKey = key.trim().toUpperCase().replace(/\s+/g, "");
+    return this.tagOccurrencesOnSheet(sh, canonKey, allowFamilyQuorum);
+  }
+
   /** Room attribution is sheet-intrinsic. Multi-view deduplication runs after
    * every row sweep, but the room index does not change between rows. */
   private roomTagCache = new Map<string, ReturnType<typeof roomTags>>();
