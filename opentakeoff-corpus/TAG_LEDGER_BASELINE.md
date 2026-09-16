@@ -6,6 +6,16 @@ records what Phase 0 has actually measured so far, session by session. It is
 **not complete** — see "What remains" at the bottom before treating any
 number here as a closed gate.
 
+**Read this first: the single highest-severity finding of this session is
+in "federal-mech — sheet-role misclassification breaks `sweep_schedule_row`
+almost completely," below.** On this real, VAV-heavy federal building
+document, 3 of the first 5 sheets — including the two carrying the
+building's entire ground-floor VAV/diffuser population (58+ distinct
+tags) — are misclassified away from `role: "plan"`, and `sweep_schedule_row`
+hard-refuses to search any sheet that isn't. This is not a hypothetical:
+it is quantified directly against the production code path this whole
+plan exists to harden.
+
 ## Environment notes (affects every number below)
 
 - Node pinned at `web/.nvmrc`/`mcp` = 24; this environment shipped Node 22, so
@@ -333,13 +343,138 @@ split-system families) — deliberately out of this key's scope, which
 targeted the control-valve/BAS-relevant families per this plan's stated
 product goal rather than exhaustive per-document coverage.
 
+## federal-mech — sheet-role misclassification breaks `sweep_schedule_row` almost completely
+
+No ground-truth key written yet for this 24-page set (VAV/AHU-heavy, per
+`sets.json`); what follows came from building its sheet graph and reading
+its first 5 pages against their assigned roles, which surfaced a defect
+severe enough to write up on its own before any row-level key-authoring.
+
+**The mechanism, precisely.** `sweep_schedule_row` — the production tool
+that grounds a schedule row's tag on the drawing, the exact capability
+this whole plan exists to harden — has a hard, documented gate
+(`mcp/src/session.ts:3639`, the tool's own contract comment): *"The tag
+must be DRAWN on at least one plan-role sheet... a fingerprint is NEVER
+guessed from text alone — refused."* Both the row-grounding path
+(`session.ts:4003-4009`) and the census/count path (`session.ts:2547-2561`,
+which throws outright if zero plan-role sheets exist) build their search
+space by filtering `graph.sheets` to `role === "plan"`, strictly. A sheet
+classified anything else — `legend`, `schedule`, `detail`, `unknown` — is
+never searched for a drawn tag occurrence by either path, no matter what
+is actually drawn on it.
+
+**What's actually on the first 5 pages of federal-mech**, read directly off
+the rendered PDF and cross-checked against each sheet's own title-block
+"DRAWING TITLE" field:
+
+| page | real drawing title (title block) | real content | assigned role | confidence |
+|---|---|---|---|---|
+| 1 | MECHANICAL ABBREVIATIONS AND SYMBOLS | a pure legend/abbreviations/general-notes sheet, zero to-scale plan content | `plan` | 0.85 |
+| 2 | HVAC ZONE LEGEND | a real to-scale ground-floor plan with **58 distinct `VAV-N` tags** drawn inline, plus a hatch-pattern-to-zone legend key at the bottom | `legend` | 0.5 |
+| 3 | GROUND FLOOR AIR TERMINALS | a real to-scale plan, densely tagged with diffuser/register/grille families (`S1-1..S4-1`, `R1-1..R3-3`, `E1-1..E3-3`) and CFM values | `detail` | 0.6 |
+| 4 | GROUND FLOOR DUCT PLAN | a real to-scale duct plan with `VAV-1..VAV-56`+ redrawn (a second, legitimate cross-view instance of the page-2 VAVs — the same H6 pattern itd-d1-lab's `HC` family showed), plus 3 small Room Schedule tables in one corner | `schedule` | 0.85 |
+| 5 | ROOF PLAN | roof-mounted equipment (`EF`, `CU`, `ALP`) | `plan` | 0.85 |
+
+Only page 5 is classified correctly. Pages 2, 3, and 4 — the three pages
+that carry essentially the entire ground-floor VAV and air-terminal
+population of the building — are all misclassified away from `plan`.
+
+**Root cause, read directly from each sheet's stored classifier evidence**
+(`graph.sheets[i].evidence`, the exact text span the classifier used to
+decide role):
+
+- **Pages #3 and #4 (the clear bugs):** the classifier's evidence is not
+  the sheet's own title block at all. Page #3's evidence is `"GRID. SEE
+  ARCHITECTURAL PLANS AND DETAILS."` — a fragment of a generic sheet note
+  ("AIR TERMINALS LOCATED IN AREAS WITH ACOUSTICAL CEILING TILES SHALL BE
+  COORDINATED WITH THE CEILING GRID. SEE ARCHITECTURAL PLANS AND
+  DETAILS.") that happens to contain the word "DETAILS," picked over the
+  sheet's own prominent, unambiguous title-block text "GROUND FLOOR AIR
+  TERMINALS." Page #4's evidence is literally `"Room Schedule"` — the
+  heading of one of three small schedule tables tucked in a page corner,
+  picked over the sheet's own title-block text "GROUND FLOOR DUCT PLAN."
+  In both cases the correct signal is present, readable, and ignored; an
+  incidental keyword match elsewhere on the page wins instead. This is a
+  fixable classifier bug: the sheet's own title-block "DRAWING TITLE"
+  field should be authoritative over any in-body note or embedded table
+  text.
+- **Page #2 (a genuine ambiguity, not simply a bug):** its own title block
+  really does say "HVAC ZONE LEGEND" — the classifier read the sheet's own
+  stated purpose correctly. The defect here is that a real, to-scale,
+  heavily tagged (58 `VAV-N` marks) floor plan can be *authored* under a
+  title that says "legend," and a role scheme with exactly one "this
+  sheet is searchable for drawn tags" bit per sheet cannot represent
+  "this sheet is titled a legend and is also a real plan" at all. Fixing
+  pages #3/#4 (title-block priority) would not fix this one; it needs a
+  content-based signal (to-scale linework plus a high density of distinct
+  equipment-family tags) that can promote a sheet into the plan search
+  space regardless of its stated title.
+- **Page #1 (the same mechanism, opposite direction, low severity):** a
+  pure legend/symbols sheet is wrongly *included* as `plan` because its
+  evidence text, "MECHANICAL FLOOR PLAN SYMBOLS" (a section heading
+  meaning "the legend of symbols used on floor plans"), contains the
+  literal substring "FLOOR PLAN." This doesn't cause a missed tag — the
+  sheet has none to find — but it's the same underlying weakness
+  (keyword-in-evidence-text treated as equivalent to an authoritative
+  title) misfiring in the safe direction instead of the costly one.
+
+**Quantified, not just qualitative.** A direct script (not
+`sweep_schedule_row`, which won't touch these sheets at all, but
+`session.tagOccurrencesForKey` — the same text-search machinery
+`sweep_schedule_row` calls per-sheet once it has decided to search one)
+confirms the tags are perfectly findable *as text* on the misclassified
+sheets:
+
+```
+distinct VAV-N single-run spans on page #2: 58 (VAV-1 .. VAV-58)
+tagOccurrencesForKey(page #2 "legend", "VAV-36") -> 2 occurrences found
+tagOccurrencesForKey(page #4 "schedule", "VAV-36") -> 1 occurrence found
+(same result shape for VAV-1, VAV-58 — checked directly, not just VAV-36)
+```
+
+The text-occurrence ladder under audit elsewhere in this document has
+**no problem at all** with this document's tags. The failure is entirely
+upstream of it: `sweep_schedule_row`'s role gate would never offer page #2
+or page #4 to that ladder in the first place. For any `VAV-N` row on this
+document, the production tool's actual search space (pages classified
+`plan`: #1 [empty], #5, #6, #7 [not yet examined]) excludes the two pages
+carrying the real ground-floor population entirely — the tool would very
+likely refuse most `VAV-N` rows with "tag appears nowhere on the plans,"
+not because the tag isn't drawn, but because the sheet it's drawn on was
+never asked.
+
+**Why this is the standout finding of the session.** H1 (role
+misclassification) was already confirmed twice, on bessemer and
+itd-d1-lab — but both of those were low-content detail/legend sheets,
+where getting the role wrong costs little (a handful of tags, at most).
+This is the same defect class causing near-total data loss on a real,
+representative, VAV-heavy federal building document — precisely the
+"run a control valve takeoff and ground every tag on the drawing"
+scenario this plan's stated product goal is about. **Sheet-role hardening
+(this plan's own Phase 4) cannot be treated as lower-priority than Phase
+1/2/3's row-reconciliation logic** — on a document shaped like this one,
+a perfect occurrence ladder still produces near-total silence, because
+the sheets it would need to search are never handed to it. Concrete,
+evidence-backed acceptance criteria for Phase 4, from this finding alone:
+(1) a sheet's own title-block "DRAWING TITLE" field must be read and take
+priority over any other in-page text when classifying role; (2) a sheet
+whose title says "legend"/"schedule"/etc. but which contains substantial
+to-scale linework and a high density of distinct equipment-family tags
+must be detectable and included in the plan search space regardless of
+its stated title — title-block priority alone (fix 1) does not resolve
+this case.
+
+Not yet done for this set: a full `.tagocc.csv` ground-truth key (this
+finding was significant enough to write up and commit on its own first);
+pages #6–#24 unexamined.
+
 ## Hypothesis verdicts (H1–H9, from the audit)
 
 | # | Hypothesis | Verdict this session |
 |---|---|---|
-| H1 | Tags on unknown/misclassified-role sheets are never counted | **Confirmed, concretely, on two independent documents.** bessemer p2 is both misclassified *and* its table is never extracted at all; its entire device population is invisible for two independent reasons. itd-d1-lab sheet `#9` (a details sheet, "M4.1") is separately, freshly found misclassified `role=schedule` at 0.85 confidence — a second real document, same failure mode, strengthening this from a one-off to a repeatable classifier weakness. |
+| H1 | Tags on unknown/misclassified-role sheets are never counted | **Confirmed, concretely, on three independent documents — and on the third, catastrophically.** bessemer p2 is both misclassified *and* its table is never extracted at all. itd-d1-lab sheet `#9` (a details sheet, "M4.1") is separately misclassified `role=schedule` at 0.85 confidence. Both of those are low-content sheets, so the cost is small. **federal-mech is a different order of severity**: 3 of its first 5 sheets are misclassified, including the two carrying the building's entire 58+-tag ground-floor VAV/air-terminal population — see the dedicated section above for the full root cause (evidence-selection ignoring the sheet's own title block) and the quantified proof that `sweep_schedule_row`'s plan-role gate, not the text-search ladder, is what fails. This elevates H1 from "a repeatable classifier weakness" to "a weakness that can silence a real document's entire tag population," and makes sheet-role hardening (Phase 4) at least as urgent as this plan's row-reconciliation phases. |
 | H2 | Hyphen/space drawn-text variants are missed | Not yet measured — no variant-spelling case identified in bessemer, bldg5406, or the 9 families sampled on itd-d1-lab. All three ground-truth documents drew every occurrence checked as either a clean single-run tag or a structurally distinct (not mis-spelled) compound/stacked run. Not falsified, simply not yet observed. |
-| H3 | First-non-empty ladder drops mixed split/whole tags on one sheet | Not yet measured directly |
+| H3 | First-non-empty ladder drops mixed split/whole tags on one sheet | **Confirmed by direct code inspection** (`mcp/src/session.ts:3522-3561`, `tagOccurrencesOnSheet`). The method's structure is unambiguous: `exact` + `compoundTagOcc` + `countPrefixedScheduleTagOccurrences` are merged and deduped into `dedupedMerged`; if `dedupedMerged.length` is nonzero, **that is returned immediately** — `splitHyphenTagOcc`, `fragmentedTagOcc`/`familyQuorumFragmentedTagOcc`, `deepHyphenChainTagOcc`, and `familySuffixTagOcc` are never even called. The fallback chain only runs at all when the merged-exact tier finds *nothing*. Concretely: if a sheet has one real exact `VAV-1` instance (satisfying `dedupedMerged`) *and* a second, genuinely different `VAV-1` instance that only exists in fragmented/split form elsewhere on the same sheet, the second instance is silently dropped — not merged, not attempted, not disclosed. No concrete real-document occurrence of this exact mixed pattern was found in any of the 3 keys grounded this session (bessemer, bldg5406, itd-d1-lab all checked: no sheet has both an exact/compound instance and an out-of-reach fragmented instance of the *same* key) — checked directly against itd-d1-lab's raw plan-page spans as part of this verification. So this is a real, live architectural defect confirmed by code, not yet observed causing an actual miscount on a real document; whether it fires depends on finding a sheet where one instance of a tag is drawn normally and another instance of the *same* tag is drawn split/fragmented elsewhere on that same sheet, which none of this session's 3 documents happen to contain. |
 | H4 | Rotated tags are missed | **Partially refuted, incidentally** — rotated (90°) tag+value runs (`"CDB 290"`, `"RRA 495"`) are found correctly by `compoundTagOcc` on bldg5406; rotation itself was not the obstacle in any case examined this session. Not a full test of H4 (no case of a *missed* rotated tag was found) but the cases seen all resolved correctly. |
 | H5 | Orphan tags (no schedule row) are invisible to row-driven tools | **Confirmed by construction, twice.** Inherent to every row-driven tool audited, and freshly re-confirmed concretely on itd-d1-lab: `HEV-1..4` are drawn on sheet `#4` and appear in zero schedule tables anywhere in the document (checked via a full 29-sheet span scan), and the ruler correctly reports exactly these 4 as the only misses, with the right explanation attached. |
 | H6 | itd-d1-lab over-counts are cross-view redraws | **Tested cleanly, not confirmed as a defect.** `HC-1` through `HC-9` are each genuinely, legitimately drawn on two different sheets (the ductwork plan `#3` and the hydronic plan `#5`) — 9 rows × 2 real sheets = 18 instances, the largest H6 fixture found this session. The ladder recovers the correct count (2) for all 9, with zero double-counting and zero dropped occurrences. The originally-hypothesized over-count does not reproduce on this family; H6 as posed is not confirmed here (may still apply to families not sampled in this key). |
@@ -393,8 +528,10 @@ running at time of writing (see "What remains").
   them are reported as real.
 - `mcp/test:shared-path` full run had not finished at time of writing.
 - `web/test/tableRecallGaps.test.ts` B-11/B-12 regression — flagged as a
-  separate task, not fixed here (out of this plan's scope); the
-  `spawn_task` call itself timed out under load and should be retried.
+  separate task, not fixed here (out of this plan's scope). Successfully
+  filed as `task_7b49dcf0` ("Fix sheetgraph.ts table-claiming regression
+  (B-11, B-12)") after an earlier `spawn_task` attempt timed out under
+  load.
 - **Operational lesson for future sessions on this repo**: do not run
   ground-truth authoring concurrently with corpus-eval or heavy test
   suites. `opentakeoff-corpus/GOAL.md` already says not to run two heavy

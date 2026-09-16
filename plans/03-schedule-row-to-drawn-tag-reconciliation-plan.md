@@ -424,8 +424,41 @@ plans, and roof/site plans; keep demolition excluded but disclosed with counts;
 handle match-line continuations as one plan. Structure first, regex confirms
 (GOAL.md rule 1).
 
+**Not lower-priority than it looks.** Phase 0's federal-mech finding
+(`opentakeoff-corpus/TAG_LEDGER_BASELINE.md`) quantified this on a real
+document: 3 of the first 5 sheets misclassified away from `role: "plan"`,
+including the two carrying the building's entire 58+-tag ground-floor VAV
+population, confirmed by direct `tagOccurrencesForKey` calls to be
+perfectly text-findable on those sheets — the occurrence ladder is not the
+bottleneck, `sweep_schedule_row`'s plan-role gate (`session.ts:3639`,
+`session.ts:4003-4009`) is. A flawless Phase 1–3 occurrence/row engine
+still produces near-total silence on a document shaped like this one. Two
+concrete, evidence-backed requirements from that finding, not just the
+general hardening above:
+
+1. **Title-block priority.** Two of the three federal-mech
+   misclassifications (`role=detail` evidence `"GRID. SEE ARCHITECTURAL
+   PLANS AND DETAILS."`; `role=schedule` evidence `"Room Schedule"`) picked
+   an incidental in-body keyword match over the sheet's own prominent,
+   unambiguous title-block "DRAWING TITLE" text ("GROUND FLOOR AIR
+   TERMINALS", "GROUND FLOOR DUCT PLAN"). The title-block field must be
+   read and take priority over any other in-page text when present and
+   legible.
+2. **Content-based promotion, independent of stated title.** The third
+   misclassification is a genuine ambiguity title-block priority alone
+   cannot fix: a real, to-scale, 58-VAV-tag floor plan whose own title
+   block reads "HVAC ZONE LEGEND" (it also carries a hatch-legend key).
+   A sheet whose title says legend/schedule/other but which has
+   substantial to-scale linework plus a high density of distinct
+   equipment-family tags must be detectable and promoted into the
+   plan search space regardless of its stated title.
+
 Gate 4: zero key PLAN_INSTANCE occurrences on sheets the graph skips, across
-keyed sets and the held-out documents.
+keyed sets and the held-out documents. Add federal-mech's page `#2`
+(58 `VAV-N` tags, title "HVAC ZONE LEGEND") and page `#4` (title "GROUND
+FLOOR DUCT PLAN") as named regression fixtures for this gate specifically —
+both must classify `role: "plan"` (or otherwise enter the search space) once
+this phase is done.
 
 ### Phase 5 — Production reachability and budget (parallel with 3–4)
 
