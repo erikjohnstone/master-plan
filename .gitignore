@@ -15,6 +15,12 @@ opentakeoff-corpus/raw/
 # the exact trap the corpus's own read-only-keys rule assumes can't happen.
 opentakeoff-corpus/takeoffs/**/runs/
 opentakeoff-corpus/bulk/
+# The real source of opentakeoff-corpus/bulk/'s two symlink targets: the
+# repo's own GitHub releases "corpus" and "corpus_2" (HVAC_BAS_Plan_Sets.zip,
+# HVAC_BAS_Plan_Sets_Vol2.zip — 1.7GB extracted), downloaded from
+# browser_download_url and unzipped here rather than from a laptop path that
+# doesn't exist off that one machine.
+opentakeoff-corpus/bulk-download/
 opentakeoff/mcp/scripts/_tmp_*/
 
 # The 30-document HVAC/BAS benchmark lives on its own branch as Git LFS

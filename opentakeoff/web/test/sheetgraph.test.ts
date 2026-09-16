@@ -226,6 +226,88 @@ test("sheet roles: an ENLARGED/PARTIAL qualifier between the level number and PL
   assert.notEqual(other.role, "plan", "an unrelated qualifier word must not classify as plan via this widened pattern");
 });
 
+test("sheet roles: DUCT (not just DUCTWORK) adjacent to PLAN classifies plan (federal-mech's own real sheet #4)", () => {
+  // Real, measured regression (2026-09-16, federal-attachment4-mechanical.pdf
+  // sheet #4, title "GROUND FLOOR DUCT PLAN"): a real, dense VAV floor plan
+  // (58+ VAV-N instances) classified role "schedule" (evidence "Room
+  // Schedule", a small embedded table, not this sheet's own title) because
+  // only the longer "DUCTWORK" was in the discipline-word list — "DUCT," at
+  // least as common a short form in AEC titles, was missing. Confirmed
+  // corpus-wide via tag-ledger-eval: 0% tag->row recall on this sheet's VAV
+  // family before this fix (keys/federal-mech.tagocc.csv).
+  const duct = classifySheetRole({ key: "a", sheet_number: "M2.3", spans: [sp("GROUND FLOOR DUCT PLAN", 100, 700)] });
+  assert.equal(duct.role, "plan");
+  assert.ok(duct.confidence >= 0.8);
+  // the same document's own sheet #6, "GROUND FLOOR HVAC PIPING PLAN",
+  // already matched correctly via "PIPING" -- proving the two real titles
+  // differ by exactly this one word, not a broader gap
+  const piping = classifySheetRole({ key: "b", sheet_number: "M3.1", spans: [sp("GROUND FLOOR HVAC PIPING PLAN", 100, 700)] });
+  assert.equal(piping.role, "plan");
+  // the file's own documented false positive, sheet #1's "MECHANICAL FLOOR
+  // PLAN SYMBOLS" (a legend, matches via the unrelated "FLOOR PLAN"
+  // alternative) -- this widening must not change its outcome
+  const legend = classifySheetRole({ key: "c", sheet_number: "M0.1", spans: [sp("MECHANICAL FLOOR PLAN SYMBOLS", 100, 700)] });
+  assert.equal(legend.role, "plan", "pre-existing false positive, unchanged by this fix -- not something this test is fixing");
+  // a bare "DUCT" with no "PLAN" adjacent must still correctly fail
+  const bareDuct = classifySheetRole({ key: "d", sheet_number: "M2.9", spans: [sp("DUCT DETAIL", 100, 700)] });
+  assert.notEqual(bareDuct.role, "plan", "DUCT with no adjacent PLAN must not classify as plan via this pattern");
+});
+
+test("sheet roles: a bare 'Room Schedule' caption never outranks the sheet's own real PLAN title (federal-mech's own real sheet #4, full collision)", () => {
+  // This is the ACTUAL real-sheet scenario the DUCT fix above measures in
+  // isolation: sheet #4 carries the "GROUND FLOOR DUCT PLAN" title AND
+  // three small "Room Schedule" utility-table captions (room-number-to-
+  // name lookups, one per side-by-side table) in the SAME span list. Before
+  // the DUCT fix, "Room Schedule" (SCHEDULE_TITLE_RE, 0.85) was the only
+  // hit at all -- role "schedule". After ONLY the DUCT fix (proven by a
+  // real, isolated corpus-wide re-run, not assumed safe), the two 0.85
+  // hits TIE, and the tie-break (first in document order) still kept
+  // "schedule" -- confirmed still 0% tag->row recall on this sheet's VAV
+  // family even with the DUCT fix alone. The `ROOM SCHEDULE` exclusion
+  // above is what actually resolves this: "Room Schedule" drops to the
+  // bare `SCHEDULE` signal (0.5), which loses outright (no tie) to the
+  // real "...PLAN" title (0.85).
+  const real = classifySheetRole({
+    key: "e", sheet_number: "M2.3",
+    spans: [
+      sp("Room Schedule", 100, 700),
+      sp("Room Schedule", 300, 700),
+      sp("Room Schedule", 500, 700),
+      sp("GROUND FLOOR DUCT PLAN", 100, 900),
+    ],
+  });
+  assert.equal(real.role, "plan", "the real sheet's own PLAN title must win outright, not tie against an incidental room-lookup caption");
+  assert.ok(real.confidence >= 0.8, "must win outright (no dissent-halving) once ROOM SCHEDULE bare no longer ties it");
+});
+
+test("sheet roles: a bare 'ROOM SCHEDULE' title scores its own lower confidence tier (0.6, not 0.85), but every other real schedule title is unaffected", () => {
+  // Narrow, exact exception -- same class as this file's own "CODE
+  // SECTION" and "ELEVATION NUMBER" exceptions: a phrase that matches
+  // SCHEDULE_TITLE_RE's shape without matching its intent (an equipment/
+  // finish schedule that is the sheet's own dominant subject). Still
+  // role "schedule" alone on a sheet (0.6 >= the room-corroboration
+  // suppression gate's own 0.6 threshold, so a schedule-only sheet is
+  // still correctly suppressed from being read as a room-plan source --
+  // this exact number is load-bearing, see the ROLE_SIGNALS comment) --
+  // the fix is about LOSING a tie against a real competing PLAN title,
+  // not about changing this sheet's own role in isolation.
+  const bare = classifySheetRole({ key: "a", sheet_number: "M0.1", spans: [sp("Room Schedule", 100, 700)] });
+  assert.equal(bare.role, "schedule", "a bare ROOM SCHEDULE alone is still schedule -- the fix is about tie-breaking against a competing PLAN title, not this sheet's own solo classification");
+  assert.equal(bare.confidence, 0.6, "must land exactly on the room-corroboration suppression threshold, not below it");
+  // baker-county-eoc's own REAL dedicated schedule sheet, "ROOM FINISH
+  // SCHEDULE" (its own sheet #27) -- a real, page-dominant schedule title,
+  // must still classify schedule at full confidence, completely unaffected
+  const finish = classifySheetRole({ key: "b", sheet_number: "A631", spans: [sp("ROOM FINISH SCHEDULE", 100, 700)] });
+  assert.equal(finish.role, "schedule");
+  assert.ok(finish.confidence >= 0.8, "a real, qualified schedule title must still win at full confidence");
+  // a qualified "ROOM SCHEDULE - LEVEL 1" (a real page-dominant schedule,
+  // just with a location suffix) must also still classify schedule --
+  // the exclusion is exact-string, not a substring match
+  const qualified = classifySheetRole({ key: "c", sheet_number: "A101", spans: [sp("ROOM SCHEDULE - LEVEL 1", 100, 700)] });
+  assert.equal(qualified.role, "schedule");
+  assert.ok(qualified.confidence >= 0.8);
+});
+
 test("sheet roles: a real SHEET INDEX cover page is never misattributed as one of the sheet types it lists (ledger, later session)", () => {
   // Real, found live on baker-county-eoc's own sheet #36, discovered
   // immediately after the LEVEL-N-PLAN fix above: a real "MECHANICAL SHEET

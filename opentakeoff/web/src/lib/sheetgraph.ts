@@ -59,8 +59,45 @@ const isVertical = (s: GraphSpan): boolean =>
 // stronger signal than the word SCHEDULE appearing in running text.
 // Apostrophes arrive both ways: ASCII ' and the typographic ’ (U+2019 —
 // pdf.js maps a Type1 quoteright there), so every CONT'D pattern accepts both.
+//
 const SCHEDULE_TITLE_RE = /^[A-Z][A-Z ()/&.'’-]* SCHEDULE( *[-–] *[A-Z0-9 ()/&.'’-]+)?( *\(?(?:CONTINUATION|CONTINUED|CONT['’]?D?)\.?\)?)?$/;
 const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
+  // A bare "ROOM SCHEDULE" — no FINISH, no further discipline/location
+  // qualifier — scores its own, LOWER confidence tier instead of the
+  // general SCHEDULE_TITLE_RE 0.85: real, measured regression (2026-09-16,
+  // federal-attachment4-mechanical.pdf's own sheet #4, title "GROUND FLOOR
+  // DUCT PLAN"): this real, dense VAV/duct floor plan carries a small
+  // embedded room-number-to-name lookup caption reading exactly "Room
+  // Schedule" (three of them, one per side-by-side utility table), which
+  // otherwise TIES the general 0.85 signal against the sheet's real
+  // "...PLAN" title, and the tie-break (first in document order) keeps
+  // this sheet `role: "schedule"` — invisible to `sweep_schedule_row`'s
+  // plan-only search, confirmed corpus-wide via tag-ledger-eval (0%
+  // tag→row recall on this sheet's VAV family) before this fix. "ROOM
+  // SCHEDULE" bare is a generic, universal architectural room-number
+  // lookup convention, never itself the dominant subject of a whole
+  // schedule sheet the way "ROOM FINISH SCHEDULE" or "AIR HANDLING UNIT
+  // SCHEDULE" are — the same class of narrow exception as this file's own
+  // "CODE SECTION" and "ELEVATION NUMBER" exclusions further down, a
+  // phrase that matches a pattern's shape without matching its intent.
+  //
+  // The exact confidence, 0.6, is load-bearing, not a rounder nearby
+  // number: it is the precise value this file's own room-corroboration
+  // gate (`role.confidence >= 0.6` suppresses a schedule/legend/elevation/
+  // detail sheet from ALSO being read as a corroborating room-plan
+  // source) requires to still suppress a schedule-only sheet correctly —
+  // caught live by this file's own test suite when an earlier version of
+  // this fix (falling through to the bare 0.5 `SCHEDULE` signal below)
+  // dropped a real, schedule-only unit-test fixture's confidence under
+  // that threshold and produced a phantom room-corroboration bubble. 0.6
+  // is also comfortably below `0.85 - 0.1`, so a real competing "...PLAN"
+  // title on the same sheet wins OUTRIGHT (no dissent-halving), which is
+  // the actual behavior federal-mech's own sheet #4 needs. Narrow and
+  // exact — "ROOM FINISH SCHEDULE", "ROOM SCHEDULE - LEVEL 1", and every
+  // other real schedule title already in this corpus (including baker-
+  // county-eoc's own real "ROOM FINISH SCHEDULE" sheet #27) still match
+  // the general 0.85 signal below normally, unaffected.
+  { re: /^ROOM SCHEDULE$/, role: "schedule", conf: 0.6 },
   // Real, found live (baker-county-eoc's own sheet #36, immediately after the
   // "- LEVEL N PLAN" fix above started matching MORE titles): a SHEET INDEX
   // page literally PRINTS every other real sheet's own title as its table of
@@ -202,7 +239,25 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // four separate bugs. Still narrow: only these two named qualifiers, still
   // anchored to `LEVEL\s+\d+`, so "KEY PLAN" and a bare "LEVEL 1 PLAN" (no
   // discipline word) are unaffected, exactly as before.
-  { re: /(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s+PLAN\b|(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s*-\s*LEVEL\s+\d+\s+(?:ENLARGED\s+|PARTIAL\s+)?PLAN\b/, role: "plan", conf: 0.85 },
+  //
+  // "DUCT" alongside "DUCTWORK" — real, measured regression (2026-09-16,
+  // federal-attachment4-mechanical.pdf's own sheet #4, title "GROUND FLOOR
+  // DUCT PLAN"): a real, dense VAV/duct floor plan (58+ VAV-N instances)
+  // scored role "schedule" (evidence "Room Schedule", a small embedded
+  // table, not this sheet's own title) because "DUCT" — the short, at
+  // least as common form of this word in AEC titles — was missing from the
+  // list; only the longer "DUCTWORK" matched. `sweep_schedule_row` and
+  // `compile_corpus_takeoff` both hard-gate on `role: "plan"`, so every
+  // VAV tag on this sheet was invisible to both — confirmed corpus-wide by
+  // `tag-ledger-eval` (0% tag→row recall on this sheet's family) before
+  // this fix. The same document's sheet #6 ("GROUND FLOOR HVAC PIPING
+  // PLAN") already matched correctly via "PIPING", proving the two titles
+  // differ by exactly this one word. Checked against this file's own
+  // documented false-positive case, sheet #1's "MECHANICAL FLOOR PLAN
+  // SYMBOLS" (a legend, matches via "FLOOR PLAN," unaffected by this
+  // addition since it doesn't touch that alternative) — this widening
+  // narrows to nothing already covered, doesn't loosen it.
+  { re: /(?:FINISH|FLOOR|FURNITURE|CEILING|DUCT(?:WORK)?|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s+PLAN\b|(?:FINISH|FLOOR|FURNITURE|CEILING|DUCT(?:WORK)?|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s*-\s*LEVEL\s+\d+\s+(?:ENLARGED\s+|PARTIAL\s+)?PLAN\b/, role: "plan", conf: 0.85 },
   // A ROOM-scoped enlarged plan — real, standard AEC drafting convention for
   // a zoomed-in mechanical/electrical ROOM (not a whole building LEVEL) —
   // was invisible to the signal above, which only ever recognized "LEVEL
