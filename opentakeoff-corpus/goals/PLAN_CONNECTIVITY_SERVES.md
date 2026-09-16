@@ -1050,9 +1050,68 @@ is not yet reliable on real, dense, unlayered CAD sheets. The real,
 scoped, necessary next step this finding names precisely: teach
 `detectDashedSegs`/`detectDashedRuns` to exclude hatch-fill ink before
 classification (mirroring how `buildMepGraph`'s own wall-vouching already
-excludes architectural ink before MEP noding — `hatchFamilies.ts` already
-exists in this codebase for exactly this kind of pattern classification)
-— not attempted here, a real, separate, dedicated increment of its own.
+excludes architectural ink before MEP noding — `oneclick.ts`'s own
+exported `hatchFamilies` function, not a separate `hatchFamilies.ts` file
+as an earlier version of this note incorrectly said, already exists in
+this codebase for exactly this kind of pattern classification) — not
+attempted here, a real, separate, dedicated increment of its own.
+
+**That named next increment landed 2026-09-16, real progress but NOT a
+full close of the gap — disclosed precisely, not overclaimed.**
+`dashdetect.ts`'s `DashDetectOpts` gained an `excludeSegs?: Uint8Array`
+(the same convention `buildMepGraph` itself already uses for its own
+graph-wide exclusions): a marked segment can never join or start a dash
+chain. `mepconnectivity.ts`'s `buildMepGraph` computes this mask
+automatically, only when `detectDashedLines` is on AND real per-segment
+`meta` is available (without `meta`, `hatchFamilies` cannot classify
+anything, so no exclusion is computed — byte-identical to before this
+fix, never a silent guess): every segment belonging to any `hatchFamilies`
+instance is excluded before dash classification runs. 3 new
+`dashdetect.test.ts` tests (`excludeSegs` isolated, selective, and a
+no-op when omitted) + 3 new `mepconnectivity.test.ts` tests, including a
+synthetic reproduction of the exact real failure shape (10 evenly-pitched,
+fully-overlapping rows — the minimum real geometry `hatchFamilies`' own
+`HATCH_MIN_RUN=10` threshold actually classifies), confirming BOTH that
+the gap is genuine without `meta` and that it's fixed with `meta`
+present. All 89 `mepconnectivity.test.ts` + 20 `dashdetect.test.ts` tests
+pass; both packages typecheck clean.
+
+**Re-verified directly against the SAME real Bessemer sheet #6 this
+finding was originally measured on** (a one-off diagnostic script,
+deleted after use per this project's own discipline): a direct,
+apples-to-apples before/after comparison over the sheet's own real
+38,339 segments (calling `detectDashedRuns` directly with and without the
+`hatchFamilies`-derived exclusion mask, same `segs`/`meta`, isolating
+this ONE variable) measured total flagged segments dropping from 6,943 to
+2,095 (−69.8%) and — the more important number — the single WORST-CASE
+run size dropping from 323 pieces to 66 (a 5x cut in how far one
+misclassified "run" can span). This is real, substantial, disclosed
+progress, not a synthetic-only claim. (Note: this direct re-measurement's
+own raw counts — 38,339 segments, 6,943 flagged before — differ from the
+13,216/28,998 figures in this same finding's own original note above;
+that original measurement's exact methodology, e.g. whether a scale/mppf
+or additional exclusion was applied, was not preserved when its own
+scratch script was deleted per this project's discipline, so the two
+numbers are not directly comparable — both are real measurements of the
+same real underlying problem on the same real sheet, not a contradiction
+requiring reconciliation, but disclosed as a real gap in this note's own
+own reproducibility rather than silently presented as an exact match.)
+**Sampling the 2,095 residual flagged segments shows the SAME real
+zigzag-strokes shape as the original finding — small hatch swatches
+running fewer than `HATCH_MIN_RUN` (10) rows evade `hatchFamilies`' own
+classification threshold (built for identifying room/legend-scale hatch
+fills, not necessarily every small or irregular hatch run) while still
+passing `dashdetect.ts`'s own forgiving chain tolerance.** Verdict
+UNCHANGED, not upgraded: `bridgeDashedGaps` remains implemented, tested,
+default OFF, and still NOT recommended for any real caller to enable —
+this increment measurably shrinks the false-positive problem's real
+severity but does not close it, and a real residual capable of producing
+the same false-confident bridging shape (smaller in scale, not
+eliminated) remains. The next real, dedicated increment this now names:
+either lower/parameterize `hatchFamilies`' own `HATCH_MIN_RUN` for this
+specific caller, or give `detectDashedRuns` a second, independent
+small-scale hatch heuristic (e.g. an alternating-short-stroke rhythm
+check) — not attempted here.
 
 **Items 2 and 4 landed, 2026-09-16, on explicit authorization** (this
 session's own Stop-hook condition named a starting commit that no amount

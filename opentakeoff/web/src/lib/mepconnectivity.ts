@@ -36,6 +36,7 @@ import type { LayerInfo } from "./layers.ts";
 import type { Bbox } from "./sheetgraph.ts";
 import { extractDuctCenterlines } from "./ductcenterline.ts";
 import { detectDashedRuns } from "./dashdetect.ts";
+import { hatchFamilies } from "./oneclick.ts";
 
 export type LayerSignal = "none" | "weak" | "strong";
 export type Point = [number, number];
@@ -315,14 +316,21 @@ export interface BuildMepGraphOpts {
    *  tested "reversed-direction" case) also accepts a zigzag hatch fill's
    *  own alternating strokes on real, dense, unlayered CAD data — never
    *  caught before because no prior test ran this detector over a WHOLE
-   *  real sheet and checked how much of it gets flagged. Do not treat
-   *  `dashed: true` as reliable evidence of a real dashed line on a real
-   *  sheet without first excluding hatch-fill ink (mirroring how
-   *  buildMepGraph's own wall-vouching already excludes architectural ink
-   *  before MEP noding — `hatchFamilies.ts` already exists in this
-   *  codebase for exactly this kind of pattern classification) — not
-   *  attempted here, PLAN_CONNECTIVITY_SERVES.md Phase 5 item 1's own
-   *  next real, dedicated increment. */
+   *  real sheet and checked how much of it gets flagged.
+   *
+   *  FIXED the same day: whenever `opts.meta` is available, every segment
+   *  belonging to a detected `hatchFamilies` (oneclick.ts — the correct
+   *  name; an earlier version of this comment mis-cited a nonexistent
+   *  `hatchFamilies.ts` file) instance is excluded from dash
+   *  classification before it ever runs, mirroring how this module's own
+   *  wall-vouching already excludes architectural ink before MEP noding.
+   *  Without `meta` (no per-segment pen-width/flag data), no exclusion is
+   *  computed — the same disclosed, byte-identical fallback this option's
+   *  own `detectDashedLines`/`bridgeDashedGaps` gates already use
+   *  elsewhere, not a silent guess. Re-verified against the same real
+   *  Bessemer sheet that found the original gap — see
+   *  PLAN_CONNECTIVITY_SERVES.md's own Phase 5 section for the measured
+   *  before/after flagged-edge count. */
   detectDashedLines?: boolean;
   /** DEFAULT OFF, and only takes effect when `detectDashedLines` is ALSO
    *  on (an edge needs its own `dashRunId` for this to have anything to
@@ -495,7 +503,21 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
   // discipline held uniformly, not selectively), a real, unmeasured
   // per-sheet cost this project's own performance history (buildMepGraph's
   // own junction-scan fix) says never to assume is free.
-  const dashedRuns = opts.detectDashedLines ? detectDashedRuns(segs, opts.meta, { mppf: ppf }) : null;
+  //
+  // Hatch-fill exclusion (real, disclosed gap found 2026-09-16 — see
+  // detectDashedLines's own doc comment above): only computable when real
+  // per-segment `meta` exists, since hatchFamilies (oneclick.ts) needs it
+  // to classify stroked hatch ink from everything else. No `meta` at all
+  // means no exclusion is computed — byte-identical to before this fix,
+  // never a silent guess at which segments are hatch fill.
+  const dashHatchExclude = opts.detectDashedLines && opts.meta
+    ? (() => {
+        const mask = new Uint8Array(n);
+        for (const fam of hatchFamilies(segs, opts.meta!)) for (const idx of fam.memberIdx) mask[idx] = 1;
+        return mask;
+      })()
+    : undefined;
+  const dashedRuns = opts.detectDashedLines ? detectDashedRuns(segs, opts.meta, { mppf: ppf, excludeSegs: dashHatchExclude }) : null;
   const addEdge = (
     ax: number, ay: number, bx: number, by: number, segIdx: number,
     aKey?: string, bKey?: string,

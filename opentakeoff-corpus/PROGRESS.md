@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5's own named next increment
+after the `bridgeDashedGaps` hatch-fill finding: `dashdetect.ts` gained an
+`excludeSegs?: Uint8Array` option (same convention `buildMepGraph` already
+uses for its own exclusions), and `buildMepGraph` now computes it
+automatically from `oneclick.ts`'s own `hatchFamilies` whenever real
+per-segment `meta` is available — every segment belonging to a detected
+hatch-fill instance is excluded from dash classification before it runs.
+Without `meta`, no exclusion is computed (byte-identical, never a silent
+guess). 6 new tests (3 in `dashdetect.test.ts`, 3 in
+`mepconnectivity.test.ts`, including a synthetic reproduction of the real
+failure shape), 89+20 total passing, both packages typecheck clean.
+Re-verified directly against the SAME real Bessemer sheet #6 this finding
+was measured on (a one-off diagnostic script, deleted after use): total
+flagged segments drop 6,943→2,095 (−69.8%), and the single worst-case run
+size drops 323→66 pieces — real, substantial, measured progress. Honestly
+disclosed as NOT a full fix: sampling the residual 2,095 still-flagged
+segments shows the same real zigzag-hatch shape, evading `hatchFamilies`'
+own `HATCH_MIN_RUN=10` threshold for small hatch swatches. Verdict stays
+unchanged: `bridgeDashedGaps` remains implemented, tested, default OFF,
+and still NOT recommended for real use — this shrinks the false-positive
+problem's severity, it does not close it. Also fixed two stale citations
+found along the way: `mepconnectivity.ts`'s own doc comment and this
+plan's own prior note both mis-cited a nonexistent `hatchFamilies.ts`
+file (it's `oneclick.ts`'s own exported `hatchFamilies` function), and
+`dashdetect.test.ts`'s header cited a nonexistent
+`dashdetect.corpus.test.ts`. Full detail: the plan doc's own Phase 5
+section.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5 item 3's own
 `reconcile_schedule_plan` half lands: a new exported
 `attachServedByToPlanCites` in `mcp/src/takeoff.ts`, called from

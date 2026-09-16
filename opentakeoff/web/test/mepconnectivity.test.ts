@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import {
   buildMepGraph, traceConnectivity, hasJunctionMark, detectArrowDirections, computePorts,
   describeComponent, seedTolPx, expandBodyAwareTarget,
-  type MepGraph, type ArrowDetectNode, type ArrowDetectEdge,
+  type MepGraph, type ArrowDetectNode, type ArrowDetectEdge, type MepEdge,
 } from "../src/lib/mepconnectivity.ts";
 import type { LayerInfo } from "../src/lib/layers.ts";
 
@@ -896,6 +896,52 @@ test("buildMepGraph: detectDashedLines threads dashRunId onto every dashed edge 
   assert.equal(runIds.size, 1, "every dashed edge of this one real run shares the same dashRunId");
   assert.ok(![...runIds].includes(undefined), "a dashed edge always carries a real dashRunId");
   assert.ok(solidEdges.every((e) => e.dashRunId === undefined), "a non-dashed edge never carries a dashRunId");
+});
+
+// ── hatch-fill exclusion (real, disclosed gap found 2026-09-16 verifying
+// bridgeDashedGaps against real Bessemer data — see detectDashedLines's own
+// doc comment) ────────────────────────────────────────────────────────────
+
+// 10 parallel, evenly-pitched, fully-overlapping rows — the minimum real
+// shape oneclick.ts's own hatchFamilies (HATCH_MIN_RUN=10) actually
+// classifies as a hatch/crosshatch fill instance. dashdetect.ts's own
+// forgiving chain tolerance (built to accept a real exporter's reversed-
+// path-winding dash pieces) ALSO accepts this shape as one long "dash
+// run" absent the fix below — the exact real failure class measured on
+// the real Bessemer sheet (45.6% of edges misclassified), reproduced here
+// at unit-test scale.
+function hatchRows(x0: number, y0: number, rows: number, rowLen: number, pitch: number): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < rows; i++) out.push(x0, y0 + i * pitch, x0 + rowLen, y0 + i * pitch);
+  return out;
+}
+
+test("buildMepGraph: a real hatch-fill shape reads as one long dash run absent real per-segment meta — confirms the gap is genuine, not already accidentally fixed", () => {
+  const hatch = hatchRows(0, 0, 10, 10, 3);
+  const g = buildMepGraph(hatch, { mppf: 100, detectDashedLines: true }); // no meta supplied
+  const dashedEdges = g.edges.filter((e) => e.dashed);
+  assert.equal(dashedEdges.length, 10, "every hatch row misclassifies as dashed when no meta is available to exclude it");
+});
+
+test("buildMepGraph: detectDashedLines excludes real hatch-fill ink from dash classification once real per-segment meta is available (fixed 2026-09-16)", () => {
+  const hatch = hatchRows(0, 0, 10, 10, 3);
+  const realDash = dashRun(500, 500, 6, 20, 20); // a genuine, unrelated dash run elsewhere on the sheet
+  const segs = [...hatch, ...realDash];
+  const meta = new Uint8Array(segs.length >> 2); // real per-segment data (all zero — no curve/clip/fill-only bits), never omitted
+  const g = buildMepGraph(segs, { mppf: 100, detectDashedLines: true, meta });
+  const isHatchEdge = (e: MepEdge) => g.nodes[e.a].y < 100 && g.nodes[e.b].y < 100;
+  const hatchEdges = g.edges.filter(isHatchEdge);
+  const realDashEdges = g.edges.filter((e) => !isHatchEdge(e));
+  assert.equal(hatchEdges.length, 10, "all 10 hatch rows still exist as real edges — this is a classification fix, never a topology change");
+  assert.ok(hatchEdges.every((e) => e.dashed === undefined), "every hatch-fill edge is excluded from dashed classification");
+  assert.equal(realDashEdges.filter((e) => e.dashed).length, 6, "the genuine, unrelated dash run elsewhere on the sheet is still correctly flagged");
+});
+
+test("buildMepGraph: hatch-fill exclusion is a no-op when detectDashedLines is off, even with real meta supplied", () => {
+  const hatch = hatchRows(0, 0, 10, 10, 3);
+  const meta = new Uint8Array(hatch.length >> 2);
+  const g = buildMepGraph(hatch, { mppf: 100, meta }); // detectDashedLines omitted
+  assert.ok(g.edges.every((e) => e.dashed === undefined && e.dashRunId === undefined));
 });
 
 // ── bridgeDashedGaps (Phase 5 item 1, second increment — the actual walk

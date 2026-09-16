@@ -34,6 +34,22 @@ export interface DashDetectOpts {
    *  pattern, never a stray 2-3-piece split from an incidental T-junction
    *  or a duplicated-stroke CAD export artifact. Default 4. */
   minCount?: number;
+  /** One byte per segment (same shape as `meta`): 1 marks a segment that
+   *  must never join or start a dash chain, 0 (or omitted) leaves today's
+   *  behavior unchanged. A real, disclosed gap found 2026-09-16 verifying
+   *  `bridgeDashedGaps` (mepconnectivity.ts) against real Bessemer data:
+   *  this detector's own chain tolerance — built to accept a real
+   *  exporter's reversed-path-winding dash pieces — ALSO accepts a
+   *  zigzag hatch/crosshatch fill pattern's own alternating short
+   *  strokes (13,216 of 28,998 real sheet edges, 45.6%, misclassified as
+   *  "dashed" on one real sheet). This module stays decoupled from any
+   *  particular hatch classifier (no import added here) — a caller who
+   *  can identify hatch-fill ink (oneclick.ts's own `hatchFamilies`,
+   *  already used this way for wall-vouching-style exclusion elsewhere in
+   *  this codebase) passes it in, the same `excludeSegs` shape/convention
+   *  `buildMepGraph` itself already uses for its own graph-wide
+   *  exclusions. Omitted: byte-identical to before this option existed. */
+  excludeSegs?: Uint8Array;
 }
 
 const DEFAULT_MIN_COUNT = 4;
@@ -134,6 +150,7 @@ export function detectDashedRuns(segs: number[], meta?: Uint8Array, opts: DashDe
   const flush = () => { classify(chain); chain = []; };
   for (let i = 0; i < n; i++) {
     if (meta && (meta[i] & SEG_NONDASH_MASK)) { flush(); continue; }
+    if (opts.excludeSegs && opts.excludeSegs[i]) { flush(); continue; }
     const li = len(i);
     if (li < 1e-6) continue; // degenerate — neither joins nor breaks a chain
     if (chain.length) {

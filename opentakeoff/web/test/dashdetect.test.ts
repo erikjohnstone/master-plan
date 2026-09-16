@@ -2,8 +2,12 @@
 // of a straight dashed run from many short, gap-separated, collinear
 // stroked segments. Pure, no PDF/DOM, same contract as oneclick.ts's own
 // tests. Every synthetic case below is hand-built to the exact shape a real
-// CAD dash export produces (measured directly against real segs in
-// dashdetect.corpus.test.ts) — not a plausible-looking guess.
+// CAD dash export produces — not a plausible-looking guess. (A prior
+// version of this comment cited a "dashdetect.corpus.test.ts" that does
+// not exist in this repo; real-corpus verification of this module's own
+// output happens via one-off diagnostic scripts against the real corpus,
+// same discipline this project's other real-data findings use, not a
+// standing committed corpus test file.)
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { detectDashedSegs, detectDashedRuns } from "../src/lib/dashdetect.ts";
@@ -209,4 +213,43 @@ test("detectDashedRuns: a non-dash segment always carries runId -1", () => {
   const { flags, runIds } = detectDashedRuns(segs);
   assert.deepEqual([...flags], [0]);
   assert.deepEqual([...runIds], [-1]);
+});
+
+// ── excludeSegs (real, disclosed gap found 2026-09-16, mepconnectivity.ts's
+// own bridgeDashedGaps real-corpus verification: this module's own chain
+// tolerance accepts a hatch/crosshatch fill's alternating strokes just as
+// readily as a real exporter's dash cadence) ─────────────────────────────
+
+test("detectDashedRuns: excludeSegs marks a would-be dash run as never-dash, splitting it out of the chain entirely", () => {
+  const segs = dashRun(0, 0, 10, 4, 4);
+  const withoutExclude = detectDashedRuns(segs);
+  assert.ok([...withoutExclude.flags].every((v) => v === 1), "sanity: this shape is a real dash run absent any exclusion");
+
+  const excludeSegs = new Uint8Array(10); // mark every piece excluded (e.g. classified as hatch fill upstream)
+  excludeSegs.fill(1);
+  const { flags, runIds } = detectDashedRuns(segs, undefined, { excludeSegs });
+  assert.ok([...flags].every((v) => v === 0), "every excluded segment is never classified as dashed");
+  assert.ok([...runIds].every((v) => v === -1));
+});
+
+test("detectDashedRuns: excludeSegs only removes the marked pieces — a genuine, unrelated dash run elsewhere is unaffected", () => {
+  const hatchLike = dashRun(0, 0, 10, 4, 4);
+  const realDash = dashRun(500, 500, 6, 20, 20);
+  const segs = [...hatchLike, ...realDash];
+  const excludeSegs = new Uint8Array(segs.length >> 2);
+  for (let i = 0; i < 10; i++) excludeSegs[i] = 1; // exclude only the hatch-like run's own pieces
+  const { flags, runIds } = detectDashedRuns(segs, undefined, { excludeSegs });
+  assert.ok([...flags].slice(0, 10).every((v) => v === 0), "the excluded run stays unflagged");
+  assert.ok([...flags].slice(10).every((v) => v === 1), "the genuine, unrelated dash run is still flagged");
+  const realIds = new Set([...runIds].slice(10));
+  assert.equal(realIds.size, 1, "the real run keeps one shared runId");
+  assert.notEqual([...realIds][0], -1);
+});
+
+test("detectDashedRuns: excludeSegs omitted (default) is byte-identical to before this option existed", () => {
+  const segs = dashRun(0, 0, 10, 4, 4);
+  const before = detectDashedRuns(segs);
+  const after = detectDashedRuns(segs, undefined, {});
+  assert.deepEqual([...after.flags], [...before.flags]);
+  assert.deepEqual([...after.runIds], [...before.runIds]);
 });
