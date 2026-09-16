@@ -221,6 +221,36 @@ resolvable to its row. A production ledger reporting "text found, row
 resolved, geometry unverified" instead of a bare refusal recovers exactly
 these 5 real installed items as disclosed evidence instead of silence.
 
+## Both confirmed bugs are now fixed, tested, and live-verified
+
+Committed as `94c6811` (H9 / `familySuffixTagOcc`) and `8bd5f20` (H7 /
+`compoundTagOcc`) on `claude/tender-meitner-4efhoz`.
+
+- **`familySuffixTagOcc`**: the sibling-proximity radius was tightened from
+  25× to 10× the median sibling text height, chosen with margin verified
+  against both existing calibration tests (need ≤9×) and the confirmed
+  false positive (needs ≥11.4× to recover its second "sibling"). A third
+  test pins the exact real fixture.
+- **`compoundTagOcc`**: now requires the text after a tag's delimiter to be
+  exactly one compact token, matching every real target case
+  ("R1 /C-11", "E1/C-2", "P1 /INV-2") and excluding ordinary prose that
+  merely starts with a tag name. A fourth test pins the exact real fixture.
+
+Live re-verification, both fixes applied, run against both keys:
+
+| set | tag→row recall (before → after) | row→tag exact (before → after) |
+|---|---|---|
+| bessemer | 66.7% → 66.7% (unchanged — the remaining gap is the unrelated `FD-1`/`WB-1` table-recall miss, out of scope for this plan) | 82.4% (14/17) → **88.2%** (15/17) |
+| bldg5406-hvac-demo | 100% → 100% (unchanged, was already clean) | 96.2% (25/26) → **100%** (26/26), zero misses in either direction |
+
+Full regression coverage before each commit: `symbolsweep.test.ts` (77→78
+tests, all passing after each fix), every other test file that imports
+`symbolsweep.ts` (`sweepScheduleRow`, `countKeyedSchedule`, `markid`,
+`equiptags`, `taggedVectorGrounding`, `scheduleLanguageScan`,
+`legendlearn`, `hvacRefShapes`, `inlinemotif`, `strokeLum`,
+`sweepCoalesce`, `sweepNegative`, `symbolAffine` — 351/351 combined), full
+web typecheck and lint (clean, same 3 pre-existing warnings).
+
 ## Hypothesis verdicts (H1–H9, from the audit)
 
 | # | Hypothesis | Verdict this session |
