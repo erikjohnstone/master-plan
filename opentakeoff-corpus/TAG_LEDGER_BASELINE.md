@@ -506,19 +506,138 @@ scenario this plan's stated product goal is about. **Sheet-role hardening
 (this plan's own Phase 4) cannot be treated as lower-priority than Phase
 1/2/3's row-reconciliation logic** — on a document shaped like this one,
 a perfect occurrence ladder still produces near-total silence, because
-the sheets it would need to search are never handed to it. Concrete,
-evidence-backed acceptance criteria for Phase 4, from this finding alone:
-(1) a sheet's own title-block "DRAWING TITLE" field must be read and take
-priority over any other in-page text when classifying role; (2) a sheet
-whose title says "legend"/"schedule"/etc. but which contains substantial
-to-scale linework and a high density of distinct equipment-family tags
-must be detectable and included in the plan search space regardless of
-its stated title — title-block priority alone (fix 1) does not resolve
-this case.
+the sheets it would need to search are never handed to it. The two real,
+verified fixes (not "title-block priority" in the abstract — see the
+corrected root-cause bullets above): (1) add `DUCT` next to `DUCTWORK` in
+`classifySheetRole`'s discipline-word list (`web/src/lib/sheetgraph.ts`
+~line 205) — a one-token, narrowly-scoped change, confirmed by direct
+regex execution to turn sheet #4's "GROUND FLOOR DUCT PLAN" from no-match
+into a match, without weakening the existing "FLOOR PLAN" pattern that
+(correctly) still fires on sheet #1's false positive; (2) the sheet #2
+content-based-promotion case (a real plan titled "legend") has no
+comparably narrow fix and needs a genuinely new signal (to-scale linework
+plus tag density), design left to Phase 4.
 
-Not yet done for this set: a full `.tagocc.csv` ground-truth key (this
-finding was significant enough to write up and commit on its own first);
-pages #6–#24 unexamined.
+**A full ground-truth key was built for this set's `VAV` family** (58
+rows, `keys/federal-mech.tagocc.csv`) specifically to run this finding
+through the same ruler as every other set, not just describe it
+qualitatively. Result, `tag-ledger-eval.mjs` against the production
+ladder:
+
+```
+tag_to_row: 117 key plan instances, 0 matched, recall 0%
+row_to_tag: 58 row groups, 1/58 exact count matches, 1.7%
+```
+
+Every one of the 117 key occurrences (58 on sheet #2, 59 on sheet #4,
+including a genuine double-drawn `VAV-45`) comes back `unresolvedShouldResolve`
+— found as real text, never resolved to a row, because neither carrying
+sheet is ever offered to the resolver. The row→tag misses are not clean
+zeros: `row_misses` shows "expected 2, actual 1" for nearly every row,
+not "actual 0" — because **a third real, legitimate, correctly-classified
+view of the same `VAV` family exists**: sheet `#6` ("GROUND FLOOR HVAC
+PIPING PLAN," role=plan at 0.85 — its title matches via the *existing*
+"PIPING PLAN" shape, unlike sheet #4's "DUCT PLAN") redraws every VAV box
+along the piping runs and IS found correctly. This is a third H6-relevant
+cross-view instance of the same family (not included as key rows here —
+out of this key's scope, noted in its own header), and it's also the
+clean, direct proof that fix (1) above is exactly the missing piece:
+sheet #6 differs from sheet #4 by exactly one recognized word
+("PIPING" vs. "DUCT").
+
+Not yet done for this set: ground truth for its other ~15 families;
+sheets #8–#24 unexamined; sheet #6/#7 not added as key rows (noted, not
+grounded).
+
+## H8 — row-identity resolution disagrees across duplicated implementations
+
+Investigated by code inspection and live execution of the real, unmodified
+repo functions (not speculation) against the plan's own named comparison:
+`sweepScheduleRow`'s row vs `uniqueFamily`'s row vs
+`reconcileScheduleFamilyFromGraph`'s row. **Confirmed**, with two concrete,
+executed disagreement examples — the full investigation is more precise
+than the plan's original framing ("three duplicated implementations"), so
+recorded in full here rather than compressed to one line.
+
+**The tag→row *lookup* primitive is not duplicated.** `rowKeyAnswersFor`
+(`web/src/lib/sheetgraph.ts:4098-4122`) is one function, called by
+`sweepScheduleRow`, `resolveTag` (rooms only), and `queryTable.mjs` alike.
+This part of H8's premise does not hold — no fix needed here.
+
+**The row→identity-tag *extraction* direction is where the real
+duplication lives.** A shared helper, `rowIdentityTag`
+(`web/src/lib/schedulePlanReconcile.mjs:337-376`), is used by three
+production paths (`sweepScheduleRow`'s `identityOf`,
+`reconcileScheduleFamilyFromGraph`, `buildPlanSetTakeoff`) — but a fourth,
+`uniqueFamily` (`web/src/lib/corpusTakeoff.mjs:750-979`, the HVAC
+`compile_corpus_takeoff` path, confirmed live via shipped evidence
+artifacts carrying `"source": "compileHvacTakeoff"`), is a hand-copied
+reimplementation that has drifted despite eleven "parity with compile
+uniqueFamily" comments in the codebase trying to keep it in lockstep. A
+fifth, `countMarks`, reads `row.key` directly and calls neither.
+`markid.ts`'s `markKey`/`spanAnswersFor` (the plan's own F2 finding: the
+"best identity module") has zero production importers — dead code,
+test-only.
+
+**Disagreement 1 — an "EQUIP NO"-keyed row (a real, already-documented
+corpus shape — `session.ts:3877-3888` describes baker-county-eoc-
+bidset.pdf#41's `RTU-1`/`EWH-1`/`CU-1`/`CU-2`/`ERV-01`/`FCU-1`/`FCU-2`/
+`WH-1` rows this way):**
+
+```
+row = { key: "", cells: { "EQUIP NO": { text: "RTU-1" } } }
+rowIdentityTag(row)              => "RTU-1"   (sweepScheduleRow, reconcileScheduleFamilyFromGraph)
+uniqueFamily's per-row pipeline  => []         (DROPS the row entirely)
+```
+
+`uniqueFamily`'s own header regex (`corpusTakeoff.mjs:842`) doesn't
+recognize the literal `"EQUIP NO"` header (`rowIdentityTag`'s does,
+`schedulePlanReconcile.mjs:362`), so `tag` never overrides the empty
+`row.key`, and the row is silently skipped
+(`corpusTakeoff.mjs:881`, `if (!canon) continue;`). **Net effect:** the
+identical row is present in `sweep_schedule_row`/`reconcile_schedule_plan`
+output and absent from `compile_corpus_takeoff`'s HVAC family count for
+the same loaded set — a real, load-bearing disagreement between
+production MCP tools, not a hypothetical.
+
+**Disagreement 2 — a comma-separated identity value on a family with no
+`keyRe`** (a live precondition today: 10 shipped `HVAC_FAMILY_SPECS`
+entries — `RTU`, `FURNACE`, `CABINET_UNIT_HEATER`, `CRAH`,
+`AIR_COMPRESSOR`, `GRD`, `RANGE_HOOD`, `DUCT_SILENCER`, `LOUVER`,
+`LOUVERED_PENTHOUSE` — have a `titleRe` but no `keyRe`/`blankKeyRe`):
+
+```
+row = { key: "ERU-1HP-4", cells: { SYMBOL: { text: "ERU-1, HP-4" } } }
+
+reconcileScheduleFamilyFromGraph's canon tag => "ERU-1,HP-4"   (never splits the comma when unfiltered)
+uniqueFamily's canon tag                     => "ERU-1HP-4"    (comma/rowKey guard discards the SYMBOL value)
+```
+
+Two different canonical strings for the identical input row. Neither
+correctly splits into the two real tags (`{"ERU-1","HP-4"}`) — that only
+happens once a family supplies a `keyRe` — but they are two *different*
+wrong answers, the disagreement H8 asks about.
+
+**Caveats, stated plainly (per this project's "never overclaim" standard
+established earlier this session):** disagreement 1's row shape is
+attested by the codebase's own comments for a real, named document, but
+was not independently re-derived from that document's actual extracted
+row objects this session. Disagreement 2's precondition (no `keyRe` on a
+titled family) is confirmed live in shipped config, but no specific
+corpus document was found where a comma-bearing identity cell actually
+occurs on one of those 10 families today — reachable in principle,
+unconfirmed as fired in practice. Neither caveat weakens the core
+finding: `rowIdentityTag` (three callers) and `uniqueFamily` (one caller,
+`compile_corpus_takeoff`'s HVAC path) are demonstrably not the same logic
+and can be driven to disagree with real, shippable inputs.
+
+Phase 2 files this points to directly:
+`web/src/lib/schedulePlanReconcile.mjs:337-376` (the extractor to make
+canonical), `web/src/lib/corpusTakeoff.mjs:750-877` (`uniqueFamily`, to
+delete/replace with a call into it), `mcp/src/takeoff.ts:664-677`
+(`buildPlanSetTakeoff`, needs the same compound-split treatment as the
+other two callers), `mcp/src/session.ts:2514-2589` (`countMarks`, needs
+to read the shared extractor instead of raw `row.key`).
 
 ## Hypothesis verdicts (H1–H9, from the audit)
 
@@ -531,7 +650,7 @@ pages #6–#24 unexamined.
 | H5 | Orphan tags (no schedule row) are invisible to row-driven tools | **Confirmed by construction, twice.** Inherent to every row-driven tool audited, and freshly re-confirmed concretely on itd-d1-lab: `HEV-1..4` are drawn on sheet `#4` and appear in zero schedule tables anywhere in the document (checked via a full 29-sheet span scan), and the ruler correctly reports exactly these 4 as the only misses, with the right explanation attached. |
 | H6 | itd-d1-lab over-counts are cross-view redraws | **Tested cleanly, not confirmed as a defect.** `HC-1` through `HC-9` are each genuinely, legitimately drawn on two different sheets (the ductwork plan `#3` and the hydronic plan `#5`) — 9 rows × 2 real sheets = 18 instances, the largest H6 fixture found this session. The ladder recovers the correct count (2) for all 9, with zero double-counting and zero dropped occurrences. The originally-hypothesized over-count does not reproduce on this family; H6 as posed is not confirmed here (may still apply to families not sampled in this key). |
 | H7 | Note mentions/legend entries leak into counts | **Confirmed, once, precisely** — bldg5406's `CWP-1` is over-counted by 1 because `compoundTagOcc` matches an installation note ("CWP-1 AND CWP-2 SHALL BE STACKED...") as if it were a second compound tag label. bessemer's `D-1`/`D-2`/`D-6` and a split-run "HP-1 IS TYPICAL..." note stayed correctly excluded, so this is not universal — H7 fires specifically when note prose happens to start with `<tag><space><more text>`, `compoundTagOcc`'s exact trigger shape. |
-| H8 | Row lookup disagrees across the three duplicated implementations | Not yet measured |
+| H8 | Row lookup disagrees across the three duplicated implementations | **Confirmed, with two concrete, executed disagreement examples** — see the dedicated "H8" section above. Refined from the original framing: the tag→row *lookup* primitive (`rowKeyAnswersFor`) is genuinely unified, not duplicated; the real duplication is in row→identity-tag *extraction*, where a shared helper (`rowIdentityTag`, 3 production callers) coexists with one independently-reimplemented, drifted copy (`uniqueFamily`, the `compile_corpus_takeoff` HVAC path) and one caller that skips extraction entirely (`countMarks`). One executed example shows a real row present in `sweep_schedule_row`/`reconcile_schedule_plan` output and silently dropped by `compile_corpus_takeoff` for the identical input. |
 | **H9 (new, corrected)** | **The occurrence ladder's `familySuffixTagOcc` fallback can recover an unrelated digit (a keynote/callout reference number) as a tag's missing suffix, when that digit happens to sit near enough to ≥4 real family siblings** | **Confirmed and precisely root-caused on one real document.** bessemer's `EBB-1` on sheet `#7`: the real `EBB-5..8` siblings are genuinely drawn there, satisfying `familySuffixTagOcc`'s own quorum gate, and a bare "1" — actually a keynote circle's reference number, not a tag fragment — gets recovered as a phantom second `EBB-1`. **Narrower and more precisely diagnosed than the first version of this finding claimed** — see the retraction in the bldg5406 section: the originally-reported `CDB`/`RRA` "fabrication" (a much larger, class-wide claim) was traced to a bug in this session's own verification script, not the pipeline, and has been withdrawn. |
 
 ## Test suite findings

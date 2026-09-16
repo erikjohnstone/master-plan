@@ -354,6 +354,22 @@ Gate 2: H8 disagreement count = 0 on all keyed sets; `planToolParity` and
 `reconcileWorkflow` green with `bulk/` staged; row-resolution accuracy on the
 ledger ≥ baseline.
 
+**H8 confirmed with two executed disagreement examples**, not just
+suspected duplication — full detail in
+`opentakeoff-corpus/TAG_LEDGER_BASELINE.md`'s "H8" section. Refined
+picture: `rowKeyAnswersFor` (the tag→row lookup) is already unified, no
+work needed there. The real fix is exactly what this phase already names
+— delete `uniqueFamily` (`web/src/lib/corpusTakeoff.mjs:750-979`) and
+route `compile_corpus_takeoff`'s HVAC path through `rowIdentityTag`
+(`web/src/lib/schedulePlanReconcile.mjs:337-376`) instead, plus give
+`buildPlanSetTakeoff` (`mcp/src/takeoff.ts:664-677`) and `countMarks`
+(`mcp/src/session.ts:2514-2589`) the same treatment. One demonstrated
+consequence of not having done this yet: an "EQUIP NO"-keyed schedule row
+(a real, already-documented shape on baker-county-eoc-bidset.pdf#41)
+resolves correctly via `sweep_schedule_row`/`reconcile_schedule_plan` and
+is silently dropped entirely by `compile_corpus_takeoff`'s HVAC family
+count for the identical input.
+
 ### Phase 3 — The Tag Ledger (occurrence-first product)
 
 Shared `buildTagLedger(session, graph)` on the Session path, then MCP
@@ -443,23 +459,26 @@ title block" is not a mechanism this classifier has; the real gaps,
 verified directly against the live regex, are narrower and more specific
 than that:
 
-1. **Two real title shapes this classifier's plan regex cannot recognize
-   under any tier**, found on federal-mech's own sheets #3 and #4 (word
-   order confirmed against the live regex, not just inferred from the
-   evidence field): a device/terminal-type title with no literal "PLAN"
-   word at all ("GROUND FLOOR AIR TERMINALS" — `planBase.test(...)` is
-   `false`), and a non-enlarged "<discipline> <drawing-type noun> PLAN"
-   word order ("GROUND FLOOR DUCT PLAN" — "DUCT" sits between "FLOOR" and
-   "PLAN", the same shape the enlarged-plan widening already fixed for
-   "MECHANICAL ROOM ENLARGED DUCT PLAN" but this title isn't "enlarged").
-   With no competing plan hit, whatever else matches on the sheet
-   (a stray note containing "DETAILS", a small embedded "Room Schedule"
-   table) wins outright, no dissent-halving even applies. Any widening
-   must be checked against the same document's sheet #1 ("MECHANICAL
-   FLOOR PLAN SYMBOLS" — a legend, not a plan — already a confirmed
-   real false positive for the existing "FLOOR PLAN" shape) before being
-   accepted, per this file's own "generalizes across ≥2 real documents"
-   bar for touching this regex.
+1. **A one-word, narrowly-scoped fix, already pinpointed exactly.**
+   Federal-mech's own sheet #6 ("GROUND FLOOR HVAC PIPING PLAN") IS
+   correctly classified `plan` at 0.85, via the *existing* "PIPING PLAN"
+   discipline-word shape — while sheet #4 ("GROUND FLOOR DUCT PLAN"),
+   drawing the same VAV family, is not, because "DUCT" isn't in the
+   discipline-word list — only "DUCTWORK" is. Confirmed by direct
+   execution: adding `DUCT` next to `DUCTWORK` in the alternation turns
+   `planBase.test("GROUND FLOOR DUCT PLAN")` from `false` to `true`.
+   Sheet #3's "GROUND FLOOR AIR TERMINALS" is a second, harder gap on the
+   same document — it contains no "PLAN" word at all
+   (`planBase.test(...)` is `false` under any tier) and needs a different,
+   less trivially-scoped widening. Any change here must be checked
+   against the same document's sheet #1 ("MECHANICAL FLOOR PLAN SYMBOLS"
+   — a legend, not a plan — already a confirmed real false positive for
+   the existing "FLOOR PLAN" shape) before being accepted, per this
+   file's own "generalizes across ≥2 real documents" bar for touching
+   this regex. tag-ledger-eval quantifies the cost of leaving this open:
+   0% tag→row recall, 1.7% row→tag exact match on federal-mech's `VAV`
+   family (`keys/federal-mech.tagocc.csv`, 58 rows) — see
+   TAG_LEDGER_BASELINE.md for the full run.
 2. **Content-based promotion, independent of stated title.** Federal-
    mech's page #2 is a genuine ambiguity regex widening cannot fix: a
    real, to-scale, 58-VAV-tag floor plan whose own title block reads
