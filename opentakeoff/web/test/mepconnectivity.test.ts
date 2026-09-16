@@ -203,7 +203,25 @@ test("traceConnectivity: a real branching junction reaching two DIFFERENT equipm
   assert.match(r.reason ?? "", /VAV-2/);
 });
 
-test("traceConnectivity: a dead end that ran out of connected linework says so, distinct from hitting the hop cap", () => {
+test("traceConnectivity: two equipment placements on the SAME straight run (one strictly downstream of the other, no real fork) reach the nearer one — a shared trunk passing through one equipment body to reach another is not ambiguity (Phase 4 item 2's own rule)", () => {
+  const g = graphOf([0, 0, 300, 0]);
+  const r = traceConnectivity(g, [0, 0], { equipmentSymbols: [{ id: "EBB-1", at: [100, 0] }, { id: "EBB-2", at: [300, 0] }] });
+  assert.equal(r.status, "reached", "EBB-2's own path is a strict extension of EBB-1's — never a real fork");
+  assert.equal(r.reachedEquipment?.id, "EBB-1", "stop at the first equipment body reached, per the plan's own serves() rule");
+});
+
+test("traceConnectivity: a real fork AFTER an already-passed equipment body still reports ambiguous between the seed's own first reached equipment and whatever the walk actually stopped at — a chain that leads into a real fork resolves to the nearest ancestor, not the downstream branch", () => {
+  // seed --300px--> EBB-1 --fork--> (100,100) EBB-2
+  //                             \-> (400,0)   EBB-3
+  const g = graphOf([0, 0, 300, 0, 300, 0, 400, 100, 300, 0, 400, 0]);
+  const r = traceConnectivity(g, [0, 0], {
+    equipmentSymbols: [{ id: "EBB-1", at: [300, 0] }, { id: "EBB-2", at: [400, 100] }, { id: "EBB-3", at: [400, 0] }],
+  });
+  assert.equal(r.status, "reached", "EBB-1 sits strictly upstream of the real fork — the walk stops there, never surfacing the fork behind it");
+  assert.equal(r.reachedEquipment?.id, "EBB-1");
+});
+
+test("traceConnectivity: a real branching junction reaching two DIFFERENT equipment is ambiguous, never picks one", () => {
   const g = graphOf([0, 0, 100, 0]);
   const r = traceConnectivity(g, [0, 0], { equipmentSymbols: [{ id: "AHU-1", at: [500, 500] }] });
   assert.equal(r.status, "dead_end");

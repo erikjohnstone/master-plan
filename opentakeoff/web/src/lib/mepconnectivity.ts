@@ -1205,14 +1205,37 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   const edgeBetween = (a: number, b: number): MepEdge | undefined =>
     walked.edges.find((e) => (e.a === a && e.b === b) || (e.a === b && e.b === a));
 
-  const distinctIds = [...new Set(reached.map((r) => r.id))];
+  // PLAN_CONNECTIVITY_SERVES.md Phase 4 item 2's own "shared trunk is one
+  // component, not ambiguity" rule: a reached equipment whose OWN path from
+  // the seed already passes through a DIFFERENT equipment's node is a
+  // pass-through hit, not a real fork — the trunk simply continues past an
+  // equipment body it already fed (or through it) to reach another one
+  // further downstream on the exact SAME physical run. "serves(device):
+  // walk from each port outward; stop at the first equipment body reached"
+  // means that downstream equipment is never this device's own answer; the
+  // nearer ancestor equipment is. A genuine fork (two different branches
+  // off a real junction) can never have this ancestor relationship, since
+  // neither branch's path is ever a prefix of the other's — only a real
+  // shared-trunk pass-through produces one BFS path fully containing
+  // another. `equipAtNode` already holds every equipment placement's own
+  // resolved node regardless of BFS order, so this checks the true parent
+  // chain, not just what happened to be pushed to `reached` earlier.
+  const isPassThroughHit = (node: number, id: string): boolean => {
+    for (let cur = parent.get(node); cur !== undefined; cur = parent.get(cur)) {
+      const ancestor = equipAtNode.get(cur);
+      if (ancestor && ancestor.id !== id) return true;
+    }
+    return false;
+  };
+  const unshadowed = reached.filter((r) => !isPassThroughHit(r.node, r.id));
+  const distinctIds = [...new Set(unshadowed.map((r) => r.id))];
 
   if (distinctIds.length >= 2) {
     // The last node common to every reached equipment's own path from the
     // seed — the real junction where the trace's outcome actually forked.
     // One representative branch (the shallowest divergence), not every
     // individual fork in a denser tree — a real, disclosed v1 scope limit.
-    const paths = reached.filter((r, i) => reached.findIndex((x) => x.id === r.id) === i).map((r) => ({ id: r.id, at: r.at, nodePath: nodePathTo(r.node) }));
+    const paths = unshadowed.filter((r, i) => unshadowed.findIndex((x) => x.id === r.id) === i).map((r) => ({ id: r.id, at: r.at, nodePath: nodePathTo(r.node) }));
     // the longest shared prefix (by NODE, not by coordinate) across every
     // reached equipment's own path from the seed — the node right before it
     // diverges is the real junction where the trace's outcome actually forked.
@@ -1232,7 +1255,7 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   }
 
   if (distinctIds.length === 1) {
-    const hit = reached[0];
+    const hit = unshadowed[0];
     const nodePath = nodePathTo(hit.node);
     const path = pointsOf(nodePath);
     const hops = nodePath.length - 1;

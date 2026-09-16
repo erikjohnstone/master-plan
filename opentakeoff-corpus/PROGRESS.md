@@ -1,5 +1,28 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 4 item 2's own "shared trunk
+is one component, not ambiguity" rule now lands: `traceConnectivity`
+filters a reached equipment out of its ambiguity decision whenever that
+equipment's own BFS path from the seed already passes through a
+DIFFERENT equipment's resolved node (a real parent-chain check, never
+proximity) — a trunk that continues past one already-reached equipment
+body to another further downstream on the exact same physical run is a
+pass-through, not a fork, matching the plan's own literal "stop at the
+first equipment body reached" text. This directly fixes a false-ambiguity
+shape `expandBodyAwareTarget`'s own multi-port bbox expansion (Phase 4
+item 2's first increment) can trigger, while leaving a genuine two-branch
+fork completely unaffected. 2 new synthetic unit tests (same-line two-
+equipment; chain-into-a-real-fork), both passing, 64 pre-existing tests
+unchanged. Re-ran `serves-eval.mjs` and `mep-trace-eval.mjs` against the
+full real corpus before committing: both scripts' CORPUS totals are
+byte-identical before/after (serves-eval still 49/12.1%/28.6%/2/0,
+matching the stored 2026-09-15 report exactly) — zero regressions,
+expected since neither eval's hand-seeded single-point candidates
+exercise the multi-port case this rule protects. The layer-boundary
+refusal and item 3's leader-chase migration remain the real, separate,
+larger increments this same section already named as out of scope for a
+single session. Full detail: the plan doc's own Phase 4 section.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md — two closed verdicts, both reached
 by real-corpus verification rather than synthetic fixtures alone, per this
 plan's own standing discipline. (1) Gate 3's centerline-flag default

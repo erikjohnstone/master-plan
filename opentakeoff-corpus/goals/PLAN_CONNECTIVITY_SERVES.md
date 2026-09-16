@@ -854,13 +854,57 @@ tests in `tools.test.ts` (a deliberately off-linework raw point that only
 resolves once its own real bbox is supplied), all passing; both packages'
 typecheck and lint clean.
 
-**Still not attempted:** everything item 2's own larger scope names above
-(the ambiguity-rule rewrite treating a shared trunk as one component, the
-layer-boundary refusal, the ambiguity-rule composition into `serves()`
-proper) and all of item 3 (migrating `symbollabels.ts`'s own leader chase
-onto this graph) — this increment gives future callers a real body-bbox
-INPUT capability, it does not itself discover a body-bbox, walk to a
-component-aware notion of "reached", or refuse across a layer boundary.
+**Still not attempted (at that point):** everything item 2's own larger
+scope names above (the ambiguity-rule rewrite treating a shared trunk as
+one component, the layer-boundary refusal, the ambiguity-rule composition
+into `serves()` proper) and all of item 3 (migrating `symbollabels.ts`'s
+own leader chase onto this graph) — that increment gave future callers a
+real body-bbox INPUT capability, it did not itself discover a body-bbox,
+walk to a component-aware notion of "reached", or refuse across a layer
+boundary.
+
+**The "shared trunk is one component, not ambiguity" rule itself landed,
+2026-09-16.** `traceConnectivity`'s own ambiguity classification in
+`mepconnectivity.ts` gained a `isPassThroughHit` filter, applied to the
+BFS's own `reached` list before `distinctIds` is computed: a reached
+equipment whose path from the seed already passes through a DIFFERENT
+equipment's own resolved node (checked against the real BFS parent chain,
+not proximity or coordinates) is a pass-through hit — the trunk simply
+continues past an equipment body it already reached to another one
+further downstream on the exact same physical run, never a real fork —
+and is dropped before the ambiguous/reached decision, matching this
+item's own literal text ("stop at the first equipment body reached").
+This directly fixes the false-ambiguity shape `expandBodyAwareTarget`'s
+own multi-port expansion can trigger: a caller-supplied equipment bbox
+that resolves onto several ports of a component already carrying a
+DIFFERENT, closer equipment body used to read ambiguous between them; it
+now correctly reads `reached` on the nearer body, and a genuine fork (two
+different branches off a real junction, neither path a prefix of the
+other) is completely unaffected — verified by both a same-line two-
+equipment synthetic case and a chain-into-a-real-fork synthetic case (the
+walk correctly stops at the near ancestor, never surfacing the fork
+sitting behind it). 2 new `mepconnectivity.test.ts` tests, both passing,
+plus all 64 pre-existing tests in that file unchanged. Re-ran both
+`serves-eval.mjs` and `mep-trace-eval.mjs` against the full real corpus
+(all four keyed sets, tuning and held-out alike, disclosed together per
+this plan's own split discipline) to check for regressions before
+committing: CORPUS totals identical before/after in both scripts
+(serves-eval: 49 rows, 12.1% served-correct, 28.6% refusal-correct, 2
+false-confident, 0 path-collision, byte-identical to the stored
+2026-09-15 report; mep-trace-eval: 3 cases, 100%/100%/0 unchanged) — zero
+regressions, as expected, since neither eval's own hand-seeded single-
+point equipment candidates exercise `expandBodyAwareTarget`'s multi-port
+expansion this rule specifically protects; this is a real, verified,
+zero-risk narrowing of the ambiguity classifier, not a no-op change to a
+case nothing exercises.
+
+**Still not attempted:** the layer-boundary refusal (supply run into a
+return body, under a strong layer signal) and item 3 (migrating
+`symbollabels.ts`'s own leader chase onto this graph) — both remain the
+real, separate, larger increments named above, requiring the same new
+device-to-graph binding model across `symbolsweep.ts`/`sweep_schedule_row`
+/`count_marks`/legend sweep that item 2's own first two increments
+correctly declined to build unilaterally.
 
 ### Phase 5 — controls and the shared path
 
