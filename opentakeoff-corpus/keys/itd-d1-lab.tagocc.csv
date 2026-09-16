@@ -1,0 +1,243 @@
+# keys/itd-d1-lab.tagocc.csv -- occurrence-level ground truth for
+# plans/03-schedule-row-to-drawn-tag-reconciliation-plan.md Phase 0.
+#
+# Authored 2026-09-16 from opentakeoff-corpus/raw/itd-d1-lab-mechanical.pdf
+# (29 pages). This document was flagged by the original audit specifically
+# for H2 (hyphen/space spelling variants between schedule and plan) and H6
+# (cross-view redraws). Coordinates are production "image px"
+# (pt x RENDER_SCALE=2, origin top-left, y down).
+#
+# METHODOLOGY NOTE (deliberately different from bessemer/bldg5406, read
+# before trusting this file): this document renders every equipment tag as
+# a stacked TWO-LINE hex/box glyph -- e.g. a hexagon containing "HC" on one
+# text line and "8" on the line directly below it, meaning "HC-8". These
+# are two SEPARATE PDF text runs (two separate spans), not one run with a
+# hyphen, and are visually and structurally distinct from bessemer/
+# bldg5406's inline "VAV-1"-style single-run tags. Grounding 135 rows of
+# this by hand-driven Session.findText calls (this key's prior methodology)
+# was impractical at this volume, so instead every row below was produced
+# by a script that (1) dumped every raw text span on the pages in scope via
+# the same textSpans()/session.sheet(...).spans the production ladder
+# itself reads, (2) filtered to spans matching a known family prefix
+# (HC|SAV|GEV|SEV|CH|SN|HEV|EF|CV|EH) or a bare 1-3 digit run, and (3)
+# paired each label span with the nearest digit span within 20px
+# horizontal / 0-40px vertical below it (a hex glyph's second line). This
+# is still real, non-fabricated PDF text -- not hand-measured, not
+# invented -- but it is a *different* (and cruder) grounding method than
+# find_text, so treat it as such. It is NOT the same code path as the
+# production ladder under test: the ladder must additionally decide, among
+# many other nearby letter/digit spans on a dense mechanical sheet (room
+# numbers, keynote circles, duct-dimension callouts, grid letters, diffuser
+# CFM/size callouts), which pairings are real tag instances -- this key's
+# script benefits from a hand-picked family allowlist the ladder does not
+# get. Confidence in the pairing is supported by every recovered digit
+# falling inside its own schedule's valid row-number range (e.g. GEV never
+# paired past 7, the schedule's real max; CH never past 4; EF only 1-3 were
+# found drawn even though the schedule runs 1-6) -- a false pairing against
+# unrelated duct-dimension digits (12, 14, 16, 20, 22...) would have shown
+# up as out-of-range row numbers, and none did.
+#
+# Real page->role map for the pages this key covers:
+#   #3  plan      M1.0 HVAC Floor Plan -- HC, SAV, EH instances
+#   #4  plan      M1.1 Exhaust Floor Plan -- CH, SN, SEV, GEV, EF, HEV instances
+#   #5  plan      M1.2 Hydronic Floor Plan -- CV, HC instances (HC's SECOND
+#       view -- see H6 note below)
+#   #12 schedule  M5.0 -- CANOPY HOOD / SNORKEL HOOD / PUMP / PRESSURE
+#       INDEPENDENT SNORKEL EXHAUST VALVE / PRESSURE INDEPENDENT ROOM
+#       SUPPLY VALVE / PRESSURE INDEPENDENT GENERAL EXHAUST VALVE / EXHAUST
+#       FAN schedules
+#   #13 schedule  M5.1 -- CONDENSING HOT WATER BOILER / HOT WATER REHEAT
+#       COIL / CONTROL VALVE / HUMIDIFIER / LAB EXHAUST FAN / DIFFUSER /
+#       RETURN & EXHAUST GRILLE / BYPASS CONTROL VALVE schedules
+#   #14 schedule  M5.2 -- ELECTRIC HEATER / MECHANICAL SPECIALTY EQUIPMENT /
+#       SPLIT SYSTEM AC / SOUND ATTENUATOR / PENTHOUSE / LOUVER / DUCTLESS
+#       SPLIT schedules
+#
+# SHEET-ROLE MISCLASSIFICATION FOUND (H1-style finding, this session): page
+# #9 (M4.1, a MECHANICAL DETAILS sheet -- combustion air intake, flue, duct
+# liner, seismic restraint construction details, zero schedule tables, zero
+# tag instances) is classified role=schedule at confidence 0.85 by the
+# production sheet-graph builder. This is the same class of defect
+# documented on bessemer's page #2 in that key's header: a details sheet
+# being scored as if it were a schedule. Not remediated in this key (Phase
+# 0 records ground truth; it does not fix the classifier), but it is a
+# second, independent real-document instance of H1's underlying failure
+# mode and is included here for that reason. Pages #18-21 and #28 are also
+# role=schedule (#20/#21 at only 0.5 confidence) and were NOT examined this
+# session -- not represented in this key, flagged as unexamined.
+#
+# H6 TEST CASE, BY CONSTRUCTION: every one of HC-1 through HC-9 is
+# genuinely, legitimately drawn TWICE in this document -- once on the
+# ductwork plan (#3, where the coil sits inline in the supply duct run) and
+# once on the hydronic plan (#5, paired with its control valve CV-#). Both
+# are real, correct drawn instances of the same physical equipment on two
+# different discipline views of the same floor -- not a redraw artifact,
+# not a duplicate-counting bug if a tool reports 2 occurrences for HC-1.
+# This is the cleanest, most systematic H6 case found in this session (a
+# full family, not an isolated instance) and should be the primary fixture
+# for whatever Phase 1/2 row->tag aggregation logic needs to represent
+# "multiple legitimate cross-sheet instances of one row" correctly.
+#
+# ORPHAN-TAG CASE, CONFIRMED BY FULL-DOCUMENT SCAN (H5-style finding): HEV
+# is drawn 4 times on page #4 (HEV-1..4) and does not appear in ANY
+# schedule table on ANY of this document's 29 pages -- confirmed by
+# scanning every sheet's spans for the substring "HEV" (4 hits, all on
+# page #4, zero elsewhere). These 4 rows are marked row_key=UNSCHEDULED
+# below. A production tag->row resolver must report these as unscheduled/
+# orphan, not silently drop them or misattribute them to an unrelated
+# family (e.g. EH, HC) via fuzzy matching.
+#
+# H2 (spelling variants): not found in this key's scope -- every ROW_LABEL
+# below is a clean single-span "PREFIX-N" schedule cell (verified by direct
+# span inspection of pages #12/#13/#14's SYMBOL columns), and every
+# PLAN_INSTANCE is the two-line hex glyph described above with no
+# alternate spelling observed (no "HC 1", "H.C.-1", "HC #1" variants
+# found). H2 remains unmeasured on this document; it was not falsified,
+# simply not present in the families sampled here.
+#
+# SCOPE: this key deliberately covers 9 of this document's ~20 schedule
+# families (CH, SN, SAV, GEV, SEV, EF, CV, HC, EH -- the valve/coil/hood/
+# fan control-device families most directly relevant to a control-valve or
+# BAS takeoff, per this plan's stated product goal) plus the unscheduled
+# HEV family, rather than exhaustively covering every family on this
+# 29-page document (e.g. B-1/2 boiler, HUM-1 humidifier, LEF-1 lab exhaust
+# fan, D-1..7 diffuser, R-1..4 grille, AHU-1, and the page-14 specialty/
+# split-system families are NOT covered here). This mirrors this plan's own
+# guidance to prioritize breadth across hypotheses and sets over exhaustive
+# per-document coverage during Phase 0.
+sheet,page,text_as_drawn,x0,y0,x1,y1,rot,class,row_table,row_key,note
+itd-d1-lab-mechanical.pdf#12,12,CH-1,350.2,401.3,385.7,420.2,0,ROW_LABEL,CANOPY HOOD SCHEDULE,CH-1,
+itd-d1-lab-mechanical.pdf#12,12,CH-2,350.2,518.2,385.7,537.1,0,ROW_LABEL,CANOPY HOOD SCHEDULE,CH-2,
+itd-d1-lab-mechanical.pdf#12,12,CH-3,350.2,632.5,385.8,651.4,0,ROW_LABEL,CANOPY HOOD SCHEDULE,CH-3,
+itd-d1-lab-mechanical.pdf#12,12,CH-4,350.2,746.0,385.7,764.9,0,ROW_LABEL,CANOPY HOOD SCHEDULE,CH-4,
+itd-d1-lab-mechanical.pdf#12,12,SN-1,361.9,1183.3,396.5,1202.2,0,ROW_LABEL,SNORKEL HOOD SCHEDULE,SN-1,
+itd-d1-lab-mechanical.pdf#12,12,SN-2,361.9,1255.3,396.5,1274.2,0,ROW_LABEL,SNORKEL HOOD SCHEDULE,SN-2,
+itd-d1-lab-mechanical.pdf#12,12,SN-3,361.9,1327.3,396.5,1346.2,0,ROW_LABEL,SNORKEL HOOD SCHEDULE,SN-3,
+itd-d1-lab-mechanical.pdf#12,12,SN-4,361.9,1399.3,396.5,1418.2,0,ROW_LABEL,SNORKEL HOOD SCHEDULE,SN-4,
+itd-d1-lab-mechanical.pdf#12,12,SN-5,361.9,1471.3,396.5,1490.2,0,ROW_LABEL,SNORKEL HOOD SCHEDULE,SN-5,
+itd-d1-lab-mechanical.pdf#12,12,SAV-1,2625.4,546.8,2669.1,565.7,0,ROW_LABEL,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-1,
+itd-d1-lab-mechanical.pdf#12,12,SAV-2,2625.4,618.8,2669.1,637.7,0,ROW_LABEL,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-2,
+itd-d1-lab-mechanical.pdf#12,12,SAV-3,2625.4,690.8,2669.1,709.7,0,ROW_LABEL,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-3,
+itd-d1-lab-mechanical.pdf#12,12,SAV-4,2625.4,762.8,2669.1,781.7,0,ROW_LABEL,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-4,
+itd-d1-lab-mechanical.pdf#12,12,SAV-5,2625.4,834.8,2669.1,853.7,0,ROW_LABEL,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-5,
+itd-d1-lab-mechanical.pdf#12,12,SAV-6,2625.4,906.5,2669.1,925.4,0,ROW_LABEL,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-6,
+itd-d1-lab-mechanical.pdf#12,12,SAV-7,2625.4,978.5,2669.1,997.4,0,ROW_LABEL,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-7,
+itd-d1-lab-mechanical.pdf#12,12,SAV-8,2625.4,1050.5,2669.1,1069.4,0,ROW_LABEL,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-8,
+itd-d1-lab-mechanical.pdf#12,12,SAV-9,2625.4,1122.5,2669.1,1141.4,0,ROW_LABEL,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-9,
+itd-d1-lab-mechanical.pdf#12,12,GEV-1,2624.4,1664.0,2669.8,1682.9,0,ROW_LABEL,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-1,
+itd-d1-lab-mechanical.pdf#12,12,GEV-2,2624.4,1736.0,2669.8,1754.9,0,ROW_LABEL,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-2,
+itd-d1-lab-mechanical.pdf#12,12,GEV-3,2624.4,1807.7,2669.8,1826.6,0,ROW_LABEL,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-3,
+itd-d1-lab-mechanical.pdf#12,12,GEV-4,2624.4,1879.7,2669.8,1898.6,0,ROW_LABEL,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-4,
+itd-d1-lab-mechanical.pdf#12,12,GEV-5,2624.4,1951.7,2669.8,1970.6,0,ROW_LABEL,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-5,
+itd-d1-lab-mechanical.pdf#12,12,GEV-6,2624.4,2023.7,2669.8,2042.6,0,ROW_LABEL,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-6,
+itd-d1-lab-mechanical.pdf#12,12,GEV-7,2624.4,2095.7,2669.8,2114.6,0,ROW_LABEL,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-7,
+itd-d1-lab-mechanical.pdf#12,12,EF-1,2619.1,2618.2,2652.1,2637.1,0,ROW_LABEL,EXHAUST FAN SCHEDULE,EF-1,
+itd-d1-lab-mechanical.pdf#12,12,EF-2,2619.1,2690.2,2652.1,2709.1,0,ROW_LABEL,EXHAUST FAN SCHEDULE,EF-2,
+itd-d1-lab-mechanical.pdf#12,12,EF-3,2619.1,2762.2,2652.1,2781.1,0,ROW_LABEL,EXHAUST FAN SCHEDULE,EF-3,
+itd-d1-lab-mechanical.pdf#12,12,EF-4,2619.1,2834.0,2652.1,2852.9,0,ROW_LABEL,EXHAUST FAN SCHEDULE,EF-4,
+itd-d1-lab-mechanical.pdf#12,12,EF-5,2619.1,2906.0,2652.1,2924.9,0,ROW_LABEL,EXHAUST FAN SCHEDULE,EF-5,
+itd-d1-lab-mechanical.pdf#12,12,EF-6,2619.1,2978.0,2652.1,2996.9,0,ROW_LABEL,EXHAUST FAN SCHEDULE,EF-6,
+itd-d1-lab-mechanical.pdf#13,13,CV-1,392.4,2196.1,427.0,2215.0,0,ROW_LABEL,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-1,
+itd-d1-lab-mechanical.pdf#13,13,CV-2,392.4,2275.3,427.0,2294.2,0,ROW_LABEL,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-2,
+itd-d1-lab-mechanical.pdf#13,13,CV-3,392.4,2354.5,427.0,2373.4,0,ROW_LABEL,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-3,
+itd-d1-lab-mechanical.pdf#13,13,CV-4,392.4,2433.2,427.0,2452.1,0,ROW_LABEL,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-4,
+itd-d1-lab-mechanical.pdf#13,13,CV-5,392.4,2511.9,427.0,2530.8,0,ROW_LABEL,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-5,
+itd-d1-lab-mechanical.pdf#13,13,CV-6,392.4,2590.9,427.0,2609.8,0,ROW_LABEL,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-6,
+itd-d1-lab-mechanical.pdf#13,13,CV-7,392.4,2669.8,427.0,2688.7,0,ROW_LABEL,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-7,
+itd-d1-lab-mechanical.pdf#13,13,CV-8,392.4,2748.8,427.0,2767.7,0,ROW_LABEL,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-8,
+itd-d1-lab-mechanical.pdf#13,13,CV-9,392.4,2827.7,427.0,2846.6,0,ROW_LABEL,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-9,
+itd-d1-lab-mechanical.pdf#13,13,HC-1,364.8,1034.0,400.4,1052.9,0,ROW_LABEL,HOT WATER REHEAT COIL SCHEDULE,HC-1,
+itd-d1-lab-mechanical.pdf#13,13,HC-2,364.8,1106.0,400.4,1124.9,0,ROW_LABEL,HOT WATER REHEAT COIL SCHEDULE,HC-2,
+itd-d1-lab-mechanical.pdf#13,13,HC-3,364.8,1178.0,400.4,1196.9,0,ROW_LABEL,HOT WATER REHEAT COIL SCHEDULE,HC-3,
+itd-d1-lab-mechanical.pdf#13,13,HC-4,364.8,1249.7,400.4,1268.6,0,ROW_LABEL,HOT WATER REHEAT COIL SCHEDULE,HC-4,
+itd-d1-lab-mechanical.pdf#13,13,HC-5,364.8,1321.3,400.4,1340.2,0,ROW_LABEL,HOT WATER REHEAT COIL SCHEDULE,HC-5,
+itd-d1-lab-mechanical.pdf#13,13,HC-6,364.8,1392.1,400.4,1411.0,0,ROW_LABEL,HOT WATER REHEAT COIL SCHEDULE,HC-6,
+itd-d1-lab-mechanical.pdf#13,13,HC-7,364.8,1463.1,400.4,1482.0,0,ROW_LABEL,HOT WATER REHEAT COIL SCHEDULE,HC-7,
+itd-d1-lab-mechanical.pdf#13,13,HC-8,364.8,1533.9,400.4,1552.8,0,ROW_LABEL,HOT WATER REHEAT COIL SCHEDULE,HC-8,
+itd-d1-lab-mechanical.pdf#13,13,HC-9,364.8,1604.7,400.4,1623.6,0,ROW_LABEL,HOT WATER REHEAT COIL SCHEDULE,HC-9,
+itd-d1-lab-mechanical.pdf#12,12,SEV-1,356.4,2845.3,400.1,2864.2,0,ROW_LABEL,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-1,
+itd-d1-lab-mechanical.pdf#12,12,SEV-2,356.4,2917.3,400.1,2936.2,0,ROW_LABEL,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-2,
+itd-d1-lab-mechanical.pdf#12,12,SEV-3,356.4,2989.3,400.1,3008.2,0,ROW_LABEL,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-3,
+itd-d1-lab-mechanical.pdf#12,12,SEV-4,356.4,3061.3,400.1,3080.2,0,ROW_LABEL,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-4,
+itd-d1-lab-mechanical.pdf#12,12,SEV-5,356.4,3133.0,400.1,3151.9,0,ROW_LABEL,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-5,
+itd-d1-lab-mechanical.pdf#14,14,EH-1,443.8,375.7,478.4,394.6,0,ROW_LABEL,ELECTRIC HEATER SCHEDULE,EH-1,
+itd-d1-lab-mechanical.pdf#14,14,EH-2,443.8,447.7,478.4,466.6,0,ROW_LABEL,ELECTRIC HEATER SCHEDULE,EH-2,
+itd-d1-lab-mechanical.pdf#14,14,EH-3,443.8,519.7,478.4,538.6,0,ROW_LABEL,ELECTRIC HEATER SCHEDULE,EH-3,
+itd-d1-lab-mechanical.pdf#14,14,EH-4,443.8,591.4,478.4,610.3,0,ROW_LABEL,ELECTRIC HEATER SCHEDULE,EH-4,
+itd-d1-lab-mechanical.pdf#14,14,EH-5,443.8,663.4,478.4,682.3,0,ROW_LABEL,ELECTRIC HEATER SCHEDULE,EH-5,
+itd-d1-lab-mechanical.pdf#14,14,EH-6,443.8,735.4,478.4,754.3,0,ROW_LABEL,ELECTRIC HEATER SCHEDULE,EH-6,
+itd-d1-lab-mechanical.pdf#14,14,EH-7,443.8,807.4,478.4,826.3,0,ROW_LABEL,ELECTRIC HEATER SCHEDULE,EH-7,
+itd-d1-lab-mechanical.pdf#14,14,EH-8,443.8,879.4,478.4,898.3,0,ROW_LABEL,ELECTRIC HEATER SCHEDULE,EH-8,
+itd-d1-lab-mechanical.pdf#14,14,EH-9,443.8,951.2,478.4,970.1,0,ROW_LABEL,ELECTRIC HEATER SCHEDULE,EH-9,
+itd-d1-lab-mechanical.pdf#3,3,EH 9,2929.7,501.7,2951.5,547.2,0,PLAN_INSTANCE,ELECTRIC HEATER SCHEDULE,EH-9,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,EH 7,3092.2,501.7,3114.0,547.2,0,PLAN_INSTANCE,ELECTRIC HEATER SCHEDULE,EH-7,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,HC 8,1738.8,712.7,1761.4,758.2,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-8,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,SAV 8,1812.2,712.7,1843.8,758.2,0,PLAN_INSTANCE,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-8,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,HC 1,2266.6,766.9,2289.2,812.2,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,SAV 1,2267.0,838.2,2298.6,883.4,0,PLAN_INSTANCE,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,SAV 9,1792.1,1075.3,1823.7,1120.8,0,PLAN_INSTANCE,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-9,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,HC 9,1796.6,1150.0,1819.3,1195.4,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-9,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,EH 1,1282.8,1182.4,1304.7,1227.8,0,PLAN_INSTANCE,ELECTRIC HEATER SCHEDULE,EH-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,EH 2,1369.7,1182.4,1391.5,1227.8,0,PLAN_INSTANCE,ELECTRIC HEATER SCHEDULE,EH-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,HC 2,1715.3,1229.2,1737.9,1274.6,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,SAV 2,1792.1,1229.2,1823.6,1274.6,0,PLAN_INSTANCE,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,SAV 3,2206.6,1280.3,2238.2,1325.5,0,PLAN_INSTANCE,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,HC 3,2219.8,1471.8,2242.4,1517.3,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,EH 3,1032.2,1511.6,1054.1,1557.1,0,PLAN_INSTANCE,ELECTRIC HEATER SCHEDULE,EH-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,SAV 4,2110.6,1703.2,2142.2,1748.6,0,PLAN_INSTANCE,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-4,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,HC 4,2194.6,1703.2,2217.2,1748.6,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-4,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,HC 5,1772.6,1977.0,1795.3,2022.5,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-5,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,SAV 5,1843.7,1977.0,1875.2,2022.5,0,PLAN_INSTANCE,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-5,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,SAV 6,2179.9,2171.4,2211.4,2216.6,0,PLAN_INSTANCE,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-6,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,HC 7,2295.8,2171.4,2318.5,2216.6,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-7,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,SAV 7,2476.8,2187.2,2508.4,2232.7,0,PLAN_INSTANCE,PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE,SAV-7,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,HC 6,2184.2,2249.6,2206.8,2295.1,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-6,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,EH 6,2921.3,2580.8,2943.1,2626.3,0,PLAN_INSTANCE,ELECTRIC HEATER SCHEDULE,EH-6,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,EH 8,3128.4,2580.8,3150.2,2626.3,0,PLAN_INSTANCE,ELECTRIC HEATER SCHEDULE,EH-8,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#3,3,EH 4,998.6,2624.8,1020.5,2670.0,0,PLAN_INSTANCE,ELECTRIC HEATER SCHEDULE,EH-4,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,CH 1,2330.2,325.3,2352.7,370.6,0,PLAN_INSTANCE,CANOPY HOOD SCHEDULE,CH-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,HEV 1,2672.6,532.2,2704.9,577.7,0,PLAN_INSTANCE,,UNSCHEDULED,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them); UNSCHEDULED -- HEV has zero schedule rows anywhere in this 29-page set (confirmed by full-document span scan), real orphan-tag case"
+itd-d1-lab-mechanical.pdf#4,4,EF 1,2787.1,532.2,2807.2,577.7,0,PLAN_INSTANCE,EXHAUST FAN SCHEDULE,EF-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SEV 1,1940.9,539.2,1972.4,584.6,0,PLAN_INSTANCE,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SN 1,2165.3,709.8,2187.1,759.1,0,PLAN_INSTANCE,SNORKEL HOOD SCHEDULE,SN-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,GEV 1,2672.2,805.1,2705.6,850.3,0,PLAN_INSTANCE,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SEV 2,1737.1,856.7,1768.7,902.2,0,PLAN_INSTANCE,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SN 2,1742.2,931.6,1764.0,980.9,0,PLAN_INSTANCE,SNORKEL HOOD SCHEDULE,SN-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,EF 2,2760.2,974.8,2780.3,1020.2,0,PLAN_INSTANCE,EXHAUST FAN SCHEDULE,EF-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,GEV 3,2373.8,1054.2,2407.3,1099.4,0,PLAN_INSTANCE,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,GEV 2,1913.3,1128.6,1946.7,1174.1,0,PLAN_INSTANCE,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,HEV 3,2687.5,1170.4,2719.8,1215.8,0,PLAN_INSTANCE,,UNSCHEDULED,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them); UNSCHEDULED -- HEV has zero schedule rows anywhere in this 29-page set (confirmed by full-document span scan), real orphan-tag case"
+itd-d1-lab-mechanical.pdf#4,4,EF 3,2785.4,1170.4,2805.5,1215.8,0,PLAN_INSTANCE,EXHAUST FAN SCHEDULE,EF-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SN 3,2281.7,1193.2,2303.5,1242.5,0,PLAN_INSTANCE,SNORKEL HOOD SCHEDULE,SN-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SEV 3,2276.9,1285.1,2308.4,1330.3,0,PLAN_INSTANCE,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,HEV 2,2048.6,1429.3,2080.9,1474.8,0,PLAN_INSTANCE,,UNSCHEDULED,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them); UNSCHEDULED -- HEV has zero schedule rows anywhere in this 29-page set (confirmed by full-document span scan), real orphan-tag case"
+itd-d1-lab-mechanical.pdf#4,4,GEV 7,1618.1,1432.2,1651.5,1477.4,0,PLAN_INSTANCE,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-7,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,CH 2,2053.4,1534.7,2076.0,1579.9,0,PLAN_INSTANCE,CANOPY HOOD SCHEDULE,CH-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,CH 3,2689.7,1536.6,2712.2,1581.8,0,PLAN_INSTANCE,CANOPY HOOD SCHEDULE,CH-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,GEV 4,2320.1,1766.0,2353.5,1811.3,0,PLAN_INSTANCE,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-4,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,GEV 6,1642.1,2080.9,1675.5,2126.2,0,PLAN_INSTANCE,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-6,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,HEV 4,2685.6,2170.0,2717.9,2215.4,0,PLAN_INSTANCE,,UNSCHEDULED,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them); UNSCHEDULED -- HEV has zero schedule rows anywhere in this 29-page set (confirmed by full-document span scan), real orphan-tag case"
+itd-d1-lab-mechanical.pdf#4,4,CH 4,2689.7,2366.3,2712.2,2411.8,0,PLAN_INSTANCE,CANOPY HOOD SCHEDULE,CH-4,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SN 5,2275.9,2377.8,2297.8,2427.1,0,PLAN_INSTANCE,SNORKEL HOOD SCHEDULE,SN-5,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SEV 5,2366.6,2381.9,2398.1,2427.4,0,PLAN_INSTANCE,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-5,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SN 4,2074.6,2438.0,2096.4,2487.4,0,PLAN_INSTANCE,SNORKEL HOOD SCHEDULE,SN-4,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,SEV 4,1989.4,2442.1,2020.9,2487.4,0,PLAN_INSTANCE,PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE,SEV-4,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#4,4,GEV 5,2327.8,2816.8,2361.2,2862.2,0,PLAN_INSTANCE,PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE,GEV-5,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,CV 1,2051.3,767.9,2073.0,817.2,0,PLAN_INSTANCE,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,HC 1,2120.4,772.2,2143.0,817.4,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-1,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,CV 8,1600.1,843.5,1621.8,892.8,0,PLAN_INSTANCE,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-8,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,HC 8,1669.4,847.6,1692.0,893.0,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-8,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,CV 9,1902.2,1195.8,1923.9,1245.1,0,PLAN_INSTANCE,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-9,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,HC 9,1971.6,1199.9,1994.2,1245.4,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-9,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,CV 2,1585.2,1303.3,1606.9,1352.6,0,PLAN_INSTANCE,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,HC 2,1654.6,1307.4,1677.1,1352.9,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-2,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,CV 3,2416.3,1367.9,2438.0,1417.2,0,PLAN_INSTANCE,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,HC 3,2346.2,1372.2,2368.8,1417.4,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-3,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,CV 4,2034.5,1790.5,2056.2,1839.8,0,PLAN_INSTANCE,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-4,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,HC 4,2103.6,1794.8,2126.2,1840.3,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-4,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,CV 5,1922.2,2053.1,1943.9,2102.4,0,PLAN_INSTANCE,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-5,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,HC 5,1852.1,2057.4,1874.6,2102.6,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-5,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,CV 6,1993.7,2183.4,2015.4,2232.7,0,PLAN_INSTANCE,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-6,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,CV 7,2268.2,2183.4,2289.9,2232.7,0,PLAN_INSTANCE,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),CV-7,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,HC 6,2063.0,2187.5,2085.6,2233.0,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-6,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"
+itd-d1-lab-mechanical.pdf#5,5,HC 7,2337.4,2187.5,2359.9,2233.0,0,PLAN_INSTANCE,HOT WATER REHEAT COIL SCHEDULE,HC-7,"stacked two-line hex-tag glyph (label span + digit span, separate PDF text runs, no hyphen/slash between them)"

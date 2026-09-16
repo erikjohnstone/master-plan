@@ -251,16 +251,98 @@ tests, all passing after each fix), every other test file that imports
 `sweepCoalesce`, `sweepNegative`, `symbolAffine` — 351/351 combined), full
 web typecheck and lint (clean, same 3 pre-existing warnings).
 
+## itd-d1-lab — third complete ground-truth key, scored (targets H2, H6)
+
+This 29-page set was specifically flagged by the original audit for H2
+(hyphen/space spelling variants) and H6 (cross-view redraws). `keys/itd-
+d1-lab.tagocc.csv` is written and committed: 135 rows (63 `ROW_LABEL` + 72
+`PLAN_INSTANCE`) across 9 families (`CH`, `SN`, `SAV`, `GEV`, `SEV`, `EF`,
+`CV`, `HC`, `EH`) plus 4 `PLAN_INSTANCE` rows for an unscheduled 10th
+(`HEV`). Full methodology, including why this key's grounding process
+differs from bessemer/bldg5406's, is in the key file's own header comment
+— summary: this document draws every tag as a stacked two-line hex glyph
+(e.g. a hexagon with "HC" on one text line and "8" directly below it, two
+separate PDF text runs, not one hyphenated run), so grounding used a
+script that dumped raw spans (the same `textSpans()` the production ladder
+itself reads) and paired each label span with the nearest digit span
+below it, rather than per-row `find_text` calls. Confidence in the pairing
+comes from every recovered digit landing inside its own schedule's real
+row-number range (no out-of-range digit ever got paired, which is what a
+false pairing against nearby duct-dimension text would produce).
+
+**Ruler result**, `tag-ledger-eval.mjs` against the production ladder,
+run in isolation (no concurrent heavy jobs, unlike the corrupted eval run
+above):
+
+```
+tag_to_row: 72 key plan instances (68 scheduled + 4 unscheduled),
+            68/68 scheduled instances matched, recall 100%
+row_to_tag: 59 row groups, 59/59 exact count matches, 100%
+```
+
+The only misses are the 4 `HEV` instances, and they miss for exactly the
+structural reason H5 predicts (a row-driven baseline cannot discover text
+with no row to start from) — not a defect.
+
+**H6 (cross-view redraws): tested cleanly, not confirmed as a defect.**
+Every one of `HC-1` through `HC-9` is genuinely, correctly drawn twice —
+once on the ductwork plan (sheet `#3`, coil inline in the supply duct run)
+and once on the hydronic plan (sheet `#5`, paired with its control valve
+`CV-#`). This is 9 full rows × 2 legitimate sheets = 18 instances, the
+largest and cleanest H6 fixture found this session, and the ladder
+recovers the correct count (2) for every one of them — no double-counting
+error, no dropped occurrence on either sheet. **H6 as originally posed
+("itd-d1-lab over-counts due to cross-view redraws") does not reproduce
+on this family**: the two views are legitimate, and the tool correctly
+treats them as two real instances of one row rather than either merging
+them into a wrong count or refusing to reconcile them.
+
+**H2 (spelling variants): still not found.** Every `ROW_LABEL` in this
+key is a clean single-span `PREFIX-N` schedule cell, and every
+`PLAN_INSTANCE` is the same two-line hex glyph pattern with no alternate
+spelling observed. Not falsified — simply absent from the 9 families
+sampled here. Two ground-truth keys and 68 scheduled cross-checked
+instances in on this document, H2 remains a hypothesis in search of a
+positive example.
+
+**H5 (orphan tags), a clean second confirmation, found by full-document
+scan.** `HEV` is drawn 4 times on sheet `#4` (`HEV-1..4`) and appears in
+*zero* schedule tables anywhere in the 29-page document — confirmed by
+scanning every sheet's spans for the substring `HEV` (4 hits total, all on
+sheet `#4`). A row-driven tool cannot discover these by construction, and
+the eval above shows exactly that gap with the correct explanation
+attached, not a silent drop or a wrong-row misattribution.
+
+**H1, a second real-document instance, incidentally found.** Sheet `#9`
+(title block reads "M4.1", a `MECHANICAL DETAILS` sheet — combustion air
+intake, flue, duct liner, and seismic-restraint construction details, zero
+schedule tables, zero tag instances) is classified `role=schedule` at
+confidence 0.85 by the production sheet-graph builder. This is the same
+failure mode as bessemer's sheet `#2` (a details sheet scored as a
+schedule) on an entirely different document, strengthening H1 from "one
+document's quirk" to "a real, repeatable classifier weakness." Not
+remediated here — Phase 0 records ground truth, not fixes — but flagged
+for whichever phase hardens sheet-role classification (this plan's own
+Phase 4).
+
+Not examined this session: sheets `#18`–`#21` and `#28` (also
+`role=schedule`, `#20`/`#21` at only 0.5 confidence) and 11 of this
+document's ~20 schedule families (`B` boiler, `HUM` humidifier, `LEF` lab
+exhaust fan, `D` diffuser, `R` grille, `AHU`, and the page-14 specialty/
+split-system families) — deliberately out of this key's scope, which
+targeted the control-valve/BAS-relevant families per this plan's stated
+product goal rather than exhaustive per-document coverage.
+
 ## Hypothesis verdicts (H1–H9, from the audit)
 
 | # | Hypothesis | Verdict this session |
 |---|---|---|
-| H1 | Tags on unknown/misclassified-role sheets are never counted | **Confirmed, concretely, and found to compound with a second defect** — bessemer p2 is both misclassified *and* its table is never extracted at all; its entire device population is invisible for two independent reasons |
-| H2 | Hyphen/space drawn-text variants are missed | Not yet measured — no variant-spelling case identified in bessemer or bldg5406 yet; itd-d1-lab remains the flagged candidate |
+| H1 | Tags on unknown/misclassified-role sheets are never counted | **Confirmed, concretely, on two independent documents.** bessemer p2 is both misclassified *and* its table is never extracted at all; its entire device population is invisible for two independent reasons. itd-d1-lab sheet `#9` (a details sheet, "M4.1") is separately, freshly found misclassified `role=schedule` at 0.85 confidence — a second real document, same failure mode, strengthening this from a one-off to a repeatable classifier weakness. |
+| H2 | Hyphen/space drawn-text variants are missed | Not yet measured — no variant-spelling case identified in bessemer, bldg5406, or the 9 families sampled on itd-d1-lab. All three ground-truth documents drew every occurrence checked as either a clean single-run tag or a structurally distinct (not mis-spelled) compound/stacked run. Not falsified, simply not yet observed. |
 | H3 | First-non-empty ladder drops mixed split/whole tags on one sheet | Not yet measured directly |
 | H4 | Rotated tags are missed | **Partially refuted, incidentally** — rotated (90°) tag+value runs (`"CDB 290"`, `"RRA 495"`) are found correctly by `compoundTagOcc` on bldg5406; rotation itself was not the obstacle in any case examined this session. Not a full test of H4 (no case of a *missed* rotated tag was found) but the cases seen all resolved correctly. |
-| H5 | Orphan tags (no schedule row) are invisible to row-driven tools | **Confirmed by construction**, inherent to every row-driven tool audited |
-| H6 | itd-d1-lab over-counts are cross-view redraws | Not yet measured — itd-d1-lab not examined this session |
+| H5 | Orphan tags (no schedule row) are invisible to row-driven tools | **Confirmed by construction, twice.** Inherent to every row-driven tool audited, and freshly re-confirmed concretely on itd-d1-lab: `HEV-1..4` are drawn on sheet `#4` and appear in zero schedule tables anywhere in the document (checked via a full 29-sheet span scan), and the ruler correctly reports exactly these 4 as the only misses, with the right explanation attached. |
+| H6 | itd-d1-lab over-counts are cross-view redraws | **Tested cleanly, not confirmed as a defect.** `HC-1` through `HC-9` are each genuinely, legitimately drawn on two different sheets (the ductwork plan `#3` and the hydronic plan `#5`) — 9 rows × 2 real sheets = 18 instances, the largest H6 fixture found this session. The ladder recovers the correct count (2) for all 9, with zero double-counting and zero dropped occurrences. The originally-hypothesized over-count does not reproduce on this family; H6 as posed is not confirmed here (may still apply to families not sampled in this key). |
 | H7 | Note mentions/legend entries leak into counts | **Confirmed, once, precisely** — bldg5406's `CWP-1` is over-counted by 1 because `compoundTagOcc` matches an installation note ("CWP-1 AND CWP-2 SHALL BE STACKED...") as if it were a second compound tag label. bessemer's `D-1`/`D-2`/`D-6` and a split-run "HP-1 IS TYPICAL..." note stayed correctly excluded, so this is not universal — H7 fires specifically when note prose happens to start with `<tag><space><more text>`, `compoundTagOcc`'s exact trigger shape. |
 | H8 | Row lookup disagrees across the three duplicated implementations | Not yet measured |
 | **H9 (new, corrected)** | **The occurrence ladder's `familySuffixTagOcc` fallback can recover an unrelated digit (a keynote/callout reference number) as a tag's missing suffix, when that digit happens to sit near enough to ≥4 real family siblings** | **Confirmed and precisely root-caused on one real document.** bessemer's `EBB-1` on sheet `#7`: the real `EBB-5..8` siblings are genuinely drawn there, satisfying `familySuffixTagOcc`'s own quorum gate, and a bare "1" — actually a keynote circle's reference number, not a tag fragment — gets recovered as a phantom second `EBB-1`. **Narrower and more precisely diagnosed than the first version of this finding claimed** — see the retraction in the bldg5406 section: the originally-reported `CDB`/`RRA` "fabrication" (a much larger, class-wide claim) was traced to a bug in this session's own verification script, not the pipeline, and has been withdrawn. |
@@ -292,12 +374,15 @@ running at time of writing (see "What remains").
 
 ## What remains for Phase 0
 
-- **Two complete, validated ground-truth keys exist** (bessemer, bldg5406);
-  **5 more sets remain** from the plan's original target list
-  (baker-county-eoc, navfac-cherry-point-atc, federal-mech, itd-d1-lab),
+- **Three complete, validated ground-truth keys exist** (bessemer,
+  bldg5406, itd-d1-lab); **3 more sets remain** from the plan's original
+  target list (baker-county-eoc, navfac-cherry-point-atc, federal-mech),
   plus 3+ held-out bulk documents blocked on bulk-corpus staging (blocked on
   network policy, unresolved this session).
-- H2, H3, H4 (only incidentally touched), H6, H8 not yet measured.
+- H2, H3, H4 (only incidentally touched), H8 not yet measured. H6 was
+  measured this session (on itd-d1-lab's `HC` family) and did not
+  reproduce as a defect — see the hypothesis table above; it may still be
+  worth checking against a family not sampled there.
 - **The full corpus-eval run from this session must be discarded and
   re-run alone**, once the machine is idle — see the takeoff+reference
   finding above. Do not carry today's 70.0%/68.1%/88.2%/10.0%-style numbers
