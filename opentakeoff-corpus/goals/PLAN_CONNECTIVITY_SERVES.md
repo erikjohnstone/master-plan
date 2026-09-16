@@ -898,13 +898,53 @@ expansion this rule specifically protects; this is a real, verified,
 zero-risk narrowing of the ambiguity classifier, not a no-op change to a
 case nothing exercises.
 
-**Still not attempted:** the layer-boundary refusal (supply run into a
-return body, under a strong layer signal) and item 3 (migrating
-`symbollabels.ts`'s own leader chase onto this graph) — both remain the
-real, separate, larger increments named above, requiring the same new
-device-to-graph binding model across `symbolsweep.ts`/`sweep_schedule_row`
-/`count_marks`/legend sweep that item 2's own first two increments
-correctly declined to build unilaterally.
+**The layer-boundary refusal's own coarser, real version landed
+2026-09-16** — item 3 (migrating `symbollabels.ts`'s own leader chase onto
+this graph) remains the real, separate, larger increment named above,
+requiring the same new device-to-graph binding model across
+`symbolsweep.ts`/`sweep_schedule_row`/`count_marks`/legend sweep that item
+2's own first two increments correctly declined to build unilaterally.
+
+`traceConnectivity`'s own BFS now refuses to cross from one recognized
+`MepSystemRole` into a genuinely DIFFERENT one (e.g. a ductwork trunk
+continuing onto a piping run it merely touches at a real junction) once
+`layer_signal` reads "strong" — the refusal is walk-relative (tracked per
+BFS path via a new `arrivingSystem` map, not a global graph property),
+skipping just that one hop rather than the whole trace, the identical
+"exclude the connection, let dead_end/an alternate route fall out
+naturally" doctrine `requireJunctionMarkForCrossings` already uses at
+graph-build time. Disclosed honestly as a NARROWER version of this item's
+own "supply run into a return body" example, not the literal thing:
+`MepSystemRole` (`mepsystems.ts`) has no supply/return sub-distinction
+today — its own token tables fold SUPP/SUPPLY/RET/RETURN/SA/RA all into
+one `"ductwork"` role — so building the exact finer distinction the plan
+prose names would require a genuinely new subsystem classifier, real,
+separate, larger work this session correctly declines to invent
+unilaterally, same discipline as the leader-chase migration right above.
+What ships here is the coarser but still real cross-SYSTEM
+(ductwork/piping/electrical/controls) boundary refusal — a real gap
+(unaddressed by anything in this codebase before today: the BFS walked
+straight through a system mismatch at any real junction, strong signal or
+not) that is now closed for that coarser case. A skipped hop discloses
+itself via a new `"system-boundary-refused"` factor, but only when it's
+relevant to the outcome actually returned (the `ambiguous`/`dead_end`
+branches) — never on a clean single `reached`, where the successful path
+by construction never crossed a refused boundary and a refusal elsewhere
+in the wider reachability graph would be noise, not signal, about that
+specific result. 3 new tests (refuses a real ductwork→piping crossing
+under a strong signal; still reaches equipment that stays entirely on the
+seed's own system; the identical shape is unaffected without a strong
+signal) — all 72 `mepconnectivity.test.ts` tests pass, both packages
+typecheck clean. Re-verified against the real corpus (`serves-eval.mjs`
+and `mep-trace-eval.mjs`, all four keyed sets): CORPUS totals
+byte-identical before/after in both scripts — zero regressions, as
+expected, since no set in this corpus carries real per-sheet layer data
+classified `"strong"` today (Bessemer's own PDF is Ghostscript-flattened
+with no OCG layers, per this plan's own earlier finding), so this refusal
+has never yet activated on any real sheet this project has a key for; it
+is real, tested, safe-by-construction code waiting for the first real
+strong-signal sheet to matter on, not a change validated only by
+synthetic fixtures.
 
 ### Phase 5 — controls and the shared path
 

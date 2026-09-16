@@ -1183,6 +1183,29 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   }
 
   const maxHops = opts.maxHops ?? (graph.crossingGated ? DEFAULT_MAX_HOPS_GATED : DEFAULT_MAX_HOPS);
+  // Phase 4 item 2's own layer-boundary refusal: under a strong, confident
+  // layer signal, a walk must never cross from one recognized MEP system
+  // into a genuinely DIFFERENT one (e.g. a ductwork trunk continuing onto
+  // a piping run it merely touches at a real junction) — refusing the
+  // CROSSING itself, not the whole trace's status, the same "exclude the
+  // connection, let dead_end/an alternate route fall out naturally"
+  // doctrine requireJunctionMarkForCrossings already uses at graph-build
+  // time (this is necessarily a WALK-time check instead: which system
+  // counts as "established" is relative to where THIS walk started, not a
+  // global graph property). A REAL, DISCLOSED narrower version of this
+  // item's own "supply run into a return body" example:  MepSystemRole
+  // has no supply/return sub-distinction today (mepsystems.ts's own token
+  // tables fold SUPP/SUPPLY/RET/RETURN/SA/RA all into one "ductwork" role)
+  // — building that finer distinction is real, separate, larger work this
+  // session correctly declines to invent unilaterally, same discipline
+  // already applied to the leader-chase migration and full UI reconcile
+  // parity elsewhere in this plan. What ships here is the coarser, still
+  // real cross-SYSTEM (ductwork/piping/electrical/controls) boundary
+  // refusal — "unknown" never refuses, since it carries no real evidence
+  // either way.
+  const refuseSystemBoundary = layer_signal === "strong";
+  const arrivingSystem = new Map<number, MepSystemRole>();
+  let systemBoundaryRefused = false;
   const parent = new Map<number, number>();
   const depth = new Map<number, number>([[seed, 0]]);
   const visited = new Set<number>([seed]);
@@ -1199,10 +1222,22 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
       const e = walked.edges[ei];
       const next = e.a === cur ? e.b : e.a;
       if (visited.has(next)) continue;
+      if (refuseSystemBoundary) {
+        const priorSystem = arrivingSystem.get(cur);
+        if (priorSystem && e.system !== "unknown" && e.system !== priorSystem) { systemBoundaryRefused = true; continue; }
+      }
       visited.add(next); parent.set(next, cur); depth.set(next, d + 1);
+      if (refuseSystemBoundary) {
+        arrivingSystem.set(next, e.system !== "unknown" ? e.system : (arrivingSystem.get(cur) ?? "unknown"));
+      }
       queue.push(next);
     }
   }
+  // Disclosed only when it's relevant to the OUTCOME actually returned (the
+  // ambiguous/dead_end branches below) — never on a clean single "reached",
+  // where the successful path by construction never crossed a refused
+  // boundary and a refusal elsewhere in the wider reachability graph would
+  // be noise, not signal, about THIS result.
   // Same OPENTAKEOFF_TRACE_DEBUG flag as the seed/equipment resolution
   // logging above — this is what actually found the DEFAULT_MAX_HOPS_GATED
   // fix: printing the real BFS's own visited set and hitCap directly
@@ -1269,6 +1304,7 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
     }
     const branchNode = paths[0].nodePath[Math.max(0, common - 1)];
     const branchAt: Point = [walked.nodes[branchNode].x, walked.nodes[branchNode].y];
+    if (systemBoundaryRefused) factors.push("system-boundary-refused");
     return {
       status: "ambiguous", layer_signal, confidence: 0, factors,
       branches: paths.map((p) => ({ at: branchAt, leads_to: p.id })),
@@ -1302,6 +1338,7 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
     };
   }
 
+  if (systemBoundaryRefused) factors.push("system-boundary-refused");
   return {
     status: "dead_end", layer_signal, confidence: 0, factors,
     reason: hitCap

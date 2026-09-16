@@ -268,6 +268,45 @@ test("traceConnectivity: refuses (does not silently return dead_end) when no equ
   assert.match(r.reason ?? "", /sweep the target family first/);
 });
 
+// ── layer-boundary refusal (Phase 4 item 2's own coarser version — see
+// mepconnectivity.ts's own doc comment above the BFS for the real,
+// disclosed gap between this and the plan's own "supply into return"
+// example) ─────────────────────────────────────────────────────────────
+
+test("traceConnectivity: under a strong layer signal, a walk refuses to cross from ductwork onto a genuinely different system (piping) at a real junction", () => {
+  const segs = [0, 0, 300, 0, 150, 0, 150, 100]; // ductwork trunk, piping stub tee'd at its midpoint
+  const layers: LayerInfo[] = [
+    { id: "duct", name: "M-DUCT", role: "unknown", confidence: 0, visible: true, seg_count: 0 },
+    { id: "pipe", name: "P-PIPE", role: "unknown", confidence: 0, visible: true, seg_count: 0 },
+  ];
+  const g = buildMepGraph(segs, { layers, layerOf: [0, 1] });
+  assert.equal(g.layerSignal, "strong", "sanity: this fixture is a real strong-signal case");
+  const r = traceConnectivity(g, [0, 0], { equipmentSymbols: [{ id: "PIPE-EQ", at: [150, 100] }] });
+  assert.equal(r.status, "dead_end", "the only path to this equipment crosses a real ductwork->piping system boundary, refused under a strong signal");
+  assert.ok(r.factors.includes("system-boundary-refused"));
+});
+
+test("traceConnectivity: the same shape still reaches equipment that stays entirely on the seed's own established system", () => {
+  const segs = [0, 0, 300, 0, 150, 0, 150, 100];
+  const layers: LayerInfo[] = [
+    { id: "duct", name: "M-DUCT", role: "unknown", confidence: 0, visible: true, seg_count: 0 },
+    { id: "pipe", name: "P-PIPE", role: "unknown", confidence: 0, visible: true, seg_count: 0 },
+  ];
+  const g = buildMepGraph(segs, { layers, layerOf: [0, 1] });
+  const r = traceConnectivity(g, [0, 0], { equipmentSymbols: [{ id: "DUCT-EQ", at: [300, 0] }] });
+  assert.equal(r.status, "reached");
+  assert.equal(r.reachedEquipment?.id, "DUCT-EQ");
+  assert.ok(!r.factors.includes("system-boundary-refused"), "no boundary was ever crossed reaching this equipment");
+});
+
+test("traceConnectivity: without a strong layer signal, the identical system-mismatched crossing is still allowed — today's unchanged behavior", () => {
+  const segs = [0, 0, 300, 0, 150, 0, 150, 100]; // identical shape, no layers supplied at all
+  const g = buildMepGraph(segs, {});
+  assert.equal(g.layerSignal, "none");
+  const r = traceConnectivity(g, [0, 0], { equipmentSymbols: [{ id: "PIPE-EQ", at: [150, 100] }] });
+  assert.equal(r.status, "reached", "no confident system data at all — the crossing is never refused, matching this option's own 'strong signal only' gate");
+});
+
 test("traceConnectivity: refuses when the seed point isn't on any traced linework", () => {
   const g = graphOf([0, 0, 100, 0]);
   const r = traceConnectivity(g, [999, 999], { equipmentSymbols: [{ id: "X", at: [100, 0] }] });

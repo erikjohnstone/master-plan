@@ -1,5 +1,28 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 4 item 2's own
+layer-boundary refusal, coarser real version: `traceConnectivity`'s BFS
+now refuses to cross from one recognized `MepSystemRole` into a
+genuinely different one (e.g. ductwork continuing onto piping at a real
+junction) once `layer_signal` is "strong" — walk-relative, via a new
+`arrivingSystem` map, skipping just that one hop rather than the whole
+trace. Disclosed honestly as narrower than the plan's own "supply into
+return" example: `MepSystemRole` has no supply/return sub-distinction
+today (mepsystems.ts folds SUPP/SUPPLY/RET/RETURN/SA/RA all into one
+"ductwork" role) — the finer distinction is real, separate, larger work
+not attempted here, same discipline already applied twice today
+(leader-chase migration, full UI reconcile parity). A skipped hop
+surfaces as a new `"system-boundary-refused"` factor, only when relevant
+to the returned outcome (ambiguous/dead_end), never on a clean reached.
+3 new tests, all 72 mepconnectivity.test.ts tests pass, both packages
+typecheck clean. Re-verified against the real corpus: serves-eval.mjs
+and mep-trace-eval.mjs CORPUS totals byte-identical before/after — zero
+regressions, since no keyed real sheet carries a "strong" layer signal
+today, so this refusal has never yet activated on real data; it's real,
+tested, safe-by-construction code, not validated by synthetic fixtures
+alone but not yet exercised by a real sheet either. Full detail: the
+plan doc's own Phase 4 section.
+
 2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 5's own named next increment
 after the `bridgeDashedGaps` hatch-fill finding: `dashdetect.ts` gained an
 `excludeSegs?: Uint8Array` option (same convention `buildMepGraph` already
