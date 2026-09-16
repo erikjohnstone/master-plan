@@ -2900,6 +2900,19 @@ export function compoundTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
     // sweep_schedule_row's own anchor (most-occs wins) — fingerprinting
     // title-block/grid furniture instead of the real device.
     if (!/^[\s/]/.test(rest)) continue;
+    // Real, measured regression (2026-09-16, bldg5406-hvac-demo-mechanical.pdf
+    // sheet #2): a general installation note reading "CWP-1 AND CWP-2 SHALL
+    // BE STACKED AND MOUNTED TO…" satisfied the shape above (key, then a
+    // delimiter, then more text in the same run) and was wrongly counted as
+    // a second drawn CWP-1. Every real compound label this function targets
+    // — "R1 /C-11", "E1/C-2", "P1 /INV-2" — is the key plus exactly ONE
+    // compact reference token, never a run of further whitespace-separated
+    // English words. Requiring the remainder (after the delimiter) to be a
+    // single token, with no further internal whitespace, keeps every real
+    // circuit/panel/inverter compound label intact while excluding ordinary
+    // prose that merely happens to start with a tag name.
+    const more = rest.replace(/^[\s/]+/, "");
+    if (!more || /\s/.test(more)) continue;
     out.push({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] });
   }
   return out;

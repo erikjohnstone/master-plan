@@ -514,6 +514,20 @@ test("compoundTagOcc: still refuses R10/R1A as a match for R1", () => {
   assert.equal(compoundTagOcc(spans, "R1").length, 0, "exact-length and alnum-continuation spans are never compound");
 });
 
+test("compoundTagOcc: a general note that happens to start with the tag name is never a compound instance (real regression, bldg5406-hvac-demo-mechanical.pdf sheet #2)", () => {
+  // Real captured span: an installation note drawn on the plan itself,
+  // reading "CWP-1 AND CWP-2 SHALL BE STACKED AND MOUNTED TO…" — before
+  // this fix, "CWP-1" + a delimiter + more same-run text satisfied
+  // compoundTagOcc's shape and this was wrongly counted as a second drawn
+  // CWP-1 instance (the real count is 1, this note is not a device).
+  const spans: FlatSpan[] = [
+    { str: "CWP-1", x0: 674.4, y0: 828.4, x1: 680.3, y1: 847.4 },
+    { str: "CWP-1 AND CWP-2 SHALL BE STACKED AND MOUNTED TO", x0: 1068.3, y0: 980.8, x1: 1074.2, y1: 1150.4 },
+  ];
+  const occ = compoundTagOcc(spans, "CWP-1");
+  assert.equal(occ.length, 0, "a multi-word note must never satisfy the compound-label shape a real circuit/panel/inverter reference does");
+});
+
 test("fragmentedTagOcc: a parenthesized gang count is not part of the tag", () => {
   const spans: FlatSpan[] = [
     { str: "(6) LD", x0: 100, y0: 200, x1: 140, y1: 210 },
