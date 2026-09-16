@@ -7,7 +7,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  buildMepGraph, traceConnectivity, hasJunctionMark, detectArrowDirections,
+  buildMepGraph, traceConnectivity, hasJunctionMark, detectArrowDirections, computePorts,
   type MepGraph, type ArrowDetectNode, type ArrowDetectEdge,
 } from "../src/lib/mepconnectivity.ts";
 import type { LayerInfo } from "../src/lib/layers.ts";
@@ -677,4 +677,48 @@ test("buildMepGraph: a centerline's own open end bridges into the existing bound
   const branchTip = g.nodes.findIndex((n) => Math.abs(n.x - 100) < 10 && Math.abs(n.y - (-50)) < 10);
   assert.ok(branchTip >= 0, "the branch tap's own tip node exists");
   assert.ok(visited.has(branchTip), "the branch is reachable from the centerline through the bridged boundary graph");
+});
+
+// ── computePorts (Phase 4 item 1) ─────────────────────────────────────────
+
+test("computePorts: a single duct entering a device's bbox from outside produces exactly one port, at the boundary crossing", () => {
+  const segs = [0, 50, 150, 50]; // a straight duct running left to right through the box
+  const g = buildMepGraph(segs, {});
+  const ports = computePorts(g, [100, 0, 200, 100]); // box from x=100..200
+  assert.equal(ports.length, 1);
+  // buildMepGraph's own coordinate quantization (no mppf given here) means
+  // the exact float isn't 50 — a tolerance check, not a stale exact value.
+  assert.equal(ports[0][0], 100, "the port sits exactly on the box's own left edge");
+  assert.ok(Math.abs(ports[0][1] - 50) < 5, "the port is where the duct crosses that edge, not the duct's own endpoint or the box centroid");
+});
+
+test("computePorts: a device with no drawn connection at all has zero ports", () => {
+  const segs = [300, 300, 400, 300]; // far away, never touches the box
+  const g = buildMepGraph(segs, {});
+  const ports = computePorts(g, [0, 0, 100, 100]);
+  assert.equal(ports.length, 0);
+});
+
+test("computePorts: a duct's own interior wiring, fully inside the box, is never a port", () => {
+  const segs = [20, 50, 80, 50]; // entirely inside a 0..100 box
+  const g = buildMepGraph(segs, {});
+  const ports = computePorts(g, [0, 0, 100, 100]);
+  assert.equal(ports.length, 0, "both ends inside the box — interior ink, not a boundary crossing");
+});
+
+test("computePorts: two separate ducts each entering the box produce two distinct ports", () => {
+  const segs = [
+    -50, 20, 50, 20,   // enters from the left at y=20
+    50, 80, 150, 80,   // enters from the right at y=80
+  ];
+  const g = buildMepGraph(segs, {});
+  const ports = computePorts(g, [0, 0, 100, 100]);
+  assert.equal(ports.length, 2);
+});
+
+test("computePorts: inkPad expands the box before testing crossings", () => {
+  const segs = [0, 50, 90, 50]; // stops just short of a 100..200 box — no crossing without padding
+  const g = buildMepGraph(segs, {});
+  assert.equal(computePorts(g, [100, 0, 200, 100]).length, 0, "the duct never reaches the box at all");
+  assert.equal(computePorts(g, [100, 0, 200, 100], 20).length, 1, "a 20px ink pad reaches the duct's own real end");
 });

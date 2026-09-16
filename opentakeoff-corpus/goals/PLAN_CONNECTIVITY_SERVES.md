@@ -689,6 +689,35 @@ change that needs its own dedicated, carefully-tested increment.
 supplied by hand — the eval passes only device tags and lets the pipeline
 find the rest. Report served-correct, refusal-correct, false-confident.
 
+**Item 1 landed, 2026-09-16 — items 2/3 and Gate 4 not started.**
+`mepconnectivity.ts` gained `computePorts(graph, bbox, inkPad?)`: every
+point a graph EDGE crosses a device placement's own bbox boundary
+(expanded by `inkPad`), never the centroid; an edge with both ends inside
+(interior wiring) or both outside (unrelated nearby ink) is never a port.
+5 unit tests (a single duct's own real crossing point; zero ports with no
+drawn connection at all; interior wiring excluded; two distinct ducts
+producing two distinct ports; `inkPad` reaching a duct that stops just
+short of the box). `symbolInkLengthPx` turned out to be a DIFFERENT,
+unrelated concept when checked directly (`symbollabels.ts`'s own
+equipment-tag ink-length CLASSIFIER, not a bbox-expansion margin) — this
+function's own `inkPad` is a plain caller-supplied number instead, not a
+reuse of that name.
+
+**Not attempted — genuinely a separate, larger increment, same discipline
+already applied to Phase 1 item 2's own `topologyFor` merge and Phase 3's
+own seed-resolution follow-up:** item 2 (`serves()`'s own walk-to-
+equipment-BODY semantics, the "shared trunk is one component, not
+ambiguity" rule, and the layer-boundary refusal) and item 3 (moving
+`symbollabels.ts`'s own leader chase onto this graph) both require a real,
+new device-to-graph binding model spanning `symbolsweep.ts`,
+`sweep_schedule_row`'s own `drawing_locations[]`, `count_marks`, and the
+legend sweep path — a materially bigger design decision (how does an
+already-shipped MCP tool surface change to accept zero hand-seeded points
+and still keep every existing caller's own contract) than a single
+session should make unilaterally without it being the session's own
+primary, dedicated focus. `computePorts` itself is a real, tested,
+standalone building block for that future work, not a partial `serves()`.
+
 ### Phase 5 — controls and the shared path
 
 1. With line style from Phase 1, `relation: controls` walks dashed edges from

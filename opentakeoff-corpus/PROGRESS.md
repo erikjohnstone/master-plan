@@ -1,5 +1,14 @@
 ## Active work
 
+2026-09-16 PLAN_CONNECTIVITY_SERVES.md Phase 4 item 1: `mepconnectivity.ts`
+gained `computePorts(graph, bbox, inkPad?)` — every point a graph edge
+crosses a device placement's own bbox boundary, never the centroid; 5 unit
+tests. Items 2/3 (the actual `serves()` walk-to-equipment-body semantics
+and moving `symbollabels.ts`'s leader chase onto this graph) are real,
+separate, larger design work spanning multiple existing modules and an
+already-shipped MCP tool's own surface — not attempted, scoped as their
+own increment in the goal doc.
+
 2026-09-15 PLAN_CONNECTIVITY_SERVES.md Phase 0 + Phase 1 (items 1, 3)
 checkpoint: Phase 0 gate met — `keys/{bessemer,itd-d1-lab,
 navfac-cherry-point-atc,bldg5406-hvac-demo}.serves.csv` (49 rows, 14

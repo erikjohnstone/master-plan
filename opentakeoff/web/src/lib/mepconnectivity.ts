@@ -33,6 +33,7 @@ import Coordinate from "jsts/org/locationtech/jts/geom/Coordinate.js";
 import UnaryUnionOp from "jsts/org/locationtech/jts/operation/union/UnaryUnionOp.js";
 import { classifyMepLayerName, mepLayerSignal, type MepSystemRole } from "./mepsystems.ts";
 import type { LayerInfo } from "./layers.ts";
+import type { Bbox } from "./sheetgraph.ts";
 import { extractDuctCenterlines } from "./ductcenterline.ts";
 
 export type LayerSignal = "none" | "weak" | "strong";
@@ -1123,4 +1124,60 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
       ? `Hit the ${maxHops}-hop limit without reaching any known equipment placement — raise max_hops and retry, or the target may genuinely be unconnected within this many hops.`
       : "Ran out of connected linework without reaching any known equipment placement — a genuine dead end, or the run may continue off-sheet at a match line this tracer has no cross-sheet awareness of.",
   };
+}
+
+// ── ports, not clicks (maturity plan Phase 4) ───────────────────────────
+// PLAN_CONNECTIVITY_SERVES.md Phase 4 item 1 — the first, self-contained
+// primitive: WHERE a device placement's own graph connections actually
+// enter its drawn footprint, not an assumed centroid seed. The rest of
+// Phase 4 (serves(): walk from each port to the first EQUIPMENT BODY
+// reached, treating a shared trunk as one component rather than
+// ambiguity; moving symbollabels.ts's own leader chase onto this same
+// graph) is real, larger, separate work — a new device-to-graph binding
+// model spanning multiple existing modules, not a quick follow-on to this
+// one primitive, same "its own dedicated increment" discipline Phase 1
+// item 2's own topologyFor merge and Phase 3's own seed-resolution
+// follow-up are already held to. Not attempted here.
+
+/** Every point where a graph EDGE crosses a device placement's own bbox
+ *  boundary (expanded by `inkPad`, the symbol's own drawn ink margin) —
+ *  never the placement's centroid. A device with zero ports has no drawn
+ *  connection to trace from at all; `traceConnectivity`'s own callers
+ *  (today, exclusively hand-seeded points) can use this to decide "refuse
+ *  as unconnected" instead of guessing a seed. An edge with BOTH ends
+ *  inside the box (interior wiring — the symbol's own drawn leg/leader)
+ *  or BOTH ends outside (unrelated linework merely passing nearby) is
+ *  never a port; only a genuine boundary crossing is. Ports are returned
+ *  in graph-edge order, deduplicated only by exact coordinate — two
+ *  edges crossing at visibly the same point but not exactly the same
+ *  float is a real, disclosed v1 scope limit, not silently merged. */
+export function computePorts(graph: MepGraph, bbox: Bbox, inkPad: number = 0): Point[] {
+  const x0 = bbox[0] - inkPad, y0 = bbox[1] - inkPad, x1 = bbox[2] + inkPad, y1 = bbox[3] + inkPad;
+  const inside = (x: number, y: number) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const seen = new Set<string>();
+  const ports: Point[] = [];
+  for (const e of graph.edges) {
+    const a = graph.nodes[e.a], b = graph.nodes[e.b];
+    const aIn = inside(a.x, a.y), bIn = inside(b.x, b.y);
+    if (aIn === bIn) continue;
+    const dx = b.x - a.x, dy = b.y - a.y;
+    // A straight segment with exactly one endpoint inside a convex
+    // rectangle crosses its boundary exactly once — find that single
+    // valid crossing among the (at most 4) candidate boundary-line
+    // intersections, rather than assuming which side it is.
+    const candidates: number[] = [];
+    if (dx !== 0) candidates.push((x0 - a.x) / dx, (x1 - a.x) / dx);
+    if (dy !== 0) candidates.push((y0 - a.y) / dy, (y1 - a.y) / dy);
+    for (const t of candidates) {
+      if (t < -1e-9 || t > 1 + 1e-9) continue;
+      const px = a.x + t * dx, py = a.y + t * dy;
+      if (px < x0 - 1e-6 || px > x1 + 1e-6 || py < y0 - 1e-6 || py > y1 + 1e-6) continue;
+      const key = `${px.toFixed(3)},${py.toFixed(3)}`;
+      if (seen.has(key)) break;
+      seen.add(key);
+      ports.push([px, py]);
+      break;
+    }
+  }
+  return ports;
 }
