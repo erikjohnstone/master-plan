@@ -123,15 +123,3 @@ export const seedConditions = (library) => (library?.length ? library : FLOORING
 // condition as a routed system (instantiateTemplate above seeds both
 // together); a flooring/architectural condition never carries either.
 export const isRoutedCond = (c) => !!(c?.system || c?.family);
-// #linear-takeoff (WP1.3): a compact human label for one RunSize, the way an
-// estimator writes it on a plan (12x6, 8"ø, 24x12 oval, 2" pipe) — distinct
-// from runSizeKey's canonical grouping string ("rect:12x6"), which is for
-// aggregation keys, never for display.
-export const sizeLabel = (sz) => {
-  if (!sz) return null;
-  if (sz.kind === "rect") return `${sz.w_in}x${sz.h_in}`;
-  if (sz.kind === "round") return `${sz.d_in}"ø`;
-  if (sz.kind === "oval") return `${sz.major_in}x${sz.minor_in} oval`;
-  if (sz.kind === "pipe") return `${sz.nps_in}" pipe`;
-  return null;
-};

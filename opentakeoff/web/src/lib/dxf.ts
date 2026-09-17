@@ -26,6 +26,7 @@
 // both call it.
 
 import { flattenCurve } from "./curve.js";
+import { runSizeKey, type ComputedRun, type RunSize } from "./linear/run.ts";
 
 export interface DxfShape {
   id: string;
@@ -37,6 +38,11 @@ export interface DxfShape {
   curved?: boolean;
   cuts_shape_id?: string;
   label?: string;
+  // #linear-takeoff (WP1.4): only `run` is read here — a per-size layer per
+  // CONTIGUOUS same-size run of segments (OT-<TAG>-LINEAR-<SIZE>). Absent
+  // (every shape before WP1.1 existed, and every non-routed trace today)
+  // falls back to today's single OT-<TAG>-LINEAR entity, byte-identical.
+  computed?: { run?: ComputedRun };
 }
 
 export interface DxfCondition {
@@ -100,6 +106,14 @@ export function dxfLayerName(tag: string | undefined | null, suffix?: string): s
   if (!base) base = "UNTAGGED";
   if (base.length > 48) base = base.slice(0, 48).replace(/-$/, "");
   return suffix ? `OT-${base}-${suffix}` : `OT-${base}`;
+}
+
+// #linear-takeoff (WP1.4): a DXF-layer-safe size suffix — runSizeKey's own
+// canonical string ("rect:12x6") with the colon (an invalid DXF layer
+// character) swapped for a dash, uppercased to match dxfLayerName's own
+// convention. "rect:12x6" → "RECT-12X6".
+function dxfSizeSuffix(size: Parameters<typeof runSizeKey>[0]): string {
+  return `LINEAR-${runSizeKey(size).replace(":", "-").toUpperCase()}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -187,7 +201,31 @@ export function buildSheetDxf(sheet: DxfSheetInput, opts: DxfOptions = {}): DxfB
       const run = role === "linear" && s.curved ? flattenCurve(px) : px;
       const pts = run.map(fromPx);
       pts.forEach(grow);
-      ents.push({ kind: "lwpoly", layer: useLayer(dxfLayerName(tag, role === "linear" ? "LINEAR" : "WALL"), color), pts, closed: false });
+      const segs = role === "linear" ? s.computed?.run?.segments : undefined;
+      if (segs && segs.length === pts.length - 1) {
+        // #linear-takeoff (WP1.4): one LWPOLYLINE per CONTIGUOUS same-size
+        // run of segments — an unsized segment (or a run block with no
+        // segment ever given a size) groups onto the plain -LINEAR layer,
+        // so this degrades to exactly the single-entity path below whenever
+        // nothing on the run is actually sized.
+        const seg0 = segs[0];
+        let groupStart = 0;
+        let groupKey: string | null = seg0.size ? runSizeKey(seg0.size) : null;
+        let groupSize: RunSize | undefined = seg0.size;
+        const emitGroup = (lastSegIdx: number) => {
+          const sub = pts.slice(groupStart, lastSegIdx + 2);
+          const suffix = groupSize ? dxfSizeSuffix(groupSize) : "LINEAR";
+          ents.push({ kind: "lwpoly", layer: useLayer(dxfLayerName(tag, suffix), color), pts: sub, closed: false });
+        };
+        for (let i = 1; i < segs.length; i++) {
+          const sg = segs[i];
+          const key = sg.size ? runSizeKey(sg.size) : null;
+          if (key !== groupKey) { emitGroup(i - 1); groupStart = i; groupKey = key; groupSize = sg.size; }
+        }
+        emitGroup(segs.length - 1);
+      } else {
+        ents.push({ kind: "lwpoly", layer: useLayer(dxfLayerName(tag, role === "linear" ? "LINEAR" : "WALL"), color), pts, closed: false });
+      }
     } else if (role === "floor_area" || role === "deduct") {
       if (role === "deduct" && s.cuts_shape_id) { skipped.push({ id: s.id, reason: `deduct reconciled into ${s.cuts_shape_id} — ships as that ring's hole` }); continue; }
       if (verts.length < 3) { skipped.push({ id: s.id, reason: `${role} ring with fewer than 3 vertices` }); continue; }

@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 // totals.js is plain JS (allowJs); the tsx loader resolves it from the .ts test.
-import { conditionTotals, materialsSummary, verticalWallSf, sheetTotals, reportJson } from "../src/lib/totals.js";
+import { conditionTotals, materialsSummary, verticalWallSf, sheetTotals, reportJson, linearRunRows } from "../src/lib/totals.js";
 
 const area = (id: string, sf: number) => ({ condition_id: id, measure_role: "floor_area", computed: { area_sf: sf } });
 const lin = (id: string, lf: number) => ({ condition_id: id, measure_role: "linear", computed: { perimeter_lf: lf } });
@@ -129,12 +129,14 @@ test("reportJson: v1 key set pinned — top level, sheets[], markups[], by_sheet
   // shape_labels + by_label appended after it (#112, additive-only, always
   // emitted); units + display_units appended after that (metric display port —
   // quantities stay RAW feet, the export says which system the user was
-  // reading); roll_goods appended last (#136, always emitted, empty without
-  // roll-goods conditions)
+  // reading); roll_goods appended (#136, always emitted, empty without
+  // roll-goods conditions); linear_runs appended last (#linear-takeoff
+  // WP1.4, always emitted, empty without sized routed runs)
   assert.deepEqual(Object.keys(j),
-    ["schema", "project_name", "generated_with", "sheets", "conditions", "by_sheet", "totals", "materials", "markups", "rfis", "condition_columns", "shape_labels", "by_label", "units", "display_units", "roll_goods"]);
+    ["schema", "project_name", "generated_with", "sheets", "conditions", "by_sheet", "totals", "materials", "markups", "rfis", "condition_columns", "shape_labels", "by_label", "units", "display_units", "roll_goods", "linear_runs"]);
   assert.equal(j.display_units, "imperial");
   assert.deepEqual(j.roll_goods, []);   // #136 — always emitted; empty when nothing carries a roll_setup
+  assert.deepEqual(j.linear_runs, []);  // #linear-takeoff WP1.4 — always emitted; empty when nothing carries a sized run
   // rfis[] appends after markups (additive v1); linked_markups/linked_sheets derived
   assert.deepEqual(Object.keys(j.rfis[0]),
     ["id", "number", "subject", "question", "status", "to", "priority", "cost_impact", "schedule_impact",
@@ -175,6 +177,63 @@ test("reportJson: roll_goods rides through verbatim; a non-array coerces to [] (
   const rows = [{ condition_id: "ct", finish_tag: "CPT-1", material: "carpet", roll_width_ft: 12, roll_length_ft: 0, direction: "ns", cuts: 3, order_lf: 46.5, rolls: 1, order_qty: 62, order_unit: "sy", oversize: false }];
   assert.deepEqual(reportJson({ rollGoods: rows }).roll_goods, rows);
   assert.deepEqual(reportJson({ rollGoods: "corrupt" as any }).roll_goods, []);
+});
+
+test("reportJson: linear_runs rides through verbatim; a non-array coerces to [] (#linear-takeoff WP1.4)", () => {
+  const rows = [{ condition_id: "ct", finish_tag: "SA-1", size_key: "rect:12x6", size: { kind: "rect", w_in: 12, h_in: 6 }, lf: 20.5, lf_net: 20.5 }];
+  assert.deepEqual(reportJson({ linearRuns: rows }).linear_runs, rows);
+  assert.deepEqual(reportJson({ linearRuns: "corrupt" as any }).linear_runs, []);
+});
+
+test("conditionTotals: a shape with no run block never gains `sizes` — byte-identical to before WP1.4", () => {
+  const rows = conditionTotals([{ id: "c", finish_tag: "CPT-1", waste_pct: 0 }], [lin("c", 20)]);
+  assert.ok(!("sizes" in rows[0]), "a plain linear trace carries no `sizes` key at all");
+});
+
+test("conditionTotals: sizes sums totals_by_size across a condition's shapes, multiplier and waste applied, with a representative RunSize object per key", () => {
+  const size12x6 = { kind: "rect", w_in: 12, h_in: 6 };
+  const size2in = { kind: "pipe", nps_in: 2 };
+  const runShape = (lf1: number, lf2: number) => ({
+    condition_id: "c", measure_role: "linear", computed: {
+      perimeter_lf: lf1 + lf2,
+      run: {
+        segments: [{ i: 0, lf: lf1, size: size12x6, size_src: "manual" }, { i: 1, lf: lf2, size: size2in, size_src: "manual" }],
+        vertices: [], totals_by_size: { "rect:12x6": lf1, "pipe:2": lf2 },
+      },
+    },
+  });
+  const rows = conditionTotals(
+    [{ id: "c", finish_tag: "SA-1", waste_pct: 10, multiplier: 2 }],
+    [runShape(10, 5), runShape(4, 1)],   // two shapes, same two sizes — sums across shapes
+  );
+  const sizes = rows[0].sizes.sort((a: any, b: any) => a.size_key.localeCompare(b.size_key));
+  assert.deepEqual(sizes.map((s: any) => s.size_key), ["pipe:2", "rect:12x6"]);
+  const pipe = sizes.find((s: any) => s.size_key === "pipe:2");
+  assert.deepEqual(pipe.size, size2in);
+  assert.equal(pipe.lf, 12);       // (5+1) × mult 2
+  assert.equal(pipe.lf_net, 13.2); // × waste 1.1
+  const rect = sizes.find((s: any) => s.size_key === "rect:12x6");
+  assert.deepEqual(rect.size, size12x6);
+  assert.equal(rect.lf, 28);       // (10+4) × mult 2
+  assert.equal(rect.lf_net, 30.8); // × waste 1.1
+});
+
+test("linearRunRows: flattens conditionTotals' sizes into one row per (condition, size); rows with none contribute nothing", () => {
+  const rows = conditionTotals(
+    [{ id: "c1", finish_tag: "SA-1", waste_pct: 0 }, { id: "c2", finish_tag: "CPT-1", waste_pct: 0 }],
+    [
+      { condition_id: "c1", measure_role: "linear", computed: { perimeter_lf: 10, run: { segments: [{ i: 0, lf: 10, size: { kind: "pipe", nps_in: 2 }, size_src: "manual" }], vertices: [], totals_by_size: { "pipe:2": 10 } } } },
+      lin("c2", 40),   // plain trace, no run block
+    ],
+  );
+  const out = linearRunRows(rows);
+  assert.equal(out.length, 1);
+  assert.deepEqual(out[0], { condition_id: "c1", finish_tag: "SA-1", size_key: "pipe:2", size: { kind: "pipe", nps_in: 2 }, lf: 10, lf_net: 10 });
+});
+
+test("linearRunRows: empty/null input is safe", () => {
+  assert.deepEqual(linearRunRows([]), []);
+  assert.deepEqual(linearRunRows(null as any), []);
 });
 
 test("reportJson: by_sheet rows serialize round2-ed — incl. ea — with key order intact", () => {

@@ -13,6 +13,40 @@ const shape = (over: Record<string, unknown> = {}) => ({
 });
 const takeoff = (conditions: unknown[], shapes: unknown[]) => ({ conditions, shapes });
 
+// #linear-takeoff (WP1.4): per-size LF deltas — a parallel field beside
+// `deltas` since conditionTotals' `sizes` is array-shaped, not a flat number.
+const runShape = (lf: number, id = "s1") => ({
+  id, sheet_id: "plan.pdf", condition_id: "c1", measure_role: "linear",
+  computed: {
+    perimeter_lf: lf,
+    run: { segments: [{ i: 0, lf, size: { kind: "pipe", nps_in: 2 }, size_src: "manual" }], vertices: [], totals_by_size: { "pipe:2": lf } },
+  },
+});
+
+test("sizes: absent (empty array) for a condition where neither side carries a sized run", () => {
+  const d = diffTakeoffs(takeoff([cond()], [shape()]), takeoff([cond()], [shape()]));
+  assert.deepEqual(d.conditions[0].sizes, []);
+});
+
+test("sizes: a size's LF change reports 'changed' with a/b/delta; an untouched size stays unchanged", () => {
+  const d = diffTakeoffs(
+    takeoff([cond()], [runShape(20)]),
+    takeoff([cond()], [runShape(35)]),
+  );
+  assert.deepEqual(d.conditions[0].sizes, [{ size_key: "pipe:2", size: { kind: "pipe", nps_in: 2 }, lf: 20, lf_b: 35, delta: 15, status: "changed" }]);
+});
+
+test("sizes: a size present only on the B side reports 'added'; only on A reports 'removed'", () => {
+  const added = diffTakeoffs(takeoff([cond()], [shape()]), takeoff([cond()], [runShape(20)]));
+  assert.equal(added.conditions[0].sizes[0].status, "added");
+  assert.equal(added.conditions[0].sizes[0].lf, 0);
+  assert.equal(added.conditions[0].sizes[0].lf_b, 20);
+  const removed = diffTakeoffs(takeoff([cond()], [runShape(20)]), takeoff([cond()], [shape()]));
+  assert.equal(removed.conditions[0].sizes[0].status, "removed");
+  assert.equal(removed.conditions[0].sizes[0].lf, 20);
+  assert.equal(removed.conditions[0].sizes[0].lf_b, 0);
+});
+
 test("identical takeoffs diff as unchanged with zero deltas", () => {
   const a = takeoff([cond()], [shape()]);
   const d = diffTakeoffs(a, takeoff([cond()], [shape()]));

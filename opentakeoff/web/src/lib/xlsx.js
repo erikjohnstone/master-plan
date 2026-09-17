@@ -14,9 +14,10 @@
 // the on-screen table: waste applied only to order quantities, never measured.
 
 import { GETTERS, colGetter, applyUnits, METRIC_CSV_LABELS } from "./reportColumns.js";
-import { grandTotals, materialsSummary, roundSheetRow, hasMultipliers, BY_SHEET_BASE_NOTE } from "./totals.js";
+import { grandTotals, materialsSummary, roundSheetRow, hasMultipliers, BY_SHEET_BASE_NOTE, linearRunRows } from "./totals.js";
 import { round2 } from "./num.js";
 import { M_PER_FT, M2_PER_SF } from "./units";
+import { sizeLabel } from "./linear/run.ts";
 
 // ---------------------------------------------------------------------------
 // XML plumbing
@@ -276,11 +277,24 @@ export function reportWorkbook({ rows = [], bySheet = [], shapeRows = [], cols =
     }
   }
 
+  // Linear runs — per-(condition, size) LF (#linear-takeoff WP1.4). Reads
+  // straight off the `sizes` field conditionTotals already computed on each
+  // row (same convention every other tab here follows: one shared `rows`
+  // input, no second pass over shapes). Omitted entirely — not even a
+  // header-only sheet — when nothing on the project carries a sized run, so
+  // a pre-WP1.4 workbook's tab COUNT stays unchanged for every such project.
+  const linearRuns = linearRunRows(rows);
+  const linearRunsTab = linearRuns.length ? [
+    ["Finish", "Size", LU, `${LU} net`],
+    ...linearRuns.map((r) => [r.finish_tag, sizeLabel(r.size) || r.size_key, L(r.lf), L(r.lf_net)]),
+  ] : null;
+
   return [
     { name: "Conditions", rows: conditions },
     { name: "By sheet", rows: bySheetRows },
     { name: "Materials", rows: materials },
     { name: "Shapes", rows: shapesTab },
     { name: "By floor × room", rows: floorRoom },
+    ...(linearRunsTab ? [{ name: "Linear runs", rows: linearRunsTab }] : []),
   ];
 }

@@ -1234,6 +1234,10 @@ export const exportReportOutput = {
   units: z.string(),
   display_units: z.string(),
   roll_goods: z.array(z.record(z.unknown())).describe("Roll-goods order rows (#136) — order_lf / rolls / order_qty per roll-goods condition, ×N applied; empty when no condition carries a roll_setup (always the case for a headless session today)"),
+  linear_runs: z.array(z.object({
+    condition_id: z.string(), finish_tag: z.string(), size_key: z.string(),
+    size: runSizeSchema.nullable(), lf: z.number(), lf_net: z.number(),
+  }).passthrough()).describe("#linear-takeoff WP1.4 — one row per (condition, size): the per-size LF breakdown beside the condition's own plain lf total, ×N and waste applied like every other reported quantity; empty when no condition carries a sized run (a plain Linear trace, or one with no segment ever given a size)"),
 };
 
 /** export_marked_pdf — the tool writes the PDF to disk and replies with where

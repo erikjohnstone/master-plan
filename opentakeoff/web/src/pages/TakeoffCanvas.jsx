@@ -130,7 +130,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 import { buildLayerInfos, effectiveLayerRoles, layerRoleCodes, segRoles, sanitizeLayerOverrides } from "../lib/layers";
 import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../lib/rules";
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
-import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
+import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText, linearRunRows } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
 import { takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
 import {
@@ -156,7 +156,7 @@ import { starPath, cloudPath, thinStroke, strokePathD, chiselRibbon, buildSnapGr
 import { DRAW_STYLES, DRAW_STYLE_IDS, resolveDrawStyle, markerPath, drawDashFor, rgbaFromHex, getDrawStyle, setDrawStyle, onDrawStyleChange } from "../lib/drawStyles.js";
 import { getDraftOutline, setDraftOutline, onDraftOutlineChange } from "../lib/draftOutline.js";
 import { flattenCurve } from "../lib/curve.js";
-import { resolveRunSegments } from "../lib/linear/run.ts";
+import { resolveRunSegments, sizeLabel } from "../lib/linear/run.ts";
 import { flattenArcRing, arcPathD, arcLength } from "../lib/arc.js";
 import { dashArrayFor, boostForDark, clampWeight, snapWeight, LINE_STYLES, LINE_STYLE_IDS, WEIGHT_STEPS } from "../lib/lineStyles.js";
 import { nextRfiNumber } from "../lib/rfi.js";
@@ -228,7 +228,7 @@ import {
   MEASURE_TOOLS, CUT_TOOLS, MARKUP_TOOLS, MARKUP_IDS, HL_INKS, HL_SIZES,
   MARKUP_IMG_MAX, MAX_IMAGE_MARKUP_BYTES, MARKUP_UPLOAD_MAX_BYTES, MARKUP_DECODE_MAX_AREA,
 } from "../lib/canvasConstants.js";
-import { uid, clamp, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions, isRoutedCond, sizeLabel } from "../lib/canvasUtil.js";
+import { uid, clamp, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions, isRoutedCond } from "../lib/canvasUtil.js";
 // Tile-pyramid rendering (#86) — pure math in lib/tiles.ts (tested), worker
 // pool in lib/tilePool.ts, DOM/Worker orchestration glue here via one
 // long-lived compositor instance. Replaces the old single-raster base +
@@ -8145,6 +8145,7 @@ export default function TakeoffCanvas() {
         sheet_id: p.key, scale_source: agentStateRef.current.scaleSources[p.key] || "unknown", scale_confirmed: true,
       })),
       sheetLabel: tabLabel, displayUnits: units,
+      linearRuns: linearRunRows(rows),
     });
     const filename = `${exportBaseName()}.report.json`;
     downloadText(filename, JSON.stringify(doc, null, 2), "application/json");

@@ -10,13 +10,26 @@
 // the geometric guess.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { resolveRunSegments, runSizeKey, type RunSize } from "../../src/lib/linear/run.ts";
+import { resolveRunSegments, runSizeKey, sizeLabel, type RunSize } from "../../src/lib/linear/run.ts";
 
 test("runSizeKey: one canonical string per size kind", () => {
   assert.equal(runSizeKey({ kind: "rect", w_in: 12, h_in: 6 }), "rect:12x6");
   assert.equal(runSizeKey({ kind: "round", d_in: 8 }), "round:8");
   assert.equal(runSizeKey({ kind: "oval", major_in: 24, minor_in: 12 }), "oval:24x12");
   assert.equal(runSizeKey({ kind: "pipe", nps_in: 2 }), "pipe:2");
+});
+
+// #linear-takeoff (WP1.3/WP1.4): moved here from canvasUtil.js so React-free,
+// MCP-shared consumers (xlsx.js, markedset.js, dxf.ts) can format a size
+// without pulling in canvasUtil.js's own React dependency.
+test("sizeLabel: one compact string per RunSize kind, the way an estimator writes it on a plan", () => {
+  assert.equal(sizeLabel({ kind: "rect", w_in: 12, h_in: 6 }), "12x6");
+  assert.equal(sizeLabel({ kind: "round", d_in: 8 }), "8\"ø");
+  assert.equal(sizeLabel({ kind: "oval", major_in: 24, minor_in: 12 }), "24x12 oval");
+  assert.equal(sizeLabel({ kind: "pipe", nps_in: 2 }), "2\" pipe");
+  assert.equal(sizeLabel(null), null);
+  assert.equal(sizeLabel(undefined), null);
+  assert.equal(sizeLabel({ kind: "hex", w_in: 4 } as unknown as RunSize), null, "an unrecognized kind never fabricates a label");
 });
 
 test("resolveRunSegments: null for fewer than 2 points, never a zero-length placeholder", () => {

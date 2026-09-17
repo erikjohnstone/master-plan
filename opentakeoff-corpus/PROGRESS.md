@@ -1,5 +1,52 @@
 ## Active work
 
+2026-09-17 linear takeoff WP1.4 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+additive outputs. conditionTotals gains a `sizes` field (one entry per
+canonical RunSize key a condition's shapes carry, ×N and waste applied like
+every other reported quantity, with a representative RunSize object per key
+read off the first segment carrying it) — present only when at least one
+shape has a sized `run` block, absent otherwise (verified: a plain trace
+gains no new key at all). A new `linearRunRows(rows)` flattens that into
+report rows; `reportJson` gains a `linear_runs` top-level block (mirrors
+roll_goods' always-emitted, appended-last convention) wired into all three
+export_report call sites (ReportPanel.jsx, mcp/session.ts's exportReport,
+and TakeoffCanvas.jsx's agentExportReport — the last of these had never
+wired roll_goods either, a separate pre-existing gap left alone, but
+linear_runs is new code so it's wired correctly there too). mcp/outputs.ts's
+exportReportOutput schema gained the matching `linear_runs` field, reusing
+the already-shared runSizeSchema.
+
+Moved `sizeLabel` out of canvasUtil.js into web/src/lib/linear/run.ts
+alongside runSizeKey: canvasUtil.js pulls in React (PALETTE from
+components/hatches.jsx) and three of WP1.4's consumers — xlsx.js,
+markedset.js, dxf.ts — are all imported directly by mcp/src/session.ts or a
+sibling (the shared-path doctrine), so a React import there would have
+broken MCP's headless build. `isRoutedCond` stays in canvasUtil.js (only
+ever used by TakeoffCanvas.jsx).
+
+Per-size sub-rows now render under a routed condition's row in
+TakeoffsPanel.jsx and as a new "Linear runs" section in ReportPanel.jsx
+(gated on any project data at all — a pre-WP1.1 or non-routed project shows
+neither); xlsx.js gains a sixth "Linear runs" tab, OMITTED entirely (not a
+header-only sheet) when nothing is sized, so a pre-WP1.4 workbook's tab
+count is unchanged. dxf.ts splits a linear shape's run into one LWPOLYLINE
+per CONTIGUOUS same-size segment run, each on its own
+OT-<TAG>-LINEAR-<SIZE> layer (colon-safe, uppercased); a run.segments length
+mismatch against the shape's own edge count (stale data) falls back safely
+to the single pre-WP1.4 entity rather than mis-slicing. markedset.js's chip
+appends a uniform run's size ("SA-1 · 18.2 LF 12x6"); a mixed-size run
+stays plain. revisions.js and snapshotDiff.js both gain a parallel
+`sizeDeltas` field (added/removed/changed per size key) beside their
+existing flat-field `deltas`, since conditionTotals' `sizes` is array-
+shaped and can't join COND_FIELDS' single-number deltasOf.
+
+Frozen-13 CSV untouched (report-csv-golden.test.ts unchanged, verified);
+totals.test.ts's report.v1 top-level key-order assertion updated to append
+linear_runs (the one test the plan item didn't name but needed touching,
+same as roll_goods' own addition once did). 122 web tests + 122 mcp tests
+green across every touched file (mcp's one failure is the same pre-existing
+sheet_graph SMOKEY MOUNTAIN citation, unrelated, reconfirmed again here).
+
 2026-09-16 linear takeoff WP0-WP1.3 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md):
 WP0 hygiene — measureLine/measurePolygon/measureSurface/placeCount now stamp
 origin.reviewed:false (B-L1; agent runs were landing as ink with no review

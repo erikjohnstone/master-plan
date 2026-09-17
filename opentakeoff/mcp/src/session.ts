@@ -19,6 +19,7 @@ import { extractControlSchematics, type ControlSchematicResult } from "../../web
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
 import type { RunSize } from "../../web/src/lib/linear/types.ts";
+import type { ComputedRun } from "../../web/src/lib/linear/run.ts";
 import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
 import { activeBasCapture, mergeBasWorkflows, type BasWorkflow } from "../../web/src/lib/basWorkflow.ts";
 import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src/lib/basNarratives.ts";
@@ -347,7 +348,7 @@ import { applyRuleToProject, type Rule, type RuleShape, type SheetRuleData } fro
 // mints and a seal the canvas mints share ONE implementation of minting,
 // load-gating, and exact-restore inverses.
 import { sanitizeApprovals as sanitizeApprovalsJs, applyApprovalCommand as applyApprovalCommandJs } from "../../web/src/lib/approvals.js";
-import { conditionTotals, grandTotals, sheetTotals, reportJson } from "../../web/src/lib/totals.js";
+import { conditionTotals, grandTotals, sheetTotals, reportJson, linearRunRows } from "../../web/src/lib/totals.js";
 import { hasRollSetup, mintRollSetup, computeRollTakeoff, rollReportRows, seamLfByShape } from "../../web/src/lib/rollTakeoff.js";
 import { gridPxPerFoot, drawGrid, drawShapes, drawMarks, type Ctx2D, type ToCanvas, type ViewMarks } from "./view.ts";
 
@@ -554,8 +555,12 @@ export interface Shape {
   measure_role: MeasureRole;
   verts_norm: [number, number][];
   /** count shapes carry {count} alone (canvas commitCount) — recompute skips
-   * them, so they never grow area fields; every other role carries both. */
-  computed: { area_sf?: number; perimeter_lf?: number; count?: number };
+   * them, so they never grow area fields; every other role carries both.
+   * run (#linear-takeoff WP1.4): only ever present on a `linear` shape that
+   * ALSO carries an authored `run` block — MCP doesn't author one yet
+   * (that's WP1.5's measure_line), but a project imported from the canvas
+   * already can, and dxf.ts/markedset.js/totals.js all read it when present. */
+  computed: { area_sf?: number; perimeter_lf?: number; count?: number; run?: ComputedRun };
   /** surface_area only: the height this shape was quantified at (canvas
    * commitSurface snapshots the condition's H onto the shape). */
   height_ft?: number;
@@ -6475,6 +6480,7 @@ export class Session {
       markups: this.markups,
       rfis: [],
       rollGoods: rollReportRows(byCond, rows),
+      linearRuns: linearRunRows(rows),
     });
   }
 

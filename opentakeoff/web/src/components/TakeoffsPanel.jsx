@@ -38,6 +38,7 @@ import { materialKind, MATERIAL_PRESETS, GROUT_DEFAULTS, groutDerivedFields, sho
 import { draftCommitValue, blurCommitValue, blurCommitNonNegative } from "../lib/draftInput.js";
 import { ROLL_FLOORING_TYPES } from "../lib/rollgoods.js";
 import { hasRollSetup, mintRollSetup } from "../lib/rollTakeoff.js";
+import { sizeLabel } from "../lib/linear/run.ts";
 import { Z } from "../lib/ui.js";
 import { ftIn } from "../lib/units";
 
@@ -966,6 +967,17 @@ function TakeoffsPanel({
                 </span>
               ) : null}
             </div>
+            {/* #linear-takeoff (WP1.4): per-size LF, only present when at least
+                one shape on this condition carries a sized run (conditionTotals'
+                additive `sizes` field) — a plain trace or non-routed condition
+                renders nothing extra here. */}
+            {row?.sizes?.length > 0 && (
+              <div style={{ fontFamily: "var(--f-mono,monospace)", fontSize: "var(--fs-2xs)", color: "var(--ink-faint)" }}>
+                {row.sizes.map((sz) => (
+                  <div key={sz.size_key}>· {fl(sz.lf)} {sizeLabel(sz.size) || sz.size_key}</div>
+                ))}
+              </div>
+            )}
           </div>
           <span style={{ fontFamily: "var(--f-mono,monospace)", fontSize: "var(--fs-xs)", color: "var(--ink-muted)", flexShrink: 0 }}>{shapeCount}▦</span>
           <button onClick={(e) => { e.stopPropagation(); onLocate(c.id); }} title="Zoom the canvas to this condition's takeoffs"

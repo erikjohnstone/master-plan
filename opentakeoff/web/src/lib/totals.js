@@ -26,6 +26,7 @@ import { M_PER_FT, M2_PER_SF } from "./units";
 import { attrValue } from "./conditionColumns.js";
 import { shapeLabelValue } from "./shapeLabels.js";
 import { compareSheetKeys } from "./sheetKey"; // NOT ./sheets — that module imports pdfjs-dist
+import { runSizeKey } from "./linear/run.ts";
 
 // Re-export so existing consumers (markedset, snapshotDiff, ReportPanel, tests)
 // keep importing round2 from here; num.js is the single definition.
@@ -73,11 +74,32 @@ export function conditionTotals(conditions, shapes, ctx = null) {
     const acc = { floor: 0, wall: 0, border: 0, lf: 0, ea: 0 };
     for (const s of cs) accumulateRole(acc, s);
     let { floor, wall, border, lf, ea } = acc;
+    // #linear-takeoff (WP1.4): per-size LF, keyed the same canonical way
+    // computed.run.totals_by_size already is (runSizeKey) — only linear
+    // shapes that carry an authored `run` block contribute; a plain trace
+    // (every shape before WP1.1 existed, and every non-routed trace today)
+    // adds nothing here, so `sizes` stays absent for a condition with none.
+    // One representative RunSize object per key rides along (read off the
+    // first segment carrying that key) so a consumer can format a label
+    // (canvasUtil.js's sizeLabel) without re-deriving it from the string key.
+    const sizeLf = {}, sizeObj = {};
+    for (const s of cs) {
+      const run = s.computed?.run;
+      if (!run?.totals_by_size) continue;
+      for (const [key, val] of Object.entries(run.totals_by_size)) {
+        sizeLf[key] = (sizeLf[key] || 0) + val;
+        if (!sizeObj[key]) {
+          const seg = (run.segments || []).find((sg) => sg.size && runSizeKey(sg.size) === key);
+          if (seg) sizeObj[key] = seg.size;
+        }
+      }
+    }
     // Seams are a property of the CUT LAYOUT, not of a role — they come in
     // pre-figured per shape and are summed here, then multiplied like every
     // other quantity: N identical units are N cuttings of the same layout.
     let seam = seamByShape ? cs.reduce((n, s) => n + (seamByShape.get(s.id) || 0), 0) : 0;
     floor *= mult; wall *= mult; border *= mult; lf *= mult; ea *= mult; seam *= mult;
+    for (const key of Object.keys(sizeLf)) sizeLf[key] *= mult;
     const total = floor + wall + border;
     // supporting materials: deterministic quantity = basis ÷ coverage, rounded up
     // to whole units (you buy whole buckets/bags). basis = this condition's measured
@@ -102,6 +124,14 @@ export function conditionTotals(conditions, shapes, ctx = null) {
       total_sf_net: round2(total * w),
       sy_net: round2((total * w) / 9),
       materials,
+      // #linear-takeoff (WP1.4): APPENDED after materials, additive-only —
+      // present only when at least one shape carries a sized run; absent
+      // (never an empty array) for every condition that doesn't, so no
+      // existing key-order assertion or consumer sees a new key it doesn't
+      // expect.
+      ...(Object.keys(sizeLf).length
+        ? { sizes: Object.keys(sizeLf).map((key) => ({ size_key: key, size: sizeObj[key] || null, lf: round2(sizeLf[key]), lf_net: round2(sizeLf[key] * w) })) }
+        : {}),
     };
   });
 }
@@ -468,6 +498,22 @@ export function totalsToCsv(rows, projectName = "", bySheet = null, sheetLabel =
   return title + lines.join("\n") + "\n";
 }
 
+// #linear-takeoff (WP1.4): the additive linear_runs block for
+// opentakeoff.report.v1 — mirrors rollTakeoff.js's rollReportRows (rows =
+// conditionTotals output, finish_tag/multiplier already applied there so
+// this can never disagree with the table), but reads straight off the
+// `sizes` field conditionTotals just computed rather than a second
+// cross-referenced map, since the per-size totals already live on the row.
+export function linearRunRows(rows) {
+  const out = [];
+  for (const r of rows || []) {
+    for (const sz of r.sizes || []) {
+      out.push({ condition_id: r.id, finish_tag: r.finish_tag, size_key: sz.size_key, size: sz.size, lf: sz.lf, lf_net: sz.lf_net });
+    }
+  }
+  return out;
+}
+
 // Report JSON envelope — schema opentakeoff.report.v1. Extracted pure so the
 // key set is testable (test/totals.test.ts pins it; schema drift fails there).
 // v1 is additive-only: new keys APPEND after the existing ones (see markups'
@@ -486,9 +532,9 @@ export function totalsToCsv(rows, projectName = "", bySheet = null, sheetLabel =
  *   conditionColumns?: Array<{id: string, name: string, values: string[]}>,
  *   attrsByCond?: Map<any, object>|null, shapeLabels?: string[],
  *   byLabel?: Array<{value: string|null, rows: any[]}>, displayUnits?: string,
- *   rollGoods?: any[]}} args
+ *   rollGoods?: any[], linearRuns?: any[]}} args
  */
-export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInfo = [], markups = [], rfis = [], sheetLabel = null, conditionColumns = [], attrsByCond = null, shapeLabels = [], byLabel = [], displayUnits = "imperial", rollGoods = [] }) {
+export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInfo = [], markups = [], rfis = [], sheetLabel = null, conditionColumns = [], attrsByCond = null, shapeLabels = [], byLabel = [], displayUnits = "imperial", rollGoods = [], linearRuns = [] }) {
   const label = (id) => (sheetLabel ? sheetLabel(id) : id);
   // destructuring defaults don't apply to an explicit null, and both values can
   // trace back to a corrupted payload — coerce (and drop malformed items) so
@@ -583,6 +629,12 @@ export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInf
     // emitted; empty for projects with no roll-goods conditions, so every
     // pre-#136 export round-trips byte-identically except this one key.
     roll_goods: Array.isArray(rollGoods) ? rollGoods : [],
+    // linear_runs APPENDS last (additive-only v1, #linear-takeoff WP1.4):
+    // one row per (condition, size) — the per-size LF breakdown beside the
+    // condition's own plain `lf` total the conditions[] rows already carry.
+    // Always emitted; empty for projects with no sized routed runs, so every
+    // pre-WP1.4 export round-trips byte-identically except this one key.
+    linear_runs: Array.isArray(linearRuns) ? linearRuns : [],
   };
 }
 

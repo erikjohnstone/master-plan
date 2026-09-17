@@ -97,6 +97,34 @@ test("sheetXml: leading/trailing whitespace gets xml:space=preserve", () => {
 // ---------------------------------------------------------------------------
 // the report workbook
 
+// #linear-takeoff (WP1.4): a project with no sized routed run gets exactly
+// the five tabs above — the "Linear runs" tab is OMITTED entirely, not a
+// header-only sixth sheet, so a pre-WP1.4 workbook's tab count is untouched.
+test("reportWorkbook: no sized run anywhere → no Linear runs tab at all (#linear-takeoff WP1.4)", () => {
+  const tabs = reportWorkbook(workbookArgs());
+  assert.deepEqual(tabs.map((t: any) => t.name), ["Conditions", "By sheet", "Materials", "Shapes", "By floor × room"]);
+});
+
+test("reportWorkbook: a sized run adds a sixth 'Linear runs' tab, one row per (condition, size)", () => {
+  const runShapes = [
+    ...shapes,
+    {
+      id: "s3", sheet_id: "plan.pdf#1", condition_id: "c2", measure_role: "linear",
+      computed: {
+        perimeter_lf: 30, area_sf: 0,
+        run: { segments: [{ i: 0, lf: 30, size: { kind: "pipe", nps_in: 2 }, size_src: "manual" }], vertices: [], totals_by_size: { "pipe:2": 30 } },
+      },
+    },
+  ];
+  const rows = conditionTotals(conds as any, runShapes as any).filter((r: any) => r.shape_count > 0);
+  const tabs = reportWorkbook({ ...workbookArgs(), rows });
+  assert.deepEqual(tabs.map((t: any) => t.name), ["Conditions", "By sheet", "Materials", "Shapes", "By floor × room", "Linear runs"]);
+  const lr = tabs[5];
+  assert.deepEqual(lr.rows[0], ["Finish", "Size", "LF", "LF net"]);
+  // c2 has multiplier ×2: the shape's own 30 LF pipe run reports 60 LF here too
+  assert.deepEqual(lr.rows[1], ["VCT-1", "2\" pipe", 60, 60]);
+});
+
 test("reportWorkbook: five tabs, Conditions mirrors the CSV columns and numbers", () => {
   const tabs = reportWorkbook(workbookArgs());
   assert.deepEqual(tabs.map((t: any) => t.name), ["Conditions", "By sheet", "Materials", "Shapes", "By floor × room"]);
