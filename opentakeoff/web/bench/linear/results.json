@@ -1,0 +1,453 @@
+{
+ "cases": 10,
+ "parity": [
+  {
+   "caseName": "01-pen-thin-solid",
+   "ok": true
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "ok": true
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "ok": true
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "ok": true
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "ok": true
+  },
+  {
+   "caseName": "06-label-inside",
+   "ok": true
+  },
+  {
+   "caseName": "07-label-beside",
+   "ok": true
+  },
+  {
+   "caseName": "08-label-leader",
+   "ok": true
+  },
+  {
+   "caseName": "09-crossing-run",
+   "ok": true
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "ok": true
+  }
+ ],
+ "totals": [
+  {
+   "caseName": "01-pen-thin-solid",
+   "expectedLf": 50.54,
+   "actualLf": 50.52,
+   "errFt": 0.01999999999999602,
+   "errPct": 0.00039572615749893197
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "expectedLf": 61.5,
+   "actualLf": 61.5,
+   "errFt": 0,
+   "errPct": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "expectedLf": 36.74,
+   "actualLf": 36.72,
+   "errFt": 0.020000000000003126,
+   "errPct": 0.0005443658138269767
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "expectedLf": 46.11,
+   "actualLf": 46.1,
+   "errFt": 0.00999999999999801,
+   "errPct": 0.00021687269572756476
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "expectedLf": 43.59,
+   "actualLf": 43.58,
+   "errFt": 0.010000000000005116,
+   "errPct": 0.00022941041523296893
+  },
+  {
+   "caseName": "06-label-inside",
+   "expectedLf": 27.81,
+   "actualLf": 27.8,
+   "errFt": 0.00999999999999801,
+   "errPct": 0.000359582883854657
+  },
+  {
+   "caseName": "07-label-beside",
+   "expectedLf": 50.61,
+   "actualLf": 50.62,
+   "errFt": 0.00999999999999801,
+   "errPct": 0.00019758940920762717
+  },
+  {
+   "caseName": "08-label-leader",
+   "expectedLf": 33.48,
+   "actualLf": 33.48,
+   "errFt": 0,
+   "errPct": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "expectedLf": 36.13,
+   "actualLf": 36.13,
+   "errFt": 0,
+   "errPct": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "expectedLf": 13.41,
+   "actualLf": 13.41,
+   "errFt": 0,
+   "errPct": 0
+  }
+ ],
+ "determinism": [
+  {
+   "caseName": "01-pen-thin-solid",
+   "transform": "rotate90",
+   "expectedLf": 50.52,
+   "actualLf": 50.52,
+   "errFt": 0
+  },
+  {
+   "caseName": "01-pen-thin-solid",
+   "transform": "translate",
+   "expectedLf": 50.52,
+   "actualLf": 50.52,
+   "errFt": 0
+  },
+  {
+   "caseName": "01-pen-thin-solid",
+   "transform": "reverse",
+   "expectedLf": 50.52,
+   "actualLf": 50.52,
+   "errFt": 0
+  },
+  {
+   "caseName": "01-pen-thin-solid",
+   "transform": "scale2x",
+   "expectedLf": 101.04,
+   "actualLf": 101.04,
+   "errFt": 0
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "transform": "rotate90",
+   "expectedLf": 61.5,
+   "actualLf": 61.5,
+   "errFt": 0
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "transform": "translate",
+   "expectedLf": 61.5,
+   "actualLf": 61.5,
+   "errFt": 0
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "transform": "reverse",
+   "expectedLf": 61.5,
+   "actualLf": 61.5,
+   "errFt": 0
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "transform": "scale2x",
+   "expectedLf": 123,
+   "actualLf": 123,
+   "errFt": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "transform": "rotate90",
+   "expectedLf": 36.72,
+   "actualLf": 36.72,
+   "errFt": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "transform": "translate",
+   "expectedLf": 36.72,
+   "actualLf": 36.72,
+   "errFt": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "transform": "reverse",
+   "expectedLf": 36.72,
+   "actualLf": 36.72,
+   "errFt": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "transform": "scale2x",
+   "expectedLf": 73.44,
+   "actualLf": 73.44,
+   "errFt": 0
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "transform": "rotate90",
+   "expectedLf": 46.1,
+   "actualLf": 46.1,
+   "errFt": 0
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "transform": "translate",
+   "expectedLf": 46.1,
+   "actualLf": 46.1,
+   "errFt": 0
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "transform": "reverse",
+   "expectedLf": 46.1,
+   "actualLf": 46.1,
+   "errFt": 0
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "transform": "scale2x",
+   "expectedLf": 92.2,
+   "actualLf": 92.2,
+   "errFt": 0
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "transform": "rotate90",
+   "expectedLf": 43.58,
+   "actualLf": 43.58,
+   "errFt": 0
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "transform": "translate",
+   "expectedLf": 43.58,
+   "actualLf": 43.58,
+   "errFt": 0
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "transform": "reverse",
+   "expectedLf": 43.58,
+   "actualLf": 43.58,
+   "errFt": 0
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "transform": "scale2x",
+   "expectedLf": 87.16,
+   "actualLf": 87.16,
+   "errFt": 0
+  },
+  {
+   "caseName": "06-label-inside",
+   "transform": "rotate90",
+   "expectedLf": 27.8,
+   "actualLf": 27.8,
+   "errFt": 0
+  },
+  {
+   "caseName": "06-label-inside",
+   "transform": "translate",
+   "expectedLf": 27.8,
+   "actualLf": 27.8,
+   "errFt": 0
+  },
+  {
+   "caseName": "06-label-inside",
+   "transform": "reverse",
+   "expectedLf": 27.8,
+   "actualLf": 27.8,
+   "errFt": 0
+  },
+  {
+   "caseName": "06-label-inside",
+   "transform": "scale2x",
+   "expectedLf": 55.6,
+   "actualLf": 55.6,
+   "errFt": 0
+  },
+  {
+   "caseName": "07-label-beside",
+   "transform": "rotate90",
+   "expectedLf": 50.62,
+   "actualLf": 50.62,
+   "errFt": 0
+  },
+  {
+   "caseName": "07-label-beside",
+   "transform": "translate",
+   "expectedLf": 50.62,
+   "actualLf": 50.62,
+   "errFt": 0
+  },
+  {
+   "caseName": "07-label-beside",
+   "transform": "reverse",
+   "expectedLf": 50.62,
+   "actualLf": 50.62,
+   "errFt": 0
+  },
+  {
+   "caseName": "07-label-beside",
+   "transform": "scale2x",
+   "expectedLf": 101.24,
+   "actualLf": 101.24,
+   "errFt": 0
+  },
+  {
+   "caseName": "08-label-leader",
+   "transform": "rotate90",
+   "expectedLf": 33.48,
+   "actualLf": 33.48,
+   "errFt": 0
+  },
+  {
+   "caseName": "08-label-leader",
+   "transform": "translate",
+   "expectedLf": 33.48,
+   "actualLf": 33.48,
+   "errFt": 0
+  },
+  {
+   "caseName": "08-label-leader",
+   "transform": "reverse",
+   "expectedLf": 33.48,
+   "actualLf": 33.48,
+   "errFt": 0
+  },
+  {
+   "caseName": "08-label-leader",
+   "transform": "scale2x",
+   "expectedLf": 66.96,
+   "actualLf": 66.96,
+   "errFt": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "transform": "rotate90",
+   "expectedLf": 36.13,
+   "actualLf": 36.13,
+   "errFt": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "transform": "translate",
+   "expectedLf": 36.13,
+   "actualLf": 36.13,
+   "errFt": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "transform": "reverse",
+   "expectedLf": 36.13,
+   "actualLf": 36.13,
+   "errFt": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "transform": "scale2x",
+   "expectedLf": 72.26,
+   "actualLf": 72.26,
+   "errFt": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "transform": "rotate90",
+   "expectedLf": 13.42,
+   "actualLf": 13.42,
+   "errFt": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "transform": "translate",
+   "expectedLf": 13.42,
+   "actualLf": 13.42,
+   "errFt": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "transform": "reverse",
+   "expectedLf": 13.42,
+   "actualLf": 13.42,
+   "errFt": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "transform": "scale2x",
+   "expectedLf": 26.84,
+   "actualLf": 26.83,
+   "errFt": 0.010000000000001563
+  }
+ ],
+ "extractionSanity": [
+  {
+   "caseName": "01-pen-thin-solid",
+   "segs": 5
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "segs": 5
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "segs": 3
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "segs": 4
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "segs": 8
+  },
+  {
+   "caseName": "06-label-inside",
+   "segs": 3
+  },
+  {
+   "caseName": "07-label-beside",
+   "segs": 5
+  },
+  {
+   "caseName": "08-label-leader",
+   "segs": 4
+  },
+  {
+   "caseName": "09-crossing-run",
+   "segs": 5
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "segs": 9
+  }
+ ],
+ "aggregate": {
+  "cases": 10,
+  "parityFailures": 0,
+  "maxTotalsErrFt": 0.020000000000003126,
+  "maxTotalsErrPct": 0.0005443658138269767,
+  "maxDeterminismErrFt": 0.010000000000001563
+ },
+ "thresholds": {
+  "maxTotalsErrFt": 0.03,
+  "maxDeterminismErrFt": 0.03,
+  "maxParityFailures": 0
+ }
+}

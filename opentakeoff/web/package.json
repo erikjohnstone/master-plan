@@ -13,6 +13,8 @@
     "test": "node --import tsx --test test/*.test.ts test/linear/*.test.ts",
     "test:shared-path": "node --import tsx --test test/corpusTakeoffBas.test.ts test/schedulePlanReconcile.test.ts test/agentTakeoff.test.ts test/agentTools.test.ts test/corpusTakeoffVol2Families.test.ts",
     "bench": "node --import tsx bench/run.mts",
+    "bench:linear": "node --import tsx bench/linear.mts",
+    "bench:linear:synthesize": "node --import tsx bench/linear/synthesize.mts",
     "bench:callouts": "node --import tsx bench/callouts.mts",
     "bench:batch": "node --import tsx bench/batch.mts",
     "bench:bas-sync": "node --import tsx bench/bas-sync-history.mts",

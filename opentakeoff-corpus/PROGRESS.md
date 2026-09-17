@@ -1,5 +1,105 @@
 ## Active work
 
+2026-09-17 linear takeoff WP1.6 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+THE BENCH v1. New `web/bench/linear.mts` (npm run bench:linear) scores the
+synthetic linear corpus on the three things that can actually regress in
+MANUAL mode — parity (canvas == MCP), totals (computed LF against the
+geometry's own analytic truth), and determinism (rotate90/translate/
+reverse/scale2x) — deliberately NOT the full run-recall/precision/Fréchet/
+vertex-F1 suite §2 of the goal document describes for the whole bench's
+lifetime: that's WP3+'s trace-engine scoring, and has no meaning yet since
+manual mode never "finds" a run — a person/agent supplies its points
+outright, so there's nothing to score recall against. score.ts's own header
+comment on the new functions says this explicitly, so nobody mistakes the
+narrower v1 scope for an oversight later.
+
+New pure functions in `web/bench/score.ts` (score.ts + linear.mts is the
+goal document's own naming for this work item): `scoreLinearParity`
+(structural equality between canvas's own resolveRunSegments call and
+MCP's replied computed_run — ANY difference is a wiring bug, since both are
+literally the one shared function, never a tolerance matter),
+`scoreLinearTotals` (LF against analytic truth), `scoreLinearDeterminism`
+(one transform probe), `aggregateLinear` (rollup). Tested in
+test/benchScore.test.ts alongside the existing scorer tests, following the
+one-file-per-pure-module convention already established there.
+
+`web/bench/linear/synthesize.mts` (npm run bench:linear:synthesize, not
+auto-run by the bench itself — like every other bench/corpus/*.json, the
+corpus is a committed fixture, regenerated only when the case set changes)
+generates ten synthetic duct/pipe-network PDFs with pdf-lib — real PDF
+bytes, never hand-drawn — plus a truth JSON per case in the same
+{pdf, page, scale, ptPerFt} shape bench/corpus/*.json already uses. Each
+case's linework and its golden LF come from the SAME authored
+feet-coordinates (corpus.ts's own truth-by-construction rule), drawn with a
+seeded PRNG (mulberry32) so "random duct/pipe networks" stays reproducible.
+
+The plan document's own "Appendix E" (cited as the source for the ten
+hardest synthetic cases) is not checked into this repo and was not
+available while writing this — noted here rather than silently guessed
+past. The ten cases below are this session's own judgment call, built from
+the goal document's own listed hard dimensions instead: pen weight
+(thin/thick), dash pattern (dashed/dash-dot), double-line duct width
+(offset parallel centerlines), label placement (inside/beside/leader),
+a crossing (two runs through one bounding box, no shared vertex), and an
+arc flattened to a polyline (a quarter-circle elbow approximated by 8
+straight segments, matching the flattenCurve convention a curved Linear
+trace already stores). Extend CASES in synthesize.mts as real hard cases
+turn up — the file says so at its own header.
+
+Caught and fixed before committing: the first draft's random walk could
+wander into negative feet coordinates with no bound, drawing (part of) a
+run off the page — visually confirmed by rendering a case to PNG via
+pdfjs + @napi-rs/canvas (a throwaway check, not part of the deliverable)
+and seeing most of the geometry simply absent. Fixed with a bounded walk
+that reflects off a safe interior box instead of trusting the origin plus
+a few random legs to stay on the page; re-rendered four cases (leader-line,
+double-line, crossing, arc) to confirm every one now draws fully inside
+the sheet.
+
+THRESHOLDS (measured actual + margin, bench/run.mts's own rule, not chosen
+for comfort): maxTotalsErrFt 0.03 — the real noise source is that
+measure_line's length_lf and this bench's truth compute the same
+real-number total via slightly different floating-point paths (Math.hypot
+in px-space×upp vs directly in feet), which can disagree by a
+rounding-boundary cent; measured max across regenerations of this ten-case
+corpus was 0.02 ft, gated one more cent above that so a harmless
+float-representation nudge at the boundary never trips it. maxDeterminismErrFt
+0.03 — rotate90/translate/reverse are EXACT every time (a transformed
+segment has the identical hypot length, so its rounded lf is identical
+too; a nonzero reading from these three would mean a real bug, not noise);
+only scale2x carries noise, since resolveRunSegments rounds EACH segment
+to 2dp before totaling and rounding isn't linear — measured max 0.01–0.02
+ft depending on which random corpus was live, gated with the same margin.
+Verified the gate actually fails on a real breach (temporarily zeroed
+maxTotalsErrFt, confirmed a real non-zero exit code, reverted).
+
+CI: `.github/workflows/ci.yml`'s `web` job gained an `npm run bench:linear`
+step plus a `git diff --exit-code -- bench/linear/results.json` gate,
+modeled exactly on the existing #198 step for bench/results.json — an
+engine change that moves a linear number now has to ship its own
+results.json delta in the same PR. NOT wired into `npm run check` — the
+goal document's own WP8.1 ("bench:linear joins npm run check") is where
+that belongs, not WP1.6.
+
+Verified: web typecheck clean; `npm run bench` (the existing flood-fill
+bench) and `npm run bench:callouts`/`bench:batch` still run clean and
+bench/results.json is byte-identical (confirming the score.ts additions
+are purely additive); test/benchScore.test.ts green (30 tests, 8 new).
+Noticed `bench/batch-results.json` drifts on every `npm run bench:batch`
+run regardless of any change here — confirmed via git-stash comparison
+against the untouched WP1.5 baseline (same drift with score.ts fully
+reverted) — pre-existing non-determinism in that bench, unrelated,
+uncommitted here. Full web suite run for a final regression signal before commit:
+3265 tests, 70 fail — one fewer than the WP1.4/WP1.5 checkpoints' own
+71-failure baseline, and the difference is exactly accounted for: the known
+compileProgressWalkthrough CLI-subprocess flake (documented in both prior
+checkpoints) didn't hang this run and passed outright, leaving the same
+sync/cloud-storage/snapshot/BAS-restore cluster as the only failures, same
+test names as before. Watched its real-PDF subprocess directly this time
+(98%+ CPU, steady growth in both elapsed and CPU time) to confirm it was
+genuinely computing rather than hung, instead of waiting blind. Nothing in
+the failing set mentions linear/bench/score/parity/determinism/totals.
+
 2026-09-17 linear takeoff WP1.5 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 MCP measure_line/edit_run. measure_line gains optional system/size/vertices:
 require condition (they configure the committed shape's run block, refused

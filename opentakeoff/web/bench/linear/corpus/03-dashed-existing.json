@@ -1,0 +1,41 @@
+{
+ "name": "03-dashed-existing",
+ "hardCase": "dash pattern (existing-to-remain)",
+ "pdf": "../synthetic/03-dashed-existing.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    19.34,
+    11.57
+   ],
+   [
+    19.34,
+    21.49
+   ],
+   [
+    6.24,
+    21.49
+   ],
+   [
+    6.24,
+    7.79
+   ]
+  ],
+  "system": "SA",
+  "size": {
+   "kind": "round",
+   "d_in": 10
+  }
+ },
+ "expected": {
+  "segment_lf": [
+   9.92,
+   13.11,
+   13.71
+  ],
+  "total_lf": 36.74
+ }
+}

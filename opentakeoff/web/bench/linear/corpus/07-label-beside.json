@@ -1,0 +1,51 @@
+{
+ "name": "07-label-beside",
+ "hardCase": "label placement (beside, no leader)",
+ "pdf": "../synthetic/07-label-beside.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    24.71,
+    18.73
+   ],
+   [
+    14.92,
+    18.73
+   ],
+   [
+    14.92,
+    11.21
+   ],
+   [
+    7.96,
+    11.21
+   ],
+   [
+    7.96,
+    23.57
+   ],
+   [
+    21.95,
+    23.57
+   ]
+  ],
+  "system": "SA",
+  "size": {
+   "kind": "round",
+   "d_in": 8
+  }
+ },
+ "expected": {
+  "segment_lf": [
+   9.79,
+   7.52,
+   6.96,
+   12.35,
+   13.99
+  ],
+  "total_lf": 50.61
+ }
+}

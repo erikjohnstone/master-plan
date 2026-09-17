@@ -1,7 +1,7 @@
 // Benchmark scorer — the IoU/aggregate math the corpus gate stands on.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, type ProbeScore, type CrossScore } from "../bench/score.ts";
+import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear, type ProbeScore, type CrossScore } from "../bench/score.ts";
 import { KNOWN_WALL_SEMANTICS, WALL_SEMANTICS } from "../bench/corpus.ts";
 import type { Point } from "../src/lib/oneclick.ts";
 
@@ -385,4 +385,54 @@ test("A2/A5b gate: the xfailAtMost and xfailEquals directions flip the same way 
   // is UNCHECKABLE, which is a failure rather than a silent pass
   const orphan = confidenceGate([...base, tile(0.85)]);
   assert.ok(orphan.failures.some((f) => /XFAIL UNCHECKABLE/.test(f)), orphan.failures.join("; "));
+});
+
+// ── #linear-takeoff (WP1.6) — parity/totals/determinism scoring ────────────
+test("scoreLinearParity: identical ComputedRuns are OK; any difference names the mismatch", () => {
+  const run = { segments: [{ i: 0, lf: 10, size_src: "manual" as const }], vertices: [], totals_by_size: {} };
+  assert.deepEqual(scoreLinearParity("c1", run, structuredClone(run)), { caseName: "c1", ok: true });
+  const different = { ...structuredClone(run), segments: [{ i: 0, lf: 11, size_src: "manual" as const }] };
+  const r = scoreLinearParity("c1", run, different);
+  assert.equal(r.ok, false);
+  assert.match(r.mismatch!, /canvas computed_run !== MCP computed_run/);
+});
+
+test("scoreLinearParity: one side null and the other resolved is a mismatch; both null is OK", () => {
+  const run = { segments: [], vertices: [], totals_by_size: {} };
+  assert.deepEqual(scoreLinearParity("c1", null, null), { caseName: "c1", ok: true });
+  const half = scoreLinearParity("c1", run, null);
+  assert.equal(half.ok, false);
+  assert.match(half.mismatch!, /one side resolved a run and the other didn't/);
+});
+
+test("scoreLinearTotals: exact match has zero error; a mismatch reports both absolute and percent error", () => {
+  assert.deepEqual(scoreLinearTotals("c1", 50, 50), { caseName: "c1", expectedLf: 50, actualLf: 50, errFt: 0, errPct: 0 });
+  const off = scoreLinearTotals("c1", 50, 51);
+  assert.equal(off.errFt, 1);
+  assert.ok(Math.abs(off.errPct - 0.02) < 1e-9);
+});
+
+test("scoreLinearTotals: a zero-length expected run reports 0% error rather than dividing by zero", () => {
+  assert.deepEqual(scoreLinearTotals("c1", 0, 0), { caseName: "c1", expectedLf: 0, actualLf: 0, errFt: 0, errPct: 0 });
+});
+
+test("scoreLinearDeterminism: reports the transform name and the raw error", () => {
+  assert.deepEqual(scoreLinearDeterminism("c1", "rotate90", 20, 20), { caseName: "c1", transform: "rotate90", expectedLf: 20, actualLf: 20, errFt: 0 });
+  const scaled = scoreLinearDeterminism("c1", "scale2x", 40, 40.02);
+  assert.ok(Math.abs(scaled.errFt - 0.02) < 1e-9, `expected ~0.02, got ${scaled.errFt}`);
+});
+
+test("aggregateLinear: rolls up parity failures and the worst totals/determinism error across cases", () => {
+  const parity = [{ ok: true }, { ok: false }, { ok: true }];
+  const totals = [scoreLinearTotals("a", 10, 10), scoreLinearTotals("b", 10, 10.03)];
+  const determinism = [scoreLinearDeterminism("a", "rotate90", 10, 10), scoreLinearDeterminism("a", "scale2x", 20, 19.98)];
+  const agg = aggregateLinear(parity, totals, determinism);
+  assert.equal(agg.cases, 2);
+  assert.equal(agg.parityFailures, 1);
+  assert.ok(Math.abs(agg.maxTotalsErrFt - 0.03) < 1e-9);
+  assert.ok(Math.abs(agg.maxDeterminismErrFt - 0.02) < 1e-9);
+});
+
+test("aggregateLinear: empty inputs report zero, not NaN or a thrown error", () => {
+  assert.deepEqual(aggregateLinear([], [], []), { cases: 0, parityFailures: 0, maxTotalsErrFt: 0, maxTotalsErrPct: 0, maxDeterminismErrFt: 0 });
 });

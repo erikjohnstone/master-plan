@@ -1,0 +1,71 @@
+{
+ "name": "10-arc-as-polyline",
+ "hardCase": "arc flattened to a polyline elbow",
+ "pdf": "../synthetic/10-arc-as-polyline.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    24.16,
+    16.08
+   ],
+   [
+    25.33,
+    16.19
+   ],
+   [
+    26.46,
+    16.53
+   ],
+   [
+    27.49,
+    17.09
+   ],
+   [
+    28.4,
+    17.83
+   ],
+   [
+    29.15,
+    18.74
+   ],
+   [
+    29.7,
+    19.78
+   ],
+   [
+    30.05,
+    20.9
+   ],
+   [
+    30.16,
+    22.08
+   ],
+   [
+    30.16,
+    26.08
+   ]
+  ],
+  "system": "HHWS",
+  "size": {
+   "kind": "pipe",
+   "nps_in": 3
+  }
+ },
+ "expected": {
+  "segment_lf": [
+   1.18,
+   1.18,
+   1.18,
+   1.18,
+   1.18,
+   1.18,
+   1.18,
+   1.18,
+   4
+  ],
+  "total_lf": 13.41
+ }
+}

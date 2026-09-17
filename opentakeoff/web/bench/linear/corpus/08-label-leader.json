@@ -1,0 +1,41 @@
+{
+ "name": "08-label-leader",
+ "hardCase": "label placement (leader line)",
+ "pdf": "../synthetic/08-label-leader.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    24.15,
+    17.02
+   ],
+   [
+    9.32,
+    17.02
+   ],
+   [
+    9.32,
+    5
+   ],
+   [
+    15.95,
+    5
+   ]
+  ],
+  "system": "HHWS",
+  "size": {
+   "kind": "pipe",
+   "nps_in": 1.5
+  }
+ },
+ "expected": {
+  "segment_lf": [
+   14.83,
+   12.02,
+   6.63
+  ],
+  "total_lf": 33.48
+ }
+}

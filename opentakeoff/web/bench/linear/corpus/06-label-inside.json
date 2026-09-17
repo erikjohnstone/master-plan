@@ -1,0 +1,42 @@
+{
+ "name": "06-label-inside",
+ "hardCase": "label placement (inside the run)",
+ "pdf": "../synthetic/06-label-inside.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    18.15,
+    13.1
+   ],
+   [
+    18.15,
+    6.35
+   ],
+   [
+    27.36,
+    6.35
+   ],
+   [
+    27.36,
+    18.19
+   ]
+  ],
+  "system": "SA",
+  "size": {
+   "kind": "rect",
+   "w_in": 14,
+   "h_in": 8
+  }
+ },
+ "expected": {
+  "segment_lf": [
+   6.75,
+   9.21,
+   11.85
+  ],
+  "total_lf": 27.81
+ }
+}

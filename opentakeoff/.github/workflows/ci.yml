@@ -47,6 +47,17 @@ jobs:
             echo "::error file=web/bench/results.json::the engine no longer produces the committed bench numbers — run 'cd web && npm run bench' and commit the regenerated results.json in this PR so the delta is reviewed with the change that caused it"
             exit 1
           }
+      # #linear-takeoff (WP1.6) — same #198 pattern for the linear-takeoff
+      # bench: bench/linear/results.json is committed, this rewrites it, and
+      # the diff-gate below is what makes an engine change that moves a
+      # linear number visible as a reviewable delta instead of a silent drift.
+      - run: npm run bench:linear
+      - name: bench/linear/results.json must match what the engine produces (#198)
+        run: |
+          git diff --exit-code -- bench/linear/results.json || {
+            echo "::error file=web/bench/linear/results.json::the engine no longer produces the committed linear-takeoff bench numbers — run 'cd web && npm run bench:linear' and commit the regenerated results.json in this PR so the delta is reviewed with the change that caused it"
+            exit 1
+          }
       - run: npm run build
 
   mcp:

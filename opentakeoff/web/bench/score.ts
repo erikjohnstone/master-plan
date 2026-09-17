@@ -7,6 +7,7 @@
 // for probes whose golden answer is "refuse".
 import { pointInPoly } from "../src/lib/geometry.js";
 import type { Point } from "../src/lib/oneclick";
+import type { ComputedRun } from "../src/lib/linear/run.ts";
 
 /** Rasterized IoU of two polygons (cell centers on the union bbox, 1 px grid).
  *  Exact enough for room-scale rings; dependency-free and orientation-proof. */
@@ -506,5 +507,69 @@ export function aggregate(scores: ProbeScore[]): Aggregate {
     refusalProbes: refuse.length,
     correctRefusalRate: refuse.length ? refuse.filter((s) => s.correctRefusal).length / refuse.length : 1,
     knownFails: scores.filter((s) => s.knownFail).length,
+  };
+}
+
+// ── #linear-takeoff (WP1.6) — manual-run scoring: parity, determinism, totals.
+// Deliberately NOT the full run-recall/precision/Fréchet/vertex-F1 suite the
+// goal document's §2 describes — that's WP3+'s trace-engine scoring, and has
+// no meaning yet: manual mode never "finds" a run, a person/agent supplies
+// its points outright, so there is nothing to score for recall against. What
+// CAN regress in manual mode is covered here: canvas and MCP computing a
+// different answer for the identical input (parity), the computed LF/size
+// breakdown drifting from the geometry's own analytic truth (totals), and the
+// answer changing under a lossless geometric transform of the same run
+// (determinism) — rotating or translating a polyline must not move its LF by
+// a hair, and scaling it must move LF by exactly that factor.
+
+/** Deep-equality check for two ComputedRun reads of what should be the
+ *  IDENTICAL run — canvas's own resolveRunSegments call and MCP's replied
+ *  computed_run for the same points/scale/run block. Structural, not
+ *  tolerance-based: these two are supposed to be the same object by
+ *  construction (both are the one shared function), so ANY difference is a
+ *  wiring bug (a size seeded differently, a system dropped, an index off by
+ *  one) — never a rounding matter. */
+export function scoreLinearParity(caseName: string, canvas: ComputedRun | null, mcp: ComputedRun | null): { caseName: string; ok: boolean; mismatch?: string } {
+  if (!canvas || !mcp) {
+    if (canvas === mcp) return { caseName, ok: true };
+    return { caseName, ok: false, mismatch: "one side resolved a run and the other didn't" };
+  }
+  const a = JSON.stringify(canvas), b = JSON.stringify(mcp);
+  if (a === b) return { caseName, ok: true };
+  return { caseName, ok: false, mismatch: `canvas computed_run !== MCP computed_run: ${a} vs ${b}` };
+}
+
+/** LF total against the case's analytic truth (the same feet-coordinates the
+ *  synthetic generator drew from) — errFt/errPct should read as pure
+ *  round-to-cent noise, never a real measurement drift. */
+export interface LinearTotalsRow { caseName: string; expectedLf: number; actualLf: number; errFt: number; errPct: number }
+export function scoreLinearTotals(caseName: string, expectedLf: number, actualLf: number): LinearTotalsRow {
+  const errFt = Math.abs(actualLf - expectedLf);
+  return { caseName, expectedLf, actualLf, errFt, errPct: expectedLf > 0 ? errFt / expectedLf : 0 };
+}
+
+/** One determinism probe: the SAME run under a lossless transform of its own
+ *  points (rotate/translate/reverse — LF unchanged; scale — LF scaled by the
+ *  same factor). `expectedLf` is the untransformed case's own actual LF times
+ *  `lfScale` (1 for rotate/translate/reverse, the scale factor otherwise). */
+export interface LinearDeterminismRow { caseName: string; transform: string; expectedLf: number; actualLf: number; errFt: number }
+export function scoreLinearDeterminism(caseName: string, transform: string, expectedLf: number, actualLf: number): LinearDeterminismRow {
+  return { caseName, transform, expectedLf, actualLf, errFt: Math.abs(actualLf - expectedLf) };
+}
+
+export interface LinearAggregate {
+  cases: number;
+  parityFailures: number;
+  maxTotalsErrFt: number;
+  maxTotalsErrPct: number;
+  maxDeterminismErrFt: number;
+}
+export function aggregateLinear(parity: Array<{ ok: boolean }>, totals: LinearTotalsRow[], determinism: LinearDeterminismRow[]): LinearAggregate {
+  return {
+    cases: totals.length,
+    parityFailures: parity.filter((p) => !p.ok).length,
+    maxTotalsErrFt: totals.length ? Math.max(...totals.map((t) => t.errFt)) : 0,
+    maxTotalsErrPct: totals.length ? Math.max(...totals.map((t) => t.errPct)) : 0,
+    maxDeterminismErrFt: determinism.length ? Math.max(...determinism.map((d) => d.errFt)) : 0,
   };
 }
