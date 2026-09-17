@@ -17,6 +17,7 @@ which retain their own licenses:
 | [Zod](https://github.com/colinhacks/zod) | MIT | Tool-input validation in `mcp/` |
 | [Flatbush](https://github.com/mourner/flatbush) | ISC | Segment-bbox spatial index for the trace engine's click/frontier queries (`web/src/lib/linear/index.ts`) |
 | [KDBush](https://github.com/mourner/kdbush) | ISC | Segment-endpoint spatial index for the trace engine's endpoint welding (`web/src/lib/linear/index.ts`) |
+| [robust-predicates](https://github.com/mourner/robust-predicates) | Unlicense | Adaptive-precision `orient2d` for the trace engine's exact interior-crossing test (`web/src/lib/linear/graph.ts`) |
 
 The optional AI sandbox (`/server`) additionally uses
 [FastAPI](https://github.com/fastapi/fastapi) (MIT), [Starlette](https://github.com/encode/starlette) (BSD-3-Clause),

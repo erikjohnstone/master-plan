@@ -1,5 +1,25 @@
 # Changelog
 
+- **Linear takeoff: trace engine, stage 3 — the local run graph.** Adds
+  `web/src/lib/linear/graph.ts`: given one point, classifies what the node
+  there looks like (end / collinear join / elbow / tee / crossing /
+  ambiguous) from its welded-end and interior-crossing candidates, for the
+  eventual walker to consume one frontier at a time. Deliberately not
+  `arrangement.ts` — that module builds the whole sheet's planar
+  subdivision up front, exactly the "global noding" this path rules out;
+  welding here is local to one point and lazy, materializing nothing until
+  asked. One new dependency,
+  [robust-predicates](https://github.com/mourner/robust-predicates)
+  (Unlicense) — its adaptive-precision `orient2d` is used for the one test
+  in this module where naive floating-point orientation math is known to
+  flip sign from catastrophic cancellation: whether a point sits exactly
+  on a segment's interior at near-zero distance (the crossing test).
+  Coarser angle-band decisions (the 8°/30°/150° thresholds plan §6.3
+  names) use plain trigonometry — those tolerances are wide enough that
+  ordinary floating point is in no danger of getting them wrong. Still no
+  caller — the walker (next) and the canvas/MCP surfaces (later) are what
+  will actually invoke this.
+
 - **Linear takeoff: trace engine, stage 2 — segment spatial index.** Adds
   `web/src/lib/linear/index.ts` (exact nearest-segment/box/endpoint queries
   over a sheet's candidate MEP linework) and `worker.ts` (stroke

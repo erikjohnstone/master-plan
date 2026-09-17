@@ -1,5 +1,63 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.3 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+`graph.ts`, Stage 3 of the trace engine (plan §6.3). Still entirely
+inert — nothing calls it yet (WP3.4's walker is the eventual consumer);
+one new dependency, `robust-predicates` (Unlicense), documented in
+`THIRD-PARTY-NOTICES.md`/`CHANGELOG.md`.
+
+`web/src/lib/linear/graph.ts`:
+
+- `weldTolerancePx(ppf)` — plan §6.3's own formula, `max(0.75px, 0.02 ×
+  ppf)`, reusing `arrangement.ts`'s exported `WELD_TOL` (0.75) as the floor
+  rather than re-declaring the same magic number a second place.
+- `frontier(index, x, y, ppf, filterFn?)` — the goal doc's own procedure,
+  implemented literally as a degree/deviation decision tree over
+  `index.ts`'s (WP3.2) `endpointsNear`/`segmentsInBox` queries: gather
+  welded-end candidates and interior-crossing candidates, then classify
+  into `end`/`collinear`/`elbow`/`tee`/`crossing`/`ambiguous`. Two angle
+  bands the plan's own text leaves unspecified (8°-30° and 150°-180°
+  deviation) fall to `ambiguous`, the stated catch-all — not silently
+  forced into whichever neighboring case seemed close.
+- The one place `robust-predicates`'s `orient2d` is used: testing whether
+  a point sits on a segment's interior at near-zero distance (the crossing
+  test) — the exact case where a naive floating-point cross product (this
+  codebase's own `segsIntersect` in `geometry.js`, for one) is known to
+  flip sign from catastrophic cancellation. The coarser angle-band
+  decisions (8°/30°/150° thresholds) use plain trigonometry — real drafted
+  angles are never adversarially close to those boundaries the way a
+  crossing test's near-zero distances routinely are.
+- Deliberately NOT `arrangement.ts`: that module welds and splits the
+  WHOLE sheet up front (global noding, explicitly ruled out for this
+  path); `frontier()` welds only the candidates near ONE point, lazily,
+  each time the walker asks — nothing is materialized until then.
+
+Genuinely different verification posture from WP3.1/WP3.2: there is no
+walker yet to validate the frontier API against end to end, and no
+real-corpus check analogous to "does this correctly identify Bessemer's
+duct pen" exists for node typing in isolation — the plan's own six-case
+decision tree is precisely specified enough to test directly, and every
+case (plus both unspecified-gap cases) has its own synthetic geometric
+fixture built to land exactly there, but the API SHAPE (what `frontier()`
+returns, how a filter composes) is a first design that WP3.4's actual
+walker may still reveal needs adjusting — flagged here explicitly rather
+than presented as settled.
+
+Tests: `web/test/linear/graph.test.ts`, 12 new — all six node types, both
+unspecified angle-band gaps, the pure 4-way endpoint crossing case versus
+the 1-crossing-segment case (both resolve to "crossing" by different
+paths through the decision tree), and `filterFn` changing a tee into a
+plain collinear join by excluding its branch.
+
+Verified: `npx tsc --noEmit` clean on both `web` and `mcp`;
+`web/test/linear/*` 76/76 (12 new, all passing on the first run against
+the synthetic fixtures — no fixture-vs-implementation mismatch this
+checkpoint, unlike WP3.1's own pen-weight-prior iteration); web's full
+suite, same command as every prior checkpoint (`test/*.test.ts
+test/linear/*.test.ts` minus the known `compileProgressWalkthrough.test.ts`
+flake) — 3346 attempted (12 new), 70 fail/13 cancelled/13 skipped, the
+identical standing baseline.
+
 2026-09-17 linear takeoff WP3.2 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 `index.ts` + `worker.ts`, Stage 2 of the trace engine (plan §6.3/§6.11).
 Still entirely inert on every project — nothing calls either module yet
