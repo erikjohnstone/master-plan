@@ -81,6 +81,11 @@ export interface WalkResult {
   vertices: WalkVertex[];
   stop: WalkStop;
   hops: number;
+  /** original segment indices, one per hop, in travel order — `segs[0]` is
+   *  always the seed. WP3.6's own trace receipt (plan §6.8: "the segment
+   *  indices walked") needs this; nothing in WP3.4 itself consumed it, so
+   *  it did not exist until that checkpoint needed it. */
+  segs: number[];
 }
 
 export interface WalkOptions {
@@ -147,13 +152,14 @@ export function walkOneDirection(
   const startEnd = pointOf(index, seedSeg, atEnd);
   const points: [number, number][] = [otherEnd, startEnd];
   const vertices: WalkVertex[] = [];
+  const segs: number[] = [seedSeg];
   let length = segLength(index, seedSeg);
   let hops = 1;
   let curSeg = seedSeg;
   let [x, y] = startEnd;
 
   while (true) {
-    if (hops >= maxHops || length >= maxLengthPx) return { points, length, vertices, stop: { reason: "cap", x, y }, hops };
+    if (hops >= maxHops || length >= maxLengthPx) return { points, length, vertices, segs, stop: { reason: "cap", x, y }, hops };
 
     // Node typing is restricted to curSeg's own family — validated against
     // real extraction (Bessemer M101 p6), NOT assumed from the plan text
@@ -186,10 +192,10 @@ export function walkOneDirection(
       const reason: WalkStopReason = unfiltered.incident.length > 1
         ? "family_change"
         : isNearBounds(x, y, opts.pageBounds, sheetEdgeTolPx) ? "sheet_edge" : "dead_end";
-      return { points, length, vertices, stop: { reason, x, y }, hops };
+      return { points, length, vertices, segs, stop: { reason, x, y }, hops };
     }
     if (node.type === "ambiguous") {
-      return { points, length, vertices, stop: { reason: "ambiguous", x, y, candidates: others }, hops };
+      return { points, length, vertices, segs, stop: { reason: "ambiguous", x, y, candidates: others }, hops };
     }
 
     let next: Continuation | undefined;
@@ -203,7 +209,7 @@ export function walkOneDirection(
       const mainAIdx = node.incident[mainA], mainBIdx = node.incident[mainB], branchIdx = node.incident[branch];
       if (mine && branchIdx.seg === mine.seg) {
         // arrived via the branch — the main run is its own trace; stop here.
-        return { points, length, vertices, stop: { reason: "branch_joins_main", x, y }, hops };
+        return { points, length, vertices, segs, stop: { reason: "branch_joins_main", x, y }, hops };
       }
       next = mine && mainAIdx.seg === mine.seg ? mainBIdx : mainAIdx;
       vertices.push({ kind: "tee", x, y, branchSeg: branchIdx.seg });
@@ -216,12 +222,13 @@ export function walkOneDirection(
       vertices.push({ kind: "crossing", x, y });
     }
 
-    if (!next) return { points, length, vertices, stop: { reason: "dead_end", x, y }, hops };
+    if (!next) return { points, length, vertices, segs, stop: { reason: "dead_end", x, y }, hops };
     if (!sameFamilyContinuity(index, ctx.dash, ctx.layerOf, curSeg, next.seg)) {
-      return { points, length, vertices, stop: { reason: "family_change", x, y }, hops };
+      return { points, length, vertices, segs, stop: { reason: "family_change", x, y }, hops };
     }
 
     curSeg = next.seg;
+    segs.push(next.seg);
     const [nx, ny] = pointOf(index, next.seg, next.end === 0 ? 1 : 0);
     points.push([nx, ny]);
     length += segLength(index, next.seg);
@@ -238,13 +245,19 @@ export function walkBothDirections(
   index: SegmentIndex, seedSeg: number, ppf: number,
   ctx: { dash?: Uint8Array | null; layerOf?: Int32Array | null },
   opts: WalkOptions = {},
-): { points: [number, number][]; length: number; vertices: WalkVertex[]; stops: { forward: WalkStop; backward: WalkStop }; hops: number } {
+): { points: [number, number][]; length: number; vertices: WalkVertex[]; segs: number[]; stops: { forward: WalkStop; backward: WalkStop }; hops: number } {
   const fwd = walkOneDirection(index, seedSeg, 1, ppf, ctx, opts);
   const back = walkOneDirection(index, seedSeg, 0, ppf, ctx, opts);
   const points = [...back.points.slice().reverse(), ...fwd.points.slice(2)];
   const vertices = [...back.vertices.slice().reverse(), ...fwd.vertices];
+  // back.segs and fwd.segs both start with the SAME seedSeg (each direction
+  // walks outward from it) — reverse back's own list (which puts seedSeg
+  // last), drop that trailing duplicate, then append fwd's own list (which
+  // still starts with it) so the seed appears exactly once, in its correct
+  // middle position.
+  const segs = [...back.segs.slice().reverse().slice(0, -1), ...fwd.segs];
   return {
-    points, vertices,
+    points, vertices, segs,
     length: fwd.length + back.length - segLength(index, seedSeg),
     stops: { forward: fwd.stop, backward: back.stop },
     hops: fwd.hops + back.hops,

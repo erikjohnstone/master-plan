@@ -22,6 +22,7 @@ test("walkOneDirection: a straight chain of collinear segments walks to the far 
   assert.equal(result.vertices.length, 0);
   assert.equal(result.length, 300);
   assert.deepEqual(result.points, [[0, 0], [100, 0], [200, 0], [300, 0]]);
+  assert.deepEqual(result.segs, [0, 1, 2], "one segment index per hop, in travel order, starting with the seed");
 });
 
 test("walkOneDirection: an isolated single segment is a dead end at zero hops beyond the seed", () => {
@@ -49,6 +50,7 @@ test("walkOneDirection: arriving at a tee via the through-pair continues onto th
   assert.equal(result.vertices[0].branchSeg, 2);
   assert.deepEqual(result.points, [[0, 0], [100, 0], [200, 0]]);
   assert.equal(result.stop.reason, "dead_end");
+  assert.deepEqual(result.segs, [0, 1], "continues onto the other through-pair member, never the branch (segment 2)");
 });
 
 test("walkOneDirection: arriving at a tee VIA the branch stops immediately with branch_joins_main — the main is its own run", () => {
@@ -122,4 +124,5 @@ test("walkBothDirections: combines both directions into one continuous chain, th
   assert.equal(result.length, 200);
   assert.equal(result.stops.forward.reason, "dead_end");
   assert.equal(result.stops.backward.reason, "dead_end");
+  assert.deepEqual(result.segs, [0, 1], "segment 0 (the backward extension) precedes the seed, segment 1, exactly once");
 });

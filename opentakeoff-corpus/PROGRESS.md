@@ -1,5 +1,88 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.6 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+`receipt.ts`, Stage 6: confidence, refusal, and the trace receipt (plan
+§6.8). The first module in the WP3 arc to touch EVERY prior module's own
+output at once (walk.ts's walked segments, strokes.ts's family grade,
+sizes.ts's bindings/conflicts) — closing a gap WP3.5's own checkpoint
+deliberately left open rather than guessed at.
+
+`web/src/lib/linear/receipt.ts`:
+
+- `buildTraceReceipt(index, seed, walk, family, boundSizes, conflicts, opts)`
+  — builds the `origin` a committed trace stamps: `method:"traced"`,
+  `reviewed:false`, `confidence`/`confidence_factors`, and the receipt
+  itself under `trace` (`seed`, `segs`, `labels`, `drawn_width_px`,
+  `stops`, `candidates`, `factors` — the exact field list the goal doc
+  names). Matches the ALREADY-SHIPPED `origin` convention
+  (`TakeoffCanvas.jsx`'s own `one_click_v1`/`net_v1` records: method,
+  reviewed, confidence, confidence_factors) rather than inventing a
+  parallel shape.
+- Confidence is `Math.min(...)` over whichever of plan §6.8's seven named
+  factors have a REAL numeric grade behind them this checkpoint can
+  compute: stroke-family evidence grade (`StrokeFamily.confidence`),
+  size-binding grade (`BoundSize.confidence`, when unconflicted),
+  an `ambiguous_stop` penalty (0.5) when either walk direction stopped
+  ambiguous, `layer-unclassified` (0.6, `mepconnectivity.ts`'s own
+  `traceConnectivity` penalty value, reused verbatim — same underlying
+  signal) when the family's own evidence isn't `layer-name`, and
+  `scale_unconfirmed` (0.7) when the caller reports a guessed rather than
+  detected px-per-foot. Two of the plan's seven — width cross-check
+  (needs a double-line pair's own drawn spacing, WP4) and bridged gaps
+  (needs `mepconnectivity.ts`'s own gap-bridging pass, which this walker
+  never calls) — are NOT computed; left out of both `factors` and the
+  confidence minimum, never assigned a guessed number. `size_missing`
+  and `size_withheld` are similarly NAME-only: a run with no reachable
+  label, or with a real label-vs-label conflict, is disclosed as such
+  but never drags confidence down on its own — "withholding is an
+  answer; a withheld size still measures LF" (plan §6.8, applied
+  literally: LF depends on the walk, not the label).
+- `REFUSAL_NO_LINEWORK`/`REFUSAL_NO_STROKE_FAMILY` — plan §6.8's own two
+  pre-walk refusal texts, verbatim constants (this pure module doesn't
+  own the click-hit-test or the empty-`StrokeClasses.families` check
+  that would fire them — that's WP3.7's canvas glue — but the exact
+  required wording lives here, the "confidence, refusal, receipts"
+  stage, rather than being duplicated at each call site).
+  `sizeWithheldRefusal(labelSize, drawnWidthIn)` — the plan's own
+  template for the label-vs-drawn-width case (WP4 scope, not a real
+  caller yet). `sizeConflictRefusal(conflict)` — the SAME "Size
+  withheld... Pick one." framing, adapted for the label-vs-label
+  conflict `resolveSizeConflicts` (WP3.5) can actually detect today.
+
+**Closes WP3.5's own documented gap, not a new one:** that checkpoint's
+header explained why "size carried along the run" couldn't be built yet
+— it needed to know, per hop of a walked run, whether a branch/transition
+sits at its far end, but `walk.ts`'s `WalkResult` had no hop-indexed
+segment list at all, only a sparse `vertices[]` (elbow/tee/crossing hops
+only). This checkpoint closes the PREREQUISITE half of that gap: `walk.ts`
+now returns `segs: number[]` (one original segment index per hop, in
+travel order, `walkBothDirections` combining both directions' own lists
+without double-counting the shared seed segment) — a minimal, additive
+change (13 assertion sites across 3 existing tests extended to check it;
+no existing assertion touched a whole-`WalkResult` deep-equal, so nothing
+broke) that the goal doc's own WP3.6 receipt-shape spec names `segs` as
+requiring anyway. The FULL "carry along the run, stopping at a real
+branch/transition" combinator is still not built — `vertices[]` remains
+sparse, so mapping a vertex to the hop boundary it sits at is still
+undesigned — but the receipt itself no longer needs it: `buildTraceReceipt`
+already filters bound sizes/conflicts down to whichever land on `walk.segs`
+using this new field directly.
+
+Tests: `web/test/linear/receipt.test.ts`, 10 new, one isolated fixture per
+named factor (clean walk / size_missing / size_withheld-on-this-run /
+conflict-on-an-unwalked-segment-never-contaminates / ambiguous_stop /
+layer-unclassified / scale_unconfirmed / drawn_width_px) plus both refusal
+text checks. `web/test/linear/walk.test.ts` gained 3 new assertions (not
+new tests) confirming `segs` on the straight-chain, tee, and
+`walkBothDirections` fixtures already used there.
+
+Verified: `npx tsc --noEmit` clean on both `web` and `mcp`;
+`web/test/linear/receipt.test.ts` 10/10; `web/test/linear/*.test.ts`
+139/139 (129 prior + 10 new); web's full suite (`test/*.test.ts
+test/linear/*.test.ts` minus the known `compileProgressWalkthrough.test.ts`
+flake) confirmed against the standing 70-fail/13-cancelled/13-skipped
+baseline.
+
 2026-09-17 linear takeoff WP3.5 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 `sizes.ts`, Stage 4's size grammar and label association (plan §6.6, App. A).
 Two halves, both new: the Appendix A grammar itself, and the orientation/
