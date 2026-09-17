@@ -587,7 +587,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 2.7410939999999755
+     "buildMs": 3.3116449999999986
     }
    ],
    "aggregate": {
@@ -598,7 +598,7 @@
     "meanLenErrPct": 0.6137211036539896,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 2.7410939999999755,
+    "maxColdBuildMs": 3.3116449999999986,
     "maxWarmQueryMs": null
    }
   },
@@ -645,7 +645,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 312.71253000000024
+     "buildMs": 302.87762900000007
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -700,7 +700,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 376.0807129999994
+     "buildMs": 367.74476200000026
     },
     {
      "caseName": "weld-county-mechanical-permit.pdf#7",
@@ -719,7 +719,7 @@
       "clippedLenFt": 21.82,
       "goldenLenFt": 21.82
      },
-     "buildMs": 479.2154470000005
+     "buildMs": 504.0266819999997
     }
    ],
    "aggregate": {
@@ -730,7 +730,7 @@
     "meanLenErrPct": 0.30820291345730527,
     "maxOverTracePct": 0.8470464135021097,
     "sizeAccuracyPct": 0.45458333333333334,
-    "maxColdBuildMs": 479.2154470000005,
+    "maxColdBuildMs": 504.0266819999997,
     "maxWarmQueryMs": null
    }
   },
@@ -753,18 +753,37 @@
       "clippedLenFt": 3.57,
       "goldenLenFt": 3.57
      },
-     "buildMs": 1323.8325730000006
+     "buildMs": 1302.9063290000004
+    },
+    {
+     "caseName": "itd-d1-lab-mechanical.pdf#4",
+     "status": "reached",
+     "goldenLf": 3.02,
+     "tracedLf": 3.02,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:8",
+     "tracedSizeKey": "round:8",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "itd-d1-lab-mechanical.pdf#4",
+      "frechetPx": 9.200000000000045,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.02,
+      "goldenLenFt": 3.02
+     },
+     "buildMs": 887.3921260000006
     }
    ],
    "aggregate": {
-    "cases": 1,
-    "recall": 1,
+    "cases": 2,
+    "recall": 0.5,
     "precision": 1,
     "maxLenErrPct": 0,
     "meanLenErrPct": 0,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 1,
-    "maxColdBuildMs": 1323.8325730000006,
+    "maxColdBuildMs": 1302.9063290000004,
     "maxWarmQueryMs": null
    }
   }

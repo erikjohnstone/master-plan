@@ -1,5 +1,55 @@
 ## Active work
 
+2026-09-17 linear takeoff: second held-out golden, a caught mistrace, and a genuine Fréchet-only miss (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Authored the second entry off `reports/LINEAR_HELDOUT.txt`'s frozen list:
+`itd-d1-lab-mechanical.pdf#4` (M1.1), an 8" round duct segment from a real
+wall-penetration dead end to a real elbow/damper assembly. Same PDF as the
+existing development-tier hydronic golden (`itd-d1-lab-m1-2.json`) but a
+DIFFERENT page never traced during development, so this stays a genuine
+held-out measurement.
+
+A `trace_run` seed-grid-sweep's first promising hit (3.11 LF, BOTH stops
+`dead_end` -- looked ideal) was caught and REJECTED before being trusted:
+its own `confidence:0` / `stroke-family:unclassified` factors were a flag,
+and a marked render crop confirmed the walk had actually followed a wall/
+shaft outline into a text-leader stub, not real ductwork. Documented in the
+golden's own `review_basis` as a caught mistrace, not silently discarded --
+this project's own "verify visually before trusting" discipline (already
+established by Run 3's two coordinate bugs and Finding 5's disproven
+hypothesis) caught a THIRD real mistake before it shipped.
+
+The second candidate (3.02 LF, round:8) held up: a marked crop confirms a
+real double-line duct symbol, wall-penetration dead end on one side, real
+elbow/damper on the other. First measurement: **LF 3.02→3.02 exact, size
+OK -- but recall MISSES**. `results.json` shows why: `lenErrPct: 0` and
+`lengthOverlapPct: 1` (both perfect) but `frechetPx: 9.2` against the
+plan's own `<2pt` criterion -- the traced polyline covers the golden's
+full span at the right total length, but isn't a clean straight line the
+way the golden's own two-point run is; the double-line duct's own edge-
+following near the elbow/damper transition introduces a small real zigzag.
+The golden's own endpoints were independently re-verified correct (same
+marked-crop method as every other golden) -- the deviation is in
+`trace_run`'s own walked SHAPE, not the ground truth, so nothing was
+touched to make this pass, per the held-out tier's own "never re-drawn to
+improve a score" rule. Held-out recall is now 1/2 (0.5), not 2/2 -- a real,
+disclosed finding, exactly what held-out measurement exists to surface: a
+case that would read as a full pass under length-only scoring and only
+fails under the plan's own stricter, literal Fréchet criterion.
+
+Measured: `npx tsc --noEmit` clean; `bench:linear` reports the numbers
+above and passes (held-out still reported-only, not gated, per the
+existing n-too-small rationale -- now n=2, still not enough). No code
+changed this pass, only ground truth + docs, so no new regression run was
+needed beyond `bench:linear` itself and the pre-existing `benchScore.test.ts`
+suite (unchanged, still 208/208 passing).
+
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 5" section with the full writeup
+above (the caught mistrace, the genuine Fréchet miss, and why the golden
+wasn't touched), and its "honestly scoped as remaining" list updated: 5
+held-out sheets remain (not 6), plus a new open question -- is Run 5's own
+Fréchet miss worth a real walker fix, or a documented, accepted limitation
+like Finding 1.
+
 2026-09-17 linear takeoff: first held-out golden authored, frozen split declared, +1 development hit (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Closed the next GATE 3 gap: no held-out sheet existed yet, so the plan's own
 "held-out tier within 5 points of development" rule was unassessable. A

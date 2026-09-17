@@ -39,8 +39,9 @@
 #   navfac-cherry-point-atc-mechanical.pdf#6   (MH101) -- coordinator pick
 #   navfac-cherry-point-atc-mechanical.pdf#18  (MP101) -- coordinator pick
 #
-# authored so far (2026-09-17): federal-attachment4-mechanical.pdf#7 only --
-# see opentakeoff-corpus/ground_truth/linear/federal-m3-1-p7-heldout.json.
-# The other six are declared and frozen but NOT yet authored; a representative
-# first measurement, not an exhaustive one -- matching this corpus's own
-# repeated "one run/one sheet, not the whole set, per pass" precedent.
+# authored so far (2026-09-17): federal-attachment4-mechanical.pdf#7 (see
+# ground_truth/linear/federal-m3-1-p7-heldout.json) and
+# itd-d1-lab-mechanical.pdf#4 (see ground_truth/linear/itd-d1-lab-m1-1-heldout.json).
+# The other five are declared and frozen but NOT yet authored; a representative
+# pass, not an exhaustive one -- matching this corpus's own repeated
+# "one run/one sheet, not the whole set, per pass" precedent.
