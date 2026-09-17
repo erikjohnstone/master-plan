@@ -1,5 +1,36 @@
 ## Active work
 
+2026-09-17 linear takeoff: root-caused (not fixed) the "FD-1" tag-box mistrace from the prior checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+The prior checkpoint's own new finding included one open question: why a
+dedicated `classifyTagBoxSegs` exclusion check, which exists specifically
+to exclude rectangular tag/label frames, didn't catch the "FD-1" box it
+mistraced. Dug into it directly rather than leaving it a mystery: that
+function requires ONE subpath with `closed:true` and more than one
+segment. Direct inspection of this exact box's own `ensureGeometry()`
+output shows its four sides are FOUR SEPARATE single-segment subpaths,
+each `closed:false` -- consistent with an already-documented fact about
+this exact PDF (`mepsystems.ts`'s own `mepLayerSignal` doc comment
+already names it Ghostscript-flattened): flattening a CAD rectangle's
+original single closed path into four independent stroke operations
+loses exactly the structure this classifier looks for.
+
+A real fix exists in principle (recognize several open, endpoint-chained
+subpaths that together close a rectangle, not only one subpath that
+already says `closed:true`) but was NOT attempted: the function lives in
+`oneclick.ts`, shared with the wider One-Click room/area flood-fill path
+(a second, independent call site beyond the trace engine's own use) --
+broadening its closed-shape recognition risks a blast radius wider than
+this investigation had budget to validate against with proper regression
+testing. Disclosed with its real, confirmed root cause in
+`docs/LINEAR-TRACE-EVAL.md` rather than left as an open question -- a
+meaningfully more useful state for a future engineer than "not caught,
+reason unknown," without taking on an under-tested change to shared
+infrastructure.
+
+No code changed, no ground truth touched -- a pure diagnostic follow-up,
+so no test run beyond confirming `git status` clean of anything but the
+doc update.
+
 2026-09-17 linear takeoff: same sweep-and-verify method tried on Bessemer P101 -- no clean candidate this time, four more disclosed engine-gap instances (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Tried the same grid-sweep-plus-visual-verification method from the prior
 two checkpoints against the third remaining refused-or-partly-refused
