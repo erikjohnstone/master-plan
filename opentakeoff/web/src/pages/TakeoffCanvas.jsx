@@ -132,6 +132,8 @@ import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
 import { takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
+import { buildValveSizeExport } from "../lib/valveSizeExport.ts";
+import { fillValveSizeTemplate, VALVE_SIZE_TEMPLATE_PUBLIC_PATH, VALVE_SIZE_TEMPLATE_FILENAME } from "../lib/valveSizeTemplate.ts";
 import {
   reconcileScheduleFamilyWithSweeps,
   reconcileRowsToCsv,
@@ -8180,6 +8182,25 @@ export default function TakeoffCanvas() {
         downloads.push(`${base}.xlsx`);
       } catch {
         // CSV/JSON still delivered
+      }
+      if (compiled.kind === "control_valves") {
+        // Same compiled rows as the CSV/JSON above, template-filled into
+        // Siemens' own "Global Valves" mass-sizing workbook (see
+        // valveSizeTemplate.ts) — a second download, not a second compile.
+        try {
+          const valveExport = buildValveSizeExport(compiled);
+          if (valveExport.rows.length) {
+            const templateRes = await fetch(VALVE_SIZE_TEMPLATE_PUBLIC_PATH);
+            if (!templateRes.ok) throw new Error(`template fetch ${templateRes.status}`);
+            const templateBytes = new Uint8Array(await templateRes.arrayBuffer());
+            const filled = await fillValveSizeTemplate(templateBytes, valveExport.rows);
+            downloadBytes(VALVE_SIZE_TEMPLATE_FILENAME, filled, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            downloads.push(VALVE_SIZE_TEMPLATE_FILENAME);
+          }
+        } catch (err) {
+          console.error("Valve size template export skipped:", err);
+          // JSON/CSV/XLSX rollup above already delivered the same numbers
+        }
       }
     }
     showCompiledTakeoff(compiled);

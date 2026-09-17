@@ -52,6 +52,9 @@ import { basDrawingCommandSchema, basDrawingCommandResultSchema } from '../../we
 import { runBasDrawingCommand } from './basDrawingReview.ts';
 import { basIssueCommandSchema, basIssueTransportResultSchema } from '../../web/src/lib/basIssueTransportContract.ts';
 import { runBasIssueTransport } from './basIssueTransport.ts';
+import { buildValveSizeExport } from '../../web/src/lib/valveSizeExport.ts';
+import { fillValveSizeTemplate, VALVE_SIZE_TEMPLATE_FILENAME } from '../../web/src/lib/valveSizeTemplate.ts';
+import { fileURLToPath } from 'node:url';
 import { basScopeCommandSchema, basScopeTransportResultSchema } from '../../web/src/lib/basScopeTransportContract.ts';
 import { runBasScopeTransport } from './basScopeTransport.ts';
 import { inspectBasSnapshotFile, basSnapshotFileInspectionSchema } from './basSnapshotFile.ts';
@@ -833,7 +836,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
   }));
 
   server.registerTool("compile_corpus_takeoff", {
-    description: `Compile a full HVAC schedule-quantity, BAS points-list, control-valve/damper, sequence-of-operations, or embedded-coil-valve-gap takeoff from the loaded plan set's extractable tables — unique scheduled MARK/VALVE MARK tags per equipment family (T-HVAC-01), extractable POINTS/DDC list rows with AI/AO/BI/BO (T-BAS-01), valve/damper/air-valve schedules with contractor columns (T-VALVE-01: mark, served unit, service, size, GPM, Cv, actuator when printed), every SOO/control-sequence table or narrative-title hit with section text and per-cell citations (T-SOO-01 / "sequences"). Explicitly labeled SOO point candidates retain their literal tag and exact drawing spans for estimator review; they never acquire inferred AI/AO/DI/DO, equipment applicability, field wiring, or installed quantity. "embedded_coil_gaps" (T-VALVE-EMBEDDED-01) walks EVERY equipment schedule (AHU/RTU/FCU/chiller/etc., not just tables already believed to be about valves) for coil GPM+EWT/LWT data embedded directly in the row, cross-references each one against the real T-VALVE-01 compile by tag/served-area, and discloses any coil with no matching scheduled valve as a real, evidence-cited gap rather than a silent miss (real, found-live case: 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations's own AIR HANDLING UNIT SCHEDULE has real coil data with no separate valve schedule anywhere in the set). This is schedule/list quantity, not installed drawing counts (use project_takeoff for those). Returns categories, item cites with bboxes, page accounting (empty pages explicit), and exclusions. Pass path to write JSON; pass export_path to also write CSV tabs (+ XLSX when available) under that directory. BAS compile also retains immutable point/PDF-text evidence in bas_workflow. Optional bas_review records a source-backed association upsert/removal in Session history as agent_proposal; it is not read-only when supplied. Recompiles retain review history. No canvas shapes, approvals, installed counts or typed I/O are created by these associations. ${COORDS}`,
+    description: `Compile a full HVAC schedule-quantity, BAS points-list, control-valve/damper, sequence-of-operations, or embedded-coil-valve-gap takeoff from the loaded plan set's extractable tables — unique scheduled MARK/VALVE MARK tags per equipment family (T-HVAC-01), extractable POINTS/DDC list rows with AI/AO/BI/BO (T-BAS-01), valve/damper/air-valve schedules with contractor columns (T-VALVE-01: mark, served unit, service, size, GPM, Cv, actuator when printed), every SOO/control-sequence table or narrative-title hit with section text and per-cell citations (T-SOO-01 / "sequences"). Explicitly labeled SOO point candidates retain their literal tag and exact drawing spans for estimator review; they never acquire inferred AI/AO/DI/DO, equipment applicability, field wiring, or installed quantity. "embedded_coil_gaps" (T-VALVE-EMBEDDED-01) walks EVERY equipment schedule (AHU/RTU/FCU/chiller/etc., not just tables already believed to be about valves) for coil GPM+EWT/LWT data embedded directly in the row, cross-references each one against the real T-VALVE-01 compile by tag/served-area, and discloses any coil with no matching scheduled valve as a real, evidence-cited gap rather than a silent miss (real, found-live case: 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations's own AIR HANDLING UNIT SCHEDULE has real coil data with no separate valve schedule anywhere in the set). This is schedule/list quantity, not installed drawing counts (use project_takeoff for those). Returns categories, item cites with bboxes, page accounting (empty pages explicit), and exclusions. Pass path to write JSON; pass export_path to also write CSV tabs (+ Siemens Valve Size Template XLSX for control_valves/T-VALVE-01 — see export_path's own description) under that directory. BAS compile also retains immutable point/PDF-text evidence in bas_workflow. Optional bas_review records a source-backed association upsert/removal in Session history as agent_proposal; it is not read-only when supplied. Recompiles retain review history. No canvas shapes, approvals, installed counts or typed I/O are created by these associations. ${COORDS}`,
     inputSchema: {
       kind: z.enum([
         "hvac_equipment",
@@ -863,7 +866,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       bas_engineering_inspect: basEngineeringInspectRequestSchema.optional().describe('BAS only: replay retained engineering history in shared Python and inspect the selected retained capture without creating an engineering decision. Default recompile returns saved results as requires_python_replay; use this option before relying on them. verified_shared_python_replay establishes calculation equality for declared inputs, not source interpretation, installation or project completeness. Stale dependency status remains separate. No automatic approval or revision rebasing.'),
       bas_project_review: basProjectReviewRequestSchema.optional().describe('BAS only: inspect the shared, source-linked project finding queue for an exact retained capture. Returns original domain codes, affected subjects, source locations, saved constraint failures/unknowns, exclusions and dependency state. Does not dismiss findings, replay Python, verify stored PDF availability or approve a takeoff. First compile to obtain capture_id. Same view as Takeoff > Review & changes; original decisions and extraction remain unchanged.'),
       path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
-      export_path: z.string().optional().describe("Optional directory for CSV/XLSX workbook tabs"),
+      export_path: z.string().optional().describe(`Optional directory for CSV/XLSX workbook tabs. For kind control_valves/T-VALVE-01, also writes ${VALVE_SIZE_TEMPLATE_FILENAME} — Siemens' own "Global Valves" mass-sizing template, template-filled (not rebuilt) with one row per compiled valve: Unit No./Location/System/Ports from the schedule, Line Size/Design flow rate straight off the schedule cells, Consumer Δp computed from printed GPM+Cv via (GPM/Cv)^2, Positioning Signal/Operating Voltage only where a control signal or actuator cell was actually printed. PN class and Branch Δp are never on a plan schedule and are always left blank — see the reply's valve_size_template.coverage/notes for exactly what filled and why.`),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: compileCorpusTakeoffOutput,
@@ -902,6 +905,25 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       for (const sheet of sheets) {
         const safe = sheet.name.replace(/[^\w.-]+/g, "_").slice(0, 40);
         await writeFile(`${exportPath.replace(/\/$/, "")}/${safe}.csv`, rowsToCsv(sheet.rows));
+      }
+      if (kind === "control_valves" || kind === "T-VALVE-01") {
+        // Siemens "Global Valves" mass-sizing template — same compiled
+        // control-valve rows as the CSVs above, template-filled (byte-level;
+        // see valveSizeTemplate.ts), never a second extraction path.
+        const valveExport = buildValveSizeExport(compiled);
+        const templatePath = fileURLToPath(new URL("../../web/public/templates/Valve_Size_Template_US_Global.xlsx", import.meta.url));
+        const templateBytes = new Uint8Array(await (await import("node:fs/promises")).readFile(templatePath));
+        const filled = await fillValveSizeTemplate(templateBytes, valveExport.rows);
+        const outFile = `${exportPath.replace(/\/$/, "")}/${VALVE_SIZE_TEMPLATE_FILENAME}`;
+        await writeFile(outFile, filled);
+        compiled.valve_size_template = {
+          path: outFile,
+          rows_written: valveExport.rows.length,
+          source_item_count: valveExport.sourceItemCount,
+          excluded_families: valveExport.excludedFamilies,
+          coverage: valveExport.coverage,
+          notes: valveExport.notes,
+        };
       }
       compiled.export_path = exportPath;
     } else {
