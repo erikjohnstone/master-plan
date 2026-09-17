@@ -556,9 +556,9 @@ export function linearRunRows(rows) {
  *   conditionColumns?: Array<{id: string, name: string, values: string[]}>,
  *   attrsByCond?: Map<any, object>|null, shapeLabels?: string[],
  *   byLabel?: Array<{value: string|null, rows: any[]}>, displayUnits?: string,
- *   rollGoods?: any[], linearRuns?: any[]}} args
+ *   rollGoods?: any[], linearRuns?: any[], linearSettings?: object}} args
  */
-export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInfo = [], markups = [], rfis = [], sheetLabel = null, conditionColumns = [], attrsByCond = null, shapeLabels = [], byLabel = [], displayUnits = "imperial", rollGoods = [], linearRuns = [] }) {
+export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInfo = [], markups = [], rfis = [], sheetLabel = null, conditionColumns = [], attrsByCond = null, shapeLabels = [], byLabel = [], displayUnits = "imperial", rollGoods = [], linearRuns = [], linearSettings = {} }) {
   const label = (id) => (sheetLabel ? sheetLabel(id) : id);
   // destructuring defaults don't apply to an explicit null, and both values can
   // trace back to a corrupted payload — coerce (and drop malformed items) so
@@ -659,6 +659,15 @@ export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInf
     // Always emitted; empty for projects with no sized routed runs, so every
     // pre-WP1.4 export round-trips byte-identically except this one key.
     linear_runs: Array.isArray(linearRuns) ? linearRuns : [],
+    // linear_settings APPENDS last (additive-only, #linear-takeoff WP2.4):
+    // the project's own adopted-code/climate-zone/pressure-class/stick-
+    // length/offset-allowance choices resolveLinearAssembly's `settings`
+    // parameter reads (plan §7.4) — passed straight through from
+    // TakeoffCanvas.jsx's own `linearSettings` state (already sanitized on
+    // load). Always emitted as an object, {} for every project that has
+    // not set one, so every pre-WP2.4 export round-trips byte-identically
+    // except this one key.
+    linear_settings: (linearSettings && typeof linearSettings === "object" && !Array.isArray(linearSettings)) ? linearSettings : {},
   };
 }
 

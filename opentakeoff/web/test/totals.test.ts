@@ -130,13 +130,15 @@ test("reportJson: v1 key set pinned — top level, sheets[], markups[], by_sheet
   // emitted); units + display_units appended after that (metric display port —
   // quantities stay RAW feet, the export says which system the user was
   // reading); roll_goods appended (#136, always emitted, empty without
-  // roll-goods conditions); linear_runs appended last (#linear-takeoff
-  // WP1.4, always emitted, empty without sized routed runs)
+  // roll-goods conditions); linear_runs appended (#linear-takeoff WP1.4,
+  // always emitted, empty without sized routed runs); linear_settings
+  // appended last (#linear-takeoff WP2.4, always emitted, {} without one set)
   assert.deepEqual(Object.keys(j),
-    ["schema", "project_name", "generated_with", "sheets", "conditions", "by_sheet", "totals", "materials", "markups", "rfis", "condition_columns", "shape_labels", "by_label", "units", "display_units", "roll_goods", "linear_runs"]);
+    ["schema", "project_name", "generated_with", "sheets", "conditions", "by_sheet", "totals", "materials", "markups", "rfis", "condition_columns", "shape_labels", "by_label", "units", "display_units", "roll_goods", "linear_runs", "linear_settings"]);
   assert.equal(j.display_units, "imperial");
   assert.deepEqual(j.roll_goods, []);   // #136 — always emitted; empty when nothing carries a roll_setup
   assert.deepEqual(j.linear_runs, []);  // #linear-takeoff WP1.4 — always emitted; empty when nothing carries a sized run
+  assert.deepEqual(j.linear_settings, {});  // #linear-takeoff WP2.4 — always emitted; {} when nothing set
   // rfis[] appends after markups (additive v1); linked_markups/linked_sheets derived
   assert.deepEqual(Object.keys(j.rfis[0]),
     ["id", "number", "subject", "question", "status", "to", "priority", "cost_impact", "schedule_impact",
@@ -183,6 +185,14 @@ test("reportJson: linear_runs rides through verbatim; a non-array coerces to [] 
   const rows = [{ condition_id: "ct", finish_tag: "SA-1", size_key: "rect:12x6", size: { kind: "rect", w_in: 12, h_in: 6 }, lf: 20.5, lf_net: 20.5 }];
   assert.deepEqual(reportJson({ linearRuns: rows }).linear_runs, rows);
   assert.deepEqual(reportJson({ linearRuns: "corrupt" as any }).linear_runs, []);
+});
+
+test("reportJson: linear_settings rides through verbatim; a non-object coerces to {} (#linear-takeoff WP2.4)", () => {
+  const settings = { adopted_pipe_hanger_code: "upc313_3", climate_zone: "cz5_8", offset_allowance_pct: 5 };
+  assert.deepEqual(reportJson({ linearSettings: settings }).linear_settings, settings);
+  assert.deepEqual(reportJson({}).linear_settings, {});
+  assert.deepEqual(reportJson({ linearSettings: "corrupt" as any }).linear_settings, {});
+  assert.deepEqual(reportJson({ linearSettings: [1, 2] as any }).linear_settings, {});
 });
 
 test("conditionTotals: a shape with no run block never gains `sizes` — byte-identical to before WP1.4", () => {

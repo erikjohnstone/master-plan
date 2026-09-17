@@ -1,5 +1,116 @@
 ## Active work
 
+2026-09-17 linear takeoff WP2.4 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+assembly library + project settings persistence. Two new pure modules:
+
+- `web/src/lib/linear/assemblyLibrary.ts`: `SEED_ASSEMBLIES` — three
+  AssemblyRecord entries (types.ts, WP2.2) matching plan §5.5's own
+  defaults verbatim: `asm-duct-rect-default`/`asm-duct-round-default`
+  (per_ft `duct_lb` with NO fixed gauge — the default lets rates.ts's
+  `ductGaugeFor` size-lookup apply per §5.5's "gauge =
+  lookup(pressure_class, max(W,H))", deliberately NOT the fixed gauge
+  WP2.2's own worked-example test pins for that one scenario;
+  `insulation_sf` at 1.5"/1.10 lap; per_vertex elbow at 1.4 labor factor;
+  `deduct_fittings: false`, D2's default) and `asm-pipe-default` (empty
+  per_ft/per_vertex/per_run — assembly.ts's pipe resolvers don't read any
+  assembly-level rule yet, so seeding ones nothing consumes would be
+  misleading, not merely incomplete; documented in the file's own header
+  and enforced by a test that fails if a future edit adds an unconsumed
+  rule silently). `sanitizeAssemblyLibrary` mirrors
+  `sanitizeMaterialLibrary`'s exact minimal contract (materials.js's own
+  precedent): non-empty unique string id, first-wins on a duplicate,
+  everything else defaulted defensively rather than thrown on.
+- `web/src/lib/linear/settings.ts`: `LinearProjectSettings` +
+  `sanitizeLinearSettings` — `adopted_pipe_hanger_code`, `climate_zone`,
+  `pressure_class_by_system` (a system-tag → w.g. map), `stick_length_by_
+  material`, `offset_allowance_pct`. `level_heights` is deliberately
+  ABSENT — plan §7.4 says so itself ("already sheetLevels.js"): the
+  project already persists per-sheet level assignment there, and
+  duplicating it here would just be a second place it could drift from
+  the real one. `pressure_class_by_system`/`stick_length_by_material` are
+  persisted but NOT YET read by `resolveLinearAssembly` (which still takes
+  a flat per-call value) — a caller resolving one condition looks up its
+  own system/material key before calling in; that lookup wiring is
+  WP2.5's job, documented in the module header rather than silently
+  assumed done.
+
+Wired additively into the existing persistence stack, mirroring each
+layer's own established pattern exactly rather than inventing a new one:
+
+- `store.js`: `loadAssemblyLibrary`/`saveAssemblyLibrary`, same
+  browser-global meta-store pattern as materials/templates/stamps — but
+  unlike materials/templates (which start empty; an estimator builds
+  those), an ABSENT record auto-seeds `SEED_ASSEMBLIES` and persists it
+  once, in the STORE METHOD ITSELF rather than a canvas-side effect
+  (contrast the stamp library's own `useEffect` in TakeoffCanvas.jsx):
+  nothing in the canvas calls `loadAssemblyLibrary` yet
+  (`resolveLinearAssembly` has no UI consumer until WP2.5's report tab),
+  so seeding at the store layer means any future caller — canvas, a
+  script, an MCP tool — gets the defaults on first touch without each
+  needing its own seeding logic.
+- `profile.js`: `buildProfile`/`applyProfile`/`resetProfileDefaults` all
+  gain the `assembly_library` section, `applyProfile`'s receipt gains an
+  `assemblies` count. `resetProfileDefaults` re-seeds (the stamp-library
+  precedent: assemblies ship with defaults, unlike templates/materials);
+  `applyProfile` never re-seeds an incoming profile's empty/absent
+  section (a REPLACE, not a merge — an old profile that deliberately
+  emptied its library on another machine must not get defaults
+  resurrected by importing it here).
+- `TakeoffCanvas.jsx`: `linearSettings` state, hydrated from the payload's
+  additive `linear_settings` key (else-clear on a snapshot load, the
+  `sheet_levels` precedent exactly), read back into `buildPayload()`
+  omit-when-empty, added to the autosave effect's dependency array.
+  Persistence only — NO settings UI panel this commit. Flagged explicitly
+  as a scoping choice, not an oversight: WP2.3's own queue text explicitly
+  asked for a "TakeoffsPanel basis select"; WP2.4's does not ask for a
+  settings UI, and building one now against a feature
+  (`resolveLinearAssembly`) with no other UI surface yet would be
+  premature wiring in a 10,000+-line component with no consumer to
+  validate it against.
+- `totals.js`: `reportJson` gains a `linearSettings` param and an
+  always-emitted `linear_settings` block, appended last (the `linear_runs`
+  precedent) — `{}` for every project that hasn't set one, so a
+  pre-WP2.4 export round-trips byte-identically except this one key.
+- MCP (`session.ts`/`outputs.ts`): `nativeExportPayload`/`exportReport`
+  both emit `linear_settings: {}` — matching `sheet_levels`'s OWN existing
+  "not tracked in Session state" status exactly (that field has been
+  hardcoded empty on the MCP side since before this goal existed). This
+  is a REAL, acknowledged gap, not silent: MCP does not read an imported
+  project's `linear_settings` block into its own state yet, so a
+  round-trip through `import_takeoff` → `export_takeoff`/`export_report`
+  currently drops it, the identical class of limitation `sheet_levels`
+  already carries. Closing it is follow-up work, not invented here.
+
+Two exact-key-list tests broke and were fixed, precisely BECAUSE these
+new keys are ALWAYS present (unlike most additive fields here, which
+omit-when-empty): `mcp/test/session.test.ts`'s `exportPayload` envelope-
+keys assertion (added `linear_settings`) and `web/test/totals.test.ts`'s
+`reportJson` v1-key-set-pinned assertion (same). Both now also assert the
+new key's value directly, not just its presence.
+
+Tests: 7 new cases in `web/test/linear/assemblyLibrary.test.ts`
+(non-array/malformed/duplicate handling, the `per_ft`/`per_vertex`/
+`per_run` defaulting, `deduct_fittings`/`allowances` passthrough gating,
+every SEED_ASSEMBLIES id unique and round-trips, and the "no fixed
+gauge" invariant on both duct seeds); 6 in `web/test/linear/
+settings.test.ts` (non-object input, full round-trip, each field's own
+enum/numeric validation, an all-dropped map coming back absent rather
+than `{}`); 2 new + 2 fixed in `web/test/totals.test.ts` (linear_settings
+passthrough/coercion, the two key-set fixes above).
+
+Verified: web and mcp typecheck/lint clean; `check-tool-count` clean (no
+tool touched); full `mcp npm test` — 107/107 file-level, same 2 known
+`.venv-bas` pytest-env failures; full `web npm test` minus the known
+`compileProgressWalkthrough.test.ts` flake — 3304 attempted, 70 fail,
+same pre-existing cluster (this run's `annotationGeneration.test.ts` and
+`basSyncRestore.test.ts` subtests additionally surfaced as
+`cancelledByParent` rather than plain assertion failures — same test
+names, same already-known-flaky files, a different manifestation of the
+identical pre-existing async-cleanup timing issue, not a new one — the
+70-count itself, the signal this session has used throughout, held
+exactly steady). `npm run bench` and `npm run bench:linear` both green,
+both `results.json` byte-identical.
+
 2026-09-17 linear takeoff WP2.3 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 materials rows gain "vertex"/"run" basis + hours_per_unit. Threaded
 additively through every layer that already knew about materials basis

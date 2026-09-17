@@ -38,6 +38,7 @@
 import { sanitizeTemplates } from "./templates.js";
 import { sanitizeMaterialLibrary } from "./materials.js";
 import { sanitizeStampLibrary } from "./stamps.js";
+import { sanitizeAssemblyLibrary, SEED_ASSEMBLIES } from "./linear/assemblyLibrary.ts";
 import { attachAnnotationGeneration, annotationConflict } from "./annotationGeneration.js";
 import { withAnnotationCoordinator } from './annotationCoordinator.js';
 import { BAS_SOURCE_CHUNK_BYTES, basSourceChunkKey, basSourceChunkCount, basSourceChunkLength, basSourceChunkRecord, isBasSourceChunkRecord } from './basSourceStorage.js';
@@ -71,6 +72,11 @@ const MATLIB_KEY = "material_library";
 // pattern as templates/materials, its own key in the keyPath-less meta store
 // (no DB version bump). Persists across projects; export/import as JSON.
 const STAMPLIB_KEY = "stamp_library";
+// assembly library (#linear-takeoff WP2.4) — same browser-global pattern as
+// materials: a condition COPIES nothing, it references a library entry by
+// `assembly_id` (types.ts's LinearCondition), so the library is never
+// load-bearing for a takeoff already resolved against it.
+const ASMLIB_KEY = "assembly_library";
 const ANN_SCHEMA = "opentakeoff.takeoff_canvas.v1";
 
 // The empty-project annotations shape. One definition so the local store and the
@@ -602,6 +608,30 @@ export const localStore = {
 
   async saveStampLibrary(lib) {
     await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put(sanitizeStampLibrary(lib), STAMPLIB_KEY)));
+  },
+
+  async loadAssemblyLibrary() {
+    // sanitize on load for the same reason as templates/materials: the
+    // record is browser-global, and one corrupt item would otherwise crash
+    // every project's hydrate at once. Unlike templates/materials (which
+    // start empty — an estimator builds those), an ABSENT record seeds
+    // plan §5.5's defaults and persists them once, the seedStampLibrary
+    // precedent (TakeoffCanvas.jsx's stamp-library effect) — but done HERE,
+    // in the store method itself, rather than a canvas-side effect: nothing
+    // in the canvas calls this yet (resolveLinearAssembly has no UI
+    // consumer until WP2.5), so any future caller — canvas, a script, an
+    // MCP tool — gets the seeded library on first touch without each
+    // needing its own seeding logic.
+    const a = await withDb((db) => tx(db, META_STORE, "readonly", (os) => os.get(ASMLIB_KEY)));
+    if (a === undefined) {
+      await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put(SEED_ASSEMBLIES, ASMLIB_KEY)));
+      return sanitizeAssemblyLibrary(SEED_ASSEMBLIES);
+    }
+    return sanitizeAssemblyLibrary(a);
+  },
+
+  async saveAssemblyLibrary(list) {
+    await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put(sanitizeAssemblyLibrary(list), ASMLIB_KEY)));
   },
 
   // `project` scopes a snapshot to a cloud project folder (cloudStore passes the

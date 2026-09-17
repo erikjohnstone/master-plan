@@ -220,7 +220,7 @@ test("exportPayload: exact envelope keys, schema, only scaled sheets listed", as
   await s.oneClick(KEY, 600, 1084, { condition: "CPT-1", role: "floor_area", returnVerts: false });
   p = s.exportPayload();
   assert.deepEqual(Object.keys(p).sort(), [
-    "conditions", "last_group", "markups", "project_name", "schema",
+    "conditions", "last_group", "linear_settings", "markups", "project_name", "schema",
     "shapes", "sheet_group", "sheet_levels", "sheet_tabs", "sheets", "units",
   ]);
   assert.equal(p.schema, ANN_SCHEMA);
@@ -229,6 +229,7 @@ test("exportPayload: exact envelope keys, schema, only scaled sheets listed", as
   assert.equal(p.project_name, "");
   assert.deepEqual(p.markups, []);
   assert.deepEqual(p.sheet_levels, {});
+  assert.deepEqual(p.linear_settings, {}, "#linear-takeoff WP2.4 — always {} on this surface today, same status as sheet_levels above");
   assert.equal(p.sheets.length, 1);
   assert.equal(p.sheets[0].sheet_id, KEY);
   assert.ok(Math.abs(p.sheets[0].units_per_px! - 1 / 36) < 1e-12);

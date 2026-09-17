@@ -6560,6 +6560,12 @@ export class Session {
       last_group: [],
       sheet_tabs: [],
       sheet_levels: {},
+      // #linear-takeoff (WP2.4): same "not tracked here yet" status as
+      // sheet_levels above — an imported project's own linear_settings
+      // block is not read into Session state, so a round-trip export
+      // always reads {} on this surface until MCP gains project-settings
+      // state of its own (a follow-up, not this commit's scope).
+      linear_settings: {},
     };
   }
 
