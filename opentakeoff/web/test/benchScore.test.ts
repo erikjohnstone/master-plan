@@ -1,7 +1,7 @@
 // Benchmark scorer — the IoU/aggregate math the corpus gate stands on.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear, type ProbeScore, type CrossScore } from "../bench/score.ts";
+import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear, polylineLength, projectOntoPolyline, clipPolyline, discreteFrechet, scoreTraceShapeMatch, scoreTraceRecall, scoreTracePrecision, aggregateTrace, type ProbeScore, type CrossScore, type TraceRunRow } from "../bench/score.ts";
 import { KNOWN_WALL_SEMANTICS, WALL_SEMANTICS } from "../bench/corpus.ts";
 import type { Point } from "../src/lib/oneclick.ts";
 
@@ -435,4 +435,169 @@ test("aggregateLinear: rolls up parity failures and the worst totals/determinism
 
 test("aggregateLinear: empty inputs report zero, not NaN or a thrown error", () => {
   assert.deepEqual(aggregateLinear([], [], []), { cases: 0, parityFailures: 0, maxTotalsErrFt: 0, maxTotalsErrPct: 0, maxDeterminismErrFt: 0 });
+});
+
+// ── #linear-takeoff WP3+ trace-engine scoring ───────────────────────────────
+
+test("polylineLength: sums a multi-segment chain, including a 3-4-5 leg", () => {
+  assert.equal(polylineLength([[0, 0], [3, 4]]), 5);
+  assert.equal(polylineLength([[0, 0], [3, 4], [3, 4]]), 5, "a zero-length trailing leg adds nothing");
+  assert.equal(polylineLength([[0, 0]]), 0, "a single point has no length");
+});
+
+test("projectOntoPolyline: a point exactly on a vertex reports that vertex's own arc-length, zero distance", () => {
+  const poly: Point[] = [[0, 0], [100, 0], [100, 100]];
+  const hit = projectOntoPolyline([100, 0], poly);
+  assert.equal(hit.arcLen, 100);
+  assert.equal(hit.dist, 0);
+  assert.deepEqual(hit.at, [100, 0]);
+});
+
+test("projectOntoPolyline: a point off to the side projects perpendicularly onto the nearest segment", () => {
+  const poly: Point[] = [[0, 0], [100, 0]];
+  const hit = projectOntoPolyline([40, 10], poly);
+  assert.equal(hit.arcLen, 40);
+  assert.equal(hit.dist, 10);
+  assert.deepEqual(hit.at, [40, 0]);
+});
+
+test("projectOntoPolyline: a point beyond either end clamps to that endpoint, not extrapolating past it", () => {
+  const poly: Point[] = [[0, 0], [100, 0]];
+  assert.deepEqual(projectOntoPolyline([-50, 0], poly).at, [0, 0]);
+  assert.deepEqual(projectOntoPolyline([500, 0], poly).at, [100, 0]);
+});
+
+test("clipPolyline: clips a straight line's middle span to exact arc-length endpoints", () => {
+  const poly: Point[] = [[0, 0], [100, 0]];
+  assert.deepEqual(clipPolyline(poly, 20, 80), [[20, 0], [80, 0]]);
+});
+
+test("clipPolyline: a clip spanning an interior vertex keeps that vertex — the elbow's own shape survives", () => {
+  const poly: Point[] = [[0, 0], [50, 0], [50, 50]];   // elbow at (50,0), arc-length 50
+  const clipped = clipPolyline(poly, 20, 70);
+  assert.deepEqual(clipped, [[20, 0], [50, 0], [50, 20]]);
+});
+
+test("discreteFrechet: identical polylines are zero distance apart", () => {
+  const poly: Point[] = [[0, 0], [50, 0], [50, 50]];
+  assert.equal(discreteFrechet(poly, poly), 0);
+});
+
+test("discreteFrechet: two parallel lines offset by a constant distance report exactly that distance", () => {
+  const a: Point[] = [[0, 0], [100, 0]];
+  const b: Point[] = [[0, 10], [100, 10]];
+  assert.equal(discreteFrechet(a, b), 10);
+});
+
+test("discreteFrechet: a single spike far from an otherwise-matching path drives the whole distance up (it's a MAX, not an average)", () => {
+  const a: Point[] = [[0, 0], [50, 0], [100, 0]];
+  const b: Point[] = [[0, 0], [50, 1000], [100, 0]];
+  assert.equal(discreteFrechet(a, b), 1000);
+});
+
+test("scoreTraceShapeMatch: an exact-match trace over the golden's own span scores zero Fréchet distance and full overlap", () => {
+  const golden: Point[] = [[0, 0], [100, 0], [100, 100]];
+  const m = scoreTraceShapeMatch("c1", golden, golden, 1 / 18);
+  assert.equal(m.frechetPx, 0);
+  assert.equal(m.lengthOverlapPct, 1);
+  assert.equal(m.clippedLenFt, m.goldenLenFt);
+});
+
+test("scoreTraceShapeMatch: an over-traced polyline (extends well past the golden on both ends) is CLIPPED to the golden's own span first — over-trace is invisible here by design", () => {
+  const golden: Point[] = [[0, 0], [100, 0]];
+  const overTraced: Point[] = [[-500, 0], [0, 0], [100, 0], [600, 0]];   // same line, way longer
+  const m = scoreTraceShapeMatch("c1", golden, overTraced, 1 / 18);
+  assert.equal(m.frechetPx, 0);
+  assert.equal(m.lengthOverlapPct, 1);
+  assert.equal(m.clippedLenFt, m.goldenLenFt, "clipped to the golden's own 100px span, not the full 1100px trace");
+});
+
+test("scoreTraceShapeMatch: a trace that stops SHORT of the golden's own end reports partial overlap, not a false 100%", () => {
+  const golden: Point[] = [[0, 0], [100, 0]];
+  const shortTrace: Point[] = [[0, 0], [40, 0]];   // dead-ended 60% short of the golden's own end
+  const m = scoreTraceShapeMatch("c1", golden, shortTrace, 1 / 18);
+  assert.ok(m.lengthOverlapPct < 0.6, `expected well under 60% overlap, got ${m.lengthOverlapPct}`);
+});
+
+test("scoreTraceShapeMatch: the trace's own walk direction relative to the golden's is arbitrary — a REVERSED trace still matches cleanly", () => {
+  const golden: Point[] = [[0, 0], [100, 0], [100, 100]];
+  const reversedTrace: Point[] = [[100, 100], [100, 0], [0, 0]];
+  const m = scoreTraceShapeMatch("c1", golden, reversedTrace, 1 / 18);
+  assert.equal(m.frechetPx, 0);
+  assert.equal(m.lengthOverlapPct, 1);
+});
+
+function traceRow(over: Partial<TraceRunRow> & { caseName: string }): TraceRunRow {
+  return { status: "reached", goldenLf: 10, tracedLf: 10, lenErrPct: 0, overTracePct: 0, goldenSizeKey: null, tracedSizeKey: null, sizeMatch: null, ...over };
+}
+
+test("scoreTraceRecall: a hit needs BOTH Fréchet under the tolerance AND overlap at/above the minimum — either one failing is a miss", () => {
+  const goodShape = { caseName: "c1", frechetPx: 1, lengthOverlapPct: 0.9, clippedLenFt: 10, goldenLenFt: 10 };
+  const badFrechet = { ...goodShape, frechetPx: 5 };
+  const badOverlap = { ...goodShape, lengthOverlapPct: 0.5 };
+  const rows = [
+    traceRow({ caseName: "hit", shape: goodShape }),
+    traceRow({ caseName: "miss-frechet", shape: badFrechet }),
+    traceRow({ caseName: "miss-overlap", shape: badOverlap }),
+    traceRow({ caseName: "miss-refused", status: "refused", tracedLf: null, shape: goodShape }),
+  ];
+  const r = scoreTraceRecall(rows, 2, 0.8);
+  assert.equal(r.hits, 1);
+  assert.equal(r.total, 4);
+  assert.equal(r.recall, 0.25);
+  assert.deepEqual(r.misses.map((m) => m.caseName), ["miss-frechet", "miss-overlap", "miss-refused"]);
+});
+
+test("scoreTraceRecall: empty input reports zero recall, not NaN", () => {
+  assert.equal(scoreTraceRecall([], 2, 0.8).recall, 0);
+});
+
+test("scoreTracePrecision: an exact-length trace scores 1.0; an over-traced one is diluted by its own excess length", () => {
+  const exact = scoreTracePrecision([traceRow({ caseName: "c1", goldenLf: 10, tracedLf: 10 })]);
+  assert.equal(exact, 1);
+  const overTraced = scoreTracePrecision([traceRow({ caseName: "c1", goldenLf: 10, tracedLf: 20 })]);
+  assert.equal(overTraced, 0.5, "10 correct ft out of 20 walked ft");
+});
+
+test("scoreTracePrecision: an under-traced (short) run is NOT penalized here — under-trace is a recall problem, not a precision one", () => {
+  const short = scoreTracePrecision([traceRow({ caseName: "c1", goldenLf: 10, tracedLf: 4 })]);
+  assert.equal(short, 1, "min(10,4)/4 = 1.0 — everything walked was correct, it just wasn't enough of it");
+});
+
+test("scoreTracePrecision: length-weighted across cases — a small case's own noise doesn't swing the aggregate as hard as a large case's real drift", () => {
+  const rows = [
+    traceRow({ caseName: "small", goldenLf: 2, tracedLf: 4 }),     // 50% precision, tiny weight
+    traceRow({ caseName: "large", goldenLf: 100, tracedLf: 100 }),  // 100% precision, huge weight
+  ];
+  const p = scoreTracePrecision(rows);
+  assert.ok(p > 0.9, `expected the large exact case to dominate, got ${p}`);
+});
+
+test("scoreTracePrecision: refused/unreached rows are excluded, not scored as zero", () => {
+  const rows = [traceRow({ caseName: "refused", status: "refused", tracedLf: null })];
+  assert.equal(scoreTracePrecision(rows), 0, "no reached rows at all — reports 0, not a crash");
+});
+
+test("aggregateTrace: rolls up recall, precision, worst length/over-trace error and length-weighted size accuracy", () => {
+  const shape = { caseName: "c", frechetPx: 0, lengthOverlapPct: 1, clippedLenFt: 10, goldenLenFt: 10 };
+  const rows: TraceRunRow[] = [
+    traceRow({ caseName: "a", goldenLf: 10, tracedLf: 10, lenErrPct: 0, overTracePct: 0, goldenSizeKey: "pipe:1", tracedSizeKey: "pipe:1", sizeMatch: true, shape }),
+    traceRow({ caseName: "b", goldenLf: 20, tracedLf: 22, lenErrPct: 0.1, overTracePct: 0.1, goldenSizeKey: "pipe:2", tracedSizeKey: "pipe:1", sizeMatch: false, shape }),
+  ];
+  const agg = aggregateTrace(rows, 2, 0.8);
+  assert.equal(agg.cases, 2);
+  assert.equal(agg.recall, 1, "both cases have a qualifying shape match");
+  assert.ok(Math.abs(agg.maxLenErrPct - 0.1) < 1e-9);
+  assert.ok(Math.abs(agg.maxOverTracePct - 0.1) < 1e-9);
+  assert.ok(Math.abs(agg.sizeAccuracyPct! - 10 / 30) < 1e-9, "length-weighted: only the 10 ft case's size matched, out of 30 ft total");
+});
+
+test("aggregateTrace: no case carries a golden size — sizeAccuracyPct is null, never a fabricated number", () => {
+  const agg = aggregateTrace([traceRow({ caseName: "a" })], 2, 0.8);
+  assert.equal(agg.sizeAccuracyPct, null);
+});
+
+test("aggregateTrace: empty input reports zeros/nulls, not NaN or a thrown error", () => {
+  const agg = aggregateTrace([], 2, 0.8);
+  assert.deepEqual(agg, { cases: 0, recall: 0, precision: 0, maxLenErrPct: 0, meanLenErrPct: 0, maxOverTracePct: 0, sizeAccuracyPct: null, maxColdBuildMs: null, maxWarmQueryMs: null });
 });

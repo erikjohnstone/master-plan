@@ -1,10 +1,22 @@
-// Linear-takeoff benchmark runner (#linear-takeoff WP1.6):
+// Linear-takeoff benchmark runner (#linear-takeoff WP1.6 + WP3+ GATE 3):
 //   npm run bench:linear          (from web/)
-// Scores the synthetic linear corpus (bench/linear/corpus/*.json + the PDFs
-// bench/linear/synthetic/synthesize.mts generated them from) on the THREE
-// things that can regress in MANUAL mode — parity, totals, determinism — per
-// the goal document's own WP1.6 scope (see score.ts's header comment on why
-// the full recall/precision/Fréchet/vertex-F1 suite doesn't apply yet).
+// TWO scored halves, kept structurally separate:
+//   1. MANUAL mode (WP1.6's own original scope) — parity, totals,
+//      determinism, over the synthetic corpus (bench/linear/corpus/*.json
+//      + the PDFs bench/linear/synthetic/synthesize.mts generated them
+//      from). A human/agent supplies the points outright here, so there
+//      is nothing to "find" — see score.ts's own header on why the full
+//      recall/precision/Fréchet/vertex-F1 suite didn't apply to THIS half.
+//   2. TRACE engine (added post-WP3.8, GATE 3's own scope) — `trace_run`
+//      seeded on the SAME synthetic corpus AND on the real hand-traced
+//      goldens (opentakeoff-corpus/ground_truth/linear/*.json, WP1.7 +
+//      WP3.8's "ground truth v2"), scored by the goal document's own
+//      literal method ("discrete Frechet < 2 pt, length overlap >= 80%"
+//      for recall; length-weighted correct/walked ratio for precision —
+//      see score.ts's own header on both). This is the scorer
+//      docs/LINEAR-TRACE-EVAL.md's own Findings 1-4 were measured
+//      against; that doc keeps the narrative history, this file is the
+//      live ruler.
 //
 // Same shape as bench/run.mts: writes bench/linear/results.json (null, 1
 // indent, diffable) and CI diff-gates it exactly like results.json (#198
@@ -12,15 +24,16 @@
 // number must ship its own results.json delta in the same PR.
 import { createRequire } from "module";
 import { readFileSync, readdirSync, writeFileSync } from "fs";
-import { join, dirname } from "path";
+import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { Session } from "../../mcp/src/session.ts";
 import { resolveRunSegments, type ComputedRun } from "../src/lib/linear/run.ts";
 import type { AuthoredRun, RunSize } from "../src/lib/linear/types.ts";
-import { extractVectorGeometry } from "../src/lib/oneclick.ts";
+import { extractVectorGeometry, type Point } from "../src/lib/oneclick.ts";
 import {
   scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear,
-  type LinearTotalsRow, type LinearDeterminismRow,
+  scoreTraceShapeMatch, scoreTraceRecall, scoreTracePrecision, aggregateTrace,
+  type LinearTotalsRow, type LinearDeterminismRow, type TraceRunRow, type TraceAggregate,
 } from "./score.ts";
 
 // THE MARGIN IS MEASURED, not chosen for comfort (bench/run.mts's own rule).
@@ -55,6 +68,37 @@ const THRESHOLDS = {
   maxTotalsErrFt: 0.03,
   maxDeterminismErrFt: 0.03,
   maxParityFailures: 0,
+};
+
+// ── #linear-takeoff WP3+ — trace-engine thresholds (GATE 3, plan §2's
+// "run recall / precision (discrete Frechet < 2 pt, length overlap >=
+// 80%)"). GATE 3's own real targets are recall>=0.85, precision>=0.95,
+// length error<=3%, over-trace<=3%, size accuracy>=0.90 — NOT met yet
+// (docs/LINEAR-TRACE-EVAL.md's own Findings 1/2/4). Per this file's own
+// "MEASURED, not chosen for comfort" rule, TRACE_THRESHOLDS below is the
+// CURRENT ratchet point — today's actual measured floor on the REAL
+// ground truth (recall 1/7 = 0.143, precision 0.612, checked directly
+// against a real run before writing these numbers), NOT GATE 3's own
+// targets. Ratchet these UP as WP3+'s own fixes land, never down. The
+// dominant miss (5 of 7 real cases refuse outright) is Finding 1's
+// wall-vouch exclusion, off this project's own "never touch
+// wallnetwork.ts/mepconnectivity.ts" list — 0.85 is not reachable by
+// anything this bench is allowed to fix on its own. The SYNTHETIC
+// corpus's own trace numbers (reported, NOT gated) are confounded the
+// same way for a different reason (Finding 5: its random-walk path
+// generator often produces near-closed rectangular loops that trip the
+// SAME wall-vouch heuristic, masking whatever property — pen weight,
+// dash, label placement — each case actually meant to isolate); fixing
+// the generator to dodge that is real, separate follow-up work, not done
+// here, so gating on it today would just be gating on Finding 1 again
+// under a different name.
+const TRACE_FRECHET_TOL_PX = 2;      // plan's own literal "discrete Frechet < 2 pt"
+const TRACE_OVERLAP_MIN = 0.8;       // plan's own literal "length overlap >= 80%"
+const TRACE_THRESHOLDS = {
+  minRecall: 0.1,           // measured 1/7 = 0.143 on the real ground truth
+  minPrecision: 0.5,        // measured 0.612 on the real ground truth
+  maxLenErrPct: 1.0,        // Finding 4 (a branchy trunk's own over-trace) reads as ~85% error under this scorer; not yet a per-case cap worth tightening
+  maxOverTracePct: 1.0,
 };
 
 interface CaseTruth {
@@ -151,6 +195,150 @@ for (const file of caseFiles) {
   }
 }
 
+// ── trace-engine scoring (GATE 3) ────────────────────────────────────────────
+// Two corpora, scored the same way, reported separately (a synthetic
+// truth-by-construction case failing means something regressed; a real
+// ground-truth case failing may just mean the real sheet has one of the
+// project's own already-documented, out-of-scope limitations —
+// docs/LINEAR-TRACE-EVAL.md's own Findings 1/4. Blending them into one
+// number would hide that distinction, the same reasoning
+// mep-trace-eval.mjs's own reach/refusal/false-confident split already
+// uses).
+const sizeKey = (sz: RunSize | null | undefined): string | null => {
+  if (!sz) return null;
+  if (sz.kind === "rect") return `rect:${sz.w_in}x${sz.h_in}`;
+  if (sz.kind === "round") return `round:${sz.d_in}`;
+  if (sz.kind === "oval") return `oval:${sz.major_in}x${sz.minor_in}`;
+  if (sz.kind === "pipe") return `pipe:${sz.nps_in}`;
+  return JSON.stringify(sz);
+};
+
+/** Seeds on the longest segment of a golden run (40% along it, away from
+ *  both endpoints/junctions) — the same "don't seed exactly on a vertex"
+ *  reasoning a real click never lands exactly on one either. */
+function seedOnLongestSegment(pts: Point[]): Point {
+  let bestI = 0, bestLen = -1;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const len = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]);
+    if (len > bestLen) { bestLen = len; bestI = i; }
+  }
+  const [x0, y0] = pts[bestI], [x1, y1] = pts[bestI + 1];
+  return [x0 + (x1 - x0) * 0.4, y0 + (y1 - y0) * 0.4];
+}
+
+async function traceOneRun(
+  session: Session, sheetKey: string, golden: Point[], goldenLf: number, goldenSize: RunSize | null | undefined,
+  cold: boolean,
+): Promise<TraceRunRow> {
+  const seed = seedOnLongestSegment(golden);
+  const caseName = sheetKey;
+  const t0 = performance.now();
+  let r;
+  try {
+    r = await session.traceRun(sheetKey, seed, {});
+  } catch (e) {
+    return { caseName, status: "refused", reason: String((e as Error).message || e), goldenLf, tracedLf: null, lenErrPct: null, overTracePct: 0, goldenSizeKey: sizeKey(goldenSize), tracedSizeKey: null, sizeMatch: null };
+  }
+  const ms = performance.now() - t0;
+  const tracedLf = r.length_lf ?? null;
+  const lenErrPct = tracedLf != null && goldenLf > 0 ? Math.abs(tracedLf - goldenLf) / goldenLf : null;
+  const overTracePct = tracedLf != null && goldenLf > 0 && tracedLf > goldenLf ? (tracedLf - goldenLf) / goldenLf : 0;
+  const goldenSizeKeyStr = sizeKey(goldenSize);
+  const tracedSizeKeyStr = sizeKey(r.size as RunSize | undefined);
+  const shape = scoreTraceShapeMatch(caseName, golden, r.points as Point[], session.sheet(sheetKey).upp || 0);
+  return {
+    caseName, status: "reached", goldenLf, tracedLf, lenErrPct, overTracePct,
+    goldenSizeKey: goldenSizeKeyStr, tracedSizeKey: tracedSizeKeyStr,
+    sizeMatch: goldenSizeKeyStr != null ? goldenSizeKeyStr === tracedSizeKeyStr : null,
+    shape,
+    ...(cold ? { buildMs: ms } : { queryMs: ms }),
+  };
+}
+
+const traceRows: TraceRunRow[] = [];
+const traceSeenSheets = new Set<string>();
+
+// Truth-by-construction px conversion for the SYNTHETIC corpus's ABSOLUTE
+// position (the manual-mode loop above never needed this — resolveRunSegments
+// only cares about relative distances between the points it's handed, so a
+// missing offset/flip is invisible to parity/totals/determinism; a seed for
+// trace_run has to land on the REAL drawn ink, which lives in a real
+// coordinate frame). Mirrors bench/linear/synthesize.mts's own `toPdf`
+// exactly: `[80 + x*PT_PER_FT, 80 + y*PT_PER_FT]` in native PDF points
+// (bottom-left origin, y UP), which pdf.js's own viewport then flips to
+// image px (top-left origin, y DOWN) on render. PAGE_H/margin duplicated
+// rather than imported — synthesize.mts has top-level side effects (it
+// WRITES the corpus on load), so importing it here would regenerate
+// fixtures on every bench run; this codebase's own established convention
+// for a small, stable primitive like this is to copy it, not force an
+// import dependency across an otherwise-unrelated module boundary (same
+// reasoning graph.ts's own `angleDiff` duplication states).
+const SYNTH_MARGIN_PT = 80;   // synthesize.mts's own toPdf: "80 + x*PT_PER_FT" — PAGE_H itself isn't needed since `heightPx` (the real rendered sheet height) already equals PAGE_H*scale by construction
+function syntheticFtToPx([xFt, yFt]: [number, number], ptPerFt: number, scale: number, heightPx: number): Point {
+  return [SYNTH_MARGIN_PT * scale + xFt * ptPerFt, heightPx - SYNTH_MARGIN_PT * scale - yFt * ptPerFt];
+}
+
+// ── synthetic truth-by-construction corpus — same cases as the manual-mode
+// loop above (reusing each case's own `expected`), but with the real
+// absolute px conversion a seed needs (see syntheticFtToPx's own header).
+for (const file of caseFiles) {
+  const c: CaseTruth = JSON.parse(readFileSync(join(corpusDir, file), "utf8"));
+  const pdfPath = join(corpusDir, c.pdf);
+  const upp = 1 / c.ptPerFt;
+  const session = new Session();
+  await session.loadPlan(pdfPath);
+  const sheetKey = pdfPath.replace(/^.*[\\/]/, "");
+  session.setScale(sheetKey, { upp });
+  const sheet = session.sheet(sheetKey);
+  const pts: Point[] = c.run.points_ft.map((p) => syntheticFtToPx(p, c.ptPerFt, c.scale, sheet.heightPx));
+  const cold = !traceSeenSheets.has(sheetKey);
+  traceSeenSheets.add(sheetKey);
+  traceRows.push(await traceOneRun(session, sheetKey, pts, c.expected.total_lf, c.run.size, cold));
+}
+
+// ── real hand-traced goldens (WP1.7 + WP3.8's "ground truth v2") — a
+// DIFFERENT JSON shape (opentakeoff.linear_takeoff_ground_truth.v1:
+// verts_norm fractions of the sheet's own viewport, one file can hold
+// several runs) than the synthetic corpus above; adapted here rather
+// than reshaping the real corpus to match the synthetic schema.
+interface RealGolden {
+  source_pdf: string;
+  sheet_id: string;
+  runs: Array<{ verts_norm: [number, number][]; computed: { perimeter_lf: number }; run?: { size_overrides?: Record<string, RunSize> } }>;
+}
+const repoRoot = resolve(here, "../../..");
+const realGtDir = join(repoRoot, "opentakeoff-corpus/ground_truth/linear");
+const realFiles = readdirSync(realGtDir).filter((f) => f.endsWith(".json")).sort();
+for (const file of realFiles) {
+  const g: RealGolden = JSON.parse(readFileSync(join(realGtDir, file), "utf8"));
+  const pdfPath = resolve(repoRoot, g.source_pdf);
+  const session = new Session();
+  await session.loadPlan(pdfPath);
+  session.setScale(g.sheet_id, { use_detected: true });
+  const sheet = session.sheet(g.sheet_id);
+  for (const run of g.runs) {
+    const pts: Point[] = run.verts_norm.map(([x, y]) => [x * sheet.widthPx, y * sheet.heightPx]);
+    // the golden segment the SEED (40% along the longest leg) actually
+    // sits on, for the size-accuracy comparison — same longest-segment
+    // convention `seedOnLongestSegment` uses, computed again here since
+    // the size lookup needs the segment INDEX, not just the seed point.
+    let bestI = 0, bestLen = -1;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const len = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]);
+      if (len > bestLen) { bestLen = len; bestI = i; }
+    }
+    const goldenSize = run.run?.size_overrides?.[String(bestI)];
+    const cold = !traceSeenSheets.has(g.sheet_id);
+    traceSeenSheets.add(g.sheet_id);
+    traceRows.push(await traceOneRun(session, g.sheet_id, pts, run.computed.perimeter_lf, goldenSize, cold));
+  }
+}
+
+const syntheticTraceRows = traceRows.slice(0, caseFiles.length);
+const realTraceRows = traceRows.slice(caseFiles.length);
+const syntheticTraceAgg: TraceAggregate = aggregateTrace(syntheticTraceRows, TRACE_FRECHET_TOL_PX, TRACE_OVERLAP_MIN);
+const realTraceAgg: TraceAggregate = aggregateTrace(realTraceRows, TRACE_FRECHET_TOL_PX, TRACE_OVERLAP_MIN);
+
 // ── report ──────────────────────────────────────────────────────────────────
 for (const p of parity) console.log(`${p.caseName.padEnd(28)} parity ${p.ok ? "OK" : `MISMATCH: ${p.mismatch}`}`);
 for (const t of totals) console.log(`${t.caseName.padEnd(28)} totals  expected ${t.expectedLf} LF, got ${t.actualLf} LF (err ${t.errFt.toFixed(3)} ft)`);
@@ -158,13 +346,26 @@ for (const d of determinism) console.log(`${d.caseName.padEnd(28)} determinism/$
 for (const s of extractionSanity) console.log(`${s.caseName.padEnd(28)} extraction sanity: ${s.segs} segment(s) found`);
 
 const agg = aggregateLinear(parity, totals, determinism);
-console.log("\naggregate:", agg);
+console.log("\naggregate (manual mode):", agg);
+
+console.log("\n── trace engine (synthetic corpus) ──");
+for (const r of syntheticTraceRows) console.log(`${r.caseName.padEnd(28)} ${r.status}${r.status === "reached" ? ` LF ${r.goldenLf}→${r.tracedLf} size ${r.sizeMatch == null ? "n/a" : r.sizeMatch ? "OK" : `${r.goldenSizeKey}!=${r.tracedSizeKey}`}` : ` ${r.reason ?? ""}`}`);
+console.log("aggregate (synthetic trace):", syntheticTraceAgg);
+
+console.log("\n── trace engine (real ground truth, development tier) ──");
+for (const r of realTraceRows) console.log(`${r.caseName.padEnd(40)} ${r.status}${r.status === "reached" ? ` LF ${r.goldenLf}→${r.tracedLf} size ${r.sizeMatch == null ? "n/a" : r.sizeMatch ? "OK" : `${r.goldenSizeKey}!=${r.tracedSizeKey}`}` : ` ${r.reason ?? ""}`}`);
+console.log("aggregate (real trace):", realTraceAgg);
 
 writeFileSync(join(here, "linear", "results.json"), JSON.stringify({
   cases: caseFiles.length,
   parity, totals, determinism, extractionSanity,
   aggregate: agg,
   thresholds: THRESHOLDS,
+  trace: {
+    frechetTolPx: TRACE_FRECHET_TOL_PX, overlapMin: TRACE_OVERLAP_MIN, thresholds: TRACE_THRESHOLDS,
+    synthetic: { rows: syntheticTraceRows, aggregate: syntheticTraceAgg },
+    real: { rows: realTraceRows, aggregate: realTraceAgg },
+  },
 }, null, 1));
 
 const failures: string[] = [];
@@ -172,6 +373,14 @@ if (agg.parityFailures > THRESHOLDS.maxParityFailures) failures.push(`parity fai
 if (agg.maxTotalsErrFt > THRESHOLDS.maxTotalsErrFt) failures.push(`max totals error ${agg.maxTotalsErrFt} ft > ${THRESHOLDS.maxTotalsErrFt} ft`);
 if (agg.maxDeterminismErrFt > THRESHOLDS.maxDeterminismErrFt) failures.push(`max determinism error ${agg.maxDeterminismErrFt} ft > ${THRESHOLDS.maxDeterminismErrFt} ft`);
 if (extractionSanity.some((s) => s.segs === 0)) failures.push("a synthetic case produced zero extracted segments");
+// Trace-engine gating checks the REAL ground truth (the plan's own
+// "development tier" language) against TRACE_THRESHOLDS's current
+// ratchet point, not GATE 3's own not-yet-met targets — see that
+// constant's own header for why.
+if (realTraceAgg.recall < TRACE_THRESHOLDS.minRecall) failures.push(`trace recall (real) ${realTraceAgg.recall.toFixed(3)} < ${TRACE_THRESHOLDS.minRecall}`);
+if (realTraceAgg.precision < TRACE_THRESHOLDS.minPrecision) failures.push(`trace precision (real) ${realTraceAgg.precision.toFixed(3)} < ${TRACE_THRESHOLDS.minPrecision}`);
+if (realTraceAgg.maxLenErrPct > TRACE_THRESHOLDS.maxLenErrPct) failures.push(`trace max length error (real) ${realTraceAgg.maxLenErrPct.toFixed(3)} > ${TRACE_THRESHOLDS.maxLenErrPct}`);
+if (realTraceAgg.maxOverTracePct > TRACE_THRESHOLDS.maxOverTracePct) failures.push(`trace max over-trace (real) ${realTraceAgg.maxOverTracePct.toFixed(3)} > ${TRACE_THRESHOLDS.maxOverTracePct}`);
 
 if (failures.length) {
   console.error("\nbench:linear FAILED:");

@@ -1,5 +1,99 @@
 ## Active work
 
+2026-09-17 linear takeoff: GATE 3 scoring migrated into bench/linear.mts (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+The prior checkpoint's `mcp/scripts/linear-trace-eval.mjs` (mirroring
+`mep-trace-eval.mjs`'s own conventions) was a real, working scorer, but
+re-reading the goal document's own §2 text closely showed it names an
+explicit, different architecture: "LINEAR BENCH... Pinned real goldens
+(ground_truth/linear/*.json) + synthetic truth-by-construction sheets...
+run recall / precision (discrete Frechet < 2 pt, length overlap >= 80%)"
+— ONE bench (`web/bench/linear.mts`, WP1.6's own file, explicitly meant
+to grow every WP: "you build it in WP1, it grows every WP"), not a
+separate ad-hoc script. This checkpoint does that migration.
+
+Deleted `mcp/scripts/linear-trace-eval.mjs`. Extended `bench/score.ts`
+with the plan's own literal method: `discreteFrechet` (iterative bottom-
+up DP, not the textbook's recursive form, so a long over-traced polyline
+can't stack-overflow it), `projectOntoPolyline`/`clipPolyline` (clips a
+traced polyline to the golden's own arc-length span BEFORE Fréchet/
+overlap ever compares them — over-trace beyond that span is invisible to
+recall by design, so an already-separately-measured failure mode isn't
+double-counted, mirroring mep-trace-eval.mjs's own reach/refusal/false-
+confident split), `scoreTraceShapeMatch` (tries the traced polyline both
+forwards and reversed — `trace_run`'s own walk direction relative to a
+golden's is arbitrary, not a real mismatch), `scoreTraceRecall` (Fréchet
+< 2pt AND overlap >= 80%, the plan's own literal criterion),
+`scoreTracePrecision` (length-weighted correct/walked ratio — a trace
+that wanders onto unrelated linework or over-traces dilutes it), and
+`aggregateTrace`. 33 new tests in `test/benchScore.test.ts`. Wired into
+`bench/linear.mts`: a new trace-scoring pass over BOTH the synthetic
+corpus and the real ground truth, reported and (for the real corpus only
+— see below) gated, alongside the pre-existing manual-mode parity/
+totals/determinism scoring untouched.
+
+Two real bugs caught before trusting the new scorer's first number, both
+by direct inspection rather than assumption:
+- **`upp` passed inverted** to `scoreTraceShapeMatch` at both call
+  sites (`1/upp` instead of `upp`) — inflated a ~7ft run into "5264 feet"
+  and zeroed out length-overlap (the tolerance became 1000x too small).
+  Fixed by passing `session.sheet(sheetKey).upp` directly.
+- **The synthetic corpus's own ft-to-pixel conversion was wrong** for
+  absolute seeding (the pre-existing manual-mode loop never needed real
+  absolute positions — `resolveRunSegments` only cares about relative
+  distances — so this was invisible until a seed needed to land on real
+  drawn ink). `bench/linear/synthesize.mts`'s own `toPdf` adds an 80pt
+  margin and uses PDF's native bottom-up Y axis; the naive `x*ptPerFt`
+  conversion had neither. Fixed with a `syntheticFtToPx` helper mirroring
+  `toPdf` exactly (duplicated rather than imported — `synthesize.mts` has
+  top-level side effects, importing it would regenerate fixtures on every
+  bench run). Confirmed real via a before/after: case `10-arc-as-polyline`
+  went from a nonsense seed to a real, in-bounds trace once fixed.
+
+With seeding now genuinely correct, a NEW finding (documented as Finding
+5 in docs/LINEAR-TRACE-EVAL.md): 9 of the synthetic corpus's own 10 cases
+STILL refuse, and direct segment-index inspection shows why — their
+randomly-generated paths (a seeded random walk in a bounded box, built
+for WP1.6's manual-mode purposes before wall-vouching existed as a
+concept in this engine) frequently form near-closed rectangular loops,
+which `wallnetwork.ts`'s wall-vouching flags as wall-like. Same Finding 1
+mechanism as the real corpus, different trigger (loop shape vs. run
+length) — meaning most of the synthetic corpus's own intended test
+dimensions (pen weight, label placement, crossings) are currently
+confounded by Finding 1 rather than isolated. Not fixed here (fixing
+`synthesize.mts`'s own generator to avoid near-closed loops is real,
+scoped follow-up work); the synthetic corpus's own trace numbers are
+reported but explicitly NOT gated, for exactly this reason.
+
+Also: recall is now measured HONESTLY where it wasn't before — with real
+Fréchet/overlap scoring, `bessemer-p101-cw-main` (Finding 4's branchy
+trunk) now correctly reads as a recall MISS (its shape genuinely diverges
+from the golden's within the golden's own span, not merely "ran long"),
+while `itd-p5-hc3-branch` is a confirmed clean HIT. Real-corpus aggregate:
+recall 1/7 (0.143), precision 0.612, size accuracy 0%, cold build 442ms.
+`TRACE_THRESHOLDS` in `bench/linear.mts` is set to this exact measured
+floor (recall>=0.1, precision>=0.5) — ratcheted from measurement per this
+file's own "MEASURED, not chosen for comfort" rule, explicitly NOT GATE
+3's own targets (recall>=0.85 etc., still far off and mostly blocked by
+Finding 1's off-limits wall-vouch exclusion).
+
+Deliberately NOT done, disclosed rather than silently deferred: fixing
+`synthesize.mts`'s own path generator (Finding 5); authoring refusal/
+negative goldens for a labeled precision corpus; authoring a held-out
+tier; the arc-chord seeding issue `10-arc-as-polyline` surfaced (61%
+length error on its one successful synthetic trace) — a real, separate
+finding worth its own follow-up, not chased further in this checkpoint.
+
+Verified: `npx tsc --noEmit` clean; `npm run bench:linear` passes with
+the new thresholds; all 205 tests in `web/test/linear/*.test.ts` +
+`test/benchScore.test.ts` pass; full `web`/`mcp` regression suites
+checked against their own known pre-existing baselines (mcp's own 2
+`test:bas` failures reproduce identically on a clean checkout, confirmed
+directly this same session; web's `compileProgressWalkthrough.test.ts`
+hangs reproducibly on an unrelated production-graph-cli subprocess in
+this environment — excluded from the run, flagged as a real,
+pre-existing environment issue worth its own report, not something this
+checkpoint's own changes touch).
+
 2026-09-17 linear takeoff: walk.ts dash-gap continuation (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 The GATE 3 eval's own Finding 2 (below) named this as the single highest-
 leverage next fix for `run recall`, since — unlike the wall-vouch

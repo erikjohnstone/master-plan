@@ -449,5 +449,270 @@
   "maxTotalsErrFt": 0.03,
   "maxDeterminismErrFt": 0.03,
   "maxParityFailures": 0
+ },
+ "trace": {
+  "frechetTolPx": 2,
+  "overlapMin": 0.8,
+  "thresholds": {
+   "minRecall": 0.1,
+   "minPrecision": 0.5,
+   "maxLenErrPct": 1,
+   "maxOverTracePct": 1
+  },
+  "synthetic": {
+   "rows": [
+    {
+     "caseName": "01-pen-thin-solid.pdf",
+     "status": "refused",
+     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "goldenLf": 50.54,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:12x6",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "02-pen-thick-solid.pdf",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 61.5,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:16x8",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "03-dashed-existing.pdf",
+     "status": "refused",
+     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "goldenLf": 36.74,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:10",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "04-dashdot-demo.pdf",
+     "status": "refused",
+     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "goldenLf": 46.11,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:2",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "05-double-line-duct.pdf",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 43.59,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:24x12",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "06-label-inside.pdf",
+     "status": "refused",
+     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "goldenLf": 27.81,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:14x8",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "07-label-beside.pdf",
+     "status": "refused",
+     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "goldenLf": 50.61,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:8",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "08-label-leader.pdf",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 33.48,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:1.5",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "09-crossing-run.pdf",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 36.13,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:10x6",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "10-arc-as-polyline.pdf",
+     "status": "reached",
+     "goldenLf": 13.41,
+     "tracedLf": 5.18,
+     "lenErrPct": 0.6137211036539896,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:3",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "10-arc-as-polyline.pdf",
+      "frechetPx": 365.29109488187635,
+      "lengthOverlapPct": 0.43137254901960786,
+      "clippedLenFt": 5.18,
+      "goldenLenFt": 13.41
+     },
+     "buildMs": 2.714337000000114
+    }
+   ],
+   "aggregate": {
+    "cases": 10,
+    "recall": 0,
+    "precision": 1,
+    "maxLenErrPct": 0.6137211036539896,
+    "meanLenErrPct": 0.6137211036539896,
+    "maxOverTracePct": 0,
+    "sizeAccuracyPct": 0,
+    "maxColdBuildMs": 2.714337000000114,
+    "maxWarmQueryMs": null
+   }
+  },
+  "real": {
+   "rows": [
+    {
+     "caseName": "bessemer-mechanical-bidset.pdf#6",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 31.69,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:16x8",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "bessemer-mechanical-bidset.pdf#6",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 28.79,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:10x6",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "bessemer-mechanical-bidset.pdf#3",
+     "status": "reached",
+     "goldenLf": 18.96,
+     "tracedLf": 35.02,
+     "lenErrPct": 0.8470464135021097,
+     "overTracePct": 0.8470464135021097,
+     "goldenSizeKey": "pipe:1",
+     "tracedSizeKey": "pipe:0.75",
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "bessemer-mechanical-bidset.pdf#3",
+      "frechetPx": 260.46905099605885,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 18.88,
+      "goldenLenFt": 18.96
+     },
+     "buildMs": 309.00343799999973
+    },
+    {
+     "caseName": "bessemer-mechanical-bidset.pdf#3",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 6.79,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:3",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "federal-attachment4-mechanical.pdf#6",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 39.7,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:4",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "federal-attachment4-mechanical.pdf#6",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 40.71,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:4",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "itd-d1-lab-mechanical.pdf#5",
+     "status": "reached",
+     "goldenLf": 7.22,
+     "tracedLf": 7.78,
+     "lenErrPct": 0.07756232686980617,
+     "overTracePct": 0.07756232686980617,
+     "goldenSizeKey": "pipe:1.25",
+     "tracedSizeKey": "round:1.25",
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "itd-d1-lab-mechanical.pdf#5",
+      "frechetPx": 0.6269792703226893,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 7.22,
+      "goldenLenFt": 7.22
+     },
+     "buildMs": 442.31184200000007
+    }
+   ],
+   "aggregate": {
+    "cases": 7,
+    "recall": 0.14285714285714285,
+    "precision": 0.6116822429906541,
+    "maxLenErrPct": 0.8470464135021097,
+    "meanLenErrPct": 0.46230437018595794,
+    "maxOverTracePct": 0.8470464135021097,
+    "sizeAccuracyPct": 0,
+    "maxColdBuildMs": 442.31184200000007,
+    "maxWarmQueryMs": null
+   }
+  }
  }
 }
