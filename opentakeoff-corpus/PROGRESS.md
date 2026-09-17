@@ -1,5 +1,82 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.5 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+`sizes.ts`, Stage 4's size grammar and label association (plan §6.6, App. A).
+Two halves, both new: the Appendix A grammar itself, and the orientation/
+placement scoring that decides which run segment a parsed label binds to.
+
+`web/src/lib/linear/sizes.ts`:
+
+- `normalizeLabelText`/`parseSize` — Appendix A's pre-normalisation
+  (`× → x`, `Ø ⌀ %%c → ø`, `″ ” → "`, Unicode fractions → `N/D` text,
+  uppercase) then three structural patterns (RECT/ROUND/PIPE, plus PIPE's
+  own `DN\d{2,4}`/`NPS\d{2,4}`/`\d{2,4}mm` alternates) and an `ELEV`
+  negative-grammar rejection (`BOD`/`AFF`/`MIN`/`MAX`/`O.C.`/`TYP`/
+  dimension strings). One deliberate, documented extension beyond
+  Appendix A's own literal regex text: plan §3.1 cites `14x3½` as a real
+  label the grammar must parse, but RECT's own dimension groups have no
+  fraction syntax at all — `resolveFractions` (a preprocessing pass, not a
+  change to RECT/ROUND/PIPE's own patterns) resolves every embedded
+  whole+fraction span to a decimal BEFORE the structural patterns run, so
+  `14x3½` reaches RECT as `14x3.5`.
+- `associateLabel(index, label, ppf, opts)` — plan §6.6's orientation
+  (label `rot` parallel to the segment, ±10°) and placement (beside beats
+  leader) scoring; confidence is `min(orientation, placement)` per the
+  plan's own formula. "Inside" a double-line duct pair (the plan's
+  strongest placement tier) and width agreement are NOT implemented —
+  both need a paired-stroke centerline WP4's double-line duct pairing
+  hasn't built yet; this file's header documents the gap rather than
+  guessing at it.
+- `resolveSizeConflicts(bindings)` — the other half of plan §6.6's
+  "uniqueness": two labels landing on the same segment with different
+  parsed sizes are withheld with both, not silently resolved to either.
+- One real regex bug, caught by this file's own test suite rather than
+  assumed correct from a clean `tsc`: `PIPE_RE`'s trailing system group was
+  written as `` `(${SYS_ALT}(?:/[A-Z]{1,5})?)` `` — since `|` has the
+  lowest precedence of any regex operator, the `(?:/[A-Z]{1,5})?` suffix
+  bound only to `SYS_ALT`'s LAST alternative (`W`), not to the whole
+  alternation, so a multi-service label with any other trailing system
+  (`2" CWS/R`, `¾" HW/CW UP`) failed to parse at all. Fixed by wrapping
+  the alternation in its own non-capturing group,
+  `` `((?:${SYS_ALT})(?:/[A-Z]{1,5})?)` ``, before appending the suffix.
+- The `DuctDirection`/`dirOf` gap identified while drafting this
+  checkpoint's own tests (before any were run) — `UP/DN` was being
+  collapsed into plain `"down"`, losing the fact a riser marker like
+  `1½" V UP/DN` goes both ways — is fixed: `DuctDirection` gained `"both"`
+  (matching `types.ts`'s own `vertex_overrides.dir?: "up"|"down"|"both"`
+  vocabulary), and `dirOf` maps the literal `UP/DN` token to it,
+  distinct from the generic `DN`/`DOWN` tokens which still read `"down"`.
+- One real, undone gap, documented rather than guessed around: "size
+  carried along the run until the next label / branch / transition
+  vertex" (plan §6.6) needs to know, for each hop of a walked run, whether
+  a branch/transition sits at its far end — but `walk.ts`'s own
+  `WalkVertex[]` is sparse (only elbow/tee/crossing hops get an entry;
+  collinear hops don't), so there is no hop-indexed shape to carry a size
+  across yet. Building that mapping now would mean guessing a shape WP3.6
+  (`receipt.ts`, which needs its own `segs`/`stops` receipt fields per the
+  goal doc) might have to redesign anyway — deferred to that checkpoint,
+  the same posture `walk.ts`'s own header takes with ITS two undone gaps.
+
+Tests: `web/test/linear/sizes.test.ts`, 40 new. The grammar half covers
+every real label string cited in plan §3.1's per-sheet table and prose
+across all six named sets (Bessemer, ITD, Federal, Bldg 5406, Weld County,
+Baker County — `12"x6"`, `14x3½`, `24X14 SA`, `8"Ø EA`, `1 1/4" HHWR`,
+`2" CWS/R`, `1½" V UP/DN`, etc.) plus every cited negative example
+(`48" MAX`, `80" MIN`, `12" ABOVE`, `#4@12" O.C.`, a dimension string, an
+elevation-callout token) — the module's own stated acceptance criterion.
+The association half covers the orientation gate (inclusive at exactly
+±10°, rejects just past it), beside-vs-leader tie-breaking, the
+association window formula, and both `resolveSizeConflicts` outcomes
+(agreement resolves to the higher-confidence binding; disagreement
+withholds with both, never picks one).
+
+Verified: `npx tsc --noEmit` clean on both `web` and `mcp`;
+`web/test/linear/sizes.test.ts` 40/40; `web/test/linear/*.test.ts` 129/129
+(89 prior + 40 new); web's full suite (`test/*.test.ts
+test/linear/*.test.ts` minus the known `compileProgressWalkthrough.test.ts`
+flake) confirmed against the standing 70-fail/13-cancelled/13-skipped
+baseline both before and after the `PIPE_RE` precedence fix.
+
 2026-09-17 linear takeoff WP3.4 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 `walk.ts`, the bidirectional walker (plan §6.4) — Stage 3's final piece.
 This is the FIRST module in the WP3 arc with a real end-to-end path
