@@ -542,8 +542,18 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     name === "query_table" && !out?.error && args?.row_key != null).length;
   const hasCorpusCompile = log.some(({ name, out }) =>
     name === "compile_corpus_takeoff" && !out?.error && (out?.takeoff_id || out?.kind));
+  // A compile_corpus_takeoff call now reconciles schedule-vs-plan itself
+  // (agentCompileCorpusTakeoff chains it deterministically and stamps
+  // reconcile_rows on its own result) — that satisfies grounding exactly
+  // like a standalone reconcile_schedule_plan call. Without this, the phase
+  // gates below never saw it (callLog only holds actual tool calls, not
+  // compile's internal fetch), so the model was forced through a redundant,
+  // per-MARK sweep_schedule_row loop even after the compile had already
+  // grounded everything in one bulk pass — live-observed taking 7+ minutes
+  // of individual tag sweeps after a compile that itself finished in ~1.
   const hasReconcile = log.some(({ name, out }) =>
-    name === "reconcile_schedule_plan" && !out?.error && Array.isArray(out?.rows));
+    (name === "reconcile_schedule_plan" && !out?.error && Array.isArray(out?.rows))
+    || (name === "compile_corpus_takeoff" && !out?.error && Number.isFinite(out?.reconcile_rows)));
   const hasSweep = log.some(({ name, out }) =>
     name === "sweep_schedule_row" && !out?.error);
   const titleScanCount = log.filter(({ name, out, args }) => {
@@ -597,8 +607,10 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
       };
     }
     // Pillar C: points / valve / damper takeoffs need plan paint on served marks —
-    // schedule scrape alone is incomplete.
-    if (intent === "corpus_bas" || intent === "corpus_valves") {
+    // schedule scrape alone is incomplete. That grounding is now satisfied by
+    // the compile's own automatic reconcile (hasReconcile, above) — skip the
+    // spot_cites/paint detour entirely when it already ran.
+    if ((intent === "corpus_bas" || intent === "corpus_valves") && !hasReconcile) {
       if (rowKeyCites < 1) {
         return {
           phase: "spot_cites",
@@ -631,6 +643,19 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         nextMove: intent === "corpus_bas"
           ? "Emit the points takeoff from compile totals (AI/AO/BI/BO, alarm/trend when printed), list served_equipment joins, and cite painted plan marks. Disclose SOO/schematic-only gaps — never invent points or plan qty."
           : "Emit the valve/damper takeoff from compile totals with contractor columns, installed plan qty from sweeps, and painted cites. Never invent plan qty.",
+        blockReason: null,
+      };
+    }
+    if (intent === "corpus_bas" || intent === "corpus_valves") {
+      // hasReconcile true: the compile already grounded every tag in one bulk
+      // pass (Installed Qty / Compare / Symbol / Tag / diagram evidence are
+      // already in the panel) — do not re-derive that per-MARK.
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: intent === "corpus_bas"
+          ? "The compile already reconciled schedule vs. plan. Emit the points takeoff from compile totals and its reconcile_rows, and cite the already-painted plan marks. Do not re-sweep tags that reconcile already grounded."
+          : "The compile already reconciled schedule vs. plan. Emit the valve/damper takeoff from compile totals and its reconcile_rows, with contractor columns and the already-grounded installed plan qty. Do not re-sweep tags that reconcile already grounded.",
         blockReason: null,
       };
     }
