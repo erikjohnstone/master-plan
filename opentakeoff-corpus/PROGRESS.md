@@ -1,5 +1,63 @@
 ## Active work
 
+2026-09-17 linear takeoff WP1.7 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+GROUND TRUTH v1. Two new goldens under `opentakeoff-corpus/ground_truth/linear/`
+(`bessemer-m101.json`, `bessemer-p101.json`), hand-traced in the running
+canvas's Linear tool (manual mode, not headless MCP calls) via a
+Playwright-driven browser session against the rendered PDF, per the goal
+document's GROUND-TRUTH AUTHORING RULE: traced from the render
+(`mcp/scripts/graph-render.mjs --all`, whose output PNGs are sha256-hashed
+and recorded in each golden's `render_hash` rather than committed —
+regenerable, not a deliverable), scope decided and written into the JSON
+before any engine ever runs on these sheets, annotator/date recorded, never
+edited after the fact to match anything.
+
+Before tracing either sheet, studied the whole-sheet render plus
+`pdf.ts`'s `positionedText` text dump to find every size label and its
+pixel position, so the run boundaries and per-segment sizes used for
+tracing were established independently of the click coordinates — not
+just eyeballed off a screenshot.
+
+M101 (page 6, tier: development): both of the sheet's two supply-duct
+trunks, one per first-floor heat-pump unit — Unit 103's (west, HP-1 to
+Bedroom 1: 14.42 LF @ 12x6 + 17.27 LF @ 16x8 = 31.69 LF) and Unit 102's
+(east, HP-1 to the Bedroom SR-1: 13.67 LF @ 16x8 + 15.12 LF @ 10x6 =
+28.79 LF); combined 60.48 LF. Explicitly out of scope and recorded as
+such in the golden: the round vertical branch/riser drops (6"ø/8"ø
+stubs to SR-1/SR-2), the 4" EA exhaust riser, and the short Bedroom-2
+14x3½ stub — none of those are the horizontal "supply mains" GATE 1
+asks for.
+
+P101 (page 3, tier: development): one representative domestic
+cold-water (CW) distribution main — traced from its 1¼" origin at the
+labeled water-service riser junction, through an explicit reduction to
+1" nominal pipe size, to the corner where it drops into a branch riser
+(4.25 LF @ 1.25" pipe + 14.71 LF @ 1" pipe = 18.96 LF). P101 is dense
+domestic plumbing with no hydronic (HHWS/HHWR) piping anywhere on the
+sheet; the parallel HW main and every SAN/V/branch run are explicitly
+out of scope for this golden — WP1.7 asks for a representative run
+here, not an exhaustive trace, and a broader pass is deferred to a
+later ground-truth tier once WP3 has vertex/branch-level scoring to
+justify the extra tracing effort.
+
+Both goldens store the run in the same schema the app itself exports
+(`opentakeoff.takeoff_canvas.v1`'s shape/`computed.run` shape, captured
+via the canvas's own "Export takeoff…" after tracing) — `verts_norm`,
+per-segment `lf`/`size`, `totals_by_size` — rather than a hand-typed
+summary, so a future WP3+ bench can diff a traced run against these
+verbatim. Nothing looked wrong during authoring (every traced segment's
+size matched a label printed directly on the run before the click), so
+no `LINEAR_BUG_CATALOGUE.md` entry — that file stays uncreated until an
+actual STOP-worthy finding needs logging, per the authoring rule's own
+"only if something looks wrong" condition.
+
+No engine/source files touched in this step — ground-truth JSON only.
+`node scripts/check-doc-links.mjs` clean; the WP1.6 checkpoint's own
+regression numbers (web typecheck clean, 3265 tests/70 pre-existing
+fails, bench/results.json and bench/linear/results.json unchanged) are
+the still-current baseline since nothing in `web/src` or `mcp/src`
+changed here.
+
 2026-09-17 linear takeoff WP1.6 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 THE BENCH v1. New `web/bench/linear.mts` (npm run bench:linear) scores the
 synthetic linear corpus on the three things that can actually regress in

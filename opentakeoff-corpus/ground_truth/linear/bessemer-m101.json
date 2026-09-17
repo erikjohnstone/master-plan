@@ -1,0 +1,84 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff/samples/bessemer-mechanical-bidset.pdf",
+  "source_pdf_sha256": "b9005d383c6ebd42477b505f039e965fc5acc19cf31f1ee71a3de3eb095a70e5",
+  "sheet_id": "bessemer-mechanical-bidset.pdf#6",
+  "sheet_number": "M101",
+  "sheet_title": "FIRST FLOOR MECHANICAL PLAN",
+  "page": 6,
+  "tier": "development",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "bessemer--ssemer-mechanical-bidset-p6--full.png",
+    "hash": "fd4bbb2d0d8427d0dcfd10570cfca5e21a4c6df8b3df591abb969fbb07c70fb0"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP1.7 autonomous coordinator)",
+  "date": "2026-09-17",
+  "review_basis": "Hand-traced in the running canvas app's Linear tool (manual mode, scale confirmed from the plan's own '1/4\" = 1'-0\"' note) via a Playwright-driven browser session against the rendered PDF, following the run centerlines visually and reading segment sizes directly off the drawn duct-size text before committing each segment. Confirmed against a screenshot of the live LF/size-breakdown widget after each commit, and against the whole-sheet render (mcp/scripts/graph-render.mjs --all) studied beforehand to identify the full extent of every supply-duct trunk on the sheet.",
+  "scope": "GATE 1 asks for Bessemer M101's supply mains. This sheet draws two independent horizontal supply-duct trunks, one per first-floor heat-pump unit (HP-1), each running from its heat pump's boot connection out to its farthest labeled diffuser/register, with an explicit rectangular-duct size change partway along. Both are in scope as the sheet's 'supply mains' (plural, matching GATE 1's own wording). Explicitly OUT OF SCOPE for this golden: the round vertical branch/riser drops off each trunk (6\"ø and 8\"ø stubs down to the SR-1/SR-2 registers), the 4\" EA exhaust duct riser (near keynote 2, EF-1), and the short 14x3½ stub serving Bedroom 2 (a branch off a vertical riser, not a horizontal main). General note 1 on the sheet ('UNIT 103 MECHANICAL LAYOUT IS TYPICAL OF ALL UNITS EXCEPT UNIT 102') is why Units 101/104 show no drawn ductwork on this sheet -- there is nothing there to trace.",
+  "runs": [
+    {
+      "run_id": "bessemer-m101-unit103-supply-trunk",
+      "description": "Unit 103 supply-duct trunk, from the Unit 103 HP-1 boot connection west to the last diffuser over Bedroom 1.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.20791635462252517, 0.30039550353084743],
+        [0.3080557558955789, 0.30039550353084743],
+        [0.42798215226554176, 0.30039550353084743]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 12, "h_in": 6 },
+          "1": { "kind": "rect", "w_in": 16, "h_in": 8 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 31.69,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 14.42, "size": { "kind": "rect", "w_in": 12, "h_in": 6 }, "size_src": "manual" },
+            { "i": 1, "lf": 17.27, "size": { "kind": "rect", "w_in": 16, "h_in": 8 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:12x6": 14.42, "rect:16x8": 17.27 }
+        }
+      }
+    },
+    {
+      "run_id": "bessemer-m101-unit102-supply-trunk",
+      "description": "Unit 102 (ADA) supply-duct trunk, from the Unit 102 HP-1 boot connection east to the last diffuser (SR-1, 160 CFM) near the Bedroom.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5524597542192199, 0.3009816930412987],
+        [0.6473895203556728, 0.3009816930412987],
+        [0.7523809667738696, 0.3009816930412987]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 16, "h_in": 8 },
+          "1": { "kind": "rect", "w_in": 10, "h_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 28.79,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 13.67, "size": { "kind": "rect", "w_in": 16, "h_in": 8 }, "size_src": "manual" },
+            { "i": 1, "lf": 15.12, "size": { "kind": "rect", "w_in": 10, "h_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:16x8": 13.67, "rect:10x6": 15.12 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:12x6": 14.42,
+    "rect:16x8": 30.94,
+    "rect:10x6": 15.12
+  },
+  "total_lf_all_runs": 60.48
+}

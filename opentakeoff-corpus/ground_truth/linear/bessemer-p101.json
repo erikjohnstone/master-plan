@@ -1,0 +1,55 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff/samples/bessemer-mechanical-bidset.pdf",
+  "source_pdf_sha256": "b9005d383c6ebd42477b505f039e965fc5acc19cf31f1ee71a3de3eb095a70e5",
+  "sheet_id": "bessemer-mechanical-bidset.pdf#3",
+  "sheet_number": "P101",
+  "sheet_title": "FIRST FLOOR PLUMBING PLAN",
+  "page": 3,
+  "tier": "development",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "bessemer--ssemer-mechanical-bidset-p3--full.png",
+    "hash": "d821be439de98ec6c6c27fe8bce13e392b276144327b07f0de91d6d4b6e010ce"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP1.7 autonomous coordinator)",
+  "date": "2026-09-17",
+  "review_basis": "Hand-traced in the running canvas app's Linear tool (manual mode, scale confirmed from the plan's own '1/4\" = 1'-0\"' note) via a Playwright-driven browser session against the rendered PDF. Before tracing, every text label on this sheet was extracted via pdf.ts's positionedText and cross-referenced against zoomed render crops to locate the pipe-size tick marks ('1 1/4\"ø', '1\"ø') printed directly on the run, confirming both the run's extent and its size-change point independently of the click coordinates used to trace it.",
+  "scope": "P101 is dense domestic plumbing (SAN/V/CW/HW branches to every fixture, largely short vertical UP/DN stubs) with no hydronic (HHWS/HHWR) piping anywhere on the sheet. WP1.7 asks for a representative run here, not an exhaustive trace of the sheet. This golden is ONE domestic cold-water (CW) distribution main: traced from its origin at the 1¼\" water-service riser drop (labeled '1¼\" CW DN TO WATER SERVICE. COORDINATE WITH FIRE SPRINKLER RISER.') east through an explicit reduction to 1\" nominal pipe size, stopping at the point the main turns 90° and drops into a vertical branch riser serving a fixture group. Explicitly OUT OF SCOPE for this golden: the parallel HW (hot water) main on the same sheet, every SAN (sanitary) and V (vent) run, and every vertical UP/DN branch off the CW main itself -- all left for a later, broader ground-truth pass once WP3's vertex/branch-level scoring exists.",
+  "runs": [
+    {
+      "run_id": "bessemer-p101-cw-main",
+      "description": "Domestic cold-water (CW) distribution main, from the 1¼\" water-service riser junction east to the branch-riser corner near the unit's kitchen/bath fixture group.",
+      "system": "CW",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5130892405506493, 0.400923495072427],
+        [0.5426180848557671, 0.400923495072427],
+        [0.6447660129334711, 0.400923495072427]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 1.25 },
+          "1": { "kind": "pipe", "nps_in": 1 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 18.96,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 4.25, "size": { "kind": "pipe", "nps_in": 1.25 }, "size_src": "manual" },
+            { "i": 1, "lf": 14.71, "size": { "kind": "pipe", "nps_in": 1 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:1.25": 4.25, "pipe:1": 14.71 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:1.25": 4.25,
+    "pipe:1": 14.71
+  },
+  "total_lf_all_runs": 18.96
+}
