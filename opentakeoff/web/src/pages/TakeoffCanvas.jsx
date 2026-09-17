@@ -58,6 +58,7 @@ import {
 import RevisionsPanel from "../components/RevisionsPanel.jsx";
 import BasSyncNotice from "../components/BasSyncNotice.jsx";
 import UserGuide from "../components/UserGuide.jsx";
+import SegmentSizeMenu from "../components/SegmentSizeMenu.jsx";
 import TakeoffsPanel, { clampPanelW, CONDITION_DND_MIME, ConditionAppearanceEditor } from "../components/TakeoffsPanel.jsx";
 import { HATCHES, PALETTE, NO_FILL, HatchPattern, HatchSwatch } from "../components/hatches.jsx";
 import { Icon } from "../brand/icons.jsx";
@@ -148,13 +149,14 @@ import { sanitizeShapesOnLoad } from "../lib/shapeSanitize.ts";
 import { buildMarkedSetPdf, downloadBytes } from "../lib/markedset.js";
 import { loadProfiles } from "../lib/identity.js";
 import { resolveBranding, loadBrandingSelection } from "../lib/branding.js";
-import { starPath, cloudPath, thinStroke, strokePathD, chiselRibbon, buildSnapGrid, nearestSnap, ANGLE_TOL, angleSnap, closedMetrics, openLen, pointInPoly, hitShape, arrowheadPath, distToSeg, reflectVertsNorm, ringSelfIntersects } from "../lib/geometry.js";
+import { starPath, cloudPath, thinStroke, strokePathD, chiselRibbon, buildSnapGrid, nearestSnap, ANGLE_TOL, angleSnap, closedMetrics, openLen, pointInPoly, hitShape, arrowheadPath, distToSeg, reflectVertsNorm, ringSelfIntersects, buildSegGrid, nearestPointOnSegments, nearestIntersection } from "../lib/geometry.js";
 // Drawing style (draft chrome look) — one resolved token object (DS in JSX,
 // dsRef.current in the imperative movers) replaces the hardcoded cobalt/star
 // literals across the in-progress trace, cursor, and selection chrome.
 import { DRAW_STYLES, DRAW_STYLE_IDS, resolveDrawStyle, markerPath, drawDashFor, rgbaFromHex, getDrawStyle, setDrawStyle, onDrawStyleChange } from "../lib/drawStyles.js";
 import { getDraftOutline, setDraftOutline, onDraftOutlineChange } from "../lib/draftOutline.js";
 import { flattenCurve } from "../lib/curve.js";
+import { resolveRunSegments } from "../lib/linear/run.ts";
 import { flattenArcRing, arcPathD, arcLength } from "../lib/arc.js";
 import { dashArrayFor, boostForDark, clampWeight, snapWeight, LINE_STYLES, LINE_STYLE_IDS, WEIGHT_STEPS } from "../lib/lineStyles.js";
 import { nextRfiNumber } from "../lib/rfi.js";
@@ -226,7 +228,7 @@ import {
   MEASURE_TOOLS, CUT_TOOLS, MARKUP_TOOLS, MARKUP_IDS, HL_INKS, HL_SIZES,
   MARKUP_IMG_MAX, MAX_IMAGE_MARKUP_BYTES, MARKUP_UPLOAD_MAX_BYTES, MARKUP_DECODE_MAX_AREA,
 } from "../lib/canvasConstants.js";
-import { uid, clamp, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions } from "../lib/canvasUtil.js";
+import { uid, clamp, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions, isRoutedCond, sizeLabel } from "../lib/canvasUtil.js";
 // Tile-pyramid rendering (#86) — pure math in lib/tiles.ts (tested), worker
 // pool in lib/tilePool.ts, DOM/Worker orchestration glue here via one
 // long-lived compositor instance. Replaces the old single-raster base +
@@ -256,6 +258,22 @@ import { tablesOverlappingRegion, bridgeRows } from "../lib/scheduleBridge.ts";
 // Carpet roll width — a run reaching this needs a seam. The live cursor readout
 // turns amber at/past it so the estimator sees where seams fall while tracing.
 const CARPET_ROLL_FT = 12;
+// #linear-takeoff (WP1.3): one glyph per RunVertexKind, drawn as a halo
+// BEHIND the existing corner handle (distinct shape/color, larger radius) so
+// the two never fight for the same pixels — the corner diamond still sits on
+// top, dead center. Kinds are linear/types.ts's RunVertexKind; "end" never
+// appears here (computed.run.vertices is interior-vertex-only, per that
+// type's own doc comment).
+const VERTEX_GLYPH = {
+  elbow: { shape: "dot", color: "#2f6fed" },
+  tee: { shape: "diamond", color: "#e08a1e" },
+  size_change: { shape: "square", color: "#8b5cf6" },
+  crossing: { shape: "star", color: "#6b7280" },
+  riser: { shape: "dot", color: "#1f9d55" },
+  equipment: { shape: "square", color: "#c0392b" },
+  symbol_gap: { shape: "diamond", color: "#9ca3af" },
+  manual: { shape: "dot", color: "#9ca3af" },
+};
 
 // Paint/pick tiers (#116): a filled Area passes hitShape anywhere inside its
 // fill, so in raw creation order an Area drawn over a Counter, Line, or Surface
@@ -626,6 +644,16 @@ export default function TakeoffCanvas() {
   const [ruleOffer, setRuleOffer] = useState(null);   // { deduct, seed, tag }
   const [ruleStage, setRuleStage] = useState(null);   // { rule, candidates, proposed_ts }
   const [agentOpen, setAgentOpen] = useState(false);      // docked right-rail Agent panel
+  // #linear-takeoff (WP1.3): right-click a Linear-shape segment → Set size…
+  // Ephemeral, like ruleStage — nothing commits until Set/Clear dispatches
+  // ONE `run` command. { shapeId, segIndex, x, y, size } | null.
+  const [segMenu, setSegMenu] = useState(null);
+  // #linear-takeoff (WP1.3): Continue mode — defaults true, matching the
+  // Linear tool's actual existing behavior byte-for-byte (finishShape never
+  // touched `tool`, so it already stays armed for the next run). The new
+  // capability is turning it OFF: finishing then reverts to Select, for an
+  // estimator tracing one isolated run who doesn't want the tool to linger.
+  const [linearContinue, setLinearContinue] = useState(true);
   // TakeoffDataPanel — production output for ALL platform workflows:
   // Takeoff tab = finished compiled takeoff; Workflow data = raw aggregate.
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
@@ -995,6 +1023,12 @@ export default function TakeoffCanvas() {
   const snapRef = useRef(null);        // current snapped image point (or null)
   const snapGridsRef = useRef(new Map()); // sheetKey → {cell, map} spatial hash of vector endpoints
   const vectorSegsRef = useRef(new Map()); // sheetKey → flat [x1,y1,x2,y2,…] linework segments (One-Click boundary source)
+  // #linear-takeoff (WP1.3): segment/intersection snap's spatial index, built
+  // lazily from vectorSegsRef's own geometry and cached by ARRAY IDENTITY
+  // (not sheetKey) — if a sheet's geometry is ever rebuilt (a fresh vector
+  // extract, a stitch remerge), vectorSegsRef gets a NEW array for that key,
+  // which is automatically a cache miss here; nothing needs to invalidate it.
+  const segGridCacheRef = useRef(new WeakMap());
   const segMetaRef = useRef(new Map());    // sheetKey → per-segment meta bytes (hatch classification input)
   // sheetKey → drawn-figure ranges (SubPath[]): the ink-classification input.
   // Single-panel sheets only — a STITCHED composite merges several sheets'
@@ -3394,7 +3428,7 @@ export default function TakeoffCanvas() {
         // tool's points, on-screen or hidden
         else if (tool === "calibrate") { setCalib((c) => c.slice(0, -1)); }
         else if (tool === "check") { setCheck((c) => c.slice(0, -1)); }
-      } else if (e.key === "Escape") { if (agentOfferFnsRef.current?.pending()) { agentOfferFnsRef.current.dismiss(); } else if (ocSel) { setOcSel(null); } else if (selVert != null) { setSelVert(null); } else { clearPoly(); setCalib([]); setCheck([]); setCheckStated(""); setScaleGuide(null); selectShape(null); setMarkupDraft(null); setProposal(null); setArmedStamp(null); setScheduleAnchor(null); setSymbolAnchor(null); setImageAnchor(null); setPlacingImageId(null); placeGrabRef.current = null; placeCrossSheetRef.current = null; setAlignPt(null); resetZone(); hlRef.current = null; if (hlPathRef.current) hlPathRef.current.style.display = "none"; } }
+      } else if (e.key === "Escape") { if (segMenu) { setSegMenu(null); } else if (agentOfferFnsRef.current?.pending()) { agentOfferFnsRef.current.dismiss(); } else if (ocSel) { setOcSel(null); } else if (selVert != null) { setSelVert(null); } else { if (tool === "linear" && poly.length === 0) setTool("select"); /* #linear-takeoff WP1.3: "Esc leaves" — nothing left to cancel, so leave the tool itself */ clearPoly(); setCalib([]); setCheck([]); setCheckStated(""); setScaleGuide(null); selectShape(null); setMarkupDraft(null); setProposal(null); setArmedStamp(null); setScheduleAnchor(null); setSymbolAnchor(null); setImageAnchor(null); setPlacingImageId(null); placeGrabRef.current = null; placeCrossSheetRef.current = null; setAlignPt(null); resetZone(); hlRef.current = null; if (hlPathRef.current) hlPathRef.current.style.display = "none"; } }
       // ⌘Z: the drawing context wins — mid-trace it still pops the last placed
       // point (with or without ⇧, matching the old behavior byte-for-byte);
       // only with no trace in progress does the command stack engage
@@ -3413,7 +3447,7 @@ export default function TakeoffCanvas() {
     return () => window.removeEventListener("keydown", onKey);
     // approvals is a real dep: ⌘Z's undoShapeCommand closes over it (the
     // family branch), and a stale capture would undo against a pre-seal array.
-  }, [tool, selectedId, selVert, selectedMarkupId, showMarkups, poly, proposal, ocSel, shapes, approvals, sheetKey, groupSig, scales, focusKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [tool, selectedId, selVert, selectedMarkupId, showMarkups, poly, proposal, ocSel, shapes, approvals, sheetKey, groupSig, scales, focusKey, segMenu]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The typed "drawing says" value belongs to ONE completed two-point check.
   // The moment the measurement is no longer complete — third-click restart,
@@ -3441,6 +3475,11 @@ export default function TakeoffCanvas() {
     if (prevToolRef.current === "zone" && tool !== "zone") clearPoly();
     prevToolRef.current = tool;
   }, [tool]);
+  // #linear-takeoff (WP1.3): the Set-size popover only opens from the Linear
+  // tool — leaving it (any way: shortcut, toolbar, Escape already closes it
+  // directly) closes an orphaned popover rather than leaving it floating over
+  // whatever tool is now active.
+  useEffect(() => { if (tool !== "linear" && segMenu) setSegMenu(null); }, [tool]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── pointer ────────────────────────────────────────────────────────────────
   function onPointerDown(e) {
@@ -3913,6 +3952,17 @@ export default function TakeoffCanvas() {
     }
     chip.__vals = vals;
   }
+  // #linear-takeoff (WP1.3): the segment/intersection spatial index for ONE
+  // sheet, built on first use and cached by the vectorSegsRef array's own
+  // identity (see segGridCacheRef above). Same SNAP_CELL bucket size as the
+  // endpoint grid — no reason for the two to disagree on tuning.
+  function segGridFor(key) {
+    const segs = vectorSegsRef.current.get(key);
+    if (!segs || !segs.length) return null;
+    let g = segGridCacheRef.current.get(segs);
+    if (!g) { g = buildSegGrid(segs, SNAP_CELL); segGridCacheRef.current.set(segs, g); }
+    return g;
+  }
   function moveCrosshair(e) {
     if (editingRef.current) return;   // inline editor open — no aim crosshair (ref check, never per-mousemove state)
     if (tool === "select" || status !== "ready" || !containerRef.current) return;
@@ -3931,6 +3981,21 @@ export default function TakeoffCanvas() {
         const pt = [hit[0] + sp.xOffset, hit[1]];
         snapRef.current = pt; cur = pt;
         if (snapMarkRef.current) { snapMarkRef.current.setAttribute("d", starPath(pt[0], pt[1], 5.5 / sc)); snapMarkRef.current.style.display = "block"; }
+      } else if (tool === "linear") {
+        // #linear-takeoff (WP1.3): segment + intersection snap, Linear tool
+        // ONLY — beside the endpoint snap above, which still wins when it
+        // hits (every other tool's snap behavior is untouched). Intersection
+        // ranks above a plain mid-span point, matching CAD osnap priority.
+        const segGrid = segGridFor(sp.key);
+        if (segGrid) {
+          const lx = cur[0] - sp.xOffset, ly = cur[1];
+          const spt = nearestIntersection(segGrid, lx, ly, 11 / sc) || nearestPointOnSegments(segGrid, lx, ly, 11 / sc);
+          if (spt) {
+            const pt = [spt[0] + sp.xOffset, spt[1]];
+            snapRef.current = pt; cur = pt;
+            if (snapMarkRef.current) { snapMarkRef.current.setAttribute("d", starPath(pt[0], pt[1], 5.5 / sc)); snapMarkRef.current.style.display = "block"; }
+          }
+        }
       }
     }
 
@@ -4012,7 +4077,7 @@ export default function TakeoffCanvas() {
         const w = Math.abs(cur[0] - a[0]) * liveUpp, h = Math.abs(cur[1] - a[1]) * liveUpp;
         const sf = w * h;
         txt = `${fmtCheckLen(w, units)} × ${fmtCheckLen(h, units)} · ${num(areaVal(sf, units))} ${areaUnit(units)}${units === "metric" ? "" : ` · ${num(sf / 9)} SY`}`;
-        over = w >= CARPET_ROLL_FT - 0.02 || h >= CARPET_ROLL_FT - 0.02;
+        over = !isRoutedCond(aCond) && (w >= CARPET_ROLL_FT - 0.02 || h >= CARPET_ROLL_FT - 0.02);
       } else if (drawing && anchor && liveUpp && !panelActive) {
         // line/polyline: live segment length, ALWAYS (not just under the 45° lock).
         // With a bow open the segment IS the arc, so measure along it — reading
@@ -4021,7 +4086,7 @@ export default function TakeoffCanvas() {
           ? arcLength(poly[poly.length - 2], anchor, cur) * liveUpp
           : Math.hypot(cur[0] - anchor[0], cur[1] - anchor[1]) * liveUpp;
         txt = lock ? `${lock.deg}° · ${fmtCheckLen(len, units)}` : fmtCheckLen(len, units);
-        over = len >= CARPET_ROLL_FT - 0.02;
+        over = !isRoutedCond(aCond) && len >= CARPET_ROLL_FT - 0.02;
       } else if (!panelActive && lock) {
         txt = `${lock.deg}°`;
       } else if (!panelActive && snapRef.current) txt = "snap";
@@ -4064,7 +4129,7 @@ export default function TakeoffCanvas() {
           v.segs.textContent = String(poly.length);
           v.pts.textContent = String(poly.length + 1);
         }
-        over = segLen >= CARPET_ROLL_FT - 0.02;
+        over = !isRoutedCond(aCond) && segLen >= CARPET_ROLL_FT - 0.02;
       } else if (txt) {
         const mode = chipT.chrome + ":row";
         // a row-mode write goes through textContent, which wipes any panel
@@ -4538,10 +4603,18 @@ export default function TakeoffCanvas() {
       return;
     }
     if (panRef.current) {
+      // #linear-takeoff (WP1.3): a right-button press that never crossed the
+      // drag threshold is a right-CLICK, not a pan — same 5px screen
+      // threshold as the deferred left-click-vs-drag check above. Right-drag
+      // (panning) is unaffected: this only fires on release, and only when
+      // the pointer never really moved.
+      const wasClick = Math.hypot(e.clientX - panRef.current.sx, e.clientY - panRef.current.sy) < 5;
+      const wasRight = e.button === 2;
       panRef.current = null;
       setTf({ ...tfRef.current });   // sync once at end
       if (containerRef.current) containerRef.current.style.cursor = spaceRef.current ? "grab" : "";
       try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* gone */ }
+      if (wasRight && wasClick && tool === "linear") openSegmentSizeMenu(e.clientX, e.clientY);
     }
   }
 
@@ -4857,16 +4930,69 @@ export default function TakeoffCanvas() {
     if (!activeCond) { setCommitMsg("Pick or add a condition first."); return; }
     // curved: verts stay the clicked CONTROL points (drag one → re-smooths);
     // length always comes from the flattened spline
-    const LF = openLen(curved ? flattenCurve(points) : points) * upp;
+    const curvedPts = curved ? flattenCurve(points) : points;
+    const LF = openLen(curvedPts) * upp;
     const tIn = Number(aCond?.thickness_in) || 0; // borders/feature strips: SF = LF × T/12
+    const computed = { perimeter_lf: +LF.toFixed(2), area_sf: tIn > 0 ? +((LF * tIn) / 12).toFixed(2) : 0 };
+    // #linear-takeoff (plan §7.2, WP1.3): a routed-system condition seeds
+    // every new trace with its own system + default size on segment 0 — the
+    // estimator can still override per segment afterward (right-click a
+    // segment → Set size…). A non-routed condition (flooring etc.) never
+    // gains a `run` block at all — this stays exactly today's plain polyline.
+    const run = isRoutedCond(aCond)
+      ? { ...(aCond.system ? { system: aCond.system } : {}), ...(aCond.size ? { size_overrides: { "0": { ...aCond.size } } } : {}) }
+      : null;
+    if (run && Object.keys(run).length) {
+      const resolved = resolveRunSegments(curvedPts, upp, run);
+      if (resolved) computed.run = resolved;
+    }
     dispatchShape({ type: "add", shapes: [{
       sheet_id: tp.key, condition_id: activeCond, measure_role: "linear",
       ...(curved ? { curved: true } : {}),
       verts_norm: points.map(([x, y]) => [(x - tp.xOffset) / tp.img.w, y / tp.img.h]),
-      computed: { perimeter_lf: +LF.toFixed(2), area_sf: tIn > 0 ? +((LF * tIn) / 12).toFixed(2) : 0 },
+      computed,
+      ...(run && Object.keys(run).length ? { run } : {}),
       ...(activeLabel ? { label: activeLabel } : {}),
       origin: { method: "manual", ...(baked ? { curved: true } : {}) },
     }] });
+  }
+  // #linear-takeoff (WP1.3): right-click a Linear shape's segment → Set size….
+  // Hit-tests every visible linear shape's own segments (each against ITS own
+  // panel/scale — a stitched multi-sheet canvas has one shape per sheet), same
+  // grab-radius convention (8 screen-px) as the corner-handle drag threshold.
+  function openSegmentSizeMenu(clientX, clientY) {
+    const cur = toImage(clientX, clientY);
+    const thr = 8 / tfRef.current.scale;
+    let best = null;
+    for (const s of shapes) {
+      if (s.measure_role !== "linear" || !s.sheet_id) continue;
+      const panel = panelByKey(s.sheet_id);
+      if (!panel?.img?.w) continue;
+      const pts = (s.verts_norm || []).map(([x, y]) => [x * panel.img.w + panel.xOffset, y * panel.img.h]);
+      for (let i = 0; i < pts.length - 1; i++) {
+        const d = distToSeg(cur[0], cur[1], pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]);
+        if (d <= thr && (!best || d < best.dist)) best = { shapeId: s.id, segIndex: i, dist: d };
+      }
+    }
+    if (!best) return;
+    const s = shapes.find((x) => x.id === best.shapeId);
+    const size = s.run?.size_overrides?.[String(best.segIndex)] || s.computed?.run?.segments?.[best.segIndex]?.size || null;
+    setSegMenu({ shapeId: best.shapeId, segIndex: best.segIndex, x: clientX, y: clientY, size });
+  }
+  // Sets or clears (size === null) ONE segment's size override, recomputes
+  // computed.run via the same recomputeShape path every other edit uses, and
+  // dispatches the ONE `run` command (shapeCommands.js) — undo-able, no stamp.
+  function applySegmentSize(shapeId, segIndex, size) {
+    const s = shapes.find((x) => x.id === shapeId);
+    if (!s) return;
+    const overrides = { ...(s.run?.size_overrides || {}) };
+    if (size) overrides[String(segIndex)] = size; else delete overrides[String(segIndex)];
+    const run = { ...(s.run || {}) };
+    if (Object.keys(overrides).length) run.size_overrides = overrides; else delete run.size_overrides;
+    const finalRun = (run.system || run.size_overrides || run.vertex_overrides || run.params || run.status) ? run : undefined;
+    const computed = recomputeShape({ ...s, run: finalRun });
+    dispatchShape({ type: "run", id: shapeId, run: finalRun, computed });
+    setSegMenu(null);
   }
   // Surface Area — trace the wall run in plan; SF = traced LF × the condition's
   // height. The wall-tile "stack" workflow: set tile height once, trace walls.
@@ -6375,7 +6501,12 @@ export default function TakeoffCanvas() {
     // kind of geometry. flattenArcRing is the identity on an all-straight trace.
     const drawn = curveIdx.length ? flattenArcRing(poly, curveIdx, false) : poly;
     if (tool === "surface") commitSurface(drawn, curveIdx.length > 0);
-    else if (tool === "linear") commitLinear(drawn, false, curveIdx.length > 0);
+    else if (tool === "linear") {
+      commitLinear(drawn, false, curveIdx.length > 0);
+      // #linear-takeoff (WP1.3): Continue OFF leaves the tool after one run;
+      // Continue ON (the default, today's unchanged behavior) stays armed.
+      if (!linearContinue) setTool("select");
+    }
     else commitPoly(curveIdx.length ? flattenArcRing(poly, curveIdx, true) : poly, tool === "deduct", { curved: curveIdx.length > 0 });
     clearPoly();
   }
@@ -11683,6 +11814,17 @@ export default function TakeoffCanvas() {
             style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${angleOn ? "var(--cobalt)" : "var(--ink-faint)"}`, background: angleOn ? "var(--cobalt)" : "transparent", color: angleOn ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
             <Icon name="angle" size={15} />45°
           </button>
+          {/* #linear-takeoff (WP1.3): only meaningful while Linear is armed —
+              ON (default) keeps the tool armed for the next run after
+              Enter/double-click finishes one (today's existing behavior,
+              unchanged); OFF returns to Select after each run. */}
+          {tool === "linear" && (
+            <button aria-pressed={linearContinue} onClick={() => setLinearContinue((v) => !v)}
+              title="Continue — stay on the Linear tool after finishing a run, ready for the next one (Esc leaves)"
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${linearContinue ? "var(--cobalt)" : "var(--ink-faint)"}`, background: linearContinue ? "var(--cobalt)" : "transparent", color: linearContinue ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
+              Continue
+            </button>
+          )}
         </>)}
         {/* The caption always shows the ACTIVE label (+ the cobalt highlight keyed
             on it) so what a new trace will get is never hidden — even in Select
@@ -12341,6 +12483,24 @@ export default function TakeoffCanvas() {
                             return <rect key={"m" + i} x={mx - ew / 2} y={my - eh / 2} width={ew} height={eh} rx={eh / 2}
                               transform={`rotate(${ang} ${mx} ${my})`} fill={grip} stroke={DS.selection.color} strokeWidth={1.6 / s} />;
                           })}
+                          {/* #linear-takeoff (WP1.3): fitting glyphs for a selected routed run —
+                              read-only today (geometry-derived from computed.run.vertices); drawn
+                              BEFORE the corner handles so they paint as a halo underneath, never on
+                              top. A plain Linear trace with no run block renders nothing extra. */}
+                          {sel.measure_role === "linear" && sel.computed?.run?.vertices?.length > 0 && (
+                            <g>
+                              {sel.computed.run.vertices.map((v) => {
+                                const pt = qs[v.i];
+                                if (!pt) return null;
+                                const glyph = VERTEX_GLYPH[v.kind] || VERTEX_GLYPH.manual;
+                                const d = markerPath(glyph.shape, pt[0], pt[1], 9 / s);
+                                if (!d) return null;
+                                return <path key={"vg" + v.i} d={d} fill={glyph.color} fillOpacity={0.35} stroke={glyph.color} strokeWidth={1.4 / s}>
+                                  <title>{v.kind}{v.angle_deg != null ? ` · ${Math.round(v.angle_deg)}°` : ""}</title>
+                                </path>;
+                              })}
+                            </g>
+                          )}
                           {/* corner handles — click selects (Delete removes just that point), drag moves.
                               The theme's handle glyph (drafting: paper-filled diamond); a "hollow" theme
                               draws the mark unfilled, the selection color as its outline. */}
@@ -13311,14 +13471,32 @@ export default function TakeoffCanvas() {
               <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.4, opacity: 0.5, marginTop: 8 }}>Measurements</div>
               <div style={{ fontFamily: "var(--f-mono)", fontSize: 11.5, lineHeight: 1.5, marginTop: 2 }}>
                 {tally.map((r) => (
-                  <div key={r.id} style={{ display: "flex", gap: 6, whiteSpace: "nowrap" }}>
-                    <span style={{ opacity: 0.45 }}>{String(r.n).padStart(2, "0")}</span>
-                    <span>
-                      {fl(r.lf)}
-                      {r.role === "wall"
-                        ? <> × {num(heightVal(r.h, units), 2)} {heightUnit(units)} = {fa(r.sf)}</>
-                        : <span style={{ color: "var(--ink-muted)" }}> linear</span>}
-                    </span>
+                  <div key={r.id}>
+                    <div style={{ display: "flex", gap: 6, whiteSpace: "nowrap" }}>
+                      <span style={{ opacity: 0.45 }}>{String(r.n).padStart(2, "0")}</span>
+                      <span>
+                        {fl(r.lf)}
+                        {r.role === "wall"
+                          ? <> × {num(heightVal(r.h, units), 2)} {heightUnit(units)} = {fa(r.sf)}</>
+                          : <span style={{ color: "var(--ink-muted)" }}> linear</span>}
+                      </span>
+                    </div>
+                    {/* #linear-takeoff (WP1.3): per-segment size breakdown — only
+                        present when the shape carries a `run` block (routed
+                        systems); a plain Linear trace renders exactly as before. */}
+                    {r.segments?.length > 0 && (
+                      <div style={{ paddingLeft: 16 }}>
+                        {r.segments.map((seg) => (
+                          <div key={seg.i} style={{ display: "flex", gap: 6, whiteSpace: "nowrap", opacity: 0.8 }}>
+                            <span style={{ opacity: 0.4 }}>·</span>
+                            <span>
+                              {fl(seg.lf)}{" "}
+                              {sizeLabel(seg.size) || <span style={{ color: "var(--c-warning)" }}>unsized</span>}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -14049,6 +14227,18 @@ export default function TakeoffCanvas() {
       {showAiSettings && <AiSettings onClose={() => setShowAiSettings(false)} />}
       {/* the manual, last in the tree so it sits above every panel and dock */}
       {guideOpen && <UserGuide onClose={() => setGuideOpen(false)} />}
+      {/* #linear-takeoff (WP1.3): the "Set size…" popover, right-click a Linear
+          segment. Keyed on shapeId+segIndex so switching segments remounts a
+          fresh form instead of carrying stale edits over from the last one. */}
+      {segMenu && (
+        <SegmentSizeMenu
+          key={`${segMenu.shapeId}:${segMenu.segIndex}`}
+          x={segMenu.x} y={segMenu.y} size={segMenu.size}
+          onSet={(size) => applySegmentSize(segMenu.shapeId, segMenu.segIndex, size)}
+          onClear={() => applySegmentSize(segMenu.shapeId, segMenu.segIndex, null)}
+          onCancel={() => setSegMenu(null)}
+        />
+      )}
     </div>
   );
 }

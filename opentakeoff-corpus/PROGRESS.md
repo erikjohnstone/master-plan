@@ -1,5 +1,69 @@
 ## Active work
 
+2026-09-16 linear takeoff WP0-WP1.3 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md):
+WP0 hygiene — measureLine/measurePolygon/measureSurface/placeCount now stamp
+origin.reviewed:false (B-L1; agent runs were landing as ink with no review
+state); scaleWarningFor wired into measureLine/measureSurface (B-L2);
+oneclick.ts's extractVectorGeometry additively captures per-segment setDash +
+stroke RGB (B-L5); a load-time shape sanitizer heals measure_role/verts_norm/
+computed on every hydrate path (B-L4); mepsystems.ts CONT/STAT tokens join
+CONTROLS (real Weld p7 M-CONT-STAT layer); takeoffWorkflow.js re-routes LF/
+duct-length/pipe-length goals to a new linear_run intent instead of
+scale_refuse; README/FEATURES Curved-Line drift removed (USER_GUIDE never had
+it, verified by grep before touching it).
+
+WP1.1 manual sized runs — web/src/lib/linear/{types,run}.ts, imported
+identically by shapeMetrics.js and by mcp/src/session.ts's Condition type
+(the shared-path doctrine): resolveRunSegments derives per-segment LF/size and
+per-vertex turn-angle/fitting-kind from an authored `run` block; a linear
+shape with no `run` computes byte-identical to before. RunSize is a zod
+schema (runSizeSchema) with the TS type as z.infer — one source of truth for
+the MCP wire contract and the canvas type, mirroring the BAS contracts'
+already-established define-once-in-web-lib pattern.
+
+WP1.2 condition identity — family/system/size/assembly_id added to Condition
+on both sides: canvasUtil.js's instantiateTemplate, plays.js's play
+round-trip, mcp/session.ts's Condition + editCondition (+ edit_condition tool
+schema, undo restore, export_takeoff round-trip). Purely additive — a
+flooring/architectural condition never carries any of the four fields.
+
+WP1.3 canvas Linear tool UI (TakeoffCanvas.jsx, one serialized pass, per the
+goal's PARALLELISM rule): the 12' roll-width amber is suppressed for routed
+conditions (isRoutedCond — plan §10.1: "does not apply to routed
+conditions"); commitLinear seeds run.system/size_overrides[0] from a routed
+condition's own defaults on every new trace; a new `run` shapeCommands.js
+type (no provenance stamp, caller-supplied computed, same contract as
+label/rollcut) backs a right-click "Set size..." popover on ANY linear
+shape's segment (new SegmentSizeMenu.jsx component), independent of whether
+the condition is routed. Vertex glyphs by kind render as a halo behind the
+existing corner handle. Segment + intersection snap (buildSegGrid/
+nearestPointOnSegments/nearestIntersection in geometry.js) sits beside the
+existing endpoint snap, Linear-tool-only. Continue mode (default true,
+matching the tool's actual pre-existing "stays armed after finishing" 
+behavior byte-for-byte) can be turned off to leave the Linear tool after one
+run; Escape also leaves once there is nothing left to cancel.
+
+All of it verified live against the real Bessemer M101 sheet (dev server +
+Playwright/Chromium, headless): a plain trace on the flooring condition CPT-1
+measured 11.7 LF unchanged (regression); right-clicking a segment set 16x8,
+the size carried forward to every later segment exactly per run.ts's rule,
+and the MEASUREMENTS panel grew the matching per-segment sub-rows; a second,
+cornered trace showed the elbow glyph rendering correctly once sized;
+enabling Snap and hovering 11px off the M101 duct's real top edge snapped
+exactly onto the segment, and hovering near the riser tee snapped exactly
+onto the real intersection; turning Continue off and finishing a run
+reverted the active tool to Select, matching the toggle's intent.
+
+New/extended unit coverage, all green: geometry.test.ts (114, +14 for
+buildSegGrid/nearestPointOnSegments/nearestIntersection/segIntersectionPoint),
+shapeCommands.test.ts (35, +3 for the new `run` command type's round-trip),
+measurementBreakdown.test.ts (+1 for per-segment rows), canvasUtil.test.ts
+(+2 for isRoutedCond/sizeLabel). mcp side: conformance.test.ts gained the
+family/system/size/assembly_id set/echo/undo/export-round-trip assertions
+and two discriminated-union violation cases for edit_condition; its one
+failure (sheet_graph SMOKEY MOUNTAIN citation) is pre-existing and unrelated,
+confirmed via git stash before this checkpoint's own work began.
+
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
 plan-tag text into installed quantity. It now retains text-only observations

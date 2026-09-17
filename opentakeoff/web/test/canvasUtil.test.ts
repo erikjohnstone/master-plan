@@ -5,7 +5,7 @@
 // object (the existing grout/roll_setup precedent this mirrors).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { instantiateTemplate } from "../src/lib/canvasUtil.js";
+import { instantiateTemplate, isRoutedCond, sizeLabel } from "../src/lib/canvasUtil.js";
 
 test("instantiateTemplate: a flooring template gains none of the routed-system fields", () => {
   const c: any = instantiateTemplate({ finish_tag: "LVT-1", color: "#123456", hatch: "plank", waste_pct: 8 });
@@ -30,6 +30,26 @@ test("instantiateTemplate: a routed-system template carries family/system/size/a
   assert.ok(a.size !== b.size, "two conditions instantiated from the same template never share one size object");
   a.size.w_in = 999;
   assert.equal(b.size.w_in, 12, "mutating one instance's size never leaks into a sibling instance or the template");
+});
+
+test("isRoutedCond: true when system OR family is set, false for a plain flooring condition and for nothing at all", () => {
+  assert.equal(isRoutedCond({ system: "SA" }), true);
+  assert.equal(isRoutedCond({ family: "duct_rect" }), true);
+  assert.equal(isRoutedCond({ system: "SA", family: "duct_rect" }), true);
+  assert.equal(isRoutedCond({ finish_tag: "CPT-1" }), false);
+  assert.equal(isRoutedCond({}), false);
+  assert.equal(isRoutedCond(null), false);
+  assert.equal(isRoutedCond(undefined), false);
+});
+
+test("sizeLabel: one compact string per RunSize kind, the way an estimator writes it on a plan", () => {
+  assert.equal(sizeLabel({ kind: "rect", w_in: 12, h_in: 6 }), "12x6");
+  assert.equal(sizeLabel({ kind: "round", d_in: 8 }), "8\"ø");
+  assert.equal(sizeLabel({ kind: "oval", major_in: 24, minor_in: 12 }), "24x12 oval");
+  assert.equal(sizeLabel({ kind: "pipe", nps_in: 2 }), "2\" pipe");
+  assert.equal(sizeLabel(null), null);
+  assert.equal(sizeLabel(undefined), null);
+  assert.equal(sizeLabel({ kind: "hex", w_in: 4 }), null, "an unrecognized kind never fabricates a label");
 });
 
 test("instantiateTemplate: ids/timestamps still mint fresh and the flooring fields still default, unchanged by this addition", () => {

@@ -11,7 +11,10 @@ import {
   splitMergedArcs, doorLeafCells, arcClusterFit,
   type Point, type MaskObj,
 } from "../src/lib/oneclick.ts";
-import { cloudBezier, cloudPath, arrowheadPath, reflectVertsNorm, closedMetrics, segsIntersect, ringSelfIntersects } from "../src/lib/geometry.js";
+import {
+  cloudBezier, cloudPath, arrowheadPath, reflectVertsNorm, closedMetrics, segsIntersect, ringSelfIntersects,
+  buildSegGrid, nearestPointOnSegments, nearestIntersection, segIntersectionPoint,
+} from "../src/lib/geometry.js";
 
 // a closed square room, as flat boundary segments in image px
 function squareSegs(x0: number, y0: number, x1: number, y1: number): number[] {
@@ -1546,5 +1549,51 @@ describe("ringSelfIntersects", () => {
     // vertex (2,0) rides the interior of edge0 (0,0)-(4,0); edge0 vs edge2 is a
     // non-adjacent pair, so the collinear/T path in segsIntersect flags it
     assert.equal(ringSelfIntersects([[0, 0], [4, 0], [2, 0], [2, 4]]), true);
+  });
+});
+
+// #linear-takeoff (WP1.3): segment + intersection snap — a Linear-tool-only
+// addition beside the existing endpoint snap (buildSnapGrid/nearestSnap,
+// which only ever return a path VERTEX). Same spatial-hash shape, but
+// bucketing segment SPANS so a query anywhere along a segment finds it.
+describe("segIntersectionPoint", () => {
+  test("a proper X-cross returns the crossing point", () => {
+    const p = segIntersectionPoint([0, 0], [4, 4], [0, 4], [4, 0]);
+    assert.ok(p); assert.ok(Math.abs(p[0] - 2) < 1e-9 && Math.abs(p[1] - 2) < 1e-9);
+  });
+  test("parallel segments never cross", () => {
+    assert.equal(segIntersectionPoint([0, 0], [4, 0], [0, 1], [4, 1]), null);
+  });
+  test("a crossing that falls outside either segment's own span is null, not extrapolated", () => {
+    // the lines cross at (2,2), well past this vertical segment's [0,1] span
+    assert.equal(segIntersectionPoint([0, 0], [4, 4], [2, 0], [2, 1]), null);
+  });
+});
+
+describe("buildSegGrid / nearestPointOnSegments / nearestIntersection", () => {
+  // a horizontal run crossed by a vertical run at (10,0) — a classic duct tee
+  const segs = [0, 0, 20, 0, /* horizontal */ 10, -10, 10, 10 /* vertical */];
+
+  test("nearestPointOnSegments finds the perpendicular foot on the NEAREST segment, clamped to its span", () => {
+    // (5, 3) is closest to the horizontal run's point (5,0)
+    const p = nearestPointOnSegments(buildSegGrid(segs, 8), 5, 3, 20);
+    assert.ok(p); assert.ok(Math.abs(p[0] - 5) < 1e-9 && Math.abs(p[1] - 0) < 1e-9);
+  });
+  test("nearestPointOnSegments is null past maxDist", () => {
+    assert.equal(nearestPointOnSegments(buildSegGrid(segs, 8), 5, 300, 20), null);
+  });
+  test("nearestIntersection finds the tee crossing regardless of which segment the cursor sits nearer to", () => {
+    const grid = buildSegGrid(segs, 8);
+    const near = nearestIntersection(grid, 9, 1, 20);
+    assert.ok(near); assert.ok(Math.abs(near[0] - 10) < 1e-9 && Math.abs(near[1] - 0) < 1e-9);
+  });
+  test("nearestIntersection is null when nothing crosses within reach (two parallel runs)", () => {
+    const parallel = [0, 0, 20, 0, 0, 5, 20, 5];
+    assert.equal(nearestIntersection(buildSegGrid(parallel, 8), 10, 2.5, 20), null);
+  });
+  test("an empty/degenerate grid never throws", () => {
+    assert.equal(nearestPointOnSegments(buildSegGrid([], 8), 0, 0, 10), null);
+    assert.equal(nearestIntersection(null, 0, 0, 10), null);
+    assert.equal(nearestPointOnSegments(null, 0, 0, 10), null);
   });
 });

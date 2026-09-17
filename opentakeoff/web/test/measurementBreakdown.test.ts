@@ -33,6 +33,14 @@ test("a wall without stored area falls back to LF × H", () => {
   assert.equal(measurementBreakdown([w], "c1", cond)[0].sf, 80);
 });
 
+test("#linear-takeoff WP1.3: a linear row carries computed.run.segments when present, absent otherwise", () => {
+  const runSegs = [{ i: 0, lf: 10, size: { kind: "pipe", nps_in: 2 }, size_src: "manual" }, { i: 1, lf: 8, size_src: "withheld" }];
+  const routed = { ...lin("a", "c1", 18), computed: { perimeter_lf: 18, run: { segments: runSegs, vertices: [], totals_by_size: { "pipe:2": 10 } } } };
+  const rows = measurementBreakdown([routed, lin("b", "c1", 5)], "c1", cond);
+  assert.deepEqual(rows[0].segments, runSegs);
+  assert.ok(!("segments" in rows[1]), "a plain Linear trace with no run block carries no segments key at all");
+});
+
 test("empty and null input are safe", () => {
   assert.deepEqual(measurementBreakdown([], "c1", cond), []);
   assert.deepEqual(measurementBreakdown(null as any, "c1", cond), []);

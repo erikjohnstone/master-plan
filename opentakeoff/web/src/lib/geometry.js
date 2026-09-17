@@ -144,6 +144,89 @@ export function nearestSnap(grid, x, y, maxDist) {
   return best;
 }
 
+// ── segment + intersection snap (#linear-takeoff WP1.3) — same spatial-hash
+// shape as buildSnapGrid/nearestSnap above, but bucketing SEGMENTS (a flat
+// [x1,y1,x2,y2,…] array, e.g. vectorSegsRef's own geometry) by every cell
+// their bounding box overlaps, not just their two endpoints — a query at any
+// point along a segment's span, not only its ends, finds it. A segment whose
+// bbox would blanket an unreasonable number of cells (a degenerate near-
+// diagonal outlier) is skipped rather than let it dominate every bucket.
+export function buildSegGrid(segsFlat, cell) {
+  const map = new Map();
+  const n = segsFlat.length >> 2;
+  for (let i = 0; i < n; i++) {
+    const x1 = segsFlat[i * 4], y1 = segsFlat[i * 4 + 1], x2 = segsFlat[i * 4 + 2], y2 = segsFlat[i * 4 + 3];
+    const gx0 = Math.floor(Math.min(x1, x2) / cell), gx1 = Math.floor(Math.max(x1, x2) / cell);
+    const gy0 = Math.floor(Math.min(y1, y2) / cell), gy1 = Math.floor(Math.max(y1, y2) / cell);
+    if ((gx1 - gx0 + 1) * (gy1 - gy0 + 1) > 64) continue;
+    for (let gx = gx0; gx <= gx1; gx++) for (let gy = gy0; gy <= gy1; gy++) {
+      const k = `${gx},${gy}`; let a = map.get(k); if (!a) { a = []; map.set(k, a); }
+      if (a.length < 64) a.push(i);
+    }
+  }
+  return { cell, map, segs: segsFlat };
+}
+// Nearest point ON any indexed segment (perpendicular foot, clamped to the
+// segment) within maxDist — the "segment snap" the goal doc asks for beside
+// the endpoint snap (nearestSnap above only ever returns a path VERTEX).
+export function nearestPointOnSegments(grid, x, y, maxDist) {
+  if (!grid) return null;
+  const { cell, map, segs } = grid, cx = Math.floor(x / cell), cy = Math.floor(y / cell);
+  const seen = new Set();
+  let best = null, bestD = maxDist * maxDist;
+  for (let gx = cx - 1; gx <= cx + 1; gx++) for (let gy = cy - 1; gy <= cy + 1; gy++) {
+    const a = map.get(`${gx},${gy}`); if (!a) continue;
+    for (const i of a) {
+      if (seen.has(i)) continue; seen.add(i);
+      const ax = segs[i * 4], ay = segs[i * 4 + 1], bx = segs[i * 4 + 2], by = segs[i * 4 + 3];
+      const dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy;
+      let t = l2 ? ((x - ax) * dx + (y - ay) * dy) / l2 : 0; t = Math.max(0, Math.min(1, t));
+      const px = ax + t * dx, py = ay + t * dy;
+      const ddx = px - x, ddy = py - y, d = ddx * ddx + ddy * ddy;
+      if (d < bestD) { bestD = d; best = [px, py]; }
+    }
+  }
+  return best;
+}
+// Where two segments actually cross (proper intersection, parametric form) —
+// null when parallel/collinear or the crossing falls outside either span.
+// Deliberately simpler than segsIntersect's full predicate (no collinear-
+// overlap/T-touch handling): this feeds a UI snap convenience, not a
+// topology decision, and only needs the ONE point a click would land on.
+export function segIntersectionPoint(p1, p2, p3, p4) {
+  const [x1, y1] = p1, [x2, y2] = p2, [x3, y3] = p3, [x4, y4] = p4;
+  const d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+  if (Math.abs(d) < 1e-9) return null;
+  const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / d;
+  const u = ((x1 - x3) * (y1 - y2) - (y1 - y3) * (x1 - x2)) / d;
+  if (t < 0 || t > 1 || u < 0 || u > 1) return null;
+  return [x1 + t * (x2 - x1), y1 + t * (y2 - y1)];
+}
+// Nearest segment-pair crossing within maxDist of (x,y) — pairwise among only
+// the near-cursor candidates the same 3×3 neighbourhood already narrows to,
+// so this stays cheap regardless of how many segments the whole sheet holds.
+export function nearestIntersection(grid, x, y, maxDist) {
+  if (!grid) return null;
+  const { cell, map, segs } = grid, cx = Math.floor(x / cell), cy = Math.floor(y / cell);
+  const cand = new Set();
+  for (let gx = cx - 1; gx <= cx + 1; gx++) for (let gy = cy - 1; gy <= cy + 1; gy++) {
+    const a = map.get(`${gx},${gy}`); if (a) for (const i of a) cand.add(i);
+  }
+  const list = [...cand];
+  let best = null, bestD = maxDist * maxDist;
+  for (let a = 0; a < list.length; a++) for (let b = a + 1; b < list.length; b++) {
+    const i = list[a], j = list[b];
+    const pt = segIntersectionPoint(
+      [segs[i * 4], segs[i * 4 + 1]], [segs[i * 4 + 2], segs[i * 4 + 3]],
+      [segs[j * 4], segs[j * 4 + 1]], [segs[j * 4 + 2], segs[j * 4 + 3]],
+    );
+    if (!pt) continue;
+    const dx = pt[0] - x, dy = pt[1] - y, d = dx * dx + dy * dy;
+    if (d < bestD) { bestD = d; best = pt; }
+  }
+  return best;
+}
+
 // ── polar tracking: lock the next segment to the 45° family (sheet axes).
 // Within ANGLE_TOL° of a 45° multiple — or at any angle while Shift forces it —
 // the cursor projects onto the locked ray from the last vertex, so the committed

@@ -116,3 +116,22 @@ export const instantiateTemplate = (t) => ({
 // built-in flooring defaults are only the empty-library fallback. Both paths
 // run instantiateTemplate — ONE condition constructor, no drift.
 export const seedConditions = (library) => (library?.length ? library : FLOORING_DEFAULTS).map(instantiateTemplate);
+
+// #linear-takeoff (plan §10.1, WP1.3): "the 12′ roll-width amber does not
+// apply to routed conditions" — a duct/pipe/conduit run has no carpet seam
+// to warn about. system/family are the two WP1.2 fields that mark a
+// condition as a routed system (instantiateTemplate above seeds both
+// together); a flooring/architectural condition never carries either.
+export const isRoutedCond = (c) => !!(c?.system || c?.family);
+// #linear-takeoff (WP1.3): a compact human label for one RunSize, the way an
+// estimator writes it on a plan (12x6, 8"ø, 24x12 oval, 2" pipe) — distinct
+// from runSizeKey's canonical grouping string ("rect:12x6"), which is for
+// aggregation keys, never for display.
+export const sizeLabel = (sz) => {
+  if (!sz) return null;
+  if (sz.kind === "rect") return `${sz.w_in}x${sz.h_in}`;
+  if (sz.kind === "round") return `${sz.d_in}"ø`;
+  if (sz.kind === "oval") return `${sz.major_in}x${sz.minor_in} oval`;
+  if (sz.kind === "pipe") return `${sz.nps_in}" pipe`;
+  return null;
+};
