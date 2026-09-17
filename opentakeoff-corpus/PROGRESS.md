@@ -1,5 +1,95 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.1 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+`strokes.ts`, Stage 1 of the trace engine (plan §6.2). Trace mode itself
+stays entirely inert on every existing project: nothing calls this module
+yet (WP3.2's index/WP3.3's graph/WP3.4's walker are the eventual
+consumers), and the new `traceModeEnabled()` deployment flag in `prefs.js`
+(default OFF, same convention as `cloudSyncEnabled`) gates whatever wires
+in between here and GATE 4.
+
+`web/src/lib/linear/strokes.ts`:
+
+- `strokeExclusionMask` — plan §6.2 step 1's five checks. Two are reused,
+  not reimplemented, per the goal doc's own instruction: layer-role
+  annotation(3)/finish-pattern(2)/hidden(6) exclusion and the
+  `networkWallSegs` wall-vouch-when-not-strong fallback are byte-for-byte
+  `ensureMepGraph`'s own mask (`mcp/src/session.ts` — the goal doc's own
+  `S:3440-3465` citation is stale; the real block is `:3649-3675`, verified
+  by reading it directly). The other three (`SEG_CLIP`/`SEG_FILLONLY`,
+  hatch rows via `classifyHatchSegs`, text-box frames via
+  `classifyTagBoxSegs`) are new here — `ensureMepGraph` never excluded
+  them. One deliberate, documented DIVERGENCE from `ensureMepGraph`'s own
+  mask: LayerRole 5 (demolition) is NOT excluded — a trace engine that
+  reports a run's own "new"/"existing"/"demo" status needs demolition ink
+  to survive to family classification, not be blanked out first.
+- `classifyStrokeFamilies` — histograms exclusion survivors by (pen
+  nibble, dash, layer, lum, colour) per plan §6.2 step 2, then ranks
+  evidence. Of the plan's four grades, (a) OCG-layer-name and (c)
+  pen-weight-prior are implemented; (b) legend-swatch-match and (d)
+  size-label-anchor are NOT — (b) needs `legendlearn.ts`'s swatch-geometry
+  subsystem (a separate concern this module doesn't read), (d) needs
+  WP3.5's `sizes.ts` (the Appendix A label grammar), which doesn't exist
+  yet. Both are documented as real follow-up in the module's own header,
+  not silently missing.
+- `classifyStrokes` — the combined convenience wrapper, plan §6.2's own
+  top-level `StrokeClasses` output.
+
+Grade (c)'s pen-weight prior went through a real, corpus-caught iteration,
+not a one-shot guess: WP3.1's own instruction to "test on Bessemer (pen 4),
+ITD (pen 3), Weld (M-HVAC-DUCT)" was taken literally — real PDF extraction
+against all three named sheets, not just synthetic fixtures. The first
+version ("the family with the most long/axis-dominant LENGTH wins")
+measurably picked the wrong pen: Bessemer's own modal pen (1, ~80% of the
+sheet's segments — background/architectural ink) carries more raw
+long-axis length than the real duct pen (4) simply by volume. Fixed by
+excluding the sheet's own modal pen first (netroom.js's own "furniture
+pen" insight, applied to a different ink class), flooring out true noise
+(a stray few segments at a rare pen), then taking the heaviest pen weight
+remaining. Re-validated against real extraction on all three sheets after
+the fix: Bessemer M101 p6 → pen 4 (582 surviving members; corpus: 624 raw);
+ITD p3 → pen 3 (14,270 members; corpus: ~14,467); Weld p7 → never reaches
+grade (c) at all, resolving instead at grade (a) via its real M-HVAC-DUCT
+layer (conf 0.9) — all three match the plan's own cited ground truth. The
+module's own comment is explicit that this heuristic remains the weakest
+of the four grades by design and can still fail on a sheet with two
+comparably-weighted non-modal candidate pens and no layer signal at all —
+not claimed to be solved, just measurably correct on the three named
+cases.
+
+Deliberately NOT done this checkpoint, and why: refactoring
+`ensureMepGraph` (`mcp/src/session.ts`) and its `TakeoffCanvas.jsx`
+duplicate to call `strokeExclusionMask`'s shared layer-role/wall-vouch
+piece instead of their own inline copy — a real, valid de-duplication the
+research for this checkpoint surfaced, but `mepconnectivity.ts` (which
+`ensureMepGraph` feeds) is explicitly off-limits to CHANGE per the goal
+doc's own "WHAT YOU NEVER TOUCH" list ("you CALL these; you do not change
+them"), and touching `ensureMepGraph` itself would mean re-verifying an
+already-shipped, corpus-tested MEP connectivity path for a benefit that's
+about eliminating duplication, not adding capability. Documented as
+follow-up in `strokes.ts`'s own header, not silently skipped.
+
+Tests: `web/test/linear/strokes.test.ts`, 13 new — exclusion checks
+against real fixtures (a verified-positive double-line wall-room fixture
+for the wall-vouch gating test, confirmed against `networkWallSegs`
+directly before use, not assumed), family grouping, grade (a)'s confidence
+floor, grade (c)'s modal-exclusion/noise-floor/heaviest-remaining
+algorithm (including that a short/diagonal family never wins however heavy
+its pen), and an end-to-end Weld-shaped case (a real classified duct layer
+surviving alongside excluded annotation ink).
+
+Verified: `npx tsc --noEmit` clean on both `web` and `mcp` (strokes.ts has
+no mcp-side caller yet, but mcp's own typecheck still walks every web/src
+file it can reach); `web/test/linear/*` 54/54; `check:tool-count`
+unaffected (no MCP tool touched — this checkpoint is `web/src/lib/linear`
++ its own test + `prefs.js` only, zero `mcp/` changes).
+
+GATE 3 (recall/precision/length-error/size-accuracy/click-latency on a
+held-out corpus tier) is far off — WP3.2 (spatial index), WP3.3 (endpoint-
+welding graph), WP3.4 (the bidirectional walker) don't exist yet, and
+GATE 3's own metrics can't be measured until a run can actually be walked
+end to end. This checkpoint is WP3.1 alone.
+
 2026-09-17 linear takeoff GATE 2 PASSED (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 all four conditions verified with concrete evidence, not asserted from the
 "same shared function" architecture alone.

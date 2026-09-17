@@ -17,3 +17,19 @@
 export function cloudSyncEnabled() {
   return ((import.meta.env && import.meta.env.VITE_CLOUD_SYNC) || "") === "1";
 }
+
+// #linear-takeoff (WP3.1, opentakeoff-corpus/goals/LINEAR_TAKEOFF.md): the
+// trace engine (stroke classification, connectivity graph, the bidirectional
+// walker, Trace mode's own canvas UI) is real, load-bearing geometry code
+// that has not yet cleared GATE 3's own accuracy bars (recall/precision/
+// length-error/size-accuracy on a held-out corpus tier) — it must not affect
+// a single existing project until it does. Same DEPLOYMENT-flag discipline
+// as cloudSyncEnabled above (a whole-build toggle, not a per-user setting,
+// flipped once GATE 4 signs off): OFF reproduces today's manual-mode-only
+// behavior byte-for-byte. Nothing reads this yet — WP3.2 onward (the index,
+// graph, walker, and WP3.7's canvas UI) are the eventual consumers; adding
+// the flag now, ahead of them, means every trace-engine module that lands
+// between here and GATE 4 has somewhere to gate itself from the start.
+export function traceModeEnabled() {
+  return ((import.meta.env && import.meta.env.VITE_LINEAR_TRACE) || "") === "1";
+}
