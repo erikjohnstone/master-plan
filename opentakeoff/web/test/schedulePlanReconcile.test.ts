@@ -20,6 +20,7 @@ import {
   classifyTakeoffIntent,
   advanceTakeoffWorkflow,
 } from "../src/lib/takeoffWorkflow.js";
+import { markKey } from "../src/lib/markid.ts";
 
 
 test("row identity prefers VALVE MARK over UNIT MARK (Pillar C valve join)", () => {
@@ -65,6 +66,62 @@ test("row identity prefers VALVE MARK over UNIT MARK (Pillar C valve join)", () 
     rows.map((r) => r.tag).sort(),
     ["CV-CUH-A1-HHW", "CV-FCU-A1-HHW"].sort(),
   );
+});
+
+// WP3 seam: session.ts's tagOccurrencesOnSheet and countMarks now both
+// filter spans with markid.ts's spanAnswersFor, and this module's row_id/
+// scopeIdentity now canonicalize with markid.ts's markKey — one identity
+// rule shared by all three production callers, in place of three
+// independent ad hoc canon functions that could (and did) disagree. This
+// exercises the real production row builder, not the shared primitive in
+// isolation: a hyphen/space twin of the SAME device (a duplicate/
+// continuation extract, the Douglas HP-20 shape this dedup exists for)
+// must collapse to one row; a genuinely different device (a different
+// digit) must not.
+test("WP3 seam: reconcile row_id/scopeIdentity use markKey — hyphen/space twins collapse, digit differences stay distinct", () => {
+  const graph = {
+    tables: [
+      {
+        sheet: "set.pdf#10",
+        title: { text: "HHW CONTROL VALVE SCHEDULE" },
+        kind: "equipment",
+        rows: [
+          {
+            key: "CUH-A1",
+            cells: {
+              "UNIT MARK": { text: "CUH-A1" },
+              "VALVE MARK": { text: "CV-CUH-A1-HHW" },
+            },
+          },
+          {
+            // Twin spelling of the row above (space instead of hyphen) — under
+            // the old whitespace-only canon this stayed a DIFFERENT row_id
+            // ("CV-CUH-A1-HHW" keeps its hyphens, "CVCUHA1HHW" does not);
+            // markKey strips both, so this is the identity fix under test.
+            key: "CUH-A1",
+            cells: {
+              "UNIT MARK": { text: "CUH-A1" },
+              "VALVE MARK": { text: "CV CUH A1 HHW" },
+            },
+          },
+          {
+            // A genuinely different device (digit differs) must never merge.
+            key: "CUH-A10",
+            cells: {
+              "UNIT MARK": { text: "CUH-A10" },
+              "VALVE MARK": { text: "CV-CUH-A10-HHW" },
+            },
+          },
+        ],
+      },
+    ],
+  };
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HHW_CONTROL_VALVE");
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle);
+  assert.equal(rows.length, 2, `twin spellings of one device must collapse to one row, got tags: ${JSON.stringify(rows.map((r) => r.tag))}`);
+  const keys = rows.map((r) => markKey(r.tag)).sort();
+  assert.deepEqual(keys, [markKey("CV-CUH-A1-HHW"), markKey("CV-CUH-A10-HHW")].sort());
+  assert.equal(new Set(rows.map((r) => r.row_id)).size, 2);
 });
 
 test("familyNeedleFromSpecs: CONTROL_DAMPER / MOTORIZED DAMPER aliases (WP7.2)", () => {
@@ -509,9 +566,12 @@ test("family reconciliation preserves independently reused marks by authored dra
     { kind: "equipment", sheet: "set.pdf#47", drawing_group: "MTRACON", title: { text: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE" }, rows: [row()] },
   ] };
   const needle = { label: "GRD", titleRe: /GRILLE.*REGISTER.*DIFFUSER/i };
+  // row_id is `${sheet}::${markKey(tag)}` (WP3: one identity rule) — built
+  // from markKey, not a hyphen-preserving literal, so this stays correct
+  // however markKey's own canonical spelling evolves.
   const sweeps = new Map([
-    ["set.pdf#44::CD-1", { installedQty: 32, placementCount: 32, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
-    ["set.pdf#47::CD-1", { installedQty: 24, placementCount: 21, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
+    [`set.pdf#44::${markKey("CD-1")}`, { installedQty: 32, placementCount: 32, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
+    [`set.pdf#47::${markKey("CD-1")}`, { installedQty: 24, placementCount: 21, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
   ]);
   const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweeps);
   assert.equal(rows.length, 2);

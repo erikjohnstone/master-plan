@@ -330,8 +330,9 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // here exactly as netroom.js's room detector already uses it, as a fallback
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
-import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, canonicalLabelFamily, type PlacementLabel, type SweepTransformCompetition } from "../../web/src/lib/symbollabels.ts";
-import { markKey } from "../../web/src/lib/markid.ts";
+import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, canonicalLabelFamily, LABEL_TOKEN_RE, type PlacementLabel, type SweepTransformCompetition } from "../../web/src/lib/symbollabels.ts";
+import { markKey, spanAnswersFor } from "../../web/src/lib/markid.ts";
+import { isEquipTag } from "../../web/src/lib/equiptags.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -2517,9 +2518,6 @@ export class Session {
     if (!graph.available) {
       throw new UserError("This set has no text layer (a scan) — the census reads drawn tag text, so it cannot run. Marquee one device with symbol_sweep instead.");
     }
-    const canon = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
-    const MARK_RE = /^[A-Z]{1,3}-?\d{1,3}[A-Z]?$/;
-
     // mark vocabulary: stated, or read off the schedule tables' row keys —
     // a compound key ("R1 / E1") contributes each of its marks
     type RowCite = { sheet: string; key: string; table: string };
@@ -2527,16 +2525,16 @@ export class Session {
     for (const tb of graph.tables) {
       const table = tb.title?.text || `${tb.kind} schedule`;
       for (const row of tb.rows) {
-        for (const part of canon(row.key).split("/").filter(Boolean)) {
+        for (const part of markKey(row.key).split("/").filter(Boolean)) {
           if (!rowCite.has(part)) rowCite.set(part, { sheet: tb.sheet, key: row.key, table });
         }
       }
     }
     let marks: string[];
     if (opts.marks?.length) {
-      marks = [...new Set(opts.marks.map(canon).filter(Boolean))];
+      marks = [...new Set(opts.marks.map(markKey).filter(Boolean))];
     } else {
-      marks = [...rowCite.keys()].filter((k) => MARK_RE.test(k)).sort();
+      marks = [...rowCite.keys()].filter((k) => isEquipTag(k) || LABEL_TOKEN_RE.test(k)).sort();
       if (!marks.length) {
         throw new UserError('No mark-shaped schedule row keys in the set to census — state the marks yourself: count_marks { marks: ["S1", "R1"] }.');
       }
@@ -2587,7 +2585,7 @@ export class Session {
       for (const m of marks) {
         const rec = perMark.get(m)!;
         for (const sp of sh.spans) {
-          if (canon(sp.str) !== m) continue;
+          if (!spanAnswersFor(sp.str, m, marks)) continue;
           const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
           const h = Math.max(sp.y1 - sp.y0, 6);
           if (regions.some((r) => cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3])) { excludedInTables++; continue; }
@@ -3520,18 +3518,18 @@ export class Session {
    * loadPlan clears it whenever the document set changes. */
   private tagOccurrenceCache = new Map<string, Map<string, TagOcc[]>>();
 
-  private tagOccurrencesOnSheet(sh: SheetState, key: string, allowFamilyQuorum = false): TagOcc[] {
+  private tagOccurrencesOnSheet(sh: SheetState, key: string, allowFamilyQuorum = false, vocab: readonly string[] = []): TagOcc[] {
     let byKey = this.tagOccurrenceCache.get(sh.key);
     if (!byKey) {
       byKey = new Map();
       this.tagOccurrenceCache.set(sh.key, byKey);
     }
-    const cacheKey = allowFamilyQuorum ? `${key}\0family-quorum` : key;
+    const cacheKey = (allowFamilyQuorum ? `${key}\0family-quorum` : key) + (vocab.length ? `\0${[...vocab].sort().join(",")}` : "");
     const cached = byKey.get(cacheKey);
     if (cached) return cached;
     if (!sh.spans) sh.spans = textSpans(sh.page);
     const exact = sh.spans
-      .filter((sp) => sp.str.trim().toUpperCase() === key)
+      .filter((sp) => spanAnswersFor(sp.str, key, vocab))
       .map((sp) => ({
         cx: (sp.x0 + sp.x1) / 2,
         cy: (sp.y0 + sp.y1) / 2,
@@ -4018,7 +4016,7 @@ export class Session {
       }
     }
     const occOf = (sh: SheetState, key: string): TagOcc[] =>
-      this.tagOccurrencesOnSheet(sh, key, airDeviceTable);
+      this.tagOccurrencesOnSheet(sh, key, airDeviceTable, tableSiblingKeys);
     // Plan-drawn form may keep spaces / omit revision prefixes while the
     // schedule row.key is glued (`NATUK1` vs plan `ATU K1` — Hurlburt). Prefer
     // any identity form that is actually drawn before refusing no-plan-tag.

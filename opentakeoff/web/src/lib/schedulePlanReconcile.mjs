@@ -7,6 +7,7 @@
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.mjs";
+import { markKey } from "./markid.ts";
 
 /** @typedef {"MATCH"|"SCHEDULE_ONLY"|"PLAN_ONLY"|"REFUSED_NO_SCALE"|"REFUSED_NO_TEXT"|"AMBIGUOUS"} ReconcileStatus */
 
@@ -728,7 +729,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         }
         // Parity with compile uniqueFamily — continuation / duplicate extracts
         // of the same MARK must not inflate reconcile rows (Douglas HP-20).
-        const canon = String(tag).toUpperCase().replace(/\s+/g, "");
+        const canon = markKey(tag);
         const tableFamily = title.toUpperCase().replace(/[^A-Z0-9]/g, "") || table.kind || "(untitled)";
         const rowId = `${table.sheet}::${canon}`;
         const scopeIdentity = `${canon}\0${tableFamily}\0${table.drawing_group || "(unscoped)"}`;

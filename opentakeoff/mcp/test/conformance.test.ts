@@ -795,7 +795,9 @@ test("compile_corpus_takeoff / query_table / count_marks / project_takeoff / rec
 
   const marks = await callOk(client, "count_marks", { marks: ["X-1"] });
   assert.equal(marks.total, 0);
-  assert.equal(marks.marks[0].mark, "X-1");
+  // Echoed as markKey's canonical spelling (WP3: one identity rule) — the
+  // hyphen is drafting variation, not identity, so "X-1" comes back "X1".
+  assert.equal(marks.marks[0].mark, "X1");
   assert.equal(marks.marks[0].unscheduled, true);
 
   const project = await callOk(client, "project_takeoff", {});

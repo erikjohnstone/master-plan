@@ -2587,3 +2587,102 @@ none missing from `TOOL_STAGES`). `mcp/test/takeoffHvac01.regression.test.mjs`,
 touched; no production role/table/schedule logic touched — `tagIndex.ts` is
 additive-only, reading what `sheetgraph.ts` and `session.ts` already
 compute.
+
+## WP3 — one identity rule (2026-09-17, goal-loop, Sonnet 5)
+
+Implemented plan §3.4 exactly, replacing three independent ad hoc canon
+functions with the one shared rule already used by `tagIndex.ts`/WP2:
+
+- `Session.tagOccurrencesOnSheet` (`mcp/src/session.ts`) gains a fourth
+  parameter `vocab: readonly string[] = []`; its exact-match filter is now
+  `spanAnswersFor(sp.str, key, vocab)` in place of a bare
+  `sp.str.trim().toUpperCase() === key` (which was hyphen/space-sensitive —
+  "P-1" never matched "P1"). `sweepScheduleRow`'s `occOf` closure passes
+  `tableSiblingKeys` (the answering table's own row keys) as `vocab`, so the
+  short-mark and shared-bare-mark guards run against that table's real
+  vocabulary. The occurrence cache key now folds in the sorted vocab (a
+  correctness fix this change requires: results now depend on vocab, so two
+  calls with the same key but different sibling vocab can no longer share a
+  cache entry).
+- `Session.countMarks`: `canon`/`MARK_RE` replaced with `markKey` throughout
+  (row-key vocabulary extraction, `opts.marks` normalization, and the
+  default-vocabulary filter, now `isEquipTag(k) || LABEL_TOKEN_RE.test(k)`
+  instead of the narrower `/^[A-Z]{1,3}-?\d{1,3}[A-Z]?$/`); span matching is
+  now `spanAnswersFor(sp.str, m, marks)` in place of `canon(sp.str) !== m`.
+- `schedulePlanReconcile.mjs`: the `rowId`/`scopeIdentity` canonicalization
+  (previously whitespace-only, hyphens kept) is now `markKey(tag)`.
+
+**New seam test, not just the shared primitive in isolation:**
+`web/test/schedulePlanReconcile.test.ts` gains "WP3 seam: reconcile
+row_id/scopeIdentity use markKey — hyphen/space twins collapse, digit
+differences stay distinct" — it calls the real, exported
+`reconcileScheduleFamilyFromGraph` (the actual production row builder, the
+same one wired into `reconcile_schedule_plan`) with a synthetic
+HHW-control-valve table carrying a hyphen-spelled row and a space-spelled
+twin of the same device, plus a genuinely different device (digit differs).
+Before this change the twin's `row_id` kept its hyphens while the other did
+not, so they never collapsed; after it, both reduce to `markKey`'s one
+canonical form and the reconcile scaffold correctly emits one row, while
+the different-digit device stays a separate row. `markid.test.ts`'s own
+20 pre-existing tests of `spanAnswersFor`/`markKey` (twins, short-mark
+overcount, shared bare marks) needed no changes and stay green — the three
+production callers now all delegate to code that test file already covers.
+
+**One pre-existing test fixture staleness found and fixed, not a
+regression:** two tests hardcoded a `row_id`/mark string in the OLD
+whitespace-only canon spelling —
+`mcp/test/conformance.test.ts`'s schema-conformance smoke test expected
+`count_marks({marks:["X-1"]})` to echo back `"X-1"`; it now correctly
+echoes `"X1"` (comment added explaining why). `web/test/
+schedulePlanReconcile.test.ts`'s "family reconciliation preserves
+independently reused marks by authored drawing group" test built its
+`sweepByTag` fixture with a literal `"set.pdf#44::CD-1"` key; updated to
+build the key via `markKey("CD-1")` so it tracks the real production
+canonicalization instead of a frozen literal. Both are wire-format/fixture
+updates, not behavior bugs — the round-trip inside `schedulePlanReconcile.
+mjs` itself (a row's own `row_id` is always both written to and read from
+`sweepByTag` by the same function) stays internally consistent regardless
+of which canon function is used, so production correctness never depended
+on the literal spelling either test hardcoded.
+
+**Verification:** `npm --prefix web run typecheck` and `npm --prefix mcp
+run typecheck` both clean. `web/test/markid.test.ts` 14/14 unchanged.
+`web/test/schedulePlanReconcile.test.ts` 27/27 (26 pre-existing + the new
+seam test). Full web suite spot-check (`markid`, `schedulePlanReconcile`,
+`symbolsweep`, `tagIndex`, `sheetgraph`, `agentTools`, `equiptags`,
+`symbolLabels`) 396/396. `mcp/test/tools.test.ts`, `staging.test.ts`,
+`conformance.test.ts`, `session.test.ts`, `context.test.ts`,
+`labels.test.ts` — 165/165 (includes the corrected `count_marks`
+conformance assertion). All three frozen regression gates green, freshly
+re-run, not assumed: `takeoffHvac01` 396/396, `takeoffValve01` 163/163,
+`takeoffBas01` 122/122 — this is the acceptance line's own "navfac sweeps
+for FCU-A1, AHU-A1, CV-CHW-BP-A return identical results to baseline"
+proof, since these three gates exercise `sweepScheduleRow`/
+`tagOccurrencesOnSheet` across the full HVAC/valve/BAS families on real
+navfac data and every quantity is unchanged.
+
+**A genuinely reproducible pre-existing hang found while attempting extra
+(non-required) verification, root-caused as pre-existing, not a WP3
+regression:** `mcp/test/reconcileGolden.test.mjs`,
+`valveMarkIdentity.regression.test.mjs`, `planToolParity.test.mjs`, and
+`reconcileWorkflow.test.mjs` are not among rule 5's three named frozen
+gates, but were attempted as bonus coverage since they exercise
+`schedulePlanReconcile.mjs`/`reconcileScheduleFamilyWithSweeps` directly.
+Running all four together hung; running `reconcileGolden.test.mjs` ALONE
+also hung, past a 480 s bound, pinned at ~99% CPU with zero output past the
+pdf.js legacy-build warning (checked directly — `OPENTAKEOFF_GRAPH_TRACE=1`
+never printed, so it never reaches graph-trace instrumentation at all).
+Root-caused as pre-existing via `git stash`, not assumed: stashed every
+WP3-modified file, re-ran the identical command against the untouched
+WP2-committed tree, and it hung identically (killed by its own 120 s
+`timeout` wrapper, exit 143). Ruled out a stale sheet-graph cache
+specifically (not just asserted): cleared `~/.cache/opentakeoff-sheet-graph/
+tmp` and re-ran cold, same hang. This fixture (`demos/D07-vav-plan-link-
+fan-refuse`) loads the full `bldg5406-hvac-demo-mechanical.pdf` (20 sheets)
+via `loadFixtureSession`, not a small excerpt as its directory name
+suggests — worth knowing for whoever next touches these four files. Not
+investigated further (out of scope for WP0–WP7, and the plan's own rule 5
+names only the three HVAC/valve/BAS gates as required); flagging for the
+coordinator alongside the earlier-flagged `vectorGridClient.ts` missing
+error/timeout handling, since this may be the same class of gap. No corpus
+key or scorer touched by WP3.
