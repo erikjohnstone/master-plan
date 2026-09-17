@@ -660,6 +660,61 @@ export function clipPolyline(poly: GeoPoint[], a: number, b: number): GeoPoint[]
   return out;
 }
 
+/** Perpendicular distance from `p` to the infinite line through `a`-`b`
+ *  (falls back to point-to-point distance when `a === b`). */
+function perpDist(p: GeoPoint, a: GeoPoint, b: GeoPoint): number {
+  const dx = b[0] - a[0], dy = b[1] - a[1];
+  const len = Math.hypot(dx, dy);
+  if (!len) return polySegLen(p, a);
+  return Math.abs(dy * p[0] - dx * p[1] + b[0] * a[1] - b[1] * a[0]) / len;
+}
+
+/** Douglas-Peucker simplification, iterative (an explicit stack, not
+ *  recursion — same reasoning as discreteFrechet below: a long polyline
+ *  must not be able to blow the call stack). Drops a vertex only when its
+ *  own perpendicular deviation from the chord it sits on is <= `tolPx` —
+ *  this exists because discrete Fréchet (below) is a per-VERTEX distance,
+ *  not a per-CURVE one: a golden hand-authored as a straight 2-point run
+ *  compared against a `trace_run` polyline that revisits the SAME straight
+ *  line with several extra, functionally-redundant vertices (a fitting
+ *  symbol's own tiny kinks, a snapped-grid rounding step) reads as a large
+ *  "shape mismatch" under raw discreteFrechet even though the two curves
+ *  are geometrically identical — the DP's own monotone correspondence has
+ *  to walk through every extra vertex on the denser side before it can
+ *  advance on the sparser one, and the worst intermediate gap becomes the
+ *  reported distance. Simplifying both curves to their OWN true corners
+ *  first (a small, fixed tolerance well under the recall gate's own 2px
+ *  Fréchet threshold, so a genuine elbow is never mistaken for noise)
+ *  removes that artifact without weakening what over-trace/shape-mismatch
+ *  scoring is actually for. Caught measuring itd-p4-ea-duct-stub (GATE 3
+ *  held-out tier, 2026-09-17): LF matched exactly (3.02→3.02) yet
+ *  frechetPx read 9.2 — reproduced directly against `discreteFrechet`
+ *  with the exact traced/golden points, confirmed as this artifact (not
+ *  real engine noise), and fixed here rather than left as a documented,
+ *  accepted "engine limitation" that this project's own methodology
+ *  actually caused. */
+export function simplifyPolyline(poly: GeoPoint[], tolPx: number): GeoPoint[] {
+  if (poly.length < 3) return poly;
+  const keep = new Uint8Array(poly.length);
+  keep[0] = 1;
+  keep[poly.length - 1] = 1;
+  const stack: Array<[number, number]> = [[0, poly.length - 1]];
+  while (stack.length) {
+    const [lo, hi] = stack.pop()!;
+    if (hi <= lo + 1) continue;
+    let bestI = -1, bestD = tolPx;
+    for (let i = lo + 1; i < hi; i++) {
+      const d = perpDist(poly[i], poly[lo], poly[hi]);
+      if (d > bestD) { bestD = d; bestI = i; }
+    }
+    if (bestI >= 0) {
+      keep[bestI] = 1;
+      stack.push([lo, bestI], [bestI, hi]);
+    }
+  }
+  return poly.filter((_, i) => keep[i]);
+}
+
 /** Discrete Fréchet distance (Eiter & Mannila 1994) between two point
  *  sequences — iterative bottom-up DP (not the textbook's own recursive
  *  form) so a long over-traced polyline can't stack-overflow this. */
@@ -695,13 +750,19 @@ export interface TraceShapeMatch {
  *  polyline both forwards and reversed, keeping whichever orientation
  *  gives the smaller Fréchet distance — `trace_run`'s own walk direction
  *  relative to the golden's is arbitrary, not a real mismatch to penalize. */
+// Well under the recall gate's own 2px Fréchet threshold, so a genuine
+// elbow (a real perpendicular deviation an engineer would call a corner)
+// is never simplified away — see simplifyPolyline's own header.
+const SHAPE_SIMPLIFY_TOL_PX = 0.5;
+
 export function scoreTraceShapeMatch(caseName: string, golden: GeoPoint[], traced: GeoPoint[], upp: number, overlapTolFt = 0.5): TraceShapeMatch {
   const p0 = projectOntoPolyline(golden[0], traced);
   const p1 = projectOntoPolyline(golden[golden.length - 1], traced);
   const a = Math.min(p0.arcLen, p1.arcLen), b = Math.max(p0.arcLen, p1.arcLen);
-  const clipped = clipPolyline(traced, a, b);
+  const clipped = simplifyPolyline(clipPolyline(traced, a, b), SHAPE_SIMPLIFY_TOL_PX);
+  const simplifiedGolden = simplifyPolyline(golden, SHAPE_SIMPLIFY_TOL_PX);
   const reversed = [...clipped].reverse();
-  const frechetPx = Math.min(discreteFrechet(golden, clipped), discreteFrechet(golden, reversed));
+  const frechetPx = Math.min(discreteFrechet(simplifiedGolden, clipped), discreteFrechet(simplifiedGolden, reversed));
 
   const overlapTolPx = overlapTolFt / (upp || 1);
   const samples = 50;

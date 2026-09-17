@@ -1,5 +1,64 @@
 ## Active work
 
+2026-09-17 linear takeoff: the "genuine Fréchet miss" from the checkpoint below was a scorer bug, found and fixed same day (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+The checkpoint immediately below this one closed with "a genuine, honest miss...
+the deviation is in trace_run's own walked SHAPE, not the ground truth" and
+guessed the cause was double-line-duct edge-following near an elbow/damper.
+That guess was written without checking the actual traced points first --
+exactly the lapse this project has caught itself making before (Run 3's own
+two coordinate bugs, Finding 5's disproven hypothesis) and had already
+promised not to repeat. Caught immediately after, same session: dumping the
+FULL-PRECISION `trace_run` points for `itd-d1-lab-mechanical.pdf#4` showed
+every point sits at EXACTLY the same y -- a perfectly straight line, not a
+zigzag. Reproducing `scoreTraceShapeMatch` directly against the exact golden/
+traced points (both provably collinear) still returned `frechetPx: 9.2`,
+proving the bug lives in the SCORER, not the engine.
+
+Root cause: discrete Fréchet distance is a per-VERTEX metric, not a per-
+CURVE one. It requires a monotone index-correspondence between two point
+sequences; when the golden (2 vertices) is far sparser than the traced
+polyline (5 vertices, genuinely on the same line but unevenly spaced from a
+fitting symbol's own tiny kinks), the DP's own monotone-advance constraint
+has to walk through every extra vertex on the denser side before advancing
+the single step on the sparser one -- the worst intermediate gap along that
+forced walk becomes the reported "distance," even though the underlying
+GEOMETRIC line is identical. A well-known discrete-vs-continuous-Fréchet
+pitfall, and one that would only get MORE common as this bench's own real
+corpus grows (any hand-authored few-vertex golden vs. a `trace_run` polyline
+that picks up extra near-collinear vertices along the same real line).
+
+Fix: `score.ts` gained `simplifyPolyline` (iterative Douglas-Peucker, same
+"no recursion" discipline as `discreteFrechet` itself), applied to both the
+golden and the clipped/reversed traced polyline in `scoreTraceShapeMatch`
+before the Fréchet call, at a fixed 0.5px tolerance -- well under the
+recall gate's own 2px threshold, so a genuine elbow is never mistaken for
+noise. 6 new tests in `test/benchScore.test.ts`, including one that proves
+the fix does NOT mask a real mid-span detour (a genuine shape mismatch
+still reads a large Fréchet distance after simplification).
+
+Re-ran the full bench and diffed every row's own `frechetPx` before vs.
+after (not just the aggregate -- the exact discipline this correction
+itself is about). Held-out recall corrected from 0.5 to a genuine 1.0 (2/2)
+-- both held-out goldens are now confirmed clean hits, better news than the
+prior checkpoint reported. A bigger surprise turned up in the SAME diff:
+`bessemer-p101-cw-main`'s (Finding 4's) own frechetPx dropped from 260.5px
+to 3.17px -- meaning most of Finding 4's own "shape genuinely diverges"
+framing was this same scorer artifact, not real geometric divergence, even
+though the case's bottom-line conclusion (a recall miss, real over-trace
+past the golden's own span) still holds at the corrected, much smaller
+number. `docs/LINEAR-TRACE-EVAL.md` corrected in place (Run 3's own
+paragraph annotated, not silently edited) plus a new "Run 6" section with
+the full writeup; a new open question added to "honestly scoped as
+remaining": is 3.17px's own residual mismatch real (a parallel similar-size
+line the walk briefly diverges onto) or more of the same noise the fix
+didn't fully absorb.
+
+Measured: `npx tsc --noEmit` clean; all 61 `benchScore.test.ts` tests pass
+(55 prior + 6 new); `bench:linear` passes with held-out now 2/2 and
+development-tier AGGREGATES unchanged (2/8 recall, 0.743 precision -- no
+case crossed a pass/fail threshold, only frechetPx numbers moved on cases
+already correctly classified either way).
+
 2026-09-17 linear takeoff: second held-out golden, a caught mistrace, and a genuine Fréchet-only miss (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Authored the second entry off `reports/LINEAR_HELDOUT.txt`'s frozen list:
 `itd-d1-lab-mechanical.pdf#4` (M1.1), an 8" round duct segment from a real

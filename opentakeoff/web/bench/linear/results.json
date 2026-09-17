@@ -587,7 +587,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 3.3116449999999986
+     "buildMs": 2.89458599999989
     }
    ],
    "aggregate": {
@@ -598,7 +598,7 @@
     "meanLenErrPct": 0.6137211036539896,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 3.3116449999999986,
+    "maxColdBuildMs": 2.89458599999989,
     "maxWarmQueryMs": null
    }
   },
@@ -640,12 +640,12 @@
      "sizeMatch": false,
      "shape": {
       "caseName": "bessemer-mechanical-bidset.pdf#3",
-      "frechetPx": 260.46905099605885,
+      "frechetPx": 3.1675204329116737,
       "lengthOverlapPct": 1,
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 302.87762900000007
+     "buildMs": 307.531978
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -695,12 +695,12 @@
      "sizeMatch": false,
      "shape": {
       "caseName": "itd-d1-lab-mechanical.pdf#5",
-      "frechetPx": 0.6269792703226893,
+      "frechetPx": 0.6265875913745731,
       "lengthOverlapPct": 1,
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 367.74476200000026
+     "buildMs": 363.8185859999994
     },
     {
      "caseName": "weld-county-mechanical-permit.pdf#7",
@@ -719,7 +719,7 @@
       "clippedLenFt": 21.82,
       "goldenLenFt": 21.82
      },
-     "buildMs": 504.0266819999997
+     "buildMs": 510.22309700000005
     }
    ],
    "aggregate": {
@@ -730,7 +730,7 @@
     "meanLenErrPct": 0.30820291345730527,
     "maxOverTracePct": 0.8470464135021097,
     "sizeAccuracyPct": 0.45458333333333334,
-    "maxColdBuildMs": 504.0266819999997,
+    "maxColdBuildMs": 510.22309700000005,
     "maxWarmQueryMs": null
    }
   },
@@ -753,7 +753,7 @@
       "clippedLenFt": 3.57,
       "goldenLenFt": 3.57
      },
-     "buildMs": 1302.9063290000004
+     "buildMs": 1286.1164149999995
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#4",
@@ -767,23 +767,23 @@
      "sizeMatch": true,
      "shape": {
       "caseName": "itd-d1-lab-mechanical.pdf#4",
-      "frechetPx": 9.200000000000045,
+      "frechetPx": 0,
       "lengthOverlapPct": 1,
       "clippedLenFt": 3.02,
       "goldenLenFt": 3.02
      },
-     "buildMs": 887.3921260000006
+     "buildMs": 872.2408109999997
     }
    ],
    "aggregate": {
     "cases": 2,
-    "recall": 0.5,
+    "recall": 1,
     "precision": 1,
     "maxLenErrPct": 0,
     "meanLenErrPct": 0,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 1,
-    "maxColdBuildMs": 1302.9063290000004,
+    "maxColdBuildMs": 1286.1164149999995,
     "maxWarmQueryMs": null
    }
   }

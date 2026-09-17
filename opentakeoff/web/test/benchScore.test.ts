@@ -1,7 +1,7 @@
 // Benchmark scorer — the IoU/aggregate math the corpus gate stands on.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear, polylineLength, projectOntoPolyline, clipPolyline, discreteFrechet, scoreTraceShapeMatch, scoreTraceRecall, scoreTracePrecision, aggregateTrace, scoreRefusalCorrectness, type ProbeScore, type CrossScore, type TraceRunRow, type RefusalRow } from "../bench/score.ts";
+import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear, polylineLength, projectOntoPolyline, clipPolyline, discreteFrechet, simplifyPolyline, scoreTraceShapeMatch, scoreTraceRecall, scoreTracePrecision, aggregateTrace, scoreRefusalCorrectness, type ProbeScore, type CrossScore, type TraceRunRow, type RefusalRow } from "../bench/score.ts";
 import { KNOWN_WALL_SEMANTICS, WALL_SEMANTICS } from "../bench/corpus.ts";
 import type { Point } from "../src/lib/oneclick.ts";
 
@@ -525,6 +525,41 @@ test("scoreTraceShapeMatch: the trace's own walk direction relative to the golde
   const m = scoreTraceShapeMatch("c1", golden, reversedTrace, 1 / 18);
   assert.equal(m.frechetPx, 0);
   assert.equal(m.lengthOverlapPct, 1);
+});
+
+test("simplifyPolyline: collinear interior points are dropped, endpoints always kept", () => {
+  const poly: Point[] = [[0, 0], [10, 0], [20, 0], [30, 0], [100, 0]];
+  assert.deepEqual(simplifyPolyline(poly, 0.5), [[0, 0], [100, 0]]);
+});
+
+test("simplifyPolyline: a real corner well past the tolerance survives", () => {
+  const poly: Point[] = [[0, 0], [50, 0], [100, 0], [100, 50], [100, 100]];
+  assert.deepEqual(simplifyPolyline(poly, 0.5), [[0, 0], [100, 0], [100, 100]]);
+});
+
+test("simplifyPolyline: a sub-tolerance wiggle (jitter, not a real kink) is dropped", () => {
+  const poly: Point[] = [[0, 0], [50, 0.2], [100, 0]];
+  assert.deepEqual(simplifyPolyline(poly, 0.5), [[0, 0], [100, 0]]);
+});
+
+test("simplifyPolyline: fewer than 3 points is returned unchanged", () => {
+  const poly: Point[] = [[0, 0], [100, 0]];
+  assert.equal(simplifyPolyline(poly, 0.5), poly);
+});
+
+test("scoreTraceShapeMatch: a golden authored with 2 vertices vs. a trace_run polyline with several EXTRA nearly-collinear vertices along the exact same straight line scores ~0 Fréchet, not an inflated one — GATE 3 held-out finding (itd-p4-ea-duct-stub, 2026-09-17): LF matched exactly (3.02→3.02) yet raw discreteFrechet on the un-simplified points read 9.2px, purely from vertex-count mismatch, not a real shape difference", () => {
+  const golden: Point[] = [[1554.2, 860.4], [1635.8, 860.4]];
+  const traced: Point[] = [[1554.2, 860.4], [1563.4, 860.4], [1626.7, 860.4], [1631.3, 860.4], [1635.8, 860.4]];
+  const m = scoreTraceShapeMatch("itd-p4-ea-duct-stub", golden, traced, 0.037037037037037035);
+  assert.ok(m.frechetPx < 2, `expected < 2px (the recall gate's own tolerance), got ${m.frechetPx}`);
+  assert.equal(m.lengthOverlapPct, 1);
+});
+
+test("scoreTraceShapeMatch: simplification does not mask a REAL shape mismatch — a genuinely different-shaped trace (a real detour) still scores a large Fréchet distance", () => {
+  const golden: Point[] = [[0, 0], [100, 0]];
+  const detouredTrace: Point[] = [[0, 0], [40, 0], [40, 50], [60, 50], [60, 0], [100, 0]];   // a real out-and-back detour mid-span
+  const m = scoreTraceShapeMatch("c1", golden, detouredTrace, 1 / 18);
+  assert.ok(m.frechetPx > 40, `expected the real 50px detour to still show up, got ${m.frechetPx}`);
 });
 
 function traceRow(over: Partial<TraceRunRow> & { caseName: string }): TraceRunRow {
