@@ -1,5 +1,31 @@
 ## Active work
 
+2026-09-17 linear takeoff: bldg5406-hvac-demo-mechanical.pdf confirmed genuinely blocked, not just unattempted (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Attempted the next declared held-out sheet, `bldg5406-hvac-demo-mechanical.pdf#2`.
+A bare `session.traceRun()` call -- the same lightweight Session API path
+every other held-out sheet this checkpoint used without incident -- did
+NOT complete within 60 seconds on a single cold-index-build call, let
+alone a seed sweep. This independently confirms, via a DIFFERENT code
+path, an already-disclosed environment issue: this project's own history
+already recorded `production-graph-cli.mjs --mode reconcile` hanging 25+
+minutes against this exact PDF. Not a coincidence of one broken CLI
+invocation -- something in this specific file's own vector data makes
+`trace_run`'s own index build pathological, independent of which caller
+drives it.
+
+Not pushed further: no leftover process was left running (confirmed via
+`pgrep` after each timed-out attempt), no escalating-timeout retry was
+tried. `#14` on the same PDF was not attempted at all, for the same
+reason. Both remain declared and frozen in `reports/LINEAR_HELDOUT.txt`
+(updated with this finding), blocked pending a real, separate fix --
+disclosed as blocked, not silently left as "not yet gotten to."
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 14" section and its own priority
+list corrected to say so.
+
+No code changed this pass -- purely a diagnostic finding, so no test run
+or regression suite needed beyond confirming `git status` clean of
+anything but the doc/report updates.
+
 2026-09-17 linear takeoff: fourth held-out golden -- a clean 4/4; a fifth sheet attempted and set aside (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Authored the fourth entry off `reports/LINEAR_HELDOUT.txt`'s frozen list:
 `baker-county-eoc-bidset.pdf#38` (M1.01), a 24x14 rectangular SA duct

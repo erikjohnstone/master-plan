@@ -53,7 +53,21 @@
 # crop. Neither was trustworthy enough to author as ground truth; set aside
 # rather than forced, per this corpus's own repeated discipline.
 #
-# The other two (bldg5406-hvac-demo-mechanical.pdf#2/#14) are declared and
-# frozen but not yet attempted; a representative pass, not an exhaustive
-# one -- matching this corpus's own repeated "one run/one sheet, not the
-# whole set, per pass" precedent.
+# bldg5406-hvac-demo-mechanical.pdf#2 (AC-1 -- sheetInfo's own sheet_number
+# reads "AC-1", not "M-101" as this file's own parenthetical names it; the
+# PAGE the plan pins, 2, is unambiguous and unaffected by that label
+# mismatch) was ATTEMPTED and BLOCKED, not merely set aside: a bare
+# session.traceRun() call -- the same lightweight Session API path every
+# other held-out sheet in this file used without incident -- did not
+# complete within 60 seconds on a single cold-index-build call, let alone a
+# seed sweep. This independently confirms, via a DIFFERENT code path, an
+# already-disclosed environment issue with this exact PDF (this project's
+# own PROGRESS.md already recorded mcp/scripts/production-graph-cli.mjs
+# hanging 25+ minutes against this same file in --mode reconcile). Not
+# pushed further: no leftover process was left running (confirmed via
+# `pgrep` after each timed-out attempt), and no further sweep or timeout
+# escalation was tried against this specific PDF. #14 was not attempted at
+# all, for the same reason. Both remain declared and frozen, blocked
+# pending a real fix to whatever in this PDF's own vector data makes
+# `trace_run`'s own index build pathological -- separate, disclosed,
+# out-of-scope work, not a GATE-3-authoring gap to keep retrying.
