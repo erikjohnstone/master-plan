@@ -576,8 +576,8 @@ export default function TakeoffDataPanel({
           <button type="button" onClick={() => runExport("pdf")} disabled={exportDisabled || !!busy}
             title={corpusMeta?.bas_math ? completeBasRun ? "Consolidated takeoff rows. Use Export BAS JSON for reviewed engineering results." : "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
             style={{ ...btnStyle, marginTop: 4 }}>{busy === "pdf" ? "…" : corpusMeta?.bas_math && !completeBasRun ? "Rows PDF" : "PDF"}</button>
-          {corpusMeta?.kind === "control_valves" && (
-            <button type="button" onClick={runExportToHit} disabled={!canExportToHit || hitBusy}
+          {canExportToHit && (
+            <button type="button" onClick={runExportToHit} disabled={hitBusy}
               title="Fill the Siemens Global Valves mass-sizing template (HIT) from this compiled valve takeoff — a separate .xlsx from the takeoff exports above."
               style={{
                 ...btnStyle, marginTop: 4, marginLeft: 10, paddingLeft: 24,
