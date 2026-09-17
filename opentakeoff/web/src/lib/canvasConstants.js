@@ -62,6 +62,7 @@ export const MEASURE_TOOLS = [
   { id: "surface", icon: "surface", label: "Surface Area", shortcut: "S" },
   { id: "count", icon: "count", label: "Count", shortcut: "C" },
   { id: "symbol", icon: "symbol", label: "Symbol — marquee ONE instance, count every placement", shortcut: "Y" },
+  { id: "trace", icon: "trace", label: "Trace — click a drawn duct/pipe line, it reads the run and its size", shortcut: "T" },
 ];
 export const CUT_TOOLS = [
   { id: "deduct", icon: "deduct", label: "Deduct shape", shortcut: "D" },

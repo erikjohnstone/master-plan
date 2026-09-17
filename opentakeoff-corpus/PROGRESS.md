@@ -1,5 +1,84 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.7 checkpoint, canvas half (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Trace mode in `TakeoffCanvas.jsx`: "hover highlight of the candidate run + chip
+(size · system · LF · fittings ahead); click stages a dashed proposal; Q
+accepts the read size; Accept pill inks; refusal drops to manual keeping the
+seed" (goal doc, verbatim). Completes WP3.7 — the MCP half (classify_strokes/
+trace_run) shipped in the prior checkpoint.
+
+Researched the existing 14,000-line file's own conventions with an Explore
+agent before writing anything: the tool-mode dispatch table, One-Click's own
+hover→stage→accept precedent (`buildOneClickRegion`/`proposeRegion`), the
+`netWorker`/`netCall` off-main-thread pattern, the keyboard-shortcut
+registry, and the generic Accept-pill mechanism — so Trace mode reuses
+these exactly rather than inventing a parallel UI pattern. Confirmed live
+in a real browser (Playwright against the running dev server, real Bessemer
+M101 sample data) rather than assumed from reading code alone.
+
+**New "T" tool** (`web/src/brand/icons.jsx`'s own `trace` glyph — a dashed
+run with a seed ring, distinct from `linear`'s solid line + filled vertex
+dots; `web/src/lib/canvasConstants.js`'s `MEASURE_TOOLS`). Same pure engine
+`mcp/src/session.ts`'s tools already wrap (strokes/index/graph/walk/sizes/
+receipt) — "canvas and MCP cannot disagree."
+
+- `ensureTraceIndex(tp)` — builds/caches `strokes.ts`'s `classifyStrokes` +
+  `index.ts`'s `buildSegmentIndex` per (sheet, scale) in a NEW `traceWorker`
+  (mirroring `netWorker`/`netCall` exactly — plan §6.10 groups this exact
+  pairing off-main-thread), with the SAME "Reading this sheet's strokes… N
+  s" ticking status message pattern One-Click's own net-engine build uses.
+- `runTraceAt(tp, local, bundle)` — the shared trace-and-associate core
+  (`buildOneClickRegion`'s own "one function, hover and click both call it"
+  precedent): `nearestSegment` → `walkBothDirections` → `associateLabel`
+  (every text span on the sheet, cheap for the ~99% that aren't sizes —
+  `parseSize` refuses before any geometry work) with
+  `leaderTerminalPointsForLabel` wired in → `resolveSizeConflicts` →
+  `buildTraceReceipt`.
+- `traceHoverAt`/`traceAt` — live preview (mousemove, unstaged, green
+  dashed) and the staged click (blue dashed, Q-accepts) respectively; both
+  render the goal doc's own chip format via `traceChipText`.
+- `acceptTraceProposal` (Q key) — commits through the SAME `dispatchShape`
+  gate every other tool uses, `origin.method:"traced"`, `reviewed:false`,
+  the full `buildTraceReceipt` output riding under `origin.trace` — no new
+  Accept-pill code needed AT ALL: `pendingCommitted`/`acceptPendingShapes`
+  already pick up any `origin.reviewed === false` shape generically.
+- A hard refusal (goal doc: "refusal drops to manual keeping the seed")
+  calls `setTool("linear")` and seeds `poly` with the exact clicked point
+  (never `clearPoly()`'d) — the estimator continues the SAME run by hand
+  from the SAME point, one Linear-tool click away from finishing it.
+
+One deliberate, documented simplification: the canvas has no per-sheet
+cache of `dash`/`strokeRgb` yet (the existing `vectorSegsRef`/`segMetaRef`/
+`segLumRef`/`subpathsRef` extraction call sites never read those two
+fields out). Rather than touch those heavily-shared call sites for a
+marginal family-grouping improvement, `ensureTraceIndex` passes them as
+null — real corpus sheets separate duct/pipe pens cleanly by weight alone
+(plan §3.1's own findings), so this rarely matters in practice.
+
+**Live-verified end to end** (Playwright against the real dev server and
+the real Bessemer M101 sample, not assumed from code review): armed the
+tool (T), confirmed the status-bar hint text, hovered a real drawn duct
+stub and saw the green dashed highlight + chip ("size withheld · 3.17 LF
+· 1 fitting ahead"), clicked to stage the blue dashed proposal, pressed Q
+and confirmed a real shape committed (condition total updated to 3.2 LF,
+"1 shapes on sheet"), clicked the pre-existing generic Accept pill and
+confirmed "pencil is now ink" — zero new code exercised there, exactly as
+designed. Separately verified: Escape on a staged proposal discards it
+(0 shapes after), and clicking the SAME sheet's own wall-vouch-excluded
+Unit-103-trunk segment (the real, already-documented WP3.4 limitation —
+confirmed BY THIS test to be the exact segment nearest that real duct
+line) produces the exact plan §6.8 refusal text and drops cleanly into
+the Linear tool with the seed point kept. Zero console errors/exceptions
+across every scenario.
+
+Verified: `npx tsc --noEmit` clean; `npx eslint` on the three touched
+files: 0 errors (3 pre-existing, unrelated warnings, none near the new
+code); web's full regression suite confirmed against the standing
+70-fail/13-cancelled/13-skipped baseline (no new automated tests — this
+is a React/DOM UI feature with no existing TakeoffCanvas.jsx unit-test
+precedent; verification is the live-browser session above, per this
+project's own convention for UI work).
+
 2026-09-17 linear takeoff WP3.7 checkpoint, MCP half (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 `classify_strokes` + `trace_run`, the two new MCP tools plan §3.2's file
 tree names for this checkpoint. The Canvas Trace mode UI (the other half

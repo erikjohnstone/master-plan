@@ -110,7 +110,17 @@ import { findLegendGlyphs, findGlyphNear, legendLearnStatus } from "../lib/legen
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
 import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
-import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
+import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, leaderTerminalPointsForLabel } from "../lib/symbollabels";
+// #linear-takeoff WP3.7 (canvas half, plan §6.2-§6.8): the SAME pure trace-
+// engine mcp/src/session.ts's classify_strokes/trace_run tools already wrap
+// — "canvas and MCP cannot disagree" (AGENTS.md). nearestSegment/walkBoth
+// Directions/associateLabel/buildTraceReceipt run synchronously on the main
+// thread (plan §6.10's own click-to-walk budget), against an index the
+// linear/worker.ts worker below builds once per (sheet, scale) off-thread.
+import { nearestSegment, hitTolerancePx, deserializeSegmentIndex } from "../lib/linear/index.ts";
+import { walkBothDirections } from "../lib/linear/walk.ts";
+import { associateLabel, resolveSizeConflicts } from "../lib/linear/sizes.ts";
+import { buildTraceReceipt, REFUSAL_NO_LINEWORK, REFUSAL_NO_STROKE_FAMILY, sizeConflictRefusal } from "../lib/linear/receipt.ts";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
 // is set) — the owner's call, 2026-08-24: it serves no purpose on the sheet.
@@ -123,6 +133,17 @@ const netPending = new Map();   // req → {resolve}
 let netReq = 0;
 if (netWorker) netWorker.onmessage = (ev) => { const m = ev.data; const p = netPending.get(m.req); if (p) { netPending.delete(m.req); p.resolve(m); } };
 function netCall(msg) { return new Promise((resolve) => { const req = ++netReq; netPending.set(req, { resolve }); netWorker.postMessage({ ...msg, req }); }); }
+// #linear-takeoff WP3.7: the trace engine's own stroke-classification +
+// spatial-index build (linear/worker.ts, WP3.1/WP3.2) — same off-main-thread
+// shape as netWorker/netCall immediately above, deliberately: plan §6.10
+// groups this exact pairing ("stroke classification + R-tree + endpoint
+// hash | worker, once per sheet"), and it is real, if far cheaper, work
+// (no JTS noding) that a live hover/click must not block the page for.
+const traceWorker = typeof Worker !== "undefined" ? new Worker(new URL("../lib/linear/worker.ts", import.meta.url), { type: "module" }) : null;
+const tracePending = new Map();
+let traceReq = 0;
+if (traceWorker) traceWorker.onmessage = (ev) => { const m = ev.data; const p = tracePending.get(m.req); if (p) { tracePending.delete(m.req); p.resolve(m); } };
+function traceCall(msg) { return new Promise((resolve) => { const req = ++traceReq; tracePending.set(req, { resolve }); traceWorker.postMessage({ ...msg, req }); }); }
 import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS } from "../lib/rastermask";
 // PDF layer roles (#85): the pure name→role classifier and the override
 // plumbing shared with the MCP session — the canvas consumes buildMask's
@@ -628,6 +649,15 @@ export default function TakeoffCanvas() {
   }
   const [guideOpen, setGuideOpen] = useState(false);   // the in-app manual overlay (? / the toolbar button)
   const [proposal, setProposal] = useState(null);  // One-Click selection under review: { key, regions: [{kind:'pos'|'neg', seed, poly, area_sf, perim_lf}] } — panel-LOCAL px
+  // #linear-takeoff WP3.7 (canvas Trace mode): a staged single-run trace,
+  // Q-accepted like One-Click's own ⏎-accepted `proposal` above — panel-LOCAL
+  // (hi-res) px points, plus the read size/system/LF/confidence for the chip.
+  const [traceProposal, setTraceProposal] = useState(null);
+  // The live hover preview under the cursor while armed and unstaged —
+  // recomputed on mousemove against the already-built index (synchronous,
+  // plan §6.10's own click-to-walk budget), cleared the moment a proposal
+  // stages or the tool changes.
+  const [traceHover, setTraceHover] = useState(null);
   // ── in-canvas takeoff agent state ──────────────────────────────────────────
   // agentProposals are NOT shapes: committed truth stays committed. Each entry
   // {id, sheet_id, condition_id, measure_role, verts_norm, evidence, seed_norm?,
@@ -880,6 +910,10 @@ export default function TakeoffCanvas() {
   const netEngine = true;
   const netCacheRef = useRef(new Map());   // `${sheetKey}:${upp}` → built net
   const netTickRef = useRef(null);          // ticking "reading the walls… N s" timer
+  // #linear-takeoff WP3.7: the trace engine's own per-(sheet,scale) index —
+  // same cache-by-identity shape as netCacheRef immediately above.
+  const traceIndexCacheRef = useRef(new Map());   // `${sheetKey}:${ftPx}` → Promise<{index, families}>
+  const traceTickRef = useRef(null);               // ticking "reading the strokes… N s" timer
   // No mode dial (his call, 2026-08-24: "too technical for users"). A click
   // is a room (walls + doors + drawn finish transitions); ⇧-click is the
   // finish FIELD — grow across the same tile/plank pattern, stop where it
@@ -1150,6 +1184,7 @@ export default function TakeoffCanvas() {
   // since moved on.
   const toolRef = useRef(tool);
   const proposalRef = useRef(proposal);
+  const traceProposalRef = useRef(null);   // #linear-takeoff WP3.7 — same stale-closure guard as proposalRef
   const hydrated = useRef(false);
   const annotationGenerationRef = useRef(null);
   const annotationConflictRef = useRef(false);
@@ -2178,6 +2213,7 @@ export default function TakeoffCanvas() {
   useEffect(() => { viewRef.current = view; }, [view]);
   useEffect(() => { toolRef.current = tool; }, [tool]);
   useEffect(() => { proposalRef.current = proposal; }, [proposal]);
+  useEffect(() => { traceProposalRef.current = traceProposal; }, [traceProposal]);
   // Tab hidden ⇒ the voice-deixis aim dies: on return the tracked position
   // predates the refocus (rAF suspended, the pointer may be anywhere), so
   // "this room" must wait for a fresh move — the stale-aim bar (RFC #59).
@@ -3344,6 +3380,10 @@ export default function TakeoffCanvas() {
       // would abandon the points already placed, so this binding can only be
       // an improvement on the one it shadows.
       if (lower === "q" && CURVABLE.has(tool) && poly.length) { setCurveMode((c) => !c); return; }
+      // #linear-takeoff WP3.7: Q accepts the read size on a staged Trace
+      // proposal (goal doc, verbatim) — takes priority over the map lookup
+      // below, which has no `q` binding of its own to shadow.
+      if (lower === "q" && tool === "trace" && traceProposal) { e.preventDefault(); acceptTraceProposal(); return; }
       // Symbol review (#264): while a sweep is under review the keyboard walks
       // the questions — one keystroke per answer, taking priority over tool
       // bindings (stopImmediatePropagation keeps the proposal-Enter handler,
@@ -3374,14 +3414,14 @@ export default function TakeoffCanvas() {
         }
         if (e.key === "Escape") { e.preventDefault(); e.stopImmediatePropagation(); setSweep(null); return; }
       }
-      const map = { v: "select", a: "area", r: "rect", l: "linear", s: "surface", c: "count", d: "deduct", o: "oneclick", k: "check", h: "highlighter", n: "dimension", y: "symbol" };
+      const map = { v: "select", a: "area", r: "rect", l: "linear", s: "surface", c: "count", d: "deduct", o: "oneclick", k: "check", h: "highlighter", n: "dimension", y: "symbol", t: "trace" };
       const t = map[lower];
       if (t) setTool(t);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tool, poly, proposal, agentProposals, activeCond, sheetGroup, sheetKey, shapes, scales]);
+  }, [tool, poly, proposal, traceProposal, agentProposals, activeCond, sheetGroup, sheetKey, shapes, scales]);
   // ^ shapes/scales joined the deps with the agent accept path (the delete-handler
   //   precedent): ⏎ accept dispatches an `add` against the CURRENT array, so a
   //   shapes change with no other dep change must re-subscribe this handler.
@@ -3434,7 +3474,7 @@ export default function TakeoffCanvas() {
         // tool's points, on-screen or hidden
         else if (tool === "calibrate") { setCalib((c) => c.slice(0, -1)); }
         else if (tool === "check") { setCheck((c) => c.slice(0, -1)); }
-      } else if (e.key === "Escape") { if (segMenu) { setSegMenu(null); } else if (agentOfferFnsRef.current?.pending()) { agentOfferFnsRef.current.dismiss(); } else if (ocSel) { setOcSel(null); } else if (selVert != null) { setSelVert(null); } else { if (tool === "linear" && poly.length === 0) setTool("select"); /* #linear-takeoff WP1.3: "Esc leaves" — nothing left to cancel, so leave the tool itself */ clearPoly(); setCalib([]); setCheck([]); setCheckStated(""); setScaleGuide(null); selectShape(null); setMarkupDraft(null); setProposal(null); setArmedStamp(null); setScheduleAnchor(null); setSymbolAnchor(null); setImageAnchor(null); setPlacingImageId(null); placeGrabRef.current = null; placeCrossSheetRef.current = null; setAlignPt(null); resetZone(); hlRef.current = null; if (hlPathRef.current) hlPathRef.current.style.display = "none"; } }
+      } else if (e.key === "Escape") { if (segMenu) { setSegMenu(null); } else if (agentOfferFnsRef.current?.pending()) { agentOfferFnsRef.current.dismiss(); } else if (ocSel) { setOcSel(null); } else if (selVert != null) { setSelVert(null); } else { if ((tool === "linear" && poly.length === 0) || (tool === "trace" && !traceProposal)) setTool("select"); /* #linear-takeoff WP1.3/WP3.7: "Esc leaves" — nothing left to cancel, so leave the tool itself */ clearPoly(); setCalib([]); setCheck([]); setCheckStated(""); setScaleGuide(null); selectShape(null); setMarkupDraft(null); setProposal(null); setTraceProposal(null); setTraceHover(null); setArmedStamp(null); setScheduleAnchor(null); setSymbolAnchor(null); setImageAnchor(null); setPlacingImageId(null); placeGrabRef.current = null; placeCrossSheetRef.current = null; setAlignPt(null); resetZone(); hlRef.current = null; if (hlPathRef.current) hlPathRef.current.style.display = "none"; } }
       // ⌘Z: the drawing context wins — mid-trace it still pops the last placed
       // point (with or without ⇧, matching the old behavior byte-for-byte);
       // only with no trace in progress does the command stack engage
@@ -3453,7 +3493,7 @@ export default function TakeoffCanvas() {
     return () => window.removeEventListener("keydown", onKey);
     // approvals is a real dep: ⌘Z's undoShapeCommand closes over it (the
     // family branch), and a stale capture would undo against a pre-seal array.
-  }, [tool, selectedId, selVert, selectedMarkupId, showMarkups, poly, proposal, ocSel, shapes, approvals, sheetKey, groupSig, scales, focusKey, segMenu]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [tool, selectedId, selVert, selectedMarkupId, showMarkups, poly, proposal, traceProposal, ocSel, shapes, approvals, sheetKey, groupSig, scales, focusKey, segMenu]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The typed "drawing says" value belongs to ONE completed two-point check.
   // The moment the measurement is no longer complete — third-click restart,
@@ -3585,6 +3625,11 @@ export default function TakeoffCanvas() {
     if (tool === "calibrate") setCalib((c) => (c.length >= 2 ? [p] : [...c, p]));
     else if (tool === "check") setCheck((c) => (c.length >= 2 ? [p] : [...c, p]));
     else if (tool === "oneclick") oneClickAt(p, !!(ev && ev.altKey), undefined, !!(ev && ev.shiftKey));
+    // #linear-takeoff WP3.7: a click while armed (and no proposal already
+    // staged — a second click mid-review does nothing, matching One-Click's
+    // own click-inside-a-proposal no-op) stages a trace, never accumulates
+    // points the way area/linear/surface do.
+    else if (tool === "trace" && !traceProposal) traceAt(p);
     // ⌥-click on an area/deduct trace drops a CURVE point (#284): the boundary
     // bends through it instead of turning a corner at it. Every other
     // point-placing tool takes the click as it always has.
@@ -4437,6 +4482,11 @@ export default function TakeoffCanvas() {
     // handles on the region under the cursor. Both work in panel-LOCAL px.
     if (ocDragRef.current) { ocDragMove(e); return; }
     if (tool === "oneclick" && proposal && !panRef.current && !pendingClickRef.current) ocHoverUpdate(e);
+    // #linear-takeoff WP3.7: live hover highlight while armed and unstaged —
+    // buildOneClickRegion's own "trace-then-render" precedent, just without a
+    // staged proposal yet. Skipped once a proposal is staged (nothing to
+    // preview past that point) or mid-pan/mid-click.
+    if (tool === "trace" && !traceProposal && !panRef.current && !pendingClickRef.current) traceHoverAt(toImage(e.clientX, e.clientY));
     if (dragRef.current) {
       const d = dragRef.current;
       // dragRef is armed only by selectAt (Select tool), where snapRef is stale
@@ -5521,6 +5571,187 @@ export default function TakeoffCanvas() {
       : "That space wasn't fully enclosed — a small opening (a doorway or line gap) was sealed to bound it. Review the edge, then ⏎ creates.");
     else if (f.minPassDelta) setCommitMsg(`A passage under ${MIN_PASS_FT} ft wide was treated as not connecting — measuring through it would have added ${Math.round(f.minPassDelta * 100)}% more area. Review that edge, then ⏎ creates.`);
     else setCommitMsg("");
+  }
+  // ── Trace mode (#linear-takeoff WP3.7) ──────────────────────────────────────
+  // Same pure engine mcp/src/session.ts's classify_strokes/trace_run tools
+  // wrap (strokes.ts/index.ts/graph.ts/walk.ts/sizes.ts/receipt.ts) — this
+  // canvas half and the MCP server can never disagree about what a click
+  // traces to. The index (stroke families + spatial structure) builds ONCE
+  // per (sheet, scale) in traceWorker, off the main thread; every actual
+  // query — nearestSegment, walkBothDirections, associateLabel,
+  // buildTraceReceipt — runs synchronously on the main thread against that
+  // built index, matching plan §6.10's own budget split exactly.
+  //
+  // One deliberate, documented simplification for this checkpoint: the
+  // canvas has no per-sheet cache of `dash`/`strokeRgb` yet (only
+  // `vectorSegsRef`/`segMetaRef`/`segLumRef`/`subpathsRef` — dash/strokeRgb
+  // were never read out at the existing extraction call sites). Rather than
+  // touch those heavily-shared call sites for a marginal family-grouping
+  // improvement, this build passes dash/strokeRgb as null — classifyStrokes
+  // groups purely by pen/layer/luminance here, same as a sheet with no
+  // per-segment dash/colour data at all. A real, disclosed limitation, not
+  // a silent one: real corpus sheets separate duct/pipe pens cleanly by
+  // WEIGHT alone (plan §3.1's own findings), so this rarely matters in
+  // practice, and nothing stops a later checkpoint adding those two caches.
+  async function ensureTraceIndex(tp) {
+    const segs = vectorSegsRef.current.get(tp.key);
+    const meta = segMetaRef.current.get(tp.key);
+    if (!segs || !meta) return null;
+    const upp = uppFor(tp.key);
+    const kF = RENDER_SCALE / (renderScalesRef.current.get(tp.key) || RENDER_SCALE);
+    const ftPx = upp ? kF / upp : 0;
+    const ck = `${tp.key}:${ftPx.toFixed(4)}`;
+    let built = traceIndexCacheRef.current.get(ck);
+    if (!built) {
+      if (!traceWorker) return null;
+      const geo = layerGeoRef.current.get(tp.key);
+      const infos = layerInfosRef.current.get(tp.key);
+      const roleCodes = rolesForSheet(tp.key);
+      const layerSignal = mepLayerSignal(infos, geo?.layerOf);
+      const t0 = Date.now();
+      setCommitMsg("Reading this sheet's strokes… 0 s — the first trace on a sheet classifies its linework; the page stays live.");
+      const tick = setInterval(() => setCommitMsg(`Reading this sheet's strokes… ${Math.round((Date.now() - t0) / 1000)} s — the first trace on a sheet classifies its linework; the page stays live.`), 1000);
+      traceTickRef.current = tick;
+      built = traceCall({
+        type: "build", key: ck, segs, meta, roleCodes, layerSignal, ftPx,
+        subpaths: subpathsRef.current.get(tp.key) || null,
+        lum: segLumRef.current.get(tp.key) || null,
+        layerOf: geo?.layerOf || null, layerIds: geo?.layerIds || null, layers: infos || null,
+      }).then((m) => {
+        if (m.error) { traceIndexCacheRef.current.delete(ck); throw new Error(m.error); }
+        const family = m.family ? new Int16Array(m.family) : null;
+        const index = deserializeSegmentIndex(segs, meta, family, m);
+        return { index, families: m.families };
+      }).finally(() => { if (traceTickRef.current === tick) { clearInterval(tick); traceTickRef.current = null; } });
+      traceIndexCacheRef.current.set(ck, built);
+    }
+    return built;
+  }
+  // The shared trace-and-associate core (buildOneClickRegion's own
+  // precedent): hover preview and the staged click both call this, so a
+  // highlighted run and the one that stages can never disagree. `local` is
+  // panel-LOCAL, hi-res (current render scale) px — the click/mousemove
+  // frame; converted to baseline px (the engine's own frame) via `kF`, the
+  // SAME conversion One-Click's net-engine branch already uses. Returns
+  // `{ refusal }` on a hard, pre-walk refusal, else the full account.
+  function runTraceAt(tp, local, bundle) {
+    const { index, families } = bundle;
+    const upp = uppFor(tp.key);
+    const kF = RENDER_SCALE / (renderScalesRef.current.get(tp.key) || RENDER_SCALE);
+    const bx = local[0] * kF, by = local[1] * kF;
+    if (!families.length) return { refusal: REFUSAL_NO_STROKE_FAMILY };
+    const hit = nearestSegment(index, bx, by, hitTolerancePx(tfRef.current.scale, 0));
+    if (!hit) return { refusal: REFUSAL_NO_LINEWORK };
+    const geo = layerGeoRef.current.get(tp.key);
+    const ftPx = upp ? kF / upp : 0;
+    const walk = walkBothDirections(index, hit.seg, ftPx, { dash: null, layerOf: geo?.layerOf || null });
+    const walkedSegs = new Set(walk.segs);
+
+    const spans = textSpansRef.current.get(tp.key) || [];
+    const pairs = [];
+    for (const sp of spans) {
+      const leaderPoints = leaderTerminalPointsForLabel(sp, spans, index.segs, segLumRef.current.get(tp.key) || null);
+      const binding = associateLabel(index, { text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, rotDeg: sp.rot }, ftPx, { leaderPoints });
+      if (binding) pairs.push({ span: sp, binding });
+    }
+    const allBindings = pairs.map((pr) => pr.binding);
+    const spanByBinding = new Map(pairs.map((pr) => [pr.binding, pr.span]));
+    const { conflicts } = resolveSizeConflicts(allBindings);
+    const family = families[index.family ? index.family[hit.seg] : -1];
+    const scaleConfirmed = !!upp && scales[tp.key]?.confirmed !== false;
+    const origin = buildTraceReceipt(index, { seg: hit.seg, x: hit.px, y: hit.py }, walk, family, allBindings, conflicts, {
+      scaleConfirmed, labelText: (b) => spanByBinding.get(b),
+    });
+    const bestLabel = origin.trace.labels.find((l) => !l.withheld);
+    const runConflicts = conflicts.filter((c) => walkedSegs.has(c.seg));
+    // panel-LOCAL hi-res px, for rendering — the inverse of the bx/by conversion above.
+    const points = walk.points.map(([x, y]) => [x / kF, y / kF]);
+    const vertices = walk.vertices.map((v) => ({ ...v, x: v.x / kF, y: v.y / kF }));
+    const length_lf = upp ? +(walk.length * upp).toFixed(2) : null;
+    return { origin, points, vertices, size: bestLabel?.size || null, systems: bestLabel?.systems || (family.system ? [family.system] : []), length_lf, withheld: runConflicts, seedPoint: local };
+  }
+  // Chip text (goal doc: "size · system · LF · fittings ahead") — fittings
+  // ahead is the vertex count the walk actually recorded (elbow/tee/
+  // crossing), the only "what's coming up" signal this stage's walk carries.
+  function traceChipText(res) {
+    const size = res.size ? sizeLabel(res.size) : "size withheld";
+    const sys = res.systems?.length ? res.systems.join("/") : null;
+    const lf = res.length_lf != null ? `${res.length_lf} LF` : null;
+    const fittings = res.vertices.length;
+    return [size, sys, lf, fittings > 0 ? `${fittings} fitting${fittings === 1 ? "" : "s"} ahead` : null].filter(Boolean).join(" · ");
+  }
+  async function traceHoverAt(p) {
+    const tp = panelAt(p[0]);
+    if (!uppFor(tp.key)) { setTraceHover(null); return; }
+    const local = [p[0] - tp.xOffset, p[1]];
+    const bundle = await ensureTraceIndex(tp);
+    if (!bundle) { setTraceHover(null); return; }
+    if (toolRef.current !== "trace" || traceProposalRef.current) return;
+    const res = runTraceAt(tp, local, bundle);
+    if (res.refusal) { setTraceHover(null); return; }
+    setTraceHover({ key: tp.key, points: res.points, chip: traceChipText(res) });
+  }
+  // Click stages a dashed proposal (goal doc). A hard refusal drops to the
+  // manual Linear tool WITH THE SEED KEPT — poly seeds with this exact
+  // click, not cleared, mirroring commitLinear's own "Esc leaves, nothing
+  // to cancel" doctrine in reverse: there IS something to keep going from.
+  async function traceAt(p) {
+    const tp = panelAt(p[0]);
+    const upp = uppFor(tp.key);
+    if (!upp) { setCommitMsg(`Set the scale for ${labelFor(tp)} first.`); return; }
+    if (!activeCond) { setCommitMsg("Pick or add a condition first."); return; }
+    const local = [p[0] - tp.xOffset, p[1]];
+    await ensureTextSpans(tp.key);
+    const bundle = await ensureTraceIndex(tp);
+    if (!bundle) {
+      setCommitMsg("This sheet has no vector linework (likely a scan) — trace manually, or use raster-assisted snapping once available.", "refusal");
+      return;
+    }
+    if (toolRef.current !== "trace") return;   // tool changed while the index/spans awaited
+    const res = runTraceAt(tp, local, bundle);
+    if (res.refusal) {
+      setTraceHover(null);
+      setTool("linear");
+      setPoly([p]);
+      setCommitMsg(`${res.refusal} — or trace it with Linear (L).`, "refusal");
+      return;
+    }
+    setTraceHover(null);
+    setTraceProposal({ key: tp.key, sheet: tp, ...res });
+    const withheldNote = res.withheld.length ? ` — ${sizeConflictRefusal(res.withheld[0])}` : "";
+    const lenNote = res.length_lf != null ? `${res.length_lf} LF` : `${Math.round(openLen(res.points))} px (no scale set)`;
+    setCommitMsg(`Traced ${lenNote}${res.size ? `, ${sizeLabel(res.size)}` : ""}${withheldNote} — Q accepts the read size, Esc discards.`);
+  }
+  // Q-accept (goal doc: "Q accepts the read size") — commits the staged
+  // proposal exactly like measure_line's own routed-condition seed, but
+  // stamped origin.method:"traced" with the FULL receipt riding on
+  // origin.trace, through the SAME dispatchShape gate every other commit
+  // uses. reviewed:false — pencil until the generic Accept pill inks it
+  // (pendingCommitted/acceptPendingShapes, unchanged: any origin.reviewed
+  // === false shape already renders dashed and gates that pill).
+  function acceptTraceProposal() {
+    const tp = traceProposalRef.current;
+    if (!tp) return;
+    const { sheet, points, origin, size, systems } = tp;
+    const upp = uppFor(sheet.key);
+    const run = {};
+    if (systems?.length) run.system = systems.join("/");
+    if (size) run.size_overrides = { "0": size };
+    const computed = { area_sf: 0, perimeter_lf: +(openLen(points) * upp).toFixed(2) };
+    if (Object.keys(run).length) {
+      const resolved = resolveRunSegments(points, upp, run);
+      if (resolved) computed.run = resolved;
+    }
+    dispatchShape({ type: "add", shapes: [{
+      sheet_id: sheet.key, condition_id: activeCond, measure_role: "linear",
+      verts_norm: points.map(([x, y]) => [(x - sheet.xOffset) / sheet.img.w, y / sheet.img.h]),
+      computed,
+      ...(Object.keys(run).length ? { run } : {}),
+      ...(activeLabel ? { label: activeLabel } : {}),
+      origin: { method: "traced", actor: "agent", reviewed: false, confidence: origin.confidence, confidence_factors: origin.confidence_factors, trace: origin.trace },
+    }] });
+    setTraceProposal(null);
+    setCommitMsg("Traced run committed — dashed until you Accept (⌘Z undoes it).");
   }
   // `direct` (voice deixis, RFC #59): { conditionId, label } — the human aimed
   // the crosshair, so the flood COMMITS in one step through settleRegion →
@@ -12882,6 +13113,51 @@ export default function TakeoffCanvas() {
                       </g>
                       );
                     })}
+                    {/* #linear-takeoff WP3.7: Trace mode's own live hover highlight
+                        (unstaged, follows the cursor) and staged proposal (post-
+                        click, Q-accepts) — panel-LOCAL hi-res px already, same
+                        frame agent proposals render in just above. Distinct
+                        dash/colour from One-Click's own selection so the two
+                        proposal kinds never read as the same thing. */}
+                    {traceHover && traceHover.key === p.key && (() => {
+                      const s = tf.scale;
+                      return (
+                        <g opacity={0.75}>
+                          <polyline points={traceHover.points.map((q) => q.join(",")).join(" ")}
+                            fill="none" stroke="#0a8f5b" strokeWidth={3 / s} strokeDasharray={`${5 / s} ${3 / s}`} strokeLinecap="round" strokeLinejoin="round" />
+                          {traceHover.chip && (() => {
+                            const [cx, cy] = traceHover.points[Math.floor(traceHover.points.length / 2)] || traceHover.points[0];
+                            const w = Math.min(traceHover.chip.length * 6.2, 320) / s, h = 20 / s;
+                            return (
+                              <g transform={`translate(${cx}, ${cy - 14 / s})`}>
+                                <rect x={-w / 2} y={-h} width={w} height={h} rx={h / 3} fill="#0a8f5b" opacity={0.92} />
+                                <text x={0} y={-h / 2} textAnchor="middle" dominantBaseline="central" fontSize={11 / s} fill="#fff">{traceHover.chip}</text>
+                              </g>
+                            );
+                          })()}
+                        </g>
+                      );
+                    })()}
+                    {traceProposal && traceProposal.key === p.key && (() => {
+                      const s = tf.scale;
+                      const chip = traceChipText(traceProposal);
+                      const [cx, cy] = traceProposal.points[Math.floor(traceProposal.points.length / 2)] || traceProposal.points[0];
+                      const w = Math.min(chip.length * 6.2, 320) / s, h = 20 / s;
+                      return (
+                        <g>
+                          <polyline points={traceProposal.points.map((q) => q.join(",")).join(" ")}
+                            fill="none" stroke="#1f3fc7" strokeWidth={3.5 / s} strokeDasharray={`${7 / s} ${4 / s}`} strokeLinecap="round" strokeLinejoin="round" />
+                          <path d={starPath(traceProposal.seedPoint[0], traceProposal.seedPoint[1], 5 / s)} fill="#1f3fc7" stroke="#fff" strokeWidth={1 / s} />
+                          {(traceProposal.vertices || []).map((v, k) => (
+                            <circle key={"tv" + k} cx={v.x} cy={v.y} r={4 / s} fill="#1f3fc7" stroke="#fff" strokeWidth={1 / s} />
+                          ))}
+                          <g transform={`translate(${cx}, ${cy - 16 / s})`}>
+                            <rect x={-w / 2} y={-h} width={w} height={h} rx={h / 3} fill="#1f3fc7" opacity={0.95} />
+                            <text x={0} y={-h / 2} textAnchor="middle" dominantBaseline="central" fontSize={11 / s} fill="#fff">{chip}</text>
+                          </g>
+                        </g>
+                      );
+                    })()}
                     {/* Agent proposals — DASHED pencil pending the accept gate. A
                         finer dash than one-click's selection so the two proposal
                         kinds read apart; the seed star marks the flood seed. The
@@ -13449,7 +13725,7 @@ export default function TakeoffCanvas() {
               );
             })()
           ) : (
-            <div style={{ fontSize: 12.5, opacity: 0.6 }}>{!unitsPerPx ? "Set scale first" : tool === "zone" ? "Trace a region (an apartment, a wing) — ⏎ closes it and lists every condition inside" : !activeCond ? "Pick a condition" : tool === "oneclick" ? "Click inside a room — it selects itself" : tool === "surface" ? "Trace the wall run" : "Click to trace an area"}</div>
+            <div style={{ fontSize: 12.5, opacity: 0.6 }}>{!unitsPerPx ? "Set scale first" : tool === "zone" ? "Trace a region (an apartment, a wing) — ⏎ closes it and lists every condition inside" : !activeCond ? "Pick a condition" : tool === "oneclick" ? "Click inside a room — it selects itself" : tool === "surface" ? "Trace the wall run" : tool === "trace" ? (traceProposal ? "Q accepts the read size — Esc discards" : "Click a drawn duct/pipe line — it reads the run and its size") : "Click to trace an area"}</div>
           )}
           {selShape?.measure_role === "surface_area" && (
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }} title="Height for THIS wall only — full-height tile here, 4-ft wainscot there, same condition. ↺ returns to the condition height.">
