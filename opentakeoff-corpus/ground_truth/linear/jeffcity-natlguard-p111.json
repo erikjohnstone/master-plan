@@ -1,0 +1,42 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/jeffcity-natlguard-cst-addition-part04.pdf",
+  "source_pdf_sha256": "fe17e2ddc5157e11f51391f20b97eafa81345c40186c75eaf2ffdeb4212396f7",
+  "sheet_id": "jeffcity-natlguard-cst-addition-part04.pdf#17",
+  "sheet_number": "P111",
+  "page": 17,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-17",
+  "review_basis": "Eighth golden authored via the mega-scan.mjs automated discovery method (the same unattended multi-file scan documented in Run 28's review_basis), this time drawing on one of that scan's own already-collected hits rather than re-scanning. Two other hits from that same scan's saved log were checked first and both REJECTED, each disclosed here rather than silently dropped:\n\n1. `13_MI_MSU_LifeSciences_LabRenovation.pdf` sheet DM-001, a 2.00 LF `1\" HPS` (high-pressure steam) pipe candidate with a genuinely clean, non-stacked marked crop (three distinctly-separated pipe labels, no ambiguity in the immediate area). Checking the sheet's own full title block before trusting it (a direct lesson from Run 28's 'NOT IN SCOPE' rejection) revealed the ENTIRE sheet is titled 'FIRST FLOOR MECHANICAL DEMOLITION PLAN - AREA A' governed by its own printed 'GENERAL DEMOLITION NOTES' and 'DEMOLITION KEY NOTES' -- meaning every pipe shown on this sheet, however cleanly labeled, is existing/being-removed, not new work a real takeoff would measure. A new, even more clear-cut variant of Run 28's scope-exclusion category: here the exclusion governs the WHOLE SHEET via its own title, not a hatched overlay on a portion of it.\n\n2. `11_CA_SDSU_EngSciences_Complex_100SD` part03 sheet M-200N (a different sheet from Run 28's own M-201N), a 4.00 LF `4\" CHWR` pipe candidate found via `size-binding:beside`. A tight marked crop centered exactly on the reported dead-end points showed both ring marks sitting on a horizontal architectural/grid reference line (the column gridline's own centerline tick, printed at the same height as a stack of 'CHWS UP'/'CHWR UP'/'HWS UP'/'HWR UP' riser labels) rather than on the real vertical pipe stub the label actually describes -- the real 4\" CHWR riser is a vertical run dropping through a row of labeled circle symbols well below this spurious horizontal segment. A new, disclosable failure category distinct from the stacked-label mismatches in Runs 26-28: here the engine bridges onto a non-pipe reference/grid line that happens to cross directly through a label's text block, rather than confusing one real pipe's label for another's.\n\nThe candidate actually used (this golden): a real 3/4\" CW (domestic cold water) branch on a genuine new-construction plumbing plan, sheet P111 'PLUMBING PLAN - ALT #1' of the Jefferson City Readiness Center Civil Support Team Building Addition (Missouri Army National Guard). Confirmed via a marked render crop as a real, single straight horizontal pipe segment running from a real elbow bend (where a vertical drop from floor sink FS-1's trap-primer connection turns horizontal) to a real printed dash-gap break in the linework, directly beside its own printed '3/4\" CW' label with no other CW-labeled run stacked or overlapping nearby (the sheet's other water lines -- a 6\" CW main and a 1 1/2\"/4\" SS pair -- sit at clearly separated positions with their own distinct labels). The sheet's own keynote P09 ('FURNISH AND INSTALL WATER METER AND BACKFLOW PREVENTER ON 3/4-INCH DOMESTIC WATER LINE') tags exactly this pipe, confirming both the size and the real-world plumbing context. No demolition or scope-exclusion marking appears anywhere on this sheet -- it is a real, in-scope, new-construction plumbing drawing.",
+  "scope": "A single real 3/4\" domestic cold water (CW) branch segment (3.40 LF) on the Jefferson City Readiness Center Civil Support Team Building Addition's real new-construction plumbing plan, sheet P111, from a real elbow bend off floor sink FS-1's trap-primer drop to a real printed dash-gap break in the linework. Explicitly OUT OF SCOPE: the REJECTED MSU LifeSciences DM-001 'HPS' demolition-sheet candidate described in review_basis; the REJECTED SDSU M-200N grid-line false-positive candidate described in review_basis; the sheet's own 6\" CW main, 1 1/2\"/4\" SS sanitary lines, and every other pipe/fixture visible in the same crop; every other run on this real, multi-part 85-page plan set (only sheet 17/P111 of part04 sampled); every other file or candidate discovered in the same mega-scan but not yet authored into a golden.",
+  "runs": [
+    {
+      "run_id": "jeffcity-p111-cw-075in",
+      "description": "3/4\" domestic cold water (CW) branch, a real straight horizontal run from a real elbow bend (vertical drop from floor sink FS-1's trap-primer connection) to a real dead end at a printed dash-gap break in the linework.",
+      "system": "CW",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.17351466049382716, 0.5006365740740741],
+        [0.15578703703703703, 0.5006365740740741]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 0.75 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 3.4,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 3.4, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:0.75": 3.4 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:0.75": 3.4 },
+  "total_lf_all_runs": 3.4
+}

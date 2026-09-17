@@ -1,5 +1,56 @@
 ## Active work
 
+2026-09-17 linear takeoff: mining the prior scan's own unverified hits, two more rejections including a whole-sheet demolition exclusion, development recall 12/18 -> 13/19 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Rather than scanning fresh files, worked directly from the previous
+scan's own log of already-discovered, not-yet-verified hits -- real,
+disclosed future work explicitly left open last round. Two candidates
+were checked and rejected, each a genuinely new disclosable failure
+category, not silently dropped.
+
+First: a clean-looking steam pipe candidate (three distinctly-separated
+labels, no visible demolition marks in the immediate crop) sitting on a
+sheet whose own FULL title block reads "FIRST FLOOR MECHANICAL
+DEMOLITION PLAN," governed by its own printed demolition notes. Every
+pipe on this sheet, however cleanly labeled, is existing/being-removed,
+not new work -- a more clear-cut variant of the prior round's own "not
+in scope" rejection, this time the exclusion is the WHOLE SHEET's own
+title, not a hatched overlay on part of it. A case where the immediate
+crop alone, however clean, was never going to be enough evidence.
+
+Second: a pipe candidate whose reported stops, on close inspection, sit
+on a horizontal architectural column-gridline reference tick -- printed
+at the same height as a stack of riser labels -- not on the real
+vertical pipe stub the label actually describes (visible, un-traced,
+well below in a wider crop). A new failure category distinct from the
+stacked-label mismatches found in earlier rounds: here the engine
+bridges onto a non-pipe reference line crossing directly through a
+label's own text, rather than confusing one real pipe's label for a
+different real pipe's.
+
+The candidate actually used: a real domestic cold-water branch on a
+genuine new-construction plumbing plan for a National Guard building
+addition, confirmed via its own full title block (no demolition or
+scope-exclusion marking anywhere) and a marked crop showing both
+reported stops as real physical points -- an elbow bend and a printed
+dash-gap break -- directly beside its own printed size label, with a
+matching keynote independently confirming the same size and real-world
+plumbing context.
+
+Development-tier recall: **12/18 (0.667) -> 13/19 (0.6842)**, an exact
+length match with a genuine size match too (size accuracy 0.699 ->
+0.704). The new source PDF is now committed to this project's own real
+corpus (`raw/`).
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+The full regression suite was launched but, at commit time, was still
+running a known-slow, pre-existing test against an already-documented
+pathological fixture unrelated to this change (only a new ground-truth
+JSON, bench results, and docs were touched) -- worth confirming once
+that run completes, not claimed as measured here. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 29" section and its own priority list updated with the new
+recall number.
+
 2026-09-17 linear takeoff: a single unattended multi-file scan across both archives, a "not in scope" rejection, development recall 11/17 -> 12/18 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 A real step up in discovery throughput: rather than working through the
 corpus one sheet at a time, ran a single automated scan unattended
