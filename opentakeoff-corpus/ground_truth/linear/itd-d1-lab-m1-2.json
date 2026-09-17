@@ -1,0 +1,51 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/itd-d1-lab-mechanical.pdf",
+  "source_pdf_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "sheet_id": "itd-d1-lab-mechanical.pdf#5",
+  "sheet_number": "M1.2",
+  "sheet_title": "HYDRONIC FLOOR PLAN",
+  "page": 5,
+  "tier": "development",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "itd-d1-lab--itd-d1-lab-mechanical-p5--full.png",
+    "hash": "7e4cb75a6d800d772ba26487487c07661f1ad6c113b54907d57e67eec5957b62"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP3.8 autonomous coordinator)",
+  "date": "2026-09-17",
+  "review_basis": "Hand-traced in the running canvas app's Linear tool (manual mode, scale confirmed from the plan's own detected '3/16\" = 1'-0\"' note) via a Playwright-driven browser session against the rendered PDF. Before tracing, the run's own size label ('1 1/4\"ø') and the coil callout it feeds ('HC 3' / 'CV 3') were confirmed against pdf.ts's positionedText output, and independently again against the raw vector geometry: the traced line's y-coordinate (page-space y=1302.7 of 3456, at the render's 2x-of-PDF-points viewport scale) matches, to sub-pixel precision, the endpoint of an explicit leader stroke dropping from the '1 1/4\"ø' label's own drawn text box -- not just a nearby label inferred by proximity, but a leader line traced stroke-for-stroke from label to pipe.",
+  "scope": "This ITD Lab sheet (M1.2) is a dense hydronic distribution plan: a full HWS/HWR riser network feeding many HC/CV coil units, plus an unrelated STEAM branch serving a rooftop AHU. WP3.8 asks for a representative run here, not an exhaustive trace of the sheet. This golden is ONE short branch stub: the 1¼\" pipe tapping off the building's HWS/HWR riser (at the point the riser breaks for its isolation-valve/circulator-pump cluster) and running to the pump/valve cluster immediately ahead of coil unit HC-3/CV-3. Explicitly OUT OF SCOPE, and deliberately left unresolved: (1) every other HC/CV coil branch on this sheet, the full riser run, and the STEAM system, left for a later, broader pass; (2) this sheet draws its HWS and HWR risers as a SINGLE overlapping vertical line with two stacked '1 1/2\"ø' size labels rather than two visually separated lines, and the branch-off likewise splits into two closely-spaced (14px, ~0.5ft apart in page space) parallel 1¼\" lines feeding separate isolation-valve/pump legs. This golden traces only ONE of those two lines (the upper of the pair). Which one is HWS and which is HWR could not be confirmed from the drawn geometry alone -- doing so would require reading the coil's own connection schedule or flow-direction convention beyond what this plan sheet shows -- so the run's system is recorded as the generic fluid code 'HHW' rather than guessing 'HWS' or 'HWR'. Withholding the supply/return distinction is deliberate, not an oversight: a wrong guess here would silently corrupt any score built on this golden.",
+  "runs": [
+    {
+      "run_id": "itd-p5-hc3-branch",
+      "description": "1¼\" hydronic branch stub tapping off the HWS/HWR riser, running to the isolation-valve/circulator-pump cluster immediately ahead of coil unit HC-3/CV-3. Supply vs. return identity of this specific line is not resolved -- see scope.",
+      "system": "HHW",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.45241990500834667, 0.3767573531274958],
+        [0.44108257405587165, 0.3767573531274958]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 1.25 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 2.18,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 2.18, "size": { "kind": "pipe", "nps_in": 1.25 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:1.25": 2.18 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:1.25": 2.18
+  },
+  "total_lf_all_runs": 2.18
+}

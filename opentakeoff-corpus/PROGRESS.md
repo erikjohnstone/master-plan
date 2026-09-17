@@ -1,5 +1,85 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.8 checkpoint, ground truth v2 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+"3.8 Ground truth v2: P101 (Bessemer), federal p6 (hydronic), ITD p5
+(piping) hand-traced from renders BEFORE the engine runs on them" (goal
+doc, verbatim). All three targets done; GATE 3 itself is not scored yet
+(no scoring script exists against these goldens as of this checkpoint).
+
+Same methodology as WP1.7's original P101/M101 goldens, extended with a
+more rigorous identification step where the sheet itself was ambiguous:
+load the real PDF into the running canvas app via a Playwright-driven
+browser session, confirm the plan's own detected scale, zoom/pan to a
+legible view, hand-trace with the Linear tool in MANUAL mode (never the
+new Trace tool built in WP3.7 — tracing with the engine under test would
+contaminate its own golden), commit, then read the exact committed
+`verts_norm`/`computed` back out of the app's IndexedDB store directly
+(the app exposes no shapes-export debug hook, so `indexedDB.open
+("opentakeoff")` → `meta` store → `"annotations"` key → `.shapes` is the
+only path to the exact numbers, not `window.__opentakeoff`).
+
+- **ITD p5** (`ground_truth/linear/itd-d1-lab-m1-2.json`, new) — sheet
+  M1.2 "HYDRONIC FLOOR PLAN". ONE representative run: a 2.2 LF 1¼\" branch
+  stub tapping the building's HWS/HWR riser, feeding the isolation-valve/
+  pump cluster ahead of coil HC-3/CV-3. Confirmed the size label's leader
+  lands on the traced line to SUB-PIXEL precision by reading raw vector
+  geometry directly (`extractVectorGeometry` via `oneclick.ts`, not just
+  proximity) — the leader's own drawn stroke terminates at page-space
+  y=1302.7, and the traced line sits at y=1302.7 too, zero error. That
+  same forensic pass surfaced a real, honestly-disclosed limitation: this
+  sheet draws its HWS and HWR risers as a SINGLE overlapping line with two
+  stacked size labels rather than two visually separate lines, and the
+  branch itself splits into two closely-spaced (~0.5 ft apart) parallel
+  1¼\" lines. Which of the two the traced line is (supply or return)
+  could not be confirmed from the drawn geometry alone without reading a
+  connection schedule this plan sheet doesn't show, so the run's system
+  is recorded as the generic fluid code "HHW" rather than guessing — the
+  same withhold-over-guess doctrine `sizes.ts`/`receipt.ts` apply to the
+  engine itself, applied here to the annotator's own hand.
+- **Federal p6** (`ground_truth/linear/federal-m3-1.json`, new) — sheet
+  M3.1 "GROUND FLOOR HVAC PIPING PLAN". TWO runs: the 4\" CHWS and 4\"
+  CHWR risers feeding chiller CH-1, ~40 LF each, chosen specifically
+  because — unlike ITD p5 — this sheet prints separate, unambiguous
+  'CHWR'/'CHWS' callouts directly beside each line (distinct from the
+  combined '4" CHWS/R PIPING DOWN...' arrow-leader note above them), so
+  supply/return identity here is a confirmed fact, not a withheld guess.
+  Each traced click was cross-checked live against the canvas app's own
+  real-world coordinate readout (x=222'0" for CHWS, x≈221'0" for CHWR)
+  before committing.
+- **P101 v2** (`ground_truth/linear/bessemer-p101.json`, extended in
+  place, not a new file) — added the exact run category the original
+  WP1.7 golden's own scope text deferred: "every vertical UP/DN branch
+  off the CW main itself -- left for a later, broader ground-truth pass."
+  One new run, `bessemer-p101-san-riser`: the 3" SAN vertical stack
+  (6.79 LF) between two fixture-connection clusters near FD-1/WB-1,
+  identified by its own dedicated '3" SAN UP' leader (distinct from the
+  '2" SAN UP'/'2" SAN DN' labels at each cluster, which describe the
+  fittings, not the run between them). `totals_by_size_all_runs`/
+  `total_lf_all_runs` recomputed; `scope`/`review_basis` text updated to
+  describe both the original CW-main pass and this addition rather than
+  silently growing stale.
+
+Deliberately NOT done, and disclosed rather than silently skipped:
+exhaustive ground truth for any of these three sheets (each golden
+remains ONE OR TWO representative runs, matching the "representative,
+not exhaustive" precedent WP1.7 itself set — GATE 3's recall/precision
+targets need breadth eventually, but that is a distinct, much larger
+follow-on effort, not something to fake by padding these goldens with
+runs that weren't actually independently verified); scoring GATE 3's
+numbers against these goldens (no scoring script exists yet); and P101's
+own still-deferred SAN/V/HW runs beyond the one SAN riser added here.
+
+Verified: all three JSON files parse and match the
+`opentakeoff.linear_takeoff_ground_truth.v1` schema's existing shape
+(spot-checked field-by-field against the pre-existing bessemer-m101.json/
+bessemer-p101.json files, not just "looks like JSON"); every
+`source_pdf_sha256`/render `hash` value is a real, freshly computed
+sha256 of the actual file it names (`sha256sum` / `mcp/scripts/
+graph-render.mjs --all`), not copied from a neighboring entry. The
+web dev server used for tracing and every temporary Playwright script
+(`_gt_*.mjs`) were stopped/deleted after this checkpoint — none of that
+scaffolding is committed.
+
 2026-09-17 linear takeoff WP3.7 checkpoint, canvas half (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Trace mode in `TakeoffCanvas.jsx`: "hover highlight of the candidate run + chip
 (size · system · LF · fittings ahead); click stages a dashed proposal; Q

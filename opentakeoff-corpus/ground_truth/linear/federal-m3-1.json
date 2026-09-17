@@ -1,0 +1,76 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/federal-attachment4-mechanical.pdf",
+  "source_pdf_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "sheet_id": "federal-attachment4-mechanical.pdf#6",
+  "sheet_number": "M3.1",
+  "sheet_title": "GROUND FLOOR HVAC PIPING PLAN",
+  "page": 6,
+  "tier": "development",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "federal-mech--l-attachment4-mechanical-p6--full.png",
+    "hash": "1c5a1f36cfff71f2f35c526fe532d65f1e04c066d665ce3361f9f4eb82d91f9c"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP3.8 autonomous coordinator)",
+  "date": "2026-09-17",
+  "review_basis": "Hand-traced in the running canvas app's Linear tool (manual mode, scale confirmed from the plan's own detected '1/8\" = 1'-0\"' note) via a Playwright-driven browser session against the rendered PDF. The two parallel 4\" chilled-water lines were each independently identified by real-world coordinate: pdf.ts's positionedText locates the separate 'CHWR' (x=3985) and 'CHWS' (x=4003) callouts printed directly beside this riser pair (distinct from -- and more specific than -- the combined '4\" CHWS/R PIPING DOWN...' arrow-leader note above them), and each traced click was cross-checked live against the canvas app's own status-bar real-world readout (x=222'0\" for the CHWS line, x≈221'0\" for the CHWR line, ~1 ft apart, matching the labels' own relative offset) before committing -- not inferred from on-screen proximity alone.",
+  "scope": "This federal ground-floor HVAC piping sheet (M3.1) is dense with heating-hot-water (HHWS/HHWR) branch piping to dozens of VAV reheat coils, plus this one chilled-water (CHWS/CHWR) riser pair feeding chiller CH-1. WP3.8 asks for a representative run here, not an exhaustive trace of the sheet. This golden is the 4\" CHWS/CHWR riser pair itself: traced from just below the 'PIPING DOWN THROUGH SLAB TO CH-1' callout, straight down to the point marked 'BELOW GRADE' where the lines leave the building envelope. Both lines are uniform 4\" nominal pipe for their full traced extent -- no size change, no fitting, a clean straight vertical pair, chosen specifically because (unlike the ITD p5 golden in this same directory) each line carries its own unambiguous, independently-labeled supply/return identity. Explicitly OUT OF SCOPE for this golden: the entire HHWS/HHWR branch network to every VAV box on this sheet, the CHWS/CHWR run's own continuation below grade toward the chiller utility enclosure ('SEE BELOW', off this immediate view), and every other mechanical room / equipment connection this dense sheet shows -- all left for a later, broader ground-truth pass.",
+  "runs": [
+    {
+      "run_id": "federal-m3.1-chws-riser",
+      "description": "4\" chilled-water supply (CHWS) riser, from the top of its 'PIPING DOWN THROUGH SLAB TO CH-1' callout straight down to the 'BELOW GRADE' transition point.",
+      "system": "CHWS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.6607440701566218, 0.49931569766138983],
+        [0.6607440701566218, 0.6647127607032053]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 4 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 39.7,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 39.7, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:4": 39.7 }
+        }
+      }
+    },
+    {
+      "run_id": "federal-m3.1-chwr-riser",
+      "description": "4\" chilled-water return (CHWR) riser, running parallel to the CHWS riser (~1 ft west of it) from the same 'PIPING DOWN THROUGH SLAB TO CH-1' callout down to its own 'BELOW GRADE' transition point.",
+      "system": "CHWR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.6581187199496089, 0.49931569766138983],
+        [0.6581187199496089, 0.6689537110376108]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 4 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 40.71,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 40.71, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:4": 40.71 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:4": 80.41
+  },
+  "total_lf_all_runs": 80.41
+}
