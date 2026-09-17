@@ -484,7 +484,9 @@ This part is self-contained. Parts 1–2 are the evidence; execute from here.
    `takeoffValve01.regression.test.mjs`, `takeoffBas01.regression.test.mjs`.
    Commit with before/after numbers from §3.1 in the body. Update
    `opentakeoff-corpus/PROGRESS.md` ("Accepted changes") per package.
-6. Node ≥ 22 with `--import tsx`. Table sidecar may stay off
+6. Every package is validated on the whole corpus per §3.11, not on one set.
+   A package is accepted only when the §3.11.3 gates are green corpus-wide.
+7. Node ≥ 22 with `--import tsx`. Table sidecar may stay off
    (`OPENTAKEOFF_TABLE_SIDECAR=0`) for every check in this plan; it does not
    affect plan text.
 
@@ -702,14 +704,147 @@ Plan-text OCR / exploded-glyph recognition (Part 1 §4 step 6) and any
 symbol-geometry change. Those start only after WP0–WP7 are merged and the
 tag metric from WP7 is green.
 
-## 3.10 Definition of done
+## 3.10 Multi-set baselines (measured, production Session, sidecar off)
 
-- WP0 script committed; five `.before.txt` baselines and matching
-  `.after.txt` per package under `opentakeoff-corpus/reports/tag-census/`.
+The same harness as §3.1, run on every keyed raw set on disk. These are the
+"before" numbers every package must re-measure. Equipment-row buckets are
+*schedule keys → drawn text occurrences outside table regions*.
+
+| set | sheets | roles (plan/sched/legend/detail/elev/unknown/demo) | tables | spans | tag tokens (equip-shaped) | sched keys | none | plan-only | non-plan-only | both | drawn keys (unscheduled) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| navfac-cherry-point-atc | 75 | 26/8/27/10/4/0/0 | 87 | 34,494 | 3,561 (1,803) | 427 | 104 | 158 | 98 | 67 | 301 (63) |
+| baker-county-eoc | 65 | 19/9/2/11/7/16/1 | 21 | 18,895 | 789 (327) | 13 | 5 | 6 | 1 | 1 | 83 (79) |
+| itd-d1-lab | 29 | 10/10/2/4/1/2/0 | 27 | 10,872 | 626 (455) | 126 | 17 | 75 | 3 | 31 | 123 (16) |
+| federal-mech | 24 | 4/11/2/3/3/1/0 | 19 | 13,789 | 1,574 (881) | 115 | 21 | 9 | 4 | 81 | 214 (120) |
+| bldg5406-hvac-demo | 20 | 4/5/1/4/0/5/1 | 13 | 3,749 | 181 (85) | 18 | 1 | 12 | 0 | 5 | 43 (26) |
+
+Per-set facts the packages must respect (each is a different failure shape;
+one set would have hidden the others):
+
+- **navfac**: 14 control-schematic sheets classified `legend` (WP1); 98
+  keys drawn only off-plan (WP4); 101/106 valve marks never drawn, served
+  unit marks drawn (WP5).
+- **baker**: 16 `unknown`-role sheets carrying 117 tag tokens; 79 of 83
+  drawn keys have no schedule row because only 13 rows were extracted from
+  21 tables — the schedule side, not the tag side, is the gap here, and
+  the census must *report* that, not paper over it. `ERV-01` refused as
+  ambiguous (2 rows) — WP6 alias/duplicate handling must not "fix" that by
+  merging.
+- **itd-d1-lab**: `AHU-1` drawn twice, refused for lack of local geometry
+  (`SYMBOL_FALSE_NEGATIVE`) — after WP4/WP5 it must still be
+  `installed_qty: null`, but with two plan-tag cites; `ET-1` genuinely
+  duplicated across two schedules stays refused.
+- **federal-mech**: `schedule`-role sheets carry 645 label tokens outside
+  extracted table regions — table-region coverage is incomplete, so
+  `in_table` from `graph.tables[].region` alone will misfile schedule row
+  labels as drawn tags. WP2 must also exclude tokens on `schedule`-role
+  sheets unless the sheet has a plan-titled region, and must report the
+  count it excluded. 120 unscheduled drawn keys is the symptom.
+- **bldg5406**: `EF-2`/`EF-3` exploded text (known ceiling) must remain
+  "never drawn" — the census must not invent them; `CWP-1` has a
+  `text_only` occurrence that WP4 must surface as a cite.
+
+## 3.11 Corpus-wide validation protocol (the production gate)
+
+Five sets prove the shapes; production is proven on the bulk corpus. The
+executor runs this after **every** package, not once at the end.
+
+### 3.11.1 Stage the corpus
+
+```
+./scripts/stage-bulk-corpus.sh          # repo root; downloads + rejoins Vol1/Vol2 into opentakeoff-corpus/bulk/
+```
+
+Bulk = `bulk/HVAC_BAS_Plan_Sets` + `bulk/HVAC_BAS_Plan_Sets_Vol2` (112 sets /
+215 files, resolved by `resolveSetFiles` in
+`opentakeoff/mcp/scripts/corpusFiles.mjs`) plus the keyed `raw/` sets in
+`sets.json`. That is the ~200-document population this plan is validated
+on. Google Drive must be reachable from the executor's machine; if it is
+not, stop and say so — do not substitute a subset silently.
+
+### 3.11.2 Run the census over the whole corpus
+
+Extend `mcp/scripts/tag-census-diag.mjs` (WP0) into
+`mcp/scripts/tag-census-corpus.mjs` with the same CLI as
+`emit-corpus-takeoff.mjs`: `--corpus DIR [--sets id,…] [--shard i/n] [--resume] [--out DIR]`.
+It must use `cachedSheetGraph` (`mcp/scripts/sheetGraphCache.mjs`) so graphs
+are built once and shared with the compile/eval scripts, and write one
+`out/tag-census/<set_id>.json` per set with the §3.1 fields plus timings, and
+a `summary.csv` (one row per set, the §3.10 columns).
+
+```
+OPENTAKEOFF_TABLE_SIDECAR=0 node --import tsx mcp/scripts/tag-census-corpus.mjs --corpus ../opentakeoff-corpus --out out --shard 0/4 --resume   # ×4 shards
+node --import tsx mcp/scripts/tag-census-corpus.mjs --corpus ../opentakeoff-corpus --out out --summarize
+```
+
+Expect roughly 40 s–90 s per set for the graph on the first pass (one-time,
+cached) and < 2 s per set for the census afterwards. No batch prewarm across
+the corpus as a *product* feature (GOAL.md forbids it); this is a
+measurement run and its cache lives under `out/`, not in the app.
+
+### 3.11.3 Corpus gates (all must hold for a package to be accepted)
+
+Computed by `tag-census-corpus.mjs --gate before.csv after.csv`; each gate
+prints the offending sets by id.
+
+| gate | rule |
+|---|---|
+| G-A no regression | For every set, `plan-only + both` (schedule keys located on plan roles) does not decrease, and `none` does not increase. |
+| G-B role sanity | No set has more `label tokens outside tables` on `legend`/`unknown` sheets than on `plan` sheets unless the set has ≤ 2 plan-role sheets; sets that violate this are listed as role-classifier work, and after WP1 the count of violating sets must drop, never rise. |
+| G-C reference disclosure (after WP4) | Every schedule key in the `non-plan-only` bucket produces a `reference_only` sweep result with ≥ 1 cite; zero throw "not drawn on any plan sheet" for such keys, corpus-wide. |
+| G-D served location (after WP5) | For every set with a VALVE MARK / UNIT MARK schedule, ≥ 90 % of valve rows whose own mark is undrawn and whose served mark is drawn carry a `served_equipment_cites` entry. |
+| G-E no phantom tags | Corpus-wide count of `DrawnTag` entries that are `sheet_callout` or that match a sheet number in *any* set's title block is reported and excluded; the unscheduled list never contains an entry whose text equals one of that set's own sheet numbers. |
+| G-F quantities frozen | `takeoffHvac01`, `takeoffValve01`, `takeoffBas01` regression tests and the frozen `keys/*.takeoff.csv` scores (`takeoff-eval.mjs`) are byte-identical before/after. Text-side work may never move a quantity. |
+| G-G budget | Whole-corpus census after warm graphs completes in < 10 min on 4 cores; per-set index < 2 s. |
+
+### 3.11.4 Stratified hand verification (the "elite" bar)
+
+Numbers from the census are not truth. After WP2 and again after WP5/WP6:
+
+1. Sample 20 sets stratified by size (5 small < 25 sheets, 10 medium, 5
+   large ≥ 60 sheets) and by discipline mix (ensure ≥ 5 with control
+   schematics, ≥ 5 with valve/damper schedules, ≥ 3 with a raster or
+   pasted-picture schedule note).
+2. In each sampled set, pick 10 drawn tags at random from the index and 10
+   schedule keys at random; render each cite with `view_sheet` crops and
+   record true/false in `opentakeoff-corpus/reports/tag-census/hand/<set>.csv`
+   (`kind,tag,sheet,bbox,verdict,note`).
+3. Gate: precision of drawn-tag entries ≥ 0.97; recall of schedule keys
+   that are visibly drawn ≥ 0.95 (a key visibly drawn but absent from the
+   index is a miss — record the shape, it becomes a WP2 fix, never a key
+   change).
+4. Every miss and every false positive is filed in
+   `opentakeoff-corpus/TAKEOFF_BUG_CATALOGUE.md` with the sheet, the text,
+   and the recogniser rule that failed, then fixed with a unit test on the
+   *shape* (synthetic spans, no corpus name).
+5. Repeat the sample with a fresh random seed until one full round of 20
+   sets produces zero new shapes. That is the definition of "production
+   level" for tag recognition; a green metric on five sets is not.
+
+### 3.11.5 Reporting
+
+Per package, commit `opentakeoff-corpus/reports/tag-census/<pkg>/summary.csv`
+and a short `<pkg>/REPORT.md`: gates table, sets that changed bucket with
+one-line reasons, hand-verification precision/recall, and the shapes added
+to the bug catalogue. Update `opentakeoff-corpus/PROGRESS.md` "Accepted
+changes" with the same numbers. A package with any red gate is not
+accepted; scaling the scope down is the user's call, so say what is red and
+stop.
+
+## 3.12 Definition of done
+
+- WP0 script and `tag-census-corpus.mjs` committed; `before` summary for
+  the whole corpus committed under `reports/tag-census/00-baseline/`.
+- Gates G-A … G-G green corpus-wide after WP6; hand-verification round
+  (§3.11.4) closed with zero new shapes.
 - On navfac: FCU rows 42/42 with plan tag cites; valve rows ≥ 150/163 with
-  served-equipment cites; 93 schematic-only equipment marks disclosed, 0
-  refused as "not drawn"; `unscheduled_tags` non-empty and callout-free.
-- `takeoffHvac01`, `takeoffValve01`, `takeoffBas01` regressions and every
-  existing test green; typecheck clean; no quantity in any locked truth
-  changed.
+  served-equipment cites; the 98 off-plan-only keys disclosed, 0 refused as
+  "not drawn"; `unscheduled_tags` non-empty and callout-free.
+- On baker: the schedule-extraction gap (13 rows from 21 tables) reported
+  by the census as *schedule-side*, not hidden; `ERV-01` still refused.
+- On federal-mech: schedule-role token exclusion reported; `AHU-1` keeps
+  its geometry cite.
+- On bldg5406: `EF-2`/`EF-3` still "never drawn"; `CWP-1` text-only cite shown.
+- `takeoffHvac01`, `takeoffValve01`, `takeoffBas01` and every existing test
+  green; typecheck clean; no quantity in any locked truth changed.
 - `PROGRESS.md` updated per package with the numbers above.
