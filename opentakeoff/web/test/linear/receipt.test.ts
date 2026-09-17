@@ -57,6 +57,19 @@ test("buildTraceReceipt: two labels disagreeing on a walked segment are withheld
   assert.ok(origin.trace.labels.every((l) => l.size === undefined), "a withheld label never carries a chosen size");
 });
 
+test("buildTraceReceipt: opts.labelText is keyed by the BINDING, not the segment — two conflicting labels on one segment still get their own distinct bbox each", () => {
+  const idx = idxFor([0, 0, 200, 0]);
+  const walk = walkBothDirections(idx, 0, 18, {});
+  const small = bound(0, 12, 0.9), big = bound(0, 16, 0.9);   // same seg, deliberately distinct binding identities
+  const conflict: SizeConflict = { seg: 0, candidates: [small, big] };
+  const bboxes = new Map([[small, { x0: 10, y0: 10, x1: 20, y1: 20 }], [big, { x0: 90, y0: 90, x1: 100, y1: 100 }]]);
+  const origin = buildTraceReceipt(idx, { seg: 0, x: 0, y: 0 }, walk, family(), [], [conflict], { scaleConfirmed: true, labelText: (b) => bboxes.get(b) });
+  const smallLabel = origin.trace.labels.find((l) => l.text === "12X6");
+  const bigLabel = origin.trace.labels.find((l) => l.text === "16X6");
+  assert.deepEqual({ x0: smallLabel!.x0, y0: smallLabel!.y0 }, { x0: 10, y0: 10 });
+  assert.deepEqual({ x0: bigLabel!.x0, y0: bigLabel!.y0 }, { x0: 90, y0: 90 });
+});
+
 test("buildTraceReceipt: a conflict on a DIFFERENT (unwalked) segment never contaminates this run's receipt", () => {
   const idx = idxFor([0, 0, 200, 0, 500, 500, 700, 500]);
   const walk = walkBothDirections(idx, 0, 18, {});   // walks only segment 0

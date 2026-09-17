@@ -304,6 +304,13 @@ test("associationWindowPx: the larger of 6x text height and 4ft*ppf", () => {
   assert.equal(associationWindowPx(label("x", { textHeightPx: 2 }), 50), 200);    // 4*50=200 > 6*2=12
 });
 
+test("associationWindowPx: with no textHeightPx, falls back to the bbox's SHORTER dimension as font height — not the longer one, which is just the string's own length", () => {
+  const wide = label("x", { x0: 0, y0: 0, x1: 100, y1: 10, textHeightPx: undefined });    // wide, short — ordinary horizontal text
+  assert.equal(associationWindowPx(wide, 1), 60, "6 * 10 (the short dimension), not 6 * 100");
+  const tall = label("x", { x0: 0, y0: 0, x1: 10, y1: 100, textHeightPx: undefined });    // narrow, tall — rotated text
+  assert.equal(associationWindowPx(tall, 1), 60, "6 * 10 (the short dimension) again, regardless of orientation");
+});
+
 // ── resolveSizeConflicts — the other half of "uniqueness" ─────────────────
 
 function bound(seg: number, wIn: number, confidence: number): BoundSize {

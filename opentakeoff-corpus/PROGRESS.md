@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.5/WP3.6 follow-up — two real bugs caught while
+designing the WP3.7 MCP wiring (`trace_run`), before any MCP code existed to
+exercise them: reasoning through how `sizes.ts`'s `associateLabel` and
+`receipt.ts`'s `buildTraceReceipt` would actually be called against real
+`mcp/src/pdf.ts` `TextSpan`s surfaced both, the same "trace the real caller
+through before believing the library is done" discipline WP3.1/WP3.4 both
+used already.
+
+1. `sizes.ts`'s `labelHeightPx` fallback (no `textHeightPx` supplied) used
+   `Math.max(|y1-y0|, |x1-x0|)` — the LONGER of the bbox's two dimensions.
+   For ordinary horizontal text (`TextSpan`'s own bbox: wide, short) that's
+   the string's own character-count-driven WIDTH, not its lettering height,
+   inflating `associationWindowPx` by however long the label's text happens
+   to be. Fixed to `Math.max(Math.min(|y1-y0|, |x1-x0|), 1)` — the SHORTER
+   dimension is font height regardless of rotation (unrotated: short in y;
+   rotated 90/270: short in x), with no need to read `rot` at all. New test:
+   `web/test/linear/sizes.test.ts`, a wide-and-short vs. narrow-and-tall
+   fixture both correctly reading a height of 10, not 100.
+2. `receipt.ts`'s `buildTraceReceipt` took `opts.labelText?: (seg: number) => {...}`
+   — keyed by segment. But a `SizeConflict`'s whole POINT is two labels
+   landing on the SAME segment; a seg-keyed lookup can only ever return one
+   bbox, silently giving both withheld label rows in the receipt the same
+   coordinates. Fixed by keying on the `BoundSize` binding itself
+   (`labelText?: (b: BoundSize) => {...}`) — `buildTraceReceipt` already
+   has the actual binding object at both call sites, so this costs nothing
+   and correctly separates two conflicting labels' own real positions. New
+   test: `web/test/linear/receipt.test.ts`, two same-segment conflicting
+   bindings each resolving to their own distinct bbox.
+
+Verified: `npx tsc --noEmit` clean on both `web` and `mcp`;
+`web/test/linear/*.test.ts` 141/141 (139 prior + 2 new); web's full suite
+confirmed against the standing 70-fail/13-cancelled/13-skipped baseline.
+
 2026-09-17 linear takeoff WP3.6 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 `receipt.ts`, Stage 6: confidence, refusal, and the trace receipt (plan
 §6.8). The first module in the WP3 arc to touch EVERY prior module's own

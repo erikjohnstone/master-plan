@@ -200,7 +200,15 @@ const BESIDE_CONFIDENCE = 0.9;
 const LEADER_CONFIDENCE = 0.75;
 
 function labelHeightPx(label: SizeLabelSpan): number {
-  return label.textHeightPx ?? Math.max(Math.abs(label.y1 - label.y0), Math.abs(label.x1 - label.x0), 1);
+  // No textHeightPx supplied: fall back to the SHORTER of the bbox's two
+  // dimensions, not the longer one — a text run's bbox is (almost) always
+  // wider than it is tall along its own baseline (mcp/src/pdf.ts's own
+  // TextSpan is exactly this: a rotation-aware hull, tall-narrow at rot 90/
+  // 270, wide-short at 0/180), so the MINIMUM dimension is font height
+  // regardless of rotation, while the MAXIMUM is the string's own length —
+  // using the max here would inflate the association window by the label's
+  // character count instead of its actual lettering size.
+  return label.textHeightPx ?? Math.max(Math.min(Math.abs(label.y1 - label.y0), Math.abs(label.x1 - label.x0)), 1);
 }
 
 /** Plan §6.6's own association window: "max(6 × text height, 4 ft × ppf)." */

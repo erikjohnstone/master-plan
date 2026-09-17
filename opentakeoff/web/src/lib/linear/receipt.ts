@@ -86,7 +86,10 @@ export function buildTraceReceipt(
   family: StrokeFamily,
   allBoundSizes: BoundSize[],
   conflicts: SizeConflict[],
-  opts: { scaleConfirmed: boolean; labelText?: (seg: number) => { text: string; x0: number; y0: number; x1: number; y1: number } | undefined },
+  // keyed by the BINDING itself, not by `seg` — two labels conflicting on
+  // the SAME segment need their own DISTINCT bbox each; a seg-keyed lookup
+  // could only ever return one of the two.
+  opts: { scaleConfirmed: boolean; labelText?: (b: BoundSize) => { x0: number; y0: number; x1: number; y1: number } | undefined },
 ): TraceOrigin {
   const walkedSegs = new Set(walk.segs);
   const factors: string[] = [];
@@ -102,7 +105,7 @@ export function buildTraceReceipt(
   for (const c of conflicts) {
     if (!walkedSegs.has(c.seg)) continue;
     for (const cand of c.candidates) {
-      const span = opts.labelText?.(cand.seg);
+      const span = opts.labelText?.(cand);
       labels.push({ text: cand.parsed.raw, x0: span?.x0 ?? 0, y0: span?.y0 ?? 0, x1: span?.x1 ?? 0, y1: span?.y1 ?? 0, seg: cand.seg, withheld: true });
     }
   }
@@ -110,7 +113,7 @@ export function buildTraceReceipt(
   if (clean.length) {
     const best = clean.reduce((a, b) => (b.confidence > a.confidence ? b : a));
     for (const b of clean) {
-      const span = opts.labelText?.(b.seg);
+      const span = opts.labelText?.(b);
       labels.push({ text: b.parsed.raw, x0: span?.x0 ?? 0, y0: span?.y0 ?? 0, x1: span?.x1 ?? 0, y1: span?.y1 ?? 0, seg: b.seg, size: b.parsed.size });
     }
     factors.push(`size-binding:${best.placement}`);
