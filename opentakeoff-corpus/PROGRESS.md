@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-17 linear takeoff: the schedule-gridline refusal case finally lands -- refusal correctness 5/5 -> 6/6 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+An earlier checkpoint's own scope note named a real schedule-table
+gridline (Weld County M0.5's own DUCT INSULATION SCHEDULE) as found but
+unusable: that sheet has no detected drawing scale, and the bench's own
+refusal loop unconditionally called `session.setScale(..., { use_detected:
+true })` for every case, which throws (not refuses) on a scale-less
+sheet -- adding the case as-is would have broken the loop, not tested it.
+
+Fixed properly instead of worked around: confirmed directly in the
+engine's own trace_run code that a find-only call never actually needs a
+confirmed scale to run at all -- only a commit does -- and that the
+stroke-classification code already has documented fallbacks for exactly
+this case (a raw-px hatch cap, a fallback feet-per-pixel guess for
+wall-vouching). Wrapped the refusal loop's own `setScale` call in a
+try/catch, bench-local only, not touching any shared or off-limits code.
+Verified the fallback actually works before trusting it: with no
+setScale call at all, trace_run at the gridline's own seed still
+correctly refuses. Re-verified the seed itself via a fresh marked render
+crop (this diagnostic dated from earlier the same day) rather than
+trusting a stale finding -- confirms it sits exactly on the gridline
+between two schedule rows, not on any text.
+
+Refusal correctness: **5/5 -> 6/6**. This closes the excluded-family
+refusal gap almost entirely (an annotation symbol, then a schedule
+gridline); only dimension lines remain open, and only because no
+dimension-string text exists on any of this project's own mechanical
+sheets at all -- a real corpus-composition gap, not a mechanism one.
+
+Measured: `npm run bench:linear` passes, refusal 6/6, development/
+held-out/synthetic numbers unchanged (this pass touches the bench's own
+refusal loop and one ground-truth fixture, no trace-engine code); all
+215 `benchScore.test.ts`/`test/linear/*.test.ts` tests pass; full
+filtered web regression suite re-run, matching the established baseline.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 20" section and its own
+priority list updated to mark this gap essentially closed.
+
 2026-09-17 linear takeoff: bldg5406's own hang root-caused to label-leader search, NOT the index build (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 An earlier checkpoint confirmed `bldg5406-hvac-demo-mechanical.pdf#2`'s
 own `trace_run` call didn't finish in 60s but framed the cause as "the

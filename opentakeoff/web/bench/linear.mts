@@ -397,7 +397,14 @@ if (existsSync(refusalCorpusPath)) {
     const pdfPath = resolve(repoRoot, c.source_pdf);
     const session = new Session();
     await session.loadPlan(pdfPath);
-    session.setScale(c.sheet_id, { use_detected: true });
+    // Best-effort: a refusal case only needs trace_run to run at all, which
+    // (unlike a commit) never requires a confirmed scale -- strokes.ts's own
+    // ftPx=0 fallbacks (raw-px hatch cap, wallnetwork.ts's PX_PER_FT_GUESS)
+    // are exactly the documented path for a scale-less sheet. Swallowing
+    // setScale's own throw here (rather than the loop dying, or every case
+    // needing a detected/confirmed scale to even be added) lets a real
+    // seed on a scale-less sheet be tested honestly, not skipped.
+    try { session.setScale(c.sheet_id, { use_detected: true }); } catch { /* scale-less sheet: trace_run still runs, feet-based fields just stay absent */ }
     const sheet = session.sheet(c.sheet_id);
     const seed: Point = [c.seed_norm[0] * sheet.widthPx, c.seed_norm[1] * sheet.heightPx];
     let gotStatus: "refused" | "reached" = "reached";

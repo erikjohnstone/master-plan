@@ -479,7 +479,7 @@
       "clippedLenFt": 50.53,
       "goldenLenFt": 50.52
      },
-     "buildMs": 8.191313000000036
+     "buildMs": 7.531756000000087
     },
     {
      "caseName": "02-pen-thick-solid.pdf",
@@ -498,7 +498,7 @@
       "clippedLenFt": 61.49,
       "goldenLenFt": 61.5
      },
-     "buildMs": 1.6433130000000347
+     "buildMs": 1.5450839999998607
     },
     {
      "caseName": "03-dashed-existing.pdf",
@@ -517,7 +517,7 @@
       "clippedLenFt": 36.73,
       "goldenLenFt": 36.72
      },
-     "buildMs": 1.4326659999999265
+     "buildMs": 1.3636770000000524
     },
     {
      "caseName": "04-dashdot-demo.pdf",
@@ -536,7 +536,7 @@
       "clippedLenFt": 46.1,
       "goldenLenFt": 46.1
      },
-     "buildMs": 1.3586159999999836
+     "buildMs": 1.2014130000000023
     },
     {
      "caseName": "05-double-line-duct.pdf",
@@ -555,7 +555,7 @@
       "clippedLenFt": 37.59,
       "goldenLenFt": 43.58
      },
-     "buildMs": 1.488698000000113
+     "buildMs": 1.4006920000001628
     },
     {
      "caseName": "06-label-inside.pdf",
@@ -574,7 +574,7 @@
       "clippedLenFt": 27.81,
       "goldenLenFt": 27.8
      },
-     "buildMs": 6.235439000000042
+     "buildMs": 5.677408000000014
     },
     {
      "caseName": "07-label-beside.pdf",
@@ -593,7 +593,7 @@
       "clippedLenFt": 50.61,
       "goldenLenFt": 50.62
      },
-     "buildMs": 4.5174030000000585
+     "buildMs": 2.814484999999877
     },
     {
      "caseName": "08-label-leader.pdf",
@@ -612,7 +612,7 @@
       "clippedLenFt": 33.47,
       "goldenLenFt": 33.48
      },
-     "buildMs": 3.4107719999999517
+     "buildMs": 3.319396999999981
     },
     {
      "caseName": "09-crossing-run.pdf",
@@ -631,7 +631,7 @@
       "clippedLenFt": 36.13,
       "goldenLenFt": 36.13
      },
-     "buildMs": 1.557990000000018
+     "buildMs": 1.68066500000009
     },
     {
      "caseName": "10-arc-as-polyline.pdf",
@@ -650,7 +650,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 1.1823640000000069
+     "buildMs": 1.2915720000000874
     }
    ],
    "aggregate": {
@@ -663,7 +663,7 @@
     "sizeAccuracyPct": 0.0695389077815563,
     "sizeWrongLabelPct": 0,
     "sizeNoLabelPct": 0.9304610922184436,
-    "maxColdBuildMs": 8.191313000000036,
+    "maxColdBuildMs": 7.531756000000087,
     "maxWarmQueryMs": null
    }
   },
@@ -710,7 +710,7 @@
       "clippedLenFt": 5.64,
       "goldenLenFt": 5.64
      },
-     "queryMs": 201.18067100000007
+     "queryMs": 200.2083050000001
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -729,7 +729,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 237.88016400000015
+     "buildMs": 210.54134900000008
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -784,7 +784,7 @@
       "clippedLenFt": 1.91,
       "goldenLenFt": 1.91
      },
-     "queryMs": 597.0964289999993
+     "queryMs": 587.8158910000002
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#5",
@@ -803,7 +803,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 366.26199800000177
+     "buildMs": 383.03872000000047
     },
     {
      "caseName": "weld-county-mechanical-permit.pdf#7",
@@ -822,7 +822,7 @@
       "clippedLenFt": 21.82,
       "goldenLenFt": 21.82
      },
-     "buildMs": 424.557463000001
+     "buildMs": 435.2031790000001
     }
    ],
    "aggregate": {
@@ -835,8 +835,8 @@
     "sizeAccuracyPct": 0.3927992799279928,
     "sizeWrongLabelPct": 0.47128712871287126,
     "sizeNoLabelPct": 0.1359135913591359,
-    "maxColdBuildMs": 424.557463000001,
-    "maxWarmQueryMs": 597.0964289999993
+    "maxColdBuildMs": 435.2031790000001,
+    "maxWarmQueryMs": 587.8158910000002
    }
   },
   "heldOut": {
@@ -858,7 +858,7 @@
       "clippedLenFt": 20.14,
       "goldenLenFt": 20.14
      },
-     "buildMs": 556.5447719999993
+     "buildMs": 541.4178790000005
     },
     {
      "caseName": "federal-attachment4-mechanical.pdf#7",
@@ -877,7 +877,7 @@
       "clippedLenFt": 3.57,
       "goldenLenFt": 3.57
      },
-     "buildMs": 1293.577663
+     "buildMs": 1292.3446120000008
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#4",
@@ -896,7 +896,7 @@
       "clippedLenFt": 3.02,
       "goldenLenFt": 3.02
      },
-     "buildMs": 858.589774
+     "buildMs": 844.766685999999
     },
     {
      "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
@@ -915,7 +915,7 @@
       "clippedLenFt": 12.39,
       "goldenLenFt": 12.39
      },
-     "buildMs": 1956.6910720000014
+     "buildMs": 1902.1566129999992
     }
    ],
    "aggregate": {
@@ -928,7 +928,7 @@
     "sizeAccuracyPct": 0.4851738241308793,
     "sizeWrongLabelPct": 0,
     "sizeNoLabelPct": 0.5148261758691206,
-    "maxColdBuildMs": 1956.6910720000014,
+    "maxColdBuildMs": 1902.1566129999992,
     "maxWarmQueryMs": null
    }
   }
@@ -959,11 +959,16 @@
     "caseName": "weld-county-mechanical-permit.pdf#7 — Weld County M1.0's own circled '2' reference/keynote balloon symbol near the top of the sheet -- a real, drawn stroke of an EXCLUDED family (an annotation symbol, not duct/pipe routing), extracted directly from the page's own vector geometry and confirmed present at this exact coordinate before being used as a seed. (Which numbered keynote entry this specific balloon corresponds to was not independently cross-checked -- the seed's own validity as a real, non-routable stroke does not depend on that identification.)",
     "correct": true,
     "gotStatus": "refused"
+   },
+   {
+    "caseName": "weld-county-mechanical-permit.pdf#6 — Weld County M0.5's own DUCT INSULATION SCHEDULE table -- a real horizontal gridline between two schedule rows (the 'WRAP 2\" 0.75' rows), extracted directly from the page's own vector geometry and confirmed present at this exact coordinate -- visually verified via a marked render crop to sit on the rule itself, not on any of the table's own text -- before being used as a seed. This sheet has no detected drawing scale (`scale_set: false`); the bench's own refusal loop no longer requires one to run this case (see this file's own `scope` field).",
+    "correct": true,
+    "gotStatus": "refused"
    }
   ],
   "aggregate": {
-   "correct": 5,
-   "total": 5,
+   "correct": 6,
+   "total": 6,
    "rate": 1,
    "misses": []
   }
