@@ -1,5 +1,23 @@
 ## Active work
 
+2026-09-17 linear takeoff: resolved bessemer-p101-cw-main's residual 3.17px — ordinary hand-tracing noise, not a defect (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Closed the open question the discrete-Fréchet scorer fix left behind: after
+`simplifyPolyline` corrected `bessemer-p101-cw-main`'s own frechetPx from
+260.5px down to 3.17px, was that residual real or more of the same
+vertex-density noise? Diagnosed directly rather than guessed: dumped the
+golden's own simplified 2-point span alongside the traced polyline's own
+clipped/simplified span for the exact same case. The LEFT endpoint (a real
+geometric point — the 1¼" water-service riser drop) matches to full
+floating-point precision, 0px apart. ALL of the 3.17px lives at the RIGHT
+endpoint, and that endpoint is the SAME one this golden's own `review_basis`
+already discloses as a human judgment call, not a hard geometric feature
+(Finding 4 -- "the point the main turns 90° and drops into a riser," on a
+much longer real trunk). A few-pixel mismatch landing exactly at a
+self-disclosed soft stop, and nowhere else along the span, is the ordinary
+noise level of hand-tracing near a judgment call. No code change; `docs/
+LINEAR-TRACE-EVAL.md` gained a "Run 8" section closing the question, and
+its own priority list dropped this item as resolved rather than remaining.
+
 2026-09-17 linear takeoff: third held-out golden — a clean 3/3, plus a set-aside on excluded-family refusals (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Authored the third entry off `reports/LINEAR_HELDOUT.txt`'s frozen list:
 `navfac-cherry-point-atc-mechanical.pdf#6` (MH101), one of the two sheets
