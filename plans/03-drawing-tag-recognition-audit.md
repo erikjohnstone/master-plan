@@ -286,3 +286,173 @@ the bldg5406 `EF-2`/`EF-3` ceiling and scanned sets.
 - `opentakeoff/web/src/lib/sheetgraph.ts` L8324 `SheetGraph` — add `plan_tags`
 - `opentakeoff/web/src/lib/textIndex.js` — persisted spans; add a sibling cache for the census
 - `opentakeoff/web/src/pages/TakeoffCanvas.jsx` L2205 (`indexOneSheet`), L8677 (`agentCountMarks`)
+
+---
+
+# Part 2 — Row ↔ tag reconciliation: exact path and measured diagnosis
+
+Date: 2026-09-17. Question: on the T-VALVE-01 takeoff panel only a handful of
+the 163 rows show a `Symbol`/`Tag` cite. Are we failing to pull tags? Measured
+on the production path against the real set, no code changed.
+
+## 2.1 How the measurement was run
+
+- Real `Session` (`mcp/src/session.ts`): `loadPlan` → `graphForPipeline()` (the
+  shared sheet-graph pipeline both the canvas and MCP use) → `sweepScheduleRow`
+  with the exact options `reconcile_schedule_plan` passes
+  (`evaluationFast: true, verifyTaggedGeometry: true`).
+- Roles, tables, and row keys come from that production graph.
+- The tag *census* has no production implementation (that is finding G1), so it
+  was built from production parts: the production span extraction
+  (`textSpans`) fed to the production tag recogniser (`labelTokens`, the same
+  function the sweep uses internally for label attachment) in a set-wide loop.
+- Table sidecar off (`OPENTAKEOFF_TABLE_SIDECAR=0`), same as the corpus emit
+  scripts. This affects raster-table OCR only, not plan text.
+- Set: `navfac-cherry-point-atc-mechanical.pdf`, 75 sheets, 87 tables.
+  Graph build 81 s; census over all 75 sheets 0.5 s; each sweep 20 ms to 1.4 s.
+- Scripts kept out of the repo (scratch): `tag-census-diag.mjs`, `tag-followup.mjs`.
+
+## 2.2 The exact row → tag path (what produces a `Symbol` / `Tag` chip)
+
+```
+compile_corpus_takeoff (control_valves)          schedule only; zero plan fields
+  └─ corpusTakeoff.compileControlValveTakeoff     export/takeoff.json has no plan_* keys
+reconcile_schedule_plan {family|categories|tags}  the only step that touches plans
+  └─ schedulePlanReconcile.reconcileScheduleFamilyWithSweeps
+       row identity = rowIdentityTag(row)         VALVE MARK beats UNIT MARK (L337)
+       └─ Session.sweepScheduleRow(tag, {evaluationFast, verifyTaggedGeometry})
+            1. find the row (rowKeyAnswersFor / identityOf)
+            2. sheets = graph.sheets with role === "plan" ONLY (L3990)
+               every other role → skipped[] "reference drawings, never installed work"
+            3. occurrences = tagOccurrencesOnSheet(sheet, tag)   (L3522)
+               exact span == tag, then compound / (N) TAG / split / fragmented /
+               deep-hyphen / family-suffix fallbacks — per key, cached
+               candidates tried: tRaw, t, MARK/SYMBOL/TAG/EQUIP TAG cells, row identity
+               NEVER the UNIT MARK when the row's own identity is VALVE MARK (L4048)
+            4. totalOcc === 0 → throw "cannot be geometrically anchored — its tag
+               is not drawn on any plan sheet"                             (L4092)
+            5. else anchor on the most-occurrence plan sheet, verify local
+               geometry per occurrence (groundExactTagsToVectorGeometry) →
+               grounding_basis tag_attached_vector | symbol_fingerprint | exact_plan_tag
+  └─ attachDiagramCorroboration(rows, control_schematics)   separate, corroboration only
+canvas: agentTakeoff.rowsFromToolResult("reconcile_schedule_plan")
+  plan_cites[0]  → field plan_tag             → line.plan_sheet_id  → "Symbol · p.N"
+  tag_bbox       → field plan_tag_observation → line.plan_tag_*     → "Tag · p.N"
+  diagram_cites  → field diagram_tag          → "Schematic evidence · p.N"
+  refusal        → field plan_status=refused  → note only; chip shows "No verified plan symbol"
+TakeoffDataPanel.SourceComparisonActions renders the FIRST cite of each kind only.
+```
+
+There is no tag → row direction anywhere. Nothing lists what is drawn.
+
+## 2.3 What the set actually contains (census)
+
+| Measure | Value |
+|---|---|
+| Sheet roles from the production graph | plan 26 · legend 27 · schedule 8 · detail 10 · elevation 4 |
+| Text spans, all sheets | 34,494 |
+| Tag-shaped tokens (`labelTokens`) outside table regions | 2,314 (plan 1,106 · legend 1,071 · detail 90 · elevation 33 · schedule 14) |
+| Equipment-shaped (`isEquipTag`) tokens outside tables | 1,803 |
+| Distinct equipment-shaped keys drawn outside tables | 301 |
+| … that match some schedule key | 238 |
+| … that match no schedule key | 63 (mostly sheet callouts `M-501`×21, `M-301`×12; real ones: `CSF-CHW-M1`, `CSF-HHW-A1`, `CV-HHW-BP-M`, `CV-CH-C-MT1`) |
+
+Schedule keys pulled from the graph: 427 (equipment rows 318, VALVE MARK 106,
+UNIT MARK-keyed rows 3).
+
+| Schedule key kind | never drawn as text | drawn on plan-role sheets only | drawn on non-plan roles only | both |
+|---|---|---|---|---|
+| VALVE MARK (106) | **101** | 0 | 5 | 0 |
+| equipment row (318) | 3 | 155 | **93** | 67 |
+| UNIT MARK-keyed (3) | 0 | 3 | 0 | 0 |
+
+FCU specifically: 42 FAN COIL UNIT SCHEDULE rows (14 + 10 + 18 across the three
+building schedules); 44 distinct `FCU-*` tags drawn outside tables; 89
+occurrences, 84 of them on plan-role sheets. Every FCU is drawn, most twice
+(plan + enlarged plan). `sweepScheduleRow("FCU-A1")` → found 1,
+`tag_attached_vector`, 1.4 s.
+
+Live sweeps, as reconcile calls them:
+
+| tag | result |
+|---|---|
+| `FCU-A1`, `AHU-A1`, `FCU-T11`, `CV-CHW-BP-A` | found 1, basis `tag_attached_vector` |
+| `CV-FCU-A1-CHW`, `CV-CUH-A1-HHW` | REFUSED "not drawn on any plan sheet" (20 ms) |
+| `HRHWP-MT1`, `HRHWP-MT2`, `PCHWP-MT1` (drawn 5–10× on the schematic sheets) | REFUSED "not drawn on any plan sheet" |
+
+## 2.4 Diagnosis — why the panel shows ~6 tag cites out of 163
+
+**D1. The valve marks are genuinely not drawn.** 101 of 106 VALVE MARKs
+(`CV-FCU-A1-CHW` …) appear nowhere in the set's text outside the schedule.
+The five that do (`CV-CHW-BP-A`, `CV-HHW-BP-A1`, …) are the plant bypass
+valves labelled on the control schematics. The sweep is not losing valve
+tags; the drawings label valves by symbol next to the unit they serve, and
+the schedule row's own identity is the only string the sweep is allowed to
+search. So the six chips are the complete literal answer, and the remaining
+157 rows are correctly "not drawn". This is the part of the user's
+observation that is *not* a recall bug.
+
+**D2. The served UNIT MARK is drawn for essentially every valve row and is
+never searched.** `FCU-A1` is drawn twice; so are `AHU-A1`, `DOAH-A1`,
+`CUH-A1`. `sweepScheduleRow` explicitly refuses to fall back from an
+undrawn VALVE MARK to the UNIT MARK (session.ts ~L4048, "never count the
+AHU/FCU as a valve"). That refusal is right for *quantity* (a unit tag is
+not a valve), but it also throws away the *location*: a valve row could
+carry "served unit `FCU-A1` located at p.29 (x,y)" as a distinct evidence
+grade, which is exactly what an estimator wants to click. Today the panel
+has no such grade, so the row ends at "No verified plan symbol".
+
+**D3. Sheet-role misclassification hides 499 tag occurrences.** Pages 52–66
+(`MI702`…`MI732`) are the DDC control schematics — sequence text plus
+schematic diagrams — but every one carries the note "REFER TO M-001 FOR
+MECHANICAL LEGEND, ABBREVIATIONS", and the graph classifies all fourteen as
+`legend`. 93 equipment marks (plant pumps `HRHWP-MT1`, `PCHWP-MT1`,
+`SHHWP-M1`, chiller valves `CV-CH-H-MT-1`, BAS points `AI1`…) are drawn
+*only* there; the sweep skips every non-plan role, so each is refused as
+"not drawn on any plan sheet" even though the text is drawn 5–10 times.
+This is a real production bug with two halves: (a) the role classifier
+lets a cross-reference note win the title vote; (b) the sweep's plan-only
+gate has no "schematic" role to admit and no text-only occurrence
+disclosure for skipped roles. `attachDiagramCorroboration` partly
+compensates (it is where "Schematic evidence · p.56" comes from) but only
+for tags the control-schematic extractor harvested inside a recognised
+schematic region, and it never counts.
+
+**D4. Identity is exact-string at the first gate.** `tagOccurrencesOnSheet`'s
+primary pass is `span.str.toUpperCase() === key`; hyphen/space aliasing
+lives only in the fallbacks and in the unused `markid.ts`. The schedule
+spells `CV-CH-H-MT-1`; the schematic draws `CV-CH-C-MT1`. Neither the
+sweep nor anything else reports "a near-alias of this row is drawn here".
+
+**D5. One-way, first-cite-only, export-blind.** Reconcile runs schedule →
+plan only, so the 63 drawn keys with no schedule row are never listed. The
+panel renders only `plan_cites[0]` / `plan_tag_cites[0]`, so a mark drawn
+twice shows one chip. The compile export (`export/takeoff.json`,
+`*.csv`) carries no plan or tag fields at all.
+
+**D6. Cost was never the barrier.** The whole-set text census took under a
+second after the graph build; the per-row sweep is 20 ms (refusal) to 1.4 s
+(geometry). A 427-key text census is cheap; a 427-row geometric sweep is
+what reconcile does today and is the slow part.
+
+## 2.5 What "reconcile all the FCU rows against their drawn tags" needs
+
+Mapping the gaps to the build order in §4 (unchanged, now evidence-backed):
+
+1. **Tag census on the graph (§4 step 1)** — closes D5's inverse direction and
+   gives every row a text-level answer before any geometry runs. From this
+   set: 2,314 tokens, 1,803 equipment-shaped, 301 distinct keys, ready in
+   0.5 s.
+2. **Role fix + role-aware census** — D3. Either classify `MI7xx` as a new
+   `schematic` role, or stop a "REFER TO … LEGEND" note from voting; then let
+   the sweep *disclose* occurrences on non-plan roles as `reference_tags`
+   (never counted as installed) instead of throwing.
+3. **Served-equipment location grade** — D2. For rows whose own identity is
+   not drawn but whose UNIT MARK / served tag is, emit
+   `located_via_served_equipment` cites (sheet + bbox of `FCU-A1`) with
+   `installed_qty` still null. That alone lights up ~150 of the 163 valve rows.
+4. **Single identity (`markKey`) at the first gate** — D4, §4 step 2.
+5. **UI: all cites, not the first; exports carry tag cites** — D5.
+
+Everything above is text-only and sits on the shared path; none of it
+changes the geometry doctrine (text never proves installation).
