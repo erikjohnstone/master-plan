@@ -165,6 +165,20 @@ export const compileCorpusTakeoffOutput = {
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),
+  /** kind control_valves/T-VALVE-01 + export_path only: the filled Siemens
+   * valve mass-sizing template alongside the CSV tabs. rows_written may be
+   * less than source_item_count when a family was out of this template's
+   * hydronic/actuated scope (see excluded_families); per-column coverage
+   * and notes disclose exactly what filled from the schedule vs. was left
+   * blank (PN class / Branch Δp have no source anywhere in this pipeline). */
+  valve_size_template: z.object({
+    path: z.string(),
+    rows_written: z.number().int(),
+    source_item_count: z.number().int(),
+    excluded_families: z.array(z.object({ family: z.string(), count: z.number().int(), reason: z.string() })),
+    coverage: z.record(z.string(), z.object({ filled: z.number().int(), total: z.number().int() })),
+    notes: z.array(z.string()),
+  }).optional(),
 };
 
 const controlPixelBox = z.tuple([z.number(), z.number(), z.number(), z.number()]);
