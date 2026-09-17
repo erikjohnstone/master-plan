@@ -1,5 +1,30 @@
 ## Active work
 
+2026-09-17 linear takeoff: a fresh scan of 8 never-touched files, zero usable goldens, a methodology lesson (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Rather than continuing to pick through the earlier scan's own leftover
+candidates, ran the same automated method fresh against 8 files the
+earlier scan never reached (it hit its own time budget partway
+through). This pass completed cleanly in about 5 minutes and surfaced
+26 hits across 3 of the 8 files -- but the highest-confidence
+candidates checked, across two different files, were all real,
+disclosable rejections: an architectural bathroom layout's own
+elevation-sightline and wall-thickness dimension lines (two separate
+hits, same sheet), and a roof-flashing construction detail's own
+multi-leader reference line (spec notes nearby used the word "pipe"
+generically to mean roof penetrations, not a labeled run).
+
+Worth carrying forward honestly: 5 of the 8 files produced zero
+automatic-bind hits at all, not from a scan failure but genuinely
+unproductive content for this method. The accumulating evidence this
+session is fairly strong now that this corpus's file naming doesn't
+guarantee mechanical-only content -- several files are full combined
+architectural/mechanical/electrical/roofing sets, and a blind
+coordinate sweep keeps finding non-mechanical linework at a real rate.
+A sheet-number-prefix filter (keep only M-/P-/H-style sheets) would
+likely help; not implemented here.
+
+No golden changed. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 30" section.
+
 2026-09-17 linear takeoff: a second independent confirmation of the dimension-line-as-pipe gap, no golden change (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 While continuing to mine the same scan log after the last golden landed,
 checked one more candidate: a 17.60 LF "4-inch pipe" on an
