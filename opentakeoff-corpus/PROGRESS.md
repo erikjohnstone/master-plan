@@ -1,5 +1,48 @@
 ## Active work
 
+2026-09-17 linear takeoff: a sixth new-corpus golden, a new stacked-label failure mode found and disclosed, development recall 10/16 -> 11/17 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept mining the same second Release archive with the same automated
+sweep. One sheet -- a county jail's own mechanical bid set, a dense
+mechanical-room riser layout -- produced FIVE candidates with an
+automatic size and system read in one pass. Only one is used here; the
+other four are explicitly rejected and disclosed as a genuinely new real
+failure category, not silently dropped.
+
+This sheet's own drawing convention stacks supply/return pairs directly
+on top of each other, each branching off closely-bundled parallel
+risers with its own short leader stub. A marked crop confirmed one
+candidate's own automatic system read was simply WRONG -- its own
+reported stop sits precisely at the OTHER stacked label's own
+connection point one row below, not the one the engine actually
+picked. Two further candidates sit in the same kind of tightly-stacked
+pair and couldn't be independently confirmed with confidence. A fourth
+looked plausible on its own crop -- but given this sheet had already
+mislabeled one case in exactly this pattern, trusting a visual read the
+same convention had already shown could mislead wasn't worth the risk;
+all four were set aside together.
+
+The candidate actually used is the one case on this sheet with no
+nearby competing stacked label at all: a single, isolated branch stub,
+confirmed via a marked crop to run between two real, unambiguous stops.
+Added as a new development-tier golden.
+
+Development-tier recall: **10/16 (0.625) -> 11/17 (0.647)**, an exact
+length match with a genuine size match too (size accuracy 0.667 ->
+0.681). A real, disclosed engine-quality finding rides alongside the
+golden itself: automatic label-association isn't fully reliable on a
+sheet whose own drafting convention stacks two closely-related labels
+with tight vertical spacing -- a real, narrow failure mode distinct
+from anything found earlier this session, not attempted as a code fix
+(outside this checkpoint's own scope), but worth watching for on future
+sheets with the same convention. The new source PDF is now committed to
+this project's own real corpus (`raw/`).
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; all 227 tests pass; full filtered web regression suite
+re-run, matching the established baseline. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 27" section and its own priority list updated with the new
+recall number.
+
 2026-09-17 linear takeoff: a fifth new-corpus golden, the first with no automatic bind at all, development recall 9/15 -> 10/16 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept mining the same second Release archive with the same automated
 sweep. One sheet -- a different state transportation department's own
