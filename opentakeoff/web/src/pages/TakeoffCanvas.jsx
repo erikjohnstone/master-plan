@@ -8269,7 +8269,30 @@ export default function TakeoffCanvas() {
           + "UI must use the same graph pipeline as MCP — geometric-only fallback is disabled for compile_corpus_takeoff.",
       };
     }
-    return finalizeAgentCompiledTakeoff(compiled, opts);
+    const result = await finalizeAgentCompiledTakeoff(compiled, opts);
+    // No takeoff is "finished" without plan-grounded evidence — leaving
+    // reconcile as a second, optional tool call meant the model routinely
+    // stopped right after compile and wrote its final answer over a
+    // schedule-only takeoff with zero citations (live-verified: asked
+    // explicitly for both in the same prompt, still got 163 valves with no
+    // Compare/Installed Qty pills — the model just didn't chain it).
+    // Reconcile is core to the platform, not an optional extra step, so it
+    // runs HERE unconditionally for every kind, deterministically, the same
+    // way complete_bas_takeoff already bundles its own reconcile pass — never
+    // dependent on the model separately deciding to call
+    // reconcile_schedule_plan.
+    if (result && !result.error) {
+      try {
+        const reconciled = await fetchProductionReconcileSchedulePlan({ onProgress: reportAgentTakeoffProgress });
+        if (reconciled && !reconciled.error && Array.isArray(reconciled.rows)) {
+          pushReconcileToTakeoffPanel(reconciled, null);
+          result.reconcile_rows = reconciled.rows.length;
+        }
+      } catch {
+        // The compiled takeoff still stands on its own without citations.
+      }
+    }
+    return result;
   }
 
   /** Browser transport for the shared, source-bounded SOO interpreter. Raw
@@ -13471,6 +13494,8 @@ export default function TakeoffCanvas() {
             onOpenTakeoff={() => setShowTakeoffData(true)}
             takeoffRowCount={finishedTakeoffLineCount}
             takeoffBadgeLabel={lastCorpusTakeoffMeta?.kind === "complete_bas_takeoff" ? takeoffBadgeLabel : null}
+            canExportToHit={!!lastControlValveTakeoff}
+            onExportToHit={exportControlValveTakeoffToHit}
             runHistory={runHistory}
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
