@@ -1129,6 +1129,81 @@ test("evidence-gate thrash: a model that keeps re-submitting the same refused an
   assert.match(res.text || "", /Evidence gate could not be satisfied/);
 });
 
+test("a repeating wording gate outside the two auto-repairs stops instead of spinning to max_iterations", async () => {
+  // The normalized-coordinates gate is wording-only and has no special-case
+  // auto-repair, so before the generic breaker a model that kept re-emitting
+  // normalized coords drew the identical "[Evidence gate: ...]" message for the
+  // rest of maxIterations — the transcript shape the user reported, reproduced
+  // with a gate that has nothing to do with valves.
+  let calls = 0;
+  const fn = async () => { calls++; return resp(anthropicDone("The valve sits at normalized [0.25, 0.30] on M-101.")); };
+  const events: any[] = [];
+  const res = await runAgentLoop({
+    cfg: CFG_A, goal: "Where is the valve?", tools: TOOLS,
+    execute: () => ({}), onEvent: (ev) => events.push(ev),
+    maxIterations: 80, fetchFn: fn as any,
+  });
+  assert.equal(res.status, "done");
+  assert.ok(calls <= 5, `expected a quick give-up, got ${calls} model round-trips`);
+  const gateEvents = events.filter((e) => e.type === "text" && /^\[Evidence gate:/.test(e.text || ""));
+  assert.ok(gateEvents.length <= 3, `expected at most 3 repeated gate messages, got ${gateEvents.length}`);
+  assert.ok(gateEvents.every((e) => /normalized citation coordinates/.test(e.text)));
+  assert.match(res.text || "", /Evidence gate could not be satisfied/);
+});
+
+test("identical corrections stop even when the model calls a tool between them", async () => {
+  // The tool-branch streak guard only counts rejections with NO tool call in
+  // between, so a model that issues one useless call each round resets it
+  // forever. The exact-text backstop has to bound that too.
+  let calls = 0;
+  const fn = async () => {
+    calls++;
+    // Alternate: refused answer (gate fires) → a query_table call that never
+    // matches (callLog grows, gate text unchanged) → same refused answer again.
+    return resp(calls % 2
+      ? anthropicDone("The control valve information is unavailable.")
+      : anthropicTurn(`toolu_${calls}`, "query_table", { cell_contains: `NOPE-${calls}` }));
+  };
+  const events: any[] = [];
+  const res = await runAgentLoop({
+    cfg: CFG_A, goal: "Give me the matching control valve for CH-A1", tools: TOOLS,
+    execute: () => ({ matches: [] }), onEvent: (ev) => events.push(ev),
+    maxIterations: 80, fetchFn: fn as any,
+  });
+  assert.equal(res.status, "done");
+  assert.ok(calls < 20, `expected the backstop to fire well before the cap, got ${calls} round-trips`);
+  const gateEvents = events.filter((e) => e.type === "text" && /^\[Evidence gate:/.test(e.text || ""));
+  assert.ok(gateEvents.length <= 5, `expected at most 5 identical gate messages, got ${gateEvents.length}`);
+  assert.equal(new Set(gateEvents.map((e) => e.text)).size, 1);
+  assert.match(res.text || "", /Evidence gate could not be satisfied/);
+});
+
+test("an ordinary 'no such row' refusal clears the control-valve gate", () => {
+  // Every one of these is an honest report of absence — the gate's intended
+  // exit. Only the first two matched before, so the rest drew the identical
+  // correction no matter how the answer was reworded.
+  const log = [
+    { name: "query_table", args: { row_key: "CH-A1" }, out: { matches: [{ table: "EQUIPMENT SCHEDULE", row: { key: "CH-A1" } }] } },
+    { name: "query_table", args: { cell_contains: "CH-A1" }, out: { matches: [] } },
+  ];
+  const goal = "Run a control valve takeoff for CH-A1";
+  for (const refusal of [
+    "No matching control valve row was found.",
+    "Could not locate a control valve for CH-A1.",
+    "No control valve schedule row exists for CH-A1 anywhere in this set.",
+    "There is no control valve entry for CH-A1 in the loaded set.",
+    "CH-A1 has no control valve listed; none was found on the schedules.",
+    "A control valve for CH-A1 does not appear on any loaded schedule.",
+  ]) {
+    assert.equal(requiredEvidenceCorrection(log as any, goal, refusal), null, `still gated: ${refusal}`);
+  }
+  // Fabricating valve data with no valve row in the log must still be caught.
+  assert.match(
+    requiredEvidenceCorrection(log as any, goal, "Control valve CV-12 is 2 in., 40 GPM, Cv 29.")!,
+    /no query_table result matched a control-valve schedule/,
+  );
+});
+
 test("malformed model output → error status + event, not a crash", async () => {
   for (const bad of [{ nonsense: true }, { content: "not-an-array" }, null]) {
     const { fn } = scriptedFetch([bad]);

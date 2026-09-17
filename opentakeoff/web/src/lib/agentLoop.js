@@ -517,8 +517,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     const relationshipSearch = callLog.some(({ name, args }) =>
       name === "query_table"
       && equipmentTags.has(String(args?.cell_contains || "").toUpperCase().replace(/[^A-Z0-9]/g, "")));
-    const refusedValve = /\b(?:could not|can't|cannot|unable to|not found|no matching)\b.{0,80}\bcontrol\s+valve\b/i.test(finalText)
-      || /\bcontrol\s+valve\b.{0,80}\b(?:could not|can't|cannot|unable to|not found|no matching)\b/i.test(finalText);
+    // Reporting "there is no such row" is this gate's intended exit, so it has
+    // to recognise how a model actually writes absence. The old pair of ordered
+    // regexes only matched six fixed phrases sitting within 80 chars of "control
+    // valve", so a plain "No control valve schedule row exists for CH-A1" was
+    // read as a fabrication risk and drew the identical correction at every
+    // rewording. Judge per sentence instead: absence stated about a control
+    // valve, in either order.
+    const absenceRe = /\b(?:could not|couldn'?t|can'?t|cannot|unable to|not found|no matching|no such|none|nothing|does not (?:exist|appear|match)|doesn'?t (?:exist|appear|match)|(?:is|are|was|were) not (?:listed|present|shown|included)|no\s+(?:\w+\s+){0,4}(?:rows?|entry|entries|records?|matches?|results?|schedules?))\b/i;
+    const refusedValve = finalText.split(/(?<=[.!?\n])/)
+      .some((sentence) => /\bcontrol\s+valves?\b/i.test(sentence) && absenceRe.test(sentence));
     if (!valveMatch && !relationshipSearch) {
       return "No control-valve row matched the exact equipment row key, but relationship schedules often encode the equipment tag inside another cell or compound valve mark. Before refusing, call query_table with cell_contains set to the exact evidence-backed equipment tag. Use the returned semantic row identity if it matches.";
     }
@@ -2391,6 +2399,37 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
   let lastToolCorrection = "";
   let toolCorrectionStreak = 0;
   let callLogLenAtLastToolCorrection = -1;
+  // Wording corrections had the same hole from the other side: their streak was
+  // tracked but only two hard-coded correction texts could ever end the loop, so
+  // any OTHER repeating wording gate spun to maxIterations. Track tool activity
+  // for them too, and count every correction by its exact text as a
+  // shape-independent backstop — identical text N times means the state that
+  // produced it has not moved, whatever the model did in between.
+  let callLogLenAtLastWordingCorrection = -1;
+  /** @type {Map<string, number>} */
+  const correctionCounts = new Map();
+  const MAX_IDENTICAL_CORRECTIONS = 5;
+  /**
+   * End a gate that keeps repeating itself instead of spending the rest of
+   * maxIterations on the identical correction: return the best draft we have
+   * plus an honest note that the gate was never cleared. The caller has
+   * already echoed the assistant turn into `messages`.
+   * @param {string} correction
+   * @param {string} draft
+   * @param {number} iterationsDone
+   */
+  const giveUpOnGate = (correction, draft, iterationsDone) => {
+    const notes = runVerifiers(callLog, goal);
+    let giveUpText = String(draft || lastDraftText || "").trim();
+    giveUpText += `${giveUpText ? "\n\n" : ""}Evidence gate could not be satisfied: ${correction} `
+      + "Stopping after repeated identical corrections rather than retrying the same answer indefinitely — "
+      + "the fields above are grounded in the tool calls actually made; anything the gate flagged was not confirmed.";
+    if (notes.length) giveUpText = `${giveUpText}\n\n${notes.join("\n\n")}`;
+    lastDraftText = giveUpText;
+    emit({ type: "text", text: giveUpText });
+    emit({ type: "done", text: giveUpText });
+    return { status: /** @type {const} */ ("done"), text: giveUpText, iterations: iterationsDone };
+  };
   let answerNudgeSent = false;
   let consecutiveHighlightOnlyTurns = 0;
 
@@ -2613,9 +2652,19 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       }
       if (correction) {
         messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
-        const needsMoreTools = /\bcall (?:query_table|find_text|read_sheet_text|sweep_schedule_row|highlight_citation|count_marks)\b/i.test(correction)
+        const needsMoreTools = /\bcall [a-z][a-z0-9]*_[a-z0-9_]+\b/i.test(correction)
+          || /\b(?:query|re-?query|re-?run) (?:the|each|that|with)\b/i.test(correction)
+          || /\bkeep searching\b/i.test(correction)
           || /\bomit sheet\b/i.test(correction)
           || /\bno successful\b/i.test(correction);
+        // Shape-independent backstop, checked before either branch: whatever the
+        // correction looks like and whatever ran in between, the same text this
+        // many times is not progress.
+        const timesSeen = (correctionCounts.get(correction) || 0) + 1;
+        correctionCounts.set(correction, timesSeen);
+        if (timesSeen >= MAX_IDENTICAL_CORRECTIONS) {
+          return giveUpOnGate(correction, draftForGate, iterations + 1);
+        }
         // Wording-only gates that repeat identical corrections thrash the step
         // cap. After two identical wording corrections, strip the offending
         // all/each-highlighted sentence and accept the rest.
@@ -2658,6 +2707,14 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
               return { status: "done", text: displayText, iterations: iterations + 1 };
             }
           }
+          // Mirror the tool branch for every other wording correction: three
+          // identical rejections with no new tool call in between means the
+          // model cannot clear this gate by rewording it again.
+          const noNewToolsSinceWording = callLog.length === callLogLenAtLastWordingCorrection;
+          callLogLenAtLastWordingCorrection = callLog.length;
+          if (wordingCorrectionStreak >= 3 && noNewToolsSinceWording) {
+            return giveUpOnGate(correction, draftForGate, iterations + 1);
+          }
         } else {
           lastWordingCorrection = "";
           wordingCorrectionStreak = 0;
@@ -2671,24 +2728,16 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           // maxIterations repeating the same message: return the last draft
           // plus an honest note that the requested evidence lookup did not run.
           if (toolCorrectionStreak >= 3) {
-            const notes = runVerifiers(callLog, goal);
-            let giveUpText = String(draftForGate || lastDraftText || "").trim();
-            giveUpText += `${giveUpText ? "\n\n" : ""}Evidence gate could not be satisfied: ${correction} `
-              + "Stopping after repeated identical corrections rather than retrying the same answer indefinitely — "
-              + "the fields above are grounded in the tool calls actually made; anything the gate flagged was not confirmed.";
-            if (notes.length) giveUpText = `${giveUpText}\n\n${notes.join("\n\n")}`;
-            lastDraftText = giveUpText;
-            emit({ type: "text", text: giveUpText });
-            messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
-            emit({ type: "done", text: giveUpText });
-            return { status: "done", text: giveUpText, iterations: iterations + 1 };
+            return giveUpOnGate(correction, draftForGate, iterations + 1);
           }
         }
         const toolDirective = needsMoreTools
           ? (toolCorrectionStreak >= 2
             ? "You already received this exact correction and did not call the suggested tool. Call it now, with real arguments, as your ONLY action this turn — do not write any answer text yet."
             : "Use tools only if this correction requires new evidence or paint; otherwise emit the complete replacement answer now.")
-          : "Do not call any tools. Emit the complete replacement answer now.";
+          : (wordingCorrectionStreak >= 2
+            ? "Rewording alone has not cleared this correction. If it asks for evidence you have not retrieved, call the tool it names now as your ONLY action this turn; otherwise emit the complete replacement answer."
+            : "Do not call any tools. Emit the complete replacement answer now.");
         messages.push({
           role: "user",
           content: `${correction}\n\n${toolDirective} Preserve every previously retrieved, tool-grounded requested field; do not answer only the latest correction. Satisfy every part of the original goal.`,
@@ -2709,6 +2758,14 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
           if (correction) {
             messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
+            // This path emits its own gate message, so it needs the same
+            // backstop — a model that keeps dropping the same attrs would
+            // otherwise spin here untracked by the counter above.
+            const timesSeenAfterMerge = (correctionCounts.get(correction) || 0) + 1;
+            correctionCounts.set(correction, timesSeenAfterMerge);
+            if (timesSeenAfterMerge >= MAX_IDENTICAL_CORRECTIONS) {
+              return giveUpOnGate(correction, draftForGate, iterations + 1);
+            }
             messages.push({
               role: "user",
               content: `${correction}\n\nUse tools only if this correction requires new evidence or paint; otherwise emit the complete replacement answer now. Preserve every previously retrieved, tool-grounded requested field.`,
