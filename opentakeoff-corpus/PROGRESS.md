@@ -1,5 +1,50 @@
 ## Active work
 
+2026-09-17 linear takeoff: same sweep-and-verify method repeated on Federal M3.1 -- development recall 3/9 -> 4/10 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Ran the exact method from the prior checkpoint against the OTHER fully-
+refused development sheet, `federal-attachment4-mechanical.pdf#6` (both
+CHWS/CHWR riser goldens entirely wall-vouch-excluded). A full-page grid
+sweep found several both-dead-end candidates; three were rejected before
+one held up, each disclosed as a further instance of the prior
+checkpoint's new finding (real but non-MEP linework slipping through
+uncaught on an unlayered sheet), not silently dropped: a repeating
+"4.00 LF" pattern turned out to be a dashed reference-line series with no
+confirming context; a "27.00 LF" candidate was the TITLE BLOCK's own rule
+line under the SCALE note; a vertical run near a real "VAV-23" callout
+looked promising on a wide crop but a tight zoomed crop showed it running
+along a WALL FACE line, not a pipe -- the same wall-outline mistrace
+category caught once before on a different sheet.
+
+The candidate that held up was seeded directly on real drawn linework
+visible in the wide crop itself: two short black pipe stubs with
+valve-symbol circles, dropping from the main "1\" HHWR"/"1\" HHWS" pipe
+pair down to VAV-23's own reheat-coil connection, exactly where the
+sheet's own "3/4\" HHWR"/"3/4\" HHWS" labels and leader arrows point. The
+traced stub (the HHWS branch) is a real 1.91 LF, dead-end-to-dead-end run
+-- top dead-end at the main line's own takeoff, bottom dead-end at the
+VAV box's coil connection -- confirmed via a marked render crop showing
+both ends on genuine CAD junctions. Added as `federal-m3-1.json`'s third
+run, system HHWS, size pipe:0.75 (a direct read off the sheet's own
+label, the same "engine's own bind came back blank, label read directly
+instead" precedent already established twice this same day).
+
+Development-tier recall: **3/9 (0.333) -> 4/10 (0.4)**, exact length
+match. Every real-corpus sheet that still refuses outright now has at
+least one candidate found-and-rejected pass on record; the prior
+checkpoint's disclosed engine finding (real non-MEP linework slipping
+through uncaught) now has three confirmed instances across two sheets,
+including a SECOND wall-outline mistrace matching a category from
+several checkpoints back -- a recurring pattern, not a one-off.
+
+Measured: `npm run bench:linear` passes, refusal still 5/5, held-out/
+synthetic numbers unchanged (this pass touches only one ground-truth
+fixture, no engine or scorer code); all 215
+`benchScore.test.ts`/`test/linear/*.test.ts` tests pass; full filtered
+web regression suite re-run, matching the established baseline (3455
+tests, 3359 pass, 70 fail/13 cancelled/13 skipped, all pre-existing).
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 17" section and its own
+priority list updated with the new recall number.
+
 2026-09-17 linear takeoff: a third Bessemer M101 golden -- development recall 2/8 -> 3/9 -- plus a new disclosed engine finding (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Finding 1 (wall-vouch false-positive exclusion, off-limits to fix --
 `wallnetwork.ts` internals are on this project's own "never touch" list)

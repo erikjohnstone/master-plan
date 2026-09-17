@@ -13,10 +13,10 @@
     "file": "federal-mech--l-attachment4-mechanical-p6--full.png",
     "hash": "1c5a1f36cfff71f2f35c526fe532d65f1e04c066d665ce3361f9f4eb82d91f9c"
   },
-  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP3.8 autonomous coordinator)",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP3.8 autonomous coordinator; 3rd run added under the WP3/GATE 3 trace-engine coordinator pass)",
   "date": "2026-09-17",
-  "review_basis": "Hand-traced in the running canvas app's Linear tool (manual mode, scale confirmed from the plan's own detected '1/8\" = 1'-0\"' note) via a Playwright-driven browser session against the rendered PDF. The two parallel 4\" chilled-water lines were each independently identified by real-world coordinate: pdf.ts's positionedText locates the separate 'CHWR' (x=3985) and 'CHWS' (x=4003) callouts printed directly beside this riser pair (distinct from -- and more specific than -- the combined '4\" CHWS/R PIPING DOWN...' arrow-leader note above them), and each traced click was cross-checked live against the canvas app's own status-bar real-world readout (x=222'0\" for the CHWS line, x≈221'0\" for the CHWR line, ~1 ft apart, matching the labels' own relative offset) before committing -- not inferred from on-screen proximity alone.",
-  "scope": "This federal ground-floor HVAC piping sheet (M3.1) is dense with heating-hot-water (HHWS/HHWR) branch piping to dozens of VAV reheat coils, plus this one chilled-water (CHWS/CHWR) riser pair feeding chiller CH-1. WP3.8 asks for a representative run here, not an exhaustive trace of the sheet. This golden is the 4\" CHWS/CHWR riser pair itself: traced from just below the 'PIPING DOWN THROUGH SLAB TO CH-1' callout, straight down to the point marked 'BELOW GRADE' where the lines leave the building envelope. Both lines are uniform 4\" nominal pipe for their full traced extent -- no size change, no fitting, a clean straight vertical pair, chosen specifically because (unlike the ITD p5 golden in this same directory) each line carries its own unambiguous, independently-labeled supply/return identity. Explicitly OUT OF SCOPE for this golden: the entire HHWS/HHWR branch network to every VAV box on this sheet, the CHWS/CHWR run's own continuation below grade toward the chiller utility enclosure ('SEE BELOW', off this immediate view), and every other mechanical room / equipment connection this dense sheet shows -- all left for a later, broader ground-truth pass.",
+  "review_basis": "Hand-traced in the running canvas app's Linear tool (manual mode, scale confirmed from the plan's own detected '1/8\" = 1'-0\"' note) via a Playwright-driven browser session against the rendered PDF. The two parallel 4\" chilled-water lines were each independently identified by real-world coordinate: pdf.ts's positionedText locates the separate 'CHWR' (x=3985) and 'CHWS' (x=4003) callouts printed directly beside this riser pair (distinct from -- and more specific than -- the combined '4\" CHWS/R PIPING DOWN...' arrow-leader note above them), and each traced click was cross-checked live against the canvas app's own status-bar real-world readout (x=222'0\" for the CHWS line, x≈221'0\" for the CHWR line, ~1 ft apart, matching the labels' own relative offset) before committing -- not inferred from on-screen proximity alone. The THIRD run ('federal-m31-vav23-hhws-branch') was added later, under GATE 3's own single-call trace-engine testing: this sheet's CHWS/CHWR riser pair above is entirely wall-vouch-excluded from `trace_run` (docs/LINEAR-TRACE-EVAL.md's own Finding 1 -- long, straight, axis-dominant, no layer signal on this unlayered sheet), so a full-page grid sweep for a DIFFERENT, single-call-friendly real run was tried instead. Several sweep hits were rejected before this one, each for a concrete, confirmed reason (Finding 6, same doc): a seed on a repeating '4.00 LF' pattern turned out to be a dashed reference/hidden-line series with no confirming MEP context; another (27.00 LF) was the title block's own horizontal rule line under the SCALE note; a third, more promising-looking candidate (a vertical run from near a VAV-23 branch takeoff down through the ceiling plan) turned out on a tight zoomed crop to be running along a WALL FACE line, not a pipe. The candidate that held up: seeded directly on the real drawn 'VAV-23' branch takeoff visible in a wide render crop -- two short black pipe stubs with valve-symbol circles, dropping from the main '1\" HHWR'/'1\" HHWS' pipe pair down to VAV-23's own reheat-coil connection, right where its own '3/4\" HHWR'/'3/4\" HHWS' labels and leader arrows point. The traced stub (the HHWS branch, right-hand of the pair) is a real 1.91 LF, 3-point (one small real jog, both segments perfectly vertical/collinear), dead-end-to-dead-end run: top dead-end exactly at the main line's own takeoff point, bottom dead-end at the VAV box's own coil connection -- confirmed via a marked render crop showing both ends on genuine drawn CAD junctions. `trace_run`'s own automatic size-bind came back blank here (`size_missing`, `stroke-family:unclassified` -- the same unlayered-sheet, no-family-evidence path as this sheet's other two runs); the '3/4\" HHWS' size and 'HHWS' system are a direct read off the sheet's own drawn callout and leader-arrow pairing, the same precedent `ground_truth/linear/baker-m101-heldout.json` and `bessemer-m101.json`'s own third run already established for a label sitting outside `trace_run`'s own binding radius.",
+  "scope": "This federal ground-floor HVAC piping sheet (M3.1) is dense with heating-hot-water (HHWS/HHWR) branch piping to dozens of VAV reheat coils, plus this one chilled-water (CHWS/CHWR) riser pair feeding chiller CH-1. WP3.8 asks for a representative run here, not an exhaustive trace of the sheet. The first two runs are the 4\" CHWS/CHWR riser pair itself: traced from just below the 'PIPING DOWN THROUGH SLAB TO CH-1' callout, straight down to the point marked 'BELOW GRADE' where the lines leave the building envelope. Both lines are uniform 4\" nominal pipe for their full traced extent -- no size change, no fitting, a clean straight vertical pair, chosen specifically because (unlike the ITD p5 golden in this same directory) each line carries its own unambiguous, independently-labeled supply/return identity. The THIRD run brings in one real 3/4\" HHWS branch stub feeding VAV-23's reheat coil -- a different, later purpose (GATE 3 single-call trace-engine recall testing), where a short, dead-end-bounded branch is exactly what a fair single-`trace_run`-call comparison needs, unlike the CHWS/CHWR riser pair above (entirely wall-vouch-excluded) or the sheet's own dense, heavily-branched HHW network in general. Explicitly OUT OF SCOPE for all three runs: the entire remaining HHWS/HHWR branch network to every OTHER VAV box on this sheet (dozens), the CHWS/CHWR run's own continuation below grade toward the chiller utility enclosure ('SEE BELOW', off this immediate view), the parallel '3/4\" HHWR' branch running beside the traced HHWS stub into the same VAV-23 unit, and every other mechanical room / equipment connection this dense sheet shows -- all left for a later, broader ground-truth pass.",
   "runs": [
     {
       "run_id": "federal-m3.1-chws-riser",
@@ -67,10 +67,39 @@
           "totals_by_size": { "pipe:4": 40.71 }
         }
       }
+    },
+    {
+      "run_id": "federal-m31-vav23-hhws-branch",
+      "description": "3/4\" heating-hot-water supply (HHWS) branch stub, from its real takeoff off the main '1\" HHWS' line down to VAV-23's own reheat-coil connection.",
+      "system": "HHWS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.28897156084656084, 0.6893981481481481],
+        [0.28897156084656084, 0.6904398148148148],
+        [0.28897156084656084, 0.6973379629629629]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 0.75 },
+          "1": { "kind": "pipe", "nps_in": 0.75 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 1.91,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 0.25, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" },
+            { "i": 1, "lf": 1.66, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:0.75": 1.91 }
+        }
+      }
     }
   ],
   "totals_by_size_all_runs": {
-    "pipe:4": 80.41
+    "pipe:4": 80.41,
+    "pipe:0.75": 1.91
   },
-  "total_lf_all_runs": 80.41
+  "total_lf_all_runs": 82.32
 }
