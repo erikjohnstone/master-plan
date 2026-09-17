@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-17 linear takeoff: ninth new-corpus golden via targeted narrow-scope-project search, a real engine-behavior finding, development recall 13/19 -> 14/20 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Refined the search strategy in direct response to the previous entry's
+own lesson: rather than scanning random archive files, targeted files
+whose own project name describes a narrowly-scoped single-system
+replacement (a boiler swap, a chiller swap) instead of a full building
+renovation. The very first file checked from that batch produced a
+real hit: a 6-inch chilled water supply pipe on a literal "Chiller
+Replacement" project, its own system name matching the project title
+exactly.
+
+A real, disclosed engine-behavior finding surfaced before this golden
+could be trusted as-is. The bench's own re-scoring convention seeds on
+whichever segment of a golden's own shape is longest -- and this real
+pipe's own two longest segments turned out to be isolated end stubs
+that don't bridge outward to the rest of the physical run, while three
+short middle segments do. Re-tracing from either long end returned
+only a short isolated piece, not the full physical pipe a first
+manual look had confirmed. This is a live, real-corpus confirmation of
+a behavior this project's own unit tests already name precisely, only
+ever exercised synthetically before now.
+
+Rather than keep a golden the bench's own honest re-seed couldn't
+reproduce, or throw the candidate out, rebuilt the golden around the
+one segment that IS reliably rediscovered on its own, with size read
+manually from the parent run's own real label (the isolated segment
+carries no automatic bind by itself).
+
+Development-tier recall: **13/19 (0.6842) -> 14/20 (0.7)**, an exact
+length match, an honest no-label size case. The new source PDF is now
+committed to this project's own real corpus (`raw/`).
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 31" section and its priority
+list updated with the new recall number.
+
 2026-09-17 linear takeoff: a sheet-prefix filter improvement, validated but zero yield this batch (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Built and tested the improvement the previous entry proposed: skip
 architectural/electrical/structural/civil sheets by their own printed
