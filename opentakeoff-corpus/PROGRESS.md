@@ -1,5 +1,45 @@
 ## Active work
 
+2026-09-17 linear takeoff: a fifth new-corpus golden, the first with no automatic bind at all, development recall 9/15 -> 10/16 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept mining the same second Release archive with the same automated
+sweep. One sheet -- a different state transportation department's own
+maintenance-shed HVAC-upgrade plumbing plan -- turned up a real, long,
+heavily dash-fragmented candidate where neither size nor system came
+back automatically bound, unlike every other new-corpus golden so far
+this session. Investigated anyway rather than discarded: a marked render
+crop confirmed a real cleanout symbol crossing the traced line, with a
+real printed size callout pointing directly at it.
+
+Built as a manual context-read golden, the same method this project's
+own very first new-corpus golden already established for a case an
+automatic bind can't reach. The size is a direct, literal read of the
+printed callout. The system is disclosed plainly as an inference from
+the cleanout symbol's own universal, single-purpose meaning -- a
+cleanout exists only on drain/waste/sewer lines, never water, gas, or
+HVAC -- not a literally-printed abbreviation, since this sheet's own
+other labels are plain descriptive text with no drawn system-code letter
+anywhere to point to directly. Both ends of the single trace call stop
+at real wall-corner pipe penetrations; two real interior branch points
+along the way (their own branches explicitly out of scope) are real,
+physically sensible geometry, not an artifact.
+
+Development-tier recall: **9/15 (0.6) -> 10/16 (0.625)**, an exact
+length match. Unlike every prior new-corpus golden, the size comparison
+reads as a miss here -- but correctly categorized as an honest no-label
+outcome (the live engine never claims a size at all on this run), not a
+wrong guess. Size accuracy dips as a result (0.770 -> 0.667), an
+expected, disclosed side effect of a long no-label case joining the mix,
+not a regression in what the engine does on cases it CAN bind. The new
+source PDF -- one part of a 3-part split original document, only the
+part containing the actual plumbing sheet -- is now committed to this
+project's own real corpus (`raw/`).
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; all 227 tests pass; full filtered web regression suite
+re-run, matching the established baseline. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 26" section and its own priority list updated with the new
+recall number.
+
 2026-09-17 linear takeoff: a second GitHub Release archive opens, an automated multi-file sweep, two more rejected candidates, development recall 8/14 -> 9/15 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Opened this repo's OTHER GitHub Release archive -- a separate ~264-PDF
 resource not yet touched this session, found the same way as the first.
