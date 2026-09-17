@@ -587,7 +587,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 2.896187000000282
+     "buildMs": 2.7410939999999755
     }
    ],
    "aggregate": {
@@ -598,7 +598,7 @@
     "meanLenErrPct": 0.6137211036539896,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 2.896187000000282,
+    "maxColdBuildMs": 2.7410939999999755,
     "maxWarmQueryMs": null
    }
   },
@@ -645,7 +645,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 307.73525299999983
+     "buildMs": 312.71253000000024
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -700,18 +700,71 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 461.72832599999947
+     "buildMs": 376.0807129999994
+    },
+    {
+     "caseName": "weld-county-mechanical-permit.pdf#7",
+     "status": "reached",
+     "goldenLf": 21.82,
+     "tracedLf": 21.82,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:16",
+     "tracedSizeKey": "round:16",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "weld-county-mechanical-permit.pdf#7",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 21.82,
+      "goldenLenFt": 21.82
+     },
+     "buildMs": 479.2154470000005
     }
    ],
    "aggregate": {
-    "cases": 7,
-    "recall": 0.14285714285714285,
-    "precision": 0.6116822429906541,
+    "cases": 8,
+    "recall": 0.25,
+    "precision": 0.7428040854224698,
     "maxLenErrPct": 0.8470464135021097,
-    "meanLenErrPct": 0.46230437018595794,
+    "meanLenErrPct": 0.30820291345730527,
     "maxOverTracePct": 0.8470464135021097,
-    "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 461.72832599999947,
+    "sizeAccuracyPct": 0.45458333333333334,
+    "maxColdBuildMs": 479.2154470000005,
+    "maxWarmQueryMs": null
+   }
+  },
+  "heldOut": {
+   "rows": [
+    {
+     "caseName": "federal-attachment4-mechanical.pdf#7",
+     "status": "reached",
+     "goldenLf": 3.57,
+     "tracedLf": 3.57,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:2.5",
+     "tracedSizeKey": "pipe:2.5",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "federal-attachment4-mechanical.pdf#7",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.57,
+      "goldenLenFt": 3.57
+     },
+     "buildMs": 1323.8325730000006
+    }
+   ],
+   "aggregate": {
+    "cases": 1,
+    "recall": 1,
+    "precision": 1,
+    "maxLenErrPct": 0,
+    "meanLenErrPct": 0,
+    "maxOverTracePct": 0,
+    "sizeAccuracyPct": 1,
+    "maxColdBuildMs": 1323.8325730000006,
     "maxWarmQueryMs": null
    }
   }

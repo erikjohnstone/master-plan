@@ -1,5 +1,68 @@
 ## Active work
 
+2026-09-17 linear takeoff: first held-out golden authored, frozen split declared, +1 development hit (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Closed the next GATE 3 gap: no held-out sheet existed yet, so the plan's own
+"held-out tier within 5 points of development" rule was unassessable. A
+research pass (delegated, then independently re-verified end to end: sha256,
+sheet metadata, size labels, a marked render crop, and a fresh `trace_run`
+call all re-checked from scratch rather than trusted on the pass's word)
+found a strong candidate on `weld-county-mechanical-permit.pdf#7` -- but
+before authoring it, a re-read of the goal document's own explicit HELD-OUT
+TIER section showed it pins that exact sheet ("weld-county p7") to the
+DEVELOPMENT tier by name. Caught and fixed before commit, not after: retagged
+`weld-county-m1-0.json` to `tier:"development"` (its content -- a 16" round
+duct riser from a real reducer to a real tee, LF 21.82→21.82 exact, size OK
+-- didn't need to change, just its label). This is the SECOND confirmed
+development-tier recall hit (after `itd-p5-hc3-branch`), moving development
+recall 1/7→2/8 (0.25) and precision 0.612→0.743.
+
+Declared the plan's own actual held-out list before authoring anything
+against it: `opentakeoff-corpus/reports/LINEAR_HELDOUT.txt`, modeled on
+`keys/HELDOUT.txt`'s own "declared first, and frozen" discipline. Five of
+the seven sheets are pinned verbatim by the plan; the two
+`navfac-cherry-point-atc-mechanical.pdf` sheets were this checkpoint's own
+one-time pick, made STRUCTURALLY (first sheet in each of the PDF's two real
+plan series, by sheet number + "PLAN NORTH" text only) with zero `trace_run`
+probing beforehand, so the pick itself carries no engine-behavior bias --
+and explicitly excluding a sheet (`MP122`) already probed earlier in the
+SAME candidate search, since probing before declaring would have quietly
+reintroduced the bias the freeze file exists to prevent.
+
+Authored the actual first held-out golden off that frozen list:
+`federal-attachment4-mechanical.pdf#7` (M4.1), a 2½" HHWS pipe stub in a
+mechanical room's enlarged piping plan, from a real tee off pump HWP-1's
+discharge riser to a real junction with the vertical header bundle. Found
+via a grid-sweep of `trace_run` seeds (the label's own text sat just off
+the actual line), confirmed via a marked render crop. First held-out
+measurement: **reached, LF 3.57→3.57 exact, recall 1.0, precision 1.0, size
+accuracy 100%** -- a clean pass, though n=1 so not yet conclusive.
+
+Wired both into `bench/linear.mts`: `RealGolden.tier` now splits real
+goldens into `traceRows` (development, gated as before) vs a new
+`heldOutTraceRows` (reported via a new `aggregateTrace` call and a
+`results.json` `trace.heldOut` field, but NOT hard-gated on "within 5
+points" yet -- disclosed explicitly in code comments and in the held-out
+golden's own `scope` field: at n=1 this bench's binary per-case recall
+criterion can only read 0% or 100%, so gating now would just gate on which
+single case got authored, not on generalization). One real bug caught
+along the way: the pre-existing real-goldens loop's own `readdirSync`
+enumeration would have silently swept `refusals.json`-style additions in
+were it not already excluded by name from the earlier refusal-corpus pass
+-- confirmed still correctly excluded, no new instance of that bug.
+
+Measured: `npx tsc --noEmit` clean; `bench:linear` reports the numbers
+above and still passes (development thresholds ratcheted up in their own
+comments to match the new 2/8 recall and 0.743 precision, not tightened as
+hard gates yet); all 208 `benchScore.test.ts` + `test/linear/*.test.ts`
+tests pass unchanged (no scoring-function behavior changed, only new golden
+data and a tier split in the bench runner itself).
+
+The other 6 declared held-out sheets remain frozen but unauthored --
+disclosed as real follow-up, matching this corpus's own repeated
+"a representative pass, not exhaustive" precedent. Enough held-out cases
+for the "within 5 points" gate to mean something is the actual next bar,
+not one clean hit.
+
 2026-09-17 linear takeoff: refusal/negative corpus authored and wired into bench:linear (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Closed a gap `docs/LINEAR-TRACE-EVAL.md` itself named as missing: `scoreTracePrecision`
 only ever sees seeds ON a real golden run, so it can never catch a seed that should

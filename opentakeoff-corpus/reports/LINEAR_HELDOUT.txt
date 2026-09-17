@@ -1,0 +1,46 @@
+# reports/LINEAR_HELDOUT.txt -- the frozen linear-takeoff held-out sheet split.
+# Declared once per opentakeoff-corpus/goals/LINEAR_TAKEOFF.md's own explicit
+# HELD-OUT TIER section ("declared first, and frozen" -- the same discipline
+# keys/HELDOUT.txt already uses for the unrelated table-extraction bakeoff):
+# NEVER traced against during a fix, NEVER used to tune wall-vouch, dash-gap
+# bridging, or any other trace_run decision, and never re-drawn to improve a
+# score. If a held-out failure is worth fixing, the fix is made against the
+# development tier and this split is re-measured untouched.
+#
+# The plan pins five of these seven sheets by exact page; only the two
+# navfac-cherry-point-atc-mechanical.pdf sheets were left to "the coordinator,
+# chosen ONCE." Chosen here STRUCTURALLY, not by how the engine performs on
+# them: the FIRST sheet in each of the PDF's two real plan series (MH =
+# mechanical HVAC/ductwork, MP = mechanical piping), confirmed via sheet
+# number + "PLAN NORTH" text only -- no trace_run call was made against
+# either sheet before this file was written and committed, so this pick
+# carries no engine-behavior bias. (MP122, explored earlier this same
+# checkpoint while researching a DIFFERENT candidate that turned out to
+# belong to the development tier instead -- see weld-county-m1-0.json's own
+# review_basis -- was excluded from consideration for exactly this reason:
+# it had already been probed with a real trace_run call.)
+#
+# development tier (may be traced against, tuned against, at any time):
+#   bessemer-mechanical-bidset.pdf#3  (P101)
+#   bessemer-mechanical-bidset.pdf#6  (M101)
+#   itd-d1-lab-mechanical.pdf#3
+#   itd-d1-lab-mechanical.pdf#5       (M1.2)
+#   federal-attachment4-mechanical.pdf#4
+#   federal-attachment4-mechanical.pdf#6 (M3.1)
+#   weld-county-mechanical-permit.pdf#7  (M1.0)
+#
+# held-out tier (never traced against until a WP's development-tier numbers
+# already pass; measured only at end-of-WP checkpoints):
+#   itd-d1-lab-mechanical.pdf#4
+#   federal-attachment4-mechanical.pdf#7
+#   baker-county-eoc-bidset.pdf#38
+#   bldg5406-hvac-demo-mechanical.pdf#2   (M-101)
+#   bldg5406-hvac-demo-mechanical.pdf#14  (P-101)
+#   navfac-cherry-point-atc-mechanical.pdf#6   (MH101) -- coordinator pick
+#   navfac-cherry-point-atc-mechanical.pdf#18  (MP101) -- coordinator pick
+#
+# authored so far (2026-09-17): federal-attachment4-mechanical.pdf#7 only --
+# see opentakeoff-corpus/ground_truth/linear/federal-m3-1-p7-heldout.json.
+# The other six are declared and frozen but NOT yet authored; a representative
+# first measurement, not an exhaustive one -- matching this corpus's own
+# repeated "one run/one sheet, not the whole set, per pass" precedent.

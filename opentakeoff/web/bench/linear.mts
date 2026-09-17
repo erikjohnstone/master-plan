@@ -97,8 +97,8 @@ const THRESHOLDS = {
 const TRACE_FRECHET_TOL_PX = 2;      // plan's own literal "discrete Frechet < 2 pt"
 const TRACE_OVERLAP_MIN = 0.8;       // plan's own literal "length overlap >= 80%"
 const TRACE_THRESHOLDS = {
-  minRecall: 0.1,           // measured 1/7 = 0.143 on the real ground truth
-  minPrecision: 0.5,        // measured 0.612 on the real ground truth
+  minRecall: 0.1,           // measured 2/8 = 0.25 on the development tier (weld-county-m1-0.json added the 2nd hit)
+  minPrecision: 0.5,        // measured 0.743 on the development tier
   maxLenErrPct: 1.0,        // Finding 4 (a branchy trunk's own over-trace) reads as ~85% error under this scorer; not yet a per-case cap worth tightening
   maxOverTracePct: 1.0,
   // Unlike the ratchet-point thresholds above, this one IS GATE 3's own
@@ -314,6 +314,10 @@ for (const file of caseFiles) {
 interface RealGolden {
   source_pdf: string;
   sheet_id: string;
+  // absent on any golden authored before this field existed -- treated as
+  // "development" (see the fallback below), matching every prior file's
+  // own actual tier rather than silently dropping it from either bucket.
+  tier?: "development" | "held_out";
   runs: Array<{ verts_norm: [number, number][]; computed: { perimeter_lf: number }; run?: { size_overrides?: Record<string, RunSize> } }>;
 }
 const repoRoot = resolve(here, "../../..");
@@ -323,6 +327,10 @@ const realGtDir = join(repoRoot, "opentakeoff-corpus/ground_truth/linear");
 // excluded by name, not just by shape, since parsing it as a RealGolden
 // yields `source_pdf: undefined` and fails loudly rather than skipping.
 const realFiles = readdirSync(realGtDir).filter((f) => f.endsWith(".json") && f !== "refusals.json").sort();
+// held-out rows go to their OWN array, never into the shared `traceRows`
+// the synthetic/development slicing below depends on -- opentakeoff-corpus/
+// reports/LINEAR_HELDOUT.txt is the frozen split this reads `tier` against.
+const heldOutTraceRows: TraceRunRow[] = [];
 for (const file of realFiles) {
   const g: RealGolden = JSON.parse(readFileSync(join(realGtDir, file), "utf8"));
   const pdfPath = resolve(repoRoot, g.source_pdf);
@@ -344,7 +352,9 @@ for (const file of realFiles) {
     const goldenSize = run.run?.size_overrides?.[String(bestI)];
     const cold = !traceSeenSheets.has(g.sheet_id);
     traceSeenSheets.add(g.sheet_id);
-    traceRows.push(await traceOneRun(session, g.sheet_id, pts, run.computed.perimeter_lf, goldenSize, cold));
+    const row = await traceOneRun(session, g.sheet_id, pts, run.computed.perimeter_lf, goldenSize, cold);
+    if (g.tier === "held_out") heldOutTraceRows.push(row);
+    else traceRows.push(row);
   }
 }
 
@@ -352,6 +362,17 @@ const syntheticTraceRows = traceRows.slice(0, caseFiles.length);
 const realTraceRows = traceRows.slice(caseFiles.length);
 const syntheticTraceAgg: TraceAggregate = aggregateTrace(syntheticTraceRows, TRACE_FRECHET_TOL_PX, TRACE_OVERLAP_MIN);
 const realTraceAgg: TraceAggregate = aggregateTrace(realTraceRows, TRACE_FRECHET_TOL_PX, TRACE_OVERLAP_MIN);
+// Reported, NOT gated at "within 5 points" yet: the plan's own GATE 3 rule
+// ("a metric that passes development and fails held-out by > 5 points...
+// is a FAILED step") needs enough held-out cases for a percentage-point gap
+// to mean anything. At n=1 (opentakeoff-corpus/reports/LINEAR_HELDOUT.txt
+// declares 7, only 1 authored so far) this bench's own per-case binary
+// recall criterion can only ever read 0% or 100% on this tier -- gating
+// that against development's own smoother 7-case percentage would just be
+// gating on which single case got authored, not on whether the engine
+// generalizes. Revisit once held-out has enough cases for its own recall
+// number to move in less-than-100-point steps.
+const heldOutTraceAgg: TraceAggregate = aggregateTrace(heldOutTraceRows, TRACE_FRECHET_TOL_PX, TRACE_OVERLAP_MIN);
 
 // ── refusal correctness — a labeled NEGATIVE corpus (opentakeoff-corpus/
 // ground_truth/linear/refusals.json), the measurement docs/
@@ -396,6 +417,10 @@ console.log("\n── trace engine (real ground truth, development tier) ──"
 for (const r of realTraceRows) console.log(`${r.caseName.padEnd(40)} ${r.status}${r.status === "reached" ? ` LF ${r.goldenLf}→${r.tracedLf} size ${r.sizeMatch == null ? "n/a" : r.sizeMatch ? "OK" : `${r.goldenSizeKey}!=${r.tracedSizeKey}`}` : ` ${r.reason ?? ""}`}`);
 console.log("aggregate (real trace):", realTraceAgg);
 
+console.log("\n── trace engine (real ground truth, held-out tier — reported only, not yet gated; see heldOutTraceAgg's own comment above) ──");
+for (const r of heldOutTraceRows) console.log(`${r.caseName.padEnd(40)} ${r.status}${r.status === "reached" ? ` LF ${r.goldenLf}→${r.tracedLf} size ${r.sizeMatch == null ? "n/a" : r.sizeMatch ? "OK" : `${r.goldenSizeKey}!=${r.tracedSizeKey}`}` : ` ${r.reason ?? ""}`}`);
+console.log("aggregate (held-out trace):", heldOutTraceAgg);
+
 console.log("\n── refusal correctness (negative corpus) ──");
 for (const r of refusalRows) console.log(`${r.caseName.padEnd(60)} ${r.correct ? "OK" : `WRONG: got ${r.gotStatus}`}`);
 console.log("aggregate (refusal):", refusalAgg);
@@ -409,6 +434,7 @@ writeFileSync(join(here, "linear", "results.json"), JSON.stringify({
     frechetTolPx: TRACE_FRECHET_TOL_PX, overlapMin: TRACE_OVERLAP_MIN, thresholds: TRACE_THRESHOLDS,
     synthetic: { rows: syntheticTraceRows, aggregate: syntheticTraceAgg },
     real: { rows: realTraceRows, aggregate: realTraceAgg },
+    heldOut: { rows: heldOutTraceRows, aggregate: heldOutTraceAgg },
   },
   refusal: { rows: refusalRows, aggregate: refusalAgg },
 }, null, 1));
