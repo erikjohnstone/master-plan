@@ -1,5 +1,87 @@
 ## Active work
 
+2026-09-17 linear takeoff GATE 3 checkpoint, the missing scorer (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+WP3.1-3.8 built the trace engine and its ground truth; nothing had ever
+actually SCORED `trace_run` against that ground truth. `web/bench/linear.mts`
+(WP1.6) explicitly says in its own header it is "deliberately NOT the full
+run-recall/precision/Fréchet/vertex-F1 suite... that's WP3+'s trace-engine
+scoring" — this checkpoint builds that missing scorer and runs it for the
+first time. New `mcp/scripts/linear-trace-eval.mjs` (mirrors
+`mep-trace-eval.mjs`'s own conventions exactly: real corpus, real goldens,
+"do not improve the scorer to make a run look better") + `docs/
+LINEAR-TRACE-EVAL.md` (mirrors `docs/MEP-CONNECTIVITY-EVAL.md`'s format).
+Scores five things against the four WP3.8 goldens: run recall, length
+error, over-trace, size accuracy (length-weighted), and build/warm-query
+ms — explicitly NOT precision (no refusal/negative goldens exist yet) or
+held-out-tier delta (no held-out sheet exists yet), both named as open
+gaps in the doc rather than assumed away.
+
+First real run: **2/7 golden runs reach at all (28.6% recall)**, far under
+GATE 3's ≥85% target. Every miss was root-caused by direct segment-index
+inspection (`ensureLinearIndex`'s own `candidate`/`family` arrays), not
+assumed — and every single one traces to a limitation this project had
+ALREADY documented before this scorer existed, not a new bug:
+
+- **Wall-vouch false-positive exclusion (5 of 7 misses)** — Bessemer
+  M101's both supply trunks, P101's SAN riser, and federal M3.1's
+  CHWS/CHWR risers all sit on segments `wallnetwork.ts`'s geometric
+  wall-vouching excludes before stroke classification ever runs (every
+  one is a 40-730px arrow-straight run, exactly the shape that heuristic
+  false-positives on per WP3.4's own prior finding). `wallnetwork.ts`/
+  `mepconnectivity.ts` internals are on the goal doc's own "never touch"
+  list — this stays a documented, accepted limitation to route around
+  (as WP3.7's live verification already did), not a target to fix.
+- **No same-family dash-gap continuation in `walk.ts` (1 of 7)** —
+  Bessemer P101's CW main golden seed lands on a real, correctly
+  classified candidate segment (unlike the wall-vouch cases), but this
+  CW main is drawn as many short dash-dot strokes; `walkOneDirection`
+  dead-ends after 3 dashes (58.56px) because the next one sits ~21px
+  away, past whatever collinear-continuation tolerance `walk.ts`
+  currently applies. Checked directly and ruled out reusing
+  `mepconnectivity.ts`'s own `bridgeDanglingGaps` for this: that function
+  requires a fitting symbol sitting IN the gap ("never bridged on
+  proximity alone") and would not fire on a plain print-style dash gap
+  even if wired in. This is the one finding actually open to a fix (not
+  on the never-touch list) and the single highest-leverage next step for
+  recall — not designed or built in this checkpoint.
+- **Pipe vs. round-duct ⌀ ambiguity (surfaced, not a recall failure)** —
+  the one branch run that DID reach (ITD p5) read its own size as
+  `round:1.25` instead of the golden's `pipe:1.25`; both share the same
+  `ø` glyph and `sizes.ts`'s grammar doesn't disambiguate by sheet
+  content yet. Disclosed, not patched quietly mid-eval.
+
+Also caught and fixed a real ground-truth-authoring bug this same run
+exposed: ITD p5's own golden originally traced only a 2.2 LF interior
+sub-span of a longer real segment (chosen for label-crop convenience,
+not because it was a real drawn stop point) — scoring `trace_run`'s
+honest full walk of the same line against that arbitrary sub-span
+produced a meaningless 257% "over-trace" reading. Re-traced live (same
+Playwright/canvas methodology, cross-checked against independently
+already-known `extractVectorGeometry` forensics from WP3.8's own
+authoring pass) to the run's real dead-end-to-elbow extent; over-trace
+dropped to a sane 7.8%, and the eval script's own build/warm-query
+timing (306ms/397ms cold, per distinct sheet) is now a real, if small,
+first measurement. `docs/LINEAR-TRACE-EVAL.md`'s own "lesson" section
+writes this up as a standing rule for future linear goldens: endpoints
+must be real geometric features the walker could plausibly also find,
+not narrative/crop-framing choices, or over-trace numbers against them
+mean nothing.
+
+Deliberately NOT done, disclosed rather than silently deferred: fixing
+either of the two open findings (dash-gap continuation is real, scoped,
+substantial engine work — not something to rush under a "keep the eval
+green" pressure this project's own doctrine explicitly rejects);
+authoring refusal/negative goldens for precision; authoring a held-out
+tier. GATE 3 itself is NOT met and not close on recall — this checkpoint
+is the measurement, not the fix.
+
+Verified: `npx tsc --noEmit` clean in both `mcp/` and `web/`; the eval
+script's own output is the verification for itself (a scoring tool that
+found real, previously-undiscovered-by-this-script findings on its
+first real run is proof it isn't a tautology); `web`'s full regression
+suite unaffected (no engine code changed, only the two ground-truth
+JSON fixes and new scoring/doc files).
+
 2026-09-17 linear takeoff WP3.8 checkpoint, ground truth v2 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 "3.8 Ground truth v2: P101 (Bessemer), federal p6 (hydronic), ITD p5
 (piping) hand-traced from renders BEFORE the engine runs on them" (goal
