@@ -1,5 +1,47 @@
 ## Active work
 
+2026-09-17 linear takeoff: a single unattended multi-file scan across both archives, a "not in scope" rejection, development recall 11/17 -> 12/18 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+A real step up in discovery throughput: rather than working through the
+corpus one sheet at a time, ran a single automated scan unattended
+across 20 previously-untouched files spanning BOTH GitHub Release
+archives in one pass, with a live safety check built in -- before
+committing to a full sweep of any sheet, time a single trace call on it
+first and skip the sheet outright if that one call itself is slow. This
+one scan surfaced real automatic-bind hits across several files at
+once, a genuinely larger single-pass yield than any prior round this
+session.
+
+A real, explicitly rejected candidate from this same scan is worth
+recording plainly: one hit was a real duct with a real, CORRECTLY read
+size and system, printed callout matching exactly -- but a render
+showed the whole surrounding area covered by a large red-hatched
+overlay boldly labeled "NOT IN SCOPE." The duct is real and the read is
+correct; a real estimator would never take it off anyway, since the
+drawing itself explicitly excludes this area from the renovation
+contract's own scope of work. Using it as a golden would validate a
+technically-correct read no real takeoff would ever include. A new
+disclosable failure category, distinct from earlier ones this session.
+
+The candidate actually used: a real exhaust-air duct riser on a
+university engineering building's own schematic-design mechanical
+sheet, confirmed via a marked render crop as a real, dash-fragmented
+duct running between two real elbows, directly beside its own printed
+leader-arrow callouts. Added as a new development-tier golden.
+
+Development-tier recall: **11/17 (0.647) -> 12/18 (0.667)**, an exact
+length match with a genuine size match too (size accuracy 0.681 ->
+0.699). Worth carrying forward honestly: this same scan surfaced
+several OTHER real hits across still more files that haven't been
+individually verified or authored yet -- real, disclosed future work,
+not a claim this pass exhausted what the scan found. The new source PDF
+is now committed to this project's own real corpus (`raw/`).
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; all 227 tests pass; full filtered web regression suite
+re-run, matching the established baseline. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 28" section and its own priority list updated with the new
+recall number.
+
 2026-09-17 linear takeoff: a sixth new-corpus golden, a new stacked-label failure mode found and disclosed, development recall 10/16 -> 11/17 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept mining the same second Release archive with the same automated
 sweep. One sheet -- a county jail's own mechanical bid set, a dense
