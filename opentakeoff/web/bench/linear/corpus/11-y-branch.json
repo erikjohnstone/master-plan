@@ -1,0 +1,41 @@
+{
+ "name": "11-y-branch",
+ "hardCase": "3-way fork, golden takes the non-default branch",
+ "pdf": "../synthetic/11-y-branch.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    13.41,
+    15.08
+   ],
+   [
+    21.41,
+    15.08
+   ],
+   [
+    25.41,
+    22.01
+   ]
+  ],
+  "system": "RA",
+  "size": {
+   "kind": "rect",
+   "w_in": 10,
+   "h_in": 6
+  },
+  "seed_point_ft": [
+   16.61,
+   15.08
+  ]
+ },
+ "expected": {
+  "segment_lf": [
+   8,
+   8
+  ],
+  "total_lf": 16
+ }
+}

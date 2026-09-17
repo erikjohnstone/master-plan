@@ -30,12 +30,13 @@ import { Session } from "../../mcp/src/session.ts";
 import { resolveRunSegments, type ComputedRun } from "../src/lib/linear/run.ts";
 import type { AuthoredRun, RunSize } from "../src/lib/linear/types.ts";
 import { extractVectorGeometry, type Point } from "../src/lib/oneclick.ts";
+import { pickGuidedContinuation, nextGoldenVertex, type AngleCandidate } from "../src/lib/linear/guidedWalk.ts";
 import {
   scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear,
   scoreTraceShapeMatch, scoreTraceRecall, scoreTracePrecision, aggregateTrace,
-  scoreRefusalCorrectness,
+  scoreRefusalCorrectness, aggregateGuidedHops,
   type LinearTotalsRow, type LinearDeterminismRow, type TraceRunRow, type TraceAggregate,
-  type RefusalRow,
+  type RefusalRow, type GuidedHopRow,
 } from "./score.ts";
 
 // THE MARGIN IS MEASURED, not chosen for comfort (bench/run.mts's own rule).
@@ -271,8 +272,64 @@ async function traceOneRun(
   };
 }
 
+/** Guided multi-hop continuation (guidedWalk.ts) — a SEPARATE, reported-
+ *  only measurement from `traceOneRun`'s own single-call recall, never
+ *  blended into it (same "don't hide a real distinction behind one
+ *  number" doctrine `sizeKey`'s own header states). Plan §6.3's own design
+ *  intent for an `ambiguous` stop is "offer the candidate fan, not block
+ *  on it" — this asks, case by case, whether that fan actually CONTAINS
+ *  the golden's own real continuation, continuing the walk with a fresh
+ *  `trace_run` call seeded on whichever candidate matches when it does.
+ *
+ *  Known, disclosed scope limit, not silently papered over: only ever
+ *  extends past a `forward`-reported ambiguous stop. `trace_run`'s own
+ *  public result collapses `stops.forward.candidates ?? stops.backward
+ *  .candidates` into one top-level `candidates` field (session.ts), so a
+ *  case whose BACKWARD end is independently ambiguous WHILE forward is
+ *  also ambiguous would have its own backward candidates invisible here —
+ *  no case in this corpus currently needs that, and this driver refuses
+ *  (reports a miss) rather than guessing blind should one ever arise. */
+const GUIDED_MAX_HOPS = 5;
+const GUIDED_CONTINUATION_STEP_PX = 30;   // comfortably past the node's own hit tolerance (~11px), comfortably short of any real short branch
+
+async function guidedMultiHopTrace(session: Session, sheetKey: string, golden: Point[], seed: Point): Promise<GuidedHopRow> {
+  const caseName = sheetKey;
+  let r;
+  try { r = await session.traceRun(sheetKey, seed, {}); }
+  catch (e) { return { caseName, hops: 0, status: "refused", reason: String((e as Error).message || e), points: [] }; }
+  let points: Point[] = (r.points as Point[]).slice();
+  let stops = r.stops as { forward: { reason: string; at: Point }; backward: { reason: string; at: Point } };
+  let candidates = (r.candidates ?? []) as AngleCandidate[];
+
+  for (let hop = 0; hop < GUIDED_MAX_HOPS; hop++) {
+    const last = points[points.length - 1];
+    const nextV = nextGoldenVertex(golden, last);
+    if (!nextV) return { caseName, hops: hop, status: "reached_golden_end", points };
+    if (stops.forward.reason !== "ambiguous") return { caseName, hops: hop, status: "miss_no_matching_candidate", reason: `forward stop is '${stops.forward.reason}', not ambiguous`, points };
+    const pick = pickGuidedContinuation(last, nextV, candidates);
+    if (!pick) return { caseName, hops: hop, status: "miss_no_matching_candidate", reason: `no candidate within tolerance of the golden's own next vertex (candidates: ${candidates.map((c) => c.angle_deg).join(", ")})`, points };
+    const rad = pick.angle_deg * Math.PI / 180;
+    const nextSeed: Point = [last[0] + GUIDED_CONTINUATION_STEP_PX * Math.cos(rad), last[1] + GUIDED_CONTINUATION_STEP_PX * Math.sin(rad)];
+    let r2;
+    try { r2 = await session.traceRun(sheetKey, nextSeed, {}); }
+    catch (e) { return { caseName, hops: hop, status: "miss_no_matching_candidate", reason: `continuation seed refused: ${String((e as Error).message || e)}`, points }; }
+    const p2 = r2.points as Point[];
+    const first = p2[0], farEnd = p2[p2.length - 1];
+    const distToFirst = Math.hypot(last[0] - first[0], last[1] - first[1]);
+    const distToLast = Math.hypot(last[0] - farEnd[0], last[1] - farEnd[1]);
+    const ordered = distToFirst <= distToLast ? p2 : p2.slice().reverse();
+    points = [...points, ...ordered.slice(1)];
+    stops = distToFirst <= distToLast
+      ? (r2.stops as typeof stops)
+      : { forward: (r2.stops as typeof stops).backward, backward: (r2.stops as typeof stops).forward };
+    candidates = (r2.candidates ?? []) as AngleCandidate[];
+  }
+  return { caseName, hops: GUIDED_MAX_HOPS, status: "miss_hop_cap", points };
+}
+
 const traceRows: TraceRunRow[] = [];
 const traceSeenSheets = new Set<string>();
+const guidedHopRows: GuidedHopRow[] = [];
 
 // Truth-by-construction px conversion for the SYNTHETIC corpus's ABSOLUTE
 // position (the manual-mode loop above never needed this — resolveRunSegments
@@ -311,6 +368,13 @@ for (const file of caseFiles) {
   const cold = !traceSeenSheets.has(sheetKey);
   traceSeenSheets.add(sheetKey);
   traceRows.push(await traceOneRun(session, sheetKey, pts, c.expected.total_lf, c.run.size, cold, seedOverride));
+  // Guided multi-hop (see guidedMultiHopTrace's own header) — run against
+  // EVERY synthetic case, not only the one built to need it: a case whose
+  // single call already reaches the golden's own final vertex reports
+  // `reached_golden_end` at 0 hops trivially (nextGoldenVertex returns
+  // null immediately), so this costs nothing and is real, not cherry-picked,
+  // evidence the mechanism doesn't misfire on an already-clean case.
+  guidedHopRows.push(await guidedMultiHopTrace(session, sheetKey, pts, seedOverride ?? seedOnLongestSegment(pts)));
 }
 
 // ── real hand-traced goldens (WP1.7 + WP3.8's "ground truth v2") — a
@@ -427,6 +491,14 @@ console.log("\n── trace engine (synthetic corpus) ──");
 for (const r of syntheticTraceRows) console.log(`${r.caseName.padEnd(28)} ${r.status}${r.status === "reached" ? ` LF ${r.goldenLf}→${r.tracedLf} size ${r.sizeMatch == null ? "n/a" : r.sizeMatch ? "OK" : `${r.goldenSizeKey}!=${r.tracedSizeKey}`}` : ` ${r.reason ?? ""}`}`);
 console.log("aggregate (synthetic trace):", syntheticTraceAgg);
 
+// ── guided multi-hop continuation — reported only, never gated (see
+// guidedMultiHopTrace's own header on why this is a separate measurement
+// from recall above, and its one disclosed scope limit).
+const guidedHopAgg = aggregateGuidedHops(guidedHopRows);
+console.log("\n── guided multi-hop continuation (synthetic corpus, reported only) ──");
+for (const r of guidedHopRows) console.log(`${r.caseName.padEnd(28)} ${r.status} (${r.hops} guided hop${r.hops === 1 ? "" : "s"})${r.reason ? ` — ${r.reason}` : ""}`);
+console.log("aggregate (guided multi-hop):", guidedHopAgg);
+
 console.log("\n── trace engine (real ground truth, development tier) ──");
 for (const r of realTraceRows) console.log(`${r.caseName.padEnd(40)} ${r.status}${r.status === "reached" ? ` LF ${r.goldenLf}→${r.tracedLf} size ${r.sizeMatch == null ? "n/a" : r.sizeMatch ? "OK" : `${r.goldenSizeKey}!=${r.tracedSizeKey}`}` : ` ${r.reason ?? ""}`}`);
 console.log("aggregate (real trace):", realTraceAgg);
@@ -449,6 +521,7 @@ writeFileSync(join(here, "linear", "results.json"), JSON.stringify({
     synthetic: { rows: syntheticTraceRows, aggregate: syntheticTraceAgg },
     real: { rows: realTraceRows, aggregate: realTraceAgg },
     heldOut: { rows: heldOutTraceRows, aggregate: heldOutTraceAgg },
+    guidedMultiHop: { rows: guidedHopRows, aggregate: guidedHopAgg },
   },
   refusal: { rows: refusalRows, aggregate: refusalAgg },
 }, null, 1));

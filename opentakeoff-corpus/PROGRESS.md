@@ -1,5 +1,50 @@
 ## Active work
 
+2026-09-17 linear takeoff: guided multi-hop continuation built and verified -- a real capability, zero cases on today's corpus need it (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+The plan's own design intent for a stop the engine calls `ambiguous` is
+explicit: offer the candidate fan, don't just block. Every measurement so
+far only ever asked whether ONE unguided trace call reaches a golden --
+this asks a different question: when that call stops ambiguous, does the
+fan it offers actually contain the golden's own real continuation?
+
+Checked first, before building anything, whether this corpus's own
+current misses would even benefit: they would NOT. The wall-vouch
+refusals never find a candidate at all (guidance can't help before a walk
+even starts); the one case that over-traces past its own golden already
+went too FAR, not too little; and a real three-way tee auto-continues
+through a fixed rule of its own, never landing on an ambiguous stop in
+the first place. A genuinely ambiguous fork (no clean through-pair at
+all) is a real category, just one this corpus's own real sheets haven't
+produced an example of yet.
+
+Built anyway, since the capability itself is real, disclosed architecture
+regardless of today's corpus, and verified rather than left as an
+unexercised, three real bugs caught along the way, each before it shipped
+rather than after: (1) a pure "which candidate matches the golden's real
+direction" matcher, with its own unit tests; (2) a "find the golden's own
+next vertex" helper whose first version mistook ordinary sub-pixel
+rounding noise between a live trace point and the golden's own authored
+coordinate for "more golden left to cover" -- would have broken every
+already-clean case; (3) a new synthetic three-way-fork test case whose
+own default seed placement was a coin flip on two nominally-equal-length
+legs and, on a real run, happened to skip the fork entirely, testing
+nothing. All three fixed and re-verified before trusting the result: the
+new case now correctly needs exactly one guided hop to reach its own
+golden, and the other ten synthetic cases correctly report "already
+there" at zero hops -- real evidence the mechanism doesn't misfire on a
+clean case, not just a demo built to succeed.
+
+Reported only, gated nowhere, run against the whole synthetic corpus.
+Wiring it against the real corpus is real follow-up work once (or if) a
+real golden needing it exists -- not attempted here, since none currently
+does.
+
+Measured: `npm run bench:linear` passes; `npx tsc --noEmit` clean; all
+227 tests pass (215 prior + 12 new); full filtered web regression suite
+re-run, matching the established baseline. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 21" section and its own priority list updated to reflect
+this real, verified, but zero-current-case-impact capability.
+
 2026-09-17 linear takeoff: the schedule-gridline refusal case finally lands -- refusal correctness 5/5 -> 6/6 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 An earlier checkpoint's own scope note named a real schedule-table
 gridline (Weld County M0.5's own DUCT INSULATION SCHEDULE) as found but

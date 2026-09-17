@@ -326,6 +326,54 @@ const CASES: CaseSpec[] = [
     build(page, _doc, _font, pts, layer) { return layer.wrap(() => drawCenterline(page, pts, { thickness: 1.25 })); },
     legs: 1, seedOffset: 900,
   },
+  {
+    // A genuine 3-way wye/fork, not a tee: `graph.ts`'s own `frontier()`
+    // only auto-continues through a "tee" when exactly one of the three
+    // incident pairs is near-collinear (< 8 deg deviation from straight) —
+    // the walker then always takes that "main" pair and never the branch,
+    // by a fixed rule, no matter what a specific golden's own path needs
+    // (walk.ts:319-327). Here NONE of the three legs pair up collinear in
+    // the FEET space these angles are authored in (each pairwise deviation
+    // is a deliberate 60 deg) — `frontier()` falls through to its own
+    // documented default, "ambiguous", exactly the case a guided multi-hop
+    // continuation (web/src/lib/linear/guidedWalk.ts) exists to score.
+    // Confirmed directly against the real built PDF before trusting this,
+    // not just derived on paper: `trace_run` really does stop `ambiguous`
+    // at the fork with exactly two candidates. (The two candidates' own
+    // PIXEL-space angles do NOT match this feet-space 60/300 labeling —
+    // `toPdf`'s own Y-flip inverts the sign of the Y component, so the
+    // golden's own branch reads as pixel-angle 300 and the "wrong main"
+    // leg reads as 60; verified empirically, not assumed — the driver
+    // itself never hardcodes either value, it always compares against the
+    // real golden direction through the same live transform, so this
+    // labeling quirk cannot silently break it.) The golden's own path
+    // takes the BRANCH leg; a third, undrawn-in-the-golden "wrong main"
+    // leg is real ink on the sheet a single `trace_run` call could just as
+    // easily wander onto — this case is worthless as a fork test without it.
+    name: "11-y-branch", hardCase: "3-way fork, golden takes the non-default branch", system: "RA",
+    size: { kind: "rect", w_in: 10, h_in: 6 },
+    build(page, _doc, _font, pts, layer) {
+      const [a, f, b] = pts;
+      const legFt = Math.hypot(f[0] - a[0], f[1] - a[1]);
+      const wrongMainDeg = 300 * Math.PI / 180;
+      const c: PtFt = [f[0] + legFt * Math.cos(wrongMainDeg), f[1] + legFt * Math.sin(wrongMainDeg)];
+      return layer.wrap(() => {
+        drawCenterline(page, [a, f, b], { thickness: 1 });
+        drawCenterline(page, [f, c], { thickness: 1 });
+      });
+    },
+    // Both legs off the fork are nominally 8ft, so the default "seed on
+    // the LONGEST segment" convention (seedOnLongestSegment, strict `>`)
+    // is a coin flip decided by float noise from the `round2()` truth
+    // roundtrip — confirmed directly: it landed on the BRANCH leg itself
+    // on a real run, skipping past the fork entirely and making this case
+    // test nothing. Force the seed onto the INCOMING leg explicitly so the
+    // walk always meets the fork as a real `ambiguous` stop, not by luck.
+    seedPointFt(pts) {
+      const [a, f] = pts;
+      return [a[0] + (f[0] - a[0]) * 0.4, a[1] + (f[1] - a[1]) * 0.4];
+    },
+  },
 ];
 
 // Finding 5's real fix (docs/LINEAR-TRACE-EVAL.md): this corpus's PDFs
@@ -427,6 +475,14 @@ async function main() {
     const origin: PtFt = [boxCx - 4 + rng() * 8, boxCy - 4 + rng() * 8];
     const pts: PtFt[] = spec.name === "10-arc-as-polyline"
       ? [origin, ...quarterArcPolyline(origin, 6).slice(1), [origin[0] + 6, origin[1] + 10]]
+      : spec.name === "11-y-branch"
+      ? (() => {
+          const legFt = 8;
+          const inDeg = 180 * Math.PI / 180, branchDeg = 60 * Math.PI / 180;
+          const a: PtFt = [origin[0] + legFt * Math.cos(inDeg), origin[1] + legFt * Math.sin(inDeg)];
+          const b: PtFt = [origin[0] + legFt * Math.cos(branchDeg), origin[1] + legFt * Math.sin(branchDeg)];
+          return [a, origin, b];
+        })()
       : randomWalk(rng, origin, 3 + Math.floor(rng() * 3));
 
     const doc = await PDFDocument.create();

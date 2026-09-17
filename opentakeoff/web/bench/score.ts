@@ -896,3 +896,26 @@ export function scoreRefusalCorrectness(rows: RefusalRow[]): { correct: number; 
   const misses = rows.filter((r) => !r.correct);
   return { correct: rows.length - misses.length, total: rows.length, rate: rows.length ? (rows.length - misses.length) / rows.length : 0, misses };
 }
+
+/** Guided multi-hop continuation (linear/guidedWalk.ts) — a SEPARATE,
+ *  reported-only measurement from `scoreTraceRecall`'s own single-call
+ *  recall, never blended into it: plan §6.3's own design intent for an
+ *  `ambiguous` stop is "offer the candidate fan, not block on it," and
+ *  this asks whether that fan actually contains the golden's own real
+ *  continuation — a different question than "did one unguided call reach
+ *  the golden," with its own separate hit rate. `bench/linear.mts`'s own
+ *  `guidedMultiHopTrace` drives the actual multi-call Session loop (it
+ *  needs a live Session, which this file's own scoring functions never
+ *  touch); this just tallies its results. */
+export interface GuidedHopRow {
+  caseName: string;
+  hops: number;
+  status: "reached_golden_end" | "miss_no_matching_candidate" | "miss_hop_cap" | "refused";
+  reason?: string;
+  points: Point[];
+}
+export function aggregateGuidedHops(rows: GuidedHopRow[]): { total: number; reachedGoldenEnd: number; rate: number; misses: GuidedHopRow[]; maxHops: number } {
+  const misses = rows.filter((r) => r.status !== "reached_golden_end");
+  const maxHops = rows.reduce((m, r) => Math.max(m, r.hops), 0);
+  return { total: rows.length, reachedGoldenEnd: rows.length - misses.length, rate: rows.length ? (rows.length - misses.length) / rows.length : 0, misses, maxHops };
+}
