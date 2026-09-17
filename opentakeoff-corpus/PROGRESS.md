@@ -1,5 +1,53 @@
 ## Active work
 
+2026-09-17 linear takeoff: the real corpus grows ~380 PDFs -- a first new golden, development recall 4/10 -> 5/11 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+The prior checkpoint concluded further recall gains needed real goldens
+on sheets not yet in the corpus. Checked what "the corpus" actually is,
+at the user's own direction, rather than treating the 7 PDFs already in
+`raw/` as the whole resource: `opentakeoff-corpus/sets.json` registers 30
+real projects, but its own `root` points to the user's own local machine,
+and only 10 files were ever actually committed here. The rest -- roughly
+380 real PDFs across two GitHub Releases on this repo (`corpus`,
+`corpus_2`) -- were sitting accessible the whole time, never pulled in
+for this GATE 3 pass.
+
+Downloaded both archives, surveyed a sample for the exact combination
+that made an earlier golden succeed cleanly this same day: a detected
+drawing scale AND real, non-blank CAD layer names. Confirmed directly:
+most sampled real third-party files carry BLANK layer names -- the same
+real-world defect this project's own synthetic generator already
+root-caused in its own code (a PDF layer-naming type mismatch), except
+here showing up in someone else's AutoCAD export. One file stood out: a
+Washington county courthouse's own combined mechanical+electrical
+composite sheet, which does carry real layer names including a genuine
+"M-DUCT" layer.
+
+Found a real double-line duct symbol on that exact layer via direct
+vector-layer extraction (the layer's own segments are a small fraction of
+the sheet's total, easy to miss on a blind sweep). Traced it: reached
+cleanly with a real layer-name-based classification, confirming that
+classification reads a family's OWN layer name directly, independent of
+the whole sheet's own weaker overall signal. Both ends of the single call
+stop at a real fork; both verified via marked render crop to be genuine
+CAD junctions (a transition/branch symbol at one end, a transition into
+named equipment at the other) -- a clean, fair single-call target by
+construction. Added as a new development-tier golden. Size deliberately
+left unlabeled: a nearby callout's own exact notation wasn't confidently
+resolved, and a wrong label is worse than none.
+
+Development-tier recall: **4/10 (0.4) -> 5/11 (0.455)**, exact length
+match. The new source PDF is now committed to this project's own real
+corpus (`raw/`), matching how every other real golden's own source PDF
+is already tracked -- unlike the other ~379 files in this newly-found
+resource, which stay accessible via the Releases only, not pulled in
+wholesale.
+
+Measured: `npm run bench:linear` passes, all other numbers unchanged; all
+227 tests pass; full filtered web regression suite re-run, matching the
+established baseline. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 22"
+section and its own priority list updated to note the corpus itself has
+grown well past what earlier checkpoints had already searched.
+
 2026-09-17 linear takeoff: guided multi-hop continuation built and verified -- a real capability, zero cases on today's corpus need it (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 The plan's own design intent for a stop the engine calls `ambiguous` is
 explicit: offer the candidate fan, don't just block. Every measurement so

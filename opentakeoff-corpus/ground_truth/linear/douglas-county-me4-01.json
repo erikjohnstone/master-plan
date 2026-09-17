@@ -1,0 +1,38 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/douglas-county-courthouse-hvac-ddc.pdf",
+  "source_pdf_sha256": "28d43301ecc6960a8b2eb7736196c7820bd7598b754f70ef791ac68f6f94796a",
+  "sheet_id": "douglas-county-courthouse-hvac-ddc.pdf#15",
+  "sheet_number": "ME4.01",
+  "page": 15,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-17",
+  "review_basis": "This is the FIRST golden authored on a real PDF from the project's own expanded corpus (GitHub releases 'corpus'/'corpus_2', ~380 real mechanical/BAS PDFs across two ZIP archives -- accessed this same day at the user's own explicit direction, after this checkpoint's own prior GATE-3 investigation concluded the existing 7-PDF real corpus was largely exhausted for finding new single-call-friendly goldens). Picked deliberately, not randomly: this project's own already-documented Finding 1 (wall-vouch false-exclusion) is the dominant blocker on the existing corpus's unlayered sheets, and this new corpus's own `sheetInfo` survey found this exact sheet (ME4.01, a combined mechanical+electrical composite drawing) carries REAL, non-blank OCG layer names -- a rarity even in this new corpus (most files surveyed have BLANK layer names, the same real-world manifestation of the OCG-name-type defect this project's own synthetic generator already root-caused in Run 10 of docs/LINEAR-TRACE-EVAL.md -- PDFName vs PDFString -- except here it's a THIRD-PARTY AutoCAD export exhibiting the identical symptom, not this project's own code). `M-DUCT` is one of this sheet's own real, correctly-named layers. Found via direct `ensureGeometry().layerOf` extraction (this project's own established direct-vector-extraction method, not a blind grid-sweep alone, given the M-DUCT layer's own 436 segments are a small fraction of the sheet's 30,075 total): a real double-line duct symbol, its own two parallel rails 21px (~1.2ft) apart. Seeded on one rail (the same 'pick a real rail, not the inkless centerline' precedent `weld-county-m1-0.json` already established) at trace_run's own `stroke-family:layer-name` grade, confirming the layer-name classification actually engages for this specific family (the sheet's own OVERALL mepLayerSignal likely reads only 'weak', not 'strong' -- most of this composite sheet's ink is architectural/electrical, not MEP -- but classifyStrokeFamilies's own per-family grade (a) check reads a family's OWN layer name directly, independent of that whole-sheet signal; confirmed empirically, not assumed). Both ends of the single `trace_run` call stop `ambiguous`, and BOTH are real, confirmed CAD junctions, verified via a marked render crop: the top ring sits exactly on a real triangular duct-transition symbol (where a round riser continuing up, separately labeled '10\"Ø', a branch off to an '8x8 CD-4 175 (TYP)' ceiling diffuser via a flex connector, and this run's own '12/14L'-labeled segment all meet); the bottom ring sits exactly on a real hatched transition-fitting symbol necking down into equipment 'HP-10A' (heat pump unit 1). Both stops are genuine forks a single un-guided trace_run call correctly cannot resolve alone -- not a mistrace, and not the same category as this project's own Finding 4 (an arbitrary interior cut on a much-longer branched trunk): this golden's own extent IS the full, real span between two genuine junctions, exactly what a single trace_run call already produces on its own, not a human's own narrower judgment call inside a longer walkable network. `run.system: \"SA\"` is a direct read off real surrounding context (CD-4 = ceiling diffuser, universally a SUPPLY-air device in standard HVAC notation, branching off this exact riser at both visible junctions), not inferred from the engine's own generic `systems:[\"ductwork\"]` family read. Size deliberately left UNLABELED: a '12/14L' callout sits directly beside this run, but its own notation (a flat-oval duct dimension pair, a duct-liner suffix, or something else) was not confidently resolved -- per this project's own 'a wrong label is worse than no label' doctrine (docs/LINEAR-TRACE-EVAL.md Run 9), left withheld rather than guessed.",
+  "scope": "A single real duct riser segment (10.33 LF) on Douglas County Courthouse's own ME4.01 sheet, from a real triangular transition/branch symbol (where a continuing round riser and an '8x8 CD-4' diffuser branch also meet) down to a real hatched transition fitting into equipment HP-10A. Explicitly OUT OF SCOPE: the continuing round '10\"Ø' riser above the top junction; the '8x8 CD-4' diffuser branches at both junctions; every other duct/pipe run on this dense, real, multi-discipline composite sheet (a full mechanical+electrical composite drawing with dozens of runs, well beyond this single-golden pass's own scope); every other sheet in this newly-added corpus (only this one sheet has been surveyed and authored so far -- a large, real, mostly-unexplored resource for future GATE 3 passes, not exhausted by this one golden).",
+  "runs": [
+    {
+      "run_id": "douglas-me401-hp10a-riser",
+      "description": "12/14L duct riser segment, from a real triangular transition/branch symbol down to a real hatched transition fitting into HP-10A.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5592728758169935, 0.36262626262626263],
+        [0.5592728758169935, 0.42133838383838385]
+      ],
+      "run": {},
+      "computed": {
+        "perimeter_lf": 10.33,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 10.33, "size_src": "withheld" }
+          ],
+          "totals_by_size": {}
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {},
+  "total_lf_all_runs": 10.33
+}

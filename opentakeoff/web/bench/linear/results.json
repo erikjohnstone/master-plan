@@ -522,7 +522,7 @@
       "clippedLenFt": 50.53,
       "goldenLenFt": 50.52
      },
-     "buildMs": 7.404929999999922
+     "buildMs": 7.199501000000055
     },
     {
      "caseName": "02-pen-thick-solid.pdf",
@@ -541,7 +541,7 @@
       "clippedLenFt": 61.49,
       "goldenLenFt": 61.5
      },
-     "buildMs": 1.4173439999999573
+     "buildMs": 1.2855369999999766
     },
     {
      "caseName": "03-dashed-existing.pdf",
@@ -560,7 +560,7 @@
       "clippedLenFt": 36.73,
       "goldenLenFt": 36.72
      },
-     "buildMs": 1.3556300000000192
+     "buildMs": 1.2114960000001247
     },
     {
      "caseName": "04-dashdot-demo.pdf",
@@ -579,7 +579,7 @@
       "clippedLenFt": 46.1,
       "goldenLenFt": 46.1
      },
-     "buildMs": 1.2787069999999403
+     "buildMs": 1.210499000000027
     },
     {
      "caseName": "05-double-line-duct.pdf",
@@ -598,7 +598,7 @@
       "clippedLenFt": 37.59,
       "goldenLenFt": 43.58
      },
-     "buildMs": 1.652313999999933
+     "buildMs": 1.4990439999999126
     },
     {
      "caseName": "06-label-inside.pdf",
@@ -617,7 +617,7 @@
       "clippedLenFt": 27.81,
       "goldenLenFt": 27.8
      },
-     "buildMs": 6.317702999999938
+     "buildMs": 5.50902300000007
     },
     {
      "caseName": "07-label-beside.pdf",
@@ -636,7 +636,7 @@
       "clippedLenFt": 50.61,
       "goldenLenFt": 50.62
      },
-     "buildMs": 2.6308890000000247
+     "buildMs": 2.395631000000094
     },
     {
      "caseName": "08-label-leader.pdf",
@@ -655,7 +655,7 @@
       "clippedLenFt": 33.47,
       "goldenLenFt": 33.48
      },
-     "buildMs": 3.00921500000004
+     "buildMs": 3.316471999999976
     },
     {
      "caseName": "09-crossing-run.pdf",
@@ -674,7 +674,7 @@
       "clippedLenFt": 36.13,
       "goldenLenFt": 36.13
      },
-     "buildMs": 1.3138639999999668
+     "buildMs": 1.3852939999999307
     },
     {
      "caseName": "10-arc-as-polyline.pdf",
@@ -693,7 +693,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 1.2041050000000268
+     "buildMs": 1.2024089999999887
     },
     {
      "caseName": "11-y-branch.pdf",
@@ -712,7 +712,7 @@
       "clippedLenFt": 8,
       "goldenLenFt": 16
      },
-     "buildMs": 0.7359260000000631
+     "buildMs": 0.6907430000001114
     }
    ],
    "aggregate": {
@@ -725,7 +725,7 @@
     "sizeAccuracyPct": 0.06686381996537795,
     "sizeWrongLabelPct": 0,
     "sizeNoLabelPct": 0.9331361800346221,
-    "maxColdBuildMs": 7.404929999999922,
+    "maxColdBuildMs": 7.199501000000055,
     "maxWarmQueryMs": null
    }
   },
@@ -772,7 +772,7 @@
       "clippedLenFt": 5.64,
       "goldenLenFt": 5.64
      },
-     "queryMs": 197.83753799999977
+     "queryMs": 193.81557799999973
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -791,7 +791,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 215.80557899999985
+     "buildMs": 207.04561399999966
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -804,6 +804,25 @@
      "goldenSizeKey": "pipe:3",
      "tracedSizeKey": null,
      "sizeMatch": null
+    },
+    {
+     "caseName": "douglas-county-courthouse-hvac-ddc.pdf#15",
+     "status": "reached",
+     "goldenLf": 10.33,
+     "tracedLf": 10.33,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": null,
+     "tracedSizeKey": null,
+     "sizeMatch": null,
+     "shape": {
+      "caseName": "douglas-county-courthouse-hvac-ddc.pdf#15",
+      "frechetPx": 4.547473508864641e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 10.33,
+      "goldenLenFt": 10.33
+     },
+     "buildMs": 356.8198629999988
     },
     {
      "caseName": "federal-attachment4-mechanical.pdf#6",
@@ -846,7 +865,7 @@
       "clippedLenFt": 1.91,
       "goldenLenFt": 1.91
      },
-     "queryMs": 584.3756629999989
+     "queryMs": 641.1097769999997
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#5",
@@ -865,7 +884,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 373.6168009999983
+     "buildMs": 396.39294599999994
     },
     {
      "caseName": "weld-county-mechanical-permit.pdf#7",
@@ -884,21 +903,21 @@
       "clippedLenFt": 21.82,
       "goldenLenFt": 21.82
      },
-     "buildMs": 435.2109080000009
+     "buildMs": 428.43833799999993
     }
    ],
    "aggregate": {
-    "cases": 10,
-    "recall": 0.4,
-    "precision": 0.7697104059858667,
+    "cases": 11,
+    "recall": 0.45454545454545453,
+    "precision": 0.7985454545454544,
     "maxLenErrPct": 0.8470464135021097,
-    "meanLenErrPct": 0.18492174807438316,
+    "meanLenErrPct": 0.15410145672865264,
     "maxOverTracePct": 0.8470464135021097,
     "sizeAccuracyPct": 0.3927992799279928,
     "sizeWrongLabelPct": 0.47128712871287126,
     "sizeNoLabelPct": 0.1359135913591359,
-    "maxColdBuildMs": 435.2109080000009,
-    "maxWarmQueryMs": 584.3756629999989
+    "maxColdBuildMs": 428.43833799999993,
+    "maxWarmQueryMs": 641.1097769999997
    }
   },
   "heldOut": {
@@ -920,7 +939,7 @@
       "clippedLenFt": 20.14,
       "goldenLenFt": 20.14
      },
-     "buildMs": 485.31759200000033
+     "buildMs": 540.94607
     },
     {
      "caseName": "federal-attachment4-mechanical.pdf#7",
@@ -939,7 +958,7 @@
       "clippedLenFt": 3.57,
       "goldenLenFt": 3.57
      },
-     "buildMs": 1303.5997060000009
+     "buildMs": 1291.3617269999995
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#4",
@@ -958,7 +977,7 @@
       "clippedLenFt": 3.02,
       "goldenLenFt": 3.02
      },
-     "buildMs": 856.9968289999997
+     "buildMs": 926.2683990000005
     },
     {
      "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
@@ -977,7 +996,7 @@
       "clippedLenFt": 12.39,
       "goldenLenFt": 12.39
      },
-     "buildMs": 1894.6120139999985
+     "buildMs": 1947.2084649999997
     }
    ],
    "aggregate": {
@@ -990,7 +1009,7 @@
     "sizeAccuracyPct": 0.4851738241308793,
     "sizeWrongLabelPct": 0,
     "sizeNoLabelPct": 0.5148261758691206,
-    "maxColdBuildMs": 1894.6120139999985,
+    "maxColdBuildMs": 1947.2084649999997,
     "maxWarmQueryMs": null
    }
   },
