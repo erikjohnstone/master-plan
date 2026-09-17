@@ -8079,7 +8079,13 @@ export default function TakeoffCanvas() {
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
   function showCompiledTakeoff(compiled, meta = {}) {
     if (!compiled || compiled.error) return;
-    setLastControlValveTakeoff(compiled.kind === "control_valves" ? compiled : null);
+    // Sticky, not overwritten by a later compile of a DIFFERENT kind (e.g. the
+    // embedded_coil_valve_gaps pass that normally follows a valve takeoff in
+    // the same session) — agentTakeoffRows accumulates across every compile,
+    // so the rich valve table stays fully visible long after corpusMeta.kind
+    // has moved on; Export to HIT must not disappear just because the LATEST
+    // compile happened to be something else. Cleared only by onClear below.
+    if (compiled.kind === "control_valves") setLastControlValveTakeoff(compiled);
     if (compiled.bas_math || compiled.bas_point_lists) setShowTakeoffData(true);
     if (compiled.bas_workflow) {
       try {
@@ -13774,7 +13780,7 @@ export default function TakeoffCanvas() {
             setBasWorkflow(updated);
             return updated;
           }}
-          onClear={() => { setAgentTakeoffRows([]); setLastCorpusTakeoffMeta(null); }}
+          onClear={() => { setAgentTakeoffRows([]); setLastCorpusTakeoffMeta(null); setLastControlValveTakeoff(null); }}
           onRemove={(id) => setAgentTakeoffRows((rows) => rows.filter((r) => r.id !== id))}
           onRemoveLine={(line) => {
             const ids = new Set(line?.source_ids || []);
