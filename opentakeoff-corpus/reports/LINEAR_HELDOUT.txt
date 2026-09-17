@@ -41,8 +41,19 @@
 #
 # authored so far (2026-09-17): federal-attachment4-mechanical.pdf#7 (see
 # ground_truth/linear/federal-m3-1-p7-heldout.json), itd-d1-lab-mechanical.pdf#4
-# (see ground_truth/linear/itd-d1-lab-m1-1-heldout.json), and
-# navfac-cherry-point-atc-mechanical.pdf#6 (see ground_truth/linear/navfac-mh101-heldout.json).
-# The other four are declared and frozen but NOT yet authored; a representative
-# pass, not an exhaustive one -- matching this corpus's own repeated
-# "one run/one sheet, not the whole set, per pass" precedent.
+# (see ground_truth/linear/itd-d1-lab-m1-1-heldout.json),
+# navfac-cherry-point-atc-mechanical.pdf#6 (see ground_truth/linear/navfac-mh101-heldout.json),
+# and baker-county-eoc-bidset.pdf#38 (see ground_truth/linear/baker-m101-heldout.json).
+#
+# navfac-cherry-point-atc-mechanical.pdf#18 (MP101) was ATTEMPTED, not
+# authored: one seed near a real "2\"o HHWR" label ran away to 11,809 LF (a
+# fully-looped hydronic distribution network -- not a fair single-call
+# target); a second seed's own "dead_end" calls looked premature against a
+# real duct line that visibly continues past both marked stops in a render
+# crop. Neither was trustworthy enough to author as ground truth; set aside
+# rather than forced, per this corpus's own repeated discipline.
+#
+# The other two (bldg5406-hvac-demo-mechanical.pdf#2/#14) are declared and
+# frozen but not yet attempted; a representative pass, not an exhaustive
+# one -- matching this corpus's own repeated "one run/one sheet, not the
+# whole set, per pass" precedent.

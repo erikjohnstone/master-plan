@@ -479,7 +479,7 @@
       "clippedLenFt": 50.53,
       "goldenLenFt": 50.52
      },
-     "buildMs": 7.337692000000061
+     "buildMs": 7.272331000000122
     },
     {
      "caseName": "02-pen-thick-solid.pdf",
@@ -498,7 +498,7 @@
       "clippedLenFt": 61.49,
       "goldenLenFt": 61.5
      },
-     "buildMs": 1.5168069999999716
+     "buildMs": 1.5516270000000532
     },
     {
      "caseName": "03-dashed-existing.pdf",
@@ -517,7 +517,7 @@
       "clippedLenFt": 36.73,
       "goldenLenFt": 36.72
      },
-     "buildMs": 1.298236000000088
+     "buildMs": 1.3617549999999028
     },
     {
      "caseName": "04-dashdot-demo.pdf",
@@ -536,7 +536,7 @@
       "clippedLenFt": 46.1,
       "goldenLenFt": 46.1
      },
-     "buildMs": 1.140194000000065
+     "buildMs": 1.3266409999998814
     },
     {
      "caseName": "05-double-line-duct.pdf",
@@ -555,7 +555,7 @@
       "clippedLenFt": 37.59,
       "goldenLenFt": 43.58
      },
-     "buildMs": 1.474563999999873
+     "buildMs": 1.332734999999957
     },
     {
      "caseName": "06-label-inside.pdf",
@@ -574,7 +574,7 @@
       "clippedLenFt": 27.81,
       "goldenLenFt": 27.8
      },
-     "buildMs": 5.8586740000000646
+     "buildMs": 8.636025000000018
     },
     {
      "caseName": "07-label-beside.pdf",
@@ -593,7 +593,7 @@
       "clippedLenFt": 50.61,
       "goldenLenFt": 50.62
      },
-     "buildMs": 3.035572000000002
+     "buildMs": 2.9560939999998936
     },
     {
      "caseName": "08-label-leader.pdf",
@@ -612,7 +612,7 @@
       "clippedLenFt": 33.47,
       "goldenLenFt": 33.48
      },
-     "buildMs": 3.50984799999992
+     "buildMs": 4.902225000000044
     },
     {
      "caseName": "09-crossing-run.pdf",
@@ -631,7 +631,7 @@
       "clippedLenFt": 36.13,
       "goldenLenFt": 36.13
      },
-     "buildMs": 1.532327000000123
+     "buildMs": 1.4944539999999051
     },
     {
      "caseName": "10-arc-as-polyline.pdf",
@@ -650,7 +650,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 1.1506130000000212
+     "buildMs": 1.2933500000001459
     }
    ],
    "aggregate": {
@@ -663,7 +663,7 @@
     "sizeAccuracyPct": 0.0695389077815563,
     "sizeWrongLabelPct": 0,
     "sizeNoLabelPct": 0.9304610922184436,
-    "maxColdBuildMs": 7.337692000000061,
+    "maxColdBuildMs": 8.636025000000018,
     "maxWarmQueryMs": null
    }
   },
@@ -710,7 +710,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 290.54445499999974
+     "buildMs": 229.3844479999998
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -765,7 +765,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 363.5657859999992
+     "buildMs": 347.29451599999993
     },
     {
      "caseName": "weld-county-mechanical-permit.pdf#7",
@@ -784,7 +784,7 @@
       "clippedLenFt": 21.82,
       "goldenLenFt": 21.82
      },
-     "buildMs": 419.7976689999996
+     "buildMs": 423.97210300000006
     }
    ],
    "aggregate": {
@@ -797,12 +797,31 @@
     "sizeAccuracyPct": 0.45458333333333334,
     "sizeWrongLabelPct": 0.5454166666666667,
     "sizeNoLabelPct": 0,
-    "maxColdBuildMs": 419.7976689999996,
+    "maxColdBuildMs": 423.97210300000006,
     "maxWarmQueryMs": null
    }
   },
   "heldOut": {
    "rows": [
+    {
+     "caseName": "baker-county-eoc-bidset.pdf#38",
+     "status": "reached",
+     "goldenLf": 20.14,
+     "tracedLf": 20.15,
+     "lenErrPct": 0.0004965243296920561,
+     "overTracePct": 0.0004965243296920561,
+     "goldenSizeKey": "rect:24x14",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "baker-county-eoc-bidset.pdf#38",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 20.14,
+      "goldenLenFt": 20.14
+     },
+     "buildMs": 522.4307289999997
+    },
     {
      "caseName": "federal-attachment4-mechanical.pdf#7",
      "status": "reached",
@@ -820,7 +839,7 @@
       "clippedLenFt": 3.57,
       "goldenLenFt": 3.57
      },
-     "buildMs": 1316.655412
+     "buildMs": 1307.136418
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#4",
@@ -839,7 +858,7 @@
       "clippedLenFt": 3.02,
       "goldenLenFt": 3.02
      },
-     "buildMs": 866.3716650000006
+     "buildMs": 856.9598579999983
     },
     {
      "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
@@ -858,20 +877,20 @@
       "clippedLenFt": 12.39,
       "goldenLenFt": 12.39
      },
-     "buildMs": 1843.8416969999998
+     "buildMs": 1899.5386700000017
     }
    ],
    "aggregate": {
-    "cases": 3,
+    "cases": 4,
     "recall": 1,
-    "precision": 1,
-    "maxLenErrPct": 0,
-    "meanLenErrPct": 0,
-    "maxOverTracePct": 0,
-    "sizeAccuracyPct": 1,
+    "precision": 0.9997444416049069,
+    "maxLenErrPct": 0.0004965243296920561,
+    "meanLenErrPct": 0.00012413108242301403,
+    "maxOverTracePct": 0.0004965243296920561,
+    "sizeAccuracyPct": 0.4851738241308793,
     "sizeWrongLabelPct": 0,
-    "sizeNoLabelPct": 0,
-    "maxColdBuildMs": 1843.8416969999998,
+    "sizeNoLabelPct": 0.5148261758691206,
+    "maxColdBuildMs": 1899.5386700000017,
     "maxWarmQueryMs": null
    }
   }

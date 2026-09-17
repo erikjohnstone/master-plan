@@ -1,5 +1,39 @@
 ## Active work
 
+2026-09-17 linear takeoff: fourth held-out golden -- a clean 4/4; a fifth sheet attempted and set aside (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Authored the fourth entry off `reports/LINEAR_HELDOUT.txt`'s frozen list:
+`baker-county-eoc-bidset.pdf#38` (M1.01), a 24x14 rectangular SA duct
+trunk. Two sweep candidates rejected before authoring, each for a
+concrete, confirmed reason: a 16.71 LF "both dead_end" candidate looked
+ideal but a marked render crop showed one endpoint on a GRAY architectural
+reference line running to a room-label leader, not real duct linework --
+the same mistrace category caught once already this same day; a 3.44 LF
+candidate with a real bound size turned out to be a small label-leader
+tick mark, not an independent run. The chosen candidate held up: both
+stops sit on genuine drawn CAD junctions (real tee/elbow points), the same
+category as two already-confirmed clean hits, not Finding 4's own "human
+judgment call on an otherwise-unbroken run" category. System code read
+directly off a label at the junction (`trace_run`'s own automatic read
+came back blank -- the label sits just outside its size-binding radius).
+
+Held-out is now a genuine, clean **4/4** -- every held-out golden authored
+so far, on four different real PDFs, has matched ground truth exactly on
+length and shape.
+
+Also attempted `navfac-cherry-point-atc-mechanical.pdf#18` (MP101, the
+second coordinator pick) and set it aside, not authored -- recorded in
+`reports/LINEAR_HELDOUT.txt`'s own history rather than silently dropped:
+one seed ran away to 11,809 LF (a fully-looped hydronic distribution
+network, not a fair single-call target); a second seed's own `dead_end`
+calls looked premature against a real duct line that visibly continues
+past both marked stops in a render crop. Two of the seven declared
+held-out sheets remain, not yet attempted.
+
+Measured: `npx tsc --noEmit` clean; `bench:linear` passes, held-out 4/4;
+all 215 `benchScore.test.ts`/`test/linear/*.test.ts` tests pass unchanged;
+full filtered web regression suite re-run to confirm no new failures
+beyond the established baseline.
+
 2026-09-17 linear takeoff: 05-double-line-duct now reaches -- mitered rails, plus a real geometric limit on recall (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Implemented the fix the prior checkpoint scoped: `drawDoubleLine` rewritten
 to draw each rail as a properly MITERED continuous polyline
