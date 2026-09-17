@@ -464,51 +464,79 @@
    "rows": [
     {
      "caseName": "01-pen-thin-solid.pdf",
-     "status": "refused",
-     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "status": "reached",
      "goldenLf": 50.54,
-     "tracedLf": null,
-     "lenErrPct": null,
+     "tracedLf": 50.54,
+     "lenErrPct": 0,
      "overTracePct": 0,
      "goldenSizeKey": "rect:12x6",
      "tracedSizeKey": null,
-     "sizeMatch": null
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "01-pen-thin-solid.pdf",
+      "frechetPx": 0.1969771560358468,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 50.53,
+      "goldenLenFt": 50.52
+     },
+     "buildMs": 8.214923999999883
     },
     {
      "caseName": "02-pen-thick-solid.pdf",
-     "status": "refused",
-     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "status": "reached",
      "goldenLf": 61.5,
-     "tracedLf": null,
-     "lenErrPct": null,
+     "tracedLf": 61.5,
+     "lenErrPct": 0,
      "overTracePct": 0,
      "goldenSizeKey": "rect:16x8",
      "tracedSizeKey": null,
-     "sizeMatch": null
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "02-pen-thick-solid.pdf",
+      "frechetPx": 0.24413111231482454,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 61.49,
+      "goldenLenFt": 61.5
+     },
+     "buildMs": 1.683520000000044
     },
     {
      "caseName": "03-dashed-existing.pdf",
-     "status": "refused",
-     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "status": "reached",
      "goldenLf": 36.74,
-     "tracedLf": null,
-     "lenErrPct": null,
+     "tracedLf": 36.74,
+     "lenErrPct": 0,
      "overTracePct": 0,
      "goldenSizeKey": "round:10",
      "tracedSizeKey": null,
-     "sizeMatch": null
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "03-dashed-existing.pdf",
+      "frechetPx": 0.28425340807105537,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 36.73,
+      "goldenLenFt": 36.72
+     },
+     "buildMs": 1.6912499999998545
     },
     {
      "caseName": "04-dashdot-demo.pdf",
-     "status": "refused",
-     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "status": "reached",
      "goldenLf": 46.11,
-     "tracedLf": null,
-     "lenErrPct": null,
+     "tracedLf": 46.11,
+     "lenErrPct": 0,
      "overTracePct": 0,
      "goldenSizeKey": "pipe:2",
      "tracedSizeKey": null,
-     "sizeMatch": null
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "04-dashdot-demo.pdf",
+      "frechetPx": 0.2545584412270864,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 46.1,
+      "goldenLenFt": 46.1
+     },
+     "buildMs": 1.2898400000001402
     },
     {
      "caseName": "05-double-line-duct.pdf",
@@ -524,51 +552,79 @@
     },
     {
      "caseName": "06-label-inside.pdf",
-     "status": "refused",
-     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "status": "reached",
      "goldenLf": 27.81,
-     "tracedLf": null,
-     "lenErrPct": null,
+     "tracedLf": 27.81,
+     "lenErrPct": 0,
      "overTracePct": 0,
      "goldenSizeKey": "rect:14x8",
-     "tracedSizeKey": null,
-     "sizeMatch": null
+     "tracedSizeKey": "rect:14x8",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "06-label-inside.pdf",
+      "frechetPx": 0.22360679774997896,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 27.81,
+      "goldenLenFt": 27.8
+     },
+     "buildMs": 5.962812999999869
     },
     {
      "caseName": "07-label-beside.pdf",
-     "status": "refused",
-     "reason": "This sheet's linework has no stroke family I can attribute to ductwork or piping — trace manually, or open Layers to mark one.",
+     "status": "reached",
      "goldenLf": 50.61,
-     "tracedLf": null,
-     "lenErrPct": null,
+     "tracedLf": 50.61,
+     "lenErrPct": 0,
      "overTracePct": 0,
      "goldenSizeKey": "round:8",
      "tracedSizeKey": null,
-     "sizeMatch": null
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "07-label-beside.pdf",
+      "frechetPx": 0.2126029162547456,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 50.61,
+      "goldenLenFt": 50.62
+     },
+     "buildMs": 2.7855980000001637
     },
     {
      "caseName": "08-label-leader.pdf",
-     "status": "refused",
-     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "status": "reached",
      "goldenLf": 33.48,
-     "tracedLf": null,
-     "lenErrPct": null,
+     "tracedLf": 26.85,
+     "lenErrPct": 0.19802867383512532,
      "overTracePct": 0,
      "goldenSizeKey": "pipe:1.5",
      "tracedSizeKey": null,
-     "sizeMatch": null
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "08-label-leader.pdf",
+      "frechetPx": 318.0999999999999,
+      "lengthOverlapPct": 0.803921568627451,
+      "clippedLenFt": 26.85,
+      "goldenLenFt": 33.48
+     },
+     "buildMs": 3.159178000000111
     },
     {
      "caseName": "09-crossing-run.pdf",
-     "status": "refused",
-     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "status": "reached",
      "goldenLf": 36.13,
-     "tracedLf": null,
-     "lenErrPct": null,
+     "tracedLf": 36.13,
+     "lenErrPct": 0,
      "overTracePct": 0,
      "goldenSizeKey": "rect:10x6",
      "tracedSizeKey": null,
-     "sizeMatch": null
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "09-crossing-run.pdf",
+      "frechetPx": 0.1897366596101459,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 36.13,
+      "goldenLenFt": 36.13
+     },
+     "buildMs": 1.8190049999998337
     },
     {
      "caseName": "10-arc-as-polyline.pdf",
@@ -587,20 +643,20 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 3.4066559999998844
+     "buildMs": 1.2816649999999754
     }
    ],
    "aggregate": {
     "cases": 10,
-    "recall": 0,
+    "recall": 0.7,
     "precision": 1,
     "maxLenErrPct": 0.6137211036539896,
-    "meanLenErrPct": 0.6137211036539896,
+    "meanLenErrPct": 0.09019441972101278,
     "maxOverTracePct": 0,
-    "sizeAccuracyPct": 0,
+    "sizeAccuracyPct": 0.07804563185810905,
     "sizeWrongLabelPct": 0,
-    "sizeNoLabelPct": 1,
-    "maxColdBuildMs": 3.4066559999998844,
+    "sizeNoLabelPct": 0.9219543681418909,
+    "maxColdBuildMs": 8.214923999999883,
     "maxWarmQueryMs": null
    }
   },
@@ -647,7 +703,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 299.39214100000027
+     "buildMs": 308.417739
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -702,7 +758,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 384.3065459999998
+     "buildMs": 377.1055350000006
     },
     {
      "caseName": "weld-county-mechanical-permit.pdf#7",
@@ -721,7 +777,7 @@
       "clippedLenFt": 21.82,
       "goldenLenFt": 21.82
      },
-     "buildMs": 441.355907000001
+     "buildMs": 455.75295299999925
     }
    ],
    "aggregate": {
@@ -734,7 +790,7 @@
     "sizeAccuracyPct": 0.45458333333333334,
     "sizeWrongLabelPct": 0.5454166666666667,
     "sizeNoLabelPct": 0,
-    "maxColdBuildMs": 441.355907000001,
+    "maxColdBuildMs": 455.75295299999925,
     "maxWarmQueryMs": null
    }
   },
@@ -757,7 +813,7 @@
       "clippedLenFt": 3.57,
       "goldenLenFt": 3.57
      },
-     "buildMs": 1298.690549
+     "buildMs": 1281.1014350000005
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#4",
@@ -776,7 +832,7 @@
       "clippedLenFt": 3.02,
       "goldenLenFt": 3.02
      },
-     "buildMs": 901.0041070000007
+     "buildMs": 873.020566000001
     },
     {
      "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
@@ -795,7 +851,7 @@
       "clippedLenFt": 12.39,
       "goldenLenFt": 12.39
      },
-     "buildMs": 1884.4697180000003
+     "buildMs": 1957.3469299999997
     }
    ],
    "aggregate": {
@@ -808,7 +864,7 @@
     "sizeAccuracyPct": 1,
     "sizeWrongLabelPct": 0,
     "sizeNoLabelPct": 0,
-    "maxColdBuildMs": 1884.4697180000003,
+    "maxColdBuildMs": 1957.3469299999997,
     "maxWarmQueryMs": null
    }
   }

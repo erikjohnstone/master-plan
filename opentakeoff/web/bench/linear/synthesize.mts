@@ -22,7 +22,7 @@
 // weight, dash, double-line duct width, label placement — inside/beside/
 // leader, a crossing, an arc flattened to a polyline, a text gap in the
 // linework) — extend CASES below as real hard cases turn up.
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument, PDFName, PDFString, PDFOperator, PDFOperatorNames, rgb, StandardFonts } from "pdf-lib";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -221,6 +221,66 @@ const CASES: CaseSpec[] = [
   },
 ];
 
+// Finding 5's real fix (docs/LINEAR-TRACE-EVAL.md): this corpus's PDFs
+// carried NO PDF Optional Content Groups at all, so mepLayerSignal read
+// "none" on every one of them, and with zero surrounding architectural
+// context wallnetwork.ts's wall-vouch fallback excluded almost any
+// sufficiently long, straight, axis-aligned segment — confounding most of
+// what this corpus was built to test. Real duct/pipe systems (SA/RA/EA vs.
+// HHWS/HHWR/etc.) get a real named layer here so trace_run's own
+// mepsystems.ts classifyMepLayerName reads a genuine "stroke-family:
+// layer-name", the same code path weld-county-m1-0.json's real golden
+// exercises, bypassing wall-vouch entirely rather than routing around it.
+const DUCT_SYSTEMS = new Set(["SA", "RA", "EA", "OA", "MA"]);
+function layerNameForSystem(system: string): string {
+  // Both names contain a token mepsystems.ts's own DUCTWORK/PIPING sets
+  // recognize outright ("DUCT"/"PIPE") — a real, not just plausible-looking,
+  // classification, verified directly against a standalone OCG-tagged PDF
+  // before this function existed (session-scoped: see PROGRESS.md).
+  return DUCT_SYSTEMS.has(system) ? "M-HVAC-DUCT" : "M-PIPE-HYDRONIC";
+}
+
+/** Registers one Optional Content Group named `name` on `doc`'s catalog +
+ * this `page`'s own `/Resources/Properties`, and returns a function that
+ * wraps a synchronous or async draw callback in `BDC /OC <name-ref> ... EMC`
+ * so every segment (and any label/leader text — harmless, see below) drawn
+ * inside it attributes to that OCG in extractVectorGeometry's own
+ * `layerOf`/`layerIds`. pdf-lib has no built-in OCG helper (`PDFPage` only
+ * exposes low-level `pushOperators`), and its own `context.obj()` coerces a
+ * plain JS string to a PDFName, not the PDF STRING type the OCG dictionary's
+ * `/Name` entry requires per spec — pdf.js's `getOptionalContentConfig()`
+ * silently reads that back as an EMPTY name if left uncorrected (confirmed
+ * directly: a first prototype using a bare string produced a real, present,
+ * but unnamed layer). `PDFString.of(name)` is required, not optional.
+ * Labels/leaders drawn under the same tag are harmless: `layerOf` is
+ * indexed by STROKED/FILLED PATH segment, not by text-show operators, so
+ * tagging a case's whole `build()` call (linework + its own label) under
+ * one OCG never puts a text run into `layerOf` at all — it only affects
+ * the real vector segments this corpus's own scoring actually reads. */
+function registerOcgLayer(doc: PDFDocument, page: import("pdf-lib").PDFPage, name: string): { wrap<T>(draw: () => T | Promise<T>): Promise<T> } {
+  const ocgDict = doc.context.obj({ Type: "OCG", Name: PDFString.of(name) });
+  const ocgRef = doc.context.register(ocgDict);
+  // one case = one fresh PDFDocument = one OCG — no prior registration to
+  // merge this with, unlike a real multi-layer CAD export.
+  doc.catalog.set(PDFName.of("OCProperties"), doc.context.obj({
+    OCGs: [ocgRef],
+    D: { ON: [ocgRef], OFF: [] },
+  }));
+  const resources = page.node.Resources();
+  const propsDict = doc.context.obj({});
+  const propName = "OC1";
+  propsDict.set(PDFName.of(propName), ocgRef);
+  resources.set(PDFName.of("Properties"), propsDict);
+  return {
+    async wrap<T>(draw: () => T | Promise<T>): Promise<T> {
+      page.pushOperators(PDFOperator.of(PDFOperatorNames.BeginMarkedContentSequence, [PDFName.of("OC"), PDFName.of(propName)]));
+      const result = await draw();
+      page.pushOperators(PDFOperator.of(PDFOperatorNames.EndMarkedContent, []));
+      return result;
+    },
+  };
+}
+
 /** Case 10's "arc" leg is a quarter-circle of radius 6 ft, flattened into 8
  *  short straight segments — the same flattenCurve-style approximation a
  *  curved Linear trace already stores (verts stay the authored control
@@ -247,7 +307,8 @@ async function main() {
     const doc = await PDFDocument.create();
     const font = await doc.embedFont(StandardFonts.Helvetica);
     const page = doc.addPage([PAGE_W, PAGE_H]);
-    await spec.build(page, doc, font, pts);
+    const layer = registerOcgLayer(doc, page, layerNameForSystem(spec.system));
+    await layer.wrap(() => spec.build(page, doc, font, pts));
     const bytes = await doc.save();
     const pdfName = `${spec.name}.pdf`;
     writeFileSync(join(SYNTH_DIR, pdfName), bytes);

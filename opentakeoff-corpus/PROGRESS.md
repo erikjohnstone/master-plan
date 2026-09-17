@@ -1,5 +1,53 @@
 ## Active work
 
+2026-09-17 linear takeoff: Finding 5's real fix landed -- a named OCG layer, synthetic recall 0/10 -> 7/10 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Finding 5's own corrected hypothesis (an earlier checkpoint) named the real
+cause of the synthetic corpus's near-total refusal rate: these `pdf-lib`-
+generated PDFs carried no Optional Content Groups at all, so
+`mepLayerSignal` read "none" everywhere, and with zero surrounding
+architectural context `wallnetwork.ts`'s wall-vouch fallback excluded
+almost any long straight segment -- confounding most of what this corpus
+was built to test. The likely real fix was named at the time but not
+attempted ("pdf-lib's OCG support is low-level"). Attempted and landed
+this pass.
+
+`pdf-lib` has no built-in OCG helper. Built one from its own lower-level
+primitives (`context.obj`/`.register`, `page.node.Resources()`,
+`PDFOperator.of(BeginMarkedContentSequence, ...)`) -- prototyped standalone
+FIRST against a throwaway test PDF before touching the real generator, and
+caught a real bug in that prototype's own first attempt: `context.obj`
+coerces a plain JS string to a PDFName, not the PDF STRING type an OCG's
+`/Name` entry requires, so pdf.js silently reads back an EMPTY layer name
+unless `PDFString.of(name)` is used explicitly. Confirmed the fix works
+end to end on the same prototype (a tagged line reads
+`stroke-family:layer-name`/`systems:["ductwork"]`; an untagged control line
+reads the ordinary fallback) BEFORE spending it on `synthesize.mts`.
+
+Wired into the real generator: each case's own system picks a layer name
+carrying a token `mepsystems.ts` recognizes outright ("M-HVAC-DUCT" or
+"M-PIPE-HYDRONIC"), wrapping that case's whole draw call in `BDC/EMC`.
+
+Result: **synthetic recall 0/10 -> 7/10** in one change -- this corpus can
+finally test what it was built to test. Two things this surfaced were
+disclosed, not chased further this pass: `05-double-line-duct` still
+refuses for a DIFFERENT, already-understood reason (the truth is authored
+at the double-line symbol's own centerline, but the generator only draws
+the two offset rails -- no ink sits where the seed lands, the same gap
+`weld-county-m1-0.json`'s real golden already solved by picking a rail);
+and `08-label-leader` shows a newly-exposed LF mismatch (33.48->26.85, not
+yet root-caused, invisible before because the whole case used to just
+refuse). `docs/LINEAR-TRACE-EVAL.md` gained a "Run 10" section; its
+priority list marks Finding 5's own fix as done, not remaining, and adds
+these two new, smaller, disclosed items in its place.
+
+Measured: `npx tsc --noEmit` clean; `bench:linear` passes (synthetic still
+reported-only, never gated, same established reason); development/held-out
+tiers unchanged (this pass only touches the synthetic generator); all 215
+`benchScore.test.ts`/`test/linear/*.test.ts` tests pass unchanged (no
+scoring code touched); full filtered web regression suite re-run (3455
+tests, exactly matching the prior checkpoint -- no test files changed this
+pass) confirms no new failures.
+
 2026-09-17 linear takeoff: size accuracy's own no-label vs wrong-label split (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Closed a real gap against the plan's own explicit §2 metric spec: "size
 accuracy (exact + length-weighted, no-label vs wrong-label separated)" --
