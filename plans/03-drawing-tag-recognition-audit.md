@@ -456,3 +456,260 @@ Mapping the gaps to the build order in §4 (unchanged, now evidence-backed):
 
 Everything above is text-only and sits on the shared path; none of it
 changes the geometry doctrine (text never proves installation).
+
+---
+
+# Part 3 — Implementation plan (for an executing coding agent)
+
+This part is self-contained. Parts 1–2 are the evidence; execute from here.
+
+## 3.0 Ground rules the executor must follow
+
+1. Read `AGENTS.md` (repo root) and `opentakeoff/AGENTS.md` first. Every work
+   package below is **shared-path** work: one module under
+   `opentakeoff/web/src/lib/`, consumed by `mcp/src/session.ts` and by the
+   canvas. Never add a UI-only or MCP-only fork of tag logic.
+2. Doctrine that must survive every change: **text never proves installation.**
+   A drawn tag may *locate* and *cite*; only geometry (or an explicit
+   installation note) may fill `installed_qty`. New evidence grades are
+   additive; never promote a text observation into `installed_qty`.
+3. No corpus names, sheet numbers, or tag literals hard-coded in production
+   code. Rules are shapes (`isEquipTag`, `markKey`), never lists of jobs.
+4. Never change a corpus key, scorer, threshold, or collapse distinct marks to
+   move a number. Record honest ceilings instead.
+5. Work one package at a time, in order. After each: `npm run typecheck`
+   (root), `npm --prefix opentakeoff/web test`, `npm --prefix opentakeoff/mcp test`,
+   and the corpus regression gates
+   `opentakeoff/mcp/test/takeoffHvac01.regression.test.mjs`,
+   `takeoffValve01.regression.test.mjs`, `takeoffBas01.regression.test.mjs`.
+   Commit with before/after numbers from §3.1 in the body. Update
+   `opentakeoff-corpus/PROGRESS.md` ("Accepted changes") per package.
+6. Node ≥ 22 with `--import tsx`. Table sidecar may stay off
+   (`OPENTAKEOFF_TABLE_SIDECAR=0`) for every check in this plan; it does not
+   affect plan text.
+
+## 3.1 WP0 — Baseline harness (do first, no production code)
+
+Create `opentakeoff/mcp/scripts/tag-census-diag.mjs` (the scratch script from
+§2.1, cleaned up; takes a PDF path and a comma list of tags to sweep). It
+loads a `Session`, builds `graphForPipeline()`, runs `labelTokens` over
+`textSpans` for every sheet, and prints: role counts; schedule keys by kind
+(VALVE MARK / UNIT MARK / equipment row); the four-bucket coverage table
+(never drawn / plan-only / non-plan-only / both); drawn-but-unscheduled keys;
+sweep outcomes for the sample tags.
+
+Baseline it must reproduce on
+`opentakeoff-corpus/raw/navfac-cherry-point-atc-mechanical.pdf` before any
+change:
+
+```
+roles          plan 26 · legend 27 · schedule 8 · detail 10 · elevation 4
+schedule keys  equipment_row 318 · valve_mark 106 · unit_mark 3
+valve_mark     none 101 · planOnly 0 · otherOnly 5 · both 0
+equipment_row  none 3   · planOnly 155 · otherOnly 93 · both 67
+drawn keys     301 (238 scheduled, 63 unscheduled)
+FCU            42 rows · 44 distinct drawn · 89 occ (84 on plan roles)
+sweep          FCU-A1 found=1 tag_attached_vector · CV-FCU-A1-CHW REFUSED ·
+               HRHWP-MT1 REFUSED (drawn 5–10× on pages 52–66)
+```
+
+Also run it on `bldg5406-hvac-demo-mechanical.pdf`, `baker-county-eoc-bidset.pdf`,
+`itd-d1-lab-mechanical.pdf`, `federal-attachment4-mechanical.pdf` and save
+all five outputs under `opentakeoff-corpus/reports/tag-census/<set>.before.txt`.
+Every later package re-runs this and commits the `.after.txt` diff.
+
+## 3.2 WP1 — Sheet role: add `schematic`, stop reference notes from voting
+
+Files: `opentakeoff/web/src/lib/sheetgraph.ts` (`SheetRole` L40,
+`ROLE_SIGNALS` L63–260, `REFERENCE_RE` L304, `classifySheetRole` L306),
+`opentakeoff/mcp/src/outputs.ts` (role enum L1313), plus every `switch`/enum
+over `SheetRole` (grep `"elevation"` to find them; the canvas
+`PlanNavigator.jsx` role badges included).
+
+Changes:
+
+- Add `"schematic"` to `SheetRole` and to the wire enum. Signals (confidence
+  0.8, above the bare `/LEGEND/` 0.5 signal): `/\bSCHEMATIC\b/`,
+  `/CONTROL(?:S)?\s+DIAGRAM/`, `/FLOW\s+DIAGRAM/`, `/RISER\s+DIAGRAM/`,
+  `/PIPING\s+DIAGRAM/`, `/SEQUENCE\s+OF\s+OPERATION/`, `/\bDDC\b.*(?:DIAGRAM|SCHEMATIC|NETWORK)/`.
+- Extend `REFERENCE_RE` so a *fragment* of a cross-reference note cannot vote:
+  a span matching `/\bFOR\s+(?:[A-Z]+\s+){0,3}(?:LEGEND|ABBREVIATIONS|SYMBOLS|NOTES)\b/`
+  or starting with `/^\d{3}\s+FOR\b/` is a reference, not a title.
+  (Measured cause: pdf.js splits "SEE M-001 FOR MECHANICAL LEGEND, …" into
+  "SEE M-" and "001 FOR MECHANICAL LEGEND, ABBREVIATIONS"; the second half
+  passed `REFERENCE_RE` and matched `/LEGEND/`.)
+- Treat `schematic` like `legend` everywhere a role gates *installed* work
+  (sweeps, `count_marks`, plan-paint) — it is still not a plan. Treat it like
+  `plan` for the control-schematic extractor and for tag *disclosure* (WP4).
+
+Acceptance:
+
+- navfac pages 50–66 (`MI700`…`MI732`) classify `schematic`; `M-001` stays
+  `legend`; role counts on the other four baseline sets change only where a
+  schematic/diagram title exists (list them in the commit).
+- New unit test in `opentakeoff/web/test/sheetgraph*.test.ts` with the
+  fragment shape above (synthetic spans, no corpus name).
+- All existing tests green.
+
+## 3.3 WP2 — `tagIndex`: the set-wide drawn-tag census on the graph
+
+New file `opentakeoff/web/src/lib/tagIndex.ts` (pure; spans in, tags out).
+
+```ts
+export interface DrawnTag {
+  sheet: string; role: SheetRole;
+  text: string;            // as drawn, joined/reconstructed
+  key: string;             // markKey(text)  (markid.ts)
+  family: string;          // canonicalLabelFamily(text) (symbollabels.ts)
+  bbox: Bbox; rot: number;
+  source: "exact" | "joined" | "stacked" | "compound" | "count_prefixed";
+  multiplier: number;      // scheduleCountMultiplier (TYP N / (N)), default 1
+  in_table: { sheet: string; title: string | null } | null;
+  sheet_callout: boolean;  // text equals one of the set's own sheet numbers
+}
+export function buildTagIndex(sheets: SheetSpans[], tables: ScheduleTable[], sheetNumbers: string[]): DrawnTag[];
+export function tagIndexFor(index: DrawnTag[], key: string): DrawnTag[];   // markKey-based
+```
+
+Rules:
+
+- Recognition = `labelTokens(spans)` ∪ `isEquipTag` on joined spans ∪
+  `compoundTagOcc`-shaped runs. Reuse those functions; do not write a new regex.
+- `sheet_callout` is decided by the set's own sheet-number list (from
+  `SheetSpans.sheet_number`), never by a fixed `M-\d{3}` regex.
+- `in_table` from `graph.tables[].region`; legend-region tags stay in the
+  index with `role: "legend"`, never dropped.
+- Attach to `SheetGraph` in `buildSheetGraph`: `tags: DrawnTag[]` (all roles).
+  Convenience getters `planTags(graph)` / `referenceTags(graph)`.
+- Canvas: index persisted next to `textIndex.js` (same `(sheetKey, rev)`
+  cache discipline; bump a `TAGIDX_VERSION`).
+- MCP tool `list_tags { sheet?, family?, key?, role?, include_tables? }` in
+  `mcp/src/tools.ts`, schema in `outputs.ts`; canvas agent tool of the same
+  name in `web/src/lib/agentTools.js`, both calling the shared getter.
+  Refuse on `graph.available === false` with the existing scan wording.
+
+Acceptance (navfac, from the WP0 script re-pointed at `graph.tags`):
+
+- ≥ 1,800 equipment-shaped tags outside tables; ≥ 300 distinct keys.
+- FCU: 44 distinct keys, 89 occurrences, none `in_table` on plan roles.
+- `M-501`-style entries carry `sheet_callout: true` and are excluded by
+  default from `list_tags` unless `include_callouts: true`.
+- Whole-set index builds in < 2 s after the graph on this set.
+- Unit tests: joined glyph split, stacked `HWP`/`1`, table exclusion,
+  sheet-callout flag, hyphen/space twins share one `key`.
+
+## 3.4 WP3 — One identity rule
+
+Wire `markKey` / `spanAnswersFor` from `opentakeoff/web/src/lib/markid.ts`
+into:
+
+- `Session.tagOccurrencesOnSheet` (session.ts L3522): the first pass becomes
+  `markKey(sp.str) === markKey(key)` with the short-mark guard from
+  `spanAnswersFor` (so `FCU-1` still never claims `FCU-10`).
+- `Session.countMarks` (L2514): replace `canon`/`MARK_RE` with `markKey` and
+  `isEquipTag || LABEL_TOKEN_RE` for the default vocabulary.
+- `schedulePlanReconcile.mjs`: `rowId`/`scopeIdentity` canon → `markKey`.
+
+Acceptance: `markid.test.ts` stays green; new seam test proves the three
+callers agree on a fixture of twins (`P-1`/`P1`/`P 1`) and non-twins
+(`P1` vs `P10`, `ET` vs `ET-1`); navfac sweeps for `FCU-A1`, `AHU-A1`,
+`CV-CHW-BP-A` return identical results to baseline.
+
+## 3.5 WP4 — Sweep discloses reference occurrences instead of throwing
+
+File: `mcp/src/session.ts` `sweepScheduleRow` at the `!totalOcc` throw
+(~L4092); wire schema `sweepScheduleRowOutput` in `outputs.ts`;
+`schedulePlanReconcile.mjs` rows; `agentTakeoff.js` folding; `takeoff.ts`
+`resolveRow` + `classifyError`.
+
+- Before throwing, consult `tagIndexFor(graph.tags, t)` for occurrences on
+  non-plan roles. If any exist, return a result instead of throwing:
+  `found: 0`, `anchor: null`, `search_scope`, `complete: true`,
+  `reference_tags: [{ sheet, role, bbox, text }]`, `status: "reference_only"`,
+  `reason` naming the roles. If none exist anywhere, keep the current throw
+  (its wording is load-bearing for `classifyError`).
+- Reconcile row gains `reference_tag_cites` and status `SCHEDULE_ONLY`
+  (unchanged quantity semantics) with the reason "drawn on schematic/legend
+  sheets only".
+- Canvas: `field: "reference_tag"` → `line.reference_tag_cites[]`; panel chip
+  "Schematic tag · p.N" (grey, not blue), never "Symbol".
+
+Acceptance (navfac): the 93 non-plan-only equipment marks (e.g. `HRHWP-MT1`)
+return `reference_only` with ≥ 1 cite each; `takeoffHvac01` regression
+unchanged (installed quantities identical); `SYMBOL_FALSE_NEGATIVE` count in
+`buildPlanSetTakeoff.failures` drops by exactly the number of rows that moved
+to `reference_only` (state the number in the commit).
+
+## 3.6 WP5 — Served-equipment location grade
+
+Files: `schedulePlanReconcile.mjs` (`reconcileScheduleFamilyWithSweeps`,
+`reconcileScheduleFamilyFromGraph`), `takeoff.ts` `resolveRow`,
+`outputs.ts`, `agentTakeoff.js`, `TakeoffDataPanel.jsx`.
+
+- For a row whose own identity (VALVE MARK / MARK) has zero occurrences on
+  any role, read the served mark from the row (`UNIT MARK`, `SERVES`,
+  `SERVED EQUIPMENT`, `EQUIPMENT SERVED` headers; extend
+  `rowIdentityTag`'s neighbour with a `servedEquipmentTag(row)` helper next
+  to it) and look it up in the tag index.
+- Emit `served_equipment_cites: [{ tag, sheet, role, bbox }]` and
+  `installed_evidence_grade: "located_via_served_equipment"` (new enum value
+  in both `outputs.ts` enums at L95 and L388). `installed_qty` stays `null`;
+  `status` stays `SCHEDULE_ONLY`.
+- `sweepScheduleRow` itself is unchanged: it must still refuse to count the
+  served unit as the valve (session.ts comment ~L4048 stays true).
+- Canvas: field `served_tag` → `line.served_tag_cites[]`; chip
+  "Served unit `FCU-A1` · p.29" opening the served tag's bbox; the Compare
+  button pairs it with the schedule row.
+
+Acceptance (navfac T-VALVE-01, `reconcile_schedule_plan { family: "valve" }`
+or the CHW/HHW needles): ≥ 150 of 163 valve rows carry a served-equipment
+cite; the 5 rows whose own mark is drawn keep their existing cites;
+`takeoffValve01` regression unchanged (quantities identical, 163 EA).
+
+## 3.7 WP6 — Two-way reconcile, all cites, exports
+
+- `reconcile_schedule_plan` output adds `unscheduled_tags: DrawnTag[]`
+  (index keys with no schedule row, `sheet_callout` excluded) and
+  `alias_candidates: [{ drawn, nearest_row_key, distance }]` using
+  `markKey` plus a one-edit tolerance on the *segment* level only (never on
+  digits). Both are review lists; neither changes any quantity.
+- Panel: render every cite (a `+N` badge after the first chip); CSV/XLSX via
+  `takeoffWorkbookSheets` gains `PLAN TAG SHEETS`, `PLAN TAG COUNT`,
+  `SERVED TAG SHEETS`, `REFERENCE TAG SHEETS` columns; `export/takeoff.json`
+  items carry `plan_tag_locations`, `served_equipment_cites`,
+  `reference_tags`.
+
+Acceptance (navfac): `unscheduled_tags` lists `CSF-CHW-M1`, `CSF-HHW-A1`,
+`CV-HHW-BP-M`, `CV-HHW-BP-T` (present in §2.3) and no `M-501`-style
+callouts; `alias_candidates` pairs `CV-CH-C-MT1` ↔ `CV-CH-H-MT-1`.
+
+## 3.8 WP7 — Ground truth and eval
+
+- Add `opentakeoff-corpus/keys/<set>.tags.csv` with columns
+  `sheet,tag,x0,y0,x1,y1,role,in_table,note` for navfac (FCU + AHU + pumps
+  at minimum), bldg5406, baker-county-eoc, itd-d1-lab. Hand-verify from
+  renders (`view_sheet` crops), never from the index itself.
+- Add `opentakeoff/mcp/scripts/tag-eval.mjs`: per set, precision/recall of
+  `graph.tags` against the key, per role and per family; prints a table and
+  exits non-zero below a stated floor. Wire it into
+  `opentakeoff/scripts/eval.mjs` alongside `takeoff-eval` / `graph-eval`.
+- Record the first numbers in `opentakeoff-corpus/PROGRESS.md` and GOAL §2 as
+  a fourth metric.
+
+## 3.9 Explicitly out of scope for this plan
+
+Plan-text OCR / exploded-glyph recognition (Part 1 §4 step 6) and any
+symbol-geometry change. Those start only after WP0–WP7 are merged and the
+tag metric from WP7 is green.
+
+## 3.10 Definition of done
+
+- WP0 script committed; five `.before.txt` baselines and matching
+  `.after.txt` per package under `opentakeoff-corpus/reports/tag-census/`.
+- On navfac: FCU rows 42/42 with plan tag cites; valve rows ≥ 150/163 with
+  served-equipment cites; 93 schematic-only equipment marks disclosed, 0
+  refused as "not drawn"; `unscheduled_tags` non-empty and callout-free.
+- `takeoffHvac01`, `takeoffValve01`, `takeoffBas01` regressions and every
+  existing test green; typecheck clean; no quantity in any locked truth
+  changed.
+- `PROGRESS.md` updated per package with the numbers above.
