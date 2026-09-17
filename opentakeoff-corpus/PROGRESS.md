@@ -1,5 +1,48 @@
 ## Active work
 
+2026-09-17 linear takeoff: a second new-corpus sheet, first gas-piping goldens, development recall 5/11 -> 7/13 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept mining the same ~380-PDF resource the prior checkpoint opened, this
+time on a sheet with NO PDF layers at all -- unlike that first new
+golden, this one had to be found the older way, a full-page grid sweep,
+not a direct layer-name pull. Two candidates came back with something no
+prior real-corpus sweep this whole session had produced: a genuine,
+engine-bound size AND system read directly off a real printed label, no
+human override needed. Both are drawn dashed (this sheet's own real
+convention for gas piping specifically) and heavily print-fragmented,
+bridged back into continuous runs by this project's own existing
+dash-gap fix. Added as a new development-tier golden -- this project's
+own first gas-piping goldens, real or synthetic.
+
+A real mistake was caught here, not papered over: the first run's own
+end point was set to where a printed size callout's TEXT sits, assuming
+the run simply dead-ends there. Running the bench itself proved that
+assumption wrong -- its own scorer doesn't measure a golden's declared
+shape directly, it re-seeds a real trace call and scores whatever THAT
+returns, and the real call stopped short, at a genuine three-way
+junction, not at the callout. A marked render crop confirmed the real
+junction: this run's own leg meets a separate branch continuing past its
+own scope, with the callout's own leader line starting right at that
+same point. Fixed by correcting the golden's own end point, length, and
+a size-lookup index to match what the engine actually, verifiably does
+on a single call -- the same "the golden's extent is what one real call
+produces, not a human's own farther guess" discipline this project has
+applied consistently all session, applied here to its own mistake before
+it could ship.
+
+Development-tier recall: **5/11 (0.455) -> 7/13 (0.538)**, both new cases
+exact length matches, and both flip to a genuine size match for the first
+time on any real-corpus case this session (size accuracy 0.525 -> 0.693)
+-- real evidence the engine's own label-association path generalizes past
+the synthetic corpus onto a real, messy, dash-fragmented drawing. The new
+source PDF is now committed to this project's own real corpus (`raw/`),
+same convention as before.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; all 227 tests pass; full filtered web regression suite
+re-run, matching the established baseline. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 23" section (including the self-correction) and its own
+priority list updated with the new recall number.
+
 2026-09-17 linear takeoff: the real corpus grows ~380 PDFs -- a first new golden, development recall 4/10 -> 5/11 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 The prior checkpoint concluded further recall gains needed real goldens
 on sheets not yet in the corpus. Checked what "the corpus" actually is,
