@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-17 linear takeoff: third held-out golden — a clean 3/3, plus a set-aside on excluded-family refusals (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Authored the third entry off `reports/LINEAR_HELDOUT.txt`'s frozen list:
+`navfac-cherry-point-atc-mechanical.pdf#6` (MH101), one of the two sheets
+this checkpoint had already declared and frozen as its own structural,
+zero-`trace_run`-foreknowledge picks back when the split was first written.
+An 8x8 rectangular RA duct, 12.39 LF, from a real transition/flex-connector
+fitting to a real elbow into a register riser, confirmed via a marked
+render crop. This sheet's own duct callouts carry EXPLICIT SA/RA/EA tags,
+so `trace_run` read `systems:['RA']` directly -- no annotator inference
+needed, unlike the first two held-out goldens.
+
+Held-out is now a genuine, clean **3/3**: recall 1.0, precision 1.0, 0%
+length error, 100% size accuracy across every case authored so far. Still
+short of the 7 the frozen list declares and still not hard-gated (n=3,
+Run 4's own rationale), but a real, encouraging trend -- every held-out
+sheet reached without Finding 1's wall-vouch excluding it outright has
+matched ground truth exactly.
+
+A parallel attempt this same pass to close a DIFFERENT disclosed gap --
+`refusals.json`'s own missing "seed on real linework of an EXCLUDED
+family" case (schedule gridlines, dimension lines, hatching) -- was tried
+and set aside, not forced: no dimension-string text exists on any of the
+project's own mechanical sheets (dimensions live on the architectural set,
+which isn't part of this corpus), and a sweep for a real schedule-table
+gridline seed on `weld-county-mechanical-permit.pdf#6`'s own DUCT SCHEDULE
+never landed close enough to reach or refuse meaningfully within a
+reasonable search budget. Disclosed in `docs/LINEAR-TRACE-EVAL.md`'s own
+priority list as attempted, not completed, with a concrete next approach
+(extract the table's own gridline coordinates directly from vector
+geometry, don't sweep blindly) rather than silently dropped.
+
+Measured: `npx tsc --noEmit` clean; `bench:linear` passes (held-out 3/3,
+development-tier aggregates unchanged at 2/8 recall / 0.743 precision);
+all 214 `benchScore.test.ts` + `test/linear/*.test.ts` tests pass (no
+scoring-function changes this pass, only a new golden + doc updates).
+
 2026-09-17 linear takeoff: the "genuine Fréchet miss" from the checkpoint below was a scorer bug, found and fixed same day (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 The checkpoint immediately below this one closed with "a genuine, honest miss...
 the deviation is in trace_run's own walked SHAPE, not the ground truth" and

@@ -587,7 +587,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 2.89458599999989
+     "buildMs": 3.302697999999964
     }
    ],
    "aggregate": {
@@ -598,7 +598,7 @@
     "meanLenErrPct": 0.6137211036539896,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 2.89458599999989,
+    "maxColdBuildMs": 3.302697999999964,
     "maxWarmQueryMs": null
    }
   },
@@ -645,7 +645,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 307.531978
+     "buildMs": 305.9810349999998
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -700,7 +700,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 363.8185859999994
+     "buildMs": 432.07123200000024
     },
     {
      "caseName": "weld-county-mechanical-permit.pdf#7",
@@ -719,7 +719,7 @@
       "clippedLenFt": 21.82,
       "goldenLenFt": 21.82
      },
-     "buildMs": 510.22309700000005
+     "buildMs": 446.09429400000226
     }
    ],
    "aggregate": {
@@ -730,7 +730,7 @@
     "meanLenErrPct": 0.30820291345730527,
     "maxOverTracePct": 0.8470464135021097,
     "sizeAccuracyPct": 0.45458333333333334,
-    "maxColdBuildMs": 510.22309700000005,
+    "maxColdBuildMs": 446.09429400000226,
     "maxWarmQueryMs": null
    }
   },
@@ -753,7 +753,7 @@
       "clippedLenFt": 3.57,
       "goldenLenFt": 3.57
      },
-     "buildMs": 1286.1164149999995
+     "buildMs": 1331.4253530000005
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#4",
@@ -772,18 +772,37 @@
       "clippedLenFt": 3.02,
       "goldenLenFt": 3.02
      },
-     "buildMs": 872.2408109999997
+     "buildMs": 901.5372299999999
+    },
+    {
+     "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
+     "status": "reached",
+     "goldenLf": 12.39,
+     "tracedLf": 12.39,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:8x8",
+     "tracedSizeKey": "rect:8x8",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 12.39,
+      "goldenLenFt": 12.39
+     },
+     "buildMs": 1985.457550000001
     }
    ],
    "aggregate": {
-    "cases": 2,
+    "cases": 3,
     "recall": 1,
     "precision": 1,
     "maxLenErrPct": 0,
     "meanLenErrPct": 0,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 1,
-    "maxColdBuildMs": 1286.1164149999995,
+    "maxColdBuildMs": 1985.457550000001,
     "maxWarmQueryMs": null
    }
   }

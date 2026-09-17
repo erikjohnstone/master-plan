@@ -40,8 +40,9 @@
 #   navfac-cherry-point-atc-mechanical.pdf#18  (MP101) -- coordinator pick
 #
 # authored so far (2026-09-17): federal-attachment4-mechanical.pdf#7 (see
-# ground_truth/linear/federal-m3-1-p7-heldout.json) and
-# itd-d1-lab-mechanical.pdf#4 (see ground_truth/linear/itd-d1-lab-m1-1-heldout.json).
-# The other five are declared and frozen but NOT yet authored; a representative
+# ground_truth/linear/federal-m3-1-p7-heldout.json), itd-d1-lab-mechanical.pdf#4
+# (see ground_truth/linear/itd-d1-lab-m1-1-heldout.json), and
+# navfac-cherry-point-atc-mechanical.pdf#6 (see ground_truth/linear/navfac-mh101-heldout.json).
+# The other four are declared and frozen but NOT yet authored; a representative
 # pass, not an exhaustive one -- matching this corpus's own repeated
 # "one run/one sheet, not the whole set, per pass" precedent.
