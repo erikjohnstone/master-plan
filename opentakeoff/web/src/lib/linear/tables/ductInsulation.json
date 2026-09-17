@@ -1,0 +1,14 @@
+{
+  "table_grade": "C",
+  "table_source": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing",
+  "note": "R-value by location, independent of climate zone except where noted (exterior/envelope-separated ducts split by climate zone band).",
+  "rows": [
+    { "location": "unconditioned_space", "r_value": 6 },
+    { "location": "outside_building_cz0_4", "r_value": 8 },
+    { "location": "outside_building_cz5_8", "r_value": 12 },
+    { "location": "within_envelope_assembly_cz1_4", "r_value": 8, "note": "separated from exterior by this R-value" },
+    { "location": "within_envelope_assembly_cz5_8", "r_value": 12, "note": "separated from exterior by this R-value" }
+  ],
+  "fitting_allowance_pct": { "value": 20, "grade": "V", "source": "https://askhvac.ca/duct-design/duct-surface-area-calculator.html" },
+  "lap_waste_pct": { "value": 10, "grade": "V", "source": "https://www.ruh.ai/industrial/construction/glossary/duct-insulation" }
+}

@@ -1,0 +1,25 @@
+{
+  "table_grade": "M",
+  "table_source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md C1/C2 — 'No published feet-of-cable-per-point figure surfaced'; engine defaults.",
+  "ft_per_point": {
+    "home_run": { "value": 75, "note": "hardwired I/O point home-run to nearest controller" },
+    "large_ahu_sensor": { "value": 150, "note": "sensors on large AHUs" }
+  },
+  "conduit_share_pct": { "value": 25, "note": "share of cable LF in 3/4\" EMT" },
+  "emt_labor_hr_per_100ft": { "value": 5.0, "grade": "V", "source": "NECA MLU via https://www.ecmweb.com/construction/estimating/article/20903843/understanding-labor" },
+  "cable_pull_hr_per_1000ft": {
+    "conduit": { "value": 4.25, "grade": "V", "source": "NECA #12 THHN, via https://forums.mikeholt.com/threads/neca-manual-of-labor-units-question.77005/" },
+    "open_plenum": { "value": 9, "note": "~2x conduit THHN rate for 18/2-22/2 plenum control cable, 8-10 hr/1000ft midpoint" }
+  },
+  "mstp_trunk": {
+    "max_ft_per_segment": 4000,
+    "max_devices_per_segment": 32,
+    "grade": "V",
+    "source": "https://elibrary.tranetechnologies.com/public/commercial-hvac/Literature/Installation%20Operation%20and%20Maintenance/BAS-SVX51N-EN_04242024.pdf ; https://www.neptronic.com/controls/PDF/EVC/BACnetModbus/BACnet%20MSTP%20Overview%20Manual-160405.pdf"
+  },
+  "per_point_sanity_check": {
+    "hr_analog": { "value": 5, "grade": "V", "source": "https://www.chemicalprocessing.com/automation/control-systems/article/11312700/control-system-rule-out-a-rule-of-thumb-chemical-processing" },
+    "hr_discrete": { "value": 3, "grade": "V", "source": "https://www.chemicalprocessing.com/automation/control-systems/article/11312700/control-system-rule-out-a-rule-of-thumb-chemical-processing" },
+    "usd_per_point": { "value": 450, "grade": "V", "source": "https://control.com/forums/threads/cost-of-wiring.9427/" }
+  }
+}

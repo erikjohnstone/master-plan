@@ -1,0 +1,20 @@
+{
+  "table_grade": "M",
+  "table_source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md B3/B5 — order-of-magnitude engine defaults, not licensed labor-unit values.",
+  "hanger_install_hr": { "value": 0.375, "note": "0.25-0.5 hr/hanger midpoint" },
+  "insulation_hr_per_lf": { "value": 0.075, "note": "0.05-0.1 hr/LF midpoint" },
+  "fallback_hr_per_lf": { "value": 0.15, "note": "per-LF fallback at 1\" copper when no joint-count basis applies", "grade": "V", "source": "https://www.theprojectestimate.com/pipe-installation-man-hours/" },
+  "hydro_test_hr_per_system": { "value": 6, "note": "4-8 hr/system midpoint" },
+  "hydro_test_hr_per_100lf": { "value": 0.5 },
+  "flush_hr_per_system": { "value": 3, "note": "2-4 hr/system midpoint" },
+  "couplings_per_stick": {
+    "steel_ft": 21,
+    "copper_pvc_ft": 20,
+    "formula": "ceil(L / stick_ft) - 1"
+  },
+  "waste_pct": {
+    "copper": 7.5, "cast_iron": 6, "pvc_cpvc": 4, "pex": 7.5, "hangers": 12.5,
+    "note": "midpoints of the research doc's ranges (copper/steel 5-10%, cast iron 5-7%, PVC/CPVC 3-5%, PEX 5-10%, hangers/small items 10-15%)"
+  },
+  "valves_per_zone": { "isolation": 2, "balancing_return": 1, "strainer_per_coil_or_zone": 1, "note": "counted from equipment connections, not the run" }
+}

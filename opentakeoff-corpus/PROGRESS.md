@@ -1,5 +1,70 @@
 ## Active work
 
+2026-09-17 linear takeoff WP2.1 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+graded rate tables. New `web/src/lib/linear/rates.ts` + nine
+`web/src/lib/linear/tables/*.json` files (duct gauge, duct weight, duct
+hanger spacing, pipe hanger spacing, duct insulation, pipe insulation,
+pipe joint hours, duct labor, BAS defaults), every cell carrying
+`{value, grade, source}` (or a table-level `table_grade`/`table_source`
+default, overridden per-cell where the source table itself mixes grades
+— e.g. the pipe-hanger and pipe-insulation tables' bold-confirmed cells).
+Data lives in JSON (tsconfig.json gains `resolveJsonModule` — mcp's
+tsconfig already had it), specifically so a future table correction is a
+JSON diff, never mixed with lookup-logic changes in the same review.
+
+LAW L10 / D6 (no licensed MCAA/Wendes/SMACNA table values ship) applied
+throughout, and extended by this session's own judgment to MSS SP-58
+(also a purchased ANSI standard, not named in L10's own sentence but
+matching its doctrine exactly): the duct gauge table ships the research
+doc's "widely used simplified spec schedule" (explicitly marked safe to
+ship, never labeled "SMACNA"), not a reconstruction of SMACNA's own
+pressure-class tables; duct hanger spacing ships the IMC 603.10 code
+floor (10 ft, [C], the one legally-mandated ceiling) with an [M]
+engine-authored hardware-by-size band that never widens spacing past
+that floor; pipe hanger spacing ships MSS SP-58 as an [M]
+order-of-magnitude reconstruction (a few independently-confirmable
+cells graded [V]) alongside the genuinely public IPC 308.5/IMC 305.4/
+UPC 313.3 code tables at [C]; pipe joint hours ship the research doc's
+own pre-softened "order of magnitude, not licensed values" grid
+verbatim, all [M], with the profile's CSV-import escape hatch (D6) noted
+in the table's own JSON rather than built here (that's WP2.4). Duct
+weight (galvanized sheet lb/ft² by gauge) and ASHRAE 90.1/IECC
+insulation R-values/thicknesses ship at [C]/[V] — these are, respectively,
+generic sheet-steel physics and code text incorporated by reference into
+adopted building codes, not a trade association's own priced table.
+
+Caught and fixed before committing: `ductWeightPerSf`'s odd-gauge
+fallback initially sorted ascending and took the first row `<=` the
+request, which for gauge numbering (inverted from thickness — a BIGGER
+number is THINNER metal) silently picked the LIGHTEST stocked gauge
+satisfying the inequality instead of the nearest-and-heaviest one;
+caught by the test asserting gauge 19 resolves to 18 ga (not 20 ga),
+fixed by sorting descending for this one lookup (documented inline why
+it's the only table that needs the reversed direction).
+
+Tests: `web/test/linear/rates.test.ts`, 11 cases — every public lookup's
+boundary bands, round-up-to-next-stocked-size behavior, and null-for-
+no-data-cell behavior, plus a generic GATE 2 invariant test that walks
+every table this module loads and asserts every graded cell (including
+`pipeInsulation.json`'s per-band `grade` arrays) uses a legal
+grade letter and carries a real, non-empty source — so a future table
+addition inherits the check for free instead of needing its own.
+
+Verified: web typecheck clean; lint clean (0 errors, the same
+pre-existing 3 warnings); full `npm test` minus the one already-known
+`compileProgressWalkthrough.test.ts` subprocess flake (it hit its own
+historically-documented multi-hour real-PDF-compile duration twice in a
+row during this checkpoint's verification and was excluded from the
+timed run rather than blocking on it) — 3280 tests attempted, 70 fail,
+the SAME count and the SAME sync/cloud-storage/snapshot/BAS-restore
+cluster as GATE 1's own baseline moments earlier, confirming this file
+contributes zero of the 70 (consistent with WP1.6's note that it "didn't
+hang this run and passed outright" when it does complete) and that
+WP2.1 introduces no new failures. `npm run bench` and `npm run
+bench:linear` both green, `bench/results.json` and
+`bench/linear/results.json` byte-identical (nothing engine-facing
+changed).
+
 2026-09-17 linear takeoff GATE 1 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) — PASSED.
 Four conditions, checked independently:
 

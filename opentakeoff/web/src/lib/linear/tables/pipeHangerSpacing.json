@@ -1,0 +1,86 @@
+{
+  "note": "D3's default hanger tables (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md): mechanical piping (hydronic, steam, refrigerant) defaults to mss_sp58, selectable to imc305_4; plumbing (domestic water, DWV, gas) defaults to ipc308_5, selectable to upc313_3. The adopted code is a per-project setting, not a global constant.",
+  "mechanical": {
+    "default_code": "mss_sp58",
+    "codes": {
+      "mss_sp58": {
+        "table_grade": "M",
+        "table_source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md B1 — MSS SP-58 Table 4 is a purchased ANSI/MSS standard (LAW L10 doctrine extended to MSS by the same no-licensed-table-values reasoning as MCAA/Wendes/SMACNA); shipped as an order-of-magnitude reconstruction, NOT the licensed table. Cells independently confirmable via public citation (calcengineer.com, industrialmonitordirect.com) are graded V; the rest M. Verify every M cell against the purchased standard before treating it as authoritative.",
+        "rod_diameter_source": "UPC Table 313.6 (rod sizes) https://up.codes/s/hanger-rod-sizes — cells graded M pending confirmation",
+        "rows": [
+          { "nps_in": 0.5,  "steel_water_ft": 7,  "steel_vapor_ft": 8,  "copper_water_ft": 5,  "rod_in": 0.375, "grade": "M" },
+          { "nps_in": 0.75, "steel_water_ft": 7,  "steel_vapor_ft": 9,  "copper_water_ft": 5,  "rod_in": 0.375, "grade": "M" },
+          { "nps_in": 1,    "steel_water_ft": 7,  "steel_vapor_ft": 9,  "copper_water_ft": 6,  "rod_in": 0.375, "grade": "M" },
+          { "nps_in": 1.25, "steel_water_ft": 7,  "steel_vapor_ft": 9,  "copper_water_ft": 7,  "rod_in": 0.375, "grade": "M" },
+          { "nps_in": 1.5,  "steel_water_ft": 9,  "steel_vapor_ft": 12, "copper_water_ft": 8,  "rod_in": 0.375, "grade": "M" },
+          { "nps_in": 2,    "steel_water_ft": 10, "steel_vapor_ft": 13, "copper_water_ft": 8,  "rod_in": 0.375, "grade": "V" },
+          { "nps_in": 2.5,  "steel_water_ft": 11, "steel_vapor_ft": 14, "copper_water_ft": 9,  "rod_in": 0.5,   "grade": "M" },
+          { "nps_in": 3,    "steel_water_ft": 12, "steel_vapor_ft": 15, "copper_water_ft": 10, "rod_in": 0.5,   "grade": "M" },
+          { "nps_in": 3.5,  "steel_water_ft": 13, "steel_vapor_ft": 16, "copper_water_ft": 11, "rod_in": 0.5,   "grade": "M" },
+          { "nps_in": 4,    "steel_water_ft": 14, "steel_vapor_ft": 17, "copper_water_ft": 12, "rod_in": 0.625, "grade": "V" },
+          { "nps_in": 5,    "steel_water_ft": 16, "steel_vapor_ft": 19, "copper_water_ft": 13, "rod_in": 0.625, "grade": "M" },
+          { "nps_in": 6,    "steel_water_ft": 17, "steel_vapor_ft": 21, "copper_water_ft": 14, "rod_in": 0.75,  "grade": "V" },
+          { "nps_in": 8,    "steel_water_ft": 19, "steel_vapor_ft": 24, "copper_water_ft": 16, "rod_in": 0.875, "grade": "M" },
+          { "nps_in": 10,   "steel_water_ft": 22, "steel_vapor_ft": 26, "copper_water_ft": 18, "rod_in": 0.875, "grade": "M" },
+          { "nps_in": 12,   "steel_water_ft": 23, "steel_vapor_ft": 30, "copper_water_ft": 19, "rod_in": 0.875, "grade": "M" }
+        ]
+      },
+      "imc305_4": {
+        "table_grade": "C",
+        "table_source": "IMC 2021 Table 305.4 (mechanical piping) — public adopted code text. https://codes.iccsafe.org/s/IMC2021P1/chapter-3-general-regulations/IMC2021P1-Ch03-Sec305.4",
+        "rows": [
+          { "material": "abs", "horizontal_ft": 4, "vertical_ft": 10 },
+          { "material": "cast_iron", "horizontal_ft": 5, "vertical_ft": 15 },
+          { "material": "copper_pipe", "horizontal_ft": 12, "vertical_ft": 10 },
+          { "material": "copper_tubing", "horizontal_ft": 8, "vertical_ft": 10, "note": "IMC does not split copper tubing spacing at 1.25 in like IPC does" },
+          { "material": "cpvc_le_1in", "horizontal_ft": 3, "vertical_ft": 10 },
+          { "material": "cpvc_ge_1_25in", "horizontal_ft": 4, "vertical_ft": 10 },
+          { "material": "pex", "horizontal_ft": 2.67, "vertical_ft": 10 },
+          { "material": "pvc", "horizontal_ft": 4, "vertical_ft": 10 },
+          { "material": "steel", "horizontal_ft": 12, "vertical_ft": 15, "grade": "M" }
+        ]
+      }
+    }
+  },
+  "plumbing": {
+    "default_code": "ipc308_5",
+    "codes": {
+      "ipc308_5": {
+        "table_grade": "C",
+        "table_source": "IPC 2018/2021 Table 308.5 — public adopted code text. https://codes.iccsafe.org/s/IPC2018/chapter-3-general-regulations/IPC2018-Ch03-Sec308.5",
+        "rows": [
+          { "material": "abs", "horizontal_ft": 4, "vertical_ft": 10 },
+          { "material": "cast_iron", "horizontal_ft": 5, "vertical_ft": 15 },
+          { "material": "copper_pipe", "horizontal_ft": 12, "vertical_ft": 10 },
+          { "material": "copper_tubing_le_1_25in", "horizontal_ft": 6, "vertical_ft": 10 },
+          { "material": "copper_tubing_ge_1_5in", "horizontal_ft": 10, "vertical_ft": 10 },
+          { "material": "cpvc_le_1in", "horizontal_ft": 3, "vertical_ft": 10 },
+          { "material": "cpvc_ge_1_25in", "horizontal_ft": 4, "vertical_ft": 10 },
+          { "material": "steel", "horizontal_ft": 12, "vertical_ft": 15 },
+          { "material": "pex_le_1in", "horizontal_ft": 2.67, "vertical_ft": 10 },
+          { "material": "pe", "horizontal_ft": 2.67, "vertical_ft": 10, "grade": "M" },
+          { "material": "pvc", "horizontal_ft": 4, "vertical_ft": 10 },
+          { "material": "polypropylene_le_1in", "horizontal_ft": 2.67, "vertical_ft": 10, "grade": "M" },
+          { "material": "polypropylene_ge_1_25in", "horizontal_ft": 4, "vertical_ft": 10, "grade": "M" },
+          { "material": "stainless_drainage", "horizontal_ft": 10, "vertical_ft": 10, "grade": "M" },
+          { "material": "lead", "horizontal_ft": null, "vertical_ft": 4, "note": "continuous horizontal support required", "grade": "M" }
+        ],
+        "extra": "Mid-story guide required for vertical runs ≤ 2 in."
+      },
+      "upc313_3": {
+        "table_grade": "C",
+        "table_source": "UPC 2021 Table 313.3 — public adopted code text. https://up.codes/s/suspended-piping",
+        "rows": [
+          { "material": "copper_tube_le_1_5in", "horizontal_ft": 6, "vertical_ft": 10, "vertical_note": "each floor" },
+          { "material": "copper_tube_ge_2in", "horizontal_ft": 10, "vertical_ft": 10, "vertical_note": "each floor" },
+          { "material": "steel_le_0_75in", "horizontal_ft": 10, "vertical_ft": 25, "vertical_note": "every other floor" },
+          { "material": "steel_ge_1in", "horizontal_ft": 12, "vertical_ft": 25, "vertical_note": "every other floor" },
+          { "material": "pvc_abs", "horizontal_ft": 4, "vertical_ft": null, "note": "expansion joint every 30 ft, mid-story guide" },
+          { "material": "cpvc_le_1in", "horizontal_ft": 3, "vertical_ft": null },
+          { "material": "cpvc_ge_1_25in", "horizontal_ft": 4, "vertical_ft": null },
+          { "material": "pex_le_1in", "horizontal_ft": 2.67, "vertical_ft": null }
+        ]
+      }
+    }
+  }
+}
