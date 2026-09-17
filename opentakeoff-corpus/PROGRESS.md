@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-17 linear takeoff: bldg5406's own hang root-caused to label-leader search, NOT the index build (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+An earlier checkpoint confirmed `bldg5406-hvac-demo-mechanical.pdf#2`'s
+own `trace_run` call didn't finish in 60s but framed the cause as "the
+index build" without proving it. Measured directly, stage by stage, by
+importing the trace engine's own build functions and calling them
+directly against this sheet's real 96,292 segments (close to GATE 3's
+"100k segs" scale target): stroke classification + segment-index build
+together took 221ms, and a direct call to the walker itself returned in
+1ms -- both comfortably fast. That framing was wrong in its specifics.
+
+The real hang lives elsewhere: `trace_run`'s own per-span label-binding
+loop (unconditional, run on every sheet, every call) calls into a
+leader-line search function that walks outward from each text label via
+a bounded breadth-first search over nearby heavily-inked ("dark")
+segments. Timed directly against this sheet's own real spans: the FIRST
+call alone did not return within 60 seconds. This sheet's own linework is
+evidently dense/cluttered enough that this per-label search becomes
+pathological, repeated fresh for every span on the sheet -- a real,
+narrowly-localized cost, not anything in the trace engine's own build or
+walk path (WP3.2-3.4), which are proven fast on this exact sheet.
+
+Not fixed: the search function backs label-to-symbol association across
+the whole app, not just trace_run, so a safe fix needs validation against
+that shared test suite -- genuinely separate follow-up. Root cause
+documented precisely (`docs/LINEAR-TRACE-EVAL.md` gained a "Run 19"
+section) rather than left as a vague guess; `reports/LINEAR_HELDOUT.txt`'s
+own bldg5406 history note corrected to match. This still means
+`bldg5406-hvac-demo-mechanical.pdf#2`/`#14` stay BLOCKED, held-out tier
+stays a 4-case reading -- the practical status is unchanged, only the
+diagnosis is now precise instead of a guess.
+
+No ground truth or code changed -- a pure diagnostic follow-up.
+
 2026-09-17 linear takeoff: root-caused (not fixed) the "FD-1" tag-box mistrace from the prior checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 The prior checkpoint's own new finding included one open question: why a
 dedicated `classifyTagBoxSegs` exclusion check, which exists specifically

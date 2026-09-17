@@ -68,6 +68,21 @@
 # `pgrep` after each timed-out attempt), and no further sweep or timeout
 # escalation was tried against this specific PDF. #14 was not attempted at
 # all, for the same reason. Both remain declared and frozen, blocked
-# pending a real fix to whatever in this PDF's own vector data makes
-# `trace_run`'s own index build pathological -- separate, disclosed,
-# out-of-scope work, not a GATE-3-authoring gap to keep retrying.
+# pending a real fix -- separate, disclosed, out-of-scope work, not a
+# GATE-3-authoring gap to keep retrying.
+#
+# ROOT CAUSE NARROWED (docs/LINEAR-TRACE-EVAL.md Run 19, same day): NOT the
+# index build -- measured directly (classifyStrokes + buildSegmentIndex on
+# this exact sheet's own 96,292 real segments, close to GATE 3's own
+# "100k segs" scale target) at 221ms total, and a direct walkBothDirections
+# call at 1ms, both comfortably fast. The actual hang is in
+# web/src/lib/symbollabels.ts's chase()/nearDark() bounded-BFS leader-line
+# search, called once per text span by session.ts's traceRun (an
+# unconditional loop, paid on every sheet, every call) -- a single call
+# against this sheet's own first span did not return within 60s on its
+# own. This sheet's own dark-linework density is evidently high enough to
+# make that per-label BFS itself pathological, not anything in WP3's own
+# build/walk path. Not fixed: symbollabels.ts backs label-leader
+# association across the whole app, not just trace_run, so a real fix
+# needs validation against that shared test suite -- genuinely separate
+# follow-up, not attempted in a trace-engine-scoped pass.
