@@ -13,10 +13,10 @@
     "file": "bessemer--ssemer-mechanical-bidset-p6--full.png",
     "hash": "fd4bbb2d0d8427d0dcfd10570cfca5e21a4c6df8b3df591abb969fbb07c70fb0"
   },
-  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP1.7 autonomous coordinator)",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP1.7 autonomous coordinator; 3rd run added under the WP3/GATE 3 trace-engine coordinator pass)",
   "date": "2026-09-17",
-  "review_basis": "Hand-traced in the running canvas app's Linear tool (manual mode, scale confirmed from the plan's own '1/4\" = 1'-0\"' note) via a Playwright-driven browser session against the rendered PDF, following the run centerlines visually and reading segment sizes directly off the drawn duct-size text before committing each segment. Confirmed against a screenshot of the live LF/size-breakdown widget after each commit, and against the whole-sheet render (mcp/scripts/graph-render.mjs --all) studied beforehand to identify the full extent of every supply-duct trunk on the sheet.",
-  "scope": "GATE 1 asks for Bessemer M101's supply mains. This sheet draws two independent horizontal supply-duct trunks, one per first-floor heat-pump unit (HP-1), each running from its heat pump's boot connection out to its farthest labeled diffuser/register, with an explicit rectangular-duct size change partway along. Both are in scope as the sheet's 'supply mains' (plural, matching GATE 1's own wording). Explicitly OUT OF SCOPE for this golden: the round vertical branch/riser drops off each trunk (6\"ø and 8\"ø stubs down to the SR-1/SR-2 registers), the 4\" EA exhaust duct riser (near keynote 2, EF-1), and the short 14x3½ stub serving Bedroom 2 (a branch off a vertical riser, not a horizontal main). General note 1 on the sheet ('UNIT 103 MECHANICAL LAYOUT IS TYPICAL OF ALL UNITS EXCEPT UNIT 102') is why Units 101/104 show no drawn ductwork on this sheet -- there is nothing there to trace.",
+  "review_basis": "Hand-traced in the running canvas app's Linear tool (manual mode, scale confirmed from the plan's own '1/4\" = 1'-0\"' note) via a Playwright-driven browser session against the rendered PDF, following the run centerlines visually and reading segment sizes directly off the drawn duct-size text before committing each segment. Confirmed against a screenshot of the live LF/size-breakdown widget after each commit, and against the whole-sheet render (mcp/scripts/graph-render.mjs --all) studied beforehand to identify the full extent of every supply-duct trunk on the sheet. The THIRD run ('bessemer-m101-bed2-transfer-stub') was added later, under GATE 3's own single-call trace-engine testing: this sheet's two horizontal trunks above are both entirely wall-vouch-excluded from `trace_run` (docs/LINEAR-TRACE-EVAL.md's own Finding 1 -- long, straight, axis-dominant runs with no layer signal on this unlayered sheet), so a grid-sweep for a DIFFERENT, single-call-friendly real run on this same sheet was run instead. It found this file's own already-disclosed '14x3½ stub serving Bedroom 2' (named in this file's own original `scope` field as real, identified linework that was simply out of scope for GATE 1's 'supply mains' purpose) -- confirmed independently via a marked render crop (both ends real: a T-off from the vertical 8\"ø riser on one side, a stop just short of the TG-1 transfer-grille's own transition boot on the other) and via `mcp/scripts/graph-render.mjs`'s DIFFUSER, GRILLE, REGISTER SCHEDULE render, which gives TG-1's own NECK SIZE as '14 x 6' -- confirming '14x3½' is NOT the register's neck size and is therefore the duct run's own size, not a mislabeled schedule value. `trace_run`'s own automatic label-bind came back blank here (`size_missing`, `stroke-family:unclassified` -- the same unlayered-sheet, no-family-evidence path as the sheet's other runs); the size is a direct read off the sheet's own drawn callout, the same precedent `ground_truth/linear/baker-m101-heldout.json` already established for a label sitting just outside `trace_run`'s own binding radius. `system: \"TA\"` (transfer air) is this annotator's own descriptive label, not one of this corpus's usual SA/RA/EA/OA/MA tokens -- TG-1 is a SCHEDULED TRANSFER GRILLE (moves air between two interior spaces, not to/from a supply or exhaust main), a real category this corpus's existing vocabulary has no clean slot for; `run.system` is documentation only here (not read by any bench scoring code -- checked directly in bench/linear.mts/score.ts before relying on that), so this costs nothing to leave honestly labeled rather than forced into a wrong SA/RA/EA guess. FIRST TWO runs unchanged from the original GATE 1 pass.",
+  "scope": "GATE 1 asks for Bessemer M101's supply mains. This sheet draws two independent horizontal supply-duct trunks, one per first-floor heat-pump unit (HP-1), each running from its heat pump's boot connection out to its farthest labeled diffuser/register, with an explicit rectangular-duct size change partway along. Both are in scope as the sheet's 'supply mains' (plural, matching GATE 1's own wording). Explicitly OUT OF SCOPE for the first two runs: the round vertical branch/riser drops off each trunk (6\"ø and 8\"ø stubs down to the SR-1/SR-2 registers), and the 4\" EA exhaust duct riser (near keynote 2, EF-1). The THIRD run brings in the short 14x3½ stub serving Bedroom 2 (a branch off the vertical 8\"ø riser to the TG-1 transfer grille) that the original GATE 1 pass named but deliberately left out as not a horizontal main -- now included for a different, later purpose (GATE 3 single-call trace-engine recall testing), where its short, dead-end-bounded shape is exactly what a fair single-`trace_run`-call comparison needs, unlike the two heavily-branched trunks above (see review_basis). General note 1 on the sheet ('UNIT 103 MECHANICAL LAYOUT IS TYPICAL OF ALL UNITS EXCEPT UNIT 102') is why Units 101/104 show no drawn ductwork on this sheet -- there is nothing there to trace.",
   "runs": [
     {
       "run_id": "bessemer-m101-unit103-supply-trunk",
@@ -73,12 +73,38 @@
           "totals_by_size": { "rect:16x8": 13.67, "rect:10x6": 15.12 }
         }
       }
+    },
+    {
+      "run_id": "bessemer-m101-bed2-transfer-stub",
+      "description": "Bedroom 2's 14x3½ transfer-air duct stub, from the vertical 8\"ø riser's T-off to a real stop just short of the TG-1 transfer-grille's own transition boot.",
+      "system": "TA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.25241126543209874, 0.41626157407407405],
+        [0.21323302469135805, 0.41626157407407405]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 14, "h_in": 3.5 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 5.64,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 5.64, "size": { "kind": "rect", "w_in": 14, "h_in": 3.5 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:14x3.5": 5.64 }
+        }
+      }
     }
   ],
   "totals_by_size_all_runs": {
     "rect:12x6": 14.42,
     "rect:16x8": 30.94,
-    "rect:10x6": 15.12
+    "rect:10x6": 15.12,
+    "rect:14x3.5": 5.64
   },
-  "total_lf_all_runs": 60.48
+  "total_lf_all_runs": 66.12
 }

@@ -1,5 +1,71 @@
 ## Active work
 
+2026-09-17 linear takeoff: a third Bessemer M101 golden -- development recall 2/8 -> 3/9 -- plus a new disclosed engine finding (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Finding 1 (wall-vouch false-positive exclusion, off-limits to fix --
+`wallnetwork.ts` internals are on this project's own "never touch" list)
+accounts for 5 of development tier's 8 misses, all on two unlayered real
+sheets (`bessemer-mechanical-bidset.pdf#6`, `federal-attachment4-mechanical.pdf#6`).
+Rather than accept that as the ceiling, asked a narrower question: are
+there OTHER real duct/pipe runs on these same sheets that don't trip
+wall-vouch's own straight-network-of-walls signature and could still
+reach on a single `trace_run` call. A full-page grid sweep of
+`bessemer-mechanical-bidset.pdf#6` (60px step, 87x58 grid) found 162
+distinct reaching seeds -- most interior spans of heavily-branched
+networks (the same "not a fair single-call target" category as an
+already-known finding), set aside without individual review. A handful
+had both ends `dead_end` -- real single-call-friendly candidates -- and
+each was checked before trusting it, not after.
+
+One looked like a clean real stub on the render crop alone (a line from a
+circled "T" symbol to equipment labeled "EBB-1") but was NOT authored:
+cross-checking `mcp/scripts/graph-render.mjs`'s own ELECTRIC BASEBOARD
+HEATER SCHEDULE render confirmed EBB-1 is a 240V electric baseboard
+heater -- the "T" is a line-voltage thermostat, and the traced line is
+electrical control wiring, not duct or pipe routing. This is a real,
+disclosed ENGINE gap, not just a rejected candidate: `trace_run` returned
+a confident `reached` result on genuinely non-MEP linework, because
+`strokeExclusionMask` has no signal for "this is electrical" beyond
+wall-vouch's own narrow wall-shape test, which a lone non-wall-shaped
+electrical run doesn't trip. Not fixed (a real heuristic addition, not a
+quick patch) -- disclosed as a new finding rather than silently worked
+around. A second candidate (running along a dashed "DW" dishwasher
+casework outline) was also rejected as a mistrace onto non-MEP linework,
+the same category from a different source.
+
+One candidate held up: a 5.64 LF, dead-end-to-dead-end run that turned
+out to already be named -- but deliberately excluded -- in this exact
+sheet's own existing golden. `bessemer-m101.json`'s original scope field
+(GATE 1) explicitly called out "the short 14x3½ stub serving Bedroom 2"
+as real, identified duct linework left out of that golden because it's a
+branch stub, not a horizontal main. That's precisely this candidate: a
+T-off from the vertical 8" riser to a stop just short of the TG-1
+transfer-grille's own transition boot. Cross-checked against the
+DIFFUSER, GRILLE, REGISTER SCHEDULE render: TG-1's own NECK SIZE is
+listed as "14 x 6" -- a DIFFERENT value than the "14x3½" callout near the
+traced stub, confirming "14x3½" is the duct run's own size, not a
+mislabeled copy of the register's neck size, and giving real independent
+support for authoring it. `system: "TA"` (transfer air) is a plain
+descriptive label outside this corpus's usual SA/RA/EA/OA/MA vocabulary
+-- confirmed harmless to leave honestly labeled since a real golden's own
+`run.system` field is documentation only, never read by any bench scoring
+code (checked directly before relying on that). Added as
+`bessemer-m101.json`'s THIRD run, not a new file -- same sheet, same
+existing golden.
+
+Development-tier recall: **2/8 (0.25) -> 3/9 (0.333)**, a genuine,
+verified gain (length matches exactly, 5.64->5.64; a clean 2-point
+straight-line shape match). Also gives an earlier small-sample finding
+(development-tier's size misses were 100% wrong-label, 0% no-label) a
+real second data point: this case is a genuine no-label miss, the honest
+"declined to guess" outcome.
+
+Measured: `npm run bench:linear` passes, refusal still 5/5, held-out/
+synthetic numbers unchanged (this pass touches only one ground-truth
+fixture, no engine or scorer code); all 215
+`benchScore.test.ts`/`test/linear/*.test.ts` tests pass.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 16" section and its own
+priority list updated with the new finding.
+
 2026-09-17 linear takeoff: refusal (negative) corpus gains a genuine excluded-family case -- refusal correctness 4/4 -> 5/5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Closed, in part, a gap the prior checkpoint's own priority list named as
 missing: every case in `ground_truth/linear/refusals.json` so far was a
