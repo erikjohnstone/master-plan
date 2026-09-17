@@ -1,5 +1,63 @@
 ## Active work
 
+2026-09-17 linear takeoff GATE 1 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) — PASSED.
+Four conditions, checked independently:
+
+(1) Trace time < 10 min: the WP1.7 checkpoint's own M101 trace (two supply
+trunks, sizes set) ran to completion in a handful of tool calls, well
+under the bound.
+
+(2) Per-size LF reconciles to the hand takeoff within 1%: verified by
+recomputing each traced segment's length from first principles —
+Δverts_norm × page_width_pt (2592, confirmed via probe.mts for both
+sheets) × (4/72 ft-per-pt, from the plan's own confirmed "1/4\" = 1'-0\""
+scale) — independent of the app's own computed.run arithmetic. All five
+segments across the three runs reproduce the app's own LF to the app's
+own 2-decimal rounding (0 measurable error): M101 12x6 14.42, M101 16x8
+(west) 17.27, M101 16x8 (east) 13.67, M101 10x6 15.12, P101 1.25" pipe
+4.25, P101 1" pipe 14.71. Also cross-checked M101's 12x6 segment against
+`plans/03-research/probes/trace-proto.mts`'s independent vector-chain
+walk (the same probe SETUP's own baseline invocation cites): its walk
+finds a 18.2 ft chain (x 1066→1718 at its internal 2×-scaled px) against
+this session's western endpoint (x≈1078) and stops mid-run at x≈1718,
+roughly 3.4 ft short of this golden's 12x6→16x8 transition vertex
+(x≈1597) — NOT a discrepancy in the golden: trace-proto.mts is an early
+WP3-prototype pair-walker that has no transition/reducer handling yet
+(that's explicitly WP4.1's job, "transition (converging edges)") and
+visibly loses the constant-pair-width assumption at this exact
+12x6-to-16x8 size change, stopping early rather than mis-measuring. It
+is not a valid ground-truth oracle for a size-changing run and was not
+used as one; the first-principles scale arithmetic above is.
+
+(3) `bench:linear` green: `npm run bench:linear` passes (parityFailures 0,
+maxTotalsErrPct 0.00054%, maxDeterminismErrFt 0.01 ft, both under the
+WP1.6 thresholds), `bench/linear/results.json` byte-identical (nothing
+engine-side changed since WP1.6).
+
+(4) Regression guard green: `web` — typecheck clean, lint clean (0
+errors, pre-existing 3 warnings), `npm run build` clean; `npm test`
+3272/3272 attempted, 70 fail — the same pre-existing sync/cloud-storage/
+snapshot/BAS-restore cluster the WP1.4/WP1.5/WP1.6 checkpoints already
+carry forward (same failure count, same theme; `npm run check`'s own
+`&&` chain stops at this step before reaching the bas-* benches and
+build, which is why typecheck/lint/build were run and confirmed
+separately here rather than through the chained script). `mcp` —
+105/107 pass; the 2 failures (`basEngineeringContract.test.ts`,
+`basEngineeringOwnershipFamilies.test.ts`) are both the identical root
+cause — `ModuleNotFoundError: No module named 'pytest'` from
+`.venv-bas/bin/python`, which has pydantic (the bas_engine runtime
+dependency `npm run dev` provisions) but not pytest (only needed by
+these two dev cross-check tests, which shell out to run
+`bas_engine/tests/test_engineering.py` via `pytest`/`runpy`) — a
+pre-existing environment-provisioning gap in a component this goal
+explicitly never touches (D4, bas_engine), unrelated to WP1.7's
+JSON-only change (zero files under `opentakeoff/web/src` or
+`opentakeoff/mcp/src` changed this checkpoint) and not attempted here.
+
+GATE 1 is satisfied by the work already committed through WP1.7 —
+nothing new to change or commit for the gate itself. Proceeding to WP2
+(assemblies) per the queue.
+
 2026-09-17 linear takeoff WP1.7 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 GROUND TRUTH v1. Two new goldens under `opentakeoff-corpus/ground_truth/linear/`
 (`bessemer-m101.json`, `bessemer-p101.json`), hand-traced in the running
