@@ -632,6 +632,12 @@ export default function TakeoffCanvas() {
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
   const [showTakeoffData, setShowTakeoffData] = useState(false);
   const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
+  // The full compile_corpus_takeoff result (kind control_valves) behind the
+  // "Export to HIT" button — lastCorpusTakeoffMeta above is trimmed for the
+  // panel header/stats and drops categories[].items, which buildValveSizeExport
+  // needs. A deliberate, separate click, not bundled into the CSV/Excel/PDF
+  // export cluster or fired automatically on every compile.
+  const [lastControlValveTakeoff, setLastControlValveTakeoff] = useState(null);
   const [basWorkflow, setBasWorkflow] = useState(null);
   const basWorkflowRef = useRef(null);
   basWorkflowRef.current = basWorkflow;
@@ -8073,6 +8079,7 @@ export default function TakeoffCanvas() {
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
   function showCompiledTakeoff(compiled, meta = {}) {
     if (!compiled || compiled.error) return;
+    setLastControlValveTakeoff(compiled.kind === "control_valves" ? compiled : null);
     if (compiled.bas_math || compiled.bas_point_lists) setShowTakeoffData(true);
     if (compiled.bas_workflow) {
       try {
@@ -8183,25 +8190,6 @@ export default function TakeoffCanvas() {
       } catch {
         // CSV/JSON still delivered
       }
-      if (compiled.kind === "control_valves") {
-        // Same compiled rows as the CSV/JSON above, template-filled into
-        // Siemens' own "Global Valves" mass-sizing workbook (see
-        // valveSizeTemplate.ts) — a second download, not a second compile.
-        try {
-          const valveExport = buildValveSizeExport(compiled);
-          if (valveExport.rows.length) {
-            const templateRes = await fetch(VALVE_SIZE_TEMPLATE_PUBLIC_PATH);
-            if (!templateRes.ok) throw new Error(`template fetch ${templateRes.status}`);
-            const templateBytes = new Uint8Array(await templateRes.arrayBuffer());
-            const filled = await fillValveSizeTemplate(templateBytes, valveExport.rows);
-            downloadBytes(VALVE_SIZE_TEMPLATE_FILENAME, filled, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            downloads.push(VALVE_SIZE_TEMPLATE_FILENAME);
-          }
-        } catch (err) {
-          console.error("Valve size template export skipped:", err);
-          // JSON/CSV/XLSX rollup above already delivered the same numbers
-        }
-      }
     }
     showCompiledTakeoff(compiled);
     return {
@@ -8240,6 +8228,21 @@ export default function TakeoffCanvas() {
       ui_takeoff_open: true,
       // Lean summary for the LLM; full item rows live in TakeoffDataPanel.
     };
+  }
+
+  // "Export to HIT" — a deliberate, standalone action distinct from the
+  // Takeoff panel's CSV/Excel/PDF cluster: template-fills Siemens' own
+  // "Global Valves" mass-sizing workbook (valveSizeTemplate.ts) from the
+  // last compiled control_valves takeoff, for handoff straight into the
+  // Siemens HIT sizing tool.
+  async function exportControlValveTakeoffToHit() {
+    if (!lastControlValveTakeoff) return;
+    const valveExport = buildValveSizeExport(lastControlValveTakeoff);
+    const templateRes = await fetch(VALVE_SIZE_TEMPLATE_PUBLIC_PATH);
+    if (!templateRes.ok) throw new Error(`template fetch ${templateRes.status}`);
+    const templateBytes = new Uint8Array(await templateRes.arrayBuffer());
+    const filled = await fillValveSizeTemplate(templateBytes, valveExport.rows);
+    downloadBytes(VALVE_SIZE_TEMPLATE_FILENAME, filled, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
   }
 
   async function agentCompileCorpusTakeoff(kind, opts = {}) {
@@ -13653,6 +13656,8 @@ export default function TakeoffCanvas() {
           rows={agentTakeoffRows}
           projectName={projectName}
           corpusMeta={lastCorpusTakeoffMeta}
+          canExportToHit={!!lastControlValveTakeoff}
+          onExportToHit={exportControlValveTakeoffToHit}
           basWorkflow={basWorkflow}
           restoreContext={basRestoreContext}
           basViewState={basViewState}
