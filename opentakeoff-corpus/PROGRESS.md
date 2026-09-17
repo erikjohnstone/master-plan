@@ -1,5 +1,62 @@
 ## Active work
 
+2026-09-17 linear takeoff: refusal (negative) corpus gains a genuine excluded-family case -- refusal correctness 4/4 -> 5/5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Closed, in part, a gap the prior checkpoint's own priority list named as
+missing: every case in `ground_truth/linear/refusals.json` so far was a
+seed with NO ink of any kind (title block text, a room label, a scale
+callout, blank margin) -- none tested a seed sitting ON real linework of
+an EXCLUDED family (an annotation symbol, a dimension line, a
+schedule-table gridline), a materially different refusal path through
+`trace_run`'s own logic than "nothing here to click."
+
+Two candidates pursued, one set aside for a concrete, disclosed reason
+rather than silently dropped. First,
+`weld-county-mechanical-permit.pdf#6`'s own DUCT SCHEDULE table: reading
+the page's own operator list directly via `extractVectorGeometry` (not
+guessing a seed from nearby text -- the same lesson this project's
+earlier mistrace incidents already taught) found real, confirmed gridline
+segments. But this sheet has no detected drawing scale, and
+`bench/linear.mts`'s shared refusal loop unconditionally calls
+`session.setScale(..., { use_detected: true })` for every case, which
+THROWS on a scale-less sheet rather than producing a `refused` result --
+adding this case as-is would break the shared loop, not exercise it. Not
+worked around here: modifying shared refusal-loop code for one corpus
+entry was judged the wrong trade.
+
+Pivoted to `weld-county-mechanical-permit.pdf#7` (M1.0 -- already scaled,
+already this project's development-tier sheet for four other goldens on
+this PDF). The same direct-vector-extraction method found short diagonal
+segments; three candidate seeds near them were tested against
+`trace_run` and all three correctly refused. A marked render crop
+confirmed what the strokes actually were before authoring, not after:
+the circular outline of a circled keynote/reference balloon symbol (a
+circled "2"), not hatching. Added as the corpus's 5th case.
+
+Caught and fixed my own error before committing: the case's first note
+text said "keynote-3 reference balloon (a circled '2' callout...)" -- an
+internal contradiction (keynote-3 vs. a circled "2"). Corrected to
+describe only what was independently confirmed (a real, drawn stroke of
+an excluded family, present at this exact coordinate) without claiming an
+uncross-checked specific keynote-number identification.
+
+Refusal correctness: **4/4 -> 5/5**, `minRefusalRate = 1.0` gate still
+holds. Dimension lines and schedule-table gridlines remain genuinely
+open, for the same concrete reasons above -- no dimension-string text
+exists on any of this project's own mechanical sheets (dimensions live on
+the architectural set, not sampled here), and the one confirmed schedule
+gridline sits on a scale-less sheet the shared refusal loop can't safely
+exercise as-is. Real, disclosed follow-up work: either a scale-less-sheet-
+safe path through that shared loop, or a different real sheet with both a
+schedule table and a detected scale.
+
+Measured: `npm run bench:linear` passes, refusal 5/5,
+development/held-out/synthetic trace numbers unchanged (this pass touches
+only the ground-truth fixture, no engine or scorer code); all 215
+`benchScore.test.ts`/`test/linear/*.test.ts` tests pass; full filtered web
+regression suite re-run to confirm no new failures beyond the established
+baseline. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 15" section and its
+own priority list updated to reflect this partial closure.
+
 2026-09-17 linear takeoff: bldg5406-hvac-demo-mechanical.pdf confirmed genuinely blocked, not just unattempted (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Attempted the next declared held-out sheet, `bldg5406-hvac-demo-mechanical.pdf#2`.
 A bare `session.traceRun()` call -- the same lightweight Session API path
