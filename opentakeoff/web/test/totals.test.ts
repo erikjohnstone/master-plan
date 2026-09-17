@@ -376,3 +376,56 @@ test("conditionTotals: reconciled deduct never double-subtracts; legacy deduct s
   ] as any);
   assert.equal(rows[0].floor_sf, 85, "90 − 5 (legacy only); a double-deduct would read 75");
 });
+
+// #linear-takeoff (WP2.3): "vertex" and "run" materials bases — every
+// interior fitting vertex across a condition's routed shapes, and the
+// count of separate traced/manual runs, each scaled by the condition's own
+// multiplier exactly like every other basis total above.
+function runShapeWithVertices(vertexCount: number) {
+  return {
+    condition_id: "sa", measure_role: "linear", computed: {
+      perimeter_lf: 10,
+      run: {
+        segments: [{ i: 0, lf: 10, size: { kind: "rect", w_in: 12, h_in: 6 }, size_src: "manual" }],
+        vertices: Array.from({ length: vertexCount }, (_, i) => ({ i: i + 1, kind: "elbow", angle_deg: 90, angle_class: "square" })),
+        totals_by_size: { "rect:12x6": 10 },
+      },
+    },
+  };
+}
+
+test("conditionTotals: materials basis 'vertex' divides against the total fitting-vertex count across the condition's runs", () => {
+  const conds = [{ id: "sa", finish_tag: "SA-1", materials: [{ id: "m", name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", round: true }] }];
+  const rows = conditionTotals(conds, [runShapeWithVertices(2), runShapeWithVertices(1)]); // 3 vertices total
+  assert.equal(rows[0].materials[0].basis_qty, 3);
+  assert.equal(rows[0].materials[0].qty, 3);
+});
+
+test("conditionTotals: materials basis 'run' divides against the count of separate traced/manual runs, not vertices or LF", () => {
+  const conds = [{ id: "sa", finish_tag: "SA-1", materials: [{ id: "m", name: "Test kit", per: 1, basis: "run", unit: "kit", round: true }] }];
+  const rows = conditionTotals(conds, [runShapeWithVertices(2), runShapeWithVertices(0), lin("sa", 40)]); // 2 shapes with a run block; the plain trace carries none
+  assert.equal(rows[0].materials[0].basis_qty, 2);
+});
+
+test("conditionTotals: vertex and run bases scale with the condition multiplier, same as every other basis", () => {
+  const conds = [{ id: "sa", finish_tag: "SA-1", multiplier: 3, materials: [
+    { id: "mv", name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", round: true },
+    { id: "mr", name: "Test kit", per: 1, basis: "run", unit: "kit", round: true },
+  ] }];
+  const rows = conditionTotals(conds, [runShapeWithVertices(2)]);
+  assert.equal(rows[0].materials[0].basis_qty, 6);  // 2 vertices × 3
+  assert.equal(rows[0].materials[1].basis_qty, 3);  // 1 run × 3
+});
+
+test("conditionTotals: hours_per_unit resolves through the SAME rounded qty, and is absent from a row that never set it", () => {
+  const conds = [{ id: "c", finish_tag: "CPT-1", materials: [
+    { id: "m1", name: "Adhesive", per: 100, basis: "area", unit: "gal", round: true, hours_per_unit: 0.5 },
+    { id: "m2", name: "Tape", per: 50, basis: "area", unit: "roll", round: true },
+  ] }];
+  const rows = conditionTotals(conds, [area("c", 250)]); // ceil(250/100) = 3
+  const withHours = rows[0].materials.find((m: any) => m.name === "Adhesive");
+  assert.equal(withHours.hours_per_unit, 0.5);
+  assert.equal(withHours.hours, 1.5); // 3 x 0.5
+  const withoutHours = rows[0].materials.find((m: any) => m.name === "Tape");
+  assert.ok(!("hours_per_unit" in withoutHours) && !("hours" in withoutHours));
+});

@@ -1,5 +1,67 @@
 ## Active work
 
+2026-09-17 linear takeoff WP2.3 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+materials rows gain "vertex"/"run" basis + hours_per_unit. Threaded
+additively through every layer that already knew about materials basis
+(the same list AGENTS.md's shared-path rule expects a routed-condition
+feature to touch):
+
+- `web/src/lib/totals.js` (`conditionTotals`, the shared resolver both the
+  canvas and MCP's `takeoff_summary`/`export_report` read): accumulates
+  `vertexCount` (every interior fitting vertex — `computed.run.vertices`
+  — across a condition's routed shapes) and `runCount` (how many separate
+  shapes carry a resolved `run` block at all), scaled by the condition's
+  own `multiplier` exactly like `floor`/`wall`/`lf`/`ea`/`sizeLf` already
+  are. The materials basisVal ternary gains `"vertex"` and `"run"`
+  alongside the existing `"linear"`/`"count"`/`"seam_lf"`. Each resolved
+  row gains `hours_per_unit`/`hours` (only when the row itself set one) —
+  `hours = qty x hours_per_unit`, using the SAME already-rounded `qty`
+  every other field on the row already reads, not a separate fractional
+  path.
+- `mcp/src/session.ts`: `MaterialRow.basis` gains the two values,
+  `MaterialRow` gains `hours_per_unit?`; `editMaterials`'s `add` row
+  construction passes it through.
+- `mcp/src/tools.ts` / `mcp/src/outputs.ts`: `edit_materials`'s inputSchema
+  (add-row basis enum + `hours_per_unit`, description text) and both
+  `materialRow`/`reportMaterialLine` output schemas updated to match
+  (`reportMaterialLine` already had `.passthrough()`; added explicitly
+  anyway for the same "documented, not just tolerated" reason every other
+  field there is spelled out).
+- `web/src/pages/TakeoffCanvas.jsx`: `agentEditMaterials`'s minted-row
+  construction and its `AGENT_MATERIAL_FIELDS` patch allowlist both gain
+  `hours_per_unit`, mirroring session.ts's MCP path exactly (the
+  "canvas and MCP cannot disagree" rule applies to the AGENT surface
+  too, not just the human one).
+- `web/src/lib/agentTools.js`: the `edit_materials` tool definition's
+  JSON-schema description and properties gain the same two additions.
+- `web/src/components/TakeoffsPanel.jsx`: both basis `<select>`s (the
+  per-condition materials row and the library-template row) gain
+  "fitting vertices" / "runs" options; both rows gain an hours/unit
+  numeric input (`LibDraftInput` for the library row, matching its
+  existing draft-commit-on-blur pattern; a plain controlled input for
+  the condition row, matching its siblings) wired into the same
+  override-diff (`ov`/`rv`) tracking every other field on the row uses.
+
+Tests: 5 new cases in `web/test/totals.test.ts` (vertex-basis count,
+run-basis count — deliberately using a mix of sized/unsized/plain-trace
+shapes to prove it counts RUNS not LF or vertices, multiplier scaling
+on both, hours_per_unit resolving through the rounded qty and staying
+absent on a row that never set one); 1 new end-to-end MCP case in
+`mcp/test/tools.test.ts` (add with the new basis + hours_per_unit,
+patch to change hours_per_unit, confirming the field round-trips and a
+row without one carries no such key at all).
+
+Verified: web and mcp typecheck/lint clean; `mcp/scripts/check-tool-
+count.mjs` clean (no new tool added — edit_materials' existing entry is
+just extended, so this is a pure sanity check); full `mcp npm test` —
+107/107 file-level (the 2 already-known `.venv-bas`-missing-`pytest`
+failures unchanged); full `web npm test` minus the known
+`compileProgressWalkthrough.test.ts` flake — 3290 tests, 70 fail, same
+pre-existing cluster, same 83 subtest names as the WP2.2 checkpoint's
+own baseline (verified by diffing the failing-test list, not just the
+count). `npm run bench` and `npm run bench:linear` both green, both
+`results.json` files byte-identical.
+
 2026-09-17 linear takeoff WP2.2 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 resolveLinearAssembly, CORE scope. New `web/src/lib/linear/assembly.ts` +
 three new shared types in `types.ts` (`LinearCondition`, `AssemblyRecord`,

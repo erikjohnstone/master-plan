@@ -247,12 +247,16 @@ function MaterialsEditor({ materials, onAdd, onUpdate, onRemove, library, libByI
               <option value="linear">linear LF</option>
               <option value="count">each</option>
               <option value="seam_lf" title="Figured seam length from the roll layout — 0 until this condition carries a roll setup">seam LF</option>
+              <option value="vertex" title="Every interior fitting vertex across this condition's traced/manual runs">fitting vertices</option>
+              <option value="run" title="Count of separate traced/manual runs on this condition">runs</option>
             </select>
             {ov("basis") && rv(m, "basis")}
             <label style={{ display: "inline-flex", alignItems: "center", gap: 4, color: ov("round") ? "var(--c-warning)" : "var(--ink-muted)" }} title="Round up to whole units (you buy whole buckets/bags)">
               <input name="material-round" type="checkbox" checked={m.round !== false} onChange={(e) => onUpdate(m.id, { round: e.target.checked })} />round up
             </label>
             {ov("round") && rv(m, "round")}
+            <input name="material-hours-per-unit" type="number" min="0" step="any" value={m.hours_per_unit || ""} onChange={(e) => onUpdate(m.id, { hours_per_unit: Math.max(0, parseFloat(e.target.value) || 0) })} placeholder="hr/unit" title="Labor hours per purchase unit (#linear-takeoff WP2.3)" style={{ ...ip, width: 66, ...(ov("hours_per_unit") ? { border: OV } : {}) }} />
+            {ov("hours_per_unit") && rv(m, "hours_per_unit")}
             <CoveragePresetSelect material={m} onPick={(patch) => onUpdate(m.id, patch)} />
             <input name="material-note" value={m.note || ""} onChange={(e) => onUpdate(m.id, { note: e.target.value })} placeholder="note (coats, trowel…)" style={{ ...ip, width: 150, ...(ov("note") ? { border: OV } : {}) }} />
             {ov("note") && rv(m, "note")}
@@ -1238,10 +1242,14 @@ function TakeoffsPanel({
                       <option value="linear">linear LF</option>
                       <option value="count">each</option>
                       <option value="seam_lf" title="Figured seam length from the roll layout — 0 until the condition carries a roll setup">seam LF</option>
+                      <option value="vertex" title="Every interior fitting vertex across this condition's traced/manual runs">fitting vertices</option>
+                      <option value="run" title="Count of separate traced/manual runs on this condition">runs</option>
                     </select>
                     <label style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "var(--ink-muted)" }} title="Round up to whole units">
                       <input name="library-material-round" type="checkbox" checked={lm.round !== false} onChange={(e) => onUpdateLibMaterial(lm.id, { round: e.target.checked })} />round up
                     </label>
+                    <LibDraftInput name="library-material-hours-per-unit" number value={lm.hours_per_unit || ""} placeholder="hr/unit" width={66}
+                      onCommitText={(t) => onUpdateLibMaterial(lm.id, { hours_per_unit: Math.max(0, parseFloat(t) || 0) })} />
                     <CoveragePresetSelect material={lm} onPick={(patch) => onUpdateLibMaterial(lm.id, patch)} />
                     <LibDraftInput name="library-material-note" value={lm.note || ""} placeholder="note" width={120}
                       onCommitText={(t) => onUpdateLibMaterial(lm.id, { note: t })} />

@@ -83,9 +83,20 @@ export function conditionTotals(conditions, shapes, ctx = null) {
     // first segment carrying that key) so a consumer can format a label
     // (canvasUtil.js's sizeLabel) without re-deriving it from the string key.
     const sizeLf = {}, sizeObj = {};
+    // #linear-takeoff (WP2.3): the "vertex" and "run" materials bases —
+    // vertexCount is every interior vertex (fitting) across this
+    // condition's routed shapes (elbow, transition, whatever `run.ts`
+    // resolved), runCount is how many separate traced/manual runs (shapes
+    // carrying a `run` block) the condition has. A generic aggregate, same
+    // spirit as "linear"/"count" above: a materials row's own `note` names
+    // which real-world item it means ("gasket kit, 1 per fitting"), this
+    // just supplies the total to divide against.
+    let vertexCount = 0, runCount = 0;
     for (const s of cs) {
       const run = s.computed?.run;
       if (!run?.totals_by_size) continue;
+      runCount += 1;
+      vertexCount += (run.vertices || []).length;
       for (const [key, val] of Object.entries(run.totals_by_size)) {
         sizeLf[key] = (sizeLf[key] || 0) + val;
         if (!sizeObj[key]) {
@@ -99,18 +110,31 @@ export function conditionTotals(conditions, shapes, ctx = null) {
     // other quantity: N identical units are N cuttings of the same layout.
     let seam = seamByShape ? cs.reduce((n, s) => n + (seamByShape.get(s.id) || 0), 0) : 0;
     floor *= mult; wall *= mult; border *= mult; lf *= mult; ea *= mult; seam *= mult;
+    vertexCount *= mult; runCount *= mult;
     for (const key of Object.keys(sizeLf)) sizeLf[key] *= mult;
     const total = floor + wall + border;
     // supporting materials: deterministic quantity = basis ÷ coverage, rounded up
     // to whole units (you buy whole buckets/bags). basis = this condition's measured
-    // area (SF), linear (LF), count (EA), or figured seam length (LF — weld rod,
-    // seam tape). Coverage comes off the product data sheet.
+    // area (SF), linear (LF), count (EA), figured seam length (LF — weld rod,
+    // seam tape), or (#linear-takeoff WP2.3) vertex/run count for a routed
+    // condition's fitting- or run-scoped supplies. Coverage comes off the
+    // product data sheet.
     const materials = (c.materials || []).filter((m) => m && m.name).map((m) => {
       const per = Math.max(0, Number(m.per) || 0);
-      const basisVal = m.basis === "linear" ? lf : m.basis === "count" ? ea : m.basis === "seam_lf" ? seam : total;
+      const basisVal = m.basis === "linear" ? lf : m.basis === "count" ? ea : m.basis === "seam_lf" ? seam
+        : m.basis === "vertex" ? vertexCount : m.basis === "run" ? runCount : total;
       let qty = per > 0 ? basisVal / per : 0;
       qty = m.round === false ? round2(qty) : Math.ceil(qty - 1e-9);
-      return { name: m.name, unit: m.unit || "", per, basis: m.basis || "area", round: m.round !== false, note: m.note || "", basis_qty: round2(basisVal), qty };
+      // hours_per_unit (WP2.3): labor hours for this row, resolved through
+      // the SAME already-ceil'd `qty` above — a materials row prices whole
+      // purchased units, and the labor to install them follows the same
+      // whole-unit count, not a fractional live measurement.
+      const hoursPerUnit = Math.max(0, Number(m.hours_per_unit) || 0);
+      return {
+        name: m.name, unit: m.unit || "", per, basis: m.basis || "area", round: m.round !== false, note: m.note || "",
+        basis_qty: round2(basisVal), qty,
+        ...(m.hours_per_unit != null ? { hours_per_unit: hoursPerUnit, hours: round2(qty * hoursPerUnit) } : {}),
+      };
     });
     return {
       id: c.id, finish_tag: c.finish_tag, color: c.color, fill: c.fill, hatch: c.hatch,

@@ -1358,6 +1358,30 @@ test("edit_materials: add/remove/patch, minted-on-touch, all-or-nothing, undo re
   assert.equal(cond.materials.length, 0, "undo restored the pre-add state");
 });
 
+// #linear-takeoff (WP2.3): basis gains "vertex"/"run", rows gain hours_per_unit.
+test("edit_materials: basis 'vertex'/'run' and hours_per_unit round-trip through add/patch", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: PLAN });
+
+  const added = await call(client, "edit_materials", { condition: "SA-1", add: [
+    { name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", hours_per_unit: 0.25 },
+    { name: "Test kit", per: 1, basis: "run", unit: "kit" },
+  ] });
+  assert.equal(added.isError, false);
+  const gasket = added.data.materials.find((m: any) => m.name === "Gasket kit");
+  assert.equal(gasket.basis, "vertex");
+  assert.equal(gasket.hours_per_unit, 0.25);
+  const test_ = added.data.materials.find((m: any) => m.name === "Test kit");
+  assert.equal(test_.basis, "run");
+  assert.equal("hours_per_unit" in test_, false, "a row that never set hours_per_unit carries no such field");
+
+  const patched = await call(client, "edit_materials", { condition: "SA-1", patch: [
+    { id: test_.id, fields: { hours_per_unit: 0.5 } },
+  ] });
+  assert.equal(patched.isError, false);
+  assert.equal(patched.data.materials.find((m: any) => m.id === test_.id).hours_per_unit, 0.5);
+});
+
 // ── annotations (#114) — the agent half of markup.condition_id (#112) ────────
 
 test("annotate: attaches a note to a scope, resolves the tag back, and round-trips into the app payload", async () => {

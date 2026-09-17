@@ -388,11 +388,21 @@ export interface MaterialRow {
    * FIGURED roll-layout seam length (weld rod, seam tape — where two cuts meet
    * on the floor), not a share of the perimeter: it reads 0 until the
    * condition carries a roll_setup and has committed floor shapes to lay out,
-   * which is the honest answer rather than a guess. */
-  basis: "area" | "linear" | "count" | "seam_lf";
+   * which is the honest answer rather than a guess. "vertex"/"run"
+   * (#linear-takeoff WP2.3) are a routed condition's own totals — every
+   * interior fitting vertex across its shapes, or the count of separate
+   * traced/manual runs — see web/src/lib/totals.js's conditionTotals. */
+  basis: "area" | "linear" | "count" | "seam_lf" | "vertex" | "run";
   unit: string;
   round: boolean;
   note?: string;
+  /** #linear-takeoff WP2.3: labor hours per purchase unit — resolved
+   * through the SAME already-rounded `qty` totals.js computes, not a
+   * separate fractional-quantity path (a materials row buys whole units;
+   * the labor to install them follows that same whole-unit count). Absent
+   * by default — a materials row with no labor content (adhesive, tape)
+   * simply carries no hours field on its resolved report line. */
+  hours_per_unit?: number;
 }
 
 export interface Condition {
@@ -5816,7 +5826,7 @@ export class Session {
    * the call, restored verbatim on undo (same pattern as editShape's `before`
    * capture, simpler here because there is no per-row provenance to preserve). */
   editMaterials(tag: string, opts: {
-    add?: { name: string; per?: number; basis?: MaterialRow["basis"]; unit?: string; round?: boolean; note?: string }[];
+    add?: { name: string; per?: number; basis?: MaterialRow["basis"]; unit?: string; round?: boolean; note?: string; hours_per_unit?: number }[];
     remove?: string[];
     patch?: { id: string; fields: Partial<Omit<MaterialRow, "id">> }[];
   }) {
@@ -5872,6 +5882,7 @@ export class Session {
         id: uid("mat"), name: a.name.trim(), per: Math.max(0, a.per ?? 0),
         basis: a.basis ?? "area", unit: a.unit ?? "", round: a.round ?? true,
         ...(a.note ? { note: a.note } : {}),
+        ...(a.hours_per_unit != null ? { hours_per_unit: Math.max(0, a.hours_per_unit) } : {}),
       };
       conds = conds.map((x) => (x.id !== cid ? x : { ...x, materials: [...(x.materials || []), row as unknown as VariantRow] }));
       added.push(row.id);

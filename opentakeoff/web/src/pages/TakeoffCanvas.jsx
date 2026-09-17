@@ -9470,7 +9470,7 @@ export default function TakeoffCanvas() {
     return { condition_id: c.id, finish_tag: c.finish_tag, ...patch };
   }
 
-  const AGENT_MATERIAL_FIELDS = new Set(["name", "per", "basis", "unit", "round", "note"]);
+  const AGENT_MATERIAL_FIELDS = new Set(["name", "per", "basis", "unit", "round", "note", "hours_per_unit"]);
   function agentEditMaterials(tag, opts = {}) {
     const t = (tag || "").trim();
     if (!t) return { error: "Pass condition — an existing or new finish tag." };
@@ -9483,11 +9483,12 @@ export default function TakeoffCanvas() {
     for (const id of remove) if (!existingIds.has(id)) return { error: `No materials row "${id}" on ${c.finish_tag} — check the current rows first.` };
     for (const pr of patchList) {
       if (!existingIds.has(pr.id)) return { error: `No materials row "${pr.id}" on ${c.finish_tag} — check the current rows first.` };
-      for (const k of Object.keys(pr.fields || {})) if (!AGENT_MATERIAL_FIELDS.has(k)) return { error: `Unknown materials field "${k}" — name/per/basis/unit/round/note only.` };
+      for (const k of Object.keys(pr.fields || {})) if (!AGENT_MATERIAL_FIELDS.has(k)) return { error: `Unknown materials field "${k}" — name/per/basis/unit/round/note/hours_per_unit only.` };
     }
     const minted = add.map((row) => ({
       id: uid("mat"), name: row.name, per: row.per ?? 0, basis: row.basis || "area",
       unit: row.unit || "", round: row.round !== false, ...(row.note ? { note: row.note } : {}),
+      ...(row.hours_per_unit != null ? { hours_per_unit: Math.max(0, row.hours_per_unit) } : {}),
     }));
     const finalRows = [
       ...(c.materials || []).filter((m) => !remove.has(m.id)).map((m) => {

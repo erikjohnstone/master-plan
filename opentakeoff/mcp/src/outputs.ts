@@ -1215,10 +1215,11 @@ const materialRow = z.object({
   id: z.string(),
   name: z.string(),
   per: z.number().describe("Coverage rate: basis ÷ per = order quantity"),
-  basis: z.enum(["area", "linear", "count", "seam_lf"]).describe("Which of the condition's totals this row's quantity is computed against — 'seam_lf' is the FIGURED roll-layout seam length (weld rod, seam tape), 0 until the condition carries a roll_setup"),
+  basis: z.enum(["area", "linear", "count", "seam_lf", "vertex", "run"]).describe("Which of the condition's totals this row's quantity is computed against — 'seam_lf' is the FIGURED roll-layout seam length (weld rod, seam tape), 0 until the condition carries a roll_setup. 'vertex'/'run' (#linear-takeoff WP2.3) are a routed condition's own fitting-vertex count and separate-run count"),
   unit: z.string(),
   round: z.boolean().describe("true = round up to whole purchase units (the default — you buy whole bags/buckets)"),
   note: z.string().optional(),
+  hours_per_unit: z.number().optional().describe("#linear-takeoff WP2.3: labor hours per purchase unit"),
   origin_id: z.string().optional().describe("On a twin: the parent row this one follows (the variants.ts family link)"),
   inherited: z.boolean().optional().describe("On a twin: true while the row still follows the family — a patch on it takes it local, split_condition freezes them all"),
 });
@@ -1241,10 +1242,12 @@ const reportMaterialLine = z.object({
   name: z.string(),
   unit: z.string().describe("Purchase unit, e.g. 'gal', 'bag'"),
   per: z.number().describe("Coverage rate — basis units per purchase unit"),
-  basis: z.enum(["area", "linear", "count", "seam_lf"]),
+  basis: z.enum(["area", "linear", "count", "seam_lf", "vertex", "run"]),
   round: z.boolean(),
-  basis_qty: z.number().describe("The condition total this row divides (SF, LF, EA, or figured seam LF — multiplier applied, waste not)"),
+  basis_qty: z.number().describe("The condition total this row divides (SF, LF, EA, figured seam LF, or #linear-takeoff WP2.3's vertex/run count — multiplier applied, waste not)"),
   qty: z.number().describe("Computed order quantity"),
+  hours_per_unit: z.number().optional().describe("#linear-takeoff WP2.3: labor hours per purchase unit, when the row carries one"),
+  hours: z.number().optional().describe("hours_per_unit x qty — present only alongside hours_per_unit"),
 }).passthrough();
 
 /** export_report: the canvas Report's own JSON document (totals.js reportJson,
