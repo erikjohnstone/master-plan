@@ -1,0 +1,26 @@
+loaded in 1158 ms
+graph in 43098 ms; sheets=29 tables=27
+
+== sheet roles == {"legend":2,"unknown":2,"plan":10,"elevation":1,"schedule":10,"detail":4}
+== schedule keys == {"equipment_row":126} total 126
+
+== census == spans=10872 label-tokens(all)=626 equip-shaped(outside tables)=276 in 43222 ms
+label tokens, ALL, by sheet role: {"legend":49,"unknown":44,"plan":251,"elevation":0,"schedule":272,"detail":10}
+label tokens, OUTSIDE table regions, by sheet role: {"legend":49,"unknown":44,"plan":251,"schedule":90,"detail":10}
+
+== schedule keys -> drawn text occurrences outside tables, per kind ==
+  valve_mark     {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  unit_mark      {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  equipment_row  {"none":17,"planOnly":75,"otherOnly":3,"both":31}   e.g. SAV-1: plan=1 other=0 | SAV-2: plan=1 other=1 | SAV-3: plan=1 other=0 | SAV-4: plan=1 other=1 | SAV-5: plan=1 other=1 | SAV-6: plan=1 other=1
+
+== drawn equip-shaped keys: 123; with a schedule key: 107; WITHOUT any schedule key: 16 ==
+  sample unscheduled: MASTIC-PLUS-EMBEDDEDx1, VENT-THROUGH-ROOFx1, HEV-1x1, HEV-3x1, HEV-2x1, HEV-4x1, EF-7x1, D-2x1, D-3x1, D-4x1, D-5x1, D-6x1, D-7x1, EQ-29x1, ST-12x1, EFT-30-MRx1
+
+== FCU == schedule keys=0 (unit_mark=0, equipment_row=0); distinct FCU tags drawn outside tables=0; total FCU tag occurrences=0 (0 on plan-role sheets)
+
+== sweep_schedule_row sample (evaluationFast + verifyTaggedGeometry) ==
+  EF-1             found=1 basis=tag_attached_vector occurrences=1 text_only=0 skipped=19 342 ms
+  VAV-6            REFUSED (2 ms): No schedule row "VAV-6" in the set — tables found: equipment on itd-d1-lab-mechanical.pdf#12 (9 rows: SAV-1, SAV-2, SAV-3, SAV-4, SAV-5, SAV-6, SAV-7, SAV-8, SAV-9) | equipment on itd-d1-lab-mechanical.pdf#12 (4 rows: BP
+  ET-1             REFUSED (5 ms): Ambiguous: 2 schedule rows carry the key "ET-1" — the same mark defined twice cannot seed one sweep. Marquee the marker yourself with symbol_sweep.
+
+done in 43572 ms

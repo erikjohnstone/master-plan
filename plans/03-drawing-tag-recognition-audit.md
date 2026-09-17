@@ -525,14 +525,19 @@ change:
 
 ```
 roles          plan 26 · legend 27 · schedule 8 · detail 10 · elevation 4
-schedule keys  equipment_row 318 · valve_mark 106 · unit_mark 3
+schedule keys  equipment_row 320 · valve_mark 106 · unit_mark 0
 valve_mark     none 101 · planOnly 0 · otherOnly 5 · both 0
-equipment_row  none 3   · planOnly 155 · otherOnly 93 · both 67
-drawn keys     301 (238 scheduled, 63 unscheduled)
+equipment_row  none 3   · planOnly 157 · otherOnly 93 · both 67
+drawn keys     301 (237 scheduled, 64 unscheduled)
 FCU            42 rows · 44 distinct drawn · 89 occ (84 on plan roles)
 sweep          FCU-A1 found=1 tag_attached_vector · CV-FCU-A1-CHW REFUSED ·
                HRHWP-MT1 REFUSED (drawn 5–10× on pages 52–66)
 ```
+(Corrected 2026-09-17 during WP0 execution: `unit_mark`/`equipment_row` here
+now match the script's literal "first kind wins" rule above, not the earlier
+ad-hoc dual-add measurement in Part 2 — see PROGRESS.md "WP0 baseline
+harness" for why. `valve_mark`, roles, and the FCU rollup were unaffected
+and reproduce exactly.)
 
 Also run it on `bldg5406-hvac-demo-mechanical.pdf`, `baker-county-eoc-bidset.pdf`,
 `itd-d1-lab-mechanical.pdf`, `federal-attachment4-mechanical.pdf` and save

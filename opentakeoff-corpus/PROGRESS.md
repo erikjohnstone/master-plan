@@ -2196,3 +2196,119 @@ Current supporting gates: focused engine 201/201; MCP conformance 19/19, tools
 intentional skips; typechecks/build/diff/lint pass (lint has the same three
 existing warnings). The fresh 47-case browser product-path gate is still in
 progress, so the repository-wide BAS goal remains active.
+
+## WP0 baseline harness — tag-census-diag.mjs (2026-09-17, goal-loop)
+
+Built `opentakeoff/mcp/scripts/tag-census-diag.mjs` per
+`plans/03-drawing-tag-recognition-audit.md` §3.1, implementing its exact
+schedule-key-kind rule (valve_mark / else unit_mark / else equipment_row,
+first-kind-seen-wins per markKey) and its exact bucket rule.
+
+**Resolved discrepancy (not blocking, no behavior ambiguity):** running the
+script on navfac reproduced §3.1's stated baseline exactly for sheet roles,
+the `valve_mark` bucket, and the FCU rollup, but not for `unit_mark` /
+`equipment_row`: measured `unit_mark=0` vs the plan's stated `3`, and
+`equipment_row=320/planOnly=157` vs the plan's stated `318/155` (drawn-keys
+64 unscheduled vs stated 63). Root cause: the plan's illustrative baseline
+block was computed by an earlier ad-hoc diagnostic (Part 2's `tag-followup.mjs`-
+style script) that added a row's VALVE MARK cell AND its UNIT MARK cell as
+two independent keys whenever both existed on one row (a real control-valve
+schedule row: VALVE MARK=`CV-CUH-A1-HHW`, UNIT MARK=`CUH-A1`) — not the
+mutually-exclusive "first kind wins" rule §3.1 explicitly specifies in
+prose ("valve_mark ... else unit_mark ... else equipment_row"). The WP0
+spec text itself is unambiguous; the numbers next to it were stale. Kept the
+spec's literal algorithm (it is the one later gates are defined against) and
+corrected the plan's baseline block to the numbers this script actually
+produces. No production code or corpus key was touched to make this decision.
+
+Measured baselines (navfac-cherry-point-atc, sidecar off):
+```
+roles          plan 26 · legend 27 · schedule 8 · detail 10 · elevation 4
+schedule keys  equipment_row 320 · valve_mark 106 · unit_mark 0
+valve_mark     none 101 · planOnly 0 · otherOnly 5 · both 0
+equipment_row  none 3   · planOnly 157 · otherOnly 93 · both 67
+drawn keys     301 (237 scheduled, 64 unscheduled)
+FCU            42 rows · 44 distinct drawn · 89 occ (84 on plan roles)
+sweep          FCU-A1 found=1 tag_attached_vector · CV-FCU-A1-CHW REFUSED ·
+               HRHWP-MT1 REFUSED
+```
+
+## BLOCKED (environment) — sidecar Python deps absent, affects rule-5 verification (2026-09-17, goal-loop, Sonnet 5)
+
+While verifying WP0 (§3.0 rule 5: typecheck + web test + mcp test + the three
+frozen regression tests), found this container's environment cannot run the
+production table-extraction path at full capability, and this is **not
+caused by WP0** (WP0 added only `mcp/scripts/tag-census-diag.mjs`, five
+`.before.txt` reports, and two doc edits — confirmed via `git status`, zero
+production files touched).
+
+**Finding 1 — frozen truth mismatch, reproduced cold, not a cache artifact.**
+`mcp/test/takeoffHvac01.regression.test.mjs` and
+`takeoffValve01.regression.test.mjs` fail: HVAC items 375 vs frozen 396;
+valve marks 142 vs frozen 163. Root-caused, not assumed:
+1. First suspected the sheet-graph cache (`~/.cache/opentakeoff-sheet-graph`)
+   was poisoned by an earlier `OPENTAKEOFF_TABLE_SIDECAR=0` run, since its
+   cache key (`sheetGraphCache.mjs`) hashes `OPENTAKEOFF_VECTORGRID` mode but
+   **not** `OPENTAKEOFF_TABLE_SIDECAR` — a real, separate, pre-existing gap
+   in that file worth fixing later (not in scope for any WP0–WP7 package;
+   flagging for the coordinator). Cleared the cache directory entirely.
+2. Re-ran cold (no env override, default settings): identical 375/142 numbers,
+   ruling out cache poisoning as the (sole) cause.
+3. Checked the actual table sidecar: `python3 -c "import onnxruntime"` /
+   `cv2` / `fitz` all fail with `ModuleNotFoundError` — the VectorGrid/table
+   sidecar's ML dependencies (`sidecar/requirements.txt`: rapidocr_onnxruntime,
+   gmft, camelot-py, pypdfium2, pdfplumber) are not installed in this
+   container, so `vectorGridClient.ts` degrades gracefully to the legacy
+   (non-sidecar) extraction path — which recovers fewer tables/rows than the
+   frozen truth (established against the full production pipeline).
+4. Tried to install them: `pip install pdfplumber camelot-py[cv] pypdfium2
+   gmft rapidocr_onnxruntime rapid_table rapid_table_det` fails building
+   `antlr4-python3-runtime` (a `gmft` transitive dependency) with
+   `AttributeError: install_layout` — a known incompatibility between an
+   old `setup.py install`-style package and this system's Debian-patched
+   `distutils`. Tried without `camelot-py` (same failure, `gmft` alone pulls
+   the same dependency), and tried upgrading `pip`/`setuptools`/`wheel`
+   first (`pip install -U` on `wheel` itself fails: "Cannot uninstall wheel
+   0.42.0, RECORD file not found... installed by debian" — the system
+   Python is a locked-down Debian-managed installation). Three distinct,
+   genuine fix attempts, all blocked by the same underlying constraint: this
+   container's system Python cannot install this dependency without a venv
+   (which would require changing how `vectorGridClient.ts` spawns `python3`
+   in production code — out of scope for any WP in this plan).
+
+**Finding 2 — a real hang, same likely root cause.** The full `web` test
+suite (`npm --prefix web test`, ~900+ files) stalled indefinitely on one
+test: zero new TAP output for over 15 minutes while a worker process sat at
+state `R` consuming 98–121% CPU continuously (17m44s of CPU time before it
+was killed). This is well beyond any real test's legitimate cost measured
+elsewhere in this session (the heaviest real graph build, navfac's 75
+sheets, takes ~70s). This is consistent with a VectorGrid spawn/retry path
+that does not fail fast when the Python sidecar cannot start at all (vs.
+starting and returning a degraded answer, which is what Finding 1 shows
+happening elsewhere) — a real robustness gap, not diagnosed further here
+(out of scope; flagging for the coordinator, not fixing as part of WP0).
+Process killed manually to stop the hang from consuming the container.
+
+**Disposition:** WP0 itself is accepted on its own merits — its own new
+script is correct (reproduces the plan's role/valve_mark/FCU baseline
+numbers exactly; the one real discrepancy found, in `unit_mark`/
+`equipment_row`, was root-caused to stale illustrative numbers in the plan
+document itself, not to the script, and the plan was corrected, see the WP0
+entry above), and both workspaces typecheck clean. The two frozen-quantity
+regression tests and the full `web` test suite could not be run to a clean
+green in this container due to the environment gap above, which predates
+and is independent of WP0's change. This blocks confidently verifying the
+regression suite in rule 5 for **every** future package in this container,
+not just WP0, until one of: (a) this container is provisioned with the
+sidecar's Python ML dependencies (likely needs a venv or a different base
+image — a human/infra decision, not something achievable by more `pip
+install` retries), or (b) the coordinator explicitly accepts running rule-5
+verification with `OPENTAKEOFF_TABLE_SIDECAR=0`/sidecar-degraded as this
+container's known, documented baseline instead of the full-production
+frozen truth (a real scope decision the plan's own §3.0 rule 4 — "never
+weaken a scorer" — makes me unwilling to decide unilaterally: accepting a
+lower number as "passing" would be exactly that).
+
+Per the plan's own goal-loop rules (Part 4, Hard Rules): stopping here to
+report this plainly rather than silently continuing past a red regression
+gate, and not scaling the verification requirement down myself.
