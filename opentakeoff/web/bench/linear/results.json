@@ -457,7 +457,8 @@
    "minRecall": 0.1,
    "minPrecision": 0.5,
    "maxLenErrPct": 1,
-   "maxOverTracePct": 1
+   "maxOverTracePct": 1,
+   "minRefusalRate": 1
   },
   "synthetic": {
    "rows": [
@@ -586,7 +587,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 3.0705309999998462
+     "buildMs": 2.896187000000282
     }
    ],
    "aggregate": {
@@ -597,7 +598,7 @@
     "meanLenErrPct": 0.6137211036539896,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 3.0705309999998462,
+    "maxColdBuildMs": 2.896187000000282,
     "maxWarmQueryMs": null
    }
   },
@@ -644,7 +645,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 302.32594800000015
+     "buildMs": 307.73525299999983
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -699,7 +700,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 452.881343
+     "buildMs": 461.72832599999947
     }
    ],
    "aggregate": {
@@ -710,9 +711,39 @@
     "meanLenErrPct": 0.46230437018595794,
     "maxOverTracePct": 0.8470464135021097,
     "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 452.881343,
+    "maxColdBuildMs": 461.72832599999947,
     "maxWarmQueryMs": null
    }
+  }
+ },
+ "refusal": {
+  "rows": [
+   {
+    "caseName": "bessemer-mechanical-bidset.pdf#3 — Bessemer P101's own title block text (project name / seal area), top-right of the sheet -- text only, no drawn linework anywhere near it.",
+    "correct": true,
+    "gotStatus": "refused"
+   },
+   {
+    "caseName": "itd-d1-lab-mechanical.pdf#5 — ITD M1.2's 'Residency Lab' room-label text run.",
+    "correct": true,
+    "gotStatus": "refused"
+   },
+   {
+    "caseName": "federal-attachment4-mechanical.pdf#6 — Federal M3.1's own 'SCALE 1/8\" = 1'-0\"' callout text in the title block.",
+    "correct": true,
+    "gotStatus": "refused"
+   },
+   {
+    "caseName": "bessemer-mechanical-bidset.pdf#3 — Bessemer P101's own top-left page margin -- blank whitespace, no ink of any kind.",
+    "correct": true,
+    "gotStatus": "refused"
+   }
+  ],
+  "aggregate": {
+   "correct": 4,
+   "total": 4,
+   "rate": 1,
+   "misses": []
   }
  }
 }

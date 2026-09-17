@@ -1,7 +1,7 @@
 // Benchmark scorer — the IoU/aggregate math the corpus gate stands on.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear, polylineLength, projectOntoPolyline, clipPolyline, discreteFrechet, scoreTraceShapeMatch, scoreTraceRecall, scoreTracePrecision, aggregateTrace, type ProbeScore, type CrossScore, type TraceRunRow } from "../bench/score.ts";
+import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear, polylineLength, projectOntoPolyline, clipPolyline, discreteFrechet, scoreTraceShapeMatch, scoreTraceRecall, scoreTracePrecision, aggregateTrace, scoreRefusalCorrectness, type ProbeScore, type CrossScore, type TraceRunRow, type RefusalRow } from "../bench/score.ts";
 import { KNOWN_WALL_SEMANTICS, WALL_SEMANTICS } from "../bench/corpus.ts";
 import type { Point } from "../src/lib/oneclick.ts";
 
@@ -600,4 +600,31 @@ test("aggregateTrace: no case carries a golden size — sizeAccuracyPct is null,
 test("aggregateTrace: empty input reports zeros/nulls, not NaN or a thrown error", () => {
   const agg = aggregateTrace([], 2, 0.8);
   assert.deepEqual(agg, { cases: 0, recall: 0, precision: 0, maxLenErrPct: 0, meanLenErrPct: 0, maxOverTracePct: 0, sizeAccuracyPct: null, maxColdBuildMs: null, maxWarmQueryMs: null });
+});
+
+// ── refusal correctness — a labeled negative corpus, distinct from recall/precision above ──
+
+function refusalRow(over: Partial<RefusalRow> & { caseName: string }): RefusalRow {
+  return { correct: true, gotStatus: "refused", ...over };
+}
+
+test("scoreRefusalCorrectness: all-correct reports rate 1.0 with no misses", () => {
+  const rows = [refusalRow({ caseName: "a" }), refusalRow({ caseName: "b" })];
+  const r = scoreRefusalCorrectness(rows);
+  assert.equal(r.correct, 2);
+  assert.equal(r.total, 2);
+  assert.equal(r.rate, 1);
+  assert.deepEqual(r.misses, []);
+});
+
+test("scoreRefusalCorrectness: a seed that confidently REACHED instead of refusing is a miss, named", () => {
+  const rows = [refusalRow({ caseName: "a" }), refusalRow({ caseName: "b", correct: false, gotStatus: "reached" })];
+  const r = scoreRefusalCorrectness(rows);
+  assert.equal(r.correct, 1);
+  assert.equal(r.rate, 0.5);
+  assert.deepEqual(r.misses.map((m) => m.caseName), ["b"]);
+});
+
+test("scoreRefusalCorrectness: empty input reports rate 0, not NaN", () => {
+  assert.equal(scoreRefusalCorrectness([]).rate, 0);
 });

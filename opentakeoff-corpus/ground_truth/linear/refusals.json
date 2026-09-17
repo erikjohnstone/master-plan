@@ -1,0 +1,37 @@
+{
+  "schema": "opentakeoff.linear_refusal_ground_truth.v1",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator)",
+  "date": "2026-09-17",
+  "review_basis": "Each seed is a point known, independently of trace_run, to sit on something that is NOT drawn duct/pipe linework (a title block, a room-label text run, a sheet's own scale callout text, or blank margin whitespace with no ink at all) -- confirmed by the same pdf.ts positionedText / render-crop methods used to author every other ground_truth/linear/*.json file in this directory, before trace_run was ever run against them. This is the labeled negative corpus docs/LINEAR-TRACE-EVAL.md's own 'what this does not score' section named as missing: a real refusal-correctness measurement, not the incidental crossing-run precision case alone.",
+  "scope": "Four cases across the three real PDFs this project's other linear goldens already use, chosen to be UNAMBIGUOUSLY non-linework (no judgment call about whether a stroke 'counts') rather than an exhaustive survey of every way a seed can miss. A broader refusal corpus -- including seeds ON real linework of an EXCLUDED family (schedule table gridlines, dimension lines, hatching) to test the 'no stroke family' refusal path specifically, not just 'no linework at all' -- is real, disclosed follow-up work.",
+  "cases": [
+    {
+      "note": "Bessemer P101's own title block text (project name / seal area), top-right of the sheet -- text only, no drawn linework anywhere near it.",
+      "source_pdf": "opentakeoff/samples/bessemer-mechanical-bidset.pdf",
+      "sheet_id": "bessemer-mechanical-bidset.pdf#3",
+      "seed_norm": [0.92, 0.05],
+      "expect_status": "refused"
+    },
+    {
+      "note": "ITD M1.2's 'Residency Lab' room-label text run.",
+      "source_pdf": "opentakeoff-corpus/raw/itd-d1-lab-mechanical.pdf",
+      "sheet_id": "itd-d1-lab-mechanical.pdf#5",
+      "seed_norm": [0.4637345679012346, 0.22511574074074075],
+      "expect_status": "refused"
+    },
+    {
+      "note": "Federal M3.1's own 'SCALE 1/8\" = 1'-0\"' callout text in the title block.",
+      "source_pdf": "opentakeoff-corpus/raw/federal-attachment4-mechanical.pdf",
+      "sheet_id": "federal-attachment4-mechanical.pdf#6",
+      "seed_norm": [0.9397907188353413, 0.9270833333333334],
+      "expect_status": "refused"
+    },
+    {
+      "note": "Bessemer P101's own top-left page margin -- blank whitespace, no ink of any kind.",
+      "source_pdf": "opentakeoff/samples/bessemer-mechanical-bidset.pdf",
+      "sheet_id": "bessemer-mechanical-bidset.pdf#3",
+      "seed_norm": [0.02, 0.02],
+      "expect_status": "refused"
+    }
+  ]
+}

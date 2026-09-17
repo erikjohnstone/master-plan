@@ -800,3 +800,23 @@ export function aggregateTrace(rows: TraceRunRow[], frechetTolPx: number, overla
     maxWarmQueryMs: warmMs.length ? Math.max(...warmMs) : null,
   };
 }
+
+// ── refusal correctness — a DIFFERENT question from recall/precision
+// above (mirrors mep-trace-eval.mjs's own "reach accuracy, refusal
+// correctness and false-confident rate scored apart from each other on
+// purpose" doctrine): of the seeds a labeled negative corpus says should
+// REFUSE (not on any real drawn duct/pipe linework at all), how many
+// actually did, rather than confidently tracing something? This is the
+// measurement docs/LINEAR-TRACE-EVAL.md's own "what this does not score"
+// section named as missing — `scoreTracePrecision` above only ever sees
+// cases seeded ON a real golden run, so it can never surface a seed that
+// should have refused outright but didn't.
+export interface RefusalRow {
+  caseName: string;
+  correct: boolean;      // true iff trace_run actually refused
+  gotStatus: "refused" | "reached";
+}
+export function scoreRefusalCorrectness(rows: RefusalRow[]): { correct: number; total: number; rate: number; misses: RefusalRow[] } {
+  const misses = rows.filter((r) => !r.correct);
+  return { correct: rows.length - misses.length, total: rows.length, rate: rows.length ? (rows.length - misses.length) / rows.length : 0, misses };
+}

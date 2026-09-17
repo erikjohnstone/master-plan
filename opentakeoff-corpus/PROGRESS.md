@@ -1,5 +1,45 @@
 ## Active work
 
+2026-09-17 linear takeoff: refusal/negative corpus authored and wired into bench:linear (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Closed a gap `docs/LINEAR-TRACE-EVAL.md` itself named as missing: `scoreTracePrecision`
+only ever sees seeds ON a real golden run, so it can never catch a seed that should
+refuse outright but instead confidently (wrongly) traces something. Authored
+`opentakeoff-corpus/ground_truth/linear/refusals.json` — 4 cases across the same
+three real PDFs the other linear goldens already use, each an UNAMBIGUOUSLY
+non-linework seed (a title block, a room-label text run, a scale callout, blank
+page margin) so there's no judgment call about whether a stroke "counts." Each
+seed independently verified via direct `session.traceRun()` Node calls (confirmed
+to actually throw) before being written into the corpus.
+
+Added `RefusalRow` + `scoreRefusalCorrectness` to `bench/score.ts` and 3 new tests
+to `test/benchScore.test.ts` (all-correct, one-miss-named, empty-input). Wired a
+third scored pass into `bench/linear.mts`: loads the corpus, re-seeds each case
+through `session.traceRun()`, reports per-case OK/WRONG, and gates at 100% in
+`TRACE_THRESHOLDS.minRefusalRate` — unlike this file's other ratchet-point
+thresholds (set to today's measured floor), this one IS the real target, since
+every case is unambiguous by construction, not a hard one.
+
+One real bug caught wiring it in, not assumed away: the existing real-goldens
+loop enumerates every `*.json` in `ground_truth/linear/` and parses each as a
+`RealGolden` — `refusals.json`'s different schema landed in the same directory
+and was silently swept into that loop, producing `source_pdf: undefined` and a
+hard crash. Fixed by excluding it by name in that loop's own filter.
+
+Measured: `npx tsc --noEmit` clean; `bench:linear` reports `4/4 = 1.0` refusal
+correctness (matches the 4 cases' own independent pre-verification, confirmed
+via the actual bench run rather than assumed); all 55 `benchScore.test.ts` tests
+pass. Full `web`/`mcp` regression suites re-run (excluding the known-hung
+`compileProgressWalkthrough.test.ts`) to confirm no new failures beyond the
+established, disclosed baselines.
+
+`docs/LINEAR-TRACE-EVAL.md` gained a "Refusal correctness" section under Run 3,
+a new row in "The ruler" table, and its "what this does not score" + "honestly
+scoped as remaining" sections rewritten: item (1) (author refusal goldens) is
+done; a NEW, narrower gap disclosed in its place — this corpus is seeds on pure
+non-linework, not a seed on real linework of an EXCLUDED family (schedule
+gridlines, dimension lines, hatching), which would test the "no stroke family"
+refusal path specifically. That remains real, disclosed follow-up work.
+
 2026-09-17 linear takeoff: Finding 5 hypothesis tested and disproven, reverted (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Tried the fix the prior checkpoint's own Finding 5 named: `bench/linear/
 synthesize.mts`'s random-walk generator often produces near-closed

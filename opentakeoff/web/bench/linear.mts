@@ -23,7 +23,7 @@
 // pattern, .github/workflows/ci.yml) — an engine change that moves a linear
 // number must ship its own results.json delta in the same PR.
 import { createRequire } from "module";
-import { readFileSync, readdirSync, writeFileSync } from "fs";
+import { readFileSync, readdirSync, writeFileSync, existsSync } from "fs";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { Session } from "../../mcp/src/session.ts";
@@ -33,7 +33,9 @@ import { extractVectorGeometry, type Point } from "../src/lib/oneclick.ts";
 import {
   scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear,
   scoreTraceShapeMatch, scoreTraceRecall, scoreTracePrecision, aggregateTrace,
+  scoreRefusalCorrectness,
   type LinearTotalsRow, type LinearDeterminismRow, type TraceRunRow, type TraceAggregate,
+  type RefusalRow,
 } from "./score.ts";
 
 // THE MARGIN IS MEASURED, not chosen for comfort (bench/run.mts's own rule).
@@ -99,6 +101,14 @@ const TRACE_THRESHOLDS = {
   minPrecision: 0.5,        // measured 0.612 on the real ground truth
   maxLenErrPct: 1.0,        // Finding 4 (a branchy trunk's own over-trace) reads as ~85% error under this scorer; not yet a per-case cap worth tightening
   maxOverTracePct: 1.0,
+  // Unlike the ratchet-point thresholds above, this one IS GATE 3's own
+  // target, not today's measured floor: refusals.json is a small, hand-
+  // curated set of UNAMBIGUOUSLY non-linework seeds (title block text,
+  // a room label, blank margin) -- there is no judgment call for trace_run
+  // to get "partially" right here, so anything short of 100% is a real
+  // false-confident trace, not a hard case. Confirmed 4/4 = 1.0 measured
+  // on first run (see docs/LINEAR-TRACE-EVAL.md).
+  minRefusalRate: 1.0,
 };
 
 interface CaseTruth {
@@ -308,7 +318,11 @@ interface RealGolden {
 }
 const repoRoot = resolve(here, "../../..");
 const realGtDir = join(repoRoot, "opentakeoff-corpus/ground_truth/linear");
-const realFiles = readdirSync(realGtDir).filter((f) => f.endsWith(".json")).sort();
+// refusals.json lives in the same directory but is a DIFFERENT schema (the
+// negative corpus below, opentakeoff.linear_refusal_ground_truth.v1) --
+// excluded by name, not just by shape, since parsing it as a RealGolden
+// yields `source_pdf: undefined` and fails loudly rather than skipping.
+const realFiles = readdirSync(realGtDir).filter((f) => f.endsWith(".json") && f !== "refusals.json").sort();
 for (const file of realFiles) {
   const g: RealGolden = JSON.parse(readFileSync(join(realGtDir, file), "utf8"));
   const pdfPath = resolve(repoRoot, g.source_pdf);
@@ -339,6 +353,32 @@ const realTraceRows = traceRows.slice(caseFiles.length);
 const syntheticTraceAgg: TraceAggregate = aggregateTrace(syntheticTraceRows, TRACE_FRECHET_TOL_PX, TRACE_OVERLAP_MIN);
 const realTraceAgg: TraceAggregate = aggregateTrace(realTraceRows, TRACE_FRECHET_TOL_PX, TRACE_OVERLAP_MIN);
 
+// ── refusal correctness — a labeled NEGATIVE corpus (opentakeoff-corpus/
+// ground_truth/linear/refusals.json), the measurement docs/
+// LINEAR-TRACE-EVAL.md's own "what this does not score" section named as
+// missing: `scoreTracePrecision` above only ever sees seeds ON a real
+// golden run, so it can never catch a seed that should refuse outright
+// but instead confidently (wrongly) traces something.
+interface RefusalCase { note: string; source_pdf: string; sheet_id: string; seed_norm: [number, number]; expect_status: "refused" }
+interface RefusalCorpus { cases: RefusalCase[] }
+const refusalRows: RefusalRow[] = [];
+const refusalCorpusPath = join(realGtDir, "refusals.json");
+if (existsSync(refusalCorpusPath)) {
+  const refusalCorpus: RefusalCorpus = JSON.parse(readFileSync(refusalCorpusPath, "utf8"));
+  for (const c of refusalCorpus.cases) {
+    const pdfPath = resolve(repoRoot, c.source_pdf);
+    const session = new Session();
+    await session.loadPlan(pdfPath);
+    session.setScale(c.sheet_id, { use_detected: true });
+    const sheet = session.sheet(c.sheet_id);
+    const seed: Point = [c.seed_norm[0] * sheet.widthPx, c.seed_norm[1] * sheet.heightPx];
+    let gotStatus: "refused" | "reached" = "reached";
+    try { await session.traceRun(c.sheet_id, seed, {}); } catch { gotStatus = "refused"; }
+    refusalRows.push({ caseName: `${c.sheet_id} — ${c.note}`, correct: gotStatus === c.expect_status, gotStatus });
+  }
+}
+const refusalAgg = scoreRefusalCorrectness(refusalRows);
+
 // ── report ──────────────────────────────────────────────────────────────────
 for (const p of parity) console.log(`${p.caseName.padEnd(28)} parity ${p.ok ? "OK" : `MISMATCH: ${p.mismatch}`}`);
 for (const t of totals) console.log(`${t.caseName.padEnd(28)} totals  expected ${t.expectedLf} LF, got ${t.actualLf} LF (err ${t.errFt.toFixed(3)} ft)`);
@@ -356,6 +396,10 @@ console.log("\n── trace engine (real ground truth, development tier) ──"
 for (const r of realTraceRows) console.log(`${r.caseName.padEnd(40)} ${r.status}${r.status === "reached" ? ` LF ${r.goldenLf}→${r.tracedLf} size ${r.sizeMatch == null ? "n/a" : r.sizeMatch ? "OK" : `${r.goldenSizeKey}!=${r.tracedSizeKey}`}` : ` ${r.reason ?? ""}`}`);
 console.log("aggregate (real trace):", realTraceAgg);
 
+console.log("\n── refusal correctness (negative corpus) ──");
+for (const r of refusalRows) console.log(`${r.caseName.padEnd(60)} ${r.correct ? "OK" : `WRONG: got ${r.gotStatus}`}`);
+console.log("aggregate (refusal):", refusalAgg);
+
 writeFileSync(join(here, "linear", "results.json"), JSON.stringify({
   cases: caseFiles.length,
   parity, totals, determinism, extractionSanity,
@@ -366,6 +410,7 @@ writeFileSync(join(here, "linear", "results.json"), JSON.stringify({
     synthetic: { rows: syntheticTraceRows, aggregate: syntheticTraceAgg },
     real: { rows: realTraceRows, aggregate: realTraceAgg },
   },
+  refusal: { rows: refusalRows, aggregate: refusalAgg },
 }, null, 1));
 
 const failures: string[] = [];
@@ -381,6 +426,7 @@ if (realTraceAgg.recall < TRACE_THRESHOLDS.minRecall) failures.push(`trace recal
 if (realTraceAgg.precision < TRACE_THRESHOLDS.minPrecision) failures.push(`trace precision (real) ${realTraceAgg.precision.toFixed(3)} < ${TRACE_THRESHOLDS.minPrecision}`);
 if (realTraceAgg.maxLenErrPct > TRACE_THRESHOLDS.maxLenErrPct) failures.push(`trace max length error (real) ${realTraceAgg.maxLenErrPct.toFixed(3)} > ${TRACE_THRESHOLDS.maxLenErrPct}`);
 if (realTraceAgg.maxOverTracePct > TRACE_THRESHOLDS.maxOverTracePct) failures.push(`trace max over-trace (real) ${realTraceAgg.maxOverTracePct.toFixed(3)} > ${TRACE_THRESHOLDS.maxOverTracePct}`);
+if (refusalAgg.total > 0 && refusalAgg.rate < TRACE_THRESHOLDS.minRefusalRate) failures.push(`refusal correctness ${refusalAgg.rate.toFixed(3)} < ${TRACE_THRESHOLDS.minRefusalRate} (misses: ${refusalAgg.misses.map((m) => m.caseName).join(", ")})`);
 
 if (failures.length) {
   console.error("\nbench:linear FAILED:");
