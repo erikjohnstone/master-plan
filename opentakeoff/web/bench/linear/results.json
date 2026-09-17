@@ -587,7 +587,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 3.302697999999964
+     "buildMs": 3.4066559999998844
     }
    ],
    "aggregate": {
@@ -598,7 +598,9 @@
     "meanLenErrPct": 0.6137211036539896,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 3.302697999999964,
+    "sizeWrongLabelPct": 0,
+    "sizeNoLabelPct": 1,
+    "maxColdBuildMs": 3.4066559999998844,
     "maxWarmQueryMs": null
    }
   },
@@ -645,7 +647,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 305.9810349999998
+     "buildMs": 299.39214100000027
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -700,7 +702,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 432.07123200000024
+     "buildMs": 384.3065459999998
     },
     {
      "caseName": "weld-county-mechanical-permit.pdf#7",
@@ -719,7 +721,7 @@
       "clippedLenFt": 21.82,
       "goldenLenFt": 21.82
      },
-     "buildMs": 446.09429400000226
+     "buildMs": 441.355907000001
     }
    ],
    "aggregate": {
@@ -730,7 +732,9 @@
     "meanLenErrPct": 0.30820291345730527,
     "maxOverTracePct": 0.8470464135021097,
     "sizeAccuracyPct": 0.45458333333333334,
-    "maxColdBuildMs": 446.09429400000226,
+    "sizeWrongLabelPct": 0.5454166666666667,
+    "sizeNoLabelPct": 0,
+    "maxColdBuildMs": 441.355907000001,
     "maxWarmQueryMs": null
    }
   },
@@ -753,7 +757,7 @@
       "clippedLenFt": 3.57,
       "goldenLenFt": 3.57
      },
-     "buildMs": 1331.4253530000005
+     "buildMs": 1298.690549
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#4",
@@ -772,7 +776,7 @@
       "clippedLenFt": 3.02,
       "goldenLenFt": 3.02
      },
-     "buildMs": 901.5372299999999
+     "buildMs": 901.0041070000007
     },
     {
      "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
@@ -791,7 +795,7 @@
       "clippedLenFt": 12.39,
       "goldenLenFt": 12.39
      },
-     "buildMs": 1985.457550000001
+     "buildMs": 1884.4697180000003
     }
    ],
    "aggregate": {
@@ -802,7 +806,9 @@
     "meanLenErrPct": 0,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 1,
-    "maxColdBuildMs": 1985.457550000001,
+    "sizeWrongLabelPct": 0,
+    "sizeNoLabelPct": 0,
+    "maxColdBuildMs": 1884.4697180000003,
     "maxWarmQueryMs": null
    }
   }

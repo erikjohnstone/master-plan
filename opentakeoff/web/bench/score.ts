@@ -835,7 +835,18 @@ export interface TraceAggregate {
   maxLenErrPct: number;
   meanLenErrPct: number;
   maxOverTracePct: number;
-  sizeAccuracyPct: number | null;   // length-weighted; null when no case carries a golden size
+  sizeAccuracyPct: number | null;      // length-weighted; null when no case carries a golden size
+  // The plan's own §2 metric spec asks for "size accuracy (exact +
+  // length-weighted, no-label vs wrong-label separated)" — a WRONG size
+  // (trace_run bound something, just not the golden's own value) is a much
+  // worse failure than NO size (trace_run correctly declined to guess, the
+  // UI's own honest "size unknown, verify manually" state) — collapsing
+  // both into one "not a match" bucket, as sizeAccuracyPct alone does,
+  // hides that distinction. Both length-weighted over the same `sized`
+  // population as sizeAccuracyPct; sizeAccuracyPct + sizeWrongLabelPct +
+  // sizeNoLabelPct sum to 1 whenever sizeAccuracyPct is non-null.
+  sizeWrongLabelPct: number | null;
+  sizeNoLabelPct: number | null;
   maxColdBuildMs: number | null;
   maxWarmQueryMs: number | null;
 }
@@ -846,6 +857,8 @@ export function aggregateTrace(rows: TraceRunRow[], frechetTolPx: number, overla
   const lenErrs = reached.map((r) => r.lenErrPct).filter((x): x is number => x != null);
   const sized = reached.filter((r) => r.sizeMatch != null);
   const sizeWeightedOk = sized.reduce((a, r) => a + (r.sizeMatch ? r.goldenLf : 0), 0);
+  const sizeWeightedNoLabel = sized.reduce((a, r) => a + (!r.sizeMatch && r.tracedSizeKey == null ? r.goldenLf : 0), 0);
+  const sizeWeightedWrongLabel = sized.reduce((a, r) => a + (!r.sizeMatch && r.tracedSizeKey != null ? r.goldenLf : 0), 0);
   const sizeWeightedTotal = sized.reduce((a, r) => a + r.goldenLf, 0);
   const coldMs = rows.map((r) => r.buildMs).filter((x): x is number => x != null);
   const warmMs = rows.filter((r) => r.buildMs == null).map((r) => r.queryMs).filter((x): x is number => x != null);
@@ -857,6 +870,8 @@ export function aggregateTrace(rows: TraceRunRow[], frechetTolPx: number, overla
     meanLenErrPct: lenErrs.length ? lenErrs.reduce((a, b) => a + b, 0) / lenErrs.length : 0,
     maxOverTracePct: reached.length ? Math.max(...reached.map((r) => r.overTracePct)) : 0,
     sizeAccuracyPct: sizeWeightedTotal > 0 ? sizeWeightedOk / sizeWeightedTotal : null,
+    sizeWrongLabelPct: sizeWeightedTotal > 0 ? sizeWeightedWrongLabel / sizeWeightedTotal : null,
+    sizeNoLabelPct: sizeWeightedTotal > 0 ? sizeWeightedNoLabel / sizeWeightedTotal : null,
     maxColdBuildMs: coldMs.length ? Math.max(...coldMs) : null,
     maxWarmQueryMs: warmMs.length ? Math.max(...warmMs) : null,
   };

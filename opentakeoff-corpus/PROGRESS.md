@@ -1,5 +1,40 @@
 ## Active work
 
+2026-09-17 linear takeoff: size accuracy's own no-label vs wrong-label split (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Closed a real gap against the plan's own explicit §2 metric spec: "size
+accuracy (exact + length-weighted, no-label vs wrong-label separated)" --
+`sizeAccuracyPct` alone only ever answered "did it match," collapsing a
+WRONG guess (`trace_run` bound a real size, just not the golden's own
+value -- confidently misleading) and NO guess (`trace_run` correctly
+declined -- the UI's own honest "size unknown" state) into one "not a
+match" bucket. Added `sizeWrongLabelPct`/`sizeNoLabelPct` to
+`aggregateTrace` (`bench/score.ts`), both length-weighted over the same
+population `sizeAccuracyPct` uses; the three sum to 1 whenever
+`sizeAccuracyPct` is non-null. 6 new/extended tests in
+`test/benchScore.test.ts`, including one built specifically to prove a
+wrong-label case and a no-label case land in different buckets.
+
+Running the split against the real corpus surfaced a real, worth-flagging
+result, not just a metric upgrade for its own sake: development-tier's own
+size misses are 100% wrong-label, 0% no-label -- every real case where the
+traced size doesn't match the golden is a CONFIDENT wrong guess (Finding
+3's round-vs-pipe grammar ambiguity, bessemer's own real over-trace into a
+different actual pipe), never an honest "I don't know." The only clean
+no-label result anywhere in the bench is the synthetic corpus's own
+`10-arc-as-polyline` case. Disclosed as a small-sample (n=2 vs n=1)
+observation worth re-checking as more real goldens exist, not chased
+further on this one measurement -- `docs/LINEAR-TRACE-EVAL.md` gained a
+"Run 9" section with the full writeup, and its own priority list marks this
+pass as done.
+
+Measured: `npx tsc --noEmit` clean; `bench:linear` passes (development
+sizeAccuracyPct 0.455 / sizeWrongLabelPct 0.545 / sizeNoLabelPct 0; held-out
+1.0/0/0; synthetic 0/0/1 -- the one no-label case, correctly isolated now);
+all 215 `benchScore.test.ts`/`test/linear/*.test.ts` tests pass; full
+filtered web regression suite re-run (3455 tests, +1 over the prior
+checkpoint's 3454, matching the one net new test added here) confirms no
+new failures (70 fail/13 cancelled/13 skipped, unchanged from baseline).
+
 2026-09-17 linear takeoff: resolved bessemer-p101-cw-main's residual 3.17px — ordinary hand-tracing noise, not a defect (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Closed the open question the discrete-Fréchet scorer fix left behind: after
 `simplifyPolyline` corrected `bessemer-p101-cw-main`'s own frechetPx from

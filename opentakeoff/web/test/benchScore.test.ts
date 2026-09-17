@@ -625,16 +625,32 @@ test("aggregateTrace: rolls up recall, precision, worst length/over-trace error 
   assert.ok(Math.abs(agg.maxLenErrPct - 0.1) < 1e-9);
   assert.ok(Math.abs(agg.maxOverTracePct - 0.1) < 1e-9);
   assert.ok(Math.abs(agg.sizeAccuracyPct! - 10 / 30) < 1e-9, "length-weighted: only the 10 ft case's size matched, out of 30 ft total");
+  assert.ok(Math.abs(agg.sizeWrongLabelPct! - 20 / 30) < 1e-9, "case b traced a real (wrong) size — wrong-label, not no-label");
+  assert.equal(agg.sizeNoLabelPct, 0, "no case in this rollup left the size unbound");
 });
 
-test("aggregateTrace: no case carries a golden size — sizeAccuracyPct is null, never a fabricated number", () => {
+test("aggregateTrace: a WRONG size and a MISSING size are counted separately, not both lumped into 'not a match' — the plan's own \"no-label vs wrong-label separated\" spec", () => {
+  const shape = { caseName: "c", frechetPx: 0, lengthOverlapPct: 1, clippedLenFt: 10, goldenLenFt: 10 };
+  const rows: TraceRunRow[] = [
+    traceRow({ caseName: "wrong", goldenLf: 10, tracedLf: 10, goldenSizeKey: "pipe:1", tracedSizeKey: "pipe:0.75", sizeMatch: false, shape }),
+    traceRow({ caseName: "no-label", goldenLf: 30, tracedLf: 30, goldenSizeKey: "pipe:1", tracedSizeKey: null, sizeMatch: false, shape }),
+  ];
+  const agg = aggregateTrace(rows, 2, 0.8);
+  assert.equal(agg.sizeAccuracyPct, 0, "neither case matched");
+  assert.ok(Math.abs(agg.sizeWrongLabelPct! - 10 / 40) < 1e-9, "only the case that traced a real, wrong size counts here");
+  assert.ok(Math.abs(agg.sizeNoLabelPct! - 30 / 40) < 1e-9, "the case that left size unbound counts here, not as a wrong guess");
+});
+
+test("aggregateTrace: no case carries a golden size — sizeAccuracyPct and its wrong/no-label siblings are all null, never fabricated numbers", () => {
   const agg = aggregateTrace([traceRow({ caseName: "a" })], 2, 0.8);
   assert.equal(agg.sizeAccuracyPct, null);
+  assert.equal(agg.sizeWrongLabelPct, null);
+  assert.equal(agg.sizeNoLabelPct, null);
 });
 
 test("aggregateTrace: empty input reports zeros/nulls, not NaN or a thrown error", () => {
   const agg = aggregateTrace([], 2, 0.8);
-  assert.deepEqual(agg, { cases: 0, recall: 0, precision: 0, maxLenErrPct: 0, meanLenErrPct: 0, maxOverTracePct: 0, sizeAccuracyPct: null, maxColdBuildMs: null, maxWarmQueryMs: null });
+  assert.deepEqual(agg, { cases: 0, recall: 0, precision: 0, maxLenErrPct: 0, meanLenErrPct: 0, maxOverTracePct: 0, sizeAccuracyPct: null, sizeWrongLabelPct: null, sizeNoLabelPct: null, maxColdBuildMs: null, maxWarmQueryMs: null });
 });
 
 // ── refusal correctness — a labeled negative corpus, distinct from recall/precision above ──
