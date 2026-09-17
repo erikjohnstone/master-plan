@@ -226,6 +226,71 @@ test("sheet roles: an ENLARGED/PARTIAL qualifier between the level number and PL
   assert.notEqual(other.role, "plan", "an unrelated qualifier word must not classify as plan via this widened pattern");
 });
 
+test("sheet roles: a control/DDC schematic classifies role \"schematic\", never \"legend\" via its own cross-reference note (plan §3.2 WP1)", () => {
+  // A real, general drafting shape: a control-schematic sheet titles itself
+  // with SCHEMATIC/DIAGRAM/SEQUENCE OF OPERATION vocabulary and separately
+  // carries a cross-reference note pointing at the set's OWN mechanical
+  // legend sheet elsewhere ("REFER TO DRAWING M-001 FOR MECHANICAL LEGEND,
+  // ABBREVIATIONS AND SYMBOLS"). Neither the real title nor the reference
+  // note's own LEGEND/ABBREVIATIONS/SYMBOLS vocabulary should win "legend".
+  const schematic = classifySheetRole({
+    key: "sch1", sheet_number: "M701",
+    spans: [
+      sp("CONTROL SCHEMATIC SYMBOLS", 100, 100),
+      sp("REFER TO DRAWING M-001 FOR MECHANICAL LEGEND, ABBREVIATIONS", 100, 700),
+    ],
+  });
+  assert.equal(schematic.role, "schematic");
+  assert.ok(schematic.confidence >= 0.8);
+
+  const riser = classifySheetRole({ key: "sch2", sheet_number: "M702", spans: [sp("HHW RISER DIAGRAM", 100, 100)] });
+  assert.equal(riser.role, "schematic");
+  const soo = classifySheetRole({ key: "sch3", sheet_number: "M703", spans: [sp("AHU-1 SEQUENCE OF OPERATION", 100, 100)] });
+  assert.equal(soo.role, "schematic");
+  const ddc = classifySheetRole({ key: "sch4", sheet_number: "M704", spans: [sp("DDC CONTROLS NETWORK DIAGRAM", 100, 100)] });
+  assert.equal(ddc.role, "schematic");
+
+  // a REAL legend sheet (no schematic vocabulary at all) must still classify
+  // legend, unaffected by the new signal
+  const legend = classifySheetRole({ key: "leg1", sheet_number: "M001", spans: [sp("MECHANICAL LEGEND, ABBREVIATIONS AND SYMBOLS", 100, 100)] });
+  assert.equal(legend.role, "legend");
+});
+
+test("sheet roles: a split cross-reference note fragment never votes for a role on its own (plan §3.2 WP1)", () => {
+  // Real, found live: pdf.js splits one authored run — "SEE M-001 FOR
+  // MECHANICAL LEGEND, ABBREVIATIONS AND SYMBOLS" — into two spans, "SEE
+  // M-" (already excluded by the SEE/REFER branch) and "001 FOR MECHANICAL
+  // LEGEND, ABBREVIATIONS…" (a bare 3-digit fragment + FOR + the legend
+  // vocabulary), which used to pass straight through to the bare /LEGEND/
+  // signal and mislabel the whole sheet "legend" even when its own real
+  // title said something else entirely.
+  const fragmentOnly = classifySheetRole({
+    key: "frag1", sheet_number: "M705",
+    spans: [sp("001 FOR MECHANICAL LEGEND, ABBREVIATIONS AND SYMBOLS", 100, 700)],
+  });
+  assert.notEqual(fragmentOnly.role, "legend", "a split cross-reference fragment alone must never classify as legend");
+
+  // the fragment must not out-vote the sheet's own REAL schematic title either
+  const withRealTitle = classifySheetRole({
+    key: "frag2", sheet_number: "M706",
+    spans: [
+      sp("HHW CONTROL SCHEMATIC", 100, 100),
+      sp("001 FOR MECHANICAL LEGEND, ABBREVIATIONS AND SYMBOLS", 100, 700),
+    ],
+  });
+  assert.equal(withRealTitle.role, "schematic");
+
+  // the general "FOR ... LEGEND/ABBREVIATIONS/SYMBOLS/NOTES" reference shape
+  // is excluded wherever it sits in the run, not just at a leading digit —
+  // and independent of the pre-existing SEE/REFER/"REFER TO" branches (this
+  // run contains neither)
+  const midRunReference = classifySheetRole({
+    key: "frag3", sheet_number: "M707",
+    spans: [sp("ADDITIONAL SYMBOLS FOR MECHANICAL CONTROLS LEGEND ARE SHOWN ON MI700", 100, 700)],
+  });
+  assert.notEqual(midRunReference.role, "legend", "a FOR ... LEGEND reference clause must never classify as legend on its own");
+});
+
 test("sheet roles: a real SHEET INDEX cover page is never misattributed as one of the sheet types it lists (ledger, later session)", () => {
   // Real, found live on baker-county-eoc's own sheet #36, discovered
   // immediately after the LEVEL-N-PLAN fix above: a real "MECHANICAL SHEET

@@ -1310,7 +1310,7 @@ export const sheetGraphOutput = {
   available: z.boolean().describe("false = the set has no text layer (a scan) — the graph degrades to unavailable, never half-populates"),
   sheets: z.array(z.object({
     sheet: z.string(),
-    role: z.enum(["plan", "schedule", "legend", "detail", "elevation", "demolition", "unknown"]),
+    role: z.enum(["plan", "schedule", "legend", "detail", "elevation", "demolition", "schematic", "unknown"]),
     confidence: z.number().describe("0..1; mixed title signals halve it, a bare sheet-number convention stays under 0.5"),
     evidence: wireEvidence.optional(),
     building: z.string().optional().describe("The sheet's building context, when it names exactly one (BUILDING A / BLDG 2)"),

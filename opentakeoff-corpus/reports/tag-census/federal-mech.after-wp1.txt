@@ -1,0 +1,26 @@
+loaded in 1152 ms
+graph in 92572 ms; sheets=24 tables=30
+
+== sheet roles == {"plan":4,"legend":2,"detail":3,"schedule":11,"schematic":1,"elevation":3}
+== schedule keys == {"equipment_row":132} total 132
+
+== census == spans=13789 label-tokens(all)=1574 equip-shaped(outside tables)=614 in 92821 ms
+label tokens, ALL, by sheet role: {"plan":170,"legend":218,"detail":303,"schedule":850,"schematic":29,"elevation":4}
+label tokens, OUTSIDE table regions, by sheet role: {"plan":170,"legend":218,"detail":303,"schedule":472,"schematic":29,"elevation":4}
+
+== schedule keys -> drawn text occurrences outside tables, per kind ==
+  valve_mark     {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  unit_mark      {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  equipment_row  {"none":23,"planOnly":17,"otherOnly":4,"both":88}   e.g. AHU-1: plan=2 other=9 | RF-1: plan=0 other=2 | RF-2: plan=0 other=2 | SF-1: plan=0 other=2 | SF-2: plan=0 other=2 | CH-1: plan=1 other=2
+
+== drawn equip-shaped keys: 212; with a schedule key: 109; WITHOUT any schedule key: 103 ==
+  sample unscheduled: T-1x9, CSR-1x8, SS-1x8, CI-1x6, AX-1x6, H-1x6, T-4x5, CSR-2x5, SS-2x5, AX-3x5, CORR-2x4, CORR-1x4, CORR-3x4, V-2x4, T-2x4, T-3x4, T-5x4, T-6x4, V-1x4, T-7x4, SP-2x4, DWH-1x3, CI-3x3, CI-4x3, AX-4x3
+
+== FCU == schedule keys=1 (unit_mark=0, equipment_row=1); distinct FCU tags drawn outside tables=1; total FCU tag occurrences=4 (1 on plan-role sheets)
+
+== sweep_schedule_row sample (evaluationFast + verifyTaggedGeometry) ==
+  CH-1             REFUSED (60 ms): Schedule row "CH-1" has 1 exact plan-tag occurrence, but none owns distinctive adjacent or leader-connected vector geometry. The tag is retained for review; installed quantity remains unknown.
+  ET-1             found=1 basis=tag_attached_vector occurrences=2 text_only=0 skipped=20 396 ms
+  AHU-1            found=1 basis=tag_attached_vector occurrences=2 text_only=0 skipped=20 9 ms
+
+done in 93287 ms

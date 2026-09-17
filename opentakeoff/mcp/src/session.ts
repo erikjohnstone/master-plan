@@ -6474,7 +6474,7 @@ export class Session {
         let segs: number[] | undefined;
         if (spans.some((t) => /^\d{1,2}$/.test(t.str.trim()))) {
           const role = classifySheetRole({ key: s.key, sheet_number: s.sheetNumber, spans }).role;
-          if (role === "plan" || role === "schedule" || role === "demolition" || role === "unknown") {
+          if (role === "plan" || role === "schedule" || role === "demolition" || role === "schematic" || role === "unknown") {
             if (vecBudget <= 0) skippedHeavy++;
             else if (s.geo) { segs = s.geo.segs; vecBudget -= segs.length / 4; }
             else {

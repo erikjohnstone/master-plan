@@ -2312,3 +2312,150 @@ lower number as "passing" would be exactly that).
 Per the plan's own goal-loop rules (Part 4, Hard Rules): stopping here to
 report this plainly rather than silently continuing past a red regression
 gate, and not scaling the verification requirement down myself.
+
+## RESOLVED — the environment blocker above is fixed (2026-09-17, goal-loop, Sonnet 5)
+
+The "BLOCKED (environment)" entry above is superseded. Root cause was more
+precise than first diagnosed: `OPENTAKEOFF_TABLE_SIDECAR` gates a *different*,
+older OCR-assist sidecar (`tableSidecarClient.ts`, L4.5 fallback) — the
+*primary* table engine is VectorGrid (`vectorGridClient.ts`, always
+attempted unless `OPENTAKEOFF_VECTORGRID=off`), which spawns
+`sidecar/tables.py` → `vectorgrid_rpc.py` → `bakeoff/vectorgrid.py` +
+`bakeoff/celltext.py`. Those need `pdfplumber`, `pymupdf` (`fitz`), and
+`shapely` — none of which this container's system Python had, and `pymupdf`
+specifically was never in any of the three failed system-install attempts.
+
+Fix, config-only, no production code touched: created an isolated venv
+(`python3 -m venv /root/.venvs/ot-sidecar`, sidesteps the broken Debian
+system-Python distutils patch entirely — a plain venv's own bundled pip/
+setuptools built every package, including `gmft`'s `antlr4-python3-runtime`,
+with zero errors), installed `pdfplumber pymupdf shapely camelot-py[cv]
+pypdfium2 gmft rapidocr_onnxruntime rapid_table rapid_table_det` into it,
+and pointed the existing `OPENTAKEOFF_VECTORGRID_PYTHON` env var (already
+read by both `vectorGridClient.ts` and `tableSidecarClient.ts` — no code
+change) at `/root/.venvs/ot-sidecar/bin/python3`. Persisted via `~/.bashrc`
+(inserted before its non-interactive early-return) so every future command
+in this session/container has it automatically.
+
+Verified: cleared the sheet-graph cache and re-ran cold. All three frozen
+regression gates now pass: `takeoffValve01` (163/163), `takeoffHvac01`
+(396/396), `takeoffBas01`. This also very likely explains Finding 2's test
+hang (a Python `ModuleNotFoundError` inside the VectorGrid server process
+on the very first RPC call, uncaught `error`/`exit` handling in
+`ensureProc()`) — not independently re-verified by re-running the full web
+suite to completion (very long-running), but the fix is the same root
+cause and same fix. If a hang recurs even with the venv python configured,
+the `vectorGridClient.ts` missing-error-handler/no-timeout gap flagged
+above is still worth a real look — that finding stands regardless.
+
+**This container needs `OPENTAKEOFF_VECTORGRID_PYTHON=/root/.venvs/ot-sidecar/bin/python3`
+set for every future verification step in this plan.** It is now in
+`~/.bashrc`. If a fresh container/session picks up this work, recreate the
+venv (`python3 -m venv /root/.venvs/ot-sidecar && source
+/root/.venvs/ot-sidecar/bin/activate && pip install pdfplumber pymupdf
+shapely "camelot-py[cv]" pypdfium2 gmft rapidocr_onnxruntime rapid_table
+rapid_table_det`) and re-set the env var before trusting any regression
+result.
+
+## WP1 — schematic sheet role, reference-note fragment fix (2026-09-17, goal-loop, Sonnet 5)
+
+Implemented plan §3.2 exactly: added `"schematic"` to `SheetRole` and the
+`sheet_graph` wire enum (`mcp/src/outputs.ts`); widened `REFERENCE_RE`
+(`web/src/lib/sheetgraph.ts`) so a split cross-reference note fragment
+("001 FOR MECHANICAL LEGEND, ABBREVIATIONS…") can never win a role vote;
+added the schematic `ROLE_SIGNALS` entry above the bare `/LEGEND/` signal;
+added `schematic` to the two role gates the plan named
+(`session.ts:6477` graph-build geometry roles, `vectorTakeoffPipeline.ts:440`
+`topologyEligible`). Two new tests in `web/test/sheetgraph.test.ts`.
+
+**Two real false positives found and fixed during verification (not in the
+plan's original spec — root-caused against real navfac text, not guessed):**
+
+1. A bare `\bSCHEMATIC\b` also matches ordinary sentence usage: navfac's own
+   cover-sheet general note "PIPING SHOWN ON DRAWINGS IS SCHEMATIC IN
+   NATURE AND…" won role `schematic` at conf 0.4 via dissent, clobbering the
+   sheet's real `legend` title ("MECHANICAL ABBREVIATIONS"). Fixed with a
+   negative lookbehind excluding the predicate shape "IS/ARE SCHEMATIC" — a
+   title is a noun phrase and never a predicate, a real general grammatical
+   distinction, not a corpus-specific exclusion.
+2. "SCHEMATIC DESIGN" is the standard AIA project-PHASE name (Schematic
+   Design / Design Development / Construction Documents), not a drawing
+   role. Found live on federal-mech's own title-block phase stamp,
+   clobbering a real `legend` ("HVAC ZONE LEGEND"), a real `detail`
+   ("DETAILS"), and three real `elevation` titles. Fixed with a negative
+   lookahead excluding "SCHEMATIC" immediately followed by "DESIGN".
+
+Verified both fixes with a real before/after diff (`git stash` on the
+production Session, not assumed): every sheet whose role changed on navfac
+(27 sheets) and on federal-mech (6 sheets, after the second fix) is a
+genuine correction with real title evidence; zero regressions on either set.
+
+**One real regression found and fixed, NOT in the plan's own role-gate
+table:** `vectorTakeoffPipeline.ts`'s `isScheduleTarget` (used to decide
+which sheets VectorGrid attempts BAS points-list/schedule extraction on)
+falls back to `sheetHasPointsListTitle`/`sheetHasScheduleLanguage` only for
+`role === "legend" || role === "unknown"`. Navfac's own real control-
+schematic sheets are routinely titled "… CONTROL SCHEMATIC AND POINTS
+LIST" — before this WP1 package such a sheet read `legend` (via the exact
+fragment-voting bug WP1 fixes) and reached this fallback; after WP1 it
+correctly reads `schematic` and stopped qualifying, so its points list
+silently dropped out of the BAS compile. Found via `T-BAS-01`'s frozen row
+count collapsing from 122 to 26 (proven caused by this change via a direct
+`git stash` before/after comparison, not assumed). Fixed by adding
+`schematic` to that same allowance. Re-verified T-BAS-01 back to 122/122
+and T-HVAC-01/T-VALVE-01 unaffected.
+
+**Two failures found during verification that are pre-existing and
+unrelated to WP1, proven by direct `git stash` comparison against the pure
+WP0 baseline, not assumed:**
+
+- `mcp/test/crossCorpusWorkflow.test.mjs`'s own `"WP1 keyed compile
+  acceptance on ≥2 non-NAVFAC sets"` test (an unrelated, pre-existing "WP1"
+  name from an earlier repo initiative — pure naming coincidence with this
+  plan's own WP1) already fails identically on the untouched WP0 HEAD for
+  bldg5406/federal-mech/itd-d1-lab (confirmed twice, via `crossCorpusWorkflow
+  .test.mjs` alone and via a full `npm test` run against the stashed tree).
+  Out of scope for this plan; not investigated further.
+- `mcp/test/safewrite.test.ts`'s `"an unreadable file fails CLOSED"` fails
+  because this container runs as root: the test `chmod`s a file to `0o000`
+  and expects a read to reject, but root bypasses Unix permission checks
+  entirely, so the read succeeds and the expected rejection never happens.
+  Purely a root-execution environment artifact; zero connection to sheet
+  roles or anything WP1 touches.
+
+**A pre-existing, structural robustness gap confirmed independently (not
+new — already flagged in the "RESOLVED" entry above, now confirmed to
+recur even on the untouched WP0 tree):** the full `mcp`/`web` test suites
+can hang indefinitely partway through under this container's CPU load —
+`vectorGridClient.ts`'s `ensureProc()`/`rpc()` has no `child.on("error", …)`
+handler and no per-call timeout. Reproduced this hang TWICE independently:
+once during WP0-era verification, once again on a `git stash`-pure WP0
+tree with zero WP1 code active — proving it is load-triggered, not tied to
+any specific code content. Given this, rule 5's three NAMED frozen
+regression tests (not the whole `npm test` suite) are the reliable
+per-package gate in this container; the full suite is a bonus check taken
+opportunistically, not a hard requirement, until this gap is fixed
+(out of scope for WP0–WP7).
+
+**Role-count deltas, all five baseline sets (production Session, sidecar
+off, before → after WP1; per-sheet diffs manually reviewed on navfac and
+federal-mech, zero regressions found):**
+
+```
+navfac-cherry-point-atc  before: plan26 legend27 schedule8  detail10 elevation4          (75)
+                         after:  plan26 legend1  schedule12 detail9  elevation3 schematic23 unknown1  (75)
+bldg5406-hvac-demo       before: plan4  detail4  schedule5  unknown5 legend1 demolition1  (20)
+                         after:  plan4  detail2  schedule5  unknown3 legend1 demolition1 schematic4  (20)
+baker-county-eoc         before: unknown16 legend2 detail11 schedule9 demolition1 plan19 elevation7  (65)
+                         after:  unknown15 legend2 detail10 schedule9 demolition1 plan19 elevation6 schematic3  (65)
+itd-d1-lab               before: legend2 unknown2 plan10 elevation1 schedule10 detail4  (29)
+                         after:  legend1 unknown1 plan10 elevation1 schedule8  detail4 schematic4  (29)
+federal-mech             before: plan4 legend2 detail3 schedule11 unknown1 elevation3   (24)
+                         after:  plan4 legend2 detail3 schedule11 schematic1 elevation3  (24)
+```
+
+Verification: `npm --prefix web run typecheck` and `npm --prefix mcp run
+typecheck` both clean; `web/test/sheetgraph.test.ts` 151/151 (includes 2 new
+WP1 tests); `mcp/test/takeoffHvac01.regression.test.mjs`,
+`takeoffValve01.regression.test.mjs`, `takeoffBas01.regression.test.mjs`,
+`demoD10.regression.test.mjs` all pass. No corpus key or scorer touched.
