@@ -1,5 +1,19 @@
 ## Active work
 
+2026-09-17 linear takeoff: two more narrow-scope-project batches, a new flex-connector false-positive, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Continued the targeting strategy that landed the previous golden across
+two further batches of never-touched files (14 total). One real hit,
+and it was a rejection: a real 90-degree-turning candidate that looked
+clean and was even self-consistent under the bench's own re-seed check
+-- but a marked crop showed the traced zigzag sits entirely inside a
+flexible duct connector's own decorative cross-hatch symbol, not a
+real duct run. The actual labeled duct sits just beside it in the same
+crop. A genuinely new false-positive category for this project's own
+disclosed record. The other 13 files produced zero automatic-bind hits
+at all.
+
+No golden changed. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 32" section.
+
 2026-09-17 linear takeoff: ninth new-corpus golden via targeted narrow-scope-project search, a real engine-behavior finding, development recall 13/19 -> 14/20 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Refined the search strategy in direct response to the previous entry's
 own lesson: rather than scanning random archive files, targeted files
