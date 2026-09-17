@@ -1,5 +1,24 @@
 # Changelog
 
+- **Linear takeoff (duct, pipe, BAS runs) — manual mode, MCP 0.9.79.** A
+  `measure_line` shape can now carry a sized, fitted `run`: `measure_line`
+  accepts `system`/`size`/`vertices` (seeded from a routed condition's own
+  defaults when omitted) and echoes the committed shape's `run` plus its
+  derived `computed_run`; `edit_run` patches an existing linear shape's
+  segment sizes and vertex kinds by index after the fact. `edit_materials`
+  rows gain basis `"vertex"`/`"run"` (a routed condition's own fitting-
+  vertex count or separate-run count) and an optional `hours_per_unit`.
+  The new `resolve_linear_assembly` tool prices one committed run's
+  `computed_run` — duct weight/insulation/labor, elbow/transition counts,
+  hangers — as line items against the shipped default assemblies (plan
+  §5.5's own graded rate tables) or a one-off assembly supplied inline;
+  read-only, no undo step. `export_report`'s `opentakeoff.report.v1` gains
+  additive `linear_runs` (per-size LF) and `linear_settings` blocks. The
+  canvas gained a matching Linear trace tool, per-segment sizing, and an
+  estimator-profile assembly library seeded with the same defaults —
+  canvas and MCP resolve the identical shared function, so the numbers
+  can never disagree between them.
+
 - Harden shared control-schematic discovery and SOO binding against horizontal
   detail titles, rotated title-block copies, adjacent authored sequence sheets,
   project-word collisions and generic non-control schematics. Add nine

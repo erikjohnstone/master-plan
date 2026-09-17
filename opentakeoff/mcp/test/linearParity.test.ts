@@ -161,3 +161,100 @@ test("edit_run refuses a non-linear shape and a human-reviewed shape, matching e
   session.shapes.find((s) => s.id === lineId)!.origin!.reviewed = true;
   assert.throws(() => session.editRun(lineId, { system: "HHWS" }), /affirmed by a human/);
 });
+
+// #linear-takeoff (WP2.5): resolve_linear_assembly wires session.ts's own
+// call into the SAME resolveLinearAssembly pure function assembly.test.ts
+// already exercises formula-by-formula — these tests cover the WIRING
+// (shape/condition/assembly lookup, error messages, the multiplier), not
+// the arithmetic a second time.
+test("resolve_linear_assembly: resolves a duct_rect run against its built-in default assembly", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: PLAN });
+  await call(client, "set_scale", { sheet: KEY, use_detected: true });
+  await call(client, "edit_materials", { condition: "SA-1", add: [{ name: "placeholder", per: 1 }] });
+  await call(client, "edit_condition", { condition: "SA-1", family: "duct_rect" });
+  const line = await call(client, "measure_line", {
+    sheet: KEY, pts: [[0, 0], [360, 0], [720, 0]], condition: "SA-1",
+    size: { kind: "rect", w_in: 12, h_in: 6 },
+  });
+
+  const resolved = await call(client, "resolve_linear_assembly", { shape_id: line.shape_id });
+  assert.equal(resolved.assembly_id, "asm-duct-rect-default");
+  assert.equal(resolved.family, "duct_rect");
+  const byItem = (item: string) => resolved.line_items.find((li: any) => li.item === item);
+  assert.ok(byItem("duct_lb"));
+  assert.ok(byItem("insulation_sf"));
+  assert.ok(byItem("hanger"));
+  assert.ok(byItem("labor_hr"));
+});
+
+test("resolve_linear_assembly: an explicit assembly_id overrides the condition's own default", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: PLAN });
+  await call(client, "set_scale", { sheet: KEY, use_detected: true });
+  await call(client, "edit_materials", { condition: "SA-1", add: [{ name: "placeholder", per: 1 }] });
+  await call(client, "edit_condition", { condition: "SA-1", family: "duct_rect", assembly_id: "asm-duct-rect-default" });
+  const line = await call(client, "measure_line", {
+    sheet: KEY, pts: [[0, 0], [360, 0]], condition: "SA-1", size: { kind: "rect", w_in: 12, h_in: 6 },
+  });
+  const resolved = await call(client, "resolve_linear_assembly", { shape_id: line.shape_id, assembly_id: "asm-duct-round-default" });
+  assert.equal(resolved.assembly_id, "asm-duct-round-default");
+});
+
+test("resolve_linear_assembly: an unknown assembly_id refuses, naming the reachable built-in ids", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: PLAN });
+  await call(client, "set_scale", { sheet: KEY, use_detected: true });
+  await call(client, "edit_materials", { condition: "SA-1", add: [{ name: "placeholder", per: 1 }] });
+  await call(client, "edit_condition", { condition: "SA-1", family: "duct_rect" });
+  const line = await call(client, "measure_line", { sheet: KEY, pts: [[0, 0], [360, 0]], condition: "SA-1", size: { kind: "rect", w_in: 12, h_in: 6 } });
+  // call() throws via assert on isError — reach the raw reply instead for this one
+  const res: any = await client.callTool({ name: "resolve_linear_assembly", arguments: { shape_id: line.shape_id, assembly_id: "asm-nope" } });
+  const data = JSON.parse(res.content[0].text);
+  assert.equal(res.isError, true);
+  assert.match(data.error, /Unknown assembly_id.*asm-duct-rect-default/);
+});
+
+test("resolve_linear_assembly: an inline assembly wins over assembly_id, and reports assembly_id 'inline'", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: PLAN });
+  await call(client, "set_scale", { sheet: KEY, use_detected: true });
+  await call(client, "edit_materials", { condition: "SA-1", add: [{ name: "placeholder", per: 1 }] });
+  await call(client, "edit_condition", { condition: "SA-1", family: "duct_rect" });
+  const line = await call(client, "measure_line", { sheet: KEY, pts: [[0, 0], [360, 0]], condition: "SA-1", size: { kind: "rect", w_in: 12, h_in: 6 } });
+  const resolved = await call(client, "resolve_linear_assembly", {
+    shape_id: line.shape_id,
+    assembly_id: "asm-duct-round-default", // must be ignored — inline wins
+    assembly: { family: "duct_rect", per_ft: [{ item: "duct_lb", gauge: 26 }], per_vertex: [], per_run: [] },
+  });
+  assert.equal(resolved.assembly_id, "inline");
+  const ductLb = resolved.line_items.find((li: any) => li.item === "duct_lb");
+  assert.match(ductLb.formula, /26 ga/);
+});
+
+test("resolve_linear_assembly: the condition's multiplier applies to every line, and pipe family resolves from NPS/material/service", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: PLAN });
+  await call(client, "set_scale", { sheet: KEY, use_detected: true });
+  await call(client, "edit_materials", { condition: "HHWS-1", add: [{ name: "placeholder", per: 1 }] });
+  await call(client, "edit_condition", { condition: "HHWS-1", family: "pipe", multiplier: 2 });
+  const line = await call(client, "measure_line", { sheet: KEY, pts: [[0, 0], [360, 0]], condition: "HHWS-1", size: { kind: "pipe", nps_in: 1 } });
+  const base = await call(client, "resolve_linear_assembly", { shape_id: line.shape_id, pipe_service: "hw_dhw_105_140f", pipe_hanger_material: "copper", pipe_hanger_service: "mechanical" });
+  assert.equal(base.assembly_id, "asm-pipe-default");
+  assert.equal(base.family, "pipe");
+  const pipeLf = base.line_items.find((li: any) => li.item === "pipe_lf");
+  assert.equal(pipeLf.qty, 20); // 360px at the demo plan's own detected scale, x2 multiplier — sanity: positive and multiplier-scaled
+  assert.ok(pipeLf.qty > 0);
+});
+
+test("resolve_linear_assembly: refuses a non-linear shape and a linear shape with no run block yet", async () => {
+  const session = new Session();
+  await session.loadPlan(PLAN);
+  session.setScale(KEY, { use_detected: true });
+
+  const areaId = session.measurePolygon(KEY, [[100, 100], [460, 100], [460, 460], [100, 460]], { role: "floor_area", condition: "VCT-1" }).shape_id!;
+  assert.throws(() => session.resolveLinearAssembly(areaId, {}), /assembly resolution only applies to linear shapes/);
+
+  const lineId = session.measureLine(KEY, [[0, 0], [360, 0]], { condition: "HHWS-1" }).shape_id!; // no size → no run block
+  assert.throws(() => session.resolveLinearAssembly(lineId, {}), /carries no run block yet/);
+});

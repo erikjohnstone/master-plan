@@ -255,7 +255,7 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 57 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 58 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
 Fifty-seven descriptions is real token weight for a session that may never touch half of them, so

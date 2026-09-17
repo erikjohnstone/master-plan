@@ -1,5 +1,96 @@
 ## Active work
 
+2026-09-17 linear takeoff WP2.5a checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+MCP `resolve_linear_assembly` (measure stage). WP2.5's other half — the
+canvas "Fittings & supports" report tab / buy-list rows — is tracked
+separately; this checkpoint is the MCP tool alone, a complete and
+independently-tested unit.
+
+`mcp/src/session.ts`'s `resolveLinearAssembly(shape_id, opts)` is a
+read-only measure-stage method (no shape mutation, no undo step — like
+`takeoff_summary`) that resolves ONE committed linear shape's own
+`computed.run` through the SAME `resolveLinearAssembly` pure function
+(`web/src/lib/linear/assembly.ts`, WP2.2) the canvas will call — imported
+directly, not ported or reimplemented, so the two surfaces cannot drift on
+arithmetic. Assembly lookup is real and permanently narrow: this server has
+no reach into an estimator's own browser-profile assembly library
+(`profile.js`'s IndexedDB-backed section — Node has no browser storage to
+read), so it resolves against `SEED_ASSEMBLIES` (the shipped §5.5 defaults,
+WP2.4's `assemblyLibrary.ts`) by `assembly_id`, the condition's own
+`assembly_id` when the call omits one, or a new `DEFAULT_ASSEMBLY_ID_BY_FAMILY`
+map keyed to the three families a seed actually ships a default for
+(duct_rect/duct_round/pipe — oval/flex/conduit/cable/tubing have none yet
+and refuse, asking for an explicit `assembly_id` or an inline assembly
+instead); a genuinely custom assembly goes in INLINE via the `assembly`
+parameter and reports back `assembly_id: "inline"`.
+
+Registered in the `measure` tool stage (`staging.ts`), right after
+`measure_line`. Threaded through the full AGENTS.md doc-sync checklist:
+README.md/USER_GUIDE.md tool-count markers (57→58, auto via
+`check-tool-count.mjs --write`) and Measure-group table rows; mcp/README.md
+("57 tools"→"58 tools" + a new table row, manual); docs/MCP.md ("Fifty-seven
+tools"→"Fifty-eight", a new bullet); docs/AGENT_GUIDE.md ("57 tool
+schemas"→"58"); one consolidated CHANGELOG.md entry covering the whole
+linear-takeoff MCP-surface arc since WP1.5 (no prior checkpoint this session
+had added one — a real gap, closed here); version 0.9.78→0.9.79 on all
+three required surfaces (mcp/package.json, mcp/server.json,
+web/public/.well-known/mcp.json) so a future PR's `mcp-version-guard` CI job
+doesn't fail on unbumped `mcp/` changes.
+
+Two gaps this checkpoint's own verification pass caught and fixed, neither
+in scope-creep territory — both are the harness catching its own tooling,
+not new functionality:
+
+- `mcp/test/linearParity.test.ts` (created WP1.5, carrying 5 tests, now 11
+  with this checkpoint's 6 new `resolve_linear_assembly` cases) was NEVER
+  wired into `mcp/package.json`'s `test` script — a silent gap since WP1.5
+  that meant this whole file has never run in CI. Fixed by inserting it
+  into the alphabetized file list (between `labels` and `overlap`).
+- `mcp/test/tools.test.ts`'s own `NO_COORDS` exemption set (the established
+  pattern for tools that don't take image-px coordinates, e.g. `edit_run`)
+  didn't list `resolve_linear_assembly` yet, so the coordinate-contract
+  assertion failed against its long description. Fixed by adding it with
+  the same one-line justification style as its neighbors.
+
+The 6 new `linearParity.test.ts` cases cover the MCP-side wiring surfaces
+that could uniquely diverge from the canvas — not the shared function's own
+arithmetic, which WP2.2's `assembly.test.ts` already proves against the
+plan §8.4 golden cell-by-cell: default assembly resolution from a
+condition's family, an explicit `assembly_id` override, an unknown
+`assembly_id` refusing by naming the reachable built-in ids, an inline
+assembly winning over `assembly_id` and reporting `assembly_id: "inline"`,
+the condition's own `multiplier` applying to every returned line, the pipe
+family resolving from NPS/material/service, and refusal on a non-linear
+shape or a linear shape with no run block yet.
+
+Verified: `npx tsc --noEmit` clean; `linearParity.test.ts` 11/11;
+`tools.test.ts` 102/102 (after the `NO_COORDS` fix); `check:tool-count`
+clean; `npm run test:packaging` 4/4 + a clean build; `node
+scripts/smoke-dist.mjs` exit 0; `web`'s `npm run bench` and `npm run
+bench:linear` both green (neither touched — WP2.5a's diff is `mcp/` +
+root docs only, zero `web/src` files). Ran the FULL `mcp` `test` script
+(the 37-file list, not just `linearParity.test.ts`) for the first time
+this session as a genuine regression signal: 431 cases, 12 failures. One
+(`tools/list: exactly TOOL_NAMES, each described with the coordinate
+contract`) was the `NO_COORDS` gap above, fixed. The other 8 distinct
+failures (`sheet graph (#87)`'s citation-chain assertion, `WP1 keyed
+compile acceptance`, three demo-regression production-engine cases
+(D04/D05/D09), `safewrite.test.ts`'s "an unreadable file fails CLOSED",
+and the T-HVAC-01/T-VALVE-01 frozen-truth-quantity compilers) were
+confirmed pre-existing and unrelated by `git stash`-ing this entire
+checkpoint's diff and re-running those exact files against the prior
+committed state: identical failures, identical messages, with the diff
+entirely absent. Also ran `web`'s full suite (`test/*.test.ts
+test/linear/*.test.ts` minus the known `compileProgressWalkthrough.test.ts`
+flake) as an independent signal even though this diff touches no `web/src`
+file: 3304 attempted, 70 fail, 13 cancelled, 13 skipped — the same standing
+baseline count and cluster (`syncStore.test.ts`, `tableRecallGaps.test.ts`
+among them) every prior checkpoint this session has confirmed unrelated.
+mcp's own `.venv-bas` pytest-env failures (`basEngineeringContract`,
+`basEngineeringOwnershipFamilies`) are separately pre-existing and out of
+scope (bas_engine off-limits per D4) — confirmed unchanged, not re-run in
+full here since `test:bas`'s own pretest gate already isolates them.
+
 2026-09-17 linear takeoff WP2.4 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 assembly library + project settings persistence. Two new pure modules:
 

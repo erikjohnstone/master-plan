@@ -18,8 +18,21 @@ import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src
 import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
-import type { RunSize, AuthoredRun, RunVertexKind } from "../../web/src/lib/linear/types.ts";
+import type { RunSize, AuthoredRun, RunVertexKind, LinearCondition, LineItem, AssemblyRecord, AssemblyRule, LinearAssemblySettings } from "../../web/src/lib/linear/types.ts";
 import { resolveRunSegments, type ComputedRun } from "../../web/src/lib/linear/run.ts";
+import { resolveLinearAssembly as resolveLinearAssemblyPure } from "../../web/src/lib/linear/assembly.ts";
+import { SEED_ASSEMBLIES } from "../../web/src/lib/linear/assemblyLibrary.ts";
+
+// #linear-takeoff (WP2.5): the built-in assembly a condition's family
+// resolves to when neither the call nor the condition names one explicitly
+// — one entry per family SEED_ASSEMBLIES actually ships a default for
+// (oval/flex/conduit/cable/tubing have none yet; resolveLinearAssembly
+// errors asking for an explicit assembly_id or inline assembly instead).
+const DEFAULT_ASSEMBLY_ID_BY_FAMILY: Record<string, string> = {
+  duct_rect: "asm-duct-rect-default",
+  duct_round: "asm-duct-round-default",
+  pipe: "asm-pipe-default",
+};
 import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
 import { activeBasCapture, mergeBasWorkflows, type BasWorkflow } from "../../web/src/lib/basWorkflow.ts";
 import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src/lib/basNarratives.ts";
@@ -2182,6 +2195,80 @@ export class Session {
     this.record({ op: "edit", tool: "edit_run", before });
 
     return { shape_id, ...(finalRun ? { run: finalRun } : {}), ...(resolved ? { computed_run: resolved } : {}) };
+  }
+
+  /** #linear-takeoff (WP2.5): resolve_linear_assembly's measure-stage body —
+   * the SAME resolveLinearAssembly pure function (web/src/lib/linear/
+   * assembly.ts, WP2.2) the canvas will call, given one committed shape's
+   * own computed.run. Read-only: no shape mutation, no undo step, exactly
+   * like takeoff_summary.
+   *
+   * Assembly lookup is deliberately narrow: this server has no access to
+   * an estimator's own browser-profile assembly library (web/src/lib/
+   * profile.js's IndexedDB-backed section) — that is a real, permanent
+   * boundary (Node has no browser storage to read), not a gap to close.
+   * It resolves against SEED_ASSEMBLIES (the shipped §5.5 defaults,
+   * assemblyLibrary.ts) by id, the condition's own `assembly_id` when the
+   * call omits one, or the family's own built-in default; a genuinely
+   * custom assembly is supplied INLINE on the call instead of by id. */
+  resolveLinearAssembly(shape_id: string, opts: {
+    assembly_id?: string;
+    assembly?: { family: LinearCondition["family"]; name?: string; per_ft?: AssemblyRule[]; per_vertex?: AssemblyRule[]; per_run?: AssemblyRule[]; allowances?: Record<string, unknown>; deduct_fittings?: boolean };
+    pressure_class_in_wg?: number;
+    climate_zone?: LinearAssemblySettings["climate_zone"];
+    adopted_pipe_hanger_code?: LinearAssemblySettings["adopted_pipe_hanger_code"];
+    pipe_service?: string;
+    pipe_hanger_material?: string;
+    pipe_hanger_service?: "mechanical" | "plumbing";
+  }): { shape_id: string; assembly_id: string; family: string | null; line_items: LineItem[] } {
+    const shape = this.shapes.find((x) => x.id === shape_id);
+    if (!shape) throw new UserError(`No shape with id ${JSON.stringify(shape_id)}.`);
+    if (shape.measure_role !== "linear") {
+      throw new UserError(`Shape ${JSON.stringify(shape_id)} is a ${shape.measure_role} shape — assembly resolution only applies to linear shapes (measure_line).`);
+    }
+    const run = shape.computed?.run;
+    if (!run) {
+      throw new UserError(`Shape ${JSON.stringify(shape_id)} carries no run block yet — give it sizes with measure_line's own system/size/vertices or edit_run first.`);
+    }
+
+    const cond = this.conditions.find((c) => c.id === shape.condition_id);
+    const condition: LinearCondition = cond
+      ? { family: cond.family as LinearCondition["family"], system: cond.system, size: cond.size, assembly_id: cond.assembly_id, multiplier: cond.multiplier, waste_pct: cond.waste_pct }
+      : {};
+
+    let assembly: AssemblyRecord;
+    let assemblyIdUsed: string;
+    if (opts.assembly) {
+      assembly = {
+        id: "inline", name: opts.assembly.name || "inline assembly", family: opts.assembly.family,
+        per_ft: opts.assembly.per_ft ?? [], per_vertex: opts.assembly.per_vertex ?? [], per_run: opts.assembly.per_run ?? [],
+        ...(opts.assembly.allowances ? { allowances: opts.assembly.allowances as AssemblyRecord["allowances"] } : {}),
+        ...(opts.assembly.deduct_fittings != null ? { deduct_fittings: opts.assembly.deduct_fittings } : {}),
+      };
+      assemblyIdUsed = "inline";
+    } else {
+      const wantId = opts.assembly_id || condition.assembly_id || DEFAULT_ASSEMBLY_ID_BY_FAMILY[condition.family || ""];
+      if (!wantId) {
+        throw new UserError(`No assembly_id given and condition ${JSON.stringify(cond?.finish_tag ?? shape.condition_id)} has no default for family ${JSON.stringify(condition.family ?? null)} — pass assembly_id or an inline assembly.`);
+      }
+      const found = SEED_ASSEMBLIES.find((a) => a.id === wantId);
+      if (!found) {
+        throw new UserError(`Unknown assembly_id ${JSON.stringify(wantId)} — this server only resolves against its built-in defaults (${SEED_ASSEMBLIES.map((a) => a.id).join(", ")}); a custom library entry from the estimator's own browser profile isn't reachable from here yet — pass it inline via the assembly parameter instead.`);
+      }
+      assembly = found;
+      assemblyIdUsed = found.id;
+    }
+
+    const settings: LinearAssemblySettings = {
+      ...(opts.pressure_class_in_wg != null ? { pressure_class_in_wg: opts.pressure_class_in_wg } : {}),
+      ...(opts.climate_zone ? { climate_zone: opts.climate_zone } : {}),
+      ...(opts.adopted_pipe_hanger_code ? { adopted_pipe_hanger_code: opts.adopted_pipe_hanger_code } : {}),
+    };
+    const line_items = resolveLinearAssemblyPure(run, condition, assembly, settings, {
+      pipeService: opts.pipe_service, pipeHangerMaterial: opts.pipe_hanger_material, pipeHangerService: opts.pipe_hanger_service,
+    });
+
+    return { shape_id, assembly_id: assemblyIdUsed, family: condition.family ?? null, line_items };
   }
 
   /** Surface Area — the canvas's Surface tool (commitSurface): an OPEN run

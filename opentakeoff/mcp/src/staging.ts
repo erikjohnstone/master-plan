@@ -18,7 +18,7 @@ export const TOOL_STAGES: Record<string, readonly string[]> = {
     "find_schedule", "query_table", "analyze_control_schematics", "read_sheet_text", "find_text", "sheet_context", "view_sheet",
   ],
   measure: [
-    "one_click", "detect_rooms", "measure_polygon", "cut_out", "measure_line",
+    "one_click", "detect_rooms", "measure_polygon", "cut_out", "measure_line", "resolve_linear_assembly",
     "measure_surface", "place_count", "count_marks", "symbol_sweep", "sweep_schedule_row",
     "project_takeoff", "compile_corpus_takeoff", "reconcile_schedule_plan", "derive_base", "derive_transitions", "trace_connectivity",
     "match_reference_symbol", "find_legend_symbols", "sweep_inline_motif",

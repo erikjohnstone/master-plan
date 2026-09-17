@@ -18,7 +18,7 @@ import {
   measurePolygonOutput, measureLineOutput, measureSurfaceOutput, placeCountOutput, symbolSweepOutput, takeoffSummaryOutput,
   exportTakeoffOutput, deleteShapeOutput, readSheetTextOutput,
   editShapeOutput, undoLastOutput, sheetContextOutput,
-  findTextOutput, editMaterialsOutput, editConditionOutput, editRunOutput, exportReportOutput,
+  findTextOutput, editMaterialsOutput, editConditionOutput, editRunOutput, resolveLinearAssemblyOutput, exportReportOutput,
   duplicateConditionOutput, splitConditionOutput,
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
@@ -279,6 +279,34 @@ No approval, installed count or complete requirement discovery. Changes stay in 
     },
     outputSchema: editRunOutput,
   }, run("edit_run", (a) => session.editRun(a.shape_id, { system: a.system, status: a.status, segment_sizes: a.segment_sizes, vertices: a.vertices, params: a.params })));
+
+  server.registerTool("resolve_linear_assembly", {
+    description: `#linear-takeoff: price one committed linear shape's run — per plan §8's fixed pipeline (per-segment weight/insulation/labor, per-vertex elbow/transition, per-run hangers), returning line items {item, qty, unit, basis, size_key?, source_segments?, source_vertices?, formula, provenance} with the same "assembly audit trail" a canvas-side call to the identical resolveLinearAssembly function produces — this reads a shape's own computed_run (from measure_line/edit_run), it commits nothing and takes no undo step, exactly like takeoff_summary. Resolves against the SHIPPED default assemblies (asm-duct-rect-default, asm-duct-round-default, asm-pipe-default — plan §5.5's own defaults, graded rate tables from mcp's shared linear/rates.ts) by assembly_id, the condition's own assembly_id when the call omits one, or the shape's family's built-in default; there is no reach from this server into an estimator's own browser-profile assembly library (Node has no browser storage to read) — a genuinely custom assembly goes in INLINE via the assembly parameter instead. Duct families (duct_rect/duct_round) resolve weight/insulation/hangers/joints/elbow+transition counts; the pipe family resolves LF/couplings/insulation/labor/hangers from NPS, material and service (pass pipe_service/pipe_hanger_material/pipe_hanger_service — these have no per-shape default the way duct's gauge lookup does). Waste and purchase-unit rounding are deliberately NOT applied here (plan §8's steps 6-7 are report-only); the condition's own multiplier IS applied, last, to every returned qty.`,
+    inputSchema: {
+      shape_id: z.string().describe("Id of a linear shape with a computed run block — from measure_line's or edit_run's reply, or list_shapes"),
+      assembly_id: z.string().optional().describe("One of the shipped defaults: asm-duct-rect-default, asm-duct-round-default, asm-pipe-default. Falls back to the shape's condition's own assembly_id, then the family's built-in default, when omitted"),
+      assembly: z.object({
+        family: z.enum(["duct_rect", "duct_round", "duct_oval", "duct_flex", "pipe", "conduit", "cable", "tubing"]),
+        name: z.string().optional(),
+        per_ft: z.array(z.object({ item: z.string() }).passthrough()).optional(),
+        per_vertex: z.array(z.object({ item: z.string() }).passthrough()).optional(),
+        per_run: z.array(z.object({ item: z.string() }).passthrough()).optional(),
+        allowances: z.record(z.string(), z.unknown()).optional(),
+        deduct_fittings: z.boolean().optional(),
+      }).optional().describe("A one-off assembly definition to resolve against instead of a shipped default or the condition's own — wins over assembly_id when both are given"),
+      pressure_class_in_wg: z.number().positive().optional().describe("Duct pressure class in inches w.g. — feeds the gauge lookup unless the assembly pins a fixed gauge. Default 2"),
+      climate_zone: z.enum(["cz0_4", "cz5_8"]).optional(),
+      adopted_pipe_hanger_code: z.enum(["mss_sp58", "imc305_4", "ipc308_5", "upc313_3"]).optional().describe("Selects which hanger-spacing table a pipe run resolves against (D3) — default mss_sp58 for a mechanical service, ipc308_5 for plumbing"),
+      pipe_service: z.string().optional().describe("Pipe insulation service band key, e.g. 'hw_dhw_105_140f', 'chilled_40_60f' — see rates.ts's PipeInsulationService. Pipe family only"),
+      pipe_hanger_material: z.string().optional().describe("Pipe hanger material/code key (e.g. 'steel', 'copper', or a code table's own material enum) — pipe family only"),
+      pipe_hanger_service: z.enum(["mechanical", "plumbing"]).optional().describe("Which D3 hanger-table group to use — default mechanical"),
+    },
+    outputSchema: resolveLinearAssemblyOutput,
+  }, run("resolve_linear_assembly", (a) => session.resolveLinearAssembly(a.shape_id, {
+    assembly_id: a.assembly_id, assembly: a.assembly,
+    pressure_class_in_wg: a.pressure_class_in_wg, climate_zone: a.climate_zone, adopted_pipe_hanger_code: a.adopted_pipe_hanger_code,
+    pipe_service: a.pipe_service, pipe_hanger_material: a.pipe_hanger_material, pipe_hanger_service: a.pipe_hanger_service,
+  })));
 
   server.registerTool("measure_surface", {
     description: `Surface Area — wall SF (#146): trace an OPEN run along the wall in plan view (min 2 points, image px) and the quantity is traced LF × height. This is how wall tile, wainscot, and wall systems are taken off — the quantity family one_click and measure_polygon cannot produce. Height lives on the CONDITION (the canvas's H knob): pass height_ft to set it on this call (journals as its own undo step, like typing H before tracing), or set it once with edit_condition; with neither, this refuses and mints nothing. The shape snapshots the height it was quantified at. Requires the sheet's scale. ${COORDS}`,

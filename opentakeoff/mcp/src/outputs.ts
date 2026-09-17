@@ -939,6 +939,31 @@ export const editRunOutput = {
   computed_run: computedRunSchema.optional().describe("Recomputed from the result — absent alongside run when the shape has none"),
 };
 
+/** One resolveLinearAssembly line item (#linear-takeoff WP2.5, web/src/lib/
+ * linear/types.ts's LineItem, verbatim). */
+const lineItemSchema = z.object({
+  item: z.string().describe("The line's own name — 'duct_lb', 'insulation_sf', 'elbow', 'transition', 'joint', 'hanger', 'pipe_lf', 'coupling', 'insulation_lf', 'labor_hr'"),
+  qty: z.number(),
+  unit: z.string(),
+  basis: z.enum(["per_ft", "per_vertex", "per_run", "allowance"]),
+  size_key: z.string().optional().describe("runSizeKey of the size this line was resolved for, when it is size-specific"),
+  source_segments: z.array(z.number().int()).optional().describe("Segment indices this line was resolved from"),
+  source_vertices: z.array(z.number().int()).optional().describe("Vertex indices this line was resolved from"),
+  formula: z.string().describe("The exact arithmetic and inputs used — the assembly audit trail (plan §4.2)"),
+  provenance: z.string().describe("Which graded rate table or plan section this line's numbers trace to"),
+  disclosed: z.boolean().optional(),
+});
+
+/** resolve_linear_assembly (#linear-takeoff WP2.5) — plan §8's resolver,
+ * called against one committed linear shape's own computed.run. Read-only:
+ * no shape mutation, no undo step, like takeoff_summary. */
+export const resolveLinearAssemblyOutput = {
+  shape_id: z.string(),
+  assembly_id: z.string().describe("The assembly actually resolved against — 'inline' when the call supplied one directly rather than by id"),
+  family: z.string().nullable().describe("The condition's family — null when the shape carries no condition"),
+  line_items: z.array(lineItemSchema),
+};
+
 /** conditionTotals row (web/src/lib/totals.js) minus presentation fields —
  * *_net = waste-adjusted order quantities. */
 const summaryRow = z.object({
