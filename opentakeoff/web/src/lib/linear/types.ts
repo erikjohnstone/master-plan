@@ -136,3 +136,85 @@ export interface AuthoredRun {
   vertex_overrides?: Record<string, { kind: RunVertexKind; dir?: "up" | "down" | "both" }>;
   params?: { rise_ft?: number; offset_allowance_pct?: number; flex_per_diffuser_ft?: number };
 }
+
+// ── WP2.2 (assembly.ts) — the pure-function inputs resolveLinearAssembly
+// takes beside a ComputedRun. These are intentionally loosely typed on
+// their rule arrays (plan §7.3's per_ft/per_vertex/per_run entries): the
+// assembly LIBRARY (WP2.4, seeded into the estimator profile) is not built
+// yet, so locking the rule shape down now would mean guessing at fields no
+// consumer exists to validate against. The RESOLVED output (LineItem) is
+// the real contract other code depends on and is fully typed below.
+
+/** The linear-specific fields a Condition record carries (plan §7.2, WP1.2).
+ *  Conditions themselves stay untyped JS objects elsewhere (canvasUtil.js
+ *  predates this directory); this is only the slice resolveLinearAssembly
+ *  reads, so the function has a real parameter type without forcing a
+ *  wider Condition interface into existence before anything needs one. */
+export interface LinearCondition {
+  family?: "duct_rect" | "duct_round" | "duct_oval" | "duct_flex" | "pipe" | "conduit" | "cable" | "tubing";
+  system?: string;
+  size?: RunSize;
+  assembly_id?: string;
+  multiplier?: number;
+  waste_pct?: number;
+}
+
+/** One per_ft/per_vertex/per_run rule inside an AssemblyRecord. `item` and
+ *  any of `kind`/`rate`/`factor`/etc. are read ad-hoc by assembly.ts's own
+ *  resolvers — see each resolver's own doc comment for which keys it
+ *  reads on which item name, the same "the code is the schema until a
+ *  second consumer exists" posture as the rest of this loose section. */
+export interface AssemblyRule {
+  item: string;
+  kind?: string;
+  [key: string]: unknown;
+}
+
+export interface AssemblyRecord {
+  id: string;
+  family: LinearCondition["family"];
+  name: string;
+  provenance?: string;
+  per_ft: AssemblyRule[];
+  per_vertex: AssemblyRule[];
+  per_run: AssemblyRule[];
+  allowances?: { fitting_weight_factor?: number; scrap_pct?: number; offset_pct?: number; [key: string]: unknown };
+  /** D2's `deduct_fittings` switch — off by default (QuoteSoft's "Auto
+   *  Elbow" behaviour is opt-in here, never silent): when on, a
+   *  size_change transition's own length (4 x the size delta) is
+   *  deducted from the adjoining straight LF rather than left additive. */
+  deduct_fittings?: boolean;
+}
+
+/** Project-level settings resolveLinearAssembly reads (plan §7.4). WP2.2
+ *  takes these as a plain parameter object — persisting them on the
+ *  project (sanitized, exported in report.v1) is WP2.4's job; nothing
+ *  here assumes where the caller got them from. */
+export interface LinearAssemblySettings {
+  pressure_class_in_wg?: number;
+  climate_zone?: "cz0_4" | "cz5_8";
+  adopted_pipe_hanger_code?: "mss_sp58" | "imc305_4" | "ipc308_5" | "upc313_3";
+  level_height_ft?: number;
+}
+
+/** One resolved line item (plan §8's opening contract). `qty` and
+ *  `unit_waste_pct`/`purchase_unit` are the LIVE number and its REPORT-ONLY
+ *  order-quantity dressing (§8's steps 6-7) — a consumer that only wants
+ *  the live number reads `qty`; the Report's order column reads the
+ *  waste/rounding fields beside it. `source_vertices`/`source_segments`
+ *  are indices into the ComputedRun this item was resolved from — the
+ *  "assembly audit trail" estimators ask for (plan §4.2). */
+export interface LineItem {
+  item: string;
+  qty: number;
+  unit: string;
+  basis: "per_ft" | "per_vertex" | "per_run" | "allowance";
+  size_key?: string;
+  source_segments?: number[];
+  source_vertices?: number[];
+  formula: string;
+  provenance: string;
+  /** True for a line the assembly derives ONLY when data is missing (e.g.
+   *  "riser_length:not_drawn") — never silently added, always visible. */
+  disclosed?: boolean;
+}

@@ -1,5 +1,90 @@
 ## Active work
 
+2026-09-17 linear takeoff WP2.2 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+resolveLinearAssembly, CORE scope. New `web/src/lib/linear/assembly.ts` +
+three new shared types in `types.ts` (`LinearCondition`, `AssemblyRecord`,
+`LineItem` — the last is the real, fully-typed output contract; the
+input assembly's own `per_ft`/`per_vertex`/`per_run` rule arrays stay
+loosely typed on purpose, since the assembly LIBRARY doesn't exist until
+WP2.4 seeds one and locking a rule shape down before any second consumer
+exists would just be guessing). Implements plan §8's fixed seven-step
+pipeline order for duct (rect/round/oval) and pipe: §8.1 per-foot duct
+weight + insulation SF + labor-from-weight, pipe LF + couplings +
+insulation + per-LF labor; §8.2 per-vertex elbow (from a real `vertices[]`
+entry) and size-change transition/reducer (see below) with the
+`deduct_fittings` switch (off by default, D2); §8.3 per-run hangers
+(duct: IMC 603.10 floor; pipe: MSS SP-58/IMC 305.4/IPC 308.5/UPC 313.3 by
+adopted code, all via WP2.1's rates.ts). The condition's `multiplier`
+applies to every live qty as the literal last step; waste/rounding
+(steps 6-7) are deliberately not touched here at all — asserted directly
+as a §8.5 invariant test (no line's formula string ever mentions waste/
+purchase/carton/roll).
+
+One real design decision, documented in assembly.ts's own header and
+inline at the exact function it affects rather than only here:
+`sizeChangeEvents()` derives a transition/reducer from comparing
+CONSECUTIVE SEGMENT sizes, not from a `"size_change"` entry in
+`vertices[]` — because WP1's actual vertex resolver (`run.ts`) never
+emits that kind at all; it only emits `"elbow"` from a real geometric
+turn or whatever an explicit `vertex_overrides` entry states (its own
+header comment says so). Plan §7.1's illustrative jsonc shows a
+`"size_change"` vertex nothing currently populates — a dead-straight run
+with two differently-sized segments (exactly §8.4's own worked example)
+has NOTHING at that boundary in `vertices[]` at all. Comparing segments
+directly is the only signal that actually exists in WP1/WP2's shipped
+data model for this, so that's what ships, with the gap between the
+plan's illustrative model and WP1's real one written down rather than
+quietly papered over.
+
+Scope this commit does NOT cover, each because it needs a WP1 vertex/
+param representation that does not exist yet (listed in assembly.ts's
+own header so the gap travels with the code, not just this entry):
+diffuser taps + flex runouts (§8.3 itself says "diffusers... or a user
+count" — but `AuthoredRun.params` never gained a `diffuser_count` field
+in WP1.1); automatic tee/riser/equipment resolution (WP1's geometry pass
+only ever infers `"elbow"`; an explicit `vertex_override` supplying
+`"tee"`/`"riser"`/`"equipment"` resolves correctly today, there is just
+no automatic path to one without the trace engine, WP3+); sleeves/
+firestop (needs `wall_crossings`, which `computeShapeMetrics` doesn't
+populate for a linear run yet); tests/flush and the offset/undrawn-
+fitting allowances (need condition-level flags — `test_per`, a
+schematic-sheet marker — that don't exist yet either). A near-elbow
+extra hanger (SMACNA practice, §8.3) and a per-piece fitting-weight
+table (no such table exists in WP2.1's rates) are the other two
+worked-example rows this leaves out.
+
+Golden test: `web/test/linear/assembly.test.ts` reproduces plan §8.4's
+worked example (Bessemer M101's traced 12x6→16x8 supply) cell by cell
+for everything the CORE scope above can compute — duct weight 56.9 lb
+(12x6, exact) and 120.9 lb (16x8; the plan's own hand-rounding gives
+121.0 — a tenth of a pound from THEIR intermediate rounding, verified by
+hand, not a formula disagreement), wrap SF 80.1 + 159.5 = 239.6 SF
+(exact), elbow and transition counts (1 ea each, exact), hanger
+sub-counts (3 and 4, exact — before the documented near-elbow bump),
+base labor 4.09 hr (exact — before the documented fitting-weight
+increment). Also covers: `deduct_fittings` on vs. off shifts weight off
+the upstream segment without changing the transition's own disclosed
+line; every §8.5 invariant this scope can exercise (no waste/rounding
+inside the function, pure/deterministic across repeat calls, the
+multiplier applied last to every line uniformly); a pipe-family case
+exercising WP2.1's pipe rate tables end to end (LF, couplings,
+insulation, per-LF labor fallback, MSS SP-58 hanger spacing by NPS and
+material). 6 new tests, 28/28 across the whole `test/linear/` directory.
+
+Verified: web typecheck/lint clean; full `npm test` minus the
+already-known `compileProgressWalkthrough.test.ts` subprocess flake
+(same exclusion as the WP2.1 checkpoint, same reason) — 3286 tests, 70
+fail, same count and same pre-existing cluster as WP2.1's own baseline
+moments earlier. `npm run bench` and `npm run bench:linear` both green,
+both `results.json` files byte-identical.
+
+Pending (tracked here, not silently dropped): the diffuser-tap/flex-
+runout/near-elbow-hanger/fitting-weight-table gaps above are real WP2
+follow-up work, not WP2.2's own remaining steps (2.3-2.5) — those are
+materials-row basis extensions, the profile's assembly library, and the
+report/MCP surface for resolve_linear_assembly, in that order per the
+queue.
+
 2026-09-17 linear takeoff WP2.1 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 graded rate tables. New `web/src/lib/linear/rates.ts` + nine
 `web/src/lib/linear/tables/*.json` files (duct gauge, duct weight, duct
