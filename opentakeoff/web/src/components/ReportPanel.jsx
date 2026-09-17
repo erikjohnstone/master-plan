@@ -5,7 +5,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "../brand/icons.jsx";
 import ToolMenu from "./ToolMenu.jsx";
-import { conditionTotals, grandTotals, sheetTotals, sheetGroupedRows, labelGroupedRows, authorGroupedRows, sheetLabelGroupedRows, round2, totalsToCsv, downloadText, materialsSummary, reportJson, hasMultipliers, BY_SHEET_BASE_NOTE, linearRunRows } from "../lib/totals.js";
+import { conditionTotals, grandTotals, sheetTotals, sheetGroupedRows, labelGroupedRows, authorGroupedRows, sheetLabelGroupedRows, round2, totalsToCsv, downloadText, materialsSummary, reportJson, hasMultipliers, BY_SHEET_BASE_NOTE, linearRunRows, fittingsAndSupportsRows } from "../lib/totals.js";
 import { TABLE_PROFILE, CSV_PROFILE, colGetter, customColProfile, specColProfile, laborColProfile, rollColProfile, partitionRowsBy, forceIncludeGroupCol, loadColPrefs, saveColPrefs, loadGroupBy, saveGroupBy, visibleCols, floorPerimeterLf, applyUnits } from "../lib/reportColumns.js";
 import { rollReportRows, seamLfByShape } from "../lib/rollTakeoff.js";
 import { areaVal, areaUnit, lenVal, lenUnit } from "../lib/units";
@@ -322,7 +322,7 @@ export default function ReportPanel({ projectName, onProjectName, conditions, sh
   const baseName = (projectName || "takeoff").replace(/[^\w.-]+/g, "_");
   const exportCsv = () => downloadText(`${baseName}.csv`, totalsToCsv(rows, projectName, bySheet, sheetLabel, csvCols, ctx, byLabelExport.length ? byLabelExport : null, brand.brandName, units), "text/csv");
   const exportJson = () => downloadText(`${baseName}.json`,
-    JSON.stringify(reportJson({ projectName, rows, bySheet, scaleInfo, markups, rfis, sheetLabel, conditionColumns, attrsByCond, shapeLabels, byLabel: byLabelExport, displayUnits: units, rollGoods: rollReportRows(rollByCond, rows), linearRuns: linearRunRows(rows) }), null, 2),
+    JSON.stringify(reportJson({ projectName, rows, bySheet, scaleInfo, markups, rfis, sheetLabel, conditionColumns, attrsByCond, shapeLabels, byLabel: byLabelExport, displayUnits: units, rollGoods: rollReportRows(rollByCond, rows), linearRuns: linearRunRows(rows), fittingsAndSupports: fittingsAndSupportsRows(rows) }), null, 2),
     "application/json");
   const exportRfisCsv = () => downloadText(`${baseName}_rfis.csv`, rfisToCsv(rfis, markups, projectName, sheetLabel, brand.brandName), "text/csv");
   const exportRfisJson = () => downloadText(`${baseName}_rfis.json`,

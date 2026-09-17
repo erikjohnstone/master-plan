@@ -361,7 +361,7 @@ import { applyRuleToProject, type Rule, type RuleShape, type SheetRuleData } fro
 // mints and a seal the canvas mints share ONE implementation of minting,
 // load-gating, and exact-restore inverses.
 import { sanitizeApprovals as sanitizeApprovalsJs, applyApprovalCommand as applyApprovalCommandJs } from "../../web/src/lib/approvals.js";
-import { conditionTotals, grandTotals, sheetTotals, reportJson, linearRunRows } from "../../web/src/lib/totals.js";
+import { conditionTotals, grandTotals, sheetTotals, reportJson, linearRunRows, fittingsAndSupportsRows } from "../../web/src/lib/totals.js";
 import { hasRollSetup, mintRollSetup, computeRollTakeoff, rollReportRows, seamLfByShape } from "../../web/src/lib/rollTakeoff.js";
 import { gridPxPerFoot, drawGrid, drawShapes, drawMarks, type Ctx2D, type ToCanvas, type ViewMarks } from "./view.ts";
 
@@ -6693,6 +6693,7 @@ export class Session {
       rfis: [],
       rollGoods: rollReportRows(byCond, rows),
       linearRuns: linearRunRows(rows),
+      fittingsAndSupports: fittingsAndSupportsRows(rows),
     });
   }
 

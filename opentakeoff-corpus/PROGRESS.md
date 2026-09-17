@@ -1,5 +1,91 @@
 ## Active work
 
+2026-09-17 linear takeoff WP2.5b checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Report "Fittings & supports" tab; buy list rows from vertex/run bases. This
+closes out WP2.5 (its other half, MCP `resolve_linear_assembly`, was
+WP2.5a). GATE 2 itself is still unassessed — separate work, not implied by
+either half landing.
+
+`web/src/lib/totals.js` gains `fittingsAndSupportsRows(rows)` /
+`fittingsAndSupportsSummary(rows)`: the subset of a condition's
+already-resolved `materials` whose basis is `"vertex"`/`"run"` (WP2.3's
+fitting-vertex/separate-run counts — elbow brackets, riser clamps, per-run
+test kits), pulled out of the general materials list so a routed trade's
+procurement list isn't lost among floor/linear/count-basis supplies (duct
+board, VCT adhesive). Both read the SAME already-resolved rows
+`conditionTotals` computed — no second pass over shapes, no
+`resolveLinearAssembly` call, so this can never disagree with the Materials
+tab/CSV section. `fittingsAndSupportsSummary` mirrors `materialsSummary`'s
+own combine rule exactly (rounded per condition first, then summed), plus
+an `hours` sum when any contributing row carries `hours_per_unit`.
+
+Wired into both export surfaces that read `rows`, canvas and MCP alike:
+
+- `web/src/lib/xlsx.js`: a new `Fittings & supports` tab, following the
+  `Linear runs` tab's own established convention exactly — appended last,
+  OMITTED entirely (not header-only) when no condition carries a vertex/
+  run-basis material, so a pre-WP2.5 workbook's tab count is unchanged for
+  every such project. Per-condition rows (Finish/Material/Qty/Unit/Basis/
+  Note, gaining Hours columns only when any row carries `hours_per_unit`),
+  then the combined buy list, same two-part shape as the Materials tab.
+- `web/src/lib/totals.js`'s `reportJson` gains a `fittingsAndSupports`
+  param, emitted as an additive-only, ALWAYS-emitted `fittings_and_supports`
+  key (the `linear_runs`/`linear_settings` precedent — empty `[]` for every
+  pre-WP2.5 project, so those exports round-trip byte-identically except
+  this one key). Wired at both call sites that already call `linearRunRows`
+  the same way: `ReportPanel.jsx`'s JSON export and `mcp/src/session.ts`'s
+  `exportReport` — unlike `linear_settings` (real project-settings state
+  MCP doesn't track), this is a pure derived view of `materials` MCP
+  already fully knows, so no "always {} on this surface" caveat applies.
+  `mcp/src/outputs.ts`'s report.v1 schema gains the matching
+  `fittings_and_supports` array field.
+
+A real pre-existing bug this checkpoint's own audit caught and fixed, not
+new functionality: `totals.js`'s CSV export and `xlsx.js`'s workbook both
+had their own `basisLabel` ternary (`"linear"→"LF"`, `"count"→"EA"`,
+`"seam_lf"→"seam LF"`, else `"SF"`) — WP2.3 added the `"vertex"`/`"run"`
+basis values themselves but never touched either `basisLabel`, so a
+vertex- or run-basis material's Coverage column read a nonsensical
+`"1 kit / 1 SF"` in both exports since WP2.3 shipped. Fixed by adding the
+two missing cases to both. Safe under the goal doc's own "Frozen-13 CSV
+untouched" rule: no basis value before WP2.3 could ever have hit the `else`
+branch this way, so no existing golden's bytes move.
+
+One version bump (0.9.79→0.9.80, all three surfaces) for this checkpoint's
+`mcp/src/session.ts`/`outputs.ts` changes, plus a new CHANGELOG.md entry —
+kept separate from WP2.5a's own entry rather than editing already-pushed
+history.
+
+No new MCP tool, so the AGENTS.md tool-count doc-sync checklist doesn't
+apply here (`resolve_linear_assembly` already covered it in WP2.5a); this
+is a schema/data addition to an existing tool's (`export_report`) output.
+
+Tests: 5 new in `web/test/totals.test.ts` (`fittingsAndSupportsRows`
+basis-filtering and hours passthrough, `fittingsAndSupportsSummary`
+cross-condition combine, `reportJson`'s `fittings_and_supports`
+verbatim/coercion, the CSV coverage-label fix) plus the `reportJson`
+key-set-pinned assertion updated; 2 new in `web/test/xlsx.test.ts`
+(no-tab-when-nothing-qualifies, and a full tab-contents assertion
+including the combined-with-Hours section). No new mcp-side test for the
+`fittings_and_supports` wire-through, matching `linear_runs`'s own
+precedent: `session.ts`'s change is a one-line pass-through of an
+already-tested pure function, not new logic to verify twice.
+
+Verified: web and mcp `npx tsc --noEmit` clean (a JSDoc `@param` type on
+`reportJson` needed the new field too, caught by mcp's own typecheck
+importing the same function); `check:tool-count` unchanged (58, no tool
+touched); `mcp npm run test:packaging` 4/4 + clean build; `node
+scripts/smoke-dist.mjs` exit 0; `report-csv-golden.test.ts` (the frozen-13
+golden) unchanged; `web`'s full suite (`test/*.test.ts test/linear/*.test.ts`
+minus the known `compileProgressWalkthrough.test.ts` flake) — 3311
+attempted (7 new), 70 fail/13 cancelled/13 skipped, the identical standing
+baseline count and cluster; `mcp`'s full `test` script (the 37-file list)
+— 431 cases, 11 fail, the exact same 8 pre-existing failures WP2.5a's own
+baseline diff already confirmed unrelated (down from that checkpoint's 12
+— the other 4 were the `tools.test.ts` `NO_COORDS` gap WP2.5a fixed).
+`npm run bench` and `npm run bench:linear` both green, unchanged from
+WP2.5a's own run.
+
 2026-09-17 linear takeoff WP2.5a checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 MCP `resolve_linear_assembly` (measure stage). WP2.5's other half — the
 canvas "Fittings & supports" report tab / buy-list rows — is tracked

@@ -1,5 +1,19 @@
 # Changelog
 
+- **Linear takeoff: "Fittings & supports" buy list.** The Excel report
+  workbook gains a `Fittings & supports` tab (canvas and MCP `export_report`
+  alike, via the shared `reportWorkbook`/`reportJson` functions) — the
+  buy-list rows pulled out of a routed condition's own vertex/run-basis
+  materials (elbow brackets, riser clamps, per-run test kits), per condition
+  then a combined buy list, with Hours columns when a row carries
+  `hours_per_unit`. Omitted entirely, like `Linear runs`, when nothing on the
+  project carries one. `export_report`'s `opentakeoff.report.v1` gains a
+  matching additive `fittings_and_supports` block. Also fixes a real gap in
+  the existing Materials CSV/XLSX sections: a vertex- or run-basis row's
+  coverage label read the `"SF"` fallback instead of `"vertex"`/`"run"`,
+  left over from the basis itself shipping one checkpoint before its own
+  coverage-label case did.
+
 - **Linear takeoff (duct, pipe, BAS runs) — manual mode, MCP 0.9.79.** A
   `measure_line` shape can now carry a sized, fitted `run`: `measure_line`
   accepts `system`/`size`/`vertices` (seeded from a routed condition's own

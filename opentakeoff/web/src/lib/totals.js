@@ -410,6 +410,46 @@ export function materialsSummary(rows) {
   return [...map.values()].map((x) => ({ ...x, qty: round2(x.qty) }));
 }
 
+// #linear-takeoff (WP2.5): "Fittings & supports" buy-list rows — the subset
+// of a condition's already-resolved materials whose basis is a routed
+// condition's own fitting-vertex or separate-run count (WP2.3: elbow
+// brackets, riser clamps, per-run test kits), pulled out of the general
+// materials list so a routed trade's procurement list isn't lost among
+// floor/linear/count-basis supplies (duct board, VCT adhesive, and the
+// like). Reads the SAME already-resolved `materials` rows conditionTotals
+// computed — no second pass over shapes or a separate resolveLinearAssembly
+// call, so this can never disagree with the Materials tab/CSV section.
+export function fittingsAndSupportsRows(rows) {
+  const out = [];
+  for (const r of (rows || [])) for (const m of (r.materials || [])) {
+    if (m.basis !== "vertex" && m.basis !== "run") continue;
+    out.push({
+      condition_id: r.id, finish_tag: r.finish_tag, name: m.name, unit: m.unit || "",
+      basis: m.basis, per: m.per, qty: m.qty,
+      ...(m.hours_per_unit != null ? { hours_per_unit: m.hours_per_unit, hours: m.hours } : {}),
+      note: m.note || "",
+    });
+  }
+  return out;
+}
+
+// Combined buy list over fittingsAndSupportsRows — same-named rows summed
+// across conditions, mirroring materialsSummary's own rule exactly (rounded
+// per condition first, then summed). hours sums alongside qty when any
+// contributing row carries one; a row with no hours_per_unit contributes 0,
+// never coercing an hours-less item into a spurious "0 hr" combined line.
+export function fittingsAndSupportsSummary(rows) {
+  const map = new Map();
+  for (const row of fittingsAndSupportsRows(rows)) {
+    const key = `${row.name}\x00${row.unit}`;
+    const cur = map.get(key) || { name: row.name, unit: row.unit, qty: 0, hours: 0, hasHours: false };
+    cur.qty += row.qty;
+    if (row.hours != null) { cur.hours += row.hours; cur.hasHours = true; }
+    map.set(key, cur);
+  }
+  return [...map.values()].map(({ hasHours, ...x }) => ({ name: x.name, unit: x.unit, qty: round2(x.qty), ...(hasHours ? { hours: round2(x.hours) } : {}) }));
+}
+
 // NB: the CSV TOTAL row emits g[key] for any column key present here — adding
 // a key that collides with a CSV column key changes that row (golden-guarded).
 export function grandTotals(rows) {
@@ -475,7 +515,7 @@ export function totalsToCsv(rows, projectName = "", bySheet = null, sheetLabel =
   // supporting materials — per condition, then a combined buy list. Coverage
   // rates deliberately stay as entered (SF/LF-based) in metric mode — the
   // upstream metric contract; the report panel carries the footnote.
-  const basisLabel = (b) => (b === "linear" ? "LF" : b === "count" ? "EA" : b === "seam_lf" ? "seam LF" : "SF");
+  const basisLabel = (b) => (b === "linear" ? "LF" : b === "count" ? "EA" : b === "seam_lf" ? "seam LF" : b === "vertex" ? "vertex" : b === "run" ? "run" : "SF");
   const perCond = [];
   for (const r of rows) for (const m of (r.materials || [])) perCond.push([r.finish_tag, m.name, m.qty, m.unit, `1 ${m.unit || "unit"} / ${m.per} ${basisLabel(m.basis)}`, m.note || ""]);
   if (perCond.length) {
@@ -556,9 +596,10 @@ export function linearRunRows(rows) {
  *   conditionColumns?: Array<{id: string, name: string, values: string[]}>,
  *   attrsByCond?: Map<any, object>|null, shapeLabels?: string[],
  *   byLabel?: Array<{value: string|null, rows: any[]}>, displayUnits?: string,
- *   rollGoods?: any[], linearRuns?: any[], linearSettings?: object}} args
+ *   rollGoods?: any[], linearRuns?: any[], linearSettings?: object,
+ *   fittingsAndSupports?: any[]}} args
  */
-export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInfo = [], markups = [], rfis = [], sheetLabel = null, conditionColumns = [], attrsByCond = null, shapeLabels = [], byLabel = [], displayUnits = "imperial", rollGoods = [], linearRuns = [], linearSettings = {} }) {
+export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInfo = [], markups = [], rfis = [], sheetLabel = null, conditionColumns = [], attrsByCond = null, shapeLabels = [], byLabel = [], displayUnits = "imperial", rollGoods = [], linearRuns = [], linearSettings = {}, fittingsAndSupports = [] }) {
   const label = (id) => (sheetLabel ? sheetLabel(id) : id);
   // destructuring defaults don't apply to an explicit null, and both values can
   // trace back to a corrupted payload — coerce (and drop malformed items) so
@@ -668,6 +709,13 @@ export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInf
     // not set one, so every pre-WP2.4 export round-trips byte-identically
     // except this one key.
     linear_settings: (linearSettings && typeof linearSettings === "object" && !Array.isArray(linearSettings)) ? linearSettings : {},
+    // fittings_and_supports APPENDS last (additive-only, #linear-takeoff
+    // WP2.5): the buy-list rows fittingsAndSupportsRows() pulled out of
+    // conditions[]'s own materials (vertex/run-basis rows only — plan §8's
+    // fitting/support supplies). Always emitted; empty for projects with no
+    // vertex/run-basis materials, so every pre-WP2.5 export round-trips
+    // byte-identically except this one key.
+    fittings_and_supports: Array.isArray(fittingsAndSupports) ? fittingsAndSupports : [],
   };
 }
 

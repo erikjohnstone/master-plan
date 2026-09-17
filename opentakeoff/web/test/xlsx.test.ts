@@ -125,6 +125,47 @@ test("reportWorkbook: a sized run adds a sixth 'Linear runs' tab, one row per (c
   assert.deepEqual(lr.rows[1], ["VCT-1", "2\" pipe", 60, 60]);
 });
 
+// #linear-takeoff (WP2.5): "Fittings & supports" — buy-list rows sourced
+// from a routed condition's own vertex/run-basis materials. Omitted
+// entirely, not a header-only tab, when nothing on the project carries one.
+test("reportWorkbook: no vertex/run-basis material anywhere → no Fittings & supports tab at all (#linear-takeoff WP2.5)", () => {
+  const tabs = reportWorkbook(workbookArgs());
+  assert.deepEqual(tabs.map((t: any) => t.name), ["Conditions", "By sheet", "Materials", "Shapes", "By floor × room"]);
+});
+
+test("reportWorkbook: a vertex-basis material adds a 'Fittings & supports' tab, per-condition rows then the combined buy list", () => {
+  const condsWithFitting = [
+    { ...conds[0] },
+    { ...conds[1], materials: [{ name: "Gasket kit", unit: "kit", per: 1, basis: "vertex", round: true, hours_per_unit: 0.25 }] },
+  ];
+  const runShapes = [
+    ...shapes,
+    {
+      id: "s3", sheet_id: "plan.pdf#1", condition_id: "c2", measure_role: "linear",
+      computed: {
+        perimeter_lf: 10, area_sf: 0,
+        run: {
+          segments: [{ i: 0, lf: 10, size: { kind: "rect", w_in: 12, h_in: 6 }, size_src: "manual" }],
+          vertices: [{ i: 1, kind: "elbow", angle_deg: 90, angle_class: "square" }],
+          totals_by_size: { "rect:12x6": 10 },
+        },
+      },
+    },
+  ];
+  const rows = conditionTotals(condsWithFitting as any, runShapes as any).filter((r: any) => r.shape_count > 0);
+  const tabs = reportWorkbook({ ...workbookArgs(), rows });
+  // the fixture's own run also carries a sized segment, so "Linear runs" is
+  // present too — this test only asserts the NEW "Fittings & supports" tab
+  assert.deepEqual(tabs.map((t: any) => t.name), ["Conditions", "By sheet", "Materials", "Shapes", "By floor × room", "Linear runs", "Fittings & supports"]);
+  const fs = tabs[6];
+  assert.deepEqual(fs.rows[0], ["Finish", "Material", "Qty", "Unit", "Basis", "Hours/unit", "Hours", "Note"]);
+  // c2 has multiplier ×2: 1 vertex × 2 = 2, so qty = 2, hours = 2 × 0.25 = 0.5
+  assert.deepEqual(fs.rows[1], ["VCT-1", "Gasket kit", 2, "kit", "vertex", 0.25, 0.5, ""]);
+  assert.deepEqual(fs.rows[2], []);
+  assert.deepEqual(fs.rows[3], ["Material (combined)", "Qty", "Unit", "Hours"]);
+  assert.deepEqual(fs.rows[4], ["Gasket kit", 2, "kit", 0.5]);
+});
+
 test("reportWorkbook: five tabs, Conditions mirrors the CSV columns and numbers", () => {
   const tabs = reportWorkbook(workbookArgs());
   assert.deepEqual(tabs.map((t: any) => t.name), ["Conditions", "By sheet", "Materials", "Shapes", "By floor × room"]);

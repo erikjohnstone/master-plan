@@ -1313,6 +1313,12 @@ export const exportReportOutput = {
     size: runSizeSchema.nullable(), lf: z.number(), lf_net: z.number(),
   }).passthrough()).describe("#linear-takeoff WP1.4 — one row per (condition, size): the per-size LF breakdown beside the condition's own plain lf total, ×N and waste applied like every other reported quantity; empty when no condition carries a sized run (a plain Linear trace, or one with no segment ever given a size)"),
   linear_settings: z.object({}).passthrough().describe("#linear-takeoff WP2.4 — the project's adopted-code/climate-zone/pressure-class/stick-length/offset-allowance choices, passed straight through from the canvas's own linear_settings payload key; always {} from a headless MCP session today (Session does not track project settings state yet)"),
+  fittings_and_supports: z.array(z.object({
+    condition_id: z.string(), finish_tag: z.string(), name: z.string(), unit: z.string(),
+    basis: z.enum(["vertex", "run"]), per: z.number(), qty: z.number(),
+    hours_per_unit: z.number().optional(), hours: z.number().optional(),
+    note: z.string(),
+  }).passthrough()).describe("#linear-takeoff WP2.5 — the buy-list rows pulled out of conditions[]'s own materials whose basis is a routed condition's fitting-vertex or separate-run count (elbow brackets, riser clamps, per-run test kits); empty when no condition carries a vertex/run-basis material"),
 };
 
 /** export_marked_pdf — the tool writes the PDF to disk and replies with where
