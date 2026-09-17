@@ -1,5 +1,86 @@
 ## Active work
 
+2026-09-17 linear takeoff: walk.ts dash-gap continuation (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+The GATE 3 eval's own Finding 2 (below) named this as the single highest-
+leverage next fix for `run recall`, since — unlike the wall-vouch
+exclusion — it isn't on the goal document's "never touch" list. Built and
+scored the same day.
+
+`walk.ts` gains `bridgeDashGap`: when a walk dead-ends with nothing else
+welding there either, and the dead-ending segment is short (≤1 ft), it
+searches for the nearest same-family segment endpoint within 0.5 ft whose
+approach direction AND own onward direction both continue straight
+through (±10°) and, if found, jumps the gap and keeps walking. New
+`WalkResult.dashBridges` field, aggregated across both directions in
+`walkBothDirections`; a new `bridged_dash_gap(N)` confidence factor in
+`receipt.ts` (0.8, following the same min-over-named-factors doctrine
+every other factor there already uses — not a compounding per-bridge
+penalty). Also revises `receipt.ts`'s own header, which had said "bridged
+gaps needs mepconnectivity.ts's own gap-bridging pass, which this walker
+never calls" — checked that claim directly before building anything: that
+function requires a fitting symbol sitting IN the gap and would not have
+fired on a plain dash gap anyway, so wiring IT in was never actually the
+fix. `bridgeDashGap` is a separate, walk.ts-native mechanism built for
+this specific case.
+
+**The trigger surprised the plan**: checked directly against the real
+Bessemer P101 "CW" main (the case that motivated this) before assuming
+the `dash` per-segment flag would be the right gate — it isn't. That
+PDF's own CAD export flattened its dash-dot linetype into many separate
+SOLID short strokes; every one of them reads `dash: 0`. Segment LENGTH,
+not the `dash` flag, is what actually distinguishes a print-artifact
+fragment from a real run in this corpus (the flag still ORs in as a
+second, real-PDF-dash-array path — just not the one that fires on the
+one real case in hand). 9 new tests (7 in `walk.test.ts`, 2 in
+`receipt.test.ts`) cover both trigger paths plus every guard: gap too
+wide, wrong family, off-axis, a real elbow correctly unaffected, and both
+directions' bridge counts summing correctly.
+
+**Re-ran `linear-trace-eval.mjs` against the real corpus and got a
+genuine surprise, not a clean win**: `bessemer-p101-cw-main`'s own seed
+now walks roughly 35 LF each way (was 1.63 LF total) before hitting a
+real `ambiguous` stop, passing FIVE real `tee` branches the golden's own
+18.96 LF extent never counted. This is the SAME lesson WP3.8's ITD golden
+already taught this session, in a new shape: the golden's own stop point
+("the main turns 90° and drops into a riser") is a real, meaningful human
+judgment call, not a hard geometric feature the walker could rediscover
+without choosing a branch at an `ambiguous` fork — plan §6.3's own
+"offer the candidate fan" design intent, now visible for the first time
+because the dash-gap fix let the walk get far enough to REACH a real
+fork instead of dying on its own first print-artifact fragment. Documented
+as Finding 4 in `docs/LINEAR-TRACE-EVAL.md`, with a matching note added to
+the golden's own `review_basis` (its geometry/LF numbers are untouched —
+they remain a real, correct hand-traced span, still valid for
+`bench/linear.mts`'s manual-mode purposes; only the automated single-call
+comparison against it is now understood to not be apples-to-apples).
+
+Run recall itself did NOT move (still 2/7 — the wall-vouch exclusion,
+Finding 1, accounts for the other 5 misses and is untouched by this fix).
+GATE 3 is still not close. But `bessemer-p101-cw-main` went from "dies
+immediately, so its real branching structure is invisible" to "reaches
+its own real ambiguous forks" — a materially more capable, more honest
+walker, even though this specific golden's own length-comparison number
+got harder to read, not easier. Recorded as-is rather than picking an
+easier-to-flatter golden to report instead.
+
+Deliberately NOT done: extending the eval script to simulate "continue
+past an ambiguous stop by following the golden's own next vertex" (a
+real, larger design task that would make single-call scoring into a
+guided multi-hop one); authoring new, deliberately unbranched/single-
+call-friendly goldens so recall/length-error have more than one clean
+data point (`itd-p5-hc3-branch` remains the only one without its own
+disclosed caveat).
+
+Verified: `npx tsc --noEmit` clean in `web/` and `mcp/`; all 153 tests in
+`web/test/linear/*.test.ts` pass (144 pre-existing + 9 new); all 5 tests
+in `mcp/test/traceRun.test.ts` pass unchanged, including its own exact
+`confidence_factors` array assertion (confirms this fixture's own walk
+never triggers a bridge, so nothing about its existing behavior moved);
+`mcp/`'s main test suite (107 tests) passes at its own pre-existing
+105/107 baseline (the 2 `test:bas` failures reproduce identically on a
+clean stash of every file this checkpoint touched — confirmed directly,
+not assumed, before writing this off as pre-existing).
+
 2026-09-17 linear takeoff GATE 3 checkpoint, the missing scorer (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 WP3.1-3.8 built the trace engine and its ground truth; nothing had ever
 actually SCORED `trace_run` against that ground truth. `web/bench/linear.mts`

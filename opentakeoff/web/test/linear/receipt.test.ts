@@ -98,6 +98,28 @@ test("buildTraceReceipt: an ambiguous stop is disclosed as a factor, drags confi
   assert.ok(origin.trace.candidates && origin.trace.candidates.length === 2);
 });
 
+test("buildTraceReceipt: a dash-gap bridge is disclosed as bridged_dash_gap(N) and drags confidence down", () => {
+  // same fixture shape as walk.test.ts's own bridged-gap case: two dashed,
+  // collinear, same-family segments with a 9px gap at 36px/ft (0.25ft,
+  // under the 0.5ft bridge bound).
+  const segs = [0, 0, 100, 0, 109, 0, 209, 0];
+  const meta = new Uint8Array(2).fill(4 << 4);
+  const dash = new Uint8Array([1, 1]);
+  const idx = buildSegmentIndex(segs, meta, { candidate: new Uint8Array(2).fill(1) });
+  const walk = walkBothDirections(idx, 0, 36, { dash });
+  assert.equal(walk.dashBridges, 1, "sanity: this fixture is the same bridged-gap shape walk.test.ts uses");
+  const origin = buildTraceReceipt(idx, { seg: 0, x: 0, y: 0 }, walk, family({ confidence: 0.9 }), [], [], { scaleConfirmed: true });
+  assert.ok(origin.confidence_factors.includes("bridged_dash_gap(1)"));
+  assert.equal(origin.confidence, 0.8, "min(0.9 family, 0.8 dash-bridge penalty)");
+});
+
+test("buildTraceReceipt: no dash bridge means no bridged_dash_gap factor at all — never a guessed zero-penalty entry", () => {
+  const idx = idxFor([0, 0, 200, 0]);
+  const walk = walkBothDirections(idx, 0, 18, {});
+  const origin = buildTraceReceipt(idx, { seg: 0, x: 0, y: 0 }, walk, family({ confidence: 0.9 }), [], [], { scaleConfirmed: true });
+  assert.ok(!origin.confidence_factors.some((f) => f.startsWith("bridged_dash_gap")));
+});
+
 test("buildTraceReceipt: layer-unclassified fires when the family's own evidence isn't layer-name", () => {
   const idx = idxFor([0, 0, 200, 0]);
   const walk = walkBothDirections(idx, 0, 18, {});

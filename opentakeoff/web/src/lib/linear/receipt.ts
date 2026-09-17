@@ -14,19 +14,24 @@
 // Plan §6.8: "A run's confidence is the minimum over its factors, each
 // named in origin.trace.factors: stroke-family evidence grade; size-
 // binding grade (or size_missing); width cross-check; vertex ambiguity
-// count; bridged gaps; layer-unclassified; scale_unconfirmed." Three of
+// count; bridged gaps; layer-unclassified; scale_unconfirmed." Two of
 // those seven are NOT computed here, honestly excluded rather than
 // fabricated:
 //   - width cross-check needs a double-line duct pair's own drawn width
 //     (WP4's own centerline pairing, not built yet);
-//   - bridged gaps needs `mepconnectivity.ts`'s own gap-bridging pass,
-//     which this walker never calls (a dead end here is just that, no
-//     bridging attempted);
 //   - "vertex ambiguity count" is, for THIS walker, always 0 or 1: plan
 //     §6.3's own decision tree makes `ambiguous` a hard STOP, never
 //     something a walk passes through and continues past, so the richer
 //     "count along the whole run" the phrase suggests can never exceed 1
 //     against this engine's actual behavior.
+// "Bridged gaps" IS computed (`bridged_dash_gap(N)`, added post-WP3.8) —
+// but NOT via `mepconnectivity.ts`'s own `bridgeDanglingGaps`, which this
+// walker still never calls: that function requires a fitting/equipment
+// symbol sitting IN the gap ("never bridged on proximity alone") and
+// would not fire on a plain print-style dash gap even if wired in.
+// `walk.ts`'s own `bridgeDashGap` is a different, narrower mechanism —
+// same-family, collinear, small — built specifically for that case; see
+// walk.ts's own header and docs/LINEAR-TRACE-EVAL.md for why.
 // A factor with no real signal behind it is left out of BOTH the
 // returned `factors` list and the confidence minimum, never assigned a
 // guessed number — the same refusal-over-guessing doctrine `sizes.ts`'s
@@ -40,6 +45,7 @@ import type { Continuation } from "./graph.ts";
 const LAYER_UNCLASSIFIED_CONFIDENCE = 0.6;   // mepconnectivity.ts's traceConnectivity, same signal, reused verbatim
 const AMBIGUOUS_STOP_CONFIDENCE = 0.5;        // weaker than a missing-layer signal — the run itself stopped short, unresolved
 const SCALE_UNCONFIRMED_CONFIDENCE = 0.7;     // a guessed px-per-foot fallback, not a detected scale — every length this run carries is suspect by the same factor
+const DASH_BRIDGE_CONFIDENCE = 0.8;           // walk.ts jumped a real print-style dash gap — a geometrically justified inference, not a guess, but not solid drawn ink either; one flat value regardless of bridge count, matching every other named factor here (the MINIMUM caps confidence, not a compounding per-bridge penalty)
 
 export interface TraceLabelRecord {
   text: string;
@@ -83,7 +89,7 @@ export interface TraceOrigin {
 export function buildTraceReceipt(
   index: SegmentIndex,
   seed: { seg: number; x: number; y: number },
-  walk: { segs: number[]; stops: { forward: WalkStop; backward: WalkStop } },
+  walk: { segs: number[]; stops: { forward: WalkStop; backward: WalkStop }; dashBridges?: number },
   family: StrokeFamily,
   allBoundSizes: BoundSize[],
   conflicts: SizeConflict[],
@@ -128,6 +134,11 @@ export function buildTraceReceipt(
   if (walk.stops.forward.reason === "ambiguous" || walk.stops.backward.reason === "ambiguous") {
     factors.push("ambiguous_stop");
     confidenceValues.push(AMBIGUOUS_STOP_CONFIDENCE);
+  }
+
+  if (walk.dashBridges) {
+    factors.push(`bridged_dash_gap(${walk.dashBridges})`);
+    confidenceValues.push(DASH_BRIDGE_CONFIDENCE);
   }
 
   if (!family.evidence.includes("layer-name")) {
