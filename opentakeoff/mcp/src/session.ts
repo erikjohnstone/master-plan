@@ -330,7 +330,8 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // here exactly as netroom.js's room detector already uses it, as a fallback
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
-import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel, type SweepTransformCompetition } from "../../web/src/lib/symbollabels.ts";
+import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, canonicalLabelFamily, type PlacementLabel, type SweepTransformCompetition } from "../../web/src/lib/symbollabels.ts";
+import { markKey } from "../../web/src/lib/markid.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -7445,6 +7446,43 @@ export class Session {
       ...(g.revisions.length ? { revisions: g.revisions.map((r) => ({ rev: r.rev, sheet: r.sheet, bbox: Session.wireBox(r.bbox), ...(r.drawn ? { drawn: true } : {}) })) } : {}),
       ...(notes.length ? { notes } : {}),
       counts: { rooms: g.rooms.length, unmatched_tags: g.unmatched_tags.length, schedules: g.tables.length, callouts: g.callouts.length },
+    };
+  }
+
+  /** The set-wide drawn-tag census (plans/03-drawing-tag-recognition-audit.md
+   * §3.3 WP2), filtered. Excludes table-region row labels and sheet-callout
+   * cross-references by default — both real, drawn text, neither a device
+   * instance — pass `include_tables`/`include_callouts` to see them anyway.
+   * Refusal-honest like resolve_tag/find_schedule: a scan has no sheet graph
+   * to census at all, never a silent empty list. */
+  async listTags(opts: {
+    sheet?: string | null;
+    family?: string | null;
+    key?: string | null;
+    role?: string | null;
+    include_tables?: boolean;
+    include_callouts?: boolean;
+  } = {}) {
+    const g = await this.ensureGraph();
+    if (!g.available) throw new UserError("This set has no text layer (a scan) — the sheet graph is unavailable, not empty.");
+    const wantKey = opts.key ? markKey(opts.key) : null;
+    const wantFamily = opts.family ? canonicalLabelFamily(opts.family.trim().toUpperCase()) : null;
+    let tags = g.tags ?? [];
+    if (opts.sheet) tags = tags.filter((t) => t.sheet === opts.sheet);
+    if (opts.role) tags = tags.filter((t) => t.role === opts.role);
+    if (wantKey) tags = tags.filter((t) => t.key === wantKey);
+    if (wantFamily) tags = tags.filter((t) => t.family === wantFamily);
+    if (!opts.include_tables) tags = tags.filter((t) => !t.in_table);
+    if (!opts.include_callouts) tags = tags.filter((t) => !t.sheet_callout);
+    return {
+      tags: tags.map((t) => ({
+        sheet: t.sheet, role: t.role, text: t.text, key: t.key, family: t.family,
+        bbox: Session.wireBox(t.bbox), ...(t.rot ? { rot: t.rot } : {}),
+        source: t.source, ...(t.multiplier > 1 ? { multiplier: t.multiplier } : {}),
+        ...(t.in_table ? { in_table: t.in_table } : {}),
+        ...(t.sheet_callout ? { sheet_callout: true } : {}),
+      })),
+      count: tags.length,
     };
   }
 

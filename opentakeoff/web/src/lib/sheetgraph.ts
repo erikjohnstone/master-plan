@@ -23,6 +23,7 @@
 import { ROOM_LABEL_RE } from "./detectRooms";
 import { isEquipTag, joinGraphSpans } from "./equiptags";
 import type { ControlSchematicResult } from "./controlSchematic.ts";
+import { buildTagIndex, type DrawnTag } from "./tagIndex.ts";
 import { extractSequenceNarratives, type NarrativeSequenceBlock } from "./sequenceNarrative.ts";
 import { nearbyDrawingIndexCaptionText, nearbyScheduleCaption } from "./scheduleLanguageScan.ts";
 
@@ -8391,6 +8392,11 @@ export interface SheetGraph {
   vector_topology?: Record<string, SheetTopologySummary>;
   /** Last vector pipeline run report (L0–L5 + L4.5 OCR/VLM assist). */
   vector_pipeline?: VectorPipelineReport;
+  /** The set-wide drawn-tag census (plans/03-drawing-tag-recognition-audit.md
+   * §3.3 WP2) — every recognised tag on every sheet, any role. Use
+   * `planTags(graph)` / `referenceTags(graph)` (tagIndex.ts) rather than
+   * filtering this array directly. */
+  tags?: DrawnTag[];
 }
 
 /** Apply source-backed caption evidence to an already-extracted table when
@@ -8426,7 +8432,7 @@ export function stripBasPointSectionHeadingRows(table: ScheduleTable): number {
 
 export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const withText = sheets.filter((s) => s.spans.length > 0);
-  if (!withText.length) return { available: false, sheets: [], rooms: [], unmatched_tags: [], tables: [], callouts: [], buildings: [], revisions: [], notes: [] };
+  if (!withText.length) return { available: false, sheets: [], rooms: [], unmatched_tags: [], tables: [], callouts: [], buildings: [], revisions: [], notes: [], tags: [] };
   const notes: string[] = [];
   const sequenceNarratives = extractSequenceNarratives(withText);
 
@@ -9156,6 +9162,16 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     return entry;
   });
 
+  // The set-wide drawn-tag census (§3.3 WP2) — same withText sheets, the
+  // final reconciled tables (continuations already merged, off-sheet
+  // duplicates already dropped), and the exact sheet-number vocabulary
+  // roomTags itself already trusts for its own callout exclusion above.
+  const tags = buildTagIndex(withText, tables, [...sheetNumbers]);
+  const untabledScheduleTokens = tags.filter((t) => t.role === "schedule" && t.in_table?.title === null).length;
+  if (untabledScheduleTokens) {
+    notes.push(`${untabledScheduleTokens} label token(s) on schedule-role sheet(s) sit outside every extracted table region — table-region coverage is incomplete on this set; treated as schedule content in the tag census, never counted as a drawn plan tag`);
+  }
+
   return {
     available: true,
     sheets: outSheets,
@@ -9167,6 +9183,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     revisions,
     sequence_narratives: sequenceNarratives,
     notes,
+    tags,
   };
 }
 

@@ -14,7 +14,7 @@ import { ok, fail, UserError } from "./format.ts";
 export const TOOL_STAGES: Record<string, readonly string[]> = {
   // Always enabled: an agent needs these to orient before anything else is useful.
   setup: [
-    "load_plan", "sheet_info", "set_scale", "sheet_graph", "resolve_tag",
+    "load_plan", "sheet_info", "set_scale", "sheet_graph", "list_tags", "resolve_tag",
     "find_schedule", "query_table", "analyze_control_schematics", "read_sheet_text", "find_text", "sheet_context", "view_sheet",
   ],
   measure: [

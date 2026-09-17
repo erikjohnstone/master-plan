@@ -1336,6 +1336,23 @@ export const sheetGraphOutput = {
   counts: z.object({ rooms: z.number().int(), unmatched_tags: z.number().int().optional(), schedules: z.number().int().describe("LOGICAL tables — a schedule continued across sheets counts once"), callouts: z.number().int() }),
 };
 
+export const listTagsOutput = {
+  tags: z.array(z.object({
+    sheet: z.string(),
+    role: z.enum(["plan", "schedule", "legend", "detail", "elevation", "demolition", "schematic", "unknown"]),
+    text: z.string().describe("As drawn, joined/reconstructed"),
+    key: z.string().describe("markKey identity — hyphen/space-insensitive, so 'P-1'/'P1'/'P 1' share one key"),
+    family: z.string().describe("canonicalLabelFamily — the instance-stripped family (VAV-E-101 → VAV-E)"),
+    bbox: wireBox,
+    rot: z.number().optional().describe("Run direction in degrees, clockwise, when nonzero"),
+    source: z.enum(["exact", "joined", "stacked", "compound", "count_prefixed"]).describe("How this tag was recognized: a plain single-run match, a CAD glyph-split rejoin, a stacked prefix-over-number bubble, a key-free compound run ('R1 /C-11'), or a run carrying an authored count multiplier ('TYP 8', '(8)')"),
+    multiplier: z.number().int().positive().optional().describe("An authored drafting multiplier beside this tag ('TYP 8', '(8)'); omitted when 1"),
+    in_table: z.object({ sheet: z.string(), title: z.string().nullable() }).optional().describe("Present when this text sits inside a schedule table's own region (a row/column label, never a drawn field instance) — omitted only with include_tables:true"),
+    sheet_callout: z.boolean().optional().describe("true when this text equals one of the set's own sheet numbers — a cross-reference callout, never a device tag — omitted only with include_callouts:true"),
+  })),
+  count: z.number().int(),
+};
+
 export const resolveTagOutput = {
   status: z.enum(["resolved", "unresolved"]),
   tag: z.string(),

@@ -645,7 +645,15 @@ Rules:
 Acceptance (navfac, from the WP0 script re-pointed at `graph.tags`):
 
 - ≥ 1,800 equipment-shaped tags outside tables; ≥ 300 distinct keys.
-- FCU: 44 distinct keys, 89 occurrences, none `in_table` on plan roles.
+- FCU: 44 distinct keys outside tables, none `in_table` on plan roles. The
+  exact total-occurrence count is not frozen here: it moves with the sheet
+  graph's own role classification (WP1's fix already moved it 89→88 by
+  shifting which sheets' tables extract where; a schedule-role sheet with
+  an FCU tag outside every extracted region correctly earns a synthetic
+  `in_table` entry per this section's own rule, one further 88→87 on
+  navfac at commit time). Measure fresh at implementation time and record
+  the number actually produced, with its own explanation if it differs
+  from a prior measurement — never chase a stale frozen count here.
 - `M-501`-style entries carry `sheet_callout: true` and are excluded by
   default from `list_tags` unless `include_callouts: true`.
 - Whole-set index builds in < 2 s after the graph on this set.

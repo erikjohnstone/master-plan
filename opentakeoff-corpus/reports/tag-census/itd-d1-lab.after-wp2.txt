@@ -1,0 +1,28 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+loaded in 892 ms
+graph in 56701 ms; sheets=29 tables=32
+
+== sheet roles == {"legend":1,"unknown":1,"plan":10,"elevation":1,"schedule":8,"detail":4,"schematic":4}
+== schedule keys == {"equipment_row":133} total 133
+
+== census == spans=10872 label-tokens(all)=626 equip-shaped(outside tables)=287 in 56792 ms
+label tokens, ALL, by sheet role: {"legend":20,"unknown":22,"plan":251,"elevation":0,"schedule":216,"detail":10,"schematic":107}
+label tokens, OUTSIDE table regions, by sheet role: {"legend":3,"unknown":22,"plan":251,"schematic":94,"schedule":46,"detail":10}
+
+== schedule keys -> drawn text occurrences outside tables, per kind ==
+  valve_mark     {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  unit_mark      {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  equipment_row  {"none":24,"planOnly":58,"otherOnly":3,"both":48}   e.g. CH-1: plan=1 other=0 | CH-2: plan=1 other=0 | CH-3: plan=1 other=0 | CH-4: plan=1 other=0 | SAV-1: plan=1 other=1 | SAV-2: plan=1 other=1
+
+== drawn equip-shaped keys: 116; with a schedule key: 107; WITHOUT any schedule key: 9 ==
+  sample unscheduled: MASTIC-PLUS-EMBEDDEDx1, HEV-1x1, HEV-3x1, HEV-2x1, HEV-4x1, EF-7x1, EQ-29x1, ST-12x1, EFT-30-MRx1
+
+== FCU == schedule keys=0 (unit_mark=0, equipment_row=0); distinct FCU tags drawn outside tables=0; total FCU tag occurrences=0 (0 on plan-role sheets)
+
+== sweep_schedule_row sample (evaluationFast + verifyTaggedGeometry) ==
+  EF-1             found=1 basis=tag_attached_vector occurrences=1 text_only=0 skipped=19 239 ms
+  VAV-6            REFUSED (4 ms): No schedule row "VAV-6" in the set — tables found: equipment on itd-d1-lab-mechanical.pdf#12 (4 rows: CH-1, CH-2, CH-3, CH-4) | reference on itd-d1-lab-mechanical.pdf#28 (7 rows: AIR HANDLING UNIT ( AHU-1, BOILER ( B-1, 
+  ET-1             REFUSED (5 ms): Ambiguous: 2 schedule rows carry the key "ET-1" — the same mark defined twice cannot seed one sweep. Marquee the marker yourself with symbol_sweep.
+
+done in 57041 ms

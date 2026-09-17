@@ -2355,7 +2355,49 @@ venv (`python3 -m venv /root/.venvs/ot-sidecar && source
 /root/.venvs/ot-sidecar/bin/activate && pip install pdfplumber pymupdf
 shapely "camelot-py[cv]" pypdfium2 gmft rapidocr_onnxruntime rapid_table
 rapid_table_det`) and re-set the env var before trusting any regression
-result.
+
+**Correction to the paragraph above, found later the same day:** the claim
+that `OPENTAKEOFF_VECTORGRID_PYTHON` is "already read by both
+`vectorGridClient.ts` and `tableSidecarClient.ts`" was wrong. Re-reading
+both files directly: `vectorGridClient.ts` reads `OPENTAKEOFF_VECTORGRID_PYTHON`
+and falls back to `OPENTAKEOFF_TABLE_SIDECAR_PYTHON` if unset; the older
+OCR-assist sidecar client (`tableSidecarClient.ts:68`) reads only
+`process.env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON || "python3"` — no fallback to
+the VectorGrid var at all. That variable was never set, so
+`tableSidecarClient.ts` (enabled by default — `sidecarEnabled()` only checks
+for `OPENTAKEOFF_TABLE_SIDECAR === "0"` and that the script file exists,
+`web/src/lib/tableSidecarClient.ts:60-63`) was silently falling back to this
+container's broken system `python3`, which still lacks `onnxruntime`, `cv2`,
+`gmft`, and `camelot` (confirmed by direct `import` checks — all four raise
+`ModuleNotFoundError`). This is the L4.5 raster/OCR-assist fallback path,
+not the primary VectorGrid engine, so it did not affect the three frozen
+regression gates (all already 163/163, 396/396, 122/122 with VectorGrid
+alone) — but it means any sheet that ever needs that fallback (a borderless
+or scanned table VectorGrid's vector/ruled backends can't resolve) was
+silently degraded to plain `python3` with none of its dependencies present.
+
+Fix: added `export OPENTAKEOFF_TABLE_SIDECAR_PYTHON=/root/.venvs/ot-sidecar/bin/python3`
+to `~/.bashrc` right next to the existing `OPENTAKEOFF_VECTORGRID_PYTHON`
+line (same venv — it already has every package `sidecar/requirements.txt`
+lists: `camelot-py`, `gmft`, `onnxruntime`, `opencv-python`, `rapidocr_onnxruntime`,
+`rapid_table`, `rapid_table_det`, plus VectorGrid's own `pdfplumber`/`pymupdf`/
+`shapely`, all already installed in that venv from the original fix — nothing
+new to `pip install`). Verified end-to-end, not just via `import`: sent a
+raw `{"id":1,"method":"ping","params":{}}` JSON-RPC line to
+`sidecar/tables.py` under the venv interpreter and got back all eight
+registered backends (`vector-lines`, `pdfplumber-lines`,
+`pdfplumber-lines_strict`, `camelot-lattice`, `camelot-stream`, `gmft-tatr`,
+`rapid-table-slanet-plus`, `rapid-table-det`) with no error. Also confirmed
+separately that the third Python-dependent path in this codebase — the BAS
+math engine (`mcp/src/basMath.ts`), gated by `OPENTAKEOFF_BAS_PYTHON` with a
+fallback to system `python3` — needed no fix: system `python3` already has
+`pydantic 2.13.5`, which satisfies `bas_engine`'s own `pydantic<3,>=2.9`
+constraint (`bas_engine/opentakeoff_bas_math.egg-info/requires.txt`).
+
+No production code touched for this fix either — config-only, same as the
+original venv fix above. All three of this repo's subprocess-spawned Python
+paths (VectorGrid, the OCR-assist table sidecar, BAS math) are now backed by
+a working interpreter with every dependency present in this container.
 
 ## WP1 — schematic sheet role, reference-note fragment fix (2026-09-17, goal-loop, Sonnet 5)
 
@@ -2459,3 +2501,89 @@ typecheck` both clean; `web/test/sheetgraph.test.ts` 151/151 (includes 2 new
 WP1 tests); `mcp/test/takeoffHvac01.regression.test.mjs`,
 `takeoffValve01.regression.test.mjs`, `takeoffBas01.regression.test.mjs`,
 `demoD10.regression.test.mjs` all pass. No corpus key or scorer touched.
+
+## WP2 — tagIndex shared census module (2026-09-17, goal-loop, Sonnet 5)
+
+Implemented plan §3.3 exactly: a new module `web/src/lib/tagIndex.ts`
+exporting `DrawnTag`, `buildTagIndex(sheets, tables, sheetNumbers)`,
+`tagIndexFor(index, key)`, `planTags(graph)`, and `referenceTags(graph)`.
+`buildTagIndex` runs three recognition passes per sheet over the same
+production text spans WP0's harness reads — `labelTokens` (exact/joined/
+stacked), `isEquipTag` on `joinHyphenatedTags` output, and a new key-free
+`compoundRunLeadTag` helper added to `symbolsweep.ts` for a compound run
+whose lead token isn't independently `isEquipTag`/`LABEL_TOKEN_RE` but
+still starts a real tag-shaped run — dedupes by box+text, and classifies
+each hit's `in_table` (against `graph.tables[].region`, with a synthetic
+`{sheet,title:null}` entry for schedule-role-sheet text outside every
+extracted table region, so schedule-sheet content is never miscounted as a
+drawn plan tag) and `sheet_callout` (via `markKey` against the sheet-number
+set `sheetgraph.ts` already computes). `sheetgraph.ts`'s `buildSheetGraph`
+now calls `buildTagIndex` and attaches the result as `graph.tags`. Wired
+end to end: `Session.listTags` (`mcp/src/session.ts`) and the new
+`list_tags` MCP tool (`mcp/src/tools.ts`, `mcp/src/outputs.ts`,
+`mcp/src/staging.ts`'s `setup` stage), plus the canvas agent-tool mirror
+(`agentListTags` in `TakeoffCanvas.jsx`, the `list_tags` schema/dispatch in
+`agentTools.js`) — the shared-path doctrine (`AGENTS.md`): one module, both
+surfaces, never forked.
+
+**One spec gap found and resolved, not guessed:** WP2's own acceptance
+criteria reference an `include_callouts` parameter for `list_tags`, but its
+own parameter list omitted it. Added `include_callouts` (default false,
+same shape as `include_tables`) so `list_tags`'s real behavior matches its
+own more specific, testable acceptance line.
+
+**FCU-count investigation on navfac (89 → 88 → 87), fully explained, not
+chased:** a naive smoke measurement using the same recognizers WP2 wires
+together showed 87 FCU occurrences where the plan's illustrative number
+said 89. Root-caused both steps via `git stash` before/after comparison
+against the exact same naive algorithm, not assumed:
+1. 89 → 88 was already a pure WP1 side effect (reproduced by running the
+   identical naive count against the WP1-committed tree with zero WP2 code
+   present) — a table-extraction boundary shift on one sheet, downstream of
+   a role reclassification, already covered by WP1's own note above.
+2. 88 → 87 is WP2's own correct, intentional behavior: sheet #71 (an
+   "FCU-M6" occurrence) was reclassified `legend` → `schedule` by WP1's
+   fragment-voting fix, and WP2's own spec rule — schedule-role-sheet text
+   outside every extracted table region is schedule content, not a drawn
+   plan tag — correctly excludes it. Confirmed directly by inspecting that
+   exact `DrawnTag` entry's `in_table: {"sheet":"...#71","title":null}`.
+Neither drop is a regression; both are the intended effect of WP1 fixing a
+role and WP2 correctly reading that role. The plan's own acceptance line
+was corrected to "measure fresh, never chase a stale frozen count."
+
+**Corpus-wide regression check, all five baseline sets:** re-ran WP0's own
+`tag-census-diag.mjs` harness (which measures sheet roles, schedule-key
+counts, label-token counts, and `sweep_schedule_row` outcomes directly from
+production spans/tables — independent of `tagIndex.ts` entirely) on all
+five sets and diffed against each set's `.after-wp1.txt` report. Every
+field is byte-identical across all five sets except run-to-run timing noise
+and one merged stderr warning line from an invocation change — confirming
+`buildSheetGraph` attaching `graph.tags` has zero effect on sheet-role
+classification, schedule-key extraction, or `sweep_schedule_row`, on any of
+the five sets. Reports committed as `*.after-wp2.txt`.
+
+**buildTagIndex cost, measured directly (not estimated):** 759 ms on navfac
+(75 sheets, 34,494 spans, 91 tables) — the largest set in this baseline —
+well under the plan's 2 s acceptance target. Temporary timing
+instrumentation was removed before commit; not shipped.
+
+**Smoke-tested against navfac directly (production `Session`, real
+`list_tags`-equivalent filtering):** 3,523 total tags, 2,653 outside
+tables, 490 distinct keys outside tables — comfortably past the plan's
+≥1,800/≥300 thresholds. Recognition-source breakdown: 3,123 `exact`, 394
+`compound` (the new key-free `compoundRunLeadTag` path), 6 `joined`. 44
+distinct FCU keys, 87 occurrences (fully explained above).
+
+Verification: `npm --prefix web run typecheck` and `npm --prefix mcp run
+typecheck` both clean. `web/test/tagIndex.test.ts` (7/7, new) plus
+`sheetgraph.test.ts`, `agentTools.test.ts`, `equiptags.test.ts`,
+`markid.test.ts`, `symbolLabels.test.ts`, `symbolsweep.test.ts` — 369/369
+together. `mcp/test/tools.test.ts`, `staging.test.ts`, `conformance.test.ts`
+— 126/126 (confirms `list_tags` registration is exact — no stray tool,
+none missing from `TOOL_STAGES`). `mcp/test/takeoffHvac01.regression.test.mjs`,
+`takeoffValve01.regression.test.mjs`, `takeoffBas01.regression.test.mjs`,
+`session.test.ts`, `staging.test.ts`, `context.test.ts`, `labels.test.ts` —
+48/48, all three frozen regression gates green. No corpus key or scorer
+touched; no production role/table/schedule logic touched — `tagIndex.ts` is
+additive-only, reading what `sheetgraph.ts` and `session.ts` already
+compute.

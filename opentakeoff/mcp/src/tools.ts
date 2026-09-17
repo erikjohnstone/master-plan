@@ -23,7 +23,7 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, controlSchematicOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, listTagsOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, controlSchematicOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
@@ -711,6 +711,22 @@ No approval, installed count or complete requirement discovery. Changes stay in 
     inputSchema: {},
     outputSchema: sheetGraphOutput,
   }, run("sheet_graph", () => session.sheetGraph()));
+
+  server.registerTool("list_tags", {
+    description: `The set-wide DRAWN-TAG census (#tag-recognition): every equipment/device tag the text layer recognizes on every sheet, any role — not just the ones a schedule row already names. This is the tag-first complement to sheet_graph's own table/room index: where sheet_graph answers "what's on the schedules", list_tags answers "what's actually drawn" — the primitive "count every FCU tag" and "which drawn tags have no schedule row" both start from. Each hit carries its identity KEY (hyphen/space-insensitive — "P-1"/"P1" share one key), its instance-stripped FAMILY, and how it was recognized: a plain single-run match, a CAD glyph-split rejoin, a stacked prefix-over-number bubble, a key-free compound run ("R1 /C-11"), or a run carrying an authored count multiplier ("TYP 8", "(8)"). Excludes by default: text sitting inside a schedule table's own region (a row/column label, never a drawn field instance — pass include_tables:true to see it) and sheet-number cross-reference callouts ("SEE M-501" — pass include_callouts:true to see them). Filter with sheet/family/key/role; omit all four for the whole set. This is disclosure, not installed-work evidence — a plan-role hit here is a drawn LOCATION, never proof of installed quantity (sweep_schedule_row/reconcile_schedule_plan own that distinction). A scanned set (no text layer) refuses. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string().optional().describe("Restrict to one loaded sheet key"),
+      family: z.string().optional().describe('Restrict to one instance-stripped family, e.g. "FCU", "VAV-E" — matches canonicalLabelFamily'),
+      key: z.string().optional().describe('Restrict to one exact identity, e.g. "FCU-1" — hyphen/space-insensitive'),
+      role: z.enum(["plan", "schedule", "legend", "detail", "elevation", "demolition", "schematic", "unknown"]).optional().describe("Restrict to one sheet role"),
+      include_tables: z.boolean().default(false).describe("Include text sitting inside a schedule table's own region (a row/column label, not a drawn field instance)"),
+      include_callouts: z.boolean().default(false).describe("Include sheet-number cross-reference callouts (\"SEE M-501\") alongside real device tags"),
+    },
+    outputSchema: listTagsOutput,
+  }, run("list_tags", (a) => session.listTags({
+    sheet: a.sheet, family: a.family, key: a.key, role: a.role,
+    include_tables: a.include_tables, include_callouts: a.include_callouts,
+  })));
 
   server.registerTool("resolve_tag", {
     description: `Resolve ONE room tag across the set (#87): the plan tag → its room-finish schedule row → each finish code's definition in the finish/material schedule, EVERY edge carrying an evidence pointer (sheet + literal text + bbox — pass a bbox to view_sheet to look at the source). Rows carried by a continuation sheet ("… SCHEDULE — CONT'D") resolve exactly like base-sheet rows, citing the sheet the ink is on. The doctrine is refusal over guessing: a room that appears on the plan with no schedule row returns status "unresolved" with the reason (and still cites the plan tag); reused room numbers return "ambiguous" rather than picking one — on a multi-building set the refusal LISTS the candidate rows per building, and a building-qualified tag ("A-134") picks the building the set names. A delta triangle or REV tag on the answering row (or the plan bubble) rides the result as "revisions": the codes returned are the POST-revision answer, but the ink changed under that delta — view_sheet the marker's bbox and check the addendum before pricing. ${COORDS}`,
