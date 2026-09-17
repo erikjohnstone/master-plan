@@ -1,5 +1,126 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.4 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+`walk.ts`, the bidirectional walker (plan §6.4) — Stage 3's final piece.
+This is the FIRST module in the WP3 arc with a real end-to-end path
+(strokes → index → graph → walk), so unlike WP3.2/WP3.3 (built and unit-
+tested with no live caller to validate against) this checkpoint's own
+verification chained all four modules together against real Bessemer and
+ITD extraction, per WP3.1's own precedent. It surfaced one real,
+already-known limitation and one deliberate, spec-correct behavior
+difference from the throwaway probe — both investigated to a real cause,
+not shrugged off as "close enough."
+
+`web/src/lib/linear/walk.ts`:
+
+- `walkOneDirection(index, seedSeg, atEnd, ppf, ctx, opts)` — plan §6.4's
+  own pseudocode, literally: `frontier()` typed per node, `collinear`
+  extends, `elbow` records a vertex and turns, `tee` extends onto the
+  through-pair's OTHER member (or stops `branch_joins_main` if arrived via
+  the branch — "the main is its own run"), `crossing` records a vertex and
+  continues straight through (never onto the crossing segment), `ambiguous`
+  stops and reports the candidate fan, hop/length caps stop with `cap`.
+  Reuses WP1's own `RunVertexKind` for the three vertex kinds it can
+  produce (`elbow`/`tee`/`crossing` — all three were ALREADY in that type
+  before this file existed, evidence WP1's own design anticipated a real
+  trace producing them) rather than inventing a parallel vocabulary.
+- `walkBothDirections` — the estimator-facing entry point, combining both
+  directions' `walkOneDirection` calls into one chain, the seed segment's
+  own length counted once.
+- Same-family continuity (plan §6.4: "pen ± 1 nibble, same dash code, same
+  layer when layered") is a REAL gate on `frontier()` itself, not a
+  post-hoc filter on the chosen continuation — this went through one real
+  design correction mid-checkpoint (below).
+- Two honest, undone gaps, both documented in the module's own header:
+  `equipment`/`riser` stop-reason detection (needs a symbol-recognition
+  signal at the dead-end point nothing yet exposes; every otherwise-
+  unclassified `end` reports `dead_end`, the conservative default) and
+  curved (`SEG_CURVE`) chain collapsing to one arc vertex with a fitted
+  radius (a walk currently treats each curve chord as its own ordinary hop
+  — real behavior, not a crash, but not the plan's own single-vertex
+  collapse).
+
+**A real design correction, caught by chaining all four modules against
+real extraction, not assumed from the plan text alone:** the first version
+ran `frontier()` UNFILTERED (plan §6.3's own node-typing text never
+mentions family, so node typing being family-agnostic seemed textually
+defensible), checking family continuity only on the chosen continuation.
+Validated against Bessemer M101 p6's own `12"x6"` label — the exact case
+the plan's own §3.1 table and the probe both cite (18.2 ft, 5 hops) — the
+unfiltered version produced 1.0 ft over 2 hops, hitting `ambiguous`
+almost immediately: a real sheet's candidate pool holds every trace-
+eligible family at once, and near any real junction several of them
+share a footprint, inflating degree past what the SAME duct run actually
+presents. `trace-proto.mts`'s own pen-restricted candidate pool
+(`if ((m>>4) !== PEN) continue`) exists for exactly this reason. Fixed by
+filtering `frontier()` to the walk's own family as the PRIMARY query, with
+one extra UNFILTERED `frontier()` call ONLY at a terminal `end` node (never
+on every hop) to distinguish a real `dead_end` from a `family_change`
+(curSeg's own end always "passes" a same-family-as-itself filter, so
+without this second check a family mismatch would read as a plain dead
+end, losing plan §6.4's own named distinction).
+
+**After the fix, two further findings, both investigated to ground, not
+merely observed:**
+
+1. Bessemer's own confirmed-correct seed segment for `12"x6"` (the probe's
+   segment #136, cross-referenced by exact coordinates to this codebase's
+   own segment numbering) is EXCLUDED by `classifyStrokes` — traced to
+   `networkWallSegs` (the wall-vouch fallback `strokes.ts` reuses verbatim
+   from `ensureMepGraph`'s own mask, per WP3.1) false-positiving on this
+   one long, dead-straight run. Quantified, not just spotted: 42 of
+   Bessemer's 624 raw pen-4 segments (6.7%) are wall-vouch-excluded — a
+   real, already-accepted characteristic (WP3.1's own checkpoint already
+   recorded "582 members" surviving of 624 raw for this exact family; this
+   checkpoint just identified WHICH check causes the gap and confirmed its
+   scale isn't systemic). Not fixed here: `wallnetwork.ts` is shared,
+   heavily relied-upon geometry no other WP in this arc touches, and the
+   tradeoff (reusing `ensureMepGraph`'s exact, already-shipped mask rather
+   than a second wall heuristic tuned only for this path) was the goal
+   doc's own explicit instruction, not a choice made in this checkpoint.
+2. Bypassing that exclusion to confirm the seed segment directly, the walk
+   still stops `ambiguous` at a real degree-6 junction the same segment
+   reaches shortly after (15.0 ft vs. the probe's 18.2 ft) — plan §6.3's
+   own decision tree has no case for a degree-6 (or degree-5, or any
+   degree beyond its four explicit patterns) junction other than the
+   stated catch-all, "anything else → ambiguous." The probe's own
+   `follow()` has no ambiguous stop at all — it always picks the
+   least-angle-deviation candidate and continues, which is precisely the
+   "guess with confidence" behavior plan §6.3's more careful decision tree
+   exists to replace with principled refusal ("offer them as continuations
+   in the UI"). Confirmed on ITD p3's `24"x16"` label too: a real degree-4
+   junction with one collinear through-pair AND two additional NON-mutually-
+   collinear branches (a real double-line-duct fitting, not a data error)
+   — a shape the plan's own decision tree has no explicit case for either,
+   correctly falling to the stated catch-all. Both real drawings are
+   double-line duct, exactly the class of drawing plan-explicit WP4 exists
+   to handle with pair-following; single-line walking refusing rather than
+   guessing through a double-line junction is the intended, documented
+   boundary of this work package, not a defect in it.
+
+Tests: `web/test/linear/walk.test.ts`, 13 new — a straight collinear
+chain, an isolated dead end, an elbow (vertex + turnDeg + angleClass), a
+tee arrived via the through-pair (continues, records the branch) and via
+the branch (`branch_joins_main`, no vertex), a crossing (continues
+straight, ignores the crossing segment), a family change by pen (stops)
+vs. within ±1 nibble (continues), a family change by dash code alone, a
+sheet-edge end, a symmetric-Y ambiguous stop with its candidate fan, the
+hop cap, and `walkBothDirections`' own combination arithmetic. One test
+fixture bug caught and fixed during authoring (an `atEnd` parameter
+mismatch that made a `branch_joins_main` fixture arrive via the wrong
+end) — confirmed to be a test bug, not an implementation bug, by tracing
+through `walkOneDirection`'s own documented `atEnd` convention by hand
+before changing anything.
+
+Verified: `npx tsc --noEmit` clean on both `web` and `mcp`;
+`web/test/linear/*` 89/89 (13 new); real end-to-end validation against
+Bessemer M101 p6 and ITD p3's own real extraction (not just synthetic
+fixtures) — the first checkpoint in this arc able to do this, since this
+is the first module with a real chain from stroke classification through
+to a walked result; web's full suite (`test/*.test.ts test/linear/*.test.ts`
+minus the known `compileProgressWalkthrough.test.ts` flake) confirmed
+against the standing 70-fail baseline before this entry was committed.
+
 2026-09-17 linear takeoff WP3.3 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 `graph.ts`, Stage 3 of the trace engine (plan §6.3). Still entirely
 inert — nothing calls it yet (WP3.4's walker is the eventual consumer);
