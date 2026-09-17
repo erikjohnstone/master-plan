@@ -1,5 +1,64 @@
 ## Active work
 
+2026-09-17 linear takeoff: a second GitHub Release archive opens, an automated multi-file sweep, two more rejected candidates, development recall 8/14 -> 9/15 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Opened this repo's OTHER GitHub Release archive -- a separate ~264-PDF
+resource not yet touched this session, found the same way as the first.
+Rather than hand-picking one file at a time as before, automated the
+search this time: surveyed several small, untouched files for sheets
+combining a detected scale with a segment count capped safely below a
+newly-discovered pathology threshold (see below), then ran a coarse grid
+sweep on each qualifying sheet, filtering directly for the fastest, most
+reliable positive signal established so far -- a real engine-bound size
+on a clean both-dead-end candidate. One automated pass across seven files
+turned up three real hits across two files.
+
+Two of those three were investigated and explicitly REJECTED, recorded
+plainly rather than dropped. The first: a seed that looked like a real
+pipe run turned out to have landed on the sheet's OWN symbols/legend
+page, on the literal sample line illustrating what a pipe-size/system
+tag looks like graphically -- not a real routed pipe at all. A genuinely
+new failure category, worth a future refusal-corpus addition. The second:
+a seed on what looked like a real duct riser turned out, on a marked
+crop, to have walked UP one rail of a double-line duct symbol and back
+DOWN the other rail via a small connector detail at the top -- the same
+"both rails of one riser, not two ends of one run" trap this project has
+already named and worked around elsewhere, just walked the wrong way by
+an automated seed this time.
+
+The third candidate holds up: a real refrigerant-piping run on a
+genuinely real (if informally named) PDF layer, both ends confirmed via
+a marked render crop as real physical stops -- a fan-coil-unit
+connection at one end, a real riser-up point continuing to roof-mounted
+heat pump units at the other, matching this sheet's own printed note
+about that exact continuation. Its own size is confirmed by a real
+printed callout with a literal leader line pointing right at it. Added
+as a new development-tier golden.
+
+Also recorded a real, useful negative finding from this same sweep: a
+sheet with only 45,000 vector segments -- well under a previously
+assumed danger threshold -- still took nearly two minutes for a single
+trace call, the same known leader-search performance pathology found
+earlier this session on a much larger sheet. Real evidence that TEXT
+density, not raw segment count, is the better predictor of that cost.
+Abandoned without further investigation, per this project's own standing
+discipline; the automated sweep's own segment-count cap was set
+specifically in response.
+
+Development-tier recall: **8/14 (0.571) -> 9/15 (0.6)**, an exact length
+match. Also a genuine size match again (size accuracy 0.713 -> 0.770) --
+the fourth real-corpus case this session with a correct automatic size
+read, and the first via yet another distinct classification grade. The
+new source PDF is now committed to this project's own real corpus
+(`raw/`) -- the first pulled in from this second Release archive
+specifically.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; all 227 tests pass; full filtered web regression suite
+re-run, matching the established baseline. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 25" section (including both rejected candidates and the
+pathology finding) and its own priority list updated with the new recall
+number and the corpus's own now-larger known size.
+
 2026-09-17 linear takeoff: a third new-corpus sheet, a rejected candidate disclosed honestly, development recall 7/13 -> 8/14 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept mining the same ~380-PDF resource. This time started from a named
 layer again: a legend/symbols sheet in a hospital central-plant chiller
