@@ -1,5 +1,48 @@
 ## Active work
 
+2026-09-17 linear takeoff: 05-double-line-duct now reaches -- mitered rails, plus a real geometric limit on recall (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Implemented the fix the prior checkpoint scoped: `drawDoubleLine` rewritten
+to draw each rail as a properly MITERED continuous polyline
+(`offsetRailMitered` -- a real polygon-offset miter join at each interior
+vertex) instead of independent per-segment offsets, closing every corner
+gap regardless of turn direction. `synthesize.mts`'s own `CaseSpec` gained
+an optional `seedPointFt(pts)` hook so a case can supply a real point on a
+rail for `trace_run` to seed on, since the centerline itself (the golden's
+own truth) has no ink; `bench/linear.mts` threads the resulting
+`seed_point_ft` through the SAME `syntheticFtToPx` transform every other
+point already uses, not a second hand-rolled conversion.
+
+Result: the case now REACHES (both ends `dead_end`, no more refusal or
+ambiguous stop) -- confirmed via direct point-dump, not assumed. But
+length comes back real and short (43.59->37.59 LF, 13.8% error), and
+recall still misses. Diagnosed rather than left as "still broken": this
+is a genuine, previously-unrecognized geometric property this fix's own
+investigation surfaced, not a bug. Offsetting a polyline at a 90 degree
+corner and mitering it is NOT length-preserving the way offsetting a
+single straight segment is -- the inside rail of a turn is shorter than
+the centerline by the offset distance, the outside longer, real 90-degree
+miter trig, and this path's own four turns happened to put the traced
+rail on the inside at enough corners to come up systematically short (real
+duct geometry -- an actual sheet-metal duct's own inner/outer edges DO
+differ in length from centerline at a real elbow, which is exactly why a
+takeoff professional's own LF convention is centerline in the first
+place). A rail is also unavoidably offset ~1 ft from the centerline at
+every point, comfortably beyond the recall scorer's own 0.5 ft overlap
+tolerance -- so a rail-traced path likely CANNOT cleanly pass recall
+against a centerline golden under the current scoring convention,
+independent of any further seeding or mitering work. A real, disclosed
+LIMIT of what this specific hard case can honestly measure, not a queued
+bug. What DID land is real regardless: no more refusal, a genuinely
+better generator (continuous gap-free rails are correct CAD-drafting
+behavior on their own merits, useful for any future double-line case),
+and a precisely understood failure mode instead of a mysterious one.
+
+Measured: `npx tsc --noEmit` clean; `bench:linear` passes, synthetic
+recall unchanged at 8/10 (this case still misses recall for the reason
+above, not a regression); all 215 tests pass unchanged (no scoring-
+function code touched, only the synthetic generator); full filtered web
+regression suite re-run to confirm no new failures beyond baseline.
+
 2026-09-17 linear takeoff: 08-label-leader fixed (synthetic recall 7/10 -> 8/10), 05-double-line-duct understood more precisely (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Follow-up to the same day's OCG-layer fix. `08-label-leader`'s own newly-
 exposed length mismatch (33.48->26.85 LF) root-caused: the leader line

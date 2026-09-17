@@ -122,6 +122,17 @@ interface CaseSpec {
   build(page: import("pdf-lib").PDFPage, doc: PDFDocument, font: import("pdf-lib").PDFFont, pts: PtFt[], layer: LayerWrap): Promise<void> | void;
   legs?: number;
   seedOffset?: number;
+  /** Only for cases where `bench/linear.mts`'s own default seed convention
+   * (40% along the golden's own longest segment — `seedOnLongestSegment`'s
+   * exact formula, mirrored here) lands somewhere with no real ink: a
+   * double-line duct's truth is authored at the CENTERLINE, but nothing is
+   * drawn there (`drawDoubleLine` only draws the two offset rails). Returns
+   * a real seed point in feet, on one of those rails; written to the truth
+   * JSON as `run.seed_point_ft` and converted through the SAME
+   * `syntheticFtToPx` transform the golden points use (not a hand-rolled
+   * second one — this project has already caught two real flip/margin bugs
+   * from exactly that kind of duplication this same day). */
+  seedPointFt?(pts: PtFt[]): PtFt;
 }
 
 const toPdf = ([x, y]: PtFt): [number, number] => [80 + x * PT_PER_FT, 80 + y * PT_PER_FT];
@@ -139,19 +150,67 @@ function drawCenterline(page: import("pdf-lib").PDFPage, pts: PtFt[], opts: { th
   }
 }
 
-/** Double-line duct: two parallel offset strokes either side of the truth
- *  centerline (real duct-plan convention — the CENTERLINE is still what a
- *  person/agent traces and measures). */
-function drawDoubleLine(page: import("pdf-lib").PDFPage, pts: PtFt[], halfWidthFt: number) {
-  for (let i = 0; i < pts.length - 1; i++) {
-    const [ax, ay] = pts[i], [bx, by] = pts[i + 1];
-    const dx = bx - ax, dy = by - ay;
+/** Intersection of infinite lines through (a1,a2) and (b1,b2), or `null` if
+ * parallel (never happens for a real turn — two DIFFERENT directions'
+ * offset lines only run parallel if the path doubled straight back on
+ * itself, which `randomWalk` already refuses to generate). */
+function lineIntersect(a1: PtFt, a2: PtFt, b1: PtFt, b2: PtFt): PtFt | null {
+  const [x1, y1] = a1, [x2, y2] = a2, [x3, y3] = b1, [x4, y4] = b2;
+  const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+  if (Math.abs(denom) < 1e-9) return null;
+  const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom;
+  return [x1 + t * (x2 - x1), y1 + t * (y2 - y1)];
+}
+
+/** One rail of a double-line duct symbol, `halfWidthFt` to `side` (±1) of
+ * the truth centerline — MITERED at interior vertices (the offset lines of
+ * the two segments meeting there, extended to their own intersection), not
+ * each segment's own independent offset endpoint. A naive per-segment
+ * offset (this function's own first version) leaves a real ink GAP on one
+ * side of a turn and a real ink OVERLAP on the other, and which side is
+ * which flips with the turn's own direction — for a path that turns both
+ * ways (any real multi-turn run), NEITHER rail is walkable end to end
+ * without a break somewhere. Mitering is the actual fix: a real drafted
+ * double-line duct symbol IS a continuous outline, corners included. */
+function offsetRailMitered(pts: PtFt[], halfWidthFt: number, side: 1 | -1): PtFt[] {
+  const n = pts.length;
+  const offsetLine = (a: PtFt, b: PtFt): [PtFt, PtFt] => {
+    const dx = b[0] - a[0], dy = b[1] - a[1];
     const len = Math.hypot(dx, dy) || 1;
-    const nx = (-dy / len) * halfWidthFt, ny = (dx / len) * halfWidthFt;
-    const off = ([x, y]: PtFt, s: number): PtFt => [x + nx * s, y + ny * s];
-    for (const s of [1, -1]) {
-      const [sx, sy] = toPdf(off([ax, ay], s));
-      const [ex, ey] = toPdf(off([bx, by], s));
+    const nx = (-dy / len) * halfWidthFt * side, ny = (dx / len) * halfWidthFt * side;
+    return [[a[0] + nx, a[1] + ny], [b[0] + nx, b[1] + ny]];
+  };
+  const out: PtFt[] = [];
+  for (let i = 0; i < n; i++) {
+    if (i === 0) {
+      out.push(offsetLine(pts[0], pts[1])[0]);
+    } else if (i === n - 1) {
+      out.push(offsetLine(pts[n - 2], pts[n - 1])[1]);
+    } else {
+      const [p1a, p1b] = offsetLine(pts[i - 1], pts[i]);
+      const [p2a, p2b] = offsetLine(pts[i], pts[i + 1]);
+      out.push(lineIntersect(p1a, p1b, p2a, p2b) ?? p1b);
+    }
+  }
+  return out;
+}
+
+// 24" duct / 12" half-width-in-inches-of-nominal-width convention this
+// generator's own single double-line case uses — named once so `build`
+// and `seedPointFt` can't drift apart from each other.
+const DOUBLE_LINE_HALF_WIDTH_FT = 24 / 12 / 2;
+
+/** Double-line duct: two parallel MITERED outlines either side of the truth
+ *  centerline (real duct-plan convention — the CENTERLINE is still what a
+ *  person/agent traces and measures), each drawn as one continuous
+ *  connected polyline (like `drawCenterline`'s own convention) so a real
+ *  walk along either rail has no corner gap to stall on. */
+function drawDoubleLine(page: import("pdf-lib").PDFPage, pts: PtFt[], halfWidthFt: number) {
+  for (const side of [1, -1] as const) {
+    const rail = offsetRailMitered(pts, halfWidthFt, side);
+    for (let i = 0; i < rail.length - 1; i++) {
+      const [sx, sy] = toPdf(rail[i]);
+      const [ex, ey] = toPdf(rail[i + 1]);
       page.drawLine({ start: { x: sx, y: sy }, end: { x: ex, y: ey }, thickness: 0.75, color: rgb(0, 0, 0) });
     }
   }
@@ -181,7 +240,21 @@ const CASES: CaseSpec[] = [
   {
     name: "05-double-line-duct", hardCase: "double-line duct width", system: "SA",
     size: { kind: "rect", w_in: 24, h_in: 12 },
-    build(page, _doc, _font, pts, layer) { return layer.wrap(() => drawDoubleLine(page, pts, 24 / 12 / 2)); },
+    build(page, _doc, _font, pts, layer) { return layer.wrap(() => drawDoubleLine(page, pts, DOUBLE_LINE_HALF_WIDTH_FT)); },
+    // the centerline itself has no ink (see CaseSpec's own comment) — seed
+    // on the SAME rail `offsetRailMitered`'s `side: 1` draws, at the same
+    // "40% along the longest segment" point `seedOnLongestSegment` would
+    // otherwise pick on the centerline.
+    seedPointFt(pts) {
+      let bestI = 0, bestLen = -1;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const len = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]);
+        if (len > bestLen) { bestLen = len; bestI = i; }
+      }
+      const rail = offsetRailMitered(pts, DOUBLE_LINE_HALF_WIDTH_FT, 1);
+      const [x0, y0] = rail[bestI], [x1, y1] = rail[bestI + 1];
+      return [x0 + (x1 - x0) * 0.4, y0 + (y1 - y0) * 0.4];
+    },
   },
   {
     name: "06-label-inside", hardCase: "label placement (inside the run)", system: "SA",
@@ -388,6 +461,12 @@ async function main() {
         points_ft: pts.map(([x, y]) => [round2(x), round2(y)]),
         system: spec.system,
         size: spec.size,
+        // only present when the centerline itself has no real ink to seed
+        // on (see CaseSpec's own `seedPointFt` header) — bench/linear.mts
+        // converts this through the SAME transform as points_ft and seeds
+        // there instead of its own default "40% along the longest segment
+        // of points_ft" convention.
+        ...(spec.seedPointFt ? { seed_point_ft: spec.seedPointFt(pts).map(round2) } : {}),
       },
       expected: {
         segment_lf: lens.map(round2),

@@ -118,7 +118,10 @@ interface CaseTruth {
   page: number;
   scale: number;
   ptPerFt: number;
-  run: { points_ft: [number, number][]; system: string; size: RunSize };
+  // seed_point_ft: only present when the golden's own points_ft centerline
+  // has no real drawn ink to seed trace_run on (a double-line duct's own
+  // truth) — see synthesize.mts's CaseSpec.seedPointFt for why.
+  run: { points_ft: [number, number][]; system: string; size: RunSize; seed_point_ft?: [number, number] };
   expected: { segment_lf: number[]; total_lf: number };
 }
 
@@ -238,9 +241,12 @@ function seedOnLongestSegment(pts: Point[]): Point {
 
 async function traceOneRun(
   session: Session, sheetKey: string, golden: Point[], goldenLf: number, goldenSize: RunSize | null | undefined,
-  cold: boolean,
+  cold: boolean, seedOverride?: Point,
 ): Promise<TraceRunRow> {
-  const seed = seedOnLongestSegment(golden);
+  // `golden` itself always stays the true centerline for scoring — only
+  // WHERE the seed click lands can differ (a double-line duct's own
+  // centerline has no ink to click; see CaseTruth's own seed_point_ft).
+  const seed = seedOverride ?? seedOnLongestSegment(golden);
   const caseName = sheetKey;
   const t0 = performance.now();
   let r;
@@ -301,9 +307,10 @@ for (const file of caseFiles) {
   session.setScale(sheetKey, { upp });
   const sheet = session.sheet(sheetKey);
   const pts: Point[] = c.run.points_ft.map((p) => syntheticFtToPx(p, c.ptPerFt, c.scale, sheet.heightPx));
+  const seedOverride = c.run.seed_point_ft ? syntheticFtToPx(c.run.seed_point_ft, c.ptPerFt, c.scale, sheet.heightPx) : undefined;
   const cold = !traceSeenSheets.has(sheetKey);
   traceSeenSheets.add(sheetKey);
-  traceRows.push(await traceOneRun(session, sheetKey, pts, c.expected.total_lf, c.run.size, cold));
+  traceRows.push(await traceOneRun(session, sheetKey, pts, c.expected.total_lf, c.run.size, cold, seedOverride));
 }
 
 // ── real hand-traced goldens (WP1.7 + WP3.8's "ground truth v2") — a

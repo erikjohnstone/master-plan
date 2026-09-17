@@ -33,7 +33,11 @@
    "kind": "rect",
    "w_in": 24,
    "h_in": 12
-  }
+  },
+  "seed_point_ft": [
+   23.41,
+   20.33
+  ]
  },
  "expected": {
   "segment_lf": [
