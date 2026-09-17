@@ -1,5 +1,19 @@
 ## Active work
 
+2026-09-17 linear takeoff: a sheet-prefix filter improvement, validated but zero yield this batch (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Built and tested the improvement the previous entry proposed: skip
+architectural/electrical/structural/civil sheets by their own printed
+sheet number before paying for a full grid sweep, keeping only
+mechanical/plumbing-style prefixes. Ran it against 6 fresh files
+chosen for mechanical-sounding names. The filter works as designed
+(skipped 10 sheets outright) but this batch's own yield was zero --
+every mechanical sheet actually swept came back with no automatic-bind
+hits at all. A real, disclosed null result, not a method failure; the
+filter itself is worth keeping for future batches regardless.
+
+No golden changed. `docs/LINEAR-TRACE-EVAL.md` gained a short addendum
+to the "Run 30" section.
+
 2026-09-17 linear takeoff: a fresh scan of 8 never-touched files, zero usable goldens, a methodology lesson (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Rather than continuing to pick through the earlier scan's own leftover
 candidates, ran the same automated method fresh against 8 files the
