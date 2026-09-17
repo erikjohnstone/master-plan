@@ -14,16 +14,17 @@
   blank (no source anywhere in the schedule data — a spec-book field, not a
   drawing one). Wired into `compile_corpus_takeoff`'s existing `export_path`
   (MCP + UI) and a standalone `export-valve-size-template.mjs` CLI. Real runs
-  against navfac-cherry-point-atc (142 rows): Unit No./System/Line
-  Size/Design flow rate 100%, Location 99%, Consumer Δp 77% (computed);
-  Ports/PN class/Branch Δp/Tolerance/Positioning Signal/Operating Voltage 0%
-  — that schedule prints no Configuration+fail-position, control-signal, or
-  pressure-class columns at all, confirmed against the table's own raw
-  header list, not a mapping bug. Surfaced, independent of this work: the
-  current CHW_CONTROL_VALVE compile undercounts navfac's own T-VALVE-01
-  golden fixture (45 vs. truth 64; HHW 97 vs. 99) — reproduces against
-  unmodified `run-takeoff.mjs`, a pre-existing extraction regression, not
-  caused by or fixed in this change.
+  through the full production pipeline (VectorGrid enabled, `OPENTAKEOFF_VECTORGRID`
+  on by default) against navfac-cherry-point-atc: 163/163 rows, matching
+  T-VALVE-01's own frozen truth exactly. Unit No./System/Line Size/Design flow
+  rate/Consumer Δp (computed) 100%, Location 98%; Ports/PN class/Branch
+  Δp/Tolerance/Positioning Signal/Operating Voltage 0% — that schedule prints
+  no Configuration+fail-position, control-signal, or pressure-class columns at
+  all, confirmed against the table's own raw header list, not a mapping bug.
+  (An earlier verification pass run without the VectorGrid sidecar wired up
+  undercounted this same set by 21 rows and wrongly read as a pipeline
+  regression; with VectorGrid — the actual production table engine — enabled,
+  the count matches truth exactly.)
 
 - Harden shared control-schematic discovery and SOO binding against horizontal
   detail titles, rotated title-block copies, adjacent authored sequence sheets,
