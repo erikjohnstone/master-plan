@@ -8079,6 +8079,12 @@ export default function TakeoffCanvas() {
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
   function showCompiledTakeoff(compiled, meta = {}) {
     if (!compiled || compiled.error) return;
+    // openPanel: false lets a caller merge this compile's rows into state
+    // WITHOUT popping the modal open yet — agentCompileCorpusTakeoff uses
+    // this for the compile pass so the estimator's first look at the panel
+    // already has reconcile's plan citations merged in, instead of a bare
+    // schedule-only flash that then rewrites itself a few seconds later.
+    const openPanel = meta.openPanel !== false;
     // Sticky, not overwritten by a later compile of a DIFFERENT kind (e.g. the
     // embedded_coil_valve_gaps pass that normally follows a valve takeoff in
     // the same session) — agentTakeoffRows accumulates across every compile,
@@ -8086,13 +8092,13 @@ export default function TakeoffCanvas() {
     // has moved on; Export to HIT must not disappear just because the LATEST
     // compile happened to be something else. Cleared only by onClear below.
     if (compiled.kind === "control_valves") setLastControlValveTakeoff(compiled);
-    if (compiled.bas_math || compiled.bas_point_lists) setShowTakeoffData(true);
+    if (openPanel && (compiled.bas_math || compiled.bas_point_lists)) setShowTakeoffData(true);
     if (compiled.bas_workflow) {
       try {
         const next = mergeBasWorkflows(basWorkflowRef.current, compiled.bas_workflow, true);
         basWorkflowRef.current = next;
         setBasWorkflow(next);
-        setShowTakeoffData(true);
+        if (openPanel) setShowTakeoffData(true);
       } catch (error) { setCommitMsg(`Couldn't retain BAS evidence: ${error.message}. Previous saved captures were preserved.`); }
     }
     if (compiled.bas_workflow_error) setCommitMsg(`Couldn't retain BAS evidence: ${compiled.bas_workflow_error}. Existing captures were preserved.`);
@@ -8152,7 +8158,7 @@ export default function TakeoffCanvas() {
         prev.filter((row) => !(row.source_tool === "compile_corpus_takeoff" && row.workflow === workflowName)),
         rows,
       ));
-      setShowTakeoffData(true);
+      if (openPanel) setShowTakeoffData(true);
       // Audit trail on the blueprints: one highlight per schedule table + per tag row.
       void paintCompiledTakeoffHighlights(compiled);
     }
@@ -8197,7 +8203,7 @@ export default function TakeoffCanvas() {
         // CSV/JSON still delivered
       }
     }
-    showCompiledTakeoff(compiled);
+    showCompiledTakeoff(compiled, { openPanel: opts.openPanel !== false });
     return {
       takeoff_id: compiled.takeoff_id,
       kind: compiled.kind,
@@ -8269,7 +8275,13 @@ export default function TakeoffCanvas() {
           + "UI must use the same graph pipeline as MCP — geometric-only fallback is disabled for compile_corpus_takeoff.",
       };
     }
-    const result = await finalizeAgentCompiledTakeoff(compiled, opts);
+    // openPanel: false — merge this compile's own rows into state but do NOT
+    // pop the modal open yet. Reconcile (below) runs before the panel is ever
+    // shown, so the estimator's first look at it already has plan citations
+    // merged in — not a bare schedule-only table that then silently rewrites
+    // itself a few seconds later once reconcile catches up (live-reported:
+    // "that first screen still comes up before any cites are attached").
+    const result = await finalizeAgentCompiledTakeoff(compiled, { ...opts, openPanel: false });
     // No takeoff is "finished" without plan-grounded evidence — leaving
     // reconcile as a second, optional tool call meant the model routinely
     // stopped right after compile and wrote its final answer over a
@@ -8281,17 +8293,27 @@ export default function TakeoffCanvas() {
     // way complete_bas_takeoff already bundles its own reconcile pass — never
     // dependent on the model separately deciding to call
     // reconcile_schedule_plan.
+    let reconciledRows = false;
     if (result && !result.error) {
       try {
         const reconciled = await fetchProductionReconcileSchedulePlan({ onProgress: reportAgentTakeoffProgress });
         if (reconciled && !reconciled.error && Array.isArray(reconciled.rows)) {
+          // pushReconcileToTakeoffPanel opens the panel itself once it has
+          // rows to merge — the FIRST time it's shown, both the compiled
+          // schedule fields and the reconciled plan citations are present.
           pushReconcileToTakeoffPanel(reconciled, null);
           result.reconcile_rows = reconciled.rows.length;
+          reconciledRows = reconciled.rows.length > 0;
         }
       } catch {
         // The compiled takeoff still stands on its own without citations.
       }
     }
+    // Reconcile found nothing to merge (error, or a genuine zero-match
+    // result) — the panel was deliberately held back above, so it must still
+    // open now with whatever the compile itself produced. Never leave a
+    // successful compile silently unopened.
+    if (!reconciledRows) setShowTakeoffData(true);
     return result;
   }
 
