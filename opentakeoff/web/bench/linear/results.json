@@ -586,7 +586,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 2.714337000000114
+     "buildMs": 3.0705309999998462
     }
    ],
    "aggregate": {
@@ -597,7 +597,7 @@
     "meanLenErrPct": 0.6137211036539896,
     "maxOverTracePct": 0,
     "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 2.714337000000114,
+    "maxColdBuildMs": 3.0705309999998462,
     "maxWarmQueryMs": null
    }
   },
@@ -644,7 +644,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 309.00343799999973
+     "buildMs": 302.32594800000015
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -699,7 +699,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 442.31184200000007
+     "buildMs": 452.881343
     }
    ],
    "aggregate": {
@@ -710,7 +710,7 @@
     "meanLenErrPct": 0.46230437018595794,
     "maxOverTracePct": 0.8470464135021097,
     "sizeAccuracyPct": 0,
-    "maxColdBuildMs": 442.31184200000007,
+    "maxColdBuildMs": 452.881343,
     "maxWarmQueryMs": null
    }
   }

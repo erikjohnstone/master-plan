@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-17 linear takeoff: Finding 5 hypothesis tested and disproven, reverted (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Tried the fix the prior checkpoint's own Finding 5 named: `bench/linear/
+synthesize.mts`'s random-walk generator often produces near-closed
+rectangular loops (two roughly-parallel, span-overlapping legs on each
+axis), so built `looksLikeWallOutline` + a retry-until-clear wrapper,
+regenerated the whole 10-case synthetic corpus, and re-ran `bench:
+linear`. Recall stayed exactly 0/10, and `02-pen-thick-solid`'s own new
+(confirmed non-rectangular) path was EXCLUDED MORE aggressively than
+before (5 of 5 segments wall-vouched vs. 4 of 5 previously) — direct
+proof the shape hypothesis was wrong, not merely insufficient. Reverted
+the generator change and the regenerated fixtures rather than leave
+disproven complexity behind (`git checkout` back to last-committed
+state, confirmed clean).
+
+Real cause looks more fundamental: these synthetic PDFs carry no PDF
+layers at all (pdf-lib draws plain content streams), so `mepLayerSignal`
+reads `"none"` for every one of them, and with zero surrounding
+architectural context (no walls, no rooms to contrast against),
+`wallnetwork.ts`'s wall-vouch fallback appears to exclude essentially any
+sufficiently long, straight, axis-aligned segment on such a bare sheet
+regardless of overall path shape. The likely real fix is giving the
+generator's own PDFs a real named OCG layer so layer classification
+short-circuits wall-vouch entirely (the same way `ensureMepGraph`'s own
+fallback only fires when the layer signal isn't strong) — not attempted
+this checkpoint; `pdf-lib`'s OCG support is low-level, a real separate
+task. `docs/LINEAR-TRACE-EVAL.md`'s own Finding 5 rewritten to record
+what was tried, why it failed, and the corrected hypothesis, rather than
+just updating the number and moving on.
+
+Verified: `npx tsc --noEmit` clean; `git status` clean after revert (no
+stray regenerated fixtures left committed or uncommitted); `bench:linear`
+re-confirmed passing at its prior, unaffected state.
+
 2026-09-17 linear takeoff: GATE 3 scoring migrated into bench/linear.mts (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 The prior checkpoint's `mcp/scripts/linear-trace-eval.mjs` (mirroring
 `mep-trace-eval.mjs`'s own conventions) was a real, working scorer, but
