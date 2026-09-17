@@ -1,5 +1,30 @@
 # Changelog
 
+- Add Siemens Valve Size Template (`Valve_Size_Template_US_Global.xlsx`) export
+  from the production control-valve takeoff (`compile_corpus_takeoff`
+  kind `control_valves`/T-VALVE-01, the same Session+ODL pipeline MCP and the
+  UI's production CLI both call). `valveSizeTemplate.ts` fills the original
+  workbook byte-level — DomainValues/Constants lookup sheets, defined names,
+  data-validation dropdowns and both protection elements untouched, only the
+  ValveTable data rows written; `valveSizeExport.ts` maps schedule cells onto
+  the template's 12 columns (Unit No./Location/System/Ports/PN class/Line
+  Size/Design flow rate/Consumer Δp/Branch Δp/Tolerance/Positioning
+  Signal/Operating Voltage), computing Consumer Δp from printed GPM+Cv via
+  (GPM/Cv)^2 where both parse cleanly, and leaving PN class/Branch Δp always
+  blank (no source anywhere in the schedule data — a spec-book field, not a
+  drawing one). Wired into `compile_corpus_takeoff`'s existing `export_path`
+  (MCP + UI) and a standalone `export-valve-size-template.mjs` CLI. Real runs
+  against navfac-cherry-point-atc (142 rows): Unit No./System/Line
+  Size/Design flow rate 100%, Location 99%, Consumer Δp 77% (computed);
+  Ports/PN class/Branch Δp/Tolerance/Positioning Signal/Operating Voltage 0%
+  — that schedule prints no Configuration+fail-position, control-signal, or
+  pressure-class columns at all, confirmed against the table's own raw
+  header list, not a mapping bug. Surfaced, independent of this work: the
+  current CHW_CONTROL_VALVE compile undercounts navfac's own T-VALVE-01
+  golden fixture (45 vs. truth 64; HHW 97 vs. 99) — reproduces against
+  unmodified `run-takeoff.mjs`, a pre-existing extraction regression, not
+  caused by or fixed in this change.
+
 - Harden shared control-schematic discovery and SOO binding against horizontal
   detail titles, rotated title-block copies, adjacent authored sequence sheets,
   project-word collisions and generic non-control schematics. Add nine
