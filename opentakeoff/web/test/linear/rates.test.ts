@@ -139,40 +139,44 @@ test("basDefaults / pipeLabor / ductLabor: re-exported tables carry the research
 
 // ── GATE 2 invariant, checked generically ────────────────────────────────
 // "every table cell carries a grade and a source; a [M] cell cannot be
-// marked C without a source URL in the same commit." Walks every JSON table
-// this module loads and asserts: (1) every object with a `grade` field uses
-// one of the three legal letters; (2) every `grade: "C"` sits beside (on the
-// same object, or inherits from the enclosing table's own `table_grade`/
-// `table_source`) a `source` string that looks like a citation, not empty;
-// (3) no orphaned grade without a source anywhere in the tree.
+// marked C without a source URL in the same commit." Walks EVERY rate table
+// this module loads (all ten — the three re-exported labor/BAS-defaults
+// tables carry their own per-cell grade/source structure exactly like the
+// seven raw JSON imports, so they get the identical walk, not a separate
+// spot-check) and asserts: (1) every grade uses one of the three legal
+// letters; (2) every graded cell sits beside (on the same object, or
+// inherits from the enclosing table's own `table_grade`/`table_source`) a
+// `source` string that looks like a citation, not empty; (3) a "C" grade
+// specifically carries a real URL in that source — GATE 2's own literal
+// wording — not merely a non-empty string (a bare "plans/03-research/..."
+// citation is a legitimate source for V/M, but never satisfies "C").
 const ALL_TABLES: Record<string, unknown> = {
   ductGauge: ductGaugeTable, ductWeight: ductWeightTable, ductHanger: ductHangerTable,
   pipeHanger: pipeHangerTable, ductInsulation: ductInsulationTable, pipeInsulation: pipeInsulationTable,
-  pipeJointHours: pipeJointHoursTable,
+  pipeJointHours: pipeJointHoursTable, ductLabor, pipeLabor, basDefaults,
 };
+
+const looksLikeUrl = (s: string) => /https?:\/\//.test(s);
 
 function walk(node: unknown, path: string, inheritedSource: string | undefined, issues: string[]) {
   if (node === null || typeof node !== "object") return;
   if (Array.isArray(node)) { node.forEach((v, i) => walk(v, `${path}[${i}]`, inheritedSource, issues)); return; }
   const obj = node as Record<string, unknown>;
   const ownSource = typeof obj.source === "string" ? obj.source : typeof obj.table_source === "string" ? obj.table_source : inheritedSource;
+  const checkGrade = (g: Grade, sourceLabel: string) => {
+    if (!["C", "V", "M"].includes(g)) issues.push(`${path}: illegal ${sourceLabel} ${JSON.stringify(g)}`);
+    if (!ownSource || ownSource.trim().length < 8) issues.push(`${path}: ${sourceLabel} ${g} with no usable source`);
+    else if (g === "C" && !looksLikeUrl(ownSource)) issues.push(`${path}: ${sourceLabel} "C" with no source URL (GATE 2)`);
+  };
   if ("grade" in obj && obj.grade !== null) {
     // pipeInsulation.json's per-row `grade` is an array of per-band overrides
     // (Grade | null), aligned with that row's `thickness_in` array — not a
     // single Grade string like everywhere else. Validate each entry the
     // same way rather than treating the array itself as one illegal value.
     const grades = Array.isArray(obj.grade) ? (obj.grade as (Grade | null)[]) : [obj.grade as Grade];
-    for (const g of grades) {
-      if (g === null) continue;
-      if (!["C", "V", "M"].includes(g)) issues.push(`${path}: illegal grade ${JSON.stringify(g)}`);
-      if (!ownSource || ownSource.trim().length < 8) issues.push(`${path}: grade ${g} with no usable source`);
-    }
+    for (const g of grades) if (g !== null) checkGrade(g, "grade");
   }
-  if ("table_grade" in obj) {
-    const g = obj.table_grade as Grade;
-    if (!["C", "V", "M"].includes(g)) issues.push(`${path}: illegal table_grade ${JSON.stringify(g)}`);
-    if (!ownSource || ownSource.trim().length < 8) issues.push(`${path}: table_grade ${g} with no usable table_source`);
-  }
+  if ("table_grade" in obj) checkGrade(obj.table_grade as Grade, "table_grade");
   for (const [k, v] of Object.entries(obj)) if (k !== "source" && k !== "table_source") walk(v, `${path}.${k}`, ownSource, issues);
 }
 

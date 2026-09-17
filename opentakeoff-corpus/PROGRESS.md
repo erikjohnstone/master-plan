@@ -1,5 +1,67 @@
 ## Active work
 
+2026-09-17 linear takeoff GATE 2 PASSED (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+all four conditions verified with concrete evidence, not asserted from the
+"same shared function" architecture alone.
+
+1. **"§8.4 golden reproduced byte-identically on canvas and MCP."**
+   `web/test/linear/assembly.test.ts`'s own "plan §8.4 worked example, cell
+   by cell" test already proved this against `resolveLinearAssembly` called
+   directly (canvas side, WP2.2). That alone wasn't sufficient evidence for
+   the MCP side — `resolve_linear_assembly` calling the identical imported
+   function is a structural argument, not a demonstrated one. Closed the
+   gap with a new `mcp/test/linearParity.test.ts` test that drives the
+   EXACT SAME fixture (WORKED_EXAMPLE_RUN's 18.2 ft of 12x6 + 29 ft of
+   16x8, one elbow vertex, `ductAssembly(false)`'s pinned-26-gauge inline
+   assembly) through the REAL wire — `set_scale({upp: 0.1})` (0.1 ft/px
+   makes 182px/290px exact whole-foot LF), `measure_line` with a
+   `vertices` override forcing the mid-run "elbow" kind (the fixture's own
+   collinear-segments-but-labeled-elbow design, ported verbatim), `edit_run`
+   for the two segment sizes, then `resolve_linear_assembly` with an inline
+   assembly matching `ductAssembly(false)` field-for-field. Asserts the
+   exact same numbers assembly.test.ts's own golden pins: duct_lb 56.9/
+   120.9, insulation_sf 80.1/159.5, elbow qty 1, transition qty 1 (formula
+   matching `/4 x 4in/`), hanger 3/4, joint 14, labor_hr 4.09. Passed on
+   the first run — genuine end-to-end confirmation, not a retrofit to make
+   a wrong number pass.
+
+2. **"Every table cell carries a grade and a source."** A GATE-2-anticipating
+   generic walker test already existed in `web/test/linear/rates.test.ts`
+   from WP2.1, but audited it and found it only covered 7 of the 10 rate
+   tables — `ductLabor`, `pipeLabor`, and `basDefaults` (all three
+   re-exported from `rates.ts`, all three carrying their own real per-cell
+   `grade`/`source` structure) were never walked, so a future ungraded or
+   unsourced cell in any of those three would have gone uncaught. Fixed by
+   adding all three to `ALL_TABLES`.
+
+3. **"A [M] cell cannot be marked C without a source URL in the same
+   commit."** The same existing walker only checked that a graded cell's
+   effective source was a non-trivial string (length ≥ 8) — a bare
+   `"plans/03-research/..."` citation (legitimate for V/M) would have
+   silently passed a "C" grade too, which is weaker than the gate's own
+   literal wording. Strengthened the walker: a "C" grade now specifically
+   requires its effective source to contain an `http(s)://` URL, checked
+   independently of the general non-empty-source rule so V/M sources keep
+   accepting a bare citation. Re-ran against the now-fully-covered table
+   set: zero violations — every "C" cell across all 10 tables already
+   carries a real URL; this closes the gap as an enforced, permanent test
+   rather than a one-time manual audit that would silently rot.
+
+4. **"Guard green."** mcp's full `test` script (37 files) — 432 cases
+   (+1 for the new golden test), 11 fail, the identical 8 pre-existing
+   failures (`sheet graph (#87)`, `WP1 keyed compile acceptance`, D04/D05/
+   D09 production-engine cases, `safewrite.test.ts`'s "unreadable file",
+   T-HVAC-01/T-VALVE-01) every checkpoint since WP2.5a has confirmed
+   unrelated. `web`'s full suite and `bench`/`bench:linear` unaffected —
+   this checkpoint touches only `mcp/test/linearParity.test.ts` and
+   `web/test/linear/rates.test.ts`, zero `src/` files on either side.
+
+No source changes this checkpoint — both fixes are test-coverage gaps in
+existing verification tooling, closed before relying on that tooling to
+certify the gate. `npx tsc --noEmit` clean on both sides;
+`linearParity.test.ts` 12/12; `rates.test.ts` 11/11; `web/test/linear/*`
+41/41.
+
 2026-09-17 linear takeoff WP2.5b checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Report "Fittings & supports" tab; buy list rows from vertex/run bases. This
 closes out WP2.5 (its other half, MCP `resolve_linear_assembly`, was

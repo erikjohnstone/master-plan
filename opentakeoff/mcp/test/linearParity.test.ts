@@ -258,3 +258,67 @@ test("resolve_linear_assembly: refuses a non-linear shape and a linear shape wit
   const lineId = session.measureLine(KEY, [[0, 0], [360, 0]], { condition: "HHWS-1" }).shape_id!; // no size → no run block
   assert.throws(() => session.resolveLinearAssembly(lineId, {}), /carries no run block yet/);
 });
+
+// GATE 2's own first condition: "§8.4 golden reproduced byte-identically on
+// canvas and MCP." web/test/linear/assembly.test.ts already proves the plan
+// §8.4 worked example cell-by-cell against resolveLinearAssembly called
+// directly (WP2.2) — its WORKED_EXAMPLE_RUN fixture, DUCT_CONDITION and
+// ductAssembly(false) are reproduced here verbatim, but driven entirely
+// through the real MCP wire (set_scale → measure_line → edit_run →
+// resolve_linear_assembly) instead of an in-memory ComputedRun literal, so
+// this is genuine end-to-end evidence, not just "same function, trust it."
+// upp: 0.1 (0.1 ft/px) makes the plan's own LF exact at whole-px distances:
+// 182px = 18.2 ft, 290px = 29.0 ft. The three points are COLLINEAR — no
+// real geometric turn — exactly matching the fixture's own comment ("the
+// elbow is a SEPARATE turn elsewhere on the run, modeled here as an extra
+// zero-length-consequence vertex entry"): the "elbow" at vertex 1 is an
+// explicit measure_line `vertices` override, not derived from geometry.
+test("resolve_linear_assembly: plan §8.4 worked example reproduced byte-identically through the real MCP wire (GATE 2)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: PLAN });
+  await call(client, "set_scale", { sheet: KEY, upp: 0.1 });
+  await call(client, "edit_materials", { condition: "SA-1", add: [{ name: "placeholder", per: 1 }] });
+  await call(client, "edit_condition", { condition: "SA-1", family: "duct_rect" });
+  const line = await call(client, "measure_line", {
+    sheet: KEY, pts: [[0, 0], [182, 0], [472, 0]], condition: "SA-1",
+    vertices: [{ i: 1, kind: "elbow" }],
+  });
+  assert.equal(line.computed_run.segments[0].lf, 18.2);
+  assert.equal(line.computed_run.segments[1].lf, 29);
+  await call(client, "edit_run", {
+    shape_id: line.shape_id,
+    segment_sizes: [
+      { i: 0, size: { kind: "rect", w_in: 12, h_in: 6 } },
+      { i: 1, size: { kind: "rect", w_in: 16, h_in: 8 } },
+    ],
+  });
+
+  const resolved = await call(client, "resolve_linear_assembly", {
+    shape_id: line.shape_id,
+    pressure_class_in_wg: 2,
+    assembly: {
+      family: "duct_rect", name: "worked-example assembly",
+      per_ft: [{ item: "duct_lb", gauge: 26 }, { item: "insulation_sf", thickness_in: 1.5, lap_factor: 1.10 }],
+      per_vertex: [{ item: "elbow", kind: "elbow", labor_factor: 1.4 }],
+      per_run: [],
+      deduct_fittings: false,
+    },
+  });
+  const by = (item: string, sizeKey?: string) => resolved.line_items.find((li: any) => li.item === item && (sizeKey === undefined || li.size_key === sizeKey));
+
+  // every cell assembly.test.ts's own "plan §8.4 worked example, cell by
+  // cell" test asserts against the pure function directly — reproduced
+  // here to the exact same values, over the wire.
+  assert.equal(by("duct_lb", "rect:12x6").qty, 56.9);
+  assert.equal(by("duct_lb", "rect:16x8").qty, 120.9);
+  assert.equal(by("insulation_sf", "rect:12x6").qty, 80.1);
+  assert.equal(by("insulation_sf", "rect:16x8").qty, 159.5);
+  assert.equal(by("elbow").qty, 1);
+  const transition = by("transition");
+  assert.equal(transition.qty, 1);
+  assert.match(transition.formula, /4 x 4in/);
+  assert.equal(by("hanger", "rect:12x6").qty, 3);
+  assert.equal(by("hanger", "rect:16x8").qty, 4);
+  assert.equal(by("joint").qty, 14);
+  assert.equal(by("labor_hr").qty, 4.09);
+});
