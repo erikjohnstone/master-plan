@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-17 linear takeoff: same sweep-and-verify method tried on Bessemer P101 -- no clean candidate this time, four more disclosed engine-gap instances (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Tried the same grid-sweep-plus-visual-verification method from the prior
+two checkpoints against the third remaining refused-or-partly-refused
+development sheet: `bessemer-mechanical-bidset.pdf#3` (dense domestic
+plumbing; the SAN riser golden refuses outright). A full-page sweep found
+only 5 both-dead-end candidates this time -- fewer than either mechanical
+sheet -- and EVERY one turned out to be a mistrace on something other than
+real pipe, a noticeably worse hit rate than the prior two checkpoints.
+
+Two candidates traced along light-gray fixture-outline edges (bathtub/
+sink alcove boundaries) -- the same non-MEP-linework category the prior
+checkpoint's finding already names, just from casework/fixture footprints
+this time. One candidate's four points sat EXACTLY on the four corners of
+the "FD-1" (floor drain) tag/label's own drawn callout box -- notable on
+its own, since this codebase already runs a dedicated tag-box exclusion
+check meant to catch exactly this kind of frame, and it wasn't caught
+here; root cause not investigated further this pass, disclosed as a
+further, more specific instance of the same finding. The remaining two
+(a matched pair, same shape at different y-bands) ran through a rotated
+"2\" SAN UP/DN" text label's own edge into a fixture-outline corner --
+ambiguous enough to set aside unidentified rather than guessed.
+
+No new golden authored. This is logged as an honest negative result, not
+a search-budget shortfall or a silently-dropped attempt: the prior
+checkpoints' own method has now been tried on all three real development
+sheets carrying a fully-or-partly-refused golden, landing two real hits
+and one honest miss. The disclosed engine finding (real non-MEP linework
+slipping through uncaught on an unlayered sheet) now has seven confirmed
+instances across three sheets and at least five distinct sources.
+
+Measured: `npm run bench:linear` passes, all numbers unchanged from the
+prior checkpoint (no ground-truth file, code, or scorer touched this
+pass -- purely a documented negative result). `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 18" section and its own priority list updated to note this
+sweep-based lever is now close to exhausted on the current sheet set.
+
 2026-09-17 linear takeoff: same sweep-and-verify method repeated on Federal M3.1 -- development recall 3/9 -> 4/10 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Ran the exact method from the prior checkpoint against the OTHER fully-
 refused development sheet, `federal-attachment4-mechanical.pdf#6` (both
