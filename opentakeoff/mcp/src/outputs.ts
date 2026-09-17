@@ -1576,6 +1576,67 @@ export const traceConnectivityOutput = {
   reason: z.string().optional().describe("dead_end/refused only — why, and what to do about it"),
 };
 
+/** classify_strokes (#linear-takeoff WP3.7, plan §6.2): which stroke
+ * families this sheet's own drawn ink classifies into, before tracing any
+ * of them — a setup/inspection tool, never a prerequisite (trace_run builds
+ * and caches the same classification itself). */
+export const classifyStrokesOutput = {
+  sheet: z.string(),
+  candidate_segments: z.number().int().describe("How many segments survived exclusion (SEG_CLIP/fill-only, annotation/finish-pattern/hidden layer roles, hatch rows, text-box frames, wall-vouched ink) to be classified at all"),
+  families: z.array(z.object({
+    id: z.number().int(),
+    pen: z.number().int().describe("Device pen nibble, 0-15"),
+    dash: z.number().int().describe("Index into the sheet's own dash patterns; 0 = solid"),
+    layer: z.string().optional().describe("OCG layer id, when every member segment shares one"),
+    system: z.enum(["piping", "ductwork", "electrical", "controls", "unknown"]).optional(),
+    confidence: z.number().describe("0-1, stated — never implied. 1.0 only for a real CAD layer name match (plan §6.2 grade a)"),
+    evidence: z.array(z.string()).describe("Which grade(s) this family's classification rests on, e.g. [\"layer-name\"] or [\"pen-weight-prior\"]; [] = no positive evidence at all"),
+    segments: z.number().int().describe("How many candidate segments belong to this family"),
+  })).describe("Every stroke family this sheet's ink separates into — the heaviest/most layer-confident one is usually the duct or pipe pen; trace_run picks whichever family the seed segment actually belongs to, not necessarily this list's first entry"),
+};
+
+/** trace_run (#linear-takeoff WP3.7, plan §6.3/§6.4/§6.6/§6.8): walk the
+ * drawn duct/pipe run under a seed point and report the SAME confidence/
+ * refusal account a canvas trace would. FIND-ONLY by default (no
+ * `shape_id`); `commit: true` mints a real linear shape, `origin.method
+ * "traced"` with the full receipt under `origin.trace`. Two hard refusals
+ * (thrown, not returned — REFUSAL_NO_LINEWORK/REFUSAL_NO_STROKE_FAMILY):
+ * nothing under the seed at all, or nothing on the sheet classifies as
+ * ductwork/piping in the first place. An `ambiguous` stop is NOT a
+ * refusal — it is a real, disclosed result with its own candidate fan. */
+export const traceRunOutput = {
+  sheet: z.string(),
+  seed: z.object({ at: z.tuple([z.number(), z.number()]).describe("The seed snapped onto the nearest candidate segment, image px") }),
+  points: z.array(z.tuple([z.number(), z.number()])).describe("The walked polyline, in travel order, image px"),
+  length_px: z.number(),
+  length_lf: z.number().optional().describe("Present only when the sheet's scale is set — a find-only trace on an unscaled sheet still reports length_px"),
+  size: runSizeSchema.optional().describe("The run's resolved size, from whichever bound label scored highest — absent when no label was reachable (size_missing) or two disagreed (size_withheld; see withheld[])"),
+  systems: z.array(z.string()).optional().describe("System tag(s) riding with the resolved size (two = a multi-service label, e.g. HW/CW), or the stroke family's own classified system when no label bound one"),
+  vertices: z.array(z.object({
+    kind: z.enum(["elbow", "tee", "crossing"]),
+    at: z.tuple([z.number(), z.number()]),
+    turn_deg: z.number().optional().describe("elbow only"),
+    angle_class: z.enum(["45", "90", "custom"]).optional().describe("elbow only"),
+    branch_seg: z.number().int().optional().describe("tee only — the segment index NOT taken"),
+  })).describe("Interior vertices the walk actually passed through, both directions combined"),
+  stops: z.object({
+    forward: z.object({ reason: z.enum(["dead_end", "equipment", "sheet_edge", "riser", "branch_joins_main", "ambiguous", "family_change", "cap"]), at: z.tuple([z.number(), z.number()]) }),
+    backward: z.object({ reason: z.enum(["dead_end", "equipment", "sheet_edge", "riser", "branch_joins_main", "ambiguous", "family_change", "cap"]), at: z.tuple([z.number(), z.number()]) }),
+  }),
+  candidates: z.array(z.object({
+    at: z.tuple([z.number(), z.number()]).describe("Where this candidate continuation starts from the ambiguous node"),
+    angle_deg: z.number(),
+  })).optional().describe("Present only when a stop's reason was \"ambiguous\" — the fan of continuations plan §6.3 says to OFFER, never pick from"),
+  withheld: z.array(z.object({
+    at: z.tuple([z.number(), z.number()]),
+    reads: z.array(z.string()).describe("The disagreeing labels' own raw text, exactly as parsed"),
+    reason: z.string(),
+  })).optional().describe("Present only when two labels landed on the same walked segment and disagreed — size stays unset on this run; view_sheet the point and pick one"),
+  confidence: z.number().describe("min() over whichever named factors have a real numeric grade behind them — see factors"),
+  factors: z.array(z.string()).describe("e.g. \"stroke-family:layer-name\", \"size-binding:beside\", \"size_missing\", \"ambiguous_stop\", \"layer-unclassified\", \"scale_unconfirmed\""),
+  shape_id: z.string().optional().describe("Present when commit:true — the committed linear shape's id"),
+};
+
 /** sheet_context (issue #29): vectors + text + hatch families of one region,
  * in one frame. Structured-only by design — the raster stays view_sheet's
  * job, and frame agreement is a contract on the echoed region rect rather

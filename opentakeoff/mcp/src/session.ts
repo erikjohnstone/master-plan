@@ -22,6 +22,16 @@ import type { RunSize, AuthoredRun, RunVertexKind, LinearCondition, LineItem, As
 import { resolveRunSegments, type ComputedRun } from "../../web/src/lib/linear/run.ts";
 import { resolveLinearAssembly as resolveLinearAssemblyPure } from "../../web/src/lib/linear/assembly.ts";
 import { SEED_ASSEMBLIES } from "../../web/src/lib/linear/assemblyLibrary.ts";
+// #linear-takeoff WP3 (trace engine, plan §6.2-§6.8) — classify_strokes +
+// trace_run's own pure-lib half. "Canvas and MCP cannot disagree": every one
+// of these is the SAME module TakeoffCanvas.jsx's own Trace mode (WP3.7's
+// canvas half) will import, never a parallel MCP-side reimplementation.
+import { classifyStrokes as classifyStrokesPure, type StrokeClasses, type StrokeFamily } from "../../web/src/lib/linear/strokes.ts";
+import { buildSegmentIndex, nearestSegment, hitTolerancePx, type SegmentIndex } from "../../web/src/lib/linear/index.ts";
+import { walkBothDirections } from "../../web/src/lib/linear/walk.ts";
+import { associateLabel, resolveSizeConflicts, type BoundSize } from "../../web/src/lib/linear/sizes.ts";
+import { buildTraceReceipt, REFUSAL_NO_LINEWORK, REFUSAL_NO_STROKE_FAMILY, sizeConflictRefusal, type TraceOrigin, type TraceReceipt } from "../../web/src/lib/linear/receipt.ts";
+import { leaderTerminalPointsForLabel } from "../../web/src/lib/symbollabels.ts";
 
 // #linear-takeoff (WP2.5): the built-in assembly a condition's family
 // resolves to when neither the call nor the condition names one explicitly
@@ -451,7 +461,7 @@ export interface Condition {
  * after a human affirmed the shape at an explicit review gate — this server
  * has no such gate, so everything it commits is reviewed: false. */
 export interface ShapeOrigin {
-  method: "manual" | "one_click_v1" | "agent_v1" | "symbol_sweep" | "rule_v1" | "cutout_v1";
+  method: "manual" | "one_click_v1" | "agent_v1" | "symbol_sweep" | "rule_v1" | "cutout_v1" | "traced";
   /** Omitted = human. "agent" = the shape was produced by MCP/automation.
    * "rule" = minted by a correction rule's deterministic re-run (#88/#207) —
    * the canvas's own third actor, kept distinct so capture and the marked-set
@@ -569,6 +579,13 @@ export interface ShapeOrigin {
       corroborated_tag?: string;
     };
   };
+  /** trace_run (#linear-takeoff WP3.6, plan §6.8): the full trace receipt —
+   * seed, segments walked, labels read (with bboxes), the seed segment's own
+   * drawn pen width, both directions' stop reasons, and the ambiguous-stop
+   * candidate fan when either stopped that way. `confidence`/
+   * `confidence_factors` above already carry this method's own account;
+   * this is the underlying evidence they're computed from. */
+  trace?: TraceReceipt;
 }
 
 export interface Shape {
@@ -769,6 +786,12 @@ interface SheetState {
    * (isError:true, a bare JTS coordinate dump, not the tool's own documented
    * TraceResult shape) instead of a clean, doctrine-consistent refusal. */
   mepGraphNodingError?: string;
+  /** #linear-takeoff WP3.7: stroke classification (strokes.ts) + spatial
+   * index (index.ts), built once and cached like `mepGraph` — classify_strokes
+   * and trace_run share this, so tracing several seeds on one sheet never
+   * repeats the classification pass. undefined = not built yet; null = zero
+   * vector linework (mirrors `mask`/`mepGraph`'s own null convention). */
+  linearIndex?: { classes: StrokeClasses; index: SegmentIndex } | null;
 }
 
 /** sheet_context decimation defaults (issue #29) — declared and stable, never
@@ -3704,6 +3727,199 @@ export class Session {
       }
     }
     return s.mepGraph;
+  }
+
+  /** #linear-takeoff WP3.7: stroke classification + spatial index (WP3.1/
+   * WP3.2), built once per sheet and cached like `ensureMepGraph` — the SAME
+   * `strokes.ts`/`index.ts` the canvas's own Trace mode worker will build
+   * from, so a headless trace and a canvas trace can never classify a
+   * sheet's ink differently. Reuses `rolesFor`'s own layer-role codes and
+   * `mepLayerSignal` exactly like `ensureMepGraph` does — one shared
+   * "which ink is real MEP linework" answer for both connectivity tracing
+   * and duct/pipe tracing, never a second heuristic. undefined = not built
+   * yet; null = zero vector linework (a scan). */
+  private async ensureLinearIndex(s: SheetState): Promise<{ classes: StrokeClasses; index: SegmentIndex } | null> {
+    if (s.linearIndex === undefined) {
+      const geo = await this.ensureGeometry(s);
+      if (!geo.segs.length) { s.linearIndex = null; return null; }
+      if (!s.spans) s.spans = textSpans(s.page);
+      const roleCodes = this.rolesFor(s, geo);
+      const layerSignal = mepLayerSignal(s.layers, geo.layerOf);
+      const mppf = s.upp ? 1 / s.upp : 0;
+      const classes = classifyStrokesPure({
+        segs: geo.segs, meta: geo.meta, roleCodes, layerSignal, ftPx: mppf,
+        subpaths: geo.subpaths, texts: s.spans.map((sp) => ({ x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0 })),
+        dash: geo.dash, lum: geo.lum, strokeRgb: geo.strokeRgb,
+        layerOf: geo.layerOf, layerIds: geo.layerIds, layers: s.layers,
+      });
+      const index = buildSegmentIndex(geo.segs, geo.meta, { candidate: classes.candidate, family: classes.family });
+      s.linearIndex = { classes, index };
+    }
+    return s.linearIndex;
+  }
+
+  /** classify_strokes (#linear-takeoff WP3.7, setup stage): read-only sheet
+   * inspection — which stroke families this sheet's own ink classifies into
+   * (plan §6.2's evidence grades a-d), and how many candidate segments each
+   * one covers. Purely informational: trace_run builds and caches the SAME
+   * index itself, so calling this first is never required, only useful for
+   * seeing what's on a sheet (which pen is the duct pen, is there real CAD
+   * layer evidence) before tracing a seed. */
+  async classifyStrokes(name: string) {
+    const s = this.sheet(name);
+    const li = await this.ensureLinearIndex(s);
+    if (!li) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — stroke classification reads drawn ink; raster-assisted tracing is not yet available here.");
+    }
+    if (!li.classes.families.length) {
+      throw new UserError(REFUSAL_NO_STROKE_FAMILY);
+    }
+    const counts = new Map<number, number>();
+    const fam = li.classes.family;
+    for (let i = 0; i < fam.length; i++) if (fam[i] >= 0) counts.set(fam[i], (counts.get(fam[i]) || 0) + 1);
+    return {
+      sheet: s.key,
+      candidate_segments: li.classes.candidate.reduce((n: number, c) => n + c, 0),
+      families: li.classes.families.map((f) => ({
+        id: f.id, pen: f.pen, dash: f.dash,
+        ...(f.layer ? { layer: f.layer } : {}),
+        ...(f.system ? { system: f.system } : {}),
+        confidence: f.confidence, evidence: f.evidence,
+        segments: counts.get(f.id) || 0,
+      })),
+    };
+  }
+
+  /** trace_run (#linear-takeoff WP3.7, measure stage): walk the drawn duct/
+   * pipe run under a seed point (plan §6.3/§6.4's index+graph+walker),
+   * associate whatever size labels (plan §6.6) land near it, and report the
+   * SAME confidence/refusal account `buildTraceReceipt` (WP3.6) would give
+   * a canvas trace. FIND-ONLY by default; `commit: true` (with `condition`)
+   * mints a real linear shape exactly like `measure_line`'s own commit path
+   * (same `this.commit` call, same `run`/`computed.run` construction) but
+   * stamped `origin.method:"traced"` with the full receipt under
+   * `origin.trace` instead of a manually-clicked polyline's plain
+   * `method:"manual"`. Two hard, pre-walk refusals (plan §6.8, verbatim):
+   * no candidate segment at all under the seed, or a sheet with no stroke
+   * family classified as ductwork/piping in the first place. Everything
+   * past that point — including an `ambiguous` stop — is a real, disclosed
+   * FOUND result, never a refusal: plan §6.3's own doctrine is to offer the
+   * candidate fan, not block on it. */
+  async traceRun(name: string, from: Point, opts: {
+    condition?: string;
+    max_hops?: number;
+    max_length_ft?: number;
+    commit?: boolean;
+  }) {
+    const s = this.sheet(name);
+    const li = await this.ensureLinearIndex(s);
+    if (!li) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — trace manually, or use raster-assisted snapping (plan §6.9, not yet available here).");
+    }
+    if (!li.classes.families.length) {
+      throw new UserError(REFUSAL_NO_STROKE_FAMILY);
+    }
+    if (opts.commit && !opts.condition) {
+      throw new UserError("commit:true needs a condition to commit onto — pass condition, or drop commit for a find-only trace.");
+    }
+    const { index, classes } = li;
+    const geo = await this.ensureGeometry(s);
+    // 11px: the SAME zoom-1 "aim radius" TakeoffCanvas.jsx's own click/
+    // endpoint/segment/intersection snap all share (index.ts's own
+    // hitTolerancePx) — the seed's OWN segment isn't known yet, so there is
+    // no per-segment pen width to widen it with.
+    const hit = nearestSegment(index, from[0], from[1], hitTolerancePx(1, 0));
+    if (!hit) {
+      throw new UserError(REFUSAL_NO_LINEWORK);
+    }
+    const mppf = s.upp ? 1 / s.upp : 0;
+    const maxLengthPx = opts.max_length_ft && mppf ? opts.max_length_ft * mppf : undefined;
+    const walk = walkBothDirections(index, hit.seg, mppf, { dash: geo.dash, layerOf: geo.layerOf }, {
+      maxHops: opts.max_hops, maxLengthPx,
+      pageBounds: { minX: 0, minY: 0, maxX: s.widthPx, maxY: s.heightPx },
+    });
+    const walkedSegs = new Set(walk.segs);
+
+    if (!s.spans) s.spans = textSpans(s.page);
+    const spans = s.spans;
+    const pairs: { span: TextSpan; binding: BoundSize }[] = [];
+    for (const sp of spans) {
+      const leaderPoints = leaderTerminalPointsForLabel(sp, spans, geo.segs, geo.lum);
+      const binding = associateLabel(index, { text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, rotDeg: sp.rot }, mppf, { leaderPoints });
+      if (binding) pairs.push({ span: sp, binding });
+    }
+    const allBindings = pairs.map((p) => p.binding);
+    const spanByBinding = new Map<BoundSize, TextSpan>(pairs.map((p) => [p.binding, p.span] as const));
+    const { conflicts } = resolveSizeConflicts(allBindings);
+    const runConflicts = conflicts.filter((c) => walkedSegs.has(c.seg));
+
+    const familyId = classes.family[hit.seg];
+    const family: StrokeFamily = classes.families[familyId];
+    const scaleConfirmed = !!s.upp && s.scaleConfirmed !== false;
+
+    const origin: TraceOrigin = buildTraceReceipt(index, { seg: hit.seg, x: hit.px, y: hit.py }, walk, family, allBindings, conflicts, {
+      scaleConfirmed,
+      labelText: (b) => spanByBinding.get(b),
+    });
+
+    const bestLabel = origin.trace.labels.find((l) => !l.withheld);
+    const rawCandidates = walk.stops.forward.candidates ?? walk.stops.backward.candidates;
+
+    let shape_id: string | undefined;
+    if (opts.commit && opts.condition) {
+      if (s.upp == null) throw new UserError(this.scaleGate(s));
+      const pts: Point[] = walk.points;
+      const length_lf = round2(walk.length * s.upp);
+      const shape = this.commit(s, opts.condition, "linear", pts, { area_sf: 0, perimeter_lf: length_lf }, { method: "traced", actor: "agent", reviewed: false, confidence: origin.confidence, confidence_factors: origin.confidence_factors, trace: origin.trace });
+      shape_id = shape.id;
+      const run: AuthoredRun = {};
+      if (bestLabel?.systems?.length) run.system = bestLabel.systems.join("/");
+      else if (family.system) run.system = family.system;
+      if (bestLabel?.size) run.size_overrides = { "0": bestLabel.size };
+      if (Object.keys(run).length) {
+        shape.run = run;
+        const resolved = resolveRunSegments(pts, s.upp, run);
+        if (resolved) shape.computed.run = resolved;
+      }
+      this.flushCommits("trace_run");
+    }
+
+    return {
+      sheet: s.key,
+      seed: { at: [round1(hit.px), round1(hit.py)] as [number, number] },
+      points: walk.points.map(([x, y]) => [round1(x), round1(y)] as [number, number]),
+      length_px: round2(walk.length),
+      ...(s.upp ? { length_lf: round2(walk.length * s.upp) } : {}),
+      ...(bestLabel?.size ? { size: bestLabel.size } : {}),
+      ...(bestLabel?.systems?.length ? { systems: bestLabel.systems } : {}),
+      ...(!bestLabel?.systems?.length && family.system ? { systems: [family.system] } : {}),
+      vertices: walk.vertices.map((v) => ({
+        kind: v.kind, at: [round1(v.x), round1(v.y)] as [number, number],
+        ...(v.turnDeg != null ? { turn_deg: round1(v.turnDeg) } : {}),
+        ...(v.angleClass ? { angle_class: v.angleClass } : {}),
+        ...(v.branchSeg != null ? { branch_seg: v.branchSeg } : {}),
+      })),
+      stops: {
+        forward: { reason: walk.stops.forward.reason, at: [round1(walk.stops.forward.x), round1(walk.stops.forward.y)] as [number, number] },
+        backward: { reason: walk.stops.backward.reason, at: [round1(walk.stops.backward.x), round1(walk.stops.backward.y)] as [number, number] },
+      },
+      ...(rawCandidates?.length ? {
+        candidates: rawCandidates.map((c) => ({
+          at: [round1(index.segs[c.seg * 4 + c.end * 2]), round1(index.segs[c.seg * 4 + c.end * 2 + 1])] as [number, number],
+          angle_deg: round1(c.angleDeg),
+        })),
+      } : {}),
+      ...(runConflicts.length ? {
+        withheld: runConflicts.map((c) => ({
+          at: [round1(index.segs[c.seg * 4]), round1(index.segs[c.seg * 4 + 1])] as [number, number],
+          reads: c.candidates.map((cand) => cand.parsed.raw),
+          reason: sizeConflictRefusal(c),
+        })),
+      } : {}),
+      confidence: origin.confidence,
+      factors: origin.confidence_factors,
+      ...(shape_id ? { shape_id } : {}),
+    };
   }
 
   /** trace_connectivity (Phase 4) — which valve belongs to which equipment,

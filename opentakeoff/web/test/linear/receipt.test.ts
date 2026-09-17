@@ -19,8 +19,8 @@ function idxFor(segs: number[], pen = 4) {
 function family(over: Partial<StrokeFamily> = {}): StrokeFamily {
   return { id: 0, pen: 4, dash: 0, confidence: 0.9, evidence: ["layer-name"], ...over };
 }
-function bound(seg: number, wIn: number, confidence: number, placement: BoundSize["placement"] = "beside"): BoundSize {
-  return { parsed: { size: { kind: "rect", w_in: wIn, h_in: 6 }, systems: [], raw: `${wIn}X6` }, seg, placement, confidence, factors: { orientation: 1, placement: confidence } };
+function bound(seg: number, wIn: number, confidence: number, placement: BoundSize["placement"] = "beside", systems: string[] = []): BoundSize {
+  return { parsed: { size: { kind: "rect", w_in: wIn, h_in: 6 }, systems, raw: `${wIn}X6` }, seg, placement, confidence, factors: { orientation: 1, placement: confidence } };
 }
 
 test("buildTraceReceipt: a clean walk with layer-backed family evidence and one bound size — confidence is the min of the two real grades, no penalty factors", () => {
@@ -35,6 +35,13 @@ test("buildTraceReceipt: a clean walk with layer-backed family evidence and one 
   assert.deepEqual(origin.trace.labels[0].size, { kind: "rect", w_in: 12, h_in: 6 });
   assert.deepEqual(origin.trace.segs, walk.segs);
   assert.deepEqual(origin.trace.seed, { seg: 0, x: 0, y: 0 });
+});
+
+test("buildTraceReceipt: a bound size's own systems ride along on its label record", () => {
+  const idx = idxFor([0, 0, 200, 0]);
+  const walk = walkBothDirections(idx, 0, 18, {});
+  const origin = buildTraceReceipt(idx, { seg: 0, x: 0, y: 0 }, walk, family(), [bound(0, 12, 0.8, "beside", ["SA"])], [], { scaleConfirmed: true });
+  assert.deepEqual(origin.trace.labels[0].systems, ["SA"]);
 });
 
 test("buildTraceReceipt: no size label reachable on this run — size_missing is named but never drags confidence down (a withheld size still measures LF)", () => {

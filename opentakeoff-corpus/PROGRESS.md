@@ -1,5 +1,104 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.7 checkpoint, MCP half (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+`classify_strokes` + `trace_run`, the two new MCP tools plan §3.2's file
+tree names for this checkpoint. The Canvas Trace mode UI (the other half
+of WP3.7) is NOT built yet — a separate, React/DOM-heavy piece of work;
+this checkpoint is MCP-only, and is the FIRST time any of WP3.1-3.6's
+pure-lib modules (strokes/index/graph/walk/sizes/receipt) are wired into
+a real, callable surface at all.
+
+Researched the codebase's own exact conventions before writing anything
+(an Explore agent traced `count_marks`'s find/commit branching,
+`staging.ts`'s TOOL_STAGES partition requirement, `server.ts`'s
+instructions-array convention, and the withheld[]/candidates[] row-shape
+idiom used across `sweep_inline_motif`/`sweep_schedule_row`/
+`trace_connectivity`) so the new tools land consistent with what's
+already shipped rather than inventing a parallel shape.
+
+`mcp/src/session.ts`:
+
+- `ensureLinearIndex(s)` — builds and caches `strokes.ts`'s
+  `classifyStrokes` + `index.ts`'s `buildSegmentIndex` once per sheet,
+  mirroring `ensureMepGraph`'s own cache-by-identity pattern exactly
+  (including its `undefined`/`null` convention). Reuses `rolesFor`'s own
+  layer-role codes and `mepLayerSignal` — the SAME "which ink is real MEP
+  linework" answer `trace_connectivity` already relies on, never a second
+  heuristic for this path.
+- `classifyStrokes(name)` (session method; the imported pure function is
+  aliased `classifyStrokesPure` to avoid the name collision, matching the
+  existing `traceMepConnectivity` alias precedent) — read-only inspection,
+  the `classify_strokes` tool's own implementation.
+- `traceRun(name, from, opts)` — the real integration point: seeds a walk
+  via `nearestSegment`/`hitTolerancePx(1, 0)` (11px, the same zoom-1 aim
+  radius the canvas's own click/endpoint/segment snap all share — the
+  seed's own segment isn't known yet, so there's no per-segment pen width
+  to widen it with), walks both directions (`walkBothDirections`),
+  resolves EVERY text span on the sheet against the run via
+  `associateLabel` (cheap for the ~99% that aren't sizes — `parseSize`
+  refuses before any geometry work runs) with `leaderTerminalPointsForLabel`
+  wired in for the leader-placement tier, resolves conflicts, and calls
+  `buildTraceReceipt`. `commit: true` mints a shape through the SAME
+  `this.commit`/`run`/`computed.run` construction `measureLine` already
+  uses, stamped `origin.method: "traced"` with the full receipt under
+  `origin.trace` instead of a manual polyline's `"manual"`.
+- `ShapeOrigin` (session.ts's own closed provenance interface) gained
+  `"traced"` in its `method` union and a `trace?: TraceReceipt` field —
+  a real, necessary type extension caught by `tsc`, not a guess: the
+  interface didn't have room for either before this checkpoint.
+
+Two hard, pre-walk refusals (`REFUSAL_NO_LINEWORK`/
+`REFUSAL_NO_STROKE_FAMILY`, receipt.ts's own WP3.6 constants, thrown as
+`UserError`) — everything past that point, `ambiguous` included, is a
+real disclosed result, never a refusal, per plan §6.3's own offer-don't-
+block doctrine. `mcp/src/outputs.ts` (`classifyStrokesOutput`/
+`traceRunOutput`), `mcp/src/tools.ts` (registrations, descriptions
+matching `trace_connectivity`'s own density/style), `mcp/src/staging.ts`
+(`classify_strokes` → setup, `trace_run` → measure — TOOL_STAGES is a
+CI-enforced partition; skipping this fails the build), `mcp/server.ts`
+(added `trace_run` to the "WITHHELD IS NOT A FAILURE" instructions line —
+`classify_strokes` has no withheld concept, so it's correctly absent),
+`mcp/README.md` (one `## Tools` row each), and root `README.md`/
+`docs/USER_GUIDE.md`'s `<!--tool-count-->` markers (58→60, via
+`npm run check:tool-count -- --write` — the repo's own enforced
+consistency check, which failed before the fix and passes clean after).
+
+**Two more real bugs, both caught wiring real text spans through
+`sizes.ts`, committed separately before this checkpoint (see the prior
+PROGRESS.md entry):** `labelHeightPx`'s fallback used the bbox's LONGER
+dimension instead of the shorter one, and `buildTraceReceipt`'s
+`labelText` callback was keyed by segment instead of by the binding
+itself, unable to distinguish two conflicting labels on one segment.
+
+**A third, found validating `trace_run` against real Bessemer M101 data,
+not fixed (an inherited, already-accepted limitation, not a new one):**
+the ground truth's own `unit103-supply-trunk` run
+(`opentakeoff-corpus/ground_truth/linear/bessemer-m101.json`) hand-traces
+a CENTERLINE of a double-line-drawn duct; its nearest real drawn edge is
+EXACTLY the segment WP3.4's own checkpoint already found wall-vouch-
+excluded. Confirmed by direct segment inspection against the real PDF,
+not assumed — `mcp/test/traceRun.test.ts` uses a different, non-excluded
+real pen-4 segment on the same sheet instead, and documents why in its
+own header rather than silently swapping the seed with no explanation.
+
+Tests: `mcp/test/traceRun.test.ts`, 5 new, all against the real MCP wire
+(`InMemoryTransport`, `linearParity.test.ts`'s own established harness)
+and the real `samples/bessemer-mechanical-bidset.pdf#6` — `classify_strokes`
+finds the real pen-4 family; `trace_run` walks a real duct stub to a real
+ambiguous junction with a fully-asserted factor list (not just
+"non-empty" — the exact five factors, since this run is genuinely
+reproducible from the real PDF); `commit: true` mints a real shape whose
+`origin.trace` round-trips through `export_takeoff` intact; both hard
+refusals fire with their exact named reasons.
+
+Verified: `npx tsc --noEmit` clean on both `web` and `mcp`;
+`mcp/test/traceRun.test.ts` 5/5; `mcp/test/staging.test.ts` +
+`mcp/test/tools.test.ts` 108/108 (the CI-enforced TOOL_STAGES partition
+test passes with both new tools correctly staged); `mcp/test/
+linearParity.test.ts` 12/12 (no regression in the existing linear-takeoff
+MCP tools sharing `session.ts`/`ShapeOrigin`); `npm run check:tool-count`
+clean (0 stale markers, TOOL_NAMES.length = 60).
+
 2026-09-17 linear takeoff WP3.5/WP3.6 follow-up — two real bugs caught while
 designing the WP3.7 MCP wiring (`trace_run`), before any MCP code existed to
 exercise them: reasoning through how `sizes.ts`'s `associateLabel` and

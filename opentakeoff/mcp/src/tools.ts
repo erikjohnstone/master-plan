@@ -25,6 +25,7 @@ import {
   markVerdictOutput, deleteVerdictOutput,
   sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, controlSchematicOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
+  classifyStrokesOutput, traceRunOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
@@ -479,6 +480,27 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       ...(r.reason ? { reason: r.reason } : {}),
     };
   }));
+
+  server.registerTool("classify_strokes", {
+    description: `#linear-takeoff: which stroke families a sheet's own drawn ink classifies into, BEFORE tracing any of them — which pen is the duct pen, is there real CAD layer evidence backing it, how many segments each family covers. A setup/inspection tool, never a prerequisite: trace_run builds and caches the SAME classification itself the first time it runs on a sheet, so skipping this and going straight to trace_run costs nothing. Evidence grades run a-d (plan §6.2): a real CAD layer name (\`M-HVAC-DUCT\`-style) is the strongest signal (confidence ≥ 0.85); with no usable layers, the heaviest pen weight among candidate strokes stands in, after excluding the sheet's own MODAL pen (the background/architectural convention on every real set probed — 66-87% of segments, never the thing being emphasized) and flooring out noise. Refuses on a scanned sheet (no vector linework at all) or a sheet whose linework has no stroke family attributable to ductwork or piping. ${COORDS}`,
+    inputSchema: { sheet: z.string() },
+    outputSchema: classifyStrokesOutput,
+  }, run("classify_strokes", async (a) => session.classifyStrokes(a.sheet)));
+
+  server.registerTool("trace_run", {
+    description: `#linear-takeoff: walk the drawn duct/pipe run under a seed point (image px, ON the drawn line) and read its size off whatever label lands near it — the single-line trace engine (plan §6.2-§6.8), not proximity or a guess. The sheet's candidate strokes are classified into families (see classify_strokes) and spatially indexed once per sheet, then walked bidirectionally from the seed: a straight run extends, an elbow/tee/crossing records a vertex and continues (a tee taken via its OWN branch stops immediately — \"the main is its own run\"), a pen/dash/layer change stops as family_change rather than crossing onto a different system, and a REAL junction with no clean through-pair stops \"ambiguous\" and returns its candidate fan in \`candidates[]\` — offered, never picked from, exactly like trace_connectivity's own branches. Size labels near the run score on orientation (the label's own rotation parallel to the run, ±10°) and placement (beside the run beats a leader line traced to it); a label that parses (Appendix A's grammar: rect/round/oval/pipe, Unicode fractions, multi-service, riser UP/DN/UP-DN qualifiers) binds to the ONE segment it scores best against. Two labels disagreeing on the same segment come back in \`withheld[]\` with both readings — \`size\` stays unset on that run, not averaged or guessed. \`confidence\`/\`factors\` name exactly which signals are behind the number (stroke-family evidence grade, size-binding grade or size_missing, an ambiguous-stop penalty, layer-unclassified, scale_unconfirmed) — the same disclosed-factor doctrine as trace_connectivity, never a flat 1.0. FIND-ONLY unless \`commit: true\` (with \`condition\`): a committed run mints a real linear shape exactly like measure_line's own commit path — same \`run\`/\`computed_run\`, but \`origin.method: "traced"\` with the full walk+label receipt under \`origin.trace\`, reviewed:false like every other agent commit. A withheld or size-missing run STILL commits and measures LF; withholding is an answer, not a failure. Two hard refusals, before any of this: no candidate segment at all under the seed ("No routed linework under the cursor..."), or classify_strokes finds nothing on the sheet attributable to ductwork/piping at all. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      from: pointSchema.describe("Seed point (image px) ON the drawn duct/pipe line to trace from"),
+      condition: z.string().optional().describe("Required with commit:true — the condition the traced run commits under"),
+      max_hops: z.number().int().positive().optional().describe("Hops to walk (each direction) before giving up with stop reason \"cap\" (default 2000)"),
+      max_length_ft: z.number().positive().optional().describe("Real feet to walk (each direction) before capping — requires a set scale; ignored on an unscaled sheet"),
+      commit: z.boolean().default(false).describe("Commit the walked run as a real linear shape under condition — omit/false for a find-only trace"),
+    },
+    outputSchema: traceRunOutput,
+  }, run("trace_run", async (a) => session.traceRun(a.sheet, a.from, {
+    condition: a.condition, max_hops: a.max_hops, max_length_ft: a.max_length_ft, commit: a.commit,
+  })));
 
   server.registerTool("count_marks", {
     description: `The COUNT TAKEOFF in one deterministic call — no seeds, no model, seconds: census every VALUE-ANNOTATED mark tag on the plan-role sheets, counted per schedule mark, committed as EA markers when asked. The identity rule is the annotated-device drafting pattern: a device is drawn as its mark tag with a value under it ("S1" over "200" — CFM on air devices, GPM on fixtures, a rating on equipment), so a tag WITH a paired value counts, a tag inside a schedule table's own region is a row label (excluded, tallied), and every other occurrence is WITHHELD with a reason and coordinates — a tag amid linework but unvalued may be a real device (view_sheet it), a bare tag is probably a note mention. Marks default to the set's schedule row keys (a compound row "R1 / E1" answers for R1 AND E1; each mark cites its row), or state them: {marks: ["S1","R1"]}. The complement to sweep_schedule_row: THAT tool is for marks drawn ON their marker with no value (finish tags in bubbles) and matches geometry; this one is for annotated devices and needs no fingerprint at all. Refusal-honest: scans refuse (no text layer), a set with no mark-shaped rows refuses unless marks are stated, non-plan sheets are skipped with the role that excused them. commit: true commits every counted occurrence under its mark's own tag — ONE undo step for the whole census, schedule citation on origin. Counts are scale-free (EA) — no set_scale needed. Then AUDIT: view_sheet {overlay: true} where the markers landed, and read every withheld entry — a withheld item you ignore is a hole in the bid. ${COORDS}`,

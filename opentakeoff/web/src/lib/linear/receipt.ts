@@ -46,6 +46,7 @@ export interface TraceLabelRecord {
   x0: number; y0: number; x1: number; y1: number;
   seg: number;
   size?: BoundSize["parsed"]["size"];
+  systems?: string[];
   withheld?: boolean;   // true when this label's own segment had a size conflict — see `sizeConflictRefusal`
 }
 
@@ -106,7 +107,7 @@ export function buildTraceReceipt(
     if (!walkedSegs.has(c.seg)) continue;
     for (const cand of c.candidates) {
       const span = opts.labelText?.(cand);
-      labels.push({ text: cand.parsed.raw, x0: span?.x0 ?? 0, y0: span?.y0 ?? 0, x1: span?.x1 ?? 0, y1: span?.y1 ?? 0, seg: cand.seg, withheld: true });
+      labels.push({ text: cand.parsed.raw, x0: span?.x0 ?? 0, y0: span?.y0 ?? 0, x1: span?.x1 ?? 0, y1: span?.y1 ?? 0, seg: cand.seg, ...(cand.parsed.systems.length ? { systems: cand.parsed.systems } : {}), withheld: true });
     }
   }
   const clean = onRun.filter((b) => !conflictedSegs.has(b.seg));
@@ -114,7 +115,7 @@ export function buildTraceReceipt(
     const best = clean.reduce((a, b) => (b.confidence > a.confidence ? b : a));
     for (const b of clean) {
       const span = opts.labelText?.(b);
-      labels.push({ text: b.parsed.raw, x0: span?.x0 ?? 0, y0: span?.y0 ?? 0, x1: span?.x1 ?? 0, y1: span?.y1 ?? 0, seg: b.seg, size: b.parsed.size });
+      labels.push({ text: b.parsed.raw, x0: span?.x0 ?? 0, y0: span?.y0 ?? 0, x1: span?.x1 ?? 0, y1: span?.y1 ?? 0, seg: b.seg, size: b.parsed.size, ...(b.parsed.systems.length ? { systems: b.parsed.systems } : {}) });
     }
     factors.push(`size-binding:${best.placement}`);
     confidenceValues.push(best.confidence);
