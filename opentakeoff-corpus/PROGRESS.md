@@ -1,5 +1,21 @@
 ## Active work
 
+2026-09-17 linear takeoff: a second independent confirmation of the dimension-line-as-pipe gap, no golden change (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+While continuing to mine the same scan log after the last golden landed,
+checked one more candidate: a 17.60 LF "4-inch pipe" on an
+ARCHITECTURAL floor plan sheet, at a completely different project and
+file than the dimension-line false positive found earlier the same day.
+A marked crop confirmed the same failure exactly: the traced line is a
+dimension string's own vertical witness/extension line, with every
+marked point sitting on a real dimension tick-mark, not a pipe.
+
+Two independent hits from two different files and projects is real, if
+still small-sample, evidence this is a systematic, recurring risk
+whenever an architectural sheet slips into a mechanical-focused scan --
+not a one-off. No golden changed; `docs/LINEAR-TRACE-EVAL.md` gained a
+short addendum and its priority list's dimension-line item now reflects
+both confirmed instances instead of a theoretical gap.
+
 2026-09-17 linear takeoff: mining the prior scan's own unverified hits, two more rejections including a whole-sheet demolition exclusion, development recall 12/18 -> 13/19 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Rather than scanning fresh files, worked directly from the previous
 scan's own log of already-discovered, not-yet-verified hits -- real,
