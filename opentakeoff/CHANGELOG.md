@@ -1,5 +1,25 @@
 # Changelog
 
+- **Linear takeoff: trace engine, stage 2 — segment spatial index.** Adds
+  `web/src/lib/linear/index.ts` (exact nearest-segment/box/endpoint queries
+  over a sheet's candidate MEP linework) and `worker.ts` (stroke
+  classification + index build, off the main thread, per plan §6.10's own
+  performance budget). Two new runtime dependencies:
+  [Flatbush](https://github.com/mourner/flatbush) (ISC) over segment bboxes
+  and [KDBush](https://github.com/mourner/kdbush) (ISC) over segment
+  endpoints, both storing their index as a single transferable
+  `ArrayBuffer` — the reason they were chosen over the in-house hash grids
+  already in `geometry.js` (`buildSegGrid`/`buildSnapGrid`), which
+  structured-clone on every worker round trip AND silently cap each grid
+  cell (64 segments / 40 points), dropping real candidates on dense
+  linework rather than merely slowing down. `jsts` (already a dependency,
+  and the only other spatial-index option already in the tree) was not
+  used: the goal doc is explicit that this path runs "NO global noding, NO
+  JTS" — jsts's `STRtree` still requires the noding-heavy setup this stage
+  exists specifically to avoid. The trace engine itself is still inert on
+  every project (`prefs.js`'s `traceModeEnabled()`, default OFF); this is
+  infrastructure with no caller yet.
+
 - **Linear takeoff: "Fittings & supports" buy list.** The Excel report
   workbook gains a `Fittings & supports` tab (canvas and MCP `export_report`
   alike, via the shared `reportWorkbook`/`reportJson` functions) — the

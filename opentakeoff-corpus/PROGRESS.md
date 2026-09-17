@@ -1,5 +1,82 @@
 ## Active work
 
+2026-09-17 linear takeoff WP3.2 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+`index.ts` + `worker.ts`, Stage 2 of the trace engine (plan §6.3/§6.11).
+Still entirely inert on every project — nothing calls either module yet
+(WP3.3's graph.ts and WP3.4's walker are the eventual consumers); adds two
+new runtime dependencies, `flatbush`/`kdbush` (both ISC), documented in
+`THIRD-PARTY-NOTICES.md` and justified in `CHANGELOG.md` per this
+project's own established dependency-documentation culture (naming why the
+in-house hash grids and jsts's own STRtree were both rejected).
+
+`web/src/lib/linear/index.ts`:
+
+- `buildSegmentIndex` — a `Flatbush` R-tree over candidate segment bboxes
+  and a `KDBush` k-d tree over candidate segment endpoints, built ONLY
+  over the segments a `StrokeClasses.candidate` (strokes.ts, WP3.1) already
+  picked out.
+- `nearestSegment` — the "exact nearest-segment query with incremental
+  neighbours" the goal doc names: `flatbush.neighbors()` returns candidates
+  ordered by BOX distance (a true lower bound on point-to-segment distance,
+  since every segment lies inside its own bbox), widening the query (8,
+  16, 32, ...) until a candidate's own box distance exceeds the best TRUE
+  distance found so far — proof no further candidate can win, not a
+  fixed-K approximation. Returns the projection point and parameter `t`,
+  not just a segment id, since the walker (WP3.4) needs to know WHERE on
+  the segment a hit landed.
+- `segmentsInBox` (crossing detection, WP4's double-line pair search) and
+  `endpointsNear` (the probe's own frontier query, exact instead of a 3×3
+  hash-cell scan) round out the query surface plan §6.3/§6.4/WP4's own
+  survey doc actually demand — read off their real consumers, not guessed.
+- `serializeSegmentIndex`/`deserializeSegmentIndex` — the transferable-
+  `ArrayBuffer` pair that lets `worker.ts` build off the main thread while
+  every actual query still runs synchronously ON the main thread (plan
+  §6.10's own budget: "click → seed → walk: main thread, < 10 ms" — a
+  worker that only answered queries by postMessage round trip could not
+  meet that; only the BUILD needs to be off-thread).
+- `hitTolerancePx(zoom, penWidthPx)` — plan §6.11's own formula,
+  `max(11/zoom, penWidthPx/2 + 0.5)`, reusing the exact `11/zoom` literal
+  `TakeoffCanvas.jsx`'s endpoint/segment/intersection snap already share
+  (not re-derived) and the pen nibble (`meta[i] >> 4`, already baseline-
+  frame device px) `strokes.ts` already reads the same way.
+
+`web/src/lib/linear/worker.ts` — one message type (`build`), running
+strokes.ts's `classifyStrokes` AND `buildSegmentIndex` together per plan
+§6.10's own performance-budget row ("stroke classification + R-tree +
+endpoint hash | worker, once per sheet"), replying with the serialized
+index buffers plus the family classification (both `family` per segment
+and the `families[]` evidence array) via a transfer list, never a
+structured-clone copy. Same protocol shape as the existing
+`netroom.worker.js` (module-scope `self.onmessage`, caller-injected `req`
+echoed back for correlation, one try/catch, an error reply reusing the
+request's own type) — deliberately not a new pattern. No test file, per
+this codebase's own established precedent: none of the three existing
+worker files (`netroom.worker.js`, `pdfTile.worker.ts`, `stt.worker.ts`)
+have one either — a worker is a thin message-passing wrapper around
+already-tested pure logic, not independently tested itself.
+
+Deliberately NOT done this checkpoint: wiring either module into
+`TakeoffCanvas.jsx`'s actual click path or a `netCacheRef`-style cache ref
+— that integration (and the MCP-side `classify_strokes`/`trace_run` tools)
+is WP3.6/WP3.7's own explicit scope, not WP3.2's. `worker.ts` has no
+`new Worker(...)` call site yet and does not appear in a production build
+(confirmed: `npm run build` output carries no `worker-*.js` chunk for it,
+unlike the three real workers, which all do — it is genuinely unreachable
+code today, not silently broken).
+
+Verified: `npx tsc --noEmit` clean on both `web` and `mcp`; `web/test/linear/*`
+64/64 (10 new in `index.test.ts`, including a deliberately-constructed
+tie/false-lead case — 12 diagonal segments all sharing box-distance zero
+to the query point, true distances strictly increasing — that a
+naive "take the first K and stop" implementation would get wrong, proving
+the incremental-widening logic is genuinely exact, not approximately
+correct); web's full suite (`test/*.test.ts test/linear/*.test.ts` minus
+the known `compileProgressWalkthrough.test.ts` flake) — 3334 attempted (10
+new), 70 fail/13 cancelled/13 skipped, the identical standing baseline;
+`npm run build` succeeds cleanly with the two new dependencies present
+(pre-existing bas-related import-order warnings and chunk-size warnings
+unrelated to this checkpoint).
+
 2026-09-17 linear takeoff WP3.1 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 `strokes.ts`, Stage 1 of the trace engine (plan §6.2). Trace mode itself
 stays entirely inert on every existing project: nothing calls this module
