@@ -22,7 +22,7 @@
 // weight, dash, double-line duct width, label placement — inside/beside/
 // leader, a crossing, an arc flattened to a polyline, a text gap in the
 // linework) — extend CASES below as real hard cases turn up.
-import { PDFDocument, PDFName, PDFString, PDFOperator, PDFOperatorNames, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument, PDFName, PDFString, PDFDict, PDFArray, PDFOperator, PDFOperatorNames, rgb, StandardFonts } from "pdf-lib";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -99,12 +99,27 @@ function segmentLengthsFt(pts: PtFt[]): number[] {
 }
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
+/** Wraps only the case's own real duct/pipe linework in the OCG layer —
+ * NOT any label/leader also drawn this pass. A leader is a real STROKED
+ * path (unlike a label, which is text and never enters `layerOf` at all —
+ * see registerOcgLayer's own header), and real CAD drawings put leaders on
+ * a separate annotation layer, not the duct/pipe layer itself. Tagging a
+ * leader as the same layer as the duct it points to (this generator's own
+ * first attempt) made 08-label-leader's own trace_run walk see a real
+ * 3-way junction where the leader takes off — the SAME duct-family stroke
+ * offering a candidate direction the golden's own straight continuation
+ * doesn't — and correctly, not spuriously, call that a real `ambiguous`
+ * stop, a new artifact this fix introduced rather than a pre-existing gap
+ * (the case only ever refused outright before Run 10, so this never
+ * surfaced until wall-vouch stopped hiding it). */
+type LayerWrap = { wrap<T>(draw: () => T | Promise<T>): Promise<T> };
+
 interface CaseSpec {
   name: string;
   hardCase: string;
   system: string;
   size: Record<string, unknown>;
-  build(page: import("pdf-lib").PDFPage, doc: PDFDocument, font: import("pdf-lib").PDFFont, pts: PtFt[]): Promise<void> | void;
+  build(page: import("pdf-lib").PDFPage, doc: PDFDocument, font: import("pdf-lib").PDFFont, pts: PtFt[], layer: LayerWrap): Promise<void> | void;
   legs?: number;
   seedOffset?: number;
 }
@@ -146,33 +161,36 @@ const CASES: CaseSpec[] = [
   {
     name: "01-pen-thin-solid", hardCase: "pen-weight (thin)", system: "SA",
     size: { kind: "rect", w_in: 12, h_in: 6 },
-    build(page, _doc, _font, pts) { drawCenterline(page, pts, { thickness: 0.5 }); },
+    build(page, _doc, _font, pts, layer) { return layer.wrap(() => drawCenterline(page, pts, { thickness: 0.5 })); },
   },
   {
     name: "02-pen-thick-solid", hardCase: "pen-weight (thick)", system: "SA",
     size: { kind: "rect", w_in: 16, h_in: 8 },
-    build(page, _doc, _font, pts) { drawCenterline(page, pts, { thickness: 2.5 }); },
+    build(page, _doc, _font, pts, layer) { return layer.wrap(() => drawCenterline(page, pts, { thickness: 2.5 })); },
   },
   {
     name: "03-dashed-existing", hardCase: "dash pattern (existing-to-remain)", system: "SA",
     size: { kind: "round", d_in: 10 },
-    build(page, _doc, _font, pts) { drawCenterline(page, pts, { thickness: 1, dashArray: [6, 4] }); },
+    build(page, _doc, _font, pts, layer) { return layer.wrap(() => drawCenterline(page, pts, { thickness: 1, dashArray: [6, 4] })); },
   },
   {
     name: "04-dashdot-demo", hardCase: "dash pattern (dash-dot)", system: "HHWR",
     size: { kind: "pipe", nps_in: 2 },
-    build(page, _doc, _font, pts) { drawCenterline(page, pts, { thickness: 1, dashArray: [8, 3, 1, 3] }); },
+    build(page, _doc, _font, pts, layer) { return layer.wrap(() => drawCenterline(page, pts, { thickness: 1, dashArray: [8, 3, 1, 3] })); },
   },
   {
     name: "05-double-line-duct", hardCase: "double-line duct width", system: "SA",
     size: { kind: "rect", w_in: 24, h_in: 12 },
-    build(page, _doc, _font, pts) { drawDoubleLine(page, pts, 24 / 12 / 2); },
+    build(page, _doc, _font, pts, layer) { return layer.wrap(() => drawDoubleLine(page, pts, 24 / 12 / 2)); },
   },
   {
     name: "06-label-inside", hardCase: "label placement (inside the run)", system: "SA",
     size: { kind: "rect", w_in: 14, h_in: 8 },
-    build(page, _doc, font, pts) {
-      drawCenterline(page, pts, { thickness: 1 });
+    async build(page, _doc, font, pts, layer) {
+      await layer.wrap(() => drawCenterline(page, pts, { thickness: 1 }));
+      // a label is TEXT, not a stroked path — never enters layerOf either
+      // way (registerOcgLayer's own header) — left outside the wrap anyway,
+      // matching real CAD practice (annotation lives on its own layer).
       const mid = pts[Math.floor(pts.length / 2)];
       const [x, y] = toPdf(mid);
       page.drawText("14x8", { x: x - 10, y: y + 2, size: 8, font, color: rgb(0, 0, 0) });
@@ -181,8 +199,8 @@ const CASES: CaseSpec[] = [
   {
     name: "07-label-beside", hardCase: "label placement (beside, no leader)", system: "SA",
     size: { kind: "round", d_in: 8 },
-    build(page, _doc, font, pts) {
-      drawCenterline(page, pts, { thickness: 1 });
+    async build(page, _doc, font, pts, layer) {
+      await layer.wrap(() => drawCenterline(page, pts, { thickness: 1 }));
       const mid = pts[Math.floor(pts.length / 2)];
       const [x, y] = toPdf(mid);
       page.drawText('8"ø', { x: x + 10, y: y + 14, size: 8, font, color: rgb(0, 0, 0) });
@@ -191,32 +209,48 @@ const CASES: CaseSpec[] = [
   {
     name: "08-label-leader", hardCase: "label placement (leader line)", system: "HHWS",
     size: { kind: "pipe", nps_in: 1.5 },
-    build(page, _doc, font, pts) {
-      drawCenterline(page, pts, { thickness: 1 });
+    async build(page, doc, font, pts, layer) {
+      await layer.wrap(() => drawCenterline(page, pts, { thickness: 1 }));
       const mid = pts[Math.floor(pts.length / 2)];
       const [x, y] = toPdf(mid);
       const [lx, ly] = [x + 40, y + 40];
-      page.drawLine({ start: { x, y }, end: { x: lx, y: ly }, thickness: 0.5, color: rgb(0, 0, 0) });
+      // The leader is a real STROKED path, unlike the label text below it —
+      // given its OWN distinct OCG ("M-ANNO", a real annotation layer, not
+      // the duct's own) rather than left untagged. Untagged was tried
+      // first and did NOT work: `layerOf === -1` reads as "compatible by
+      // default" to `sameFamilyContinuity` (see registerOcgLayer's own
+      // header), not as a confirmed non-match, so the walk still saw the
+      // leader as the same family as the duct it takes off from and still
+      // stopped `ambiguous` there. A genuinely distinct layer index is
+      // what the walker's own filter actually keys on.
+      const annotation = registerOcgLayer(doc, page, "M-ANNO");
+      await annotation.wrap(() => {
+        page.drawLine({ start: { x, y }, end: { x: lx, y: ly }, thickness: 0.5, color: rgb(0, 0, 0) });
+      });
       page.drawText('1-1/2" HW', { x: lx + 2, y: ly + 2, size: 8, font, color: rgb(0, 0, 0) });
     },
   },
   {
     name: "09-crossing-run", hardCase: "two runs crossing, no shared vertex", system: "SA",
     size: { kind: "rect", w_in: 10, h_in: 6 },
-    build(page, _doc, _font, pts) {
-      drawCenterline(page, pts, { thickness: 1 });
-      // a SECOND, unrelated run drawn straight through the middle of this
-      // one's bounding box — same pen, no vertex in either truth polyline at
-      // the intersection (a real X crossing, not a tee).
-      const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
-      const cx = (Math.min(...xs) + Math.max(...xs)) / 2, cy = (Math.min(...ys) + Math.max(...ys)) / 2;
-      drawCenterline(page, [[cx - 6, cy + 6], [cx + 6, cy - 6]], { thickness: 1 });
+    build(page, _doc, _font, pts, layer) {
+      return layer.wrap(() => {
+        drawCenterline(page, pts, { thickness: 1 });
+        // a SECOND, unrelated run drawn straight through the middle of this
+        // one's bounding box — same pen, no vertex in either truth polyline at
+        // the intersection (a real X crossing, not a tee). Tagged under the
+        // SAME layer deliberately: two real duct runs of the same system
+        // sharing one CAD layer is normal, not an artifact to route around.
+        const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+        const cx = (Math.min(...xs) + Math.max(...xs)) / 2, cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+        drawCenterline(page, [[cx - 6, cy + 6], [cx + 6, cy - 6]], { thickness: 1 });
+      });
     },
   },
   {
     name: "10-arc-as-polyline", hardCase: "arc flattened to a polyline elbow", system: "HHWS",
     size: { kind: "pipe", nps_in: 3 },
-    build(page, _doc, _font, pts) { drawCenterline(page, pts, { thickness: 1.25 }); },
+    build(page, _doc, _font, pts, layer) { return layer.wrap(() => drawCenterline(page, pts, { thickness: 1.25 })); },
     legs: 1, seedOffset: 900,
   },
 ];
@@ -241,9 +275,11 @@ function layerNameForSystem(system: string): string {
 }
 
 /** Registers one Optional Content Group named `name` on `doc`'s catalog +
- * this `page`'s own `/Resources/Properties`, and returns a function that
- * wraps a synchronous or async draw callback in `BDC /OC <name-ref> ... EMC`
- * so every segment (and any label/leader text — harmless, see below) drawn
+ * this `page`'s own `/Resources/Properties` (MERGING with any OCG a prior
+ * call already registered on the same page — see below on why more than
+ * one is real, not hypothetical), and returns a function that wraps a
+ * synchronous or async draw callback in `BDC /OC <name-ref> ... EMC` so
+ * every segment (and any label/leader text — harmless, see below) drawn
  * inside it attributes to that OCG in extractVectorGeometry's own
  * `layerOf`/`layerIds`. pdf-lib has no built-in OCG helper (`PDFPage` only
  * exposes low-level `pushOperators`), and its own `context.obj()` coerces a
@@ -256,19 +292,35 @@ function layerNameForSystem(system: string): string {
  * indexed by STROKED/FILLED PATH segment, not by text-show operators, so
  * tagging a case's whole `build()` call (linework + its own label) under
  * one OCG never puts a text run into `layerOf` at all — it only affects
- * the real vector segments this corpus's own scoring actually reads. */
-function registerOcgLayer(doc: PDFDocument, page: import("pdf-lib").PDFPage, name: string): { wrap<T>(draw: () => T | Promise<T>): Promise<T> } {
+ * the real vector segments this corpus's own scoring actually reads.
+ *
+ * A SECOND OCG per page is real, not a hypothetical this generator never
+ * needs: `walk.ts`'s own `sameFamilyContinuity` only excludes a candidate
+ * on a CONFIRMED layer mismatch (`lFrom >= 0 && lTo >= 0 && lFrom !== lTo`)
+ * — an UNTAGGED segment (`layerOf === -1`) is treated as compatible by
+ * DEFAULT, not confidently different, so simply leaving 08-label-leader's
+ * own leader line untagged (this fix's own first attempt) left it just as
+ * "same family" as the duct it takes off from, and the walk's own
+ * `ambiguous` stop there was unchanged. A distinct, real OCG (any name;
+ * `sameFamilyContinuity` compares raw layer INDICES, never calls
+ * `classifyMepLayerName` itself) is what actually produces `lFrom !== lTo`. */
+let nextPropIndex = 0;
+function registerOcgLayer(doc: PDFDocument, page: import("pdf-lib").PDFPage, name: string): LayerWrap {
   const ocgDict = doc.context.obj({ Type: "OCG", Name: PDFString.of(name) });
   const ocgRef = doc.context.register(ocgDict);
-  // one case = one fresh PDFDocument = one OCG — no prior registration to
-  // merge this with, unlike a real multi-layer CAD export.
+  const propName = `OC${nextPropIndex++}`;
+
+  const existingProps = doc.catalog.get(PDFName.of("OCProperties"));
+  const priorOcgs = existingProps instanceof PDFDict ? existingProps.lookup(PDFName.of("OCGs")) : undefined;
+  const ocgs = priorOcgs instanceof PDFArray ? [...priorOcgs.asArray(), ocgRef] : [ocgRef];
   doc.catalog.set(PDFName.of("OCProperties"), doc.context.obj({
-    OCGs: [ocgRef],
-    D: { ON: [ocgRef], OFF: [] },
+    OCGs: ocgs,
+    D: { ON: ocgs, OFF: [] },
   }));
+
   const resources = page.node.Resources();
-  const propsDict = doc.context.obj({});
-  const propName = "OC1";
+  const existingPropsDict = resources.lookup(PDFName.of("Properties"));
+  const propsDict = existingPropsDict instanceof PDFDict ? existingPropsDict : doc.context.obj({});
   propsDict.set(PDFName.of(propName), ocgRef);
   resources.set(PDFName.of("Properties"), propsDict);
   return {
@@ -308,7 +360,7 @@ async function main() {
     const font = await doc.embedFont(StandardFonts.Helvetica);
     const page = doc.addPage([PAGE_W, PAGE_H]);
     const layer = registerOcgLayer(doc, page, layerNameForSystem(spec.system));
-    await layer.wrap(() => spec.build(page, doc, font, pts));
+    await spec.build(page, doc, font, pts, layer);
     const bytes = await doc.save();
     const pdfName = `${spec.name}.pdf`;
     writeFileSync(join(SYNTH_DIR, pdfName), bytes);

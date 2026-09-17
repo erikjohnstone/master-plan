@@ -1,5 +1,43 @@
 ## Active work
 
+2026-09-17 linear takeoff: 08-label-leader fixed (synthetic recall 7/10 -> 8/10), 05-double-line-duct understood more precisely (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Follow-up to the same day's OCG-layer fix. `08-label-leader`'s own newly-
+exposed length mismatch (33.48->26.85 LF) root-caused: the leader line
+takes off from the EXACT vertex the golden's own path turns a real 90°
+corner at. First attempt -- leave the leader line untagged rather than
+duct-classified -- did NOT work, and this was VERIFIED not assumed:
+re-diagnosed after the "fix" showed the identical `ambiguous` stop,
+unchanged. Root cause: `walk.ts`'s own `sameFamilyContinuity` only excludes
+a candidate on a CONFIRMED layer mismatch (`lFrom >= 0 && lTo >= 0 && lFrom
+!== lTo`) -- an UNTAGGED segment (`layerOf === -1`) reads as compatible BY
+DEFAULT, not as a confirmed non-match, so the untagged leader still counted
+as the same family as the duct it takes off from. Real fix: give the
+leader its OWN distinct OCG ("M-ANNO") instead of no OCG at all --
+`registerOcgLayer` extended to MERGE additional OCGs onto the same page
+(a real `/OCProperties`/`/Resources/Properties` array append) rather than
+assume one-OCG-per-page. Re-diagnosed after the real fix: the walk now
+reaches the golden's full 4-point path, both ends `dead_end`, confirmed via
+the same point-dump/re-trace method used throughout this project rather
+than trusting the aggregate alone. Synthetic recall: 7/10 -> 8/10.
+
+`05-double-line-duct` investigated further, NOT fixed -- and the docs'
+own prior framing ("just pick a rail, the way weld-county-m1-0.json did")
+is corrected to a more precise one: this case's own truth path has four
+segments turning BOTH ways (a zigzag), and the generator's own
+`drawDoubleLine` offsets each segment's two rails independently with no
+mitering at corners -- so whichever rail is picked, some corners get a
+real ink overlap and others a real ink gap, and which corners fall which
+way flips with each turn's own direction. No single rail choice is
+walkable end to end for this specific case. A real fix needs mitered/
+continuous rail drawing in the generator or a per-segment seed/stitch
+convention in the bench itself -- deferred, disclosed with the corrected
+understanding rather than the easier-sounding original framing.
+
+Measured: `npx tsc --noEmit` clean; `bench:linear` passes, synthetic
+recall now 8/10; all 215 `benchScore.test.ts`/`test/linear/*.test.ts`
+tests pass unchanged; full filtered web regression suite re-run to
+confirm no new failures beyond the established baseline.
+
 2026-09-17 linear takeoff: Finding 5's real fix landed -- a named OCG layer, synthetic recall 0/10 -> 7/10 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Finding 5's own corrected hypothesis (an earlier checkpoint) named the real
 cause of the synthetic corpus's near-total refusal rate: these `pdf-lib`-
