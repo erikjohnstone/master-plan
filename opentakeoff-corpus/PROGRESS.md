@@ -1,5 +1,47 @@
 ## Active work
 
+2026-09-17 linear takeoff: a third new-corpus sheet, a rejected candidate disclosed honestly, development recall 7/13 -> 8/14 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept mining the same ~380-PDF resource. This time started from a named
+layer again: a legend/symbols sheet in a hospital central-plant chiller
+project carries a real plumbing waste layer -- but rendering it showed
+that sheet is purely a legend page with no actual routed geometry, an
+honest dead end. That same legend sheet's own printed sheet list named
+the real floor-plan sheet directly, though: a dense, richly hand-labeled
+real chilled-water piping plan. A full-page grid sweep there found two
+candidates with a real, engine-bound size AND system -- via a mechanism
+not seen anywhere else in this real corpus this session, a printed
+callout connected to its pipe by a literal leader line rather than just
+sitting beside it.
+
+One of those two candidates was investigated and explicitly REJECTED --
+worth recording plainly, not silently dropped. It looked promising (a
+long straight run with size labels printed at each end), but a wider
+render proved the drawn pipe clearly continues well past both of its own
+reported stop points in each direction -- a real, much longer trunk. The
+actual cause: small flow-direction arrow glyphs drawn on top of the
+continuous pipe line appear to break the underlying vector path at
+those exact spots, an engine artifact, not a real physical break. Using
+it would have enshrined a known limitation as a golden. Set aside.
+
+The other candidate holds up: it stops at two real physical components,
+confirmed via a marked render crop -- a real branch origin off a
+pump/valve riser at one end, a real check-valve symbol tying into the
+main trunk at the other. Added as a new development-tier golden.
+
+Development-tier recall: **7/13 (0.538) -> 8/14 (0.571)**, an exact
+length match with no correction needed this time. Also a genuine size
+match again (size accuracy 0.693 -> 0.713) -- the third real-corpus case
+this session with a correct automatic size+system read, and the first
+via this specific leader-line bind mechanism. The new source PDF is now
+committed to this project's own real corpus (`raw/`), same convention as
+before.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; all 227 tests pass; full filtered web regression suite
+re-run, matching the established baseline. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 24" section (including the rejected candidate) and its own
+priority list updated with the new recall number.
+
 2026-09-17 linear takeoff: a second new-corpus sheet, first gas-piping goldens, development recall 5/11 -> 7/13 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept mining the same ~380-PDF resource the prior checkpoint opened, this
 time on a sheet with NO PDF layers at all -- unlike that first new

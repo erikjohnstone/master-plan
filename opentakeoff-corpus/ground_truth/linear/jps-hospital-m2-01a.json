@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/jps-hospital-central-plant-chiller.pdf",
+  "source_pdf_sha256": "740d599a0d2296efade9e14522160039bccaa57cdbf85b6289ada5e9db8c010a",
+  "sheet_id": "jps-hospital-central-plant-chiller.pdf#4",
+  "sheet_number": "M2.01A",
+  "page": 4,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-17",
+  "review_basis": "Third sheet authored from the project's own newly-expanded real corpus (GitHub Releases 'corpus'/'corpus_2' -- see douglas-county-me4-01.json's own review_basis for how that corpus was found and accessed). Found via a direct named-layer survey first (this file's own sheet 2, a symbols/legends sheet, carries a real 'P-WAST-ABFF' plumbing layer -- but visual inspection confirmed that sheet is purely a legend page with no routed geometry, an honest dead end, not used), then via the sheet list printed on that same legend sheet, which named the real floor-plan sheets directly: 'M2.01A -- ENLARGED CHILLER PLANT AREA A - MECHANICAL', a dense, richly hand-labeled real chilled-water piping plan (no PDF layers at all on this specific sheet -- `layers: []` -- so `mepLayerSignal` reads 'none', the same unlayered-but-scaled category as bessemer/federal/itd/klamath). A full-page grid sweep found several both-`dead_end` candidates, two of which came back with a real, engine-bound size AND system via a DIFFERENT automatic-bind mechanism than any seen so far in this real corpus this session (`factors` includes `size-binding:leader`, not `size-binding:beside` -- a real, printed callout connected to the pipe by a literal leader/arrow line, not just sitting beside it).\n\nOne candidate was investigated and explicitly REJECTED, disclosed here rather than silently dropped: a seed on a long straight run printed '20\" CWR' at one end and '24\" CWR' at the other (15.47 LF, `size-binding:leader`, size bound to pipe:20) stopped `dead_end` at BOTH ends -- but a wide render crop proved the drawn pipe line clearly CONTINUES well past both stop points in each direction (a real, much longer trunk, visibly reaching an 18\" CWR label and a 12\" CWS branch further along). The real cause: small flow-direction arrowhead glyphs drawn ON TOP of the continuous pipe line at those exact two points appear to break the underlying vector path into separate abutting segments -- an engine artifact (misreading a decorative direction arrow as a line break), not a genuine physical run boundary. This is the same category this project's own docs/LINEAR-TRACE-EVAL.md Finding 4 already named and warned against (an interior cut on a much-longer trunk) -- except here the cut comes from the ENGINE's own unguided stop, not a human's own narrower judgment call, which is arguably worse to enshrine as a golden (a future fix recognizing decorative arrow glyphs would change this exact stop behavior). Set aside, not used, per this project's own 'a wrong case is worse than no case' discipline.\n\nThe candidate actually used (7.66 LF, `size-binding:leader`, system CWR, size pipe:2) stops at REAL physical components at both ends, confirmed via a marked render crop: the backward end (a real, printed '2\" CWR' label sitting directly at the pipe's own start) sits at the point this line branches off a vertical riser carrying a pump/check-valve/isolation-valve cluster; the forward end sits exactly at a real check-valve (bowtie) symbol where this 2\" branch ties into the main CWR trunk. Both are genuine physical pipe-network boundaries (a branch origin and a real valve component), the same 'real fitting/junction, not an arbitrary interior cut' standard weld-county-m1-0.json's own reducer-to-tee span and douglas-county-me4-01.json's own CAD-junction span already established -- not the Finding-4-style artifact the rejected candidate above showed. `verts_norm` is the run's own real elbow vertex (`trace_run`'s own reported single `vertices[]` entry) plus both real stop points -- confirmed to reproduce the exact same total length as `trace_run`'s own authoritative `length_lf` (7.66) once simplified, with no floating-point gap this time (2 segments, both round numbers).",
+  "scope": "A single real 2\" CWR (condenser water return) branch/bypass line (7.66 LF) on JPS Health Network's own M2.01A sheet (Main Central Plant Chiller Addition, Enlarged Chiller Plant Area A), from a real branch origin off a pump/valve riser cluster, through one real 90-degree elbow, to a real check-valve symbol where it ties into the main CWR trunk. Explicitly OUT OF SCOPE: the rejected 20\"/24\" CWR candidate described in review_basis (a real engine limitation, not a usable golden); the main 14\"/20\"/24\" CWR and CWS trunk piping and every chiller/pump/cooling-tower-pump equipment run on this dense sheet; every other sheet in this same PDF (13 pages total, including a legend sheet, demo plans, and AHU/schedule sheets not sampled here); every other file in this newly-added ~380-PDF corpus resource beyond the three sheets (this one, Douglas County's ME4.01, and Klamath CC's M401) authored so far.",
+  "runs": [
+    {
+      "run_id": "jps-m201a-cwr-2in-bypass",
+      "description": "2\" CWR (condenser water return) branch line, from a real branch origin off a pump/valve riser, through one real 90-degree elbow, to a real check-valve symbol tying into the main CWR trunk.",
+      "system": "CWR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.1574570105820106, 0.6041666666666666],
+        [0.19277447089947092, 0.6041666666666666],
+        [0.19277447089947092, 0.5897685185185185]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 2 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 7.66,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 5.93, "size": { "kind": "pipe", "nps_in": 2 }, "size_src": "manual" },
+            { "i": 1, "lf": 1.73, "size": { "kind": "pipe", "nps_in": 2 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:2": 7.66 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:2": 7.66 },
+  "total_lf_all_runs": 7.66
+}
