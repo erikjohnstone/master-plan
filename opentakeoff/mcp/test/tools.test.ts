@@ -69,7 +69,9 @@ async function captureStderr(fn: () => Promise<void>): Promise<string> {
 // derive_base takes shape ids and lineal feet — same reasoning.
 // import_takeoff takes a file path — same reasoning.
 // delete_verdict takes a record id — same reasoning.
-const NO_COORDS = new Set(["undo_last", "edit_materials", "edit_condition", "export_report", "export_marked_pdf", "export_dxf", "link_annotation", "list_shapes", "derive_base", "import_takeoff", "delete_verdict", "duplicate_condition", "split_condition", "apply_rules"]);
+// edit_run (#linear-takeoff) takes a shape id plus segment/vertex INDICES —
+// no image-px points cross it — same reasoning.
+const NO_COORDS = new Set(["undo_last", "edit_materials", "edit_condition", "edit_run", "export_report", "export_marked_pdf", "export_dxf", "link_annotation", "list_shapes", "derive_base", "import_takeoff", "delete_verdict", "duplicate_condition", "split_condition", "apply_rules"]);
 
 test("tools/list: exactly TOOL_NAMES, each described with the coordinate contract", async () => {
   const client = await pair();

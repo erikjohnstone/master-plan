@@ -18,7 +18,7 @@ import {
   measurePolygonOutput, measureLineOutput, measureSurfaceOutput, placeCountOutput, symbolSweepOutput, takeoffSummaryOutput,
   exportTakeoffOutput, deleteShapeOutput, readSheetTextOutput,
   editShapeOutput, undoLastOutput, sheetContextOutput,
-  findTextOutput, editMaterialsOutput, editConditionOutput, exportReportOutput,
+  findTextOutput, editMaterialsOutput, editConditionOutput, editRunOutput, exportReportOutput,
   duplicateConditionOutput, splitConditionOutput,
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
@@ -55,7 +55,7 @@ import { runBasIssueTransport } from './basIssueTransport.ts';
 import { basScopeCommandSchema, basScopeTransportResultSchema } from '../../web/src/lib/basScopeTransportContract.ts';
 import { runBasScopeTransport } from './basScopeTransport.ts';
 import { inspectBasSnapshotFile, basSnapshotFileInspectionSchema } from './basSnapshotFile.ts';
-import { runSizeSchema } from '../../web/src/lib/linear/types.ts';
+import { runSizeSchema, runVertexKindSchema } from '../../web/src/lib/linear/types.ts';
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -240,14 +240,45 @@ No approval, installed count or complete requirement discovery. Changes stay in 
   }, run("cut_out", (a) => session.cutOut(a)));
 
   server.registerTool("measure_line", {
-    description: `Measure an open polyline (min 2 points, image px): length_lf at the sheet's scale. Requires the scale to be set. Pass condition to commit it as a linear shape (base, transitions, feature strips). ${COORDS}`,
+    description: `Measure an open polyline (min 2 points, image px): length_lf at the sheet's scale. Requires the scale to be set. Pass condition to commit it as a linear shape (base, transitions, feature strips). #linear-takeoff: system/size/vertices author this run's \`run\` block on commit (require condition — they configure the committed shape, not the preview) and the reply echoes it as \`run\`, plus the resulting per-segment/per-vertex \`computed_run\`. A routed-system condition (family or system set via edit_condition) seeds this run's system and segment-0 size from its own defaults when system/size are omitted, exactly like a canvas trace; an explicit value here wins outright over the seed. Per-segment size changes after this call, or a vertex kind you didn't know yet, go through edit_run. ${COORDS}`,
     inputSchema: {
       sheet: z.string(),
       pts: z.array(pointSchema).min(2),
       condition: z.string().optional(),
+      system: z.string().optional().describe("#linear-takeoff: this run's system tag (e.g. 'SA', 'HHWS'). Falls back to the condition's own default system when omitted and the condition is routed."),
+      size: runSizeSchema.optional().describe("#linear-takeoff: this run's size (rect/round/oval/pipe), applied from segment 0 onward (carried the whole run until an edit_run segment_sizes override starts a new size partway through). Falls back to the condition's own default size when omitted and the condition is routed."),
+      vertices: z.array(z.object({
+        i: z.number().int().min(1).describe("Interior vertex index into THIS call's own pts (1..pts.length-2) — vertex 0 and the last point are the run's own ends, never listed here"),
+        kind: runVertexKindSchema.exclude(["end"]).describe("What this vertex actually is — geometry alone only ever infers 'elbow' from turn angle; state a tee/riser/crossing/equipment tap/symbol gap explicitly"),
+        dir: z.enum(["up", "down", "both"]).optional().describe("Riser direction, when kind is 'riser'"),
+      })).optional().describe("#linear-takeoff: explicit vertex-kind overrides for interior vertices this run already passes through — a fitting the agent can see on the sheet but geometry alone can't classify."),
     },
     outputSchema: measureLineOutput,
-  }, run("measure_line", (a) => session.measureLine(a.sheet, a.pts, { condition: a.condition })));
+  }, run("measure_line", (a) => session.measureLine(a.sheet, a.pts, { condition: a.condition, system: a.system, size: a.size, vertices: a.vertices })));
+
+  server.registerTool("edit_run", {
+    description: `#linear-takeoff: patch an existing linear shape's \`run\` block — the segment-size/vertex-kind equivalent of edit_condition, working on a committed shape instead of a condition default. system/status overwrite wholesale (null clears); segment_sizes and vertices patch BY INDEX — a null size/kind clears just that one entry, every other index is left alone, mirroring the canvas's right-click "Set size…" menu (applySegmentSize in TakeoffCanvas.jsx). computed.run is recomputed from the result via the same resolveRunSegments call the canvas panel uses, so the reply's computed_run is exactly what MEASUREMENTS would show. Refuses a shape a human has reviewed (ink, not pencil) and any non-linear shape. Reversible with undo_last.`,
+    inputSchema: {
+      shape_id: z.string().describe("Id of an existing linear shape, from measure_line's reply or list_shapes"),
+      system: z.union([z.string(), z.null()]).optional().describe("Set (string) or clear (null) this run's system tag"),
+      status: z.union([z.enum(["new", "existing", "demo"]), z.null()]).optional().describe("Set or clear this run's status"),
+      segment_sizes: z.array(z.object({
+        i: z.number().int().min(0).describe("Segment index (edge i runs vertex i → i+1); a size carries forward until the next overridden index"),
+        size: z.union([runSizeSchema, z.null()]).describe("The size starting at this segment, or null to clear this segment's own override (it then carries forward from the nearest earlier one, if any)"),
+      })).optional().describe("Per-segment size overrides to set or clear, by index"),
+      vertices: z.array(z.object({
+        i: z.number().int().min(1).describe("Interior vertex index (1..nverts-2)"),
+        kind: z.union([runVertexKindSchema.exclude(["end"]), z.null()]).describe("The vertex's kind, or null to clear this vertex's override (it then reads as plain geometry — 'elbow' at a real turn, nothing at a straight pass-through)"),
+        dir: z.enum(["up", "down", "both"]).optional().describe("Riser direction, when kind is 'riser'"),
+      })).optional().describe("Per-vertex fitting-kind overrides to set or clear, by index"),
+      params: z.object({
+        rise_ft: z.union([z.number(), z.null()]).optional(),
+        offset_allowance_pct: z.union([z.number(), z.null()]).optional(),
+        flex_per_diffuser_ft: z.union([z.number(), z.null()]).optional(),
+      }).optional().describe("Numeric run params to set or clear (null clears that one field)"),
+    },
+    outputSchema: editRunOutput,
+  }, run("edit_run", (a) => session.editRun(a.shape_id, { system: a.system, status: a.status, segment_sizes: a.segment_sizes, vertices: a.vertices, params: a.params })));
 
   server.registerTool("measure_surface", {
     description: `Surface Area — wall SF (#146): trace an OPEN run along the wall in plan view (min 2 points, image px) and the quantity is traced LF × height. This is how wall tile, wainscot, and wall systems are taken off — the quantity family one_click and measure_polygon cannot produce. Height lives on the CONDITION (the canvas's H knob): pass height_ft to set it on this call (journals as its own undo step, like typing H before tracing), or set it once with edit_condition; with neither, this refuses and mints nothing. The shape snapshots the height it was quantified at. Requires the sheet's scale. ${COORDS}`,

@@ -17,7 +17,7 @@ import { basAssemblyCalculationSchema } from '../../web/src/lib/basAssemblyQuant
 import { basEngineeringSummarySchema } from '../../web/src/lib/basEngineeringReview.ts';
 import { basProjectReviewSchema } from '../../web/src/lib/basProjectReview.ts';
 import { basEvidenceBundleInspectionSchema } from '../../web/src/lib/basEvidenceBundle.ts';
-import { runSizeSchema } from '../../web/src/lib/linear/types.ts';
+import { runSizeSchema, computedRunSchema } from '../../web/src/lib/linear/types.ts';
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -887,11 +887,56 @@ export const sweepInlineMotifOutput = {
   note: z.string().optional().describe("Present when no scale is committed on this sheet — sizes were compared in image px only"),
 };
 
+/** #linear-takeoff WP1.5: the AUTHORED run block, on the wire — shared by
+ * measure_line and edit_run so a caller reading one shape's state back from
+ * either tool sees the identical shape (never `run` meaning one thing on one
+ * reply and something else on the other). */
+const authoredRunOutput = z.object({
+  system: z.string().optional(),
+  status: z.enum(["new", "existing", "demo"]).optional(),
+  // z.unknown(), not z.record(z.string(), runSizeSchema): web/ and mcp/ each
+  // install their own node_modules/zod (same 3.25.76, never deduped — mcp's
+  // package.json still pins ^3.24.1), so runSizeSchema here is a DIFFERENT
+  // module instance than this file's own `z`. z.record's overload detection
+  // does an instanceof check on its value-type argument that silently fails
+  // across that instance boundary, falls back to treating the call as
+  // z.record(valueType) with z.string() (the intended KEY type) as the
+  // value instead — so every real RunSize object then fails this file's own
+  // reply-shape self-check. runSizeSchema stays the one real contract
+  // (reused successfully everywhere else in this file via plain
+  // `.optional()`/`.nullable()`, which don't hit this instanceof path); this
+  // field is validation-only on our own already-typed reply, so looser is
+  // safe. See size_overrides on AuthoredRun (web/src/lib/linear/types.ts)
+  // for the actual shape: keyed by segment index, one rect/round/oval/pipe
+  // RunSize per key.
+  size_overrides: z.record(z.string(), z.unknown()).optional(),
+  vertex_overrides: z.record(z.string(), z.object({
+    kind: z.string(),
+    dir: z.enum(["up", "down", "both"]).optional(),
+  })).optional(),
+  params: z.object({
+    rise_ft: z.number().optional(),
+    offset_allowance_pct: z.number().optional(),
+    flex_per_diffuser_ft: z.number().optional(),
+  }).optional(),
+});
+
 export const measureLineOutput = {
   length_lf: z.number(),
   npts: z.number().int(),
   shape_id: z.string().optional().describe("Present when condition was passed and the shape committed"),
+  run: authoredRunOutput.optional().describe("#linear-takeoff: the committed shape's authored run block — present when system/size/vertices were passed explicitly, or seeded from a routed condition's defaults"),
+  computed_run: computedRunSchema.optional().describe("#linear-takeoff: present alongside run — the same per-segment/per-vertex read the canvas MEASUREMENTS panel shows"),
   warning: z.string().optional().describe("Mixed-scale warning (#153): a scale note disagreeing with the sheet's sits in the measured region — verify before trusting these numbers"),
+};
+
+/** edit_run (#linear-takeoff WP1.5): the shape's run block and recomputed
+ * computed.run after the patch — absent `run`/`computed_run` means the
+ * patch cleared every field (the shape is a plain polyline again). */
+export const editRunOutput = {
+  shape_id: z.string(),
+  run: authoredRunOutput.optional().describe("The shape's authored run block after this call — absent when the patch left it empty"),
+  computed_run: computedRunSchema.optional().describe("Recomputed from the result — absent alongside run when the shape has none"),
 };
 
 /** conditionTotals row (web/src/lib/totals.js) minus presentation fields —

@@ -255,11 +255,11 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 55 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 57 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
-Forty descriptions is real token weight for a session that may never touch half of them, so the
-server can stage the surface along the workflow it already teaches:
+Fifty-seven descriptions is real token weight for a session that may never touch half of them, so
+the server can stage the surface along the workflow it already teaches:
 
 ```bash
 OPENTAKEOFF_MCP_STAGED_TOOLS=1 npx -y opentakeoff-mcp

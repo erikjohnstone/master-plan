@@ -48,6 +48,15 @@ export interface RunSegment {
 
 export type RunVertexKind = "elbow" | "tee" | "size_change" | "crossing" | "riser" | "equipment" | "symbol_gap" | "end" | "manual";
 
+/** Zod mirror of RunVertexKind — the same "define once, import into MCP"
+ *  pattern as runSizeSchema (WP1.5, mcp/src/tools.ts's `edit_run`/
+ *  `measure_line` inputs and mcp/src/outputs.ts's computed.run schema).
+ *  "end" is real (a shape's own two ends aren't interior vertices — see
+ *  RunVertex.i below — so nothing ever authors or reads it as a kind);
+ *  input schemas that author a vertex override exclude it explicitly with
+ *  `runVertexKindSchema.exclude(["end"])` rather than duplicating the list. */
+export const runVertexKindSchema = z.enum(["elbow", "tee", "size_change", "crossing", "riser", "equipment", "symbol_gap", "end", "manual"]);
+
 export interface RunVertex {
   /** Index of the INTERIOR vertex (1..n-2 of an n-point open polyline) this
    *  describes — vertex 0 and vertex n-1 are the run's own ends, never
@@ -83,6 +92,33 @@ export interface ComputedRun {
    *  here (per-size aggregation of "no size" isn't a real quantity). */
   totals_by_size: Record<string, number>;
 }
+
+/** Zod mirror of ComputedRun (WP1.5) — measure_line and edit_run hand this
+ *  straight back on their reply, so an agent sees the same per-segment/
+ *  per-vertex read the canvas panel does without a round trip through
+ *  export_takeoff. Structural mirror of the interfaces above; kept beside
+ *  them so the two can never drift silently. */
+export const runSegmentSchema = z.object({
+  i: z.number().int(),
+  lf: z.number(),
+  size: runSizeSchema.optional(),
+  size_src: z.enum(["label", "carried", "drawn", "manual", "withheld"]),
+});
+export const runVertexSchema = z.object({
+  i: z.number().int(),
+  kind: runVertexKindSchema,
+  angle_deg: z.number().optional(),
+  angle_class: z.enum(["square", "45", "custom"]).optional(),
+  from: runSizeSchema.optional(),
+  to: runSizeSchema.optional(),
+  dir: z.enum(["up", "down", "both"]).optional(),
+  manual: z.boolean().optional(),
+});
+export const computedRunSchema = z.object({
+  segments: z.array(runSegmentSchema),
+  vertices: z.array(runVertexSchema),
+  totals_by_size: z.record(z.string(), z.number()),
+});
 
 /** The AUTHORED state a person/agent sets on a linear shape. Every field is
  *  optional and the whole block is optional on the shape — a plain polyline

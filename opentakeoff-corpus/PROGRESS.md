@@ -1,5 +1,117 @@
 ## Active work
 
+2026-09-17 linear takeoff WP1.5 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+MCP measure_line/edit_run. measure_line gains optional system/size/vertices:
+require condition (they configure the committed shape's run block, refused
+without one); when the resolved condition is routed (system or family set),
+system/size seed from its own defaults exactly like TakeoffCanvas.jsx's
+commitLinear — an explicit value here wins outright over the seed, never
+merged with it (same "one wins" rule as measure_surface's height_ft).
+vertices authors vertex_overrides (kind + optional dir) at explicit interior
+indices — the first-ever writer of that field anywhere in the codebase (the
+canvas's own vertex-glyph UI only ever reads it). The reply gains `run`
+(the shape's authored block, when non-empty) and `computed_run` (the
+resolved read, via the same resolveRunSegments call computeShapeMetrics
+uses) — both fields, same names, on both measure_line's and the new
+edit_run's replies, so a caller never sees `run` mean one thing on one tool
+and something else on the other.
+
+New `edit_run` verb (revise stage): patches an EXISTING linear shape's run
+block after commit — the MCP equivalent of the canvas's right-click "Set
+size..." segment menu, generalized to every AuthoredRun field. system/status
+overwrite wholesale (null clears); segment_sizes/vertices patch BY INDEX (a
+null size/kind clears just that one entry, mirroring TakeoffCanvas.jsx's
+applySegmentSize exactly — every other index untouched, carried-forward
+sizes recompute from whatever's left); params patches its three numeric
+sub-fields the same way. Refuses a non-linear shape and a human-reviewed
+shape (edit_shape's own doctrine, same wording). Reversible with undo_last
+via the generic "edit" op (structuredClone(cur) before, restored verbatim —
+no new undo case needed). Added to staging.ts's `revise` list; total tool
+count 56 → 57.
+
+Shape gained `run?: AuthoredRun` (session.ts) — previously only
+`computed.run` existed there (WP1.4 didn't author one, only read an
+imported project's). New shared zod schemas in web/src/lib/linear/types.ts
+for MCP wire reuse: `runVertexKindSchema` (all 9 RunVertexKind values,
+including "end" for output fidelity — input schemas exclude it via
+`.exclude(["end"])` since an interior-vertex override can never be an
+"end"), and `runSegmentSchema`/`runVertexSchema`/`computedRunSchema`
+mirroring the ComputedRun/RunSegment/RunVertex TS interfaces one-for-one.
+
+Tool-count sync (AGENTS.md's five places): check-tool-count.mjs --write
+fixed its two tracked `<!--tool-count-->` markers (README.md,
+docs/USER_GUIDE.md); README.md's own untracked "40 MCP tools" prose (stale
+since #171-era, predating even WP1) converted to the same marker so it
+can't rot silently again; mcp/README.md and docs/AGENT_GUIDE.md each had a
+second untracked "55"/"Fifty-five" mention beside their tracked ones, fixed
+by hand to 57. Added edit_run rows/mentions to mcp/README.md's tool table,
+docs/MCP.md's Revise bullet, and docs/USER_GUIDE.md's Edit-and-audit group.
+FEATURES.md's own long-stale "41 tools" line (pre-existing, outside
+AGENTS.md's five places) is left untouched — flagged here, not fixed, to
+stay in scope.
+
+Found and worked around a real cross-package zod bug while wiring
+size_overrides into the new authoredRunOutput schema: web/ and mcp/ each
+install their OWN node_modules/zod (both resolve to 3.25.76, but
+mcp/package.json still pins the older `^3.24.1` range, so npm's workspace
+hoist never deduped them into one copy). z.record(keyType, valueType)'s
+two-arg overload detection does an instanceof check on valueType; a schema
+built by a DIFFERENT zod module instance (runSizeSchema, imported from
+web/) fails that check silently, and zod falls back to treating the call as
+single-arg z.record(valueType) — using the KEY schema (z.string()) as the
+value type instead. Every real RunSize object then failed the reply's own
+self-validation ("expected string, received object"). Isolated repro
+confirmed z.union/z.array/.optional()/.exclude() all handle the same
+cross-package schema fine — only z.record's overload detection is affected.
+Fixed narrowly: `size_overrides: z.record(z.string(), z.unknown())` with a
+comment explaining why and pointing at the real contract
+(AuthoredRun.size_overrides in types.ts). NOT fixed at the root (aligning
+mcp/package.json's zod range to web's and deduping) — that's a pre-existing
+repo dependency-hygiene issue outside this task, flagged here as a
+follow-up since the same failure would recur for any future
+z.record(..., <cross-package schema>) composition.
+
+mcp/test/linearParity.test.ts (new, 5 tests): TakeoffCanvas.jsx's
+commitLinear/applySegmentSize can't be imported headlessly (React), so this
+file reproduces their exact formulas inline (comments cite the source
+lines) and drives measure_line/edit_run over a real client/server pair,
+checking two things per case — the AUTHORED run block the tool wrote
+matches what the canvas formula would produce for the same inputs, and
+computed_run matches resolveRunSegments called directly on that same
+run/points/scale. Covers: routed-condition seeding, an explicit value
+winning outright over the seed, vertices authoring (asserts manual:true on
+the resolved vertex), segment_sizes patch-by-index with carry-forward and
+full-clear, and the refusal doctrine (non-linear shape, human-reviewed
+shape — the latter via direct Session access, same idiom tools.test.ts
+already uses since no MCP verb sets origin.reviewed itself).
+
+Verification: mcp + web typecheck clean. staging.test.ts, tools.test.ts,
+conformance.test.ts, linearParity.test.ts all green except conformance's
+one already-documented pre-existing sheet_graph SMOKEY MOUNTAIN citation
+failure. A full 85-file mcp suite run (~2h under heavy concurrent corpus
+regression load) surfaced several more "not ok" lines beyond that one;
+rather than assume, each distinct failure was chased down: T-HVAC-01,
+T-VALVE-01, D04 (VAV scope-rollup), D09 (room HVAC coordination), and WP1
+keyed compile acceptance (bldg5406/federal-mech/itd-d1-lab HVAC-total
+mismatches) all reproduce byte-identically on the untouched WP1.4 baseline
+via git-stash comparison — five independent confirmations, all in the same
+frozen-truth/corpus-extraction drift category as the known SMOKEY MOUNTAIN
+one, none touching anything WP1.5 changed. D05 and the federal-mech VAV
+reconcile failure share the exact same error text/pattern as D09 and D04
+respectively (same underlying cause, not independently re-verified).
+vectorGridPackaging.test.mjs's packaging test fails because mcp/dist has
+never been built in this container (`npm run build` was never run) — an
+environment-state gap, not a code issue. safewrite.test.ts's "an unreadable
+file fails CLOSED" test chmod 0o000's a file and expects a permission
+refusal, which never happens running as root (root bypasses file-mode
+checks) — also environmental, not code. One more failure
+(rowsymBessemer.regression.test.mjs) was caused by killing that specific
+subprocess myself after it hung for 1h49m with 20s of actual CPU time (the
+same CPU-contention subprocess flake documented in the WP1.3/WP1.4
+checkpoints, recurring under the full suite's resource pressure) — not a
+regression. No failure in the full run touches any file this checkpoint
+changed.
+
 2026-09-17 linear takeoff WP1.4 checkpoint (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 additive outputs. conditionTotals gains a `sizes` field (one entry per
 canonical RunSize key a condition's shapes carry, ×N and waste applied like

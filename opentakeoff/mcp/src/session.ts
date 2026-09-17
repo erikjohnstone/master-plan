@@ -18,8 +18,8 @@ import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src
 import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
-import type { RunSize } from "../../web/src/lib/linear/types.ts";
-import type { ComputedRun } from "../../web/src/lib/linear/run.ts";
+import type { RunSize, AuthoredRun, RunVertexKind } from "../../web/src/lib/linear/types.ts";
+import { resolveRunSegments, type ComputedRun } from "../../web/src/lib/linear/run.ts";
 import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
 import { activeBasCapture, mergeBasWorkflows, type BasWorkflow } from "../../web/src/lib/basWorkflow.ts";
 import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src/lib/basNarratives.ts";
@@ -557,10 +557,17 @@ export interface Shape {
   /** count shapes carry {count} alone (canvas commitCount) — recompute skips
    * them, so they never grow area fields; every other role carries both.
    * run (#linear-takeoff WP1.4): only ever present on a `linear` shape that
-   * ALSO carries an authored `run` block — MCP doesn't author one yet
-   * (that's WP1.5's measure_line), but a project imported from the canvas
-   * already can, and dxf.ts/markedset.js/totals.js all read it when present. */
+   * ALSO carries an authored `run` block — dxf.ts/markedset.js/totals.js all
+   * read it when present. */
   computed: { area_sf?: number; perimeter_lf?: number; count?: number; run?: ComputedRun };
+  /** The AUTHORED run state (#linear-takeoff WP1.5): system/status/per-segment
+   * size overrides/per-vertex fitting overrides. Written by measure_line (at
+   * commit) and edit_run (after); a project imported from the canvas already
+   * carries one on any shape traced there with the Linear tool. Only ever
+   * present on a `linear` shape, and only when at least one field is set —
+   * mirrors the canvas's own `finalRun` truthiness rule (TakeoffCanvas.jsx's
+   * commitLinear/applySegmentSize) so an empty object never gets stored. */
+  run?: AuthoredRun;
   /** surface_area only: the height this shape was quantified at (canvas
    * commitSurface snapshots the condition's H onto the shape). */
   height_ft?: number;
@@ -2051,19 +2058,120 @@ export class Session {
     return { area_sf, perimeter_lf, nverts: verts.length, ...(shape_id ? { shape_id } : {}), ...(mixed ? { warning: mixed } : {}) };
   }
 
-  measureLine(name: string, pts: Point[], opts: { condition?: string }) {
+  measureLine(name: string, pts: Point[], opts: { condition?: string; system?: string; size?: RunSize; vertices?: { i: number; kind: RunVertexKind; dir?: "up" | "down" | "both" }[] }) {
     const s = this.sheet(name);
     if (s.upp == null) throw new UserError(this.scaleGate(s));
+    if (!opts.condition && (opts.system !== undefined || opts.size !== undefined || opts.vertices?.length)) {
+      throw new UserError("system/size/vertices configure the committed shape's run block — pass condition too, or drop them for a plain length preview.");
+    }
     const length_lf = round2(openLen(pts) * s.upp);
     let shape_id: string | undefined;
+    let finalRun: AuthoredRun | undefined;
+    let computedRun: ComputedRun | undefined;
     // area_sf stays 0 — the canvas only mints border SF when the condition has a thickness.
     // reviewed: false — an agent-drawn line is pencil until a human affirms it,
     // same as every other agent commit (ShapeOrigin's own invariant, previously
     // unstamped here — see measure_line/measure_polygon parity).
-    if (opts.condition) shape_id = this.commit(s, opts.condition, "linear", pts, { area_sf: 0, perimeter_lf: length_lf }, { method: "manual", actor: "agent", reviewed: false }).id;
+    if (opts.condition) {
+      const c = this.conditionFor(opts.condition);
+      const shape = this.commit(s, opts.condition, "linear", pts, { area_sf: 0, perimeter_lf: length_lf }, { method: "manual", actor: "agent", reviewed: false });
+      shape_id = shape.id;
+      // #linear-takeoff (WP1.5): mirrors TakeoffCanvas.jsx's commitLinear —
+      // a routed-system condition (system or family set) seeds this run's
+      // system and segment-0 size from its own defaults; an explicit
+      // system/size here wins outright over the seed (never merged with
+      // it), same "one wins" rule as measure_surface's height_ft.
+      const routed = !!(c.system || c.family);
+      const run: AuthoredRun = {};
+      const system = opts.system !== undefined ? opts.system : routed ? c.system : undefined;
+      const size = opts.size !== undefined ? opts.size : routed ? c.size : undefined;
+      if (system !== undefined) run.system = system;
+      if (size) run.size_overrides = { "0": size };
+      if (opts.vertices?.length) {
+        const vertex_overrides: Record<string, { kind: RunVertexKind; dir?: "up" | "down" | "both" }> = {};
+        for (const v of opts.vertices) vertex_overrides[String(v.i)] = { kind: v.kind, ...(v.dir ? { dir: v.dir } : {}) };
+        run.vertex_overrides = vertex_overrides;
+      }
+      if (Object.keys(run).length) {
+        shape.run = run;
+        finalRun = run;
+        const resolved = resolveRunSegments(pts, s.upp, run);
+        if (resolved) { shape.computed.run = resolved; computedRun = resolved; }
+      }
+    }
     this.flushCommits("measure_line");
     const mixed = this.scaleWarningFor(s, pts);
-    return { length_lf, npts: pts.length, ...(shape_id ? { shape_id } : {}), ...(mixed ? { warning: mixed } : {}) };
+    return { length_lf, npts: pts.length, ...(shape_id ? { shape_id } : {}), ...(finalRun ? { run: finalRun } : {}), ...(computedRun ? { computed_run: computedRun } : {}), ...(mixed ? { warning: mixed } : {}) };
+  }
+
+  /** edit_run (#linear-takeoff WP1.5): patch an EXISTING linear shape's
+   * authored `run` block after commit — the MCP-side equivalent of the
+   * canvas's right-click "Set size…" segment menu, generalized to every
+   * AuthoredRun field. Segment/vertex overrides patch by index (a `null`
+   * kind/size clears just that one entry, exactly like the canvas's
+   * applySegmentSize); system/status/params overwrite wholesale, `null`
+   * clearing the field entirely. computed.run is recomputed from the
+   * resulting run block via the same resolveRunSegments call
+   * computeShapeMetrics uses — canvas and MCP can never disagree about the
+   * math because both call the one function in linear/run.ts. */
+  editRun(shape_id: string, patch: {
+    system?: string | null;
+    status?: "new" | "existing" | "demo" | null;
+    segment_sizes?: { i: number; size: RunSize | null }[];
+    vertices?: { i: number; kind: RunVertexKind | null; dir?: "up" | "down" | "both" }[];
+    params?: { rise_ft?: number | null; offset_allowance_pct?: number | null; flex_per_diffuser_ft?: number | null };
+  }) {
+    const i = this.shapes.findIndex((x) => x.id === shape_id);
+    if (i < 0) throw new UserError(`No shape with id ${JSON.stringify(shape_id)}.`);
+    const cur = this.shapes[i];
+    if (cur.measure_role !== "linear") {
+      throw new UserError(`Shape ${JSON.stringify(shape_id)} is a ${cur.measure_role} shape — run overrides only apply to linear shapes (measure_line).`);
+    }
+    if (cur.origin?.reviewed === true) {
+      throw new UserError(`Shape ${JSON.stringify(shape_id)} was affirmed by a human — reviewed work is ink, not pencil, and cannot be edited by an agent.`);
+    }
+    if (patch.system === undefined && patch.status === undefined && !patch.segment_sizes?.length && !patch.vertices?.length && patch.params === undefined) {
+      throw new UserError("Nothing to change — pass at least one of system, status, segment_sizes, vertices, params.");
+    }
+    const s = this.sheet(cur.sheet_id);
+    if (s.upp == null) throw new UserError(this.scaleGate(s));
+    const before: Shape = structuredClone(cur);
+
+    const run: AuthoredRun = { ...(cur.run || {}) };
+    if (patch.system !== undefined) { if (patch.system === null) delete run.system; else run.system = patch.system; }
+    if (patch.status !== undefined) { if (patch.status === null) delete run.status; else run.status = patch.status; }
+    if (patch.segment_sizes?.length) {
+      const overrides = { ...(run.size_overrides || {}) };
+      for (const seg of patch.segment_sizes) {
+        if (seg.size) overrides[String(seg.i)] = seg.size; else delete overrides[String(seg.i)];
+      }
+      if (Object.keys(overrides).length) run.size_overrides = overrides; else delete run.size_overrides;
+    }
+    if (patch.vertices?.length) {
+      const overrides = { ...(run.vertex_overrides || {}) };
+      for (const v of patch.vertices) {
+        if (v.kind) overrides[String(v.i)] = { kind: v.kind, ...(v.dir ? { dir: v.dir } : {}) }; else delete overrides[String(v.i)];
+      }
+      if (Object.keys(overrides).length) run.vertex_overrides = overrides; else delete run.vertex_overrides;
+    }
+    if (patch.params !== undefined) {
+      const params = { ...(run.params || {}) } as Record<string, number>;
+      for (const [k, v] of Object.entries(patch.params)) {
+        if (v === null || v === undefined) delete params[k]; else params[k] = v;
+      }
+      if (Object.keys(params).length) run.params = params; else delete run.params;
+    }
+    const finalRun = Object.keys(run).length ? run : undefined;
+
+    this.shapes[i] = { ...cur, ...(finalRun ? { run: finalRun } : {}) };
+    if (!finalRun) delete this.shapes[i].run;
+    const pts: Point[] = cur.verts_norm.map(([x, y]) => [x * s.widthPx, y * s.heightPx]);
+    const resolved = finalRun ? resolveRunSegments(pts, s.upp, finalRun) : null;
+    this.shapes[i].computed = { ...cur.computed, ...(resolved ? { run: resolved } : {}) };
+    if (!resolved) delete this.shapes[i].computed.run;
+    this.record({ op: "edit", tool: "edit_run", before });
+
+    return { shape_id, ...(finalRun ? { run: finalRun } : {}), ...(resolved ? { computed_run: resolved } : {}) };
   }
 
   /** Surface Area — the canvas's Surface tool (commitSurface): an OPEN run
