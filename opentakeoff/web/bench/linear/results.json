@@ -522,7 +522,7 @@
       "clippedLenFt": 50.53,
       "goldenLenFt": 50.52
      },
-     "buildMs": 8.444420000000036
+     "buildMs": 7.2856930000000375
     },
     {
      "caseName": "02-pen-thick-solid.pdf",
@@ -541,7 +541,7 @@
       "clippedLenFt": 61.49,
       "goldenLenFt": 61.5
      },
-     "buildMs": 1.394158999999945
+     "buildMs": 1.2802220000000943
     },
     {
      "caseName": "03-dashed-existing.pdf",
@@ -560,7 +560,7 @@
       "clippedLenFt": 36.73,
       "goldenLenFt": 36.72
      },
-     "buildMs": 1.2808399999998983
+     "buildMs": 1.2410370000000057
     },
     {
      "caseName": "04-dashdot-demo.pdf",
@@ -579,7 +579,7 @@
       "clippedLenFt": 46.1,
       "goldenLenFt": 46.1
      },
-     "buildMs": 1.3191369999999552
+     "buildMs": 1.2906490000000304
     },
     {
      "caseName": "05-double-line-duct.pdf",
@@ -598,7 +598,7 @@
       "clippedLenFt": 37.59,
       "goldenLenFt": 43.58
      },
-     "buildMs": 1.588942999999972
+     "buildMs": 1.639550999999983
     },
     {
      "caseName": "06-label-inside.pdf",
@@ -617,7 +617,7 @@
       "clippedLenFt": 27.81,
       "goldenLenFt": 27.8
      },
-     "buildMs": 5.603676999999834
+     "buildMs": 5.475078000000167
     },
     {
      "caseName": "07-label-beside.pdf",
@@ -636,7 +636,7 @@
       "clippedLenFt": 50.61,
       "goldenLenFt": 50.62
      },
-     "buildMs": 2.2947079999999005
+     "buildMs": 2.4349600000000464
     },
     {
      "caseName": "08-label-leader.pdf",
@@ -655,7 +655,7 @@
       "clippedLenFt": 33.47,
       "goldenLenFt": 33.48
      },
-     "buildMs": 2.710992000000033
+     "buildMs": 3.425260999999864
     },
     {
      "caseName": "09-crossing-run.pdf",
@@ -674,7 +674,7 @@
       "clippedLenFt": 36.13,
       "goldenLenFt": 36.13
      },
-     "buildMs": 1.3324710000001687
+     "buildMs": 1.4302920000000086
     },
     {
      "caseName": "10-arc-as-polyline.pdf",
@@ -693,7 +693,7 @@
       "clippedLenFt": 5.18,
       "goldenLenFt": 13.41
      },
-     "buildMs": 1.1191290000001572
+     "buildMs": 1.264319000000114
     },
     {
      "caseName": "11-y-branch.pdf",
@@ -712,7 +712,7 @@
       "clippedLenFt": 8,
       "goldenLenFt": 16
      },
-     "buildMs": 0.6274510000000646
+     "buildMs": 0.7633550000000469
     }
    ],
    "aggregate": {
@@ -725,7 +725,7 @@
     "sizeAccuracyPct": 0.06686381996537795,
     "sizeWrongLabelPct": 0,
     "sizeNoLabelPct": 0.9331361800346221,
-    "maxColdBuildMs": 8.444420000000036,
+    "maxColdBuildMs": 7.2856930000000375,
     "maxWarmQueryMs": null
    }
   },
@@ -772,7 +772,7 @@
       "clippedLenFt": 5.64,
       "goldenLenFt": 5.64
      },
-     "queryMs": 72.84528599999976
+     "queryMs": 71.08443699999953
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -791,7 +791,7 @@
       "clippedLenFt": 18.88,
       "goldenLenFt": 18.96
      },
-     "buildMs": 193.69888100000026
+     "buildMs": 190.0884729999998
     },
     {
      "caseName": "bessemer-mechanical-bidset.pdf#3",
@@ -822,7 +822,7 @@
       "clippedLenFt": 10.33,
       "goldenLenFt": 10.33
      },
-     "buildMs": 290.208928
+     "buildMs": 297.6250340000006
     },
     {
      "caseName": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#9",
@@ -841,7 +841,7 @@
       "clippedLenFt": 76.44,
       "goldenLenFt": 76.44
      },
-     "buildMs": 282.40722900000037
+     "buildMs": 265.8274650000003
     },
     {
      "caseName": "federal-attachment4-mechanical.pdf#6",
@@ -884,7 +884,7 @@
       "clippedLenFt": 1.91,
       "goldenLenFt": 1.91
      },
-     "queryMs": 133.45960800000103
+     "queryMs": 138.6022979999998
     },
     {
      "caseName": "guaranteed-rate-field-hvac-ahu.pdf#5",
@@ -903,7 +903,7 @@
       "clippedLenFt": 29,
       "goldenLenFt": 29
      },
-     "buildMs": 490.5428049999973
+     "buildMs": 513.4542949999995
     },
     {
      "caseName": "h59-chiller-addition.pdf#10",
@@ -922,7 +922,7 @@
       "clippedLenFt": 7.99,
       "goldenLenFt": 7.99
      },
-     "buildMs": 402.07892699999866
+     "buildMs": 368.6366310000012
     },
     {
      "caseName": "h59-chiller-addition.pdf#10",
@@ -941,7 +941,7 @@
       "clippedLenFt": 7.99,
       "goldenLenFt": 7.99
      },
-     "queryMs": 0.8967039999988629
+     "queryMs": 0.9479299999984505
     },
     {
      "caseName": "health-science-center-3809.pdf#33",
@@ -960,7 +960,7 @@
       "clippedLenFt": 25.71,
       "goldenLenFt": 25.71
      },
-     "buildMs": 280.14680999999837
+     "buildMs": 301.3961530000015
     },
     {
      "caseName": "hines-finance-center-renovation.pdf#14",
@@ -979,7 +979,7 @@
       "clippedLenFt": 2.23,
       "goldenLenFt": 2.23
      },
-     "buildMs": 375.3978559999996
+     "buildMs": 296.86149999999907
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#5",
@@ -998,7 +998,7 @@
       "clippedLenFt": 7.22,
       "goldenLenFt": 7.22
      },
-     "buildMs": 240.4340119999979
+     "buildMs": 231.03672500000175
     },
     {
      "caseName": "itd-d3-bruneau-hvac-upgrade-part02.pdf#2",
@@ -1017,7 +1017,7 @@
       "clippedLenFt": 22.67,
       "goldenLenFt": 22.67
      },
-     "buildMs": 183.33930200000032
+     "buildMs": 170.30967099999907
     },
     {
      "caseName": "jeffcity-natlguard-cst-addition-part04.pdf#17",
@@ -1036,7 +1036,7 @@
       "clippedLenFt": 3.4,
       "goldenLenFt": 3.4
      },
-     "buildMs": 230.98361699999805
+     "buildMs": 229.49854100000084
     },
     {
      "caseName": "jonesboro-heat-pump-part01.pdf#3",
@@ -1055,7 +1055,7 @@
       "clippedLenFt": 17.05,
       "goldenLenFt": 17.05
      },
-     "buildMs": 248.24574100000245
+     "buildMs": 248.64616599999863
     },
     {
      "caseName": "jonesboro-heat-pump-part01.pdf#4",
@@ -1074,7 +1074,7 @@
       "clippedLenFt": 18.83,
       "goldenLenFt": 18.83
      },
-     "buildMs": 195.28123700000287
+     "buildMs": 187.80024200000116
     },
     {
      "caseName": "jps-hospital-central-plant-chiller.pdf#4",
@@ -1093,7 +1093,7 @@
       "clippedLenFt": 7.66,
       "goldenLenFt": 7.66
      },
-     "buildMs": 235.33465299999807
+     "buildMs": 247.08229800000117
     },
     {
      "caseName": "klamath-cc-learning-center-mechanical.pdf#13",
@@ -1112,7 +1112,7 @@
       "clippedLenFt": 38.68,
       "goldenLenFt": 38.68
      },
-     "buildMs": 334.662946000004
+     "buildMs": 349.095960000006
     },
     {
      "caseName": "klamath-cc-learning-center-mechanical.pdf#13",
@@ -1131,7 +1131,7 @@
       "clippedLenFt": 15.49,
       "goldenLenFt": 15.49
      },
-     "queryMs": 1.4674559999984922
+     "queryMs": 1.5361510000002454
     },
     {
      "caseName": "ma-town-offices-hvac-upgrades.pdf#12",
@@ -1150,7 +1150,7 @@
       "clippedLenFt": 29.35,
       "goldenLenFt": 29.35
      },
-     "buildMs": 99.16567999999825
+     "buildMs": 97.36217299999407
     },
     {
      "caseName": "navfac-cherry-point-atc-mechanical.pdf#7",
@@ -1169,7 +1169,7 @@
       "clippedLenFt": 15.17,
       "goldenLenFt": 15.17
      },
-     "buildMs": 278.3856400000004
+     "buildMs": 269.29042599999957
     },
     {
      "caseName": "navfac-cherry-point-atc-mechanical.pdf#14",
@@ -1188,7 +1188,7 @@
       "clippedLenFt": 6.37,
       "goldenLenFt": 6.37
      },
-     "buildMs": 398.3478759999998
+     "buildMs": 388.8781650000019
     },
     {
      "caseName": "094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4",
@@ -1207,7 +1207,26 @@
       "clippedLenFt": 16.93,
       "goldenLenFt": 16.93
      },
-     "buildMs": 158.20458900000085
+     "buildMs": 128.10109799999918
+    },
+    {
+     "caseName": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#10",
+     "status": "reached",
+     "goldenLf": 10.77,
+     "tracedLf": 10.77,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:12",
+     "tracedSizeKey": "round:12",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#10",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 10.77,
+      "goldenLenFt": 10.77
+     },
+     "buildMs": 244.19923000000563
     },
     {
      "caseName": "salinity-lab-chiller-replacement.pdf#11",
@@ -1226,7 +1245,7 @@
       "clippedLenFt": 2,
       "goldenLenFt": 2
      },
-     "buildMs": 204.56171400000312
+     "buildMs": 204.32531000000017
     },
     {
      "caseName": "sdsu-eng-sciences-part03.pdf#28",
@@ -1245,7 +1264,7 @@
       "clippedLenFt": 10.45,
       "goldenLenFt": 10.45
      },
-     "buildMs": 188.76000699999713
+     "buildMs": 177.18285400000605
     },
     {
      "caseName": "suwannee-hs-courtyard.pdf#12",
@@ -1264,7 +1283,7 @@
       "clippedLenFt": 2.73,
       "goldenLenFt": 2.73
      },
-     "buildMs": 256.3506999999954
+     "buildMs": 264.785398
     },
     {
      "caseName": "suwannee-hs-courtyard.pdf#12",
@@ -1283,7 +1302,7 @@
       "clippedLenFt": 6.09,
       "goldenLenFt": 6.09
      },
-     "buildMs": 174.67208400000527
+     "buildMs": 178.77507999999943
     },
     {
      "caseName": "t2523-replace-boilers-phase2.pdf#11",
@@ -1302,7 +1321,7 @@
       "clippedLenFt": 75.85,
       "goldenLenFt": 75.85
      },
-     "buildMs": 316.9242019999947
+     "buildMs": 315.60638800000015
     },
     {
      "caseName": "t2523-replace-boilers-phase2.pdf#11",
@@ -1321,7 +1340,7 @@
       "clippedLenFt": 73.97,
       "goldenLenFt": 73.97
      },
-     "queryMs": 2.6707420000020647
+     "queryMs": 1.7947080000012647
     },
     {
      "caseName": "t2523-replace-boilers-phase2.pdf#12",
@@ -1340,7 +1359,7 @@
       "clippedLenFt": 27.16,
       "goldenLenFt": 27.16
      },
-     "buildMs": 433.8233309999923
+     "buildMs": 404.5271270000085
     },
     {
      "caseName": "t2523-replace-boilers-phase2.pdf#12",
@@ -1359,7 +1378,7 @@
       "clippedLenFt": 27.91,
       "goldenLenFt": 27.91
      },
-     "queryMs": 3.660838000010699
+     "queryMs": 3.434984000006807
     },
     {
      "caseName": "va-durham-chillers-ahu.pdf#16",
@@ -1378,7 +1397,7 @@
       "clippedLenFt": 11.98,
       "goldenLenFt": 11.98
      },
-     "buildMs": 390.31493500000215
+     "buildMs": 387.90317800000776
     },
     {
      "caseName": "va-durham-chillers-ahu.pdf#16",
@@ -1397,7 +1416,7 @@
       "clippedLenFt": 11.98,
       "goldenLenFt": 11.98
      },
-     "queryMs": 4.11779600000591
+     "queryMs": 4.107774000003701
     },
     {
      "caseName": "va-durham-chillers-ahu.pdf#16",
@@ -1416,7 +1435,7 @@
       "clippedLenFt": 11.98,
       "goldenLenFt": 11.98
      },
-     "queryMs": 3.759650000007241
+     "queryMs": 3.7508669999951962
     },
     {
      "caseName": "va-durham-chillers-ahu.pdf#16",
@@ -1435,7 +1454,7 @@
       "clippedLenFt": 9.33,
       "goldenLenFt": 9.33
      },
-     "buildMs": 382.3936079999985
+     "buildMs": 374.98596399999224
     },
     {
      "caseName": "va-durham-chillers-ahu.pdf#16",
@@ -1454,7 +1473,7 @@
       "clippedLenFt": 17.56,
       "goldenLenFt": 17.56
      },
-     "buildMs": 396.95980399999826
+     "buildMs": 380.32190699999046
     },
     {
      "caseName": "va-durham-chillers-ahu.pdf#16",
@@ -1473,7 +1492,7 @@
       "clippedLenFt": 16.49,
       "goldenLenFt": 16.49
      },
-     "buildMs": 404.1382319999975
+     "buildMs": 405.0758690000075
     },
     {
      "caseName": "va-durham-chillers-ahu.pdf#16",
@@ -1492,7 +1511,7 @@
       "clippedLenFt": 3.1,
       "goldenLenFt": 3.1
      },
-     "buildMs": 398.39884999999776
+     "buildMs": 375.83318100000906
     },
     {
      "caseName": "va-durham-chillers-ahu.pdf#16",
@@ -1511,7 +1530,7 @@
       "clippedLenFt": 3.1,
       "goldenLenFt": 3.1
      },
-     "queryMs": 3.5692330000019865
+     "queryMs": 3.742909000007785
     },
     {
      "caseName": "va-durham-chillers-ahu.pdf#16",
@@ -1530,7 +1549,7 @@
       "clippedLenFt": 3.1,
       "goldenLenFt": 3.1
      },
-     "queryMs": 3.3101739999983693
+     "queryMs": 3.442580999995698
     },
     {
      "caseName": "va-project637-ehrm-infrastructure.pdf#66",
@@ -1549,7 +1568,7 @@
       "clippedLenFt": 13.58,
       "goldenLenFt": 13.58
      },
-     "buildMs": 360.2768970000034
+     "buildMs": 380.5746280000021
     },
     {
      "caseName": "vermillion-county-jail-mechanical.pdf#16",
@@ -1568,7 +1587,7 @@
       "clippedLenFt": 7.46,
       "goldenLenFt": 7.46
      },
-     "buildMs": 278.9092820000078
+     "buildMs": 322.1762799999997
     },
     {
      "caseName": "weld-county-mechanical-permit.pdf#7",
@@ -1587,21 +1606,21 @@
       "clippedLenFt": 21.82,
       "goldenLenFt": 21.82
      },
-     "buildMs": 348.995814000009
+     "buildMs": 340.6369410000043
     }
    ],
    "aggregate": {
-    "cases": 47,
-    "recall": 0.8723404255319149,
-    "precision": 0.97809709453942,
+    "cases": 48,
+    "recall": 0.875,
+    "precision": 0.9784034388270587,
     "maxLenErrPct": 0.8470464135021097,
-    "meanLenErrPct": 0.022036267849115405,
+    "meanLenErrPct": 0.021523796503787142,
     "maxOverTracePct": 0.8470464135021097,
-    "sizeAccuracyPct": 0.7387094968940622,
-    "sizeWrongLabelPct": 0.03662767922099724,
-    "sizeNoLabelPct": 0.2246628238849403,
-    "maxColdBuildMs": 490.5428049999973,
-    "maxWarmQueryMs": 133.45960800000103
+    "sizeAccuracyPct": 0.7425881769189419,
+    "sizeWrongLabelPct": 0.03608396620401636,
+    "sizeNoLabelPct": 0.22132785687704154,
+    "maxColdBuildMs": 513.4542949999995,
+    "maxWarmQueryMs": 138.6022979999998
    }
   },
   "heldOut": {
@@ -1623,7 +1642,7 @@
       "clippedLenFt": 20.14,
       "goldenLenFt": 20.14
      },
-     "buildMs": 422.929537
+     "buildMs": 403.2172419999997
     },
     {
      "caseName": "bldg5406-hvac-demo-mechanical.pdf#14",
@@ -1642,7 +1661,7 @@
       "clippedLenFt": 4.16,
       "goldenLenFt": 4.16
      },
-     "buildMs": 852.4639610000004
+     "buildMs": 867.6964339999995
     },
     {
      "caseName": "federal-attachment4-mechanical.pdf#7",
@@ -1661,7 +1680,7 @@
       "clippedLenFt": 3.57,
       "goldenLenFt": 3.57
      },
-     "buildMs": 392.572306
+     "buildMs": 445.94747199999983
     },
     {
      "caseName": "itd-d1-lab-mechanical.pdf#4",
@@ -1680,7 +1699,7 @@
       "clippedLenFt": 3.02,
       "goldenLenFt": 3.02
      },
-     "buildMs": 455.03571699999884
+     "buildMs": 417.98215699999855
     },
     {
      "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
@@ -1699,7 +1718,7 @@
       "clippedLenFt": 12.39,
       "goldenLenFt": 12.39
      },
-     "buildMs": 777.8680569999997
+     "buildMs": 816.0928510000012
     },
     {
      "caseName": "navfac-cherry-point-atc-mechanical.pdf#18",
@@ -1718,7 +1737,7 @@
       "clippedLenFt": 12.53,
       "goldenLenFt": 12.53
      },
-     "buildMs": 979.4039879999982
+     "buildMs": 1024.1410840000026
     }
    ],
    "aggregate": {
@@ -1731,7 +1750,7 @@
     "sizeAccuracyPct": 0.6391327719046765,
     "sizeWrongLabelPct": 0,
     "sizeNoLabelPct": 0.3608672280953234,
-    "maxColdBuildMs": 979.4039879999982,
+    "maxColdBuildMs": 1024.1410840000026,
     "maxWarmQueryMs": null
    }
   },

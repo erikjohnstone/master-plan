@@ -1,5 +1,32 @@
 ## Active work
 
+2026-09-18 linear takeoff: a third real self-reading answer lands, this time with no new labeling fix needed (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept the search going on yet another genuinely new real project, a
+poultry research facility's own mechanical drawings. Checked image
+coverage first as usual -- clean, a real digital drawing. This one's
+own duct-size labels were already in a format the reader already
+understood, no new fix needed this time.
+
+Found a clean, real 11-foot section of round duct, drawn as a proper
+double-line duct with its own size label sitting right on it, running
+from a return-air grille to a real smooth turn feeding two more ducts
+below. The computer read its own size correctly again, and this time
+with noticeably higher confidence than usual -- it managed to read a
+real category label straight off the original drawing file itself,
+something most of today's other finds haven't managed. Double-checked
+the turn at the far end against the actual raw computer output, not
+just the picture, and confirmed multiple genuine directions really are
+there. Added to the answer key.
+
+Third self-reading answer out of the last three genuinely new
+drawings tried -- three in a row now, no forcing needed on any of
+them.
+
+Measured: only the new drawing's own row and the summary numbers that
+include it moved; everything else already verified stayed exactly the
+same; nothing in the tool itself changed this round.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 89" section.
+
 2026-09-18 linear takeoff: two more real labeling gaps fixed, no new answer this round (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept the search going. Checked image coverage first again, like
 yesterday's lesson said to -- came back clean, a real digital drawing.
