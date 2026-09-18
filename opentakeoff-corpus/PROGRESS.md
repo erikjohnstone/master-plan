@@ -1,5 +1,30 @@
 ## Active work
 
+2026-09-18 linear takeoff: closed out an earlier open question -- a held-out drawing's second unanswered sheet has no further usable label, confirmed rather than just suspected (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Earlier today, a held-out drawing's own sibling sheet was tried and
+turned down for one specific reason: its only good-looking answer
+sat right where two different pipe labels (supply and return) sat
+close enough together to genuinely not be sure which one the actual
+answer belonged to. That earlier attempt suggested a more targeted
+label search, rather than a blind grid check, might turn up something
+better. Went back and actually tried that today.
+
+It didn't. A careful read of every piece of label text on the page
+found only that same one already-tried label -- nothing else. A
+second, looser check for labels split across separate bits of text
+turned up two more matches, but they're just the two halves of that
+same already-known label sitting a few pixels apart, not a new one.
+
+This closes out that earlier open question honestly: there simply
+isn't another usable label on this specific page to find this way.
+Growing this held-out drawing further would need a different method
+entirely, or a different sheet -- not attempted today.
+
+No new answer from this. Nothing measured changes.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 75" section.
+
 2026-09-18 linear takeoff: three more drawings checked, all empty or too risky -- today's easy returns from this particular method have clearly thinned (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked three more drawings. One's few matches read as plain
 installation instructions rather than plan labels ("pipe to
