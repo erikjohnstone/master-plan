@@ -1,5 +1,30 @@
 ## Active work
 
+2026-09-18 linear takeoff: a diminishing-returns checkpoint on grid-sweep discovery, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Mined two further small batches across both archives. Real mechanical
+sheets were genuinely swept -- seven real M/MD-prefixed sheets on one
+public-housing HVAC set alone, each with a real detected scale and
+substantial segment counts -- and every one came back empty. The one
+hit found (a "5.5 inch pipe" read) was a fifth real-corpus confirmation
+of the dimension-line-as-pipe category found repeatedly this session,
+this time in a mechanical-room penetration-sizing schematic.
+
+Worth stating plainly: coordinate grid-sweep discovery is approaching
+a real ceiling on this corpus independent of file quality -- roughly
+35 of the last 40 files checked produced nothing usable. Most plausibly
+because much of this corpus's own real labeling doesn't sit in a
+position this engine's automatic bind currently catches. A genuinely
+different discovery method (find real printed size callouts first,
+then seed near each one) is real, disclosed future work.
+
+Also recorded and rejected before it could cause harm: adding a
+refusal-corpus case for the dimension-line gap would break
+`bench:linear` outright, since its own refusal-rate gate requires a
+perfect 1.0 and the engine does not currently refuse there. That gap
+needs a real engine fix first, not a golden addition.
+
+No golden changed. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 33" section.
+
 2026-09-17 linear takeoff: two more narrow-scope-project batches, a new flex-connector false-positive, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Continued the targeting strategy that landed the previous golden across
 two further batches of never-touched files (14 total). One real hit,
