@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-18 linear takeoff: two more fresh drawings checked, both honest misses this time (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept the same search going after yesterday's good find. Checked two
+more genuinely new real projects, and came up empty on both, for two
+different, both legitimate reasons.
+
+The first was actually a set of SCANNED drawings, not real digital
+drawings at all -- almost no readable text or drawn-line data behind
+the picture on any of its own mechanical sheets, the same "it's really
+just a photo of a drawing" situation already known to affect a couple
+of other files in this project. Nothing to trace here at all, not a
+close call.
+
+The second was a real, normal digital drawing set for a chiller
+upgrade -- but its own piping plan sheets, while showing real pump and
+equipment tags, don't actually print any pipe SIZE labels directly on
+the plan itself. Those likely live in a separate schedule table
+instead, which would need a slower, more manual cross-check between a
+tag on the drawing and a row in that table -- a heavier method already
+known from earlier in this project to have thin returns, not attempted
+today.
+
+Neither is a setback -- two misses after one real win, using a method
+this project has always known runs hot and cold, is a normal and
+expected result, not a new problem.
+
+Measured: nothing added or changed in the answer key; nothing in the
+tool touched. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 84" section.
+
 2026-09-18 linear takeoff: a second fresh drawing, in the same low-key search, lands the biggest single jump in the size-accuracy number all session (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept the same easy-does-it search going onto a second new project after
 the first one's own boiler room turned out too tangled to use. Checked
