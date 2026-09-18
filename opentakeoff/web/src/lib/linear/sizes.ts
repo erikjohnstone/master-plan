@@ -45,13 +45,26 @@ import type { RunSize } from "./types.ts";
 import { nearestSegment, segmentsInBox, type SegmentIndex } from "./index.ts";
 
 /** Plan Appendix A's own pre-normalisation rules, applied in order:
- *  `× → x`, `Ø ⌀ %%c → ø`, `″ ” → "`, Unicode fractions → `N/D` text,
- *  collapse whitespace, uppercase (system tokens are always upper — a
- *  lowercase size digit has no case to preserve either way). */
+ *  `× → x`, `Ø ⌀ %%c → ø`, `″ ” → "`, insert a space after a size's own
+ *  closing quote when the extractor ran it straight into the following
+ *  system letters, Unicode fractions → `N/D` text, collapse whitespace,
+ *  uppercase (system tokens are always upper — a lowercase size digit has
+ *  no case to preserve either way). */
 export function normalizeLabelText(raw: string): string {
   let s = String(raw ?? "");
   s = s.replace(/×/g, "x");
   s = s.replace(/[″”]/g, '"');
+  // A real corpus label (`2"CHWS&R`, Orange County Regional History Center
+  // M-102) came through pdf.js's own text extraction with NO space between
+  // the inch mark and the system token at all — tight CAD kerning collapsed
+  // to zero gap, not a typo in the source drawing. PIPE_RE's own trailing
+  // system group requires `\s+` there by design (plan Appendix A's literal
+  // grammar), so without this the whole match fails, not just the system
+  // tag. Inserted here, before that requirement is ever checked, rather
+  // than loosened to `\s*` in the regex itself — this keeps the grammar's
+  // own stated shape intact and fixes the one real, narrow extraction
+  // artifact instead of quietly accepting a run-together token everywhere.
+  s = s.replace(/"(?=[A-Za-z])/g, '" ');
   s = s
     .replace(/½/g, "1/2").replace(/¼/g, "1/4").replace(/¾/g, "3/4")
     .replace(/⅛/g, "1/8").replace(/⅜/g, "3/8").replace(/⅝/g, "5/8").replace(/⅞/g, "7/8");
@@ -90,7 +103,15 @@ const ROUND_RE = new RegExp(`^(?:ø\\s*)?(\\d{1,3}(?:\\.\\d+)?)"?\\s*(?:ø|DIA\\
 // alternative C, not to the whole A|B|C group — a real bug caught by this
 // file's own test suite (`2" CWS/R"`, `¾" HW/CW UP` both failed to parse
 // until this wrapper was added).
-const PIPE_RE = new RegExp(`^(?:(${SYS_ALT})\\s+)?(\\d{1,2}(?:\\.\\d+)?)?"(?:\\s+((?:${SYS_ALT})(?:/[A-Z]{1,5})?))?(?:\\s+(${DIR_ALT}))?(?:\\s+(TO|FROM)\\b.*)?$`);
+//
+// `[/&]` rather than a bare `/`: a real corpus label (`2" CHWS&R`, Orange
+// County Regional History Center M-102/M-103, GATE 3 corpus-hunting pass)
+// uses `&` for the identical "one drawn line, two co-located systems"
+// convention `/` already covers (`CWS/R` → `systems:["CWS","R"]`) — same
+// second-token shorthand (`R` alone, not a standalone code), just a
+// different real-world separator glyph. `splitSystems` below widened the
+// same way so both separators land in the same two-entry `systems[]` shape.
+const PIPE_RE = new RegExp(`^(?:(${SYS_ALT})\\s+)?(\\d{1,2}(?:\\.\\d+)?)?"(?:\\s+((?:${SYS_ALT})(?:[/&][A-Z]{1,5})?))?(?:\\s+(${DIR_ALT}))?(?:\\s+(TO|FROM)\\b.*)?$`);
 const PIPE_DN_RE = /^(?:DN|NPS)\s*(\d{2,4})$/;
 const PIPE_MM_RE = /^(\d{2,4})\s*MM$/;
 
@@ -117,7 +138,7 @@ function dirOf(tok: string | undefined): DuctDirection | undefined {
 
 function splitSystems(tok: string | undefined): string[] {
   if (!tok) return [];
-  return tok.split("/").filter(Boolean);
+  return tok.split(/[/&]/).filter(Boolean);
 }
 
 /** Plan Appendix A / §3.1: parse one normalized label into a `RunSize`, or

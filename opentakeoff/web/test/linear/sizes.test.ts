@@ -196,6 +196,28 @@ test("parseSize: PIPE — MEANG B493 Boiler Replacement's own existing-heating-w
   assert.deepEqual(parseSize('3" HWS')?.systems, ["HWS"]);
 });
 
+test("parseSize: PIPE — Orange County Regional History Center M-102/M-103's own `2\" CHWS&R`-style labels (#linear-takeoff GATE 3 bug catalogue: `&` as a second real multi-system separator alongside `/`, same `CWS/R`-style shorthand — the second token is `R` alone, not a standalone code, exactly like the already-accepted `/` case)", () => {
+  const a = parseSize('2" CHWS&R');
+  assert.deepEqual(a?.size, { kind: "pipe", nps_in: 2 });
+  assert.deepEqual(a?.systems, ["CHWS", "R"]);
+  assert.deepEqual(parseSize('8" CHWS&R')?.size, { kind: "pipe", nps_in: 8 });
+  assert.deepEqual(parseSize('2 1/2" CHWS&R')?.size, { kind: "pipe", nps_in: 2.5 });
+  // the existing `/` convention still resolves the same way alongside it
+  assert.deepEqual(parseSize('2" CWS/R')?.systems, ["CWS", "R"]);
+});
+
+test("parseSize: PIPE — the same M-102 labels as pdf.js actually extracted them, with NO space between the inch mark and the system token (#linear-takeoff GATE 3 bug catalogue: tight CAD kerning collapsed the gap to zero in the real PDF text layer, not a typo in the drawing — PIPE_RE's own `\\s+` there is unmet without normalizeLabelText's own space-insertion fix)", () => {
+  const a = parseSize('2"CHWS&R');
+  assert.deepEqual(a?.size, { kind: "pipe", nps_in: 2 });
+  assert.deepEqual(a?.systems, ["CHWS", "R"]);
+  assert.deepEqual(parseSize('8"CHWS&R')?.size, { kind: "pipe", nps_in: 8 });
+  // a genuinely already-spaced label, or a quote followed by a non-letter
+  // (a rect's own "X", a round's own ø), must not gain a SECOND space or
+  // otherwise change shape from this same normalization pass.
+  assert.deepEqual(parseSize('2" CHWS&R'), parseSize('2"CHWS&R'));
+  assert.deepEqual(parseSize('16"x8"')?.size, { kind: "rect", w_in: 16, h_in: 8 });
+});
+
 test("parseSize: PIPE — DN/NPS/mm forms (Appendix A's own second PIPE alternative, not yet seen in the six named sets but part of the stated grammar)", () => {
   assert.deepEqual(parseSize("DN150")?.size, { kind: "pipe", nps_in: 5.91 });
   assert.deepEqual(parseSize("NPS100")?.size, { kind: "pipe", nps_in: 3.94 });

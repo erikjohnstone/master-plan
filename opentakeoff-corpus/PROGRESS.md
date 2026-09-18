@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-18 linear takeoff: a third real labeling gap fixed, and a second real self-reading answer lands (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Put yesterday's lesson to use right away: before spending time on a new
+drawing, checked first how much of the page is covered by an embedded
+picture rather than real lines. This one checked out clean -- a real
+digital drawing, not a scan.
+
+Found a bunch of real, well-labeled chilled-water pipe callouts using
+yet another format this project's reader had never seen: an "&" symbol
+joining the supply and return labels into one ("2\" CHWS&R" meaning one
+drawn pair of pipes, described together). Also found, only by actually
+testing the exact text the computer extracted, that the size and the
+label were jammed together with no space between them at all in the
+real file -- a real side effect of how tightly the original drawing's
+own lettering was spaced, not a typo anyone made. Fixed both, narrowly
+and carefully, with new tests, and confirmed the entire existing test
+suite -- both parts of this project -- still shows only the same
+already-known, unrelated problems as always.
+
+Found a real, clean 16-foot pipe run using one of these newly-readable
+labels, and once again the computer read its own size correctly on its
+own, no manual typing needed -- confirmed against real valve symbols at
+both ends, including a genuine double-check this time: the raw
+computer read itself listed two real directions at the ambiguous end,
+not just a guess from looking at the picture. Added to the answer key.
+
+This is the second time in a row that plain, patient searching through
+a genuinely new real drawing turned into an automatically-read, no
+manual entry needed. Two in a row is still a small sample, but two is
+better than one, and worth keeping doing.
+
+Measured: the new label-reading tests pass (51/51) alongside the whole
+file; the full check on both parts of the project still passes at its
+usual baseline; only the new drawing's own row and the summary numbers
+that include it moved. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 87"
+section.
+
 2026-09-18 linear takeoff: solved yesterday's mystery -- the drawing that "looked right but wouldn't trace" turned out to be a photo pretending to be a real drawing (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Went back and actually figured out why that one drawing refused to
 cooperate last time, instead of leaving it as an open question.
