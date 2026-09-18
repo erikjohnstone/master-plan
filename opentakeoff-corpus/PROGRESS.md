@@ -1,5 +1,34 @@
 ## Active work
 
+2026-09-18 linear takeoff: twenty-first new-corpus golden, a fresh project, one case from the gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Two more zero-detected-scale files were disqualified in seconds. A
+third, real, genuinely dangerous candidate was found and declined: a
+temporary-boiler site plan's own curved pipe route, drawn over hatched
+gravel/railroad-tie texture, returned a wildly implausible length over
+thousands of points before hitting the walk's own safety cap -- on a
+seed only steps away from ones returning plausible results. A concrete
+instance of a real hatching-density pathology, correctly declined
+rather than risking a silently wrong capture from an unstable path.
+
+The one that landed: a fresh, previously-untouched Maine heat-pump
+upgrade project. A legible, uncluttered mechanical plan -- a clear
+step down in complexity from the sheet the last several rounds came
+from -- shows a real condensate-drain main serving several ductless
+indoor units. The trace reaches it cleanly with a real dead-end at a
+wall-penetration stub and a real fork near one of the indoor units,
+both confirmed via marked crop.
+
+Development-tier recall: **32/38 (0.8421) -> 33/39 (0.8462)**, an
+exact length match. Precision ticks up further above the project's
+own gate threshold (0.9701 -> 0.9710). Recall is now just ONE fully-
+reached case away from the project's own 0.85 gate -- the closest
+checkpoint of this entire session.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 45" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: twentieth new-corpus golden, a fifth candidate on the same sheet, development recall 31/37 -> 32/38, within 0.008 of the gate -- two cases away (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 A fifth candidate on the same rich VA Durham sheet, found via a grid
 sweep near a real text anchor whose own label repeats twice along one
