@@ -1,5 +1,31 @@
 ## Active work
 
+2026-09-18 linear takeoff: fixed a real bench-harness bug that had inflated the click-to-proposal proxy sevenfold (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+While checking the gate's own click-to-proposal threshold, the bench's
+own reported "warm query" ceiling was 7075 milliseconds -- nothing like
+a real click. Traced it to a real bug in the bench script itself, not
+the trace engine: several separate golden files can share one physical
+sheet, each getting its own fresh session, but the script's own cold-
+vs-warm bookkeeping was keyed on the sheet's name rather than on which
+session actually built it -- so a second, third, fourth, fifth file
+touching the same sheet each paid a real, once-per-session cost fresh,
+yet got mislabeled as an already-warmed-up "click", inflating the
+number far past reality.
+
+Fixed by keying that bookkeeping to the session itself rather than the
+sheet's name. Re-ran the full bench: recall, precision, and size
+accuracy all held exactly steady (confirming the fix only changes which
+calls count as cold vs warm, nothing about matching or scoring), while
+the inflated number dropped from 7075 milliseconds to 552 -- a real,
+now-trustworthy measurement. Most real sheets show single-digit-
+millisecond warm queries, comfortably under the gate's own 16ms bar;
+two sheets remain genuine, smaller, not-yet-explained outliers above
+it.
+
+Measured: `npm run bench:linear` passes with the corrected number; the
+targeted linear test suite (165 tests) passes. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 48" section and its priority list updated.
+
 2026-09-18 linear takeoff: GATE 3's own `per-sheet build < 400ms` threshold confirmed VIOLATED on a live development-tier golden, not just unverified (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 With recall and precision now both clearing their own gate thresholds,
 went back and actually read the bench's own real-tier aggregate rather

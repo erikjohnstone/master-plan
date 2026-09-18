@@ -328,7 +328,17 @@ async function guidedMultiHopTrace(session: Session, sheetKey: string, golden: P
 }
 
 const traceRows: TraceRunRow[] = [];
-const traceSeenSheets = new Set<string>();
+// Cold vs warm must track the SESSION instance, not the sheet_id string: a
+// fresh `new Session()` pays trace_run's own once-per-session label-leader
+// cost (symbollabels.ts chase()/nearDark(), see docs/LINEAR-TRACE-EVAL.md
+// Run 19) again regardless of whether some OTHER session already traced the
+// same physical sheet earlier in this run. Several real golden files can
+// share one sheet_id (e.g. five separate va-durham-chillers-m401*.json files
+// all point at va-durham-chillers-ahu.pdf#16), each getting its own fresh
+// Session below — keying on sheet_id alone mislabeled every file after the
+// first as "warm", which folded a genuinely-cold, once-per-session cost into
+// `maxWarmQueryMs` and silently inflated it (Run 48).
+const traceWarmSessions = new WeakSet<Session>();
 const guidedHopRows: GuidedHopRow[] = [];
 
 // Truth-by-construction px conversion for the SYNTHETIC corpus's ABSOLUTE
@@ -365,8 +375,8 @@ for (const file of caseFiles) {
   const sheet = session.sheet(sheetKey);
   const pts: Point[] = c.run.points_ft.map((p) => syntheticFtToPx(p, c.ptPerFt, c.scale, sheet.heightPx));
   const seedOverride = c.run.seed_point_ft ? syntheticFtToPx(c.run.seed_point_ft, c.ptPerFt, c.scale, sheet.heightPx) : undefined;
-  const cold = !traceSeenSheets.has(sheetKey);
-  traceSeenSheets.add(sheetKey);
+  const cold = !traceWarmSessions.has(session);
+  traceWarmSessions.add(session);
   traceRows.push(await traceOneRun(session, sheetKey, pts, c.expected.total_lf, c.run.size, cold, seedOverride));
   // Guided multi-hop (see guidedMultiHopTrace's own header) — run against
   // EVERY synthetic case, not only the one built to need it: a case whose
@@ -421,8 +431,8 @@ for (const file of realFiles) {
       if (len > bestLen) { bestLen = len; bestI = i; }
     }
     const goldenSize = run.run?.size_overrides?.[String(bestI)];
-    const cold = !traceSeenSheets.has(g.sheet_id);
-    traceSeenSheets.add(g.sheet_id);
+    const cold = !traceWarmSessions.has(session);
+    traceWarmSessions.add(session);
     const row = await traceOneRun(session, g.sheet_id, pts, run.computed.perimeter_lf, goldenSize, cold);
     if (g.tier === "held_out") heldOutTraceRows.push(row);
     else traceRows.push(row);
