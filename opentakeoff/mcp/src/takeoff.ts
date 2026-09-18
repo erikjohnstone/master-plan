@@ -30,7 +30,9 @@ import {
   attachDiagramCorroboration,
   familyNeedleFromSpecs,
   rowIdentityTag,
+  servedEquipmentTag,
 } from "../../web/src/lib/schedulePlanReconcile.mjs";
+import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
 import { HVAC_FAMILY_SPECS, isBasPointsListTable } from "../../web/src/lib/corpusTakeoff.mjs";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
@@ -118,9 +120,21 @@ export interface TakeoffItem {
     bbox: { x0: number; y0: number; x1: number; y1: number };
     text: string;
   }>;
+  /** Present only when this item's own mark (e.g. a VALVE MARK) has zero
+   * drawn occurrences anywhere — every drawn occurrence of the UNIT MARK/
+   * SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED mark it names instead, so the
+   * row can still be located and reviewed. A citation, never installed
+   * evidence; sweepScheduleRow still refuses to count the served unit as
+   * this item's own mark. */
+  served_equipment_cites?: Array<{
+    tag: string;
+    sheet: string;
+    role: string;
+    bbox: { x0: number; y0: number; x1: number; y1: number };
+  }>;
   /** What proves the installed quantity; never inferred from the schedule. */
   quantity_basis?: "symbol_fingerprint" | "tag_attached_vector" | "exact_plan_tag" | "explicit_installation_note" | null;
-  installed_evidence_grade?: "symbol_geometry" | "explicit_installation_note" | "tag_text_only" | "mixed_geometry_and_tag_text" | "unverified";
+  installed_evidence_grade?: "symbol_geometry" | "explicit_installation_note" | "tag_text_only" | "mixed_geometry_and_tag_text" | "located_via_served_equipment" | "unverified";
   geometry_verified?: boolean;
   /** Search coverage returned by the shared row sweep. */
   search_scope?: "exhaustive" | "tagged_only" | "explicit_note_set" | null;
@@ -628,6 +642,38 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         return;
       }
       const ft = classifyError(msg);
+      // Served-equipment location grade (WP5): this item's own mark has zero
+      // drawn occurrences anywhere (the only way this specific throw fires,
+      // per WP4's reference_only intercept above) — but the schedule row may
+      // name the unit it serves in a separate column, and THAT mark may be
+      // drawn. Never a substitute identity, never installed quantity —
+      // sweepScheduleRow still refuses to count the served unit as this
+      // item's own mark — only a location to review the row from.
+      if (ft === "SYMBOL_FALSE_NEGATIVE") {
+        const servedTag = servedEquipmentTag(row);
+        const servedCites = servedTag
+          ? tagIndexFor(graph.tags ?? [], servedTag)
+            .filter((dt) => !dt.sheet_callout && !dt.in_table)
+            .map((dt) => ({
+              tag: servedTag, sheet: dt.sheet, role: dt.role,
+              bbox: { x0: dt.bbox[0], y0: dt.bbox[1], x1: dt.bbox[2], y1: dt.bbox[3] },
+            }))
+          : [];
+        if (servedCites.length) {
+          item.status = "refused";
+          item.reason = msg;
+          item.served_equipment_cites = servedCites;
+          item.installed_evidence_grade = "located_via_served_equipment";
+          out.stats.refused++;
+          out.items.push(item);
+          processedRows++;
+          opts.onProgress?.({
+            phase: "reconcile_row", state: "done", tag: item.tag, processed: processedRows,
+            elapsed_ms: Math.round(performance.now() - started), status: item.status,
+          });
+          return;
+        }
+      }
       item.status = ft === "SYMBOL_FALSE_NEGATIVE"
         || ft === "AMBIGUOUS_ROW_KEY"
         || ft === "CROSS_SHEET_ASSOCIATION_FAILURE"

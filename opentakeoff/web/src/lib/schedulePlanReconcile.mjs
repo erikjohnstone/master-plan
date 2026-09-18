@@ -8,6 +8,7 @@
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
+import { tagIndexFor } from "./tagIndex.ts";
 
 /** @typedef {"MATCH"|"SCHEDULE_ONLY"|"PLAN_ONLY"|"REFUSED_NO_SCALE"|"REFUSED_NO_TEXT"|"AMBIGUOUS"} ReconcileStatus */
 
@@ -377,6 +378,25 @@ export function rowIdentityTag(row, identityHeaderRe = null) {
 }
 
 /**
+ * The unit a row's own device SERVES (or is served BY), when the schedule
+ * names it in a separate column — a valve row's own identity is the VALVE
+ * MARK, but UNIT MARK/SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED name the
+ * host unit that is actually drawn on the plan. Neighbour of
+ * rowIdentityTag: same header-scan shape, a different header set, and
+ * genuinely a different mark — never a substitute identity for the row.
+ * @param {object} row
+ * @returns {string|null}
+ */
+export function servedEquipmentTag(row) {
+  for (const [header, cell] of Object.entries(row?.cells || {})) {
+    if (!/^(UNIT\s*MARK|SERVES|SERVED\s*EQUIPMENT|EQUIPMENT\s*SERVED)$/i.test(String(header || "").trim())) continue;
+    const t = String(cell?.text || "").trim();
+    if (t) return t;
+  }
+  return null;
+}
+
+/**
  * Build reconcile rows from buildPlanSetTakeoff items (installed sweep path).
  * @param {Array<object>} items TakeoffItem[]
  * @param {Array<object>} [failures] TakeoffFailure[]
@@ -511,6 +531,8 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
         ...(loc.reason ? { reason: loc.reason } : {}),
         ...(loc.hold ? { hold: loc.hold } : {}),
       })),
+      ...(item.reference_tags?.length ? { reference_tag_cites: item.reference_tags } : {}),
+      ...(item.served_equipment_cites?.length ? { served_equipment_cites: item.served_equipment_cites } : {}),
       reason: qtyStatus.reason || item.reason || fail?.detail
         || (tagTextOnly
           ? `Exact plan tag text was found ${taggedPlanQty} time${taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
@@ -740,10 +762,33 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
         const sweep = sweepByTag.get(rowId) || sweepByTag.get(tag) || {};
         const reportedInstalledQty = Number.isFinite(sweep.installedQty) ? sweep.installedQty : null;
-        const installedEvidenceGrade = sweep.installedEvidenceGrade
-          || (sweep.installedQtyBasis === "symbol_fingerprint" || sweep.installedQtyBasis === "tag_attached_vector" ? "symbol_geometry"
-            : sweep.installedQtyBasis === "explicit_installation_note" ? "explicit_installation_note"
-              : sweep.installedQtyBasis === "exact_plan_tag" ? "tag_text_only" : "unverified");
+        // Served-equipment location grade (WP5): a row's own mark (often a
+        // VALVE MARK) sometimes has zero drawn occurrences anywhere — the
+        // schedule names the valve, but only the UNIT it serves is ever
+        // actually labeled on the drawings. Look up the served mark's own
+        // drawn occurrences directly from the tag index. This never
+        // substitutes for the row's own identity and never counts as
+        // installed quantity — sweepScheduleRow still refuses to count the
+        // served unit as the valve — it only locates the row for review.
+        const ownDrawn = tagIndexFor(graph.tags ?? [], tag).some((dt) => !dt.sheet_callout && !dt.in_table);
+        let servedEquipmentCites = [];
+        if (!ownDrawn) {
+          const servedTag = servedEquipmentTag(row);
+          if (servedTag) {
+            servedEquipmentCites = tagIndexFor(graph.tags ?? [], servedTag)
+              .filter((dt) => !dt.sheet_callout && !dt.in_table)
+              .map((dt) => ({
+                tag: servedTag, sheet: dt.sheet, role: dt.role,
+                bbox: { x0: dt.bbox[0], y0: dt.bbox[1], x1: dt.bbox[2], y1: dt.bbox[3] },
+              }));
+          }
+        }
+        const installedEvidenceGrade = servedEquipmentCites.length
+          ? "located_via_served_equipment"
+          : sweep.installedEvidenceGrade
+            || (sweep.installedQtyBasis === "symbol_fingerprint" || sweep.installedQtyBasis === "tag_attached_vector" ? "symbol_geometry"
+              : sweep.installedQtyBasis === "explicit_installation_note" ? "explicit_installation_note"
+                : sweep.installedQtyBasis === "exact_plan_tag" ? "tag_text_only" : "unverified");
         const installedQty = installedEvidenceGrade === "symbol_geometry"
           || installedEvidenceGrade === "explicit_installation_note"
           ? reportedInstalledQty
@@ -789,6 +834,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           plan_tag_cites: sweep.planTagCites || [],
           plan_candidate_cites: sweep.planCandidateCites || [],
           ...(sweep.referenceTagCites?.length ? { reference_tag_cites: sweep.referenceTagCites } : {}),
+          ...(servedEquipmentCites.length ? { served_equipment_cites: servedEquipmentCites } : {}),
           reason: qtyStatus.reason || sweep.reason
             || (installedEvidenceGrade === "tag_text_only"
               ? `Exact plan tag text was found ${sweep.taggedPlanQty ?? 0} time${sweep.taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`

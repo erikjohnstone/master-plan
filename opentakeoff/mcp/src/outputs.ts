@@ -92,7 +92,7 @@ const projectTakeoffItem = z.object({
     hold: z.unknown().optional(),
   })).optional(),
   quantity_basis: z.enum(["symbol_fingerprint", "tag_attached_vector", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
-  installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "unverified"]).optional(),
+  installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "located_via_served_equipment", "unverified"]).optional(),
   geometry_verified: z.boolean().optional(),
   search_scope: z.enum(["exhaustive", "tagged_only", "explicit_note_set"]).nullable().optional(),
   unlabeled_audit_complete: z.boolean().nullable().optional(),
@@ -385,7 +385,7 @@ export const reconcileSchedulePlanOutput = {
     observed_plan_qty: z.number().int().nullable().optional()
       .describe("Grounded placements observed so far; differs from installed_qty only when an incomplete search makes this a floor, not a releasable total"),
     installed_qty_basis: z.enum(["symbol_fingerprint", "tag_attached_vector", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
-    installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "unverified"]).optional(),
+    installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "located_via_served_equipment", "unverified"]).optional(),
     geometry_verified: z.boolean().optional(),
     search_scope: z.enum(["exhaustive", "tagged_only", "explicit_note_set"]).nullable().optional(),
     unlabeled_audit_complete: z.boolean().nullable().optional(),
@@ -438,6 +438,9 @@ export const reconcileSchedulePlanOutput = {
     reference_tag_cites: z.array(z.object({
       sheet: z.string(), role: z.string(), bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }), text: z.string(),
     })).optional().describe("Every non-plan drawn occurrence of this row's mark (schematic/legend/detail/etc) — a citation, never installed evidence; present only when sweep_schedule_row returned status: reference_only"),
+    served_equipment_cites: z.array(z.object({
+      tag: z.string(), sheet: z.string(), role: z.string(), bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }),
+    })).optional().describe("Present only when this row's own mark (e.g. a VALVE MARK) has zero drawn occurrences anywhere — every drawn occurrence of the UNIT MARK/SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED mark it names instead, so the row can still be located and reviewed. A citation, never installed evidence; sweep_schedule_row still refuses to count the served unit as the row's own mark"),
     reason: z.string().nullable().optional(),
   })),
   path: z.string().nullable().optional(),

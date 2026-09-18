@@ -2787,3 +2787,116 @@ the new WP4 test, ~100s for its real navfac load). `mcp/test/tools.test.ts`,
 `takeoffHvac01` 396/396, `takeoffValve01` 163/163, `takeoffBas01` 122/122 —
 unchanged, confirming this purely-additive disclosure path never touches an
 installed quantity. No corpus key or scorer touched.
+
+## WP5 — served-equipment location grade (2026-09-18, goal-loop, Sonnet 5)
+
+Implemented plan §3.6 exactly. Added `servedEquipmentTag(row)` to
+`schedulePlanReconcile.mjs` right next to `rowIdentityTag` (same
+header-scan shape, a different header set: `UNIT MARK`/`SERVES`/`SERVED
+EQUIPMENT`/`EQUIPMENT SERVED` — never the row's own identity headers). For
+a row whose own mark has zero drawn occurrences anywhere (checked directly
+against WP2's `graph.tags` via `tagIndexFor`, not the sweep outcome — a
+pure text-census fact independent of geometric matching), the served mark
+is looked up the same way; any hit is emitted as `served_equipment_cites:
+[{tag,sheet,role,bbox}]` with `installed_evidence_grade:
+"located_via_served_equipment"`. `installed_qty` stays `null` and `status`
+still lands `SCHEDULE_ONLY` via `classifyReconcileStatus`'s own existing
+`scheduledQty>0 && installedQty==null` fallback — verified directly, no
+change needed there. `sweepScheduleRow` itself is untouched, exactly as the
+plan specifies: it still refuses to count the served unit as the valve.
+
+Wired both reconcile paths, not just the family-scoped one:
+- `reconcileScheduleFamilyFromGraph` (the family-scoped path, feeding
+  `reconcile_schedule_plan {family:...}`): the lookup and
+  `served_equipment_cites` field described above.
+- `takeoff.ts`'s `resolveRow` (the whole-set `buildPlanSetTakeoff` path,
+  feeding `compile_corpus_takeoff`/`project_takeoff`/family-less
+  `reconcile_schedule_plan`): the same lookup, gated on
+  `classifyError(msg) === "SYMBOL_FALSE_NEGATIVE"` (the only throw shape
+  this fires for, per WP4's own intercept), landing
+  `item.status = "refused"` with a new `TakeoffItem.served_equipment_cites`
+  field.
+- **A real WP4 gap found and fixed while wiring this**:
+  `reconcileRowsFromTakeoffItems` (the function that turns whole-set
+  `TakeoffItem[]` into reconcile rows for the family-less
+  `reconcile_schedule_plan` path) never read `item.reference_tags` at all
+  — WP4's disclosure was reachable through `resolveRow` and the
+  family-scoped reconcile path, but silently dropped on the floor for a
+  family-less whole-set reconcile call. Added the mapping for both
+  `reference_tag_cites` and the new `served_equipment_cites` in the same
+  place.
+- `outputs.ts`: added `"located_via_served_equipment"` to both
+  `installed_evidence_grade` enums (the whole-set `TakeoffItem` schema and
+  `reconcileSchedulePlanOutput.rows[]`) and the matching TS union in
+  `takeoff.ts`; added `served_equipment_cites` to
+  `reconcileSchedulePlanOutput.rows[]` (closed object — a field not named
+  there is stripped from the wire, so this was required, not optional
+  polish) and a matching `TakeoffItem.served_equipment_cites` field.
+- `agentTakeoff.js`: **the plan's "Canvas: field served_tag →
+  line.served_tag_cites[]" language is real, not aspirational** — re-checked
+  after WP4 wrongly concluded no such "line" structure exists.
+  `compileAgentTakeoff`'s `ensureGroup`/per-row folding loop already builds
+  exactly this shape for `diagram_cites` (an array on the per-tag "group"/
+  line object, deduped by sheet+bbox identity, mapped to the final line
+  object). Added `reference_tag_cites: []` and `served_tag_cites: []` next
+  to `diagram_cites: []` in `ensureGroup`, added `field === "reference_tag"`
+  and `field === "served_equipment_tag"` folding branches (this ALSO
+  retroactively wires WP4's `reference_tag` row-folding all the way through
+  to the line object, which stopped short at the flat EAV row before this),
+  and excluded both new fields from the generic `schedule_sheet_id` guess
+  (matching `diagram_tag`'s own precedent — a citation's sheet is not
+  necessarily "the schedule's sheet"). Confirmed via direct grep that no
+  chip/panel actually RENDERS `diagram_cites` anywhere yet either
+  (`TakeoffDataPanel.jsx` renders the flat row list, not per-line chips) —
+  so the visual "Served unit `FCU-A1` · p.29" chip itself is correctly left
+  to WP6, which explicitly owns building that panel (§3.7: "render every
+  cite"); the data path up to the line object is now complete and correct
+  for WP6 to render from.
+
+**Real production tests, not synthetic-only:** `web/test/
+schedulePlanReconcile.test.ts` gains a pure `servedEquipmentTag` header
+test plus two WP5 seam tests against the real `reconcileScheduleFamilyFromGraph`
+row builder using a synthetic `graph.tags` DrawnTag census (WP2's own
+shape): one proving a row whose own VALVE MARK is never drawn gets located
+via its drawn UNIT MARK (`served_equipment_cites`, `installed_qty: null`,
+`status: "SCHEDULE_ONLY"`, `installed_evidence_grade:
+"located_via_served_equipment"`), one proving a row whose own mark IS drawn
+never falls back to a served-equipment cite.
+
+**Acceptance, measured on real navfac T-VALVE-01 data (CHW + HHW control
+valve families via `reconcileScheduleFamilyWithSweeps`, not assumed):**
+
+```
+total valve rows                           163
+own mark drawn directly (kept existing cites) 3
+located via served-equipment cite            148
+neither own mark nor served mark drawn        12
+```
+
+148 of 163 (91%) — short of the plan's own stated "≥150 of 163" and "the 5
+rows whose own mark is drawn". Investigated the 12 unresolved rows
+directly against the real schedule cells, not assumed a bug: 7 of them
+(`CV-CH-A1`, `CV-CH-A2`, `CV-CH-C-MT1`, `CV-CH-C-MT2`, `CV-CH-H-MT-1`,
+`CV-CH-H-MT-2`, `CV-HHW-BP-A1`) have `UNIT MARK` cells that literally
+duplicate `VALVE MARK` — there is no genuinely separate served unit to
+fall back to. The other 5 (`CHW-BP-T`, `HHW-BP-T`, `DOAH-T1-CHW`,
+`DOAH-T1-HHW`, `CUH-T2-HHW`) do name a genuinely different served mark
+(`CV-CHW-BP-T`, `CV-HHW-BP-T`, `DOAH-T1`, `CUH-T2`), but that mark itself
+is also never drawn anywhere. Both are honest, correct "cannot locate"
+outcomes, not a recognizer bug — same class of stale-baseline drift as
+WP0's "93", WP2's FCU count, and WP4's "93": the plan's "150"/"5" figures
+are from an earlier diagnosis-phase measurement, before later packages'
+role/reconcile changes shifted the real count. 148/163, measured fresh, is
+the correct number to carry forward.
+
+**Verification:** `npm --prefix web run typecheck` and `npm --prefix mcp
+run typecheck` both clean. `web/test/schedulePlanReconcile.test.ts` 30/30
+(3 new WP5 tests), `agentTakeoff.test.ts`/`markid.test.ts` unchanged.
+`mcp/test/tools.test.ts`, `staging.test.ts`, `session.test.ts`,
+`context.test.ts`, `labels.test.ts` — 146/146. `mcp/test/conformance.test.ts`
+20/20 (schema round-trips clean with the new enum value and field). All
+three frozen regression gates freshly green and unchanged:
+`takeoffHvac01` 396/396, `takeoffValve01` 163/163 (both compile via
+`compileCorpusTakeoff`/`corpusTakeoff.mjs`, a code path this package never
+touches — `takeoff.ts`'s `buildPlanSetTakeoff`/`resolveRow` is a separate
+function), `takeoffBas01` 122/122. No corpus key or scorer touched.

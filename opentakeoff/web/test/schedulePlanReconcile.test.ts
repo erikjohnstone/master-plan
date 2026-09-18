@@ -14,6 +14,7 @@ import {
   reconcileRowsToCsv,
   attachDiagramCorroboration,
   rowIdentityTag,
+  servedEquipmentTag,
 } from "../src/lib/schedulePlanReconcile.mjs";
 import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
 import {
@@ -122,6 +123,100 @@ test("WP3 seam: reconcile row_id/scopeIdentity use markKey — hyphen/space twin
   const keys = rows.map((r) => markKey(r.tag)).sort();
   assert.deepEqual(keys, [markKey("CV-CUH-A1-HHW"), markKey("CV-CUH-A10-HHW")].sort());
   assert.equal(new Set(rows.map((r) => r.row_id)).size, 2);
+});
+
+test("servedEquipmentTag: reads UNIT MARK/SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED, never the row's own VALVE MARK header", () => {
+  assert.equal(servedEquipmentTag({ cells: { "UNIT MARK": { text: "CUH-A1" } } }), "CUH-A1");
+  assert.equal(servedEquipmentTag({ cells: { SERVES: { text: "AHU-A1" } } }), "AHU-A1");
+  assert.equal(servedEquipmentTag({ cells: { "SERVED EQUIPMENT": { text: "FCU-A2" } } }), "FCU-A2");
+  assert.equal(servedEquipmentTag({ cells: { "EQUIPMENT SERVED": { text: "DOAH-A1" } } }), "DOAH-A1");
+  assert.equal(servedEquipmentTag({ cells: { "VALVE MARK": { text: "CV-CUH-A1-HHW" } } }), null);
+  assert.equal(servedEquipmentTag({ cells: {} }), null);
+});
+
+// WP5 seam: a row's own identity (a VALVE MARK) with zero drawn occurrences
+// anywhere still gets located via the UNIT MARK it serves, using the real
+// production row builder against a synthetic graph.tags census (WP2's own
+// DrawnTag shape) — not just the servedEquipmentTag helper in isolation.
+test("WP5 seam: served-equipment location grade — a row with no drawn VALVE MARK is located via its drawn UNIT MARK", () => {
+  const graph = {
+    tables: [
+      {
+        sheet: "set.pdf#10",
+        title: { text: "HHW CONTROL VALVE SCHEDULE" },
+        kind: "equipment",
+        rows: [
+          {
+            key: "CUH-A1",
+            cells: {
+              "UNIT MARK": { text: "CUH-A1" },
+              "VALVE MARK": { text: "CV-CUH-A1-HHW" },
+            },
+          },
+        ],
+      },
+    ],
+    // CV-CUH-A1-HHW (the row's own identity) is never drawn; CUH-A1 (the
+    // served unit named in UNIT MARK) is drawn once on a plan sheet.
+    tags: [
+      {
+        sheet: "set.pdf#12", role: "plan", text: "CUH-A1", key: "CUHA1", family: "CUH-A",
+        bbox: [10, 20, 60, 40], rot: 0, source: "exact", multiplier: 1,
+        in_table: null, sheet_callout: false,
+      },
+    ],
+  };
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HHW_CONTROL_VALVE");
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle);
+  assert.equal(rows.length, 1);
+  const [row] = rows;
+  assert.equal(row.tag, "CV-CUH-A1-HHW");
+  assert.equal(row.installed_qty, null, "served-equipment location is never installed quantity");
+  assert.equal(row.status, "SCHEDULE_ONLY");
+  assert.equal(row.installed_evidence_grade, "located_via_served_equipment");
+  assert.equal(row.served_equipment_cites?.length, 1);
+  assert.equal(row.served_equipment_cites[0].tag, "CUH-A1");
+  assert.equal(row.served_equipment_cites[0].sheet, "set.pdf#12");
+  assert.equal(row.served_equipment_cites[0].role, "plan");
+  assert.deepEqual(row.served_equipment_cites[0].bbox, { x0: 10, y0: 20, x1: 60, y1: 40 });
+});
+
+test("WP5 seam: a row whose own VALVE MARK IS drawn never gets a served-equipment cite", () => {
+  const graph = {
+    tables: [
+      {
+        sheet: "set.pdf#10",
+        title: { text: "HHW CONTROL VALVE SCHEDULE" },
+        kind: "equipment",
+        rows: [
+          {
+            key: "CUH-A1",
+            cells: {
+              "UNIT MARK": { text: "CUH-A1" },
+              "VALVE MARK": { text: "CV-CUH-A1-HHW" },
+            },
+          },
+        ],
+      },
+    ],
+    tags: [
+      {
+        sheet: "set.pdf#12", role: "plan", text: "CV-CUH-A1-HHW", key: "CVCUHA1HHW", family: "CV-CUH-HHW",
+        bbox: [1, 2, 3, 4], rot: 0, source: "exact", multiplier: 1,
+        in_table: null, sheet_callout: false,
+      },
+      {
+        sheet: "set.pdf#12", role: "plan", text: "CUH-A1", key: "CUHA1", family: "CUH-A",
+        bbox: [10, 20, 60, 40], rot: 0, source: "exact", multiplier: 1,
+        in_table: null, sheet_callout: false,
+      },
+    ],
+  };
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HHW_CONTROL_VALVE");
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].served_equipment_cites, undefined, "the row's own mark IS drawn — never fall back to the served unit");
+  assert.notEqual(rows[0].installed_evidence_grade, "located_via_served_equipment");
 });
 
 test("familyNeedleFromSpecs: CONTROL_DAMPER / MOTORIZED DAMPER aliases (WP7.2)", () => {
