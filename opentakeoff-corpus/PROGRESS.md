@@ -1,5 +1,35 @@
 ## Active work
 
+2026-09-18 linear takeoff: the last four leftover answers from that rich Idaho sheet get used up, bringing that one sheet's total to seven (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Finished going through the remaining good candidates already found and
+already confirmed on that same unusually rich Idaho laboratory
+building sheet -- four more, each checked properly with its own marked
+picture before being written down, one shorter one left out for being
+too small to bother with:
+
+- A duct section about eight feet long, from a valve assembly to a
+  ceiling vent box.
+- Another duct section about nine feet long, in a room labeled "Noise
+  Room," running between a vent box and a valve assembly.
+- A duct trunk about seven and a quarter feet long, in the building's
+  own lobby -- and the very same picture used to check it happens to
+  also show last time's own answer continuing right below it, a nice
+  free double-check that the two pieces fit together properly rather
+  than overlapping or double-counting the same duct.
+- A shorter duct section about five feet long, in a materials lab,
+  between two vent boxes.
+
+That's seven real, separately-checked answers now from this one lucky
+sheet -- a genuinely unusual yield, written down honestly as coming
+from one especially rich source rather than pretending it's typical.
+The sheet still has roughly three dozen more size labels never even
+looked at, so more might be there for another day, but this pass
+stops here rather than trying to squeeze out every last drop at once.
+
+Checked everything the usual way: full benchmark re-run confirmed all
+four new answers landed cleanly, and the complete test suite in both
+parts of the project re-run clean at its already-known baseline.
+
 2026-09-18 linear takeoff: two more real answers land, picked straight from yesterday's own leftover pile rather than a fresh search (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Instead of downloading a fresh batch of projects this time, went back
 to that unusually rich Idaho laboratory building sheet from last time,
