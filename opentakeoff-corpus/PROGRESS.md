@@ -1,5 +1,34 @@
 ## Active work
 
+2026-09-18 linear takeoff: a fifteenth real answer lands, the second-biggest single jump this whole session (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked four more brand-new real projects, plus double-checked that a
+similarly-named Klamath Falls community college file wasn't secretly
+the same document already used under a different name (it wasn't --
+confirmed by comparing the files' own unique fingerprints).
+
+One project, an Idaho highway department's laboratory building, had
+an unusually rich sheet: 56 real size labels, and out of a sample of
+nineteen, NINE separate real answers all passed the strict official
+check right away. The best of them, by far: a real duct trunk running
+about thirty-five feet up through a multi-story hallway chase, with
+its own size printed not once but TWICE along the same visible run --
+both copies agreeing, a genuinely nice independent confirmation that
+the size doesn't secretly change partway along. The duct passes
+several real branch junctions along the way without changing size,
+and the reader correctly read those as real pass-through points, not
+size changes.
+
+The other eight good answers found on that same sheet were
+deliberately left for another day, so as not to strip-mine one lucky
+sheet down to nothing in a single sitting.
+
+This is the fifteenth of these small (well, this one wasn't so small)
+real wins in a row, and it moved the project's own size-reading
+accuracy score up by the second-largest amount of the whole session.
+Checked everything the usual way: full benchmark re-run confirmed the
+new answer landed cleanly, and the complete test suite in both parts
+of the project re-run clean at its already-known baseline.
+
 2026-09-18 linear takeoff: a fourteenth real answer lands, sitting right at a real "before/after" construction marker (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked five more brand-new real projects. One, a middle school's HVAC
 replacement in Nevada, had 35 real large outside-air duct labels on
