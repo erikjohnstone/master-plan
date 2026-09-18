@@ -1,5 +1,55 @@
 ## Active work
 
+2026-09-18 linear takeoff: broke down exactly where the slow-drawing time goes, and found the speed test itself has been reading a bit optimistic (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+One of the nine things this project measures is how long it takes to
+get a drawing ready to click on the first time -- meant to stay under
+400 milliseconds. A few entries back, the one truly bad case (a
+drawing that took nearly two and a half minutes) got fixed, but a
+handful of big, busy drawings still run a bit over budget. Never
+actually broken down where that remaining time goes -- did that today.
+
+For one busy drawing (about 81,000 individual drawn lines), timed each
+step separately: reading the underlying PDF's own drawing instructions
+takes about 180 milliseconds, turning those into usable lines takes
+about 150, sorting those lines into categories (duct vs. pipe vs.
+something else) takes about 170, and building the fast-lookup index
+takes about 50 -- everything else is under 90 combined. Read through
+the two biggest pieces of OUR OWN code in that list looking for the
+same kind of accidental-slowdown bug found and fixed a few weeks back
+-- neither one has it. Both are already doing one honest pass over the
+data at a reasonable, unremarkable speed per line. Nothing obviously
+broken to fix here.
+
+Found something else instead, more useful in a different way. This
+project's own speed measurements run through fifty-plus real drawings
+back to back in one long-running process. Tested the two slowest
+drawings completely on their own, in a single fresh run each -- and
+they came out 40-70% SLOWER than the numbers already on record for
+them. Checked why: ran the same two drawings four times each, back to
+back, in one process, and watched the numbers steadily drop each
+time -- even though every single run started from a totally blank
+slate with no drawing-specific caching possible. The computer's own
+engine (not this project's code) gradually gets faster at running the
+SAME kind of instructions the more times it sees them, regardless of
+which drawing they come from. Running fifty drawings back to back
+warms that up before it ever reaches the slow ones; testing a drawing
+completely alone never gets that warm-up at all.
+
+So the honest answer to "how slow is the worst case" depends on a
+question nobody has actually answered yet: does this measure a truly
+fresh server's very first few looks at a drawing, or a server that's
+already been running a while and warmed up the way the batch test
+naturally does? Right now it's silently measuring the second one and
+calling it the whole answer. Not a bug, and nothing broken -- just an
+honest gap in what the existing number actually represents, written
+down plainly instead of left implicit.
+
+Measured: one drawing's build time fully broken into five timed
+pieces; two of the slowest drawings retimed completely alone, and
+again as a repeated-back-to-back experiment to confirm the cause.
+Nothing in the actual tool changed. `docs/LINEAR-TRACE-EVAL.md` gained
+a "Run 80" section.
+
 2026-09-18 linear takeoff: tested the two ideas from last week's shelved fix against real numbers -- neither one holds up (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 The fix put on the shelf a few entries back had two guessed-at ways to
 make it safe, neither actually tried yet. Tried both today, against
