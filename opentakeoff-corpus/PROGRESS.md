@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-18 linear takeoff: an eighth real self-reading answer lands, still mining the same one unusually rich drawing (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Went back to that same especially clear Missouri renovation drawing
+sheet from last time and checked seventeen more of its size labels
+that hadn't been tried yet (out of 75 total on that one sheet).
+
+Found one more real, clean answer: a short horizontal duct section
+about two feet long, connecting a real elbow coming down from an
+exhaust fan to a real four-way junction box that splits off toward a
+rooftop unit and a further duct continuation. Checked with a marked
+picture and a second computer check -- both matched.
+
+Also found, and wrote down honestly rather than forcing into use: two
+real cases where a size label sits near a duct, but the duct closest
+to it is actually a different size than the label says (a label
+reading one size sitting next to a run that's actually a different
+size) -- a known kind of mistake this project already tracks
+separately, not a new answer to add. And one more case where the
+size was read correctly but the real duct section was too short and
+minor to bother writing down.
+
+This is the eighth of these small real wins in a row, moving the
+project's own size-reading accuracy score up again by a smaller
+amount than the last couple, as expected now that this one
+particularly rich sheet is mostly mined out. Checked everything the
+usual way: full benchmark re-run confirmed the new answer landed
+cleanly with nothing else disturbed, and the complete test suite in
+both parts of the project re-run clean at its already-known baseline.
+
 2026-09-18 linear takeoff: two more real self-reading answers land from one unusually clear real drawing (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked another batch of five brand-new real projects at once. One of
 them, a Missouri renovation project, had a single sheet that stood out
