@@ -218,6 +218,35 @@ test("parseSize: PIPE — the same M-102 labels as pdf.js actually extracted the
   assert.deepEqual(parseSize('16"x8"')?.size, { kind: "rect", w_in: 16, h_in: 8 });
 });
 
+test("parseSize: PIPE — Contra Costa College Chiller Replacement M1.0/M3.1's own `\\A1;5\"CHWR`-style labels (#linear-takeoff GATE 3 bug catalogue: a leftover AutoCAD MTEXT alignment code — `\\A0;`/`\\A1;`/`\\A2;`, the three real bottom/center/top values AutoCAD emits — the CAD-to-PDF export flattened the MTEXT run into plain text without stripping the code itself, so the whole label failed to parse, not just its own leading characters)", () => {
+  const a = parseSize('\\A1;5"CHWR');
+  assert.deepEqual(a?.size, { kind: "pipe", nps_in: 5 });
+  assert.deepEqual(a?.systems, ["CHWR"]);
+  // the hyphenated whole+fraction form this same sheet also uses (`2-1/2"`,
+  // not `2 1/2"`) already resolves via resolveFractions's own `[ -]?`
+  // separator — confirmed alongside the MTEXT strip, not a second new gap.
+  assert.deepEqual(parseSize('\\A1;2-1/2"CHWS')?.size, { kind: "pipe", nps_in: 2.5 });
+  // the other two real AutoCAD alignment values strip the same way
+  assert.deepEqual(parseSize('\\A0;5" CHWR')?.systems, ["CHWR"]);
+  assert.deepEqual(parseSize('\\A2;5" CHWR')?.systems, ["CHWR"]);
+  // a label with no leading code at all is unaffected
+  assert.deepEqual(parseSize('5" CHWR'), parseSize('\\A1;5" CHWR'));
+});
+
+test("parseSize: PIPE — the same Contra Costa sheet's own `5\" CHWS & R` (#linear-takeoff GATE 3 bug catalogue: the `&` multi-system separator written WITH surrounding spaces, not run together like Orange County's own `CHWS&R` — a real drafter's choice, both spacings must resolve identically)", () => {
+  const a = parseSize('5" CHWS & R');
+  assert.deepEqual(a?.size, { kind: "pipe", nps_in: 5 });
+  assert.deepEqual(a?.systems, ["CHWS", "R"]);
+  // the run-together form resolves to the same size/systems — `raw` itself
+  // legitimately differs (it echoes the real normalized spacing), so only
+  // those two fields are compared here, not the whole parsed object.
+  const b = parseSize('5" CHWS&R');
+  assert.deepEqual(b?.size, a?.size);
+  assert.deepEqual(b?.systems, a?.systems);
+  // spacing widened the same way around the existing `/` separator too
+  assert.deepEqual(parseSize('2" CWS / R')?.systems, ["CWS", "R"]);
+});
+
 test("parseSize: PIPE — DN/NPS/mm forms (Appendix A's own second PIPE alternative, not yet seen in the six named sets but part of the stated grammar)", () => {
   assert.deepEqual(parseSize("DN150")?.size, { kind: "pipe", nps_in: 5.91 });
   assert.deepEqual(parseSize("NPS100")?.size, { kind: "pipe", nps_in: 3.94 });

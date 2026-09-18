@@ -45,13 +45,25 @@ import type { RunSize } from "./types.ts";
 import { nearestSegment, segmentsInBox, type SegmentIndex } from "./index.ts";
 
 /** Plan Appendix A's own pre-normalisation rules, applied in order:
- *  `× → x`, `Ø ⌀ %%c → ø`, `″ ” → "`, insert a space after a size's own
- *  closing quote when the extractor ran it straight into the following
- *  system letters, Unicode fractions → `N/D` text, collapse whitespace,
- *  uppercase (system tokens are always upper — a lowercase size digit has
- *  no case to preserve either way). */
+ *  strip a leading AutoCAD MTEXT alignment code, `× → x`, `Ø ⌀ %%c → ø`,
+ *  `″ ” → "`, insert a space after a size's own closing quote when the
+ *  extractor ran it straight into the following system letters, Unicode
+ *  fractions → `N/D` text, collapse whitespace, uppercase (system tokens
+ *  are always upper — a lowercase size digit has no case to preserve
+ *  either way). */
 export function normalizeLabelText(raw: string): string {
   let s = String(raw ?? "");
+  // A real corpus label (`\A1;5"CHWR`, Contra Costa College Chiller
+  // Replacement M1.0/M3.1) came through pdf.js's own text extraction still
+  // carrying its own AutoCAD MTEXT alignment code (`\A0;`/`\A1;`/`\A2;` —
+  // bottom/center/top alignment, the three real values AutoCAD emits) —
+  // the CAD-to-PDF export flattened the MTEXT run's own formatting into
+  // plain text without stripping the code itself. Stripped here, first,
+  // before anything else ever sees the string; every other real label on
+  // the same sheet extracted clean (no code), confirming this is a
+  // per-run leftover, not something every span on an affected sheet
+  // carries.
+  s = s.replace(/^\\A\d;/, "");
   s = s.replace(/×/g, "x");
   s = s.replace(/[″”]/g, '"');
   // A real corpus label (`2"CHWS&R`, Orange County Regional History Center
@@ -111,7 +123,11 @@ const ROUND_RE = new RegExp(`^(?:ø\\s*)?(\\d{1,3}(?:\\.\\d+)?)"?\\s*(?:ø|DIA\\
 // second-token shorthand (`R` alone, not a standalone code), just a
 // different real-world separator glyph. `splitSystems` below widened the
 // same way so both separators land in the same two-entry `systems[]` shape.
-const PIPE_RE = new RegExp(`^(?:(${SYS_ALT})\\s+)?(\\d{1,2}(?:\\.\\d+)?)?"(?:\\s+((?:${SYS_ALT})(?:[/&][A-Z]{1,5})?))?(?:\\s+(${DIR_ALT}))?(?:\\s+(TO|FROM)\\b.*)?$`);
+// `\s*` around the separator, not bare `[/&]`: the SAME Contra Costa sheet
+// that motivated the `\A1;` strip above also has this exact convention
+// written with spaces (`5" CHWS & R`), not run together — a real drafter's
+// choice, not a different grammar, so both spacings resolve identically.
+const PIPE_RE = new RegExp(`^(?:(${SYS_ALT})\\s+)?(\\d{1,2}(?:\\.\\d+)?)?"(?:\\s+((?:${SYS_ALT})(?:\\s*[/&]\\s*[A-Z]{1,5})?))?(?:\\s+(${DIR_ALT}))?(?:\\s+(TO|FROM)\\b.*)?$`);
 const PIPE_DN_RE = /^(?:DN|NPS)\s*(\d{2,4})$/;
 const PIPE_MM_RE = /^(\d{2,4})\s*MM$/;
 
@@ -138,7 +154,10 @@ function dirOf(tok: string | undefined): DuctDirection | undefined {
 
 function splitSystems(tok: string | undefined): string[] {
   if (!tok) return [];
-  return tok.split(/[/&]/).filter(Boolean);
+  // PIPE_RE's own separator group tolerates surrounding spaces (`CHWS & R`,
+  // not just `CHWS&R`) — trim each side so a spaced form never leaks stray
+  // whitespace into a systems[] entry.
+  return tok.split(/[/&]/).map((t) => t.trim()).filter(Boolean);
 }
 
 /** Plan Appendix A / §3.1: parse one normalized label into a `RunSize`, or

@@ -1,5 +1,36 @@
 ## Active work
 
+2026-09-18 linear takeoff: two more real labeling gaps fixed, no new answer this round (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept the search going. Checked image coverage first again, like
+yesterday's lesson said to -- came back clean, a real digital drawing.
+
+Found two more genuine, different label-reading problems on it. One:
+some labels still carried an invisible leftover formatting code from
+the original CAD software, stuck to the very front of the text, that
+this project's reader had never learned to ignore. Two: the same "join
+two systems with one symbol" trick from two days ago showed up again,
+but written with spaces around the joining symbol this time instead of
+run together. Fixed both, narrowly, with new tests -- caught and fixed
+one of my own new tests along the way too, which had compared the
+wrong thing and failed for an uninteresting reason once fixed.
+
+Went looking for a new answer-key entry using these now-readable
+labels and came up empty this round. The one real candidate found
+traces out to a very long run (about 100 feet) with no ends firmly
+settled and, even with the fixes in place, still doesn't read its own
+size automatically -- a weaker, less certain candidate than the last
+two clean wins, not worth forcing further on a low-key pass.
+
+Two label-reading fixes with no new example is still a legitimate,
+useful result on its own -- future drawings using either of these real
+formats will read correctly from here on, even without today's own
+drawing joining the answer key.
+
+Measured: the new tests pass (53/53); the full check on both parts of
+the project still shows only the same already-known, unrelated
+problems as always; nothing in the answer key changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 88" section.
+
 2026-09-18 linear takeoff: a third real labeling gap fixed, and a second real self-reading answer lands (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Put yesterday's lesson to use right away: before spending time on a new
 drawing, checked first how much of the page is covered by an embedded
