@@ -1,5 +1,52 @@
 ## Active work
 
+2026-09-18 linear takeoff: one of the two long-stuck real test sheets finally lands a real answer -- and a careless mistake in writing it down was caught and fixed before it could quietly hide a correct result as a miss (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+With today's own speed fix making two long-stuck real sheets usable
+for the first time, went back and tried the faster of the two for a
+genuine held-back test case -- part of the small, protected group of
+real sheets this whole effort has always kept separate from tuning,
+specifically so a passing score there means something real.
+
+Swept the sheet, a real multi-room plumbing floor plan for restrooms
+in a real building, and found a promising early candidate right away
+-- but a careful double-check caught a real problem before trusting
+it: the same printed pipe line this candidate followed carried two
+DIFFERENT size labels along its own length, three-quarter inch at one
+end and one-and-a-half inch further along, with no visible break or
+fitting between them. The same kind of labeling trap already caught
+once before this session on a different real project. Set aside, not
+used.
+
+A second candidate held up completely: a real plumbing branch line
+connecting a sink and a toilet in one of the restrooms, through two
+clean right-angle turns, ending exactly where it ties into the
+building's own main water line -- with a printed three-quarter-inch
+label sitting right beside it, matching automatically and exactly.
+
+Before calling it done, a real authoring mistake was caught and fixed:
+this effort's own way of recording a pipe's size for a multi-segment
+run isn't always filed under the same simple label every previous
+example happened to use -- it has to match whichever piece of the run
+turns out to be the longest, and this run's longest piece wasn't the
+first one. Filed under the wrong label, the size would have silently
+read back as unknown rather than correct, quietly turning a genuine
+match into a miss. Caught by actually re-checking the fresh result
+rather than assuming it worked, and fixed before anything was
+finalized.
+
+The held-back test group grew from four real sheets to five, with a
+perfect find-rate maintained and a real, meaningful improvement in how
+often a pipe's size reads correctly there -- not enough on its own to
+satisfy the "close enough to the main test set" requirement, since
+five sheets is still a small enough group that one result either way
+swings the number a lot, but real, verified movement in the right
+direction rather than a number sitting still.
+
+Measured: the full benchmark passes, the new result reproduces
+exactly, and the fix to the authoring mistake was verified by
+re-running the benchmark and confirming the match before treating it
+as good. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 61" section.
+
 2026-09-18 linear takeoff: found and fixed the actual root cause of this effort's worst remaining performance problem -- a single, tiny, well-understood code change turns a 148-second delay into under half a second, with every existing test and every accuracy number completely unchanged (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 With every other requirement now given a clear, final answer, turned to
 the one remaining problem that had a real, already-understood cause
