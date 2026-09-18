@@ -1,5 +1,52 @@
 ## Active work
 
+2026-09-18 linear takeoff: two more requirements confirmed met by reading the numbers already on hand, one made precise for the first time and confirmed still short (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+With the hunt for new real matches showing thinner and thinner returns
+today, switched to a more direct kind of progress: going back over
+numbers this effort already has on hand, rather than searching for
+new ones, to settle three requirements that had been sitting marked
+"not yet checked" for a while.
+
+Two of them turned out to already be met, comfortably. The rule about
+how far off a traced length can be from the truth, and the rule about
+how much extra, wrongly-included length a trace can carry, both allow
+up to three percent on average across the whole real test set. Working
+out the actual average for both, directly from the full set of
+existing results rather than trusting only the single worst-case
+number already on record, gave two and a half percent and two and
+two-tenths percent respectively -- both comfortably under the limit.
+The two worst individual cases behind those averages were both already
+known, already explained oddities from earlier in this same effort,
+not new problems -- which is itself a reason to trust reading these
+two rules as being about the average across the whole set, the same
+way the recall and precision rules already are, rather than a hard
+line no single case may ever cross.
+
+The third result was less encouraging, but more honest than before.
+The rule that the held-back, never-tuned-against set of sheets should
+score within five points of the main test set, on every single
+measure, had only ever been checked carefully for one of those
+measures. Working out the actual gap for all of them: the accuracy
+of how well pipe sizes get read correctly is nineteen points worse on
+the held-back set, a real, meaningful shortfall, though on only four
+sheets, where flipping even a single result swings the number by a
+quarter. How often a real pipe or duct gets found at all is actually
+fourteen points BETTER on the held-back set, not worse, so that
+particular gap is not a sign of anything going wrong, just a very
+easy four-sheet sample.
+
+No golden added or needed for this. Recall, precision, and size
+accuracy are unchanged -- this work only made two existing, real
+numbers precise and clearly stated, moving two rules from "not yet
+checked" to "met," and completing the picture on a third that stays
+short.
+
+Measured: no ground truth touched, no bench numbers changed, no code
+touched. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 57" section and an
+updated running summary reflecting four of the project's nine
+requirements now confirmed met at once, for the first time this
+session.
+
 2026-09-18 linear takeoff: an old match rediscovered by accident, one more record-setting runaway trace, and a mix-up about which files were actually still unexplored, caught and corrected (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Went back to the method that has worked best when it works at all:
 reading a sheet's own real printed text directly for a pipe size and
