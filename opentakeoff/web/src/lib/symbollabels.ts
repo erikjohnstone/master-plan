@@ -317,17 +317,56 @@ function stackedEquipmentTagTokens(spans: LabelSpan[]): LabelSpan[] {
           && isEquipTag(`${prefix}-${raw}`);
       })
       .sort((a, b) => a.y0 - b.y0 || Math.abs((a.x0 + a.x1) / 2 - tcx) - Math.abs((b.x0 + b.x1) / 2 - tcx))[0];
-    if (!suffix) continue;
-    candidates.push({
-      ...top,
-      str: `${prefix}-${suffix.str.trim()}`,
-      x0: Math.min(top.x0, suffix.x0),
-      y0: Math.min(top.y0, suffix.y0),
-      x1: Math.max(top.x1, suffix.x1),
-      y1: Math.max(top.y1, suffix.y1),
-      family: prefix,
-      text_height_px: Math.min(th, Math.max(suffix.y1 - suffix.y0, 1)),
-    });
+    if (suffix) {
+      candidates.push({
+        ...top,
+        str: `${prefix}-${suffix.str.trim()}`,
+        x0: Math.min(top.x0, suffix.x0),
+        y0: Math.min(top.y0, suffix.y0),
+        x1: Math.max(top.x1, suffix.x1),
+        y1: Math.max(top.y1, suffix.y1),
+        family: prefix,
+        text_height_px: Math.min(th, Math.max(suffix.y1 - suffix.y0, 1)),
+      });
+    }
+
+    // Some drawings draw the same divided hexagon tag with the instance
+    // number ABOVE the prefix instead ("M107" over "VAV", reading bottom-
+    // to-top as VAV-M107) — the mirror image of the prefix-over-number
+    // layout above. Only which span sits on top changes; the same tight
+    // centering/height-match gates and the same isEquipTag + family
+    // evidence rule (applied to `candidates` below) still gate this pass.
+    // A bare I/O type code (AI/AO/DI/DO) under a plain point number is
+    // stackedBasPointTagTokens's own convention (a BAS point bubble, not an
+    // equipment tag) — leave that exact combination to it so the two passes
+    // don't both reconstruct the same divided run.
+    const above = /^(?:AI|AO|DI|DO)$/.test(prefix) ? undefined : spans
+      .filter((candidate) => {
+        const raw = candidate.str.trim();
+        if (!/^[A-Z]{0,2}\d{1,3}[A-Z]?$/.test(raw.toUpperCase()) || (candidate.rot ?? 0) !== 0) return false;
+        const ch = Math.max(candidate.y1 - candidate.y0, 1);
+        if (Math.max(th, ch) > 1.35 * Math.min(th, ch)) return false;
+        const gap = top.y0 - candidate.y1;
+        const ccx = (candidate.x0 + candidate.x1) / 2;
+        const xGate = 0.3 * Math.max(top.x1 - top.x0, th);
+        return gap >= -0.1 * Math.max(th, ch)
+          && gap <= 0.8 * Math.max(th, ch)
+          && Math.abs(ccx - tcx) <= xGate
+          && isEquipTag(`${prefix}-${raw}`);
+      })
+      .sort((a, b) => b.y1 - a.y1 || Math.abs((a.x0 + a.x1) / 2 - tcx) - Math.abs((b.x0 + b.x1) / 2 - tcx))[0];
+    if (above) {
+      candidates.push({
+        ...top,
+        str: `${prefix}-${above.str.trim()}`,
+        x0: Math.min(top.x0, above.x0),
+        y0: Math.min(top.y0, above.y0),
+        x1: Math.max(top.x1, above.x1),
+        y1: Math.max(top.y1, above.y1),
+        family: prefix,
+        text_height_px: Math.min(th, Math.max(above.y1 - above.y0, 1)),
+      });
+    }
   }
   const perFamily = new Map<string, number>();
   for (const candidate of candidates) {
