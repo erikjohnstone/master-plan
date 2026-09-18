@@ -1,5 +1,27 @@
 ## Active work
 
+2026-09-18 linear takeoff: eleventh new-corpus golden (two runs), a real precision milestone, development recall 15/21 -> 17/23 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Applied the same "read real text, look at a crop, seed by eye" method
+to another narrow-scope boiler-replacement project (a Missouri Army
+National Guard job). Found a real, sparse, legible mechanical plan
+with a matched parallel 6-inch heating-hot-water supply/return riser
+pair, both real automatic binds, each with one clean dead end (a real
+cross-sheet continuation break-line, confirmed via crop) and one real
+fork (an elbow into a multi-branch header serving several AHU units,
+also confirmed via crop). Added both as separate runs in one golden.
+
+Development-tier recall: **15/21 (0.7143) -> 17/23 (0.7391)**, both
+runs an exact length match with a genuine size match too. Worth
+naming plainly: precision (0.9557) now clears the project's own gate
+threshold (>= 0.95) for the first time this session -- two long,
+correctly-sized, exact-length runs in one pass moved it there. The new
+source PDF is now committed to this project's own real corpus (`raw/`).
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 35" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: tenth new-corpus golden, first real ambiguous-stop case, development recall 14/20 -> 15/21 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Followed up on the inconclusive text-anchored attempt with a simpler
 version of the same idea: read a sheet's own real text for a
