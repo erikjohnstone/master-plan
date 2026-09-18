@@ -77,6 +77,15 @@ export function normalizeLabelText(raw: string): string {
   // own stated shape intact and fixes the one real, narrow extraction
   // artifact instead of quietly accepting a run-together token everywhere.
   s = s.replace(/"(?=[A-Za-z])/g, '" ');
+  // A real corpus label (`4"CHWS(E)`, ITD District 2 Laboratory Heating
+  // Upgrades) carries a trailing `(E)` existing-marker AFTER the whole
+  // label, a structurally different convention from the already-declined
+  // LEADING `(E)` prefix (West Valley College, e.g. `(E) 6"ø` — a bigger,
+  // deliberately-untouched grammar change since it precedes the whole
+  // match). A trailing marker is narrow to fix: strip it, with any
+  // preceding whitespace, before anything else needs to parse past it —
+  // this sheet alone carries 20 real instances across HWS/HWR/CHWS/CHWR.
+  s = s.replace(/\s*\(E\)\s*$/i, "");
   s = s
     .replace(/½/g, "1/2").replace(/¼/g, "1/4").replace(/¾/g, "3/4")
     .replace(/⅛/g, "1/8").replace(/⅜/g, "3/8").replace(/⅝/g, "5/8").replace(/⅞/g, "7/8");

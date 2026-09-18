@@ -233,6 +233,19 @@ test("parseSize: PIPE — Contra Costa College Chiller Replacement M1.0/M3.1's o
   assert.deepEqual(parseSize('5" CHWR'), parseSize('\\A1;5" CHWR'));
 });
 
+test("parseSize: PIPE — ITD District 2 Laboratory Heating Upgrades' own `4\"CHWS(E)`-style labels (#linear-takeoff GATE 3 bug catalogue: a trailing `(E)` existing-marker AFTER the whole label — structurally different from the already-declined LEADING `(E)` prefix convention seen elsewhere, e.g. `(E) 6\"ø`, which precedes the whole match and is a bigger, deliberately-untouched change; a trailing marker is narrow to strip)", () => {
+  const a = parseSize('4"CHWS(E)');
+  assert.deepEqual(a?.size, { kind: "pipe", nps_in: 4 });
+  assert.deepEqual(a?.systems, ["CHWS"]);
+  // the same sheet's own fractional sizes strip identically
+  assert.deepEqual(parseSize('2 1/2"HWS(E)')?.size, { kind: "pipe", nps_in: 2.5 });
+  assert.deepEqual(parseSize('1 1/4"HWR(E)')?.size, { kind: "pipe", nps_in: 1.25 });
+  // a label with a space before the quote-then-system also strips
+  assert.deepEqual(parseSize('3" HWS(E)')?.systems, ["HWS"]);
+  // a label with no trailing marker at all is unaffected
+  assert.deepEqual(parseSize('4"CHWS'), parseSize('4"CHWS(E)'));
+});
+
 test("parseSize: PIPE — the same Contra Costa sheet's own `5\" CHWS & R` (#linear-takeoff GATE 3 bug catalogue: the `&` multi-system separator written WITH surrounding spaces, not run together like Orange County's own `CHWS&R` — a real drafter's choice, both spacings must resolve identically)", () => {
   const a = parseSize('5" CHWS & R');
   assert.deepEqual(a?.size, { kind: "pipe", nps_in: 5 });

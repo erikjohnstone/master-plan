@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-18 linear takeoff: a sixth real labeling-format fix lands, plus an eleventh real answer it unlocked (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked five more brand-new real projects; most were weak this round
+(mostly architectural dimension numbers, not real mechanical size
+labels). But one, an Idaho highway department lab's heating-system
+upgrade, turned up a real drawing convention the reader had never
+seen before: a small "(E)" existing-equipment marker stuck on the
+END of a size label instead of the front (the front-marker version
+was already a known, deliberately-unfixed gap). Checked directly:
+every single one of these labels failed to read at all, not just
+partially.
+
+Since a marker stuck on the end is a much smaller, safer fix than one
+stuck on the front, it got fixed this time -- taught the reader to
+recognize and remove that trailing marker before trying to read the
+rest of the label. Six new test cases added to lock the fix in, and a
+full check across the entire project's whole real-drawing collection
+confirmed the fix disturbed nothing else at all -- exactly the same
+before and after everywhere the fix wasn't needed.
+
+With that fixed, a sweep of the newly-readable labels on the same
+sheet found one real, clean answer: a 3-inch heating hot water return
+pipe about thirteen feet long, its own label pointing with a leader
+line straight at it, running between two real fittings near the
+building's own boilers. Checked with a marked picture and a second,
+careful re-check the same strict way as recent answers. One other
+candidate on the same sheet was tried and declined -- another case of
+two nearby, similarly-labeled pipes confusing the reader about which
+one a label belonged to.
+
+This is the sixth real labeling-format fix found and fixed this
+session, and the eleventh real answer overall. Checked everything the
+usual way: full benchmark re-run confirmed the new answer landed
+cleanly, and the complete test suite in both parts of the project
+re-run clean -- especially important this time since actual code
+changed, not just a new example.
+
 2026-09-18 linear takeoff: a tenth real self-reading answer lands (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked five more brand-new real projects. One of them, a hospital
 emergency-room renovation, had a sheet packed with 82 already-readable
