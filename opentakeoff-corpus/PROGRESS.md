@@ -1,5 +1,40 @@
 ## Active work
 
+2026-09-18 linear takeoff: the front-end's own full regression check finally ran to the end -- the long-stuck step wasn't actually stuck, but a second, separate, unrelated batch of failures showed up once it finished (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+A step in the project's own front-end regression check had been left
+running from earlier today, past twenty-five minutes without finishing
+or failing, longer than anything else seen all session, and was left
+alone rather than killed or worked around. It has since finished on its
+own. The step that looked stuck simply turned out to be one slow piece
+of a much longer overall run -- the whole check took thirty-six minutes
+to get through its own full test suite, and nothing about that specific
+slow piece ever failed or hung forever.
+
+The test suite itself did fail, though, and by a wide margin: seventy
+individual failures and thirteen more cancelled alongside them, out of
+thirty-four hundred seventy tests total. Every one of them traced back
+to the same corner of the code -- the part that saves a project's own
+markups and notes to the browser's own storage and keeps them in sync
+with cloud drives, entirely separate from anything the actual pipe and
+duct tracing work this session has been doing touches or depends on.
+This mirrors, in a different corner of the code, the same kind of
+pre-existing, out-of-scope failure batch already found and catalogued
+on the back end earlier today -- real, but not something this specific
+effort has any business fixing, so it was written down in full detail
+and left alone, the same discipline already applied consistently all
+session.
+
+Because that test step failed, the slower steps after it in the same
+check -- the project's own performance benchmarks and its final build
+-- never got a chance to run this time. Nothing changed about what's
+already known on those two fronts from earlier, separate, targeted
+checks.
+
+Measured: no ground truth touched, no bench numbers changed, no tracing
+code touched anywhere. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 54"
+section, and its own running summary of what's left was updated to
+reflect the front-end check now being fully, not partially, checked.
+
 2026-09-18 linear takeoff: two more tries in the newly-opened pool of previously-skipped sheets -- one clean empty result, one text-leader mistrace, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Continued testing the theory opened earlier today -- that sheets skipped
 by the original scan for lacking a classified drawing layer might still
