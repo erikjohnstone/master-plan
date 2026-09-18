@@ -1,5 +1,47 @@
 ## Active work
 
+2026-09-18 linear takeoff: an old match rediscovered by accident, one more record-setting runaway trace, and a mix-up about which files were actually still unexplored, caught and corrected (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Went back to the method that has worked best when it works at all:
+reading a sheet's own real printed text directly for a pipe size and
+system written together in one place, rather than guessing blindly.
+Tried it on a Texas hospital's chiller-plant piping plan and it worked
+very well -- dozens of real, clean matches from two inches up to thirty
+inches. Following up on one of the cleanest turned up a real, solid,
+well-terminated two-inch pipe branch with a real elbow and a real
+valve at each end.
+
+Before writing it up as new, a routine check -- comparing the source
+file's own fingerprint against everything already on file -- caught
+something important: this exact project, this exact pipe, had already
+been found and recorded the day before, in an earlier stretch of this
+same overall effort. What looked like a brand new find was actually
+an accidental repeat of already-banked work. No harm done and nothing
+lost -- it was caught before anything was written down twice -- but
+worth being honest about rather than quietly moving past. The one
+genuinely new thing that came out of the detour was another instance
+of the runaway-trace problem already on record several times this
+session, this one smaller than the current record but still a
+meaningful data point on how often it turns up.
+
+Tried the same reading-the-text method on three more projects next,
+and got no matches on any of them. Here another mix-up was caught and
+fixed before being written down as fact: those three projects were
+NOT actually new ground -- all three already have real, disclosed
+findings from earlier in this same effort (mistaken-for-a-pipe
+dimension lines and leader lines, and one already-swept building set
+with no automatic matches at all). The "no matches" result from this
+particular method is still worth keeping as a small extra data point,
+just not the fresh discovery it was first described as. Caught and
+corrected in the same sitting, the same honesty this effort has tried
+to hold itself to throughout.
+
+No golden added either way. Recall, precision, and size accuracy are
+unchanged.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 56" section, corrected in
+place before being finalized.
+
 2026-09-18 linear takeoff: an eighth try lands a fourth caught near-miss instead of a golden -- a surveying elevation marker mistaken for a pipe, and this specific search method set aside for now (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Tried the last of this round's already-identified safe candidates: a
 Stanford physics-lab cooling-water skid drawing. A sweep found four
