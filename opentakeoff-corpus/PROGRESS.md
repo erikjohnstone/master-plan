@@ -1,5 +1,34 @@
 ## Active work
 
+2026-09-18 linear takeoff: nineteenth new-corpus golden, the most structurally complex real capture this session, development recall 30/36 -> 31/37, within 0.012 of the gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Caught a real engine false positive before it became a wrong golden:
+a pipe label's own leader arrow (the thin annotation line connecting
+text to its symbol) was itself traced with confidence as if it were a
+real pipe. A tightly-zoomed marked crop showed the "traced" segment
+sitting exactly on the leader line, not the real pipe drawn right
+beside it -- caught and discarded rather than used. A second
+candidate (a cluster of isolated connection-point symbols) had no
+drawn pipe run between them at all, recognized as empty before
+wasting a seed on it.
+
+The candidate that landed: the most structurally complex real capture
+of this whole session -- a genuine multi-vertex pipe run with a real
+tee branch partway along its own length, two real elbows, and a true
+dead-end at BOTH physical ends, the cleanest possible stop pair with
+no forks to second-guess anywhere in the path. Confirmed via marked
+crop matching the visible pipe exactly, tee and both elbows included.
+
+Development-tier recall: **30/36 (0.8333) -> 31/37 (0.8378)**, a match
+well within the project's own length-error tolerance. Precision ticks
+up further above the project's own gate threshold (0.9682 -> 0.9692).
+Recall is now within 0.012 of the project's own 0.85 gate -- the
+closest checkpoint yet.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 43" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: eighteenth new-corpus golden, a simple single-system riser, development recall 29/35 -> 30/36, within 0.017 of the gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Tried and set aside two more candidates on the same rich VA Durham
 sheet first: a domestic cold water line that fragmented into several
